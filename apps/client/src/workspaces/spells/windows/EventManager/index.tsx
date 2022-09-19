@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useEffect, useState } from 'react'
+
+import { usePubSub } from '../../../../contexts/PubSubProvider'
 import EventTable from './EventTable'
-import { usePubSub } from '@/contexts/PubSubProvider'
 
 const EventManagerWindow = ({ tab }) => {
   const [events, setEvents] = useState(null)

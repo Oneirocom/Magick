@@ -5,8 +5,8 @@
     "client": "apps/client",
     "client-core": "packages/client-core",
     "core": "packages/core",
+    "my-app": "apps/my-app",
     "server": "apps/server",
-    "server-core": "packages/server-core",
-    "test": "packages/test"
+    "server-core": "packages/server-core"
   }
 }

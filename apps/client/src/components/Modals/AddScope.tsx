@@ -1,14 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+
+import { MenuItem, Select } from '@material-ui/core'
+
+import { createScope, singleScope, updateScope } from '../../state/admin/scope/scopeState'
+import { useAppDispatch, useAppSelector } from '../../state/hooks'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
-import { Select, MenuItem } from '@material-ui/core'
-import { useAppDispatch, useAppSelector } from '@/state/hooks'
-import {
-  createScope,
-  singleScope,
-  updateScope,
-} from '../../state/admin/scope/scopeState'
 
 const AddScope = ({ closeModal, name, id }) => {
   const dispatch = useAppDispatch()

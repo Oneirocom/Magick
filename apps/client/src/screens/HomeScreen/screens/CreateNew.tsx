@@ -1,23 +1,20 @@
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import {
-  uniqueNamesGenerator,
-  adjectives,
-  colors,
-} from 'unique-names-generator'
 import { useNavigate } from 'react-router-dom'
+import { adjectives, colors, uniqueNamesGenerator } from 'unique-names-generator'
 
-import { useNewSpellMutation } from '@/state/api/spells'
+import { GraphData } from '@thothai/core'
+
 import Panel from '../../../components/Panel/Panel'
+import { useAuth } from '../../../contexts/AuthProvider'
+import defaultGraph from '../../../data/graphs/default'
+import { useNewSpellMutation } from '../../../state/api/spells'
+import TemplatePanel from '../components/TemplatePanel'
 import emptyImg from '../empty.png'
 // import enkiImg from '../enki.png'
 // import langImg from '../lang.png'
 import css from '../homeScreen.module.css'
-import TemplatePanel from '../components/TemplatePanel'
-import defaultGraph from '../../../data/graphs/default'
-import { GraphData } from '@thothai/core/types'
-import { useAuth } from '@/contexts/AuthProvider'
 
 const customConfig = {
   dictionaries: [adjectives, colors],

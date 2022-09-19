@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react'
-import Table from '../../common/Table'
-import Search from '../../common/Search'
-import { styled } from '@mui/material/styles'
-import Grid from '@mui/material/Grid'
+
 import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
+import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
-import { columnConfig } from '../../common/Variable/column'
+
 import { useModal } from '../../../../contexts/ModalProvider'
-import { useAppDispatch, useAppSelector } from '@/state/hooks'
 import {
-  retrieveConfig,
-  ConfigRes,
-  deleteConfig,
-  searchConfig,
+    ConfigRes, deleteConfig, retrieveConfig, searchConfig
 } from '../../../../state/admin/config/configState'
+import { useAppDispatch, useAppSelector } from '../../../../state/hooks'
+import Search from '../../common/Search'
+import Table from '../../common/Table'
+import { columnConfig } from '../../common/Variable/column'
 
 const Container = styled(Grid)({
   marginBottom: '1.5rem',

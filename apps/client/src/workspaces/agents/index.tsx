@@ -1,12 +1,12 @@
-import { Layout } from '@/workspaces/contexts/LayoutProvider'
-import EventHandler from '@/screens/Thoth/components/EventHandler'
-import StateManager from '@/workspaces/spells/windows/StateManagerWindow'
-import { CalendarApp } from '@/screens/Calendar/Calendar'
+import { CalendarApp } from '../../screens/Calendar/Calendar'
+import EventHandler from '../../screens/Thoth/components/EventHandler'
+import { Layout } from '../../workspaces/contexts/LayoutProvider'
+import StateManager from '../../workspaces/spells/windows/StateManagerWindow'
 import EntityManagerWindow from './windows/EntityManagerWindow'
 import GreetingsManagerWindow from './windows/GreetingsManagerWindow'
+import MessageReactionEditor from './windows/MessageReactionEditor'
 import SearchCorpus from './windows/SearchCorpusWindow'
 import VideoTranscription from './windows/VideoTranscription'
-import MessageReactionEditor from './windows/MessageReactionEditor'
 import WysiwygEditor from './windows/WysiwygEditor'
 
 const Workspace = ({ tab, pubSub }) => {

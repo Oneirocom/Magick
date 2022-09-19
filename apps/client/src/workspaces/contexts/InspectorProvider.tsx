@@ -1,6 +1,8 @@
-import { usePubSub } from '@/contexts/PubSubProvider'
-import { InspectorData } from '@thothai/core/types'
 import { createContext, useContext, useEffect, useState } from 'react'
+
+import { InspectorData } from '@thothai/core'
+
+import { usePubSub } from '../../contexts/PubSubProvider'
 
 export type TextEditorData = {
   options?: Record<string, any> | undefined

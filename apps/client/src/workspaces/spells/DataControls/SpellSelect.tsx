@@ -1,18 +1,17 @@
 import { useSnackbar } from 'notistack'
-
-import { useAppDispatch } from '@/state/hooks'
-import { openTab } from '@/state/tabs'
-// import { useModule } from '../../../contexts/ModuleProvider'
-import Select from '@components/Select/Select'
-import {
-  useLazyGetSpellQuery,
-  useGetSpellsQuery,
-  useNewSpellMutation,
-} from '@/state/api/spells'
-import defaultGraph from '@/data/graphs/default'
-import { GraphData } from '@thothai/core/types'
 import { useEffect } from 'react'
-import { useAuth } from '@/contexts/AuthProvider'
+
+import { GraphData } from '@thothai/core'
+
+// import { useModule } from '../../../contexts/ModuleProvider'
+import Select from '../../../components/Select/Select'
+import { useAuth } from '../../../contexts/AuthProvider'
+import defaultGraph from '../../../data/graphs/default'
+import {
+    useGetSpellsQuery, useLazyGetSpellQuery, useNewSpellMutation
+} from '../../../state/api/spells'
+import { useAppDispatch } from '../../../state/hooks'
+import { openTab } from '../../../state/tabs'
 
 const ModuleSelect = ({ control, updateData, initialValue }) => {
   const dispatch = useAppDispatch()

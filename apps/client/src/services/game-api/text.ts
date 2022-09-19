@@ -1,5 +1,6 @@
-import { latitudeApiRootUrl } from '@/config'
 import axios from 'axios'
+
+import { latitudeApiRootUrl } from '../../config'
 import { getAuthHeader } from '../../contexts/AuthProvider'
 
 export const getModels = async () => {
@@ -19,34 +20,38 @@ export const getModels = async () => {
 }
 
 type CompletionBody = {
-  prompt: string,
-  modelName: string,
-  temperature: number,
-  maxTokens: number,
-  topP: number,
-  frequencyPenalty: number,
-  presencePenalty: number,
+  prompt: string
+  modelName: string
+  temperature: number
+  maxTokens: number
+  topP: number
+  frequencyPenalty: number
+  presencePenalty: number
   stop: string[]
 }
 
-export const completion = async ({ modelName,
+export const completion = async ({
+  modelName,
   prompt,
   stop,
   maxTokens,
   temperature,
   topP,
   frequencyPenalty,
-  presencePenalty
+  presencePenalty,
 }: CompletionBody) => {
   try {
-    const filteredStop = stop.filter ? stop.filter(function (el: any) {
-      return el != null && el !== undefined && el.length > 0
-    }) : stop
+    const filteredStop = stop.filter
+      ? stop.filter(function (el: any) {
+          return el != null && el !== undefined && el.length > 0
+        })
+      : stop
 
     const resp = await axios.post(
-      `${process.env.REACT_APP_API_URL ??
-      process.env.API_URL ??
-      'https://localhost:8001'
+      `${
+        process.env.REACT_APP_API_URL ??
+        process.env.API_URL ??
+        'https://localhost:8001'
       }/text_completion`,
       {
         prompt: prompt,

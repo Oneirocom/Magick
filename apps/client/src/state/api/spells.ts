@@ -1,9 +1,10 @@
 import { createSelector } from '@reduxjs/toolkit'
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
-
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
+import { GraphData, Spell } from '@thothai/core'
+
 import { rootApi } from './api'
-import { GraphData, Spell } from '@thothai/core/types'
+
 // function camelize(str) {
 //   return str
 //     .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {

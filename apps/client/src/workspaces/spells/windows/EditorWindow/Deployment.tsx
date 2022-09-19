@@ -1,25 +1,20 @@
+import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { useSnackbar } from 'notistack'
 
-import css from './editorwindow.module.css'
-
-import WindowToolbar from '@components/Window/WindowToolbar'
-import { SimpleAccordion } from '@components/Accordion'
-import Input from '@components/Input/Input'
-import Panel from '@components/Panel/Panel'
-import { useModal } from '@/contexts/ModalProvider'
-
+import { SimpleAccordion } from '../../../../components/Accordion'
+import Input from '../../../../components/Input/Input'
+import Panel from '../../../../components/Panel/Panel'
+import WindowToolbar from '../../../../components/Window/WindowToolbar'
+import { latitudeApiRootUrl } from '../../../../config'
+import { useAuth } from '../../../../contexts/AuthProvider'
+import { useModal } from '../../../../contexts/ModalProvider'
 import {
-  useGetDeploymentsQuery,
-  useDeploySpellMutation,
-  useLazyGetDeploymentQuery,
-  useSaveSpellMutation,
-  useGetSpellQuery,
-} from '@/state/api/spells'
-import { useEditor } from '@/workspaces/contexts/EditorProvider'
-import { latitudeApiRootUrl } from '@/config'
-import { useAuth } from '@/contexts/AuthProvider'
+    useDeploySpellMutation, useGetDeploymentsQuery, useGetSpellQuery, useLazyGetDeploymentQuery,
+    useSaveSpellMutation
+} from '../../../../state/api/spells'
+import { useEditor } from '../../../../workspaces/contexts/EditorProvider'
+import css from './editorwindow.module.css'
 
 const DeploymentView = ({ open, setOpen, spellId, close }) => {
   const [loadingVersion, setLoadingVersion] = useState(false)

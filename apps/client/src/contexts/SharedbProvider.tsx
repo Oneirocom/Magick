@@ -1,12 +1,13 @@
-import { sharedb } from '@/config'
-import { useContext, createContext, useEffect, useState } from 'react'
-import { Doc } from 'sharedb'
+import { createContext, useContext, useEffect, useState } from 'react';
+import { Doc } from 'sharedb';
+import client from 'sharedb/lib/client';
+import { Socket } from 'sharedb/lib/sharedb';
 
-import client from 'sharedb/lib/client'
-import { Socket } from 'sharedb/lib/sharedb'
-import { Spell } from '@thothai/core/types'
-import LoadingScreen from '@/components/LoadingScreen/LoadingScreen'
-import { useWebSocket } from './WebSocketProvider'
+import { Spell } from '@thothai/core';
+
+import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
+import { sharedb } from '../config';
+import { useWebSocket } from './WebSocketProvider';
 
 const Connection = client.Connection
 

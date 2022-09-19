@@ -1,16 +1,12 @@
 import {
-  Layout as LayoutComponent,
-  Model,
-  Actions,
-  DockLocation,
-  TabNode,
-  TabSetNode,
+    Actions, DockLocation, Layout as LayoutComponent, Model, TabNode, TabSetNode
 } from 'flexlayout-react'
-import { useContext, createContext, useEffect, useState, useRef } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
-import { saveTabLayout } from '@/state/tabs'
-import { useDispatch } from 'react-redux'
+import { saveTabLayout } from '../../state/tabs'
+
 // Component types are listed here which are used to load components from the data sent by rete
 const windowTypes: WindowTypes = {
   TEXT_EDITOR: 'textEditor',

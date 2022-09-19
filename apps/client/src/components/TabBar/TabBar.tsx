@@ -1,16 +1,15 @@
-import { closeTab, selectAllTabs } from '@/state/tabs'
 import classnames from 'classnames'
 import { VscClose } from 'react-icons/vsc'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { RootState } from '../../state/store'
+import { changeActive, closeTab, selectAllTabs } from '../../state/tabs'
 import MenuBar from '../MenuBar/MenuBar'
-import CreateTab from './CreateTab'
-import css from './tabBar.module.css'
 import { PlugWallet } from '../PlugWallet/PlugWallet'
-import { changeActive } from '@/state/tabs'
-import { RootState } from '@/state/store'
+import CreateTab from './CreateTab'
 import { LoginTab } from './LoginTab'
+import css from './tabBar.module.css'
 
 const Tab = ({ tab, activeTab }) => {
   const dispatch = useDispatch()

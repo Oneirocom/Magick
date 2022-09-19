@@ -1,9 +1,10 @@
-import VideoInput from '@/screens/HomeScreen/components/VideoInput'
-import Window from '../../../components/Window/Window'
-
 import '../../../screens/Thoth/thoth.module.css'
+
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
+
+import Window from '../../../components/Window/Window'
+import VideoInput from '../../../screens/HomeScreen/components/VideoInput'
 
 const VideoTranscription = () => {
   const { enqueueSnackbar } = useSnackbar()
@@ -11,8 +12,8 @@ const VideoTranscription = () => {
     uploadFile(selectedFile)
   }
 
-  const uploadFile = async(file) => {
-    let formData = new FormData();
+  const uploadFile = async file => {
+    let formData = new FormData()
     formData.append('video', file)
     let url = `${process.env.REACT_APP_API_URL}/video`
     try {
@@ -26,8 +27,8 @@ const VideoTranscription = () => {
 
   return (
     <Window>
-    <p>Upload Video</p>
-    <VideoInput loadFile={loadFile} />
+      <p>Upload Video</p>
+      <VideoInput loadFile={loadFile} />
     </Window>
   )
 }

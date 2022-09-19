@@ -1,16 +1,14 @@
-import Editor from '@monaco-editor/react'
-import { useState, useEffect, useRef } from 'react'
-
-import Window from '@components/Window/Window'
-import WindowMessage from '../../components/WindowMessage'
-
 import '../../../screens/Thoth/thoth.module.css'
-import {
-  TextEditorData,
-  useInspector,
-} from '@/workspaces/contexts/InspectorProvider'
-import { RootState } from '@/state/store'
+
+import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
+
+import Editor from '@monaco-editor/react'
+
+import Window from '../../../components/Window/Window'
+import { RootState } from '../../../state/store'
+import { TextEditorData, useInspector } from '../../../workspaces/contexts/InspectorProvider'
+import WindowMessage from '../../components/WindowMessage'
 
 const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)

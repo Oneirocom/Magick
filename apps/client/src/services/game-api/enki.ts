@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { latitudeApiRootUrl } from '@/config'
+import { latitudeApiRootUrl } from '../../config'
 import { getAuthHeader } from '../../contexts/AuthProvider'
 
 export const getEnkiPrompt = async taskName => {

@@ -1,25 +1,24 @@
 import axios from 'axios'
+import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { getAllUserNFTs } from '@psychedelic/dab-js'
-import { HttpAgent } from '@dfinity/agent'
-import { useSnackbar } from 'notistack'
-
-import css from './editorwindow.module.css'
-
-import WindowToolbar from '@components/Window/WindowToolbar'
-import { useAuth } from '@/contexts/AuthProvider'
-import { useGetSpellQuery, useNewSpellMutation } from '@/state/api/spells'
-import { SimpleAccordion } from '@components/Accordion'
-import Input from '@components/Input/Input'
-// import Panel from '@components/Panel/Panel'
-// import { useModal } from '@/contexts/ModalProvider'
-
-// import { useEditor } from '@/workspaces/contexts/EditorProvider'
-import { Mint } from '../../../../components/Mint/Mint'
-import { usePlugWallet } from '@/contexts/PlugProvider'
 import { useNavigate } from 'react-router'
-import { thothApiRootUrl } from '@/config'
+
+import { HttpAgent } from '@dfinity/agent'
+import { getAllUserNFTs } from '@psychedelic/dab-js'
+
+import { SimpleAccordion } from '../../../../components/Accordion'
+import Input from '../../../../components/Input/Input'
+// import Panel from '../../../..components/Panel/Panel'
+// import { useModal } from '../../../../contexts/ModalProvider'
+// import { useEditor } from '../../../../workspaces/contexts/EditorProvider'
+import { Mint } from '../../../../components/Mint/Mint'
+import WindowToolbar from '../../../../components/Window/WindowToolbar'
+import { thothApiRootUrl } from '../../../../config'
+import { useAuth } from '../../../../contexts/AuthProvider'
+import { usePlugWallet } from '../../../../contexts/PlugProvider'
+import { useGetSpellQuery, useNewSpellMutation } from '../../../../state/api/spells'
+import css from './editorwindow.module.css'
 
 const MintingView = ({ open, setOpen, spellId, close }) => {
   const [nfts, setNfts] = useState<any>(null)

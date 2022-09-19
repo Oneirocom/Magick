@@ -1,13 +1,12 @@
-import { useState, useEffect, useRef } from 'react'
-import JoditEditor from 'jodit-react'
-
-import WindowMessage from '../../components/WindowMessage'
-
 import '../../../screens/Thoth/thoth.module.css'
+
+import JoditEditor from 'jodit-react'
+import { useEffect, useRef, useState } from 'react'
+
 import {
-  useWysiwygInspector,
-  WysiwygEditorData,
-} from '@/workspaces/contexts/WysiwygProvider'
+    useWysiwygInspector, WysiwygEditorData
+} from '../../../workspaces/contexts/WysiwygProvider'
+import WindowMessage from '../../components/WindowMessage'
 
 const WysiwygEditor = props => {
   const [data, setData] = useState<WysiwygEditorData | null>(null)
@@ -50,7 +49,6 @@ const WysiwygEditor = props => {
       <JoditEditor
         ref={editorRef}
         value={content}
-        config={{ readonly: false, placeholder: 'Start typing' }}
         onBlur={newContent => setContent(newContent)}
         onChange={newContent => {}}
       />

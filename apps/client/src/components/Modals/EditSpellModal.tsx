@@ -1,12 +1,13 @@
-import { useState } from 'react'
 import { useSnackbar } from 'notistack'
-import { usePatchSpellMutation } from '../../state/api/spells'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+
+import { useAuth } from '../../contexts/AuthProvider'
+import { usePatchSpellMutation } from '../../state/api/spells'
+import { closeTab, openTab } from '../../state/tabs'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
-import { useAuth } from '@/contexts/AuthProvider'
-import { closeTab, openTab } from '@/state/tabs'
-import { useDispatch } from 'react-redux'
 
 const EditSpellModal = ({ closeModal, spellId, name, tab }) => {
   const [error, setError] = useState('')
@@ -40,11 +41,13 @@ const EditSpellModal = ({ closeModal, spellId, name, tab }) => {
     enqueueSnackbar('Spell saved', { variant: 'success' })
 
     dispatch(closeTab(tab.id))
-    dispatch(openTab({
-      name: data.name,
-      spellId: data.name,
-      type: 'spell'
-    }))
+    dispatch(
+      openTab({
+        name: data.name,
+        spellId: data.name,
+        type: 'spell',
+      })
+    )
 
     closeModal()
   })

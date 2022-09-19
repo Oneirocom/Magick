@@ -1,9 +1,9 @@
-import { websockets, websocketUrl } from '@/config'
-import { useContext, createContext, useEffect, useState } from 'react'
-
+import { createContext, useContext, useEffect, useState } from 'react'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { Socket } from 'sharedb/lib/sharedb'
-import LoadingScreen from '@/components/LoadingScreen/LoadingScreen'
+
+import LoadingScreen from '../components/LoadingScreen/LoadingScreen'
+import { websockets, websocketUrl } from '../config'
 
 interface SharedbContext {
   socket: Socket | null

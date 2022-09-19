@@ -1,11 +1,9 @@
 // We need to tell TypeScript that when we write "import styles from './styles.scss' we mean to load a module (to look for a './styles.scss.d.ts').
+export {}
 declare module '*.css'
 declare module '*.module.css'
 declare module '*.jpg'
-declare module '*.png' {
-  const value: any
-  export default value
-}
+declare module '*.png'
 
 declare global {
   interface Window {

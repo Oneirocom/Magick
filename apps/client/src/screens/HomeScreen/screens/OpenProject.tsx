@@ -1,14 +1,14 @@
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import Icon from '../../../components/Icon/Icon'
 import Panel from '../../../components/Panel/Panel'
-import css from '../homeScreen.module.css'
-import thothBanner from '../version-banner-0.0.0beta.jpg'
+import { RootState } from '../../../state/store'
+import { selectAllTabs } from '../../../state/tabs'
 import FileInput from '../components/FileInput'
 import ProjectRow from '../components/ProjectRow'
-import { useSelector } from 'react-redux'
-import { selectAllTabs } from '@/state/tabs'
-import { RootState } from '@/state/store'
+import css from '../homeScreen.module.css'
+import thothBanner from '../version-banner-0.0.0beta.jpg'
 
 const getThothVersion = () => '1'
 

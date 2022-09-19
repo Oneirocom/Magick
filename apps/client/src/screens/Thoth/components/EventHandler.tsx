@@ -1,28 +1,21 @@
-import { useEffect, useRef } from 'react'
-import { GraphData, Spell } from '@thothai/core/types'
-
-import {
-  uniqueNamesGenerator,
-  adjectives,
-  colors,
-} from 'unique-names-generator'
-
-import {
-  useSaveSpellMutation,
-  useGetSpellQuery,
-  useSaveDiffMutation,
-} from '../../../state/api/spells'
-import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
-import { useEditor } from '../../../workspaces/contexts/EditorProvider'
-import { diff } from '@/utils/json0'
 import { useSnackbar } from 'notistack'
-import { sharedb } from '@/config'
-import { useSharedb } from '@/contexts/SharedbProvider'
-import { useAuth } from '@/contexts/AuthProvider'
-import { useFeathers } from '@/contexts/FeathersProvider'
-import { feathers as feathersFlag } from '@/config'
-import { RootState } from '@/state/store'
+import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
+import { adjectives, colors, uniqueNamesGenerator } from 'unique-names-generator'
+
+import { GraphData, Spell } from '@thothai/core'
+
+import { feathers as feathersFlag, sharedb } from '../../../config'
+import { useAuth } from '../../../contexts/AuthProvider'
+import { useFeathers } from '../../../contexts/FeathersProvider'
+import { useSharedb } from '../../../contexts/SharedbProvider'
+import {
+    useGetSpellQuery, useSaveDiffMutation, useSaveSpellMutation
+} from '../../../state/api/spells'
+import { RootState } from '../../../state/store'
+import { diff } from '../../../utils/json0'
+import { useEditor } from '../../../workspaces/contexts/EditorProvider'
+import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
 
 // Config for unique name generator
 const customConfig = {

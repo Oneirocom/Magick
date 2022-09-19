@@ -1,16 +1,17 @@
-import Editor from '@monaco-editor/react'
-import jsonFormat from 'json-format'
-import { useState, useEffect } from 'react'
-import { useGetSpellQuery } from '../../../state/api/spells'
-import Window from '../../../components/Window/Window'
-
 import '../../../screens/Thoth/thoth.module.css'
-import WindowMessage from '../../components/WindowMessage'
-import { usePubSub } from '@/contexts/PubSubProvider'
 
-import { RootState } from '@/state/store'
+import jsonFormat from 'json-format'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useAuth } from '@/contexts/AuthProvider'
+
+import Editor from '@monaco-editor/react'
+
+import Window from '../../../components/Window/Window'
+import { useAuth } from '../../../contexts/AuthProvider'
+import { usePubSub } from '../../../contexts/PubSubProvider'
+import { useGetSpellQuery } from '../../../state/api/spells'
+import { RootState } from '../../../state/store'
+import WindowMessage from '../../components/WindowMessage'
 
 const StateManager = ({ tab, ...props }) => {
   const { publish, events } = usePubSub()
@@ -33,7 +34,7 @@ const StateManager = ({ tab, ...props }) => {
   const SAVE_SPELL = events.$SAVE_SPELL(tab.id)
 
   const editorOptions = {
-    lineNumbers: false,
+    lineNumbers: 'off' as 'off',
     minimap: {
       enabled: false,
     },

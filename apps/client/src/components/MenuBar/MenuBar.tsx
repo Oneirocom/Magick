@@ -1,15 +1,15 @@
-import { activeTabSelector, Tab } from '@/state/tabs'
 import React, { useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import thothlogo from './thoth.png'
 
 import { useModal } from '../../contexts/ModalProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
+import { toggleAutoSave } from '../../state/preferences'
+import { RootState } from '../../state/store'
+import { activeTabSelector, Tab } from '../../state/tabs'
 import css from './menuBar.module.css'
-import { toggleAutoSave } from '@/state/preferences'
-import { RootState } from '@/state/store'
+import thothlogo from './thoth.png'
 
 const MenuBar = () => {
   const navigate = useNavigate()
@@ -114,7 +114,7 @@ const MenuBar = () => {
   const onEntityManagerCreate = () => {
     publish($CREATE_ENT_MANAGER(activeTabRef.current?.id))
   }
-  
+
   const onGreetingsManagerCreate = () => {
     publish($CREATE_GREETINGS_MANAGER(activeTabRef.current?.id))
   }

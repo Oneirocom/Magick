@@ -1,3 +1,1 @@
-import { test } from '@thothai/test'
-
-test()
+console.log('test')

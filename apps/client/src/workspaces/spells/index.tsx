@@ -1,31 +1,26 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { useEditor } from '@/workspaces/contexts/EditorProvider'
-import { Layout } from '@/workspaces/contexts/LayoutProvider'
-import { useLazyGetSpellQuery } from '@/state/api/spells'
-import EventHandler from '@/screens/Thoth/components/EventHandler'
-import { debounce } from '@/utils/debounce'
+import { Spell, ThothComponent } from '@thothai/core'
 
+import { feathers as feathersFlag, sharedb } from '../../config'
+import { useAuth } from '../../contexts/AuthProvider'
+import { useFeathers } from '../../contexts/FeathersProvider'
+import { usePubSub } from '../../contexts/PubSubProvider'
+import { useSharedb } from '../../contexts/SharedbProvider'
+import EventHandler from '../../screens/Thoth/components/EventHandler'
+import { useLazyGetSpellQuery } from '../../state/api/spells'
+import { RootState } from '../../state/store'
+import { debounce } from '../../utils/debounce'
+import { useEditor } from '../../workspaces/contexts/EditorProvider'
+import { Layout } from '../../workspaces/contexts/LayoutProvider'
+import StateManager from '../../workspaces/spells/windows/StateManagerWindow'
+import DebugConsole from './windows/DebugConsole'
 import EditorWindow from './windows/EditorWindow/'
+import EventManagerWindow from './windows/EventManager'
 import Inspector from './windows/InspectorWindow'
 import Playtest from './windows/PlaytestWindow'
-import StateManager from '@/workspaces/spells/windows/StateManagerWindow'
-
 import TextEditor from './windows/TextEditorWindow'
-import DebugConsole from './windows/DebugConsole'
-
-import { Spell } from '@thothai/core/types'
-import { usePubSub } from '@/contexts/PubSubProvider'
-import { useSharedb } from '@/contexts/SharedbProvider'
-import { sharedb } from '@/config'
-import { ThothComponent } from '@thothai/core/types'
-import { useAuth } from '@/contexts/AuthProvider'
-
-import EventManagerWindow from './windows/EventManager'
-import { RootState } from '@/state/store'
-import { useFeathers } from '@/contexts/FeathersProvider'
-import { feathers as feathersFlag } from '@/config'
 
 const Workspace = ({ tab, tabs, pubSub }) => {
   const spellRef = useRef<Spell>()

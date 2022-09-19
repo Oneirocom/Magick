@@ -1,13 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+
+import { createConfig, SingleConfig, updateConfig } from '../../state/admin/config/configState'
+import { useAppDispatch, useAppSelector } from '../../state/hooks'
 // import { useForm } from 'react-hook-form'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
-import { useAppDispatch, useAppSelector } from '@/state/hooks'
-import {
-  createConfig,
-  SingleConfig,
-  updateConfig,
-} from '../../state/admin/config/configState'
 
 const Config = ({ closeModal, name, id, modal }) => {
   const dispatch = useAppDispatch()

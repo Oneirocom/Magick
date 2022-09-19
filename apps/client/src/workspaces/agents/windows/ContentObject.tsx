@@ -1,11 +1,12 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-//@ts-nocheck
-import { useState } from 'react'
-import { useModal } from '@/contexts/ModalProvider'
-import { VscTrash, VscSave } from 'react-icons/vsc'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
+//@ts-nocheck
+import { useState } from 'react'
+import { VscSave, VscTrash } from 'react-icons/vsc'
+
+import { useModal } from '../../../contexts/ModalProvider'
 
 const ContentObject = ({ content, getContentObjects }) => {
   const { id: objId, ..._content } = content
@@ -71,10 +72,12 @@ const ContentObject = ({ content, getContentObjects }) => {
             type="text"
             className="form-text-area"
             value={contentObj.title}
-            onChange={e => setContentObj({
-              ...contentObj,
-              title: e.target.value
-            })}
+            onChange={e =>
+              setContentObj({
+                ...contentObj,
+                title: e.target.value,
+              })
+            }
           ></input>
         </div>
       </div>

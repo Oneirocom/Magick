@@ -1,10 +1,10 @@
-import feathers from '@feathersjs/client'
+import { createContext, useContext, useEffect, useState } from 'react'
 import io from 'socket.io-client'
-import { useContext, createContext, useEffect, useState } from 'react'
 
-import { feathers as feathersFlag, feathersUrl } from '@/config'
+import feathers from '@feathersjs/client'
+
+import { feathers as feathersFlag, feathersUrl } from '../config'
 // import { Application } from '@feathersjs/feathers'
-
 import { getAuthHeader, useAuth } from './AuthProvider'
 
 const buildFeathersClient = async () => {

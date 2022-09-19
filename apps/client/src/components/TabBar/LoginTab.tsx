@@ -1,6 +1,7 @@
-import { useAuth, getSessionId } from '@/contexts/AuthProvider'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+
+import { getSessionId, useAuth } from '../../contexts/AuthProvider'
 import Icon from '../Icon/Icon'
 
 export function LoginTab({}) {

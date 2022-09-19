@@ -1,7 +1,8 @@
-import { useAuth } from '@/contexts/AuthProvider'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
+
+import { useAuth } from '../../../contexts/AuthProvider'
 
 const MessageReaction = ({ message_reaction, updateCallback }) => {
   const [data, setData] = useState(message_reaction)

@@ -1,18 +1,13 @@
-import { RootState } from '@/state/store'
-import {
-  activeTabSelector,
-  selectAllTabs,
-  openTab,
-  closeTab,
-} from '@/state/tabs'
 import { useEffect } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { usePubSub } from '../../contexts/PubSubProvider'
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import TabLayout from '../../components/TabLayout/TabLayout'
+import { usePubSub } from '../../contexts/PubSubProvider'
+import { RootState } from '../../state/store'
+import { activeTabSelector, closeTab, openTab, selectAllTabs } from '../../state/tabs'
 import Workspaces from '../../workspaces'
 
 const Thoth = ({ empty = false }) => {
@@ -33,8 +28,7 @@ const Thoth = ({ empty = false }) => {
     // If there are still tabs, grab one at random to open to for now.
     // We should do better at this.  Probably with some kind of tab ordering.
     // Could fit in well with drag and drop for tabs
-    if (tabs.length > 0 && !activeTab && !spellName)
-      navigate(`/thoth`)
+    if (tabs.length > 0 && !activeTab && !spellName) navigate(`/thoth`)
 
     if (tabs.length === 0 && !activeTab && !spellName) navigate('/home')
   }, [tabs])

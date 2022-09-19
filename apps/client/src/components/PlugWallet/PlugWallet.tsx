@@ -1,6 +1,8 @@
-import { usePlugWallet } from '@/contexts/PlugProvider'
-import { useEffect, useState } from 'react'
 import './plugWallet.css'
+
+import { useEffect, useState } from 'react'
+
+import { usePlugWallet } from '../../contexts/PlugProvider'
 
 export function PlugWallet({
   onConnect = (arg: string) => {},

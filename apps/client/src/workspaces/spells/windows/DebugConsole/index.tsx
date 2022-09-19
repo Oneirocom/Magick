@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { renderToString } from 'react-dom/server'
 import Terminal from 'react-console-emulator'
-import { useAuth } from '@/contexts/AuthProvider'
-import { usePubSub } from '@/contexts/PubSubProvider'
-import Window from '@components/Window/Window'
-import { useEditor } from '@/workspaces/contexts/EditorProvider'
+import { renderToString } from 'react-dom/server'
+
+import Window from '../../../../components/Window/Window'
+import { useAuth } from '../../../../contexts/AuthProvider'
+import { usePubSub } from '../../../../contexts/PubSubProvider'
+import { useEditor } from '../../../../workspaces/contexts/EditorProvider'
 
 export type DebugMessage = {
   message: string

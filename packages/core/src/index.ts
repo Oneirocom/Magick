@@ -15,3 +15,5 @@ export { default as SelectionPlugin } from './plugins/selectionPlugin'
 export { default as SocketGeneratorPlugin } from './plugins/socketGenerator'
 export { default as SocketPlugin } from './plugins/socketPlugin'
 export { default as TaskPlugin } from './plugins/taskPlugin'
+
+export * from './types'

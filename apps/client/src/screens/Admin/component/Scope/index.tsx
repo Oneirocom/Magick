@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react'
 
-import Table from '../../common/Table'
-import Search from '../../common/Search'
-import { styled } from '@mui/material/styles'
-import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
+import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
-import { columnScope } from '../../common/Variable/column'
+
 import { useModal } from '../../../../contexts/ModalProvider'
-import { useAppDispatch, useAppSelector } from '@/state/hooks'
 import {
-  retrieveScope,
-  ScopeRes,
-  deleteScope,
-  searchScope,
+    deleteScope, retrieveScope, ScopeRes, searchScope
 } from '../../../../state/admin/scope/scopeState'
+import { useAppDispatch, useAppSelector } from '../../../../state/hooks'
+import Search from '../../common/Search'
+import Table from '../../common/Table'
+import { columnScope } from '../../common/Variable/column'
 
 const Container = styled(Grid)({
   marginBottom: '1.5rem',

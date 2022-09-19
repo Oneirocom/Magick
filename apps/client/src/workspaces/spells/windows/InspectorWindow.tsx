@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 
-import { useModal } from '@/contexts/ModalProvider'
+import { InspectorData } from '@thothai/core'
+
 import Icon, { componentCategories } from '../../../components/Icon/Icon'
 import Window from '../../../components/Window/Window'
-import DataControls from '../DataControls'
+import { useModal } from '../../../contexts/ModalProvider'
+import { useInspector } from '../../../workspaces/contexts/InspectorProvider'
 import WindowMessage from '../../components/WindowMessage'
-import { useInspector } from '@/workspaces/contexts/InspectorProvider'
-import { InspectorData } from '@thothai/core/types'
+import DataControls from '../DataControls'
+
 // import { useWysiwygInspector } from '@/workspaces/contexts/WysiwygProvider'
 
 const Inspector = props => {

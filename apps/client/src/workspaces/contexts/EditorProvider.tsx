@@ -1,29 +1,17 @@
-import { initEditor, zoomAt } from '@thothai/core'
-import {
-  GraphData,
-  EditorContext,
-  Spell,
-  ThothEditor,
-} from '@thothai/core/types'
-import React, {
-  useRef,
-  useContext,
-  createContext,
-  useState,
-  useEffect,
-} from 'react'
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 
-import { useLazyGetSpellQuery } from '../../state/api/spells'
+import gridimg from '@/grid.png'
+import { EditorContext, GraphData, initEditor, Spell, ThothEditor, zoomAt } from '@thothai/core'
 
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import { MyNode } from '../../components/Node/Node'
-import gridimg from '@/grid.png'
-import { usePubSub } from '../../contexts/PubSubProvider'
-import { useThothInterface } from './ThothInterfaceProvider'
+import { feathers } from '../../config'
 // TODO fix this path import
-import { useAuth } from '@/contexts/AuthProvider'
-import { useFeathers } from '@/contexts/FeathersProvider'
-import { feathers } from '@/config'
+import { useAuth } from '../../contexts/AuthProvider'
+import { useFeathers } from '../../contexts/FeathersProvider'
+import { usePubSub } from '../../contexts/PubSubProvider'
+import { useLazyGetSpellQuery } from '../../state/api/spells'
+import { useThothInterface } from './ThothInterfaceProvider'
 
 export type ThothTab = {
   layoutJson: string

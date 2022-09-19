@@ -1,14 +1,10 @@
-import { useState, useEffect } from 'react'
-
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+
+import { createClient, singleClient, updateClient } from '../../state/admin/clientS/clientState'
+import { useAppDispatch, useAppSelector } from '../../state/hooks'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
-import { useAppDispatch, useAppSelector } from '@/state/hooks'
-import {
-  createClient,
-  singleClient,
-  updateClient,
-} from '../../state/admin/clientS/clientState'
 
 const AddClientSettings = ({ closeModal, name, id }) => {
   const { sclient, loading, error, createSuccess, updateSuccess } =

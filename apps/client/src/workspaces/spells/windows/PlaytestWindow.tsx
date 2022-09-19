@@ -1,20 +1,17 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import Editor from '@monaco-editor/react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {
-  upsertLocalState,
-  selectStateBySpellId,
-  addLocalState,
-} from '@/state/localState'
-import { usePubSub } from '@/contexts/PubSubProvider'
-import Window from '@/components/Window/Window'
-import css from '@/screens/Thoth/thoth.module.css'
-import { useFeathers } from '@/contexts/FeathersProvider'
-import { feathers as feathersFlag } from '@/config'
-import { useAppSelector } from '@/state/hooks'
+import Editor from '@monaco-editor/react'
+
+import Window from '../../../components/Window/Window'
+import { feathers as feathersFlag } from '../../../config'
+import { useFeathers } from '../../../contexts/FeathersProvider'
+import { usePubSub } from '../../../contexts/PubSubProvider'
+import css from '../../../screens/Thoth/thoth.module.css'
+import { useAppSelector } from '../../../state/hooks'
+import { addLocalState, selectStateBySpellId, upsertLocalState } from '../../../state/localState'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
@@ -95,7 +92,7 @@ const Playtest = ({ tab }) => {
     minimap: {
       enabled: false,
     },
-    wordWrap: 'bounded',
+    wordWrap: 'bounded' as 'bounded',
     fontSize: 14,
   }
 
