@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 30 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,0,-39)">
+        <g id="water" transform="matrix(1,0,0,1,0,39.6309)">
+            <rect x="0" y="0" width="30" height="30" style="fill:none;"/>
+            <g transform="matrix(1,0,0,1,0,-39.6309)">
+                <path d="M2.549,64.964L6.663,61.11C6.663,61.11 10.636,64.831 10.636,64.831L14.831,60.902C14.831,60.902 19.105,64.906 19.105,64.906L23.218,61.053L27.309,64.885L29.858,62.096L23.218,55.876L19.105,59.729C19.105,59.729 14.831,55.725 14.831,55.725L10.636,59.654C10.636,59.654 6.664,55.933 6.664,55.933L0,62.175L2.549,64.964ZM2.691,53.595L6.805,49.741C6.805,49.741 10.778,53.462 10.778,53.462L14.972,49.533C14.972,49.533 19.247,53.537 19.247,53.537L23.36,49.684L27.451,53.516L30,50.727L23.36,44.507L19.247,48.36C19.247,48.36 14.972,44.356 14.972,44.356L10.778,48.285C10.778,48.285 6.805,44.564 6.805,44.564L0.142,50.806L2.691,53.595Z" style="fill:white;"/>
+            </g>
+        </g>
+    </g>
+</svg>

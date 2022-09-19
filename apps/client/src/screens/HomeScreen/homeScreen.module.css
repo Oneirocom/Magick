@@ -1,0 +1,113 @@
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(20, 20, 20, 0.8);
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spell-details {
+  margin-bottom: var(--c4);
+}
+
+.label {
+  font-size: 14px;
+}
+
+.input {
+  margin-top: var(--c1);
+  margin-bottom: var(--c1);
+  width: 100%;
+}
+
+.error-message {
+  margin-top: var(--c1);
+  color: var(--red);
+  text-align: center;
+}
+
+.template-panel:hover {
+  /* background-color: var(--dark-3); */
+  border: 1px solid var(--primary);
+}
+.center-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--small);
+}
+.center-container h1 {
+  margin-top: var(--extraSmall);
+  margin-bottom: var(--small);
+}
+.template-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.template-container .template-panel {
+  border: 1px solid transparent;
+}
+.template-container p {
+  display: inline-block;
+  padding: 4px;
+  padding-left: var(--small);
+  padding-right: var(--small);
+  border-radius: 4px;
+}
+.template-container:hover p {
+  background-color: var(--dark-3);
+}
+.template-container:hover .template-panel {
+  border: 1px solid var(--dark-4);
+}
+
+.template-container.selected p {
+  background-color: var(--primary);
+}
+.template-container.selected .template-panel {
+  border: 1px solid var(--primary);
+}
+
+.button-row {
+  margin-top: var(--small);
+  border-top: 1px solid var(--dark-3);
+  padding-top: var(--small);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--extraSmall);
+}
+.project-row {
+  display: flex;
+  padding: var(--extraSmall);
+  padding-left: var(--small);
+  border-bottom: 1px solid var(--dark-2);
+  align-items: center;
+}
+.project-row:hover {
+  background-color: var(--dark-3);
+}
+.project-row.selected {
+  background-color: var(--primary);
+}
+
+.version-banner {
+  color: rgba(255, 255, 255, 0.3);
+  box-sizing: border-box;
+  box-shadow: inset 0px -30px 30px rgba(0, 0, 0, 0.5);
+  background-position: center;
+  background-size: cover;
+  height: var(--c25);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: var(--small);
+}
+.open-project-container {
+  padding: var(--small);
+}

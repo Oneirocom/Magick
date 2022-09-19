@@ -1,0 +1,5 @@
+top2vec
+flask
+psycopg2
+#if there is issue installing psycopg2, use psycopg2-binary
+#psycopg2-binary

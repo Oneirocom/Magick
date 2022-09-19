@@ -1,0 +1,30 @@
+.panel {
+  text-align: left;
+  display: inline-block;
+  color: #fff;
+  padding: var(--small);
+  background-color: var(--dark-2);
+  border-radius: var(--extraSmall);
+  box-sizing: border-box;
+  background-position: center;
+  background-size: cover;
+  overflow: hidden;
+}
+.panel.unpadded {
+  padding: 0;
+}
+.panel.square {
+  border-radius: 0;
+}
+.panel.round {
+  border-radius: 4px;
+}
+.panel.rounder {
+  border-radius: var(--extraSmall);
+}
+.panel.roundest {
+  border-radius: var(--small);
+}
+.panel.shadow {
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}

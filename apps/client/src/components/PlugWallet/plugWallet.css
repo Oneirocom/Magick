@@ -1,0 +1,117 @@
+.walletContainer {
+  float: left;
+  margin: 10px;
+  overflow: hidden;
+}
+
+.plugMenu {
+  background: none;
+  border: 1px solid #ffcf40;
+  border-radius: 10px;
+  font-size: 14px;
+  padding: 8px 10px;
+  color: lightgoldenrodyellow;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.plugMenu:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.plugSettings {
+  display: none;
+  position: absolute;
+  background-color: #202020;
+  min-width: 160px;
+  max-width: 180px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+.menuHeader button {
+  width: 80%;
+  margin: 15px 10%;
+  background: none;
+  border: 1px solid #ffcf40;
+  border-radius: 10px;
+  font-size: 12px;
+  padding: 8px 10px;
+  color: lightgoldenrodyellow;
+  cursor: pointer;
+}
+
+.menuHeader button:hover {
+  background-color: #303030;
+}
+
+.menuHeader button:disabled {
+  cursor: default;
+  background: none;
+  color: silver;
+  border: 1px solid rgba(255, 210, 67, 0.5);
+}
+
+.menuHeader h6 {
+  display: block;
+  padding: 0px 16px;
+  height: auto;
+  margin: 0px;
+  color: lightgoldenrodyellow;
+}
+
+.menuHeader p {
+  font-size: 16px;
+  color: #e7e7e7;
+  padding: 12px 16px;
+  margin: 0px;
+}
+
+.balance {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.menuBody p {
+  float: none;
+  color: #ffcf40;
+  padding: 12px 16px;
+  margin: 0px;
+  text-decoration: none;
+  text-align: left;
+  font-size: 18px;
+  display: block;
+  height: 16px;
+}
+
+.menuBody p:hover {
+  background-color: #303030;
+  cursor: pointer;
+}
+
+.showMenu {
+  display: block;
+}
+
+.menuDivider {
+  height: 1px;
+  width: 100%;
+  background-color: #353535;
+}
+
+.statusBubble {
+  height: 10px;
+  width: 10px;
+  border: 1px solid black;
+  border-radius: 360px;
+  margin-left: 6px;
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.statusBubble.connected {
+  background-color: rgba(0, 255, 0, 0.5);
+}

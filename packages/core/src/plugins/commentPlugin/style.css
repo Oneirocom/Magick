@@ -1,0 +1,28 @@
+.inline-comment,
+.frame-comment {
+  color: black;
+  padding: 12px;
+  font-size: 140%;
+  color: white;
+  position: absolute;
+  cursor: move;
+  border-radius: 16px;
+}
+
+.frame-comment:focus,
+.inline-comment:focus {
+  outline: none;
+  border-color: #ffd92c;
+}
+
+.inline-comment {
+  z-index: 4;
+  background: #aec4ff;
+  border: 3px solid #aec4ff;
+}
+
+.frame-comment {
+  z-index: -10;
+  background: rgba(15, 80, 255, 0.2);
+  border: 6px solid transparent;
+}

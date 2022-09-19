@@ -1,0 +1,91 @@
+{
+  "name": "@thothai/core",
+  "version": "0.1.3",
+  "license": "Apache-2.0",
+  "author": "Michael Sharpe <m.sharpe@project89.org> (https://www.project89.org)",
+  "contributors": [
+    "Sean Gillespie <s.gillespie@project89.org>",
+    "Jakob Grant <j.grant@project89.org>",
+    "Preston Gull <gull.preston@gmail.com>"
+  ],
+  "private": false,
+  "description": "core shared code for thoth",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "resolutions": {
+    "@types/react": "17.0.2"
+  },
+  "dependencies": {
+    "@green-api/whatsapp-bot": "0.2.5",
+    "@types/deep-equal": "^1.0.1",
+    "axios": "0.27.0",
+    "cross-fetch": "^3.1.5",
+    "deep-equal": "^2.0.5",
+    "discord.js": "^13.6.0",
+    "dotenv-flow": "3.2.0",
+    "emoji-dictionary": "1.0.11",
+    "emoji-regex": "10.0.0",
+    "expletives": "^0.1.1",
+    "glob": "^7.2.0",
+    "googleapis": "^39.2.0",
+    "handlebars": "^4.7.7",
+    "inquirer": "^8.2.0",
+    "instagram-private-api": "1.45.3",
+    "isomorphic-fetch": "^3.0.0",
+    "jsdom": "^17.0.0",
+    "keyword-extractor": "^0.0.20",
+    "lodash": "^4.17.21",
+    "mustache": "^4.2.0",
+    "natural": "^5.1.13",
+    "node-telegram-bot-api": "0.56.0",
+    "openai-api": "1.2.6",
+    "path": "^0.12.7",
+    "pg": "8.7.1",
+    "puppeteer": "13.0.1",
+    "puppeteer-extra": "3.2.3",
+    "puppeteer-extra-plugin-stealth": "2.9.0",
+    "puppeteer-screen-recorder": "^2.0.2",
+    "puppeteer-stream": "2.0.7",
+    "racist": "^1.0.6",
+    "readline": "^1.3.0",
+    "reddit": "1.2.1",
+    "redis": "4.0.1",
+    "regenerator-runtime": "^0.13.9",
+    "rete": "https://github.com/AtlasFoundation/rete.git",
+    "rete-area-plugin": "^0.2.1",
+    "rete-connection-plugin": "^0.9.0",
+    "rete-context-menu-plugin": "^0.6.0-rc.1",
+    "rete-module-plugin": "^0.4.1",
+    "similarity": "^1.2.1",
+    "snoostream": "1.0.1",
+    "snoowrap": "1.23.0",
+    "socket.io": "^4.5.0",
+    "tedis": "0.1.12",
+    "twilio": "3.72.0",
+    "twit": "2.2.11",
+    "twitter-api-v2": "1.8.0",
+    "twitter-autohook": "1.7.2",
+    "uuid": "^8.3.2",
+    "vm2": "^3.9.11",
+    "weaviate-client": "^2.10.1",
+    "wikipedia": "^1.1.6",
+    "xvfb": "0.4.0"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AtlasFoundation/Thoth.git"
+  },
+  "auto": {
+    "plugins": [
+      "npm"
+    ]
+  },
+  "gitHead": "964e67951af5e6b6a638c8e140dfa459cc2c27cb",
+  "devDependencies": {
+    "@types/uuid": "^8.3.4"
+  }
+}

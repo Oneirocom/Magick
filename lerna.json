@@ -1,0 +1,8 @@
+{
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "packages": ["build/packages/*"],
+  "useNx": true,
+  "useWorkspaces": true,
+  "version": "0.0.0",
+  "granularPathspec": false
+}

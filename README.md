@@ -1,94 +1,118 @@
+# THOTH
 
+Thoth is a multishot system builder. It leverages a visual coding style interface to allows game designers and developers to rapidly create powerful natural language systems and prototype games.
 
-# Thoth
+## Quickstart
 
-This project was generated using [Nx](https://nx.dev).
+You will need **yarn or npm** and **Docker** installed, along with **Node.js 16 or higher**. We use Docker to run a local Postgres database. You can skip the docker and install postgres directly, but you are almost always better off just using Docker.
+For **Linux** and **MAC** users, **sleep** and **concurently** commands must be installed in the machine.
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+Install xvfb, chromium and ffmpeg
 
-🔎 **Smart, Fast and Extensible Build System**
+First, clone and set up Thoth
 
-## Adding capabilities to your workspace
+```
+git clone https://github.com/TheNexusCity/thoth
+```
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+Next, install dependencies
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+```
+yarn install
+OR
+npm i
+```
 
-Below are our core plugins:
+You will need to make a few environment variable modifications
+To keep values privates, create a new file for each .env, called .env.local (these files are safe from the .gitignore)
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+In order to run the client and server use
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+```
+yarn run dev
 
-## Generate an application
+If on Windows run:
+yarn run dev:windows
+```
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+### Local Development
 
-> You can use any of the plugins above to generate applications as well.
+We use dotenv-flow for local environment variable management
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+Go to client folder, and create a new file called .env.local -- copy and .env vars you want to set from .env there
+If you are developing independently and are not a member of Latitude Games team, set **REACT_APP_USE_LATITUDE=false**
 
-## Generate a library
+Go to server folder, and create a new file called .env.local -- copy and .env vars you want to set from .env there
+If you are developing independently and are not a member of Latitude Games team, set **USE_LATITUDE=false**
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+## Client Setup
 
-> You can also use any of the plugins above to generate libraries as well.
+1. Generate a [Personal Access Token](https://github.com/settings/tokens) on Github which will allow you to install private latitude packages. Make sure you check the `write:packages` option. (`read:packages` will suffice as well if you aren't planning on publishing new versions of @thothai/core)
+1. In your `~/.bashrc`, append the line `export NPM_TOKEN=YourTokenGoesHere`, and restart your terminal (you can run `source ~/.bashrc` to do so)
+1. Clone the repository
+1. Navigate to the project root by running `cd thoth`
+1. Run `yarn install` to install project dependencies
+1. Run `yarn start` to start the @thothai/thoth-client app
 
-Libraries are shareable across libraries and applications. They can be imported from `@thoth/mylib`.
+## Core Local Setup
 
-## Development server
+1. Core the contents of `core/.env.default` to `core/.env` and modify the secrets as necessary
+1. Step 2 in Monorepo Development Setup
 
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+## Monorepo Development
 
-## Code scaffolding
+Within the yarn workspace we need to be mindful of which version of the shared package @thothai/core we are including in our local development setup and our deploys to Netlify.
 
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+You can either:
 
-## Build
+1. Target a published version of [@thothai/core](https://github.com/latitudegames/thoth/packages/983711) in client/package.json
+2. Or actively develop against the current state of the repository. (By ensuring that client/package.json is targetting the same version of @thothai/core that is currently listed in core/package.json)
 
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+If you are testing with the Latitude API locally you can point the latitude api to your local thoth package:
 
-## Running unit tests
+1.  making the dependance `"@thothai/core": "../thoth/core"`
+    or
+2.  run `yarn link` inside '/packages/core' and then copy the command it generates for you and run that command in your root latitude api path. This will tell your latitude api to use the simlinked version of thoth that your actively developing.
 
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
+## @thothai/core CI
 
-Run `nx affected:test` to execute the unit tests affected by a change.
+### Testing
 
-## Running end-to-end tests
+On Pull Request, GitHub actions will first determine if the diff contains changes in the `core` directory. If so
+and there isn't an active `thoth-core` labelled PR already open - it will proceed with building and deploying a Canary Release
+to GitHub packages. There can only be one `thoth-core` labelled PR active at a time, so if one exists additional PR's will be labelled `thoth-core-draft` by the CI. This `thoth-core-draft` label can be removed, and the CI re-run to build a canary once the unique `thoth-core` label position has been vacated.
 
-Run `nx e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+The latest canary release can be tested and installed locally with `yarn add @thothai/core@canary`. The Netlify Deploy Preview is configured to sense `thoth-core` PR's as well and targets the latest canary release, but it runs concurrently to the canary publishing process. You can test a canary release of `thoth-core` on your branch's Deploy Preview by re-deploying from the Netlify UI for your branch. It is important to note that `thoth-core-draft` PR's will still have a deploy preview on Netlify, but will be building with the latest canary release of `thoth-core` which may be unrelated to that PR's changes until it had it's own canary release and been re-deployed.
 
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
+### Releases
 
-## Understand your workspace
+When a `thoth-core` PR has been merged with main, the CI will create a prerelease based on the last commit, publish
+@thothai/core to GitHub packages and take care of incrementing the patch version in core/package.json to prepare
+for the next prerelease.
 
-Run `nx graph` to see a diagram of the dependencies of your projects.
+## Available Scripts
 
-## Further help
+In the project directory, you can run:
 
-Visit the [Nx Documentation](https://nx.dev) to learn more.
+### `yarn run dev`
 
+Runs both server and client.\
+Open [https://localhost:3001](https://localhost:3001) to view it in the browser.
 
+### `yarn start`
 
-## ☁ Nx Cloud
+Runs @thothai/client in the development mode.\
+Open [http://localhost:3003](http://localhost:3003) to view it in the browser.
 
-### Distributed Computation Caching & Distributed Task Execution
+### `yarn build`
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
+Builds the @thothai/thoth-client app for production to the `client/build` folder.
 
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
+### `yarn build:core`
 
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
+Builds the @thothai/core package for production to the `core/build` folder.
 
-Visit [Nx Cloud](https://nx.app/) to learn more.
+## Apache license information
+
+Good example here for formatting apache license files for reference.
+https://www.openntf.org/Internal/home.nsf/dx/Applying_Apache_License

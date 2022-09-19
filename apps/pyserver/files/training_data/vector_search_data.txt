@@ -1,0 +1,518 @@
+my unit-tests failed.
+tried the program, but it was buggy.
+the drive has a 2TB capacity.
+i need a new power supply.
+my computer has 2GB of ram.
+universe has a vast amount of planets.
+the universe is expanding.
+the trees are growing.
+many trees create a forest.
+the amazon is the bigger forest.
+Greece is in Europe.
+Europe is a continent.
+America is a continent.
+Asia is a continent.
+Africa is a continent.
+There are 5 oceans on earth.
+The biggest mountain is the everest.
+The biggest lake is the lake Superior.
+The eartch has a core inside that is very hot.
+The earth is round.
+Not all earth's oceans have been explored
+The biggest mammal is the blue whale.
+The biggest bird is the ostrich.
+The biggest fish is the shark.
+The biggest snake is the cobra.
+The most dangerous snake is the cobra.
+The biggest insect is the bee.
+Most of the insects are not dangerous, but some are.
+People that study biology are known as biologists.
+Australia's Great Barrier Reef is the largest living structure on Earth. Reaching over 2000 kilometres (1240 miles) in length.
+The first person to see a live cell with a microscope was Antonie van Leeuwenhoek, in 1674.
+Ecology is the study of ecosystems and how organisms interact with their environment.
+While some bacteria can make you sick, others have positive benefits such as helping you digest food or even make yoghurt.
+Moulds, yeasts and mushrooms are types of fungus.
+The common cold is a type of virus.
+Viruses can be treated with antiviral drugs.
+The human body has a lot of bones.
+Bacteria are extremely small and are made up of just one cell.
+Bacterial infections can be treated with antibiotics.
+Animals that eat plants as their primary food source are known as herbivores.
+Animals that eat meat as their primary food source are known as carnivores.
+Endangered species are those that are in danger of being completely wiped out, they include blue whales, tigers and pandas. Without protection these species may eventually become extinct.
+Born on July 5th 1996, Dolly the sheep was the first mammal to be cloned from an adult cell.
+When the DNA of an organism changes and results in a new trait (characteristic) it is known as mutation.
+French chemist and microbiologist Louis Pasteur was well known for inventing a process to stop various foods and liquids making people sick. Called Pasteurization, it reduces the amount of microorganisms that could lead to disease without having a noticeable effect on taste and quality in a way which methods such as sterilization might.
+Charles Darwin developed the idea of natural selection, sometimes called survival of the fittest. It is a process that involves living things with favorable traits being more likely to reproduce, passing on their favorable traits to future generations.
+An adult human body is made up of ± 100 trillion cells.
+Our bone marrow produces 260 billion red blood cells (RBCs) and 135 billion white blood cells (WBCs) per day.
+Thirst not only occurs when the body loses a lot of fluids but also occurs due to increased levels of salt in the blood. The reason being salt tends to bind water.
+What’s the largest organ of the human body? Quite surprising, but the answer is your skin.
+Did you know about the world’s smallest snake? If no, then here’s the answer - the Barbados Thread snake.
+Every nucleus in the human body has DNA of 6 feet long.
+Magnetoreception is a type of magnetic compass present in some migratory birds that help them navigate using the Earth’s magnetic field.
+The jaw is one of the strongest parts of the human body when it comes to exerting force.
+The ostrich egg is the biggest in the world. It equals to the volume of as much as 30 chicken eggs.
+The life of an eyelash is no more than 5 months.
+Armadillos spend about 80% of their life asleep!
+Babies born with farsightedness. They start to focus properly only between 3 to 6 months of age.
+In seahorses, the male gives birth to a young one.
+It is a fact that in a human mouth there are more bacteria than there are in the world.
+Alaska Is the Westernmost and Easternmost State in the U.S.
+There’s an Lake Within an Island on a Lake Within an Island
+Mauna Kea Is Taller Than Everest
+Mt. Everest Isn't as Close to the Moon as Mt. Chimborazo
+Iceland Is Growing 5 Centimeters Per Year
+The Pacific Ocean Is Shrinking at a Rate of 1.5 Percent Per Year
+A Good Morning Is a Good Night in Parts of Russia
+Los Angeles Is East of Reno, Nevada
+Mexico City Is Sinking
+Los Angeles and San Francisco Will Be Neighboring Cities
+There Are 7,100+ Islands in the Philippines
+The Sargasso Sea Has No Coasts
+Yellowstone National Park Is Home to a Supervolcano
+Sudan Has More Ancient Pyramids Than Egypt
+The Largest Rock on the Planet Is in Australia
+Damascus is the Oldest Continuously Inhabited City in the World
+Africa Spans All Four Hemispheres
+Kentucky Has More Caves Than Any Other Place on Earth
+Istanbul Is the Only Major City Resting on Two Continents
+Alaska Is Home to the Largest Cities in America
+The Deepest Place on Earth Is in the Pacific Ocean
+Russia's Transsiberian Railway Crosses 3,901 Bridges
+It Snows in the Sahara Desert
+Fly Over the Great Barrier Reef and You'll See a Heart
+Bangkok's Full Name is 163 Letters
+The Largest Concentration of Lakes Is in Canada
+42 Buildings in New York Have Their Own Zip Codes
+Two Islands 2.4 Miles Apart Are 20 Hours Apart
+Earth Has Enough Gold to Cover Itself in Its Entirety
+Water Covers the Majority of the Planet, but Most of It Can't Be Used by Humans
+The Most Remote Place on Earth Is Point Nemo
+20% of Oxygen Is Produced by the Amazon
+California Is Bigger Than Canada (By Population)
+Australia's Red Rock Is Bigger Than You Think
+Mount Everest Can Fit Inside the Mariana Trench
+The Shortest Town Names Have One Letter
+A Town in Nebraska Has a Single Resident
+The Country With the Longest Name Has 56 Characters
+Greece Has More Than 200 Inhabited Islands
+Australia's Alps Get More Snow Than the Swiss Alps
+Brazil has derived its name from a tree named brazilwood tree. It is a shortened form of Terra do Brasil, land of Brazil.
+Apples have 25% water in their volume! This is why it can float on water because it’s lighter than water.
+The potatoes were first cultivated in Peru almost 7000-10,000 years ago. There are right now almost 1000 different types of tomatoes.
+Vanilla extract comes from percolating of Vanilla pods called as Vanilla planifolia. There is some amount of alcohol present in it for approximately 2-3% of it!
+The most common fruit in the world is the banana.
+Oak trees get struck by lightning the most among all the trees. It is because they are taller than most of the trees.
+Strawberry is the only fruit that bears its seeds on the outside! An average strawberry will have about 200 seeds.
+An average pomegranate has more than 1000 seeds. Pomegranates are used for baking, juice blends and even in alcoholic beverages.
+Dwarf Willow is the tiniest tree in the world which is about two inches. Its scientific name is Salix herbacea.
+Titan Arums is the largest flower in the world! It is even bigger than an elephant being 10 feet high and 3 feet wide.
+The Shenzhen Nongke Orchid claimed the record for most expensive flower ever sold, when it was auctioned off for about $224,000 in 2005. This flower was created by scientists in a university lab, and took 8 years of work to develop. It only blooms every 5 years!
+Potatoes and Tomatoes are grown in the largest amount across the world. However, it is Onions that are the most widely used vegetable being a part of almost all the dishes.
+Caffeine is used as a natural pesticide for plants. It paralyzes and kills the insects feeding on them.
+Cutting an Onion releases a gas called Propanethiol S-oxide, which when mixed with certain enzymes present in Onion, creates a sulfur gas. The gas gets into our eyes while cutting the Onions and that is why you cry!
+The most efficient thing to wake you up in the morning is not Tea or Coffee, it’s Apples. They are packed with high amounts of Vitamins, antioxidants and fiber that makes your body active.
+More than a quarter of plant life (85%) is found in water! Earth is covered widely by marine biomes, estuaries and coral reefs.
+The fastest growing woody plant in the world is Bamboo. It can easily grow upto 35 inches per day.
+The Arabic word for fingers is Banana! The bunch of Bananas is called as hand of bananas and the individual units are the “fingers” of the fruit, hence, the name.
+The largest flower Rafflesia or “corpse flower”. They are 3 feet in diameter and 42 inches in height.
+There is a science of calculating the age of a tree by counting its rings called Dendrochronology. Rings in the steam of a tree are an indicator of its age.
+The word “hundred” comes from the old Norse term, “hundrath”, which actually means 120 and not 100
+In a room of 23 people there’s a 50% chance that two people have the same birthday.
+Most mathematical symbols weren’t invented until the 16th century. Before that, equations were written in words.
+“Forty” is the only number that is spelt with letters arranged in alphabetical order.
+Conversely, “one” is the only number that is spelt with letters arranged in descending order.
+From 0 to 1000, the only number that has the letter “a” in it is “one thousand”.
+‘Four’ is the only number in the English language that is spelt with the same number of letters as the number itself.
+Every odd number has an “e” in it.
+The reason Americans call mathematics “math”, is because they argue that “mathematics” functions as a singular noun so ‘math’ should be singular too.
+Markings on animal bones indicate that humans have been doing maths since around 30,000BC.
+“Eleven plus two” is an anagram of “twelve plus one” which is pretty fitting as the answer to both equations is 13.
+Because of differences in gravity, a 200 pound person would only weigh 76 pounds on Mars.
+Electric eels can stun both predators and prey with electric shocks of around 500 volts.
+Energy from food is usually measured in joules or calories.
+Light from the Earth takes just 1.255 seconds to reach the Moon.
+Sound travels at a speed of around 767 miles per hour (1,230 kilometres per hour).
+Physics is the science of matter and its behavior.
+The word Physics Comes from the Greek word, physikḗ, which means “science of nature.”
+Physics was recognized as a discipline in the 19th century.
+The Dead Sea is so dense with salt, you can easily float on it without drowning.
+The world's densest wood, the Black Ironwood (Olea laurifolia), does not float on water and therefore sinks.
+Gravity is by far the weakest force we know.
+Gravity and weight are not the same thing.
+Gravity makes waves that move at light speed.
+Explaining the microscopic behavior of gravity has thrown researchers for a loop.
+Gravity might be carried by massless particles called gravitons.
+Quantum gravity appears at the smallest length anything can be.
+Electricity travels at the speed of light, about 300,000 kilometres per second.
+A spark of static electricity can measure up to 3,000 volts.
+The average taser emits 50,000 volts.
+A bolt of lightning can measure up to three million (3,000,000) volts (and lasts less than one second).
+According to the Global Energy Statistical Yearbook, global electricity production for 2015 approached 25,000 terawatt hours (1 terawatt = 1 trillion watts).
+The first four common domestic items to be powered by electricity were the sewing machine, fan, kettle and toaster.
+LED light bulbs use about one-sixth of the electricity that conventional bulbs do, cost about a quarter as much to use, and last about 40 times longer.
+The quantum world is lumpy.
+Something can be both wave and particle at the same time.
+Objects can be in two places at once.
+Quantum Phyiscs may lead us towards a multiverse.
+Quantum Phyiscs helps us characterize stars.
+You Can’t Directly See a Black Hole.
+Our Milky Way Probably Has a Black Hole.
+Dying Stars Lead to Stellar Black Holes.
+There are Three Categories of Black Holes.
+Black Holes Are Funky.
+The First Black Hole Wasn’t Discovered Until X-Ray Astronomy was Used.
+The Closest Black Hole is Probably Not 1,600 Light-Years Away.
+We Don’t Know if Wormholes Exist.
+Black Holes Are Only Dangerous if You Get Too Close.
+Black Holes Are Constantly Used in Science Fiction.
+Our solar system is about 4.5 billion years old.
+The Moon is drifting away from Earth at a rate of 1.5 inches (3.8 cm) a year.
+A person who weighs 220 pounds (100 kg) on Earth would weigh only 84 pounds (34 kg) on Mars.
+Astronomers have made more than 1.4 million observations using the Hubble Space Telescope.
+Neutron stars rotate at a speed of 600 times per second.
+Scientists discovered a hydrogen signal from a galaxy located five billion light-years away.
+Saturn is made of 96% hydrogen.
+Enceladus reflects 90% of the Sun’s light.
+The world’s first speeding ticket was issued in 1902
+1 in 4 cars on the UK’s road were made in China
+A modern Formula 1 car can drive upside down in a tunnel at 120mph
+60 million cars are produced every year
+1 billion cars are currently in use around the world
+The average British driver will spend around 99 days of their life stuck in traffic
+It would take less than a month to get to the moon by car
+The average car contains over 30,000 unique parts
+75% of all cars produced by Rolls Royce are still on the road
+Volkswagen owns twelve well-known car brands from 7 European countries
+The first ever car accident occurred in 1891
+The largest speeding fine ever produced was €1,000,000
+The world record for removing and replacing a car engine is 42 seconds
+The odds of dying in a car accident are around 1 in 5,000
+The man who invented cruise control was blind
+The highest total mileage clocked by a single car is 2,850,000 million miles
+The creaks in your house have little to do with its age.
+That space under your lower cabinets serves a very specific purpose.
+The cabinet under your sink isn't really for storage.
+Your brass doorknobs may keep you healthy.
+Those holes on the bottom of your brick house aren't foundation problems that need correcting.
+The overhang on your roof is a good thing.
+The style of your roof depends on where you live.
+You can tell your home's age by its roof.
+Your home may have its own bird box.
+Your staircase balusters are named after a popular fruit.
+Your farmhouse's red exterior is probably paying homage to an old-fashioned tradition.
+Your stately Victorian home may have been built from a box.
+The bricks on your home's exterior have a very adorable name.
+Your textured plaster walls were likely made using real flowers.
+Some of the smaller boats used by man today include canoes, kayaks, paddleboats, dinghies, and rowboats. Boats are usually designed for inland waterways such as lakes, rivers, and bays.
+Some of the larger boats, sometimes referred to as ships, include cargo ships, cruise ships, military ships, yachts, and sailboats. Ships are usually designed for travel on seas and oceans.
+In the Old Testament of King James Bible there are 37 references to ships, and one reference to a boat.
+Native Americans used to make boats by digging out the inside of a log. These are the earliest canoes.
+The oldest boats found by archaeologists are called Pesse canoes. The oldest recovered boat is believed to be between 7,000 and 10,000 years old.
+Evidence from ancient references exists to prove that boats were used 900,000 years ago and in prehistoric times.
+Over a century ago steamboats were popular for transporting people and goods along rivers.
+The hull of a boat is the main body of the boat not including the sail or motor or oars.
+The boat's left side is referred to as the port side.
+The boat's right side is referred to as the starboard side.
+The bow is the boats front, and the boat's back is called the stern.
+The boat's width at the widest point from starboard to port side is called its beam.
+There are approximately 18 million boats owned by Americans for recreational use today.
+Coding has over 700 languages.
+Coding Bugs were NOT named after an actual bug.
+Coding will soon be as important as reading.
+The first programmer was the daughter of a mad poet
+The first computer virus was a Creeper.
+NASA still operates some projects on programming from the 1970’s.
+There is BIG money in coding.
+It’s all 0’s and 1’s.
+You don’t have to work in tech to use coding.
+Computer was a job title, and the first programmers were women
+Coding can “power up” your brain
+Some planes can fly for more than five hours after one of their engines goes out.
+If someone dies on your flight, their body might stay in the cabin with you.
+In-flight oxygen masks aren't intended to last the whole flight.
+Pilots frequently fall asleep on the job.
+Black boxes aren't actually black.
+Airplane air is significantly drier than any you might experience on earth.
+A Boeing 747 is more fuel efficient than your car.
+A hijacker once relinquished control of a flight for beer.
+An engineer designed a plane with a detachable cabin to save passengers.
+The dirtiest place on the plane isn't the bathroom.
+Dead chickens are thrown into plane jets during safety tests.
+There are thousands of planes over the United States at any moment.
+Takeoff and landing are the most dangerous times during a flight.
+The world's largest airplane weighs nearly 600 tons.
+The safest seats on an aircraft are those at the back of the plane.
+You are about 7 percent of the distance to space during flights.
+Airplanes can trigger lightning.
+Airplane blankets aren't always washed between passengers.
+A Boeing 747 tank can hold 48,445 gallons of fuel.
+Dimming the aircraft's lights serves a purpose beyond sleep.
+Plane exhaust kills more people than plane crashes.
+Plane doors can't actually open in mid-flight.
+All pilots who fly internationally must know at least a bit of English.
+Pointing a laser pointer at a plane is a serious crime.
+The world's oldest airline will turn 100 in 2019.
+Airplane bathrooms can be opened from the outside.
+One airline has had no fatal accidents.
+There are 140 miles of wiring inside a Boeing 747.
+American Airlines saved $40,000 by cutting one ingredient from meals.
+Airplane water is riddled with bacteria.
+Some of the deadliest crashes happen when planes are securely on the ground.
+Pilots and co-pilots eat different meals on a flight.
+The most expensive First Class seat costs more than $30,000.
+Your taste buds change in flight.
+Traveling by plane is the safest way to get around.
+The sound barrier was broken in 1947.
+Sandra Bullock and about 2 million other Americans have aviophobia.
+Long-haul flights have secret bedrooms and a bathroom for flight attendants.
+The world's smallest plane weighs only 358.8 pounds.
+The longest military plane is six stories tall.
+Turbulence is the top cause of non-fatal plane injuries.
+Living in an airplane flight path could harm your heart.
+The fastest commercial plane flew at twice the speed of sound.
+Airplane tires are inflated to about six times the PSI of car tires.
+There are temperatures too cold to fly in.
+The Highest Number of Languages in a Country
+The Language Isolate Factor
+Order of Adjectives in the English language
+The Pirahã Language Facts
+The Double-edged Sword
+Where Clicking Sounds are Enough to Communicate
+Turkeys Were Once Worshipped Like Gods
+Paul Revere Never Actually Shouted, "The British Are Coming!"
+The Olympics Used to Award Medals for Art.
+One Time, 100 Imposters Claimed to Be Marie Antoinette's Dead Son
+Napoleon Was Once Attacked By a Horde of Bunnies
+Women Were Once Banned from Smoking in Public
+The Government Literally Poisoned Alcohol During Prohibition
+Captain Morgan Actually Existed
+Using Forks Used to Be Seen as Sacrilegious
+The Titanic's Owners Never Said the Ship Was "Unsinkable"
+There Were More Than 600 Plots to Kill Fidel Castro
+Cleopatra Was Not Egyptian
+Pope Gregory IV Declared a War On Cats
+Mary Actually Had a Little Lamb
+Richard Nixon Was a Great Musician
+Lyndon B. Johnson Gave Interviews From the Bathroom
+Ketchup Was Sold in the 1830s as Medicine
+President Abraham Lincoln is in the Wrestling Hall of Fame
+July 4th Isn't the Real Independence Day
+Abraham Lincoln Was Also a Licensed Bartender
+John Adams Was the First President to Live In the White House
+The First Face on the $1 Bill Was Not George Washington
+Thomas Edison Didn't Invent the Light Bulb
+And Betsy Ross Didn't Design and Sew the First American Flag
+Cars Weren't Invented in the United States
+George Washington Opened a Whiskey Distillery After His Presidency
+Christians were the largest religious group in the world in 2015, making up nearly a third (31 percent) of Earth’s 7.3 billion people. Muslims were second, with 1.8 billion people, or 24 percent of the global population, followed by religious "nones" (16 percent), Hindus (15 percent) and Buddhists (7 percent).
+Between 2015 and 2060, Muslims – the major religious group with the youngest population and the highest fertility – are projected to increase by 70 percent. The number of Christians is projected to rise by 34 percent.
+Much of the worldwide growth of Islam and Christianity is expected to take place in sub-Saharan Africa.
+Over the coming decades (2010 to 2050), about 40 million people are projected to switch into Christianity, while 106 million are projected to leave, with most joining the ranks of the religiously unaffiliated.
+People have been painting for as long as 30,000 years!
+The Earliest Known Oil Paintings Date Back to the 14th Century!
+Artists Used to Store Their Paint in Animal Bladders!
+World War II Brought Changes To The Paint Industry!
+Acrylic Paint Only Became Commercially Available In The 50s!
+Oil Paint Takes 2 Weeks To Dry!
+Acrylic Paints Take Between 10 Minutes to 2 Hours To Dry!
+It takes 570 Gallons of Paint to Repaint The White House!
+Spray paint was invented in the 1949!
+Acrylic Paint Has A Lot of Big Names Behind It!
+Musicians Have Shorter Life Spans Than the General Population
+In 2016, Mozart Sold More CDs than Beyoncé did
+Singing in a Group Boosts Mood and Creates a Bond
+Some People Feel Nothing Toward Music When They Listen to It
+Listening to Music Enhances Physical Performance
+Rod Stewart Hosted the Largest Ever Free Concert in the World
+"Wanna Be" by The Spice Girls is the Catchiest Song of All Time
+Finland Has the Most Metal Bands Per Capita
+An Astronaut Released an Album with All Songs Recorded in Space
+The British Navy Uses Britney Spears Songs to Scare Off Pirates
+"Jingle Bells" Was Originally a Thanksgiving Song
+Barry Manilow Didn't Write "I Write the Songs"
+Music Affects Your Perception of the World
+Music Helps Plants Grow Faster and Better
+None of The Beatles Could Read or Write Music
+The Most Expensive Musical Instrument Sold for $15.9 Million in the U.S.
+Metallica is the First and Only Band to Have Played on All 7 Continents of the World
+The "Happy Birthday" Song Brings A Bunch of Royalties
+The earliest forms of poetry predate written language. They were sung or recited to help people remember genealogy, laws, and oral history.
+The word "poetry" is from the Greek term poiesis, which means "making.
+Poetry is one of the oldest forms of communication, dating back to prehistoric times with hunting poetry in Africa and ancient Egypt.
+he oldest surviving epic poem is the Epic of Gilgamesh and dates from the 3rd millennium BC in Sumer (now Iraq).
+he longest poem in the world is the Mahabharata. An Indian epic poem dating from the 4th century BC or earlier, the poem has about 1.8 million words.
+Poet's Day is celebrated every August 21.
+The skin of murderer George Cudmore was used to bind an 1852 edition of John Milton's Poetical Works.
+The word "unfriend" first appeared in a 1275 medieval poem titled "Brut" by Layamon. Coincidentally, this is also the same poem in which the word "muggle" first appears.
+German poet Gottlob Burmann so despised the letter "r" that he avoided using it in his poems and suppressed it in his speech during the last 17 years of his life.
+Anne Bradstreet was the first woman to be recognized as an accomplished poet in the British American colonies. After she died, her husband collected her poems and published them as a book, making her the first woman to have a published book in America.
+Art used to be an Olympic event
+The Mona Lisa has her own mailbox in the Louvre because of all the love letters she receives
+The colour wheel predates the United States
+Artist Willard Wigan once inhaled his own work
+In 2003 street artist Banksy stuck his own work to the wall in the Tate Modern Museum.
+Fish are social
+Fish do remember!
+Fish are smart
+Fish are excellent communicators
+Fish are flexible
+Fish can migrate extremely far distances
+Fish have exceptional sensory capabilities
+Fish are important to sustaining ecosystems
+Fish can change colour
+Fish as farm animals
+Lions are the only cats that live in groups.
+A group, or pride, can be up to 30 lions, depending on how much food and water is available.
+Female lions are the main hunters. While they’re out looking for food, the males guard the pride’s territory and their young.
+A lion’s roar can be heard up to eight kilometres away.
+Lions scent mark their territory, using their wee, to create a border.
+A house cat’s genome is 95.6 percent tiger, and they share many behaviors with their jungle ancestors, says Layla Morgan Wilde, a cat behavior expert and the founder of Cat Wisdom 101. These behaviors include scent marking by scratching, prey play, prey stalking, pouncing, chinning, and urine marking.
+Cats are believed to be the only mammals who don’t taste sweetness.
+Cats are nearsighted, but their peripheral vision and night vision are much better than that of humans.
+Cats are supposed to have 18 toes (five toes on each front paw; four toes on each back paw).
+Cats can jump up to six times their length.
+Cats’ claws all curve downward, which means that they can’t climb down trees head-first. Instead, they have to back down the trunk.
+Dogs can sniff at the same time as breathing.
+Some dogs are incredible swimmers.
+Dogs don’t sweat like we do
+Your dog could be left or right-pawed
+Dogs have 18 muscles controlling their ears
+Dogs are about as intelligent as a two-year-old child
+Mammals are warm-blooded animals. Their body temperature remains about the same their entire lives.
+All mammals have hair, even dolphins and whales that live in the ocean.
+Most mammals are born live, not from eggs. There are two mammals that hatch from eggs, including the spiny anteater and the duckbilled platypus.
+Most mammals are helpless when they are babies. Adult mammals protect and help care for babies until they can survive on their own. The mammal most famous for caring for their babies is the mother kangaroo who carries their babies in their pouch until they are about one year old. Mammals like mice, only care for their young for about 1 month. Elephants care for their young for a long time, up to 10 years. How long do you think your parents will care for you?
+All mammal babies drink milk from their mothers.
+All mammals except ant eaters have teeth.
+Bats are the only mammals that can fly.
+Cheetahs are the fastest land animal and also mammals. The can run up to 70 mph. The fastest cheetah clocked in a zoo for the 100 meter dash is 5.95 seconds which is almost twice as fast as the fastest human recorded. To run this fast the cheetah has a stride length of nearly 22 feet. The long jump record for a human is just over 29 feet. The cheetah has the perfect body for speed and has enlarged lungs, nostrils and heart to be able to get enough oxygen to run fast.
+Orca (Killer) whales are one of the fiercest hunters of all animals. They are known to attack whales and even polar bears. Orcas are also very smart and are featured in aquatic shows where they can show off their intelligence
+Koalas sleep the longest of any animal. They sleep 22 hours a day.
+Dolphin and whale babies do not sleep the first month of their life.
+Snakes don't have eyelids.
+Snakes have 5 forms of locomotion.
+he definition of a ‘family’ used by the Office for National Statistics is “a married, civil partnered or cohabiting couple with or without children, or a lone parent with at least one child”.
+By that definition, according to the ONS, there were 18.2 million families in the UK in 2012.
+Of those, 12.2 million consisted of a married couple with or without children.
+Until the late 17th century, ‘family’ included not only relatives but also the servants of a household.
+You’re going to be taller in the morning
+your heart beats about 100,000 times a day
+Your highest blood flow is in your kidneys
+You can produce enough saliva to fill two bathtubs a year
+Healthy lungs are pink lungs
+Dreaming in black and white
+Your blood vessels could circle the globe
+The average human adult has 2000-4000 taste buds
+Your body has more than 600 muscles
+In time your brain has a harder time with long-term memories
+Solar System is 4.6 Billion Years Old
+Sunlight Takes Around 8 Minutes To Reach Earth
+Solar System 2 Light-years Across
+Planets Are Made of Rock or Gas
+Most Asteroids Found Between Mars and Jupiter
+The Closer To The Sun, The Hotter The Planet
+One Year Different On Each Planet
+Comets We See Originate From Within Our Solar System
+Nearest Star To Earth is Proxima Centauri
+There Are 100 Billion Solar Systems In Milky Way Galaxy
+The Sun accounts for 99.86% of the mass in the solar system.
+Over one million Earth’s could fit inside the Sun.
+One day the Sun will consume the Earth.
+The energy created by the Sun’s core is nuclear fusion.
+The Sun is almost a perfect sphere.
+The Sun is travelling at 220 km per second.
+The Sun will eventually be about the size of Earth.
+It takes eight minutes for light reach Earth from the Sun.
+Some of the earliest named doctors were women
+Cataract surgery was possible in the sixth century BC
+A ‘tree of life’ tackled scurvy
+If you want a cure for everything, try theriac
+General anaesthesia helped cancer patients at the beginning of the 19th century
+A ‘leech craze’ hit 19th-century Europe
+You can tell the temperature by counting a cricket’s chirps!
+Sandstorms can swallow up entire cities.
+Dirt mixed with wind can make dust storms called black blizzards.
+A mudslide can carry rocks, trees, vehicles and entire buildings!
+The coldest temperature ever officially recorded was -89.2°C. Brrrr!
+Mild autumn weather often means bigger spiders in our homes.
+A heatwave can make train tracks bend!
+About 2,000 thunderstorms rain down on Earth every minute.
+A 2003 heatwave turned grapes to raisins before they were picked from the vine!
+Lightning often follows a volcanic eruption.
+Raindrops can be the size of a housefly and fall at more than 30kmph.
+Cape Farewell in Greenland is the windiest place on the planet.
+Hurricanes can push more than 6m of water ashore.
+In July 2001 the rainfall in Kerala, India, was blood red!
+Blizzards can make snowflakes feel like pellets hitting your face.
+A hurricane in Florida, USA, caused 900 captive pythons to escape.
+Worms wriggle up from underground when a flood is coming.
+A thunderstorm can produce 160kmph winds!
+In Antarctica, snow can fall so hard you can’t see your hand in front of your face.
+A whiteout or heavy snowfall that makes it difficult to see, can make you feel sick.
+Within the next 2 decades, global temperatures are likely to rise 1.5 degrees Celsius
+The last 7 years have been the warmest on record.
+More than 1 million species are at risk of extinction by climate change in the next 50 years
+Climate change is already happening, and it’s detrimental to human life, too.
+Many leaders still aren’t taking it seriously.
+Light is made up of energy.
+Light travels in a straight line. Objects in its path cause light to bend or refract.
+The speed of light is exactly 299 792 km per second.
+This is the speed when light is travelling in a vacuum and not obstructed by the atmosphere.
+Travelling at the speed of light, you could go around Earth 7.5 times in a second.
+The First Computer Weighed More Than 27 Tons
+About 90% of the World’s Currency Only Exists on Computers
+The First Computer Mouse was Made of Wood
+About 70% of Virus Engineers Work for Organized Crime Syndicates
+The First Known Computer Programmer was a Woman
+Some of the Biggest Computer Brands Started in Garages
+People Blink Less When They Use Computers
+Hackers Write About 6,000 New Viruses Each Month
+More Than 80% of Daily Emails in the U.S. are Spam
+MyDoom is the Most Expensive Computer Virus in History
+The Parts for the Modern Computer Were First Invented in 1833
+The First Gigabyte Drive Cost $40,000
+Guinea Pigs can live up to 10 years!
+At birth, a guinea pig can walk immediately after birth.
+There are 3 basic types of domestic guinea pigs, which can be identified by their hair type.
+Guinea Pigs are born with teeth that are constantly growing throughout their lifetime.
+The guinea pig can open its eyes while in its mother’s womb 14 days before birth.
+Although they are called “Guinea Pigs”, they are not closely related to pigs, but named for their short, robust body & piggish appearance. “Guinea” refers to Guyana, a country within their natural range.
+Guinea pigs don’t need to sleep for long periods? Instead they prefer to take short naps throughout the day and night
+Guinea pigs don’t have the same number of toes on their fore feet compared to their hind feet. They actually have 4 on their forefeet and 3 on their hind feet.
+They are very social animals and love the company of others, even humans.
+They need a supplement of vitamin c as they do not produce it themselves.
+A dragon has zero to four legs, claws, scales, and possibly spikes. It may also have wings.
+A dragon can look like a snake with wings or like lizards.
+A dragon has a tail and a long neck.
+A dragon has a wide mouth with big and dangerous teeth.
+Sometimes they have horns and hair.
+A dragon can usually fly.
+A dragon can perhaps breathe fire (or other dangerous substances).
+A dragon has special powers.
+Some dragons live in caves.
+Dragons hoard precious metals and jewels.
+Hades wasn’t such a monster in Greek mythology
+Ares was not that powerful and Artemis was a killer
+Theseus Was a Manipulator
+Medusa was not the only monster in Greek mythology
+Zeus, the serial predator
+The Olympians were not the first immortals in Greek mythology
+Pandora had a daughter and Aphrodite went to war with her
+We all know that Pegasus is a beautiful, winged horse. But did you know that this popular figure from Greek mythology was born when Perseus sliced off the head of the snake-haired Medusa? It’s an uncommon origin story to say the least.
+A hybrid lion-eagle creature, the griffin was revered in mythology as the king of all creatures, and is found in European, Islamic, and Far Eastern traditions. One of the more unusual aspects of the species is that its claws were believed to cure the blind and have other medicinal powers.
+Bees have 5 eyes
+Bees are insects, so they have 6 legs.
+Male bees in the hive are called drones
+Bees fly about 20 mph
+Female bees in the hive (except the queen) are called worker bees
+Number of eggs laid by queen: 2,000 per day is the high
+Losing its stinger will cause a bee to die
+Bees have been here about 30 million years!
+Bees carry pollen on their hind legs in a pollen basket or corbicula
+An average beehive can hold around 50,000 bees
+Foragers must collect nectar from about 2 million flowers to make 1 pound of honey
+The average forager makes about 1/12 th of a teaspoon of honey in her lifetime
+Average per capita honey consumption in the US is 1.3 pounds
+Bees have 2 pairs of wings, one on each side of their body.

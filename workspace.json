@@ -1,5 +1,11 @@
 {
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
-  "projects": {}
+  "projects": {
+    "client": "apps/client",
+    "client-core": "packages/client-core",
+    "core": "packages/core",
+    "server": "apps/server",
+    "server-core": "packages/server-core"
+  }
 }

@@ -1,0 +1,39 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "moduleResolution": "Node",
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "strict": false,
+    "jsx": "react",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "allowJs": true
+  },
+  "paths": {
+    "rete-connection-reroute-plugin": [
+      "@types/rete-connection-reroute-plugin.d.ts"
+    ],
+    "rete-context-menu-plugin": ["@types/rete-context-menu-plugin.d.ts"],
+    "deep-equal": ["@types/deepEqual.d.ts"],
+    "rete-comment-plugin": ["@types/rete-comment-plugin.d.ts"],
+    "weaviate-client": ["@types/weaviate-client.d.ts"]
+  },
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}

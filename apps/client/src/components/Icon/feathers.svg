@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 31 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-419,-39)">
+        <g id="feathers" transform="matrix(1,0,0,1,419.417,39.6309)">
+            <rect x="0" y="0" width="30" height="30" style="fill:none;"/>
+            <g transform="matrix(1,0,0,1,-419.417,-241.662)">
+                <path d="M441.569,262.245L441.569,266.137L444.069,266.137C444.069,266.137 444.078,251.9 444.078,250.977C444.078,249.372 443.71,245.528 439.324,245.286L437.76,245.282L434.229,260.26L441.569,262.245ZM430.576,262.245L430.576,266.137L433.076,266.137C433.076,266.137 433.085,251.9 433.085,250.977C433.085,249.372 432.717,245.528 428.331,245.286L426.767,245.282L423.236,260.26L430.576,262.245ZM438.749,257.565L440.288,257.982L440.297,250.997L438.749,257.565ZM427.756,257.565L429.296,257.982L429.304,250.997L427.756,257.565Z" style="fill:white;"/>
+            </g>
+        </g>
+    </g>
+</svg>

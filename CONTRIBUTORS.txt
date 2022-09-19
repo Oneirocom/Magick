@@ -1,0 +1,12 @@
+This file contains a list of people who have made large contributions
+to the public version of Voyage Thoth.
+
+Original application concept and architecture:
+    Michael Sharpe <m.sharpe@project89.org>
+
+Stargate Design System designed by:
+    Preston Gull <gull.preston@gmail.com>
+
+Large code contributions by:
+    Sean Gillespie <s.gillespie@project89.org>
+    Jakob Grant <j.grant@project89.org>

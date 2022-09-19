@@ -1,0 +1,126 @@
+ul {
+  margin: 0;
+  list-style: none;
+  position: relative;
+  border-radius: 3px;
+}
+
+.list-item {
+  border: 1px solid var(--dark-3);
+  border-top: 0;
+  border-bottom: 0;
+  position: relative;
+  display: inline-block;
+  background-color: var(--dark-2);
+  padding: var(--extraSmall);
+  padding-left: var(--small);
+  text-transform: capitalize;
+  display: flex;
+  justify-content: space-between;
+}
+.list-item:hover {
+  background-color: var(--primary);
+}
+
+/* Hide Dropdowns by Default */
+ul ul {
+  display: none;
+  position: absolute;
+  top: var(--c4); /* the height of the main nav */
+  transform: translateX(calc(var(--c7) * -1));
+}
+
+/* Display Dropdowns on Hover */
+ul li:hover > ul {
+  display: inherit;
+}
+
+/* Fisrt Tier Dropdown */
+ul ul li {
+  width: var(--c20);
+  float: none;
+  display: list-item;
+  position: relative;
+}
+
+/* Second, Third and more Tiers	*/
+ul ul ul li {
+  position: relative;
+  top: calc(var(--c4) * -1);
+  left: var(--c23);
+}
+
+li.list-item:first-child {
+  border: 1px solid var(--dark-3);
+  border-bottom: 0;
+  border-radius: 4px 4px 0px 0px;
+}
+
+li.list-item:last-child {
+  border: 1px solid var(--dark-3);
+  border-top: 0;
+  border-radius: 0px 0px 4px 4px;
+}
+li.list-item:only-child {
+  border: 1px solid var(--dark-3);
+  border-radius: 4px;
+}
+
+.menu-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #fff;
+  margin-right: var(--medium);
+  padding: 0;
+  position: relative;
+  z-index: 999;
+}
+.thoth-logo {
+  position: relative;
+  top: 2px;
+  margin-left: calc(var(--c2) + 2px);
+  margin-right: var(--c3);
+  height: var(--c2);
+}
+.menu-bar-item {
+  border-radius: 4px;
+  cursor: default;
+  background-color: var(--dark-0);
+  padding: var(--extraSmall);
+  padding-left: var(--small);
+  padding-right: var(--small);
+  font-family: 'IBM Plex Mono';
+  text-transform: uppercase;
+  list-style: none;
+
+  /* moving down 1px because the container itself follows the grid, but the items do not. */
+  position: relative;
+  top: 1px;
+}
+.menu-bar-item:hover {
+  background-color: var(--dark-2);
+  filter: drop-shadow(0px 5px 5px rgba(0, 0, 0, 0.3));
+}
+.folder-arrow {
+  display: none;
+  margin-left: var(--extraSmall);
+  transform: rotate(90deg);
+}
+.menu-panel .folder-arrow {
+  display: inline-block;
+  position: absolute;
+  top: 49%;
+  right: var(--small);
+  transform: translateY(-50%);
+}
+
+.preference-active {
+  color: green;
+}
+
+.preference-notActive {
+  color: rgb(183, 0, 0);
+}

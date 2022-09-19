@@ -1,0 +1,21 @@
+:root {
+  --color: #ccc;
+  --size: 32px;
+  --area: calc(var(--size) * 1000);
+}
+
+.rete-background {
+  display: table;
+  z-index: -1;
+  position: absolute;
+  top: -var(--area);
+  left: -var(--area);
+  width: 2 * var(--area);
+  height: 2 * var(--area);
+}
+
+.rete-background.degfault {
+  background-size: var(--size) var(--size);
+  background-image: linear-gradient(to right, var(--color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color) 1px, transparent 1px);
+}
