@@ -7,15 +7,16 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "strict": false,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "noEmit": true,
+    "declaration": true,
     "noUnusedLocals": false,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "allowJs": true
+    "allowJs": true,
+    "types": ["vite/client", "@nxext/react/client"]
   },
   "paths": {
     "rete-connection-reroute-plugin": [

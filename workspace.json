@@ -6,6 +6,7 @@
     "client-core": "packages/client-core",
     "core": "packages/core",
     "server": "apps/server",
-    "server-core": "packages/server-core"
+    "server-core": "packages/server-core",
+    "test": "packages/test"
   }
 }

@@ -9,7 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/client-core",
-        "packageJson": "packages/core/package.json",
+        "generatePackageJson": true,
         "assets": ["assets"],
         "entryFile": "src/index.ts",
         "configFile": "@nxext/vite/plugins/vite-package"

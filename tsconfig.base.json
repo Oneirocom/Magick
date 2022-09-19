@@ -15,9 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@thoth/core": ["packages/core/src/index.ts"],
+      "@thothai/core": ["packages/core/src/index.ts"],
       "@thothai/client-core": ["packages/client-core/src/index.ts"],
-      "@thothai/server-core": ["packages/server-core/src/index.ts"]
+      "@thothai/server-core": ["packages/server-core/src/index.ts"],
+      "@thothai/test": ["packages/test/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
