@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable no-console */
 /* eslint-disable require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -25,7 +23,9 @@ type InputReturn = {
 
 export async function getMatrix(agent: string, speaker: string) {
   const response = await axios.get(
-    `${process.env.REACT_APP_API_ROOT_URL}/relationship_matrix?agent=${agent}&speaker=${speaker}`
+    `${
+      import.meta.env.VITE_APP_API_ROOT_URL
+    }/relationship_matrix?agent=${agent}&speaker=${speaker}`
   )
   return response.data
 }

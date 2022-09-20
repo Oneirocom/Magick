@@ -1,0 +1,113 @@
+{
+  "global": {
+    "tabSetTabStripHeight": 24
+  },
+  "layout": {
+    "type": "row",
+    "id": "#root",
+    "children": [
+      {
+        "type": "tabset",
+        "id": "#3",
+        "weight": 7.102489336164113,
+        "children": [
+          {
+            "type": "tab",
+            "id": "#31",
+            "name": "Inspector",
+            "component": "inspector"
+          }
+        ]
+      },
+      {
+        "type": "row",
+        "id": "#9",
+        "weight": 34.08645212404496,
+        "children": [
+          {
+            "type": "tabset",
+            "id": "#15",
+            "weight": 77.96917497733455,
+            "children": [
+              {
+                "type": "tab",
+                "id": "#21",
+                "name": "Composer",
+                "component": "editorWindow",
+                "enableClose": false,
+                "className": "editor-tab"
+              }
+            ],
+            "active": true
+          },
+          {
+            "type": "tabset",
+            "id": "#8",
+            "weight": 22.030825022665457,
+            "children": [
+              {
+                "type": "tab",
+                "id": "44",
+                "name": "Console",
+                "component": "debugConsole",
+                "className": "debug-console"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "row",
+        "id": "#7",
+        "weight": 7.945196793081777,
+        "children": [
+          {
+            "type": "tabset",
+            "id": "#14",
+            "weight": 50,
+            "children": [
+              {
+                "type": "tab",
+                "id": "#40",
+                "name": "Text Editor",
+                "component": "textEditor"
+              },
+              {
+                "type": "tab",
+                "id": "#10",
+                "name": "State Manager",
+                "component": "stateManager"
+              },
+              {
+                "type": "tab",
+                "id": "#19",
+                "name": "Event Manager",
+                "component": "eventManager"
+              },
+              {
+                "type": "tab",
+                "id": "#12",
+                "name": "Ent Manager",
+                "component": "entityManager"
+              }
+            ]
+          },
+          {
+            "type": "tabset",
+            "id": "#6",
+            "weight": 50,
+            "children": [
+              {
+                "type": "tab",
+                "id": "#22",
+                "name": "Playtest",
+                "component": "playtest"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "borders": []
+}

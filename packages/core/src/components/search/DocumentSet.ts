@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable require-await */
@@ -71,7 +69,7 @@ export class DocumentSet extends ThothComponent<void> {
     const isIncluded = inputs['isIncluded'][0] as string
 
     const resp = await axios.post(
-      `${process.env.REACT_APP_SEARCH_SERVER_URL}/document`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document`,
       {
         title,
         description,

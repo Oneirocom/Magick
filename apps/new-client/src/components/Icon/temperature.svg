@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 31 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-455,0)">
+        <g id="temperature" transform="matrix(1,0,0,1,455.709,0)">
+            <rect x="0" y="0" width="30" height="30" style="fill:none;"/>
+            <g transform="matrix(1,0,0,1,-455.709,-202.031)">
+                <path d="M468.809,216.938C466.596,217.721 465.009,219.833 465.009,222.313C465.009,225.459 467.563,228.013 470.709,228.013C473.855,228.013 476.409,225.459 476.409,222.313C476.409,219.833 474.822,217.721 472.609,216.938L472.609,208.339C472.609,207.291 471.757,206.439 470.709,206.439C469.66,206.439 468.809,207.291 468.809,208.339L468.809,216.938ZM470.709,220.413L470.709,220.413C471.757,220.413 472.609,221.264 472.609,222.313C472.609,223.362 471.757,224.213 470.709,224.213C469.66,224.213 468.809,223.362 468.809,222.313C468.809,221.264 469.66,220.413 470.709,220.413Z" style="fill:white;"/>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -125,7 +125,7 @@ export const initEditor = function ({
       }
     },
     allocate: (component: ThothComponent<unknown>) => {
-      const isProd = process.env.NODE_ENV === 'production'
+      const isProd = import.meta.env.NODE_ENV === 'production'
       //@seang: disabling component filtering in anticipation of needing to treat spells as "top level modules" in the publishing workflow
       const tabType = editor.tab.type
       const { workspaceType } = component

@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable no-console */
 /* eslint-disable require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -21,7 +19,7 @@ const info = 'Form Opinion About Speaker'
 
 async function storeMatrix(agent: string, speaker: string, matrix: string) {
   const response = await axios.post(
-    `${process.env.REACT_APP_API_ROOT_URL}/relationship_matrix`,
+    `${import.meta.env.VITE_APP_API_ROOT_URL}/relationship_matrix`,
     {
       agent: agent,
       speaker: speaker,

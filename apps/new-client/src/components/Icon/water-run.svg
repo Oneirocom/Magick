@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 31 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-107,-39)">
+        <g id="water-run" transform="matrix(1,0,0,1,107.728,39.6309)">
+            <rect x="0" y="0" width="30" height="30" style="fill:none;"/>
+            <clipPath id="_clip1">
+                <rect x="0" y="0" width="30" height="30"/>
+            </clipPath>
+            <g clip-path="url(#_clip1)">
+                <g transform="matrix(1,0,0,1,-107.728,-39.6309)">
+                    <path d="M110.05,64.964L114.216,61.11C114.216,61.11 118.238,64.831 118.238,64.831L125.169,58.418L122.589,55.628L118.238,59.654C118.238,59.654 114.216,55.933 114.216,55.933L107.47,62.175L110.05,64.964ZM128.412,64.117L135.157,64.117L135.157,60.317L128.412,60.317L128.412,64.117ZM110.194,53.595L114.359,49.741C114.359,49.741 118.381,53.462 118.381,53.462L122.628,49.533C122.628,49.533 126.956,53.537 126.956,53.537L131.12,49.684L135.261,53.516L137.842,50.727L131.12,44.507L126.956,48.36C126.955,48.36 122.628,44.356 122.628,44.356L118.381,48.285C118.381,48.285 114.359,44.564 114.359,44.564L107.613,50.806L110.194,53.595Z" style="fill:white;"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

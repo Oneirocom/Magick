@@ -1,0 +1,29 @@
+.chip {
+  width: 100%;
+  box-sizing: border-box;
+  color: #fff;
+  border-radius: 4px;
+  cursor: default;
+  background-color: var(--dark-3);
+  border: 1px solid var(--dark-4);
+  padding: 9px 16px;
+  padding-left: var(--small);
+  padding-right: var(--small);
+  font-size: 11px;
+  height: var(--c4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chip:hover {
+  filter: brightness(1.1);
+}
+.chip.no-events {
+  pointer-events: none;
+  background-color: var(--dark-2);
+  box-shadow: none;
+  border-color: var(--dark-3);
+  color: var(--dark-4);
+  font-family: "IBM Plex Mono";
+  text-transform: uppercase;
+}

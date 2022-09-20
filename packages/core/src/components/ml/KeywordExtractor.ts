@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
@@ -83,12 +81,15 @@ async function keywordExtractor(input: string, onlyKeywords: boolean) {
     return []
   }
 
-  const resp = await axios.post(`${process.env.REACT_APP_API_URL}/hf_request`, {
-    inputs: input,
-    model: 'flair/pos-english',
-    parameters: [],
-    options: undefined,
-  })
+  const resp = await axios.post(
+    `${import.meta.env.VITE_APP_API_URL}/hf_request`,
+    {
+      inputs: input,
+      model: 'flair/pos-english',
+      parameters: [],
+      options: undefined,
+    }
+  )
 
   const { success, data } = resp.data
 
@@ -114,7 +115,7 @@ async function keywordExtractor(input: string, onlyKeywords: boolean) {
   const respp: any[] = []
   for (let i = 0; i < keywords.length; i++) {
     const _resp = await axios.post(
-      `${process.env.REACT_APP_API_URL}/weaviate`,
+      `${import.meta.env.VITE_APP_API_URL}/weaviate`,
       {
         keyword: keywords[i],
       }
@@ -127,7 +128,7 @@ async function keywordExtractor(input: string, onlyKeywords: boolean) {
 
     if (weaviateResponse.Paragraph.length > 0) {
       const modelResp = await axios.post(
-        `${process.env.REACT_APP_API_URL}/hf_request`,
+        `${import.meta.env.VITE_APP_API_URL}/hf_request`,
         {
           inputs: weaviateResponse.Paragraph[0].content,
           model: 'facebook/bart-large-cnn',

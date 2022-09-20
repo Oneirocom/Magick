@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable no-async-promise-executor */
 /* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
@@ -186,8 +184,8 @@ export class CustomTextCompletion extends ThothComponent<
 
     const resp = await axios.post(
       `${
-        process.env.REACT_APP_API_URL ??
-        process.env.API_URL ??
+        import.meta.env.VITE_APP_API_URL ??
+        import.meta.env.VITE_API_URL ??
         'https://localhost:8001'
       }/text_completion`,
       {

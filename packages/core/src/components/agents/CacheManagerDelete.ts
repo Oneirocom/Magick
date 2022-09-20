@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable require-await */
@@ -46,7 +44,7 @@ export class CacheManagerDelete extends ThothComponent<void> {
     const key = inputs['key'][0] as string
     const agent = inputs['agent'][0] as Agent
 
-    await axios.delete(`${process.env.REACT_APP_API_URL}/cache_manager`, {
+    await axios.delete(`${import.meta.env.VITE_APP_API_URL}/cache_manager`, {
       params: {
         key: key,
         agent: agent.agent,

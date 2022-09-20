@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios'
 import Rete from 'rete'
@@ -75,8 +73,8 @@ export class ItemTypeComponent extends ThothComponent<Promise<WorkerReturn>> {
 
     const resp = await axios.post(
       `${
-        process.env.REACT_APP_API_URL ??
-        process.env.API_URL ??
+        import.meta.env.VITE_APP_API_URL ??
+        import.meta.env.VITE_API_URL ??
         'https://localhost:8001'
       }/text_completion`,
       {

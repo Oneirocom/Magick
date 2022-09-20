@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable no-console */
 /* eslint-disable require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -68,7 +66,7 @@ export class SummarizeFacts extends ThothComponent<Promise<InputReturn>> {
     const prompt = node.data.fewshot as string
 
     const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/hf_request`,
+      `${import.meta.env.VITE_APP_API_URL}/hf_request`,
       {
         inputs: prompt,
         model: 'toloka/t5-large-for-text-aggregation',

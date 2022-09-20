@@ -7,7 +7,6 @@ import {
 
 import AuthProvider from './AuthProvider'
 import FeathersProvider from './FeathersProvider'
-import PlugProvider from './PlugProvider'
 import PubSubProvider from './PubSubProvider'
 import SharedbProvider from './SharedbProvider'
 import ToastProvider from './ToastProvider'
@@ -34,7 +33,6 @@ const providers = [
   FeathersProvider,
   WebSocketProvider,
   SharedbProvider,
-  PlugProvider,
 ]
 
 /**

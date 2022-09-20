@@ -50,7 +50,7 @@ import { DocumentGet } from './search/DocumentGet'
 import { DocumentSet } from './search/DocumentSet'
 import { DocumentSetMass } from './search/DocumentSetMass'
 import { DocumentStoreGet } from './search/DocumentStoreGet'
-import { RSSGet } from './search/RSSGet'
+// import { RSSGet } from './search/RSSGet'
 import { Search } from './search/Search'
 import { VectorSearch } from './search/VectorSearch'
 import { WeaviateWikipedia } from './search/WeaviateWikipedia'
@@ -126,7 +126,7 @@ export const components = {
   documentSet: () => new DocumentSet(),
   documentSetMass: () => new DocumentSetMass(),
   documentStoreGet: () => new DocumentStoreGet(),
-  rssGet: () => new RSSGet(),
+  // rssGet: () => new RSSGet(),
   forEach: () => new ForEach(),
   whileLoop: () => new WhileLoop(),
   cacheManagerGet: () => new CacheManagerGet(),

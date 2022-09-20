@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable require-await */
@@ -54,7 +52,7 @@ export class CacheManagerSet extends ThothComponent<void> {
     const agent = inputs['agent'][0] as Agent
     const value = inputs['value'][0]
 
-    await axios.post(`${process.env.REACT_APP_API_URL}/cache_manager`, {
+    await axios.post(`${import.meta.env.VITE_APP_API_URL}/cache_manager`, {
       key: key,
       agent: agent.agent,
       value: value,

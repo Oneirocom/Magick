@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable require-await */
@@ -90,7 +88,9 @@ export class RSSGet extends ThothComponent<Promise<WorkerReturn>> {
       try {
         resp = await axios.get(urls[i])
       } catch (e) {
-        resp = await axios.get(process.env.REACT_APP_CORS_URL + '/' + urls[i])
+        resp = await axios.get(
+          import.meta.env.VITE_APP_CORS_URL + '/' + urls[i]
+        )
       }
 
       if (

@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable no-async-promise-executor */
 /* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
@@ -82,7 +80,7 @@ export class Request extends ThothComponent<Promise<WorkerReturn>> {
     let url = node?.data?.url as string
     const method = (node?.data?.method as string)?.toLowerCase().trim()
     if (url.startsWith('server')) {
-      url = url.replace('server', process.env.REACT_APP_API_URL as string)
+      url = url.replace('server', import.meta.env.VITE_APP_API_URL as string)
     }
 
     let resp = undefined as any

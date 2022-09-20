@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
@@ -55,7 +53,7 @@ export class NamedEntityRecognition extends ThothComponent<
     const action = inputs['string'][0] as string
 
     const resp = await axios.post(
-      `${process.env.REACT_APP_API_URL}/hf_request`,
+      `${import.meta.env.VITE_APP_API_URL}/hf_request`,
       {
         inputs: action,
         model: 'dslim/bert-large-NER',

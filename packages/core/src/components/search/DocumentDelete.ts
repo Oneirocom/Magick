@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable require-await */
@@ -41,7 +39,7 @@ export class DocumentDelete extends ThothComponent<void> {
     const docId = inputs['docId'][0]
     node.display(docId)
     const resp = await axios.delete(
-      `${process.env.REACT_APP_SEARCH_SERVER_URL}/document`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document`,
       {
         params: {
           documentId: docId,

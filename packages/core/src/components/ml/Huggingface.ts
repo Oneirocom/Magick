@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios'
 import Handlebars from 'handlebars'
@@ -106,7 +104,7 @@ export class HuggingfaceComponent extends ThothComponent<
 
     try {
       const resp = await axios.post(
-        `${process.env.REACT_APP_API_URL}/hf_request`,
+        `${import.meta.env.VITE_APP_API_URL}/hf_request`,
         {
           inputs: request,
           model: model,

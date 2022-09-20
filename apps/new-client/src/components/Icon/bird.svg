@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 31 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-315,-39)">
+        <g id="bird" transform="matrix(1,0,0,1,315.804,39.6309)">
+            <rect x="0" y="0" width="30" height="30" style="fill:none;"/>
+            <g transform="matrix(1,0,0,1,-315.804,-39.6309)">
+                <path d="M325.119,45.156L319.618,48.946L325.119,48.946L325.119,54.382C325.119,55.956 325.744,57.465 326.857,58.578C327.609,59.33 328.542,59.859 329.554,60.123L329.554,61.615L325.119,61.615L325.119,64.115L336.488,64.115L336.488,61.615L332.054,61.615L332.054,60.315L344.068,60.315C344.068,60.315 335.953,50.413 330.344,43.568C329.555,42.605 328.246,42.242 327.074,42.661C325.97,43.055 325.204,44.001 325.119,45.156ZM328.919,47.824L336.041,56.515L331.053,56.515C330.487,56.515 329.944,56.291 329.544,55.891C329.144,55.49 328.919,54.948 328.919,54.382L328.919,47.824Z" style="fill:white;"/>
+            </g>
+        </g>
+    </g>
+</svg>

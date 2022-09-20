@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable no-console */
 /* eslint-disable require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -56,7 +54,7 @@ export class CreateOrGetAgent extends ThothComponent<Promise<WorkerReturn>> {
     const speaker = inputs['speaker'][0] as string
 
     const resp = await axios.post(
-      `${process.env.API_URL}/createWikipediaEntity`,
+      `${import.meta.env.VITE_API_URL}/createWikipediaEntity`,
       {
         speaker: speaker,
         agent: agentName,

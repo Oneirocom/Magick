@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable require-await */
@@ -60,7 +58,7 @@ export class CacheManagerGet extends ThothComponent<Promise<WorkerReturn>> {
       : 'Global'
 
     const resp = await axios.get(
-      `${process.env.REACT_APP_API_URL}/cache_manager`,
+      `${import.meta.env.VITE_APP_API_URL}/cache_manager`,
       {
         params: {
           key: key,
