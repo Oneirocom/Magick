@@ -1,6 +1,5 @@
-// @ts-nocheck
-import FileInput from '@/screens/HomeScreen/components/FileInput'
-import { useGetGreetingsQuery } from '@/state/api/greetings'
+import FileInput from '../../../screens/HomeScreen/components/FileInput'
+import { useGetGreetingsQuery } from '../../../state/api/greetings'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 

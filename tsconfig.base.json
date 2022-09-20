@@ -3,7 +3,6 @@
   "compilerOptions": {
     "rootDir": ".",
     "sourceMap": true,
-    "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -14,18 +13,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "typeRoots": ["./@types", "./node_modules/@types"],
     "paths": {
       "@thothai/client-core": ["packages/client-core/src/index.ts"],
       "@thothai/core": ["packages/core/src/index.ts"],
       "@thothai/engine": ["packages/engine/src/index.ts"],
-      "@thothai/server-core": ["packages/server-core/src/index.ts"],
-      "deep-equal": ["@types/deepEqual.d.ts"],
-      "rete-comment-plugin": ["@types/rete-comment-plugin.d.ts"],
-      "rete-connection-reroute-plugin": [
-        "@types/rete-connection-reroute-plugin.d.ts"
-      ],
-      "rete-context-menu-plugin": ["@types/rete-context-menu-plugin.d.ts"],
-      "weaviate-client": ["@types/weaviate-client.d.ts"]
+      "@thothai/server-core": ["packages/server-core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,12 +1,11 @@
 //@ts-nocheck
 
 import axios from 'axios'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { VscNewFile, VscTrash } from 'react-icons/vsc'
 import { FaEdit } from 'react-icons/fa'
 import SearchCorpusDocument from './SearchCorpusDocument'
-import { useModal } from '@/contexts/ModalProvider'
-import { store } from '@/state/store'
+import { useModal } from '../../../contexts/ModalProvider'
 import { useSnackbar } from 'notistack'
 
 const SearchCorpus = () => {

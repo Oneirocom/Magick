@@ -1,10 +1,9 @@
 //@ts-nocheck
 
-import { useAuth } from '@/contexts/AuthProvider'
+import { useAuth } from '../../../contexts/AuthProvider'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import {
   adjectives,
   colors,

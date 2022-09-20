@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { createNode } from 'rete-context-menu-plugin/src/utils'
 
-import WindowToolbar from '@/components/Window/WindowToolbar'
 import { Editor, useEditor } from '../../../contexts/EditorProvider'
 import Deployment from './Deployment'
 import Minting from './Minting'
-import Select from '@components/Select/Select'
+import Select from '../../../../components/Select/Select'
 import css from './editorwindow.module.css'
-import { usePlugWallet } from '@/contexts/PlugProvider'
+import { usePlugWallet } from '../../../../contexts/PlugProvider'
 
 const EditorWindow = ({ tab }) => {
   const { getNodes, getNodeMap, editor } = useEditor()
@@ -32,7 +31,7 @@ const EditorWindow = ({ tab }) => {
 
     // Checks if a category already exists in the array and returns its address,
     // otherwise returns false, and the nodeList map below creates a category.
-    const doesCategoryExist = (arr, category) => {
+    const doesCategoryExist = (arr, category): number | boolean => {
       let address = false
       if (arr.length === 0) return false
       arr.forEach((obj, index) => {
@@ -49,7 +48,7 @@ const EditorWindow = ({ tab }) => {
         }
         if (doesCategoryExist(arr, nodeList[item].category) !== false) {
           return arr[
-            doesCategoryExist(arr, nodeList[item].category)
+            doesCategoryExist(arr, nodeList[item].category) as number
           ].options.push({
             label: nodeList[item].name,
             value: nodeList[item].name,
@@ -93,7 +92,7 @@ const EditorWindow = ({ tab }) => {
         <button
           style={{ visibility: `${connected ? 'initial' : 'hidden'}` }}
           onClick={() => {
-            setMitningOpen(true)
+            setMintingOpen(true)
           }}
         >
           Minting

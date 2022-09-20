@@ -1,18 +1,21 @@
 // @ts-nocheck
-import { useDeleteGreetingMutation, useUpdateGreetingMutation } from "@/state/api/greetings"
-import { useSnackbar } from "notistack"
-import { useState } from "react"
+import {
+  useDeleteGreetingMutation,
+  useUpdateGreetingMutation,
+} from '../../../state/api/greetings'
+import { useSnackbar } from 'notistack'
+import { useState } from 'react'
 
 const Greeting = ({ greeting, updateCallback }) => {
   const [data, setData] = useState(greeting)
   const { enqueueSnackbar } = useSnackbar()
-  const [ updateGreeting ] = useUpdateGreetingMutation()
-  const [ deleteGreeting ] = useDeleteGreetingMutation()
+  const [updateGreeting] = useUpdateGreetingMutation()
+  const [deleteGreeting] = useDeleteGreetingMutation()
 
   const handleChange = (key: string, value: string | boolean) => {
     setData({
       ...data,
-      [key]: value
+      [key]: value,
     })
   }
 
@@ -33,9 +36,12 @@ const Greeting = ({ greeting, updateCallback }) => {
   const _deleteGreeting = async () => {
     try {
       await deleteGreeting(data.id)
-      enqueueSnackbar('Greeting with id: ' + data.id + ' deleted successfully', {
-        variant: 'success',
-      })
+      enqueueSnackbar(
+        'Greeting with id: ' + data.id + ' deleted successfully',
+        {
+          variant: 'success',
+        }
+      )
     } catch (e) {
       enqueueSnackbar('Server Error deleting entity with id: ' + data.id, {
         variant: 'error',
@@ -50,40 +56,40 @@ const Greeting = ({ greeting, updateCallback }) => {
         <input
           type="checkbox"
           defaultChecked={data.enabled}
-          onChange={(e) => handleChange('enabled', e.target.checked)}
+          onChange={e => handleChange('enabled', e.target.checked)}
         />
       </div>
 
       <div className="form-item agent-select">
         <span className="form-item-label">Send Greeting In</span>
-        <select 
-          name="sendIn" 
+        <select
+          name="sendIn"
           id="sendIn"
           value={data.sendIn}
-          onChange={(e) => handleChange('sendIn', e.target.value)}
+          onChange={e => handleChange('sendIn', e.target.value)}
         >
           <option defaultValue hidden></option>
-          <option value='dm'>DM</option>
-          <option value='channel'>Channel</option>
+          <option value="dm">DM</option>
+          <option value="channel">Channel</option>
         </select>
       </div>
 
       <div className="form-item">
         <span className="form-item-label">Channel ID</span>
-        <input 
+        <input
           type="text"
           value={data.channelId}
-          onChange={(e) => handleChange('channelId', e.target.value)}
+          onChange={e => handleChange('channelId', e.target.value)}
         />
       </div>
-      
+
       <div className="form-item">
         <span className="form-item-label">Message</span>
         <textarea
-          className="form-text-area" 
+          className="form-text-area"
           rows={1}
           value={data.message}
-          onChange={(e) => handleChange('message', e.target.value)}
+          onChange={e => handleChange('message', e.target.value)}
         />
       </div>
 

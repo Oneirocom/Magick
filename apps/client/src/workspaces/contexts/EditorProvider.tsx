@@ -1,8 +1,20 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
-import gridimg from '@/grid.png'
+import gridimg from '../../grid.png'
 import { initEditor } from '@thothai/client-core'
-import { EditorContext, GraphData, Spell, ThothEditor, zoomAt } from '@thothai/core'
+import {
+  EditorContext,
+  GraphData,
+  Spell,
+  ThothEditor,
+  zoomAt,
+} from '@thothai/core'
 
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import { MyNode } from '../../components/Node/Node'
@@ -25,28 +37,7 @@ export type ThothTab = {
 }
 
 // TODO give better typing to the editor
-const Context = createContext({
-  run: () => {},
-  getEditor: (): ThothEditor | null => null,
-  editor: {} as ThothEditor | null,
-  serialize: (): GraphData | undefined => undefined,
-  buildEditor: (
-    el: HTMLDivElement,
-    // todo update this to use proper spell type
-    spell: Spell | undefined,
-    tab: ThothTab,
-    reteInterface: EditorContext
-  ) => {},
-  setEditor: (editor: any) => {},
-  getNodeMap: () => {},
-  getNodes: () => {},
-  loadGraph: (graph: any) => {},
-  setContainer: () => {},
-  undo: () => {},
-  redo: () => {},
-  del: () => {},
-  centerNode: (nodeId: number): void => {},
-})
+const Context = createContext(undefined!)
 
 export const useEditor = () => useContext(Context)
 

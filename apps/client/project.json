@@ -10,7 +10,7 @@
       "options": {
         "outputPath": "dist/apps/client",
         "baseHref": "/",
-        "configFile": "apps/client/vite.config.ts",
+        "configFile": "@nxext/vite/plugins/vite",
         "frameworkConfigFile": "@nxext/react/plugins/vite"
       },
       "configurations": {
@@ -42,7 +42,7 @@
       "options": {
         "outputPath": "dist/apps/client",
         "baseHref": "/",
-        "configFile": "apps/client/vite.config.ts",
+        "configFile": "@nxext/vite/plugins/vite",
         "frameworkConfigFile": "@nxext/react/plugins/vite"
       },
       "configurations": {
