@@ -4,13 +4,7 @@
 import { hasBadWords } from 'expletives'
 import Rete from 'rete'
 
-import {
-  EngineContext,
-  NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
-} from '../../types'
+import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
 import { triggerSocket, stringSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
 

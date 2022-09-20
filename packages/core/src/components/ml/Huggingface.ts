@@ -10,7 +10,6 @@ import {
   ThothNode,
   ThothWorkerInputs,
   ThothWorkerOutputs,
-  EngineContext,
 } from '../../types'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'

@@ -13,8 +13,4 @@ export class EmptyControl extends DataControl {
 
     super(options)
   }
-
-  onData() {
-    return
-  }
 }

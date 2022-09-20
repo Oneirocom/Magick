@@ -7,7 +7,6 @@ import Rete from 'rete'
 import similarity from 'similarity'
 
 import {
-  EngineContext,
   NodeData,
   ThothNode,
   ThothWorkerInputs,

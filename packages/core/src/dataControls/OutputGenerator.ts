@@ -24,7 +24,7 @@ export class OutputGeneratorControl extends DataControl {
     }
 
     super(options)
-    this.socketType = socketType
+    // this.socketType = socketType
   }
 
   onData(outputs = []) {
@@ -32,7 +32,7 @@ export class OutputGeneratorControl extends DataControl {
 
     const existingOutputs = []
     const ignored =
-      this?.control?.data?.ignored.map(output => output.name) || []
+      (this?.control?.data as any)?.ignored.map(output => output.name) || []
 
     this.node.outputs.forEach(out => {
       existingOutputs.push(out.key)
@@ -63,7 +63,7 @@ export class OutputGeneratorControl extends DataControl {
     )
 
     // Here we are running over and ensuring that the outputs are in the task
-    this.component.task.outputs = this.node.data.outputs.reduce(
+    this.component.task.outputs = (this.node.data.outputs as any[]).reduce(
       (acc, out) => {
         acc[out.name] = out.taskType || 'output'
         return acc

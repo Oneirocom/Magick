@@ -1,5 +1,14 @@
 import { DataControl } from '../plugins/inspectorPlugin'
 
+type ControlArgs = {
+  dataKey: string
+  name: string
+  icon?: string
+  label?: string
+  defaultValue?: Record<string, unknown>
+  ignored?: string[]
+}
+
 export class PlaytestControl extends DataControl {
   constructor({
     dataKey,
@@ -8,7 +17,7 @@ export class PlaytestControl extends DataControl {
     label = 'Toggle',
     defaultValue = {},
     ignored = [],
-  }) {
+  }: ControlArgs) {
     const options = {
       dataKey: dataKey,
       defaultValue,
@@ -22,9 +31,5 @@ export class PlaytestControl extends DataControl {
     }
 
     super(options)
-  }
-
-  onData(playtestToggle) {
-    return
   }
 }

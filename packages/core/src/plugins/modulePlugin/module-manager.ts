@@ -128,7 +128,7 @@ export class ModuleManager {
   }
 
   async workerModule(
-    node: ThothNode,
+    node: NodeData,
     inputs: ThothWorkerInputs,
     outputs: ThothWorkerOutputs,
     args: { socketInfo: { target: string } }
@@ -174,7 +174,7 @@ export class ModuleManager {
   }
 
   workerInputs(
-    node: ThothNode,
+    node: NodeData,
     _inputs: ThothWorkerInputs,
     outputs: ModuleWorkerOutput,
     { module }: { module: Module }
@@ -187,7 +187,7 @@ export class ModuleManager {
   }
 
   workerOutputs(
-    node: ThothNode,
+    node: NodeData,
     inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
     { module }: { module: Module }
@@ -198,7 +198,7 @@ export class ModuleManager {
   }
 
   workerTriggerIns(
-    _node: ThothNode,
+    _node: NodeData,
     _inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
     { module }: { module: Module }
@@ -209,7 +209,7 @@ export class ModuleManager {
   }
 
   workerTriggerOuts(
-    node: ThothNode,
+    node: NodeData,
     inputs: ThothWorkerInputs,
     outputs: ThothWorkerOutputs,
     { module }: { module: Module }

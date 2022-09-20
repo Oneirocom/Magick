@@ -1,5 +1,5 @@
 import deepEqual from 'deep-equal'
-import Rete, { Input, Output } from 'rete'
+import Rete, { Input, Output, Node } from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import { DataSocketType, IRunContextEditor, ThothNode } from '../../types'
@@ -194,8 +194,8 @@ export class Inspector {
 
   handleDefaultTrigger(update: Record<string, any>) {
     this.editor.nodes
-      .filter((node: ThothNode) => node.name === 'Module Trigger In')
-      .map((node: ThothNode) => {
+      .filter((node: Node) => node.name === 'Module Trigger In')
+      .map((node: Node, _index, _array) => {
         if (node.data.isDefaultTriggerIn) {
           node.data.isDefaultTriggerIn = !node.data.isDefaultTriggerIn
         }

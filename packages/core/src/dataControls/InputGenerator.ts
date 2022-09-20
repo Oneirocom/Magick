@@ -31,7 +31,8 @@ export class InputGeneratorControl extends DataControl {
     this.node.data.inputs = inputs
 
     const existingInputs = []
-    const ignored = this?.control?.data?.ignored.map(input => input.name) || []
+    const ignored =
+      (this?.control?.data as any)?.ignored.map(input => input.name) || []
 
     this.node.inputs.forEach(out => {
       existingInputs.push(out.key)

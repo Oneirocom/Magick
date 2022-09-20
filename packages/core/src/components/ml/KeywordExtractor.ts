@@ -10,13 +10,7 @@ import axios from 'axios'
 import keyword_extractor from 'keyword-extractor'
 import Rete from 'rete'
 
-import {
-  EngineContext,
-  NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
-} from '../../types'
+import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { triggerSocket, anySocket, stringSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'

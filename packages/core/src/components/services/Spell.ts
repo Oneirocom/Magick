@@ -23,7 +23,7 @@ export class SpellComponent extends ThothComponent<
   Promise<ModuleWorkerOutput>
 > {
   declare _task: Task
-  updateModuleSockets: Function
+  declare updateModuleSockets: Function
   declare task: any
   declare info
   subscriptionMap: Record<number, Function> = {}

@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import {
-  NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
-} from '../../types'
+import { NodeData, ThothNode } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'

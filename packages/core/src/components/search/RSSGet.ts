@@ -9,13 +9,7 @@ import Rete from 'rete'
 //@ts-ignore
 import xmldoc from 'xmldoc'
 
-import {
-  EngineContext,
-  NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
-} from '../../types'
+import { NodeData, ThothNode } from '../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, arraySocket } from '../../sockets'

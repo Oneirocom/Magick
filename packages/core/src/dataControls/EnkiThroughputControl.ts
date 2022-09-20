@@ -19,7 +19,7 @@ export class EnkiThroughputControl extends DataControl {
     }
 
     super(options)
-    this.socketType = socketType
+    // this.socketType = socketType
   }
 
   onData({ activeTask }) {

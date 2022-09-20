@@ -7,7 +7,6 @@ import axios from 'axios'
 import Rete from 'rete'
 
 import {
-  EngineContext,
   NodeData,
   ThothNode,
   ThothWorkerInputs,

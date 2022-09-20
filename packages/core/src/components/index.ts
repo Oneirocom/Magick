@@ -188,11 +188,11 @@ export const getComponents = () => {
     // @ts-ignore
     // TODO fix this ignore
     .reduce(function (acc, key: keyof typeof components) {
-      acc[key] = components[key]
+      acc[key] = components[key] as Function
       return acc
-    }, {} as Record<string, any>)
+    }, {} as Record<string, Function>)
 
-  return Object.values(sortedComponents)
+  return (Object.values(sortedComponents) as unknown as Function[])
     .map(component => component())
     .sort(compare)
 }

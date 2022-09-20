@@ -12,11 +12,9 @@
       "resolveJsonModule": true,
       "esModuleInterop": true,
       "declaration": true,
-      "noUnusedLocals": false,
+      "noUnusedLocals": true,
       "noUnusedParameters": true,
       "noImplicitReturns": true,
-      "allowJs": true,
-      "types": ["vite/client", "@nxext/react/client"]
     },
     "files": [],
     "include": [],

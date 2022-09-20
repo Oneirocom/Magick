@@ -10,7 +10,6 @@ export abstract class DataControl {
   component: ThothComponent<unknown> | null = null
   id: string | null = null
   dataKey: string
-  key: string
   name: string
   defaultValue: unknown
   componentData: object
@@ -20,6 +19,7 @@ export abstract class DataControl {
   write: boolean
   data: Record<string, unknown>
   type: string
+  declare key: string
 
   constructor({
     dataKey,
@@ -55,6 +55,7 @@ export abstract class DataControl {
     this.write = write
     this.defaultValue = defaultValue
     this.type = type
+    this.data = data
   }
 
   //Serializer to easily extract the data controls information for publishing
@@ -75,5 +76,7 @@ export abstract class DataControl {
     return
   }
 
-  onData?: (...args: any[]) => Promise<void> | void
+  onData(_: any): any {}
+
+  // onData?: (...args: any[]) => Promise<void> | void
 }

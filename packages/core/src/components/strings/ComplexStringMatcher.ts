@@ -4,7 +4,6 @@
 import Rete from 'rete'
 
 import {
-  EngineContext,
   NodeData,
   ThothNode,
   ThothWorkerInputs,
