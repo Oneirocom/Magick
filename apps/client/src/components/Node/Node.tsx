@@ -1,12 +1,12 @@
-import { Node, Socket, Control } from '@thothai/core'
+import { Control, Node, Socket } from '@thothai/core'
 
 import Icon, { componentCategories } from '../Icon/Icon'
-import css from './Node.module.css'
 import icons from '../Icon/icon.module.css'
+import css from './Node.module.css'
 
 export class MyNode extends Node {
-  props: { node: any; bindSocket: any; bindControl: any }
-  state: { outputs: any; controls: any; inputs: any; selected: any }
+  declare props: { node: any; bindSocket: any; bindControl: any }
+  declare state: { outputs: any; controls: any; inputs: any; selected: any }
 
   render() {
     const { node, bindSocket, bindControl } = this.props

@@ -4,43 +4,48 @@ import ConnectionPlugin from 'rete-connection-plugin'
 import ContextMenuPlugin from 'rete-context-menu-plugin'
 import { Data } from 'rete/types/core/data'
 
-import { getComponents } from './components'
-import { initSharedEngine, ThothEngine } from './engine'
-// import CommentPlugin from './plugins/commentPlugin'
-import AreaPlugin from './plugins/areaPlugin'
-import cachePlugin from './plugins/cachePlugin'
-import DebuggerPlugin from './plugins/debuggerPlugin'
-import DisplayPlugin from './plugins/displayPlugin'
-// import SelectionPlugin from './plugins/selectionPlugin'
-import errorPlugin from './plugins/errorPlugin'
-import HistoryPlugin from './plugins/historyPlugin'
-import InspectorPlugin from './plugins/inspectorPlugin'
-import KeyCodePlugin from './plugins/keyCodePlugin'
-import LifecyclePlugin from './plugins/lifecyclePlugin'
-import ModulePlugin from './plugins/modulePlugin'
-import { ModuleManager } from './plugins/modulePlugin/module-manager'
-import ReactRenderPlugin from './plugins/reactRenderPlugin'
-import SocketGenerator from './plugins/socketGenerator'
-import SocketOverridePlugin from './plugins/socketOverridePlugin'
-import SocketPlugin from './plugins/socketPlugin'
-import TaskPlugin, { Task } from './plugins/taskPlugin'
-import { PubSubContext, ThothComponent } from './thoth-component'
-import { EditorContext, EventsTypes, ThothNode } from './types'
+import {
+  AreaPlugin,
+  CachePlugin,
+  DebuggerPlugin,
+  DisplayPlugin,
+  ErrorPlugin,
+  HistoryPlugin,
+  InspectorPlugin,
+  KeyCodePlugin,
+  LifecyclePlugin,
+  ModuleManager,
+  ModulePlugin,
+  ReactRenderPlugin,
+  SocketGeneratorPlugin,
+  SocketOverridePlugin,
+  SocketPlugin,
+  Task,
+  TaskPlugin,
+  EditorContext,
+  EventsTypes,
+  ThothNode,
+  PubSubContext,
+  ThothComponent,
+  getComponents,
+} from '@thothai/core'
+
+import { initSharedEngine, ThothEngine } from '@thothai/engine'
 
 interface ThothEngineClient extends ThothEngine {
   thoth: EditorContext
 }
 export class ThothEditor extends NodeEditor<EventsTypes> {
-  tasks: Task[]
-  pubSub: PubSubContext
-  thoth: EditorContext
-  tab: { type: string }
-  abort: unknown
-  loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
-  moduleManager: ModuleManager
-  runProcess: (callback?: Function) => Promise<void>
-  onSpellUpdated: (spellId: string, callback: Function) => Function
-  refreshEventTable: () => void
+  declare tasks: Task[]
+  declare pubSub: PubSubContext
+  declare thoth: EditorContext
+  declare tab: { type: string }
+  declare abort: unknown
+  declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
+  declare moduleManager: ModuleManager
+  declare runProcess: (callback?: Function | undefined) => Promise<void>
+  declare onSpellUpdated: (spellId: string, callback: Function) => Function
+  declare refreshEventTable: () => void
 }
 
 /*
@@ -66,7 +71,7 @@ export const initEditor = function ({
   client?: any
   feathers?: any
 }) {
-  if (!window) return null
+  if (!window) return
   if (editorTabMap[tab.id]) editorTabMap[tab.id].clear()
 
   const components = getComponents()
@@ -89,7 +94,7 @@ export const initEditor = function ({
   // ╚═╝     ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝╚══════╝
 
   if (client && feathers) {
-    editor.use(SocketOverridePlugin, { client })
+    editor.use(SocketOverridePlugin, { client } as unknown as void)
   }
 
   // History plugin for undo/redo
@@ -140,7 +145,7 @@ export const initEditor = function ({
 
   // This should only be needed on client, not server
   editor.use(DebuggerPlugin)
-  editor.use(SocketGenerator)
+  editor.use(SocketGeneratorPlugin)
   editor.use(DisplayPlugin)
   editor.use(InspectorPlugin)
   editor.use(AreaPlugin, {
@@ -155,7 +160,7 @@ export const initEditor = function ({
     server: false,
     modules: {},
   }) as ThothEngineClient
-  engine.use(errorPlugin)
+  engine.use(ErrorPlugin)
   engine.thoth = thoth
   // @seang TODO: update types for editor.use rather than casting as unknown here, we may want to bring our custom rete directly into the monorepo at this point
 
@@ -170,10 +175,10 @@ export const initEditor = function ({
   editor.use(KeyCodePlugin)
 
   if (client && feathers) {
-    editor.use(SocketPlugin, { client })
+    editor.use(SocketPlugin, { client } as unknown as void)
   } else {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
-    editor.use(cachePlugin)
+    editor.use(CachePlugin)
     editor.use(ModulePlugin, { engine, modules: {} } as unknown as void)
     editor.use(TaskPlugin)
   }
@@ -213,7 +218,7 @@ export const initEditor = function ({
     await engine.abort()
   }
 
-  editor.runProcess = async (callback: Function) => {
+  editor.runProcess = async (callback: Function | undefined) => {
     await engine.abort()
     await engine.process(editor.toJSON(), null, { thoth: thoth })
     if (callback) callback()

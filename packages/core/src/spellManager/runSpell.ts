@@ -1,4 +1,4 @@
-import { getComponents } from '../components/components'
+import { getComponents } from '../components'
 
 import { initSharedEngine } from '../engine'
 

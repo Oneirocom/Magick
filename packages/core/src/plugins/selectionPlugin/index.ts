@@ -171,7 +171,7 @@ function install(editor: NodeEditor, params: Cfg) {
 
     canvas.style.pointerEvents = 'none'
     Array.from(canvas.querySelectorAll('path')).forEach(item => {
-      ;(item as SVGElement).style.pointerEvents = 'none'
+      ;(item as unknown as SVGElement).style.pointerEvents = 'none'
     })
 
     cleanSelectionArea(selectionArea)

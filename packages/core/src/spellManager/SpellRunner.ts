@@ -8,7 +8,7 @@ import {
   ModuleComponent,
   Spell as SpellType,
 } from '../types'
-import { getComponents } from '../components/components'
+import { getComponents } from '../components'
 import { initSharedEngine, ThothEngine } from '../engine'
 import { extractNodes } from '../utils/chainHelpers'
 import { Module } from '../plugins/modulePlugin/module'

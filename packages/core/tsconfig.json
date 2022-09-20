@@ -18,15 +18,6 @@
     "allowJs": true,
     "types": ["vite/client", "@nxext/react/client"]
   },
-  "paths": {
-    "rete-connection-reroute-plugin": [
-      "@types/rete-connection-reroute-plugin.d.ts"
-    ],
-    "rete-context-menu-plugin": ["@types/rete-context-menu-plugin.d.ts"],
-    "deep-equal": ["@types/deepEqual.d.ts"],
-    "rete-comment-plugin": ["@types/rete-comment-plugin.d.ts"],
-    "weaviate-client": ["@types/weaviate-client.d.ts"]
-  },
   "files": [],
   "include": [],
   "references": [

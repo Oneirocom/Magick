@@ -105,6 +105,7 @@
     "twitter-api-v2": "1.8.0",
     "unique-names-generator": "^4.5.0",
     "uuid": "^8.3.2",
+    "vite": "^2.9.14",
     "vite-tsconfig-paths": "^3.5.0",
     "vm2": "^3.9.11",
     "weaviate-client": "^2.10.1",

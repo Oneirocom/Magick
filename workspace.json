@@ -5,6 +5,7 @@
     "client": "apps/client",
     "client-core": "packages/client-core",
     "core": "packages/core",
+    "engine": "packages/engine",
     "my-app": "apps/my-app",
     "server": "apps/server",
     "server-core": "packages/server-core"

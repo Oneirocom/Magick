@@ -6,13 +6,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 // import axios from 'axios'
 import Rete from 'rete'
 
-import {
-  EngineContext,
-  NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
-} from '../../types'
+import { ThothNode } from '../../types'
 import { triggerSocket, stringSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
 

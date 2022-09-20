@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 import gridimg from '@/grid.png'
-import { EditorContext, GraphData, initEditor, Spell, ThothEditor, zoomAt } from '@thothai/core'
+import { initEditor } from '@thothai/client-core'
+import { EditorContext, GraphData, Spell, ThothEditor, zoomAt } from '@thothai/core'
 
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import { MyNode } from '../../components/Node/Node'
