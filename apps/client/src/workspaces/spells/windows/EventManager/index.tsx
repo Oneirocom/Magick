@@ -23,7 +23,7 @@ const EventManagerWindow = ({ tab }) => {
 
   const fetchEvents = async () => {
     const { data } = await axios.get(
-      `${process.env.REACT_APP_API_ROOT_URL}/events`
+      `${import.meta.env.VITE_API_ROOT_URL}/events`
     )
     setEvents(data)
   }

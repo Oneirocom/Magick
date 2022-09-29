@@ -7,7 +7,7 @@ const MessageReactionEditor = () => {
 
   const getMessageReactions = async () => {
     const res = await axios.get(
-      `${process.env.REACT_APP_API_ROOT_URL}/message_reactions`
+      `${import.meta.env.VITE_API_ROOT_URL}/message_reactions`
     )
     setMessageReactions(res.data)
   }
@@ -15,7 +15,7 @@ const MessageReactionEditor = () => {
   const createNew = async () => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_ROOT_URL}/message_reactions`,
+        `${import.meta.env.VITE_API_ROOT_URL}/message_reactions`,
         {
           client: '',
           channelId: '',

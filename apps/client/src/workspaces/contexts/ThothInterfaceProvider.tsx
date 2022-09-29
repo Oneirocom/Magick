@@ -1,7 +1,12 @@
 import axios from 'axios'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
-import { CreateEventArgs, EditorContext, Spell, ThothWorkerInputs } from '@thothai/core'
+import {
+  CreateEventArgs,
+  EditorContext,
+  Spell,
+  ThothWorkerInputs,
+} from '@thothai/core'
 
 import { useAuth } from '../../contexts/AuthProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
@@ -232,8 +237,8 @@ const ThothInterfaceProvider = ({ children, tab }) => {
     maxCount = 10,
   }) => {
     const urlString = `${
-      process.env.REACT_APP_API_ROOT_URL ??
-      process.env.API_ROOT_URL ??
+      import.meta.env.VITE_API_ROOT_URL ??
+      import.meta.env.API_ROOT_URL ??
       'https://localhost:8001'
     }/event`
 
@@ -267,8 +272,8 @@ const ThothInterfaceProvider = ({ children, tab }) => {
   }: CreateEventArgs) => {
     const response = await axios.post(
       `${
-        process.env.REACT_APP_API_ROOT_URL ??
-        process.env.API_ROOT_URL ??
+        import.meta.env.VITE_API_ROOT_URL ??
+        import.meta.env.API_ROOT_URL ??
         'https://localhost:8001'
       }/event`,
       {
@@ -285,8 +290,8 @@ const ThothInterfaceProvider = ({ children, tab }) => {
   }
 
   const getWikipediaSummary = async (keyword: string) => {
-    console.log('NODE ENV', process.env.NODE_ENV)
-    const isProd = process.env.NODE_ENV === 'production'
+    console.log('NODE ENV', import.meta.env.MODE)
+    const isProd = import.meta.env.MODE === 'production'
     const root = isProd
       ? 'https://thoth.supereality.com'
       : 'https://localhost:8001'

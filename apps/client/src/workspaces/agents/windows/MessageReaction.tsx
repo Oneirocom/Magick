@@ -19,7 +19,7 @@ const MessageReaction = ({ message_reaction, updateCallback }) => {
   useEffect(() => {
     ;(async () => {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_ROOT_URL}/game/spells?userId=${user?.id}`
+        `${import.meta.env.VITE_API_ROOT_URL}/game/spells?userId=${user?.id}`
       )
       setSpellList(res.data)
     })()
@@ -29,7 +29,7 @@ const MessageReaction = ({ message_reaction, updateCallback }) => {
     const { id, ...reqBody } = data
     try {
       await axios.put(
-        `${process.env.REACT_APP_API_ROOT_URL}/message_reaction/${id}`,
+        `${import.meta.env.VITE_API_ROOT_URL}/message_reaction/${id}`,
         {
           ...reqBody,
         }
@@ -51,7 +51,7 @@ const MessageReaction = ({ message_reaction, updateCallback }) => {
   const removeMessageReaction = async () => {
     try {
       await axios.delete(
-        `${process.env.REACT_APP_API_ROOT_URL}/message_reaction/${data.id}`
+        `${import.meta.env.VITE_API_ROOT_URL}/message_reaction/${data.id}`
       )
       enqueueSnackbar(
         'Message Reaction with id: ' + data.id + ' deleted successfully',

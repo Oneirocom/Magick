@@ -40,7 +40,7 @@ yarn run dev:windows
 We use dotenv-flow for local environment variable management
 
 Go to client folder, and create a new file called .env.local -- copy and .env vars you want to set from .env there
-If you are developing independently and are not a member of Latitude Games team, set **REACT_APP_USE_LATITUDE=false**
+If you are developing independently and are not a member of Latitude Games team, set **VITE_USE_LATITUDE=false**
 
 Go to server folder, and create a new file called .env.local -- copy and .env vars you want to set from .env there
 If you are developing independently and are not a member of Latitude Games team, set **USE_LATITUDE=false**

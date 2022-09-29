@@ -32,8 +32,8 @@ const DocumentAddModal = ({
 
     const body = { ...newDocument }
     let url = isContentObject
-      ? `${process.env.REACT_APP_SEARCH_SERVER_URL}/content-object`
-      : `${process.env.REACT_APP_SEARCH_SERVER_URL}/document`
+      ? `${import.meta.env.VITE_SEARCH_SERVER_URL}/content-object`
+      : `${import.meta.env.VITE_SEARCH_SERVER_URL}/document`
 
     try {
       await axios.post(url, body)

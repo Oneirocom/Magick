@@ -1,4 +1,4 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 import { useState, useEffect, Fragment } from 'react'
 import DayLabels from './DayLabels'
@@ -353,7 +353,7 @@ export const CalendarApp = () => {
 
   const fetchEvents = async () => {
     axios
-      .get(`${process.env.REACT_APP_API_ROOT_URL}/calendar_event`)
+      .get(`${import.meta.env.VITE_API_ROOT_URL}/calendar_event`)
       .then(({ data }) => {
         console.log(data)
         setEvents(data)
@@ -379,7 +379,7 @@ export const CalendarApp = () => {
     setIsLoading(true)
     setShowingEventForm({ visible: false, withEvent: false })
     axios
-      .post(`${process.env.REACT_APP_API_ROOT_URL}/calendar_event`, event)
+      .post(`${import.meta.env.VITE_API_ROOT_URL}/calendar_event`, event)
       .then(res => {
         setIsLoading(false)
         fetchEvents()
@@ -398,7 +398,7 @@ export const CalendarApp = () => {
     let { id, ...eventBody } = event
     axios
       .patch(
-        `${process.env.REACT_APP_API_ROOT_URL}/calendar_event/${id}`,
+        `${import.meta.env.VITE_API_ROOT_URL}/calendar_event/${id}`,
         eventBody
       )
       .then(res => {
@@ -419,9 +419,7 @@ export const CalendarApp = () => {
     setShowingEventForm({ visible: false, withEvent: false })
 
     axios
-      .delete(
-        `${process.env.REACT_APP_API_ROOT_URL}/calendar_event/${event.id}`
-      )
+      .delete(`${import.meta.env.VITE_API_ROOT_URL}/calendar_event/${event.id}`)
       .then(res => {
         setIsLoading(false)
         fetchEvents()

@@ -15,7 +15,7 @@ const VideoTranscription = () => {
   const uploadFile = async file => {
     let formData = new FormData()
     formData.append('video', file)
-    let url = `${process.env.REACT_APP_API_URL}/video`
+    let url = `${import.meta.env.VITE_API_URL}/video`
     try {
       await axios.post(url, formData)
       enqueueSnackbar('Video uploaded', { variant: 'success' })

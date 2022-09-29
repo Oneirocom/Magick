@@ -22,7 +22,7 @@ module.exports = () => {
         directory: 'public',
       },
       compress: true,
-      port: process.env.PORT || 3003,
+      port: import.meta.env.PORT || 3003,
       historyApiFallback: true,
     },
     // optimization: {

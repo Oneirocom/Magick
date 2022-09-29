@@ -32,7 +32,7 @@ export function LoginTab({}) {
       return
     }
 
-    const resp = await axios.post(process.env.API_URL + '/login', {
+    const resp = await axios.post(import.meta.env.VITE_API_URL + '/login', {
       username: loginInfo.username,
       password: loginInfo.password,
     })
@@ -83,7 +83,7 @@ export function LoginTab({}) {
 
     setUsername('')
 
-    const resp = await axios.post(process.env.API_URL + '/register', {
+    const resp = await axios.post(import.meta.env.VITE_API_URL + '/register', {
       email: registerInfo.email,
       username: registerInfo.username,
       password: registerInfo.password,

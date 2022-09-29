@@ -1,4 +1,4 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 //@ts-nocheck
 import { useState } from 'react'
@@ -26,7 +26,7 @@ const StoreAddEditModal = ({
         } else {
           setError('')
           await axios.post(
-            `${process.env.REACT_APP_SEARCH_SERVER_URL}/document-store`,
+            `${import.meta.env.VITE_SEARCH_SERVER_URL}/document-store`,
             body
           )
           enqueueSnackbar('Document store created', { variant: 'success' })
@@ -44,7 +44,7 @@ const StoreAddEditModal = ({
         } else {
           setError('')
           await axios.put(
-            `${process.env.REACT_APP_SEARCH_SERVER_URL}/document-store`,
+            `${import.meta.env.VITE_SEARCH_SERVER_URL}/document-store`,
             body
           )
           enqueueSnackbar('Document store updated', { variant: 'success' })

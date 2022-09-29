@@ -1,4 +1,4 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
@@ -20,7 +20,7 @@ const ContentObject = ({ content, getContentObjects }) => {
   const updateObj = async () => {
     const body = { ...contentObj }
     await axios.put(
-      `${process.env.REACT_APP_SEARCH_SERVER_URL}/content-object`,
+      `${import.meta.env.VITE_SEARCH_SERVER_URL}/content-object`,
       body
     )
     enqueueSnackbar('Content Object updated', { variant: 'success' })

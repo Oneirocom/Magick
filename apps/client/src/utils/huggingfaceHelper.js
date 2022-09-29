@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const invokeInference = async (model, data) => {
-  const API_TOKEN = process.env.REACT_APP_HUGGINGFACE_API_TOKEN
+  const API_TOKEN = import.meta.env.VITE_HUGGINGFACE_API_TOKEN
 
   try {
     const resp = await axios.post(

@@ -25,15 +25,15 @@
 
 9. Open client .env file (vim client/.env).
 
-- Change following env params REACT_APP_LAPI_ROOT_URL, REACT_APP_API_ROOT_URL, REACT_APP_API_ROOT_URL_PROD, REACT_APP_CORS_URL, REACT_APP_API_URL,REACT_APP_SEARCH_FILE_URL
+- Change following env params VITE_LAPI_ROOT_URL, VITE_API_ROOT_URL, VITE_API_ROOT_URL_PROD, VITE_CORS_URL, VITE_API_URL,VITE_SEARCH_FILE_URL
 
 10. Open core .env file (vim client/.env).
 
-- Change following env params REACT_APP_API_ROOT_URL, API_URL
+- Change following env params VITE_API_ROOT_URL, VITE_API_URL
 
 11. Open server .env file (vim client/.env).
 
-- Change following .env params API_URL, PGUSER, PGHOST, PGPASSWORD, PGDATABASE, GOOGLE_APPLICATION_CREDENTIALS, WITAI_KEY, UBER_DUCK_KEY, UBER_DUCK_SECRET_KEY, OPENAI_API_KEY, HF_API_KEY
+- Change following .env params VITE_API_URL, PGUSER, PGHOST, PGPASSWORD, PGDATABASE, GOOGLE_APPLICATION_CREDENTIALS, WITAI_KEY, UBER_DUCK_KEY, UBER_DUCK_SECRET_KEY, OPENAI_API_KEY, HF_API_KEY
   Note: In GOOGLE_APPLICATION_CREDENTIALS set path of credential json file
 
 12. Run following commands

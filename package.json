@@ -5,6 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "nx build",
+    "start": "nx serve",
+    "test": "nx test",
     "generate:node:app": "nx g @nrwl/node:application",
     "generate:node:library": "nx g @nrwl/js:node",
     "generate:react:app": "nx g @nxext/react:application",
@@ -12,8 +14,6 @@
     "generate:vite:library": "nx g @nxext/vite:library",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
-    "start": "nx serve",
-    "test": "nx test",
     "sortPackage": "npx sort-package-json"
   },
   "resolutions": {
@@ -34,6 +34,7 @@
     "@psychedelic/dab-js": "^1.3.6",
     "@reduxjs/toolkit": "^1.6.2",
     "axios": "0.27.0",
+    "cheerio": "^1.0.0-rc.12",
     "classnames": "^2.3.1",
     "core-js": "^3.6.5",
     "cross-fetch": "^3.1.5",
@@ -106,6 +107,7 @@
     "twilio": "3.72.0",
     "twitter-api-v2": "1.8.0",
     "unique-names-generator": "^4.5.0",
+    "unirest": "^0.6.0",
     "uuid": "^8.3.2",
     "vite-tsconfig-paths": "^3.5.0",
     "vm2": "^3.9.11",

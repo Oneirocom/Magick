@@ -8,7 +8,7 @@ const webpack = require('webpack')
 const BundleAnalyzerPlugin =
   require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
-const prod = process.env.NODE_ENV === 'production'
+const prod = import.meta.env.MODE === 'production'
 
 const babelOptions = {
   presets: [
@@ -17,7 +17,7 @@ const babelOptions = {
       '@babel/preset-react',
       {
         runtime: 'automatic',
-        development: process.env.NODE_ENV === 'development',
+        development: import.meta.env.MODE === 'development',
         importSource: '@welldone-software/why-did-you-render',
       },
     ],
@@ -103,7 +103,9 @@ module.exports = () => {
         Buffer: ['buffer', 'Buffer'],
       }),
       new webpack.DefinePlugin({
-        'process.env.NODE_DEBUG': JSON.stringify(process.env.NODE_DEBUG),
+        'import.meta.env.NODE_DEBUG': JSON.stringify(
+          import.meta.env.NODE_DEBUG
+        ),
       }),
       new CopyPlugin({
         patterns: [{ from: 'public', to: '.' }],
@@ -111,7 +113,7 @@ module.exports = () => {
     ],
   }
 
-  const isAnalyze = typeof process.env.BUNDLE_ANALYZE !== 'undefined'
+  const isAnalyze = typeof import.meta.env.BUNDLE_ANALYZE !== 'undefined'
 
   if (isAnalyze) {
     console.log('RUNNING BUNDLE ANALYZER')
