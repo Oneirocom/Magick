@@ -6,7 +6,6 @@
     "client-core": "packages/client-core",
     "core": "packages/core",
     "engine": "packages/engine",
-    "new-client": "apps/new-client",
     "server-core": "packages/server-core"
   }
 }

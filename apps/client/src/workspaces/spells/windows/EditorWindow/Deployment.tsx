@@ -10,8 +10,11 @@ import { latitudeApiRootUrl } from '../../../../config'
 import { useAuth } from '../../../../contexts/AuthProvider'
 import { useModal } from '../../../../contexts/ModalProvider'
 import {
-    useDeploySpellMutation, useGetDeploymentsQuery, useGetSpellQuery, useLazyGetDeploymentQuery,
-    useSaveSpellMutation
+  useDeploySpellMutation,
+  useGetDeploymentsQuery,
+  useGetSpellQuery,
+  useLazyGetDeploymentQuery,
+  useSaveSpellMutation,
 } from '../../../../state/api/spells'
 import { useEditor } from '../../../../workspaces/contexts/EditorProvider'
 import css from './editorwindow.module.css'

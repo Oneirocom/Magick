@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 
-import { createConfig, SingleConfig, updateConfig } from '../../state/admin/config/configState'
+import {
+  createConfig,
+  SingleConfig,
+  updateConfig,
+} from '../../state/admin/config/configState'
 import { useAppDispatch, useAppSelector } from '../../state/hooks'
 // import { useForm } from 'react-hook-form'
 import Modal from '../Modal/Modal'

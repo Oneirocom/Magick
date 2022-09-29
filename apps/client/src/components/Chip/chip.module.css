@@ -24,6 +24,6 @@
   box-shadow: none;
   border-color: var(--dark-3);
   color: var(--dark-4);
-  font-family: "IBM Plex Mono";
+  font-family: 'IBM Plex Mono';
   text-transform: uppercase;
 }

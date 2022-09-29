@@ -7,7 +7,10 @@ import Editor from '@monaco-editor/react'
 
 import Window from '../../../components/Window/Window'
 import { RootState } from '../../../state/store'
-import { TextEditorData, useInspector } from '../../../workspaces/contexts/InspectorProvider'
+import {
+  TextEditorData,
+  useInspector,
+} from '../../../workspaces/contexts/InspectorProvider'
 import WindowMessage from '../../components/WindowMessage'
 
 const TextEditor = props => {

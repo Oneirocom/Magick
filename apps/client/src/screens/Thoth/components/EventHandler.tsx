@@ -1,7 +1,11 @@
 import { useSnackbar } from 'notistack'
 import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import { adjectives, colors, uniqueNamesGenerator } from 'unique-names-generator'
+import {
+  adjectives,
+  colors,
+  uniqueNamesGenerator,
+} from 'unique-names-generator'
 
 import { GraphData, Spell } from '@thothai/core'
 
@@ -10,7 +14,9 @@ import { useAuth } from '../../../contexts/AuthProvider'
 import { useFeathers } from '../../../contexts/FeathersProvider'
 import { useSharedb } from '../../../contexts/SharedbProvider'
 import {
-    useGetSpellQuery, useSaveDiffMutation, useSaveSpellMutation
+  useGetSpellQuery,
+  useSaveDiffMutation,
+  useSaveSpellMutation,
 } from '../../../state/api/spells'
 import { RootState } from '../../../state/store'
 import { diff } from '../../../utils/json0'

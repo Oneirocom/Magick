@@ -2,7 +2,11 @@ import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { adjectives, colors, uniqueNamesGenerator } from 'unique-names-generator'
+import {
+  adjectives,
+  colors,
+  uniqueNamesGenerator,
+} from 'unique-names-generator'
 
 import { GraphData } from '@thothai/core'
 

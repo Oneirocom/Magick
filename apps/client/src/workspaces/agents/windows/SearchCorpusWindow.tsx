@@ -29,7 +29,7 @@ const SearchCorpus = () => {
     let res
     try {
       res = await axios.get(
-        `${import.meta.env.VITE_SEARCH_SERVER_URL}/document-store`
+        `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document-store`
       )
     } catch (e) {
       enqueueSnackbar('Request returned: ' + resp.status + '!', {
@@ -47,7 +47,7 @@ const SearchCorpus = () => {
 
   const getDocuments = async () => {
     const docs = await axios.get(
-      `${import.meta.env.VITE_SEARCH_SERVER_URL}/document`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document`,
       {
         params: {
           storeId: storeRef.current.value,

@@ -54,7 +54,6 @@
       }
     }
   },
-  "defaultProject": "client",
   "cli": {
     "defaultCollection": "@nxext/vite"
   }

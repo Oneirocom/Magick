@@ -6,7 +6,13 @@ const SwitchComponent = ({ label: _label, checked, onChange }) => {
   return (
     <FormControlLabel
       label={_label}
-      control={<Switch {...label} checked={checked === true || checked === "true"} onChange={onChange} />}
+      control={
+        <Switch
+          {...label}
+          checked={checked === true || checked === 'true'}
+          onChange={onChange}
+        />
+      }
     />
   )
 }

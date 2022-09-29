@@ -2,7 +2,10 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import SwitchComponent from '../../../../components/Switch/Switch'
 import Window from '../../../../components/Window/Window'
-import { toggleAutoSave, toggleDoNotShowUnlockWarning } from '../../../../state/preferences'
+import {
+  toggleAutoSave,
+  toggleDoNotShowUnlockWarning,
+} from '../../../../state/preferences'
 import { RootState } from '../../../../state/store'
 
 const SettingsWindow = ({ tab }) => {

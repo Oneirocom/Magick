@@ -17,7 +17,10 @@ import WindowToolbar from '../../../../components/Window/WindowToolbar'
 import { thothApiRootUrl } from '../../../../config'
 import { useAuth } from '../../../../contexts/AuthProvider'
 import { usePlugWallet } from '../../../../contexts/PlugProvider'
-import { useGetSpellQuery, useNewSpellMutation } from '../../../../state/api/spells'
+import {
+  useGetSpellQuery,
+  useNewSpellMutation,
+} from '../../../../state/api/spells'
 import css from './editorwindow.module.css'
 
 const MintingView = ({ open, setOpen, spellId, close }) => {

@@ -3,7 +3,11 @@ import { useForm } from 'react-hook-form'
 
 import { MenuItem, Select } from '@material-ui/core'
 
-import { createScope, singleScope, updateScope } from '../../state/admin/scope/scopeState'
+import {
+  createScope,
+  singleScope,
+  updateScope,
+} from '../../state/admin/scope/scopeState'
 import { useAppDispatch, useAppSelector } from '../../state/hooks'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'

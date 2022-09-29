@@ -8,7 +8,9 @@ import Select from '../../../components/Select/Select'
 import { useAuth } from '../../../contexts/AuthProvider'
 import defaultGraph from '../../../data/graphs/default'
 import {
-    useGetSpellsQuery, useLazyGetSpellQuery, useNewSpellMutation
+  useGetSpellsQuery,
+  useLazyGetSpellQuery,
+  useNewSpellMutation,
 } from '../../../state/api/spells'
 import { useAppDispatch } from '../../../state/hooks'
 import { openTab } from '../../../state/tabs'

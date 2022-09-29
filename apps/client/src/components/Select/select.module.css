@@ -4,11 +4,11 @@
 .select-dropdown-container:hover {
   filter: brightness(1.1);
 }
-.select-dropdown-container input[type="text"] {
+.select-dropdown-container input[type='text'] {
   box-shadow: none !important;
 }
 .dropdown-indicator {
-  transition: transform .2s ease;
+  transition: transform 0.2s ease;
 }
 .select-dropdown-container:hover .dropdown-indicator {
   transform: rotate(90deg);
@@ -20,22 +20,22 @@
   padding: var(--c1);
   background-color: var(--dark-1);
   border-radius: 4px;
-  font-family: "IBM Plex Mono";
-  letter-spacing: .1em;
+  font-family: 'IBM Plex Mono';
+  letter-spacing: 0.1em;
 }
 
-.select-dropdown-container ::-webkit-scrollbar{
+.select-dropdown-container ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
-  }
-.select-dropdown-container ::-webkit-scrollbar-thumb{
+}
+.select-dropdown-container ::-webkit-scrollbar-thumb {
   border: 2px solid var(--dark-2);
-  background: #A8A6A8;
+  background: #a8a6a8;
   border-radius: 5px;
-  }
-.select-dropdown-container ::-webkit-scrollbar-thumb:hover{
+}
+.select-dropdown-container ::-webkit-scrollbar-thumb:hover {
   background: #878587;
-  }
-.select-dropdown-container ::-webkit-scrollbar-track{
+}
+.select-dropdown-container ::-webkit-scrollbar-track {
   background: transparent;
-  }
+}

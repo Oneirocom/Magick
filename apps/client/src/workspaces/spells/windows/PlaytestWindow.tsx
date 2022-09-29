@@ -11,7 +11,11 @@ import { useFeathers } from '../../../contexts/FeathersProvider'
 import { usePubSub } from '../../../contexts/PubSubProvider'
 import css from '../../../screens/Thoth/thoth.module.css'
 import { useAppSelector } from '../../../state/hooks'
-import { addLocalState, selectStateBySpellId, upsertLocalState } from '../../../state/localState'
+import {
+  addLocalState,
+  selectStateBySpellId,
+  upsertLocalState,
+} from '../../../state/localState'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>

@@ -38,11 +38,11 @@ class speechUtils {
 
   constructor() {
     this.socket = socketIOClient(
-      import.meta.env.VITE_SPEECH_SERVER_URL as string
+      import.meta.env.VITE_APP_SPEECH_SERVER_URL as string
     )
     console.log(
       'connected to speach server at:',
-      import.meta.env.VITE_SPEECH_SERVER_URL,
+      import.meta.env.VITE_APP_SPEECH_SERVER_URL,
       ':',
       this.socket.connected
     )

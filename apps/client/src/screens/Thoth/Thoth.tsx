@@ -7,7 +7,12 @@ import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import TabLayout from '../../components/TabLayout/TabLayout'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { RootState } from '../../state/store'
-import { activeTabSelector, closeTab, openTab, selectAllTabs } from '../../state/tabs'
+import {
+  activeTabSelector,
+  closeTab,
+  openTab,
+  selectAllTabs,
+} from '../../state/tabs'
 import Workspaces from '../../workspaces'
 
 const Thoth = ({ empty = false }) => {

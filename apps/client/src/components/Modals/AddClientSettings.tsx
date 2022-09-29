@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { createClient, singleClient, updateClient } from '../../state/admin/clientS/clientState'
+import {
+  createClient,
+  singleClient,
+  updateClient,
+} from '../../state/admin/clientS/clientState'
 import { useAppDispatch, useAppSelector } from '../../state/hooks'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'

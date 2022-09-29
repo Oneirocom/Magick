@@ -1,5 +1,10 @@
 import {
-    Actions, DockLocation, Layout as LayoutComponent, Model, TabNode, TabSetNode
+  Actions,
+  DockLocation,
+  Layout as LayoutComponent,
+  Model,
+  TabNode,
+  TabSetNode,
 } from 'flexlayout-react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'

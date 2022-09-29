@@ -4,7 +4,8 @@ import JoditEditor from 'jodit-react'
 import { useEffect, useRef, useState } from 'react'
 
 import {
-    useWysiwygInspector, WysiwygEditorData
+  useWysiwygInspector,
+  WysiwygEditorData,
 } from '../../../workspaces/contexts/WysiwygProvider'
 import WindowMessage from '../../components/WindowMessage'
 

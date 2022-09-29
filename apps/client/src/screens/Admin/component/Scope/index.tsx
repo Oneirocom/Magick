@@ -7,7 +7,10 @@ import Typography from '@mui/material/Typography'
 
 import { useModal } from '../../../../contexts/ModalProvider'
 import {
-    deleteScope, retrieveScope, ScopeRes, searchScope
+  deleteScope,
+  retrieveScope,
+  ScopeRes,
+  searchScope,
 } from '../../../../state/admin/scope/scopeState'
 import { useAppDispatch, useAppSelector } from '../../../../state/hooks'
 import Search from '../../common/Search'

@@ -1,5 +1,3 @@
-import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 //@ts-nocheck
 import Modal from '../../Modal/Modal'
 import css from '../modalForms.module.css'
@@ -11,7 +9,7 @@ const StoreDeleteModal = ({ closeModal, store, getDocumentsStores }) => {
 
   const deleteStore = async () => {
     await axios.delete(
-      `${import.meta.env.VITE_SEARCH_SERVER_URL}/document-store`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document-store`,
       {
         params: {
           storeId: store.id,

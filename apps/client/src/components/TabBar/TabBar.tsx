@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { RootState } from '../../state/store'
 import { changeActive, closeTab, selectAllTabs } from '../../state/tabs'
 import MenuBar from '../MenuBar/MenuBar'
+import { PlugWallet } from '../PlugWallet/PlugWallet'
 import CreateTab from './CreateTab'
 import { LoginTab } from './LoginTab'
 import css from './tabBar.module.css'
@@ -75,6 +76,7 @@ const TabBar = ({ tabs, activeTab }) => {
       </div>
 
       <div className={css['tabbar-user']}>
+        <PlugWallet />
         <LoginTab />
       </div>
     </div>

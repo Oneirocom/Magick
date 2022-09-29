@@ -174,7 +174,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
       }
 
       const resp = await axios.get(
-        `${import.meta.env.VITE_API_URL}/text_to_speech`,
+        `${import.meta.env.VITE_APP_API_URL}/text_to_speech`,
         {
           params: {
             text: 'Hello there! How are you?',
@@ -188,7 +188,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
 
       const url =
         voice_provider === 'google' || voice_provider === 'tiktalknet'
-          ? import.meta.env.VITE_SEARCH_FILE_URL + '/' + resp.data
+          ? import.meta.env.VITE_APP_SEARCH_FILE_URL + '/' + resp.data
           : resp.data
       if (url && url.length > 0) {
         setPlayingAudio(true)
@@ -225,7 +225,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
     if (!loaded) {
       ;(async () => {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_ROOT_URL}/entity?instanceId=` + id
+          `${import.meta.env.VITE_APP_API_ROOT_URL}/entity?instanceId=` + id
         )
         console.log('res is', res.data)
         setEnabled(res.data.enabled === true)
@@ -354,7 +354,9 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
   useEffect(() => {
     ;(async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_ROOT_URL}/game/spells?userId=${user?.id}`
+        `${import.meta.env.VITE_APP_API_ROOT_URL}/game/spells?userId=${
+          user?.id
+        }`
       )
       setSpellList(res.data)
     })()
@@ -362,7 +364,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
 
   const _delete = () => {
     axios
-      .delete(`${import.meta.env.VITE_API_ROOT_URL}/entity/` + id)
+      .delete(`${import.meta.env.VITE_APP_API_ROOT_URL}/entity/` + id)
       .then(res => {
         console.log('deleted', res)
         if (res.data === 'internal error') {
@@ -483,7 +485,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
       twilio_spell_handler_incoming,
     }
     axios
-      .post(`${import.meta.env.VITE_API_ROOT_URL}/entity`, {
+      .post(`${import.meta.env.VITE_APP_API_ROOT_URL}/entity`, {
         id,
         data: _data,
       })

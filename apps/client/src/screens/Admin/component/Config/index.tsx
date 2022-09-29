@@ -7,7 +7,10 @@ import Typography from '@mui/material/Typography'
 
 import { useModal } from '../../../../contexts/ModalProvider'
 import {
-    ConfigRes, deleteConfig, retrieveConfig, searchConfig
+  ConfigRes,
+  deleteConfig,
+  retrieveConfig,
+  searchConfig,
 } from '../../../../state/admin/config/configState'
 import { useAppDispatch, useAppSelector } from '../../../../state/hooks'
 import Search from '../../common/Search'

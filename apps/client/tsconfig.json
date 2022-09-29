@@ -14,8 +14,10 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
     "noImplicitAny": false,
-    "jsx": "react-jsx"
+    "types": ["vite/client", "@nxext/react/client"]
   },
   "files": [],
   "include": [],

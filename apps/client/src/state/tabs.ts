@@ -102,8 +102,14 @@ export const tabSlice = createSlice({
 })
 
 // actions
-export const { openTab, closeTab, switchTab, clearTabs, saveTabLayout, changeActive } =
-  tabSlice.actions
+export const {
+  openTab,
+  closeTab,
+  switchTab,
+  clearTabs,
+  saveTabLayout,
+  changeActive,
+} = tabSlice.actions
 
 // selectors
 export const activeTabSelector = (state: RootState) =>

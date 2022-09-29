@@ -13,7 +13,7 @@ const AgentModal = ({ content, onClose, options: _options }) => {
     },
   ]
   const updateNotes = e => {
-    console.log("message is ", e.target.value)
+    console.log('message is ', e.target.value)
     setMessage(e.target.value)
   }
 

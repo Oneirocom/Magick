@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const SimpleAccordion = ({ setExpanded = x => { }, ...props }) => {
+export const SimpleAccordion = ({ setExpanded = x => {}, ...props }) => {
   const classes = useStyles() as any
 
   const onChange = (_, expanded) => {

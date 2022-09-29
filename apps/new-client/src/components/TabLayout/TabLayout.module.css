@@ -1,7 +1,0 @@
-.view-container {
-  padding: var(--c1);
-  height: 100%;
-  background-color: var(--dark-1);
-  border: 1px solid var(--dark-2);
-  border-radius: 4px;
-}
