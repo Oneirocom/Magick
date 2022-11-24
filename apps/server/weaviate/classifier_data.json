@@ -1,0 +1,99 @@
+[
+  {
+    "type": "happy",
+    "examples": ["I'm very happy today"]
+  },
+  {
+    "type": "sad",
+    "examples": ["I'm gonna cry", "I'm gonna cry for you", "I'm sad"]
+  },
+  {
+    "type": "angry",
+    "examples": ["Why are you saying this?", "Stop saying that", "I'm angry"]
+  },
+  {
+    "type": "frustrated",
+    "examples": [
+      "Can't do it anymore",
+      "I'm unlucky",
+      "I'm not good at it",
+      "I'm frustrated about you"
+    ]
+  },
+  {
+    "type": "scared",
+    "examples": ["Please don't", "Help me", "SOS", "I'm scared"]
+  },
+  {
+    "type": "surprised",
+    "examples": ["Oh wow!", "Oh my god!", "WoW", "You surprised me"]
+  },
+  {
+    "type": "shy",
+    "examples": ["Too crowded", "I'm too shy", "I'm an introvert"]
+  },
+  {
+    "type": "sleepy",
+    "examples": [
+      "It is very late",
+      "I'm exhausted",
+      "I need some sleep",
+      "I'm sleepy"
+    ]
+  },
+  {
+    "type": "embarrased",
+    "examples": [
+      "Stop you're making me blush",
+      "I'm embarrasing",
+      "I'm embarrased"
+    ]
+  },
+  {
+    "type": "mean",
+    "examples": ["You are ugly", "You are slow", "You are mean", "I'm mean"]
+  },
+  {
+    "type": "proud",
+    "examples": ["I'm very proud of you!", "You are the best"]
+  },
+  {
+    "type": "nervous",
+    "examples": ["Cant wait", "I'm so nervous"]
+  },
+  {
+    "type": "disappointed",
+    "examples": ["Why are you keep doing this?", "I'm dissapointed in you"]
+  },
+  {
+    "type": "confused",
+    "examples": ["What do you mean?", "I'm confused", "I can't understand"]
+  },
+  {
+    "type": "impatient",
+    "examples": [
+      "Can't wait to see you!",
+      "Can't wait",
+      "When are we going",
+      "I'm very impatient"
+    ]
+  },
+  {
+    "type": "curious",
+    "examples": [
+      "What is this?",
+      "Where are you from?",
+      "Where are we going",
+      "Who are you?",
+      "I'm curious"
+    ]
+  },
+  {
+    "type": "excited",
+    "examples": ["Can't wait", "I'm very excited today!", "I'm excited"]
+  },
+  {
+    "type": "bored",
+    "examples": ["When are we leaving", "I'm bored", "You are boring"]
+  }
+]

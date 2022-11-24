@@ -1,0 +1,36 @@
+---
+version: '3.4'
+services:
+  weaviate:
+    command:
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8080'
+    - --scheme
+    - http
+    image: semitechnologies/weaviate:1.11.0
+    ports:
+    - 8080:8080
+    restart: on-failure:0
+    environment:
+      TRANSFORMERS_INFERENCE_API: 'http://t2v-transformers:8080'
+      QNA_INFERENCE_API: 'http://qna-transformers:8080'
+      SPELLCHECK_INFERENCE_API: 'http://text-spellcheck:8080'
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      DEFAULT_VECTORIZER_MODULE: 'text2vec-transformers'
+      ENABLE_MODULES: 'text2vec-transformers,qna-transformers,text-spellcheck'
+      CLUSTER_HOSTNAME: 'node1'
+  t2v-transformers:
+    image: semitechnologies/transformers-inference:sentence-transformers-multi-qa-MiniLM-L6-cos-v1
+    environment:
+      ENABLE_CUDA: '0'
+  qna-transformers:
+    image: semitechnologies/qna-transformers:distilbert-base-uncased-distilled-squad
+    environment:
+      ENABLE_CUDA: '0'
+  text-spellcheck:
+    image: semitechnologies/text-spellcheck-model:pyspellchecker-en
+...

@@ -56,5 +56,6 @@
   },
   "cli": {
     "defaultCollection": "@nxext/vite"
-  }
+  },
+  "defaultProject": "server"
 }

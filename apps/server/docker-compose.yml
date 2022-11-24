@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  db:
+    restart: always
+    image: postgres
+    hostname: thoth_db
+    environment:
+      POSTGRES_DB: thoth
+      POSTGRES_USER: thoth
+      POSTGRES_PASSWORD: thoth_default_pw
+    ports:
+      - '5432:5432'
