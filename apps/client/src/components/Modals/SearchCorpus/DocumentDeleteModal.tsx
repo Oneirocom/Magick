@@ -14,8 +14,8 @@ const DocumentDeleteModal = ({
   getContentObjects,
 }) => {
   let url = isContentObj
-    ? `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/content-object`
-    : `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/document`
+    ? `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/content-object`
+    : `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document`
   let params = isContentObj
     ? {
         objId,

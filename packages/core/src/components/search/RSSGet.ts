@@ -97,7 +97,7 @@ export class RSSGet extends ThothComponent<Promise<WorkerReturn>> {
         resp = await axios.get(urls[i])
       } catch (e) {
         resp = await axios.get(
-          import.meta.env.REACT_APP_CORS_URL + '/' + urls[i]
+          import.meta.env.VITE_APP_CORS_URL + '/' + urls[i]
         )
       }
 

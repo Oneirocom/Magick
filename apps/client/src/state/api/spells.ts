@@ -148,7 +148,7 @@ export const spellApi = rootApi.injectEndpoints({
 })
 
 const selectSpellResults = spellApi.endpoints.getSpells.select()
-const emptySpells = []
+const emptySpells = Array
 
 export const selectAllSpells = createSelector(
   selectSpellResults,

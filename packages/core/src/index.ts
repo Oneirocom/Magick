@@ -11,11 +11,17 @@ export { default as KeyCodePlugin } from './plugins/keyCodePlugin'
 export { default as LifecyclePlugin } from './plugins/lifecyclePlugin'
 export { default as ModulePlugin } from './plugins/modulePlugin'
 export { default as ReactRenderPlugin } from './plugins/reactRenderPlugin'
+export * from './plugins/reactRenderPlugin'
 export { default as SelectionPlugin } from './plugins/selectionPlugin'
 export { default as SocketGeneratorPlugin } from './plugins/socketGenerator'
 export { default as SocketOverridePlugin } from './plugins/socketOverridePlugin'
 export { default as SocketPlugin } from './plugins/socketPlugin'
 export { default as TaskPlugin } from './plugins/taskPlugin'
+
+export { Node } from './plugins/reactRenderPlugin/Node'
+export { Socket } from './plugins/reactRenderPlugin/Socket'
+export { Control } from './plugins/reactRenderPlugin/Control'
+export { zoomAt } from './plugins/areaPlugin/zoom-at'
 
 // TODO we can better organzie this folder structure with nested index aggregators
 export * from './plugins/reactRenderPlugin'

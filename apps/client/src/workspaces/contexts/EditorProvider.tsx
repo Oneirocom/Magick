@@ -101,7 +101,7 @@ const EditorProvider = ({ children }) => {
     const spell = JSON.parse(JSON.stringify(_spell))
 
     console.log('Loading graph in build editor')
-    newEditor.loadGraph(spell.graph)
+    newEditor?.loadGraph(spell.graph)
   }
 
   const run = () => {

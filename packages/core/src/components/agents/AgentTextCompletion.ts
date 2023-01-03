@@ -135,7 +135,7 @@ export class AgentTextCompletion extends ThothComponent<Promise<WorkerReturn>> {
     // instead of axios.post, use fetch
     const resp = await fetch(
       `${
-        import.meta.env.REACT_APP_API_URL ?? API_URL ?? 'https://0.0.0.0:8001'
+        import.meta.env.VITE_APP_API_URL ?? API_URL ?? 'https://0.0.0.0:8001'
       }/text_completion`,
       {
         method: 'POST',

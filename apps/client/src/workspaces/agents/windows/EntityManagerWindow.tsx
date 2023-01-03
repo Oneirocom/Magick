@@ -9,7 +9,7 @@ const EntityManagerWindow = () => {
 
   const resetData = async () => {
     const res = await axios.get(
-      `${import.meta.env.REACT_APP_API_ROOT_URL}/entities`
+      `${import.meta.env.VITE_APP_API_ROOT_URL}/entities`
     )
     console.log('res is ', res)
     setData(res.data)
@@ -18,11 +18,11 @@ const EntityManagerWindow = () => {
   const createNew = (data = {}) => {
     console.log('Create new called')
     axios
-      .post(`${import.meta.env.REACT_APP_API_ROOT_URL}/entity`, { data })
+      .post(`${import.meta.env.VITE_APP_API_ROOT_URL}/entity`, { data })
       .then(async res => {
         console.log('response is', res)
         const res2 = await axios.get(
-          `${import.meta.env.REACT_APP_API_ROOT_URL}/entities`
+          `${import.meta.env.VITE_APP_API_ROOT_URL}/entities`
         )
         setData(res2.data)
       })
@@ -40,7 +40,7 @@ const EntityManagerWindow = () => {
   useEffect(() => {
     ;(async () => {
       const res = await axios.get(
-        `${import.meta.env.REACT_APP_API_ROOT_URL}/entities`
+        `${import.meta.env.VITE_APP_API_ROOT_URL}/entities`
       )
       setData(res.data)
       console.log('set the data', res.data)

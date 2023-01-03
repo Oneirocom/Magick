@@ -15,7 +15,7 @@ const info = `Given a keyword pull in relevant information of the wevaiate wikip
 
 const makeWeaviateRequest = async (keyword: string) => {
   const _resp = await axios.post(
-    `${import.meta.env.REACT_APP_API_URL}/weaviate`,
+    `${import.meta.env.VITE_APP_API_URL}/weaviate`,
     {
       keyword: keyword,
     }

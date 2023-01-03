@@ -83,7 +83,7 @@ export class Classifier extends ThothComponent<Promise<InputReturn>> {
 
     const resp = await axios.post(
       `${
-        import.meta.env.REACT_APP_API_URL ??
+        import.meta.env.VITE_APP_API_URL ??
         import.meta.env.API_URL ??
         'https://0.0.0.0:8001'
       }/hf_request`,

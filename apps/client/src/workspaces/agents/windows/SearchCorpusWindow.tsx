@@ -7,16 +7,16 @@ import { useModal } from '../../../contexts/ModalProvider'
 import { useSnackbar } from 'notistack'
 
 const SearchCorpus = () => {
-  const [documentsStores, setDocumentsStores] = useState(null)
+  const [documentsStores, setDocumentsStores] = useState<any>(null)
   const { openModal } = useModal()
-  const storeRef = useRef(null)
-  const [documents, setDocuments] = useState([])
+  const storeRef = useRef<any>(null)
+  const [documents, setDocuments] = useState<any[]>([])
   const { enqueueSnackbar } = useSnackbar()
 
   const add = async () => {
     openModal({
       modal: 'documentAddModal',
-      storeId: storeRef.current.value,
+      storeId: storeRef?.current?.value,
       isContentObject: false,
       getDocuments,
     })
@@ -27,7 +27,7 @@ const SearchCorpus = () => {
     let res
     try {
       res = await axios.get(
-        `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/document-store`
+        `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document-store`
       )
     } catch (e) {
       enqueueSnackbar('Request returned: ' + res.status + '!', {
@@ -45,7 +45,7 @@ const SearchCorpus = () => {
 
   const getDocuments = async () => {
     const docs = await axios.get(
-      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/document`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document`,
       {
         params: {
           storeId: storeRef.current.value,
@@ -56,7 +56,7 @@ const SearchCorpus = () => {
   }
 
   const openAddEditModal = opType => {
-    let store = null
+    let store: any = null
     if (opType === 'edit') {
       store =
         documentsStores.filter(

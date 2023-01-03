@@ -72,7 +72,7 @@ export class Search extends ThothComponent<Promise<WorkerReturn>> {
     console.log('SEARCHING FOR:', searchStr)
     const documents: Document[] = []
     const resp = await axios.get(
-      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/search`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/search`,
       {
         params: {
           question: searchStr,

@@ -212,7 +212,7 @@ const ThothInterfaceProvider = ({ children, tab }) => {
     max_time_diff = -1,
   }) => {
     const urlString = `${
-      import.meta.env.REACT_APP_API_ROOT_URL ??
+      import.meta.env.VITE_APP_API_ROOT_URL ??
       import.meta.env.API_ROOT_URL ??
       'https://localhost:8001'
     }/event`
@@ -249,7 +249,7 @@ const ThothInterfaceProvider = ({ children, tab }) => {
   }: CreateEventArgs) => {
     const response = await axios.post(
       `${
-        import.meta.env.REACT_APP_API_ROOT_URL ??
+        import.meta.env.VITE_APP_API_ROOT_URL ??
         import.meta.env.API_ROOT_URL ??
         'https://localhost:8001'
       }/event`,

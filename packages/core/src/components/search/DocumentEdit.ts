@@ -81,7 +81,7 @@ export class DocumentEdit extends ThothComponent<void> {
     const is_included = inputs['isIncluded'][0] as string
     console.log('inputs', inputs)
     const resp = await axios.post(
-      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/update_document`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/update_document`,
       {
         documentId,
         keywords,

@@ -77,7 +77,7 @@ export class DocumentSet extends ThothComponent<void> {
     const isIncluded = inputs['isIncluded'][0] as string
 
     const resp = await axios.post(
-      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/document`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document`,
       {
         title,
         description,

@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { thothApiRootUrl } from '../../config'
 // initialize an empty api service that we'll inject endpoints into later as needed
+
+console.log('thothApiRootUrl', thothApiRootUrl)
 export const rootApi = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({

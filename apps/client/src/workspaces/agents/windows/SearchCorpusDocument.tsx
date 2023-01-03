@@ -17,7 +17,7 @@ const SearchCorpusDocument = ({ document, getDoc }) => {
   const getContentObjects = async () => {
     console.log('get documents store')
     const res = await axios.get(
-      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/content-object`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/content-object`,
       {
         params: {
           documentId: document.id,
@@ -73,7 +73,7 @@ const SearchCorpusDocument = ({ document, getDoc }) => {
     }
     console.log('body ::: ', body)
     await axios.post(
-      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/update_document`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/update_document`,
       body
     )
     enqueueSnackbar('Document updated', { variant: 'success' })

@@ -76,7 +76,7 @@ export class DocumentSetMass extends ThothComponent<void> {
         temp.push(documents[i])
         if (i >= t * 100 || i === documents.length - 1) {
           await axios.post(
-            `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/document_mass`,
+            `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document_mass`,
             {
               documents: temp,
               storeId,

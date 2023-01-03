@@ -5,6 +5,8 @@ import css from './Node.module.css'
 import icons from '../Icon/icon.module.css'
 
 export class MyNode extends Node {
+  declare props: any
+  declare state: any
   render() {
     const { node, bindSocket, bindControl } = this.props
     const { outputs, controls, inputs, selected } = this.state

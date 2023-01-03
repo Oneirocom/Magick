@@ -25,7 +25,7 @@ const DocumentEditModal = ({ closeModal, field, document, getDocuments }) => {
     }
     console.log('body ::: ', body)
     await axios.post(
-      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/update_document`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/update_document`,
       body
     )
     enqueueSnackbar('Document updated', { variant: 'success' })

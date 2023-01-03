@@ -264,7 +264,7 @@ const MenuBar = () => {
     if (item.items && Object.keys(item.items)) {
       children = (
         <ul className={css['menu-panel']}>
-          {Object.entries(item.items).map(
+          {Object.entries(item.items as [string, Record<string, any>][]).map(
             ([key, item]: [string, Record<string, any>]) => {
               useHotkeys(
                 item.hotKey,
@@ -298,7 +298,7 @@ const MenuBar = () => {
         onClick={onClick}
       >
         <span>
-          {Object.entries(item).map(
+          {Object.entries(item as [string, Record<string, any>][]).map(
             ([key, value]: [string, Record<string, any>]) => {
               if (key === 'isActive')
                 return (

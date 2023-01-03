@@ -67,11 +67,11 @@ export class VectorSearch extends ThothComponent<Promise<WorkerReturn>> {
     const searchStr = inputs['input'][0] as string
     console.log(
       'requesting to:',
-      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/vector_search`
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/vector_search`
     )
     console.log('searchStr:', searchStr)
     const resp = await axios.post(
-      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/vector_search`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/vector_search`,
       {
         question: searchStr,
       }
