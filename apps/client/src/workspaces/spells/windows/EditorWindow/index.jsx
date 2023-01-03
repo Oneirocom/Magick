@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { createNode } from 'rete-context-menu-plugin/src/utils'
 
 import { Editor, useEditor } from '../../../contexts/EditorProvider'
-import Select from '../../../components/Select/Select'
+import Select from '../../../../components/Select/Select'
 import css from './editorwindow.module.css'
 
 const EditorWindow = ({ tab }) => {
