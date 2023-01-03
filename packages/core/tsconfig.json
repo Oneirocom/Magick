@@ -1,10 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "lib": ["ESNext", "DOM"],
+    "module": "esnext",
+    "lib": ["esnext", "DOM"],
     "moduleResolution": "Node",
-    "target": "ESNext",
+    "target": "esnext",
     "useDefineForClassFields": true,
     "strict": false,
     "jsx": "react",
@@ -14,7 +14,7 @@
     "declaration": true,
     "noUnusedLocals": false,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "noImplicitAny": false,
     "allowJs": true,
     "types": ["vite/client", "@nxext/react/client"]

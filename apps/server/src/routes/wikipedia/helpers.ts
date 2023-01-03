@@ -21,13 +21,14 @@ export const searchWikipedia = async (keyword: string) => {
       stop: ['\n'],
     }
 
-    const { success, choice } = await MakeCompletionRequest(
+    const { success, choice } = (await MakeCompletionRequest(
       data,
       null,
       null,
       'conversation',
-      'davinci'
-    ) as any
+      'davinci',
+      process.env.OPENAI_API_KEY
+    )) as any
 
     if (success) {
       keyword = choice.text
@@ -35,7 +36,7 @@ export const searchWikipedia = async (keyword: string) => {
   }
 
   // Search for it, and accept suggestion if there is one
-  const searchResults = await wiki.search(keyword) as any
+  const searchResults = (await wiki.search(keyword)) as any
 
   // If the first result contains the keyword or vice versa, probably just go with it
   if (

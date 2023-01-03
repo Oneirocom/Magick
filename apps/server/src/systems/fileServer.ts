@@ -70,6 +70,7 @@ async function initSSL(): Promise<boolean> {
         }
 
         fs.readFile(filePath, function (error, content) {
+          console.log('file read')
           if (error) {
             if (error.code == 'ENOENT') {
               res.writeHead(404)

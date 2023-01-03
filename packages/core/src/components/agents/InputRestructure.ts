@@ -2,7 +2,12 @@
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import {
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+} from '../../../types'
 import { Task } from '../../plugins/taskPlugin/task'
 import {
   arraySocket,
@@ -68,6 +73,16 @@ export class InputRestructureComponent extends ThothComponent<
     const channelId = new Rete.Input('channel', 'channel', stringSocket)
     const entity = new Rete.Input('entity', 'entity', stringSocket)
     const roomInfo = new Rete.Input('roomInfo', 'roomInfo', arraySocket)
+    const private_key = new Rete.Input(
+      'eth_private_key',
+      'private_key',
+      stringSocket
+    )
+    const public_address = new Rete.Input(
+      'eth_public_address',
+      'public_address',
+      stringSocket
+    )
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const agentSoc = new Rete.Output('output', 'output', agentSocket)
 
@@ -78,6 +93,8 @@ export class InputRestructureComponent extends ThothComponent<
       .addInput(channelId)
       .addInput(entity)
       .addInput(roomInfo)
+      .addInput(private_key)
+      .addInput(public_address)
       .addInput(input)
       .addInput(dataInput)
       .addOutput(agentSoc)
@@ -86,7 +103,7 @@ export class InputRestructureComponent extends ThothComponent<
 
   // eslint-disable-next-line require-await
   async worker(_node: NodeData, inputs: ThothWorkerInputs) {
-    let agent: any = {}
+    const agent: any = {}
     Object.entries(inputs).map(([k, v]) => {
       agent[k] = v[0]
     })
@@ -101,6 +118,8 @@ export class InputRestructureComponent extends ThothComponent<
         ChannelID: agent.channel,
         Entity: agent.entity,
         RoomInfo: agent.roomInfo,
+        eth_private_key: agent.eth_private_key,
+        eth_public_address: agent.eth_public_address,
       },
     }
   }

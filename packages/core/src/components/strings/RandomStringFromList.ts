@@ -5,7 +5,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import { NodeData, ThothNode } from '../../types'
+import {
+  EngineContext,
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+} from '../../../types'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { triggerSocket, stringSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'

@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { triggerSocket, stringSocket } from '../../sockets'
@@ -83,7 +83,7 @@ export class LogicalOperator extends ThothComponent<Promise<WorkerReturn>> {
         is = inp1 < inp2
       }
     } catch (e) {
-      error = (e as any).message
+      error = e.message
     }
 
     this._task.closed = is ? ['false'] : ['true']

@@ -1,16 +1,14 @@
-//@ts-nocheck
-import { SearchSchema } from 'src/types'
+import { SearchSchema } from '../types'
 import weaviate from 'weaviate-client'
 import * as fs from 'fs'
-import { classifyText } from '../../../core/src/utils/textClassifier'
 import path from 'path'
-import { database } from '../database'
+import { database } from '@thothai/database'
 import axios from 'axios'
 import { ClassifierSchema } from '../types'
 
 const DOCUMENTS_CLASS_NAME = 'DataStore'
 const saved_docs: SearchSchema[] = []
-let client: weaviate.client
+let client: any
 
 export async function initWeaviateClient(
   _train: boolean,
@@ -55,7 +53,7 @@ export async function initWeaviateClient(
 
 async function trainClassifier(data: ClassifierSchema[]) {
   if (!client) {
-    initWeaviateClient(false)
+    initWeaviateClient(false, false)
   }
 
   if (!data || data === undefined) {
@@ -81,7 +79,7 @@ async function trainClassifier(data: ClassifierSchema[]) {
 
 async function train(data: SearchSchema[]) {
   if (!client) {
-    initWeaviateClient(false)
+    initWeaviateClient(false, false)
   }
 
   if (!data || data === undefined) {
@@ -164,7 +162,7 @@ async function trainFromUrl(url: string): Promise<SearchSchema[]> {
 
 export async function singleTrain(data: SearchSchema) {
   if (!client) {
-    initWeaviateClient(false)
+    initWeaviateClient(false, false)
   }
 
   if (!data || data === undefined) {
@@ -189,7 +187,7 @@ export async function singleTrain(data: SearchSchema) {
   console.log(res)
 }
 
-export async function search(query: string): SearchSchema {
+export async function search(query: string): Promise<SearchSchema> {
   if (!client || client === undefined) {
     await initWeaviateClient(false, false)
   }
@@ -264,7 +262,7 @@ async function getDocumentId(
   description: string
 ): Promise<string> {
   if (!client) {
-    await initWeaviateClient(false)
+    await initWeaviateClient(false, false)
   }
 
   const docs = await client.data.getter().do()
@@ -287,7 +285,7 @@ export async function updateDocument(
   newDescription: string
 ) {
   if (!client) {
-    await initWeaviateClient(false)
+    await initWeaviateClient(false, false)
   }
 
   if (
@@ -337,7 +335,7 @@ export async function updateDocument(
 }
 export async function deleteDocument(title: string, description: string) {
   if (!client) {
-    await initWeaviateClient(false)
+    await initWeaviateClient(false, false)
   }
 
   if (!title || title.length <= 0 || !description || description.length <= 0) {

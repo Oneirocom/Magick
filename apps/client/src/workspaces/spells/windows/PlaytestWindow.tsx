@@ -1,21 +1,20 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import Editor from '@monaco-editor/react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { useDispatch, useSelector } from 'react-redux'
 
-import Editor from '@monaco-editor/react'
-
-import Window from '../../../components/Window/Window'
-import { feathers as feathersFlag } from '../../../config'
-import { useFeathers } from '../../../contexts/FeathersProvider'
-import { usePubSub } from '../../../contexts/PubSubProvider'
-import css from '../../../screens/Thoth/thoth.module.css'
-import { useAppSelector } from '../../../state/hooks'
 import {
-  addLocalState,
-  selectStateBySpellId,
   upsertLocalState,
+  selectStateBySpellId,
+  addLocalState,
 } from '../../../state/localState'
+import { usePubSub } from '../../../contexts/PubSubProvider'
+import Window from '../../../components/Window/Window'
+import css from '../../../screens/Thoth/thoth.module.css'
+import { useFeathers } from '../../../contexts/FeathersProvider'
+import { feathers as feathersFlag } from '../../../config'
+import { useAppSelector } from '../../../state/hooks'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
@@ -165,6 +164,16 @@ const Playtest = ({ tab }) => {
 
   const toolbar = (
     <React.Fragment>
+      <form>
+        <label htmlFor="api-key">API Key</label>
+        <input
+          type="password"
+          id="api-key"
+          name="api-key"
+          value="api-key"
+          onChange={e => localStorage.setItem('openai-api-key', e.target.value)}
+        />
+      </form>
       <button className="small" onClick={onClear}>
         Clear
       </button>
@@ -173,6 +182,15 @@ const Playtest = ({ tab }) => {
       </button>
     </React.Fragment>
   )
+  if (document.getElementById('api-key')) {
+    document
+      .getElementById('api-key')
+      ?.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          event.preventDefault()
+        }
+      })
+  }
 
   const printItem = (text, key) => <li key={key}>{text}</li>
 

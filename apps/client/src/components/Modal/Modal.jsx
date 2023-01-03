@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-
 import { useModal } from '../../contexts/ModalProvider'
 import Icon from '../Icon/Icon'
 import css from './modal.module.css'

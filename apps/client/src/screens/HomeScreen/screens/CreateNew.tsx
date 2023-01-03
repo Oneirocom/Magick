@@ -1,24 +1,20 @@
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { GraphData } from '@thothai/core'
 import {
+  uniqueNamesGenerator,
   adjectives,
   colors,
-  uniqueNamesGenerator,
 } from 'unique-names-generator'
+import { useNavigate } from 'react-router-dom'
 
-import { GraphData } from '@thothai/core'
-
-import Panel from '../../../components/Panel/Panel'
-import { useAuth } from '../../../contexts/AuthProvider'
-import defaultGraph from '../../../data/graphs/default'
 import { useNewSpellMutation } from '../../../state/api/spells'
-import TemplatePanel from '../components/TemplatePanel'
+import Panel from '../../../components/Panel/Panel'
 import emptyImg from '../empty.png'
-// import enkiImg from '../enki.png'
-// import langImg from '../lang.png'
 import css from '../homeScreen.module.css'
+import TemplatePanel from '../components/TemplatePanel'
+import defaultGraph from '../../../data/graphs/default'
 
 const customConfig = {
   dictionaries: [adjectives, colors],
@@ -35,7 +31,6 @@ export type Template = {
 export const thothTemplates = [
   { label: 'Starter', bg: emptyImg, graph: defaultGraph },
   // { label: 'Language example', bg: langImg, graph: defaultChain },
-  // { label: 'Enki example', bg: enkiImg, graph: defaultChain },
 ]
 
 const CreateNew = () => {
@@ -47,22 +42,15 @@ const CreateNew = () => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const [newSpell] = useNewSpellMutation()
-  const { user } = useAuth()
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors },
-  } = useForm()
+  const { register, handleSubmit } = useForm()
 
   const onCreate = handleSubmit(async data => {
     try {
       const placeholderName = uniqueNamesGenerator(customConfig)
       const name = data.name || placeholderName
-      console.log('SELECTED GRAPH', selectedTemplate)
       const response = await newSpell({
         graph: selectedTemplate?.graph,
         name,
-        user: user?.id,
       })
 
       if ('error' in response) {
@@ -81,13 +69,6 @@ const CreateNew = () => {
       }
 
       navigate(`/thoth/${name}`)
-      // dispatch(
-      //   openTab({
-      //     name: name,
-      //     spellId: name,
-      //     type: 'spell',
-      //   })
-      // )
     } catch (err) {
       console.log('ERROR!!', err)
     }

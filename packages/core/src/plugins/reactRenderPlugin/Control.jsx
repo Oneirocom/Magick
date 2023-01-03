@@ -1,22 +1,18 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React from 'react'
 
 export class Control extends React.Component {
-    createRef = el => {
-        const { innerRef, control } = this.props;
-    
-        el && innerRef(el, control);
-    };
+  createRef = el => {
+    const { innerRef, control } = this.props
 
-    render() {
-        const { className, control } = this.props;
+    el && innerRef(el, control)
+  }
 
-        return (
-            <div
-                className={className}
-                title={control.key}
-                ref={this.createRef}
-            />
-        )
-    }
+  render() {
+    const { className, control } = this.props
+
+    return (
+      <div className={className} title={control.key} ref={this.createRef} />
+    )
+  }
 }

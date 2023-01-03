@@ -1,3 +1,5 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable require-await */
@@ -5,7 +7,13 @@
 import axios from 'axios'
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import {
+  EngineContext,
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+} from '../../../types'
 import { triggerSocket, anySocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
 
@@ -49,7 +57,7 @@ export class DocumentStoreGet extends ThothComponent<Promise<WorkerReturn>> {
     const name = inputs['name'][0] as string
 
     const resp = await axios.get(
-      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document-store/${name}`
+      `${process.env.REACT_APP_SEARCH_SERVER_URL}/document-store/${name}`
     )
 
     return {

@@ -1,6 +1,10 @@
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import {
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+} from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, anySocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
@@ -12,7 +16,8 @@ export class Log extends ThothComponent<void> {
     super('Log')
 
     this.task = {
-      outputs: {},
+      outputs: {
+      },
     }
 
     this.category = 'Utility'
@@ -31,13 +36,18 @@ export class Log extends ThothComponent<void> {
 
     node.inspector.add(nameControl)
 
-    return node.addInput(dataInput).addInput(inp)
+    return node
+      .addInput(dataInput)
+      .addInput(inp)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(
+    node: NodeData,
+    inputs: ThothWorkerInputs
+  ) {
     const input = inputs.string[0] as string
 
-    console.log(`Output from ${node.data.name || 'log component'}`, input)
+    console.log(`Output from ${node.data.name || "log component"}`, input)
 
     return null
   }

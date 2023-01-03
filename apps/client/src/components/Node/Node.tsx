@@ -1,13 +1,10 @@
-import { Control, Node, Socket } from '@thothai/core'
+import { Node, Socket, Control } from '@thothai/core'
 
 import Icon, { componentCategories } from '../Icon/Icon'
-import icons from '../Icon/icon.module.css'
 import css from './Node.module.css'
+import icons from '../Icon/icon.module.css'
 
 export class MyNode extends Node {
-  declare props: { node: any; bindSocket: any; bindControl: any }
-  declare state: { outputs: any; controls: any; inputs: any; selected: any }
-
   render() {
     const { node, bindSocket, bindControl } = this.props
     const { outputs, controls, inputs, selected } = this.state
@@ -16,7 +13,6 @@ export class MyNode extends Node {
     const fullName = node.data.name ? `${name} - ${node.data.name}` : name
     const hasError = node.data.error
     const hasSuccess = node.data.success
-    const nodeLocked = node.data.nodeLocked
 
     return (
       <div
@@ -24,10 +20,6 @@ export class MyNode extends Node {
           css[hasError ? 'error' : '']
         } ${css[hasSuccess ? 'success' : '']}`}
       >
-        {node.deprecated && <div className={css['deprecated-overlay']}></div>}
-        {nodeLocked && (
-          <div className={`${css['node-locked']} ${icons['node-lock']}`}></div>
-        )}
         <div
           className={`${css['node-id']} ${hasError ? css['error'] : ''} ${
             hasSuccess ? css['success'] : ''
@@ -41,9 +33,6 @@ export class MyNode extends Node {
             style={{ marginRight: 'var(--extraSmall)' }}
           />
           {fullName}
-          {node.deprecated && (
-            <div className={css['node-depricated']}>DEPRECATED</div>
-          )}
         </div>
         <div className={css['connections-container']}>
           {inputs.length > 0 && (

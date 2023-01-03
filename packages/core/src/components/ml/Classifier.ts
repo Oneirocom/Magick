@@ -1,3 +1,5 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 /* eslint-disable no-console */
 /* eslint-disable require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -5,11 +7,12 @@ import axios from 'axios'
 import Rete from 'rete'
 
 import {
+  EngineContext,
   NodeData,
   ThothNode,
   ThothWorkerInputs,
   ThothWorkerOutputs,
-} from '../../types'
+} from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { stringSocket, triggerSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
@@ -80,9 +83,9 @@ export class Classifier extends ThothComponent<Promise<InputReturn>> {
 
     const resp = await axios.post(
       `${
-        import.meta.env.VITE_APP_API_URL ??
-        import.meta.env.VITE_API_URL ??
-        'https://localhost:8001'
+        process.env.REACT_APP_API_URL ??
+        process.env.API_URL ??
+        'https://0.0.0.0:8001'
       }/hf_request`,
       {
         inputs: inputData as string,

@@ -7,37 +7,29 @@
   align-items: center;
   box-sizing: border-box;
   z-index: 8;
-  margin-bottom: var(--extraSmall);
+  /* margin-bottom: var(--extraSmall);
+  margin-top: var(--extraSmall); */
 }
 .tabbar-section {
   display: flex;
   align-items: center;
-  gap: var(--extraSmall);
   height: var(--c4);
-}
-/* .tabbar-section:last-child {
-  justify-content: flex-end;
-} */
-.thoth-logo {
-  position: relative;
-  top: 2px;
-  margin-left: calc(var(--c2) + 2px);
-  margin-right: var(--c3);
-  height: var(--c2);
 }
 
 .tabbar-tab {
   position: relative;
-  top: 1px;
   padding: var(--small) var(--small);
   box-sizing: border-box;
-  width: var(--c28);
   background-color: var(--dark-1);
   position: relative;
   display: flex;
   align-items: center;
-  flex: 1;
   cursor: pointer !important;
+}
+
+.tab-close {
+  position: relative;
+  left: 10px;
 }
 
 .tabbar-user {
@@ -47,11 +39,10 @@
 }
 
 .tabbar-tab.active {
-  background: var(--dark-2);
+  background: var(--dark-1);
   height: var(--c4);
   color: var(--dark-5);
-  border: 1px solid var(--dark-2);
-  border-radius: 4px;
+  border-bottom: 1px solid var(--glow);
 }
 
 .tabbar-tab.inactive {
@@ -60,7 +51,6 @@
   height: var(--c4);
   color: var(--dark-5);
   border: 1px solid var(--dark-2);
-  border-radius: 4px;
 }
 .tabbar-tab.inactive:hover {
   background-color: var(--dark-1);
@@ -83,14 +73,11 @@
 .create-spell-tab {
   display: flex;
   color: var(--dark-5);
-  border-radius: 4px;
   position: relative;
   height: var(--c4);
-  border: 1px solid var(--dark-2);
   width: 2vw;
   align-items: center;
   justify-content: center;
-  margin-left: 15%;
   background-color: transparent;
 }
 

@@ -35,7 +35,6 @@ export const events = {
   $NODE_SET: (tabId, nodeId) => `nodeSet:${tabId}:${nodeId}`,
   $SAVE_SPELL: tabId => `saveSpell:${tabId}`,
   $SAVE_SPELL_DIFF: tabId => `saveSpellDiff:${tabId}`,
-  $CREATE_SETTINGS_WINDOW: tabId => `createSettingsWindow:${tabId}`,
   $CREATE_STATE_MANAGER: tabId => `createStateManage:${tabId}`,
   $CREATE_MESSAGE_REACTION_EDITOR: tabId =>
     `createMessageReactionEditor:${tabId}`,
@@ -43,10 +42,6 @@ export const events = {
   $CREATE_INSPECTOR: tabId => `createInspector:${tabId}`,
   $CREATE_TEXT_EDITOR: tabId => `createTextEditor:${tabId}`,
   $CREATE_ENT_MANAGER: tabId => `createEntManager:${tabId}`,
-  $CREATE_GREETINGS_MANAGER: tabId => `createGreetingsManager:${tabId}`,
-  $CREATE_VIDEO_TRANSCRIPTION: tabId => `createVideoTranscription:${tabId}`,
-  $CREATE_CALENDAR_TAB: tabId => `createCalendarTab:${tabId}`,
-  $CREATE_WYSIWYG_EDITOR: tabId => `createWysiwygEditor:${tabId}`,
   $CREATE_SEARCH_CORPUS: tabId => `createSearchCorpus:${tabId}`,
   $CREATE_DEBUG_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $CREATE_CONSOLE: tabId => `createDebugConsole:${tabId}`,
@@ -57,7 +52,8 @@ export const events = {
   $UNDO: tabId => `undo:${tabId}`,
   $REDO: tabId => `redo:${tabId}`,
   $DELETE: tabId => `delete:${tabId}`,
-  $REFRESH_EVENT_TABLE: tabId => `refreshEventTable: ${tabId}`,
+  $REFRESH_EVENT_TABLE: tabId => `refreshEventTable:${tabId}`,
+  $SEND_TO_AVATAR: tabId => `sendToAvatar:${tabId}`,
 }
 
 const PubSubProvider = ({ children }) => {

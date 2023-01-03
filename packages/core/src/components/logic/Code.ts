@@ -6,7 +6,7 @@ import {
   ThothNode,
   ThothWorkerInputs,
   ThothWorkerOutputs,
-} from '../../types'
+} from '../../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
 // @seang todo: convert data controls to typescript to remove this
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -21,7 +21,7 @@ const defaultCode = `
 // data: internal data of the node to read or write to nodes data state
 // state: access to the current game state in the state manager window. Return state to update the state.
 function worker(inputs, data, state) {
-  // Keys of the object returned must match the names 
+  // Keys of the object returned must match the names
   // of your outputs you defined.
   // To update the state, you must return the modified state.
   return {}
@@ -44,6 +44,7 @@ export class Code extends ThothComponent<unknown> {
     this.category = 'Logic'
     this.info = info
     this.display = false
+    this.runFromCache = true
   }
 
   builder(node: ThothNode) {
@@ -88,11 +89,7 @@ export class Code extends ThothComponent<unknown> {
   worker(
     node: NodeData,
     inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
-    {
-      data,
-      thoth,
-    }: { silent: boolean; thoth: EngineContext; data: { code: unknown } }
+    { data, thoth }: { thoth: EngineContext; data: { code: unknown } }
   ) {
     const { processCode, getCurrentGameState, updateCurrentGameState } = thoth
     if (!processCode) return

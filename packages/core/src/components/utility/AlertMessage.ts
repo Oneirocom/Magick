@@ -1,6 +1,6 @@
 import Rete from 'rete'
 
-import { NodeData, ThothNode } from '../../types'
+import { NodeData, ThothNode } from '../../../types'
 import { TextInputControl } from '../../controls/TextInputControl'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { triggerSocket } from '../../sockets'

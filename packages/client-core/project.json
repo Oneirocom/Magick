@@ -6,25 +6,35 @@
   "targets": {
     "build": {
       "executor": "@nxext/vite:package",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/client-core",
         "generatePackageJson": true,
-        "assets": ["assets"],
+        "assets": [
+          "assets"
+        ],
         "entryFile": "src/index.ts",
         "configFile": "@nxext/vite/plugins/vite-package"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["packages/client-core/**/*.{ts,js,tsx,jsx}"]
+        "lintFilePatterns": [
+          "packages/client-core/**/*.{ts,js,tsx,jsx}"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/packages/client-core"],
+      "outputs": [
+        "coverage/packages/client-core"
+      ],
       "options": {
         "jestConfig": "packages/client-core/jest.config.ts",
         "passWithNoTests": true

@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import thothlogo from './thoth.png'
 
 import { useModal } from '../../contexts/ModalProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
+import css from './menuBar.module.css'
+import { activeTabSelector, Tab } from '../../state/tabs'
 import { toggleAutoSave } from '../../state/preferences'
 import { RootState } from '../../state/store'
-import { activeTabSelector, Tab } from '../../state/tabs'
-import css from './menuBar.module.css'
-import thothlogo from './thoth.png'
 
 const MenuBar = () => {
   const navigate = useNavigate()
@@ -36,18 +36,12 @@ const MenuBar = () => {
     $SAVE_SPELL,
     $CREATE_STATE_MANAGER,
     $CREATE_ENT_MANAGER,
-    $CREATE_GREETINGS_MANAGER,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
     $CREATE_SEARCH_CORPUS,
-    $CREATE_MESSAGE_REACTION_EDITOR,
     $CREATE_TEXT_EDITOR,
-    $CREATE_WYSIWYG_EDITOR,
     $CREATE_CONSOLE,
     $CREATE_EVENT_MANAGER,
-    $CREATE_VIDEO_TRANSCRIPTION,
-    $CREATE_CALENDAR_TAB,
-    $CREATE_SETTINGS_WINDOW,
     $SERIALIZE,
     $EXPORT,
     $UNDO,
@@ -106,21 +100,8 @@ const MenuBar = () => {
   const onCreateSearchCorpus = () => {
     publish($CREATE_SEARCH_CORPUS(activeTabRef.current?.id))
   }
-
-  const onCreateWYSIWYGEditor = () => {
-    publish($CREATE_WYSIWYG_EDITOR(activeTabRef.current?.id))
-  }
-
   const onEntityManagerCreate = () => {
     publish($CREATE_ENT_MANAGER(activeTabRef.current?.id))
-  }
-
-  const onGreetingsManagerCreate = () => {
-    publish($CREATE_GREETINGS_MANAGER(activeTabRef.current?.id))
-  }
-
-  const onMessageReactionEditorCreate = () => {
-    publish($CREATE_MESSAGE_REACTION_EDITOR(activeTabRef.current?.id))
   }
 
   const onPlaytestCreate = () => {
@@ -138,11 +119,6 @@ const MenuBar = () => {
     publish($CREATE_TEXT_EDITOR(activeTabRef.current.id))
   }
 
-  const onSettingsCreate = () => {
-    if (!activeTabRef.current) return
-    publish($CREATE_SETTINGS_WINDOW(activeTabRef.current.id))
-  }
-
   const onExport = () => {
     if (!activeTabRef.current) return
     publish($EXPORT(activeTabRef.current.id))
@@ -156,16 +132,6 @@ const MenuBar = () => {
   const onEventManagerCreate = () => {
     if (!activeTabRef.current) return
     publish($CREATE_EVENT_MANAGER(activeTabRef.current.id))
-  }
-
-  const onVideoTrancriptionCreate = () => {
-    if (!activeTabRef.current) return
-    publish($CREATE_VIDEO_TRANSCRIPTION(activeTabRef.current.id))
-  }
-
-  const onCalendarTabCreate = () => {
-    if (!activeTabRef.current) return
-    publish($CREATE_CALENDAR_TAB(activeTabRef.current.id))
   }
 
   //Menu bar hotkeys
@@ -243,13 +209,6 @@ const MenuBar = () => {
         },
       },
     },
-    dev: {
-      items: {
-        serialize: {
-          onClick: onSerialize,
-        },
-      },
-    },
     windows: {
       items: {
         text_editor: {
@@ -264,17 +223,8 @@ const MenuBar = () => {
         search_corpus: {
           onClick: onCreateSearchCorpus,
         },
-        ent_manager: {
+        agent_manager: {
           onClick: onEntityManagerCreate,
-        },
-        greetings_manager: {
-          onClick: onGreetingsManagerCreate,
-        },
-        wysiwyg_editor: {
-          onClick: onCreateWYSIWYGEditor,
-        },
-        message_reaction_editor: {
-          onClick: onMessageReactionEditorCreate,
         },
         playtest: {
           onClick: onPlaytestCreate,
@@ -284,15 +234,6 @@ const MenuBar = () => {
         },
         event_manager: {
           onClick: onEventManagerCreate,
-        },
-        video_transcription: {
-          onClick: onVideoTrancriptionCreate,
-        },
-        calendar_tab: {
-          onClick: onCalendarTabCreate,
-          settings: {
-            onClick: onSettingsCreate,
-          },
         },
       },
       settings: {
@@ -394,7 +335,6 @@ const MenuBar = () => {
 
   return (
     <ul className={css['menu-bar']}>
-      <img className={css['thoth-logo']} alt="Thoth logo" src={thothlogo} />
       {Object.keys(menuBarItems).map((item, index) => (
         <ListItem
           item={menuBarItems[item]}

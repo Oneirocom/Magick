@@ -3,7 +3,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import {
+  EngineContext,
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+} from '../../../types'
 import { triggerSocket, stringSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
 
@@ -36,7 +42,7 @@ export class IsNullOrUndefined extends ThothComponent<Promise<void>> {
   }
 
   async worker(_node: NodeData, inputs: ThothWorkerInputs) {
-    const action = inputs['string'][0]
+    const action = inputs['string'][0] ?? inputs['string']
     const is =
       action === null || action === undefined || (action as string).length <= 0
     console.log('found null or empty input:', is)

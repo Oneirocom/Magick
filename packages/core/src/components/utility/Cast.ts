@@ -1,6 +1,11 @@
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import {
+  NodeData,
+  ThothNode,
+  ThothWorkerOutputs,
+  ThothWorkerInputs,
+} from '../../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import * as sockets from '../../sockets'

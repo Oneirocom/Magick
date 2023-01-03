@@ -2,7 +2,7 @@ import {
   ImageCacheResponse,
   OpenAIResultChoice,
   ThothWorkerInputs,
-} from '../src/types'
+} from '../types'
 import { VM } from 'vm2'
 export default {
   completion: () => {

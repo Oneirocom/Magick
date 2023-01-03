@@ -8,7 +8,7 @@ import {
   ThothNode,
   ThothWorkerInputs,
   ThothWorkerOutputs,
-} from '../../types'
+} from '../../../types'
 import { TextInputControl } from '../../controls/TextInputControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { PlaytestControl } from '../../dataControls/PlaytestControl'

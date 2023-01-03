@@ -6,7 +6,7 @@ import {
   NodeData,
   ThothWorkerInputs,
   ThothWorkerOutputs,
-} from '../../types'
+} from '../../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'

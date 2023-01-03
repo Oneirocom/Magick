@@ -1,15 +1,11 @@
 import Koa from 'koa'
 
 import { searchWikipedia } from "./helpers";
-import { noAuth } from '../../middleware/auth';
 import { Route } from "../../types";
 import { CustomError } from "../../utils/CustomError";
 
 const getWikipediaSummary = async (ctx: Koa.Context) => {
-  console.log("GETTING WIKIPEDIA SUMMARY")
   const { keyword } = ctx.query
-
-  console.log('query params', keyword)
 
   if (!keyword) throw new CustomError('input-failed', 'No keyword supplied in params')
 
@@ -41,7 +37,6 @@ const getWikipediaSummary = async (ctx: Koa.Context) => {
 export const wikipedia: Route[] = [
   {
     path: '/wikipediaSummary',
-    access: noAuth,
     get: getWikipediaSummary
   }
 ]

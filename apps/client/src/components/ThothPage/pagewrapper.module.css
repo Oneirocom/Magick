@@ -1,7 +1,0 @@
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  margin: var(--c1);
-  margin-top: 6px;
-  height: calc(100% - var(--c2));
-}

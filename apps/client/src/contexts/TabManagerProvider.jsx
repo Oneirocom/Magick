@@ -11,12 +11,12 @@ const Context = createContext({
   tabs: [],
   activeTab: {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  openTab: async options => {},
-  switchTab: x => {},
-  closeTab: x => {},
-  saveTabLayout: () => {},
-  clearTabs: () => {},
-  closeTabBySpellId: spellId => {},
+  openTab: async options => { },
+  switchTab: x => { },
+  closeTab: x => { },
+  saveTabLayout: () => { },
+  clearTabs: () => { },
+  closeTabBySpellId: spellId => { },
   updateTab: (tabId, update) => Promise.resolve(),
 })
 
@@ -39,9 +39,9 @@ const TabManager = ({ children }) => {
   // Suscribe to changes in the database for active tab, and all tabs
   useEffect(() => {
     if (!db) return
-    ;(async () => {
-      refreshTabs()
-    })()
+      ; (async () => {
+        refreshTabs()
+      })()
   }, [db])
 
   const filterTabs = tabDocs => {
@@ -80,12 +80,7 @@ const TabManager = ({ children }) => {
     openNew = true,
   }) => {
     // don't open a new tab if one is already open
-    if (!openNew && type === 'module') {
-      const tabOpened = await switchTab(null, { module: { $eq: moduleName } })
-      if (tabOpened) return
-    }
-
-    if (!openNew && type === 'spell') {
+    if (!openNew) {
       const tabOpened = await switchTab(null, { spell: { $eq: spellId } })
       if (tabOpened) return
     }

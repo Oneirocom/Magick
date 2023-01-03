@@ -1,17 +1,16 @@
-import FileInput from '../../../screens/HomeScreen/components/FileInput'
-import { useGetGreetingsQuery } from '../../../state/api/greetings'
+// @ts-nocheck
+import FileInput from '@/screens/HomeScreen/components/FileInput'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
 import EntityWindow from './EntityWindow'
 
 const EntityManagerWindow = () => {
-  const { data: greetings } = useGetGreetingsQuery(true)
   const [data, setData] = useState(false)
 
   const resetData = async () => {
     const res = await axios.get(
-      `${import.meta.env.VITE_APP_API_ROOT_URL}/entities`
+      `${process.env.REACT_APP_API_ROOT_URL}/entities`
     )
     console.log('res is ', res)
     setData(res.data)
@@ -20,11 +19,11 @@ const EntityManagerWindow = () => {
   const createNew = (data = {}) => {
     console.log('Create new called')
     axios
-      .post(`${import.meta.env.VITE_APP_API_ROOT_URL}/entity`, { data })
+      .post(`${process.env.REACT_APP_API_ROOT_URL}/entity`, { data })
       .then(async res => {
         console.log('response is', res)
         const res2 = await axios.get(
-          `${import.meta.env.VITE_APP_API_ROOT_URL}/entities`
+          `${process.env.REACT_APP_API_ROOT_URL}/entities`
         )
         setData(res2.data)
       })
@@ -42,7 +41,7 @@ const EntityManagerWindow = () => {
   useEffect(() => {
     ;(async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_APP_API_ROOT_URL}/entities`
+        `${process.env.REACT_APP_API_ROOT_URL}/entities`
       )
       setData(res.data)
       console.log('set the data', res.data)
@@ -52,21 +51,18 @@ const EntityManagerWindow = () => {
   return (
     <div className="agent-editor">
       <React.Fragment>
-        <div>
-          {data &&
-            (data as any).map((value, idx) => {
-              return (
-                <EntityWindow
-                  id={value.id ?? 0}
-                  key={value.id ?? idx}
-                  updateCallback={async () => {
-                    resetData()
-                  }}
-                  greetings={greetings}
-                />
-              )
-            })}
-        </div>
+        {data &&
+          (data as any).map(value => {
+            return (
+              <EntityWindow
+                id={value.id ?? 0}
+                key={value.id ?? idx}
+                updateCallback={async () => {
+                  resetData()
+                }}
+              />
+            )
+          })}
       </React.Fragment>
       <div className="entBtns">
         <button onClick={() => createNew()} style={{ marginRight: '10px' }}>

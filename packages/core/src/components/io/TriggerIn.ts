@@ -4,26 +4,21 @@ import Rete from 'rete'
 //@ts-ignore
 import { v4 as uuidv4 } from 'uuid'
 
-import { NodeData, ThothNode } from '../../types'
+import { NodeData, ThothNode } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { PlaytestControl } from '../../dataControls/PlaytestControl'
-import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { triggerSocket } from '../../sockets'
 import { ThothComponent, ThothTask } from '../../thoth-component'
 
 const info = `The trigger in allows you to pass values into your spell either from a higher level component or from the server.  There must be one single trigger into a spell for now as the server does not support multiple triggers.  Yet.`
 
 export class TriggerIn extends ThothComponent<void> {
-  declare task: TaskOptions
-  declare category: string
-  declare info: string
-  declare contextMenuName: string
   nodeTaskMap: Record<number, ThothTask> = {}
 
   constructor() {
     // Name of the component
     // If name of component changes please update module-manager workerModule code
-    super('Module Trigger In')
+    super('Trigger In')
     this.displayName = 'Trigger In'
     this.contextMenuName = 'Trigger In'
 

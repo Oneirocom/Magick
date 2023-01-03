@@ -24,6 +24,7 @@ export type SocketType =
   | 'objectSocket'
   | 'triggerSocket'
   | 'agentSocket'
+  | 'triggerAndDataSocket'
 
 export const socketNameMap: Record<SocketNameType, SocketType> = {
   'Any type': 'anySocket',
@@ -52,7 +53,7 @@ const sockets = [
   stringSocket,
   arraySocket,
   objectSocket,
-  agentSocket
+  agentSocket,
 ]
 
 sockets.forEach(socket => {

@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import Terminal from 'react-console-emulator'
 import { renderToString } from 'react-dom/server'
-
-import Window from '../../../../components/Window/Window'
-import { useAuth } from '../../../../contexts/AuthProvider'
+import Terminal from 'react-console-emulator'
 import { usePubSub } from '../../../../contexts/PubSubProvider'
+import Window from '../../../../components/Window/Window'
 import { useEditor } from '../../../../workspaces/contexts/EditorProvider'
 
 export type DebugMessage = {
@@ -18,7 +16,6 @@ interface Terminal {
 const DebugConsole = ({ tab }) => {
   const [scrollToBottom, setScrollToBottom] = useState<boolean>(false)
   const { centerNode } = useEditor()
-  const { user } = useAuth()
   const { publish, subscribe, events } = usePubSub()
   const { $TRIGGER, $DEBUG_PRINT } = events
 
@@ -114,7 +111,6 @@ const DebugConsole = ({ tab }) => {
     },
   }
 
-  // https://github.com/linuswillner/react-console-emulator/tree/e2b602f631e8b7c57c4a7407491cbfb84f357519
   return (
     <Window scrollToBottom={scrollToBottom}>
       <Terminal
@@ -123,7 +119,7 @@ const DebugConsole = ({ tab }) => {
         dangerMode={true} // This is causing the [Object, object] line to appear in the terminal printout
         commandCallback={commandCallback}
         noNewlineParsing={true}
-        promptLabel={`${user?.username}@thothai:~$`}
+        promptLabel={`~$`}
         style={{
           overflow: 'hidden',
           minHeight: '100%',

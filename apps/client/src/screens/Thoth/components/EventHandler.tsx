@@ -1,47 +1,28 @@
-import { useSnackbar } from 'notistack'
 import { useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
-import {
-  adjectives,
-  colors,
-  uniqueNamesGenerator,
-} from 'unique-names-generator'
-
 import { GraphData, Spell } from '@thothai/core'
 
-import { feathers as feathersFlag, sharedb } from '../../../config'
-import { useAuth } from '../../../contexts/AuthProvider'
-import { useFeathers } from '../../../contexts/FeathersProvider'
-import { useSharedb } from '../../../contexts/SharedbProvider'
 import {
+  useSaveSpellMutation,
   useGetSpellQuery,
   useSaveDiffMutation,
-  useSaveSpellMutation,
 } from '../../../state/api/spells'
-import { RootState } from '../../../state/store'
-import { diff } from '../../../utils/json0'
-import { useEditor } from '../../../workspaces/contexts/EditorProvider'
 import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
-
-// Config for unique name generator
-const customConfig = {
-  dictionaries: [adjectives, colors],
-  separator: ' ',
-  length: 2,
-}
+import { useEditor } from '../../../workspaces/contexts/EditorProvider'
+import { diff } from '../../../utils/json0'
+import { useSnackbar } from 'notistack'
+import { useFeathers } from '../../../contexts/FeathersProvider'
+import { RootState } from '../../../state/store'
+import { useSelector } from 'react-redux'
 
 const EventHandler = ({ pubSub, tab }) => {
   // only using this to handle events, so not rendering anything with it.
   const { createOrFocus, windowTypes } = useLayout()
   const { enqueueSnackbar } = useSnackbar()
-  const { getSpellDoc } = useSharedb()
 
   const [saveSpellMutation] = useSaveSpellMutation()
   const [saveDiff] = useSaveDiffMutation()
-  const { user } = useAuth()
   const { data: spell } = useGetSpellQuery({
     spellId: tab.spellId,
-    userId: user?.id as string,
   })
   const preferences = useSelector(
     (state: RootState) => state.preferences
@@ -57,13 +38,10 @@ const EventHandler = ({ pubSub, tab }) => {
     spellRef.current = spell
   }, [spell])
 
-  const { serialize, getEditor, undo, redo, del } = useEditor()
+  const { serialize, getEditor, undo, redo, del, dirtyGraph, setDirtyGraph } =
+    useEditor()
 
   const { events, subscribe } = pubSub
-
-  useEffect(() => {
-    console.log('using effect')
-  }, [])
 
   const {
     $DELETE,
@@ -75,15 +53,11 @@ const EventHandler = ({ pubSub, tab }) => {
     $CREATE_SEARCH_CORPUS,
     $CREATE_ENT_MANAGER,
     $CREATE_SETTINGS_WINDOW,
-    $CREATE_GREETINGS_MANAGER,
     $CREATE_MESSAGE_REACTION_EDITOR,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
     $CREATE_CONSOLE,
-    $CREATE_WYSIWYG_EDITOR,
     $CREATE_EVENT_MANAGER,
-    $CREATE_VIDEO_TRANSCRIPTION,
-    $CREATE_CALENDAR_TAB,
     $CREATE_TEXT_EDITOR,
     $SERIALIZE,
     $EXPORT,
@@ -98,7 +72,6 @@ const EventHandler = ({ pubSub, tab }) => {
     const response = await saveSpellMutation({
       ...currentSpell,
       graph,
-      user: user?.id,
     })
 
     if ('error' in response) {
@@ -113,25 +86,6 @@ const EventHandler = ({ pubSub, tab }) => {
         variant: 'success',
       })
     }
-  }
-
-  const sharedbDiff = async (event, update) => {
-    if (!spellRef.current) return
-    const doc = getSpellDoc(spellRef.current as Spell)
-    if (!doc) return
-
-    const updatedSpell = {
-      ...doc.data,
-      ...update,
-    }
-
-    const jsonDiff = diff(doc.data, updatedSpell)
-
-    if (jsonDiff.length === 0) return
-
-    console.log('JSON DIFF IN SHAREDB DIFF', jsonDiff)
-
-    doc.submitOp(jsonDiff)
   }
 
   const onSaveDiff = async (event, update) => {
@@ -152,34 +106,34 @@ const EventHandler = ({ pubSub, tab }) => {
       diff: jsonDiff,
     })
 
-    if (preferences.autoSave) {
-      if ('error' in response) {
-        enqueueSnackbar('Error saving spell', {
-          variant: 'error',
-        })
-        return
-      }
+    // if (preferences.autoSave) {
+    //   if ('error' in response) {
+    //     enqueueSnackbar('Error saving spell', {
+    //       variant: 'error',
+    //     })
+    //     return
+    //   }
 
-      enqueueSnackbar('Spell saved', {
-        variant: 'success',
-      })
-    }
+    //   enqueueSnackbar('Spell saved', {
+    //     variant: 'success',
+    //   })
+    // }
 
-    if (feathersFlag) {
-      try {
-        await client.service('spell-runner').update(currentSpell.name, {
-          diff: jsonDiff,
-        })
-        enqueueSnackbar('Spell saved', {
-          variant: 'success',
-        })
-      } catch {
-        enqueueSnackbar('Error saving spell', {
-          variant: 'error',
-        })
-        return
-      }
-    }
+    // if (feathersFlag) {
+    //   try {
+    //     await client.service('spell-runner').update(currentSpell.name, {
+    //       diff: jsonDiff,
+    //     })
+    //     enqueueSnackbar('Spell saved', {
+    //       variant: 'success',
+    //     })
+    //   } catch {
+    //     enqueueSnackbar('Error saving spell', {
+    //       variant: 'error',
+    //     })
+    //     return
+    //   }
+    // }
   }
 
   const createStateManager = () => {
@@ -191,11 +145,7 @@ const EventHandler = ({ pubSub, tab }) => {
   }
 
   const createEntityManager = () => {
-    createOrFocus(windowTypes.ENT_MANAGER, 'Ent Manager')
-  }
-
-  const createGreetingsManager = () => {
-    createOrFocus(windowTypes.GREETINGS_MANAGER, 'Greetings Manager')
+    createOrFocus(windowTypes.ENT_MANAGER, 'Agent Manager')
   }
 
   const createMessageReactionEditor = () => {
@@ -225,22 +175,6 @@ const EventHandler = ({ pubSub, tab }) => {
     createOrFocus(windowTypes.EVENT_MANAGER, 'Event Manager')
   }
 
-  const createVideoTranscription = () => {
-    createOrFocus(windowTypes.VIDEO_TRANSCRIPTION, 'Video Transcription')
-  }
-
-  const createWysiwygEditor = () => {
-    createOrFocus(windowTypes.WYSIWYG_EDITOR, 'Wysiwyg Editor')
-  }
-
-  const createCalendarTab = () => {
-    createOrFocus(windowTypes.CALENDAR_TAB, 'Calendar Tab')
-  }
-
-  const createSettingsWindow = () => {
-    createOrFocus(windowTypes.SETTINGS, 'Settings')
-  }
-
   const onSerialize = () => {
     // eslint-disable-next-line no-console
     console.log(serialize())
@@ -248,9 +182,13 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const onProcess = () => {
     const editor = getEditor()
-    if (!editor) return
+    if (!editor || !dirtyGraph) return
 
-    editor.runProcess()
+    console.log('RUNNING PROCESS')
+
+    editor.runProcess(() => {
+      setDirtyGraph(false)
+    })
   }
 
   const onUndo = () => {
@@ -270,7 +208,6 @@ const EventHandler = ({ pubSub, tab }) => {
     console.log('ON EXPORT')
     const spell = { ...spellRef.current }
     spell.graph = serialize() as GraphData
-    spell.name = uniqueNamesGenerator(customConfig)
 
     const json = JSON.stringify(spell)
 
@@ -278,7 +215,7 @@ const EventHandler = ({ pubSub, tab }) => {
     const url = window.URL.createObjectURL(new Blob([blob]))
     const link = document.createElement('a')
     link.href = url
-    link.setAttribute('download', `${spell.name}.thoth`)
+    link.setAttribute('download', `${spell.name}.spell.json`)
 
     // Append to html link element page
     document.body.appendChild(link)
@@ -305,16 +242,11 @@ const EventHandler = ({ pubSub, tab }) => {
     [$CREATE_SEARCH_CORPUS(tab.id)]: createSearchCorpus,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,
     [$CREATE_ENT_MANAGER(tab.id)]: createEntityManager,
-    [$CREATE_SETTINGS_WINDOW(tab.id)]: createSettingsWindow,
-    [$CREATE_GREETINGS_MANAGER(tab.id)]: createGreetingsManager,
     [$CREATE_PLAYTEST(tab.id)]: createPlaytest,
     [$CREATE_INSPECTOR(tab.id)]: createInspector,
     [$CREATE_TEXT_EDITOR(tab.id)]: createTextEditor,
     [$CREATE_CONSOLE(tab.id)]: createConsole,
     [$CREATE_EVENT_MANAGER(tab.id)]: createEventManager,
-    [$CREATE_VIDEO_TRANSCRIPTION(tab.id)]: createVideoTranscription,
-    [$CREATE_CALENDAR_TAB(tab.id)]: createCalendarTab,
-    [$CREATE_WYSIWYG_EDITOR(tab.id)]: createWysiwygEditor,
     [$SERIALIZE(tab.id)]: onSerialize,
     [$EXPORT(tab.id)]: onExport,
     [$CLOSE_EDITOR(tab.id)]: onCloseEditor,
@@ -322,13 +254,11 @@ const EventHandler = ({ pubSub, tab }) => {
     [$REDO(tab.id)]: onRedo,
     [$DELETE(tab.id)]: onDelete,
     [$PROCESS(tab.id)]: onProcess,
-    [$SAVE_SPELL_DIFF(tab.id)]: sharedb ? sharedbDiff : onSaveDiff,
+    [$SAVE_SPELL_DIFF(tab.id)]: onSaveDiff,
   }
 
   useEffect(() => {
     if (!tab && !spell && !client) return
-
-    console.log('TAB ID I EVENT HANDLER', tab.id)
 
     const subscriptions = Object.entries(handlerMap).map(([event, handler]) => {
       return subscribe(event, handler)

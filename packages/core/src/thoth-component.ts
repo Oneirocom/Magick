@@ -1,6 +1,7 @@
 import { Node, Socket } from 'rete'
+
+import { PubSubBase, ThothNode } from '../types'
 import { ThothEditor } from './editor'
-import { PubSubBase, ThothNode } from './types'
 import { ThothEngineComponent } from './engine'
 import { Task, TaskOptions } from './plugins/taskPlugin/task'
 
@@ -33,17 +34,16 @@ export abstract class ThothComponent<
   task: TaskOptions
   _task: ThothTask
   cache: Record<string, any>
-  // Original Class: https://github.com/latitudegames/rete/blob/master/src/component.ts
+  // Original Class: https://github.com/AtlasFoundation/rete/blob/master/src/component.ts
   editor: ThothEditor | null = null
   data: unknown = {}
   category: string
   info: string
   display: boolean
-  deprecated = false
   dev = false
   hide = false
   runFromCache = false
-  deprecationMessage: string | undefined
+  deprecated? = false
   module: ModuleOptions
   contextMenuName: string | undefined
   workspaceType: 'module' | 'spell' | null | undefined

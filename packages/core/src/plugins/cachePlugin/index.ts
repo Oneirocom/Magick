@@ -1,5 +1,11 @@
 import { Component, Control } from 'rete'
-import { NodeData, ThothComponent, ThothEditor, ThothNode } from '../../types'
+
+import {
+  NodeData,
+  ThothComponent,
+  ThothEditor,
+  ThothNode,
+} from '../../../types'
 import { RunButtonControl } from './RunLastArguments'
 
 function install(editor: ThothEditor) {
@@ -30,8 +36,8 @@ function install(editor: ThothEditor) {
      */
     component.builder = (node: ThothNode) => {
       if (component.runFromCache) {
-        // Run function runs the worker with old arg```````s and returns the result.
-        const run = async node => {
+        // Run function runs the worker with old args and returns the result.
+        const run = async (node: NodeData) => {
           const cache = component.cache[node.id]
 
           if (!cache) return null

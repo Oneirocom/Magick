@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-console */
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
@@ -8,7 +9,7 @@ import {
   ThothNode,
   ThothWorkerInputs,
   ThothWorkerOutputs,
-} from '../../types'
+} from '../../../types'
 import { Task } from '../../plugins/taskPlugin/task'
 import {
   agentSocket,
@@ -21,7 +22,7 @@ import { ThothComponent, ThothTask } from '../../thoth-component'
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
 type InputReturn = {
-  output: Agent
+  output: Agent | unknown
   speaker: string
   agent: string
   client: string
@@ -33,6 +34,8 @@ type InputReturn = {
     isBot: boolean
     info3d: string
   }[]
+  eth_private_key: string
+  eth_public_address: string
   channel_type: string
 }
 
@@ -53,6 +56,8 @@ export class InputDestructureComponent extends ThothComponent<
         client: 'output',
         channel: 'output',
         entity: 'output',
+        eth_private_key: 'output',
+        eth_public_address: 'output',
         roomInfo: 'output',
         channel_type: 'output',
         trigger: 'option',
@@ -81,7 +86,18 @@ export class InputDestructureComponent extends ThothComponent<
     const client = new Rete.Output('client', 'client', stringSocket)
     const channelId = new Rete.Output('channel', 'channel', stringSocket)
     const entity = new Rete.Output('entity', 'entity', stringSocket)
+    const private_key = new Rete.Output(
+      'eth_private_key',
+      'private_key',
+      stringSocket
+    )
+    const public_address = new Rete.Output(
+      'eth_public_address',
+      'public_address',
+      stringSocket
+    )
     const roomInfo = new Rete.Output('roomInfo', 'roomInfo', arraySocket)
+    // eslint-disable-next-line camelcase
     const channel_type = new Rete.Output(
       'channel_type',
       'channel_type',
@@ -99,6 +115,8 @@ export class InputDestructureComponent extends ThothComponent<
       .addOutput(entity)
       .addOutput(roomInfo)
       .addOutput(channel_type)
+      .addOutput(private_key)
+      .addOutput(public_address)
       .addOutput(out)
       .addOutput(dataOutput)
   }
@@ -117,14 +135,17 @@ export class InputDestructureComponent extends ThothComponent<
 
     if (!silent) node.display(agent)
     // If there are outputs, we are running as a module input and we use that value
+
     return {
-      output: (agent as any).Input ?? agent,
+      output: typeof agent === 'string' ? agent : (agent as any).Input,
       speaker: (agent as any)['Speaker'] ?? 'Speaker',
       agent: (agent as any)['Agent'] ?? 'Agent',
       client: (agent as any)['Client'] ?? 'Playtest',
       channel: (agent as any)['ChannelID'] ?? 'TestChannel',
       entity: (agent as any)['Entity'],
       roomInfo: (agent as any)['RoomInfo'],
+      eth_private_key: (agent as any)['eth_private_key'],
+      eth_public_address: (agent as any)['eth_public_address'],
       channel_type: (agent as any)['Channel'],
     }
   }

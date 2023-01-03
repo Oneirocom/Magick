@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap');
-* {
+
+p, h1, h2, h3, h4, h5, form, button {
   font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
-  /* cursor: default !important; */
 }
 
 :root {
   color-scheme: dark;
 
-  --primary: #1290ce;
+  --primary: #60c585;
   --dark-0: #000000;
   --dark-1: #191919;
   --dark-2: #272727;
@@ -22,6 +22,9 @@
   --green: #21b534;
   --blue: #1290ce;
   --purple: #7027dd;
+  --glow-light: #b2fccd75;
+  --glow: #7AFBAA;
+  --glow-dark: #4a9b67;
 
   --c1: 8px;
   --c2: 16px;

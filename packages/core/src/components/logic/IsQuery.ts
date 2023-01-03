@@ -1,10 +1,17 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 /* eslint-disable no-console */
 /* eslint-disable require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// import axios from 'axios'
 import Rete from 'rete'
 
-import { ThothNode } from '../../types'
+import {
+  EngineContext,
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+} from '../../../types'
 import { triggerSocket, stringSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
 
@@ -38,17 +45,11 @@ export class IsQuery extends ThothComponent<void> {
   }
 
   async worker() {
-    // const str = inputs['input'][0]
-
-    // let parameters = {
-    //   candidate_labels: ['greeting', 'question', 'statement'],
-    // }
-
-    let is = false
+    const is = false
     this._task.closed = is ? ['false'] : ['true']
     /*
     const resp = await axios.post(
-      `${ import.meta.env.VITE_API_URL ?? 'https://localhost:8001'}/hf_request`,
+      `${process.env.API_URL ?? 'https://0.0.0.0:8001'}/hf_request`,
       {
         inputs: str as string,
         model: 'facebook/bart-large-mnli',
@@ -95,7 +96,7 @@ export class IsQuery extends ThothComponent<void> {
         }
 
         const resp2 = await axios.post(
-          `${ import.meta.env.VITE_API_URL ?? 'https://localhost:8001'}/hf_request`,
+          `${process.env.API_URL ?? 'https://0.0.0.0:8001'}/hf_request`,
           {
             inputs: str as string,
             model: 'facebook/bart-large-mnli',

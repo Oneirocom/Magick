@@ -1,12 +1,11 @@
-import io from 'socket.io'
 import Rete, { Engine } from 'rete'
+import io from 'socket.io'
 
-import { GraphData, ModuleType, NodeData, ThothWorkerInputs } from './types'
-import SocketPlugin from './plugins/socketPlugin'
+import { GraphData, ModuleType, NodeData, ThothWorkerInputs } from '../types'
 import debuggerPlugin from './plugins/debuggerPlugin'
 import ModulePlugin from './plugins/modulePlugin'
+import SocketPlugin from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
-import { extractNodes } from './utils/chainHelpers'
 
 interface WorkerOutputs {
   [key: string]: unknown
@@ -18,7 +17,7 @@ export interface ThothEngine extends Engine {
   moduleManager?: any
 }
 export abstract class ThothEngineComponent<WorkerReturnType> {
-  // Original Class: https://github.com/latitudegames/rete/blob/master/src/engine/component.ts
+  // Original Class: https://github.com/AtlasFoundation/rete/blob/master/src/engine/component.ts
   name: string
   data: unknown = {}
   engine: Engine | null = null
@@ -76,11 +75,24 @@ export const initSharedEngine = ({
   return engine
 }
 
+// this parses through all the nodes in the data and finds the nodes associated with the given map
+export const extractNodes = (
+  nodes: GraphData['nodes'],
+  map: Map<any, any> | Set<unknown>
+) => {
+  const names = Array.from(map.keys())
+
+  return Object.keys(nodes)
+    .filter(k => names.includes(nodes[k].name))
+    .map(k => nodes[k])
+    .sort((n1, n2) => n1.position[1] - n2.position[1])
+}
+
 // This will get the node that was triggered given a socketKey associated with that node.
 export const getTriggeredNode = (
   data: GraphData,
   socketKey: string,
-  map: Set<unknown>
+  map: Map<any, any> | Set<unknown>
 ) => {
   return extractNodes(data.nodes, map).find(
     node => node.data.socketKey === socketKey

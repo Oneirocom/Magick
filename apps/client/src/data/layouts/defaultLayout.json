@@ -1,7 +1,9 @@
 {
   "global": {
+    "splitterSize": 4,
     "tabSetTabStripHeight": 24
   },
+  "borders": [],
   "layout": {
     "type": "row",
     "id": "#root",
@@ -9,7 +11,7 @@
       {
         "type": "tabset",
         "id": "#3",
-        "weight": 7.102489336164113,
+        "weight": 15,
         "children": [
           {
             "type": "tab",
@@ -22,12 +24,12 @@
       {
         "type": "row",
         "id": "#9",
-        "weight": 34.08645212404496,
+        "weight": 53.03349282296651,
         "children": [
           {
             "type": "tabset",
             "id": "#15",
-            "weight": 77.96917497733455,
+            "weight": 60,
             "children": [
               {
                 "type": "tab",
@@ -37,14 +39,19 @@
                 "enableClose": false,
                 "className": "editor-tab"
               }
-            ],
-            "active": true
+            ]
           },
           {
             "type": "tabset",
             "id": "#8",
-            "weight": 22.030825022665457,
+            "weight": 40,
             "children": [
+              {
+                "type": "tab",
+                "id": "#22",
+                "name": "Playtest",
+                "component": "playtest"
+              },
               {
                 "type": "tab",
                 "id": "44",
@@ -59,12 +66,12 @@
       {
         "type": "row",
         "id": "#7",
-        "weight": 7.945196793081777,
+        "weight": 31.966507177033492,
         "children": [
           {
             "type": "tabset",
             "id": "#14",
-            "weight": 50,
+            "weight": 62.108108108108105,
             "children": [
               {
                 "type": "tab",
@@ -87,7 +94,7 @@
               {
                 "type": "tab",
                 "id": "#12",
-                "name": "Ent Manager",
+                "name": "Agent Manager",
                 "component": "entityManager"
               }
             ]
@@ -95,19 +102,19 @@
           {
             "type": "tabset",
             "id": "#6",
-            "weight": 50,
+            "weight": 87.89189189189189,
             "children": [
               {
                 "type": "tab",
-                "id": "#22",
-                "name": "Playtest",
-                "component": "playtest"
+                "id": "#418",
+                "name": "Avatar",
+                "component": "avatar"
               }
-            ]
+            ],
+            "active": true
           }
         ]
       }
     ]
-  },
-  "borders": []
+  }
 }

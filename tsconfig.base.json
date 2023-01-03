@@ -7,19 +7,44 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
+    "jsx": "react",
+    "target": "esnext",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "typeRoots": ["./@types", "./node_modules/@types"],
+    "esModuleInterop": true,
+    "typeRoots": [
+      "./@types",
+      "./node_modules/@types"
+    ],
     "paths": {
-      "@thothai/client-core": ["packages/client-core/src/index.ts"],
-      "@thothai/core": ["packages/core/src/index.ts"],
-      "@thothai/engine": ["packages/engine/src/index.ts"],
-      "@thothai/server-core": ["packages/server-core/src/index.ts"]
+      "@thothai/client-core": [
+        "packages/client-core/src/index.ts"
+      ],
+      "@thothai/core": [
+        "packages/core/src/index.ts"
+      ],
+      "@thothai/database": [
+        "packages/database/src/index.ts"
+      ],
+      "@thothai/engine": [
+        "packages/engine/src/index.ts"
+      ],
+      "@thothai/plugins": [
+        "packages/plugins/src/index.ts"
+      ],
+      "@thothai/server-core": [
+        "packages/server-core/src/index.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

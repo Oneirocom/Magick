@@ -1,1 +1,0 @@
-declare module '@moebius/http-graceful-shutdown'

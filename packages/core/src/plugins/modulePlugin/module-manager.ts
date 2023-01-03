@@ -1,5 +1,6 @@
 import { Engine, Socket, Component } from 'rete'
 import { Socket as SocketType } from 'rete/types'
+import { NodeData } from 'rete/types/core/data'
 
 import {
   GraphData,
@@ -8,11 +9,10 @@ import {
   ThothNode,
   ThothWorkerInputs,
   ThothWorkerOutputs,
-} from '../../types'
+} from '../../../types'
+import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'
 import { Module } from './module'
-import { extractNodes } from './utils'
-import { NodeData } from 'rete/types/core/data'
 interface ModuleComponent extends Component {
   run: Function
 }
@@ -128,13 +128,13 @@ export class ModuleManager {
   }
 
   async workerModule(
-    node: NodeData,
+    node: ThothNode,
     inputs: ThothWorkerInputs,
     outputs: ThothWorkerOutputs,
-    args: { socketInfo: { target: string } }
+    args: { socketInfo: { targetSocket: string } }
   ) {
-    if (!node.data.module) return false
-    if (!this.modules[node.data.module as number]) return false
+    if (!node.data.module) return
+    if (!this.modules[node.data.module as number]) return
     const moduleName = node.data.module as string
     const data = this.modules[moduleName].data as any
     const module = new Module()
@@ -149,7 +149,6 @@ export class ModuleManager {
         acc[name] = value
         return acc
       }
-      return acc
     }, {} as Record<string, unknown[]>) as Record<string, unknown[]>
 
     module.read(parsedInputs)
@@ -159,12 +158,17 @@ export class ModuleManager {
       Object.assign({}, args, { module, silent: true })
     )
 
-    if (args?.socketInfo?.target) {
-      const triggeredNode = this.getTriggeredNode(data, args.socketInfo.target)
+    if ((args?.socketInfo as any)?.targetNode) {
+      console.log('targetNode', (args?.socketInfo as any).targetNode)
+    }
+
+    if (args?.socketInfo?.targetSocket) {
+      const triggeredNode = this.getTriggeredNode(
+        data,
+        args.socketInfo.targetSocket
+      )
       // todo need to remember to update this if/when componnet name changes
-      const component = engine?.components.get(
-        'Module Trigger In'
-      ) as ModuleComponent
+      const component = engine?.components.get('Trigger In') as ModuleComponent
       await component?.run(triggeredNode)
     }
     // gather the outputs
@@ -174,12 +178,12 @@ export class ModuleManager {
   }
 
   workerInputs(
-    node: NodeData,
+    node: ThothNode,
     _inputs: ThothWorkerInputs,
     outputs: ModuleWorkerOutput,
     { module }: { module: Module }
   ) {
-    if (!module) return false
+    if (!module) return
     const nodeDataName = node.data.name as string
     outputs['output'] = ((module.getInput(nodeDataName) as string[]) ||
       ([] as string[]))[0]
@@ -187,7 +191,7 @@ export class ModuleManager {
   }
 
   workerOutputs(
-    node: NodeData,
+    node: ThothNode,
     inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
     { module }: { module: Module }
@@ -198,7 +202,7 @@ export class ModuleManager {
   }
 
   workerTriggerIns(
-    _node: NodeData,
+    _node: ThothNode,
     _inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
     { module }: { module: Module }
@@ -209,14 +213,13 @@ export class ModuleManager {
   }
 
   workerTriggerOuts(
-    node: NodeData,
-    inputs: ThothWorkerInputs,
+    node: ThothNode,
+    _inputs: ThothWorkerInputs,
     outputs: ThothWorkerOutputs,
     { module }: { module: Module }
   ) {
     if (!module) return
     const socketKey = node.data.socketKey as string
-    console.log('setting output', inputs, "inputs['input']", inputs['input'])
     module.setOutput(socketKey, outputs['trigger'])
   }
 

@@ -1,4 +1,4 @@
-import { IRunContextEditor, ThothComponent } from '../../types'
+import { IRunContextEditor, ThothComponent } from '../../../types'
 
 function install(
   editor: IRunContextEditor

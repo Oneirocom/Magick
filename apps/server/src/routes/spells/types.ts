@@ -1,4 +1,4 @@
-import { ThothComponent } from '@thothai/core/types'
+import { ThothComponent } from '@thothai/core'
 
 export type ModuleComponent = ThothComponent<unknown> & {
   run: Function

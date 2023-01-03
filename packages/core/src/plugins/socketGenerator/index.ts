@@ -1,11 +1,10 @@
 import Rete, { Input, Output } from 'rete'
-import { DataSocketType, IRunContextEditor, ThothNode } from '../../types'
 
+import { DataSocketType, IRunContextEditor, ThothNode } from '../../../types'
 import * as sockets from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
 
 function install(editor: IRunContextEditor) {
-  editor.on('componentregister', (component: ThothComponent<unknown>) => {
+  editor.on('componentregister', (component: any) => {
     const builder = component.builder
 
     // we are going to override the default builder with our own, and will invoke the original builder inside it.

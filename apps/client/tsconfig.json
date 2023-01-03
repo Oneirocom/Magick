@@ -21,6 +21,10 @@
   },
   "files": [],
   "include": [],
+  "paths": {
+    "@/*": ["src/*"],
+    "@components/*": ["src/components/*"]
+  },
   "references": [
     {
       "path": "./tsconfig.app.json"

@@ -1,3 +1,5 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 /* eslint-disable camelcase */
 /* eslint-disable no-console */
 /* eslint-disable require-await */
@@ -12,13 +14,14 @@ import {
   ThothNode,
   ThothWorkerInputs,
   ThothWorkerOutputs,
-} from '../../types'
+} from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, anySocket, agentSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
 
 const info = 'Event Recall is used to get conversation for an agent and user'
 
+//add option to get only events from max time difference (time diff, if set to 0 or -1, will get all events, otherwise will count in minutes)
 type InputReturn = {
   output: unknown
 }
@@ -37,6 +40,7 @@ export class EventRecall extends ThothComponent<Promise<InputReturn>> {
     this.category = 'Agents'
     this.display = true
     this.info = info
+    this.runFromCache = true
   }
 
   builder(node: ThothNode) {
@@ -62,7 +66,13 @@ export class EventRecall extends ThothComponent<Promise<InputReturn>> {
       icon: 'moon',
     })
 
-    node.inspector.add(nameInput).add(max_count).add(type)
+    const max_time_diff = new InputControl({
+      dataKey: 'max_time_diff',
+      name: 'Max Time Difference',
+      icon: 'moon',
+    })
+
+    node.inspector.add(nameInput).add(max_count).add(type).add(max_time_diff)
 
     return node
       .addInput(agentInput)
@@ -91,6 +101,8 @@ export class EventRecall extends ThothComponent<Promise<InputReturn>> {
 
     const maxCountData = node.data?.max_count as string
     const maxCount = maxCountData ? parseInt(maxCountData) : 10
+    const max_time_diffData = node.data?.max_time_diff as string
+    const max_time_diff = max_time_diffData ? parseInt(max_time_diffData) : -1
 
     const event = await getEvent({
       type,
@@ -99,6 +111,7 @@ export class EventRecall extends ThothComponent<Promise<InputReturn>> {
       client,
       channel,
       maxCount,
+      max_time_diff,
     })
     if (!silent) node.display(`Event ${type} found` || 'Not found')
 

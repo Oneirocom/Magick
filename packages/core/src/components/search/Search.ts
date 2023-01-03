@@ -1,3 +1,5 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable require-await */
@@ -5,7 +7,13 @@
 import axios from 'axios'
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import {
+  EngineContext,
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+} from '../../../types'
 import { triggerSocket, anySocket, stringSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
 
@@ -64,7 +72,7 @@ export class Search extends ThothComponent<Promise<WorkerReturn>> {
     console.log('SEARCHING FOR:', searchStr)
     const documents: Document[] = []
     const resp = await axios.get(
-      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/search`,
+      `${process.env.REACT_APP_SEARCH_SERVER_URL}/search`,
       {
         params: {
           question: searchStr,

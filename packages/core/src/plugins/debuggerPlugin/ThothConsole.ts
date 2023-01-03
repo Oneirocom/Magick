@@ -1,6 +1,6 @@
 import { NodeView } from 'rete/types/view/node'
 
-import { IRunContextEditor, NodeData } from '../../types'
+import { IRunContextEditor, NodeData } from '../../../types'
 import { ThothComponent } from '../../thoth-component'
 
 type ConsoleConstructor = {
@@ -24,7 +24,7 @@ export class ThothConsole {
   node: NodeData
   editor: IRunContextEditor
   component: ThothComponent<unknown>
-  declare nodeView: NodeView
+  nodeView: NodeView
   isServer: boolean
   throwError?: Function
   isEngine: boolean
@@ -51,7 +51,7 @@ export class ThothConsole {
 
     if (!foundNode) return
 
-    this.nodeView = foundNode[1]
+    this.nodeView = foundNode[1] as any
   }
 
   updateNodeView() {

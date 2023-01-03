@@ -1,3 +1,5 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 import Modal from '../../Modal/Modal'
 import css from '../modalForms.module.css'
 import axios from 'axios'
@@ -12,8 +14,8 @@ const DocumentDeleteModal = ({
   getContentObjects,
 }) => {
   let url = isContentObj
-    ? `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/content-object`
-    : `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document`
+    ? `${process.env.REACT_APP_SEARCH_SERVER_URL}/content-object`
+    : `${process.env.REACT_APP_SEARCH_SERVER_URL}/document`
   let params = isContentObj
     ? {
         objId,

@@ -18,6 +18,7 @@ const request = {
     languageCode: languageCode,
     profanityFilter: false,
     enableWordTimeOffsets: true,
+    enableAutomaticPunctuation: true,
     // speechContexts: [{
     //     phrases: ["hi","hello"]
     //    }]
@@ -80,7 +81,7 @@ export async function initSpeechServer(ignoreDotEnv: boolean) {
           recognizeStream !== undefined &&
           recognizeStream.destroyed === false
         ) {
-          console.log('received data:', data)
+          // console.log('received data:', data)
           recognizeStream.write(data)
         }
       } catch (e) {

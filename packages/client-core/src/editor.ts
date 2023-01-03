@@ -176,7 +176,7 @@ export const initEditor = function ({
   editor.use(KeyCodePlugin)
 
   if (client && feathers) {
-    editor.use(SocketPlugin, { client } as unknown as void)
+    editor.use(SocketPlugin, { client } as any)
   } else {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
     editor.use(CachePlugin)

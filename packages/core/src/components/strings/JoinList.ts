@@ -1,6 +1,6 @@
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
 import { TextInputControl } from '../../controls/TextInputControl'
 import { stringSocket, arraySocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'

@@ -1,5 +1,4 @@
 // We need to tell TypeScript that when we write "import styles from './styles.scss' we mean to load a module (to look for a './styles.scss.d.ts').
-export {}
 declare module '*.css'
 declare module '*.module.css'
 declare module '*.jpg'
@@ -10,3 +9,4 @@ declare global {
     getLayout: any
   }
 }
+export {}

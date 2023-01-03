@@ -8,7 +8,7 @@ import {
   ThothNode,
   ThothWorkerInputs,
   ThothWorkerOutputs,
-} from '../../types'
+} from '../../../types'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { triggerSocket } from '../../sockets'
 import { ThothComponent, ThothTask } from '../../thoth-component'
@@ -16,7 +16,7 @@ import { ThothComponent, ThothTask } from '../../thoth-component'
 const info = `While loop is used to execute a series of tasks for x times`
 
 type WorkerReturn = {
-  element: number
+  element?: number
 }
 export class WhileLoop extends ThothComponent<
   Promise<WorkerReturn | undefined>
@@ -71,7 +71,7 @@ export class WhileLoop extends ThothComponent<
         })
       )
       this._task.closed = ['false']
-      return { element }
+      return {}
     } else {
       this._task.closed = ['true']
       return { element }

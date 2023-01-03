@@ -1,20 +1,16 @@
 import axios from 'axios'
-import { createContext, useContext, useEffect, useRef } from 'react'
-
 import {
   CreateEventArgs,
   EditorContext,
   Spell,
   ThothWorkerInputs,
 } from '@thothai/core'
+import { createContext, useContext, useEffect, useRef } from 'react'
 
-import { useAuth } from '../../contexts/AuthProvider'
-import { usePubSub } from '../../contexts/PubSubProvider'
-import { postEnkiCompletion } from '../../services/game-api/enki'
-import { completion as _completion } from '../../services/game-api/text'
 import { useGetSpellQuery, useRunSpellMutation } from '../../state/api/spells'
-import { useFetchFromImageCacheMutation } from '../../state/api/visualGenerationsApi'
-import { invokeInference } from '../../utils/huggingfaceHelper'
+
+import { usePubSub } from '../../contexts/PubSubProvider'
+import { thothApiRootUrl } from '../../config'
 
 const Context = createContext<EditorContext>(undefined!)
 
@@ -23,13 +19,10 @@ export const useThothInterface = () => useContext(Context)
 const ThothInterfaceProvider = ({ children, tab }) => {
   const { events, publish, subscribe } = usePubSub()
   const spellRef = useRef<Spell | null>(null)
-  const [fetchFromImageCache] = useFetchFromImageCacheMutation()
-  const { user } = useAuth()
   const [_runSpell] = useRunSpellMutation()
   const { data: _spell } = useGetSpellQuery(
     {
       spellId: tab.spellId,
-      userId: user?.id as string,
     },
     {
       skip: !tab.spellId,
@@ -56,6 +49,7 @@ const ThothInterfaceProvider = ({ children, tab }) => {
     $PROCESS,
     $TRIGGER,
     $REFRESH_EVENT_TABLE,
+    $SEND_TO_AVATAR,
   } = events
 
   const onTrigger = (node, callback) => {
@@ -120,6 +114,10 @@ const ThothInterfaceProvider = ({ children, tab }) => {
     publish($PLAYTEST_PRINT(tab.id), data)
   }
 
+  const sendToAvatar = data => {
+    publish($SEND_TO_AVATAR(tab.id), data)
+  }
+
   const onPlaytest = callback => {
     return subscribe($PLAYTEST_INPUT(tab.id), (event, data) => {
       publish($PROCESS(tab.id))
@@ -127,31 +125,6 @@ const ThothInterfaceProvider = ({ children, tab }) => {
       // No super elegant, but we need a better more centralised way to run the engine than these callbacks.
       setTimeout(() => callback(data), 0)
     })
-  }
-
-  const completion = async body => {
-    const result = await _completion(body)
-    return result
-  }
-
-  const enkiCompletion = async (taskName, inputs) => {
-    const result = await postEnkiCompletion(taskName, inputs)
-    return result
-  }
-
-  const huggingface = async (model, data) => {
-    const result = await invokeInference(model, data)
-    return result
-  }
-
-  const readFromImageCache = async (caption, cacheTag, topK) => {
-    const result = await fetchFromImageCache({
-      caption,
-      cacheTag,
-      topK,
-    })
-    if ('error' in result) throw new Error('Error reading from image cache')
-    return result.data
   }
 
   const processCode = (code, inputs, data, state) => {
@@ -201,7 +174,7 @@ const ThothInterfaceProvider = ({ children, tab }) => {
     const update = {
       gameState: newState,
     }
-    publish($SAVE_SPELL_DIFF(tab.id), update)
+    // publish($SAVE_SPELL_DIFF(tab.id), update)
   }
 
   const updateCurrentGameState = _update => {
@@ -225,7 +198,7 @@ const ThothInterfaceProvider = ({ children, tab }) => {
       ...spell,
       ...update,
     }
-    publish($SAVE_SPELL_DIFF(tab.id), update)
+    // publish($SAVE_SPELL_DIFF(tab.id), update)
   }
 
   const getEvent = async ({
@@ -235,10 +208,12 @@ const ThothInterfaceProvider = ({ children, tab }) => {
     client,
     channel,
     maxCount = 10,
+    target_count = 'single',
+    max_time_diff = -1,
   }) => {
     const urlString = `${
-      import.meta.env.VITE_APP_API_ROOT_URL ??
-      import.meta.env.VITE_API_ROOT_URL ??
+      process.env.REACT_APP_API_ROOT_URL ??
+      process.env.API_ROOT_URL ??
       'https://localhost:8001'
     }/event`
 
@@ -249,6 +224,8 @@ const ThothInterfaceProvider = ({ children, tab }) => {
       client: client,
       channel: channel,
       maxCount: maxCount,
+      target_count,
+      max_time_diff,
     } as Record<string, any>
 
     const url = new URL(urlString)
@@ -272,8 +249,8 @@ const ThothInterfaceProvider = ({ children, tab }) => {
   }: CreateEventArgs) => {
     const response = await axios.post(
       `${
-        import.meta.env.VITE_APP_API_ROOT_URL ??
-        import.meta.env.VITE_API_ROOT_URL ??
+        process.env.REACT_APP_API_ROOT_URL ??
+        process.env.API_ROOT_URL ??
         'https://localhost:8001'
       }/event`,
       {
@@ -290,8 +267,7 @@ const ThothInterfaceProvider = ({ children, tab }) => {
   }
 
   const getWikipediaSummary = async (keyword: string) => {
-    console.log('NODE ENV', import.meta.env.MODE)
-    const isProd = import.meta.env.MODE === 'production'
+    const isProd = process.env.NODE_ENV === 'production'
     const root = isProd
       ? 'https://thoth.supereality.com'
       : 'https://localhost:8001'
@@ -302,6 +278,15 @@ const ThothInterfaceProvider = ({ children, tab }) => {
     const response = await fetch(url)
 
     return await response.json()
+  }
+
+  const queryGoogle = async (query: string) => {
+    const url = `${thothApiRootUrl}/query_google`
+    const response = await axios.post(url, {
+      query,
+    })
+
+    return await response.data.result
   }
 
   const publicInterface = {
@@ -317,10 +302,6 @@ const ThothInterfaceProvider = ({ children, tab }) => {
     sendToPlaytest,
     onPlaytest,
     clearTextEditor,
-    completion,
-    enkiCompletion,
-    huggingface,
-    readFromImageCache,
     getCurrentGameState,
     setCurrentGameState,
     updateCurrentGameState,
@@ -330,6 +311,8 @@ const ThothInterfaceProvider = ({ children, tab }) => {
     getEvent,
     storeEvent,
     getWikipediaSummary,
+    queryGoogle,
+    sendToAvatar,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>

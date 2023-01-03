@@ -1,5 +1,4 @@
-import { IRunContextEditor, ThothNode } from '../../types'
-import { ThothComponent } from '../../thoth-component'
+import { IRunContextEditor, ThothNode } from '../../../types'
 // @seang todo: convert data controls to typescript to remove this
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
@@ -8,7 +7,7 @@ import { Inspector } from './Inspector'
 function install(editor: IRunContextEditor) {
   const { onInspector, sendToInspector, clearTextEditor } = editor.thoth
 
-  editor.on('componentregister', (component: ThothComponent<unknown>) => {
+  editor.on('componentregister', (component: any) => {
     const builder = component.builder
 
     if (!component.info)
@@ -25,9 +24,6 @@ function install(editor: IRunContextEditor) {
 
       // Adding category to node for display on node`
       node.category = component.category
-
-      // todo this should likely go somewhere better.  Maybe a thoth plugin for all general thoth related things?
-      node.deprecated = component.deprecated
 
       node.displayName = component.displayName
 

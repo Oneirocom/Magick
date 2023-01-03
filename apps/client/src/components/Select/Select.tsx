@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import Creatable from 'react-select/creatable'
-import Select from 'react-select'
+import Select, { SelectInstance, StylesConfig } from 'react-select'
 
 import Chip from '../Chip/Chip'
 import Icon, { componentCategories } from '../Icon/Icon'
@@ -20,7 +20,7 @@ const BasicSelect = ({
     true,
   ...props
 }) => {
-  const selectRef = useRef<HTMLInputElement | null>(null)
+  const selectRef = useRef<SelectInstance | null>(null)
 
   const DropdownIndicator = () => {
     return props.searchable ? (
@@ -71,7 +71,7 @@ const BasicSelect = ({
     [blurSelect]
   )
 
-  const styles = {
+  const styles: StylesConfig<unknown, false, any> = {
     menu: () => ({
       backgroundColor: 'var(--dark-2)',
       borderRadius: 4,
@@ -95,6 +95,7 @@ const BasicSelect = ({
       backgroundColor: 'transparent',
       boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.1) !important',
     }),
+
     control: (provided, state) => ({
       color: '#fff',
       backgroundColor: state.isFocused ? 'var(--dark-2)' : 'var(--dark-3)',

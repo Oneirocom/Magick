@@ -1,4 +1,4 @@
-import { Spell } from '../src/types'
+import { Spell } from '../types'
 export default {
   id: '3b7add2b-0f49-4c6b-8db9-18ecbb34602c',
   name: 'square amaranth',

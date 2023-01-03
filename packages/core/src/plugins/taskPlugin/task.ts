@@ -1,6 +1,6 @@
 import { NodeData } from 'rete/types/core/data'
 
-import { ThothReteInput, ThothWorkerInputs } from '../../types'
+import { ThothReteInput, ThothWorkerInputs } from '../../../types'
 import { ThothComponent, ThothTask } from '../../thoth-component'
 
 type TaskRef = {
@@ -82,6 +82,40 @@ export class Task {
     return input
   }
 
+  getInputByNodeId(node, fromSocket) {
+    let value: null | any = null
+    Object.entries(this.inputs).forEach(([key, input]) => {
+      const found = input.find(
+        (con: ThothReteInput) => con && con.task.node.id === node.id
+      ) as {
+        key: string
+        task: { closed: string[] }
+      }
+      if (found) {
+        if (found?.task && found.key == fromSocket) value = key
+      }
+    })
+
+    return value
+  }
+
+  // getInputFromConnection(socketKey: string) {
+  //   let input: null | any = null
+  //   Object.entries(this.inputs).forEach(([key, value]) => {
+  //     const val = value.find((con: any) => con && con.key === socketKey) as {
+  //       task: { closed: string[] }
+  //     }
+  //     if (val) {
+  //       if (val && val.task && val.task.closed.length > 0) {
+  //         input = key
+  //         return
+  //       }
+  //     }
+  //   })
+
+  //   return input
+  // }
+
   reset() {
     this.outputData = null
     this.closed = []
@@ -93,7 +127,7 @@ export class Task {
       garbage = [] as Task[],
       propagate = true,
       fromSocket,
-      // fromNode,
+      fromNode,
       // fromTask,
     } = options
 
@@ -110,30 +144,48 @@ export class Task {
 
       /*
         This is where we are populating all the input values to be passed into the worker. We are getting all the input connections that are connected as outputs (ie have values)
-        We filter out all connections which did not come from the previou node.  This is to help support multiple inputs properly, otherwise we actually back propagate along every input and run it, which I think is unwanted behaviour.
-        
+        We filter out all connections which did not come from the previou node.  This is to hgelp support multiple inputs properly, otherwise we actually back propagate along every input and run it, whichI think is unwanted behaviour.
+
         After we have filtered these out, we need to run the task, which triggers that nodes worker.  After the worker runs, the task has populated output data, which we take and we associate with the tasks input values, which are subsequently
         passed to the nodes worker for processing.
+
         We assume here that his nodes worker does not need to access ALL values simultaneously, but is only interested in one. There is a task option which enables this functionality just in case we have use cases that don't want this behaviour.
       */
 
       await Promise.all(
         this.getInputs('output').map(async key => {
           const inputPromises = this.inputs[key]
-            // .filter((con: ThothReteInput) => {
-            //   // only filter inputs to remove ones that are not the origin if a task option is true
-            //   if (this.component.task.runOneInput) return false
-            //   // if (!this.component.task.runOneInput || !fromNode) return true
-            //   return true
-            // })
+            .filter((con: ThothReteInput) => {
+              // only filter inputs to remove ones that are not the origin if a task option is true
+              if (!this.component.task.runOneInput || !fromNode) return true
+              if (con.task.outputData) return true
+              if (con.task.node.id === fromNode.id) return true
+              if (con.task.component.name === 'Spell') return false
+
+              // return true if the input is from a triggerless component
+              if (!con.task.node.outputs.trigger) return true
+            })
             .map(async (con: ThothReteInput) => {
+              // if the task has come from a node with output data that is not the calling node, use that data
+              if (con.task.outputData && con.task.node.id !== fromNode?.id) {
+                const outputData = con.task.outputData as Record<
+                  string,
+                  unknown
+                >
+
+                return outputData[con.key]
+              }
+
               await con.task.run(data, {
                 needReset: false,
                 garbage,
                 propagate: false,
                 fromNode: this.node,
               })
-              const outputData = con.task.outputData as Record<string, unknown>
+              const outputData = con.task.outputData as unknown as Record<
+                string,
+                unknown
+              >
 
               return outputData[con.key]
             })
@@ -147,8 +199,13 @@ export class Task {
       // socket info is used internally in the worker if we need to know about where signals come from.
       // this is mainly used currently by the module plugin to know where the run signal should go to.
       const socketInfo = {
-        target: fromSocket ? this.getInputFromConnection(fromSocket) : null,
+        targetSocket: fromSocket
+          ? this.getInputByNodeId(fromNode, fromSocket)
+          : null,
+        targetNode: fromNode ? fromNode : null,
       }
+
+      // if (!socketInfo.targetSocket) debugger
 
       // the main output data of the task, which is gathered up when the next node gets this nodes value
       this.outputData = await this.worker(this, inputs, data, socketInfo)

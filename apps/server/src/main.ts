@@ -3,14 +3,11 @@ config()
 //@ts-ignore
 import cors from '@koa/cors'
 import Router from '@koa/router'
-import { initClassifier } from '@thothai/core/dist/server'
 import HttpStatus from 'http-status-codes'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
-import { cacheManager } from './cacheManager'
-import { database } from './database'
-import { creatorToolsDatabase } from './databases/creatorTools'
+import { database } from '@thothai/database'
 import { routes } from './routes'
 import { Handler, Method, Middleware } from './types'
 import { initTextToSpeech } from './systems/googleTextToSpeech'
@@ -19,10 +16,8 @@ import https from 'https'
 import http from 'http'
 import * as fs from 'fs'
 import spawnPythonServer from './systems/pythonServer'
-import { auth } from './middleware/auth'
 import { initWeaviateClient } from './systems/weaviateClient'
-import cors_server from './cors-server'
-import { initExitHandler } from './exitHandler'
+import cors_server from './systems/cors-server'
 
 const app: Koa = new Koa()
 const router: Router = new Router()
@@ -30,27 +25,6 @@ const router: Router = new Router()
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 
 async function init() {
-  initExitHandler()
-  // async function initLoop() {
-  //   new roomManager()
-  //   const expectedServerDelta = 1000 / 60
-  //   let lastTime = 0
-
-  //   // @ts-ignore
-  //   globalThis.requestAnimationFrame = f => {
-  //     const serverLoop = () => {
-  //       const now = Date.now()
-  //       if (now - lastTime >= expectedServerDelta) {
-  //         lastTime = now
-  //         f(now)
-  //       } else {
-  //         setImmediate(serverLoop)
-  //       }
-  //     }
-  //     serverLoop()
-  //   }
-  // }
-
   // required for some current consumers (i.e Thoth)
   // to-do: standardize an allowed origin list based on env values or another source of truth?
 
@@ -60,24 +34,19 @@ async function init() {
     'refreshing db',
     process.env.REFRESH_DB?.toLowerCase().trim() === 'true'
   )
-  await creatorToolsDatabase.sequelize.sync({
+  await database.instance.sequelize.sync({
     force: process.env.REFRESH_DB?.toLowerCase().trim() === 'true',
   })
-  await database.instance.firstInit()
+  await initFileServer()
+  await initTextToSpeech()
+  await initWeaviateClient(
+    process.env.WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true',
+    process.env.CLASSIFIER_IMPORT_DATA?.toLowerCase().trim() === 'true'
+  )
 
-  // todo better organize and architect these servers and determine what is needed.
-  // await initFileServer()
-  // await initClassifier()
-  // await initTextToSpeech()
-  // new cacheManager()
-  // await initWeaviateClient(
-  //   process.env.WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true',
-  //   process.env.CLASSIFIER_IMPORT_DATA?.toLowerCase().trim() === 'true'
-  // )
-
-  // if (process.env.RUN_PYTHON_SERVER === 'true') {
-  //   spawnPythonServer()
-  // }
+  if (process.env.RUN_PYTHON_SERVER === 'true') {
+    spawnPythonServer()
+  }
 
   // generic error handling
   app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
@@ -113,9 +82,6 @@ async function init() {
   // Middleware used by every request. For route-specific middleware, add it to you route middleware specification
   app.use(koaBody({ multipart: true }))
 
-  // Middleware used to handle authentication
-  app.use(auth.isValidToken)
-
   const createRoute = (
     method: Method,
     path: string,
@@ -148,21 +114,17 @@ async function init() {
   }
 
   type MiddlewareParams = {
-    access: string | string[] | Middleware
     middleware: Middleware[] | undefined
   }
 
-  const routeMiddleware = ({ access, middleware = [] }: MiddlewareParams) => {
-    if (!access) return [...middleware]
-    if (typeof access === 'function') return [access, ...middleware]
-    if (typeof access === 'string') return [...middleware]
+  const routeMiddleware = ({ middleware = [] }: MiddlewareParams) => {
     return [...middleware]
   }
 
   // Create Koa routes from the routes defined in each module
   routes.forEach(route => {
-    const { method, path, access, middleware, handler } = route
-    const _middleware = routeMiddleware({ access, middleware })
+    const { method, path, middleware, handler } = route
+    const _middleware = routeMiddleware({ middleware })
     if (method && handler) {
       createRoute(method, path, _middleware, handler)
     }

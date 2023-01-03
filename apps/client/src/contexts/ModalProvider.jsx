@@ -5,8 +5,8 @@ import { getModals } from '../components/Modals'
 const Context = React.createContext({
   activeModal: '',
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  openModal: options => {},
-  closeModal: () => {},
+  openModal: options => { },
+  closeModal: () => { },
 })
 
 export const useModal = () => React.useContext(Context)

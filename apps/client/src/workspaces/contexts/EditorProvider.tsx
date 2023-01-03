@@ -1,30 +1,28 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-
-import gridimg from '../../grid.png'
-import { initEditor } from '@thothai/client-core'
 import {
-  EditorContext,
+  zoomAt,
   GraphData,
+  EditorContext,
   Spell,
   ThothEditor,
-  zoomAt,
 } from '@thothai/core'
+import { initEditor } from '@thothai/client-core'
+import React, {
+  useRef,
+  useContext,
+  createContext,
+  useState,
+  useEffect,
+} from 'react'
+
+import { useLazyGetSpellQuery } from '../../state/api/spells'
 
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import { MyNode } from '../../components/Node/Node'
-import { feathers } from '../../config'
-// TODO fix this path import
-import { useAuth } from '../../contexts/AuthProvider'
-import { useFeathers } from '../../contexts/FeathersProvider'
+import gridimg from '@/grid.png'
 import { usePubSub } from '../../contexts/PubSubProvider'
-import { useLazyGetSpellQuery } from '../../state/api/spells'
 import { useThothInterface } from './ThothInterfaceProvider'
+import { useFeathers } from '../../contexts/FeathersProvider'
+import { feathers } from '../../config'
 
 export type ThothTab = {
   layoutJson: string
@@ -37,12 +35,36 @@ export type ThothTab = {
 }
 
 // TODO give better typing to the editor
-const Context = createContext(undefined!)
+const Context = createContext({
+  run: () => {},
+  getEditor: (): ThothEditor | null => null,
+  editor: {} as ThothEditor | null,
+  serialize: (): GraphData | undefined => undefined,
+  buildEditor: (
+    el: HTMLDivElement,
+    // todo update this to use proper spell type
+    spell: Spell | undefined,
+    tab: ThothTab,
+    reteInterface: EditorContext
+  ) => {},
+  setEditor: (editor: any) => {},
+  getNodeMap: () => {},
+  getNodes: () => {},
+  loadGraph: (graph: any) => {},
+  setContainer: () => {},
+  undo: () => {},
+  redo: () => {},
+  del: () => {},
+  centerNode: (nodeId: number): void => {},
+  dirtyGraph: false,
+  setDirtyGraph: (isDirty: boolean): void => {},
+})
 
 export const useEditor = () => useContext(Context)
 
 const EditorProvider = ({ children }) => {
   const [editor, setEditorState] = useState<ThothEditor | null>(null)
+  const [dirtyGraph, setDirtyGraph] = useState<boolean>(true)
   const editorRef = useRef<ThothEditor | null>(null)
   const FeathersContext = useFeathers()
   const client = FeathersContext?.client
@@ -72,21 +94,14 @@ const EditorProvider = ({ children }) => {
       feathers,
     })
 
-    if (!newEditor) return
-
     // set editor to the map
     setEditor(newEditor)
 
-    if (tab.type === 'spell') {
-      // copy spell in case it is read onl
-      const spell = JSON.parse(JSON.stringify(_spell))
-      newEditor.loadGraph(spell.graph)
-    }
+    // copy spell in case it is read onl
+    const spell = JSON.parse(JSON.stringify(_spell))
 
-    if (tab.type === 'module') {
-      const moduleDoc = await thoth.getModule(tab.module)
-      newEditor.loadGraph(moduleDoc.toJSON().data)
-    }
+    console.log('Loading graph in build editor')
+    newEditor.loadGraph(spell.graph)
   }
 
   const run = () => {
@@ -154,13 +169,14 @@ const EditorProvider = ({ children }) => {
     del,
     setContainer,
     centerNode,
+    dirtyGraph,
+    setDirtyGraph,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }
 
 const RawEditor = ({ tab, children }) => {
-  const { user } = useAuth()
   const [getSpell, { data: spell, isLoading }] = useLazyGetSpellQuery()
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
@@ -168,12 +184,11 @@ const RawEditor = ({ tab, children }) => {
   const reteInterface = useThothInterface()
 
   useEffect(() => {
-    if (!tab) return
+    if (!tab || loaded) return
 
     if (tab?.spellId)
       getSpell({
         spellId: tab.spellId,
-        userId: user?.id as string,
       })
   }, [tab])
 

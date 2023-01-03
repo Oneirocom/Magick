@@ -1,15 +1,16 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 import axios from 'axios'
 
-// TODO: Refactor and remove this, replace with Thoth completion node
-
 export async function MakeCompletionRequest(
-  data,
-  speaker,
-  agent,
-  type,
-  engine
+  data: any,
+  speaker: any,
+  agent: any,
+  type: any,
+  engine: any,
+  apiKey: string
 ) {
   // if ((await database.instance.getConfig())['use_gptj']) {
   //   const params = {
@@ -35,13 +36,20 @@ export async function MakeCompletionRequest(
   //   }
   //   return responseModified
   // } else {
-  return await makeOpenAIGPT3Request(data, speaker, agent, type, engine)
+  return await makeOpenAIGPT3Request(data, speaker, agent, type, engine, apiKey)
   // }
 }
 const useDebug = false
-async function makeOpenAIGPT3Request(data, speaker, agent, type, engine) {
+async function makeOpenAIGPT3Request(
+  data: any,
+  speaker: any,
+  agent: any,
+  type: any,
+  engine: any,
+  apiKey: string
+) {
   if (useDebug) return { success: true, choice: { text: 'Default response' } }
-  const API_KEY = process.env.OPENAI_API_KEY
+  const API_KEY = (apiKey !== '' && apiKey) ?? process.env.OPENAI_API_KEY
   const headers = {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + API_KEY,
@@ -64,50 +72,64 @@ async function makeOpenAIGPT3Request(data, speaker, agent, type, engine) {
   }
 }
 
+type CompletionData = {
+  prompt: string
+  temperature: number
+  max_tokens: number
+  top_p: number
+  frequency_penalty: number
+  presence_penalty: number
+  stop: string[]
+  apiKey?: string
+}
+
 export async function makeCompletion(
   engine: string,
-  data: {
-    prompt: string,
-    temperature: number = 0.7,
-    max_tokens: number = 256,
-    top_p: number = 1,
-    frequency_penalty: number = 0,
-    presence_penalty: number = 0,
-    stop: string[],
-  }
+  data: CompletionData
 ): Promise<any> {
-  const API_KEY =
-    process.env.OPENAI_API_KEY
+  const {
+    prompt,
+    temperature = 0.7,
+    max_tokens = 256,
+    top_p = 1,
+    frequency_penalty = 0,
+    presence_penalty = 0,
+    stop,
+    apiKey,
+  } = data
+
+  const API_KEY = apiKey || process.env.OPENAI_API_KEY
 
   const headers = {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + API_KEY,
   }
 
-  console.log("API KEYS", headers)
-
-  const _data = {}
-  _data.prompt = data.prompt
-  if (data.temperature && data.temperature !== undefined) {
-    _data.temperature = data.temperature
+  const _data: any = {}
+  _data.prompt = prompt
+  if (temperature && temperature !== undefined) {
+    _data.temperature = temperature
   }
-  if (data.max_tokens && data.max_tokens !== undefined) {
-    _data.max_tokens = data.max_tokens
+  if (max_tokens && max_tokens !== undefined) {
+    _data.max_tokens = max_tokens
   }
-  if (data.top_p && data.top_p !== undefined) {
-    _data.top_p = data.top_p
+  if (top_p && top_p !== undefined) {
+    _data.top_p = top_p
   }
-  if (data.frequency_penalty && data.frequency_penalty !== undefined) {
-    _data.frequency_penalty = data.frequency_penalty
+  if (frequency_penalty && frequency_penalty !== undefined) {
+    _data.frequency_penalty = frequency_penalty
   }
-  if (data.presence_penalty && data.presence_penalty !== undefined) {
-    _data.presence_penalty = data.presence_penalty
+  if (presence_penalty && presence_penalty !== undefined) {
+    _data.presence_penalty = presence_penalty
   }
-  _data.stop = data.stop
+  _data.stop = stop
 
   try {
     const gptEngine = engine ?? 'text-davinci-002'
-    console.log("MAKING REQUEST TO", `https://api.openai.com/v1/engines/${gptEngine}/completions`)
+    console.log(
+      'MAKING REQUEST TO',
+      `https://api.openai.com/v1/engines/${gptEngine}/completions`
+    )
     console.log('BODY', _data)
 
     const resp = await axios.post(
@@ -121,7 +143,7 @@ export async function makeCompletion(
       return { success: true, choice }
     }
   } catch (err) {
-    console.log("ERROR")
+    console.log('ERROR')
     console.error(err)
     return { success: false }
   }

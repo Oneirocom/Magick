@@ -1,7 +1,7 @@
 import './style.css'
-import CommentManager from './manager'
 import FrameComment from './frame-comment'
 import InlineComment from './inline-comment'
+import CommentManager from './manager'
 import { nodesBBox, listenWindow } from './utils'
 
 // eslint-disable-next-line max-statements

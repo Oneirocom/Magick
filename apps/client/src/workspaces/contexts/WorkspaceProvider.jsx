@@ -2,14 +2,12 @@ import EditorProvider from './EditorProvider'
 import LayoutProvider from './LayoutProvider'
 import ThothInterfaceProvider from './ThothInterfaceProvider'
 import InspectorProvider from './InspectorProvider'
-import WysiwygProvider from './WysiwygProvider'
 
 const providers = [
   ThothInterfaceProvider,
   EditorProvider,
   LayoutProvider,
   InspectorProvider,
-  WysiwygProvider,
 ]
 
 function ComposeProviders({ providers, children, ...parentProps }) {

@@ -88,6 +88,7 @@
   padding-left: var(--small);
   border-bottom: 1px solid var(--dark-2);
   align-items: center;
+  font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
 }
 .project-row:hover {
   background-color: var(--dark-3);

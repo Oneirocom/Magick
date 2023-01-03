@@ -1,11 +1,7 @@
+import { EngineContext, GraphData, ModuleComponent, Spell } from '../../types'
 import { getComponents } from '../components'
-
-import { initSharedEngine } from '../engine'
-
-import { EngineContext, GraphData, ModuleComponent, Spell } from '../types'
-import { ThothEngine } from '../engine'
+import { initSharedEngine, extractNodes, ThothEngine } from '../engine'
 import { Module } from '../plugins/modulePlugin/module'
-import { extractNodes } from '../utils/chainHelpers'
 
 type RunSpellConstructor = {
   thothInterface: EngineContext

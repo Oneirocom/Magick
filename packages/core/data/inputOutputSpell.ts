@@ -1,4 +1,4 @@
-import { Spell } from '../src/types'
+import { Spell } from '../types'
 export default {
   id: '3e645657-ec88-43e7-9b4d-6c177219c8f2',
   name: 'modest bronze',

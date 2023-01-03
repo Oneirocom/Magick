@@ -5,8 +5,13 @@
     "client": "apps/client",
     "client-core": "packages/client-core",
     "core": "packages/core",
+    "database": "packages/database",
     "engine": "packages/engine",
+    "entity-server": "apps/entity-server",
+    "plugins": "packages/plugins",
+    "search-server": "apps/search-server",
     "server": "apps/server",
-    "server-core": "packages/server-core"
+    "server-core": "packages/server-core",
+    "speech-server": "apps/speech-server"
   }
 }

@@ -1,26 +1,23 @@
 import { useSnackbar } from 'notistack'
+import { GraphData } from '@thothai/core'
 import { useEffect } from 'react'
 
-import { GraphData } from '@thothai/core'
-
-// import { useModule } from '../../../contexts/ModuleProvider'
-import Select from '../../../components/Select/Select'
-import { useAuth } from '../../../contexts/AuthProvider'
-import defaultGraph from '../../../data/graphs/default'
-import {
-  useGetSpellsQuery,
-  useLazyGetSpellQuery,
-  useNewSpellMutation,
-} from '../../../state/api/spells'
 import { useAppDispatch } from '../../../state/hooks'
 import { openTab } from '../../../state/tabs'
+// import { useModule } from '../../../contexts/ModuleProvider'
+import Select from '../../../components/Select/Select'
+import {
+  useLazyGetSpellQuery,
+  useGetSpellsQuery,
+  useNewSpellMutation,
+} from '../../../state/api/spells'
+import defaultGraph from '../../../data/graphs/default'
 
 const ModuleSelect = ({ control, updateData, initialValue }) => {
   const dispatch = useAppDispatch()
 
   const [getSpell, { data: spell }] = useLazyGetSpellQuery()
-  const { user } = useAuth()
-  const { data: spells } = useGetSpellsQuery(user?.id as string)
+  const { data: spells } = useGetSpellsQuery()
   const [newSpell] = useNewSpellMutation()
 
   const { enqueueSnackbar } = useSnackbar()
@@ -58,7 +55,6 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   const onChange = async ({ value }) => {
     getSpell({
       spellId: value,
-      userId: user?.id as string,
     })
   }
 
@@ -71,12 +67,10 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
       await newSpell({
         name: value,
         graph: defaultGraph as unknown as GraphData,
-        user: user?.id,
       })
 
       getSpell({
         spellId: value,
-        userId: user?.id as string,
       })
     } catch (err) {
       // eslint-disable-next-line no-console

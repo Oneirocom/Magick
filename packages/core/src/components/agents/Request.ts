@@ -1,13 +1,16 @@
-/* eslint-disable no-async-promise-executor */
-/* eslint-disable camelcase */
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable no-console */
-/* eslint-disable require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 import axios from 'axios'
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import {
+  EngineContext,
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+} from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket, stringSocket } from '../../sockets'
@@ -68,7 +71,11 @@ export class Request extends ThothComponent<Promise<WorkerReturn>> {
     return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)
   }
 
-  async worker(node: NodeData, rawInputs: ThothWorkerInputs) {
+  async worker(
+    node: NodeData,
+    rawInputs: ThothWorkerInputs,
+    _outputs: ThothWorkerOutputs
+  ) {
     const name = node.data.name as string
     node.name = name
 
@@ -80,7 +87,7 @@ export class Request extends ThothComponent<Promise<WorkerReturn>> {
     let url = node?.data?.url as string
     const method = (node?.data?.method as string)?.toLowerCase().trim()
     if (url.startsWith('server')) {
-      url = url.replace('server', import.meta.env.VITE_APP_API_URL as string)
+      url = url.replace('server', process.env.REACT_APP_API_URL as string)
     }
 
     let resp = undefined as any

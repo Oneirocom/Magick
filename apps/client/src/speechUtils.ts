@@ -26,6 +26,7 @@ class speechUtils {
 
   finalWord = false
   removeLastSentence = true
+  paused = false
 
   streamStreaming = false
 
@@ -38,13 +39,7 @@ class speechUtils {
 
   constructor() {
     this.socket = socketIOClient(
-      import.meta.env.VITE_APP_SPEECH_SERVER_URL as string
-    )
-    console.log(
-      'connected to speach server at:',
-      import.meta.env.VITE_APP_SPEECH_SERVER_URL,
-      ':',
-      this.socket.connected
+      process.env.REACT_APP_SPEECH_SERVER_URL as string
     )
   }
 
@@ -65,6 +60,8 @@ class speechUtils {
       this.input.connect(this.processor)
 
       this.processor.onaudioprocess = (e: any) => {
+        if (this.paused) return
+        console.log('AUDIO PROCESS')
         this.microphoneProcess(e)
       }
     }
@@ -84,6 +81,7 @@ class speechUtils {
     this.socket.on('speechData', (data: any) => {
       const dataFinal = undefined || data.results[0].isFinal
 
+      console.log('Speech data', data)
       if (dataFinal === true) {
         let finalString = data.results[0].alternatives[0].transcript
         console.log("Google Speech sent 'final' Sentence and it is:")
@@ -100,6 +98,16 @@ class speechUtils {
     const left = e.inputBuffer.getChannelData(0)
     const left16 = this.downsampleBuffer(left, 44100, 16000)
     this.socket.emit('binaryData', left16)
+  }
+
+  pause() {
+    console.log('RECORDING PAUSED')
+    this.paused = true
+  }
+
+  unpause() {
+    console.log('RECODING UNPAUSED')
+    this.paused = false
   }
 
   stopRecording = () => {
@@ -121,6 +129,9 @@ class speechUtils {
       this.context = null
       this.AudioContext = null
     })
+    this.socket.off('speechData')
+    this.socket.off('connect')
+    this.socket.off('messages')
   }
 
   downsampleBuffer = (buffer: any, sampleRate: any, outSampleRate: any) => {

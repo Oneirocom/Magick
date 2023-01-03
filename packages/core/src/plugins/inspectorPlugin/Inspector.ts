@@ -1,8 +1,8 @@
 import deepEqual from 'deep-equal'
-import Rete, { Input, Output, Node } from 'rete'
+import Rete, { Input, Output } from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { DataSocketType, IRunContextEditor, ThothNode } from '../../types'
+import { DataSocketType, IRunContextEditor, ThothNode } from '../../../types'
 import * as socketMap from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
 import { DataControl } from './DataControl'
@@ -23,8 +23,6 @@ export type InspectorData = {
   data: Record<string, unknown>
   category?: string
   info: string
-  deprecated: boolean
-  deprecationMessage: string
 }
 
 export class Inspector {
@@ -187,15 +185,10 @@ export class Inspector {
     this.node.data.dataControls = cache
   }
 
-  handleLock(update: Record<string, any>) {
-    if (!('nodeLocked' in update.data)) return
-    this.node.data.nodeLocked = update.data.nodeLocked
-  }
-
   handleDefaultTrigger(update: Record<string, any>) {
     this.editor.nodes
-      .filter((node: Node) => node.name === 'Module Trigger In')
-      .map((node: Node, _index, _array) => {
+      .filter((node: ThothNode) => node.name === 'Trigger In')
+      .map((node: ThothNode) => {
         if (node.data.isDefaultTriggerIn) {
           node.data.isDefaultTriggerIn = !node.data.isDefaultTriggerIn
         }
@@ -211,7 +204,6 @@ export class Inspector {
 
     const { data } = update
 
-    this.handleLock(update)
     this.handleDefaultTrigger(update)
 
     // Send data to a possibel node global handler
@@ -266,6 +258,9 @@ export class Inspector {
 
     // update the node at the end ofthid
     this.node.update()
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.editor.trigger('save')
   }
 
@@ -291,10 +286,6 @@ export class Inspector {
       data: this.node.data,
       category: this.node.category,
       info: this.node.info,
-      deprecated: this.component.deprecated,
-      deprecationMessage:
-        this.component.deprecationMessage ||
-        'This component has been deprecated.  Please use an alternative component, and remove any instances from your spells.',
     }
   }
 

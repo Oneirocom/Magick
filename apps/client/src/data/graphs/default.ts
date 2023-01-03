@@ -18,8 +18,8 @@ const graph = {
           connections: [],
         },
       },
-      position: [-1555.4724883179474, -132.7648214211178],
-      name: 'Module Trigger In',
+      position: [-200, -100],
+      name: 'Trigger In',
     },
     '232': {
       id: 232,
@@ -47,7 +47,7 @@ const graph = {
           connections: [],
         },
       },
-      position: [-1554.8394720686588, -362.87500885530955],
+      position: [-200, 100],
       name: 'Universal Input',
     },
     '233': {
@@ -66,7 +66,7 @@ const graph = {
           connections: [],
         },
       },
-      position: [-828.9994593860473, -299.2588216155752],
+      position: [200, 0],
       name: 'Output',
     },
   },

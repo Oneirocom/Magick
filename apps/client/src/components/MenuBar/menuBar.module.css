@@ -78,13 +78,6 @@ li.list-item:only-child {
   position: relative;
   z-index: 999;
 }
-.thoth-logo {
-  position: relative;
-  top: 2px;
-  margin-left: calc(var(--c2) + 2px);
-  margin-right: var(--c3);
-  height: var(--c2);
-}
 .menu-bar-item {
   border-radius: 4px;
   cursor: default;
@@ -97,8 +90,8 @@ li.list-item:only-child {
   list-style: none;
 
   /* moving down 1px because the container itself follows the grid, but the items do not. */
-  position: relative;
-  top: 1px;
+  /* position: relative; */
+  /* top: 1px; */
 }
 .menu-bar-item:hover {
   background-color: var(--dark-2);

@@ -1,13 +1,13 @@
-/* eslint-disable no-async-promise-executor */
-/* eslint-disable camelcase */
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import axios from 'axios'
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import {
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+  EngineContext,
+} from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
@@ -101,6 +101,13 @@ export class AgentTextCompletion extends ThothComponent<Promise<WorkerReturn>> {
   }
 
   async worker(node: NodeData, inputs: ThothWorkerInputs) {
+    let apiKey = process.env.OPENAI_API_KEY as string | null
+    // check if we are in a browser and local storage is available
+    // if it is, we can use the API key from local storage
+    if (typeof window !== 'undefined' && window.localStorage) {
+      apiKey = window.localStorage.getItem('openai-api-key')
+    }
+
     const prompt = inputs['string'][0]
     const settings = ((inputs.settings && inputs.settings[0]) ?? {}) as any
     const modelName = settings.modelName ?? (node?.data?.modelName as string)
@@ -130,41 +137,46 @@ export class AgentTextCompletion extends ThothComponent<Promise<WorkerReturn>> {
     })
 
     console.log('filteredStop is', filteredStop)
-
-    const resp = await axios.post(
+    const API_URL = 'https://0.0.0.0:8001'
+    // instead of axios.post, use fetch
+    const resp = await fetch(
       `${
-        import.meta.env.VITE_APP_API_URL ??
-        import.meta.env.VITE_API_URL ??
-        'https://localhost:8001'
+        process.env.REACT_APP_API_URL ?? API_URL ?? 'https://0.0.0.0:8001'
       }/text_completion`,
       {
-        prompt: prompt,
-        modelName: modelName,
-        temperature: temperature,
-        maxTokens: maxTokens,
-        topP: topP,
-        frequencyPenalty: frequencyPenalty,
-        presencePenalty: presencePenalty,
-        stop: filteredStop,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt,
+          modelName,
+          temperature,
+          maxTokens,
+          topP,
+          frequencyPenalty,
+          presencePenalty,
+          stop: filteredStop,
+          apiKey,
+        }),
       }
     )
-    console.log('resp.data is ', resp.data)
 
-    const { success, choice } = resp.data
+    const data = await resp.json()
 
-    if (!success)
+    console.log('resp.data is ', data)
+
+    const { success, choice } = data
+
+    if (!success) {
+      console.error('Error in text completion', data)
       return {
-        output:
-          'Sorry, I had a completion error:' +
-          JSON.stringify(resp.data) +
-          ' prompt:' +
-          JSON.stringify(prompt),
+        output: '<error>',
       }
+    }
 
     const res =
-      success !== 'false' && success !== false
-        ? choice.text
-        : 'Sorry, I had an error!'
+      success !== 'false' && success !== false ? choice.text : '<error>'
 
     console.log('success:', success, 'choice:', choice.text, 'res:', res)
 

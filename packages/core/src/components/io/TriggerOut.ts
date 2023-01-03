@@ -4,7 +4,7 @@ import Rete from 'rete'
 //@ts-ignore
 import { v4 as uuidv4 } from 'uuid'
 
-import { ThothNode } from '../../types'
+import { ThothNode } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { triggerSocket } from '../../sockets'
@@ -16,14 +16,9 @@ type WorkerReturn = {
 }
 
 export class TriggerOut extends ThothComponent<WorkerReturn> {
-  declare task: TaskOptions
-  declare category: string
-  declare info: string
-  declare contextMenuName: string
-
   constructor() {
     // Name of the component
-    super('Module Trigger Out')
+    super('Trigger Out')
     this.contextMenuName = 'Trigger Out'
 
     this.task = {

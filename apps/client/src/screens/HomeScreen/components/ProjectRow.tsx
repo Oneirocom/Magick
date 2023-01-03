@@ -1,7 +1,5 @@
-import { CSSProperties } from 'react'
-
 import { Spell } from '@thothai/core'
-
+import { CSSProperties } from 'react'
 import Icon from '../../../components/Icon/Icon'
 import css from '../homeScreen.module.css'
 

@@ -1,6 +1,6 @@
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { stringSocket, triggerSocket } from '../../sockets'

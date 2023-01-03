@@ -1,4 +1,4 @@
-import { IRunContextEditor, ThothNode } from '../../types'
+import { IRunContextEditor, ThothNode } from '../../../types'
 
 function install(editor: IRunContextEditor) {
   editor.bind('delete')
@@ -10,9 +10,10 @@ function install(editor: IRunContextEditor) {
     currentNode = node
   })
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   editor.on('delete', () => {
     if (!currentNode) return
-    if (currentNode.data.nodeLocked) return
     editor.removeNode(currentNode)
   })
 }

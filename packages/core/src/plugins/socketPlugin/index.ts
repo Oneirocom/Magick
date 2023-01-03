@@ -1,5 +1,6 @@
 import io from 'socket.io'
-import { IRunContextEditor, ThothComponent } from '../../types'
+
+import { IRunContextEditor } from '../../../types'
 
 function install(
   editor: IRunContextEditor,
@@ -12,7 +13,7 @@ function install(
 ) {
   const subscriptionMap = new Map()
 
-  editor.on('componentregister', (component: ThothComponent<unknown>) => {
+  editor.on('componentregister', (component: any) => {
     const worker = component.worker
 
     component.worker = async (node, inputs, outputs, context, ...args) => {

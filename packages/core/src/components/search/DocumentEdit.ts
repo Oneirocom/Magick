@@ -1,3 +1,5 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable require-await */
@@ -5,7 +7,13 @@
 import axios from 'axios'
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import {
+  EngineContext,
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+} from '../../../types'
 import {
   triggerSocket,
   stringSocket,
@@ -59,7 +67,11 @@ export class DocumentEdit extends ThothComponent<void> {
       .addOutput(dataOutput)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(
+    node: NodeData,
+    inputs: ThothWorkerInputs,
+    { silent }: { silent: boolean }
+  ) {
     const documentId = inputs['documentId'][0]
     const storeId = inputs['storeId'][0]
     const keywords = inputs['keywords'] ? (inputs['keywords'][0] as string) : ''
@@ -69,7 +81,7 @@ export class DocumentEdit extends ThothComponent<void> {
     const is_included = inputs['isIncluded'][0] as string
     console.log('inputs', inputs)
     const resp = await axios.post(
-      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/update_document`,
+      `${process.env.REACT_APP_SEARCH_SERVER_URL}/update_document`,
       {
         documentId,
         keywords,
@@ -78,6 +90,6 @@ export class DocumentEdit extends ThothComponent<void> {
         storeId,
       }
     )
-    node.display(resp.data)
+    if (!silent) node.display(resp.data)
   }
 }

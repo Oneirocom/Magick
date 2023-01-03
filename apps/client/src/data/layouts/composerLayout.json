@@ -1,6 +1,7 @@
 {
   "global": {
-    "tabSetTabStripHeight": 24
+    "tabSetTabStripHeight": 24,
+    "splitterSize": 4
   },
   "layout": {
     "type": "row",
@@ -87,7 +88,7 @@
               {
                 "type": "tab",
                 "id": "#12",
-                "name": "Ent Manager",
+                "name": "Agent Manager",
                 "component": "entityManager"
               }
             ]
@@ -102,6 +103,12 @@
                 "id": "#22",
                 "name": "Playtest",
                 "component": "playtest"
+              },
+              {
+                "type": "tab",
+                "id": "#418",
+                "name": "Avatar",
+                "component": "avatar"
               }
             ]
           }

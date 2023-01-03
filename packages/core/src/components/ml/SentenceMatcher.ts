@@ -7,11 +7,12 @@ import Rete from 'rete'
 import similarity from 'similarity'
 
 import {
+  EngineContext,
   NodeData,
   ThothNode,
   ThothWorkerInputs,
   ThothWorkerOutputs,
-} from '../../types'
+} from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket, stringSocket, triggerSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
@@ -63,7 +64,6 @@ export class SentenceMatcher extends ThothComponent<Promise<InputReturn>> {
   async worker(
     node: NodeData,
     inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
     { silent }: { silent: boolean }
   ) {
     const sourceSentence = (inputs['source'][0] ?? inputs['source']) as string

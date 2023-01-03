@@ -1,5 +1,3 @@
-//@ts-nocheck
-
 import io from 'socket.io'
 
 import {
@@ -7,12 +5,11 @@ import {
   GraphData,
   ModuleComponent,
   Spell as SpellType,
-} from '../types'
+} from '../../types'
 import { getComponents } from '../components'
-import { initSharedEngine, ThothEngine } from '../engine'
-import { extractNodes } from '../utils/chainHelpers'
+import { extractNodes, initSharedEngine, ThothEngine } from '../engine'
 import { Module } from '../plugins/modulePlugin/module'
-import { extractModuleInputKeys } from '../utils/chainHelpers'
+import { extractModuleInputKeys } from './graphHelpers'
 
 type RunSpellConstructor = {
   thothInterface: EngineContext
@@ -161,14 +158,14 @@ class SpellRunner {
   /**
    * Runs engine process to load the spell into the engine.
    */
-  private async _process() {
-    await this.engine.abort()
-    await this.engine.process(
-      this.currentSpell.graph as GraphData,
-      null,
-      this.context
-    )
-  }
+  // private async _process() {
+  //   await this.engine.abort()
+  //   await this.engine.process(
+  //     this.currentSpell.graph as GraphData,
+  //     null,
+  //     this.context
+  //   )
+  // }
 
   /**
    * Loads a spell into the spell runner.
@@ -189,7 +186,7 @@ class SpellRunner {
   async runComponent(
     inputs: Record<string, any>,
     componentName: string,
-    runSubspell: boolean = false
+    runSubspell = false
   ) {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
@@ -220,8 +217,8 @@ class SpellRunner {
   /**
    * temporary function to be backwards compatible with current use of run spell
    */
-  async defaultRun(inputs: Record<string, any>, runSubspell: boolean = false) {
-    return this.runComponent(inputs, 'Module Trigger In', runSubspell)
+  async defaultRun(inputs: Record<string, any>, runSubspell = false) {
+    return await this.runComponent(inputs, 'Trigger In', runSubspell)
   }
 }
 

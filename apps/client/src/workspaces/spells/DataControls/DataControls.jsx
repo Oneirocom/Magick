@@ -1,26 +1,23 @@
-import { SimpleAccordion } from '../../../components/Accordion'
+import Box from '@mui/material/Box'
 import CodeControl from './CodeControl'
-import css from '../../components/windowMessage.module.css'
-import EnkiSelect from './EnkiSelect'
+import css from './datacontrols.module.css'
 import Info from './Info'
 import Input from './Input'
 import InputGenerator from './InputGenerator'
 import LongText from './LongTextControl'
 import OutputGenerator from './OutputGenerator'
 import DropdownSelect from './DropdownSelect'
-import ModelSelect from './ModelSelect'
 import SocketGenerator from './SocketGenerator'
+import MultiSocketGenerator from './MultiSocketGenerator'
 import PlaytestControl from './PlaytestControl'
 import SwitchControl from './SwitchControl'
 import SpellSelect from './SpellSelect'
-import WysiwygControl from './WysiwygControl'
 
 const StubComponent = props => <div>{props.name}</div>
 
 const controlMap = {
   code: CodeControl,
   dial: StubComponent,
-  enkiSelect: EnkiSelect,
   info: Info,
   input: Input,
   inputGenerator: InputGenerator,
@@ -28,17 +25,15 @@ const controlMap = {
   spellSelect: SpellSelect,
   outputGenerator: OutputGenerator,
   slider: StubComponent,
+  multiSocketGenerator: MultiSocketGenerator,
   socketGenerator: SocketGenerator,
   playtest: PlaytestControl,
   switch: SwitchControl,
   dropdownSelect: DropdownSelect,
-  modelSelect: ModelSelect,
-  wysiwygControl: WysiwygControl,
 }
 
 const DataControls = ({
   dataControls,
-  // wysiwygControls,
   updateData,
   updateControl,
   width,
@@ -64,7 +59,7 @@ const DataControls = ({
           nodeId,
           width,
           control,
-          name: inspectorData.name,
+          name: inspectorData.name + ' (' + key + ')',
           initialValue: data[control.dataKey] || '',
           updateData,
           tab,
@@ -74,24 +69,21 @@ const DataControls = ({
 
         if (!Component) return null
 
-        const setExpanded = state => {
-          control.expanded = state
-          updateControl({ [control.dataKey]: control })
-        }
-
         if (control.component === 'info' && !control?.data?.info) return null
 
         return (
-          <SimpleAccordion
-            heading={control.name || key}
-            defaultExpanded={true}
-            expanded={control.expanded}
-            setExpanded={setExpanded}
-            key={key}
-            icon={control.icon}
+          <Box
+            key={control.name + nodeId + key}
+            sx={{
+              padding: '15px',
+              borderRadius: '5px',
+            }}
           >
-            <Component {...controlProps} />
-          </SimpleAccordion>
+            <p style={{ margin: 0, marginBottom: '10px' }}>
+              {control.name || key}
+            </p>
+            <Component key={nodeId + control.name} {...controlProps} />
+          </Box>
         )
       })}
     </>

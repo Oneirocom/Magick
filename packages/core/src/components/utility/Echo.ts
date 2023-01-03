@@ -1,6 +1,11 @@
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import {
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+} from '../../../types'
 import { triggerSocket, stringSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
 
@@ -39,9 +44,15 @@ export class Echo extends ThothComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(_node: NodeData, inputs: ThothWorkerInputs) {
+  // eslint-disable-next-line @typescript-eslint/require-await, require-await
+  async worker(
+    node: NodeData,
+    inputs: ThothWorkerInputs,
+    _outputs: ThothWorkerOutputs,
+    { silent }: { silent: boolean }
+  ) {
     const input = inputs.string[0] as string
-
+    if (!silent) node.display(input as string)
     return {
       output: input,
     }

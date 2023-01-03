@@ -20,7 +20,6 @@ export type Handler = (ctx: Koa.Context) => any
 export type Route = {
   method?: Method
   path: string
-  access: string | string[] | Middleware
   middleware?: Middleware[]
   handler?: Handler
   get?: Handler

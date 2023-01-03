@@ -1,8 +1,7 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
-
-import { usePubSub } from '../../../../contexts/PubSubProvider'
+import axios from 'axios'
 import EventTable from './EventTable'
+import { usePubSub } from '../../../../contexts/PubSubProvider'
 
 const EventManagerWindow = ({ tab }) => {
   const [events, setEvents] = useState(null)
@@ -23,7 +22,7 @@ const EventManagerWindow = ({ tab }) => {
 
   const fetchEvents = async () => {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_APP_API_ROOT_URL}/events`
+      `${process.env.REACT_APP_API_ROOT_URL}/events`
     )
     setEvents(data)
   }

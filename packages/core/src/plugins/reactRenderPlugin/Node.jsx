@@ -1,9 +1,10 @@
 /* eslint-disable sort-imports */
 /* eslint-disable react/prop-types */
 import React from 'react'
-import { kebab } from './utils'
+
 import { Control } from './Control'
 import { Socket } from './Socket'
+import { kebab } from './utils'
 import './styles.css'
 
 export class Node extends React.Component {

@@ -1,3 +1,5 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 /* eslint-disable no-console */
 /* eslint-disable require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -11,7 +13,7 @@ import {
   ThothNode,
   ThothWorkerInputs,
   ThothWorkerOutputs,
-} from '../../types'
+} from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, agentSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
@@ -74,7 +76,6 @@ export class EventStore extends ThothComponent<Promise<void>> {
     { silent, thoth }: { silent: boolean; thoth: EngineContext }
   ) {
     const { storeEvent } = thoth
-    console.log('store event function:', storeEvent, thoth.getEvent, thoth)
     const agent = inputs['agent'][0] as Agent
     const primary = ((inputs['primary'] && inputs['primary'][0]) ||
       inputs['primary']) as string
@@ -99,6 +100,7 @@ export class EventStore extends ThothComponent<Promise<void>> {
         type,
         agent: agent.agent,
         speaker,
+        sender: speaker,
         text: primary,
         client,
         channel,
@@ -109,7 +111,8 @@ export class EventStore extends ThothComponent<Promise<void>> {
       respAgent = await storeEvent({
         type,
         agent: agent.agent,
-        speaker: agent.agent,
+        speaker,
+        sender: agent.agent,
         text: secondary,
         client,
         channel,
@@ -118,6 +121,6 @@ export class EventStore extends ThothComponent<Promise<void>> {
     if (!silent) node.display(respUser?.data + '|' + respAgent?.data)
 
     // If we are on the client, we want to refresh the event table UI
-    if (this?.editor?.refreshEventTable) this.editor.refreshEventTable()
+    // if (this?.editor?.refreshEventTable) this.editor.refreshEventTable()
   }
 }

@@ -1,13 +1,20 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios'
 import Rete from 'rete'
-//@ts-ignore
 import xmldoc from 'xmldoc'
 
-import { NodeData, ThothNode } from '../../types'
+import {
+  EngineContext,
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+} from '../../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, arraySocket } from '../../sockets'
@@ -42,15 +49,15 @@ export class RSSGet extends ThothComponent<Promise<WorkerReturn>> {
     const output = new Rete.Output('output', 'Output', arraySocket)
 
     const feedUrl = new InputControl({
-      dataKey: 'feed_url',
+      dataKey: 'feedUrl',
       name: 'Feed URL',
     })
     const toDocument = new BooleanControl({
-      dataKey: 'to_document',
+      dataKey: 'toDocument',
       name: 'To Document',
     })
     const fetchWay = new BooleanControl({
-      dataKey: 'fetch_way',
+      dataKey: 'fetchWay',
       name: 'Fetch Way',
     })
 
@@ -60,23 +67,24 @@ export class RSSGet extends ThothComponent<Promise<WorkerReturn>> {
   }
 
   async worker(node: NodeData) {
-    const feed_url = node?.data?.feed_url as string
-    const to_document = node?.data?.to_document
-    const fetch_way = node?.data?.fetch_way as string
+    const feedUrl = node?.data?.feedUrl as string
+    const toDocument = node?.data?.toDocument
+    const fetchWay = node?.data?.fetchWay as string
 
-    if (feed_url === undefined || !feed_url || feed_url?.length <= 0) {
+    if (feedUrl === undefined || !feedUrl || feedUrl?.length <= 0) {
       return {
         output: [],
       }
     }
 
-    const url = feed_url.split('|')
+    const url = feedUrl.split('|')
     let urls: any[] = []
 
     if (url.length === 1) {
       urls.push(url[0])
     } else {
-      if (fetch_way === 'random' || fetch_way === 'rnd') {
+      // eslint-disable-next-line camelcase
+      if (fetchWay === 'random' || fetchWay === 'rnd') {
         urls.push(url[Math.floor(Math.random() * url.length)])
       } else {
         urls = url
@@ -88,9 +96,7 @@ export class RSSGet extends ThothComponent<Promise<WorkerReturn>> {
       try {
         resp = await axios.get(urls[i])
       } catch (e) {
-        resp = await axios.get(
-          import.meta.env.VITE_APP_CORS_URL + '/' + urls[i]
-        )
+        resp = await axios.get(process.env.REACT_APP_CORS_URL + '/' + urls[i])
       }
 
       if (
@@ -104,7 +110,8 @@ export class RSSGet extends ThothComponent<Promise<WorkerReturn>> {
       }
 
       if (isJson(resp.data)) {
-        if (to_document === true || to_document === 'true') {
+        // eslint-disable-next-line camelcase
+        if (toDocument === true || toDocument === 'true') {
           for (let i = 0; i < resp.data.items.length; i++) {
             const object = {
               title: resp.data.items[i].title,

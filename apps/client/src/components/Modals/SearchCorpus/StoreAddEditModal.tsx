@@ -1,3 +1,5 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 //@ts-nocheck
 import { useState } from 'react'
 import Modal from '../../Modal/Modal'
@@ -24,7 +26,7 @@ const StoreAddEditModal = ({
         } else {
           setError('')
           await axios.post(
-            `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document-store`,
+            `${process.env.REACT_APP_SEARCH_SERVER_URL}/document-store`,
             body
           )
           enqueueSnackbar('Document store created', { variant: 'success' })
@@ -42,7 +44,7 @@ const StoreAddEditModal = ({
         } else {
           setError('')
           await axios.put(
-            `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document-store`,
+            `${process.env.REACT_APP_SEARCH_SERVER_URL}/document-store`,
             body
           )
           enqueueSnackbar('Document store updated', { variant: 'success' })

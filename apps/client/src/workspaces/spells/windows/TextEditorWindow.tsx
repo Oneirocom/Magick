@@ -1,29 +1,27 @@
-import '../../../screens/Thoth/thoth.module.css'
-
-import { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
-
 import Editor from '@monaco-editor/react'
+import { useState, useEffect, useRef } from 'react'
 
 import Window from '../../../components/Window/Window'
-import { RootState } from '../../../state/store'
+import WindowMessage from '../../components/WindowMessage'
+
+import '../../../screens/Thoth/thoth.module.css'
 import {
   TextEditorData,
   useInspector,
 } from '../../../workspaces/contexts/InspectorProvider'
-import WindowMessage from '../../components/WindowMessage'
+import { RootState } from '../../../state/store'
+import { useSelector } from 'react-redux'
 
 const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)
   const [data, setData] = useState<TextEditorData | null>(null)
   // const [height, setHeight] = useState<number>()
   const [editorOptions, setEditorOptions] = useState<Record<string, any>>()
-  const [typing, setTyping] = useState<boolean>(false)
   const [language, setLanguage] = useState<string | undefined>(undefined)
   const codeRef = useRef<string>()
   const preferences = useSelector((state: RootState) => state.preferences)
 
-  const { textEditorData, saveTextEditor } = useInspector()
+  const { textEditorData, saveTextEditor, inspectorData } = useInspector()
 
   // const bottomHeight = 50
   const handleEditorWillMount = monaco => {
@@ -47,7 +45,7 @@ const TextEditor = props => {
         preview: language === 'javascript',
       },
       wordWrap: 'bounded',
-      fontSize: 14,
+
       // fontFamily: '"IBM Plex Mono", sans-serif !important',
     }
 
@@ -58,24 +56,11 @@ const TextEditor = props => {
     if (!textEditorData) return
     setData(textEditorData)
     setCode(textEditorData.data as string)
-    setTyping(false)
 
     if (textEditorData?.options?.language) {
       setLanguage(textEditorData.options.language)
     }
   }, [textEditorData])
-
-  // debounce for delayed save
-  useEffect(() => {
-    if (!typing) return
-    if (!preferences.autoSave) return
-    const delayDebounceFn = setTimeout(() => {
-      save(code)
-      setTyping(false)
-    }, 2500)
-
-    return () => clearTimeout(delayDebounceFn)
-  }, [code])
 
   const save = code => {
     const update = {
@@ -98,7 +83,6 @@ const TextEditor = props => {
       data: code,
     }
     setData(update)
-    setTyping(true)
   }
 
   const setCode = update => {
@@ -119,7 +103,7 @@ const TextEditor = props => {
     return <WindowMessage content="Component has no editable text" />
 
   return (
-    <Window toolbar={toolbar}>
+    <Window key={inspectorData?.nodeId} toolbar={toolbar}>
       <Editor
         theme="sds-dark"
         // height={height} // This seemed to have been causing issues.

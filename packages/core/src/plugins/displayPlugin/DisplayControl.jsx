@@ -1,7 +1,11 @@
 import React from 'react'
 import { Control } from 'rete'
 const ReactTextInputControl = props => {
-  return <p style={{ width: 200, wordBreak:'break-all' }}>Result: {props.display}</p>
+  return (
+    <p style={{ width: 200, wordBreak: 'break-all' }}>
+      Result: {props.display}
+    </p>
+  )
 }
 
 export class DisplayControl extends Control {

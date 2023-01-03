@@ -1,4 +1,4 @@
-import { Spell } from '../src/types'
+import { Spell } from '../types'
 export default {
   id: '801b7a36-9468-402a-8ecd-aed4038dfcd5',
   name: 'whole amethyst',

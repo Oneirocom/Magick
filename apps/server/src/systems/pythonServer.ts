@@ -4,7 +4,7 @@ import path from 'path'
 import os from 'os'
 
 export default async function spawnPythonServer() {
-  const _path = path.resolve(__dirname, '../../../pyserver') + '/main.py'
+  const _path = path.resolve(__dirname, './pyserver') + '/main.py'
   if (!fs.existsSync(_path)) {
     console.error('Python server not found!')
     return

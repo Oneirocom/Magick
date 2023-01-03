@@ -1,12 +1,22 @@
 import io from 'socket.io'
 import Rete, { Engine } from 'rete'
 
-import { SocketPlugin, DebuggerPlugin, ModulePlugin, TaskPlugin, GraphData, ModuleType, NodeData, ThothWorkerInputs } from '@thothai/core'
+import {
+  SocketPlugin,
+  DebuggerPlugin,
+  ModulePlugin,
+  TaskPlugin,
+  GraphData,
+  ModuleType,
+  NodeData,
+  ThothWorkerInputs,
+  extractNodes,
+  Task,
+} from '@thothai/core'
 // import SocketPlugin from '@thothai/corea/socketPlugin'
 // import debuggerPlugin from '@thothai/corea/debuggerPlugin'
 // import ModulePlugin from '@thothai/corea/modulePlugin'
 // import TaskPlugin, { Task } from '@thothai/corea/taskPlugin'
-import { extractNodes } from './utils/chainHelpers'
 
 interface WorkerOutputs {
   [key: string]: unknown

@@ -1,83 +1,36 @@
-//@ts-nocheck
-
-import { useAuth } from '../../../contexts/AuthProvider'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
-import {
-  adjectives,
-  colors,
-  uniqueNamesGenerator,
-} from 'unique-names-generator'
 
-function isJson(str) {
-  try {
-    JSON.parse(str)
-  } catch (e) {
-    return false
-  }
-  return true
-}
-
-function capitalizeFirstLetter(word) {
-  if (!word || word === undefined) word = ''
-  return word.charAt(0).toUpperCase() + word.slice(1)
-}
-
-const EntityWindow = ({ id, updateCallback, greetings }) => {
-  const { user } = useAuth()
+const EntityWindow = ({ id, updateCallback }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [loaded, setLoaded] = useState(false)
 
   const [enabled, setEnabled] = useState(false)
+  const [openai_api_key, setOpenaiApiKey] = useState('')
+  const [eth_private_key, setEthPrivateKey] = useState('')
+  const [eth_public_address, setEthPublicAddress] = useState('')
+
   const [discord_enabled, setDiscordEnabled] = useState(false)
   const [discord_api_key, setDiscordApiKey] = useState('')
 
   const [use_voice, setUseVoice] = useState(false)
-  const [voice_provider, setVoiceProvider] = useState(false)
+  const [voice_provider, setVoiceProvider] = useState<string | null>(null)
   const [voice_character, setVoiceCharacter] = useState('')
   const [voice_language_code, setVoiceLanguageCode] = useState('')
   const [voice_default_phrases, setVoiceDefaultPhrases] = useState('')
   const [tiktalknet_url, setTikTalkNetUrl] = useState('')
 
-  const [use_custom_commands, setUseCustomCommands] = useState(false)
-  const [custom_command_starter, setCustomCommandStarter] = useState('')
-  const [custom_commands, setCustomCommands] = useState([])
-  const [cusotm_commands_updated, setCustomCommandsUpdated] = useState(false)
-
   const [discord_starting_words, setDiscordStartingWords] = useState('')
   const [discord_bot_name_regex, setDiscordBotNameRegex] = useState('')
   const [discord_bot_name, setDiscordBotName] = useState('')
   const [discord_empty_responses, setDiscordEmptyResponses] = useState('')
-  const [discord_greeting_id, setDiscordGreetingId] = useState(0)
-  const [discord_echo_slack, setDiscordEchoSlack] = useState(false)
-  const [discord_echo_format, setDiscordEchoFormat] = useState('')
 
   const [discord_spell_handler_incoming, setDiscordSpellHandlerIncoming] =
     useState('')
   const [discord_spell_handler_update, setDiscordSpellHandlerUpdate] =
     useState('')
-  const [discord_spell_handler_feed, setDiscordSpellHandlerFeed] = useState('')
-  const [discord_spell_handler_metadata, setDiscordSpellHandlerMetadata] =
-    useState('')
-  const [
-    discord_spell_handler_slash_command,
-    setDiscordSpellHandlerSlashCommand,
-  ] = useState('')
-
-  const [xrengine_spell_handler_incoming, setXREngineSpellHandlerIncoming] =
-    useState('')
-  const [xrengine_spell_handler_update, setXREngineSpellHandlerUpdate] =
-    useState('')
-  const [xrengine_spell_handler_feed, setXREngineSpellHandlerFeed] =
-    useState('')
-  const [xrengine_enabled, setxrengine_enabled] = useState(false)
-  const [xrengine_url, setXREngineUrl] = useState('')
-  const [xrengine_bot_name, setXREngineBotName] = useState('')
-  const [xrengine_bot_name_regex, setXREngineBotNameRegex] = useState('')
-  const [xrengine_starting_words, setXREngineStartingWords] = useState('')
-  const [xrengine_empty_responses, setXREngineEmptyResponses] = useState('')
 
   const [twitter_client_enable, setTwitterClientEnable] = useState(false)
   const [twitter_token, setTwitterToken] = useState('')
@@ -99,13 +52,13 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
     useState('')
   const [twitter_spell_handler_auto, setTwitterSpellHandlerAuto] = useState('')
 
-  const [telegram_enabled, setTelegramEnabled] = useState('')
+  const [telegram_enabled, setTelegramEnabled] = useState(false)
   const [telegram_bot_token, setTelegramBotToken] = useState('')
   const [telegram_bot_name, setTelegramBotName] = useState('')
   const [telegram_spell_handler_incoming, setTelegramSpellHandlerIncoming] =
     useState('')
 
-  const [reddit_enabled, setRedditEnabled] = useState('')
+  const [reddit_enabled, setRedditEnabled] = useState(false)
   const [reddit_app_id, setRedditAppId] = useState('')
   const [reddit_app_secret_id, setRedditAppSecretId] = useState('')
   const [reddit_oauth_token, setRedditOauthToken] = useState('')
@@ -114,7 +67,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
   const [reddit_spell_handler_incoming, setRedditSpellHandlerIncoming] =
     useState('')
 
-  const [zoom_enabled, setZoomEnabled] = useState('')
+  const [zoom_enabled, setZoomEnabled] = useState(false)
   const [zoom_invitation_link, setZoomInvitationLink] = useState('')
   const [zoom_password, setZoomPassword] = useState('')
   const [zoom_bot_name, setZoomBotName] = useState('')
@@ -122,21 +75,6 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
     useState('')
 
   const [playingAudio, setPlayingAudio] = useState(false)
-
-  const [loop_enabled, setLoopEnabled] = useState(false)
-  const [loop_interval, setLoopInterval] = useState('')
-  const [loop_agent_name, setLoopAgentName] = useState('')
-  const [loop_spell_handler, setLoopSpellHandler] = useState('')
-
-  const [slack_enabled, setSlackEnabled] = useState(false)
-  const [slack_token, setSlackToken] = useState('')
-  const [slack_signing_secret, setSlackSigningSecret] = useState('')
-  const [slack_bot_token, setSlackBotToken] = useState('')
-  const [slack_bot_name, setSlackBotName] = useState('')
-  const [slack_port, setSlackPort] = useState('')
-  const [slack_echo_channel, setSlackEchoChannel] = useState('')
-  const [slack_spell_handler_incoming, setSlackSpellHandlerIncoming] =
-    useState('')
 
   const [instagram_enabled, setInstagramEnabled] = useState(false)
   const [instagram_username, setInstagramUsername] = useState('')
@@ -146,7 +84,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
   const [instagram_spell_handler_incoming, setInstagramSpellHandlerIncoming] =
     useState('')
 
-  const [messenger_enabled, setMessengerEnabled] = useState('')
+  const [messenger_enabled, setMessengerEnabled] = useState(false)
   const [messenger_page_access_token, setMessengerPageAccessToken] =
     useState('')
   const [messenger_verify_token, setMessengerVerifyToken] = useState('')
@@ -164,17 +102,28 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
   const [twilio_spell_handler_incoming, setTwilioSpellHandlerIncoming] =
     useState('')
 
+  const [slack_enabled, setSlackEnabled] = useState(false)
+  const [slack_token, setSlackToken] = useState('')
+  const [slack_signing_secret, setSlackSigningSecret] = useState('')
+  const [slack_bot_token, setSlackBotToken] = useState('')
+  const [slack_bot_name, setSlackBotName] = useState('')
+  const [slack_port, setSlackPort] = useState('')
+  const [slack_spell_handler_incoming, setSlackSpellHandlerIncoming] =
+    useState('')
+
+  const [loop_enabled, setLoopEnabled] = useState(false)
+  const [loop_interval, setLoopInterval] = useState('')
+  const [loop_agent_name, setLoopAgentName] = useState('')
+  const [loop_spell_handler, setLoopSpellHandler] = useState('')
+
   const testVoice = async () => {
-    if (
-      (voice_provider && voice_character && voice_language_code) ||
-      playingAudio
-    ) {
+    if ((voice_provider && voice_character) || playingAudio) {
       if (voice_provider === 'tiktalknet' && tiktalknet_url?.length <= 0) {
         return
       }
 
       const resp = await axios.get(
-        `${import.meta.env.VITE_APP_API_URL}/text_to_speech`,
+        `${process.env.REACT_APP_API_URL}/text_to_speech`,
         {
           params: {
             text: 'Hello there! How are you?',
@@ -188,7 +137,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
 
       const url =
         voice_provider === 'google' || voice_provider === 'tiktalknet'
-          ? import.meta.env.VITE_APP_SEARCH_FILE_URL + '/' + resp.data
+          ? process.env.REACT_APP_FILE_SERVER_URL + '/' + resp.data
           : resp.data
       if (url && url.length > 0) {
         setPlayingAudio(true)
@@ -209,25 +158,13 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
     }
   }
 
-  const getNextCustomCommandId = () => {
-    let index = 0
-    for (let i = 0; i < custom_commands.length; i++) {
-      if (custom_commands[i].id === index) {
-        index++
-      }
-    }
-
-    return index
-  }
-
-  const [spellList, setSpellList] = useState('')
+  const [spellList, setSpellList] = useState<any[]>([])
   useEffect(() => {
     if (!loaded) {
       ;(async () => {
         const res = await axios.get(
-          `${import.meta.env.VITE_APP_API_ROOT_URL}/entity?instanceId=` + id
+          `${process.env.REACT_APP_API_ROOT_URL}/entity?instanceId=` + id
         )
-        console.log('res is', res.data)
         setEnabled(res.data.enabled === true)
         setDiscordEnabled(res.data.discord_enabled === true)
         setUseVoice(res.data.use_voice === true)
@@ -235,39 +172,19 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
         setVoiceCharacter(res.data.voice_character)
         setVoiceLanguageCode(res.data.voice_language_code)
         setVoiceDefaultPhrases(res.data.voice_default_phrases)
-        setUseCustomCommands(res.data.use_custom_commands === true)
-        setCustomCommandStarter(res.data.custom_command_starter)
-        setCustomCommands(
-          res.data.custom_commands ? JSON.parse(res.data.custom_commands) : []
-        )
         setTikTalkNetUrl(res.data.tiktalknet_url)
 
+        setOpenaiApiKey(res.data.openai_api_key)
         setDiscordApiKey(res.data.discord_api_key)
         setDiscordStartingWords(res.data.discord_starting_words)
         setDiscordBotNameRegex(res.data.discord_bot_name_regex)
         setDiscordBotName(res.data.discord_bot_name)
         setDiscordEmptyResponses(res.data.discord_empty_responses)
-        setDiscordGreetingId(res.data.discord_greeting_id)
-        setDiscordEchoSlack(res.data.discord_echo_slack === true)
-        setDiscordEchoFormat(res.data.discord_echo_format)
         setDiscordSpellHandlerIncoming(res.data.discord_spell_handler_incoming)
         setDiscordSpellHandlerUpdate(res.data.discord_spell_handler_update)
-        setDiscordSpellHandlerMetadata(res.data.discord_spell_handler_metadata)
-        setDiscordSpellHandlerSlashCommand(
-          res.data.discord_spell_handler_slash_command
-        )
 
-        setxrengine_enabled(res.data.xrengine_enabled === true)
-        setXREngineUrl(res.data.xrengine_url)
-        setXREngineSpellHandlerIncoming(
-          res.data.xrengine_spell_handler_incoming
-        )
-        setXREngineSpellHandlerUpdate(res.data.xrengine_spell_handler_update)
-        setXREngineSpellHandlerFeed(res.data.xrengine_spell_handler_feed)
-        setXREngineBotName(res.data.xrengine_bot_name)
-        setXREngineBotNameRegex(res.data.xrengine_bot_name_regex)
-        setXREngineStartingWords(res.data.xrengine_starting_words)
-        setXREngineEmptyResponses(res.data.xrengine_empty_responses)
+        setEthPrivateKey(res.data.eth_private_key)
+        setEthPublicAddress(res.data.eth_public_address)
 
         setTwitterClientEnable(res.data.twitter_client_enable === true)
         setTwitterToken(res.data.twitter_token)
@@ -317,10 +234,9 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
         setSlackSigningSecret(res.data.slack_signing_secret)
         setSlackBotName(res.data.slack_bot_name)
         setSlackPort(res.data.slack_port)
-        setSlackEchoChannel(res.data.slack_echo_channel)
         setSlackSpellHandlerIncoming(res.data.slack_spell_handler_incoming)
 
-        setInstagramEnabled(res.data.instagram_enabled)
+        setInstagramEnabled(res.data.instagram_enabled === true)
         setInstagramUsername(res.data.instagram_username)
         setInstagramPassword(res.data.instagram_password)
         setInstagramBotName(res.data.instagram_bot_name)
@@ -329,7 +245,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
           res.data.instagram_spell_handler_incoming
         )
 
-        setMessengerEnabled(res.data.messenger_enabled)
+        setMessengerEnabled(res.data.messenger_enabled === true)
         setMessengerPageAccessToken(res.data.messenger_page_access_token)
         setMessengerVerifyToken(res.data.messenger_verify_token)
         setMessengerBotName(res.data.messenger_bot_name)
@@ -354,9 +270,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
   useEffect(() => {
     ;(async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_APP_API_ROOT_URL}/game/spells?userId=${
-          user?.id
-        }`
+        `${process.env.REACT_APP_API_ROOT_URL}/spells`
       )
       setSpellList(res.data)
     })()
@@ -364,7 +278,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
 
   const _delete = () => {
     axios
-      .delete(`${import.meta.env.VITE_APP_API_ROOT_URL}/entity/` + id)
+      .delete(`${process.env.REACT_APP_API_ROOT_URL}/entity/` + id)
       .then(res => {
         console.log('deleted', res)
         if (res.data === 'internal error') {
@@ -391,36 +305,22 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
     const _data = {
       enabled,
       discord_enabled,
+      openai_api_key,
+      eth_private_key,
+      eth_public_address,
       discord_api_key,
       discord_starting_words,
       discord_bot_name_regex,
       discord_bot_name,
       discord_empty_responses,
-      discord_greeting_id,
-      discord_echo_slack,
-      discord_echo_format,
       discord_spell_handler_incoming,
       discord_spell_handler_update,
-      discord_spell_handler_metadata,
-      discord_spell_handler_slash_command,
       use_voice,
       voice_provider,
       voice_character,
       voice_language_code,
       voice_default_phrases,
-      use_custom_commands,
-      custom_command_starter,
-      custom_commands: JSON.stringify(custom_commands),
       tiktalknet_url,
-      xrengine_enabled,
-      xrengine_url,
-      xrengine_spell_handler_incoming,
-      xrengine_spell_handler_update,
-      xrengine_spell_handler_feed,
-      xrengine_bot_name,
-      xrengine_bot_name_regex,
-      xrengine_starting_words,
-      xrengine_empty_responses,
       twitter_client_enable,
       twitter_token,
       twitter_id,
@@ -462,7 +362,6 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
       slack_bot_token,
       slack_bot_name,
       slack_port,
-      slack_echo_channel,
       slack_spell_handler_incoming,
       instagram_enabled,
       instagram_username,
@@ -485,7 +384,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
       twilio_spell_handler_incoming,
     }
     axios
-      .post(`${import.meta.env.VITE_APP_API_ROOT_URL}/entity`, {
+      .post(`${process.env.REACT_APP_API_ROOT_URL}/entity`, {
         id,
         data: _data,
       })
@@ -501,49 +400,22 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
           console.log('response on update', JSON.parse(res.config.data).data)
           let responseData = res && JSON.parse(res?.config?.data).data
           console.log(responseData, 'responseDataresponseData')
-          setUseCustomCommands(responseData.use_custom_commands)
-          setCustomCommandStarter(responseData.custom_command_starter)
-          setCustomCommands(
-            responseData.custom_commands
-              ? JSON.parse(responseData.custom_commands)
-              : []
-          )
 
           setEnabled(responseData.enabled)
           setDiscordEnabled(responseData.discord_enabled)
+          setOpenaiApiKey(responseData.openai_api_key)
           setDiscordApiKey(responseData.discord_api_key)
           setDiscordStartingWords(responseData.discord_starting_words)
           setDiscordBotNameRegex(responseData.discord_bot_name_regex)
           setDiscordBotName(responseData.discord_bot_name)
           setDiscordEmptyResponses(responseData.discord_empty_responses)
-          setDiscordGreetingId(responseData.discord_greeting_id)
-          setDiscordEchoSlack(responseData.discord_echo_slack)
-          setDiscordEchoFormat(responseData.discord_echo_format)
           setDiscordSpellHandlerIncoming(
             responseData.discord_spell_handler_incoming
           )
           setDiscordSpellHandlerUpdate(
             responseData.discord_spell_handler_update
           )
-          setDiscordSpellHandlerMetadata(
-            responseData.discord_spell_handler_metadata
-          )
-          setDiscordSpellHandlerSlashCommand(
-            responseData.discord_spell_handler_slash_command
-          )
-
-          setXREngineSpellHandlerIncoming(
-            responseData.xrengine_spell_handler_incoming
-          )
-          setXREngineSpellHandlerUpdate(
-            responseData.xrengine_spell_handler_update
-          )
-          setXREngineSpellHandlerFeed(responseData.xrengine_spell_handler_feed)
-          setXREngineBotName(responseData.xrengine_bot_name)
-          setXREngineBotNameRegex(responseData.xrengine_bot_name_regex)
-          setXREngineStartingWords(responseData.xrengine_starting_words)
-          setXREngineEmptyResponses(responseData.xrengine_empty_responses)
-
+          
           setTwitterClientEnable(responseData.twitter_client_enable)
           setTwitterToken(responseData.twitter_token)
           setTwitterId(responseData.twitter_id)
@@ -600,7 +472,6 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
           setSlackBotToken(responseData.slack_bot_token)
           setSlackBotName(responseData.slack_bot_name)
           setSlackPort(responseData.slack_port)
-          setSlackEchoChannel(responseData.slack_echo_channel)
           setSlackSpellHandlerIncoming(
             responseData.slack_spell_handler_incoming
           )
@@ -647,36 +518,20 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
     const _data = {
       enabled,
       discord_enabled,
+      openai_api_key,
       discord_api_key,
       discord_starting_words,
       discord_bot_name_regex,
       discord_bot_name,
       discord_empty_responses,
-      discord_greeting_id,
-      discord_echo_slack,
-      discord_echo_format,
       discord_spell_handler_incoming,
       discord_spell_handler_update,
-      discord_spell_handler_metadata,
-      discord_spell_handler_slash_command,
       use_voice,
       voice_provider,
       voice_character,
       voice_language_code,
-      use_custom_commands,
-      custom_command_starter,
-      custom_commands,
       voice_default_phrases,
       tiktalknet_url,
-      xrengine_enabled,
-      xrengine_url,
-      xrengine_spell_handler_incoming,
-      xrengine_spell_handler_update,
-      xrengine_spell_handler_feed,
-      xrengine_bot_name,
-      xrengine_bot_name_regex,
-      xrengine_starting_words,
-      xrengine_empty_responses,
       twitter_client_enable,
       twitter_token,
       twitter_id,
@@ -718,7 +573,6 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
       slack_bot_token,
       slack_bot_name,
       slack_port,
-      slack_echo_channel,
       slack_spell_handler_incoming,
       instagram_enabled,
       instagram_username,
@@ -740,17 +594,13 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
       twilio_empty_responses,
       twilio_spell_handler_incoming,
     }
-    const fileName = uniqueNamesGenerator({
-      dictionaries: [adjectives, colors],
-      separator: '-',
-      length: 2,
-    })
+    const fileName = discord_bot_name ?? twitter_id ?? twilio_bot_name ?? 'entity'
     const json = JSON.stringify(_data)
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))
     const link = document.createElement('a')
     link.href = url
-    link.setAttribute('download', `${fileName}.thoth`)
+    link.setAttribute('download', `${fileName}.ent.json`)
     // Append to html link element page
     document.body.appendChild(link)
     // Start download
@@ -760,10 +610,78 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
     link.parentNode.removeChild(link)
   }
 
+  function ChatBox({
+    spell_handler,
+    client,
+    channelId,
+    entity,
+    speaker,
+    agent,
+    channel,
+    eth_private_key,
+    eth_public_address
+  }) {
+    const [messages, setMessages] = useState(["Welcome to the room!"]);
+    const [value, setValue] = useState("");
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+      console.log('value is: ', value)
+      try {
+        const url = encodeURI(
+            `https://localhost:8001/spells/${spell_handler}`
+          )
+          console.log('url is: ', url)
+          const response = await axios.post(`${url}`, {
+            inputs: {
+              Input: value,
+              Speaker: speaker,
+              Agent: agent,
+              Client: client,
+              ChannelID: channelId,
+              Entity: entity,
+              Channel: channel,
+              eth_private_key,
+              eth_public_address
+            },
+          }).then((response) => {
+            const data = response.data;
+            
+            // get the output from data
+            const outputs = data.outputs;
+
+            // get the first key from outputs
+            const outputKey = Object.keys(outputs)[0];
+
+            // get the output from outputs
+            const output = outputs[outputKey];
+
+            setMessages([...messages, output]);
+            console.log(response);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    return (
+      <div style={{ width: "80%" }}>
+        {messages.map((message, index) => (
+          <div key={index}>{message}</div>
+        ))}
+  
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="message">Message:</label>
+          <input type="text" name="message" value={value} onChange={(e) => { setValue(e.target.value); }} />
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    );
+  }
+
   return !loaded ? (
     <>Loading...</>
   ) : (
-    <div>
+    <div className="entityWindow">
       <div className="form-item">
         <span className="form-item-label">Enabled</span>
         <input
@@ -774,12 +692,23 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
           }}
         />
       </div>
+      <ChatBox
+        client={'EntityWindow'}
+        spell_handler={discord_spell_handler_incoming}
+        channelId={'EntityWindow'}
+        entity={id}
+        speaker={'Speaker'}
+        agent={'Agent'}
+        channel={'EntityWindow'}
+        eth_private_key={eth_private_key}
+        eth_public_address={eth_public_address}
+      />
       <div className="form-item">
         <span className="form-item-label">Voice Enabled</span>
         <input
           type="checkbox"
-          value={use_voice}
-          defaultChecked={use_voice || use_voice === 'true'}
+          value={use_voice.toString()}
+          defaultChecked={use_voice}
           onChange={e => {
             setUseVoice(e.target.checked)
           }}
@@ -793,13 +722,13 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
             <select
               name="voice_provider"
               id="voice_provider"
-              value={voice_provider}
+              value={voice_provider?.toString()}
               onChange={event => {
                 setVoiceProvider(event.target.value)
                 setVoiceCharacter('')
               }}
             >
-              <option defaultValue hidden></option>
+              <option hidden></option>
               <option value={'google'}>Google</option>
               <option value={'uberduck'}>Uberduck</option>
               <option value={'tiktalknet'}>Tiktalknet</option>
@@ -817,7 +746,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                   setVoiceCharacter(event.target.value)
                 }}
               >
-                <option defaultValue hidden></option>
+                <option hidden></option>
                 <option value={'en-US-Standard-A'}>en-US-Standard-A</option>
                 <option value={'en-US-Standard-B'}>en-US-Standard-B</option>
                 <option value={'en-US-Standard-C'}>en-US-Standard-C</option>
@@ -848,7 +777,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                   setVoiceCharacter(event.target.value)
                 }}
               >
-                <option defaultValue hidden></option>
+                <option hidden></option>
                 <option value={'101-dalmatians-lucky'}>
                   101-dalmatians-lucky
                 </option>
@@ -893,7 +822,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                   setVoiceCharacter(event.target.value)
                 }}
               >
-                <option defaultValue hidden></option>
+                <option hidden></option>
                 <option value={'1_ztAbe5YArCMwyyQ_G9lUiz74ym5xJKC'}>
                   test voice 1
                 </option>
@@ -920,9 +849,8 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                 setVoiceLanguageCode(event.target.value)
               }}
             >
-              <option defaultValue hidden></option>
-              <option value={'en-US'}>en-US</option>
-              <option value={'en-GB'}>en-GB</option>
+              <option value={'en-US'}>none</option>
+              <option value={'en-US'}>en-GB</option>
             </select>
           </div>
 
@@ -962,123 +890,47 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
           </div>
         </React.Fragment>
       )}
-
-      <div className="form-item">
-        <span className="form-item-label">Custom Commands Enabled</span>
-        <input
-          type="checkbox"
-          value={use_voice}
-          defaultChecked={use_custom_commands || use_custom_commands === 'true'}
-          onChange={e => {
-            setUseCustomCommands(e.target.checked)
-          }}
-        />
-      </div>
-      {use_custom_commands && (
-        <React.Fragment>
-          <div className="form-item agent-select">
-            <div className="form-item">
-              <span className="form-item-label">Command Start</span>
-              <input
-                type="text"
-                defaultValue={custom_command_starter}
-                onChange={e => {
-                  setCustomCommandStarter(e.target.value)
-                }}
-              />
-            </div>
-            {custom_commands.map((d, idx) => {
-              return (
-                <div id={idx}>
-                  <div className="form-item">
-                    <span className="form-item-label">Command Name</span>
-                    <input
-                      type="text"
-                      defaultValue={d.command_name}
-                      onChange={e => {
-                        d.command_name = e.target.value
-                      }}
-                    />
-                  </div>
-                  <div className="form-item">
-                    <span className="form-item-label">Command Description</span>
-                    <input
-                      type="text"
-                      defaultValue={d.command_description}
-                      onChange={e => {
-                        d.command_description = e.target.value
-                      }}
-                    />
-                  </div>
-                  <div className="form-item agent-select">
-                    <span className="form-item-label">
-                      Spell Handler (Command Handler)
-                    </span>
-                    <select
-                      name="spellHandlerIncoming"
-                      id="spellHandlerIncoming"
-                      value={d.spell_Handler}
-                      onChange={event => {
-                        d.spell_Handler = event.target.value
-                      }}
-                    >
-                      {spellList.length > 0 &&
-                        spellList.map((spell, idx) => (
-                          <option value={spell.name} key={idx}>
-                            {spell.name}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                  <div className="form-item">
-                    <button
-                      onClick={() => {
-                        for (let i = 0; i < custom_commands.length; i++) {
-                          if (custom_commands[i].id === d.id) {
-                            custom_commands.splice(i, 1)
-                            break
-                          }
-                        }
-                        setCustomCommandsUpdated(!cusotm_commands_updated)
-                        console.log('added new cmd:', custom_commands)
-                      }}
-                      style={{ marginRight: '10px' }}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              )
-            })}
-            <div className="form-item">
-              <button
-                onClick={() => {
-                  custom_commands.push({
-                    id: getNextCustomCommandId(),
-                    command_name: '',
-                    command_description: '',
-                    spell_Handler: '',
-                  })
-                  setCustomCommandsUpdated(!cusotm_commands_updated)
-                  console.log('added new cmd:', custom_commands)
-                }}
-                style={{ marginRight: '10px' }}
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        </React.Fragment>
-      )}
-
       {enabled && (
         <>
+          <div className="form-item">
+            <span className="form-item-label">OpenAI Key</span>
+            {/*password input field that, when changed, sets the openai key*/}
+            <input
+              type="password"
+              defaultValue={openai_api_key}
+              onChange={e => {
+                setOpenaiApiKey(e.target.value)
+              }}
+            />
+          </div>
+          <div className="form-item">
+            <span className="form-item-label">Ethereum Private Key</span>
+            {/*password input field that, when changed, sets the openai key*/}
+            <input
+              type="password"
+              defaultValue={eth_private_key}
+              onChange={e => {
+                setEthPrivateKey(e.target.value)
+              }}
+            />
+          </div>
+          <div className="form-item">
+            <span className="form-item-label">Ethereum Public Address</span>
+            {/*password input field that, when changed, sets the openai key*/}
+            <input
+              type="input"
+              defaultValue={eth_public_address}
+              onChange={e => {
+                setEthPublicAddress(e.target.value)
+              }}
+            />
+          </div>
           <div className="form-item">
             <span className="form-item-label">Discord Enabled</span>
             <input
               type="checkbox"
-              value={discord_enabled}
-              defaultChecked={discord_enabled || discord_enabled === 'true'}
+              value={discord_enabled.toString()}
+              defaultChecked={discord_enabled}
               onChange={e => {
                 setDiscordEnabled(e.target.checked)
               }}
@@ -1090,7 +942,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
               <div className="form-item">
                 <span className="form-item-label">Discord API Key</span>
                 <input
-                  type="text"
+                  type="password"
                   defaultValue={discord_api_key}
                   onChange={e => {
                     setDiscordApiKey(e.target.value)
@@ -1146,74 +998,6 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                 />
               </div>
 
-              <div className="form-item">
-                <span className="form-item-label">Echo Slack</span>
-                <input
-                  type="checkbox"
-                  value={discord_echo_slack}
-                  defaultChecked={
-                    discord_echo_slack || discord_echo_slack === 'true'
-                  }
-                  onChange={e => {
-                    setDiscordEchoSlack(e.target.checked)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Echo Format</span>
-                <input
-                  type="text"
-                  defaultValue={discord_echo_format}
-                  onChange={e => {
-                    setDiscordEchoFormat(e.target.value)
-                  }}
-                />
-              </div>
-
-              <div className="form-item agent-select">
-                <span className="form-item-label">Discord Greeting</span>
-                <select
-                  name="discordGreetingId"
-                  id="discordGreetingId"
-                  value={discord_greeting_id}
-                  onChange={event => {
-                    setDiscordGreetingId(event.target.value)
-                  }}
-                >
-                  <option defaultValue hidden></option>
-                  {greetings.length > 0 &&
-                    greetings.map((greeting, idx) => (
-                      <option value={greeting.id} key={idx}>
-                        {greeting.message}
-                      </option>
-                    ))}
-                </select>
-
-                <div className="form-item">
-                  <span className="form-item-label">Echo Slack</span>
-                  <input
-                    type="checkbox"
-                    value={discord_echo_slack}
-                    defaultChecked={
-                      discord_echo_slack || discord_echo_slack === 'true'
-                    }
-                    onChange={e => {
-                      setDiscordEchoSlack(e.target.checked)
-                    }}
-                  />
-                </div>
-                <div className="form-item">
-                  <span className="form-item-label">Echo Format</span>
-                  <input
-                    type="text"
-                    defaultValue={discord_echo_format}
-                    onChange={e => {
-                      setDiscordEchoFormat(e.target.value)
-                    }}
-                  />
-                </div>
-              </div>
-
               <div className="form-item agent-select">
                 <span className="form-item-label">
                   Spell Handler (Incoming Message Handler)
@@ -1226,7 +1010,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                     setDiscordSpellHandlerIncoming(event.target.value)
                   }}
                 >
-                  <option defaultValue hidden></option>
+                  <option hidden></option>
                   {spellList.length > 0 &&
                     spellList.map((spell, idx) => (
                       <option value={spell.name} key={idx}>
@@ -1257,185 +1041,6 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                     ))}
                 </select>
               </div>
-
-              <div className="form-item agent-select">
-                <span className="form-item-label">Metadata Handler</span>
-                <select
-                  name="spellHandlerMetadata"
-                  id="spellHandlerMetadata"
-                  value={discord_spell_handler_metadata}
-                  onChange={event => {
-                    setDiscordSpellHandlerMetadata(event.target.value)
-                  }}
-                >
-                  <option value="null" selected>
-                    --Disabled--
-                  </option>
-                  {spellList.length > 0 &&
-                    spellList.map((spell, idx) => (
-                      <option value={spell.name} key={idx}>
-                        {spell.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-
-              <div className="form-item agent-select">
-                <span className="form-item-label">Slash Command Handler</span>
-                <select
-                  name="spellHandlerSlashCommand"
-                  id="spellHandlerSlashCommand"
-                  value={discord_spell_handler_slash_command}
-                  onChange={event => {
-                    setDiscordSpellHandlerSlashCommand(event.target.value)
-                  }}
-                >
-                  <option value="null" selected>
-                    --Disabled--
-                  </option>
-                  {spellList.length > 0 &&
-                    spellList.map((spell, idx) => (
-                      <option value={spell.name} key={idx}>
-                        {spell.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            </>
-          )}
-
-          <div className="form-item">
-            <span className="form-item-label">XREngine Enabled</span>
-            <input
-              type="checkbox"
-              value={xrengine_enabled}
-              defaultChecked={xrengine_enabled || xrengine_enabled === 'true'}
-              onChange={e => {
-                setxrengine_enabled(e.target.checked)
-              }}
-            />
-          </div>
-
-          {xrengine_enabled && (
-            <>
-              <div className="form-item">
-                <span className="form-item-label">Room URL</span>
-                <input
-                  type="text"
-                  defaultValue={xrengine_url}
-                  onChange={e => {
-                    setXREngineUrl(e.target.value)
-                  }}
-                />
-              </div>
-
-              <div className="form-item">
-                <span className="form-item-label">Starting Words</span>
-                <input
-                  type="text"
-                  defaultValue={xrengine_starting_words}
-                  onChange={e => {
-                    setXREngineStartingWords(e.target.value)
-                  }}
-                />
-              </div>
-
-              <div className="form-item">
-                <span className="form-item-label">Bot Name Regex</span>
-                <input
-                  type="text"
-                  defaultValue={xrengine_bot_name_regex}
-                  onChange={e => {
-                    setXREngineBotNameRegex(e.target.value)
-                  }}
-                />
-              </div>
-
-              <div className="form-item">
-                <span className="form-item-label">Bot Name</span>
-                <input
-                  type="text"
-                  defaultValue={xrengine_bot_name}
-                  onChange={e => {
-                    setXREngineBotName(e.target.value)
-                  }}
-                />
-              </div>
-
-              <div className="form-item">
-                <span className="form-item-label">
-                  Empty Responses - Separated by |
-                </span>
-                <input
-                  type="text"
-                  defaultValue={xrengine_empty_responses}
-                  onChange={e => {
-                    setXREngineEmptyResponses(e.target.value)
-                  }}
-                />
-              </div>
-
-              <div className="form-item agent-select">
-                <span className="form-item-label">
-                  Spell Handler (Incoming Message Handler)
-                </span>
-                <select
-                  name="spellHandlerIncoming"
-                  id="spellHandlerIncoming"
-                  value={xrengine_spell_handler_incoming}
-                  onChange={event => {
-                    setXREngineSpellHandlerIncoming(event.target.value)
-                  }}
-                >
-                  <option defaultValue hidden></option>
-                  {spellList.length > 0 &&
-                    spellList.map((spell, idx) => (
-                      <option value={spell.name} key={idx}>
-                        {spell.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-
-              <div className="form-item agent-select">
-                <span className="form-item-label">Interval Update Handler</span>
-                <select
-                  name="spellHandlerUpdate"
-                  id="spellHandlerUpdate"
-                  value={xrengine_spell_handler_update}
-                  onChange={event => {
-                    setXREngineSpellHandlerUpdate(event.target.value)
-                  }}
-                >
-                  <option defaultValue hidden></option>
-                  {spellList.length > 0 &&
-                    spellList.map((spell, idx) => (
-                      <option value={spell.name} key={idx}>
-                        {spell.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-
-              <div className="form-item agent-select">
-                <span className="form-item-label">Event Feed Handler</span>
-                <select
-                  name="spellHandlerFeed"
-                  id="spellHandlerFeed"
-                  value={xrengine_spell_handler_feed}
-                  onChange={event => {
-                    setXREngineSpellHandlerFeed(event.target.value)
-                  }}
-                >
-                  <option defaultValue hidden></option>
-                  {spellList.length > 0 &&
-                    spellList.map((spell, idx) => (
-                      <option value={spell.name} key={idx}>
-                        {spell.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
             </>
           )}
 
@@ -1443,10 +1048,8 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
             <span className="form-item-label">Twitter Client Enabled</span>
             <input
               type="checkbox"
-              value={twitter_client_enable}
-              defaultChecked={
-                twitter_client_enable || twitter_client_enable === 'true'
-              }
+              value={twitter_client_enable.toString()}
+              defaultChecked={twitter_client_enable}
               onChange={e => {
                 setTwitterClientEnable(e.target.checked)
               }}
@@ -1458,7 +1061,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
               <div className="form-item">
                 <span className="form-item-label">Bearer Token</span>
                 <input
-                  type="text"
+                  type="password"
                   defaultValue={twitter_token}
                   onChange={e => {
                     setTwitterToken(e.target.value)
@@ -1490,7 +1093,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                   Twitter App Token Secret
                 </span>
                 <input
-                  type="text"
+                  type="password"
                   defaultValue={twitter_app_token_secret}
                   onChange={e => {
                     setTwitterAppTokenSecret(e.target.value)
@@ -1500,7 +1103,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
               <div className="form-item">
                 <span className="form-item-label">Twitter Access Token</span>
                 <input
-                  type="text"
+                  type="password"
                   defaultValue={twitter_access_token}
                   onChange={e => {
                     setTwitterAccessToken(e.target.value)
@@ -1512,7 +1115,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                   Twitter Access Token Secret
                 </span>
                 <input
-                  type="text"
+                  type="password"
                   defaultValue={twitter_access_token_secret}
                   onChange={e => {
                     setTwitterAccessTokenSecret(e.target.value)
@@ -1523,10 +1126,8 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                 <span className="form-item-label">Twitter Enable Tweets</span>
                 <input
                   type="checkbox"
-                  value={twitter_enable_twits}
-                  defaultChecked={
-                    twitter_enable_twits || twitter_enable_twits === 'true'
-                  }
+                  value={twitter_enable_twits.toString()}
+                  defaultChecked={twitter_enable_twits}
                   onChange={e => {
                     setTwitterEnableTwits(e.target.checked)
                   }}
@@ -1601,7 +1202,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                     setTwitterSpellHandlerIncoming(event.target.value)
                   }}
                 >
-                  <option defaultValue hidden></option>
+                  <option hidden></option>
                   {spellList.length > 0 &&
                     spellList.map((spell, idx) => (
                       <option value={spell.name} key={idx}>
@@ -1637,8 +1238,8 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
             <span className="form-item-label">Telegram Client Enabled</span>
             <input
               type="checkbox"
-              value={telegram_enabled}
-              defaultChecked={telegram_enabled || telegram_enabled === 'true'}
+              value={telegram_enabled.toString()}
+              defaultChecked={telegram_enabled}
               onChange={e => {
                 setTelegramEnabled(e.target.checked)
               }}
@@ -1650,7 +1251,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
               <div className="form-item">
                 <span className="form-item-label">Bot Token</span>
                 <input
-                  type="text"
+                  type="password"
                   defaultValue={telegram_bot_token}
                   onChange={e => {
                     setTelegramBotToken(e.target.value)
@@ -1679,7 +1280,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                     setTelegramSpellHandlerIncoming(event.target.value)
                   }}
                 >
-                  <option defaultValue hidden></option>
+                  <option hidden></option>
                   {spellList.length > 0 &&
                     spellList.map((spell, idx) => (
                       <option value={spell.name} key={idx}>
@@ -1695,8 +1296,8 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
             <span className="form-item-label">Reddit Client Enabled</span>
             <input
               type="checkbox"
-              value={reddit_enabled}
-              defaultChecked={reddit_enabled || reddit_enabled === 'true'}
+              value={reddit_enabled.toString()}
+              defaultChecked={reddit_enabled}
               onChange={e => {
                 setRedditEnabled(e.target.checked)
               }}
@@ -1718,7 +1319,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
               <div className="form-item">
                 <span className="form-item-label">Bot App Secret Id</span>
                 <input
-                  type="text"
+                  type="password"
                   defaultValue={reddit_app_secret_id}
                   onChange={e => {
                     setRedditAppSecretId(e.target.value)
@@ -1767,7 +1368,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                     setRedditSpellHandlerIncoming(event.target.value)
                   }}
                 >
-                  <option defaultValue hidden></option>
+                  <option hidden></option>
                   {spellList.length > 0 &&
                     spellList.map((spell, idx) => (
                       <option value={spell.name} key={idx}>
@@ -1783,8 +1384,8 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
             <span className="form-item-label">Zoom Client Enabled</span>
             <input
               type="checkbox"
-              value={zoom_enabled}
-              defaultChecked={zoom_enabled || zoom_enabled === 'true'}
+              value={zoom_enabled.toString()}
+              defaultChecked={zoom_enabled}
               onChange={e => {
                 setZoomEnabled(e.target.checked)
               }}
@@ -1847,89 +1448,11 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
           )}
 
           <div className="form-item">
-            <span className="form-item-label">Instagram Client Enabled</span>
-            <input
-              type="checkbox"
-              value={instagram_enabled}
-              defaultChecked={instagram_enabled || instagram_enabled === 'true'}
-              onChange={e => {
-                setInstagramEnabled(e.target.checked)
-              }}
-            />
-          </div>
-
-          {instagram_enabled && (
-            <>
-              <div className="form-item">
-                <span className="form-item-label">Username</span>
-                <input
-                  type="text"
-                  defaultValue={instagram_username}
-                  onChange={e => {
-                    setInstagramUsername(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Password</span>
-                <input
-                  type="text"
-                  defaultValue={instagram_password}
-                  onChange={e => {
-                    setInstagramPassword(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Bot Name</span>
-                <input
-                  type="text"
-                  defaultValue={instagram_bot_name}
-                  onChange={e => {
-                    setInstagramBotName(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Bot Name Regex</span>
-                <input
-                  type="text"
-                  defaultValue={instagram_bot_name_regex}
-                  onChange={e => {
-                    setInstagramBotNameRegex(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item agent-select">
-                <span className="form-item-label">
-                  Spell Handler (Incoming Message Handler)
-                </span>
-                <select
-                  name="spellHandlerIncoming"
-                  id="spellHandlerIncoming"
-                  value={instagram_spell_handler_incoming}
-                  onChange={event => {
-                    setInstagramSpellHandlerIncoming(event.target.value)
-                  }}
-                >
-                  <option defaultValue hidden></option>
-                  {spellList.length > 0 &&
-                    spellList.map((spell, idx) => (
-                      <option value={spell.name} key={idx}>
-                        {spell.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            </>
-          )}
-
-          <div className="form-item">
             <span className="form-item-label">Messenger Client Enabled</span>
             <input
               type="checkbox"
-              value={messenger_enabled}
-              defaultChecked={messenger_enabled || messenger_enabled === 'true'}
+              value={messenger_enabled.toString()}
+              defaultChecked={messenger_enabled}
               onChange={e => {
                 setMessengerEnabled(e.target.checked)
               }}
@@ -2005,8 +1528,8 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
             <span className="form-item-label">Zoom Client Enabled</span>
             <input
               type="checkbox"
-              value={zoom_enabled}
-              defaultChecked={zoom_enabled || zoom_enabled === 'true'}
+              value={zoom_enabled.toString()}
+              defaultChecked={zoom_enabled}
               onChange={e => {
                 setZoomEnabled(e.target.checked)
               }}
@@ -2028,7 +1551,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
               <div className="form-item">
                 <span className="form-item-label">Zoom Password</span>
                 <input
-                  type="text"
+                  type="password"
                   defaultValue={zoom_password}
                   onChange={e => {
                     setZoomPassword(e.target.value)
@@ -2072,8 +1595,8 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
             <span className="form-item-label">Slack Client Enabled</span>
             <input
               type="checkbox"
-              value={slack_enabled}
-              defaultChecked={slack_enabled || slack_enabled === 'true'}
+              value={slack_enabled.toString()}
+              defaultChecked={slack_enabled}
               onChange={e => {
                 setSlackEnabled(e.target.checked)
               }}
@@ -2085,7 +1608,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
               <div className="form-item">
                 <span className="form-item-label">Token</span>
                 <input
-                  type="text"
+                  type="password"
                   defaultValue={slack_token}
                   onChange={e => {
                     setSlackToken(e.target.value)
@@ -2095,7 +1618,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
               <div className="form-item">
                 <span className="form-item-label">Signing Secret</span>
                 <input
-                  type="text"
+                  type="password"
                   defaultValue={slack_signing_secret}
                   onChange={e => {
                     setSlackSigningSecret(e.target.value)
@@ -2115,7 +1638,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
               <div className="form-item">
                 <span className="form-item-label">Bot Token</span>
                 <input
-                  type="text"
+                  type="password"
                   defaultValue={slack_bot_token}
                   onChange={e => {
                     setSlackBotToken(e.target.value)
@@ -2129,16 +1652,6 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
                   defaultValue={slack_bot_name}
                   onChange={e => {
                     setSlackBotName(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Echo Channel</span>
-                <input
-                  type="text"
-                  defaultValue={slack_echo_channel}
-                  onChange={e => {
-                    setSlackEchoChannel(e.target.value)
                   }}
                 />
               </div>
@@ -2166,166 +1679,11 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
           )}
 
           <div className="form-item">
-            <span className="form-item-label">Instagram Client Enabled</span>
-            <input
-              type="checkbox"
-              value={instagram_enabled}
-              defaultChecked={instagram_enabled || instagram_enabled === 'true'}
-              onChange={e => {
-                setInstagramEnabled(e.target.checked)
-              }}
-            />
-          </div>
-
-          {instagram_enabled && (
-            <>
-              <div className="form-item">
-                <span className="form-item-label">Username</span>
-                <input
-                  type="text"
-                  defaultValue={instagram_username}
-                  onChange={e => {
-                    setInstagramUsername(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Password</span>
-                <input
-                  type="text"
-                  defaultValue={instagram_password}
-                  onChange={e => {
-                    setInstagramPassword(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Bot Name</span>
-                <input
-                  type="text"
-                  defaultValue={instagram_bot_name}
-                  onChange={e => {
-                    setInstagramBotName(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Bot Name Regex</span>
-                <input
-                  type="text"
-                  defaultValue={instagram_bot_name_regex}
-                  onChange={e => {
-                    setInstagramBotNameRegex(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item agent-select">
-                <span className="form-item-label">
-                  Spell Handler (Incoming Message Handler)
-                </span>
-                <select
-                  name="spellHandlerIncoming"
-                  id="spellHandlerIncoming"
-                  value={instagram_spell_handler_incoming}
-                  onChange={event => {
-                    setInstagramSpellHandlerIncoming(event.target.value)
-                  }}
-                >
-                  <option defaultValue hidden></option>
-                  {spellList.length > 0 &&
-                    spellList.map((spell, idx) => (
-                      <option value={spell.name} key={idx}>
-                        {spell.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            </>
-          )}
-
-          <div className="form-item">
-            <span className="form-item-label">Messenger Client Enabled</span>
-            <input
-              type="checkbox"
-              value={messenger_enabled}
-              defaultChecked={messenger_enabled || messenger_enabled === 'true'}
-              onChange={e => {
-                setMessengerEnabled(e.target.checked)
-              }}
-            />
-          </div>
-
-          {messenger_enabled && (
-            <>
-              <div className="form-item">
-                <span className="form-item-label">Page Access Token</span>
-                <input
-                  type="text"
-                  defaultValue={messenger_page_access_token}
-                  onChange={e => {
-                    setMessengerPageAccessToken(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Verify Token</span>
-                <input
-                  type="text"
-                  defaultValue={messenger_verify_token}
-                  onChange={e => {
-                    setMessengerVerifyToken(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Bot Name</span>
-                <input
-                  type="text"
-                  defaultValue={messenger_bot_name}
-                  onChange={e => {
-                    setMessengerBotName(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Bot Name Regex</span>
-                <input
-                  type="text"
-                  defaultValue={messenger_bot_name_regex}
-                  onChange={e => {
-                    setMessengerBotNameRegex(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item agent-select">
-                <span className="form-item-label">
-                  Spell Handler (Incoming Message Handler)
-                </span>
-                <select
-                  name="spellHandlerIncoming"
-                  id="spellHandlerIncoming"
-                  value={messenger_spell_handler_incoming}
-                  onChange={event => {
-                    setMessengerSpellHandlerIncoming(event.target.value)
-                  }}
-                >
-                  {spellList.length > 0 &&
-                    spellList.map((spell, idx) => (
-                      <option value={spell.name} key={idx}>
-                        {spell.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            </>
-          )}
-
-          <div className="form-item">
             <span className="form-item-label">Twilio Client Enabled</span>
             <input
               type="checkbox"
-              value={twilio_enabled}
-              defaultChecked={twilio_enabled || twilio_enabled === 'true'}
+              value={twilio_enabled.toString()}
+              defaultChecked={twilio_enabled}
               onChange={e => {
                 setTwilioEnabled(e.target.checked)
               }}
@@ -2347,7 +1705,7 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
               <div className="form-item">
                 <span className="form-item-label">Auth Token</span>
                 <input
-                  type="text"
+                  type="password"
                   defaultValue={twilio_auth_token}
                   onChange={e => {
                     setTwilioAuthToken(e.target.value)
@@ -2410,138 +1768,11 @@ const EntityWindow = ({ id, updateCallback, greetings }) => {
           )}
 
           <div className="form-item">
-            <span className="form-item-label">Slack Client Enabled</span>
-            <input
-              type="checkbox"
-              value={slack_enabled}
-              defaultChecked={slack_enabled || slack_enabled === 'true'}
-              onChange={e => {
-                setSlackEnabled(e.target.checked)
-              }}
-            />
-          </div>
-
-          {slack_enabled && (
-            <>
-              <div className="form-item">
-                <span className="form-item-label">Token</span>
-                <input
-                  type="text"
-                  defaultValue={slack_token}
-                  onChange={e => {
-                    setSlackToken(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Signing Secret</span>
-                <input
-                  type="text"
-                  defaultValue={slack_signing_secret}
-                  onChange={e => {
-                    setSlackSigningSecret(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Port</span>
-                <input
-                  type="text"
-                  defaultValue={slack_port}
-                  onChange={e => {
-                    setSlackPort(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Verification Token</span>
-                <input
-                  type="text"
-                  defaultValue={slack_verification_token}
-                  onChange={e => {
-                    setSlackVerificationToken(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Bot Token</span>
-                <input
-                  type="text"
-                  defaultValue={slack_bot_token}
-                  onChange={e => {
-                    setSlackBotToken(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Bot Name</span>
-                <input
-                  type="text"
-                  defaultValue={slack_bot_name}
-                  onChange={e => {
-                    setSlackBotName(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item agent-select">
-                <span className="form-item-label">Slack Greeting</span>
-                <select
-                  name="slackGreetingId"
-                  id="slackGreetingId"
-                  value={slack_greeting_id}
-                  onChange={event => {
-                    setSlackGreetingId(event.target.value)
-                  }}
-                >
-                  <option defaultValue hidden></option>
-                  {greetings.length > 0 &&
-                    greetings.map((greeting, idx) => (
-                      <option value={greeting.id} key={idx}>
-                        {greeting.message}
-                      </option>
-                    ))}
-                </select>
-              </div>
-              <div className="form-item">
-                <span className="form-item-label">Echo Channel</span>
-                <input
-                  type="text"
-                  defaultValue={slack_echo_channel}
-                  onChange={e => {
-                    setSlackEchoChannel(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="form-item agent-select">
-                <span className="form-item-label">
-                  Spell Handler (Incoming Message Handler)
-                </span>
-                <select
-                  name="spellHandlerIncoming"
-                  id="spellHandlerIncoming"
-                  value={slack_spell_handler_incoming}
-                  onChange={event => {
-                    setSlackSpellHandlerIncoming(event.target.value)
-                  }}
-                >
-                  <option defaultValue hidden></option>
-                  {spellList.length > 0 &&
-                    spellList.map((spell, idx) => (
-                      <option value={spell.name} key={idx}>
-                        {spell.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            </>
-          )}
-
-          <div className="form-item">
             <span className="form-item-label">Loop Enabled</span>
             <input
               type="checkbox"
-              value={loop_enabled}
-              defaultChecked={loop_enabled || loop_enabled === 'true'}
+              value={loop_enabled.toString()}
+              defaultChecked={loop_enabled}
               onChange={e => {
                 setLoopEnabled(e.target.checked)
               }}

@@ -1,26 +1,22 @@
-import '../../../screens/Thoth/thoth.module.css'
-
-import jsonFormat from 'json-format'
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-
 import Editor from '@monaco-editor/react'
-
-import Window from '../../../components/Window/Window'
-import { useAuth } from '../../../contexts/AuthProvider'
-import { usePubSub } from '../../../contexts/PubSubProvider'
+import jsonFormat from 'json-format'
+import { useState, useEffect } from 'react'
 import { useGetSpellQuery } from '../../../state/api/spells'
-import { RootState } from '../../../state/store'
+import Window from '../../../components/Window/Window'
+
+import '../../../screens/Thoth/thoth.module.css'
 import WindowMessage from '../../components/WindowMessage'
+import { usePubSub } from '../../../contexts/PubSubProvider'
+
+import { RootState } from '../../../state/store'
+import { useSelector } from 'react-redux'
 
 const StateManager = ({ tab, ...props }) => {
   const { publish, events } = usePubSub()
-  const { user } = useAuth()
   const preferences = useSelector((state: RootState) => state.preferences)
   const { data: spell } = useGetSpellQuery(
     {
       spellId: tab.spellId,
-      userId: user?.id as string,
     },
     {
       skip: !tab.spellId,
@@ -119,9 +115,6 @@ const StateManager = ({ tab, ...props }) => {
       </button>
     </>
   )
-
-  if (tab.type === 'module')
-    return <WindowMessage content="Modules do not support game state" />
 
   return (
     <Window toolbar={toolbar}>

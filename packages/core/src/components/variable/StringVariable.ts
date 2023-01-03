@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import { NodeData, ThothNode } from '../../types'
+import {
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+} from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
@@ -48,7 +53,7 @@ export class StringVariable extends ThothComponent<InputReturn> {
   worker(node: NodeData) {
     const _var = node?.data?._var as string
 
-    this.name = (node?.data?.name as string) + ' - ' + _var
+    this.name = node?.data?.name as string
 
     return {
       output: _var,

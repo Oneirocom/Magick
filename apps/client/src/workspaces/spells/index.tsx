@@ -1,85 +1,82 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Spell, ThothComponent } from '@thothai/core'
-
-import { feathers as feathersFlag, sharedb } from '../../config'
-import { useAuth } from '../../contexts/AuthProvider'
-import { useFeathers } from '../../contexts/FeathersProvider'
-import { usePubSub } from '../../contexts/PubSubProvider'
-import { useSharedb } from '../../contexts/SharedbProvider'
-import EventHandler from '../../screens/Thoth/components/EventHandler'
-import { useLazyGetSpellQuery } from '../../state/api/spells'
-import { RootState } from '../../state/store'
-import { debounce } from '../../utils/debounce'
 import { useEditor } from '../../workspaces/contexts/EditorProvider'
 import { Layout } from '../../workspaces/contexts/LayoutProvider'
-import StateManager from '../../workspaces/spells/windows/StateManagerWindow'
-import DebugConsole from './windows/DebugConsole'
+import { useLazyGetSpellQuery } from '../../state/api/spells'
+import EventHandler from '../../screens/Thoth/components/EventHandler'
+import { debounce } from '../../utils/debounce'
+
 import EditorWindow from './windows/EditorWindow/'
-import EventManagerWindow from './windows/EventManager'
 import Inspector from './windows/InspectorWindow'
 import Playtest from './windows/PlaytestWindow'
+import AvatarWindow from './windows/AvatarWindow'
+import StateManager from '../../workspaces/spells/windows/StateManagerWindow'
+
 import TextEditor from './windows/TextEditorWindow'
+import DebugConsole from './windows/DebugConsole'
+
+import { Spell, ThothComponent } from '@thothai/core'
+import { usePubSub } from '../../contexts/PubSubProvider'
+import EventManagerWindow from './windows/EventManager'
+import { RootState } from '../../state/store'
+import { useFeathers } from '../../contexts/FeathersProvider'
+import { feathers as feathersFlag } from '../../config'
+import EntityManagerWindow from '../agents/windows/EntityManagerWindow'
+import React from 'react'
 
 const Workspace = ({ tab, tabs, pubSub }) => {
   const spellRef = useRef<Spell>()
   const { events, publish } = usePubSub()
-  const { getSpellDoc } = useSharedb()
-  const { user } = useAuth()
   const [loadSpell, { data: spellData }] = useLazyGetSpellQuery()
-  const { editor, serialize } = useEditor()
+  const { editor, serialize, setDirtyGraph, dirtyGraph } = useEditor()
   const FeathersContext = useFeathers()
   const client = FeathersContext?.client
   const preferences = useSelector((state: RootState) => state.preferences)
-
-  const [docLoaded, setDocLoaded] = useState<boolean>(false)
 
   // Set up autosave for the workspaces
   useEffect(() => {
     if (!editor?.on) return
     const unsubscribe = editor.on(
       // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
-      'save nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
+      // @ts-ignore
+      'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
       debounce(async data => {
+        if (!dirtyGraph) return
         if (tab.type === 'spell' && spellRef.current) {
+          setDirtyGraph(true)
+          const graph = serialize()
+          // dont both to send the event if the update shows zero nodes.
+          // Thios may prevent someone from saving a graph with zero nodes however.
+          if (Object.keys(graph?.nodes || {}).length === 0) return
           publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
         }
       }, 2000)
     )
 
-    return unsubscribe as () => void
+    return () => {
+      unsubscribe()
+    }
   }, [editor, preferences.autoSave])
-
-  // useEffect(() => {
-  //   if (!editor?.on) return
-  //   const unsubscribe = editor.on('save', () =>
-  //     publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
-  //   )
-
-  //   return unsubscribe as () => void
-  // }, [editor])
 
   useEffect(() => {
     if (!editor?.on) return
 
-    const unsubscribe = editor.on(
+    editor.on(
+      // @ts-ignore
       'nodecreated noderemoved',
       (node: ThothComponent<unknown>) => {
         if (!spellRef.current) return
         if (node.category !== 'I/O') return
         // TODO we can probably send this update to a spell namespace for this spell.
         // then spells can subscribe to only their dependency updates.
-        const event = events.$SUBSPELL_UPDATED(spellRef.current.name)
         const spell = {
           ...spellRef.current,
           graph: editor.toJSON(),
         }
-        publish(event, spell)
+        publish(events.$SUBSPELL_UPDATED(spellRef.current.name), spell)
       }
-    ) as Function
-
-    return unsubscribe as () => void
+    ) as unknown as Function
   }, [editor])
 
   useEffect(() => {
@@ -88,26 +85,9 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   }, [spellData])
 
   useEffect(() => {
-    if (!spellData || !sharedb || docLoaded || !editor) return
-
-    const doc = getSpellDoc(spellData as Spell)
-
-    if (!doc) return
-
-    doc.on('op batch', (op, origin) => {
-      if (origin) return
-      console.log('UPDATED GRAPH', spellData.graph)
-      editor.loadGraph(doc.data.graph, true)
-    })
-
-    setDocLoaded(true)
-  }, [spellData, editor])
-
-  useEffect(() => {
     if (!tab || !tab.spellId) return
     loadSpell({
       spellId: tab.spellId,
-      userId: user?.id as string,
     })
   }, [tab])
 
@@ -141,6 +121,10 @@ const Workspace = ({ tab, tabs, pubSub }) => {
           return <DebugConsole {...props} />
         case 'eventManager':
           return <EventManagerWindow {...props} />
+        case 'entityManager':
+          return <EntityManagerWindow />
+        case 'avatar':
+          return <AvatarWindow {...props} />
         default:
           return <p></p>
       }
@@ -159,4 +143,6 @@ const Wrapped = props => {
   return <Workspace {...props} />
 }
 
-export default Wrapped
+export default React.memo(Wrapped, (prevProps, nextProps) => {
+  return prevProps.tab.id !== nextProps.tab.id
+})

@@ -1,12 +1,50 @@
-import { CustomError } from './../../utils/CustomError';
-import { EngineContext, ThothWorkerInputs } from '@thothai/core/types'
+import { CustomError } from './../../utils/CustomError'
+import { EngineContext, ThothWorkerInputs } from '@thothai/core'
 import Koa from 'koa'
 import vm2 from 'vm2'
-import { CompletionRequest, completionsParser } from '../completions'
-import * as events from '../../services/events'
-import { CreateEventArgs, GetEventArgs } from '../../services/events'
-import { searchWikipedia } from '../wikipedia/helpers';
-import { makeCompletion } from '../../utils/MakeCompletionRequest'
+import { GetEventArgs, CreateEventArgs } from '@thothai/core'
+
+import { searchWikipedia } from '../wikipedia/helpers'
+import queryGoogle from '../utils/queryGoogle'
+
+import { database } from '@thothai/database'
+
+const getEvents = async ({
+  type,
+  agent,
+  speaker,
+  client,
+  channel,
+  maxCount,
+  max_time_diff,
+}: GetEventArgs) => {
+  const event = await database.instance.getEvents({
+    type,
+    agent,
+    speaker,
+    client,
+    channel,
+    maxCount,
+    max_time_diff,
+  })
+
+  if (!event) return null
+
+  return event
+}
+
+const createEvent = async (args: CreateEventArgs) => {
+  const { type, agent, speaker, client, channel, text, sender } = args
+  return await database.instance.createEvent({
+    type,
+    agent,
+    speaker,
+    sender,
+    client,
+    channel,
+    text,
+  })
+}
 
 export const buildThothInterface = (
   ctx: Koa.Context,
@@ -16,35 +54,13 @@ export const buildThothInterface = (
   let gameState = { ...initialGameState }
 
   return {
-    completion: async (request: CompletionRequest) => {
-      const {
-        model,
-        prompt,
-        stop,
-        maxTokens,
-        temperature,
-        frequencyPenalty,
-        presencePenalty,
-        topP
-      } = request
-
-      const { success, choice } = await makeCompletion(model, {
-        prompt: prompt.trim(),
-        temperature: temperature,
-        max_tokens: maxTokens,
-        top_p: topP,
-        frequency_penalty: frequencyPenalty,
-        presence_penalty: presencePenalty,
-        stop: stop,
-      })
-
-      return choice.text
-    },
     runSpell: () => {
+      console.error('*************** RUNNING EMPTY NOTHING SPELL')
       return {}
     },
-    readFromImageCache: async () => {
-      return { images: [] }
+    queryGoogle: async query => {
+      const response = await queryGoogle(query)
+      return response
     },
     processCode: (
       code: unknown,
@@ -56,12 +72,13 @@ export const buildThothInterface = (
       const vm = new VM()
 
       // Inputs are flattened before we inject them for a better code experience
-      const flattenInputs = Object.entries(inputs)
-        .reduce((acc, [key, value]: [string, any]) => {
+      const flattenInputs = Object.entries(inputs).reduce(
+        (acc, [key, value]: [string, any]) => {
           acc[key] = value[0]
           return acc
-        }, {} as Record<string, any>)
-
+        },
+        {} as Record<string, any>
+      )
 
       // Freeze the variables we are injecting into the VM
       vm.freeze(data, 'data')
@@ -73,21 +90,17 @@ export const buildThothInterface = (
 
       try {
         const codeResult = vm.run(codeToRun)
-        console.log("CODE RESULT", codeResult)
+        console.log('CODE RESULT', codeResult)
         return codeResult
       } catch (err) {
         console.log({ err })
-        throw new CustomError('server-error', 'Error in spell runner: processCode component.')
+        throw new CustomError(
+          'server-error',
+          'Error in spell runner: processCode component: ' + code
+        )
       }
     },
-    enkiCompletion: async (taskName: string, inputs: string) => {
-      return { outputs: [] }
-    },
-    huggingface: async (model: string, options: any) => {
-      // const outputs = await huggingface({ context: ctx, model, options })
-      return {}
-    },
-    setCurrentGameState: (state) => {
+    setCurrentGameState: state => {
       gameState = state
     },
     getCurrentGameState: () => {
@@ -101,24 +114,24 @@ export const buildThothInterface = (
 
       gameState = newState
     },
-    // IMPLEMENT THESE INTERFACES FOR THE SERVER
+    // IMPLEMENT THESE INTERFACES FOR THE SERVERbuildThothInterface
     getEvent: async (args: GetEventArgs) => {
-      return await events.getEvents(args)
+      return await getEvents(args)
     },
     storeEvent: async (args: CreateEventArgs) => {
-      return await events.createEvent(args)
+      return await createEvent(args)
     },
     getWikipediaSummary: async (keyword: string) => {
       let out = null
       try {
-        out = await searchWikipedia(keyword as string) as any
+        out = (await searchWikipedia(keyword as string)) as any
       } catch (err) {
         throw new Error('Error getting wikipedia summary')
       }
 
-      console.log("WIKIPEDIA SEARCH", out)
+      console.log('WIKIPEDIA SEARCH', out)
 
       return out
-    }
+    },
   }
 }

@@ -1,17 +1,16 @@
 import {
-  Actions,
-  DockLocation,
   Layout as LayoutComponent,
   Model,
+  Actions,
+  DockLocation,
   TabNode,
   TabSetNode,
 } from 'flexlayout-react'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useContext, createContext, useEffect, useState, useRef } from 'react'
 
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import { saveTabLayout } from '../../state/tabs'
-
+import { useDispatch } from 'react-redux'
 // Component types are listed here which are used to load components from the data sent by rete
 const windowTypes: WindowTypes = {
   TEXT_EDITOR: 'textEditor',
@@ -19,16 +18,10 @@ const windowTypes: WindowTypes = {
   STATE_MANAGER: 'stateManager',
   EDITOR: 'editor',
   PLAYTEST: 'playtest',
-  WYSIWYG_EDITOR: 'wysiwygEditor',
   CONSOLE: 'debugConsole',
-  SETTINGS: 'settings',
   SEARCH_CORPUS: 'searchCorpus',
   ENT_MANAGER: 'entityManager',
-  GREETINGS_MANAGER: 'greetingsManager',
   EVENT_MANAGER: 'eventManager',
-  VIDEO_TRANSCRIPTION: 'videoTranscription',
-  CALENDAR_TAB: 'calendarTab',
-  MESSAGE_REACTION_EDITOR: 'messageReactionEditor',
 }
 
 type WindowType =
@@ -41,12 +34,7 @@ type WindowType =
   | 'settings'
   | 'searchCorpus'
   | 'entityManager'
-  | 'greetingsManager'
-  | 'wysiwygEditor'
-  | 'messageReactionEditor'
   | 'eventManager'
-  | 'videoTranscription'
-  | 'calendarTab'
 type WindowTypes = Record<string, WindowType>
 
 // helpful resources

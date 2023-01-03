@@ -16,7 +16,7 @@
   border-radius: var(--extraSmall);
   border: 1px solid transparent;
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
-  background-color: rgba(70, 70, 70, 0.7);
+  background-color: rgba(70, 70, 70, 1.0);
   color: #aaa;
   resize: both;
   /* backdrop-filter: blur(3px); */
@@ -29,15 +29,6 @@
   right: 10px;
   color: var(--red);
   border-radius: var(--extraSmall);
-}
-.deprecated-overlay {
-  background-color: var(--red);
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  opacity: 0.2;
 }
 .node-id {
   position: absolute;
@@ -52,7 +43,7 @@
   color: var(--green);
 }
 .node-title {
-  /* font-family: 'IBM Plex Mono', monospace !important; */
+font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
   /* text-transform: uppercase; */
   letter-spacing: 0.1em;
   font-weight: 900;
@@ -106,8 +97,8 @@
 }
 .node.selected {
   color: var(--dark-5);
-  background-color: rgba(70, 70, 70, 0.95);
-  border-color: var(--primary);
+  background-color: rgba(70, 70, 70, 1.0);
+  border-color: var(--glow);
   /* backdrop-filter: blur(15px); */
 }
 .node.error {
@@ -116,6 +107,7 @@
 }
 .node.success {
   border-color: var(--green) !important;
+  border: 2px solid var(--green);
 }
 .node.selected .node-title {
   opacity: 1;

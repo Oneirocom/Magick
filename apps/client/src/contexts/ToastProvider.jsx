@@ -1,7 +1,6 @@
-import makeStyles from '@mui/styles/makeStyles'
 import { SnackbarProvider } from 'notistack'
 
-const useStyles = makeStyles(() => ({
+const styles = () => ({
   success: {
     border: '1px solid var(--green)',
     backgroundColor: 'var(--dark-2) !important',
@@ -18,26 +17,17 @@ const useStyles = makeStyles(() => ({
     border: '1px solid var(--blue)',
     backgroundColor: 'var(--dark-2) !important',
   },
-}))
+})
+
+// {
+//   variantSuccess: classes.success,
+//   variantError: classes.error,
+//   variantWarning: classes.warning,
+//   variantInfo: classes.info,
+// }
 
 const ToastProvider = ({ children }) => {
-  const classes = useStyles()
-
-  console.log('TOIAST CLASSES', classes)
-
-  return (
-    <SnackbarProvider
-      maxSnack="3"
-      classes={{
-        variantSuccess: classes.success,
-        variantError: classes.error,
-        variantWarning: classes.warning,
-        variantInfo: classes.info,
-      }}
-    >
-      {children}
-    </SnackbarProvider>
-  )
+  return <SnackbarProvider maxSnack="3">{children}</SnackbarProvider>
 }
 
 export default ToastProvider

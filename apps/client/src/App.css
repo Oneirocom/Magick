@@ -80,7 +80,7 @@ body,
 
 .connection .main-path {
   stroke-width: 2px;
-  stroke: var(--primary);
+  stroke: #7afba97e;
   filter: drop-shadow(0px 1px 0px var(--dark-0))
     drop-shadow(0px -1px 0px var(--dark-0))
     drop-shadow(-1px 0px 0px var(--dark-0))
@@ -310,6 +310,10 @@ input[type='text'] {
   height: var(--c4);
 }
 
+input[type='text']:focus-visible {
+    outline: 1px solid var(--glow)
+}
+
 .App {
   width: calc(100% - 180px);
 }
@@ -363,6 +367,7 @@ input[type='text'] {
 }
 
 .entBtns {
+  padding: 1em;
   display: flex;
 }
 
@@ -450,11 +455,6 @@ input[type='text'] {
 .dialogInput {
   min-height: 100px;
 }
-.personalityInput,
-.MonologueInput,
-.FactsInput {
-  min-height: 50px;
-}
 .gettingsInput {
   min-height: 80px;
 }
@@ -467,9 +467,15 @@ input[type='text'] {
 }
 
 .agent-editor {
-  padding: 2em;
+  padding: 1em;
   height: calc(100% - 4em);
   overflow: auto;
+}
+
+.entityWindow {
+  padding: 1em;
+  background-color: #333;
+  border-radius: .25em;
 }
 
 .form-item > input[type='text'] {
@@ -523,4 +529,8 @@ input[type='text'] {
 .adminActive div {
   background-color: #05c807 !important;
   color: red !important;
+}
+
+.input-title, .output-title, div.item {
+    font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
 }

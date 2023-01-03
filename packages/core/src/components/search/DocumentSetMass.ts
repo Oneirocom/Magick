@@ -1,3 +1,5 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable require-await */
@@ -5,7 +7,13 @@
 import axios from 'axios'
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../types'
+import {
+  EngineContext,
+  NodeData,
+  ThothNode,
+  ThothWorkerInputs,
+  ThothWorkerOutputs,
+} from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, numSocket, anySocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
@@ -51,6 +59,7 @@ export class DocumentSetMass extends ThothComponent<void> {
   async worker(node: NodeData, inputs: ThothWorkerInputs) {
     const storeId = inputs['storeId']?.[0]
     let documents = inputs['documents']
+    // eslint-disable-next-line camelcase
     const store_name = node?.data?.store_name as string
 
     if (typeof documents === 'string') {
@@ -67,7 +76,7 @@ export class DocumentSetMass extends ThothComponent<void> {
         temp.push(documents[i])
         if (i >= t * 100 || i === documents.length - 1) {
           await axios.post(
-            `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document_mass`,
+            `${process.env.REACT_APP_SEARCH_SERVER_URL}/document_mass`,
             {
               documents: temp,
               storeId,

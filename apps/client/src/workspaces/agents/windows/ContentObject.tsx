@@ -1,10 +1,11 @@
-import axios from 'axios'
-import { useSnackbar } from 'notistack'
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 //@ts-nocheck
 import { useState } from 'react'
-import { VscSave, VscTrash } from 'react-icons/vsc'
-
 import { useModal } from '../../../contexts/ModalProvider'
+import { VscTrash, VscSave } from 'react-icons/vsc'
+import axios from 'axios'
+import { useSnackbar } from 'notistack'
 
 const ContentObject = ({ content, getContentObjects }) => {
   const { id: objId, ..._content } = content
@@ -18,7 +19,7 @@ const ContentObject = ({ content, getContentObjects }) => {
   const updateObj = async () => {
     const body = { ...contentObj }
     await axios.put(
-      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/content-object`,
+      `${process.env.REACT_APP_SEARCH_SERVER_URL}/content-object`,
       body
     )
     enqueueSnackbar('Content Object updated', { variant: 'success' })

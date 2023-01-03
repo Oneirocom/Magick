@@ -1,5 +1,4 @@
 import { ImageCacheResponse } from '@thothai/core'
-
 import { rootApi } from './api'
 
 export const visualGenerationsApi = rootApi.injectEndpoints({

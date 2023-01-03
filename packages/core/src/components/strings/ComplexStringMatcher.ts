@@ -4,11 +4,12 @@
 import Rete from 'rete'
 
 import {
+  EngineContext,
   NodeData,
   ThothNode,
   ThothWorkerInputs,
   ThothWorkerOutputs,
-} from '../../types'
+} from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { triggerSocket, stringSocket } from '../../sockets'
@@ -116,8 +117,8 @@ export class ComplexStringMatcher extends ThothComponent<Promise<void>> {
 
     let input = inputs['input'][0] as string
     console.log('input:::::', input)
-    let str = input + ''
-    let i1 = str.toString().replace(/<.*>/, '')
+    const str = input + ''
+    const i1 = str.toString().replace(/<.*>/, '')
 
     console.log('input:::::', i1)
 
@@ -134,7 +135,6 @@ export class ComplexStringMatcher extends ThothComponent<Promise<void>> {
     const matchBeginningStringArray = (
       (node.data.matchBeginningString ?? '') as string
     )
-      .trim()
       .toLowerCase()
       .split(', ')
     if (
@@ -145,7 +145,6 @@ export class ComplexStringMatcher extends ThothComponent<Promise<void>> {
     }
 
     const matchEndStringArray = ((node.data.matchEndString ?? '') as string)
-      .trim()
       .toLowerCase()
       .split(', ')
 
@@ -154,7 +153,6 @@ export class ComplexStringMatcher extends ThothComponent<Promise<void>> {
     }
 
     const matchAnyStringArray = ((node.data.matchAnyString ?? '') as string)
-      .trim()
       .toLowerCase()
       .split(', ')
 
@@ -165,7 +163,6 @@ export class ComplexStringMatcher extends ThothComponent<Promise<void>> {
     const notMatchBeginningStringArray = (
       (node.data.notMatchBeginningString ?? '') as string
     )
-      .trim()
       .toLowerCase()
       .split(', ')
     if (
@@ -178,7 +175,6 @@ export class ComplexStringMatcher extends ThothComponent<Promise<void>> {
     const notMatchEndStringArray = (
       (node.data.notMatchEndString ?? '') as string
     )
-      .trim()
       .toLowerCase()
       .split(', ')
 
@@ -189,7 +185,6 @@ export class ComplexStringMatcher extends ThothComponent<Promise<void>> {
     const notMatchAnyStringArray = (
       (node.data.notMatchAnyString ?? '') as string
     )
-      .trim()
       .toLowerCase()
       .split(', ')
 

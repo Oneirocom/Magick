@@ -1,22 +1,10 @@
-import { Input, NodeEditor, Output, Socket } from 'rete'
+import { Input, NodeEditor, Output } from 'rete'
 
 import { IRunContextEditor } from '.'
-import { GraphData, DataSocketType, ThothNode } from '../../types'
+import { DataSocketType, ThothNode } from '../../../types'
 import { socketNameMap, SocketNameType } from '../../sockets'
 import { ModuleSocketType } from './module-manager'
 export type ThroughPutType = 'outputs' | 'inputs'
-
-export function extractNodes(
-  nodes: GraphData['nodes'],
-  map: Map<string, Socket>
-) {
-  const names = Array.from(map.keys())
-
-  return Object.keys(nodes)
-    .filter(k => names.includes(nodes[k].name))
-    .map(k => nodes[k])
-    .sort((n1, n2) => n1.position[1] - n2.position[1])
-}
 
 const getRemovedSockets = (
   existingSockets: DataSocketType[],
