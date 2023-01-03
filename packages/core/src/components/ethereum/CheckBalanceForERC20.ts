@@ -9,13 +9,7 @@ const provider = new ethers.providers.JsonRpcProvider(
   'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
 )
 
-import {
-  EngineContext,
-  NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
-} from '../../../types'
+import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
 import { triggerSocket, numSocket, stringSocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
 

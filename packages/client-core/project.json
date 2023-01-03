@@ -1,22 +1,17 @@
 {
+  "name": "client-core",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/client-core/src",
   "projectType": "library",
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@nxext/vite:package",
+      "executor": "@nrwl/vite:build",
       "outputs": [
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/packages/client-core",
-        "generatePackageJson": true,
-        "assets": [
-          "assets"
-        ],
-        "entryFile": "src/index.ts",
-        "configFile": "@nxext/vite/plugins/vite-package"
+        "outputPath": "dist/packages/client-core"
       }
     },
     "lint": {

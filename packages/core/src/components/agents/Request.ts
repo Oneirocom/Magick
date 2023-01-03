@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 import axios from 'axios'
 import Rete from 'rete'
 
 import {
-  EngineContext,
   NodeData,
   ThothNode,
   ThothWorkerInputs,
@@ -87,7 +86,7 @@ export class Request extends ThothComponent<Promise<WorkerReturn>> {
     let url = node?.data?.url as string
     const method = (node?.data?.method as string)?.toLowerCase().trim()
     if (url.startsWith('server')) {
-      url = url.replace('server', process.env.REACT_APP_API_URL as string)
+      url = url.replace('server', import.meta.env.REACT_APP_API_URL as string)
     }
 
     let resp = undefined as any

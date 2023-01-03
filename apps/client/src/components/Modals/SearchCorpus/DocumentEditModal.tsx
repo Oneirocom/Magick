@@ -1,4 +1,4 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 import { useState } from 'react'
 import Modal from '../../Modal/Modal'
@@ -25,7 +25,7 @@ const DocumentEditModal = ({ closeModal, field, document, getDocuments }) => {
     }
     console.log('body ::: ', body)
     await axios.post(
-      `${process.env.REACT_APP_SEARCH_SERVER_URL}/update_document`,
+      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/update_document`,
       body
     )
     enqueueSnackbar('Document updated', { variant: 'success' })

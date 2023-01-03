@@ -161,10 +161,10 @@ function compare(a: ThothComponent<unknown>, b: ThothComponent<unknown>) {
 export const getComponents = () => {
   const sortedComponents = Object.keys(components)
     .sort()
-    .reduce(function (acc, key: keyof typeof components) {
+    .reduce<Record<any, any>>((acc: any, key) => {
       acc[key] = components[key]
       return acc
-    }, {} as Record<string, any>)
+    }, {} as Record<any, any>)
 
   return Object.values(sortedComponents)
     .map(component => component())

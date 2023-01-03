@@ -1,4 +1,4 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 /* eslint-disable no-async-promise-executor */
 /* eslint-disable camelcase */
@@ -9,13 +9,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 import axios from 'axios'
 import Rete from 'rete'
 
-import {
-  NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
-  EngineContext,
-} from '../../../types'
+import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
@@ -171,8 +165,8 @@ export class CustomTextCompletion extends ThothComponent<
 
     const resp = await axios.post(
       `${
-        process.env.REACT_APP_API_URL ??
-        process.env.API_URL ??
+        import.meta.env.REACT_APP_API_URL ??
+        import.meta.env.API_URL ??
         'https://0.0.0.0:8001'
       }/text_completion`,
       {

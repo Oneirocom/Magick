@@ -14,9 +14,12 @@ import { ThothComponent } from '../../thoth-component'
 const info = `Given a keyword pull in relevant information of the wevaiate wikipedia instance.`
 
 const makeWeaviateRequest = async (keyword: string) => {
-  const _resp = await axios.post(`${process.env.REACT_APP_API_URL}/weaviate`, {
-    keyword: keyword,
-  })
+  const _resp = await axios.post(
+    `${import.meta.env.REACT_APP_API_URL}/weaviate`,
+    {
+      keyword: keyword,
+    }
+  )
 
   return _resp
 }

@@ -58,112 +58,107 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
         return new VRMLoaderPlugin(parser)
       })
 
-      loader.load(`/avatar.vrm`,
-        gltf => {
-          const vrm = gltf.userData.vrm
+      loader.load(`/avatar.vrm`, gltf => {
+        const vrm = gltf.userData.vrm
 
-          // Disable frustum culling
-          vrm.scene.traverse(obj => {
-            obj.frustumCulled = false
-          })
+        // Disable frustum culling
+        vrm.scene.traverse(obj => {
+          obj.frustumCulled = false
+        })
 
-          VRMUtils.removeUnnecessaryVertices(gltf.scene)
-          VRMUtils.removeUnnecessaryJoints(gltf.scene)
+        VRMUtils.removeUnnecessaryVertices(gltf.scene)
+        VRMUtils.removeUnnecessaryJoints(gltf.scene)
 
-          VRMUtils.rotateVRM0(vrm)
+        VRMUtils.rotateVRM0(vrm)
 
-          avatar.current = vrm
+        avatar.current = vrm
 
-          if (!avatar || !avatar.current) return
+        if (!avatar || !avatar.current) return
 
-          camera.position.set(0.0, 1, 1)
-          vrm.lookAt.target = camera
+        camera.position.set(0.0, 1, 1)
+        vrm.lookAt.target = camera
 
-          // vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Hips).rotation.y =
-          //   Math.PI
-          vrm.springBoneManager?.reset()
+        // vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Hips).rotation.y =
+        //   Math.PI
+        vrm.springBoneManager?.reset()
 
-          // un-T-pose
-          vrm.humanoid.getNormalizedBoneNode(
-            VRMHumanBoneName.RightUpperArm
-          ).rotation.z = 250
+        // un-T-pose
+        vrm.humanoid.getNormalizedBoneNode(
+          VRMHumanBoneName.RightUpperArm
+        ).rotation.z = 250
 
-          vrm.humanoid.getNormalizedBoneNode(
-            VRMHumanBoneName.RightLowerArm
-          ).rotation.z = -0.2
+        vrm.humanoid.getNormalizedBoneNode(
+          VRMHumanBoneName.RightLowerArm
+        ).rotation.z = -0.2
 
-          vrm.humanoid.getNormalizedBoneNode(
-            VRMHumanBoneName.LeftUpperArm
-          ).rotation.z = -250
+        vrm.humanoid.getNormalizedBoneNode(
+          VRMHumanBoneName.LeftUpperArm
+        ).rotation.z = -250
 
-          vrm.humanoid.getNormalizedBoneNode(
-            VRMHumanBoneName.LeftLowerArm
-          ).rotation.z = 0.2
+        vrm.humanoid.getNormalizedBoneNode(
+          VRMHumanBoneName.LeftLowerArm
+        ).rotation.z = 0.2
 
-          vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Head).rotation.x =
-            randomsomesuch()
-          vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Head).rotation.y =
-            randomsomesuch()
-          vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Head).rotation.z =
-            randomsomesuch()
+        vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Head).rotation.x =
+          randomsomesuch()
+        vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Head).rotation.y =
+          randomsomesuch()
+        vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Head).rotation.z =
+          randomsomesuch()
 
-          vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Neck).rotation.x =
-            randomsomesuch()
-          vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Neck).rotation.y =
-            randomsomesuch()
-          vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Neck).rotation.z =
-            randomsomesuch()
+        vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Neck).rotation.x =
+          randomsomesuch()
+        vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Neck).rotation.y =
+          randomsomesuch()
+        vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Neck).rotation.z =
+          randomsomesuch()
 
-          vrm.humanoid.getNormalizedBoneNode(
-            VRMHumanBoneName.Spine
-          ).rotation.x = randomsomesuch()
-          vrm.humanoid.getNormalizedBoneNode(
-            VRMHumanBoneName.Spine
-          ).rotation.y = randomsomesuch()
-          vrm.humanoid.getNormalizedBoneNode(
-            VRMHumanBoneName.Spine
-          ).rotation.z = randomsomesuch()
+        vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Spine).rotation.x =
+          randomsomesuch()
+        vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Spine).rotation.y =
+          randomsomesuch()
+        vrm.humanoid.getNormalizedBoneNode(VRMHumanBoneName.Spine).rotation.z =
+          randomsomesuch()
 
-          vrm.springBoneManager?.reset()
+        vrm.springBoneManager?.reset()
 
-          function blink() {
-            var blinktimeout = Math.floor(Math.random() * 250) + 50
+        function blink() {
+          var blinktimeout = Math.floor(Math.random() * 250) + 50
 
-            lookAtTarget.position.y =
-              camera.position.y - camera.position.y * 2 + 1.25
-            setTimeout(() => {
-              avatar.current.expressionManager.setValue(
-                VRMExpressionPresetName.BlinkLeft,
-                0
-              )
-              avatar.current.expressionManager.setValue(
-                VRMExpressionPresetName.BlinkRight,
-                0
-              )
-            }, blinktimeout)
-
+          lookAtTarget.position.y =
+            camera.position.y - camera.position.y * 2 + 1.25
+          setTimeout(() => {
             avatar.current.expressionManager.setValue(
               VRMExpressionPresetName.BlinkLeft,
-              1
+              0
             )
             avatar.current.expressionManager.setValue(
               VRMExpressionPresetName.BlinkRight,
-              1
+              0
             )
-          }
+          }, blinktimeout)
 
-          ;(function loop() {
-            var rand = Math.round(Math.random() * 10000) + 1000
-            setTimeout(function () {
-              blink()
-              loop()
-            }, rand)
-          })()
-
-          avatar.current = vrm
-          scene.add(avatar.current.scene)
+          avatar.current.expressionManager.setValue(
+            VRMExpressionPresetName.BlinkLeft,
+            1
+          )
+          avatar.current.expressionManager.setValue(
+            VRMExpressionPresetName.BlinkRight,
+            1
+          )
         }
-      )
+
+        ;(function loop() {
+          var rand = Math.round(Math.random() * 10000) + 1000
+          setTimeout(function () {
+            blink()
+            loop()
+          }, rand)
+        })()
+
+        avatar.current = vrm
+        scene.add(avatar.current.scene)
+      })
     }
   }, [scene, gltf, camera])
 
@@ -175,7 +170,7 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
 
     pause()
 
-    const url = `${process.env.REACT_APP_FILE_SERVER_URL}/${speechUrl}`
+    const url = `${import.meta.env.REACT_APP_FILE_SERVER_URL}/${speechUrl}`
     let interval
 
     // @ts-ignore

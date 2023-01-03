@@ -39,7 +39,7 @@ class speechUtils {
 
   constructor() {
     this.socket = socketIOClient(
-      process.env.REACT_APP_SPEECH_SERVER_URL as string
+      import.meta.env.REACT_APP_SPEECH_SERVER_URL as string
     )
   }
 

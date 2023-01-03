@@ -42,7 +42,7 @@ export const socketKeyFromOutputName = createSocketFromName('outputs')
 export class SpellComponent extends ThothComponent<
   Promise<ModuleWorkerOutput>
 > {
-  updateModuleSockets: Function
+  declare updateModuleSockets: Function
   subscriptionMap: Record<number, Function> = {}
   noBuildUpdate: boolean
 
@@ -62,6 +62,7 @@ export class SpellComponent extends ThothComponent<
   }
 
   subscribe(node: ThothNode, spellId: string) {
+    if (!this.editor) return
     if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
 
     let cache: Spell

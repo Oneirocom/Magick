@@ -123,7 +123,7 @@ const EntityWindow = ({ id, updateCallback }) => {
       }
 
       const resp = await axios.get(
-        `${process.env.REACT_APP_API_URL}/text_to_speech`,
+        `${import.meta.env.REACT_APP_API_URL}/text_to_speech`,
         {
           params: {
             text: 'Hello there! How are you?',
@@ -137,7 +137,7 @@ const EntityWindow = ({ id, updateCallback }) => {
 
       const url =
         voice_provider === 'google' || voice_provider === 'tiktalknet'
-          ? process.env.REACT_APP_FILE_SERVER_URL + '/' + resp.data
+          ? import.meta.env.REACT_APP_FILE_SERVER_URL + '/' + resp.data
           : resp.data
       if (url && url.length > 0) {
         setPlayingAudio(true)
@@ -163,7 +163,7 @@ const EntityWindow = ({ id, updateCallback }) => {
     if (!loaded) {
       ;(async () => {
         const res = await axios.get(
-          `${process.env.REACT_APP_API_ROOT_URL}/entity?instanceId=` + id
+          `${import.meta.env.REACT_APP_API_ROOT_URL}/entity?instanceId=` + id
         )
         setEnabled(res.data.enabled === true)
         setDiscordEnabled(res.data.discord_enabled === true)
@@ -270,7 +270,7 @@ const EntityWindow = ({ id, updateCallback }) => {
   useEffect(() => {
     ;(async () => {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_ROOT_URL}/spells`
+        `${import.meta.env.REACT_APP_API_ROOT_URL}/spells`
       )
       setSpellList(res.data)
     })()
@@ -278,7 +278,7 @@ const EntityWindow = ({ id, updateCallback }) => {
 
   const _delete = () => {
     axios
-      .delete(`${process.env.REACT_APP_API_ROOT_URL}/entity/` + id)
+      .delete(`${import.meta.env.REACT_APP_API_ROOT_URL}/entity/` + id)
       .then(res => {
         console.log('deleted', res)
         if (res.data === 'internal error') {
@@ -384,7 +384,7 @@ const EntityWindow = ({ id, updateCallback }) => {
       twilio_spell_handler_incoming,
     }
     axios
-      .post(`${process.env.REACT_APP_API_ROOT_URL}/entity`, {
+      .post(`${import.meta.env.REACT_APP_API_ROOT_URL}/entity`, {
         id,
         data: _data,
       })
@@ -415,7 +415,7 @@ const EntityWindow = ({ id, updateCallback }) => {
           setDiscordSpellHandlerUpdate(
             responseData.discord_spell_handler_update
           )
-          
+
           setTwitterClientEnable(responseData.twitter_client_enable)
           setTwitterToken(responseData.twitter_token)
           setTwitterId(responseData.twitter_id)
@@ -594,7 +594,8 @@ const EntityWindow = ({ id, updateCallback }) => {
       twilio_empty_responses,
       twilio_spell_handler_incoming,
     }
-    const fileName = discord_bot_name ?? twitter_id ?? twilio_bot_name ?? 'entity'
+    const fileName =
+      discord_bot_name ?? twitter_id ?? twilio_bot_name ?? 'entity'
     const json = JSON.stringify(_data)
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))
@@ -619,19 +620,18 @@ const EntityWindow = ({ id, updateCallback }) => {
     agent,
     channel,
     eth_private_key,
-    eth_public_address
+    eth_public_address,
   }) {
-    const [messages, setMessages] = useState(["Welcome to the room!"]);
-    const [value, setValue] = useState("");
-    const handleSubmit = async (event) => {
-      event.preventDefault();
+    const [messages, setMessages] = useState(['Welcome to the room!'])
+    const [value, setValue] = useState('')
+    const handleSubmit = async event => {
+      event.preventDefault()
       console.log('value is: ', value)
       try {
-        const url = encodeURI(
-            `https://localhost:8001/spells/${spell_handler}`
-          )
-          console.log('url is: ', url)
-          const response = await axios.post(`${url}`, {
+        const url = encodeURI(`https://localhost:8001/spells/${spell_handler}`)
+        console.log('url is: ', url)
+        const response = await axios
+          .post(`${url}`, {
             inputs: {
               Input: value,
               Speaker: speaker,
@@ -641,41 +641,49 @@ const EntityWindow = ({ id, updateCallback }) => {
               Entity: entity,
               Channel: channel,
               eth_private_key,
-              eth_public_address
+              eth_public_address,
             },
-          }).then((response) => {
-            const data = response.data;
-            
+          })
+          .then(response => {
+            const data = response.data
+
             // get the output from data
-            const outputs = data.outputs;
+            const outputs = data.outputs
 
             // get the first key from outputs
-            const outputKey = Object.keys(outputs)[0];
+            const outputKey = Object.keys(outputs)[0]
 
             // get the output from outputs
-            const output = outputs[outputKey];
+            const output = outputs[outputKey]
 
-            setMessages([...messages, output]);
-            console.log(response);
-          });
+            setMessages([...messages, output])
+            console.log(response)
+          })
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
-    };
-  
+    }
+
     return (
-      <div style={{ width: "80%" }}>
+      <div style={{ width: '80%' }}>
         {messages.map((message, index) => (
           <div key={index}>{message}</div>
         ))}
-  
+
         <form onSubmit={handleSubmit}>
           <label htmlFor="message">Message:</label>
-          <input type="text" name="message" value={value} onChange={(e) => { setValue(e.target.value); }} />
+          <input
+            type="text"
+            name="message"
+            value={value}
+            onChange={e => {
+              setValue(e.target.value)
+            }}
+          />
           <button type="submit">Send</button>
         </form>
       </div>
-    );
+    )
   }
 
   return !loaded ? (

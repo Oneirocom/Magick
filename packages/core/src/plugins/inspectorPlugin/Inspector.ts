@@ -45,9 +45,9 @@ export class Inspector {
   }
   // addede DataControl[]
   _add(list: Map<string, DataControl>, control: DataControl) {
-    if (list.has(control.key))
+    if (list.has(control.dataKey))
       throw new Error(
-        `Item with key '${control.key}' already been added to the inspector`
+        `Item with dataKey '${control.dataKey}' already been added to the inspector`
       )
 
     if (control['inspector'] !== null)
@@ -187,8 +187,8 @@ export class Inspector {
 
   handleDefaultTrigger(update: Record<string, any>) {
     this.editor.nodes
-      .filter((node: ThothNode) => node.name === 'Trigger In')
-      .map((node: ThothNode) => {
+      .filter(node => node.name === 'Trigger In')
+      .map(node => {
         if (node.data.isDefaultTriggerIn) {
           node.data.isDefaultTriggerIn = !node.data.isDefaultTriggerIn
         }

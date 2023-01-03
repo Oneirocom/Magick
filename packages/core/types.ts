@@ -280,7 +280,7 @@ export type ModuleWorkerOutput = WorkerOutputs & {
   [key: string]: any
 }
 
-export type ThothWorkerInput = string | unknown | unknown[]
+export type ThothWorkerInput = string | unknown | ThothReteInput
 export type ThothWorkerInputs = { [key: string]: ThothWorkerInput[] }
 export type ThothWorkerOutputs = WorkerOutputs & {
   [key: string]: TaskOutput

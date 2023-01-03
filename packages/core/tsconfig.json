@@ -1,32 +1,31 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "esnext",
-    "lib": ["esnext", "DOM"],
-    "moduleResolution": "Node",
-    "target": "esnext",
+    "target": "ESNext",
     "useDefineForClassFields": true,
-    "strict": false,
-    "jsx": "react",
-    "sourceMap": true,
-    "resolveJsonModule": true,
+    "module": "ESNext",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "skipLibCheck": true,
     "esModuleInterop": true,
-    "declaration": true,
+    "strict": true,
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noImplicitAny": false,
+    "noEmit": true,
     "noUnusedLocals": false,
     "noUnusedParameters": true,
     "noImplicitReturns": false,
-    "noImplicitAny": false,
-    "allowJs": true,
-    "types": ["vite/client", "@nxext/react/client"]
+    "types": [
+      "vite/client"
+    ]
   },
   "files": [],
-  "include": [],
-  "references": [
-    {
-      "path": "./tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
+  "include": [
+    "src",
+    "src"
   ]
 }

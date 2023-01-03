@@ -31,20 +31,20 @@ export abstract class ThothComponent<
   WorkerReturnType
 > extends ThothEngineComponent<WorkerReturnType> {
   // Original interface for task and _task: IComponentWithTask from the Rete Task Plugin
-  task: TaskOptions
-  _task: ThothTask
-  cache: Record<string, any>
+  declare task: TaskOptions
+  declare _task: ThothTask
+  declare cache: Record<string, any>
   // Original Class: https://github.com/AtlasFoundation/rete/blob/master/src/component.ts
   editor: ThothEditor | null = null
   data: unknown = {}
-  category: string
-  info: string
-  display: boolean
+  declare category: string
+  declare info: string
+  declare display: boolean
   dev = false
   hide = false
   runFromCache = false
   deprecated? = false
-  module: ModuleOptions
+  declare module: ModuleOptions
   contextMenuName: string | undefined
   workspaceType: 'module' | 'spell' | null | undefined
   displayName: string | undefined

@@ -6,6 +6,7 @@ import {
   ThothEditor,
   ThothNode,
 } from '../../../types'
+import { Task } from '../taskPlugin'
 import { RunButtonControl } from './RunLastArguments'
 
 function install(editor: ThothEditor) {
@@ -46,12 +47,12 @@ function install(editor: ThothEditor) {
 
           // Since running thos worker invokes the next plugin, task,
           // We have to grab that task, and run the original worker.
-          const task = await component.worker.apply(component, [
+          const task = (await component.worker.apply(component, [
             node,
             inputs,
             outputs,
             context,
-          ])
+          ])) as Task
 
           const value = await task.worker(node, inputs, outputs, context)
           return value

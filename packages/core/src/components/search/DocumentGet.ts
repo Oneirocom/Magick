@@ -1,4 +1,4 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
@@ -56,7 +56,7 @@ export class DocumentGet extends ThothComponent<Promise<WorkerReturn>> {
     const id = inputs['id'][0] as string
 
     const resp = await axios.get(
-      `${process.env.REACT_APP_SEARCH_SERVER_URL}/document/${id}`
+      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/document/${id}`
     )
 
     return {

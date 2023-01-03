@@ -1,13 +1,7 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 import Rete from 'rete'
 
-import {
-  NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
-  EngineContext,
-} from '../../../types'
+import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
 import { ThothComponent } from '../../thoth-component'
@@ -101,7 +95,7 @@ export class AgentTextCompletion extends ThothComponent<Promise<WorkerReturn>> {
   }
 
   async worker(node: NodeData, inputs: ThothWorkerInputs) {
-    let apiKey = process.env.OPENAI_API_KEY as string | null
+    let apiKey = import.meta.env.OPENAI_API_KEY as string | null
     // check if we are in a browser and local storage is available
     // if it is, we can use the API key from local storage
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -141,7 +135,7 @@ export class AgentTextCompletion extends ThothComponent<Promise<WorkerReturn>> {
     // instead of axios.post, use fetch
     const resp = await fetch(
       `${
-        process.env.REACT_APP_API_URL ?? API_URL ?? 'https://0.0.0.0:8001'
+        import.meta.env.REACT_APP_API_URL ?? API_URL ?? 'https://0.0.0.0:8001'
       }/text_completion`,
       {
         method: 'POST',

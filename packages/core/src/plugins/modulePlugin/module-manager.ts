@@ -128,7 +128,7 @@ export class ModuleManager {
   }
 
   async workerModule(
-    node: ThothNode,
+    node: NodeData,
     inputs: ThothWorkerInputs,
     outputs: ThothWorkerOutputs,
     args: { socketInfo: { targetSocket: string } }
@@ -140,7 +140,8 @@ export class ModuleManager {
     const module = new Module()
     const engine = this.engine?.clone()
 
-    const parsedInputs = Object.entries(inputs).reduce((acc, [key, value]) => {
+    const parsedInputs = Object.entries(inputs).reduce((acc, input) => {
+      const [key, value] = input
       const nodeInputs = node.data.inputs as ModuleSocketType[]
       const name = nodeInputs?.find(
         (n: ModuleSocketType) => n?.socketKey === key
@@ -149,7 +150,7 @@ export class ModuleManager {
         acc[name] = value
         return acc
       }
-    }, {} as Record<string, unknown[]>) as Record<string, unknown[]>
+    }, {} as any)
 
     module.read(parsedInputs)
     await engine?.process(
@@ -178,7 +179,7 @@ export class ModuleManager {
   }
 
   workerInputs(
-    node: ThothNode,
+    node: NodeData,
     _inputs: ThothWorkerInputs,
     outputs: ModuleWorkerOutput,
     { module }: { module: Module }
@@ -191,7 +192,7 @@ export class ModuleManager {
   }
 
   workerOutputs(
-    node: ThothNode,
+    node: NodeData,
     inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
     { module }: { module: Module }
@@ -202,7 +203,7 @@ export class ModuleManager {
   }
 
   workerTriggerIns(
-    _node: ThothNode,
+    _node: NodeData,
     _inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
     { module }: { module: Module }
@@ -213,7 +214,7 @@ export class ModuleManager {
   }
 
   workerTriggerOuts(
-    node: ThothNode,
+    node: NodeData,
     _inputs: ThothWorkerInputs,
     outputs: ThothWorkerOutputs,
     { module }: { module: Module }

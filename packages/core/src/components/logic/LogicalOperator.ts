@@ -83,7 +83,7 @@ export class LogicalOperator extends ThothComponent<Promise<WorkerReturn>> {
         is = inp1 < inp2
       }
     } catch (e) {
-      error = e.message
+      error = (e as any).message
     }
 
     this._task.closed = is ? ['false'] : ['true']

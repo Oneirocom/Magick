@@ -1,12 +1,9 @@
-//@ts-nocheck
-
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { VscNewFile, VscTrash } from 'react-icons/vsc'
 import { FaEdit } from 'react-icons/fa'
 import SearchCorpusDocument from './SearchCorpusDocument'
-import { useModal } from '@/contexts/ModalProvider'
-import { store } from '@/state/store'
+import { useModal } from '../../../contexts/ModalProvider'
 import { useSnackbar } from 'notistack'
 
 const SearchCorpus = () => {
@@ -30,10 +27,10 @@ const SearchCorpus = () => {
     let res
     try {
       res = await axios.get(
-        `${process.env.REACT_APP_SEARCH_SERVER_URL}/document-store`
+        `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/document-store`
       )
     } catch (e) {
-      enqueueSnackbar('Request returned: ' + resp.status + '!', {
+      enqueueSnackbar('Request returned: ' + res.status + '!', {
         variant: 'error',
       })
       setDocuments([])
@@ -48,7 +45,7 @@ const SearchCorpus = () => {
 
   const getDocuments = async () => {
     const docs = await axios.get(
-      `${process.env.REACT_APP_SEARCH_SERVER_URL}/document`,
+      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/document`,
       {
         params: {
           storeId: storeRef.current.value,

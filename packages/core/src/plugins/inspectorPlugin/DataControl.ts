@@ -10,7 +10,6 @@ export abstract class DataControl {
   component: ThothComponent<unknown> | null = null
   id: string | null = null
   dataKey: string
-  key: string
   name: string
   defaultValue: unknown
   componentData: object
@@ -18,7 +17,6 @@ export abstract class DataControl {
   options: object
   icon: string
   write: boolean
-  data: Record<string, unknown>
   type: string
 
   constructor({

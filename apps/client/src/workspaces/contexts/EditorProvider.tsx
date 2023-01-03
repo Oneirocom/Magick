@@ -18,7 +18,7 @@ import { useLazyGetSpellQuery } from '../../state/api/spells'
 
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import { MyNode } from '../../components/Node/Node'
-import gridimg from '@/grid.png'
+import gridimg from '../../grid.png'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { useThothInterface } from './ThothInterfaceProvider'
 import { useFeathers } from '../../contexts/FeathersProvider'

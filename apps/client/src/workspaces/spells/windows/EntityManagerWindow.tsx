@@ -8,17 +8,17 @@ const EntityManagerWindow = () => {
 
   const resetData = async () => {
     const res = await axios.get(
-      `${process.env.REACT_APP_API_ROOT_URL}/entities`
+      `${import.meta.env.REACT_APP_API_ROOT_URL}/entities`
     )
     setData(res.data)
   }
 
   const createNew = (data = {}) => {
     axios
-      .post(`${process.env.REACT_APP_API_ROOT_URL}/entity`, { data })
+      .post(`${import.meta.env.REACT_APP_API_ROOT_URL}/entity`, { data })
       .then(async res => {
         const res2 = await axios.get(
-          `${process.env.REACT_APP_API_ROOT_URL}/entities`
+          `${import.meta.env.REACT_APP_API_ROOT_URL}/entities`
         )
         setData(res2.data)
       })
@@ -36,7 +36,7 @@ const EntityManagerWindow = () => {
   useEffect(() => {
     ;(async () => {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_ROOT_URL}/entities`
+        `${import.meta.env.REACT_APP_API_ROOT_URL}/entities`
       )
       setData(res.data)
       console.log('set the data', res.data)

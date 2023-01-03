@@ -1,9 +1,11 @@
 import { IRunContextEditor } from '../../../types'
 import { ThothConsole } from './ThothConsole'
 
+export type DebuggerArgs = { server?: boolean; throwError?: Function }
+
 function install(
   editor: IRunContextEditor,
-  { server = false, throwError }: { server?: boolean; throwError?: Function }
+  { server = false, throwError }: DebuggerArgs
 ) {
   editor.on('componentregister', (component: any) => {
     const worker = component.worker

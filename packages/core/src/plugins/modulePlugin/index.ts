@@ -2,7 +2,7 @@
 import { Engine, NodeEditor, Component, Socket } from 'rete/types'
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data'
 
-import { GraphData, ThothNode } from '../../../types'
+import { GraphData, ThothNode, ThothWorkerOutputs } from '../../../types'
 import { Task } from '../taskPlugin'
 import { Module } from './module'
 import { ModuleManager } from './module-manager'
@@ -84,7 +84,7 @@ function install(
         component.worker = (
           node: NodeData,
           inputs: WorkerInputs,
-          outputs: WorkerOutputs,
+          outputs: ThothWorkerOutputs,
           context
         ) => {
           let _outputs = outputs
@@ -116,7 +116,7 @@ function install(
         component.worker = (
           node: NodeData,
           inputs: WorkerInputs,
-          outputs: WorkerOutputs,
+          outputs: ThothWorkerOutputs,
           context
         ) => {
           moduleManager.workerTriggerIns.call(
@@ -192,8 +192,8 @@ function install(
         component.worker = async (
           node: NodeData,
           inputs: WorkerInputs,
-          outputs: WorkerOutputs,
-          context: object
+          outputs: ThothWorkerOutputs,
+          context: { socketInfo: { targetSocket: string } }
         ) => {
           const module = await moduleManager.workerModule.call(
             moduleManager,
@@ -220,7 +220,7 @@ function install(
         component.worker = (
           node: NodeData,
           inputs: WorkerInputs,
-          outputs: WorkerOutputs,
+          outputs: ThothWorkerOutputs,
           context
         ) => {
           if (outputsWorker)

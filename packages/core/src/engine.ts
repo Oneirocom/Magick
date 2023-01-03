@@ -1,10 +1,11 @@
 import Rete, { Engine } from 'rete'
+import { Plugin } from 'rete/types/core/plugin'
 import io from 'socket.io'
 
 import { GraphData, ModuleType, NodeData, ThothWorkerInputs } from '../types'
-import debuggerPlugin from './plugins/debuggerPlugin'
+import debuggerPlugin, { DebuggerArgs } from './plugins/debuggerPlugin'
 import ModulePlugin from './plugins/modulePlugin'
-import SocketPlugin from './plugins/socketPlugin'
+import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
 
 interface WorkerOutputs {
@@ -58,10 +59,16 @@ export const initSharedEngine = ({
 
   if (server) {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
-    engine.use(debuggerPlugin, { server: true, throwError })
+    engine.use<Plugin, DebuggerArgs>(debuggerPlugin, {
+      server: true,
+      throwError,
+    })
     engine.use(ModulePlugin, { engine, modules } as any)
     if (socket) {
-      engine.use(SocketPlugin, { socket, server: true })
+      engine.use<Plugin, SocketPluginArgs>(SocketPlugin, {
+        socket,
+        server: true,
+      })
     }
     engine.use(TaskPlugin)
   }

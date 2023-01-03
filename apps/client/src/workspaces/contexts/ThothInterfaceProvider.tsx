@@ -212,8 +212,8 @@ const ThothInterfaceProvider = ({ children, tab }) => {
     max_time_diff = -1,
   }) => {
     const urlString = `${
-      process.env.REACT_APP_API_ROOT_URL ??
-      process.env.API_ROOT_URL ??
+      import.meta.env.REACT_APP_API_ROOT_URL ??
+      import.meta.env.API_ROOT_URL ??
       'https://localhost:8001'
     }/event`
 
@@ -249,8 +249,8 @@ const ThothInterfaceProvider = ({ children, tab }) => {
   }: CreateEventArgs) => {
     const response = await axios.post(
       `${
-        process.env.REACT_APP_API_ROOT_URL ??
-        process.env.API_ROOT_URL ??
+        import.meta.env.REACT_APP_API_ROOT_URL ??
+        import.meta.env.API_ROOT_URL ??
         'https://localhost:8001'
       }/event`,
       {
@@ -267,7 +267,7 @@ const ThothInterfaceProvider = ({ children, tab }) => {
   }
 
   const getWikipediaSummary = async (keyword: string) => {
-    const isProd = process.env.NODE_ENV === 'production'
+    const isProd = import.meta.env.NODE_ENV === 'production'
     const root = isProd
       ? 'https://thoth.supereality.com'
       : 'https://localhost:8001'

@@ -1,4 +1,4 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 /* eslint-disable no-console */
 /* eslint-disable require-await */
@@ -83,8 +83,8 @@ export class Classifier extends ThothComponent<Promise<InputReturn>> {
 
     const resp = await axios.post(
       `${
-        process.env.REACT_APP_API_URL ??
-        process.env.API_URL ??
+        import.meta.env.REACT_APP_API_URL ??
+        import.meta.env.API_URL ??
         'https://0.0.0.0:8001'
       }/hf_request`,
       {

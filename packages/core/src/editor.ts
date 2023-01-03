@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import { NodeEditor } from 'rete'
+import { Plugin } from 'rete/types/core/plugin'
 import ConnectionPlugin from 'rete-connection-plugin'
 // import ConnectionReroutePlugin from 'rete-connection-reroute-plugin'
 import ContextMenuPlugin from 'rete-context-menu-plugin'
@@ -22,7 +23,7 @@ import ModulePlugin from './plugins/modulePlugin'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import MultiSocketGenerator from './plugins/multiSocketGenerator'
 import SocketGenerator from './plugins/socketGenerator'
-import SocketPlugin from './plugins/socketPlugin'
+import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
 import SocketOverridePlugin from './plugins/socketPlugin/socketOverridePlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
 import { PubSubContext, ThothComponent } from './thoth-component'
@@ -33,15 +34,15 @@ interface ThothEngineClient extends ThothEngine {
   thoth: EditorContext
 }
 export class ThothEditor extends NodeEditor {
-  tasks: Task[]
-  pubSub: PubSubContext
-  thoth: EditorContext
-  tab: { type: string }
+  declare tasks: Task[]
+  declare pubSub: PubSubContext
+  declare thoth: EditorContext
+  declare tab: { type: string }
   abort: unknown
-  loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
-  moduleManager: ModuleManager
-  runProcess: (callback?: Function) => Promise<void>
-  onSpellUpdated: (spellId: string, callback: Function) => Function
+  declare loadGraph: (graph: Data, reloading?: boolean) => Promise<void>
+  declare moduleManager: ModuleManager
+  declare runProcess: (callback?: Function) => Promise<void>
+  declare onSpellUpdated: (spellId: string, callback: Function) => Function
 }
 
 /*
@@ -89,7 +90,7 @@ export const initEditor = function ({
   // ╚═╝     ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝╚══════╝
 
   if (client && feathers) {
-    editor.use(SocketOverridePlugin, { client })
+    editor.use(SocketOverridePlugin)
   }
 
   // History plugin for undo/redo
@@ -161,7 +162,7 @@ export const initEditor = function ({
   editor.use(KeyCodePlugin)
 
   if (client && feathers) {
-    editor.use(SocketPlugin, { client })
+    editor.use<Plugin, SocketPluginArgs>(SocketPlugin, { client })
   } else {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
     editor.use(ModulePlugin, { engine, modules: {} } as unknown as void)
@@ -203,7 +204,7 @@ export const initEditor = function ({
     await engine.abort()
   }
 
-  editor.runProcess = async (callback: Function) => {
+  editor.runProcess = async callback => {
     await engine.abort()
     await engine.process(editor.toJSON(), null, { thoth: thoth })
     if (callback) callback()

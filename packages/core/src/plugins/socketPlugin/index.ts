@@ -2,14 +2,16 @@ import io from 'socket.io'
 
 import { IRunContextEditor } from '../../../types'
 
+export type SocketPluginArgs = {
+  server?: boolean
+  socket?: io.Socket
+  client?: any
+}
+
 function install(
   editor: IRunContextEditor,
   // Need to better type the feathers client here
-  {
-    server = false,
-    socket,
-    client,
-  }: { server?: boolean; socket?: io.Socket; client?: any }
+  { server = false, socket, client }: SocketPluginArgs
 ) {
   const subscriptionMap = new Map()
 

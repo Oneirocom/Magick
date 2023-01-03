@@ -6,7 +6,10 @@
   },
   "paths": {
     "@/*": ["src/*"],
-    "@components/*": ["src/components/*"]
+    "@components/*": ["src/components/*"],
+    "stream": [
+      "node_modules/stream-browserify"
+    ]
   },
   "include": ["src/**/*"],
   "exclude": [

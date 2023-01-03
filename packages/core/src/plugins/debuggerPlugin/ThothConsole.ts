@@ -24,7 +24,7 @@ export class ThothConsole {
   node: NodeData
   editor: IRunContextEditor
   component: ThothComponent<unknown>
-  nodeView: NodeView
+  nodeView: any
   isServer: boolean
   throwError?: Function
   isEngine: boolean

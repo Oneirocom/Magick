@@ -41,34 +41,32 @@ function install(editor: ThothEditor) {
     const taskOptions = component.task
 
     component.worker = (
-      node: NodeData,
+      node: any,
       inputs,
       outputs,
       args: unknown[],
       ...rest
     ) => {
-      const task = new Task(
-        inputs,
-        component,
-        node,
-        (
-          _ctx: unknown,
-          inputs: ThothWorkerInputs,
-          data: NodeData,
-          socketInfo: string | null
-        ) => {
-          component._task = task
-          // might change this interface, since we swap out data for outputs here, which just feels wrong.
-          return taskWorker.call(
-            component,
-            node,
-            inputs,
-            outputs,
-            { ...args, data, socketInfo },
-            ...rest
-          )
-        }
-      )
+      // Task caller is what actually gets run once the task runs itself.  It is called inside the run function.
+      const taskCaller = (
+        _ctx: unknown,
+        inputs: ThothWorkerInputs,
+        data: NodeData,
+        socketInfo: string | null
+      ) => {
+        component._task = task
+        // might change this interface, since we swap out data for outputs here, which just feels wrong.
+        return taskWorker.call(
+          component,
+          node,
+          inputs,
+          outputs,
+          { ...args, data, socketInfo },
+          ...rest
+        )
+      }
+
+      const task = new Task(inputs, component, node, taskCaller)
 
       if (taskOptions.init) taskOptions.init(task, node)
 

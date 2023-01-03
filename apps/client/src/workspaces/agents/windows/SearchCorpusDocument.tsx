@@ -1,9 +1,8 @@
-//@ts-nocheck
 import { useEffect, useState } from 'react'
-import { useModal } from '@/contexts/ModalProvider';
+import { useModal } from '../../../contexts/ModalProvider'
 import { VscWand, VscTrash, VscSave } from 'react-icons/vsc'
 import axios from 'axios'
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack'
 
 const SearchCorpusDocument = ({ document, getDoc }) => {
   const [isInclude, setIsInclude] = useState(document.isIncluded)
@@ -12,20 +11,20 @@ const SearchCorpusDocument = ({ document, getDoc }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
-    (async () => await getContentObjects())()
+    ;(async () => await getContentObjects())()
   }, [])
 
   const getContentObjects = async () => {
-    console.log('get documents store');
+    console.log('get documents store')
     const res = await axios.get(
-      `${process.env.REACT_APP_SEARCH_SERVER_URL}/content-object`,
+      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/content-object`,
       {
         params: {
-          documentId: document.id
-        }
+          documentId: document.id,
+        },
       }
     )
-    console.log('objects ::: ', res.data);
+    console.log('objects ::: ', res.data)
     setContentObjects(res.data)
   }
 
@@ -35,7 +34,7 @@ const SearchCorpusDocument = ({ document, getDoc }) => {
       isContentObject: true,
       documentId: document.id,
       getDocuments: getDoc,
-      getContentObjects
+      getContentObjects,
     })
   }
 
@@ -44,16 +43,16 @@ const SearchCorpusDocument = ({ document, getDoc }) => {
       modal: 'documentEditModal',
       field,
       document,
-      getDocuments: getDoc
+      getDocuments: getDoc,
     })
   }
-  
+
   const openDeleteModal = () => {
     openModal({
       modal: 'documentDeleteModal',
       documentId: document.id,
       isContentObj: false,
-      getDocuments: getDoc
+      getDocuments: getDoc,
     })
   }
 
@@ -61,7 +60,7 @@ const SearchCorpusDocument = ({ document, getDoc }) => {
     openModal({
       modal: 'contentObjEditModal',
       contents: contentObjects,
-      getContentObjects
+      getContentObjects,
     })
   }
 
@@ -70,11 +69,11 @@ const SearchCorpusDocument = ({ document, getDoc }) => {
     const body = {
       ..._document,
       documentId: id,
-      isIncluded: isInclude
+      isIncluded: isInclude,
     }
-    console.log('body ::: ', body);
+    console.log('body ::: ', body)
     await axios.post(
-      `${process.env.REACT_APP_SEARCH_SERVER_URL}/update_document`,
+      `${import.meta.env.REACT_APP_SEARCH_SERVER_URL}/update_document`,
       body
     )
     enqueueSnackbar('Document updated', { variant: 'success' })
@@ -85,18 +84,25 @@ const SearchCorpusDocument = ({ document, getDoc }) => {
     <div className="search-corpus-document">
       <div className="d-flex align-items-center justify-content-between">
         <div className="form-item">
-          <input 
-            type="checkbox" 
-            name="include" 
-            className="custom-checkbox" 
-            checked={isInclude} 
-            onChange={() => setIsInclude(!isInclude)} 
+          <input
+            type="checkbox"
+            name="include"
+            className="custom-checkbox"
+            checked={isInclude}
+            onChange={() => setIsInclude(!isInclude)}
           />
-          <span className="form-item-label" style={{ marginBottom: 'unset' }}>Include</span>
+          <span className="form-item-label" style={{ marginBottom: 'unset' }}>
+            Include
+          </span>
         </div>
         <div className="form-item">
-          <VscSave size={20} color='#A0A0A0' onClick={saveDocument} style={{ margin: '0 0.5rem'}}/>
-          <VscTrash size={20} color='#A0A0A0' onClick={openDeleteModal}/>
+          <VscSave
+            size={20}
+            color="#A0A0A0"
+            onClick={saveDocument}
+            style={{ margin: '0 0.5rem' }}
+          />
+          <VscTrash size={20} color="#A0A0A0" onClick={openDeleteModal} />
         </div>
       </div>
       <div className="form-item">
@@ -109,7 +115,11 @@ const SearchCorpusDocument = ({ document, getDoc }) => {
             value={document.title}
             readOnly
           ></input>
-          <VscWand size={20} color='#A0A0A0' onClick={() => openEditModal('title')}/>  
+          <VscWand
+            size={20}
+            color="#A0A0A0"
+            onClick={() => openEditModal('title')}
+          />
         </div>
       </div>
       <div className="form-item">
@@ -122,15 +132,16 @@ const SearchCorpusDocument = ({ document, getDoc }) => {
             value={document.description}
             readOnly
           ></input>
-          <VscWand size={20} color='#A0A0A0' onClick={() => openEditModal('description')}/>  
+          <VscWand
+            size={20}
+            color="#A0A0A0"
+            onClick={() => openEditModal('description')}
+          />
         </div>
       </div>
       <div className="form-item search-corpus">
         <span className="form-item-label">Type</span>
-        <select
-          name="documents"
-          id="documents"
-        >
+        <select name="documents" id="documents">
           <option value="document">Document</option>
         </select>
       </div>
@@ -161,7 +172,7 @@ const SearchCorpusDocument = ({ document, getDoc }) => {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default SearchCorpusDocument;
+export default SearchCorpusDocument

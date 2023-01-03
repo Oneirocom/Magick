@@ -1,5 +1,4 @@
-// @ts-nocheck
-import FileInput from '@/screens/HomeScreen/components/FileInput'
+import FileInput from '../../../screens/HomeScreen/components/FileInput'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
@@ -10,7 +9,7 @@ const EntityManagerWindow = () => {
 
   const resetData = async () => {
     const res = await axios.get(
-      `${process.env.REACT_APP_API_ROOT_URL}/entities`
+      `${import.meta.env.REACT_APP_API_ROOT_URL}/entities`
     )
     console.log('res is ', res)
     setData(res.data)
@@ -19,11 +18,11 @@ const EntityManagerWindow = () => {
   const createNew = (data = {}) => {
     console.log('Create new called')
     axios
-      .post(`${process.env.REACT_APP_API_ROOT_URL}/entity`, { data })
+      .post(`${import.meta.env.REACT_APP_API_ROOT_URL}/entity`, { data })
       .then(async res => {
         console.log('response is', res)
         const res2 = await axios.get(
-          `${process.env.REACT_APP_API_ROOT_URL}/entities`
+          `${import.meta.env.REACT_APP_API_ROOT_URL}/entities`
         )
         setData(res2.data)
       })
@@ -41,7 +40,7 @@ const EntityManagerWindow = () => {
   useEffect(() => {
     ;(async () => {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_ROOT_URL}/entities`
+        `${import.meta.env.REACT_APP_API_ROOT_URL}/entities`
       )
       setData(res.data)
       console.log('set the data', res.data)
@@ -52,7 +51,7 @@ const EntityManagerWindow = () => {
     <div className="agent-editor">
       <React.Fragment>
         {data &&
-          (data as any).map(value => {
+          (data as any).map((value, idx) => {
             return (
               <EntityWindow
                 id={value.id ?? 0}

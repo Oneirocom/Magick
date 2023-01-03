@@ -1,23 +1,21 @@
-import Window from '../../../../components/Window/Window'
 import Switch from '@mui/material/Switch'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-
+import { useDispatch } from 'react-redux'
 import { useEffect, useRef, useState } from 'react'
+import Scrollbars from 'react-custom-scrollbars-2'
+import Editor from '@monaco-editor/react'
 
-import css from '@/screens/Thoth/thoth.module.css'
+import Window from '../../../../components/Window/Window'
+import css from '../../../../screens/Thoth/thoth.module.css'
 import SpeechUtils from '../../../../speechUtils'
 import { usePubSub } from '../../../../contexts/PubSubProvider'
 import Avatar from './Avatar'
-import { CollectionsOutlined } from '@mui/icons-material'
-import Scrollbars from 'react-custom-scrollbars-2'
-import Editor from '@monaco-editor/react'
 import { useAppSelector } from '../../../../state/hooks'
 import {
   selectStateBySpellId,
   upsertLocalState,
 } from '../../../../state/localState'
-import { useDispatch } from 'react-redux'
 
 const AvatarWindow = ({ tab }) => {
   const scrollbars = useRef<any>()

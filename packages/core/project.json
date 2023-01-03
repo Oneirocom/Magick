@@ -1,34 +1,25 @@
 {
+  "name": "core",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/core/src",
   "projectType": "library",
   "tags": [],
   "targets": {
     "vite-build": {
-      "executor": "@nxext/vite:package",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "executor": "@nrwl/vite:build",
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/core",
         "generatePackageJson": true,
-        "assets": [
-          "assets"
-        ],
-        "entryFile": "src/index.ts",
-        "frameworkConfigFile": "@nxext/react/plugins/vite",
-        "configFile": "@nxext/vite/plugins/vite-package"
+        "assets": ["assets"],
+        "entryFile": "src/index.ts"
       }
     },
     "build": {
-      "executor": "@nrwl/workspace:run-commands",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "executor": "@nrwl/vite:build",
+      "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/core",
-        "command": "tsc --project packages/core/tsconfig.lib.json --emitDeclarationOnly --skipLibCheck",
-        "color": true
+        "outputPath": "dist/packages/core"
       },
       "dependsOn": [
         {
@@ -39,20 +30,14 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "packages/core/**/*.{ts,js,tsx,jsx}"
-        ]
+        "lintFilePatterns": ["packages/core/**/*.{ts,js,tsx,jsx}"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/packages/core"
-      ],
+      "outputs": ["coverage/packages/core"],
       "options": {
         "jestConfig": "packages/core/jest.config.ts",
         "passWithNoTests": true
