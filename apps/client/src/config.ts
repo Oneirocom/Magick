@@ -1,4 +1,4 @@
-export const a = import.meta.env.PROD
+export const thothApiRootUrl = import.meta.env.PROD
   ? (import.meta.env.VITE_APP_API_ROOT_URL_PROD as string)
   : (import.meta.env.VITE_APP_API_ROOT_URL as string)
 

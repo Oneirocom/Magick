@@ -2,7 +2,15 @@
 import { Engine, NodeEditor, Component, Socket } from 'rete/types'
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data'
 
-import { GraphData, ThothNode, ThothWorkerOutputs } from '../../../types'
+import {
+  EngineContext,
+  GraphData,
+  IRunContextEditor,
+  ModuleType,
+  ThothNode,
+  ThothWorkerOutputs,
+} from '../../../types'
+import { ThothEngine } from '../../engine'
 import { Task } from '../taskPlugin'
 import { Module } from './module'
 import { ModuleManager } from './module-manager'
@@ -15,9 +23,8 @@ interface IRunContextEngine extends Engine {
   trigger: any
 }
 
-export interface IRunContextEditor extends NodeEditor {
+export interface ModuleIRunContextEditor extends IRunContextEditor {
   moduleManager: ModuleManager
-  tasks?: Task[]
 }
 
 type ModuleOptions = {
@@ -32,9 +39,14 @@ interface IModuleComponent extends Component {
   noBuildUpdate: boolean
 }
 
+export type ModulePluginArgs = {
+  engine: ThothEngine
+  modules: Record<string, ModuleType>
+}
+
 function install(
-  runContext: IRunContextEngine | IRunContextEditor,
-  { engine, modules }: any
+  runContext: IRunContextEngine | ModuleIRunContextEditor,
+  { engine, modules }: ModulePluginArgs
 ) {
   const moduleManager = new ModuleManager(modules)
 

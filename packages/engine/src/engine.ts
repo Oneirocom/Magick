@@ -1,5 +1,6 @@
 import io from 'socket.io'
 import Rete, { Engine } from 'rete'
+import { Plugin } from 'rete/types/core/plugin'
 
 import {
   SocketPlugin,
@@ -12,6 +13,9 @@ import {
   NodeData,
   ThothWorkerInputs,
   extractNodes,
+  DebuggerArgs,
+  ModulePluginArgs,
+  SocketPluginArgs,
 } from '@thothai/core'
 
 interface WorkerOutputs {
@@ -65,10 +69,19 @@ export const initSharedEngine = ({
 
   if (server) {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
-    engine.use(DebuggerPlugin, { server: true, throwError })
-    engine.use(ModulePlugin, { engine, modules } as any)
+    engine.use<Plugin, DebuggerArgs>(DebuggerPlugin, {
+      server: true,
+      throwError,
+    })
+    engine.use<Plugin, ModulePluginArgs>(ModulePlugin, {
+      engine,
+      modules,
+    } as any)
     if (socket) {
-      engine.use(SocketPlugin, { socket, server: true })
+      engine.use<Plugin, SocketPluginArgs>(SocketPlugin, {
+        socket,
+        server: true,
+      })
     }
     engine.use(TaskPlugin)
   }
