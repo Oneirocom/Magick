@@ -4,14 +4,11 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "dev": "nx run-many --target=serve --projects=server,entity-server,search-server,speech-server,client --parallel 5",
+    "containers": "docker-compose up",
     "build": "nx build",
     "start": "nx serve",
     "test": "nx test",
-    "generate:node:app": "nx g @nrwl/node:application",
-    "generate:node:library": "nx g @nrwl/js:node",
-    "generate:react:app": "nx g @nxext/react:application",
-    "generate:react:library": "nx g @nxext/react:library",
-    "generate:vite:library": "nx g @nxext/vite:library",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json"
