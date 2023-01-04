@@ -17,6 +17,7 @@ import * as fs from 'fs'
 import spawnPythonServer from './systems/pythonServer'
 import { initWeaviateClient } from './systems/weaviateClient'
 import cors_server from './systems/cors-server'
+import path from 'path'
 
 const app: Koa = new Koa()
 const router: Router = new Router()
@@ -64,14 +65,20 @@ async function init() {
     origin: '*',
   }
   app.use(cors(options))
+  console.log('PWD', __dirname)
+  console.log('PATH TO CERTS', path.join(__dirname, 'certs/key.pem'))
+  console.log(
+    'CERTS EXIST!',
+    fs.existsSync(path.join(__dirname, 'certs/key.pem'))
+  )
 
   new cors_server(
     parseInt(process.env.CORS_PORT as string),
     '0.0.0.0',
     process.env.USESSL === 'true' &&
-      fs.existsSync('certs/') &&
-      fs.existsSync('certs/key.pem') &&
-      fs.existsSync('certs/cert.pem')
+      fs.existsSync(path.join(__dirname, './certs/')) &&
+      fs.existsSync(path.join(__dirname, './certs/key.pem')) &&
+      fs.existsSync(path.join(__dirname, './certs/cert.pem'))
   )
 
   process.on('unhandledRejection', (err: Error) => {
@@ -152,13 +159,15 @@ async function init() {
   const PORT: number = Number(process.env.PORT) || 8001
   const useSSL =
     process.env.USESSL === 'true' &&
-    fs.existsSync('certs/') &&
-    fs.existsSync('certs/key.pem') &&
-    fs.existsSync('certs/cert.pem')
+    fs.existsSync(path.join(__dirname, './certs/')) &&
+    fs.existsSync(path.join(__dirname, './certs/key.pem')) &&
+    fs.existsSync(path.join(__dirname, './certs/cert.pem'))
 
   var optionSsl = {
-    key: useSSL ? fs.readFileSync('certs/key.pem') : '',
-    cert: useSSL ? fs.readFileSync('certs/cert.pem') : '',
+    key: useSSL ? fs.readFileSync(path.join(__dirname, './certs/key.pem')) : '',
+    cert: useSSL
+      ? fs.readFileSync(path.join(__dirname, './certs/cert.pem'))
+      : '',
   }
   useSSL
     ? https

@@ -13,7 +13,7 @@
         "outputPath": "dist/apps/server",
         "main": "apps/server/src/main.ts",
         "tsConfig": "apps/server/tsconfig.app.json",
-        "assets": ["apps/server/src/assets"],
+        "assets": ["apps/server/src/assets", "apps/server/src/certs"],
         "webpackConfig": "apps/server/webpack.config.js"
       },
       "configurations": {
