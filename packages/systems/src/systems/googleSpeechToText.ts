@@ -3,6 +3,7 @@ import { Server } from 'socket.io'
 import { config } from 'dotenv-flow'
 import https from 'https'
 import * as fs from 'fs'
+import path from 'path'
 
 config({ path: '.env' })
 
@@ -39,8 +40,8 @@ export async function initSpeechServer(ignoreDotEnv: boolean) {
 
   if (useSSL) {
     const server = https.createServer({
-      key: fs.readFileSync('certs/key.pem'),
-      cert: fs.readFileSync('certs/cert.pem'),
+      key: fs.readFileSync(path.join(__dirname, './certs/key.pem')),
+      cert: fs.readFileSync(path.join(__dirname, './certs/cert.pem')),
     })
     server.listen(PORT)
     io = new Server(server, {
