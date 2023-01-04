@@ -1,0 +1,40 @@
+version: '3.4'
+services:
+  weaviate:
+    command:
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8080'
+    - --scheme
+    - http
+    image: semitechnologies/weaviate:1.11.0
+    ports:
+    - 8080:8080
+    restart: on-failure:0
+    environment:
+      QUERY_DEFAULTS_LIMIT: 100
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - cache:/data
+  db:
+    restart: always
+    image: postgres
+    hostname: thoth_db
+    environment:
+      POSTGRES_DB: thoth
+      POSTGRES_USER: thoth
+      POSTGRES_PASSWORD: thoth_default_pw
+    ports:
+      - '5432:5432'
+volumes:
+  cache:
+    driver: local
+#to set password for reddis --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
