@@ -1,4 +1,3 @@
-import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 import Rete from 'rete'
 
 import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'

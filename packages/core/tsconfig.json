@@ -1,11 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "esnext",
     "useDefineForClassFields": true,
-    "module": "ESNext",
+    "module": "esnext",
     "lib": [
-      "ESNext",
+      "esnext",
       "DOM"
     ],
     "skipLibCheck": true,
@@ -26,6 +26,5 @@
   "files": [],
   "include": [
     "src",
-    "src"
-  ]
+    "./env.d.ts", "../client-core/src/plugins/reactRenderPlugin" ]
 }

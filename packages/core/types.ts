@@ -13,11 +13,11 @@ import {
 
 import { ThothConsole } from './src/plugins/debuggerPlugin/ThothConsole'
 import { Inspector } from './src/plugins/inspectorPlugin/Inspector'
-import { TaskOutputTypes } from './src/plugins/taskPlugin/task'
+import { ModuleManager } from './src/plugins/modulePlugin/module-manager'
+import { Task, TaskOutputTypes } from './src/plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './src/sockets'
-import { ThothTask } from './src/thoth-component'
+import { PubSubContext, ThothTask } from './src/thoth-component'
 
-export { ThothEditor } from './src/editor'
 export { ThothComponent } from './src/thoth-component'
 //@seang this was causing test enviroment issues to have it shared client/server
 // export { ThothEditor } from './src/editor'
@@ -55,6 +55,19 @@ export type GetEventArgs = {
   channel: string
   maxCount: number
   max_time_diff: number
+}
+
+export class ThothEditor extends NodeEditor<EventsTypes> {
+  declare tasks: Task[]
+  declare pubSub: PubSubContext
+  declare thoth: EditorContext
+  declare tab: { type: string }
+  declare abort: unknown
+  declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
+  declare moduleManager: ModuleManager
+  declare runProcess: (callback?: Function | undefined) => Promise<void>
+  declare onSpellUpdated: (spellId: string, callback: Function) => Function
+  declare refreshEventTable: () => void
 }
 
 export type EngineContext = {

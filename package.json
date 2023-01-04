@@ -205,6 +205,7 @@
     "@welldone-software/why-did-you-render": "^7.0.1",
     "babel-jest": "28.1.1",
     "copyfiles": "2.4.1",
+    "css-loader": "^6.7.3",
     "cypress": "^10.7.0",
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
@@ -231,6 +232,7 @@
     "vite": "^4.0.1",
     "vite-plugin-dts": "~1.7.1",
     "vite-plugin-eslint": "^1.8.1",
-    "vitest": "^0.25.8"
+    "vitest": "^0.25.8",
+    "webpack-merge": "^5.8.0"
   }
 }

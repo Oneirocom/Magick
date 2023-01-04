@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 import axios from 'axios'
 import Rete from 'rete'

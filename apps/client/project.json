@@ -44,6 +44,7 @@
       "configurations": {
         "development": {
           "logLevel": "info",
+          "hmr": true,
           "buildTarget": "client:build:development"
         },
         "production": {

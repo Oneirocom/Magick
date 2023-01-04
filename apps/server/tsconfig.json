@@ -2,6 +2,10 @@
   "extends": "../../tsconfig.base.json",
   "files": [],
   "include": [],
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "es2020",
+  },
   "references": [
     {
       "path": "./tsconfig.app.json"

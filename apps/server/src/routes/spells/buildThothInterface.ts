@@ -1,8 +1,12 @@
 import { CustomError } from './../../utils/CustomError'
-import { EngineContext, ThothWorkerInputs } from '@thothai/core'
+import {
+  EngineContext,
+  ThothWorkerInputs,
+  GetEventArgs,
+  CreateEventArgs,
+} from '@thothai/core'
 import Koa from 'koa'
 import vm2 from 'vm2'
-import { GetEventArgs, CreateEventArgs } from '@thothai/core'
 
 import { searchWikipedia } from '../wikipedia/helpers'
 import queryGoogle from '../utils/queryGoogle'

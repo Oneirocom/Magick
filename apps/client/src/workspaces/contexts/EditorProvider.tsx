@@ -1,11 +1,5 @@
-import {
-  zoomAt,
-  GraphData,
-  EditorContext,
-  Spell,
-  ThothEditor,
-} from '@thothai/core'
-import { initEditor } from '@thothai/client-core'
+import { GraphData, EditorContext, Spell, ThothEditor } from '@thothai/core'
+import { initEditor, zoomAt } from '@thothai/client-core'
 import React, {
   useRef,
   useContext,

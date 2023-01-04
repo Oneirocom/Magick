@@ -25,6 +25,8 @@ function install(editor: NodeEditor) {
         false
     )
       return false
+
+    return true
   })
   editor.on('connectioncreated', connection => {
     getHook<OnConnected>(
@@ -52,6 +54,8 @@ function install(editor: NodeEditor) {
       )(connection) === false
     )
       return false
+
+    return true
   })
   editor.on('connectionremoved', connection => {
     getHook<OnDisconnected>(

@@ -65,7 +65,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     editor.on(
       // @ts-ignore
       'nodecreated noderemoved',
-      (node: ThothComponent<unknown>) => {
+      (node: any) => {
         if (!spellRef.current) return
         if (node.category !== 'I/O') return
         // TODO we can probably send this update to a spell namespace for this spell.

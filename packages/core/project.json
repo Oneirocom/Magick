@@ -5,7 +5,7 @@
   "projectType": "library",
   "tags": [],
   "targets": {
-    "vite-build": {
+    "build": {
       "executor": "@nrwl/vite:build",
       "outputs": ["{options.outputPath}"],
       "options": {
@@ -14,19 +14,6 @@
         "assets": ["assets"],
         "entryFile": "src/index.ts"
       }
-    },
-    "build": {
-      "executor": "@nrwl/vite:build",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/core"
-      },
-      "dependsOn": [
-        {
-          "target": "vite-build",
-          "projects": "self"
-        }
-      ]
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",

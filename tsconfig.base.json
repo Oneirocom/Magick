@@ -12,7 +12,7 @@
     "target": "esnext",
     "module": "esnext",
     "lib": [
-      "es2017",
+      "es2021",
       "dom"
     ],
     "skipLibCheck": true,
@@ -38,9 +38,6 @@
       ],
       "@thothai/plugins": [
         "packages/plugins/src/index.ts"
-      ],
-      "@thothai/server-core": [
-        "packages/server-core/src/index.ts"
       ]
     }
   },

@@ -1,5 +1,3 @@
-import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable require-await */

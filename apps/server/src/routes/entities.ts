@@ -1,6 +1,5 @@
 // @ts-nocheck
-import { database } from '../database'
-import { handleInput } from '../entities/connectors/handleInput'
+import { database } from '@thothai/database'
 import 'regenerator-runtime/runtime'
 //@ts-ignore
 // import weaviate from 'weaviate-client'
@@ -197,8 +196,8 @@ const createEvent = async (ctx: Koa.Context) => {
     sender,
     client,
     channel,
-    text
-})
+    text,
+  })
 
   return (ctx.body = 'ok')
 }
@@ -249,7 +248,8 @@ const textCompletion = async (ctx: Koa.Context) => {
     .replace('{agent}', agent)
     .replace('{speaker}', sender)
   let stop = (ctx.request.body.stop ?? ['']) as string[]
-  const openaiApiKey = ctx.request.body.apiKey as string ?? process.env.OPENAI_API_KEY
+  const openaiApiKey =
+    (ctx.request.body.apiKey as string) ?? process.env.OPENAI_API_KEY
 
   if (!stop || stop.length === undefined || stop.length <= 0) {
     stop = ['"""', '###']
@@ -408,5 +408,5 @@ export const entities: Route[] = [
   {
     path: '/query_google',
     post: queryGoogle,
-  }
+  },
 ]

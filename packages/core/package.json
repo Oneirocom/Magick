@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "private": false,
   "description": "core shared code for thoth",
-  "main": "./core.umd.js",
-  "module": "./core.es.js",
+  "main": "./index.js",
+  "module": "./index.js",
   "exports": {
     ".": {
-      "import": "./core.es.js",
-      "require": "./core.umd.js"
+      "import": "./index.js",
+      "require": "./index.js"
     }
   },
   "peerDependencies": {

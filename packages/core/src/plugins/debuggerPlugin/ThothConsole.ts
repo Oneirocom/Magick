@@ -1,5 +1,3 @@
-import { NodeView } from 'rete/types/view/node'
-
 import { IRunContextEditor, NodeData } from '../../../types'
 import { ThothComponent } from '../../thoth-component'
 

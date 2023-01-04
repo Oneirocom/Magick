@@ -1,9 +1,8 @@
 /* eslint-disable no-case-declarations */
-import { Engine, NodeEditor, Component, Socket } from 'rete/types'
+import { Engine, Component, Socket } from 'rete/types'
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data'
 
 import {
-  EngineContext,
   GraphData,
   IRunContextEditor,
   ModuleType,
@@ -11,7 +10,6 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { ThothEngine } from '../../engine'
-import { Task } from '../taskPlugin'
 import { Module } from './module'
 import { ModuleManager } from './module-manager'
 import { addIO, removeIO } from './utils'

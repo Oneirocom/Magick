@@ -1,13 +1,16 @@
-import { NodeEditor } from 'rete'
+import { createRoot } from 'react-dom/client'
 import ConnectionPlugin from 'rete-connection-plugin'
+import { Plugin } from 'rete/types/core/plugin'
 // import ConnectionReroutePlugin from 'rete-connection-reroute-plugin'
 // @ts-ignore
 import ContextMenuPlugin from 'rete-context-menu-plugin'
 import { Data } from 'rete/types/core/data'
+import CommentPlugin from './plugins/commentPlugin'
+import ReactRenderPlugin from './plugins/reactRenderPlugin'
 
 import {
-  AreaPlugin,
-  CachePlugin,
+  // CachePlugin,
+  SocketPluginArgs,
   DebuggerPlugin,
   DisplayPlugin,
   ErrorPlugin,
@@ -15,38 +18,24 @@ import {
   InspectorPlugin,
   KeyCodePlugin,
   LifecyclePlugin,
-  ModuleManager,
   ModulePlugin,
-  ReactRenderPlugin,
   SocketGeneratorPlugin,
   SocketOverridePlugin,
   SocketPlugin,
-  Task,
   TaskPlugin,
   EditorContext,
-  EventsTypes,
-  ThothNode,
-  PubSubContext,
   ThothComponent,
   getComponents,
+  ThothEditor,
+  MultiSocketGenerator,
 } from '@thothai/core'
+
+import { AreaPlugin } from './plugins/areaPlugin'
 
 import { initSharedEngine, ThothEngine } from '@thothai/engine'
 
 interface ThothEngineClient extends ThothEngine {
   thoth: EditorContext
-}
-export class ThothEditor extends NodeEditor<EventsTypes> {
-  declare tasks: Task[]
-  declare pubSub: PubSubContext
-  declare thoth: EditorContext
-  declare tab: { type: string }
-  declare abort: unknown
-  declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
-  declare moduleManager: ModuleManager
-  declare runProcess: (callback?: Function | undefined) => Promise<void>
-  declare onSpellUpdated: (spellId: string, callback: Function) => Function
-  declare refreshEventTable: () => void
 }
 
 /*
@@ -54,7 +43,6 @@ export class ThothEditor extends NodeEditor<EventsTypes> {
 */
 
 const editorTabMap: Record<string, ThothEditor> = {}
-
 export const initEditor = function ({
   container,
   pubSub,
@@ -72,7 +60,6 @@ export const initEditor = function ({
   client?: any
   feathers?: any
 }) {
-  if (!window) return
   if (editorTabMap[tab.id]) editorTabMap[tab.id].clear()
 
   const components = getComponents()
@@ -95,7 +82,7 @@ export const initEditor = function ({
   // ╚═╝     ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝╚══════╝
 
   if (client && feathers) {
-    editor.use(SocketOverridePlugin, { client } as unknown as void)
+    editor.use(SocketOverridePlugin)
   }
 
   // History plugin for undo/redo
@@ -106,38 +93,32 @@ export const initEditor = function ({
   // connection plugin is used to render conections between nodes
   editor.use(ConnectionPlugin)
   // @seang: temporarily disabling because dependencies of ConnectionReroutePlugin are failing validation on server import of thoth-core
-  // if (window) {
-  //   editor.use(ConnectionReroutePlugin)
-  // }
+  // editor.use(ConnectionReroutePlugin)
   // React rendering for the editor
   editor.use(ReactRenderPlugin, {
     // this component parameter is a custom default style for nodes
     component: node as any,
+    createRoot,
   })
   // renders a context menu on right click that shows available nodes
   editor.use(LifecyclePlugin)
   editor.use(ContextMenuPlugin, {
+    searchBar: false,
     delay: 0,
     rename(component: { contextMenuName: any; name: any }) {
       return component.contextMenuName || component.name
     },
-    nodeItems: (node: ThothNode) => {
-      if (node.data.nodeLocked) {
-        return { Delete: false }
-      }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    nodeItems: () => {
       return {
         Deleted: true,
         Clone: true,
       }
     },
     allocate: (component: ThothComponent<unknown>) => {
-      const isProd = import.meta.env.MODE === 'production'
-      //@seang: disabling component filtering in anticipation of needing to treat spells as "top level modules" in the publishing workflow
       const tabType = editor.tab.type
       const { workspaceType } = component
 
-      if (isProd && (component as any).dev) return null
-      if (component.deprecated) return null
       if (component.hide) return null
       if (workspaceType && workspaceType !== tabType) return null
       return [component.category]
@@ -147,10 +128,11 @@ export const initEditor = function ({
   // This should only be needed on client, not server
   editor.use(DebuggerPlugin)
   editor.use(SocketGeneratorPlugin)
+  editor.use(MultiSocketGenerator)
   editor.use(DisplayPlugin)
   editor.use(InspectorPlugin)
   editor.use(AreaPlugin, {
-    scaleExtent: { min: 0.25, max: 2 },
+    scaleExtent: { min: 0.025, max: 2 },
   })
 
   // The engine is used to process/run the rete graph
@@ -169,26 +151,21 @@ export const initEditor = function ({
     return thoth.onSubspellUpdated(spellId, callback)
   }
 
-  editor.refreshEventTable = () => {
-    return thoth.refreshEventTable()
-  }
-
   editor.use(KeyCodePlugin)
 
   if (client && feathers) {
-    editor.use(SocketPlugin, { client } as any)
+    editor.use<Plugin, SocketPluginArgs>(SocketPlugin, { client })
   } else {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
-    editor.use(CachePlugin)
     editor.use(ModulePlugin, { engine, modules: {} } as unknown as void)
     editor.use(TaskPlugin)
   }
 
   // editor.use(SelectionPlugin, { enabled: true })
 
-  // editor.use(CommentPlugin, {
-  //   margin: 20, // indent for new frame comments by default 30 (px)
-  // })
+  editor.use(CommentPlugin, {
+    margin: 20, // indent for new frame comments by default 30 (px)
+  })
 
   // WARNING all the plugins from the editor get installed onto the component and modify it.  This effects the components registered in the engine, which already have plugins installed.
   components.forEach((c: any) => {
@@ -219,19 +196,18 @@ export const initEditor = function ({
     await engine.abort()
   }
 
-  editor.runProcess = async (callback: Function | undefined) => {
+  editor.runProcess = async callback => {
     await engine.abort()
     await engine.process(editor.toJSON(), null, { thoth: thoth })
     if (callback) callback()
   }
 
-  editor.loadGraph = async (_graph: Data, reloading = false) => {
+  editor.loadGraph = async (_graph: Data) => {
     const graph = JSON.parse(JSON.stringify(_graph))
     await engine.abort()
     editor.fromJSON(graph)
-
+    editor.view.area.translate(0, 0)
     editor.view.resize()
-    if (!reloading) AreaPlugin.zoomAt(editor)
   }
 
   // Start the engine off on first load

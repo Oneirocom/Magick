@@ -1,8 +1,7 @@
-import { Node, Socket, Control } from '@thothai/core'
+import { Node, Socket, Control } from '@thothai/client-core'
 
 import Icon, { componentCategories } from '../Icon/Icon'
 import css from './Node.module.css'
-import icons from '../Icon/icon.module.css'
 
 export class MyNode extends Node {
   declare props: any
