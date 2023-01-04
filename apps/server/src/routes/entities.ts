@@ -8,10 +8,8 @@ import 'regenerator-runtime/runtime'
 import { Route } from '../types'
 import { makeCompletion } from '../utils/MakeCompletionRequest'
 import { MakeModelRequest } from '../utils/MakeModelRequest'
-import { tts } from '../systems/googleTextToSpeech'
 import { getAudioUrl } from './getAudioUrl'
-import { tts_tiktalknet } from '../systems/tiktalknet'
-import queryGoogleSearch from './utils/queryGoogle'
+import { tts, tts_tiktalknet, queryGoogleSearch } from '@thothai/systems'
 import { CustomError } from '../utils/CustomError'
 
 export const modules: Record<string, unknown> = {}

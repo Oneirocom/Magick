@@ -67,12 +67,6 @@ async function init() {
     origin: '*',
   }
   app.use(cors(options))
-  console.log('PWD', __dirname)
-  console.log('PATH TO CERTS', path.join(__dirname, 'certs/key.pem'))
-  console.log(
-    'CERTS EXIST!',
-    fs.existsSync(path.join(__dirname, 'certs/key.pem'))
-  )
 
   new cors_server(
     parseInt(process.env.CORS_PORT as string),

@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/client/src",
   "projectType": "application",
+  "implicitDependencies": ["server", "speech-server", "search-server"],
   "targets": {
     "build": {
       "executor": "@nrwl/vite:build",
