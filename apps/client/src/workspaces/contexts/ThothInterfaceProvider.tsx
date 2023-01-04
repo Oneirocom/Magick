@@ -4,7 +4,7 @@ import {
   EditorContext,
   Spell,
   ThothWorkerInputs,
-} from '@thothai/core'
+} from '@ magickml/core'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
 import { useGetSpellQuery, useRunSpellMutation } from '../../state/api/spells'

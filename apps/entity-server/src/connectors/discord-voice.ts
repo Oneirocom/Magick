@@ -10,8 +10,8 @@ import {
 import { createReadStream } from 'fs'
 
 import { getAudioUrl } from '../../../server/src/routes/getAudioUrl'
-import { removeEmojisFromString } from '@thothai/utils'
-import { tts, tts_tiktalknet } from '@thothai/systems'
+import { removeEmojisFromString } from '@ magickml/utils'
+import { tts, tts_tiktalknet } from '@ magickml/systems'
 
 import { addSpeechEvent } from './voiceUtils/addSpeechEvent'
 

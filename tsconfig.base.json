@@ -24,25 +24,25 @@
       "./node_modules/@types"
     ],
     "paths": {
-      "@thothai/client-core": [
+      "@ magickml/client-core": [
         "packages/client-core/src/index.ts"
       ],
-      "@thothai/core": [
+      "@ magickml/core": [
         "packages/core/src/index.ts"
       ],
-      "@thothai/database": [
+      "@ magickml/database": [
         "packages/database/src/index.ts"
       ],
-      "@thothai/engine": [
+      "@ magickml/engine": [
         "packages/engine/src/index.ts"
       ],
-      "@thothai/plugins": [
+      "@ magickml/plugins": [
         "packages/plugins/src/index.ts"
       ],
-      "@thothai/systems": [
+      "@ magickml/systems": [
         "packages/systems/src/index.ts"
       ],
-      "@thothai/utils": [
+      "@ magickml/utils": [
         "packages/utils/src/index.ts"
       ]
     }

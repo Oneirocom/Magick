@@ -1,6 +1,6 @@
-import { database } from '@thothai/database'
-import { tts, tts_tiktalknet } from '@thothai/systems'
-import { SpellManager } from '@thothai/core'
+import { database } from '@ magickml/database'
+import { tts, tts_tiktalknet } from '@ magickml/systems'
+import { SpellManager } from '@ magickml/core'
 
 import discord_client from './connectors/discord'
 import { twitter_client } from './connectors/twitter'

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { database } from '@thothai/database'
+import { database } from '@ magickml/database'
 import 'regenerator-runtime/runtime'
 //@ts-ignore
 // import weaviate from 'weaviate-client'
@@ -9,7 +9,7 @@ import { Route } from '../types'
 import { makeCompletion } from '../utils/MakeCompletionRequest'
 import { MakeModelRequest } from '../utils/MakeModelRequest'
 import { getAudioUrl } from './getAudioUrl'
-import { tts, tts_tiktalknet, queryGoogleSearch } from '@thothai/systems'
+import { tts, tts_tiktalknet, queryGoogleSearch } from '@ magickml/systems'
 import { CustomError } from '../utils/CustomError'
 
 export const modules: Record<string, unknown> = {}

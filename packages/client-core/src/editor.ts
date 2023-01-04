@@ -28,11 +28,11 @@ import {
   getComponents,
   ThothEditor,
   MultiSocketGenerator,
-} from '@thothai/core'
+} from '@ magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
 
-import { initSharedEngine, ThothEngine } from '@thothai/engine'
+import { initSharedEngine, ThothEngine } from '@ magickml/engine'
 
 interface ThothEngineClient extends ThothEngine {
   thoth: EditorContext

@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack'
-import { GraphData } from '@thothai/core'
+import { GraphData } from '@ magickml/core'
 import { useEffect } from 'react'
 
 import { useAppDispatch } from '../../../state/hooks'

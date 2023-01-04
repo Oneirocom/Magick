@@ -1,4 +1,4 @@
-import { InspectorData } from '@thothai/core'
+import { InspectorData } from '@ magickml/core'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { createContext, useContext, useEffect, useState } from 'react'
 

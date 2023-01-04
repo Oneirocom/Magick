@@ -1,6 +1,6 @@
 import Koa from 'koa'
 import 'regenerator-runtime/runtime'
-import { database } from '@thothai/database'
+import { database } from '@ magickml/database'
 import { Route } from '../../types'
 import { CustomError } from '../../utils/CustomError'
 import {
@@ -8,7 +8,7 @@ import {
   GraphData,
   Spell as SpellType,
   extractModuleInputKeys,
-} from '@thothai/core'
+} from '@ magickml/core'
 import { buildThothInterface } from './buildThothInterface'
 
 import otJson0 from 'ot-json0'

@@ -1,4 +1,4 @@
-import { Node, Socket, Control } from '@thothai/client-core'
+import { Node, Socket, Control } from '@ magickml/client-core'
 
 import Icon, { componentCategories } from '../Icon/Icon'
 import css from './Node.module.css'

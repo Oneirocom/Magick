@@ -4,14 +4,14 @@ import {
   ThothWorkerInputs,
   GetEventArgs,
   CreateEventArgs,
-} from '@thothai/core'
+} from '@ magickml/core'
 import Koa from 'koa'
 import vm2 from 'vm2'
 
 import { searchWikipedia } from '../wikipedia/helpers'
 import queryGoogle from '../utils/queryGoogle'
 
-import { database } from '@thothai/database'
+import { database } from '@ magickml/database'
 
 const getEvents = async ({
   type,

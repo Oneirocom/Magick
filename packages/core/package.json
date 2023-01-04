@@ -1,5 +1,5 @@
 {
-  "name": "@thothai/core",
+  "name": "@ magickml/core",
   "version": "0.0.1",
   "private": false,
   "description": "core shared code for thoth",

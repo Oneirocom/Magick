@@ -1,6 +1,6 @@
 import { config } from 'dotenv-flow'
 config()
-import { initSpeechServer } from '@thothai/systems'
+import { initSpeechServer } from '@ magickml/systems'
 
 // @ts-ignore
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0

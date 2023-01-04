@@ -16,7 +16,7 @@ import {
   DebuggerArgs,
   ModulePluginArgs,
   SocketPluginArgs,
-} from '@thothai/core'
+} from '@ magickml/core'
 
 interface WorkerOutputs {
   [key: string]: unknown

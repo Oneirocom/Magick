@@ -1,5 +1,5 @@
 {
-  "name": "@thothai/engine",
+  "name": "@ magickml/engine",
   "version": "0.0.0",
   "main": "./engine.umd.js",
   "module": "./engine.es.js",

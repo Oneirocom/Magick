@@ -6,7 +6,7 @@ import HttpStatus from 'http-status-codes'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
-import { database } from '@thothai/database'
+import { database } from '@ magickml/database'
 import { routes } from './routes'
 import { Handler, Method, Middleware } from './types'
 import {
@@ -15,7 +15,7 @@ import {
   spawnPythonServer,
   initWeaviateClient,
   cors_server,
-} from '@thothai/systems'
+} from '@ magickml/systems'
 import https from 'https'
 import http from 'http'
 import * as fs from 'fs'
