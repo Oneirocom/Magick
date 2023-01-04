@@ -26,3 +26,5 @@ export * from '../types'
 export * from './components'
 export * from './engine'
 export * from './spellManager'
+
+export * from './components/agents/roomManager'

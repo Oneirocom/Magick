@@ -3,7 +3,6 @@ import cors_proxy_https from 'cors-anywhere'
 //@ts-ignore
 import cors_proxy from 'cors-anywhere'
 import * as fs from 'fs'
-import path from 'path'
 
 //CORs server that is used for the web client to request an agent's image from wikipedia
 export class cors_server {
@@ -16,8 +15,8 @@ export class cors_server {
       cors_proxy_https
         .createServer({
           httpsOptions: {
-            key: fs.readFileSync(path.join(__dirname, './certs/key.pem')),
-            cert: fs.readFileSync(path.join(__dirname, './certs/cert.pem')),
+            key: fs.readFileSync('certs/key.pem'),
+            cert: fs.readFileSync('certs/cert.pem'),
           },
           originWhitelist: [],
           requireHeader: ['origin', 'x-requested-with'],

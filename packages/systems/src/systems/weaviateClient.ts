@@ -1,10 +1,9 @@
-import { SearchSchema } from '../types'
+import { SearchSchema, ClassifierSchema } from '@thothai/core'
 import weaviate from 'weaviate-client'
 import * as fs from 'fs'
 import path from 'path'
 import { database } from '@thothai/database'
 import axios from 'axios'
-import { ClassifierSchema } from '../types'
 
 const DOCUMENTS_CLASS_NAME = 'DataStore'
 const saved_docs: SearchSchema[] = []

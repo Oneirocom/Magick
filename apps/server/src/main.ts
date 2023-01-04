@@ -9,14 +9,16 @@ import compose from 'koa-compose'
 import { database } from '@thothai/database'
 import { routes } from './routes'
 import { Handler, Method, Middleware } from './types'
-import { initTextToSpeech } from './systems/googleTextToSpeech'
-import { initFileServer } from './systems/fileServer'
+import {
+  initTextToSpeech,
+  initFileServer,
+  spawnPythonServer,
+  initWeaviateClient,
+  cors_server,
+} from '@thothai/systems'
 import https from 'https'
 import http from 'http'
 import * as fs from 'fs'
-import spawnPythonServer from './systems/pythonServer'
-import { initWeaviateClient } from './systems/weaviateClient'
-import cors_server from './systems/cors-server'
 import path from 'path'
 
 const app: Koa = new Koa()

@@ -36,7 +36,7 @@ const runSpellHandler = async (ctx: Koa.Context) => {
   // const modules = rootSpell.modules as Module[]
 
   // Build the interface
-  const thothInterface = buildThothInterface(ctx, userGameState)
+  const thothInterface = buildThothInterface(userGameState)
 
   // Extract any keys from the graphs inputs
   const inputKeys = extractModuleInputKeys(graph) as string[]

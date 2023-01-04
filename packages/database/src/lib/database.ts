@@ -604,4 +604,22 @@ export class database {
     const rows = await this.client.query(query, values)
     return rows && rows.rows && rows.rows.length > 0
   }
+  async dataIsHandled(id: string, client: string): Promise<boolean> {
+    const query = 'SELECT * FROM handled_history WHERE _id=$1 AND client=$2'
+    const values = [id, client]
+
+    const rows = await this.client.query(query, values)
+    return rows && rows.rows && rows.rows.length > 0 ? true : false
+  }
+  async setDataHandled(
+    id: string,
+    client: string,
+    data: string
+  ): Promise<void> {
+    const query =
+      'INSERT INTO handled_history(_id, client, data) VALUES($1, $2, $3)'
+    const values = [id, client, data]
+
+    await this.client.query(query, values)
+  }
 }

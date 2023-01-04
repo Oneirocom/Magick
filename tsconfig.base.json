@@ -38,6 +38,12 @@
       ],
       "@thothai/plugins": [
         "packages/plugins/src/index.ts"
+      ],
+      "@thothai/systems": [
+        "packages/systems/src/index.ts"
+      ],
+      "@thothai/utils": [
+        "packages/utils/src/index.ts"
       ]
     }
   },

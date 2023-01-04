@@ -11,6 +11,8 @@
     "plugins": "packages/plugins",
     "search-server": "apps/search-server",
     "server": "apps/server",
-    "speech-server": "apps/speech-server"
+    "speech-server": "apps/speech-server",
+    "systems": "packages/systems",
+    "utils": "packages/utils"
   }
 }

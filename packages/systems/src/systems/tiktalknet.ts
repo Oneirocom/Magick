@@ -24,13 +24,18 @@ export async function tts_tiktalknet(
   const writer = createWriteStream(outputFile)
   resp.data.pipe(writer)
   let error: any = null
+  await new Promise((resolve, reject) => {
   writer.on('error', err => {
     error = err
     writer.close()
+    reject(err)
   })
   writer.on('close', () => {
     if (!error) {
+      resolve(true)
     }
+    reject(error)
+  })
   })
 
   return outputFile

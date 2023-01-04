@@ -5,10 +5,10 @@ import SpellRunner from './SpellRunner'
 
 export default class SpellManager {
   spellRunnerMap: Map<string, SpellRunner> = new Map()
-  socket: io.Socket
+  socket?: io.Socket
   thothInterface: EngineContext
 
-  constructor(thothInterface: EngineContext, socket: io.Socket) {
+  constructor(thothInterface: EngineContext, socket?: io.Socket) {
     this.socket = socket
     this.thothInterface = thothInterface
   }

@@ -51,7 +51,6 @@ const createEvent = async (args: CreateEventArgs) => {
 }
 
 export const buildThothInterface = (
-  ctx: Koa.Context,
   initialGameState: Record<string, unknown>
 ): EngineContext => {
   // eslint-disable-next-line functional/no-let
