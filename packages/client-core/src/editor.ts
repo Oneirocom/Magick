@@ -30,7 +30,7 @@ import {
   MultiSocketGenerator,
 } from '@thothai/core'
 
-import { AreaPlugin } from './plugins/areaPlugin'
+import AreaPlugin from './plugins/areaPlugin'
 
 import { initSharedEngine, ThothEngine } from '@thothai/engine'
 
