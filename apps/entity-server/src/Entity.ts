@@ -26,17 +26,19 @@ function CreateSpellHandler({ spell }) {
     channel,
   }) {
     const spellInputs = {
-      Input: message,
-      Speaker: speaker,
-      Agent: agent,
-      Client: client,
-      ChannelID: channelId,
-      Entity: entity,
-      RoomInfo: roomInfo,
-      Channel: channel,
-      eth_private_key,
-      eth_public_address,
-    } as any
+      input: {
+        input: message,
+        speaker: speaker,
+        agent: agent,
+        client: client,
+        channel: channel,
+        channelId: channelId,
+        entity: entity,
+        roomInfo: roomInfo,
+        eth_private_key,
+        eth_public_address
+      } as any
+    }
     console.log('spellInputs', spellInputs)
     const spellOutputs = await spellRunner.defaultRun(spellInputs)
     console.log('spellOutputs', spellOutputs)

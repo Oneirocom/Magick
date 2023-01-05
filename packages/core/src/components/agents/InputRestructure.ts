@@ -16,13 +16,13 @@ const info = `Restructure Agent Data`
 
 type InputReturn = {
   output: {
-    Input: string
-    Speaker: string
-    Agent: string
-    Client: string
-    ChannelID: string
-    Entity: object
-    RoomInfo: {
+    input: string
+    speaker: string
+    agent: string
+    client: string
+    channelId?: string
+    entity: object
+    roomInfo: {
       user: string
       inConversation: boolean
       isBot: boolean
@@ -106,13 +106,13 @@ export class InputRestructureComponent extends ThothComponent<
 
     return {
       output: {
-        Input: agent.input,
-        Speaker: agent.speaker,
-        Agent: agent.agent,
-        Client: agent.client,
-        ChannelID: agent.channel,
-        Entity: agent.entity,
-        RoomInfo: agent.roomInfo,
+        input: agent.input,
+        speaker: agent.speaker,
+        agent: agent.agent,
+        client: agent.client,
+        // channelID: agent.channel,
+        entity: agent.entity,
+        roomInfo: agent.roomInfo,
         eth_private_key: agent.eth_private_key,
         eth_public_address: agent.eth_public_address,
       },

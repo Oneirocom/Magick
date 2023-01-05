@@ -36,7 +36,7 @@ type InputReturn = {
   }[]
   eth_private_key: string
   eth_public_address: string
-  channel_type: string
+  channel_type?: string
 }
 
 export class InputDestructureComponent extends ThothComponent<
@@ -84,7 +84,8 @@ export class InputDestructureComponent extends ThothComponent<
     const speaker = new Rete.Output('speaker', 'speaker', stringSocket)
     const agent = new Rete.Output('agent', 'agent', stringSocket)
     const client = new Rete.Output('client', 'client', stringSocket)
-    const channelId = new Rete.Output('channel', 'channel', stringSocket)
+    const channel = new Rete.Output('channel', 'channel', stringSocket)
+    const channelId = new Rete.Output('channelId', 'channelId', stringSocket)
     const entity = new Rete.Output('entity', 'entity', stringSocket)
     const private_key = new Rete.Output(
       'eth_private_key',
@@ -111,6 +112,7 @@ export class InputDestructureComponent extends ThothComponent<
       .addOutput(speaker)
       .addOutput(agent)
       .addOutput(client)
+      .addOutput(channel)
       .addOutput(channelId)
       .addOutput(entity)
       .addOutput(roomInfo)
@@ -137,16 +139,17 @@ export class InputDestructureComponent extends ThothComponent<
     // If there are outputs, we are running as a module input and we use that value
 
     return {
-      output: typeof agent === 'string' ? agent : (agent as any).Input,
-      speaker: (agent as any)['Speaker'] ?? 'Speaker',
-      agent: (agent as any)['Agent'] ?? 'Agent',
-      client: (agent as any)['Client'] ?? 'Playtest',
-      channel: (agent as any)['ChannelID'] ?? 'TestChannel',
-      entity: (agent as any)['Entity'],
-      roomInfo: (agent as any)['RoomInfo'],
+      output: typeof agent === 'string' ? agent : (agent as any).input,
+      speaker: (agent as any)['speaker'] ?? 'Speaker',
+      agent: (agent as any)['agent'] ?? 'Agent',
+      client: (agent as any)['client'] ?? 'Playtest',
+      channel: (agent as any)['channel'] ?? 'TestChannel',
+      channelId: (agent as any)['channelId'] ?? 'TestChannelId',
+      entity: (agent as any)['entity'],
+      roomInfo: (agent as any)['roomInfo'],
       eth_private_key: (agent as any)['eth_private_key'],
       eth_public_address: (agent as any)['eth_public_address'],
-      channel_type: (agent as any)['Channel'],
+      // channel_type: (agent as any)['Channel'],
     }
   }
 }
