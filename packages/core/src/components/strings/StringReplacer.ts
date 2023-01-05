@@ -87,7 +87,7 @@ export class StringReplacer extends ThothComponent<Promise<WorkerReturn>> {
       node?.data?.replace) as string
 
     try {
-      input = input.replaceAll(match, replace)
+      input = input.replaceAll(match, replace ?? '')
     } catch {
       console.error('String Replacer Error')
     }

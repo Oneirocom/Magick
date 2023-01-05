@@ -31,7 +31,6 @@
     "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.5.3",
     "@pixiv/three-vrm": "^1.0.6",
-    "@psychedelic/dab-js": "^1.3.6",
     "@react-three/drei": "^9.46.5",
     "@react-three/fiber": "^8.9.1",
     "@reduxjs/toolkit": "^1.6.2",

@@ -314,14 +314,6 @@ const hfRequest = async (ctx: Koa.Context) => {
 //   return (ctx.body = { data: '' })
 // }
 
-const getEntityData = async (ctx: Koa.Context) => {
-  const agent = ctx.request.query.agent as string
-
-  const data = await database.instance.getEntity(agent)
-
-  return (ctx.body = { agent: data })
-}
-
 const getEntitiesInfo = async (ctx: Koa.Context) => {
   const id = (ctx.request.query.id as string)
     ? parseInt(ctx.request.query.id as string)
@@ -354,6 +346,22 @@ const queryGoogle = async (ctx: Koa.Context) => {
   ctx.body = {
     result,
   }
+}
+
+const image_generation = async (ctx: Koa.Context) => {
+  const url = "http://localhost:7860/sdapi/v1/txt2img"
+
+  // proxy the request to the url and then return the respons
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(ctx.request.body),
+  })
+
+  const data = await response.json()
+  ctx.body = data
 }
 
 export const entities: Route[] = [
@@ -408,4 +416,8 @@ export const entities: Route[] = [
     path: '/query_google',
     post: queryGoogle,
   },
+  {
+    path: '/image_generation',
+    post: image_generation,
+  }
 ]

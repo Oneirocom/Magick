@@ -18,54 +18,36 @@ type InputReturn = {
 }
 
 async function getPrompt(prompt, server) {
-  const r = await fetch(server + '/run/txt2img', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      data: [
-        prompt,
-        '',
-        'None',
-        'None',
-        20,
-        'Euler a',
-        false,
-        false,
-        1,
-        1,
-        7,
-        -1,
-        -1,
-        0,
-        0,
-        0,
-        false,
-        512,
-        512,
-        false,
-        0.7,
-        0,
-        0,
-        'None',
-        false,
-        false,
-        false,
-        'hello world',
-        'Nothing',
-        'hello world',
-        'Nothing',
-        'hello world',
-        true,
-        false,
-        false,
-      ],
-    }),
+  const myHeaders = new Headers()
+  myHeaders.append('Content-Type', 'application/json')
+
+  const raw = JSON.stringify({
+    prompt,
+    sampler_name: 'Euler a',
+    batch_size: 1,
+    n_iter: 1,
+    steps: 50,
+    cfg_scale: 7,
+    width: 256,
+    height: 256,
+    tiling: false,
+    sampler_index: 'Euler',
   })
 
-  const j = await r.json()
-  const data = j.data
-  const imgUrl = `${server}/file=${data[0][0].name}`
-  return imgUrl
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow',
+  }
+
+  const r = await fetch(server, requestOptions as any).catch(error =>
+    console.log('error', error)
+  )
+
+  const j = await (r as Response).json()
+  console.log('j is', j)
+  return j
 }
 
 export class ImageGeneration extends ThothComponent<Promise<InputReturn>> {
@@ -114,15 +96,15 @@ export class ImageGeneration extends ThothComponent<Promise<InputReturn>> {
     const prompt = inputs['prompt'] && inputs['prompt'][0]
     const endpoint = inputs['endpoint'] && inputs['endpoint'][0]
 
-    const server = endpoint ?? 'https://stable-diffusion.webaverse.com'
+    const server = endpoint ?? 'https://localhost:8001/image_generation'
 
-    const imgUrl = await getPrompt(prompt, server)
+    const { images } = await getPrompt(prompt, server)
+    const image = images && images[0]
 
     if (!silent) {
-      if (!imgUrl) node.display('Error: No data returned', imgUrl)
-      else node.display('Response is', imgUrl)
+      if (!image) node.display('Error: No data returned', image)
+      else node.display('Response is', image)
     }
-    console.log('Respone is', imgUrl)
-    return { output: imgUrl }
-  }
+
+    return { output: image }  }
 }
