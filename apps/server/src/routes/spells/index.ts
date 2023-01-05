@@ -3,48 +3,24 @@ import 'regenerator-runtime/runtime'
 import { database } from '@magickml/database'
 import { Route } from '../../types'
 import { CustomError } from '../../utils/CustomError'
-import {
-  SpellRunner,
-  GraphData,
-  Spell as SpellType,
-  extractModuleInputKeys,
-} from '@magickml/core'
-import { buildThothInterface } from './buildThothInterface'
+import { extractModuleInputKeys } from '@magickml/core'
 
 import otJson0 from 'ot-json0'
 import { Op } from 'sequelize'
+import { runSpell } from '../utils/runSpell'
 
 export const modules: Record<string, unknown> = {}
 
 const runSpellHandler = async (ctx: Koa.Context) => {
-  const { spell } = ctx.params
+  const { spell: spellName } = ctx.params
   const { userGameState = {} } = ctx.request.body
 
-  const rootSpell = await database.instance.models.spells.findOne({
-    where: { name: spell },
-    raw: true,
-  })
+  const inputFormatter = graph => {
+    // Extract any keys from the graphs inputs
+    const inputKeys = extractModuleInputKeys(graph) as string[]
 
-  //todo validate spell has an input trigger?
-
-  if (!rootSpell?.graph) {
-    throw new CustomError('not-found', `Spell with name ${spell} not found`)
-  }
-
-  // TODO use test spells if body option is given
-  // const rootSpell = getTestSpell(spell)
-  const graph = rootSpell.graph as GraphData
-  // const modules = rootSpell.modules as Module[]
-
-  // Build the interface
-  const thothInterface = buildThothInterface(userGameState)
-
-  // Extract any keys from the graphs inputs
-  const inputKeys = extractModuleInputKeys(graph) as string[]
-
-  // We should report on them here
-  const inputs = inputKeys.reduce(
-    (acc: { [x: string]: any[] }, input: string) => {
+    // We should report on them here
+    return inputKeys.reduce((acc: { [x: string]: any[] }, input: string) => {
       const requestInput = ctx.request.body[input]
 
       if (requestInput) {
@@ -53,31 +29,17 @@ const runSpellHandler = async (ctx: Koa.Context) => {
         acc[input] = null
       }
       return acc
-    },
-    {} as Record<string, unknown>
-  )
-
-  const spellToRun = {
-    // TOTAL HACK HERE
-    ...rootSpell,
-    gameState: userGameState,
+    }, {} as Record<string, unknown>)
   }
 
-  // Initialize the spell runner
-  const spellRunner = new SpellRunner({ thothInterface })
-
-  // Load the spell in to the spell runner
-  await spellRunner.loadSpell(spellToRun as SpellType)
-
   try {
-    // Get the outputs from running the spell
-    const outputs = await spellRunner.defaultRun(inputs)
-
-    // Get the updated state
-    const state = thothInterface.getCurrentGameState()
-
+    const { outputs, state, name } = await runSpell({
+      spellName,
+      state: userGameState,
+      inputFormatter,
+    })
     // Return the response
-    ctx.body = { spell: rootSpell.name, outputs, state }
+    ctx.body = { spell: name, outputs, state }
   } catch (err) {
     // return any errors
     console.error(err)

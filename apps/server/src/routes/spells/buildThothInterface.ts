@@ -12,6 +12,7 @@ import { searchWikipedia } from '../wikipedia/helpers'
 import { queryGoogle } from '../utils/queryGoogle'
 
 import { database } from '@magickml/database'
+import { runSpell } from '../utils/runSpell'
 
 const getEvents = async ({
   type,
@@ -57,9 +58,16 @@ export const buildThothInterface = (
   let gameState = { ...initialGameState }
 
   return {
-    runSpell: () => {
-      console.error('*************** RUNNING EMPTY NOTHING SPELL')
-      return {}
+    runSpell: async (flattenedInputs, spellId, state) => {
+      const { outputs } = await runSpell({
+        state,
+        spellName: spellId,
+        inputs: flattenedInputs,
+      })
+
+      console.log('*************************RUNSPELL OUTPUTS', outputs)
+
+      return outputs
     },
     queryGoogle: async query => {
       const response = await queryGoogle(query)
