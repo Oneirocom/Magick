@@ -1,15 +1,15 @@
 import { Component } from 'rete'
 import { NodeData } from 'rete/types/core/data'
 
-import { ThothEditor, ThothWorkerInputs } from '../../../types'
-import { ThothComponent } from '../../magick-component'
+import { MagickEditor, MagickWorkerInputs } from '../../../types'
+import { MagickComponent } from '../../magick-component'
 import { Task } from './task'
 
-function install(editor: ThothEditor) {
+function install(editor: MagickEditor) {
   editor.on('componentregister', (_component: Component) => {
     editor.tasks = []
 
-    const component = _component as unknown as ThothComponent<unknown>
+    const component = _component as unknown as MagickComponent<unknown>
 
     if (!component.task)
       throw new Error('Task plugin requires a task property in component')
@@ -49,7 +49,7 @@ function install(editor: ThothEditor) {
       // Task caller is what actually gets run once the task runs itself.  It is called inside the run function.
       const taskCaller = (
         _ctx: unknown,
-        inputs: ThothWorkerInputs,
+        inputs: MagickWorkerInputs,
         data: NodeData,
         socketInfo: string | null
       ) => {

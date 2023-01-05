@@ -1,7 +1,7 @@
 import { CustomError } from './../../utils/CustomError'
 import {
   EngineContext,
-  ThothWorkerInputs,
+  MagickWorkerInputs,
   GetEventArgs,
   CreateEventArgs,
 } from '@magickml/core'
@@ -51,7 +51,7 @@ const createEvent = async (args: CreateEventArgs) => {
   })
 }
 
-export const buildThothInterface = (
+export const buildMagickInterface = (
   initialGameState: Record<string, unknown>
 ): EngineContext => {
   // eslint-disable-next-line functional/no-let
@@ -75,7 +75,7 @@ export const buildThothInterface = (
     },
     processCode: (
       code: unknown,
-      inputs: ThothWorkerInputs,
+      inputs: MagickWorkerInputs,
       data: Record<string, any>,
       state: Record<string, any>
     ) => {
@@ -125,7 +125,7 @@ export const buildThothInterface = (
 
       gameState = newState
     },
-    // IMPLEMENT THESE INTERFACES FOR THE SERVERbuildThothInterface
+    // IMPLEMENT THESE INTERFACES FOR THE SERVERbuildMagickInterface
     getEvent: async (args: GetEventArgs) => {
       return await getEvents(args)
     },

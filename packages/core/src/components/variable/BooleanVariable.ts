@@ -3,14 +3,14 @@ import Rete from 'rete'
 
 import {
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { booleanSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = `Boolean Variable`
 
@@ -18,7 +18,7 @@ type InputReturn = {
   output: boolean
 }
 
-export class BooleanVariable extends ThothComponent<InputReturn> {
+export class BooleanVariable extends MagickComponent<InputReturn> {
   constructor() {
     super('Boolean Variable')
 
@@ -33,7 +33,7 @@ export class BooleanVariable extends ThothComponent<InputReturn> {
     this.display = true
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const out = new Rete.Output('output', 'output', booleanSocket)
     const _var = new BooleanControl({
       dataKey: '_var',

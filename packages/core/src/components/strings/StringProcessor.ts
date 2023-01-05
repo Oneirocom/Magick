@@ -1,15 +1,15 @@
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
+import { NodeData, MagickNode, MagickWorkerInputs } from '../../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { stringSocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 const info = `The String Processor component takes a string as an input and allows you to write a function in the text editor to parse that string in whatever way you need.  You can define any number of outputs which you can pass the result of your parsing out through.
 
 Note that the return value of your function must be an object whose keys match the names of your generated output sockets.`
 
-export class StringProcessor extends ThothComponent<Record<string, string>> {
+export class StringProcessor extends MagickComponent<Record<string, string>> {
   constructor() {
     // Name of the component
     super('String Processor')
@@ -24,7 +24,7 @@ export class StringProcessor extends ThothComponent<Record<string, string>> {
 
   node = {}
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     // Add a default javascript template if the node is new and we don't have one.
     if (!node.data.code)
       node.data.code =
@@ -54,7 +54,7 @@ export class StringProcessor extends ThothComponent<Record<string, string>> {
     return node.addInput(input).addInput(triggerIn).addOutput(triggerOut)
   }
 
-  worker(node: NodeData, inputs: ThothWorkerInputs) {
+  worker(node: NodeData, inputs: MagickWorkerInputs) {
     const input = inputs['input'][0]
 
     // TODO (mitchg) - obviously this is bad, but we want this for games week. Figure out security later.

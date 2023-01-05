@@ -1,12 +1,12 @@
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
+import { NodeData, MagickNode, MagickWorkerInputs } from '../../../types'
 import { triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = `The or gate will be triggered when either of two triggers are triggered off.`
 
-export class OrGate extends ThothComponent<void> {
+export class OrGate extends MagickComponent<void> {
   constructor() {
     // Name of the component
     super('Or Gate')
@@ -21,7 +21,7 @@ export class OrGate extends ThothComponent<void> {
   // the builder is used to "assemble" the node component.
   // when we have enki hooked up and have grabbed all few shots, we would use the builder
   // to generate the appropriate inputs and ouputs for the fewshot at build time
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const trigger1 = new Rete.Input('trigger1', 'Trigger 1', triggerSocket)
     const trigger2 = new Rete.Input('trigger2', 'Trigger 2', triggerSocket)
     const outTrigger = new Rete.Output('trigger', 'Trigger', triggerSocket)

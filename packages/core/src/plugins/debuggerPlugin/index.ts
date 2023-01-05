@@ -1,5 +1,5 @@
 import { IRunContextEditor } from '../../../types'
-import { ThothConsole } from './ThothConsole'
+import { MagickConsole } from './MagickConsole'
 
 export type DebuggerArgs = { server?: boolean; throwError?: Function }
 
@@ -11,7 +11,7 @@ function install(
     const worker = component.worker
 
     component.worker = async (node, inputs, outputs, data, ...args) => {
-      node.console = new ThothConsole({
+      node.console = new MagickConsole({
         node,
         component,
         editor,

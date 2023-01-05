@@ -1,7 +1,7 @@
 import {
   ImageCacheResponse,
   OpenAIResultChoice,
-  ThothWorkerInputs,
+  MagickWorkerInputs,
 } from '../types'
 import { VM } from 'vm2'
 export default {
@@ -29,7 +29,7 @@ export default {
   },
   processCode: (
     code: unknown,
-    inputs: ThothWorkerInputs,
+    inputs: MagickWorkerInputs,
     data: Record<string, any>,
     state: Record<string, any>
   ) => {
@@ -45,7 +45,7 @@ export default {
       },
     }
 
-    const flattenedInputs = Object.entries(inputs as ThothWorkerInputs).reduce(
+    const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
       (acc, [key, value]) => {
         // eslint-disable-next-line prefer-destructuring
         acc[key as string] = value[0] // as any[][0] <- this change was made 2 days ago

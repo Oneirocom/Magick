@@ -7,24 +7,24 @@ import {
   Spell as SpellType,
 } from '../../types'
 import { getComponents } from '../components'
-import { extractNodes, initSharedEngine, ThothEngine } from '../engine'
+import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
 import { Module } from '../plugins/modulePlugin/module'
 import { extractModuleInputKeys } from './graphHelpers'
 
 type RunSpellConstructor = {
-  thothInterface: EngineContext
+  magickInterface: EngineContext
   socket?: io.Socket
 }
 
 class SpellRunner {
-  engine: ThothEngine
+  engine: MagickEngine
   currentSpell!: SpellType
   module: Module
-  thothInterface: EngineContext
+  magickInterface: EngineContext
   ranSpells: string[] = []
   socket?: io.Socket | null = null
 
-  constructor({ thothInterface, socket }: RunSpellConstructor) {
+  constructor({ magickInterface, socket }: RunSpellConstructor) {
     // Initialize the engine
     this.engine = initSharedEngine({
       name: 'demo@0.1.0',
@@ -32,7 +32,7 @@ class SpellRunner {
       server: true,
       modules: {},
       socket: socket || undefined,
-    }) as ThothEngine
+    }) as MagickEngine
 
     // Set up the module to interface with the runtime processes
     this.module = new Module()
@@ -40,7 +40,7 @@ class SpellRunner {
     if (socket) this.socket = socket
 
     // Set the interface that this runner will use when running workers
-    this.thothInterface = thothInterface
+    this.magickInterface = magickInterface
 
     // We should probably load up here all the "modules" the spell needds to run
     // This would basicallyt be an array of spells pulled from the DB
@@ -59,7 +59,7 @@ class SpellRunner {
   get context() {
     return {
       module: this.module,
-      magick: this.thothInterface,
+      magick: this.magickInterface,
       silent: true,
     }
   }

@@ -2,15 +2,15 @@ import deepEqual from 'deep-equal'
 import Rete, { Input, Output } from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { DataSocketType, IRunContextEditor, ThothNode } from '../../../types'
+import { DataSocketType, IRunContextEditor, MagickNode } from '../../../types'
 import * as socketMap from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 import { DataControl } from './DataControl'
 
 type InspectorConstructor = {
-  component: ThothComponent<unknown>
+  component: MagickComponent<unknown>
   editor: IRunContextEditor
-  node: ThothNode
+  node: MagickNode
 }
 
 // todo improve this typing
@@ -28,8 +28,8 @@ export type InspectorData = {
 export class Inspector {
   // Stub of function.  Can be a nodes catch all onData
   cache: Record<string, any> = {}
-  node: ThothNode
-  component: ThothComponent<unknown>
+  node: MagickNode
+  component: MagickComponent<unknown>
   editor: IRunContextEditor
   dataControls: Map<string, DataControl>
   category: string

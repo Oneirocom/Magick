@@ -5,11 +5,11 @@ import {
   ModuleWorkerOutput,
   NodeData,
   Spell,
-  ThothNode,
-  ThothWorkerInputs,
+  MagickNode,
+  MagickWorkerInputs,
 } from '../../../types'
 import { SpellControl } from '../../dataControls/SpellControl'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
 type Socket = {
@@ -37,7 +37,7 @@ export const outputNameFromSocketKey = createNameFromSocket('outputs')
 export const socketKeyFromInputName = createSocketFromName('inputs')
 export const socketKeyFromOutputName = createSocketFromName('outputs')
 
-export class SpellComponent extends ThothComponent<
+export class SpellComponent extends MagickComponent<
   Promise<ModuleWorkerOutput>
 > {
   declare updateModuleSockets: Function
@@ -59,7 +59,7 @@ export class SpellComponent extends ThothComponent<
     this.display = true
   }
 
-  subscribe(node: ThothNode, spellId: string) {
+  subscribe(node: MagickNode, spellId: string) {
     if (!this.editor) return
     if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
 
@@ -79,7 +79,7 @@ export class SpellComponent extends ThothComponent<
     )
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const spellControl = new SpellControl({
       name: 'Spell Select',
       write: false,
@@ -119,7 +119,7 @@ export class SpellComponent extends ThothComponent<
     return node
   }
 
-  updateSockets(node: ThothNode, spell: Spell) {
+  updateSockets(node: MagickNode, spell: Spell) {
     const graph = JSON.parse(JSON.stringify(spell.graph))
     this.updateModuleSockets(node, graph, true)
     node.update()
@@ -146,7 +146,7 @@ export class SpellComponent extends ThothComponent<
 
   async worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
+    inputs: MagickWorkerInputs,
     _outputs: { [key: string]: string },
     {
       magick,

@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: thoth-server
+  name: magick-server
 spec:
   selector:
     matchLabels:
-      app: thoth-server
+      app: magick-server
   replicas: 1
   template:
     metadata:
       labels:
-        app: thoth-server
+        app: magick-server
     spec:
       tolerations:
         - key: "appservicesonly"
@@ -19,7 +19,7 @@ spec:
           effect: "NoSchedule"
       containers:
         - name: server
-          image: 389959444765.dkr.ecr.us-east-1.amazonaws.com/thoth-server:latest
+          image: 389959444765.dkr.ecr.us-east-1.amazonaws.com/magick-server:latest
           workingDir: /app/packages/server
           args:
             [
@@ -31,8 +31,6 @@ spec:
             - containerPort: 8001
               protocol: TCP
           env:
-            - name: USE_LATITUDE_API
-              value: "false"
             - name: API_URL
               value: http://localhost:8001
             - name: EXTEND_ESLINT
@@ -114,7 +112,7 @@ spec:
             - name: ENTITY_WEBSERVER_PORT_RANGE
               value: 65510-65529
             - name: ENTITY_HOSTNAME
-              value: thoth-runner
+              value: magick-runner
             - name: EMAIL_HOST
               value: smtp.gmail.com
             - name: EMAIL_PORT
@@ -134,7 +132,7 @@ spec:
             - name: AUTHENTICATION
               value: "false"
             - name: AUTHENTICATION_SECRET_KEY
-              value: thoth
+              value: magick
       imagePullSecrets:
         - name: regcred
 
@@ -142,10 +140,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: thoth-server
+  name: magick-server
 spec:
   selector:
-    app: thoth-server
+    app: magick-server
   ports:
     - protocol: TCP
       port: 80
@@ -164,7 +162,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: thoth-server-ingress
+  name: magick-server-ingress
   annotations:
     kubernetes.io/ingress.class: "alb"
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -179,7 +177,7 @@ spec:
             path: "/"
             backend:
               service:
-                name: thoth-server
+                name: magick-server
                 port:
                   number: 80
     - http:
@@ -188,7 +186,7 @@ spec:
             path: "/"
             backend:
               service:
-                name: thoth-server
+                name: magick-server
                 port:
                   number: 65532
     - http:
@@ -197,6 +195,6 @@ spec:
             path: "/"
             backend:
               service:
-                name: thoth-server
+                name: magick-server
                 port:
                   number: 65531

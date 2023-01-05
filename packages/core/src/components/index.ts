@@ -1,4 +1,4 @@
-import { ThothComponent } from '../../types'
+import { MagickComponent } from '../../types'
 import { AgentTextCompletion } from './agents/AgentTextCompletion'
 import { CustomTextCompletion } from './agents/CustomTextCompletion'
 import { EventRecall } from './agents/EventRecall'
@@ -148,7 +148,7 @@ export const components = {
   ImageGeneration: () => new ImageGeneration(),
 }
 
-function compare(a: ThothComponent<unknown>, b: ThothComponent<unknown>) {
+function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {
   if ((a.displayName || a.name) < (b.displayName || b.name)) {
     return -1
   }

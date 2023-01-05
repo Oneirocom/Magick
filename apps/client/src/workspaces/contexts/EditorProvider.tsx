@@ -1,4 +1,4 @@
-import { GraphData, EditorContext, Spell, ThothEditor } from '@magickml/core'
+import { GraphData, EditorContext, Spell, MagickEditor } from '@magickml/core'
 import { initEditor, zoomAt } from '@magickml/client-core'
 import React, {
   useRef,
@@ -14,11 +14,11 @@ import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import { MyNode } from '../../components/Node/Node'
 import gridimg from '../../grid.png'
 import { usePubSub } from '../../contexts/PubSubProvider'
-import { useThothInterface } from './ThothInterfaceProvider'
+import { useMagickInterface } from './MagickInterfaceProvider'
 import { useFeathers } from '../../contexts/FeathersProvider'
 import { feathers } from '../../config'
 
-export type ThothTab = {
+export type MagickTab = {
   layoutJson: string
   name: string
   id: string
@@ -31,14 +31,14 @@ export type ThothTab = {
 // TODO give better typing to the editor
 const Context = createContext({
   run: () => {},
-  getEditor: (): ThothEditor | null => null,
-  editor: {} as ThothEditor | null,
+  getEditor: (): MagickEditor | null => null,
+  editor: {} as MagickEditor | null,
   serialize: (): GraphData | undefined => undefined,
   buildEditor: (
     el: HTMLDivElement,
     // todo update this to use proper spell type
     spell: Spell | undefined,
-    tab: ThothTab,
+    tab: MagickTab,
     reteInterface: EditorContext
   ) => {},
   setEditor: (editor: any) => {},
@@ -57,9 +57,9 @@ const Context = createContext({
 export const useEditor = () => useContext(Context)
 
 const EditorProvider = ({ children }) => {
-  const [editor, setEditorState] = useState<ThothEditor | null>(null)
+  const [editor, setEditorState] = useState<MagickEditor | null>(null)
   const [dirtyGraph, setDirtyGraph] = useState<boolean>(true)
-  const editorRef = useRef<ThothEditor | null>(null)
+  const editorRef = useRef<MagickEditor | null>(null)
   const FeathersContext = useFeathers()
   const client = FeathersContext?.client
   const pubSub = usePubSub()
@@ -175,7 +175,7 @@ const RawEditor = ({ tab, children }) => {
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
   // This will be the main interface between magick and rete
-  const reteInterface = useThothInterface()
+  const reteInterface = useMagickInterface()
 
   useEffect(() => {
     if (!tab || loaded) return

@@ -3,14 +3,14 @@ import Rete from 'rete'
 
 import {
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { arraySocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = `Array Variable`
 
@@ -18,7 +18,7 @@ type InputReturn = {
   output: string[]
 }
 
-export class ArrayVariable extends ThothComponent<InputReturn> {
+export class ArrayVariable extends MagickComponent<InputReturn> {
   constructor() {
     super('Array Variable')
 
@@ -33,7 +33,7 @@ export class ArrayVariable extends ThothComponent<InputReturn> {
     this.display = true
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const out = new Rete.Output('output', 'output', arraySocket)
     const _var = new InputControl({
       dataKey: '_var',

@@ -7,11 +7,11 @@
 import axios from 'axios'
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
+import { NodeData, MagickNode, MagickWorkerInputs } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Custom Text Completion is using OpenAI for the agent to respond.'
 
@@ -19,7 +19,7 @@ type WorkerReturn = {
   output: string
 }
 
-export class CustomTextCompletion extends ThothComponent<
+export class CustomTextCompletion extends MagickComponent<
   Promise<WorkerReturn>
 > {
   constructor() {
@@ -37,7 +37,7 @@ export class CustomTextCompletion extends ThothComponent<
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const settings = new Rete.Input('settings', 'Settings', anySocket)
     const agentInput = new Rete.Input('agent', 'Agent', stringSocket)
     const speakerInput = new Rete.Input('speaker', 'Speaker', stringSocket)
@@ -112,7 +112,7 @@ export class CustomTextCompletion extends ThothComponent<
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, rawInputs: ThothWorkerInputs) {
+  async worker(node: NodeData, rawInputs: MagickWorkerInputs) {
     const agent = rawInputs['agent'][0] as string
     const speaker = rawInputs['speaker'][0] as string
     const inputs: any = Object.entries(rawInputs).reduce(

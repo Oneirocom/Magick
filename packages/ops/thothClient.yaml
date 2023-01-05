@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: thoth-client
+  name: magick-client
 spec:
   selector:
     matchLabels:
-      app: thoth-client
+      app: magick-client
   replicas: 1
   template:
     metadata:
       labels:
-        app: thoth-client
+        app: magick-client
     spec:
       tolerations:
         - key: "appservicesonly"
@@ -19,7 +19,7 @@ spec:
           effect: "NoSchedule"
       containers:
         - name: server
-          image: 389959444765.dkr.ecr.us-east-1.amazonaws.com/thoth-client:latest
+          image: 389959444765.dkr.ecr.us-east-1.amazonaws.com/magick-client:latest
           args: ["npm run docker"]
           stdin: true
           tty: true
@@ -36,9 +36,9 @@ spec:
             - name: REACT_APP_SITE_ROOT_URL
               value: "http://localhost:3003"
             - name: REACT_APP_API_ROOT_URL
-              value: "https://thoth-server.projectlazarus.ai"
+              value: "https://magick-server.projectlazarus.ai"
             - name: REACT_APP_API_ROOT_URL_PROD
-              value: "https://thoth-server.projectlazarus.ai"
+              value: "https://magick-server.projectlazarus.ai"
             - name: REACT_APP_CORS_URL
               value: "http://localhost:65526"
             - name: REACT_APP_SITE_STAGING
@@ -46,15 +46,15 @@ spec:
             - name: REACT_APP_OAUTH_CLIENT_ID
               value: "a6b51c87-7565-42ab-a4b0-38a07f3b6c56"
             - name: REACT_APP_SPEECH_SERVER_URL
-              value: "https://thoth-server.projectlazarus.ai:65532"
+              value: "https://magick-server.projectlazarus.ai:65532"
             - name: REACT_APP_SEARCH_SERVER_URL
-              value: "https://thoth-server.projectlazarus.ai:65531"
+              value: "https://magick-server.projectlazarus.ai:65531"
             - name: EXTEND_ESLINT
               value: "true"
             - name: REACT_APP_API_URL
-              value: "https://thoth-server.projectlazarus.ai"
+              value: "https://magick-server.projectlazarus.ai"
             - name: API_URL
-              value: "https://thoth-server.projectlazarus.ai"
+              value: "https://magick-server.projectlazarus.ai"
             - name: REACT_APP_FEATHERS
               value: "false"
             - name: NODE_TLS_REJECT_UNAUTHORIZED
@@ -66,10 +66,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: thoth-client
+  name: magick-client
 spec:
   selector:
-    app: thoth-client
+    app: magick-client
   ports:
     - protocol: TCP
       port: 80
@@ -79,7 +79,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: thoth-client-ingress
+  name: magick-client-ingress
   annotations:
     kubernetes.io/ingress.class: "alb"
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -94,6 +94,6 @@ spec:
             path: "/"
             backend:
               service:
-                name: thoth-client
+                name: magick-client
                 port:
                   number: 80

@@ -1,4 +1,4 @@
-import { IRunContextEditor, ThothNode } from '../../../types'
+import { IRunContextEditor, MagickNode } from '../../../types'
 // @seang todo: convert data controls to typescript to remove this
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
@@ -16,7 +16,7 @@ function install(editor: IRunContextEditor) {
       )
 
     // we are going to override the default builder with our own, and will invoke the original builder inside it.
-    component.builder = (node: ThothNode) => {
+    component.builder = (node: MagickNode) => {
       // This will unsubscribe us
       // if (node.subscription) node.subscription()
       // Inspector class which will handle regsistering data controls, serializing, etc.
@@ -44,10 +44,10 @@ function install(editor: IRunContextEditor) {
     }
   })
 
-  let currentNode: ThothNode | undefined
+  let currentNode: MagickNode | undefined
 
   // handle publishing and subscribing to inspector
-  editor.on('nodeselect', (node: ThothNode) => {
+  editor.on('nodeselect', (node: MagickNode) => {
     if (currentNode && node.id === currentNode.id) return
     if (!clearTextEditor || !sendToInspector) return
     currentNode = node

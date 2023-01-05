@@ -14,9 +14,9 @@ You probably want to hard code your API key into an .env file but for a clear de
 ```
  const myApiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMyMTc4Mzg5IiwiZW1haWfdsfdswiOiJqYWtvYkBsYXRpdHVkZS5pbyIsIm5hbWUiOiJoYXJ1aHVuYWIxMzIwIiwiYXBpS2V5Ijp7ImNyZWF0ZWRBdCI6IjIwMjItMDQtMTZUMTg6Mzc6NDAuMTk0WiIsInVwZGF0ZWRBdCI6IjIwMjItMDQtMTZUMTg6Mzc6NDAuMTk0WiIsImtleSI6IjY0MThmY2EzLTQ4N2ItNGQ4ZS1hYTYxLWExYjQ3MjVjMmQ2ZCIsImlkIjoiNzQiLCJ1c2VySWQiOiIzMjE3ODM4OSIsImRlbGV0ZWRBdCI6bnVsbCwibm90ZXMiOm51bGx9LCJpYXQiOjE2NTAxMzQyNjB9.36bkZ4PZW35znCojKsUTxaIiNqJXtiEX2GkC514wFD0f'
 
- const mySpell = 'https://api.latitude.io/game/chains/MyAwesomeNewGame'
+ const mySpell = 'https://localhost:8001/spells/MyAwesomeNewGame'
 
-  const spellEndpoint = `https://api.latiutude.io/game/chains/${encodeURIComponent(
+  const spellEndpoint = `https://localhost:8001/spells/${encodeURIComponent(
     mySpell
   )}/latest`;
 

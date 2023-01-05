@@ -6,19 +6,19 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'Complex String Matcher uses basic string matches to determine if the input matches some selected properties'
 
-export class ComplexStringMatcher extends ThothComponent<Promise<void>> {
+export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
   constructor() {
     super('Complex String Matcher')
 
@@ -31,7 +31,7 @@ export class ComplexStringMatcher extends ThothComponent<Promise<void>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Component Name',
@@ -106,8 +106,8 @@ export class ComplexStringMatcher extends ThothComponent<Promise<void>> {
 
   async worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { silent }: { silent: boolean }
   ) {
     // implement a function that replaces all instances of a string with another string

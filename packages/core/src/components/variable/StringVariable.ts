@@ -3,13 +3,13 @@ import Rete from 'rete'
 
 import {
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = `String Variable`
 
@@ -17,7 +17,7 @@ type InputReturn = {
   output: string
 }
 
-export class StringVariable extends ThothComponent<InputReturn> {
+export class StringVariable extends MagickComponent<InputReturn> {
   constructor() {
     super('String Variable')
 
@@ -32,7 +32,7 @@ export class StringVariable extends ThothComponent<InputReturn> {
     this.display = true
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const out = new Rete.Output('output', 'output', anySocket)
     const _var = new InputControl({
       dataKey: '_var',

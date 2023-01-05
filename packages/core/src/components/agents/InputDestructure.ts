@@ -6,9 +6,9 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   Agent,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { Task } from '../../plugins/taskPlugin/task'
 import {
@@ -17,7 +17,7 @@ import {
   stringSocket,
   triggerSocket,
 } from '../../sockets'
-import { ThothComponent, ThothTask } from '../../magick-component'
+import { MagickComponent, MagickTask } from '../../magick-component'
 
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
@@ -39,10 +39,10 @@ type InputReturn = {
   channel_type: string
 }
 
-export class InputDestructureComponent extends ThothComponent<
+export class InputDestructureComponent extends MagickComponent<
   Promise<InputReturn>
 > {
-  nodeTaskMap: Record<number, ThothTask> = {}
+  nodeTaskMap: Record<number, MagickTask> = {}
 
   constructor() {
     // Name of the component
@@ -62,7 +62,7 @@ export class InputDestructureComponent extends ThothComponent<
         channel_type: 'output',
         trigger: 'option',
       },
-      init: (task = {} as Task, node: ThothNode) => {
+      init: (task = {} as Task, node: MagickNode) => {
         this.nodeTaskMap[node.id] = task
       },
     }
@@ -72,7 +72,7 @@ export class InputDestructureComponent extends ThothComponent<
     this.display = true
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     // module components need to have a socket key.
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
@@ -126,8 +126,8 @@ export class InputDestructureComponent extends ThothComponent<
   // eslint-disable-next-line require-await
   async worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { silent }: { silent: boolean }
   ) {
     // eslint-disable-next-line prettier/prettier

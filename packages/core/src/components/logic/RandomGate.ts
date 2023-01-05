@@ -2,18 +2,18 @@ import Rete from 'rete'
 
 import {
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
   DataSocketType,
 } from '../../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = `The random gate takes a trigger input, and randomly fires one of the connected outputs.`
 
-export class RandomGate extends ThothComponent<void> {
+export class RandomGate extends MagickComponent<void> {
   constructor() {
     // Name of the component
     super('Random Gate')
@@ -29,7 +29,7 @@ export class RandomGate extends ThothComponent<void> {
   // the builder is used to "assemble" the node component.
   // when we have enki hooked up and have grabbed all few shots, we would use the builder
   // to generate the appropriate inputs and ouputs for the fewshot at build time
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const outputToggles = new SocketGeneratorControl({
       connectionType: 'output',
@@ -46,8 +46,8 @@ export class RandomGate extends ThothComponent<void> {
   // to the outputs to be consumed by any connected components
   worker(
     node: NodeData,
-    _inputs: ThothWorkerInputs,
-    outputs: ThothWorkerOutputs
+    _inputs: MagickWorkerInputs,
+    outputs: MagickWorkerOutputs
   ) {
     // pick a random object from outputs objects
     const randomOutput =

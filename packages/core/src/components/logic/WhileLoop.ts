@@ -5,20 +5,20 @@ import Rete from 'rete'
 
 import {
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { triggerSocket } from '../../sockets'
-import { ThothComponent, ThothTask } from '../../magick-component'
+import { MagickComponent, MagickTask } from '../../magick-component'
 
 const info = `While loop is used to execute a series of tasks for x times`
 
 type WorkerReturn = {
   element?: number
 }
-export class WhileLoop extends ThothComponent<
+export class WhileLoop extends MagickComponent<
   Promise<WorkerReturn | undefined>
 > {
   constructor() {
@@ -30,7 +30,7 @@ export class WhileLoop extends ThothComponent<
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const inp = new Rete.Input('act1', 'Data', triggerSocket, true)
     const isTrue = new Rete.Output('true', 'Done', triggerSocket)
     const isFalse = new Rete.Output('false', 'Loop', triggerSocket)
@@ -48,8 +48,8 @@ export class WhileLoop extends ThothComponent<
 
   async worker(
     node: NodeData,
-    _inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    _inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { element }: { element: number }
   ) {
     const recursionTimesData = node?.data?.recursionTimes as string
@@ -66,7 +66,7 @@ export class WhileLoop extends ThothComponent<
             return
           }
           this._task
-            .clone(false, {} as ThothTask, {} as ThothTask)
+            .clone(false, {} as MagickTask, {} as MagickTask)
             .run({ element: element !== undefined ? element + 1 : 1 })
         })
       )

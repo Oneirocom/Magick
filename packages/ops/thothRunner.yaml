@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: thoth-runner
+  name: magick-runner
 spec:
   selector:
     matchLabels:
-      app: thoth-runner
+      app: magick-runner
   replicas: 1
   template:
     metadata:
       labels:
-        app: thoth-runner
+        app: magick-runner
     spec:
       tolerations:
         - key: "appservicesonly"
@@ -19,7 +19,7 @@ spec:
           effect: "NoSchedule"
       containers:
         - name: server
-          image: 389959444765.dkr.ecr.us-east-1.amazonaws.com/thoth-server:latest
+          image: 389959444765.dkr.ecr.us-east-1.amazonaws.com/magick-server:latest
           workingDir: /app/packages/server
           args: ["src/entity-server.ts"]
           stdin: true
@@ -28,8 +28,6 @@ spec:
             - containerPort: 8001
               protocol: TCP
           env:
-            - name: USE_LATITUDE_API
-              value: "false"
             - name: API_URL
               value: http://localhost:8001
             - name: EXTEND_ESLINT
@@ -41,7 +39,7 @@ spec:
             - name: CREATOR_TOOLS_DB_URL
               value: ""
             - name: PGUSER
-              value: thoth
+              value: magick
             - name: PGHOST
               value: nothingprojects-lazarus.cbfjobrijahm.us-east-1.rds.amazonaws.com
             - name: PGPASSWORD
@@ -104,7 +102,7 @@ spec:
             - name: ENTITY_WEBSERVER_PORT_RANGE
               value: 65510-65529
             - name: ENTITY_HOSTNAME
-              value: thoth-runner
+              value: magick-runner
             - name: EMAIL_HOST
               value: smtp.gmail.com
             - name: EMAIL_PORT
@@ -124,7 +122,7 @@ spec:
             - name: AUTHENTICATION
               value: "false"
             - name: AUTHENTICATION_SECRET_KEY
-              value: thoth
+              value: magick
       imagePullSecrets:
         - name: regcred
 
@@ -132,10 +130,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: thoth-server
+  name: magick-server
 spec:
   selector:
-    app: thoth-server
+    app: magick-server
   ports:
     - protocol: TCP
       port: 80
@@ -145,7 +143,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: thoth-server-ingress
+  name: magick-server-ingress
   annotations:
     kubernetes.io/ingress.class: "alb"
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -159,6 +157,6 @@ spec:
             path: "/"
             backend:
               service:
-                name: thoth-server
+                name: magick-server
                 port:
                   number: 80

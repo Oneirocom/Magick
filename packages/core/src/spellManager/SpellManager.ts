@@ -6,11 +6,11 @@ import SpellRunner from './SpellRunner'
 export default class SpellManager {
   spellRunnerMap: Map<string, SpellRunner> = new Map()
   socket?: io.Socket
-  thothInterface: EngineContext
+  magickInterface: EngineContext
 
-  constructor(thothInterface: EngineContext, socket?: io.Socket) {
+  constructor(magickInterface: EngineContext, socket?: io.Socket) {
     this.socket = socket
-    this.thothInterface = thothInterface
+    this.magickInterface = magickInterface
   }
 
   getSpellRunner(spellId: string) {
@@ -22,7 +22,7 @@ export default class SpellManager {
       return this.getSpellRunner(spell.name)
 
     const spellRunner = new SpellRunner({
-      thothInterface: this.thothInterface,
+      magickInterface: this.magickInterface,
       socket: this.socket,
     })
 

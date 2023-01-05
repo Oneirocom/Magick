@@ -6,10 +6,10 @@ import {
   GraphData,
   IRunContextEditor,
   ModuleType,
-  ThothNode,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerOutputs,
 } from '../../../types'
-import { ThothEngine } from '../../engine'
+import { MagickEngine } from '../../engine'
 import { Module } from './module'
 import { ModuleManager } from './module-manager'
 import { addIO, removeIO } from './utils'
@@ -38,7 +38,7 @@ interface IModuleComponent extends Component {
 }
 
 export type ModulePluginArgs = {
-  engine: ThothEngine
+  engine: MagickEngine
   modules: Record<string, ModuleType>
 }
 
@@ -94,7 +94,7 @@ function install(
         component.worker = (
           node: NodeData,
           inputs: WorkerInputs,
-          outputs: ThothWorkerOutputs,
+          outputs: MagickWorkerOutputs,
           context
         ) => {
           let _outputs = outputs
@@ -126,7 +126,7 @@ function install(
         component.worker = (
           node: NodeData,
           inputs: WorkerInputs,
-          outputs: ThothWorkerOutputs,
+          outputs: MagickWorkerOutputs,
           context
         ) => {
           moduleManager.workerTriggerIns.call(
@@ -145,7 +145,7 @@ function install(
 
         if (builder) {
           component.updateModuleSockets = (
-            node: ThothNode,
+            node: MagickNode,
             graphData?: GraphData,
             useSocketName = false
           ) => {
@@ -202,7 +202,7 @@ function install(
         component.worker = async (
           node: NodeData,
           inputs: WorkerInputs,
-          outputs: ThothWorkerOutputs,
+          outputs: MagickWorkerOutputs,
           context: { socketInfo: { targetSocket: string } }
         ) => {
           const module = await moduleManager.workerModule.call(
@@ -230,7 +230,7 @@ function install(
         component.worker = (
           node: NodeData,
           inputs: WorkerInputs,
-          outputs: ThothWorkerOutputs,
+          outputs: MagickWorkerOutputs,
           context
         ) => {
           if (outputsWorker)
