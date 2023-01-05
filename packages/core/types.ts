@@ -145,20 +145,21 @@ export interface Spell {
 }
 
 export type Agent = {
-  output: unknown
+  output: string
   speaker: string
   agent: string
   client: string
   channel: string
   entity: number
-  eth_private_key: string
-  eth_public_address: string
   roomInfo?: {
     user: string
     inConversation: boolean
     isBot: boolean
     info3d: string
   }[]
+  eth_private_key: string
+  eth_public_address: string
+  channelType: string
 }
 
 export interface IRunContextEditor extends NodeEditor {

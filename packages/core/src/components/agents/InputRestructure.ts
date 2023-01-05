@@ -2,7 +2,7 @@
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../../types'
+import { NodeData, MagickNode, MagickWorkerInputs, Agent } from '../../../types'
 import { Task } from '../../plugins/taskPlugin/task'
 import {
   arraySocket,
@@ -14,25 +14,8 @@ import { MagickComponent, MagickTask } from '../../magick-component'
 
 const info = `Restructure Agent Data`
 
-type InputReturn = {
-  output: {
-    Input: string
-    Speaker: string
-    Agent: string
-    Client: string
-    channelId: string
-    Entity: object
-    RoomInfo: {
-      user: string
-      inConversation: boolean
-      isBot: boolean
-      info3d: string
-    }[]
-  }
-}
-
 export class InputRestructureComponent extends MagickComponent<
-  Promise<InputReturn>
+  Promise<{ output: Agent}>
 > {
   nodeTaskMap: Record<number, MagickTask> = {}
 
@@ -65,6 +48,7 @@ export class InputRestructureComponent extends MagickComponent<
     const speaker = new Rete.Input('speaker', 'speaker', stringSocket)
     const agent = new Rete.Input('agent', 'agent', stringSocket)
     const client = new Rete.Input('client', 'client', stringSocket)
+    const channelType = new Rete.Input('channelType', 'channelType', stringSocket)
     const channelId = new Rete.Input('channel', 'channel', stringSocket)
     const entity = new Rete.Input('entity', 'entity', stringSocket)
     const roomInfo = new Rete.Input('roomInfo', 'roomInfo', arraySocket)
@@ -86,6 +70,7 @@ export class InputRestructureComponent extends MagickComponent<
       .addInput(agent)
       .addInput(client)
       .addInput(channelId)
+      .addInput(channelType)
       .addInput(entity)
       .addInput(roomInfo)
       .addInput(private_key)
@@ -106,11 +91,13 @@ export class InputRestructureComponent extends MagickComponent<
 
     return {
       output: {
-        input: agent.input,
+        output: agent.output,
         speaker: agent.speaker,
         agent: agent.agent,
         client: agent.client,
-        // channelID: agent.channel,
+        channel: agent.channel,
+        channelId: agent.channelId,
+        channelType: agent.channelType,
         entity: agent.entity,
         roomInfo: agent.roomInfo,
         eth_private_key: agent.eth_private_key,

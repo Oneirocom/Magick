@@ -21,26 +21,8 @@ import { MagickComponent, MagickTask } from '../../magick-component'
 
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
-type InputReturn = {
-  output: Agent | unknown
-  speaker: string
-  agent: string
-  client: string
-  channel: string
-  entity: number
-  roomInfo?: {
-    user: string
-    inConversation: boolean
-    isBot: boolean
-    info3d: string
-  }[]
-  eth_private_key: string
-  eth_public_address: string
-  channel_type: string
-}
-
 export class InputDestructureComponent extends MagickComponent<
-  Promise<InputReturn>
+  Promise<Agent>
 > {
   nodeTaskMap: Record<number, MagickTask> = {}
 
@@ -59,7 +41,7 @@ export class InputDestructureComponent extends MagickComponent<
         eth_private_key: 'output',
         eth_public_address: 'output',
         roomInfo: 'output',
-        channel_type: 'output',
+        channelType: 'output',
         trigger: 'option',
       },
       init: (task = {} as Task, node: MagickNode) => {
@@ -99,9 +81,9 @@ export class InputDestructureComponent extends MagickComponent<
     )
     const roomInfo = new Rete.Output('roomInfo', 'roomInfo', arraySocket)
     // eslint-disable-next-line camelcase
-    const channel_type = new Rete.Output(
-      'channel_type',
-      'channel_type',
+    const channelType = new Rete.Output(
+      'channelType',
+      'channelType',
       stringSocket
     )
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -116,7 +98,7 @@ export class InputDestructureComponent extends MagickComponent<
       .addOutput(channelId)
       .addOutput(entity)
       .addOutput(roomInfo)
-      .addOutput(channel_type)
+      .addOutput(channelType)
       .addOutput(private_key)
       .addOutput(public_address)
       .addOutput(out)
@@ -149,7 +131,7 @@ export class InputDestructureComponent extends MagickComponent<
       roomInfo: (agent as any)['roomInfo'],
       eth_private_key: (agent as any)['eth_private_key'],
       eth_public_address: (agent as any)['eth_public_address'],
-      // channel_type: (agent as any)['Channel'],
+      channelType: (agent as any)['channelType'],
     }
   }
 }
