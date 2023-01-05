@@ -415,10 +415,11 @@ export class discord_client {
       channel: 'msg',
     })
 
+    const { Output, Image } = response
+
     // get the value of the first entry in the object
     const firstValue = Object.values(response)[0]
-
-    this.handlePingSoloAgent(message.channel.id, message.id, firstValue, false)
+    this.handleMessage({chat_id: message.channel.id, message_id: message.id, responses: Output ?? (!Image && firstValue), addPing: false, image: Image})
   }
 
   //Event that is triggered when a message is deleted
@@ -911,12 +912,13 @@ export class discord_client {
     log('handleUserUpdateEvent: ' + response)
   }
 
-  async handlePingSoloAgent(
-    chat_id: any,
-    message_id: any,
-    responses: string | boolean | any[] | undefined,
-    addPing: boolean
-  ) {
+  async handleMessage({
+    chat_id,
+    message_id,
+    responses,
+    addPing,
+    image
+  }) {
     this.client.channels
       .fetch(chat_id)
       .then((channel: { messages: { fetch: (arg0: any) => Promise<any> } }) => {

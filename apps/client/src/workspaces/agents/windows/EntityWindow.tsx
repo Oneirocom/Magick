@@ -633,13 +633,13 @@ const EntityWindow = ({ id, updateCallback }) => {
         const response = await axios
           .post(`${url}`, {
             inputs: {
-              Input: value,
-              Speaker: speaker,
-              Agent: agent,
-              Client: client,
-              ChannelID: channelId,
-              Entity: entity,
-              Channel: channel,
+              input: value,
+              speaker: speaker,
+              agent: agent,
+              client: client,
+              channelId: channelId,
+              entity: entity,
+              channel: channel,
               eth_private_key,
               eth_public_address,
             },

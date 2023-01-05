@@ -117,7 +117,7 @@ const Playtest = ({ tab }) => {
       client.service('spell-runner').create({
         spellId: tab.spellId,
         inputs: {
-          Input: value,
+          input: value,
         },
       })
     }
