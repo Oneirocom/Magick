@@ -1,5 +1,7 @@
 import { config } from 'dotenv-flow'
-config()
+config({
+  path: '../../../',
+})
 import cors from '@koa/cors'
 import Router from '@koa/router'
 import HttpStatus from 'http-status-codes'

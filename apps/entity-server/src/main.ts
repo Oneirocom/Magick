@@ -1,6 +1,8 @@
 import 'regenerator-runtime/runtime'
 import { config } from 'dotenv-flow'
-config()
+config({
+  path: '../../../',
+})
 
 // todo fix this import
 import { roomManager } from '@magickml/core'

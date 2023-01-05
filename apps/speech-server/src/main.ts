@@ -1,5 +1,7 @@
 import { config } from 'dotenv-flow'
-config()
+config({
+  path: '../../../',
+})
 import { initSpeechServer } from '@magickml/systems'
 
 // @ts-ignore

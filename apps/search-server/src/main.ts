@@ -1,5 +1,7 @@
 import { config } from 'dotenv-flow'
-config()
+config({
+  path: '../../../',
+})
 import { initSearchCorpus } from '@magickml/systems'
 
 initSearchCorpus(false)
