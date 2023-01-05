@@ -1,6 +1,6 @@
 import Koa from 'koa'
 import 'regenerator-runtime/runtime'
-import { database } from '@ magickml/database'
+import { database } from '@magickml/database'
 import { Route } from '../../types'
 import { CustomError } from '../../utils/CustomError'
 import {
@@ -8,7 +8,7 @@ import {
   GraphData,
   Spell as SpellType,
   extractModuleInputKeys,
-} from '@ magickml/core'
+} from '@magickml/core'
 import { buildThothInterface } from './buildThothInterface'
 
 import otJson0 from 'ot-json0'
@@ -22,6 +22,7 @@ const runSpellHandler = async (ctx: Koa.Context) => {
 
   const rootSpell = await database.instance.models.spells.findOne({
     where: { name: spell },
+    raw: true,
   })
 
   //todo validate spell has an input trigger?
@@ -58,7 +59,7 @@ const runSpellHandler = async (ctx: Koa.Context) => {
 
   const spellToRun = {
     // TOTAL HACK HERE
-    ...(rootSpell as any).toJSON(),
+    ...rootSpell,
     gameState: userGameState,
   }
 
