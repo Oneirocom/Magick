@@ -28,7 +28,6 @@ export interface MagickEngine extends Engine {
   moduleManager?: any
 }
 export abstract class MagickEngineComponent<WorkerReturnType> {
-  // Original Class: https://github.com/oneirocom/rete/blob/master/src/engine/component.ts
   name: string
   data: unknown = {}
   engine: Engine | null = null

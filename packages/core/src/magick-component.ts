@@ -33,7 +33,6 @@ export abstract class MagickComponent<
   declare task: TaskOptions
   declare _task: MagickTask
   declare cache: Record<string, any>
-  // Original Class: https://github.com/AtlasFoundation/rete/blob/master/src/component.ts
   editor: MagickEditor | null = null
   data: unknown = {}
   declare category: string

@@ -43,10 +43,6 @@ const config = {
     ({
       navbar: {
         title: 'Home',
-        logo: {
-          alt: 'magick',
-          src: 'img/magick-logo.png',
-        },
         items: [
           {
             type: 'doc',

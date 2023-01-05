@@ -12,7 +12,7 @@ Install xvfb, chromium and ffmpeg
 First, clone and set up magick
 
 ```
-git clone https://github.com/TheNexusCity/magick
+git clone https://github.com/Oneirocom/MagickML
 ```
 
 Next, install dependencies
