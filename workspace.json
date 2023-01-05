@@ -9,6 +9,7 @@
     "engine": "packages/engine",
     "entity-server": "apps/entity-server",
     "plugins": "packages/plugins",
+    "prisma": "packages/prisma",
     "search-server": "apps/search-server",
     "server": "apps/server",
     "speech-server": "apps/speech-server",

@@ -217,6 +217,7 @@
     "lerna": "^5.5.1",
     "lint-staged": ">=10",
     "nx": "15.4.2",
+    "prisma": "^4.8.1",
     "redoc-cli": "^0.12.3",
     "rimraf": "^3.0.2",
     "sequelize-cli": "^6.4.1",
