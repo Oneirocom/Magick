@@ -8,7 +8,7 @@ import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info =
   'Logical Operator is used to compare two values - options: equal, not equal, greater than, less greater than'

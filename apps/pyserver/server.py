@@ -5,8 +5,8 @@ from vector_search import trainModel, getNumberOfTpocis, query, keywords_query
 from utils import *
 
 def run_server(port, _postgres):
-    app = Flask('thoth')
-    
+    app = Flask('magick')
+
     @app.route('/', methods=['GET', 'POST'])
     def main_page():
         if request.method == 'GET':
@@ -15,7 +15,7 @@ def run_server(port, _postgres):
             return html
         elif request.method =='POST':
             return json.dumps({"status": "not_supported"})
-    
+
     @app.route('/search', methods=['GET', 'POST'])
     def search_page():
         if request.method == 'GET':
@@ -31,7 +31,7 @@ def run_server(port, _postgres):
                 res = query(_query)
 
             return  json.dumps({"status": 'ok', 'data': res})
-    
+
     @app.route('/update_search_model')
     def update_search_model_page():
         if request.method == 'GET':
@@ -41,12 +41,12 @@ def run_server(port, _postgres):
                 return json.dumps({"status": "ok"})
             except Exception as e:
                 return json.dumps({"status": "error", "message": str(e)})
-    
+
     @app.route('/number_of_topics')
     def get_number_of_topics_page():
         if request.method == 'GET':
             num = getNumberOfTpocis()
             return json.dumps({"status": "ok", "count": num})
-    
+
     app.secret_key = 'KJDFSIJ34534(*%&#)kjfdskfd'
     app.run(host='0.0.0.0', port=port)

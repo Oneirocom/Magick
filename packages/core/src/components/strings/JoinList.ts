@@ -3,7 +3,7 @@ import Rete from 'rete'
 import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
 import { TextInputControl } from '../../controls/TextInputControl'
 import { stringSocket, arraySocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 const info = `The Join List component takes in an array, and will join each item in the array together with a seperator, defined in the components input field.`
 
 type WorkerReturn = {

@@ -1,6 +1,6 @@
 import { Node, NodeEditor } from 'rete'
 
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 import { Inspector } from './Inspector'
 export type RestProps = {}
 export abstract class DataControl {

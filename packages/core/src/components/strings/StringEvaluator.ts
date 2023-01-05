@@ -14,7 +14,7 @@ import {
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const fewshot = ``
 

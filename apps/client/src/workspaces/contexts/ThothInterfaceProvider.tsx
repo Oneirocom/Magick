@@ -4,7 +4,7 @@ import {
   EditorContext,
   Spell,
   ThothWorkerInputs,
-} from '@ magickml/core'
+} from '@magickml/core'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
 import { useGetSpellQuery, useRunSpellMutation } from '../../state/api/spells'
@@ -269,7 +269,7 @@ const ThothInterfaceProvider = ({ children, tab }) => {
   const getWikipediaSummary = async (keyword: string) => {
     const isProd = import.meta.env.NODE_ENV === 'production'
     const root = isProd
-      ? 'https://thoth.supereality.com'
+      ? 'https://magick.supereality.com'
       : 'https://localhost:8001'
     const url = `${root}/wikipediaSummary?keyword=${keyword}`
 

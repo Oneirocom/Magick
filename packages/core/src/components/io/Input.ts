@@ -15,7 +15,7 @@ import { PlaytestControl } from '../../dataControls/PlaytestControl'
 import { SwitchControl } from '../../dataControls/SwitchControl'
 import { Task } from '../../plugins/taskPlugin/task'
 import { anySocket } from '../../sockets'
-import { ThothComponent, ThothTask } from '../../thoth-component'
+import { ThothComponent, ThothTask } from '../../magick-component'
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
 type InputReturn = {
@@ -56,7 +56,7 @@ export class InputComponent extends ThothComponent<InputReturn> {
   unsubscribe?: () => void
 
   subscribeToPlaytest(node: ThothNode) {
-    const { onPlaytest } = this.editor?.thoth as EditorContext
+    const { onPlaytest } = this.editor?.magick as EditorContext
 
     // check node for the right data attribute
     if (onPlaytest) {

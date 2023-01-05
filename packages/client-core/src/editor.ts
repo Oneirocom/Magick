@@ -1,4 +1,3 @@
-import { createRoot } from 'react-dom/client'
 import ConnectionPlugin from 'rete-connection-plugin'
 import { Plugin } from 'rete/types/core/plugin'
 // import ConnectionReroutePlugin from 'rete-connection-reroute-plugin'
@@ -28,14 +27,14 @@ import {
   getComponents,
   ThothEditor,
   MultiSocketGenerator,
-} from '@ magickml/core'
+} from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
 
-import { initSharedEngine, ThothEngine } from '@ magickml/engine'
+import { initSharedEngine, ThothEngine } from '@magickml/engine'
 
 interface ThothEngineClient extends ThothEngine {
-  thoth: EditorContext
+  magick: EditorContext
 }
 
 /*
@@ -46,7 +45,7 @@ const editorTabMap: Record<string, ThothEditor> = {}
 export const initEditor = function ({
   container,
   pubSub,
-  thoth,
+  magick,
   tab,
   node,
   client,
@@ -54,7 +53,7 @@ export const initEditor = function ({
 }: {
   container: any
   pubSub: any
-  thoth: any
+  magick: any
   tab: any
   node: any
   client?: any
@@ -71,7 +70,7 @@ export const initEditor = function ({
 
   // Set up the reactcontext pubsub on the editor so rete components can talk to react
   editor.pubSub = pubSub
-  editor.thoth = thoth
+  editor.magick = magick
   editor.tab = tab
 
   // ██████╗ ██╗     ██╗   ██╗ ██████╗ ██╗███╗   ██╗███████╗
@@ -92,13 +91,12 @@ export const initEditor = function ({
   // https://github.com/retejs/comment-plugin
   // connection plugin is used to render conections between nodes
   editor.use(ConnectionPlugin)
-  // @seang: temporarily disabling because dependencies of ConnectionReroutePlugin are failing validation on server import of thoth-core
+  // @seang: temporarily disabling because dependencies of ConnectionReroutePlugin are failing validation on server import of magick-core
   // editor.use(ConnectionReroutePlugin)
   // React rendering for the editor
   editor.use(ReactRenderPlugin, {
     // this component parameter is a custom default style for nodes
     component: node as any,
-    createRoot,
   })
   // renders a context menu on right click that shows available nodes
   editor.use(LifecyclePlugin)
@@ -144,11 +142,11 @@ export const initEditor = function ({
     modules: {},
   }) as ThothEngineClient
   engine.use(ErrorPlugin)
-  engine.thoth = thoth
+  engine.magick = magick
   // @seang TODO: update types for editor.use rather than casting as unknown here, we may want to bring our custom rete directly into the monorepo at this point
 
   editor.onSpellUpdated = (spellId: string, callback: Function) => {
-    return thoth.onSubspellUpdated(spellId, callback)
+    return magick.onSubspellUpdated(spellId, callback)
   }
 
   editor.use(KeyCodePlugin)
@@ -198,7 +196,7 @@ export const initEditor = function ({
 
   editor.runProcess = async callback => {
     await engine.abort()
-    await engine.process(editor.toJSON(), null, { thoth: thoth })
+    await engine.process(editor.toJSON(), null, { magick: magick })
     if (callback) callback()
   }
 

@@ -1,4 +1,4 @@
-import { ImageCacheResponse } from '@ magickml/core'
+import { ImageCacheResponse } from '@magickml/core'
 import { rootApi } from './api'
 
 export const visualGenerationsApi = rootApi.injectEndpoints({

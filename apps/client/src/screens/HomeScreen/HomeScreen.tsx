@@ -53,7 +53,7 @@ const StartScreen = () => {
       })
     )
 
-    navigate('/thoth')
+    navigate('/magick')
   }
 
   const loadFile = selectedFile => {
@@ -76,7 +76,7 @@ const StartScreen = () => {
 
   const openSpell = async spell => {
     // dispatch(openTab({ name: spell.name, spellId: spell.name, type: 'spell' }))
-    navigate(`/thoth/${spell.name}`)
+    navigate(`/magick/${spell.name}`)
   }
 
   const [selectedSpell, setSelectedSpell] = useState(null)

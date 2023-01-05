@@ -6,7 +6,7 @@ import HttpStatus from 'http-status-codes'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
-import { database } from '@ magickml/database'
+import { database } from '@magickml/database'
 import { routes } from './routes'
 import { Handler, Method, Middleware } from './types'
 import {
@@ -15,7 +15,7 @@ import {
   spawnPythonServer,
   initWeaviateClient,
   cors_server,
-} from '@ magickml/systems'
+} from '@magickml/systems'
 import https from 'https'
 import http from 'http'
 import * as fs from 'fs'
@@ -27,7 +27,7 @@ const router: Router = new Router()
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 
 async function init() {
-  // required for some current consumers (i.e Thoth)
+  // required for some current consumers (i.e magick)
   // to-do: standardize an allowed origin list based on env values or another source of truth?
 
   new database()

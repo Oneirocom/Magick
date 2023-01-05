@@ -13,7 +13,7 @@ import {
 } from '../../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info =
   'InputsToJSON runs JSON.stringify on the inputs and returns the result'

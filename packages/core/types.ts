@@ -18,9 +18,9 @@ import { Inspector } from './src/plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './src/plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './src/plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './src/sockets'
-import { PubSubContext, ThothTask } from './src/thoth-component'
+import { PubSubContext, ThothTask } from './src/magick-component'
 
-export { ThothComponent } from './src/thoth-component'
+export { ThothComponent } from './src/magick-component'
 //@seang this was causing test enviroment issues to have it shared client/server
 // export { ThothEditor } from './src/editor'
 
@@ -62,7 +62,7 @@ export type GetEventArgs = {
 export class ThothEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
   declare pubSub: PubSubContext
-  declare thoth: EditorContext
+  declare magick: EditorContext
   declare tab: { type: string }
   declare abort: unknown
   declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
@@ -162,7 +162,7 @@ export type Agent = {
 }
 
 export interface IRunContextEditor extends NodeEditor {
-  thoth: EditorContext
+  magick: EditorContext
   abort: Function
 }
 

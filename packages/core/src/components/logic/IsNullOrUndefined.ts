@@ -11,7 +11,7 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'Is Null Or Undefined checks if the input is null or undefined'
 

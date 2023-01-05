@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Window from '../../../components/Window/Window'
 import WindowMessage from '../../components/WindowMessage'
 
-import '../../../screens/Thoth/thoth.module.css'
+import '../../../screens/Magick/magick.module.css'
 import {
   TextEditorData,
   useInspector,

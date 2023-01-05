@@ -3,7 +3,7 @@ import Rete from 'rete'
 import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'Agent Text Completion is using OpenAI for the agent to respond.'
 

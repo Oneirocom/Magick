@@ -1,8 +1,8 @@
-import { SearchSchema, ClassifierSchema } from '@ magickml/core'
+import { SearchSchema, ClassifierSchema } from '@magickml/core'
 import weaviate from 'weaviate-client'
 import * as fs from 'fs'
 import path from 'path'
-import { database } from '@ magickml/database'
+import { database } from '@magickml/database'
 import axios from 'axios'
 
 const DOCUMENTS_CLASS_NAME = 'DataStore'

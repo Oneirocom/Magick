@@ -14,7 +14,7 @@ import {
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, agentSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'Event Store is used to store events for an agent and user'
 
@@ -71,9 +71,9 @@ export class EventStore extends ThothComponent<Promise<void>> {
     node: NodeData,
     inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
-    { silent, thoth }: { silent: boolean; thoth: EngineContext }
+    { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
-    const { storeEvent } = thoth
+    const { storeEvent } = magick
     const agent = inputs['agent'][0] as Agent
     const primary = ((inputs['primary'] && inputs['primary'][0]) ||
       inputs['primary']) as string

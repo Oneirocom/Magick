@@ -49,7 +49,7 @@ Just going to put some notes in here for now in no particular order to start to 
       - windows
       - layout json
       - generating a new layout
-    - thoth interface
+    - magick interface
     - contexts
     - state
     - inspector and inspector controls
@@ -60,9 +60,9 @@ Just going to put some notes in here for now in no particular order to start to 
       - socket generator
       - task plugin
   - package overview
-    - thoth-core
-    - thoth-client-core
-    - thoth-client
-    - thoth-server-core
-    - thoth-server
+    - magick-core
+    - magick-client-core
+    - magick-client
+    - magick-server-core
+    - magick-server
     - stargate design system

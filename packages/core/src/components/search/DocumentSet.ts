@@ -19,7 +19,7 @@ import {
   numSocket,
   anySocket,
 } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'Document Set is used to add a document in the search corpus'
 

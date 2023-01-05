@@ -9,7 +9,7 @@ npm install --global yarn
 npm install --global pm2
 
 #create our working directory if it doesnt exist
-DIR="/opt/thoth"
+DIR="/opt/magick"
 if [ -d "$DIR" ]; then
   echo "${DIR} exists"
 else

@@ -11,7 +11,7 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info =
   'Is Query node checks if an input is a query, that can be searched in the search corpus'

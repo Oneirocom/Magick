@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { database } from '@ magickml/database'
+import { database } from '@magickml/database'
 import 'regenerator-runtime/runtime'
 //@ts-ignore
 // import weaviate from 'weaviate-client'
@@ -8,8 +8,9 @@ import 'regenerator-runtime/runtime'
 import { Route } from '../types'
 import { makeCompletion } from '../utils/MakeCompletionRequest'
 import { MakeModelRequest } from '../utils/MakeModelRequest'
+import { queryGoogleSearch } from '../routes/utils/queryGoogle'
 import { getAudioUrl } from './getAudioUrl'
-import { tts, tts_tiktalknet, queryGoogleSearch } from '@ magickml/systems'
+import { tts, tts_tiktalknet } from '@magickml/systems'
 import { CustomError } from '../utils/CustomError'
 
 export const modules: Record<string, unknown> = {}

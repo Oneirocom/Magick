@@ -13,7 +13,7 @@ import {
 } from '../../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'String Adder adds a string in the current input.'
 

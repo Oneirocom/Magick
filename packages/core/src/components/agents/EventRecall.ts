@@ -15,7 +15,7 @@ import {
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, anySocket, agentSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'Event Recall is used to get conversation for an agent and user'
 
@@ -83,9 +83,9 @@ export class EventRecall extends ThothComponent<Promise<InputReturn>> {
     node: NodeData,
     inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
-    { silent, thoth }: { silent: boolean; thoth: EngineContext }
+    { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
-    const { getEvent } = thoth
+    const { getEvent } = magick
 
     const agentObj = inputs['agent'] && (inputs['agent'][0] as Agent)
 

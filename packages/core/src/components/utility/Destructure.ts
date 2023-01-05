@@ -8,7 +8,7 @@ import {
 } from '../../../types'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { objectSocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 import { SocketGeneratorControl } from './../../dataControls/SocketGenerator'
 
 const info = `Destructure properties out of an object`

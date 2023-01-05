@@ -15,7 +15,7 @@ import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import TabLayout from '../../components/TabLayout/TabLayout'
 import Workspaces from '../../workspaces'
 
-const Thoth = ({ empty = false }) => {
+const Magick = ({ empty = false }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
@@ -32,7 +32,7 @@ const Thoth = ({ empty = false }) => {
     // If there are still tabs, grab one at random to open to for now.
     // We should do better at this.  Probably with some kind of tab ordering.
     // Could fit in well with drag and drop for tabs
-    if (tabs.length > 0 && !activeTab && !spellName) navigate(`/thoth`)
+    if (tabs.length > 0 && !activeTab && !spellName) navigate(`/magick`)
 
     if (tabs.length === 0 && !activeTab && !spellName) navigate('/home')
   }, [tabs])
@@ -97,4 +97,4 @@ const Thoth = ({ empty = false }) => {
   )
 }
 
-export default Thoth
+export default Magick

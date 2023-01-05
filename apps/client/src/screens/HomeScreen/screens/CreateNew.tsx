@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { GraphData } from '@ magickml/core'
+import { GraphData } from '@magickml/core'
 import {
   uniqueNamesGenerator,
   adjectives,
@@ -68,7 +68,7 @@ const CreateNew = () => {
         }
       }
 
-      navigate(`/thoth/${name}`)
+      navigate(`/magick/${name}`)
     } catch (err) {
       console.log('ERROR!!', err)
     }

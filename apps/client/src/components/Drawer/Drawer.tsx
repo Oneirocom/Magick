@@ -132,10 +132,10 @@ export default function MiniDrawer({ children }) {
           }}
         >
           <DrawerItem
-            active={location.pathname === '/thoth'}
+            active={location.pathname === '/magick'}
             Icon={AutoFixHighIcon}
             open={open}
-            onClick={onClick('/thoth')}
+            onClick={onClick('/magick')}
             text="Spell Composer"
           />
           <DrawerItem

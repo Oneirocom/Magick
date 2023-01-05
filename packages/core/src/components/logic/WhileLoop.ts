@@ -11,7 +11,7 @@ import {
 } from '../../../types'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { triggerSocket } from '../../sockets'
-import { ThothComponent, ThothTask } from '../../thoth-component'
+import { ThothComponent, ThothTask } from '../../magick-component'
 
 const info = `While loop is used to execute a series of tasks for x times`
 

@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable camelcase */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-import { database } from '@ magickml/database'
+import { database } from '@magickml/database'
 import { TwitterApi, ETwitterStreamEvent } from 'twitter-api-v2'
 
 import { randomInt } from './utils'

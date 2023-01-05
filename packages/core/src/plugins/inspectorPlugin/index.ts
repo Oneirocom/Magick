@@ -5,7 +5,7 @@ import { IRunContextEditor, ThothNode } from '../../../types'
 import { Inspector } from './Inspector'
 
 function install(editor: IRunContextEditor) {
-  const { onInspector, sendToInspector, clearTextEditor } = editor.thoth
+  const { onInspector, sendToInspector, clearTextEditor } = editor.magick
 
   editor.on('componentregister', (component: any) => {
     const builder = component.builder

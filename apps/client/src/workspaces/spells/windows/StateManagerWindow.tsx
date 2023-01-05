@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useGetSpellQuery } from '../../../state/api/spells'
 import Window from '../../../components/Window/Window'
 
-import '../../../screens/Thoth/thoth.module.css'
+import '../../../screens/Magick/magick.module.css'
 import WindowMessage from '../../components/WindowMessage'
 import { usePubSub } from '../../../contexts/PubSubProvider'
 

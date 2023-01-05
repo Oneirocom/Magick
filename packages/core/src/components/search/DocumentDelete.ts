@@ -13,7 +13,7 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, numSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info =
   'Document Delete is used to delete a document from the search corpus'

@@ -14,7 +14,7 @@ import { CodeControl } from '../../dataControls/CodeControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const defaultCode = `
 // inputs: dictionary of inputs based on socket names
@@ -89,9 +89,9 @@ export class Code extends ThothComponent<unknown> {
   worker(
     node: NodeData,
     inputs: ThothWorkerInputs,
-    { data, thoth }: { thoth: EngineContext; data: { code: unknown } }
+    { data, magick }: { magick: EngineContext; data: { code: unknown } }
   ) {
-    const { processCode, getCurrentGameState, updateCurrentGameState } = thoth
+    const { processCode, getCurrentGameState, updateCurrentGameState } = magick
     if (!processCode) return
 
     const state = getCurrentGameState()

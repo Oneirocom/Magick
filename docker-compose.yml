@@ -27,11 +27,11 @@ services:
   db:
     restart: always
     image: postgres
-    hostname: thoth_db
+    hostname: magick_db
     environment:
-      POSTGRES_DB: thoth
-      POSTGRES_USER: thoth
-      POSTGRES_PASSWORD: thoth_default_pw
+      POSTGRES_DB: magick
+      POSTGRES_USER: magick
+      POSTGRES_PASSWORD: magick_default_pw
     ports:
       - '5432:5432'
 volumes:

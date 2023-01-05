@@ -1,5 +1,5 @@
 import { Layout } from '../../workspaces/contexts/LayoutProvider'
-import EventHandler from '../../screens/Thoth/components/EventHandler'
+import EventHandler from '../../screens/Magick/components/EventHandler'
 import StateManager from '../../workspaces/spells/windows/StateManagerWindow'
 import EntityManagerWindow from './windows/EntityManagerWindow'
 import SearchCorpus from './windows/SearchCorpusWindow'

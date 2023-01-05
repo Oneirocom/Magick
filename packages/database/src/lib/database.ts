@@ -1,4 +1,4 @@
-import { CreateEventArgs, GetEventArgs } from '@ magickml/core'
+import { CreateEventArgs, GetEventArgs } from '@magickml/core'
 import pg from 'pg'
 import { Sequelize } from 'sequelize'
 import { initModels } from '../models/init-models'

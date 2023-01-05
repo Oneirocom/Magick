@@ -12,7 +12,7 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'Does some basic checks'
 

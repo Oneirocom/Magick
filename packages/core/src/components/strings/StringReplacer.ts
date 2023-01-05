@@ -15,7 +15,7 @@ import {
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info =
   'String Replacer is used to replace one string with another. Useful for variable injection.'

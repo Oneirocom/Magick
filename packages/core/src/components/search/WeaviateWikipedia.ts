@@ -9,7 +9,7 @@ import {
 } from '../../../types'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { anySocket, stringSocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = `Given a keyword pull in relevant information of the wevaiate wikipedia instance.`
 

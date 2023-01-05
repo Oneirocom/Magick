@@ -7,7 +7,7 @@ import Scrollbars from 'react-custom-scrollbars-2'
 import Editor from '@monaco-editor/react'
 
 import Window from '../../../../components/Window/Window'
-import css from '../../../../screens/Thoth/thoth.module.css'
+import css from '../../../../screens/Magick/magick.module.css'
 import SpeechUtils from '../../../../speechUtils'
 import { usePubSub } from '../../../../contexts/PubSubProvider'
 import Avatar from './Avatar'

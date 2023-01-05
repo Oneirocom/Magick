@@ -5,7 +5,7 @@ hide_table_of_contents: false
 sidebar_position: 3
 ---
 
-### You need an API key to call your thoth spell endpoints. You can test your spell using a tool like [Postman](https://www.postman.com/) or use it by sending a [POST](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST) request from your code. Once you have generated your API key your going to have something that looks like this:
+### You need an API key to call your magick spell endpoints. You can test your spell using a tool like [Postman](https://www.postman.com/) or use it by sending a [POST](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST) request from your code. Once you have generated your API key your going to have something that looks like this:
 
 ---
 

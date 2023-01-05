@@ -242,6 +242,10 @@ button.disabled {
   background: var(--dark-0);
 }
 
+.flexlayout__tabset_tabbar_inner_tab_container {
+  padding-left: 0;
+}
+
 .flexlayout__tabset_tabbar_inner_tab_container_top {
   border-top: none;
   background-color: var(--dark-2);
@@ -252,7 +256,8 @@ button.disabled {
 }
 
 .flexlayout__tabset {
-  font-size: 16px;
+  font-size: 14px;
+  font-family: 'IBM Plex Mono', 'sans-serif' !important;
 }
 
 .flexlayout__tab {

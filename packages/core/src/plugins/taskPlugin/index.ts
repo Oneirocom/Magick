@@ -2,7 +2,7 @@ import { Component } from 'rete'
 import { NodeData } from 'rete/types/core/data'
 
 import { ThothEditor, ThothWorkerInputs } from '../../../types'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 import { Task } from './task'
 
 function install(editor: ThothEditor) {

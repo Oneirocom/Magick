@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap');
 
-p, h1, h2, h3, h4, h5, form, button {
+p, h1, h2, h3, h4, h5, form, button, label, .flexlayout__tab_button_content {
   font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
 }
 

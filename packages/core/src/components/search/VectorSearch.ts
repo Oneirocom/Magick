@@ -13,7 +13,7 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, anySocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info =
   'Vector Search is used to do neural search in the search corpus and return a document'

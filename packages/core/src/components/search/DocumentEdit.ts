@@ -18,7 +18,7 @@ import {
   booleanSocket,
   numSocket,
 } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'Document Edit is used to edit a document in the search corpus'
 

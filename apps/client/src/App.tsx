@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import ThothPageLayout from './components/ThothPageLayout/ThothPageLayout'
 import HomeScreen from './screens/HomeScreen/HomeScreen'
-import Thoth from './screens/Thoth/Thoth'
+import Magick from './screens/Magick/Magick'
 
 import 'flexlayout-react/style/dark.css'
 import './design-globals/design-globals.css'
@@ -18,10 +18,10 @@ function App() {
       <Route element={<MainLayout />}>
         <Route element={<ThothPageLayout />}>
           <Route path="/home/*" element={<HomeScreen />} />
-          <Route path="/" element={<Thoth />} />
-          <Route path="/thoth/*" element={<Thoth />} />
-          <Route path="/thoth/:spellName" element={<Thoth />} />
-          <Route path="/*" element={<Thoth />} />
+          <Route path="/" element={<Magick />} />
+          <Route path="/magick/*" element={<Magick />} />
+          <Route path="/magick/:spellName" element={<Magick />} />
+          <Route path="/*" element={<Magick />} />
         </Route>
       </Route>
     </Routes>

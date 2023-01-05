@@ -9,7 +9,7 @@ import {
 } from '../../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = `The random gate takes a trigger input, and randomly fires one of the connected outputs.`
 

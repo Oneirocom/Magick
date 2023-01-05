@@ -1,5 +1,5 @@
 {
-  "name": "@ magickml/client-core",
+  "name": "@magickml/client-core",
   "version": "0.0.0",
   "main": "./client-core.umd.js",
   "module": "./client-core.es.js",

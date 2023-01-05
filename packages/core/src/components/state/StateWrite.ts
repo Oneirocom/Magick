@@ -9,7 +9,7 @@ import {
 } from '../../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = `The State Write component allows you to define any number of inputs, and to write values to the state manager which correspond to the names of those inputs.  If the value does not exist in the state, it will be written.
 
@@ -55,9 +55,9 @@ export class StateWrite extends ThothComponent<void> {
     _node: NodeData,
     inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
-    { thoth }: { thoth: EngineContext }
+    { magick }: { magick: EngineContext }
   ) {
-    const { getCurrentGameState, updateCurrentGameState } = thoth
+    const { getCurrentGameState, updateCurrentGameState } = magick
 
     try {
       const gameState = (await getCurrentGameState()) as Record<string, any>

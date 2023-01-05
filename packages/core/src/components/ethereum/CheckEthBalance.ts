@@ -17,7 +17,7 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, numSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'Check the balance of an ethereum wallet'
 

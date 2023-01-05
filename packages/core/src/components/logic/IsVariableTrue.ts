@@ -11,7 +11,7 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, anySocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info =
   'Is Variable true checks if input is true - string or boolean are checked as true or false, numbers are checked as 0 or 1, undifined or null are checked as false'

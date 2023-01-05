@@ -1,6 +1,6 @@
 ---
 title: Layouts
-description: This is where you will find information relevant to the layouts of Thoth.
+description: This is where you will find information relevant to the layouts of magick.
 hide_table_of_contents: false
 ---
 

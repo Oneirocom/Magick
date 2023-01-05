@@ -6,7 +6,7 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 const info = `The State Read component allows you to read values from the state.  These can be found in and are managed by the State Manager window.  This window consists of a JSON object.  You can define any number of outputs where an outputs name corresponds to a key in the state manager.  Whatever value is assigned to that key will be read ans passed into your graph.`
 export class StateRead extends ThothComponent<
   Promise<Record<string, unknown>>
@@ -40,9 +40,9 @@ export class StateRead extends ThothComponent<
     _node: NodeData,
     _inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
-    { thoth }: { silent: boolean; thoth: EngineContext }
+    { magick }: { silent: boolean; magick: EngineContext }
   ) {
-    const { getCurrentGameState } = thoth
+    const { getCurrentGameState } = magick
 
     try {
       const gameState = await getCurrentGameState()

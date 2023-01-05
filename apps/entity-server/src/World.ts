@@ -1,5 +1,5 @@
 import { randomInt } from './connectors/utils'
-import { database } from '@ magickml/database'
+import { database } from '@magickml/database'
 import Entity from './Entity'
 
 const maxMSDiff = 5000

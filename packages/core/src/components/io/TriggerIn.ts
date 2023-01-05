@@ -8,7 +8,7 @@ import { NodeData, ThothNode } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { PlaytestControl } from '../../dataControls/PlaytestControl'
 import { triggerSocket } from '../../sockets'
-import { ThothComponent, ThothTask } from '../../thoth-component'
+import { ThothComponent, ThothTask } from '../../magick-component'
 
 const info = `The trigger in allows you to pass values into your spell either from a higher level component or from the server.  There must be one single trigger into a spell for now as the server does not support multiple triggers.  Yet.`
 
@@ -47,7 +47,7 @@ export class TriggerIn extends ThothComponent<void> {
   unsubscribe?: () => void
 
   subscribeToPlaytest(node: ThothNode) {
-    const { onPlaytest } = this.editor?.thoth as any
+    const { onPlaytest } = this.editor?.magick as any
 
     // check node for the right data attribute
     if (onPlaytest) {

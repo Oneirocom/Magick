@@ -8,7 +8,7 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { stringSocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info =
   'Webaverse Image Generation node, leverages the current Webaverse build of Stable Diffusion (https://github.com/webaverse/stable-diffusion-webui) and takes an input string and arbitrary labels and returns the most likely label'
@@ -109,7 +109,7 @@ export class ImageGeneration extends ThothComponent<Promise<InputReturn>> {
     node: NodeData,
     inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
-    { silent }: { silent: boolean; thoth: EngineContext }
+    { silent }: { silent: boolean; magick: EngineContext }
   ) {
     const prompt = inputs['prompt'] && inputs['prompt'][0]
     const endpoint = inputs['endpoint'] && inputs['endpoint'][0]

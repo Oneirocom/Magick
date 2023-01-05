@@ -7,7 +7,7 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'Returns the same output as the input'
 

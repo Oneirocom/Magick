@@ -1,5 +1,5 @@
 This file contains a list of people who have made large contributions
-to the public version of Voyage Thoth.
+to the public version of Voyage magick.
 
 Original application concept and architecture:
     Michael Sharpe <m.sharpe@project89.org>

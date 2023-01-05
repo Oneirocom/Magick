@@ -16,7 +16,7 @@ import {
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, arraySocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info =
   'RSS Get is used to get a json array from an RSS feed, you can use RSS1|RSS2|...|RSSN to use more links, also the Fetch Way can be left to empty to get the data from all RSS feeds or rnd/random to get randomly from one from the list'

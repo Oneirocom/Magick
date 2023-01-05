@@ -11,7 +11,7 @@ import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'Custom Text Completion is using OpenAI for the agent to respond.'
 

@@ -41,13 +41,13 @@ const Tab = ({ tab, activeTab }) => {
           }
     )
     dispatch(changeActive(updatedTabs))
-    navigate(`/thoth/${tab.name}`)
+    navigate(`/magick/${tab.name}`)
   }
 
   // Handle selecting the next tab down is none are active.
   const onClose = e => {
     e.stopPropagation()
-    navigate('/thoth')
+    navigate('/magick')
     dispatch(closeTab(tab.id))
   }
 

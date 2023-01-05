@@ -14,8 +14,8 @@ Development Flow
 
 Questions
 
-- if we have the client run against the latitude API directly, we reduce needing of duplicating endpoints in thothserver just to proxy through to latitude API. However that would require users developing to have a latitude account to run our interface for thoth on the client side.
-- we could mirror the latitude API in the thoth API and have all client calls first go to thoth server. Might work well.
+- if we have the client run against the latitude API directly, we reduce needing of duplicating endpoints in thothserver just to proxy through to latitude API. However that would require users developing to have a latitude account to run our interface for magick on the client side.
+- we could mirror the latitude API in the magick API and have all client calls first go to magick server. Might work well.
 - Perhaps the real solution here is that all everything latitude related should go through a dedicated interface and no mirror any endpoints?
 - how do we allow other plugin components running on the server to use the latitude API from server-side? Need the api key for the user stored in the DB. Or a token override provided. Maybe .env latitude api token overrides the user based on in the DB if it exists?
 
@@ -49,7 +49,7 @@ One proposed pattern, which reflect the data needs of each part of the applicati
     interface: ThothInterface,
     menuBar: Record<string, MenuBar>
     // or maybe this, which would load in all the above itself ands expose a single component.
-    // Perhaps our client library (or client-core) gives a provider that lets people load these things into thoth from their individual app.
+    // Perhaps our client library (or client-core) gives a provider that lets people load these things into magick from their individual app.
     appRoot: MyAppThothRootComponent
   }
   server: {

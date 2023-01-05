@@ -9,7 +9,7 @@ import {
   ThothWorkerInputs,
 } from '../../../types'
 import { SpellControl } from '../../dataControls/SpellControl'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
 type Socket = {
@@ -149,19 +149,19 @@ export class SpellComponent extends ThothComponent<
     inputs: ThothWorkerInputs,
     _outputs: { [key: string]: string },
     {
-      thoth,
+      magick,
       silent,
     }: {
       module: { outputs: ModuleWorkerOutput[] }
-      thoth: EngineContext
+      magick: EngineContext
       silent: Boolean
     }
   ) {
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
 
-    if (!thoth.runSpell) return {}
-    const outputs = await thoth.runSpell(
+    if (!magick.runSpell) return {}
+    const outputs = await magick.runSpell(
       flattenedInputs,
       node.data.spellId as string,
       {}

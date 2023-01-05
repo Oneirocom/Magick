@@ -39,13 +39,5 @@
     "stream": [
       "node_modules/stream-browserify"
     ]
-  },
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ]
+  }
 }

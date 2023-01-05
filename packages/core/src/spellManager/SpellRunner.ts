@@ -59,7 +59,7 @@ class SpellRunner {
   get context() {
     return {
       module: this.module,
-      thoth: this.thothInterface,
+      magick: this.thothInterface,
       silent: true,
     }
   }

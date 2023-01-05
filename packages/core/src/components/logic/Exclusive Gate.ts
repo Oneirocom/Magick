@@ -8,7 +8,7 @@ import {
 } from '../../../types'
 import { MultiSocketGeneratorControl } from '../../dataControls/MultiSocketGenerator'
 import { anySocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = `Fires once all connected triggers have fired.`
 

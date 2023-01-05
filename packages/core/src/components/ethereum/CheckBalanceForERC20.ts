@@ -11,7 +11,7 @@ const provider = new ethers.providers.JsonRpcProvider(
 
 import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
 import { triggerSocket, numSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info =
   'Check the balance of an ethereum wallet for an ERC20 at a contract address'

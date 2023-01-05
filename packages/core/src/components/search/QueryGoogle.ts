@@ -9,7 +9,7 @@ import {
 } from '../../../types'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { stringSocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
@@ -56,9 +56,9 @@ export class QueryGoogle extends ThothComponent<Promise<WorkerReturn>> {
     _node: NodeData,
     inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
-    { thoth }: { thoth: EngineContext }
+    { magick }: { magick: EngineContext }
   ) {
-    const { queryGoogle } = thoth
+    const { queryGoogle } = magick
 
     const query = inputs.query[0] as string
     const result = await queryGoogle(query)

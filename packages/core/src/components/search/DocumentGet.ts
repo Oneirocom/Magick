@@ -13,7 +13,7 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, anySocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'Document Get is used to get a document from the search corpus'
 

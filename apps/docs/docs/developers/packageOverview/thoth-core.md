@@ -1,9 +1,9 @@
 ---
-title: Thoth Core
-description: This is where you will find information relevant to the thoth-core package.
+title: magick Core
+description: This is where you will find information relevant to the magick-core package.
 hide_table_of_contents: false
 ---
 
-# thoth-core
+# magick-core
 
 How are you?

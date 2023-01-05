@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { DataSocketType, IRunContextEditor, ThothNode } from '../../../types'
 import * as socketMap from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 import { DataControl } from './DataControl'
 
 type InspectorConstructor = {

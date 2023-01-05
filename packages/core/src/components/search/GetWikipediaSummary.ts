@@ -9,7 +9,7 @@ import {
 } from '../../../types'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { anySocket, stringSocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = `Given a keyword pull in relevant information of the wevaiate wikipedia instance.`
 
@@ -56,10 +56,10 @@ export class GetWikipediaSummary extends ThothComponent<void> {
     _node: NodeData,
     inputs: ThothWorkerInputs,
     _outputs: ThothWorkerOutputs,
-    { thoth }: { thoth: EngineContext }
+    { magick }: { magick: EngineContext }
   ) {
     this._task.closed = ['success', 'error']
-    const { getWikipediaSummary } = thoth
+    const { getWikipediaSummary } = magick
     try {
       const result = (await getWikipediaSummary(
         inputs.keyword[0] as string

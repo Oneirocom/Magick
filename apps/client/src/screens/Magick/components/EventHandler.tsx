@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { GraphData, Spell } from '@ magickml/core'
+import { GraphData, Spell } from '@magickml/core'
 
 import {
   useSaveSpellMutation,

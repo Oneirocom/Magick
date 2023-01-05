@@ -4,7 +4,7 @@ import { NodeData, ThothNode } from '../../../types'
 import { TextInputControl } from '../../controls/TextInputControl'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 

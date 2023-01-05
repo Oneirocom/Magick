@@ -6,7 +6,7 @@ import glob from 'glob'
 import weaviate from 'weaviate-client'
 import wiki from 'wikipedia'
 
-import { database } from '@ magickml/database'
+import { database } from '@magickml/database'
 
 const client = weaviate.client({
   scheme: 'http',

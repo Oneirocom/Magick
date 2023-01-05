@@ -1,4 +1,4 @@
-# Thoth Deployment steps
+# magick Deployment steps
 
 1. Setup AWS CICD (https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines.html)
 
@@ -11,17 +11,17 @@
 
 6. Generate SSL certificate -` sudo certbot certonly --standalone --agree-tos --preferred-challenges http -d <domainName>`
 
-   sudo certbot certonly --manual --agree-tos --preferred-challenges dns -d superreality.com,thoth.superreality.com
+   sudo certbot certonly --manual --agree-tos --preferred-challenges dns -d superreality.com,magick.superreality.com
 
 7. Go to the project root path
 8. Copy certificates
 
    - Copy generated certificates into client dir. (tooth/client/certs)
-     - `sudo cp /etc/letsencrypt/live/superreality.com/privkey.pem /opt/thoth/packages/client/certs/key.pem`
-     - `sudo cp /etc/letsencrypt/live/superreality.com/cert.pem /opt/thoth/packages/client/certs/cert.pem`
+     - `sudo cp /etc/letsencrypt/live/superreality.com/privkey.pem /opt/magick/packages/client/certs/key.pem`
+     - `sudo cp /etc/letsencrypt/live/superreality.com/cert.pem /opt/magick/packages/client/certs/cert.pem`
    - Copy generated certificates into server dir. (tooth/server/certs)
-     - `sudo cp /etc/letsencrypt/live/superreality.com/privkey.pem /opt/thoth/packages/server/certs/key.pem`
-     - `sudo cp /etc/letsencrypt/live/superreality.com/cert.pem /opt/thoth/packages/server/certs/cert.pem`
+     - `sudo cp /etc/letsencrypt/live/superreality.com/privkey.pem /opt/magick/packages/server/certs/key.pem`
+     - `sudo cp /etc/letsencrypt/live/superreality.com/cert.pem /opt/magick/packages/server/certs/cert.pem`
 
 9. Open client .env file (vim client/.env).
 
@@ -37,5 +37,5 @@
   Note: In GOOGLE_APPLICATION_CREDENTIALS set path of credential json file
 
 12. Run following commands
-    - `pm2 --name thoth start "yarn run dev"`
+    - `pm2 --name magick start "yarn run dev"`
     - `pm2 save`

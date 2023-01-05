@@ -15,7 +15,7 @@ import {
   ThothWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, numSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 const info = 'Check the recent transactions of an ethereum wallet'
 

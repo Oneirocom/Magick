@@ -1,9 +1,9 @@
 ---
-title: Thoth Client
-description: This is where you will find information relevant to the thoth-client package.
+title: magick Client
+description: This is where you will find information relevant to the magick-client package.
 hide_table_of_contents: false
 ---
 
-# thoth-client
+# magick-client
 
 How are you?

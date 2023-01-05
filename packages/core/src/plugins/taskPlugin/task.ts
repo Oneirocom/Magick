@@ -1,7 +1,7 @@
 import { NodeData } from 'rete/types/core/data'
 
 import { ThothReteInput, ThothWorkerInputs } from '../../../types'
-import { ThothComponent, ThothTask } from '../../thoth-component'
+import { ThothComponent, ThothTask } from '../../magick-component'
 
 type TaskRef = {
   key: string

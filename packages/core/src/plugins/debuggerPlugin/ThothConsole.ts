@@ -1,5 +1,5 @@
 import { IRunContextEditor, NodeData } from '../../../types'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 
 type ConsoleConstructor = {
   component: ThothComponent<unknown>
@@ -109,8 +109,8 @@ export class ThothConsole {
   }
 
   sendToDebug(message: any) {
-    if (this.editor && this.editor.thoth && this.editor.thoth.sendToDebug)
-      this.editor.thoth.sendToDebug(message)
+    if (this.editor && this.editor.magick && this.editor.magick.sendToDebug)
+      this.editor.magick.sendToDebug(message)
   }
 
   throwServerError(message: any) {

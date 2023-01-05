@@ -1,6 +1,6 @@
 ---
 title: Workspaces and Tabs
-description: This is where you will find information relevant to the Workspaces and tabs in Thoth.
+description: This is where you will find information relevant to the Workspaces and tabs in magick.
 hide_table_of_contents: false
 ---
 

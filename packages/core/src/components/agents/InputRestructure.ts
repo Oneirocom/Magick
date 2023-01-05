@@ -10,7 +10,7 @@ import {
   triggerSocket,
   agentSocket,
 } from '../../sockets'
-import { ThothComponent, ThothTask } from '../../thoth-component'
+import { ThothComponent, ThothTask } from '../../magick-component'
 
 const info = `Restructure Agent Data`
 

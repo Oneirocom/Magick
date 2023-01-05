@@ -10,7 +10,7 @@ import { DropdownControl } from '../../dataControls/DropdownControl'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import * as sockets from '../../sockets'
 import { SocketNameType } from '../../sockets'
-import { ThothComponent } from '../../thoth-component'
+import { ThothComponent } from '../../magick-component'
 // import { DropdownControl } from '../../dataControls/DropdownControl';
 
 const info = `Used to cast any socket into another socket type.  Be sure you know the type of input to your any to cast it into your socket type, as it might break things otherwise.`

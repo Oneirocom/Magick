@@ -30,8 +30,8 @@ Implementation notes
 
 TO DO
 
-- create new default thoth interface using generic APIs (OpenAI, AI21, etc)\
-- build thoth interface directly off feathers services
+- create new default magick interface using generic APIs (OpenAI, AI21, etc)\
+- build magick interface directly off feathers services
   - or just inject the whole feathers app service interface into the engine context when running
 - USER AUTH
 - fix docker setup to all run at once and document it

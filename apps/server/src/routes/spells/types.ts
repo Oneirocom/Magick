@@ -1,4 +1,4 @@
-import { ThothComponent } from '@ magickml/core'
+import { ThothComponent } from '@magickml/core'
 
 export type ModuleComponent = ThothComponent<unknown> & {
   run: Function

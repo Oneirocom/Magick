@@ -1,5 +1,5 @@
-import { GraphData, EditorContext, Spell, ThothEditor } from '@ magickml/core'
-import { initEditor, zoomAt } from '@ magickml/client-core'
+import { GraphData, EditorContext, Spell, ThothEditor } from '@magickml/core'
+import { initEditor, zoomAt } from '@magickml/client-core'
 import React, {
   useRef,
   useContext,
@@ -74,13 +74,13 @@ const EditorProvider = ({ children }) => {
     return editorRef.current
   }
 
-  const buildEditor = async (container, _spell, tab, thoth) => {
+  const buildEditor = async (container, _spell, tab, magick) => {
     // eslint-disable-next-line no-console
     const newEditor = await initEditor({
       container,
       pubSub,
-      // calling thoth during migration of screens
-      thoth,
+      // calling magick during migration of screens
+      magick,
       tab,
       // MyNode is a custom default style for nodes
       node: MyNode,
@@ -174,7 +174,7 @@ const RawEditor = ({ tab, children }) => {
   const [getSpell, { data: spell, isLoading }] = useLazyGetSpellQuery()
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
-  // This will be the main interface between thoth and rete
+  // This will be the main interface between magick and rete
   const reteInterface = useThothInterface()
 
   useEffect(() => {

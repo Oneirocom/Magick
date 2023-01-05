@@ -2,7 +2,7 @@
 
 - Need a universal structure for models and options
 - each model should have different defaults provided for itself
-- model switcher needs to live in thoth-core, but is consumed on the react client to populate the data options
+- model switcher needs to live in magick-core, but is consumed on the react client to populate the data options
 - provide all values needed and filter on frontend rather than programmatically add or remove inspector elements
 
 ## MODEL DATA SHAPES
