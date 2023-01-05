@@ -22,8 +22,7 @@ export class Alert extends MagickComponent<void> {
     this.info = info
   }
   // the builder is used to "assemble" the node component.
-  // when we have enki hooked up and have grabbed all few shots, we would use the builder
-  // to generate the appropriate inputs and ouputs for the fewshot at build time
+
   builder(node: MagickNode): MagickNode {
     // create inputs here. First argument is the name, second is the type (matched to other components sockets), and third is the socket the i/o will use
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)

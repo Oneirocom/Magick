@@ -10,9 +10,6 @@ export default {
       string | OpenAIResultChoice
     >
   },
-  enkiCompletion: (): Promise<{ outputs: string[] }> => {
-    return new Promise(resolve => resolve({ outputs: ['string'] }))
-  },
   huggingface: (): Promise<{ outputs: string[] }> => {
     return new Promise(resolve => resolve({ outputs: ['string'] }))
   },

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import Icon from '../../../components/Icon/Icon'
 import Panel from '../../../components/Panel/Panel'
 import css from '../homeScreen.module.css'
-import magickBanner from '../version-banner-0.0.0beta.jpg'
 import FileInput from '../components/FileInput'
 import ProjectRow from '../components/ProjectRow'
 import { useSelector } from 'react-redux'
@@ -24,14 +23,6 @@ const OpenProject = ({
 
   return (
     <Panel shadow unpadded>
-      {tabs?.length < 1 && (
-        <div
-          className={css['version-banner']}
-          style={{ backgroundImage: `url(${magickBanner})` }}
-        >
-          {getMagickVersion()}
-        </div>
-      )}
       <div className={css['open-project-container']}>
         <h1 style={{ marginLeft: 'var(--small)' }}>Recent Projects</h1>
 

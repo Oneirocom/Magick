@@ -69,9 +69,6 @@ import { FewshotVariable } from './variable/FewshotVariable'
 import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
 
-// Here we load up all components of the builder into our editor for usage.
-// We might be able to programatically generate components from enki
-
 // NOTE: PLEASE KEEP THESE IN ALPHABETICAL ORDER
 // todo some kind of custom build parser perhaps to take car of keeping these in alphabetical order
 
