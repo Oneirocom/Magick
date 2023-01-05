@@ -1,13 +1,13 @@
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
+import { NodeData, MagickNode, MagickWorkerInputs } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, numSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = `The In Range component takes either a manually input set of numbers or a dynamically generated set of numbers as a boundary. When supplied with a value to test its existance between the set range, will trigger 1 of 2 outputs. If the number exists within the range including the start and end number, will trigger the true output else will trigger the false output.`
 
-export class InRange extends ThothComponent<void> {
+export class InRange extends MagickComponent<void> {
   constructor() {
     super('In Range')
 
@@ -18,7 +18,7 @@ export class InRange extends ThothComponent<void> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const startNumSocket = new Rete.Input(
       'startNumber',
       'Start Number',
@@ -60,7 +60,7 @@ export class InRange extends ThothComponent<void> {
     node.inspector.add(inspectorStartNumSocket).add(inspectorEndNumSocket)
   }
 
-  worker(node: NodeData, inputs: ThothWorkerInputs) {
+  worker(node: NodeData, inputs: MagickWorkerInputs) {
     const startRange =
       (inputs['startNumber'][0] as number) ?? (node.data.startNumber as number)
     const endRange =

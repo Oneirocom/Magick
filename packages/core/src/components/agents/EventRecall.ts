@@ -9,13 +9,13 @@ import {
   Agent,
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, anySocket, agentSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Event Recall is used to get conversation for an agent and user'
 
@@ -24,7 +24,7 @@ type InputReturn = {
   output: unknown
 }
 
-export class EventRecall extends ThothComponent<Promise<InputReturn>> {
+export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     super('Event Recall')
 
@@ -41,7 +41,7 @@ export class EventRecall extends ThothComponent<Promise<InputReturn>> {
     this.runFromCache = true
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const agentInput = new Rete.Input('agent', 'Agent', agentSocket)
     const out = new Rete.Output('output', 'Event', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
@@ -81,8 +81,8 @@ export class EventRecall extends ThothComponent<Promise<InputReturn>> {
 
   async worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
     const { getEvent } = magick

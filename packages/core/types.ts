@@ -13,16 +13,16 @@ import {
   WorkerOutputs,
 } from 'rete/types/core/data'
 
-import { ThothConsole } from './src/plugins/debuggerPlugin/ThothConsole'
+import { MagickConsole } from './src/plugins/debuggerPlugin/MagickConsole'
 import { Inspector } from './src/plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './src/plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './src/plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './src/sockets'
-import { PubSubContext, ThothTask } from './src/magick-component'
+import { PubSubContext, MagickTask } from './src/magick-component'
 
-export { ThothComponent } from './src/magick-component'
+export { MagickComponent } from './src/magick-component'
 //@seang this was causing test enviroment issues to have it shared client/server
-// export { ThothEditor } from './src/editor'
+// export { MagickEditor } from './src/editor'
 
 export type { InspectorData } from './src/plugins/inspectorPlugin/Inspector'
 
@@ -59,7 +59,7 @@ export type GetEventArgs = {
   max_time_diff: number
 }
 
-export class ThothEditor extends NodeEditor<EventsTypes> {
+export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
   declare pubSub: PubSubContext
   declare magick: EditorContext
@@ -83,7 +83,7 @@ export type EngineContext = {
   ) => Record<string, any>
   processCode: (
     code: unknown,
-    inputs: ThothWorkerInputs,
+    inputs: MagickWorkerInputs,
     data: Record<string, any>,
     state: Record<string, any>
   ) => any | void
@@ -99,11 +99,11 @@ export type EventPayload = Record<string, any>
 
 export interface EditorContext extends EngineContext {
   sendToAvatar: (data: any) => void
-  onTrigger: (node: ThothNode | string, callback: Function) => Function
+  onTrigger: (node: MagickNode | string, callback: Function) => Function
   sendToPlaytest: (data: string) => void
   sendToInspector: (data: EventPayload) => void
   sendToDebug: (data: EventPayload) => void
-  onInspector: (node: ThothNode, callback: Function) => Function
+  onInspector: (node: MagickNode, callback: Function) => Function
   onPlaytest: (callback: Function) => Function
   onDebug: (node: NodeData, callback: Function) => Function
   clearTextEditor: () => void
@@ -112,7 +112,7 @@ export interface EditorContext extends EngineContext {
   refreshEventTable: () => void
   processCode: (
     code: unknown,
-    inputs: ThothWorkerInputs,
+    inputs: MagickWorkerInputs,
     data: Record<string, any>,
     state: Record<string, any>
   ) => any | void
@@ -145,20 +145,21 @@ export interface Spell {
 }
 
 export type Agent = {
-  output: unknown
+  output: string
   speaker: string
   agent: string
   client: string
   channel: string
   entity: number
-  eth_private_key: string
-  eth_public_address: string
   roomInfo?: {
     user: string
     inConversation: boolean
     isBot: boolean
     info3d: string
   }[]
+  eth_private_key: string
+  eth_public_address: string
+  channelType: string
 }
 
 export interface IRunContextEditor extends NodeEditor {
@@ -175,7 +176,7 @@ export type DataSocketType = {
   useSocketName: boolean
 }
 
-export type ThothNode = Node & {
+export type MagickNode = Node & {
   inspector: Inspector
   display: (content: string) => void
   outputs: { name: string; [key: string]: unknown }[]
@@ -183,7 +184,7 @@ export type ThothNode = Node & {
   displayName?: string
   info: string
   subscription: Function
-  console: ThothConsole
+  console: MagickConsole
 }
 
 export type ModuleType = {
@@ -261,7 +262,7 @@ export type NodeData = ReteNodeData & {
   fewshot?: string
   display: Function
   error?: boolean
-  console: ThothConsole
+  console: MagickConsole
 }
 
 // export type Node = {
@@ -278,16 +279,16 @@ export type NodeData = ReteNodeData & {
 //   nodes: Record<number, Node>
 // }
 
-export type ThothReteInput = {
+export type MagickReteInput = {
   type: TaskOutputTypes
   outputData: unknown
-  task: ThothTask
+  task: MagickTask
   key: string
 }
 
 export type TaskOutput = {
   type: TaskOutputTypes
-  task: ThothTask
+  task: MagickTask
   key: string
 }
 
@@ -295,15 +296,15 @@ export type ModuleWorkerOutput = WorkerOutputs & {
   [key: string]: any
 }
 
-export type ThothWorkerInput = string | unknown | ThothReteInput
-export type ThothWorkerInputs = { [key: string]: ThothWorkerInput[] }
-export type ThothWorkerOutputs = WorkerOutputs & {
+export type MagickWorkerInput = string | unknown | MagickReteInput
+export type MagickWorkerInputs = { [key: string]: MagickWorkerInput[] }
+export type MagickWorkerOutputs = WorkerOutputs & {
   [key: string]: TaskOutput
 }
 
 export type WorkerReturn =
   | Node
-  | ThothWorkerOutputs
+  | MagickWorkerOutputs
   | void
   | Promise<void>
   | Promise<{ actionType: string }>
@@ -320,8 +321,8 @@ export type WorkerReturn =
   | Promise<null | undefined>
   | WorkerOutputs[]
   | { trigger: boolean }
-export type ThothWorker = (
-  node: ThothNode,
+export type MagickWorker = (
+  node: MagickNode,
   inputs: WorkerInputs,
   outputs: WorkerOutputs,
   ...args: unknown[]

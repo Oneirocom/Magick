@@ -10,13 +10,13 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Returns the input string as voice'
 
@@ -26,7 +26,7 @@ type WorkerReturn = {
 
 const API_URL = 'https://0.0.0.0:8001'
 
-export class TextToSpeech extends ThothComponent<Promise<WorkerReturn>> {
+export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('Text to Speech')
 
@@ -47,7 +47,7 @@ export class TextToSpeech extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const textInput = new Rete.Input('input', 'Input', anySocket, true)
     const voiceProviderInp = new Rete.Input(
       'voiceProvider',
@@ -87,7 +87,7 @@ export class TextToSpeech extends ThothComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     console.log('INPUTS:', inputs)
     const action = inputs['input'][0]
     const voiceProvider = inputs['voiceProvider'][0]

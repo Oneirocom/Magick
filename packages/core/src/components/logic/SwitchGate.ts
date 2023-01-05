@@ -3,17 +3,17 @@ import Rete from 'rete'
 import {
   DataSocketType,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { anySocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = `The Switch Gate component takes a single input, and allows you to define any number of outputs.  It works the same as the javascript switch.  The component will try to match the value of the input to one of the output socket names you have created.  It will route the trigger signal through that socket.`
 
-export class SwitchGate extends ThothComponent<void> {
+export class SwitchGate extends MagickComponent<void> {
   constructor() {
     // Name of the component
     super('Switch')
@@ -28,7 +28,7 @@ export class SwitchGate extends ThothComponent<void> {
 
   node = {}
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const outputGenerator = new SocketGeneratorControl({
       connectionType: 'output',
       ignored: ['default'],
@@ -52,8 +52,8 @@ export class SwitchGate extends ThothComponent<void> {
   // to the outputs to be consumed by any connected components
   worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { silent }: { silent: boolean }
   ) {
     const input = inputs['input'][0] as string

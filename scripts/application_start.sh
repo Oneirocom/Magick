@@ -18,9 +18,9 @@ cp /etc/letsencrypt/live/magick.superreality.com/cert.pem /opt/magick/packages/c
 cp /etc/letsencrypt/live/magick.superreality.com/privkey.pem /opt/magick/packages/server/certs/key.pem
 cp /etc/letsencrypt/live/magick.superreality.com/cert.pem /opt/magick/packages/server/certs/cert.pem
 
-cp /opt/thoth_env/server/.env /opt/magick/packages/server/.env
-cp /opt/thoth_env/client/.env /opt/magick/packages/client/.env
-cp /opt/thoth_env/core/.env /opt/magick/packages/core/.env
+cp /opt/magick_env/server/.env /opt/magick/packages/server/.env
+cp /opt/magick_env/client/.env /opt/magick/packages/client/.env
+cp /opt/magick_env/core/.env /opt/magick/packages/core/.env
 
 #start our node app in the background using PM2
 # pm2 --name magick start "yarn run dev"

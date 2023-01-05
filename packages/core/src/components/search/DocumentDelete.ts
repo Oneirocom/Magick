@@ -8,17 +8,17 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, numSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'Document Delete is used to delete a document from the search corpus'
 
-export class DocumentDelete extends ThothComponent<void> {
+export class DocumentDelete extends MagickComponent<void> {
   constructor() {
     super('Document Delete')
 
@@ -33,7 +33,7 @@ export class DocumentDelete extends ThothComponent<void> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const docIdInput = new Rete.Input('docId', 'Document Id', numSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -41,7 +41,7 @@ export class DocumentDelete extends ThothComponent<void> {
     return node.addInput(docIdInput).addInput(dataInput).addOutput(dataOutput)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     const docId = inputs['docId'][0]
     node.display(docId)
     const resp = await axios.delete(

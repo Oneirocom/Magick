@@ -8,12 +8,12 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, anySocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'Document Store Get is used to get a document store from the search corpus'
@@ -22,7 +22,7 @@ type WorkerReturn = {
   output: string
 }
 
-export class DocumentStoreGet extends ThothComponent<Promise<WorkerReturn>> {
+export class DocumentStoreGet extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('Document Store Get')
 
@@ -38,7 +38,7 @@ export class DocumentStoreGet extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const nameInput = new Rete.Input('name', 'Store Name', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -51,7 +51,7 @@ export class DocumentStoreGet extends ThothComponent<Promise<WorkerReturn>> {
       .addOutput(output)
   }
 
-  async worker(_node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
     const name = inputs['name'][0] as string
 
     const resp = await axios.get(

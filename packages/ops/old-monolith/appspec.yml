@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /opt/thoth
+    destination: /opt/magick
 file_exists_behavior: OVERWRITE
 hooks:
   ApplicationStop:

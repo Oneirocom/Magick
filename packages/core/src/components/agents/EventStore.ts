@@ -8,17 +8,17 @@ import {
   Agent,
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, agentSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Event Store is used to store events for an agent and user'
 
-export class EventStore extends ThothComponent<Promise<void>> {
+export class EventStore extends MagickComponent<Promise<void>> {
   constructor() {
     super('Store Event')
 
@@ -33,7 +33,7 @@ export class EventStore extends ThothComponent<Promise<void>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const agentInput = new Rete.Input('agent', 'Agent', agentSocket)
     const factsInp = new Rete.Input('primary', 'Primary Event', stringSocket)
 
@@ -69,8 +69,8 @@ export class EventStore extends ThothComponent<Promise<void>> {
 
   async worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
     const { storeEvent } = magick

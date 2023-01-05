@@ -5,9 +5,9 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   EditorContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { TextInputControl } from '../../controls/TextInputControl'
 import { InputControl } from '../../dataControls/InputControl'
@@ -15,15 +15,15 @@ import { PlaytestControl } from '../../dataControls/PlaytestControl'
 import { SwitchControl } from '../../dataControls/SwitchControl'
 import { Task } from '../../plugins/taskPlugin/task'
 import { anySocket } from '../../sockets'
-import { ThothComponent, ThothTask } from '../../magick-component'
+import { MagickComponent, MagickTask } from '../../magick-component'
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
 type InputReturn = {
   output: unknown
 }
 
-export class InputComponent extends ThothComponent<InputReturn> {
-  nodeTaskMap: Record<number, ThothTask> = {}
+export class InputComponent extends MagickComponent<InputReturn> {
+  nodeTaskMap: Record<number, MagickTask> = {}
 
   constructor() {
     // Name of the component
@@ -34,7 +34,7 @@ export class InputComponent extends ThothComponent<InputReturn> {
         output: 'output',
         trigger: 'option',
       },
-      init: (task = {} as Task, node: ThothNode) => {
+      init: (task = {} as Task, node: MagickNode) => {
         this.nodeTaskMap[node.id] = task
       },
     }
@@ -55,7 +55,7 @@ export class InputComponent extends ThothComponent<InputReturn> {
 
   unsubscribe?: () => void
 
-  subscribeToPlaytest(node: ThothNode) {
+  subscribeToPlaytest(node: MagickNode) {
     const { onPlaytest } = this.editor?.magick as EditorContext
 
     // check node for the right data attribute
@@ -75,12 +75,12 @@ export class InputComponent extends ThothComponent<InputReturn> {
     }
   }
 
-  destroyed(node: ThothNode) {
+  destroyed(node: MagickNode) {
     if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
     delete this.subscriptionMap[node.id]
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
     delete this.subscriptionMap[node.id]
 
@@ -141,8 +141,8 @@ export class InputComponent extends ThothComponent<InputReturn> {
 
   worker(
     node: NodeData,
-    _inputs: ThothWorkerInputs,
-    outputs: ThothWorkerOutputs,
+    _inputs: MagickWorkerInputs,
+    outputs: MagickWorkerOutputs,
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
     this._task.closed = ['trigger']

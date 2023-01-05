@@ -3,16 +3,16 @@ import Rete from 'rete'
 import {
   DataSocketType,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
+  MagickNode,
+  MagickWorkerInputs,
 } from '../../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = `Fires once all connected triggers have fired.`
 
-export class WaitForAll extends ThothComponent<void> {
+export class WaitForAll extends MagickComponent<void> {
   constructor() {
     // Name of the component
     super('Wait For All')
@@ -26,7 +26,7 @@ export class WaitForAll extends ThothComponent<void> {
 
   node = {}
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const inputGenerator = new SocketGeneratorControl({
       connectionType: 'input',
       socketType: 'triggerSocket',
@@ -44,7 +44,7 @@ export class WaitForAll extends ThothComponent<void> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  worker(_node: NodeData, inputs: ThothWorkerInputs) {
+  worker(_node: NodeData, inputs: MagickWorkerInputs) {
     const nodeInputs = Object.values(inputs as any).filter(
       (input: any) => !!input
     ) as DataSocketType[]

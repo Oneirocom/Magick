@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Routes, Route } from 'react-router-dom'
-import ThothPageLayout from './components/ThothPageLayout/ThothPageLayout'
+import MagickPageLayout from './components/MagickPageLayout/MagickPageLayout'
 import HomeScreen from './screens/HomeScreen/HomeScreen'
 import Magick from './screens/Magick/Magick'
 
@@ -16,7 +16,7 @@ function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route element={<ThothPageLayout />}>
+        <Route element={<MagickPageLayout />}>
           <Route path="/home/*" element={<HomeScreen />} />
           <Route path="/" element={<Magick />} />
           <Route path="/magick/*" element={<Magick />} />

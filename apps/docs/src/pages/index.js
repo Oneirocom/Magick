@@ -5,7 +5,7 @@ import Link from '@docusaurus/Link'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import styles from './index.module.css'
 import HomepageFeatures from '@site/src/components/HomepageFeatures'
-import ThothDemo from '../components/HomepageFeatures/ThothDemo'
+import MagickDemo from '../components/HomepageFeatures/MagickDemo'
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext()
@@ -14,7 +14,7 @@ function HomepageHeader() {
     <header className={styles.heroBanner}>
       <div className="container">
         {/* <h1 className="hero__title">{siteConfig.title}</h1> */}
-        <img src={siteConfig.customFields.thothLogo} />
+        <img src={siteConfig.customFields.magickLogo} />
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
           <Link
@@ -26,13 +26,13 @@ function HomepageHeader() {
           </Link>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/developers/getting%20started/installingThoth"
+            to="/docs/developers/getting%20started/installingMagick"
           >
             Developers
           </Link>
           <div className={styles.githubButtons}>
             <iframe
-              src="https://ghbtns.com/github-btn.html?user=latitudegames&repo=magick&type=star&count=true&size=large&v=2"
+              src="https://ghbtns.com/github-btn.html?user=oneirocom&repo=magickml&type=star&count=true&size=large&v=2"
               frameborder="0"
               scrolling="0"
               width="170"
@@ -56,7 +56,7 @@ export default function Home() {
       <HomepageHeader />
       <main>
         {/* <HomepageFeatures /> */}
-        <ThothDemo />
+        <MagickDemo />
       </main>
     </Layout>
   )

@@ -6,16 +6,16 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Is Null Or Undefined checks if the input is null or undefined'
 
-export class IsNullOrUndefined extends ThothComponent<Promise<void>> {
+export class IsNullOrUndefined extends MagickComponent<Promise<void>> {
   constructor() {
     super('Is Null Or Undefined')
 
@@ -28,7 +28,7 @@ export class IsNullOrUndefined extends ThothComponent<Promise<void>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const inp = new Rete.Input('string', 'String', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const isTrue = new Rete.Output('true', 'True', triggerSocket)
@@ -41,7 +41,7 @@ export class IsNullOrUndefined extends ThothComponent<Promise<void>> {
       .addOutput(isFalse)
   }
 
-  async worker(_node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
     const action = inputs['string'][0] ?? inputs['string']
     const is =
       action === null || action === undefined || (action as string).length <= 0

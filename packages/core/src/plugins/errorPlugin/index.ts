@@ -1,5 +1,5 @@
-import { IRunContextEditor, NodeData, ThothComponent } from '../../../types'
-import { ThothConsole } from '../debuggerPlugin/ThothConsole'
+import { IRunContextEditor, NodeData, MagickComponent } from '../../../types'
+import { MagickConsole } from '../debuggerPlugin/MagickConsole'
 
 function install(
   engine: IRunContextEditor,
@@ -13,11 +13,11 @@ function install(
     ({ message, data }: { message: string; data: NodeData }) => {
       const component = engine.components.get(
         data.name
-      ) as unknown as ThothComponent<unknown>
+      ) as unknown as MagickComponent<unknown>
 
       if (!component) return
 
-      const console = new ThothConsole({
+      const console = new MagickConsole({
         node: data,
         component,
         editor: engine,

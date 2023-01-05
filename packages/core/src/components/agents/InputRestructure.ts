@@ -2,7 +2,7 @@
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
+import { NodeData, MagickNode, MagickWorkerInputs, Agent } from '../../../types'
 import { Task } from '../../plugins/taskPlugin/task'
 import {
   arraySocket,
@@ -10,7 +10,7 @@ import {
   triggerSocket,
   agentSocket,
 } from '../../sockets'
-import { ThothComponent, ThothTask } from '../../magick-component'
+import { MagickComponent, MagickTask } from '../../magick-component'
 
 const info = `Restructure Agent Data`
 
@@ -34,7 +34,7 @@ type InputReturn = {
 export class InputRestructureComponent extends ThothComponent<
   Promise<InputReturn>
 > {
-  nodeTaskMap: Record<number, ThothTask> = {}
+  nodeTaskMap: Record<number, MagickTask> = {}
 
   constructor() {
     // Name of the component
@@ -45,7 +45,7 @@ export class InputRestructureComponent extends ThothComponent<
         output: 'output',
         trigger: 'option',
       },
-      init: (task = {} as Task, node: ThothNode) => {
+      init: (task = {} as Task, node: MagickNode) => {
         this.nodeTaskMap[node.id] = task
       },
     }
@@ -55,7 +55,7 @@ export class InputRestructureComponent extends ThothComponent<
     this.display = true
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     // module components need to have a socket key.
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
@@ -65,6 +65,7 @@ export class InputRestructureComponent extends ThothComponent<
     const speaker = new Rete.Input('speaker', 'speaker', stringSocket)
     const agent = new Rete.Input('agent', 'agent', stringSocket)
     const client = new Rete.Input('client', 'client', stringSocket)
+    const channelType = new Rete.Input('channelType', 'channelType', stringSocket)
     const channelId = new Rete.Input('channel', 'channel', stringSocket)
     const entity = new Rete.Input('entity', 'entity', stringSocket)
     const roomInfo = new Rete.Input('roomInfo', 'roomInfo', arraySocket)
@@ -86,6 +87,7 @@ export class InputRestructureComponent extends ThothComponent<
       .addInput(agent)
       .addInput(client)
       .addInput(channelId)
+      .addInput(channelType)
       .addInput(entity)
       .addInput(roomInfo)
       .addInput(private_key)
@@ -97,7 +99,7 @@ export class InputRestructureComponent extends ThothComponent<
   }
 
   // eslint-disable-next-line require-await
-  async worker(_node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
     const agent: any = {}
     Object.entries(inputs).map(([k, v]) => {
       agent[k] = v[0]
@@ -106,11 +108,13 @@ export class InputRestructureComponent extends ThothComponent<
 
     return {
       output: {
-        input: agent.input,
+        output: agent.output,
         speaker: agent.speaker,
         agent: agent.agent,
         client: agent.client,
-        // channelID: agent.channel,
+        channel: agent.channel,
+        channelId: agent.channelId,
+        channelType: agent.channelType,
         entity: agent.entity,
         roomInfo: agent.roomInfo,
         eth_private_key: agent.eth_private_key,

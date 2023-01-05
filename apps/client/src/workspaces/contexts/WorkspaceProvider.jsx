@@ -1,10 +1,10 @@
 import EditorProvider from './EditorProvider'
 import LayoutProvider from './LayoutProvider'
-import ThothInterfaceProvider from './ThothInterfaceProvider'
+import MagickInterfaceProvider from './MagickInterfaceProvider'
 import InspectorProvider from './InspectorProvider'
 
 const providers = [
-  ThothInterfaceProvider,
+  MagickInterfaceProvider,
   EditorProvider,
   LayoutProvider,
   InspectorProvider,

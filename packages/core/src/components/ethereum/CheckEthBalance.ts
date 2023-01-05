@@ -12,16 +12,16 @@ const provider = new ethers.providers.JsonRpcProvider(
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, numSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Check the balance of an ethereum wallet'
 
-export class CheckEthBalance extends ThothComponent<void> {
+export class CheckEthBalance extends MagickComponent<void> {
   constructor() {
     super('Check Balance')
 
@@ -37,7 +37,7 @@ export class CheckEthBalance extends ThothComponent<void> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const addressInput = new Rete.Input('address', 'Address', numSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -50,7 +50,7 @@ export class CheckEthBalance extends ThothComponent<void> {
       .addOutput(balanceOutput)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     const address = inputs['address'][0] as unknown as string
     node.display(address)
 

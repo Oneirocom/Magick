@@ -8,13 +8,13 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'Random String From List returns a randomly selected string from an array, it keeps memory of recently selected strings'
@@ -28,7 +28,7 @@ type WorkerReturn = {
   output: string
 }
 
-export class RandomStringFromList extends ThothComponent<
+export class RandomStringFromList extends MagickComponent<
   Promise<WorkerReturn>
 > {
   constructor() {
@@ -46,7 +46,7 @@ export class RandomStringFromList extends ThothComponent<
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     if (!node.data.fewshot) node.data.fewshot = fewshot
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)

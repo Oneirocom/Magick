@@ -3,12 +3,12 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { stringSocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'Image Generation node, leverages the current Automatic1111 build of Stable Diffusion (https://github.com/automatic1111/stable-diffusion-webui) and takes an input string and arbitrary labels and returns the most likely label'
@@ -50,7 +50,7 @@ async function getPrompt(prompt, server) {
   return j
 }
 
-export class ImageGeneration extends ThothComponent<Promise<InputReturn>> {
+export class ImageGeneration extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     super('Image Generation')
 
@@ -66,7 +66,7 @@ export class ImageGeneration extends ThothComponent<Promise<InputReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const promptInput = new Rete.Input('prompt', 'Prompt', stringSocket, true)
     const endpointInput = new Rete.Input('endpoint', 'Endpoint', stringSocket)
     // eslint-disable-next-line prettier/prettier
@@ -89,8 +89,8 @@ export class ImageGeneration extends ThothComponent<Promise<InputReturn>> {
 
   async worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { silent }: { silent: boolean; magick: EngineContext }
   ) {
     const prompt = inputs['prompt'] && inputs['prompt'][0]

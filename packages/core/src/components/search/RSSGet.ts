@@ -9,14 +9,14 @@ import xmldoc from 'xmldoc'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, arraySocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'RSS Get is used to get a json array from an RSS feed, you can use RSS1|RSS2|...|RSSN to use more links, also the Fetch Way can be left to empty to get the data from all RSS feeds or rnd/random to get randomly from one from the list'
@@ -25,7 +25,7 @@ type WorkerReturn = {
   output: any[]
 }
 
-export class RSSGet extends ThothComponent<Promise<WorkerReturn>> {
+export class RSSGet extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('RSS Get')
 
@@ -41,7 +41,7 @@ export class RSSGet extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const output = new Rete.Output('output', 'Output', arraySocket)

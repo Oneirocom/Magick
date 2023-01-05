@@ -2,20 +2,20 @@ import Rete from 'rete'
 
 import {
   NodeData,
-  ThothNode,
-  ThothWorkerOutputs,
-  ThothWorkerInputs,
+  MagickNode,
+  MagickWorkerOutputs,
+  MagickWorkerInputs,
 } from '../../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import * as sockets from '../../sockets'
 import { SocketNameType } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 // import { DropdownControl } from '../../dataControls/DropdownControl';
 
 const info = `Used to cast any socket into another socket type.  Be sure you know the type of input to your any to cast it into your socket type, as it might break things otherwise.`
 
-export class Cast extends ThothComponent<void> {
+export class Cast extends MagickComponent<void> {
   constructor() {
     // Name of the component
     super('Cast')
@@ -30,7 +30,7 @@ export class Cast extends ThothComponent<void> {
     this.info = info
   }
 
-  addSocket(node: ThothNode, name: sockets.SocketNameType) {
+  addSocket(node: MagickNode, name: sockets.SocketNameType) {
     const key = sockets.socketNameMap[name]
     const output = sockets[key]
     const socket = new Rete.Output('output', name, output)
@@ -51,7 +51,7 @@ export class Cast extends ThothComponent<void> {
     node.addOutput(socket)
   }
 
-  builder(node: ThothNode): ThothNode {
+  builder(node: MagickNode): MagickNode {
     const input = new Rete.Input('input', 'Input', sockets.anySocket, true)
     const output = new Rete.Output('output', 'Output', sockets.anySocket)
 
@@ -82,7 +82,7 @@ export class Cast extends ThothComponent<void> {
     return node
   }
 
-  worker(node: NodeData, inputs: ThothWorkerInputs) {
+  worker(node: NodeData, inputs: MagickWorkerInputs) {
     const value = inputs.input[0]
     const key = sockets.socketNameMap[node.data.socketType as SocketNameType]
 

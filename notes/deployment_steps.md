@@ -25,7 +25,7 @@
 
 9. Open client .env file (vim client/.env).
 
-- Change following env params VITE_LAPI_ROOT_URL, VITE_API_ROOT_URL, VITE_API_ROOT_URL_PROD, VITE_CORS_URL, VITE_API_URL,VITE_SEARCH_FILE_URL
+- Change following env params VITE_API_ROOT_URL, VITE_API_ROOT_URL_PROD, VITE_CORS_URL, VITE_API_URL,VITE_SEARCH_FILE_URL
 
 10. Open core .env file (vim client/.env).
 

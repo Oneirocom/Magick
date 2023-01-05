@@ -1,4 +1,4 @@
-import { ThothComponent } from '../../types'
+import { MagickComponent } from '../../types'
 import { AgentTextCompletion } from './agents/AgentTextCompletion'
 import { CustomTextCompletion } from './agents/CustomTextCompletion'
 import { EventRecall } from './agents/EventRecall'
@@ -68,9 +68,6 @@ import { BooleanVariable } from './variable/BooleanVariable'
 import { FewshotVariable } from './variable/FewshotVariable'
 import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
-
-// Here we load up all components of the builder into our editor for usage.
-// We might be able to programatically generate components from enki
 
 // NOTE: PLEASE KEEP THESE IN ALPHABETICAL ORDER
 // todo some kind of custom build parser perhaps to take car of keeping these in alphabetical order
@@ -148,7 +145,7 @@ export const components = {
   ImageGeneration: () => new ImageGeneration(),
 }
 
-function compare(a: ThothComponent<unknown>, b: ThothComponent<unknown>) {
+function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {
   if ((a.displayName || a.name) < (b.displayName || b.name)) {
     return -1
   }

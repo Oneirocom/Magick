@@ -2,7 +2,7 @@ import { SpellRunner, GraphData, Spell as SpellType } from '@magickml/core'
 
 import { database } from '@magickml/database'
 import { CustomError } from '../../utils/CustomError'
-import { buildThothInterface } from '../spells/buildThothInterface'
+import { buildMagickInterface } from '../spells/buildMagickInterface'
 
 export type RunSpellArgs = {
   spellName: string
@@ -27,7 +27,7 @@ export const runSpell = async ({
   }
 
   const graph = rootSpell.graph as GraphData
-  const thothInterface = buildThothInterface(state)
+  const magickInterface = buildMagickInterface(state)
 
   const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs
 
@@ -38,7 +38,7 @@ export const runSpell = async ({
   }
 
   // Initialize the spell runner
-  const spellRunner = new SpellRunner({ thothInterface })
+  const spellRunner = new SpellRunner({ magickInterface })
 
   // Load the spell in to the spell runner
   await spellRunner.loadSpell(spellToRun as SpellType)
@@ -47,7 +47,7 @@ export const runSpell = async ({
   const outputs = await spellRunner.defaultRun(formattedInputs)
 
   // Get the updated state
-  const newState = thothInterface.getCurrentGameState()
+  const newState = magickInterface.getCurrentGameState()
 
   return { outputs, state: newState, name: rootSpell.name }
 }

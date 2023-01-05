@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { activeTabSelector, selectAllTabs } from '../../state/tabs'
 import { RootState } from '../../state/store'
 
-const ThothPageWrapper = () => {
+const MagickPageWrapper = () => {
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
   const activeTab = useSelector(activeTabSelector)
 
@@ -17,4 +17,4 @@ const ThothPageWrapper = () => {
     </div>
   )
 }
-export default ThothPageWrapper
+export default MagickPageWrapper

@@ -2,12 +2,12 @@ import Rete from 'rete'
 
 import {
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Returns the same output as the input'
 
@@ -15,7 +15,7 @@ type WorkerReturn = {
   output: string
 }
 
-export class Echo extends ThothComponent<Promise<WorkerReturn>> {
+export class Echo extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('Echo')
 
@@ -31,7 +31,7 @@ export class Echo extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const inp = new Rete.Input('string', 'String', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -47,8 +47,8 @@ export class Echo extends ThothComponent<Promise<WorkerReturn>> {
   // eslint-disable-next-line @typescript-eslint/require-await, require-await
   async worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { silent }: { silent: boolean }
   ) {
     const input = inputs.string[0] as string

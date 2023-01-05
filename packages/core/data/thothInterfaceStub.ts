@@ -1,7 +1,7 @@
 import {
   ImageCacheResponse,
   OpenAIResultChoice,
-  ThothWorkerInputs,
+  MagickWorkerInputs,
 } from '../types'
 import { VM } from 'vm2'
 export default {
@@ -9,9 +9,6 @@ export default {
     return new Promise(resolve => resolve('string')) as Promise<
       string | OpenAIResultChoice
     >
-  },
-  enkiCompletion: (): Promise<{ outputs: string[] }> => {
-    return new Promise(resolve => resolve({ outputs: ['string'] }))
   },
   huggingface: (): Promise<{ outputs: string[] }> => {
     return new Promise(resolve => resolve({ outputs: ['string'] }))
@@ -29,7 +26,7 @@ export default {
   },
   processCode: (
     code: unknown,
-    inputs: ThothWorkerInputs,
+    inputs: MagickWorkerInputs,
     data: Record<string, any>,
     state: Record<string, any>
   ) => {
@@ -45,7 +42,7 @@ export default {
       },
     }
 
-    const flattenedInputs = Object.entries(inputs as ThothWorkerInputs).reduce(
+    const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
       (acc, [key, value]) => {
         // eslint-disable-next-line prefer-destructuring
         acc[key as string] = value[0] // as any[][0] <- this change was made 2 days ago

@@ -7,13 +7,13 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'String Combiner is used to replace a value in the string with something else - Add a new socket with the string and the value like this - Agent Replacer (will replace all the $agent from the input with the input assigned)'
@@ -22,7 +22,7 @@ type WorkerReturn = {
   output: string
 }
 
-export class StringCombiner extends ThothComponent<Promise<WorkerReturn>> {
+export class StringCombiner extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('String Combiner')
 
@@ -38,7 +38,7 @@ export class StringCombiner extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const inp = new Rete.Input('string', 'String', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -59,7 +59,7 @@ export class StringCombiner extends ThothComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(_node: NodeData, rawInputs: ThothWorkerInputs) {
+  async worker(_node: NodeData, rawInputs: MagickWorkerInputs) {
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
       acc[key] = value[0]
       return acc

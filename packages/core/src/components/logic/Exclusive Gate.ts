@@ -2,17 +2,17 @@ import Rete from 'rete'
 
 import {
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { MultiSocketGeneratorControl } from '../../dataControls/MultiSocketGenerator'
 import { anySocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = `Fires once all connected triggers have fired.`
 
-export class ExclusiveGate extends ThothComponent<void> {
+export class ExclusiveGate extends MagickComponent<void> {
   constructor() {
     // Name of the component
     super('Exclusive Gate')
@@ -31,7 +31,7 @@ export class ExclusiveGate extends ThothComponent<void> {
 
   node = {}
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const multiInputGenerator = new MultiSocketGeneratorControl({
       connectionType: 'input',
       socketTypes: ['anySocket', 'triggerSocket'],
@@ -53,8 +53,8 @@ export class ExclusiveGate extends ThothComponent<void> {
   // to the outputs to be consumed by any connected components
   worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     context: { silent: boolean; socketInfo: { targetSocket: any } }
   ) {
     const trigger = context.socketInfo.targetSocket
