@@ -16,13 +16,13 @@ const info = `Restructure Agent Data`
 
 type InputReturn = {
   output: {
-    Input: string
-    Speaker: string
-    Agent: string
-    Client: string
-    channelId: string
-    Entity: object
-    RoomInfo: {
+    input: string
+    speaker: string
+    agent: string
+    client: string
+    channelId?: string
+    entity: object
+    roomInfo: {
       user: string
       inConversation: boolean
       isBot: boolean

@@ -36,7 +36,7 @@ type InputReturn = {
   }[]
   eth_private_key: string
   eth_public_address: string
-  channel_type: string
+  channel_type?: string
 }
 
 export class InputDestructureComponent extends ThothComponent<
