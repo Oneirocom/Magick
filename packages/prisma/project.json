@@ -4,25 +4,28 @@
   "sourceRoot": "packages/prisma/src",
   "projectType": "library",
   "targets": {
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+    "migrate-save": {
+      "executor": "@nrwl/workspace:run-commands",
+      "outputs": [],
       "options": {
-        "lintFilePatterns": [
-          "packages/prisma/**/*.ts"
-        ]
+        "command": "npx prisma migrate save",
+        "cwd": "packages/prisma"
       }
     },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+    "migrate-up": {
+      "executor": "@nrwl/workspace:run-commands",
+      "outputs": [],
       "options": {
-        "jestConfig": "packages/prisma/jest.config.ts",
-        "passWithNoTests": true
+        "command": "npx prisma migrate up",
+        "cwd": "packages/prisma"
+      }
+    },
+    "generate": {
+      "executor": "@nrwl/workspace:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npx prisma generate",
+        "cwd": "packages/prisma"
       }
     }
   },
