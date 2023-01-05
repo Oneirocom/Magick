@@ -4,7 +4,6 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, useGLTF } from '@react-three/drei'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import {
-  VRM,
   VRMExpressionPresetName,
   VRMHumanBoneName,
   VRMLoaderPlugin,
@@ -24,7 +23,7 @@ function randomsomesuch() {
 
 const Avatar = ({ speechUrl, pause, unpause }) => {
   const { scene, camera } = useThree()
-  const gltf = useGLTF(`/avatar.vrm`)
+  const gltf = useGLTF('/avatar.vrm')
 
   useEffect(() => {
     console.log('SPEECH URL', speechUrl)

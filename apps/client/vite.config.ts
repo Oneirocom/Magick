@@ -7,6 +7,7 @@ export default defineConfig({
     port: 4200,
     host: 'localhost',
   },
+  assetsInclude: ['**/*.vrm'],
   resolve: {
     alias: {
       stream: './node_modules/stream-browserify/index.js',
