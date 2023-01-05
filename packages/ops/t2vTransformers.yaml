@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: t2v-transformers
+spec:
+  selector:
+    matchLabels:
+      app: t2v-transformers
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: t2v-transformers
+    spec:
+      containers:
+        - name: t2v-transformers
+          image: semitechnologies/transformers-inference:sentence-transformers-multi-qa-MiniLM-L6-cos-v1
+          stdin: true
+          tty: true
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: ENABLE_CUDA
+              value: "0"
+      imagePullSecrets:
+        - name: regcred
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: t2v-transformers
+spec:
+  selector:
+    app: t2v-transformers
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

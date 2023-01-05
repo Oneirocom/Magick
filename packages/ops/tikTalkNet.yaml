@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tiktalknet
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tiktalknet
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tiktalknet
+    spec:
+      terminationGracePeriodSeconds: 10
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: tiktalknet
+          stdin: true
+          tty: true
+          image: 389959444765.dkr.ecr.us-east-1.amazonaws.com/tiktalknet:latest
+          ports:
+            - name: tiktalknet
+              containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 4000m # The CPU unit is mili-cores. 500m is 0.5 cores
+              memory: 8Gi
+            limits:
+              cpu: 4000m
+              memory: 8Gi
+              nvidia.com/gpu: 1
+              # GPUs can only be allocated as a limit, which both reserves and limits the number of GPUs the Pod will have access to
+              # Making individual Pods resource light is advantageous for bin-packing. Since this Pod is for general purpose interactive testing
+              # we allocate 6 GPUs to it
+
+      # Node affinity can be used to require / prefer the Pods to be scheduled on a node with a specific hardware type
+      # No affinity allows scheduling on all hardware types that can fulfill the resource request.
+      # In this example, without affinity, any NVIDIA GPU would be allowed to run the Pod.
+      # Read more about affinity at: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+      affinity:
+        nodeAffinity:
+          # This will REQUIRE the Pod to be run on a system with a multi purpose NVIDIA Pascal series GPU
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: topology.kubernetes.io/region
+                    operator: In
+                    values:
+                      - ORD1
+                  - key: gpu.nvidia.com/class
+                    operator: In
+                    values:
+                      - Tesla_V100
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tiktalknet
+spec:
+  selector:
+    app: tiktalknet
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.middlewares: tenant-nothingprojects-lazarus-redirect-secure@kubernetescrd
+  labels:
+    app.kubernetes.io/name: tiktalknet
+  name: tiktalknet
+spec:
+  rules:
+    - host: tiktalknet.tenant-nothingprojects-lazarus.ord1.ingress.coreweave.cloud
+      http:
+        paths:
+          - backend:
+              serviceName: tiktalknet
+              servicePort: http
+            path: /
+            pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - tiktalknet.tenant-nothingprojects-lazarus.ord1.ingress.coreweave.cloud
+      secretName: tiktalknet-tls # This secret is automatically created for you
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-secure
+  namespace: tenant-nothingprojects-lazarus
+spec:
+  redirectScheme:
+    permanent: true
+    scheme: https

@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thoth-client
+spec:
+  selector:
+    matchLabels:
+      app: thoth-client
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: thoth-client
+    spec:
+      tolerations:
+        - key: "appservicesonly"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
+      containers:
+        - name: server
+          image: 389959444765.dkr.ecr.us-east-1.amazonaws.com/thoth-client:latest
+          args: ["npm run docker"]
+          stdin: true
+          tty: true
+          ports:
+            - containerPort: 3003
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: USE_SSL
+              value: "false"
+            - name: URL_SCHEME
+              value: "http"
+            - name: REACT_APP_SITE_ROOT_URL
+              value: "http://localhost:3003"
+            - name: REACT_APP_API_ROOT_URL
+              value: "https://thoth-server.projectlazarus.ai"
+            - name: REACT_APP_API_ROOT_URL_PROD
+              value: "https://thoth-server.projectlazarus.ai"
+            - name: REACT_APP_CORS_URL
+              value: "http://localhost:65526"
+            - name: REACT_APP_SITE_STAGING
+              value: "https://62264f21c3a9860ad1e5bdd3--optimistic-turing-def916.netlify.app/"
+            - name: REACT_APP_OAUTH_CLIENT_ID
+              value: "a6b51c87-7565-42ab-a4b0-38a07f3b6c56"
+            - name: REACT_APP_SPEECH_SERVER_URL
+              value: "https://thoth-server.projectlazarus.ai:65532"
+            - name: REACT_APP_SEARCH_SERVER_URL
+              value: "https://thoth-server.projectlazarus.ai:65531"
+            - name: EXTEND_ESLINT
+              value: "true"
+            - name: REACT_APP_API_URL
+              value: "https://thoth-server.projectlazarus.ai"
+            - name: API_URL
+              value: "https://thoth-server.projectlazarus.ai"
+            - name: REACT_APP_FEATHERS
+              value: "false"
+            - name: NODE_TLS_REJECT_UNAUTHORIZED
+              value: "0"
+      imagePullSecrets:
+        - name: regcred
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: thoth-client
+spec:
+  selector:
+    app: thoth-client
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3003
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: thoth-client-ingress
+  annotations:
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:389959444765:certificate/bdd1359a-55a4-47f0-bce3-946bc57a0031
+
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: thoth-client
+                port:
+                  number: 80

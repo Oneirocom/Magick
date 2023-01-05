@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weaviate
+spec:
+  selector:
+    matchLabels:
+      app: weaviate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: weaviate
+    spec:
+      containers:
+        - name: weaviate
+          image: semitechnologies/weaviate:1.11.0
+          args: ["--host", "0.0.0.0", "--port", "8080", "--scheme", "http"]
+          stdin: true
+          tty: true
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: TRANSFORMERS_INFERENCE_API
+              value: "http://t2v-transformers:8080"
+            - name: QNA_INFERENCE_API
+              value: "http://qna-transformers:8080"
+            - name: SPELLCHECK_INFERENCE_API
+              value: "http://text-spellcheck:8080"
+            - name: QUERY_DEFAULTS_LIMIT
+              value: "25"
+            - name: AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED
+              value: "true"
+            - name: PERSISTENCE_DATA_PATH
+              value: "/var/lib/weaviate"
+            #- name: DEFAULT_VECTORIZER_MODULE
+            #  value: "text2vec-transformers"
+            #- name: ENABLE_MODULES
+            #  value: "text2vec-transformers,qna-transformers,text-spellcheck"
+            - name: CLUSTER_HOSTNAME
+              value: "node1"
+      imagePullSecrets:
+        - name: regcred
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weaviate
+spec:
+  selector:
+    app: weaviate
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
