@@ -9,14 +9,14 @@ const provider = new ethers.providers.JsonRpcProvider(
   'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
 )
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
+import { NodeData, MagickNode, MagickWorkerInputs } from '../../../types'
 import { triggerSocket, numSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'Check the balance of an ethereum wallet for an ERC20 at a contract address'
 
-export class CheckBalanceForERC20 extends ThothComponent<void> {
+export class CheckBalanceForERC20 extends MagickComponent<void> {
   constructor() {
     super('Check Balance for ERC20')
 
@@ -32,7 +32,7 @@ export class CheckBalanceForERC20 extends ThothComponent<void> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const addressInput = new Rete.Input('address', 'Wallet Address', numSocket)
     const contractAddressInput = new Rete.Input(
       'contract',
@@ -51,7 +51,7 @@ export class CheckBalanceForERC20 extends ThothComponent<void> {
       .addOutput(balanceOutput)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     const address = inputs['address'][0] as unknown as string
     const contractAddress = inputs['contract'][0] as unknown as string
     node.display(address)

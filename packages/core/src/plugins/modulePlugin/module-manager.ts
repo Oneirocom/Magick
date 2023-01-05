@@ -6,9 +6,9 @@ import {
   GraphData,
   ModuleType,
   ModuleWorkerOutput,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'
@@ -24,7 +24,7 @@ export type ModuleSocketType = {
   [key: string]: unknown
 }
 
-export type ModuleGraphData = { nodes: Record<string, ThothNode> }
+export type ModuleGraphData = { nodes: Record<string, MagickNode> }
 export class ModuleManager {
   engine?: Engine | null
   modules: Record<string, ModuleType>
@@ -129,8 +129,8 @@ export class ModuleManager {
 
   async workerModule(
     node: NodeData,
-    inputs: ThothWorkerInputs,
-    outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    outputs: MagickWorkerOutputs,
     args: { socketInfo: { targetSocket: string } }
   ) {
     if (!node.data.module) return
@@ -180,7 +180,7 @@ export class ModuleManager {
 
   workerInputs(
     node: NodeData,
-    _inputs: ThothWorkerInputs,
+    _inputs: MagickWorkerInputs,
     outputs: ModuleWorkerOutput,
     { module }: { module: Module }
   ) {
@@ -193,8 +193,8 @@ export class ModuleManager {
 
   workerOutputs(
     node: NodeData,
-    inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { module }: { module: Module }
   ) {
     if (!module) return
@@ -204,8 +204,8 @@ export class ModuleManager {
 
   workerTriggerIns(
     _node: NodeData,
-    _inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    _inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { module }: { module: Module }
   ) {
     if (!module) return
@@ -215,8 +215,8 @@ export class ModuleManager {
 
   workerTriggerOuts(
     node: NodeData,
-    _inputs: ThothWorkerInputs,
-    outputs: ThothWorkerOutputs,
+    _inputs: MagickWorkerInputs,
+    outputs: MagickWorkerOutputs,
     { module }: { module: Module }
   ) {
     if (!module) return

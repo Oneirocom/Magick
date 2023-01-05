@@ -8,18 +8,18 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, numSocket, anySocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'Document Set Mass is used to add multiple documents in the search corpus'
 
-export class DocumentSetMass extends ThothComponent<void> {
+export class DocumentSetMass extends MagickComponent<void> {
   constructor() {
     super('Document Set Mass')
 
@@ -34,7 +34,7 @@ export class DocumentSetMass extends ThothComponent<void> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const storeIdInput = new Rete.Input('storeId', 'Store ID', numSocket)
     const documentsInput = new Rete.Input('documents', 'Documents', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
@@ -54,7 +54,7 @@ export class DocumentSetMass extends ThothComponent<void> {
       .addOutput(dataOutput)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     const storeId = inputs['storeId']?.[0]
     let documents = inputs['documents']
     // eslint-disable-next-line camelcase

@@ -3,20 +3,20 @@ import {
   CreateEventArgs,
   EditorContext,
   Spell,
-  ThothWorkerInputs,
+  MagickWorkerInputs,
 } from '@magickml/core'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
 import { useGetSpellQuery, useRunSpellMutation } from '../../state/api/spells'
 
 import { usePubSub } from '../../contexts/PubSubProvider'
-import { thothApiRootUrl } from '../../config'
+import { magickApiRootUrl } from '../../config'
 
 const Context = createContext<EditorContext>(undefined!)
 
-export const useThothInterface = () => useContext(Context)
+export const useMagickInterface = () => useContext(Context)
 
-const ThothInterfaceProvider = ({ children, tab }) => {
+const MagickInterfaceProvider = ({ children, tab }) => {
   const { events, publish, subscribe } = usePubSub()
   const spellRef = useRef<Spell | null>(null)
   const [_runSpell] = useRunSpellMutation()
@@ -128,7 +128,7 @@ const ThothInterfaceProvider = ({ children, tab }) => {
   }
 
   const processCode = (code, inputs, data, state) => {
-    const flattenedInputs = Object.entries(inputs as ThothWorkerInputs).reduce(
+    const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
       (acc, [key, value]) => {
         // @ts-ignore
         acc[key as string] = value[0] as any
@@ -281,7 +281,7 @@ const ThothInterfaceProvider = ({ children, tab }) => {
   }
 
   const queryGoogle = async (query: string) => {
-    const url = `${thothApiRootUrl}/query_google`
+    const url = `${magickApiRootUrl}/query_google`
     const response = await axios.post(url, {
       query,
     })
@@ -318,4 +318,4 @@ const ThothInterfaceProvider = ({ children, tab }) => {
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }
 
-export default ThothInterfaceProvider
+export default MagickInterfaceProvider

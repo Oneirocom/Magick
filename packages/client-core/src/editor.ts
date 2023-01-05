@@ -23,17 +23,17 @@ import {
   SocketPlugin,
   TaskPlugin,
   EditorContext,
-  ThothComponent,
+  MagickComponent,
   getComponents,
-  ThothEditor,
+  MagickEditor,
   MultiSocketGenerator,
 } from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
 
-import { initSharedEngine, ThothEngine } from '@magickml/engine'
+import { initSharedEngine, MagickEngine } from '@magickml/engine'
 
-interface ThothEngineClient extends ThothEngine {
+interface MagickEngineClient extends MagickEngine {
   magick: EditorContext
 }
 
@@ -41,7 +41,7 @@ interface ThothEngineClient extends ThothEngine {
   Primary initialization function.  Takes a container ref to attach the rete editor to.
 */
 
-const editorTabMap: Record<string, ThothEditor> = {}
+const editorTabMap: Record<string, MagickEditor> = {}
 export const initEditor = function ({
   container,
   pubSub,
@@ -64,7 +64,7 @@ export const initEditor = function ({
   const components = getComponents()
 
   // create the main edtor
-  const editor = new ThothEditor('demo@0.1.0', container)
+  const editor = new MagickEditor('demo@0.1.0', container)
 
   editorTabMap[tab.id] = editor
 
@@ -113,7 +113,7 @@ export const initEditor = function ({
         Clone: true,
       }
     },
-    allocate: (component: ThothComponent<unknown>) => {
+    allocate: (component: MagickComponent<unknown>) => {
       const tabType = editor.tab.type
       const { workspaceType } = component
 
@@ -140,7 +140,7 @@ export const initEditor = function ({
     components,
     server: false,
     modules: {},
-  }) as ThothEngineClient
+  }) as MagickEngineClient
   engine.use(ErrorPlugin)
   engine.magick = magick
   // @seang TODO: update types for editor.use rather than casting as unknown here, we may want to bring our custom rete directly into the monorepo at this point

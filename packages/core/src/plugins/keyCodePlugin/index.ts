@@ -1,11 +1,11 @@
-import { IRunContextEditor, ThothNode } from '../../../types'
+import { IRunContextEditor, MagickNode } from '../../../types'
 
 function install(editor: IRunContextEditor) {
   editor.bind('delete')
 
-  let currentNode: ThothNode | undefined
+  let currentNode: MagickNode | undefined
 
-  editor.on('nodeselect', (node: ThothNode) => {
+  editor.on('nodeselect', (node: MagickNode) => {
     if (currentNode && node.id === currentNode.id) return
     currentNode = node
   })

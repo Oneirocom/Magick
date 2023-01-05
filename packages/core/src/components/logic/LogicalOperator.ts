@@ -4,11 +4,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
+import { NodeData, MagickNode, MagickWorkerInputs } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'Logical Operator is used to compare two values - options: equal, not equal, greater than, less greater than'
@@ -17,7 +17,7 @@ type WorkerReturn = {
   error: string
 }
 
-export class LogicalOperator extends ThothComponent<Promise<WorkerReturn>> {
+export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('Logical Operator')
 
@@ -30,7 +30,7 @@ export class LogicalOperator extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const inp1 = new Rete.Input('input1', 'Input 1', stringSocket)
     const inp2 = new Rete.Input('input2', 'Input 2', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
@@ -61,7 +61,7 @@ export class LogicalOperator extends ThothComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     const inp1 = inputs['input1'][0] as string
     const inp2 = inputs['input2'][0] as string
     const operationTypeData = node?.data?.operationType as string

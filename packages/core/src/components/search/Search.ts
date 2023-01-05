@@ -8,12 +8,12 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, anySocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'Search is used to do neural search in the search corpus and return a document'
@@ -27,7 +27,7 @@ type WorkerReturn = {
   output: unknown
 }
 
-export class Search extends ThothComponent<Promise<WorkerReturn>> {
+export class Search extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('Search Documents')
 
@@ -43,7 +43,7 @@ export class Search extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const searchStrInput = new Rete.Input(
       'searchStr',
       'Search String',
@@ -65,7 +65,7 @@ export class Search extends ThothComponent<Promise<WorkerReturn>> {
       .addOutput(dataOutput)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     const searchStr = inputs['searchStr'][0] as string
     console.log('SEARCHING FOR:', searchStr)
     const documents: Document[] = []

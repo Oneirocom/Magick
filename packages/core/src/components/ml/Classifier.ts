@@ -7,13 +7,13 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { stringSocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'Classifier takes an input string and arbitrary labels and returns the most likely label'
@@ -22,7 +22,7 @@ type InputReturn = {
   output: unknown
 }
 
-export class Classifier extends ThothComponent<Promise<InputReturn>> {
+export class Classifier extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     super('Classifier')
 
@@ -38,7 +38,7 @@ export class Classifier extends ThothComponent<Promise<InputReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const input = new Rete.Input('input', 'Input', stringSocket)
 
     const nameControl = new InputControl({
@@ -67,8 +67,8 @@ export class Classifier extends ThothComponent<Promise<InputReturn>> {
 
   async worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { silent }: { silent: boolean }
   ) {
     const inputData = inputs['input'][0]

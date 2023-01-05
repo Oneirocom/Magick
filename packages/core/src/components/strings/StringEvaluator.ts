@@ -7,21 +7,21 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const fewshot = ``
 
 const info =
   'String Evaluator - options: includes, not includes, equals, not equals, starts with, not starts with, ends with, not ends with'
 
-export class StringEvaluator extends ThothComponent<Promise<void>> {
+export class StringEvaluator extends MagickComponent<Promise<void>> {
   constructor() {
     super('String Evaluator')
 
@@ -34,7 +34,7 @@ export class StringEvaluator extends ThothComponent<Promise<void>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     if (!node.data.fewshot) node.data.fewshot = fewshot
 
     const inp = new Rete.Input('string', 'String', stringSocket)
@@ -59,7 +59,7 @@ export class StringEvaluator extends ThothComponent<Promise<void>> {
       .addOutput(isFalse)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     const action = inputs['string'][0] as string
     const fewshot = (node.data.fewshot as string).trim()
     const operationTypeData = node?.data?.operationType as string

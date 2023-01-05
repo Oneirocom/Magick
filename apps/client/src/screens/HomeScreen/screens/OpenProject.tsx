@@ -3,14 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import Icon from '../../../components/Icon/Icon'
 import Panel from '../../../components/Panel/Panel'
 import css from '../homeScreen.module.css'
-import thothBanner from '../version-banner-0.0.0beta.jpg'
 import FileInput from '../components/FileInput'
 import ProjectRow from '../components/ProjectRow'
 import { useSelector } from 'react-redux'
 import { selectAllTabs } from '../../../state/tabs'
 import { RootState } from '../../../state/store'
 
-const getThothVersion = () => '1'
+const getMagickVersion = () => '1'
 
 const OpenProject = ({
   spells,
@@ -24,14 +23,6 @@ const OpenProject = ({
 
   return (
     <Panel shadow unpadded>
-      {tabs?.length < 1 && (
-        <div
-          className={css['version-banner']}
-          style={{ backgroundImage: `url(${thothBanner})` }}
-        >
-          {getThothVersion()}
-        </div>
-      )}
       <div className={css['open-project-container']}>
         <h1 style={{ marginLeft: 'var(--small)' }}>Recent Projects</h1>
 

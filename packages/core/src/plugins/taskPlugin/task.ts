@@ -1,11 +1,11 @@
 import { NodeData } from 'rete/types/core/data'
 
-import { ThothReteInput, ThothWorkerInputs } from '../../../types'
-import { ThothComponent, ThothTask } from '../../magick-component'
+import { MagickReteInput, MagickWorkerInputs } from '../../../types'
+import { MagickComponent, MagickTask } from '../../magick-component'
 
 type TaskRef = {
   key: string
-  task: ThothTask
+  task: MagickTask
   run?: Function
   next?: any[]
 }
@@ -34,21 +34,21 @@ export type TaskOutputTypes = 'option' | 'output'
 
 export class Task {
   node: NodeData
-  inputs: ThothWorkerInputs
-  component: ThothComponent<unknown>
+  inputs: MagickWorkerInputs
+  component: MagickComponent<unknown>
   worker: Function
   next: TaskRef[]
   outputData: Record<string, unknown> | null
   closed: string[]
 
   constructor(
-    inputs: ThothWorkerInputs,
-    component: ThothComponent<unknown>,
+    inputs: MagickWorkerInputs,
+    component: MagickComponent<unknown>,
     node: NodeData,
     worker: Function
   ) {
     this.node = node
-    this.inputs = inputs as ThothWorkerInputs
+    this.inputs = inputs as MagickWorkerInputs
     this.component = component
     this.worker = worker
     this.next = []
@@ -56,8 +56,8 @@ export class Task {
     this.closed = []
 
     this.getInputs('option').forEach((key: string) => {
-      ;(this.inputs[key] as ThothReteInput[]).forEach(
-        (workerInput: ThothReteInput) => {
+      ;(this.inputs[key] as MagickReteInput[]).forEach(
+        (workerInput: MagickReteInput) => {
           workerInput.task.next.push({ key: workerInput.key, task: this })
         }
       )
@@ -68,7 +68,7 @@ export class Task {
     return Object.keys(this.inputs)
       .filter(key => this.inputs[key][0])
       .filter(key => {
-        const workerBase = this.inputs[key][0] as ThothReteInput
+        const workerBase = this.inputs[key][0] as MagickReteInput
         return workerBase.type === type
       })
   }
@@ -77,8 +77,8 @@ export class Task {
     let input: null | any = null
     Object.entries(this.inputs).forEach(([key, value]) => {
       if (
-        (value as ThothReteInput[]).some(
-          (con: ThothReteInput) => con && con.key === socketKey
+        (value as MagickReteInput[]).some(
+          (con: MagickReteInput) => con && con.key === socketKey
         )
       ) {
         input = key
@@ -91,8 +91,8 @@ export class Task {
   getInputByNodeId(node, fromSocket) {
     let value: null | any = null
     Object.entries(this.inputs).forEach(([key, input]) => {
-      const found = (input as ThothReteInput[]).find(
-        (con: ThothReteInput) => con && con.task.node.id === node.id
+      const found = (input as MagickReteInput[]).find(
+        (con: MagickReteInput) => con && con.task.node.id === node.id
       ) as {
         key: string
         task: { closed: string[] }
@@ -160,8 +160,8 @@ export class Task {
 
       await Promise.all(
         this.getInputs('output').map(async key => {
-          const inputPromises = (this.inputs[key] as ThothReteInput[])
-            .filter((con: ThothReteInput) => {
+          const inputPromises = (this.inputs[key] as MagickReteInput[])
+            .filter((con: MagickReteInput) => {
               // only filter inputs to remove ones that are not the origin if a task option is true
               if (!this.component.task.runOneInput || !fromNode) return true
               if (con.task.outputData) return true
@@ -171,7 +171,7 @@ export class Task {
               // return true if the input is from a triggerless component
               if (!con.task.node.outputs.trigger) return true
             })
-            .map(async (con: ThothReteInput) => {
+            .map(async (con: MagickReteInput) => {
               // if the task has come from a node with output data that is not the calling node, use that data
               if (con.task.outputData && con.task.node.id !== fromNode?.id) {
                 const outputData = con.task.outputData as Record<
@@ -196,9 +196,9 @@ export class Task {
               return outputData[con.key]
             })
 
-          const thothWorkerinputs = await Promise.all(inputPromises)
+          const magickWorkerinputs = await Promise.all(inputPromises)
 
-          inputs[key] = thothWorkerinputs
+          inputs[key] = magickWorkerinputs
         })
       )
 
@@ -243,8 +243,8 @@ export class Task {
     if (needReset) garbage.map(t => t.reset())
   }
 
-  clone(root = true, oldTask: ThothTask, newTask: ThothTask) {
-    const inputs = Object.assign({}, this.inputs) as ThothWorkerInputs
+  clone(root = true, oldTask: MagickTask, newTask: MagickTask) {
+    const inputs = Object.assign({}, this.inputs) as MagickWorkerInputs
 
     if (root)
       // prevent of adding this task to `next` property of predecessor
@@ -252,10 +252,10 @@ export class Task {
     // replace old tasks with new copies
     else
       Object.keys(inputs).forEach((key: string) => {
-        inputs[key] = (inputs[key] as ThothReteInput[]).map(
-          (con: ThothReteInput) => ({
+        inputs[key] = (inputs[key] as MagickReteInput[]).map(
+          (con: MagickReteInput) => ({
             ...con,
-            task: con.task === oldTask ? newTask : (con.task as ThothTask),
+            task: con.task === oldTask ? newTask : (con.task as MagickTask),
           })
         )
       })

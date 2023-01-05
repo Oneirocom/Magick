@@ -2,19 +2,19 @@ import Rete from 'rete'
 
 import {
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { objectSocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = `Merge can take in any number of properties in the form of named sockets, and compose them together iinto an object.  Additionally, another object can be added in, in which case merge will add in any proprties from that object, but overwrite them with any from the sockets.`
 
-export class Merge extends ThothComponent<void> {
+export class Merge extends MagickComponent<void> {
   constructor() {
     // Name of the component
     super('Merge')
@@ -31,7 +31,7 @@ export class Merge extends ThothComponent<void> {
     this.info = info
   }
 
-  builder(node: ThothNode): ThothNode {
+  builder(node: MagickNode): MagickNode {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const objectInput = new Rete.Input(
       'object',
@@ -62,7 +62,7 @@ export class Merge extends ThothComponent<void> {
     return node
   }
 
-  worker(_node: NodeData, inputs: ThothWorkerInputs) {
+  worker(_node: NodeData, inputs: MagickWorkerInputs) {
     const object = inputs.object[0] as Record<string, any>
     const combinedInputs = Object.entries(inputs).reduce(
       (acc, [key, value]) => {

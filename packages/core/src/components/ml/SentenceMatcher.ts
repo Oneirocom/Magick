@@ -9,13 +9,13 @@ import similarity from 'similarity'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket, stringSocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'SentenceMatcher takes an query, needs to be generalized'
 
@@ -23,7 +23,7 @@ type InputReturn = {
   output: unknown
 }
 
-export class SentenceMatcher extends ThothComponent<Promise<InputReturn>> {
+export class SentenceMatcher extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     super('Sentence Matcher')
 
@@ -39,7 +39,7 @@ export class SentenceMatcher extends ThothComponent<Promise<InputReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Component Name',
@@ -63,7 +63,7 @@ export class SentenceMatcher extends ThothComponent<Promise<InputReturn>> {
 
   async worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
+    inputs: MagickWorkerInputs,
     { silent }: { silent: boolean }
   ) {
     const sourceSentence = (inputs['source'][0] ?? inputs['source']) as string

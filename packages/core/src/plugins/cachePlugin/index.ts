@@ -2,16 +2,16 @@ import { Component, Control } from 'rete'
 
 import {
   NodeData,
-  ThothComponent,
-  ThothEditor,
-  ThothNode,
+  MagickComponent,
+  MagickEditor,
+  MagickNode,
 } from '../../../types'
 import { Task } from '../taskPlugin'
 import { RunButtonControl } from './RunLastArguments'
 
-function install(editor: ThothEditor) {
+function install(editor: MagickEditor) {
   editor.on('componentregister', (_component: Component) => {
-    const component = _component as unknown as ThothComponent<unknown>
+    const component = _component as unknown as MagickComponent<unknown>
     const worker = component.worker
     const builder = component.builder
 
@@ -35,7 +35,7 @@ function install(editor: ThothEditor) {
     /**
      * Create a builder wrapper which will add on the run button if a compoonent has the proper   boolean defined on it.
      */
-    component.builder = (node: ThothNode) => {
+    component.builder = (node: MagickNode) => {
       if (component.runFromCache) {
         // Run function runs the worker with old args and returns the result.
         const run = async (node: NodeData) => {

@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: thoth-runner
+  name: magick-server
 spec:
   selector:
     matchLabels:
-      app: thoth-runner
+      app: magick-server
   replicas: 1
   template:
     metadata:
       labels:
-        app: thoth-runner
+        app: magick-server
     spec:
       tolerations:
         - key: "appservicesonly"
@@ -19,17 +19,18 @@ spec:
           effect: "NoSchedule"
       containers:
         - name: server
-          image: 389959444765.dkr.ecr.us-east-1.amazonaws.com/thoth-server:latest
+          image: 389959444765.dkr.ecr.us-east-1.amazonaws.com/magick-server:latest
           workingDir: /app/packages/server
-          args: ["src/entity-server.ts"]
+          args:
+            [
+              'concurrently "nodemon src/server.ts" "yarn run speech" "sleep 1 && yarn run search" "sleep 2 && yarn run entity-server"',
+            ]
           stdin: true
           tty: true
           ports:
             - containerPort: 8001
               protocol: TCP
           env:
-            - name: USE_LATITUDE_API
-              value: "false"
             - name: API_URL
               value: http://localhost:8001
             - name: EXTEND_ESLINT
@@ -39,9 +40,9 @@ spec:
             - name: AGENT_RUNNER_PORT
               value: "8003"
             - name: CREATOR_TOOLS_DB_URL
-              value: ""
+              value:
             - name: PGUSER
-              value: thoth
+              value: postgres
             - name: PGHOST
               value: nothingprojects-lazarus.cbfjobrijahm.us-east-1.rds.amazonaws.com
             - name: PGPASSWORD
@@ -74,17 +75,24 @@ spec:
             - name: UBER_DUCK_SECRET_KEY
               value:
             - name: OPENAI_API_KEY
-              value:
+              valueFrom:
+                secretKeyRef:
+                  name: servicesecrets
+                  key: OPENAI_API_KEY
             - name: HF_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: servicesecrets
+                  key: HF_API_KEY
               value:
             - name: USSSL_SPEECH
-              value: "true"
+              value: "false"
             - name: FILE_SERVER_PORT
               value: "65530"
             - name: FILE_SERVER_URL
               value: http://localhost:65530
             - name: USESSL
-              value: "true"
+              value: "false"
             - name: WITAI_KEY
               value:
             - name: RUN_PYTHON_SERVER
@@ -104,7 +112,7 @@ spec:
             - name: ENTITY_WEBSERVER_PORT_RANGE
               value: 65510-65529
             - name: ENTITY_HOSTNAME
-              value: thoth-runner
+              value: magick-runner
             - name: EMAIL_HOST
               value: smtp.gmail.com
             - name: EMAIL_PORT
@@ -124,7 +132,7 @@ spec:
             - name: AUTHENTICATION
               value: "false"
             - name: AUTHENTICATION_SECRET_KEY
-              value: thoth
+              value: magick
       imagePullSecrets:
         - name: regcred
 
@@ -132,24 +140,34 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: thoth-server
+  name: magick-server
 spec:
   selector:
-    app: thoth-server
+    app: magick-server
   ports:
     - protocol: TCP
       port: 80
+      name: http
       targetPort: 8001
+    - protocol: TCP
+      port: 65532
+      name: speech
+      targetPort: 65532
+    - protocol: TCP
+      port: 65531
+      name: search
+      targetPort: 65531
 
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: thoth-server-ingress
+  name: magick-server-ingress
   annotations:
     kubernetes.io/ingress.class: "alb"
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:389959444765:certificate/bdd1359a-55a4-47f0-bce3-946bc57a0031
 
 spec:
   rules:
@@ -159,6 +177,24 @@ spec:
             path: "/"
             backend:
               service:
-                name: thoth-server
+                name: magick-server
                 port:
                   number: 80
+    - http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: magick-server
+                port:
+                  number: 65532
+    - http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: magick-server
+                port:
+                  number: 65531

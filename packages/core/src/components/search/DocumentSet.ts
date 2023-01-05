@@ -8,9 +8,9 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import {
   triggerSocket,
@@ -19,11 +19,11 @@ import {
   numSocket,
   anySocket,
 } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Document Set is used to add a document in the search corpus'
 
-export class DocumentSet extends ThothComponent<void> {
+export class DocumentSet extends MagickComponent<void> {
   constructor() {
     super('Document Set')
 
@@ -39,7 +39,7 @@ export class DocumentSet extends ThothComponent<void> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const storeIdInput = new Rete.Input('storeId', 'Store ID', numSocket)
     const titleInput = new Rete.Input('title', 'title', stringSocket)
     const descriptionInput = new Rete.Input(
@@ -66,7 +66,7 @@ export class DocumentSet extends ThothComponent<void> {
       .addOutput(output)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     const storeId = inputs['storeId'][0]
     const title = inputs['title'] ? (inputs['title'][0] as string) : ''
     const description = inputs['description']

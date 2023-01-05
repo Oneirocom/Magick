@@ -7,13 +7,13 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'InputsToJSON runs JSON.stringify on the inputs and returns the result'
@@ -22,7 +22,7 @@ type WorkerReturn = {
   output: string
 }
 
-export class InputsToJSON extends ThothComponent<Promise<WorkerReturn>> {
+export class InputsToJSON extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('Inputs To JSON')
 
@@ -38,7 +38,7 @@ export class InputsToJSON extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const outp = new Rete.Output('output', 'String', stringSocket)
@@ -54,7 +54,7 @@ export class InputsToJSON extends ThothComponent<Promise<WorkerReturn>> {
     return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)
   }
 
-  async worker(_node: NodeData, rawInputs: ThothWorkerInputs) {
+  async worker(_node: NodeData, rawInputs: MagickWorkerInputs) {
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
       acc[key] = value[0]
       return acc

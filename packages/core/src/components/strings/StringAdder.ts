@@ -7,13 +7,13 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'String Adder adds a string in the current input.'
 
@@ -21,7 +21,7 @@ type WorkerReturn = {
   output: string
 }
 
-export class StringAdder extends ThothComponent<Promise<WorkerReturn>> {
+export class StringAdder extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('String Adder')
 
@@ -37,7 +37,7 @@ export class StringAdder extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const inp = new Rete.Input('string', 'String', stringSocket)
     const newInput = new Rete.Input('newInput', 'New Input', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
@@ -60,7 +60,7 @@ export class StringAdder extends ThothComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     const input = inputs['string'][0] as string
     const newInput = inputs['newInput'][0] as string
     const newLineStarting =

@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.css'
 
-export default function ThothDemo() {
+export default function MagickDemo() {
   return (
     <section style={{ margin: 'auto', marginTop: '4%', marginBottom: '4%' }}>
       <div className="container">

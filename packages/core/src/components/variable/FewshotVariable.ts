@@ -3,14 +3,14 @@ import Rete from 'rete'
 
 import {
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = `Fewshot Variable`
 
@@ -20,7 +20,7 @@ type InputReturn = {
   output: string
 }
 
-export class FewshotVariable extends ThothComponent<InputReturn> {
+export class FewshotVariable extends MagickComponent<InputReturn> {
   constructor() {
     super('Fewshot Variable')
 
@@ -35,7 +35,7 @@ export class FewshotVariable extends ThothComponent<InputReturn> {
     this.display = true
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     if (!node.data.fewshot) node.data.fewshot = fewshot
     const out = new Rete.Output('output', 'output', anySocket)
 

@@ -5,14 +5,14 @@ import Rete from 'rete'
 
 import {
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Request is used to make a web request to a server.'
 
@@ -20,7 +20,7 @@ type WorkerReturn = {
   output: any
 }
 
-export class Request extends ThothComponent<Promise<WorkerReturn>> {
+export class Request extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('Request')
 
@@ -36,7 +36,7 @@ export class Request extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const outp = new Rete.Output('output', 'output', stringSocket)
@@ -71,8 +71,8 @@ export class Request extends ThothComponent<Promise<WorkerReturn>> {
 
   async worker(
     node: NodeData,
-    rawInputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs
+    rawInputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs
   ) {
     const name = node.data.name as string
     node.name = name

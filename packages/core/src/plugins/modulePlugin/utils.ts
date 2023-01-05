@@ -1,6 +1,6 @@
 import { Input, NodeEditor, Output } from 'rete'
 
-import { DataSocketType, ThothNode, IRunContextEditor } from '../../../types'
+import { DataSocketType, MagickNode, IRunContextEditor } from '../../../types'
 import { socketNameMap, SocketNameType } from '../../sockets'
 import { ModuleSocketType } from './module-manager'
 export type ThroughPutType = 'outputs' | 'inputs'
@@ -16,7 +16,7 @@ const getRemovedSockets = (
 }
 
 const removeSockets = (
-  node: ThothNode,
+  node: MagickNode,
   sockets: DataSocketType[],
   type: 'input' | 'output',
   editor: NodeEditor
@@ -50,7 +50,7 @@ const removeSockets = (
   })
 }
 
-const updateSockets = (node: ThothNode, sockets: ModuleSocketType[]) => {
+const updateSockets = (node: MagickNode, sockets: ModuleSocketType[]) => {
   sockets.forEach(({ socketKey, name }) => {
     if (node.inputs.has(socketKey)) {
       const input = node.inputs.get(socketKey) as Input
@@ -83,7 +83,7 @@ const updateSockets = (node: ThothNode, sockets: ModuleSocketType[]) => {
 }
 
 type AddSockets = {
-  node: ThothNode
+  node: MagickNode
   sockets: ModuleSocketType[]
   connectionType: 'input' | 'output'
   taskType?: 'option' | 'output'
@@ -151,7 +151,7 @@ const addSockets = ({
 }
 
 type AddIO = {
-  node: ThothNode
+  node: MagickNode
   inputs: ModuleSocketType[]
   outputs: ModuleSocketType[]
   triggerOuts: ModuleSocketType[]
@@ -203,7 +203,7 @@ export function addIO({
 // here we can only remove the inputs and outputs that are not supposed to be on the node.
 // This means we determine which IO are present on the node but not in the incoming IO
 export function removeIO(
-  node: ThothNode,
+  node: MagickNode,
   editor: IRunContextEditor,
   inputs: ModuleSocketType[],
   outputs: ModuleSocketType[]

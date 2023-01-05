@@ -5,11 +5,11 @@ import { SpellManager } from '@magickml/core'
 import discord_client from './connectors/discord'
 import { twitter_client } from './connectors/twitter'
 import { getAudioUrl } from '../../server/src/routes/getAudioUrl'
-import { buildThothInterface } from '../../server/src/routes/spells/buildThothInterface'
+import { buildMagickInterface } from '../../server/src/routes/spells/buildMagickInterface'
 
 function CreateSpellHandler({ spell }) {
-  const thothInterface = buildThothInterface({})
-  const spellManager = new SpellManager(thothInterface)
+  const magickInterface = buildMagickInterface({})
+  const spellManager = new SpellManager(magickInterface)
 
   const spellRunner = spellManager.load(spell)
 

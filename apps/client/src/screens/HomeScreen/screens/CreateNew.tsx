@@ -28,7 +28,7 @@ export type Template = {
   graph: GraphData
 }
 
-export const thothTemplates = [
+export const magickTemplates = [
   { label: 'Starter', bg: emptyImg, graph: defaultGraph },
   // { label: 'Language example', bg: langImg, graph: defaultChain },
 ]
@@ -100,7 +100,7 @@ const CreateNew = () => {
           gap: 'var(--extraSmall)',
         }}
       >
-        {thothTemplates.map((template, i) => (
+        {magickTemplates.map((template, i) => (
           <TemplatePanel
             setSelectedTemplate={setSelectedTemplate}
             selectedTemplate={selectedTemplate}

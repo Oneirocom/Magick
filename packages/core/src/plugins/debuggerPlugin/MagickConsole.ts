@@ -1,8 +1,8 @@
 import { IRunContextEditor, NodeData } from '../../../types'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 type ConsoleConstructor = {
-  component: ThothComponent<unknown>
+  component: MagickComponent<unknown>
   editor: IRunContextEditor
   node: NodeData
   server: boolean
@@ -18,10 +18,10 @@ export type Message = {
   type: 'error' | 'log'
 }
 
-export class ThothConsole {
+export class MagickConsole {
   node: NodeData
   editor: IRunContextEditor
-  component: ThothComponent<unknown>
+  component: MagickComponent<unknown>
   nodeView: any
   isServer: boolean
   throwError?: Function

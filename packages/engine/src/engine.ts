@@ -11,7 +11,7 @@ import {
   GraphData,
   ModuleType,
   NodeData,
-  ThothWorkerInputs,
+  MagickWorkerInputs,
   extractNodes,
   DebuggerArgs,
   ModulePluginArgs,
@@ -22,13 +22,12 @@ interface WorkerOutputs {
   [key: string]: unknown
 }
 
-export interface ThothEngine extends Engine {
+export interface MagickEngine extends Engine {
   tasks: Task[]
   activateDebugger?: Function
   moduleManager?: any
 }
-export abstract class ThothEngineComponent<WorkerReturnType> {
-  // Original Class: https://github.com/latitudegames/rete/blob/master/src/engine/component.ts
+export abstract class MagickEngineComponent<WorkerReturnType> {
   name: string
   data: unknown = {}
   engine: Engine | null = null
@@ -39,7 +38,7 @@ export abstract class ThothEngineComponent<WorkerReturnType> {
 
   abstract worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
+    inputs: MagickWorkerInputs,
     outputs: WorkerOutputs,
     context: Record<string, any>,
     ...args: unknown[]
@@ -65,7 +64,7 @@ export const initSharedEngine = ({
   throwError,
   socket,
 }: InitEngineArguments) => {
-  const engine = new Rete.Engine(name) as ThothEngine
+  const engine = new Rete.Engine(name) as MagickEngine
 
   if (server) {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup

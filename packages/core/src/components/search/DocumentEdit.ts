@@ -8,9 +8,9 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import {
   triggerSocket,
@@ -18,11 +18,11 @@ import {
   booleanSocket,
   numSocket,
 } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Document Edit is used to edit a document in the search corpus'
 
-export class DocumentEdit extends ThothComponent<void> {
+export class DocumentEdit extends MagickComponent<void> {
   constructor() {
     super('Document Edit')
 
@@ -38,7 +38,7 @@ export class DocumentEdit extends ThothComponent<void> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const documentId = new Rete.Input('documentId', 'documentId', numSocket)
     const storeIdInput = new Rete.Input('storeId', 'Store ID', numSocket)
     const keywordsInput = new Rete.Input('keywords', 'Keywords', stringSocket)
@@ -67,7 +67,7 @@ export class DocumentEdit extends ThothComponent<void> {
 
   async worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
+    inputs: MagickWorkerInputs,
     { silent }: { silent: boolean }
   ) {
     const documentId = inputs['documentId'][0]

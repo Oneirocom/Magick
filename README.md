@@ -12,7 +12,7 @@ Install xvfb, chromium and ffmpeg
 First, clone and set up magick
 
 ```
-git clone https://github.com/TheNexusCity/magick
+git clone https://github.com/Oneirocom/MagickML
 ```
 
 Next, install dependencies
@@ -40,39 +40,14 @@ yarn run dev:windows
 We use dotenv-flow for local environment variable management
 
 Go to client folder, and create a new file called .env.local -- copy and .env vars you want to set from .env there
-If you are developing independently and are not a member of Latitude Games team, set **VITE_USE_LATITUDE=false**
-
 Go to server folder, and create a new file called .env.local -- copy and .env vars you want to set from .env there
-If you are developing independently and are not a member of Latitude Games team, set **USE_LATITUDE=false**
 
 ## Client Setup
 
-1. Generate a [Personal Access Token](https://github.com/settings/tokens) on Github which will allow you to install private latitude packages. Make sure you check the `write:packages` option. (`read:packages` will suffice as well if you aren't planning on publishing new versions of @magickml/core)
-1. In your `~/.bashrc`, append the line `export NPM_TOKEN=YourTokenGoesHere`, and restart your terminal (you can run `source ~/.bashrc` to do so)
 1. Clone the repository
-1. Navigate to the project root by running `cd magick`
-1. Run `yarn install` to install project dependencies
-1. Run `yarn start` to start the @magickml/magick-client app
-
-## Core Local Setup
-
-1. Core the contents of `core/.env.default` to `core/.env` and modify the secrets as necessary
-1. Step 2 in Monorepo Development Setup
-
-## Monorepo Development
-
-Within the yarn workspace we need to be mindful of which version of the shared package @magickml/core we are including in our local development setup and our deploys to Netlify.
-
-You can either:
-
-1. Target a published version of [@magickml/core](https://github.com/latitudegames/magick/packages/983711) in client/package.json
-2. Or actively develop against the current state of the repository. (By ensuring that client/package.json is targetting the same version of @magickml/core that is currently listed in core/package.json)
-
-If you are testing with the Latitude API locally you can point the latitude api to your local magick package:
-
-1.  making the dependance `"@magickml/core": "../magick/core"`
-    or
-2.  run `yarn link` inside '/packages/core' and then copy the command it generates for you and run that command in your root latitude api path. This will tell your latitude api to use the simlinked version of magick that your actively developing.
+2. Navigate to the project root by running `cd magick`
+3. Run `yarn install` to install project dependencies
+4. Run `yarn start` to start the @magickml/magick-client app
 
 ## @magickml/core CI
 

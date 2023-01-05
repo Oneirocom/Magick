@@ -1,9 +1,9 @@
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
+import { NodeData, MagickNode, MagickWorkerInputs } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Agent Text Completion is using OpenAI for the agent to respond.'
 
@@ -11,7 +11,7 @@ type WorkerReturn = {
   output: string
 }
 
-export class AgentTextCompletion extends ThothComponent<Promise<WorkerReturn>> {
+export class AgentTextCompletion extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('Agent Text Completion')
 
@@ -27,7 +27,7 @@ export class AgentTextCompletion extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const inp = new Rete.Input('string', 'Text', stringSocket)
     const settings = new Rete.Input('settings', 'Settings', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
@@ -93,7 +93,7 @@ export class AgentTextCompletion extends ThothComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     let apiKey = import.meta.env.OPENAI_API_KEY as string | null
     // check if we are in a browser and local storage is available
     // if it is, we can use the API key from local storage

@@ -8,12 +8,12 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, anySocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'Vector Search is used to do neural search in the search corpus and return a document'
@@ -22,7 +22,7 @@ type WorkerReturn = {
   output: unknown
 }
 
-export class VectorSearch extends ThothComponent<Promise<WorkerReturn>> {
+export class VectorSearch extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('Vector Search')
 
@@ -38,7 +38,7 @@ export class VectorSearch extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const searchStrInput = new Rete.Input(
       'input',
       'Search String',
@@ -60,7 +60,7 @@ export class VectorSearch extends ThothComponent<Promise<WorkerReturn>> {
       .addOutput(dataOutput)
   }
 
-  async worker(_node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
     console.log('inputs:', inputs)
     const searchStr = inputs['input'][0] as string
     console.log(

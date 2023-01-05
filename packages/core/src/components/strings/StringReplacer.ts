@@ -8,14 +8,14 @@ import Rete from 'rete'
 
 import {
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
   EngineContext,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'String Replacer is used to replace one string with another. Useful for variable injection.'
@@ -24,7 +24,7 @@ type WorkerReturn = {
   output: string
 }
 
-export class StringReplacer extends ThothComponent<Promise<WorkerReturn>> {
+export class StringReplacer extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('String Replacer')
 
@@ -40,7 +40,7 @@ export class StringReplacer extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     // should be nameable
     const name = new InputControl({
       dataKey: 'name',
@@ -76,7 +76,7 @@ export class StringReplacer extends ThothComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, rawInputs: ThothWorkerInputs) {
+  async worker(node: NodeData, rawInputs: MagickWorkerInputs) {
     this.name = node?.data?.name as string
 
     let input = rawInputs['input'][0] as string

@@ -1,13 +1,13 @@
 import Rete from 'rete'
 
-import { NodeData, ThothNode, ThothWorkerInputs } from '../../../types'
+import { NodeData, MagickNode, MagickWorkerInputs } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, anySocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Logs a value to the console'
 
-export class Log extends ThothComponent<void> {
+export class Log extends MagickComponent<void> {
   constructor() {
     super('Log')
 
@@ -20,7 +20,7 @@ export class Log extends ThothComponent<void> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const inp = new Rete.Input('string', 'Value', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
 
@@ -34,7 +34,7 @@ export class Log extends ThothComponent<void> {
     return node.addInput(dataInput).addInput(inp)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     const input = inputs.string[0] as string
 
     console.log(`Output from ${node.data.name || 'log component'}`, input)

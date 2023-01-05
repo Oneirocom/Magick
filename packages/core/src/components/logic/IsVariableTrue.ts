@@ -6,16 +6,16 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, anySocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info =
   'Is Variable true checks if input is true - string or boolean are checked as true or false, numbers are checked as 0 or 1, undifined or null are checked as false'
-export class IsVariableTrue extends ThothComponent<void> {
+export class IsVariableTrue extends MagickComponent<void> {
   constructor() {
     super('Is Variable True')
 
@@ -28,7 +28,7 @@ export class IsVariableTrue extends ThothComponent<void> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const inp = new Rete.Input('input', 'Input', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const isTrue = new Rete.Output('true', 'True', triggerSocket)
@@ -41,7 +41,7 @@ export class IsVariableTrue extends ThothComponent<void> {
       .addOutput(isFalse)
   }
 
-  async worker(_node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
     const action = inputs['input'][0]
     const type = typeof action
     let is = false

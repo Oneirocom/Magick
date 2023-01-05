@@ -3,13 +3,13 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { stringSocket, triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
@@ -17,7 +17,7 @@ type WorkerReturn = {
   result: string
 }
 
-export class QueryGoogle extends ThothComponent<Promise<WorkerReturn>> {
+export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     // Name of the component
     super('Query Google')
@@ -34,9 +34,8 @@ export class QueryGoogle extends ThothComponent<Promise<WorkerReturn>> {
     this.info = info
   }
   // the builder is used to "assemble" the node component.
-  // when we have enki hooked up and have grabbed all few shots, we would use the builder
-  // to generate the appropriate inputs and ouputs for the fewshot at build time
-  builder(node: ThothNode): ThothNode {
+
+  builder(node: MagickNode): MagickNode {
     // create inputs here. First argument is the name, second is the type (matched to other components sockets), and third is the socket the i/o will use
     const query = new Rete.Input('query', 'Query', stringSocket)
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
@@ -54,8 +53,8 @@ export class QueryGoogle extends ThothComponent<Promise<WorkerReturn>> {
   // to the outputs to be consumed by any connected components
   async worker(
     _node: NodeData,
-    inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { magick }: { magick: EngineContext }
   ) {
     const { queryGoogle } = magick

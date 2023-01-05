@@ -40,3 +40,8 @@ Thumbs.db
 
 .env*
 !.env.example
+
+
+# ignore lock files, since users are using both npm and yarn, just causes commit noise
+yarn.lock
+package-lock.json

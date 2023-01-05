@@ -3,9 +3,9 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
 // @seang todo: convert data controls to typescript to remove this
@@ -14,7 +14,7 @@ import { CodeControl } from '../../dataControls/CodeControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const defaultCode = `
 // inputs: dictionary of inputs based on socket names
@@ -31,7 +31,7 @@ function worker(inputs, data, state) {
 const info = `The code component is your swiss army knife when other components won't cut it.  You can define any number of inputs and outputs on it, and then write a custom worker function.  You have access to the data plugged into the inputs you created on your component, and can send data out along your outputs.
 Please note that the return of your function must be an object whose keys are the same value as the names given to your output sockets.  The incoming inputs argument is an object whose keys are the names you defined, and each is an array.
 `
-export class Code extends ThothComponent<unknown> {
+export class Code extends MagickComponent<unknown> {
   constructor() {
     // Name of the component
     super('Code')
@@ -47,7 +47,7 @@ export class Code extends ThothComponent<unknown> {
     this.runFromCache = true
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     if (!node.data.code) node.data.code = defaultCode
 
     const outputGenerator = new SocketGeneratorControl({
@@ -88,7 +88,7 @@ export class Code extends ThothComponent<unknown> {
   // to the outputs to be consumed by any connected components
   worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
+    inputs: MagickWorkerInputs,
     { data, magick }: { magick: EngineContext; data: { code: unknown } }
   ) {
     const { processCode, getCurrentGameState, updateCurrentGameState } = magick

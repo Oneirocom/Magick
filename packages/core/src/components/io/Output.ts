@@ -4,17 +4,17 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   EditorContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SwitchControl } from '../../dataControls/SwitchControl'
 import { triggerSocket, anySocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 const info = `The output component will pass values out from your spell.  You can have multiple outputs in a spell and all output values will be collected. It also has an option to send the output to the playtest area for easy testing.`
 
-export class Output extends ThothComponent<void> {
+export class Output extends MagickComponent<void> {
   constructor() {
     super('Output')
 
@@ -36,7 +36,7 @@ export class Output extends ThothComponent<void> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const triggerInput = new Rete.Input(
       'trigger',
       'Trigger',
@@ -80,8 +80,8 @@ export class Output extends ThothComponent<void> {
 
   async worker(
     node: NodeData,
-    inputs: ThothWorkerInputs,
-    _outputs: ThothWorkerOutputs,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
     { silent, magick }: { silent: boolean; magick: EditorContext }
   ) {
     if (!inputs.input) throw new Error('No input provided to output component')

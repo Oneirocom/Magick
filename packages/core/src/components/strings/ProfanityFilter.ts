@@ -7,16 +7,16 @@ import Rete from 'rete'
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Does some basic checks'
 
-export class ProfanityFilter extends ThothComponent<Promise<void>> {
+export class ProfanityFilter extends MagickComponent<Promise<void>> {
   constructor() {
     super('Profanity Filter')
 
@@ -29,7 +29,7 @@ export class ProfanityFilter extends ThothComponent<Promise<void>> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const inp = new Rete.Input('string', 'String', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const isTrue = new Rete.Output('true', 'Dirty', triggerSocket)
@@ -42,7 +42,7 @@ export class ProfanityFilter extends ThothComponent<Promise<void>> {
       .addOutput(isFalse)
   }
 
-  async worker(_node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
     console.log('inputs is', inputs)
     console.log("inputs['string'] is", inputs['string'])
 

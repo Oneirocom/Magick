@@ -10,16 +10,16 @@ const etherscanProvider = new ethers.providers.EtherscanProvider()
 import {
   EngineContext,
   NodeData,
-  ThothNode,
-  ThothWorkerInputs,
-  ThothWorkerOutputs,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
 } from '../../../types'
 import { triggerSocket, numSocket, stringSocket } from '../../sockets'
-import { ThothComponent } from '../../magick-component'
+import { MagickComponent } from '../../magick-component'
 
 const info = 'Check the recent transactions of an ethereum wallet'
 
-export class GetRecentTransactions extends ThothComponent<void> {
+export class GetRecentTransactions extends MagickComponent<void> {
   constructor() {
     super('Get Recent Transactions')
 
@@ -35,7 +35,7 @@ export class GetRecentTransactions extends ThothComponent<void> {
     this.info = info
   }
 
-  builder(node: ThothNode) {
+  builder(node: MagickNode) {
     const addressInput = new Rete.Input('address', 'Wallet Address', numSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -48,7 +48,7 @@ export class GetRecentTransactions extends ThothComponent<void> {
       .addOutput(balanceOutput)
   }
 
-  async worker(node: NodeData, inputs: ThothWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     const address = inputs['address'][0] as unknown as string
     node.display(address)
 
