@@ -7,7 +7,11 @@ import {
 } from '@magickml/core'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
-import { useGetSpellQuery, useRunSpellMutation } from '../../state/api/spells'
+import {
+  useGetSpellQuery,
+  useLazyGetSpellQuery,
+  useRunSpellMutation,
+} from '../../state/api/spells'
 
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { magickApiRootUrl } from '../../config'
@@ -20,6 +24,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const { events, publish, subscribe } = usePubSub()
   const spellRef = useRef<Spell | null>(null)
   const [_runSpell] = useRunSpellMutation()
+  const [_getSpell] = useLazyGetSpellQuery()
   const { data: _spell } = useGetSpellQuery(
     {
       spellId: tab.spellId,
@@ -125,6 +130,12 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       // No super elegant, but we need a better more centralised way to run the engine than these callbacks.
       setTimeout(() => callback(data), 0)
     })
+  }
+
+  const getSpell = async spellId => {
+    const spell = await _getSpell(spellId)
+
+    return spell.data as Spell
   }
 
   const processCode = (code, inputs, data, state) => {
@@ -313,6 +324,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     getWikipediaSummary,
     queryGoogle,
     sendToAvatar,
+    getSpell,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>

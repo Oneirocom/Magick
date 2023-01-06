@@ -419,7 +419,13 @@ export class discord_client {
 
     // get the value of the first entry in the object
     const firstValue = Object.values(response)[0]
-    this.handleMessage({chat_id: message.channel.id, message_id: message.id, responses: Output ?? (!Image && firstValue), addPing: false, image: Image})
+    this.handleMessage({
+      chat_id: message.channel.id,
+      message_id: message.id,
+      responses: Output ?? (!Image && firstValue),
+      addPing: false,
+      image: Image,
+    })
   }
 
   //Event that is triggered when a message is deleted
@@ -912,13 +918,7 @@ export class discord_client {
     log('handleUserUpdateEvent: ' + response)
   }
 
-  async handleMessage({
-    chat_id,
-    message_id,
-    responses,
-    addPing,
-    image
-  }) {
+  async handleMessage({ chat_id, message_id, responses, addPing, image }) {
     this.client.channels
       .fetch(chat_id)
       .then((channel: { messages: { fetch: (arg0: any) => Promise<any> } }) => {

@@ -52,7 +52,8 @@ const createEvent = async (args: CreateEventArgs) => {
 }
 
 export const buildMagickInterface = (
-  initialGameState: Record<string, unknown>
+  initialGameState: Record<string, unknown>,
+  overrides: Record<string, Function> = {}
 ): EngineContext => {
   // eslint-disable-next-line functional/no-let
   let gameState = { ...initialGameState }
@@ -68,6 +69,14 @@ export const buildMagickInterface = (
       console.log('*************************RUNSPELL OUTPUTS', outputs)
 
       return outputs
+    },
+    getSpell: async spellId => {
+      const spell = await database.instance.models.spells.findOne({
+        where: { name: spellId },
+        raw: true,
+      })
+
+      return spell
     },
     queryGoogle: async query => {
       const response = await queryGoogle(query)
