@@ -34,7 +34,9 @@ Next, install dependencies
 yarn install
 ```
 
-Now, copy the `.env.example` file and rename it to `.env` -- you can store secrets and environment variables here. This is git ignored but make sure you don't accidentally reveal this in your public repo!
+Now, copy the `.env.example` file and rename it to `.env` -- you can store secrets and environment variables here. This is git ignored but make sure you don't accidentally reveal this in your public repo!  The minimum you will need to get started is an OpenAI key.
+
+Finally, make sure you have docker installed and running.  We recommend the Docker Desktop app which you can find [here](https://docs.docker.com/get-docker/).
 
 That's it, you're installed. In order to run the client and server use this quickstart command:
 
