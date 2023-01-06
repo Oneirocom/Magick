@@ -1,17 +1,24 @@
+<p align="center"><img src="docs/logo.png" /></p>
+<h1 align="center">MAGICK ML</h1>
 
-<center><img src="docs/logo.png" /></center>
-<h1><center>MAGICK ML</center></h1>
+Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and connectors well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.
 
-Magick is visual IDE for data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and connectors well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.
+## Key Features
+- Powerful graph-based IDE for complex data pipelines
+- Realtime agents which can perform actions on their own, interact with users and other agents in different modalities with a unified memory and self
+- Social connectors to Discord, Twitter and Twilio -- Zoom, Google Meet, Reddit, Slack connectors will be available soon as plugins!
+- Search Google, Wikipedia and the Semantic Web
+- Many included powertools, including voice and image generation and vector search
+- Graphs can be embedded in subgraphs and shared for rapid community development
+
+
+![image](https://user-images.githubusercontent.com/18633264/210928740-fec448aa-e6fe-4640-9587-aae109ddea12.png)
 
 ## Getting Started
 
 ### Prerequisites
 
-You will need **yarn or npm** and **Docker** installed, along with **Node.js 16 or higher**. We use Docker to run a local Postgres database. You can skip the docker and install postgres directly, but you are almost always better off just using Docker.
-For **Linux** and **MAC** users, **sleep** and **concurently** commands must be installed in the machine.
-
-You may need to install `xvfb, chromium and ffmpeg` for features like browser integration and text to speech.
+You will need **yarn** and **Docker** installed, along with **Node.js 18 or higher**. We use Docker to run a local Postgres database. You can skip the docker and install postgres directly, but you are almost always better off just using Docker. You may need to install `xvfb, chromium and ffmpeg` for features like browser integration and text to speech.
 
 ### Installation
 
@@ -27,7 +34,9 @@ Next, install dependencies
 yarn install
 ```
 
-Now, copy the `.env.example` file and rename it to `.env` -- you can store secrets and environment variables here. This is git ignored but make sure you don't accidentally reveal this in your public repo!
+Now, copy the `.env.example` file and rename it to `.env` -- you can store secrets and environment variables here. This is git ignored but make sure you don't accidentally reveal this in your public repo!  The minimum you will need to get started is an OpenAI key.
+
+Finally, make sure you have docker installed and running.  We recommend the Docker Desktop app which you can find [here](https://docs.docker.com/get-docker/).
 
 That's it, you're installed. In order to run the client and server use this quickstart command:
 
