@@ -7,7 +7,7 @@ Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick 
 
 ### Prerequisites
 
-You will need **yarn or npm** and **Docker** installed, along with **Node.js 16 or higher**. We use Docker to run a local Postgres database. You can skip the docker and install postgres directly, but you are almost always better off just using Docker.
+You will need **yarn** and **Docker** installed, along with **Node.js 18 or higher**. We use Docker to run a local Postgres database. You can skip the docker and install postgres directly, but you are almost always better off just using Docker.
 For **Linux** and **MAC** users, **sleep** and **concurently** commands must be installed in the machine.
 
 You may need to install `xvfb, chromium and ffmpeg` for features like browser integration and text to speech.
