@@ -344,6 +344,16 @@ export class database {
 
     await this.client.query(query, values)
   }
+  async createEntity() {
+    const query = 'INSERT INTO entities (personality) VALUES ($1)'
+    const values = ['common']
+    console.log('called ', query)
+    try {
+      return await this.client.query(query, values)
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
   async updateEntity(id: any, data: { [x: string]: any; dirty?: any }) {
     const check = 'SELECT * FROM entities WHERE id=$1'
     const cvalues = [id]

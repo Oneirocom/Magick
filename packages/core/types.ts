@@ -81,6 +81,7 @@ export type EngineContext = {
     spellId: string,
     state: Record<string, any>
   ) => Record<string, any>
+  getSpell: (spellId: string) => Promise<Spell>
   processCode: (
     code: unknown,
     inputs: MagickWorkerInputs,

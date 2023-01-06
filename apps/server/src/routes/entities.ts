@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 import { database } from '@magickml/database'
 import 'regenerator-runtime/runtime'
 //@ts-ignore
@@ -11,6 +11,7 @@ import { MakeModelRequest } from '../utils/MakeModelRequest'
 import { queryGoogle } from '../routes/utils/queryGoogle'
 import { getAudioUrl } from './getAudioUrl'
 import { tts, tts_tiktalknet } from '@magickml/systems'
+import { prisma } from '@magickml/prisma'
 import { CustomError } from '../utils/CustomError'
 
 export const modules: Record<string, unknown> = {}
@@ -74,7 +75,7 @@ const addEntityHandler = async (ctx: Koa.Context) => {
   try {
     console.log('updated agent database with', data)
     if (Object.keys(data).length <= 0)
-      return (ctx.body = await database.instance.createEntity())
+      return (ctx.body = await prisma.entities.create({ data: {} }))
     return (ctx.body = await database.instance.updateEntity(instanceId, data))
   } catch (e) {
     console.log('addEntityHandler:', e)
@@ -105,15 +106,15 @@ const getEvent = async (ctx: Koa.Context) => {
   const maxCount = parseInt(ctx.request.query.maxCount as string)
   const max_time_diff = parseInt(ctx.request.query.max_time_diff as string)
 
-  const event = await database.instance.getEvents(
+  const event = await database.instance.getEvents({
     type,
     agent,
     speaker,
     client,
     channel,
     maxCount,
-    max_time_diff
-  )
+    max_time_diff,
+  })
 
   return (ctx.body = { event })
 }
@@ -188,7 +189,7 @@ const createEvent = async (ctx: Koa.Context) => {
   console.log('Creating event:', agent, speaker, client, channel, text, type)
 
   // Todo needs error handling
-  await events.createEvent({
+  await database.instance.createEvent({
     type,
     agent,
     speaker,
@@ -214,6 +215,7 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
 
   let url = ''
 
+  //@ts-ignore
   if (!cache && cache.length <= 0) {
     if (voice_provider === 'uberduck') {
       url = (await getAudioUrl(
@@ -349,7 +351,7 @@ const queryGoogle = async (ctx: Koa.Context) => {
 }
 
 const image_generation = async (ctx: Koa.Context) => {
-  const url = "http://localhost:7860/sdapi/v1/txt2img"
+  const url = 'http://localhost:7860/sdapi/v1/txt2img'
 
   // proxy the request to the url and then return the respons
   const response = await fetch(url, {
@@ -419,5 +421,5 @@ export const entities: Route[] = [
   {
     path: '/image_generation',
     post: image_generation,
-  }
+  },
 ]
