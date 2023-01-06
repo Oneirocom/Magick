@@ -7,7 +7,6 @@ console.log('Running root!')
 
 import App from './App'
 import AppProviders from './contexts/AppProviders'
-// import reportWebVitals from './reportWebVitals'
 import { store } from './state/store'
 
 const container = document.getElementById('root')
@@ -24,4 +23,3 @@ const Root = () => (
 )
 
 root.render(<Root />)
-// reportWebVitals()
