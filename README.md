@@ -1,6 +1,5 @@
-
-<center><img src="docs/logo.png" /></center>
-<h1><center>MAGICK ML</center></h1>
+<img align="center" src="docs/logo.png" />
+<h1 align="center">MAGICK ML</h1>
 
 Magick is visual IDE for data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and connectors well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.
 
