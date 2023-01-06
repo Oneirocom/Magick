@@ -1,8 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// require('isomorphic-fetch');
 import Rete from 'rete'
 
 import {
