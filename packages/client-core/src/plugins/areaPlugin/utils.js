@@ -6,12 +6,12 @@ export function nodesBBox(editor, nodes) {
   const top = min(nodes.map(node => node.position[1]))
   const right = max(
     nodes.map(
-      node => node.position[0] + editor.view.nodes.get(node).el.clientWidth
+      node => node.position[0] + (editor.view?.nodes?.get(node)?.el?.clientWidth || 0)
     )
   )
   const bottom = max(
     nodes.map(
-      node => node.position[1] + editor.view.nodes.get(node).el.clientHeight
+      node => node.position[1] + (editor.view?.nodes?.get(node)?.el?.clientHeight || 0)
     )
   )
 

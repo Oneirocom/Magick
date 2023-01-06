@@ -32,6 +32,7 @@ import {
 import AreaPlugin from './plugins/areaPlugin'
 
 import { initSharedEngine, MagickEngine } from '@magickml/engine'
+import { zoomAt } from '.'
 
 interface MagickEngineClient extends MagickEngine {
   magick: EditorContext
@@ -204,8 +205,29 @@ export const initEditor = function ({
     const graph = JSON.parse(JSON.stringify(_graph))
     await engine.abort()
     editor.fromJSON(graph)
+    const nodes = graph.nodes;
+    console.log('node is', nodes)
+    // get the first node in the graph (which is an object)
+    const firstNode = nodes[Object.keys(nodes)[0]];
+    console.log('firstNode is', firstNode)
+    console.log('editor.view', editor.view)
+
+    firstNode.position = [firstNode.position[0] + 250, firstNode.position[1] + 500]
+
+    // add an event listener to log editor view on }
+    document.addEventListener('keydown', (e) => {
+      if(e.key === '}' && e.shiftKey) {
+        console.log('editor.view', editor.view)
+      }
+    })
+
     editor.view.area.translate(0, 0)
     editor.view.resize()
+
+    setTimeout(() => {
+      zoomAt(editor, [firstNode])
+    }, 100)
+
   }
 
   // Start the engine off on first load
