@@ -31,7 +31,7 @@ type InputReturn = {
   }
 }
 
-export class InputRestructureComponent extends ThothComponent<
+export class InputRestructureComponent extends MagickComponent<
   Promise<InputReturn>
 > {
   nodeTaskMap: Record<number, MagickTask> = {}
@@ -65,7 +65,11 @@ export class InputRestructureComponent extends ThothComponent<
     const speaker = new Rete.Input('speaker', 'speaker', stringSocket)
     const agent = new Rete.Input('agent', 'agent', stringSocket)
     const client = new Rete.Input('client', 'client', stringSocket)
-    const channelType = new Rete.Input('channelType', 'channelType', stringSocket)
+    const channelType = new Rete.Input(
+      'channelType',
+      'channelType',
+      stringSocket
+    )
     const channelId = new Rete.Input('channel', 'channel', stringSocket)
     const entity = new Rete.Input('entity', 'entity', stringSocket)
     const roomInfo = new Rete.Input('roomInfo', 'roomInfo', arraySocket)
@@ -108,6 +112,7 @@ export class InputRestructureComponent extends ThothComponent<
 
     return {
       output: {
+        input: agent.input,
         output: agent.output,
         speaker: agent.speaker,
         agent: agent.agent,

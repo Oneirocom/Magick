@@ -39,7 +39,7 @@ type InputReturn = {
   channel_type?: string
 }
 
-export class InputDestructureComponent extends ThothComponent<
+export class InputDestructureComponent extends MagickComponent<
   Promise<InputReturn>
 > {
   nodeTaskMap: Record<number, MagickTask> = {}
