@@ -14,25 +14,8 @@ import { MagickComponent, MagickTask } from '../../magick-component'
 
 const info = `Restructure Agent Data`
 
-type InputReturn = {
-  output: {
-    input: string
-    speaker: string
-    agent: string
-    client: string
-    channelId?: string
-    entity: object
-    roomInfo: {
-      user: string
-      inConversation: boolean
-      isBot: boolean
-      info3d: string
-    }[]
-  }
-}
-
 export class InputRestructureComponent extends MagickComponent<
-  Promise<InputReturn>
+  Promise<{ output: Agent }>
 > {
   nodeTaskMap: Record<number, MagickTask> = {}
 

@@ -151,6 +151,7 @@ export type Agent = {
   agent: string
   client: string
   channel: string
+  channelId: string
   entity: number
   roomInfo?: {
     user: string

@@ -1,13 +1,26 @@
-# MAGICK ML
+<p align="center"><img src="docs/logo.png" /></p>
+<h1 align="center">MAGICK ML</h1>
 
-magick is a multishot system builder. It leverages a visual coding style interface to allows game designers and developers to rapidly create powerful natural language systems and prototype games.
+Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and connectors well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.
 
-## Quickstart
+## Key Features
+- Powerful graph-based IDE for complex data pipelines
+- Realtime agents which can perform actions on their own, interact with users and other agents in different modalities with a unified memory and self
+- Social connectors to Discord, Twitter and Twilio -- Zoom, Google Meet, Reddit, Slack connectors will be available soon as plugins!
+- Search Google, Wikipedia and the Semantic Web
+- Many included powertools, including voice and image generation and vector search
+- Graphs can be embedded in subgraphs and shared for rapid community development
 
-You will need **yarn or npm** and **Docker** installed, along with **Node.js 16 or higher**. We use Docker to run a local Postgres database. You can skip the docker and install postgres directly, but you are almost always better off just using Docker.
-For **Linux** and **MAC** users, **sleep** and **concurently** commands must be installed in the machine.
 
-Install xvfb, chromium and ffmpeg
+![image](https://user-images.githubusercontent.com/18633264/210928740-fec448aa-e6fe-4640-9587-aae109ddea12.png)
+
+## Getting Started
+
+### Prerequisites
+
+You will need **yarn** and **Docker** installed, along with **Node.js 18 or higher**. We use Docker to run a local Postgres database. You can skip the docker and install postgres directly, but you are almost always better off just using Docker. You may need to install `xvfb, chromium and ffmpeg` for features like browser integration and text to speech.
+
+### Installation
 
 First, clone and set up magick
 
@@ -19,73 +32,19 @@ Next, install dependencies
 
 ```
 yarn install
-OR
-npm i
 ```
 
-You will need to make a few environment variable modifications
-To keep values privates, create a new file for each .env, called .env.local (these files are safe from the .gitignore)
+Now, copy the `.env.example` file and rename it to `.env` -- you can store secrets and environment variables here. This is git ignored but make sure you don't accidentally reveal this in your public repo!  The minimum you will need to get started is an OpenAI key.
 
-In order to run the client and server use
+Finally, make sure you have docker installed and running.  We recommend the Docker Desktop app which you can find [here](https://docs.docker.com/get-docker/).
+
+That's it, you're installed. In order to run the client and server use this quickstart command:
 
 ```
-yarn run dev
-
-If on Windows run:
-yarn run dev:windows
+yarn dev
 ```
 
-### Local Development
-
-We use dotenv-flow for local environment variable management
-
-Go to client folder, and create a new file called .env.local -- copy and .env vars you want to set from .env there
-Go to server folder, and create a new file called .env.local -- copy and .env vars you want to set from .env there
-
-## Client Setup
-
-1. Clone the repository
-2. Navigate to the project root by running `cd magick`
-3. Run `yarn install` to install project dependencies
-4. Run `yarn start` to start the @magickml/magick-client app
-
-## @magickml/core CI
-
-### Testing
-
-On Pull Request, GitHub actions will first determine if the diff contains changes in the `core` directory. If so
-and there isn't an active `magick-core` labelled PR already open - it will proceed with building and deploying a Canary Release
-to GitHub packages. There can only be one `magick-core` labelled PR active at a time, so if one exists additional PR's will be labelled `magick-core-draft` by the CI. This `magick-core-draft` label can be removed, and the CI re-run to build a canary once the unique `magick-core` label position has been vacated.
-
-The latest canary release can be tested and installed locally with `yarn add @magickml/core@canary`. The Netlify Deploy Preview is configured to sense `magick-core` PR's as well and targets the latest canary release, but it runs concurrently to the canary publishing process. You can test a canary release of `magick-core` on your branch's Deploy Preview by re-deploying from the Netlify UI for your branch. It is important to note that `magick-core-draft` PR's will still have a deploy preview on Netlify, but will be building with the latest canary release of `magick-core` which may be unrelated to that PR's changes until it had it's own canary release and been re-deployed.
-
-### Releases
-
-When a `magick-core` PR has been merged with main, the CI will create a prerelease based on the last commit, publish
-@magickml/core to GitHub packages and take care of incrementing the patch version in core/package.json to prepare
-for the next prerelease.
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `yarn run dev`
-
-Runs both server and client.\
-Open [https://localhost:3001](https://localhost:3001) to view it in the browser.
-
-### `yarn start`
-
-Runs @magickml/client in the development mode.\
-Open [http://localhost:3003](http://localhost:3003) to view it in the browser.
-
-### `yarn build`
-
-Builds the @magickml/magick-client app for production to the `client/build` folder.
-
-### `yarn build:core`
-
-Builds the @magickml/core package for production to the `core/build` folder.
+You can also start the parts up individually. In order, start `containers`, then `apps`, then if you'd like live agents, also run `entities`. All three are covered by the `yarn dev`.
 
 ## Apache license information
 
