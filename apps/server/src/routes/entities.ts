@@ -8,7 +8,6 @@ import { Route } from '../types'
 import { makeCompletion } from '../utils/MakeCompletionRequest'
 import { MakeModelRequest } from '../utils/MakeModelRequest'
 import { queryGoogleSearch } from '../routes/utils/queryGoogle'
-import { getAudioUrl } from './getAudioUrl'
 import { tts, tts_tiktalknet } from '@magickml/systems'
 import { prisma } from '@magickml/prisma'
 import { CustomError } from '../utils/CustomError'
@@ -236,14 +235,7 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
 
   //@ts-ignore
   if (!cache && cache.length <= 0) {
-    if (voice_provider === 'uberduck') {
-      url = (await getAudioUrl(
-        process.env.UBER_DUCK_KEY as string,
-        process.env.UBER_DUCK_SECRET_KEY as string,
-        voice_character as string,
-        text as string
-      )) as string
-    } else if (voice_provider === 'google') {
+    if (voice_provider === 'google') {
       url = await tts(text, voice_character as string)
     } else {
       url = await tts_tiktalknet(text, voice_character, tiktalknet_url)

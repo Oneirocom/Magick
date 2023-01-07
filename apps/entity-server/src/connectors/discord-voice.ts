@@ -9,7 +9,6 @@ import {
 } from '@discordjs/voice'
 import { createReadStream } from 'fs'
 
-import { getAudioUrl } from '../../../server/src/routes/getAudioUrl'
 import { removeEmojisFromString } from '@magickml/utils'
 import { tts, tts_tiktalknet } from '@magickml/systems'
 
@@ -84,14 +83,7 @@ export function initSpeechClient(
       console.log('response is', response)
       let url
       if (response) {
-        if (voiceProvider === 'uberduck') {
-          url = await getAudioUrl(
-            process.env.UBER_DUCK_KEY as string,
-            process.env.UBER_DUCK_SECRET_KEY as string,
-            voiceCharacter,
-            response as string
-          )
-        } else if (voiceProvider === 'google') {
+        if (voiceProvider === 'google') {
           console.log('discord voice tts:', response)
           // google tts
           url = await tts(response, voiceCharacter, languageCode)

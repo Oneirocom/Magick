@@ -35,25 +35,8 @@ spec:
               value: http://localhost:8001
             - name: PORT
               value: "8001"
-            - name: AGENT_RUNNER_PORT
-              value: "8003"
-            - name: PGUSER
-              value: postgres
-            - name: PGHOST
-              value: nothingprojects-lazarus.cbfjobrijahm.us-east-1.rds.amazonaws.com
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: lazarus-secret
-                  key: POSTGRES_PASSWORD
-            - name: PGDATABASE
-              value: postgres
-            - name: PGPORT
-              value: "5432"
-            - name: PGSSL
-              value: "false"
-            - name: REFRESH_DB
-              value: "false"
+            - name: DATABASE_URL
+              value: postgresql://lalalune:v2_3xkRe_BtzcVMDdrzMkhCMvbNZHE4n@db.bit.io/lalalune/magickml
             - name: CORS_PORT
               value: "65526"
             - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -66,10 +49,6 @@ spec:
               value: "65531"
             - name: ENABLE_SEARCH_CORPUS
               value: "true"
-            - name: UBER_DUCK_KEY
-              value:
-            - name: UBER_DUCK_SECRET_KEY
-              value:
             - name: OPENAI_API_KEY
               valueFrom:
                 secretKeyRef:
