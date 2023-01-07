@@ -1,7 +1,6 @@
 import ConnectionPlugin from 'rete-connection-plugin'
 import { Plugin } from 'rete/types/core/plugin'
 // import ConnectionReroutePlugin from 'rete-connection-reroute-plugin'
-// @ts-ignore
 import ContextMenuPlugin from 'rete-context-menu-plugin'
 import { Data } from 'rete/types/core/data'
 import CommentPlugin from './plugins/commentPlugin'

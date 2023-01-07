@@ -259,8 +259,6 @@ export class Inspector {
     // update the node at the end ofthid
     this.node.update()
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     this.editor.trigger('save')
   }
 
