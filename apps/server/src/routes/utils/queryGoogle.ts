@@ -1,7 +1,7 @@
 import unirest from 'unirest'
 import cheerio from 'cheerio'
 
-export const queryGoogle = (searchTerm: string) => {
+export const queryGoogleSearch = (searchTerm: string) => {
   const query = searchTerm.split(' ').join('+')
   return unirest
     .get(`https://www.google.com/search?q=${query}&gl=us&hl=en`)

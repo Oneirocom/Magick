@@ -4,19 +4,11 @@
   "sourceRoot": "packages/prisma/src",
   "projectType": "library",
   "targets": {
-    "migrate-save": {
+    "migrate-dev": {
       "executor": "@nrwl/workspace:run-commands",
       "outputs": [],
       "options": {
-        "command": "npx prisma migrate save",
-        "cwd": "packages/prisma"
-      }
-    },
-    "migrate-up": {
-      "executor": "@nrwl/workspace:run-commands",
-      "outputs": [],
-      "options": {
-        "command": "npx prisma migrate up",
+        "command": "npx prisma migrate deve",
         "cwd": "packages/prisma"
       }
     },
