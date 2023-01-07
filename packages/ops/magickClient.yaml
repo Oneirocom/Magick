@@ -33,24 +33,12 @@ spec:
               value: "false"
             - name: URL_SCHEME
               value: "http"
-            - name: REACT_APP_SITE_ROOT_URL
-              value: "http://localhost:3003"
-            - name: REACT_APP_API_ROOT_URL
-              value: "https://magick-server.projectlazarus.ai"
-            - name: REACT_APP_API_ROOT_URL_PROD
-              value: "https://magick-server.projectlazarus.ai"
-            - name: REACT_APP_CORS_URL
-              value: "http://localhost:65526"
-            - name: REACT_APP_SITE_STAGING
-              value: "https://62264f21c3a9860ad1e5bdd3--optimistic-turing-def916.netlify.app/"
             - name: REACT_APP_OAUTH_CLIENT_ID
               value: "a6b51c87-7565-42ab-a4b0-38a07f3b6c56"
             - name: REACT_APP_SPEECH_SERVER_URL
               value: "https://magick-server.projectlazarus.ai:65532"
             - name: REACT_APP_SEARCH_SERVER_URL
               value: "https://magick-server.projectlazarus.ai:65531"
-            - name: EXTEND_ESLINT
-              value: "true"
             - name: REACT_APP_API_URL
               value: "https://magick-server.projectlazarus.ai"
             - name: API_URL

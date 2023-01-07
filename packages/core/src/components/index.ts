@@ -42,7 +42,6 @@ import { GetWikipediaSummary } from './search/GetWikipediaSummary'
 import { QueryGoogle } from './search/QueryGoogle'
 import { RSSGet } from './search/RSSGet'
 import { Search } from './search/Search'
-import { VectorSearch } from './search/VectorSearch'
 import { WeaviateWikipedia } from './search/WeaviateWikipedia'
 import { StateRead } from './state/StateRead'
 import { StateWrite } from './state/StateWrite'
@@ -95,7 +94,6 @@ export const components = {
   conversationRecall: () => new EventRecall(),
   request: () => new Request(),
   search: () => new Search(),
-  vectorSearch: () => new VectorSearch(),
   documentGet: () => new DocumentGet(),
   documentEdit: () => new DocumentEdit(),
   documentDelete: () => new DocumentDelete(),

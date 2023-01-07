@@ -14,7 +14,6 @@ import { Handler, Method, Middleware } from './types'
 import {
   initTextToSpeech,
   initFileServer,
-  spawnPythonServer,
   initWeaviateClient,
   cors_server,
 } from '@magickml/systems'
@@ -47,10 +46,6 @@ async function init() {
     process.env.WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true',
     process.env.CLASSIFIER_IMPORT_DATA?.toLowerCase().trim() === 'true'
   )
-
-  if (process.env.RUN_PYTHON_SERVER === 'true') {
-    spawnPythonServer()
-  }
 
   // generic error handling
   app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
