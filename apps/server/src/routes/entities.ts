@@ -153,6 +153,7 @@ const updateEvent = async (ctx: Koa.Context) => {
     }
 
     const agent = ctx.request.body.agent
+    const speaker = ctx.request.body.speaker
     const sender = ctx.request.body.sender
     const client = ctx.request.body.client
     const channel = ctx.request.body.channel
@@ -162,6 +163,7 @@ const updateEvent = async (ctx: Koa.Context) => {
 
     const res = await database.instance.updateEvent(id, {
       agent,
+      speaker,
       sender,
       client,
       channel,
