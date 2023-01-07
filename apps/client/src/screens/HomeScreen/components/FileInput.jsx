@@ -11,8 +11,7 @@ const FileInput = ({ loadFile }) => {
   }
 
   const handleChange = event => {
-    const fileUploaded = event.target.files[0]
-    loadFile(fileUploaded)
+    Object.values(event.target.files).forEach(loadFile)
   }
   return (
     <>
@@ -22,6 +21,7 @@ const FileInput = ({ loadFile }) => {
       </button>
       <input
         type="file"
+        multiple="multiple"
         ref={hiddenFileInput}
         onChange={handleChange}
         style={{ display: 'none' }}

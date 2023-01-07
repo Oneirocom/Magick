@@ -9,8 +9,8 @@ import { getAudioUrl } from '../../server/src/routes/getAudioUrl'
 
 const createSpellHandlerFactory =
   spellManager =>
-  ({ spell }) => {
-    const spellRunner = spellManager.load(spell)
+  async ({ spell }) => {
+    const spellRunner = await spellManager.load(spell)
 
     async function spellHandler({
       message,
@@ -38,9 +38,7 @@ const createSpellHandlerFactory =
           eth_public_address,
         } as any,
       }
-      console.log('spellInputs', spellInputs)
       const spellOutputs = await spellRunner.defaultRun(spellInputs)
-      console.log('spellOutputs', spellOutputs)
       return spellOutputs
     }
 
@@ -84,7 +82,7 @@ export class Entity {
     this.name = data.agent ?? data.name ?? 'agent'
     this.spellManager = new SpellManager({
       magickInterface: buildMagickInterface({}),
-      cache: true,
+      cache: false,
     })
 
     this.createSpellHandler = createSpellHandlerFactory(this.spellManager)
@@ -232,9 +230,12 @@ export class Entity {
 
     const spell = await database.instance.models.spells.findOne({
       where: { name: spell_handler },
+      raw: true,
     })
 
-    const spellHandler = this.createSpellHandler({ spell })
+    console.log('discord incoming spell', spell)
+
+    const spellHandler = await this.createSpellHandler({ spell })
 
     this.discord = new discord_client()
     console.log('createDiscordClient')

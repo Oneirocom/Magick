@@ -28,6 +28,8 @@ const StartScreen = () => {
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
 
   const onReaderLoad = async event => {
+    // check if file is a
+
     const spellData = JSON.parse(event.target.result)
     /* This part deletes the graph key from the spelldata, which causes the spell to not be imported  */
     /* if (spellData.graph) {
