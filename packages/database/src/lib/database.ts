@@ -48,7 +48,7 @@ export class database {
   async connect() {
     this.client = new Client({
       connectionString,
-      ssl: useSSL ? { rejectUnauthorized: false, }: {}
+      ssl: useSSL ? { rejectUnauthorized: false, }: false
     })
     this.client.connect()
   }
