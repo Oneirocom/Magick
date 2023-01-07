@@ -15,7 +15,6 @@ import {
   initTextToSpeech,
   initFileServer,
   initWeaviateClient,
-  cors_server,
 } from '@magickml/systems'
 import https from 'https'
 import http from 'http'
@@ -64,15 +63,6 @@ async function init() {
     origin: '*',
   }
   app.use(cors(options))
-
-  new cors_server(
-    parseInt(process.env.CORS_PORT as string),
-    '0.0.0.0',
-    process.env.USESSL === 'true' &&
-      fs.existsSync(path.join(__dirname, './certs/')) &&
-      fs.existsSync(path.join(__dirname, './certs/key.pem')) &&
-      fs.existsSync(path.join(__dirname, './certs/cert.pem'))
-  )
 
   process.on('unhandledRejection', (err: Error) => {
     console.error('Unhandled Rejection:' + err + ' - ' + err.stack)
