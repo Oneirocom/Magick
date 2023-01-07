@@ -35,30 +35,24 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   const preferences = useSelector((state: RootState) => state.preferences)
 
   // Set up autosave for the workspaces
-  useEffect(() => {
-    if (!editor?.on) return
-    const unsubscribe = editor.on(
-      // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
-      'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
-      debounce(async data => {
-        if (!dirtyGraph) return
-        if (tab.type === 'spell' && spellRef.current) {
-          setDirtyGraph(true)
-          const graph = serialize()
-          // dont both to send the event if the update shows zero nodes.
-          // Thios may prevent someone from saving a graph with zero nodes however.
-          if (Object.keys(graph?.nodes || {}).length === 0) return
-          setTimeout(() => {
-            publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
-          }, 1000) // wait 1000 ms before saving the graph, we may be getting a lot of calls at once
-        }
-      }, 2000) // debounce for 2000 ms
-    )
+  // useEffect(() => {
+  //   if (!editor?.on) return
+  //   const unsubscribe = editor.on(
+  //     // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
+  //     'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
+  //     debounce(async data => {
+  //       if (!dirtyGraph) return
+  //       if (tab.type === 'spell' && spellRef.current) {
+  //         setDirtyGraph(true)
+  //         publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
+  //       }
+  //     }, 2000) // debounce for 2000 ms
+  //   )
 
-    return () => {
-      unsubscribe()
-    }
-  }, [editor, preferences.autoSave])
+  //   return () => {
+  //     unsubscribe()
+  //   }
+  // }, [editor, preferences.autoSave])
 
   useEffect(() => {
     if (!editor?.on) return

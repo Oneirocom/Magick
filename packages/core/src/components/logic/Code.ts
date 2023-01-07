@@ -93,7 +93,6 @@ export class Code extends MagickComponent<unknown> {
     context: { magick: EngineContext; data: { code: unknown } }
   ) {
     const { magick, data } = context
-    console.log('MAGICK INTERFACE IN CODE', context)
     const { processCode, getCurrentGameState, updateCurrentGameState } = magick
     if (!processCode) return
 
