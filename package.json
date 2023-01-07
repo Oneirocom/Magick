@@ -116,6 +116,7 @@
     "rete-connection-plugin": "^0.9.0",
     "rete-connection-reroute-plugin": "^0.4.0",
     "rete-context-menu-plugin": "^0.6.0-rc.1",
+    "rollup-plugin-node-polyfills": "^0.2.1",
     "sequelize": "^6.15.0",
     "sequelize-auto": "^0.8.8",
     "sharedb": "^2.2.5",
