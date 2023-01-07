@@ -45,6 +45,7 @@ async function init() {
     process.env.WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true',
     process.env.CLASSIFIER_IMPORT_DATA?.toLowerCase().trim() === 'true'
   )
+  database.instance.close()
 
   // generic error handling
   app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {

@@ -54,6 +54,10 @@ export class database {
     this.client.connect()
   }
 
+  close() {
+    this.client.end()
+  }
+
   // create a type called CreateEventArgs in typescript
 
   async createEvent({

@@ -65,7 +65,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
   ]
 
   return (
-    <Modal title="Edit Spell" options={options} icon="info">
+    <Modal title="Save As" options={options} icon="info">
       <div className={css['login-container']}>
         {error && <span className={css['error-message']}>{error}</span>}
         <form>
