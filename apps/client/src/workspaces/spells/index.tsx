@@ -39,7 +39,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     if (!editor?.on) return
     const unsubscribe = editor.on(
       // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
-      // @ts-ignore
       'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
       debounce(async data => {
         if (!dirtyGraph) return
@@ -51,9 +50,9 @@ const Workspace = ({ tab, tabs, pubSub }) => {
           if (Object.keys(graph?.nodes || {}).length === 0) return
           setTimeout(() => {
             publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
-          }, 1000)
+          }, 1000) // wait 1000 ms before saving the graph, we may be getting a lot of calls at once
         }
-      }, 1000)
+      }, 2000) // debounce for 2000 ms
     )
 
     return () => {
@@ -65,7 +64,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     if (!editor?.on) return
 
     editor.on(
-      // @ts-ignore
       'nodecreated noderemoved',
       (node: any) => {
         if (!spellRef.current) return

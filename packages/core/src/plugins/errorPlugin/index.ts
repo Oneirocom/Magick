@@ -7,9 +7,6 @@ function install(
 ) {
   engine.on(
     'error',
-    // disable typescript error 2345
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     ({ message, data }: { message: string; data: NodeData }) => {
       const component = engine.components.get(
         data.name

@@ -69,18 +69,18 @@ const saveHandler = async (ctx: Koa.Context) => {
     return (ctx.body = { id: newSpell.id })
   } else {
     console.log('saveHandler body is', body)
-    if(Object.keys(body.graph.nodes).length === 0)
+    if (Object.keys(body.graph.nodes).length === 0)
       throw new CustomError('input-failed', 'No nodes provided in request body')
-    await spell.update(body)
-    return (ctx.body = { id: spell.id })
+    else {
+      await spell.update(body)
+      return (ctx.body = { id: spell.id })
+    }
   }
 }
 
 const saveDiffHandler = async (ctx: Koa.Context) => {
   const { body } = ctx.request
   const { name, diff } = body
-
-  console.log('saveDiffHandler body is', body)
 
   if (!body) throw new CustomError('input-failed', 'No parameters provided')
 
@@ -92,22 +92,21 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
     throw new CustomError('input-failed', `No spell with ${name} name found.`)
   if (!diff)
     throw new CustomError('input-failed', 'No diff provided in request body')
-  console.log('spell is', spell)
   try {
     const spellUpdate = otJson0.type.apply(spell.toJSON(), diff)
     console.log('spellUpdate is', spellUpdate)
-    if(Object.keys(spellUpdate.graph.nodes).length === 0)
+    if (Object.keys(spellUpdate.graph.nodes).length === 0)
       throw new CustomError('input-failed', 'No nodes provided in request body')
+    else {
+      const updatedSpell = await database.instance.models.spells.update(
+        spellUpdate,
+        {
+          where: { name },
+        })
 
-    const updatedSpell = await database.instance.models.spells.update(
-      spellUpdate,
-      {
-        where: { name },
-      }
-    )
-
-    ctx.response.status = 200
-    ctx.body = updatedSpell
+      ctx.response.status = 200
+      ctx.body = updatedSpell
+    }
   } catch (err) {
     throw new CustomError('server-error', 'Error processing diff.', err)
   }
