@@ -4,6 +4,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 export interface eventsAttributes {
   type?: string;
   agent?: string;
+  speaker?: string;
   client?: string;
   channel?: string;
   sender?: string;
@@ -16,6 +17,7 @@ export type eventsCreationAttributes = Optional<eventsAttributes, eventsOptional
 
 export class events extends Model<eventsAttributes, eventsCreationAttributes> implements eventsAttributes {
   agent?: string;
+  speaker?: string;
   client?: string;
   channel?: string;
   sender?: string;
@@ -29,6 +31,10 @@ export class events extends Model<eventsAttributes, eventsCreationAttributes> im
         allowNull: true
       },
       agent: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
+      speaker: {
         type: DataTypes.TEXT,
         allowNull: true
       },

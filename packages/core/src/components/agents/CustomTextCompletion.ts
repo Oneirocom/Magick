@@ -177,6 +177,7 @@ export class CustomTextCompletion extends MagickComponent<
         presencePenalty: presencePenalty,
         stop: filteredStop,
         agent: agent,
+        speaker: speaker,
         sender: speaker,
       }
     )
