@@ -3,12 +3,7 @@ import pg from 'pg'
 import { Sequelize } from 'sequelize'
 import { initModels } from '../models/init-models'
 
-const creatorToolsUrl =
-  !!process.env.CREATOR_TOOLS_DB_URL &&
-  process.env.CREATOR_TOOLS_DB_URL != '' &&
-  process.env.CREATOR_TOOLS_DB_URL
 const connectionString =
-  creatorToolsUrl ||
   'postgres://' +
     process.env.PGUSER +
     ':' +
@@ -19,9 +14,9 @@ const connectionString =
     process.env.PGPORT +
     '/' +
     process.env.PGDATABASE
-const sequelize = new Sequelize(creatorToolsUrl || connectionString, {
+const sequelize = new Sequelize(connectionString, {
   dialect: 'postgres',
-  dialectOptions: creatorToolsUrl ? { ssl: { rejectUnauthorized: false } } : {},
+  dialectOptions: {},
   define: {
     charset: 'utf8mb4',
     collate: 'utf8mb4_unicode_ci',

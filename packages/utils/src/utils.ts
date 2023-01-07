@@ -169,8 +169,6 @@ export const makeUpdateQuery = ({ table, wheres, cols }: any): string => {
   return query.join(' ')
 }
 
-export const isAuthentication = process.env.AUTHENTICATION === 'true'
-
 export const isValidEndPoint = (urls: string[], endPoint: string): boolean => {
   let isValid: boolean = false
 

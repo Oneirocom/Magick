@@ -35,7 +35,7 @@ If you want to deploy an instance of Magick to run on a single server, follow th
 
 11. Open server .env file (vim client/.env).
 
-- Change following .env params API_URL, PGUSER, PGHOST, PGPASSWORD, PGDATABASE, GOOGLE_APPLICATION_CREDENTIALS, WITAI_KEY, UBER_DUCK_KEY, UBER_DUCK_SECRET_KEY, OPENAI_API_KEY, HF_API_KEY
+- Change following .env params API_URL, PGUSER, PGHOST, PGPASSWORD, PGDATABASE, GOOGLE_APPLICATION_CREDENTIALS, UBER_DUCK_KEY, UBER_DUCK_SECRET_KEY, OPENAI_API_KEY, HF_API_KEY
   Note: In GOOGLE_APPLICATION_CREDENTIALS set path of credential json file
 
 12. Run following commands
