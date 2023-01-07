@@ -4,9 +4,10 @@ import { Sequelize } from 'sequelize'
 import { initModels } from '../models/init-models'
 
 const connectionString = process.env.DATABASE_URL
+const useSSL = process.env.DATABASE_USE_SSL === 'true'
 const sequelize = new Sequelize(connectionString, {
   dialect: 'postgres',
-  dialectOptions: { ssl: { rejectUnauthorized: false } },
+  dialectOptions: useSSL ? { ssl: { rejectUnauthorized: false } } : {},
   define: {
     charset: 'utf8mb4',
     collate: 'utf8mb4_unicode_ci',
@@ -47,9 +48,7 @@ export class database {
   async connect() {
     this.client = new Client({
       connectionString,
-      ssl: {
-            rejectUnauthorized: false,
-          }
+      ssl: useSSL ? { rejectUnauthorized: false, }: {}
     })
     this.client.connect()
   }
