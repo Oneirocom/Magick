@@ -68,7 +68,9 @@ const saveHandler = async (ctx: Koa.Context) => {
     })
     return (ctx.body = { id: newSpell.id })
   } else {
-    // TODO eventually we should actually validate the body before dumping it in.
+    console.log('saveHandler body is', body)
+    if(Object.keys(body.graph.nodes).length === 0)
+      throw new CustomError('input-failed', 'No nodes provided in request body')
     await spell.update(body)
     return (ctx.body = { id: spell.id })
   }
@@ -78,7 +80,7 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
   const { body } = ctx.request
   const { name, diff } = body
 
-  console.log('body is', body)
+  console.log('saveDiffHandler body is', body)
 
   if (!body) throw new CustomError('input-failed', 'No parameters provided')
 
@@ -93,6 +95,10 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
   console.log('spell is', spell)
   try {
     const spellUpdate = otJson0.type.apply(spell.toJSON(), diff)
+    console.log('spellUpdate is', spellUpdate)
+    if(Object.keys(spellUpdate.graph.nodes).length === 0)
+      throw new CustomError('input-failed', 'No nodes provided in request body')
+
     const updatedSpell = await database.instance.models.spells.update(
       spellUpdate,
       {

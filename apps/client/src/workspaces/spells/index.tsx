@@ -49,9 +49,11 @@ const Workspace = ({ tab, tabs, pubSub }) => {
           // dont both to send the event if the update shows zero nodes.
           // Thios may prevent someone from saving a graph with zero nodes however.
           if (Object.keys(graph?.nodes || {}).length === 0) return
-          publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
+          setTimeout(() => {
+            publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
+          }, 1000)
         }
-      }, 2000)
+      }, 1000)
     )
 
     return () => {
