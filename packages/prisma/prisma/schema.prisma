@@ -120,6 +120,7 @@ model entities {
 model events {
   id      Int     @id @default(autoincrement())
   type    String?
+  speaker String?
   agent   String?
   client  String?
   channel String?

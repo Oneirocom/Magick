@@ -138,12 +138,12 @@ export default function MiniDrawer({ children }) {
             onClick={onClick('/magick')}
             text="Spell Composer"
           />
-          <DrawerItem
+          {/* <DrawerItem
             active={location.pathname === '/spellbook'}
             Icon={AutoStoriesIcon}
             open={open}
             text="Spellbook"
-          />
+          /> */}
           <DrawerItem
             active={location.pathname === '/eventManager'}
             Icon={StorageIcon}
@@ -152,17 +152,17 @@ export default function MiniDrawer({ children }) {
             text="Event Manager"
           />
           <DrawerItem
-            active={location.pathname === '/dataManager'}
+            active={location.pathname === '/entityManager'}
             Icon={HubIcon}
             open={open}
             text="Entity Manager"
           />
-          <DrawerItem
+          {/* <DrawerItem
             active={location.pathname === '/settings'}
             Icon={SettingsIcon}
             open={open}
             text="Settings"
-          />
+          /> */}
         </List>
         {/* <Divider /> */}
       </Drawer>

@@ -5,14 +5,17 @@ import {
   GetEventArgs,
   CreateEventArgs,
 } from '@magickml/core'
+import { prisma } from '@magickml/prisma'
 import Koa from 'koa'
 import vm2 from 'vm2'
 
 import { searchWikipedia } from '../wikipedia/helpers'
-import { queryGoogle } from '../utils/queryGoogle'
+import { queryGoogleSearch } from '../utils/queryGoogle'
 
 import { database } from '@magickml/database'
 import { runSpell } from '../utils/runSpell'
+import e from 'express'
+import { spells } from '@prisma/client'
 
 const getEvents = async ({
   type,
@@ -52,7 +55,8 @@ const createEvent = async (args: CreateEventArgs) => {
 }
 
 export const buildMagickInterface = (
-  initialGameState: Record<string, unknown>
+  initialGameState: Record<string, unknown>,
+  overrides: Record<string, Function> = {}
 ): EngineContext => {
   // eslint-disable-next-line functional/no-let
   let gameState = { ...initialGameState }
@@ -69,8 +73,13 @@ export const buildMagickInterface = (
 
       return outputs
     },
+    getSpell: async spellId => {
+      const spell = await prisma.spells.findUnique({ where: { name: spellId } })
+
+      return spell
+    },
     queryGoogle: async query => {
-      const response = await queryGoogle(query)
+      const response = await queryGoogleSearch(query)
       return response
     },
     processCode: (

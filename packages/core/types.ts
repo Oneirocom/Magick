@@ -19,6 +19,7 @@ import { ModuleManager } from './src/plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './src/plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './src/sockets'
 import { PubSubContext, MagickTask } from './src/magick-component'
+import { spells } from '@prisma/client'
 
 export { MagickComponent } from './src/magick-component'
 //@seang this was causing test enviroment issues to have it shared client/server
@@ -81,6 +82,7 @@ export type EngineContext = {
     spellId: string,
     state: Record<string, any>
   ) => Record<string, any>
+  getSpell: (spellId: string) => Promise<spells | Spell>
   processCode: (
     code: unknown,
     inputs: MagickWorkerInputs,
@@ -139,7 +141,7 @@ export interface Spell {
   name: string
   graph: GraphData
   // Spells: Module[]
-  gameState: Record<string, unknown>
+  gameState?: Record<string, unknown>
   createdAt?: number
   updatedAt?: number
 }
