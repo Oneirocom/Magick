@@ -7,6 +7,7 @@ import css from './modalForms.module.css'
 import { closeTab } from '../../state/tabs'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
+import { v4 as uuidv4 } from 'uuid'
 
 const EditSpellModal = ({ tab, closeModal }) => {
   const dispatch = useDispatch()
@@ -32,6 +33,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const onSubmit = handleSubmit(async data => {
     const saveResponse: any = await saveSpell({
       ...spell,
+      id: uuidv4(),
       name: data.name,
     })
 
