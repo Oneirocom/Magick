@@ -932,20 +932,6 @@ export class discord_client {
               ) => Promise<any>
             }
           }) => {
-            log('response:', responses)
-            if (responses && (responses as string).includes('uberduck')) {
-              if (addPing) {
-                message.reply({
-                  files: [{ attachment: responses, name: 'voice.wav' }],
-                })
-                return
-              } else {
-                message.channel.send('', {
-                  files: [{ attachment: responses, name: 'voice.wav' }],
-                })
-                return
-              }
-            } else {
               if (
                 responses !== undefined &&
                 responses.length <= 2000 &&
@@ -1045,7 +1031,7 @@ export class discord_client {
                   }
                 }
               }
-            }
+            
           }
         )
       })

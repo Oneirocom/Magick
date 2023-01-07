@@ -3,20 +3,10 @@ import pg from 'pg'
 import { Sequelize } from 'sequelize'
 import { initModels } from '../models/init-models'
 
-const connectionString =
-  'postgres://' +
-    process.env.PGUSER +
-    ':' +
-    process.env.PGPASSWORD +
-    '@' +
-    process.env.PGHOST +
-    ':' +
-    process.env.PGPORT +
-    '/' +
-    process.env.PGDATABASE
+const connectionString = process.env.DATABASE_URL
 const sequelize = new Sequelize(connectionString, {
   dialect: 'postgres',
-  dialectOptions: {},
+  dialectOptions: { ssl: { rejectUnauthorized: false } },
   define: {
     charset: 'utf8mb4',
     collate: 'utf8mb4_unicode_ci',
@@ -41,7 +31,6 @@ function randomInt(min: number, max: number) {
 
 const { Client } = pg
 
-const PGSSL = process.env.PGSSL === 'true'
 export class database {
   static instance: database
 
@@ -57,16 +46,10 @@ export class database {
 
   async connect() {
     this.client = new Client({
-      user: process.env.PGUSER as any,
-      password: process.env.PGPASSWORD as any,
-      database: process.env.PGDATABASE as any,
-      port: process.env.PGPORT as any,
-      host: process.env.PGHOST,
-      ssl: PGSSL
-        ? {
+      connectionString,
+      ssl: {
             rejectUnauthorized: false,
           }
-        : false,
     })
     this.client.connect()
   }
