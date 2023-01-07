@@ -2,6 +2,8 @@ export const magickApiRootUrl = import.meta.env.PROD
   ? (import.meta.env.VITE_APP_API_ROOT_URL_PROD as string)
   : (import.meta.env.VITE_APP_API_ROOT_URL as string)
 
+console.log("ENV", import.meta.env)
+
 export const oAuthClientId = import.meta.env.VITE_APP_OAUTH_CLIENT_ID
 
 export const appRootUrl = import.meta.env.VITE_APP_SITE_ROOT_URL

@@ -56,6 +56,7 @@ export const initSharedEngine = ({
 }: InitEngineArguments) => {
   const engine = new Rete.Engine(name) as MagickEngine
 
+  console.log('STARTING ENGINE')
   if (server) {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
     engine.use<Plugin, DebuggerArgs>(debuggerPlugin, {

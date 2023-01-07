@@ -1,6 +1,7 @@
 import FileInput from '../../../screens/HomeScreen/components/FileInput'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { magickApiRootUrl } from '../../../config'
 
 import EntityWindow from './EntityWindow'
 
@@ -17,15 +18,11 @@ const EntityManagerWindow = () => {
 
   const createNew = (data = {}) => {
     console.log('Create new called')
-    axios
-      .post(`${import.meta.env.VITE_APP_API_ROOT_URL}/entity`, { data })
-      .then(async res => {
-        console.log('response is', res)
-        const res2 = await axios.get(
-          `${import.meta.env.VITE_APP_API_ROOT_URL}/entities`
-        )
-        setData(res2.data)
-      })
+    axios.post(`${magickApiRootUrl}/entity`, { data }).then(async res => {
+      console.log('response is', res)
+      const res2 = await axios.get(`${magickApiRootUrl}/entities`)
+      setData(res2.data)
+    })
   }
 
   const loadFile = selectedFile => {
@@ -39,9 +36,7 @@ const EntityManagerWindow = () => {
 
   useEffect(() => {
     ;(async () => {
-      const res = await axios.get(
-        `${import.meta.env.VITE_APP_API_ROOT_URL}/entities`
-      )
+      const res = await axios.get(`${magickApiRootUrl}/entities`)
       setData(res.data)
       console.log('set the data', res.data)
     })()

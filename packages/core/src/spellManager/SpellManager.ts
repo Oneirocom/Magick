@@ -13,6 +13,7 @@ export default class SpellManager {
   spellRunnerMap: Map<string, SpellRunner> = new Map()
   socket?: io.Socket
   cache: boolean
+  magickInterface: EngineContext
 
   constructor({
     magickInterface,
@@ -20,30 +21,31 @@ export default class SpellManager {
     cache = false,
   }: SpellManagerArgs) {
     this.socket = socket
-    this.magickInterface = magickInterface
+    this.magickInterface = this.processMagickInterface(magickInterface)
     this.cache = cache
   }
 
   // This getter will overwrite the standard runSpell with a new one.
   // this runSpell will add spells to the cache
-  get magickInterface(): EngineContext {
+  processMagickInterface(magickInterface): EngineContext {
     const runSpell: EngineContext['runSpell'] = async (
       flattenedInputs,
       spellId
     ) => {
-      if (!this.cache) return this.magickInterface
+      if (!this.cache) return magickInterface
       if (this.getSpellRunner(spellId)) {
+        console.log('SPELL FOUND, RUNNING', spellId)
         const outputs = await this.run(spellId, flattenedInputs)
         return outputs
       }
 
-      const spell = await this.magickInterface.getSpell(spellId)
+      const spell = await magickInterface.getSpell(spellId)
 
       if (!spell) {
         throw new Error(`No spell found with name ${spellId}`)
       }
 
-      this.load(spell)
+      await this.load(spell)
 
       const outputs = await this.run(spellId, flattenedInputs)
 
@@ -51,13 +53,9 @@ export default class SpellManager {
     }
 
     return {
-      ...this.magickInterface,
+      ...magickInterface,
       runSpell,
     }
-  }
-
-  set magickInterface(magickInterface: EngineContext) {
-    this.magickInterface = magickInterface
   }
 
   getSpellRunner(spellId: string) {
@@ -68,7 +66,7 @@ export default class SpellManager {
     this.spellRunnerMap = new Map()
   }
 
-  load(spell: Spell, overload = false) {
+  async load(spell: Spell, overload = false) {
     if (this.spellRunnerMap.has(spell.name) && !overload)
       return this.getSpellRunner(spell.name)
 
@@ -77,7 +75,9 @@ export default class SpellManager {
       socket: this.socket,
     })
 
-    spellRunner.loadSpell(spell)
+    await spellRunner.loadSpell(spell)
+
+    console.log('SPELL LOADED INTO RUNNER', spell.name)
 
     this.spellRunnerMap.set(spell.name, spellRunner)
 
@@ -85,8 +85,11 @@ export default class SpellManager {
   }
 
   async run(spellId: string, inputs: Record<string, any>) {
+    console.log('RUNNING SPELL', spellId, inputs)
     const runner = this.getSpellRunner(spellId)
     const result = await runner?.defaultRun(inputs)
+
+    console.log('RUNNER RESULT', result)
 
     return result
   }
