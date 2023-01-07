@@ -1,7 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
 import Rete from 'rete'
 
 import {

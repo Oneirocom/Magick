@@ -1,9 +1,3 @@
-/* eslint-disable no-async-promise-executor */
-/* eslint-disable camelcase */
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios'
 import Rete from 'rete'
 
