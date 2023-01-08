@@ -1,6 +1,7 @@
 import { randomInt } from './connectors/utils'
 import { database } from '@magickml/database'
 import Entity from './Entity'
+import { prisma } from '@magickml/prisma'
 
 const maxMSDiff = 5000
 let interval = 3000
@@ -97,6 +98,20 @@ export class World {
     this.oldEntities = this.newEntities
   }
 
+  async resetEntitySpells() {
+    const entities = await prisma.entities.findMany()
+    for (const i in entities) {
+      await prisma.entities.update({
+        where: { id: entities[i].id },
+        data: {
+          spells: {
+            set: [],
+          },
+        },
+      })
+    }
+  }
+
   async onCreate() {
     const ports: string[] = ((process.env.ENTITY_WEBSERVER_PORT_RANGE?.split(
       '-'
@@ -111,6 +126,9 @@ export class World {
     for (let i = portStart; i <= portEnd; i++) {
       this.availablePorts.push(i)
     }
+
+    // reset all entities to remove any references to spells
+    this.resetEntitySpells()
 
     initEntityLoop(
       async (id: number) => {
