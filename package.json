@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently \"nx run-many --target=serve --projects=server,client,entity-server,speech-server --parallel 4\"",
+    "dev": "NODE_OPTIONS=\"--max-old-space-size=8192\" concurrently \"nx run-many --target=serve --projects=server,client,entity-server,speech-server --parallel 4\"",
     "containers": "docker-compose up",
     "apps": "nx run-many --target=serve --projects=server,search-server,speech-server,client --parallel 4",
     "entities": "nx run-many --target=serve --projects=entity-server",
