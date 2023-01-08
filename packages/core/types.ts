@@ -60,6 +60,22 @@ export type GetEventArgs = {
   max_time_diff: number
 }
 
+export type CompletionBody = {
+  prompt: string
+  modelName: string
+  maxTokens: number
+  temperature: number
+  topP: number
+  presencePenalty: number
+  frequencyPenalty: number
+  stop: any
+}
+
+export type CompletionResponse = {
+  success: any
+  choice: any
+}
+
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
   declare pubSub: PubSubContext
@@ -82,6 +98,7 @@ export type EngineContext = {
     spellId: string,
     state: Record<string, any>
   ) => Record<string, any>
+  completion: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: (spellId: string) => Promise<spells | Spell>
   processCode: (
     code: unknown,
