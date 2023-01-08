@@ -32,8 +32,6 @@ spec:
               value: http://localhost:8001
             - name: PORT
               value: "8001"
-            - name: DATABASE_URL
-              value: postgresql://lalalune:v2_3xkRe_BtzcVMDdrzMkhCMvbNZHE4n@db.bit.io/lalalune/magickml
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: google_credentials.json
             - name: SPEECH_SERVER_PORT

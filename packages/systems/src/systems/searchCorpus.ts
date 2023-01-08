@@ -33,7 +33,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
     return
   }
 
-  if (!database.instance || database.instance === undefined) {
+  if (!database || database === undefined) {
     new database()
   }
 
@@ -47,17 +47,17 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
   app.use(koaBody({ multipart: true }))
 
   router.get('/document-store', async function (ctx: Koa.Context) {
-    const stores = await database.instance.getDocumentStores()
+    const stores = await database.getDocumentStores()
     return (ctx.body = stores.sort((a, b) => a.id - b.id))
   })
   router.get('/document', async function (ctx: Koa.Context) {
-    const storeId = ctx.query.storeId
+    const storeId = ctx.query.storeId as unknown as number
     if (!storeId || storeId === undefined) {
       ctx.response.status = 400
       return (ctx.body = [])
     }
 
-    const documents: any = await database.instance.getDocumentsOfStore(storeId)
+    const documents: any = await database.getDocumentsOfStore(storeId)
     return (ctx.body = documents)
   })
   router.get('/document/:docId', async function (ctx: Koa.Context) {
@@ -66,7 +66,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
       ctx.response.status = 400
       return (ctx.body = {})
     }
-    const doc = await database.instance.getSingleDocument(docId)
+    const doc = await database.getSingleDocument(docId)
     return (ctx.body = doc)
   })
   router.post('/document', async function (ctx: Koa.Context) {
@@ -85,7 +85,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
 
     let id = -1
     try {
-      id = await database.instance.addDocument(
+      id = await database.addDocument(
         title,
         description,
         isIncluded,
@@ -113,19 +113,19 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
     const store_name = body?.store_name
 
     if (!storeId || storeId === undefined) {
-      storeId = await database.instance.getSingleDocumentStore(
+      storeId = await database.getSingleDocumentStore(
         store_name && store_name?.length > 0 ? store_name : 'rss_feed'
       )
       console.log('generated store id:', storeId)
       if (storeId?.length <= 0 || storeId === undefined || !storeId) {
-        storeId = await database.instance.addDocumentStore(
+        storeId = await database.addDocumentStore(
           store_name && store_name?.length > 0 ? store_name : 'rss_feed'
         )
       } else {
         if (storeId[0] && storeId[0] !== undefined) {
           storeId = storeId[0].id
         } else {
-          storeId = await database.instance.addDocumentStore(
+          storeId = await database.addDocumentStore(
             store_name && store_name?.length > 0 ? store_name : 'rss_feed'
           )
         }
@@ -145,7 +145,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
           continue
         }
 
-        id = await database.instance.addDocument(
+        id = await database.addDocument(
           documents[i].title,
           documents[i].description,
           true,
@@ -172,11 +172,11 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
     return (ctx.body = { documentId: id })
   })
   router.delete('/document', async function (ctx: Koa.Context) {
-    const documentId = ctx.query.documentId
-    const doc = await database.instance.getSingleDocument(documentId)
+    const documentId = ctx.query.documentId as unknown as number
+    const doc = await database.getSingleDocument(documentId)
 
     try {
-      await database.instance.removeDocument(documentId)
+      await database.removeDocument(documentId)
       if (doc) {
         await deleteDocument(doc.title ?? 'Document', doc.description)
       }
@@ -194,7 +194,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
     const description = body?.description || ''
     const isIncluded = body?.isIncluded && true
     const storeId = body?.storeId
-    const doc = await database.instance.getSingleDocument(documentId)
+    const doc = await database.getSingleDocument(documentId)
 
     if (!storeId || storeId === undefined) {
       ctx.response.status = 400
@@ -204,7 +204,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
     }
 
     try {
-      await database.instance.updateDocument(
+      await database.updateDocument(
         documentId,
         title,
         description,
@@ -242,7 +242,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
 
     let id = -1
     try {
-      id = await database.instance.addContentObj(
+      id = await database.addContentObj(
         title,
         description,
         isIncluded,
@@ -268,7 +268,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
     const documentId = body?.documentId
 
     try {
-      await database.instance.editContentObj(
+      await database.editContentObj(
         objId,
         title,
         description,
@@ -283,17 +283,17 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
     return (ctx.body = 'ok')
   })
   router.get('/content-object', async function (ctx: Koa.Context) {
-    const documentId = ctx.query.documentId
-    const contentObjects: any = await database.instance.getContentObjOfDocument(
+    const documentId = ctx.query.documentId as unknown as number
+    const contentObjects: any = await database.getContentObjOfDocument(
       documentId
     )
 
     return (ctx.body = contentObjects)
   })
   router.delete('/content-object', async function (ctx: Koa.Context) {
-    const objId = ctx.query.objId
+    const objId = ctx.query.objId as unknown as number
     try {
-      await database.instance.removeContentObject(objId)
+      await database.removeContentObject(objId)
     } catch (e) {
       console.log(e)
       return (ctx.body = 'internal error')
@@ -302,19 +302,19 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
   })
 
   router.get('/document-store', async function (ctx: Koa.Context) {
-    const stores = await database.instance.getDocumentStores()
+    const stores = await database.getDocumentStores()
     return (ctx.body = stores)
   })
   router.get('/document-store/:name', async function (ctx: Koa.Context) {
     const name = ctx.params.name
-    const store = await database.instance.getSingleDocumentStore(name)
+    const store = await database.getSingleDocumentStore(name)
     return (ctx.body = store)
   })
   router.post('/document-store', async function (ctx: Koa.Context) {
     const name = ctx.request.body?.name || ''
     let id = -1
     try {
-      id = await database.instance.addDocumentStore(name)
+      id = await database.addDocumentStore(name)
     } catch (e) {
       console.log(e)
       return (ctx.body = 'internal error')
@@ -326,7 +326,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
     const storeId = ctx.request.body?.id
     const name = ctx.request.body?.name || ''
     try {
-      await database.instance.updateDocumentStore(storeId, name)
+      await database.updateDocumentStore(storeId, name)
     } catch (e) {
       console.log(e)
       return (ctx.body = 'internal error')
@@ -334,9 +334,9 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
     return (ctx.body = 'ok')
   })
   router.delete('/document-store', async function (ctx: Koa.Context) {
-    const storeId = ctx.query.storeId
+    const storeId = ctx.query.storeId as unknown as number
     try {
-      const documents = await database.instance.getDocumentsOfStore(storeId)
+      const documents = await database.getDocumentsOfStore(storeId)
       if (documents && documents.length > 0) {
         for (let i = 0; i < documents.length; i++) {
           await deleteDocument(
@@ -346,7 +346,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
         }
       }
 
-      await database.instance.removeDocumentStore(storeId)
+      await database.removeDocumentStore(storeId)
     } catch (e) {
       console.log(e)
       return (ctx.body = 'internal error')
