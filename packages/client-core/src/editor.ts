@@ -205,18 +205,21 @@ export const initEditor = function ({
     const graph = JSON.parse(JSON.stringify(_graph))
     await engine.abort()
     editor.fromJSON(graph)
-    const nodes = graph.nodes;
+    const nodes = graph.nodes
     console.log('node is', nodes)
     // get the first node in the graph (which is an object)
-    const firstNode = nodes[Object.keys(nodes)[0]];
+    const firstNode = nodes[Object.keys(nodes)[0]]
     console.log('firstNode is', firstNode)
     console.log('editor.view', editor.view)
 
-    firstNode.position = [firstNode.position[0] + 250, firstNode.position[1] + 500]
+    firstNode.position = [
+      firstNode.position[0] + 250,
+      firstNode.position[1] + 500,
+    ]
 
     // add an event listener to log editor view on }
-    document.addEventListener('keydown', (e) => {
-      if(e.key === '}' && e.shiftKey) {
+    document.addEventListener('keydown', e => {
+      if (e.key === '}' && e.shiftKey) {
         console.log('editor.view', editor.view)
       }
     })
@@ -227,7 +230,6 @@ export const initEditor = function ({
     setTimeout(() => {
       zoomAt(editor, [firstNode])
     }, 100)
-
   }
 
   // Start the engine off on first load
