@@ -39,7 +39,7 @@ export async function initWeaviateClient(
 }
 async function train(data: SearchSchema[]) {
   if (!client) {
-    initWeaviateClient(false, false)
+    initWeaviateClient(false)
   }
 
   if (!data || data === undefined) {
@@ -122,7 +122,7 @@ async function trainFromUrl(url: string): Promise<SearchSchema[]> {
 
 export async function singleTrain(data: SearchSchema) {
   if (!client) {
-    initWeaviateClient(false, false)
+    initWeaviateClient(false)
   }
 
   if (!data || data === undefined) {
@@ -149,7 +149,7 @@ export async function singleTrain(data: SearchSchema) {
 
 export async function search(query: string): Promise<SearchSchema> {
   if (!client || client === undefined) {
-    await initWeaviateClient(false, false)
+    await initWeaviateClient(false)
   }
 
   const info = await client.graphql
@@ -222,7 +222,7 @@ async function getDocumentId(
   description: string
 ): Promise<string> {
   if (!client) {
-    await initWeaviateClient(false, false)
+    await initWeaviateClient(false)
   }
 
   const docs = await client.data.getter().do()
@@ -245,7 +245,7 @@ export async function updateDocument(
   newDescription: string
 ) {
   if (!client) {
-    await initWeaviateClient(false, false)
+    await initWeaviateClient(false)
   }
 
   if (
@@ -295,7 +295,7 @@ export async function updateDocument(
 }
 export async function deleteDocument(title: string, description: string) {
   if (!client) {
-    await initWeaviateClient(false, false)
+    await initWeaviateClient(false)
   }
 
   if (!title || title.length <= 0 || !description || description.length <= 0) {
