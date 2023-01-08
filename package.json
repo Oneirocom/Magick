@@ -13,7 +13,8 @@
     "test": "nx test",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
-    "sortPackage": "npx sort-package-json"
+    "sortPackage": "npx sort-package-json",
+    "postinstall": "npx prisma generate --schema ./packages/prisma/prisma/schema.prisma"
   },
   "resolutions": {
     "@types/react": "18.0.2"
@@ -21,6 +22,8 @@
   "dependencies": {
     "@discordjs/voice": "^0.9.0",
     "@emotion/styled": "^11.10.4",
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+    "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@feathersjs/client": "^4.5.14",
     "@feathersjs/feathers": "^4.5.12",
     "@google-cloud/speech": "^4.10.0",
@@ -96,6 +99,7 @@
     "react-hook-form": "^7.15.4",
     "react-hotkeys-hook": "^3.3.2",
     "react-icons": "^4.2.0",
+    "react-jupyter-notebook": "^0.4.0",
     "react-redux": "^7.2.5",
     "react-router": "^6.0.0",
     "react-router-dom": "^6.0.0",
@@ -115,6 +119,8 @@
     "rete-connection-plugin": "^0.9.0",
     "rete-connection-reroute-plugin": "^0.4.0",
     "rete-context-menu-plugin": "^0.6.0-rc.1",
+    "rollup-plugin-node-polyfills": "^0.2.1",
+    "rollup-plugin-polyfill-node": "^0.11.0",
     "sequelize": "^6.15.0",
     "sequelize-auto": "^0.8.8",
     "sharedb": "^2.2.5",

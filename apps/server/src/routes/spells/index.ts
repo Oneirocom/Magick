@@ -69,17 +69,18 @@ const saveHandler = async (ctx: Koa.Context) => {
     })
     return (ctx.body = { id: newSpell.id })
   } else {
-    // TODO eventually we should actually validate the body before dumping it in.
-    await spell.update(body)
-    return (ctx.body = { id: spell.id })
+    if (Object.keys(body.graph.nodes).length === 0)
+      throw new CustomError('input-failed', 'No nodes provided in request body')
+    else {
+      await spell.update(body)
+      return (ctx.body = { id: spell.id })
+    }
   }
 }
 
 const saveDiffHandler = async (ctx: Koa.Context) => {
   const { body } = ctx.request
   const { name, diff } = body
-
-  console.log('body is', body)
 
   if (!body) throw new CustomError('input-failed', 'No parameters provided')
 
@@ -91,6 +92,7 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
     throw new CustomError('input-failed', `No spell with ${name} name found.`)
   if (!diff)
     throw new CustomError('input-failed', 'No diff provided in request body')
+
   try {
     const spellUpdate = otJson0.type.apply(spell, diff)
 
@@ -185,7 +187,6 @@ const getSpellsHandler = async (ctx: Koa.Context) => {
 }
 
 const getSpellHandler = async (ctx: Koa.Context) => {
-  console.log('GETTING SPELLLLLLLL')
   const name = ctx.params.name
   try {
     const spell = await database.instance.models.spells.findOne({
@@ -193,15 +194,9 @@ const getSpellHandler = async (ctx: Koa.Context) => {
     })
 
     if (!spell) {
-      const newSpell = await database.instance.models.spells.create({
-        name,
-        graph: { id: 'demo@0.1.0', nodes: {} },
-        gameState: {},
-        modules: [],
-      })
-      ctx.body = newSpell
+      throw new Error('Spell not found')
     } else {
-      ctx.body = spell
+      return (ctx.body = spell)
     }
   } catch (e) {
     console.error(e)

@@ -3,25 +3,11 @@ import pg from 'pg'
 import { Sequelize } from 'sequelize'
 import { initModels } from '../models/init-models'
 
-const creatorToolsUrl =
-  !!process.env.CREATOR_TOOLS_DB_URL &&
-  process.env.CREATOR_TOOLS_DB_URL != '' &&
-  process.env.CREATOR_TOOLS_DB_URL
-const connectionString =
-  creatorToolsUrl ||
-  'postgres://' +
-    process.env.PGUSER +
-    ':' +
-    process.env.PGPASSWORD +
-    '@' +
-    process.env.PGHOST +
-    ':' +
-    process.env.PGPORT +
-    '/' +
-    process.env.PGDATABASE
-const sequelize = new Sequelize(creatorToolsUrl || connectionString, {
+const connectionString = process.env.DATABASE_URL
+const useSSL = process.env.DATABASE_USE_SSL === 'true'
+const sequelize = new Sequelize(connectionString, {
   dialect: 'postgres',
-  dialectOptions: creatorToolsUrl ? { ssl: { rejectUnauthorized: false } } : {},
+  dialectOptions: useSSL ? { ssl: { rejectUnauthorized: false } } : {},
   define: {
     charset: 'utf8mb4',
     collate: 'utf8mb4_unicode_ci',
@@ -46,7 +32,6 @@ function randomInt(min: number, max: number) {
 
 const { Client } = pg
 
-const PGSSL = process.env.PGSSL === 'true'
 export class database {
   static instance: database
 
@@ -62,18 +47,14 @@ export class database {
 
   async connect() {
     this.client = new Client({
-      user: process.env.PGUSER as any,
-      password: process.env.PGPASSWORD as any,
-      database: process.env.PGDATABASE as any,
-      port: process.env.PGPORT as any,
-      host: process.env.PGHOST,
-      ssl: PGSSL
-        ? {
-            rejectUnauthorized: false,
-          }
-        : false,
+      connectionString,
+      ssl: useSSL ? { rejectUnauthorized: false, }: false
     })
     this.client.connect()
+  }
+
+  close() {
+    this.client.end()
   }
 
   // create a type called CreateEventArgs in typescript
@@ -242,9 +223,9 @@ export class database {
     const findEventQueryValues = [id]
     const rows = await this.client.query(findEventQuery, findEventQueryValues)
     if (rows && rows.rows && rows.rows.length > 0) {
-      const { agent, sender, client, channel, text, type, date } = data
-      const query = `UPDATE events SET agent = $1, sender = $2, client = $3, channel = $4, text = $5, type = $6, date = $7 WHERE id = $8`
-      const values = [agent, sender, client, channel, text, type, date, id]
+      const { agent, speaker, sender, client, channel, text, type, date } = data
+      const query = `UPDATE events SET agent = $1, speaker = $2, sender = $3, client = $4, channel = $5, text = $6, type = $7, date = $8 WHERE id = $9`
+      const values = [agent, speaker, sender, client, channel, text, type, date, id]
       const res = await this.client.query(query, values)
       return res.rowCount
     } else return 0
@@ -252,7 +233,7 @@ export class database {
 
   async addWikipediaData(agent: any, data: any) {
     const query =
-      'INSERT INTO events(type, agent, client, channel, sender, text, date) VALUES($1, $2, $3, $4, $5, $6, $7)'
+      'INSERT INTO events(type, agent, speaker, client, channel, sender, text, date) VALUES($1, $2, $3, $4, $5, $6, $7, $8)'
     const values = [
       'agent_data',
       agent,
@@ -267,7 +248,7 @@ export class database {
   }
   async getWikipediaData(agent: any) {
     const query =
-      'SELECT * FROM events WHERE type=$1 AND agent=$2 AND client=$3 AND channel=$4 AND sender=$5'
+      'SELECT * FROM events WHERE type=$1 AND agent=$2 AND client=$3 AND channel=$4 AND speaker=$5'
     const values = ['agent_data', agent, 'wikipedia', 'wikipedia', 'wikipedia']
 
     const rows = await this.client.query(query, values)
@@ -279,7 +260,7 @@ export class database {
   }
   async wikipediaDataExists(agent: any) {
     const query =
-      'SELECT * FROM events WHERE type=$1 AND agent=$2 AND client=$3 AND channel=$4 AND sender=$5'
+      'SELECT * FROM events WHERE type=$1 AND agent=$2 AND client=$3 AND channel=$4 AND speaker=$5'
     const values = ['agent_data', agent, 'wikipedia', 'wikipedia', 'wikipedia']
 
     const rows = await this.client.query(query, values)
