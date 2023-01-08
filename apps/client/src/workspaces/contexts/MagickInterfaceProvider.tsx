@@ -4,6 +4,7 @@ import {
   EditorContext,
   Spell,
   MagickWorkerInputs,
+  CompletionBody,
 } from '@magickml/core'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
@@ -299,6 +300,33 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return await response.data.result
   }
 
+  const completion = async (body: CompletionBody) => {
+    const url = `${
+      import.meta.env.VITE_APP_API_URL || 'https://0.0.0.0:8001'
+    }/text_completion`
+
+    const apiKey = window.localStorage.getItem('openai-api-key')
+
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...body,
+        apiKey,
+      }),
+    })
+
+    const data = await resp.json()
+
+    console.log('resp.data is ', data)
+
+    const { success, choice } = data
+
+    return { success, choice }
+  }
+
   const publicInterface = {
     onTrigger,
     onInspector,
@@ -324,6 +352,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     queryGoogle,
     sendToAvatar,
     getSpell,
+    completion,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
