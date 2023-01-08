@@ -6,44 +6,7 @@ import { SpellManager } from '@magickml/core'
 import discord_client from './connectors/discord'
 import { twitter_client } from './connectors/twitter'
 import { getAudioUrl } from '../../server/src/routes/getAudioUrl'
-
-const createSpellHandlerFactory =
-  spellManager =>
-  async ({ spell }) => {
-    const spellRunner = await spellManager.load(spell)
-
-    async function spellHandler({
-      message,
-      speaker,
-      agent,
-      client,
-      channelId,
-      entity,
-      eth_private_key,
-      eth_public_address,
-      roomInfo,
-      channel,
-    }) {
-      const spellInputs = {
-        input: {
-          input: message,
-          speaker: speaker,
-          agent: agent,
-          client: client,
-          channel: channel,
-          channelId: channelId,
-          entity: entity,
-          roomInfo: roomInfo,
-          eth_private_key,
-          eth_public_address,
-        } as any,
-      }
-      const spellOutputs = await spellRunner.defaultRun(spellInputs)
-      return spellOutputs
-    }
-
-    return spellHandler
-  }
+import { prisma } from '@magickml/prisma'
 
 // import { telegram_client } from './connectors/telegram'
 // import { twilio_client } from './connectors/twilio'
@@ -72,7 +35,50 @@ export class Entity {
   app: any
   loopHandler: any
   spellManager: SpellManager
-  createSpellHandler: Function
+
+  async createSpellHandler({ spell }) {
+    const spellRunner = await this.spellManager.load(spell)
+    await prisma.entities.update({
+      where: { id: this.id },
+      data: {
+        spells: {
+          connect: {
+            id: spell.id,
+          },
+        },
+      },
+    })
+
+    return async function spellHandler({
+      message,
+      speaker,
+      agent,
+      client,
+      channelId,
+      entity,
+      eth_private_key,
+      eth_public_address,
+      roomInfo,
+      channel,
+    }) {
+      const spellInputs = {
+        input: {
+          input: message,
+          speaker: speaker,
+          agent: agent,
+          client: client,
+          channel: channel,
+          channelId: channelId,
+          entity: entity,
+          roomInfo: roomInfo,
+          eth_private_key,
+          eth_public_address,
+        } as any,
+      }
+      const spellOutputs = await spellRunner.defaultRun(spellInputs)
+      return spellOutputs
+    }
+  }
 
   constructor(data: any) {
     this.onDestroy()
@@ -84,8 +90,6 @@ export class Entity {
       magickInterface: buildMagickInterface({}),
       cache: false,
     })
-
-    this.createSpellHandler = createSpellHandlerFactory(this.spellManager)
 
     process.env.OPENAI_API_KEY = data.openai_api_key
 
@@ -388,7 +392,7 @@ export class Entity {
   //     throw new Error('Reddit already running for this entity on this instance')
   //   }
 
-  //   const spellHandler = this.createSpellHandler({
+  //   const spellHandler = await this.createSpellHandler({
   //     spell: reddit_spell_handler_incoming,
   //   })
 
