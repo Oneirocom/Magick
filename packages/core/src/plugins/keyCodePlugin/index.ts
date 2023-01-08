@@ -10,8 +10,6 @@ function install(editor: IRunContextEditor) {
     currentNode = node
   })
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   editor.on('delete', () => {
     if (!currentNode) return
     editor.removeNode(currentNode)

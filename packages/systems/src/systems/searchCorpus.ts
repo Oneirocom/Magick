@@ -95,13 +95,6 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
         title: title ?? 'Document',
         description: description,
       })
-      /*const resp = await axios.get(
-        `${process.env.PYTHON_SERVER_URL}/update_search_model`
-      )
-      if (resp.data.status != 'ok') {
-        ctx.response.status = 400
-        return (ctx.body = 'internal error')
-      }*/
     } catch (e) {
       console.log(e)
       return (ctx.body = 'internal error')
@@ -167,13 +160,6 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
           description: documents[i].description,
         })
       }
-      /*const resp = await axios.get(
-        `${process.env.PYTHON_SERVER_URL}/update_search_model`
-      )
-      if (resp.data.status != 'ok') {
-        ctx.response.status = 400
-        return (ctx.body = 'internal error')
-      }*/
     } catch (e) {
       console.log(e)
       return (ctx.body = 'internal error')
@@ -194,13 +180,6 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
       if (doc) {
         await deleteDocument(doc.title ?? 'Document', doc.description)
       }
-      /*const resp = await axios.get(
-        `${process.env.PYTHON_SERVER_URL}/update_search_model`
-      )
-      await deleteDocument()
-      if (resp.data.status != 'ok') {
-        return (ctx.body = 'internal error')
-      }*/
     } catch (e) {
       console.log(e)
       return (ctx.body = 'internal error')
@@ -240,14 +219,6 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
           description
         )
       }
-      /*const resp = await axios.get(
-        `${process.env.PYTHON_SERVER_URL}/update_search_model`
-      )
-      await updateDocument()
-      if (resp.data.status != 'ok') {
-        return (ctx.body = 'internal error')
-      }*/
-      //update document
     } catch (e) {
       console.log(e)
       return (ctx.body = 'internal error')
@@ -260,21 +231,6 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
 
     const searchResult = await search(question)
     return (ctx.body = searchResult)
-  })
-  router.post('/vector_search', async function (ctx: Koa.Context) {
-    const question = ctx.request.body?.question as string
-    console.log('question:', question)
-    const cleanQuestion = removePunctuation(question)
-
-    const resp = await axios.post(`${process.env.PYTHON_SERVER_URL}/search`, {
-      isKeywords: false,
-      query: cleanQuestion,
-    })
-
-    return (ctx.body =
-      resp.data.status == 'ok' && resp.data.data.length > 0
-        ? resp.data.data
-        : 'No documents where found to search from!')
   })
 
   router.post('/content-object', async function (ctx: Koa.Context) {

@@ -14,9 +14,7 @@ import { Handler, Method, Middleware } from './types'
 import {
   initTextToSpeech,
   initFileServer,
-  spawnPythonServer,
   initWeaviateClient,
-  cors_server,
 } from '@magickml/systems'
 import https from 'https'
 import http from 'http'
@@ -47,10 +45,7 @@ async function init() {
     process.env.WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true',
     process.env.CLASSIFIER_IMPORT_DATA?.toLowerCase().trim() === 'true'
   )
-
-  if (process.env.RUN_PYTHON_SERVER === 'true') {
-    spawnPythonServer()
-  }
+  database.instance.close()
 
   // generic error handling
   app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
@@ -69,15 +64,6 @@ async function init() {
     origin: '*',
   }
   app.use(cors(options))
-
-  new cors_server(
-    parseInt(process.env.CORS_PORT as string),
-    '0.0.0.0',
-    process.env.USESSL === 'true' &&
-      fs.existsSync(path.join(__dirname, './certs/')) &&
-      fs.existsSync(path.join(__dirname, './certs/key.pem')) &&
-      fs.existsSync(path.join(__dirname, './certs/cert.pem'))
-  )
 
   process.on('unhandledRejection', (err: Error) => {
     console.error('Unhandled Rejection:' + err + ' - ' + err.stack)

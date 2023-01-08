@@ -5,7 +5,6 @@ import { SpellManager } from '@magickml/core'
 
 import discord_client from './connectors/discord'
 import { twitter_client } from './connectors/twitter'
-import { getAudioUrl } from '../../server/src/routes/getAudioUrl'
 import { prisma } from '@magickml/prisma'
 
 // import { telegram_client } from './connectors/telegram'
@@ -684,14 +683,7 @@ export class Entity {
 
         for (let i = 0; i < filtered.length; i++) {
           let url: any = ''
-          if (data.voice_provider === 'uberduck') {
-            url = await getAudioUrl(
-              process.env.UBER_DUCK_KEY as string,
-              process.env.UBER_DUCK_SECRET_KEY as string,
-              data.voice_character,
-              filtered[i]
-            )
-          } else if (data.voice_provider === 'google') {
+          if (data.voice_provider === 'google') {
             url = await tts(
               filtered[i],
               data.voice_character,

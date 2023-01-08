@@ -9,7 +9,6 @@ import { launch } from 'puppeteer-stream'
 import Xvfb from 'xvfb'
 
 import { detectOsOption } from '../../server/src/entities/connectors/utils'
-import { getAudioUrl } from '../../server/src/routes/getAudioUrl'
 import { tts } from '../../server/src/systems/googleTextToSpeech'
 import { tts_tiktalknet } from '../../server/src/systems/tiktalknet'
 import { removeEmojisFromString } from '../../server/src/utils/utils'
@@ -205,14 +204,6 @@ export class zoom {
               (process.env.FILE_SERVER_URL?.endsWith('/')
                 ? process.env.FILE_SERVER_URL
                 : process.env.FILE_SERVER_URL + '/') + fileId
-            response = url
-          } else if (this.settings.voice_provider === 'uberduck') {
-            const url = await getAudioUrl(
-              process.env.UBER_DUCK_KEY as string,
-              process.env.UBER_DUCK_SECRET_KEY as string,
-              this.settings.voice_character,
-              response as string
-            )
             response = url
           } else {
             const fileId = await tts_tiktalknet(

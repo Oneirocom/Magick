@@ -33,31 +33,10 @@ spec:
           env:
             - name: API_URL
               value: http://localhost:8001
-            - name: EXTEND_ESLINT
-              value: "true"
             - name: PORT
               value: "8001"
-            - name: AGENT_RUNNER_PORT
-              value: "8003"
-            - name: CREATOR_TOOLS_DB_URL
-              value:
-            - name: PGUSER
-              value: postgres
-            - name: PGHOST
-              value: nothingprojects-lazarus.cbfjobrijahm.us-east-1.rds.amazonaws.com
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: lazarus-secret
-                  key: POSTGRES_PASSWORD
-            - name: PGDATABASE
-              value: postgres
-            - name: PGPORT
-              value: "5432"
-            - name: PGSSL
-              value: "false"
-            - name: REFRESH_DB
-              value: "false"
+            - name: DATABASE_URL
+              value: postgresql://lalalune:v2_3xkRe_BtzcVMDdrzMkhCMvbNZHE4n@db.bit.io/lalalune/magickml
             - name: CORS_PORT
               value: "65526"
             - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -70,10 +49,6 @@ spec:
               value: "65531"
             - name: ENABLE_SEARCH_CORPUS
               value: "true"
-            - name: UBER_DUCK_KEY
-              value:
-            - name: UBER_DUCK_SECRET_KEY
-              value:
             - name: OPENAI_API_KEY
               valueFrom:
                 secretKeyRef:
@@ -93,12 +68,6 @@ spec:
               value: http://localhost:65530
             - name: USESSL
               value: "false"
-            - name: WITAI_KEY
-              value:
-            - name: RUN_PYTHON_SERVER
-              value: "false"
-            - name: PYTHON_SERVER_URL
-              value: http://localhost:7777
             - name: WEAVIATE_CLIENT_SCHEME
               value: http
             - name: WEAVIATE_CLIENT_HOST
@@ -113,26 +82,10 @@ spec:
               value: 65510-65529
             - name: ENTITY_HOSTNAME
               value: magick-runner
-            - name: EMAIL_HOST
-              value: smtp.gmail.com
-            - name: EMAIL_PORT
-              value: "587"
-            - name: EMAIL_SECURE
-              value: "false"
-            - name: EMAIL_USER
-              value:
-            - name: EMAIL_PASSWORD
-              value:
             - name: TIKTALKNET_URL
               value: http://0.0.0.0:8050/tts
-            - name: REACT_APP_CORS_URL
-              value: https://localhost:65526
             - name: REACT_APP_SEARCH_SERVER_URL
               value: http://localhost:65531
-            - name: AUTHENTICATION
-              value: "false"
-            - name: AUTHENTICATION_SECRET_KEY
-              value: magick
       imagePullSecrets:
         - name: regcred
 

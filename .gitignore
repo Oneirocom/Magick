@@ -38,9 +38,7 @@ testem.log
 .DS_Store
 Thumbs.db
 
-.env*
-!.env.example
-
+.env.local
 
 # ignore lock files, since users are using both npm and yarn, just causes commit noise
 yarn.lock

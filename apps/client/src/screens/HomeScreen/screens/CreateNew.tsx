@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { GraphData } from '@magickml/core'
 import {
@@ -28,14 +28,13 @@ export type Template = {
   graph: GraphData
 }
 
-export const magickTemplates = [
-  { label: 'Starter', bg: emptyImg, graph: defaultGraph },
-  // { label: 'Language example', bg: langImg, graph: defaultChain },
+export const magickTemplates: Template[] = [
+  { label: 'Starter', bg: emptyImg, graph: defaultGraph as any as GraphData },
 ]
 
 const CreateNew = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
-    null
+    magickTemplates[0]
   )
   const [error, setError] = useState<string | null>(null)
 
@@ -78,7 +77,7 @@ const CreateNew = () => {
     <Panel shadow flexColumn>
       <h1> Create New </h1>
       <div className={css['spell-details']}>
-        <form>
+          <form onSubmit={(e) => {e.preventDefault(); onCreate();}}>
           <label className={css['label']} htmlFor="">
             Spell name
           </label>

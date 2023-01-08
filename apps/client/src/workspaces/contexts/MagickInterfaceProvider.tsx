@@ -141,7 +141,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const processCode = (code, inputs, data, state) => {
     const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
       (acc, [key, value]) => {
-        // @ts-ignore
         acc[key as string] = value[0] as any
         return acc
       },

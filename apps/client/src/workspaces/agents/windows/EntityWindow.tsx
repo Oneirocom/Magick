@@ -738,7 +738,6 @@ const EntityWindow = ({ id, updateCallback }) => {
             >
               <option hidden></option>
               <option value={'google'}>Google</option>
-              <option value={'uberduck'}>Uberduck</option>
               <option value={'tiktalknet'}>Tiktalknet</option>
             </select>
           </div>
@@ -775,51 +774,6 @@ const EntityWindow = ({ id, updateCallback }) => {
                 <option value={'en-US-Wavenet-H'}>en-US-Wavenet-H</option>
                 <option value={'en-US-Wavenet-I'}>en-US-Wavenet-I</option>
                 <option value={'en-US-Wavenet-J'}>en-US-Wavenet-J</option>
-              </select>
-            ) : voice_provider === 'uberduck' ? (
-              <select
-                name="voice_provider"
-                id="voice_provider"
-                value={voice_character}
-                onChange={event => {
-                  setVoiceCharacter(event.target.value)
-                }}
-              >
-                <option hidden></option>
-                <option value={'101-dalmatians-lucky'}>
-                  101-dalmatians-lucky
-                </option>
-                <option value={'101-dalmatians-roll'}>
-                  101-dalmatians-roll
-                </option>
-                <option value={'11-45-g'}>11-45-g</option>
-                <option value={'11th-doctor'}>11th-doctor</option>
-                <option value={'12th-doctor'}>12th-doctor</option>
-                <option value={'13-amp'}>13-amp</option>
-                <option value={'13-zt'}>13-zt</option>
-                <option value={'21-savage'}>21-savage</option>
-                <option value={'2pac'}>2pac</option>
-                <option value={'2pac-arpa'}>2pac-arpa</option>
-                <option value={'2pac-speaking'}>2pac-speaking</option>
-                <option value={'3kliksphilip'}>3kliksphilip</option>
-                <option value={'church'}>church</option>
-                <option value={'antman'}>antman</option>
-                <option value={'applejack'}>applejack</option>
-                <option value={'juice-wrld-rapping'}>juice-wrld-rapping</option>
-                <option value={'juice-wrld-singing'}>juice-wrld-singing</option>
-                <option value={'juicewrld'}>juicewrld</option>
-                <option value={'kanye-west-rap'}>kanye-west-rap</option>
-                <option value={'karen-20'}>karen-20</option>
-                <option value={'killjoy'}>killjoy</option>
-                <option value={'king-julien-sbc'}>king-julien-sbc</option>
-                <option value={'kratos'}>kratos</option>
-                <option value={'lemon-demon'}>lemon-demon</option>
-                <option value={'lil-jon'}>lil-jon</option>
-                <option value={'lil-peep'}>lil-peep</option>
-                <option value={'luigi'}>luigi</option>
-                <option value={'yoda'}>yoda</option>
-                <option value={'zoog-disney'}>zoog-disney</option>
-                <option value={'zro'}>zro</option>
               </select>
             ) : (
               <select
