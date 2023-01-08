@@ -628,7 +628,7 @@ const EntityWindow = ({ id, updateCallback }) => {
       event.preventDefault()
       console.log('value is: ', value)
       try {
-        const url = encodeURI(`https://localhost:8001/spells/${spell_handler}`)
+        const url = encodeURI(`http://localhost:8001/spells/${spell_handler}`)
         console.log('url is: ', url)
         const response = await axios
           .post(`${url}`, {
