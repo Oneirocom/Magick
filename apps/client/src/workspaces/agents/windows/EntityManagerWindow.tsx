@@ -9,7 +9,7 @@ const EntityManagerWindow = () => {
 
   const resetData = async () => {
     const res = await fetch(
-      `${import.meta.env.VITE_APP_API_ROOT_URL}/entities`
+      `${import.meta.env.VITE_APP_API_URL}/entities`
     )
     console.log('res is ', res)
     setData(await res.json())

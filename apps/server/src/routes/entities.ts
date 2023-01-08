@@ -14,15 +14,6 @@ import { CustomError } from '../utils/CustomError'
 
 export const modules: Record<string, unknown> = {}
 
-// This function is used to return a list of entities
-// from the database.
-// It returns a list of entities from the database.
-// The function is called by the getEntitiesHandler function.
-async function getEntities() {
-  let entities = await database.instance.getEntities()
-  return entities
-}
-
 const getEntitiesHandler = async (ctx: Koa.Context) => {
   try {
     let data = await database.instance.getEntities()
