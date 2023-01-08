@@ -14,10 +14,14 @@
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
-    "postinstall": "npx prisma generate --schema ./packages/prisma/prisma/schema.prisma"
+    "postinstall": "npx prisma generate",
+    "db:init": "npx prisma db push"
   },
   "resolutions": {
     "@types/react": "18.0.2"
+  },
+  "prisma": {
+    "schema": "./packages/prisma/prisma/schema.prisma"
   },
   "dependencies": {
     "@discordjs/voice": "^0.9.0",
