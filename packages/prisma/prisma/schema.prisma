@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("ATABASE_URL")
 }
 
 model content_objects {
@@ -115,29 +115,29 @@ model entities {
   twilio_bot_name                  String?
   twilio_empty_responses           String?
   twilio_spell_handler_incoming    String?
-  spells                           spells[]
+  spells                           spells[] @relation("entitiesTospells")
 }
 
 model events {
   id      Int     @id @default(autoincrement())
   type    String?
-  speaker String?
   agent   String?
   client  String?
   channel String?
   sender  String?
   text    String?
   date    String?
+  speaker String?
 }
 
 model spells {
   id         String     @id @db.Uuid
   name       String     @unique
   graph      Json?
-  entities   entities[]
   created_at DateTime?  @default(now()) @db.Timestamptz(6)
   updated_at DateTime?  @default(now()) @db.Timestamptz(6)
   deleted_at DateTime?  @db.Timestamptz(6)
   modules    Json?
   game_state Json?
+  entities   entities[] @relation("entitiesTospells")
 }
