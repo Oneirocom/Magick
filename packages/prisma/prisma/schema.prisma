@@ -115,6 +115,7 @@ model entities {
   twilio_bot_name                  String?
   twilio_empty_responses           String?
   twilio_spell_handler_incoming    String?
+  spells                           spells[]
 }
 
 model events {
@@ -130,12 +131,13 @@ model events {
 }
 
 model spells {
-  id         String    @id @db.Uuid
-  name       String    @unique
+  id         String     @id @db.Uuid
+  name       String     @unique
   graph      Json?
-  created_at DateTime? @default(now()) @db.Timestamptz(6)
-  updated_at DateTime? @default(now()) @db.Timestamptz(6)
-  deleted_at DateTime? @db.Timestamptz(6)
+  entities   entities[]
+  created_at DateTime?  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime?  @default(now()) @db.Timestamptz(6)
+  deleted_at DateTime?  @db.Timestamptz(6)
   modules    Json?
   game_state Json?
 }
