@@ -127,7 +127,7 @@ function EventTable({ events, updateCallback }) {
     }
     if (!_.isEqual(reqBody, rowData)) {
       const isUpdated = await axios.put(
-        `${import.meta.env.VITE_APP_API_ROOT_URL}/event/${id}`,
+        `${import.meta.env.VITE_APP_API_URL}/event/${id}`,
         reqBody
       )
       if (isUpdated) enqueueSnackbar('Event updated', { variant: 'success' })
@@ -193,7 +193,7 @@ function EventTable({ events, updateCallback }) {
   const handleEventDelete = async (event: any) => {
     console.log('event to delete ::: ', event)
     const isDeleted = await axios.delete(
-      `${import.meta.env.VITE_APP_API_ROOT_URL}/event/${event.id}`
+      `${import.meta.env.VITE_APP_API_URL}/event/${event.id}`
     )
     if (isDeleted) enqueueSnackbar('Event deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting Event', { variant: 'error' })

@@ -163,7 +163,7 @@ const EntityWindow = ({ id, updateCallback }) => {
     if (!loaded) {
       ;(async () => {
         const res = await axios.get(
-          `${import.meta.env.VITE_APP_API_ROOT_URL}/entity?instanceId=` + id
+          `${import.meta.env.VITE_APP_API_URL}/entity?instanceId=` + id
         )
         setEnabled(res.data.enabled === true)
         setDiscordEnabled(res.data.discord_enabled === true)
@@ -270,7 +270,7 @@ const EntityWindow = ({ id, updateCallback }) => {
   useEffect(() => {
     ;(async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_APP_API_ROOT_URL}/spells`
+        `${import.meta.env.VITE_APP_API_URL}/spells`
       )
       setSpellList(res.data)
     })()
@@ -278,7 +278,7 @@ const EntityWindow = ({ id, updateCallback }) => {
 
   const _delete = () => {
     axios
-      .delete(`${import.meta.env.VITE_APP_API_ROOT_URL}/entity/` + id)
+      .delete(`${import.meta.env.VITE_APP_API_URL}/entity/` + id)
       .then(res => {
         console.log('deleted', res)
         if (res.data === 'internal error') {
@@ -384,7 +384,7 @@ const EntityWindow = ({ id, updateCallback }) => {
       twilio_spell_handler_incoming,
     }
     axios
-      .post(`${import.meta.env.VITE_APP_API_ROOT_URL}/entity`, {
+      .post(`${import.meta.env.VITE_APP_API_URL}/entity`, {
         id,
         data: _data,
       })
