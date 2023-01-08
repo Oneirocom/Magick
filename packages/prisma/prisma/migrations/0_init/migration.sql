@@ -122,6 +122,7 @@ CREATE TABLE "events" (
     "type" TEXT,
     "agent" TEXT,
     "client" TEXT,
+    "speaker" TEXT,
     "channel" TEXT,
     "sender" TEXT,
     "text" TEXT,

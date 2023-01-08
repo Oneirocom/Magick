@@ -106,8 +106,8 @@ export const makeWeaviateRequest = async (keyword: string) => {
 
 export async function lookUpOnWikipedia(subject: string) {
   try {
-    // if (await database.instance.wikipediaDataExists(subject)) {
-    //   return JSON.parse(await database.instance.getWikipediaData(subject))
+    // if (await database.wikipediaDataExists(subject)) {
+    //   return JSON.parse(await database.getWikipediaData(subject))
     // } else {
     //   console.log("Data doesn't yet exist")
     // }
@@ -125,7 +125,7 @@ export async function lookUpOnWikipedia(subject: string) {
     }
 
     // create a directory recursively at data/wikipedia/ if it doesn't exist
-    // await database.instance.addWikipediaData(subject, JSON.stringify(summary))
+    // await database.addWikipediaData(subject, JSON.stringify(summary))
 
     return summary
   } catch (err) {

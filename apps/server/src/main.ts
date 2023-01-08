@@ -23,22 +23,12 @@ import path from 'path'
 
 const app: Koa = new Koa()
 const router: Router = new Router()
-// @ts-ignore
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 async function init() {
-  // required for some current consumers (i.e magick)
-  // to-do: standardize an allowed origin list based on env values or another source of truth?
-
   new database()
-  await database.instance.connect()
-  console.log(
-    'refreshing db',
-    process.env.REFRESH_DB?.toLowerCase().trim() === 'true'
-  )
-  await database.instance.sequelize.sync({
-    force: process.env.REFRESH_DB?.toLowerCase().trim() === 'true',
-  })
+
   await initFileServer()
   await initTextToSpeech()
   await initWeaviateClient(
@@ -77,9 +67,6 @@ async function init() {
     middleware: Middleware[],
     handler: Handler
   ) => {
-    // This gets a typescript error
-    // router[method](path, compose(_middleware), handler);
-    // TODO: Fix this hack:
     switch (method) {
       case 'get':
         router.get(path, compose(middleware), handler)

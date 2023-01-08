@@ -104,7 +104,7 @@ async function train(data: SearchSchema[]) {
     console.log(res)
   }
 
-  const documents = await database.instance.getAllDocuments()
+  const documents = await database.getAllDocuments()
   if (documents && documents.length > 0) {
     for (let i = 0; i < documents.length; i++) {
       const object = {
