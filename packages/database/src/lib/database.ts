@@ -46,11 +46,21 @@ export class database {
   }
 
   async connect() {
-    this.client = new Client({
-      connectionString,
-      ssl: useSSL ? { rejectUnauthorized: false, }: false
-    })
-    this.client.connect()
+    if(!this.client) {
+      this.client = new Client({
+        connectionString,
+        keepAlive: true,
+        keepAliveInitialDelayMillis: 10000,
+        ssl: useSSL ? { rejectUnauthorized: false, }: false
+      })
+      this.client.connect()
+      setInterval(async () => {
+        const check = 'SELECT * FROM entities'
+        const cvalues = []
+    
+        await this.client.query(check, cvalues)
+      }, 30000)
+    }
   }
 
   close() {
