@@ -31,7 +31,7 @@ git clone https://github.com/Oneirocom/MagickML
 Next, install dependencies
 
 ```
-npm install
+yarn install
 ```
 
 Now, copy the `.env.example` file and rename it to `.env` -- you can store secrets and environment variables here. This is git ignored but make sure you don't accidentally reveal this in your public repo! The minimum you will need to get started is an OpenAI key.
@@ -41,7 +41,7 @@ Finally, make sure you have docker installed and running. We recommend the Docke
 That's it, you're installed. In order to run the client and server use this quickstart command:
 
 ```
-npm run dev
+yarn dev
 ```
 
 You can also start the parts up individually. In order, start `containers`, then `apps`, then if you'd like live agents, also run `entities`. All three are covered by the `yarn dev`.
