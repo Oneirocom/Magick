@@ -25,7 +25,7 @@ const MenuBar = () => {
   const activeTabRef = useRef<Tab | null>(null)
 
   useEffect(() => {
-    if (!activeTab || !activeTab.spell) return
+    if (!activeTab || !activeTab.spellId) return
     activeTabRef.current = activeTab
     console.log('changing current to ', activeTabRef.current)
   }, [activeTab])
@@ -57,6 +57,7 @@ const MenuBar = () => {
   const [menuVisibility, togglemenuVisibility] = useToggle()
 
   const onSave = () => {
+    console.log('SAVING')
     if (!activeTabRef.current) return
     publish($SAVE_SPELL(activeTabRef.current.id))
   }
