@@ -225,7 +225,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     const urlString = `${
       import.meta.env.VITE_APP_API_URL ??
       import.meta.env.API_ROOT_URL ??
-      'https://localhost:8001'
+      'http://localhost:8001'
     }/event`
 
     const params = {
@@ -262,7 +262,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       `${
         import.meta.env.VITE_APP_API_URL ??
         import.meta.env.API_ROOT_URL ??
-        'https://localhost:8001'
+        'http://localhost:8001'
       }/event`,
       {
         type,
@@ -281,7 +281,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     const isProd = import.meta.env.NODE_ENV === 'production'
     const root = isProd
       ? 'https://magick.supereality.com'
-      : 'https://localhost:8001'
+      : 'htts://localhost:8001'
     const url = `${root}/wikipediaSummary?keyword=${keyword}`
 
     console.log('FETCHOING FROM URL', url)
@@ -302,7 +302,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
   const completion = async (body: CompletionBody) => {
     const url = `${
-      import.meta.env.VITE_APP_API_URL || 'https://0.0.0.0:8001'
+      import.meta.env.VITE_APP_API_URL || 'http://0.0.0.0:8001'
     }/text_completion`
 
     const apiKey = window.localStorage.getItem('openai-api-key')
