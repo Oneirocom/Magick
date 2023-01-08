@@ -70,8 +70,6 @@ spec:
               value: waviate:8080
             - name: WEAVIATE_IMPORT_DATA
               value: "false"
-            - name: CLASSIFIER_IMPORT_DATA
-              value: "false"
             - name: REDIS_URL
               value: redis://redis:6379
             - name: ENTITY_WEBSERVER_PORT_RANGE

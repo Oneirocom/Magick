@@ -11,7 +11,6 @@ let client: any
 
 export async function initWeaviateClient(
   _train: boolean,
-  _trainClassifier: boolean
 ) {
   client = weaviate.client({
     scheme: process.env.WEAVIATE_CLIENT_SCHEME,
@@ -37,45 +36,7 @@ export async function initWeaviateClient(
     await train(data)
     console.timeEnd('train')
   }
-
-  if (_trainClassifier) {
-    await trainClassifier(
-      JSON.parse(
-        fs.readFileSync(
-          path.join(__dirname, '..', '..', '/weaviate/classifier_data.json'),
-          'utf-8'
-        )
-      )
-    )
-  }
 }
-
-async function trainClassifier(data: ClassifierSchema[]) {
-  if (!client) {
-    initWeaviateClient(false, false)
-  }
-
-  if (!data || data === undefined) {
-    return
-  }
-
-  for (let i = 0; i < data.length; i++) {
-    if (Array.isArray(data[i].examples)) {
-      data[i].examples = (data[i].examples as string[]).join(', ')
-    }
-
-    console.log(typeof data[i].examples, data[i].examples)
-
-    const res = await client.data
-      .creator()
-      .withClassName('Emotion')
-      .withProperties(data[i])
-      .do()
-
-    console.log(res)
-  }
-}
-
 async function train(data: SearchSchema[]) {
   if (!client) {
     initWeaviateClient(false, false)

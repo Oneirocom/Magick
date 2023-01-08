@@ -32,8 +32,7 @@ async function init() {
   await initFileServer()
   await initTextToSpeech()
   await initWeaviateClient(
-    process.env.WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true',
-    process.env.CLASSIFIER_IMPORT_DATA?.toLowerCase().trim() === 'true'
+    process.env.WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true'
   )
 
   // generic error handling
