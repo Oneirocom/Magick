@@ -5,6 +5,7 @@ import { SpellManager } from '@magickml/core'
 
 import discord_client from './connectors/discord'
 import { twitter_client } from './connectors/twitter'
+import { prisma } from '@magickml/prisma'
 
 // import { telegram_client } from './connectors/telegram'
 // import { twilio_client } from './connectors/twilio'
@@ -222,9 +223,8 @@ export class Entity {
     if (this.discord)
       throw new Error('Discord already running for this agent on this instance')
 
-    const spell = await database.instance.models.spells.findOne({
+    const spell = await prisma.spells.findUnique({
       where: { name: spell_handler },
-      raw: true,
     })
 
     console.log('discord incoming spell', spell)
@@ -291,7 +291,7 @@ export class Entity {
         'Twitter already running for this entity on this instance'
       )
 
-    const incoming_spell = await database.instance.models.spells.findOne({
+    const incoming_spell = await prisma.spells.findUnique({
       where: { name: twitter_spell_handler_incoming },
     })
 
@@ -299,8 +299,8 @@ export class Entity {
       spell: incoming_spell,
     })
 
-    const auto_spell = await database.instance.models.spells.findOne({
-      where: { name: twitter_spell_handler_incoming },
+    const auto_spell = await prisma.spells.findUnique({
+      where: { name: twitter_spell_handler_auto },
     })
 
     const spellHandlerAuto = await this.createSpellHandler({
@@ -463,13 +463,13 @@ export class Entity {
 
     const loopInterval = parseInt(loop_interval)
     if (typeof loopInterval === 'number' && loopInterval > 0) {
-      const spell = await database.instance.models.spells.findOne({
+      const spell = await prisma.spells.findUnique({
         where: { name: loop_spell_handler },
       })
-      const spellHandler = null
-      // await this.createSpellHandler({
-      //   spell,
-      // })
+
+      const spellHandler =  await this.createSpellHandler({
+        spell,
+      })
 
       this.loopHandler = setInterval(async () => {
         const resp = await spellHandler({
@@ -484,7 +484,7 @@ export class Entity {
           roomInfo: [],
           channel: 'auto',
         })
-        if (resp && (resp as string)?.length > 0) {
+        if (resp?.length > 0) {
           console.log('Loop Response:', resp)
         }
       }, loopInterval)

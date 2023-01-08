@@ -1,19 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Node } from './Node'
-
 const SUPPRESSED_WARNINGS = ['ReactDOM.render'];
 const consoleError = console.error;
-
+console.error = function filterWarnings(msg, ...args) {
+  if (!SUPPRESSED_WARNINGS.some((entry) => msg.includes(entry))) {
+    consoleError(msg, ...args);
+  }
+};
 function install(editor, { component: NodeComponent = Node, createRoot }) {
   const roots = new Map()
-  
-  console.error = function filterWarnings(msg, ...args) {
-    if (!SUPPRESSED_WARNINGS.some((entry) => msg.includes(entry))) {
-      consoleError(msg, ...args);
-    }
-};
-  
   const render = createRoot
     ? (element, container) => {
         if (!roots.has(container)) roots.set(container, createRoot(container))

@@ -1,23 +1,16 @@
-import { CustomError } from '../../utils/CustomError'
 import {
-  EngineContext,
-  MagickWorkerInputs,
-  GetEventArgs,
-  CreateEventArgs,
-  CompletionBody,
+  CompletionBody, CreateEventArgs, EngineContext, GetEventArgs, MagickWorkerInputs
 } from '@magickml/core'
 import { prisma } from '@magickml/prisma'
-import Koa from 'koa'
 import vm2 from 'vm2'
+import { CustomError } from '../../utils/CustomError'
 
-import { searchWikipedia } from '../wikipedia/helpers'
 import { queryGoogleSearch } from '../utils/queryGoogle'
+import { searchWikipedia } from '../wikipedia/helpers'
 
 import { database } from '@magickml/database'
-import { runSpell } from '../utils/runSpell'
-import e from 'express'
-import { spells } from '@prisma/client'
 import { makeCompletion } from '../../utils/MakeCompletionRequest'
+import { runSpell } from '../utils/runSpell'
 
 const getEvents = async ({
   type,
@@ -28,7 +21,7 @@ const getEvents = async ({
   maxCount,
   max_time_diff,
 }: GetEventArgs) => {
-  const event = await database.instance.getEvents({
+  const event = await database.getEvents({
     type,
     agent,
     speaker,
@@ -45,7 +38,7 @@ const getEvents = async ({
 
 const createEvent = async (args: CreateEventArgs) => {
   const { type, agent, speaker, client, channel, text, sender } = args
-  return await database.instance.createEvent({
+  return await database.createEvent({
     type,
     agent,
     speaker,
