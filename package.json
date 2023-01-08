@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently \"nx run-many --target=serve --projects=server,client,entity-server,speech-server --parallel 4\"",
+    "dev": "nx run-many --target=serve --projects=server,client,entity-server,speech-server --parallel 4",
     "containers": "docker-compose up",
     "apps": "nx run-many --target=serve --projects=server,speech-server,client --parallel 3",
     "entities": "nx run-many --target=serve --projects=entity-server",
@@ -46,7 +46,6 @@
     "cheerio": "^1.0.0-rc.12",
     "classnames": "^2.3.1",
     "compromise": "^14.0.0",
-    "concurrently": "^7.6.0",
     "core-js": "^3.6.5",
     "cors-anywhere": "^0.4.4",
     "crypto-js": "^4.0.0",
