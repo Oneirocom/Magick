@@ -94,7 +94,7 @@ export class AgentTextCompletion extends MagickComponent<Promise<WorkerReturn>> 
   }
 
   async worker(node: NodeData, inputs: MagickWorkerInputs) {
-    let apiKey = import.meta.env.OPENAI_API_KEY as string | null
+    let apiKey = (process?.env?.OPENAI_API_KEY ?? import.meta.env.OPENAI_API_KEY as string | null)
     // check if we are in a browser and local storage is available
     // if it is, we can use the API key from local storage
     if (typeof window !== 'undefined' && window.localStorage) {
