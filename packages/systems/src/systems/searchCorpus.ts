@@ -34,7 +34,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
   }
 
   if (!database.instance || database.instance === undefined) {
-    new database().connect()
+    new database()
   }
 
   const app: Koa = new Koa()
