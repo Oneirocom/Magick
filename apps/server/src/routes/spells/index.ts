@@ -54,7 +54,7 @@ const saveHandler = async (ctx: Koa.Context) => {
       : ctx.request.body
 
   if (!body) throw new CustomError('input-failed', 'No parameters provided')
-
+  
   const spell = await database.instance.models.spells.findOne({
     where: { id: body.id },
   })
