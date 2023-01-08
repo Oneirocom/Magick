@@ -29,7 +29,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   const spellRef = useRef<Spell>()
   const { events, publish } = usePubSub()
   const [loadSpell, { data: spellData }] = useLazyGetSpellQuery()
-  const { editor, serialize, setDirtyGraph, dirtyGraph } = useEditor()
+  const { editor, serialize, setDirtyGraph, getDirtyGraph } = useEditor()
   const FeathersContext = useFeathers()
   const client = FeathersContext?.client
   const preferences = useSelector((state: RootState) => state.preferences)
@@ -41,7 +41,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   //     // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
   //     'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
   //     debounce(async data => {
-  //       if (!dirtyGraph) return
+  //       if (!getDirtyGraph) return
   //       if (tab.type === 'spell' && spellRef.current) {
   //         setDirtyGraph(true)
   //         publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
@@ -57,20 +57,17 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   useEffect(() => {
     if (!editor?.on) return
 
-    editor.on(
-      'nodecreated noderemoved',
-      (node: any) => {
-        if (!spellRef.current) return
-        if (node.category !== 'I/O') return
-        // TODO we can probably send this update to a spell namespace for this spell.
-        // then spells can subscribe to only their dependency updates.
-        const spell = {
-          ...spellRef.current,
-          graph: editor.toJSON(),
-        }
-        publish(events.$SUBSPELL_UPDATED(spellRef.current.name), spell)
+    editor.on('nodecreated noderemoved', (node: any) => {
+      if (!spellRef.current) return
+      if (node.category !== 'I/O') return
+      // TODO we can probably send this update to a spell namespace for this spell.
+      // then spells can subscribe to only their dependency updates.
+      const spell = {
+        ...spellRef.current,
+        graph: editor.toJSON(),
       }
-    ) as unknown as Function
+      publish(events.$SUBSPELL_UPDATED(spellRef.current.name), spell)
+    }) as unknown as Function
   }, [editor])
 
   useEffect(() => {
