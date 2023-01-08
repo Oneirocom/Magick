@@ -137,6 +137,7 @@ const Playtest = ({ tab }) => {
 
       toSend = {
         input: value,
+        output: value,
         ...JSON.parse(json),
       }
     }
