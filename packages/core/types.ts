@@ -69,6 +69,7 @@ export type CompletionBody = {
   presencePenalty: number
   frequencyPenalty: number
   stop: any
+  apiKey?: string
 }
 
 export type CompletionResponse = {
