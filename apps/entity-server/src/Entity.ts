@@ -6,10 +6,36 @@ import { SpellManager } from '@magickml/core'
 import discord_client from './connectors/discord'
 import { twitter_client } from './connectors/twitter'
 
-const createSpellHandlerFactory =
-  spellManager =>
-  async ({ spell }) => {
-    const spellRunner = await spellManager.load(spell)
+// import { telegram_client } from './connectors/telegram'
+// import { twilio_client } from './connectors/twilio'
+// import { slack_client } from './connectors/slack'
+// import { zoom_client } from './connectors/zoom'
+// import { reddit_client } from './connectors/reddit'
+// import { instagram_client } from './connectors/instagram'
+// import { messenger_client } from './connectors/messenger'
+// import { whatsapp_client } from './connectors/whatsapp'
+export class Entity {
+  name = ''
+  //Clients
+  discord: discord_client | null
+  twitter: twitter_client | null
+  // telegram: telegram_client | null
+  // twilio: twilio_client | null
+  // slack: slack_client | null
+  // zoom: zoom_client | null
+  // reddit: reddit_client | null
+  // instagram: instagram_client | null
+  // messenger: messenger_client | null
+  // whatsapp: whatsapp_client | null
+  id: any
+
+  router: any
+  app: any
+  loopHandler: any
+  spellManager: SpellManager
+
+  async createSpellHandler({ spell }) {
+    const spellRunner = await this.spellManager.load(spell)
 
     async function spellHandler({
       message,
@@ -44,35 +70,6 @@ const createSpellHandlerFactory =
     return spellHandler
   }
 
-// import { telegram_client } from './connectors/telegram'
-// import { twilio_client } from './connectors/twilio'
-// import { slack_client } from './connectors/slack'
-// import { zoom_client } from './connectors/zoom'
-// import { reddit_client } from './connectors/reddit'
-// import { instagram_client } from './connectors/instagram'
-// import { messenger_client } from './connectors/messenger'
-// import { whatsapp_client } from './connectors/whatsapp'
-export class Entity {
-  name = ''
-  //Clients
-  discord: discord_client | null
-  twitter: twitter_client | null
-  // telegram: telegram_client | null
-  // twilio: twilio_client | null
-  // slack: slack_client | null
-  // zoom: zoom_client | null
-  // reddit: reddit_client | null
-  // instagram: instagram_client | null
-  // messenger: messenger_client | null
-  // whatsapp: whatsapp_client | null
-  id: any
-
-  router: any
-  app: any
-  loopHandler: any
-  spellManager: SpellManager
-  createSpellHandler: Function
-
   constructor(data: any) {
     this.onDestroy()
     this.id = data.id
@@ -83,8 +80,6 @@ export class Entity {
       magickInterface: buildMagickInterface({}),
       cache: false,
     })
-
-    this.createSpellHandler = createSpellHandlerFactory(this.spellManager)
 
     process.env.OPENAI_API_KEY = data.openai_api_key
 
