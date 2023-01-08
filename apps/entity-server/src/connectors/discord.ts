@@ -932,44 +932,82 @@ export class discord_client {
               ) => Promise<any>
             }
           }) => {
+            if (
+              responses !== undefined &&
+              responses.length <= 2000 &&
+              responses.length > 0
+            ) {
+              let text = this.replacePlaceholders(responses)
+              if (addPing) {
+                message
+                  .reply(text)
+                  .then(async function (msg: any) {
+                    //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
+                  })
+                  .catch(console.error)
+              } else {
+                while (
+                  text === undefined ||
+                  text === '' ||
+                  text.replace(/\s/g, '').length === 0
+                )
+                  text = getRandomEmptyResponse()
+                log('response1: ' + text)
+                message.channel
+                  .send(text)
+                  .then(async function (msg: any) {
+                    //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
+                  })
+                  .catch(console.error)
+              }
+            } else if (
+              responses &&
+              responses !== undefined &&
+              responses.length >= 2000
+            ) {
+              let text = this.replacePlaceholders(responses)
+              if (addPing) {
+                message.reply(text).then(async function (msg: any) {
+                  //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
+                })
+              } else {
+                while (
+                  text === undefined ||
+                  text === '' ||
+                  text.replace(/\s/g, '').length === 0
+                )
+                  text = getRandomEmptyResponse(this.discord_empty_responses)
+                log('response2: ' + text)
+              }
+              if (text.length > 0) {
+                message.channel
+                  .send(text, { split: true })
+                  .then(async function (msg: any) {
+                    //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
+                  })
+              }
+            } else {
+              const emptyResponse = getRandomEmptyResponse(
+                this.discord_empty_responses
+              )
+              log('sending empty response 1: ' + emptyResponse)
               if (
-                responses !== undefined &&
-                responses.length <= 2000 &&
-                responses.length > 0
+                emptyResponse !== undefined &&
+                emptyResponse !== '' &&
+                emptyResponse.replace(/\s/g, '').length !== 0
               ) {
-                let text = this.replacePlaceholders(responses)
+                let text = emptyResponse
                 if (addPing) {
                   message
                     .reply(text)
                     .then(async function (msg: any) {
-                      //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
+                      //this.onMessageResponseUpdated(
+                      //  channel.id,
+                      //  message.id,
+                      //  msg.id
+                      //)
                     })
                     .catch(console.error)
-                } else {
-                  while (
-                    text === undefined ||
-                    text === '' ||
-                    text.replace(/\s/g, '').length === 0
-                  )
-                    text = getRandomEmptyResponse()
-                  log('response1: ' + text)
-                  message.channel
-                    .send(text)
-                    .then(async function (msg: any) {
-                      //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
-                    })
-                    .catch(console.error)
-                }
-              } else if (
-                responses &&
-                responses !== undefined &&
-                responses.length >= 2000
-              ) {
-                let text = this.replacePlaceholders(responses)
-                if (addPing) {
-                  message.reply(text).then(async function (msg: any) {
-                    //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
-                  })
                 } else {
                   while (
                     text === undefined ||
@@ -977,61 +1015,20 @@ export class discord_client {
                     text.replace(/\s/g, '').length === 0
                   )
                     text = getRandomEmptyResponse(this.discord_empty_responses)
-                  log('response2: ' + text)
-                }
-                if (text.length > 0) {
+                  log('response4: ' + text)
                   message.channel
-                    .send(text, { split: true })
+                    .send(text)
                     .then(async function (msg: any) {
-                      //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
+                      //this.onMessageResponseUpdated(
+                      //  channel.id,
+                      //  message.id,
+                      //  msg.id
+                      //)
                     })
-                }
-              } else {
-                const emptyResponse = getRandomEmptyResponse(
-                  this.discord_empty_responses
-                )
-                log('sending empty response 1: ' + emptyResponse)
-                if (
-                  emptyResponse !== undefined &&
-                  emptyResponse !== '' &&
-                  emptyResponse.replace(/\s/g, '').length !== 0
-                ) {
-                  let text = emptyResponse
-                  if (addPing) {
-                    message
-                      .reply(text)
-                      .then(async function (msg: any) {
-                        //this.onMessageResponseUpdated(
-                        //  channel.id,
-                        //  message.id,
-                        //  msg.id
-                        //)
-                      })
-                      .catch(console.error)
-                  } else {
-                    while (
-                      text === undefined ||
-                      text === '' ||
-                      text.replace(/\s/g, '').length === 0
-                    )
-                      text = getRandomEmptyResponse(
-                        this.discord_empty_responses
-                      )
-                    log('response4: ' + text)
-                    message.channel
-                      .send(text)
-                      .then(async function (msg: any) {
-                        //this.onMessageResponseUpdated(
-                        //  channel.id,
-                        //  message.id,
-                        //  msg.id
-                        //)
-                      })
-                      .catch(console.error)
-                  }
+                    .catch(console.error)
                 }
               }
-            
+            }
           }
         )
       })
