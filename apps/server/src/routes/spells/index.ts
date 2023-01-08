@@ -3,11 +3,12 @@ import 'regenerator-runtime/runtime'
 import { database } from '@magickml/database'
 import { Route } from '../../types'
 import { CustomError } from '../../utils/CustomError'
-import { extractModuleInputKeys } from '@magickml/core'
+import { extractModuleInputKeys, Spell } from '@magickml/core'
 
 import otJson0 from 'ot-json0'
 import { Op } from 'sequelize'
 import { runSpell } from '../utils/runSpell'
+import { prisma } from '@magickml/prisma'
 
 export const modules: Record<string, unknown> = {}
 
@@ -82,7 +83,7 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
 
   if (!body) throw new CustomError('input-failed', 'No parameters provided')
 
-  const spell = await database.instance.models.spells.findOne({
+  const spell = await prisma.spells.findUnique({
     where: { name },
   })
 
@@ -90,15 +91,32 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
     throw new CustomError('input-failed', `No spell with ${name} name found.`)
   if (!diff)
     throw new CustomError('input-failed', 'No diff provided in request body')
-  console.log('spell is', spell)
   try {
-    const spellUpdate = otJson0.type.apply(spell.toJSON(), diff)
-    const updatedSpell = await database.instance.models.spells.update(
-      spellUpdate,
-      {
-        where: { name },
-      }
-    )
+    const spellUpdate = otJson0.type.apply(spell, diff)
+
+    if (Object.keys((spellUpdate as Spell).graph.nodes).length === 0)
+      throw new CustomError(
+        'input-failed',
+        'Graph would be cleared.  Aborting.'
+      )
+
+    const updatedSpell = await prisma.spells.update({
+      where: { name },
+      data: spellUpdate,
+      include: {
+        entities: true,
+      },
+    })
+
+    // get all entities from this spell and set to dirty
+    await updatedSpell.entities.forEach(async entity => {
+      await prisma.entities.update({
+        where: { id: entity.id },
+        data: {
+          dirty: true,
+        },
+      })
+    })
 
     ctx.response.status = 200
     ctx.body = updatedSpell
