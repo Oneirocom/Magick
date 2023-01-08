@@ -38,8 +38,15 @@ const EventHandler = ({ pubSub, tab }) => {
     spellRef.current = spell
   }, [spell])
 
-  const { serialize, getEditor, undo, redo, del, dirtyGraph, setDirtyGraph } =
-    useEditor()
+  const {
+    serialize,
+    getEditor,
+    undo,
+    redo,
+    del,
+    getDirtyGraph,
+    setDirtyGraph,
+  } = useEditor()
 
   const { events, subscribe } = pubSub
 
@@ -105,6 +112,8 @@ const EventHandler = ({ pubSub, tab }) => {
       name: currentSpell.name,
       diff: jsonDiff,
     })
+
+    setDirtyGraph(true)
 
     // if (preferences.autoSave) {
     //   if ('error' in response) {
@@ -182,7 +191,7 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const onProcess = () => {
     const editor = getEditor()
-    if (!editor || !dirtyGraph) return
+    if (!editor || !getDirtyGraph()) return
 
     console.log('RUNNING PROCESS')
 
