@@ -8,7 +8,7 @@ datasource db {
 }
 
 model content_objects {
-  id          Int       @id @default(autoincrement())
+  id          Int       @id
   title       String
   description String
   is_included Boolean   @default(true)
@@ -17,7 +17,7 @@ model content_objects {
 }
 
 model documents {
-  id              Int               @id @default(autoincrement())
+  id              Int               @id
   title           String
   description     String
   is_included     Boolean           @default(true)
@@ -27,7 +27,7 @@ model documents {
 }
 
 model documents_store {
-  id              Int               @id @default(autoincrement())
+  id        Int         @id
   name      String
   documents documents[]
 }

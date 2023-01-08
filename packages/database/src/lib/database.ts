@@ -2,12 +2,7 @@ import { CreateEventArgs, GetEventArgs } from '@magickml/core'
 import { prisma } from '@magickml/prisma'
 
 export class database {
-  static instance: database
-  constructor() {
-    database.instance = this
-  }
-
-  async createEvent({
+  static async createEvent({
     type,
     agent,
     speaker,
@@ -30,7 +25,7 @@ export class database {
     })
   }
 
-  async getEvents({
+  static async getEvents({
     type,
     agent = 'system',
     speaker = 'none',
@@ -69,18 +64,21 @@ export class database {
 
     return event
   }
-  async getAllEvents() {
+
+  static async getAllEvents() {
     const events = await prisma.events.findMany()
     return events
   }
-  async deleteEvent(id: number) {
+
+  static async deleteEvent(id: number) {
     return await prisma.events.delete({
       where: {
         id,
       },
     })
   }
-  async updateEvent(id: number, data: { [key: string]: string }) {
+
+  static async updateEvent(id: number, data: { [key: string]: string }) {
     const event = await prisma.events.update({
       where: {
         id,
@@ -90,7 +88,7 @@ export class database {
     return event
   }
 
-  async addWikipediaData(agent: any, data: any) {
+  static async addWikipediaData(agent: any, data: any) {
     const event = await prisma.events.create({
       data: {
         type: 'agent_data',
@@ -106,22 +104,7 @@ export class database {
     return event
   }
 
-  async getWikipediaData(agent: any) {
-    const event = await prisma.events.findFirst({
-      where: {
-        type: 'agent_data',
-        agent,
-        client: 'wikipedia',
-        channel: 'wikipedia',
-        speaker: 'wikipedia',
-      },
-    })
-    if (event) {
-      return event.text
-    }
-    return ''
-  }
-  async wikipediaDataExists(agent: any) {
+  static async getWikipediaData(agent: any) {
     const event = await prisma.events.findFirst({
       where: {
         type: 'agent_data',
@@ -137,10 +120,27 @@ export class database {
     return ''
   }
 
-  async getEntities() {
+  static async wikipediaDataExists(agent: any) {
+    const event = await prisma.events.findFirst({
+      where: {
+        type: 'agent_data',
+        agent,
+        client: 'wikipedia',
+        channel: 'wikipedia',
+        speaker: 'wikipedia',
+      },
+    })
+    if (event) {
+      return event.text
+    }
+    return ''
+  }
+
+  static async getEntities() {
     return await prisma.entities.findMany()
   }
-  async getEntity(id: any) {
+
+  static async getEntity(id: any) {
     const entity = await prisma.entities.findFirst({
       where: {
         id,
@@ -148,7 +148,8 @@ export class database {
     })
     return entity
   }
-  async entityExists(id: any) {
+
+  static async entityExists(id: any) {
     const entity = await prisma.entities.findFirst({
       where: {
         id,
@@ -156,14 +157,16 @@ export class database {
     })
     return entity ? true : false
   }
-  async deleteEntity(id: any) {
+
+  static async deleteEntity(id: any) {
     const entity = await prisma.entities.delete({
       where: {
         id,
       },
     })
   }
-  async getLastUpdatedInstances() {
+
+  static async getLastUpdatedInstances() {
     const entities = await prisma.entities.findMany()
     return entities.map((e) => {
       return {
@@ -172,7 +175,8 @@ export class database {
       }
     })
   }
-  async setEntityDirty(id: any, value: boolean) {
+
+  static async setEntityDirty(id: any, value: boolean) {
     const entity = await prisma.entities.update({
       where: {
         id,
@@ -185,7 +189,7 @@ export class database {
     return entity
   }
 
-  async setEntityUpdated(id: any) {
+  static async setEntityUpdated(id: any) {
     const entity = await prisma.entities.update({
       where: {
         id,
@@ -197,13 +201,15 @@ export class database {
 
     return entity
   }
-  async createEntity() {
+
+  static async createEntity() {
     const entity = await prisma.entities.create({
       data: {},
     })
     return entity
   }
-  async updateEntity(id: any, data: { [x: string]: any; dirty?: any }) {
+
+  static async updateEntity(id: any, data: { [x: string]: any; dirty?: any }) {
     const entity = await prisma.entities.update({
       where: {
         id,
@@ -213,7 +219,7 @@ export class database {
     return entity
   }
 
-  async addDocument(
+  static async addDocument(
     title: any,
     description: any,
     is_included: any,
@@ -230,7 +236,8 @@ export class database {
   })
   return document.id
 }
-  async removeDocument(documentId: number) {
+
+  static async removeDocument(documentId: number) {
     const document = await prisma.documents.delete({
       where: {
         id: documentId,
@@ -238,7 +245,8 @@ export class database {
     })
     return document
   }
-  async updateDocument(
+  
+  static async updateDocument(
     document_id: any,
     title: string,
     description: any,
@@ -258,7 +266,8 @@ export class database {
     })
     return document
   }
-  async getDocumentsOfStore(
+
+  static async getDocumentsOfStore(
     storeId: number
   ): Promise<any> {
     const documents = await prisma.documents.findMany({
@@ -268,11 +277,13 @@ export class database {
     })
     return documents
   }
-  async getAllDocuments(): Promise<any[]> {
+
+  static async getAllDocuments(): Promise<any[]> {
     const documents = await prisma.documents.findMany()
     return documents
   }
-  async getAllDocumentsForSearch(): Promise<any[]> {
+
+  static async getAllDocumentsForSearch(): Promise<any[]> {
     const documents = await prisma.documents.findMany({
       where: {
         is_included: true,
@@ -280,7 +291,8 @@ export class database {
     })
     return documents
   }
-  async getSingleDocument(docId: any): Promise<any> {
+
+  static async getSingleDocument(docId: any): Promise<any> {
     const document = await prisma.documents.findFirst({
       where: {
         id: docId,
@@ -288,7 +300,8 @@ export class database {
     })
     return document
   }
-  async documentIdExists(documentId: any) {
+
+  static async documentIdExists(documentId: any) {
     const document = await prisma.documents.findFirst({
       where: {
         id: documentId,
@@ -297,7 +310,7 @@ export class database {
     return document ? true : false
   }
 
-  async addContentObj(
+  static async addContentObj(
     title: string,
     description: any,
     is_included: any,
@@ -313,7 +326,8 @@ export class database {
     })
     return contentObj.id
   }
-  async editContentObj(
+
+  static async editContentObj(
     obj_id: any,
     title: string,
     description: any,
@@ -333,7 +347,8 @@ export class database {
     })
     return contentObj
   }
-  async getContentObjOfDocument(
+
+  static async getContentObjOfDocument(
     documentId: number
   ): Promise<any> {
     const contentObjs = await prisma.content_objects.findMany({
@@ -343,7 +358,8 @@ export class database {
     })
     return contentObjs
   }
-  async removeContentObject(objId: number) {
+
+  static async removeContentObject(objId: number) {
     const contentObj = await prisma.content_objects.delete({
       where: {
         id: objId,
@@ -351,7 +367,8 @@ export class database {
     })
     return contentObj
   }
-  async contentObjIdExists(contentObjId: any) {
+
+  static async contentObjIdExists(contentObjId: any) {
     const contentObj = await prisma.content_objects.findFirst({
       where: {
         id: contentObjId,
@@ -360,7 +377,7 @@ export class database {
     return contentObj ? true : false
   }
 
-  async addDocumentStore(name: any): Promise<number> {
+  static async addDocumentStore(name: any): Promise<number> {
     const documentStore = await prisma.documents_store.create({
       data: {
         name
@@ -368,7 +385,8 @@ export class database {
     })
     return documentStore.id
   }
-  async updateDocumentStore(storeId: any, name: any) {
+
+  static async updateDocumentStore(storeId: any, name: any) {
     const documentStore = await prisma.documents_store.update({
       where: {
         id: storeId,
@@ -379,7 +397,8 @@ export class database {
     })
     return documentStore
   }
-  async removeDocumentStore(storeId: number) {
+  
+  static async removeDocumentStore(storeId: number) {
     const documentStore = await prisma.documents_store.delete({
       where: {
         id: storeId,
@@ -387,11 +406,13 @@ export class database {
     })
     return documentStore
   }
-  async getDocumentStores(): Promise<any[]> {
+
+  static async getDocumentStores(): Promise<any[]> {
     const documentStores = await prisma.documents_store.findMany()
     return documentStores
   }
-  async getSingleDocumentStore(name: any): Promise<any> {
+
+  static async getSingleDocumentStore(name: any): Promise<any> {
     const documentStore = await prisma.documents_store.findFirst({
       where: {
         name,
@@ -399,7 +420,8 @@ export class database {
     })
     return documentStore
   }
-  async documentStoreIdExists(documentStoreId: any) {
+
+  static async documentStoreIdExists(documentStoreId: any) {
     const documentStore = await prisma.documents_store.findFirst({
       where: {
         id: documentStoreId,
