@@ -254,6 +254,9 @@ const textCompletion = async (ctx: Koa.Context) => {
   const openaiApiKey =
     (ctx.request.body.apiKey as string) ?? process.env.OPENAI_API_KEY
 
+  if (!openaiApiKey)
+    throw new CustomError('authentication-error', 'No API key provided')
+
   if (!stop || stop.length === undefined || stop.length <= 0) {
     stop = ['"""', '###']
   }
