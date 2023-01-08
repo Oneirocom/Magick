@@ -25,7 +25,7 @@ async function getEntities() {
 
 const getEntitiesHandler = async (ctx: Koa.Context) => {
   try {
-    let data = await database.instance.getEntities()
+    let data = await prisma.entities.findMany()
     return (ctx.body = data)
   } catch (e) {
     console.log('getEntitiesHandler:', e)
