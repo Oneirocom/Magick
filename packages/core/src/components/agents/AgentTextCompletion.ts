@@ -1,6 +1,12 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../../types'
+import {
+  NodeData,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  EngineContext,
+} from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -11,7 +17,9 @@ type WorkerReturn = {
   output: string
 }
 
-export class AgentTextCompletion extends MagickComponent<Promise<WorkerReturn>> {
+export class AgentTextCompletion extends MagickComponent<
+  Promise<WorkerReturn>
+> {
   constructor() {
     super('Agent Text Completion')
 
@@ -93,13 +101,13 @@ export class AgentTextCompletion extends MagickComponent<Promise<WorkerReturn>> 
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
-    let apiKey = import.meta.env.OPENAI_API_KEY as string | null
-    // check if we are in a browser and local storage is available
-    // if it is, we can use the API key from local storage
-    if (typeof window !== 'undefined' && window.localStorage) {
-      apiKey = window.localStorage.getItem('openai-api-key')
-    }
+  async worker(
+    node: NodeData,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+    { magick }: { magick: EngineContext }
+  ) {
+    const { completion } = magick
 
     const prompt = inputs['string'][0]
     const settings = ((inputs.settings && inputs.settings[0]) ?? {}) as any
@@ -129,35 +137,18 @@ export class AgentTextCompletion extends MagickComponent<Promise<WorkerReturn>> 
       return el != null && el !== undefined && el.length > 0
     })
 
-    console.log('filteredStop is', filteredStop)
-    const API_URL = 'https://0.0.0.0:8001'
-    // instead of axios.post, use fetch
-    const resp = await fetch(
-      `${
-        import.meta.env.VITE_APP_API_URL ?? API_URL ?? 'https://0.0.0.0:8001'
-      }/text_completion`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          prompt,
-          modelName,
-          temperature,
-          maxTokens,
-          topP,
-          frequencyPenalty,
-          presencePenalty,
-          stop: filteredStop,
-          apiKey,
-        }),
-      }
-    )
+    const body = {
+      prompt: prompt as string,
+      modelName,
+      temperature,
+      maxTokens,
+      topP,
+      frequencyPenalty,
+      presencePenalty,
+      stop: filteredStop,
+    }
 
-    const data = await resp.json()
-
-    console.log('resp.data is ', data)
+    const data = await completion(body)
 
     const { success, choice } = data
 

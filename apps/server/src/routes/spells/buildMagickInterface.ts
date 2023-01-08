@@ -4,6 +4,7 @@ import {
   MagickWorkerInputs,
   GetEventArgs,
   CreateEventArgs,
+  CompletionBody,
 } from '@magickml/core'
 import { prisma } from '@magickml/prisma'
 import Koa from 'koa'
@@ -16,6 +17,7 @@ import { database } from '@magickml/database'
 import { runSpell } from '../utils/runSpell'
 import e from 'express'
 import { spells } from '@prisma/client'
+import { makeCompletion } from '../../utils/MakeCompletionRequest'
 
 const getEvents = async ({
   type,
@@ -72,6 +74,27 @@ export const buildMagickInterface = (
       console.log('*************************RUNSPELL OUTPUTS', outputs)
 
       return outputs
+    },
+    completion: async (body: CompletionBody) => {
+      // check body for API key, otherwise use the environment
+      const openaiApiKey = body.apiKey
+        ? body.apiKey
+        : process.env.OPENAI_API_KEY
+
+      if (!openaiApiKey) throw new Error('No API key provided')
+
+      const { success, choice } = await makeCompletion(body.modelName, {
+        prompt: body.prompt.trim(),
+        temperature: body.temperature,
+        max_tokens: body.maxTokens,
+        top_p: body.topP,
+        frequency_penalty: body.frequencyPenalty,
+        presence_penalty: body.presencePenalty,
+        stop: body.stop,
+        apiKey: openaiApiKey,
+      })
+
+      return { success, choice }
     },
     getSpell: async spellId => {
       const spell = await prisma.spells.findUnique({ where: { name: spellId } })
