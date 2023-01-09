@@ -85,6 +85,9 @@ const MenuBar = () => {
   const onOpen = () => {
     navigate('/home/all-projects')
   }
+  const onImport = () => {
+    navigate('/home/all-projects?import')
+  }
 
   const onSerialize = () => {
     if (!activeTabRef.current) return
@@ -177,6 +180,10 @@ const MenuBar = () => {
         open_spell: {
           onClick: onOpen,
           hotKey: 'option+o',
+        },
+        import_spell: {
+          onClick: onImport,
+          hotKey: 'option+i'
         },
         edit_spell: {
           onClick: onEdit,
