@@ -20,6 +20,7 @@ const FileInput = ({ loadFile }) => {
         Import...
       </button>
       <input
+        id="import"
         type="file"
         multiple="multiple"
         ref={hiddenFileInput}
