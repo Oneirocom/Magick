@@ -145,7 +145,8 @@ export class World {
   async addEntity(obj: any) {
     console.log('adding object', obj.id)
     if (this.objects[obj.id] === undefined) {
-      this.objects[obj.id] = new Entity(obj)
+      obj.data.id = obj.id
+      this.objects[obj.id] = new Entity(obj.data)
     } else {
       //throw new Error('Object already exists')
     }

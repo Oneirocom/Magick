@@ -14,7 +14,7 @@
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
-    "postinstall": "npx prisma generate",
+    "postinstall": "npx prisma generate && yarn db:init",
     "db:init": "npx prisma db push"
   },
   "resolutions": {

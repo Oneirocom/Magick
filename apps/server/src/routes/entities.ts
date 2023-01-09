@@ -39,11 +39,6 @@ const getEntityHandler = async (ctx: Koa.Context) => {
   }
 
   const _instanceId = parseInt(instanceId)
-  if (_instanceId < 1) {
-    ctx.status = 400
-    return (ctx.body = { error: 'instanceId must be greater than 0' })
-  }
-
   try {
     let data = await database.getEntity(_instanceId) as any
     if (data === undefined || !data) {
@@ -66,24 +61,44 @@ const getEntityHandler = async (ctx: Koa.Context) => {
 }
 
 const addEntityHandler = async (ctx: Koa.Context) => {
-  const data = ctx.request.body.data
-  let instanceId = ctx.request.body.id ?? ctx.request.body.instanceId
+  const data = ctx.request.body
+  if(!data.data) {
+    data.data = ""
+    data.dirty = true
+    data.enabled = false
+  }
 
-  if (!instanceId || instanceId === undefined || instanceId <= 0) {
-    instanceId = 0
-    while (
-      (await database.entityExists(instanceId)) ||
-      instanceId <= 0
-    ) {
-      instanceId++
-    }
+  if (typeof data.data === 'object') {
+    data.data = JSON.stringify(data.data)
+  }
+
+  const entity = await prisma.entities.findFirst({
+    where: {
+      id: data.id,
+    },
+  })
+
+  // if entity exists, update it
+  if (entity) {
+    await prisma.entities.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        id: data.id,
+        data: data.data as string,
+        dirty: data.dirty,
+        enabled: data.enabled,
+      },
+    })
+    return (ctx.body = { id: data.id })
   }
 
   try {
     console.log('updated agent database with', data)
-    if (Object.keys(data).length <= 0)
-      return (ctx.body = await prisma.entities.create({ data: {} }))
-    return (ctx.body = await database.updateEntity(instanceId, data))
+    // if data.data is an object, stringify it
+
+    return (ctx.body = await prisma.entities.create({ data }))
   } catch (e) {
     console.log('addEntityHandler:', e)
     ctx.status = 500

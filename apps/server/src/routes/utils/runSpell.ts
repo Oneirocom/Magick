@@ -16,22 +16,30 @@ export const runSpell = async ({
   inputFormatter,
   state = {},
 }: RunSpellArgs) => {
-  let rootSpell = await prisma.spells.findUnique({
+  let spell = await prisma.spells.findUnique({
     where: { name: spellName },
   })
 
-  if (!rootSpell?.graph) {
+  if (!spell?.graph) {
     throw new CustomError('not-found', `Spell with name ${spellName} not found`)
   }
 
-  const graph = rootSpell.graph as unknown as GraphData
+  if(spell){
+    // spell.graph, spell.modules and spell.gameState are all JSON
+    // parse them back into the object before returning it
+    spell.graph = JSON.parse(spell.graph as any)
+    spell.modules = JSON.parse(spell.modules as any)
+    spell.gameState = JSON.parse(spell.gameState as any)
+  }
+
+  const graph = spell.graph as unknown as GraphData
   const magickInterface = buildMagickInterface(state)
 
   const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs
 
   const spellToRun = {
     // TOTAL HACK HERE
-    ...rootSpell,
+    ...spell,
     gameState: state,
   }
 
@@ -47,5 +55,5 @@ export const runSpell = async ({
   // Get the updated state
   const newState = magickInterface.getCurrentGameState()
 
-  return { outputs, state: newState, name: rootSpell.name }
+  return { outputs, state: newState, name: spell.name }
 }
