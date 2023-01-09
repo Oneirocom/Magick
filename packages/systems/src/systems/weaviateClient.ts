@@ -11,7 +11,6 @@ let client: any
 
 export async function initWeaviateClient(
   _train: boolean,
-  _trainClassifier: boolean
 ) {
   client = weaviate.client({
     scheme: process.env.WEAVIATE_CLIENT_SCHEME,
@@ -37,48 +36,10 @@ export async function initWeaviateClient(
     await train(data)
     console.timeEnd('train')
   }
-
-  if (_trainClassifier) {
-    await trainClassifier(
-      JSON.parse(
-        fs.readFileSync(
-          path.join(__dirname, '..', '..', '/weaviate/classifier_data.json'),
-          'utf-8'
-        )
-      )
-    )
-  }
 }
-
-async function trainClassifier(data: ClassifierSchema[]) {
-  if (!client) {
-    initWeaviateClient(false, false)
-  }
-
-  if (!data || data === undefined) {
-    return
-  }
-
-  for (let i = 0; i < data.length; i++) {
-    if (Array.isArray(data[i].examples)) {
-      data[i].examples = (data[i].examples as string[]).join(', ')
-    }
-
-    console.log(typeof data[i].examples, data[i].examples)
-
-    const res = await client.data
-      .creator()
-      .withClassName('Emotion')
-      .withProperties(data[i])
-      .do()
-
-    console.log(res)
-  }
-}
-
 async function train(data: SearchSchema[]) {
   if (!client) {
-    initWeaviateClient(false, false)
+    initWeaviateClient(false)
   }
 
   if (!data || data === undefined) {
@@ -104,7 +65,7 @@ async function train(data: SearchSchema[]) {
     console.log(res)
   }
 
-  const documents = await database.instance.getAllDocuments()
+  const documents = await database.getAllDocuments()
   if (documents && documents.length > 0) {
     for (let i = 0; i < documents.length; i++) {
       const object = {
@@ -161,7 +122,7 @@ async function trainFromUrl(url: string): Promise<SearchSchema[]> {
 
 export async function singleTrain(data: SearchSchema) {
   if (!client) {
-    initWeaviateClient(false, false)
+    initWeaviateClient(false)
   }
 
   if (!data || data === undefined) {
@@ -188,7 +149,7 @@ export async function singleTrain(data: SearchSchema) {
 
 export async function search(query: string): Promise<SearchSchema> {
   if (!client || client === undefined) {
-    await initWeaviateClient(false, false)
+    await initWeaviateClient(false)
   }
 
   const info = await client.graphql
@@ -261,7 +222,7 @@ async function getDocumentId(
   description: string
 ): Promise<string> {
   if (!client) {
-    await initWeaviateClient(false, false)
+    await initWeaviateClient(false)
   }
 
   const docs = await client.data.getter().do()
@@ -284,7 +245,7 @@ export async function updateDocument(
   newDescription: string
 ) {
   if (!client) {
-    await initWeaviateClient(false, false)
+    await initWeaviateClient(false)
   }
 
   if (
@@ -334,7 +295,7 @@ export async function updateDocument(
 }
 export async function deleteDocument(title: string, description: string) {
   if (!client) {
-    await initWeaviateClient(false, false)
+    await initWeaviateClient(false)
   }
 
   if (!title || title.length <= 0 || !description || description.length <= 0) {

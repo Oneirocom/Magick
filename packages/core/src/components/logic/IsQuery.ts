@@ -47,7 +47,7 @@ export class IsQuery extends MagickComponent<void> {
     this._task.closed = is ? ['false'] : ['true']
     /*
     const resp = await axios.post(
-      `${import.meta.env.API_URL ?? 'https://0.0.0.0:8001'}/hf_request`,
+      `${import.meta.env.API_URL ?? 'https://localhost:8001'}/hf_request`,
       {
         inputs: str as string,
         model: 'facebook/bart-large-mnli',
@@ -94,7 +94,7 @@ export class IsQuery extends MagickComponent<void> {
         }
 
         const resp2 = await axios.post(
-          `${import.meta.env.API_URL ?? 'https://0.0.0.0:8001'}/hf_request`,
+          `${import.meta.env.API_URL ?? 'https://localhost:8001'}/hf_request`,
           {
             inputs: str as string,
             model: 'facebook/bart-large-mnli',

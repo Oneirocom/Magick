@@ -1,6 +1,5 @@
 import { SpellRunner, GraphData, Spell as SpellType } from '@magickml/core'
-
-import { database } from '@magickml/database'
+import { prisma } from '@magickml/prisma'
 import { CustomError } from '../../utils/CustomError'
 import { buildMagickInterface } from '../spells/buildMagickInterface'
 
@@ -17,23 +16,30 @@ export const runSpell = async ({
   inputFormatter,
   state = {},
 }: RunSpellArgs) => {
-  const rootSpell = await database.instance.models.spells.findOne({
+  let spell = await prisma.spells.findUnique({
     where: { name: spellName },
-    raw: true,
   })
 
-  if (!rootSpell?.graph) {
+  if (!spell?.graph) {
     throw new CustomError('not-found', `Spell with name ${spellName} not found`)
   }
 
-  const graph = rootSpell.graph as GraphData
+  if(spell){
+    // spell.graph, spell.modules and spell.gameState are all JSON
+    // parse them back into the object before returning it
+    spell.graph = JSON.parse(spell.graph as any)
+    spell.modules = JSON.parse(spell.modules as any)
+    spell.gameState = JSON.parse(spell.gameState as any)
+  }
+
+  const graph = spell.graph as unknown as GraphData
   const magickInterface = buildMagickInterface(state)
 
   const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs
 
   const spellToRun = {
     // TOTAL HACK HERE
-    ...rootSpell,
+    ...spell,
     gameState: state,
   }
 
@@ -41,7 +47,7 @@ export const runSpell = async ({
   const spellRunner = new SpellRunner({ magickInterface })
 
   // Load the spell in to the spell runner
-  await spellRunner.loadSpell(spellToRun as SpellType)
+  await spellRunner.loadSpell(spellToRun as unknown as SpellType)
 
   // Get the outputs from running the spell
   const outputs = await spellRunner.defaultRun(formattedInputs)
@@ -49,5 +55,5 @@ export const runSpell = async ({
   // Get the updated state
   const newState = magickInterface.getCurrentGameState()
 
-  return { outputs, state: newState, name: rootSpell.name }
+  return { outputs, state: newState, name: spell.name }
 }

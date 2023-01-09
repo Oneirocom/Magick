@@ -85,7 +85,7 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     let url = node?.data?.url as string
     const method = (node?.data?.method as string)?.toLowerCase().trim()
     if (url.startsWith('server')) {
-      url = url.replace('server', import.meta.env.VITE_APP_API_URL as string)
+      url = url.replace('server', import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_URL as string)
     }
 
     let resp = undefined as any
