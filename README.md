@@ -33,7 +33,13 @@ npm run install
 npm run dev
 ```
 
-## Apache license information
+## Contributors
 
-Good example here for formatting apache license files for reference.
-https://www.openntf.org/Internal/home.nsf/dx/Applying_Apache_License
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
