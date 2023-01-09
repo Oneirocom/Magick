@@ -387,7 +387,7 @@ const AvatarFrame = ({ speechUrl, pause, unpause }) => (
   <Canvas>
     <OrbitControls target={[0.0, 1.25, 0.0]} screenSpacePanning={true} />
     <directionalLight
-      args={['0xFFFFFF']}
+      args={[0xFFFFFF]}
       position={[1.0, 1.0, 1.0]}
       intensity={0.3}
     />
