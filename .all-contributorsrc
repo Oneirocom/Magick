@@ -1,54 +1,53 @@
 {
-  "files": [
-    "README.md"
-  ],
-  "imageSize": 100,
-  "commit": false,
-  "commitConvention": "angular",
-  "contributors": [
-    {
-      "login": "michaelsharpe",
-      "name": "Michael",
-      "avatar_url": "https://avatars.githubusercontent.com/u/2397603?v=4",
-      "profile": "https://github.com/michaelsharpe",
-      "contributions": [
-        "code",
-        "platform"
-      ]
-    },
-    {
-      "login": "lalalune",
-      "name": "M̵̞̗̝̼̅̏̎͝Ȯ̴̝̻̊̃̋̀Õ̷̼͋N̸̩̿͜ ̶̜̠̹̼̩͒",
-      "avatar_url": "https://avatars.githubusercontent.com/u/18633264?v=4",
-      "profile": "https://thenexus.city",
-      "contributions": [
-        "code",
-        "platform"
-      ]
-    },
-    {
-      "login": "alextitonis",
-      "name": "alextitonis",
-      "avatar_url": "https://avatars.githubusercontent.com/u/45359358?v=4",
-      "profile": "https://github.com/alextitonis",
-      "contributions": [
-        "code",
-       ]
-       },
-       {
-      "login": "msub2",
-      "name": "Daniel Adams",
-      "avatar_url": "https://avatars.githubusercontent.com/u/70986246?v=4",
-      "profile": "http://msub2.com",
-      "contributions": [
-        "code"
-      ]
-    }
-  ],
-  "contributorsPerLine": 7,
-  "skipCi": true,
-  "repoType": "github",
-  "repoHost": "https://github.com",
-  "projectName": "MagickML",
-  "projectOwner": "Oneirocom"
+	"files": [
+		"README.md"
+	],
+	"imageSize": 100,
+	"commit": false,
+	"commitConvention": "angular",
+	"contributors": [{
+			"login": "michaelsharpe",
+			"name": "Michael",
+			"avatar_url": "https://avatars.githubusercontent.com/u/2397603?v=4",
+			"profile": "https://github.com/michaelsharpe",
+			"contributions": [
+				"code",
+				"platform"
+			]
+		},
+		{
+			"login": "lalalune",
+			"name": "M̵̞̗̝̼̅̏̎͝Ȯ̴̝̻̊̃̋̀Õ̷̼͋N̸̩̿͜ ̶̜̠̹̼̩͒",
+			"avatar_url": "https://avatars.githubusercontent.com/u/18633264?v=4",
+			"profile": "https://thenexus.city",
+			"contributions": [
+				"code",
+				"platform"
+			]
+		},
+		{
+			"login": "alextitonis",
+			"name": "alextitonis",
+			"avatar_url": "https://avatars.githubusercontent.com/u/45359358?v=4",
+			"profile": "https://github.com/alextitonis",
+			"contributions": [
+				"code"
+			]
+		},
+		{
+			"login": "msub2",
+			"name": "Daniel Adams",
+			"avatar_url": "https://avatars.githubusercontent.com/u/70986246?v=4",
+			"profile": "http://msub2.com",
+			"contributions": [
+				"code"
+			]
+		}
+	],
+	"contributorsPerLine": 7,
+	"skipCi": true,
+	"repoType": "github",
+	"repoHost": "https://github.com",
+	"projectName": "MagickML",
+	"projectOwner": "Oneirocom"
 }
