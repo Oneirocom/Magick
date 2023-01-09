@@ -10,7 +10,7 @@ sudo chmod -R 777 /opt/magick
 cd /opt/magick
 
 # install node modules
-yarn install
+npm install
 
 cp /etc/letsencrypt/live/magick.superreality.com/privkey.pem /opt/magick/packages/client/certs/key.pem
 cp /etc/letsencrypt/live/magick.superreality.com/cert.pem /opt/magick/packages/client/certs/cert.pem
@@ -23,6 +23,6 @@ cp /opt/magick_env/client/.env /opt/magick/packages/client/.env
 cp /opt/magick_env/core/.env /opt/magick/packages/core/.env
 
 #start our node app in the background using PM2
-# pm2 --name magick start "yarn run dev"
+# pm2 --name magick start "npm run dev"
 # pm2 save
 pm2 restart all
