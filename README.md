@@ -36,19 +36,9 @@ yarn install
 
 Now, copy the `.env` file and rename it to `.env.local` -- you can store secrets and environment variables here. This is git ignored but make sure you don't accidentally reveal this in your public repo! The minimum you will need to get started is an OpenAI key.
 
-## Starting the database
-We use Prisma, which is really flexible. You can set your own connection string later, but to get started we've provided a docker container you can run.
-
-First, make sure you have docker installed and running. We recommend the Docker Desktop app which you can find [here](https://docs.docker.com/get-docker/).
-
-Next, start the containers
+# Run Magick!
 ```
-yarn containers
-```
-
-# Run the apps
-```
-yarn apps
+yarn dev
 ```
 
 ## Apache license information

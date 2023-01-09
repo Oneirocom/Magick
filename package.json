@@ -5,17 +5,16 @@
   "license": "MIT",
   "scripts": {
     "dev": "nx run-many --target=serve --projects=server,client,entity-server,speech-server --parallel 4",
-    "containers": "concurrently \"docker-compose up\" \"sleep 20 && yarn db:init && echo database synced!\"",
-    "apps": "nx run-many --target=serve --projects=server,speech-server,client --parallel 3",
     "entities": "nx run-many --target=serve --projects=entity-server",
+    "db:init": "npx prisma db push",
+    "containers": "concurrently \"docker-compose up\" \"sleep 20 && yarn db:init && echo database synced!\"",
     "build": "nx build",
     "start": "nx serve",
     "test": "nx test",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
-    "postinstall": "npx prisma generate && yarn db:init",
-    "db:init": "npx prisma db push"
+    "postinstall": "npx prisma generate && yarn db:init"
   },
   "resolutions": {
     "@types/react": "18.0.2"
