@@ -276,42 +276,42 @@ export class twitter_client {
               const author = await this.twitterv2.v2.user(twit.data.author_id)
               if (author) authorName = author.data.username
 
-              const handled: boolean = await database.dataIsHandled(
-                twit.data.id,
-                'twitter'
-              )
+              // const handled: boolean = await database.dataIsHandled(
+              //   twit.data.id,
+              //   'twitter'
+              // )
 
-              if (!handled) {
-                const resp = await this.spellHandler(
-                  twit.data.text,
-                  author.data.name,
-                  this.settings.twitter_bot_name ?? 'Agent',
-                  'twitter',
-                  twit.data.id,
-                  settings.entity,
-                  [],
-                  'tweet'
-                )
+              // if (!handled) {
+              //   const resp = await this.spellHandler(
+              //     twit.data.text,
+              //     author.data.name,
+              //     this.settings.twitter_bot_name ?? 'Agent',
+              //     'twitter',
+              //     twit.data.id,
+              //     settings.entity,
+              //     [],
+              //     'tweet'
+              //   )
 
-                if (resp && resp !== undefined && resp?.length > 0) {
-                  if (resp === 'like' || resp === 'heart') {
-                    await this.twitterv2.v2.like(
-                      localUser.data.id,
-                      twit.data.id
-                    )
-                  } else if (resp !== 'ignore') {
-                    await this.handleMessage(resp, twit.data.id, 'Twit')
-                  } else if (resp === 'retweet') {
-                    await this.twitterv2.v2.retweet(
-                      localUser.data.id,
-                      twit.data.id
-                    )
-                  }
-                }
+              //   if (resp && resp !== undefined && resp?.length > 0) {
+              //     if (resp === 'like' || resp === 'heart') {
+              //       await this.twitterv2.v2.like(
+              //         localUser.data.id,
+              //         twit.data.id
+              //       )
+              //     } else if (resp !== 'ignore') {
+              //       await this.handleMessage(resp, twit.data.id, 'Twit')
+              //     } else if (resp === 'retweet') {
+              //       await this.twitterv2.v2.retweet(
+              //         localUser.data.id,
+              //         twit.data.id
+              //       )
+              //     }
+              //   }
 
-                // todo not sure about this third argument
-                database.setDataHandled(twit.data.id, 'twitter', resp)
-              }
+              //   // todo not sure about this third argument
+              //   // database.setDataHandled(twit.data.id, 'twitter', resp)
+              // }
             }
           }
         })

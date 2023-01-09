@@ -224,8 +224,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }) => {
     const urlString = `${
       import.meta.env.VITE_APP_API_URL ??
-      import.meta.env.API_ROOT_URL ??
-      'http://localhost:8001'
+      import.meta.env.API_ROOT_URL
     }/event`
 
     const params = {
@@ -261,8 +260,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     const response = await axios.post(
       `${
         import.meta.env.VITE_APP_API_URL ??
-        import.meta.env.API_ROOT_URL ??
-        'http://localhost:8001'
+        import.meta.env.API_ROOT_URL
       }/event`,
       {
         type,
