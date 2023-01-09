@@ -77,7 +77,7 @@ spec:
             - name: ENTITY_HOSTNAME
               value: magick-runner
             - name: TIKTALKNET_URL
-              value: http://0.0.0.0:8050/tts
+              value: http://localhost:8050/tts
             - name: REACT_APP_SEARCH_SERVER_URL
               value: http://localhost:65531
       imagePullSecrets:

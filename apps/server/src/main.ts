@@ -141,11 +141,11 @@ async function init() {
   useSSL
     ? https
         .createServer(optionSsl, app.callback())
-        .listen(PORT, '0.0.0.0', () => {
-          console.log('Https Server listening on: 0.0.0.0:' + PORT)
+        .listen(PORT, 'localhost', () => {
+          console.log('Https Server listening on: localhost:' + PORT)
         })
-    : http.createServer(app.callback()).listen(PORT, '0.0.0.0', () => {
-        console.log('Http Server listening on: 0.0.0.0:' + PORT)
+    : http.createServer(app.callback()).listen(PORT, 'localhost', () => {
+        console.log('Http Server listening on: localhost:' + PORT)
       })
   // await initLoop()
 }
