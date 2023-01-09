@@ -54,6 +54,15 @@
         "code",
         "blog"
       ]
+    },
+    {
+      "login": "madjin",
+      "name": "jin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32600939?v=4",
+      "profile": "https://xrdevlog.com/",
+      "contributions": [
+        "blog"
+      ]
     }
   ],
   "contributorsPerLine": 7,
