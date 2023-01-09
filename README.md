@@ -14,12 +14,6 @@ Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick 
 
 ![image](https://user-images.githubusercontent.com/18633264/210928740-fec448aa-e6fe-4640-9587-aae109ddea12.png)
 
-## Getting Started
-
-### Prerequisites
-
-You will need **Node.js 18 or higher**. You may need to install `xvfb, chromium and ffmpeg` for features like browser integration and text to speech. For speech, search and image generation serverss, you will need Docker (or it will make your life much easier).
-
 ### Installation
 
 First, clone and set up Magick
@@ -33,8 +27,6 @@ Next, install dependencies
 ```
 npm run install
 ```
-
-Now, copy the `.env` file and rename it to `.env.local` -- you can store secrets and environment variables here. This is git ignored but make sure you don't accidentally reveal this in your public repo! The minimum you will need to get started is an OpenAI key.
 
 # Run Magick!
 ```
