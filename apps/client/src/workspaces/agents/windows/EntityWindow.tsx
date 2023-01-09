@@ -1,3 +1,4 @@
+import { magickApiRootUrl } from 'apps/client/src/config'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
@@ -628,7 +629,7 @@ const EntityWindow = ({ id, updateCallback }) => {
       event.preventDefault()
       console.log('value is: ', value)
       try {
-        const url = encodeURI(`http://localhost:8001/spells/${spell_handler}`)
+        const url = encodeURI(`${magickApiRootUrl}/spells/${spell_handler}`)
         console.log('url is: ', url)
         const response = await axios
           .post(`${url}`, {
