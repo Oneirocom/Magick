@@ -384,13 +384,13 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
   useSSL
     ? https
         .createServer(sslOptions, app.callback())
-        .listen(PORT, '0.0.0.0', () => {
-          console.log('Corpus Search Server listening on: 0.0.0.0:' + PORT)
+        .listen(PORT, 'localhost', () => {
+          console.log('Corpus Search Server listening on: localhost:' + PORT)
         })
     : https
         .createServer({ rejectUnauthorized: false }, app.callback())
-        .listen(PORT, '0.0.0.0', () => {
-          console.log('Corpus Search Server listening on: 0.0.0.0:' + PORT)
+        .listen(PORT, 'localhost', () => {
+          console.log('Corpus Search Server listening on: localhost:' + PORT)
         })
 }
 

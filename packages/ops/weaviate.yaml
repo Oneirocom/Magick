@@ -15,7 +15,7 @@ spec:
       containers:
         - name: weaviate
           image: semitechnologies/weaviate:1.11.0
-          args: ["--host", "0.0.0.0", "--port", "8080", "--scheme", "http"]
+          args: ["--host", "localhost", "--port", "8080", "--scheme", "http"]
           stdin: true
           tty: true
           ports:
