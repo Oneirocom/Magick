@@ -14,6 +14,7 @@
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
+    "download-whisper-bin": "ts-node packages/utils/src/whisper-models.ts",
     "postinstall": "npx prisma generate && npm run db:init"
   },
   "resolutions": {
