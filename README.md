@@ -22,7 +22,7 @@ You will need **Node.js 18 or higher**. You may need to install `xvfb, chromium 
 
 ### Installation
 
-First, clone and set up magick
+First, clone and set up Magick
 
 ```
 git clone https://github.com/Oneirocom/MagickML
@@ -31,20 +31,15 @@ git clone https://github.com/Oneirocom/MagickML
 Next, install dependencies
 
 ```
-npm install
+yarn install
 ```
 
-Now, copy the `.env.example` file and rename it to `.env` -- you can store secrets and environment variables here. This is git ignored but make sure you don't accidentally reveal this in your public repo! The minimum you will need to get started is an OpenAI key.
+Now, copy the `.env` file and rename it to `.env.local` -- you can store secrets and environment variables here. This is git ignored but make sure you don't accidentally reveal this in your public repo! The minimum you will need to get started is an OpenAI key.
 
-Finally, make sure you have docker installed and running. We recommend the Docker Desktop app which you can find [here](https://docs.docker.com/get-docker/).
-
-That's it, you're installed. In order to run the client and server use this quickstart command:
-
+# Run Magick!
 ```
-npm run dev
+yarn dev
 ```
-
-You can also start the parts up individually. In order, start `containers`, then `apps`, then if you'd like live agents, also run `entities`. All three are covered by the `yarn dev`.
 
 ## Apache license information
 

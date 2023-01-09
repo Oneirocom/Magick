@@ -1,8 +1,9 @@
+import { magickApiRootUrl } from 'apps/client/src/config'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
 
-const EntityWindow = ({ id, updateCallback }) => {
+const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [loaded, setLoaded] = useState(false)
@@ -165,102 +166,106 @@ const EntityWindow = ({ id, updateCallback }) => {
         const res = await axios.get(
           `${import.meta.env.VITE_APP_API_URL}/entity?instanceId=` + id
         )
+        console.log('res is', res)
+        if(!res.data.data) {
+          res.data.data = {}
+        }
         setEnabled(res.data.enabled === true)
-        setDiscordEnabled(res.data.discord_enabled === true)
-        setUseVoice(res.data.use_voice === true)
-        setVoiceProvider(res.data.voice_provider)
-        setVoiceCharacter(res.data.voice_character)
-        setVoiceLanguageCode(res.data.voice_language_code)
-        setVoiceDefaultPhrases(res.data.voice_default_phrases)
-        setTikTalkNetUrl(res.data.tiktalknet_url)
+        setDiscordEnabled(res.data.data.discord_enabled === true)
+        setUseVoice(res.data.data.use_voice === true)
+        setVoiceProvider(res.data.data.voice_provider)
+        setVoiceCharacter(res.data.data.voice_character)
+        setVoiceLanguageCode(res.data.data.voice_language_code)
+        setVoiceDefaultPhrases(res.data.data.voice_default_phrases)
+        setTikTalkNetUrl(res.data.data.tiktalknet_url)
 
-        setOpenaiApiKey(res.data.openai_api_key)
-        setDiscordApiKey(res.data.discord_api_key)
-        setDiscordStartingWords(res.data.discord_starting_words)
-        setDiscordBotNameRegex(res.data.discord_bot_name_regex)
-        setDiscordBotName(res.data.discord_bot_name)
-        setDiscordEmptyResponses(res.data.discord_empty_responses)
-        setDiscordSpellHandlerIncoming(res.data.discord_spell_handler_incoming)
-        setDiscordSpellHandlerUpdate(res.data.discord_spell_handler_update)
+        setOpenaiApiKey(res.data.data.openai_api_key)
+        setDiscordApiKey(res.data.data.discord_api_key)
+        setDiscordStartingWords(res.data.data.discord_starting_words)
+        setDiscordBotNameRegex(res.data.data.discord_bot_name_regex)
+        setDiscordBotName(res.data.data.discord_bot_name)
+        setDiscordEmptyResponses(res.data.data.discord_empty_responses)
+        setDiscordSpellHandlerIncoming(res.data.data.discord_spell_handler_incoming)
+        setDiscordSpellHandlerUpdate(res.data.data.discord_spell_handler_update)
 
-        setEthPrivateKey(res.data.eth_private_key)
-        setEthPublicAddress(res.data.eth_public_address)
+        setEthPrivateKey(res.data.data.eth_private_key)
+        setEthPublicAddress(res.data.data.eth_public_address)
 
-        setTwitterClientEnable(res.data.twitter_client_enable === true)
-        setTwitterToken(res.data.twitter_token)
-        setTwitterId(res.data.twitter_id)
-        setTwitterAppToken(res.data.twitter_app_token)
-        setTwitterAppTokenSecret(res.data.twitter_app_token_secret)
-        setTwitterAccessToken(res.data.twitter_access_token)
-        setTwitterAccessTokenSecret(res.data.twitter_access_token_secret)
-        setTwitterEnableTwits(res.data.twitter_enable_twits === true)
-        setTwitterTweetRules(res.data.twitter_tweet_rules)
-        setTwitterAutoTweetIntervalMin(res.data.twitter_auto_tweet_interval_min)
-        setTwitterAutoTweetIntervalMax(res.data.twitter_auto_tweet_interval_max)
-        setTwitterBotName(res.data.twitter_bot_name)
-        setTwitterBotNameRegex(res.data.twitter_bot_name_regex)
-        setTwitterSpellHandlerIncoming(res.data.twitter_spell_handler_incoming)
-        setTwitterSpellHandlerAuto(res.data.twitter_spell_handler_auto)
+        setTwitterClientEnable(res.data.data.twitter_client_enable === true)
+        setTwitterToken(res.data.data.twitter_token)
+        setTwitterId(res.data.data.twitter_id)
+        setTwitterAppToken(res.data.data.twitter_app_token)
+        setTwitterAppTokenSecret(res.data.data.twitter_app_token_secret)
+        setTwitterAccessToken(res.data.data.twitter_access_token)
+        setTwitterAccessTokenSecret(res.data.data.twitter_access_token_secret)
+        setTwitterEnableTwits(res.data.data.twitter_enable_twits === true)
+        setTwitterTweetRules(res.data.data.twitter_tweet_rules)
+        setTwitterAutoTweetIntervalMin(res.data.data.twitter_auto_tweet_interval_min)
+        setTwitterAutoTweetIntervalMax(res.data.data.twitter_auto_tweet_interval_max)
+        setTwitterBotName(res.data.data.twitter_bot_name)
+        setTwitterBotNameRegex(res.data.data.twitter_bot_name_regex)
+        setTwitterSpellHandlerIncoming(res.data.data.twitter_spell_handler_incoming)
+        setTwitterSpellHandlerAuto(res.data.data.twitter_spell_handler_auto)
 
-        setTelegramEnabled(res.data.telegram_enabled === true)
-        setTelegramBotToken(res.data.telegram_bot_token)
-        setTelegramBotName(res.data.telegram_bot_name)
+        setTelegramEnabled(res.data.data.telegram_enabled === true)
+        setTelegramBotToken(res.data.data.telegram_bot_token)
+        setTelegramBotName(res.data.data.telegram_bot_name)
         setTelegramSpellHandlerIncoming(
-          res.data.telegram_spell_handler_incoming
+          res.data.data.telegram_spell_handler_incoming
         )
 
-        setRedditEnabled(res.data.reddit_enabled === true)
-        setRedditAppId(res.data.reddit_app_id)
-        setRedditAppSecretId(res.data.reddit_app_secret_id)
-        setRedditOauthToken(res.data.reddit_oauth_token)
-        setRedditBotName(res.data.reddit_bot_name)
-        setRedditBotNameRegex(res.data.reddit_bot_name_regex)
-        setRedditSpellHandlerIncoming(res.data.reddit_spell_handler_incoming)
+        setRedditEnabled(res.data.data.reddit_enabled === true)
+        setRedditAppId(res.data.data.reddit_app_id)
+        setRedditAppSecretId(res.data.data.reddit_app_secret_id)
+        setRedditOauthToken(res.data.data.reddit_oauth_token)
+        setRedditBotName(res.data.data.reddit_bot_name)
+        setRedditBotNameRegex(res.data.data.reddit_bot_name_regex)
+        setRedditSpellHandlerIncoming(res.data.data.reddit_spell_handler_incoming)
 
-        setZoomEnabled(res.data.zoom_enabled === true)
-        setZoomInvitationLink(res.data.zoom_invitation_link)
-        setZoomPassword(res.data.zoom_password)
-        setZoomBotName(res.data.zoom_bot_name)
-        setZoomSpellHandlerIncoming(res.data.zoom_spell_handler_incoming)
+        setZoomEnabled(res.data.data.zoom_enabled === true)
+        setZoomInvitationLink(res.data.data.zoom_invitation_link)
+        setZoomPassword(res.data.data.zoom_password)
+        setZoomBotName(res.data.data.zoom_bot_name)
+        setZoomSpellHandlerIncoming(res.data.data.zoom_spell_handler_incoming)
 
-        setLoopEnabled(res.data.loop_enabled === true)
-        setLoopInterval(res.data.loop_interval)
-        setLoopAgentName(res.data.loop_agent_name)
-        setLoopSpellHandler(res.data.loop_spell_handler)
+        setLoopEnabled(res.data.data.loop_enabled === true)
+        setLoopInterval(res.data.data.loop_interval)
+        setLoopAgentName(res.data.data.loop_agent_name)
+        setLoopSpellHandler(res.data.data.loop_spell_handler)
 
-        setSlackEnabled(res.data.slack_enabled === true)
-        setSlackToken(res.data.slack_token)
-        setSlackBotToken(res.data.slack_bot_token)
-        setSlackSigningSecret(res.data.slack_signing_secret)
-        setSlackBotName(res.data.slack_bot_name)
-        setSlackPort(res.data.slack_port)
-        setSlackSpellHandlerIncoming(res.data.slack_spell_handler_incoming)
+        setSlackEnabled(res.data.data.slack_enabled === true)
+        setSlackToken(res.data.data.slack_token)
+        setSlackBotToken(res.data.data.slack_bot_token)
+        setSlackSigningSecret(res.data.data.slack_signing_secret)
+        setSlackBotName(res.data.data.slack_bot_name)
+        setSlackPort(res.data.data.slack_port)
+        setSlackSpellHandlerIncoming(res.data.data.slack_spell_handler_incoming)
 
-        setInstagramEnabled(res.data.instagram_enabled === true)
-        setInstagramUsername(res.data.instagram_username)
-        setInstagramPassword(res.data.instagram_password)
-        setInstagramBotName(res.data.instagram_bot_name)
-        setInstagramBotNameRegex(res.data.instagram_bot_name_regex)
+        setInstagramEnabled(res.data.data.instagram_enabled === true)
+        setInstagramUsername(res.data.data.instagram_username)
+        setInstagramPassword(res.data.data.instagram_password)
+        setInstagramBotName(res.data.data.instagram_bot_name)
+        setInstagramBotNameRegex(res.data.data.instagram_bot_name_regex)
         setInstagramSpellHandlerIncoming(
-          res.data.instagram_spell_handler_incoming
+          res.data.data.instagram_spell_handler_incoming
         )
 
-        setMessengerEnabled(res.data.messenger_enabled === true)
-        setMessengerPageAccessToken(res.data.messenger_page_access_token)
-        setMessengerVerifyToken(res.data.messenger_verify_token)
-        setMessengerBotName(res.data.messenger_bot_name)
-        setMessengerBotNameRegex(res.data.messenger_bot_name_regex)
+        setMessengerEnabled(res.data.data.messenger_enabled === true)
+        setMessengerPageAccessToken(res.data.data.messenger_page_access_token)
+        setMessengerVerifyToken(res.data.data.messenger_verify_token)
+        setMessengerBotName(res.data.data.messenger_bot_name)
+        setMessengerBotNameRegex(res.data.data.messenger_bot_name_regex)
         setMessengerSpellHandlerIncoming(
-          res.data.messenger_spell_handler_incoming
+          res.data.data.messenger_spell_handler_incoming
         )
 
-        setTwilioEnabled(res.data.twilio_enabled === true)
-        setTwilioAccountSID(res.data.twilio_account_sid)
-        setTwilioAuthToken(res.data.twilio_auth_token)
-        setTwilioPhoneNumber(res.data.twilio_phone_number)
-        setTwilioBotName(res.data.twilio_bot_name)
-        setTwilioEmptyResponses(res.data.twilio_empty_responses)
-        setTwilioSpellHandlerIncoming(res.data.twilio_spell_handler_incoming)
+        setTwilioEnabled(res.data.data.twilio_enabled === true)
+        setTwilioAccountSID(res.data.data.twilio_account_sid)
+        setTwilioAuthToken(res.data.data.twilio_auth_token)
+        setTwilioPhoneNumber(res.data.data.twilio_phone_number)
+        setTwilioBotName(res.data.data.twilio_bot_name)
+        setTwilioEmptyResponses(res.data.data.twilio_empty_responses)
+        setTwilioSpellHandlerIncoming(res.data.data.twilio_spell_handler_incoming)
 
         setLoaded(true)
       })()
@@ -304,84 +309,86 @@ const EntityWindow = ({ id, updateCallback }) => {
     console.log('Update called')
     const _data = {
       enabled,
-      discord_enabled,
-      openai_api_key,
-      eth_private_key,
-      eth_public_address,
-      discord_api_key,
-      discord_starting_words,
-      discord_bot_name_regex,
-      discord_bot_name,
-      discord_empty_responses,
-      discord_spell_handler_incoming,
-      discord_spell_handler_update,
-      use_voice,
-      voice_provider,
-      voice_character,
-      voice_language_code,
-      voice_default_phrases,
-      tiktalknet_url,
-      twitter_client_enable,
-      twitter_token,
-      twitter_id,
-      twitter_app_token,
-      twitter_app_token_secret,
-      twitter_access_token,
-      twitter_access_token_secret,
-      twitter_enable_twits,
-      twitter_tweet_rules,
-      twitter_auto_tweet_interval_min,
-      twitter_auto_tweet_interval_max,
-      twitter_bot_name,
-      twitter_bot_name_regex,
-      twitter_spell_handler_incoming,
-      twitter_spell_handler_auto,
-      telegram_enabled,
-      telegram_bot_token,
-      telegram_bot_name,
-      telegram_spell_handler_incoming,
-      reddit_enabled,
-      reddit_app_id,
-      reddit_app_secret_id,
-      reddit_oauth_token,
-      reddit_bot_name,
-      reddit_bot_name_regex,
-      reddit_spell_handler_incoming,
-      zoom_enabled,
-      zoom_invitation_link,
-      zoom_password,
-      zoom_bot_name,
-      zoom_spell_handler_incoming,
-      loop_enabled,
-      loop_interval,
-      loop_agent_name,
-      loop_spell_handler,
-      slack_enabled,
-      slack_token,
-      slack_signing_secret,
-      slack_bot_token,
-      slack_bot_name,
-      slack_port,
-      slack_spell_handler_incoming,
-      instagram_enabled,
-      instagram_username,
-      instagram_password,
-      instagram_bot_name,
-      instagram_bot_name_regex,
-      instagram_spell_handler_incoming,
-      messenger_enabled,
-      messenger_page_access_token,
-      messenger_verify_token,
-      messenger_bot_name,
-      messenger_bot_name_regex,
-      messenger_spell_handler_incoming,
-      twilio_enabled,
-      twilio_account_sid,
-      twilio_auth_token,
-      twilio_phone_number,
-      twilio_bot_name,
-      twilio_empty_responses,
-      twilio_spell_handler_incoming,
+      data: {
+        discord_enabled,
+        openai_api_key,
+        eth_private_key,
+        eth_public_address,
+        discord_api_key,
+        discord_starting_words,
+        discord_bot_name_regex,
+        discord_bot_name,
+        discord_empty_responses,
+        discord_spell_handler_incoming,
+        discord_spell_handler_update,
+        use_voice,
+        voice_provider,
+        voice_character,
+        voice_language_code,
+        voice_default_phrases,
+        tiktalknet_url,
+        twitter_client_enable,
+        twitter_token,
+        twitter_id,
+        twitter_app_token,
+        twitter_app_token_secret,
+        twitter_access_token,
+        twitter_access_token_secret,
+        twitter_enable_twits,
+        twitter_tweet_rules,
+        twitter_auto_tweet_interval_min,
+        twitter_auto_tweet_interval_max,
+        twitter_bot_name,
+        twitter_bot_name_regex,
+        twitter_spell_handler_incoming,
+        twitter_spell_handler_auto,
+        telegram_enabled,
+        telegram_bot_token,
+        telegram_bot_name,
+        telegram_spell_handler_incoming,
+        reddit_enabled,
+        reddit_app_id,
+        reddit_app_secret_id,
+        reddit_oauth_token,
+        reddit_bot_name,
+        reddit_bot_name_regex,
+        reddit_spell_handler_incoming,
+        zoom_enabled,
+        zoom_invitation_link,
+        zoom_password,
+        zoom_bot_name,
+        zoom_spell_handler_incoming,
+        loop_enabled,
+        loop_interval,
+        loop_agent_name,
+        loop_spell_handler,
+        slack_enabled,
+        slack_token,
+        slack_signing_secret,
+        slack_bot_token,
+        slack_bot_name,
+        slack_port,
+        slack_spell_handler_incoming,
+        instagram_enabled,
+        instagram_username,
+        instagram_password,
+        instagram_bot_name,
+        instagram_bot_name_regex,
+        instagram_spell_handler_incoming,
+        messenger_enabled,
+        messenger_page_access_token,
+        messenger_verify_token,
+        messenger_bot_name,
+        messenger_bot_name_regex,
+        messenger_spell_handler_incoming,
+        twilio_enabled,
+        twilio_account_sid,
+        twilio_auth_token,
+        twilio_phone_number,
+        twilio_bot_name,
+        twilio_empty_responses,
+        twilio_spell_handler_incoming,
+      }
     }
     axios
       .post(`${import.meta.env.VITE_APP_API_URL}/entity`, {
@@ -402,106 +409,106 @@ const EntityWindow = ({ id, updateCallback }) => {
           console.log(responseData, 'responseDataresponseData')
 
           setEnabled(responseData.enabled)
-          setDiscordEnabled(responseData.discord_enabled)
-          setOpenaiApiKey(responseData.openai_api_key)
-          setDiscordApiKey(responseData.discord_api_key)
-          setDiscordStartingWords(responseData.discord_starting_words)
-          setDiscordBotNameRegex(responseData.discord_bot_name_regex)
-          setDiscordBotName(responseData.discord_bot_name)
-          setDiscordEmptyResponses(responseData.discord_empty_responses)
+          setDiscordEnabled(responseData.data.discord_enabled)
+          setOpenaiApiKey(responseData.data.openai_api_key)
+          setDiscordApiKey(responseData.data.discord_api_key)
+          setDiscordStartingWords(responseData.data.discord_starting_words)
+          setDiscordBotNameRegex(responseData.data.discord_bot_name_regex)
+          setDiscordBotName(responseData.data.discord_bot_name)
+          setDiscordEmptyResponses(responseData.data.discord_empty_responses)
           setDiscordSpellHandlerIncoming(
-            responseData.discord_spell_handler_incoming
+            responseData.data.discord_spell_handler_incoming
           )
           setDiscordSpellHandlerUpdate(
-            responseData.discord_spell_handler_update
+            responseData.data.discord_spell_handler_update
           )
 
-          setTwitterClientEnable(responseData.twitter_client_enable)
-          setTwitterToken(responseData.twitter_token)
-          setTwitterId(responseData.twitter_id)
-          setTwitterAppToken(responseData.twitter_app_token)
-          setTwitterAppTokenSecret(responseData.twitter_app_token_secret)
-          setTwitterAccessToken(responseData.twitter_access_token)
-          setTwitterAccessTokenSecret(responseData.twitter_access_token_secret)
-          setTwitterEnableTwits(responseData.twitter_enable_twits)
-          setTwitterTweetRules(responseData.twitter_tweet_rules)
+          setTwitterClientEnable(responseData.data.twitter_client_enable)
+          setTwitterToken(responseData.data.twitter_token)
+          setTwitterId(responseData.data.twitter_id)
+          setTwitterAppToken(responseData.data.twitter_app_token)
+          setTwitterAppTokenSecret(responseData.data.twitter_app_token_secret)
+          setTwitterAccessToken(responseData.data.twitter_access_token)
+          setTwitterAccessTokenSecret(responseData.data.twitter_access_token_secret)
+          setTwitterEnableTwits(responseData.data.twitter_enable_twits)
+          setTwitterTweetRules(responseData.data.twitter_tweet_rules)
           setTwitterAutoTweetIntervalMin(
-            responseData.twitter_auto_tweet_interval_min
+            responseData.data.twitter_auto_tweet_interval_min
           )
           setTwitterAutoTweetIntervalMax(
-            responseData.twitter_auto_tweet_interval_max
+            responseData.data.twitter_auto_tweet_interval_max
           )
-          setTwitterBotName(responseData.twitter_bot_name)
-          setTwitterBotNameRegex(responseData.twitter_bot_name_regex)
+          setTwitterBotName(responseData.data.twitter_bot_name)
+          setTwitterBotNameRegex(responseData.data.twitter_bot_name_regex)
           setTwitterSpellHandlerIncoming(
-            responseData.twitter_spell_handler_incoming
+            responseData.data.twitter_spell_handler_incoming
           )
-          setTwitterSpellHandlerAuto(responseData.twitter_spell_handler_auto)
+          setTwitterSpellHandlerAuto(responseData.data.twitter_spell_handler_auto)
 
-          setTelegramEnabled(responseData.telegram_enabled)
-          setTelegramBotToken(responseData.telegram_bot_token)
-          setTelegramBotName(responseData.telegram_bot_name)
+          setTelegramEnabled(responseData.data.telegram_enabled)
+          setTelegramBotToken(responseData.data.telegram_bot_token)
+          setTelegramBotName(responseData.data.telegram_bot_name)
           setTelegramSpellHandlerIncoming(
-            responseData.telegram_spell_handler_incoming
+            responseData.data.telegram_spell_handler_incoming
           )
 
-          setRedditEnabled(responseData.reddit_enabled)
-          setRedditAppId(responseData.reddit_app_id)
-          setRedditAppSecretId(responseData.reddit_app_secret_id)
-          setRedditOauthToken(responseData.reddit_oauth_token)
-          setRedditBotName(responseData.reddit_bot_name)
-          setRedditBotNameRegex(responseData.reddit_bot_name_regex)
+          setRedditEnabled(responseData.data.reddit_enabled)
+          setRedditAppId(responseData.data.reddit_app_id)
+          setRedditAppSecretId(responseData.data.reddit_app_secret_id)
+          setRedditOauthToken(responseData.data.reddit_oauth_token)
+          setRedditBotName(responseData.data.reddit_bot_name)
+          setRedditBotNameRegex(responseData.data.reddit_bot_name_regex)
           setRedditSpellHandlerIncoming(
-            responseData.reddit_spell_handler_incoming
+            responseData.data.reddit_spell_handler_incoming
           )
 
-          setZoomEnabled(responseData.zoom_enabled)
-          setZoomInvitationLink(responseData.zoom_invitation_link)
-          setZoomPassword(responseData.zoom_password)
-          setZoomBotName(responseData.zoom_bot_name)
-          setZoomSpellHandlerIncoming(responseData.zoom_spell_handler_incoming)
+          setZoomEnabled(responseData.data.zoom_enabled)
+          setZoomInvitationLink(responseData.data.zoom_invitation_link)
+          setZoomPassword(responseData.data.zoom_password)
+          setZoomBotName(responseData.data.zoom_bot_name)
+          setZoomSpellHandlerIncoming(responseData.data.zoom_spell_handler_incoming)
 
-          setLoopEnabled(responseData.loop_enabled)
-          setLoopInterval(responseData.loop_interval)
-          setLoopAgentName(responseData.loop_agent_name)
-          setLoopSpellHandler(responseData.loop_spell_handler)
+          setLoopEnabled(responseData.data.loop_enabled)
+          setLoopInterval(responseData.data.loop_interval)
+          setLoopAgentName(responseData.data.loop_agent_name)
+          setLoopSpellHandler(responseData.data.loop_spell_handler)
 
-          setSlackEnabled(responseData.slack_enabled)
-          setSlackToken(responseData.slack_token)
-          setSlackSigningSecret(responseData.slack_signing_secret)
-          setSlackBotToken(responseData.slack_bot_token)
-          setSlackBotName(responseData.slack_bot_name)
-          setSlackPort(responseData.slack_port)
+          setSlackEnabled(responseData.data.slack_enabled)
+          setSlackToken(responseData.data.slack_token)
+          setSlackSigningSecret(responseData.data.slack_signing_secret)
+          setSlackBotToken(responseData.data.slack_bot_token)
+          setSlackBotName(responseData.data.slack_bot_name)
+          setSlackPort(responseData.data.slack_port)
           setSlackSpellHandlerIncoming(
-            responseData.slack_spell_handler_incoming
+            responseData.data.slack_spell_handler_incoming
           )
 
-          setInstagramEnabled(responseData.instagram_enabled)
-          setInstagramUsername(responseData.instagram_username)
-          setInstagramPassword(responseData.instagram_password)
-          setInstagramBotName(responseData.instagram_bot_name)
-          setInstagramBotNameRegex(responseData.instagram_bot_name_regex)
+          setInstagramEnabled(responseData.data.instagram_enabled)
+          setInstagramUsername(responseData.data.instagram_username)
+          setInstagramPassword(responseData.data.instagram_password)
+          setInstagramBotName(responseData.data.instagram_bot_name)
+          setInstagramBotNameRegex(responseData.data.instagram_bot_name_regex)
           setInstagramSpellHandlerIncoming(
-            responseData.instagram_spell_handler_incoming
+            responseData.data.instagram_spell_handler_incoming
           )
 
-          setMessengerEnabled(responseData.messenger_enabled)
-          setMessengerPageAccessToken(responseData.messenger_page_access_token)
-          setMessengerVerifyToken(responseData.messenger_verify_token)
-          setMessengerBotName(responseData.messenger_bot_name)
-          setMessengerBotNameRegex(responseData.messenger_bot_name_regex)
+          setMessengerEnabled(responseData.data.messenger_enabled)
+          setMessengerPageAccessToken(responseData.data.messenger_page_access_token)
+          setMessengerVerifyToken(responseData.data.messenger_verify_token)
+          setMessengerBotName(responseData.data.messenger_bot_name)
+          setMessengerBotNameRegex(responseData.data.messenger_bot_name_regex)
           setMessengerSpellHandlerIncoming(
-            responseData.messenger_spell_handler_incoming
+            responseData.data.messenger_spell_handler_incoming
           )
 
-          setTwilioEnabled(responseData.twilio_enabled)
-          setTwilioAccountSID(responseData.twilio_account_sid)
-          setTwilioAuthToken(responseData.twilio_auth_token)
-          setTwilioPhoneNumber(responseData.twilio_phone_number)
-          setTwilioBotName(responseData.twilio_bot_name)
-          setTwilioEmptyResponses(responseData.twilio_empty_responses)
+          setTwilioEnabled(responseData.data.twilio_enabled)
+          setTwilioAccountSID(responseData.data.twilio_account_sid)
+          setTwilioAuthToken(responseData.data.twilio_auth_token)
+          setTwilioPhoneNumber(responseData.data.twilio_phone_number)
+          setTwilioBotName(responseData.data.twilio_bot_name)
+          setTwilioEmptyResponses(responseData.data.twilio_empty_responses)
           setTwilioSpellHandlerIncoming(
-            responseData.twilio_spell_handler_incoming
+            responseData.data.twilio_spell_handler_incoming
           )
 
           updateCallback()
@@ -517,6 +524,7 @@ const EntityWindow = ({ id, updateCallback }) => {
   const exportEntity = () => {
     const _data = {
       enabled,
+      data: {
       discord_enabled,
       openai_api_key,
       discord_api_key,
@@ -593,6 +601,7 @@ const EntityWindow = ({ id, updateCallback }) => {
       twilio_bot_name,
       twilio_empty_responses,
       twilio_spell_handler_incoming,
+      }
     }
     const fileName =
       discord_bot_name ?? twitter_id ?? twilio_bot_name ?? 'entity'
@@ -628,7 +637,7 @@ const EntityWindow = ({ id, updateCallback }) => {
       event.preventDefault()
       console.log('value is: ', value)
       try {
-        const url = encodeURI(`https://localhost:8001/spells/${spell_handler}`)
+        const url = encodeURI(`${magickApiRootUrl}/spells/${spell_handler}`)
         console.log('url is: ', url)
         const response = await axios
           .post(`${url}`, {
