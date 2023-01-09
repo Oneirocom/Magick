@@ -226,6 +226,11 @@ export class Entity {
     const spell = await prisma.spells.findUnique({
       where: { name: spell_handler },
     })
+    // spell.graph, spell.modules and spell.gameState are all JSON
+    // parse them back into the object before returning it
+    spell.graph = JSON.parse(spell.graph as any)
+    spell.modules = JSON.parse(spell.modules as any)
+    spell.gameState = JSON.parse(spell.gameState as any)
 
     console.log('discord incoming spell', spell)
 
@@ -291,20 +296,36 @@ export class Entity {
         'Twitter already running for this entity on this instance'
       )
 
-    const incoming_spell = await prisma.spells.findUnique({
+    let spell = await prisma.spells.findUnique({
       where: { name: twitter_spell_handler_incoming },
     })
 
+    if(spell){
+      // spell.graph, spell.modules and spell.gameState are all JSON
+      // parse them back into the object before returning it
+      spell.graph = JSON.parse(spell.graph as any)
+      spell.modules = JSON.parse(spell.modules as any)
+      spell.gameState = JSON.parse(spell.gameState as any)
+    }
+
     const spellHandler = await this.createSpellHandler({
-      spell: incoming_spell,
+      spell,
     })
 
-    const auto_spell = await prisma.spells.findUnique({
+    spell = await prisma.spells.findUnique({
       where: { name: twitter_spell_handler_auto },
     })
 
+    if(spell){
+      // spell.graph, spell.modules and spell.gameState are all JSON
+      // parse them back into the object before returning it
+      spell.graph = JSON.parse(spell.graph as any)
+      spell.modules = JSON.parse(spell.modules as any)
+      spell.gameState = JSON.parse(spell.gameState as any)
+    }
+
     const spellHandlerAuto = await this.createSpellHandler({
-      spell: auto_spell,
+      spell: spell,
     })
 
     this.twitter = new twitter_client()
@@ -466,6 +487,15 @@ export class Entity {
       const spell = await prisma.spells.findUnique({
         where: { name: loop_spell_handler },
       })
+
+      if(spell){        
+        // spell.graph, spell.modules and spell.gameState are all JSON
+        // parse them back into the object before returning it
+        spell.graph = JSON.parse(spell.graph as any)
+        spell.modules = JSON.parse(spell.modules as any)
+        spell.gameState = JSON.parse(spell.gameState as any)
+      }
+
 
       const spellHandler =  await this.createSpellHandler({
         spell,

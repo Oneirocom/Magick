@@ -135,12 +135,12 @@ CREATE TABLE "events" (
 CREATE TABLE "spells" (
     "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
-    "graph" JSONB,
+    "graph" TEXT,
     "created_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "deleted_at" TIMESTAMPTZ(6),
-    "modules" JSONB,
-    "game_state" JSONB,
+    "modules" TEXT,
+    "gameState" TEXT,
 
     CONSTRAINT "spells_pkey" PRIMARY KEY ("id")
 );

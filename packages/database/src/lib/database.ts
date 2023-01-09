@@ -159,11 +159,16 @@ export class database {
   }
 
   static async deleteEntity(id: any) {
+    // if id is a string, convert to number
+    if (typeof id === 'string') {
+      id = parseInt(id)
+    }
     const entity = await prisma.entities.delete({
       where: {
         id,
       },
     })
+    return entity
   }
 
   static async getLastUpdatedInstances() {
@@ -204,12 +209,22 @@ export class database {
 
   static async createEntity() {
     const entity = await prisma.entities.create({
-      data: {},
+      data: {
+        dirty: true,
+        enabled: false,
+        data: "",
+      },
     })
     return entity
   }
 
   static async updateEntity(id: any, data: { [x: string]: any; dirty?: any }) {
+
+    // if data.data is json, convert to string
+    if (typeof data.data === 'object') {
+      data.data = JSON.stringify(data.data)
+    }
+
     const entity = await prisma.entities.update({
       where: {
         id,
