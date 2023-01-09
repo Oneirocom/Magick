@@ -158,7 +158,7 @@ const deleteEvent = async (ctx: Koa.Context) => {
       ctx.status = 400
       return (ctx.body = 'invalid url parameter')
     }
-    const res = await database.deleteEvent(id)
+    const res = await database.deleteEvent(parseInt(id))
     return (ctx.body = true)
   } catch (e) {
     console.log(e)
