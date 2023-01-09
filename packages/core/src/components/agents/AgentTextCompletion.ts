@@ -154,9 +154,7 @@ export class AgentTextCompletion extends MagickComponent<
 
     if (!success) {
       console.error('Error in text completion', data)
-      return {
-        output: '<error>',
-      }
+      throw new Error('Error in text completion')
     }
 
     const res =
