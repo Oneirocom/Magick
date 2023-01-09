@@ -21,7 +21,7 @@ export default class SpellManager {
     cache = false,
   }: SpellManagerArgs) {
     this.socket = socket
-    this.magickInterface = this.processMagickInterface(magickInterface)
+    this.magickInterface = magickInterface
     this.cache = cache
   }
 
@@ -67,6 +67,8 @@ export default class SpellManager {
   }
 
   async load(spell: Spell, overload = false) {
+    if(!spell)
+      throw new Error('No spell provided to load') 
     if (this.spellRunnerMap.has(spell.name) && !overload)
       return this.getSpellRunner(spell.name)
 

@@ -5,11 +5,38 @@ import { SpellManager } from '@magickml/core'
 
 import discord_client from './connectors/discord'
 import { twitter_client } from './connectors/twitter'
+import { prisma } from '@magickml/prisma'
 
-const createSpellHandlerFactory =
-  spellManager =>
-  async ({ spell }) => {
-    const spellRunner = await spellManager.load(spell)
+// import { telegram_client } from './connectors/telegram'
+// import { twilio_client } from './connectors/twilio'
+// import { slack_client } from './connectors/slack'
+// import { zoom_client } from './connectors/zoom'
+// import { reddit_client } from './connectors/reddit'
+// import { instagram_client } from './connectors/instagram'
+// import { messenger_client } from './connectors/messenger'
+// import { whatsapp_client } from './connectors/whatsapp'
+export class Entity {
+  name = ''
+  //Clients
+  discord: discord_client | null
+  twitter: twitter_client | null
+  // telegram: telegram_client | null
+  // twilio: twilio_client | null
+  // slack: slack_client | null
+  // zoom: zoom_client | null
+  // reddit: reddit_client | null
+  // instagram: instagram_client | null
+  // messenger: messenger_client | null
+  // whatsapp: whatsapp_client | null
+  id: any
+
+  router: any
+  app: any
+  loopHandler: any
+  spellManager: SpellManager
+
+  async createSpellHandler({ spell }) {
+    const spellRunner = await this.spellManager.load(spell)
 
     async function spellHandler({
       message,
@@ -44,35 +71,6 @@ const createSpellHandlerFactory =
     return spellHandler
   }
 
-// import { telegram_client } from './connectors/telegram'
-// import { twilio_client } from './connectors/twilio'
-// import { slack_client } from './connectors/slack'
-// import { zoom_client } from './connectors/zoom'
-// import { reddit_client } from './connectors/reddit'
-// import { instagram_client } from './connectors/instagram'
-// import { messenger_client } from './connectors/messenger'
-// import { whatsapp_client } from './connectors/whatsapp'
-export class Entity {
-  name = ''
-  //Clients
-  discord: discord_client | null
-  twitter: twitter_client | null
-  // telegram: telegram_client | null
-  // twilio: twilio_client | null
-  // slack: slack_client | null
-  // zoom: zoom_client | null
-  // reddit: reddit_client | null
-  // instagram: instagram_client | null
-  // messenger: messenger_client | null
-  // whatsapp: whatsapp_client | null
-  id: any
-
-  router: any
-  app: any
-  loopHandler: any
-  spellManager: SpellManager
-  createSpellHandler: Function
-
   constructor(data: any) {
     this.onDestroy()
     this.id = data.id
@@ -83,8 +81,6 @@ export class Entity {
       magickInterface: buildMagickInterface({}),
       cache: false,
     })
-
-    this.createSpellHandler = createSpellHandlerFactory(this.spellManager)
 
     process.env.OPENAI_API_KEY = data.openai_api_key
 
@@ -227,10 +223,14 @@ export class Entity {
     if (this.discord)
       throw new Error('Discord already running for this agent on this instance')
 
-    const spell = await database.instance.models.spells.findOne({
+    const spell = await prisma.spells.findUnique({
       where: { name: spell_handler },
-      raw: true,
     })
+    // spell.graph, spell.modules and spell.gameState are all JSON
+    // parse them back into the object before returning it
+    spell.graph = JSON.parse(spell.graph as any)
+    spell.modules = JSON.parse(spell.modules as any)
+    spell.gameState = JSON.parse(spell.gameState as any)
 
     console.log('discord incoming spell', spell)
 
@@ -296,20 +296,36 @@ export class Entity {
         'Twitter already running for this entity on this instance'
       )
 
-    const incoming_spell = await database.instance.models.spells.findOne({
+    let spell = await prisma.spells.findUnique({
       where: { name: twitter_spell_handler_incoming },
     })
+
+    if(spell){
+      // spell.graph, spell.modules and spell.gameState are all JSON
+      // parse them back into the object before returning it
+      spell.graph = JSON.parse(spell.graph as any)
+      spell.modules = JSON.parse(spell.modules as any)
+      spell.gameState = JSON.parse(spell.gameState as any)
+    }
 
     const spellHandler = await this.createSpellHandler({
-      spell: incoming_spell,
+      spell,
     })
 
-    const auto_spell = await database.instance.models.spells.findOne({
-      where: { name: twitter_spell_handler_incoming },
+    spell = await prisma.spells.findUnique({
+      where: { name: twitter_spell_handler_auto },
     })
+
+    if(spell){
+      // spell.graph, spell.modules and spell.gameState are all JSON
+      // parse them back into the object before returning it
+      spell.graph = JSON.parse(spell.graph as any)
+      spell.modules = JSON.parse(spell.modules as any)
+      spell.gameState = JSON.parse(spell.gameState as any)
+    }
 
     const spellHandlerAuto = await this.createSpellHandler({
-      spell: auto_spell,
+      spell: spell,
     })
 
     this.twitter = new twitter_client()
@@ -468,13 +484,22 @@ export class Entity {
 
     const loopInterval = parseInt(loop_interval)
     if (typeof loopInterval === 'number' && loopInterval > 0) {
-      const spell = await database.instance.models.spells.findOne({
+      const spell = await prisma.spells.findUnique({
         where: { name: loop_spell_handler },
       })
-      const spellHandler = null
-      // await this.createSpellHandler({
-      //   spell,
-      // })
+
+      if(spell){        
+        // spell.graph, spell.modules and spell.gameState are all JSON
+        // parse them back into the object before returning it
+        spell.graph = JSON.parse(spell.graph as any)
+        spell.modules = JSON.parse(spell.modules as any)
+        spell.gameState = JSON.parse(spell.gameState as any)
+      }
+
+
+      const spellHandler =  await this.createSpellHandler({
+        spell,
+      })
 
       this.loopHandler = setInterval(async () => {
         const resp = await spellHandler({
@@ -489,7 +514,7 @@ export class Entity {
           roomInfo: [],
           channel: 'auto',
         })
-        if (resp && (resp as string)?.length > 0) {
+        if (resp?.length > 0) {
           console.log('Loop Response:', resp)
         }
       }, loopInterval)

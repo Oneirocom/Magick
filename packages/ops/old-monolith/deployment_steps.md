@@ -39,5 +39,5 @@ If you want to deploy an instance of Magick to run on a single server, follow th
   Note: In GOOGLE_APPLICATION_CREDENTIALS set path of credential json file
 
 12. Run following commands
-    - `pm2 --name magick start "yarn run dev"`
+    - `pm2 --name magick start "npm run dev"`
     - `pm2 save`
