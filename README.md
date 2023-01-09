@@ -1,4 +1,7 @@
 <p align="center"><img src="files/logo.png" /></p>
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 <h1 align="center">MAGICK ML</h1>
 
 Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and connectors well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.
@@ -14,15 +17,9 @@ Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick 
 
 ![image](https://user-images.githubusercontent.com/18633264/210928740-fec448aa-e6fe-4640-9587-aae109ddea12.png)
 
-## Getting Started
-
-### Prerequisites
-
-You will need **Node.js 18 or higher**. You may need to install `xvfb, chromium and ffmpeg` for features like browser integration and text to speech. For speech, search and image generation serverss, you will need Docker (or it will make your life much easier).
-
 ### Installation
 
-First, clone and set up magick
+First, clone and set up Magick
 
 ```
 git clone https://github.com/Oneirocom/MagickML
@@ -31,22 +28,40 @@ git clone https://github.com/Oneirocom/MagickML
 Next, install dependencies
 
 ```
-npm install
+npm run install
 ```
 
-Now, copy the `.env.example` file and rename it to `.env` -- you can store secrets and environment variables here. This is git ignored but make sure you don't accidentally reveal this in your public repo! The minimum you will need to get started is an OpenAI key.
-
-Finally, make sure you have docker installed and running. We recommend the Docker Desktop app which you can find [here](https://docs.docker.com/get-docker/).
-
-That's it, you're installed. In order to run the client and server use this quickstart command:
-
+# Run Magick!
 ```
 npm run dev
 ```
 
-You can also start the parts up individually. In order, start `containers`, then `apps`, then if you'd like live agents, also run `entities`. All three are covered by the `yarn dev`.
+## Contributors
 
-## Apache license information
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/michaelsharpe"><img src="https://avatars.githubusercontent.com/u/2397603?v=4?s=100" width="100px;" alt="Michael"/><br /><sub><b>Michael</b></sub></a><br /><a href="https://github.com/Oneirocom/MagickML/commits?author=michaelsharpe" title="Code">💻</a> <a href="#platform-michaelsharpe" title="Packaging/porting to new platform">📦</a> <a href="#business-michaelsharpe" title="Business development">💼</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://thenexus.city"><img src="https://avatars.githubusercontent.com/u/18633264?v=4?s=100" width="100px;" alt="M̵̞̗̝̼̅̏̎͝Ȯ̴̝̻̊̃̋̀Õ̷̼͋N̸̩̿͜ ̶̜̠̹̼̩͒"/><br /><sub><b>M̵̞̗̝̼̅̏̎͝Ȯ̴̝̻̊̃̋̀Õ̷̼͋N̸̩̿͜ ̶̜̠̹̼̩͒</b></sub></a><br /><a href="https://github.com/Oneirocom/MagickML/commits?author=lalalune" title="Code">💻</a> <a href="#platform-lalalune" title="Packaging/porting to new platform">📦</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/alextitonis"><img src="https://avatars.githubusercontent.com/u/45359358?v=4?s=100" width="100px;" alt="alextitonis"/><br /><sub><b>alextitonis</b></sub></a><br /><a href="https://github.com/Oneirocom/MagickML/commits?author=alextitonis" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://msub2.com"><img src="https://avatars.githubusercontent.com/u/70986246?v=4?s=100" width="100px;" alt="Daniel Adams"/><br /><sub><b>Daniel Adams</b></sub></a><br /><a href="https://github.com/Oneirocom/MagickML/commits?author=msub2" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://3ov.xyz"><img src="https://avatars.githubusercontent.com/u/8985705?v=4?s=100" width="100px;" alt="Anthony Burchell"/><br /><sub><b>Anthony Burchell</b></sub></a><br /><a href="https://github.com/Oneirocom/MagickML/commits?author=antpb" title="Code">💻</a> <a href="#blog-antpb" title="Blogposts">📝</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://xrdevlog.com/"><img src="https://avatars.githubusercontent.com/u/32600939?v=4?s=100" width="100px;" alt="jin"/><br /><sub><b>jin</b></sub></a><br /><a href="#blog-madjin" title="Blogposts">📝</a></td>
+    </tr>
+  </tbody>
+</table>
 
-Good example here for formatting apache license files for reference.
-https://www.openntf.org/Internal/home.nsf/dx/Applying_Apache_License
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->

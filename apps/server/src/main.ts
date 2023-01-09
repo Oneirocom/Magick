@@ -23,27 +23,16 @@ import path from 'path'
 
 const app: Koa = new Koa()
 const router: Router = new Router()
-// @ts-ignore
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 async function init() {
-  // required for some current consumers (i.e magick)
-  // to-do: standardize an allowed origin list based on env values or another source of truth?
-
   new database()
-  await database.instance.connect()
-  console.log(
-    'refreshing db',
-    process.env.REFRESH_DB?.toLowerCase().trim() === 'true'
-  )
-  await database.instance.sequelize.sync({
-    force: process.env.REFRESH_DB?.toLowerCase().trim() === 'true',
-  })
+
   await initFileServer()
   await initTextToSpeech()
   await initWeaviateClient(
-    process.env.WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true',
-    process.env.CLASSIFIER_IMPORT_DATA?.toLowerCase().trim() === 'true'
+    process.env.WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true'
   )
 
   // generic error handling
@@ -77,9 +66,6 @@ async function init() {
     middleware: Middleware[],
     handler: Handler
   ) => {
-    // This gets a typescript error
-    // router[method](path, compose(_middleware), handler);
-    // TODO: Fix this hack:
     switch (method) {
       case 'get':
         router.get(path, compose(middleware), handler)
@@ -155,11 +141,11 @@ async function init() {
   useSSL
     ? https
         .createServer(optionSsl, app.callback())
-        .listen(PORT, '0.0.0.0', () => {
-          console.log('Https Server listening on: 0.0.0.0:' + PORT)
+        .listen(PORT, 'localhost', () => {
+          console.log('Https Server listening on: localhost:' + PORT)
         })
-    : http.createServer(app.callback()).listen(PORT, '0.0.0.0', () => {
-        console.log('Http Server listening on: 0.0.0.0:' + PORT)
+    : http.createServer(app.callback()).listen(PORT, 'localhost', () => {
+        console.log('Http Server listening on: localhost:' + PORT)
       })
   // await initLoop()
 }

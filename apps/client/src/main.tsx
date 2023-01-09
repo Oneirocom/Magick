@@ -11,7 +11,7 @@ import { store } from './state/store'
 
 const container = document.getElementById('root')
 const root = createRoot(container!) // createRoot(container!) if you use TypeScript
-
+;(window as any).root = root
 const Root = () => (
   <Router>
     <Provider store={store}>

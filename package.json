@@ -4,20 +4,23 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently \"nx run-many --target=serve --projects=server,client,entity-server,speech-server --parallel 4\"",
-    "containers": "docker-compose up",
-    "apps": "nx run-many --target=serve --projects=server,search-server,speech-server,client --parallel 4",
+    "dev": "nx run-many --target=serve --projects=server,client,entity-server,speech-server --parallel 4",
     "entities": "nx run-many --target=serve --projects=entity-server",
+    "db:init": "npx prisma db push",
+    "containers": "concurrently \"docker-compose up\" \"sleep 20 && npm run db:init && echo database synced!\"",
     "build": "nx build",
     "start": "nx serve",
     "test": "nx test",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
-    "postinstall": "npx prisma generate --schema ./packages/prisma/prisma/schema.prisma"
+    "postinstall": "npx prisma generate && npm run db:init"
   },
   "resolutions": {
     "@types/react": "18.0.2"
+  },
+  "prisma": {
+    "schema": "./packages/prisma/prisma/schema.prisma"
   },
   "dependencies": {
     "@discordjs/voice": "^0.9.0",
@@ -35,6 +38,7 @@
     "@monaco-editor/react": "^4.2.1",
     "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.5.3",
+    "@nxext/capacitor": "^15.2.0",
     "@pixiv/three-vrm": "^1.0.6",
     "@prisma/client": "^4.8.1",
     "@react-three/drei": "^9.46.5",
@@ -83,9 +87,6 @@
     "openai-api": "1.2.6",
     "ot-json0": "^1.1.0",
     "path": "^0.12.7",
-    "pg": "8.7.1",
-    "pg-format": "^1.0.4",
-    "pg-hstore": "2.3.4",
     "pm2": "^5.0.0",
     "promise-retry": "^2.0.1",
     "pubsub-js": "^1.9.3",
@@ -122,8 +123,6 @@
     "rete-context-menu-plugin": "^0.6.0-rc.1",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "rollup-plugin-polyfill-node": "^0.11.0",
-    "sequelize": "^6.15.0",
-    "sequelize-auto": "^0.8.8",
     "sharedb": "^2.2.5",
     "similarity": "^1.2.1",
     "socket.io": "^4.5.0",
@@ -172,8 +171,6 @@
     "@types/koa__router": "^8.0.4",
     "@types/lodash": "^4.14.185",
     "@types/node": "16.11.7",
-    "@types/pg": "^7.14.11",
-    "@types/pg-format": "^1.0.2",
     "@types/promise-retry": "^1.1.3",
     "@types/react": "18.0.2",
     "@types/react-csv": "^1.1.2",
@@ -210,7 +207,6 @@
     "nx": "15.4.2",
     "prisma": "^4.8.1",
     "rimraf": "^3.0.2",
-    "sequelize-cli": "^6.4.1",
     "supertest": "6.1.3",
     "swagger-cli": "^4.0.4",
     "ts-jest": "28.0.5",

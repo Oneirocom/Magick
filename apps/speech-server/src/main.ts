@@ -4,6 +4,5 @@ config({
 })
 import { initSpeechServer } from '@magickml/systems'
 
-// @ts-ignore
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 initSpeechServer(false)

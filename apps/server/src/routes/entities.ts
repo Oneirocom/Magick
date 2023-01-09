@@ -16,7 +16,7 @@ export const modules: Record<string, unknown> = {}
 
 const getEntitiesHandler = async (ctx: Koa.Context) => {
   try {
-    let data = await database.instance.getEntities()
+    let data = await database.getEntities()
     return (ctx.body = data)
   } catch (e) {
     console.log('getEntitiesHandler:', e)
@@ -39,16 +39,11 @@ const getEntityHandler = async (ctx: Koa.Context) => {
   }
 
   const _instanceId = parseInt(instanceId)
-  if (_instanceId < 1) {
-    ctx.status = 400
-    return (ctx.body = { error: 'instanceId must be greater than 0' })
-  }
-
   try {
-    let data = await database.instance.getEntity(_instanceId)
+    let data = await database.getEntity(_instanceId) as any
     if (data === undefined || !data) {
       let newId = _instanceId
-      while ((await database.instance.entityExists(newId)) || newId <= 0) {
+      while ((await database.entityExists(newId)) || newId <= 0) {
         newId++
       }
 
@@ -66,24 +61,44 @@ const getEntityHandler = async (ctx: Koa.Context) => {
 }
 
 const addEntityHandler = async (ctx: Koa.Context) => {
-  const data = ctx.request.body.data
-  let instanceId = ctx.request.body.id ?? ctx.request.body.instanceId
+  const data = ctx.request.body
+  if(!data.data) {
+    data.data = ""
+    data.dirty = true
+    data.enabled = false
+  }
 
-  if (!instanceId || instanceId === undefined || instanceId <= 0) {
-    instanceId = 0
-    while (
-      (await database.instance.entityExists(instanceId)) ||
-      instanceId <= 0
-    ) {
-      instanceId++
-    }
+  if (typeof data.data === 'object') {
+    data.data = JSON.stringify(data.data)
+  }
+
+  const entity = await prisma.entities.findFirst({
+    where: {
+      id: data.id,
+    },
+  })
+
+  // if entity exists, update it
+  if (entity) {
+    await prisma.entities.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        id: data.id,
+        data: data.data as string,
+        dirty: data.dirty,
+        enabled: data.enabled,
+      },
+    })
+    return (ctx.body = { id: data.id })
   }
 
   try {
     console.log('updated agent database with', data)
-    if (Object.keys(data).length <= 0)
-      return (ctx.body = await prisma.entities.create({ data: {} }))
-    return (ctx.body = await database.instance.updateEntity(instanceId, data))
+    // if data.data is an object, stringify it
+
+    return (ctx.body = await prisma.entities.create({ data }))
   } catch (e) {
     console.log('addEntityHandler:', e)
     ctx.status = 500
@@ -96,7 +111,7 @@ const deleteEntityHandler = async (ctx: Koa.Context) => {
   console.log('deleteEntityHandler', deleteEntityHandler)
 
   try {
-    return (ctx.body = await database.instance.deleteEntity(id))
+    return (ctx.body = await database.deleteEntity(id))
   } catch (e) {
     console.log(e)
     ctx.status = 500
@@ -113,7 +128,7 @@ const getEvent = async (ctx: Koa.Context) => {
   const maxCount = parseInt(ctx.request.query.maxCount as string)
   const max_time_diff = parseInt(ctx.request.query.max_time_diff as string)
 
-  const event = await database.instance.getEvents({
+  const event = await database.getEvents({
     type,
     agent,
     speaker,
@@ -128,7 +143,7 @@ const getEvent = async (ctx: Koa.Context) => {
 
 const getAllEvents = async (ctx: Koa.Context) => {
   try {
-    const events = await database.instance.getAllEvents()
+    const events = await database.getAllEvents()
     return (ctx.body = events)
   } catch (e) {
     console.log(e)
@@ -143,8 +158,8 @@ const deleteEvent = async (ctx: Koa.Context) => {
       ctx.status = 400
       return (ctx.body = 'invalid url parameter')
     }
-    const res = await database.instance.deleteEvent(id)
-    return (ctx.body = res.rowCount)
+    const res = await database.deleteEvent(parseInt(id))
+    return (ctx.body = true)
   } catch (e) {
     console.log(e)
     ctx.status = 500
@@ -169,7 +184,7 @@ const updateEvent = async (ctx: Koa.Context) => {
     const type = ctx.request.body.type
     const date = ctx.request.body.date
 
-    const res = await database.instance.updateEvent(id, {
+    const res = await database.updateEvent(id, {
       agent,
       speaker,
       sender,
@@ -198,7 +213,7 @@ const createEvent = async (ctx: Koa.Context) => {
   console.log('Creating event:', agent, speaker, client, channel, text, type)
 
   // Todo needs error handling
-  await database.instance.createEvent({
+  await database.createEvent({
     type,
     agent,
     speaker,
@@ -253,6 +268,9 @@ const textCompletion = async (ctx: Koa.Context) => {
   let stop = (ctx.request.body.stop ?? ['']) as string[]
   const openaiApiKey =
     (ctx.request.body.apiKey as string) ?? process.env.OPENAI_API_KEY
+
+  if (!openaiApiKey)
+    throw new CustomError('authentication-error', 'No API key provided')
 
   if (!stop || stop.length === undefined || stop.length <= 0) {
     stop = ['"""', '###']
@@ -324,7 +342,7 @@ const getEntitiesInfo = async (ctx: Koa.Context) => {
     : -1
 
   try {
-    let data = await database.instance.getEntities()
+    let data = await database.getEntities()
     let info = undefined
     for (let i = 0; i < data.length; i++) {
       if (data[i].id === id) {
