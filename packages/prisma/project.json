@@ -8,7 +8,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "outputs": [],
       "options": {
-        "command": "npx prisma migrate deve",
+        "command": "npx prisma migrate dev",
         "cwd": "packages/prisma"
       }
     },
