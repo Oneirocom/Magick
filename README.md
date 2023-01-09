@@ -31,14 +31,14 @@ git clone https://github.com/Oneirocom/MagickML
 Next, install dependencies
 
 ```
-yarn install
+npm run install
 ```
 
 Now, copy the `.env` file and rename it to `.env.local` -- you can store secrets and environment variables here. This is git ignored but make sure you don't accidentally reveal this in your public repo! The minimum you will need to get started is an OpenAI key.
 
 # Run Magick!
 ```
-yarn dev
+npm run dev
 ```
 
 ## Apache license information

@@ -30,7 +30,6 @@ node_modules
 /coverage
 /libpeerconnection.log
 npm-debug.log
-yarn-error.log
 testem.log
 /typings
 
@@ -39,7 +38,3 @@ testem.log
 Thumbs.db
 
 .env.local
-
-# ignore lock files, since users are using both npm and yarn, just causes commit noise
-yarn.lock
-package-lock.json

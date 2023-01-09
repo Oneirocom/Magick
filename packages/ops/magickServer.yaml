@@ -23,7 +23,7 @@ spec:
           workingDir: /app/packages/server
           args:
             [
-              'concurrently "nodemon src/server.ts" "yarn run speech" "sleep 1 && yarn run search" "sleep 2 && yarn run entity-server"',
+              'concurrently "nodemon src/server.ts" "npm run speech" "sleep 1 && npm run search" "sleep 2 && npm run entity-server"',
             ]
           stdin: true
           tty: true
