@@ -3,7 +3,13 @@ import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
 
-const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any }) => {
+const EntityWindow = ({
+  id,
+  updateCallback,
+}: {
+  id: number
+  updateCallback: any
+}) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [loaded, setLoaded] = useState(false)
@@ -167,7 +173,7 @@ const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any 
           `${import.meta.env.VITE_APP_API_URL}/entity?instanceId=` + id
         )
         console.log('res is', res)
-        if(!res.data.data) {
+        if (!res.data.data) {
           res.data.data = {}
         }
         setEnabled(res.data.enabled === true)
@@ -185,7 +191,9 @@ const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any 
         setDiscordBotNameRegex(res.data.data.discord_bot_name_regex)
         setDiscordBotName(res.data.data.discord_bot_name)
         setDiscordEmptyResponses(res.data.data.discord_empty_responses)
-        setDiscordSpellHandlerIncoming(res.data.data.discord_spell_handler_incoming)
+        setDiscordSpellHandlerIncoming(
+          res.data.data.discord_spell_handler_incoming
+        )
         setDiscordSpellHandlerUpdate(res.data.data.discord_spell_handler_update)
 
         setEthPrivateKey(res.data.data.eth_private_key)
@@ -200,11 +208,17 @@ const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any 
         setTwitterAccessTokenSecret(res.data.data.twitter_access_token_secret)
         setTwitterEnableTwits(res.data.data.twitter_enable_twits === true)
         setTwitterTweetRules(res.data.data.twitter_tweet_rules)
-        setTwitterAutoTweetIntervalMin(res.data.data.twitter_auto_tweet_interval_min)
-        setTwitterAutoTweetIntervalMax(res.data.data.twitter_auto_tweet_interval_max)
+        setTwitterAutoTweetIntervalMin(
+          res.data.data.twitter_auto_tweet_interval_min
+        )
+        setTwitterAutoTweetIntervalMax(
+          res.data.data.twitter_auto_tweet_interval_max
+        )
         setTwitterBotName(res.data.data.twitter_bot_name)
         setTwitterBotNameRegex(res.data.data.twitter_bot_name_regex)
-        setTwitterSpellHandlerIncoming(res.data.data.twitter_spell_handler_incoming)
+        setTwitterSpellHandlerIncoming(
+          res.data.data.twitter_spell_handler_incoming
+        )
         setTwitterSpellHandlerAuto(res.data.data.twitter_spell_handler_auto)
 
         setTelegramEnabled(res.data.data.telegram_enabled === true)
@@ -220,7 +234,9 @@ const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any 
         setRedditOauthToken(res.data.data.reddit_oauth_token)
         setRedditBotName(res.data.data.reddit_bot_name)
         setRedditBotNameRegex(res.data.data.reddit_bot_name_regex)
-        setRedditSpellHandlerIncoming(res.data.data.reddit_spell_handler_incoming)
+        setRedditSpellHandlerIncoming(
+          res.data.data.reddit_spell_handler_incoming
+        )
 
         setZoomEnabled(res.data.data.zoom_enabled === true)
         setZoomInvitationLink(res.data.data.zoom_invitation_link)
@@ -265,7 +281,9 @@ const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any 
         setTwilioPhoneNumber(res.data.data.twilio_phone_number)
         setTwilioBotName(res.data.data.twilio_bot_name)
         setTwilioEmptyResponses(res.data.data.twilio_empty_responses)
-        setTwilioSpellHandlerIncoming(res.data.data.twilio_spell_handler_incoming)
+        setTwilioSpellHandlerIncoming(
+          res.data.data.twilio_spell_handler_incoming
+        )
 
         setLoaded(true)
       })()
@@ -274,9 +292,7 @@ const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any 
 
   useEffect(() => {
     ;(async () => {
-      const res = await axios.get(
-        `${import.meta.env.VITE_APP_API_URL}/spells`
-      )
+      const res = await axios.get(`${import.meta.env.VITE_APP_API_URL}/spells`)
       setSpellList(res.data)
     })()
   }, [])
@@ -388,12 +404,12 @@ const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any 
         twilio_bot_name,
         twilio_empty_responses,
         twilio_spell_handler_incoming,
-      }
+      },
     }
     axios
       .post(`${import.meta.env.VITE_APP_API_URL}/entity`, {
         id,
-        data: _data,
+        ..._data,
       })
       .then(res => {
         if (typeof res.data === 'string' && res.data === 'internal error') {
@@ -429,7 +445,9 @@ const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any 
           setTwitterAppToken(responseData.data.twitter_app_token)
           setTwitterAppTokenSecret(responseData.data.twitter_app_token_secret)
           setTwitterAccessToken(responseData.data.twitter_access_token)
-          setTwitterAccessTokenSecret(responseData.data.twitter_access_token_secret)
+          setTwitterAccessTokenSecret(
+            responseData.data.twitter_access_token_secret
+          )
           setTwitterEnableTwits(responseData.data.twitter_enable_twits)
           setTwitterTweetRules(responseData.data.twitter_tweet_rules)
           setTwitterAutoTweetIntervalMin(
@@ -443,7 +461,9 @@ const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any 
           setTwitterSpellHandlerIncoming(
             responseData.data.twitter_spell_handler_incoming
           )
-          setTwitterSpellHandlerAuto(responseData.data.twitter_spell_handler_auto)
+          setTwitterSpellHandlerAuto(
+            responseData.data.twitter_spell_handler_auto
+          )
 
           setTelegramEnabled(responseData.data.telegram_enabled)
           setTelegramBotToken(responseData.data.telegram_bot_token)
@@ -466,7 +486,9 @@ const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any 
           setZoomInvitationLink(responseData.data.zoom_invitation_link)
           setZoomPassword(responseData.data.zoom_password)
           setZoomBotName(responseData.data.zoom_bot_name)
-          setZoomSpellHandlerIncoming(responseData.data.zoom_spell_handler_incoming)
+          setZoomSpellHandlerIncoming(
+            responseData.data.zoom_spell_handler_incoming
+          )
 
           setLoopEnabled(responseData.data.loop_enabled)
           setLoopInterval(responseData.data.loop_interval)
@@ -493,7 +515,9 @@ const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any 
           )
 
           setMessengerEnabled(responseData.data.messenger_enabled)
-          setMessengerPageAccessToken(responseData.data.messenger_page_access_token)
+          setMessengerPageAccessToken(
+            responseData.data.messenger_page_access_token
+          )
           setMessengerVerifyToken(responseData.data.messenger_verify_token)
           setMessengerBotName(responseData.data.messenger_bot_name)
           setMessengerBotNameRegex(responseData.data.messenger_bot_name_regex)
@@ -525,83 +549,83 @@ const EntityWindow = ({ id, updateCallback }: { id: number, updateCallback: any 
     const _data = {
       enabled,
       data: {
-      discord_enabled,
-      openai_api_key,
-      discord_api_key,
-      discord_starting_words,
-      discord_bot_name_regex,
-      discord_bot_name,
-      discord_empty_responses,
-      discord_spell_handler_incoming,
-      discord_spell_handler_update,
-      use_voice,
-      voice_provider,
-      voice_character,
-      voice_language_code,
-      voice_default_phrases,
-      tiktalknet_url,
-      twitter_client_enable,
-      twitter_token,
-      twitter_id,
-      twitter_app_token,
-      twitter_app_token_secret,
-      twitter_access_token,
-      twitter_access_token_secret,
-      twitter_enable_twits,
-      twitter_tweet_rules,
-      twitter_auto_tweet_interval_min,
-      twitter_auto_tweet_interval_max,
-      twitter_bot_name,
-      twitter_bot_name_regex,
-      twitter_spell_handler_incoming,
-      twitter_spell_handler_auto,
-      telegram_enabled,
-      telegram_bot_token,
-      telegram_bot_name,
-      telegram_spell_handler_incoming,
-      reddit_enabled,
-      reddit_app_id,
-      reddit_app_secret_id,
-      reddit_oauth_token,
-      reddit_bot_name,
-      reddit_bot_name_regex,
-      reddit_spell_handler_incoming,
-      zoom_enabled,
-      zoom_invitation_link,
-      zoom_password,
-      zoom_bot_name,
-      zoom_spell_handler_incoming,
-      loop_enabled,
-      loop_interval,
-      loop_agent_name,
-      loop_spell_handler,
-      slack_enabled,
-      slack_token,
-      slack_signing_secret,
-      slack_bot_token,
-      slack_bot_name,
-      slack_port,
-      slack_spell_handler_incoming,
-      instagram_enabled,
-      instagram_username,
-      instagram_password,
-      instagram_bot_name,
-      instagram_bot_name_regex,
-      instagram_spell_handler_incoming,
-      messenger_enabled,
-      messenger_page_access_token,
-      messenger_verify_token,
-      messenger_bot_name,
-      messenger_bot_name_regex,
-      messenger_spell_handler_incoming,
-      twilio_enabled,
-      twilio_account_sid,
-      twilio_auth_token,
-      twilio_phone_number,
-      twilio_bot_name,
-      twilio_empty_responses,
-      twilio_spell_handler_incoming,
-      }
+        discord_enabled,
+        openai_api_key,
+        discord_api_key,
+        discord_starting_words,
+        discord_bot_name_regex,
+        discord_bot_name,
+        discord_empty_responses,
+        discord_spell_handler_incoming,
+        discord_spell_handler_update,
+        use_voice,
+        voice_provider,
+        voice_character,
+        voice_language_code,
+        voice_default_phrases,
+        tiktalknet_url,
+        twitter_client_enable,
+        twitter_token,
+        twitter_id,
+        twitter_app_token,
+        twitter_app_token_secret,
+        twitter_access_token,
+        twitter_access_token_secret,
+        twitter_enable_twits,
+        twitter_tweet_rules,
+        twitter_auto_tweet_interval_min,
+        twitter_auto_tweet_interval_max,
+        twitter_bot_name,
+        twitter_bot_name_regex,
+        twitter_spell_handler_incoming,
+        twitter_spell_handler_auto,
+        telegram_enabled,
+        telegram_bot_token,
+        telegram_bot_name,
+        telegram_spell_handler_incoming,
+        reddit_enabled,
+        reddit_app_id,
+        reddit_app_secret_id,
+        reddit_oauth_token,
+        reddit_bot_name,
+        reddit_bot_name_regex,
+        reddit_spell_handler_incoming,
+        zoom_enabled,
+        zoom_invitation_link,
+        zoom_password,
+        zoom_bot_name,
+        zoom_spell_handler_incoming,
+        loop_enabled,
+        loop_interval,
+        loop_agent_name,
+        loop_spell_handler,
+        slack_enabled,
+        slack_token,
+        slack_signing_secret,
+        slack_bot_token,
+        slack_bot_name,
+        slack_port,
+        slack_spell_handler_incoming,
+        instagram_enabled,
+        instagram_username,
+        instagram_password,
+        instagram_bot_name,
+        instagram_bot_name_regex,
+        instagram_spell_handler_incoming,
+        messenger_enabled,
+        messenger_page_access_token,
+        messenger_verify_token,
+        messenger_bot_name,
+        messenger_bot_name_regex,
+        messenger_spell_handler_incoming,
+        twilio_enabled,
+        twilio_account_sid,
+        twilio_auth_token,
+        twilio_phone_number,
+        twilio_bot_name,
+        twilio_empty_responses,
+        twilio_spell_handler_incoming,
+      },
     }
     const fileName =
       discord_bot_name ?? twitter_id ?? twilio_bot_name ?? 'entity'
