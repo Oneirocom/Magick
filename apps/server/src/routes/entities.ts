@@ -1,6 +1,5 @@
 import { database } from '@magickml/database'
 import 'regenerator-runtime/runtime'
-//@ts-ignore
 // import weaviate from 'weaviate-client'
 import Koa from 'koa'
 import 'regenerator-runtime/runtime'
@@ -62,6 +61,7 @@ const getEntityHandler = async (ctx: Koa.Context) => {
 
 const addEntityHandler = async (ctx: Koa.Context) => {
   const data = ctx.request.body
+  console.log('DATA IN ADD ENTITY HANDLER: ', data)
   if (!data.data) {
     data.data = ''
     data.dirty = true
@@ -80,23 +80,25 @@ const addEntityHandler = async (ctx: Koa.Context) => {
 
   // if entity exists, update it
   if (entity) {
-    await prisma.entities.update({
+    console.log('Entity exists', entity)
+    const updated = await prisma.entities.update({
       where: {
         id: data.id,
       },
       data: {
         id: data.id,
         data: data.data as string,
-        dirty: data.dirty,
+        dirty: true,
         enabled: data.enabled,
       },
     })
+
+    console.log('updated agent database with', updated)
     return (ctx.body = { id: data.id })
   }
 
   try {
     console.log('updated agent database with', data)
-    // if data.data is an object, stringify it
 
     return (ctx.body = await prisma.entities.create({ data }))
   } catch (e) {

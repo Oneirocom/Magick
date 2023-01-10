@@ -29,7 +29,9 @@ export class Entity {
   // messenger: messenger_client | null
   // whatsapp: whatsapp_client | null
   id: any
-
+  rawEntity: Record<string, any>
+  // todo better typing for all the data possible for an entity
+  data: Record<string, any>
   router: any
   app: any
   loopHandler: any
@@ -79,18 +81,23 @@ export class Entity {
     }
   }
 
-  constructor(data: any) {
+  constructor(entity: any) {
     this.onDestroy()
-    this.id = data.id
+    this.id = entity.id
+    this.rawEntity = entity
+    this.data = entity.data
     console.log('initing agent')
-    console.log('agent data is ', data)
-    this.name = data.agent ?? data.name ?? 'agent'
+    console.log('agent data is ', entity)
+    this.name = entity.agent ?? entity.name ?? 'agent'
     this.spellManager = new SpellManager({
       magickInterface: buildMagickInterface({}),
       cache: false,
     })
 
-    process.env.OPENAI_API_KEY = data.openai_api_key
+    const data = this.data
+
+    if (!process.env.OPENAI_API_KEY && entity.openai_api_key)
+      process.env.OPENAI_API_KEY = data.openai_api_key
 
     this.generateVoices(data)
 
