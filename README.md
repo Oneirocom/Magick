@@ -4,7 +4,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <h1 align="center">MAGICK ML</h1>
-<h2 align="center"><a href="https://twitter.com/MagickM">Twitter</a></h2>
+<h2 align="center"><a href="https://twitter.com/MagickML">Twitter</a></h2>
 
 Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and connectors well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.
 
