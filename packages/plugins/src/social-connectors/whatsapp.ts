@@ -361,7 +361,7 @@ export class whatsapp_client {
   }
 
   async addMessageToHistory(chatId, messageId, senderName, content) {
-    await database.instance.addMessageInHistory(
+    await database.addMessageInHistory(
       'whatsapp',
       chatId,
       messageId,
@@ -371,10 +371,10 @@ export class whatsapp_client {
   }
   async getChatHistory(chatId, length) {
     return []
-    // return await database.instance.getHistory(length, 'whatsapp', chatId)
+    // return await database.getHistory(length, 'whatsapp', chatId)
   }
   async updateMessage(chatId, messageId, newContent) {
-    // await database.instance.updateMessage(
+    // await database.updateMessage(
     //   'whatsapp',
     //   chatId,
     //   messageId,

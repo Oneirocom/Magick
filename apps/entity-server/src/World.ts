@@ -10,7 +10,7 @@ function initEntityLoop(update: Function, lateUpdate: Function) {
   const date = new Date()
 
   async function entityLoop(update: Function, lateUpdate: Function) {
-    const agents = await database.instance.getLastUpdatedInstances()
+    const agents = await database.getLastUpdatedInstances()
     const now = new Date()
     const updated = []
 
@@ -21,7 +21,7 @@ function initEntityLoop(update: Function, lateUpdate: Function) {
         update(id)
 
         updated.push(id)
-        database.instance.setEntityUpdated(id)
+        database.setEntityUpdated(id)
       }
     }
     for (let i = 0; i < updated.length; i++) {
@@ -56,7 +56,7 @@ export class World {
   }
 
   async updateEntity() {
-    this.newEntities = await database.instance.getEntities()
+    this.newEntities = await database.getEntities()
     const newEntities = this.newEntities
     delete newEntities['updated_at']
     const oldEntities = this.oldEntities ?? []
@@ -91,7 +91,7 @@ export class World {
       if (newEntities[i].dirty) {
         await this.removeEntity(newEntities[i].id)
         await this.addEntity(newEntities[i])
-        await database.instance.setEntityDirty(newEntities[i].id, false)
+        await database.setEntityDirty(newEntities[i].id, false)
       }
     }
 
@@ -163,7 +163,8 @@ export class World {
   async addEntity(obj: any) {
     console.log('adding object', obj.id)
     if (this.objects[obj.id] === undefined) {
-      this.objects[obj.id] = new Entity(obj)
+      obj.data.id = obj.id
+      this.objects[obj.id] = new Entity(obj.data)
     } else {
       //throw new Error('Object already exists')
     }

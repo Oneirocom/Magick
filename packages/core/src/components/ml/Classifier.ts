@@ -82,8 +82,7 @@ export class Classifier extends MagickComponent<Promise<InputReturn>> {
     const resp = await axios.post(
       `${
         import.meta.env.VITE_APP_API_URL ??
-        import.meta.env.API_URL ??
-        'https://0.0.0.0:8001'
+        import.meta.env.API_URL
       }/hf_request`,
       {
         inputs: inputData as string,

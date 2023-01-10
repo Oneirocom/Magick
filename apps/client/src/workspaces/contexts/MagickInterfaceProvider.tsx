@@ -4,6 +4,7 @@ import {
   EditorContext,
   Spell,
   MagickWorkerInputs,
+  CompletionBody,
 } from '@magickml/core'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
@@ -223,8 +224,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }) => {
     const urlString = `${
       import.meta.env.VITE_APP_API_URL ??
-      import.meta.env.API_ROOT_URL ??
-      'https://localhost:8001'
+      import.meta.env.API_ROOT_URL
     }/event`
 
     const params = {
@@ -260,8 +260,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     const response = await axios.post(
       `${
         import.meta.env.VITE_APP_API_URL ??
-        import.meta.env.API_ROOT_URL ??
-        'https://localhost:8001'
+        import.meta.env.API_ROOT_URL
       }/event`,
       {
         type,
@@ -280,7 +279,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     const isProd = import.meta.env.NODE_ENV === 'production'
     const root = isProd
       ? 'https://magick.supereality.com'
-      : 'https://localhost:8001'
+      : 'htts://localhost:8001'
     const url = `${root}/wikipediaSummary?keyword=${keyword}`
 
     console.log('FETCHOING FROM URL', url)
@@ -297,6 +296,33 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     })
 
     return await response.data.result
+  }
+
+  const completion = async (body: CompletionBody) => {
+    const url = `${
+      import.meta.env.VITE_APP_API_URL || 'http://localhost:8001'
+    }/text_completion`
+
+    const apiKey = window.localStorage.getItem('openai-api-key')
+
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...body,
+        apiKey,
+      }),
+    })
+
+    const data = await resp.json()
+
+    console.log('resp.data is ', data)
+
+    const { success, choice } = data
+
+    return { success, choice }
   }
 
   const publicInterface = {
@@ -324,6 +350,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     queryGoogle,
     sendToAvatar,
     getSpell,
+    completion,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>

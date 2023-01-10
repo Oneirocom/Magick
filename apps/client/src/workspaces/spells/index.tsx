@@ -35,24 +35,24 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   const preferences = useSelector((state: RootState) => state.preferences)
 
   // Set up autosave for the workspaces
-  // useEffect(() => {
-  //   if (!editor?.on) return
-  //   const unsubscribe = editor.on(
-  //     // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
-  //     'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
-  //     debounce(async data => {
-  //       if (!getDirtyGraph) return
-  //       if (tab.type === 'spell' && spellRef.current) {
-  //         setDirtyGraph(true)
-  //         publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
-  //       }
-  //     }, 2000) // debounce for 2000 ms
-  //   )
+  useEffect(() => {
+    if (!editor?.on) return
+    const unsubscribe = editor.on(
+      // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
+      'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
+      debounce(async data => {
+        if (!getDirtyGraph()) return
+        if (tab.type === 'spell' && spellRef.current) {
+          setDirtyGraph(true)
+          publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
+        }
+      }, 2000) // debounce for 2000 ms
+    )
 
-  //   return () => {
-  //     unsubscribe()
-  //   }
-  // }, [editor, preferences.autoSave])
+    return () => {
+      unsubscribe()
+    }
+  }, [editor, preferences.autoSave])
 
   useEffect(() => {
     if (!editor?.on) return

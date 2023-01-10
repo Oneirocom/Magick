@@ -1,21 +1,16 @@
-import { CustomError } from '../../utils/CustomError'
 import {
-  EngineContext,
-  MagickWorkerInputs,
-  GetEventArgs,
-  CreateEventArgs,
+  CompletionBody, CreateEventArgs, EngineContext, GetEventArgs, MagickWorkerInputs
 } from '@magickml/core'
 import { prisma } from '@magickml/prisma'
-import Koa from 'koa'
 import vm2 from 'vm2'
+import { CustomError } from '../../utils/CustomError'
 
-import { searchWikipedia } from '../wikipedia/helpers'
 import { queryGoogleSearch } from '../utils/queryGoogle'
+import { searchWikipedia } from '../wikipedia/helpers'
 
 import { database } from '@magickml/database'
+import { makeCompletion } from '../../utils/MakeCompletionRequest'
 import { runSpell } from '../utils/runSpell'
-import e from 'express'
-import { spells } from '@prisma/client'
 
 const getEvents = async ({
   type,
@@ -26,7 +21,7 @@ const getEvents = async ({
   maxCount,
   max_time_diff,
 }: GetEventArgs) => {
-  const event = await database.instance.getEvents({
+  const event = await database.getEvents({
     type,
     agent,
     speaker,
@@ -43,7 +38,7 @@ const getEvents = async ({
 
 const createEvent = async (args: CreateEventArgs) => {
   const { type, agent, speaker, client, channel, text, sender } = args
-  return await database.instance.createEvent({
+  return await database.createEvent({
     type,
     agent,
     speaker,
@@ -73,9 +68,36 @@ export const buildMagickInterface = (
 
       return outputs
     },
+    completion: async (body: CompletionBody) => {
+      // check body for API key, otherwise use the environment
+      const openaiApiKey = body.apiKey
+        ? body.apiKey
+        : process.env.OPENAI_API_KEY
+
+      if (!openaiApiKey) throw new Error('No API key provided')
+
+      const { success, choice } = await makeCompletion(body.modelName, {
+        prompt: body.prompt.trim(),
+        temperature: body.temperature,
+        max_tokens: body.maxTokens,
+        top_p: body.topP,
+        frequency_penalty: body.frequencyPenalty,
+        presence_penalty: body.presencePenalty,
+        stop: body.stop,
+        apiKey: openaiApiKey,
+      })
+
+      return { success, choice }
+    },
     getSpell: async spellId => {
       const spell = await prisma.spells.findUnique({ where: { name: spellId } })
-
+      if(spell) {
+        // spell.graph, spell.modules and spell.gameState are all JSON
+        // parse them back into the object before returning it
+        spell.graph = JSON.parse(spell.graph as any)
+        spell.modules = JSON.parse(spell.modules as any)
+        spell.gameState = JSON.parse(spell.gameState as any)
+      }
       return spell
     },
     queryGoogle: async query => {

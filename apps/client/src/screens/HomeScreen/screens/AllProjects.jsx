@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 
 import Icon from '../../../components/Icon/Icon'
@@ -14,6 +15,12 @@ const AllProjects = ({
   selectedSpell,
   loadFile,
 }) => {
+  useEffect(() => {
+    if (document.location.href.includes('import')) {
+      document.getElementById('import').click();
+    }
+  }, [])
+
   return (
     <Panel shadow>
       <h1>

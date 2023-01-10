@@ -1,23 +1,26 @@
 {
   "name": "magick",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_OPTIONS=\"--max-old-space-size=8192\" concurrently \"nx run-many --target=serve --projects=server,client,entity-server,speech-server --parallel 4\"",
-    "containers": "docker-compose up",
-    "apps": "nx run-many --target=serve --projects=server,search-server,speech-server,client --parallel 4",
+    "dev": "nx run-many --target=serve --projects=server,client,entity-server,speech-server --parallel 4",
     "entities": "nx run-many --target=serve --projects=entity-server",
+    "db:init": "npx prisma db push",
+    "containers": "concurrently \"docker-compose up\" \"sleep 20 && npm run db:init && echo database synced!\"",
     "build": "nx build",
     "start": "nx serve",
     "test": "nx test",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
-    "postinstall": "npx prisma generate --schema ./packages/prisma/prisma/schema.prisma"
+    "postinstall": "npx prisma generate && npm run db:init"
   },
   "resolutions": {
     "@types/react": "18.0.2"
+  },
+  "prisma": {
+    "schema": "./packages/prisma/prisma/schema.prisma"
   },
   "dependencies": {
     "@discordjs/voice": "^0.9.0",
@@ -34,6 +37,7 @@
     "@monaco-editor/react": "^4.2.1",
     "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.5.3",
+    "@nxext/capacitor": "^15.2.0",
     "@pixiv/three-vrm": "^1.0.6",
     "@prisma/client": "^4.8.1",
     "@react-three/drei": "^9.46.5",
@@ -71,7 +75,6 @@
     "notistack": "^3.0.0-alpha.11",
     "ot-json0": "^1.1.0",
     "path": "^0.12.7",
-    "pg": "8.7.1",
     "pm2": "^5.0.0",
     "prisma": "^4.8.1",
     "pubsub-js": "^1.9.3",
@@ -100,7 +103,6 @@
     "rete-connection-reroute-plugin": "^0.4.0",
     "rete-context-menu-plugin": "^0.6.0-rc.1",
     "rollup-plugin-node-polyfills": "^0.2.1",
-    "sequelize": "^6.15.0",
     "similarity": "^1.2.1",
     "socket.io": "^4.5.0",
     "socket.io-client": "^4.4.1",
@@ -144,7 +146,6 @@
     "@types/koa__router": "^8.0.4",
     "@types/lodash": "^4.14.185",
     "@types/node": "16.11.7",
-    "@types/pg": "^7.14.11",
     "@types/react": "18.0.2",
     "@types/react-csv": "^1.1.2",
     "@types/react-dom": "18.0.2",
