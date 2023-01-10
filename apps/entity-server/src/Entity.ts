@@ -15,6 +15,88 @@ import { prisma } from '@magickml/prisma'
 // import { instagram_client } from './connectors/instagram'
 // import { messenger_client } from './connectors/messenger'
 // import { whatsapp_client } from './connectors/whatsapp'
+
+type StartLoopArgs = {
+  loop_interval?: string
+  loop_spell_handler?: string
+  agent_name?: string
+  eth_private_key?: string
+  eth_public_address?: string
+}
+
+type StartDiscordArgs = {
+  discord_enabled?: boolean
+  discord_api_key?: string
+  discord_starting_words?: string
+  discord_bot_name_regex?: string
+  discord_bot_name?: string
+  discord_empty_responses?: string
+  discord_spell_handler_incoming?: string
+  use_voice?: boolean
+  voice_provider?: string
+  voice_character?: string
+  voice_language_code?: string
+  tiktalknet_url?: string
+  eth_private_key?: string
+  eth_public_address?: string
+}
+
+type StartTwitterArgs = {
+  twitter_token?: any
+  twitter_id?: any
+  twitter_app_token?: any
+  twitter_app_token_secret?: any
+  twitter_access_token?: any
+  twitter_access_token_secret?: any
+  twitter_enable_twits?: any
+  twitter_tweet_rules?: any
+  twitter_auto_tweet_interval_min?: any
+  twitter_auto_tweet_interval_max?: any
+  twitter_bot_name?: any
+  twitter_bot_name_regex?: any
+  twitter_spell_handler_incoming?: any
+  twitter_spell_handler_auto?: any
+  entity?: any
+}
+
+type EntityData = {
+  twitter_client_enabled?: boolean
+  loop_enabled?: boolean
+  loop_interval?: string
+  loop_spell_handler?: string
+  agent_name?: string
+  eth_private_key?: string
+  eth_public_address?: string
+  openai_api_key?: string
+  discord_enabled?: boolean
+  discord_api_key?: string
+  discord_starting_words?: string
+  discord_bot_name_regex?: string
+  discord_bot_name?: string
+  discord_empty_responses?: string
+  discord_spell_handler_incoming?: string
+  use_voice?: boolean
+  voice_provider?: string
+  voice_character?: string
+  voice_language_code?: string
+  tiktalknet_url?: string
+  twitter_token?: any
+  twitter_id?: any
+  twitter_app_token?: any
+  twitter_app_token_secret?: any
+  twitter_access_token?: any
+  twitter_access_token_secret?: any
+  twitter_enable_twits?: any
+  twitter_tweet_rules?: any
+  twitter_auto_tweet_interval_min?: any
+  twitter_auto_tweet_interval_max?: any
+  twitter_bot_name?: any
+  twitter_bot_name_regex?: any
+  twitter_spell_handler_incoming?: any
+  twitter_spell_handler_auto?: any
+  entity?: any
+}
+
 export class Entity {
   name = ''
   //Clients
@@ -31,7 +113,7 @@ export class Entity {
   id: any
   rawEntity: Record<string, any>
   // todo better typing for all the data possible for an entity
-  data: Record<string, any>
+  data: EntityData
   router: any
   app: any
   loopHandler: any
@@ -96,57 +178,21 @@ export class Entity {
 
     const data = this.data
 
-    if (!process.env.OPENAI_API_KEY && entity.openai_api_key)
+    if (!process.env.OPENAI_API_KEY && data.openai_api_key)
       process.env.OPENAI_API_KEY = data.openai_api_key
 
     this.generateVoices(data)
 
     if (data.loop_enabled) {
-      this.startLoop(
-        data.loop_interval,
-        data.loop_spell_handler,
-        data.loop_agent_name,
-        data.eth_private_key,
-        data.eth_public_address
-      )
+      this.startLoop(data)
     }
 
     if (data.discord_enabled) {
-      this.startDiscord(
-        data.discord_api_key,
-        data.discord_starting_words,
-        data.discord_bot_name_regex,
-        data.discord_bot_name,
-        data.discord_empty_responses,
-        data.discord_spell_handler_incoming,
-        data.use_voice,
-        data.voice_provider,
-        data.voice_character,
-        data.voice_language_code,
-        data.tiktalknet_url,
-        data.eth_private_key,
-        data.eth_public_address
-      )
+      this.startDiscord(data)
     }
 
-    if (data.twitter_client_enable) {
-      this.startTwitter(
-        data.twitter_token,
-        data.twitter_id,
-        data.twitter_app_token,
-        data.twitter_app_token_secret,
-        data.twitter_access_token,
-        data.twitter_access_token_secret,
-        data.twitter_enable_twits,
-        data.twitter_tweet_rules,
-        data.twitter_auto_tweet_interval_min,
-        data.twitter_auto_tweet_interval_max,
-        data.twitter_bot_name,
-        data.twitter_bot_name_regex,
-        data.twitter_spell_handler_incoming,
-        data.twitter_spell_handler_auto,
-        data
-      )
+    if (data.twitter_client_enabled) {
+      this.startTwitter(data)
     }
 
     // if (data.telegram_enabled) {
@@ -219,27 +265,30 @@ export class Entity {
     // }
   }
 
-  async startDiscord(
-    discord_api_token: string,
-    discord_starting_words: string,
-    discord_bot_name_regex: string,
-    discord_bot_name: string,
-    discord_empty_responses: string,
-    spell_handler: string,
-    use_voice: boolean,
-    voice_provider: string,
-    voice_character: string,
-    voice_language_code: string,
-    tiktalknet_url: string,
+  async startDiscord({
+    discord_api_key,
+    discord_starting_words,
+    discord_bot_name_regex,
+    discord_bot_name,
+    discord_empty_responses,
+    discord_spell_handler_incoming,
+    use_voice,
+    voice_provider,
+    voice_character,
+    voice_language_code,
+    tiktalknet_url,
     eth_private_key,
-    eth_public_address
-  ) {
-    console.log('initializing discord, spell_handler:', spell_handler)
+    eth_public_address,
+  }: StartDiscordArgs) {
+    console.log(
+      'initializing discord, spell_handler:',
+      discord_spell_handler_incoming
+    )
     if (this.discord)
       throw new Error('Discord already running for this agent on this instance')
 
     const spell = await prisma.spells.findUnique({
-      where: { name: spell_handler },
+      where: { name: discord_spell_handler_incoming },
     })
     // spell.graph, spell.modules and spell.gameState are all JSON
     // parse them back into the object before returning it
@@ -255,7 +304,7 @@ export class Entity {
     console.log('createDiscordClient')
     await this.discord.createDiscordClient(
       this,
-      discord_api_token,
+      discord_api_key,
       discord_starting_words,
       discord_bot_name_regex,
       discord_bot_name,
@@ -288,23 +337,23 @@ export class Entity {
     console.log('Stopped discord client for agent ' + this.name)
   }
 
-  async startTwitter(
-    twitter_token: any,
-    twitter_id: any,
-    twitter_app_token: any,
-    twitter_app_token_secret: any,
-    twitter_access_token: any,
-    twitter_access_token_secret: any,
-    twitter_enable_twits: any,
-    twitter_tweet_rules: any,
-    twitter_auto_tweet_interval_min: any,
-    twitter_auto_tweet_interval_max: any,
-    twitter_bot_name: any,
-    twitter_bot_name_regex: any,
-    twitter_spell_handler_incoming: any,
-    twitter_spell_handler_auto: any,
-    entity: any
-  ) {
+  async startTwitter({
+    twitter_token,
+    twitter_id,
+    twitter_app_token,
+    twitter_app_token_secret,
+    twitter_access_token,
+    twitter_access_token_secret,
+    twitter_enable_twits,
+    twitter_tweet_rules,
+    twitter_auto_tweet_interval_min,
+    twitter_auto_tweet_interval_max,
+    twitter_bot_name,
+    twitter_bot_name_regex,
+    twitter_spell_handler_incoming,
+    twitter_spell_handler_auto,
+    entity,
+  }: StartTwitterArgs) {
     console.log('initializing Twitter:', twitter_token)
     if (this.twitter)
       throw new Error(
@@ -486,13 +535,13 @@ export class Entity {
   //   }
   // }
 
-  async startLoop(
-    loop_interval: string,
-    loop_spell_handler: string,
-    agent_name: string,
+  async startLoop({
+    loop_interval,
+    loop_spell_handler,
+    agent_name,
     eth_private_key,
-    eth_public_address
-  ) {
+    eth_public_address,
+  }: StartLoopArgs) {
     if (this.loopHandler) {
       throw new Error('Loop already running for this client on this instance')
     }
