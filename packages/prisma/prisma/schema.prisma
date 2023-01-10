@@ -3,12 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model content_objects {
-  id          Int       @id
+  id          Int       @id @default(autoincrement())
   title       String
   description String
   is_included Boolean   @default(true)
@@ -17,7 +17,7 @@ model content_objects {
 }
 
 model documents {
-  id              Int               @id
+  id              Int               @id @default(autoincrement())
   title           String
   description     String
   is_included     Boolean           @default(true)
@@ -27,95 +27,18 @@ model documents {
 }
 
 model documents_store {
-  id        Int         @id
+  id        Int         @id @default(autoincrement())
   name      String
   documents documents[]
 }
 
 model entities {
-  id                               Int      @id @default(autoincrement())
-  dirty                            Boolean?
-  enabled                          Boolean?
-  updated_at                       String?
-  openai_api_key                   String?
-  eth_private_key                  String?
-  eth_public_address               String?
-  discord_enabled                  Boolean?
-  discord_api_key                  String?
-  discord_starting_words           String?
-  discord_bot_name_regex           String?
-  discord_bot_name                 String?
-  discord_empty_responses          String?
-  discord_spell_handler_incoming   String?
-  use_voice                        Boolean?
-  voice_provider                   String?
-  voice_character                  String?
-  voice_language_code              String?
-  voice_default_phrases            String?
-  tiktalknet_url                   String?
-  discord_spell_handler_update     String?
-  twitter_client_enable            Boolean?
-  twitter_token                    String?
-  twitter_id                       String?
-  twitter_app_token                String?
-  twitter_app_token_secret         String?
-  twitter_access_token             String?
-  twitter_access_token_secret      String?
-  twitter_enable_twits             String?
-  twitter_tweet_rules              String?
-  twitter_auto_tweet_interval_min  String?
-  twitter_auto_tweet_interval_max  String?
-  twitter_bot_name                 String?
-  twitter_bot_name_regex           String?
-  twitter_spell_handler_incoming   String?
-  twitter_spell_handler_auto       String?
-  telegram_enabled                 Boolean?
-  telegram_bot_token               String?
-  telegram_bot_name                String?
-  telegram_spell_handler_incoming  String?
-  reddit_enabled                   Boolean?
-  reddit_app_id                    String?
-  reddit_app_secret_id             String?
-  reddit_oauth_token               String?
-  reddit_bot_name                  String?
-  reddit_bot_name_regex            String?
-  reddit_spell_handler_incoming    String?
-  zoom_enabled                     Boolean?
-  zoom_invitation_link             String?
-  zoom_password                    String?
-  zoom_bot_name                    String?
-  zoom_spell_handler_incoming      String?
-  loop_enabled                     Boolean?
-  loop_interval                    String?
-  loop_agent_name                  String?
-  loop_spell_handler               String?
-  slack_enabled                    Boolean?
-  slack_token                      String?
-  slack_signing_secret             String?
-  slack_bot_token                  String?
-  slack_bot_name                   String?
-  slack_port                       String?
-  slack_spell_handler_incoming     String?
-  instagram_enabled                Boolean?
-  instagram_username               String?
-  instagram_password               String?
-  instagram_bot_name               String?
-  instagram_bot_name_regex         String?
-  instagram_spell_handler_incoming String?
-  messenger_enabled                Boolean?
-  messenger_page_access_token      String?
-  messenger_verify_token           String?
-  messenger_bot_name               String?
-  messenger_bot_name_regex         String?
-  messenger_spell_handler_incoming String?
-  twilio_enabled                   Boolean?
-  twilio_account_sid               String?
-  twilio_auth_token                String?
-  twilio_phone_number              String?
-  twilio_bot_name                  String?
-  twilio_empty_responses           String?
-  twilio_spell_handler_incoming    String?
-  spells                           spells[] @relation("entitiesTospells")
+  id         Int      @id @default(autoincrement())
+  dirty      Boolean?
+  enabled    Boolean?
+  updated_at String?
+  spells     spells[] @relation("entitiesTospells")
+  data       String?
 }
 
 model events {
@@ -131,13 +54,13 @@ model events {
 }
 
 model spells {
-  id         String     @id @db.Uuid
+  id         String     @id @unique
   name       String     @unique
-  graph      Json?
-  created_at DateTime?  @default(now()) @db.Timestamptz(6)
-  updated_at DateTime?  @default(now()) @db.Timestamptz(6)
-  deleted_at DateTime?  @db.Timestamptz(6)
-  modules    Json?
-  game_state Json?
+  graph      String?
+  created_at DateTime?
+  updated_at DateTime?
+  deleted_at DateTime?
+  modules    String?
+  gameState  String?
   entities   entities[] @relation("entitiesTospells")
 }

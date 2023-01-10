@@ -96,7 +96,7 @@ export class ImageGeneration extends MagickComponent<Promise<InputReturn>> {
     const prompt = inputs['prompt'] && inputs['prompt'][0]
     const endpoint = inputs['endpoint'] && inputs['endpoint'][0]
 
-    const server = endpoint ?? 'https://localhost:8001/image_generation'
+    const server = endpoint ?? 'http://localhost:8001/image_generation'
 
     const { images } = await getPrompt(prompt, server)
     const image = images && images[0]

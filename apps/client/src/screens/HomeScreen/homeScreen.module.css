@@ -98,7 +98,7 @@
 }
 
 .version-banner {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.2);
   box-sizing: border-box;
   box-shadow: inset 0px -30px 30px rgba(0, 0, 0, 0.5);
   background-position: center;

@@ -3,7 +3,7 @@ services:
   weaviate:
     command:
     - --host
-    - 0.0.0.0
+    - localhost
     - --port
     - '8080'
     - --scheme
