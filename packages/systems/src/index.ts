@@ -1,5 +1,5 @@
 export * from './systems/fileServer'
-export * from './systems/googleSpeechToText'
+export * from './systems/whisperSpeechToText'
 export * from './systems/googleTextToSpeech'
 export * from './systems/searchCorpus'
 export * from './systems/tiktalknet'

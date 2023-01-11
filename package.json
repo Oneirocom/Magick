@@ -142,6 +142,7 @@
     "vm2": "^3.9.11",
     "wav": "^1.0.2",
     "weaviate-client": "^2.10.1",
+    "whisper.cpp": "^1.0.3",
     "wikipedia": "^1.1.6",
     "xmldoc": "^1.2.0",
     "xvfb": "0.4.0"
