@@ -16,10 +16,13 @@ import {
 
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { magickApiRootUrl } from '../../config'
+ 
+import run_python from '../../../../../packages/core/src/ProcessPython'
 
 const Context = createContext<EditorContext>(undefined!)
 
 export const useMagickInterface = () => useContext(Context)
+
 
 const MagickInterfaceProvider = ({ children, tab }) => {
   const { events, publish, subscribe } = usePubSub()
@@ -39,6 +42,8 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     if (!_spell) return
     spellRef.current = _spell
   }, [_spell])
+
+  // run_python("https://cdn.jsdelivr.net/pyodide/v0.22.0/full/pyodide.js");
 
   const {
     $PLAYTEST_INPUT,
@@ -139,24 +144,40 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return spell.data as Spell
   }
 
-  const processCode = (code, inputs, data, state) => {
-    const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
-      (acc, [key, value]) => {
-        acc[key as string] = value[0] as any
-        return acc
-      },
-      {} as Record<string, any>
-    )
-    // eslint-disable-next-line no-new-func
-    const result = new Function('"use strict";return (' + code + ')')()(
-      flattenedInputs,
-      data,
-      state
-    )
-    if (result.state) {
-      updateCurrentGameState(result.state)
-    }
-    return result
+  const  processCode = async (code, inputs, data, state, language='javascript') => {
+    console.log('processCode')
+    if (language == 'javascript'){
+      console.log('processCode, javascript')
+      const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
+        (acc, [key, value]) => {
+          acc[key as string] = value[0] as any
+          return acc
+        },
+        {} as Record<string, any>
+      )
+      // eslint-disable-next-line no-new-func
+      const result = new Function('"use strict";return (' + code + ')')()(
+        flattenedInputs,
+        data,
+        state
+      )
+      if (result.state) {
+        updateCurrentGameState(result.state)
+      }
+      return result
+    } else if (language == 'python') {
+      try {
+        return run_python(code);
+        // console.log('processCode, python')
+        // let pyodide = await global.loadPyodide();
+        // const codeResult = pyodide.runPython("1 + 10");
+        // console.log('coderesult', codeResult);
+      } catch (err) {
+        console.log({ err })
+      }
+
+    }  
+    
   }
 
   const runSpell = async (inputs, spellId, state) => {

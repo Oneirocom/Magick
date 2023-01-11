@@ -25,6 +25,7 @@ import { IsQuery } from './logic/IsQuery'
 import { IsVariableTrue } from './logic/IsVariableTrue'
 import { LogicalOperator } from './logic/LogicalOperator'
 import { OrGate } from './logic/OrGate'
+import { Python } from './logic/Python'
 import { RandomGate } from './logic/RandomGate'
 import { SwitchGate } from './logic/SwitchGate'
 import { WaitForAll } from './logic/WaitForAll'
@@ -79,6 +80,7 @@ export const components = {
   cast: () => new Cast(),
   inRange: () => new InRange(),
   code: () => new Code(),
+  python: () => new Python(),
   sentenceMatcher: () => new SentenceMatcher(),
   destructure: () => new Destructure(),
   complexStringMatcher: () => new ComplexStringMatcher(),
