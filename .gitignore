@@ -39,3 +39,4 @@ Thumbs.db
 
 .env.local
 dev.db
+*/**/dev.db

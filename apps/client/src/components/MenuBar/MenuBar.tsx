@@ -34,7 +34,8 @@ const MenuBar = () => {
   const {
     $SAVE_SPELL,
     $CREATE_STATE_MANAGER,
-    $CREATE_ENT_MANAGER,
+    $CREATE_AGENT_MANAGER,
+    $CREATE_AVATAR_WINDOW,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
     $CREATE_SEARCH_CORPUS,
@@ -103,7 +104,11 @@ const MenuBar = () => {
     publish($CREATE_SEARCH_CORPUS(activeTabRef.current?.id))
   }
   const onEntityManagerCreate = () => {
-    publish($CREATE_ENT_MANAGER(activeTabRef.current?.id))
+    publish($CREATE_AGENT_MANAGER(activeTabRef.current?.id))
+  }
+
+  const onAvatarWindowCreate = () => {
+    publish($CREATE_AVATAR_WINDOW(activeTabRef.current?.id))
   }
 
   const onPlaytestCreate = () => {
@@ -231,6 +236,9 @@ const MenuBar = () => {
         },
         agent_manager: {
           onClick: onEntityManagerCreate,
+        },
+        avatar: {
+          onClick: onAvatarWindowCreate,
         },
         playtest: {
           onClick: onPlaytestCreate,
