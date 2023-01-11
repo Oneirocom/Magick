@@ -8,7 +8,7 @@ p, h1, h2, h3, h4, h5, form, button, label, .flexlayout__tab_button_content {
 :root {
   color-scheme: dark;
 
-  --primary: #60c585;
+  --primary: #9D12A4;
   --dark-0: #000000;
   --dark-1: #191919;
   --dark-2: #272727;
@@ -23,8 +23,8 @@ p, h1, h2, h3, h4, h5, form, button, label, .flexlayout__tab_button_content {
   --blue: #1290ce;
   --purple: #7027dd;
   --glow-light: #b2fccd75;
-  --glow: #7AFBAA;
-  --glow-dark: #4a9b67;
+  --glow: #9D12A4;
+  --glow-dark: #570b5b;
 
   --c1: 8px;
   --c2: 16px;
