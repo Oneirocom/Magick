@@ -24,7 +24,15 @@ const Magick = ({ empty = false }) => {
   const pubSub = usePubSub()
   const { spellName } = useParams()
 
-  const { events, publish } = pubSub
+  const { events, publish, subscribe } = pubSub
+
+  // Handle open tab events
+  useEffect(() => {
+    return subscribe(events.OPEN_TAB, (_event, tabData) => {
+      console.log('OPEN_TAB', tabData)
+      dispatch(openTab(tabData))
+    }) as () => void
+  })
 
   useEffect(() => {
     if (!tabs) return

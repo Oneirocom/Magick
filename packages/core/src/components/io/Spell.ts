@@ -60,7 +60,14 @@ export class SpellComponent extends MagickComponent<
     this.onDoubleClick = (node: MagickNode) => {
       if (!this.editor) return
       console.log('double click', node)
-      // this.editor.openSpell(node.data.spellId)
+      const pubsub = this.editor.pubSub
+      const event = pubsub.events.OPEN_TAB
+      pubsub.publish(event, {
+        type: 'spell',
+        spellId: node.data.spellId,
+        name: node.data.spell,
+        openNew: false,
+      })
     }
   }
 
