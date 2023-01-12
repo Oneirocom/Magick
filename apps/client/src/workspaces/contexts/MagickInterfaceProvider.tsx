@@ -43,6 +43,8 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     spellRef.current = _spell
   }, [_spell])
 
+  // run_python("https://cdn.jsdelivr.net/pyodide/v0.22.0/full/pyodide.js");
+
   const {
     $PLAYTEST_INPUT,
     $PLAYTEST_PRINT,
@@ -166,6 +168,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     } else if (language == 'python') {
       try {
         return run_python(code);
+        // console.log('processCode, python')
+        // let pyodide = await global.loadPyodide();
+        // const codeResult = pyodide.runPython("1 + 10");
+        // console.log('coderesult', codeResult);
       } catch (err) {
         console.log({ err })
       }
@@ -243,12 +249,12 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     }/event`
 
     const params = {
-      type,
-      agent,
-      speaker,
-      client,
-      channel,
-      maxCount,
+      type: type,
+      agent: agent,
+      speaker: speaker,
+      client: client,
+      channel: channel,
+      maxCount: maxCount,
       target_count,
       max_time_diff,
     } as Record<string, any>
@@ -268,7 +274,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     type,
     agent,
     speaker,
-    sender,
     text,
     client,
     channel,
@@ -282,7 +287,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
         type,
         agent,
         speaker,
-        sender,
         text,
         client,
         channel,

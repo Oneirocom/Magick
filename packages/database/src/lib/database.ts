@@ -38,12 +38,6 @@ export class database {
       throw new Error('Missing argument for type')
     }
 
-    console.log('************* GET EVENTS')
-    console.log(        type,
-      agent,
-      speaker,
-      client,
-      channel,)
     // rewrite this function to use prisma
     const event = await prisma.events.findMany({
       where: {
