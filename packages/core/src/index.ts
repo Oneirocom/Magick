@@ -14,6 +14,7 @@ export { default as SocketOverridePlugin } from './plugins/socketOverridePlugin'
 export { default as SocketPlugin } from './plugins/socketPlugin'
 export { default as TaskPlugin } from './plugins/taskPlugin'
 export { default as MultiSocketGenerator } from './plugins/multiSocketGenerator'
+export { default as NodeClickPlugin } from './plugins/nodeClickPlugin'
 
 // TODO we can better organzie this folder structure with nested index aggregators
 export * from './plugins/socketPlugin'

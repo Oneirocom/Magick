@@ -26,6 +26,7 @@ import {
   getComponents,
   MagickEditor,
   MultiSocketGenerator,
+  NodeClickPlugin,
 } from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
@@ -129,6 +130,7 @@ export const initEditor = function ({
   editor.use(MultiSocketGenerator)
   editor.use(DisplayPlugin)
   editor.use(InspectorPlugin)
+  editor.use(NodeClickPlugin)
   editor.use(AreaPlugin, {
     scaleExtent: { min: 0.025, max: 2 },
   })

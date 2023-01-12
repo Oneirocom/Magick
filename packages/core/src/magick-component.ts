@@ -42,6 +42,7 @@ export abstract class MagickComponent<
   hide = false
   runFromCache = false
   deprecated? = false
+  onDoubleClick?: (node: MagickNode) => void
   declare module: ModuleOptions
   contextMenuName: string | undefined
   workspaceType: 'module' | 'spell' | null | undefined
