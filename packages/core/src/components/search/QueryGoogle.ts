@@ -14,7 +14,8 @@ import { MagickComponent } from '../../magick-component'
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
 type WorkerReturn = {
-  result: string
+  summary: string,
+  links: string
 }
 
 export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
@@ -24,7 +25,8 @@ export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
 
     this.task = {
       outputs: {
-        result: 'output',
+        summary: 'output',
+        links: 'output',
         trigger: 'option',
       },
       init: () => {},
@@ -40,13 +42,15 @@ export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
     const query = new Rete.Input('query', 'Query', stringSocket)
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const result = new Rete.Output('result', 'Result', stringSocket)
+    const summary = new Rete.Output('summary', 'Summary', stringSocket)
+    const links = new Rete.Output('links', 'Links', stringSocket)
 
     return node
       .addInput(triggerIn)
       .addInput(query)
       .addOutput(triggerOut)
-      .addOutput(result)
+      .addOutput(summary)
+      .addOutput(links)
   }
 
   // the worker contains the main business logic of the node.  It will pass those results
@@ -60,10 +64,11 @@ export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
     const { queryGoogle } = magick
 
     const query = inputs.query[0] as string
-    const result = await queryGoogle(query)
-
+    const {summary, links} = await queryGoogle(query)
+    console.log('summary, links', summary, links)
     return {
-      result,
+      summary,
+      links
     }
   }
 }

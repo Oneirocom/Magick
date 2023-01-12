@@ -363,11 +363,12 @@ const queryGoogle = async (ctx: Koa.Context) => {
   if (!ctx.request?.body?.query)
     throw new CustomError('input-failed', 'No query provided in request body')
   const query = ctx.request.body?.query as string
-  const result = await queryGoogleSearch(query)
-
-  ctx.body = {
-    result,
-  }
+  const data = await queryGoogleSearch(query);
+  console.log('DATA', data)
+  const { summary, links } = data;
+  console.log ('SUMMARY', summary)
+  console.log ('LINKS', links)
+  return (ctx.body = { summary, links })
 }
 
 const image_generation = async (ctx: Koa.Context) => {

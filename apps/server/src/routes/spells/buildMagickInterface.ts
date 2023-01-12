@@ -14,7 +14,6 @@ import { runSpell } from '../utils/runSpell'
 
 import run_python from '../../../../../packages/core/src/ProcessPython'
 
-
 const getEvents = async ({
   type,
   agent,
@@ -104,8 +103,7 @@ export const buildMagickInterface = (
       return spell
     },
     queryGoogle: async query => {
-      const response = await queryGoogleSearch(query)
-      return response
+      return await queryGoogleSearch(query)
     },
     processCode: async (
       code: unknown,
