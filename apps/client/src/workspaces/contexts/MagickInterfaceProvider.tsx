@@ -293,10 +293,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const getWikipediaSummary = async (keyword: string) => {
-    const isProd = import.meta.env.NODE_ENV === 'production'
-    const root = isProd
-      ? 'https://magick.supereality.com'
-      : 'htts://localhost:8001'
+    const root = import.meta.env.API_URL ?? 'http://localhost:8001' 
     const url = `${root}/wikipediaSummary?keyword=${keyword}`
 
     console.log('FETCHOING FROM URL', url)
@@ -312,7 +309,12 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       query,
     })
 
-    return await response.data.result
+
+    const summary = response.data.summary
+    const links = response.data.links.join('\n')
+    console.log('summary is ', summary)
+
+    return { summary, links }
   }
 
   const completion = async (body: CompletionBody) => {

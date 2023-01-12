@@ -40,3 +40,6 @@ Thumbs.db
 .env.local
 dev.db
 */**/dev.db
+
+package-lock.json
+yarn.lock
