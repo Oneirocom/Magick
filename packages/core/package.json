@@ -1,10 +1,12 @@
 {
   "name": "@magickml/core",
   "version": "0.0.1",
-  "private": false,
   "description": "core shared code for magick",
   "main": "./index.js",
   "module": "./index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "import": "./index.js",

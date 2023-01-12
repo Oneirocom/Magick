@@ -1,12 +1,23 @@
 import { loadPyodide } from "pyodide";
+const PYODIDE_URL = "https://cdn.jsdelivr.net/pyodide/v0.22.0/full/";
 
-export default async function run_python(code) {
-  console.log(code);
-  let loaded = await loadPyodide();
-  const codeResult = loaded.runPython("1 + 1");
-  console.log('run_python code', codeResult)  
-}
+const isBrowser = typeof window !== "undefined";
 
+let pyodide;
+loadPyodide({
+  indexURL: isBrowser ? PYODIDE_URL : undefined,
+}).then((_pyodide) => {
+  console.log("Pyodide loaded");
+  pyodide = _pyodide;
+});
+
+export default async function run_python (code) {
+  if(!pyodide) {
+    throw new Error("Pyodide not loaded");
+  }
+
+	return await pyodide.runPythonAsync(code);
+};
 
 
 // import { useEffect } from 'react'

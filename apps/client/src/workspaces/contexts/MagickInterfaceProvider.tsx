@@ -43,8 +43,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     spellRef.current = _spell
   }, [_spell])
 
-  // run_python("https://cdn.jsdelivr.net/pyodide/v0.22.0/full/pyodide.js");
-
   const {
     $PLAYTEST_INPUT,
     $PLAYTEST_PRINT,
@@ -168,10 +166,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     } else if (language == 'python') {
       try {
         return run_python(code);
-        // console.log('processCode, python')
-        // let pyodide = await global.loadPyodide();
-        // const codeResult = pyodide.runPython("1 + 10");
-        // console.log('coderesult', codeResult);
       } catch (err) {
         console.log({ err })
       }
