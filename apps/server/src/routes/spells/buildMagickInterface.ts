@@ -114,7 +114,7 @@ export const buildMagickInterface = (
       state: Record<string, any>,
       language: string='javascript'
     ) => {
-      if (language=='javascript'){
+      if (language === 'javascript'){
         const { VM } = vm2
         const vm = new VM()
 
@@ -146,9 +146,14 @@ export const buildMagickInterface = (
             'Error in spell runner: processCode component: ' + code
           )
         }
-      } else if (language == 'python') {
+      } else {
+        console.log('processing code')
         console.log(code)
-        const codeResult = await run_python(code);
+        let testcode= `
+          print('hello world')
+          1+1
+        `
+        const codeResult = await run_python(testcode);
         console.log(codeResult);
       }
     },
