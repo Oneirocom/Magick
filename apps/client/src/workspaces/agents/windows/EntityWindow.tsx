@@ -412,6 +412,7 @@ const EntityWindow = ({
         ..._data,
       })
       .then(res => {
+        console.log('RESPONSE DATA', res.data)
         if (typeof res.data === 'string' && res.data === 'internal error') {
           enqueueSnackbar('internal error updating entity', {
             variant: 'error',
@@ -420,9 +421,8 @@ const EntityWindow = ({
           enqueueSnackbar('updated entity', {
             variant: 'success',
           })
-          console.log('response on update', JSON.parse(res.config.data).data)
-          let responseData = res && JSON.parse(res?.config?.data).data
-          console.log(responseData, 'responseDataresponseData')
+          console.log('response on update', JSON.parse(res.config.data))
+          let responseData = res && JSON.parse(res?.config?.data)
 
           setEnabled(responseData.enabled)
           setDiscordEnabled(responseData.data.discord_enabled)
@@ -539,6 +539,7 @@ const EntityWindow = ({
         }
       })
       .catch(e => {
+        console.log('ERROR', e)
         enqueueSnackbar('internal error updating entity', {
           variant: 'error',
         })
