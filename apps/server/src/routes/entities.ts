@@ -79,7 +79,7 @@ const addEntityHandler = async (ctx: Koa.Context) => {
 
   // if entity exists, update it
   if (entity) {
-    await prisma.entities.update({
+    const entity = await prisma.entities.update({
       where: {
         id: data.id,
       },
@@ -91,7 +91,7 @@ const addEntityHandler = async (ctx: Koa.Context) => {
       },
     })
 
-    return (ctx.body = { id: data.id })
+    return (ctx.body = entity)
   }
 
   try {
