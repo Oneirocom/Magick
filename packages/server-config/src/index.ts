@@ -3,8 +3,10 @@ config({
   path: '../../../.env.*',
 })
 
-export const API_URL = process.env.API_URL || 'http://localhost:8001'
 export const SERVER_PORT = process.env.PORT || 8001
+export const API_URL = process.env.API_URL || `http://localhost:${SERVER_PORT}`
+export const API_ROOT_URL =
+  process.env.API_URL || `http://localhost:${SERVER_PORT}`
 export const GOOGLE_APPLICATION_CREDENTIALS =
   process.env.GOOGLE_APPLICATION_CREDENTIALS || ''
 export const SPEECH_SERVER_PORT = process.env.SPEECH_SERVER_PORT || 65532
@@ -29,3 +31,5 @@ export const ENTITY_WEBSERVER_PORT_RANGE =
 export const DATABASE_URL =
   process.env.DATABASE_URL ||
   'postgresql://postgres:ZTE*meq1mzh3abn!cmk@db.xpilpcjsizemuijsiask.supabase.co:5432/postgres'
+export const APP_SEARCH_SERVER_URL =
+  process.env.APP_SEARCH_SERVER_URL || `http://localhost:${SEARCH_CORPUS_PORT}`
