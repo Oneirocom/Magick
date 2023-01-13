@@ -51,6 +51,8 @@ const getEntityHandler = async (ctx: Koa.Context) => {
         enabled: true,
       }
     }
+    if (typeof data.data === 'string') data.data = JSON.parse(data.data)
+
     return (ctx.body = data)
   } catch (e) {
     console.log('getEntityHandler:', e)
