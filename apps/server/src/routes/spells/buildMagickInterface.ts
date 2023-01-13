@@ -15,6 +15,7 @@ import { searchWikipedia } from '../wikipedia/helpers'
 import { database } from '@magickml/database'
 import { makeCompletion } from '../../utils/MakeCompletionRequest'
 import { runSpell } from '../utils/runSpell'
+import { OPENAI_API_KEY } from '@magickml/server-config'
 
 const getEvents = async ({
   type,
@@ -74,9 +75,7 @@ export const buildMagickInterface = (
     },
     completion: async (body: CompletionBody) => {
       // check body for API key, otherwise use the environment
-      const openaiApiKey = body.apiKey
-        ? body.apiKey
-        : process.env.OPENAI_API_KEY
+      const openaiApiKey = body.apiKey ? body.apiKey : OPENAI_API_KEY
 
       if (!openaiApiKey) throw new Error('No API key provided')
 
