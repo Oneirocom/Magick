@@ -6,7 +6,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'magick',
+  title: 'Magick',
   tagline: 'A visual node editor for building AI powered data pipelines',
   url: 'https://magick.ml',
   baseUrl: '/',
@@ -111,7 +111,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} MagickML`,
+        copyright: `Copyright © ${new Date().getFullYear()} Oneirocom Systems Inc.`,
       },
       prism: {
         theme: lightCodeTheme,
@@ -119,7 +119,7 @@ const config = {
       },
     }),
   customFields: {
-    magickLogo: 'img/magick-logo.png',
+    magickLogo: 'img/MAGICK- banner.png',
   },
 }
 
