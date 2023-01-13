@@ -58,8 +58,8 @@ const EventHandler = ({ pubSub, tab }) => {
     $SAVE_SPELL_DIFF,
     $CREATE_STATE_MANAGER,
     $CREATE_SEARCH_CORPUS,
-    $CREATE_ENT_MANAGER,
-    $CREATE_SETTINGS_WINDOW,
+    $CREATE_AGENT_MANAGER,
+    $CREATE_AVATAR_WINDOW,
     $CREATE_MESSAGE_REACTION_EDITOR,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
@@ -158,7 +158,11 @@ const EventHandler = ({ pubSub, tab }) => {
   }
 
   const createEntityManager = () => {
-    createOrFocus(windowTypes.ENT_MANAGER, 'Agent Manager')
+    createOrFocus(windowTypes.AGENT_MANAGER, 'Agent Manager')
+  }
+
+  const createAvatarWindow = () => {
+    createOrFocus(windowTypes.AVATAR, 'Avatar Window')
   }
 
   const createMessageReactionEditor = () => {
@@ -254,7 +258,8 @@ const EventHandler = ({ pubSub, tab }) => {
     [$CREATE_STATE_MANAGER(tab.id)]: createStateManager,
     [$CREATE_SEARCH_CORPUS(tab.id)]: createSearchCorpus,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,
-    [$CREATE_ENT_MANAGER(tab.id)]: createEntityManager,
+    [$CREATE_AGENT_MANAGER(tab.id)]: createEntityManager,
+    [$CREATE_AVATAR_WINDOW(tab.id)]: createAvatarWindow,
     [$CREATE_PLAYTEST(tab.id)]: createPlaytest,
     [$CREATE_INSPECTOR(tab.id)]: createInspector,
     [$CREATE_TEXT_EDITOR(tab.id)]: createTextEditor,
