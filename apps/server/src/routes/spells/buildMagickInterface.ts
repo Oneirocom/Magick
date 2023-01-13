@@ -1,5 +1,9 @@
 import {
-  CompletionBody, CreateEventArgs, EngineContext, GetEventArgs, MagickWorkerInputs
+  CompletionBody,
+  CreateEventArgs,
+  EngineContext,
+  GetEventArgs,
+  MagickWorkerInputs,
 } from '@magickml/core'
 import { prisma } from '@magickml/prisma'
 import vm2 from 'vm2'
@@ -91,7 +95,7 @@ export const buildMagickInterface = (
     },
     getSpell: async spellId => {
       const spell = await prisma.spells.findUnique({ where: { name: spellId } })
-      if(spell) {
+      if (spell) {
         // spell.graph, spell.modules and spell.gameState are all JSON
         // parse them back into the object before returning it
         spell.graph = JSON.parse(spell.graph as any)
