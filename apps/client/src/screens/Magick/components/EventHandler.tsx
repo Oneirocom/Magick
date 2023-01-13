@@ -103,7 +103,11 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
+    console.log('updated spell', updatedSpell)
+    console.log('current spell', currentSpell)
     const jsonDiff = diff(currentSpell, updatedSpell)
+
+    console.log('json diff', jsonDiff)
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
@@ -191,7 +195,7 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const onProcess = () => {
     const editor = getEditor()
-    if (!editor || !getDirtyGraph()) return
+    if (!editor) return
 
     console.log('RUNNING PROCESS')
 
