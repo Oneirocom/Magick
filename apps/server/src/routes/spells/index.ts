@@ -90,6 +90,8 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
   const { body } = ctx.request
   const { name, diff } = body
 
+  console.log('saving diff', name, diff)
+
   if (!body) throw new CustomError('input-failed', 'No parameters provided')
 
   let spell = await prisma.spells.findUnique({ where: { name } })
@@ -101,12 +103,16 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
 
   try {
     if (spell) {
+      console.log('parsing json')
       // spell.graph, spell.modules and spell.gameState are all JSON
       // parse them back into the object before returning it
       spell.graph = JSON.parse(spell.graph as any)
       spell.modules = JSON.parse(spell.modules as any)
       spell.gameState = JSON.parse(spell.gameState as any)
     }
+
+    console.log('Spell: ', spell)
+    console.log('Diff: ', diff)
 
     const spellUpdate = otJson0.type.apply(spell, diff)
 
@@ -137,9 +143,9 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
     if (updatedSpell) {
       // spell.graph, spell.modules and spell.gameState are all JSON
       // parse them back into the object before returning it
-      updatedSpell.graph = JSON.parse(spell.graph as any)
-      updatedSpell.modules = JSON.parse(spell.modules as any)
-      updatedSpell.gameState = JSON.parse(spell.gameState as any)
+      updatedSpell.graph = JSON.stringify(spell.graph as any)
+      updatedSpell.modules = JSON.stringify(spell.modules as any)
+      updatedSpell.gameState = JSON.stringify(spell.gameState as any)
     }
 
     ctx.response.status = 200
