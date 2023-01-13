@@ -89,7 +89,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     const { speaker, client, channel } = agent
 
-    if (primary) {
+    if (primary && primary !== '') {
       respUser = await storeEvent({
         type,
         agent: agent.agent,
@@ -101,7 +101,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       })
     }
 
-    if (secondary) {
+    if (secondary && secondary !== '') {
       respAgent = await storeEvent({
         type,
         agent: agent.agent,

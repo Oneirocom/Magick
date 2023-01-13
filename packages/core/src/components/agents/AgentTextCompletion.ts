@@ -126,9 +126,8 @@ export class AgentTextCompletion extends MagickComponent<
     const presencePenaltyData =
       settings.presence_penalty ?? (node?.data?.presencePenalty as string)
     const presencePenalty = parseFloat(presencePenaltyData)
-    const stop = settings.stop ?? (node?.data?.stop as string).split(',')
+    const stop = settings.stop ?? (node?.data?.stop as string).split(', ')
     for (let i = 0; i < stop.length; i++) {
-      stop[i] = stop[i].trim()
       if (stop[i] === '\\n') {
         stop[i] = '\n'
       }
