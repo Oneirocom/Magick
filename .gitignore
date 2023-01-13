@@ -43,3 +43,4 @@ dev.db
 
 package-lock.json
 yarn.lock
+packages/prisma/prisma/dev.db
