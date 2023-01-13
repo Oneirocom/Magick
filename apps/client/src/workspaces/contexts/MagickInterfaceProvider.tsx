@@ -228,12 +228,12 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     }/event`
 
     const params = {
-      type: type,
-      agent: agent,
-      speaker: speaker,
-      client: client,
-      channel: channel,
-      maxCount: maxCount,
+      type,
+      agent,
+      speaker,
+      client,
+      channel,
+      maxCount,
       target_count,
       max_time_diff,
     } as Record<string, any>
@@ -253,6 +253,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     type,
     agent,
     speaker,
+    sender,
     text,
     client,
     channel,
@@ -266,6 +267,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
         type,
         agent,
         speaker,
+        sender,
         text,
         client,
         channel,

@@ -6,6 +6,7 @@ import { EventStore } from './agents/EventStore'
 import { InputDestructureComponent } from './agents/InputDestructure'
 import { InputRestructureComponent } from './agents/InputRestructure'
 import { Request } from './agents/Request'
+import { JupyterComms } from './agents/JupyterComms'
 import { CheckBalanceForERC20 } from './ethereum/CheckBalanceForERC20'
 import { CheckEthBalance } from './ethereum/CheckEthBalance'
 import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentTransactionsFromWallet'
@@ -94,6 +95,7 @@ export const components = {
   conversationStore: () => new EventStore(),
   conversationRecall: () => new EventRecall(),
   request: () => new Request(),
+  request2: () => new JupyterComms(),
   search: () => new Search(),
   documentGet: () => new DocumentGet(),
   documentEdit: () => new DocumentEdit(),
