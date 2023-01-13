@@ -1,5 +1,6 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
+import { HF_API_KEY } from '@magickml/server-config'
 /* eslint-disable no-console */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
@@ -19,7 +20,7 @@ export async function MakeModelRequest(
       { inputs, parameters, options },
       {
         headers: {
-          Authorization: `Bearer ${process.env.HF_API_KEY}`,
+          Authorization: `Bearer ${HF_API_KEY}`,
         },
       }
     )

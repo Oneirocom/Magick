@@ -178,9 +178,6 @@ export class Entity {
 
     const data = this.data
 
-    if (!process.env.OPENAI_API_KEY && data.openai_api_key)
-      process.env.OPENAI_API_KEY = data.openai_api_key
-
     this.generateVoices(data)
 
     if (data.loop_enabled) {
