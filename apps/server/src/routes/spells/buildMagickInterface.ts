@@ -136,6 +136,8 @@ export const buildMagickInterface = (
 
       try {
         const codeResult = vm.run(codeToRun)
+        console.log('Inputs', inputs)
+        console.log('CODE TO RUN', codeToRun)
         console.log('CODE RESULT', codeResult)
         return codeResult
       } catch (err) {

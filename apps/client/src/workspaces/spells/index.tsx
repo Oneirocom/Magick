@@ -43,8 +43,8 @@ const Workspace = ({ tab, tabs, pubSub }) => {
       debounce(async data => {
         if (!getDirtyGraph()) return
         if (tab.type === 'spell' && spellRef.current) {
-          setDirtyGraph(true)
-          publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
+          // setDirtyGraph(true)
+          // publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
         }
       }, 2000) // debounce for 2000 ms
     )
