@@ -15,7 +15,12 @@ import { searchWikipedia } from '../wikipedia/helpers'
 import { database } from '@magickml/database'
 import { makeCompletion } from '../../utils/MakeCompletionRequest'
 import { runSpell } from '../utils/runSpell'
-import { OPENAI_API_KEY } from '@magickml/server-config'
+import {
+  API_ROOT_URL,
+  API_URL,
+  APP_SEARCH_SERVER_URL,
+  OPENAI_API_KEY,
+} from '@magickml/server-config'
 
 const getEvents = async ({
   type,
@@ -60,8 +65,14 @@ export const buildMagickInterface = (
 ): EngineContext => {
   // eslint-disable-next-line functional/no-let
   let gameState = { ...initialGameState }
+  const env = {
+    API_ROOT_URL,
+    API_URL,
+    APP_SEARCH_SERVER_URL,
+  }
 
   return {
+    env,
     runSpell: async (flattenedInputs, spellId, state) => {
       const { outputs } = await runSpell({
         state,

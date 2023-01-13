@@ -35,6 +35,12 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     }
   )
 
+  const env = {
+    API_ROOT_URL: import.meta.env.API_ROOT_URL,
+    API_URL: import.meta.env.API_URL,
+    APP_SEARCH_SERVER_URL: import.meta.env.APP_SEARCH_SERVER_URL,
+  }
+
   useEffect(() => {
     if (!_spell) return
     spellRef.current = _spell
@@ -223,8 +229,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     max_time_diff = -1,
   }) => {
     const urlString = `${
-      import.meta.env.VITE_APP_API_URL ??
-      import.meta.env.API_ROOT_URL
+      import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
     }/event`
 
     const params = {
@@ -259,8 +264,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }: CreateEventArgs) => {
     const response = await axios.post(
       `${
-        import.meta.env.VITE_APP_API_URL ??
-        import.meta.env.API_ROOT_URL
+        import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
       }/event`,
       {
         type,
@@ -326,6 +330,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const publicInterface = {
+    env,
     onTrigger,
     onInspector,
     onAddModule,
