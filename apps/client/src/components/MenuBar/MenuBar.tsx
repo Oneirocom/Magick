@@ -191,7 +191,7 @@ const MenuBar = () => {
           onClick: onImport,
           hotKey: 'option+i'
         },
-        edit_spell: {
+        rename_spell: {
           onClick: onEdit,
           hotKey: 'option+e',
         },

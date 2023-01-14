@@ -478,7 +478,7 @@ input[type='text']:focus-visible {
   overflow: auto;
 }
 
-.entityWindow {
+.agentWindow {
   padding: 1em;
   background-color: #333;
   border-radius: .25em;

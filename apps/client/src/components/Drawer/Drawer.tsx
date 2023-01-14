@@ -152,10 +152,10 @@ export default function MiniDrawer({ children }) {
             text="Event Manager"
           />
           <DrawerItem
-            active={location.pathname === '/entityManager'}
+            active={location.pathname === '/agentManager'}
             Icon={HubIcon}
             open={open}
-            text="Entity Manager"
+            text="Agent Manager"
           />
           {/* <DrawerItem
             active={location.pathname === '/settings'}

@@ -1,4 +1,5 @@
 const { merge } = require('webpack-merge')
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = (config, context) => {
   return merge(config, {
@@ -9,6 +10,6 @@ module.exports = (config, context) => {
           use: ['style-loader', 'css-loader'],
         },
       ],
-    },
+    }
   })
 }

@@ -25,8 +25,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/speech-server/src/environments/environment.ts",
-              "with": "apps/speech-server/src/environments/environment.prod.ts"
+              "replace": "apps/speech-server/environments/environment.ts",
+              "with": "apps/speech-server/environments/environment.prod.ts"
             }
           ]
         }
