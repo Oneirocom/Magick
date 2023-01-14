@@ -6,10 +6,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
 import express from 'express'
-import { MessagingRequest } from '@magickml/core'
+import { MessagingRequest } from 'src/types'
 import Twilio from 'twilio'
 
-import { getRandomEmptyResponse, getSetting } from './utils'
+import { getRandomEmptyResponse, getSetting } from '../../server/src/entities/connectors/utils'
 
 export class twilio_client {
   async message(req: MessagingRequest, res: any) {

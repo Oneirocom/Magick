@@ -69,9 +69,8 @@ export class Classifier extends MagickComponent<Promise<InputReturn>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent, magick }: { silent: boolean; magick: EngineContext }
+    { silent }: { silent: boolean }
   ) {
-    const { env } = magick
     const inputData = inputs['input'][0]
     const labels = inputs['labels'] && inputs['labels'][0]
     const labelData = ((labels ?? node.data?.labels) as string).split(', ')
@@ -80,12 +79,18 @@ export class Classifier extends MagickComponent<Promise<InputReturn>> {
       candidate_labels: labelData,
     }
 
-    const resp = await axios.post(`${env.API_URL}/hf_request`, {
-      inputs: inputData as string,
-      model: 'facebook/bart-large-mnli',
-      parameters: parameters,
-      options: undefined,
-    })
+    const resp = await axios.post(
+      `${
+        import.meta.env.VITE_APP_API_URL ??
+        import.meta.env.API_URL
+      }/hf_request`,
+      {
+        inputs: inputData as string,
+        model: 'facebook/bart-large-mnli',
+        parameters: parameters,
+        options: undefined,
+      }
+    )
 
     const { data, success, error } = resp.data
 

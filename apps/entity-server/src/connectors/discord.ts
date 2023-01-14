@@ -20,7 +20,6 @@ import Discord, {
 import emoji from 'emoji-dictionary'
 import emojiRegex from 'emoji-regex'
 
-import { DISCORD_API_TOKEN } from '@magickml/server-config'
 import { initSpeechClient, recognizeSpeech } from './discord-voice'
 import { getRandomEmptyResponse, startsWithCapital } from './utils'
 
@@ -1335,7 +1334,7 @@ export class discord_client {
     this.discord_bot_name_regex = discord_bot_name_regex
     this.discord_bot_name = discord_bot_name
 
-    const token = discord_api_token ?? DISCORD_API_TOKEN
+    const token = discord_api_token ?? process.env.DISCORD_API_TOKEN
     if (!token) return console.warn('No API token for Discord bot, skipping')
 
     this.client = new Discord.Client({
