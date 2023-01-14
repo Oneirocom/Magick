@@ -6,7 +6,7 @@
 import { database } from '@magickml/database'
 import { TwitterApi, ETwitterStreamEvent } from 'twitter-api-v2'
 
-import { randomInt } from './utils'
+import { randomInt } from '../../../../apps/agent-server/src/connectors/utils'
 
 function log(...s: (string | boolean)[]) {
   console.log(...s)

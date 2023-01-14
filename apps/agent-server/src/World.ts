@@ -45,8 +45,8 @@ export class World {
   static instance: World
   id = -1
   objects: { [id: number]: any } = {}
-  oldEntities: any
-  newEntities: any
+  oldAgents: any
+  newAgents: any
   availablePorts: number[] = []
 
   constructor() {
@@ -56,54 +56,54 @@ export class World {
     this.onCreate()
   }
 
-  async updateEntity() {
-    this.newEntities = await database.getEntities()
-    const newEntities = this.newEntities
-    delete newEntities['updated_at']
-    const oldEntities = this.oldEntities ?? []
-    if (oldEntities['updated_at']) delete oldEntities['updated_at']
-    if (JSON.stringify(newEntities) === JSON.stringify(oldEntities)) return // They are the same
+  async updateAgent() {
+    this.newAgents = await database.getAgents()
+    const newAgents = this.newAgents
+    delete newAgents['updated_at']
+    const oldAgents = this.oldAgents ?? []
+    if (oldAgents['updated_at']) delete oldAgents['updated_at']
+    if (JSON.stringify(newAgents) === JSON.stringify(oldAgents)) return // They are the same
 
     // If an entry exists in oldAgents but not in newAgents, it has been deleted
-    for (const i in oldEntities) {
+    for (const i in oldAgents) {
       // filter for entries where oldAgents where id === newAgents[i].id
       if (
-        newEntities.filter((x: any) => x.id === oldEntities[i].id)[0] ===
+        newAgents.filter((x: any) => x.id === oldAgents[i].id)[0] ===
         undefined
       ) {
-        await this.removeEntity(oldEntities[i].id)
+        await this.removeAgent(oldAgents[i].id)
       }
     }
 
     // If an entry exists in newAgents but not in oldAgents, it has been added
-    for (const i in newEntities) {
+    for (const i in newAgents) {
       // filter for entries where oldAgents where id === newAgents[i].id
       if (
-        oldEntities.filter((x: any) => x.id === newEntities[i].id)[0] ===
+        oldAgents.filter((x: any) => x.id === newAgents[i].id)[0] ===
         undefined
       ) {
-        if (newEntities[i].enabled) {
-          await this.addEntity(newEntities[i])
+        if (newAgents[i].enabled) {
+          await this.addAgent(newAgents[i])
         }
       }
     }
 
-    for (const i in newEntities) {
-      if (newEntities[i].dirty) {
-        await this.removeEntity(newEntities[i].id)
-        await this.addEntity(newEntities[i])
-        await database.setEntityDirty(newEntities[i].id, false)
+    for (const i in newAgents) {
+      if (newAgents[i].dirty) {
+        await this.removeAgent(newAgents[i].id)
+        await this.addAgent(newAgents[i])
+        await database.markAgentDirty(newAgents[i].id, false)
       }
     }
 
-    this.oldEntities = this.newEntities
+    this.oldAgents = this.newAgents
   }
 
-  async resetEntitySpells() {
-    const entities = await prisma.agents.findMany()
-    for (const i in entities) {
+  async resetAgentSpells() {
+    const agents = await prisma.agents.findMany()
+    for (const i in agents) {
       await prisma.agents.update({
-        where: { id: entities[i].id },
+        where: { id: agents[i].id },
         data: {
           spells: {
             set: [],
@@ -128,12 +128,11 @@ export class World {
       this.availablePorts.push(i)
     }
 
-    // reset all entities to remove any references to spells
-    this.resetEntitySpells()
+    this.resetAgentSpells()
 
     initEntityLoop(
       async (id: number) => {
-        await this.updateEntity()
+        await this.updateAgent()
         this.updateInstance(id)
       },
       async (id: number) => {
@@ -161,7 +160,7 @@ export class World {
 
   async onDestroy() {}
 
-  async addEntity(obj: any) {
+  async addAgent(obj: any) {
     if (this.objects[obj.id] === undefined) {
       obj.data.id = obj.id
       this.objects[obj.id] = new Agent(obj)
@@ -170,7 +169,7 @@ export class World {
     }
   }
 
-  async removeEntity(id: number) {
+  async removeAgent(id: number) {
     if (this.objectExists(id)) {
       await this.objects[id]?.onDestroy()
       this.objects[id] = null

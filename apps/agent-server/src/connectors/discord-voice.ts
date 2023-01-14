@@ -15,17 +15,17 @@ import { tts, tts_tiktalknet } from '@magickml/systems'
 import { addSpeechEvent } from './voiceUtils/addSpeechEvent'
 
 //const transcriber = new Transcriber('288916776772018')
-export function initSpeechClient(
+export function initSpeechClient({
   client,
   discord_bot_name,
-  entity,
+  agent,
   spellHandler,
   voiceProvider,
   voiceCharacter,
   languageCode,
   tiktalknet_url
-) {
-  addSpeechEvent(client, { group: 'default_' + entity.id })
+}) {
+  addSpeechEvent(client, { group: 'default_' + agent.id })
   const audioPlayer = createAudioPlayer({
     behaviors: {
       noSubscriber: NoSubscriberBehavior.Play,
@@ -68,7 +68,7 @@ export function initSpeechClient(
         agent: discord_bot_name,
         client: 'discord',
         channel: channel.id,
-        entity,
+        agentId: agent.id,
         entities,
         channelType: 'voice',
       })

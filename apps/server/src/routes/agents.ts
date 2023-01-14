@@ -9,7 +9,7 @@ export const modules: Record<string, unknown> = {}
 
 const getAgentsHandler = async (ctx: Koa.Context) => {
   try {
-    let data = await database.getEntities()
+    let data = await database.getAgents()
     return (ctx.body = data)
   } catch (e) {
     console.log('getAgentsHandler:', e)

@@ -1358,16 +1358,17 @@ export class discord_client {
     this.client.embed = embed
 
     if (this.use_voice) {
-      initSpeechClient(
-        this.client,
-        this.discord_bot_name,
-        this.agent,
-        this.spellHandler,
-        this.voice_provider,
-        this.voice_character,
-        this.voice_language_code,
-        this.tiktalknet_url
-      )
+      const {client, discord_bot_name, agent, spellHandler, voice_provider, voice_character, voice_language_code, tiktalknet_url} = this
+      initSpeechClient({
+        client,
+        discord_bot_name,
+        agent,
+        spellHandler,
+        voice_provider,
+        voice_character,
+        voice_language_code,
+        tiktalknet_url
+      })
     }
 
     this.client.on('messageCreate', this.messageCreate.bind(null, this.client))

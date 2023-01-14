@@ -129,7 +129,7 @@ const getEntitiesInfo = async (ctx: Koa.Context) => {
     : -1
 
   try {
-    let data = await database.getEntities()
+    let data = await database.getAgents()
     let info = undefined
     for (let i = 0; i < data.length; i++) {
       if (data[i].id === id) {
@@ -191,10 +191,6 @@ export const generation: Route[] = [
   //   path: '/weaviate',
   //   post: makeWeaviateRequest,
   // },
-  {
-    path: '/agents_info',
-    get: getEntitiesInfo,
-  },
   {
     path: '/query_google',
     post:queryGoogle,
