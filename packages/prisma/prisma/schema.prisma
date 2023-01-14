@@ -27,38 +27,40 @@ model documents {
 }
 
 model documents_store {
-  id              Int               @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   name      String
   documents documents[]
 }
 
 model entities {
-  id                               Int      @id @default(autoincrement())
-  dirty                            Boolean?
-  enabled                          Boolean?
-  updated_at                       String?
-  data                             String?
+  id         Int      @id @default(autoincrement())
+  dirty      Boolean?
+  enabled    Boolean?
+  updated_at String?
+  spells     spells[] @relation("entitiesTospells")
+  data       String?
 }
 
 model events {
   id      Int     @id @default(autoincrement())
   type    String?
-  speaker String?
   agent   String?
   client  String?
   channel String?
   sender  String?
   text    String?
   date    String?
+  speaker String?
 }
 
 model spells {
-  id         String    @id @unique
-  name       String    @unique
+  id         String     @id @unique
+  name       String     @unique
   graph      String?
   created_at DateTime?
   updated_at DateTime?
   deleted_at DateTime?
   modules    String?
-  gameState String?
+  gameState  String?
+  entities   entities[] @relation("entitiesTospells")
 }
