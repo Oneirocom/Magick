@@ -1,8 +1,8 @@
-import Koa from 'koa'
+import Koa from 'koa';
 
-import { lookUpOnWikipedia, searchWikipedia } from "./helpers";
-import { Route } from "../../types";
-import { CustomError } from "../../utils/CustomError";
+import { Route } from "../types";
+import { CustomError } from "../utils/CustomError";
+import { lookUpOnWikipedia } from "./helpers";
 
 const getWikipediaSummary = async (ctx: Koa.Context) => {
   const { keyword } = ctx.query

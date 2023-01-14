@@ -1,9 +1,7 @@
 import { database } from '@magickml/database'
-import 'regenerator-runtime/runtime'
-import Koa from 'koa'
-import 'regenerator-runtime/runtime'
-import { Route } from '../types'
 import { prisma } from '@magickml/prisma'
+import Koa from 'koa'
+import { Route } from './types'
 
 export const modules: Record<string, unknown> = {}
 

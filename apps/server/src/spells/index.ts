@@ -1,14 +1,13 @@
-import Koa from 'koa'
-import 'regenerator-runtime/runtime'
-import { Route } from '../../types'
-import { CustomError } from '../../utils/CustomError'
 import { extractModuleInputKeys, Spell } from '@magickml/core'
-
+import { prisma } from '@magickml/prisma'
+import Koa from 'koa'
 import otJson0 from 'ot-json0'
-import { runSpell } from '../utils/runSpell'
+import 'regenerator-runtime/runtime'
 import { v4 as uuidv4 } from 'uuid'
 
-import { prisma } from '@magickml/prisma'
+import { Route } from '../types'
+import { CustomError } from '../utils/CustomError'
+import { runSpell } from '../utils/runSpell'
 
 export const modules: Record<string, unknown> = {}
 

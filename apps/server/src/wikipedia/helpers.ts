@@ -2,7 +2,7 @@ import { OPENAI_API_KEY } from '@magickml/server-config'
 import weaviate from 'weaviate-client'
 import wiki from 'wikipedia'
 
-import { MakeCompletionRequest } from '../../utils/MakeCompletionRequest'
+import { MakeCompletionRequest } from '../utils/MakeCompletionRequest'
 
 const client = weaviate.client({
   scheme: 'http',
