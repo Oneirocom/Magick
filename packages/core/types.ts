@@ -40,25 +40,28 @@ export type ImageCacheResponse = {
   images: ImageType[]
 }
 
-export type CreateEventArgs = {
-  type: string
-  agent: string
-  speaker: string
-  sender: string
-  text: string
-  client: string
-  channel: string
+export type Event = {
+  id?: number
+  type?: string
+  content?: string
+  sender?: string
+  entities?: string[]
+  observer?: string
+  client?: string
+  channel?: string
+  channelType?: string
+  agentId?: number | string
+  date?: string
 }
 
-export type GetEventArgs = {
-  type: string
-  agent: string
-  speaker: string
-  client: string
-  channel: string
-  maxCount: number
-  max_time_diff: number
+export type CreateEventArgs = Event
+
+export type GetEventArgs = Event & {
+  maxCount?: number
+  max_time_diff?: number
 }
+
+export type EventResponse = Event[]
 
 export type CompletionBody = {
   prompt: string
@@ -90,7 +93,14 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare refreshEventTable: () => void
 }
 
+export type Env = {
+  API_ROOT_URL: string
+  API_URL: string
+  APP_SEARCH_SERVER_URL: string
+}
+
 export type EngineContext = {
+  env: Env
   getCurrentGameState: () => Record<string, unknown>
   setCurrentGameState: (state: Record<string, unknown>) => void
   updateCurrentGameState: (update: Record<string, unknown>) => void
@@ -109,9 +119,9 @@ export type EngineContext = {
     language?: string | null
   ) => any | void
   queryGoogle: (query: string) => Promise<{summary: string, links: string}>
-  getEvent: (
+  getEvents: (
     args: GetEventArgs
-  ) => Promise<string | string[] | null | Record<string, any>>
+  ) => Promise<any[]>
   storeEvent: (args: CreateEventArgs) => Promise<any>
   getWikipediaSummary: (keyword: string) => Promise<Record<string, any> | null>
 }
@@ -163,25 +173,6 @@ export interface Spell {
   gameState?: Record<string, unknown>
   createdAt?: number
   updatedAt?: number
-}
-
-export type Agent = {
-  output: string
-  speaker: string
-  agent: string
-  client: string
-  channel: string
-  channelId: string
-  entity: number
-  roomInfo?: {
-    user: string
-    inConversation: boolean
-    isBot: boolean
-    info3d: string
-  }[]
-  eth_private_key: string
-  eth_public_address: string
-  channelType: string
 }
 
 export interface IRunContextEditor extends NodeEditor {

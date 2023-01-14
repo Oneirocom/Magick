@@ -4,32 +4,10 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import { rootApi } from './api'
 import { GraphData, Spell } from '@magickml/core'
-// function camelize(str) {
-//   return str
-//     .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
-//       return index === 0 ? word.toLowerCase() : word.toUpperCase()
-//     })
-//     .replace(/\s+/g, '')
-// }
+
 export interface Diff {
   name: string
   diff: Record<string, unknown>
-}
-
-export interface DeployedSpellVersion {
-  spellId: string
-  message?: string
-  url?: string
-  graph?: GraphData
-}
-
-export interface DeployArgs {
-  spellId: string
-  message: string
-}
-
-export interface GetDeployArgs {
-  spellId: string
 }
 
 export interface PatchArgs {
@@ -75,6 +53,7 @@ export const spellApi = rootApi.injectEndpoints({
       }),
     }),
     saveDiff: builder.mutation<void, Diff>({
+      invalidatesTags: ['Spell'],
       query: diffData => ({
         url: 'spells/saveDiff',
         method: 'POST',
@@ -91,6 +70,7 @@ export const spellApi = rootApi.injectEndpoints({
       }),
     }),
     saveSpell: builder.mutation<Partial<Spell>, Partial<Spell> | Spell>({
+      invalidatesTags: ['Spell'],
       // needed to use queryFn as query option didnt seem to allow async functions.
       async queryFn({ user, ...spell }, { dispatch }, extraOptions, baseQuery) {
         const baseQueryOptions = {
@@ -134,16 +114,7 @@ export const spellApi = rootApi.injectEndpoints({
         url: `spells/${spellId}`,
         method: 'DELETE',
       }),
-    }),
-    deploySpell: builder.mutation<DeployedSpellVersion, DeployArgs>({
-      query({ spellId, ...update }) {
-        return {
-          url: `spells/${spellId}/deploy`,
-          body: update,
-          method: 'POST',
-        }
-      },
-    }),
+    })
   }),
 })
 

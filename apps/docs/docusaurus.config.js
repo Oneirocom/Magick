@@ -6,8 +6,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'magick',
-  tagline: 'A visual node editor for building AI powered data pipelines',
+  title: 'Magick',
+  tagline: 'A low code IDE for building AI driven experiences and agents.',
   url: 'https://magick.ml',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -41,8 +41,18 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      colorMode: {
+        defaultMode: 'light',
+        disableSwitch: false,
+        respectPrefersColorScheme: false,
+      },
+      image: 'MAGICK- banner.png',
       navbar: {
-        title: 'Home',
+        logo: {
+          alt: 'Magick',
+          src: 'img/Magick-purple-logo.png',
+          height: 32,
+        },
         items: [
           {
             type: 'doc',
@@ -92,8 +102,8 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'magick Discord',
-                href: 'https://discord.gg/MEqNmmzrtx',
+                label: 'Magick Discord',
+                href: 'https://discord.gg/8WkayXw8a4',
               },
             ],
           },
@@ -111,7 +121,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} MagickML`,
+        copyright: `Copyright © ${new Date().getFullYear()} Oneirocom Systems Inc.`,
       },
       prism: {
         theme: lightCodeTheme,
@@ -119,7 +129,7 @@ const config = {
       },
     }),
   customFields: {
-    magickLogo: 'img/magick-logo.png',
+    magickLogo: 'img/magick-banner-short.png',
   },
 }
 

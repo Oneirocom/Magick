@@ -14,13 +14,15 @@ function HomepageHeader() {
     <header className={styles.heroBanner}>
       <div className="container">
         {/* <h1 className="hero__title">{siteConfig.title}</h1> */}
-        <img src={siteConfig.customFields.magickLogo} />
+        {/* <img src={siteConfig.customFields.magickLogo} /> */}
+
+        <MagickDemo />
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
             to="/docs/creators/gettingStarted/CreatorWelcome"
-            // style={{ marginRight: '2%' }}
+            style={{ marginRight: '2%' }}
           >
             Creators
           </Link>
@@ -55,8 +57,7 @@ export default function Home() {
     >
       <HomepageHeader />
       <main>
-        {/* <HomepageFeatures /> */}
-        <MagickDemo />
+        <HomepageFeatures />
       </main>
     </Layout>
   )

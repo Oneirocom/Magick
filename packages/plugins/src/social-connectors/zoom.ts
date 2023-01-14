@@ -8,6 +8,7 @@
 import { launch } from 'puppeteer-stream'
 import Xvfb from 'xvfb'
 
+import { FILE_SERVER_URL } from '@magickml/server-config'
 import { detectOsOption } from '../../server/src/entities/connectors/utils'
 import { tts } from '../../server/src/systems/googleTextToSpeech'
 import { tts_tiktalknet } from '../../server/src/systems/tiktalknet'
@@ -201,9 +202,9 @@ export class zoom {
           if (this.settings.voice_provider === 'google') {
             const fileId = await tts(response as string)
             const url =
-              (process.env.FILE_SERVER_URL?.endsWith('/')
-                ? process.env.FILE_SERVER_URL
-                : process.env.FILE_SERVER_URL + '/') + fileId
+              (FILE_SERVER_URL?.endsWith('/')
+                ? FILE_SERVER_URL
+                : FILE_SERVER_URL + '/') + fileId
             response = url
           } else {
             const fileId = await tts_tiktalknet(
@@ -212,9 +213,9 @@ export class zoom {
               this.settings.tiktalknet_url
             )
             const url =
-              (process.env.FILE_SERVER_URL?.endsWith('/')
-                ? process.env.FILE_SERVER_URL
-                : process.env.FILE_SERVER_URL + '/') + fileId
+              (FILE_SERVER_URL?.endsWith('/')
+                ? FILE_SERVER_URL
+                : FILE_SERVER_URL + '/') + fileId
             response = url
           }
           try {

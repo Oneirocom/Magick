@@ -2,56 +2,35 @@ import { CreateEventArgs, GetEventArgs } from '@magickml/core'
 import { prisma } from '@magickml/prisma'
 
 export class database {
-  static async createEvent({
-    type,
-    agent,
-    speaker,
-    sender,
-    client,
-    channel,
-    text,
-  }: CreateEventArgs) {
-    return await prisma.events.create({
-      data: {
-        type,
-        agent,
-        speaker,
-        sender,
-        client,
-        channel,
-        text,
-        date: new Date().toUTCString(),
-      },
+  static async createEvent(_data: CreateEventArgs) {
+    const data = { ..._data }
+    if(data.id){
+      delete data.id
+    }
+    // filter data to only include valid fields
+    const validFields = ['type', 'sender', 'observer', 'client', 'channel', 'channelType', 'data']
+    for (const key in data) {
+      if (!validFields.includes(key)) {
+        delete data[key]
+      }
+    }
+    const event = await prisma.events.create({
+      data: data as any,
     })
+    return event
   }
 
-  static async getEvents({
-    type,
-    agent = 'system',
-    speaker = 'none',
-    client = 'default',
-    channel = 'default',
-    maxCount = 10,
-    max_time_diff = -1,
-  }: GetEventArgs) {
-    if (!type) {
-      throw new Error('Missing argument for type')
-    }
-
-    console.log('************* GET EVENTS')
-    console.log(        type,
-      agent,
-      speaker,
-      client,
-      channel,)
-    // rewrite this function to use prisma
+  static async getEvents(params: GetEventArgs) {
+    const 
+      { type, sender, observer, client, channel, channelType, maxCount, max_time_diff } = params
     const event = await prisma.events.findMany({
       where: {
         type,
-        agent,
-        speaker,
+        sender,
+        observer,
         client,
         channel,
+        channelType,
       },
       take: maxCount,
       orderBy: {
@@ -61,7 +40,7 @@ export class database {
 
     if (max_time_diff > 0) {
       const now = new Date()
-      const filtered = event.filter((e) => {
+      const filtered = event.filter(e => {
         const diff = now.getTime() - new Date(e.date).getTime()
         return diff < max_time_diff
       })
@@ -94,60 +73,12 @@ export class database {
     return event
   }
 
-  static async addWikipediaData(agent: any, data: any) {
-    const event = await prisma.events.create({
-      data: {
-        type: 'agent_data',
-        agent,
-        speaker: 'wikipedia',
-        sender: data,
-        client: 'wikipedia',
-        channel: 'wikipedia',
-        text: data,
-        date: new Date().toUTCString(),
-      },
-    })
-    return event
-  }
-
-  static async getWikipediaData(agent: any) {
-    const event = await prisma.events.findFirst({
-      where: {
-        type: 'agent_data',
-        agent,
-        client: 'wikipedia',
-        channel: 'wikipedia',
-        speaker: 'wikipedia',
-      },
-    })
-    if (event) {
-      return event.text
-    }
-    return ''
-  }
-
-  static async wikipediaDataExists(agent: any) {
-    const event = await prisma.events.findFirst({
-      where: {
-        type: 'agent_data',
-        agent,
-        client: 'wikipedia',
-        channel: 'wikipedia',
-        speaker: 'wikipedia',
-      },
-    })
-    if (event) {
-      return event.text
-    }
-    return ''
-  }
-
   static async getEntities() {
-    return await prisma.entities.findMany()
+    return await prisma.agents.findMany()
   }
 
   static async getEntity(id: any) {
-    const entity = await prisma.entities.findFirst({
+    const entity = await prisma.agents.findFirst({
       where: {
         id,
       },
@@ -156,7 +87,7 @@ export class database {
   }
 
   static async entityExists(id: any) {
-    const entity = await prisma.entities.findFirst({
+    const entity = await prisma.agents.findFirst({
       where: {
         id,
       },
@@ -169,7 +100,7 @@ export class database {
     if (typeof id === 'string') {
       id = parseInt(id)
     }
-    const entity = await prisma.entities.delete({
+    const entity = await prisma.agents.delete({
       where: {
         id,
       },
@@ -178,8 +109,8 @@ export class database {
   }
 
   static async getLastUpdatedInstances() {
-    const entities = await prisma.entities.findMany()
-    return entities.map((e) => {
+    const agents = await prisma.agents.findMany()
+    return agents.map(e => {
       return {
         id: e.id,
         lastUpdated: e.updated_at ? e.updated_at : 0,
@@ -188,7 +119,7 @@ export class database {
   }
 
   static async setEntityDirty(id: any, value: boolean) {
-    const entity = await prisma.entities.update({
+    const entity = await prisma.agents.update({
       where: {
         id,
       },
@@ -201,12 +132,12 @@ export class database {
   }
 
   static async setEntityUpdated(id: any) {
-    const entity = await prisma.entities.update({
+    const entity = await prisma.agents.update({
       where: {
         id,
       },
       data: {
-        updated_at: (new Date()).toString(),
+        updated_at: new Date().toString(),
       },
     })
 
@@ -214,24 +145,18 @@ export class database {
   }
 
   static async createEntity() {
-    const entity = await prisma.entities.create({
+    const entity = await prisma.agents.create({
       data: {
         dirty: true,
         enabled: false,
-        data: "",
+        data: '',
       },
     })
     return entity
   }
 
   static async updateEntity(id: any, data: { [x: string]: any; dirty?: any }) {
-
-    // if data.data is json, convert to string
-    if (typeof data.data === 'object') {
-      data.data = JSON.stringify(data.data)
-    }
-
-    const entity = await prisma.entities.update({
+    const entity = await prisma.agents.update({
       where: {
         id,
       },
@@ -246,17 +171,17 @@ export class database {
     is_included: any,
     store_id: any
   ): Promise<number> {
-  // rewrite in prisma
-  const document = await prisma.documents.create({
-    data: {
-      title,
-      description,
-      is_included,
-      store_id,
-    },
-  })
-  return document.id
-}
+    // rewrite in prisma
+    const document = await prisma.documents.create({
+      data: {
+        title,
+        description,
+        is_included,
+        store_id,
+      },
+    })
+    return document.id
+  }
 
   static async removeDocument(documentId: number) {
     const document = await prisma.documents.delete({
@@ -266,7 +191,7 @@ export class database {
     })
     return document
   }
-  
+
   static async updateDocument(
     document_id: any,
     title: string,
@@ -288,9 +213,7 @@ export class database {
     return document
   }
 
-  static async getDocumentsOfStore(
-    storeId: number
-  ): Promise<any> {
+  static async getDocumentsOfStore(storeId: number): Promise<any> {
     const documents = await prisma.documents.findMany({
       where: {
         store_id: storeId,
@@ -369,9 +292,7 @@ export class database {
     return contentObj
   }
 
-  static async getContentObjOfDocument(
-    documentId: number
-  ): Promise<any> {
+  static async getContentObjOfDocument(documentId: number): Promise<any> {
     const contentObjs = await prisma.content_objects.findMany({
       where: {
         document_id: documentId,
@@ -401,7 +322,7 @@ export class database {
   static async addDocumentStore(name: any): Promise<number> {
     const documentStore = await prisma.documents_store.create({
       data: {
-        name
+        name,
       },
     })
     return documentStore.id
@@ -418,7 +339,7 @@ export class database {
     })
     return documentStore
   }
-  
+
   static async removeDocumentStore(storeId: number) {
     const documentStore = await prisma.documents_store.delete({
       where: {

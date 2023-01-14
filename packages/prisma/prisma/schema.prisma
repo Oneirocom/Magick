@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model content_objects {
@@ -27,38 +28,42 @@ model documents {
 }
 
 model documents_store {
-  id              Int               @id @default(autoincrement())
-  name      String
-  documents documents[]
+  id            Int         @id @default(autoincrement())
+  name          String
+  documents     documents[]
 }
 
-model entities {
-  id                               Int      @id @default(autoincrement())
-  dirty                            Boolean?
-  enabled                          Boolean?
-  updated_at                       String?
-  data                             String?
+model agents {
+  id            Int      @id @default(autoincrement())
+  dirty         Boolean?
+  enabled       Boolean?
+  updated_at    String?
+  spells        spells[] @relation("agentsTospells")
+  data          Json?
 }
 
 model events {
-  id      Int     @id @default(autoincrement())
-  type    String?
-  speaker String?
-  agent   String?
-  client  String?
-  channel String?
-  sender  String?
-  text    String?
-  date    String?
+  id            Int     @id @default(autoincrement())
+  type          String?
+  observer      String?
+  sender        String?
+  entities      Json?
+  client        String?
+  channel       String?
+  channelType   String?
+  content       String?
+  agentId       Int
+  date          String?
 }
 
 model spells {
-  id         String    @id @unique
-  name       String    @unique
-  graph      String?
-  created_at DateTime?
-  updated_at DateTime?
-  deleted_at DateTime?
-  modules    String?
-  gameState String?
+  id            String     @id @unique
+  name          String     @unique
+  graph         Json?
+  created_at    DateTime?
+  updated_at    DateTime?
+  deleted_at    DateTime?
+  modules       String[]
+  gameState     Json?
+  agents        agents[] @relation("agentsTospells")
 }

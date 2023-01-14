@@ -6,6 +6,8 @@
 }
 .select-dropdown-container input[type="text"] {
   box-shadow: none !important;
+  width: 0 !important;
+  font-family: "IBM Plex Mono" !important;
 }
 .dropdown-indicator {
   transition: transform .2s ease;
