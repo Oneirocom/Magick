@@ -50,16 +50,12 @@ export class DocumentGet extends MagickComponent<Promise<WorkerReturn>> {
       .addOutput(output)
   }
 
-  async worker(
-    _node: NodeData,
-    inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
-    context: { magick: EngineContext }
-  ) {
-    const { env } = context.magick
+  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
     const id = inputs['id'][0] as string
 
-    const resp = await axios.get(`${env.APP_SEARCH_SERVER_URL}/document/${id}`)
+    const resp = await axios.get(
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document/${id}`
+    )
 
     return {
       output: resp.data,

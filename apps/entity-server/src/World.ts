@@ -2,7 +2,6 @@ import { randomInt } from './connectors/utils'
 import { database } from '@magickml/database'
 import Entity from './Entity'
 import { prisma } from '@magickml/prisma'
-import { ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/server-config'
 
 const maxMSDiff = 5000
 let interval = 3000
@@ -114,7 +113,7 @@ export class World {
   }
 
   async onCreate() {
-    const ports: string[] = ((ENTITY_WEBSERVER_PORT_RANGE?.split(
+    const ports: string[] = ((process.env.ENTITY_WEBSERVER_PORT_RANGE?.split(
       '-'
     ) as any) ?? ['10001', '10100']) as string[]
     let portStart: number = parseInt(ports[0])
@@ -162,6 +161,7 @@ export class World {
   async onDestroy() {}
 
   async addEntity(obj: any) {
+    obj.data = typeof obj.data === 'string' ? JSON.parse(obj.data) : obj.data
     if (this.objects[obj.id] === undefined) {
       obj.data.id = obj.id
       this.objects[obj.id] = new Entity(obj)
