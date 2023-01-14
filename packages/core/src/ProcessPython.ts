@@ -11,30 +11,10 @@ loadPyodide({
   pyodide = _pyodide;
 });
 
-export default async function run_python (code) {
+export default async function runPython (code) {
   if(!pyodide) {
     throw new Error("Pyodide not loaded");
   }
 
 	return await pyodide.runPythonAsync(code);
 };
-
-
-// import { useEffect } from 'react'
-
-// const run_python = url => {
-//   useEffect(() => {
-//     const script = document.createElement('script');
-
-//     script.src = url;
-//     script.async = true;
-
-//     document.body.appendChild(script);
-
-//     return () => {
-//       document.body.removeChild(script);
-//     }
-//   }, [url]);
-// };
-
-// export default run_python;

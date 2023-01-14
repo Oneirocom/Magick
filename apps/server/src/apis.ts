@@ -1,15 +1,11 @@
 import { database } from '@magickml/database'
-import 'regenerator-runtime/runtime'
-//@ts-ignore
-// import weaviate from 'weaviate-client'
-import Koa from 'koa'
-import 'regenerator-runtime/runtime'
-import { Route } from '../types'
-import { makeCompletion } from '../utils/MakeCompletionRequest'
-import { MakeModelRequest } from '../utils/MakeModelRequest'
-import { queryGoogleSearch } from './utils/queryGoogle'
 import { tts, tts_tiktalknet } from '@magickml/systems'
-import { CustomError } from '../utils/CustomError'
+import Koa from 'koa'
+import { Route } from './types'
+import { CustomError } from './utils/CustomError'
+import { makeCompletion } from './utils/MakeCompletionRequest'
+import { MakeModelRequest } from './utils/MakeModelRequest'
+import { queryGoogleSearch } from './utils/queryGoogle'
 
 export const modules: Record<string, unknown> = {}
 
@@ -174,7 +170,7 @@ const image_generation = async (ctx: Koa.Context) => {
   ctx.body = data
 }
 
-export const generation: Route[] = [
+export const apis: Route[] = [
   {
     path: '/text_to_speech',
     get: getTextToSpeech,

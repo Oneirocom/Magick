@@ -16,6 +16,7 @@ export { default as TaskPlugin } from './plugins/taskPlugin'
 export { default as MultiSocketGenerator } from './plugins/multiSocketGenerator'
 export { default as NodeClickPlugin } from './plugins/nodeClickPlugin'
 export { default as worldManager } from './components/world/worldManager'
+export { default as runPython } from './ProcessPython'
 
 // TODO we can better organzie this folder structure with nested index aggregators
 export * from './plugins/socketPlugin'

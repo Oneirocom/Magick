@@ -1,36 +1,41 @@
-import {
-  WEAVIATE_IMPORT_DATA,
-  USESSL,
-} from './../../../packages/server-config/src/index'
-import { config } from 'dotenv-flow'
-config({
-  path: '../../../',
-})
 import cors from '@koa/cors'
 import Router from '@koa/router'
+import { database } from '@magickml/database'
+import { SERVER_PORT } from '@magickml/server-config'
+import {
+  initFileServer, initTextToSpeech, initWeaviateClient
+} from '@magickml/systems'
+import { config } from 'dotenv-flow'
+import * as fs from 'fs'
+import http from 'http'
 import HttpStatus from 'http-status-codes'
+import https from 'https'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
-import { database } from '@magickml/database'
-import { routes } from './routes'
-import { Handler, Method, Middleware } from './types'
-import {
-  initTextToSpeech,
-  initFileServer,
-  initWeaviateClient,
-} from '@magickml/systems'
-import https from 'https'
-import http from 'http'
-import * as fs from 'fs'
 import path from 'path'
-import { SERVER_PORT } from '@magickml/server-config'
+import 'regenerator-runtime/runtime'
+import {
+  USESSL, WEAVIATE_IMPORT_DATA
+} from './../../../packages/server-config/src/index'
+import { Handler, Method, Middleware } from './types'
+config({
+  path: '../../../',
+})
+
+// todo probaly want to get ride of this.  Not super secure.
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const app: Koa = new Koa()
 const router: Router = new Router()
 
-// todo probaly want to get ride of this.  Not super secure.
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+import { agents } from './agents'
+import { apis } from './apis'
+import { events } from './events'
+import { spells } from './spells'
+import { Route } from './types'
+
+const routes: Route[] = [...spells, ...agents, ...events, ...apis]
 
 async function init() {
   new database()

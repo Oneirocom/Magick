@@ -26,8 +26,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/agent-server/src/environments/environment.ts",
-              "with": "apps/agent-server/src/environments/environment.prod.ts"
+              "replace": "apps/agent-server/environments/environment.ts",
+              "with": "apps/agent-server/environments/environment.prod.ts"
             }
           ]
         }

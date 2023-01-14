@@ -1,4 +1,4 @@
-import { buildMagickInterface } from '../../server/src/routes/spells/buildMagickInterface'
+import { buildMagickInterface } from '../../server/src/spells/buildMagickInterface'
 import { tts, tts_tiktalknet } from '@magickml/systems'
 import { SpellManager } from '@magickml/core'
 

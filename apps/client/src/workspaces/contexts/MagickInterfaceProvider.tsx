@@ -18,7 +18,7 @@ import {
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { magickApiRootUrl } from '../../config'
 
-import run_python from '../../../../../packages/core/src/ProcessPython'
+import { runPython } from '../../../../../packages/core/src/ProcessPython'
 
 const Context = createContext<EditorContext>(undefined!)
 
@@ -172,7 +172,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       return result
     } else if (language == 'python') {
       try {
-        return run_python(code);
+        return runPython(code);
       } catch (err) {
         console.log({ err })
       }

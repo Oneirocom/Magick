@@ -1,6 +1,6 @@
 import { SpellRunner, GraphData, Spell as SpellType } from '@magickml/core'
 import { prisma } from '@magickml/prisma'
-import { CustomError } from '../../utils/CustomError'
+import { CustomError } from './CustomError'
 import { buildMagickInterface } from '../spells/buildMagickInterface'
 
 export type RunSpellArgs = {

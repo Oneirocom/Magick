@@ -3,26 +3,24 @@ import {
   CreateEventArgs,
   EngineContext,
   GetEventArgs,
-  MagickWorkerInputs,
+  MagickWorkerInputs
 } from '@magickml/core'
-import { prisma } from '@magickml/prisma'
-import vm2 from 'vm2'
-import { CustomError } from '../../utils/CustomError'
-
-import { queryGoogleSearch } from '../utils/queryGoogle'
-import { searchWikipedia } from '../wikipedia/helpers'
-
 import { database } from '@magickml/database'
-import { makeCompletion } from '../../utils/MakeCompletionRequest'
-import { runSpell } from '../utils/runSpell'
+import { prisma } from '@magickml/prisma'
 import {
   API_ROOT_URL,
   API_URL,
   APP_SEARCH_SERVER_URL,
-  OPENAI_API_KEY,
+  OPENAI_API_KEY
 } from '@magickml/server-config'
+import vm2 from 'vm2'
 
-import run_python from '../../../../../packages/core/src/ProcessPython'
+import { runPython } from '@magickml/core'
+import { CustomError } from '../utils/CustomError'
+import { makeCompletion } from '../utils/MakeCompletionRequest'
+import { queryGoogleSearch } from '../utils/queryGoogle'
+import { runSpell } from '../utils/runSpell'
+import { searchWikipedia } from '../wikipedia/helpers'
 
 const getEvents = async (params: GetEventArgs) => {
   return await database.getEvents(params)
@@ -132,7 +130,7 @@ export const buildMagickInterface = (
         return worker(inputs, data, state)
         `
         console.log('running template')
-        const codeResult = await run_python(template);
+        const codeResult = await runPython(template);
         console.log(codeResult);
       }
     },
