@@ -114,18 +114,20 @@ export const buildMagickInterface = (
       state: Record<string, any>,
       language: string='javascript'
     ) => {
+      const flattenInputs = Object.entries(inputs).reduce(
+        (acc, [key, value]: [string, any]) => {
+          acc[key] = value[0]
+          return acc
+        },
+        {} as Record<string, any>
+      )
+
       if (language === 'javascript'){
         const { VM } = vm2
         const vm = new VM()
 
         // Inputs are flattened before we inject them for a better code experience
-        const flattenInputs = Object.entries(inputs).reduce(
-          (acc, [key, value]: [string, any]) => {
-            acc[key] = value[0]
-            return acc
-          },
-          {} as Record<string, any>
-        )
+        
 
         // Freeze the variables we are injecting into the VM
         vm.freeze(data, 'data')
@@ -147,14 +149,15 @@ export const buildMagickInterface = (
           )
         }
       } else {
-        console.log('processing code')
-        console.log(code)
-        let testcode= `
-          print('hello world')
-          1+1
-        `
-        const codeResult = await run_python(testcode);
-        console.log(codeResult);
+        try {
+
+          const codeResult = await run_python(code, flattenInputs, data, state);
+          return codeResult;
+  
+        
+        } catch (err) {
+          console.log({ err })
+        }
       }
     },
     setCurrentGameState: state => {
