@@ -18,13 +18,9 @@ import { usePubSub } from '../../contexts/PubSubProvider'
 import { magickApiRootUrl } from '../../config'
  
 import run_python from '../../../../../packages/core/src/ProcessPython'
-import { type } from 'os'
-import { clear } from 'console'
-
 const Context = createContext<EditorContext>(undefined!)
 
 export const useMagickInterface = () => useContext(Context)
-
 
 const MagickInterfaceProvider = ({ children, tab }) => {
   const { events, publish, subscribe } = usePubSub()
