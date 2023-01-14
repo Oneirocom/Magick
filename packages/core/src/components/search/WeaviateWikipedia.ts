@@ -6,7 +6,6 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  EngineContext,
 } from '../../../types'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { anySocket, stringSocket, triggerSocket } from '../../sockets'
@@ -14,10 +13,13 @@ import { MagickComponent } from '../../magick-component'
 
 const info = `Given a keyword pull in relevant information of the wevaiate wikipedia instance.`
 
-const makeWeaviateRequest = async (keyword: string, apiUrl: string) => {
-  const _resp = await axios.post(`${apiUrl}/weaviate`, {
-    keyword: keyword,
-  })
+const makeWeaviateRequest = async (keyword: string) => {
+  const _resp = await axios.post(
+    `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_URL}/weaviate`,
+    {
+      keyword: keyword,
+    }
+  )
 
   return _resp
 }
@@ -63,17 +65,12 @@ export class WeaviateWikipedia extends MagickComponent<void> {
   async worker(
     node: NodeData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
-    { magick }: { magick: EngineContext }
+    _outputs: MagickWorkerOutputs
   ) {
-    const { env } = magick
     this._task.closed = ['success', 'error']
     try {
       console.log('keyword', node.data.keyword)
-      const result = await makeWeaviateRequest(
-        inputs.keyword[0] as string,
-        env.API_ROOT_URL
-      )
+      const result = await makeWeaviateRequest(inputs.keyword[0] as string)
       console.log('result', result)
       this._task.closed = ['error']
       return {

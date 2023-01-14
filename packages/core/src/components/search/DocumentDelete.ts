@@ -41,20 +41,17 @@ export class DocumentDelete extends MagickComponent<void> {
     return node.addInput(docIdInput).addInput(dataInput).addOutput(dataOutput)
   }
 
-  async worker(
-    node: NodeData,
-    inputs: MagickWorkerInputs,
-    _: MagickWorkerOutputs,
-    { magick }: { magick: EngineContext }
-  ) {
-    const { env } = magick
+  async worker(node: NodeData, inputs: MagickWorkerInputs) {
     const docId = inputs['docId'][0]
     node.display(docId)
-    const resp = await axios.delete(`${env.APP_SEARCH_SERVER_URL}/document`, {
-      params: {
-        documentId: docId,
-      },
-    })
+    const resp = await axios.delete(
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document`,
+      {
+        params: {
+          documentId: docId,
+        },
+      }
+    )
     node.display(resp.data)
   }
 }

@@ -24,6 +24,14 @@ export const runSpell = async ({
     throw new CustomError('not-found', `Spell with name ${spellName} not found`)
   }
 
+  if(spell){
+    // spell.graph, spell.modules and spell.gameState are all JSON
+    // parse them back into the object before returning it
+    spell.graph = JSON.parse(spell.graph as any)
+    spell.modules = JSON.parse(spell.modules as any)
+    spell.gameState = JSON.parse(spell.gameState as any)
+  }
+
   const graph = spell.graph as unknown as GraphData
   const magickInterface = buildMagickInterface(state)
 
