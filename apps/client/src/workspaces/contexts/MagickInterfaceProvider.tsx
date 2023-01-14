@@ -18,6 +18,8 @@ import { usePubSub } from '../../contexts/PubSubProvider'
 import { magickApiRootUrl } from '../../config'
  
 import run_python from '../../../../../packages/core/src/ProcessPython'
+import { type } from 'os'
+import { clear } from 'console'
 
 const Context = createContext<EditorContext>(undefined!)
 
@@ -142,17 +144,17 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return spell.data as Spell
   }
 
-  const  processCode = async (code, inputs, data, state, language='javascript') => {
-    console.log('processCode')
+  const processCode = async (code, inputs, data, state, language='javascript') => {
+    const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
+      (acc, [key, value]) => {
+        acc[key as string] = value[0] as any
+        return acc
+      },
+      {} as Record<string, any>
+    )
     if (language == 'javascript'){
       console.log('processCode, javascript')
-      const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
-        (acc, [key, value]) => {
-          acc[key as string] = value[0] as any
-          return acc
-        },
-        {} as Record<string, any>
-      )
+      
       // eslint-disable-next-line no-new-func
       const result = new Function('"use strict";return (' + code + ')')()(
         flattenedInputs,
@@ -165,7 +167,15 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       return result
     } else if (language == 'python') {
       try {
-        return run_python(code);
+
+        const result = await run_python(code, flattenedInputs, data, state);
+        if (result.state) {
+          updateCurrentGameState(result.state)
+        }
+
+        return result;
+
+      
       } catch (err) {
         console.log({ err })
       }
