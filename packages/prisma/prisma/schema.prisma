@@ -39,7 +39,7 @@ model entities {
   enabled    Boolean?
   updated_at String?
   spells     spells[] @relation("entitiesTospells")
-  data       String?
+  data       Json?
 }
 
 model events {
@@ -57,11 +57,11 @@ model events {
 model spells {
   id         String     @id @unique
   name       String     @unique
-  graph      String?
+  graph      Json?
   created_at DateTime?
   updated_at DateTime?
   deleted_at DateTime?
-  modules    String?
-  gameState  String?
+  modules    String[]
+  gameState  Json?
   entities   entities[] @relation("entitiesTospells")
 }

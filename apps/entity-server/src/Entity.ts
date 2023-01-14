@@ -287,11 +287,6 @@ export class Entity {
     const spell = await prisma.spells.findUnique({
       where: { name: discord_spell_handler_incoming },
     })
-    // spell.graph, spell.modules and spell.gameState are all JSON
-    // parse them back into the object before returning it
-    spell.graph = JSON.parse(spell.graph as any)
-    spell.modules = JSON.parse(spell.modules as any)
-    spell.gameState = JSON.parse(spell.gameState as any)
 
     console.log('discord incoming spell', spell)
 
@@ -361,14 +356,6 @@ export class Entity {
       where: { name: twitter_spell_handler_incoming },
     })
 
-    if (spell) {
-      // spell.graph, spell.modules and spell.gameState are all JSON
-      // parse them back into the object before returning it
-      spell.graph = JSON.parse(spell.graph as any)
-      spell.modules = JSON.parse(spell.modules as any)
-      spell.gameState = JSON.parse(spell.gameState as any)
-    }
-
     const spellHandler = await this.createSpellHandler({
       spell,
     })
@@ -376,14 +363,6 @@ export class Entity {
     spell = await prisma.spells.findUnique({
       where: { name: twitter_spell_handler_auto },
     })
-
-    if (spell) {
-      // spell.graph, spell.modules and spell.gameState are all JSON
-      // parse them back into the object before returning it
-      spell.graph = JSON.parse(spell.graph as any)
-      spell.modules = JSON.parse(spell.modules as any)
-      spell.gameState = JSON.parse(spell.gameState as any)
-    }
 
     const spellHandlerAuto = await this.createSpellHandler({
       spell: spell,
@@ -548,14 +527,6 @@ export class Entity {
       const spell = await prisma.spells.findUnique({
         where: { name: loop_spell_handler },
       })
-
-      if (spell) {
-        // spell.graph, spell.modules and spell.gameState are all JSON
-        // parse them back into the object before returning it
-        spell.graph = JSON.parse(spell.graph as any)
-        spell.modules = JSON.parse(spell.modules as any)
-        spell.gameState = JSON.parse(spell.gameState as any)
-      }
 
       const spellHandler = await this.createSpellHandler({
         spell,

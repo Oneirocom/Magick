@@ -105,13 +105,7 @@ export const buildMagickInterface = (
     },
     getSpell: async spellId => {
       const spell = await prisma.spells.findUnique({ where: { name: spellId } })
-      if (spell) {
-        // spell.graph, spell.modules and spell.gameState are all JSON
-        // parse them back into the object before returning it
-        spell.graph = JSON.parse(spell.graph as any)
-        spell.modules = JSON.parse(spell.modules as any)
-        spell.gameState = JSON.parse(spell.gameState as any)
-      }
+
       return spell
     },
     queryGoogle: async query => {
