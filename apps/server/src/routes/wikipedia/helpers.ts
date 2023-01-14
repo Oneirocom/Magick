@@ -1,3 +1,4 @@
+import { OPENAI_API_KEY } from '@magickml/server-config'
 import weaviate from 'weaviate-client'
 import wiki from 'wikipedia'
 
@@ -27,7 +28,7 @@ export const searchWikipedia = async (keyword: string) => {
       null,
       'conversation',
       'davinci',
-      process.env.OPENAI_API_KEY
+      OPENAI_API_KEY
     )) as any
 
     if (success) {
@@ -106,13 +107,6 @@ export const makeWeaviateRequest = async (keyword: string) => {
 
 export async function lookUpOnWikipedia(subject: string) {
   try {
-    // if (await database.wikipediaDataExists(subject)) {
-    //   return JSON.parse(await database.getWikipediaData(subject))
-    // } else {
-    //   console.log("Data doesn't yet exist")
-    // }
-
-    // if it doesn't, fetch it from wikipedia and save it to the file
     const { title, displaytitle, description, extract } = await wiki.summary(
       subject
     )
@@ -123,9 +117,6 @@ export async function lookUpOnWikipedia(subject: string) {
       description,
       extract,
     }
-
-    // create a directory recursively at data/wikipedia/ if it doesn't exist
-    // await database.addWikipediaData(subject, JSON.stringify(summary))
 
     return summary
   } catch (err) {

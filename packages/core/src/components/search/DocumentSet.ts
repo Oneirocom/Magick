@@ -66,7 +66,13 @@ export class DocumentSet extends MagickComponent<void> {
       .addOutput(output)
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(
+    node: NodeData,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+    context: { magick: EngineContext; silent: boolean }
+  ) {
+    const { env } = context.magick
     const storeId = inputs['storeId'][0]
     const title = inputs['title'] ? (inputs['title'][0] as string) : ''
     const description = inputs['description']
@@ -74,15 +80,12 @@ export class DocumentSet extends MagickComponent<void> {
       : ''
     const isIncluded = inputs['isIncluded'][0] as string
 
-    const resp = await axios.post(
-      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document`,
-      {
-        title,
-        description,
-        isIncluded,
-        storeId,
-      }
-    )
+    const resp = await axios.post(`${env.APP_SEARCH_SERVER_URL}/document`, {
+      title,
+      description,
+      isIncluded,
+      storeId,
+    })
     node.display(resp.data)
     console.log('resp.data.documentId', resp.data.documentId)
     return {

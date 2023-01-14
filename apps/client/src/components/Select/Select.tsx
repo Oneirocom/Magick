@@ -89,6 +89,7 @@ const BasicSelect = ({
       paddingLeft: nested ? 'var(--large)' : 'var(--small)',
       paddingRight: 'var(--small)',
       backgroundColor: state.isFocused ? 'var(--primary)' : 'transparent',
+      fontFamily: 'IBM Plex Mono',
     }),
     input: () => ({
       color: '#fff',
@@ -129,6 +130,7 @@ const BasicSelect = ({
       display: 'flex',
       flex: '1',
       alignItems: 'center',
+      fontFamily: 'IBM Plex Mono',
     }),
     singleValue: () => ({
       color: 'rgba(255,255,255)',

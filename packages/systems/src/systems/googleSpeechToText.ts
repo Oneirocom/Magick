@@ -5,6 +5,12 @@ import https from 'https'
 import * as fs from 'fs'
 import path from 'path'
 
+import {
+  ENABLE_SPEECH_SERVER,
+  SPEECH_SERVER_PORT,
+  USSSL_SPEECH,
+} from '@magickml/server-config'
+
 config({ path: '.env' })
 
 let speechClient: SpeechClient
@@ -28,14 +34,14 @@ const request = {
 }
 
 export async function initSpeechServer(ignoreDotEnv: boolean) {
-  if (ignoreDotEnv === false && process.env.ENABLE_SPEECH_SERVER === 'false') {
+  if (ignoreDotEnv === false && ENABLE_SPEECH_SERVER === 'false') {
     console.log('Speech server disabled')
     return
   }
 
-  const useSSL = process.env.USSSL_SPEECH === 'true'
+  const useSSL = USSSL_SPEECH === 'true'
 
-  const PORT: number = Number(process.env.SPEECH_SERVER_PORT) || 65532
+  const PORT: number = Number(SPEECH_SERVER_PORT) || 65532
   let io
 
   if (useSSL) {

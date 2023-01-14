@@ -28,13 +28,13 @@ export default class SpellManager {
   // This getter will overwrite the standard runSpell with a new one.
   // this runSpell will add spells to the cache
   processMagickInterface(magickInterface): EngineContext {
+    if (!this.cache) return magickInterface
+
     const runSpell: EngineContext['runSpell'] = async (
       flattenedInputs,
       spellId
     ) => {
-      if (!this.cache) return magickInterface
       if (this.getSpellRunner(spellId)) {
-        console.log('SPELL FOUND, RUNNING', spellId)
         const outputs = await this.run(spellId, flattenedInputs)
         return outputs
       }

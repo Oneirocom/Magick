@@ -1,12 +1,11 @@
 import { MagickComponent } from '../../types'
-import { AgentTextCompletion } from './agents/AgentTextCompletion'
-import { CustomTextCompletion } from './agents/CustomTextCompletion'
-import { EventRecall } from './agents/EventRecall'
-import { EventStore } from './agents/EventStore'
-import { InputDestructureComponent } from './agents/InputDestructure'
-import { InputRestructureComponent } from './agents/InputRestructure'
-import { Request } from './agents/Request'
-import { JupyterComms } from './agents/JupyterComms'
+import { TextCompletion } from './ml/TextCompletion'
+import { EventRecall } from './events/EventRecall'
+import { EventStore } from './events/EventStore'
+import { EventDestructureComponent } from './events/EventDestructure'
+import { EventRestructureComponent } from './events/EventRestructure'
+import { Request } from './io/Request'
+import { JupyterComms } from './io/JupyterNotebook'
 import { CheckBalanceForERC20 } from './ethereum/CheckBalanceForERC20'
 import { CheckEthBalance } from './ethereum/CheckEthBalance'
 import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentTransactionsFromWallet'
@@ -40,11 +39,11 @@ import { DocumentGet } from './search/DocumentGet'
 import { DocumentSet } from './search/DocumentSet'
 import { DocumentSetMass } from './search/DocumentSetMass'
 import { DocumentStoreGet } from './search/DocumentStoreGet'
-import { GetWikipediaSummary } from './search/GetWikipediaSummary'
-import { QueryGoogle } from './search/QueryGoogle'
+import { GetWikipediaSummary } from './apis/GetWikipediaSummary'
+import { QueryGoogle } from './apis/QueryGoogle'
 import { RSSGet } from './search/RSSGet'
 import { Search } from './search/Search'
-import { WeaviateWikipedia } from './search/WeaviateWikipedia'
+import { WeaviateWikipedia } from './apis/WeaviateWikipedia'
 import { StateRead } from './state/StateRead'
 import { StateWrite } from './state/StateWrite'
 import { ComplexStringMatcher } from './strings/ComplexStringMatcher'
@@ -69,6 +68,7 @@ import { BooleanVariable } from './variable/BooleanVariable'
 import { FewshotVariable } from './variable/FewshotVariable'
 import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
+import { Generator } from './ml/Generator'
 
 // NOTE: PLEASE KEEP THESE IN ALPHABETICAL ORDER
 // todo some kind of custom build parser perhaps to take car of keeping these in alphabetical order
@@ -87,8 +87,7 @@ export const components = {
   echo: () => new Echo(),
   stringReplacer: () => new StringReplacer(),
   textToSpeech: () => new TextToSpeech(),
-  agentTextCompletion: () => new AgentTextCompletion(),
-  customTextCompletion: () => new CustomTextCompletion(),
+  textCompletion: () => new TextCompletion(),
   Classifier: () => new Classifier(),
   isNullOrUndefined: () => new IsNullOrUndefined(),
   isQuery: () => new IsQuery(),
@@ -119,8 +118,8 @@ export const components = {
   arrayVariable: () => new ArrayVariable(),
   logicalOperator: () => new LogicalOperator(),
   inputComponent: () => new InputComponent(),
-  inputDestructureComponent: () => new InputDestructureComponent(),
-  inputRestructureComponent: () => new InputRestructureComponent(),
+  inputDestructureComponent: () => new EventDestructureComponent(),
+  inputRestructureComponent: () => new EventRestructureComponent(),
   inputsToJson: () => new InputsToJSON(),
   joinListComponent: () => new JoinListComponent(),
   moduleComponent: () => new SpellComponent(),
@@ -145,6 +144,7 @@ export const components = {
   log: () => new Log(),
   queryGoogle: () => new QueryGoogle(),
   ImageGeneration: () => new ImageGeneration(),
+  Generator: () => new Generator(),
 }
 
 function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {

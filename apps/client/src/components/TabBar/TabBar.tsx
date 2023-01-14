@@ -3,6 +3,9 @@ import { VscClose } from 'react-icons/vsc'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+// import MagickLogo from './white-logomark@4x.png'
+// import MagickLogo from './MAGICK-whitelogo@4x.png'
+import MagickLogo from './Magick-purple-logo.png'
 import MenuBar from '../MenuBar/MenuBar'
 import CreateTab from './CreateTab'
 import css from './tabBar.module.css'
@@ -72,6 +75,7 @@ const Tab = ({ tab, activeTab }) => {
 const TabBar = ({ tabs, activeTab }) => {
   return (
     <div className={css['th-tabbar']}>
+      <img style={{ height: 16, marginLeft: 10 }} src={MagickLogo} alt="" />
       <div className={css['tabbar-section']}>
         <MenuBar />
       </div>

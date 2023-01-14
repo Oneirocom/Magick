@@ -139,10 +139,11 @@ const Playtest = ({ tab }) => {
 
       toSend = {
         input: value,
+        output: value,
         speaker: "Speaker",
         agent: "Agent",
-        channelId: "previewChannelId",
         channel: "previewChannel",
+        channelType: "previewChannelType",
         ...JSON.parse(json),
       }
     }

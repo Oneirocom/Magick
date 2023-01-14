@@ -1,5 +1,9 @@
 import {
-  CompletionBody, CreateEventArgs, EngineContext, GetEventArgs, MagickWorkerInputs
+  CompletionBody,
+  CreateEventArgs,
+  EngineContext,
+  GetEventArgs,
+  MagickWorkerInputs,
 } from '@magickml/core'
 import { prisma } from '@magickml/prisma'
 import vm2 from 'vm2'
@@ -11,44 +15,21 @@ import { searchWikipedia } from '../wikipedia/helpers'
 import { database } from '@magickml/database'
 import { makeCompletion } from '../../utils/MakeCompletionRequest'
 import { runSpell } from '../utils/runSpell'
+import {
+  API_ROOT_URL,
+  API_URL,
+  APP_SEARCH_SERVER_URL,
+  OPENAI_API_KEY,
+} from '@magickml/server-config'
 
 import run_python from '../../../../../packages/core/src/ProcessPython'
 
-const getEvents = async ({
-  type,
-  agent,
-  speaker,
-  client,
-  channel,
-  maxCount,
-  max_time_diff,
-}: GetEventArgs) => {
-  const event = await database.getEvents({
-    type,
-    agent,
-    speaker,
-    client,
-    channel,
-    maxCount,
-    max_time_diff,
-  })
-
-  if (!event) return null
-
-  return event
+const getEvents = async (params: GetEventArgs) => {
+  return await database.getEvents(params)
 }
 
 const createEvent = async (args: CreateEventArgs) => {
-  const { type, agent, speaker, client, channel, text, sender } = args
-  return await database.createEvent({
-    type,
-    agent,
-    speaker,
-    sender,
-    client,
-    channel,
-    text,
-  })
+  return await database.createEvent(args)
 }
 
 export const buildMagickInterface = (
@@ -57,8 +38,14 @@ export const buildMagickInterface = (
 ): EngineContext => {
   // eslint-disable-next-line functional/no-let
   let gameState = { ...initialGameState }
+  const env = {
+    API_ROOT_URL,
+    API_URL,
+    APP_SEARCH_SERVER_URL,
+  }
 
   return {
+    env,
     runSpell: async (flattenedInputs, spellId, state) => {
       const { outputs } = await runSpell({
         state,
@@ -72,9 +59,7 @@ export const buildMagickInterface = (
     },
     completion: async (body: CompletionBody) => {
       // check body for API key, otherwise use the environment
-      const openaiApiKey = body.apiKey
-        ? body.apiKey
-        : process.env.OPENAI_API_KEY
+      const openaiApiKey = body.apiKey ? body.apiKey : OPENAI_API_KEY
 
       if (!openaiApiKey) throw new Error('No API key provided')
 
@@ -93,13 +78,7 @@ export const buildMagickInterface = (
     },
     getSpell: async spellId => {
       const spell = await prisma.spells.findUnique({ where: { name: spellId } })
-      if(spell) {
-        // spell.graph, spell.modules and spell.gameState are all JSON
-        // parse them back into the object before returning it
-        spell.graph = JSON.parse(spell.graph as any)
-        spell.modules = JSON.parse(spell.modules as any)
-        spell.gameState = JSON.parse(spell.gameState as any)
-      }
+
       return spell
     },
     queryGoogle: async query => {
@@ -113,22 +92,22 @@ export const buildMagickInterface = (
       language: string='javascript'
     ) => {
       if (language === 'javascript'){
-        const { VM } = vm2
-        const vm = new VM()
+      const { VM } = vm2
+      const vm = new VM()
 
-        // Inputs are flattened before we inject them for a better code experience
-        const flattenInputs = Object.entries(inputs).reduce(
-          (acc, [key, value]: [string, any]) => {
-            acc[key] = value[0]
-            return acc
-          },
-          {} as Record<string, any>
-        )
+      // Inputs are flattened before we inject them for a better code experience
+      const flattenInputs = Object.entries(inputs).reduce(
+        (acc, [key, value]: [string, any]) => {
+          acc[key] = value[0]
+          return acc
+        },
+        {} as Record<string, any>
+      )
 
-        // Freeze the variables we are injecting into the VM
-        vm.freeze(data, 'data')
-        vm.freeze(flattenInputs, 'input')
-        vm.protect(state, 'state')
+      // Freeze the variables we are injecting into the VM
+      vm.freeze(data, 'data')
+      vm.freeze(flattenInputs, 'input')
+      vm.protect(state, 'state')
 
         // run the code
         const codeToRun = `"use strict"; function runFn(input,data,state){ return (${code})(input,data,state)}; runFn(input,data,state);`
@@ -145,13 +124,15 @@ export const buildMagickInterface = (
           )
         }
       } else {
-        console.log('processing code')
-        console.log(code)
-        let testcode= `
-          print('hello world')
-          1+1
+        const template = `
+        inputs = json.loads(${JSON.stringify(inputs)})
+        data = json.loads(${JSON.stringify(data)})
+        state = json.loads(${JSON.stringify(state)})
+        ${code}
+        return worker(inputs, data, state)
         `
-        const codeResult = await run_python(testcode);
+        console.log('running template')
+        const codeResult = await run_python(template);
         console.log(codeResult);
       }
     },
@@ -169,8 +150,7 @@ export const buildMagickInterface = (
 
       gameState = newState
     },
-    // IMPLEMENT THESE INTERFACES FOR THE SERVERbuildMagickInterface
-    getEvent: async (args: GetEventArgs) => {
+    getEvents: async (args: GetEventArgs) => {
       return await getEvents(args)
     },
     storeEvent: async (args: CreateEventArgs) => {
