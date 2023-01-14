@@ -73,7 +73,7 @@ export class database {
     return event
   }
 
-  static async getEntities() {
+  static async getAgents() {
     return await prisma.agents.findMany()
   }
 
@@ -118,7 +118,7 @@ export class database {
     })
   }
 
-  static async setEntityDirty(id: any, value: boolean) {
+  static async markAgentDirty(id: any, value: boolean) {
     const entity = await prisma.agents.update({
       where: {
         id,
@@ -155,7 +155,7 @@ export class database {
     return entity
   }
 
-  static async updateEntity(id: any, data: { [x: string]: any; dirty?: any }) {
+  static async updateAgent(id: any, data: { [x: string]: any; dirty?: any }) {
     const entity = await prisma.agents.update({
       where: {
         id,

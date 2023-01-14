@@ -33,7 +33,6 @@ const runSpellHandler = async (ctx: Koa.Context) => {
     }, {} as Record<string, unknown>)
   }
 
-  try {
     const { outputs, state, name } = await runSpell({
       spellName,
       state: userGameState,
@@ -41,11 +40,6 @@ const runSpellHandler = async (ctx: Koa.Context) => {
     })
     // Return the response
     ctx.body = { spell: name, outputs, state }
-  } catch (err) {
-    // return any errors
-    console.error(err)
-    throw new CustomError('server-error', err.message)
-  }
 }
 
 const saveHandler = async (ctx: Koa.Context) => {
@@ -101,7 +95,6 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
   if (!diff)
     throw new CustomError('input-failed', 'No diff provided in request body')
 
-  try {
     const spellUpdate = otJson0.type.apply(spell, diff)
 
     if (Object.keys((spellUpdate as Spell).graph.nodes).length === 0)
@@ -130,9 +123,6 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
 
     ctx.response.status = 200
     ctx.body = updatedSpell
-  } catch (err) {
-    throw new CustomError('server-error', 'Error processing diff.', err)
-  }
 }
 
 const newHandler = async (ctx: Koa.Context) => {
