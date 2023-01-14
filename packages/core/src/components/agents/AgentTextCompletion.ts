@@ -10,6 +10,7 @@ import {
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { DropdownControl } from '../../dataControls/DropdownControl'
 
 const info = 'Agent Text Completion is using OpenAI for the agent to respond.'
 
@@ -42,10 +43,20 @@ export class AgentTextCompletion extends MagickComponent<
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const outp = new Rete.Output('output', 'output', stringSocket)
 
-    const modelName = new InputControl({
+    const modelName = new DropdownControl({
+      name: 'modelName',
       dataKey: 'modelName',
-      name: 'Model Name',
-      icon: 'moon',
+      values: [
+        'text-davinvci-003',
+        'text-davinvci-002',
+        'text-davinvci-001',
+        'text-curie-001',
+        'text-babbage-001',
+        'text-ada-001',
+        'curie-instruct-beta',
+        'davinci-instruct-beta',
+      ],
+      defaultValue: 'text-davinci-002',
     })
 
     const temperature = new InputControl({

@@ -46,7 +46,7 @@ body,
 
 .socket.output.trigger,
 .socket.input.trigger {
-  background: #7027dd;
+  background: var(--primary);
 }
 
 .socket.output.agent,
@@ -80,11 +80,11 @@ body,
 
 .connection .main-path {
   stroke-width: 2px;
-  stroke: #7afba97e;
-  filter: drop-shadow(0px 1px 0px var(--dark-0))
+  stroke: #9D12A4;
+  /* filter: drop-shadow(0px 1px 0px var(--dark-0))
     drop-shadow(0px -1px 0px var(--dark-0))
     drop-shadow(-1px 0px 0px var(--dark-0))
-    drop-shadow(1px 0px 0px var(--dark-0));
+    drop-shadow(1px 0px 0px var(--dark-0)); */
 }
 
 button {
@@ -229,6 +229,7 @@ button.disabled {
   border-radius: 0px 0px 4px 4px;
   border: 1px solid #333;
   border-top: 0;
+  font-family: "IBM Plex Mono";
 }
 
 .flexlayout__tabset {

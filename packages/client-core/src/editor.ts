@@ -26,6 +26,7 @@ import {
   getComponents,
   MagickEditor,
   MultiSocketGenerator,
+  NodeClickPlugin,
 } from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
@@ -129,6 +130,7 @@ export const initEditor = function ({
   editor.use(MultiSocketGenerator)
   editor.use(DisplayPlugin)
   editor.use(InspectorPlugin)
+  editor.use(NodeClickPlugin)
   editor.use(AreaPlugin, {
     scaleExtent: { min: 0.025, max: 2 },
   })
@@ -204,13 +206,16 @@ export const initEditor = function ({
     const graph = JSON.parse(JSON.stringify(_graph))
     await engine.abort()
     editor.fromJSON(graph)
-    const nodes = graph.nodes;
+    const nodes = graph.nodes
     // get the first node in the graph (which is an object)
-    const firstNode = nodes[Object.keys(nodes)[0]];
+    const firstNode = nodes[Object.keys(nodes)[0]]
 
-    if(firstNode) {
-      firstNode.position = [firstNode.position && (firstNode.position[0] + 250) || 0, firstNode.position && (firstNode.position[1] + 500) || 0]
-      
+    if (firstNode) {
+      firstNode.position = [
+        (firstNode.position && firstNode.position[0] + 250) || 0,
+        (firstNode.position && firstNode.position[1] + 500) || 0,
+      ]
+
       setTimeout(() => {
         zoomAt(editor, [firstNode])
       }, 100)

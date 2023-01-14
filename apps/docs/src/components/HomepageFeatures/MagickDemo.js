@@ -6,7 +6,7 @@ export default function MagickDemo() {
     <section style={{ margin: 'auto', marginTop: '4%', marginBottom: '4%' }}>
       <div className="container">
         <div className="row" style={{ justifyContent: 'center' }}>
-          <img src={'/img/magick-Screen.png'} />
+          <img src={'/img/magick-screen.png'} />
         </div>
       </div>
     </section>
