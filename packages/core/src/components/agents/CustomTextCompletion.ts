@@ -1,7 +1,13 @@
 import axios from 'axios'
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../../types'
+import {
+  NodeData,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  EngineContext,
+} from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
@@ -106,7 +112,14 @@ export class CustomTextCompletion extends MagickComponent<
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, rawInputs: MagickWorkerInputs) {
+  async worker(
+    node: NodeData,
+    rawInputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+    { magick }: { magick: EngineContext }
+  ) {
+    const { completion } = magick
+
     const agent = rawInputs['agent'][0] as string
     const speaker = rawInputs['speaker'][0] as string
     const inputs: any = Object.entries(rawInputs).reduce(
@@ -155,27 +168,23 @@ export class CustomTextCompletion extends MagickComponent<
       return el != null && el !== undefined && el.length > 0
     })
 
-    const resp = await axios.post(
-      `${
-        import.meta.env.VITE_APP_API_URL ??
-        import.meta.env.API_URL
-      }/text_completion`,
-      {
-        prompt: data,
-        modelName: modelName,
-        temperature: temperature,
-        maxTokens: maxTokens,
-        topP: topP,
-        frequencyPenalty: frequencyPenalty,
-        presencePenalty: presencePenalty,
-        stop: filteredStop,
-        agent: agent,
-        speaker: speaker,
-        sender: speaker,
-      }
-    )
+    const body = {
+      prompt: data,
+      modelName: modelName,
+      temperature: temperature,
+      maxTokens: maxTokens,
+      topP: topP,
+      frequencyPenalty: frequencyPenalty,
+      presencePenalty: presencePenalty,
+      stop: filteredStop,
+      agent: agent,
+      speaker: speaker,
+      sender: speaker,
+    }
 
-    const { success, choice } = resp.data
+    const resp = await completion(body)
+
+    const { success, choice } = resp
 
     if (!success) {
       console.error('error:', choice.text)
