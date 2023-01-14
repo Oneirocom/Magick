@@ -52,7 +52,6 @@ const getEntityHandler = async (ctx: Koa.Context) => {
         enabled: true,
       }
     }
-    if (typeof data.data === 'string') data.data = JSON.parse(data.data)
 
     return (ctx.body = data)
   } catch (e) {
@@ -68,10 +67,6 @@ const addEntityHandler = async (ctx: Koa.Context) => {
     data.data = ''
     data.dirty = true
     data.enabled = false
-  }
-
-  if (typeof data.data === 'object') {
-    data.data = JSON.stringify(data.data)
   }
 
   const entity = await prisma.entities.findFirst({
