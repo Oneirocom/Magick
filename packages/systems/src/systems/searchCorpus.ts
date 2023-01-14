@@ -19,6 +19,12 @@ import {
   singleTrain,
   updateDocument,
 } from './weaviateClient'
+import {
+  ENABLE_SEARCH_CORPUS,
+  HF_API_KEY,
+  SEARCH_CORPUS_PORT,
+  USESSL,
+} from '@magickml/server-config'
 
 config({ path: '.env' })
 const searchEngine = 'davinci'
@@ -29,7 +35,7 @@ const client = weaviate.client({
 const saved_docs: any[] = []
 
 export async function initSearchCorpus(ignoreDotEnv: boolean) {
-  if (ignoreDotEnv === false && process.env.ENABLE_SEARCH_CORPUS === 'false') {
+  if (ignoreDotEnv === false && ENABLE_SEARCH_CORPUS === 'false') {
     return
   }
 
@@ -85,12 +91,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
 
     let id = -1
     try {
-      id = await database.addDocument(
-        title,
-        description,
-        isIncluded,
-        storeId
-      )
+      id = await database.addDocument(title, description, isIncluded, storeId)
       await singleTrain({
         title: title ?? 'Document',
         description: description,
@@ -368,9 +369,9 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
     }
   })
 
-  const PORT: number = Number(process.env.SEARCH_CORPUS_PORT) || 65531
+  const PORT: number = Number(SEARCH_CORPUS_PORT) || 65531
   const useSSL =
-    process.env.USESSL === 'true' &&
+    USESSL === 'true' &&
     fs.existsSync('certs/') &&
     fs.existsSync('certs/key.pem') &&
     fs.existsSync('certs/cert.pem')
@@ -461,7 +462,7 @@ export async function MakeModelRequest(
       { inputs, parameters, options },
       {
         headers: {
-          Authorization: `Bearer ${process.env.HF_API_KEY}`,
+          Authorization: `Bearer ${HF_API_KEY}`,
         },
       }
     )

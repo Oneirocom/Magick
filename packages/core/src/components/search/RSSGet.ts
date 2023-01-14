@@ -60,7 +60,13 @@ export class RSSGet extends MagickComponent<Promise<WorkerReturn>> {
     return node.addInput(dataInput).addOutput(dataOutput).addOutput(output)
   }
 
-  async worker(node: NodeData) {
+  async worker(
+    node: NodeData,
+    _inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+    { magick }: { magick: EngineContext }
+  ) {
+    const { env } = magick
     const feedUrl = node?.data?.feedUrl as string
     const toDocument = node?.data?.toDocument
     const fetchWay = node?.data?.fetchWay as string
@@ -90,9 +96,7 @@ export class RSSGet extends MagickComponent<Promise<WorkerReturn>> {
       try {
         resp = await axios.get(urls[i])
       } catch (e) {
-        resp = await axios.get(
-          import.meta.env.VITE_APP_CORS_URL + '/' + urls[i]
-        )
+        resp = await axios.get(env.API_URL + '/' + urls[i])
       }
 
       if (
