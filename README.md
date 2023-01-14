@@ -1,7 +1,9 @@
 <p align="center"><img src="files/logo.png" /></p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <h1 align="center">MAGICK ML</h1>
 
@@ -37,6 +39,20 @@ yarn install
 ```
 yarn dev
 ```
+
+# Development
+
+There are a few things to keep in mind while this project is actively being worked on.
+
+## Database
+
+_Please be aware Magick is under heavy development and changes can cause your DB to be wiped. Back up your spells via export regularly._
+
+The default setup of Magick is connected to a test database on Supabase. It will get you going, but it will likely be wiped regularly and is not a good storage for your spells.
+
+We recommend either installing the docker desktop app, and running `docker-compose up` at the root of Magick, or getting your own Supabase instance set up for free in the cloud.
+
+We will be working on more database docoumentation to help you get your data store up and running.
 
 ## Contributors
 
