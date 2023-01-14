@@ -7,7 +7,7 @@
     "core": "packages/core",
     "database": "packages/database",
     "engine": "packages/engine",
-    "entity-server": "apps/entity-server",
+    "agent-server": "apps/agent-server",
     "plugins": "packages/plugins",
     "prisma": "packages/prisma",
     "search-server": "apps/search-server",

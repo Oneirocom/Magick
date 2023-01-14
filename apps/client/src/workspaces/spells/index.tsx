@@ -22,7 +22,7 @@ import EventManagerWindow from './windows/EventManager'
 import { RootState } from '../../state/store'
 import { useFeathers } from '../../contexts/FeathersProvider'
 import { feathers as feathersFlag } from '../../config'
-import EntityManagerWindow from '../agents/windows/EntityManagerWindow'
+import AgentManagerWindow from '../agents/windows/AgentManagerWindow'
 import React from 'react'
 
 const Workspace = ({ tab, tabs, pubSub }) => {
@@ -112,8 +112,8 @@ const Workspace = ({ tab, tabs, pubSub }) => {
           return <DebugConsole {...props} />
         case 'eventManager':
           return <EventManagerWindow {...props} />
-        case 'entityManager':
-          return <EntityManagerWindow />
+        case 'agentManager':
+          return <AgentManagerWindow />
         case 'avatar':
           return <AvatarWindow {...props} />
         default:

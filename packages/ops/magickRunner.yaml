@@ -21,7 +21,7 @@ spec:
         - name: server
           image: 389959444765.dkr.ecr.us-east-1.amazonaws.com/magick-server:latest
           workingDir: /app/packages/server
-          args: ["src/entity-server.ts"]
+          args: ["src/agent-server.ts"]
           stdin: true
           tty: true
           ports:

@@ -54,12 +54,12 @@ export class whatsapp_client {
 
       const isMention =
         msg.entities !== undefined &&
-        msg.entities.length === 1 &&
+        msg.agents.length === 1 &&
         msg.entities[0].type === 'mention' &&
         content.includes('@' + this.botName)
       const otherMention =
         msg.entities !== undefined &&
-        msg.entities.length > 0 &&
+        msg.agents.length > 0 &&
         msg.entities[0].type === 'mention' &&
         !content.includes('@' + this.botName)
       let startConv = false
@@ -84,7 +84,7 @@ export class whatsapp_client {
       }
       if (otherMention) {
         this.exitConversation(_sender)
-        for (let i = 0; i < msg.entities.length; i++) {
+        for (let i = 0; i < msg.agents.length; i++) {
           if (msg.entities[i].type === 'mention') {
             const _user = msg.text.slice(
               msg.entities[i].offset + 1,

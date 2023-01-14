@@ -2,12 +2,7 @@ export type CustomErrorCodes =
   | 'input-failed'
   | 'server-error'
   | 'not-found'
-  | 'open-ai-error'
-  | 'ai21-error'
-  | 'coreweave-error'
-  | 'forefront-error'
-  | 'authentication-error'
-  | `generation-model-error`
+  | 'already-exists'
 
 // eslint-disable-next-line functional/no-class
 export class CustomError extends Error {
