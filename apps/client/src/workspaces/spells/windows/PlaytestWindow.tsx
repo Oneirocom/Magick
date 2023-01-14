@@ -118,6 +118,8 @@ const Playtest = ({ tab }) => {
         spellId: tab.spellId,
         inputs: {
           input: value,
+          speaker: "Speaker",
+          agent: "Agent"
         },
       })
     }
@@ -138,6 +140,10 @@ const Playtest = ({ tab }) => {
       toSend = {
         input: value,
         output: value,
+        speaker: "Speaker",
+        agent: "Agent",
+        channelId: "previewChannelId",
+        channel: "previewChannel",
         ...JSON.parse(json),
       }
     }

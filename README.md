@@ -1,8 +1,10 @@
-<p align="center"><img src="files/logo.png" /></p>
+<p align="center"><img src="files/MAGICK-banner.png" /></p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/MagickML.svg?style=social&label=Follow%20%40MagickML)](https://twitter.com/MagickML)
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <h1 align="center">MAGICK ML</h1>
