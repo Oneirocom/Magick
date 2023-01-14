@@ -162,7 +162,6 @@ export class World {
   async onDestroy() {}
 
   async addEntity(obj: any) {
-    obj.data = typeof obj.data === 'string' ? JSON.parse(obj.data) : obj.data
     if (this.objects[obj.id] === undefined) {
       obj.data.id = obj.id
       this.objects[obj.id] = new Entity(obj)

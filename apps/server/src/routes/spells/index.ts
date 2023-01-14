@@ -171,14 +171,6 @@ const patchHandler = async (ctx: Koa.Context) => {
 
   if (!spell) throw new CustomError('input-failed', 'spell not found')
 
-  if (spell) {
-    // spell.graph, spell.modules and spell.gameState are all JSON
-    // parse them back into the object before returning it
-    ctx.request.body.graph = JSON.stringify(spell.graph as any)
-    ctx.request.body.modules = JSON.stringify(spell.modules as any)
-    ctx.request.body.gameState = JSON.stringify(spell.gameState as any)
-  }
-
   await prisma.spells.update({
     where: { name },
     data: ctx.request.body,
