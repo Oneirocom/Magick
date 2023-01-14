@@ -1,3 +1,4 @@
+import { OPENAI_API_KEY } from '@magickml/server-config'
 import weaviate from 'weaviate-client'
 import wiki from 'wikipedia'
 
@@ -27,7 +28,7 @@ export const searchWikipedia = async (keyword: string) => {
       null,
       'conversation',
       'davinci',
-      process.env.OPENAI_API_KEY
+      OPENAI_API_KEY
     )) as any
 
     if (success) {

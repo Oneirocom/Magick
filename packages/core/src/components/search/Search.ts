@@ -65,18 +65,21 @@ export class Search extends MagickComponent<Promise<WorkerReturn>> {
       .addOutput(dataOutput)
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(
+    node: NodeData,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+    { magick }: { magick: EngineContext }
+  ) {
+    const { env } = magick
     const searchStr = inputs['searchStr'][0] as string
     console.log('SEARCHING FOR:', searchStr)
     const documents: Document[] = []
-    const resp = await axios.get(
-      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/search`,
-      {
-        params: {
-          question: searchStr,
-        },
-      }
-    )
+    const resp = await axios.get(`${env.APP_SEARCH_SERVER_URL}/search`, {
+      params: {
+        question: searchStr,
+      },
+    })
     if (typeof resp.data === 'object') {
       documents.push({
         title: resp.data.title,

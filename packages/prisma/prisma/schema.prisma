@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model content_objects {
@@ -38,7 +39,7 @@ model entities {
   enabled    Boolean?
   updated_at String?
   spells     spells[] @relation("entitiesTospells")
-  data       String?
+  data       Json?
 }
 
 model events {
@@ -56,11 +57,11 @@ model events {
 model spells {
   id         String     @id @unique
   name       String     @unique
-  graph      String?
+  graph      Json?
   created_at DateTime?
   updated_at DateTime?
   deleted_at DateTime?
-  modules    String?
-  gameState  String?
+  modules    String[]
+  gameState  Json?
   entities   entities[] @relation("entitiesTospells")
 }
