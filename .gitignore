@@ -40,3 +40,6 @@ Thumbs.db
 .env
 .env.local
 dev.db
+*/**/dev.db
+
+packages/prisma/prisma/dev.db
