@@ -68,10 +68,8 @@ export class DocumentEdit extends MagickComponent<void> {
   async worker(
     node: NodeData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
-    { silent, magick }: { silent: boolean; magick: EngineContext }
+    { silent }: { silent: boolean }
   ) {
-    const { env } = magick
     const documentId = inputs['documentId'][0]
     const storeId = inputs['storeId'][0]
     const keywords = inputs['keywords'] ? (inputs['keywords'][0] as string) : ''
@@ -81,7 +79,7 @@ export class DocumentEdit extends MagickComponent<void> {
     const is_included = inputs['isIncluded'][0] as string
     console.log('inputs', inputs)
     const resp = await axios.post(
-      `${env.APP_SEARCH_SERVER_URL}/update_document`,
+      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/update_document`,
       {
         documentId,
         keywords,

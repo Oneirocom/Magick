@@ -10,7 +10,6 @@ import { queryGoogleSearch } from '../routes/utils/queryGoogle'
 import { tts, tts_tiktalknet } from '@magickml/systems'
 import { prisma } from '@magickml/prisma'
 import { CustomError } from '../utils/CustomError'
-import { OPENAI_API_KEY } from '@magickml/server-config'
 
 export const modules: Record<string, unknown> = {}
 
@@ -52,6 +51,7 @@ const getEntityHandler = async (ctx: Koa.Context) => {
         enabled: true,
       }
     }
+    if (typeof data.data === 'string') data.data = JSON.parse(data.data)
 
     return (ctx.body = data)
   } catch (e) {
@@ -67,6 +67,10 @@ const addEntityHandler = async (ctx: Koa.Context) => {
     data.data = ''
     data.dirty = true
     data.enabled = false
+  }
+
+  if (typeof data.data === 'object') {
+    data.data = JSON.stringify(data.data)
   }
 
   const entity = await prisma.entities.findFirst({
@@ -261,7 +265,8 @@ const textCompletion = async (ctx: Koa.Context) => {
     .replace('{agent}', agent)
     .replace('{speaker}', sender)
   let stop = (ctx.request.body.stop ?? ['']) as string[]
-  const openaiApiKey = (ctx.request.body.apiKey as string) ?? OPENAI_API_KEY
+  const openaiApiKey =
+    (ctx.request.body.apiKey as string) ?? process.env.OPENAI_API_KEY
 
   if (!openaiApiKey)
     throw new CustomError('authentication-error', 'No API key provided')
