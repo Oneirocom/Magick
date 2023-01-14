@@ -51,11 +51,17 @@ export class DocumentStoreGet extends MagickComponent<Promise<WorkerReturn>> {
       .addOutput(output)
   }
 
-  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(
+    _node: NodeData,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+    { magick }: { magick: EngineContext }
+  ) {
+    const { env } = magick
     const name = inputs['name'][0] as string
 
     const resp = await axios.get(
-      `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document-store/${name}`
+      `${env.APP_SEARCH_SERVER_URL}/document-store/${name}`
     )
 
     return {
