@@ -122,91 +122,10 @@ const AgentWindow = ({
         setEthPrivateKey(res.data.data.eth_private_key)
         setEthPublicAddress(res.data.data.eth_public_address)
 
-        setTwitterClientEnable(res.data.data.twitter_client_enable === true)
-        setTwitterToken(res.data.data.twitter_token)
-        setTwitterId(res.data.data.twitter_id)
-        setTwitterAppToken(res.data.data.twitter_app_token)
-        setTwitterAppTokenSecret(res.data.data.twitter_app_token_secret)
-        setTwitterAccessToken(res.data.data.twitter_access_token)
-        setTwitterAccessTokenSecret(res.data.data.twitter_access_token_secret)
-        setTwitterEnableTwits(res.data.data.twitter_enable_twits === true)
-        setTwitterTweetRules(res.data.data.twitter_tweet_rules)
-        setTwitterAutoTweetIntervalMin(
-          res.data.data.twitter_auto_tweet_interval_min
-        )
-        setTwitterAutoTweetIntervalMax(
-          res.data.data.twitter_auto_tweet_interval_max
-        )
-        setTwitterBotName(res.data.data.twitter_bot_name)
-        setTwitterBotNameRegex(res.data.data.twitter_bot_name_regex)
-        setTwitterSpellHandlerIncoming(
-          res.data.data.twitter_spell_handler_incoming
-        )
-        setTwitterSpellHandlerAuto(res.data.data.twitter_spell_handler_auto)
-
-        setTelegramEnabled(res.data.data.telegram_enabled === true)
-        setTelegramBotToken(res.data.data.telegram_bot_token)
-        setTelegramBotName(res.data.data.telegram_bot_name)
-        setTelegramSpellHandlerIncoming(
-          res.data.data.telegram_spell_handler_incoming
-        )
-
-        setRedditEnabled(res.data.data.reddit_enabled === true)
-        setRedditAppId(res.data.data.reddit_app_id)
-        setRedditAppSecretId(res.data.data.reddit_app_secret_id)
-        setRedditOauthToken(res.data.data.reddit_oauth_token)
-        setRedditBotName(res.data.data.reddit_bot_name)
-        setRedditBotNameRegex(res.data.data.reddit_bot_name_regex)
-        setRedditSpellHandlerIncoming(
-          res.data.data.reddit_spell_handler_incoming
-        )
-
-        setZoomEnabled(res.data.data.zoom_enabled === true)
-        setZoomInvitationLink(res.data.data.zoom_invitation_link)
-        setZoomPassword(res.data.data.zoom_password)
-        setZoomBotName(res.data.data.zoom_bot_name)
-        setZoomSpellHandlerIncoming(res.data.data.zoom_spell_handler_incoming)
-
         setLoopEnabled(res.data.data.loop_enabled === true)
         setLoopInterval(res.data.data.loop_interval)
         setLoopAgentName(res.data.data.loop_agent_name)
         setLoopSpellHandler(res.data.data.loop_spell_handler)
-
-        setSlackEnabled(res.data.data.slack_enabled === true)
-        setSlackToken(res.data.data.slack_token)
-        setSlackBotToken(res.data.data.slack_bot_token)
-        setSlackSigningSecret(res.data.data.slack_signing_secret)
-        setSlackBotName(res.data.data.slack_bot_name)
-        setSlackPort(res.data.data.slack_port)
-        setSlackSpellHandlerIncoming(res.data.data.slack_spell_handler_incoming)
-
-        setInstagramEnabled(res.data.data.instagram_enabled === true)
-        setInstagramUsername(res.data.data.instagram_username)
-        setInstagramPassword(res.data.data.instagram_password)
-        setInstagramBotName(res.data.data.instagram_bot_name)
-        setInstagramBotNameRegex(res.data.data.instagram_bot_name_regex)
-        setInstagramSpellHandlerIncoming(
-          res.data.data.instagram_spell_handler_incoming
-        )
-
-        setMessengerEnabled(res.data.data.messenger_enabled === true)
-        setMessengerPageAccessToken(res.data.data.messenger_page_access_token)
-        setMessengerVerifyToken(res.data.data.messenger_verify_token)
-        setMessengerBotName(res.data.data.messenger_bot_name)
-        setMessengerBotNameRegex(res.data.data.messenger_bot_name_regex)
-        setMessengerSpellHandlerIncoming(
-          res.data.data.messenger_spell_handler_incoming
-        )
-
-        setTwilioEnabled(res.data.data.twilio_enabled === true)
-        setTwilioAccountSID(res.data.data.twilio_account_sid)
-        setTwilioAuthToken(res.data.data.twilio_auth_token)
-        setTwilioPhoneNumber(res.data.data.twilio_phone_number)
-        setTwilioBotName(res.data.data.twilio_bot_name)
-        setTwilioEmptyResponses(res.data.data.twilio_empty_responses)
-        setTwilioSpellHandlerIncoming(
-          res.data.data.twilio_spell_handler_incoming
-        )
 
         setLoaded(true)
       })()
@@ -266,67 +185,10 @@ const AgentWindow = ({
         voice_language_code,
         voice_default_phrases,
         tiktalknet_url,
-        twitter_client_enable,
-        twitter_token,
-        twitter_id,
-        twitter_app_token,
-        twitter_app_token_secret,
-        twitter_access_token,
-        twitter_access_token_secret,
-        twitter_enable_twits,
-        twitter_tweet_rules,
-        twitter_auto_tweet_interval_min,
-        twitter_auto_tweet_interval_max,
-        twitter_bot_name,
-        twitter_bot_name_regex,
-        twitter_spell_handler_incoming,
-        twitter_spell_handler_auto,
-        telegram_enabled,
-        telegram_bot_token,
-        telegram_bot_name,
-        telegram_spell_handler_incoming,
-        reddit_enabled,
-        reddit_app_id,
-        reddit_app_secret_id,
-        reddit_oauth_token,
-        reddit_bot_name,
-        reddit_bot_name_regex,
-        reddit_spell_handler_incoming,
-        zoom_enabled,
-        zoom_invitation_link,
-        zoom_password,
-        zoom_bot_name,
-        zoom_spell_handler_incoming,
         loop_enabled,
         loop_interval,
         loop_agent_name,
         loop_spell_handler,
-        slack_enabled,
-        slack_token,
-        slack_signing_secret,
-        slack_bot_token,
-        slack_bot_name,
-        slack_port,
-        slack_spell_handler_incoming,
-        instagram_enabled,
-        instagram_username,
-        instagram_password,
-        instagram_bot_name,
-        instagram_bot_name_regex,
-        instagram_spell_handler_incoming,
-        messenger_enabled,
-        messenger_page_access_token,
-        messenger_verify_token,
-        messenger_bot_name,
-        messenger_bot_name_regex,
-        messenger_spell_handler_incoming,
-        twilio_enabled,
-        twilio_account_sid,
-        twilio_auth_token,
-        twilio_phone_number,
-        twilio_bot_name,
-        twilio_empty_responses,
-        twilio_spell_handler_incoming,
       },
     }
     axios
@@ -361,102 +223,10 @@ const AgentWindow = ({
           setDiscordSpellHandlerUpdate(
             responseData.data.discord_spell_handler_update
           )
-
-          setTwitterClientEnable(responseData.data.twitter_client_enable)
-          setTwitterToken(responseData.data.twitter_token)
-          setTwitterId(responseData.data.twitter_id)
-          setTwitterAppToken(responseData.data.twitter_app_token)
-          setTwitterAppTokenSecret(responseData.data.twitter_app_token_secret)
-          setTwitterAccessToken(responseData.data.twitter_access_token)
-          setTwitterAccessTokenSecret(
-            responseData.data.twitter_access_token_secret
-          )
-          setTwitterEnableTwits(responseData.data.twitter_enable_twits)
-          setTwitterTweetRules(responseData.data.twitter_tweet_rules)
-          setTwitterAutoTweetIntervalMin(
-            responseData.data.twitter_auto_tweet_interval_min
-          )
-          setTwitterAutoTweetIntervalMax(
-            responseData.data.twitter_auto_tweet_interval_max
-          )
-          setTwitterBotName(responseData.data.twitter_bot_name)
-          setTwitterBotNameRegex(responseData.data.twitter_bot_name_regex)
-          setTwitterSpellHandlerIncoming(
-            responseData.data.twitter_spell_handler_incoming
-          )
-          setTwitterSpellHandlerAuto(
-            responseData.data.twitter_spell_handler_auto
-          )
-
-          setTelegramEnabled(responseData.data.telegram_enabled)
-          setTelegramBotToken(responseData.data.telegram_bot_token)
-          setTelegramBotName(responseData.data.telegram_bot_name)
-          setTelegramSpellHandlerIncoming(
-            responseData.data.telegram_spell_handler_incoming
-          )
-
-          setRedditEnabled(responseData.data.reddit_enabled)
-          setRedditAppId(responseData.data.reddit_app_id)
-          setRedditAppSecretId(responseData.data.reddit_app_secret_id)
-          setRedditOauthToken(responseData.data.reddit_oauth_token)
-          setRedditBotName(responseData.data.reddit_bot_name)
-          setRedditBotNameRegex(responseData.data.reddit_bot_name_regex)
-          setRedditSpellHandlerIncoming(
-            responseData.data.reddit_spell_handler_incoming
-          )
-
-          setZoomEnabled(responseData.data.zoom_enabled)
-          setZoomInvitationLink(responseData.data.zoom_invitation_link)
-          setZoomPassword(responseData.data.zoom_password)
-          setZoomBotName(responseData.data.zoom_bot_name)
-          setZoomSpellHandlerIncoming(
-            responseData.data.zoom_spell_handler_incoming
-          )
-
           setLoopEnabled(responseData.data.loop_enabled)
           setLoopInterval(responseData.data.loop_interval)
           setLoopAgentName(responseData.data.loop_agent_name)
           setLoopSpellHandler(responseData.data.loop_spell_handler)
-
-          setSlackEnabled(responseData.data.slack_enabled)
-          setSlackToken(responseData.data.slack_token)
-          setSlackSigningSecret(responseData.data.slack_signing_secret)
-          setSlackBotToken(responseData.data.slack_bot_token)
-          setSlackBotName(responseData.data.slack_bot_name)
-          setSlackPort(responseData.data.slack_port)
-          setSlackSpellHandlerIncoming(
-            responseData.data.slack_spell_handler_incoming
-          )
-
-          setInstagramEnabled(responseData.data.instagram_enabled)
-          setInstagramUsername(responseData.data.instagram_username)
-          setInstagramPassword(responseData.data.instagram_password)
-          setInstagramBotName(responseData.data.instagram_bot_name)
-          setInstagramBotNameRegex(responseData.data.instagram_bot_name_regex)
-          setInstagramSpellHandlerIncoming(
-            responseData.data.instagram_spell_handler_incoming
-          )
-
-          setMessengerEnabled(responseData.data.messenger_enabled)
-          setMessengerPageAccessToken(
-            responseData.data.messenger_page_access_token
-          )
-          setMessengerVerifyToken(responseData.data.messenger_verify_token)
-          setMessengerBotName(responseData.data.messenger_bot_name)
-          setMessengerBotNameRegex(responseData.data.messenger_bot_name_regex)
-          setMessengerSpellHandlerIncoming(
-            responseData.data.messenger_spell_handler_incoming
-          )
-
-          setTwilioEnabled(responseData.data.twilio_enabled)
-          setTwilioAccountSID(responseData.data.twilio_account_sid)
-          setTwilioAuthToken(responseData.data.twilio_auth_token)
-          setTwilioPhoneNumber(responseData.data.twilio_phone_number)
-          setTwilioBotName(responseData.data.twilio_bot_name)
-          setTwilioEmptyResponses(responseData.data.twilio_empty_responses)
-          setTwilioSpellHandlerIncoming(
-            responseData.data.twilio_spell_handler_incoming
-          )
 
           updateCallback()
         }
@@ -488,71 +258,14 @@ const AgentWindow = ({
         voice_language_code,
         voice_default_phrases,
         tiktalknet_url,
-        twitter_client_enable,
-        twitter_token,
-        twitter_id,
-        twitter_app_token,
-        twitter_app_token_secret,
-        twitter_access_token,
-        twitter_access_token_secret,
-        twitter_enable_twits,
-        twitter_tweet_rules,
-        twitter_auto_tweet_interval_min,
-        twitter_auto_tweet_interval_max,
-        twitter_bot_name,
-        twitter_bot_name_regex,
-        twitter_spell_handler_incoming,
-        twitter_spell_handler_auto,
-        telegram_enabled,
-        telegram_bot_token,
-        telegram_bot_name,
-        telegram_spell_handler_incoming,
-        reddit_enabled,
-        reddit_app_id,
-        reddit_app_secret_id,
-        reddit_oauth_token,
-        reddit_bot_name,
-        reddit_bot_name_regex,
-        reddit_spell_handler_incoming,
-        zoom_enabled,
-        zoom_invitation_link,
-        zoom_password,
-        zoom_bot_name,
-        zoom_spell_handler_incoming,
         loop_enabled,
         loop_interval,
         loop_agent_name,
         loop_spell_handler,
-        slack_enabled,
-        slack_token,
-        slack_signing_secret,
-        slack_bot_token,
-        slack_bot_name,
-        slack_port,
-        slack_spell_handler_incoming,
-        instagram_enabled,
-        instagram_username,
-        instagram_password,
-        instagram_bot_name,
-        instagram_bot_name_regex,
-        instagram_spell_handler_incoming,
-        messenger_enabled,
-        messenger_page_access_token,
-        messenger_verify_token,
-        messenger_bot_name,
-        messenger_bot_name_regex,
-        messenger_spell_handler_incoming,
-        twilio_enabled,
-        twilio_account_sid,
-        twilio_auth_token,
-        twilio_phone_number,
-        twilio_bot_name,
-        twilio_empty_responses,
-        twilio_spell_handler_incoming,
       },
     }
     const fileName =
-      discord_bot_name ?? twitter_id ?? twilio_bot_name ?? 'entity'
+      discord_bot_name ?? 'agent'
     const json = JSON.stringify(_data)
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))

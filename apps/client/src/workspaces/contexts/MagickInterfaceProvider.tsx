@@ -18,7 +18,7 @@ import {
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { magickApiRootUrl } from '../../config'
 
-import { runPython } from '../../../../../packages/core/src/ProcessPython'
+import { runPython } from '@magickml/core'
 
 const Context = createContext<EditorContext>(undefined!)
 

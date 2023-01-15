@@ -56,20 +56,21 @@ export const buildMagickInterface = (
       return outputs
     },
     completion: async (body: CompletionBody) => {
-      // check body for API key, otherwise use the environment
-      const openaiApiKey = body.apiKey ? body.apiKey : OPENAI_API_KEY
+      const apiKey = body.apiKey ?? OPENAI_API_KEY
 
-      if (!openaiApiKey) throw new Error('No API key provided')
+      if (!apiKey) throw new Error('No API key provided')
 
-      const { success, choice } = await makeCompletion(body.modelName, {
-        prompt: body.prompt.trim(),
-        temperature: body.temperature,
-        max_tokens: body.maxTokens,
-        top_p: body.topP,
-        frequency_penalty: body.frequencyPenalty,
-        presence_penalty: body.presencePenalty,
-        stop: body.stop,
-        apiKey: openaiApiKey,
+      const {prompt, modelName, temperature, maxTokens, topP, frequencyPenalty, presencePenalty, stop} = body
+
+      const { success, choice } = await makeCompletion(modelName, {
+        prompt,
+        temperature,
+        max_tokens: maxTokens,
+        top_p: topP,
+        frequency_penalty: frequencyPenalty,
+        presence_penalty: presencePenalty,
+        stop,
+        apiKey,
       })
 
       return { success, choice }

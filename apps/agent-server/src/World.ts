@@ -179,7 +179,7 @@ export class World {
     }
   }
 
-  getEntity(id: any) {
+  getAgent(id: any) {
     let res = null
 
     for (let x in this.objects) {
@@ -192,7 +192,7 @@ export class World {
   }
 
   objectExists(id: any) {
-    return this.getEntity(id) !== null && this.getEntity(id) !== undefined
+    return this.getAgent(id) !== null && this.getAgent(id) !== undefined
   }
 
   generateId(): number {

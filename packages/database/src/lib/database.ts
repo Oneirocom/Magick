@@ -77,7 +77,7 @@ export class database {
     return await prisma.agents.findMany()
   }
 
-  static async getEntity(id: any) {
+  static async getAgent(id: any) {
     const entity = await prisma.agents.findFirst({
       where: {
         id,
