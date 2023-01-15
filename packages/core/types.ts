@@ -93,7 +93,14 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare refreshEventTable: () => void
 }
 
+export type Env = {
+  API_ROOT_URL: string
+  API_URL: string
+  APP_SEARCH_SERVER_URL: string
+}
+
 export type EngineContext = {
+  env: Env
   getCurrentGameState: () => Record<string, unknown>
   setCurrentGameState: (state: Record<string, unknown>) => void
   updateCurrentGameState: (update: Record<string, unknown>) => void

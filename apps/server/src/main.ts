@@ -18,6 +18,11 @@ import { Handler, Method, Middleware } from './types'
 config({
   path: '../../../',
 })
+import {
+  WEAVIATE_IMPORT_DATA,
+  USESSL,
+  SERVER_PORT,
+} from '@magickml/server-config'
 
 // todo probaly want to get ride of this.  Not super secure.
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
@@ -39,7 +44,9 @@ async function init() {
   await initFileServer()
   await initTextToSpeech()
   await initWeaviateClient(
-    process.env.WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true'
+    typeof WEAVIATE_IMPORT_DATA === 'string'
+      ? WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true'
+      : WEAVIATE_IMPORT_DATA
   )
 
   // generic error handling
@@ -132,9 +139,9 @@ async function init() {
 
   app.use(router.routes()).use(router.allowedMethods())
 
-  const PORT: number = Number(process.env.PORT) || 8001
+  const PORT: number = Number(SERVER_PORT) || 8001
   const useSSL =
-    process.env.USESSL === 'true' &&
+    USESSL === 'true' &&
     fs.existsSync(path.join(__dirname, './certs/')) &&
     fs.existsSync(path.join(__dirname, './certs/key.pem')) &&
     fs.existsSync(path.join(__dirname, './certs/cert.pem'))

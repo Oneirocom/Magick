@@ -3,6 +3,7 @@ import { database } from '@magickml/database'
 import Agent from './Agent'
 import { prisma } from '@magickml/prisma'
 import { CustomError } from 'apps/server/src/utils/CustomError'
+import { ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/server-config'
 
 const maxMSDiff = 5000
 let interval = 3000
@@ -114,7 +115,7 @@ export class World {
   }
 
   async onCreate() {
-    const ports: string[] = ((process.env.ENTITY_WEBSERVER_PORT_RANGE?.split(
+    const ports: string[] = ((ENTITY_WEBSERVER_PORT_RANGE?.split(
       '-'
     ) as any) ?? ['10001', '10100']) as string[]
     let portStart: number = parseInt(ports[0])

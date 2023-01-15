@@ -12,6 +12,7 @@
     "prisma": "packages/prisma",
     "search-server": "apps/search-server",
     "server": "apps/server",
+    "server-config": "packages/server-config",
     "speech-server": "apps/speech-server",
     "systems": "packages/systems",
     "utils": "packages/utils"

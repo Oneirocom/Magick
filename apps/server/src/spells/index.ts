@@ -58,9 +58,9 @@ const saveHandler = async (ctx: Koa.Context) => {
       data: {
         id: body.id ?? uuidv4(),
         name: body.name,
-        graph: JSON.stringify(body.graph),
-        gameState: JSON.stringify(body.gameState || {}),
-        modules: JSON.stringify(body.modules || []),
+        graph: body.graph,
+        gameState: body.gameState || {},
+        modules: body.modules || [],
       },
     })
     return (ctx.body = { id: newSpell.id })
@@ -69,9 +69,9 @@ const saveHandler = async (ctx: Koa.Context) => {
       where: { id: body.id },
       data: {
         name: body.name,
-        graph: JSON.stringify(body.graph),
-        gameState: JSON.stringify(body.gameState || {}),
-        modules: JSON.stringify(body.modules || []),
+        graph: body.graph,
+        gameState: body.gameState || {},
+        modules: body.modules || [],
       },
     })
 
@@ -120,14 +120,6 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
       })
     })
 
-    if (updatedSpell) {
-      // spell.graph, spell.modules and spell.gameState are all JSON
-      // parse them back into the object before returning it
-      updatedSpell.graph = JSON.stringify(spell.graph as any)
-      updatedSpell.modules = JSON.stringify(spell.modules as any)
-      updatedSpell.gameState = JSON.stringify(spell.gameState as any)
-    }
-
     ctx.response.status = 200
     ctx.body = updatedSpell
 }
@@ -152,9 +144,9 @@ const newHandler = async (ctx: Koa.Context) => {
     data: {
       id: uuidv4(),
       name: body.name,
-      graph: JSON.stringify(body.graph),
-      gameState: JSON.stringify({}),
-      modules: JSON.stringify([]),
+      graph: body.graph,
+      gameState: {},
+      modules: [],
     },
   })
 
@@ -168,14 +160,6 @@ const patchHandler = async (ctx: Koa.Context) => {
 
   if (!spell) throw new CustomError('input-failed', 'spell not found')
 
-  if (spell) {
-    // spell.graph, spell.modules and spell.gameState are all JSON
-    // parse them back into the object before returning it
-    ctx.request.body.graph = JSON.stringify(spell.graph as any)
-    ctx.request.body.modules = JSON.stringify(spell.modules as any)
-    ctx.request.body.gameState = JSON.stringify(spell.gameState as any)
-  }
-
   await prisma.spells.update({
     where: { name },
     data: ctx.request.body,
@@ -187,13 +171,6 @@ const patchHandler = async (ctx: Koa.Context) => {
 const getSpellsHandler = async (ctx: Koa.Context) => {
   const spells = await prisma.spells.findMany()
 
-  // for each spell in spells, parse the graph, modules and gameState
-  spells.forEach(spell => {
-    spell.graph = JSON.parse(spell.graph as any)
-    spell.modules = JSON.parse(spell.modules as any)
-    spell.gameState = JSON.parse(spell.gameState as any)
-  })
-
   return (ctx.body = spells)
 }
 
@@ -201,14 +178,6 @@ const getSpellHandler = async (ctx: Koa.Context) => {
   const name = ctx.params.name
   try {
     const spell = await prisma.spells.findUnique({ where: { name } })
-
-    if (spell) {
-      // spell.graph, spell.modules and spell.gameState are all JSON
-      // parse them back into the object before returning it
-      spell.graph = JSON.parse(spell.graph as any)
-      spell.modules = JSON.parse(spell.modules as any)
-      spell.gameState = JSON.parse(spell.gameState as any)
-    }
 
     if (!spell) {
       throw new Error('Spell not found')
