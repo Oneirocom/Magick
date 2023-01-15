@@ -11,9 +11,17 @@
   background: '#424242';
 }
 
+.heroBanner img {
+  width: 70%;
+}
+
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2rem;
+  }
+
+  .heroBanner img {
+    width: 100%;
   }
 }
 

@@ -2,7 +2,7 @@ import Koa from 'koa'
 import 'regenerator-runtime/runtime'
 import { Route } from '../../types'
 import { CustomError } from '../../utils/CustomError'
-import { extractModuleInputKeys } from '@magickml/core'
+import { extractModuleInputKeys, Spell } from '@magickml/core'
 
 import otJson0 from 'ot-json0'
 import { runSpell } from '../utils/runSpell'
@@ -72,23 +72,25 @@ const saveHandler = async (ctx: Koa.Context) => {
     })
     return (ctx.body = { id: newSpell.id })
   } else {
-      await prisma.spells.update({
-        where: { id: body.id },
-        data: {
-          name: body.name,
-          graph: JSON.stringify(body.graph),
-          gameState: JSON.stringify(body.gameState || {}),
-          modules: JSON.stringify(body.modules || []),
-        },
-      })
-      
-      return (ctx.body = { id: spell.id })
+    await prisma.spells.update({
+      where: { id: body.id },
+      data: {
+        name: body.name,
+        graph: JSON.stringify(body.graph),
+        gameState: JSON.stringify(body.gameState || {}),
+        modules: JSON.stringify(body.modules || []),
+      },
+    })
+
+    return (ctx.body = { id: spell.id })
   }
 }
 
 const saveDiffHandler = async (ctx: Koa.Context) => {
   const { body } = ctx.request
   const { name, diff } = body
+
+  console.log('saving diff', name, diff)
 
   if (!body) throw new CustomError('input-failed', 'No parameters provided')
 
@@ -98,34 +100,56 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
     throw new CustomError('input-failed', `No spell with ${name} name found.`)
   if (!diff)
     throw new CustomError('input-failed', 'No diff provided in request body')
-  try {
 
-    if(spell){
+  try {
+    if (spell) {
+      console.log('parsing json')
       // spell.graph, spell.modules and spell.gameState are all JSON
       // parse them back into the object before returning it
       spell.graph = JSON.parse(spell.graph as any)
       spell.modules = JSON.parse(spell.modules as any)
       spell.gameState = JSON.parse(spell.gameState as any)
     }
+
+    console.log('Spell: ', spell)
+    console.log('Diff: ', diff)
 
     const spellUpdate = otJson0.type.apply(spell, diff)
-    if (Object.keys(spellUpdate.graph.nodes).length === 0)
-      throw new CustomError('input-failed', 'No nodes provided in request body')
-    else {
-    spell = await prisma.spells.update({
+
+    if (Object.keys((spellUpdate as Spell).graph.nodes).length === 0)
+      throw new CustomError(
+        'input-failed',
+        'Graph would be cleared.  Aborting.'
+      )
+
+    const updatedSpell = await prisma.spells.update({
       where: { name },
       data: spellUpdate,
+      include: {
+        entities: true,
+      },
     })
-    if(spell){
+
+    // get all entities from this spell and set to dirty
+    await updatedSpell.entities.forEach(async entity => {
+      await prisma.entities.update({
+        where: { id: entity.id },
+        data: {
+          dirty: true,
+        },
+      })
+    })
+
+    if (updatedSpell) {
       // spell.graph, spell.modules and spell.gameState are all JSON
       // parse them back into the object before returning it
-      spell.graph = JSON.parse(spell.graph as any)
-      spell.modules = JSON.parse(spell.modules as any)
-      spell.gameState = JSON.parse(spell.gameState as any)
+      updatedSpell.graph = JSON.stringify(spell.graph as any)
+      updatedSpell.modules = JSON.stringify(spell.modules as any)
+      updatedSpell.gameState = JSON.stringify(spell.gameState as any)
     }
-      ctx.response.status = 200
-      ctx.body = spell
-    }
+
+    ctx.response.status = 200
+    ctx.body = updatedSpell
   } catch (err) {
     throw new CustomError('server-error', 'Error processing diff.', err)
   }
@@ -145,7 +169,7 @@ const newHandler = async (ctx: Koa.Context) => {
   const spell = await prisma.spells.findUnique({ where: { name: body.name } })
 
   // rewrite this to use prisma
-  if(spell) throw new CustomError('input-failed', 'spell already exists')
+  if (spell) throw new CustomError('input-failed', 'spell already exists')
 
   const newSpell = await prisma.spells.create({
     data: {
@@ -167,7 +191,7 @@ const patchHandler = async (ctx: Koa.Context) => {
 
   if (!spell) throw new CustomError('input-failed', 'spell not found')
 
-  if(spell){
+  if (spell) {
     // spell.graph, spell.modules and spell.gameState are all JSON
     // parse them back into the object before returning it
     ctx.request.body.graph = JSON.stringify(spell.graph as any)
@@ -193,7 +217,7 @@ const getSpellsHandler = async (ctx: Koa.Context) => {
     spell.gameState = JSON.parse(spell.gameState as any)
   })
 
-  return ctx.body = spells
+  return (ctx.body = spells)
 }
 
 const getSpellHandler = async (ctx: Koa.Context) => {
@@ -201,7 +225,7 @@ const getSpellHandler = async (ctx: Koa.Context) => {
   try {
     const spell = await prisma.spells.findUnique({ where: { name } })
 
-    if(spell){
+    if (spell) {
       // spell.graph, spell.modules and spell.gameState are all JSON
       // parse them back into the object before returning it
       spell.graph = JSON.parse(spell.graph as any)
@@ -212,7 +236,7 @@ const getSpellHandler = async (ctx: Koa.Context) => {
     if (!spell) {
       throw new Error('Spell not found')
     } else {
-      return ctx.body = spell
+      return (ctx.body = spell)
     }
   } catch (e) {
     console.error(e)

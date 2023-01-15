@@ -70,6 +70,7 @@ import { BooleanVariable } from './variable/BooleanVariable'
 import { FewshotVariable } from './variable/FewshotVariable'
 import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
+import { Generator } from './ml/Generator'
 
 // NOTE: PLEASE KEEP THESE IN ALPHABETICAL ORDER
 // todo some kind of custom build parser perhaps to take car of keeping these in alphabetical order
@@ -147,6 +148,7 @@ export const components = {
   log: () => new Log(),
   queryGoogle: () => new QueryGoogle(),
   ImageGeneration: () => new ImageGeneration(),
+  Generator: () => new Generator(),
 }
 
 function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {

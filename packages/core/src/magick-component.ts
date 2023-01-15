@@ -10,7 +10,7 @@ import { Task, TaskOptions } from './plugins/taskPlugin/task'
 export type PubSubContext = {
   publish: (event: string, data: unknown) => boolean
   subscribe: (event: string, callback: Function) => void
-  events: Record<string, (tabId: string) => string>
+  events: Record<string, any>
   PubSub: PubSubBase
 }
 
@@ -42,6 +42,7 @@ export abstract class MagickComponent<
   hide = false
   runFromCache = false
   deprecated? = false
+  onDoubleClick?: (node: MagickNode) => void
   declare module: ModuleOptions
   contextMenuName: string | undefined
   workspaceType: 'module' | 'spell' | null | undefined
