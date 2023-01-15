@@ -54,7 +54,13 @@ export class DocumentSetMass extends MagickComponent<void> {
       .addOutput(dataOutput)
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(
+    node: NodeData,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+    { magick }: { magick: EngineContext }
+  ) {
+    const { env } = magick
     const storeId = inputs['storeId']?.[0]
     let documents = inputs['documents']
     // eslint-disable-next-line camelcase
@@ -73,14 +79,11 @@ export class DocumentSetMass extends MagickComponent<void> {
       for (let i = 0; i < documents.length; i++) {
         temp.push(documents[i])
         if (i >= t * 100 || i === documents.length - 1) {
-          await axios.post(
-            `${import.meta.env.VITE_APP_SEARCH_SERVER_URL}/document_mass`,
-            {
-              documents: temp,
-              storeId,
-              store_name,
-            }
-          )
+          await axios.post(`${env.APP_SEARCH_SERVER_URL}/document_mass`, {
+            documents: temp,
+            storeId,
+            store_name,
+          })
           temp = []
           t++
         }

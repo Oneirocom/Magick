@@ -40,7 +40,7 @@ export class database {
 
     if (max_time_diff > 0) {
       const now = new Date()
-      const filtered = event.filter((e) => {
+      const filtered = event.filter(e => {
         const diff = now.getTime() - new Date(e.date).getTime()
         return diff < max_time_diff
       })
@@ -137,7 +137,7 @@ export class database {
         id,
       },
       data: {
-        updated_at: (new Date()).toString(),
+        updated_at: new Date().toString(),
       },
     })
 
@@ -149,7 +149,7 @@ export class database {
       data: {
         dirty: true,
         enabled: false,
-        data: "",
+        data: '',
       },
     })
     return entity
@@ -171,17 +171,17 @@ export class database {
     is_included: any,
     store_id: any
   ): Promise<number> {
-  // rewrite in prisma
-  const document = await prisma.documents.create({
-    data: {
-      title,
-      description,
-      is_included,
-      store_id,
-    },
-  })
-  return document.id
-}
+    // rewrite in prisma
+    const document = await prisma.documents.create({
+      data: {
+        title,
+        description,
+        is_included,
+        store_id,
+      },
+    })
+    return document.id
+  }
 
   static async removeDocument(documentId: number) {
     const document = await prisma.documents.delete({
@@ -191,7 +191,7 @@ export class database {
     })
     return document
   }
-  
+
   static async updateDocument(
     document_id: any,
     title: string,
@@ -213,9 +213,7 @@ export class database {
     return document
   }
 
-  static async getDocumentsOfStore(
-    storeId: number
-  ): Promise<any> {
+  static async getDocumentsOfStore(storeId: number): Promise<any> {
     const documents = await prisma.documents.findMany({
       where: {
         store_id: storeId,
@@ -294,9 +292,7 @@ export class database {
     return contentObj
   }
 
-  static async getContentObjOfDocument(
-    documentId: number
-  ): Promise<any> {
+  static async getContentObjOfDocument(documentId: number): Promise<any> {
     const contentObjs = await prisma.content_objects.findMany({
       where: {
         document_id: documentId,
@@ -326,7 +322,7 @@ export class database {
   static async addDocumentStore(name: any): Promise<number> {
     const documentStore = await prisma.documents_store.create({
       data: {
-        name
+        name,
       },
     })
     return documentStore.id
@@ -343,7 +339,7 @@ export class database {
     })
     return documentStore
   }
-  
+
   static async removeDocumentStore(storeId: number) {
     const documentStore = await prisma.documents_store.delete({
       where: {
