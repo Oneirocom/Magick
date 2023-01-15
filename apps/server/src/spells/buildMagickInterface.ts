@@ -89,10 +89,6 @@ export const buildMagickInterface = (
       state: Record<string, any>,
       language: string='javascript'
     ) => {
-      if (language === 'javascript'){
-      const { VM } = vm2
-      const vm = new VM()
-
       // Inputs are flattened before we inject them for a better code experience
       const flattenInputs = Object.entries(inputs).reduce(
         (acc, [key, value]: [string, any]) => {
@@ -102,10 +98,14 @@ export const buildMagickInterface = (
         {} as Record<string, any>
       )
 
-      // Freeze the variables we are injecting into the VM
-      vm.freeze(data, 'data')
-      vm.freeze(flattenInputs, 'input')
-      vm.protect(state, 'state')
+      if (language === 'javascript'){
+        const { VM } = vm2
+        const vm = new VM()
+
+        // Freeze the variables we are injecting into the VM
+        vm.freeze(data, 'data')
+        vm.freeze(flattenInputs, 'input')
+        vm.protect(state, 'state')
 
         // run the code
         const codeToRun = `"use strict"; function runFn(input,data,state){ return (${code})(input,data,state)}; runFn(input,data,state);`
@@ -122,16 +122,15 @@ export const buildMagickInterface = (
           )
         }
       } else {
-        const template = `
-        inputs = json.loads(${JSON.stringify(inputs)})
-        data = json.loads(${JSON.stringify(data)})
-        state = json.loads(${JSON.stringify(state)})
-        ${code}
-        return worker(inputs, data, state)
-        `
-        console.log('running template')
-        const codeResult = await runPython(template);
-        console.log(codeResult);
+        try {
+
+          const codeResult = await runPython(code, flattenInputs, data, state);
+          return codeResult;
+  
+        
+        } catch (err) {
+          console.log({ err })
+        }
       }
     },
     setCurrentGameState: state => {
