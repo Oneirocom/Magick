@@ -15,7 +15,6 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
   console.log('text and character are', text, character)
   const voice_provider = ctx.request.query.voice_provider as string
   const voice_character = ctx.request.query.voice_character as string
-  // const voice_language_code = ctx.request.query.voice_language_code
   const tiktalknet_url = ctx.request.query.tiktalknet_url as string
 
   console.log('text and character are', text, voice_character)
@@ -37,37 +36,22 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
 }
 
 const textCompletion = async (ctx: Koa.Context) => {
-  const modelName = ctx.request.body.modelName as string
-  const temperature = ctx.request.body.temperature as number
-  const maxTokens = ctx.request.body.maxTokens as number
-  const topP = ctx.request.body.topP as number
-  const frequencyPenalty = ctx.request.body.frequencyPenalty as number
-  const presencePenalty = ctx.request.body.presencePenalty as number
-  const sender = (ctx.request.body.sender as string) ?? 'User'
-  const agent = (ctx.request.body.agent as string) ?? 'Agent'
-  const prompt = (ctx.request.body.prompt as string)
-    .replace('{agent}', agent)
-    .replace('{speaker}', sender)
-  let stop = (ctx.request.body.stop ?? ['']) as string[]
-  const openaiApiKey =
-    (ctx.request.body.apiKey as string) ?? process.env.OPENAI_API_KEY
+  const { modelName, temperature, maxTokens, topP, frequencyPenalty, presencePenalty, sender, prompt, stop, apiKey: _apiKey } = ctx.request.body
 
-  if (!openaiApiKey)
+  let apiKey = _apiKey ?? process.env.OPENAI_API_KEY;
+
+  if (!apiKey)
     throw new CustomError('authentication-error', 'No API key provided')
-
-  if (!stop || stop.length === undefined || stop.length <= 0) {
-    stop = ['"""', '###']
-  }
 
   const { success, choice } = await makeCompletion(modelName, {
     prompt: prompt.trim(),
-    temperature: temperature,
+    temperature,
     max_tokens: maxTokens,
     top_p: topP,
     frequency_penalty: frequencyPenalty,
     presence_penalty: presencePenalty,
-    stop: stop,
-    apiKey: openaiApiKey,
+    stop,
+    apiKey,
   })
 
   return (ctx.body = { success, choice })
@@ -119,7 +103,7 @@ const hfRequest = async (ctx: Koa.Context) => {
 //   return (ctx.body = { data: '' })
 // }
 
-const getEntitiesInfo = async (ctx: Koa.Context) => {
+const getAgentsInfo = async (ctx: Koa.Context) => {
   const id = (ctx.request.query.id as string)
     ? parseInt(ctx.request.query.id as string)
     : -1
@@ -135,7 +119,7 @@ const getEntitiesInfo = async (ctx: Koa.Context) => {
 
     return (ctx.body = info)
   } catch (e) {
-    console.log('getEntitiesHandler:', e)
+    console.log('getAgentsHandler:', e)
     ctx.status = 500
     return (ctx.body = { error: 'internal error' })
   }

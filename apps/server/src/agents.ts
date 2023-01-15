@@ -31,7 +31,7 @@ const getAgentHandler = async (ctx: Koa.Context) => {
 
   const _instanceId = parseInt(instanceId)
   try {
-    let data = await database.getEntity(_instanceId) as any
+    let data = await database.getAgent(_instanceId) as any
     if (data === undefined || !data) {
       let newId = _instanceId
       while ((await database.entityExists(newId)) || newId <= 0) {

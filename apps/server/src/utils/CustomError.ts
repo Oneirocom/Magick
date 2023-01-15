@@ -3,6 +3,7 @@ export type CustomErrorCodes =
   | 'server-error'
   | 'not-found'
   | 'already-exists'
+  | 'authentication-error'
 
 // eslint-disable-next-line functional/no-class
 export class CustomError extends Error {
@@ -31,18 +32,10 @@ export const mapStatusCode = (customErrorCode: CustomErrorCodes) => {
       return 400
     case 'authentication-error':
       return 401
+    case 'already-exists':
+      return 239
     case 'not-found':
       return 404
-    case 'open-ai-error':
-      return 502
-    case 'coreweave-error':
-      return 502
-    case 'ai21-error':
-      return 502
-    case 'forefront-error':
-      return 502
-    case 'generation-model-error':
-      return 502
     case 'server-error':
       return 500
   }
