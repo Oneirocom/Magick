@@ -38,8 +38,15 @@ const EventHandler = ({ pubSub, tab }) => {
     spellRef.current = spell
   }, [spell])
 
-  const { serialize, getEditor, undo, redo, del, dirtyGraph, setDirtyGraph } =
-    useEditor()
+  const {
+    serialize,
+    getEditor,
+    undo,
+    redo,
+    del,
+    getDirtyGraph,
+    setDirtyGraph,
+  } = useEditor()
 
   const { events, subscribe } = pubSub
 
@@ -96,7 +103,11 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
+    console.log('updated spell', updatedSpell)
+    console.log('current spell', currentSpell)
     const jsonDiff = diff(currentSpell, updatedSpell)
+
+    console.log('json diff', jsonDiff)
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
@@ -105,6 +116,8 @@ const EventHandler = ({ pubSub, tab }) => {
       name: currentSpell.name,
       diff: jsonDiff,
     })
+
+    setDirtyGraph(true)
 
     // if (preferences.autoSave) {
     //   if ('error' in response) {
@@ -186,7 +199,7 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const onProcess = () => {
     const editor = getEditor()
-    if (!editor || !dirtyGraph) return
+    if (!editor) return
 
     console.log('RUNNING PROCESS')
 

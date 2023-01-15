@@ -32,13 +32,13 @@ git clone https://github.com/Oneirocom/MagickML
 Next, install dependencies
 
 ```
-npm install
+yarn install
 ```
 
 # Run Magick!
 
 ```
-npm run dev
+yarn dev
 ```
 
 ## Contributors
