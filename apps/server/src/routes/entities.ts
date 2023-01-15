@@ -1,7 +1,9 @@
 import { database } from '@magickml/database'
+import { weaviate_connection } from '@magickml/systems'
 import 'regenerator-runtime/runtime'
 //@ts-ignore
 // import weaviate from 'weaviate-client'
+import { initWeaviateClientEvent } from '@magickml/systems'
 import Koa from 'koa'
 import 'regenerator-runtime/runtime'
 import { Route } from '../types'
@@ -13,7 +15,7 @@ import { prisma } from '@magickml/prisma'
 import { CustomError } from '../utils/CustomError'
 
 export const modules: Record<string, unknown> = {}
-
+//initWeaviateClientEvent()
 const getEntitiesHandler = async (ctx: Koa.Context) => {
   try {
     let data = await database.getEntities()
@@ -119,7 +121,7 @@ const deleteEntityHandler = async (ctx: Koa.Context) => {
   }
 }
 
-const getEvent = async (ctx: Koa.Context) => {
+export const getEventWeaviate = async (ctx: Koa.Context) => {
   const type = ctx.request.query.type as string
   const agent = ctx.request.query.agent as string
   const speaker = ctx.request.query.speaker as string
@@ -127,8 +129,7 @@ const getEvent = async (ctx: Koa.Context) => {
   const channel = ctx.request.query.channel as string
   const maxCount = parseInt(ctx.request.query.maxCount as string)
   const max_time_diff = parseInt(ctx.request.query.max_time_diff as string)
-
-  const event = await database.getEvents({
+  const event = await weaviate_connection.getEvents({
     type,
     agent,
     speaker,
@@ -137,12 +138,35 @@ const getEvent = async (ctx: Koa.Context) => {
     maxCount,
     max_time_diff,
   })
+  return (ctx.body = { event })
+}
 
+const getEvent = async (ctx: Koa.Context) => {
+  const type = ctx.request.query.type as string
+  const agent = ctx.request.query.agent as string
+  const speaker = ctx.request.query.speaker as string
+  const client = ctx.request.query.client as string
+  const channel = ctx.request.query.channel as string
+  const maxCount = parseInt(ctx.request.query.maxCount as string)
+  const max_time_diff = parseInt(ctx.request.query.max_time_diff as string)
+  
+  const event = await database.getEvents({
+    type,
+    agent,
+    speaker,
+    client,
+    channel,
+    maxCount,
+    max_time_diff,
+  })  
   return (ctx.body = { event })
 }
 
 const getAllEvents = async (ctx: Koa.Context) => {
   try {
+    console.log("Getting All events")
+    const events_wea_all = await weaviate_connection.getAllEvents()
+    console.log(events_wea_all)
     const events = await database.getAllEvents()
     return (ctx.body = events)
   } catch (e) {
@@ -202,6 +226,28 @@ const updateEvent = async (ctx: Koa.Context) => {
   }
 }
 
+export const createEventWeaviate = async (ctx: Koa.Context) => {
+  const agent = ctx.request.body.agent
+  const speaker = ctx.request.body.speaker
+  const client = ctx.request.body.client
+  const sender = ctx.request.body.sender
+  const channel = ctx.request.body.channel
+  const text = ctx.request.body.text
+  const type = ctx.request.body.type
+  console.log('Creating event:', agent, speaker, client, channel, text, type)
+  await weaviate_connection.createEvent({
+    type,
+    agent,
+    speaker,
+    sender,
+    client,
+    channel,
+    text,
+  })
+  return (ctx.body = 'ok')
+}
+
+
 const createEvent = async (ctx: Koa.Context) => {
   const agent = ctx.request.body.agent
   const speaker = ctx.request.body.speaker
@@ -211,18 +257,21 @@ const createEvent = async (ctx: Koa.Context) => {
   const text = ctx.request.body.text
   const type = ctx.request.body.type
   console.log('Creating event:', agent, speaker, client, channel, text, type)
-
   // Todo needs error handling
-  await database.createEvent({
-    type,
-    agent,
-    speaker,
-    sender,
-    client,
-    channel,
-    text,
-  })
-
+  try {
+    await database.createEvent({
+      type,
+      agent,
+      speaker,
+      sender,
+      client,
+      channel,
+      text,
+    })
+  } catch (e: unknown){
+    console.error(e)
+    return (ctx.body = e)
+  }
   return (ctx.body = 'ok')
 }
 
@@ -430,6 +479,11 @@ export const entities: Route[] = [
   //   path: '/weaviate',
   //   post: makeWeaviateRequest,
   // },
+  {
+    path: '/eventWeaviate',
+    get: getEventWeaviate,
+    post: createEventWeaviate,
+  },
   {
     path: '/entities_info',
     get: getEntitiesInfo,

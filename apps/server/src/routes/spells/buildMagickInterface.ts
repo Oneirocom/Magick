@@ -11,6 +11,30 @@ import { searchWikipedia } from '../wikipedia/helpers'
 import { database } from '@magickml/database'
 import { makeCompletion } from '../../utils/MakeCompletionRequest'
 import { runSpell } from '../utils/runSpell'
+import { weaviate_connection } from '@magickml/systems'
+const getEventWeaviate = async ({
+  type,
+  agent,
+  speaker,
+  client,
+  channel,
+  maxCount,
+  max_time_diff,
+}: GetEventArgs) => {
+  const event = await weaviate_connection.getEvents({
+    type,
+    agent,
+    speaker,
+    client,
+    channel,
+    maxCount,
+    max_time_diff,
+  })
+
+  if (!event) return null
+
+  return event
+}
 
 const getEvents = async ({
   type,
@@ -34,6 +58,19 @@ const getEvents = async ({
   if (!event) return null
 
   return event
+}
+
+const createEventWeaviate = async (args: CreateEventArgs) => {
+  const { type, agent, speaker, client, channel, text, sender } = args
+  return await weaviate_connection.createEvent({
+    type,
+    agent,
+    speaker,
+    sender,
+    client,
+    channel,
+    text,
+  })
 }
 
 const createEvent = async (args: CreateEventArgs) => {
@@ -160,8 +197,14 @@ export const buildMagickInterface = (
     getEvent: async (args: GetEventArgs) => {
       return await getEvents(args)
     },
+    getEventWeaviate: async (args: GetEventArgs) => {
+      return await getEventWeaviate(args)
+    },
     storeEvent: async (args: CreateEventArgs) => {
       return await createEvent(args)
+    },
+    storeEventWeaviate: async (args: CreateEventArgs) => {
+      return await createEventWeaviate(args)
     },
     getWikipediaSummary: async (keyword: string) => {
       let out = null

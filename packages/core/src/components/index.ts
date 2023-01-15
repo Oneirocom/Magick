@@ -3,6 +3,8 @@ import { AgentTextCompletion } from './agents/AgentTextCompletion'
 import { CustomTextCompletion } from './agents/CustomTextCompletion'
 import { EventRecall } from './agents/EventRecall'
 import { EventStore } from './agents/EventStore'
+import { EventRecallWeaviate } from './agents/EventRecallWeaviate'
+import { EventStoreWeaviate } from './agents/EventStoreWeaviate'
 import { InputDestructureComponent } from './agents/InputDestructure'
 import { InputRestructureComponent } from './agents/InputRestructure'
 import { Request } from './agents/Request'
@@ -92,7 +94,9 @@ export const components = {
   isQuery: () => new IsQuery(),
   isVariableTrue: () => new IsVariableTrue(),
   conversationStore: () => new EventStore(),
+  conversationStore1: () => new EventStoreWeaviate(),
   conversationRecall: () => new EventRecall(),
+  conversationRecall1: () => new EventRecallWeaviate(),
   request: () => new Request(),
   request2: () => new JupyterComms(),
   search: () => new Search(),

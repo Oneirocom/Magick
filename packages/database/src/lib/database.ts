@@ -37,6 +37,9 @@ export class database {
     if (!type) {
       throw new Error('Missing argument for type')
     }
+    if (channel === "undefined") {
+      channel = undefined
+    } 
 
     // rewrite this function to use prisma
     const event = await prisma.events.findMany({

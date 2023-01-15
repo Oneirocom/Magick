@@ -111,7 +111,11 @@ export type EngineContext = {
   getEvent: (
     args: GetEventArgs
   ) => Promise<string | string[] | null | Record<string, any>>
+  getEventWeaviate: (
+    args: GetEventArgs
+  ) => Promise<string | string[] | null | Record<string, any>>
   storeEvent: (args: CreateEventArgs) => Promise<any>
+  storeEventWeaviate: (args: CreateEventArgs) => Promise<any>
   getWikipediaSummary: (keyword: string) => Promise<Record<string, any> | null>
 }
 
