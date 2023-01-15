@@ -2,9 +2,16 @@ import cors from '@koa/cors'
 import Router from '@koa/router'
 import { database } from '@magickml/database'
 import {
-  initFileServer, initTextToSpeech, initWeaviateClient
+  initFileServer,
+  initTextToSpeech,
+  initWeaviateClient,
 } from '@magickml/systems'
-import { config } from 'dotenv-flow'
+import {
+  WEAVIATE_IMPORT_DATA,
+  USESSL,
+  SERVER_PORT,
+} from '@magickml/server-config'
+
 import * as fs from 'fs'
 import http from 'http'
 import HttpStatus from 'http-status-codes'
@@ -14,15 +21,8 @@ import koaBody from 'koa-body'
 import compose from 'koa-compose'
 import path from 'path'
 import 'regenerator-runtime/runtime'
+
 import { Handler, Method, Middleware } from './types'
-config({
-  path: '../../../',
-})
-import {
-  WEAVIATE_IMPORT_DATA,
-  USESSL,
-  SERVER_PORT,
-} from '@magickml/server-config'
 
 // todo probaly want to get ride of this.  Not super secure.
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
