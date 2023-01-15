@@ -1,4 +1,5 @@
 import { database } from '@magickml/database'
+import { OPENAI_API_KEY } from '@magickml/server-config'
 import { tts, tts_tiktalknet } from '@magickml/systems'
 import Koa from 'koa'
 import { Route } from './types'
@@ -36,9 +37,20 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
 }
 
 const textCompletion = async (ctx: Koa.Context) => {
-  const { modelName, temperature, maxTokens, topP, frequencyPenalty, presencePenalty, sender, prompt, stop, apiKey: _apiKey } = ctx.request.body
+  const {
+    modelName,
+    temperature,
+    maxTokens,
+    topP,
+    frequencyPenalty,
+    presencePenalty,
+    sender,
+    prompt,
+    stop,
+    apiKey: _apiKey,
+  } = ctx.request.body
 
-  let apiKey = _apiKey ?? process.env.OPENAI_API_KEY;
+  let apiKey = _apiKey ?? OPENAI_API_KEY
 
   if (!apiKey)
     throw new CustomError('authentication-error', 'No API key provided')
@@ -130,11 +142,11 @@ const queryGoogle = async (ctx: Koa.Context) => {
   if (!ctx.request?.body?.query)
     throw new CustomError('input-failed', 'No query provided in request body')
   const query = ctx.request.body?.query as string
-  const data = await queryGoogleSearch(query);
+  const data = await queryGoogleSearch(query)
   console.log('DATA', data)
-  const { summary, links } = data;
-  console.log ('SUMMARY', summary)
-  console.log ('LINKS', links)
+  const { summary, links } = data
+  console.log('SUMMARY', summary)
+  console.log('LINKS', links)
   return (ctx.body = { summary, links })
 }
 
@@ -173,7 +185,7 @@ export const apis: Route[] = [
   // },
   {
     path: '/query_google',
-    post:queryGoogle,
+    post: queryGoogle,
   },
   {
     path: '/image_generation',
