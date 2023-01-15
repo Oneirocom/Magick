@@ -24,7 +24,6 @@ const Context = createContext<EditorContext>(undefined!)
 
 export const useMagickInterface = () => useContext(Context)
 
-
 const MagickInterfaceProvider = ({ children, tab }) => {
   const { events, publish, subscribe } = usePubSub()
   const spellRef = useRef<Spell | null>(null)
@@ -149,17 +148,17 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return spell.data as Spell
   }
 
-  const processCode = async (code, inputs, data, state, language = 'javascript') => {
-    console.log('processCode')
-    if (language == 'javascript') {
+  const processCode = async (code, inputs, data, state, language='javascript') => {
+    const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
+      (acc, [key, value]) => {
+        acc[key as string] = value[0] as any
+        return acc
+      },
+      {} as Record<string, any>
+    )
+    if (language == 'javascript'){
       console.log('processCode, javascript')
-      const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
-        (acc, [key, value]) => {
-          acc[key as string] = value[0] as any
-          return acc
-        },
-        {} as Record<string, any>
-      )
+      
       // eslint-disable-next-line no-new-func
       const result = new Function('"use strict";return (' + code + ')')()(
         flattenedInputs,
@@ -172,7 +171,15 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       return result
     } else if (language == 'python') {
       try {
-        return runPython(code);
+
+        const result = await runPython(code, flattenedInputs, data, state);
+        if (result.state) {
+          updateCurrentGameState(result.state)
+        }
+
+        return result;
+
+      
       } catch (err) {
         console.log({ err })
       }

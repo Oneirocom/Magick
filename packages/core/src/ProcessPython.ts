@@ -7,14 +7,43 @@ let pyodide;
 loadPyodide({
   indexURL: isBrowser ? PYODIDE_URL : undefined,
 }).then((_pyodide) => {
-  console.log("Pyodide loaded");
   pyodide = _pyodide;
 });
 
-export default async function runPython (code) {
+export default async function runPython (code, entry, data, state) {
+  // inputs renamed to entry for python insertion
   if(!pyodide) {
     throw new Error("Pyodide not loaded");
   }
 
-	return await pyodide.runPythonAsync(code);
+  for (const [key, value] of Object.entries(entry)) {
+    pyodide.globals.set(key, value);
+  }
+  pyodide.globals.set("data" , data);
+  pyodide.globals.set("state", state);
+  
+  
+  let codeResult = pyodide.runPython(code);
+
+  let toJsResult = codeResult.toJs();
+  let codeResultJS = toJsResult[0] instanceof Map ? convertMapToObject(toJsResult[0]) : toJsResult[0];
+  let dataResult = toJsResult[1] instanceof Map ? convertMapToObject(toJsResult[1]) : toJsResult[1];
+  let stateResult = toJsResult[2] instanceof Map ? convertMapToObject(toJsResult[2]) : toJsResult[2];
+
+  const result = {...codeResultJS, data: dataResult, state: stateResult};
+
+  return result;
 };
+
+
+function convertMapToObject(inputMap) {
+  let outputObject = {};
+  for (let [key, value] of inputMap) {
+      if (value instanceof Map) {
+          outputObject[key] = convertMapToObject(value);
+      } else {
+          outputObject[key] = value;
+      }
+  }
+  return outputObject;
+}

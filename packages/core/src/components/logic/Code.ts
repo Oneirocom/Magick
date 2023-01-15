@@ -65,6 +65,7 @@ export class Code extends MagickComponent<unknown> {
     const codeControl = new CodeControl({
       dataKey: 'code',
       name: 'Code',
+      language: 'javascript'
     })
 
     const nameControl = new InputControl({
@@ -100,7 +101,7 @@ export class Code extends MagickComponent<unknown> {
 
     try {
       // const value = runCodeWithArguments(node.data.code)
-      const value = processCode(node.data.code, inputs, data, state)
+      const value = processCode(node.data.code, inputs, data, state, "javascript")
 
       if (value.state) updateCurrentGameState(value.state)
 
