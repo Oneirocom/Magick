@@ -249,6 +249,44 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return json.event
   }
 
+  const getEventWeaviate = async ({
+    type,
+    agent,
+    speaker,
+    client,
+    channel,
+    maxCount = 10,
+    target_count = 'single',
+    max_time_diff = -1,
+  }) => {
+    const urlString = `${
+      import.meta.env.VITE_APP_API_URL ??
+      import.meta.env.API_ROOT_URL
+    }/eventWeaviate`
+
+    const params = {
+      type,
+      agent,
+      speaker,
+      client,
+      channel,
+      maxCount,
+      target_count,
+      max_time_diff,
+    } as Record<string, any>
+
+    const url = new URL(urlString)
+    for (let p in params) {
+      url.searchParams.append(p, params[p])
+    }
+
+    const response = await fetch(url.toString())
+    console.log(response)
+    if (response.status !== 200) return null
+    const json = await response.json()
+    return json.event
+  }
+
   const storeEvent = async ({
     type,
     agent,
@@ -263,6 +301,34 @@ const MagickInterfaceProvider = ({ children, tab }) => {
         import.meta.env.VITE_APP_API_URL ??
         import.meta.env.API_ROOT_URL
       }/event`,
+      {
+        type,
+        agent,
+        speaker,
+        sender,
+        text,
+        client,
+        channel,
+      }
+    )
+    console.log('Created event', response.data)
+    return response.data
+  }
+
+  const storeEventWeaviate = async ({
+    type,
+    agent,
+    speaker,
+    sender,
+    text,
+    client,
+    channel,
+  }: CreateEventArgs) => {
+    const response = await axios.post(
+      `${
+        import.meta.env.VITE_APP_API_URL ??
+        import.meta.env.API_ROOT_URL
+      }/eventWeaviate`,
       {
         type,
         agent,
@@ -347,7 +413,9 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     runSpell,
     refreshEventTable,
     getEvent,
+    getEventWeaviate,
     storeEvent,
+    storeEventWeaviate,
     getWikipediaSummary,
     queryGoogle,
     sendToAvatar,
