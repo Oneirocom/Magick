@@ -63,6 +63,15 @@
       "contributions": [
         "blog"
       ]
+    },
+    {
+      "login": "sshivaditya2019",
+      "name": "Shivaditya Shivganesh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/53160903?v=4",
+      "profile": "https://github.com/sshivaditya2019",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
