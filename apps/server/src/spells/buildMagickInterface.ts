@@ -127,8 +127,6 @@ export const buildMagickInterface = (
 
           const codeResult = await runPython(code, flattenInputs, data, state);
           return codeResult;
-  
-        
         } catch (err) {
           console.log({ err })
         }

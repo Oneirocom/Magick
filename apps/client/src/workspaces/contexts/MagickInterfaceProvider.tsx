@@ -49,6 +49,8 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     spellRef.current = _spell
   }, [_spell])
 
+  // run_python("https://cdn.jsdelivr.net/pyodide/v0.22.0/full/pyodide.js");
+
   const {
     $PLAYTEST_INPUT,
     $PLAYTEST_PRINT,
@@ -178,8 +180,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
         }
 
         return result;
-
-      
       } catch (err) {
         console.log({ err })
       }
