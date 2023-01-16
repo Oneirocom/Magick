@@ -54,9 +54,10 @@ const Playtest = ({ tab }) => {
   const FeathersContext = useFeathers()
   const dispatch = useDispatch()
 
-  const localState = useAppSelector(state =>
-    selectStateBySpellId(state.localState, tab.spellId)
-  )
+  const localState = useAppSelector(state => {
+    console.log('GETTING STSTE FROM TAB', tab)
+    return selectStateBySpellId(state.localState, tab.spellId)
+  })
 
   const client = FeathersContext?.client
   const { $PLAYTEST_INPUT, $PLAYTEST_PRINT } = events
@@ -118,8 +119,8 @@ const Playtest = ({ tab }) => {
         spellId: tab.spellId,
         inputs: {
           input: value,
-          speaker: "Speaker",
-          agent: "Agent"
+          speaker: 'Speaker',
+          agent: 'Agent',
         },
       })
     }
@@ -140,10 +141,10 @@ const Playtest = ({ tab }) => {
       toSend = {
         input: value,
         output: value,
-        speaker: "Speaker",
-        agent: "Agent",
-        channel: "previewChannel",
-        channelType: "previewChannelType",
+        speaker: 'Speaker',
+        agent: 'Agent',
+        channel: 'previewChannel',
+        channelType: 'previewChannelType',
         ...JSON.parse(json),
       }
     }

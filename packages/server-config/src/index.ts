@@ -33,3 +33,4 @@ export const DATABASE_URL =
   'postgresql://postgres:ZTE*meq1mzh3abn!cmk@db.xpilpcjsizemuijsiask.supabase.co:5432/postgres'
 export const APP_SEARCH_SERVER_URL =
   process.env.APP_SEARCH_SERVER_URL || `http://localhost:${SEARCH_CORPUS_PORT}`
+export const CASTER_PORT = process.env.CASTER_PORT || 8002

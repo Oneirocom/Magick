@@ -1,4 +1,4 @@
-import feathers from '@feathersjs/client'
+import { feathers, socketio } from '@feathersjs/client'
 import io from 'socket.io-client'
 import { useContext, createContext, useEffect, useState } from 'react'
 
@@ -7,7 +7,7 @@ import { feathers as feathersFlag, feathersUrl } from '../config'
 const buildFeathersClient = async () => {
   const feathersClient = feathers()
   const socket = io(feathersUrl)
-  feathersClient.configure(feathers.socketio(socket, { timeout: 10000 }))
+  feathersClient.configure(socketio(socket, { timeout: 10000 }))
 
   // No idea how to type feathers to add io properties to root client.
   return feathersClient as any

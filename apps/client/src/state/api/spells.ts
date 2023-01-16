@@ -114,7 +114,7 @@ export const spellApi = rootApi.injectEndpoints({
         url: `spells/${spellId}`,
         method: 'DELETE',
       }),
-    })
+    }),
   }),
 })
 
@@ -136,7 +136,6 @@ export const {
   useRunSpellMutation,
   useSaveSpellMutation,
   useSaveDiffMutation,
-  useDeploySpellMutation,
   usePatchSpellMutation,
 } = spellApi
 
