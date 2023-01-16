@@ -44,7 +44,7 @@ function getPromiseFromEvent(item, event) {
 }
 
 
-export class JupyterComms extends MagickComponent<Promise<WorkerReturn>> {
+export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('Jupyter Notebook')
 

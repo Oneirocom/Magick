@@ -49,8 +49,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     spellRef.current = _spell
   }, [_spell])
 
-  // run_python("https://cdn.jsdelivr.net/pyodide/v0.22.0/full/pyodide.js");
-
   const {
     $PLAYTEST_INPUT,
     $PLAYTEST_PRINT,
@@ -256,10 +254,78 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return json.event
   }
 
+  const getEventWeaviate = async ({
+    type = 'default',
+    sender = 'system',
+    observer = 'system',
+    entities = [],
+    client = 'system',
+    channel = 'system',
+    maxCount = 10,
+    target_count = 'single',
+    max_time_diff = -1,
+  }) => {
+    const urlString = `${
+      import.meta.env.VITE_APP_API_URL ??
+      import.meta.env.API_ROOT_URL
+    }/eventWeaviate`
+
+    const params = {
+      type,
+      observer,
+      sender,
+      entities,
+      client,
+      channel,
+      maxCount,
+      target_count,
+      max_time_diff,
+    } as Record<string, any>
+
+    const url = new URL(urlString)
+    for (let p in params) {
+      url.searchParams.append(p, params[p])
+    }
+
+    const response = await fetch(url.toString())
+    console.log(response)
+    if (response.status !== 200) return null
+    const json = await response.json()
+    return json.event
+  }
+
   const storeEvent = async (eventData: CreateEventArgs) => {
     const response = await axios.post(
       `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
       }/event`, eventData
+    )
+    console.log('Created event', response.data)
+    return response.data
+  }
+
+  const storeEventWeaviate = async ({
+    type,
+    observer,
+    sender,
+    entities,
+    content,
+    client,
+    channel,
+  }: CreateEventArgs) => {
+    const response = await axios.post(
+      `${
+        import.meta.env.VITE_APP_API_URL ??
+        import.meta.env.API_ROOT_URL
+      }/eventWeaviate`,
+      {
+        type,
+        observer,
+        sender,
+        entities,
+        content,
+        client,
+        channel,
+      }
     )
     console.log('Created event', response.data)
     return response.data
@@ -335,7 +401,9 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     runSpell,
     refreshEventTable,
     getEvents,
+    getEventWeaviate,
     storeEvent,
+    storeEventWeaviate,
     getWikipediaSummary,
     queryGoogle,
     sendToAvatar,

@@ -1,17 +1,21 @@
 import { MagickComponent } from '../../types'
-import { TextCompletion } from './ml/TextCompletion'
-import { EventRecall } from './events/EventRecall'
-import { EventStore } from './events/EventStore'
-import { EventDestructureComponent } from './events/EventDestructure'
-import { EventRestructureComponent } from './events/EventRestructure'
-import { Request } from './io/Request'
-import { JupyterComms } from './io/JupyterNotebook'
+import { EventStoreWeaviate } from './events/EventStoreWeaviate'
+import { GetWikipediaSummary } from './apis/GetWikipediaSummary'
+import { QueryGoogle } from './apis/QueryGoogle'
+import { WeaviateWikipedia } from './apis/WeaviateWikipedia'
 import { CheckBalanceForERC20 } from './ethereum/CheckBalanceForERC20'
 import { CheckEthBalance } from './ethereum/CheckEthBalance'
 import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentTransactionsFromWallet'
 import { GetRecentTransactions } from './ethereum/GetRecentTransactions'
+import { EventDestructureComponent } from './events/EventDestructure'
+import { EventRecall } from './events/EventRecall'
+import { EventRecallWeaviate } from './events/EventRecallWeaviate'
+import { EventRestructureComponent } from './events/EventRestructure'
+import { EventStore } from './events/EventStore'
 import { InputComponent } from './io/Input'
+import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
+import { Request } from './io/Request'
 import { SpellComponent } from './io/Spell'
 import { TriggerIn } from './io/TriggerIn'
 import { TriggerOut } from './io/TriggerOut'
@@ -30,8 +34,10 @@ import { SwitchGate } from './logic/SwitchGate'
 import { WaitForAll } from './logic/WaitForAll'
 import { WhileLoop } from './logic/WhileLoop'
 import { Classifier } from './ml/Classifier'
+import { Generator } from './ml/Generator'
 import { ImageGeneration } from './ml/ImageGeneration'
 import { SentenceMatcher } from './ml/SentenceMatcher'
+import { TextCompletion } from './ml/TextCompletion'
 import { TextToSpeech } from './ml/TextToSpeech'
 import { DocumentDelete } from './search/DocumentDelete'
 import { DocumentEdit } from './search/DocumentEdit'
@@ -39,11 +45,8 @@ import { DocumentGet } from './search/DocumentGet'
 import { DocumentSet } from './search/DocumentSet'
 import { DocumentSetMass } from './search/DocumentSetMass'
 import { DocumentStoreGet } from './search/DocumentStoreGet'
-import { GetWikipediaSummary } from './apis/GetWikipediaSummary'
-import { QueryGoogle } from './apis/QueryGoogle'
 import { RSSGet } from './search/RSSGet'
 import { Search } from './search/Search'
-import { WeaviateWikipedia } from './apis/WeaviateWikipedia'
 import { StateRead } from './state/StateRead'
 import { StateWrite } from './state/StateWrite'
 import { ComplexStringMatcher } from './strings/ComplexStringMatcher'
@@ -68,7 +71,6 @@ import { BooleanVariable } from './variable/BooleanVariable'
 import { FewshotVariable } from './variable/FewshotVariable'
 import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
-import { Generator } from './ml/Generator'
 
 // NOTE: PLEASE KEEP THESE IN ALPHABETICAL ORDER
 // todo some kind of custom build parser perhaps to take car of keeping these in alphabetical order
@@ -93,9 +95,11 @@ export const components = {
   isQuery: () => new IsQuery(),
   isVariableTrue: () => new IsVariableTrue(),
   conversationStore: () => new EventStore(),
+  conversationStore1: () => new EventStoreWeaviate(),
   conversationRecall: () => new EventRecall(),
+  conversationRecall1: () => new EventRecallWeaviate(),
   request: () => new Request(),
-  request2: () => new JupyterComms(),
+  jupyterNotebook: () => new JupyterNotebook(),
   search: () => new Search(),
   documentGet: () => new DocumentGet(),
   documentEdit: () => new DocumentEdit(),
