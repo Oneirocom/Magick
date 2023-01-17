@@ -227,21 +227,28 @@ function install(
 
         if (skip) return
 
-        component.worker = (
+        component.worker = async (
           node: NodeData,
           inputs: WorkerInputs,
           outputs: MagickWorkerOutputs,
           context
         ) => {
-          if (outputsWorker)
-            outputsWorker.call(component, node, inputs, outputs, context)
-          return moduleManager.workerOutputs.call(
+          moduleManager.workerOutputs.call(
             moduleManager,
             node,
             inputs,
             outputs,
             context as { module: Module }
           )
+
+          if (outputsWorker)
+            return await outputsWorker.call(
+              component,
+              node,
+              inputs,
+              outputs,
+              context
+            )
         }
         break
       default:
