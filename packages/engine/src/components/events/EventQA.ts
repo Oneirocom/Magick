@@ -5,7 +5,7 @@ import {
     MagickNode,
     MagickWorkerInputs,
     MagickWorkerOutputs,
-  } from '../../../types'
+  } from '../../types'
   import { triggerSocket, anySocket, stringSocket } from '../../sockets'
   import { MagickComponent } from '../../magick-component'
 import { response } from 'express'
