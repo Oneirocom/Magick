@@ -144,9 +144,8 @@ export class EventRecallWeaviate extends MagickComponent<Promise<InputReturn>> {
       maxCount,
       max_time_diff,
     })
-
     if (!silent) node.display(`Event ${type} found` || 'Not found')
-
+    
     return {
       output: event_wes ?? '',
     }
