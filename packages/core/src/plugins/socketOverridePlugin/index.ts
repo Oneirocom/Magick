@@ -1,13 +1,19 @@
-import { IRunContextEditor, MagickComponent } from '../../../types'
+import { IRunContextEditor } from '../../../types'
 
-function install(
-  editor: IRunContextEditor
-  // Need to better type the feathers client here
-) {
-  editor.on('componentregister', (component: MagickComponent<unknown>) => {
-    component.worker = async (_node, _inputs, _outputs, context) => {
-      if (context.socketOutput) {
-        return context.socketOutput
+function install(editor: IRunContextEditor) {
+  editor.on('componentregister', (component: any) => {
+    component.worker = (node, inputs, _outputs, { magick, socketOutput }) => {
+      const { sendToPlaytest } = magick
+
+      // Might be a bit hacky to do it this way, but it works for now
+      if (node.data.sendToPlaytest && sendToPlaytest) {
+        console.log('OUTPUT')
+        const text = inputs.input.filter(Boolean)[0] as string
+        sendToPlaytest(text)
+      }
+
+      if (socketOutput) {
+        return socketOutput
       }
     }
   })
