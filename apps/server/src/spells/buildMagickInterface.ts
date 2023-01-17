@@ -79,20 +79,15 @@ const storeEventWeaviate = async ({
   client,
   channel,
 }: CreateEventArgs) => {
-  const response = await axios.post(
-    `${
-      import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-    }/eventWeaviate`,
-    {
-      type,
-      sender,
-      observer,
-      entities,
-      content,
-      client,
-      channel,
-    }
-  )
+  const response = await axios.post(`${API_ROOT_URL}/eventWeaviate`, {
+    type,
+    sender,
+    observer,
+    entities,
+    content,
+    client,
+    channel,
+  })
   console.log('Created event', response.data)
   return response.data
 }

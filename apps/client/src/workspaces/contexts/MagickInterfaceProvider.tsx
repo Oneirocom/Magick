@@ -148,7 +148,13 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return spell.data as Spell
   }
 
-  const processCode = async (code, inputs, data, state, language='javascript') => {
+  const processCode = async (
+    code,
+    inputs,
+    data,
+    state,
+    language = 'javascript'
+  ) => {
     const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
       (acc, [key, value]) => {
         acc[key as string] = value[0] as any
@@ -156,9 +162,9 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       },
       {} as Record<string, any>
     )
-    if (language == 'javascript'){
+    if (language == 'javascript') {
       console.log('processCode, javascript')
-      
+
       // eslint-disable-next-line no-new-func
       const result = new Function('"use strict";return (' + code + ')')()(
         flattenedInputs,
@@ -171,19 +177,16 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       return result
     } else if (language == 'python') {
       try {
-
-        const result = await runPython(code, flattenedInputs, data, state);
+        const result = await runPython(code, flattenedInputs, data, state)
         if (result.state) {
           updateCurrentGameState(result.state)
         }
 
-        return result;
+        return result
       } catch (err) {
         console.log({ err })
       }
-
     }
-
   }
 
   const runSpell = async (inputs, spellId, state) => {
@@ -240,8 +243,9 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const getEvents = async (params: GetEventArgs) => {
-    const urlString = `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-      }/event`
+    const urlString = `${
+      import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
+    }/event`
 
     const url = new URL(urlString)
     for (let p in params) {
@@ -262,12 +266,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     client = 'system',
     channel = 'system',
     maxCount = 10,
-    target_count = 'single',
     max_time_diff = -1,
-  }) => {
+  }: GetEventArgs) => {
     const urlString = `${
-      import.meta.env.VITE_APP_API_URL ??
-      import.meta.env.API_ROOT_URL
+      import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
     }/eventWeaviate`
 
     const params = {
@@ -278,7 +280,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       client,
       channel,
       maxCount,
-      target_count,
       max_time_diff,
     } as Record<string, any>
 
@@ -296,8 +297,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
   const storeEvent = async (eventData: CreateEventArgs) => {
     const response = await axios.post(
-      `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-      }/event`, eventData
+      `${
+        import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
+      }/event`,
+      eventData
     )
     console.log('Created event', response.data)
     return response.data
@@ -314,8 +317,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }: CreateEventArgs) => {
     const response = await axios.post(
       `${
-        import.meta.env.VITE_APP_API_URL ??
-        import.meta.env.API_ROOT_URL
+        import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
       }/eventWeaviate`,
       {
         type,
@@ -346,7 +348,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       query,
     })
 
-
     const summary = response.data.summary
     const links = response.data.links.join('\n')
     console.log('summary is ', summary)
@@ -355,8 +356,9 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const completion = async (body: CompletionBody) => {
-    const url = `${import.meta.env.VITE_APP_API_URL || 'http://localhost:8001'
-      }/text_completion`
+    const url = `${
+      import.meta.env.VITE_APP_API_URL || 'http://localhost:8001'
+    }/text_completion`
 
     const apiKey = window.localStorage.getItem('openai-api-key')
 
