@@ -41,12 +41,11 @@ const Workspace = ({ tab, tabs, pubSub }) => {
       // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
       'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
       debounce(async data => {
-        if (!getDirtyGraph()) return
         if (tab.type === 'spell' && spellRef.current) {
           // setDirtyGraph(true)
-          // publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
+          publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
         }
-      }, 2000) // debounce for 2000 ms
+      }, 5000) // debounce for 2000 ms
     )
 
     return () => {
