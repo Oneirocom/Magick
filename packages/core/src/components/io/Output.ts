@@ -45,6 +45,7 @@ export class Output extends MagickComponent<void> {
     )
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const textInput = new Rete.Input('input', 'Outputs', anySocket, true)
+    const output = new Rete.Output('output', 'Output', anySocket)
 
     node.data.name = node.data.name || `output-${node.id}`
 
@@ -76,6 +77,7 @@ export class Output extends MagickComponent<void> {
       .addInput(textInput)
       .addInput(triggerInput)
       .addOutput(triggerOutput)
+      .addOutput(output)
   }
 
   async worker(
@@ -86,23 +88,23 @@ export class Output extends MagickComponent<void> {
   ) {
     if (!inputs.input) throw new Error('No input provided to output component')
 
-    const text = inputs.input.filter(Boolean)[0] as string
+    const output = inputs.input.filter(Boolean)[0] as string
 
     //just need a new check here for playtest send boolean
     const { sendToPlaytest, sendToAvatar } = magick
 
     if (node.data.sendToPlaytest && sendToPlaytest) {
-      sendToPlaytest(text)
+      sendToPlaytest(output)
     }
 
     if (node.data.sendToAvatar && sendToAvatar) {
-      sendToAvatar(text)
+      sendToAvatar(output)
     }
 
-    if (!silent) node.display(text as string)
+    if (!silent) node.display(output as string)
 
     return {
-      text,
+      output,
     }
   }
 }
