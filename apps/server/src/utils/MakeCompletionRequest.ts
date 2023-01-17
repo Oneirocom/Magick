@@ -3,20 +3,14 @@ import axios from 'axios'
 
 export async function MakeCompletionRequest(
   data: any,
-  speaker: any,
-  agent: any,
-  type: any,
   engine: any,
   apiKey: string
 ) {
-  return await makeOpenAIGPT3Request(data, speaker, agent, type, engine, apiKey)
+  return await makeOpenAIGPT3Request(data, engine, apiKey)
 }
 const useDebug = false
 async function makeOpenAIGPT3Request(
   data: any,
-  speaker: any,
-  agent: any,
-  type: any,
   engine: any,
   apiKey: string
 ) {

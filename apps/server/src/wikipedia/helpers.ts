@@ -24,9 +24,6 @@ export const searchWikipedia = async (keyword: string) => {
 
     const { success, choice } = (await MakeCompletionRequest(
       data,
-      null,
-      null,
-      'conversation',
       'davinci',
       OPENAI_API_KEY
     )) as any

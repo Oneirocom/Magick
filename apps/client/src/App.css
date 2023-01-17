@@ -49,8 +49,8 @@ body,
   background: var(--primary);
 }
 
-.socket.output.agent,
-.socket.input.agent {
+.socket.output.event,
+.socket.input.event {
   background: #0e10a4;
 }
 
