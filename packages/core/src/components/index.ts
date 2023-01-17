@@ -12,6 +12,7 @@ import { EventRecall } from './events/EventRecall'
 import { EventRecallWeaviate } from './events/EventRecallWeaviate'
 import { EventRestructureComponent } from './events/EventRestructure'
 import { EventStore } from './events/EventStore'
+import { EventQA } from './events/EventQA'
 import { InputComponent } from './io/Input'
 import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
@@ -98,6 +99,7 @@ export const components = {
   conversationStore1: () => new EventStoreWeaviate(),
   conversationRecall: () => new EventRecall(),
   conversationRecall1: () => new EventRecallWeaviate(),
+  eventqa: () => new EventQA(),
   request: () => new Request(),
   jupyterNotebook: () => new JupyterNotebook(),
   search: () => new Search(),
