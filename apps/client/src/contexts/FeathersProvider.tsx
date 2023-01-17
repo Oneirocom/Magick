@@ -32,6 +32,18 @@ const FeathersProvider = ({ children }) => {
       client.io.on('connected', () => {
         setClient(client)
       })
+
+      client.io.on('disconnected', () => {
+        console.log("We've been disconnected from the server")
+      })
+
+      client.io.on('connect_error', () => {
+        console.log('Connection error, trying to reconnect...')
+        setTimeout(() => {
+          console.log('Reconnecting...')
+          client.io.connect()
+        }, 1000)
+      })
     })()
   }, [])
 
