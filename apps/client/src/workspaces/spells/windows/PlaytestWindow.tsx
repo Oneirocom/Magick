@@ -55,7 +55,6 @@ const Playtest = ({ tab }) => {
   const dispatch = useDispatch()
 
   const localState = useAppSelector(state => {
-    console.log('GETTING STSTE FROM TAB', tab)
     return selectStateBySpellId(state.localState, tab.spellId)
   })
 

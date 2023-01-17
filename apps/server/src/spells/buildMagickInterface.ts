@@ -3,7 +3,7 @@ import {
   CreateEventArgs,
   EngineContext,
   GetEventArgs,
-  MagickWorkerInputs
+  MagickWorkerInputs,
 } from '@magickml/core'
 import { database } from '@magickml/database'
 import { prisma } from '@magickml/prisma'
@@ -60,7 +60,16 @@ export const buildMagickInterface = (
 
       if (!apiKey) throw new Error('No API key provided')
 
-      const {prompt, modelName, temperature, maxTokens, topP, frequencyPenalty, presencePenalty, stop} = body
+      const {
+        prompt,
+        modelName,
+        temperature,
+        maxTokens,
+        topP,
+        frequencyPenalty,
+        presencePenalty,
+        stop,
+      } = body
 
       const { success, choice } = await makeCompletion(modelName, {
         prompt,
@@ -88,7 +97,7 @@ export const buildMagickInterface = (
       inputs: MagickWorkerInputs,
       data: Record<string, any>,
       state: Record<string, any>,
-      language: string='javascript'
+      language: string = 'javascript'
     ) => {
       // Inputs are flattened before we inject them for a better code experience
       const flattenInputs = Object.entries(inputs).reduce(
@@ -99,7 +108,7 @@ export const buildMagickInterface = (
         {} as Record<string, any>
       )
 
-      if (language === 'javascript'){
+      if (language === 'javascript') {
         const { VM } = vm2
         const vm = new VM()
 
@@ -124,11 +133,8 @@ export const buildMagickInterface = (
         }
       } else {
         try {
-
-          const codeResult = await runPython(code, flattenInputs, data, state);
-          return codeResult;
-  
-        
+          const codeResult = await runPython(code, flattenInputs, data, state)
+          return codeResult
         } catch (err) {
           console.log({ err })
         }
