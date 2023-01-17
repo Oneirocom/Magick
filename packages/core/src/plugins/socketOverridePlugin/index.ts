@@ -2,14 +2,12 @@ import { IRunContextEditor } from '../../../types'
 
 function install(editor: IRunContextEditor) {
   editor.on('componentregister', (component: any) => {
-    component.worker = (node, inputs, _outputs, { magick, socketOutput }) => {
+    component.worker = (node, _inputs, _outputs, { magick, socketOutput }) => {
       const { sendToPlaytest } = magick
 
       // Might be a bit hacky to do it this way, but it works for now
       if (node.data.sendToPlaytest && sendToPlaytest) {
-        console.log('OUTPUT')
-        const text = inputs.input.filter(Boolean)[0] as string
-        sendToPlaytest(text)
+        sendToPlaytest(socketOutput)
       }
 
       if (socketOutput) {
