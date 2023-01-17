@@ -1,18 +1,19 @@
 import { useEffect, useRef } from 'react'
 import { GraphData, Spell } from '@magickml/core'
+import { useSnackbar } from 'notistack'
+import { useSelector } from 'react-redux'
 
 import {
   useSaveSpellMutation,
   useGetSpellQuery,
   useSaveDiffMutation,
 } from '../../../state/api/spells'
+import { feathers as feathersFlag } from '../../../config'
 import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
 import { useEditor } from '../../../workspaces/contexts/EditorProvider'
 import { diff } from '../../../utils/json0'
-import { useSnackbar } from 'notistack'
 import { useFeathers } from '../../../contexts/FeathersProvider'
 import { RootState } from '../../../state/store'
-import { useSelector } from 'react-redux'
 
 const EventHandler = ({ pubSub, tab }) => {
   // only using this to handle events, so not rendering anything with it.
@@ -103,50 +104,45 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
-    console.log('updated spell', updatedSpell)
-    console.log('current spell', currentSpell)
-    const jsonDiff = diff(currentSpell, updatedSpell)
 
-    console.log('json diff', jsonDiff)
+    const jsonDiff = diff(currentSpell, updatedSpell)
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
 
-    const response = await saveDiff({
-      name: currentSpell.name,
-      diff: jsonDiff,
-    })
+    if (feathersFlag) {
+      try {
+        await client.service('spell-runner').update(currentSpell.name, {
+          diff: jsonDiff,
+        })
+        await saveDiff({
+          name: currentSpell.name,
+          diff: jsonDiff,
+        })
+        enqueueSnackbar('Spell saved', {
+          variant: 'success',
+        })
+      } catch {
+        enqueueSnackbar('Error saving spell', {
+          variant: 'error',
+        })
+        return
+      }
+    } else {
+      try {
+        await saveDiff({
+          name: currentSpell.name,
+          diff: jsonDiff,
+        })
+      } catch {
+        enqueueSnackbar('Error saving spell', {
+          variant: 'error',
+        })
+        return
+      }
+    }
 
     setDirtyGraph(true)
-
-    // if (preferences.autoSave) {
-    //   if ('error' in response) {
-    //     enqueueSnackbar('Error saving spell', {
-    //       variant: 'error',
-    //     })
-    //     return
-    //   }
-
-    //   enqueueSnackbar('Spell saved', {
-    //     variant: 'success',
-    //   })
-    // }
-
-    // if (feathersFlag) {
-    //   try {
-    //     await client.service('spell-runner').update(currentSpell.name, {
-    //       diff: jsonDiff,
-    //     })
-    //     enqueueSnackbar('Spell saved', {
-    //       variant: 'success',
-    //     })
-    //   } catch {
-    //     enqueueSnackbar('Error saving spell', {
-    //       variant: 'error',
-    //     })
-    //     return
-    //   }
-    // }
   }
 
   const createStateManager = () => {
