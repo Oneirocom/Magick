@@ -51,6 +51,19 @@ export type Event = {
   date?: string
 }
 
+export type SemanticSearch = {
+  concept?: string
+  postive?: string
+  negative?: string
+  distance?: number
+  postive_distance?: number
+  negative_distance?: number
+}
+
+export type QAArgs = {
+  question: string
+}
+
 export type CreateEventArgs = Event
 
 export type GetEventArgs = Event & {
@@ -102,8 +115,26 @@ export type EngineContext = {
     flattenedInputs: Record<string, any>,
     spellId: string,
   ) => Record<string, any>
-  // TODO: import type and replace any
+  completion: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: (spellId: string) => Promise<any | Spell>
+  processCode: (
+    code: unknown,
+    inputs: MagickWorkerInputs,
+    data: Record<string, any>,
+    state: Record<string, any>,
+    language?: string | null
+  ) => any | void
+  queryGoogle: (query: string) => Promise<{summary: string, links: string}>
+  getEvents: (
+    args: GetEventArgs
+  ) => Promise<string | string[] | null | Record<string, any>>
+  getEventWeaviate: (
+    args: GetEventArgs
+  ) => Promise<string | string[] | null | Record<string, any>>
+  storeEvent: (args: CreateEventArgs) => Promise<any>
+  storeEventWeaviate: (args: CreateEventArgs) => Promise<any>
+  eventQAWeaviate: (args: QAArgs) => Promise<string | string[] >
+  getWikipediaSummary: (keyword: string) => Promise<Record<string, any> | null>
 }
 
 export type EventPayload = Record<string, any>
