@@ -32,7 +32,9 @@
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "spell-caster:build"
+        "buildTarget": "spell-caster:build",
+        "inspect": true,
+        "port": 7777
       },
       "configurations": {
         "production": {

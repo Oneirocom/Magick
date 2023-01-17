@@ -33,7 +33,9 @@
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "server:build"
+        "buildTarget": "server:build",
+        "inspect": true,
+        "port": 7778
       },
       "dependsOn": ["^build"],
       "configurations": {

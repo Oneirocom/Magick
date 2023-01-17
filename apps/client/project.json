@@ -39,6 +39,7 @@
     "serve": {
       "executor": "@nrwl/vite:dev-server",
       "defaultConfiguration": "development",
+      "dependsOn": ["^build"],
       "options": {
         "buildTarget": "client:build"
       },
