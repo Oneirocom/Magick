@@ -14,7 +14,8 @@ import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket, stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
-const info = 'Jupyter Notebook is used to interface with the jupyter server'
+const info =
+  'Call a Jupyter Notebook with the given name and inputs, and return the output.'
 
 type WorkerReturn = {
   output: any
@@ -41,9 +42,9 @@ function getPromiseFromEvent(item, event) {
   })
 }
 
-export class JupyterComms extends MagickComponent<Promise<WorkerReturn>> {
+export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('JupyterComms')
+    super('Jupyter Notebook')
 
     this.task = {
       outputs: {
@@ -52,7 +53,7 @@ export class JupyterComms extends MagickComponent<Promise<WorkerReturn>> {
       },
     }
 
-    this.category = 'io'
+    this.category = 'I/O'
     this.display = true
     this.info = info
   }

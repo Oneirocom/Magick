@@ -1,8 +1,6 @@
-import { ParamsDictionary, Query } from 'express-serve-static-core'
-import { Request } from 'express'
-/* eslint-disable camelcase */
 import { Component, Connection, Input, Output, NodeEditor } from 'rete'
 import { Node } from 'rete/types'
+import { Request } from 'koa'
 //@seang todo: convert inspector plugin fully to typescript
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
@@ -121,8 +119,12 @@ export type EngineContext = {
   queryGoogle: (query: string) => Promise<{summary: string, links: string}>
   getEvents: (
     args: GetEventArgs
-  ) => Promise<any[]>
+  ) => Promise<string | string[] | null | Record<string, any>>
+  getEventWeaviate: (
+    args: GetEventArgs
+  ) => Promise<string | string[] | null | Record<string, any>>
   storeEvent: (args: CreateEventArgs) => Promise<any>
+  storeEventWeaviate: (args: CreateEventArgs) => Promise<any>
   getWikipediaSummary: (keyword: string) => Promise<Record<string, any> | null>
 }
 
@@ -412,9 +414,4 @@ type MessagingWebhookBody = {
   To: string
 }
 
-export type MessagingRequest = Request<
-  ParamsDictionary,
-  any,
-  MessagingWebhookBody,
-  Query
->
+export type MessagingRequest = any

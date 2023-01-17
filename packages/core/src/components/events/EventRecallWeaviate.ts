@@ -12,16 +12,16 @@ import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, anySocket, eventSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
-const info = 'Event Recall is used to get conversation for an agent and user'
+const info = 'Event Recall is used to get conversation for an event and user'
 
 //add option to get only events from max time difference (time diff, if set to 0 or -1, will get all events, otherwise will count in minutes)
 type InputReturn = {
   output: unknown
 }
 
-export class EventRecall extends MagickComponent<Promise<InputReturn>> {
+export class EventRecallWeaviate extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Event Recall')
+    super('Event Recall Weaviate')
 
     this.task = {
       outputs: {
@@ -80,11 +80,10 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     _outputs: MagickWorkerOutputs,
     { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
-    const { getEvents } = magick
+    const { getEventWeaviate  } = magick
+    const eventObj = inputs['event'] && (inputs['event'][0] as Event)
 
-    const event = (inputs['event'] && (inputs['event'][0] ?? inputs['event'])) as Event
-
-    const { sender, observer, client, channel, channelType } = event
+    const { observer, client, channel, sender } = eventObj
 
     const typeData = node?.data?.type as string
     const type =
@@ -97,29 +96,20 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     const max_time_diffData = node.data?.max_time_diff as string
     const max_time_diff = max_time_diffData ? parseInt(max_time_diffData) : -1
 
-    const events = await getEvents({
+    const event_wes = await getEventWeaviate({
       type,
       sender,
       observer,
       client,
       channel,
-      channelType,
       maxCount,
       max_time_diff,
     })
+
     if (!silent) node.display(`Event ${type} found` || 'Not found')
-    
-    let conversation = '';
 
-    // // for each event in events,
-    // if(events) events.forEach((event) => {
-    //   conversation += event.sender + ': ' + event.content + '\n';
-    // });
-
-    conversation = JSON.stringify(events);
-    
     return {
-      output: conversation,
+      output: event_wes ?? '',
     }
   }
 }

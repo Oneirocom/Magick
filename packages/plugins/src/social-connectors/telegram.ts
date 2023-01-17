@@ -253,14 +253,14 @@ export class telegram_client {
         this.moreThanOneInConversation()
 
       const isMention =
-        msg.entities !== undefined &&
+        msg.agents !== undefined &&
         msg.agents.length === 1 &&
-        msg.entities[0].type === 'mention' &&
+        msg.agents[0].type === 'mention' &&
         content.includes('@' + this.settings.telegram_bot_name)
       const otherMention =
-        msg.entities !== undefined &&
+        msg.agents !== undefined &&
         msg.agents.length > 0 &&
-        msg.entities[0].type === 'mention' &&
+        msg.agents[0].type === 'mention' &&
         !content.includes('@' + this.settings.telegram_bot_name)
       let startConv = false
       let startConvName = ''
@@ -285,10 +285,10 @@ export class telegram_client {
       if (otherMention) {
         this.exitConversation(_sender)
         for (let i = 0; i < msg.agents.length; i++) {
-          if (msg.entities[i].type === 'mention') {
+          if (msg.agents[i].type === 'mention') {
             const _user = msg.text.slice(
-              msg.entities[i].offset + 1,
-              msg.entities[i].length
+              msg.agents[i].offset + 1,
+              msg.agents[i].length
             )
             this.exitConversation(_user)
           }
