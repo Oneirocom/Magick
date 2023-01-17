@@ -163,6 +163,7 @@ export class World {
 
   async addAgent(obj: any) {
     if (this.objects[obj.id] === undefined) {
+      obj.data = JSON.parse(obj.data)
       obj.data.id = obj.id
       this.objects[obj.id] = new Agent(obj)
     } else {
