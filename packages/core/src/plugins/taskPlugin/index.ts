@@ -47,7 +47,7 @@ function install(editor: MagickEditor) {
       ...rest
     ) => {
       // Task caller is what actually gets run once the task runs itself.  It is called inside the run function.
-      const taskCaller = (
+      const taskCaller = async (
         _ctx: unknown,
         inputs: MagickWorkerInputs,
         data: NodeData,
@@ -55,7 +55,8 @@ function install(editor: MagickEditor) {
       ) => {
         component._task = task
         // might change this interface, since we swap out data for outputs here, which just feels wrong.
-        return taskWorker.call(
+
+        const result = await taskWorker.call(
           component,
           node,
           inputs,
@@ -63,6 +64,8 @@ function install(editor: MagickEditor) {
           { ...args, data, socketInfo },
           ...rest
         )
+
+        return result
       }
 
       const task = new Task(inputs, component, node, taskCaller)
