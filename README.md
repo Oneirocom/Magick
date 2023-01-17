@@ -56,6 +56,12 @@ We recommend either installing the docker desktop app, and running `docker-compo
 
 We will be working on more database docoumentation to help you get your data store up and running.
 
+## Self signed certificates
+
+Developing locally, it can be very helpful to have google chrome accept all self signed cetificates coming from localhost. To do this, simply paste the following snippet into chromes URL bar and enable the feature:
+
+`chrome://flags/#allow-insecure-localhost`
+
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
