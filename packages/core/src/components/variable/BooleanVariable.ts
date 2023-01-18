@@ -37,7 +37,7 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
     const out = new Rete.Output('output', 'output', booleanSocket)
     const _var = new BooleanControl({
       dataKey: '_var',
-      name: 'Variable',
+      name: 'Value',
       icon: 'moon',
     })
     const name = new InputControl({
@@ -54,7 +54,6 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
   worker(node: NodeData) {
     const _var = node?.data?._var == true
 
-    this.name = (node?.data?.name as string) + ' - ' + _var
 
     return {
       output: _var,

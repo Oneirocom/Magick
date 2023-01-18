@@ -55,8 +55,6 @@ export class FewshotVariable extends MagickComponent<InputReturn> {
   worker(node: NodeData) {
     const fewshot = node.data.fewshot as string
 
-    this.name = node?.data?.name as string
-
     return {
       output: fewshot,
     }

@@ -42,3 +42,8 @@ dev.db
 */**/dev.db
 
 packages/prisma/prisma/dev.db
+
+package-lock.json
+yarn-error.log
+yarn.lock
+.env

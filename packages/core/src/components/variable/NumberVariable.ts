@@ -37,7 +37,7 @@ export class NumberVariable extends MagickComponent<InputReturn> {
     const out = new Rete.Output('output', 'output', numSocket)
     const _var = new NumberControl({
       dataKey: '_var',
-      name: 'Variable',
+      name: 'Value',
       icon: 'moon',
     })
     const name = new InputControl({
@@ -53,8 +53,6 @@ export class NumberVariable extends MagickComponent<InputReturn> {
 
   worker(node: NodeData) {
     const _var = node?.data?._var as number
-
-    this.name = (node?.data?.name as string) + ' - ' + _var
 
     return {
       output: _var,

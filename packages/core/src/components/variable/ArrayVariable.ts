@@ -37,7 +37,7 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
     const out = new Rete.Output('output', 'output', arraySocket)
     const _var = new InputControl({
       dataKey: '_var',
-      name: 'Variable',
+      name: 'Value',
       icon: 'moon',
     })
     const splitter = new InputControl({
@@ -69,7 +69,7 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
       ? _var.split(splitter).filter(el => el.length > 0)
       : _var.split(splitter)
 
-    this.name = (node?.data?.name as string) + ' - ' + _var
+    
 
     return {
       output: res,

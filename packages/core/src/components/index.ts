@@ -49,6 +49,7 @@ import { StateWrite } from './state/StateWrite'
 import { ComplexStringMatcher } from './strings/ComplexStringMatcher'
 import { JoinListComponent } from './strings/JoinList'
 import { ProfanityFilter } from './strings/ProfanityFilter'
+import { RandomNumber } from './utility/RandomNumber'
 import { RandomStringFromList } from './strings/RandomStringFromList'
 import { StringAdder } from './strings/StringAdder'
 import { StringCombiner } from './strings/StringCombiner'
@@ -70,10 +71,12 @@ import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
 import { Generator } from './ml/Generator'
 
+
 // NOTE: PLEASE KEEP THESE IN ALPHABETICAL ORDER
 // todo some kind of custom build parser perhaps to take car of keeping these in alphabetical order
 
 export const components = {
+  randomNumber: () => new RandomNumber(),
   alert: () => new Alert(),
   booleanGate: () => new BooleanGate(),
   randomGate: () => new RandomGate(),
