@@ -39,9 +39,6 @@
       "@magickml/plugins": [
         "packages/plugins/src/index.ts"
       ],
-      "@magickml/prisma": [
-        "packages/prisma/src/index.ts"
-      ],
       "@magickml/random": [
         "packages/random/src/index.ts"
       ],
