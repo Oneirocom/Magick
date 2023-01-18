@@ -193,7 +193,7 @@ export class weaviate_connection {
         await initWeaviateClientEvent()
     }
     const data = { ..._data }
-    const validFields = ['concept', 'postive', 'negative', 'distance', 'postive_distance', 'negative_distance']
+    const validFields = ['concept', 'positive', 'negative', 'distance', 'positive_distance', 'negative_distance']
     for (const key in data) {
       if (!validFields.includes(key)) {
         delete data[key]
@@ -209,7 +209,7 @@ export class weaviate_connection {
                                             force: data["negative_distance"]
                                           },
                                           moveTo: {
-                                            concepts: [data["postive"]],
+                                            concepts: [data["positive"]],
                                             force:  data["positive_distance"]
                                           }
                                         })

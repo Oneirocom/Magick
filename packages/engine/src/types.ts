@@ -53,10 +53,10 @@ export type Event = {
 
 export type SemanticSearch = {
   concept?: string
-  postive?: string
+  positive?: string
   negative?: string
   distance?: number
-  postive_distance?: number
+  positive_distance?: number
   negative_distance?: number
 }
 
