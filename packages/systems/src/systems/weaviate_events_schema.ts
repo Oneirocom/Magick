@@ -58,7 +58,7 @@ export default
         "dataType": [
           "string"
         ],
-        "description": "Type of the channel thourgh which event was created.",
+        "description": "Type of the channel through which event was created.",
         "name": "channelType"
       },
       {
@@ -77,7 +77,7 @@ export default
         "dataType": [
           "string"
         ],
-        "description" : "The Observerver",
+        "description" : "The Observer",
         "name": "observer"
       }
 
