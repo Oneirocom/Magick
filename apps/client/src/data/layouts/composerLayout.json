@@ -89,7 +89,7 @@
                 "type": "tab",
                 "id": "#12",
                 "name": "Agent Manager",
-                "component": "entityManager"
+                "component": "agentManager"
               }
             ]
           },

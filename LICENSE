@@ -1,8 +1,12 @@
-Copyright (c) 2023 MagickML, Inc.
+Copyright (c) 2023 Oneirocom Systems Inc.
 All rights reserved.
-https://www.magick.ml
+https://www.oneirocom.ai
 
 Parts of this codebase are (c) 2022 Latitude Games, and subject to the same Apache 2.0 license.
+
+All past modifications to files can be found in the git commit history found archived here: https://github.com/Oneirocom/thoth_archive.
+
+All original code contributed by Latitude can be found archived here: https://github.com/latitudegames/thoth.
 
 ================================================================================================
 

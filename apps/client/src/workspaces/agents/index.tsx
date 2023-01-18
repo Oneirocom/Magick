@@ -1,8 +1,8 @@
 import { Layout } from '../../workspaces/contexts/LayoutProvider'
 import EventHandler from '../../screens/Magick/components/EventHandler'
 import StateManager from '../../workspaces/spells/windows/StateManagerWindow'
-import EntityManagerWindow from './windows/EntityManagerWindow'
-import SearchCorpus from './windows/SearchCorpusWindow'
+import AgentManagerWindow from './windows/AgentManagerWindow'
+import SearchCorpus from '../search/SearchCorpusWindow'
 
 const Workspace = ({ tab, pubSub }) => {
   const factory = tab => {
@@ -17,8 +17,8 @@ const Workspace = ({ tab, pubSub }) => {
           return <StateManager {...props} />
         case 'searchCorpus':
           return <SearchCorpus />
-        case 'entityManager':
-          return <EntityManagerWindow />
+        case 'agentManager':
+          return <AgentManagerWindow />
         default:
           return <p></p>
       }

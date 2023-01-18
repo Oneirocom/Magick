@@ -15,17 +15,17 @@ spec:
       containers:
         - name: weaviate
           image: semitechnologies/weaviate:1.11.0
-          args: ["--host", "localhost", "--port", "8080", "--scheme", "http"]
+          args: ["--host", "localhost", "--port", "8888", "--scheme", "http"]
           stdin: true
           tty: true
           ports:
-            - containerPort: 8080
+            - containerPort: 8888
               protocol: TCP
           env:
             - name: NODE_ENV
               value: "production"
             - name: TRANSFORMERS_INFERENCE_API
-              value: "http://t2v-transformers:8080"
+              value: "http://t2v-transformers:8888"
             - name: QNA_INFERENCE_API
               value: "http://qna-transformers:8080"
             - name: SPELLCHECK_INFERENCE_API

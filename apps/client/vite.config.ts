@@ -9,6 +9,7 @@ export default defineConfig({
   server: {
     port: 4200,
     host: 'localhost',
+    https: process.env.USESSL === 'true',
   },
   assetsInclude: ['**/*.vrm'],
   resolve: {

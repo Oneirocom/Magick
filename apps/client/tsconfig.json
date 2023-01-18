@@ -28,7 +28,7 @@
   "files": [],
   "include": [
     "src"
-  ],
+, "environments"  ],
   "paths": {
     "@/*": [
       "src/*"

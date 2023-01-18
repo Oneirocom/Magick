@@ -1,17 +1,21 @@
 import { MagickComponent } from '../../types'
-import { AgentTextCompletion } from './agents/AgentTextCompletion'
-import { CustomTextCompletion } from './agents/CustomTextCompletion'
-import { EventRecall } from './agents/EventRecall'
-import { EventStore } from './agents/EventStore'
-import { InputDestructureComponent } from './agents/InputDestructure'
-import { InputRestructureComponent } from './agents/InputRestructure'
-import { Request } from './agents/Request'
+import { EventStoreWeaviate } from './events/EventStoreWeaviate'
+import { GetWikipediaSummary } from './apis/GetWikipediaSummary'
+import { QueryGoogle } from './apis/QueryGoogle'
+import { WeaviateWikipedia } from './apis/WeaviateWikipedia'
 import { CheckBalanceForERC20 } from './ethereum/CheckBalanceForERC20'
 import { CheckEthBalance } from './ethereum/CheckEthBalance'
 import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentTransactionsFromWallet'
 import { GetRecentTransactions } from './ethereum/GetRecentTransactions'
+import { EventDestructureComponent } from './events/EventDestructure'
+import { EventRecall } from './events/EventRecall'
+import { EventRecallWeaviate } from './events/EventRecallWeaviate'
+import { EventRestructureComponent } from './events/EventRestructure'
+import { EventStore } from './events/EventStore'
 import { InputComponent } from './io/Input'
+import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
+import { Request } from './io/Request'
 import { SpellComponent } from './io/Spell'
 import { TriggerIn } from './io/TriggerIn'
 import { TriggerOut } from './io/TriggerOut'
@@ -24,13 +28,16 @@ import { IsQuery } from './logic/IsQuery'
 import { IsVariableTrue } from './logic/IsVariableTrue'
 import { LogicalOperator } from './logic/LogicalOperator'
 import { OrGate } from './logic/OrGate'
+import { Python } from './logic/Python'
 import { RandomGate } from './logic/RandomGate'
 import { SwitchGate } from './logic/SwitchGate'
 import { WaitForAll } from './logic/WaitForAll'
 import { WhileLoop } from './logic/WhileLoop'
 import { Classifier } from './ml/Classifier'
+import { Generator } from './ml/Generator'
 import { ImageGeneration } from './ml/ImageGeneration'
 import { SentenceMatcher } from './ml/SentenceMatcher'
+import { TextCompletion } from './ml/TextCompletion'
 import { TextToSpeech } from './ml/TextToSpeech'
 import { DocumentDelete } from './search/DocumentDelete'
 import { DocumentEdit } from './search/DocumentEdit'
@@ -38,11 +45,8 @@ import { DocumentGet } from './search/DocumentGet'
 import { DocumentSet } from './search/DocumentSet'
 import { DocumentSetMass } from './search/DocumentSetMass'
 import { DocumentStoreGet } from './search/DocumentStoreGet'
-import { GetWikipediaSummary } from './search/GetWikipediaSummary'
-import { QueryGoogle } from './search/QueryGoogle'
 import { RSSGet } from './search/RSSGet'
 import { Search } from './search/Search'
-import { WeaviateWikipedia } from './search/WeaviateWikipedia'
 import { StateRead } from './state/StateRead'
 import { StateWrite } from './state/StateWrite'
 import { ComplexStringMatcher } from './strings/ComplexStringMatcher'
@@ -78,21 +82,24 @@ export const components = {
   cast: () => new Cast(),
   inRange: () => new InRange(),
   code: () => new Code(),
+  python: () => new Python(),
   sentenceMatcher: () => new SentenceMatcher(),
   destructure: () => new Destructure(),
   complexStringMatcher: () => new ComplexStringMatcher(),
   echo: () => new Echo(),
   stringReplacer: () => new StringReplacer(),
   textToSpeech: () => new TextToSpeech(),
-  agentTextCompletion: () => new AgentTextCompletion(),
-  customTextCompletion: () => new CustomTextCompletion(),
+  textCompletion: () => new TextCompletion(),
   Classifier: () => new Classifier(),
   isNullOrUndefined: () => new IsNullOrUndefined(),
   isQuery: () => new IsQuery(),
   isVariableTrue: () => new IsVariableTrue(),
   conversationStore: () => new EventStore(),
+  conversationStore1: () => new EventStoreWeaviate(),
   conversationRecall: () => new EventRecall(),
+  conversationRecall1: () => new EventRecallWeaviate(),
   request: () => new Request(),
+  jupyterNotebook: () => new JupyterNotebook(),
   search: () => new Search(),
   documentGet: () => new DocumentGet(),
   documentEdit: () => new DocumentEdit(),
@@ -115,8 +122,8 @@ export const components = {
   arrayVariable: () => new ArrayVariable(),
   logicalOperator: () => new LogicalOperator(),
   inputComponent: () => new InputComponent(),
-  inputDestructureComponent: () => new InputDestructureComponent(),
-  inputRestructureComponent: () => new InputRestructureComponent(),
+  inputDestructureComponent: () => new EventDestructureComponent(),
+  inputRestructureComponent: () => new EventRestructureComponent(),
   inputsToJson: () => new InputsToJSON(),
   joinListComponent: () => new JoinListComponent(),
   moduleComponent: () => new SpellComponent(),
@@ -141,6 +148,7 @@ export const components = {
   log: () => new Log(),
   queryGoogle: () => new QueryGoogle(),
   ImageGeneration: () => new ImageGeneration(),
+  Generator: () => new Generator(),
 }
 
 function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {

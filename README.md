@@ -1,6 +1,7 @@
-<p align="center"><img src="files/logo.png" /></p>
+<p align="center"><img src="files/MAGICK-banner.png" /></p>
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <h1 align="center">MAGICK ML</h1>
 
@@ -28,7 +29,7 @@ git clone https://github.com/Oneirocom/MagickML
 Next, install dependencies
 
 ```
-npm run install
+yarn install
 ```
 
 The Speech to text feature used here requires a 75MB download of the [whisper](https://github.com/openai/whisper) models developed by OpenAI, they're required by the [whisper.cpp](https://github.com/ggerganov/whisper.cpp) wasm interface, to download the models and enable the feature
@@ -38,9 +39,24 @@ npm run download-whisper-bin
 ```
 
 # Run Magick!
+
 ```
-npm run dev
+yarn dev
 ```
+
+# Development
+
+There are a few things to keep in mind while this project is actively being worked on.
+
+## Database
+
+_Please be aware Magick is under heavy development and changes can cause your DB to be wiped. Back up your spells via export regularly._
+
+The default setup of Magick is connected to a test database on Supabase. It will get you going, but it will likely be wiped regularly and is not a good storage for your spells.
+
+We recommend either installing the docker desktop app, and running `docker-compose up` at the root of Magick, or getting your own Supabase instance set up for free in the cloud.
+
+We will be working on more database docoumentation to help you get your data store up and running.
 
 ## Contributors
 
@@ -56,6 +72,10 @@ npm run dev
       <td align="center" valign="top" width="14.28%"><a href="http://msub2.com"><img src="https://avatars.githubusercontent.com/u/70986246?v=4?s=100" width="100px;" alt="Daniel Adams"/><br /><sub><b>Daniel Adams</b></sub></a><br /><a href="https://github.com/Oneirocom/MagickML/commits?author=msub2" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://3ov.xyz"><img src="https://avatars.githubusercontent.com/u/8985705?v=4?s=100" width="100px;" alt="Anthony Burchell"/><br /><sub><b>Anthony Burchell</b></sub></a><br /><a href="https://github.com/Oneirocom/MagickML/commits?author=antpb" title="Code">💻</a> <a href="#blog-antpb" title="Blogposts">📝</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://xrdevlog.com/"><img src="https://avatars.githubusercontent.com/u/32600939?v=4?s=100" width="100px;" alt="jin"/><br /><sub><b>jin</b></sub></a><br /><a href="#blog-madjin" title="Blogposts">📝</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sshivaditya2019"><img src="https://avatars.githubusercontent.com/u/53160903?v=4?s=100" width="100px;" alt="Shivaditya Shivganesh"/><br /><sub><b>Shivaditya Shivganesh</b></sub></a><br /><a href="https://github.com/Oneirocom/MagickML/commits?author=sshivaditya2019" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/khalildh"><img src="https://avatars.githubusercontent.com/u/16530987?v=4?s=100" width="100px;" alt="khalildh"/><br /><sub><b>khalildh</b></sub></a><br /><a href="https://github.com/Oneirocom/MagickML/commits?author=khalildh" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

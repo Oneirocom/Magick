@@ -1,30 +1,42 @@
-import { config } from 'dotenv-flow'
-config({
-  path: '../../../',
-})
 import cors from '@koa/cors'
 import Router from '@koa/router'
+import { database } from '@magickml/database'
+import {
+  initFileServer,
+  initTextToSpeech,
+  initWeaviateClient,
+} from '@magickml/systems'
+import {
+  WEAVIATE_IMPORT_DATA,
+  USESSL,
+  SERVER_PORT,
+} from '@magickml/server-config'
+
+import * as fs from 'fs'
+import http from 'http'
 import HttpStatus from 'http-status-codes'
+import https from 'https'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
-import { database } from '@magickml/database'
-import { routes } from './routes'
-import { Handler, Method, Middleware } from './types'
-import {
-  initTextToSpeech,
-  initFileServer,
-  initWeaviateClient,
-} from '@magickml/systems'
-import https from 'https'
-import http from 'http'
-import * as fs from 'fs'
 import path from 'path'
+import 'regenerator-runtime/runtime'
+
+import { Handler, Method, Middleware } from './types'
+
+// todo probaly want to get ride of this.  Not super secure.
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const app: Koa = new Koa()
 const router: Router = new Router()
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+import { agents } from './agents'
+import { apis } from './apis'
+import { events } from './events'
+import { spells } from './spells'
+import { Route } from './types'
+
+const routes: Route[] = [...spells, ...agents, ...events, ...apis]
 
 async function init() {
   new database()
@@ -32,7 +44,9 @@ async function init() {
   await initFileServer()
   await initTextToSpeech()
   await initWeaviateClient(
-    process.env.WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true'
+    typeof WEAVIATE_IMPORT_DATA === 'string'
+      ? WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true'
+      : WEAVIATE_IMPORT_DATA
   )
 
   // generic error handling
@@ -125,9 +139,9 @@ async function init() {
 
   app.use(router.routes()).use(router.allowedMethods())
 
-  const PORT: number = Number(process.env.PORT) || 8001
+  const PORT: number = Number(SERVER_PORT) || 8001
   const useSSL =
-    process.env.USESSL === 'true' &&
+    USESSL === 'true' &&
     fs.existsSync(path.join(__dirname, './certs/')) &&
     fs.existsSync(path.join(__dirname, './certs/key.pem')) &&
     fs.existsSync(path.join(__dirname, './certs/cert.pem'))

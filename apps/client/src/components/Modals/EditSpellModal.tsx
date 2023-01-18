@@ -61,15 +61,10 @@ const EditSpellModal = ({ closeModal, spellId, name, tab }) => {
   ]
 
   return (
-    <Modal title="Edit Spell" options={options} icon="info">
+    <Modal title="Rename Spell" options={options} icon="info">
       <div className={css['login-container']}>
         {error && <span className={css['error-message']}>{error}</span>}
-        <p>
-          Warning: Changing the name of your spell currently will break the url
-          of your spell deployment. If you rename your spell, please change the
-          url for any urls you are using in production.
-        </p>
-        <form>
+        <form onSubmit={onSubmit}>
           {/* register your input into the hook by invoking the "register" function */}
           <div className={css['input-container']}>
             <label className={css['label']} htmlFor="">

@@ -34,7 +34,8 @@ const MenuBar = () => {
   const {
     $SAVE_SPELL,
     $CREATE_STATE_MANAGER,
-    $CREATE_ENT_MANAGER,
+    $CREATE_AGENT_MANAGER,
+    $CREATE_AVATAR_WINDOW,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
     $CREATE_SEARCH_CORPUS,
@@ -57,6 +58,7 @@ const MenuBar = () => {
   const [menuVisibility, togglemenuVisibility] = useToggle()
 
   const onSave = () => {
+    console.log('SAVING')
     if (!activeTabRef.current) return
     publish($SAVE_SPELL(activeTabRef.current.id))
   }
@@ -85,6 +87,9 @@ const MenuBar = () => {
   const onOpen = () => {
     navigate('/home/all-projects')
   }
+  const onImport = () => {
+    navigate('/home/all-projects?import')
+  }
 
   const onSerialize = () => {
     if (!activeTabRef.current) return
@@ -100,7 +105,11 @@ const MenuBar = () => {
     publish($CREATE_SEARCH_CORPUS(activeTabRef.current?.id))
   }
   const onEntityManagerCreate = () => {
-    publish($CREATE_ENT_MANAGER(activeTabRef.current?.id))
+    publish($CREATE_AGENT_MANAGER(activeTabRef.current?.id))
+  }
+
+  const onAvatarWindowCreate = () => {
+    publish($CREATE_AVATAR_WINDOW(activeTabRef.current?.id))
   }
 
   const onPlaytestCreate = () => {
@@ -178,7 +187,11 @@ const MenuBar = () => {
           onClick: onOpen,
           hotKey: 'option+o',
         },
-        edit_spell: {
+        import_spell: {
+          onClick: onImport,
+          hotKey: 'option+i'
+        },
+        rename_spell: {
           onClick: onEdit,
           hotKey: 'option+e',
         },
@@ -224,6 +237,9 @@ const MenuBar = () => {
         },
         agent_manager: {
           onClick: onEntityManagerCreate,
+        },
+        avatar: {
+          onClick: onAvatarWindowCreate,
         },
         playtest: {
           onClick: onPlaytestCreate,

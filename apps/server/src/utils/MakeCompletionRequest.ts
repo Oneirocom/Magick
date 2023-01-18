@@ -1,26 +1,21 @@
+import { OPENAI_API_KEY } from '@magickml/server-config'
 import axios from 'axios'
 
 export async function MakeCompletionRequest(
   data: any,
-  speaker: any,
-  agent: any,
-  type: any,
   engine: any,
   apiKey: string
 ) {
-  return await makeOpenAIGPT3Request(data, speaker, agent, type, engine, apiKey)
+  return await makeOpenAIGPT3Request(data, engine, apiKey)
 }
 const useDebug = false
 async function makeOpenAIGPT3Request(
   data: any,
-  speaker: any,
-  agent: any,
-  type: any,
   engine: any,
   apiKey: string
 ) {
   if (useDebug) return { success: true, choice: { text: 'Default response' } }
-  const API_KEY = (apiKey !== '' && apiKey) ?? process.env.OPENAI_API_KEY
+  const API_KEY = (apiKey !== '' && apiKey) ?? OPENAI_API_KEY
   const headers = {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + API_KEY,
@@ -69,7 +64,7 @@ export async function makeCompletion(
     apiKey,
   } = data
 
-  const API_KEY = apiKey || process.env.OPENAI_API_KEY
+  const API_KEY = apiKey || OPENAI_API_KEY
 
   const headers = {
     'Content-Type': 'application/json',

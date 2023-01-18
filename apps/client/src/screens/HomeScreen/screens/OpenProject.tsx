@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
+import thothBanner from '../version-banner-0.2.0-alpha.png'
 import Icon from '../../../components/Icon/Icon'
 import Panel from '../../../components/Panel/Panel'
 import css from '../homeScreen.module.css'
@@ -9,7 +10,7 @@ import { useSelector } from 'react-redux'
 import { selectAllTabs } from '../../../state/tabs'
 import { RootState } from '../../../state/store'
 
-const getMagickVersion = () => '1'
+const getMagickVersion = () => 'alpha-0.2.0'
 
 const OpenProject = ({
   spells,
@@ -23,6 +24,17 @@ const OpenProject = ({
 
   return (
     <Panel shadow unpadded>
+      {tabs?.length < 1 && (
+        <div
+          className={css['version-banner']}
+          style={{ backgroundImage: `url(${thothBanner})` }}
+        >
+          <div style={{ flex: 1 }}>
+            <span style={{ float: 'right' }}>{getMagickVersion()}</span>
+            <span>&copy; 2023 Oneirocom Systems Inc.</span>
+          </div>
+        </div>
+      )}
       <div className={css['open-project-container']}>
         <h1 style={{ marginLeft: 'var(--small)' }}>Recent Projects</h1>
 

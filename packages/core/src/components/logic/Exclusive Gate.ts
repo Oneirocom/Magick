@@ -59,8 +59,6 @@ export class ExclusiveGate extends MagickComponent<void> {
   ) {
     const trigger = context.socketInfo.targetSocket
 
-    console.log('context', context)
-
     const silent = context.silent
     //remove ' trigger' from the end of the name
     const triggerFilterName = trigger?.replace('trigger', '')
@@ -69,8 +67,6 @@ export class ExclusiveGate extends MagickComponent<void> {
       acc[key] = value[0]
       return acc
     }, {} as Record<string, unknown>)
-
-    console.log('Node inputs', nodeInputs)
 
     // get the first input from the nodeInputs object where the key includes triggerFilterName
     const outputKey = Object.keys(nodeInputs).find(key =>
@@ -85,8 +81,6 @@ export class ExclusiveGate extends MagickComponent<void> {
     if (!outputKey) return { output: 'error' }
 
     const output = nodeInputs[outputKey]
-
-    console.log('outputKey', outputKey, 'output', output)
 
     return {
       output,
