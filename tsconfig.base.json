@@ -42,6 +42,9 @@
       "@magickml/random": [
         "packages/random/src/index.ts"
       ],
+      "@magickml/server-config": [
+        "packages/server-config/src/index.ts"
+      ],
       "@magickml/systems": [
         "packages/systems/src/index.ts"
       ],

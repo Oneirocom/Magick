@@ -16,7 +16,7 @@ import { triggerSocket, stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
 const info =
-  'String Combiner is used to replace a value in the string with something else - Add a new socket with the string and the value like this - Agent Replacer (will replace all the $agent from the input with the input assigned)'
+  'String Combiner is used to add two strings twogether - Add a new socket with the string and the value like this - Agent Replacer (will replace all the $agent from the input with the input assigned)'
 
 type WorkerReturn = {
   output: string
@@ -39,7 +39,6 @@ export class StringCombiner extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   builder(node: MagickNode) {
-    const inp = new Rete.Input('string', 'String', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const outp = new Rete.Output('output', 'String', stringSocket)
@@ -53,7 +52,6 @@ export class StringCombiner extends MagickComponent<Promise<WorkerReturn>> {
     node.inspector.add(inputGenerator)
 
     return node
-      .addInput(inp)
       .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(outp)
@@ -65,20 +63,11 @@ export class StringCombiner extends MagickComponent<Promise<WorkerReturn>> {
       return acc
     }, {} as Record<string, unknown>)
 
-    let input = inputs['string'] as string
+    let input = ''
     console.log('combining input:', input)
     for (const x in inputs) {
-      if (x.toLowerCase().includes('replacer')) {
-        console.log(
-          'replacing: $',
-          x.split(' ')[0].toLowerCase().trim(),
-          'with:',
-          inputs[x]
-        )
-        input = input.replace(
-          '$' + x.split(' ')[0].toLowerCase().trim(),
-          inputs[x] as string
-        )
+      if (x !== 'trigger') {
+        input += inputs[x]
       }
     }
 

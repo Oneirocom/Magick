@@ -7,6 +7,8 @@ interface ImportMetaEnv {
   NODE_TLS_REJECT_UNAUTHORIZED: string
   readonly OPENAI_API_KEY: string
   readonly HF_API_KEY: string
+  readonly VITE_APP_SEARCH_SERVER_URL: string
+  readonly VITE_APP_API_URL: string
 }
 
 interface ImportMeta {
