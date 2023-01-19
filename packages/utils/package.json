@@ -1,0 +1,12 @@
+{
+  "name": "@magickml/utils",
+  "version": "0.0.1",
+  "main": "./utils.umd.js",
+  "module": "./utils.es.js",
+  "exports": {
+    ".": {
+      "import": "./utils.es.js",
+      "require": "./utils.umd.js"
+    }
+  }
+}

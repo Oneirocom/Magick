@@ -30,7 +30,7 @@ function getGoogleRequestOptions(
       profanityFilter = options.profanityFilter ? '1' : '0'
   }
 
-  const googleRequestOptions: AxiosRequestConfig = {
+  const googleRequestOptions: any = {
     url: `https://www.google.com/speech-api/v2/recognize?output=json&lang=${lang}&key=${key}&pFilter=${profanityFilter}`,
     headers: {
       'Content-Type': 'audio/l16; rate=48000;',
