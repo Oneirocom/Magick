@@ -42,9 +42,7 @@ const getEventWeaviate = async ({
   target_count = 'single',
   max_time_diff = -1,
 }) => {
-  const urlString = `${
-    import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-  }/eventWeaviate`
+  const urlString = `${API_ROOT_URL}/eventWeaviate`
 
   const params = {
     type,

@@ -50,29 +50,16 @@ const Context = createContext({
   redo: () => {},
   del: () => {},
   centerNode: (nodeId: number): void => {},
-  getDirtyGraph: (): boolean => false,
-  setDirtyGraph: (isDirty: boolean): void => {},
 })
 
 export const useEditor = () => useContext(Context)
 
 const EditorProvider = ({ children }) => {
   const [editor, setEditorState] = useState<MagickEditor | null>(null)
-  const [_dirtyGraph, _setDirtyGraph] = useState<boolean>(true)
   const editorRef = useRef<MagickEditor | null>(null)
-  const dirtyRef = useRef<boolean>(true)
   const FeathersContext = useFeathers()
   const client = FeathersContext?.client
   const pubSub = usePubSub()
-
-  const setDirtyGraph = (isDirty: boolean) => {
-    dirtyRef.current = isDirty
-    _setDirtyGraph(isDirty)
-  }
-
-  const getDirtyGraph = () => {
-    return dirtyRef.current
-  }
 
   const setEditor = editor => {
     editorRef.current = editor
@@ -174,8 +161,6 @@ const EditorProvider = ({ children }) => {
     del,
     setContainer,
     centerNode,
-    getDirtyGraph,
-    setDirtyGraph,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>

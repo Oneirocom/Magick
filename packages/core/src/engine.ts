@@ -3,7 +3,7 @@ import { Plugin } from 'rete/types/core/plugin'
 import io from 'socket.io'
 
 import { GraphData, ModuleType, NodeData, MagickWorkerInputs } from '../types'
-import debuggerPlugin, { DebuggerArgs } from './plugins/debuggerPlugin'
+import ConsolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
 import ModulePlugin from './plugins/modulePlugin'
 import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
@@ -59,7 +59,7 @@ export const initSharedEngine = ({
   console.log('STARTING ENGINE')
   if (server) {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
-    engine.use<Plugin, DebuggerArgs>(debuggerPlugin, {
+    engine.use<Plugin, DebuggerArgs>(ConsolePlugin, {
       server: true,
       throwError,
     })

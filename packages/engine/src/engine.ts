@@ -4,7 +4,7 @@ import { Plugin } from 'rete/types/core/plugin'
 
 import {
   SocketPlugin,
-  DebuggerPlugin,
+  ConsolePlugin,
   ModulePlugin,
   TaskPlugin,
   Task,
@@ -68,7 +68,7 @@ export const initSharedEngine = ({
 
   if (server) {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
-    engine.use<Plugin, DebuggerArgs>(DebuggerPlugin, {
+    engine.use<Plugin, DebuggerArgs>(ConsolePlugin, {
       server: true,
       throwError,
     })

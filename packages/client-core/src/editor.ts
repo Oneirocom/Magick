@@ -9,9 +9,8 @@ import ReactRenderPlugin from './plugins/reactRenderPlugin'
 import {
   // CachePlugin,
   SocketPluginArgs,
-  DebuggerPlugin,
+  ConsolePlugin,
   DisplayPlugin,
-  ErrorPlugin,
   HistoryPlugin,
   InspectorPlugin,
   KeyCodePlugin,
@@ -125,15 +124,21 @@ export const initEditor = function ({
   })
 
   // This should only be needed on client, not server
-  editor.use(DebuggerPlugin)
+  editor.use(ConsolePlugin)
   editor.use(SocketGeneratorPlugin)
   editor.use(MultiSocketGenerator)
   editor.use(DisplayPlugin)
   editor.use(InspectorPlugin)
   editor.use(NodeClickPlugin)
   editor.use(AreaPlugin, {
-    scaleExtent: { min: 0.025, max: 2 },
+    scaleExtent: { min: 0.025, max: 1.5 },
   })
+
+  editor.use(CommentPlugin, {
+    margin: 20, // indent for new frame comments by default 30 (px)
+  })
+
+  editor.use(KeyCodePlugin)
 
   // The engine is used to process/run the rete graph
 
@@ -143,15 +148,7 @@ export const initEditor = function ({
     server: false,
     modules: {},
   }) as MagickEngineClient
-  engine.use(ErrorPlugin)
   engine.magick = magick
-  // @seang TODO: update types for editor.use rather than casting as unknown here, we may want to bring our custom rete directly into the monorepo at this point
-
-  editor.onSpellUpdated = (spellId: string, callback: Function) => {
-    return magick.onSubspellUpdated(spellId, callback)
-  }
-
-  editor.use(KeyCodePlugin)
 
   if (client && feathers) {
     editor.use<Plugin, SocketPluginArgs>(SocketPlugin, { client })
@@ -162,10 +159,6 @@ export const initEditor = function ({
   }
 
   // editor.use(SelectionPlugin, { enabled: true })
-
-  editor.use(CommentPlugin, {
-    margin: 20, // indent for new frame comments by default 30 (px)
-  })
 
   // WARNING all the plugins from the editor get installed onto the component and modify it.  This effects the components registered in the engine, which already have plugins installed.
   components.forEach((c: any) => {
@@ -191,6 +184,9 @@ export const initEditor = function ({
   // ██╔═══╝ ██║   ██║██╔══██╗██║     ██║██║
   // ██║     ╚██████╔╝██████╔╝███████╗██║╚██████╗
   // ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝
+  editor.onSpellUpdated = (spellId: string, callback: Function) => {
+    return magick.onSubspellUpdated(spellId, callback)
+  }
 
   editor.abort = async () => {
     await engine.abort()
@@ -223,6 +219,7 @@ export const initEditor = function ({
 
     editor.view.area.translate(0, 0)
     editor.view.resize()
+    editor.runProcess()
   }
 
   // Start the engine off on first load

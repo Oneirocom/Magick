@@ -29,7 +29,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   const spellRef = useRef<Spell>()
   const { events, publish } = usePubSub()
   const [loadSpell, { data: spellData }] = useLazyGetSpellQuery()
-  const { editor, serialize, setDirtyGraph, getDirtyGraph } = useEditor()
+  const { editor, serialize } = useEditor()
   const FeathersContext = useFeathers()
   const client = FeathersContext?.client
   const preferences = useSelector((state: RootState) => state.preferences)
@@ -42,7 +42,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
       'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
       debounce(async data => {
         if (tab.type === 'spell' && spellRef.current) {
-          // setDirtyGraph(true)
           publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
         }
       }, 5000) // debounce for 2000 ms
