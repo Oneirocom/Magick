@@ -3,60 +3,6 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/server/src",
   "projectType": "application",
-  "targets": {
-    "build": {
-      "executor": "@nrwl/webpack:webpack",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "target": "node",
-        "compiler": "tsc",
-        "outputPath": "dist/apps/server",
-        "main": "apps/server/src/main.ts",
-        "tsConfig": "apps/server/tsconfig.app.json",
-        "assets": ["apps/server/src/assets", "apps/server/src/certs"],
-        "webpackConfig": "apps/server/webpack.config.js"
-      },
-      "configurations": {
-        "production": {
-          "optimization": true,
-          "extractLicenses": true,
-          "inspect": false,
-          "fileReplacements": [
-            {
-              "replace": "apps/server/environments/environment.ts",
-              "with": "apps/server/environments/environment.prod.ts"
-            }
-          ]
-        }
-      }
-    },
-    "serve": {
-      "executor": "@nrwl/js:node",
-      "options": {
-        "buildTarget": "server:build"
-      },
-      "dependsOn": ["^build"],
-      "configurations": {
-        "production": {
-          "buildTarget": "server:build:production"
-        }
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["apps/server/**/*.ts"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "apps/server/jest.config.ts",
-        "passWithNoTests": true
-      }
-    }
-  },
+  "targets": {},
   "tags": []
 }

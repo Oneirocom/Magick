@@ -1,0 +1,12 @@
+{
+  "name": "@magickml/prisma",
+  "version": "0.0.1",
+  "main": "./prisma.umd.js",
+  "module": "./prisma.es.js",
+  "exports": {
+    ".": {
+      "import": "./prisma.es.js",
+      "require": "./prisma.umd.js"
+    }
+  }
+}

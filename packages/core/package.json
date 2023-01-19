@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "private": false,
   "description": "core shared code for magick",
-  "main": "./index.js",
-  "module": "./index.js",
+  "main": "./core.js",
+  "module": "./core.js",
   "exports": {
     ".": {
-      "import": "./index.js",
-      "require": "./index.js"
+      "import": "./core.js",
+      "require": "./core.js"
     }
   },
   "peerDependencies": {

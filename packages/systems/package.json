@@ -1,0 +1,12 @@
+{
+  "name": "@magickml/systems",
+  "version": "0.0.1",
+  "main": "./systems.umd.js",
+  "module": "./systems.es.js",
+  "exports": {
+    ".": {
+      "import": "./systems.es.js",
+      "require": "./systems.umd.js"
+    }
+  }
+}
