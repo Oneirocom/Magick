@@ -7,6 +7,8 @@ function install(
   editor: IRunContextEditor,
   { server = false, throwError }: DebuggerArgs
 ) {
+  console.log('installing debugger plugin', { server })
+
   editor.on('componentregister', (component: any) => {
     const worker = component.worker
 
@@ -40,7 +42,7 @@ function install(
 }
 
 const defaultExport = {
-  name: 'debuggerPlugin',
+  name: 'consolePlugin',
   install,
 }
 

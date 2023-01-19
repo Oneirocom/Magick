@@ -11,7 +11,7 @@ import {
   WorkerOutputs,
 } from 'rete/types/core/data'
 
-import { MagickConsole } from './src/plugins/debuggerPlugin/MagickConsole'
+import { MagickConsole } from './src/plugins/consolePlugin/MagickConsole'
 import { Inspector } from './src/plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './src/plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './src/plugins/taskPlugin/task'
@@ -116,7 +116,7 @@ export type EngineContext = {
     state: Record<string, any>,
     language?: string | null
   ) => any | void
-  queryGoogle: (query: string) => Promise<{summary: string, links: string}>
+  queryGoogle: (query: string) => Promise<{ summary: string; links: string }>
   getEvents: (
     args: GetEventArgs
   ) => Promise<string | string[] | null | Record<string, any>>

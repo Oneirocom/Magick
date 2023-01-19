@@ -64,7 +64,7 @@ export class TriggerIn extends MagickComponent<void> {
         // will need to run this here with the stater rather than the text
         task?.run(text)
         task?.reset()
-        this.editor?.trigger('process')
+        // this.editor?.trigger('process')
       })
     }
   }

@@ -15,6 +15,7 @@ import css from '../../../screens/Magick/magick.module.css'
 import { useFeathers } from '../../../contexts/FeathersProvider'
 import { feathers as feathersFlag } from '../../../config'
 import { useAppSelector } from '../../../state/hooks'
+import { useEditor } from '../../contexts/EditorProvider'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
@@ -53,6 +54,7 @@ const Playtest = ({ tab }) => {
   const { publish, subscribe, events } = usePubSub()
   const FeathersContext = useFeathers()
   const dispatch = useDispatch()
+  const { serialize } = useEditor()
 
   const localState = useAppSelector(state => {
     return selectStateBySpellId(state.localState, tab.spellId)
@@ -113,14 +115,6 @@ const Playtest = ({ tab }) => {
   const onSend = () => {
     const newHistory = [...history, `You: ${value}`]
     setHistory(newHistory as [])
-    if (feathersFlag) {
-      client.service('spell-runner').create({
-        spellId: tab.spellId,
-        inputs: {
-          input: value,
-        },
-      })
-    }
 
     let toSend = value
 
@@ -144,6 +138,27 @@ const Playtest = ({ tab }) => {
         channelType: 'previewChannelType',
         ...JSON.parse(json),
       }
+    }
+
+    if (feathersFlag) {
+      // get spell from editor
+      const graph = serialize()
+      if (!graph) return
+
+      const playtestInputName = Object.values(graph.nodes).find(
+        node => node.data.playtestToggle && node.name === 'Universal Input'
+      )?.data.name
+
+      if (!playtestInputName) return
+
+      console.log('FOUND NODE', playtestInputName)
+
+      client.service('spell-runner').create({
+        spellId: tab.spellId,
+        inputs: {
+          [playtestInputName as string]: toSend,
+        },
+      })
     }
 
     publish($PLAYTEST_INPUT(tab.id), toSend)
