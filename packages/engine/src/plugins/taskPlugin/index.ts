@@ -1,7 +1,7 @@
 import { Component } from 'rete'
 import { NodeData } from 'rete/types/core/data'
 
-import { MagickEditor, MagickWorkerInputs } from '../../../types'
+import { MagickEditor, MagickWorkerInputs } from '../../types'
 import { MagickComponent } from '../../magick-component'
 import { Task } from './task'
 

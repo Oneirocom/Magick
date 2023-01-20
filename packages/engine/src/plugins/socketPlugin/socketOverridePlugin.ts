@@ -1,4 +1,4 @@
-import { IRunContextEditor } from '../../../types'
+import { IRunContextEditor } from '../../types'
 
 function install(editor: IRunContextEditor) {
   editor.on('componentregister', (component: any) => {

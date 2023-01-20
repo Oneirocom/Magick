@@ -5,7 +5,7 @@ import {
   GraphData,
   ModuleComponent,
   Spell as SpellType,
-} from '../../types'
+} from '../types'
 import { getComponents } from '../components'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
 import { Module } from '../plugins/modulePlugin/module'

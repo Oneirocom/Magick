@@ -2,10 +2,10 @@ import { OPENAI_API_KEY } from '@magickml/server-core'
 import { tts, tts_tiktalknet } from '@magickml/server-core'
 import Koa from 'koa'
 import { Route } from './types'
-import { CustomError } from './utils/CustomError'
-import { makeCompletion } from './utils/MakeCompletionRequest'
+import { ServerError } from './utils/ServerError'
+import { makeCompletion } from '@magickml/engine'
 import { MakeModelRequest } from './utils/MakeModelRequest'
-import { queryGoogleSearch } from './utils/queryGoogle'
+import { queryGoogleSearch } from '../../../packages/engine/src/functions/queryGoogle'
 import weaviate from 'weaviate-client'
 
 export const modules: Record<string, unknown> = {}
@@ -52,7 +52,7 @@ const textCompletion = async (ctx: Koa.Context) => {
   let apiKey = _apiKey ?? OPENAI_API_KEY
 
   if (!apiKey)
-    throw new CustomError('authentication-error', 'No API key provided')
+    throw new ServerError('authentication-error', 'No API key provided')
 
   const { success, choice } = await makeCompletion(modelName, {
     prompt: prompt.trim(),
@@ -120,7 +120,7 @@ const queryGoogle = async (ctx: Koa.Context) => {
   const body = ctx.request.body as any
   console.log('QUERY', body?.query)
   if (!body?.query)
-    throw new CustomError('input-failed', 'No query provided in request body')
+    throw new ServerError('input-failed', 'No query provided in request body')
   const query = body?.query as string
   const data = await queryGoogleSearch(query)
   console.log('DATA', data)

@@ -9,7 +9,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../types'
+} from '../../types'
 import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'
 import { Module } from './module'

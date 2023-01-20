@@ -1,4 +1,4 @@
-import { GraphData, NodeData } from '../../types'
+import { GraphData, NodeData } from '../types'
 
 /**
  * extracts all module inputs based upon a given key

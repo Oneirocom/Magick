@@ -1,6 +1,6 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../../core/types'
+import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, numSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'

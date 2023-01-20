@@ -1,7 +1,7 @@
 // @ts-nocheck
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../../core/types'
+import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { stringSocket, triggerSocket } from '../../sockets'

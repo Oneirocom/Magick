@@ -7,7 +7,7 @@ import {
   Spell,
   MagickNode,
   MagickWorkerInputs,
-} from '../../../core/types'
+} from '../../types'
 import { SpellControl } from '../../dataControls/SpellControl'
 import { MagickComponent } from '../../magick-component'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
@@ -175,9 +175,8 @@ export class SpellComponent extends MagickComponent<
     if (!magick.runSpell) return {}
     const outputs = await magick.runSpell(
       flattenedInputs,
-      node.data.spellId as string,
-      {}
-    )
+      node.data.spellId as string
+      )
 
     if (!silent) node.display(`${JSON.stringify(outputs)}`)
     else {

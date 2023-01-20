@@ -10,7 +10,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket } from '../../sockets'

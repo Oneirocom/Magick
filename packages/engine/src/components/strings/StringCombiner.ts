@@ -5,12 +5,10 @@
 import Rete from 'rete'
 
 import {
-  EngineContext,
   NodeData,
   MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket, stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'

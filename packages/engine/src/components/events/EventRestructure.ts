@@ -2,7 +2,7 @@
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { NodeData, MagickNode, MagickWorkerInputs, Event } from '../../../core/types'
+import { NodeData, MagickNode, MagickWorkerInputs, Event } from '../../types'
 import { Task } from '../../plugins/taskPlugin/task'
 import {
   arraySocket,

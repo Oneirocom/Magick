@@ -1,4 +1,4 @@
-import { MagickComponent } from '../../core/types'
+import { MagickComponent } from '../types'
 import { EventStoreWeaviate } from './events/EventStoreWeaviate'
 import { GetWikipediaSummary } from './apis/GetWikipediaSummary'
 import { QueryGoogle } from './apis/QueryGoogle'

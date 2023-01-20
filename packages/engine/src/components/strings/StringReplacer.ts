@@ -10,9 +10,7 @@ import {
   NodeData,
   MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs,
-  EngineContext,
-} from '../../../core/types'
+} from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'

@@ -7,7 +7,7 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   EngineContext,
-} from '../../../core/types'
+} from '../../types'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { anySocket, stringSocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'

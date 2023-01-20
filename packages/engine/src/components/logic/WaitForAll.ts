@@ -5,7 +5,7 @@ import {
   NodeData,
   MagickNode,
   MagickWorkerInputs,
-} from '../../../core/types'
+} from '../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'

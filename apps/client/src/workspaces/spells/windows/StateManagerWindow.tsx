@@ -1,17 +1,15 @@
 import Editor from '@monaco-editor/react'
-import jsonFormat from 'json-format'
 import { useState, useEffect } from 'react'
 import { useGetSpellQuery } from '../../../state/api/spells'
 import Window from '../../../components/Window/Window'
 
 import '../../../screens/Magick/magick.module.css'
-import WindowMessage from '../../components/WindowMessage'
 import { usePubSub } from '../../../contexts/PubSubProvider'
 
 import { RootState } from '../../../state/store'
 import { useSelector } from 'react-redux'
 
-const StateManager = ({ tab, ...props }) => {
+const StateManager = ({ tab }) => {
   const { publish, events } = usePubSub()
   const preferences = useSelector((state: RootState) => state.preferences)
   const { data: spell } = useGetSpellQuery(

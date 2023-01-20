@@ -15,11 +15,11 @@ import { MagickConsole } from './plugins/debuggerPlugin/MagickConsole'
 import { Inspector } from './plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
-import { SocketNameType, SocketType } from './socketskets'
-import { PubSubContext, MagickTask, MagickComponent } from './magick-componentnent'
+import { SocketNameType, SocketType } from './sockets'
+import { PubSubContext, MagickTask, MagickComponent } from './magick-component'
 import { spells } from '@prisma/client'
 
-export { MagickComponent } from './magick-componentnent'
+export { MagickComponent } from './magick-component'
 //@seang this was causing test enviroment issues to have it shared client/server
 // export { MagickEditor } from './src/editor'
 
@@ -104,12 +104,6 @@ export type EngineContext = {
     spellId: string,
   ) => Record<string, any>
   getSpell: (spellId: string) => Promise<spells | Spell>
-  processCode: (
-    code: unknown,
-    inputs: MagickWorkerInputs,
-    data: Record<string, any>,
-    language?: string | null
-  ) => any | void
 }
 
 export type EventPayload = Record<string, any>
@@ -125,11 +119,6 @@ export interface EditorContext extends EngineContext {
   onDebug: (node: NodeData, callback: Function) => Function
   clearTextEditor: () => void
   refreshEventTable: () => void
-  processCode: (
-    code: unknown,
-    inputs: MagickWorkerInputs,
-    data: Record<string, any>,
-  ) => any | void
 }
 
 export type EventsTypes = {
@@ -240,19 +229,14 @@ export type NodeOutputs = {
 export type NodeData = {
   socketKey?: string
   name?: string
-  [DataKey: string]: unknown
+  [DataKey: string]: any
 }
 
-export type Module = { name: string; id: string; data: Graph }
-
-export type Graph = {
-  id: string
-  nodes: Record<number, Node>
-}
+export type Module = { name: string; id: string; data: Data }
 
 export type Spell = {
   name: string
-  graph: Graph
+  graph: Data
   createdAt: number
   updatedAt: number
   modules: Module[]

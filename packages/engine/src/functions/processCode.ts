@@ -1,7 +1,7 @@
 import { MagickWorkerInputs } from '@magickml/engine';
 import vm2 from 'vm2';
 import { runPython } from '@magickml/engine';
-import { CustomError } from '../../../apps/server/src/utils/CustomError';
+import { ServerError } from '../../../../apps/server/src/utils/ServerError';
 
 
 export async function processCode(
@@ -36,7 +36,7 @@ export async function processCode(
       return codeResult;
     } catch (err) {
       console.log({ err });
-      throw new CustomError(
+      throw new ServerError(
         'server-error',
         'Error in spell runner: processCode component: ' + code
       );

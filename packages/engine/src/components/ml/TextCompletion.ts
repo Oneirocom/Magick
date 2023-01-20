@@ -6,11 +6,12 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   EngineContext,
-} from '../../../core/types'
+} from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { DropdownControl } from '../../dataControls/DropdownControl'
+import { makeCompletion } from '../../functions/makeCompletion'
 
 const info = 'Basic text completion using OpenAI.'
 
@@ -66,29 +67,29 @@ export class TextCompletion extends MagickComponent<
       defaultValue: 0.5,
     })
 
-    const maxTokens = new InputControl({
-      dataKey: 'maxTokens',
+    const max_tokens = new InputControl({
+      dataKey: 'max_tokens',
       name: 'Max Tokens',
       icon: 'moon',
       defaultValue: 100,
     })
 
-    const topP = new InputControl({
-      dataKey: 'topP',
+    const top_p = new InputControl({
+      dataKey: 'top_p',
       name: 'Top P',
       icon: 'moon',
       defaultValue: 1,
     })
 
-    const frequencyPenalty = new InputControl({
-      dataKey: 'frequencyPenalty',
+    const frequency_penalty = new InputControl({
+      dataKey: 'frequency_penalty',
       name: 'Frequency Penalty',
       icon: 'moon',
       defaultValue: 0,
     })
 
-    const presencePenalty = new InputControl({
-      dataKey: 'presencePenalty',
+    const presence_penalty = new InputControl({
+      dataKey: 'presence_penalty',
       name: 'Presence Penalty',
       icon: 'moon',
       defaultValue: 0,
@@ -104,10 +105,10 @@ export class TextCompletion extends MagickComponent<
     node.inspector
       .add(modelName)
       .add(temperature)
-      .add(maxTokens)
-      .add(topP)
-      .add(frequencyPenalty)
-      .add(presencePenalty)
+      .add(max_tokens)
+      .add(top_p)
+      .add(frequency_penalty)
+      .add(presence_penalty)
       .add(stop)
 
     return node
@@ -122,10 +123,7 @@ export class TextCompletion extends MagickComponent<
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { magick }: { magick: EngineContext }
   ) {
-    const { completion } = magick
-
     const prompt = inputs['string'][0]
     const settings = ((inputs.settings && inputs.settings[0]) ?? {}) as any
     const modelName = settings.modelName ?? (node?.data?.modelName as string)
@@ -133,16 +131,16 @@ export class TextCompletion extends MagickComponent<
       settings.temperature ?? (node?.data?.temperature as string)
     const temperature = parseFloat(temperatureData)
     const maxTokensData =
-      settings.max_tokens ?? (node?.data?.maxTokens as string)
-    const maxTokens = parseInt(maxTokensData)
-    const topPData = settings.top_p ?? (node?.data?.topP as string)
-    const topP = parseFloat(topPData)
+      settings.max_tokens ?? (node?.data?.max_tokens as string)
+    const max_tokens = parseInt(maxTokensData)
+    const topPData = settings.top_p ?? (node?.data?.top_p as string)
+    const top_p = parseFloat(topPData)
     const frequencyPenaltyData =
-      settings.frequency_penalty ?? (node?.data?.frequencyPenalty as string)
-    const frequencyPenalty = parseFloat(frequencyPenaltyData)
+      settings.frequency_penalty ?? (node?.data?.frequency_penalty as string)
+    const frequency_penalty = parseFloat(frequencyPenaltyData)
     const presencePenaltyData =
-      settings.presence_penalty ?? (node?.data?.presencePenalty as string)
-    const presencePenalty = parseFloat(presencePenaltyData)
+      settings.presence_penalty ?? (node?.data?.presence_penalty as string)
+    const presence_penalty = parseFloat(presencePenaltyData)
     const stop = settings.stop ?? (node?.data?.stop as string).split(', ')
     for (let i = 0; i < stop.length; i++) {
       if (stop[i] === '\\n') {
@@ -155,16 +153,15 @@ export class TextCompletion extends MagickComponent<
 
     const body = {
       prompt: prompt as string,
-      modelName,
       temperature,
-      maxTokens,
-      topP,
-      frequencyPenalty,
-      presencePenalty,
+      max_tokens,
+      top_p,
+      frequency_penalty,
+      presence_penalty,
       stop: filteredStop,
     }
 
-    const data = await completion(body)
+    const data = await makeCompletion(modelName, body)
 
     const { success, choice } = data
 

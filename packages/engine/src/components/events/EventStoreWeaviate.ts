@@ -1,4 +1,5 @@
 import Rete from 'rete'
+import axios from 'axios'
 
 import {
   Event,
@@ -7,7 +8,8 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+  CreateEventArgs,
+} from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, eventSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -69,7 +71,35 @@ export class EventStoreWeaviate extends MagickComponent<Promise<void>> {
     _outputs: MagickWorkerOutputs,
     { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
-    const { storeEventWeaviate } = magick
+
+    const storeEventWeaviate = async ({
+      type,
+      observer,
+      sender,
+      entities,
+      content,
+      client,
+      channel,
+    }: CreateEventArgs) => {
+      const response = await axios.post(
+        `${
+          import.meta.env.VITE_APP_API_URL ??
+          import.meta.env.API_ROOT_URL
+        }/eventWeaviate`,
+        {
+          type,
+          observer,
+          sender,
+          entities,
+          content,
+          client,
+          channel,
+        }
+      )
+      console.log('Created event', response.data)
+      return response.data
+    }
+
     const event = inputs['event'][0] as Event
     const primary = ((inputs['primary'] && inputs['primary'][0]) ||
       inputs['primary']) as string

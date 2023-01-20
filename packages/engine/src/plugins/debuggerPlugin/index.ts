@@ -1,4 +1,4 @@
-import { IRunContextEditor } from '../../../types'
+import { IRunContextEditor } from '../../types'
 import { MagickConsole } from './MagickConsole'
 
 export type DebuggerArgs = { server?: boolean; throwError?: Function }

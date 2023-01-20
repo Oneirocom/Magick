@@ -1,7 +1,7 @@
-import { SpellRunner, GraphData, Spell as SpellType } from '@magickml/core'
+import { SpellRunner, GraphData, Spell as SpellType } from '@magickml/engine'
 import { prisma } from '@magickml/prisma'
-import { CustomError } from './CustomError'
 import { buildMagickInterface } from '../buildMagickInterface'
+import { ServerError } from './ServerError'
 
 export type RunSpellArgs = {
   spellName: string
@@ -19,7 +19,7 @@ export const runSpell = async ({
   })
 
   if (!spell?.graph) {
-    throw new CustomError('not-found', `Spell with name ${spellName} not found`)
+    throw new ServerError('not-found', `Spell with name ${spellName} not found`)
   }
 
   const graph = spell.graph as unknown as GraphData

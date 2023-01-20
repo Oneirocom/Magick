@@ -8,7 +8,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { triggerSocket } from '../../sockets'
 import { MagickComponent, MagickTask } from '../../magick-component'

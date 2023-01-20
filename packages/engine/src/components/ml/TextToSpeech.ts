@@ -13,7 +13,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'

@@ -7,7 +7,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, anySocket, eventSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -78,9 +78,8 @@ export class EventRecallWeaviate extends MagickComponent<Promise<InputReturn>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent, magick }: { silent: boolean; magick: EngineContext }
+    { silent }: { silent: boolean }
   ) {
-    const { getEventWeaviate  } = magick
     const eventObj = inputs['event'] && (inputs['event'][0] as Event)
 
     const { observer, client, channel, sender } = eventObj
@@ -95,6 +94,46 @@ export class EventRecallWeaviate extends MagickComponent<Promise<InputReturn>> {
     const maxCount = maxCountData ? parseInt(maxCountData) : 10
     const max_time_diffData = node.data?.max_time_diff as string
     const max_time_diff = max_time_diffData ? parseInt(max_time_diffData) : -1
+
+    const getEventWeaviate = async ({
+      type = 'default',
+      sender = 'system',
+      observer = 'system',
+      entities = [],
+      client = 'system',
+      channel = 'system',
+      maxCount = 10,
+      target_count = 'single',
+      max_time_diff = -1,
+    }) => {
+      const urlString = `${
+        import.meta.env.VITE_APP_API_URL ??
+        import.meta.env.API_ROOT_URL
+      }/eventWeaviate`
+  
+      const params = {
+        type,
+        observer,
+        sender,
+        entities,
+        client,
+        channel,
+        maxCount,
+        target_count,
+        max_time_diff,
+      } as Record<string, any>
+  
+      const url = new URL(urlString)
+      for (let p in params) {
+        url.searchParams.append(p, params[p])
+      }
+  
+      const response = await fetch(url.toString())
+      console.log(response)
+      if (response.status !== 200) return null
+      const json = await response.json()
+      return json.event
+    }
 
     const event_wes = await getEventWeaviate({
       type,

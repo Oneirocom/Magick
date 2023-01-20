@@ -4,7 +4,7 @@ import Rete from 'rete'
 //@ts-ignore
 import { v4 as uuidv4 } from 'uuid'
 
-import { NodeData, MagickNode } from '../../../core/types'
+import { NodeData, MagickNode } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { PlaytestControl } from '../../dataControls/PlaytestControl'
 import { triggerSocket } from '../../sockets'

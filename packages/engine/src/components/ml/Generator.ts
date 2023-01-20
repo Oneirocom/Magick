@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 import Handlebars from 'handlebars'
 import Rete from 'rete'
-
+import { CompletionData, makeCompletion } from '../../functions/makeCompletion'
 import {
   EngineContext,
   NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
@@ -104,14 +104,14 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     })
 
     const maxTokenControl = new InputControl({
-      dataKey: 'maxTokens',
+      dataKey: 'max_tokens',
       name: 'Max Tokens',
       icon: 'moon',
       defaultValue: 50,
     })
 
-    const frequencyPenalty = new InputControl({
-      dataKey: 'frequencyPenalty',
+    const frequency_penalty = new InputControl({
+      dataKey: 'frequency_penalty',
       name: 'Frequency Penalty',
       defaultValue: 0,
     })
@@ -124,7 +124,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       .add(stopControl)
       .add(temperatureControl)
       .add(maxTokenControl)
-      .add(frequencyPenalty)
+      .add(frequency_penalty)
 
     return node
   }
@@ -135,7 +135,6 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     _outputs: MagickWorkerOutputs,
     { magick }: { silent: boolean; magick: EngineContext }
   ) {
-    const { completion } = magick
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
       acc[key] = value[0]
       return acc
@@ -149,8 +148,8 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       ? (node.data.fewshot as string).replace('\r\n', '\n')
       : ''
     const stopSequence = node.data.stop as string
-    const topPData = node?.data?.topP as string
-    const topP = topPData ? parseFloat(topPData) : 1
+    const topPData = node?.data?.top_p as string
+    const top_p = topPData ? parseFloat(topPData) : 1
     const template = Handlebars.compile(fewshot, { noEscape: true })
     const prompt = template(inputs)
 
@@ -159,34 +158,33 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
           if (i.includes('\\n')) return '\n'
           return i.trim()
         })
-      : ''
+      : []
 
     const tempData = node.data.temp as string
     const temperature = tempData ? parseFloat(tempData) : 0.7
-    const maxTokensData = node?.data?.maxTokens as string
-    const maxTokens = maxTokensData ? parseInt(maxTokensData) : 50
-    const frequencyPenaltyData = node?.data?.frequencyPenalty as string
-    const frequencyPenalty = frequencyPenaltyData
+    const maxTokensData = node?.data?.max_tokens as string
+    const max_tokens = maxTokensData ? parseInt(maxTokensData) : 50
+    const frequencyPenaltyData = node?.data?.frequency_penalty as string
+    const frequency_penalty = frequencyPenaltyData
       ? parseFloat(frequencyPenaltyData)
       : 0
 
-    const presencePenaltyData = node?.data?.presencePenalty as string
-    const presencePenalty = presencePenaltyData
+    const presencePenaltyData = node?.data?.presence_penalty as string
+    const presence_penalty = presencePenaltyData
       ? parseFloat(presencePenaltyData)
       : 0
 
-    const body = {
-      modelName,
+    const body: CompletionData = {
       prompt,
       stop,
-      maxTokens,
+      max_tokens,
       temperature,
-      frequencyPenalty,
-      presencePenalty,
-      topP,
+      frequency_penalty,
+      presence_penalty,
+      top_p,
     }
     try {
-      const { success, choice } = await completion(body)
+      const { success, choice } = await makeCompletion(modelName, body)
 
       if (!success) throw new Error('Error in generator')
 

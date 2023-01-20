@@ -1,4 +1,4 @@
-import { IRunContextEditor, MagickNode } from '../../../types'
+import { IRunContextEditor, MagickNode } from '../../types'
 
 function install(editor: IRunContextEditor) {
   editor.bind('delete')

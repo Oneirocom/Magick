@@ -1,6 +1,6 @@
 import Rete, { Input, Output } from 'rete'
 
-import { DataSocketType, IRunContextEditor, MagickNode } from '../../../types'
+import { DataSocketType, IRunContextEditor, MagickNode } from '../../types'
 import * as sockets from '../../sockets'
 
 function install(editor: IRunContextEditor) {

@@ -1,4 +1,4 @@
-import { IRunContextEditor, MagickComponent } from '../../../types'
+import { IRunContextEditor, MagickComponent } from '../../types'
 
 function install(
   editor: IRunContextEditor

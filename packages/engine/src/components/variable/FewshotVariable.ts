@@ -4,9 +4,7 @@ import Rete from 'rete'
 import {
   NodeData,
   MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket } from '../../sockets'

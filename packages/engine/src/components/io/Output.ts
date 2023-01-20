@@ -7,7 +7,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SwitchControl } from '../../dataControls/SwitchControl'
 import { triggerSocket, anySocket } from '../../sockets'
