@@ -4,7 +4,6 @@
   "projects": {
     "client": "apps/client",
     "client-core": "packages/client-core",
-    "database": "packages/database",
     "engine": "packages/engine",
     "server": "apps/server",
     "server-core": "packages/server-core"
