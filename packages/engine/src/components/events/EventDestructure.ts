@@ -7,7 +7,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { Task } from '../../plugins/taskPlugin/task'
 import {
   eventSocket,

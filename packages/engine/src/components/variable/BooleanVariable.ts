@@ -4,9 +4,7 @@ import Rete from 'rete'
 import {
   NodeData,
   MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { booleanSocket } from '../../sockets'

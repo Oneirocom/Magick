@@ -6,7 +6,7 @@ export type CustomErrorCodes =
   | 'authentication-error'
 
 // eslint-disable-next-line functional/no-class
-export class CustomError extends Error {
+export class ServerError extends Error {
   public code: CustomErrorCodes
   public status: number
   public message: string

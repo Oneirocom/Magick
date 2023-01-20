@@ -6,10 +6,11 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { stringSocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { queryGoogleSearch } from '../../functions/queryGoogle'
 
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
@@ -61,10 +62,8 @@ export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
     _outputs: MagickWorkerOutputs,
     { magick }: { magick: EngineContext }
   ) {
-    const { queryGoogle } = magick
-
     const query = inputs.query[0] as string
-    const {summary, links} = await queryGoogle(query)
+    const {summary, links} = await queryGoogleSearch(query)
     console.log('summary, links', summary, links)
     return {
       summary,

@@ -1,4 +1,4 @@
-import { IRunContextEditor, MagickNode } from '../../../types'
+import { IRunContextEditor, MagickNode } from '../../types'
 // @seang todo: convert data controls to typescript to remove this
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore

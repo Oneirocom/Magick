@@ -8,7 +8,7 @@ import {
   ModuleType,
   MagickNode,
   MagickWorkerOutputs,
-} from '../../../types'
+} from '../../types'
 import { MagickEngine } from '../../engine'
 import { Module } from './module'
 import { ModuleManager } from './module-manager'

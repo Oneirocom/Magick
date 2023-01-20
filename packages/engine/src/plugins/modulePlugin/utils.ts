@@ -1,6 +1,6 @@
 import { Input, NodeEditor, Output } from 'rete'
 
-import { DataSocketType, MagickNode, IRunContextEditor } from '../../../types'
+import { DataSocketType, MagickNode, IRunContextEditor } from '../../types'
 import { socketNameMap, SocketNameType } from '../../sockets'
 import { ModuleSocketType } from './module-manager'
 export type ThroughPutType = 'outputs' | 'inputs'

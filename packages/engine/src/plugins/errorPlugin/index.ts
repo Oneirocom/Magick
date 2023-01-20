@@ -1,4 +1,4 @@
-import { IRunContextEditor, NodeData, MagickComponent } from '../../../types'
+import { IRunContextEditor, NodeData, MagickComponent } from '../../types'
 import { MagickConsole } from '../debuggerPlugin/MagickConsole'
 
 function install(

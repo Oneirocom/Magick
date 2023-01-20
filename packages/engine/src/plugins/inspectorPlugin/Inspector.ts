@@ -2,7 +2,7 @@ import deepEqual from 'deep-equal'
 import Rete, { Input, Output } from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { DataSocketType, IRunContextEditor, MagickNode } from '../../../types'
+import { DataSocketType, IRunContextEditor, MagickNode } from '../../types'
 import * as socketMap from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { DataControl } from './DataControl'

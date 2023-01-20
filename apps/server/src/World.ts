@@ -1,7 +1,7 @@
 import { randomInt } from './connectors/utils'
 import Agent from './Agent'
 import { prisma } from '@magickml/prisma'
-import { CustomError } from 'apps/server/src/utils/CustomError'
+import { ServerError } from 'apps/server/src/utils/ServerError'
 import { ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/server-core'
 
 const maxMSDiff = 5000
@@ -166,7 +166,7 @@ export class World {
       obj.data.id = obj.id
       this.objects[obj.id] = new Agent(obj)
     } else {
-      throw new CustomError('already-exists', 'Object already exists')
+      throw new ServerError('already-exists', 'Object already exists')
     }
   }
 

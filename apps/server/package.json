@@ -15,7 +15,8 @@
       "websockets"
     ],
     "schema": "typebox"
-  },  "scripts": {
+  },
+  "scripts": {
     "dev": "nodemon -x ts-node src/index.ts",
     "compile": "shx rm -rf lib/ && tsc",
     "start": "node lib/",
@@ -25,5 +26,8 @@
     "bundle:client": "npm run compile && npm pack --pack-destination ./public",
     "migrate": "knex migrate:latest",
     "migrate:make": "knex migrate:make"
+  },
+  "dependencies": {
+    "feathers-swagger": "^2.0.0"
   }
 }

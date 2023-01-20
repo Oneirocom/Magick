@@ -4,8 +4,8 @@ import Koa from 'koa'
 import otJson0 from 'ot-json0'
 
 import { Route } from '../types'
-import { CustomError } from '../utils/CustomError'
 import { runSpell } from '../utils/runSpell'
+import { ServerError } from '../utils/ServerError'
 
 export const modules: Record<string, unknown> = {}
 
@@ -39,23 +39,23 @@ const runSpellHandler = async (ctx: Koa.Context) => {
 
 const saveDiffHandler = async (ctx: Koa.Context) => {
   const { body } = ctx.request
-  const { name, diff } = body
+  const { name, diff } = body as any
 
   console.log('saving diff', name, diff)
 
-  if (!body) throw new CustomError('input-failed', 'No parameters provided')
+  if (!body) throw new ServerError('input-failed', 'No parameters provided')
 
   let spell = await prisma.spells.findUnique({ where: { name } })
 
   if (!spell)
-    throw new CustomError('input-failed', `No spell with ${name} name found.`)
+    throw new ServerError('input-failed', `No spell with ${name} name found.`)
   if (!diff)
-    throw new CustomError('input-failed', 'No diff provided in request body')
+    throw new ServerError('input-failed', 'No diff provided in request body')
 
     const spellUpdate = otJson0.type.apply(spell, diff)
 
     if (Object.keys((spellUpdate as Spell).graph.nodes).length === 0)
-      throw new CustomError(
+      throw new ServerError(
         'input-failed',
         'Graph would be cleared.  Aborting.'
       )

@@ -5,7 +5,7 @@ import {
   MagickComponent,
   MagickEditor,
   MagickNode,
-} from '../../../types'
+} from '../../types'
 import { Task } from '../taskPlugin'
 import { RunButtonControl } from './RunLastArguments'
 

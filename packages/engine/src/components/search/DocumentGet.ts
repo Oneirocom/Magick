@@ -11,7 +11,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { triggerSocket, anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 

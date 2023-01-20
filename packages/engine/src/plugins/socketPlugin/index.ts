@@ -1,6 +1,6 @@
 import io from 'socket.io'
 
-import { IRunContextEditor } from '../../../types'
+import { IRunContextEditor } from '../../types'
 
 export type SocketPluginArgs = {
   server?: boolean

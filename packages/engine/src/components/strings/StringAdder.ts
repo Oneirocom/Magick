@@ -10,7 +10,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { triggerSocket, stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'

@@ -2,7 +2,7 @@ import Rete, { Engine } from 'rete'
 import { Plugin } from 'rete/types/core/plugin'
 import io from 'socket.io'
 
-import { GraphData, ModuleType, NodeData, MagickWorkerInputs } from '../types'
+import { GraphData, ModuleType, NodeData, MagickWorkerInputs } from './types'
 import debuggerPlugin, { DebuggerArgs } from './plugins/debuggerPlugin'
 import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
 import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'

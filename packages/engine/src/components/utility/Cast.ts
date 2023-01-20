@@ -5,7 +5,7 @@ import {
   MagickNode,
   MagickWorkerOutputs,
   MagickWorkerInputs,
-} from '../../../core/types'
+} from '../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import * as sockets from '../../sockets'

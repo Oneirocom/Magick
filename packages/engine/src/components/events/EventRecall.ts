@@ -7,7 +7,8 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+  GetEventArgs,
+} from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, anySocket, eventSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -80,8 +81,21 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     _outputs: MagickWorkerOutputs,
     { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
-    const { getEvents } = magick
-
+    
+    const getEvents = async (params: GetEventArgs) => {
+      const urlString = `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
+        }/event`
+  
+      const url = new URL(urlString)
+      for (let p in params) {
+        url.searchParams.append(p, params[p])
+      }
+  
+      const response = await fetch(url.toString())
+      if (response.status !== 200) return null
+      const json = await response.json()
+      return json.event
+    }
     const event = (inputs['event'] && (inputs['event'][0] ?? inputs['event'])) as Event
 
     const { sender, observer, client, channel, channelType } = event

@@ -1,13 +1,14 @@
 import Rete from 'rete'
+import axios from 'axios'
 
 import {
   Event,
-  EngineContext,
   NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+  CreateEventArgs,
+} from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, eventSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -60,9 +61,18 @@ export class EventStore extends MagickComponent<Promise<void>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent, magick }: { silent: boolean; magick: EngineContext }
+    { silent }: { silent: boolean }
   ) {
-    const { storeEvent } = magick
+
+    const storeEvent = async (eventData: CreateEventArgs) => {
+      const response = await axios.post(
+        `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
+        }/event`, eventData
+      )
+      console.log('Created event', response.data)
+      return response.data
+    }
+
     const event = inputs['event'][0] as Event
     const content = (inputs['content'] && inputs['content'][0]) as string
 

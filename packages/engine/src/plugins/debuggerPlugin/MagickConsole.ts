@@ -1,4 +1,4 @@
-import { IRunContextEditor, NodeData } from '../../../types'
+import { IRunContextEditor, NodeData } from '../../types'
 import { MagickComponent } from '../../magick-component'
 
 type ConsoleConstructor = {

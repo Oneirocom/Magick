@@ -9,7 +9,7 @@ const provider = new ethers.providers.JsonRpcProvider(
   'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
 )
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../../core/types'
+import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
 import { triggerSocket, numSocket, stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 

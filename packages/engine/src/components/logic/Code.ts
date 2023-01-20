@@ -15,6 +15,7 @@ import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { processCode } from '../../functions/processCode'
 
 const defaultCode = `
 // inputs: dictionary of inputs based on socket names
@@ -91,11 +92,9 @@ export class Code extends MagickComponent<unknown> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: { magick: EngineContext; data: { code: unknown } }
+    context: { data: { code: unknown } }
   ) {
-    const { magick, data } = context
-    const { processCode } = magick
-    if (!processCode) return
+    const { data } = context
 
     try {
       // const value = runCodeWithArguments(node.data.code)

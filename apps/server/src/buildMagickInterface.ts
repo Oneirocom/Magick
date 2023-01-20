@@ -21,9 +21,8 @@ export const buildMagickInterface = (
 
   return {
     env,
-    runSpell: async (flattenedInputs, spellId, state) => {
+    runSpell: async (flattenedInputs, spellId) => {
       const { outputs } = await runSpell({
-        state,
         spellName: spellId,
         inputs: flattenedInputs,
       })

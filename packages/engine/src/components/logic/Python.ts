@@ -6,7 +6,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../core/types'
+} from '../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
 // @seang todo: convert data controls to typescript to remove this
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -15,6 +15,7 @@ import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { processCode } from '../../functions/processCode'
 
 const defaultCode = `
 # inputs: dictionary of inputs based on socket names outside the worker function
@@ -101,8 +102,6 @@ export class Python extends MagickComponent<unknown> {
     context: { magick: EngineContext; data: { code: unknown } }
   ) {
     const { magick, data } = context
-    const { processCode } = magick
-    if (!processCode) return
 
     try {
       // const value = runCodeWithArguments(node.data.code)
