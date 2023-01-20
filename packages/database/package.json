@@ -1,12 +1,5 @@
 {
   "name": "@magickml/database",
   "version": "0.0.1",
-  "main": "./database.umd.js",
-  "module": "./database.es.js",
-  "exports": {
-    ".": {
-      "import": "./database.es.js",
-      "require": "./database.umd.js"
-    }
-  }
+  "main": "./src/index.ts"
 }

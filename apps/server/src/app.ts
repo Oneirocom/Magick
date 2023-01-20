@@ -8,7 +8,6 @@ import {
   errorHandler,
   parseAuthentication,
   cors,
-  serveStatic,
 } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
 
@@ -19,15 +18,27 @@ import { postgresql } from './postgresql'
 import { authentication } from './authentication'
 import { services } from './services/index'
 import { channels } from './channels'
+import swagger from 'feathers-swagger';
 
 const app: Application = koa(feathers())
+
+app.configure(swagger({
+  docsPath: '/docs',
+  specs: {
+    info: {
+      title: 'Magick API',
+      description: 'API for Magick',
+      version: '1.0.0',
+    }
+  }
+}));
 
 // Load our app configuration (see config/ folder)
 app.configure(configuration(configurationValidator))
 
 // Set up Koa middleware
 app.use(cors())
-app.use(serveStatic(app.get('public')))
+// app.use(serveStatic(app.get('public')))
 app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())

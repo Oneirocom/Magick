@@ -1,4 +1,4 @@
-//@ts-ignore
+//@ts-nocheck
 import cors from '@koa/cors'
 //@ts-ignore
 import weaviate from 'weaviate-client'
@@ -8,7 +8,6 @@ import Koa from 'koa'
 import koaBody from 'koa-body'
 import Router from '@koa/router'
 import axios from 'axios'
-import { removePunctuation } from '@magickml/utils'
 import { database } from '@magickml/database'
 import keyword_extractor from 'keyword-extractor'
 import * as fs from 'fs'
@@ -40,6 +39,7 @@ export async function initSearchCorpus(ignoreDotEnv: boolean) {
   }
 
   if (!database || database === undefined) {
+    // @ts-ignore
     new database()
   }
 

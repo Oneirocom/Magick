@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { database } from '@magickml/database'
 import { prisma } from '@magickml/prisma'
 import Koa from 'koa'

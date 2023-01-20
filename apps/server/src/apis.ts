@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { database } from '@magickml/database'
 import { OPENAI_API_KEY } from '@magickml/server-config'
 import { tts, tts_tiktalknet } from '@magickml/systems'

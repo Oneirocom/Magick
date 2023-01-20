@@ -1,12 +1,6 @@
 {
   "name": "@magickml/server-config",
   "version": "0.0.1",
-  "main": "./server-config.umd.js",
-  "module": "./server-config.es.js",
-  "exports": {
-    ".": {
-      "import": "./server-config.es.js",
-      "require": "./server-config.umd.js"
-    }
-  }
+  "main":  "./src/index.ts",
+  "module": "./src/index.ts"
 }

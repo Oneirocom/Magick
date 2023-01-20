@@ -3,10 +3,7 @@
   "version": "0.0.1",
   "main": "./engine.umd.js",
   "module": "./engine.es.js",
-  "exports": {
-    ".": {
-      "import": "./engine.es.js",
-      "require": "./engine.umd.js"
-    }
+  "paths": {
+    "@magickml/engine": ["packages/engine"]
   }
 }

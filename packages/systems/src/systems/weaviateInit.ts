@@ -93,7 +93,7 @@ export class weaviate_connection {
       throw new Error('Missing argument for type')
     }
     if (channel === 'undefined') {
-      channel = undefined
+      channel = ''
     }
     if (!weaviate_client) {
       await initWeaviateClientEvent()
