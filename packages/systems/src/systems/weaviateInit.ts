@@ -53,7 +53,7 @@ export class weaviate_connection {
       await initWeaviateClientEvent()
     }
     const data = { ..._data }
-    const validFields = ['type', 'sender', 'observer', 'client', 'channel', 'channelType', 'content', 'entities']
+    const validFields = ['type', 'sender', 'observer', 'client', 'channel', 'channelType', 'content', 'entities', 'agentId']
     for (const key in data) {
       if (!validFields.includes(key)) {
         delete data[key]
@@ -71,6 +71,7 @@ export class weaviate_connection {
         client: data['client'],
         channel: data['channel'],
         entities: data['entities'],
+        agentId: parseInt(data['agentId'].toString()),
         channelType: data['channelType'],
         content: data['content'],
         date: new Date().toUTCString(),
@@ -191,20 +192,15 @@ export class weaviate_connection {
     const answer = await weaviate_client.graphql
                                         .get()
                                         .withClassName('Event')
+                                        .withWhere({
+                                          operator: 'Equal',
+                                          path: ['agentId'],
+                                          valueInt: agentid,
+                                        })
                                         .withAsk(({
                                             question: question
                                         }))
                                         .withFields('content _additional { answer { hasAnswer certainty property result startPosition endPosition } }')
-                                        .withWhere({
-                                          operator: 'Or',
-                                          operands: [
-                                            {
-                                              path: ['agentId'],
-                                              operator: 'Equal',
-                                              valueString: agentid,
-                                            }
-                                          ],
-                                        })
                                         .withLimit(1)
                                         .do()
                                         .catch(err => {
