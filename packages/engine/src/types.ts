@@ -11,19 +11,19 @@ import {
   WorkerOutputs,
 } from 'rete/types/core/data'
 
-import { MagickConsole } from './src/plugins/debuggerPlugin/MagickConsole'
-import { Inspector } from './src/plugins/inspectorPlugin/Inspector'
-import { ModuleManager } from './src/plugins/modulePlugin/module-manager'
-import { Task, TaskOutputTypes } from './src/plugins/taskPlugin/task'
-import { SocketNameType, SocketType } from './src/sockets'
-import { PubSubContext, MagickTask, MagickComponent } from './src/magick-component'
+import { MagickConsole } from './plugins/debuggerPlugin/MagickConsole'
+import { Inspector } from './plugins/inspectorPlugin/Inspector'
+import { ModuleManager } from './plugins/modulePlugin/module-manager'
+import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
+import { SocketNameType, SocketType } from './socketskets'
+import { PubSubContext, MagickTask, MagickComponent } from './magick-componentnent'
 import { spells } from '@prisma/client'
 
-export { MagickComponent } from './src/magick-component'
+export { MagickComponent } from './magick-componentnent'
 //@seang this was causing test enviroment issues to have it shared client/server
 // export { MagickEditor } from './src/editor'
 
-export type { InspectorData } from './src/plugins/inspectorPlugin/Inspector'
+export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 
 export type ImageType = {
   id: string
@@ -99,20 +99,15 @@ export type Env = {
 
 export type EngineContext = {
   env: Env
-  getCurrentGameState: () => Record<string, unknown>
-  setCurrentGameState: (state: Record<string, unknown>) => void
-  updateCurrentGameState: (update: Record<string, unknown>) => void
   runSpell: (
     flattenedInputs: Record<string, any>,
     spellId: string,
-    state: Record<string, any>
   ) => Record<string, any>
   getSpell: (spellId: string) => Promise<spells | Spell>
   processCode: (
     code: unknown,
     inputs: MagickWorkerInputs,
     data: Record<string, any>,
-    state: Record<string, any>,
     language?: string | null
   ) => any | void
 }
@@ -129,14 +124,11 @@ export interface EditorContext extends EngineContext {
   onPlaytest: (callback: Function) => Function
   onDebug: (node: NodeData, callback: Function) => Function
   clearTextEditor: () => void
-  getCurrentGameState: () => Record<string, unknown>
-  updateCurrentGameState: (update: EventPayload) => void
   refreshEventTable: () => void
   processCode: (
     code: unknown,
     inputs: MagickWorkerInputs,
     data: Record<string, any>,
-    state: Record<string, any>
   ) => any | void
 }
 
@@ -261,7 +253,6 @@ export type Graph = {
 export type Spell = {
   name: string
   graph: Graph
-  gameState: Record<string, unknown>
   createdAt: number
   updatedAt: number
   modules: Module[]

@@ -10,11 +10,9 @@ import {
 } from '@magickml/server-core'
 
 export const buildMagickInterface = (
-  initialGameState: Record<string, unknown>,
   overrides: Record<string, Function> = {}
 ): EngineContext => {
   // eslint-disable-next-line functional/no-let
-  let gameState = { ...initialGameState }
   const env = {
     API_ROOT_URL,
     API_URL,
@@ -34,21 +32,6 @@ export const buildMagickInterface = (
     getSpell: async spellId => {
       const spell = await prisma.spells.findUnique({ where: { name: spellId } })
       return spell
-    },
-
-    setCurrentGameState: state => {
-      gameState = state
-    },
-    getCurrentGameState: () => {
-      return gameState
-    },
-    updateCurrentGameState: (update: Record<string, unknown>) => {
-      const newState = {
-        ...gameState,
-        ...update,
-      }
-
-      gameState = newState
     }
   }
 }

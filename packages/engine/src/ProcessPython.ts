@@ -10,7 +10,7 @@ loadPyodide({
   pyodide = _pyodide;
 });
 
-export default async function runPython (code, entry, data, state) {
+export default async function runPython (code, entry, data) {
   // inputs renamed to entry for python insertion
   if(!pyodide) {
     throw new Error("Pyodide not loaded");
@@ -20,7 +20,6 @@ export default async function runPython (code, entry, data, state) {
     pyodide.globals.set(key, value);
   }
   pyodide.globals.set("data" , data);
-  pyodide.globals.set("state", state);
   
   
   let codeResult = pyodide.runPython(code);
@@ -28,9 +27,8 @@ export default async function runPython (code, entry, data, state) {
   let toJsResult = codeResult.toJs();
   let codeResultJS = toJsResult[0] instanceof Map ? convertMapToObject(toJsResult[0]) : toJsResult[0];
   let dataResult = toJsResult[1] instanceof Map ? convertMapToObject(toJsResult[1]) : toJsResult[1];
-  let stateResult = toJsResult[2] instanceof Map ? convertMapToObject(toJsResult[2]) : toJsResult[2];
 
-  const result = {...codeResultJS, data: dataResult, state: stateResult};
+  const result = {...codeResultJS, data: dataResult};
 
   return result;
 };
