@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { magickApiRootUrl } from '../../config'
+import { magickApiRootUrl } from '../../utils/config'
 // initialize an empty api service that we'll inject endpoints into later as needed
 
 console.log('magickApiRootUrl', magickApiRootUrl)

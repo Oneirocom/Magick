@@ -16,7 +16,7 @@ import gridimg from '../../grid.png'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import { useFeathers } from '../../contexts/FeathersProvider'
-import { feathers } from '../../config'
+import { feathers } from '../../utils/config'
 
 export type MagickTab = {
   layoutJson: string

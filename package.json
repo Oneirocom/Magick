@@ -4,9 +4,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "nx run-many --target=serve --projects=server,client,agent-server,speech-server --parallel 4",
-    "db:init": "npx prisma db push",
-    "agents": "nx run agent-server:serve",
+    "dev": "nx run-many --target=serve --projects=server,client --parallel 2",
     "server": "nx run server:serve",
     "containers": "concurrently \"docker-compose up\" \"sleep 20 && npm run db:init && echo database synced!\"",
     "build": "nx build",
@@ -14,14 +12,10 @@
     "test": "nx test",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
-    "sortPackage": "npx sort-package-json",
-    "postinstall": "npx prisma generate && npm run db:init"
+    "sortPackage": "npx sort-package-json"
   },
   "resolutions": {
     "@types/react": "18.0.2"
-  },
-  "prisma": {
-    "schema": "./packages/prisma/prisma/schema.prisma"
   },
   "dependencies": {
     "@capacitor-community/electron": "3.0.4",

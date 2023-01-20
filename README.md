@@ -1,4 +1,4 @@
-<p align="center"><img src="files/MAGICK-banner.png" /></p>
+<p align="center"><img src="apps/docs/readme-files/MAGICK-banner.png" /></p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 

@@ -21,7 +21,7 @@ import { usePubSub } from '../../contexts/PubSubProvider'
 import EventManagerWindow from './windows/EventManager'
 import { RootState } from '../../state/store'
 import { useFeathers } from '../../contexts/FeathersProvider'
-import { feathers as feathersFlag } from '../../config'
+import { feathers as feathersFlag } from '../../utils/config'
 import AgentManagerWindow from '../agents/windows/AgentManagerWindow'
 import React from 'react'
 

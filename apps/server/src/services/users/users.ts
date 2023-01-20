@@ -29,6 +29,10 @@ export const user = (app: Application) => {
     // You can add additional custom events to be sent to clients here
     events: [],
   })
+
+  const authFunction = 
+    process.env.USE_AUTH !== 'true' && process.env.NODE_ENV === 'development' ? authenticate : () => (context: any, next: any) => next()
+  
   // Initialize hooks
   app.service('users').hooks({
     around: {
@@ -36,12 +40,12 @@ export const user = (app: Application) => {
         schemaHooks.resolveExternal(userExternalResolver),
         schemaHooks.resolveResult(userResolver),
       ],
-      find: [authenticate('jwt')],
-      get: [authenticate('jwt')],
+      find: [authFunction('jwt')],
+      get: [authFunction('jwt')],
       create: [],
       update: [authenticate('jwt')],
-      patch: [authenticate('jwt')],
-      remove: [authenticate('jwt')],
+      patch: [authFunction('jwt')],
+      remove: [authFunction('jwt')],
     },
     before: {
       all: [

@@ -36,26 +36,14 @@
       "@magickml/core": [
         "packages/core/src/index.ts"
       ],
-      "@magickml/database": [
-        "packages/database/src/index.ts"
-      ],
       "@magickml/engine": [
         "packages/engine/src/index.ts"
       ],
       "@magickml/plugins": [
         "packages/plugins/src/index.ts"
       ],
-      "@magickml/prisma": [
-        "packages/prisma/src/index.ts"
-      ],
-      "@magickml/server-config": [
-        "packages/server-config/src/index.ts"
-      ],
-      "@magickml/systems": [
-        "packages/systems/src/index.ts"
-      ],
-      "@magickml/utils": [
-        "packages/utils/src/index.ts"
+      "@magickml/server-core": [
+        "packages/server-core/src/index.ts"
       ]
     }
   },
