@@ -269,8 +269,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     sendToPlaytest,
     onPlaytest,
     clearTextEditor,
-    processCode,
-    eventQAWeaviate,
     runSpell,
     refreshEventTable,
     queryGoogle,
