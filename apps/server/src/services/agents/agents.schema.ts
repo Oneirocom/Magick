@@ -7,6 +7,16 @@ import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../validators'
 import { spellSchema } from '../spells/spells.schema'
 
+// task: convert the Prisma schema to a Typebox schema
+// model agents {
+//   id            Int      @id @default(autoincrement())
+//   dirty         Boolean?
+//   enabled       Boolean?
+//   updated_at    String?
+//   spells        spells[] @relation("agentsTospells")
+//   data          Json?
+// }
+
 // Main data model schema
 export const agentSchema = Type.Object(
   {
