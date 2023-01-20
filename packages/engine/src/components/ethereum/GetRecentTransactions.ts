@@ -8,7 +8,6 @@ import Rete from 'rete'
 const etherscanProvider = new ethers.providers.EtherscanProvider()
 
 import {
-  EngineContext,
   NodeData,
   MagickNode,
   MagickWorkerInputs,
