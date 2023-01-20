@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
 import {
@@ -62,17 +61,30 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
   }
 
   worker(node: NodeData) {
-    const _var = node?.data?._var as string
-    const splitter = node?.data?._var as string
-    const keepEmpty = node?.data?.keepEmpty == 'true'
+    //Validate inputs
+    if (!node?.data?._var) {
+      throw new Error('Variable is required');
+    }
+    if (!node?.data?.splitter) {
+      throw new Error('Splitter is required');
+    }
+    if (!node?.data?.name) {
+      throw new Error('Name is required');
+    }
+
+    // Extract inputs
+    const _var = node.data._var as string;
+    const splitter = node.data.splitter as string;
+    const name = node.data.name as string;
+    const keepEmpty = node.data.keepEmpty == 'true';
+
+    // Perform split and filter
     const res = !keepEmpty
       ? _var.split(splitter).filter(el => el.length > 0)
-      : _var.split(splitter)
+      : _var.split(splitter);
 
-    this.name = (node?.data?.name as string) + ' - ' + _var
-
-    return {
-      output: res,
-    }
+    // set name and return output
+    this.name = name + ' - ' + _var;
+    return { output: res };
   }
 }
