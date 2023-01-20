@@ -70,6 +70,7 @@ import { BooleanVariable } from './variable/BooleanVariable'
 import { FewshotVariable } from './variable/FewshotVariable'
 import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
+import { EventDelete } from './events/EventDelete'
 
 // NOTE: PLEASE KEEP THESE IN ALPHABETICAL ORDER
 // todo some kind of custom build parser perhaps to take car of keeping these in alphabetical order
@@ -98,6 +99,7 @@ export const components = {
   conversationRecall: () => new EventRecall(),
   conversationRecall1: () => new EventRecallWeaviate(),
   eventqa: () => new EventQA(),
+  eventsdelete: () => new EventDelete(),
   request: () => new Request(),
   jupyterNotebook: () => new JupyterNotebook(),
   search: () => new Search(),
