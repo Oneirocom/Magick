@@ -22,6 +22,7 @@ export const runSpell = async ({
   }
 
   const graph = spell.graph as unknown as GraphData
+  const magickInterface = buildMagickInterface()
 
   const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs
 
@@ -31,7 +32,7 @@ export const runSpell = async ({
   }
 
   // Initialize the spell runner
-  const spellRunner = new SpellRunner()
+  const spellRunner = new SpellRunner({ magickInterface })
 
   // Load the spell in to the spell runner
   await spellRunner.loadSpell(spellToRun as unknown as SpellType)
