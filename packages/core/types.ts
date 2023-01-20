@@ -63,6 +63,7 @@ export type SemanticSearch = {
 
 export type QAArgs = {
   question: string
+  agentId: string
 }
 
 export type CreateEventArgs = Event
