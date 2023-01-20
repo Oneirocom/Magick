@@ -1,13 +1,12 @@
-// @ts-nocheck
-import { database } from '@magickml/database'
-import { OPENAI_API_KEY } from '@magickml/server-config'
-import { tts, tts_tiktalknet } from '@magickml/systems'
+import { OPENAI_API_KEY } from '@magickml/server-core'
+import { tts, tts_tiktalknet } from '@magickml/server-core'
 import Koa from 'koa'
 import { Route } from './types'
 import { CustomError } from './utils/CustomError'
 import { makeCompletion } from './utils/MakeCompletionRequest'
 import { MakeModelRequest } from './utils/MakeModelRequest'
 import { queryGoogleSearch } from './utils/queryGoogle'
+import weaviate from 'weaviate-client'
 
 export const modules: Record<string, unknown> = {}
 
@@ -45,11 +44,10 @@ const textCompletion = async (ctx: Koa.Context) => {
     topP,
     frequencyPenalty,
     presencePenalty,
-    sender,
     prompt,
     stop,
     apiKey: _apiKey,
-  } = ctx.request.body
+  } = ctx.request.body as any
 
   let apiKey = _apiKey ?? OPENAI_API_KEY
 
@@ -71,10 +69,11 @@ const textCompletion = async (ctx: Koa.Context) => {
 }
 
 const hfRequest = async (ctx: Koa.Context) => {
-  const inputs = ctx.request.body.inputs as string
-  const model = ctx.request.body.model as string
-  const parameters = ctx.request.body.parameters as any
-  const options = (ctx.request.body.options as any) || {
+  const body = ctx.request.body as any
+  const inputs = body.inputs as string
+  const model = body.model as string
+  const parameters = body.parameters as any
+  const options = (body.options as any) || {
     use_cache: false,
     wait_for_model: true,
   }
@@ -89,60 +88,40 @@ const hfRequest = async (ctx: Koa.Context) => {
   return (ctx.body = { succes: success, data: data })
 }
 
-// const makeWeaviateRequest = async (ctx: Koa.Context) => {
-//   const keyword = ctx.request.body.keyword as string
+const makeWeaviateRequest = async (ctx: Koa.Context) => {
+  const body = ctx.request.body as any
+  const keyword = body.keyword as string
 
-//   const client = weaviate.client({
-//     scheme: 'http',
-//     host: 'semantic-search-wikipedia-with-weaviate.api.vectors.network:8080/',
-//   })
+  const client = weaviate.client({
+    scheme: 'http',
+    host: 'semantic-search-wikipedia-with-weaviate.api.vectors.network:8080/',
+  })
 
-//   const res = await client.graphql
-//     .get()
-//     .withNearText({
-//       concepts: [keyword],
-//       certainty: 0.75,
-//     })
-//     .withClassName('Paragraph')
-//     .withFields('title content inArticle { ... on Article {  title } }')
-//     .withLimit(3)
-//     .do()
+  const res = await client.graphql
+    .get()
+    .withNearText({
+      concepts: [keyword],
+      certainty: 0.75,
+    })
+    .withClassName('Paragraph')
+    .withFields('title content inArticle { ... on Article {  title } }')
+    .withLimit(3)
+    .do()
 
-//   console.log('RESPONSE', res)
+  console.log('RESPONSE', res)
 
-//   if (res?.data?.Get !== undefined) {
-//     return (ctx.body = { data: res.data.Get })
-//   }
-//   return (ctx.body = { data: '' })
-// }
-
-const getAgentsInfo = async (ctx: Koa.Context) => {
-  const id = (ctx.request.query.id as string)
-    ? parseInt(ctx.request.query.id as string)
-    : -1
-
-  try {
-    let data = await database.getAgents()
-    let info = undefined
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].id === id) {
-        info = data[i]
-      }
-    }
-
-    return (ctx.body = info)
-  } catch (e) {
-    console.log('getAgentsHandler:', e)
-    ctx.status = 500
-    return (ctx.body = { error: 'internal error' })
+  if (res?.data?.Get !== undefined) {
+    return (ctx.body = { data: res.data.Get })
   }
+  return (ctx.body = { data: '' })
 }
 
 const queryGoogle = async (ctx: Koa.Context) => {
-  console.log('QUERY', ctx.request?.body?.query)
-  if (!ctx.request?.body?.query)
+  const body = ctx.request.body as any
+  console.log('QUERY', body?.query)
+  if (!body?.query)
     throw new CustomError('input-failed', 'No query provided in request body')
-  const query = ctx.request.body?.query as string
+  const query = body?.query as string
   const data = await queryGoogleSearch(query)
   console.log('DATA', data)
   const { summary, links } = data
@@ -180,10 +159,10 @@ export const apis: Route[] = [
     path: '/hf_request',
     post: hfRequest,
   },
-  // {
-  //   path: '/weaviate',
-  //   post: makeWeaviateRequest,
-  // },
+  {
+    path: '/weaviate',
+    post: makeWeaviateRequest,
+  },
   {
     path: '/query_google',
     post: queryGoogle,

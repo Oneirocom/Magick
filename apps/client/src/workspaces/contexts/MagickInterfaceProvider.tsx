@@ -16,7 +16,7 @@ import {
 } from '../../state/api/spells'
 
 import { usePubSub } from '../../contexts/PubSubProvider'
-import { magickApiRootUrl } from '../../config'
+import { magickApiRootUrl } from '../../utils/config'
 
 import { runPython } from '@magickml/core'
 

@@ -33,9 +33,9 @@ export const event = (app: Application) => {
   app.service('events').hooks({
     around: {
       all: [
-        authenticate('jwt'),
+        process.env.USE_AUTH !== 'true' && process.env.NODE_ENV === 'development' ? authenticate('jwt') : (context: any, next: any) => next(),
         schemaHooks.resolveExternal(eventExternalResolver),
-        schemaHooks.resolveResult(eventResolver)
+        schemaHooks.resolveResult(eventResolver),
       ]
     },
     before: {

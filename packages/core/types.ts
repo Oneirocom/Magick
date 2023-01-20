@@ -16,7 +16,7 @@ import { Inspector } from './src/plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './src/plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './src/plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './src/sockets'
-import { PubSubContext, MagickTask } from './src/magick-component'
+import { PubSubContext, MagickTask, MagickComponent } from './src/magick-component'
 import { spells } from '@prisma/client'
 
 export { MagickComponent } from './src/magick-component'
@@ -107,7 +107,6 @@ export type EngineContext = {
     spellId: string,
     state: Record<string, any>
   ) => Record<string, any>
-  completion: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: (spellId: string) => Promise<spells | Spell>
   processCode: (
     code: unknown,
@@ -116,16 +115,6 @@ export type EngineContext = {
     state: Record<string, any>,
     language?: string | null
   ) => any | void
-  queryGoogle: (query: string) => Promise<{summary: string, links: string}>
-  getEvents: (
-    args: GetEventArgs
-  ) => Promise<string | string[] | null | Record<string, any>>
-  getEventWeaviate: (
-    args: GetEventArgs
-  ) => Promise<string | string[] | null | Record<string, any>>
-  storeEvent: (args: CreateEventArgs) => Promise<any>
-  storeEventWeaviate: (args: CreateEventArgs) => Promise<any>
-  getWikipediaSummary: (keyword: string) => Promise<Record<string, any> | null>
 }
 
 export type EventPayload = Record<string, any>
@@ -166,17 +155,6 @@ export type EventsTypes = {
   resetconnection: void
 }
 
-export interface Spell {
-  id?: string
-  user?: Record<string, unknown> | string | null | undefined
-  name: string
-  graph: GraphData
-  // Spells: Module[]
-  gameState?: Record<string, unknown>
-  createdAt?: number
-  updatedAt?: number
-}
-
 export interface IRunContextEditor extends NodeEditor {
   magick: EditorContext
   abort: Function
@@ -194,7 +172,7 @@ export type DataSocketType = {
 export type MagickNode = Node & {
   inspector: Inspector
   display: (content: string) => void
-  outputs: { name: string; [key: string]: unknown }[]
+  outputs: { name: string;[key: string]: unknown }[]
   category?: string
   displayName?: string
   info: string
@@ -247,9 +225,11 @@ export type OpenAIResponse = {
 
 export type Subspell = { name: string; id: string; data: GraphData }
 
-export type ModuleComponent = Component & {
+export type GraphData = Data
+
+
+export type ModuleComponent = MagickComponent<unknown> & {
   run: Function
-  nodeTaskMap: Map<string, any>
 }
 
 export type NodeConnections = {
@@ -260,39 +240,32 @@ export type NodeConnections = {
 }
 
 export type NodeOutputs = {
-  output?: {
-    connections: NodeConnections[]
-  }
-  trigger?: {
-    connections: NodeConnections[]
-  }
-  action?: {
+  [outputKey: string]: {
     connections: NodeConnections[]
   }
 }
 
-export type GraphData = Data
-
-export type NodeData = ReteNodeData & {
-  fewshot?: string
-  display: Function
-  error?: boolean
-  console: MagickConsole
+export type NodeData = {
+  socketKey?: string
+  name?: string
+  [DataKey: string]: unknown
 }
 
-// export type Node = {
-//   id: number,
-//   data: NodeData,
-//   name: string,
-//   inputs: NodeOutputs,
-//   outputs?: NodeOutputs,
-//   position: number[]
-// }
+export type Module = { name: string; id: string; data: Graph }
 
-// export type Spell = {
-//   id: string
-//   nodes: Record<number, Node>
-// }
+export type Graph = {
+  id: string
+  nodes: Record<number, Node>
+}
+
+export type Spell = {
+  name: string
+  graph: Graph
+  gameState: Record<string, unknown>
+  createdAt: number
+  updatedAt: number
+  modules: Module[]
+}
 
 export type MagickReteInput = {
   type: TaskOutputTypes
@@ -328,9 +301,9 @@ export type WorkerReturn =
   | Promise<never[] | { entities: { name: string; type: string }[] }>
   | Promise<{ element: unknown } | undefined>
   | Promise<
-      | { result: { error: unknown; [key: string]: unknown } }
-      | { result?: undefined }
-    >
+    | { result: { error: unknown;[key: string]: unknown } }
+    | { result?: undefined }
+  >
   | Promise<{ text: unknown }>
   | Promise<{ boolean: boolean }>
   | Promise<null | undefined>
@@ -351,11 +324,11 @@ export type MagickWorker = (
 
 export interface PubSubBase
   extends CountSubscriptions,
-    ClearAllSubscriptions,
-    GetSubscriptions,
-    Publish,
-    Subscribe,
-    Unsubscribe {
+  ClearAllSubscriptions,
+  GetSubscriptions,
+  Publish,
+  Subscribe,
+  Unsubscribe {
   name: string
 }
 

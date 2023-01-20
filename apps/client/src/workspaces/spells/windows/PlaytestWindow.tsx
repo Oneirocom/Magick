@@ -13,7 +13,7 @@ import { usePubSub } from '../../../contexts/PubSubProvider'
 import Window from '../../../components/Window/Window'
 import css from '../../../screens/Magick/magick.module.css'
 import { useFeathers } from '../../../contexts/FeathersProvider'
-import { feathers as feathersFlag } from '../../../config'
+import { feathers as feathersFlag } from '../../../utils/config'
 import { useAppSelector } from '../../../state/hooks'
 
 const Input = props => {

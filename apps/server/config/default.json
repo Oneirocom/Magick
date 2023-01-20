@@ -1,9 +1,9 @@
 {
   "host": "localhost",
-  "port": 3030,
+  "port": 8001,
   "public": "./public/",
   "origins": [
-    "http://localhost:3030"
+    "http://localhost:8001"
   ],
   "paginate": {
     "default": 10,

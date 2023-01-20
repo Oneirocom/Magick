@@ -6,11 +6,25 @@ import type { Static } from '@feathersjs/typebox'
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../validators'
 
+// task: convert the Prisma schema to a Typebox schema
+// model agents {
+//   id            Int      @id @default(autoincrement())
+//   dirty         Boolean?
+//   enabled       Boolean?
+//   updated_at    String?
+//   spells        spells[] @relation("agentsTospells")
+//   data          Json?
+// }
+
 // Main data model schema
 export const agentSchema = Type.Object(
   {
     id: Type.Number(),
-    text: Type.String()
+    dirty: Type.Optional(Type.Boolean()),
+    enabled: Type.Optional(Type.Boolean()),
+    updated_at: Type.Optional(Type.String()),
+    spells: Type.Optional(Type.Array(Type.Number())),
+    data: Type.Optional(Type.Any()),
   },
   { $id: 'Agent', additionalProperties: false }
 )
@@ -20,7 +34,13 @@ export const agentResolver = resolve<Agent, HookContext>({})
 export const agentExternalResolver = resolve<Agent, HookContext>({})
 
 // Schema for creating new entries
-export const agentDataSchema = Type.Pick(agentSchema, ['text'], {
+export const agentDataSchema = Type.Pick(agentSchema, [
+  'dirty',
+  'enabled',
+  'updated_at',
+  'spells',
+  'data',
+], {
   $id: 'AgentData'
 })
 export type AgentData = Static<typeof agentDataSchema>
@@ -36,7 +56,14 @@ export const agentPatchValidator = getDataValidator(agentPatchSchema, dataValida
 export const agentPatchResolver = resolve<Agent, HookContext>({})
 
 // Schema for allowed query properties
-export const agentQueryProperties = Type.Pick(agentSchema, ['id', 'text'])
+export const agentQueryProperties = Type.Pick(agentSchema, [
+  'id',
+  'dirty',
+  'enabled',
+  'updated_at',
+  'spells',
+  'data'
+])
 export const agentQuerySchema = Type.Intersect(
   [
     querySyntax(agentQueryProperties),

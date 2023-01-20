@@ -1,4 +1,3 @@
-// // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
@@ -10,7 +9,14 @@ import { dataValidator, queryValidator } from '../../validators'
 export const spellSchema = Type.Object(
   {
     id: Type.Number(),
-    text: Type.String()
+    name: Type.String(),
+    graph: Type.Optional(Type.Any()),
+    created_at: Type.Optional(Type.String()),
+    updated_at: Type.Optional(Type.String()),
+    deleted_at: Type.Optional(Type.String()),
+    modules: Type.Optional(Type.Array(Type.String())),
+    gameState: Type.Optional(Type.Any()),
+    agents: Type.Optional(Type.Array(Type.Number())),
   },
   { $id: 'Spell', additionalProperties: false }
 )
@@ -20,7 +26,16 @@ export const spellResolver = resolve<Spell, HookContext>({})
 export const spellExternalResolver = resolve<Spell, HookContext>({})
 
 // Schema for creating new entries
-export const spellDataSchema = Type.Pick(spellSchema, ['text'], {
+export const spellDataSchema = Type.Pick(spellSchema, [
+  'name',
+  'graph',
+  'created_at',
+  'updated_at',
+  'deleted_at',
+  'modules',
+  'gameState',
+  'agents',
+], {
   $id: 'SpellData'
 })
 export type SpellData = Static<typeof spellDataSchema>
@@ -36,7 +51,17 @@ export const spellPatchValidator = getDataValidator(spellPatchSchema, dataValida
 export const spellPatchResolver = resolve<Spell, HookContext>({})
 
 // Schema for allowed query properties
-export const spellQueryProperties = Type.Pick(spellSchema, ['id', 'text'])
+export const spellQueryProperties = Type.Pick(spellSchema, [
+  'id',
+  'name',
+  'graph',
+  'created_at',
+  'updated_at',
+  'deleted_at',
+  'modules',
+  'gameState',
+  'agents',
+])
 export const spellQuerySchema = Type.Intersect(
   [
     querySyntax(spellQueryProperties),

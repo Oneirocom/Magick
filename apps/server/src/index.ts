@@ -1,18 +1,18 @@
+import 'regenerator-runtime/runtime'
+
 import { app } from './app'
 
 import cors from '@koa/cors'
 import Router from '@koa/router'
-import { database } from '@magickml/database'
 import {
   initFileServer,
   initTextToSpeech,
   initWeaviateClient,
-} from '@magickml/systems'
+} from '@magickml/server-core'
 import {
   WEAVIATE_IMPORT_DATA,
   USESSL,
-  SERVER_PORT,
-} from '@magickml/server-config'
+} from '@magickml/server-core'
 
 import * as fs from 'fs'
 import http from 'http'
@@ -21,7 +21,7 @@ import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
 import path from 'path'
-import 'regenerator-runtime/runtime'
+import { initSpeechServer } from '@magickml/server-core'
 
 import { Handler, Method, Middleware } from './types'
 
@@ -46,17 +46,20 @@ process.on('unhandledRejection', (reason, p) =>
 
 const router: Router = new Router()
 
-import { agents } from './agents'
 import { apis } from './apis'
-import { events } from './events'
 import { spells } from './spells'
 import { Route } from './types'
 
-const routes: Route[] = [...spells, ...agents, ...events, ...apis]
+const routes: Route[] = [...spells, ...apis]
+
+import { worldManager } from '@magickml/core'
+import { World } from './World'
 
 async function init() {
-  new database()
 
+  new World()
+  new worldManager()
+  initSpeechServer(false)
   await initFileServer()
   await initTextToSpeech()
   await initWeaviateClient(
@@ -153,7 +156,6 @@ async function init() {
 
   app.use(router.routes()).use(router.allowedMethods())
 
-  const PORT: number = Number(SERVER_PORT) || 8001
   const useSSL =
     USESSL === 'true' &&
     fs.existsSync(path.join(__dirname, './certs/')) &&
@@ -169,11 +171,11 @@ async function init() {
   useSSL
     ? https
         .createServer(optionSsl, app.callback())
-        .listen(PORT, 'localhost', () => {
-          logger.info('Https Server listening on: localhost:' + PORT)
+        .listen(app.get('port'), 'localhost', () => {
+          logger.info('Https Server listening on: localhost:' + app.get('port'))
         })
-    : http.createServer(app.callback()).listen(PORT, 'localhost', () => {
-        logger.info('Http Server listening on: localhost:' + PORT)
+    : http.createServer(app.callback()).listen(app.get('port'), 'localhost', () => {
+        logger.info('Http Server listening on: localhost:' + app.get('port'))
       })
   // await initLoop()
 }
