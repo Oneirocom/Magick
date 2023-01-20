@@ -1,4 +1,4 @@
-import { GraphData, EditorContext, Spell, MagickEditor } from '@magickml/core'
+import { GraphData, EditorContext, Spell, MagickEditor } from '@magickml/engine'
 import { initEditor, zoomAt } from '@magickml/client-core'
 import React, {
   useRef,

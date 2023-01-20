@@ -1,5 +1,5 @@
 import {
-  EngineContext} from '@magickml/core'
+  EngineContext} from '@magickml/engine'
 import { prisma } from '@magickml/prisma'
 
 import { runSpell } from './utils/runSpell'

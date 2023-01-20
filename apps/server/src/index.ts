@@ -52,7 +52,7 @@ import { Route } from './types'
 
 const routes: Route[] = [...spells, ...apis]
 
-import { worldManager } from '@magickml/core'
+import { worldManager } from '@magickml/engine'
 import { World } from './World'
 
 async function init() {

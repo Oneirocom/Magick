@@ -1,4 +1,4 @@
-import { SearchSchema } from '@magickml/core'
+import { SearchSchema } from '@magickml/engine'
 import weaviate from 'weaviate-client'
 import * as fs from 'fs'
 import path from 'path'

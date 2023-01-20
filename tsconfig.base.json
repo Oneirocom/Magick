@@ -33,14 +33,8 @@
       "@magickml/client-core": [
         "packages/client-core/src/index.ts"
       ],
-      "@magickml/core": [
-        "packages/core/src/index.ts"
-      ],
       "@magickml/engine": [
         "packages/engine/src/index.ts"
-      ],
-      "@magickml/plugins": [
-        "packages/plugins/src/index.ts"
       ],
       "@magickml/server-core": [
         "packages/server-core/src/index.ts"

@@ -27,7 +27,7 @@ import {
   MagickEditor,
   MultiSocketGenerator,
   NodeClickPlugin,
-} from '@magickml/core'
+} from '@magickml/engine'
 
 import AreaPlugin from './plugins/areaPlugin'
 

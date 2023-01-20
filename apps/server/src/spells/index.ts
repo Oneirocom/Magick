@@ -1,4 +1,4 @@
-import { extractModuleInputKeys, Spell } from '@magickml/core'
+import { extractModuleInputKeys, Spell } from '@magickml/engine'
 import { prisma } from '@magickml/prisma'
 import Koa from 'koa'
 import otJson0 from 'ot-json0'

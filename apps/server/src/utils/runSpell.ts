@@ -1,7 +1,6 @@
-import { SpellRunner, GraphData, Spell as SpellType } from '@magickml/core'
+import { SpellRunner, GraphData, Spell as SpellType } from '@magickml/engine'
 import { prisma } from '@magickml/prisma'
 import { CustomError } from './CustomError'
-import { buildMagickInterface } from '../spells/buildMagickInterface'
 
 export type RunSpellArgs = {
   spellName: string
@@ -25,7 +24,6 @@ export const runSpell = async ({
   }
 
   const graph = spell.graph as unknown as GraphData
-  const magickInterface = buildMagickInterface(state)
 
   const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs
 
@@ -36,7 +34,7 @@ export const runSpell = async ({
   }
 
   // Initialize the spell runner
-  const spellRunner = new SpellRunner({ magickInterface })
+  const spellRunner = new SpellRunner()
 
   // Load the spell in to the spell runner
   await spellRunner.loadSpell(spellToRun as unknown as SpellType)
