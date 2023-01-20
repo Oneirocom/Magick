@@ -101,16 +101,12 @@ export class Python extends MagickComponent<unknown> {
     context: { magick: EngineContext; data: { code: unknown } }
   ) {
     const { magick, data } = context
-    const { processCode, getCurrentGameState, updateCurrentGameState } = magick
+    const { processCode } = magick
     if (!processCode) return
-
-    const state = getCurrentGameState()
 
     try {
       // const value = runCodeWithArguments(node.data.code)
-      const value = processCode(node.data.code, inputs, data, state, 'python')
-
-      if (value.state) updateCurrentGameState(value.state)
+      const value = processCode(node.data.code, inputs, data, 'python')
 
       return value
     } catch (err) {

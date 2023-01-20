@@ -11,7 +11,6 @@ export const modules: Record<string, unknown> = {}
 
 const runSpellHandler = async (ctx: Koa.Context) => {
   const { spell: spellName } = ctx.params
-  const { userGameState = {} } = ctx.request.body
 
   const inputFormatter = graph => {
     // Extract any keys from the graphs inputs
@@ -30,13 +29,12 @@ const runSpellHandler = async (ctx: Koa.Context) => {
     }, {} as Record<string, unknown>)
   }
 
-    const { outputs, state, name } = await runSpell({
+    const { outputs, name } = await runSpell({
       spellName,
-      state: userGameState,
       inputFormatter,
     })
     // Return the response
-    ctx.body = { spell: name, outputs, state }
+    ctx.body = { spell: name, outputs }
 }
 
 const saveDiffHandler = async (ctx: Koa.Context) => {

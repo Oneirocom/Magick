@@ -74,12 +74,6 @@ const StateManager = ({ tab, ...props }) => {
     return () => clearTimeout(delayDebounceFn)
   }, [code])
 
-  // update code when game state changes
-  useEffect(() => {
-    if (!spell?.gameState) return
-    setCode(jsonFormat(spell.gameState))
-  }, [spell])
-
   const onClear = () => {
     const reset = `{}`
     setCode(reset)
@@ -92,10 +86,8 @@ const StateManager = ({ tab, ...props }) => {
 
   const onSave = async () => {
     try {
-      const parsedState = JSON.parse(code)
       const spellUpdate = {
         ...spell,
-        gameState: parsedState,
       }
 
       // publish(SAVE_SPELL_DIFF, spellUpdate)

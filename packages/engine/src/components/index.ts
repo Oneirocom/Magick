@@ -47,8 +47,6 @@ import { DocumentSetMass } from './search/DocumentSetMass'
 import { DocumentStoreGet } from './search/DocumentStoreGet'
 import { RSSGet } from './search/RSSGet'
 import { Search } from './search/Search'
-import { StateRead } from './state/StateRead'
-import { StateWrite } from './state/StateWrite'
 import { ComplexStringMatcher } from './strings/ComplexStringMatcher'
 import { JoinListComponent } from './strings/JoinList'
 import { ProfanityFilter } from './strings/ProfanityFilter'
@@ -128,8 +126,6 @@ export const components = {
   joinListComponent: () => new JoinListComponent(),
   moduleComponent: () => new SpellComponent(),
   output: () => new Output(),
-  stateWrite: () => new StateWrite(),
-  stateRead: () => new StateRead(),
   stringProcessor: () => new StringProcessor(),
   switchGate: () => new SwitchGate(),
   triggerIn: () => new TriggerIn(),

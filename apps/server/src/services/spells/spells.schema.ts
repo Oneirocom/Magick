@@ -15,7 +15,6 @@ export const spellSchema = Type.Object(
     updated_at: Type.Optional(Type.String()),
     deleted_at: Type.Optional(Type.String()),
     modules: Type.Optional(Type.Array(Type.String())),
-    gameState: Type.Optional(Type.Any()),
     agents: Type.Optional(Type.Array(Type.Number())),
   },
   { $id: 'Spell', additionalProperties: false }
@@ -33,7 +32,6 @@ export const spellDataSchema = Type.Pick(spellSchema, [
   'updated_at',
   'deleted_at',
   'modules',
-  'gameState',
   'agents',
 ], {
   $id: 'SpellData'
@@ -59,7 +57,6 @@ export const spellQueryProperties = Type.Pick(spellSchema, [
   'updated_at',
   'deleted_at',
   'modules',
-  'gameState',
   'agents',
 ])
 export const spellQuerySchema = Type.Intersect(

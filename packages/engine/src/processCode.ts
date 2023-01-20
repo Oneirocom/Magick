@@ -8,7 +8,6 @@ export async function processCode(
   code: unknown,
   inputs: MagickWorkerInputs,
   data: Record<string, any>,
-  state: Record<string, any>,
   language: string = 'javascript'
 ) {
   // Inputs are flattened before we inject them for a better code experience
@@ -27,10 +26,9 @@ export async function processCode(
     // Freeze the variables we are injecting into the VM
     vm.freeze(data, 'data');
     vm.freeze(flattenInputs, 'input');
-    vm.protect(state, 'state');
 
     // run the code
-    const codeToRun = `"use strict"; function runFn(input,data,state){ return (${code})(input,data,state)}; runFn(input,data,state);`;
+    const codeToRun = `"use strict"; function runFn(input,data){ return (${code})(input,data)}; runFn(input,data);`;
 
     try {
       const codeResult = vm.run(codeToRun);
@@ -46,7 +44,7 @@ export async function processCode(
   } else {
     try {
 
-      const codeResult = await runPython(code, flattenInputs, data, state);
+      const codeResult = await runPython(code, flattenInputs, data);
       return codeResult;
     } catch (err) {
       console.log({ err });

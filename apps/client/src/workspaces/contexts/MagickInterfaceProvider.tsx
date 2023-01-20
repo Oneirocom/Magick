@@ -148,7 +148,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return spell.data as Spell
   }
 
-  const processCode = async (code, inputs, data, state, language='javascript') => {
+  const processCode = async (code, inputs, data, language='javascript') => {
     const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
       (acc, [key, value]) => {
         acc[key as string] = value[0] as any
@@ -163,19 +163,12 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       const result = new Function('"use strict";return (' + code + ')')()(
         flattenedInputs,
         data,
-        state
       )
-      if (result.state) {
-        updateCurrentGameState(result.state)
-      }
       return result
     } else if (language == 'python') {
       try {
 
-        const result = await runPython(code, flattenedInputs, data, state);
-        if (result.state) {
-          updateCurrentGameState(result.state)
-        }
+        const result = await runPython(code, flattenedInputs, data);
 
         return result;
       } catch (err) {
@@ -198,45 +191,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
   const clearTextEditor = () => {
     publish($TEXT_EDITOR_CLEAR(tab.id))
-  }
-
-  const getCurrentGameState = () => {
-    if (!spellRef.current) return {}
-
-    return spellRef.current?.gameState ?? {}
-  }
-
-  const setCurrentGameState = newState => {
-    if (!spellRef.current) return
-
-    const update = {
-      gameState: newState,
-    }
-    // publish($SAVE_SPELL_DIFF(tab.id), update)
-  }
-
-  const updateCurrentGameState = _update => {
-    if (!spellRef.current) return
-    const spell = spellRef.current
-
-    // lets delete out all undefined properties coming in
-    Object.keys(_update).forEach(
-      key => _update[key] === undefined && delete _update[key]
-    )
-
-    const update = {
-      gameState: {
-        ...spell.gameState,
-        ..._update,
-      },
-    }
-
-    // Temporarily update the spell refs game state to account for multiple state writes in a spell run
-    spellRef.current = {
-      ...spell,
-      ...update,
-    }
-    // publish($SAVE_SPELL_DIFF(tab.id), update)
   }
 
   const getEvents = async (params: GetEventArgs) => {
@@ -394,9 +348,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     sendToPlaytest,
     onPlaytest,
     clearTextEditor,
-    getCurrentGameState,
-    setCurrentGameState,
-    updateCurrentGameState,
     processCode,
     runSpell,
     refreshEventTable,
