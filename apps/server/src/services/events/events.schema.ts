@@ -6,22 +6,6 @@ import type { Static } from '@feathersjs/typebox'
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../validators'
 
-// convert the Prisma schema to a Typebox schema
-// model events {
-//   id            Int     @id @default(autoincrement())
-//   type          String?
-//   observer      String?
-//   sender        String?
-//   entities      Json?
-//   client        String?
-//   channel       String?
-//   channelType   String?
-//   content       String?
-//   agentId       Int
-//   date          String?
-// }
-
-// Main data model schema
 export const eventSchema = Type.Object(
   {
     id: Type.Number(),

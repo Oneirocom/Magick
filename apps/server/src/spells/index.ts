@@ -1,5 +1,5 @@
 import { extractModuleInputKeys, Spell } from '@magickml/engine'
-import { prisma } from '@magickml/prisma'
+import { app } from "../app"
 import Koa from 'koa'
 import otJson0 from 'ot-json0'
 
@@ -45,7 +45,7 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
 
   if (!body) throw new ServerError('input-failed', 'No parameters provided')
 
-  let spell = await prisma.spells.findUnique({ where: { name } })
+  let spell = await app.service('spells').find({ query: { name } })
 
   if (!spell)
     throw new ServerError('input-failed', `No spell with ${name} name found.`)
@@ -59,25 +59,14 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
         'input-failed',
         'Graph would be cleared.  Aborting.'
       )
-
-    const updatedSpell = await prisma.spells.update({
-      where: { name },
-      data: spellUpdate,
-      include: {
-        agents: true,
-      },
-    })
+  // in feathers.js, get the spells service and update the spell with the name of name
+    const updatedSpell = await app.service('spells').update(name, spellUpdate)
 
     // get all entities from this spell and set to dirty
     await updatedSpell.agents.forEach(async entity => {
-      await prisma.agents.update({
-        where: { id: entity.id },
-        data: {
-          dirty: true,
-        },
-      })
+      // in feathers.js get the agents service and update the entity with the id of entity.id
+      await app.service('agents').update(entity, { dirty: true })
     })
-
     ctx.response.status = 200
     ctx.body = updatedSpell
 }
