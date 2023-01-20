@@ -102,8 +102,10 @@ const getAllEventsWeaviate = async (ctx: Koa.Context) => {
 
 const eventQAWeaviate = async (ctx: Koa.Context) => {
   const question = ctx.request.query.question as string
+  const agentId = ctx.request.query.agentId as string
   console.log("Inside EventQA", question)
-  const answer = await weaviate_connection.searchEvents(question, 10)
+  console.log(agentId)
+  const answer = await weaviate_connection.searchEvents(question, parseInt(agentId))
   console.log("Inside EventQA")
   console.log(answer)
   return (ctx.body = answer)
