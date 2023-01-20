@@ -13,10 +13,10 @@ import axios from 'axios'
 
 import { runPython } from '@magickml/core'
 import { CustomError } from '../utils/CustomError'
-import { makeCompletion } from '../utils/MakeCompletionRequest'
+import { makeCompletion } from './utils/MakeCompletionRequest'
 import { queryGoogleSearch } from '../utils/queryGoogle'
-import { runSpell } from '../utils/runSpell'
-import { searchWikipedia } from '../wikipedia/helpers'
+import { runSpell } from './utils/runSpell'
+import { searchWikipedia } from './wikipedia/helpers'
 import {
   API_ROOT_URL,
   API_URL,

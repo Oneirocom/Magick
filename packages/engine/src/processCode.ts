@@ -1,7 +1,7 @@
-import { MagickWorkerInputs } from '@magickml/core';
+import { MagickWorkerInputs } from '@magickml/engine';
 import vm2 from 'vm2';
-import { runPython } from '@magickml/core';
-import { CustomError } from './utils/CustomError';
+import { runPython } from '@magickml/engine';
+import { CustomError } from '../../../apps/server/src/utils/CustomError';
 
 
 export async function processCode(
