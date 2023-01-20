@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import {
   CompletionBody,
   CreateEventArgs,
@@ -103,12 +101,8 @@ const createEvent = async (args: CreateEventArgs) => {
     return response.data
   }
 
-export const buildMagickInterface = (
-  initialGameState: Record<string, unknown>,
-  overrides: Record<string, Function> = {}
-): EngineContext => {
+export const buildMagickInterface = (): EngineContext => {
   // eslint-disable-next-line functional/no-let
-  let gameState = { ...initialGameState }
   const env = {
     API_ROOT_URL,
     API_URL,
@@ -204,20 +198,6 @@ export const buildMagickInterface = (
           console.log({ err })
         }
       }
-    },
-    setCurrentGameState: state => {
-      gameState = state
-    },
-    getCurrentGameState: () => {
-      return gameState
-    },
-    updateCurrentGameState: (update: Record<string, unknown>) => {
-      const newState = {
-        ...gameState,
-        ...update,
-      }
-
-      gameState = newState
     },
     getEvents: async (args: GetEventArgs) => {
       return await getEvents(args)
