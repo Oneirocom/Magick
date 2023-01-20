@@ -122,7 +122,6 @@ export type EngineContext = {
     code: unknown,
     inputs: MagickWorkerInputs,
     data: Record<string, any>,
-    state: Record<string, any>,
     language?: string | null
   ) => any | void
 }

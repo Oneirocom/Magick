@@ -1,7 +1,6 @@
 import Rete from 'rete'
 
 import {
-  EngineContext,
   NodeData,
   MagickNode,
   MagickWorkerInputs,
@@ -99,9 +98,9 @@ export class Python extends MagickComponent<unknown> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: { magick: EngineContext; data: { code: unknown } }
+    context: { data: { code: unknown } }
   ) {
-    const { magick, data } = context
+    const { data } = context
 
     try {
       // const value = runCodeWithArguments(node.data.code)
