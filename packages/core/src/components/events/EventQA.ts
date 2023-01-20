@@ -6,7 +6,7 @@ import {
     MagickWorkerInputs,
     MagickWorkerOutputs,
   } from '../../../types'
-  import { triggerSocket, anySocket } from '../../sockets'
+  import { triggerSocket, anySocket, stringSocket } from '../../sockets'
   import { MagickComponent } from '../../magick-component'
 import { response } from 'express'
   
@@ -34,11 +34,13 @@ import { response } from 'express'
 
     builder(node: MagickNode) {
       const idInput = new Rete.Input('question','Question', anySocket)
+      const agentidInput = new Rete.Input('agentId', 'Agent ID', stringSocket)
       const dataInput = new Rete.Input('trigger','Tirgger',triggerSocket, true)
       const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
       const output = new Rete.Output('output', 'Output', anySocket)
       return node
              .addInput(idInput)
+             .addInput(agentidInput)
              .addInput(dataInput)
              .addOutput(dataOutput)
              .addOutput(output)
@@ -54,8 +56,10 @@ import { response } from 'express'
       const { eventQAWeaviate } = magick
 
       const question = inputs['question'][0] as string
+      const agentId = (inputs['agentId'] && inputs['agentId'][0]) as string
       const body = {
-        question
+        question,
+        agentId
       }
       const response = await eventQAWeaviate(body)
       var result

@@ -291,10 +291,11 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const eventQAWeaviate = async ({
-    question
+    question, agentId
   }: QAArgs) => {
     const params = {
-      question
+      question,
+      agentId
     } as Record<string, any>
     const urlString = `${
       import.meta.env.VITE_APP_API_URL ??
