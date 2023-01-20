@@ -228,7 +228,7 @@ export const buildMagickInterface = (
     },
     eventQAWeaviate: async (args: QAArgs) => {
       const data = {...args}
-      return await weaviate_connection.searchEvents(data["question"], 10)
+      return await weaviate_connection.searchEvents(data["question"], parseInt(data['agentId'].toString()))
     },
     storeEventWeaviate: async (args: CreateEventArgs) => {
       return await storeEventWeaviate(args)
