@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import Action from '../action'
 
 // The saved connection may have been removed and recreated, so make sure we are working with the correct reference

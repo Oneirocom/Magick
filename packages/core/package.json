@@ -3,16 +3,6 @@
   "version": "0.0.1",
   "private": false,
   "description": "core shared code for magick",
-  "main": "./core.js",
-  "module": "./core.js",
-  "exports": {
-    ".": {
-      "import": "./core.js",
-      "require": "./core.js"
-    }
-  },
-  "peerDependencies": {
-    "react": "^18.0.2",
-    "react-dom": "^18.0.2"
-  }
+  "main": "./src/index.ts",
+  "module": "./src/index.ts"
 }

@@ -3,26 +3,30 @@ import { feathers } from '@feathersjs/feathers'
 import type { TransportConnection, Params } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
-import type {
-  User,
-  UserData,
-  UserQuery,
-  UserService,
-} from './services/users/users'
+import type { Spell, SpellData, SpellQuery, SpellService } from './services/spells/spells'
+export type { Spell, SpellData, SpellQuery }
+export const spellServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
+export type SpellClientService = Pick<SpellService<Params<SpellQuery>>, (typeof spellServiceMethods)[number]>
+
+import type { Agent, AgentData, AgentQuery, AgentService } from './services/agents/agents'
+export type { Agent, AgentData, AgentQuery }
+export const agentServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
+export type AgentClientService = Pick<AgentService<Params<AgentQuery>>, (typeof agentServiceMethods)[number]>
+
+import type { Event, EventData, EventQuery, EventService } from './services/events/events'
+export type { Event, EventData, EventQuery }
+export const eventServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
+export type EventClientService = Pick<EventService<Params<EventQuery>>, (typeof eventServiceMethods)[number]>
+
+import type { User, UserData, UserQuery, UserService } from './services/users/users'
 export type { User, UserData, UserQuery }
-export const userServiceMethods = [
-  'find',
-  'get',
-  'create',
-  'patch',
-  'remove',
-] as const
-export type UserClientService = Pick<
-  UserService<Params<UserQuery>>,
-  (typeof userServiceMethods)[number]
->
+export const userServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
+export type UserClientService = Pick<UserService<Params<UserQuery>>, (typeof userServiceMethods)[number]>
 
 export interface ServiceTypes {
+  spells: SpellClientService
+  agents: AgentClientService
+  events: EventClientService
   users: UserClientService
   //
 }
@@ -45,7 +49,16 @@ export const createClient = <Configuration = any>(
   client.configure(authenticationClient(authenticationOptions))
 
   client.use('users', connection.service('users'), {
-    methods: userServiceMethods,
+    methods: userServiceMethods
+  })
+  client.use('events', connection.service('events'), {
+    methods: eventServiceMethods
+  })
+  client.use('agents', connection.service('agents'), {
+    methods: agentServiceMethods
+  })
+  client.use('spells', connection.service('spells'), {
+    methods: spellServiceMethods
   })
   return client
 }

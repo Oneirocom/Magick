@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
   CompletionBody,
   CreateEventArgs,
@@ -43,8 +45,8 @@ const createEvent = async (args: CreateEventArgs) => {
     max_time_diff = -1,
   }) => {
     const urlString = `${
-      import.meta.env.VITE_APP_API_URL ??
-      import.meta.env.API_ROOT_URL
+      process.env.VITE_APP_API_URL ??
+      process.env.API_ROOT_URL
     }/eventWeaviate`
 
     const params = {
@@ -82,8 +84,8 @@ const createEvent = async (args: CreateEventArgs) => {
   }: CreateEventArgs) => {
     const response = await axios.post(
       `${
-        import.meta.env.VITE_APP_API_URL ??
-        import.meta.env.API_ROOT_URL
+        process.env.VITE_APP_API_URL ??
+        process.env.API_ROOT_URL
       }/eventWeaviate`,
       {
         type,

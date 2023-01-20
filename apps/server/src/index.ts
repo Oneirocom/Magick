@@ -1,3 +1,5 @@
+import { app } from './app'
+
 import cors from '@koa/cors'
 import Router from '@koa/router'
 import { database } from '@magickml/database'
@@ -14,7 +16,6 @@ import {
 
 import * as fs from 'fs'
 import http from 'http'
-import HttpStatus from 'http-status-codes'
 import https from 'https'
 import Koa from 'koa'
 import koaBody from 'koa-body'
@@ -24,10 +25,19 @@ import 'regenerator-runtime/runtime'
 
 import { Handler, Method, Middleware } from './types'
 
+// log node.js errors
+process.on('uncaughtException', (err) => {
+  console.error('uncaughtException', err)
+})
+
+// log node.js errors
+process.on('unhandledRejection', (err) => {
+  console.error('unhandledRejection', err)
+})
+
 // todo probaly want to get ride of this.  Not super secure.
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-import { app } from './app'
 import { logger } from './logger'
 
 process.on('unhandledRejection', (reason, p) =>

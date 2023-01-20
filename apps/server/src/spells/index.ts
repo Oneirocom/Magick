@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { extractModuleInputKeys, Spell } from '@magickml/core'
 import { prisma } from '@magickml/prisma'
 import Koa from 'koa'

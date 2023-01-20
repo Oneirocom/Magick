@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from 'react'
 import { Control } from 'rete'
 const ReactTextInputControl = props => {

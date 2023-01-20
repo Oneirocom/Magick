@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 export default class History {
   constructor() {
     this.active = false

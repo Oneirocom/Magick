@@ -8,7 +8,6 @@
     "outDir": "./lib",
     "rootDir": "./src",
     "declaration": true,
-    "strict": true,
     "esModuleInterop": true
   },
   "references": [

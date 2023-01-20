@@ -2,16 +2,9 @@
   "name": "@magickml/server",
   "description": "Server for Magick",
   "version": "0.0.1",
-  "homepage": "",
   "private": true,
-  "keywords": [
-    "feathers"
-  ],
   "contributors": [],
   "bugs": {},
-  "engines": {
-    "node": ">= 19.1.0"
-  },
   "feathers": {
     "language": "ts",
     "packager": "npm",
@@ -22,17 +15,7 @@
       "websockets"
     ],
     "schema": "typebox"
-  },
-  "directories": {
-    "lib": "src",
-    "test": "test"
-  },
-  "files": [
-    "lib/client.js",
-    "lib/**/*.d.ts"
-  ],
-  "main": "lib/client",
-  "scripts": {
+  },  "scripts": {
     "dev": "nodemon -x ts-node src/index.ts",
     "compile": "shx rm -rf lib/ && tsc",
     "start": "node lib/",
@@ -42,10 +25,5 @@
     "bundle:client": "npm run compile && npm pack --pack-destination ./public",
     "migrate": "knex migrate:latest",
     "migrate:make": "knex migrate:make"
-  },
-  "dependencies": {
-    "@magickml/database": "workspace:^0.0.1",
-    "@magickml/systems": "workspace:^0.0.1"
   }
-
 }

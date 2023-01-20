@@ -24,6 +24,12 @@
       "./node_modules/@types"
     ],
     "paths": {
+      "@magickml/client": [
+        "packages/client/src/index.ts"
+      ],
+      "@magickml/server": [
+        "packages/server/src/index.ts"
+      ],
       "@magickml/client-core": [
         "packages/client-core/src/index.ts"
       ],

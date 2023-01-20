@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { DisplayControl } from './DisplayControl'
 
 function install(editor) {

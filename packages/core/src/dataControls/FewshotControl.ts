@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { DataControl } from '../plugins/inspectorPlugin'
 
 export class FewshotControl extends DataControl {

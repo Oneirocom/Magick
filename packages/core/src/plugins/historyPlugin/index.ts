@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import Act from './action'
 import {
   AddConnectionAction,

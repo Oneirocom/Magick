@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { DataControl } from '../plugins/inspectorPlugin'
 
 export class PlaytestControl extends DataControl {

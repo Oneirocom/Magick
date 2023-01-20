@@ -2,6 +2,9 @@
   "extends": "../../tsconfig.base.json",
   "files": [],
   "include": [],
+  "paths": {
+    "@magickml/server-config": ["packages/server-config"]
+  },
   "references": [
     {
       "path": "./tsconfig.lib.json"

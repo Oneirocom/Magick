@@ -4,7 +4,6 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
     "dev": "nx run-many --target=serve --projects=server,client,agent-server,speech-server --parallel 4",
     "db:init": "npx prisma db push",
     "agents": "nx run agent-server:serve",
@@ -25,6 +24,13 @@
     "schema": "./packages/prisma/prisma/schema.prisma"
   },
   "dependencies": {
+    "@capacitor-community/electron": "3.0.4",
+    "@capacitor/android": "3.1.2",
+    "@capacitor/core": "3.1.2",
+    "@material-ui/core": "4.12.3",
+    "@material-ui/icons": "4.11.2",
+    "next": "11.0.1",
+    "next-redux-wrapper": "7.0.2",
     "@discordjs/voice": "^0.9.0",
     "@emotion/styled": "^11.10.5",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
@@ -219,6 +225,8 @@
     "vite-plugin-dts": "~1.7.1",
     "vite-plugin-eslint": "^1.8.1",
     "vitest": "^0.25.8",
-    "webpack-merge": "^5.8.0"
+    "webpack-merge": "^5.8.0",
+    "@capacitor/cli": "3.1.2",
+    "eslint-config-next": "11.0.1"
   }
 }

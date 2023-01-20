@@ -4,11 +4,7 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": false,
@@ -21,23 +17,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": [
-      "vite/client"
-    ]
+    "types": ["vite/client"]
   },
   "files": [],
-  "include": [
-    "src"
-, "environments"  ],
+  "include": ["src", "environments"],
   "paths": {
-    "@/*": [
-      "src/*"
-    ],
-    "@components/*": [
-      "src/components/*"
-    ],
-    "stream": [
-      "node_modules/stream-browserify"
-    ]
+    "@magickml/client": ["apps/client"]
   }
 }

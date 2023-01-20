@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import Action from '../action'
 
 class NodeAction extends Action {

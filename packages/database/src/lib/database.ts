@@ -38,9 +38,10 @@ export class database {
       },
     })
 
-    if (max_time_diff > 0) {
+    if (max_time_diff && max_time_diff > 0) {
       const now = new Date()
-      const filtered = event.filter(e => {
+      const filtered = event.filter((e: any) => {
+        console.log('e is', e)
         const diff = now.getTime() - new Date(e.date).getTime()
         return diff < max_time_diff
       })
