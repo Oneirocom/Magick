@@ -12,11 +12,11 @@ import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, eventSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
-const info = 'Event Store is used to store events for an event and user'
+const info = 'Event Delete is used to delete events based on inputs recevied from the user.'
 
-export class EventStoreWeaviate extends MagickComponent<Promise<void>> {
+export class EventDelete extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Store Event Weaviate')
+    super('EventDelete')
 
     this.task = {
       outputs: {
@@ -56,21 +56,20 @@ export class EventStoreWeaviate extends MagickComponent<Promise<void>> {
       .addOutput(dataOutput)
   }
 
-
   async worker(
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
-    const { storeEventWeaviate } = magick
+    const { deleteEvent } = magick
     const event = inputs['event'][0] as Event
     const content = (inputs['content'] && inputs['content'][0]) as string
 
-    if (!content) return console.log('Content is null, not storing event')
+    if (!content) return console.log('Content is null, not deleting event')
 
     if (content && content !== '') {
-      const respUser = await storeEventWeaviate({ ...event, content } as any)
+      const respUser = await deleteEvent({ ...event, content } as any)
       if (!silent) node.display(respUser)
     } else {
       if (!silent) node.display('No input')
