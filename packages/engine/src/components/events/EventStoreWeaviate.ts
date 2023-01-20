@@ -44,6 +44,7 @@ export class EventStoreWeaviate extends MagickComponent<Promise<void>> {
     })
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
+    const agentidInput = new Rete.Input('agentid', 'Agent ID', stringSocket)
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
 
     node.inspector.add(nameInput).add(type)
@@ -53,6 +54,7 @@ export class EventStoreWeaviate extends MagickComponent<Promise<void>> {
 
     return node
       .addInput(contentInput)
+      .addInput(agentidInput)
       .addInput(eventInput)
       .addInput(dataInput)
       .addOutput(dataOutput)
@@ -96,11 +98,12 @@ export class EventStoreWeaviate extends MagickComponent<Promise<void>> {
 
     const event = inputs['event'][0] as Event
     const content = (inputs['content'] && inputs['content'][0]) as string
+    const agentId = (inputs['agentid'] && inputs['agentid'][0]) as string
 
     if (!content) return console.log('Content is null, not storing event')
 
     if (content && content !== '') {
-      const respUser = await storeEventWeaviate({ ...event, content } as any)
+      const respUser = await storeEventWeaviate({ ...event, content, agentId } as any)
       if (!silent) node.display(respUser)
     } else {
       if (!silent) node.display('No input')
