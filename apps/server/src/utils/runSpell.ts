@@ -1,5 +1,5 @@
 import { SpellRunner, GraphData, Spell as SpellType } from '@magickml/engine'
-import { prisma } from '@magickml/prisma'
+import { app } from '../app'
 import { buildMagickInterface } from '../buildMagickInterface'
 import { ServerError } from './ServerError'
 
@@ -14,9 +14,8 @@ export const runSpell = async ({
   inputs,
   inputFormatter,
 }: RunSpellArgs) => {
-  let spell = await prisma.spells.findUnique({
-    where: { name: spellName },
-  })
+
+  let spell = await app.service('spells').find({ query: { name: spellName } }) as any
 
   if (!spell?.graph) {
     throw new ServerError('not-found', `Spell with name ${spellName} not found`)

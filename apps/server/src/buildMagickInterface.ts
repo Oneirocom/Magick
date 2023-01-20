@@ -1,6 +1,4 @@
-import {
-  EngineContext} from '@magickml/engine'
-import { prisma } from '@magickml/prisma'
+import {EngineContext} from '@magickml/engine'
 
 import { runSpell } from './utils/runSpell'
 import {
@@ -8,6 +6,7 @@ import {
   API_URL,
   APP_SEARCH_SERVER_URL,
 } from '@magickml/server-core'
+import { app } from './app'
 
 export const buildMagickInterface = (
   overrides: Record<string, Function> = {}
@@ -29,7 +28,8 @@ export const buildMagickInterface = (
       return outputs
     },
     getSpell: async spellId => {
-      const spell = await prisma.spells.findUnique({ where: { name: spellId } })
+      const spell = await app.service('spells').find({ query: { name: spellId } })
+      
       return spell
     }
   }

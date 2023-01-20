@@ -17,7 +17,6 @@ import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
 import { PubSubContext, MagickTask, MagickComponent } from './magick-component'
-import { spells } from '@prisma/client'
 
 export { MagickComponent } from './magick-component'
 //@seang this was causing test enviroment issues to have it shared client/server
@@ -103,7 +102,8 @@ export type EngineContext = {
     flattenedInputs: Record<string, any>,
     spellId: string,
   ) => Record<string, any>
-  getSpell: (spellId: string) => Promise<spells | Spell>
+  // TODO: import type and replace any
+  getSpell: (spellId: string) => Promise<any | Spell>
 }
 
 export type EventPayload = Record<string, any>

@@ -1,8 +1,8 @@
 import { randomInt } from './connectors/utils'
 import Agent from './Agent'
-import { prisma } from '@magickml/prisma'
 import { ServerError } from 'apps/server/src/utils/ServerError'
 import { ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/server-core'
+import { app } from './app'
 
 const maxMSDiff = 5000
 let interval = 3000
@@ -101,15 +101,11 @@ export class World {
   }
 
   async resetAgentSpells() {
-    const agents = await prisma.agents.findMany()
+    const agents = await app.service('agents').find({ query: {} });
     for (const i in agents) {
-      await prisma.agents.update({
-        where: { id: agents[i].id },
-        data: {
-          spells: {
-            set: [],
-          },
-        },
+      // rewrite as a feathers service call
+      await app.service('agents').patch(agents[i].id, {
+        spells: [],
       })
     }
   }

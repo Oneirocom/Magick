@@ -5,16 +5,9 @@ import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../validators'
+import { spellSchema } from '../spells/spells.schema'
 
-// task: convert the Prisma schema to a Typebox schema
-// model agents {
-//   id            Int      @id @default(autoincrement())
-//   dirty         Boolean?
-//   enabled       Boolean?
-//   updated_at    String?
-//   spells        spells[] @relation("agentsTospells")
-//   data          Json?
-// }
+const spells = Type.Array(spellSchema)
 
 // Main data model schema
 export const agentSchema = Type.Object(
@@ -23,7 +16,8 @@ export const agentSchema = Type.Object(
     dirty: Type.Optional(Type.Boolean()),
     enabled: Type.Optional(Type.Boolean()),
     updated_at: Type.Optional(Type.String()),
-    spells: Type.Optional(Type.Array(Type.Number())),
+    // 
+    spells: Type.Optional(spells),
     data: Type.Optional(Type.Any()),
   },
   { $id: 'Agent', additionalProperties: false }

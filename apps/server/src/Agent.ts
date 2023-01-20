@@ -1,9 +1,9 @@
 import { buildMagickInterface } from '../../server/src/buildMagickInterface'
 import { tts, tts_tiktalknet } from '@magickml/server-core'
 import { SpellManager } from '@magickml/engine'
+import { app } from './app'
 
 import discord_client from './connectors/discord'
-import { prisma } from '@magickml/prisma'
 
 type StartLoopArgs = {
   loop_interval?: string
@@ -67,16 +67,27 @@ export class Agent {
 
   async createSpellHandler({ spell }) {
     const spellRunner = await this.spellManager.load(spell)
-    await prisma.agents.update({
-      where: { id: this.id },
-      data: {
-        spells: {
-          connect: {
-            id: spell.id,
-          },
+    // await prisma.agents.update({
+    //   where: { id: this.id },
+    //   data: {
+    //     spells: {
+    //       connect: {
+    //         id: spell.id,
+    //       },
+    //     },
+    //   },
+    // })
+    // rewrite as a feathers service
+    await app.service('agents').patch(this.id, {
+      spells: {
+        // TODO: this must be wrong?
+        // @ts-ignore
+        connect: {
+          id: spell.id,
         },
       },
     })
+
 
     return async function spellHandler({
       content,
@@ -153,11 +164,9 @@ export class Agent {
     if (this.discord)
       throw new Error('Discord already running for this agent on this instance')
 
-    const spell = await prisma.spells.findUnique({
-      where: { name: discord_spell_handler_incoming },
+    const spell = await app.service('spells').find({
+      query: { name: discord_spell_handler_incoming },
     })
-
-    console.log('discord incoming spell', spell)
 
     const spellHandler = await this.createSpellHandler({ spell })
 
@@ -197,8 +206,8 @@ export class Agent {
 
     const loopInterval = parseInt(loop_interval)
     if (typeof loopInterval === 'number' && loopInterval > 0) {
-      const spell = await prisma.spells.findUnique({
-        where: { name: loop_spell_handler },
+      const spell = await app.service('spells').find({
+        query: { name: loop_spell_handler },
       })
 
       const spellHandler = await this.createSpellHandler({
