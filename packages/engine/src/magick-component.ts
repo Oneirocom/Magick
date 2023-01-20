@@ -1,7 +1,7 @@
 import { Node, Socket } from 'rete'
 
-import { PubSubBase, MagickEditor, MagickNode } from '../types'
-import { MagickEngineComponent } from './engine'
+import { PubSubBase, MagickEditor, MagickNode } from './types'
+import { MagickEngineComponent } from './'
 import { Task, TaskOptions } from './plugins/taskPlugin/task'
 
 // Note: We do this so Typescript knows what extra properties we're
