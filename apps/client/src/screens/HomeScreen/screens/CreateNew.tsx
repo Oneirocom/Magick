@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { GraphData } from '@magickml/core'
+import { GraphData } from '@magickml/engine'
 import {
   uniqueNamesGenerator,
   adjectives,

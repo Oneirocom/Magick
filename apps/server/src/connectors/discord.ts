@@ -11,7 +11,7 @@
 // TODO this is a huge mess of types, and looks like there is some serious mistyping going on.  Definitely needs cleanup.
 //@ts-nocheck
 // required for message.lineReply
-import { Event } from '@magickml/core'
+import { Event } from '@magickml/engine'
 import Discord, {
   ChannelType,
   EmbedBuilder,

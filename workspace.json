@@ -4,10 +4,8 @@
   "projects": {
     "client": "apps/client",
     "client-core": "packages/client-core",
-    "core": "packages/core",
     "database": "packages/database",
     "engine": "packages/engine",
-    "plugins": "packages/plugins",
     "server": "apps/server",
     "server-core": "packages/server-core"
   }

@@ -16,7 +16,7 @@ import StateManager from '../../workspaces/spells/windows/StateManagerWindow'
 import TextEditor from './windows/TextEditorWindow'
 import DebugConsole from './windows/DebugConsole'
 
-import { Spell, MagickComponent } from '@magickml/core'
+import { Spell, MagickComponent } from '@magickml/engine'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import EventManagerWindow from './windows/EventManager'
 import { RootState } from '../../state/store'

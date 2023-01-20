@@ -1,6 +1,6 @@
 import { buildMagickInterface } from '../../server/src/buildMagickInterface'
 import { tts, tts_tiktalknet } from '@magickml/server-core'
-import { SpellManager } from '@magickml/core'
+import { SpellManager } from '@magickml/engine'
 
 import discord_client from './connectors/discord'
 import { prisma } from '@magickml/prisma'

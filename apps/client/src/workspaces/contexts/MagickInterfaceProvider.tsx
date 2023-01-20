@@ -6,7 +6,7 @@ import {
   MagickWorkerInputs,
   CompletionBody,
   GetEventArgs,
-} from '@magickml/core'
+} from '@magickml/engine'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
 import {
@@ -18,7 +18,7 @@ import {
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { magickApiRootUrl } from '../../utils/config'
 
-import { runPython } from '@magickml/core'
+import { runPython } from '@magickml/engine'
 
 const Context = createContext<EditorContext>(undefined!)
 
