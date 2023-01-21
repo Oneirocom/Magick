@@ -4,16 +4,13 @@ const PYODIDE_URL = "https://cdn.jsdelivr.net/pyodide/v0.22.0/full/";
 const isBrowser = typeof window !== "undefined";
 
 let pyodide;
-loadPyodide({
-  indexURL: isBrowser ? PYODIDE_URL : undefined,
-}).then((_pyodide) => {
-  pyodide = _pyodide;
-});
 
 export default async function runPython (code, entry, data, state) {
   // inputs renamed to entry for python insertion
   if(!pyodide) {
-    throw new Error("Pyodide not loaded");
+    pyodide = await loadPyodide({
+      indexURL: isBrowser ? PYODIDE_URL : undefined,
+    })
   }
 
   for (const [key, value] of Object.entries(entry)) {

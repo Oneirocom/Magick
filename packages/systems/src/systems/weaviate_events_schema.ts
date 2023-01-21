@@ -1,10 +1,16 @@
 export default
 {
-    "class": "events",
-    "invertedIndexConfig": {
-          "indexTimestamps": true
-      },
+    "class": "event",
     "description": "A Event for storing the and recalling at a later point of time",
+    "invertedIndexConfig": {
+        "indexTimestamps": true
+    },
+    "vectorizer": "text2vec-contextionary",   // vectorizer to use for data objects added to this class
+    "moduleConfig": {
+      "text2vec-contextionary": {  
+        "vectorizeClassName": true            // include the class name in vector calculation (default true)
+      }
+    },
     "properties": [
       {
         "dataType": [
@@ -17,50 +23,62 @@ export default
         "dataType": [
           "string"
         ],
-        "description": "The entity the accesses the output of the events. ",
-        "name": "speaker"
+        "description": "Describes the data found in the event.",
+        "name": "content"
       },
       {
         "dataType": [
           "string"
         ],
-        "description": "The Name of the agent",
-        "name": "agent"
+        "description": "The name of the sender of the event.",
+        "name": "sender"
+      },
+      {
+        "dataType": [
+          "string[]"
+        ],
+        "description": "The entities which are related to the client.",
+        "name": "entities"
       },
       {
         "dataType": [
           "string"
         ],
-        "description": "The name of the client",
+        "description": "Name of the client from which event was created.",
         "name": "client"
       },
       {
         "dataType": [
           "string"
         ],
-        "description": "Channel Through Which the event was initiated",
+        "description": "Name of the channel through which event was created.",
         "name": "channel"
       },
       {
         "dataType": [
           "string"
         ],
-        "description": "The trigger that send the event",
-        "name": "sender"
+        "description": "Type of the channel through which event was created.",
+        "name": "channelType"
       },
       {
         "dataType": [
-          "string"
+          "int"
         ],
-        "description": "Contains the output of the text embedded in the text",
-        "name": "text"
-      },
-      {
+        "description": "The ID of the agent.",
+        "name": "agentId"
+      },{
         "dataType": [
           "string"
         ],
-        "description": "The date at which event was created",
+        "description": "The date at which the event was created",
         "name": "date"
+      },{
+        "dataType": [
+          "string"
+        ],
+        "description" : "The Observer",
+        "name": "observer"
       }
 
     ],
