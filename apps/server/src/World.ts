@@ -103,10 +103,13 @@ export class World {
   async resetAgentSpells() {
     const agents = await app.service('agents').find({ query: {} });
     for (const i in agents) {
-      // rewrite as a feathers service call
+
+      // rewrite as a feathers service call to empty
       await app.service('agents').patch(agents[i].id, {
         spells: [],
       })
+      console.log('agents[i].id', agents[i].id)
+      console.log('agents[i]', agents[i])
     }
   }
 

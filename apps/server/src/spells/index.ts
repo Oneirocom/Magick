@@ -65,7 +65,7 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
     // get all entities from this spell and set to dirty
     await updatedSpell.agents.forEach(async entity => {
       // in feathers.js get the agents service and update the entity with the id of entity.id
-      await app.service('agents').update(entity, { dirty: true })
+      await app.service('agents').patch(entity, { dirty: true })
     })
     ctx.response.status = 200
     ctx.body = updatedSpell
