@@ -96,7 +96,7 @@ export class EventRecallWeaviate extends MagickComponent<Promise<InputReturn>> {
     const max_time_diffData = node.data?.max_time_diff as string
     const max_time_diff = max_time_diffData ? parseInt(max_time_diffData) : -1
 
-    const event_wes = await getEventWeaviate({
+    const events = await getEventWeaviate({
       type,
       sender,
       observer,
@@ -105,10 +105,17 @@ export class EventRecallWeaviate extends MagickComponent<Promise<InputReturn>> {
       maxCount,
       max_time_diff,
     })
-    if (!silent) node.display(`Event ${type} found` || 'Not found')
-    
+    if (!silent) node.display(`Event of ${type} found` || 'Not found')
+    let conversation = '';
+
+    // // for each event in events,
+    // if(events) events.forEach((event) => {
+    //   conversation += event.sender + ': ' + event.content + '\n';
+    // });
+
+    conversation = JSON.stringify(events);
     return {
-      output: event_wes ?? '',
+      output: conversation ?? '',
     }
   }
 }

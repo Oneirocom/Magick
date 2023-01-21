@@ -102,13 +102,26 @@ const getAllEventsWeaviate = async (ctx: Koa.Context) => {
 
 const eventQAWeaviate = async (ctx: Koa.Context) => {
   const question = ctx.request.query.question as string
+  const agentId = ctx.request.query.agentId as string
   console.log("Inside EventQA", question)
-  const answer = await weaviate_connection.searchEvents(question)
+  console.log(agentId)
+  const answer = await weaviate_connection.searchEvents(question, parseInt(agentId))
   console.log("Inside EventQA")
   console.log(answer)
   return (ctx.body = answer)
 }
 
+const deleteEventWeaviate = async (ctx: Koa.Context) => {
+  try {
+    await weaviate_connection.getAndDeleteEvents(ctx.request.body)
+    ctx.status = 200
+    return (ctx.body = "Deleted Events")
+  } catch(e) {
+    console.log(e)
+    ctx.status = 500
+    return (ctx.body = 'internal error')
+  }
+}
 export const events: Route[] = [
   {
     path: '/event',
@@ -135,5 +148,8 @@ export const events: Route[] = [
   },{
     path: '/eventsWeaviate',
     get: getAllEventsWeaviate,
+  },{
+    path: '/eventDelete',
+    post: deleteEventWeaviate,
   }
 ]

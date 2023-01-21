@@ -1,6 +1,7 @@
 import { CreateEventArgs, GetEventArgs, SemanticSearch } from '@magickml/core'
 import weaviate from 'weaviate-client'
 import EventSchema from './weaviate_events_schema'
+import { env } from 'process'
 
 const DOCUMENTS_CLASS_NAME = 'events'
 let weaviate_client: any
@@ -52,7 +53,7 @@ export class weaviate_connection {
       await initWeaviateClientEvent()
     }
     const data = { ..._data }
-    const validFields = ['type', 'sender', 'observer', 'client', 'channel', 'channelType', 'content']
+    const validFields = ['type', 'sender', 'observer', 'client', 'channel', 'channelType', 'content', 'entities', 'agentId']
     for (const key in data) {
       if (!validFields.includes(key)) {
         delete data[key]
@@ -69,6 +70,8 @@ export class weaviate_connection {
         observer: data['observer'],
         client: data['client'],
         channel: data['channel'],
+        entities: data['entities'],
+        agentId: parseInt(data['agentId'].toString()),
         channelType: data['channelType'],
         content: data['content'],
         date: new Date().toUTCString(),
@@ -100,6 +103,7 @@ export class weaviate_connection {
         'sender',
         'content',
         'date',
+        '_additional {id}',
       ])
       .withWhere({
         operator: 'And',
@@ -113,12 +117,7 @@ export class weaviate_connection {
             path: ['sender'],
             operator: 'Equal',
             valueString: sender,
-          },
-          {
-            path: ['client'],
-            operator: 'Equal',
-            valueString: client,
-          },
+          }
         ],
       })
       .withLimit(maxCount)
@@ -152,13 +151,52 @@ export class weaviate_connection {
     return events
   }
 
-  static async searchEvents(question: String){
+  static async getAndDeleteEvents(params: GetEventArgs){
+    const 
+      { type, sender, observer, client, channel, channelType, maxCount, max_time_diff } = params
+    if (!weaviate_client) {
+      await initWeaviateClientEvent()
+    }
+    const events =  await this.getEvents(params)
+    events.forEach(element => {
+      console.log(element)
+      this.deleteEvents(element["_additional"]["id"])
+    });
+
+    return events.length
+
+  }
+
+
+  static async deleteEvents(id: string){
+    if (!weaviate_client) {
+      await initWeaviateClientEvent()
+    }
+    await weaviate_client.data
+                         .deleter()
+                         .withClassName('Event')
+                         .withId(id)
+                         .do()
+                         .then(res=> {
+                            console.log(res)
+                         })
+                         .catch(err => {
+                            console.log(err)
+                         })
+  }
+
+  static async searchEvents(question: String, agentid: number){
     if (!weaviate_client) {
         await initWeaviateClientEvent()
     }
     const answer = await weaviate_client.graphql
                                         .get()
                                         .withClassName('Event')
+                                        .withWhere({
+                                          operator: 'Equal',
+                                          path: ['agentId'],
+                                          valueInt: agentid,
+                                        })
                                         .withAsk(({
                                             question: question
                                         }))
