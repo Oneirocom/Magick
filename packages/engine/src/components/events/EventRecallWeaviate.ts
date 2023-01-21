@@ -19,6 +19,46 @@ type InputReturn = {
   output: unknown
 }
 
+const getEventWeaviate = async ({
+  type = 'default',
+  sender = 'system',
+  observer = 'system',
+  entities = [],
+  client = 'system',
+  channel = 'system',
+  maxCount = 10,
+  target_count = 'single',
+  max_time_diff = -1,
+}) => {
+  const urlString = `${
+    process.env.VITE_APP_API_URL ??
+    process.env.API_ROOT_URL
+  }/eventWeaviate`
+
+  const params = {
+    type,
+    sender,
+    observer,
+    entities,
+    client,
+    channel,
+    maxCount,
+    target_count,
+    max_time_diff,
+  } as Record<string, any>
+
+  const url = new URL(urlString)
+  for (let p in params) {
+    url.searchParams.append(p, params[p])
+  }
+
+  const response = await fetch(url.toString())
+  console.log(response)
+  if (response.status !== 200) return null
+  const json = await response.json()
+  return json.event
+}
+
 export class EventRecallWeaviate extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     super('Event Recall Weaviate')
@@ -94,46 +134,6 @@ export class EventRecallWeaviate extends MagickComponent<Promise<InputReturn>> {
     const maxCount = maxCountData ? parseInt(maxCountData) : 10
     const max_time_diffData = node.data?.max_time_diff as string
     const max_time_diff = max_time_diffData ? parseInt(max_time_diffData) : -1
-
-    const getEventWeaviate = async ({
-      type = 'default',
-      sender = 'system',
-      observer = 'system',
-      entities = [],
-      client = 'system',
-      channel = 'system',
-      maxCount = 10,
-      target_count = 'single',
-      max_time_diff = -1,
-    }) => {
-      const urlString = `${
-        import.meta.env.VITE_APP_API_URL ??
-        import.meta.env.API_ROOT_URL
-      }/eventWeaviate`
-  
-      const params = {
-        type,
-        observer,
-        sender,
-        entities,
-        client,
-        channel,
-        maxCount,
-        target_count,
-        max_time_diff,
-      } as Record<string, any>
-  
-      const url = new URL(urlString)
-      for (let p in params) {
-        url.searchParams.append(p, params[p])
-      }
-  
-      const response = await fetch(url.toString())
-      console.log(response)
-      if (response.status !== 200) return null
-      const json = await response.json()
-      return json.event
-    }
 
     const events = await getEventWeaviate({
       type,
