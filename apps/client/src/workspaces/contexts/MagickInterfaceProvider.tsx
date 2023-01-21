@@ -291,10 +291,11 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const eventQAWeaviate = async ({
-    question
+    question, agentId
   }: QAArgs) => {
     const params = {
-      question
+      question,
+      agentId
     } as Record<string, any>
     const urlString = `${
       import.meta.env.VITE_APP_API_URL ??
@@ -307,6 +308,15 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
     const response = await fetch(url.toString()).then(response => response.json())
     return response
+  }
+
+  const deleteEvent = async (eventData: CreateEventArgs) => {
+    const response = await axios.post(
+      `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
+      }/eventDelete`, eventData
+    )
+    console.log('Deleted ', response.data, ' events')
+    return response.data
   }
 
 
@@ -383,6 +393,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     getEvents,
     getEventWeaviate,
     storeEvent,
+    deleteEvent,
     storeEventWeaviate,
     getWikipediaSummary,
     queryGoogle,
