@@ -26,9 +26,5 @@
     "bundle:client": "npm run compile && npm pack --pack-destination ./public",
     "migrate": "knex migrate:latest",
     "migrate:make": "knex migrate:make"
-  },
-  "dependencies": {
-    "feathers-swagger": "^2.0.0",
-    "swagger-ui-dist": "^4.15.5"
   }
 }

@@ -7,8 +7,6 @@ import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../validators'
 import { spellSchema } from '../spells/spells.schema'
 
-const spells = Type.Array(spellSchema)
-
 // Main data model schema
 export const agentSchema = Type.Object(
   {
@@ -16,8 +14,8 @@ export const agentSchema = Type.Object(
     dirty: Type.Optional(Type.Boolean()),
     enabled: Type.Optional(Type.Boolean()),
     updated_at: Type.Optional(Type.String()),
-    // 
-    spells: Type.Optional(spells),
+    // one to many relationship of spells (spellSchema) as an array to agents as a ref
+    spells: Type.Optional(Type.Array(Type.Any())),
     data: Type.Optional(Type.Any()),
   },
   { $id: 'Agent', additionalProperties: false }
