@@ -1,4 +1,4 @@
-import { CreateEventArgs, GetEventArgs, SemanticSearch } from '@magickml/core'
+import { CreateEventArgs, GetEventArgs, SemanticSearch } from '@magickml/engine'
 import weaviate from 'weaviate-client'
 import EventSchema from './weaviate_events_schema'
 import { env } from 'process'

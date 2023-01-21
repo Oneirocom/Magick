@@ -5,13 +5,12 @@ import {
   GetEventArgs,
   MagickWorkerInputs,
   QAArgs
-} from '@magickml/core'
+} from '@magickml/engine'
 import { database } from '@magickml/database'
-import { prisma } from '@magickml/prisma'
 import vm2 from 'vm2'
 import axios from 'axios'
 
-import { runPython } from '@magickml/core'
+import { runPython } from '@magickml/engine'
 import { CustomError } from '../utils/CustomError'
 import { makeCompletion } from './utils/MakeCompletionRequest'
 import { queryGoogleSearch } from '../utils/queryGoogle'
@@ -32,46 +31,6 @@ const getEvents = async (params: GetEventArgs) => {
 const createEvent = async (args: CreateEventArgs) => {
   return await database.createEvent(args)
 }
-
-  const getEventWeaviate = async ({
-    type = 'default',
-    sender = 'system',
-    observer = 'system',
-    entities = [],
-    client = 'system',
-    channel = 'system',
-    maxCount = 10,
-    target_count = 'single',
-    max_time_diff = -1,
-  }) => {
-    const urlString = `${
-      process.env.VITE_APP_API_URL ??
-      process.env.API_ROOT_URL
-    }/eventWeaviate`
-
-    const params = {
-      type,
-      sender,
-      observer,
-      entities,
-      client,
-      channel,
-      maxCount,
-      target_count,
-      max_time_diff,
-    } as Record<string, any>
-
-    const url = new URL(urlString)
-    for (let p in params) {
-      url.searchParams.append(p, params[p])
-    }
-
-    const response = await fetch(url.toString())
-    console.log(response)
-    if (response.status !== 200) return null
-    const json = await response.json()
-    return json.event
-  }
 
     const storeEventWeaviate = async ({
     type,
@@ -201,9 +160,6 @@ export const buildMagickInterface = (): EngineContext => {
     },
     getEvents: async (args: GetEventArgs) => {
       return await getEvents(args)
-    },
-    getEventWeaviate: async (args: GetEventArgs) => {
-      return await getEventWeaviate(args)
     },
     storeEvent: async (args: CreateEventArgs) => {
       return await createEvent(args)
