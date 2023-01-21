@@ -1290,9 +1290,7 @@ export class discord_client {
     console.log('creating discord client')
     this.agent = agent
     this.spellHandler = spellHandler
-    ;(this.eth_private_key = eth_private_key),
-      (this.eth_public_address = eth_public_address),
-      (this.use_voice = use_voice)
+    this.use_voice = use_voice
     this.voice_provider = voice_provider
     this.voice_character = voice_character
     this.voice_language_code = voice_language_code
