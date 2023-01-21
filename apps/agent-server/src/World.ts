@@ -162,7 +162,10 @@ export class World {
   async onDestroy() {}
 
   async addAgent(obj: any) {
+    const data = JSON.parse(obj.data)
+    obj = {...obj, ...data}
     if (this.objects[obj.id] === undefined) {
+      obj.data = JSON.parse(obj.data)
       obj.data.id = obj.id
       this.objects[obj.id] = new Agent(obj)
     } else {
