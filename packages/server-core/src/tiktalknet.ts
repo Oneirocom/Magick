@@ -1,6 +1,5 @@
 import axios from 'axios'
 import * as fs from 'fs'
-import { createWriteStream } from 'fs'
 
 export async function tts_tiktalknet(
   text: string,
@@ -21,7 +20,7 @@ export async function tts_tiktalknet(
   })
   const fileName = makeid(8) + '.wav'
   const outputFile = 'files/' + fileName
-  const writer = createWriteStream(outputFile)
+  const writer = fs.createWriteStream(outputFile)
   resp.data.pipe(writer)
   let error: any = null
   await new Promise((resolve, reject) => {

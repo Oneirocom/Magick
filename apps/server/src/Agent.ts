@@ -119,7 +119,7 @@ export class Agent {
     this.data = {...agent.data, ...agent.data.data}
     this.name = agent.agent ?? agent.name ?? 'agent'
     this.spellManager = new SpellManager({
-      magickInterface: buildMagickInterface({}),
+      magickInterface: buildMagickInterface({}) as any,
       cache: false,
     })
 

@@ -7,22 +7,61 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  GetEventArgs,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, anySocket, eventSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
-const info = 'Event Recall is used to get conversation for an agent and user'
+const info = 'Event Recall is used to get conversation for an event and user'
 
 //add option to get only events from max time difference (time diff, if set to 0 or -1, will get all events, otherwise will count in minutes)
 type InputReturn = {
   output: unknown
 }
 
+const getEventWeaviate = async ({
+  type = 'default',
+  sender = 'system',
+  observer = 'system',
+  entities = [],
+  client = 'system',
+  channel = 'system',
+  maxCount = 10,
+  target_count = 'single',
+  max_time_diff = -1,
+}) => {
+  const urlString = `${
+    process.env.VITE_APP_API_URL ??
+    process.env.API_ROOT_URL
+  }/eventWeaviate`
+
+  const params = {
+    type,
+    sender,
+    observer,
+    entities,
+    client,
+    channel,
+    maxCount,
+    target_count,
+    max_time_diff,
+  } as Record<string, any>
+
+  const url = new URL(urlString)
+  for (let p in params) {
+    url.searchParams.append(p, params[p])
+  }
+
+  const response = await fetch(url.toString())
+  console.log(response)
+  if (response.status !== 200) return null
+  const json = await response.json()
+  return json.event
+}
+
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Event Recall')
+    super('Event Recall Weaviate')
 
     this.task = {
       outputs: {
@@ -79,26 +118,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent, magick }: { silent: boolean; magick: EngineContext }
+    { silent }: { silent: boolean }
   ) {
-    
-    const getEvents = async (params: GetEventArgs) => {
-      const urlString = `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-        }/event`
-  
-      const url = new URL(urlString)
-      for (let p in params) {
-        url.searchParams.append(p, params[p])
-      }
-  
-      const response = await fetch(url.toString())
-      if (response.status !== 200) return null
-      const json = await response.json()
-      return json.event
-    }
-    const event = (inputs['event'] && (inputs['event'][0] ?? inputs['event'])) as Event
+    const eventObj = inputs['event'] && (inputs['event'][0] as Event)
 
-    const { sender, observer, client, channel, channelType } = event
+    const { observer, client, channel, sender } = eventObj
 
     const typeData = node?.data?.type as string
     const type =
@@ -111,18 +135,16 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     const max_time_diffData = node.data?.max_time_diff as string
     const max_time_diff = max_time_diffData ? parseInt(max_time_diffData) : -1
 
-    const events = await getEvents({
+    const events = await getEventWeaviate({
       type,
       sender,
       observer,
       client,
       channel,
-      channelType,
       maxCount,
       max_time_diff,
     })
-    if (!silent) node.display(`Event ${type} found` || 'Not found')
-    
+    if (!silent) node.display(`Event of ${type} found` || 'Not found')
     let conversation = '';
 
     // // for each event in events,
@@ -131,9 +153,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     // });
 
     conversation = JSON.stringify(events);
-    
     return {
-      output: conversation,
+      output: conversation ?? '',
     }
   }
 }
