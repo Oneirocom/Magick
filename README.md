@@ -1,7 +1,9 @@
-<p align="center"><img src="files/MAGICK-banner.png" /></p>
+<p align="center"><img src="apps/docs/readme-files/MAGICK-banner.png" /></p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <h1 align="center">MAGICK ML</h1>
 
@@ -29,13 +31,13 @@ git clone https://github.com/Oneirocom/MagickML
 Next, install dependencies
 
 ```
-yarn install
+npm install
 ```
 
 # Run Magick!
 
 ```
-yarn dev
+npm run dev
 ```
 
 # Development

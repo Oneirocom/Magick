@@ -3,7 +3,7 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import { rootApi } from './api'
-import { GraphData, Spell } from '@magickml/core'
+import { GraphData, Spell } from '@magickml/engine'
 
 export interface Diff {
   name: string
@@ -72,7 +72,7 @@ export const spellApi = rootApi.injectEndpoints({
     saveSpell: builder.mutation<Partial<Spell>, Partial<Spell> | Spell>({
       invalidatesTags: ['Spell'],
       // needed to use queryFn as query option didnt seem to allow async functions.
-      async queryFn({ user, ...spell }, { dispatch }, extraOptions, baseQuery) {
+      async queryFn({ ...spell }, { dispatch }, extraOptions, baseQuery) {
         const baseQueryOptions = {
           url: 'spells/save',
           body: spell,

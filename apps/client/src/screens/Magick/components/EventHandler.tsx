@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
-import { GraphData, Spell } from '@magickml/core'
 import { useSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
+import { GraphData, Spell } from '@magickml/engine'
 
 import {
   useSaveSpellMutation,
