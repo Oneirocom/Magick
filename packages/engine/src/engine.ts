@@ -2,11 +2,11 @@ import Rete, { Engine } from 'rete'
 import { Plugin } from 'rete/types/core/plugin'
 import io from 'socket.io'
 
-import { GraphData, ModuleType, NodeData, MagickWorkerInputs } from './types'
 import consolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
 import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
 import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
+import { GraphData, MagickWorkerInputs, NodeData } from './types'
 
 interface WorkerOutputs {
   [key: string]: unknown
@@ -41,7 +41,6 @@ export type InitEngineArguments = {
   name: string
   components: any[]
   server: boolean
-  modules?: Record<string, ModuleType>
   throwError?: Function
   socket?: io.Socket
 }
@@ -50,7 +49,6 @@ export const initSharedEngine = ({
   name,
   components,
   server = false,
-  modules = {},
   throwError,
   socket,
 }: InitEngineArguments) => {
@@ -65,7 +63,6 @@ export const initSharedEngine = ({
     })
     engine.use<Plugin, ModulePluginArgs>(ModulePlugin, {
       engine,
-      modules,
     } as any)
     if (socket) {
       engine.use<Plugin, SocketPluginArgs>(SocketPlugin, {

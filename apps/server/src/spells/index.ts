@@ -7,8 +7,6 @@ import { Route } from '../types'
 import { runSpell } from '../utils/runSpell'
 import { ServerError } from '../utils/ServerError'
 
-export const modules: Record<string, unknown> = {}
-
 const runSpellHandler = async (ctx: Koa.Context) => {
   const { spell: spellName } = ctx.params
 

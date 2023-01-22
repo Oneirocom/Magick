@@ -8,8 +8,6 @@ import { MakeModelRequest } from './utils/MakeModelRequest'
 import { queryGoogleSearch } from '../../../packages/engine/src/functions/queryGoogle'
 import weaviate from 'weaviate-client'
 
-export const modules: Record<string, unknown> = {}
-
 const getTextToSpeech = async (ctx: Koa.Context) => {
   const text = ctx.request.query.text as string
   let character = ctx.request.query.character ?? 'none'
