@@ -1,6 +1,6 @@
-import { OPENAI_API_KEY } from '@magickml/server-core';
 import axios from 'axios';
 
+const OPENAI_API_KEY = (import.meta?.env?.OPENAI_API_KEY || typeof process !== "undefined" && process?.env?.OPENAI_API_KEY) as string;
 export type CompletionData = {
   prompt: string
   temperature: number

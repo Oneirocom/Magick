@@ -72,7 +72,7 @@ export const spellApi = rootApi.injectEndpoints({
     saveSpell: builder.mutation<Partial<Spell>, Partial<Spell> | Spell>({
       invalidatesTags: ['Spell'],
       // needed to use queryFn as query option didnt seem to allow async functions.
-      async queryFn({ user, ...spell }, { dispatch }, extraOptions, baseQuery) {
+      async queryFn({ ...spell }, { dispatch }, extraOptions, baseQuery) {
         const baseQueryOptions = {
           url: 'spells/save',
           body: spell,
@@ -136,7 +136,6 @@ export const {
   useRunSpellMutation,
   useSaveSpellMutation,
   useSaveDiffMutation,
-  useDeploySpellMutation,
   usePatchSpellMutation,
 } = spellApi
 

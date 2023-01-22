@@ -1,7 +1,6 @@
 import Rete from 'rete'
 
 import {
-  EngineContext,
   NodeData,
   MagickNode,
   MagickWorkerInputs,
@@ -10,7 +9,7 @@ import {
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { stringSocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
-import { queryGoogleSearch } from '../../functions/queryGoogle'
+// import { queryGoogleSearch } from '../../functions/queryGoogle'
 
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
@@ -60,10 +59,9 @@ export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
     _node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { magick }: { magick: EngineContext }
   ) {
     const query = inputs.query[0] as string
-    const {summary, links} = await queryGoogleSearch(query)
+    const {summary, links} = {summary: "changeme", links: ["changeme"]} as any // await queryGoogleSearch(query)
     console.log('summary, links', summary, links)
     return {
       summary,

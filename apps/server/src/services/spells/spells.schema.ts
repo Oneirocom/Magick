@@ -10,7 +10,7 @@ export const spellSchema = Type.Object(
   {
     id: Type.Number(),
     name: Type.String(),
-    graph: Type.Optional(Type.Any()),
+    graph: Type.Object({}),
     created_at: Type.Optional(Type.String()),
     updated_at: Type.Optional(Type.String()),
     deleted_at: Type.Optional(Type.String()),

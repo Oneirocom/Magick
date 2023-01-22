@@ -19,7 +19,6 @@ export const userSchema = Type.Object(
     email: Type.String(),
     password: Type.Optional(Type.String()),
     googleId: Type.Optional(Type.String()),
-    facebookId: Type.Optional(Type.String()),
     twitterId: Type.Optional(Type.String()),
     githubId: Type.Optional(Type.String()),
     auth0Id: Type.Optional(Type.String()),
@@ -37,15 +36,7 @@ export const userExternalResolver = resolve<User, HookContext>({
 // Schema for creating new users
 export const userDataSchema = Type.Pick(
   userSchema,
-  [
-    'email',
-    'password',
-    'googleId',
-    'facebookId',
-    'twitterId',
-    'githubId',
-    'auth0Id',
-  ],
+  ['email', 'password', 'googleId', 'twitterId', 'githubId', 'auth0Id'],
   { $id: 'UserData', additionalProperties: false }
 )
 export type UserData = Static<typeof userDataSchema>
@@ -72,7 +63,6 @@ export const userQueryProperties = Type.Pick(userSchema, [
   'id',
   'email',
   'googleId',
-  'facebookId',
   'twitterId',
   'githubId',
   'auth0Id',

@@ -22,23 +22,23 @@ import swagger from 'feathers-swagger';
 
 const app: Application = koa(feathers())
 
-app.configure(swagger({
-  docsPath: '/docs',
-  specs: {
-    info: {
-      title: 'Magick API',
-      description: 'API for Magick',
-      version: '1.0.0',
-    }
-  }
-}));
-
 // Load our app configuration (see config/ folder)
 app.configure(configuration(configurationValidator))
+app.configure(
+  swagger({
+    ui: swagger.swaggerUI({}),
+    specs: {
+      info: {
+        title: 'Magick API Documentation',
+        description: 'Documentation for the Magick API backend, built with FeathersJS',
+        version: '1.0.0',
+      },
+    },
+  })
+)
 
 // Set up Koa middleware
 app.use(cors())
-// app.use(serveStatic(app.get('public')))
 app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
