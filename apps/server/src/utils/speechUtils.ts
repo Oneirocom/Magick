@@ -2,7 +2,7 @@ import axios from 'axios'
 import io from 'socket.io-client'
 
 const SPEECH_SERVER_URL: string = `http://localhost:65532`
-const SERVER_URL: string = `http://localhost:8001`
+const SERVER_URL: string = `http://localhost:3030`
 
 export class singleton {
   static instance: speechUtils

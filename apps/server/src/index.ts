@@ -156,27 +156,31 @@ async function init() {
 
   app.use(router.routes()).use(router.allowedMethods())
 
-  const useSSL =
-    USESSL === 'true' &&
-    fs.existsSync(path.join(__dirname, './certs/')) &&
-    fs.existsSync(path.join(__dirname, './certs/key.pem')) &&
-    fs.existsSync(path.join(__dirname, './certs/cert.pem'))
+  app.listen(app.get('port'), () => {
+    console.log('Server started on port ', app.get('port'))
+  })
 
-  var optionSsl = {
-    key: useSSL ? fs.readFileSync(path.join(__dirname, './certs/key.pem')) : '',
-    cert: useSSL
-      ? fs.readFileSync(path.join(__dirname, './certs/cert.pem'))
-      : '',
-  }
-  useSSL
-    ? https
-        .createServer(optionSsl, app.callback())
-        .listen(app.get('port'), 'localhost', () => {
-          logger.info('Https Server listening on: localhost:' + app.get('port'))
-        })
-    : http.createServer(app.callback()).listen(app.get('port'), 'localhost', () => {
-        logger.info('Http Server listening on: localhost:' + app.get('port'))
-      })
+  // const useSSL =
+  //   USESSL === 'true' &&
+  //   fs.existsSync(path.join(__dirname, './certs/')) &&
+  //   fs.existsSync(path.join(__dirname, './certs/key.pem')) &&
+  //   fs.existsSync(path.join(__dirname, './certs/cert.pem'))
+
+  // var optionSsl = {
+  //   key: useSSL ? fs.readFileSync(path.join(__dirname, './certs/key.pem')) : '',
+  //   cert: useSSL
+  //     ? fs.readFileSync(path.join(__dirname, './certs/cert.pem'))
+  //     : '',
+  // }
+  // useSSL
+  //   ? https
+  //       .createServer(optionSsl, app.callback())
+  //       .listen(app.get('port'), 'localhost', () => {
+  //         logger.info('Https Server listening on: localhost:' + app.get('port'))
+  //       })
+  //   : http.createServer(app.callback()).listen(app.get('port'), 'localhost', () => {
+  //       logger.info('Http Server listening on: localhost:' + app.get('port'))
+  //     })
   // await initLoop()
 }
 

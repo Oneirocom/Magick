@@ -18,7 +18,9 @@ export const spellRunner = (app: Application) => {
   // Initialize hooks
   app.service('spell-runner').hooks({
     around: {
-      all: [authenticate('jwt')]
+      all: [
+       // authenticate('jwt')
+      ]
     },
     before: {
       all: [],
