@@ -11,22 +11,12 @@ import {
   WorkerOutputs,
 } from 'rete/types/core/data'
 
-<<<<<<< HEAD:packages/core/types.ts
-import { MagickConsole } from './src/plugins/consolePlugin/MagickConsole'
-import { Inspector } from './src/plugins/inspectorPlugin/Inspector'
-import { ModuleManager } from './src/plugins/modulePlugin/module-manager'
-import { Task, TaskOutputTypes } from './src/plugins/taskPlugin/task'
-import { SocketNameType, SocketType } from './src/sockets'
-import { PubSubContext, MagickTask } from './src/magick-component'
-import { spells } from '@prisma/client'
-=======
-import { MagickConsole } from './plugins/debuggerPlugin/MagickConsole'
+import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
 import { Inspector } from './plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
 import { PubSubContext, MagickTask, MagickComponent } from './magick-component'
->>>>>>> feathers:packages/engine/src/types.ts
 
 export { MagickComponent } from './magick-component'
 //@seang this was causing test enviroment issues to have it shared client/server
@@ -134,19 +124,6 @@ export type EngineContext = {
     data: Record<string, any>,
     language?: string | null
   ) => any | void
-<<<<<<< HEAD:packages/core/types.ts
-  queryGoogle: (query: string) => Promise<{ summary: string; links: string }>
-  getEvents: (
-    args: GetEventArgs
-  ) => Promise<string | string[] | null | Record<string, any>>
-  getEventWeaviate: (
-    args: GetEventArgs
-  ) => Promise<string | string[] | null | Record<string, any>>
-  storeEvent: (args: CreateEventArgs) => Promise<any>
-  storeEventWeaviate: (args: CreateEventArgs) => Promise<any>
-  getWikipediaSummary: (keyword: string) => Promise<Record<string, any> | null>
-=======
->>>>>>> feathers:packages/engine/src/types.ts
 }
 
 export type EventPayload = Record<string, any>
