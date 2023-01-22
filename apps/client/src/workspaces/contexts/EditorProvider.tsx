@@ -91,9 +91,10 @@ const EditorProvider = ({ children }) => {
     // copy spell in case it is read onl
     const spell = JSON.parse(JSON.stringify(_spell))
 
-    console.log('Loading graph in build editor')
-    console.log(spell)
-    newEditor?.loadGraph(spell.graph)
+    console.log('Loading graph in build editor', spell)
+    const graph = spell.data[0].graph
+    console.log('graph', graph)
+    newEditor?.loadGraph(graph)
   }
 
   const run = () => {
@@ -138,6 +139,7 @@ const EditorProvider = ({ children }) => {
 
   const loadGraph = graph => {
     if (!editorRef.current) return
+    console.log('loading graph', graph)
     editorRef.current.loadGraph(graph)
   }
 
