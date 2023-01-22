@@ -54,7 +54,6 @@ export class Echo extends MagickComponent<Promise<WorkerReturn>> {
     const input = inputs.string[0] as string
     if (!silent) node.display(input as string)
 
-    throw new Error('This is an error')
     return {
       output: input,
     }

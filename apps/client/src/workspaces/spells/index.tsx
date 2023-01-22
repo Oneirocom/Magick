@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
 import { useEditor } from '../../workspaces/contexts/EditorProvider'
@@ -21,7 +21,6 @@ import { usePubSub } from '../../contexts/PubSubProvider'
 import EventManagerWindow from './windows/EventManager'
 import { RootState } from '../../state/store'
 import { useFeathers } from '../../contexts/FeathersProvider'
-import { feathers as feathersFlag } from '../../utils/config'
 import AgentManagerWindow from '../agents/windows/AgentManagerWindow'
 import React from 'react'
 
@@ -81,12 +80,12 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   }, [tab])
 
   useEffect(() => {
-    if (!client || !feathersFlag) return
+    if (!client) return
     ;(async () => {
       if (!client || !tab || !tab.spellId) return
       await client.service('spell-runner').get(tab.spellId)
     })()
-  }, [client, feathersFlag])
+  }, [client])
 
   const factory = tab => {
     return node => {

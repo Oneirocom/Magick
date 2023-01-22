@@ -37,7 +37,7 @@ export const spellApi = rootApi.injectEndpoints({
       providesTags: ['Spell'],
       query: ({ spellId }) => {
         return {
-          url: `spells/${spellId}`,
+          url: `spells?name=${spellId}`,
           params: {},
         }
       },

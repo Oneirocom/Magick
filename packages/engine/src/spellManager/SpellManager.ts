@@ -4,7 +4,7 @@ import { EngineContext, Spell } from '../types'
 import SpellRunner from './SpellRunner'
 
 type SpellManagerArgs = {
-  magickInterface: EngineContext
+  magickInterface?: EngineContext
   socket?: io.Socket
   cache?: boolean
 }

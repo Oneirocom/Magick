@@ -3,6 +3,19 @@ import { feathers } from '@feathersjs/feathers'
 import type { TransportConnection, Params } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
+import type {
+  SpellRunner,
+  SpellRunnerData,
+  SpellRunnerQuery,
+  SpellRunnerService
+} from './services/spell-runner/spell-runner'
+export type { SpellRunner, SpellRunnerData, SpellRunnerQuery }
+export const spellRunnerServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
+export type SpellRunnerClientService = Pick<
+  SpellRunnerService<Params<SpellRunnerQuery>>,
+  (typeof spellRunnerServiceMethods)[number]
+>
+
 import type { Spell, SpellData, SpellQuery, SpellService } from './services/spells/spells'
 export type { Spell, SpellData, SpellQuery }
 export const spellServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
@@ -19,6 +32,7 @@ export const userServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] a
 export type UserClientService = Pick<UserService<Params<UserQuery>>, (typeof userServiceMethods)[number]>
 
 export interface ServiceTypes {
+  'spell-runner': SpellRunnerClientService
   spells: SpellClientService
   agents: AgentClientService
   users: UserClientService
@@ -50,6 +64,9 @@ export const createClient = <Configuration = any>(
   })
   client.use('spells', connection.service('spells'), {
     methods: spellServiceMethods
+  })
+  client.use('spell-runner', connection.service('spell-runner'), {
+    methods: spellRunnerServiceMethods
   })
   return client
 }
