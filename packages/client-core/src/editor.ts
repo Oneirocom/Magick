@@ -146,7 +146,6 @@ export const initEditor = function ({
     name: 'demo@0.1.0',
     components,
     server: false,
-    modules: {},
   }) as MagickEngineClient
   engine.magick = magick
 
@@ -154,7 +153,7 @@ export const initEditor = function ({
     editor.use<Plugin, SocketPluginArgs>(SocketPlugin, { client })
   } else {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
-    editor.use(ModulePlugin, { engine, modules: {} } as unknown as void)
+    editor.use(ModulePlugin, { engine } as unknown as void)
     editor.use(TaskPlugin)
   }
 

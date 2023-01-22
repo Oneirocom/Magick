@@ -30,7 +30,6 @@ class SpellRunner {
       name: 'demo@0.1.0',
       components: getComponents(),
       server: true,
-      modules: {},
       socket: socket || undefined,
     }) as MagickEngine
 

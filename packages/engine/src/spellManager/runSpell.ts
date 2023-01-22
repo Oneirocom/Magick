@@ -1,4 +1,4 @@
-import { EngineContext, GraphData, ModuleComponent, Spell } from '../../types'
+import { EngineContext, GraphData, ModuleComponent, Spell } from '../types'
 import { getComponents } from '../components'
 import { initSharedEngine, extractNodes, MagickEngine } from '../engine'
 import { Module } from '../plugins/modulePlugin/module'
@@ -19,7 +19,6 @@ class RunSpell {
       name: 'demo@0.1.0',
       components: getComponents(),
       server: true,
-      modules: {},
     }) as MagickEngine
 
     // Set up the module to interface with the runtime processes
