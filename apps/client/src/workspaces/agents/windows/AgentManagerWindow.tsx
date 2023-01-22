@@ -46,7 +46,8 @@ const AgentManagerWindow = () => {
   useEffect(() => {
     (async () => {
       const res = await fetch(`${magickApiRootUrl}/agents`)
-      setData(await res.json())
+      const json = await res.json();
+      setData(json.data)
     })()
   }, [])
 
