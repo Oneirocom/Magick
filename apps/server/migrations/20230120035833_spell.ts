@@ -4,7 +4,11 @@ import type { Knex } from 'knex'
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('spells', (table) => {
     table.increments('id')
-    table.string('text')
+    table.boolean('dirty')
+    table.boolean('enabled')
+    table.string('updated_at')
+    table.jsonb('spells')
+    table.jsonb('data')
   })
 }
 

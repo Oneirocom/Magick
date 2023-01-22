@@ -1,5 +1,5 @@
 import { MagickComponent } from '../types'
-import { EventStoreWeaviate } from './events/EventStoreWeaviate'
+import { EventStore } from './events/EventStore'
 import { GetWikipediaSummary } from './apis/GetWikipediaSummary'
 import { QueryGoogle } from './apis/QueryGoogle'
 import { WeaviateWikipedia } from './apis/WeaviateWikipedia'
@@ -9,9 +9,7 @@ import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentT
 import { GetRecentTransactions } from './ethereum/GetRecentTransactions'
 import { EventDestructureComponent } from './events/EventDestructure'
 import { EventRecall } from './events/EventRecall'
-import { EventRecallWeaviate } from './events/EventRecallWeaviate'
 import { EventRestructureComponent } from './events/EventRestructure'
-import { EventStore } from './events/EventStore'
 import { EventQA } from './events/EventQA'
 import { InputComponent } from './io/Input'
 import { JupyterNotebook } from './io/JupyterNotebook'
@@ -94,10 +92,8 @@ export const components = {
   isNullOrUndefined: () => new IsNullOrUndefined(),
   isQuery: () => new IsQuery(),
   isVariableTrue: () => new IsVariableTrue(),
-  conversationStore: () => new EventStore(),
-  conversationStore1: () => new EventStoreWeaviate(),
-  conversationRecall: () => new EventRecall(),
-  conversationRecall1: () => new EventRecallWeaviate(),
+  conversationStore1: () => new EventStore(),
+  conversationRecall1: () => new EventRecall(),
   eventqa: () => new EventQA(),
   eventsdelete: () => new EventDelete(),
   request: () => new Request(),

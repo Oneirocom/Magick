@@ -9,6 +9,8 @@
     "containers": "concurrently \"docker-compose up\" \"sleep 20 && npm run db:init && echo database synced!\"",
     "build": "nx build",
     "start": "nx serve",
+    "migrate:make": "nx run server:migrate:make",
+    "migrate": "nx run server:migrate",
     "test": "nx test",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",

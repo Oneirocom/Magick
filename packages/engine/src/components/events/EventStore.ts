@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import {
   Event,
+  EngineContext,
   NodeData,
   MagickNode,
   MagickWorkerInputs,
@@ -17,7 +18,7 @@ const info = 'Event Store is used to store events for an event and user'
 
 export class EventStore extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Store Event')
+    super('Store Event Weaviate')
 
     this.task = {
       outputs: {
@@ -43,6 +44,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     })
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
+    const agentidInput = new Rete.Input('agentid', 'Agent ID', stringSocket)
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
 
     node.inspector.add(nameInput).add(type)
@@ -52,22 +54,43 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     return node
       .addInput(contentInput)
+      .addInput(agentidInput)
       .addInput(eventInput)
       .addInput(dataInput)
       .addOutput(dataOutput)
   }
 
+
   async worker(
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent }: { silent: boolean }
+    { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
 
-    const storeEvent = async (eventData: CreateEventArgs) => {
+    const storeEventWeaviate = async ({
+      type,
+      observer,
+      sender,
+      entities,
+      content,
+      client,
+      channel,
+    }: CreateEventArgs) => {
       const response = await axios.post(
-        `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-        }/event`, eventData
+        `${
+          import.meta.env.VITE_APP_API_URL ??
+          import.meta.env.API_ROOT_URL
+        }/eventWeaviate`,
+        {
+          type,
+          observer,
+          sender,
+          entities,
+          content,
+          client,
+          channel,
+        }
       )
       console.log('Created event', response.data)
       return response.data
@@ -75,11 +98,12 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     const event = inputs['event'][0] as Event
     const content = (inputs['content'] && inputs['content'][0]) as string
+    const agentId = (inputs['agentid'] && inputs['agentid'][0]) as string
 
     if (!content) return console.log('Content is null, not storing event')
 
     if (content && content !== '') {
-      const respUser = await storeEvent({ ...event, content } as any)
+      const respUser = await storeEventWeaviate({ ...event, content, agentId } as any)
       if (!silent) node.display(respUser)
     } else {
       if (!silent) node.display('No input')

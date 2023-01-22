@@ -5,6 +5,7 @@ import {
     MagickNode,
     MagickWorkerInputs,
     MagickWorkerOutputs,
+    QAArgs,
   } from '../../types'
   import { triggerSocket, anySocket, stringSocket } from '../../sockets'
   import { MagickComponent } from '../../magick-component'
@@ -53,8 +54,26 @@ import { response } from 'express'
       { magick }: { magick: EngineContext }
     ){
 
-      const { eventQAWeaviate } = magick
-
+      const eventQAWeaviate = async ({
+        question, agentId
+      }: QAArgs) => {
+        const params = {
+          question,
+          agentId
+        } as Record<string, any>
+        const urlString = `${
+          import.meta.env.VITE_APP_API_URL ??
+          import.meta.env.API_ROOT_URL
+        }/eventQA`
+        const url = new URL(urlString)
+        for (let p in params) {
+          url.searchParams.append(p, params[p])
+        }
+    
+        const response = await fetch(url.toString()).then(response => response.json())
+        return response
+      }
+      
       const question = inputs['question'][0] as string
       const agentId = (inputs['agentId'] && inputs['agentId'][0]) as string
       const body = {

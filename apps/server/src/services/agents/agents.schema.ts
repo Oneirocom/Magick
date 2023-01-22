@@ -5,9 +5,6 @@ import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../validators'
-import { spellSchema } from '../spells/spells.schema'
-
-const spells = Type.Array(Type.Ref(spellSchema))
 
 // Main data model schema
 export const agentSchema = Type.Object(
@@ -16,8 +13,7 @@ export const agentSchema = Type.Object(
     dirty: Type.Optional(Type.Boolean()),
     enabled: Type.Optional(Type.Boolean()),
     updated_at: Type.Optional(Type.String()),
-    // one to many relationship of spells (spellSchema) as an array to agents as a ref
-    spells: Type.Optional(spells),
+    spells: Type.Array(Type.String()),
     data: Type.Optional(Type.Any()),
   },
   { $id: 'Agent', additionalProperties: false }
