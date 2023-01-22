@@ -6,7 +6,8 @@ import {
   MagickWorkerInputs,
   CompletionBody,
   GetEventArgs,
-} from '@magickml/core'
+  QAArgs,
+} from '@magickml/engine'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
 import {
@@ -16,9 +17,9 @@ import {
 } from '../../state/api/spells'
 
 import { usePubSub } from '../../contexts/PubSubProvider'
-import { magickApiRootUrl } from '../../config'
+import { magickApiRootUrl } from '../../utils/config'
 
-import { runPython } from '@magickml/core'
+import { runPython } from '@magickml/engine'
 
 const Context = createContext<EditorContext>(undefined!)
 
@@ -148,13 +149,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return spell.data as Spell
   }
 
-  const processCode = async (
-    code,
-    inputs,
-    data,
-    state,
-    language = 'javascript'
-  ) => {
+  const processCode = async (code, inputs, data, language='javascript') => {
     const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
       (acc, [key, value]) => {
         acc[key as string] = value[0] as any
@@ -169,18 +164,12 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       const result = new Function('"use strict";return (' + code + ')')()(
         flattenedInputs,
         data,
-        state
       )
-      if (result.state) {
-        updateCurrentGameState(result.state)
-      }
       return result
     } else if (language == 'python') {
       try {
-        const result = await runPython(code, flattenedInputs, data, state)
-        if (result.state) {
-          updateCurrentGameState(result.state)
-        }
+
+        const result = await runPython(code, flattenedInputs, data);
 
         return result
       } catch (err) {
@@ -201,145 +190,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
   const clearTextEditor = () => {
     publish($TEXT_EDITOR_CLEAR(tab.id))
-  }
-
-  const getCurrentGameState = () => {
-    if (!spellRef.current) return {}
-
-    return spellRef.current?.gameState ?? {}
-  }
-
-  const setCurrentGameState = newState => {
-    if (!spellRef.current) return
-
-    const update = {
-      gameState: newState,
-    }
-    // publish($SAVE_SPELL_DIFF(tab.id), update)
-  }
-
-  const updateCurrentGameState = _update => {
-    if (!spellRef.current) return
-    const spell = spellRef.current
-
-    // lets delete out all undefined properties coming in
-    Object.keys(_update).forEach(
-      key => _update[key] === undefined && delete _update[key]
-    )
-
-    const update = {
-      gameState: {
-        ...spell.gameState,
-        ..._update,
-      },
-    }
-
-    // Temporarily update the spell refs game state to account for multiple state writes in a spell run
-    spellRef.current = {
-      ...spell,
-      ...update,
-    }
-    // publish($SAVE_SPELL_DIFF(tab.id), update)
-  }
-
-  const getEvents = async (params: GetEventArgs) => {
-    const urlString = `${
-      import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-    }/event`
-
-    const url = new URL(urlString)
-    for (let p in params) {
-      url.searchParams.append(p, params[p])
-    }
-
-    const response = await fetch(url.toString())
-    if (response.status !== 200) return null
-    const json = await response.json()
-    return json.event
-  }
-
-  const getEventWeaviate = async ({
-    type = 'default',
-    sender = 'system',
-    observer = 'system',
-    entities = [],
-    client = 'system',
-    channel = 'system',
-    maxCount = 10,
-    max_time_diff = -1,
-  }: GetEventArgs) => {
-    const urlString = `${
-      import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-    }/eventWeaviate`
-
-    const params = {
-      type,
-      observer,
-      sender,
-      entities,
-      client,
-      channel,
-      maxCount,
-      max_time_diff,
-    } as Record<string, any>
-
-    const url = new URL(urlString)
-    for (let p in params) {
-      url.searchParams.append(p, params[p])
-    }
-
-    const response = await fetch(url.toString())
-    console.log(response)
-    if (response.status !== 200) return null
-    const json = await response.json()
-    return json.event
-  }
-
-  const storeEvent = async (eventData: CreateEventArgs) => {
-    const response = await axios.post(
-      `${
-        import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-      }/event`,
-      eventData
-    )
-    console.log('Created event', response.data)
-    return response.data
-  }
-
-  const storeEventWeaviate = async ({
-    type,
-    observer,
-    sender,
-    entities,
-    content,
-    client,
-    channel,
-  }: CreateEventArgs) => {
-    const response = await axios.post(
-      `${
-        import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-      }/eventWeaviate`,
-      {
-        type,
-        observer,
-        sender,
-        entities,
-        content,
-        client,
-        channel,
-      }
-    )
-    console.log('Created event', response.data)
-    return response.data
-  }
-
-  const getWikipediaSummary = async (keyword: string) => {
-    const root = import.meta.env.API_URL
-    const url = `${root}/wikipediaSummary?keyword=${keyword}`
-
-    const response = await fetch(url)
-
-    return await response.json()
   }
 
   const queryGoogle = async (query: string) => {
@@ -382,6 +232,27 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return { success, choice }
   }
 
+
+  const eventQAWeaviate = async ({
+    question, agentId
+  }: QAArgs) => {
+    const params = {
+      question,
+      agentId
+    } as Record<string, any>
+    const urlString = `${
+      import.meta.env.VITE_APP_API_URL ??
+      import.meta.env.API_ROOT_URL
+    }/eventQA`
+    const url = new URL(urlString)
+    for (let p in params) {
+      url.searchParams.append(p, params[p])
+    }
+
+    const response = await fetch(url.toString()).then(response => response.json())
+    return response
+  }
+
   const publicInterface = {
     env,
     onTrigger,
@@ -396,17 +267,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     sendToPlaytest,
     onPlaytest,
     clearTextEditor,
-    getCurrentGameState,
-    setCurrentGameState,
-    updateCurrentGameState,
     processCode,
+    eventQAWeaviate,
     runSpell,
     refreshEventTable,
-    getEvents,
-    getEventWeaviate,
-    storeEvent,
-    storeEventWeaviate,
-    getWikipediaSummary,
     queryGoogle,
     sendToAvatar,
     getSpell,

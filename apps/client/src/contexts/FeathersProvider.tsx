@@ -2,7 +2,7 @@ import { feathers, socketio } from '@feathersjs/client'
 import io from 'socket.io-client'
 import { useContext, createContext, useEffect, useState } from 'react'
 
-import { feathers as feathersFlag, feathersUrl } from '../config'
+import { feathers as feathersFlag, feathersUrl } from '../utils/config'
 
 const buildFeathersClient = async () => {
   const feathersClient = feathers()

@@ -1,4 +1,4 @@
-import { Spell } from '@magickml/core'
+import { Spell } from '@magickml/engine'
 import { CSSProperties } from 'react'
 import Icon from '../../../components/Icon/Icon'
 import css from '../homeScreen.module.css'

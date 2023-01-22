@@ -1,4 +1,4 @@
-import { GraphData, EditorContext, Spell, MagickEditor } from '@magickml/core'
+import { GraphData, EditorContext, Spell, MagickEditor } from '@magickml/engine'
 import { initEditor, zoomAt } from '@magickml/client-core'
 import React, {
   useRef,
@@ -16,7 +16,7 @@ import gridimg from '../../grid.png'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import { useFeathers } from '../../contexts/FeathersProvider'
-import { feathers } from '../../config'
+import { feathers } from '../../utils/config'
 
 export type MagickTab = {
   layoutJson: string
