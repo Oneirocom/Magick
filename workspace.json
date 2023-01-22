@@ -2,7 +2,6 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
-    "agent-server": "apps/agent-server",
     "client": "apps/client",
     "client-core": "packages/client-core",
     "engine": "packages/engine",
