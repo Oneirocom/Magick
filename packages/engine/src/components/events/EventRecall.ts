@@ -31,8 +31,8 @@ const getEventWeaviate = async ({
   max_time_diff = -1,
 }) => {
   const urlString = `${
-    process.env.VITE_APP_API_URL ??
-    process.env.API_ROOT_URL
+    (import.meta.env ?? process?.env).VITE_APP_API_URL ??
+    (import.meta.env ?? process?.env).API_ROOT_URL
   }/eventWeaviate`
 
   const params = {

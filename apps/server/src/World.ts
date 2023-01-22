@@ -101,7 +101,8 @@ export class World {
   }
 
   async resetAgentSpells() {
-    const agents = await app.service('agents').find({ query: {} });
+    return;
+    const agents = await app.service('agents').find({ query: {} })
     for (const i in agents) {
 
       // rewrite as a feathers service call to empty

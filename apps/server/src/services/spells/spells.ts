@@ -33,7 +33,7 @@ export const spell = (app: Application) => {
   app.service('spells').hooks({
     around: {
       all: [
-        process.env.USE_AUTH !== 'true' && process.env.NODE_ENV === 'development' ? authenticate('jwt') : (context: any, next: any) => next(),
+        // process.env.USE_AUTH !== 'true' && process.env.NODE_ENV === 'development' ? authenticate('jwt') : (context: any, next: any) => next(),
         schemaHooks.resolveExternal(spellExternalResolver),
         schemaHooks.resolveResult(spellResolver)
       ]

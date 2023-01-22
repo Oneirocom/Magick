@@ -5,7 +5,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { log } from 'console'
-import request from 'request'
+// import request from 'request'
 
 export class messenger_client {
   static instance: messenger_client
@@ -45,21 +45,21 @@ export class messenger_client {
     }
 
     // Send the HTTP request to the Messenger Platform
-    request(
-      {
-        uri: 'https://graph.facebook.com/v14.0/me/messages',
-        qs: { access_token: PAGE_ACCESS_TOKEN },
-        method: 'POST',
-        json: requestBody,
-      },
-      (err, _res, _body) => {
-        if (!err) {
-          console.log('Message sent!')
-        } else {
-          console.error('Unable to send message:' + err)
-        }
-      }
-    )
+    // request(
+    //   {
+    //     uri: 'https://graph.facebook.com/v14.0/me/messages',
+    //     qs: { access_token: PAGE_ACCESS_TOKEN },
+    //     method: 'POST',
+    //     json: requestBody,
+    //   },
+    //   (err, _res, _body) => {
+    //     if (!err) {
+    //       console.log('Message sent!')
+    //     } else {
+    //       console.error('Unable to send message:' + err)
+    //     }
+    //   }
+    // )
   }
 
   createMessengerClient = async (

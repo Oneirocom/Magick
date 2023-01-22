@@ -13,11 +13,6 @@ export type { Agent, AgentData, AgentQuery }
 export const agentServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
 export type AgentClientService = Pick<AgentService<Params<AgentQuery>>, (typeof agentServiceMethods)[number]>
 
-import type { Event, EventData, EventQuery, EventService } from './services/events/events'
-export type { Event, EventData, EventQuery }
-export const eventServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
-export type EventClientService = Pick<EventService<Params<EventQuery>>, (typeof eventServiceMethods)[number]>
-
 import type { User, UserData, UserQuery, UserService } from './services/users/users'
 export type { User, UserData, UserQuery }
 export const userServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
@@ -26,7 +21,6 @@ export type UserClientService = Pick<UserService<Params<UserQuery>>, (typeof use
 export interface ServiceTypes {
   spells: SpellClientService
   agents: AgentClientService
-  events: EventClientService
   users: UserClientService
   //
 }
@@ -50,9 +44,6 @@ export const createClient = <Configuration = any>(
 
   client.use('users', connection.service('users'), {
     methods: userServiceMethods
-  })
-  client.use('events', connection.service('events'), {
-    methods: eventServiceMethods
   })
   client.use('agents', connection.service('agents'), {
     methods: agentServiceMethods

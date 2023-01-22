@@ -33,7 +33,7 @@ export const agent = (app: Application) => {
   app.service('agents').hooks({
     around: {
       all: [
-        authenticate('jwt'),
+        // authenticate('jwt'),
         schemaHooks.resolveExternal(agentExternalResolver),
         schemaHooks.resolveResult(agentResolver)
       ]
