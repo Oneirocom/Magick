@@ -73,6 +73,9 @@ async function init() {
     try {
       await next()
     } catch (error: any) {
+      // where did the error come from?
+      console.error(error)
+
       ctx.status = error.statusCode ;
       ctx.body = { error }
       ctx.app.emit('error', error, ctx)
