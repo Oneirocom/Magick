@@ -59,8 +59,6 @@ const Playtest = ({ tab }) => {
     return selectStateBySpellId(state.localState, tab.spellId)
   })
 
-  console.log('FeathersContext is', FeathersContext)
-
   const client = FeathersContext?.client
   const { $PLAYTEST_INPUT, $PLAYTEST_PRINT } = events
 
