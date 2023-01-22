@@ -1,8 +1,6 @@
 import { MagickWorkerInputs } from '@magickml/engine';
 // import vm2 from 'vm2';
 import { runPython } from '@magickml/engine';
-import { ServerError } from '../../../../apps/server/src/utils/ServerError';
-
 
 export async function processCode(
   code: unknown,

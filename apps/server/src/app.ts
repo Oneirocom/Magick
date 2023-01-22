@@ -17,7 +17,7 @@ import { logError } from './hooks/log-error'
 import { postgresql } from './postgresql'
 import { authentication } from './authentication'
 import { services } from './services/index'
-import { channels } from './channels'
+import channels from './channels'
 import swagger from 'feathers-swagger';
 
 const app: Application = koa(feathers())

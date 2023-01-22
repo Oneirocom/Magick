@@ -2,7 +2,7 @@ import { feathers, socketio } from '@feathersjs/client'
 import io from 'socket.io-client'
 import { useContext, createContext, useEffect, useState } from 'react'
 
-import { feathers as feathersFlag, feathersUrl } from '../utils/config'
+import {  feathersUrl } from '../config'
 
 const buildFeathersClient = async () => {
   const feathersClient = feathers()
@@ -57,8 +57,6 @@ const FeathersProvider = ({ children }) => {
 }
 
 const ConditionalProvider = props => {
-  if (!feathersFlag) return props.children
-
   return <FeathersProvider {...props} />
 }
 

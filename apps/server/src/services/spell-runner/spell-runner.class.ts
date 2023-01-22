@@ -1,15 +1,21 @@
-import { spells } from '@prisma/client'
-import { prisma } from '@magickml/prisma'
+import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
+import { KnexService } from '@feathersjs/knex'
+import { Spell } from '@magickml/engine'
 import otJson0 from 'ot-json0'
+import { app } from '../../app'
 import {
   Id,
-  NullableId,
-  Paginated,
   Params,
-  ServiceMethods,
 } from '@feathersjs/feathers'
-import { Application } from '../../declarations'
-import { Spell } from '@magickml/core'
+
+import type { Application } from '../../declarations'
+
+export type SpellRunner = any
+export type SpellRunnerData = any
+export type SpellRunnerPatch = any
+export type SpellRunnerQuery = any
+
+export interface SpellRunnerParams extends KnexAdapterParams<SpellRunnerQuery> {}
 
 interface Data {}
 
@@ -18,51 +24,39 @@ interface CreateData {
   spellId: string
 }
 
-interface ServiceOptions {}
-
-type UserInfo = {
-  id: string
-}
-interface SpellRunnerParams extends Params {
-  user: UserInfo
-}
-
-const getSpell = async (spellId: string) => {
-  const spell = await prisma.spells.findUnique({
-    where: {
-      name: spellId,
+const getSpell = async (app, spellName: string) => {
+  const spell = await app.service('spells').find({
+    query: {
+      name: spellName,
     },
   })
+
 
   return spell
 }
 
-export class SpellRunner {
-  app: Application
-
-  constructor(app: Application) {
-    this.app = app
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-varswaaaa
-  async find(params?: Params): Promise<Data[] | Paginated<Data>> {
-    return []
-  }
+// By default calls the standard Knex adapter service methods but can be customized with your own functionality.
+export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams> extends KnexService<
+  SpellRunner,
+  SpellRunnerData,
+  ServiceParams,
+  SpellRunnerPatch
+> {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async get(id: Id, params?: SpellRunnerParams): Promise<spells | {}> {
-    if (!this.app.userSpellManagers) return {}
+  async get(id: Id, params?: SpellRunnerParams): Promise<any | {}> {
+    if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
 
     const { user } = params
 
     if (!user) throw new Error('No user is present in service')
     // Here we get the users spellManagerApp
-    const spellManager = this.app.userSpellManagers.get(user.id)
+    const spellManager = app.userSpellManagers.get(user.id.toString())
 
     if (!spellManager) throw new Error('No spell manager created for user!')
 
-    const spell = await getSpell(id as string)
+    const spell = await getSpell(app, id as string)
 
     // Load the spell into the spellManager. If there is no spell runner, we make one.
     await spellManager.load(spell as unknown as Spell)
@@ -70,21 +64,22 @@ export class SpellRunner {
     return spell
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async create(
+  // TODO: Fix this
+  // @ts-ignore
+  async create (
     data: CreateData,
     params?: SpellRunnerParams
   ): Promise<Record<string, unknown>> {
-    if (!this.app.userSpellManagers) return {}
+    if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
 
-    const { user } = params
+    const { user } = params as any
 
     if (!user) throw new Error('No user is present in service')
 
     const { inputs, spellId } = data
 
-    const spellManager = this.app.userSpellManagers.get(user.id)
+    const spellManager = app.userSpellManagers.get(user.id)
 
     if (!spellManager) throw new Error('No spell manager found for user!')
 
@@ -94,21 +89,20 @@ export class SpellRunner {
   }
 
   async update(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     spellId: string,
     data: { diff: Record<string, unknown> },
     params?: SpellRunnerParams
   ): Promise<Data> {
-    if (!this.app.userSpellManagers) return {}
+    if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
 
-    const { user } = params
+    const { user } = params as any
 
     if (!user) throw new Error('No user present in service')
 
     const { diff } = data
 
-    const spellManager = this.app.userSpellManagers.get(user.id)
+    const spellManager = app.userSpellManagers.get(user.id)
     if (!spellManager) throw new Error('No spell manager found for user!')
 
     const spellRunner = spellManager.getSpellRunner(spellId)
@@ -121,13 +115,19 @@ export class SpellRunner {
     return updatedSpell
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async patch(id: NullableId, data: Data, params?: Params): Promise<Data> {
-    return data
-  }
+  // async patch(id: NullableId, data: Data, params?: Params): Promise<Data> {
+  //   return data
+  // }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async remove(id: NullableId, params?: Params): Promise<Data> {
-    return { id }
+  // async remove(id: NullableId, params?: Params): Promise<Data> {
+  //   return { id }
+  // }
+}
+
+export const getOptions = (app: Application): KnexAdapterOptions => {
+  return {
+    paginate: app.get('paginate'),
+    Model: app.get('postgresqlClient'),
+    name: 'spell-runner'
   }
 }

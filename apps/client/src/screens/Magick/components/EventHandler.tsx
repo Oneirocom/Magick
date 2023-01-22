@@ -8,7 +8,6 @@ import {
   useGetSpellQuery,
   useSaveDiffMutation,
 } from '../../../state/api/spells'
-import { feathers as feathersFlag } from '../../../config'
 import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
 import { useEditor } from '../../../workspaces/contexts/EditorProvider'
 import { diff } from '../../../utils/json0'
@@ -102,36 +101,22 @@ const EventHandler = ({ pubSub, tab }) => {
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
 
-    if (feathersFlag) {
-      try {
-        await client.service('spell-runner').update(currentSpell.name, {
-          diff: jsonDiff,
-        })
-        await saveDiff({
-          name: currentSpell.name,
-          diff: jsonDiff,
-        })
-        enqueueSnackbar('Spell saved', {
-          variant: 'success',
-        })
-      } catch {
-        enqueueSnackbar('Error saving spell', {
-          variant: 'error',
-        })
-        return
-      }
-    } else {
-      try {
-        await saveDiff({
-          name: currentSpell.name,
-          diff: jsonDiff,
-        })
-      } catch {
-        enqueueSnackbar('Error saving spell', {
-          variant: 'error',
-        })
-        return
-      }
+    try {
+      await client.service('spell-runner').update(currentSpell.name, {
+        diff: jsonDiff,
+      })
+      await saveDiff({
+        name: currentSpell.name,
+        diff: jsonDiff,
+      })
+      enqueueSnackbar('Spell saved', {
+        variant: 'success',
+      })
+    } catch {
+      enqueueSnackbar('Error saving spell', {
+        variant: 'error',
+      })
+      return
     }
   }
 
