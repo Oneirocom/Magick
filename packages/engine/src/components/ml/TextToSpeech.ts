@@ -24,7 +24,7 @@ type WorkerReturn = {
   output: string
 }
 
-const API_URL = 'https://localhost:8001'
+const API_URL = 'https://localhost:3030'
 
 export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {

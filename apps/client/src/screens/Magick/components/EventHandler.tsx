@@ -32,7 +32,7 @@ const EventHandler = ({ pubSub, tab }) => {
   const spellRef = useRef<Spell | null>(null)
 
   const FeathersContext = useFeathers()
-  const client = FeathersContext?.client
+  const client = FeathersContext.client
   useEffect(() => {
     if (!spell) return
     spellRef.current = spell
@@ -68,8 +68,11 @@ const EventHandler = ({ pubSub, tab }) => {
     const currentSpell = spellRef.current
     const graph = serialize() as GraphData
 
+    console.log('currentSpell', currentSpell.data[0])
+    console.log('graph', graph)
+
     const response = await saveSpellMutation({
-      ...currentSpell,
+      ...currentSpell.data[0],
       graph,
     })
 

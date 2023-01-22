@@ -73,10 +73,19 @@ export const spellApi = rootApi.injectEndpoints({
       invalidatesTags: ['Spell'],
       // needed to use queryFn as query option didnt seem to allow async functions.
       async queryFn({ ...spell }, { dispatch }, extraOptions, baseQuery) {
+        // make a copy of spell but remove the id
+        const spellCopy = { ...spell } as any
+        if(spellCopy.id) delete spellCopy.id
+
+        if(!spellCopy.created_at) spellCopy.created_at = new Date().toISOString();
+        spellCopy.updated_at = new Date().toISOString();
+        if(!spellCopy.modules) spellCopy.modules = [];
+        if(!spellCopy.agents) spellCopy.agents = [];
+
         const baseQueryOptions = {
-          url: 'spells/save',
-          body: spell,
-          method: 'POST',
+          url: 'spells/'+spell.id,
+          body: spellCopy,
+          method: 'PATCH',
         }
 
         // cast into proper response shape expected by queryFn return
