@@ -1,11 +1,7 @@
 import io from 'socket.io'
 
-<<<<<<< HEAD:packages/core/src/plugins/socketPlugin/index.ts
-import { IRunContextEditor } from '../../../types'
-import { MagickConsole } from '../consolePlugin/MagickConsole'
-=======
 import { IRunContextEditor } from '../../types'
->>>>>>> feathers:packages/engine/src/plugins/socketPlugin/index.ts
+import { MagickConsole } from '../consolePlugin/MagickConsole'
 
 export type SocketPluginArgs = {
   server?: boolean

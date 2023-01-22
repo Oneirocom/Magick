@@ -3,7 +3,7 @@ import { Plugin } from 'rete/types/core/plugin'
 import io from 'socket.io'
 
 import { GraphData, ModuleType, NodeData, MagickWorkerInputs } from '../types'
-import ConsolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
+import ConsolePlugin, { DebuggerArgs } from '../../engine/src/plugins/consolePlugin'
 import ModulePlugin from './plugins/modulePlugin'
 import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'

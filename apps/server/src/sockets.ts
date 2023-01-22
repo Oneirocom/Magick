@@ -1,4 +1,4 @@
-import { buildMagickInterface } from '../../server/src/spells/buildMagickInterface'
+import { buildMagickInterface } from './spells/buildMagickInterface'
 // import io from 'socket.io'
 import { SpellManager } from '@magickml/core'
 
