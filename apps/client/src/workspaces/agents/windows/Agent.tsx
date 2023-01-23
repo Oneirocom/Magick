@@ -99,6 +99,7 @@ const AgentWindow = ({
         if (!res.data.data) {
           res.data.data = {}
         }
+        res.data.data = JSON.parse(res.data.data)
         setEnabled(res.data.enabled === true)
         setDiscordEnabled(res.data.data.discord_enabled === true)
         setUseVoice(res.data.data.use_voice === true)
@@ -656,7 +657,7 @@ const AgentWindow = ({
                     setDiscordSpellHandlerUpdate(event.target.value)
                   }}
                 >
-                  <option value="null" selected>
+                  <option value="null">
                     --Disabled--
                   </option>
                   {spellList.length > 0 &&
