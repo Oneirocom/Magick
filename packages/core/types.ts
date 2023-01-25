@@ -63,6 +63,7 @@ export type SemanticSearch = {
 
 export type QAArgs = {
   question: string
+  agentId: string
 }
 
 export type CreateEventArgs = Event
@@ -138,6 +139,7 @@ export type EngineContext = {
   ) => Promise<string | string[] | null | Record<string, any>>
   storeEvent: (args: CreateEventArgs) => Promise<any>
   storeEventWeaviate: (args: CreateEventArgs) => Promise<any>
+  deleteEvent: (args: CreateEventArgs) => Promise<any>
   eventQAWeaviate: (args: QAArgs) => Promise<string | string[] >
   getWikipediaSummary: (keyword: string) => Promise<Record<string, any> | null>
 }
