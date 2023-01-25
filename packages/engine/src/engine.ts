@@ -37,6 +37,7 @@ export abstract class MagickEngineComponent<WorkerReturnType> {
 
 // TODO separate the engine context out from the editor context for cleaner typing.
 
+
 export type InitEngineArguments = {
   name: string
   components: any[]
@@ -70,6 +71,7 @@ export const initSharedEngine = ({
         server: true,
       })
     }
+    console.log(socket)
     engine.use(TaskPlugin)
   }
 
