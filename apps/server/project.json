@@ -15,7 +15,9 @@
         "compiler": "tsc",
         "outputPath": "dist/apps/server",
         "main": "apps/server/src/index.ts",
-        "tsConfig": "apps/server/tsconfig.app.json"
+        "assets": ["apps/server/src/certs"],
+        "tsConfig": "apps/server/tsconfig.app.json",
+        "webpackConfig": "apps/server/webpack.config.js"
       },
       "configurations": {
         "production": {
