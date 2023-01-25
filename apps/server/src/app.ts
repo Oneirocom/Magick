@@ -1,14 +1,7 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
 import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
-import {
-  koa,
-  rest,
-  bodyParser,
-  errorHandler,
-  parseAuthentication,
-  cors,
-} from '@feathersjs/koa'
+import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
 
 import type { Application } from './declarations'
@@ -18,7 +11,9 @@ import { postgresql } from './postgresql'
 import { authentication } from './authentication'
 import { services } from './services/index'
 import channels from './channels'
-import swagger from 'feathers-swagger';
+import swagger from 'feathers-swagger'
+import handleSockets from './sockets'
+import { configureManager } from '@magickml/engine'
 
 const app: Application = koa(feathers())
 
@@ -31,9 +26,9 @@ app.configure(
       info: {
         title: 'Magick API Documentation',
         description: 'Documentation for the Magick API backend, built with FeathersJS',
-        version: '1.0.0',
-      },
-    },
+        version: '1.0.0'
+      }
+    }
   })
 )
 
@@ -45,12 +40,21 @@ app.use(bodyParser())
 
 // Configure services and transports
 app.configure(rest())
+
+// configures this needed for the spellManager
+app.configure(configureManager())
 app.configure(
-  socketio({
-    cors: {
-      origin: '*',
+  socketio(
+    {
+      cors: {
+        origin: 'http://localhost:4200',
+        methods: ['GET', 'POST'],
+        allowedHeaders: ['Authorization'],
+        credentials: true
+      }
     },
-  })
+    handleSockets(app)
+  )
 )
 app.configure(postgresql)
 app.configure(authentication)
@@ -60,16 +64,16 @@ app.configure(channels)
 // Register hooks that run on all service methods
 app.hooks({
   around: {
-    all: [logError],
+    all: [logError]
   },
   before: {},
   after: {},
-  error: {},
+  error: {}
 })
 // Register application setup and teardown hooks here
 app.hooks({
   setup: [],
-  teardown: [],
+  teardown: []
 })
 
 export { app }
