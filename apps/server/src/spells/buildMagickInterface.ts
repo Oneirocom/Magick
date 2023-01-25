@@ -228,10 +228,13 @@ export const buildMagickInterface = (
     },
     eventQAWeaviate: async (args: QAArgs) => {
       const data = {...args}
-      return await weaviate_connection.searchEvents(data["question"])
+      return await weaviate_connection.searchEvents(data["question"], parseInt(data['agentId'].toString()))
     },
     storeEventWeaviate: async (args: CreateEventArgs) => {
       return await storeEventWeaviate(args)
+    },
+    deleteEvent: async (args: CreateEventArgs) => {
+      return await weaviate_connection.getAndDeleteEvents(args)
     },
     getWikipediaSummary: async (keyword: string) => {
       let out = null
