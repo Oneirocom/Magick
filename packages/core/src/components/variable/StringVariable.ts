@@ -36,7 +36,7 @@ export class StringVariable extends MagickComponent<InputReturn> {
     const out = new Rete.Output('output', 'output', anySocket)
     const _var = new InputControl({
       dataKey: '_var',
-      name: 'Variable',
+      name: 'Value',
       icon: 'moon',
     })
     const name = new InputControl({
@@ -50,10 +50,13 @@ export class StringVariable extends MagickComponent<InputReturn> {
     return node.addOutput(out)
   }
 
-  worker(node: NodeData) {
+  worker(node: NodeData){
+  
     const _var = node?.data?._var as string
 
-    this.name = node?.data?.name as string
+    this.name = (node?.data?.name as string) + '_' + Math.floor(Math.random()*1000)
+    
+    node.display("\""+ _var+ "\"");
 
     return {
       output: _var,
