@@ -96,36 +96,34 @@ const AgentWindow = ({
           `${import.meta.env.VITE_APP_API_URL}/agent?instanceId=` + id
         )
         console.log('res is', res)
-        if (!res.data.data) {
-          res.data.data = {}
-        }
+        let agentData = res.data.data ? JSON.parse(res.data.data) : {}
         setEnabled(res.data.enabled === true)
-        setDiscordEnabled(res.data.data.discord_enabled === true)
-        setUseVoice(res.data.data.use_voice === true)
-        setVoiceProvider(res.data.data.voice_provider)
-        setVoiceCharacter(res.data.data.voice_character)
-        setVoiceLanguageCode(res.data.data.voice_language_code)
-        setVoiceDefaultPhrases(res.data.data.voice_default_phrases)
-        setTikTalkNetUrl(res.data.data.tiktalknet_url)
+        setDiscordEnabled(agentData.discord_enabled === true)
+        setUseVoice(agentData.use_voice === true)
+        setVoiceProvider(agentData.voice_provider)
+        setVoiceCharacter(agentData.voice_character)
+        setVoiceLanguageCode(agentData.voice_language_code)
+        setVoiceDefaultPhrases(agentData.voice_default_phrases)
+        setTikTalkNetUrl(agentData.tiktalknet_url)
 
-        setOpenaiApiKey(res.data.data.openai_api_key)
-        setDiscordApiKey(res.data.data.discord_api_key)
-        setDiscordStartingWords(res.data.data.discord_starting_words)
-        setDiscordBotNameRegex(res.data.data.discord_bot_name_regex)
-        setDiscordBotName(res.data.data.discord_bot_name)
-        setDiscordEmptyResponses(res.data.data.discord_empty_responses)
+        setOpenaiApiKey(agentData.openai_api_key)
+        setDiscordApiKey(agentData.discord_api_key)
+        setDiscordStartingWords(agentData.discord_starting_words)
+        setDiscordBotNameRegex(agentData.discord_bot_name_regex)
+        setDiscordBotName(agentData.discord_bot_name)
+        setDiscordEmptyResponses(agentData.discord_empty_responses)
         setDiscordSpellHandlerIncoming(
-          res.data.data.discord_spell_handler_incoming
+          agentData.discord_spell_handler_incoming
         )
-        setDiscordSpellHandlerUpdate(res.data.data.discord_spell_handler_update)
+        setDiscordSpellHandlerUpdate(agentData.discord_spell_handler_update)
 
-        setEthPrivateKey(res.data.data.eth_private_key)
-        setEthPublicAddress(res.data.data.eth_public_address)
+        setEthPrivateKey(agentData.eth_private_key)
+        setEthPublicAddress(agentData.eth_public_address)
 
-        setLoopEnabled(res.data.data.loop_enabled === true)
-        setLoopInterval(res.data.data.loop_interval)
-        setLoopAgentName(res.data.data.loop_agent_name)
-        setLoopSpellHandler(res.data.data.loop_spell_handler)
+        setLoopEnabled(agentData.loop_enabled === true)
+        setLoopInterval(agentData.loop_interval)
+        setLoopAgentName(agentData.loop_agent_name)
+        setLoopSpellHandler(agentData.loop_spell_handler)
 
         setLoaded(true)
       })()
@@ -656,7 +654,7 @@ const AgentWindow = ({
                     setDiscordSpellHandlerUpdate(event.target.value)
                   }}
                 >
-                  <option value="null" selected>
+                  <option value="null">
                     --Disabled--
                   </option>
                   {spellList.length > 0 &&
