@@ -35,9 +35,15 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
 
   builder(node: MagickNode) {
     const out = new Rete.Output('output', 'output', arraySocket)
+    const name = new InputControl({
+      dataKey: 'name',
+      name: 'Name',
+      icon: 'moon',
+    })
+
     const _var = new InputControl({
       dataKey: '_var',
-      name: 'Variable',
+      name: 'Value',
       icon: 'moon',
     })
     const splitter = new InputControl({
@@ -45,14 +51,10 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
       name: 'Splitter',
       icon: 'moon',
     })
-    const name = new InputControl({
-      dataKey: 'name',
-      name: 'Name',
-      icon: 'moon',
-    })
+   
     const keepEmpty = new BooleanControl({
       dataKey: 'keepEmpty',
-      name: 'Variable',
+      name: 'Keep Empty Values',
       icon: 'moon',
     })
 
@@ -63,14 +65,17 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
 
   worker(node: NodeData) {
     const _var = node?.data?._var as string
-    const splitter = node?.data?._var as string
+    const splitter = node?.data?.splitter as string
     const keepEmpty = node?.data?.keepEmpty == 'true'
     const res = !keepEmpty
       ? _var.split(splitter).filter(el => el.length > 0)
       : _var.split(splitter)
 
-    this.name = (node?.data?.name as string) + ' - ' + _var
-
+    node.display(res.toString());
+    if(res === undefined) node.display("undefined value");
+    
+    this.name = (node?.data?.name as string) + '_' + Math.floor(Math.random()*1000)
+    
     return {
       output: res,
     }
