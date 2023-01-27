@@ -1,8 +1,8 @@
+// @ts-nocheck
 import { database } from '@magickml/database'
 import Koa from 'koa'
 import { Route } from './types'
 import { weaviate_connection } from '@magickml/systems'
-export const modules: Record<string, unknown> = {}
 
 const getEvents = async (ctx: Koa.Context) => {
   const event = await database.getEvents(ctx.request.query)
@@ -42,7 +42,7 @@ const updateEvent = async (ctx: Koa.Context) => {
       ctx.status = 400
       return (ctx.body = 'invalid url parameter')
     }
-    const res = await database.updateEvent(id, ctx.request.body)
+    const res = await database.updateEvent(id, ctx.request.body as any)
     return (ctx.body = res)
   } catch (e) {
     console.log(e)

@@ -3,7 +3,7 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import { rootApi } from './api'
-import { GraphData, Spell } from '@magickml/core'
+import { GraphData, Spell } from '@magickml/engine'
 
 export interface Diff {
   name: string
@@ -37,7 +37,7 @@ export const spellApi = rootApi.injectEndpoints({
       providesTags: ['Spell'],
       query: ({ spellId }) => {
         return {
-          url: `spells/${spellId}`,
+          url: `spells?name=${spellId}`,
           params: {},
         }
       },
@@ -72,11 +72,20 @@ export const spellApi = rootApi.injectEndpoints({
     saveSpell: builder.mutation<Partial<Spell>, Partial<Spell> | Spell>({
       invalidatesTags: ['Spell'],
       // needed to use queryFn as query option didnt seem to allow async functions.
-      async queryFn({ user, ...spell }, { dispatch }, extraOptions, baseQuery) {
+      async queryFn({ ...spell }, { dispatch }, extraOptions, baseQuery) {
+        // make a copy of spell but remove the id
+        const spellCopy = { ...spell } as any
+        if(spellCopy.id) delete spellCopy.id
+        if(spellCopy.modules) delete spellCopy.modules
+        if(!spellCopy.created_at) spellCopy.created_at = new Date().toISOString();
+        spellCopy.updated_at = new Date().toISOString();
+
+        if(!spellCopy.agents || Object.keys(spellCopy.agents).length === 0) spellCopy.agents = [];
+
         const baseQueryOptions = {
-          url: 'spells/save',
-          body: spell,
-          method: 'POST',
+          url: 'spells/'+spell.id,
+          body: spellCopy,
+          method: 'PATCH',
         }
 
         // cast into proper response shape expected by queryFn return
@@ -114,7 +123,7 @@ export const spellApi = rootApi.injectEndpoints({
         url: `spells/${spellId}`,
         method: 'DELETE',
       }),
-    })
+    }),
   }),
 })
 
@@ -136,7 +145,6 @@ export const {
   useRunSpellMutation,
   useSaveSpellMutation,
   useSaveDiffMutation,
-  useDeploySpellMutation,
   usePatchSpellMutation,
 } = spellApi
 

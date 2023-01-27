@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
-import { GraphData, Spell } from '@magickml/core'
+import { useSnackbar } from 'notistack'
+import { useSelector } from 'react-redux'
+import { GraphData, Spell } from '@magickml/engine'
 
 import {
   useSaveSpellMutation,
@@ -9,10 +11,8 @@ import {
 import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
 import { useEditor } from '../../../workspaces/contexts/EditorProvider'
 import { diff } from '../../../utils/json0'
-import { useSnackbar } from 'notistack'
 import { useFeathers } from '../../../contexts/FeathersProvider'
 import { RootState } from '../../../state/store'
-import { useSelector } from 'react-redux'
 
 const EventHandler = ({ pubSub, tab }) => {
   // only using this to handle events, so not rendering anything with it.
@@ -32,21 +32,13 @@ const EventHandler = ({ pubSub, tab }) => {
   const spellRef = useRef<Spell | null>(null)
 
   const FeathersContext = useFeathers()
-  const client = FeathersContext?.client
+  const client = FeathersContext.client
   useEffect(() => {
     if (!spell) return
     spellRef.current = spell
   }, [spell])
 
-  const {
-    serialize,
-    getEditor,
-    undo,
-    redo,
-    del,
-    getDirtyGraph,
-    setDirtyGraph,
-  } = useEditor()
+  const { serialize, getEditor, undo, redo, del } = useEditor()
 
   const { events, subscribe } = pubSub
 
@@ -76,8 +68,11 @@ const EventHandler = ({ pubSub, tab }) => {
     const currentSpell = spellRef.current
     const graph = serialize() as GraphData
 
+    console.log('currentSpell', currentSpell.data[0])
+    console.log('graph', graph)
+
     const response = await saveSpellMutation({
-      ...currentSpell,
+      ...currentSpell.data[0],
       graph,
     })
 
@@ -103,50 +98,29 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
-    console.log('updated spell', updatedSpell)
-    console.log('current spell', currentSpell)
-    const jsonDiff = diff(currentSpell, updatedSpell)
 
-    console.log('json diff', jsonDiff)
+    const jsonDiff = diff(currentSpell, updatedSpell)
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
 
-    const response = await saveDiff({
-      name: currentSpell.name,
-      diff: jsonDiff,
-    })
-
-    setDirtyGraph(true)
-
-    // if (preferences.autoSave) {
-    //   if ('error' in response) {
-    //     enqueueSnackbar('Error saving spell', {
-    //       variant: 'error',
-    //     })
-    //     return
-    //   }
-
-    //   enqueueSnackbar('Spell saved', {
-    //     variant: 'success',
-    //   })
-    // }
-
-    // if (feathersFlag) {
-    //   try {
-    //     await client.service('spell-runner').update(currentSpell.name, {
-    //       diff: jsonDiff,
-    //     })
-    //     enqueueSnackbar('Spell saved', {
-    //       variant: 'success',
-    //     })
-    //   } catch {
-    //     enqueueSnackbar('Error saving spell', {
-    //       variant: 'error',
-    //     })
-    //     return
-    //   }
-    // }
+    try {
+      await client.service('spell-runner').update(currentSpell.name, {
+        diff: jsonDiff,
+      })
+      await saveDiff({
+        name: currentSpell.name,
+        diff: jsonDiff,
+      })
+      enqueueSnackbar('Spell saved', {
+        variant: 'success',
+      })
+    } catch {
+      enqueueSnackbar('Error saving spell', {
+        variant: 'error',
+      })
+      return
+    }
   }
 
   const createStateManager = () => {
@@ -203,9 +177,7 @@ const EventHandler = ({ pubSub, tab }) => {
 
     console.log('RUNNING PROCESS')
 
-    editor.runProcess(() => {
-      setDirtyGraph(false)
-    })
+    editor.runProcess()
   }
 
   const onUndo = () => {

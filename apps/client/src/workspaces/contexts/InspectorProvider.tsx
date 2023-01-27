@@ -1,4 +1,4 @@
-import { InspectorData } from '@magickml/core'
+import { InspectorData } from '@magickml/engine'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { createContext, useContext, useEffect, useState } from 'react'
 

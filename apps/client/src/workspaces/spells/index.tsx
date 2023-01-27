@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
 import { useEditor } from '../../workspaces/contexts/EditorProvider'
@@ -16,12 +16,11 @@ import StateManager from '../../workspaces/spells/windows/StateManagerWindow'
 import TextEditor from './windows/TextEditorWindow'
 import DebugConsole from './windows/DebugConsole'
 
-import { Spell, MagickComponent } from '@magickml/core'
+import { Spell, MagickComponent } from '@magickml/engine'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import EventManagerWindow from './windows/EventManager'
 import { RootState } from '../../state/store'
 import { useFeathers } from '../../contexts/FeathersProvider'
-import { feathers as feathersFlag } from '../../config'
 import AgentManagerWindow from '../agents/windows/AgentManagerWindow'
 import React from 'react'
 
@@ -29,7 +28,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   const spellRef = useRef<Spell>()
   const { events, publish } = usePubSub()
   const [loadSpell, { data: spellData }] = useLazyGetSpellQuery()
-  const { editor, serialize, setDirtyGraph, getDirtyGraph } = useEditor()
+  const { editor, serialize } = useEditor()
   const FeathersContext = useFeathers()
   const client = FeathersContext?.client
   const preferences = useSelector((state: RootState) => state.preferences)
@@ -41,12 +40,10 @@ const Workspace = ({ tab, tabs, pubSub }) => {
       // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
       'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
       debounce(async data => {
-        if (!getDirtyGraph()) return
         if (tab.type === 'spell' && spellRef.current) {
-          // setDirtyGraph(true)
-          // publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
+          publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
         }
-      }, 2000) // debounce for 2000 ms
+      }, 5000) // debounce for 2000 ms
     )
 
     return () => {
@@ -83,12 +80,12 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   }, [tab])
 
   useEffect(() => {
-    if (!client || !feathersFlag) return
+    if (!client) return
     ;(async () => {
       if (!client || !tab || !tab.spellId) return
       await client.service('spell-runner').get(tab.spellId)
     })()
-  }, [client, feathersFlag])
+  }, [client])
 
   const factory = tab => {
     return node => {

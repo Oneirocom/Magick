@@ -1,4 +1,4 @@
-import { magickApiRootUrl } from 'apps/client/src/config'
+import { magickApiRootUrl } from '../../../config'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
@@ -93,7 +93,7 @@ const AgentWindow = ({
     if (!loaded) {
       ;(async () => {
         const res = await axios.get(
-          `${import.meta.env.VITE_APP_API_URL}/agent?instanceId=` + id
+          `${import.meta.env.VITE_APP_API_URL}/agents?is=` + id
         )
         console.log('res is', res)
         let agentData = res.data.data ? JSON.parse(res.data.data) : {}
@@ -190,10 +190,7 @@ const AgentWindow = ({
       },
     }
     axios
-      .post(`${import.meta.env.VITE_APP_API_URL}/agent`, {
-        id,
-        ..._data,
-      })
+      .patch(`${import.meta.env.VITE_APP_API_URL}/agents/${id}`, _data)
       .then(res => {
         console.log('RESPONSE DATA', res.data)
         if (typeof res.data === 'string' && res.data === 'internal error') {
@@ -206,6 +203,8 @@ const AgentWindow = ({
           })
           console.log('response on update', JSON.parse(res.config.data))
           let responseData = res && JSON.parse(res?.config?.data)
+
+          console.log('responseData', responseData)
 
           setEnabled(responseData.enabled)
           setDiscordEnabled(responseData.data.discord_enabled)
