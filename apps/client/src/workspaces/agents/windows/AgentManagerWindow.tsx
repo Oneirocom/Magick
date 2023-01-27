@@ -15,19 +15,22 @@ const AgentManagerWindow = () => {
     setData(await res.json())
   }
 
-  const createNew = (data = {}) => {
+  const createNew = (data = { spells: [] }) => {
+    console.log('data is', data)
+    if(!data.spells === undefined) data.spells = []
     // rewrite using fetch instead of axios
-    fetch(`${magickApiRootUrl}/agent`, {
+    fetch(`${magickApiRootUrl}/agents`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ data }),
+      body: JSON.stringify(data),
     })
       .then(async res => {
         console.log('response is', res)
         const res2 = await fetch(`${magickApiRootUrl}/agents`)
-        setData(await res2.json())
+        const json = await res2.json();
+        setData(json.data)
       })
       .catch(err => {
         console.log('error is', err)
@@ -46,7 +49,8 @@ const AgentManagerWindow = () => {
   useEffect(() => {
     (async () => {
       const res = await fetch(`${magickApiRootUrl}/agents`)
-      setData(await res.json())
+      const json = await res.json();
+      setData(json.data)
     })()
   }, [])
 

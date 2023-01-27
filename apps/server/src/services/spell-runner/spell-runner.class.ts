@@ -1,0 +1,133 @@
+import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
+import { KnexService } from '@feathersjs/knex'
+import { Spell } from '@magickml/engine'
+import otJson0 from 'ot-json0'
+import { app } from '../../app'
+import {
+  Id,
+  Params,
+} from '@feathersjs/feathers'
+
+import type { Application } from '../../declarations'
+
+export type SpellRunner = any
+export type SpellRunnerData = any
+export type SpellRunnerPatch = any
+export type SpellRunnerQuery = any
+
+export interface SpellRunnerParams extends KnexAdapterParams<SpellRunnerQuery> {}
+
+interface Data {}
+
+interface CreateData {
+  inputs: Record<string, any>
+  spellId: string
+}
+
+const getSpell = async (app, spellName: string) => {
+  const spell = await app.service('spells').find({
+    query: {
+      name: spellName,
+    },
+  })
+
+
+  return spell
+}
+
+// By default calls the standard Knex adapter service methods but can be customized with your own functionality.
+export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams> extends KnexService<
+  SpellRunner,
+  SpellRunnerData,
+  ServiceParams,
+  SpellRunnerPatch
+> {
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async get(id: Id, params?: SpellRunnerParams): Promise<any | {}> {
+    if (!app.userSpellManagers) return {}
+    if (!params) throw new Error('No params present in service')
+
+    const { user } = params
+
+    if (!user) throw new Error('No user is present in service')
+    // Here we get the users spellManagerApp
+    const spellManager = app.userSpellManagers.get(user.id.toString())
+
+    if (!spellManager) throw new Error('No spell manager created for user!')
+
+    const spell = await getSpell(app, id as string)
+
+    // Load the spell into the spellManager. If there is no spell runner, we make one.
+    await spellManager.load(spell as unknown as Spell)
+
+    return spell
+  }
+
+  // TODO: Fix this
+  // @ts-ignore
+  async create (
+    data: CreateData,
+    params?: SpellRunnerParams
+  ): Promise<Record<string, unknown>> {
+    if (!app.userSpellManagers) return {}
+    if (!params) throw new Error('No params present in service')
+
+    const { user } = params as any
+
+    if (!user) throw new Error('No user is present in service')
+
+    const { inputs, spellId } = data
+
+    const spellManager = app.userSpellManagers.get(user.id)
+
+    if (!spellManager) throw new Error('No spell manager found for user!')
+
+    const result = await spellManager.run(spellId, inputs)
+
+    return result || {}
+  }
+
+  async update(
+    spellId: string,
+    data: { diff: Record<string, unknown> },
+    params?: SpellRunnerParams
+  ): Promise<Data> {
+    if (!app.userSpellManagers) return {}
+    if (!params) throw new Error('No params present in service')
+
+    const { user } = params as any
+
+    if (!user) throw new Error('No user present in service')
+
+    const { diff } = data
+
+    const spellManager = app.userSpellManagers.get(user.id)
+    if (!spellManager) throw new Error('No spell manager found for user!')
+
+    const spellRunner = spellManager.getSpellRunner(spellId)
+    if (!spellRunner) throw new Error('No spell runner found!')
+
+    const spell = spellRunner.currentSpell
+    const updatedSpell = otJson0.type.apply(spell, diff)
+
+    spellManager.load(updatedSpell, true)
+    return updatedSpell
+  }
+
+  // async patch(id: NullableId, data: Data, params?: Params): Promise<Data> {
+  //   return data
+  // }
+
+  // async remove(id: NullableId, params?: Params): Promise<Data> {
+  //   return { id }
+  // }
+}
+
+export const getOptions = (app: Application): KnexAdapterOptions => {
+  return {
+    paginate: app.get('paginate'),
+    Model: app.get('postgresqlClient'),
+    name: 'spell-runner'
+  }
+}

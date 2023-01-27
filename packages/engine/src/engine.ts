@@ -1,22 +1,12 @@
-import io from 'socket.io'
 import Rete, { Engine } from 'rete'
 import { Plugin } from 'rete/types/core/plugin'
+import io from 'socket.io'
 
-import {
-  SocketPlugin,
-  DebuggerPlugin,
-  ModulePlugin,
-  TaskPlugin,
-  Task,
-  GraphData,
-  ModuleType,
-  NodeData,
-  MagickWorkerInputs,
-  extractNodes,
-  DebuggerArgs,
-  ModulePluginArgs,
-  SocketPluginArgs,
-} from '@magickml/core'
+import consolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
+import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
+import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
+import TaskPlugin, { Task } from './plugins/taskPlugin'
+import { GraphData, MagickWorkerInputs, NodeData } from './types'
 
 interface WorkerOutputs {
   [key: string]: unknown
@@ -51,7 +41,6 @@ export type InitEngineArguments = {
   name: string
   components: any[]
   server: boolean
-  modules?: Record<string, ModuleType>
   throwError?: Function
   socket?: io.Socket
 }
@@ -60,21 +49,20 @@ export const initSharedEngine = ({
   name,
   components,
   server = false,
-  modules = {},
   throwError,
   socket,
 }: InitEngineArguments) => {
   const engine = new Rete.Engine(name) as MagickEngine
 
+  console.log('STARTING ENGINE')
   if (server) {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
-    engine.use<Plugin, DebuggerArgs>(DebuggerPlugin, {
+    engine.use<Plugin, DebuggerArgs>(consolePlugin, {
       server: true,
       throwError,
     })
     engine.use<Plugin, ModulePluginArgs>(ModulePlugin, {
       engine,
-      modules,
     } as any)
     if (socket) {
       engine.use<Plugin, SocketPluginArgs>(SocketPlugin, {
@@ -94,11 +82,24 @@ export const initSharedEngine = ({
   return engine
 }
 
+// this parses through all the nodes in the data and finds the nodes associated with the given map
+export const extractNodes = (
+  nodes: GraphData['nodes'],
+  map: Map<any, any> | Set<unknown>
+) => {
+  const names = Array.from(map.keys())
+
+  return Object.keys(nodes)
+    .filter(k => names.includes(nodes[k].name))
+    .map(k => nodes[k])
+    .sort((n1, n2) => n1.position[1] - n2.position[1])
+}
+
 // This will get the node that was triggered given a socketKey associated with that node.
 export const getTriggeredNode = (
   data: GraphData,
   socketKey: string,
-  map: Set<unknown>
+  map: Map<any, any> | Set<unknown>
 ) => {
   return extractNodes(data.nodes, map).find(
     node => node.data.socketKey === socketKey

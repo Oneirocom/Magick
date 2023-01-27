@@ -18,10 +18,10 @@ const darkTheme = createTheme(
 )
 
 const providers = [
+  FeathersProvider,
   PubSubProvider,
   [ThemeProvider, { theme: darkTheme }],
   ToastProvider,
-  FeathersProvider,
 ]
 
 /**

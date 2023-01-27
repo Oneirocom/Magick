@@ -36,10 +36,6 @@ const Inspector = props => {
     if (!inspectorData) return
     const newData = {
       ...inspectorData,
-      dataControls: {
-        ...inspectorData.dataControls,
-        ...control,
-      },
     }
 
     saveInspector(newData)

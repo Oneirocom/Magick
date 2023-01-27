@@ -1,4 +1,4 @@
-<p align="center"><img src="files/MAGICK-banner.png" /></p>
+<p align="center"><img src="apps/docs/readme-files/MAGICK-banner.png" /></p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 
@@ -53,6 +53,12 @@ The default setup of Magick is connected to a test database on Supabase. It will
 We recommend either installing the docker desktop app, and running `docker-compose up` at the root of Magick, or getting your own Supabase instance set up for free in the cloud.
 
 We will be working on more database docoumentation to help you get your data store up and running.
+
+## Self signed certificates
+
+Developing locally, it can be very helpful to have google chrome accept all self signed cetificates coming from localhost. To do this, simply paste the following snippet into chromes URL bar and enable the feature:
+
+`chrome://flags/#allow-insecure-localhost`
 
 ## Contributors
 
