@@ -31,8 +31,7 @@ const getSpell = async (app, spellName: string) => {
     },
   })
 
-
-  return spell
+  return spell.data[0]
 }
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
@@ -58,8 +57,10 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     const spell = await getSpell(app, id as string)
 
+    console.log('spell runner spell', spell)
+
     // Load the spell into the spellManager. If there is no spell runner, we make one.
-    await spellManager.load(spell as unknown as Spell)
+    await spellManager.load(spell as Spell)
 
     return spell
   }
@@ -102,6 +103,8 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     const { diff } = data
 
+    console.log('updated spell, diff is', spellId, diff)
+
     const spellManager = app.userSpellManagers.get(user.id)
     if (!spellManager) throw new Error('No spell manager found for user!')
 
@@ -110,6 +113,8 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     const spell = spellRunner.currentSpell
     const updatedSpell = otJson0.type.apply(spell, diff)
+
+    console.log('updatedSpell', updatedSpell)
 
     spellManager.load(updatedSpell, true)
     return updatedSpell

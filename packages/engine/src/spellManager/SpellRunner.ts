@@ -211,7 +211,6 @@ class SpellRunner {
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
     await component.run(triggeredNode)
-    console.log("TTTT")
     return this.outputData
   }
 
@@ -219,7 +218,6 @@ class SpellRunner {
    * temporary function to be backwards compatible with current use of run spell
    */
   async defaultRun(inputs: Record<string, any>, runSubspell = false) {
-    console.log("NOTTT")
     return await this.runComponent(inputs, 'Trigger In', runSubspell)
   }
 }

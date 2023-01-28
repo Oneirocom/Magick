@@ -61,7 +61,7 @@ const getEventWeaviate = async ({
 
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Event Recall Weaviate')
+    super('Event Recall')
 
     this.task = {
       outputs: {
