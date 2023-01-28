@@ -24,7 +24,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
 
   constructor() {
     // Name of the component
-    super('Input Destructure')
+    super('Event Destructure')
 
     this.task = {
       outputs: {

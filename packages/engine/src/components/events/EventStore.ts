@@ -18,7 +18,7 @@ const info = 'Event Store is used to store events for an event and user'
 
 export class EventStore extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Store Event Weaviate')
+    super('Event Store')
 
     this.task = {
       outputs: {

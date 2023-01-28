@@ -90,15 +90,18 @@ export class Output extends MagickComponent<void> {
 
     const output = inputs.input.filter(Boolean)[0] as string
 
-    //just need a new check here for playtest send boolean
-    const { sendToPlaytest, sendToAvatar } = magick
+    if(magick) {
 
-    if (node.data.sendToPlaytest && sendToPlaytest) {
-      sendToPlaytest(output)
-    }
-
-    if (node.data.sendToAvatar && sendToAvatar) {
-      sendToAvatar(output)
+      //just need a new check here for playtest send boolean
+      const { sendToPlaytest, sendToAvatar } = magick
+      
+      if (node.data.sendToPlaytest && sendToPlaytest) {
+        sendToPlaytest(output)
+      }
+      
+      if (node.data.sendToAvatar && sendToAvatar) {
+        sendToAvatar(output)
+      }
     }
 
     if (!silent) node.display(output as string)

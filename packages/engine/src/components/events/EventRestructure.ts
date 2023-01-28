@@ -21,7 +21,7 @@ export class EventRestructureComponent extends MagickComponent<
 
   constructor() {
     // Name of the component
-    super('Input Restructure')
+    super('Event Restructure')
 
     this.task = {
       outputs: {

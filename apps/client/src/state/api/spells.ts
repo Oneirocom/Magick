@@ -76,11 +76,13 @@ export const spellApi = rootApi.injectEndpoints({
         // make a copy of spell but remove the id
         const spellCopy = { ...spell } as any
         if(spellCopy.id) delete spellCopy.id
-        if(spellCopy.modules) delete spellCopy.modules
+        if(Object.keys(spellCopy).includes('modules')) delete spellCopy.modules
         if(!spellCopy.created_at) spellCopy.created_at = new Date().toISOString();
         spellCopy.updated_at = new Date().toISOString();
 
         if(!spellCopy.agents || Object.keys(spellCopy.agents).length === 0) spellCopy.agents = [];
+
+        console.log('spellCopy is', spellCopy)
 
         const baseQueryOptions = {
           url: 'spells/'+spell.id,
