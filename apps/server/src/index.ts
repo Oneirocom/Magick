@@ -13,7 +13,9 @@ import {
   WEAVIATE_IMPORT_DATA,
   USESSL,
 } from '@magickml/server-core'
-
+import {
+  Plugin  
+} from '@magickml/magick-plugins'
 import * as fs from 'fs'
 import http from 'http'
 import https from 'https'
@@ -24,6 +26,7 @@ import path from 'path'
 import { initSpeechServer } from '@magickml/server-core'
 
 import { Handler, Method, Middleware } from './types'
+
 
 // log node.js errors
 process.on('uncaughtException', (err) => {
@@ -54,9 +57,9 @@ const routes: Route[] = [...spells, ...apis]
 
 import { worldManager } from '@magickml/engine'
 import { World } from './World'
+import { pluginsContext } from './plugins/discordPlugin'
 
 async function init() {
-
   new World()
   new worldManager()
   initSpeechServer(false)
@@ -93,7 +96,11 @@ async function init() {
 
   // Middleware used by every request. For route-specific middleware, add it to you route middleware specification
   app.use(koaBody({ multipart: true }))
-
+  let plugin = {
+    featherApp: app,
+  }
+  const discordInputPlugin = new Plugin(pluginsContext, app)
+  discordInputPlugin.setup()
   const createRoute = (
     method: Method,
     path: string,

@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/server/src",
   "projectType": "application",
-  "implicitDependencies": ["server-core", "engine"],
+  "implicitDependencies": ["server-core", "engine", "magick-plugins"],
   "targets": {
     "build": {
       "executor": "@nrwl/webpack:webpack",
