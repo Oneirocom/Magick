@@ -38,6 +38,9 @@
       ],
       "@magickml/server-core": [
         "packages/server-core/src/index.ts"
+      ],
+      "@magickml/magick-plugins":[
+        "packages/magick-plugins/src/index.ts"
       ]
     }
   },
