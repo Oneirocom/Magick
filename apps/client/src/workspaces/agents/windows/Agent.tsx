@@ -703,27 +703,20 @@ const AgentWindow = ({
 }
 
 const KeyInput = ({ value, setValue, secret }: { value: string, setValue: any, secret: boolean }) => {
-  const [apiKey, setApiKey] = useState<string>('')
 
-  useEffect(() => {
-    setApiKey(value)
-  }, [value])
-
-  const addKey = (val) => {
-    //discount random key presses, could def have better sense checking
+  const addKey = (str: string) => {
+    // discount random key presses, could def have better sense checking
     // ethereum addresses are 42 chars
-    if (val.length > 41) {
-      setApiKey(val)
-      setValue(val)
+    if (str.length > 41) {
+      setValue(str)
     }
   }
 
   const removeKey = () => {
-    setApiKey('')
     setValue('')
   }
 
-  const viewKey = (str) => {
+  const obfuscateKey = (str: string) => {
     const first = str.substring(0, 6)
     const last = str.substring(str.length - 4, str.length)
     return `${first}....${last}`
@@ -731,9 +724,9 @@ const KeyInput = ({ value, setValue, secret }: { value: string, setValue: any, s
 
   return (
     <>
-      {apiKey ?
-        <div><p>{secret ? viewKey(apiKey) : apiKey}</p> <button onClick={removeKey}>remove</button></div>
-        : <div><input type={secret ? "password" : "input"} defaultValue={apiKey} onChange={e => {addKey(e.target.value)}} /></div>
+      {value ?
+        <div><p>{secret ? obfuscateKey(value) : value}</p> <button onClick={removeKey}>remove</button></div>
+        : <div><input type={secret ? "password" : "input"} defaultValue={value} onChange={e => {addKey(e.target.value)}} /></div>
       }
     </>
   )
