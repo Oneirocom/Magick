@@ -364,7 +364,7 @@ const AgentWindow = ({
           }}
         />
       </div>
-      <ChatBox
+      {/* <ChatBox
         client={'AgentWindow'}
         spell_handler={discord_spell_handler_incoming}
         channelType={'AgentWindow'}
@@ -372,7 +372,7 @@ const AgentWindow = ({
         sender={'Speaker'}
         observer={'Agent'}
         channel={'AgentWindow'}
-      />
+      /> */}
       <div className="form-item">
         <span className="form-item-label">Voice Enabled</span>
         <input
@@ -722,13 +722,13 @@ const KeyInput = ({ value, setValue, secret }: { value: string, setValue: any, s
     return `${first}....${last}`
   }
 
-  return (
+  return value ? (
     <>
-      {value ?
-        <div><p>{secret ? obfuscateKey(value) : value}</p> <button onClick={removeKey}>remove</button></div>
-        : <div><input type={secret ? "password" : "input"} defaultValue={value} onChange={e => {addKey(e.target.value)}} /></div>
-      }
+      <p>{secret ? obfuscateKey(value) : value}</p>
+      <button onClick={removeKey}>remove</button>
     </>
+  ) : (
+    <input type={secret ? "password" : "input"} defaultValue={value} onChange={e => { addKey(e.target.value) }} />
   )
 }
 
