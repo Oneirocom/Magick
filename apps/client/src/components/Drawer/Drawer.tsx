@@ -144,7 +144,7 @@ export default function MiniDrawer({ children }) {
             open={open}
             text="Spellbook"
           /> */}
-          <DrawerItem
+          {/* <DrawerItem
             active={location.pathname === '/eventManager'}
             Icon={StorageIcon}
             open={open}
@@ -156,7 +156,7 @@ export default function MiniDrawer({ children }) {
             Icon={HubIcon}
             open={open}
             text="Agent Manager"
-          />
+          /> */}
           {/* <DrawerItem
             active={location.pathname === '/settings'}
             Icon={SettingsIcon}
