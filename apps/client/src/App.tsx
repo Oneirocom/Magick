@@ -9,6 +9,7 @@ import './design-globals/design-globals.css'
 import './App.css'
 
 import MainLayout from './components/MainLayout/MainLayout'
+import FineTuneManager from './screens/FineTuneManager/FineTuneManager'
 
 //These need to be imported last to override styles.
 
@@ -16,7 +17,7 @@ function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route path="/fineTuneManager" element={<></>} />
+        <Route path="/fineTuneManager" element={<FineTuneManager />} />
         <Route element={<MagickPageLayout />}>
           <Route path="/home/*" element={<HomeScreen />} />
           <Route path="/" element={<Magick />} />
