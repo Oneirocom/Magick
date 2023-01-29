@@ -138,6 +138,13 @@ export default function MiniDrawer({ children }) {
             onClick={onClick('/magick')}
             text="Spell Composer"
           />
+          <DrawerItem
+            active={location.pathname === '/fineTuneManager'}
+            Icon={AutoStoriesIcon}
+            open={open}
+            onClick={onClick('/fineTuneManager')}
+            text="Fine Tune Manager"
+          />
           {/* <DrawerItem
             active={location.pathname === '/spellbook'}
             Icon={AutoStoriesIcon}
