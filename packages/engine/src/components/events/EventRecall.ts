@@ -31,8 +31,7 @@ const getEventWeaviate = async ({
   max_time_diff = -1,
 }) => {
   const urlString = `${
-    (import.meta.env ?? process?.env).VITE_APP_API_URL ??
-    (import.meta.env ?? process?.env).API_ROOT_URL
+    process.env.WEAVIATE_CLIENT_HOST
   }/eventWeaviate`
 
   const params = {
@@ -46,6 +45,8 @@ const getEventWeaviate = async ({
     target_count,
     max_time_diff,
   } as Record<string, any>
+  
+  console.log('urlString is', urlString)
 
   const url = new URL(urlString)
   for (let p in params) {

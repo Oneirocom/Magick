@@ -79,8 +79,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     }: CreateEventArgs) => {
       const response = await axios.post(
         `${
-          import.meta.env.VITE_APP_API_URL ??
-          import.meta.env.API_ROOT_URL
+          process.env.WEAVIATE_CLIENT_HOST
         }/eventWeaviate`,
         {
           type,
