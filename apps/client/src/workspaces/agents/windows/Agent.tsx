@@ -53,7 +53,7 @@ const AgentWindow = ({
       }
 
       const resp = await axios.get(
-        `${import.meta.env.VITE_APP_API_URL}/text_to_speech`,
+        `${magickApiRootUrl}/text_to_speech`,
         {
           params: {
             text: 'Hello there! How are you?',
@@ -93,13 +93,27 @@ const AgentWindow = ({
     if (!loaded) {
       ;(async () => {
         const res = await axios.get(
-          `${import.meta.env.VITE_APP_API_URL}/agents?is=` + id
+          `${magickApiRootUrl}/agents/` + id
         )
         console.log('res is', res)
-        let agentData = res.data.data ? JSON.parse(res.data.data) : {}
+
+        if (res.data === null) {
+          enqueueSnackbar('Agent not found', {
+            variant: 'error',
+          })
+          return
+        }
+
+        console.log('res data', res.data)
+
+        let agentData = res.data.data
         setEnabled(res.data.enabled === true)
+
+        console.log('agentData', agentData)
+
+        if (agentData !== null && agentData !== undefined) {
         setDiscordEnabled(agentData.discord_enabled === true)
-        setUseVoice(agentData.use_voice === true)
+        setUseVoice(agentData !== undefined && agentData.use_voice === true)
         setVoiceProvider(agentData.voice_provider)
         setVoiceCharacter(agentData.voice_character)
         setVoiceLanguageCode(agentData.voice_language_code)
@@ -112,7 +126,7 @@ const AgentWindow = ({
         setDiscordBotNameRegex(agentData.discord_bot_name_regex)
         setDiscordBotName(agentData.discord_bot_name)
         setDiscordEmptyResponses(agentData.discord_empty_responses)
-        setDiscordSpellHandlerIncoming(
+        setDiscordSpellHandlerIncoming(agentData &&
           agentData.discord_spell_handler_incoming
         )
         setDiscordSpellHandlerUpdate(agentData.discord_spell_handler_update)
@@ -124,7 +138,7 @@ const AgentWindow = ({
         setLoopInterval(agentData.loop_interval)
         setLoopAgentName(agentData.loop_agent_name)
         setLoopSpellHandler(agentData.loop_spell_handler)
-
+        }
         setLoaded(true)
       })()
     }
@@ -132,14 +146,14 @@ const AgentWindow = ({
 
   useEffect(() => {
     ;(async () => {
-      const res = await axios.get(`${import.meta.env.VITE_APP_API_URL}/spells`)
+      const res = await axios.get(`${magickApiRootUrl}/spells`)
       setSpellList(res.data)
     })()
   }, [])
 
   const _delete = () => {
     axios
-      .delete(`${import.meta.env.VITE_APP_API_URL}/agent/` + id)
+      .delete(`${magickApiRootUrl}/agents/` + id)
       .then(res => {
         console.log('deleted', res)
         if (res.data === 'internal error') {
@@ -151,7 +165,6 @@ const AgentWindow = ({
             variant: 'success',
           })
         }
-        setLoaded(false)
         updateCallback()
       })
       .catch(e => {
@@ -190,7 +203,7 @@ const AgentWindow = ({
       },
     }
     axios
-      .patch(`${import.meta.env.VITE_APP_API_URL}/agents/${id}`, _data)
+      .patch(`${magickApiRootUrl}/agents/${id}`, _data)
       .then(res => {
         console.log('RESPONSE DATA', res.data)
         if (typeof res.data === 'string' && res.data === 'internal error') {
@@ -278,77 +291,6 @@ const AgentWindow = ({
     link.parentNode.removeChild(link)
   }
 
-  function ChatBox({
-    spell_handler,
-    client,
-    channel,
-    channelType,
-    sender,
-    observer,
-    agentId
-  }) {
-    const [messages, setMessages] = useState(['Welcome to the room!'])
-    const [value, setValue] = useState('')
-    const handleSubmit = async event => {
-      event.preventDefault()
-      console.log('value is: ', value)
-      try {
-        const url = encodeURI(`${magickApiRootUrl}/spells/${spell_handler}`)
-        console.log('url is: ', url)
-        const response = await axios
-          .post(`${url}`, {
-            inputs: {
-              content: value,
-              sender,
-              observer,
-              client,
-              channelType,
-              agentId: agentId,
-              channel,
-            },
-          })
-          .then(response => {
-            const data = response.data
-
-            // get the output from data
-            const outputs = data.outputs
-
-            // get the first key from outputs
-            const outputKey = Object.keys(outputs)[0]
-
-            // get the output from outputs
-            const output = outputs[outputKey]
-
-            setMessages([...messages, output])
-            console.log(response)
-          })
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
-    return (
-      <div style={{ width: '80%' }}>
-        {messages.map((message, index) => (
-          <div key={index}>{message}</div>
-        ))}
-
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="message">Message:</label>
-          <input
-            type="text"
-            name="message"
-            value={value}
-            onChange={e => {
-              setValue(e.target.value)
-            }}
-          />
-          <button type="submit">Send</button>
-        </form>
-      </div>
-    )
-  }
-
   return !loaded ? (
     <>Loading...</>
   ) : (
@@ -363,15 +305,6 @@ const AgentWindow = ({
           }}
         />
       </div>
-      <ChatBox
-        client={'AgentWindow'}
-        spell_handler={discord_spell_handler_incoming}
-        channelType={'AgentWindow'}
-        agentId={id}
-        sender={'Speaker'}
-        observer={'Agent'}
-        channel={'AgentWindow'}
-      />
       <div className="form-item">
         <span className="form-item-label">Voice Enabled</span>
         <input

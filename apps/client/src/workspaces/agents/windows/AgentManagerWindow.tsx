@@ -9,10 +9,11 @@ const AgentManagerWindow = () => {
 
   const resetData = async () => {
     const res = await fetch(
-      `${import.meta.env.VITE_APP_API_URL}/agents`
+      `${magickApiRootUrl}/agents`
     )
-    console.log('res is ', res)
-    setData(await res.json())
+    const json = await res.json();
+    setData(null)
+    console.log('res is', json)
   }
 
   const createNew = (data = { spells: [] }) => {
@@ -50,6 +51,7 @@ const AgentManagerWindow = () => {
     (async () => {
       const res = await fetch(`${magickApiRootUrl}/agents`)
       const json = await res.json();
+      console.log('setting data to ', json)
       setData(json.data)
     })()
   }, [])
