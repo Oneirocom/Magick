@@ -105,7 +105,7 @@ export class Agent {
     this.onDestroy()
     this.id = agent.id
     this.rawAgent = agent
-    this.data = {...agent.data, ...agent.data.data}
+    this.data = { ...agent.data, ...agent.data.data }
     this.name = agent.agent ?? agent.name ?? 'agent'
     this.spellManager = new SpellManager({
       magickInterface: buildMagickInterface({}),
@@ -140,7 +140,8 @@ export class Agent {
   }: StartDiscordArgs) {
     if (this.discord)
       throw new Error('Discord already running for this agent on this instance')
-
+    // @thomageanderson TODO: how do we handle this correctly? Prisma will throw an error if we try to connect to a spell that doesn't exist
+    if (!discord_spell_handler_incoming) return
     const spell = await prisma.spells.findUnique({
       where: { name: discord_spell_handler_incoming },
     })
@@ -211,7 +212,6 @@ export class Agent {
       this.loopHandler = null
     }
   }
-
 
   async onDestroy() {
     if (this.discord) this.stopDiscord()
