@@ -451,35 +451,17 @@ const AgentWindow = ({
           <div className="form-item">
             <span className="form-item-label">OpenAI Key</span>
             {/*password input field that, when changed, sets the openai key*/}
-            <input
-              type="password"
-              defaultValue={openai_api_key}
-              onChange={e => {
-                setOpenaiApiKey(e.target.value)
-              }}
-            />
+            <KeyInput value={openai_api_key} setValue={setOpenaiApiKey} secret={true} />
           </div>
           <div className="form-item">
             <span className="form-item-label">Ethereum Private Key</span>
             {/*password input field that, when changed, sets the openai key*/}
-            <input
-              type="password"
-              defaultValue={eth_private_key}
-              onChange={e => {
-                setEthPrivateKey(e.target.value)
-              }}
-            />
+            <KeyInput value={eth_private_key} setValue={setEthPrivateKey} secret={true} />
           </div>
           <div className="form-item">
             <span className="form-item-label">Ethereum Public Address</span>
             {/*password input field that, when changed, sets the openai key*/}
-            <input
-              type="input"
-              defaultValue={eth_public_address}
-              onChange={e => {
-                setEthPublicAddress(e.target.value)
-              }}
-            />
+            <KeyInput value={eth_public_address} setValue={setEthPublicAddress} secret={false} />
           </div>
           <div className="form-item">
             <span className="form-item-label">Discord Enabled</span>
@@ -497,13 +479,7 @@ const AgentWindow = ({
             <>
               <div className="form-item">
                 <span className="form-item-label">Discord API Key</span>
-                <input
-                  type="password"
-                  defaultValue={discord_api_key}
-                  onChange={e => {
-                    setDiscordApiKey(e.target.value)
-                  }}
-                />
+                <KeyInput value={discord_api_key} setValue={setDiscordApiKey} secret={true} />
               </div>
 
               <div className="form-item">
@@ -655,6 +631,36 @@ const AgentWindow = ({
         <button onClick={() => exportEntity()}>Export</button>
       </div>
     </div>
+  )
+}
+
+const KeyInput = ({ value, setValue, secret }: { value: string, setValue: any, secret: boolean }) => {
+
+  const addKey = (str: string) => {
+    // discount random key presses, could def have better sense checking
+    // ethereum addresses are 42 chars
+    if (str.length > 41) {
+      setValue(str)
+    }
+  }
+
+  const removeKey = () => {
+    setValue('')
+  }
+
+  const obfuscateKey = (str: string) => {
+    const first = str.substring(0, 6)
+    const last = str.substring(str.length - 4, str.length)
+    return `${first}....${last}`
+  }
+
+  return value ? (
+    <>
+      <p>{secret ? obfuscateKey(value) : value}</p>
+      <button onClick={removeKey}>remove</button>
+    </>
+  ) : (
+    <input type={secret ? "password" : "input"} defaultValue={value} onChange={e => { addKey(e.target.value) }} />
   )
 }
 
