@@ -16,6 +16,7 @@ function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
+        <Route path="/fineTuneManager" element={<></>} />
         <Route element={<MagickPageLayout />}>
           <Route path="/home/*" element={<HomeScreen />} />
           <Route path="/" element={<Magick />} />
