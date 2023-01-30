@@ -57,7 +57,7 @@ const routes: Route[] = [...spells, ...apis]
 
 import { worldManager } from '@magickml/engine'
 import { World } from './World'
-import { pluginsContext } from './plugins/discordPlugin'
+import { pluginsContext } from '@magickml/magick-plugins'
 
 async function init() {
   new World()
