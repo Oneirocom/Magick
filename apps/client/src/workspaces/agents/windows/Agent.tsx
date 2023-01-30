@@ -306,6 +306,16 @@ const AgentWindow = ({
         />
       </div>
       <div className="form-item">
+        <span className="form-item-label">Random PLugin</span>
+        <input
+          type="checkbox"
+          defaultChecked={enabled}
+          onChange={e => {
+            setEnabled(e.target.checked)
+          }}
+        />
+      </div>
+      <div className="form-item">
         <span className="form-item-label">Voice Enabled</span>
         <input
           type="checkbox"
