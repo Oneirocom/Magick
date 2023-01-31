@@ -1,0 +1,19 @@
+To classify with more than 200 examples, upload a file containing classification examples and labels.
+
+The file can be CSV, Excel, or JSONL. It must contain the fields "text" and "label", and may also include the column "metadata". For Excel, the first column is "text" and the second column is "label". [More details](https://beta.openai.com/docs/guides/classifications).
+
+- All labels need to be capitalized. If not, input labels will be formatted at the backend.
+- Each label needs to be prepended with a white space when encoded by the tokenizer.
+- We highly recommend that each label is a single token word.
+- If every label is a single token, the calculated probabilities would be precise. Otherwise the probabilities are approximations.
+
+For example:
+
+```
+{ "text": "good film, but very glum.",
+  "label": "Positive",
+  "metadata": { "source": "example.com" } }
+{ "text": "i sympathize with the plight of these families, but the movie doesn't do a very good job conveying the issue at hand.",
+  "label": "Negative",
+  "metadata": { "source": "example.com" } }
+```

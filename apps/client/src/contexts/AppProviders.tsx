@@ -8,6 +8,7 @@ import {
 import FeathersProvider from './FeathersProvider'
 import PubSubProvider from './PubSubProvider'
 import ToastProvider from './ToastProvider'
+import Account from '../screens/FineTuneManager/account/Account'
 
 const darkTheme = createTheme(
   adaptV4Theme({
@@ -22,6 +23,7 @@ const providers = [
   [ThemeProvider, { theme: darkTheme }],
   ToastProvider,
   FeathersProvider,
+  Account,
 ]
 
 /**
