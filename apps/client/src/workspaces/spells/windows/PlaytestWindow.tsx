@@ -138,10 +138,10 @@ const Playtest = ({ tab }) => {
       toSend = {
         input: value,
         output: value,
-        sender: "Speaker",
-        observer: "Agent",
-        channel: "previewChannel",
-        channelType: "previewChannelType",
+        sender: 'Speaker',
+        observer: 'Agent',
+        channel: 'previewChannel',
+        channelType: 'previewChannelType',
         ...JSON.parse(json),
       }
     }
@@ -176,7 +176,12 @@ const Playtest = ({ tab }) => {
           id="api-key"
           name="api-key"
           value="api-key"
-          onChange={e => localStorage.setItem('openai-api-key', e.target.value)}
+          onChange={e =>
+            localStorage.setItem(
+              'openai',
+              JSON.stringify({ apiKey: e.target.value })
+            )
+          }
         />
       </form>
       <button className="small" onClick={onClear}>
