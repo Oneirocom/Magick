@@ -9,11 +9,7 @@ export async function MakeCompletionRequest(
   return await makeOpenAIGPT3Request(data, engine, apiKey)
 }
 const useDebug = false
-async function makeOpenAIGPT3Request(
-  data: any,
-  engine: any,
-  apiKey: string
-) {
+async function makeOpenAIGPT3Request(data: any, engine: any, apiKey: string) {
   if (useDebug) return { success: true, choice: { text: 'Default response' } }
   const API_KEY = (apiKey !== '' && apiKey) ?? OPENAI_API_KEY
   const headers = {
@@ -50,7 +46,7 @@ type CompletionData = {
 }
 
 export async function makeCompletion(
-  engine: string,
+  model: string,
   data: CompletionData
 ): Promise<any> {
   const {
@@ -90,16 +86,16 @@ export async function makeCompletion(
   }
   _data.stop = stop
 
+  if (model) {
+    _data.model = model
+  }
+
   try {
-    const gptEngine = engine ?? 'text-davinci-002'
-    console.log(
-      'MAKING REQUEST TO',
-      `https://api.openai.com/v1/engines/${gptEngine}/completions`
-    )
+    console.log('MAKING REQUEST TO', `https://api.openai.com/v1/completions`)
     console.log('BODY', _data)
 
     const resp = await axios.post(
-      `https://api.openai.com/v1/engines/${gptEngine}/completions`,
+      `https://api.openai.com/v1/completions`,
       _data,
       { headers: headers }
     )
