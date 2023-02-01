@@ -14,6 +14,10 @@ import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, eventSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
+import {
+  API_URL
+} from "@magickml/engine"
+
 const info = 'Event Store is used to store events for an event and user'
 
 export class EventStore extends MagickComponent<Promise<void>> {
@@ -79,7 +83,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     }: CreateEventArgs) => {
       const response = await axios.post(
         `${
-          process.env.WEAVIATE_CLIENT_HOST
+          API_URL
         }/eventWeaviate`,
         {
           type,

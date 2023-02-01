@@ -12,6 +12,10 @@ import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, anySocket, eventSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
+import {
+  API_URL
+} from "@magickml/engine"
+
 const info = 'Event Recall is used to get conversation for an event and user'
 
 //add option to get only events from max time difference (time diff, if set to 0 or -1, will get all events, otherwise will count in minutes)
@@ -31,8 +35,10 @@ const getEventWeaviate = async ({
   max_time_diff = -1,
 }) => {
   const urlString = `${
-    process.env.WEAVIATE_CLIENT_HOST
+    API_URL
   }/eventWeaviate`
+
+  console.log('url is', urlString)
 
   const params = {
     type,

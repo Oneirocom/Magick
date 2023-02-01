@@ -44,6 +44,7 @@ function install(
           return result
         } catch (err: any) {
           console.log('CAUGHT ERROR')
+          console.log(err)
           // handle errors here so they dont crash the process, and are communicated to the client
           socket?.emit(`${node.id}`, {
             error: {

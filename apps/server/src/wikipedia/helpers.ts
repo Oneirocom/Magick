@@ -1,4 +1,4 @@
-import { OPENAI_API_KEY } from '@magickml/server-core'
+import { OPENAI_API_KEY } from '@magickml/engine'
 import weaviate from 'weaviate-client'
 import wiki from 'wikipedia'
 

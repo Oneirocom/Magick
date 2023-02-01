@@ -1,4 +1,4 @@
-import { OPENAI_API_KEY } from '@magickml/server-core'
+import { OPENAI_API_KEY } from '@magickml/engine'
 import { tts, tts_tiktalknet } from '@magickml/server-core'
 import Koa from 'koa'
 import { Route } from './types'

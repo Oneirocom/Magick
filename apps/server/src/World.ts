@@ -1,7 +1,7 @@
 import { randomInt } from './connectors/utils'
 import Agent from './Agent'
 import { ServerError } from 'apps/server/src/utils/ServerError'
-import { ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/server-core'
+import { ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
 import { app } from './app'
 
 const maxMSDiff = 5000

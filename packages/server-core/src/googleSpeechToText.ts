@@ -9,7 +9,7 @@ import {
   ENABLE_SPEECH_SERVER,
   SPEECH_SERVER_PORT,
   USSSL_SPEECH,
-} from './config'
+} from '@magickml/engine'
 
 config({ path: '.env' })
 

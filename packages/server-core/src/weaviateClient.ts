@@ -6,7 +6,7 @@ import axios from 'axios'
 import {
   WEAVIATE_CLIENT_HOST,
   WEAVIATE_CLIENT_SCHEME,
-} from './config'
+} from '@magickml/engine'
 
 const DOCUMENTS_CLASS_NAME = 'DataStore'
 const saved_docs: SearchSchema[] = []

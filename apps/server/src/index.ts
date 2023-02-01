@@ -11,18 +11,13 @@ import {
 } from '@magickml/server-core'
 import {
   WEAVIATE_IMPORT_DATA,
-  USESSL,
-} from '@magickml/server-core'
+} from '@magickml/engine'
 import {
   Plugin  
 } from '@magickml/magick-plugins'
-import * as fs from 'fs'
-import http from 'http'
-import https from 'https'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
-import path from 'path'
 import { initSpeechServer } from '@magickml/server-core'
 
 import { Handler, Method, Middleware } from './types'
@@ -76,9 +71,6 @@ async function init() {
     try {
       await next()
     } catch (error: any) {
-      // where did the error come from?
-      console.error(error)
-
       ctx.status = error.statusCode ;
       ctx.body = { error }
       ctx.app.emit('error', error, ctx)

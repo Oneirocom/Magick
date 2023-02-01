@@ -63,11 +63,13 @@ const createEvent = async (ctx: Koa.Context) => {
 }
 
 const createEventWeaviate = async (ctx: Koa.Context) => {
+  console.log('createEventWeaviate', ctx.request.body)
   try {
     await weaviate_connection.createEvent(ctx.request.body)
     ctx.status = 200
     return (ctx.body = "ok")
   } catch(e) {
+    console.log('********** WEAVIATE ERROR **********')
     console.log(e)
     ctx.status = 500
     return (ctx.body = 'internal error')
@@ -75,6 +77,7 @@ const createEventWeaviate = async (ctx: Koa.Context) => {
 }
 
 const getEventsWeaviate = async (ctx: Koa.Context) => {
+  console.log("getEventsWeaviate")
   try{
     console.log("Inside in TRY")
     console.log(ctx.request.body)

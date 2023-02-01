@@ -21,7 +21,6 @@ import Discord, {
 import emoji from 'emoji-dictionary'
 import emojiRegex from 'emoji-regex'
 
-import { DISCORD_API_TOKEN } from '@magickml/server-core'
 import { initSpeechClient, recognizeSpeech } from './discord-voice'
 import { getRandomEmptyResponse, startsWithCapital } from './utils'
 
