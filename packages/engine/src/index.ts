@@ -19,6 +19,8 @@ export { default as NodeClickPlugin } from './plugins/nodeClickPlugin'
 export { default as worldManager } from './components/world/worldManager'
 export { default as runPython } from './functions/ProcessPython'
 
+export * from './config'
+
 // TODO we can better organzie this folder structure with nested index aggregators
 export * from './plugins/socketPlugin'
 export * from './plugins/modulePlugin'

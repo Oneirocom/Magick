@@ -5,7 +5,7 @@ import {
   API_ROOT_URL,
   API_URL,
   APP_SEARCH_SERVER_URL,
-} from '@magickml/server-core'
+} from '@magickml/engine'
 import { app } from './app'
 
 export const buildMagickInterface = (

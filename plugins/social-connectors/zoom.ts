@@ -8,7 +8,7 @@
 import { launch } from 'puppeteer-stream'
 import Xvfb from 'xvfb'
 
-import { FILE_SERVER_URL } from './config'
+import { FILE_SERVER_URL } from '@magickml/engine'
 import { detectOsOption } from '../../server/src/entities/connectors/utils'
 import { tts } from '../../server/src/googleTextToSpeech'
 import { tts_tiktalknet } from '../../server/src/tiktalknet'

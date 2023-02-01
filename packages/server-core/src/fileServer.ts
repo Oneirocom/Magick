@@ -2,7 +2,7 @@ import https from 'https'
 import http from 'http'
 import * as fs from 'fs'
 import path from 'path'
-import { FILE_SERVER_PORT, USESSL } from './config'
+import { FILE_SERVER_PORT, USESSL } from '@magickml/engine'
 
 export async function initFileServer() {
   if (!fs.existsSync('files')) {
