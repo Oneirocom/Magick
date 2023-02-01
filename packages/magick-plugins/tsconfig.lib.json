@@ -3,6 +3,9 @@
   "compilerOptions": {
     "module": "commonjs",
     "outDir": "../../dist/out-tsc",
+    "paths": {
+      "@magickml/magick-plugins": ["packages/magick-plugins"]
+    },
     "declaration": true,
     "types": ["node"]
   },
