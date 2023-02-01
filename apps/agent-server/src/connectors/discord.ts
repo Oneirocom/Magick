@@ -411,7 +411,6 @@ export class discord_client {
       client: 'discord',
       channel: message.channel.id,
       channelType: 'msg',
-      agentId: this.agent.id,
       entities,
     })
 

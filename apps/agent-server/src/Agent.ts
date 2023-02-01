@@ -74,7 +74,7 @@ export class Agent {
       },
     })
 
-    return async function spellHandler({
+    return (async function spellHandler({
       content,
       sender,
       observer,
@@ -98,7 +98,7 @@ export class Agent {
       }
       const spellOutputs = await spellRunner.defaultRun(spellInputs)
       return spellOutputs
-    }
+    }).bind(this)
   }
 
   constructor(agent: any) {
@@ -198,8 +198,7 @@ export class Agent {
           client: 'loop',
           channel: 'auto',
           channelType: 'loop',
-          entities: [],
-          agentId: this.id
+          entities: []
         })
       }, loopInterval)
     } else {
