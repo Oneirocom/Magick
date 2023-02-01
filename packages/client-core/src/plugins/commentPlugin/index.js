@@ -23,7 +23,7 @@ function install(
       altKey: false,
     },
     deleteCommentKeys = {
-      code: 'Delete',
+      code: 'Backspace',
       shiftKey: false,
       ctrlKey: false,
       altKey: false,
@@ -57,7 +57,8 @@ function install(
         e.code === x.code &&
         e.shiftKey === x.shiftKey &&
         e.ctrlKey === x.ctrlKey &&
-        e.altKey === x.altKey
+        e.altKey === x.altKey &&
+        e.target.localName !== 'input'
       )
     })
 
