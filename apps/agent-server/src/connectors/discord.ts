@@ -405,14 +405,14 @@ export class discord_client {
     }
 
     const response = await this.spellHandler({
-      message: content,
-      speaker: message.author.username,
-      agent: this.discord_bot_name,
+      content,
+      sender: message.author.username,
+      observer: this.discord_bot_name,
       client: 'discord',
-      channelId: message.channel.id,
+      channel: message.channel.id,
+      channelType: 'msg',
       agentId: this.agent.id,
       entities,
-      channel: 'msg',
     })
 
     const { Output, Image } = response
@@ -469,7 +469,7 @@ export class discord_client {
 
     const oldResponse = this.getResponse(channel.id, id)
     if (oldResponse === undefined) {
-      await channel.messages.fetch(id).then(async (msg: any) => {})
+      await channel.messages.fetch(id).then(async (msg: any) => { })
       log('message not found')
       return
     }
@@ -642,8 +642,8 @@ export class discord_client {
               deleted: boolean
               permissionsFor: (arg0: any) => {
                 (): any
-                new (): any
-                has: { (arg0: string[]): any; new (): any }
+                new(): any
+                has: { (arg0: string[]): any; new(): any }
               }
               name: string | boolean
               id: string | boolean
@@ -1357,7 +1357,7 @@ export class discord_client {
     this.client.embed = embed
 
     if (this.use_voice) {
-      const {client, discord_bot_name, agent, spellHandler, voice_provider, voice_character, voice_language_code, tiktalknet_url} = this
+      const { client, discord_bot_name, agent, spellHandler, voice_provider, voice_character, voice_language_code, tiktalknet_url } = this
       initSpeechClient({
         client,
         discord_bot_name,
