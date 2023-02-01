@@ -199,6 +199,7 @@ export class Agent {
           channel: 'auto',
           channelType: 'loop',
           entities: [],
+          agentId: this.id
         })
       }, loopInterval)
     } else {
