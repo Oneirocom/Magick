@@ -3,7 +3,7 @@
 //    1. EntityID
 //    2. Content
 //    3. Sender
-
+import { EventQA } from "./nodes/EventQA";
 const DiscordInput = {
     create : async function (this, data) {
         const message = {
@@ -23,4 +23,5 @@ const DiscordInput = {
 export const pluginsContext = {
     "name" : "discordinput",
     "route" : DiscordInput,
+    "nodes" : { eventsqa: () => new EventQA()} 
 }

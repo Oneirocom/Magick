@@ -10,7 +10,6 @@ import { GetRecentTransactions } from './ethereum/GetRecentTransactions'
 import { EventDestructureComponent } from './events/EventDestructure'
 import { EventRecall } from './events/EventRecall'
 import { EventRestructureComponent } from './events/EventRestructure'
-import { EventQA } from './events/EventQA'
 import { InputComponent } from './io/Input'
 import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
@@ -70,10 +69,11 @@ import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
 import { EventDelete } from './events/EventDelete'
 
+import { plugin_nodes } from '@magickml/magick-plugins'
 // NOTE: PLEASE KEEP THESE IN ALPHABETICAL ORDER
 // todo some kind of custom build parser perhaps to take car of keeping these in alphabetical order
 
-export const components = {
+export let components = {
   alert: () => new Alert(),
   booleanGate: () => new BooleanGate(),
   randomGate: () => new RandomGate(),
@@ -94,7 +94,6 @@ export const components = {
   isVariableTrue: () => new IsVariableTrue(),
   conversationStore1: () => new EventStore(),
   conversationRecall1: () => new EventRecall(),
-  eventqa: () => new EventQA(),
   eventsdelete: () => new EventDelete(),
   request: () => new Request(),
   jupyterNotebook: () => new JupyterNotebook(),
@@ -158,6 +157,7 @@ function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {
 }
 
 export const getComponents = () => {
+  components = {...components, ...plugin_nodes}
   const sortedComponents = Object.keys(components)
     .sort()
     .reduce<Record<any, any>>((acc: any, key) => {
