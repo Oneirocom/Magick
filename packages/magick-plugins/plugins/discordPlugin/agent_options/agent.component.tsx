@@ -1,36 +1,6 @@
 //@ts-nocheck
 import React, {FC, useState, useEffect} from 'react'
-
-const KeyInput = ({ value, setValue, secret }: { value: string, setValue: any, secret: boolean }) => {
-
-    const addKey = (str: string) => {
-      // discount random key presses, could def have better sense checking
-      // ethereum addresses are 42 chars
-      if (str.length > 31) {
-        setValue(str)
-      }
-    }
-  
-    const removeKey = () => {
-      setValue('')
-    }
-  
-    const obfuscateKey = (str: string) => {
-      const first = str.substring(0, 6)
-      const last = str.substring(str.length - 4, str.length)
-      return `${first}....${last}`
-    }
-  
-    return value ? (
-      <>
-        <p>{secret ? obfuscateKey(value) : value}</p>
-        <button onClick={removeKey}>remove</button>
-      </>
-    ) : (
-      <input type={secret ? "password" : "input"} defaultValue={value} onChange={e => { addKey(e.target.value) }} />
-    )
-  }
-
+import { KeyInput } from './utils'
 type PluginProps = { 
     setloaded: any
     loaded: any
@@ -39,7 +9,7 @@ type PluginProps = {
     spellList: any
 }
 export const DiscordPlugin: FC<PluginProps> = (props) => {
-    const [discord_enabled, setDiscordEnabled] = useState(false)
+    const [discord_enabled, setDiscordEnabled] = useState(undefined)
     const [discord_api_key, setDiscordApiKey] = useState('')
     const [discord_starting_words, setDiscordStartingWords] = useState('')
     const [discord_bot_name_regex, setDiscordBotNameRegex] = useState('')
@@ -51,7 +21,7 @@ export const DiscordPlugin: FC<PluginProps> = (props) => {
         useState('')
     useEffect(() => {
         if (props.agentData !== null && props.agentData !== undefined) {
-            setDiscordEnabled(props.agentData.discord_enabled === true)
+            setDiscordEnabled(props.agentData.discord_enabled)
             setDiscordApiKey(props.agentData.discord_api_key)
             setDiscordStartingWords(props.agentData.discord_starting_words)
             setDiscordBotNameRegex(props.agentData.discord_bot_name_regex)
@@ -73,8 +43,8 @@ export const DiscordPlugin: FC<PluginProps> = (props) => {
             })
         }      
     }, [])
-
     useEffect(() => {
+        
         props.setDiscordValue({
             discord_enabled : discord_enabled,
             discord_api_key : discord_api_key || props.agentData.discord_api_key,
@@ -91,8 +61,9 @@ export const DiscordPlugin: FC<PluginProps> = (props) => {
         <div className="form-item">
             <span className="form-item-label">Discord Enabled</span>
             <input
+              key={Math.random()}
               type="checkbox"
-              value={discord_enabled.toString()}
+              value={discord_enabled}
               defaultChecked={discord_enabled}
               onChange={e => {
                 setDiscordEnabled(e.target.checked)
