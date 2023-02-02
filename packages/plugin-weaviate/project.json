@@ -1,7 +1,7 @@
 {
   "name": "weaviate",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/weaviate/src",
+  "sourceRoot": "packages/plugin-weaviate/src",
   "projectType": "library",
   "targets": {
     "lint": {
@@ -11,7 +11,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/weaviate/**/*.ts"
+          "packages/plugin-weaviate/**/*.ts"
         ]
       }
     },
@@ -21,7 +21,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/weaviate/jest.config.ts",
+        "jestConfig": "packages/plugin-weaviate/jest.config.ts",
         "passWithNoTests": true
       }
     }

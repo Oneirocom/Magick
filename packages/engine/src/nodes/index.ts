@@ -1,5 +1,4 @@
 import { MagickComponent } from '../types'
-import { EventStore } from '../../../../plugins/weaviate/src/nodes/EventStore'
 import { GetWikipediaSummary } from './apis/GetWikipediaSummary'
 import { QueryGoogle } from './apis/QueryGoogle'
 import { WeaviateWikipedia } from './apis/WeaviateWikipedia'
@@ -8,7 +7,6 @@ import { CheckEthBalance } from './ethereum/CheckEthBalance'
 import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentTransactionsFromWallet'
 import { GetRecentTransactions } from './ethereum/GetRecentTransactions'
 import { EventDestructureComponent } from './events/EventDestructure'
-import { EventRecall } from '../../../../plugins/weaviate/src/nodes/EventRecall'
 import { EventRestructureComponent } from './events/EventRestructure'
 import { InputComponent } from './io/Input'
 import { JupyterNotebook } from './io/JupyterNotebook'
@@ -67,7 +65,6 @@ import { BooleanVariable } from './variable/BooleanVariable'
 import { FewshotVariable } from './variable/FewshotVariable'
 import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
-import { EventDelete } from '../../../../plugins/weaviate/src/nodes/EventDelete'
 
 import { pluginManager } from '@magickml/engine'
 
@@ -90,9 +87,6 @@ export let components = {
   isNullOrUndefined: () => new IsNullOrUndefined(),
   isQuery: () => new IsQuery(),
   isVariableTrue: () => new IsVariableTrue(),
-  conversationStore1: () => new EventStore(),
-  conversationRecall1: () => new EventRecall(),
-  eventsdelete: () => new EventDelete(),
   request: () => new Request(),
   jupyterNotebook: () => new JupyterNotebook(),
   search: () => new Search(),
