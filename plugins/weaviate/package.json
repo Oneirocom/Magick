@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/magick-plugins",
+  "name": "@magickml/weaviate",
   "version": "0.0.1",
   "main": "./src/index.ts",
   "module": "./src/index.ts"

@@ -39,6 +39,12 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
       icon: 'moon',
     })
 
+    const _public = new BooleanControl({
+      dataKey: 'public',
+      name: 'Public',
+      icon: 'moon',
+    })
+
     const _var = new InputControl({
       dataKey: '_var',
       name: 'Value',
@@ -56,7 +62,7 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
       icon: 'moon',
     })
 
-    node.inspector.add(name).add(_var).add(splitter).add(keepEmpty)
+    node.inspector.add(name).add(_public).add(_var).add(splitter).add(keepEmpty)
 
     return node.addOutput(out)
   }
