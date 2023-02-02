@@ -48,7 +48,6 @@ function install(
   }
 
   const destroyKeyListener = listenWindow('keydown', function handleKey(e) {
-    console.log('*********************', e)
     const keyCombosMap = [
       frameCommentKeys,
       inlineCommentKeys,
