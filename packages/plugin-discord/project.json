@@ -1,7 +1,7 @@
 {
   "name": "discord",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/discord/src",
+  "sourceRoot": "packages/plugin-discord/src",
   "projectType": "library",
   "targets": {
     "lint": {
@@ -11,7 +11,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/discord/**/*.ts"
+          "packages/plugin-discord/**/*.ts"
         ]
       }
     },
@@ -21,7 +21,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/discord/jest.config.ts",
+        "jestConfig": "packages/plugin-discord/jest.config.ts",
         "passWithNoTests": true
       }
     }

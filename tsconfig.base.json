@@ -39,11 +39,11 @@
       "@magickml/server-core": [
         "packages/server-core/src/index.ts"
       ],
-      "@magickml/discord": [
-        "plugins/discord/src/index.ts"
+      "@magickml/plugin-discord": [
+        "packages/plugin-discord/src/index.ts"
       ],
-      "@magickml/weaviate": [
-        "plugins/weaviate/src/index.ts"
+      "@magickml/plugin-weaviate": [
+        "packages/plugin-weaviate/src/index.ts"
       ]
     }
   },
