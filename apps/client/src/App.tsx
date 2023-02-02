@@ -9,6 +9,7 @@ import './design-globals/design-globals.css'
 import './App.css'
 
 import MainLayout from './components/MainLayout/MainLayout'
+import EventManagerWindow from './workspaces/spells/windows/EventManager'
 
 //These need to be imported last to override styles.
 
@@ -17,6 +18,7 @@ function App() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route element={<MagickPageLayout />}>
+          <Route path="/eventManager" element={<EventManagerWindow />} />
           <Route path="/home/*" element={<HomeScreen />} />
           <Route path="/" element={<Magick />} />
           <Route path="/magick/*" element={<Magick />} />
