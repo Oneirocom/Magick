@@ -12,9 +12,6 @@ import {
 import {
   WEAVIATE_IMPORT_DATA,
 } from '@magickml/engine'
-import {
-  Plugin  
-} from '@magickml/magick-plugins'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
@@ -52,7 +49,6 @@ const routes: Route[] = [...spells, ...apis]
 
 import { worldManager } from '@magickml/engine'
 import { World } from './World'
-import { pluginsContext } from '@magickml/magick-plugins'
 
 async function init() {
   new World()
@@ -88,11 +84,7 @@ async function init() {
 
   // Middleware used by every request. For route-specific middleware, add it to you route middleware specification
   app.use(koaBody({ multipart: true }))
-  let plugin = {
-    featherApp: app,
-  }
-  const discordInputPlugin = new Plugin(pluginsContext, app)
-  discordInputPlugin.setup()
+
   const createRoute = (
     method: Method,
     path: string,

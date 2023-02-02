@@ -4,7 +4,7 @@
     "module": "commonjs",
     "outDir": "../../dist/out-tsc",
     "paths": {
-      "@magickml/magick-plugins": ["packages/magick-plugins"]
+      "@magickml/discord": ["plugins/discord"]
     },
     "declaration": true,
     "types": ["node"],

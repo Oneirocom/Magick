@@ -86,7 +86,7 @@ export class weaviate_connection {
       })
   }
   static async getEvents(params: GetEventArgs) {
-    const 
+    const
       { type, sender, observer, client, channel, channelType, maxCount, max_time_diff } = params
     if (!weaviate_client) {
       await initWeaviateClientEvent()
@@ -127,7 +127,7 @@ export class weaviate_connection {
         console.log(err)
       })
     const event_obj = events.data.Get.Event
-    
+
     if (max_time_diff > 0) {
       const now = new Date()
       const filtered = event_obj.filter(e => {
@@ -152,13 +152,13 @@ export class weaviate_connection {
     return events
   }
 
-  static async getAndDeleteEvents(params: GetEventArgs){
-    const 
+  static async getAndDeleteEvents(params: GetEventArgs) {
+    const
       { type, sender, observer, client, channel, channelType, maxCount, max_time_diff } = params
     if (!weaviate_client) {
       await initWeaviateClientEvent()
     }
-    const events =  await this.getEvents(params)
+    const events = await this.getEvents(params)
     events.forEach(element => {
       console.log(element)
       this.deleteEvents(element["_additional"]["id"])
@@ -169,44 +169,44 @@ export class weaviate_connection {
   }
 
 
-  static async deleteEvents(id: string){
+  static async deleteEvents(id: string) {
     if (!weaviate_client) {
       await initWeaviateClientEvent()
     }
     await weaviate_client.data
-                         .deleter()
-                         .withClassName('Event')
-                         .withId(id)
-                         .do()
-                         .then(res=> {
-                            console.log(res)
-                         })
-                         .catch(err => {
-                            console.log(err)
-                         })
+      .deleter()
+      .withClassName('Event')
+      .withId(id)
+      .do()
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
-  static async searchEvents(question: String, agentid: number){
+  static async searchEvents(question: String, agentid: number) {
     if (!weaviate_client) {
-        await initWeaviateClientEvent()
+      await initWeaviateClientEvent()
     }
     const answer = await weaviate_client.graphql
-                                        .get()
-                                        .withClassName('Event')
-                                        .withWhere({
-                                          operator: 'Equal',
-                                          path: ['agentId'],
-                                          valueInt: agentid,
-                                        })
-                                        .withAsk(({
-                                            question: question
-                                        }))
-                                        .withFields('content _additional { answer { hasAnswer certainty property result startPosition endPosition } }')
-                                        .withLimit(1)
-                                        .do()
-                                        .catch(err => {
-                                            console.log(err)
-                                           })
+      .get()
+      .withClassName('Event')
+      .withWhere({
+        operator: 'Equal',
+        path: ['agentId'],
+        valueInt: agentid,
+      })
+      .withAsk(({
+        question: question
+      }))
+      .withFields('content _additional { answer { hasAnswer certainty property result startPosition endPosition } }')
+      .withLimit(1)
+      .do()
+      .catch(err => {
+        console.log(err)
+      })
     if (answer['data']['Get']['Event']['0'] === (undefined)) {
       return {
         _additional: {
@@ -221,15 +221,15 @@ export class weaviate_connection {
         },
         content: 'No Result Found'
       }
-    } else{
+    } else {
       return answer['data']['Get']['Event']['0']
     }
-    
+
   }
 
-  static async semanticSearch(_data: SemanticSearch){
+  static async semanticSearch(_data: SemanticSearch) {
     if (!weaviate_client) {
-        await initWeaviateClientEvent()
+      await initWeaviateClientEvent()
     }
     const data = { ..._data }
     const validFields = ['concept', 'positive', 'negative', 'distance', 'positive_distance', 'negative_distance']
@@ -239,29 +239,29 @@ export class weaviate_connection {
       }
     }
     const events = await weaviate_client.graphql
-                                        .explore()
-                                        .withNearText({
-                                          concepts: [data["concept"]],
-                                          distance: 0.6,
-                                          moveAwayFrom: {
-                                            concepts: [data["negative"]],
-                                            force: data["negative_distance"]
-                                          },
-                                          moveTo: {
-                                            concepts: [data["positive"]],
-                                            force:  data["positive_distance"]
-                                          }
-                                        })
-                                        .withCertainty(0.7)
-                                        .withFields('beacon certainty className')
-                                        .do()
-                                        .catch(err => {
-                                          console.log(err)
-                                         })
-    
-    return events                                     
+      .explore()
+      .withNearText({
+        concepts: [data["concept"]],
+        distance: 0.6,
+        moveAwayFrom: {
+          concepts: [data["negative"]],
+          force: data["negative_distance"]
+        },
+        moveTo: {
+          concepts: [data["positive"]],
+          force: data["positive_distance"]
+        }
+      })
+      .withCertainty(0.7)
+      .withFields('beacon certainty className')
+      .do()
+      .catch(err => {
+        console.log(err)
+      })
+
+    return events
 
 
-    
-    }
+
+  }
 }

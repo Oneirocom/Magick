@@ -102,7 +102,6 @@ const DrawerItem = ({ Icon, open, text, active, onClick = () => {} }) => (
 )
 
 export default function MiniDrawer({ children }) {
-  const theme = useTheme()
   const location = useLocation()
   const navigate = useNavigate()
 

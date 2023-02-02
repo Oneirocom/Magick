@@ -6,9 +6,9 @@ import {
     MagickWorkerInputs,
     MagickWorkerOutputs,
     QAArgs,
-  } from '../../types'
-  import { triggerSocket, anySocket, stringSocket } from '../../sockets'
-  import { MagickComponent } from '../../magick-component'
+  } from '../../../../packages/engine/src/types'
+  import { triggerSocket, anySocket, stringSocket } from '../../../../packages/engine/src/sockets'
+  import { MagickComponent } from '../../../../packages/engine/src/magick-component'
 import { response } from 'express'
   
   const info = 'Event Q&A is used for getting answers to questions based on the events stored.'
