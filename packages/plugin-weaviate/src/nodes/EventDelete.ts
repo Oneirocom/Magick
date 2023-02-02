@@ -6,10 +6,12 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../../packages/engine/src/types'
-import { InputControl } from '../../../../packages/engine/src/dataControls/InputControl'
-import { triggerSocket, stringSocket, eventSocket } from '../../../../packages/engine/src/sockets'
-import { MagickComponent } from '../../../../packages/engine/src/magick-component'
+  InputControl,
+  triggerSocket,
+  stringSocket,
+  eventSocket,
+  MagickComponent
+} from '@magickml/engine'
 
 const info = 'Event Delete is used to delete events based on inputs recevied from the user.'
 
