@@ -85,6 +85,8 @@ export class weaviate_connection {
       })
   }
   static async getEvents(params: GetEventArgs) {
+    
+    console.log(params)
     const 
       { type, sender, observer, client, channel, channelType, maxCount, max_time_diff } = params
     if (!weaviate_client) {
@@ -125,6 +127,7 @@ export class weaviate_connection {
       .catch(err => {
         console.log(err)
       })
+      console.log(events)
     const event_obj = events.data.Get.Event
     
     if (max_time_diff > 0) {

@@ -2,7 +2,18 @@ import { magickApiRootUrl } from '../../../config'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
-import { DiscordPlugin } from '@magickml/magick-plugins'
+import { ReactDOM } from 'react'
+
+/* Import All Agent Window Components */
+import { pluginManager } from '@magickml/engine'
+
+const RenderComp = (props) =>{
+  console.log(props)
+  return (
+    <props.element props={props} />
+  )
+}
+
 const AgentWindow = ({
   id,
   updateCallback,
@@ -30,8 +41,8 @@ const AgentWindow = ({
 
 
   const [ discordValue, setDiscordValue] = useState([])
-
-  const [ agentDataValue, setAgentDataValue] = useState({})
+  const agentDatVal = React.useRef(null);
+  const [agentDataValue, setAgentDataValue] = useState({})
   const [playingAudio, setPlayingAudio] = useState(false)
 
   const [loop_enabled, setLoopEnabled] = useState(false)
@@ -105,8 +116,8 @@ const AgentWindow = ({
         console.log('agentData', agentData)
 
         if (agentData !== null && agentData !== undefined) {
-        setAgentDataValue(agentData)
         setUseVoice(agentData !== undefined && agentData.use_voice === true)
+        agentDatVal.current = agentData
         setVoiceProvider(agentData.voice_provider)
         setVoiceCharacter(agentData.voice_character)
         setVoiceLanguageCode(agentData.voice_language_code)
@@ -260,7 +271,9 @@ const AgentWindow = ({
           }}
         />
       </div>
-      <DiscordPlugin loaded={loaded} setloaded={setLoaded} agentData={agentDataValue} setDiscordValue={setDiscordValue} spellList={spellList} />
+      {pluginManager.getAgentComponents().map((value, index, array) => {
+          return <RenderComp key={index} element={value} agentData={agentDatVal.current} spellList={spellList} setDiscordValue={setDiscordValue}/>
+      })}
       <div className="form-item">
         <span className="form-item-label">Voice Enabled</span>
         <input

@@ -2,13 +2,12 @@
 import React, {FC, useState, useEffect} from 'react'
 import { KeyInput } from './utils'
 type PluginProps = { 
-    setloaded: any
-    loaded: any
     agentData: any
     setDiscordValue: any
     spellList: any
 }
-export const DiscordPlugin: FC<PluginProps> = (props) => {
+export const DiscordAgentWindow: FC<PluginProps> = (props) => {
+    props = props.props
     const [discord_enabled, setDiscordEnabled] = useState(undefined)
     const [discord_api_key, setDiscordApiKey] = useState('')
     const [discord_starting_words, setDiscordStartingWords] = useState('')
@@ -21,6 +20,7 @@ export const DiscordPlugin: FC<PluginProps> = (props) => {
         useState('')
     useEffect(() => {
         if (props.agentData !== null && props.agentData !== undefined) {
+            console.log(props.agentData)
             setDiscordEnabled(props.agentData.discord_enabled)
             setDiscordApiKey(props.agentData.discord_api_key)
             setDiscordStartingWords(props.agentData.discord_starting_words)
@@ -44,17 +44,17 @@ export const DiscordPlugin: FC<PluginProps> = (props) => {
         }      
     }, [])
     useEffect(() => {
+      props.setDiscordValue({
+        discord_enabled : discord_enabled,
+        discord_api_key : discord_api_key || props.agentData.discord_api_key,
+        discord_starting_words : discord_starting_words || props.agentData.discord_starting_words,
+        discord_bot_name : discord_bot_name || props.agentData.discord_bot_name,
+        discord_bot_name_regex : discord_bot_name || props.agentData.discord_bot_name_regex,
+        discord_empty_responses : discord_empty_responses || props.agentData.discord_empty_responses,
+        discord_spell_handler_incoming : discord_spell_handler_incoming || props.agentData.discord_spell_handler_incoming,
+        discord_spell_handler_update : discord_spell_handler_update || props.agentData.discord_spell_handler_update
+    })
         
-        props.setDiscordValue({
-            discord_enabled : discord_enabled,
-            discord_api_key : discord_api_key || props.agentData.discord_api_key,
-            discord_starting_words : discord_starting_words || props.agentData.discord_starting_words,
-            discord_bot_name : discord_bot_name || props.agentData.discord_bot_name,
-            discord_bot_name_regex : discord_bot_name || props.agentData.discord_bot_name_regex,
-            discord_empty_responses : discord_empty_responses || props.agentData.discord_empty_responses,
-            discord_spell_handler_incoming : discord_spell_handler_incoming || props.agentData.discord_spell_handler_incoming,
-            discord_spell_handler_update : discord_spell_handler_update || props.agentData.discord_spell_handler_update
-        })
     }, [discord_enabled, discord_api_key,discord_starting_words, discord_bot_name, discord_bot_name_regex, discord_empty_responses,discord_empty_responses, discord_empty_responses, discord_spell_handler_incoming, discord_spell_handler_update ])
     return (
         <>
