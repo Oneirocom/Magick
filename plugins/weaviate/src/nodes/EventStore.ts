@@ -9,14 +9,14 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   CreateEventArgs,
-} from '@magickml/engine'
+} from '../../../../packages/engine/src/index'
 import { InputControl } from '../../../../packages/engine/src/dataControls/InputControl'
 import { triggerSocket, stringSocket, eventSocket } from '../../../../packages/engine/src/sockets'
 import { MagickComponent } from '../../../../packages/engine/src/magick-component'
 
 import {
   API_URL
-} from "@magickml/engine"
+} from "../../../../packages/engine/src/config"
 
 const info = 'Event Store is used to store events for an event and user'
 

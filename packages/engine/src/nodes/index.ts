@@ -90,8 +90,8 @@ export let components = {
   isNullOrUndefined: () => new IsNullOrUndefined(),
   isQuery: () => new IsQuery(),
   isVariableTrue: () => new IsVariableTrue(),
-  conversationStore1: () => new EventStore(),
-  conversationRecall1: () => new EventRecall(),
+/*   conversationStore1: () => new EventStore(),
+  conversationRecall1: () => new EventRecall(), */
   eventsdelete: () => new EventDelete(),
   request: () => new Request(),
   jupyterNotebook: () => new JupyterNotebook(),
@@ -156,14 +156,16 @@ function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {
 
 export const getNodes = () => {
   const pluginNodes = pluginManager.getNodes();
-  const allComponents = {...components, pluginNodes}
+  console.log(pluginNodes)
+  const allComponents = {...components, ...pluginNodes}
+
   const sortedComponents = Object.keys(allComponents)
     .sort()
     .reduce<Record<any, any>>((acc: any, key) => {
       acc[key] = allComponents[key]
       return acc
     }, {} as Record<any, any>)
-
+  console.log(sortedComponents)
   return Object.values(sortedComponents)
     .map(component => component())
     .sort(compare)

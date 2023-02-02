@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Rete from 'rete'
 
 import {
@@ -14,7 +15,7 @@ import { MagickComponent } from '../../../../packages/engine/src/magick-componen
 
 import {
   API_URL
-} from "@magickml/engine"
+} from "../../../../packages/engine/src/config"
 
 const info = 'Event Recall is used to get conversation for an event and user'
 

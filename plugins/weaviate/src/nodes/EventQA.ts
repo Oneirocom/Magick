@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Rete from 'rete'
 import {
     EngineContext,
@@ -6,9 +7,9 @@ import {
     MagickWorkerInputs,
     MagickWorkerOutputs,
     QAArgs,
-  } from '../../../../packages/engine/src/types'
-  import { triggerSocket, anySocket, stringSocket } from '../../../../packages/engine/src/sockets'
-  import { MagickComponent } from '../../../../packages/engine/src/magick-component'
+  } from '../../../utils/engine'
+  import { triggerSocket, anySocket, stringSocket } from '../../../utils/engine'
+  import { MagickComponent } from '../../../utils/engine'
 import { response } from 'express'
   
   const info = 'Event Q&A is used for getting answers to questions based on the events stored.'

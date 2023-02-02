@@ -3,14 +3,15 @@
 //    1. EntityID
 //    2. Content
 //    3. Sender
+import { DiscordAgentWindow } from "./components/agent.component"
+import type { Id, Params } from '@feathersjs/feathers'
 const DiscordInput = {
     create : async function (this, data) {
         const message = {
             entityID: data.entityID,
             content: data.content,
             sender: data.sender
-        };
-        this.arr_store.push(message)
+        }
         return message
     },
     find: async function (this,data) {
@@ -19,8 +20,20 @@ const DiscordInput = {
 
 }
 
-export const pluginsContext = {
-    "name" : "discordinput",
-    "route" : DiscordInput,
-    "nodes" : {} 
-}
+export class MessageService {
+    async find(params: Params) {
+      return [
+        {
+          id: 1,
+          text: 'Message 1'
+        },
+        {
+          id: 2,
+          text: 'Message 2'
+        }
+      ]
+    }
+  }
+
+export { DiscordAgentWindow }
+

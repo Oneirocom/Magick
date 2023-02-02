@@ -34,5 +34,4 @@ export * from './spellManager'
 export * from './types'
 export * from './functions/makeCompletion'
 export * from './functions/processCode'
-
 export * from './plugin'

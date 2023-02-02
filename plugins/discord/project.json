@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugins/discord/src",
   "projectType": "library",
+  "implicitDependencies": ["engine"],
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
