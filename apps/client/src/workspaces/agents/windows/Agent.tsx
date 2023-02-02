@@ -2,7 +2,7 @@ import { magickApiRootUrl } from '../../../config'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
-
+import { DiscordPlugin } from '@magickml/magick-plugins'
 const AgentWindow = ({
   id,
   updateCallback,
@@ -19,8 +19,7 @@ const AgentWindow = ({
   const [eth_private_key, setEthPrivateKey] = useState('')
   const [eth_public_address, setEthPublicAddress] = useState('')
 
-  const [discord_enabled, setDiscordEnabled] = useState(false)
-  const [discord_api_key, setDiscordApiKey] = useState('')
+  
 
   const [use_voice, setUseVoice] = useState(false)
   const [voice_provider, setVoiceProvider] = useState<string | null>(null)
@@ -29,16 +28,10 @@ const AgentWindow = ({
   const [voice_default_phrases, setVoiceDefaultPhrases] = useState('')
   const [tiktalknet_url, setTikTalkNetUrl] = useState('')
 
-  const [discord_starting_words, setDiscordStartingWords] = useState('')
-  const [discord_bot_name_regex, setDiscordBotNameRegex] = useState('')
-  const [discord_bot_name, setDiscordBotName] = useState('')
-  const [discord_empty_responses, setDiscordEmptyResponses] = useState('')
 
-  const [discord_spell_handler_incoming, setDiscordSpellHandlerIncoming] =
-    useState('')
-  const [discord_spell_handler_update, setDiscordSpellHandlerUpdate] =
-    useState('')
+  const [ discordValue, setDiscordValue] = useState([])
 
+  const [ agentDataValue, setAgentDataValue] = useState({})
   const [playingAudio, setPlayingAudio] = useState(false)
 
   const [loop_enabled, setLoopEnabled] = useState(false)
@@ -95,7 +88,7 @@ const AgentWindow = ({
         const res = await axios.get(
           `${magickApiRootUrl}/agents/` + id
         )
-        console.log('res is', res)
+        console.log('res    //@ts-ignore is', res)
 
         if (res.data === null) {
           enqueueSnackbar('Agent not found', {
@@ -112,7 +105,7 @@ const AgentWindow = ({
         console.log('agentData', agentData)
 
         if (agentData !== null && agentData !== undefined) {
-        setDiscordEnabled(agentData.discord_enabled === true)
+        setAgentDataValue(agentData)
         setUseVoice(agentData !== undefined && agentData.use_voice === true)
         setVoiceProvider(agentData.voice_provider)
         setVoiceCharacter(agentData.voice_character)
@@ -121,16 +114,6 @@ const AgentWindow = ({
         setTikTalkNetUrl(agentData.tiktalknet_url)
 
         setOpenaiApiKey(agentData.openai_api_key)
-        setDiscordApiKey(agentData.discord_api_key)
-        setDiscordStartingWords(agentData.discord_starting_words)
-        setDiscordBotNameRegex(agentData.discord_bot_name_regex)
-        setDiscordBotName(agentData.discord_bot_name)
-        setDiscordEmptyResponses(agentData.discord_empty_responses)
-        setDiscordSpellHandlerIncoming(agentData &&
-          agentData.discord_spell_handler_incoming
-        )
-        setDiscordSpellHandlerUpdate(agentData.discord_spell_handler_update)
-
         setEthPrivateKey(agentData.eth_private_key)
         setEthPublicAddress(agentData.eth_public_address)
 
@@ -179,17 +162,10 @@ const AgentWindow = ({
     const _data = {
       enabled,
       data: {
-        discord_enabled,
+        ...discordValue,
         openai_api_key,
         eth_private_key,
         eth_public_address,
-        discord_api_key,
-        discord_starting_words,
-        discord_bot_name_regex,
-        discord_bot_name,
-        discord_empty_responses,
-        discord_spell_handler_incoming,
-        discord_spell_handler_update,
         use_voice,
         voice_provider,
         voice_character,
@@ -220,19 +196,6 @@ const AgentWindow = ({
           console.log('responseData', responseData)
 
           setEnabled(responseData.enabled)
-          setDiscordEnabled(responseData.data.discord_enabled)
-          setOpenaiApiKey(responseData.data.openai_api_key)
-          setDiscordApiKey(responseData.data.discord_api_key)
-          setDiscordStartingWords(responseData.data.discord_starting_words)
-          setDiscordBotNameRegex(responseData.data.discord_bot_name_regex)
-          setDiscordBotName(responseData.data.discord_bot_name)
-          setDiscordEmptyResponses(responseData.data.discord_empty_responses)
-          setDiscordSpellHandlerIncoming(
-            responseData.data.discord_spell_handler_incoming
-          )
-          setDiscordSpellHandlerUpdate(
-            responseData.data.discord_spell_handler_update
-          )
           setLoopEnabled(responseData.data.loop_enabled)
           setLoopInterval(responseData.data.loop_interval)
           setLoopAgentName(responseData.data.loop_agent_name)
@@ -253,16 +216,8 @@ const AgentWindow = ({
     const _data = {
       enabled,
       data: {
-        discord_enabled,
         openai_api_key,
-        discord_api_key,
-        discord_starting_words,
-        discord_bot_name_regex,
-        discord_bot_name,
-        discord_empty_responses,
-        discord_spell_handler_incoming,
-        discord_spell_handler_update,
-        use_voice,
+        ...discordValue,
         voice_provider,
         voice_character,
         voice_language_code,
@@ -275,7 +230,7 @@ const AgentWindow = ({
       },
     }
     const fileName =
-      discord_bot_name ?? 'agent'
+      (discordValue as any).discord_bot_name ?? 'agent'
     const json = JSON.stringify(_data)
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))
@@ -305,16 +260,7 @@ const AgentWindow = ({
           }}
         />
       </div>
-      <div className="form-item">
-        <span className="form-item-label">Random PLugin</span>
-        <input
-          type="checkbox"
-          defaultChecked={enabled}
-          onChange={e => {
-            setEnabled(e.target.checked)
-          }}
-        />
-      </div>
+      <DiscordPlugin loaded={loaded} setloaded={setLoaded} agentData={agentDataValue} setDiscordValue={setDiscordValue} spellList={spellList} />
       <div className="form-item">
         <span className="form-item-label">Voice Enabled</span>
         <input
@@ -473,118 +419,6 @@ const AgentWindow = ({
             {/*password input field that, when changed, sets the openai key*/}
             <KeyInput value={eth_public_address} setValue={setEthPublicAddress} secret={false} />
           </div>
-          <div className="form-item">
-            <span className="form-item-label">Discord Enabled</span>
-            <input
-              type="checkbox"
-              value={discord_enabled.toString()}
-              defaultChecked={discord_enabled}
-              onChange={e => {
-                setDiscordEnabled(e.target.checked)
-              }}
-            />
-          </div>
-
-          {discord_enabled && (
-            <>
-              <div className="form-item">
-                <span className="form-item-label">Discord API Key</span>
-                <KeyInput value={discord_api_key} setValue={setDiscordApiKey} secret={true} />
-              </div>
-
-              <div className="form-item">
-                <span className="form-item-label">
-                  Discord Starting Words - Separated by ,
-                </span>
-                <input
-                  type="text"
-                  defaultValue={discord_starting_words}
-                  onChange={e => {
-                    setDiscordStartingWords(e.target.value)
-                  }}
-                />
-              </div>
-
-              <div className="form-item">
-                <span className="form-item-label">Discord Bot Name Regex</span>
-                <input
-                  type="text"
-                  defaultValue={discord_bot_name_regex}
-                  onChange={e => {
-                    setDiscordBotNameRegex(e.target.value)
-                  }}
-                />
-              </div>
-
-              <div className="form-item">
-                <span className="form-item-label">Discord Bot Name</span>
-                <input
-                  type="text"
-                  defaultValue={discord_bot_name}
-                  onChange={e => {
-                    setDiscordBotName(e.target.value)
-                  }}
-                />
-              </div>
-
-              <div className="form-item">
-                <span className="form-item-label">
-                  Discord Empty Responses - Separated by |
-                </span>
-                <input
-                  type="text"
-                  defaultValue={discord_empty_responses}
-                  onChange={e => {
-                    setDiscordEmptyResponses(e.target.value)
-                  }}
-                />
-              </div>
-
-              <div className="form-item agent-select">
-                <span className="form-item-label">
-                  Spell Handler (Incoming Message Handler)
-                </span>
-                <select
-                  name="spellHandlerIncoming"
-                  id="spellHandlerIncoming"
-                  value={discord_spell_handler_incoming}
-                  onChange={event => {
-                    setDiscordSpellHandlerIncoming(event.target.value)
-                  }}
-                >
-                  <option hidden></option>
-                  {spellList.length > 0 &&
-                    spellList.map((spell, idx) => (
-                      <option value={spell.name} key={idx}>
-                        {spell.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-
-              <div className="form-item agent-select">
-                <span className="form-item-label">Interval Update Handler</span>
-                <select
-                  name="spellHandlerUpdate"
-                  id="spellHandlerUpdate"
-                  value={discord_spell_handler_update}
-                  onChange={event => {
-                    setDiscordSpellHandlerUpdate(event.target.value)
-                  }}
-                >
-                  <option value="null">
-                    --Disabled--
-                  </option>
-                  {spellList.length > 0 &&
-                    spellList.map((spell, idx) => (
-                      <option value={spell.name} key={idx}>
-                        {spell.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            </>
-          )}
 
           {loop_enabled && (
             <>

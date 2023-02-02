@@ -12,7 +12,7 @@ const AgentManagerWindow = () => {
       `${magickApiRootUrl}/agents`
     )
     const json = await res.json();
-    setData(null)
+    setData(json.data)
     console.log('res is', json)
   }
 
