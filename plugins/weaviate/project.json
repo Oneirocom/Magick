@@ -1,7 +1,7 @@
 {
-  "name": "magick-plugins",
+  "name": "weaviate",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/magick-plugins/src",
+  "sourceRoot": "plugins/weaviate/src",
   "projectType": "library",
   "targets": {
     "lint": {
@@ -11,7 +11,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "packages/magick-plugins/**/*.ts"
+          "plugins/weaviate/**/*.ts"
         ]
       }
     },
@@ -21,7 +21,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "packages/magick-plugins/jest.config.ts",
+        "jestConfig": "plugins/weaviate/jest.config.ts",
         "passWithNoTests": true
       }
     }

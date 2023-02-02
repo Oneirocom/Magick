@@ -1,5 +1,5 @@
 import { MagickComponent } from '../types'
-import { EventStore } from './events/EventStore'
+import { EventStore } from '../../../../plugins/weaviate/src/nodes/EventStore'
 import { GetWikipediaSummary } from './apis/GetWikipediaSummary'
 import { QueryGoogle } from './apis/QueryGoogle'
 import { WeaviateWikipedia } from './apis/WeaviateWikipedia'
@@ -8,7 +8,7 @@ import { CheckEthBalance } from './ethereum/CheckEthBalance'
 import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentTransactionsFromWallet'
 import { GetRecentTransactions } from './ethereum/GetRecentTransactions'
 import { EventDestructureComponent } from './events/EventDestructure'
-import { EventRecall } from './events/EventRecall'
+import { EventRecall } from '../../../../plugins/weaviate/src/nodes/EventRecall'
 import { EventRestructureComponent } from './events/EventRestructure'
 import { InputComponent } from './io/Input'
 import { JupyterNotebook } from './io/JupyterNotebook'
@@ -67,11 +67,9 @@ import { BooleanVariable } from './variable/BooleanVariable'
 import { FewshotVariable } from './variable/FewshotVariable'
 import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
-import { EventDelete } from './events/EventDelete'
+import { EventDelete } from '../../../../plugins/weaviate/src/nodes/EventDelete'
 
-import { plugin_nodes } from '@magickml/magick-plugins'
-// NOTE: PLEASE KEEP THESE IN ALPHABETICAL ORDER
-// todo some kind of custom build parser perhaps to take car of keeping these in alphabetical order
+import { pluginManager } from '@magickml/engine'
 
 export let components = {
   alert: () => new Alert(),
@@ -156,12 +154,13 @@ function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {
   return 0
 }
 
-export const getComponents = () => {
-  components = {...components, ...plugin_nodes}
-  const sortedComponents = Object.keys(components)
+export const getNodes = () => {
+  const pluginNodes = pluginManager.getNodes();
+  const allComponents = {...components, pluginNodes}
+  const sortedComponents = Object.keys(allComponents)
     .sort()
     .reduce<Record<any, any>>((acc: any, key) => {
-      acc[key] = components[key]
+      acc[key] = allComponents[key]
       return acc
     }, {} as Record<any, any>)
 

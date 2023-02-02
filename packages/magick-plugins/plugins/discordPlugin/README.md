@@ -1,1 +1,0 @@
-# Discord Plugin for Magick
