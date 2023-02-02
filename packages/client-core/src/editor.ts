@@ -22,7 +22,7 @@ import {
   TaskPlugin,
   EditorContext,
   MagickComponent,
-  getComponents,
+  getNodes,
   MagickEditor,
   MultiSocketGenerator,
   NodeClickPlugin,
@@ -61,7 +61,7 @@ export const initEditor = function ({
 }) {
   if (editorTabMap[tab.id]) editorTabMap[tab.id].clear()
 
-  const components = getComponents()
+  const components = getNodes()
 
   // create the main edtor
   const editor = new MagickEditor('demo@0.1.0', container)

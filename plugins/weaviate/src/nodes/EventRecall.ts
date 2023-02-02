@@ -7,10 +7,10 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, anySocket, eventSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+} from '../../../../packages/engine/src/types'
+import { InputControl } from '../../../../packages/engine/src/dataControls/InputControl'
+import { triggerSocket, anySocket, eventSocket } from '../../../../packages/engine/src/sockets'
+import { MagickComponent } from '../../../../packages/engine/src/magick-component'
 
 import {
   API_URL

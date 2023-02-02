@@ -8,7 +8,7 @@ export class BooleanControl extends DataControl {
     const options = {
       dataKey: dataKey,
       name: name,
-      component: 'input',
+      component: 'switch',
       icon,
       type: 'boolean',
     }
