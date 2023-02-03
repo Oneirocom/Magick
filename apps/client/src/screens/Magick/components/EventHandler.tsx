@@ -68,11 +68,13 @@ const EventHandler = ({ pubSub, tab }) => {
     const currentSpell = spellRef.current
     const graph = serialize() as GraphData
 
-    console.log('currentSpell', currentSpell.data[0])
+    if (!currentSpell) return
+
+    console.log('currentSpell', currentSpell)
     console.log('graph', graph)
 
     const response = await saveSpellMutation({
-      ...currentSpell.data[0],
+      ...currentSpell,
       graph,
     })
 

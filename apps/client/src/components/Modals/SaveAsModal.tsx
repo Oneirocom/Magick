@@ -33,7 +33,6 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const onSubmit = handleSubmit(async data => {
     const saveResponse: any = await saveSpell({
       ...spell,
-      id: uuidv4(),
       name: data.name,
     })
 

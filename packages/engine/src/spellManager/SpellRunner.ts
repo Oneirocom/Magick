@@ -41,6 +41,8 @@ class SpellRunner {
     // Set the interface that this runner will use when running workers
     this.magickInterface = magickInterface
 
+    this.magickInterface.getCurrentSpell = () => this.currentSpell
+
     // We should probably load up here all the "modules" the spell needds to run
     // This would basicallyt be an array of spells pulled from the DB
   }
@@ -188,7 +190,6 @@ class SpellRunner {
     componentName: string,
     runSubspell = false
   ) {
-    
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
