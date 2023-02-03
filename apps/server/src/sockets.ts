@@ -1,5 +1,6 @@
 // import io from 'socket.io'
 import { SpellManager } from '@magickml/engine'
+import { buildMagickInterface } from './buildMagickInterface'
 
 const handleSockets = (app: any) => {
   return (io: any) => {
@@ -14,15 +15,17 @@ const handleSockets = (app: any) => {
 
       // hard coding user for now.
       const user = {
-        id: '123',
+        id: '123'
       }
       // Attach the user info to the params or use in services
       socket.feathers.user = user
 
+      const magickInterface = buildMagickInterface({})
+
       // probably need to move interface instantiation into the runner rather than the spell manager.
       // Doing it this way makes the interface shared across all spells
       // Which messes up state stuff.
-      const spellManager = new SpellManager({ socket })
+      const spellManager = new SpellManager({ socket, magickInterface })
 
       app.userSpellManagers.set(user.id, spellManager)
 

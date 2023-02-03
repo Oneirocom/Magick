@@ -9,7 +9,7 @@ function install(
     'error',
     ({ message, data }: { message: string; data: NodeData }) => {
       const component = engine.components.get(
-        data.name
+        data.name as string
       ) as unknown as MagickComponent<unknown>
 
       if (!component) return

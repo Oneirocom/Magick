@@ -75,17 +75,19 @@ export const spellApi = rootApi.injectEndpoints({
       async queryFn({ ...spell }, { dispatch }, extraOptions, baseQuery) {
         // make a copy of spell but remove the id
         const spellCopy = { ...spell } as any
-        if(spellCopy.id) delete spellCopy.id
-        if(Object.keys(spellCopy).includes('modules')) delete spellCopy.modules
-        if(!spellCopy.created_at) spellCopy.created_at = new Date().toISOString();
-        spellCopy.updated_at = new Date().toISOString();
+        if (spellCopy.id) delete spellCopy.id
+        if (Object.keys(spellCopy).includes('modules')) delete spellCopy.modules
+        if (!spellCopy.created_at)
+          spellCopy.created_at = new Date().toISOString()
+        spellCopy.updated_at = new Date().toISOString()
 
-        if(!spellCopy.agents || Object.keys(spellCopy.agents).length === 0) spellCopy.agents = [];
+        if (!spellCopy.agents || Object.keys(spellCopy.agents).length === 0)
+          spellCopy.agents = []
 
         console.log('spellCopy is', spellCopy)
 
         const baseQueryOptions = {
-          url: 'spells/'+spell.id,
+          url: 'spells/' + spell.name,
           body: spellCopy,
           method: 'PATCH',
         }

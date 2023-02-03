@@ -5,20 +5,18 @@ import { magickApiRootUrl } from '../../../config'
 import AgentWindow from './Agent'
 
 const AgentManagerWindow = () => {
-  const [data, setData] = useState(false)
+  const [data, setData] = useState<Record<string, unknown> | null>(null)
 
   const resetData = async () => {
-    const res = await fetch(
-      `${magickApiRootUrl}/agents`
-    )
-    const json = await res.json();
+    const res = await fetch(`${magickApiRootUrl}/agents`)
+    const json = await res.json()
     setData(null)
     console.log('res is', json)
   }
 
   const createNew = (data = { spells: [] }) => {
     console.log('data is', data)
-    if(!data.spells === undefined) data.spells = []
+    if (!data.spells === undefined) data.spells = []
     // rewrite using fetch instead of axios
     fetch(`${magickApiRootUrl}/agents`, {
       method: 'POST',
@@ -30,13 +28,13 @@ const AgentManagerWindow = () => {
       .then(async res => {
         console.log('response is', res)
         const res2 = await fetch(`${magickApiRootUrl}/agents`)
-        const json = await res2.json();
+        const json = await res2.json()
         setData(json.data)
       })
       .catch(err => {
         console.log('error is', err)
       })
-    }
+  }
 
   const loadFile = selectedFile => {
     const fileReader = new FileReader()
@@ -48,9 +46,9 @@ const AgentManagerWindow = () => {
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const res = await fetch(`${magickApiRootUrl}/agents`)
-      const json = await res.json();
+      const json = await res.json()
       console.log('setting data to ', json)
       setData(json.data)
     })()
