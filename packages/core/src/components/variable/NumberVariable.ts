@@ -11,6 +11,7 @@ import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { numSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { BooleanControl } from '../../dataControls/BooleanControl'
 
 const info = `Number Variable`
 
@@ -46,7 +47,12 @@ export class NumberVariable extends MagickComponent<InputReturn> {
       icon: 'moon',
     })
 
-    node.inspector.add(name).add(_var)
+    const _public = new BooleanControl({
+      dataKey: 'Public',
+      name: 'Public',
+    })
+
+    node.inspector.add(name).add(_var).add(_public)
 
     return node.addOutput(out)
   }
@@ -54,9 +60,10 @@ export class NumberVariable extends MagickComponent<InputReturn> {
   worker(node: NodeData) {
     const _var = node?.data?._var as number
 
-    this.name = (node?.data?.name as string) + '_' + Math.floor(Math.random()*1000)
-    node.display(_var.toString());
-    
+    this.name =
+      (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
+    node.display(_var.toString())
+
     return {
       output: _var,
     }
