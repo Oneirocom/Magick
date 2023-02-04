@@ -1,3 +1,5 @@
+// TODO: Remove this
+// This interface introduces some coupling and an additional layer of abstraction that is no longer needed
 // import {EngineContext} from '@magickml/engine'
 
 import { runSpell } from './utils/runSpell'
