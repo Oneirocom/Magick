@@ -87,7 +87,7 @@ export const spellApi = rootApi.injectEndpoints({
         console.log('spellCopy is', spellCopy)
 
         const baseQueryOptions = {
-          url: 'spells/' + spell.name,
+          url: 'spells/' + spell.id,
           body: spellCopy,
           method: 'PATCH',
         }
