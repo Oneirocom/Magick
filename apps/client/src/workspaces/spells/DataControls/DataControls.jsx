@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box'
 import CodeControl from './CodeControl'
 import css from './datacontrols.module.css'
 import Info from './Info'
@@ -12,6 +11,7 @@ import MultiSocketGenerator from './MultiSocketGenerator'
 import PlaytestControl from './PlaytestControl'
 import SwitchControl from './SwitchControl'
 import SpellSelect from './SpellSelect'
+import CheckBoxControl from './CheckBox'
 
 const StubComponent = props => <div>{props.name}</div>
 
@@ -30,6 +30,7 @@ const controlMap = {
   playtest: PlaytestControl,
   switch: SwitchControl,
   dropdownSelect: DropdownSelect,
+  checkbox: CheckBoxControl,
 }
 
 const DataControls = ({
@@ -72,7 +73,7 @@ const DataControls = ({
         if (control.component === 'info' && !control?.data?.info) return null
 
         return (
-          <Box
+          <div
             key={control.name + nodeId + key}
             sx={{
               padding: '15px',
@@ -83,7 +84,7 @@ const DataControls = ({
               {control.name || key}
             </p>
             <Component key={nodeId + control.name} {...controlProps} />
-          </Box>
+          </div>
         )
       })}
     </>

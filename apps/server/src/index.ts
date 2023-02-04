@@ -12,9 +12,6 @@ import {
 import {
   WEAVIATE_IMPORT_DATA,
 } from '@magickml/engine'
-import {
-  Plugin  
-} from '@magickml/magick-plugins'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
@@ -22,6 +19,18 @@ import { initSpeechServer } from '@magickml/server-core'
 
 import { Handler, Method, Middleware } from './types'
 
+import { logger } from './logger'
+
+import { apis } from './apis'
+import { spells } from './spells'
+import { Route } from './types'
+import { worldManager } from '@magickml/engine'
+import { World } from './World'
+
+// the current file is in dist/apps/server, and we want to import the root package.json
+const packageJson = require('../../../package.json')
+
+console.log('plugins', packageJson)
 
 // log node.js errors
 process.on('uncaughtException', (err) => {
@@ -36,23 +45,13 @@ process.on('unhandledRejection', (err) => {
 // todo probaly want to get ride of this.  Not super secure.
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-import { logger } from './logger'
-
 process.on('unhandledRejection', (reason, p) =>
   logger.error('Unhandled Rejection at: Promise ', p, reason)
 )
 
 const router: Router = new Router()
 
-import { apis } from './apis'
-import { spells } from './spells'
-import { Route } from './types'
-
 const routes: Route[] = [...spells, ...apis]
-
-import { worldManager } from '@magickml/engine'
-import { World } from './World'
-import { pluginsContext } from '@magickml/magick-plugins'
 
 async function init() {
   new World()
@@ -71,7 +70,7 @@ async function init() {
     try {
       await next()
     } catch (error: any) {
-      ctx.status = error.statusCode ;
+      ctx.status = error.statusCode;
       ctx.body = { error }
       ctx.app.emit('error', error, ctx)
     }
@@ -88,11 +87,7 @@ async function init() {
 
   // Middleware used by every request. For route-specific middleware, add it to you route middleware specification
   app.use(koaBody({ multipart: true }))
-  let plugin = {
-    featherApp: app,
-  }
-  const discordInputPlugin = new Plugin(pluginsContext, app)
-  discordInputPlugin.setup()
+
   const createRoute = (
     method: Method,
     path: string,

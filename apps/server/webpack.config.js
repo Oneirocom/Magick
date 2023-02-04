@@ -3,6 +3,10 @@ const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = (config, context) => {
   return merge(config, {
+    experiments: {
+      topLevelAwait: true
+    },
+
     module: {
       rules: [
         {

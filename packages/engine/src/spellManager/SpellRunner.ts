@@ -6,7 +6,7 @@ import {
   ModuleComponent,
   Spell as SpellType,
 } from '../types'
-import { getComponents } from '../components'
+import { getNodes } from '../nodes'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
 import { Module } from '../plugins/modulePlugin/module'
 import { extractModuleInputKeys } from './graphHelpers'
@@ -28,7 +28,7 @@ class SpellRunner {
     // Initialize the engine
     this.engine = initSharedEngine({
       name: 'demo@0.1.0',
-      components: getComponents(),
+      components: getNodes(),
       server: true,
       socket: socket || undefined,
     }) as MagickEngine
@@ -75,7 +75,7 @@ class SpellRunner {
   get outputData() {
     const rawOutputs = {}
     this.module.write(rawOutputs)
-    console.log('RAW OUTPURS', rawOutputs)
+    console.log('RAW OUTPUTS', rawOutputs)
     return this._formatOutputs(rawOutputs)
   }
 
@@ -111,6 +111,7 @@ class SpellRunner {
    * and puts those values into the module in preparation for processing.
    */
   private _loadInputs(inputs: Record<string, unknown>): void {
+    console.log(inputs)
     this.module.read(this._formatInputs(inputs))
   }
 
@@ -154,6 +155,7 @@ class SpellRunner {
    * it for the next run.
    */
   private _resetTasks(): void {
+    console.log("Task Reset")
     this.engine.tasks.forEach(t => t.reset())
   }
 
@@ -193,11 +195,12 @@ class SpellRunner {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
-      throw new Error('Infinite loop detected.  Exiting.')
+      throw new Error('Infinite loop detected.  Exiting.') 
     }
     // Set the current spell into the cache of spells that have run now.
     if (runSubspell) this.ranSpells.push(this.currentSpell.name)
 
+    this._clearRanSpellCache()
     // ensure we run from a clean slate
     this._resetTasks()
 

@@ -23,7 +23,7 @@ function install(
       altKey: false,
     },
     deleteCommentKeys = {
-      code: 'Delete',
+      code: ['Delete', 'Backspace'],
       shiftKey: false,
       ctrlKey: false,
       altKey: false,
@@ -53,12 +53,12 @@ function install(
       inlineCommentKeys,
       deleteCommentKeys,
     ].map(function (x) {
-      return (
-        e.code === x.code &&
-        e.shiftKey === x.shiftKey &&
-        e.ctrlKey === x.ctrlKey &&
-        e.altKey === x.altKey
-      )
+      return Array.isArray(x.code)
+        ? x.code.includes(e.code)
+        : e.code === x.code &&
+            e.shiftKey === x.shiftKey &&
+            e.ctrlKey === x.ctrlKey &&
+            e.altKey === x.altKey
     })
 
     if (keyCombosMap[0]) {
@@ -72,6 +72,7 @@ function install(
       editor.trigger('addcomment', { type: 'inline', position })
     } else if (keyCombosMap[2]) {
       manager.deleteFocusedComment()
+      editor.trigger('delete')
     }
   })
 
