@@ -13,12 +13,28 @@ services:
     - 8080:8080
     restart: on-failure:0
     environment:
+      CONTEXTIONARY_URL: contextionary:9999
+      QNA_INFERENCE_API: 'http://qna-transformers:8080'
       QUERY_DEFAULTS_LIMIT: 25
       AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
       PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
-      DEFAULT_VECTORIZER_MODULE: 'none'
-      ENABLE_MODULES: ''
+      DEFAULT_VECTORIZER_MODULE: 'text2vec-contextionary'
+      ENABLE_MODULES: 'text2vec-contextionary,qna-transformers'
       CLUSTER_HOSTNAME: 'node1'
+  contextionary:
+    environment:
+      OCCURRENCE_WEIGHT_LINEAR_FACTOR: 0.75
+      EXTENSIONS_STORAGE_MODE: weaviate
+      EXTENSIONS_STORAGE_ORIGIN: http://weaviate:8080
+      NEIGHBOR_OCCURRENCE_IGNORE_PERCENTILE: 5
+      ENABLE_COMPOUND_SPLITTING: 'false'
+    image: semitechnologies/contextionary:en0.16.0-v1.0.2
+    ports:
+    - 9999:9999
+  qna-transformers:
+    image: semitechnologies/qna-transformers:distilbert-base-cased-distilled-squad
+    environment:
+      ENABLE_CUDA: '0'
   cache:
     image: redis:6.2-alpine
     restart: always

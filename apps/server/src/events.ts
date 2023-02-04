@@ -1,7 +1,7 @@
 import { database } from '@magickml/database'
 import Koa from 'koa'
 import { Route } from './types'
-
+import { weaviate_connection } from '@magickml/systems'
 export const modules: Record<string, unknown> = {}
 
 const getEvents = async (ctx: Koa.Context) => {
@@ -61,6 +61,67 @@ const createEvent = async (ctx: Koa.Context) => {
 
   return (ctx.body = 'ok')
 }
+
+const createEventWeaviate = async (ctx: Koa.Context) => {
+  try {
+    await weaviate_connection.createEvent(ctx.request.body)
+    ctx.status = 200
+    return (ctx.body = "ok")
+  } catch(e) {
+    console.log(e)
+    ctx.status = 500
+    return (ctx.body = 'internal error')
+  }
+}
+
+const getEventsWeaviate = async (ctx: Koa.Context) => {
+  try{
+    console.log("Inside in TRY")
+    console.log(ctx.request.body)
+    const events = await weaviate_connection.getEvents(ctx.request.query)
+    return (ctx.body = { events })
+  } catch (e) {
+    console.log(e)
+    ctx.status = 200
+    return (ctx.body = "Error")
+  }
+  
+}
+
+const getAllEventsWeaviate = async (ctx: Koa.Context) => {
+  try {
+    const events = await weaviate_connection.getAllEvents()
+    return (ctx.body = events)
+  } catch (e) {
+    console.log(e)
+    ctx.status = 500
+    return (ctx.body = 'internal error')
+  }
+}
+
+
+const eventQAWeaviate = async (ctx: Koa.Context) => {
+  const question = ctx.request.query.question as string
+  const agentId = ctx.request.query.agentId as string
+  console.log("Inside EventQA", question)
+  console.log(agentId)
+  const answer = await weaviate_connection.searchEvents(question, parseInt(agentId))
+  console.log("Inside EventQA")
+  console.log(answer)
+  return (ctx.body = answer)
+}
+
+const deleteEventWeaviate = async (ctx: Koa.Context) => {
+  try {
+    await weaviate_connection.getAndDeleteEvents(ctx.request.body)
+    ctx.status = 200
+    return (ctx.body = "Deleted Events")
+  } catch(e) {
+    console.log(e)
+    ctx.status = 500
+    return (ctx.body = 'internal error')
+  }
+}
 export const events: Route[] = [
   {
     path: '/event',
@@ -76,4 +137,19 @@ export const events: Route[] = [
     path: '/events',
     get: getAllEvents,
   },
+  {
+    path: '/eventWeaviate',
+    get: getEventsWeaviate,
+    post: createEventWeaviate,
+  },
+  {
+    path: '/eventQA',
+    get: eventQAWeaviate,
+  },{
+    path: '/eventsWeaviate',
+    get: getAllEventsWeaviate,
+  },{
+    path: '/eventDelete',
+    post: deleteEventWeaviate,
+  }
 ]

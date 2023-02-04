@@ -1,6 +1,7 @@
-import { CreateEventArgs, GetEventArgs } from '@magickml/core'
+import { CreateEventArgs, GetEventArgs, SemanticSearch } from '@magickml/core'
 import weaviate from 'weaviate-client'
 import EventSchema from './weaviate_events_schema'
+import { env } from 'process'
 
 const DOCUMENTS_CLASS_NAME = 'events'
 let weaviate_client: any
@@ -33,7 +34,7 @@ export async function initWeaviateClientEvent() {
     scheme: process.env.WEAVIATE_CLIENT_SCHEME,
     host: process.env.WEAVIATE_CLIENT_HOST,
   })
-  weaviate_client.schema
+  await weaviate_client.schema
     .classCreator()
     .withClass(EventSchema)
     .do()
@@ -46,30 +47,33 @@ export async function initWeaviateClientEvent() {
 }
 
 export class weaviate_connection {
-  static async createEvent({
-    type,
-    sender,
-    observer,
-    entities,
-    client,
-    channel,
-    content,
-  }: CreateEventArgs) {
+  static async createEvent(_data: CreateEventArgs) {
+    console.log("Inside the function")
     if (!weaviate_client) {
       await initWeaviateClientEvent()
     }
+    const data = { ..._data }
+    const validFields = ['type', 'sender', 'observer', 'client', 'channel', 'channelType', 'content', 'entities', 'agentId']
+    for (const key in data) {
+      if (!validFields.includes(key)) {
+        delete data[key]
+      }
+    }
+    console.log(data)
     return await weaviate_client.data
       .creator()
       .withClassName('Event')
       .withId(generateUUID())
       .withProperties({
-        type,
-        sender,
-        observer,
-        client,
-        channel,
-        entities,
-        content,
+        type: data['type'],
+        sender: data['sender'],
+        observer: data['observer'],
+        client: data['client'],
+        channel: data['channel'],
+        entities: data['entities'],
+        agentId: parseInt(data['agentId'].toString()),
+        channelType: data['channelType'],
+        content: data['content'],
         date: new Date().toUTCString(),
       })
       .do()
@@ -80,21 +84,9 @@ export class weaviate_connection {
         console.error(err)
       })
   }
-  static async getEvents({
-    type,
-    sender = 'system',
-    observer = 'none',
-    client = 'default',
-    channel = 'default',
-    maxCount = 10,
-    max_time_diff = -1,
-  }: GetEventArgs) {
-    if (!type) {
-      throw new Error('Missing argument for type')
-    }
-    if (channel === 'undefined') {
-      channel = undefined
-    }
+  static async getEvents(params: GetEventArgs) {
+    const 
+      { type, sender, observer, client, channel, channelType, maxCount, max_time_diff } = params
     if (!weaviate_client) {
       await initWeaviateClientEvent()
     }
@@ -109,8 +101,9 @@ export class weaviate_connection {
         'client',
         'channel',
         'sender',
-        'text',
+        'content',
         'date',
+        '_additional {id}',
       ])
       .withWhere({
         operator: 'And',
@@ -124,12 +117,7 @@ export class weaviate_connection {
             path: ['sender'],
             operator: 'Equal',
             valueString: sender,
-          },
-          {
-            path: ['client'],
-            operator: 'Equal',
-            valueString: client,
-          },
+          }
         ],
       })
       .withLimit(maxCount)
@@ -138,6 +126,7 @@ export class weaviate_connection {
         console.log(err)
       })
     const event_obj = events.data.Get.Event
+    
     if (max_time_diff > 0) {
       const now = new Date()
       const filtered = event_obj.filter(e => {
@@ -161,4 +150,117 @@ export class weaviate_connection {
       })
     return events
   }
+
+  static async getAndDeleteEvents(params: GetEventArgs){
+    const 
+      { type, sender, observer, client, channel, channelType, maxCount, max_time_diff } = params
+    if (!weaviate_client) {
+      await initWeaviateClientEvent()
+    }
+    const events =  await this.getEvents(params)
+    events.forEach(element => {
+      console.log(element)
+      this.deleteEvents(element["_additional"]["id"])
+    });
+
+    return events.length
+
+  }
+
+
+  static async deleteEvents(id: string){
+    if (!weaviate_client) {
+      await initWeaviateClientEvent()
+    }
+    await weaviate_client.data
+                         .deleter()
+                         .withClassName('Event')
+                         .withId(id)
+                         .do()
+                         .then(res=> {
+                            console.log(res)
+                         })
+                         .catch(err => {
+                            console.log(err)
+                         })
+  }
+
+  static async searchEvents(question: String, agentid: number){
+    if (!weaviate_client) {
+        await initWeaviateClientEvent()
+    }
+    const answer = await weaviate_client.graphql
+                                        .get()
+                                        .withClassName('Event')
+                                        .withWhere({
+                                          operator: 'Equal',
+                                          path: ['agentId'],
+                                          valueInt: agentid,
+                                        })
+                                        .withAsk(({
+                                            question: question
+                                        }))
+                                        .withFields('content _additional { answer { hasAnswer certainty property result startPosition endPosition } }')
+                                        .withLimit(1)
+                                        .do()
+                                        .catch(err => {
+                                            console.log(err)
+                                           })
+    if (answer['data']['Get']['Event']['0'] === (undefined)) {
+      return {
+        _additional: {
+          answer: {
+            certainty: 0.00,
+            endPosition: 3,
+            hasAnswer: false,
+            property: 'NONE',
+            result: 'NONE',
+            startPosition: 0
+          }
+        },
+        content: 'No Result Found'
+      }
+    } else{
+      return answer['data']['Get']['Event']['0']
+    }
+    
+  }
+
+  static async semanticSearch(_data: SemanticSearch){
+    if (!weaviate_client) {
+        await initWeaviateClientEvent()
+    }
+    const data = { ..._data }
+    const validFields = ['concept', 'positive', 'negative', 'distance', 'positive_distance', 'negative_distance']
+    for (const key in data) {
+      if (!validFields.includes(key)) {
+        delete data[key]
+      }
+    }
+    const events = await weaviate_client.graphql
+                                        .explore()
+                                        .withNearText({
+                                          concepts: [data["concept"]],
+                                          distance: 0.6,
+                                          moveAwayFrom: {
+                                            concepts: [data["negative"]],
+                                            force: data["negative_distance"]
+                                          },
+                                          moveTo: {
+                                            concepts: [data["positive"]],
+                                            force:  data["positive_distance"]
+                                          }
+                                        })
+                                        .withCertainty(0.7)
+                                        .withFields('beacon certainty className')
+                                        .do()
+                                        .catch(err => {
+                                          console.log(err)
+                                         })
+    
+    return events                                     
+
+
+    
+    }
 }

@@ -9,8 +9,6 @@ type StartLoopArgs = {
   loop_interval?: string
   loop_spell_handler?: string
   agent_name?: string
-  eth_private_key?: string
-  eth_public_address?: string
 }
 
 type StartDiscordArgs = {
@@ -26,8 +24,6 @@ type StartDiscordArgs = {
   voice_character?: string
   voice_language_code?: string
   tiktalknet_url?: string
-  eth_private_key?: string
-  eth_public_address?: string
 }
 
 type EntityData = {
@@ -109,9 +105,7 @@ export class Agent {
     this.onDestroy()
     this.id = agent.id
     this.rawAgent = agent
-    this.data = agent.data
-    console.log('initing agent')
-    console.log('agent data is ', agent)
+    this.data = {...agent.data, ...agent.data.data}
     this.name = agent.agent ?? agent.name ?? 'agent'
     this.spellManager = new SpellManager({
       magickInterface: buildMagickInterface({}),
@@ -143,13 +137,7 @@ export class Agent {
     voice_character,
     voice_language_code,
     tiktalknet_url,
-    eth_private_key,
-    eth_public_address,
   }: StartDiscordArgs) {
-    console.log(
-      'initializing discord, spell_handler:',
-      discord_spell_handler_incoming
-    )
     if (this.discord)
       throw new Error('Discord already running for this agent on this instance')
 
@@ -157,12 +145,9 @@ export class Agent {
       where: { name: discord_spell_handler_incoming },
     })
 
-    console.log('discord incoming spell', spell)
-
     const spellHandler = await this.createSpellHandler({ spell })
 
     this.discord = new discord_client()
-    console.log('createDiscordClient')
     await this.discord.createDiscordClient(
       this,
       discord_api_key,
@@ -215,9 +200,6 @@ export class Agent {
           channelType: 'loop',
           entities: [],
         })
-        if (resp?.length > 0) {
-          console.log('Loop Response:', resp)
-        }
       }, loopInterval)
     } else {
       throw new Error('Loop Interval must be a number greater than 0')

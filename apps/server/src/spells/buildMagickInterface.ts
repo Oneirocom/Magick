@@ -3,7 +3,8 @@ import {
   CreateEventArgs,
   EngineContext,
   GetEventArgs,
-  MagickWorkerInputs
+  MagickWorkerInputs,
+  QAArgs
 } from '@magickml/core'
 import { database } from '@magickml/database'
 import { prisma } from '@magickml/prisma'
@@ -22,6 +23,7 @@ import {
   APP_SEARCH_SERVER_URL,
   OPENAI_API_KEY,
 } from '@magickml/server-config'
+import { weaviate_connection } from '@magickml/systems'
 
 const getEvents = async (params: GetEventArgs) => {
   return await database.getEvents(params)
@@ -224,8 +226,15 @@ export const buildMagickInterface = (
     storeEvent: async (args: CreateEventArgs) => {
       return await createEvent(args)
     },
+    eventQAWeaviate: async (args: QAArgs) => {
+      const data = {...args}
+      return await weaviate_connection.searchEvents(data["question"], parseInt(data['agentId'].toString()))
+    },
     storeEventWeaviate: async (args: CreateEventArgs) => {
       return await storeEventWeaviate(args)
+    },
+    deleteEvent: async (args: CreateEventArgs) => {
+      return await weaviate_connection.getAndDeleteEvents(args)
     },
     getWikipediaSummary: async (keyword: string) => {
       let out = null

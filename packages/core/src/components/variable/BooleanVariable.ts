@@ -37,8 +37,9 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
     const out = new Rete.Output('output', 'output', booleanSocket)
     const _var = new BooleanControl({
       dataKey: '_var',
-      name: 'Variable',
+      name: 'Value',
       icon: 'moon',
+      component: 'switch',
     })
     const name = new InputControl({
       dataKey: 'name',
@@ -46,7 +47,12 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
       icon: 'moon',
     })
 
-    node.inspector.add(name).add(_var)
+    const _public = new BooleanControl({
+      dataKey: 'Public',
+      name: 'Public',
+    })
+
+    node.inspector.add(name).add(_var).add(_public)
 
     return node.addOutput(out)
   }
@@ -54,7 +60,10 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
   worker(node: NodeData) {
     const _var = node?.data?._var == true
 
-    this.name = (node?.data?.name as string) + ' - ' + _var
+    this.name =
+      (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
+    if (_var) node.display('TRUE')
+    else node.display('FALSE')
 
     return {
       output: _var,
