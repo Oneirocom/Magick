@@ -22,6 +22,7 @@ export { default as runPython } from './functions/ProcessPython'
 export * from './config'
 
 // TODO we can better organzie this folder structure with nested index aggregators
+export * from './dataControls/InputControl'
 export * from './plugins/socketPlugin'
 export * from './plugins/modulePlugin'
 export * from './plugins/taskPlugin/task'
