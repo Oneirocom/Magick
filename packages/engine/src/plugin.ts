@@ -1,6 +1,3 @@
-
-import {DiscordAgentWindow, MessageService} from '@magickml/plugin-discord'
-import {EventStore, EventRecall, WeaviateService} from '@magickml/plugin-weaviate'
 export class Plugin {
     name: string;
     nodes: any;
@@ -25,9 +22,8 @@ export class Plugin {
         this.agentComponents = agentComponents;
         this.setup = setup;
         this.teardown = teardown;
+        pluginManager.register(this)
     }
-
-
 }
 
 class PluginManager {
@@ -93,24 +89,3 @@ class PluginManager {
 }
 
 export const pluginManager = new PluginManager()
-
-const DiscordPlugin = new Plugin({
-    'name': 'DiscordPlugin', 
-    'nodes': [], 
-    'services': [MessageService], 
-    'agentComponents' : [DiscordAgentWindow], 
-    'windowComponents': [], 
-    'setup': ()=>{console.log("DiscordPlugin")}, 
-    'teardown': ()=>{console.log("DiscordPlugin")} })
-
-const WeaviatePlugin = new Plugin({
-    'name': 'WeaviatePlugin', 
-    'nodes': [ EventStore, EventRecall], 
-    'services': [WeaviateService], 
-    'agentComponents' : [], 
-    'windowComponents': [], 
-    'setup': ()=>{console.log("HUII")}, 
-    'teardown': ()=>{console.log("HUIII")} })
-
-pluginManager.register(WeaviatePlugin)
-pluginManager.register(DiscordPlugin)
