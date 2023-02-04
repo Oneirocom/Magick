@@ -17,6 +17,7 @@ import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
 import { PubSubContext, MagickTask, MagickComponent } from './magick-component'
+import e from 'express'
 
 export { MagickComponent } from './magick-component'
 //@seang this was causing test enviroment issues to have it shared client/server
@@ -114,15 +115,16 @@ export type EngineContext = {
   env: Env
   runSpell: (
     flattenedInputs: Record<string, any>,
-    spellId: string,
+    spellId: string
   ) => Record<string, any>
-  completion: (body: CompletionBody) => Promise<CompletionResponse>
+  completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: (spellId: string) => Promise<any | Spell>
-  processCode: (
+  getCurrentSpell?: () => Spell
+  processCode?: (
     code: unknown,
     inputs: MagickWorkerInputs,
     data: Record<string, any>,
-    language?: string | null
+    language?: string
   ) => any | void
 }
 
@@ -173,7 +175,7 @@ export type DataSocketType = {
 export type MagickNode = Node & {
   inspector: Inspector
   display: (content: string) => void
-  outputs: { name: string;[key: string]: unknown }[]
+  outputs: { name: string; [key: string]: unknown }[]
   category?: string
   displayName?: string
   info: string
@@ -227,7 +229,6 @@ export type OpenAIResponse = {
 export type Subspell = { name: string; id: string; data: GraphData }
 
 export type GraphData = Data
-
 
 export type ModuleComponent = MagickComponent<unknown> & {
   run: Function
@@ -295,9 +296,9 @@ export type WorkerReturn =
   | Promise<never[] | { entities: { name: string; type: string }[] }>
   | Promise<{ element: unknown } | undefined>
   | Promise<
-    | { result: { error: unknown;[key: string]: unknown } }
-    | { result?: undefined }
-  >
+      | { result: { error: unknown; [key: string]: unknown } }
+      | { result?: undefined }
+    >
   | Promise<{ text: unknown }>
   | Promise<{ boolean: boolean }>
   | Promise<null | undefined>
@@ -318,11 +319,11 @@ export type MagickWorker = (
 
 export interface PubSubBase
   extends CountSubscriptions,
-  ClearAllSubscriptions,
-  GetSubscriptions,
-  Publish,
-  Subscribe,
-  Unsubscribe {
+    ClearAllSubscriptions,
+    GetSubscriptions,
+    Publish,
+    Subscribe,
+    Unsubscribe {
   name: string
 }
 

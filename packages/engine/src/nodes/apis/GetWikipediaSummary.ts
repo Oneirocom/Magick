@@ -54,17 +54,16 @@ export class GetWikipediaSummary extends MagickComponent<void> {
   async worker(
     _node: NodeData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
-    { magick }: { magick: EngineContext }
+    _outputs: MagickWorkerOutputs
   ) {
     this._task.closed = ['success', 'error']
 
     const getWikipediaSummary = async (keyword: string) => {
       const root = import.meta.env.API_URL
       const url = `${root}/wikipediaSummary?keyword=${keyword}`
-  
+
       const response = await fetch(url)
-  
+
       return await response.json()
     }
 

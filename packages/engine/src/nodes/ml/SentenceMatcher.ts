@@ -6,13 +6,7 @@ import Rete from 'rete'
 //@ts-ignore
 import similarity from 'similarity'
 
-import {
-  EngineContext,
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../types'
+import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket, stringSocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
