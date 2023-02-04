@@ -12,6 +12,7 @@ import MultiSocketGenerator from './MultiSocketGenerator'
 import PlaytestControl from './PlaytestControl'
 import SwitchControl from './SwitchControl'
 import SpellSelect from './SpellSelect'
+import CheckBoxControl from './CheckBox'
 
 const StubComponent = props => <div>{props.name}</div>
 
@@ -30,6 +31,7 @@ const controlMap = {
   playtest: PlaytestControl,
   switch: SwitchControl,
   dropdownSelect: DropdownSelect,
+  checkbox: CheckBoxControl,
 }
 
 const DataControls = ({
