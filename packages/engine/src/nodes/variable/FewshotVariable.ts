@@ -9,6 +9,7 @@ import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { BooleanControl } from '../../dataControls/BooleanControl'
 
 const info = `Fewshot Variable`
 
@@ -43,9 +44,14 @@ export class FewshotVariable extends MagickComponent<InputReturn> {
       icon: 'moon',
     })
 
+    const _public = new BooleanControl({
+      dataKey: 'Public',
+      name: 'Public',
+    })
+
     const fewshotControl = new FewshotControl({})
 
-    node.inspector.add(fewshotControl).add(name)
+    node.inspector.add(fewshotControl).add(name).add(_public)
 
     return node.addOutput(out)
   }
@@ -53,10 +59,11 @@ export class FewshotVariable extends MagickComponent<InputReturn> {
   worker(node: NodeData) {
     const fewshot = node.data.fewshot as string
 
-    this.name = (node?.data?.name as string) + '_' + Math.floor(Math.random()*1000)
-    if(fewshot.length==0)node.display("ERROR: EMPTY STRING");
-    else node.display(fewshot.substring(0,1000)+"...");
-    
+    this.name =
+      (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
+    if (fewshot.length == 0) node.display('ERROR: EMPTY STRING')
+    else node.display(fewshot.substring(0, 1000) + '...')
+
     return {
       output: fewshot,
     }

@@ -40,9 +40,8 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
     })
 
     const _public = new BooleanControl({
-      dataKey: 'public',
+      dataKey: 'Public',
       name: 'Public',
-      icon: 'moon',
     })
 
     const _var = new InputControl({
@@ -55,14 +54,14 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
       name: 'Splitter',
       icon: 'moon',
     })
-   
+
     const keepEmpty = new BooleanControl({
       dataKey: 'keepEmpty',
       name: 'Keep Empty Values',
       icon: 'moon',
     })
 
-    node.inspector.add(name).add(_public).add(_var).add(splitter).add(keepEmpty)
+    node.inspector.add(name).add(_var).add(splitter).add(keepEmpty).add(_public)
 
     return node.addOutput(out)
   }
@@ -75,11 +74,12 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
       ? _var.split(splitter).filter(el => el.length > 0)
       : _var.split(splitter)
 
-    node.display(res.toString());
-    if(res === undefined) node.display("undefined value");
-    
-    this.name = (node?.data?.name as string) + '_' + Math.floor(Math.random()*1000)
-    
+    node.display(res.toString())
+    if (res === undefined) node.display('undefined value')
+
+    this.name =
+      (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
+
     return {
       output: res,
     }
