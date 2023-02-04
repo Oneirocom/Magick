@@ -158,7 +158,7 @@ export const getNodes = () => {
       acc[key] = allComponents[key]
       return acc
     }, {} as Record<any, any>)
-
+  console.log(sortedComponents)
   return Object.values(sortedComponents)
     .map(component => component())
     .sort(compare)
