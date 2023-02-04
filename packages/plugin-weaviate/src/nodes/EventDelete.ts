@@ -11,7 +11,7 @@ import {
   stringSocket,
   eventSocket,
   MagickComponent
-} from '@magickml/engine'
+} from 'packages/engine/src/index'
 
 const info = 'Event Delete is used to delete events based on inputs recevied from the user.'
 
