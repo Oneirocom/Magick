@@ -1,5 +1,5 @@
 import { EngineContext, GraphData, ModuleComponent, Spell } from '../types'
-import { getComponents } from '../components'
+import { getNodes } from '../nodes'
 import { initSharedEngine, extractNodes, MagickEngine } from '../engine'
 import { Module } from '../plugins/modulePlugin/module'
 
@@ -17,7 +17,7 @@ class RunSpell {
     // Initialize the engine
     this.engine = initSharedEngine({
       name: 'demo@0.1.0',
-      components: getComponents(),
+      components: getNodes(),
       server: true,
     }) as MagickEngine
 

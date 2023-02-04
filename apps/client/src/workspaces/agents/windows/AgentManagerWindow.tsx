@@ -8,9 +8,11 @@ const AgentManagerWindow = () => {
   const [data, setData] = useState<Record<string, unknown> | null>(null)
 
   const resetData = async () => {
-    const res = await fetch(`${magickApiRootUrl}/agents`)
-    const json = await res.json()
-    setData(null)
+    const res = await fetch(
+      `${magickApiRootUrl}/agents`
+    )
+    const json = await res.json();
+    setData(json.data)
     console.log('res is', json)
   }
 

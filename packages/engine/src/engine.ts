@@ -71,7 +71,6 @@ export const initSharedEngine = ({
         server: true,
       })
     }
-    console.log(socket)
     engine.use(TaskPlugin)
   }
 
