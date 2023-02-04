@@ -8,6 +8,7 @@ import {
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { BooleanControl } from '../../dataControls/BooleanControl'
 
 const info = `String Variable`
 
@@ -43,18 +44,23 @@ export class StringVariable extends MagickComponent<InputReturn> {
       icon: 'moon',
     })
 
-    node.inspector.add(name).add(_var)
+    const _public = new BooleanControl({
+      dataKey: 'Public',
+      name: 'Public',
+    })
+
+    node.inspector.add(name).add(_var).add(_public)
 
     return node.addOutput(out)
   }
 
-  worker(node: NodeData){
-  
+  worker(node: NodeData) {
     const _var = node?.data?._var as string
 
-    this.name = (node?.data?.name as string) + '_' + Math.floor(Math.random()*1000)
-    
-    node.display("\""+ _var+ "\"");
+    this.name =
+      (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
+
+    node.display('"' + _var + '"')
 
     return {
       output: _var,

@@ -37,6 +37,7 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
       dataKey: '_var',
       name: 'Value',
       icon: 'moon',
+      component: 'switch',
     })
     const name = new InputControl({
       dataKey: 'name',
@@ -44,7 +45,12 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
       icon: 'moon',
     })
 
-    node.inspector.add(name).add(_var)
+    const _public = new BooleanControl({
+      dataKey: 'Public',
+      name: 'Public',
+    })
+
+    node.inspector.add(name).add(_var).add(_public)
 
     return node.addOutput(out)
   }
@@ -52,10 +58,11 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
   worker(node: NodeData) {
     const _var = node?.data?._var == true
 
-    this.name = (node?.data?.name as string) + '_' + Math.floor(Math.random()*1000)
-    if(_var) node.display("TRUE");
-    else node.display("FALSE");
-    
+    this.name =
+      (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
+    if (_var) node.display('TRUE')
+    else node.display('FALSE')
+
     return {
       output: _var,
     }
