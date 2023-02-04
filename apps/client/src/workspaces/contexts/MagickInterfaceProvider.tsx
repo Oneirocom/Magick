@@ -68,6 +68,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     $SEND_TO_AVATAR,
   } = events
 
+  const getCurrentSpell = () => {
+    return spellRef.current
+  }
+
   const onTrigger = (node, callback) => {
     let isDefault = node === 'default' ? 'default' : null
     return subscribe($TRIGGER(tab.id, isDefault ?? node.id), (event, data) => {
@@ -149,7 +153,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return spell.data as Spell
   }
 
-  const processCode = async (code, inputs, data, language='javascript') => {
+  const processCode = async (code, inputs, data, language = 'javascript') => {
     const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
       (acc, [key, value]) => {
         acc[key as string] = value[0] as any
@@ -163,13 +167,12 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       // eslint-disable-next-line no-new-func
       const result = new Function('"use strict";return (' + code + ')')()(
         flattenedInputs,
-        data,
+        data
       )
       return result
     } else if (language == 'python') {
       try {
-
-        const result = await runPython(code, flattenedInputs, data);
+        const result = await runPython(code, flattenedInputs, data)
 
         return result
       } catch (err) {
@@ -178,8 +181,8 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     }
   }
 
-  const runSpell = async (inputs, spellId, state) => {
-    const response = await _runSpell({ inputs, spellId, state })
+  const runSpell = async (inputs, spellId) => {
+    const response = await _runSpell({ inputs, spellId })
 
     if ('error' in response) {
       throw new Error(`Error running spell ${spellId}`)
@@ -232,24 +235,22 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return { success, choice }
   }
 
-
-  const eventQAWeaviate = async ({
-    question, agentId
-  }: QAArgs) => {
+  const eventQAWeaviate = async ({ question, agentId }: QAArgs) => {
     const params = {
       question,
-      agentId
+      agentId,
     } as Record<string, any>
     const urlString = `${
-      import.meta.env.VITE_APP_API_URL ??
-      import.meta.env.API_ROOT_URL
+      import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
     }/eventQA`
     const url = new URL(urlString)
     for (let p in params) {
       url.searchParams.append(p, params[p])
     }
 
-    const response = await fetch(url.toString()).then(response => response.json())
+    const response = await fetch(url.toString()).then(response =>
+      response.json()
+    )
     return response
   }
 
@@ -275,6 +276,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     sendToAvatar,
     getSpell,
     completion,
+    getCurrentSpell,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
