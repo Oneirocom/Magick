@@ -1,9 +1,8 @@
 {
-  "name": "discord",
+  "name": "plugin-weaviate",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/plugin-discord/src",
+  "sourceRoot": "packages/plugin-weaviate/src",
   "projectType": "library",
-  "implicitDependencies": ["engine"],
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
