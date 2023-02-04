@@ -65,7 +65,7 @@ const EventHandler = ({ pubSub, tab }) => {
   } = events
 
   const saveSpell = async () => {
-    const currentSpell = spellRef.current
+    const currentSpell = spellRef.current?.data[0]
     const graph = serialize() as GraphData
 
     if (!currentSpell) return

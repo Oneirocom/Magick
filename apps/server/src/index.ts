@@ -28,9 +28,42 @@ import { worldManager } from '@magickml/engine'
 import { World } from './World'
 
 // the current file is in dist/apps/server, and we want to import the root package.json
-const packageJson = require('../../../package.json')
+let packageJson, localPackageJson, plugins;
 
-console.log('plugins', packageJson)
+try {
+  packageJson = require('../../../package.json')
+} catch (e) {
+  packageJson = {
+    dependencies: {}
+  }
+}
+
+try {
+  localPackageJson = require('../package.json')
+} catch (e) {
+  localPackageJson = {
+    dependencies: {}
+  }
+}
+
+try {
+  plugins = require('../plugins.json')
+} catch (e) {
+  plugins = {
+    dependencies: {}
+  }
+}
+
+const deps = {...packageJson.dependencies, ...localPackageJson.dependencies, ...plugins.dependencies}
+
+if(deps?.dependencies) {
+  Object.keys(deps.dependencies).forEach((key) => {
+    if(key.startsWith('@magickml/plugin-')) {
+      console.log('loading plugin', key)
+      require(key)
+    }
+  })
+}
 
 // log node.js errors
 process.on('uncaughtException', (err) => {

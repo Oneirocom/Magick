@@ -12,6 +12,8 @@ import { RunButtonControl } from './RunLastArguments'
 function install(editor: MagickEditor) {
   editor.on('componentregister', (_component: Component) => {
     const component = _component as unknown as MagickComponent<unknown>
+    console.log('***** 6')
+
     const worker = component.worker
     const builder = component.builder
 
