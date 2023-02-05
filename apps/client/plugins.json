@@ -1,0 +1,4 @@
+[
+    "@magickml/plugin-discord",
+    "@magickml/plugin-weaviate"
+]
