@@ -10,7 +10,7 @@ import {
   anySocket,
   stringSocket,
   MagickComponent
-} from '@magickml/engine'
+} from 'packages/engine/src/index'
 const info = 'Event Q&A is used for getting answers to questions based on the events stored.'
 
 type WorkerReturn = {

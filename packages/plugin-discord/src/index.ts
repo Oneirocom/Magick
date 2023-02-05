@@ -4,10 +4,8 @@
 //    2. Content
 //    3. Sender
 import type { Params } from '@feathersjs/feathers'
-import { Plugin } from "@magickml/engine"
+import { Plugin, pluginManager } from "packages/plugin-helper/plugin"
 import { DiscordAgentWindow } from "./components/agent.component"
-import { DiscordInput } from "./nodes/DiscordInput"
-import { DiscordOutput } from "./nodes/DiscordOutput"
 
 const DiscordInput = {
     create : async function (this, data) {
@@ -39,14 +37,16 @@ export class MessageService {
     }
   }
 
-  const DiscordPlugin = new Plugin({
+const DiscordPlugin = new Plugin({
     'name': 'DiscordPlugin', 
-    'nodes': [DiscordInput, DiscordOutput], 
+    'nodes': [], 
     'services': [MessageService], 
     'agentComponents' : [DiscordAgentWindow], 
     'windowComponents': [], 
     'setup': ()=>{console.log("DiscordPlugin")}, 
     'teardown': ()=>{console.log("DiscordPlugin")} })
 
-export { DiscordAgentWindow }
+
+
+export { DiscordAgentWindow , pluginManager}
 

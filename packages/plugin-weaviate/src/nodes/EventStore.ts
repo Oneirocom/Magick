@@ -14,7 +14,7 @@ import {
   MagickWorkerOutputs,
   CreateEventArgs,
   API_URL
-} from "@magickml/engine"
+} from "packages/engine/src/index"
 
 const info = 'Event Store is used to store events for an event and user'
 

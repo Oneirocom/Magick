@@ -4,7 +4,8 @@
     "module": "commonjs",
     "outDir": "../../dist/out-tsc",
     "paths": {
-      "@magickml/plugin-weaviate": ["packages/plugin-weaviate"]
+      "@magickml/plugin-weaviate": ["packages/plugin-weaviate"],
+      "@magickml/plugin-discord": ["packages/plugin-discord"]
     },
     "declaration": true,
     "types": ["node"],
