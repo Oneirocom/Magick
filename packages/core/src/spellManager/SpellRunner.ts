@@ -74,7 +74,7 @@ class SpellRunner {
   get outputData() {
     const rawOutputs = {}
     this.module.write(rawOutputs)
-    console.log('RAW OUTPURS', rawOutputs)
+    console.log('RAW OUTPUTS', rawOutputs)
     return this._formatOutputs(rawOutputs)
   }
 
