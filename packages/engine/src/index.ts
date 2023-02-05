@@ -19,6 +19,10 @@ export { default as NodeClickPlugin } from './plugins/nodeClickPlugin'
 export { default as worldManager } from './world/worldManager'
 export { default as runPython } from './functions/ProcessPython'
 
+export { SwitchControl } from './dataControls/SwitchControl'
+export { PlaytestControl } from './dataControls/PlaytestControl'
+export { TextInputControl } from './controls/TextInputControl'
+
 export * from './config'
 
 // TODO we can better organzie this folder structure with nested index aggregators
