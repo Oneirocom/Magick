@@ -56,7 +56,9 @@ const Inspector = props => {
 
   const toolbar = (
     <>
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+      <div
+        style={{ flex: 1, display: 'flex', alignItems: 'center', padding: 15 }}
+      >
         <Icon
           name={componentCategories[inspectorData?.category || 0]}
           style={{ marginRight: 'var(--extraSmall)' }}

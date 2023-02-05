@@ -3,9 +3,20 @@ import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
-  anySocket, EditorContext, InputControl, MagickComponent, MagickNode, MagickTask, MagickWorkerInputs,
-  MagickWorkerOutputs, NodeData,  Task, PlaytestControl, SwitchControl, TextInputControl
-} from "@magickml/engine"
+  anySocket,
+  EditorContext,
+  InputControl,
+  MagickComponent,
+  MagickNode,
+  MagickTask,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  NodeData,
+  Task,
+  PlaytestControl,
+  SwitchControl,
+  TextInputControl,
+} from '@magickml/engine'
 
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
@@ -38,8 +49,8 @@ export class DiscordInput extends MagickComponent<InputReturn> {
     this.category = 'I/O'
     this.info = info
     this.display = true
-    this.contextMenuName = 'Input'
-    this.displayName = 'Input'
+    this.contextMenuName = 'Discord Input'
+    this.displayName = 'Discord Input'
   }
 
   subscriptionMap: Record<string, Function> = {}

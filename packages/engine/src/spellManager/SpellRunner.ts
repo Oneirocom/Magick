@@ -41,7 +41,10 @@ class SpellRunner {
     // Set the interface that this runner will use when running workers
     this.magickInterface = magickInterface
 
-    this.magickInterface.getCurrentSpell = () => this.currentSpell
+    this.magickInterface.getCurrentSpell = () => {
+      console.log('GETTING CURRENT SPELL', this.currentSpell)
+      return this.currentSpell
+    }
 
     // We should probably load up here all the "modules" the spell needds to run
     // This would basicallyt be an array of spells pulled from the DB
@@ -155,7 +158,7 @@ class SpellRunner {
    * it for the next run.
    */
   private _resetTasks(): void {
-    console.log("Task Reset")
+    console.log('Task Reset')
     this.engine.tasks.forEach(t => t.reset())
   }
 
@@ -195,7 +198,7 @@ class SpellRunner {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
-      throw new Error('Infinite loop detected.  Exiting.') 
+      throw new Error('Infinite loop detected.  Exiting.')
     }
     // Set the current spell into the cache of spells that have run now.
     if (runSubspell) this.ranSpells.push(this.currentSpell.name)

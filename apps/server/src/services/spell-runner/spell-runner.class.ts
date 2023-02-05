@@ -3,10 +3,7 @@ import { KnexService } from '@feathersjs/knex'
 import { Spell } from '@magickml/engine'
 import otJson0 from 'ot-json0'
 import { app } from '../../app'
-import {
-  Id,
-  Params,
-} from '@feathersjs/feathers'
+import { Id, Params } from '@feathersjs/feathers'
 
 import type { Application } from '../../declarations'
 
@@ -27,8 +24,8 @@ interface CreateData {
 const getSpell = async (app, spellName: string) => {
   const spell = await app.service('spells').find({
     query: {
-      name: spellName,
-    },
+      name: spellName
+    }
   })
 
   return spell.data[0]
@@ -41,8 +38,6 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
   ServiceParams,
   SpellRunnerPatch
 > {
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async get(id: Id, params?: SpellRunnerParams): Promise<any | {}> {
     if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
@@ -67,10 +62,7 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
   // TODO: Fix this
   // @ts-ignore
-  async create (
-    data: CreateData,
-    params?: SpellRunnerParams
-  ): Promise<Record<string, unknown>> {
+  async create(data: CreateData, params?: SpellRunnerParams): Promise<Record<string, unknown>> {
     if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
 
