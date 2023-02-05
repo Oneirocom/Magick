@@ -9,13 +9,11 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  ModuleComponent,
 } from '../../types'
 import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'
 import { Module } from './module'
-interface ModuleComponent extends Component {
-  run: Function
-}
 
 export type ModuleSocketType = {
   name: SocketNameType
@@ -39,22 +37,6 @@ export class ModuleManager {
     this.outputs = new Map()
     this.triggerIns = new Map()
     this.triggerOuts = new Map()
-  }
-
-  addModule(module: ModuleType) {
-    this.modules[module.name] = module
-  }
-
-  setModules(modules: Record<string, ModuleType>) {
-    this.modules = modules
-  }
-
-  updateModule(module: ModuleType) {
-    this.modules[module.name as string] = module
-  }
-
-  deleteModule(module: ModuleType) {
-    delete this.modules[module.name as string]
   }
 
   getSockets(
