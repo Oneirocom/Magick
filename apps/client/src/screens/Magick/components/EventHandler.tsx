@@ -34,8 +34,9 @@ const EventHandler = ({ pubSub, tab }) => {
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
   useEffect(() => {
-    if (!spell) return
-    spellRef.current = spell
+    if (!spell || !spell?.data[0]) return
+    console.log('SPELL IN HANDLER', spell)
+    spellRef.current = spell.data[0]
   }, [spell])
 
   const { serialize, getEditor, undo, redo, del } = useEditor()
@@ -65,7 +66,7 @@ const EventHandler = ({ pubSub, tab }) => {
   } = events
 
   const saveSpell = async () => {
-    const currentSpell = spellRef.current?.data[0]
+    const currentSpell = spellRef.current
     const graph = serialize() as GraphData
 
     if (!currentSpell) return

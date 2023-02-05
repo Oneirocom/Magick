@@ -92,7 +92,7 @@ const EditorProvider = ({ children }) => {
     const spell = JSON.parse(JSON.stringify(_spell))
 
     console.log('Loading graph in build editor', spell)
-    const graph = spell.data[0].graph
+    const graph = spell.graph
     console.log('graph', graph)
     newEditor?.loadGraph(graph)
   }
@@ -206,7 +206,7 @@ const RawEditor = ({ tab, children }) => {
         <div
           ref={el => {
             if (el && !loaded) {
-              buildEditor(el, spell, tab, reteInterface)
+              buildEditor(el, spell.data[0], tab, reteInterface)
               setLoaded(true)
             }
           }}

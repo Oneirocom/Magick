@@ -69,7 +69,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
   useEffect(() => {
     if (!spellData) return
-    spellRef.current = spellData
+    spellRef.current = spellData.data[0]
   }, [spellData])
 
   useEffect(() => {
@@ -108,7 +108,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
         case 'debugConsole':
           return <DebugConsole {...props} />
         case 'eventManager':
-          return <EventManagerWindow {...props} />
+          return <EventManagerWindow />
         case 'agentManager':
           return <AgentManagerWindow />
         case 'avatar':
