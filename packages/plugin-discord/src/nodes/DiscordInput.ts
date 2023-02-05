@@ -4,8 +4,9 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   anySocket, EditorContext, InputControl, MagickComponent, MagickNode, MagickTask, MagickWorkerInputs,
-  MagickWorkerOutputs, NodeData, PlaytestControl, SwitchControl, Task, TextInputControl
-} from '@magickml/engine'
+  MagickWorkerOutputs, NodeData,  Task, PlaytestControl, SwitchControl, TextInputControl
+} from "@magickml/engine"
+
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
 type InputReturn = {

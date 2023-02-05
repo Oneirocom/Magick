@@ -6,11 +6,13 @@ export * from "./nodes/EventStore";
 export * from "./nodes/EventRecall";
 export * from "./nodes/EventQA";
 
-export const WeaviatePlugin = new Plugin({
-    'name': 'WeaviatePlugin', 
-    'nodes': [ EventStore, EventRecall], 
-    'services': [], 
-    'agentComponents' : [], 
-    'windowComponents': [], 
-    'setup': ()=>{console.log("HUII")}, 
-    'teardown': ()=>{console.log("HUIII")} })
+const WeaviatePlugin = new Plugin({
+    name: 'WeaviatePlugin', 
+    nodes: [ EventStore, EventRecall], 
+    services: [], // TODO: move event services here
+    agentComponents: [], 
+    windowComponents: [], // TODO: move event view here
+    setup: ()=>{console.log("HUII")}, 
+    teardown: ()=>{console.log("HUIII")} })
+
+export default WeaviatePlugin;
