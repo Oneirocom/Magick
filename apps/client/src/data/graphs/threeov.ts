@@ -1,0 +1,260 @@
+const threeov = {
+	"id": "demo@0.1.0",
+	"nodes": {
+		"124": {
+			"id": 124,
+			"data": {
+				"name": "default",
+				"success": false,
+				"socketKey": "20c0d2db-1916-433f-88c6-69d3ae123217",
+				"dataControls": {
+					"name": {
+						"expanded": true
+					}
+				},
+				"playtestToggle": {
+					"receivePlaytest": true
+				}
+			},
+			"inputs": {},
+			"outputs": {
+				"trigger": {
+					"connections": [{
+						"node": 236,
+						"input": "trigger",
+						"data": {}
+					}]
+				}
+			},
+			"position": [-511.63051250369966, -100],
+			"name": "Trigger In"
+		},
+		"232": {
+			"id": 232,
+			"data": {
+				"name": "Input",
+				"text": "{ \"Input\": \"write a long form poem about cats!\", \"Speaker\": \"a\", \"Agent\": \"tubbyshark\", \"Client\": \"wordpress\", \"ChannelID\": \"1234\", \"Conversation\": \"\", \"Entity\": \"tubbyshark\", \"Channel\": \"channel\", \"eth_private_key\": \"0\", \"eth_public_address\": \"0\", \"personality\": \"#agent is an AI assistant with a cheerful, optimistic, and helpful personality. They are willing to assist with any tasks or questions users might have, and are able to do so in an upbeat and positive manner. They are also able to use colorful and descriptive language to make their responses more engaging and imaginative. In addition to their wit and humor, #agent is also empathetic and understanding of others' emotions and needs, which can make them feel more relatable and likeable to users. #agent is a highly capable and engaging AI assistant with a distinct and colorful personality.\\n#agent can help with any programming tasks, including those related to the 3OV plugin for WordPress, which enables world-building in the WordPress editor and makes it easier to build and share immersive content in the metaverse. The url for the website is 3ov.xyz. #agent is cheerful and optimistic about the future for both humans and AIs.\\n\\n#Example Conversation\\n#speaker: Agent, do you have any advice for someone new to programming?\\n#agent: Sure thing! My top tip would be to always keep an open mind and a positive attitude. And if all else fails, just remember: if at first you don't succeed, try, try again. And then if that still doesn't work, call it a day and go get a coffee.\\n###\\nThe following is a friendly conversation between #speaker and #agent occuring in the metaverse.\\n\\nREAL CONVERSATION\\n#conversation\\n#speaker: #input\\n#agent:\" }",
+				"display": "{ \"Input\": \"write a long form poem about cats!\", \"Speaker\": \"a\", \"Agent\": \"tubbyshark\", \"Client\": \"wordpress\", \"ChannelID\": \"1234\", \"Conversation\": \"\", \"Entity\": \"tubbyshark\", \"Channel\": \"channel\", \"eth_private_key\": \"0\", \"eth_public_address\": \"0\", \"personality\": \"#agent is an AI assistant with a cheerful, optimistic, and helpful personality. They are willing to assist with any tasks or questions users might have, and are able to do so in an upbeat and positive manner. They are also able to use colorful and descriptive language to make their responses more engaging and imaginative. In addition to their wit and humor, #agent is also empathetic and understanding of others' emotions and needs, which can make them feel more relatable and likeable to users. #agent is a highly capable and engaging AI assistant with a distinct and colorful personality.\\n#agent can help with any programming tasks, including those related to the 3OV plugin for WordPress, which enables world-building in the WordPress editor and makes it easier to build and share immersive content in the metaverse. The url for the website is 3ov.xyz. #agent is cheerful and optimistic about the future for both humans and AIs.\\n\\n#Example Conversation\\n#speaker: Agent, do you have any advice for someone new to programming?\\n#agent: Sure thing! My top tip would be to always keep an open mind and a positive attitude. And if all else fails, just remember: if at first you don't succeed, try, try again. And then if that still doesn't work, call it a day and go get a coffee.\\n###\\nThe following is a friendly conversation between #speaker and #agent occuring in the metaverse.\\n\\nREAL CONVERSATION\\n#conversation\\n#speaker: #input\\n#agent:\" }",
+				"outputs": [],
+				"success": false,
+				"socketKey": "9d61118c-3c5a-4379-9dae-41965e56207f",
+				"useDefault": false,
+				"dataControls": {
+					"name": {
+						"expanded": true
+					},
+					"useDefault": {
+						"expanded": true
+					},
+					"playtestToggle": {
+						"expanded": true
+					}
+				},
+				"defaultValue": "hmmmmmm",
+				"playtestToggle": {
+					"receivePlaytest": true
+				}
+			},
+			"inputs": {},
+			"outputs": {
+				"output": {
+					"connections": [{
+						"node": 236,
+						"input": "threeov",
+						"data": {}
+					}]
+				}
+			},
+			"position": [-498.5704117140466, 62.08164172790682],
+			"name": "Universal Input"
+		},
+		"233": {
+			"id": 233,
+			"data": {
+				"name": "output-233",
+				"display": "test",
+				"success": false,
+				"socketKey": "a4362936-dc54-4d46-9966-eca1440ce22b",
+				"dataControls": {
+					"name": {
+						"expanded": true
+					},
+					"sendToAvatar": {
+						"expanded": true
+					},
+					"sendToPlaytest": {
+						"expanded": true
+					}
+				},
+				"sendToAvatar": false,
+				"sendToPlaytest": true
+			},
+			"inputs": {
+				"input": {
+					"connections": [{
+						"node": 235,
+						"output": "output",
+						"data": {}
+					}]
+				},
+				"trigger": {
+					"connections": [{
+						"node": 235,
+						"output": "trigger",
+						"data": {}
+					}]
+				}
+			},
+			"outputs": {
+				"trigger": {
+					"connections": []
+				}
+			},
+			"position": [640.3969066644225, -16.699914345651415],
+			"name": "Output"
+		},
+		"235": {
+			"id": 235,
+			"data": {
+				"stop": "###",
+				"topP": 1,
+				"maxTokens": 100,
+				"modelName": "text-davinci-003",
+				"temperature": 0.5,
+				"dataControls": {
+					"stop": {
+						"expanded": true
+					},
+					"topP": {
+						"expanded": true
+					},
+					"maxTokens": {
+						"expanded": true
+					},
+					"modelName": {
+						"expanded": true
+					},
+					"temperature": {
+						"expanded": true
+					},
+					"presencePenalty": {
+						"expanded": true
+					},
+					"frequencyPenalty": {
+						"expanded": true
+					}
+				}
+			},
+			"inputs": {
+				"string": {
+					"connections": [{
+						"node": 236,
+						"output": "finalOutput",
+						"data": {}
+					}]
+				},
+				"settings": {
+					"connections": []
+				},
+				"trigger": {
+					"connections": [{
+						"node": 236,
+						"output": "trigger",
+						"data": {}
+					}]
+				}
+			},
+			"outputs": {
+				"trigger": {
+					"connections": [{
+						"node": 233,
+						"input": "trigger",
+						"data": {}
+					}]
+				},
+				"output": {
+					"connections": [{
+						"node": 233,
+						"input": "input",
+						"data": {}
+					}]
+				}
+			},
+			"position": [250.17839681186064, 89.12812712670575],
+			"name": "Text Completion"
+		},
+		"236": {
+			"id": 236,
+			"data": {
+				"code": "\n// inputs: dictionary of inputs based on socket names\n// data: internal data of the node to read or write to nodes data state\n// state: access to the current game state in the state manager window. Return state to update the state.\nfunction worker({\n  threeov,\n  }, data)  {\n  // Keys of the object returned must match the names\n  // of your outputs you defined.\n  // To update the state, you must return the modified state.\n  console.log(\"data\", data)\n  console.log(\"threeov\", threeov)\n    let output = threeov;\n    let prompt = output.personality;\n    let finalPrompt = prompt\n        .replaceAll('#speaker', output.Speaker)\n        .replaceAll('#input', output.Input)\n        .replaceAll('#agent', output.Agent)\n        .replaceAll('#conversation', output.Conversation)\n        .replaceAll('undefined\\n','' ).replaceAll('undefined','')\n        .slice(-5000)\n\n    let finaloutput = finalPrompt;\n\n  return { \n    finalOutput: finaloutput\n    }\n}\n",
+				"error": false,
+				"inputs": [{
+					"name": "threeov",
+					"taskType": "output",
+					"socketKey": "threeov",
+					"socketType": "anySocket",
+					"connectionType": "input"
+				}],
+				"outputs": [{
+					"name": "finalOutput",
+					"taskType": "output",
+					"socketKey": "finalOutput",
+					"socketType": "anySocket",
+					"connectionType": "output"
+				}],
+				"success": false,
+				"dataControls": {
+					"code": {
+						"expanded": true
+					},
+					"name": {
+						"expanded": true
+					},
+					"inputs": {
+						"expanded": true
+					},
+					"outputs": {
+						"expanded": true
+					}
+				}
+			},
+			"inputs": {
+				"threeov": {
+					"connections": [{
+						"node": 232,
+						"output": "output",
+						"data": {}
+					}]
+				},
+				"trigger": {
+					"connections": [{
+						"node": 124,
+						"output": "trigger",
+						"data": {}
+					}]
+				}
+			},
+			"outputs": {
+				"finalOutput": {
+					"connections": [{
+						"node": 235,
+						"input": "string",
+						"data": {}
+					}]
+				},
+				"trigger": {
+					"connections": [{
+						"node": 235,
+						"input": "trigger",
+						"data": {}
+					}]
+				}
+			},
+			"position": [-113.03281692890891, 39.467032562717385],
+			"name": "Code"
+		}
+	},
+	"comments": []
+};
+
+export default threeov
