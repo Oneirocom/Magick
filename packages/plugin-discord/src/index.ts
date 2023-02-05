@@ -4,49 +4,18 @@
 //    2. Content
 //    3. Sender
 import type { Params } from '@feathersjs/feathers'
-import { Plugin } from "@magickml/engine"
+import { Plugin } from "../../engine/src" // TODO: fix me
 import { DiscordAgentWindow } from "./components/agent.component"
 import { DiscordInput } from "./nodes/DiscordInput"
 import { DiscordOutput } from "./nodes/DiscordOutput"
 
-const DiscordInput = {
-    create : async function (this, data) {
-        const message = {
-            entityID: data.entityID,
-            content: data.content,
-            sender: data.sender
-        }
-        return message
-    },
-    find: async function (this,data) {
-        return this.arr_store
-    }
+const DiscordPlugin = new Plugin({
+  'name': 'DiscordPlugin', 
+  'nodes': [DiscordInput, DiscordOutput], 
+  'services': [], 
+  'agentComponents' : [DiscordAgentWindow], 
+  'windowComponents': [], 
+  'setup': ()=>{console.log("DiscordPlugin")}, 
+  'teardown': ()=>{console.log("DiscordPlugin")} })
 
-}
-
-export class MessageService {
-    async find(params: Params) {
-      return [
-        {
-          id: 1,
-          text: 'Message 1'
-        },
-        {
-          id: 2,
-          text: 'Message 2'
-        }
-      ]
-    }
-  }
-
-  const DiscordPlugin = new Plugin({
-    'name': 'DiscordPlugin', 
-    'nodes': [DiscordInput, DiscordOutput], 
-    'services': [MessageService], 
-    'agentComponents' : [DiscordAgentWindow], 
-    'windowComponents': [], 
-    'setup': ()=>{console.log("DiscordPlugin")}, 
-    'teardown': ()=>{console.log("DiscordPlugin")} })
-
-export { DiscordAgentWindow }
-
+export default DiscordPlugin;

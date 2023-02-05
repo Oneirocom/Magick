@@ -9,8 +9,12 @@ import App from './App'
 import AppProviders from './contexts/AppProviders'
 import { store } from './state/store'
 
-import * as pluginDiscord from '@magickml/plugin-discord'
-import * as pluginWeaviate from '@magickml/plugin-weaviate'
+import DiscordPlugin from '@magickml/plugin-discord'
+import WeaviatePlugin from '@magickml/plugin-weaviate'
+
+console.log('loading plugins')
+console.log('DiscordPlugin', DiscordPlugin)
+console.log('WeaviatePlugin', WeaviatePlugin)
 
 const container = document.getElementById('root')
 const root = createRoot(container!) // createRoot(container!) if you use TypeScript
