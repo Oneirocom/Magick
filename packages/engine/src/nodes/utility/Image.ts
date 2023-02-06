@@ -31,7 +31,6 @@ export class Image extends MagickComponent<any> {
     this.category = 'utility'
     this.info = info
     this.display = true
-    this.id_image = uuidv4()
   }
 
   builder(node: MagickNode) {
