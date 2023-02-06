@@ -1,4 +1,3 @@
-import { Box } from '@mui/material'
 import CodeControl from './CodeControl'
 import css from './datacontrols.module.css'
 import Info from './Info'
@@ -74,7 +73,7 @@ const DataControls = ({
         if (control.component === 'info' && !control?.data?.info) return null
 
         return (
-          <Box
+          <div
             key={control.name + nodeId + key}
             sx={{
               padding: '15px',
@@ -85,7 +84,7 @@ const DataControls = ({
               {control.name || key}
             </p>
             <Component key={nodeId + control.name} {...controlProps} />
-          </Box>
+          </div>
         )
       })}
     </>

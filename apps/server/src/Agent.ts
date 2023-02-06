@@ -17,8 +17,6 @@ type StartDiscordArgs = {
   discord_starting_words?: string
   discord_bot_name_regex?: string
   discord_bot_name?: string
-  discord_empty_responses?: string
-  discord_spell_handler_incoming?: string
   use_voice?: boolean
   voice_provider?: string
   voice_character?: string
@@ -39,8 +37,6 @@ type EntityData = {
   discord_starting_words?: string
   discord_bot_name_regex?: string
   discord_bot_name?: string
-  discord_empty_responses?: string
-  discord_spell_handler_incoming?: string
   use_voice?: boolean
   voice_provider?: string
   voice_character?: string
@@ -141,8 +137,6 @@ export class Agent {
     discord_starting_words,
     discord_bot_name_regex,
     discord_bot_name,
-    discord_empty_responses,
-    discord_spell_handler_incoming,
     use_voice,
     voice_provider,
     voice_character,
@@ -165,7 +159,6 @@ export class Agent {
       discord_starting_words,
       discord_bot_name_regex,
       discord_bot_name,
-      discord_empty_responses,
       spellHandler,
       use_voice,
       voice_provider,
