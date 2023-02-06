@@ -3,7 +3,6 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/plugin-weaviate/src",
   "projectType": "library",
-  "implicitDependencies": ["engine"],
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
