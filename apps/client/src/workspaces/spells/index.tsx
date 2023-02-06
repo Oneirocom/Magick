@@ -11,17 +11,14 @@ import EditorWindow from './windows/EditorWindow/'
 import Inspector from './windows/InspectorWindow'
 import Playtest from './windows/PlaytestWindow'
 import AvatarWindow from './windows/AvatarWindow'
-import StateManager from '../../workspaces/spells/windows/StateManagerWindow'
 
 import TextEditor from './windows/TextEditorWindow'
 import DebugConsole from './windows/DebugConsole'
 
-import { Spell, MagickComponent } from '@magickml/engine'
+import { Spell } from '@magickml/engine'
 import { usePubSub } from '../../contexts/PubSubProvider'
-import EventManagerWindow from './windows/EventManager'
 import { RootState } from '../../state/store'
 import { useFeathers } from '../../contexts/FeathersProvider'
-import AgentManagerWindow from '../agents/windows/AgentManagerWindow'
 import React from 'react'
 
 const Workspace = ({ tab, tabs, pubSub }) => {
@@ -69,7 +66,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
   useEffect(() => {
     if (!spellData) return
-    spellRef.current = spellData
+    spellRef.current = spellData.data[0]
   }, [spellData])
 
   useEffect(() => {
@@ -95,8 +92,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
       }
       const component = node.getComponent()
       switch (component) {
-        case 'stateManager':
-          return <StateManager {...props} />
         case 'playtest':
           return <Playtest {...props} />
         case 'inspector':
@@ -107,10 +102,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
           return <EditorWindow {...props} />
         case 'debugConsole':
           return <DebugConsole {...props} />
-        case 'eventManager':
-          return <EventManagerWindow {...props} />
-        case 'agentManager':
-          return <AgentManagerWindow />
         case 'avatar':
           return <AvatarWindow {...props} />
         default:

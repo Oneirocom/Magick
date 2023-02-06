@@ -92,11 +92,12 @@ type AddSockets = {
 
 const addSockets = ({
   node,
-  sockets,
+  sockets: _sockets,
   connectionType,
   taskType = 'output',
   useSocketName = false,
 }: AddSockets) => {
+  const sockets = _sockets.filter(socket => !socket.hide)
   const uniqueCount = new Set(sockets.map(i => i.name)).size
   const currentConnection = node.data[
     (connectionType + 's') as ThroughPutType

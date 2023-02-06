@@ -4,7 +4,6 @@ import { DisplayControl } from './DisplayControl'
 function install(editor) {
   editor.on('componentregister', component => {
     const worker = component.worker
-    console.log('***** 4')
 
     const builder = component.builder
 

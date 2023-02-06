@@ -7,8 +7,6 @@ function install(
   editor: IRunContextEditor,
   { server = false, throwError }: DebuggerArgs
 ) {
-  console.log('installing debugger plugin', { server })
-
   editor.on('componentregister', (component: any) => {
     const worker = component.worker
 

@@ -25,15 +25,22 @@ export interface UserSpellArgs {
   spellId: string
 }
 
+export interface SpellData {
+  limit: number
+  skip: number
+  total: number
+  data: Spell[]
+}
+
 export const spellApi = rootApi.injectEndpoints({
   endpoints: builder => ({
-    getSpells: builder.query<Spell[], void>({
+    getSpells: builder.query<SpellData, void>({
       providesTags: ['Spells'],
       query: () => ({
         url: `spells`,
       }),
     }),
-    getSpell: builder.query<Spell, UserSpellArgs>({
+    getSpell: builder.query<SpellData, UserSpellArgs>({
       providesTags: ['Spell'],
       query: ({ spellId }) => {
         return {
@@ -84,8 +91,7 @@ export const spellApi = rootApi.injectEndpoints({
         if (!spellCopy.agents || Object.keys(spellCopy.agents).length === 0)
           spellCopy.agents = []
 
-        console.log('spellCopy is', spellCopy)
-
+        console.log('SAVING SPELL')
         const baseQueryOptions = {
           url: 'spells/' + spell.id,
           body: spellCopy,
