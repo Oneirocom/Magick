@@ -37,7 +37,7 @@ export class MyNode extends Node {
         </div>
         <div className={css['connections-container']}>
           {html != undefined && <div dangerouslySetInnerHTML={{ __html: html }} />}
-          {img_url != undefined && <Upload output={outputs} />}
+          {img_url != undefined && <Upload output={outputs} id_image={img_url} />}
           {inputs.length > 0 && (
             <div className={css['connection-container']}>
               {inputs.map(input => (
