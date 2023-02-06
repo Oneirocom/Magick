@@ -111,7 +111,7 @@
     "regenerator-runtime": "^0.13.11",
     "rete": "github:Oneirocom/rete",
     "rete-connection-plugin": "^0.9.0",
-    "rete-context-menu-plugin": "^0.6.0",
+    "rete-context-menu-plugin": "github:Oneirocom/context-menu-plugin",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "serp": "^2.2.2",
     "serve-favicon": "^2.5.0",
@@ -207,19 +207,5 @@
     "vite": "^4.0.4",
     "vite-plugin-dts": "~1.7.1",
     "vitest": "^0.25.8"
-  },
-  "overrides": {
-    "os": {
-      "linux": {
-        "dependencies": {
-          "@esbuild/linux-x64": "^0.17.4"
-        }
-      },
-      "darwin": {
-        "dependencies": {
-          "@esbuild/darwin-x64": "^0.17.4"
-        }
-      }
-    }
   }
 }
