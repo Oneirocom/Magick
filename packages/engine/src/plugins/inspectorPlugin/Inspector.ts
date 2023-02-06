@@ -34,6 +34,7 @@ export class Inspector {
   dataControls: Map<string, DataControl>
   category: string
   info: string
+  img: string
 
   constructor({ component, editor, node }: InspectorConstructor) {
     this.component = component
@@ -60,7 +61,7 @@ export class Inspector {
     control.component = this.component
     control.id = uuidv4()
 
-    // If we gave a dewfault value and there isnt already one on the node, add it.
+    // If we gave a default value and there isnt already one on the node, add it.
     if (control.defaultValue && !this.node.data[control.dataKey])
       this.node.data[control.dataKey] = control.defaultValue
 
@@ -73,6 +74,17 @@ export class Inspector {
     return this
   }
 
+  add_html(html: string){
+    this.node.data["html"] = html
+  }
+
+  add_img(img_url: string){
+    this.node.data["image"] = img_url
+  }
+
+  add_func(func: ()=>{}){
+    this.node.data["func"] = func
+  }
   handleSockets(
     sockets: DataSocketType[],
     control: DataControlData,
