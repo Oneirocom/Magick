@@ -8,7 +8,7 @@ import Editor from '@monaco-editor/react'
 
 import Window from '../../../../components/Window/Window'
 import css from '../../../../screens/Magick/magick.module.css'
-import SpeechUtils from '../../../../speechUtils'
+import SpeechUtils from '../../../../utils/speechUtils'
 import { usePubSub } from '../../../../contexts/PubSubProvider'
 import Avatar from './Avatar'
 import { useAppSelector } from '../../../../state/hooks'

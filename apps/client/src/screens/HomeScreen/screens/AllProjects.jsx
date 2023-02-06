@@ -43,7 +43,7 @@ const AllProjects = ({
         unpadded
       >
         <Scrollbars>
-          {spells.map((spell, i) => (
+          {spells.data.map((spell, i) => (
             <ProjectRow
               key={i}
               spell={spell}

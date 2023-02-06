@@ -1,4 +1,4 @@
-import { GraphData, EditorContext, Spell, MagickEditor } from '@magickml/core'
+import { GraphData, EditorContext, Spell, MagickEditor } from '@magickml/engine'
 import { initEditor, zoomAt } from '@magickml/client-core'
 import React, {
   useRef,
@@ -50,29 +50,16 @@ const Context = createContext({
   redo: () => {},
   del: () => {},
   centerNode: (nodeId: number): void => {},
-  getDirtyGraph: (): boolean => false,
-  setDirtyGraph: (isDirty: boolean): void => {},
 })
 
 export const useEditor = () => useContext(Context)
 
 const EditorProvider = ({ children }) => {
   const [editor, setEditorState] = useState<MagickEditor | null>(null)
-  const [_dirtyGraph, _setDirtyGraph] = useState<boolean>(true)
   const editorRef = useRef<MagickEditor | null>(null)
-  const dirtyRef = useRef<boolean>(true)
   const FeathersContext = useFeathers()
   const client = FeathersContext?.client
   const pubSub = usePubSub()
-
-  const setDirtyGraph = (isDirty: boolean) => {
-    dirtyRef.current = isDirty
-    _setDirtyGraph(isDirty)
-  }
-
-  const getDirtyGraph = () => {
-    return dirtyRef.current
-  }
 
   const setEditor = editor => {
     editorRef.current = editor
@@ -104,9 +91,10 @@ const EditorProvider = ({ children }) => {
     // copy spell in case it is read onl
     const spell = JSON.parse(JSON.stringify(_spell))
 
-    console.log('Loading graph in build editor')
-    console.log(spell)
-    newEditor?.loadGraph(spell.graph)
+    console.log('Loading graph in build editor', spell)
+    const graph = spell.graph
+    console.log('graph', graph)
+    newEditor?.loadGraph(graph)
   }
 
   const run = () => {
@@ -151,6 +139,7 @@ const EditorProvider = ({ children }) => {
 
   const loadGraph = graph => {
     if (!editorRef.current) return
+    console.log('loading graph', graph)
     editorRef.current.loadGraph(graph)
   }
 
@@ -174,8 +163,6 @@ const EditorProvider = ({ children }) => {
     del,
     setContainer,
     centerNode,
-    getDirtyGraph,
-    setDirtyGraph,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
@@ -219,7 +206,7 @@ const RawEditor = ({ tab, children }) => {
         <div
           ref={el => {
             if (el && !loaded) {
-              buildEditor(el, spell, tab, reteInterface)
+              buildEditor(el, spell.data[0], tab, reteInterface)
               setLoaded(true)
             }
           }}

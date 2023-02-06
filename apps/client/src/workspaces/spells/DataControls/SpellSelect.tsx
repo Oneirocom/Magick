@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack'
-import { GraphData } from '@magickml/core'
+import { GraphData } from '@magickml/engine'
 import { useEffect } from 'react'
 
 import { useAppDispatch } from '../../../state/hooks'
@@ -33,7 +33,7 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
 
   const optionArray = () => {
     if (!spells) return
-    return spells.map((module, index) => ({
+    return spells.data.map((module, index) => ({
       value: module.name,
       label: module.name,
     }))

@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
-import { GraphData, Spell } from '@magickml/core'
+import { useSnackbar } from 'notistack'
+import { useSelector } from 'react-redux'
+import { GraphData, Spell } from '@magickml/engine'
 
 import {
   useSaveSpellMutation,
@@ -9,10 +11,8 @@ import {
 import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
 import { useEditor } from '../../../workspaces/contexts/EditorProvider'
 import { diff } from '../../../utils/json0'
-import { useSnackbar } from 'notistack'
 import { useFeathers } from '../../../contexts/FeathersProvider'
 import { RootState } from '../../../state/store'
-import { useSelector } from 'react-redux'
 
 const EventHandler = ({ pubSub, tab }) => {
   // only using this to handle events, so not rendering anything with it.
@@ -32,21 +32,14 @@ const EventHandler = ({ pubSub, tab }) => {
   const spellRef = useRef<Spell | null>(null)
 
   const FeathersContext = useFeathers()
-  const client = FeathersContext?.client
+  const client = FeathersContext.client
   useEffect(() => {
-    if (!spell) return
-    spellRef.current = spell
+    if (!spell || !spell?.data[0]) return
+    console.log('SPELL IN HANDLER', spell)
+    spellRef.current = spell.data[0]
   }, [spell])
 
-  const {
-    serialize,
-    getEditor,
-    undo,
-    redo,
-    del,
-    getDirtyGraph,
-    setDirtyGraph,
-  } = useEditor()
+  const { serialize, getEditor, undo, redo, del } = useEditor()
 
   const { events, subscribe } = pubSub
 
@@ -56,15 +49,12 @@ const EventHandler = ({ pubSub, tab }) => {
     $REDO,
     $SAVE_SPELL,
     $SAVE_SPELL_DIFF,
-    $CREATE_STATE_MANAGER,
     $CREATE_SEARCH_CORPUS,
-    $CREATE_AGENT_MANAGER,
     $CREATE_AVATAR_WINDOW,
     $CREATE_MESSAGE_REACTION_EDITOR,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
     $CREATE_CONSOLE,
-    $CREATE_EVENT_MANAGER,
     $CREATE_TEXT_EDITOR,
     $SERIALIZE,
     $EXPORT,
@@ -75,6 +65,11 @@ const EventHandler = ({ pubSub, tab }) => {
   const saveSpell = async () => {
     const currentSpell = spellRef.current
     const graph = serialize() as GraphData
+
+    if (!currentSpell) return
+
+    console.log('currentSpell', currentSpell)
+    console.log('graph', graph)
 
     const response = await saveSpellMutation({
       ...currentSpell,
@@ -103,62 +98,33 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
-    console.log('updated spell', updatedSpell)
-    console.log('current spell', currentSpell)
-    const jsonDiff = diff(currentSpell, updatedSpell)
 
-    console.log('json diff', jsonDiff)
+    const jsonDiff = diff(currentSpell, updatedSpell)
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
 
-    const response = await saveDiff({
-      name: currentSpell.name,
-      diff: jsonDiff,
-    })
-
-    setDirtyGraph(true)
-
-    // if (preferences.autoSave) {
-    //   if ('error' in response) {
-    //     enqueueSnackbar('Error saving spell', {
-    //       variant: 'error',
-    //     })
-    //     return
-    //   }
-
-    //   enqueueSnackbar('Spell saved', {
-    //     variant: 'success',
-    //   })
-    // }
-
-    // if (feathersFlag) {
-    //   try {
-    //     await client.service('spell-runner').update(currentSpell.name, {
-    //       diff: jsonDiff,
-    //     })
-    //     enqueueSnackbar('Spell saved', {
-    //       variant: 'success',
-    //     })
-    //   } catch {
-    //     enqueueSnackbar('Error saving spell', {
-    //       variant: 'error',
-    //     })
-    //     return
-    //   }
-    // }
-  }
-
-  const createStateManager = () => {
-    createOrFocus(windowTypes.STATE_MANAGER, 'State Manager')
+    try {
+      await client.service('spell-runner').update(currentSpell.name, {
+        diff: jsonDiff,
+      })
+      await saveDiff({
+        name: currentSpell.name,
+        diff: jsonDiff,
+      })
+      enqueueSnackbar('Spell saved', {
+        variant: 'success',
+      })
+    } catch {
+      enqueueSnackbar('Error saving spell', {
+        variant: 'error',
+      })
+      return
+    }
   }
 
   const createSearchCorpus = () => {
     createOrFocus(windowTypes.SEARCH_CORPUS, 'Search Corpus')
-  }
-
-  const createEntityManager = () => {
-    createOrFocus(windowTypes.AGENT_MANAGER, 'Agent Manager')
   }
 
   const createAvatarWindow = () => {
@@ -188,10 +154,6 @@ const EventHandler = ({ pubSub, tab }) => {
     createOrFocus(windowTypes.CONSOLE, 'Console')
   }
 
-  const createEventManager = () => {
-    createOrFocus(windowTypes.EVENT_MANAGER, 'Event Manager')
-  }
-
   const onSerialize = () => {
     // eslint-disable-next-line no-console
     console.log(serialize())
@@ -203,9 +165,7 @@ const EventHandler = ({ pubSub, tab }) => {
 
     console.log('RUNNING PROCESS')
 
-    editor.runProcess(() => {
-      setDirtyGraph(false)
-    })
+    editor.runProcess()
   }
 
   const onUndo = () => {
@@ -255,16 +215,13 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
-    [$CREATE_STATE_MANAGER(tab.id)]: createStateManager,
     [$CREATE_SEARCH_CORPUS(tab.id)]: createSearchCorpus,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,
-    [$CREATE_AGENT_MANAGER(tab.id)]: createEntityManager,
     [$CREATE_AVATAR_WINDOW(tab.id)]: createAvatarWindow,
     [$CREATE_PLAYTEST(tab.id)]: createPlaytest,
     [$CREATE_INSPECTOR(tab.id)]: createInspector,
     [$CREATE_TEXT_EDITOR(tab.id)]: createTextEditor,
     [$CREATE_CONSOLE(tab.id)]: createConsole,
-    [$CREATE_EVENT_MANAGER(tab.id)]: createEventManager,
     [$SERIALIZE(tab.id)]: onSerialize,
     [$EXPORT(tab.id)]: onExport,
     [$CLOSE_EDITOR(tab.id)]: onCloseEditor,

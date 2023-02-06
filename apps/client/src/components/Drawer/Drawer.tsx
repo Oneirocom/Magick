@@ -19,6 +19,8 @@ import HubIcon from '@mui/icons-material/Hub'
 import ManageSearchIcon from '@mui/icons-material/ManageSearch'
 import Card from '@mui/material/Card'
 
+import MagickLogo from './Magick-purple-logo.png'
+
 const drawerWidth = 240
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -102,7 +104,6 @@ const DrawerItem = ({ Icon, open, text, active, onClick = () => {} }) => (
 )
 
 export default function MiniDrawer({ children }) {
-  const theme = useTheme()
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -119,13 +120,17 @@ export default function MiniDrawer({ children }) {
   return (
     <div style={{ display: 'flex', height: '100%' }}>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader open={open}>
-          <Card></Card>
-          <IconButton onClick={toggleDrawer}>
-            {open ? <ChevronLeftIcon /> : <MenuIcon />}
+        <DrawerHeader open={open} onClick={toggleDrawer} sx={{justifyContent: open ? "normal" : "flex-end"}}>
+        {!open ? <IconButton>
+           <MenuIcon />
           </IconButton>
+         : <img style={{
+          height: 16,
+          // on hover, show the finger cursor
+          cursor: 'pointer',
+         
+         }} src={MagickLogo} onClick={toggleDrawer} alt="" />}
         </DrawerHeader>
-        <Divider />
         <List
           sx={{
             padding: 0,
@@ -136,7 +141,7 @@ export default function MiniDrawer({ children }) {
             Icon={AutoFixHighIcon}
             open={open}
             onClick={onClick('/magick')}
-            text="Spell Composer"
+            text="Spells"
           />
           {/* <DrawerItem
             active={location.pathname === '/spellbook'}
@@ -145,18 +150,19 @@ export default function MiniDrawer({ children }) {
             text="Spellbook"
           /> */}
           <DrawerItem
-            active={location.pathname === '/eventManager'}
+            active={location.pathname === '/events'}
             Icon={StorageIcon}
             open={open}
-            onClick={onClick('/eventManager')}
-            text="Event Manager"
+            onClick={onClick('/events')}
+            text="Events"
           />
           <DrawerItem
-            active={location.pathname === '/agentManager'}
+            active={location.pathname === '/apps'}
             Icon={HubIcon}
             onClick={onClick('/agentManager')}
             open={open}
-            text="Agent Manager"
+            onClick={onClick('/apps')}
+            text="Applications"
           />
           <DrawerItem
             active={location.pathname === '/searchCorpus'}
