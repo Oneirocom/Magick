@@ -1,6 +1,5 @@
 import { Outlet } from 'react-router-dom'
 
-import TabBar from '../TabBar/TabBar'
 import css from './pagewrapper.module.css'
 import { useSelector } from 'react-redux'
 import { activeTabSelector, selectAllTabs } from '../../state/tabs'
@@ -12,7 +11,6 @@ const MagickPageWrapper = () => {
 
   return (
     <div className={css['wrapper']}>
-      <TabBar tabs={tabs} activeTab={activeTab} />
       <Outlet />
     </div>
   )

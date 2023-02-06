@@ -1,0 +1,55 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "public": "./public/",
+  "origins": [
+    "http://localhost:3030"
+  ],
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "postgresql": {
+    "client": "pg",
+    "connection": "postgres://postgres:Va5LOJ7j9FHXGNB6@db.orrwaspuvvlqhhtpynjz.supabase.co:6543/postgres"
+  },
+  "authentication": {
+    "entity": "user",
+    "service": "users",
+    "secret": "bOuiOUnnQULGYRm5Z/NdwvZJjMPrwIdQ",
+    "authStrategies": [
+      "jwt",
+      "local"
+    ],
+    "jwtOptions": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "usernameField": "email",
+      "passwordField": "password"
+    },
+    "oauth": {
+      "google": {
+        "key": "<Client ID>",
+        "secret": "<Client secret>"
+      },
+      "twitter": {
+        "key": "<Client ID>",
+        "secret": "<Client secret>"
+      },
+      "github": {
+        "key": "<Client ID>",
+        "secret": "<Client secret>"
+      },
+      "auth0": {
+        "key": "<Client ID>",
+        "secret": "<Client secret>"
+      }
+    }
+  }
+}
