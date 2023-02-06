@@ -16,6 +16,13 @@ type RunSpellConstructor = {
   socket?: io.Socket
 }
 
+type RunComponentArgs = {
+  inputs: Record<string, any>
+  componentName: string
+  runSubspell?: boolean
+  runData?: Record<string, any>
+}
+
 class SpellRunner {
   engine: MagickEngine
   currentSpell!: SpellType
@@ -55,6 +62,13 @@ class SpellRunner {
    */
   get triggerIns() {
     return this.engine.moduleManager.triggerIns
+  }
+
+  /**
+   * Getter method for the inputs for the loaded spell
+   */
+  get inputs() {
+    return this.engine.moduleManager.inputs
   }
 
   /**
@@ -154,6 +168,18 @@ class SpellRunner {
   }
 
   /**
+   * Allows us to grab a specific triggered node by name
+   */
+  private _getTriggeredNodeByName(componentName) {
+    const triggerIns = extractNodes(
+      this.currentSpell.graph.nodes,
+      this.triggerIns
+    )
+    const inputs = extractNodes(this.currentSpell.graph.nodes, this.inputs)
+    return [...triggerIns, ...inputs].find(node => node.name === componentName)
+  }
+
+  /**
    * Resets all tasks.  This clears the cached data output of the task and prepares
    * it for the next run.
    */
@@ -190,11 +216,12 @@ class SpellRunner {
    * component, and ran the one triggered rather than this slightly hacky hard coded
    * method.
    */
-  async runComponent(
-    inputs: Record<string, any>,
-    componentName: string,
-    runSubspell = false
-  ) {
+  async runComponent({
+    inputs,
+    componentName,
+    runSubspell = false,
+    runData = {},
+  }: RunComponentArgs) {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
@@ -211,13 +238,17 @@ class SpellRunner {
     this._loadInputs(inputs)
 
     const component = this._getComponent(componentName) as ModuleComponent
-    const triggeredNode = this._getFirstNodeTrigger()
+    // FOR SHAW
+    const triggeredNode = this._getTriggeredNodeByName(componentName)
+    // const triggeredNode = this._getFirstNodeTrigger()
+
+    if (!component.run) throw new Error('Component does not have a run method')
 
     // this running is where the main "work" happens.
     // I do wonder whether we could make this even more elegant by having the node
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
-    await component.run(triggeredNode)
+    await component.run(triggeredNode, runData)
     return this.outputData
   }
 
@@ -225,7 +256,11 @@ class SpellRunner {
    * temporary function to be backwards compatible with current use of run spell
    */
   async defaultRun(inputs: Record<string, any>, runSubspell = false) {
-    return await this.runComponent(inputs, 'Trigger In', runSubspell)
+    return await this.runComponent({
+      inputs,
+      componentName: 'Trigger In',
+      runSubspell,
+    })
   }
 }
 
