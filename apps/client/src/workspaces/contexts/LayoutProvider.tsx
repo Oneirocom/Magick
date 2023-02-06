@@ -15,7 +15,6 @@ import { useDispatch } from 'react-redux'
 const windowTypes: WindowTypes = {
   TEXT_EDITOR: 'textEditor',
   INSPECTOR: 'inspector',
-  STATE_MANAGER: 'stateManager',
   EDITOR: 'editor',
   PLAYTEST: 'playtest',
   CONSOLE: 'debugConsole',
@@ -26,7 +25,6 @@ const windowTypes: WindowTypes = {
 type WindowType =
   | 'textEditor'
   | 'inspector'
-  | 'stateManager'
   | 'editor'
   | 'playtest'
   | 'debugConsole'

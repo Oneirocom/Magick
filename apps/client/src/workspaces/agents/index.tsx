@@ -1,6 +1,5 @@
 import { Layout } from '../../workspaces/contexts/LayoutProvider'
 import EventHandler from '../../screens/Magick/components/EventHandler'
-import StateManager from '../../workspaces/spells/windows/StateManagerWindow'
 import SearchCorpus from '../search/SearchCorpusWindow'
 
 const Workspace = ({ tab, pubSub }) => {
@@ -12,8 +11,6 @@ const Workspace = ({ tab, pubSub }) => {
       }
       const component = node.getComponent()
       switch (component) {
-        case 'stateManager':
-          return <StateManager {...props} />
         case 'searchCorpus':
           return <SearchCorpus />
         default:

@@ -11,7 +11,6 @@ import EditorWindow from './windows/EditorWindow/'
 import Inspector from './windows/InspectorWindow'
 import Playtest from './windows/PlaytestWindow'
 import AvatarWindow from './windows/AvatarWindow'
-import StateManager from '../../workspaces/spells/windows/StateManagerWindow'
 
 import TextEditor from './windows/TextEditorWindow'
 import DebugConsole from './windows/DebugConsole'
@@ -93,8 +92,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
       }
       const component = node.getComponent()
       switch (component) {
-        case 'stateManager':
-          return <StateManager {...props} />
         case 'playtest':
           return <Playtest {...props} />
         case 'inspector':
