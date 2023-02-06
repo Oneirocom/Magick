@@ -33,7 +33,6 @@ const MenuBar = () => {
   // grab all events we need
   const {
     $SAVE_SPELL,
-    $CREATE_STATE_MANAGER,
     $CREATE_AVATAR_WINDOW,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
@@ -92,11 +91,6 @@ const MenuBar = () => {
   const onSerialize = () => {
     if (!activeTabRef.current) return
     publish($SERIALIZE(activeTabRef.current.id))
-  }
-
-  const onStateManagerCreate = () => {
-    if (!activeTabRef.current) return
-    publish($CREATE_STATE_MANAGER(activeTabRef.current.id))
   }
 
   const onCreateSearchCorpus = () => {
@@ -218,9 +212,6 @@ const MenuBar = () => {
         },
         inspector: {
           onClick: onInspectorCreate,
-        },
-        state_manager: {
-          onClick: onStateManagerCreate,
         },
         search_corpus: {
           onClick: onCreateSearchCorpus,
