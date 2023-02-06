@@ -22,8 +22,8 @@ function App() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route element={<MagickPageLayout />}>
-          <Route path="/eventManager" element={<EventManagerWindow />} />
-          <Route path="/agentManager" element={<AgentManagerWindow />} />
+          <Route path="/events" element={<EventManagerWindow />} />
+          <Route path="/apps" element={<AgentManagerWindow />} />
           <Route path="/home/*" element={<HomeScreen />} />
 
 
