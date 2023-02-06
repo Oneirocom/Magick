@@ -39,6 +39,7 @@ import { DocumentDelete } from './search/DocumentDelete'
 import { DocumentEdit } from './search/DocumentEdit'
 import { DocumentGet } from './search/DocumentGet'
 import { DocumentSet } from './search/DocumentSet'
+import { Image } from './utility/Image'
 import { DocumentSetMass } from './search/DocumentSetMass'
 import { DocumentStoreGet } from './search/DocumentStoreGet'
 import { RSSGet } from './search/RSSGet'
@@ -117,6 +118,7 @@ export let components = {
   joinListComponent: () => new JoinListComponent(),
   moduleComponent: () => new SpellComponent(),
   output: () => new Output(),
+  imgs: () => new Image(),
   stringProcessor: () => new StringProcessor(),
   switchGate: () => new SwitchGate(),
   triggerIn: () => new TriggerIn(),
