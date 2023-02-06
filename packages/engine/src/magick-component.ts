@@ -24,6 +24,7 @@ export interface ModuleOptions {
   nodeType: 'input' | 'output' | 'triggerIn' | 'triggerOut' | 'module'
   socket?: Socket
   skip?: boolean
+  hide?: boolean
 }
 
 export abstract class MagickComponent<
