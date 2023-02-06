@@ -1,4 +1,4 @@
-import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+  import.meta.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 //@ts-nocheck
 import { useState } from 'react'

@@ -45,14 +45,14 @@ export const DiscordAgentWindow: FC<PluginProps> = (props) => {
     }, [])
     useEffect(() => {
       props.setDiscordValue({
-        discord_enabled : discord_enabled,
-        discord_api_key : discord_api_key || props.agentData.discord_api_key,
-        discord_starting_words : discord_starting_words || props.agentData.discord_starting_words,
-        discord_bot_name : discord_bot_name || props.agentData.discord_bot_name,
-        discord_bot_name_regex : discord_bot_name || props.agentData.discord_bot_name_regex,
-        discord_empty_responses : discord_empty_responses || props.agentData.discord_empty_responses,
-        discord_spell_handler_incoming : discord_spell_handler_incoming || props.agentData.discord_spell_handler_incoming,
-        discord_spell_handler_update : discord_spell_handler_update || props.agentData.discord_spell_handler_update
+        discord_enabled: discord_enabled,
+        discord_api_key: discord_api_key || props?.agentData?.discord_api_key,
+        discord_starting_words: discord_starting_words || props?.agentData?.discord_starting_words,
+        discord_bot_name: discord_bot_name || props?.agentData?.discord_bot_name,
+        discord_bot_name_regex: discord_bot_name || props?.agentData?.discord_bot_name_regex,
+        discord_empty_responses: discord_empty_responses || props?.agentData?.discord_empty_responses,
+        discord_spell_handler_incoming: discord_spell_handler_incoming || props?.agentData?.discord_spell_handler_incoming,
+        discord_spell_handler_update: discord_spell_handler_update || props?.agentData?.discord_spell_handler_update
     })
         
     }, [discord_enabled, discord_api_key,discord_starting_words, discord_bot_name, discord_bot_name_regex, discord_empty_responses,discord_empty_responses, discord_empty_responses, discord_spell_handler_incoming, discord_spell_handler_update ])

@@ -19,6 +19,8 @@ import HubIcon from '@mui/icons-material/Hub'
 import SettingsIcon from '@mui/icons-material/Settings'
 import Card from '@mui/material/Card'
 
+import MagickLogo from './Magick-purple-logo.png'
+
 const drawerWidth = 240
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -118,13 +120,11 @@ export default function MiniDrawer({ children }) {
   return (
     <div style={{ display: 'flex', height: '100%' }}>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader open={open}>
-          <Card></Card>
-          <IconButton onClick={toggleDrawer}>
-            {open ? <ChevronLeftIcon /> : <MenuIcon />}
+        <DrawerHeader open={open} onClick={toggleDrawer}>
+          <IconButton>
+            {open ? <img style={{ height: 16, marginLeft: 10 }} src={MagickLogo} alt="" /> : <MenuIcon />}
           </IconButton>
         </DrawerHeader>
-        <Divider />
         <List
           sx={{
             padding: 0,
@@ -154,6 +154,7 @@ export default function MiniDrawer({ children }) {
             active={location.pathname === '/agentManager'}
             Icon={HubIcon}
             open={open}
+            onClick={onClick('/agentManager')}
             text="Agent Manager"
           />
           {/* <DrawerItem
