@@ -159,7 +159,6 @@ export default function MiniDrawer({ children }) {
           <DrawerItem
             active={location.pathname === '/apps'}
             Icon={HubIcon}
-            onClick={onClick('/agentManager')}
             open={open}
             onClick={onClick('/apps')}
             text="Applications"
