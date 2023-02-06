@@ -49,7 +49,6 @@ const EventHandler = ({ pubSub, tab }) => {
     $REDO,
     $SAVE_SPELL,
     $SAVE_SPELL_DIFF,
-    $CREATE_STATE_MANAGER,
     $CREATE_SEARCH_CORPUS,
     $CREATE_AVATAR_WINDOW,
     $CREATE_MESSAGE_REACTION_EDITOR,

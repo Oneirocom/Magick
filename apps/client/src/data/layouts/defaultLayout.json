@@ -80,20 +80,6 @@
                 "component": "textEditor"
               }
             ]
-          },
-          {
-            "type": "tabset",
-            "id": "#6",
-            "weight": 87.89189189189189,
-            "children": [
-              {
-                "type": "tab",
-                "id": "#418",
-                "name": "Avatar",
-                "component": "avatar"
-              }
-            ],
-            "active": true
           }
         ]
       }
