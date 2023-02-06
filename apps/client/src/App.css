@@ -480,6 +480,7 @@ input[type='text']:focus-visible {
 
 .agentWindow {
   padding: 1em;
+  margin-bottom: 1em;
   background-color: #333;
   border-radius: .25em;
 }

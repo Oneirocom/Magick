@@ -72,12 +72,6 @@
                 "id": "#40",
                 "name": "Text Editor",
                 "component": "textEditor"
-              },
-              {
-                "type": "tab",
-                "id": "#10",
-                "name": "State Manager",
-                "component": "stateManager"
               }
             ]
           },

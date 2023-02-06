@@ -124,16 +124,8 @@ const EventHandler = ({ pubSub, tab }) => {
     }
   }
 
-  const createStateManager = () => {
-    createOrFocus(windowTypes.STATE_MANAGER, 'State Manager')
-  }
-
   const createSearchCorpus = () => {
     createOrFocus(windowTypes.SEARCH_CORPUS, 'Search Corpus')
-  }
-
-  const createEntityManager = () => {
-    createOrFocus(windowTypes.AGENT_MANAGER, 'Agent Manager')
   }
 
   const createAvatarWindow = () => {
@@ -224,7 +216,6 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
-    [$CREATE_STATE_MANAGER(tab.id)]: createStateManager,
     [$CREATE_SEARCH_CORPUS(tab.id)]: createSearchCorpus,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,
     [$CREATE_AVATAR_WINDOW(tab.id)]: createAvatarWindow,

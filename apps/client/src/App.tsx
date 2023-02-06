@@ -12,9 +12,12 @@ import MainLayout from './components/MainLayout/MainLayout'
 import EventManagerWindow from './workspaces/spells/windows/EventManager'
 import AgentManagerWindow from './workspaces/agents/windows/AgentManagerWindow'
 
+
+
 //These need to be imported last to override styles.
 
 function App() {
+
   return (
     <Routes>
       <Route element={<MainLayout />}>
@@ -22,6 +25,8 @@ function App() {
           <Route path="/eventManager" element={<EventManagerWindow />} />
           <Route path="/agentManager" element={<AgentManagerWindow />} />
           <Route path="/home/*" element={<HomeScreen />} />
+
+
           <Route path="/" element={<Magick />} />
           <Route path="/magick/*" element={<Magick />} />
           <Route path="/magick/:spellName" element={<Magick />} />
