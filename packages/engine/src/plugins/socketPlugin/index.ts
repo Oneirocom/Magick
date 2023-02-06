@@ -40,7 +40,7 @@ function install(
     ) => {
       console.log('CONTEXT', context)
       const currentSpell = context.magick.getCurrentSpell()
-      const event = `${currentSpell}-${node.id}`
+      const event = `${currentSpell.name}-${node.id}`
 
       if (server) {
         try {
