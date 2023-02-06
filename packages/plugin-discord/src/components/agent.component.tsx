@@ -1,10 +1,11 @@
+//@ts-nocheck
 import axios from 'axios'
+import { useSnackbar } from 'notistack'
 import React, { FC, useState, useEffect } from 'react'
 import { KeyInput } from './utils'
 type PluginProps = {
   agentData: any
-  setAgentData: any
-  spellList: any[]
+  props
 }
 
 // determine if process or import.meta is available, get the .env from the one that is
@@ -14,11 +15,9 @@ const magickApiRootUrl =
     // @ts-ignore
     : import.meta.env.VITE_APP_API_URL
 
-export const DiscordAgentWindow: FC<PluginProps> = ({
-  agentData,
-  setAgentData,
-  spellList
-}) => {
+export const DiscordAgentWindow: FC<any> = (props) => {
+  props = props.props
+  const { enqueueSnackbar } = useSnackbar()
   const [discord_enabled, setDiscordEnabled] = useState(undefined)
   const [discord_api_key, setDiscordApiKey] = useState('')
   const [discord_starting_words, setDiscordStartingWords] = useState('')
@@ -33,6 +32,53 @@ export const DiscordAgentWindow: FC<PluginProps> = ({
   const [tiktalknet_url, setTikTalkNetUrl] = useState('')
   const [playingAudio, setPlayingAudio] = useState(false)
 
+  useEffect(() => {
+    if (props.agentData !== null && props.agentData !== undefined) {
+        console.log(props.agentData)
+        setDiscordEnabled(props.agentData.discord_enabled)
+        setDiscordApiKey(props.agentData.discord_api_key)
+        setDiscordStartingWords(props.agentData.discord_starting_words)
+        setDiscordBotNameRegex(props.agentData.discord_bot_name_regex)
+        setDiscordBotName(props.agentData.discord_bot_name)
+        setUseVoice(props.agentData !== undefined && props.agentData.use_voice === true)
+        setVoiceProvider(props.agentData.voice_provider)
+        setVoiceCharacter(props.agentData.voice_character)
+        setVoiceLanguageCode(props.agentData.voice_language_code)
+        setVoiceDefaultPhrases(props.agentData.voice_default_phrases)
+        setTikTalkNetUrl(props.agentData.tiktalknet_url)
+        props.setAgentDataState({
+            discord_enabled : discord_enabled,
+            discord_api_key : discord_api_key,
+            discord_starting_words : discord_starting_words,
+            discord_bot_name : discord_bot_name,
+            discord_bot_name_regex : discord_bot_name,
+            use_voice: use_voice,
+            voice_provider: voice_provider,
+            voice_character: voice_character,
+            voice_language_code: voice_language_code,
+            voice_default_phrases: voice_default_phrases,
+            tiktalknet_url: tiktalknet_url
+        })
+        
+        
+      }      
+  }, [])
+   useEffect(() => {
+    //console.log(discord_enabled, discord_api_key, discord_starting_words, discord_bot_name, discord_bot_name_regex, use_voice, voice_provider, voice_character, voice_default_phrases, voice_language_code, tiktalknet_url)
+    props.setAgentDataState({
+      discord_enabled : discord_enabled,
+      discord_api_key : discord_api_key,
+      discord_starting_words : discord_starting_words,
+      discord_bot_name : discord_bot_name,
+      discord_bot_name_regex : discord_bot_name,
+      use_voice: use_voice,
+      voice_provider: voice_provider,
+      voice_character: voice_character,
+      voice_language_code: voice_language_code,
+      voice_default_phrases: voice_default_phrases,
+      tiktalknet_url: tiktalknet_url
+  })
+   }, [discord_enabled, discord_api_key, discord_starting_words, discord_bot_name, discord_bot_name_regex, use_voice, voice_provider, voice_character, voice_default_phrases, voice_language_code, tiktalknet_url])
 
   const testVoice = async () => {
     if ((voice_provider && voice_character) || playingAudio) {
@@ -75,46 +121,6 @@ export const DiscordAgentWindow: FC<PluginProps> = ({
       )
     }
   }
-
-  // useEffect(() => {
-  //   if (agentData !== null && agentData !== undefined) {
-  //     console.log(agentData)
-  //     setDiscordEnabled(agentData.discord_enabled)
-  //     setDiscordApiKey(agentData.discord_api_key)
-  //     setDiscordStartingWords(agentData.discord_starting_words)
-  //     setDiscordBotNameRegex(agentData.discord_bot_name_regex)
-  //     setDiscordBotName(agentData.discord_bot_name)
-
-  //     if (agentData !== null && agentData !== undefined) {
-  //       setUseVoice(agentData !== undefined && agentData.use_voice === true)
-  //       setVoiceProvider(agentData.voice_provider)
-  //       setVoiceCharacter(agentData.voice_character)
-  //       setVoiceLanguageCode(agentData.voice_language_code)
-  //       setVoiceDefaultPhrases(agentData.voice_default_phrases)
-  //       setTikTalkNetUrl(agentData.tiktalknet_url)
-  //       }
-
-  //     setAgentData({
-  //       ...agentData,
-  //       discord_enabled,
-  //       discord_api_key,
-  //       discord_starting_words,
-  //       discord_bot_name,
-  //       discord_bot_name_regex,
-  //     })
-  //   }
-  // }, [])
-  // useEffect(() => {
-  //   console.log('useEffect', discord_enabled, discord_api_key, discord_starting_words, discord_bot_name, discord_bot_name_regex)
-  //   setAgentData({
-  //     discord_enabled: discord_enabled,
-  //     discord_api_key: discord_api_key || agentData?.discord_api_key,
-  //     discord_starting_words: discord_starting_words || agentData?.discord_starting_words,
-  //     discord_bot_name: discord_bot_name || agentData?.discord_bot_name,
-  //     discord_bot_name_regex: discord_bot_name || agentData?.discord_bot_name_regex,
-  //   })
-
-  // }, [discord_enabled, discord_api_key, discord_starting_words, discord_bot_name, discord_bot_name_regex])
   return (
     <div style={{
       backgroundColor: '#222',
