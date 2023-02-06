@@ -91,10 +91,9 @@ export const spellApi = rootApi.injectEndpoints({
         if (!spellCopy.agents || Object.keys(spellCopy.agents).length === 0)
           spellCopy.agents = []
 
-        console.log('spellCopy is', spellCopy)
-
+        console.log('SAVING SPELL')
         const baseQueryOptions = {
-          url: 'spells/' + spell.name,
+          url: 'spells/' + spell.id,
           body: spellCopy,
           method: 'PATCH',
         }
