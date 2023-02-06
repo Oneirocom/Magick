@@ -56,9 +56,7 @@ const Inspector = props => {
 
   const toolbar = (
     <>
-      <div
-        style={{ flex: 1, display: 'flex', alignItems: 'center', padding: 15 }}
-      >
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
         <Icon
           name={componentCategories[inspectorData?.category || 0]}
           style={{ marginRight: 'var(--extraSmall)' }}
@@ -86,15 +84,17 @@ const Inspector = props => {
 
   return (
     <Window toolbar={toolbar} darker outline borderless>
-      <DataControls
-        inspectorData={inspectorData}
-        nodeId={inspectorData.nodeId}
-        dataControls={inspectorData.dataControls}
-        data={inspectorData.data}
-        width={width}
-        updateData={updateData}
-        updateControl={updateControl}
-      />
+      <div style={{ padding: 15 }}>
+        <DataControls
+          inspectorData={inspectorData}
+          nodeId={inspectorData.nodeId}
+          dataControls={inspectorData.dataControls}
+          data={inspectorData.data}
+          width={width}
+          updateData={updateData}
+          updateControl={updateControl}
+        />
+      </div>
     </Window>
   )
 }
