@@ -154,6 +154,7 @@ export default function MiniDrawer({ children }) {
             active={location.pathname === '/agentManager'}
             Icon={HubIcon}
             open={open}
+            onClick={onClick('/agentManager')}
             text="Agent Manager"
           />
           {/* <DrawerItem

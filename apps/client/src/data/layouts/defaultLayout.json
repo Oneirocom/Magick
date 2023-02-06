@@ -84,18 +84,6 @@
                 "id": "#10",
                 "name": "State Manager",
                 "component": "stateManager"
-              },
-              {
-                "type": "tab",
-                "id": "#19",
-                "name": "Event Manager",
-                "component": "eventManager"
-              },
-              {
-                "type": "tab",
-                "id": "#12",
-                "name": "Agent Manager",
-                "component": "agentManager"
               }
             ]
           },
