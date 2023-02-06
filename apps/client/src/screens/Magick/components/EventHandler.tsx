@@ -51,13 +51,11 @@ const EventHandler = ({ pubSub, tab }) => {
     $SAVE_SPELL_DIFF,
     $CREATE_STATE_MANAGER,
     $CREATE_SEARCH_CORPUS,
-    $CREATE_AGENT_MANAGER,
     $CREATE_AVATAR_WINDOW,
     $CREATE_MESSAGE_REACTION_EDITOR,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
     $CREATE_CONSOLE,
-    $CREATE_EVENT_MANAGER,
     $CREATE_TEXT_EDITOR,
     $SERIALIZE,
     $EXPORT,
@@ -165,10 +163,6 @@ const EventHandler = ({ pubSub, tab }) => {
     createOrFocus(windowTypes.CONSOLE, 'Console')
   }
 
-  const createEventManager = () => {
-    createOrFocus(windowTypes.EVENT_MANAGER, 'Event Manager')
-  }
-
   const onSerialize = () => {
     // eslint-disable-next-line no-console
     console.log(serialize())
@@ -233,13 +227,11 @@ const EventHandler = ({ pubSub, tab }) => {
     [$CREATE_STATE_MANAGER(tab.id)]: createStateManager,
     [$CREATE_SEARCH_CORPUS(tab.id)]: createSearchCorpus,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,
-    [$CREATE_AGENT_MANAGER(tab.id)]: createEntityManager,
     [$CREATE_AVATAR_WINDOW(tab.id)]: createAvatarWindow,
     [$CREATE_PLAYTEST(tab.id)]: createPlaytest,
     [$CREATE_INSPECTOR(tab.id)]: createInspector,
     [$CREATE_TEXT_EDITOR(tab.id)]: createTextEditor,
     [$CREATE_CONSOLE(tab.id)]: createConsole,
-    [$CREATE_EVENT_MANAGER(tab.id)]: createEventManager,
     [$SERIALIZE(tab.id)]: onSerialize,
     [$EXPORT(tab.id)]: onExport,
     [$CLOSE_EDITOR(tab.id)]: onCloseEditor,
