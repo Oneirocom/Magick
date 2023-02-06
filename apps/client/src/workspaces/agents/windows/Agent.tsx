@@ -1,11 +1,15 @@
 import { magickApiRootUrl } from '../../../config'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 /* Import All Agent Window Components */
 import { pluginManager } from '@magickml/engine'
-
+const RenderComp = (props) =>{
+  return (
+    <props.element props={props} />
+  )
+}
 const AgentWindow = ({
   id,
   updateCallback,
@@ -25,9 +29,8 @@ const AgentWindow = ({
   const [loop_enabled, setLoopEnabled] = useState(false)
   const [loop_interval, setLoopInterval] = useState('')
 
-  const [pluginData, setPluginData] = useState<any>({})
-  const [agentData, setAgentData] = useState<any>({})
-
+  const agentDatVal = useRef(null);
+  const [agentDataState, setAgentDataState] = useState<any>({})
   const [spellList, setSpellList] = useState<any[]>([])
   useEffect(() => {
     if (!loaded) {
@@ -47,18 +50,14 @@ const AgentWindow = ({
 
         let agentData = res.data.data
         setEnabled(res.data.enabled === true)
-
-        console.log('agentData', agentData)
-
         if (agentData !== null && agentData !== undefined) {
+        agentDatVal.current = agentData
         setOpenaiApiKey(agentData.openai_api_key)
         setEthPrivateKey(agentData.eth_private_key)
         setEthPublicAddress(agentData.eth_public_address)
 
         setLoopEnabled(agentData.loop_enabled === true)
         setLoopInterval(agentData.loop_interval)
-        console.log('setting agentData', agentData)
-        setAgentData(agentData)
         }
         setLoaded(true)
       })()
@@ -100,7 +99,7 @@ const AgentWindow = ({
     const _data = {
       enabled,
       data: {
-        ...pluginData,
+        ...agentDataState,
         openai_api_key,
         eth_private_key,
         eth_public_address,
@@ -144,8 +143,8 @@ const AgentWindow = ({
     const _data = {
       enabled,
       data: {
+        ...agentDataState,
         openai_api_key,
-        ...pluginData,
         loop_enabled,
         loop_interval
       },
@@ -165,7 +164,7 @@ const AgentWindow = ({
     // Clean up and remove the link
     link.parentNode.removeChild(link)
   }
-
+  const agentComponents = pluginManager.getAgentComponents()
   return !loaded ? (
     <>Loading...</>
   ) : (
@@ -183,16 +182,7 @@ const AgentWindow = ({
       {enabled && (
         <>
           {pluginManager.getAgentComponents().map((value, index, array) => {
-            const PluginComponent = (props) =>{
-              const {
-                agentData, spellList, setAgentData
-              } = props
-              console.log('props are', props)
-              return (
-                <props.element agentData={agentData} spellList={spellList} setAgentData={setAgentData} />
-              )
-            }
-            return <PluginComponent key={index} element={value} agentData={agentData} spellList={spellList} setAgentData={setAgentData}/>
+          return <RenderComp key={index} element={value} agentData={agentDatVal.current} setAgentDataState={setAgentDataState}/>
           })}
           <div className="form-item">
             <span className="form-item-label">OpenAI Key</span>
