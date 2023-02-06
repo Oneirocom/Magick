@@ -1,6 +1,6 @@
 import io from 'socket.io'
 
-import { IRunContextEditor } from '../../types'
+import { EngineContext, IRunContextEditor } from '../../types'
 import { MagickConsole } from '../consolePlugin/MagickConsole'
 
 export type SocketPluginArgs = {
@@ -17,6 +17,10 @@ export type SocketData = {
   }
 }
 
+type Context = {
+  magick: EngineContext
+}
+
 function install(
   editor: IRunContextEditor,
   // Need to better type the feathers client here
@@ -27,7 +31,17 @@ function install(
   editor.on('componentregister', (component: any) => {
     const worker = component.worker
 
-    component.worker = async (node, inputs, outputs, context, ...args) => {
+    component.worker = async (
+      node,
+      inputs,
+      outputs,
+      context: Context,
+      ...args
+    ) => {
+      console.log('CONTEXT', context)
+      const currentSpell = context.magick.getCurrentSpell()
+      const event = `${currentSpell.name}-${node.id}`
+
       if (server) {
         try {
           const result = await worker.apply(component, [
@@ -38,7 +52,7 @@ function install(
             ...args,
           ])
 
-          socket?.emit(`${node.id}`, {
+          socket?.emit(event, {
             output: result?.output,
           })
           return result
@@ -68,7 +82,7 @@ function install(
         if (subscriptionMap.has(node.id)) return
         //  We may need to namespace this by spell as well
         const unsubscribe = client.io.on(
-          node.id,
+          event,
           async (socketData: SocketData) => {
             const newContext = {
               ...context,

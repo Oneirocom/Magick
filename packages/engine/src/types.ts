@@ -260,6 +260,7 @@ export type Spell = {
   graph: Data
   createdAt: number
   updatedAt: number
+  id: string
 }
 
 export type MagickReteInput = {

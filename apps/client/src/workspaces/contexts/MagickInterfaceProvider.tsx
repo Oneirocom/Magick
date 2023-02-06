@@ -47,7 +47,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
   useEffect(() => {
     if (!_spell) return
-    spellRef.current = _spell
+    spellRef.current = _spell.data[0]
   }, [_spell])
 
   const {
@@ -150,7 +150,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const getSpell = async spellId => {
     const spell = await _getSpell(spellId)
 
-    return spell.data as Spell
+    return spell.data[0] as Spell
   }
 
   const processCode = async (code, inputs, data, language = 'javascript') => {

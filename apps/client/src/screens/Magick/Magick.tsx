@@ -15,6 +15,8 @@ import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import TabLayout from '../../components/TabLayout/TabLayout'
 import Workspaces from '../../workspaces'
 
+import TabBar from '../../components/TabBar/TabBar'
+
 const Magick = ({ empty = false }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -97,11 +99,14 @@ const Magick = ({ empty = false }) => {
   if (!activeTab) return <LoadingScreen />
 
   return (
+    <>
+        <TabBar tabs={tabs} activeTab={activeTab} />
     <TabLayout>
       {!empty && (
         <Workspaces tabs={tabs} pubSub={pubSub} activeTab={activeTab} />
       )}
     </TabLayout>
+    </>
   )
 }
 

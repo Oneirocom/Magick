@@ -22,6 +22,7 @@ export default class SpellManager {
   }: SpellManagerArgs) {
     this.socket = socket
     this.magickInterface = magickInterface
+
     this.cache = cache
   }
 
