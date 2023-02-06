@@ -42,7 +42,8 @@ function install(
 
   if (!disableBuiltInEdit) {
     editor.on('editcomment', comment => {
-      comment.text = prompt('Edit comment', comment.text)
+      const prevText = comment.text
+      comment.text = prompt('Edit comment', comment.text) || prevText
       comment.update()
     })
   }
@@ -77,6 +78,7 @@ function install(
   })
 
   editor.on('addcomment', ({ type, text, nodes, position }) => {
+    text = !text ? 'right click to edit' : text
     if (type === 'inline') {
       manager.addInlineComment(text, position)
     } else if (type === 'frame') {
