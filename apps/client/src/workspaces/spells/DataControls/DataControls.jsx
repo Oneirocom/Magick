@@ -76,7 +76,7 @@ const DataControls = ({
         return (
           <Box
             key={control.name + nodeId + key}
-            style={{
+            sx={{
               padding: '15px',
               borderRadius: '5px',
             }}
