@@ -71,7 +71,8 @@ const AgentWindow = ({
     ;(async () => {
       const res = await axios.get(`${magickApiRootUrl}/spells`)
       console.log('res', res.data)
-      setSpellList(res.data)
+      console.log('spellList', res.data)
+      setSpellList(res.data?.data)
     })()
   }, [])
 
