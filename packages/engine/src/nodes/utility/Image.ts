@@ -28,7 +28,7 @@ export class Image extends MagickComponent<any> {
       },
     }
 
-    this.category = 'utility'
+    this.category = 'Variable'
     this.info = info
     this.display = true
   }
