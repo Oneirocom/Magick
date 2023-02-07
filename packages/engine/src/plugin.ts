@@ -56,7 +56,7 @@ class PluginManager {
         let services_list = []
         PluginManager.pluginList.forEach((plugin) => {
             plugin.services.forEach((service) => {
-                services_list.push([plugin.name,service])
+                services_list.push(service)
             })
         })
         return services_list
