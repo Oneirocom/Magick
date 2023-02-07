@@ -64,7 +64,7 @@ const AgentManagerWindow = () => {
             return (
               <AgentWindow
                 id={value.id ?? 0}
-                key={value.id ?? idx}
+                key={idx}
                 updateCallback={async () => {
                   resetData()
                 }}
