@@ -29,6 +29,8 @@ const AgentWindow = ({
   const [loop_enabled, setLoopEnabled] = useState(false)
   const [loop_interval, setLoopInterval] = useState('')
 
+  const [root_spell, setRootSpell] = useState('');
+
   const agentDatVal = useRef(null);
   const [agentDataState, setAgentDataState] = useState<any>({})
   const [spellList, setSpellList] = useState<any[]>([])
@@ -53,6 +55,7 @@ const AgentWindow = ({
         if (agentData !== null && agentData !== undefined) {
         agentDatVal.current = agentData
         setOpenaiApiKey(agentData.openai_api_key)
+        setRootSpell(agentData.root_spell)
         setEthPrivateKey(agentData.eth_private_key)
         setEthPublicAddress(agentData.eth_public_address)
 
@@ -67,6 +70,7 @@ const AgentWindow = ({
   useEffect(() => {
     ;(async () => {
       const res = await axios.get(`${magickApiRootUrl}/spells`)
+      console.log('res', res.data)
       setSpellList(res.data)
     })()
   }, [])
@@ -105,6 +109,7 @@ const AgentWindow = ({
         eth_public_address,
         loop_enabled,
         loop_interval,
+        root_spell,
       },
     }
     axios
@@ -184,6 +189,29 @@ const AgentWindow = ({
           {pluginManager.getAgentComponents().map((value, index, array) => {
           return <RenderComp key={index} element={value} agentData={agentDatVal.current} setAgentDataState={setAgentDataState}/>
           })}
+          <div className="form-item agent-select">
+                <span className="form-item-label">Spell Handler</span>
+                <select
+                  name="spellHandlerIncoming"
+                  id="spellHandlerIncoming"
+                  value={root_spell}
+                  onChange={event => {
+                    setRootSpell(event.target.value)
+                  }}
+                >
+                  {spellList.length > 0 &&
+                    spellList.map((spell, idx) => (
+                      <option value={spell.name} key={idx}>
+                        {spell.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
+          <div className="form-item">
+            <span className="form-item-label">OpenAI Key</span>
+            {/*password input field that, when changed, sets the openai key*/}
+            <KeyInput value={openai_api_key} setValue={setOpenaiApiKey} secret={true} />
+          </div>
           <div className="form-item">
             <span className="form-item-label">OpenAI Key</span>
             {/*password input field that, when changed, sets the openai key*/}

@@ -26,7 +26,7 @@ export class DiscordOutput extends MagickComponent<void> {
       socket: anySocket,
     }
 
-    this.category = 'I/O'
+    this.category = 'Discord'
     this.display = true
     this.info = info
   }

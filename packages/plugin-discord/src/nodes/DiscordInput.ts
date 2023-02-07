@@ -16,6 +16,7 @@ import {
   PlaytestControl,
   SwitchControl,
   TextInputControl,
+  eventSocket,
 } from '@magickml/engine'
 
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
@@ -47,7 +48,7 @@ export class DiscordInput extends MagickComponent<InputReturn> {
       hide: true,
     }
 
-    this.category = 'I/O'
+    this.category = 'Discord'
     this.info = info
     this.display = true
     this.contextMenuName = 'Discord Input'
@@ -90,7 +91,7 @@ export class DiscordInput extends MagickComponent<InputReturn> {
     // subscribe the node to the playtest input data stream
     this.subscribeToPlaytest(node)
 
-    const out = new Rete.Output('output', 'output', anySocket)
+    const out = new Rete.Output('output', 'output', eventSocket)
 
     node.data.name = node.data.name || `input-${node.id}`
 

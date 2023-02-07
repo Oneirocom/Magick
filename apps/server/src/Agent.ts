@@ -6,12 +6,13 @@ import { app } from './app'
 import discord_client from './connectors/discord'
 
 type StartLoopArgs = {
+  spellHandler: any
   loop_interval?: string
-  loop_spell_handler?: string
   agent_name?: string
 }
 
 type StartDiscordArgs = {
+  spellHandler: any
   discord_enabled?: boolean
   discord_api_key?: string
   discord_starting_words?: string
@@ -27,7 +28,7 @@ type StartDiscordArgs = {
 type EntityData = {
   loop_enabled?: boolean
   loop_interval?: string
-  loop_spell_handler?: string
+  root_spell?: string
   agent_name?: string
   eth_private_key?: string
   eth_public_address?: string
@@ -121,18 +122,29 @@ export class Agent {
 
     const data = this.data
 
-    this.generateVoices(data)
+    this.generateVoices(data);
+    (async () => {
 
-    if (data.loop_enabled) {
-      this.startLoop(data)
-    }
+      const spell = await app.service('spells').find({
+        query: { name: data.root_spell },
+      })
+      
+      const spellHandler = await this.createSpellHandler({
+        spell,
+      })
+            
+      if (data.loop_enabled) {
+        this.startLoop({...data, spellHandler})
+      }
 
     if (data.discord_enabled) {
-      this.startDiscord(data)
+      this.startDiscord({...data, spellHandler})
     }
+  })()
   }
 
   async startDiscord({
+    spellHandler,
     discord_api_key,
     discord_starting_words,
     discord_bot_name_regex,
@@ -145,12 +157,6 @@ export class Agent {
   }: StartDiscordArgs) {
     if (this.discord)
       throw new Error('Discord already running for this agent on this instance')
-
-    const spell = await app.service('spells').find({
-      query: { name: discord_spell_handler_incoming },
-    })
-
-    const spellHandler = await this.createSpellHandler({ spell })
 
     this.discord = new discord_client()
     await this.discord.createDiscordClient(
@@ -176,8 +182,8 @@ export class Agent {
   }
 
   async startLoop({
+    spellHandler,
     loop_interval,
-    loop_spell_handler,
     agent_name,
   }: StartLoopArgs) {
     if (this.loopHandler) {
@@ -186,14 +192,6 @@ export class Agent {
 
     const loopInterval = parseInt(loop_interval)
     if (typeof loopInterval === 'number' && loopInterval > 0) {
-      const spell = await app.service('spells').find({
-        query: { name: loop_spell_handler },
-      })
-
-      const spellHandler = await this.createSpellHandler({
-        spell,
-      })
-
       this.loopHandler = setInterval(async () => {
         const resp = await spellHandler({
           content: 'loop',
