@@ -1,27 +1,20 @@
-import {
-  createTheme,
-  ThemeProvider,
-  Theme,
-  adaptV4Theme,
-} from '@mui/material/styles'
+import { createTheme, ThemeProvider } from '@mui/material'
 
 import FeathersProvider from './FeathersProvider'
 import PubSubProvider from './PubSubProvider'
 import ToastProvider from './ToastProvider'
 
-const darkTheme = createTheme(
-  adaptV4Theme({
-    palette: {
-      mode: 'dark',
-    },
-  })
-)
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+})
 
 const providers = [
-  PubSubProvider,
-  [ThemeProvider, { theme: darkTheme }],
-  ToastProvider,
   FeathersProvider,
+  PubSubProvider,
+  ToastProvider,
+  [ThemeProvider, { theme: darkTheme }],
 ]
 
 /**

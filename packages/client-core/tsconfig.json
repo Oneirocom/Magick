@@ -15,12 +15,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
     "types": [
       "vite/client"
     ]
+  },
+  "paths": {
+    "@magickml/client-core": ["packages/client-core"]
   },
   "files": [],
   "include": [
