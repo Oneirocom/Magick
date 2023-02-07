@@ -157,11 +157,11 @@ export default function MiniDrawer({ children }) {
             text="Events"
           />
           <DrawerItem
-            active={location.pathname === '/apps'}
+            active={location.pathname === '/agents'}
             Icon={HubIcon}
             open={open}
-            onClick={onClick('/apps')}
-            text="Applications"
+            onClick={onClick('/agents')}
+            text="Agents"
           />
           <DrawerItem
             active={location.pathname === '/searchCorpus'}
