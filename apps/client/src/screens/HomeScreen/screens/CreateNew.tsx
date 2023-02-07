@@ -15,6 +15,7 @@ import emptyImg from '../empty.png'
 import css from '../homeScreen.module.css'
 import TemplatePanel from '../components/TemplatePanel'
 import defaultGraph from '../../../data/graphs/default'
+import threeovGraph from '../../../data/graphs/threeov'
 
 const customConfig = {
   dictionaries: [adjectives, colors],
@@ -29,7 +30,8 @@ export type Template = {
 }
 
 export const magickTemplates: Template[] = [
-  { label: 'Starter', bg: emptyImg, graph: defaultGraph as any as GraphData },
+	{ label: 'Starter', bg: emptyImg, graph: defaultGraph as any as GraphData },
+	{ label: '3OV for WordPress', bg: emptyImg, graph: threeovGraph as any as GraphData },
 ]
 
 const CreateNew = () => {
