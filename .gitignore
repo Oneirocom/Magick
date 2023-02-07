@@ -43,3 +43,5 @@ dev.db
 
 package-lock.json
 yarn.lock
+
+files/

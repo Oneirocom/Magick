@@ -152,7 +152,8 @@ const AgentWindow = ({
         ...agentDataState,
         openai_api_key,
         loop_enabled,
-        loop_interval
+        loop_interval,
+        root_spell
       },
     }
     const fileName = 'agent'
@@ -187,14 +188,11 @@ const AgentWindow = ({
       </div>
       {enabled && (
         <>
-          {pluginManager.getAgentComponents().map((value, index, array) => {
-          return <RenderComp key={index} element={value} agentData={agentDatVal.current} setAgentDataState={setAgentDataState}/>
-          })}
           <div className="form-item agent-select">
-                <span className="form-item-label">Spell Handler</span>
+                <span className="form-item-label">Root Spell</span>
                 <select
-                  name="spellHandlerIncoming"
-                  id="spellHandlerIncoming"
+                  name="root_spell"
+                  id="root_spell"
                   value={root_spell}
                   onChange={event => {
                     setRootSpell(event.target.value)
@@ -208,11 +206,6 @@ const AgentWindow = ({
                     ))}
                 </select>
               </div>
-          <div className="form-item">
-            <span className="form-item-label">OpenAI Key</span>
-            {/*password input field that, when changed, sets the openai key*/}
-            <KeyInput value={openai_api_key} setValue={setOpenaiApiKey} secret={true} />
-          </div>
           <div className="form-item">
             <span className="form-item-label">OpenAI Key</span>
             {/*password input field that, when changed, sets the openai key*/}
@@ -244,6 +237,9 @@ const AgentWindow = ({
               </div>
             </>
           )}
+          {pluginManager.getAgentComponents().map((value, index, array) => {
+            return <RenderComp key={index} element={value} agentData={agentDatVal.current} setAgentDataState={setAgentDataState}/>
+          })}
         </>
       )}
       <div className="form-item entBtns">
