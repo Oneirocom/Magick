@@ -110,7 +110,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
         },
       })
     }
-
+ 
     return {
       output: isCommand ? (action as string) : (url.data as string),
     }

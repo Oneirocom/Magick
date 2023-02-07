@@ -23,7 +23,7 @@ function App() {
       <Route element={<MainLayout />}>
         <Route element={<MagickPageLayout />}>
           <Route path="/events" element={<EventManagerWindow />} />
-          <Route path="/apps" element={<AgentManagerWindow />} />
+          <Route path="/agents" element={<AgentManagerWindow />} />
           <Route path="/home/*" element={<HomeScreen />} />
 
 
