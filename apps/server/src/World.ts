@@ -1,8 +1,11 @@
-import { randomInt } from './connectors/utils'
 import Agent from './Agent'
 import { ServerError } from 'apps/server/src/utils/ServerError'
 import { ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
 import { app } from './app'
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
 
 const maxMSDiff = 5000
 let interval = 3000
