@@ -11,8 +11,6 @@ const NavBar = () => {
       {isSignedIn && (
         <div className={css['tabbar-section']}>
           <Button>Completions</Button>
-          <Button>Classifications</Button>
-          <Button>Search</Button>
           <Button onClick={() => signOut()}>Clear Credentials</Button>
         </div>
       )}
