@@ -171,7 +171,6 @@ const AgentWindow = ({
     // Clean up and remove the link
     link.parentNode.removeChild(link)
   }
-  const agentComponents = pluginManager.getAgentComponents()
   return !loaded ? (
     <>Loading...</>
   ) : (
@@ -208,17 +207,14 @@ const AgentWindow = ({
               </div>
           <div className="form-item">
             <span className="form-item-label">OpenAI Key</span>
-            {/*password input field that, when changed, sets the openai key*/}
             <KeyInput value={openai_api_key} setValue={setOpenaiApiKey} secret={true} />
           </div>
           <div className="form-item">
             <span className="form-item-label">Ethereum Private Key</span>
-            {/*password input field that, when changed, sets the openai key*/}
             <KeyInput value={eth_private_key} setValue={setEthPrivateKey} secret={true} />
           </div>
           <div className="form-item">
             <span className="form-item-label">Ethereum Public Address</span>
-            {/*password input field that, when changed, sets the openai key*/}
             <KeyInput value={eth_public_address} setValue={setEthPublicAddress} secret={false} />
           </div>
 
@@ -258,11 +254,7 @@ const AgentWindow = ({
 const KeyInput = ({ value, setValue, secret }: { value: string, setValue: any, secret: boolean }) => {
 
   const addKey = (str: string) => {
-    // discount random key presses, could def have better sense checking
-    // ethereum addresses are 42 chars
-    if (str.length > 41) {
       setValue(str)
-    }
   }
 
   const removeKey = () => {
@@ -281,7 +273,7 @@ const KeyInput = ({ value, setValue, secret }: { value: string, setValue: any, s
       <button onClick={removeKey}>remove</button>
     </>
   ) : (
-    <input type={secret ? "password" : "input"} defaultValue={value} onChange={e => { addKey(e.target.value) }} />
+    <input type={secret ? "password" : "input"} value={value} onChange={e => { addKey(e.target.value) }} />
   )
 }
 
