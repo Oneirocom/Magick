@@ -11,13 +11,13 @@ function initEntityLoop(update: Function, lateUpdate: Function) {
   const date = new Date()
 
   async function entityLoop(update: Function, lateUpdate: Function) {
-    const agents = [] as any // REPLACE with feathers call await database.getLastUpdatedInstances()
+    const agents = (await app.service('agents').find()).data
     const now = new Date()
     const updated = []
 
     for (let i = 0; i < agents.length; i++) {
       const id = agents[i].id
-      const lastUpdate = new Date(agents[i].lastUpdated ?? 0)
+      const lastUpdate = new Date(agents[i].updated_at ?? 0)
       if (now.valueOf() - lastUpdate.valueOf() > maxMSDiff) {
         update(id)
 
@@ -58,7 +58,7 @@ export class World {
   }
 
   async updateAgent() {
-    this.newAgents = [] // TODO: replace await database.getAgents()
+    this.newAgents = (await app.service('agents').find()).data
     const newAgents = this.newAgents
     delete newAgents['updated_at']
     const oldAgents = this.oldAgents ?? []
@@ -93,7 +93,11 @@ export class World {
       if (newAgents[i].dirty) {
         await this.removeAgent(newAgents[i].id)
         await this.addAgent(newAgents[i])
-        // TODO: fix this await database.markAgentDirty(newAgents[i].id, false)
+
+        await app.service('agents').patch(newAgents[i].id, {
+          dirty: false
+        })
+
       }
     }
 
@@ -101,15 +105,12 @@ export class World {
   }
 
   async resetAgentSpells() {
-    return;
-    const agents = await app.service('agents').find({ query: {} })
+    const agents = (await app.service('agents').find()).data
     for (const i in agents) {
-
       // rewrite as a feathers service call to empty
       await app.service('agents').patch(agents[i].id, {
         spells: [],
       })
-      console.log('agents[i].id', agents[i].id)
       console.log('agents[i]', agents[i])
     }
   }
@@ -162,12 +163,10 @@ export class World {
   async onDestroy() {}
 
   async addAgent(obj: any) {
-    const data = JSON.parse(obj.data)
-    obj = {...obj, ...data}
-    if (this.objects[obj.id] === undefined) {
-      obj.data = JSON.parse(obj.data)
-      obj.data.id = obj.id
-      this.objects[obj.id] = new Agent(obj)
+    console.log('adding agent. obj is: ', obj)
+    const data = obj.data
+    if (this.objects[data.id] === undefined) {
+      this.objects[data.id] = new Agent(data)
     } else {
       throw new ServerError('already-exists', 'Object already exists')
     }

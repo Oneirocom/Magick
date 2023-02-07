@@ -51,7 +51,6 @@ export class Agent {
   //Clients
   discord: discord_client | null
   id: any
-  rawAgent: Record<string, any>
   data: EntityData
   router: any
   app: any
@@ -109,18 +108,16 @@ export class Agent {
     }
   }
 
-  constructor(agent: any) {
+  constructor(data: any) {
     this.onDestroy()
-    this.id = agent.id
-    this.rawAgent = agent
-    this.data = {...agent.data, ...agent.data.data}
-    this.name = agent.agent ?? agent.name ?? 'agent'
+    this.id = data.id
+    console.log('agent is', data)
+    this.data = data
+    this.name = data.agent ?? data.name ?? 'agent'
     this.spellManager = new SpellManager({
       magickInterface: buildMagickInterface({}) as any,
       cache: false,
     })
-
-    const data = this.data
 
     this.generateVoices(data);
     (async () => {

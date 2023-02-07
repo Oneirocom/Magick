@@ -20,14 +20,11 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
 
   let url = ''
 
-  //@ts-ignore
-  if (!cache && cache.length <= 0) {
     if (voice_provider === 'google') {
       url = await tts(text, voice_character as string)
     } else {
       url = await tts_tiktalknet(text, voice_character, tiktalknet_url)
     }
-  }
 
   console.log('stt url:', url)
 
