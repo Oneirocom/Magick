@@ -16,7 +16,7 @@ import { useLocation } from 'react-router-dom'
 import StorageIcon from '@mui/icons-material/Storage'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories'
 import HubIcon from '@mui/icons-material/Hub'
-import SettingsIcon from '@mui/icons-material/Settings'
+import ManageSearchIcon from '@mui/icons-material/ManageSearch'
 import Card from '@mui/material/Card'
 
 import MagickLogo from './Magick-purple-logo.png'
@@ -162,6 +162,13 @@ export default function MiniDrawer({ children }) {
             open={open}
             onClick={onClick('/apps')}
             text="Applications"
+          />
+          <DrawerItem
+            active={location.pathname === '/searchCorpus'}
+            Icon={ManageSearchIcon}
+            onClick={onClick('/searchCorpus')}
+            open={open}
+            text="Search Corpus"
           />
           {/* <DrawerItem
             active={location.pathname === '/settings'}
