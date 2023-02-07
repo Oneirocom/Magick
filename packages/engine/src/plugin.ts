@@ -6,6 +6,10 @@ export class Plugin {
     agentComponents: []
     setup: Function;
     teardown: Function;
+    agentMethods: {
+        start: Function,
+        stop: Function
+    }
     constructor({
         name,
         nodes,
@@ -13,7 +17,8 @@ export class Plugin {
         windowComponents,
         agentComponents,
         setup,
-        teardown
+        teardown,
+        agentMethods
     }) {
         this.name = name;
         this.nodes = nodes;
@@ -22,6 +27,7 @@ export class Plugin {
         this.agentComponents = agentComponents;
         this.setup = setup;
         this.teardown = teardown;
+        this.agentMethods = agentMethods;
         pluginManager.register(this)
     }
 }

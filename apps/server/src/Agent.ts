@@ -3,26 +3,12 @@ import { tts, tts_tiktalknet } from '@magickml/server-core'
 import { SpellManager } from '@magickml/engine'
 import { app } from './app'
 
-import discord_client from './connectors/discord'
+// import discord_client from '../../../packages/plugin-discord/src/connectors/discord'
 
 type StartLoopArgs = {
   spellHandler: any
   loop_interval?: string
   agent_name?: string
-}
-
-type StartDiscordArgs = {
-  spellHandler: any
-  discord_enabled?: boolean
-  discord_api_key?: string
-  discord_starting_words?: string
-  discord_bot_name_regex?: string
-  discord_bot_name?: string
-  use_voice?: boolean
-  voice_provider?: string
-  voice_character?: string
-  voice_language_code?: string
-  tiktalknet_url?: string
 }
 
 type EntityData = {
@@ -33,23 +19,29 @@ type EntityData = {
   eth_private_key?: string
   eth_public_address?: string
   openai_api_key?: string
-  discord_enabled?: boolean
-  discord_api_key?: string
-  discord_starting_words?: string
-  discord_bot_name_regex?: string
-  discord_bot_name?: string
-  use_voice?: boolean
-  voice_provider?: string
-  voice_character?: string
-  voice_language_code?: string
-  tiktalknet_url?: string
   entity?: any
 }
+
+class AgentPluginManager {
+  plugins: any
+  constructor() {
+    this.plugins = {}
+  }
+
+  registerPlugin(plugin) {
+    this.plugins[plugin.name] = plugin
+  }
+
+  getPlugin(name) {
+    return this.plugins[name]
+  }
+}
+
+export const agentPluginManager = new AgentPluginManager()
 
 export class Agent {
   name = ''
   //Clients
-  discord: discord_client | null
   id: any
   data: EntityData
   router: any
@@ -134,48 +126,10 @@ export class Agent {
         this.startLoop({...data, spellHandler})
       }
 
-    if (data.discord_enabled) {
-      this.startDiscord({...data, spellHandler})
-    }
+    // if (data.discord_enabled) {
+    //   this.startDiscord({...data, spellHandler})
+    // }
   })()
-  }
-
-  async startDiscord({
-    spellHandler,
-    discord_api_key,
-    discord_starting_words,
-    discord_bot_name_regex,
-    discord_bot_name,
-    use_voice,
-    voice_provider,
-    voice_character,
-    voice_language_code,
-    tiktalknet_url,
-  }: StartDiscordArgs) {
-    if (this.discord)
-      throw new Error('Discord already running for this agent on this instance')
-
-    this.discord = new discord_client()
-    await this.discord.createDiscordClient(
-      this,
-      discord_api_key,
-      discord_starting_words,
-      discord_bot_name_regex,
-      discord_bot_name,
-      spellHandler,
-      use_voice,
-      voice_provider,
-      voice_character,
-      voice_language_code,
-      tiktalknet_url
-    )
-  }
-
-  async stopDiscord() {
-    if (!this.discord) throw new Error("Discord isn't running, can't stop it")
-    await this.discord.destroy()
-    this.discord = null
-    console.log('Stopped discord client for agent ' + this.name)
   }
 
   async startLoop({
@@ -213,7 +167,7 @@ export class Agent {
 
 
   async onDestroy() {
-    if (this.discord) this.stopDiscord()
+  //  if (this.discord) this.stopDiscord()
   }
 
   async generateVoices(data: any) {
