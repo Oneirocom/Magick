@@ -6,9 +6,9 @@ import Drawer from '../Drawer/Drawer'
 const MainLayout = () => {
   return (
     <ModalProvider>
-      {/* <Drawer> */}
+      <Drawer>
         <Outlet />
-      {/* </Drawer> */}
+      </Drawer>
     </ModalProvider>
   )
 }

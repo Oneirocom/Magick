@@ -45,7 +45,7 @@ const OpenProject = ({
           roundness="round"
           unpadded
         >
-          {spells.slice(0, 2).map((spell, i) => {
+          {spells.data.slice(0, 2).map((spell, i) => {
             return (
               <ProjectRow
                 key={i}

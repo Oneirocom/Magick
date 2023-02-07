@@ -44,7 +44,6 @@ const StartScreen = () => {
     await newSpell({
       graph: spellData.graph,
       name: spellData.name,
-      gameState: spellData.gameState,
     })
 
     dispatch(

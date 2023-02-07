@@ -4,13 +4,6 @@
     "outDir": "../../dist/out-tsc",
     "types": ["vite/client", "node"]
   },
-  "paths": {
-    "@/*": ["src/*"],
-    "@components/*": ["src/components/*"],
-    "stream": [
-      "node_modules/stream-browserify"
-    ]
-  },
   "include": ["src/**/*"],
   "exclude": [
     "**/*.spec.ts",

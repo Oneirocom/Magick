@@ -1,5 +1,5 @@
-import { Node, Socket, Control } from '@magickml/client-core'
-
+//@ts-nocheck
+import { Node, Socket, Control, Image, Upload } from '@magickml/client-core'
 import Icon, { componentCategories } from '../Icon/Icon'
 import css from './Node.module.css'
 
@@ -9,12 +9,12 @@ export class MyNode extends Node {
   render() {
     const { node, bindSocket, bindControl } = this.props
     const { outputs, controls, inputs, selected } = this.state
-
     const name = node.displayName ? node.displayName : node.name
     const fullName = node.data.name ? `${name} - ${node.data.name}` : name
     const hasError = node.data.error
     const hasSuccess = node.data.success
-
+    const img_url = node.data.image
+    const html = node.data.func
     return (
       <div
         className={`${css['node']} ${css[selected]} ${
@@ -36,10 +36,13 @@ export class MyNode extends Node {
           {fullName}
         </div>
         <div className={css['connections-container']}>
+          {html != undefined && <div dangerouslySetInnerHTML={{ __html: html }} />}
+          {img_url != undefined && <Upload output={outputs} id_image={img_url} />}
           {inputs.length > 0 && (
             <div className={css['connection-container']}>
               {inputs.map(input => (
                 <div className={css['input']} key={input.key}>
+                  
                   <Socket
                     type="input"
                     socket={input.socket}
@@ -64,6 +67,9 @@ export class MyNode extends Node {
             <div className={`${css['connection-container']} ${css['out']}`}>
               {outputs.map(output => (
                 <div className={css['output']} key={output.key}>
+                  {typeof(output) != "undefined" && ( output.connections.forEach((element)=>{
+                    element.data = {...element.data, hello:"hello"}
+                  }))}
                   <div className="output-title">{output.name}</div>
                   <Socket
                     type="output"
