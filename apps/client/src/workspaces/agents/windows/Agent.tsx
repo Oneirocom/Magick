@@ -96,36 +96,34 @@ const AgentWindow = ({
           `${import.meta.env.VITE_APP_API_URL}/agent?instanceId=` + id
         )
         console.log('res is', res)
-        if (!res.data.data) {
-          res.data.data = {}
-        }
+        let agentData = res.data.data ? JSON.parse(res.data.data) : {}
         setEnabled(res.data.enabled === true)
-        setDiscordEnabled(res.data.data.discord_enabled === true)
-        setUseVoice(res.data.data.use_voice === true)
-        setVoiceProvider(res.data.data.voice_provider)
-        setVoiceCharacter(res.data.data.voice_character)
-        setVoiceLanguageCode(res.data.data.voice_language_code)
-        setVoiceDefaultPhrases(res.data.data.voice_default_phrases)
-        setTikTalkNetUrl(res.data.data.tiktalknet_url)
+        setDiscordEnabled(agentData.discord_enabled === true)
+        setUseVoice(agentData.use_voice === true)
+        setVoiceProvider(agentData.voice_provider)
+        setVoiceCharacter(agentData.voice_character)
+        setVoiceLanguageCode(agentData.voice_language_code)
+        setVoiceDefaultPhrases(agentData.voice_default_phrases)
+        setTikTalkNetUrl(agentData.tiktalknet_url)
 
-        setOpenaiApiKey(res.data.data.openai_api_key)
-        setDiscordApiKey(res.data.data.discord_api_key)
-        setDiscordStartingWords(res.data.data.discord_starting_words)
-        setDiscordBotNameRegex(res.data.data.discord_bot_name_regex)
-        setDiscordBotName(res.data.data.discord_bot_name)
-        setDiscordEmptyResponses(res.data.data.discord_empty_responses)
+        setOpenaiApiKey(agentData.openai_api_key)
+        setDiscordApiKey(agentData.discord_api_key)
+        setDiscordStartingWords(agentData.discord_starting_words)
+        setDiscordBotNameRegex(agentData.discord_bot_name_regex)
+        setDiscordBotName(agentData.discord_bot_name)
+        setDiscordEmptyResponses(agentData.discord_empty_responses)
         setDiscordSpellHandlerIncoming(
-          res.data.data.discord_spell_handler_incoming
+          agentData.discord_spell_handler_incoming
         )
-        setDiscordSpellHandlerUpdate(res.data.data.discord_spell_handler_update)
+        setDiscordSpellHandlerUpdate(agentData.discord_spell_handler_update)
 
-        setEthPrivateKey(res.data.data.eth_private_key)
-        setEthPublicAddress(res.data.data.eth_public_address)
+        setEthPrivateKey(agentData.eth_private_key)
+        setEthPublicAddress(agentData.eth_public_address)
 
-        setLoopEnabled(res.data.data.loop_enabled === true)
-        setLoopInterval(res.data.data.loop_interval)
-        setLoopAgentName(res.data.data.loop_agent_name)
-        setLoopSpellHandler(res.data.data.loop_spell_handler)
+        setLoopEnabled(agentData.loop_enabled === true)
+        setLoopInterval(agentData.loop_interval)
+        setLoopAgentName(agentData.loop_agent_name)
+        setLoopSpellHandler(agentData.loop_spell_handler)
 
         setLoaded(true)
       })()
@@ -366,7 +364,7 @@ const AgentWindow = ({
           }}
         />
       </div>
-      <ChatBox
+      {/* <ChatBox
         client={'AgentWindow'}
         spell_handler={discord_spell_handler_incoming}
         channelType={'AgentWindow'}
@@ -374,7 +372,7 @@ const AgentWindow = ({
         sender={'Speaker'}
         observer={'Agent'}
         channel={'AgentWindow'}
-      />
+      /> */}
       <div className="form-item">
         <span className="form-item-label">Voice Enabled</span>
         <input
@@ -521,35 +519,17 @@ const AgentWindow = ({
           <div className="form-item">
             <span className="form-item-label">OpenAI Key</span>
             {/*password input field that, when changed, sets the openai key*/}
-            <input
-              type="password"
-              defaultValue={openai_api_key}
-              onChange={e => {
-                setOpenaiApiKey(e.target.value)
-              }}
-            />
+            <KeyInput value={openai_api_key} setValue={setOpenaiApiKey} secret={true} />
           </div>
           <div className="form-item">
             <span className="form-item-label">Ethereum Private Key</span>
             {/*password input field that, when changed, sets the openai key*/}
-            <input
-              type="password"
-              defaultValue={eth_private_key}
-              onChange={e => {
-                setEthPrivateKey(e.target.value)
-              }}
-            />
+            <KeyInput value={eth_private_key} setValue={setEthPrivateKey} secret={true} />
           </div>
           <div className="form-item">
             <span className="form-item-label">Ethereum Public Address</span>
             {/*password input field that, when changed, sets the openai key*/}
-            <input
-              type="input"
-              defaultValue={eth_public_address}
-              onChange={e => {
-                setEthPublicAddress(e.target.value)
-              }}
-            />
+            <KeyInput value={eth_public_address} setValue={setEthPublicAddress} secret={false} />
           </div>
           <div className="form-item">
             <span className="form-item-label">Discord Enabled</span>
@@ -567,13 +547,7 @@ const AgentWindow = ({
             <>
               <div className="form-item">
                 <span className="form-item-label">Discord API Key</span>
-                <input
-                  type="password"
-                  defaultValue={discord_api_key}
-                  onChange={e => {
-                    setDiscordApiKey(e.target.value)
-                  }}
-                />
+                <KeyInput value={discord_api_key} setValue={setDiscordApiKey} secret={true} />
               </div>
 
               <div className="form-item">
@@ -656,7 +630,7 @@ const AgentWindow = ({
                     setDiscordSpellHandlerUpdate(event.target.value)
                   }}
                 >
-                  <option value="null" selected>
+                  <option value="null">
                     --Disabled--
                   </option>
                   {spellList.length > 0 &&
@@ -725,6 +699,36 @@ const AgentWindow = ({
         <button onClick={() => exportEntity()}>Export</button>
       </div>
     </div>
+  )
+}
+
+const KeyInput = ({ value, setValue, secret }: { value: string, setValue: any, secret: boolean }) => {
+
+  const addKey = (str: string) => {
+    // discount random key presses, could def have better sense checking
+    // ethereum addresses are 42 chars
+    if (str.length > 41) {
+      setValue(str)
+    }
+  }
+
+  const removeKey = () => {
+    setValue('')
+  }
+
+  const obfuscateKey = (str: string) => {
+    const first = str.substring(0, 6)
+    const last = str.substring(str.length - 4, str.length)
+    return `${first}....${last}`
+  }
+
+  return value ? (
+    <>
+      <p>{secret ? obfuscateKey(value) : value}</p>
+      <button onClick={removeKey}>remove</button>
+    </>
+  ) : (
+    <input type={secret ? "password" : "input"} defaultValue={value} onChange={e => { addKey(e.target.value) }} />
   )
 }
 
