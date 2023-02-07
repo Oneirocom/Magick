@@ -8,11 +8,11 @@ import { Plugin } from "../../engine/src" // TODO: fix me
 import { DiscordAgentWindow } from "./components/agent.component"
 import { DiscordInput } from "./nodes/DiscordInput"
 import { DiscordOutput } from "./nodes/DiscordOutput"
-import { UploadService } from './services/Upload/Upload.utils'
+import { UploadService } from './services/Upload/Upload.class'
 const DiscordPlugin = new Plugin({
   'name': 'DiscordPlugin', 
   'nodes': [DiscordInput, DiscordOutput], 
-  'services': [UploadService], 
+  'services': [['DiscordPlugin',UploadService]], 
   'agentComponents' : [DiscordAgentWindow], 
   'windowComponents': [], 
   'setup': ()=>{console.log("DiscordPlugin")}, 
