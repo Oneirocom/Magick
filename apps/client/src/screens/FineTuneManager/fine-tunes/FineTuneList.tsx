@@ -71,7 +71,9 @@ function FineTunesTable({ fineTunes }: { fineTunes: OpenAI.FineTune[] }) {
               key={fineTune.id}
             >
               <td className="p-2 max-w-0 truncate" title={fineTune.id}>
-                <a href={`/fine-tunes/${fineTune.id}`}>{fineTune.id}</a>
+                <a href={`fineTuneManager/fine-tune/${fineTune.id}`}>
+                  {fineTune.id}
+                </a>
               </td>
               <td className="p-2 max-w-0 truncate">
                 {[...fineTune.training_files, ...fineTune.validation_files]
