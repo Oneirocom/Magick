@@ -30,7 +30,7 @@ export default defineConfig({
       root: '../../',
     }),
     spaFallbackWithDot(),
-    mdPlugin({ mode: [Mode.REACT] }),
+    mdPlugin({ mode: [Mode.HTML, Mode.TOC, Mode.REACT] }),
   ],
   optimizeDeps: {
     esbuildOptions: {
