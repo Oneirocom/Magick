@@ -14,7 +14,7 @@ export class InputControl extends DataControl {
     defaultValue?: unknown
   }) {
     super({
-      dataKey: dataKey + nonce++,
+      dataKey: dataKey,
       name: name,
       component: 'input',
       defaultValue,

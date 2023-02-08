@@ -36,13 +36,16 @@ export class MyNode extends Node {
           {fullName}
         </div>
         <div className={css['connections-container']}>
-          {html != undefined && <div dangerouslySetInnerHTML={{ __html: html }} />}
-          {img_url != undefined && <Upload output={outputs} id_image={img_url} />}
+          {html != undefined && (
+            <div dangerouslySetInnerHTML={{ __html: html }} />
+          )}
+          {img_url != undefined && (
+            <Upload output={outputs} id_image={img_url} />
+          )}
           {inputs.length > 0 && (
             <div className={css['connection-container']}>
               {inputs.map(input => (
                 <div className={css['input']} key={input.key}>
-                  
                   <Socket
                     type="input"
                     socket={input.socket}
@@ -67,9 +70,10 @@ export class MyNode extends Node {
             <div className={`${css['connection-container']} ${css['out']}`}>
               {outputs.map(output => (
                 <div className={css['output']} key={output.key}>
-                  {typeof(output) != "undefined" && ( output.connections.forEach((element)=>{
-                    element.data = {...element.data, hello:"hello"}
-                  }))}
+                  {typeof output != 'undefined' &&
+                    output.connections.forEach(element => {
+                      element.data = { ...element.data, hello: 'hello' }
+                    })}
                   <div className="output-title">{output.name}</div>
                   <Socket
                     type="output"
