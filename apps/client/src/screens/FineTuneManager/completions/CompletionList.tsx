@@ -5,6 +5,7 @@ import UsageInstructions from '../instructions/UsageInstructions'
 import React from 'react'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
+import { ReactComponent as CompletionInstructions } from './instructions.md'
 
 export default function ClassificationList() {
   const navigate = useNavigate()
@@ -37,18 +38,7 @@ export default function ClassificationList() {
         <FileListTable purpose="fine-tune" />
       </section>
       <UsageInstructions>
-        To classify with more than 200 examples, upload a file containing
-        classification examples and labels. The file can be CSV, Excel, or
-        JSONL. It must contain the fields "text" and "label", and may also
-        include the column "metadata". For Excel, the first column is "text" and
-        the second column is "label". [More
-        details](https://beta.openai.com/docs/guides/classifications). - All
-        labels need to be capitalized. If not, input labels will be formatted at
-        the backend. - Each label needs to be prepended with a white space when
-        encoded by the tokenizer. - We highly recommend that each label is a
-        single token word. - If every label is a single token, the calculated
-        probabilities would be precise. Otherwise the probabilities are
-        approximations. For example:
+        <CompletionInstructions></CompletionInstructions>
       </UsageInstructions>
     </main>
   )
