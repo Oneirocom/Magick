@@ -48,6 +48,7 @@
     "@types/dotenv-flow": "^3.2.0",
     "@types/filesize": "^5.0.0",
     "axios": "1.2.2",
+    "buffer": "^6.0.3",
     "cheerio": "^1.0.0-rc.12",
     "classnames": "^2.3.1",
     "compromise": "^14.0.0",
