@@ -100,7 +100,6 @@ const AgentWindow = ({
   }
 
   const update = () => {
-    console.log('Update called')
     const _data = {
       enabled,
       data: {
@@ -113,6 +112,8 @@ const AgentWindow = ({
         root_spell,
       },
     }
+    console.log('Update called', _data)
+
     axios
       .patch(`${magickApiRootUrl}/agents/${id}`, _data)
       .then(res => {

@@ -1,16 +1,9 @@
-//Creating two endpoint for discord
-// 1. Input for Discord Input Node
-//    1. EntityID
-//    2. Content
-//    3. Sender
-import type { Params } from '@feathersjs/feathers'
 import { Plugin } from "../../engine/src" // TODO: fix me
 import { DiscordAgentWindow } from "./components/agent.component"
 import { DiscordInput } from "./nodes/DiscordInput"
 import { DiscordOutput } from "./nodes/DiscordOutput"
 import { UploadService } from './services/Upload/Upload.utils'
 
-import { discord_client } from './connectors/discord'
 
 type StartDiscordArgs = {
   spellHandler: any
@@ -26,9 +19,19 @@ type StartDiscordArgs = {
   tiktalknet_url?: string
 }
 
+function getAgentMethods() {
+  // if we are in node, we need to import the discord client
+  if(typeof window !== 'undefined') return
+  
+  let discord_client
+  import('./connectors/discord')
+  .then((module) => {
+    discord_client = module.discord_client
+  });
+
   async function startDiscord({
     spellHandler,
-    discord_api_key,
+    discord_api_key,  
     discord_starting_words,
     discord_bot_name_regex,
     discord_bot_name,
@@ -64,6 +67,12 @@ type StartDiscordArgs = {
     console.log('Stopped discord client for agent ' + this.name)
   }
 
+  return {
+    start: startDiscord,
+    stop: stopDiscord,
+  }
+}
+
 const DiscordPlugin = new Plugin({
   name: 'DiscordPlugin', 
   nodes: [DiscordInput, DiscordOutput], 
@@ -72,10 +81,7 @@ const DiscordPlugin = new Plugin({
   windowComponents: [], 
   setup: ()=>{console.log("DiscordPlugin")}, 
   teardown: ()=>{console.log("DiscordPlugin")},
-  agentMethods: {
-    start: startDiscord,
-    stop: stopDiscord,
-  },
+  agentMethods: getAgentMethods(),
 })
 
 export default DiscordPlugin;

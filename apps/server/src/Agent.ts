@@ -1,9 +1,7 @@
 import { buildMagickInterface } from '../../server/src/buildMagickInterface'
 import { tts, tts_tiktalknet } from '@magickml/server-core'
-import { SpellManager } from '@magickml/engine'
+import { SpellManager, pluginManager } from '@magickml/engine'
 import { app } from './app'
-
-// import discord_client from '../../../packages/plugin-discord/src/connectors/discord'
 
 type StartLoopArgs = {
   spellHandler: any
@@ -21,23 +19,6 @@ type EntityData = {
   openai_api_key?: string
   entity?: any
 }
-
-class AgentPluginManager {
-  plugins: any
-  constructor() {
-    this.plugins = {}
-  }
-
-  registerPlugin(plugin) {
-    this.plugins[plugin.name] = plugin
-  }
-
-  getPlugin(name) {
-    return this.plugins[name]
-  }
-}
-
-export const agentPluginManager = new AgentPluginManager()
 
 export class Agent {
   name = ''
@@ -62,15 +43,13 @@ export class Agent {
     //   },
     // })
     // rewrite as a feathers service
-    await app.service('agents').patch(this.id, {
-      spells: {
-        // TODO: this must be wrong?
-        // @ts-ignore
-        connect: {
-          id: spell.id,
-        },
-      },
-    })
+    // await app.service('agents').patch(this.id, {
+    //   spells: {
+    //     connect: {
+    //       id: spell.id,
+    //     },
+    //   },
+    // })
 
 
     return async function spellHandler({
@@ -113,17 +92,27 @@ export class Agent {
 
     this.generateVoices(data);
     (async () => {
+      console.log('starting agent', data)
 
-      const spell = await app.service('spells').find({
+      const spell = (await app.service('spells').find({
         query: { name: data.root_spell },
-      })
-      
+      })).data[0]
+
+      console.log('spell is', spell)
+
       const spellHandler = await this.createSpellHandler({
         spell,
       })
-            
+
       if (data.loop_enabled) {
         this.startLoop({...data, spellHandler})
+      }
+
+      const agentStartMethods = pluginManager.getAgentStartMethods();
+      console.log('agentStartMethods', agentStartMethods)
+      for (const method of Object.keys(agentStartMethods)) {
+        console.log('method', method)
+        await agentStartMethods[method]({agent: this, data, spellHandler})
       }
 
     // if (data.discord_enabled) {
@@ -167,7 +156,12 @@ export class Agent {
 
 
   async onDestroy() {
-  //  if (this.discord) this.stopDiscord()
+    const agentStopMethods = pluginManager.getAgentStopMethods();
+    console.log('agentStartMethods', agentStopMethods)
+    for (const method of Object.keys(agentStopMethods)) {
+      console.log('method', method)
+      agentStopMethods[method]()
+    }
   }
 
   async generateVoices(data: any) {
