@@ -14,24 +14,24 @@ function initEntityLoop(update: Function, lateUpdate: Function) {
   const date = new Date()
 
   async function entityLoop(update: Function, lateUpdate: Function) {
-    const agents = (await app.service('agents').find()).data
-    const now = new Date()
-    const updated = []
+    // const agents = (await app.service('agents').find()).data
+    // const now = new Date()
+    // const updated = []
 
-    for (let i = 0; i < agents.length; i++) {
-      const id = agents[i].id
-      const lastUpdate = new Date(agents[i].updated_at ?? 0)
-      if (now.valueOf() - lastUpdate.valueOf() > maxMSDiff) {
-        update(id)
+    // for (let i = 0; i < agents.length; i++) {
+    //   const id = agents[i].id
+    //   const lastUpdate = new Date(agents[i].updated_at ?? 0)
+    //   if (now.valueOf() - lastUpdate.valueOf() > maxMSDiff) {
+    //     update(id)
 
-        updated.push(id)
-        // TODO: update the db
-        // database.setEntityUpdated(id)
-      }
-    }
-    for (let i = 0; i < updated.length; i++) {
-      lateUpdate(updated[i])
-    }
+    //     updated.push(id)
+    //     // TODO: update the db
+    //     // database.setEntityUpdated(id)
+    //   }
+    // }
+    // for (let i = 0; i < updated.length; i++) {
+    //   lateUpdate(updated[i])
+    // }
   }
   setInterval(() => {
     entityLoop(
