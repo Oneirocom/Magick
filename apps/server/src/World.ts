@@ -167,7 +167,7 @@ export class World {
 
   async addAgent(obj: any) {
     console.log('adding agent. obj is: ', obj)
-    const data = obj.data
+    const data = {...obj.data, id: obj.id, enabled: obj.enabled, dirty: obj.dirty, spells: obj.spells, updated_at: obj.updated_at}
     if (this.objects[data.id] === undefined) {
       this.objects[data.id] = new Agent(data)
     } else {

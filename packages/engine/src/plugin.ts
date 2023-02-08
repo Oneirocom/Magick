@@ -55,6 +55,27 @@ class PluginManager {
         })
         return agentComp
     }
+
+    getAgentStartMethods(){
+        let agentStartMethods = {}
+        PluginManager.pluginList.forEach((plugin) => {
+            let obj = {}
+            obj[plugin.name] = plugin.agentMethods.start
+            agentStartMethods = {...agentStartMethods, ...obj}
+        })
+        return agentStartMethods
+    }
+
+    getAgentStopMethods(){
+        let agentStopMethods = {}
+        PluginManager.pluginList.forEach((plugin) => {
+            let obj = {}
+            obj[plugin.name] = plugin.agentMethods.stop
+            agentStopMethods = {...agentStopMethods, ...obj}
+        })
+        return agentStopMethods
+    }
+
     /*
     Gets All Services from all the registered plugins 
     */

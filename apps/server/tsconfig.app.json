@@ -6,5 +6,5 @@
     "types": ["node"]
   },
   "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"],
-  "include": ["**/*.ts", "./env.d.ts", "../../packages/plugin-discord/src/connectors/addSpeechEvent.ts", "../../packages/plugin-discord/src/connectors/addSpeechEvent.ts", "../../packages/plugin-discord/src/agent/discord-voice.ts", "../../packages/plugin-discord/src/agent/discord-voice.ts", "../../packages/plugin-discord/src/agent/discord.ts", "../../packages/plugin-discord/src/connectors/speech.ts", "../../packages/plugin-discord/src/connectors/speech.ts"]
+  "include": ["**/*.ts", "./env.d.ts"]
 }
