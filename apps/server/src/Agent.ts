@@ -92,33 +92,24 @@ export class Agent {
 
     this.generateVoices(data);
     (async () => {
-      console.log('starting agent', data)
-
       const spell = (await app.service('spells').find({
         query: { name: data.root_spell },
       })).data[0]
-
-      console.log('spell is', spell)
 
       const spellHandler = await this.createSpellHandler({
         spell,
       })
 
       if (data.loop_enabled) {
-        this.startLoop({...data, spellHandler})
+        this.startLoop({ ...data, spellHandler })
       }
 
       const agentStartMethods = pluginManager.getAgentStartMethods();
-      console.log('agentStartMethods', agentStartMethods)
       for (const method of Object.keys(agentStartMethods)) {
         console.log('method', method)
-        await agentStartMethods[method]({agent: this, data, spellHandler})
+        await agentStartMethods[method]({ ...data, agent: this, spellHandler })
       }
-
-    // if (data.discord_enabled) {
-    //   this.startDiscord({...data, spellHandler})
-    // }
-  })()
+    })()
   }
 
   async startLoop({
