@@ -1,13 +1,13 @@
-import ErrorMessage from "components/ErrorMessage";
-import Loading from "components/Loading";
-import React from "react";
-import useFineTuneResults from "./useFineTuneResults";
+import ErrorMessage from '../components/ErrorMessage'
+import Loading from '../components/Loading'
+import React from 'react'
+import useFineTuneResults from './useFineTuneResults'
 
 export default function FineTuneResultsFile({ id }: { id: string }) {
-  const { results, error } = useFineTuneResults(id);
+  const { results, error } = useFineTuneResults(id)
 
-  if (error) return <ErrorMessage error={error} />;
-  if (!results) return <Loading />;
+  if (error) return <ErrorMessage error={error} />
+  if (!results) return <Loading />
 
   return (
     <table className="w-full text-left" cellPadding={4}>
@@ -22,7 +22,7 @@ export default function FineTuneResultsFile({ id }: { id: string }) {
         </tr>
       </thead>
       <tbody>
-        {results.map((row) => (
+        {results.map(row => (
           <tr key={row.step}>
             <td>{row.step}</td>
             <td>{row.elapsed_tokens}</td>
@@ -34,5 +34,5 @@ export default function FineTuneResultsFile({ id }: { id: string }) {
         ))}
       </tbody>
     </table>
-  );
+  )
 }
