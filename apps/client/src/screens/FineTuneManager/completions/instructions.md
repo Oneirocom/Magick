@@ -6,7 +6,7 @@ Then create a new model using that training file. You can use a second file for 
 
 For example:
 
-```
+```json
 { "prompt": "Company: BHFF insurance\nProduct: allround insurance\nAd:One stop shop for all your insurance needs!\nSupported:",
   "completion": "yes" }
 { "prompt": "Company: Loft conversion specialists\nProduct: -\nAd:Straight teeth in weeks!\nSupported:",
