@@ -5,7 +5,7 @@ import UsageInstructions from '../instructions/UsageInstructions'
 import React from 'react'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
-import { ReactComponent as CompletionInstructions } from './instructions.md'
+import { html as CompletionInstructions } from './instructions.md'
 
 export default function ClassificationList() {
   const navigate = useNavigate()
@@ -38,7 +38,7 @@ export default function ClassificationList() {
         <FileListTable purpose="fine-tune" />
       </section>
       <UsageInstructions>
-        <CompletionInstructions></CompletionInstructions>
+        <div dangerouslySetInnerHTML={{ __html: CompletionInstructions }} />
       </UsageInstructions>
     </main>
   )
