@@ -6,6 +6,7 @@ import { UploadService } from './services/Upload/Upload.utils'
 
 
 type StartDiscordArgs = {
+  agent: any,
   spellHandler: any
   discord_enabled?: boolean
   discord_api_key?: string
@@ -30,6 +31,7 @@ function getAgentMethods() {
   });
 
   async function startDiscord({
+    agent,
     spellHandler,
     discord_api_key,  
     discord_starting_words,
@@ -41,12 +43,10 @@ function getAgentMethods() {
     voice_language_code,
     tiktalknet_url,
   }: StartDiscordArgs) {
-    if (this.discord)
-      throw new Error('Discord already running for this agent on this instance')
-
-    this.discord = new discord_client()
-    await this.discord.createDiscordClient(
-      this,
+    const discord = new discord_client()
+    agent.discord = discord
+    await discord.createDiscordClient(
+      agent,
       discord_api_key,
       discord_starting_words,
       discord_bot_name_regex,
