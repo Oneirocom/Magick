@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
+import mdPlugin, { Mode } from 'vite-plugin-markdown'
 
 export default defineConfig({
   server: {
@@ -20,18 +21,16 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      plugins: [
-        rollupNodePolyFill({
-          
-        }),
-      ],
+      plugins: [rollupNodePolyFill({})],
     },
   },
   plugins: [
-    react(),    viteTsConfigPaths({
+    react(),
+    viteTsConfigPaths({
       root: '../../',
     }),
-    spaFallbackWithDot()
+    spaFallbackWithDot(),
+    mdPlugin({ mode: [Mode.REACT] }),
   ],
   optimizeDeps: {
     esbuildOptions: {
@@ -42,7 +41,7 @@ export default defineConfig({
       // Enable esbuild polyfill plugins
       plugins: [
         NodeGlobalsPolyfillPlugin({
-          process: false
+          process: false,
         }),
         NodeModulesPolyfillPlugin(),
       ],
@@ -72,6 +71,6 @@ function spaFallbackWithDot() {
           next()
         })
       }
-    }
+    },
   }
 }
