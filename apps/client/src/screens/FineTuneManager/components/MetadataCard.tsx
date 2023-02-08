@@ -1,6 +1,4 @@
-// import { faCopy } from "@fortawesome/free-solid-svg-icons/faCopy";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { Tooltip } from "@nextui-org/react";
+import Tooltip from '@mui/material/Tooltip'
 import { useState } from 'react'
 import { useCopyToClipboard } from 'usehooks-ts'
 import InfoCard from './InfoCard'
@@ -31,7 +29,7 @@ export function MetadataCard({
             {clickToCopy ? (
               <ClickToCopy className="flex gap-2 items-center" value={value}>
                 <span className="line-clamp-1">
-                  <FontAwesomeIcon icon={faCopy} /> {value}
+                  {'COPY ICON HERE'} {value}
                 </span>
               </ClickToCopy>
             ) : (
@@ -48,7 +46,7 @@ function ClickToCopy({
   className,
   value,
 }: {
-  children: React.ReactNode
+  children: React.ReactElement
   className?: string
   value: string
 }) {
@@ -58,13 +56,13 @@ function ClickToCopy({
   return (
     <Tooltip
       className={className}
-      content={copied ? 'Copied!' : 'Click to copy'}
-      onVisibleChange={visible => visible && setCopied(false)}
+      title={copied ? 'Copied!' : 'Click to copy'}
       placement="left"
       onClick={async () => {
         await copy(value)
         setCopied(true)
       }}
+      onClose={() => setCopied(false)}
     >
       {children}
     </Tooltip>
