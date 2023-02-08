@@ -109,7 +109,7 @@
 //   async clickSelectorFirstMatch(selector: any) {
 //     if (this.autoLog) console.log(`Clicking for first ${selector}`)
 
-//     await this.page.evaluate((selector: any) => {
+//     await this.page.evaluate((selector: any) => {F
 //       const matches = Array.from(document.querySelectorAll(selector))
 //       const singleMatch = matches[0]
 //       if (singleMatch) singleMatch.click()
