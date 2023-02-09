@@ -1,7 +1,5 @@
 import { MagickComponent } from '../types'
-import { GetWikipediaSummary } from './apis/GetWikipediaSummary'
 import { QueryGoogle } from './apis/QueryGoogle'
-import { WeaviateWikipedia } from './apis/WeaviateWikipedia'
 import { CheckBalanceForERC20 } from './ethereum/CheckBalanceForERC20'
 import { CheckEthBalance } from './ethereum/CheckEthBalance'
 import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentTransactionsFromWallet'
@@ -130,8 +128,6 @@ export let components = {
   getRecentTransactions: () => new GetRecentTransactions(),
   checkForRecentTransactionsFromWallet: () =>
     new CheckForRecentTransactionsFromWallet(),
-  weaviateWikipedia: () => new WeaviateWikipedia(),
-  getWikipediaSummary: () => new GetWikipediaSummary(),
   merge: () => new Merge(),
   orGate: () => new OrGate(),
   log: () => new Log(),

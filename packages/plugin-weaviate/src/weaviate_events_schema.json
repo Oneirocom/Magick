@@ -1,14 +1,13 @@
-export default
 {
     "class": "event",
     "description": "A Event for storing the and recalling at a later point of time",
     "invertedIndexConfig": {
         "indexTimestamps": true
     },
-    "vectorizer": "text2vec-contextionary",   // vectorizer to use for data objects added to this class
+    "vectorizer": "text2vec-contextionary",
     "moduleConfig": {
       "text2vec-contextionary": {  
-        "vectorizeClassName": true            // include the class name in vector calculation (default true)
+        "vectorizeClassName": true
       }
     },
     "properties": [

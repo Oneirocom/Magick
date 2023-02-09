@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { CreateEventArgs, GetEventArg,GetEventArgs, SemanticSearch } from '@magickml/engine'
 import weaviate from 'weaviate-client'
-import EventSchema from './weaviate_events_schema'
+import EventSchema from '../weaviate_events_schema.json'
 import { env } from 'process'
 
 const DOCUMENTS_CLASS_NAME = 'events'
@@ -89,8 +89,10 @@ export class weaviate_connection {
     const
       { sender, observer, maxCount, max_time_diff } = params
     if (!weaviate_client) {
+      console.log('init weaviate client')
       await initWeaviateClientEvent()
     }
+    console.log('get events', params)
     const events = await weaviate_client.graphql
       .get()
       .withClassName('Event')
@@ -128,14 +130,14 @@ export class weaviate_connection {
       })
     const event_obj = events.data.Get.Event
 
-    if (max_time_diff > 0) {
-      const now = new Date()
-      const filtered = event_obj.filter(e => {
-        const diff = now.getTime() - new Date(e.date).getTime()
-        return diff < max_time_diff
-      })
-      return filtered
-    }
+    // if (max_time_diff > 0) {
+    //   const now = new Date()
+    //   const filtered = event_obj.filter(e => {
+    //     const diff = now.getTime() - new Date(e.date).getTime()
+    //     return diff < max_time_diff
+    //   })
+    //   return filtered
+    // }
     return event_obj
   }
   static async getAllEvents() {

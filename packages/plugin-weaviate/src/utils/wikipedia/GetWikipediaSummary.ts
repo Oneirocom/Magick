@@ -6,10 +6,12 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../types'
-import { TaskOptions } from '../../plugins/taskPlugin/task'
-import { anySocket, stringSocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+  anySocket,
+  stringSocket,
+  triggerSocket,
+  MagickComponent,
+  TaskOptions
+} from '@magickml/engine'
 
 const info = `Given a keyword pull in relevant information of the wevaiate wikipedia instance.`
 
@@ -59,7 +61,7 @@ export class GetWikipediaSummary extends MagickComponent<void> {
     this._task.closed = ['success', 'error']
 
     const getWikipediaSummary = async (keyword: string) => {
-      const root = import.meta.env.API_URL
+      const root = (typeof process !== 'undefined') && process.env.API_URL
       const url = `${root}/wikipediaSummary?keyword=${keyword}`
 
       const response = await fetch(url)

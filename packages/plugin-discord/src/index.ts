@@ -60,11 +60,11 @@ function getAgentMethods() {
     )
   }
 
-  async function stopDiscord() {
-    if (!this.discord) throw new Error("Discord isn't running, can't stop it")
-    await this.discord.destroy()
-    this.discord = null
-    console.log('Stopped discord client for agent ' + this.name)
+  async function stopDiscord(agent) {
+    if (!agent.discord) throw new Error("Discord isn't running, can't stop it")
+    await agent.discord.destroy()
+    agent.discord = null
+    console.log('Stopped discord client for agent ' + agent.name)
   }
 
   return {
@@ -78,7 +78,9 @@ const DiscordPlugin = new Plugin({
   nodes: [DiscordInput, DiscordOutput], 
   services: [['DiscordPlugin',UploadService]],
   agentComponents: [DiscordAgentWindow], 
-  windowComponents: [], 
+  windowComponents: [],
+  serverInit: null,
+  serverRoutes: null,
   setup: ()=>{console.log("DiscordPlugin")}, 
   teardown: ()=>{console.log("DiscordPlugin")},
   agentMethods: getAgentMethods(),

@@ -1,12 +1,10 @@
 import { OPENAI_API_KEY } from '@magickml/engine'
 import { tts, tts_tiktalknet } from '@magickml/server-core'
 import Koa from 'koa'
-import { Route } from './types'
-import { ServerError } from './utils/ServerError'
+import { Route } from '@magickml/server-core'
 import { makeCompletion } from '@magickml/engine'
 import { MakeModelRequest } from './utils/MakeModelRequest'
-import { queryGoogleSearch } from '../../../packages/engine/src/functions/queryGoogle'
-import weaviate from 'weaviate-client'
+import { queryGoogleSearch, ServerError } from '@magickml/server-core'
 
 const getTextToSpeech = async (ctx: Koa.Context) => {
   const text = ctx.request.query.text as string
@@ -83,34 +81,6 @@ const hfRequest = async (ctx: Koa.Context) => {
   return (ctx.body = { succes: success, data: data })
 }
 
-const makeWeaviateRequest = async (ctx: Koa.Context) => {
-  const body = ctx.request.body as any
-  const keyword = body.keyword as string
-
-  const client = weaviate.client({
-    scheme: 'http',
-    host: 'semantic-search-wikipedia-with-weaviate.api.vectors.network:8080/',
-  })
-
-  const res = await client.graphql
-    .get()
-    .withNearText({
-      concepts: [keyword],
-      certainty: 0.75,
-    })
-    .withClassName('Paragraph')
-    .withFields('title content inArticle { ... on Article {  title } }')
-    .withLimit(3)
-    .do()
-
-  console.log('RESPONSE', res)
-
-  if (res?.data?.Get !== undefined) {
-    return (ctx.body = { data: res.data.Get })
-  }
-  return (ctx.body = { data: '' })
-}
-
 const queryGoogle = async (ctx: Koa.Context) => {
   const body = ctx.request.body as any
   console.log('QUERY', body?.query)
@@ -153,10 +123,6 @@ export const apis: Route[] = [
   {
     path: '/hf_request',
     post: hfRequest,
-  },
-  {
-    path: '/weaviate',
-    post: makeWeaviateRequest,
   },
   {
     path: '/query_google',

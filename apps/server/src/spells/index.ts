@@ -3,9 +3,9 @@ import { app } from "../app"
 import Koa from 'koa'
 import otJson0 from 'ot-json0'
 
-import { Route } from '../types'
+import { Route } from '@magickml/server-core'
 import { runSpell } from '../utils/runSpell'
-import { ServerError } from '../utils/ServerError'
+import { ServerError } from '@magickml/server-core'
 
 const runSpellHandler = async (ctx: Koa.Context) => {
   const { spell: spellName } = ctx.params

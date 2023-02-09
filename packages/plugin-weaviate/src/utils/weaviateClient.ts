@@ -21,19 +21,15 @@ export async function initWeaviateClient(_train: boolean) {
   if (_train) {
     console.time('train')
 
-    const data = await trainFromUrl(
-      'https://www.toptal.com/developers/feed2json/convert?url=https%3A%2F%2Ffeeds.simplecast.com%2F54nAGcIl'
-    )
-    const data2 = JSON.parse(
+    // const data = await trainFromUrl(
+    //   'https://www.toptal.com/developers/feed2json/convert?url=https%3A%2F%2Ffeeds.simplecast.com%2F54nAGcIl'
+    // )
+    const data = JSON.parse(
       fs.readFileSync(
-        path.join(__dirname, '..', '..', '/weaviate/test_data.json'),
+        path.join(__dirname, '../../packages/plugin-weaviate/src/weaviate_events_schema.json'),
         'utf-8'
       )
     )
-    for (let i = 0; i < data2.length; i++) {
-      data.push(data2[i])
-    }
-
     await train(data)
     console.timeEnd('train')
   }

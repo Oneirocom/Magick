@@ -42,14 +42,6 @@ export class DiscordOutput extends MagickComponent<void> {
     const textInput = new Rete.Input('input', 'Outputs', anySocket, true)
     const output = new Rete.Output('output', 'Output', anySocket)
 
-    node.data.name = node.data.name || `output-${node.id}`
-
-    const nameInput = new InputControl({
-      dataKey: 'name',
-      name: 'Output name',
-      defaultValue: node.data.name,
-    })
-
     const switchControl = new SwitchControl({
       dataKey: 'sendToPlaytest',
       name: 'Send to Playtest',
@@ -64,7 +56,7 @@ export class DiscordOutput extends MagickComponent<void> {
       defaultValue: node.data.sendToAvatar || false,
     })
 
-    node.inspector.add(nameInput).add(switchControl).add(avatarControl)
+    node.inspector.add(switchControl).add(avatarControl)
     // need to automate this part!  Wont workw without a socket key
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
