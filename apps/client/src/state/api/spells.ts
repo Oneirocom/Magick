@@ -88,9 +88,6 @@ export const spellApi = rootApi.injectEndpoints({
           spellCopy.created_at = new Date().toISOString()
         spellCopy.updated_at = new Date().toISOString()
 
-        if (!spellCopy.agents || Object.keys(spellCopy.agents).length === 0)
-          spellCopy.agents = []
-
         console.log('SAVING SPELL')
         const baseQueryOptions = {
           url: 'spells/' + spell.id,

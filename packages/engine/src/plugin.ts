@@ -63,6 +63,7 @@ class PluginManager {
             obj[plugin.name] = plugin.agentMethods.start
             agentStartMethods = {...agentStartMethods, ...obj}
         })
+        console.log('getAgentStartMethods', agentStartMethods)
         return agentStartMethods
     }
 

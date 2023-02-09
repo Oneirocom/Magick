@@ -392,16 +392,30 @@ export class discord_client {
       content = content.replace('!ping ', '')
     }
 
-    const response = await this.spellHandler({
-      message: content,
-      speaker: message.author.username,
-      agent: this.discord_bot_name,
-      client: 'discord',
-      channelId: message.channel.id,
-      agentId: this.agent.id,
-      entities,
-      channel: 'msg',
-    })
+    // async runComponent({
+    //   inputs,
+    //   componentName,
+    //   runSubspell = false,
+    //   runData = {},
+    // }: RunComponentArgs) {
+
+    const response = await this.spellRunner.runComponent(
+      {
+      inputs: {},
+      componentName: "Discord Input",
+      runData: {
+          content,
+          speaker: message.author.username,
+          agent: this.discord_bot_name,
+          client: 'discord',
+          channelId: message.channel.id,
+          agentId: this.agent.id,
+          entities,
+          channel: 'msg',
+      },
+      runSubspell: true,
+    }
+    )
 
     const { Output, Image } = response
 
@@ -1141,7 +1155,7 @@ export class discord_client {
 
   client = Discord.Client as any
   agent = undefined
-  spellHandler = null
+  spellRunner = null
   discord_starting_words: string[] = []
   discord_bot_name_regex: string = ''
   discord_bot_name: string = 'Bot'
@@ -1156,7 +1170,7 @@ export class discord_client {
     discord_starting_words: string,
     discord_bot_name_regex: string,
     discord_bot_name: string,
-    spellHandler: (Event) => Promise<unknown>,
+    spellRunner: any,
     use_voice,
     voice_provider,
     voice_character,
@@ -1165,7 +1179,7 @@ export class discord_client {
   ) => {
     console.log('creating discord client')
     this.agent = agent
-    this.spellHandler = spellHandler
+    this.spellRunner = spellRunner
     this.use_voice = use_voice
     this.voice_provider = voice_provider
     this.voice_character = voice_character
@@ -1221,12 +1235,12 @@ export class discord_client {
     this.client.embed = embed
 
     if (this.use_voice) {
-      const {client, discord_bot_name, agent, spellHandler, voice_provider, voice_character, voice_language_code, tiktalknet_url} = this
+      const {client, discord_bot_name, agent, spellRunner, voice_provider, voice_character, voice_language_code, tiktalknet_url} = this
       initSpeechClient({
         client,
         discord_bot_name,
         agent,
-        spellHandler,
+        spellRunner,
         voiceProvider: voice_provider,
         voiceCharacter: voice_character,
         languageCode: voice_language_code,
@@ -1297,7 +1311,7 @@ export class discord_client {
     //         }, 1000 * 3600 * 4),
     //         responded: false,
     //       }
-    //       // const resp = await spellHandler(
+    //       // const resp = await spellRunner(
     //       //   'Tell me about ' + 'butterlifes',
     //       //   'bot',
     //       //    this.discord_bot_name ?? 'Agent',

@@ -29,7 +29,7 @@ export function initSpeechClient({
   client,
   discord_bot_name,
   agent,
-  spellHandler,
+  spellRunner,
   voiceProvider,
   voiceCharacter,
   languageCode,
@@ -72,16 +72,24 @@ export function initSpeechClient({
       } catch (e) {}
 
       console.log(entities)
-      const fullResponse = await spellHandler({
-        content,
-        speaker: author?.username ?? 'VoiceSpeaker',
-        agent: discord_bot_name,
-        client: 'discord',
-        channel: channel.id,
-        agentId: agent.id,
-        entities,
-        channelType: 'voice',
-      })
+
+      const fullResponse = await this.spellRunner.runComponent(
+        {
+        inputs: {},
+        componentName: "Discord Input",
+        runData: {
+            content,
+            speaker: author?.username ?? 'VoiceSpeaker',
+            agent: discord_bot_name,
+            client: 'discord',
+            channelId: channel.id,
+            agentId: agent.id,
+            entities,
+            channel: 'voice',
+        },
+        runSubspell: true,
+      }
+      )
       let response = Object.values(fullResponse)[0] as string
 
       if (response === undefined || !response || response.length <= 0) {

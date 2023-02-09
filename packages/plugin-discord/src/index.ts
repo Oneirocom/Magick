@@ -7,7 +7,7 @@ import { UploadService } from './services/Upload/Upload.utils'
 
 type StartDiscordArgs = {
   agent: any,
-  spellHandler: any
+  spellRunner: any
   discord_enabled?: boolean
   discord_api_key?: string
   discord_starting_words?: string
@@ -32,7 +32,7 @@ function getAgentMethods() {
 
   async function startDiscord({
     agent,
-    spellHandler,
+    spellRunner,
     discord_api_key,  
     discord_starting_words,
     discord_bot_name_regex,
@@ -51,7 +51,7 @@ function getAgentMethods() {
       discord_starting_words,
       discord_bot_name_regex,
       discord_bot_name,
-      spellHandler,
+      spellRunner,
       use_voice,
       voice_provider,
       voice_character,
