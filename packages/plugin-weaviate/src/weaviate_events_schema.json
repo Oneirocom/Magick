@@ -4,13 +4,36 @@
     "invertedIndexConfig": {
         "indexTimestamps": true
     },
-    "vectorizer": "text2vec-contextionary",
+    "vectorizer": "text2vec-openai",
     "moduleConfig": {
-      "text2vec-contextionary": {  
-        "vectorizeClassName": true
+      "qna-openai": {
+        "model": "text-curie-001",
+        "maxTokens": 50,
+        "temperature": 0.0,
+        "topP": 1,
+        "frequencyPenalty": 0.0,
+        "presencePenalty": 0.0
+      },
+      "text2vec-openai": {
+        "model": "ada",
+        "modelVersion": "002",
+        "type": "embeddings"
       }
     },
     "properties": [
+      {
+        "dataType": [
+          "text"
+        ],
+        "description": "Content that will be vectorized",
+        "moduleConfig": {
+          "text2vec-openai": {
+            "skip": false,
+            "vectorizePropertyName": false
+          }
+        },
+        "name": "content"
+      },
       {
         "dataType": [
           "string"
