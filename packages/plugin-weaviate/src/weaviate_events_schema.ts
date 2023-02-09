@@ -1,4 +1,4 @@
-{
+export default {
     "class": "event",
     "description": "A Event for storing the and recalling at a later point of time",
     "invertedIndexConfig": {

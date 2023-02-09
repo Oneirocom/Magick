@@ -21,12 +21,12 @@ const WeaviatePlugin = new Plugin({
     windowComponents: [], 
     agentMethods: null,
     serverInit: () => {
-        const WEAVIATE_IMPORT_DATA = process?.env.WEAVIATE_IMPORT_DATA
-        initWeaviateClient(
-            typeof WEAVIATE_IMPORT_DATA === 'string'
-              ? WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true'
-              : WEAVIATE_IMPORT_DATA
-          )
+        // const WEAVIATE_IMPORT_DATA = process?.env.WEAVIATE_IMPORT_DATA ?? false
+        // initWeaviateClient(
+        //     typeof WEAVIATE_IMPORT_DATA === 'string'
+        //       ? WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true'
+        //       : WEAVIATE_IMPORT_DATA
+        //   )
     },
     serverRoutes: [/*wikipedia*/],
     setup: ()=>{console.log("Setting up Weaviate plugin...")}, 

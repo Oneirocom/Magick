@@ -1,11 +1,9 @@
 //@ts-nocheck
 import { CreateEventArgs, GetEventArg,GetEventArgs, SemanticSearch } from '@magickml/engine'
 import weaviate from 'weaviate-client'
-import EventSchema from '../weaviate_events_schema.json'
+import EventSchema from '../weaviate_events_schema'
 import { OPENAI_API_KEY } from '@magickml/engine'
-import { env } from 'process'
 
-const DOCUMENTS_CLASS_NAME = 'events'
 let weaviate_client: any
 
 function generateUUID() {
