@@ -3,16 +3,17 @@ import weaviate from 'weaviate-client'
 import * as fs from 'fs'
 import path from 'path'
 import axios from 'axios'
-import {
-  WEAVIATE_CLIENT_HOST,
-  WEAVIATE_CLIENT_SCHEME,
-} from '@magickml/engine'
 
 const DOCUMENTS_CLASS_NAME = 'DataStore'
 const saved_docs: SearchSchema[] = []
 let client: any
 
 export async function initWeaviateClient(_train: boolean) {
+  let WEAVIATE_CLIENT_HOST, WEAVIATE_CLIENT_SCHEME;
+  if (typeof process !== 'undefined') {
+    WEAVIATE_CLIENT_HOST = process.env.VITE_WEAVIATE_CLIENT_HOST
+    WEAVIATE_CLIENT_SCHEME = process.env.VITE_WEAVIATE_CLIENT_SCHEME
+  }
   client = weaviate.client({
     scheme: WEAVIATE_CLIENT_SCHEME,
     host: WEAVIATE_CLIENT_HOST,
