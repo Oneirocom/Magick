@@ -17,6 +17,7 @@ import {
   SwitchControl,
   TextInputControl,
   eventSocket,
+  triggerSocket,
 } from '@magickml/engine'
 
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
@@ -92,14 +93,7 @@ export class DiscordInput extends MagickComponent<InputReturn> {
     this.subscribeToPlaytest(node)
 
     const out = new Rete.Output('output', 'output', eventSocket)
-
-    node.data.name = node.data.name || `input-${node.id}`
-
-    const nameInput = new InputControl({
-      dataKey: 'name',
-      name: 'Input name',
-      defaultValue: node.data.name,
-    })
+    const trigger = new Rete.Output('trigger', 'trigger', triggerSocket)
 
     const data = node?.data?.playtestToggle as
       | {
@@ -118,29 +112,13 @@ export class DiscordInput extends MagickComponent<InputReturn> {
       label: 'Receive from playtest',
     })
 
-    const toggleDefault = new SwitchControl({
-      dataKey: 'useDefault',
-      name: 'Use Default',
-      label: 'Use Default',
-      defaultValue: false,
-    })
-
-    node.inspector.add(nameInput).add(togglePlaytest).add(toggleDefault)
-
-    node.data.defaultValue = node.data.defaultValue ?? 'Input text here'
-
-    const defaultInput = new TextInputControl({
-      editor: this.editor,
-      key: 'defaultValue',
-      value: node.data.defaultValue,
-      label: 'Default value',
-    })
+    node.inspector.add(togglePlaytest)
 
     // module components need to have a socket key.
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    return node.addOutput(out).addControl(defaultInput)
+    return node.addOutput(out).addOutput(trigger)
   }
 
   async run(node: MagickNode, data: NodeData) {

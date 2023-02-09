@@ -30,55 +30,6 @@ export class Agent {
   loopHandler: any
   spellManager: SpellManager
 
-  async createSpellHandler({ spell }) {
-    const spellRunner = await this.spellManager.load(spell)
-    // await prisma.agents.update({
-    //   where: { id: this.id },
-    //   data: {
-    //     spells: {
-    //       connect: {
-    //         id: spell.id,
-    //       },
-    //     },
-    //   },
-    // })
-    // rewrite as a feathers service
-    // await app.service('agents').patch(this.id, {
-    //   spells: {
-    //     connect: {
-    //       id: spell.id,
-    //     },
-    //   },
-    // })
-
-
-    return async function spellHandler({
-      content,
-      sender,
-      observer,
-      client,
-      channel,
-      channelType,
-      entities,
-      agentId = this.id,
-    }) {
-      const spellInputs = {
-        input: {
-          content,
-          sender,
-          observer,
-          client,
-          channel,
-          channelType,
-          agentId,
-          entities,
-        } as any,
-      }
-      const spellOutputs = await spellRunner.defaultRun(spellInputs)
-      return spellOutputs
-    }
-  }
-
   constructor(data: any) {
     this.onDestroy()
     this.id = data.id
@@ -96,18 +47,20 @@ export class Agent {
         query: { name: data.root_spell },
       })).data[0]
 
-      const spellHandler = await this.createSpellHandler({
-        spell,
-      })
+      console.log('spell is', spell)
 
-      if (data.loop_enabled) {
-        this.startLoop({ ...data, spellHandler })
-      }
+      const spellRunner = await this.spellManager.load(spell)
+
+      // TODO: reenable loop
+      // if (data.loop_enabled) {
+      //   this.startLoop({ ...data, spellRunner })
+      // }
 
       const agentStartMethods = pluginManager.getAgentStartMethods();
+      console.log('starting agents')
       for (const method of Object.keys(agentStartMethods)) {
         console.log('method', method)
-        await agentStartMethods[method]({ ...data, agent: this, spellHandler })
+        await agentStartMethods[method]({ ...data, agent: this, spellRunner })
       }
     })()
   }
