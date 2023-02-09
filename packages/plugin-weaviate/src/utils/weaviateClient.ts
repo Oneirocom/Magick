@@ -11,8 +11,8 @@ let client: any
 export async function initWeaviateClient(_train: boolean) {
   let WEAVIATE_CLIENT_HOST, WEAVIATE_CLIENT_SCHEME;
   if (typeof process !== 'undefined') {
-    WEAVIATE_CLIENT_HOST = process.env.VITE_WEAVIATE_CLIENT_HOST
-    WEAVIATE_CLIENT_SCHEME = process.env.VITE_WEAVIATE_CLIENT_SCHEME
+    WEAVIATE_CLIENT_HOST = process.env.WEAVIATE_CLIENT_HOST
+    WEAVIATE_CLIENT_SCHEME = process.env.WEAVIATE_CLIENT_SCHEME
   }
   client = weaviate.client({
     scheme: WEAVIATE_CLIENT_SCHEME,
@@ -31,7 +31,7 @@ export async function initWeaviateClient(_train: boolean) {
         'utf-8'
       )
     )
-    await train(data)
+    await train([] /*data*/)
     console.timeEnd('train')
   }
 }
