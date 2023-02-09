@@ -54,12 +54,15 @@ function install(
       inlineCommentKeys,
       deleteCommentKeys,
     ].map(function (x) {
-      return Array.isArray(x.code)
-        ? x.code.includes(e.code)
-        : e.code === x.code &&
-            e.shiftKey === x.shiftKey &&
-            e.ctrlKey === x.ctrlKey &&
-            e.altKey === x.altKey
+      if (e.target.localName === 'input' || e.target.localName === 'textarea')
+        return false
+      else
+        return Array.isArray(x.code)
+          ? x.code.includes(e.code)
+          : e.code === x.code &&
+              e.shiftKey === x.shiftKey &&
+              e.ctrlKey === x.ctrlKey &&
+              e.altKey === x.altKey
     })
 
     if (keyCombosMap[0]) {

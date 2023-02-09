@@ -1,16 +1,3 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable no-console */
-/* eslint-disable no-param-reassign */
-/* eslint-disable prefer-const */
-/* eslint-disable no-invalid-this */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable camelcase */
-/* eslint-disable require-await */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-
-// TODO this is a huge mess of types, and looks like there is some serious mistyping going on.  Definitely needs cleanup.
-//@ts-nocheck
-// required for message.lineReply
 import { Event } from '@magickml/engine'
 import Discord, {
   ChannelType,
@@ -22,8 +9,10 @@ import emoji from 'emoji-dictionary'
 import emojiRegex from 'emoji-regex'
 
 import { initSpeechClient, recognizeSpeech } from './discord-voice'
-import { getRandomEmptyResponse, startsWithCapital } from './utils'
 
+export function startsWithCapital(word) {
+  return word.charAt(0) === word.charAt(0).toUpperCase()
+}
 function log(...s: (string | boolean)[]) {
   console.log(...s)
 }
@@ -163,8 +152,8 @@ export class discord_client {
 
   //Event that is trigger when a new message is created (sent)
   messageCreate = async (
-    client: string | boolean,
-    message: string | boolean
+    client: any,
+    message: any
   ) => {
     console.log('new message from discord:', message.content)
 
@@ -266,7 +255,7 @@ export class discord_client {
     //checks if the user is in discussion with the but, or includes !ping or started the conversation, if so it adds (if not exists) !ping in the start to handle the message the ping command
     const isDirectMethion =
       !content.startsWith('!') &&
-      content.toLowerCase().includes(this.bot_name?.toLowerCase())
+      content.toLowerCase().includes(this.discord_bot_name?.toLowerCase())
     const isUserNameMention =
       (channel.type === ChannelType.GuildText || isDM) &&
       content &&
@@ -336,7 +325,7 @@ export class discord_client {
           const channelName = d[index]
           await message.guild.channels.cache.forEach(
             async (channel: {
-              type: string
+              type: ChannelType
               name: any
               join: () => any
               leave: () => void
@@ -403,16 +392,30 @@ export class discord_client {
       content = content.replace('!ping ', '')
     }
 
-    const response = await this.spellHandler({
-      message: content,
-      speaker: message.author.username,
-      agent: this.discord_bot_name,
-      client: 'discord',
-      channelId: message.channel.id,
-      agentId: this.agent.id,
-      entities,
-      channel: 'msg',
-    })
+    // async runComponent({
+    //   inputs,
+    //   componentName,
+    //   runSubspell = false,
+    //   runData = {},
+    // }: RunComponentArgs) {
+
+    const response = await this.spellRunner.runComponent(
+      {
+      inputs: {},
+      componentName: "Discord Input",
+      runData: {
+          content,
+          speaker: message.author.username,
+          agent: this.discord_bot_name,
+          client: 'discord',
+          channelId: message.channel.id,
+          agentId: this.agent.id,
+          entities,
+          channel: 'msg',
+      },
+      runSubspell: true,
+    }
+    )
 
     const { Output, Image } = response
 
@@ -527,14 +530,14 @@ export class discord_client {
             })
           })
       })
-      .catch((err: string) => log(err + ' - ' + err.stack))
+      .catch((err: string) => log(err))
   }
 
   //Event that is trigger when a user's presence is changed (offline, idle, online)
   presenceUpdate = async (
     client: any,
     oldMember: { status: any },
-    newMember: { status: string | boolean }
+    newMember: { userId: string, status: string | boolean }
   ) => {
     if (!oldMember || !newMember) {
       log('Cannot update presence, oldMember or newMember is null')
@@ -637,7 +640,7 @@ export class discord_client {
           //adds unread message to the chat history from each channel
           server.channels.cache.forEach(
             async (channel: {
-              type: string
+              type: ChannelType
               deleted: boolean
               permissionsFor: (arg0: any) => {
                 (): any
@@ -686,14 +689,7 @@ export class discord_client {
                       if (msg.deleted === true) {
                         // await deleteMessageFromHistory(channel.id, msg.id)
                         log('deleted message: ' + msg.content)
-                      } else
-                        await wasHandled(
-                          channel.id,
-                          msg.id,
-                          _author,
-                          msg.content,
-                          msg.createdTimestamp
-                        )
+                      }
                     })
                   })
               }
@@ -781,7 +777,7 @@ export class discord_client {
 
   _findCommand = (commandName: any) => {
     let command = null
-    for (const helpField of helpFields) {
+    for (const helpField of this.helpFields) {
       for (const c of helpField.commands) {
         const [name, args, description] = c
         if (name === commandName) {
@@ -831,7 +827,7 @@ export class discord_client {
       text = text.replace('{day_now}', new Date().getDay().toString())
     }
     if (text.includes('{name}')) {
-      text = text.replace('{name}', this.bot_name)
+      text = text.replace('{name}', this.discord_bot_name)
     }
 
     return text
@@ -945,15 +941,8 @@ export class discord_client {
                   })
                   .catch(console.error)
               } else {
-                while (
-                  text === undefined ||
-                  text === '' ||
-                  text.replace(/\s/g, '').length === 0
-                )
-                  text = getRandomEmptyResponse()
-                log('response1: ' + text)
                 message.channel
-                  .send(text)
+                  .send(text, { split: true })
                   .then(async function (msg: any) {
                     //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
                   })
@@ -997,7 +986,7 @@ export class discord_client {
           id: any
           messages: { fetch: (arg0: { limit: any }) => Promise<any> }
         }) => {
-          const oldResponse = getResponse(channel.id, message_id)
+          const oldResponse = this.getResponse(channel.id, message_id)
           if (oldResponse === undefined) {
             return
           }
@@ -1029,20 +1018,20 @@ export class discord_client {
                           responses.length <= 2000 &&
                           responses.length > 0
                         ) {
-                          let text = replacePlaceholders(responses)
+                          let text = this.replacePlaceholders(responses)
                           msg.edit(text)
-                          onMessageResponseUpdated(
+                          this.onMessageResponseUpdated(
                             channel.id,
                             edited.id,
                             msg.id
                           )
                         } else if (responses.length >= 2000) {
-                          let text = replacePlaceholders(responses)
+                          let text = this.replacePlaceholders(responses)
                           if (text.length > 0) {
                             edited.channel
                               .send(text, { split: true })
                               .then(async function (msg: { id: any }) {
-                                onMessageResponseUpdated(
+                                this.onMessageResponseUpdated(
                                   channel.id,
                                   edited.id,
                                   msg.id
@@ -1166,7 +1155,7 @@ export class discord_client {
 
   client = Discord.Client as any
   agent = undefined
-  spellHandler = null
+  spellRunner = null
   discord_starting_words: string[] = []
   discord_bot_name_regex: string = ''
   discord_bot_name: string = 'Bot'
@@ -1180,8 +1169,8 @@ export class discord_client {
     discord_api_token: string | undefined,
     discord_starting_words: string,
     discord_bot_name_regex: string,
-    discord_bot_name: string | RegExp,
-    spellHandler: (Event) => Promise<unknown>,
+    discord_bot_name: string,
+    spellRunner: any,
     use_voice,
     voice_provider,
     voice_character,
@@ -1190,7 +1179,7 @@ export class discord_client {
   ) => {
     console.log('creating discord client')
     this.agent = agent
-    this.spellHandler = spellHandler
+    this.spellRunner = spellRunner
     this.use_voice = use_voice
     this.voice_provider = voice_provider
     this.voice_character = voice_character
@@ -1224,7 +1213,6 @@ export class discord_client {
         GatewayIntentBits.GuildVoiceStates,
       ],
     })
-    this.bot_name = discord_bot_name
     this.client.prefix = '!'
     this.client.prefixOptionalWhenMentionOrDM = true
 
@@ -1247,15 +1235,15 @@ export class discord_client {
     this.client.embed = embed
 
     if (this.use_voice) {
-      const {client, discord_bot_name, agent, spellHandler, voice_provider, voice_character, voice_language_code, tiktalknet_url} = this
+      const {client, discord_bot_name, agent, spellRunner, voice_provider, voice_character, voice_language_code, tiktalknet_url} = this
       initSpeechClient({
         client,
         discord_bot_name,
         agent,
-        spellHandler,
-        voice_provider,
-        voice_character,
-        voice_language_code,
+        spellRunner,
+        voiceProvider: voice_provider,
+        voiceCharacter: voice_character,
+        languageCode: voice_language_code,
         tiktalknet_url
       })
     }
@@ -1268,13 +1256,13 @@ export class discord_client {
     //   this.presenceUpdate.bind(null, this.client)
     // )
 
-    this.client.on(
-      'interactionCreate',
-      async (interaction: string | boolean) => {
-        log('Handling interaction', interaction)
-        this.handleSlashCommand(client, interaction)
-      }
-    )
+    // this.client.on(
+    //   'interactionCreate',
+    //   async (interaction: string | boolean) => {
+    //     log('Handling interaction', interaction)
+    //     this.handleSlashCommand(this.client, interaction)
+    //   }
+    // )
     this.client.on(
       'guildMemberAdd',
       async (user: { user: { id: any; username: any } }) => {
@@ -1323,7 +1311,7 @@ export class discord_client {
     //         }, 1000 * 3600 * 4),
     //         responded: false,
     //       }
-    //       // const resp = await spellHandler(
+    //       // const resp = await spellRunner(
     //       //   'Tell me about ' + 'butterlifes',
     //       //   'bot',
     //       //    this.discord_bot_name ?? 'Agent',

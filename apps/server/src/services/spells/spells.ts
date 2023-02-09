@@ -59,7 +59,6 @@ export const spell = (app: Application) => {
               userSpellManager.spellRunnerMap.get(spell.name).loadSpell(spell)
             }
           });
-
         }
       ]
     },
