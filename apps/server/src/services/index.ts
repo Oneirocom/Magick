@@ -17,6 +17,7 @@ export const services = (app: Application) => {
   app.configure(user)
   app.configure(spellRunner)
   service_list.forEach((service)=>{
+    console.log('service', service)
       app.use(service[0], new service[1])
   })
   // All services will be registered here

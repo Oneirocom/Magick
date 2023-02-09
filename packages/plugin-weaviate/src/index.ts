@@ -16,6 +16,7 @@ const WeaviatePlugin = new Plugin({
     services: [['WeaviatePlugin',WeaviateService],['EventsQA',EventsQAService]],
     agentComponents: [], 
     windowComponents: [], 
+    agentMethods: null,
     setup: ()=>{console.log("HUII")}, 
     teardown: ()=>{console.log("HUIII")} })
 
