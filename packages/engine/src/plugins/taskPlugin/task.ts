@@ -76,6 +76,7 @@ export class Task {
   getInputFromConnection(socketKey: string) {
     let input: null | any = null
     Object.entries(this.inputs).forEach(([key, value]) => {
+      console.log('analyzing connection', key, value)
       if (
         (value as MagickReteInput[]).some(
           (con: MagickReteInput) => con && con.key === socketKey
@@ -157,6 +158,7 @@ export class Task {
 
         We assume here that his nodes worker does not need to access ALL values simultaneously, but is only interested in one. There is a task option which enables this functionality just in case we have use cases that don't want this behaviour.
       */
+        console.log('output is', this.getInputs('output'), 'fromNode', fromNode);
 
       await Promise.all(
         this.getInputs('output').map(async key => {
@@ -188,10 +190,15 @@ export class Task {
                 propagate: false,
                 fromNode: this.node,
               })
+
+              console.log('con', con)
+
               const outputData = con.task.outputData as unknown as Record<
                 string,
                 unknown
               >
+              console.log('con.key', con.key)
+              console.log('outputData', outputData)
 
               return outputData[con.key]
             })

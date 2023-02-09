@@ -7,10 +7,12 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   EngineContext,
-} from '../../types'
-import { TaskOptions } from '../../plugins/taskPlugin/task'
-import { anySocket, stringSocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+  TaskOptions,
+  anySocket,
+  stringSocket,
+  triggerSocket,
+  MagickComponent
+} from '@magickml/engine'
 
 const info = `Given a keyword pull in relevant information of the wevaiate wikipedia instance.`
 

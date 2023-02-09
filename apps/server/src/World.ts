@@ -1,5 +1,5 @@
 import Agent from './Agent'
-import { ServerError } from 'apps/server/src/utils/ServerError'
+import { ServerError } from '@magickml/server-core'
 import { ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
 import { app } from './app'
 

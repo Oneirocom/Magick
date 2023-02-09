@@ -7,24 +7,18 @@ import Router from '@koa/router'
 import {
   initFileServer,
   initTextToSpeech,
-  initWeaviateClient,
 } from '@magickml/server-core'
-import {
-  WEAVIATE_IMPORT_DATA,
-} from '@magickml/engine'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
 import { initSpeechServer } from '@magickml/server-core'
 
-import { Handler, Method, Middleware } from './types'
-
 import { logger } from './logger'
 
 import { apis } from './apis'
 import { spells } from './spells'
-import { Route } from './types'
-import { worldManager } from '@magickml/engine'
+import { Handler, Method, Middleware, Route } from '@magickml/server-core'
+import { worldManager, pluginManager } from '@magickml/engine'
 import { World } from './World'
 
 // the current file is in dist/apps/server, and we want to import the root package.json
@@ -82,9 +76,11 @@ process.on('unhandledRejection', (reason, p) =>
   logger.error('Unhandled Rejection at: Promise ', p, reason)
 )
 
+const serverRoutes = pluginManager.getServerRoutes();
+
 const router: Router = new Router()
 
-const routes: Route[] = [...spells, ...apis]
+const routes: Route[] = [...spells, ...apis, ...serverRoutes]
 
 async function init() {
   new World()
@@ -92,11 +88,11 @@ async function init() {
   initSpeechServer(false)
   await initFileServer()
   await initTextToSpeech()
-  await initWeaviateClient(
-    typeof WEAVIATE_IMPORT_DATA === 'string'
-      ? WEAVIATE_IMPORT_DATA?.toLowerCase().trim() === 'true'
-      : WEAVIATE_IMPORT_DATA
-  )
+
+  const serverInits = pluginManager.getServerInits();
+  for (const method of Object.keys(serverInits)) {
+    await serverInits[method]();
+  }
 
   // generic error handling
   app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
@@ -189,29 +185,6 @@ async function init() {
   app.listen(app.get('port'), () => {
     console.log('Server started on port ', app.get('port'))
   })
-
-  // const useSSL =
-  //   USESSL === 'true' &&
-  //   fs.existsSync(path.join(__dirname, './certs/')) &&
-  //   fs.existsSync(path.join(__dirname, './certs/key.pem')) &&
-  //   fs.existsSync(path.join(__dirname, './certs/cert.pem'))
-
-  // var optionSsl = {
-  //   key: useSSL ? fs.readFileSync(path.join(__dirname, './certs/key.pem')) : '',
-  //   cert: useSSL
-  //     ? fs.readFileSync(path.join(__dirname, './certs/cert.pem'))
-  //     : '',
-  // }
-  // useSSL
-  //   ? https
-  //       .createServer(optionSsl, app.callback())
-  //       .listen(app.get('port'), 'localhost', () => {
-  //         logger.info('Https Server listening on: localhost:' + app.get('port'))
-  //       })
-  //   : http.createServer(app.callback()).listen(app.get('port'), 'localhost', () => {
-  //       logger.info('Http Server listening on: localhost:' + app.get('port'))
-  //     })
-  // await initLoop()
 }
 
 init()

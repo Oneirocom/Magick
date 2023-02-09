@@ -130,13 +130,16 @@ export class DiscordInput extends MagickComponent<InputReturn> {
     if (task) await task.run(data)
   }
 
-  worker(
+  // @ts-ignore
+  async worker(
     node: NodeData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
     this._task.closed = ['trigger']
+    console.log('********* processing input to discord input *********')
+    console.log(data)
 
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data)) {
