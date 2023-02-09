@@ -5,10 +5,15 @@ export default
     "invertedIndexConfig": {
         "indexTimestamps": true
     },
-    "vectorizer": "text2vec-contextionary",   // vectorizer to use for data objects added to this class
+    "vectorizer": "text2vec-openai",   // vectorizer to use for data objects added to this class
     "moduleConfig": {
-      "text2vec-contextionary": {  
-        "vectorizeClassName": true            // include the class name in vector calculation (default true)
+      "qna-openai": {
+        "model": "text-davinci-002",
+        "maxTokens": 16,
+        "temperature": 0.0,
+        "topP": 1,
+        "frequencyPenalty": 0.0,
+        "presencePenalty": 0.0
       }
     },
     "properties": [

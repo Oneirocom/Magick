@@ -1,7 +1,9 @@
-import { weaviate_connection } from "../utils/weaviateInit"
+import { weaviate_connection, initWeaviateClientEvent } from "../utils/weaviateInit"
 
 export class WeaviateService {
-    constructor(){}
+    constructor(){
+        initWeaviateClientEvent()
+    }
     async create(body, params){
         console.log('createEventWeaviate', body)
         try {

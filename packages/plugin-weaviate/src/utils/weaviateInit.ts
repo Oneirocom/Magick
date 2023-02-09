@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { CreateEventArgs, GetEventArg,GetEventArgs, SemanticSearch } from '@magickml/engine'
 import weaviate from 'weaviate-client'
+import { OPENAI_API_KEY } from '@magickml/engine'
 import EventSchema from './weaviate_events_schema'
 import { env } from 'process'
 
@@ -34,6 +35,7 @@ export async function initWeaviateClientEvent() {
   weaviate_client = weaviate.client({
     scheme: process.env.WEAVIATE_CLIENT_SCHEME,
     host: process.env.WEAVIATE_CLIENT_HOST,
+    headers: {'X-OpenAI-Api-Key': OPENAI_API_KEY},
   })
   await weaviate_client.schema
     .classCreator()
@@ -201,17 +203,18 @@ export class weaviate_connection {
       .withAsk(({
         question: question
       }))
-      .withFields('content _additional { answer { hasAnswer certainty property result startPosition endPosition } }')
+      .withFields('content _additional { answer { hasAnswer property result startPosition endPosition } }')
       .withLimit(1)
       .do()
       .catch(err => {
         console.log(err)
       })
+    
+    console.log(answer)
     if (answer['data']['Get']['Event']['0'] === (undefined)) {
       return {
         _additional: {
           answer: {
-            certainty: 0.00,
             endPosition: 3,
             hasAnswer: false,
             property: 'NONE',
