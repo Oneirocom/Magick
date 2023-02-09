@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { CreateEventArgs, GetEventArgs, SemanticSearch } from '@magickml/engine'
+import { CreateEventArgs, GetEventArg,GetEventArgs, SemanticSearch } from '@magickml/engine'
 import weaviate from 'weaviate-client'
 import EventSchema from './weaviate_events_schema'
 import { env } from 'process'
@@ -85,9 +85,9 @@ export class weaviate_connection {
         console.error(err)
       })
   }
-  static async getEvents(params: GetEventArgs) {
+  static async getEvents(params: GetEventArg) {
     const
-      { type, sender, observer, client, channel, channelType, maxCount, max_time_diff } = params
+      { sender, observer, maxCount, max_time_diff } = params
     if (!weaviate_client) {
       await initWeaviateClientEvent()
     }
@@ -152,9 +152,9 @@ export class weaviate_connection {
     return events
   }
 
-  static async getAndDeleteEvents(params: GetEventArgs) {
+  static async getAndDeleteEvents(params: GetEventArg) {
     const
-      { type, sender, observer, client, channel, channelType, maxCount, max_time_diff } = params
+      { sender, observer, maxCount, max_time_diff } = params
     if (!weaviate_client) {
       await initWeaviateClientEvent()
     }

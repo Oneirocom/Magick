@@ -9,7 +9,8 @@ import {
   triggerSocket,
   anySocket,
   stringSocket,
-  MagickComponent
+  MagickComponent,
+  API_URL
 } from 'packages/engine/src/index'
 const info = 'Event Q&A is used for getting answers to questions based on the events stored.'
 
@@ -61,9 +62,10 @@ export class EventQA extends MagickComponent<Promise<WorkerReturn>>{
         question,
         agentId
       } as Record<string, any>
-      const urlString = `${import.meta.env.VITE_APP_API_URL ??
-        import.meta.env.API_ROOT_URL
-        }/eventQA`
+      const urlString = `${
+        API_URL
+      }/eventWeaviate`
+        
       const url = new URL(urlString)
       for (let p in params) {
         url.searchParams.append(p, params[p])

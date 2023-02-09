@@ -73,6 +73,13 @@ export type GetEventArgs = Event & {
   max_time_diff?: number
 }
 
+export type GetEventArg = {
+  sender: string
+  observer: string
+  maxCount?: number
+  max_time_diff?: number
+}
+
 export type EventResponse = Event[]
 
 export type CompletionBody = {

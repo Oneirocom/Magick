@@ -6,8 +6,10 @@ import { spellRunner } from './spell-runner/spell-runner'
 import type { Application } from '../declarations'
 import { pluginManager } from '@magickml/engine'
 import DiscordPlugin from '@magickml/plugin-discord'
+import WeaviatePlugin from '@magickml/plugin-weaviate'
 console.log("Loading Services from:")
 console.log(DiscordPlugin.services)
+console.log(WeaviatePlugin.services)
 export const services = (app: Application) => {
   const service_list = pluginManager.getServices()
   app.configure(spell)
