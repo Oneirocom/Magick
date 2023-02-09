@@ -194,8 +194,8 @@ export type ModuleType = {
   id: string
   name: string
   data: GraphData
-  createdAt: number
-  updatedAt: number
+  created_at: string
+  updated_at: string
 }
 
 export type ModelCompletionOpts = {
@@ -265,9 +265,9 @@ export type Module = { name: string; id: string; data: Data }
 export type Spell = {
   name: string
   graph: Data
-  createdAt: number
-  updatedAt: number
-  id: string
+  created_at?: string
+  updated_at?: string
+  id: number
 }
 
 export type MagickReteInput = {

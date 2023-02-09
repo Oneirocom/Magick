@@ -2,6 +2,14 @@
   "extends": "../../tsconfig.base.json",
   "files": [],
   "include": [],
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "outDir": "./lib",
+    "rootDir": "../..",
+    "declaration": true,
+    "esModuleInterop": true
+  },
   "references": [
     {
       "path": "./tsconfig.lib.json"

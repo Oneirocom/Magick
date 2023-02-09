@@ -1,8 +1,11 @@
-import { randomInt } from './connectors/utils'
 import Agent from './Agent'
 import { ServerError } from 'apps/server/src/utils/ServerError'
 import { ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
 import { app } from './app'
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
 
 const maxMSDiff = 5000
 let interval = 3000
@@ -164,7 +167,7 @@ export class World {
 
   async addAgent(obj: any) {
     console.log('adding agent. obj is: ', obj)
-    const data = obj.data
+    const data = {...obj.data, id: obj.id, enabled: obj.enabled, dirty: obj.dirty, spells: obj.spells, updated_at: obj.updated_at}
     if (this.objects[data.id] === undefined) {
       this.objects[data.id] = new Agent(data)
     } else {

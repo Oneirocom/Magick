@@ -10,11 +10,12 @@ export const spellSchema = Type.Object(
   {
     id: Type.Number(),
     name: Type.String(),
-    graph: Type.Object({}),
+    graph: Type.Object({
+      id: Type.String(),
+      nodes: Type.Object({})
+    }),
     created_at: Type.Optional(Type.String()),
     updated_at: Type.Optional(Type.String()),
-    deleted_at: Type.Optional(Type.String()),
-    agents: Type.Optional(Type.Array(Type.Number())),
   },
   { $id: 'Spell', additionalProperties: false }
 )
@@ -29,8 +30,6 @@ export const spellDataSchema = Type.Pick(spellSchema, [
   'graph',
   'created_at',
   'updated_at',
-  'deleted_at',
-  'agents',
 ], {
   $id: 'SpellData'
 })
@@ -53,8 +52,6 @@ export const spellQueryProperties = Type.Pick(spellSchema, [
   'graph',
   'created_at',
   'updated_at',
-  'deleted_at',
-  'agents',
 ])
 export const spellQuerySchema = Type.Intersect(
   [
