@@ -124,7 +124,7 @@ const EventHandler = ({ pubSub, tab }) => {
   }
 
   const createSearchCorpus = () => {
-    createOrFocus(windowTypes.SEARCH_CORPUS, 'Search Corpus')
+    // createOrFocus(windowTypes.SEARCH_CORPUS, 'Search Corpus')
   }
 
   const createAvatarWindow = () => {

@@ -173,7 +173,7 @@ const MenuBar = () => {
         },
         import_spell: {
           onClick: onImport,
-          hotKey: 'option+i'
+          hotKey: 'option+i',
         },
         rename_spell: {
           onClick: onEdit,
@@ -213,9 +213,9 @@ const MenuBar = () => {
         inspector: {
           onClick: onInspectorCreate,
         },
-        search_corpus: {
-          onClick: onCreateSearchCorpus,
-        },
+        // search_corpus: {
+        //   onClick: onCreateSearchCorpus,
+        // },
         avatar: {
           onClick: onAvatarWindowCreate,
         },
