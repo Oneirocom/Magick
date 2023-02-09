@@ -65,6 +65,7 @@ export class Task {
   }
 
   getInputs(type: TaskOutputTypes): string[] {
+    console.log('getting inputs', this.inputs)
     return Object.keys(this.inputs)
       .filter(key => this.inputs[key][0])
       .filter(key => {
@@ -158,8 +159,6 @@ export class Task {
 
         We assume here that his nodes worker does not need to access ALL values simultaneously, but is only interested in one. There is a task option which enables this functionality just in case we have use cases that don't want this behaviour.
       */
-        console.log('output is', this.getInputs('output'), 'fromNode', fromNode);
-
       await Promise.all(
         this.getInputs('output').map(async key => {
           const inputPromises = (this.inputs[key] as MagickReteInput[])
@@ -190,8 +189,6 @@ export class Task {
                 propagate: false,
                 fromNode: this.node,
               })
-
-              console.log('con', con)
 
               const outputData = con.task.outputData as unknown as Record<
                 string,

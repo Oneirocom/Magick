@@ -171,7 +171,6 @@ class SpellRunner {
    * Allows us to grab a specific triggered node by name
    */
   private _getTriggeredNodeByName(componentName) {
-    console.log('triggering node by name')
     const triggerIns = extractNodes(
       this.currentSpell.graph.nodes,
       this.triggerIns
@@ -244,7 +243,6 @@ class SpellRunner {
     console.log('RUNNING COMPONENT', component)
 
     const triggeredNode = this._getTriggeredNodeByName(componentName)
-    console.log('TRIGGERED NODE', triggeredNode)
     // const triggeredNode = this._getFirstNodeTrigger()
 
     if (!component.run) throw new Error('Component does not have a run method')
@@ -253,10 +251,7 @@ class SpellRunner {
     // I do wonder whether we could make this even more elegant by having the node
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
-    console.log('triggeredNode, runData', triggeredNode, runData)
     await component.run(triggeredNode, runData)
-    console.log('this is', this)
-    console.log('this.outputData', this.outputData)
     return this.outputData
   }
 
