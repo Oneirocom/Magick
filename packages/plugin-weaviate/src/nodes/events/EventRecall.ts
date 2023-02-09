@@ -8,14 +8,14 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../../../packages/engine/src/types'
-import { InputControl } from '../../../../packages/engine/src/dataControls/InputControl'
-import { triggerSocket, anySocket, eventSocket } from '../../../../packages/engine/src/sockets'
-import { MagickComponent } from '../../../../packages/engine/src/magick-component'
+  InputControl,
+  triggerSocket, anySocket, eventSocket,
+  MagickComponent
+} from '@magickml/engine'
 
 import {
   API_URL
-} from "../../../../packages/engine/src/config"
+} from "../../../../engine/src/config"
 
 const info = 'Event Recall is used to get conversation for an event and user'
 

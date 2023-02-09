@@ -63,9 +63,8 @@ export class Task {
       )
     })
   }
-
+x
   getInputs(type: TaskOutputTypes): string[] {
-    console.log('getting inputs', this.inputs)
     return Object.keys(this.inputs)
       .filter(key => this.inputs[key][0])
       .filter(key => {
@@ -77,7 +76,6 @@ export class Task {
   getInputFromConnection(socketKey: string) {
     let input: null | any = null
     Object.entries(this.inputs).forEach(([key, value]) => {
-      console.log('analyzing connection', key, value)
       if (
         (value as MagickReteInput[]).some(
           (con: MagickReteInput) => con && con.key === socketKey
@@ -194,8 +192,6 @@ export class Task {
                 string,
                 unknown
               >
-              console.log('con.key', con.key)
-              console.log('outputData', outputData)
 
               return outputData[con.key]
             })
