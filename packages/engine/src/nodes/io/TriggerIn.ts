@@ -80,6 +80,7 @@ export class TriggerIn extends MagickComponent<void> {
     }
 
     const task = this.nodeTaskMap[node?.id]
+    console.log('task is', task)
     if (task) await task.run(data)
   }
 
