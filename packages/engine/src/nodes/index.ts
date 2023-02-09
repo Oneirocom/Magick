@@ -33,15 +33,7 @@ import { ImageGeneration } from './ml/ImageGeneration'
 import { SentenceMatcher } from './ml/SentenceMatcher'
 import { TextCompletion } from './ml/TextCompletion'
 import { TextToSpeech } from './ml/TextToSpeech'
-import { DocumentDelete } from './search/DocumentDelete'
-import { DocumentEdit } from './search/DocumentEdit'
-import { DocumentGet } from './search/DocumentGet'
-import { DocumentSet } from './search/DocumentSet'
 import { Image } from './utility/Image'
-import { DocumentSetMass } from './search/DocumentSetMass'
-import { DocumentStoreGet } from './search/DocumentStoreGet'
-import { RSSGet } from './search/RSSGet'
-import { Search } from './search/Search'
 import { ComplexStringMatcher } from './strings/ComplexStringMatcher'
 import { JoinListComponent } from './strings/JoinList'
 import { ProfanityFilter } from './strings/ProfanityFilter'
@@ -88,14 +80,6 @@ export let components = {
   isVariableTrue: () => new IsVariableTrue(),
   request: () => new Request(),
   jupyterNotebook: () => new JupyterNotebook(),
-  search: () => new Search(),
-  documentGet: () => new DocumentGet(),
-  documentEdit: () => new DocumentEdit(),
-  documentDelete: () => new DocumentDelete(),
-  documentSet: () => new DocumentSet(),
-  documentSetMass: () => new DocumentSetMass(),
-  documentStoreGet: () => new DocumentStoreGet(),
-  rssGet: () => new RSSGet(),
   forEach: () => new ForEach(),
   whileLoop: () => new WhileLoop(),
   stringEvaluator: () => new StringEvaluator(),
@@ -148,7 +132,6 @@ function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {
 
 export const getNodes = () => {
   const pluginNodes = pluginManager.getNodes();
-  console.log('pluginNodes', pluginNodes)
   const allComponents = {...components, ...pluginNodes}
   const sortedComponents = Object.keys(allComponents)
     .sort()
@@ -156,7 +139,6 @@ export const getNodes = () => {
       acc[key] = allComponents[key]
       return acc
     }, {} as Record<any, any>)
-  console.log(sortedComponents)
   return Object.values(sortedComponents)
     .map(component => component())
     .sort(compare)

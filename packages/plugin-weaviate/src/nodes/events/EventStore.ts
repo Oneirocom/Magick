@@ -1,10 +1,7 @@
 import Rete from 'rete'
 import axios from 'axios'
 
-import { InputControl } from '../../../../packages/engine/src/dataControls/InputControl'
-import { triggerSocket, stringSocket, eventSocket } from '../../../../packages/engine/src/sockets'
-import { MagickComponent } from '../../../../packages/engine/src/magick-component'
-
+import { InputControl, triggerSocket, stringSocket, eventSocket, MagickComponent } from '@magickml/engine'
 import {
   Event,
   EngineContext,
