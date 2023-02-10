@@ -11,9 +11,9 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../types'
-import { triggerSocket, numSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+} from 'packages/engine/src/types'
+import { triggerSocket, numSocket } from 'packages/engine/src/sockets'
+import { MagickComponent } from 'packages/engine/src/magick-component'
 
 const info =
   'Document Delete is used to delete a document from the search corpus'

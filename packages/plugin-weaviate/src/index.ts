@@ -16,7 +16,7 @@ export * from "./nodes/events/EventQA";
 const WeaviatePlugin = new Plugin({
     name: 'WeaviatePlugin', 
     nodes: [ EventStore, EventRecall, EventQA, EventDelete, /*WeaviateWikipedia*/], 
-    services: [['WeaviatePlugin',WeaviateService],['EventsQA',EventsQAService]], // todo, should be key value object, not tuples array
+    services: [['WeaviatePlugin',WeaviateService],['EventsQA',EventsQAService]], // TODO: should be key value object, not tuples array
     agentComponents: [], 
     windowComponents: [], 
     agentMethods: null,

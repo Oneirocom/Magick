@@ -12,6 +12,7 @@ import {
   MagickComponent,
   API_URL
 } from 'packages/engine/src/index'
+import axios from 'axios'
 const info = 'Event Q&A is used for getting answers to questions based on the events stored.'
 
 type WorkerReturn = {
@@ -56,23 +57,21 @@ export class EventQA extends MagickComponent<Promise<WorkerReturn>>{
   ) {
 
     const eventQAWeaviate = async ({
-      question, agentId
-    }: QAArgs) => {
-      const params = {
-        question,
-        agentId
-      } as Record<string, any>
-      const urlString = `${
-        API_URL
-      }/EventsQA`
-        
-      const url = new URL(urlString)
-      for (let p in params) {
-        url.searchParams.append(p, params[p])
-      }
+      question,
+      agentId,
 
-      const response = await fetch(url.toString()).then(response => response.json())
-      return response
+    }: QAArgs) => {
+      const response = await axios.post(
+        `${
+          API_URL
+        }/EventsQA`,
+        {
+          question,
+          agentId,
+        }
+      )
+      console.log('Question Answer', response.data)
+      return response.data
     }
 
     const question = inputs['question'][0] as string
@@ -84,7 +83,7 @@ export class EventQA extends MagickComponent<Promise<WorkerReturn>>{
     const response = await eventQAWeaviate(body)
     var result
     if (!(response['_additional']['answer']['hasAnswer'])) {
-      result = "No Mathching events found"
+      result = "No Matching events found"
     } else {
       result = response['_additional']['answer']['result']
     }

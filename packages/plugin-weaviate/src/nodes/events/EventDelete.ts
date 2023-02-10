@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Rete from 'rete'
 
 import {
@@ -11,10 +12,8 @@ import {
   stringSocket,
   eventSocket,
   MagickComponent,
-  API_URL,
-  CreateEventArgs
+  API_URL
 } from 'packages/engine/src/index'
-import axios from 'axios'
 
 const info = 'Event Delete is used to delete events based on inputs recevied from the user.'
 
@@ -31,7 +30,7 @@ const EventDel = async ({
 }) => {
   const urlString = `${
     API_URL
-  }/WeaviatePlugin`
+  }/event`
 
   const params = {
     type,
@@ -53,9 +52,8 @@ const EventDel = async ({
   const response = await fetch(url.toString(), {
     method: 'DELETE',
   })
-  if (response.status !== 200) return null
-  const json = await response.json()
-  return json.event
+  const json = await response
+  return json
 }
 
 export class EventDelete extends MagickComponent<Promise<void>> {
@@ -92,12 +90,13 @@ export class EventDelete extends MagickComponent<Promise<void>> {
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-
+    const out = new Rete.Output('output', 'Output', stringSocket)
     return node
       .addInput(contentInput)
       .addInput(eventInput)
       .addInput(dataInput)
       .addOutput(dataOutput)
+      .addOutput(out)
   }
 
   async worker(
@@ -105,39 +104,34 @@ export class EventDelete extends MagickComponent<Promise<void>> {
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
-      const deleteEvent = async ({
-        type,
-        observer,
-        sender,
-        entities,
-        content,
-        client,
-        channel,
-      }: CreateEventArgs) => {
-      const response = await axios.delete(
-        `${
-          API_URL
-        }/WeaviatePlugin`,
-        {
-          data: {
-          type,
-          observer,
-          sender,
-          entities,
-          content,
-          client,
-          channel,
-        }
-      })
-      }
+    const eventObj = inputs['event'] && (inputs['event'][0] as Event)
 
-    const event = inputs['event'][0] as Event
-    const content = (inputs['content'] && inputs['content'][0]) as string
+    const { observer, client, channel, sender } = eventObj
 
-    if (!content) return console.log('Content is null, not deleting event')
+    const typeData = node?.data?.type as string
+    const type =
+      typeData !== undefined && typeData.length > 0
+        ? typeData.toLowerCase().trim()
+        : 'none'
 
-    if (content && content !== '') {
-      const respUser = await deleteEvent({ ...event, content } as any)
+    const maxCountData = node.data?.max_count as string
+    const maxCount = maxCountData ? parseInt(maxCountData) : 10
+    const max_time_diffData = node.data?.max_time_diff as string
+    const max_time_diff = max_time_diffData ? parseInt(max_time_diffData) : -1
+
+   const events = await EventDel({
+      type,
+      sender,
+      observer,
+      client,
+      channel,
+      maxCount,
+      max_time_diff,
+    })
+
+    let number_of_events = events;
+    return {
+      output: number_of_events ?? false,
     }
   }
 }
