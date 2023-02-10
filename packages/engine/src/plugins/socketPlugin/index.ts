@@ -38,7 +38,6 @@ function install(
       context: Context,
       ...args
     ) => {
-      console.log('CONTEXT', context)
       const currentSpell = context.magick.getCurrentSpell()
       const event = `${currentSpell.name}-${node.id}`
 

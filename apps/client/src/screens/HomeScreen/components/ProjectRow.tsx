@@ -41,7 +41,7 @@ const ProjectRow = ({
         <Icon
           name="trash"
           onClick={() => {
-            spell?.name && onDelete(spell.name)
+            spell?.name && onDelete(spell.id)
           }}
           style={{
             marginRight: 'var(--extraSmall)',
