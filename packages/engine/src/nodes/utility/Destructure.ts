@@ -39,6 +39,7 @@ export class Destructure extends MagickComponent<void> {
     const socketGenerator = new SocketGeneratorControl({
       connectionType: 'output',
       name: 'Property Name',
+      ignored: ['trigger'],
     })
 
     node.inspector.add(socketGenerator)
