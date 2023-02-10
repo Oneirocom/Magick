@@ -114,12 +114,12 @@ export class weaviate_connection {
           {
             path: ['observer'],
             operator: 'Equal',
-            valueString: observer,
+            valueText: observer,
           },
           {
             path: ['sender'],
             operator: 'Equal',
-            valueString: sender,
+            valueText: sender,
           }
         ],
       })

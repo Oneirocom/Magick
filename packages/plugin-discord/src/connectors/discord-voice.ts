@@ -4,10 +4,9 @@ import {
   createAudioResource,
   AudioPlayerStatus,
   StreamType,
-  VoiceConnectionStatus,
   NoSubscriberBehavior,
 } from '@discordjs/voice'
-import { createReadStream } from 'fs'
+let createReadStream;
 
 import { tts, tts_tiktalknet } from '@magickml/server-core'
 
@@ -43,15 +42,19 @@ export function initSpeechClient({
     debug: true,
   })
   client.on('speech', async msg => {
-    console.log('msg is ', msg)
     const content = msg.content
     const connection = msg.connection
     const author = msg.author
     const channel = msg.channel
 
+    if(!createReadStream) {
+      // dynbamically import createReadStream from fs
+      const fs = await import('fs')
+      createReadStream = fs.createReadStream
+    }
+
     connection.subscribe(audioPlayer)
 
-    console.log('got voice input:', content)
     if (content) {
       const entities: {
         user: string
