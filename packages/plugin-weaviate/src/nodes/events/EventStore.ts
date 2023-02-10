@@ -75,6 +75,9 @@ export class EventStore extends MagickComponent<Promise<void>> {
       content,
       client,
       channel,
+      agentId,
+      channelType,
+
     }: CreateEventArgs) => {
       const response = await axios.post(
         `${
@@ -88,6 +91,8 @@ export class EventStore extends MagickComponent<Promise<void>> {
           content,
           client,
           channel,
+          agentId,
+          channelType
         }
       )
       console.log('Created event', response.data)
@@ -114,7 +119,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       return console.log('agentId is null, not storing event')
     }
 
-
+    console.log("INSIDE COMPO, ", { ...event, content, agentId })
     if (content && content !== '') {
       const respUser = await storeEventWeaviate({ ...event, content, agentId } as any)
       if (!silent) node.display(respUser)

@@ -53,9 +53,8 @@ const EventDel = async ({
   const response = await fetch(url.toString(), {
     method: 'DELETE',
   })
-  if (response.status !== 200) return null
-  const json = await response.json()
-  return json.event
+  const json = await response
+  return json
 }
 
 export class EventDelete extends MagickComponent<Promise<void>> {
@@ -92,12 +91,13 @@ export class EventDelete extends MagickComponent<Promise<void>> {
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-
+    const out = new Rete.Output('output', 'Output', stringSocket)
     return node
       .addInput(contentInput)
       .addInput(eventInput)
       .addInput(dataInput)
       .addOutput(dataOutput)
+      .addOutput(out)
   }
 
   async worker(
@@ -120,7 +120,7 @@ export class EventDelete extends MagickComponent<Promise<void>> {
     const max_time_diffData = node.data?.max_time_diff as string
     const max_time_diff = max_time_diffData ? parseInt(max_time_diffData) : -1
 
-    const events = await EventDel({
+/*     const events = await EventDel({
       type,
       sender,
       observer,
@@ -130,9 +130,9 @@ export class EventDelete extends MagickComponent<Promise<void>> {
       max_time_diff,
     })
 
-    let number_of_events = JSON.stringify(events);
+    let number_of_events = events; */
     return {
-      output: number_of_events ?? '',
+      output: "number_of_events" ?? '',
     }
   }
 }

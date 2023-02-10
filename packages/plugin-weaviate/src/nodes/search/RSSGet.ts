@@ -8,11 +8,11 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../types'
-import { BooleanControl } from '../../dataControls/BooleanControl'
-import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, arraySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+} from 'packages/engine/src/types'
+import { BooleanControl } from 'packages/engine/src/dataControls/BooleanControl'
+import { InputControl } from 'packages/engine/src/dataControls/InputControl'
+import { triggerSocket, arraySocket } from 'packages/engine/src/sockets'
+import { MagickComponent } from 'packages/engine/src/magick-component'
 
 const info =
   'RSS Get is used to get a json array from an RSS feed, you can use RSS1|RSS2|...|RSSN to use more links, also the Fetch Way can be left to empty to get the data from all RSS feeds or rnd/random to get randomly from one from the list'
