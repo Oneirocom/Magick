@@ -85,12 +85,8 @@ export default class SpellManager {
   }
 
   async run(spellId: string, inputs: Record<string, any>) {
-    console.log('RUNNING SPELL', spellId, inputs)
     const runner = this.getSpellRunner(spellId)
-    console.log('runner', runner)
     const result = await runner?.defaultRun(inputs)
-
-    console.log('RUNNER RESULT', result)
 
     return result
   }

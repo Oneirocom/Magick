@@ -66,7 +66,7 @@ export class Code extends MagickComponent<unknown> {
     const codeControl = new CodeControl({
       dataKey: 'code',
       name: 'Code',
-      language: 'javascript'
+      language: 'javascript',
     })
 
     const nameControl = new InputControl({
@@ -98,7 +98,7 @@ export class Code extends MagickComponent<unknown> {
 
     try {
       // const value = runCodeWithArguments(node.data.code)
-      const value = processCode(node.data.code, inputs, data, "javascript")
+      const value = processCode(node.data.code, inputs, data, 'javascript')
 
       return value
     } catch (err) {
