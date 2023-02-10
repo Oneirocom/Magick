@@ -104,40 +104,34 @@ export class EventDelete extends MagickComponent<Promise<void>> {
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
-    const deleteEvent = async ({
+    const eventObj = inputs['event'] && (inputs['event'][0] as Event)
+
+    const { observer, client, channel, sender } = eventObj
+
+    const typeData = node?.data?.type as string
+    const type =
+      typeData !== undefined && typeData.length > 0
+        ? typeData.toLowerCase().trim()
+        : 'none'
+
+    const maxCountData = node.data?.max_count as string
+    const maxCount = maxCountData ? parseInt(maxCountData) : 10
+    const max_time_diffData = node.data?.max_time_diff as string
+    const max_time_diff = max_time_diffData ? parseInt(max_time_diffData) : -1
+
+    const events = await EventDel({
       type,
-      observer,
       sender,
-      entities,
-      content,
+      observer,
       client,
       channel,
-    }: CreateEventArgs) => {
-    const response = await axios.delete(
-      `${
-        API_URL
-      }/WeaviatePlugin`,
-      {
-        type,
-        observer,
-        sender,
-        entities,
-        content,
-        client,
-        channel,
-      }
-    )
-    const deleteEvent = async (event: Event) => {
-      const resp = null; // await weaviate.events.delete(event)
-      return resp
-    }
-    const event = inputs['event'][0] as Event
-    const content = (inputs['content'] && inputs['content'][0]) as string
+      maxCount,
+      max_time_diff,
+    })
 
-    if (!content) return console.log('Content is null, not deleting event')
-
-    if (content && content !== '') {
-      const respUser = await deleteEvent({ ...event, content } as any)
+    let number_of_events = JSON.stringify(events);
+    return {
+      output: number_of_events ?? '',
     }
   }
 }
