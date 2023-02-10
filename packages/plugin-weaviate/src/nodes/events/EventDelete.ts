@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Rete from 'rete'
 
 import {
