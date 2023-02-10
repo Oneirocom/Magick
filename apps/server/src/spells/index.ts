@@ -7,7 +7,7 @@ import { Route } from '@magickml/server-core'
 import { runSpell } from '../utils/runSpell'
 import { ServerError } from '@magickml/server-core'
 
-import md5 from 'md5-hash'
+import md5 from 'md5'
 
 const runSpellHandler = async (ctx: Koa.Context) => {
   const { spell: spellName } = ctx.params
@@ -41,8 +41,6 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
   const { body } = ctx.request
   const { name, diff } = body as any
 
-  console.log('saving diff', name, diff)
-
   if (!body) throw new ServerError('input-failed', 'No parameters provided')
 
   let spell = await app.service('spells').find({ query: { name } })
@@ -60,9 +58,9 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
         'Graph would be cleared.  Aborting.'
       )
 
-    const hash = md5(JSON.stringify(spellUpdate.graph))
+    const hash = md5(JSON.stringify(spellUpdate.graph.nodes))
   // in feathers.js, get the spells service and update the spell with the name of name
-    const updatedSpell = await app.service('spells').update(name, {hash, ...spellUpdate})
+    const updatedSpell = await app.service('spells').update(name, {...spellUpdate, hash})
 
     // get all entities from this spell and set to dirty
     // await updatedSpell.agents.forEach(async entity => {

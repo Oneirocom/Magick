@@ -119,22 +119,16 @@ export class World {
           query: { name: agent.data.root_spell },
         })).data[0]
 
-        if (spell) {
           if (!runningAgent.root_spell_hash || spell.hash !== runningAgent.root_spell_hash) {
             // reload the spell
             console.log('reloading root spell', spell.name)
-            console.log('agent is', runningAgent)
             const spellRunner = await runningAgent.spellManager.load(spell)
             runningAgent.root_spell_hash = spell.hash
-          } console.log('spell hash is', spell.hash)
-        } else {
-          console.error('no spell found for', agent.data.root_spell)
-        }
+          }
       }
 
       // evaluate all spells
       if (agent.spells.length > 0) {
-        console.log('spells are', agent.spells)
         // for each spell in agent.spells, get the hash from the db
         // if the hash is not the same as agent.spells.hash, then reload the spell
         // otherwise set agent.spells.hash to the hash of the spell
