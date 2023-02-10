@@ -99,7 +99,6 @@ export class EventStore extends MagickComponent<Promise<void>> {
     const agentId = (inputs['agentid'] && inputs['agentid'][0]) as string
 
     if (!content) {
-      node.display('Content is null, not storing event')
       return console.log('Content is null, not storing event')
   
     }
