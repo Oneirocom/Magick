@@ -63,6 +63,7 @@ export class Cast extends MagickComponent<void> {
       name: 'Socket Type',
       dataKey: 'socketType',
       values,
+      ignored: ['trigger'],
       defaultValue: 'any Type',
     })
 
