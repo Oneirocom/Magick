@@ -6,7 +6,8 @@ import { toast } from 'react-toastify'
 import useSWR, { mutate } from 'swr'
 import type { OpenAI } from '../../../../../../@types/openai'
 import Button from '@mui/material/Button'
-import { Table, TableCell, TableRow } from '@mui/material'
+import { IconButton, Table, TableCell, TableRow } from '@mui/material'
+import DeleteOutlined from '@mui/icons-material/DeleteOutlined'
 
 export default function FineTuneList() {
   const { data, error } = useSWR<OpenAI.List<OpenAI.FineTune>>('fine-tunes')
@@ -142,8 +143,8 @@ function DeleteFineTune({ id }: { id: string }) {
   }
 
   return (
-    <Button onClick={onClick} disabled={isDeleting}>
-      Trash Icon Here
-    </Button>
+    <IconButton onClick={onClick} disabled={isDeleting}>
+      <DeleteOutlined fontSize="small" />
+    </IconButton>
   )
 }
