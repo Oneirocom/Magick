@@ -8,6 +8,7 @@ export class DropdownControl extends DataControl {
     defaultValue,
     icon = 'properties',
     write = true,
+    ignored = [],
   }: {
     name: string
     dataKey: string
@@ -15,6 +16,7 @@ export class DropdownControl extends DataControl {
     values: string[]
     icon?: string
     write?: boolean
+    ignored?: string[]
   }) {
     const options = {
       dataKey,
@@ -25,6 +27,7 @@ export class DropdownControl extends DataControl {
       data: {
         defaultValue,
         values,
+        ignored,
       },
     }
 
