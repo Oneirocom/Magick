@@ -11,9 +11,9 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../types'
-import { triggerSocket, anySocket, stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+} from 'packages/engine/src/types'
+import { triggerSocket, anySocket, stringSocket } from 'packages/engine/src/sockets'
+import { MagickComponent } from 'packages/engine/src/magick-component'
 
 const info =
   'Search is used to do neural search in the search corpus and return a document'

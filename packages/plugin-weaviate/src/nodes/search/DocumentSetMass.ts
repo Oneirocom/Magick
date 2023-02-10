@@ -11,10 +11,10 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, numSocket, anySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+} from 'packages/engine/src/types'
+import { InputControl } from 'packages/engine/src/dataControls/InputControl'
+import { triggerSocket, numSocket, anySocket } from 'packages/engine/src//sockets'
+import { MagickComponent } from 'packages/engine/src//magick-component'
 
 const info =
   'Document Set Mass is used to add multiple documents in the search corpus'
