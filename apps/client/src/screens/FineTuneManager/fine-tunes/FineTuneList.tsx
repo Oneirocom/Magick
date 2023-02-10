@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import useSWR, { mutate } from 'swr'
 import type { OpenAI } from '../../../../../../@types/openai'
 import Button from '@mui/material/Button'
+import { Table, TableCell, TableRow } from '@mui/material'
 
 export default function FineTuneList() {
   const { data, error } = useSWR<OpenAI.List<OpenAI.FineTune>>('fine-tunes')
@@ -61,38 +62,36 @@ function Processing({ fineTunes }: { fineTunes: OpenAI.FineTune[] }) {
 function FineTunesTable({ fineTunes }: { fineTunes: OpenAI.FineTune[] }) {
   const ready = fineTunes.filter(fineTune => fineTune.status === 'succeeded')
   return (
-    <table className="my-4 w-full border-collapse">
-      <tbody>
-        {ready
-          .sort((a, b) => b.updated_at - a.updated_at)
-          .map((fineTune, index) => (
-            <tr
-              className={index % 2 === 0 ? 'bg-gray-100' : ''}
-              key={fineTune.id}
+    <Table>
+      {ready
+        .sort((a, b) => b.updated_at - a.updated_at)
+        .map((fineTune, index) => (
+          <TableRow
+            // className={index % 2 === 0 ? 'bg-gray-100' : ''}
+            key={fineTune.id}
+          >
+            <TableCell className="p-2 max-w-0 truncate" title={fineTune.id}>
+              <a href={`/fineTuneManager/fine-tune/${fineTune.id}`}>
+                {fineTune.id}
+              </a>
+            </TableCell>
+            <TableCell className="p-2 max-w-0 truncate">
+              {[...fineTune.training_files, ...fineTune.validation_files]
+                .map(({ filename }) => filename)
+                .join(', ')}
+            </TableCell>
+            <TableCell
+              className="p-2 max-w-0 truncate"
+              title={new Date(fineTune.updated_at * 1000).toISOString()}
             >
-              <td className="p-2 max-w-0 truncate" title={fineTune.id}>
-                <a href={`/fineTuneManager/fine-tune/${fineTune.id}`}>
-                  {fineTune.id}
-                </a>
-              </td>
-              <td className="p-2 max-w-0 truncate">
-                {[...fineTune.training_files, ...fineTune.validation_files]
-                  .map(({ filename }) => filename)
-                  .join(', ')}
-              </td>
-              <td
-                className="p-2 max-w-0 truncate"
-                title={new Date(fineTune.updated_at * 1000).toISOString()}
-              >
-                {new Date(fineTune.updated_at * 1000).toLocaleString()}
-              </td>
-              <td className="p-2 w-8">
-                <DeleteFineTune id={fineTune.id} />
-              </td>
-            </tr>
-          ))}
-      </tbody>
-    </table>
+              {new Date(fineTune.updated_at * 1000).toLocaleString()}
+            </TableCell>
+            <TableCell className="p-2 w-8">
+              <DeleteFineTune id={fineTune.id} />
+            </TableCell>
+          </TableRow>
+        ))}
+    </Table>
   )
 }
 
