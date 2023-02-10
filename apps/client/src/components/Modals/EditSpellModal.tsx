@@ -7,6 +7,8 @@ import css from './modalForms.module.css'
 import { closeTab, openTab } from '../../state/tabs'
 import { useDispatch } from 'react-redux'
 
+import md5 from 'md5'
+
 const EditSpellModal = ({ closeModal, spellId, name, tab }) => {
   const [error, setError] = useState('')
   const [patchSpell, { isLoading }] = usePatchSpellMutation()
@@ -23,7 +25,7 @@ const EditSpellModal = ({ closeModal, spellId, name, tab }) => {
   const onSubmit = handleSubmit(async data => {
     const response: any = await patchSpell({
       spellId: tab.spellId,
-      update: data,
+      update: {...data, hash: md5(JSON.stringify(data.graph.nodes))},
     })
 
     if (response.error) {

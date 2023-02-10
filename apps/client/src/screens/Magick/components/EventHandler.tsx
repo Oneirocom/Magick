@@ -3,6 +3,8 @@ import { useSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
 import { GraphData, Spell } from '@magickml/engine'
 
+import md5 from 'md5'
+
 import {
   useSaveSpellMutation,
   useGetSpellQuery,
@@ -35,7 +37,6 @@ const EventHandler = ({ pubSub, tab }) => {
   const client = FeathersContext.client
   useEffect(() => {
     if (!spell || !spell?.data[0]) return
-    console.log('SPELL IN HANDLER', spell)
     spellRef.current = spell.data[0]
   }, [spell])
 
@@ -74,7 +75,10 @@ const EventHandler = ({ pubSub, tab }) => {
     const updatedSpell = {
       ...currentSpell,
       graph,
+      hash: md5(JSON.stringify(graph))
     }
+
+    console.log('updatedSpell', updatedSpell)
 
     const response = await saveSpellMutation(updatedSpell)
     const jsonDiff = diff(currentSpell, updatedSpell)
@@ -109,6 +113,7 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
+    updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes));
 
     const jsonDiff = diff(currentSpell, updatedSpell)
 
