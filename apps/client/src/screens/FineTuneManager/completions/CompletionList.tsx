@@ -5,6 +5,7 @@ import UsageInstructions from '../instructions/UsageInstructions'
 import React from 'react'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
+// TODO @thomageanderson: resolve the type warning on this markdown import
 import { html as CompletionInstructions } from './instructions.md'
 
 export default function ClassificationList() {
