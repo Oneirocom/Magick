@@ -71,10 +71,21 @@ const EventHandler = ({ pubSub, tab }) => {
     console.log('currentSpell', currentSpell)
     console.log('graph', graph)
 
-    const response = await saveSpellMutation({
+    const updatedSpell = {
       ...currentSpell,
       graph,
-    })
+    }
+
+    const response = await saveSpellMutation(updatedSpell)
+    const jsonDiff = diff(currentSpell, updatedSpell)
+
+    if (jsonDiff.length !== 0) {
+      console.log('Sending json diff to spell runner!')
+      // save diff to spell runner if something has changed.  Will update spell in spell runner session
+      await client.service('spell-runner').update(currentSpell.name, {
+        diff: jsonDiff,
+      })
+    }
 
     if ('error' in response) {
       enqueueSnackbar('Error saving spell', {
