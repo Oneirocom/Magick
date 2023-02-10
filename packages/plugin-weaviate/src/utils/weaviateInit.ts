@@ -60,6 +60,7 @@ export class weaviate_connection {
         delete data[key]
       }
     }
+    console.log('SS')
     console.log(data)
     return await weaviate_client.data
       .creator()
@@ -130,14 +131,14 @@ export class weaviate_connection {
       })
     const event_obj = events.data.Get.Event
 
-    // if (max_time_diff > 0) {
-    //   const now = new Date()
-    //   const filtered = event_obj.filter(e => {
-    //     const diff = now.getTime() - new Date(e.date).getTime()
-    //     return diff < max_time_diff
-    //   })
-    //   return filtered
-    // }
+     if (max_time_diff > 0) {
+       const now = new Date()
+       const filtered = event_obj.filter(e => {
+         const diff = now.getTime() - new Date(e.date).getTime()
+         return diff < max_time_diff
+       })
+       return filtered
+     }
     return event_obj
   }
   static async getAllEvents() {
@@ -227,7 +228,7 @@ export class weaviate_connection {
     } else {
       return answer['data']['Get']['Event']['0']
     }
-
+    return answer
   }
 
   static async semanticSearch(_data: SemanticSearch) {

@@ -51,11 +51,13 @@ const getEventWeaviate = async ({
   for (let p in params) {
     url.searchParams.append(p, params[p])
   }
-
+  
+  
   const response = await fetch(url.toString())
+  console.log(response)
   if (response.status !== 200) return null
   const json = await response.json()
-  return json.event
+  return json
 }
 
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
@@ -80,6 +82,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     const out = new Rete.Output('output', 'Event', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    
 
     const nameInput = new InputControl({
       dataKey: 'name',
@@ -144,16 +147,14 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       max_time_diff,
     })
     if (!silent) node.display(`Event of ${type} found` || 'Not found')
-    let conversation = '';
+    let conversation = events;
+    console.log(conversation)
+     /* if(events) events.forEach((event) => {
+       conversation += event.sender + ': ' + event.content + '\n';
+     }); */
 
-    // // for each event in events,
-    // if(events) events.forEach((event) => {
-    //   conversation += event.sender + ': ' + event.content + '\n';
-    // });
-
-    conversation = JSON.stringify(events);
     return {
-      output: conversation ?? '',
+      output: "conversation found" ?? '',
     }
   }
 }

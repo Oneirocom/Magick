@@ -74,7 +74,7 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
       ? _var.split(splitter).filter(el => el.length > 0)
       : _var.split(splitter)
 
-    node.display(res.toString())
+    //node.display(res.toString())
     if (res === undefined) node.display('undefined value')
 
     this.name =
