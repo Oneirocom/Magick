@@ -5,6 +5,8 @@ import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import { rootApi } from './api'
 import { GraphData, Spell } from '@magickml/engine'
 
+import md5 from 'md5-hash'
+
 export interface Diff {
   name: string
   diff: Record<string, unknown>
@@ -87,6 +89,7 @@ export const spellApi = rootApi.injectEndpoints({
         if (!spellCopy.created_at)
           spellCopy.created_at = new Date().toISOString()
         spellCopy.updated_at = new Date().toISOString()
+        spellCopy.hash = md5(JSON.stringify(spell.graph))
 
         console.log('SAVING SPELL')
         const baseQueryOptions = {

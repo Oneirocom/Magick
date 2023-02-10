@@ -7,6 +7,8 @@ import { Route } from '@magickml/server-core'
 import { runSpell } from '../utils/runSpell'
 import { ServerError } from '@magickml/server-core'
 
+import md5 from 'md5-hash'
+
 const runSpellHandler = async (ctx: Koa.Context) => {
   const { spell: spellName } = ctx.params
 
@@ -57,8 +59,10 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
         'input-failed',
         'Graph would be cleared.  Aborting.'
       )
+
+    const hash = md5(JSON.stringify(spellUpdate.graph))
   // in feathers.js, get the spells service and update the spell with the name of name
-    const updatedSpell = await app.service('spells').update(name, spellUpdate)
+    const updatedSpell = await app.service('spells').update(name, {hash, ...spellUpdate})
 
     // get all entities from this spell and set to dirty
     // await updatedSpell.agents.forEach(async entity => {

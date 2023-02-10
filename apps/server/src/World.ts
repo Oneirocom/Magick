@@ -66,6 +66,7 @@ export class World {
     delete newAgents['updated_at']
     const oldAgents = this.oldAgents ?? []
     if (oldAgents['updated_at']) delete oldAgents['updated_at']
+    await this.updateSpells();
     if (JSON.stringify(newAgents) === JSON.stringify(oldAgents)) return // They are the same
 
     // If an entry exists in oldAgents but not in newAgents, it has been deleted
@@ -106,6 +107,55 @@ export class World {
 
     this.oldAgents = this.newAgents
   }
+
+  async updateSpells() {
+    for (const i in this.newAgents) {
+      const agent = this.newAgents[i]
+      const runningAgent = this.getAgent(agent.id)
+      if(!runningAgent) continue;
+      // evaluate the root spell
+      if (agent.data.root_spell) {
+        const spell = (await app.service('spells').find({
+          query: { name: agent.data.root_spell },
+        })).data[0]
+
+        if (spell) {
+          if (!runningAgent.root_spell_hash || spell.hash !== runningAgent.root_spell_hash) {
+            // reload the spell
+            console.log('reloading root spell', spell.name)
+            console.log('agent is', runningAgent)
+            const spellRunner = await runningAgent.spellManager.load(spell)
+            runningAgent.root_spell_hash = spell.hash
+          } console.log('spell hash is', spell.hash)
+        } else {
+          console.error('no spell found for', agent.data.root_spell)
+        }
+      }
+
+      // evaluate all spells
+      if (agent.spells.length > 0) {
+        console.log('spells are', agent.spells)
+        // for each spell in agent.spells, get the hash from the db
+        // if the hash is not the same as agent.spells.hash, then reload the spell
+        // otherwise set agent.spells.hash to the hash of the spell
+        const spells = (await app.service('spells').find({
+          query: { name: { $in: agent.spells } },
+        })).data
+
+        for (const j in spells) {
+          const spell = spells[j]
+          if(!runningAgent.spells_hash) runningAgent.spells_hash = []
+          if (spell.hash !== runningAgent.spells_hash[j]) {
+            // reload the spell
+            console.log('reloading spell', spell.name)
+            const spellRunner = await runningAgent.spellManager.load(spell)
+            runningAgent.spells_hash[j] = spell.hash
+          }
+        }
+      }
+    }
+  }
+
 
   async resetAgentSpells() {
     const agents = (await app.service('agents').find()).data

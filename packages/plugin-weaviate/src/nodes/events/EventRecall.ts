@@ -1,7 +1,7 @@
-//@ts-nocheck
 import Rete from 'rete'
 
 import {
+  API_URL,
   Event,
   EngineContext,
   NodeData,
@@ -12,10 +12,6 @@ import {
   triggerSocket, anySocket, eventSocket,
   MagickComponent
 } from '@magickml/engine'
-
-import {
-  API_URL
-} from "../../../../engine/src/config"
 
 const info = 'Event Recall is used to get conversation for an event and user'
 
@@ -39,8 +35,6 @@ const getEventWeaviate = async ({
     API_URL
   }/eventWeaviate`
 
-  console.log('url is', urlString)
-
   const params = {
     type,
     sender,
@@ -53,15 +47,12 @@ const getEventWeaviate = async ({
     max_time_diff,
   } as Record<string, any>
   
-  console.log('urlString is', urlString)
-
   const url = new URL(urlString)
   for (let p in params) {
     url.searchParams.append(p, params[p])
   }
 
   const response = await fetch(url.toString())
-  console.log(response)
   if (response.status !== 200) return null
   const json = await response.json()
   return json.event
