@@ -137,7 +137,13 @@ function install(
             context as any
           )
           if (triggerInWorker)
-            triggerInWorker.call(component, node, inputs, outputs, context)
+            return triggerInWorker.call(
+              component,
+              node,
+              inputs,
+              outputs,
+              context
+            )
         }
         break
       case 'module':

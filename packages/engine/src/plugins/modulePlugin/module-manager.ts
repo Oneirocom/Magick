@@ -185,13 +185,14 @@ export class ModuleManager {
   }
 
   workerTriggerIns(
-    _node: NodeData,
+    node: NodeData,
     _inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
-    { module }: { module: Module }
+    outputs: MagickWorkerOutputs,
+    { module, data }: { module: Module; data: Record<string, any> }
   ) {
     if (!module) return
 
+    return data
     // module.setOutput(node.data.name as any, inputs['input'][0])
   }
 
