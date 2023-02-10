@@ -99,9 +99,26 @@ export class EventStore extends MagickComponent<Promise<void>> {
     const agentId = (inputs['agentid'] && inputs['agentid'][0]) as string
 
     if (!content) {
+      node.display('Content is null, not storing event')
       return console.log('Content is null, not storing event')
-  
     }
+    if (!event.observer) {
+      node.display('observer is null, not storing event')
+      return console.log('observer is null, not storing event')
+    }
+    if (!event.entities) {
+      node.display('entities is null, not storing event')
+      return console.log('entities is null, not storing event')
+    }
+    if (!event.sender) {
+      node.display('sender is null, not storing event')
+      return console.log('sender is null, not storing event')
+    }
+    if (!agentId) {
+      node.display('agentId is null, not storing event')
+      return console.log('agentId is null, not storing event')
+    }
+
 
     if (content && content !== '') {
       const respUser = await storeEventWeaviate({ ...event, content, agentId } as any)
