@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "plugin-generator",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "x-prompt": "Plugin Name",
+      "description": "The name of the Plugin",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "services":{
+      "type": "boolean",
+      "x-prompt": "Services Required?",
+      "description": "If Feather services are to be created",
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      }
+    },
+    "nodes":{
+      "type": "boolean",
+      "x-prompt": "Nodes Required?",
+      "description": "If Nodes are to be created",
+      "$default": {
+        "$source": "argv",
+        "index": 2
+      }
+    }
+  },
+  "required": ["name","services","nodes"]
+}
