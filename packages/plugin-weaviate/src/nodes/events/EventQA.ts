@@ -64,7 +64,7 @@ export class EventQA extends MagickComponent<Promise<WorkerReturn>>{
       } as Record<string, any>
       const urlString = `${
         API_URL
-      }/eventWeaviate`
+      }/EventsQA`
         
       const url = new URL(urlString)
       for (let p in params) {

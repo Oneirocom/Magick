@@ -79,7 +79,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       const response = await axios.post(
         `${
           API_URL
-        }/eventWeaviate`,
+        }/WeaviatePlugin`,
         {
           type,
           observer,
