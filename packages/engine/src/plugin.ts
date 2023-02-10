@@ -98,6 +98,7 @@ class PluginManager {
         })
         return serverInits
     }
+    
 
     getServerRoutes() {
         let serverRoutes = []
@@ -135,7 +136,6 @@ class PluginManager {
         let nodes = {}
 
         PluginManager.pluginList.forEach((plugin) => {
-
             let plug_nodes = {}
             plugin.nodes.forEach((node) => {
                 let id = Math.random().toString(36).slice(2, 7);

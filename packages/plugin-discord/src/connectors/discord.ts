@@ -1,4 +1,3 @@
-import { Event } from '@magickml/engine'
 import Discord, {
   ChannelType,
   EmbedBuilder,
@@ -8,7 +7,7 @@ import Discord, {
 import emoji from 'emoji-dictionary'
 import emojiRegex from 'emoji-regex'
 
-import { initSpeechClient, recognizeSpeech } from './discord-voice'
+let recognizeSpeech
 
 export function startsWithCapital(word) {
   return word.charAt(0) === word.charAt(0).toUpperCase()
@@ -1236,6 +1235,9 @@ export class discord_client {
 
     if (this.use_voice) {
       const {client, discord_bot_name, agent, spellRunner, voice_provider, voice_character, voice_language_code, tiktalknet_url} = this
+
+      const { initSpeechClient, recognizeSpeech: _recognizeSpeech } = await import('./discord-voice')
+      recognizeSpeech = _recognizeSpeech
       initSpeechClient({
         client,
         discord_bot_name,

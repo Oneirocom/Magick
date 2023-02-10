@@ -10,6 +10,7 @@ export const spellSchema = Type.Object(
   {
     id: Type.Number(),
     name: Type.String(),
+    hash: Type.String(),
     graph: Type.Object({
       id: Type.String(),
       nodes: Type.Object({})
@@ -30,6 +31,7 @@ export const spellDataSchema = Type.Pick(spellSchema, [
   'graph',
   'created_at',
   'updated_at',
+  'hash',
 ], {
   $id: 'SpellData'
 })
@@ -52,6 +54,7 @@ export const spellQueryProperties = Type.Pick(spellSchema, [
   'graph',
   'created_at',
   'updated_at',
+  'hash',
 ])
 export const spellQuerySchema = Type.Intersect(
   [
