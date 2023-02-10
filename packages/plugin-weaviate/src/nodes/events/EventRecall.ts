@@ -33,7 +33,7 @@ const getEventWeaviate = async ({
 }) => {
   const urlString = `${
     API_URL
-  }/eventWeaviate`
+  }/pluginWeaviate`
 
   const params = {
     type,
