@@ -52,8 +52,6 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     const spell = await getSpell(app, id as string)
 
-    console.log('spell runner spell', spell)
-
     // Load the spell into the spellManager. If there is no spell runner, we make one.
     await spellManager.load(spell as Spell)
 

@@ -235,25 +235,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return { success, choice }
   }
 
-  const eventQAWeaviate = async ({ question, agentId }: QAArgs) => {
-    const params = {
-      question,
-      agentId,
-    } as Record<string, any>
-    const urlString = `${
-      import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-    }/eventQA`
-    const url = new URL(urlString)
-    for (let p in params) {
-      url.searchParams.append(p, params[p])
-    }
-
-    const response = await fetch(url.toString()).then(response =>
-      response.json()
-    )
-    return response
-  }
-
   const publicInterface = {
     env,
     onTrigger,
@@ -269,7 +250,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     onPlaytest,
     clearTextEditor,
     processCode,
-    eventQAWeaviate,
     runSpell,
     refreshEventTable,
     queryGoogle,

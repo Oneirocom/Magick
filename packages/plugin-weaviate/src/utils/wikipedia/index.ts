@@ -1,8 +1,8 @@
 import Koa from 'koa';
 
-import { Route } from "../types";
-import { ServerError } from "../utils/ServerError";
+import { Route, ServerError } from '@magickml/server-core'
 import { lookUpOnWikipedia } from "./helpers";
+import weaviate from 'weaviate-client'
 
 const getWikipediaSummary = async (ctx: Koa.Context) => {
   const { keyword } = ctx.query
@@ -36,9 +36,41 @@ const getWikipediaSummary = async (ctx: Koa.Context) => {
   }
 }
 
+const handleWeaviateRequest = async (ctx: Koa.Context) => {
+  const body = (ctx.request as any).body as any
+  const keyword = body.keyword as string
+
+  const client = weaviate.client({
+    scheme: 'http',
+    host: 'semantic-search-wikipedia-with-weaviate.api.vectors.network:8080/',
+  })
+
+  const res = await client.graphql
+    .get()
+    .withNearText({
+      concepts: [keyword],
+      certainty: 0.75,
+    })
+    .withClassName('Paragraph')
+    .withFields('title content inArticle { ... on Article {  title } }')
+    .withLimit(3)
+    .do()
+
+  console.log('RESPONSE', res)
+
+  if (res?.data?.Get !== undefined) {
+    return (ctx.body = { data: res.data.Get })
+  }
+  return (ctx.body = { data: '' })
+}
+
 export const wikipedia: Route[] = [
   {
     path: '/wikipediaSummary',
     get: getWikipediaSummary
-  }
+  },
+  {
+    path: '/weaviate',
+    post: handleWeaviateRequest,
+  },
 ]

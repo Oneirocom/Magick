@@ -31,7 +31,6 @@ export class Agent {
   spellManager: SpellManager
 
   constructor(data: any) {
-    this.onDestroy()
     this.id = data.id
     console.log('agent is', data)
     this.data = data
@@ -104,7 +103,7 @@ export class Agent {
     console.log('agentStartMethods', agentStopMethods)
     for (const method of Object.keys(agentStopMethods)) {
       console.log('method', method)
-      agentStopMethods[method]()
+      agentStopMethods[method](this)
     }
   }
 

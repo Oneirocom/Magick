@@ -6,10 +6,12 @@ export class Plugin {
     agentComponents: []
     setup: Function;
     teardown: Function;
+    serverInit?: Function;
     agentMethods?: {
         start: Function,
         stop: Function
     }
+    serverRoutes?: Array<any>
     constructor({
         name,
         nodes,
@@ -18,7 +20,9 @@ export class Plugin {
         agentComponents,
         setup,
         teardown,
-        agentMethods
+        serverInit,
+        agentMethods,
+        serverRoutes
     }) {
         this.name = name;
         this.nodes = nodes;
@@ -28,6 +32,8 @@ export class Plugin {
         this.setup = setup;
         this.teardown = teardown;
         this.agentMethods = agentMethods;
+        this.serverInit = serverInit;
+        this.serverRoutes = serverRoutes;
         pluginManager.register(this)
     }
 }
@@ -81,6 +87,31 @@ class PluginManager {
         return agentStopMethods
     }
 
+    getServerInits() {
+        let serverInits = {}
+        PluginManager.pluginList.forEach((plugin) => {
+            if (plugin.serverInit) {
+                let obj = {}
+                obj[plugin.name] = plugin.serverInit
+                serverInits = { ...serverInits, ...obj }
+            }
+        })
+        return serverInits
+    }
+    
+
+    getServerRoutes() {
+        let serverRoutes = []
+        PluginManager.pluginList.forEach((plugin) => {
+            if (plugin.serverRoutes) {
+                plugin.serverRoutes.forEach((route) => {
+                    serverRoutes.push(route)
+                })
+            }
+        })
+        return serverRoutes
+    }
+
     /*
     Gets All Services from all the registered plugins 
     */
@@ -105,7 +136,6 @@ class PluginManager {
         let nodes = {}
 
         PluginManager.pluginList.forEach((plugin) => {
-
             let plug_nodes = {}
             plugin.nodes.forEach((node) => {
                 let id = Math.random().toString(36).slice(2, 7);

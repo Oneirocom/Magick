@@ -3,16 +3,17 @@ import weaviate from 'weaviate-client'
 import * as fs from 'fs'
 import path from 'path'
 import axios from 'axios'
-import {
-  WEAVIATE_CLIENT_HOST,
-  WEAVIATE_CLIENT_SCHEME,
-} from '@magickml/engine'
 
 const DOCUMENTS_CLASS_NAME = 'DataStore'
 const saved_docs: SearchSchema[] = []
 let client: any
 
 export async function initWeaviateClient(_train: boolean) {
+  let WEAVIATE_CLIENT_HOST, WEAVIATE_CLIENT_SCHEME;
+  if (typeof process !== 'undefined') {
+    WEAVIATE_CLIENT_HOST = process.env.WEAVIATE_CLIENT_HOST
+    WEAVIATE_CLIENT_SCHEME = process.env.WEAVIATE_CLIENT_SCHEME
+  }
   client = weaviate.client({
     scheme: WEAVIATE_CLIENT_SCHEME,
     host: WEAVIATE_CLIENT_HOST,
@@ -21,20 +22,16 @@ export async function initWeaviateClient(_train: boolean) {
   if (_train) {
     console.time('train')
 
-    const data = await trainFromUrl(
-      'https://www.toptal.com/developers/feed2json/convert?url=https%3A%2F%2Ffeeds.simplecast.com%2F54nAGcIl'
-    )
-    const data2 = JSON.parse(
+    // const data = await trainFromUrl(
+    //   'https://www.toptal.com/developers/feed2json/convert?url=https%3A%2F%2Ffeeds.simplecast.com%2F54nAGcIl'
+    // )
+    const data = JSON.parse(
       fs.readFileSync(
-        path.join(__dirname, '..', '..', '/weaviate/test_data.json'),
+        path.join(__dirname, '../../packages/plugin-weaviate/src/weaviate_events_schema.json'),
         'utf-8'
       )
     )
-    for (let i = 0; i < data2.length; i++) {
-      data.push(data2[i])
-    }
-
-    await train(data)
+    await train([] /*data*/)
     console.timeEnd('train')
   }
 }

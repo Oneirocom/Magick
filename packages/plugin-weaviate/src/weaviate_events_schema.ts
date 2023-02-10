@@ -1,22 +1,39 @@
-export default
-{
+export default {
     "class": "event",
     "description": "A Event for storing the and recalling at a later point of time",
     "invertedIndexConfig": {
         "indexTimestamps": true
     },
-    "vectorizer": "text2vec-openai",   // vectorizer to use for data objects added to this class
+    "vectorizer": "text2vec-openai",
     "moduleConfig": {
       "qna-openai": {
-        "model": "text-davinci-002",
-        "maxTokens": 16,
+        "model": "text-curie-001",
+        "maxTokens": 50,
         "temperature": 0.0,
         "topP": 1,
         "frequencyPenalty": 0.0,
         "presencePenalty": 0.0
+      },
+      "text2vec-openai": {
+        "model": "ada",
+        "modelVersion": "002",
+        "type": "embeddings"
       }
     },
     "properties": [
+      {
+        "dataType": [
+          "text"
+        ],
+        "description": "Content that will be vectorized",
+        "moduleConfig": {
+          "text2vec-openai": {
+            "skip": false,
+            "vectorizePropertyName": false
+          }
+        },
+        "name": "content"
+      },
       {
         "dataType": [
           "string"
