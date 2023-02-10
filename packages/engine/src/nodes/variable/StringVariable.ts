@@ -60,7 +60,7 @@ export class StringVariable extends MagickComponent<InputReturn> {
     this.name =
       (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
 
-    node.display('"' + _var + '"')
+    // node.display('"' + _var + '"')
 
     return {
       output: _var,

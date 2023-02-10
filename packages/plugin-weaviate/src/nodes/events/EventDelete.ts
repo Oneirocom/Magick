@@ -11,7 +11,8 @@ import {
   stringSocket,
   eventSocket,
   MagickComponent,
-  API_URL
+  API_URL,
+  CreateEventArgs
 } from 'packages/engine/src/index'
 import axios from 'axios'
 
@@ -104,20 +105,7 @@ export class EventDelete extends MagickComponent<Promise<void>> {
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
-    const deleteEvent = async ({
-      type,
-      observer,
-      sender,
-      entities,
-      content,
-      client,
-      channel,
-    }: CreateEventArgs) => {
-    const response = await axios.delete(
-      `${
-        API_URL
-      }/WeaviatePlugin`,
-      {
+      const deleteEvent = async ({
         type,
         observer,
         sender,
@@ -125,12 +113,24 @@ export class EventDelete extends MagickComponent<Promise<void>> {
         content,
         client,
         channel,
+      }: CreateEventArgs) => {
+      const response = await axios.delete(
+        `${
+          API_URL
+        }/WeaviatePlugin`,
+        {
+          data: {
+          type,
+          observer,
+          sender,
+          entities,
+          content,
+          client,
+          channel,
+        }
+      })
       }
-    )
-    const deleteEvent = async (event: Event) => {
-      const resp = null; // await weaviate.events.delete(event)
-      return resp
-    }
+
     const event = inputs['event'][0] as Event
     const content = (inputs['content'] && inputs['content'][0]) as string
 
