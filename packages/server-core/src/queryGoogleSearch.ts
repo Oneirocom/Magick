@@ -3,7 +3,6 @@ import cheerio from 'cheerio'
 import serp from 'serp'
 
 export const queryGoogleSearch = async (searchTerm: string) => {
-
   async function searchDirectly() {
     const query = searchTerm.split(' ').join('+')
     const response = await unirest

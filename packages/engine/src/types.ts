@@ -268,6 +268,7 @@ export type Spell = {
   created_at?: string
   updated_at?: string
   id: number
+  hash?: string
 }
 
 export type MagickReteInput = {

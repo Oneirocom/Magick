@@ -171,7 +171,6 @@ class SpellRunner {
    * Allows us to grab a specific triggered node by name
    */
   private _getTriggeredNodeByName(componentName) {
-    console.log('triggering node by name')
     const triggerIns = extractNodes(
       this.currentSpell.graph.nodes,
       this.triggerIns
@@ -244,7 +243,6 @@ class SpellRunner {
     console.log('RUNNING COMPONENT', component)
 
     const triggeredNode = this._getTriggeredNodeByName(componentName)
-    console.log('TRIGGERED NODE', triggeredNode)
     // const triggeredNode = this._getFirstNodeTrigger()
 
     if (!component.run) throw new Error('Component does not have a run method')

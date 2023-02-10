@@ -22,12 +22,6 @@ export const FILE_SERVER_PORT = processEnv.FILE_SERVER_PORT || 65530
 export const FILE_SERVER_URL =
   processEnv.FILE_SERVER_URL || 'https://localhost:65530'
 export const USESSL = processEnv.USESSL || false
-export const WEAVIATE_CLIENT_SCHEME =
-  processEnv.WEAVIATE_CLIENT_SCHEME || 'http'
-export const WEAVIATE_CLIENT_HOST =
-  processEnv.WEAVIATE_CLIENT_HOST || 'localhost:8080'
-export const WEAVIATE_IMPORT_DATA = processEnv.WEAVIATE_IMPORT_DATA || false
-export const REDIS_URL = processEnv.REDIS_URL || 'redis://localhost:6379'
 export const ENTITY_WEBSERVER_PORT_RANGE =
   processEnv.ENTITY_WEBSERVER_PORT_RANGE || '8000-9000'
 export const DATABASE_URL =
