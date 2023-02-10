@@ -106,8 +106,6 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
     const spell = spellRunner.currentSpell
     const updatedSpell = otJson0.type.apply(spell, diff)
 
-    console.log('updatedSpell', updatedSpell)
-
     spellManager.load(updatedSpell, true)
     return updatedSpell
   }
