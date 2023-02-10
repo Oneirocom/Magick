@@ -2,7 +2,7 @@ import { feathers, socketio } from '@feathersjs/client'
 import io from 'socket.io-client'
 import { useContext, createContext, useEffect, useState } from 'react'
 
-import {  feathersUrl } from '../config'
+import { feathersUrl } from '../config'
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen'
 
 const buildFeathersClient = async () => {
@@ -43,9 +43,13 @@ const FeathersProvider = ({ children }) => {
 
       client.io.on('disconnect', () => {
         console.log("We've been disconnected from the server")
+        setTimeout(() => {
+          console.log('Reconnecting...')
+          client.io.connect()
+        }, 1000)
       })
 
-      client.io.on('error', (error) => {
+      client.io.on('error', error => {
         console.log('Connection error: ' + error + '\n trying to reconnect...')
         setTimeout(() => {
           console.log('Reconnecting...')
