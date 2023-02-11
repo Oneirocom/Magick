@@ -1,2 +1,1 @@
-const plugins = ["@magickml/plugin-weaviate", "@magickml/plugin-discord"]
-export default plugins;
+module.exports = ["@magickml/plugin-weaviate", "@magickml/plugin-discord"]

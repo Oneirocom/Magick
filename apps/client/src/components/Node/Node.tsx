@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { Node, Socket, Control, Image, Upload } from '@magickml/client-core'
 import Icon, { componentCategories } from '../Icon/Icon'
 import css from './Node.module.css'
