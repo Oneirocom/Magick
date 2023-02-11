@@ -8,7 +8,7 @@ const fs  = require('fs');
 const uuid = require('uuid').v4;
 
 function configProject() {
-  const pluginsJsPath = path.join(__dirname, '..', 'packages', 'engine', 'project.js');
+  const pluginsJsPath = path.join(__dirname, '..', 'packages', 'engine', 'project.ts');
   const pluginsJsExamplePath = path.join(__dirname, 'project.example.js');
 
   const projectId = uuid();

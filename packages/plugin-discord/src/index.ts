@@ -21,11 +21,9 @@ type StartDiscordArgs = {
 }
 
 function getAgentMethods() {
-  // if we are in node, we need to import the discord client
-  if(typeof window !== 'undefined') return
-  
   let discord_client
   
+  /* vite ignore this dynamic import */
   import('./connectors/discord')
   .then((module) => {
     discord_client = module.discord_client
@@ -44,6 +42,7 @@ function getAgentMethods() {
     voice_language_code,
     tiktalknet_url,
   }: StartDiscordArgs) {
+    console.log('starting discord')
     const discord = new discord_client()
     agent.discord = discord
     await discord.createDiscordClient(

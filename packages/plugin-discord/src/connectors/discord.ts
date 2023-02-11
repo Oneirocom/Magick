@@ -1236,11 +1236,8 @@ export class discord_client {
     if (this.use_voice) {
       const {client, discord_bot_name, agent, spellRunner, voice_provider, voice_character, voice_language_code, tiktalknet_url} = this
 
-      function dynamicImport(mod) {
-        return import(mod)
-      }
       if(typeof window !== 'undefined'){
-        const { initSpeechClient, recognizeSpeech: _recognizeSpeech } = await dynamicImport('./discord-voice')
+        const { initSpeechClient, recognizeSpeech: _recognizeSpeech } = await import('./discord-voice')
       recognizeSpeech = _recognizeSpeech
       initSpeechClient({
         client,

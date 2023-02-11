@@ -1,11 +1,12 @@
-// check if packages/engine/plugins.json exists
-// if it does, end the program
-// if it doesn't exist, copy ./plugins.example.json to packages/engine/plugins.json
-// end the program
+const dotenv = require('dotenv');
+dotenv.config('../');
+
+console.log('Installation plugins', process.env.PLUGINS)
+
+const plugins = process.env.PLUGINS ? process.env.PLUGINS.split(',') : [];
 
 const path = require('path');
 const fs  = require('fs');
-const plugins = require('./plugins.example.js');
 function copyExamplePluginsJson() {
   const pluginsJsPath = path.join(__dirname, '..', 'packages', 'engine', 'plugins.ts');
 

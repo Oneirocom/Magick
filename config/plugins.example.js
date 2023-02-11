@@ -1,1 +1,0 @@
-module.exports = ["@magickml/plugin-weaviate", "@magickml/plugin-discord"]
