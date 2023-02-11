@@ -10,14 +10,6 @@ const appUrl = `http://${app.get('host')}:${port}`
 describe('Feathers application tests', () => {
   let server: Server
 
-  before(async () => {
-    server = await app.listen(port)
-  })
-
-  after(async () => {
-    await app.teardown()
-  })
-
   it('starts and shows the index page', async () => {
     const { data } = await axios.get<string>(appUrl)
 

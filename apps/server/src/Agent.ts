@@ -1,6 +1,6 @@
 import { buildMagickInterface } from '../../server/src/buildMagickInterface'
 import { tts, tts_tiktalknet } from '@magickml/server-core'
-import { SpellManager, pluginManager } from '@magickml/engine'
+import { SpellManager, pluginManager, projectId } from '@magickml/engine'
 import { app } from './app'
 
 type StartLoopArgs = {
@@ -42,7 +42,7 @@ export class Agent {
     this.generateVoices(data);
     (async () => {
       const spell = (await app.service('spells').find({
-        query: { name: data.root_spell },
+        query: { projectId, name: data.root_spell },
       })).data[0]
 
       const spellRunner = await this.spellManager.load(spell)

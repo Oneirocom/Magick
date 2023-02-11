@@ -43,4 +43,4 @@ export * from './plugin'
 export * from './sockets'
 export * from './globals'
 
-export { projectId } from '../project'
+export { projectId } from './project'

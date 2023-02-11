@@ -1,6 +1,6 @@
 import Agent from './Agent'
 import { ServerError } from '@magickml/server-core'
-import { ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
+import { projectId, ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
 import { app } from './app'
 
 function randomInt(min, max) {
@@ -14,7 +14,9 @@ function initEntityLoop(update: Function, lateUpdate: Function) {
   const date = new Date()
 
   async function entityLoop(update: Function, lateUpdate: Function) {
-    const agents = (await app.service('agents').find()).data
+    const agents = (await app.service('agents').find({
+      query: { projectId },
+    })).data
     const now = new Date()
     const updated = []
 
@@ -61,7 +63,9 @@ export class World {
   }
 
   async updateAgent() {
-    this.newAgents = (await app.service('agents').find()).data
+    this.newAgents = (await app.service('agents').find({
+      query: { projectId },
+    })).data
     const newAgents = this.newAgents
     delete newAgents['updated_at']
     const oldAgents = this.oldAgents ?? []
@@ -116,7 +120,7 @@ export class World {
       // evaluate the root spell
       if (agent.data.root_spell) {
         const spell = (await app.service('spells').find({
-          query: { name: agent.data.root_spell },
+          query: { projectId, name: agent.data.root_spell },
         })).data[0]
 
           if (!runningAgent.root_spell_hash || spell.hash !== runningAgent.root_spell_hash) {
@@ -133,7 +137,7 @@ export class World {
         // if the hash is not the same as agent.spells.hash, then reload the spell
         // otherwise set agent.spells.hash to the hash of the spell
         const spells = (await app.service('spells').find({
-          query: { name: { $in: agent.spells } },
+          query: { projectId, name: { $in: agent.spells } },
         })).data
 
         for (const j in spells) {
