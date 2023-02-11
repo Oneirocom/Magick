@@ -32,7 +32,6 @@ export class Agent {
 
   constructor(data: any) {
     this.id = data.id
-    console.log('agent is', data)
     this.data = data
     this.name = data.agent ?? data.name ?? 'agent'
     this.spellManager = new SpellManager({
@@ -46,8 +45,6 @@ export class Agent {
         query: { name: data.root_spell },
       })).data[0]
 
-      console.log('spell is', spell)
-
       const spellRunner = await this.spellManager.load(spell)
 
       // TODO: reenable loop
@@ -56,7 +53,6 @@ export class Agent {
       // }
 
       const agentStartMethods = pluginManager.getAgentStartMethods();
-      console.log('starting agents')
       for (const method of Object.keys(agentStartMethods)) {
         console.log('method', method)
         await agentStartMethods[method]({ ...data, agent: this, spellRunner })
