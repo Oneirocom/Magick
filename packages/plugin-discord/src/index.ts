@@ -22,14 +22,6 @@ type StartDiscordArgs = {
 function getAgentMethods() {
   let discord_client
   
-  if(typeof window === 'undefined'){
-    /*@vite-ignore*/
-    import('./connectors/discord')
-    .then((module) => {
-      discord_client = module.discord_client
-    });
-  }
-
   async function startDiscord({
     agent,
     spellRunner,
@@ -44,6 +36,12 @@ function getAgentMethods() {
     tiktalknet_url,
   }: StartDiscordArgs) {
     console.log('starting discord')
+    // ignore import if vite
+    // @vite-ignore
+    const isBrowser = typeof window !== 'undefined'
+    const module = await import(/* @vite-ignore */ `${!isBrowser ? './connectors/discord' : './dummy'}`)
+    discord_client = module.discord_client
+
     const discord = new discord_client()
     agent.discord = discord
     await discord.createDiscordClient(
