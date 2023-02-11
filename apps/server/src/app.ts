@@ -13,24 +13,27 @@ import { services } from './services/index'
 import channels from './channels'
 import swagger from 'feathers-swagger'
 import handleSockets from './sockets'
-import { configureManager } from '@magickml/engine'
+import { configureManager, globalsManager } from '@magickml/engine'
 
 const app: Application = koa(feathers())
 
+// Expose feathers app to other apps that might want to access feathers services directly
+globalsManager.registerGlobal('feathers', app)
+
 // Load our app configuration (see config/ folder)
 app.configure(configuration(configurationValidator))
-// app.configure(
-//   swagger({
-//     ui: swagger.swaggerUI({}),
-//     specs: {
-//       info: {
-//         title: 'Magick API Documentation',
-//         description: 'Documentation for the Magick API backend, built with FeathersJS',
-//         version: '1.0.0'
-//       }
-//     }
-//   })
-// )
+app.configure(
+  swagger({
+    ui: swagger.swaggerUI({}),
+    specs: {
+      info: {
+        title: 'Magick API Documentation',
+        description: 'Documentation for the Magick API backend, built with FeathersJS',
+        version: '1.0.0'
+      }
+    }
+  })
+)
 
 // Set up Koa middleware
 app.use(cors())
