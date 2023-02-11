@@ -1,6 +1,5 @@
 import Rete from 'rete'
 import {
-  EngineContext,
   NodeData,
   MagickNode,
   MagickWorkerInputs,
@@ -52,7 +51,6 @@ export class EventQA extends MagickComponent<Promise<WorkerReturn>>{
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { magick }: { magick: EngineContext }
   ) {
 
     const eventQAWeaviate = async ({
