@@ -114,13 +114,13 @@ class PluginManager {
     Gets All Services from all the registered plugins 
     */
     getServices() {
-        let services_list = []
+        let serviceList = []
         this.pluginList.forEach((plugin) => {
-            plugin.services.forEach((service) => {
-                services_list.push(service)
+            Object.keys(plugin.services).forEach((key) => {
+                serviceList.push(plugin.services[key])
             })
         })
-        return services_list
+        return serviceList
     }
 
     async teardown(plugin: Plugin) {
