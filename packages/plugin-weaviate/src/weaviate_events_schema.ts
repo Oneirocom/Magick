@@ -1,10 +1,43 @@
-export default {
-    "class": "event",
+export const EntitySchema = {
+  "class" : "Entity",
+  "description": "Entity Object many to one as Entity List ",
+  "invertedIndexConfig": {
+      "indexTimestamps": false
+  },
+/*   "vectorizer": "text2vec-openai",
+    "moduleConfig": {
+      "text2vec-openai": {
+        "model": "ada",
+        "modelVersion": "002",
+        "type": "embeddings",
+        "vectorizeClassName": true
+      }
+  }, */
+  "properties": [
+    {
+      "dataType": [
+        "string"
+      ],
+      "description": "Name of the entity",
+      "name": "name"
+    },
+    {
+      "dataType":[
+        "Event"
+      ],
+      "description": "Event Linked With",
+      "name": "event"
+    }
+  ]
+
+}
+export const EventSchema = {
+    "class": "Event",
     "description": "A Event for storing the and recalling at a later point of time",
     "invertedIndexConfig": {
         "indexTimestamps": true
     },
-    "vectorizer": "text2vec-openai",
+    /* "vectorizer": "text2vec-openai",
     "moduleConfig": {
       "qna-openai": {
         "model": "text-curie-001",
@@ -19,20 +52,21 @@ export default {
         "modelVersion": "002",
         "type": "embeddings"
       }
-    },
+    }, */
     "properties": [
       {
         "dataType": [
           "text"
         ],
         "description": "Content that will be vectorized",
-        "moduleConfig": {
+/*         "moduleConfig": {
           "text2vec-openai": {
             "skip": false,
             "vectorizePropertyName": false
           }
-        },
-        "name": "content"
+        }, */
+        "name": "content",
+        "tokenization": "word"
       },
       {
         "dataType": [
@@ -40,27 +74,6 @@ export default {
         ],
         "description": "Type of the event",
         "name": "type"
-      },
-      {
-        "dataType": [
-          "string"
-        ],
-        "description": "Describes the data found in the event.",
-        "name": "content"
-      },
-      {
-        "dataType": [
-          "string"
-        ],
-        "description": "The name of the sender of the event.",
-        "name": "sender"
-      },
-      {
-        "dataType": [
-          "string[]"
-        ],
-        "description": "The entities which are related to the client.",
-        "name": "entities"
       },
       {
         "dataType": [
@@ -95,12 +108,6 @@ export default {
         ],
         "description": "The date at which the event was created",
         "name": "date"
-      },{
-        "dataType": [
-          "string"
-        ],
-        "description" : "The Observer",
-        "name": "observer"
       }
 
     ],
@@ -119,3 +126,4 @@ export default {
           "distance": "cosine"
       }
 }
+
