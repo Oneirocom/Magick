@@ -11,15 +11,15 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../types'
+} from 'packages/engine/src/types'
 import {
   triggerSocket,
   stringSocket,
   booleanSocket,
   numSocket,
   anySocket,
-} from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+} from 'packages/engine/src/sockets'
+import { MagickComponent } from 'packages/engine/src/magick-component'
 
 const info = 'Document Set is used to add a document in the search corpus'
 

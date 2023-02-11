@@ -11,9 +11,9 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../types'
-import { triggerSocket, anySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+} from 'packages/engine/src/types'
+import { triggerSocket, anySocket } from 'packages/engine/src/sockets'
+import { MagickComponent } from 'packages/engine/src/magick-component'
 
 const info = 'Document Get is used to get a document from the search corpus'
 

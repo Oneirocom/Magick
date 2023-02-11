@@ -68,16 +68,9 @@ export type QAArgs = {
 
 export type CreateEventArgs = Event
 
-export type GetEventArgs = Event & {
-  maxCount?: number
-  max_time_diff?: number
-}
-
 export type GetEventArg = {
-  sender: string
-  observer: string
+  entities: string[]
   maxCount?: number
-  max_time_diff?: number
 }
 
 export type EventResponse = Event[]

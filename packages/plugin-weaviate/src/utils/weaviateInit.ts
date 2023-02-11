@@ -1,5 +1,4 @@
-//@ts-nocheck
-import { CreateEventArgs, GetEventArg,GetEventArgs, SemanticSearch } from '@magickml/engine'
+import { CreateEventArgs, GetEventArg, SemanticSearch } from '@magickml/engine'
 import weaviate from 'weaviate-client'
 import EventSchema from '../weaviate_events_schema'
 import { OPENAI_API_KEY } from '@magickml/engine'
@@ -33,7 +32,7 @@ export async function initWeaviateClientEvent() {
   weaviate_client = weaviate.client({
     scheme: process.env.WEAVIATE_CLIENT_SCHEME,
     host: process.env.WEAVIATE_CLIENT_HOST,
-    headers: {'X-OpenAI-Api-Key': OPENAI_API_KEY},
+    headers: { 'X-OpenAI-Api-Key': OPENAI_API_KEY },
   })
   await weaviate_client.schema
     .classCreator()
@@ -53,6 +52,7 @@ export class weaviate_connection {
     if (!weaviate_client) {
       await initWeaviateClientEvent()
     }
+    console.log('data is', _data)
     const data = { ..._data }
     const validFields = ['type', 'sender', 'observer', 'client', 'channel', 'channelType', 'content', 'entities', 'agentId']
     for (const key in data) {
@@ -60,7 +60,17 @@ export class weaviate_connection {
         delete data[key]
       }
     }
+    console.log('SS')
     console.log(data)
+
+
+    let agentId = data['agentId']
+
+    // if agentId is not an int, parse it to an int
+    if (typeof agentId !== 'number') {
+      agentId = parseInt(agentId)
+    }
+
     return await weaviate_client.data
       .creator()
       .withClassName('Event')
@@ -72,7 +82,7 @@ export class weaviate_connection {
         client: data['client'],
         channel: data['channel'],
         entities: data['entities'],
-        agentId: parseInt(data['agentId'].toString()),
+        agentId: agentId,
         channelType: data['channelType'],
         content: data['content'],
         date: new Date().toUTCString(),
@@ -86,8 +96,7 @@ export class weaviate_connection {
       })
   }
   static async getEvents(params: GetEventArg) {
-    const
-      { sender, observer, maxCount, max_time_diff } = params
+    const { entities, maxCount } = params
     if (!weaviate_client) {
       console.log('init weaviate client')
       await initWeaviateClientEvent()
@@ -109,35 +118,20 @@ export class weaviate_connection {
         '_additional {id}',
       ])
       .withWhere({
-        operator: 'And',
-        operands: [
-          {
-            path: ['observer'],
-            operator: 'Equal',
-            valueString: observer,
-          },
-          {
-            path: ['sender'],
-            operator: 'Equal',
-            valueString: sender,
-          }
-        ],
+        path: ['entities'],
+        operator: 'InArray',
+        valueArray: entities,
       })
       .withLimit(maxCount)
       .do()
       .catch(err => {
         console.log(err)
       })
+
+      console.log('events', events.data.Get.Event)
+
     const event_obj = events.data.Get.Event
 
-    // if (max_time_diff > 0) {
-    //   const now = new Date()
-    //   const filtered = event_obj.filter(e => {
-    //     const diff = now.getTime() - new Date(e.date).getTime()
-    //     return diff < max_time_diff
-    //   })
-    //   return filtered
-    // }
     return event_obj
   }
   static async getAllEvents() {
@@ -155,8 +149,6 @@ export class weaviate_connection {
   }
 
   static async getAndDeleteEvents(params: GetEventArg) {
-    const
-      { sender, observer, maxCount, max_time_diff } = params
     if (!weaviate_client) {
       await initWeaviateClientEvent()
     }
@@ -188,7 +180,7 @@ export class weaviate_connection {
       })
   }
 
-  static async searchEvents(question: String, agentid: number) {
+  static async searchEvents(question: String, entities: string[]) {
     if (!weaviate_client) {
       await initWeaviateClientEvent()
     }
@@ -196,9 +188,10 @@ export class weaviate_connection {
       .get()
       .withClassName('Event')
       .withWhere({
-        operator: 'Equal',
-        path: ['agentId'],
-        valueInt: agentid,
+        // check that entities contains the entity
+        operator: 'InArray',
+        path: ['entities'],
+        valueInt: entities,
       })
       .withAsk(({
         question: question
@@ -209,7 +202,7 @@ export class weaviate_connection {
       .catch(err => {
         console.log(err)
       })
-    
+
     console.log(answer)
     if (answer['data']['Get']['Event']['0'] === (undefined)) {
       return {
@@ -227,7 +220,7 @@ export class weaviate_connection {
     } else {
       return answer['data']['Get']['Event']['0']
     }
-
+    return answer
   }
 
   static async semanticSearch(_data: SemanticSearch) {
@@ -263,8 +256,5 @@ export class weaviate_connection {
       })
 
     return events
-
-
-
   }
 }
