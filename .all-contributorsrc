@@ -99,6 +99,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "alexjorgef",
+      "name": "Alexandre Ferreira",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3478673?v=4",
+      "profile": "http://www.alexjorgef.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
