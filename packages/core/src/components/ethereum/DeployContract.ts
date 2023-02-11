@@ -12,19 +12,22 @@ import {
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { DropdownControl } from '../../dataControls/DropdownControl'
-import { triggerSocket, numSocket, stringSocket } from '../../sockets'
+import { triggerSocket, numSocket, stringSocket, anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
-const info = 'Check the balance of an ethereum wallet'
+const info = 'Deploys a contract from Solidity code, a standard for defining non-fungible tokens on EVM machines.'
 
-export class CheckEthBalance extends MagickComponent<void> {
+export class DeployContract extends MagickComponent<void> {
   constructor() {
-    super('Check Balance')
+    super('Deploy Contract')
 
     this.task = {
       outputs: {
-        output: 'output',
         trigger: 'option',
+        balance: 'output',
+        balance_after: 'output',
+        tx: 'output',
+        contract: 'output'
       },
     }
 
@@ -34,12 +37,31 @@ export class CheckEthBalance extends MagickComponent<void> {
   }
 
   builder(node: MagickNode) {
-    const addressInput = new Rete.Input('address', 'Address', stringSocket)
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const bytecodeInput = new Rete.Input('bytecode', 'Bytecode', anySocket)
+    const abiInput = new Rete.Input('abi', 'ABI', anySocket)
+    const privatekeyInput = new Rete.Input('privatekey', 'Private Key', anySocket)
     const rpcHttpInput = new Rete.Input('rpc_http', 'RPC HTTP Endpoint', stringSocket)
     const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numSocket)
-    const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const balanceOutput = new Rete.Output('balance', 'Balance', numSocket)
+    const balanceAfterOutput = new Rete.Output('balance_after', 'Balance After', numSocket)
+    const txOutput = new Rete.Output('tx', 'Transaction', stringSocket)
+    const contractAddrOutput = new Rete.Output('contract', 'Contract Address', stringSocket)
+
+    node
+      .addInput(bytecodeInput)
+      .addInput(abiInput)
+      .addInput(rpcHttpInput)
+      .addInput(chainIdInput)
+      .addInput(privatekeyInput)
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(balanceOutput)
+      .addOutput(balanceAfterOutput)
+      .addOutput(contractAddrOutput)
+      .addOutput(txOutput)
 
     const rpcHttpControl = new InputControl({
       dataKey: 'rpc_http',
@@ -64,15 +86,10 @@ export class CheckEthBalance extends MagickComponent<void> {
       .add(chainIdControl)
 
     return node
-      .addInput(addressInput)
-      .addInput(rpcHttpInput)
-      .addInput(chainIdInput)
-      .addInput(dataInput)
-      .addOutput(dataOutput)
-      .addOutput(balanceOutput)
   }
 
   async worker(node: NodeData, inputs: MagickWorkerInputs) {
+
     const defaultNetwork = {
       name: 'maticmaticmum',
       chainId: 80001,
@@ -101,15 +118,31 @@ export class CheckEthBalance extends MagickComponent<void> {
       provider = new ethers.providers.JsonRpcProvider(inputs['rpc_http'][0] as string, chainId)
     }
 
-    const address = inputs['address'][0] as unknown as string
-    const balance = await provider.getBalance(address)
-    const resultInEth = ethers.utils.formatEther(balance).toString()
+    const privateKey = (inputs['privatekey'] && inputs['privatekey'][0]) as string
+    const contractAbi = (inputs['abi'] && inputs['abi'][0]) as string
+    const contractByteCode = (inputs['bytecode'] && inputs['bytecode'][0]) as string
+
+    const wallet = new ethers.Wallet(privateKey, provider)
+    const factory = new ethers.ContractFactory(contractAbi, contractByteCode, wallet);
+
+    const balance = await provider.getBalance(wallet.address)
+    const balanceInEth = ethers.utils.formatEther(balance).toString()
+
+    const contract = await factory.deploy();
+    await contract.deployTransaction.wait()
+
+    const balanceAfter = await provider.getBalance(wallet.address)
+    const balanceAfterInEth = ethers.utils.formatEther(balanceAfter).toString()
 
     // TODO: need to be fixed, issue of loosing display() function from NodeData context
+    // node.display(balance)
     // node.display(resultInEth)
 
     return {
-      output: resultInEth,
+      balance: balanceInEth,
+      balance_after: balanceAfterInEth,
+      tx: contract.deployTransaction.hash,
+      contract: contract.address
     }
   }
 }

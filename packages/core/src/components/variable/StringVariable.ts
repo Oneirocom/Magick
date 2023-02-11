@@ -8,7 +8,7 @@ import {
   MagickWorkerOutputs,
 } from '../../../types'
 import { InputControl } from '../../dataControls/InputControl'
-import { anySocket } from '../../sockets'
+import { stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 
@@ -34,13 +34,13 @@ export class StringVariable extends MagickComponent<InputReturn> {
   }
 
   builder(node: MagickNode) {
-    const out = new Rete.Output('output', 'output', anySocket)
+    const out = new Rete.Output('output', 'output', stringSocket)
     const _var = new InputControl({
       dataKey: '_var',
       name: 'Value',
       icon: 'moon',
     })
-    const name = new InputControl({
+    const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
@@ -51,7 +51,7 @@ export class StringVariable extends MagickComponent<InputReturn> {
       name: 'Public',
     })
 
-    node.inspector.add(name).add(_var).add(_public)
+    node.inspector.add(nameControl).add(_var).add(_public)
 
     return node.addOutput(out)
   }
@@ -62,7 +62,8 @@ export class StringVariable extends MagickComponent<InputReturn> {
     this.name =
       (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
 
-    node.display('"' + _var + '"')
+    // TODO: need to be fixed, issue of loosing display() function from NodeData context
+    // node.display('"' + _var + '"')
 
     return {
       output: _var,

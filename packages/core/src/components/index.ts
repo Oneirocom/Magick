@@ -5,6 +5,10 @@ import { QueryGoogle } from './apis/QueryGoogle'
 import { WeaviateWikipedia } from './apis/WeaviateWikipedia'
 import { CheckBalanceForERC20 } from './ethereum/CheckBalanceForERC20'
 import { CheckEthBalance } from './ethereum/CheckEthBalance'
+import { Solidity } from './ethereum/Solidity'
+import { DeployContract } from './ethereum/DeployContract'
+import { CallContractFunctionWrite } from './ethereum/CallContractFunctionWrite'
+import { CallContractFunctionRead } from './ethereum/CallContractFunctionRead'
 import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentTransactionsFromWallet'
 import { GetRecentTransactions } from './ethereum/GetRecentTransactions'
 import { EventDestructureComponent } from './events/EventDestructure'
@@ -143,6 +147,10 @@ export const components = {
   checkEthBalance: () => new CheckEthBalance(),
   checkBalanceForERC20: () => new CheckBalanceForERC20(),
   getRecentTransactions: () => new GetRecentTransactions(),
+  solidity: () => new Solidity(),
+  deployContract: () => new DeployContract(),
+  callContractFunctionWrite: () => new CallContractFunctionWrite(),
+  callContractFunctionRead: () => new CallContractFunctionRead(),
   checkForRecentTransactionsFromWallet: () =>
     new CheckForRecentTransactionsFromWallet(),
   weaviateWikipedia: () => new WeaviateWikipedia(),
