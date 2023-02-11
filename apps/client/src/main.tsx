@@ -12,7 +12,8 @@ import { store } from './state/store'
 import DiscordPlugin from '@magickml/plugin-discord'
 import WeaviatePlugin from '@magickml/plugin-weaviate'
 
-console.log('loading plugins')
+
+console.log('loading plugins from file')
 console.log('DiscordPlugin', DiscordPlugin)
 console.log('WeaviatePlugin', WeaviatePlugin)
 
@@ -30,3 +31,4 @@ const Root = () => (
 )
 
 root.render(<Root />)
+

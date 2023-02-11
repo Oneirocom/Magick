@@ -1,10 +1,9 @@
 //@ts-nocheck
 import { CreateEventArgs, GetEventArg,GetEventArgs, SemanticSearch } from '@magickml/engine'
 import weaviate from 'weaviate-client'
-import EventSchema from '../weaviate_events_schema'
+import {EventSchema, EntitySchema} from '../weaviate_events_schema'
 import { OPENAI_API_KEY } from '@magickml/engine'
-
-let weaviate_client: any
+var weaviate_client
 
 function generateUUID() {
   // Public Domain/MIT
@@ -13,15 +12,13 @@ function generateUUID() {
     (typeof performance !== 'undefined' &&
       performance.now &&
       performance.now() * 1000) ||
-    0 //Time in microseconds since page-load or 0 if unsupported
+    0 
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = Math.random() * 16 //random number between 0 and 16
+    var r = Math.random() * 16 
     if (d > 0) {
-      //Use timestamp until depleted
       r = (d + r) % 16 | 0
       d = Math.floor(d / 16)
     } else {
-      //Use microseconds since page-load if supported
       r = (d2 + r) % 16 | 0
       d2 = Math.floor(d2 / 16)
     }
@@ -29,27 +26,93 @@ function generateUUID() {
   })
 }
 
-export async function initWeaviateClientEvent() {
-  weaviate_client = weaviate.client({
-    scheme: process.env.WEAVIATE_CLIENT_SCHEME,
-    host: process.env.WEAVIATE_CLIENT_HOST,
-    headers: {'X-OpenAI-Api-Key': OPENAI_API_KEY},
-  })
-  await weaviate_client.schema
+async function class_creator(client, schema) {
+    await client.schema
     .classCreator()
-    .withClass(EventSchema)
+    .withClass(schema)
     .do()
     .then(re => {
       console.log(re)
     })
-    .catch(err => {
-      console.error(err)
+    .catch(async (err) => {
+      if (err.search("422")){
+          await client.schema
+                      .classDeleter()
+                      .withClassName(schema.class)
+                      .do()
+                      .catch(async(err) => {
+                      })
+          await client.schema
+                      .classCreator()
+                      .withClass(schema)
+                      .do()
+      }
     })
 }
 
+async function schema_update(client, prop){
+  await client.schema
+                       .propertyCreator()
+                       .withClassName("Event")
+                       .withProperty(prop)
+                       .do()
+                       .then(res => {
+                        console.log(res);
+                       })
+                       .catch(err => {
+                        console.error(err)
+                       });
+}
+
+export async function initWeaviateClientEvent() {
+  weaviate_client = await weaviate.client({
+    scheme: process.env.WEAVIATE_CLIENT_SCHEME,
+    host: process.env.WEAVIATE_CLIENT_HOST,
+    headers: {'X-OpenAI-Api-Key': OPENAI_API_KEY},
+  })
+
+  const observerProp = {
+    dataType: ['Entity'],
+    name: 'observer',
+  };
+  const senderProp = {
+    dataType: ['Entity'],
+    name: 'sender',
+  };
+  await class_creator(weaviate_client, EventSchema)
+  await class_creator(weaviate_client, EntitySchema)
+  await schema_update(weaviate_client, observerProp)
+  await schema_update(weaviate_client, senderProp)
+      
+}
+
 export class weaviate_connection {
+
+  static async createEntity(entity: {name: string, event_uuid: string}){
+    let UUID = generateUUID()
+    await weaviate_client.data
+                .referenceCreator()
+                .withClassName('Entity')
+                .withId(UUID)
+                .withReferenceProperty('event')
+                .withReference(
+                  weaviate_client.data
+                    .referencePayloadBuilder()
+                    .withClassName('Event')
+                    .withId(entity['event_uuid'])
+                    .payload(),
+                )
+                .do()
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                    console.error(err)
+                });
+    return UUID                      
+
+  }
   static async createEvent(_data: CreateEventArgs) {
-    console.log("Inside the function")
     if (!weaviate_client) {
       await initWeaviateClientEvent()
     }
@@ -60,31 +123,52 @@ export class weaviate_connection {
         delete data[key]
       }
     }
-    console.log('SS')
-    console.log(data)
-    return await weaviate_client.data
+    let event_uuid = generateUUID()
+    await weaviate_client.data
       .creator()
       .withClassName('Event')
-      .withId(generateUUID())
-      .withProperties({
-        type: data['type'],
-        sender: data['sender'],
-        observer: data['observer'],
-        client: data['client'],
-        channel: data['channel'],
-        entities: data['entities'],
-        agentId: parseInt(data['agentId'].toString()),
-        channelType: data['channelType'],
-        content: data['content'],
-        date: new Date().toUTCString(),
-      })
+      .withId(event_uuid)
       .do()
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.error(err)
-      })
+
+    let entity_list = data['entities']?.map(async (name) => (await weaviate_connection.createEntity({name: name, event_uuid: event_uuid})))
+    let sender = await weaviate_connection.createEntity({name: data['sender'], event_uuid: event_uuid})
+    let observer = await weaviate_connection.createEntity({name: data['observer'], event_uuid: event_uuid})
+    console.log(sender,observer)
+    await weaviate_client.data
+          .getterById()
+          .withClassName('Event')
+          .withId(event_uuid)
+          .do()
+          .then(res => {
+              // alter the schema
+              return weaviate_client.data
+                  .updater()
+                  .withId(event_uuid)
+                  .withClassName('Event')
+                  .withProperties({
+                    observer: [{
+                      "beacon" : "weaviate://"+process.env.WEAVIATE_CLIENT_HOST+"/"+observer
+                    }],
+                    sender: [{
+                      "beacon" : "weaviate://"+process.env.WEAVIATE_CLIENT_HOST+"/"+sender
+                    }],
+                    type: data['type'],
+                    client: data['client'],
+                    channel: data['channel'],
+                    agentId: parseInt(data['agentId']?.toString()),
+                    channelType: data['channelType'],
+                    content: data['content'],
+                    date: new Date().toUTCString(),
+                  })
+                  .do();
+              })
+          .then(res => {
+              console.log(res)
+          })
+          .catch(err => {
+              console.error(err)
+          });
+
   }
   static async getEvents(params: GetEventArg) {
     const
