@@ -1,9 +1,8 @@
-import { Plugin } from "../../engine/src" // TODO: fix me
+import { Plugin } from "@magickml/engine" // TODO: fix me
 import { DiscordAgentWindow } from "./components/agent.component"
 import { DiscordInput } from "./nodes/DiscordInput"
 import { DiscordOutput } from "./nodes/DiscordOutput"
 import { UploadService } from './services/Upload/Upload.class'
-
 
 type StartDiscordArgs = {
   agent: any,
@@ -23,11 +22,13 @@ type StartDiscordArgs = {
 function getAgentMethods() {
   let discord_client
   
-  /* vite ignore this dynamic import */
-  import('./connectors/discord')
-  .then((module) => {
-    discord_client = module.discord_client
-  });
+  if(typeof window === 'undefined'){
+    /*@vite-ignore*/
+    import('./connectors/discord')
+    .then((module) => {
+      discord_client = module.discord_client
+    });
+  }
 
   async function startDiscord({
     agent,

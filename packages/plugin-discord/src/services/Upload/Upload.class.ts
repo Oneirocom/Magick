@@ -1,10 +1,8 @@
-//@ts-nocheck
-
 export class UploadService {
     blobService: any
-    image_store: Array<Object>
+    image_store: Array<any>
     constructor(){
-        this.image_store = new Array<Object>();
+        this.image_store = new Array<any>();
     }
     async create(body, params){
         let img_body = {
