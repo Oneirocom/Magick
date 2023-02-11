@@ -16,6 +16,7 @@ import css from '../homeScreen.module.css'
 import TemplatePanel from '../components/TemplatePanel'
 import defaultGraph from '../../../data/graphs/default'
 import threeovGraph from '../../../data/graphs/threeov'
+import md5 from 'md5'
 
 const customConfig = {
   dictionaries: [adjectives, colors],
@@ -52,6 +53,7 @@ const CreateNew = () => {
       const response = await newSpell({
         graph: selectedTemplate?.graph,
         name,
+        hash: md5(JSON.stringify(selectedTemplate?.graph.nodes))
       })
 
       if ('error' in response) {
