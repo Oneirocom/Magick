@@ -37,9 +37,7 @@ function getAgentMethods() {
   }: StartDiscordArgs) {
     console.log('starting discord')
     // ignore import if vite
-    // @vite-ignore
-    const isBrowser = typeof window !== 'undefined'
-    const module = await import(/* @vite-ignore */ `${!isBrowser ? './connectors/discord' : './dummy'}`)
+    const module = await import(/* @vite-ignore */ `${typeof window === 'undefined' ? './connectors/discord' : './dummy'}`)
     discord_client = module.discord_client
 
     const discord = new discord_client()
@@ -75,7 +73,7 @@ function getAgentMethods() {
 const DiscordPlugin = new Plugin({
   name: 'DiscordPlugin', 
   nodes: [DiscordInput, DiscordOutput], 
-  services: [['DiscordPlugin',UploadService]],
+  services: {'DiscordPlugin': UploadService},
   agentComponents: [DiscordAgentWindow], 
   windowComponents: [],
   serverInit: null,
