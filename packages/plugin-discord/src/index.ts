@@ -25,6 +25,7 @@ function getAgentMethods() {
   if(typeof window !== 'undefined') return
   
   let discord_client
+  
   import('./connectors/discord')
   .then((module) => {
     discord_client = module.discord_client
@@ -81,8 +82,6 @@ const DiscordPlugin = new Plugin({
   windowComponents: [],
   serverInit: null,
   serverRoutes: null,
-  setup: ()=>{console.log("DiscordPlugin")}, 
-  teardown: ()=>{console.log("DiscordPlugin")},
   agentMethods: getAgentMethods(),
 })
 

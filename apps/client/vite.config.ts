@@ -14,7 +14,6 @@ export default defineConfig({
   assetsInclude: ['**/*.vrm'],
   resolve: {
     alias: {
-      stream: './node_modules/stream-browserify/index.js',
       url: 'rollup-plugin-node-polyfills/polyfills/url',
     },
   },
@@ -28,7 +27,8 @@ export default defineConfig({
     },
   },
   plugins: [
-    react(),    viteTsConfigPaths({
+    react(),
+    viteTsConfigPaths({
       root: '../../',
     }),
     spaFallbackWithDot()

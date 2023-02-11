@@ -409,7 +409,7 @@ export class discord_client {
           client: 'discord',
           channelId: message.channel.id,
           agentId: this.agent.id,
-          entities,
+          entities: entities.map((e) => e.user),
           channel: 'msg',
       },
       runSubspell: true,
@@ -1236,7 +1236,8 @@ export class discord_client {
     if (this.use_voice) {
       const {client, discord_bot_name, agent, spellRunner, voice_provider, voice_character, voice_language_code, tiktalknet_url} = this
 
-      const { initSpeechClient, recognizeSpeech: _recognizeSpeech } = await import('./discord-voice')
+      if(typeof window !== 'undefined'){
+        const { initSpeechClient, recognizeSpeech: _recognizeSpeech } = await import('./discord-voice')
       recognizeSpeech = _recognizeSpeech
       initSpeechClient({
         client,
@@ -1249,6 +1250,7 @@ export class discord_client {
         tiktalknet_url
       })
     }
+  }
 
     this.client.on('messageCreate', this.messageCreate.bind(null, this.client))
     // this.client.on('messageDelete', this.messageDelete.bind(null, this.client))

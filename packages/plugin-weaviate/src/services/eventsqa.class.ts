@@ -4,10 +4,10 @@ export class EventsQAService{
     constructor(){}
     async create(body, params){
         const question = body["question"] as string
-        const agentId = body["agentId"] as string
+        const entities = body["entities"] as string[]
         console.log("Inside EventQA", question)
-        console.log(agentId)
-        const answer = await weaviate_connection.searchEvents(question, parseInt(agentId))
+        console.log(entities)
+        const answer = await weaviate_connection.searchEvents(question, entities)
         console.log(answer)
         return (answer)
     }
