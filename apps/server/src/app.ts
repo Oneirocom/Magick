@@ -8,7 +8,6 @@ import type { Application } from './declarations'
 import { configurationValidator } from './configuration'
 import { logError } from './hooks/log-error'
 import { postgresql } from './postgresql'
-import { authentication } from './authentication'
 import { services } from './services/index'
 import channels from './channels'
 import swagger from 'feathers-swagger'
@@ -60,7 +59,6 @@ app.configure(
   )
 )
 app.configure(postgresql)
-app.configure(authentication)
 app.configure(services)
 app.configure(channels)
 

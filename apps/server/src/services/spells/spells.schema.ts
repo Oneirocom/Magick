@@ -9,6 +9,7 @@ import { dataValidator, queryValidator } from '../../validators'
 export const spellSchema = Type.Object(
   {
     id: Type.Number(),
+    projectId: Type.String(),
     name: Type.String(),
     hash: Type.String(),
     graph: Type.Object({
@@ -28,6 +29,7 @@ export const spellExternalResolver = resolve<Spell, HookContext>({})
 // Schema for creating new entries
 export const spellDataSchema = Type.Pick(spellSchema, [
   'name',
+  'projectId',
   'graph',
   'created_at',
   'updated_at',
@@ -51,6 +53,7 @@ export const spellPatchResolver = resolve<Spell, HookContext>({})
 export const spellQueryProperties = Type.Pick(spellSchema, [
   'id',
   'name',
+  'projectId',
   'graph',
   'created_at',
   'updated_at',

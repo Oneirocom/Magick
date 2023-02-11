@@ -2,6 +2,8 @@
 import { SpellManager } from '@magickml/engine'
 import { buildMagickInterface } from './buildMagickInterface'
 
+import {v4} from 'uuid'
+
 const handleSockets = (app: any) => {
   return (io: any) => {
     // Another gross 'any' here
@@ -14,8 +16,9 @@ const handleSockets = (app: any) => {
       // Authenticate with the auth headers here
 
       // hard coding user for now.
+      const id = v4()
       const user = {
-        id: '123'
+        id: id,
       }
       // Attach the user info to the params or use in services
       socket.feathers.user = user

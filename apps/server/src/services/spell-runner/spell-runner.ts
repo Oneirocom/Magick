@@ -1,6 +1,4 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
-import { authenticate } from '@feathersjs/authentication'
-
 import type { Application } from '../../declarations'
 import { SpellRunnerService, getOptions } from './spell-runner.class'
 
@@ -19,7 +17,6 @@ export const spellRunner = (app: Application) => {
   app.service('spell-runner').hooks({
     around: {
       all: [
-       // authenticate('jwt')
       ]
     },
     before: {

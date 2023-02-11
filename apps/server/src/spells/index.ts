@@ -1,4 +1,4 @@
-import { extractModuleInputKeys, Spell } from '@magickml/engine'
+import { extractModuleInputKeys, Spell, projectId } from '@magickml/engine'
 import { app } from "../app"
 import Koa from 'koa'
 import otJson0 from 'ot-json0'
@@ -43,7 +43,7 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
 
   if (!body) throw new ServerError('input-failed', 'No parameters provided')
 
-  let spell = await app.service('spells').find({ query: { name } })
+  let spell = await app.service('spells').find({ query: { projectId, name } })
 
   if (!spell)
     throw new ServerError('input-failed', `No spell with ${name} name found.`)

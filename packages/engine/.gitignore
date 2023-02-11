@@ -1,2 +1,2 @@
-plugins.ts
-project.ts
+src/plugins.ts
+src/project.ts

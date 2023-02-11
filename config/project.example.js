@@ -1,1 +1,1 @@
-export const projectId = '{uuid}';
+export let projectId = '{uuid}';

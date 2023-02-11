@@ -10,6 +10,7 @@ import { dataValidator, queryValidator } from '../../validators'
 export const agentSchema = Type.Object(
   {
     id: Type.Number(),
+    projectId: Type.String(),
     dirty: Type.Optional(Type.Boolean()),
     enabled: Type.Optional(Type.Boolean()),
     updated_at: Type.Optional(Type.String()),
@@ -25,6 +26,7 @@ export const agentExternalResolver = resolve<Agent, HookContext>({})
 
 // Schema for creating new entries
 export const agentDataSchema = Type.Pick(agentSchema, [
+  'projectId',
   'dirty',
   'enabled',
   'updated_at',
@@ -48,6 +50,7 @@ export const agentPatchResolver = resolve<Agent, HookContext>({})
 // Schema for allowed query properties
 export const agentQueryProperties = Type.Pick(agentSchema, [
   'id',
+  'projectId',
   'dirty',
   'enabled',
   'updated_at',

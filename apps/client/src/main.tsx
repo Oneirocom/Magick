@@ -10,7 +10,6 @@ import AppProviders from './contexts/AppProviders'
 import { store } from './state/store'
 
 import { pluginManager } from '@magickml/engine'
-console.log('loading plugins', pluginManager.plugins)
 
 const container = document.getElementById('root')
 const root = createRoot(container!) // createRoot(container!) if you use TypeScript

@@ -39,7 +39,7 @@ class PluginManager {
     constructor() {
         this.pluginList = new Array<Plugin>();
         (async () => {
-            let plugins = (await import('../plugins')).default
+            let plugins = (await import('./plugins')).default
             this.plugins = plugins;
         })()
     }
