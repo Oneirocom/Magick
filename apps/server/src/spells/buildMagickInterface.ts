@@ -10,6 +10,7 @@ import { database } from '@magickml/database'
 import { prisma } from '@magickml/prisma'
 import vm2 from 'vm2'
 import axios from 'axios'
+import solc from 'solc'
 
 import { runPython } from '@magickml/core'
 import { CustomError } from '../utils/CustomError'
@@ -193,14 +194,43 @@ export const buildMagickInterface = (
             'Error in spell runner: processCode component: ' + code
           )
         }
-      } else {
+      } else if (language === 'python'){
         try {
-
           const codeResult = await runPython(code, flattenInputs, data, state);
           return codeResult;
         } catch (err) {
           console.log({ err })
         }
+      } else if (language === 'solidity'){
+        const input = {
+          language: 'Solidity',
+          sources: {
+            'solidity.sol': {
+              content: code
+            }
+          },
+          settings: {
+            optimizer:{
+              enabled: data.optimization,
+              runs: data.optimization_num
+            },
+            outputSelection: {
+              '*': {
+                '*': ['*']
+              }
+            }
+          }
+        };
+        const output = JSON.parse(solc.compile(JSON.stringify(input)));
+        // TODO: change hardcoded contract name to a dynamic compilation
+        const bytecode = output.contracts['solidity.sol']['SimpleContract'].evm.bytecode.object
+        const abi = output.contracts['solidity.sol']['SimpleContract'].abi
+        return {
+          bytecode: bytecode,
+          abi: abi,
+        };
+      } else {
+        console.log(`Server can not process ${language} code`)
       }
     },
     setCurrentGameState: state => {

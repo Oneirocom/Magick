@@ -2,7 +2,6 @@
 /* eslint-disable no-console */
 /* eslint-disable require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import * as ethers from 'ethers'
 import Rete from 'rete'
 
 import {
@@ -10,16 +9,15 @@ import {
   MagickNode,
   MagickWorkerInputs,
 } from '../../../types'
-import { InputControl } from '../../dataControls/InputControl'
+import { triggerSocket, numSocket, stringSocket, anySocket } from '../../sockets'
 import { DropdownControl } from '../../dataControls/DropdownControl'
-import { triggerSocket, numSocket, stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
-const info = 'Check the balance of an ethereum wallet'
+const info = 'Call a write function from a contract'
 
-export class CheckEthBalance extends MagickComponent<void> {
+export class CallContractFunctionWrite extends MagickComponent<void> {
   constructor() {
-    super('Check Balance')
+    super('Call Contract Write Function')
 
     this.task = {
       outputs: {
@@ -34,17 +32,14 @@ export class CheckEthBalance extends MagickComponent<void> {
   }
 
   builder(node: MagickNode) {
-    const addressInput = new Rete.Input('address', 'Address', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const rpcHttpInput = new Rete.Input('rpc_http', 'RPC HTTP Endpoint', stringSocket)
+    const contractAddressInput = new Rete.Input('contract_addr', 'Contract Address', stringSocket)
+    const abiInput = new Rete.Input('abi', 'ABI', anySocket)
     const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numSocket)
-    const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
-
-    const rpcHttpControl = new InputControl({
-      dataKey: 'rpc_http',
-      name: 'RPC Endpoint',
-    })
+    const functionNameInput = new Rete.Input('function_name', 'Function Name', stringSocket)
+    const functionArgsInput = new Rete.Input('function_args', 'Function Arguments', stringSocket)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const urlOutput = new Rete.Output('output', 'Output', stringSocket)
 
     const chainIdControl = new DropdownControl({
       name: 'Chain',
@@ -57,29 +52,26 @@ export class CheckEthBalance extends MagickComponent<void> {
         '80001'
       ],
       defaultValue: '80001',
+      write: true
     })
 
     node.inspector
-      .add(rpcHttpControl)
       .add(chainIdControl)
 
     return node
-      .addInput(addressInput)
-      .addInput(rpcHttpInput)
+      .addInput(abiInput)
       .addInput(chainIdInput)
+      .addInput(functionNameInput)
+      .addInput(functionArgsInput)
+      .addInput(contractAddressInput)
       .addInput(dataInput)
       .addOutput(dataOutput)
-      .addOutput(balanceOutput)
+      .addOutput(urlOutput)
   }
 
   async worker(node: NodeData, inputs: MagickWorkerInputs) {
-    const defaultNetwork = {
-      name: 'maticmaticmum',
-      chainId: 80001,
-      _defaultProvider: (providers) => new providers.JsonRpcProvider('https://rpc.ankr.com/polygon_mumbai')
-    };
 
-    let chainId = defaultNetwork.chainId
+    let chainId = 80001
     if (node.data?.chain_id) {
       const parsed = parseInt(node.data?.chain_id as string);
       if (!isNaN(parsed)) {
@@ -93,23 +85,14 @@ export class CheckEthBalance extends MagickComponent<void> {
       }
     }
 
-    let provider = ethers.getDefaultProvider(defaultNetwork)
-    if (node.data?.rpc_http) {
-      provider = new ethers.providers.JsonRpcProvider(node.data?.rpc_http as string, chainId)
-    }
-    if (inputs['rpc_http']) {
-      provider = new ethers.providers.JsonRpcProvider(inputs['rpc_http'][0] as string, chainId)
-    }
-
-    const address = inputs['address'][0] as unknown as string
-    const balance = await provider.getBalance(address)
-    const resultInEth = ethers.utils.formatEther(balance).toString()
+    const contractAddress = (inputs['contract_addr'] && inputs['contract_addr'][0]) as string
+    const functionName = (inputs['function_name'] && inputs['function_name'][0]) as string
 
     // TODO: need to be fixed, issue of loosing display() function from NodeData context
-    // node.display(resultInEth)
+    // node.display(address)
 
     return {
-      output: resultInEth,
+      output: `http://localhost:4200/contract/${chainId}/${contractAddress}/${functionName}`,
     }
   }
 }

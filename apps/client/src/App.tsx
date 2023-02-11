@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import MagickPageLayout from './components/MagickPageLayout/MagickPageLayout'
 import HomeScreen from './screens/HomeScreen/HomeScreen'
 import Magick from './screens/Magick/Magick'
+import Contract from './screens/Contract/Contract'
 
 import 'flexlayout-react/style/dark.css'
 import './design-globals/design-globals.css'
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<Magick />} />
           <Route path="/magick/*" element={<Magick />} />
           <Route path="/magick/:spellName" element={<Magick />} />
+          <Route path="/contract/:chain/:address/:function" element={<Contract />} />
           <Route path="/*" element={<Magick />} />
         </Route>
       </Route>
