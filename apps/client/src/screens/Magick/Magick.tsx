@@ -52,7 +52,6 @@ const Magick = ({ empty = false }) => {
 
     // Return if navigating to the spell that is already active
     if (activeTab && activeTab.spellId === spellName) return
-
     // Close spell tab if it is exists
     let spellNameTab = tabs.filter(tab => tab.spellId === spellName)
     let isSpellNameTabPresent = spellNameTab.length
@@ -100,12 +99,12 @@ const Magick = ({ empty = false }) => {
 
   return (
     <>
-        <TabBar tabs={tabs} activeTab={activeTab} />
-    <TabLayout>
-      {!empty && (
-        <Workspaces tabs={tabs} pubSub={pubSub} activeTab={activeTab} />
-      )}
-    </TabLayout>
+      <TabBar tabs={tabs} activeTab={activeTab} />
+      <TabLayout>
+        {!empty && (
+          <Workspaces tabs={tabs} pubSub={pubSub} activeTab={activeTab} />
+        )}
+      </TabLayout>
     </>
   )
 }

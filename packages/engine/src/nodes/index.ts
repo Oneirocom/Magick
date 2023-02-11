@@ -131,8 +131,8 @@ function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {
 }
 
 export const getNodes = () => {
-  const pluginNodes = pluginManager.getNodes();
-  const allComponents = {...components, ...pluginNodes}
+  const pluginNodes = pluginManager.getNodes()
+  const allComponents = { ...components, ...pluginNodes }
   const sortedComponents = Object.keys(allComponents)
     .sort()
     .reduce<Record<any, any>>((acc: any, key) => {
