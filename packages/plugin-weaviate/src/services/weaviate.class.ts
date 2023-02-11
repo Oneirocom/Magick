@@ -15,12 +15,12 @@ export class WeaviateService {
             return ('internal error')
         }
     }
-    async find(id, params){
+    async find(body, params){
         console.log("getEventsWeaviate")
         try{
             console.log("Inside in TRY")
-            console.log(id)
-            const events = await weaviate_connection.getEvents(id['query'])
+            console.log(body)
+            const events = await weaviate_connection.getEvents(body['query'])
             return ({ events })
         } catch (e) {
             console.log(e)

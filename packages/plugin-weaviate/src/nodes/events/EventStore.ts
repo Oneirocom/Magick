@@ -43,6 +43,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     })
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
+    const senderInput = new Rete.Input('sender', 'Sender', stringSocket)
     const agentidInput = new Rete.Input('agentid', 'Agent ID', stringSocket)
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
 
@@ -52,6 +53,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     return node
+      .addInput(senderInput)
       .addInput(contentInput)
       .addInput(agentidInput)
       .addInput(eventInput)
@@ -82,7 +84,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       const response = await axios.post(
         `${
           API_URL
-        }/WeaviatePlugin`,
+        }/event`,
         {
           type,
           observer,
@@ -100,28 +102,31 @@ export class EventStore extends MagickComponent<Promise<void>> {
     }
 
     const event = inputs['event'][0] as Event
-    const content = (inputs['content'] && inputs['content'][0]) as string
-    const agentId = (inputs['agentid'] && inputs['agentid'][0]) as string
-
+    const sender = (inputs['sender'] && inputs['sender'][0]) as string || event.sender
+    const content = (inputs['content'] && inputs['content'][0]) as string || event.content
+   
+   
+    console.log('string content', content)
+    
+    let error = null;
     if (!content) {
-      return console.log('Content is null, not storing event')
+      error = 'Content is null, not storing event'
     }
     if (!event.observer) {
-      return console.log('observer is null, not storing event')
+      error = 'observer is null, not storing event'
     }
     if (!event.entities) {
-      return console.log('entities is null, not storing event')
-    }
-    if (!event.sender) {
-      return console.log('sender is null, not storing event')
-    }
-    if (!agentId) {
-      return console.log('agentId is null, not storing event')
+      error = 'entities is null, not storing event'
     }
 
-    console.log("INSIDE COMPO, ", { ...event, content, agentId })
+    if (error) {
+      console.error(error)
+      if (!silent) node.display('ERROR: ' + error)
+      return
+    }
+
     if (content && content !== '') {
-      const respUser = await storeEventWeaviate({ ...event, content, agentId } as any)
+      const respUser = await storeEventWeaviate({ ...event, content, sender } as any)
       if (!silent) node.display(respUser)
     } else {
       if (!silent) node.display('No input')

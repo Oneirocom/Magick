@@ -15,7 +15,8 @@
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
-    "find unused deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive"
+    "find unused deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
+    "postinstall": "node config/config-plugins.js"
   },
   "resolutions": {
     "@types/react": "18.0.2"

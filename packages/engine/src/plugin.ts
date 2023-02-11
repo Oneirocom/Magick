@@ -4,8 +4,6 @@ export class Plugin {
     services: any;
     windowComponents: []
     agentComponents: []
-    setup: Function;
-    teardown: Function;
     serverInit?: Function;
     agentMethods?: {
         start: Function,
@@ -18,8 +16,6 @@ export class Plugin {
         services,
         windowComponents,
         agentComponents,
-        setup,
-        teardown,
         serverInit,
         agentMethods,
         serverRoutes
@@ -29,8 +25,6 @@ export class Plugin {
         this.services = services;
         this.windowComponents = windowComponents;
         this.agentComponents = agentComponents;
-        this.setup = setup;
-        this.teardown = teardown;
         this.agentMethods = agentMethods;
         this.serverInit = serverInit;
         this.serverRoutes = serverRoutes;
@@ -47,7 +41,6 @@ class PluginManager {
 
     register(plugin: Plugin) {
         PluginManager.pluginList.push(plugin)
-        plugin.setup()
     }
     /*
     Gets All Agent Components from all the registered plugins 
@@ -126,7 +119,6 @@ class PluginManager {
     }
 
     async teardown(plugin: Plugin) {
-        plugin.teardown()
         PluginManager.pluginList.pop()
     }
     /*

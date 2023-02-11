@@ -87,7 +87,7 @@ export function initSpeechClient({
             client: 'discord',
             channelId: channel.id,
             agentId: agent.id,
-            entities,
+            entities: entities.map(e => e.user),
             channel: 'voice',
         },
         runSubspell: true,

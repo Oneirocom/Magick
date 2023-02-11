@@ -158,7 +158,6 @@ export class World {
       await app.service('agents').patch(agents[i].id, {
         spells: [],
       })
-      console.log('agents[i]', agents[i])
     }
   }
 
@@ -210,7 +209,6 @@ export class World {
   async onDestroy() {}
 
   async addAgent(obj: any) {
-    console.log('adding agent. obj is: ', obj)
     const data = {...obj.data, id: obj.id, enabled: obj.enabled, dirty: obj.dirty, spells: obj.spells, updated_at: obj.updated_at}
     if (this.objects[data.id] === undefined) {
       this.objects[data.id] = new Agent(data)
@@ -224,7 +222,6 @@ export class World {
       await this.objects[id]?.onDestroy()
       this.objects[id] = null
       delete this.objects[id]
-      console.log('Removed ', id)
     }
   }
 

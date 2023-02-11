@@ -82,8 +82,6 @@ const DiscordPlugin = new Plugin({
   windowComponents: [],
   serverInit: null,
   serverRoutes: null,
-  setup: ()=>{console.log("DiscordPlugin")}, 
-  teardown: ()=>{console.log("DiscordPlugin")},
   agentMethods: getAgentMethods(),
 })
 
