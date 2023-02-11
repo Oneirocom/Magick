@@ -22,18 +22,16 @@ type InputReturn = {
 
 const getEventWeaviate = async ({
   type = 'default',
-  sender = 'system',
-  observer = 'system',
-  entities = [],
+  sender,
+  observer,
+  entities,
   client = 'system',
   channel = 'system',
   maxCount = 10,
-  target_count = 'single',
-  max_time_diff = -1,
 }) => {
   const urlString = `${
     API_URL
-  }/WeaviatePlugin`
+  }/event`
 
   const params = {
     type,
@@ -43,21 +41,27 @@ const getEventWeaviate = async ({
     client,
     channel,
     maxCount,
-    target_count,
-    max_time_diff,
   } as Record<string, any>
   
   const url = new URL(urlString)
-  for (let p in params) {
-    url.searchParams.append(p, params[p])
-  }
-  
-  
-  const response = await fetch(url.toString())
+
+  const response = await fetch(url.toString(), 
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(params)
+    }
+  )
+  console.log('response is')
   console.log(response)
   if (response.status !== 200) return null
+  // get the response body and parse it as JSON
   const json = await response.json()
-  return json
+  console.log('json is')
+  console.log(json)
+  return json.events;
 }
 
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
@@ -101,13 +105,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       icon: 'moon',
     })
 
-    const max_time_diff = new InputControl({
-      dataKey: 'max_time_diff',
-      name: 'Max Time Difference',
-      icon: 'moon',
-    })
-
-    node.inspector.add(nameInput).add(max_count).add(type).add(max_time_diff)
+    node.inspector.add(nameInput).add(max_count).add(type)
 
     return node
       .addInput(eventInput)
@@ -134,27 +132,26 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     const maxCountData = node.data?.max_count as string
     const maxCount = maxCountData ? parseInt(maxCountData) : 10
-    const max_time_diffData = node.data?.max_time_diff as string
-    const max_time_diff = max_time_diffData ? parseInt(max_time_diffData) : -1
 
     const events = await getEventWeaviate({
       type,
       sender,
       observer,
+      entities: [sender, observer],
       client,
       channel,
       maxCount,
-      max_time_diff,
     })
     if (!silent) node.display(`Event of ${type} found` || 'Not found')
-    let conversation = events;
+    let conversation = ''; // events;
+    console.log('conversation is')
     console.log(conversation)
-     /* if(events) events.forEach((event) => {
+     if(events) events.forEach((event) => {
        conversation += event.sender + ': ' + event.content + '\n';
-     }); */
+     });
 
     return {
-      output: "conversation found" ?? '',
+      output: conversation, //"conversation found" ?? '',
     }
   }
 }
