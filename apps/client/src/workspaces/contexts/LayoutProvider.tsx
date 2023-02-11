@@ -19,7 +19,7 @@ const windowTypes: WindowTypes = {
   PLAYTEST: 'playtest',
   CONSOLE: 'debugConsole',
   SEARCH_CORPUS: 'searchCorpus',
-  AVATAR: 'avatar'
+  AVATAR: 'avatar',
 }
 
 type WindowType =
@@ -160,7 +160,7 @@ export const Layout = ({ json, factory, tab }) => {
     setCurrentRef(layoutRef)
   }, [layoutRef, setCurrentRef])
 
-  const onModelChange = () => {
+  const onModelChange = e => {
     if (!currentModel) return
     dispatch(
       saveTabLayout({ tabId: tab.id, layoutJson: currentModel.toJson() })
