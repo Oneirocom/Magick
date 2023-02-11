@@ -34,6 +34,7 @@ export function initSpeechClient({
   languageCode,
   tiktalknet_url
 }) {
+  this.spellRunner = spellRunner
   addSpeechEvent(client, { group: 'default_' + agent.id })
   const audioPlayer = createAudioPlayer({
     behaviors: {
