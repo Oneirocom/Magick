@@ -128,7 +128,7 @@ export class weaviate_connection {
         console.log(err)
       })
 
-      console.log('events', events.data.Get.Event)
+    console.log('events', events.data.Get.Event)
 
     const event_obj = events.data.Get.Event
 

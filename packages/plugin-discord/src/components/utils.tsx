@@ -1,4 +1,3 @@
-//@ts-ignore
 import React from 'react'
 
 export const KeyInput = ({ value, setValue, secret }: { value: string, setValue: any, secret: boolean }) => {
