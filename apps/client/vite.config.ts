@@ -15,14 +15,13 @@ export default defineConfig({
   resolve: {
     alias: {
       url: 'rollup-plugin-node-polyfills/polyfills/url',
+      querystring: 'rollup-plugin-node-polyfills/polyfills/qs',
     },
   },
   build: {
     rollupOptions: {
       plugins: [
-        rollupNodePolyFill({
-          
-        }),
+        rollupNodePolyFill(),
       ],
     },
   },
