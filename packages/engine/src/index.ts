@@ -23,7 +23,6 @@ export { SwitchControl } from './dataControls/SwitchControl'
 export { PlaytestControl } from './dataControls/PlaytestControl'
 export { TextInputControl } from './controls/TextInputControl'
 
-export { default as plugins } from '../plugins'
 export * from './config'
 
 // TODO we can better organzie this folder structure with nested index aggregators
@@ -43,3 +42,5 @@ export * from './functions/processCode'
 export * from './plugin'
 export * from './sockets'
 export * from './globals'
+
+export { projectId } from '../project'

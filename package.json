@@ -16,7 +16,7 @@
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
     "find unused deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
-    "postinstall": "node config/config-plugins.js"
+    "postinstall": "node config/config-plugins.js && node config/config-project.js"
   },
   "resolutions": {
     "@types/react": "18.0.2"

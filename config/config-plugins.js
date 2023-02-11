@@ -5,12 +5,22 @@
 
 const path = require('path');
 const fs  = require('fs');
+const plugins = require('./plugins.example.js');
 function copyExamplePluginsJson() {
-  const pluginsJsonPath = path.join(__dirname, '..', 'packages', 'engine', 'plugins.json');
-  const pluginsJsonExamplePath = path.join(__dirname, 'plugins.example.js');
+  const pluginsJsPath = path.join(__dirname, '..', 'packages', 'engine', 'plugins.ts');
 
-  if (!fs.existsSync(pluginsJsonPath)) {
-    fs.copyFileSync(pluginsJsonExamplePath, pluginsJsonPath);
+  let i = 0;
+
+  let importString = 'const plugins = {}\n';
+  for (const plugin of plugins) {
+    importString += `import {default as plugin${i}} from '${plugin}';\nplugins['${plugin}'] = plugin${i};\n`;
+    i++;
+  }
+  importString += 'export default plugins;';
+
+  if (!fs.existsSync(pluginsJsPath)) {
+    // write importString to pluginsJsPath
+    fs.writeFileSync(pluginsJsPath, importString);
   }
 }
 

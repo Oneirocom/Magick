@@ -33,21 +33,26 @@ export class Plugin {
 }
 
 class PluginManager {
-    static pluginList: Array<Plugin>;
-    static componentList: Object;
+    pluginList: Array<Plugin>;
+    componentList: Object;
+    plugins
     constructor() {
-        PluginManager.pluginList = new Array<Plugin>();
+        this.pluginList = new Array<Plugin>();
+        (async () => {
+            let plugins = (await import('../plugins')).default
+            this.plugins = plugins;
+        })()
     }
 
     register(plugin: Plugin) {
-        PluginManager.pluginList.push(plugin)
+        this.pluginList.push(plugin)
     }
     /*
     Gets All Agent Components from all the registered plugins 
     */
     getAgentComponents() {
         let agentComp = []
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             plugin.agentComponents.forEach((component) => {
                 agentComp.push(component)
             })
@@ -57,7 +62,7 @@ class PluginManager {
 
     getAgentStartMethods() {
         let agentStartMethods = {}
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             if (plugin.agentMethods) {
                 let obj = {}
                 obj[plugin.name] = plugin.agentMethods.start
@@ -70,7 +75,7 @@ class PluginManager {
 
     getAgentStopMethods() {
         let agentStopMethods = {}
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             if (plugin.agentMethods) {
                 let obj = {}
                 obj[plugin.name] = plugin.agentMethods.stop
@@ -82,7 +87,7 @@ class PluginManager {
 
     getServerInits() {
         let serverInits = {}
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             if (plugin.serverInit) {
                 let obj = {}
                 obj[plugin.name] = plugin.serverInit
@@ -95,7 +100,7 @@ class PluginManager {
 
     getServerRoutes() {
         let serverRoutes = []
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             if (plugin.serverRoutes) {
                 plugin.serverRoutes.forEach((route) => {
                     serverRoutes.push(route)
@@ -110,7 +115,7 @@ class PluginManager {
     */
     getServices() {
         let services_list = []
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             plugin.services.forEach((service) => {
                 services_list.push(service)
             })
@@ -119,7 +124,7 @@ class PluginManager {
     }
 
     async teardown(plugin: Plugin) {
-        PluginManager.pluginList.pop()
+        this.pluginList.pop()
     }
     /*
     Gets All Nodes from all the registered plugins 
@@ -127,7 +132,7 @@ class PluginManager {
     getNodes() {
         let nodes = {}
 
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             let plug_nodes = {}
             plugin.nodes.forEach((node) => {
                 let id = Math.random().toString(36).slice(2, 7);
