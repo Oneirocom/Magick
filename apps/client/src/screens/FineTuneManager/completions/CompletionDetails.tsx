@@ -16,7 +16,7 @@ export default function CompletionDetails() {
   )
 
   return (
-    <DetailsPage name="fine-tune" id={fineTuneId} error={error}>
+    <DetailsPage name="Fine Tune" id={fineTuneId} error={error}>
       {fineTune ? (
         <>
           <CompletionForm fineTune={fineTune} />
