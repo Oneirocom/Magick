@@ -144,7 +144,7 @@ function DeleteFineTune({ id }: { id: string }) {
 
   return (
     <IconButton onClick={onClick} disabled={isDeleting}>
-      <DeleteOutlined fontSize="small" />
+      <DeleteOutlined fontSize="medium" />
     </IconButton>
   )
 }
