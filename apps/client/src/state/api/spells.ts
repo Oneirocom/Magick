@@ -91,8 +91,7 @@ export const spellApi = rootApi.injectEndpoints({
         spellCopy.updated_at = new Date().toISOString()
         spellCopy.hash = md5(JSON.stringify(spellCopy.graph.nodes))
 
-        console.log('SAVING SPELL', JSON.stringify(spellCopy.graph.nodes))
-        console.log('hash is', spellCopy.hash)
+        console.log('SAVING SPELL')
         const baseQueryOptions = {
           url: 'spells/' + spell.id,
           body: spellCopy,

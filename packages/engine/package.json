@@ -2,8 +2,5 @@
   "name": "@magickml/engine",
   "version": "0.0.1",
   "main": "./engine.umd.js",
-  "module": "./engine.es.js",
-  "paths": {
-    "@magickml/engine": ["packages/engine"]
-  }
+  "module": "./engine.es.js"
 }

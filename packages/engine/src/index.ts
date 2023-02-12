@@ -41,3 +41,6 @@ export * from './functions/makeCompletion'
 export * from './functions/processCode'
 export * from './plugin'
 export * from './sockets'
+export * from './globals'
+
+export { projectId } from './project'

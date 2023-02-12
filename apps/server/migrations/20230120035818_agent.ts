@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.boolean('dirty')
     table.boolean('enabled')
     table.string('updated_at')
+    table.string('projectId')
     table.jsonb('spells')
     table.jsonb('data')
   })

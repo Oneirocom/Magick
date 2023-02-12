@@ -5,10 +5,11 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('spells', (table) => {
     table.increments('id')
     table.string('name')
+    table.string('projectId')
+    table.string('hash')
     table.jsonb('graph')
     table.string('created_at')
     table.string('updated_at')
-    table.jsonb('agents')
   })
 }
 

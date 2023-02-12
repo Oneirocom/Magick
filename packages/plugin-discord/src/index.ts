@@ -1,9 +1,8 @@
-import { Plugin } from "../../engine/src" // TODO: fix me
+import { Plugin } from "@magickml/engine" // TODO: fix me
 import { DiscordAgentWindow } from "./components/agent.component"
 import { DiscordInput } from "./nodes/DiscordInput"
 import { DiscordOutput } from "./nodes/DiscordOutput"
 import { UploadService } from './services/Upload/Upload.class'
-
 
 type StartDiscordArgs = {
   agent: any,
@@ -21,15 +20,8 @@ type StartDiscordArgs = {
 }
 
 function getAgentMethods() {
-  // if we are in node, we need to import the discord client
-  if(typeof window !== 'undefined') return
-  
   let discord_client
-  import('./connectors/discord')
-  .then((module) => {
-    discord_client = module.discord_client
-  });
-
+  
   async function startDiscord({
     agent,
     spellRunner,
@@ -43,6 +35,11 @@ function getAgentMethods() {
     voice_language_code,
     tiktalknet_url,
   }: StartDiscordArgs) {
+    console.log('starting discord')
+    // ignore import if vite
+    const module = await import(/* @vite-ignore */ `${typeof window === 'undefined' ? './connectors/discord' : './dummy'}`)
+    discord_client = module.discord_client
+
     const discord = new discord_client()
     agent.discord = discord
     await discord.createDiscordClient(
@@ -76,13 +73,11 @@ function getAgentMethods() {
 const DiscordPlugin = new Plugin({
   name: 'DiscordPlugin', 
   nodes: [DiscordInput, DiscordOutput], 
-  services: [['DiscordPlugin',UploadService]],
+  services: {'DiscordPlugin': UploadService},
   agentComponents: [DiscordAgentWindow], 
   windowComponents: [],
   serverInit: null,
   serverRoutes: null,
-  setup: ()=>{console.log("DiscordPlugin")}, 
-  teardown: ()=>{console.log("DiscordPlugin")},
   agentMethods: getAgentMethods(),
 })
 

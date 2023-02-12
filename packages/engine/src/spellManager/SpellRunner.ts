@@ -49,7 +49,6 @@ class SpellRunner {
     this.magickInterface = magickInterface
 
     this.magickInterface.getCurrentSpell = () => {
-      console.log('GETTING CURRENT SPELL', this.currentSpell)
       return this.currentSpell
     }
 
@@ -92,7 +91,6 @@ class SpellRunner {
   get outputData() {
     const rawOutputs = {}
     this.module.write(rawOutputs)
-    console.log('RAW OUTPUTS', rawOutputs)
     return this._formatOutputs(rawOutputs)
   }
 
@@ -128,7 +126,6 @@ class SpellRunner {
    * and puts those values into the module in preparation for processing.
    */
   private _loadInputs(inputs: Record<string, unknown>): void {
-    console.log(inputs)
     this.module.read(this._formatInputs(inputs))
   }
 
@@ -185,7 +182,6 @@ class SpellRunner {
    * it for the next run.
    */
   private _resetTasks(): void {
-    console.log('Task Reset')
     this.engine.tasks.forEach(t => t.reset())
   }
 
@@ -239,8 +235,6 @@ class SpellRunner {
     this._loadInputs(inputs)
 
     const component = this._getComponent(componentName) as ModuleComponent
-
-    console.log('RUNNING COMPONENT', component)
 
     const triggeredNode = this._getTriggeredNodeByName(componentName)
     // const triggeredNode = this._getFirstNodeTrigger()
