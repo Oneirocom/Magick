@@ -1,3 +1,4 @@
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 import ErrorMessage from './ErrorMessage'
 
@@ -13,10 +14,13 @@ export default function DetailsPage({
   children: React.ReactNode
 }) {
   return (
-    <main className="mx-auto mb-8 space-y-8 max-w-2xl">
-      <h1 className="text-3xl">
-        <span className="font-normal">{name}</span> {id}
-      </h1>
+    <main>
+      {/* TODO @thomageanderson: remove hardcoded color when global mui themes are supported */}
+      <Box component={'span'} sx={{ textAlign: 'center' }}>
+        <Typography variant="h4" component="h2" color="white">
+          {name} {id}
+        </Typography>
+      </Box>
       {error && <ErrorMessage error={error} />}
       {children}
     </main>
