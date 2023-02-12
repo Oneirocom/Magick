@@ -15,7 +15,7 @@ import AvatarWindow from './windows/AvatarWindow'
 import TextEditor from './windows/TextEditorWindow'
 import DebugConsole from './windows/DebugConsole'
 
-import { Spell } from '@magickml/engine'
+import { Spell, projectId } from '@magickml/engine'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { RootState } from '../../state/store'
 import { useFeathers } from '../../contexts/FeathersProvider'
@@ -80,7 +80,15 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     if (!client) return
     ;(async () => {
       if (!client || !tab || !tab.spellId) return
-      await client.service('spell-runner').get(tab.spellId)
+      console.log('projectId from client ', projectId)
+      // make sure to pass the projectId to the service call
+      await client.service('spell-runner').get(tab.spellId,
+        {
+          query: {
+            projectId,
+          },
+        }
+      )
     })()
   }, [client])
 

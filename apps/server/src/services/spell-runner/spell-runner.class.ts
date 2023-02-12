@@ -21,12 +21,16 @@ interface CreateData {
   spellId: string
 }
 
-const getSpell = async (app, spellName: string) => {
+const getSpell = async (app, spellName: string, projectId) => {
+  console.log('spellName', spellName, 'projectId', projectId)
   const spell = await app.service('spells').find({
     query: {
+      projectId,
       name: spellName
     }
   })
+
+  console.log('spell is', spell)
 
   return spell.data[0]
 }
@@ -41,8 +45,8 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
   async get(id: Id, params?: SpellRunnerParams): Promise<any | {}> {
     if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
-
-    const { user } = params
+    console.log('params', params)
+    const { user, query } = params as any // TODO: remove the any
 
     if (!user) throw new Error('No user is present in service')
     // Here we get the users spellManagerApp
@@ -50,15 +54,18 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     if (!spellManager) throw new Error('No spell manager created for user!')
 
-    const spell = await getSpell(app, id as string)
+    console.log('get spell', id, 'for user', user.id, 'with query', query)
+
+    const spell = await getSpell(app, id as string, query.projectId)
+
+    console.log('spell is', spell)
 
     // Load the spell into the spellManager. If there is no spell runner, we make one.
     await spellManager.load(spell as Spell)
 
     return spell
   }
-
-  // TODO: Fix this
+  
   // @ts-ignore
   async create(data: CreateData, params?: SpellRunnerParams): Promise<Record<string, unknown>> {
     if (!app.userSpellManagers) return {}

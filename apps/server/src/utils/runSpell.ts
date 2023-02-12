@@ -1,4 +1,4 @@
-import { SpellRunner, GraphData, Spell as SpellType } from '@magickml/engine'
+import { SpellRunner, GraphData, Spell as SpellType, projectId } from '@magickml/engine'
 import { app } from '../app'
 import { buildMagickInterface } from '../buildMagickInterface'
 import { ServerError } from '@magickml/server-core'
@@ -15,7 +15,7 @@ export const runSpell = async ({
   inputFormatter,
 }: RunSpellArgs) => {
 
-  let spell = await app.service('spells').find({ query: { name: spellName } }) as any
+  let spell = await app.service('spells').find({ query: { projectId, name: spellName } }) as any
 
   if (!spell?.graph) {
     throw new ServerError('not-found', `Spell with name ${spellName} not found`)

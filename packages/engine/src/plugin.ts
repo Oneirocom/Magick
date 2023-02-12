@@ -4,8 +4,6 @@ export class Plugin {
     services: any;
     windowComponents: []
     agentComponents: []
-    setup: Function;
-    teardown: Function;
     serverInit?: Function;
     agentMethods?: {
         start: Function,
@@ -18,8 +16,6 @@ export class Plugin {
         services,
         windowComponents,
         agentComponents,
-        setup,
-        teardown,
         serverInit,
         agentMethods,
         serverRoutes
@@ -29,8 +25,6 @@ export class Plugin {
         this.services = services;
         this.windowComponents = windowComponents;
         this.agentComponents = agentComponents;
-        this.setup = setup;
-        this.teardown = teardown;
         this.agentMethods = agentMethods;
         this.serverInit = serverInit;
         this.serverRoutes = serverRoutes;
@@ -39,22 +33,26 @@ export class Plugin {
 }
 
 class PluginManager {
-    static pluginList: Array<Plugin>;
-    static componentList: Object;
+    pluginList: Array<Plugin>;
+    componentList: Object;
+    plugins
     constructor() {
-        PluginManager.pluginList = new Array<Plugin>();
+        this.pluginList = new Array<Plugin>();
+        (async () => {
+            let plugins = (await import('./plugins')).default
+            this.plugins = plugins;
+        })()
     }
 
     register(plugin: Plugin) {
-        PluginManager.pluginList.push(plugin)
-        plugin.setup()
+        this.pluginList.push(plugin)
     }
     /*
     Gets All Agent Components from all the registered plugins 
     */
     getAgentComponents() {
         let agentComp = []
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             plugin.agentComponents.forEach((component) => {
                 agentComp.push(component)
             })
@@ -64,7 +62,7 @@ class PluginManager {
 
     getAgentStartMethods() {
         let agentStartMethods = {}
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             if (plugin.agentMethods) {
                 let obj = {}
                 obj[plugin.name] = plugin.agentMethods.start
@@ -77,7 +75,7 @@ class PluginManager {
 
     getAgentStopMethods() {
         let agentStopMethods = {}
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             if (plugin.agentMethods) {
                 let obj = {}
                 obj[plugin.name] = plugin.agentMethods.stop
@@ -89,7 +87,7 @@ class PluginManager {
 
     getServerInits() {
         let serverInits = {}
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             if (plugin.serverInit) {
                 let obj = {}
                 obj[plugin.name] = plugin.serverInit
@@ -102,7 +100,7 @@ class PluginManager {
 
     getServerRoutes() {
         let serverRoutes = []
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             if (plugin.serverRoutes) {
                 plugin.serverRoutes.forEach((route) => {
                     serverRoutes.push(route)
@@ -116,18 +114,17 @@ class PluginManager {
     Gets All Services from all the registered plugins 
     */
     getServices() {
-        let services_list = []
-        PluginManager.pluginList.forEach((plugin) => {
-            plugin.services.forEach((service) => {
-                services_list.push(service)
+        let serviceList = []
+        this.pluginList.forEach((plugin) => {
+            Object.keys(plugin.services).forEach((key) => {
+                serviceList.push(plugin.services[key])
             })
         })
-        return services_list
+        return serviceList
     }
 
     async teardown(plugin: Plugin) {
-        plugin.teardown()
-        PluginManager.pluginList.pop()
+        this.pluginList.pop()
     }
     /*
     Gets All Nodes from all the registered plugins 
@@ -135,7 +132,7 @@ class PluginManager {
     getNodes() {
         let nodes = {}
 
-        PluginManager.pluginList.forEach((plugin) => {
+        this.pluginList.forEach((plugin) => {
             let plug_nodes = {}
             plugin.nodes.forEach((node) => {
                 let id = Math.random().toString(36).slice(2, 7);

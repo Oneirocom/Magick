@@ -14,7 +14,6 @@ import {
   MagickComponent,
   API_URL
 } from 'packages/engine/src/index'
-import axios from 'axios'
 
 const info = 'Event Delete is used to delete events based on inputs recevied from the user.'
 
@@ -26,12 +25,10 @@ const EventDel = async ({
   client = 'system',
   channel = 'system',
   maxCount = 10,
-  target_count = 'single',
-  max_time_diff = -1,
 }) => {
   const urlString = `${
     API_URL
-  }/WeaviatePlugin`
+  }/event`
 
   const params = {
     type,
@@ -41,8 +38,6 @@ const EventDel = async ({
     client,
     channel,
     maxCount,
-    target_count,
-    max_time_diff,
   } as Record<string, any>
   
   const url = new URL(urlString)
@@ -117,22 +112,19 @@ export class EventDelete extends MagickComponent<Promise<void>> {
 
     const maxCountData = node.data?.max_count as string
     const maxCount = maxCountData ? parseInt(maxCountData) : 10
-    const max_time_diffData = node.data?.max_time_diff as string
-    const max_time_diff = max_time_diffData ? parseInt(max_time_diffData) : -1
 
-/*     const events = await EventDel({
+   const events = await EventDel({
       type,
       sender,
       observer,
       client,
       channel,
       maxCount,
-      max_time_diff,
     })
 
-    let number_of_events = events; */
+    let number_of_events = events;
     return {
-      output: "number_of_events" ?? '',
+      output: number_of_events ?? false,
     }
   }
 }

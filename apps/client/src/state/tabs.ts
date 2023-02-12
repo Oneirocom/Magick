@@ -97,13 +97,23 @@ export const tabSlice = createSlice({
     switchTab: tabAdapater.updateOne,
     clearTabs: tabAdapater.removeAll,
     changeActive: tabAdapater.updateMany,
-    saveTabLayout: (state, action) => {},
+    saveTabLayout: (state, action) => {
+      state.ids = [action.payload.tabId]
+      state.entities[action.payload.tabId].layoutJson =
+        action.payload?.layoutJson
+    },
   },
 })
 
 // actions
-export const { openTab, closeTab, switchTab, clearTabs, saveTabLayout, changeActive } =
-  tabSlice.actions
+export const {
+  openTab,
+  closeTab,
+  switchTab,
+  clearTabs,
+  saveTabLayout,
+  changeActive,
+} = tabSlice.actions
 
 // selectors
 export const activeTabSelector = (state: RootState) =>

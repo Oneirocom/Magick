@@ -11,7 +11,7 @@
       {
         "type": "tabset",
         "id": "#3",
-        "weight": 15,
+        "weight": 10,
         "children": [
           {
             "type": "tab",
@@ -44,7 +44,7 @@
           {
             "type": "tabset",
             "id": "#8",
-            "weight": 40,
+            "weight": 30,
             "children": [
               {
                 "type": "tab",
@@ -66,7 +66,7 @@
       {
         "type": "row",
         "id": "#7",
-        "weight": 31.966507177033492,
+        "weight": 10,
         "children": [
           {
             "type": "tabset",

@@ -3,7 +3,7 @@
 // import {EngineContext} from '@magickml/engine'
 
 import { runSpell } from './utils/runSpell'
-import { API_ROOT_URL, API_URL, APP_SEARCH_SERVER_URL, EngineContext } from '@magickml/engine'
+import { API_ROOT_URL, API_URL, APP_SEARCH_SERVER_URL, projectId } from '@magickml/engine'
 import { app } from './app'
 
 export const buildMagickInterface = (overrides: Record<string, Function> = {}) => {
@@ -24,7 +24,7 @@ export const buildMagickInterface = (overrides: Record<string, Function> = {}) =
       return outputs
     },
     getSpell: async (spellId) => {
-      const spell = await app.service('spells').find({ query: { name: spellId } })
+      const spell = await app.service('spells').find({ query: { projectId, name: spellId } })
 
       return spell
     }
