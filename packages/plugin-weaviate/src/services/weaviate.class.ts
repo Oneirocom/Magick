@@ -21,10 +21,10 @@ export class WeaviateService {
             console.log("Inside in TRY")
             console.log(body)
             const events = await weaviate_connection.getEvents(body['query'])
-            return ({ events })
+            return ({ events: events })
         } catch (e) {
             console.log(e)
-            return ("Error")
+            return {error: "Error"}
         }
     }
     
