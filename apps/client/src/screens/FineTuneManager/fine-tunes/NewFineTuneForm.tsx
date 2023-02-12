@@ -10,6 +10,7 @@ import { OpenAI } from '../../../../../../@types/openai'
 import Label from '../forms/Label'
 import { useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
 
 type Fields = {
   model: string
@@ -67,9 +68,10 @@ export default function NewFineTuneForm() {
 
   return (
     <main className="mx-auto mb-8 space-y-8 max-w-2xl">
-      <h1 className="text-3xl">
-        Fine Tune <span className="font-normal">Completions Model</span>
-      </h1>
+      {/* TODO @thomageanderson: remove hardcoded color when global mui themes are supported */}
+      <Typography variant="h4" component="h2" color="white">
+        Fine TuneCompletions Model
+      </Typography>
       {error && <ErrorMessage error={error} />}
       {data && (
         <FormProvider {...form}>
@@ -99,7 +101,11 @@ export default function NewFineTuneForm() {
                 />
               </Label>
             </fieldset>
-            <Button disabled={form.formState.isSubmitting} type="submit">
+            <Button
+              disabled={form.formState.isSubmitting}
+              type="submit"
+              variant="contained"
+            >
               Create Model
             </Button>
           </form>
