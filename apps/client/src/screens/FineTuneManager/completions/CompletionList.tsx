@@ -7,26 +7,49 @@ import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 // TODO @thomageanderson: resolve the type warning on this markdown import
 import { html as CompletionInstructions } from './instructions.md'
+import { Box, Typography } from '@mui/material'
 
 export default function ClassificationList() {
   const navigate = useNavigate()
   return (
     <main className="mx-auto space-y-12 max-w-4xl">
-      <section className="space-y-4">
-        <div className="flex flex-nowrap justify-between items-center">
-          <h1 className="text-3xl">Completions</h1>
+      <Box component={'div'} style={{ width: '100%' }}>
+        <Box
+          component={'div'}
+          display={'flex'}
+          justifyContent={'space-between'}
+          flexWrap={'nowrap'}
+          flexDirection={'row'}
+          padding={1}
+        >
+          {/* TODO @thomageanderson: remove hardcoded color when global mui themes are supported */}
+          <Typography variant="h4" component="h2" color="white">
+            Completions
+          </Typography>
           <Button
             size="small"
+            variant="contained"
             onClick={() => navigate('/fineTuneManager/fine-tunes/new')}
           >
             New Model
           </Button>
-        </div>
-        <FineTuneList />
-      </section>
-      <section className="space-y-4">
-        <div className="flex flex-nowrap justify-between items-center">
-          <h2 className="text-3xl">Training Files</h2>
+        </Box>
+      </Box>
+      <FineTuneList />
+
+      <Box component={'div'} style={{ width: '100%' }}>
+        <Box
+          component={'div'}
+          display={'flex'}
+          justifyContent={'space-between'}
+          flexWrap={'nowrap'}
+          flexDirection={'row'}
+          padding={1}
+        >
+          {/* TODO @thomageanderson: remove hardcoded color when global mui themes are supported */}
+          <Typography variant="h4" component="h2" color="white">
+            Training Files
+          </Typography>
           <UploadFileButton
             purpose="fine-tune"
             enforce={{
@@ -35,9 +58,10 @@ export default function ClassificationList() {
               maxTokens: 2048,
             }}
           />
-        </div>
-        <FileListTable purpose="fine-tune" />
-      </section>
+        </Box>
+      </Box>
+
+      <FileListTable purpose="fine-tune" />
       <UsageInstructions>
         <div dangerouslySetInnerHTML={{ __html: CompletionInstructions }} />
       </UsageInstructions>
