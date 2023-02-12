@@ -7,7 +7,8 @@ import { OpenAI } from '../../../../../../@types/openai'
 import useFineTuneResults from './useFineTuneResults'
 import Button from '@mui/material/Button'
 import Loading from '../components/Loading'
-
+import { Box } from '@mui/material'
+import DownloadIcon from '@mui/icons-material/Download'
 export type ResultFileRecord = {
   elapsed_examples: number
   elapsed_tokens: number
@@ -46,15 +47,18 @@ export default function FineTuneResultsCard({
 
   return (
     <InfoCard>
-      <h4>
-        Results File
-        {results && (
-          <span className="ml-2 font-thin">{results.length} records</span>
-        )}
-      </h4>
-      {error && <ErrorMessage error={error} />}
-      {results && resultFile ? (
-        <div className="flex gap-4 justify-between">
+      <Box
+        component={'span'}
+        sx={{
+          flexDirection: 'row',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <h4>Results File</h4> {results && <>{results?.length} records</>}
+        {error && <ErrorMessage error={error} />}
+        {results && resultFile ? (
           <Button
             size="small"
             onClick={event => {
@@ -62,13 +66,14 @@ export default function FineTuneResultsCard({
               download(resultFile)
             }}
             variant="contained"
+            startIcon={<DownloadIcon />}
           >
             Download (CSV)
           </Button>
-        </div>
-      ) : (
-        <Loading />
-      )}
+        ) : (
+          <Loading />
+        )}
+      </Box>
     </InfoCard>
   )
 }
