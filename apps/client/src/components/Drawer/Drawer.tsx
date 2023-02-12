@@ -16,8 +16,6 @@ import { useLocation } from 'react-router-dom'
 import StorageIcon from '@mui/icons-material/Storage'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories'
 import HubIcon from '@mui/icons-material/Hub'
-import ManageSearchIcon from '@mui/icons-material/ManageSearch'
-import Card from '@mui/material/Card'
 
 import MagickLogo from './Magick-purple-logo.png'
 

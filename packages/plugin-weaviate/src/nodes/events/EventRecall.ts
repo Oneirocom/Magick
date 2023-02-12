@@ -31,7 +31,7 @@ const getEventWeaviate = async ({
 }) => {
   const urlString = `${
     API_URL
-  }/event`
+  }/event?`
 
   const params = {
     type,
@@ -42,16 +42,17 @@ const getEventWeaviate = async ({
     channel,
     maxCount,
   } as Record<string, any>
-  
-  const url = new URL(urlString)
+  const searchParams = new URLSearchParams();
+  Object.keys(params).forEach(key => searchParams.append(key, params[key]));
+  console.log(urlString + searchParams.toString())
+  const url = new URL(urlString + searchParams.toString())
 
   const response = await fetch(url.toString(), 
     {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(params)
+      }
     }
   )
   console.log('response is')
@@ -66,7 +67,7 @@ const getEventWeaviate = async ({
 
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Event Recall')
+    super('Event Recall(Short Term Memory)')
 
     this.task = {
       outputs: {
@@ -133,7 +134,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     const maxCountData = node.data?.max_count as string
     const maxCount = maxCountData ? parseInt(maxCountData) : 10
 
-    const events = await getEventWeaviate({
+    let events = await getEventWeaviate({
       type,
       sender,
       observer,
@@ -143,15 +144,27 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       maxCount,
     })
     if (!silent) node.display(`Event of ${type} found` || 'Not found')
-    let conversation = ''; // events;
+    let conversation = events;
     console.log('conversation is')
+    if (conversation == undefined) {
+      return {
+        output: "Error"
+      }
+    }
+    
     console.log(conversation)
-     if(events) events.forEach((event) => {
-       conversation += event.sender + ': ' + event.content + '\n';
-     });
+    
+    if (conversation.error != 'Check your Args' ){
+      events = events.splice(0, maxCount)
+      if(events) events.forEach((event) => {
+        conversation += event.properties.sender + ': ' + event.properties.content + '\n';
+      });
+    } else {
+      conversation = "No Conversation Found"
+    }
 
     return {
-      output: conversation, //"conversation found" ?? '',
+      output: conversation,
     }
   }
 }
