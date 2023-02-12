@@ -92,6 +92,7 @@ export default function CompletionForm({
             // auto
             // iconRight={<FontAwesomeIcon icon={faChevronRight} />}
             // loading={form.formState.isSubmitting}
+            variant="contained"
             type="submit"
           >
             Complete
