@@ -13,7 +13,7 @@ import { toast } from 'react-toastify'
 import { OpenAI } from '../../../../../../@types/openai'
 import Input from '@mui/material/Input'
 import { Button, TextField } from '@mui/material'
-
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 export default function CompletionForm({
   fineTune,
 }: {
@@ -79,10 +79,8 @@ export default function CompletionForm({
                 <TextField
                   // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus
-                  //   bordered
                   minRows={8}
                   required
-                  //   width="100%"
                   {...form.register('prompt')}
                 />
               </Label>
@@ -91,11 +89,9 @@ export default function CompletionForm({
             </fieldset>
             <div>
               <Button
-                // auto
-                // iconRight={<FontAwesomeIcon icon={faChevronRight} />}
-                // loading={form.formState.isSubmitting}
                 variant="contained"
                 type="submit"
+                endIcon={<ChevronRightIcon />}
               >
                 Complete
               </Button>
