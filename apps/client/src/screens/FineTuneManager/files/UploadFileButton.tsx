@@ -2,6 +2,7 @@ import { OpenAI } from '../../../../../../@types/openai'
 import React, { useEffect, useRef } from 'react'
 import useUploadFile, { Enforce, MimeTypes } from './useUploadFile'
 import Button from '@mui/material/Button'
+import UploadFileIcon from '@mui/icons-material/UploadFile'
 
 export default function UploadFileButton({
   enforce,
@@ -35,6 +36,7 @@ export default function UploadFileButton({
         variant="contained"
         disabled={isLoading}
         onClick={() => inputRef.current?.click()}
+        startIcon={<UploadFileIcon />}
       >
         Upload File
       </Button>
