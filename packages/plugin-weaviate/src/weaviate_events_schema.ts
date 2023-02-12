@@ -20,13 +20,6 @@ export const EntitySchema = {
       ],
       "description": "Name of the entity",
       "name": "name"
-    },
-    {
-      "dataType":[
-        "Event"
-      ],
-      "description": "Event Linked With",
-      "name": "event"
     }
   ]
 
@@ -77,6 +70,13 @@ export const EventSchema = {
       },
       {
         "dataType": [
+          "Entity"
+        ],
+        "description": "The name of the sender of the event.",
+        "name": "sender"
+      },
+      {
+        "dataType": [
           "string"
         ],
         "description": "Name of the client from which event was created.",
@@ -108,6 +108,18 @@ export const EventSchema = {
         ],
         "description": "The date at which the event was created",
         "name": "date"
+      },{
+        "dataType": [
+          "Entity"
+        ],
+        "description" : "The Observer",
+        "name": "observer"
+      },{
+        "dataType": [
+          "Entity"
+        ],
+        "description": "The list of Entities",
+        "name": "entities"
       }
 
     ],
