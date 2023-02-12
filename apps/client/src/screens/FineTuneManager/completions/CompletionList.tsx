@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { html as CompletionInstructions } from './instructions.md'
 import { Box, Typography } from '@mui/material'
 import InfoCard from '../components/InfoCard'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 
 export default function ClassificationList() {
   const navigate = useNavigate()
@@ -32,6 +33,7 @@ export default function ClassificationList() {
               size="small"
               variant="contained"
               onClick={() => navigate('/fineTuneManager/fine-tunes/new')}
+              startIcon={<AddCircleOutlineIcon />}
             >
               New Model
             </Button>
