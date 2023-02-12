@@ -2,27 +2,19 @@
   "migrations": [
     {
       "cli": "nx",
-      "version": "15.0.0-beta.1",
-      "description": "Replace implicitDependencies with namedInputs + target inputs",
-      "implementation": "./src/migrations/update-15-0-0/migrate-to-inputs",
-      "package": "nx",
-      "name": "15.0.0-migrate-to-inputs"
+      "version": "15.5.0-beta.0",
+      "description": "Update to Cypress v12. Cypress 12 contains a handful of breaking changes that might causes tests to start failing that nx cannot directly fix. Read more Cypress 12 changes: https://docs.cypress.io/guides/references/migration-guide#Migrating-to-Cypress-12-0.This migration will only run if you are already using Cypress v11.",
+      "factory": "./src/migrations/update-15-5-0/update-to-cypress-12",
+      "package": "@nrwl/cypress",
+      "name": "update-to-cypress-12"
     },
     {
       "cli": "nx",
-      "version": "15.0.0-beta.1",
-      "description": "Prefix outputs with {workspaceRoot}/{projectRoot} if needed",
-      "implementation": "./src/migrations/update-15-0-0/prefix-outputs",
-      "package": "nx",
-      "name": "15.0.0-prefix-outputs"
-    },
-    {
-      "cli": "nx",
-      "version": "15.0.12-beta.1",
-      "description": "Set project names in project.json files",
-      "implementation": "./src/migrations/update-15-1-0/set-project-names",
-      "package": "nx",
-      "name": "15.1.0-set-project-names"
+      "version": "15.5.4-beta.0",
+      "description": "Update `@nrwl/web/babel` preset to `@nrwl/js/babel` for projects that have a .babelrc file.",
+      "factory": "./src/migrations/update-15-5-4/update-babel-preset",
+      "package": "@nrwl/web",
+      "name": "update-babel-preset"
     }
   ]
 }

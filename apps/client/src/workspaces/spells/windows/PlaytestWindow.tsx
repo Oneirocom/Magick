@@ -15,6 +15,7 @@ import css from '../../../screens/Magick/magick.module.css'
 import { useFeathers } from '../../../contexts/FeathersProvider'
 import { useAppSelector } from '../../../state/hooks'
 import { useEditor } from '../../contexts/EditorProvider'
+import { projectId } from '@magickml/engine'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
@@ -153,6 +154,7 @@ const Playtest = ({ tab }) => {
 
     client.service('spell-runner').create({
       spellId: tab.spellId,
+      projectId,
       inputs: {
         [playtestInputName as string]: toSend,
       },
