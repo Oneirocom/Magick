@@ -5,6 +5,14 @@ const config: CapacitorConfig = {
   appName: 'magick',
   webDir: '../../dist/apps/client',
   bundledWebRuntime: false,
+  plugins: {
+    CapacitorCookies: {
+      enabled: true,
+    },
+    CapacitorHttp: {
+      enabled: true
+    }
+  }
 }
 
 export default config
