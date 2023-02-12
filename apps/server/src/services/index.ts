@@ -5,12 +5,15 @@ import { spellRunner } from './spell-runner/spell-runner'
 import type { Application } from '../declarations'
 import { pluginManager } from '@magickml/engine'
 export const services = (app: Application) => {
+  console.log(pluginManager)
   const service_list = pluginManager.getServices()
   app.configure(spell)
   app.configure(agent)
   app.configure(spellRunner)
-  service_list.forEach((service)=>{
-      app.use(service[0], new service[1])
+  service_list.then((services)=>{
+    console.log(services)
+    services.forEach((service)=>{
+        app.use(service[0], new service[1])
+    })
   })
-  // All services will be registered here
 }

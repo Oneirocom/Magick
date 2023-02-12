@@ -31,7 +31,7 @@ const getEventWeaviate = async ({
 }) => {
   const urlString = `${
     API_URL
-  }/event`
+  }/event?`
 
   const params = {
     type,
@@ -42,16 +42,17 @@ const getEventWeaviate = async ({
     channel,
     maxCount,
   } as Record<string, any>
-  
-  const url = new URL(urlString)
+  const searchParams = new URLSearchParams();
+  Object.keys(params).forEach(key => searchParams.append(key, params[key]));
+  console.log(urlString + searchParams.toString())
+  const url = new URL(urlString + searchParams.toString())
 
   const response = await fetch(url.toString(), 
     {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(params)
+      }
     }
   )
   console.log('response is')
