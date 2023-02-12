@@ -1,6 +1,6 @@
-import FileInput from '../../../screens/HomeScreen/components/FileInput'
+import FileInput from '../../screens/HomeScreen/components/FileInput'
 import React, { useEffect, useState } from 'react'
-import { magickApiRootUrl } from '../../../config'
+import { magickApiRootUrl } from '../../config'
 
 import AgentWindow from './Agent'
 

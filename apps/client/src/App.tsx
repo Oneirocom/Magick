@@ -13,7 +13,7 @@ import './App.css'
 
 import MainLayout from './components/MainLayout/MainLayout'
 import EventManagerWindow from './workspaces/spells/windows/EventManager'
-import AgentManagerWindow from './workspaces/agents/windows/AgentManagerWindow'
+import AgentManagerWindow from './workspaces/agents/AgentManagerWindow'
 
 import FineTuneManager from './screens/FineTuneManager/FineTuneManager'
 import Completions from './screens/FineTuneManager/completions'
@@ -45,7 +45,6 @@ function App() {
           <Route path="/events" element={<EventManagerWindow />} />
           <Route path="/agents" element={<AgentManagerWindow />} />
           {/* todo search corpus component */}
-          <Route path="/searchCorpus" element={<></>} />
           <Route path="/home/*" element={<HomeScreen />} />
 
           <Route path="/" element={<Magick />} />

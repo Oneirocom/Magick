@@ -112,10 +112,8 @@ export class Solidity extends MagickComponent<void> {
     context: { magick: EngineContext; data: { code: unknown } }
   ) {
     const { magick, data } = context
-    const { processCode, getCurrentGameState } = magick
+    const { processCode } = magick
     if (!processCode) return
-
-    const state = getCurrentGameState()
 
     try {
       const optimization = node.data?.optimization ? node.data?.optimization : false
@@ -128,7 +126,7 @@ export class Solidity extends MagickComponent<void> {
         }
       }
 
-      const { bytecode, abi } = await processCode(node.data.code, inputs, {data, ...{optimization, optimization_num}}, state, 'solidity')
+      const { bytecode, abi } = await processCode(node.data.code, inputs, {data, ...{optimization, optimization_num}}, 'solidity')
 
       // TODO: need to be fixed, issue of loosing display() function from NodeData context
       // node.display({
