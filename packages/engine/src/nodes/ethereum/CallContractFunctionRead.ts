@@ -9,7 +9,7 @@ import {
   NodeData,
   MagickNode,
   MagickWorkerInputs,
-} from '../../../types'
+} from '../../types'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
