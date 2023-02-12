@@ -11,6 +11,7 @@ import Label from '../forms/Label'
 import { useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 
 type Fields = {
   model: string
@@ -105,6 +106,7 @@ export default function NewFineTuneForm() {
               disabled={form.formState.isSubmitting}
               type="submit"
               variant="contained"
+              endIcon={<ChevronRightIcon />}
             >
               Create Model
             </Button>
