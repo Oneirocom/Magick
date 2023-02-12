@@ -20,7 +20,21 @@ export const EntitySchema = {
       ],
       "description": "Name of the entity",
       "name": "name"
-    }
+    },
+    {
+      "dataType" : [
+        "string"
+      ],
+      "description": "Type of the entity",
+      "name": "type"
+    },
+    {
+      "dataType": [
+        "Event"
+      ],
+      "description": "Event with which the entity is related",
+      "name": "event"
+    },
   ]
 
 }
@@ -70,13 +84,6 @@ export const EventSchema = {
       },
       {
         "dataType": [
-          "Entity"
-        ],
-        "description": "The name of the sender of the event.",
-        "name": "sender"
-      },
-      {
-        "dataType": [
           "string"
         ],
         "description": "Name of the client from which event was created.",
@@ -108,18 +115,20 @@ export const EventSchema = {
         ],
         "description": "The date at which the event was created",
         "name": "date"
-      },{
+      },
+      {
         "dataType": [
-          "Entity"
+          "string"
         ],
-        "description" : "The Observer",
-        "name": "observer"
-      },{
-        "dataType": [
-          "Entity"
+        "description": "Sender of the Event",
+        "name": "sender"
+      },
+      {
+        "dataType":[
+          "string"
         ],
-        "description": "The list of Entities",
-        "name": "entities"
+        "description": "Observer of the Event",
+        "name": "Observer"
       }
 
     ],
