@@ -153,7 +153,13 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return spell.data[0] as Spell
   }
 
-  const processCode = async (code, inputs, data, language = 'javascript') => {
+  const processCode = async (
+    code,
+    inputs,
+    data,
+    state,
+    language = 'javascript'
+  ) => {
     const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
       (acc, [key, value]) => {
         acc[key as string] = value[0] as any
@@ -215,6 +221,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
     const apiKey = window.localStorage.getItem('openai-api-key')
 
+    const openAICredentials = window.localStorage.getItem('openai')
     const resp = await fetch(url, {
       method: 'POST',
       headers: {
@@ -222,7 +229,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       },
       body: JSON.stringify({
         ...body,
-        apiKey,
+        apiKey: openAICredentials ? JSON.parse(openAICredentials).apiKey : '',
       }),
     })
 
