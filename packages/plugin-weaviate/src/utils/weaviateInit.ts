@@ -6,8 +6,7 @@ import { OPENAI_API_KEY } from '@magickml/engine'
 var weaviate_client
 
 function generateUUID() {
-  // Public Domain/MIT
-  var d = new Date().getTime() //Timestamp
+  var d = new Date().getTime()
   var d2 =
     (typeof performance !== 'undefined' &&
       performance.now &&
@@ -35,12 +34,14 @@ async function class_creator(client, schema) {
       console.log(re)
     })
     .catch(async (err) => {
+      console.log(err)
       if (err.search("422")){
           await client.schema
                       .classDeleter()
                       .withClassName(schema.class)
                       .do()
                       .catch(async(err) => {
+                        console.log(err)
                       })
           await client.schema
                       .classCreator()
@@ -50,18 +51,47 @@ async function class_creator(client, schema) {
     })
 }
 
-async function schema_update(client, prop){
-  await client.schema
-                       .propertyCreator()
-                       .withClassName("Event")
-                       .withProperty(prop)
-                       .do()
-                       .then(res => {
-                        console.log(res);
-                       })
-                       .catch(err => {
-                        console.error(err)
-                       });
+async function bulkReferences(client, uuid_main, prop, class_name, obj){
+  obj.map(async (obj_uuid)=>{
+      obj_uuid.then(async (data)=> {
+        await client.data
+                    .referenceCreator()
+                    .withClassName('Entity')
+                    .withId(data)
+                    .withReferenceProperty(prop)
+                    .withReference(
+                      client.data
+                            .referencePayloadBuilder()
+                            .withClassName(class_name)
+                            .withId(uuid_main)
+                            .payload()
+                    )
+                    .do()
+                    .then((res)=> console.log(res))
+                    .catch((err)=> console.log(err))
+
+      })
+      
+  })
+}
+
+
+async function addReferences(client, uuid_main, ref_uuid, prop, class_name){
+  await client.data
+              .referenceCreator()
+              .withClassName('Event')
+              .withId(uuid_main)
+              .withReferenceProperty(prop)
+              .withReference(
+                client.data
+                  .referencePayloadBuilder()
+                  .withClassName(class_name)
+                  .withId(ref_uuid)
+                  .payload(),
+              )
+              .do()
+              .then(res => {})
+              .catch(err => {console.log(err)})
 }
 
 export async function initWeaviateClientEvent() {
@@ -71,44 +101,26 @@ export async function initWeaviateClientEvent() {
     headers: {'X-OpenAI-Api-Key': OPENAI_API_KEY},
   })
 
-  const observerProp = {
-    dataType: ['Entity'],
-    name: 'observer',
-  };
-  const senderProp = {
-    dataType: ['Entity'],
-    name: 'sender',
-  };
   await class_creator(weaviate_client, EventSchema)
   await class_creator(weaviate_client, EntitySchema)
-  await schema_update(weaviate_client, observerProp)
-  await schema_update(weaviate_client, senderProp)
+
       
 }
 
 export class weaviate_connection {
 
-  static async createEntity(entity: {name: string, event_uuid: string}){
+  static async createEntity(entity: {name: string}){
     let UUID = generateUUID()
     await weaviate_client.data
-                .referenceCreator()
-                .withClassName('Entity')
-                .withId(UUID)
-                .withReferenceProperty('event')
-                .withReference(
-                  weaviate_client.data
-                    .referencePayloadBuilder()
-                    .withClassName('Event')
-                    .withId(entity['event_uuid'])
-                    .payload(),
-                )
-                .do()
-                .then(res => {
-                    console.log(res)
-                })
-                .catch(err => {
-                    console.error(err)
-                });
+                          .creator()
+                          .withClassName('Entity')
+                          .withId(UUID)
+                          .withProperties({
+                            name: entity['name'],
+                          })
+                          .do()
+                          .then(res => {})
+                          .catch(err => {console.log(err)})
     return UUID                      
 
   }
@@ -124,52 +136,34 @@ export class weaviate_connection {
       }
     }
     let event_uuid = generateUUID()
+    let entity_list = data['entities']?.map(async (name) => (await weaviate_connection.createEntity({name: name})))
+    let sender = await weaviate_connection.createEntity({name: data['sender']})
+    let observer = await weaviate_connection.createEntity({name: data['observer']})
     await weaviate_client.data
-      .creator()
-      .withClassName('Event')
-      .withId(event_uuid)
-      .do()
+                        .creator()
+                        .withClassName('Event')
+                        .withId(event_uuid)
+                        .withProperties({
+                          type: data['type'],
+                          client: data['client'],
+                          channel: data['channel'],
+                          agentId: parseInt(data['agentId']?.toString()),
+                          channelType: data['channelType'],
+                          content: data['content'],
+                          date: new Date().toUTCString(),
+                        })
+                        .do()
+                        .then(res => {})
+                        .catch(err => {console.log(err)})
+    console.log(event_uuid, observer)
+    await addReferences(weaviate_client, event_uuid, observer, 'observer', 'Entity')
+    await addReferences(weaviate_client, event_uuid, sender, 'sender', 'Entity')
+    await bulkReferences(weaviate_client, event_uuid, "event", "Event", entity_list)
 
-    let entity_list = data['entities']?.map(async (name) => (await weaviate_connection.createEntity({name: name, event_uuid: event_uuid})))
-    let sender = await weaviate_connection.createEntity({name: data['sender'], event_uuid: event_uuid})
-    let observer = await weaviate_connection.createEntity({name: data['observer'], event_uuid: event_uuid})
-    console.log(sender,observer)
-    await weaviate_client.data
-          .getterById()
-          .withClassName('Event')
-          .withId(event_uuid)
-          .do()
-          .then(res => {
-              // alter the schema
-              return weaviate_client.data
-                  .updater()
-                  .withId(event_uuid)
-                  .withClassName('Event')
-                  .withProperties({
-                    observer: [{
-                      "beacon" : "weaviate://"+process.env.WEAVIATE_CLIENT_HOST+"/"+observer
-                    }],
-                    sender: [{
-                      "beacon" : "weaviate://"+process.env.WEAVIATE_CLIENT_HOST+"/"+sender
-                    }],
-                    type: data['type'],
-                    client: data['client'],
-                    channel: data['channel'],
-                    agentId: parseInt(data['agentId']?.toString()),
-                    channelType: data['channelType'],
-                    content: data['content'],
-                    date: new Date().toUTCString(),
-                  })
-                  .do();
-              })
-          .then(res => {
-              console.log(res)
-          })
-          .catch(err => {
-              console.error(err)
-          });
 
+    
   }
+
   static async getEvents(params: GetEventArg) {
     const
       { sender, observer, maxCount, max_time_diff } = params
