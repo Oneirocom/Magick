@@ -23,7 +23,6 @@ import CompletionDetails from './screens/FineTuneManager/completions/CompletionD
 //These need to be imported last to override styles.
 
 function App() {
-
   return (
     <Routes>
       <Route element={<MainLayout />}>
@@ -45,8 +44,9 @@ function App() {
         <Route element={<MagickPageLayout />}>
           <Route path="/events" element={<EventManagerWindow />} />
           <Route path="/agents" element={<AgentManagerWindow />} />
+          {/* todo search corpus component */}
+          <Route path="/searchCorpus" element={<></>} />
           <Route path="/home/*" element={<HomeScreen />} />
-
 
           <Route path="/" element={<Magick />} />
           <Route path="/magick/*" element={<Magick />} />

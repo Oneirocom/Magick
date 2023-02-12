@@ -120,16 +120,32 @@ export default function MiniDrawer({ children }) {
   return (
     <div style={{ display: 'flex', height: '100%' }}>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader open={open} onClick={toggleDrawer} sx={{justifyContent: open ? "normal" : "flex-end"}}>
-        {!open ? <IconButton>
-           <MenuIcon />
-          </IconButton>
-         : <img style={{
-          height: 16,
-          // on hover, show the finger cursor
-          cursor: 'pointer',
-         
-         }} src={MagickLogo} onClick={toggleDrawer} alt="" />}
+        <DrawerHeader
+          open={open}
+          onClick={toggleDrawer}
+          sx={{ justifyContent: open ? 'space-between' : 'flex-end' }}
+        >
+          {!open ? (
+            <IconButton>
+              <MenuIcon />
+            </IconButton>
+          ) : (
+            <img
+              style={{
+                height: 16,
+                // on hover, show the finger cursor
+                cursor: 'pointer',
+              }}
+              src={MagickLogo}
+              onClick={toggleDrawer}
+              alt=""
+            />
+          )}
+          {open && (
+            <IconButton>
+              <ChevronLeftIcon fontSize="medium" />
+            </IconButton>
+          )}
         </DrawerHeader>
         <List
           sx={{
