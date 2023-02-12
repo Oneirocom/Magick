@@ -2,7 +2,7 @@
 // if it does, end the program
 // if it doesn't exist, copy ./plugins.example.json to packages/engine/plugins.json
 // end the program
-const dotenv = require('dotenv');
+const dotenv = require('dotenv-flow');
 dotenv.config('../');
 
 const path = require('path');
@@ -16,6 +16,8 @@ const pluginsJsExamplePath = path.join(__dirname, 'project.example.js');
 const uuid = generateUuid();
 
 let projectId = process.env.PROJECT_ID
+
+console.log('projectId', projectId)
 
 if(!process.env.PROJECT_ID) {
   // check if there is a ../.env.local, if not copy .env.local.example to it

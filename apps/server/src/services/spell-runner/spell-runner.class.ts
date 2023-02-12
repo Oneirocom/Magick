@@ -30,6 +30,8 @@ const getSpell = async (app, spellName: string, projectId) => {
     }
   })
 
+  console.log('spell is', spell)
+
   return spell.data[0]
 }
 
@@ -52,7 +54,11 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     if (!spellManager) throw new Error('No spell manager created for user!')
 
+    console.log('get spell', id, 'for user', user.id, 'with query', query)
+
     const spell = await getSpell(app, id as string, query.projectId)
+
+    console.log('spell is', spell)
 
     // Load the spell into the spellManager. If there is no spell runner, we make one.
     await spellManager.load(spell as Spell)

@@ -1,4 +1,4 @@
-const dotenv = require('dotenv');
+const dotenv = require('dotenv-flow');
 dotenv.config('../');
 
 console.log('Installation plugins', process.env.PLUGINS)
