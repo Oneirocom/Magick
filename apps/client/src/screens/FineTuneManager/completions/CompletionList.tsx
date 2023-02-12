@@ -1,7 +1,7 @@
 import FileListTable from '../files/FileListTable'
 import UploadFileButton from '../files/UploadFileButton'
 import FineTuneList from '../fine-tunes/FineTuneList'
-import UsageInstructions from '../instructions/UsageInstructions'
+import ExpansionDetails from '../components/ExpansionDetails'
 import React from 'react'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
@@ -62,9 +62,9 @@ export default function ClassificationList() {
       </Box>
 
       <FileListTable purpose="fine-tune" />
-      <UsageInstructions>
+      <ExpansionDetails title={'Usage Instructions'}>
         <div dangerouslySetInnerHTML={{ __html: CompletionInstructions }} />
-      </UsageInstructions>
+      </ExpansionDetails>
     </main>
   )
 }
