@@ -1,7 +1,7 @@
 {
   "name": "@magickml/server",
   "description": "Server for Magick",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "contributors": [],
   "bugs": {},
