@@ -188,7 +188,12 @@ const Playtest = ({ tab }) => {
           id="openai-api-key"
           name="api-key"
           value="api-key"
-          onChange={e => localStorage.setItem('openai-api-key', e.target.value)}
+          onChange={e =>
+            localStorage.setItem(
+              'openai',
+              JSON.stringify({ apiKey: e.target.value })
+            )
+          }
         />
       </form>
       <button className="small" onClick={onClear}>

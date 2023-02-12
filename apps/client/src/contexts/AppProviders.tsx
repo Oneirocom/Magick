@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material'
 import FeathersProvider from './FeathersProvider'
 import PubSubProvider from './PubSubProvider'
 import ToastProvider from './ToastProvider'
+import Account from '../screens/FineTuneManager/account/Account'
 
 const darkTheme = createTheme({
   palette: {
@@ -11,10 +12,11 @@ const darkTheme = createTheme({
 })
 
 const providers = [
+  [ThemeProvider, { theme: darkTheme }],
   FeathersProvider,
   PubSubProvider,
   ToastProvider,
-  [ThemeProvider, { theme: darkTheme }],
+  Account,
 ]
 
 /**
