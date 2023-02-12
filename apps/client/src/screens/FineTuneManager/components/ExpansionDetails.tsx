@@ -19,10 +19,12 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     duration: theme.transitions.duration.shortest,
   }),
 }))
-export default function UsageInstructions({
+export default function ExpansionDetails({
   children,
+  title,
 }: {
   children: React.ReactNode
+  title: string
 }) {
   const [expanded, setExpanded] = React.useState(false)
 
@@ -40,7 +42,7 @@ export default function UsageInstructions({
         <ExpandMoreIcon />
       </ExpandMore>
       <Typography variant={'h6'} color={'white'} display={'inline'}>
-        Usage Instructions
+        {title}
       </Typography>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         {children}
