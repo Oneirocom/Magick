@@ -9,7 +9,7 @@ import {
   NodeData,
   MagickNode,
   MagickWorkerInputs,
-} from '../../../types'
+} from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { triggerSocket, numSocket, stringSocket, anySocket } from '../../sockets'
