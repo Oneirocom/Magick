@@ -61,17 +61,9 @@ export default function FineTuneResultsCard({
               event.preventDefault()
               download(resultFile)
             }}
+            variant="contained"
           >
             Download (CSV)
-          </Button>
-          <Button
-            size="small"
-            onClick={event => {
-              event.preventDefault()
-              window.open(`/fine-tunes/results/${resultFile.id}`)
-            }}
-          >
-            View in new tab
           </Button>
         </div>
       ) : (
