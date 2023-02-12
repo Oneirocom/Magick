@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-// import { createNode } from '@magickml/client-core'
+import { createNode } from 'rete-context-menu-plugin/src/utils'
 
 import { Editor, useEditor } from '../../../contexts/EditorProvider'
 import Select from '../../../../components/Select/Select'
@@ -12,13 +12,13 @@ const EditorWindow = ({ tab }) => {
   const nodeMap = getNodeMap()
 
   const handleNodeSelect = async e => {
-    // if (editor)
-    //   editor.addNode(
-    //     await createNode(nodeMap.get(e.value), {
-    //       x: 0,
-    //       y: 0,
-    //     })
-    //   )
+    if (editor)
+      editor.addNode(
+        await createNode(nodeMap.get(e.value), {
+          x: 0,
+          y: 0,
+        })
+      )
   }
 
   const getNodeOptions = () => {

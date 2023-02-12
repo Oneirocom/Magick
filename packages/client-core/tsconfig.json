@@ -19,6 +19,9 @@
       "vite/client"
     ]
   },
+  "paths": {
+    "@magickml/client-core": ["packages/client-core"]
+  },
   "files": [],
   "include": [
     "src"
