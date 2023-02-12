@@ -1,6 +1,7 @@
 import Tooltip from '@mui/material/Tooltip'
 import { useState } from 'react'
 import { useCopyToClipboard } from 'usehooks-ts'
+import ExpansionDetails from './ExpansionDetails'
 import InfoCard from './InfoCard'
 
 export default function ShowRequestExample({
@@ -21,8 +22,7 @@ export default function ShowRequestExample({
 
   return (
     <InfoCard>
-      <details className="bg-white">
-        <summary className="font-bold">Request JSON</summary>
+      <ExpansionDetails title={'Request JSON'}>
         <div className="relative prose">
           <Tooltip
             className="absolute top-0 right-0 p-2"
@@ -43,7 +43,7 @@ export default function ShowRequestExample({
             OpenAI Reference
           </a>
         </p>
-      </details>
+      </ExpansionDetails>
     </InfoCard>
   )
 }
