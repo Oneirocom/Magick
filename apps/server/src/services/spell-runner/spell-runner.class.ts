@@ -1,3 +1,4 @@
+import { spellRunner } from './spell-runner'
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
 import { KnexService } from '@feathersjs/knex'
 import { Spell } from '@magickml/engine'
@@ -19,6 +20,7 @@ interface Data {}
 interface CreateData {
   inputs: Record<string, any>
   spellId: string
+  projectId: string
 }
 
 const getSpell = async (app, spellName: string, projectId) => {
@@ -65,7 +67,7 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     return spell
   }
-  
+
   // @ts-ignore
   async create(data: CreateData, params?: SpellRunnerParams): Promise<Record<string, unknown>> {
     if (!app.userSpellManagers) return {}
@@ -75,11 +77,16 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     if (!user) throw new Error('No user is present in service')
 
-    const { inputs, spellId } = data
+    const { inputs, spellId, projectId } = data
 
     const spellManager = app.userSpellManagers.get(user.id)
 
     if (!spellManager) throw new Error('No spell manager found for user!')
+
+    if (!spellManager.hasSpellRunner(spellId)) {
+      const spell = await getSpell(app, spellId, projectId)
+      await spellManager.load(spell as Spell)
+    }
 
     const result = await spellManager.run(spellId, inputs)
 
