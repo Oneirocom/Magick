@@ -63,6 +63,10 @@ export default class SpellManager {
     return this.spellRunnerMap.get(spellId)
   }
 
+  hasSpellRunner(spellId: string) {
+    return this.spellRunnerMap.has(spellId)
+  }
+
   clear() {
     this.spellRunnerMap = new Map()
   }
