@@ -70,45 +70,49 @@ export default function CompletionForm({
   })
 
   return (
-    <InfoCard>
-      <FormProvider {...form}>
-        <form onSubmit={onSubmit} className="space-y-8">
-          <fieldset className="md:space-y-4">
-            <Label label="Text to complete" required>
-              <TextField
-                // eslint-disable-next-line jsx-a11y/no-autofocus
-                autoFocus
-                //   bordered
-                minRows={8}
-                required
-                //   width="100%"
-                {...form.register('prompt')}
-              />
-            </Label>
-            {!fineTune && <AdHocOptions />}
-            <CommonOptions />
-          </fieldset>
-          <div>
-            <Button
-              // auto
-              // iconRight={<FontAwesomeIcon icon={faChevronRight} />}
-              // loading={form.formState.isSubmitting}
-              variant="contained"
-              type="submit"
-            >
-              Complete
-            </Button>
-          </div>
-        </form>
-        {results.map((result, index) => (
-          <CompletionResults key={index} results={result} />
-        ))}
+    <>
+      <InfoCard>
+        <FormProvider {...form}>
+          <form onSubmit={onSubmit} className="space-y-8">
+            <fieldset className="md:space-y-4">
+              <Label label="Text to complete" required>
+                <TextField
+                  // eslint-disable-next-line jsx-a11y/no-autofocus
+                  autoFocus
+                  //   bordered
+                  minRows={8}
+                  required
+                  //   width="100%"
+                  {...form.register('prompt')}
+                />
+              </Label>
+              {!fineTune && <AdHocOptions />}
+              <CommonOptions />
+            </fieldset>
+            <div>
+              <Button
+                // auto
+                // iconRight={<FontAwesomeIcon icon={faChevronRight} />}
+                // loading={form.formState.isSubmitting}
+                variant="contained"
+                type="submit"
+              >
+                Complete
+              </Button>
+            </div>
+          </form>
+          {results.map((result, index) => (
+            <CompletionResults key={index} results={result} />
+          ))}
+        </FormProvider>
+      </InfoCard>
+      <InfoCard>
         <ShowRequestExample
           request={request}
           reference="https://beta.openai.com/docs/api-reference/completions/create"
         />
-      </FormProvider>
-    </InfoCard>
+      </InfoCard>
+    </>
   )
 }
 
