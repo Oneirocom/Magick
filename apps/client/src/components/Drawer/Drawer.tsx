@@ -186,14 +186,14 @@ export default function MiniDrawer({ children }) {
             onClick={onClick('/agents')}
             text="Agents"
           />
-          <DrawerItem
+           {/* <DrawerItem
             active={location.pathname === '/searchCorpus'}
             Icon={ManageSearchIcon}
             onClick={onClick('/searchCorpus')}
             open={open}
             text="Search Corpus"
           />
-          {/* <DrawerItem
+         <DrawerItem
             active={location.pathname === '/settings'}
             Icon={SettingsIcon}
             open={open}
