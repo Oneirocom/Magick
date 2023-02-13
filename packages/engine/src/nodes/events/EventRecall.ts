@@ -10,7 +10,7 @@ import {
   GetEventArgs,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, anySocket, eventSocket, stringSocket } from '../../sockets'
+import { triggerSocket, anySocket, eventSocket, stringSocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
 const info = 'Event Recall is used to get conversation for an agent and user'
@@ -40,7 +40,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   builder(node: MagickNode) {
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
     const searchString = new Rete.Input('search', 'search', stringSocket)
-    const out = new Rete.Output('output', 'Event', anySocket)
+    const out = new Rete.Output('output', 'Events', arraySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
@@ -126,15 +126,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     })
     if (!silent) node.display(`Event ${type} found` || 'Not found')
     
-    let conversation = '';
-
-    // for each event in events,
-    if(events) events.forEach((event) => {
-      conversation += event.sender + ': ' + event.content + '\n';
-    });
-    
     return {
-      output: conversation,
+      output: events,
     }
   }
 }

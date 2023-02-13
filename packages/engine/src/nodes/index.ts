@@ -64,6 +64,7 @@ import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
 
 import { pluginManager } from '../plugin'
+import { EventsToConversation } from './events/EventsToConversation'
 
 export let components = {
   alert: () => new Alert(),
@@ -104,6 +105,7 @@ export let components = {
   eventRestructure: () => new EventRestructureComponent(),
   eventRecall: () => new EventRecall(),
   eventStore: () => new EventStore(),
+  eventsToConversation: () => new EventsToConversation(),
   inputsToJson: () => new InputsToJSON(),
   joinListComponent: () => new JoinListComponent(),
   moduleComponent: () => new SpellComponent(),
