@@ -155,13 +155,14 @@ export class TextCompletion extends MagickComponent<
       prompt: prompt as string,
       temperature,
       max_tokens,
+      model: modelName ?? 'text-davinci-002',
       top_p,
       frequency_penalty,
       presence_penalty,
       stop: filteredStop,
     }
 
-    const data = await makeCompletion(modelName, body)
+    const data = await makeCompletion(body)
 
     const { success, choice } = data
 

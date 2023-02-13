@@ -3,7 +3,10 @@ config({
   path: '../../../.env.*',
 })
 
-const processEnv = process.env
+// process is not defined on client
+const processEnv = typeof process === 'undefined' ? {} : process.env
+
+
 
 export const SERVER_PORT = processEnv.PORT || 3030
 export const API_URL = processEnv.API_URL || `http://localhost:${SERVER_PORT}`
