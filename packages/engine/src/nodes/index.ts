@@ -62,6 +62,7 @@ import { BooleanVariable } from './variable/BooleanVariable'
 import { FewshotVariable } from './variable/FewshotVariable'
 import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
+import { GetCachedEmbedding } from './ml/GetCachedEmbedding'
 
 import { pluginManager } from '../plugin'
 import { EventsToConversation } from './events/EventsToConversation'
@@ -80,6 +81,7 @@ export let components = {
   destructure: () => new Destructure(),
   complexStringMatcher: () => new ComplexStringMatcher(),
   echo: () => new Echo(),
+  getCachedEmbedding: () => new GetCachedEmbedding(),
   stringReplacer: () => new StringReplacer(),
   textToSpeech: () => new TextToSpeech(),
   textCompletion: () => new TextCompletion(),
