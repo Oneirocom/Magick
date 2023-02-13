@@ -15,6 +15,10 @@ export async function up(knex: Knex): Promise<void> {
     table.integer('agentId')
     table.string('date')
   })
+  // alter table events add column embedding vector
+  await knex.schema.alterTable('events', (table) => {
+    table.specificType('embedding', 'vector(1536)')
+  });
 }
 
 export async function down(knex: Knex): Promise<void> {
