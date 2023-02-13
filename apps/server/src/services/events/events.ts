@@ -1,7 +1,14 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
 import pgvector from 'pgvector/pg'
-import { hooks as schemaHooks } from '@feathersjs/schema'
+import postgres from 'postgres'
+import { hooks as schemaHooks } from '@feathersjs/schema' 
+const sql = postgres(process.env.DATABASE_URL)
+async function getUsersOver(embedding) {
+  const users = await sql`
+    select * from events order by embedding <-> ${embedding} limit 1;`
+  return users
+}
 
 import {
   eventDataValidator,
@@ -14,8 +21,9 @@ import {
   eventQueryResolver
 } from './events.schema'
 
-import type { Application } from '../../declarations'
+import type { Application, HookContext } from '../../declarations'
 import { EventService, getOptions } from './events.class'
+import { makeEmbedding } from 'packages/engine/src/functions/makeEmbedding'
 
 export * from './events.class'
 export * from './events.schema'
@@ -56,6 +64,17 @@ export const event = (app: Application) => {
       remove: []
     },
     after: {
+      create:[
+
+      ],
+      find:[
+          async (context: HookContext) => {
+            //let embed = await makeEmbedding({input: context.params.query.content})
+
+            //let temp = await getUsersOver("["+embed.data[0].embedding+"]")
+            return context.params.query.embedding
+          }
+        ],
       all: []
     },
     error: {
