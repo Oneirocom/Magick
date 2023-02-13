@@ -10,7 +10,7 @@ import {
   stringSocket,
   MagickComponent,
   API_URL
-} from 'packages/engine/src/index'
+} from '@magickml/engine'
 const info = 'Event Q&A is used for getting answers to questions based on the events stored.'
 
 type WorkerReturn = {
@@ -19,7 +19,7 @@ type WorkerReturn = {
 
 export class EventQA extends MagickComponent<Promise<WorkerReturn>>{
   constructor() {
-    super('Event QA')
+    super('Event QA (Vector DB)')
     this.task = {
       outputs: {
         output: 'output',
@@ -27,7 +27,7 @@ export class EventQA extends MagickComponent<Promise<WorkerReturn>>{
       },
     }
 
-    this.category = 'Events'
+    this.category = 'Vector Events'
     this.display = true
     this.info = info
     this.runFromCache = true

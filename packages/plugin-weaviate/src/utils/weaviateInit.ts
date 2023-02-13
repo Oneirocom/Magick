@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { CreateEventArgs, GetEventArg, SemanticSearch } from '@magickml/engine'
+import { CreateEventArgs, GetEventArgs, SemanticSearch } from '@magickml/engine'
 import weaviate from 'weaviate-client'
 import {EventSchema, EntitySchema} from '../weaviate_events_schema'
 import { OPENAI_API_KEY } from '@magickml/engine'
@@ -185,8 +185,8 @@ export class weaviate_connection {
                                       
   }
 
-  static async getEvents(params: GetEventArg) {
-    const { entities, maxCount } = params
+  static async getEvents(params: GetEventArgs) {
+    const { type, entities, maxCount } = params
     if (!weaviate_client) {
       console.log('init weaviate client')
       await initWeaviateClientEvent()
@@ -243,7 +243,7 @@ export class weaviate_connection {
     return events
   }
 
-  static async getAndDeleteEvents(params: GetEventArg) {
+  static async getAndDeleteEvents(params: GetEventArgs) {
     if (!weaviate_client) {
       await initWeaviateClientEvent()
     }

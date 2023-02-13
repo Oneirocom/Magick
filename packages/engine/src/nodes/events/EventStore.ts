@@ -1,0 +1,88 @@
+import Rete from 'rete'
+import axios from 'axios'
+
+import {
+  Event,
+  NodeData,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  CreateEventArgs,
+} from '../../types'
+import { InputControl } from '../../dataControls/InputControl'
+import { triggerSocket, stringSocket, eventSocket } from '../../sockets'
+import { MagickComponent } from '../../magick-component'
+
+const info = 'Event Store is used to store events for an event and user'
+
+export class EventStore extends MagickComponent<Promise<void>> {
+  constructor() {
+    super('Store Event')
+
+    this.task = {
+      outputs: {
+        trigger: 'option',
+      },
+    }
+
+    this.category = 'Events'
+    this.display = true
+    this.info = info
+  }
+
+  builder(node: MagickNode) {
+    const nameInput = new InputControl({
+      dataKey: 'name',
+      name: 'Input name',
+    })
+
+    const type = new InputControl({
+      dataKey: 'type',
+      name: 'Type',
+      icon: 'moon',
+    })
+
+    const contentInput = new Rete.Input('content', 'Content', stringSocket)
+    const eventInput = new Rete.Input('event', 'Event', eventSocket)
+
+    node.inspector.add(nameInput).add(type)
+
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+
+    return node
+      .addInput(contentInput)
+      .addInput(eventInput)
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+  }
+
+  async worker(
+    node: NodeData,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+    { silent }: { silent: boolean }
+  ) {
+
+    const storeEvent = async (eventData: CreateEventArgs) => {
+      const response = await axios.post(
+        `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
+        }/event`, eventData
+      )
+      console.log('Created event', response.data)
+      return response.data
+    }
+
+    const event = inputs['event'][0] as Event
+    const content = (inputs['content'] && inputs['content'][0]) as string
+
+    if (!content) return console.log('Content is null, not storing event')
+
+    if (content && content !== '') {
+      const respUser = await storeEvent({ ...event, content } as any)
+      if (!silent) node.display(respUser)
+    } else {
+      if (!silent) node.display('No input')
+    }
+  }
+}
