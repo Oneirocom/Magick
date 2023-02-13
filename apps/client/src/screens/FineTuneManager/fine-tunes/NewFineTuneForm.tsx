@@ -87,6 +87,14 @@ export default function NewFineTuneForm() {
               </Label>
               <Label label="Training File">
                 <Select
+                  styles={{
+                    option: styles => {
+                      return {
+                        ...styles,
+                        color: 'black',
+                      }
+                    },
+                  }}
                   options={files}
                   {...form.register('training', { required: true })}
                   onChange={selection =>
@@ -96,6 +104,14 @@ export default function NewFineTuneForm() {
               </Label>
               <Label label="Validation File (optional)">
                 <Select
+                  styles={{
+                    option: styles => {
+                      return {
+                        ...styles,
+                        color: 'black',
+                      }
+                    },
+                  }}
                   isClearable
                   escapeClearsValue
                   options={files}
