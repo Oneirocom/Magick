@@ -54,7 +54,7 @@ const EventDel = async ({
 
 export class EventDelete extends MagickComponent<Promise<void>> {
   constructor() {
-    super('EventDelete')
+    super('Event Delete (Vector)')
 
     this.task = {
       outputs: {
@@ -62,7 +62,7 @@ export class EventDelete extends MagickComponent<Promise<void>> {
       },
     }
 
-    this.category = 'Events'
+    this.category = 'Vector Events'
     this.display = true
     this.info = info
   }

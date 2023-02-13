@@ -17,7 +17,7 @@ const info = 'Event Store is used to store events for an event and user'
 
 export class EventStore extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Event Store')
+    super('Event Store (Vector DB)')
 
     this.task = {
       outputs: {
@@ -25,7 +25,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       },
     }
 
-    this.category = 'Events'
+    this.category = 'Vector Events'
     this.display = true
     this.info = info
   }

@@ -10,6 +10,8 @@ import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentT
 import { GetRecentTransactions } from './ethereum/GetRecentTransactions'
 import { EventDestructureComponent } from './events/EventDestructure'
 import { EventRestructureComponent } from './events/EventRestructure'
+import { EventRecall } from './events/EventRecall'
+import { EventStore } from './events/EventStore'
 import { InputComponent } from './io/Input'
 import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
@@ -98,8 +100,10 @@ export let components = {
   arrayVariable: () => new ArrayVariable(),
   logicalOperator: () => new LogicalOperator(),
   inputComponent: () => new InputComponent(),
-  inputDestructureComponent: () => new EventDestructureComponent(),
-  inputRestructureComponent: () => new EventRestructureComponent(),
+  eventDestructure: () => new EventDestructureComponent(),
+  eventRestructure: () => new EventRestructureComponent(),
+  eventRecall: () => new EventRecall(),
+  eventStore: () => new EventStore(),
   inputsToJson: () => new InputsToJSON(),
   joinListComponent: () => new JoinListComponent(),
   moduleComponent: () => new SpellComponent(),

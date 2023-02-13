@@ -67,7 +67,7 @@ const getEventWeaviate = async ({
 
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Event Recall(Short Term Memory)')
+    super('Event Recall (Vector DB)')
 
     this.task = {
       outputs: {
@@ -76,7 +76,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       },
     }
 
-    this.category = 'Events'
+    this.category = 'Vector Events'
     this.display = true
     this.info = info
     this.runFromCache = true
