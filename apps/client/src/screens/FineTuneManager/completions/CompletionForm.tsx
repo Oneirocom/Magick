@@ -1,14 +1,8 @@
 import useAuthentication from '../account/useAuthentication'
-import Label from '../components/forms/Label'
-import SelectEngine, {
-  BaseEngines,
-  InstructEngines,
-} from '../components/forms/SelectEngine'
 import InfoCard from '../components/InfoCard'
 import ShowRequestExample from '../components/ShowRequestExample'
 import React, { useState } from 'react'
 import { FormProvider, useForm, useFormContext } from 'react-hook-form'
-import CreatableSelect from 'react-select/creatable'
 import { toast } from 'react-toastify'
 import { OpenAI } from '../../../../../../@types/openai'
 import { Box, Button, TextField } from '@mui/material'
@@ -165,36 +159,6 @@ function CommonOptions() {
         {...form.register('frequency_penalty', { min: -2, max: 2 })}
       />
     </Box>
-  )
-}
-
-function AdHocOptions() {
-  const form = useFormContext()
-
-  return (
-    <div className="flex flex-wrap gap-x-4">
-      <Label label="Engine" required>
-        <SelectEngine
-          engines={BaseEngines.concat(InstructEngines)}
-          name="engine"
-          required
-        />
-      </Label>
-      <Label label="Stop sequences">
-        <CreatableSelect
-          {...form.register('stop')}
-          classNamePrefix="react-select"
-          isMulti
-          onChange={selection =>
-            form.setValue(
-              'stop',
-              selection.map(({ value }) => value)
-            )
-          }
-          options={[] as Array<{ value: string }>}
-        />
-      </Label>
-    </div>
   )
 }
 
