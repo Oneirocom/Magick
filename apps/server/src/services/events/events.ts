@@ -3,6 +3,9 @@ import { authenticate } from '@feathersjs/authentication'
 import pgvector from 'pgvector/pg'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 
+// array 1536 values in length
+const nullArray = new Array(1536).fill(0)
+
 import {
   eventDataValidator,
   eventPatchValidator,
@@ -41,13 +44,25 @@ export const event = (app: Application) => {
     before: {
       all: [schemaHooks.validateQuery(eventQueryValidator), schemaHooks.resolveQuery(eventQueryResolver)],
       find: [],
-      get: [],
+      get: [
+        // if contains the 'getEmbedding' boolean, we want to return one entry which doesn't contain the null array vector
+        (context: any) => {
+          const { getEmbedding } = context.params.query
+          if (getEmbedding) {
+            context.params.query.$limit = 1
+            context.params.query.embedding = { $ne: pgvector.toSql(nullArray) }
+          }
+          return context
+        }
+      ],
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         (context: any) => {
           const { embedding } = context.data
           if( embedding ) {
             context.data.embedding = pgvector.toSql(embedding)
+          } else {
+            context.data.embedding = pgvector.toSql(nullArray)
           }
           return context
         },
