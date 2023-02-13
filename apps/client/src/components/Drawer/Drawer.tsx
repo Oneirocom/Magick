@@ -49,7 +49,6 @@ type HeaderProps = {
 const DrawerHeader = styled('div', {
   shouldForwardProp: prop => prop !== 'open',
 })<HeaderProps>(({ theme, open }) => ({
-  display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',
   position: 'relative',

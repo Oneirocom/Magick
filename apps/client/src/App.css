@@ -357,7 +357,7 @@ input[type='text']:focus-visible {
 
 .flex-container {
   margin: 0.5em;
-  width: calc(100% - 2em);
+  width: calc(100% - 1em);
   justify-content: center;
   display: flex;
   flex-wrap: wrap;
@@ -466,21 +466,19 @@ input[type='text']:focus-visible {
 }
 
 .agent-container {
-  max-width: 100%;
   padding: 2em;
-  height: calc(100% - 4em);
+  width: calc(100% - 6em);
   overflow: auto;
 }
 
 .agent-editor {
+
   padding: 1em;
-  height: calc(100% - 4em);
   overflow: auto;
 }
 
 .agentWindow {
   padding: 1em;
-  margin-bottom: 1em;
   background-color: #333;
   border-radius: .25em;
 }

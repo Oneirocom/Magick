@@ -48,12 +48,11 @@ const Input = props => {
 const defaultPlaytestData = `{
   "sender": "playtestSender",
   "observer": "playtestObserver",
-  "content": "this is a message",
   "type": "playtest",
   "channel": "playtest",
   "channelType": "playtest",
   "agentId": 0,
-  "entities": ["playtestSender", "playtestObserver"]
+  "entities": {"data": ["playtestSender", "playtestObserver"]}
 }`
 
 const Playtest = ({ tab }) => {
