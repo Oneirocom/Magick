@@ -7,7 +7,7 @@ type PluginProps = {
   agentData: any
   props
 }
-import {API_ROOT_URL} from '@magickml/engine'
+import {API_ROOT_URL} from '../../../engine/src'
 
 // determine if process or import.meta is available, get the .env from the one that is
 const magickApiRootUrl = API_ROOT_URL
