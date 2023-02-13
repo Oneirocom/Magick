@@ -10,9 +10,9 @@ import {
   GetEventArgs,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, anySocket, eventSocket } from '../../sockets'
+import { triggerSocket, anySocket, eventSocket, stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
-
+import { API_ROOT_URL } from '../../config'
 const info = 'Event Recall is used to get conversation for an agent and user'
 
 //add option to get only events from max time difference (time diff, if set to 0 or -1, will get all events, otherwise will count in minutes)
@@ -39,6 +39,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
   builder(node: MagickNode) {
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
+    const searchString = new Rete.Input('search', 'search', stringSocket)
     const out = new Rete.Output('output', 'Event', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -71,6 +72,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     return node
       .addInput(eventInput)
       .addInput(dataInput)
+      .addInput(searchString)
       .addOutput(dataOutput)
       .addOutput(out)
   }
@@ -83,8 +85,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   ) {
     
     const getEvents = async (params: GetEventArgs) => {
-      const urlString = `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-        }/event`
+      const urlString = `${API_ROOT_URL}/event`
   
       const url = new URL(urlString)
       for (let p in params) {
@@ -100,6 +101,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     const { observer, client, channel, channelType, entities } = event
 
+    const searchString = node?.data?.search as string
+
     const typeData = node?.data?.type as string
     const type =
       typeData !== undefined && typeData.length > 0
@@ -111,6 +114,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     const events = await getEvents({
       type,
+      search: searchString,
       observer,
       client,
       entities,

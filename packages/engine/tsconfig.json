@@ -1,9 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "esnext",
     "lib": [
-      "ESNext",
+      "esnext",
       "DOM"
     ],
     "skipLibCheck": true,

@@ -11,6 +11,6 @@
   },
   "postgresql": {
     "client": "pg",
-    "connection": "postgres://postgres:Va5LOJ7j9FHXGNB6@db.orrwaspuvvlqhhtpynjz.supabase.co:6543/postgres"
+    "connection": "postgres://postgres:ZTE*meq1mzh3abn!cmk@db.xnzvmluhwpbngdufsbrd.supabase.co:6543/postgres"
   }
 }

@@ -7,13 +7,10 @@ type PluginProps = {
   agentData: any
   props
 }
+import {API_ROOT_URL} from '@magickml/engine'
 
 // determine if process or import.meta is available, get the .env from the one that is
-const magickApiRootUrl =
-  typeof process !== 'undefined'
-    ? process.env.VITE_APP_API_URL
-    // @ts-ignore
-    : import.meta.env.VITE_APP_API_URL
+const magickApiRootUrl = API_ROOT_URL
 
 export const DiscordAgentWindow: FC<any> = (props) => {
   props = props.props

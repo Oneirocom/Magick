@@ -63,7 +63,7 @@ import { FewshotVariable } from './variable/FewshotVariable'
 import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
 
-import { pluginManager } from '@magickml/engine'
+import { pluginManager } from '../plugin'
 
 export let components = {
   alert: () => new Alert(),
