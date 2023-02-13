@@ -4,6 +4,7 @@ import { useCopyToClipboard } from 'usehooks-ts'
 import InfoCard from './InfoCard'
 import Button from '@mui/material/Button'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import { Table, TableCell, TableContainer, TableRow } from '@mui/material'
 export function MetadataCard({
   fields,
 }: {
@@ -15,27 +16,36 @@ export function MetadataCard({
 }) {
   return (
     <InfoCard>
-      {fields
-        .map(({ clickToCopy, label, value }) => ({
-          clickToCopy,
-          label,
-          value:
-            value instanceof Date
-              ? value.toLocaleString()
-              : String(value ?? ''),
-        }))
-        .map(({ clickToCopy, label, value }) => (
-          <div key={label} className="flex flex-nowrap gap-4">
-            <span className="flex-shrink-0 w-20 font-bold"> {label}</span>
-            {clickToCopy ? (
-              <ClickToCopy className="flex gap-2 items-center" value={value}>
-                <>{value}</>
-              </ClickToCopy>
-            ) : (
-              <span className="line-clamp-1">{value}</span>
-            )}
-          </div>
-        ))}
+      <TableContainer>
+        <Table>
+          {fields
+            .map(({ clickToCopy, label, value }) => ({
+              clickToCopy,
+              label,
+              value:
+                value instanceof Date
+                  ? value.toLocaleString()
+                  : String(value ?? ''),
+            }))
+            .map(({ clickToCopy, label, value }) => (
+              <TableRow>
+                <TableCell>{label}</TableCell>
+                {clickToCopy ? (
+                  <TableCell>
+                    <ClickToCopy
+                      className="flex gap-2 items-center"
+                      value={value}
+                    >
+                      <>{value}</>
+                    </ClickToCopy>
+                  </TableCell>
+                ) : (
+                  <TableCell>{value}</TableCell>
+                )}
+              </TableRow>
+            ))}
+        </Table>
+      </TableContainer>
     </InfoCard>
   )
 }
