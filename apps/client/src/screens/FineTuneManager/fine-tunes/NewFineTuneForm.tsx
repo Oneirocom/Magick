@@ -71,7 +71,7 @@ export default function NewFineTuneForm() {
     <main className="mx-auto mb-8 space-y-8 max-w-2xl">
       {/* TODO @thomageanderson: remove hardcoded color when global mui themes are supported */}
       <Typography variant="h4" component="h2" color="white">
-        Fine TuneCompletions Model
+        Fine Tune Completions Model
       </Typography>
       {error && <ErrorMessage error={error} />}
       {data && (
