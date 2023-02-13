@@ -17,7 +17,7 @@ const info = 'Event Recall is used to get conversation for an agent and user'
 
 //add option to get only events from max time difference (time diff, if set to 0 or -1, will get all events, otherwise will count in minutes)
 type InputReturn = {
-  output: unknown
+  events: any[]
 }
 
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
@@ -26,7 +26,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     this.task = {
       outputs: {
-        output: 'output',
+        events: 'output',
         trigger: 'option',
       },
     }
@@ -39,8 +39,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
   builder(node: MagickNode) {
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
-    const searchString = new Rete.Input('search', 'search', stringSocket)
-    const out = new Rete.Output('output', 'Events', arraySocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
+    const out = new Rete.Output('events', 'Events', arraySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
@@ -66,8 +66,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     return node
       .addInput(eventInput)
+      .addInput(embedding)
       .addInput(dataInput)
-      .addInput(searchString)
       .addOutput(dataOutput)
       .addOutput(out)
   }
@@ -98,12 +98,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       return json.data
     }
     const event = (inputs['event'] && (inputs['event'][0] ?? inputs['event'])) as Event
-
+    const embedding = (inputs['embedding'] && (inputs['embedding'][0] ?? inputs['embedding'])) as number[]
     const { observer, client, channel, channelType, entities } = event
-
-    console.log('entities', entities)
-
-    const searchString = node?.data?.search as string
 
     const typeData = node?.data?.type as string
     const type =
@@ -114,20 +110,21 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     const maxCountData = node.data?.max_count as string
     const maxCount = maxCountData ? parseInt(maxCountData) : 10
 
-    const events = await getEvents({
+    const data = {
       type,
-      search: searchString,
       observer,
       client,
       entities,
       channel,
       channelType,
       maxCount,
-    })
+    }
+    if(embedding) data['embedding'] = embedding
+    const events = await getEvents(data)
     if (!silent) node.display(`Event ${type} found` || 'Not found')
-    
+    console.log('events', events)
     return {
-      output: events,
+      events,
     }
   }
 }

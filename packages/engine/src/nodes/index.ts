@@ -65,12 +65,14 @@ import { StringVariable } from './variable/StringVariable'
 
 import { pluginManager } from '../plugin'
 import { EventsToConversation } from './events/EventsToConversation'
+import { CreateEmbedding } from './ml/CreateEmbedding'
 
 export let components = {
   alert: () => new Alert(),
   booleanGate: () => new BooleanGate(),
   randomGate: () => new RandomGate(),
   cast: () => new Cast(),
+  createEmbedding: () => new CreateEmbedding(),
   inRange: () => new InRange(),
   code: () => new Code(),
   python: () => new Python(),

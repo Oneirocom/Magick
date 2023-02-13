@@ -70,7 +70,7 @@ export type CreateEventArgs = Event
 
 export type GetEventArgs = {
   type: string,
-  search?: string,
+  embedding?: number[],
   observer: string,
   client: string,
   entities: any[],
