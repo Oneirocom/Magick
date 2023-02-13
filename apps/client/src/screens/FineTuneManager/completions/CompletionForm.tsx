@@ -79,7 +79,10 @@ export default function CompletionForm({
               />
               <CommonOptions />
             </fieldset>
-            <div>
+            <Box
+              component={'div'}
+              sx={{ display: 'flex', justifyContent: 'flex-end', padding: 1 }}
+            >
               <Button
                 variant="contained"
                 type="submit"
@@ -87,7 +90,7 @@ export default function CompletionForm({
               >
                 Complete
               </Button>
-            </div>
+            </Box>
           </form>
           {results.map((result, index) => (
             <CompletionResults key={index} results={result} />
