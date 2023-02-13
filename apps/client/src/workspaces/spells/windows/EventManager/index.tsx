@@ -1,19 +1,13 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import EventTable from './EventTable'
-import { usePubSub } from '../../../../contexts/PubSubProvider'
 
-const EventManagerWindow = ({ tab }) => {
+const EventManagerWindow = () => {
   const [events, setEvents] = useState(null)
-  const { events: eventMap, subscribe } = usePubSub()
 
   useEffect(() => {
     fetchEvents()
-
-    return subscribe(
-      eventMap.$REFRESH_EVENT_TABLE(tab.id),
-      fetchEvents
-    ) as () => void
+    console.log('fetching events')
   }, [])
 
   const resetEvents = async () => {
@@ -21,10 +15,12 @@ const EventManagerWindow = ({ tab }) => {
   }
 
   const fetchEvents = async () => {
-    const { data } = await axios.get(
-      `${import.meta.env.VITE_APP_API_URL}/events`
-    )
-    setEvents(data)
+    // const { data } = await axios.get(
+    //   `${import.meta.env.VITE_APP_API_URL}/events`
+    // )
+    // console.log('fetching events', data)
+    // setEvents(data)
+    setEvents([]) // TODO: Fix this
   }
 
   return (

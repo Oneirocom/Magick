@@ -9,7 +9,6 @@ const NavBar = () => {
   const navigate = useNavigate()
   return (
     <div className={css['th-tabbar']}>
-      <img style={{ height: 16, marginLeft: 10 }} src={MagickLogo} alt="" />
       {isSignedIn && (
         <div className={css['tabbar-section']}>
           <Button onClick={() => navigate('/fineTuneManager/completions')}>

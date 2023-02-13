@@ -1,4 +1,4 @@
-import { OPENAI_API_KEY } from '@magickml/server-config'
+import { OPENAI_API_KEY } from '@magickml/engine'
 import axios from 'axios'
 
 export async function MakeCompletionRequest(

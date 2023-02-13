@@ -36,10 +36,6 @@ const Inspector = props => {
     if (!inspectorData) return
     const newData = {
       ...inspectorData,
-      dataControls: {
-        ...inspectorData.dataControls,
-        ...control,
-      },
     }
 
     saveInspector(newData)
@@ -88,15 +84,17 @@ const Inspector = props => {
 
   return (
     <Window toolbar={toolbar} darker outline borderless>
-      <DataControls
-        inspectorData={inspectorData}
-        nodeId={inspectorData.nodeId}
-        dataControls={inspectorData.dataControls}
-        data={inspectorData.data}
-        width={width}
-        updateData={updateData}
-        updateControl={updateControl}
-      />
+      <div style={{ padding: 15 }}>
+        <DataControls
+          inspectorData={inspectorData}
+          nodeId={inspectorData.nodeId}
+          dataControls={inspectorData.dataControls}
+          data={inspectorData.data}
+          width={width}
+          updateData={updateData}
+          updateControl={updateControl}
+        />
+      </div>
     </Window>
   )
 }
