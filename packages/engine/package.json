@@ -1,12 +1,6 @@
 {
   "name": "@magickml/engine",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "./engine.umd.js",
-  "module": "./engine.es.js",
-  "exports": {
-    ".": {
-      "import": "./engine.es.js",
-      "require": "./engine.umd.js"
-    }
-  }
+  "module": "./engine.es.js"
 }

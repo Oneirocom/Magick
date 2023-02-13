@@ -33,15 +33,12 @@ const MenuBar = () => {
   // grab all events we need
   const {
     $SAVE_SPELL,
-    $CREATE_STATE_MANAGER,
-    $CREATE_AGENT_MANAGER,
     $CREATE_AVATAR_WINDOW,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
     $CREATE_SEARCH_CORPUS,
     $CREATE_TEXT_EDITOR,
     $CREATE_CONSOLE,
-    $CREATE_EVENT_MANAGER,
     $SERIALIZE,
     $EXPORT,
     $UNDO,
@@ -96,16 +93,8 @@ const MenuBar = () => {
     publish($SERIALIZE(activeTabRef.current.id))
   }
 
-  const onStateManagerCreate = () => {
-    if (!activeTabRef.current) return
-    publish($CREATE_STATE_MANAGER(activeTabRef.current.id))
-  }
-
   const onCreateSearchCorpus = () => {
     publish($CREATE_SEARCH_CORPUS(activeTabRef.current?.id))
-  }
-  const onEntityManagerCreate = () => {
-    publish($CREATE_AGENT_MANAGER(activeTabRef.current?.id))
   }
 
   const onAvatarWindowCreate = () => {
@@ -135,11 +124,6 @@ const MenuBar = () => {
   const onConsole = () => {
     if (!activeTabRef.current) return
     publish($CREATE_CONSOLE(activeTabRef.current.id))
-  }
-
-  const onEventManagerCreate = () => {
-    if (!activeTabRef.current) return
-    publish($CREATE_EVENT_MANAGER(activeTabRef.current.id))
   }
 
   //Menu bar hotkeys
@@ -189,7 +173,7 @@ const MenuBar = () => {
         },
         import_spell: {
           onClick: onImport,
-          hotKey: 'option+i'
+          hotKey: 'option+i',
         },
         rename_spell: {
           onClick: onEdit,
@@ -229,15 +213,9 @@ const MenuBar = () => {
         inspector: {
           onClick: onInspectorCreate,
         },
-        state_manager: {
-          onClick: onStateManagerCreate,
-        },
-        search_corpus: {
-          onClick: onCreateSearchCorpus,
-        },
-        agent_manager: {
-          onClick: onEntityManagerCreate,
-        },
+        // search_corpus: {
+        //   onClick: onCreateSearchCorpus,
+        // },
         avatar: {
           onClick: onAvatarWindowCreate,
         },
@@ -246,9 +224,6 @@ const MenuBar = () => {
         },
         console: {
           onClick: onConsole,
-        },
-        event_manager: {
-          onClick: onEventManagerCreate,
         },
       },
       settings: {

@@ -42,7 +42,8 @@ function install(
 
   if (!disableBuiltInEdit) {
     editor.on('editcomment', comment => {
-      comment.text = prompt('Edit comment', comment.text)
+      const prevText = comment.text
+      comment.text = prompt('Edit comment', comment.text) || prevText
       comment.update()
     })
   }
@@ -53,12 +54,15 @@ function install(
       inlineCommentKeys,
       deleteCommentKeys,
     ].map(function (x) {
-      return Array.isArray(x.code)
-        ? x.code.includes(e.code)
-        : e.code === x.code &&
-            e.shiftKey === x.shiftKey &&
-            e.ctrlKey === x.ctrlKey &&
-            e.altKey === x.altKey
+      if (e.target.localName === 'input' || e.target.localName === 'textarea')
+        return false
+      else
+        return Array.isArray(x.code)
+          ? x.code.includes(e.code)
+          : e.code === x.code &&
+              e.shiftKey === x.shiftKey &&
+              e.ctrlKey === x.ctrlKey &&
+              e.altKey === x.altKey
     })
 
     if (keyCombosMap[0]) {
@@ -77,6 +81,7 @@ function install(
   })
 
   editor.on('addcomment', ({ type, text, nodes, position }) => {
+    text = !text ? 'right click to edit' : text
     if (type === 'inline') {
       manager.addInlineComment(text, position)
     } else if (type === 'frame') {

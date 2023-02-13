@@ -1,0 +1,16 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "public": "./public/",
+  "origins": [
+    "http://localhost:3030"
+  ],
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "postgresql": {
+    "client": "pg",
+    "connection": "postgres://postgres:Va5LOJ7j9FHXGNB6@db.orrwaspuvvlqhhtpynjz.supabase.co:6543/postgres"
+  }
+}

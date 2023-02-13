@@ -15,27 +15,21 @@ import { useDispatch } from 'react-redux'
 const windowTypes: WindowTypes = {
   TEXT_EDITOR: 'textEditor',
   INSPECTOR: 'inspector',
-  STATE_MANAGER: 'stateManager',
   EDITOR: 'editor',
   PLAYTEST: 'playtest',
   CONSOLE: 'debugConsole',
   SEARCH_CORPUS: 'searchCorpus',
-  AGENT_MANAGER: 'agentManager',
-  EVENT_MANAGER: 'eventManager',
-  AVATAR: 'avatar'
+  AVATAR: 'avatar',
 }
 
 type WindowType =
   | 'textEditor'
   | 'inspector'
-  | 'stateManager'
   | 'editor'
   | 'playtest'
   | 'debugConsole'
   | 'settings'
   | 'searchCorpus'
-  | 'agentManager'
-  | 'eventManager'
   | 'avatar'
 type WindowTypes = Record<string, WindowType>
 
@@ -166,7 +160,7 @@ export const Layout = ({ json, factory, tab }) => {
     setCurrentRef(layoutRef)
   }, [layoutRef, setCurrentRef])
 
-  const onModelChange = () => {
+  const onModelChange = e => {
     if (!currentModel) return
     dispatch(
       saveTabLayout({ tabId: tab.id, layoutJson: currentModel.toJson() })

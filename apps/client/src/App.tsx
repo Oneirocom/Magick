@@ -5,12 +5,16 @@ import FineTuneManagerLayout from './screens/FineTuneManager/PageLayout'
 
 import HomeScreen from './screens/HomeScreen/HomeScreen'
 import Magick from './screens/Magick/Magick'
+import Contract from './screens/Contract/Contract'
 
 import 'flexlayout-react/style/dark.css'
 import './design-globals/design-globals.css'
 import './App.css'
 
 import MainLayout from './components/MainLayout/MainLayout'
+import EventManagerWindow from './workspaces/spells/windows/EventManager'
+import AgentManagerWindow from './workspaces/agents/AgentManagerWindow'
+
 import FineTuneManager from './screens/FineTuneManager/FineTuneManager'
 import Completions from './screens/FineTuneManager/completions'
 import NewFineTune from './screens/FineTuneManager/screens/NewFineTune'
@@ -38,10 +42,15 @@ function App() {
           />
         </Route>
         <Route element={<MagickPageLayout />}>
+          <Route path="/events" element={<EventManagerWindow />} />
+          <Route path="/agents" element={<AgentManagerWindow />} />
+          {/* todo search corpus component */}
           <Route path="/home/*" element={<HomeScreen />} />
+
           <Route path="/" element={<Magick />} />
           <Route path="/magick/*" element={<Magick />} />
           <Route path="/magick/:spellName" element={<Magick />} />
+          <Route path="/contract/:chain/:address/:function" element={<Contract />} />
           <Route path="/*" element={<Magick />} />
         </Route>
       </Route>

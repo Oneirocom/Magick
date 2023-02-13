@@ -13,8 +13,9 @@ import { usePubSub } from '../../../contexts/PubSubProvider'
 import Window from '../../../components/Window/Window'
 import css from '../../../screens/Magick/magick.module.css'
 import { useFeathers } from '../../../contexts/FeathersProvider'
-import { feathers as feathersFlag } from '../../../config'
 import { useAppSelector } from '../../../state/hooks'
+import { useEditor } from '../../contexts/EditorProvider'
+import { projectId } from '@magickml/engine'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
@@ -53,10 +54,11 @@ const Playtest = ({ tab }) => {
   const { publish, subscribe, events } = usePubSub()
   const FeathersContext = useFeathers()
   const dispatch = useDispatch()
+  const { serialize } = useEditor()
 
-  const localState = useAppSelector(state =>
-    selectStateBySpellId(state.localState, tab.spellId)
-  )
+  const localState = useAppSelector(state => {
+    return selectStateBySpellId(state.localState, tab.spellId)
+  })
 
   const client = FeathersContext?.client
   const { $PLAYTEST_INPUT, $PLAYTEST_PRINT } = events
@@ -113,14 +115,6 @@ const Playtest = ({ tab }) => {
   const onSend = () => {
     const newHistory = [...history, `You: ${value}`]
     setHistory(newHistory as [])
-    if (feathersFlag) {
-      client.service('spell-runner').create({
-        spellId: tab.spellId,
-        inputs: {
-          input: value,
-        },
-      })
-    }
 
     let toSend = value
 
@@ -146,6 +140,26 @@ const Playtest = ({ tab }) => {
       }
     }
 
+    // get spell from editor
+    const graph = serialize()
+    if (!graph) return
+
+    const playtestInputName = Object.values(graph.nodes).find(
+      node => node.data.playtestToggle && node.name === 'Universal Input'
+    )?.data.name
+
+    if (!playtestInputName) return
+
+    console.log('FOUND NODE', playtestInputName)
+
+    client.service('spell-runner').create({
+      spellId: tab.spellId,
+      projectId,
+      inputs: {
+        [playtestInputName as string]: toSend,
+      },
+    })
+
     publish($PLAYTEST_INPUT(tab.id), toSend)
     setValue('')
   }
@@ -170,10 +184,10 @@ const Playtest = ({ tab }) => {
   const toolbar = (
     <React.Fragment>
       <form>
-        <label htmlFor="api-key">API Key</label>
+        <label htmlFor="openai-api-key">API Key</label>
         <input
           type="password"
-          id="api-key"
+          id="openai-api-key"
           name="api-key"
           value="api-key"
           onChange={e =>

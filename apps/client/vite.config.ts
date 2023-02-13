@@ -15,13 +15,15 @@ export default defineConfig({
   assetsInclude: ['**/*.vrm'],
   resolve: {
     alias: {
-      stream: './node_modules/stream-browserify/index.js',
       url: 'rollup-plugin-node-polyfills/polyfills/url',
+      querystring: 'rollup-plugin-node-polyfills/polyfills/qs',
     },
   },
   build: {
     rollupOptions: {
-      plugins: [rollupNodePolyFill({})],
+      plugins: [
+        rollupNodePolyFill(),
+      ],
     },
   },
   plugins: [

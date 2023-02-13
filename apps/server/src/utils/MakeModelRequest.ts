@@ -1,6 +1,6 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-import { HF_API_KEY } from '@magickml/server-config'
+import { HF_API_KEY } from '@magickml/engine'
 /* eslint-disable no-console */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck

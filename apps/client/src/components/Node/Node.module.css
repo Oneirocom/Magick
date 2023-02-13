@@ -11,8 +11,8 @@
 .node {
   animation: nodeGenesis 0.2s ease;
   transition: background-color 0.05s ease;
-  min-width: var(--c40);
-  width: var(--c40);
+  min-width: var(--c30);
+  width: var(--c30);
   border-radius: var(--extraSmall);
   border: 1px solid transparent;
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
