@@ -1,23 +1,17 @@
 import axios from 'axios';
 import { OPENAI_API_KEY } from '../config';
 
-export type CompletionData = {
-  model: string
-  prompt: string
-  temperature: number
-  max_tokens: number
-  top_p: number
-  frequency_penalty: number
-  presence_penalty: number
-  stop: string[]
+export type EmbeddingData = {
+  input: string
+  model?: string
   apiKey?: string
 }
 
-export async function makeCompletion(
-  data: CompletionData
+export async function makeEmbedding(
+  data: EmbeddingData
 ): Promise<any> {
   const {
-    prompt, model, temperature = 0.7, max_tokens = 256, top_p = 1, frequency_penalty = 0, presence_penalty = 0, stop, apiKey,
+    input, model = 'text-embedding-ada-002', apiKey,
   } = data;
 
   const API_KEY = apiKey || OPENAI_API_KEY;
@@ -25,21 +19,12 @@ export async function makeCompletion(
   const headers = {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + API_KEY,
-  };;
+  };
 
   try {
     const resp = await axios.post(
-      `https://api.openai.com/v1/completions`,
-      {
-        prompt,
-        model,
-        temperature,
-        max_tokens,
-        top_p,
-        frequency_penalty,
-        presence_penalty,
-        stop,
-      },
+      `https://api.openai.com/v1/embeddings`,
+      { input, model },
       { headers: headers }
     );
 

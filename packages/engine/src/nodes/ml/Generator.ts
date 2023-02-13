@@ -177,6 +177,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     const body: CompletionData = {
       prompt,
       stop,
+      model: modelName ?? 'text-davinci-003',
       max_tokens,
       temperature,
       frequency_penalty,
@@ -184,7 +185,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       top_p,
     }
     try {
-      const { success, choice } = await makeCompletion(modelName, body)
+      const { success, choice } = await makeCompletion(body)
 
       if (!success) throw new Error('Error in generator')
 
