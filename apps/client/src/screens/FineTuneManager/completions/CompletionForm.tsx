@@ -11,8 +11,7 @@ import { FormProvider, useForm, useFormContext } from 'react-hook-form'
 import CreatableSelect from 'react-select/creatable'
 import { toast } from 'react-toastify'
 import { OpenAI } from '../../../../../../@types/openai'
-import Input from '@mui/material/Input'
-import { Button, TextField } from '@mui/material'
+import { Box, Button, TextField } from '@mui/material'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 export default function CompletionForm({
   fineTune,
@@ -73,8 +72,8 @@ export default function CompletionForm({
     <>
       <InfoCard>
         <FormProvider {...form}>
-          <form onSubmit={onSubmit} className="space-y-8">
-            <fieldset className="md:space-y-4">
+          <form onSubmit={onSubmit}>
+            <fieldset style={{ border: 'none' }}>
               <TextField
                 label="Prompt"
                 autoFocus
@@ -84,7 +83,6 @@ export default function CompletionForm({
                 sx={{ width: '100%' }}
                 {...form.register('prompt')}
               />
-              {!fineTune && <AdHocOptions />}
               <CommonOptions />
             </fieldset>
             <div>
@@ -116,48 +114,57 @@ function CommonOptions() {
   const form = useFormContext()
 
   return (
-    <div className="flex flex-wrap gap-x-4">
-      <Label label="Max tokens">
-        <Input
-          //   bordered
-          type="number"
-          min={10}
-          max={2048}
-          //   step={10}
-          {...form.register('max_tokens', { min: 10, max: 2048 })}
-        />
-      </Label>
-      <Label label="Temperature">
-        <Input
-          //   bordered
-          type="number"
-          min={0}
-          max={1}
-          //   step={0.1}
-          {...form.register('temperature', { min: 0, max: 1 })}
-        />
-      </Label>
-      <Label label="Presence penalty">
-        <Input
-          //   bordered
-          type="number"
-          min={-2}
-          max={2}
-          //   step={0.1}
-          {...form.register('presence_penalty', { min: -2, max: 2 })}
-        />
-      </Label>
-      <Label label="Frequency penalty">
-        <Input
-          //   bordered
-          type="number"
-          min={-2}
-          max={2}
-          //   step={0.1}
-          {...form.register('frequency_penalty', { min: -2, max: 2 })}
-        />
-      </Label>
-    </div>
+    <Box
+      component={'div'}
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        padding: 2,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      <TextField
+        label="Max tokens"
+        type="number"
+        min={10}
+        max={2048}
+        inputProps={{
+          step: 10,
+        }}
+        {...form.register('max_tokens', { min: 10, max: 2048 })}
+      />
+      <TextField
+        label="Temperature"
+        type="number"
+        min={0}
+        max={1}
+        inputProps={{
+          step: 0.1,
+        }}
+        {...form.register('temperature', { min: 0, max: 1 })}
+      />
+      <TextField
+        label="Presence penalty"
+        type="number"
+        min={-2}
+        max={2}
+        inputProps={{
+          step: 0.1,
+        }}
+        {...form.register('presence_penalty', { min: -2, max: 2 })}
+      />
+      <TextField
+        label="Frequency penalty"
+        type="number"
+        min={-2}
+        max={2}
+        inputProps={{
+          step: 0.1,
+        }}
+        {...form.register('frequency_penalty', { min: -2, max: 2 })}
+      />
+    </Box>
   )
 }
 
