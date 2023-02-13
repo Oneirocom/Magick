@@ -97,7 +97,7 @@ export const DiscordAgentWindow: FC<any> = (props) => {
 
       const url =
         voice_provider === 'google' || voice_provider === 'tiktalknet'
-          ? import.meta.env.VITE_APP_FILE_SERVER_URL + '/' + resp.data
+          ? (import.meta as any).env.VITE_APP_FILE_SERVER_URL + '/' + resp.data
           : resp.data
       if (url && url.length > 0) {
         setPlayingAudio(true)

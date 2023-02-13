@@ -96,6 +96,7 @@
     "path": "^0.12.7",
     "pg": "^8.8.0",
     "pgvector": "^0.1.0",
+    "postgres": "^3.3.3",
     "pubsub-js": "^1.9.4",
     "puppeteer": "^19.5.2",
     "pyodide": "^0.22.0",
