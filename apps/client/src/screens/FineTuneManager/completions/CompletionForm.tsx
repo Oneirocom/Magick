@@ -75,15 +75,15 @@ export default function CompletionForm({
         <FormProvider {...form}>
           <form onSubmit={onSubmit} className="space-y-8">
             <fieldset className="md:space-y-4">
-              <Label label="Text to complete" required>
-                <TextField
-                  // eslint-disable-next-line jsx-a11y/no-autofocus
-                  autoFocus
-                  minRows={8}
-                  required
-                  {...form.register('prompt')}
-                />
-              </Label>
+              <TextField
+                label="Prompt"
+                autoFocus
+                required
+                multiline
+                rows={2}
+                sx={{ width: '100%' }}
+                {...form.register('prompt')}
+              />
               {!fineTune && <AdHocOptions />}
               <CommonOptions />
             </fieldset>
