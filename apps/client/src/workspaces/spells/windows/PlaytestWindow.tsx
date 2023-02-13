@@ -49,6 +49,7 @@ const defaultPlaytestData = `{
   "sender": "playtestSender",
   "observer": "playtestObserver",
   "type": "playtest",
+  "client": "playtest",
   "channel": "playtest",
   "channelType": "playtest",
   "agentId": 0,
@@ -98,7 +99,7 @@ const Playtest = ({ tab }) => {
   useEffect(() => {
     // Set up a default for the local state here
     if (!localState) {
-      dispatch(addLocalState({ spellId: tab.spellId, playtestData: '{}' }))
+      dispatch(addLocalState({ spellId: tab.spellId, playtestData: defaultPlaytestData }))
       return
     }
   }, [localState])
@@ -177,7 +178,7 @@ const Playtest = ({ tab }) => {
 
   const onDataChange = dataText => {
     console.log('new data text', dataText)
-    dispatch(upsertLocalState({ spellId: tab.spellId, playtestData: dataText }))
+    dispatch(upsertLocalState({ spellId: tab.spellId, playtestData: dataText ?? defaultPlaytestData }))
   }
 
   const onChange = e => {

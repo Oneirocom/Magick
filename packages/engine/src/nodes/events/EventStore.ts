@@ -14,6 +14,7 @@ import { triggerSocket, stringSocket, eventSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { API_ROOT_URL } from '../../config'
+import { makeEmbedding } from '../../functions/makeEmbedding'
 
 const info = 'Event Store is used to store events for an event and user'
 
@@ -72,14 +73,6 @@ export class EventStore extends MagickComponent<Promise<void>> {
     { silent }: { silent: boolean }
   ) {
 
-    const storeEvent = async (eventData: CreateEventArgs) => {
-      const response = await axios.post(
-        `${API_ROOT_URL}/events`, eventData
-      )
-      console.log('Created event', response.data)
-      return response.data
-    }
-
     const event = inputs['event'][0] as Event
     const content = (inputs['content'] && inputs['content'][0]) as string
 
@@ -93,9 +86,25 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     if (!content) return console.log('Content is null, not storing event')
 
+    let embedding = null;
+
+    if(makeSearchable) {
+      const data = await makeEmbedding({
+        input: content,
+        model: 'text-embedding-ada-002',
+      })
+
+      const [responseData] = data?.data
+      embedding = responseData.embedding
+    }
+
     if (content && content !== '') {
-      const respUser = await storeEvent({ ...event, content, type, makeSearchable } as any)
-      if (!silent) node.display(respUser)
+      const response = await axios.post(
+        `${API_ROOT_URL}/events`,
+        { ...event, content, type, embedding }
+      )
+      
+    if (!silent) node.display(JSON.stringify(response.data))
     } else {
       if (!silent) node.display('No input')
     }
