@@ -59,15 +59,10 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       dataKey: 'max_count',
       name: 'Max Count',
       icon: 'moon',
+      defaultValue: '6',
     })
 
-    const max_time_diff = new InputControl({
-      dataKey: 'max_time_diff',
-      name: 'Max Time Difference',
-      icon: 'moon',
-    })
-
-    node.inspector.add(nameInput).add(max_count).add(type).add(max_time_diff)
+    node.inspector.add(nameInput).add(type).add(max_count)
 
     return node
       .addInput(eventInput)
@@ -85,7 +80,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   ) {
     
     const getEvents = async (params: GetEventArgs) => {
-      const urlString = `${API_ROOT_URL}/event`
+      const urlString = `${API_ROOT_URL}/events`
   
       const url = new URL(urlString)
       for (let p in params) {

@@ -74,7 +74,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     const storeEvent = async (eventData: CreateEventArgs) => {
       const response = await axios.post(
-        `${API_ROOT_URL}/event`, eventData
+        `${API_ROOT_URL}/events`, eventData
       )
       console.log('Created event', response.data)
       return response.data
