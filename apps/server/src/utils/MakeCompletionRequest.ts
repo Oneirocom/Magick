@@ -1,4 +1,4 @@
-import { OPENAI_API_KEY } from '@magickml/engine'
+import { OPENAI_API_KEY, OPENAI_ENDPOINT_OVERRIDE } from '@magickml/engine'
 import axios from 'axios'
 
 export async function MakeCompletionRequest(
@@ -9,7 +9,7 @@ export async function MakeCompletionRequest(
   return await makeOpenAIGPT3Request(data, engine, apiKey)
 }
 const useDebug = false
-async function makeOpenAIGPT3Request(data: any, engine: any, apiKey: string) {
+async function makeOpenAIGPT3Request(data: any, engine: any, apiKey: string, endpoint = 'completions') {
   if (useDebug) return { success: true, choice: { text: 'Default response' } }
   const API_KEY = (apiKey !== '' && apiKey) ?? OPENAI_API_KEY
   const headers = {
@@ -17,10 +17,11 @@ async function makeOpenAIGPT3Request(data: any, engine: any, apiKey: string) {
     Authorization: 'Bearer ' + API_KEY,
   }
   try {
-    const gptEngine = engine ?? 'davinci'
+    const model = engine ?? 'text-davinci:003'
+    
     const resp = await axios.post(
-      `https://api.openai.com/v1/engines/${gptEngine}/completions`,
-      data,
+      (OPENAI_ENDPOINT_OVERRIDE ?? `https://api.openai.com/v1`) + `/${endpoint}`,
+      {data, ...model},
       { headers: headers }
     )
 
