@@ -40,6 +40,7 @@ export const eventDataSchema = Type.Pick(eventSchema, [
   'content',
   'agentId',
   'date',
+  'embedding'
 ], {
   $id: 'EventData'
 })
@@ -68,6 +69,7 @@ export const eventQueryProperties = Type.Pick(eventSchema, [
   'content',
   'agentId',
   'date',
+  'embedding'
 ])
 export const eventQuerySchema = Type.Intersect(
   [
