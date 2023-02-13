@@ -45,6 +45,17 @@ const Input = props => {
   )
 }
 
+const defaultPlaytestData = `{
+  "sender": "playtestSender",
+  "observer": "playtestObserver",
+  "content": "this is a message",
+  "type": "playtest",
+  "channel": "playtest",
+  "channelType": "playtest",
+  "agentId": 0,
+  "entities": ["playtestSender", "playtestObserver"]
+}`
+
 const Playtest = ({ tab }) => {
   const scrollbars = useRef<any>()
   const [history, setHistory] = useState([])
@@ -130,10 +141,11 @@ const Playtest = ({ tab }) => {
       if (!json) return
 
       toSend = {
-        input: value,
-        output: value,
+        content: value,
         sender: 'Speaker',
         observer: 'Agent',
+        agentId: 0,
+        client: "playtest",
         channel: 'previewChannel',
         channelType: 'previewChannelType',
         ...JSON.parse(json),
@@ -232,7 +244,7 @@ const Playtest = ({ tab }) => {
               language="javascript"
               value={localState?.playtestData}
               options={options}
-              defaultValue={localState?.playtestData || '{}'}
+              defaultValue={localState?.playtestData || defaultPlaytestData}
               onChange={onDataChange}
               beforeMount={handleEditorWillMount}
             />

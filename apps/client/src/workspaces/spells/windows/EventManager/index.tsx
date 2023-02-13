@@ -15,12 +15,11 @@ const EventManagerWindow = () => {
   }
 
   const fetchEvents = async () => {
-    // const { data } = await axios.get(
-    //   `${import.meta.env.VITE_APP_API_URL}/events`
-    // )
-    // console.log('fetching events', data)
-    // setEvents(data)
-    setEvents([]) // TODO: Fix this
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_APP_API_URL}/events`
+    )
+    console.log('fetching events', data)
+    setEvents(data.data)
   }
 
   return (
