@@ -84,17 +84,24 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   
       const url = new URL(urlString)
       for (let p in params) {
-        url.searchParams.append(p, params[p])
+        // append params to url, make sure to preserve arrays
+        if (Array.isArray(params[p])) {
+          params[p].forEach((v) => url.searchParams.append(p, v))
+        } else {
+          url.searchParams.append(p, params[p])
+        }
       }
   
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
       const json = await response.json()
-      return json.event
+      return json.data
     }
     const event = (inputs['event'] && (inputs['event'][0] ?? inputs['event'])) as Event
 
     const { observer, client, channel, channelType, entities } = event
+
+    console.log('entities', entities)
 
     const searchString = node?.data?.search as string
 
@@ -121,12 +128,10 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     
     let conversation = '';
 
-    // // for each event in events,
-    // if(events) events.forEach((event) => {
-    //   conversation += event.sender + ': ' + event.content + '\n';
-    // });
-
-    conversation = JSON.stringify(events);
+    // for each event in events,
+    if(events) events.forEach((event) => {
+      conversation += event.sender + ': ' + event.content + '\n';
+    });
     
     return {
       output: conversation,
