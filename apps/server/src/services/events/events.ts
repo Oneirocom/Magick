@@ -45,7 +45,6 @@ export const event = (app: Application) => {
       all: [schemaHooks.validateQuery(eventQueryValidator), schemaHooks.resolveQuery(eventQueryResolver)],
       find: [],
       get: [
-        // if contains the 'getEmbedding' boolean, we want to return one entry which doesn't contain the null array vector
         (context: any) => {
           const { getEmbedding } = context.params.query
           if (getEmbedding) {
@@ -59,7 +58,8 @@ export const event = (app: Application) => {
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         (context: any) => {
           const { embedding } = context.data
-          if( embedding ) {
+          // if embedding is not null and not null array, then cast to pgvector
+          if( embedding && embedding.length > 0 && embedding[0] !== 0 ) {
             context.data.embedding = pgvector.toSql(embedding)
           } else {
             context.data.embedding = pgvector.toSql(nullArray)

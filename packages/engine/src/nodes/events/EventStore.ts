@@ -69,7 +69,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     const event = inputs['event'][0] as Event
     const content = (inputs['content'] && inputs['content'][0]) as string
-    const embedding = (inputs['embedding'] && inputs['embedding'][0]) as string
+    const embedding = (inputs['embedding'] && inputs['embedding'][0]) as number[]
     const typeData = node?.data?.type as string
     const type =
       typeData !== undefined && typeData.length > 0
