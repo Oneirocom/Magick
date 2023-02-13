@@ -7,12 +7,10 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  CreateEventArgs,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, stringSocket, eventSocket } from '../../sockets'
+import { triggerSocket, stringSocket, eventSocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
-import { BooleanControl } from '../../dataControls/BooleanControl'
 import { API_ROOT_URL } from '../../config'
 import { makeEmbedding } from '../../functions/makeEmbedding'
 
@@ -45,16 +43,11 @@ export class EventStore extends MagickComponent<Promise<void>> {
       icon: 'moon',
     })
 
-    const makeSearchable = new BooleanControl({
-      dataKey: 'makeSearchable',
-      name: 'Make Searchable',
-      icon: 'moon',
-    })
-
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
 
-    node.inspector.add(nameInput).add(type).add(makeSearchable)
+    node.inspector.add(nameInput).add(type)
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -63,6 +56,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       .addInput(contentInput)
       .addInput(eventInput)
       .addInput(dataInput)
+      .addInput(embedding)
       .addOutput(dataOutput)
   }
 
@@ -75,36 +69,25 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     const event = inputs['event'][0] as Event
     const content = (inputs['content'] && inputs['content'][0]) as string
-
+    const embedding = (inputs['embedding'] && inputs['embedding'][0]) as string
     const typeData = node?.data?.type as string
     const type =
       typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
         : 'none'
 
-    const makeSearchable = node?.data?.makeSearchable
-
     if (!content) return console.log('Content is null, not storing event')
 
-    let embedding = null;
-
-    if(makeSearchable) {
-      const data = await makeEmbedding({
-        input: content,
-        model: 'text-embedding-ada-002',
-      })
-
-      const [responseData] = data?.data
-      embedding = responseData.embedding
-    }
+    const data = { ...event, content, type } as any
+    if (embedding) data.embedding = embedding
 
     if (content && content !== '') {
       const response = await axios.post(
         `${API_ROOT_URL}/events`,
-        { ...event, content, type, embedding }
+        data
       )
-      
-    if (!silent) node.display(JSON.stringify(response.data))
+
+      if (!silent) node.display(JSON.stringify(response.data))
     } else {
       if (!silent) node.display('No input')
     }
