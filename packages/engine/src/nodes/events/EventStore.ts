@@ -12,6 +12,8 @@ import {
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, eventSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { BooleanControl } from '../../dataControls/BooleanControl'
+import { API_ROOT_URL } from '../../config'
 
 const info = 'Event Store is used to store events for an event and user'
 
@@ -42,10 +44,16 @@ export class EventStore extends MagickComponent<Promise<void>> {
       icon: 'moon',
     })
 
+    const makeSearchable = new BooleanControl({
+      dataKey: 'makeSearchable',
+      name: 'Make Searchable',
+      icon: 'moon',
+    })
+
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
 
-    node.inspector.add(nameInput).add(type)
+    node.inspector.add(nameInput).add(type).add(makeSearchable)
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -66,8 +74,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     const storeEvent = async (eventData: CreateEventArgs) => {
       const response = await axios.post(
-        `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-        }/event`, eventData
+        `${API_ROOT_URL}/event`, eventData
       )
       console.log('Created event', response.data)
       return response.data
@@ -76,10 +83,18 @@ export class EventStore extends MagickComponent<Promise<void>> {
     const event = inputs['event'][0] as Event
     const content = (inputs['content'] && inputs['content'][0]) as string
 
+    const typeData = node?.data?.type as string
+    const type =
+      typeData !== undefined && typeData.length > 0
+        ? typeData.toLowerCase().trim()
+        : 'none'
+
+    const makeSearchable = node?.data?.makeSearchable
+
     if (!content) return console.log('Content is null, not storing event')
 
     if (content && content !== '') {
-      const respUser = await storeEvent({ ...event, content } as any)
+      const respUser = await storeEvent({ ...event, content, type, makeSearchable } as any)
       if (!silent) node.display(respUser)
     } else {
       if (!silent) node.display('No input')

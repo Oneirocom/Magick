@@ -1,6 +1,6 @@
 import axios from 'axios';
+import { OPENAI_API_KEY } from '../config';
 
-const OPENAI_API_KEY = (import.meta?.env?.OPENAI_API_KEY || typeof process !== "undefined" && process?.env?.OPENAI_API_KEY) as string;
 export type CompletionData = {
   prompt: string
   temperature: number

@@ -6,7 +6,6 @@
     "client-core": "packages/client-core",
     "engine": "packages/engine",
     "plugin-discord": "packages/plugin-discord",
-    "plugin-weaviate": "packages/plugin-weaviate",
     "server": "apps/server",
     "server-core": "packages/server-core"
   }

@@ -3,7 +3,7 @@ config({
   path: '../../../.env.*',
 })
 
-const processEnv = typeof process === 'undefined' ? import.meta.env : process.env
+const processEnv = process.env
 
 export const SERVER_PORT = processEnv.PORT || 3030
 export const API_URL = processEnv.API_URL || `http://localhost:${SERVER_PORT}`
@@ -16,6 +16,7 @@ export const ENABLE_SPEECH_SERVER = processEnv.ENABLE_SPEECH_SERVER || true
 export const SEARCH_CORPUS_PORT = processEnv.SEARCH_CORPUS_PORT || 65531
 export const ENABLE_SEARCH_CORPUS = processEnv.ENABLE_SEARCH_CORPUS || true
 export const OPENAI_API_KEY = processEnv.OPENAI_API_KEY || ''
+export const OPENAI_ENDPOINT_OVERRIDE = processEnv.OPENAI_ENDPOINT_OVERRIDE || null
 export const HF_API_KEY = processEnv.HF_API_KEY || ''
 export const USSSL_SPEECH = processEnv.USSSL_SPEECH || true
 export const FILE_SERVER_PORT = processEnv.FILE_SERVER_PORT || 65530

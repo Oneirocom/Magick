@@ -1,6 +1,6 @@
-import { MagickWorkerInputs } from '@magickml/engine';
+import { MagickWorkerInputs } from '../types';
 // import vm2 from 'vm2';
-import { runPython } from '@magickml/engine';
+import runPython from '../functions/ProcessPython';
 
 export async function processCode(
   code: unknown,

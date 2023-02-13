@@ -69,7 +69,8 @@ export type QAArgs = {
 export type CreateEventArgs = Event
 
 export type GetEventArgs = {
-  type: string
+  type: string,
+  search?: string,
   observer: string,
   client: string,
   entities: any[],

@@ -50,14 +50,12 @@ const EventHandler = ({ pubSub, tab }) => {
     $REDO,
     $SAVE_SPELL,
     $SAVE_SPELL_DIFF,
-    $CREATE_SEARCH_CORPUS,
     $CREATE_AVATAR_WINDOW,
     $CREATE_MESSAGE_REACTION_EDITOR,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
     $CREATE_CONSOLE,
     $CREATE_TEXT_EDITOR,
-    $SERIALIZE,
     $EXPORT,
     $CLOSE_EDITOR,
     $PROCESS,
@@ -139,10 +137,6 @@ const EventHandler = ({ pubSub, tab }) => {
     }
   }
 
-  const createSearchCorpus = () => {
-    // createOrFocus(windowTypes.SEARCH_CORPUS, 'Search Corpus')
-  }
-
   const createAvatarWindow = () => {
     createOrFocus(windowTypes.AVATAR, 'Avatar Window')
   }
@@ -168,11 +162,6 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const createConsole = () => {
     createOrFocus(windowTypes.CONSOLE, 'Console')
-  }
-
-  const onSerialize = () => {
-    // eslint-disable-next-line no-console
-    console.log(serialize())
   }
 
   const onProcess = () => {
@@ -231,14 +220,12 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
-    [$CREATE_SEARCH_CORPUS(tab.id)]: createSearchCorpus,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,
     [$CREATE_AVATAR_WINDOW(tab.id)]: createAvatarWindow,
     [$CREATE_PLAYTEST(tab.id)]: createPlaytest,
     [$CREATE_INSPECTOR(tab.id)]: createInspector,
     [$CREATE_TEXT_EDITOR(tab.id)]: createTextEditor,
     [$CREATE_CONSOLE(tab.id)]: createConsole,
-    [$SERIALIZE(tab.id)]: onSerialize,
     [$EXPORT(tab.id)]: onExport,
     [$CLOSE_EDITOR(tab.id)]: onCloseEditor,
     [$UNDO(tab.id)]: onUndo,
