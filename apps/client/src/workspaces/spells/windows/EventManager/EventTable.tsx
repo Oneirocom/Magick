@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useMemo, useState } from 'react'
 import {
   useAsyncDebounce,
@@ -59,10 +58,7 @@ const DefaultColumnFilter = ({
       }}
       placeholder={'Search ' + Header}
       style={{
-        width: '80%',
-        height: 'unset',
-        paddingTop: '4px',
-        paddingBottom: '4px',
+        width: '100%',
       }}
     />
   )
@@ -75,7 +71,7 @@ function EventTable({ events, updateCallback }) {
     () => [
       {
         Header: 'Agent',
-        accessor: 'agent',
+        accessor: 'agentId',
         disableSortBy: true,
       },
       {
@@ -89,8 +85,8 @@ function EventTable({ events, updateCallback }) {
         disableSortBy: true,
       },
       {
-        Header: 'Text',
-        accessor: 'text',
+        Header: 'Content',
+        accessor: 'content',
         disableSortBy: true,
       },
       {
@@ -104,9 +100,19 @@ function EventTable({ events, updateCallback }) {
         disableSortBy: true,
       },
       {
+        Header: 'Entities',
+        accessor: 'entities',
+        disableFilters: true,
+      },
+      {
+        Header: 'Observer',
+        accessor: 'observer',
+        disableFilters: false,
+      },
+      {
         Header: 'Date',
         accessor: 'date',
-        disableFilters: true,
+        disableFilters: false,
       },
       {
         Header: 'Actions',
@@ -143,12 +149,12 @@ function EventTable({ events, updateCallback }) {
     updateEvent,
   }) => {
     const [val, setVal] = useState(value)
-    const onChange = e => setVal(e.target.value)
+    const onChange = e => typeof val !== 'object' && setVal(e.target.value)
     const onBlur = e => updateEvent(row, id, val)
     useEffect(() => setVal(value), [value])
     return (
       <input
-        value={val}
+        value={val && typeof val === 'object' ? JSON.stringify(val.data) : val}
         onChange={onChange}
         onBlur={onBlur}
         className="bare-input"
@@ -214,27 +220,6 @@ function EventTable({ events, updateCallback }) {
             setGlobalFilter={setGlobalFilter}
           />
         </Grid>
-        <Grid item xs={1}>
-          <Grid container justifyContent="end">
-            <CSVLink
-              data={originalRows}
-              filename="events.csv"
-              target="_blank"
-              style={{ textDecoration: 'none' }}
-            >
-              <button>
-                <FaFileCsv size={20} />
-              </button>
-            </CSVLink>
-            <button
-              style={{ position: 'relative', right: '90px', top: '-32px' }}
-              name="refresh"
-              onClick={updateCallback}
-            >
-              Refresh
-            </button>
-          </Grid>
-        </Grid>
       </Grid>
       <TableContainer component={Paper}>
         <Table {...getTableProps()}>
@@ -294,6 +279,23 @@ function EventTable({ events, updateCallback }) {
         showFirstButton
         showLastButton
       />
+                  <CSVLink
+              data={originalRows}
+              filename="events.csv"
+              target="_blank"
+              style={{ textDecoration: 'none', display: "inline", width: "8em" }}
+            >
+              <button               style={{ textDecoration: 'none', display: "inline" }}>
+                <FaFileCsv size={20} />
+              </button>
+            </CSVLink>
+            <button
+              style={{ display: 'inline', width: "8em" }}
+              name="refresh"
+              onClick={updateCallback}
+            >
+              Refresh
+            </button>
     </Stack>
   )
 }
