@@ -16,6 +16,8 @@ export async function makeEmbedding(
 
   const API_KEY = apiKey || OPENAI_API_KEY;
 
+  console.log('API_KEY', API_KEY)
+
   const headers = {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + API_KEY,
@@ -27,11 +29,7 @@ export async function makeEmbedding(
       { input, model },
       { headers: headers }
     );
-
-    if (resp.data.choices && resp.data.choices.length > 0) {
-      const choice = resp.data.choices[0];
-      return { success: true, choice };
-    }
+    return resp.data
   } catch (err) {
     console.log('ERROR');
     console.error(err);

@@ -1,6 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
-
+import pgvector from 'pgvector/pg'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 
 import {
@@ -42,7 +42,16 @@ export const event = (app: Application) => {
       all: [schemaHooks.validateQuery(eventQueryValidator), schemaHooks.resolveQuery(eventQueryResolver)],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(eventDataValidator), schemaHooks.resolveData(eventDataResolver)],
+      create: [
+        // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
+        (context: any) => {
+          const { embedding } = context.data
+          if( embedding ) {
+            context.data.embedding = pgvector.toSql(embedding)
+          }
+          return context
+        },
+        schemaHooks.validateData(eventDataValidator), schemaHooks.resolveData(eventDataResolver)],
       patch: [schemaHooks.validateData(eventPatchValidator), schemaHooks.resolveData(eventPatchResolver)],
       remove: []
     },
