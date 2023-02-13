@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import InfoCard from '../components/InfoCard'
+import { Box } from '@mui/material'
 
 type Fields = {
   model: string
@@ -69,15 +71,17 @@ export default function NewFineTuneForm() {
 
   return (
     <main className="mx-auto mb-8 space-y-8 max-w-2xl">
-      {/* TODO @thomageanderson: remove hardcoded color when global mui themes are supported */}
-      <Typography variant="h4" component="h2" color="white">
-        Fine Tune Completions Model
-      </Typography>
+      <Box component={'span'} sx={{ textAlign: 'center' }}>
+        {/* TODO @thomageanderson: remove hardcoded color when global mui themes are supported */}
+        <Typography variant="h4" component="h2" color="white">
+          Fine Tune Completions Model
+        </Typography>
+      </Box>
       {error && <ErrorMessage error={error} />}
       {data && (
-        <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <fieldset className="space-y-4">
+        <InfoCard>
+          <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <Label label="OpenAI Engine">
                 <SelectEngine name="model" required />
               </Label>
@@ -101,17 +105,22 @@ export default function NewFineTuneForm() {
                   }
                 />
               </Label>
-            </fieldset>
-            <Button
-              disabled={form.formState.isSubmitting}
-              type="submit"
-              variant="contained"
-              endIcon={<ChevronRightIcon />}
-            >
-              Create Model
-            </Button>
-          </form>
-        </FormProvider>
+              <Box
+                component={'div'}
+                sx={{ display: 'flex', justifyContent: 'flex-end', padding: 1 }}
+              >
+                <Button
+                  disabled={form.formState.isSubmitting}
+                  type="submit"
+                  variant="contained"
+                  endIcon={<ChevronRightIcon />}
+                >
+                  Create Model
+                </Button>
+              </Box>
+            </form>
+          </FormProvider>
+        </InfoCard>
       )}
     </main>
   )
