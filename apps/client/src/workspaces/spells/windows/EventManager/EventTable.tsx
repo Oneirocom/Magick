@@ -143,7 +143,7 @@ function EventTable({ events, updateCallback }) {
   }
 
   const EditableCell = ({
-    value,
+    value = '',
     row: { original: row },
     column: { id },
     updateEvent,

@@ -12,7 +12,7 @@ export const eventSchema = Type.Object(
     type: Type.Optional(Type.String()),
     observer: Type.Optional(Type.String()),
     sender: Type.Optional(Type.String()),
-    entities: Type.Optional(Type.Any()),
+    entities: Type.Optional(Type.Array(Type.String())),
     client: Type.Optional(Type.String()),
     channel: Type.Optional(Type.String()),
     channelType: Type.Optional(Type.String()),

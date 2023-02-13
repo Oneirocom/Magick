@@ -52,7 +52,7 @@ const defaultPlaytestData = `{
   "channel": "playtest",
   "channelType": "playtest",
   "agentId": 0,
-  "entities": {"data": ["playtestSender", "playtestObserver"]}
+  "entities": ["playtestSender", "playtestObserver"]
 }`
 
 const Playtest = ({ tab }) => {

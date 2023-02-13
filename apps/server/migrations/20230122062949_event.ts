@@ -7,18 +7,15 @@ export async function up(knex: Knex): Promise<void> {
     table.string('type')
     table.string('observer')
     table.string('sender')
-    table.json('entities')
     table.string('client')
     table.string('channel')
     table.string('channelType')
     table.string('content')
     table.integer('agentId')
+    table.specificType('entities', 'text ARRAY')
+    table.specificType('embedding', 'vector(1536)')
     table.string('date')
   })
-  // alter table events add column embedding vector
-  await knex.schema.alterTable('events', (table) => {
-    table.specificType('embedding', 'vector(1536)')
-  });
 }
 
 export async function down(knex: Knex): Promise<void> {
