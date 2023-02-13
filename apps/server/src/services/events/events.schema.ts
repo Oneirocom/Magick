@@ -19,6 +19,7 @@ export const eventSchema = Type.Object(
     content: Type.Optional(Type.String()),
     agentId: Type.Number(),
     date: Type.Optional(Type.String()),
+    embedding: Type.Optional(Type.Any()),
   },
   { $id: 'Event', additionalProperties: false }
 )
