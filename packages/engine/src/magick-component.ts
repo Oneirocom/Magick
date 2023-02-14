@@ -3,6 +3,7 @@ import { Node, Socket } from 'rete'
 import { PubSubBase, MagickEditor, MagickNode } from './types'
 import { MagickEngineComponent } from './'
 import { Task, TaskOptions } from './plugins/taskPlugin/task'
+import { NodeData } from 'rete/types/core/data'
 
 // Note: We do this so Typescript knows what extra properties we're
 // adding to the NodeEditor (in rete/editor.js). In an ideal world, we
@@ -49,6 +50,8 @@ export abstract class MagickComponent<
   workspaceType: 'module' | 'spell' | null | undefined
   displayName: string | undefined
 
+  nodeTaskMap: Record<number, MagickTask> = {}
+
   constructor(name: string) {
     super(name)
   }
@@ -58,6 +61,15 @@ export abstract class MagickComponent<
     await this.builder(node)
 
     return node
+  }
+
+  async run(node: NodeData, data: unknown = {}) {
+    if (!node || node === undefined) {
+      throw new Error('node is undefined')
+    }
+
+    const task = this.nodeTaskMap[node?.id]
+    if (task) await task.run(data)
   }
 
   async createNode(data = {}) {

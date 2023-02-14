@@ -26,10 +26,6 @@ export class TriggerIn extends MagickComponent<void> {
       outputs: {
         trigger: 'option',
       },
-      init: (task: MagickTask, node: MagickNode) => {
-        // store the nodes task inside the component
-        this.nodeTaskMap[node.id] = task
-      },
     }
 
     this.module = {
@@ -72,15 +68,6 @@ export class TriggerIn extends MagickComponent<void> {
   destroyed(node: MagickNode) {
     if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
     delete this.subscriptionMap[node.id]
-  }
-
-  async run(node: MagickNode, data: NodeData) {
-    if (!node || node === undefined) {
-      throw new Error('node is undefined')
-    }
-
-    const task = this.nodeTaskMap[node?.id]
-    if (task) await task.run(data)
   }
 
   // the builder is used to "assemble" the node component.
