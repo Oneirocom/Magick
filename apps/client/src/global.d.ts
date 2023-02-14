@@ -3,6 +3,12 @@ declare module '*.css'
 declare module '*.module.css'
 declare module '*.jpg'
 declare module '*.png'
+declare module '*.md' {
+  // When "Mode.React" is requested. VFC could take a generic like React.VFC<{ MyComponent: TypeOfMyComponent }>
+  import React from 'react'
+  const ReactComponent: React.VFC
+  export { ReactComponent }
+}
 
 declare global {
   interface Window {

@@ -120,16 +120,32 @@ export default function MiniDrawer({ children }) {
   return (
     <div style={{ display: 'flex', height: '100%' }}>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader open={open} onClick={toggleDrawer} sx={{justifyContent: open ? "normal" : "flex-end"}}>
-        {!open ? <IconButton>
-           <MenuIcon />
-          </IconButton>
-         : <img style={{
-          height: 16,
-          // on hover, show the finger cursor
-          cursor: 'pointer',
-         
-         }} src={MagickLogo} onClick={toggleDrawer} alt="" />}
+        <DrawerHeader
+          open={open}
+          onClick={toggleDrawer}
+          sx={{ justifyContent: open ? 'space-between' : 'flex-end' }}
+        >
+          {!open ? (
+            <IconButton>
+              <MenuIcon />
+            </IconButton>
+          ) : (
+            <img
+              style={{
+                height: 16,
+                // on hover, show the finger cursor
+                cursor: 'pointer',
+              }}
+              src={MagickLogo}
+              onClick={toggleDrawer}
+              alt=""
+            />
+          )}
+          {open && (
+            <IconButton>
+              <ChevronLeftIcon fontSize="medium" />
+            </IconButton>
+          )}
         </DrawerHeader>
         <List
           sx={{
@@ -137,11 +153,18 @@ export default function MiniDrawer({ children }) {
           }}
         >
           <DrawerItem
-            active={location.pathname === '/magick'}
+            active={location.pathname.includes('/magick')}
             Icon={AutoFixHighIcon}
             open={open}
             onClick={onClick('/magick')}
             text="Spells"
+          />
+          <DrawerItem
+            active={location.pathname.includes('/fineTuneManager')}
+            Icon={AutoStoriesIcon}
+            open={open}
+            onClick={onClick('/fineTuneManager')}
+            text="Fine Tuning"
           />
           {/* <DrawerItem
             active={location.pathname === '/spellbook'}
@@ -163,14 +186,14 @@ export default function MiniDrawer({ children }) {
             onClick={onClick('/agents')}
             text="Agents"
           />
-          <DrawerItem
+           {/* <DrawerItem
             active={location.pathname === '/searchCorpus'}
             Icon={ManageSearchIcon}
             onClick={onClick('/searchCorpus')}
             open={open}
             text="Search Corpus"
           />
-          {/* <DrawerItem
+         <DrawerItem
             active={location.pathname === '/settings'}
             Icon={SettingsIcon}
             open={open}
