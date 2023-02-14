@@ -391,13 +391,6 @@ export class discord_client {
       content = content.replace('!ping ', '')
     }
 
-    // async runComponent({
-    //   inputs,
-    //   componentName,
-    //   runSubspell = false,
-    //   runData = {},
-    // }: RunComponentArgs) {
-
     const response = await this.spellRunner.runComponent(
       {
       inputs: {},
@@ -470,7 +463,7 @@ export class discord_client {
 
     const oldResponse = this.getResponse(channel.id, id)
     if (oldResponse === undefined) {
-      await channel.messages.fetch(id).then(async (msg: any) => {})
+      await channel.messages.fetch(id).then(async (msg: any) => { })
       log('message not found')
       return
     }
@@ -643,8 +636,8 @@ export class discord_client {
               deleted: boolean
               permissionsFor: (arg0: any) => {
                 (): any
-                new (): any
-                has: { (arg0: string[]): any; new (): any }
+                new(): any
+                has: { (arg0: string[]): any; new(): any }
               }
               name: string | boolean
               id: string | boolean

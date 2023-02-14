@@ -1,4 +1,4 @@
-import { magickApiRootUrl } from '../../../config'
+import { magickApiRootUrl } from '../../config'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState, useRef } from 'react'

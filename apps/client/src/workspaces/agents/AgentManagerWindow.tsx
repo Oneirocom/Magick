@@ -1,6 +1,6 @@
-import FileInput from '../../../screens/HomeScreen/components/FileInput'
+import FileInput from '../../screens/HomeScreen/components/FileInput'
 import React, { useEffect, useState } from 'react'
-import { magickApiRootUrl } from '../../../config'
+import { magickApiRootUrl } from '../../config'
 
 import AgentWindow from './Agent'
 
@@ -8,10 +8,8 @@ const AgentManagerWindow = () => {
   const [data, setData] = useState<Record<string, unknown> | null>(null)
 
   const resetData = async () => {
-    const res = await fetch(
-      `${magickApiRootUrl}/agents`
-    )
-    const json = await res.json();
+    const res = await fetch(`${magickApiRootUrl}/agents`)
+    const json = await res.json()
     setData(json.data)
     console.log('res is', json)
   }

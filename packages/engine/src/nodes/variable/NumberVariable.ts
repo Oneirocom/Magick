@@ -60,7 +60,9 @@ export class NumberVariable extends MagickComponent<InputReturn> {
 
     this.name =
       (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
-    node.display(_var.toString())
+
+    // TODO: need to be fixed, issue of loosing display() function from NodeData context
+    // node.display(_var.toString())
 
     return {
       output: _var,
