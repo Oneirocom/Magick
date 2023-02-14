@@ -9,6 +9,7 @@ import {
   selectStateBySpellId,
   addLocalState,
 } from '../../../state/localState'
+import Select from '../../../components/Select/Select'
 import { usePubSub } from '../../../contexts/PubSubProvider'
 import Window from '../../../components/Window/Window'
 import css from '../../../screens/Magick/magick.module.css'
@@ -16,6 +17,12 @@ import { useFeathers } from '../../../contexts/FeathersProvider'
 import { useAppSelector } from '../../../state/hooks'
 import { useEditor } from '../../contexts/EditorProvider'
 import { projectId } from '@magickml/engine'
+
+import {
+  useGetSpellQuery,
+  useLazyGetSpellQuery,
+} from 'apps/client/src/state/api/spells'
+import { notDeepEqual } from 'assert'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
@@ -56,6 +63,14 @@ const Playtest = ({ tab }) => {
   const dispatch = useDispatch()
   const { serialize } = useEditor()
 
+  const { data: spellData } = useGetSpellQuery(
+    { spellId: tab.spellId },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: !tab.spellId,
+    }
+  )
+
   const localState = useAppSelector(state => {
     return selectStateBySpellId(state.localState, tab.spellId)
   })
@@ -71,6 +86,28 @@ const Playtest = ({ tab }) => {
     },
     [history]
   )
+
+  // we want to set the options for the dropdown by parsing the spell graph
+  // and looking for nodes with the playtestToggle set to true
+  const [playtestOptions, setPlaytestOptions] = useState([])
+  const [playtestOption, setPlaytestOption] = useState('')
+
+  useEffect(() => {
+    console.log('SPELL DATA!!!', spellData)
+    if (!spellData || !spellData.data[0].graph) return
+
+    const graph = spellData.data[0].graph
+
+    console.log('GRAPH!!!', graph)
+    const options = Object.values(graph.nodes)
+      .filter(node => node.data.playtestToggle)
+      .map(node => ({
+        value: node.data.name ?? node.name,
+        label: node.data.name ?? node.name,
+      }))
+
+    setPlaytestOptions(options)
+  }, [spellData])
 
   // Keep scrollbar at bottom of its window
   useEffect(() => {
@@ -181,8 +218,19 @@ const Playtest = ({ tab }) => {
     setOpenData(!openData)
   }
 
+  const onSelectChange = async ({ value }) => {
+    setPlaytestOption(value)
+  }
+
   const toolbar = (
     <React.Fragment>
+      <Select
+        style={{ width: '100%', zIndex: 10 }}
+        options={playtestOptions}
+        onChange={onSelectChange}
+        placeholder="target node"
+        creatable={false}
+      />
       <form>
         <label htmlFor="openai-api-key">API Key</label>
         <input
