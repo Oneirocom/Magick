@@ -70,6 +70,7 @@ function install(editor: MagickEditor) {
 
       const task = new Task(inputs, component, node, taskCaller)
 
+      component.nodeTaskMap[node.id] = task
       if (taskOptions.init) taskOptions.init(task, node)
 
       // Since some outputs are generated dynamically based on data stored in the node

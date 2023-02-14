@@ -38,9 +38,6 @@ export class DiscordInput extends MagickComponent<InputReturn> {
         output: 'output',
         trigger: 'option',
       },
-      init: (task = {} as Task, node: MagickNode) => {
-        this.nodeTaskMap[node.id] = task
-      },
     }
 
     this.module = {
@@ -119,15 +116,6 @@ export class DiscordInput extends MagickComponent<InputReturn> {
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
     return node.addOutput(out).addOutput(trigger)
-  }
-
-  async run(node: MagickNode, data: NodeData) {
-    if (!node || node === undefined) {
-      throw new Error('node is undefined')
-    }
-
-    const task = this.nodeTaskMap[node?.id]
-    if (task) await task.run(data)
   }
 
   // @ts-ignore
