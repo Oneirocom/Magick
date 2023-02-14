@@ -14,7 +14,8 @@ export class SpellService<ServiceParams extends Params = SpellParams> extends Kn
   SpellData,
   ServiceParams,
   SpellPatch
-> {}
+> {
+}
 
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
