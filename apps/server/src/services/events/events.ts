@@ -1,3 +1,5 @@
+
+//@ts-nocheck
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
 import pgvector from 'pgvector/pg'
@@ -5,10 +7,16 @@ import postgres from 'postgres'
 import { hooks as schemaHooks } from '@feathersjs/schema' 
 const sql = postgres(process.env.DATABASE_URL)
 async function getUsersOver(embedding) {
-  const users = await sql`
+  var users
+  try {
+    users = await sql`
     select * from events order by embedding <-> ${embedding} limit 1;`
+  } catch (e){
+    console.log(e)
+  }
   return users
 }
+  
 
 import {
   eventDataValidator,
@@ -68,11 +76,30 @@ export const event = (app: Application) => {
 
       ],
       find:[
-          async (context: HookContext) => {
-            //let embed = await makeEmbedding({input: context.params.query.content})
-
-            //let temp = await getUsersOver("["+embed.data[0].embedding+"]")
-            return context.params.query.embedding
+          async (context: any) => {
+            if (!(context.params.query.embedding)){
+              try {
+                const query = context.service.createQuery(context.params)
+                const cQuery = context.params.query;
+                Object.keys(cQuery).map(key => {
+                  query[key] = cQuery[key];
+                });
+                context.params.query = query;
+              } catch (e){
+                console.log(e)
+              }
+            } else {
+              console.log("FIND")
+              let undecoded_array = JSON.parse(context.params.query.embedding)
+              let embedding_array = undecoded_array.map(element => {
+                  return element/100000.0
+              })
+              let temp = await getUsersOver("["+embedding_array+"]")
+              return {
+                "result" : temp
+              }
+            }
+            
           }
         ],
       all: []
