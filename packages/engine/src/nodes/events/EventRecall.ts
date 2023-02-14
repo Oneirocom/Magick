@@ -13,11 +13,19 @@ import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, anySocket, eventSocket, stringSocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
+import axios from 'axios'
 const info = 'Event Recall is used to get conversation for an agent and user'
 
 //add option to get only events from max time difference (time diff, if set to 0 or -1, will get all events, otherwise will count in minutes)
 type InputReturn = {
   events: any[]
+}
+function toBinary(string) {
+  const codeUnits = new Uint16Array(string.length);
+  for (let i = 0; i < codeUnits.length; i++) {
+    codeUnits[i] = string.charCodeAt(i);
+  }
+  return btoa(String.fromCharCode(...new Uint8Array(codeUnits.buffer)));
 }
 
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
@@ -78,7 +86,20 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     _outputs: MagickWorkerOutputs,
     { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
-    
+    const getEventsbyEmbedding = async ( params: any) => {
+      const urlString = `${API_ROOT_URL}/events`
+      const url = new URL(urlString)
+      let embeddings = params['embedding']
+      console.log(embeddings)
+      const response = await axios.get(urlString, {
+        params: {
+          embedding: "[" + params['embedding'] + "]"
+        }
+      })
+      return response.data
+
+
+    }
     const getEvents = async (params: GetEventArgs) => {
       const urlString = `${API_ROOT_URL}/events`
   
@@ -119,8 +140,22 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       channelType,
       maxCount,
     }
+    var events
     if(embedding) data['embedding'] = embedding
-    const events = await getEvents(data)
+    if (embedding) {
+      if(embedding.length == 1536) {
+        console.log(embedding)
+        const enc_embed = embedding.map(element => {
+          var result  = Math.floor(element*100000)
+          return result
+        })
+        events = await getEventsbyEmbedding({embedding: enc_embed})
+      } else {
+        console.log("Embedding Size not matching with the table")
+      }
+    } else {
+      events = await getEvents(data)
+    } 
     if (!silent) node.display(`Event ${type} found` || 'Not found')
     console.log('events', events)
     return {
