@@ -8,18 +8,14 @@ import {
 } from '@magickml/systems'
 import {
   WEAVIATE_IMPORT_DATA,
-  USESSL,
-  SERVER_PORT,
 } from '@magickml/server-config'
 
 import * as fs from 'fs'
 import http from 'http'
 import HttpStatus from 'http-status-codes'
-import https from 'https'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
-import path from 'path'
 import 'regenerator-runtime/runtime'
 
 import { Handler, Method, Middleware } from './types'
@@ -140,27 +136,10 @@ async function init() {
   app.use(router.routes()).use(router.allowedMethods())
 
   const PORT: number = Number(process.env.PORT) || 5000
-  const useSSL =
-    USESSL === 'true' &&
-    fs.existsSync(path.join(__dirname, './certs/')) &&
-    fs.existsSync(path.join(__dirname, './certs/key.pem')) &&
-    fs.existsSync(path.join(__dirname, './certs/cert.pem'))
+  http.createServer(app.callback()).listen(PORT);
 
-  var optionSsl = {
-    key: useSSL ? fs.readFileSync(path.join(__dirname, './certs/key.pem')) : '',
-    cert: useSSL
-      ? fs.readFileSync(path.join(__dirname, './certs/cert.pem'))
-      : '',
-  }
-  useSSL
-    ? https
-        .createServer(optionSsl, app.callback())
-        .listen(PORT, 'localhost', () => {
-          console.log('Https Server listening on: localhost:' + PORT)
-        })
-    : http.createServer(app.callback()).listen(PORT, 'localhost', () => {
-        console.log('Http Server listening on: localhost:' + PORT)
-      })
+  console.log(`Server running on port ${PORT}`)
+
   // await initLoop()
 
 }
