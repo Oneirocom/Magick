@@ -83,12 +83,9 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       const url = new URL(urlString)
       let embeddings = params['embedding']
       console.log(embeddings)
-      const response = await axios.get(urlString, {
-        params: {
-          embedding: "[" + params['embedding'] + "]"
-        }
-      })
-      return response.data
+      const response = await fetch(urlString
+        + "?embedding=" + "[" + params['embedding'] + "]")
+      return response.json()
 
 
     }
