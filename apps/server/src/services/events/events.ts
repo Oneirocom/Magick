@@ -1,7 +1,22 @@
+
+//@ts-nocheck
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
 import pgvector from 'pgvector/pg'
-import { hooks as schemaHooks } from '@feathersjs/schema'
+import postgres from 'postgres'
+import { hooks as schemaHooks } from '@feathersjs/schema' 
+const sql = postgres(process.env.DATABASE_URL)
+async function getUsersOver(embedding) {
+  var users
+  try {
+    users = await sql`
+    select * from events order by embedding <-> ${embedding} limit 1;`
+  } catch (e){
+    console.log(e)
+  }
+  return users
+}
+  
 
 // array 1536 values in length
 const nullArray = new Array(1536).fill(0)
@@ -17,8 +32,9 @@ import {
   eventQueryResolver
 } from './events.schema'
 
-import type { Application } from '../../declarations'
+import type { Application, HookContext } from '../../declarations'
 import { EventService, getOptions } from './events.class'
+import { makeEmbedding } from 'packages/engine/src/functions/makeEmbedding'
 
 export * from './events.class'
 export * from './events.schema'
@@ -71,6 +87,36 @@ export const event = (app: Application) => {
       remove: []
     },
     after: {
+      create:[
+
+      ],
+      find:[
+          async (context: any) => {
+            if (!(context.params.query.embedding)){
+              try {
+                const query = context.service.createQuery(context.params)
+                const cQuery = context.params.query;
+                Object.keys(cQuery).map(key => {
+                  query[key] = cQuery[key];
+                });
+                context.params.query = query;
+              } catch (e){
+                console.log(e)
+              }
+            } else {
+              console.log("FIND")
+              let undecoded_array = JSON.parse(context.params.query.embedding)
+              let embedding_array = undecoded_array.map(element => {
+                  return element/100000.0
+              })
+              let temp = await getUsersOver("["+embedding_array+"]")
+              return {
+                "result" : temp
+              }
+            }
+            
+          }
+        ],
       all: []
     },
     error: {
