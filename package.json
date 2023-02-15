@@ -113,7 +113,7 @@
     "socket.io-client": "^4.4.1",
     "stream-browserify": "^3.0.0",
     "styled-components": "^5.3.5",
-    "three": "^0.146.0",
+    "three": "^0.148.0",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
     "twilio": "^3.84.1",
