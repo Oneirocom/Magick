@@ -15,7 +15,8 @@
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
-    "postinstall": "npx prisma generate && npm run db:init"
+    "postinstall": "npx prisma generate && npm run db:init",
+    "start-heroku": "node dist/apps/server/main.js"
   },
   "resolutions": {
     "@types/react": "18.0.2"
