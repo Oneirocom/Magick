@@ -96,7 +96,7 @@ class PluginManager {
         })
         return serverInits
     }
-    
+
 
     getServerRoutes() {
         let serverRoutes = []
@@ -117,7 +117,7 @@ class PluginManager {
         let serviceList = []
         this.pluginList.forEach((plugin) => {
             Object.keys(plugin.services).forEach((key) => {
-                serviceList.push(plugin.services[key])
+                serviceList.push([key, plugin.services[key]])
             })
         })
         return serviceList

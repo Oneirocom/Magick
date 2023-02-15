@@ -52,6 +52,17 @@ const Input = props => {
   )
 }
 
+const defaultPlaytestData = `{
+  "sender": "playtestSender",
+  "observer": "playtestObserver",
+  "type": "playtest",
+  "client": "playtest",
+  "channel": "playtest",
+  "channelType": "playtest",
+  "agentId": 0,
+  "entities": ["playtestSender", "playtestObserver"]
+}`
+
 const Playtest = ({ tab }) => {
   const scrollbars = useRef<any>()
   const [history, setHistory] = useState([])
@@ -125,7 +136,7 @@ const Playtest = ({ tab }) => {
   useEffect(() => {
     // Set up a default for the local state here
     if (!localState) {
-      dispatch(addLocalState({ spellId: tab.spellId, playtestData: '{}' }))
+      dispatch(addLocalState({ spellId: tab.spellId, playtestData: defaultPlaytestData }))
       return
     }
   }, [localState])
@@ -167,10 +178,11 @@ const Playtest = ({ tab }) => {
       if (!json) return
 
       toSend = {
-        input: value,
-        output: value,
+        content: value,
         sender: 'Speaker',
         observer: 'Agent',
+        agentId: 0,
+        client: "playtest",
         channel: 'previewChannel',
         channelType: 'previewChannelType',
         ...JSON.parse(json),
@@ -203,7 +215,7 @@ const Playtest = ({ tab }) => {
 
   const onDataChange = dataText => {
     console.log('new data text', dataText)
-    dispatch(upsertLocalState({ spellId: tab.spellId, playtestData: dataText }))
+    dispatch(upsertLocalState({ spellId: tab.spellId, playtestData: dataText ?? defaultPlaytestData }))
   }
 
   const onChange = e => {
@@ -280,7 +292,7 @@ const Playtest = ({ tab }) => {
               language="javascript"
               value={localState?.playtestData}
               options={options}
-              defaultValue={localState?.playtestData || '{}'}
+              defaultValue={localState?.playtestData || defaultPlaytestData}
               onChange={onDataChange}
               beforeMount={handleEditorWillMount}
             />

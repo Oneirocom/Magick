@@ -1,6 +1,6 @@
 {
   "name": "@magickml/engine",
   "version": "0.1.0",
-  "main": "./engine.umd.js",
-  "module": "./engine.es.js"
+  "main": "./src/index.ts",
+  "module": "./src/index.ts"
 }

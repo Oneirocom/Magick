@@ -10,6 +10,8 @@ import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentT
 import { GetRecentTransactions } from './ethereum/GetRecentTransactions'
 import { EventDestructureComponent } from './events/EventDestructure'
 import { EventRestructureComponent } from './events/EventRestructure'
+import { EventRecall } from './events/EventRecall'
+import { EventStore } from './events/EventStore'
 import { InputComponent } from './io/Input'
 import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
@@ -60,14 +62,18 @@ import { BooleanVariable } from './variable/BooleanVariable'
 import { FewshotVariable } from './variable/FewshotVariable'
 import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
+import { GetCachedEmbedding } from './ml/GetCachedEmbedding'
 
-import { pluginManager } from '@magickml/engine'
+import { pluginManager } from '../plugin'
+import { EventsToConversation } from './events/EventsToConversation'
+import { CreateEmbedding } from './ml/CreateEmbedding'
 
 export let components = {
   alert: () => new Alert(),
   booleanGate: () => new BooleanGate(),
   randomGate: () => new RandomGate(),
   cast: () => new Cast(),
+  createEmbedding: () => new CreateEmbedding(),
   inRange: () => new InRange(),
   code: () => new Code(),
   python: () => new Python(),
@@ -75,6 +81,7 @@ export let components = {
   destructure: () => new Destructure(),
   complexStringMatcher: () => new ComplexStringMatcher(),
   echo: () => new Echo(),
+  getCachedEmbedding: () => new GetCachedEmbedding(),
   stringReplacer: () => new StringReplacer(),
   textToSpeech: () => new TextToSpeech(),
   textCompletion: () => new TextCompletion(),
@@ -98,8 +105,11 @@ export let components = {
   arrayVariable: () => new ArrayVariable(),
   logicalOperator: () => new LogicalOperator(),
   inputComponent: () => new InputComponent(),
-  inputDestructureComponent: () => new EventDestructureComponent(),
-  inputRestructureComponent: () => new EventRestructureComponent(),
+  eventDestructure: () => new EventDestructureComponent(),
+  eventRestructure: () => new EventRestructureComponent(),
+  eventRecall: () => new EventRecall(),
+  eventStore: () => new EventStore(),
+  eventsToConversation: () => new EventsToConversation(),
   inputsToJson: () => new InputsToJSON(),
   joinListComponent: () => new JoinListComponent(),
   moduleComponent: () => new SpellComponent(),

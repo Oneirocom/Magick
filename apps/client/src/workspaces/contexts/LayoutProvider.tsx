@@ -18,7 +18,6 @@ const windowTypes: WindowTypes = {
   EDITOR: 'editor',
   PLAYTEST: 'playtest',
   CONSOLE: 'debugConsole',
-  SEARCH_CORPUS: 'searchCorpus',
   AVATAR: 'avatar',
 }
 
@@ -29,7 +28,6 @@ type WindowType =
   | 'playtest'
   | 'debugConsole'
   | 'settings'
-  | 'searchCorpus'
   | 'avatar'
 type WindowTypes = Record<string, WindowType>
 
