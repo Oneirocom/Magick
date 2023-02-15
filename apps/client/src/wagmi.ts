@@ -9,13 +9,30 @@ import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
 import { publicProvider } from 'wagmi/providers/public'
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [mainnet, polygonMumbai, ...(import.meta.env?.MODE === 'development' ? [goerli] : [])],
+  [
+    mainnet,
+    polygonMumbai,
+    ...(import.meta.env?.MODE === 'development' ? [goerli] : []),
+  ],
   [
     publicProvider(),
-    jsonRpcProvider({ rpc: (chain) => (chain.id === polygonMumbai.id ? { http: 'https://rpc-mumbai.maticvigil.com', } : null), }),
-    jsonRpcProvider({ rpc: (chain) => (chain.id === polygonMumbai.id ? { http: 'https://polygon-mumbai.blockpi.network/v1/rpc/public', } : null), }),
-    alchemyProvider({ apiKey: import.meta.env.VITE_APP_ETH_PROVIDER_ALCHEMY_KEY_MUMBAI as string })
-  ],
+    jsonRpcProvider({
+      rpc: chain =>
+        chain.id === polygonMumbai.id
+          ? { http: 'https://rpc-mumbai.maticvigil.com' }
+          : null,
+    }),
+    jsonRpcProvider({
+      rpc: chain =>
+        chain.id === polygonMumbai.id
+          ? { http: 'https://polygon-mumbai.blockpi.network/v1/rpc/public' }
+          : null,
+    }),
+    alchemyProvider({
+      apiKey: import.meta.env
+        .VITE_APP_ETH_PROVIDER_ALCHEMY_KEY_MUMBAI as string,
+    }),
+  ]
 )
 
 export const client = createClient({
