@@ -62,7 +62,8 @@ const DataControls = ({
           width,
           control,
           name: inspectorData.name + ' (' + key + ')',
-          initialValue: data[control.dataKey] || '',
+          initialValue:
+            data[control.dataKey] === 0 ? 0 : data[control.dataKey] || '',
           updateData,
           tab,
         }

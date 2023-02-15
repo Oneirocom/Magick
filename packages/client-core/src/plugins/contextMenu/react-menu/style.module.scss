@@ -1,0 +1,31 @@
+@import '../vars.scss';
+@import '../style.module.scss';
+
+.context-menu {
+  left: 0;
+  top: 0;
+  position: fixed;
+  padding: 10px;
+  width: $width;
+  margin-top: -20px;
+  margin-left: -$width/2;
+  .item {
+    @extend .item;
+    &.hasSubitems:after {
+      content: '►';
+      position: absolute;
+      opacity: 0.6;
+      right: 5px;
+      top: 5px;
+    }
+    .subitems {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      width: $width;
+      .subitem {
+        @extend .item;
+      }
+    }
+  }
+}
