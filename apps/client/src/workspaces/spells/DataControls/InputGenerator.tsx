@@ -1,17 +1,6 @@
 import { useState, useEffect } from 'react'
-
-const SingleInput = props => {
-  return (
-    <div style={{ marginBottom: 10, flex: 1, width: '100%' }}>
-      <p style={{ display: 'inline' }}>{props.name}</p>
-      <span style={{ float: 'right' }}>
-        <button className="list" onClick={() => props.delete(props.name)}>
-          Delete
-        </button>
-      </span>
-    </div>
-  )
-}
+import Form from './Form'
+import SingleElement from './SingleElement'
 
 const AddNewInput = props => {
   const [value, setValue] = useState('')
@@ -20,24 +9,20 @@ const AddNewInput = props => {
     setValue(e.target.value)
   }
 
-  const onAdd = () => {
+  const onAdd = e => {
+    if (!value) return
+    e.preventDefault()
     props.addInput(value)
     setValue('')
   }
 
   return (
-    <div style={{ display: 'flex', gap: 'var(--extraSmall)' }}>
-      <input
-        style={{ flex: 6 }}
-        value={value}
-        type="text"
-        onChange={onChange}
-        placeholder={'Node input text...'}
-      />
-      <button style={{ flex: 1 }} onClick={onAdd}>
-        + Add
-      </button>
-    </div>
+    <Form
+      value={value}
+      placeHolder="Node input text..."
+      onChange={onChange}
+      onAdd={onAdd}
+    />
   )
 }
 
@@ -80,7 +65,12 @@ const InputGenerator = ({ updateData, control, initialValue }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
       {inputs.map((input, i) => (
-        <SingleInput name={input.name} key={i} delete={onDelete} />
+        <SingleElement
+          name={input.name}
+          key={i}
+          delete={onDelete}
+          type={input.socketType}
+        />
       ))}
       <AddNewInput addInput={addInput} />
     </div>
