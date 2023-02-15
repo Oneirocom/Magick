@@ -38,7 +38,6 @@
     "@monaco-editor/react": "^4.2.1",
     "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.5.3",
-    "@nxext/capacitor": "^15.2.0",
     "@pixiv/three-vrm": "^1.0.6",
     "@prisma/client": "^4.8.1",
     "@react-three/drei": "^9.46.5",
