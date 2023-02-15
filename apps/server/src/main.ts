@@ -140,7 +140,7 @@ async function init() {
 
   app.use(router.routes()).use(router.allowedMethods())
 
-  const PORT: number = Number(SERVER_PORT) || 8001
+  const PORT: number = Number(SERVER_PORT) || 5000
   const useSSL =
     USESSL === 'true' &&
     fs.existsSync(path.join(__dirname, './certs/')) &&

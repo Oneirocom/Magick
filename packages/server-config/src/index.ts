@@ -3,7 +3,7 @@ config({
   path: '../../../.env.*',
 })
 
-export const SERVER_PORT = process.env.PORT || 8001
+export const SERVER_PORT = process.env.PORT || 5000
 export const API_URL = process.env.API_URL || `http://localhost:${SERVER_PORT}`
 export const API_ROOT_URL =
   process.env.API_URL || `http://localhost:${SERVER_PORT}`
