@@ -19,14 +19,13 @@ import https from 'https'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
-import koaStatic from 'koa-static'
 import path from 'path'
 import 'regenerator-runtime/runtime'
 
 import { Handler, Method, Middleware } from './types'
 
 // todo probaly want to get ride of this.  Not super secure.
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const app: Koa = new Koa()
 const router: Router = new Router()
@@ -140,7 +139,7 @@ async function init() {
 
   app.use(router.routes()).use(router.allowedMethods())
 
-  const PORT: number = Number(SERVER_PORT) || 5000
+  const PORT: number = Number(process.env.PORT) || 5000
   const useSSL =
     USESSL === 'true' &&
     fs.existsSync(path.join(__dirname, './certs/')) &&
