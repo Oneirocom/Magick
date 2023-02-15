@@ -9,7 +9,7 @@
     "agents": "npx nx run agent-server:serve",
     "server": "npx nx run server:serve",
     "containers": "concurrently \"docker-compose up\" \"sleep 20 && npm run db:init && echo database synced!\"",
-    "build": "npx nx run-many --target=build --projects=server,client",
+    "build": "npx nx build",
     "start": "npx nx serve",
     "test": "npx nx test",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",

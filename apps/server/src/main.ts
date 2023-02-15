@@ -164,9 +164,6 @@ async function init() {
       })
   // await initLoop()
 
-// serve static files from ../client
-app.use(koaStatic(path.join(__dirname, '../client')))
-
 }
 
 init()
