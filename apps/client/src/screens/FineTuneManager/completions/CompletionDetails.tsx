@@ -6,6 +6,7 @@ import FineTuneMetadata from '../fine-tunes/FineTuneMetadata'
 import FineTuneResultsCard from '../fine-tunes/FineTuneResultsCard'
 import CompletionForm from './CompletionForm'
 import { useParams } from 'react-router'
+import LoginRequired from '../account/LoginRequired'
 
 export default function CompletionDetails() {
   const { fineTuneId } = useParams()
@@ -16,16 +17,18 @@ export default function CompletionDetails() {
   )
 
   return (
-    <DetailsPage name="fine-tune" id={fineTuneId} error={error}>
-      {fineTune ? (
-        <>
-          <CompletionForm fineTune={fineTune} />
-          <FineTuneMetadata fineTune={fineTune} />
-          <FineTuneResultsCard fineTune={fineTune} />
-        </>
-      ) : (
-        <></>
-      )}
-    </DetailsPage>
+    <LoginRequired>
+      <DetailsPage name="Fine Tune" id={fineTuneId} error={error}>
+        {fineTune ? (
+          <>
+            <CompletionForm fineTune={fineTune} />
+            <FineTuneMetadata fineTune={fineTune} />
+            <FineTuneResultsCard fineTune={fineTune} />
+          </>
+        ) : (
+          <></>
+        )}
+      </DetailsPage>
+    </LoginRequired>
   )
 }

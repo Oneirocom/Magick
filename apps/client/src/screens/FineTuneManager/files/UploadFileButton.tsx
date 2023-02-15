@@ -1,10 +1,8 @@
-// import { faFileUpload } from '@fortawesome/free-solid-svg-icons/faFileUpload'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { Button } from '@nextui-org/react'
 import { OpenAI } from '../../../../../../@types/openai'
 import React, { useEffect, useRef } from 'react'
 import useUploadFile, { Enforce, MimeTypes } from './useUploadFile'
 import Button from '@mui/material/Button'
+import UploadFileIcon from '@mui/icons-material/UploadFile'
 
 export default function UploadFileButton({
   enforce,
@@ -34,7 +32,12 @@ export default function UploadFileButton({
         style={{ display: 'none' }}
         type="file"
       />
-      <Button disabled={isLoading} onClick={() => inputRef.current?.click()}>
+      <Button
+        variant="contained"
+        disabled={isLoading}
+        onClick={() => inputRef.current?.click()}
+        startIcon={<UploadFileIcon />}
+      >
         Upload File
       </Button>
     </span>

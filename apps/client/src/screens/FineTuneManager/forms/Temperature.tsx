@@ -1,20 +1,22 @@
-import { Input } from "@nextui-org/react";
-import React from "react";
-import { useFormContext } from "react-hook-form";
-import Label from "./Label";
+import { TextField } from '@mui/material'
+import React from 'react'
+import { useFormContext } from 'react-hook-form'
+import Label from './Label'
 
 export default function Temperature() {
-  const form = useFormContext();
+  const form = useFormContext()
 
   return (
     <Label label="Temperature">
-      <Input
+      <TextField
         min={0}
         max={1}
-        step={0.1}
+        inputProps={{
+          step: 0.1,
+        }}
         type="number"
-        {...form.register("temperature", { min: 0, max: 1 })}
+        {...form.register('temperature', { min: 0, max: 1 })}
       />
     </Label>
-  );
+  )
 }

@@ -1,24 +1,24 @@
-import { useFormContext } from "react-hook-form";
-import Select from "react-select";
+import { useFormContext } from 'react-hook-form'
+import Select from 'react-select'
 
-export const BaseEngines = ["ada", "babbage", "curie", "davinci"];
-export const InstructEngines = ["davinci-instruct-beta", "curie-instruct-beta"];
+export const BaseEngines = ['ada', 'babbage', 'curie', 'davinci']
+export const InstructEngines = ['davinci-instruct-beta', 'curie-instruct-beta']
 
 export default function SelectEngine({
   engines = BaseEngines,
-  name = "model",
+  name = 'model',
   required,
 }: {
-  engines?: string[];
-  name: string;
-  required?: boolean;
+  engines?: string[]
+  name: string
+  required?: boolean
 }) {
-  const form = useFormContext();
+  const form = useFormContext()
 
-  const options = engines.map((engine) => ({
+  const options = engines.map(engine => ({
     label: engine,
     value: engine,
-  }));
+  }))
 
   return (
     <Select
@@ -26,13 +26,21 @@ export default function SelectEngine({
       className="w-44"
       classNamePrefix="react-select"
       defaultValue={options.find(
-        (option) => option.value === form.getValues()[name]
+        option => option.value === form.getValues()[name]
       )}
       isClearable={!required}
       escapeClearsValue
       isSearchable={false}
-      onChange={(selection) => form.setValue(name, selection?.value ?? "")}
+      onChange={selection => form.setValue(name, selection?.value ?? '')}
       options={options}
+      styles={{
+        option: styles => {
+          return {
+            ...styles,
+            color: 'black',
+          }
+        },
+      }}
     />
-  );
+  )
 }

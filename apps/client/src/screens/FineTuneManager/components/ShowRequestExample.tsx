@@ -1,7 +1,7 @@
 import Tooltip from '@mui/material/Tooltip'
 import { useState } from 'react'
 import { useCopyToClipboard } from 'usehooks-ts'
-import InfoCard from './InfoCard'
+import ExpansionDetails from './ExpansionDetails'
 
 export default function ShowRequestExample({
   reference,
@@ -20,30 +20,27 @@ export default function ShowRequestExample({
   const code = JSON.stringify(request, null, 2)
 
   return (
-    <InfoCard>
-      <details className="bg-white">
-        <summary className="font-bold">Request JSON</summary>
-        <div className="relative prose">
-          <Tooltip
-            className="absolute top-0 right-0 p-2"
-            title={copied ? 'Copied!' : 'Click to copy'}
-            placement="left"
-            onClose={() => setCopied(false)}
-            onClick={async () => {
-              await copy(code)
-              setCopied(true)
-            }}
-          >
-            <></>
-          </Tooltip>
-          <pre>{code}</pre>
-        </div>
-        <p>
-          <a href={reference} target="_blank">
-            OpenAI Reference
-          </a>
-        </p>
-      </details>
-    </InfoCard>
+    <ExpansionDetails title={'Request JSON'}>
+      <div className="relative prose">
+        <Tooltip
+          className="absolute top-0 right-0 p-2"
+          title={copied ? 'Copied!' : 'Click to copy'}
+          placement="left"
+          onClose={() => setCopied(false)}
+          onClick={async () => {
+            await copy(code)
+            setCopied(true)
+          }}
+        >
+          <></>
+        </Tooltip>
+        <pre>{code}</pre>
+      </div>
+      <p>
+        <a href={reference} target="_blank">
+          OpenAI Reference
+        </a>
+      </p>
+    </ExpansionDetails>
   )
 }

@@ -4,7 +4,9 @@ The file can be CSV, Excel, or JSONL. It must contain two columns, "prompt" and 
 
 Then create a new model using that training file. You can use a second file for validating the model. Read more about [prompt design](https://beta.openai.com/docs/guides/completion/prompt-design).
 
-For example:
+## For example:
+
+---
 
 ```json
 { "prompt": "Company: BHFF insurance\nProduct: allround insurance\nAd:One stop shop for all your insurance needs!\nSupported:",
@@ -12,3 +14,5 @@ For example:
 { "prompt": "Company: Loft conversion specialists\nProduct: -\nAd:Straight teeth in weeks!\nSupported:",
   "completion":"no" }
 ```
+
+---
