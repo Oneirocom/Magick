@@ -344,7 +344,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const completion = async (body: CompletionBody) => {
-    const url = `${import.meta.env.VITE_APP_API_URL || 'http://localhost:8001'
+    const url = `${import.meta.env.VITE_APP_API_URL || 'http://localhost:5000'
       }/text_completion`
 
     const apiKey = window.localStorage.getItem('openai-api-key')
