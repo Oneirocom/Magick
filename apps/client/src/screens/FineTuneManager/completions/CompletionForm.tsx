@@ -1,19 +1,12 @@
 import useAuthentication from '../account/useAuthentication'
-import Label from '../components/forms/Label'
-import SelectEngine, {
-  BaseEngines,
-  InstructEngines,
-} from '../components/forms/SelectEngine'
 import InfoCard from '../components/InfoCard'
 import ShowRequestExample from '../components/ShowRequestExample'
 import React, { useState } from 'react'
 import { FormProvider, useForm, useFormContext } from 'react-hook-form'
-import CreatableSelect from 'react-select/creatable'
 import { toast } from 'react-toastify'
 import { OpenAI } from '../../../../../../@types/openai'
-import Input from '@mui/material/Input'
-import { Button, TextField } from '@mui/material'
-
+import { Box, Button, TextField } from '@mui/material'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 export default function CompletionForm({
   fineTune,
 }: {
@@ -70,42 +63,47 @@ export default function CompletionForm({
   })
 
   return (
-    <FormProvider {...form}>
-      <form onSubmit={onSubmit} className="space-y-8">
-        <fieldset className="md:space-y-4">
-          <Label label="Text to complete" required>
-            <TextField
-              // eslint-disable-next-line jsx-a11y/no-autofocus
-              autoFocus
-              //   bordered
-              minRows={8}
-              required
-              //   width="100%"
-              {...form.register('prompt')}
-            />
-          </Label>
-          {!fineTune && <AdHocOptions />}
-          <CommonOptions />
-        </fieldset>
-        <div>
-          <Button
-            // auto
-            // iconRight={<FontAwesomeIcon icon={faChevronRight} />}
-            // loading={form.formState.isSubmitting}
-            type="submit"
-          >
-            Complete
-          </Button>
-        </div>
-      </form>
-      {results.map((result, index) => (
-        <CompletionResults key={index} results={result} />
-      ))}
-      <ShowRequestExample
-        request={request}
-        reference="https://beta.openai.com/docs/api-reference/completions/create"
-      />
-    </FormProvider>
+    <>
+      <InfoCard>
+        <FormProvider {...form}>
+          <form onSubmit={onSubmit}>
+            <fieldset style={{ border: 'none' }}>
+              <TextField
+                label="Prompt"
+                autoFocus
+                required
+                multiline
+                rows={2}
+                sx={{ width: '100%' }}
+                {...form.register('prompt')}
+              />
+              <CommonOptions />
+            </fieldset>
+            <Box
+              component={'div'}
+              sx={{ display: 'flex', justifyContent: 'flex-end', padding: 1 }}
+            >
+              <Button
+                variant="contained"
+                type="submit"
+                endIcon={<ChevronRightIcon />}
+              >
+                Complete
+              </Button>
+            </Box>
+          </form>
+          {results.map((result, index) => (
+            <CompletionResults key={index} results={result} />
+          ))}
+        </FormProvider>
+      </InfoCard>
+      <InfoCard>
+        <ShowRequestExample
+          request={request}
+          reference="https://beta.openai.com/docs/api-reference/completions/create"
+        />
+      </InfoCard>
+    </>
   )
 }
 
@@ -113,78 +111,57 @@ function CommonOptions() {
   const form = useFormContext()
 
   return (
-    <div className="flex flex-wrap gap-x-4">
-      <Label label="Max tokens">
-        <Input
-          //   bordered
-          type="number"
-          min={10}
-          max={2048}
-          //   step={10}
-          {...form.register('max_tokens', { min: 10, max: 2048 })}
-        />
-      </Label>
-      <Label label="Temperature">
-        <Input
-          //   bordered
-          type="number"
-          min={0}
-          max={1}
-          //   step={0.1}
-          {...form.register('temperature', { min: 0, max: 1 })}
-        />
-      </Label>
-      <Label label="Presence penalty">
-        <Input
-          //   bordered
-          type="number"
-          min={-2}
-          max={2}
-          //   step={0.1}
-          {...form.register('presence_penalty', { min: -2, max: 2 })}
-        />
-      </Label>
-      <Label label="Frequency penalty">
-        <Input
-          //   bordered
-          type="number"
-          min={-2}
-          max={2}
-          //   step={0.1}
-          {...form.register('frequency_penalty', { min: -2, max: 2 })}
-        />
-      </Label>
-    </div>
-  )
-}
-
-function AdHocOptions() {
-  const form = useFormContext()
-
-  return (
-    <div className="flex flex-wrap gap-x-4">
-      <Label label="Engine" required>
-        <SelectEngine
-          engines={BaseEngines.concat(InstructEngines)}
-          name="engine"
-          required
-        />
-      </Label>
-      <Label label="Stop sequences">
-        <CreatableSelect
-          {...form.register('stop')}
-          classNamePrefix="react-select"
-          isMulti
-          onChange={selection =>
-            form.setValue(
-              'stop',
-              selection.map(({ value }) => value)
-            )
-          }
-          options={[] as Array<{ value: string }>}
-        />
-      </Label>
-    </div>
+    <Box
+      component={'div'}
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        padding: 2,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      <TextField
+        label="Max tokens"
+        type="number"
+        min={10}
+        max={2048}
+        inputProps={{
+          step: 10,
+        }}
+        {...form.register('max_tokens', { min: 10, max: 2048 })}
+      />
+      <TextField
+        label="Temperature"
+        type="number"
+        min={0}
+        max={1}
+        inputProps={{
+          step: 0.1,
+        }}
+        {...form.register('temperature', { min: 0, max: 1 })}
+      />
+      <TextField
+        label="Presence penalty"
+        type="number"
+        min={-2}
+        max={2}
+        inputProps={{
+          step: 0.1,
+        }}
+        {...form.register('presence_penalty', { min: -2, max: 2 })}
+      />
+      <TextField
+        label="Frequency penalty"
+        type="number"
+        min={-2}
+        max={2}
+        inputProps={{
+          step: 0.1,
+        }}
+        {...form.register('frequency_penalty', { min: -2, max: 2 })}
+      />
+    </Box>
   )
 }
 

@@ -10,6 +10,10 @@ import { OpenAI } from '../../../../../../@types/openai'
 import Label from '../forms/Label'
 import { useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import InfoCard from '../components/InfoCard'
+import { Box } from '@mui/material'
 
 type Fields = {
   model: string
@@ -67,19 +71,30 @@ export default function NewFineTuneForm() {
 
   return (
     <main className="mx-auto mb-8 space-y-8 max-w-2xl">
-      <h1 className="text-3xl">
-        Fine Tune <span className="font-normal">Completions Model</span>
-      </h1>
+      <Box component={'span'} sx={{ textAlign: 'center' }}>
+        {/* TODO @thomageanderson: remove hardcoded color when global mui themes are supported */}
+        <Typography variant="h4" component="h2" color="white">
+          Fine Tune Completions Model
+        </Typography>
+      </Box>
       {error && <ErrorMessage error={error} />}
       {data && (
-        <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <fieldset className="space-y-4">
+        <InfoCard>
+          <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <Label label="OpenAI Engine">
                 <SelectEngine name="model" required />
               </Label>
               <Label label="Training File">
                 <Select
+                  styles={{
+                    option: styles => {
+                      return {
+                        ...styles,
+                        color: 'black',
+                      }
+                    },
+                  }}
                   options={files}
                   {...form.register('training', { required: true })}
                   onChange={selection =>
@@ -89,6 +104,14 @@ export default function NewFineTuneForm() {
               </Label>
               <Label label="Validation File (optional)">
                 <Select
+                  styles={{
+                    option: styles => {
+                      return {
+                        ...styles,
+                        color: 'black',
+                      }
+                    },
+                  }}
                   isClearable
                   escapeClearsValue
                   options={files}
@@ -98,12 +121,22 @@ export default function NewFineTuneForm() {
                   }
                 />
               </Label>
-            </fieldset>
-            <Button disabled={form.formState.isSubmitting} type="submit">
-              Create Model
-            </Button>
-          </form>
-        </FormProvider>
+              <Box
+                component={'div'}
+                sx={{ display: 'flex', justifyContent: 'flex-end', padding: 1 }}
+              >
+                <Button
+                  disabled={form.formState.isSubmitting}
+                  type="submit"
+                  variant="contained"
+                  endIcon={<ChevronRightIcon />}
+                >
+                  Create Model
+                </Button>
+              </Box>
+            </form>
+          </FormProvider>
+        </InfoCard>
       )}
     </main>
   )

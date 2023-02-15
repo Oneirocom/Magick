@@ -5,7 +5,8 @@ import useAuthentication from '../account/useAuthentication'
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import { mutate } from 'swr'
-import { Button } from '@mui/material'
+import { IconButton } from '@mui/material'
+import DeleteOutlined from '@mui/icons-material/DeleteOutlined'
 
 export default function DeleteFileButton({ id }: { id: string }) {
   const { headers } = useAuthentication()
@@ -28,8 +29,8 @@ export default function DeleteFileButton({ id }: { id: string }) {
   }
 
   return (
-    <Button onClick={onClick} disabled={isDeleting}>
-      Trash Icon Here
-    </Button>
+    <IconButton onClick={onClick} disabled={isDeleting}>
+      <DeleteOutlined fontSize="medium" />
+    </IconButton>
   )
 }
