@@ -19,6 +19,7 @@ import https from 'https'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
+import koaStatic from 'koa-static'
 import path from 'path'
 import 'regenerator-runtime/runtime'
 
@@ -162,6 +163,10 @@ async function init() {
         console.log('Http Server listening on: localhost:' + PORT)
       })
   // await initLoop()
+
+// serve static files from ../client
+app.use(koaStatic(path.join(__dirname, '../client')))
+
 }
 
 init()

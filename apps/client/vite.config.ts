@@ -16,6 +16,7 @@ export default defineConfig({
     alias: {
       stream: './node_modules/stream-browserify/index.js',
       url: 'rollup-plugin-node-polyfills/polyfills/url',
+      buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
     },
   },
   build: {
@@ -42,7 +43,8 @@ export default defineConfig({
       // Enable esbuild polyfill plugins
       plugins: [
         NodeGlobalsPolyfillPlugin({
-          process: false
+          process: false,
+          buffer: true
         }),
         NodeModulesPolyfillPlugin(),
       ],
