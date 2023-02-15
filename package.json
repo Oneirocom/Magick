@@ -10,6 +10,7 @@
     "server": "npx nx run server:serve",
     "containers": "concurrently \"docker-compose up\" \"sleep 20 && npm run db:init && echo database synced!\"",
     "build": "npx nx build",
+    "build-client": "npx nx build client",
     "start": "npx nx serve",
     "test": "npx nx test",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
