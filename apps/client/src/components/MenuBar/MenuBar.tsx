@@ -36,10 +36,8 @@ const MenuBar = () => {
     $CREATE_AVATAR_WINDOW,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
-    $CREATE_SEARCH_CORPUS,
     $CREATE_TEXT_EDITOR,
     $CREATE_CONSOLE,
-    $SERIALIZE,
     $EXPORT,
     $UNDO,
     $REDO,
@@ -86,15 +84,6 @@ const MenuBar = () => {
   }
   const onImport = () => {
     navigate('/home/all-projects?import')
-  }
-
-  const onSerialize = () => {
-    if (!activeTabRef.current) return
-    publish($SERIALIZE(activeTabRef.current.id))
-  }
-
-  const onCreateSearchCorpus = () => {
-    publish($CREATE_SEARCH_CORPUS(activeTabRef.current?.id))
   }
 
   const onAvatarWindowCreate = () => {
@@ -213,9 +202,6 @@ const MenuBar = () => {
         inspector: {
           onClick: onInspectorCreate,
         },
-        // search_corpus: {
-        //   onClick: onCreateSearchCorpus,
-        // },
         avatar: {
           onClick: onAvatarWindowCreate,
         },

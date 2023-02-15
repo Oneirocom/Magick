@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { GraphData } from '@magickml/engine'
+import { GraphData, projectId } from '@magickml/engine'
 import {
   uniqueNamesGenerator,
   adjectives,
@@ -53,6 +53,7 @@ const CreateNew = () => {
       const response = await newSpell({
         graph: selectedTemplate?.graph,
         name,
+        projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes))
       })
 

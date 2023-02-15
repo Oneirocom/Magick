@@ -47,7 +47,8 @@ const textCompletion = async (ctx: Koa.Context) => {
   if (!apiKey)
     throw new ServerError('authentication-error', 'No API key provided')
 
-  const { success, choice } = await makeCompletion(modelName, {
+  const { success, choice } = await makeCompletion({
+    model: modelName ?? 'text-davinci-003',
     prompt: prompt.trim(),
     temperature,
     max_tokens: maxTokens,

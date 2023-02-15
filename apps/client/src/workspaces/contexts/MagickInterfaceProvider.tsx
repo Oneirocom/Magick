@@ -5,6 +5,7 @@ import {
   Spell,
   MagickWorkerInputs,
   CompletionBody,
+  QAArgs,
 } from '@magickml/engine'
 import { createContext, useContext, useEffect, useRef } from 'react'
 

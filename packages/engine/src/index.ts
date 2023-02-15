@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime'
+
 export * from './engine'
 // PLUGINS
 export { default as CachePlugin } from './plugins/cachePlugin'

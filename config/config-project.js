@@ -1,7 +1,3 @@
-// check if packages/engine/plugins.json exists
-// if it does, end the program
-// if it doesn't exist, copy ./plugins.example.json to packages/engine/plugins.json
-// end the program
 const dotenv = require('dotenv-flow');
 dotenv.config('../');
 

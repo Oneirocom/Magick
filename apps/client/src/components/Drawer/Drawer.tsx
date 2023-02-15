@@ -16,8 +16,6 @@ import { useLocation } from 'react-router-dom'
 import StorageIcon from '@mui/icons-material/Storage'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories'
 import HubIcon from '@mui/icons-material/Hub'
-import ManageSearchIcon from '@mui/icons-material/ManageSearch'
-import Card from '@mui/material/Card'
 
 import MagickLogo from './Magick-purple-logo.png'
 
@@ -51,7 +49,6 @@ type HeaderProps = {
 const DrawerHeader = styled('div', {
   shouldForwardProp: prop => prop !== 'open',
 })<HeaderProps>(({ theme, open }) => ({
-  display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',
   position: 'relative',
@@ -186,13 +183,7 @@ export default function MiniDrawer({ children }) {
             onClick={onClick('/agents')}
             text="Agents"
           />
-           {/* <DrawerItem
-            active={location.pathname === '/searchCorpus'}
-            Icon={ManageSearchIcon}
-            onClick={onClick('/searchCorpus')}
-            open={open}
-            text="Search Corpus"
-          />
+           {/*
          <DrawerItem
             active={location.pathname === '/settings'}
             Icon={SettingsIcon}

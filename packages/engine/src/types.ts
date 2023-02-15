@@ -68,7 +68,19 @@ export type QAArgs = {
 
 export type CreateEventArgs = Event
 
-export type GetEventArg = {
+export type GetEventArgs = {
+  type: string,
+  embedding?: number[],
+  observer: string,
+  client: string,
+  entities: any[],
+  channel: string,
+  channelType: string,
+  maxCount?: number
+}
+
+export type GetVectorEventArgs = {
+  type: string
   entities: string[]
   maxCount?: number
 }
