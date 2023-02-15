@@ -51,6 +51,7 @@
     "@reduxjs/toolkit": "^1.9.1",
     "@types/dotenv-flow": "^3.2.0",
     "@types/filesize": "^5.0.0",
+    "@wagmi/core": "^0.9.5",
     "axios": "1.2.2",
     "buffer": "^6.0.3",
     "cheerio": "1.0.0-rc.12",
