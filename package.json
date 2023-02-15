@@ -11,13 +11,12 @@
     "containers": "concurrently \"docker-compose up\" \"sleep 20 && npm run db:init && echo database synced!\"",
     "build": "npx nx build",
     "build-client": "npx nx build client",
-    "start": "npx nx serve",
+    "start": "node dist/apps/server/main.js",
     "test": "npx nx test",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
-    "postinstall": "npx prisma generate && npm run db:init",
-    "start-heroku": "node dist/apps/server/main.js"
+    "postinstall": "npx prisma generate && npm run db:init"
   },
   "resolutions": {
     "@types/react": "18.0.2"
