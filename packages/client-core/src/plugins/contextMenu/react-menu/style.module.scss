@@ -8,7 +8,7 @@
   padding: 10px;
   width: $width;
   margin-top: -20px;
-  margin-left: -$width/2;
+  margin-left: calc($width/2*-1);
   .item {
     @extend .item;
     &.hasSubitems:after {
