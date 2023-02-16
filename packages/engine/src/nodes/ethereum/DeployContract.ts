@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as ethers from 'ethers'
 import Rete from 'rete'
+
+import {
+  EditorContext,
+  MagickWorkerOutputs,
+} from '../../types'
 
 import {
   NodeData,
@@ -88,7 +89,12 @@ export class DeployContract extends MagickComponent<void> {
     return node
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(
+    node: NodeData,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+    { silent, magick }: { silent: boolean; magick: EditorContext }
+    ) {
 
     const defaultNetwork = {
       name: 'maticmaticmum',
@@ -134,9 +140,11 @@ export class DeployContract extends MagickComponent<void> {
     const balanceAfter = await provider.getBalance(wallet.address)
     const balanceAfterInEth = ethers.utils.formatEther(balanceAfter).toString()
 
-    // TODO: need to be fixed, issue of loosing display() function from NodeData context
-    // node.display(balance)
-    // node.display(resultInEth)
+    if(!silent) {
+      node.display(balance)
+      node.display(balanceAfterInEth)
+    }
+
 
     return {
       balance: balanceInEth,

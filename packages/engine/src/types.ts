@@ -1,9 +1,5 @@
-import { Component, Connection, Input, Output, NodeEditor } from 'rete'
+import { Connection, Input, Output, NodeEditor } from 'rete'
 import { Node } from 'rete/types'
-import { Request } from 'koa'
-//@seang todo: convert inspector plugin fully to typescript
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
 import {
   Data,
   NodeData as ReteNodeData,

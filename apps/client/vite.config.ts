@@ -58,7 +58,6 @@ export default defineConfig({
 })
 /**
  * Vite doesn't handle fallback html with dot (.), see https://github.com/vitejs/vite/issues/2415
- * TODO: Review the PR in Vite
  * @returns {import('vite').Plugin}
  */
 function spaFallbackWithDot() {

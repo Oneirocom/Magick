@@ -8,9 +8,6 @@ import {
   MagickWorkerOutputs,
 } from '../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
-// @seang todo: convert data controls to typescript to remove this
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
 import { InputControl } from '../../dataControls/InputControl'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { NumberControl } from '../../dataControls/NumberControl'
@@ -109,9 +106,9 @@ export class Solidity extends MagickComponent<void> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: { magick: EngineContext; data: { code: unknown } }
+    context: { magick: EngineContext; silent: boolean; data: { code: unknown } }
   ) {
-    const { magick, data } = context
+    const { magick, data, silent } = context
     const { processCode } = magick
     if (!processCode) return
 
@@ -128,11 +125,13 @@ export class Solidity extends MagickComponent<void> {
 
       const { bytecode, abi } = await processCode(node.data.code, inputs, {data, ...{optimization, optimization_num}}, 'solidity')
 
-      // TODO: need to be fixed, issue of loosing display() function from NodeData context
-      // node.display({
-      //   bytecode: bytecode,
-      //   abi
-      // })
+
+      if(!silent){
+        node.display({
+          bytecode: bytecode,
+          abi
+        })
+      }
 
       return {
         bytecode: bytecode,

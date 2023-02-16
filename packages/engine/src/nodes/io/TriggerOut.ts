@@ -1,12 +1,8 @@
 import Rete from 'rete'
-// @seang todo: convert data controls to typescript to remove this
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
 import { v4 as uuidv4 } from 'uuid'
 
 import { MagickNode } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
-import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 const info = `The trigger out component is mainly used to add an output to a spell when it is being run as a module, ie inside a component of another spell.  It will pass the trigger signal out of the spell to the higher level spell.`

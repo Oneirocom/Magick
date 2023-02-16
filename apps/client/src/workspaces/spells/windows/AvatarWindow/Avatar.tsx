@@ -218,7 +218,6 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
         if (avatar.current != undefined) {
           const vrm = avatar.current as any
           if (talktime == true) {
-            // todo: more vowelshapes
             var voweldamp = 53
             var vowelmin = 12
             if (inputvolume > mouththreshold * 2) {
@@ -232,8 +231,6 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
           }
 
           // move body
-
-          // todo: replace with ease-to-target behaviour
           var damping = 750 / (bodymotion / 10)
           var springback = 1.001
 

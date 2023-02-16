@@ -1,4 +1,4 @@
-import { Plugin } from "@magickml/engine" // TODO: fix me
+import { Plugin } from "@magickml/engine"
 import { DiscordAgentWindow } from "./components/agent.component"
 import { DiscordInput } from "./nodes/DiscordInput"
 import { DiscordOutput } from "./nodes/DiscordOutput"

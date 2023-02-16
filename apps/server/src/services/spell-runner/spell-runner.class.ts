@@ -1,4 +1,3 @@
-import { spellRunner } from './spell-runner'
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
 import { KnexService } from '@feathersjs/knex'
 import { Spell } from '@magickml/engine'
@@ -44,7 +43,7 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
   async get(id: Id, params?: SpellRunnerParams): Promise<any | {}> {
     if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
-    const { user, query } = params as any // TODO: remove the any
+    const { user, query } = params as any;
 
     if (!user) throw new Error('No user is present in service')
     // Here we get the users spellManagerApp
