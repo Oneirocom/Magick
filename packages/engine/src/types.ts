@@ -65,13 +65,13 @@ export type QAArgs = {
 export type CreateEventArgs = Event
 
 export type GetEventArgs = {
-  type: string,
-  embedding?: number[],
-  observer: string,
-  client: string,
-  entities: any[],
-  channel: string,
-  channelType: string,
+  type: string
+  embedding?: number[]
+  observer: string
+  client: string
+  entities: any[]
+  channel: string
+  channelType: string
   maxCount?: number
 }
 
@@ -270,6 +270,12 @@ export type Spell = {
   updated_at?: string
   id: number
   hash?: string
+  projectId: string
+}
+
+export type NewSpellArgs = {
+  name: string
+  graph: Data
 }
 
 export type MagickReteInput = {
