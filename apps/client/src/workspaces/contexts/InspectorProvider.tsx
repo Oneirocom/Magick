@@ -71,7 +71,6 @@ const InspectorProvider = ({ children, tab }) => {
     }) as () => void
   }, [events, subscribe, publish])
 
- 
   const saveTextEditor = textData => {
     const textUpdate = {
       [textData.control.dataKey]: textData.data,
