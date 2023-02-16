@@ -1,3 +1,4 @@
+import React, { createContext, useContext, useEffect, useRef } from 'react'
 import axios from 'axios'
 import {
   CreateEventArgs,
@@ -6,8 +7,8 @@ import {
   MagickWorkerInputs,
   CompletionBody,
   QAArgs,
+  VITE_APP_API_URL
 } from '@magickml/engine'
-import { createContext, useContext, useEffect, useRef } from 'react'
 
 import {
   useGetSpellQuery,
@@ -40,7 +41,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
   const env = {
     API_ROOT_URL: import.meta.env.API_ROOT_URL,
-    API_URL: import.meta.env.API_URL,
     APP_SEARCH_SERVER_URL: import.meta.env.APP_SEARCH_SERVER_URL,
   }
 
@@ -214,9 +214,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const completion = async (body: CompletionBody) => {
-    const url = `${
-      import.meta.env.VITE_APP_API_URL || 'http://localhost:3030'
-    }/text_completion`
+    const url = `${VITE_APP_API_URL}/text_completion`
 
     const apiKey = window.localStorage.getItem('openai-api-key')
 
