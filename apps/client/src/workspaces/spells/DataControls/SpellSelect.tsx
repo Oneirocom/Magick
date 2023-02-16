@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack'
-import { GraphData } from '@magickml/engine'
+import { GraphData, projectId } from '@magickml/engine'
 import { useEffect } from 'react'
 
 import { useAppDispatch } from '../../../state/hooks'
@@ -27,8 +27,10 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   useEffect(() => {
     if (!spell) return
 
-    update(spell)
-    _openTab(spell)
+    const _spell = spell.data[0]
+
+    update(_spell)
+    _openTab(_spell)
   }, [spell])
 
   const optionArray = () => {
