@@ -49,7 +49,6 @@ export const initEditor = function ({
   tab,
   node,
   client,
-  feathers,
 }: {
   container: any
   pubSub: any
@@ -57,7 +56,6 @@ export const initEditor = function ({
   tab: any
   node: any
   client?: any
-  feathers?: any
 }) {
   if (editorTabMap[tab.id]) editorTabMap[tab.id].clear()
 
@@ -80,7 +78,7 @@ export const initEditor = function ({
   // ██║     ███████╗╚██████╔╝╚██████╔╝██║██║ ╚████║███████║
   // ╚═╝     ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝╚══════╝
 
-  if (client && feathers) {
+  if (client) {
     editor.use(SocketOverridePlugin)
   }
 
@@ -149,7 +147,7 @@ export const initEditor = function ({
   }) as MagickEngineClient
   engine.magick = magick
 
-  if (client && feathers) {
+  if (client) {
     editor.use<Plugin, SocketPluginArgs>(SocketPlugin, { client })
   } else {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
