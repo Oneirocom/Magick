@@ -10,8 +10,6 @@ import { triggerSocket, stringSocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
 
-import qs from 'qs'
-
 const info = 'Get a cached embedding for this exact string'
 
 type InputReturn = {
