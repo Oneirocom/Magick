@@ -8,9 +8,6 @@ type PluginProps = {
 }
 import {API_ROOT_URL} from '../../../engine'
 
-// determine if process or import.meta is available, get the .env from the one that is
-const magickApiRootUrl = API_ROOT_URL
-
 export const DiscordAgentWindow: FC<any> = (props) => {
   props = props.props
   const { enqueueSnackbar } = useSnackbar()
@@ -83,7 +80,7 @@ export const DiscordAgentWindow: FC<any> = (props) => {
       }
 
       const resp = await axios.get(
-        `${magickApiRootUrl}/text_to_speech`,
+        `${API_ROOT_URL}/text_to_speech`,
         {
           params: {
             text: 'Hello there! How are you?',

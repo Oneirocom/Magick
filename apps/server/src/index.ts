@@ -31,9 +31,6 @@ process.on('unhandledRejection', (err) => {
   console.error('unhandledRejection', err)
 })
 
-// todo probaly want to get ride of this.  Not super secure.
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 process.on('unhandledRejection', (reason, p) =>
   logger.error('Unhandled Rejection at: Promise ', p, reason)
 )
