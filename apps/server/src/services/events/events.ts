@@ -2,10 +2,13 @@
 //@ts-nocheck
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
+import {
+  DATABASE_URL
+} from '@magickml/engine'
 import pgvector from 'pgvector/pg'
 import postgres from 'postgres'
 import { hooks as schemaHooks } from '@feathersjs/schema' 
-const sql = postgres(process.env.DATABASE_URL)
+const sql = postgres(DATABASE_URL)
 async function getUsersOver(embedding) {
   var users
   try {
@@ -52,7 +55,6 @@ export const event = (app: Application) => {
   app.service('events').hooks({
     around: {
       all: [
-        // process.env.USE_AUTH !== 'true' && process.env.NODE_ENV === 'development' ? authenticate('jwt') : (context: any, next: any) => next(),
         schemaHooks.resolveExternal(eventExternalResolver),
         schemaHooks.resolveResult(eventResolver),
       ]

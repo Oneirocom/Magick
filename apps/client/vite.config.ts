@@ -9,8 +9,7 @@ import mdPlugin, { Mode } from 'vite-plugin-markdown'
 export default defineConfig({
   server: {
     port: 4200,
-    host: 'localhost',
-    https: process.env.USESSL === 'true',
+    host: 'localhost'
   },
   assetsInclude: ['**/*.vrm'],
   resolve: {

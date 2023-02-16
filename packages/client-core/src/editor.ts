@@ -29,9 +29,9 @@ import {
 } from '@magickml/engine'
 
 import AreaPlugin from './plugins/areaPlugin'
+import { zoomAt } from './plugins/areaPlugin/zoom-at'
 
 import { initSharedEngine, MagickEngine } from '@magickml/engine'
-import { zoomAt } from '.'
 
 interface MagickEngineClient extends MagickEngine {
   magick: EditorContext
