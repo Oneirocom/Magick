@@ -1,5 +1,6 @@
 import { GraphData, EditorContext, Spell, MagickEditor } from '@magickml/engine'
-import { initEditor, zoomAt } from '@magickml/client-core'
+import { initEditor } from '../../editor'
+import { zoomAt } from '../../plugins/areaPlugin/zoom-at'
 import React, {
   useRef,
   useContext,
