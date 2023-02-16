@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
 import { NodeData, MagickNode } from '../../types'
@@ -52,14 +51,14 @@ export class NumberVariable extends MagickComponent<InputReturn> {
     return node.addOutput(out)
   }
 
-  worker(node: NodeData) {
+  worker(node: NodeData, inputs, outputs, {silent}) {
     const _var = node?.data?._var as number
 
-    this.name =
-      (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
+    this.name = (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
 
-    // TODO: need to be fixed, issue of loosing display() function from NodeData context
-    // node.display(_var.toString())
+    if(!silent) {
+      node.display(_var.toString())
+    }
 
     return {
       output: _var,

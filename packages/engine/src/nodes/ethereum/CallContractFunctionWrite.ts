@@ -69,7 +69,7 @@ export class CallContractFunctionWrite extends MagickComponent<void> {
       .addOutput(urlOutput)
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(node: NodeData, inputs: MagickWorkerInputs,outputs, { silent }: { silent: boolean }    ) {
 
     let chainId = 80001
     if (node.data?.chain_id) {
@@ -88,8 +88,9 @@ export class CallContractFunctionWrite extends MagickComponent<void> {
     const contractAddress = (inputs['contract_addr'] && inputs['contract_addr'][0]) as string
     const functionName = (inputs['function_name'] && inputs['function_name'][0]) as string
 
-    // TODO: need to be fixed, issue of loosing display() function from NodeData context
-    // node.display(address)
+    if(!silent) {
+      node.display(contractAddress)
+    }
 
     return {
       output: `http://localhost:4200/contract/${chainId}/${contractAddress}/${functionName}`,

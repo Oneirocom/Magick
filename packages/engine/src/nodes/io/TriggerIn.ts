@@ -1,7 +1,4 @@
 import Rete from 'rete'
-// @seang todo: convert data controls to typescript to remove this
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
 import { v4 as uuidv4 } from 'uuid'
 
 import { NodeData, MagickNode } from '../../types'

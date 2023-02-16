@@ -44,7 +44,7 @@ export type InitEngineArguments = {
   throwError?: Function
   socket?: io.Socket
 }
-// @seang TODO: update this to not use positional arguments
+
 export const initSharedEngine = ({
   name,
   components,

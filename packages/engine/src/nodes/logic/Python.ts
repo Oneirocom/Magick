@@ -7,9 +7,6 @@ import {
   MagickWorkerOutputs,
 } from '../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
-// @seang todo: convert data controls to typescript to remove this
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
