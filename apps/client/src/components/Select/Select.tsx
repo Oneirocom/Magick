@@ -144,6 +144,7 @@ const BasicSelect = ({
         <>
           {creatable && (
             <Creatable
+              isClearable
               options={options}
               onChange={onChange}
               styles={styles}
