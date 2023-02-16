@@ -17,7 +17,6 @@ export default defineConfig({
     alias: {
       url: 'rollup-plugin-node-polyfills/polyfills/url',
       querystring: 'rollup-plugin-node-polyfills/polyfills/qs',
-      buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
     },
   },
   build: {
@@ -45,7 +44,6 @@ export default defineConfig({
       plugins: [
         NodeGlobalsPolyfillPlugin({
           process: false,
-          buffer: true,
         }),
         NodeModulesPolyfillPlugin(),
       ],

@@ -56,7 +56,6 @@
     "@types/filesize": "^5.0.0",
     "@wagmi/core": "^0.9.5",
     "axios": "1.2.2",
-    "buffer": "^6.0.3",
     "cheerio": "1.0.0-rc.12",
     "classnames": "^2.3.2",
     "compromise": "^14.0.0",
