@@ -15,8 +15,5 @@
     "types": ["vite/client"]
   },
   "files": [],
-  "include": ["src", "environments"],
-  "paths": {
-    "@magickml/client": ["apps/client"]
-  }
+  "include": ["src"]
 }
