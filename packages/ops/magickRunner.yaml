@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magick-runner
+spec:
+  selector:
+    matchLabels:
+      app: magick-runner
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: magick-runner
+    spec:
+      tolerations:
+        - key: "appservicesonly"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
+      containers:
+        - name: server
+          image: 389959444765.dkr.ecr.us-east-1.amazonaws.com/magick-server:latest
+          workingDir: /app/packages/server
+          args: ["src/agent-server.ts"]
+          stdin: true
+          tty: true
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          env:
+            - name: API_URL
+              value: http://localhost:5000
+            - name: PORT
+              value: "5000"
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: google_credentials.json
+            - name: SPEECH_SERVER_PORT
+              value: "65532"
+            - name: ENABLE_SPEECH_SERVER
+              value: "true"
+            - name: SEARCH_CORPUS_PORT
+              value: "65531"
+            - name: ENABLE_SEARCH_CORPUS
+              value: "true"
+            - name: OPENAI_API_KEY
+              value:
+            - name: HF_API_KEY
+              value:
+            - name: USSSL_SPEECH
+              value: "true"
+            - name: FILE_SERVER_PORT
+              value: "65530"
+            - name: FILE_SERVER_URL
+              value: http://localhost:65530
+            - name: USESSL
+              value: "true"
+            - name: WEAVIATE_CLIENT_SCHEME
+              value: http
+            - name: WEAVIATE_CLIENT_HOST
+              value: waviate:8080
+            - name: WEAVIATE_IMPORT_DATA
+              value: "false"
+            - name: REDIS_URL
+              value: redis://redis:6379
+            - name: ENTITY_WEBSERVER_PORT_RANGE
+              value: 65510-65529
+            - name: ENTITY_HOSTNAME
+              value: magick-runner
+            - name: TIKTALKNET_URL
+              value: http://localhost:8050/tts
+            - name: REACT_APP_SEARCH_SERVER_URL
+              value: http://localhost:65531
+      imagePullSecrets:
+        - name: regcred
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: magick-server
+spec:
+  selector:
+    app: magick-server
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: magick-server-ingress
+  annotations:
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: magick-server
+                port:
+                  number: 80
