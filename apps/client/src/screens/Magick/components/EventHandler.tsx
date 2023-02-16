@@ -67,16 +67,11 @@ const EventHandler = ({ pubSub, tab }) => {
 
     if (!currentSpell) return
 
-    console.log('currentSpell', currentSpell)
-    console.log('graph', graph)
-
     const updatedSpell = {
       ...currentSpell,
       graph,
-      hash: md5(JSON.stringify(graph))
+      hash: md5(JSON.stringify(graph)),
     }
-
-    console.log('updatedSpell', updatedSpell)
 
     const response = await saveSpellMutation(updatedSpell)
     const jsonDiff = diff(currentSpell, updatedSpell)
@@ -84,22 +79,20 @@ const EventHandler = ({ pubSub, tab }) => {
     if (jsonDiff.length !== 0) {
       console.log('Sending json diff to spell runner!')
       // save diff to spell runner if something has changed.  Will update spell in spell runner session
-      await client.service('spell-runner').update(currentSpell.name, {
+      client.service('spell-runner').update(currentSpell.name, {
         diff: jsonDiff,
       })
     }
+
+    enqueueSnackbar('Spell saved', {
+      variant: 'success',
+    })
 
     if ('error' in response) {
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
       })
       return
-    }
-
-    if (preferences.autoSave) {
-      enqueueSnackbar('Spell saved', {
-        variant: 'success',
-      })
     }
   }
 
@@ -111,7 +104,7 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
-    updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes));
+    updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
 
     const jsonDiff = diff(currentSpell, updatedSpell)
 
