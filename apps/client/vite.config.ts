@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
+import mdPlugin, { Mode } from 'vite-plugin-markdown'
 
 export default defineConfig({
   server: {
@@ -14,25 +15,24 @@ export default defineConfig({
   assetsInclude: ['**/*.vrm'],
   resolve: {
     alias: {
-      stream: './node_modules/stream-browserify/index.js',
       url: 'rollup-plugin-node-polyfills/polyfills/url',
-      buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
+      querystring: 'rollup-plugin-node-polyfills/polyfills/qs',
     },
   },
   build: {
     rollupOptions: {
       plugins: [
-        rollupNodePolyFill({
-          
-        }),
+        rollupNodePolyFill(),
       ],
     },
   },
   plugins: [
-    react(),    viteTsConfigPaths({
+    react(),
+    viteTsConfigPaths({
       root: '../../',
     }),
-    spaFallbackWithDot()
+    spaFallbackWithDot(),
+    mdPlugin({ mode: [Mode.HTML, Mode.TOC, Mode.REACT] }),
   ],
   optimizeDeps: {
     esbuildOptions: {
@@ -44,7 +44,6 @@ export default defineConfig({
       plugins: [
         NodeGlobalsPolyfillPlugin({
           process: false,
-          buffer: true
         }),
         NodeModulesPolyfillPlugin(),
       ],
@@ -59,7 +58,6 @@ export default defineConfig({
 })
 /**
  * Vite doesn't handle fallback html with dot (.), see https://github.com/vitejs/vite/issues/2415
- * TODO: Review the PR in Vite
  * @returns {import('vite').Plugin}
  */
 function spaFallbackWithDot() {
@@ -74,6 +72,6 @@ function spaFallbackWithDot() {
           next()
         })
       }
-    }
+    },
   }
 }

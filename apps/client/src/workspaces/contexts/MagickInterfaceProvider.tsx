@@ -5,9 +5,8 @@ import {
   Spell,
   MagickWorkerInputs,
   CompletionBody,
-  GetEventArgs,
   QAArgs,
-} from '@magickml/core'
+} from '@magickml/engine'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
 import {
@@ -19,7 +18,7 @@ import {
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { magickApiRootUrl } from '../../config'
 
-import { runPython } from '@magickml/core'
+import { runPython } from '@magickml/engine'
 
 const Context = createContext<EditorContext>(undefined!)
 
@@ -47,7 +46,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
   useEffect(() => {
     if (!_spell) return
-    spellRef.current = _spell
+    spellRef.current = _spell.data[0]
   }, [_spell])
 
   const {
@@ -67,6 +66,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     $REFRESH_EVENT_TABLE,
     $SEND_TO_AVATAR,
   } = events
+
+  const getCurrentSpell = () => {
+    return spellRef.current
+  }
 
   const onTrigger = (node, callback) => {
     let isDefault = node === 'default' ? 'default' : null
@@ -136,7 +139,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
   const onPlaytest = callback => {
     return subscribe($PLAYTEST_INPUT(tab.id), (event, data) => {
-      publish($PROCESS(tab.id))
+      // publish($PROCESS(tab.id))
       // weird hack.  This staggers the process slightly to allow the published event to finish before the callback runs.
       // No super elegant, but we need a better more centralised way to run the engine than these callbacks.
       setTimeout(() => callback(data), 0)
@@ -146,10 +149,16 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const getSpell = async spellId => {
     const spell = await _getSpell(spellId)
 
-    return spell.data as Spell
+    return spell.data[0] as Spell
   }
 
-  const processCode = async (code, inputs, data, state, language='javascript') => {
+  const processCode = async (
+    code,
+    inputs,
+    data,
+    state,
+    language = 'javascript'
+  ) => {
     const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
       (acc, [key, value]) => {
         acc[key as string] = value[0] as any
@@ -157,38 +166,28 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       },
       {} as Record<string, any>
     )
-    if (language == 'javascript'){
+    if (language == 'javascript') {
       console.log('processCode, javascript')
-      
+
       // eslint-disable-next-line no-new-func
       const result = new Function('"use strict";return (' + code + ')')()(
         flattenedInputs,
-        data,
-        state
+        data
       )
-      if (result.state) {
-        updateCurrentGameState(result.state)
-      }
       return result
     } else if (language == 'python') {
       try {
+        const result = await runPython(code, flattenedInputs, data)
 
-        const result = await runPython(code, flattenedInputs, data, state);
-        if (result.state) {
-          updateCurrentGameState(result.state)
-        }
-
-        return result;
+        return result
       } catch (err) {
         console.log({ err })
       }
-
     }
-
   }
 
-  const runSpell = async (inputs, spellId, state) => {
-    const response = await _runSpell({ inputs, spellId, state })
+  const runSpell = async (inputs, spellId) => {
+    const response = await _runSpell({ inputs, spellId })
 
     if ('error' in response) {
       throw new Error(`Error running spell ${spellId}`)
@@ -201,140 +200,11 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     publish($TEXT_EDITOR_CLEAR(tab.id))
   }
 
-  const getCurrentGameState = () => {
-    if (!spellRef.current) return {}
-
-    return spellRef.current?.gameState ?? {}
-  }
-
-  const setCurrentGameState = newState => {
-    if (!spellRef.current) return
-
-    const update = {
-      gameState: newState,
-    }
-    // publish($SAVE_SPELL_DIFF(tab.id), update)
-  }
-
-  const updateCurrentGameState = _update => {
-    if (!spellRef.current) return
-    const spell = spellRef.current
-
-    // lets delete out all undefined properties coming in
-    Object.keys(_update).forEach(
-      key => _update[key] === undefined && delete _update[key]
-    )
-
-    const update = {
-      gameState: {
-        ...spell.gameState,
-        ..._update,
-      },
-    }
-
-    // Temporarily update the spell refs game state to account for multiple state writes in a spell run
-    spellRef.current = {
-      ...spell,
-      ...update,
-    }
-    // publish($SAVE_SPELL_DIFF(tab.id), update)
-  }
-
-  const getEvents = async (params: GetEventArgs) => {
-    const urlString = `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-      }/event`
-
-    const url = new URL(urlString)
-    for (let p in params) {
-      url.searchParams.append(p, params[p])
-    }
-
-    const response = await fetch(url.toString())
-    if (response.status !== 200) return null
-    const json = await response.json()
-    return json.event
-  }
-
-  const getEventWeaviate = async (params: GetEventArgs) => {
-    const urlString = `${
-      import.meta.env.VITE_APP_API_URL ??
-      import.meta.env.API_ROOT_URL
-    }/eventWeaviate`
-
-    const url = new URL(urlString)
-    for (let p in params) {
-      url.searchParams.append(p, params[p])
-    }
-
-    const response = await fetch(url.toString()).then(response => response.json())
-    return response
-  }
-
-  const storeEvent = async (eventData: CreateEventArgs) => {
-    const response = await axios.post(
-      `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-      }/event`, eventData
-    )
-    console.log('Created event', response.data)
-    return response.data
-  }
-
-  const storeEventWeaviate = async (eventData: CreateEventArgs) => {
-    console.log("Store Event")
-    console.log(eventData)
-    const response = await axios.post(
-      `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-      }/eventWeaviate`, eventData
-    )
-    console.log('Created event', response.data)
-    return response.data
-  }
-
-  const eventQAWeaviate = async ({
-    question, agentId
-  }: QAArgs) => {
-    const params = {
-      question,
-      agentId
-    } as Record<string, any>
-    const urlString = `${
-      import.meta.env.VITE_APP_API_URL ??
-      import.meta.env.API_ROOT_URL
-    }/eventQA`
-    const url = new URL(urlString)
-    for (let p in params) {
-      url.searchParams.append(p, params[p])
-    }
-
-    const response = await fetch(url.toString()).then(response => response.json())
-    return response
-  }
-
-  const deleteEvent = async (eventData: CreateEventArgs) => {
-    const response = await axios.post(
-      `${import.meta.env.VITE_APP_API_URL ?? import.meta.env.API_ROOT_URL
-      }/eventDelete`, eventData
-    )
-    console.log('Deleted ', response.data, ' events')
-    return response.data
-  }
-
-
-  const getWikipediaSummary = async (keyword: string) => {
-    const root = import.meta.env.API_URL
-    const url = `${root}/wikipediaSummary?keyword=${keyword}`
-
-    const response = await fetch(url)
-
-    return await response.json()
-  }
-
   const queryGoogle = async (query: string) => {
     const url = `${magickApiRootUrl}/query_google`
     const response = await axios.post(url, {
       query,
     })
-
 
     const summary = response.data.summary
     const links = response.data.links.join('\n')
@@ -344,11 +214,13 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const completion = async (body: CompletionBody) => {
-    const url = `${import.meta.env.VITE_APP_API_URL || 'http://localhost:5000'
-      }/text_completion`
+    const url = `${
+      import.meta.env.VITE_APP_API_URL || 'http://localhost:3030'
+    }/text_completion`
 
     const apiKey = window.localStorage.getItem('openai-api-key')
 
+    const openAICredentials = window.localStorage.getItem('openai')
     const resp = await fetch(url, {
       method: 'POST',
       headers: {
@@ -356,7 +228,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       },
       body: JSON.stringify({
         ...body,
-        apiKey,
+        apiKey: openAICredentials ? JSON.parse(openAICredentials).apiKey : '',
       }),
     })
 
@@ -383,23 +255,14 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     sendToPlaytest,
     onPlaytest,
     clearTextEditor,
-    getCurrentGameState,
-    setCurrentGameState,
-    updateCurrentGameState,
     processCode,
-    eventQAWeaviate,
     runSpell,
     refreshEventTable,
-    getEvents,
-    getEventWeaviate,
-    storeEvent,
-    deleteEvent,
-    storeEventWeaviate,
-    getWikipediaSummary,
     queryGoogle,
     sendToAvatar,
     getSpell,
     completion,
+    getCurrentSpell,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>

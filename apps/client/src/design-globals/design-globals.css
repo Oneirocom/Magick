@@ -1,14 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap');
 
-p, h1, h2, h3, h4, h5, form, button, label, .flexlayout__tab_button_content {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+form,
+button,
+label,
+.flexlayout__tab_button_content {
   font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
 }
 
 :root {
   color-scheme: dark;
 
-  --primary: #9D12A4;
+  --primary: #9d12a4;
   --dark-0: #000000;
   --dark-1: #191919;
   --dark-2: #272727;
@@ -23,7 +32,7 @@ p, h1, h2, h3, h4, h5, form, button, label, .flexlayout__tab_button_content {
   --blue: #1290ce;
   --purple: #7027dd;
   --glow-light: #b2fccd75;
-  --glow: #9D12A4;
+  --glow: #9d12a4;
   --glow-dark: #570b5b;
 
   --c1: 8px;

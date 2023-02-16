@@ -1,11 +1,28 @@
 import Select from '../../../components/Select/Select'
+import useSWR from 'swr'
+import type { OpenAI } from '../../../../../../@types/openai'
+import { useEffect, useState } from 'react'
 
 const DropdownSelect = ({ control, updateData, initialValue }) => {
   const { dataKey, data } = control
 
   const { values, defaultValue } = data
+  const [compositeValues, setCompositeValues] = useState(values)
 
-  const options = values.map(value => ({
+  // @thomageanderson TODO: This is a hack to get the fine-tunes to show up in the dropdown until we have a vendor provider solution
+  const { data: fineTuneData } =
+    useSWR<OpenAI.List<OpenAI.FineTune>>('fine-tunes')
+
+  useEffect(() => {
+    if (fineTuneData && dataKey === 'modelName') {
+      setCompositeValues([
+        ...values,
+        ...fineTuneData.data.map(fineTune => fineTune.fine_tuned_model),
+      ])
+    }
+  }, [fineTuneData])
+
+  const options = compositeValues.map(value => ({
     value: value,
     label: value,
   }))
