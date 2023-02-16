@@ -3,9 +3,9 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import { rootApi } from './api'
-import { GraphData, Spell } from '@magickml/engine'
+import { projectId, NewSpellArgs, Spell } from '@magickml/engine'
 
-import md5 from 'md5'
+import * as md5 from 'md5'
 
 export interface Diff {
   name: string
@@ -107,13 +107,22 @@ export const spellApi = rootApi.injectEndpoints({
         >
       },
     }),
-    newSpell: builder.mutation<Spell, Partial<Spell>>({
+    newSpell: builder.mutation<Spell, NewSpellArgs>({
       invalidatesTags: ['Spells'],
-      query: spellData => ({
-        url: 'spells',
-        method: 'POST',
-        body: spellData,
-      }),
+      // transformResponse: (response: { data: Spell }, meta, arg) => response.data,
+      query: spellData => {
+        const body = {
+          ...spellData,
+          projectId,
+          hash: md5(JSON.stringify(spellData.graph.nodes)),
+        }
+
+        return {
+          url: 'spells',
+          method: 'POST',
+          body,
+        }
+      },
     }),
     patchSpell: builder.mutation<Spell, PatchArgs>({
       invalidatesTags: ['Spell'],

@@ -57,8 +57,6 @@ const CreateNew = () => {
       const response = await newSpell({
         graph: selectedTemplate?.graph,
         name,
-        projectId,
-        hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
       })
 
       if ('error' in response) {
