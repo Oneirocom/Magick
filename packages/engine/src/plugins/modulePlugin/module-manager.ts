@@ -115,9 +115,9 @@ export class ModuleManager {
     outputs: MagickWorkerOutputs,
     args: { socketInfo: { targetSocket: string } }
   ) {
-    if (!node.data.module) return
-    if (!this.modules[node.data.module as number]) return
-    const moduleName = node.data.module as string
+    if (!node.data.spell) return
+    if (!this.modules[node.data.spell as number]) return
+    const moduleName = node.data.spell as string
     const data = this.modules[moduleName].data as any
     const module = new Module()
     const engine = this.engine?.clone()
