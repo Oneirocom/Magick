@@ -1,5 +1,5 @@
 import Rete from 'rete'
-
+import axios from 'axios'
 import {
   Event,
   EngineContext,
@@ -83,12 +83,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       const url = new URL(urlString)
       let embeddings = params['embedding']
       console.log(embeddings)
-      // TODO: 
-      const response = {data: []}; /* await axios.get(urlString, {
+      const response = await axios.get(urlString, {
         params: {
           embedding: "[" + params['embedding'] + "]"
         }
-      }) */
+      })
       return response.data
 
 
