@@ -73,7 +73,7 @@ const EventHandler = ({ pubSub, tab }) => {
     const updatedSpell = {
       ...currentSpell,
       graph,
-      hash: md5(JSON.stringify(graph))
+      hash: md5(JSON.stringify(graph)),
     }
 
     console.log('updatedSpell', updatedSpell)
@@ -111,7 +111,7 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
-    updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes));
+    updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
 
     const jsonDiff = diff(currentSpell, updatedSpell)
 

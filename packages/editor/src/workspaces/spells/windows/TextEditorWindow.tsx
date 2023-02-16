@@ -36,6 +36,15 @@ const TextEditor = props => {
   }
 
   useEffect(() => {
+    if (code === textEditorData.data && !code) return
+    const delayDebounce = setTimeout(() => {
+      save(code)
+    }, 3000)
+
+    return () => clearTimeout(delayDebounce)
+  }, [code])
+
+  useEffect(() => {
     const options = {
       lineNumbers: language === 'javascript',
       minimap: {
