@@ -1,4 +1,4 @@
-import { Spell } from '@magickml/core'
+import { Spell } from '@magickml/engine'
 import { CSSProperties } from 'react'
 import Icon from '../../../components/Icon/Icon'
 import css from '../homeScreen.module.css'
@@ -41,7 +41,7 @@ const ProjectRow = ({
         <Icon
           name="trash"
           onClick={() => {
-            spell?.name && onDelete(spell.name)
+            spell?.name && onDelete(spell.id)
           }}
           style={{
             marginRight: 'var(--extraSmall)',

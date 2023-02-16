@@ -4,17 +4,9 @@
   "projects": {
     "client": "apps/client",
     "client-core": "packages/client-core",
-    "core": "packages/core",
-    "database": "packages/database",
     "engine": "packages/engine",
-    "agent-server": "apps/agent-server",
-    "plugins": "packages/plugins",
-    "prisma": "packages/prisma",
-    "search-server": "apps/search-server",
+    "plugin-discord": "packages/plugin-discord",
     "server": "apps/server",
-    "server-config": "packages/server-config",
-    "speech-server": "apps/speech-server",
-    "systems": "packages/systems",
-    "utils": "packages/utils"
+    "server-core": "packages/server-core"
   }
 }

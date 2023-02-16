@@ -1,17 +1,6 @@
 import { useState, useEffect } from 'react'
-
-const SingleSocket = props => {
-  return (
-    <div style={{ marginBottom: 10, flex: 1, width: '100%' }}>
-      <p style={{ display: 'inline' }}>{props.name}</p>
-      <span style={{ float: 'right' }}>
-        <button className="list" onClick={() => props.delete(props.name)}>
-          Delete
-        </button>
-      </span>
-    </div>
-  )
-}
+import Form from './Form'
+import SingleElement from './SingleElement'
 
 const AddNewSocket = props => {
   const [value, setValue] = useState('')
@@ -20,24 +9,20 @@ const AddNewSocket = props => {
     setValue(e.target.value)
   }
 
-  const onAdd = () => {
+  const onAdd = e => {
+    if (!value) return
+    e.preventDefault()
     props.addSocket(value)
     setValue('')
   }
 
   return (
-    <div style={{ display: 'flex', gap: 'var(--extraSmall)' }}>
-      <input
-        style={{ flex: 6 }}
-        value={value}
-        type="text"
-        onChange={onChange}
-        placeholder={'Name your socket...'}
-      />
-      <button style={{ flex: 1 }} onClick={onAdd}>
-        + Add
-      </button>
-    </div>
+    <Form
+      value={value}
+      placeHolder="Name your socket..."
+      onChange={onChange}
+      onAdd={onAdd}
+    />
   )
 }
 
@@ -84,10 +69,15 @@ const SocketGenerator = ({ updateData, control, initialValue }) => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-      {sockets.map((socket, i) => (
-        <SingleSocket name={socket.name} key={i} delete={onDelete} />
-      ))}
       <AddNewSocket addSocket={addSocket} />
+      {sockets.map((socket, i) => (
+        <SingleElement
+          name={socket.name}
+          key={i}
+          delete={onDelete}
+          type={socket.socketType}
+        />
+      ))}
     </div>
   )
 }

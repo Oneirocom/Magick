@@ -3,7 +3,9 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import { rootApi } from './api'
-import { GraphData, Spell } from '@magickml/core'
+import { GraphData, Spell } from '@magickml/engine'
+
+import md5 from 'md5'
 
 export interface Diff {
   name: string
@@ -25,19 +27,26 @@ export interface UserSpellArgs {
   spellId: string
 }
 
+export interface SpellData {
+  limit: number
+  skip: number
+  total: number
+  data: Spell[]
+}
+
 export const spellApi = rootApi.injectEndpoints({
   endpoints: builder => ({
-    getSpells: builder.query<Spell[], void>({
+    getSpells: builder.query<SpellData, void>({
       providesTags: ['Spells'],
       query: () => ({
         url: `spells`,
       }),
     }),
-    getSpell: builder.query<Spell, UserSpellArgs>({
+    getSpell: builder.query<SpellData, UserSpellArgs>({
       providesTags: ['Spell'],
       query: ({ spellId }) => {
         return {
-          url: `spells/${spellId}`,
+          url: `spells?name=${spellId}`,
           params: {},
         }
       },
@@ -72,11 +81,21 @@ export const spellApi = rootApi.injectEndpoints({
     saveSpell: builder.mutation<Partial<Spell>, Partial<Spell> | Spell>({
       invalidatesTags: ['Spell'],
       // needed to use queryFn as query option didnt seem to allow async functions.
-      async queryFn({ user, ...spell }, { dispatch }, extraOptions, baseQuery) {
+      async queryFn({ ...spell }, { dispatch }, extraOptions, baseQuery) {
+        // make a copy of spell but remove the id
+        const spellCopy = { ...spell } as any
+        if (spellCopy.id) delete spellCopy.id
+        if (Object.keys(spellCopy).includes('modules')) delete spellCopy.modules
+        if (!spellCopy.created_at)
+          spellCopy.created_at = new Date().toISOString()
+        spellCopy.updated_at = new Date().toISOString()
+        spellCopy.hash = md5(JSON.stringify(spellCopy.graph.nodes))
+
+        console.log('SAVING SPELL')
         const baseQueryOptions = {
-          url: 'spells/save',
-          body: spell,
-          method: 'POST',
+          url: 'spells/' + spell.id,
+          body: spellCopy,
+          method: 'PATCH',
         }
 
         // cast into proper response shape expected by queryFn return
@@ -114,7 +133,7 @@ export const spellApi = rootApi.injectEndpoints({
         url: `spells/${spellId}`,
         method: 'DELETE',
       }),
-    })
+    }),
   }),
 })
 
@@ -136,7 +155,6 @@ export const {
   useRunSpellMutation,
   useSaveSpellMutation,
   useSaveDiffMutation,
-  useDeploySpellMutation,
   usePatchSpellMutation,
 } = spellApi
 

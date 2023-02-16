@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { GraphData } from '@magickml/core'
+import { GraphData, projectId } from '@magickml/engine'
 import {
   uniqueNamesGenerator,
   adjectives,
@@ -16,6 +16,7 @@ import css from '../homeScreen.module.css'
 import TemplatePanel from '../components/TemplatePanel'
 import defaultGraph from '../../../data/graphs/default'
 import threeovGraph from '../../../data/graphs/threeov'
+import md5 from 'md5'
 
 const customConfig = {
   dictionaries: [adjectives, colors],
@@ -30,8 +31,12 @@ export type Template = {
 }
 
 export const magickTemplates: Template[] = [
-	{ label: 'Starter', bg: emptyImg, graph: defaultGraph as any as GraphData },
-	{ label: '3OV for WordPress', bg: emptyImg, graph: threeovGraph as any as GraphData },
+  { label: 'Starter', bg: emptyImg, graph: defaultGraph as any as GraphData },
+  {
+    label: '3OV for WordPress',
+    bg: emptyImg,
+    graph: threeovGraph as any as GraphData,
+  },
 ]
 
 const CreateNew = () => {
@@ -52,6 +57,8 @@ const CreateNew = () => {
       const response = await newSpell({
         graph: selectedTemplate?.graph,
         name,
+        projectId,
+        hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
       })
 
       if ('error' in response) {
@@ -79,7 +86,12 @@ const CreateNew = () => {
     <Panel shadow flexColumn>
       <h1> Create New </h1>
       <div className={css['spell-details']}>
-          <form onSubmit={(e) => {e.preventDefault(); onCreate();}}>
+        <form
+          onSubmit={e => {
+            e.preventDefault()
+            onCreate()
+          }}
+        >
           <label className={css['label']} htmlFor="">
             Spell name
           </label>

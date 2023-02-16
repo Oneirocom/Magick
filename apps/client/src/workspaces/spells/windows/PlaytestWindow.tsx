@@ -9,12 +9,20 @@ import {
   selectStateBySpellId,
   addLocalState,
 } from '../../../state/localState'
+import Select from '../../../components/Select/Select'
 import { usePubSub } from '../../../contexts/PubSubProvider'
 import Window from '../../../components/Window/Window'
 import css from '../../../screens/Magick/magick.module.css'
 import { useFeathers } from '../../../contexts/FeathersProvider'
-import { feathers as feathersFlag } from '../../../config'
 import { useAppSelector } from '../../../state/hooks'
+import { useEditor } from '../../contexts/EditorProvider'
+import { projectId } from '@magickml/engine'
+
+import {
+  useGetSpellQuery,
+  useLazyGetSpellQuery,
+} from 'apps/client/src/state/api/spells'
+import { notDeepEqual } from 'assert'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
@@ -44,6 +52,17 @@ const Input = props => {
   )
 }
 
+const defaultPlaytestData = `{
+  "sender": "playtestSender",
+  "observer": "playtestObserver",
+  "type": "playtest",
+  "client": "playtest",
+  "channel": "playtest",
+  "channelType": "playtest",
+  "agentId": 0,
+  "entities": ["playtestSender", "playtestObserver"]
+}`
+
 const Playtest = ({ tab }) => {
   const scrollbars = useRef<any>()
   const [history, setHistory] = useState([])
@@ -53,10 +72,19 @@ const Playtest = ({ tab }) => {
   const { publish, subscribe, events } = usePubSub()
   const FeathersContext = useFeathers()
   const dispatch = useDispatch()
+  const { serialize } = useEditor()
 
-  const localState = useAppSelector(state =>
-    selectStateBySpellId(state.localState, tab.spellId)
+  const { data: spellData } = useGetSpellQuery(
+    { spellId: tab.spellId },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: !tab.spellId,
+    }
   )
+
+  const localState = useAppSelector(state => {
+    return selectStateBySpellId(state.localState, tab.spellId)
+  })
 
   const client = FeathersContext?.client
   const { $PLAYTEST_INPUT, $PLAYTEST_PRINT } = events
@@ -69,6 +97,28 @@ const Playtest = ({ tab }) => {
     },
     [history]
   )
+
+  // we want to set the options for the dropdown by parsing the spell graph
+  // and looking for nodes with the playtestToggle set to true
+  const [playtestOptions, setPlaytestOptions] = useState([])
+  const [playtestOption, setPlaytestOption] = useState('')
+
+  useEffect(() => {
+    console.log('SPELL DATA!!!', spellData)
+    if (!spellData || !spellData.data[0].graph) return
+
+    const graph = spellData.data[0].graph
+
+    console.log('GRAPH!!!', graph)
+    const options = Object.values(graph.nodes)
+      .filter(node => node.data.playtestToggle)
+      .map(node => ({
+        value: node.data.name ?? node.name,
+        label: node.data.name ?? node.name,
+      }))
+
+    setPlaytestOptions(options)
+  }, [spellData])
 
   // Keep scrollbar at bottom of its window
   useEffect(() => {
@@ -86,7 +136,7 @@ const Playtest = ({ tab }) => {
   useEffect(() => {
     // Set up a default for the local state here
     if (!localState) {
-      dispatch(addLocalState({ spellId: tab.spellId, playtestData: '{}' }))
+      dispatch(addLocalState({ spellId: tab.spellId, playtestData: defaultPlaytestData }))
       return
     }
   }, [localState])
@@ -113,14 +163,6 @@ const Playtest = ({ tab }) => {
   const onSend = () => {
     const newHistory = [...history, `You: ${value}`]
     setHistory(newHistory as [])
-    if (feathersFlag) {
-      client.service('spell-runner').create({
-        spellId: tab.spellId,
-        inputs: {
-          input: value,
-        },
-      })
-    }
 
     let toSend = value
 
@@ -136,15 +178,36 @@ const Playtest = ({ tab }) => {
       if (!json) return
 
       toSend = {
-        input: value,
-        output: value,
-        sender: "Speaker",
-        observer: "Agent",
-        channel: "previewChannel",
-        channelType: "previewChannelType",
+        content: value,
+        sender: 'Speaker',
+        observer: 'Agent',
+        agentId: 0,
+        client: "playtest",
+        channel: 'previewChannel',
+        channelType: 'previewChannelType',
         ...JSON.parse(json),
       }
     }
+
+    // get spell from editor
+    const graph = serialize()
+    if (!graph) return
+
+    const playtestInputName = Object.values(graph.nodes).find(
+      node => node.data.playtestToggle && node.name === 'Universal Input'
+    )?.data.name
+
+    if (!playtestInputName) return
+
+    console.log('FOUND NODE', playtestInputName)
+
+    client.service('spell-runner').create({
+      spellId: tab.spellId,
+      projectId,
+      inputs: {
+        [playtestInputName as string]: toSend,
+      },
+    })
 
     publish($PLAYTEST_INPUT(tab.id), toSend)
     setValue('')
@@ -152,7 +215,7 @@ const Playtest = ({ tab }) => {
 
   const onDataChange = dataText => {
     console.log('new data text', dataText)
-    dispatch(upsertLocalState({ spellId: tab.spellId, playtestData: dataText }))
+    dispatch(upsertLocalState({ spellId: tab.spellId, playtestData: dataText ?? defaultPlaytestData }))
   }
 
   const onChange = e => {
@@ -167,16 +230,32 @@ const Playtest = ({ tab }) => {
     setOpenData(!openData)
   }
 
+  const onSelectChange = async ({ value }) => {
+    setPlaytestOption(value)
+  }
+
   const toolbar = (
     <React.Fragment>
+      <Select
+        style={{ width: '100%', zIndex: 10 }}
+        options={playtestOptions}
+        onChange={onSelectChange}
+        placeholder="target node"
+        creatable={false}
+      />
       <form>
-        <label htmlFor="api-key">API Key</label>
+        <label htmlFor="openai-api-key">API Key</label>
         <input
           type="password"
-          id="api-key"
+          id="openai-api-key"
           name="api-key"
           value="api-key"
-          onChange={e => localStorage.setItem('openai-api-key', e.target.value)}
+          onChange={e =>
+            localStorage.setItem(
+              'openai',
+              JSON.stringify({ apiKey: e.target.value })
+            )
+          }
         />
       </form>
       <button className="small" onClick={onClear}>
@@ -213,7 +292,7 @@ const Playtest = ({ tab }) => {
               language="javascript"
               value={localState?.playtestData}
               options={options}
-              defaultValue={localState?.playtestData || '{}'}
+              defaultValue={localState?.playtestData || defaultPlaytestData}
               onChange={onDataChange}
               beforeMount={handleEditorWillMount}
             />

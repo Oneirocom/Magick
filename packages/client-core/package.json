@@ -1,6 +1,6 @@
 {
   "name": "@magickml/client-core",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "./client-core.umd.js",
   "module": "./client-core.es.js",
   "exports": {

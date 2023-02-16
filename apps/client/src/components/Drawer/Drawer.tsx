@@ -16,8 +16,8 @@ import { useLocation } from 'react-router-dom'
 import StorageIcon from '@mui/icons-material/Storage'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories'
 import HubIcon from '@mui/icons-material/Hub'
-import SettingsIcon from '@mui/icons-material/Settings'
-import Card from '@mui/material/Card'
+
+import MagickLogo from './Magick-purple-logo.png'
 
 const drawerWidth = 240
 
@@ -49,7 +49,6 @@ type HeaderProps = {
 const DrawerHeader = styled('div', {
   shouldForwardProp: prop => prop !== 'open',
 })<HeaderProps>(({ theme, open }) => ({
-  display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',
   position: 'relative',
@@ -102,7 +101,6 @@ const DrawerItem = ({ Icon, open, text, active, onClick = () => {} }) => (
 )
 
 export default function MiniDrawer({ children }) {
-  const theme = useTheme()
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -119,24 +117,51 @@ export default function MiniDrawer({ children }) {
   return (
     <div style={{ display: 'flex', height: '100%' }}>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader open={open}>
-          <Card></Card>
-          <IconButton onClick={toggleDrawer}>
-            {open ? <ChevronLeftIcon /> : <MenuIcon />}
-          </IconButton>
+        <DrawerHeader
+          open={open}
+          onClick={toggleDrawer}
+          sx={{ justifyContent: open ? 'space-between' : 'flex-end' }}
+        >
+          {!open ? (
+            <IconButton>
+              <MenuIcon />
+            </IconButton>
+          ) : (
+            <img
+              style={{
+                height: 16,
+                // on hover, show the finger cursor
+                cursor: 'pointer',
+              }}
+              src={MagickLogo}
+              onClick={toggleDrawer}
+              alt=""
+            />
+          )}
+          {open && (
+            <IconButton>
+              <ChevronLeftIcon fontSize="medium" />
+            </IconButton>
+          )}
         </DrawerHeader>
-        <Divider />
         <List
           sx={{
             padding: 0,
           }}
         >
           <DrawerItem
-            active={location.pathname === '/magick'}
+            active={location.pathname.includes('/magick')}
             Icon={AutoFixHighIcon}
             open={open}
             onClick={onClick('/magick')}
-            text="Spell Composer"
+            text="Spells"
+          />
+          <DrawerItem
+            active={location.pathname.includes('/fineTuneManager')}
+            Icon={AutoStoriesIcon}
+            open={open}
+            onClick={onClick('/fineTuneManager')}
+            text="Fine Tuning"
           />
           {/* <DrawerItem
             active={location.pathname === '/spellbook'}
@@ -145,19 +170,21 @@ export default function MiniDrawer({ children }) {
             text="Spellbook"
           /> */}
           <DrawerItem
-            active={location.pathname === '/eventManager'}
+            active={location.pathname === '/events'}
             Icon={StorageIcon}
             open={open}
-            onClick={onClick('/eventManager')}
-            text="Event Manager"
+            onClick={onClick('/events')}
+            text="Events"
           />
           <DrawerItem
-            active={location.pathname === '/agentManager'}
+            active={location.pathname === '/agents'}
             Icon={HubIcon}
             open={open}
-            text="Agent Manager"
+            onClick={onClick('/agents')}
+            text="Agents"
           />
-          {/* <DrawerItem
+           {/*
+         <DrawerItem
             active={location.pathname === '/settings'}
             Icon={SettingsIcon}
             open={open}
