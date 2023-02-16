@@ -155,8 +155,8 @@ function install(
             graphData?: GraphData,
             useSocketName = false
           ) => {
-            const modules = moduleManager.modules
-            const currentNodeModule = node.data.module as string
+            const modules = moduleManager.modules || []
+            const currentNodeModule = node.data.spellId as string
             if (!modules[currentNodeModule] && !graphData) return
 
             if (!node.data.inputs) node.data.inputs = []

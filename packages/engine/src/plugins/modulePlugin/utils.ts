@@ -108,7 +108,7 @@ const addSockets = ({
 
   if (uniqueCount !== sockets.length)
     throw new Error(
-      `Module ${node.data.module} has duplicate ${
+      `Module ${node.data.spell} has duplicate ${
         taskType === 'option' ? 'trigger' : ''
       } ${connectionType}s`
     )
