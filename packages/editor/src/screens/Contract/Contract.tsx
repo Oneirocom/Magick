@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState, useEffect } from 'react'
 import { useContract, useConnect, useDisconnect, useAccount, useNetwork, useSigner, useContractWrite, usePrepareContractWrite, useSwitchNetwork } from 'wagmi'
 import { useParams } from 'react-router-dom'
