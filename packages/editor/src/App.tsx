@@ -9,7 +9,6 @@ import Contract from './screens/Contract/Contract'
 
 import 'flexlayout-react/style/dark.css'
 import './design-globals/design-globals.css'
-import './App.css'
 
 import MainLayout from './components/MainLayout/MainLayout'
 import EventManagerWindow from './workspaces/spells/windows/EventManager'
