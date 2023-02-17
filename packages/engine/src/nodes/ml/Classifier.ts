@@ -80,7 +80,7 @@ export class Classifier extends MagickComponent<Promise<InputReturn>> {
       candidate_labels: labelData,
     }
 
-    const resp = await axios.post(`${env.API_URL}/hf_request`, {
+    const resp = await axios.post(`${env.API_ROOT_URL}/hf_request`, {
       inputs: inputData as string,
       model: 'facebook/bart-large-mnli',
       parameters: parameters,

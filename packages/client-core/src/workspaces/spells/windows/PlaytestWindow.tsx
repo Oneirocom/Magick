@@ -21,7 +21,7 @@ import { projectId } from '@magickml/engine'
 import {
   useGetSpellQuery,
   useLazyGetSpellQuery,
-} from 'apps/client/src/state/api/spells'
+} from '../../../state/api/spells'
 import { notDeepEqual } from 'assert'
 
 const Input = props => {

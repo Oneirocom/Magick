@@ -5,6 +5,7 @@ import {
   NodeData,
   MagickNode,
 } from '../../types'
+import { API_ROOT_URL } from '../../config'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket, stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -60,7 +61,7 @@ export class Image extends MagickComponent<any> {
   async worker(node: NodeData) {
     const _var = node?.data?._var as string
     const params = new URLSearchParams([['id', node.id]]);
-    const result = await axios.get('http://localhost:3030/DiscordPlugin', { params });
+    const result = await axios.get(`${API_ROOT_URL}/DiscordPlugin`, { params });
     this.name =
       (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
     return {
