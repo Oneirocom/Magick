@@ -3,7 +3,7 @@
   "version": 2,
   "projects": {
     "client": "apps/client",
-    "client-core": "packages/client-core",
+    "editor": "packages/editor",
     "engine": "packages/engine",
     "plugin-discord": "packages/plugin-discord",
     "server": "apps/server",
