@@ -1,8 +1,10 @@
-import axios from 'axios'
 import io from 'socket.io-client'
+import {
+  API_ROOT_URL,
+  SPEECH_SERVER_PORT
+} from '@magickml/engine'
 
-const SPEECH_SERVER_URL: string = `http://localhost:65532`
-const SERVER_URL: string = `http://localhost:3030`
+const SPEECH_SERVER_URL = `${API_ROOT_URL}:${SPEECH_SERVER_PORT}`
 
 export class singleton {
   static instance: speechUtils
