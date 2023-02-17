@@ -8,6 +8,7 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 import mdPlugin, { Mode } from 'vite-plugin-markdown'
+import { viteExternalsPlugin } from 'vite-plugin-externals'
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/editor',
@@ -20,18 +21,27 @@ export default defineConfig({
     },
   },
   plugins: [
+<<<<<<< HEAD
     dts({
       tsConfigFilePath: join(__dirname, 'tsconfig.lib.json'),
       // Faster builds by skipping tests. Set this to false to enable type checking.
+=======
+    mdPlugin({ mode: [Mode.HTML, Mode.TOC, Mode.REACT] }),
+    dts({
+      entryRoot: 'src',
+      tsConfigFilePath: join(__dirname, 'tsconfig.lib.json'),
+>>>>>>> e340b6a (fix editor packaging issues, types are typing)
       skipDiagnostics: true,
     }),
     react(),
     viteTsConfigPaths({
       root: '../../',
     }),
+<<<<<<< HEAD
     mdPlugin({ mode: [Mode.HTML, Mode.TOC, Mode.REACT] })
+=======
+>>>>>>> e340b6a (fix editor packaging issues, types are typing)
   ],
-
   // Uncomment this if you are using workers.
   // worker: {
   //  viteTsConfigPaths({
@@ -68,7 +78,7 @@ export default defineConfig({
     rollupOptions: {
       plugins: [rollupNodePolyFill()],
       // External packages that should not be bundled into your library.
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      external: ['@magickml/plugin-discord', '@magickml/engine', 'react', 'react-dom', 'react/jsx-runtime'],
     },
   },
 })

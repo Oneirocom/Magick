@@ -1,6 +1,6 @@
 import React from "react"
 import axios from 'axios';
-import { VITE_APP_API_URL } from "../../../../engine/src";
+import { VITE_APP_API_URL } from "@magickml/engine";
 
 const fileToDataUri = (file) => new Promise((resolve, reject) => {
     const reader = new FileReader();

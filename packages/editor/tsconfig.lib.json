@@ -8,6 +8,10 @@
     "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",
     "../../node_modules/@nrwl/react/typings/image.d.ts"
   ],
+<<<<<<< HEAD
+=======
+  "paths": { "@magickml/*": ["dist/packages/*"] },
+>>>>>>> e340b6a (fix editor packaging issues, types are typing)
   "exclude": [
     "**/*.spec.ts",
     "**/*.test.ts",

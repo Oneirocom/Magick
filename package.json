@@ -6,7 +6,7 @@
   "scripts": {
     "migrate:make": "nx run server:migrate:make",
     "migrate": "nx run server:migrate",
-    "dev": "npx nx run-many --target=serve --projects=server,client,agent-server,speech-server --parallel 4",
+    "dev": "npx nx run-many --target=serve --projects=server,client --parallel 2",
     "db:init": "npx prisma db push",
     "agents": "npx nx run agent-server:serve",
     "server": "npx nx run server:serve",
@@ -238,6 +238,7 @@
     "vite": "^4.1.1",
     "vite-plugin-dts": "~1.7.1",
     "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-externals": "^0.6.2",
     "vite-plugin-markdown": "^2.1.0",
     "vitest": "^0.25.8",
     "webpack-merge": "^5.8.0"
@@ -248,4 +249,3 @@
     }
   }
 }
-
