@@ -7,6 +7,7 @@ import LoadingScreen from '../components/LoadingScreen/LoadingScreen'
 
 const buildFeathersClient = async () => {
   const feathersClient = feathers()
+  console.log('magickApiRootUrl is', magickApiRootUrl)
   const socket = io(magickApiRootUrl)
   feathersClient.configure(socketio(socket, { timeout: 10000 }))
 

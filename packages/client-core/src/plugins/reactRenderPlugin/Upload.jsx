@@ -1,5 +1,6 @@
 import React from "react"
 import axios from 'axios';
+import { VITE_APP_API_URL } from "../../../../engine/src";
 
 const fileToDataUri = (file) => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -29,7 +30,7 @@ export class Upload extends React.Component {
             .then(dataUri => {
                 axios({
                     method: 'post',
-                    url: 'http://localhost:3030/DiscordPlugin',
+                    url: `${VITE_APP_API_URL}/DiscordPlugin`,
                     data: {
                       id: this.id_image,
                       uri: dataUri

@@ -14,6 +14,9 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
 } from '../../types'
+import {
+  API_ROOT_URL
+} from '../../config'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -23,8 +26,6 @@ const info = 'Returns the input string as voice'
 type WorkerReturn = {
   output: string
 }
-
-const API_URL = 'https://localhost:3030'
 
 export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
@@ -100,7 +101,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
     let url: any = undefined
 
     if (!isCommand && action) {
-      url = await axios.get(`${API_URL}/text_to_speech`, {
+      url = await axios.get(`${API_ROOT_URL}/text_to_speech`, {
         params: {
           text: action,
           voice_provider: voiceProvider,
