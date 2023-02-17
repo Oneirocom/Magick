@@ -5,15 +5,11 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 import mdPlugin, { Mode } from 'vite-plugin-markdown'
-import path from 'path'
 
 export default defineConfig({
   server: {
     port: 4200,
-    host: 'localhost',
-    fs: {
-      allow: [path.resolve(__dirname, '../../packages/client-core')],
-    },
+    host: 'localhost'
   },
   assetsInclude: ['**/*.vrm'],
   resolve: {
