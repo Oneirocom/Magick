@@ -8,7 +8,7 @@ import '../../../screens/Magick/magick.module.css'
 import {
   TextEditorData,
   useInspector,
-} from '../../../workspaces/contexts/InspectorProvider'
+} from '../../contexts/InspectorProvider'
 import { RootState } from '../../../state/store'
 import { useSelector } from 'react-redux'
 

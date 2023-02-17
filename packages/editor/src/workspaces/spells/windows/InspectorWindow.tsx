@@ -5,7 +5,7 @@ import Icon, { componentCategories } from '../../../components/Icon/Icon'
 import Window from '../../../components/Window/Window'
 import DataControls from '../DataControls'
 import WindowMessage from '../../components/WindowMessage'
-import { useInspector } from '../../../workspaces/contexts/InspectorProvider'
+import { useInspector } from '../../contexts/InspectorProvider'
 
 const Inspector = props => {
   const { inspectorData, saveInspector } = useInspector()

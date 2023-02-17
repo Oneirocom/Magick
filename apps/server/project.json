@@ -1,9 +1,9 @@
 {
-  "name": "server",
+  "name": "@magickml/server",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/server/src",
   "projectType": "application",
-  "implicitDependencies": ["server-core", "engine"],
+  "implicitDependencies": ["server-core", "@magickml/engine"],
   "targets": {
     "build": {
       "executor": "@nrwl/webpack:webpack",

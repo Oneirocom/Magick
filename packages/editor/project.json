@@ -1,8 +1,9 @@
 {
-  "name": "editor",
+  "name": "@magickml/editor",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/editor/src",
   "projectType": "library",
+  "implicitDependencies": ["@magickml/engine"],
   "tags": [],
   "targets": {
     "lint": {
@@ -15,6 +16,7 @@
     "build": {
       "executor": "@nrwl/vite:build",
       "outputs": ["{options.outputPath}"],
+      "configFile": "packages/editor/vite.config.ts",
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/packages/editor"

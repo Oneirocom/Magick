@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
-import { useEditor } from '../../workspaces/contexts/EditorProvider'
-import { Layout } from '../../workspaces/contexts/LayoutProvider'
+import { useEditor } from '../contexts/EditorProvider'
+import { Layout } from '../contexts/LayoutProvider'
 import { useLazyGetSpellQuery } from '../../state/api/spells'
 import EventHandler from '../../screens/Magick/components/EventHandler'
 import { debounce } from '../../utils/debounce'
 
-import EditorWindow from './windows/EditorWindow/'
+import EditorWindow from './windows/EditorWindow'
 import Inspector from './windows/InspectorWindow'
 import Playtest from './windows/PlaytestWindow'
 import AvatarWindow from './windows/AvatarWindow'
