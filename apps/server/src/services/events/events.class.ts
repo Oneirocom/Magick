@@ -16,6 +16,7 @@ export class EventService<ServiceParams extends Params = EventParams> extends Kn
   EventPatch
 > {}
 
+
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),
