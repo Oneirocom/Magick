@@ -39,6 +39,7 @@
     "@feathersjs/koa": "5.0.0-pre.35",
     "@feathersjs/schema": "5.0.0-pre.35",
     "@feathersjs/socketio": "5.0.0-pre.35",
+    "@feathersjs/socketio-client": "^5.0.0-pre.37",
     "@feathersjs/transport-commons": "5.0.0-pre.35",
     "@feathersjs/typebox": "5.0.0-pre.35",
     "@google-cloud/speech": "^4.10.2",
@@ -79,8 +80,8 @@
     "fs-blob-store": "^6.0.0",
     "glob": "^7.2.3",
     "graphql": "^16.6.0",
-    "helmet": "^6.0.1",
     "handlebars": "^4.7.7",
+    "helmet": "^6.0.1",
     "http-status-codes": "^2.1.4",
     "json-format": "^1.0.1",
     "json0-ot-diff": "^1.1.2",
@@ -101,10 +102,10 @@
     "path": "^0.12.7",
     "pg": "^8.8.0",
     "pgvector": "^0.1.0",
-    "postgres": "^3.3.3",
-    "pubsub-js": "^1.9.4",
     "pm2": "^5.0.0",
+    "postgres": "^3.3.3",
     "prisma": "^4.8.1",
+    "pubsub-js": "^1.9.4",
     "pyodide": "^0.22.0",
     "react": "^18.2.0",
     "react-console-emulator": "^5.0.2",
@@ -242,4 +243,3 @@
     }
   }
 }
-

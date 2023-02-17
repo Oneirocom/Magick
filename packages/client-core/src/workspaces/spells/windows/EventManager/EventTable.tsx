@@ -1,3 +1,5 @@
+// todo remove this and make a new event table component eventually.
+//@ts-nocheck
 import { useEffect, useMemo, useState } from 'react'
 import {
   useAsyncDebounce,
@@ -279,23 +281,23 @@ function EventTable({ events, updateCallback }) {
         showFirstButton
         showLastButton
       />
-                  <CSVLink
-              data={originalRows}
-              filename="events.csv"
-              target="_blank"
-              style={{ textDecoration: 'none', display: "inline", width: "8em" }}
-            >
-              <button               style={{ textDecoration: 'none', display: "inline" }}>
-                <FaFileCsv size={20} />
-              </button>
-            </CSVLink>
-            <button
-              style={{ display: 'inline', width: "8em" }}
-              name="refresh"
-              onClick={updateCallback}
-            >
-              Refresh
-            </button>
+      <CSVLink
+        data={originalRows}
+        filename="events.csv"
+        target="_blank"
+        style={{ textDecoration: 'none', display: 'inline', width: '8em' }}
+      >
+        <button style={{ textDecoration: 'none', display: 'inline' }}>
+          <FaFileCsv size={20} />
+        </button>
+      </CSVLink>
+      <button
+        style={{ display: 'inline', width: '8em' }}
+        name="refresh"
+        onClick={updateCallback}
+      >
+        Refresh
+      </button>
     </Stack>
   )
 }

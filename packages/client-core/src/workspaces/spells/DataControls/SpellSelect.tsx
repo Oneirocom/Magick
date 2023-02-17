@@ -54,7 +54,10 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   }
 
   // TODO fix on change to handle loading a single spell
-  const onChange = async ({ value }) => {
+  const onChange = async e => {
+    if (!e) return
+    const { value } = e
+
     getSpell({
       spellId: value,
     })

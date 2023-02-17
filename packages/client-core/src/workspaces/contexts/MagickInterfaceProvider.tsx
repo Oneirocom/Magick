@@ -7,7 +7,7 @@ import {
   MagickWorkerInputs,
   CompletionBody,
   QAArgs,
-  VITE_APP_API_URL
+  VITE_APP_API_URL,
 } from '@magickml/engine'
 
 import {
@@ -148,6 +148,8 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
   const getSpell = async spellId => {
     const spell = await _getSpell(spellId)
+
+    if (!spell.data) return null
 
     return spell.data[0] as Spell
   }

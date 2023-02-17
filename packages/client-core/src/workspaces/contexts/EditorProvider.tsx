@@ -204,7 +204,7 @@ const RawEditor = ({ tab, children }) => {
       >
         <div
           ref={el => {
-            if (el && !loaded) {
+            if (el && !loaded && spell) {
               buildEditor(el, spell.data[0], tab, reteInterface)
               setLoaded(true)
             }

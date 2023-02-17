@@ -82,6 +82,8 @@ const Playtest = ({ tab }) => {
     }
   )
 
+  // const localState = {} as any
+
   const localState = useAppSelector(state => {
     return selectStateBySpellId(state.localState, tab.spellId)
   })
@@ -100,7 +102,10 @@ const Playtest = ({ tab }) => {
 
   // we want to set the options for the dropdown by parsing the spell graph
   // and looking for nodes with the playtestToggle set to true
-  const [playtestOptions, setPlaytestOptions] = useState([])
+  const [playtestOptions, setPlaytestOptions] = useState<Record<
+    string,
+    any
+  > | null>([])
   const [playtestOption, setPlaytestOption] = useState('')
 
   useEffect(() => {
@@ -134,10 +139,15 @@ const Playtest = ({ tab }) => {
 
   // Sync up localState into data field for persistence
   useEffect(() => {
+    console.log('Checking for local state!', localState)
     // Set up a default for the local state here
     if (!localState) {
-      dispatch(addLocalState({ spellId: tab.spellId, playtestData: defaultPlaytestData }))
-      return
+      dispatch(
+        addLocalState({
+          spellId: tab.spellId,
+          playtestData: defaultPlaytestData,
+        })
+      )
     }
   }, [localState])
 
@@ -166,28 +176,28 @@ const Playtest = ({ tab }) => {
 
     let toSend = value
 
-    if (localState?.playtestData !== '{}') {
-      const json = localState?.playtestData.replace(
-        /(['"])?([a-z0-9A-Z_]+)(['"])?:/g,
-        '"$2": '
-      )
+    // if (localState?.playtestData !== '{}') {
+    //   const json = localState?.playtestData.replace(
+    //     /(['"])?([a-z0-9A-Z_]+)(['"])?:/g,
+    //     '"$2": '
+    //   )
 
-      // IMPLEMENT THIS: https://www.npmjs.com/package/json5
+    //   // IMPLEMENT THIS: https://www.npmjs.com/package/json5
 
-      // todo could throw an error here
-      if (!json) return
+    //   // todo could throw an error here
+    //   if (!json) return
 
-      toSend = {
-        content: value,
-        sender: 'Speaker',
-        observer: 'Agent',
-        agentId: 0,
-        client: "playtest",
-        channel: 'previewChannel',
-        channelType: 'previewChannelType',
-        ...JSON.parse(json),
-      }
-    }
+    //   toSend = {
+    //     content: value,
+    //     sender: 'Speaker',
+    //     observer: 'Agent',
+    //     agentId: 0,
+    //     client: 'playtest',
+    //     channel: 'previewChannel',
+    //     channelType: 'previewChannelType',
+    //     ...JSON.parse(json),
+    //   }
+    // }
 
     // get spell from editor
     const graph = serialize()
@@ -215,7 +225,12 @@ const Playtest = ({ tab }) => {
 
   const onDataChange = dataText => {
     console.log('new data text', dataText)
-    dispatch(upsertLocalState({ spellId: tab.spellId, playtestData: dataText ?? defaultPlaytestData }))
+    dispatch(
+      upsertLocalState({
+        spellId: tab.spellId,
+        playtestData: dataText ?? defaultPlaytestData,
+      })
+    )
   }
 
   const onChange = e => {

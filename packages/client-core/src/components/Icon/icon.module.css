@@ -7,136 +7,136 @@
 }
 
 .account {
-  background-image: url('account.svg');
+  background-image: url('/account.svg');
 }
 .add {
-  background-image: url('add.svg');
+  background-image: url('/add.svg');
 }
 .ankh {
-  background-image: url('ankh.svg');
+  background-image: url('/ankh.svg');
 }
 .add {
-  background-image: url('add.svg');
+  background-image: url('/add.svg');
 }
 .bird {
-  background-image: url('bird.svg');
+  background-image: url('/bird.svg');
 }
 .cloth {
-  background-image: url('cloth.svg');
+  background-image: url('/cloth.svg');
 }
 .cup {
-  background-image: url('cup.svg');
+  background-image: url('/cup.svg');
 }
 .feathers {
-  background-image: url('feathers.svg');
+  background-image: url('/feathers.svg');
 }
 .fewshot {
-  background-image: url('fewshot.svg');
+  background-image: url('/fewshot.svg');
 }
 .hand {
-  background-image: url('hand.svg');
+  background-image: url('/hand.svg');
 }
 .info {
-  background-image: url('info.svg');
+  background-image: url('/info.svg');
 }
 .merge {
-  background-image: url('merge.svg');
+  background-image: url('/merge.svg');
 }
 .minus {
-  background-image: url('minus.svg');
+  background-image: url('/minus.svg');
 }
 .moon {
-  background-image: url('moon.svg');
+  background-image: url('/moon.svg');
 }
 .newnode {
-  background-image: url('newnode.svg');
+  background-image: url('/newnode.svg');
 }
 .pause {
-  background-image: url('pause.svg');
+  background-image: url('/pause.svg');
 }
 .person {
-  background-image: url('person.svg');
+  background-image: url('/person.svg');
 }
 .play-print {
-  background-image: url('play-print.svg');
+  background-image: url('/play-print.svg');
 }
 .play {
-  background-image: url('play.svg');
+  background-image: url('/play.svg');
 }
 .properties {
-  background-image: url('properties.svg');
+  background-image: url('/properties.svg');
 }
 .refresh {
-  background-image: url('refresh.svg');
+  background-image: url('/refresh.svg');
 }
 .search {
-  background-image: url('search.svg');
+  background-image: url('/search.svg');
 }
 .seive {
-  background-image: url('seive.svg');
+  background-image: url('/seive.svg');
 }
 .snake {
-  background-image: url('snake.svg');
+  background-image: url('/snake.svg');
 }
 .state {
-  background-image: url('state.svg');
+  background-image: url('/state.svg');
 }
 .state-read {
-  background-image: url('state-read.svg');
+  background-image: url('/state-read.svg');
 }
 .state-write {
-  background-image: url('state-write.svg');
+  background-image: url('/state-write.svg');
 }
 .stop {
-  background-image: url('stop.svg');
+  background-image: url('/stop.svg');
 }
 .stop-sign {
-  background-image: url('stop-sign.svg');
+  background-image: url('/stop-sign.svg');
 }
 .switch {
-  background-image: url('switch.svg');
+  background-image: url('/switch.svg');
 }
 .temperature {
-  background-image: url('temperature.svg');
+  background-image: url('/temperature.svg');
 }
 .text {
-  background-image: url('text.svg');
+  background-image: url('/text.svg');
 }
 .time {
-  background-image: url('time.svg');
+  background-image: url('/time.svg');
 }
 .warn {
-  background-image: url('warn.svg');
+  background-image: url('/warn.svg');
 }
 .add {
-  background-image: url('add.svg');
+  background-image: url('/add.svg');
 }
 .water {
-  background-image: url('water.svg');
+  background-image: url('/water.svg');
 }
 .water-play {
-  background-image: url('water-play.svg');
+  background-image: url('/water-play.svg');
 }
 .water-run {
-  background-image: url('water-run.svg');
+  background-image: url('/water-run.svg');
 }
 .folder {
-  background-image: url('folder.svg');
+  background-image: url('/folder.svg');
 }
 .close {
-  background-image: url('close.svg');
+  background-image: url('/close.svg');
 }
 .tiles {
-  background-image: url('tiles.svg');
+  background-image: url('/tiles.svg');
 }
 .trash {
-  background-image: url('trash.svg');
+  background-image: url('/trash.svg');
 }
 
 .trash:hover {
-  background-image: url('dangerTrash.svg');
+  background-image: url('/dangerTrash.svg');
 }
 
 .node-lock {
-  background-image: url('node-lock.svg');
+  background-image: url('/node-lock.svg');
 }
