@@ -21,26 +21,16 @@ export default defineConfig({
     },
   },
   plugins: [
-<<<<<<< HEAD
-    dts({
-      tsConfigFilePath: join(__dirname, 'tsconfig.lib.json'),
-      // Faster builds by skipping tests. Set this to false to enable type checking.
-=======
     mdPlugin({ mode: [Mode.HTML, Mode.TOC, Mode.REACT] }),
     dts({
       entryRoot: 'src',
       tsConfigFilePath: join(__dirname, 'tsconfig.lib.json'),
->>>>>>> e340b6a (fix editor packaging issues, types are typing)
       skipDiagnostics: true,
     }),
     react(),
     viteTsConfigPaths({
       root: '../../',
     }),
-<<<<<<< HEAD
-    mdPlugin({ mode: [Mode.HTML, Mode.TOC, Mode.REACT] })
-=======
->>>>>>> e340b6a (fix editor packaging issues, types are typing)
   ],
   // Uncomment this if you are using workers.
   // worker: {
