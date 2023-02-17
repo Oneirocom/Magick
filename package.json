@@ -6,10 +6,8 @@
   "scripts": {
     "migrate:make": "nx run server:migrate:make",
     "migrate": "nx run server:migrate",
-    "dev": "npx nx run-many --target=serve --projects=server,client --parallel 2",
+    "dev": "npx nx run-many --target=serve --projects=@magickml/server,@magickml/client",
     "db:init": "npx prisma db push",
-    "agents": "npx nx run agent-server:serve",
-    "server": "npx nx run server:serve",
     "containers": "concurrently \"docker-compose up\" \"sleep 20 && npm run db:init && echo database synced!\"",
     "build": "npx nx build",
     "build-client": "npx nx build client",

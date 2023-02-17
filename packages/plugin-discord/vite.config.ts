@@ -10,7 +10,7 @@ import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 import mdPlugin, { Mode } from 'vite-plugin-markdown'
 
 export default defineConfig({
-  cacheDir: '../../node_modules/.vite/editor',
+  cacheDir: '../../node_modules/.vite/plugin-discord',
   assetsInclude: ['**/*.vrm', '**/*.svg'],
   resolve: {
     alias: {
@@ -20,18 +20,17 @@ export default defineConfig({
     },
   },
   plugins: [
+    mdPlugin({ mode: [Mode.HTML, Mode.TOC, Mode.REACT] }),
+    dts({
+      entryRoot: 'src',
+      tsConfigFilePath: join(__dirname, 'tsconfig.lib.json'),
+      skipDiagnostics: true,
+    }),
     react(),
     viteTsConfigPaths({
       root: '../../',
     }),
-    mdPlugin({ mode: [Mode.HTML, Mode.TOC, Mode.REACT] }),
-    dts({
-      tsConfigFilePath: join(__dirname, 'tsconfig.lib.json'),
-      // Faster builds by skipping tests. Set this to false to enable type checking.
-      skipDiagnostics: false,
-    }),
   ],
-
   // Uncomment this if you are using workers.
   // worker: {
   //  viteTsConfigPaths({
@@ -59,7 +58,7 @@ export default defineConfig({
     lib: {
       // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
-      name: 'editor',
+      name: 'plugin-discord',
       fileName: 'index',
       // Change this to the formats you want to support.
       // Don't forgot to update your package.json as well.
@@ -68,7 +67,7 @@ export default defineConfig({
     rollupOptions: {
       plugins: [rollupNodePolyFill()],
       // External packages that should not be bundled into your library.
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      external: ['@magickml/engine', 'react', 'react-dom', 'react/jsx-runtime'],
     },
   },
 })

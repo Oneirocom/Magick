@@ -64,5 +64,5 @@
   "cli": {
     "defaultCollection": "@nxext/vite"
   },
-  "defaultProject": "server"
+  "defaultProject": "@magickml/server"
 }

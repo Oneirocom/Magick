@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "main": "./src/index.ts",
   "module": "./src/index.ts",
-  "dependencies": {
-    "@magickml/engine": "file:../../packages/engine"
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
 }

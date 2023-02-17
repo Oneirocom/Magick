@@ -1,5 +1,5 @@
 {
-  "name": "plugin-discord",
+  "name": "@magickml/plugin-discord",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/plugin-discord/src",
   "projectType": "library",
@@ -8,6 +8,7 @@
     "build": {
       "executor": "@nrwl/vite:build",
       "outputs": ["{options.outputPath}"],
+      "configFile": "packages/plugin-discord/vite.config.ts",
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/packages/plugin-discord"
