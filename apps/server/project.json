@@ -36,13 +36,13 @@
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "server:build",
+        "buildTarget": "@magickml/server:build",
         "inspect": true,
         "port": 7778
       },
       "configurations": {
         "production": {
-          "buildTarget": "server:build:production"
+          "buildTarget": "@magickml/server:build:production"
         }
       }
     },

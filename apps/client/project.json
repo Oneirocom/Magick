@@ -41,16 +41,16 @@
       "defaultConfiguration": "development",
       "dependsOn": ["^build"],
       "options": {
-        "buildTarget": "client:build"
+        "buildTarget": "@magickml/client:build"
       },
       "configurations": {
         "development": {
           "logLevel": "info",
           "hmr": true,
-          "buildTarget": "client:build:development"
+          "buildTarget": "@magickml/client:build:development"
         },
         "production": {
-          "buildTarget": "client:build:production",
+          "buildTarget": "@magickml/client:build:production",
           "hmr": false
         }
       }
