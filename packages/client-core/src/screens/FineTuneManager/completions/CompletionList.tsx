@@ -1,15 +1,17 @@
+import Button from '@mui/material/Button'
+import React from 'react'
+
+import { useNavigate } from 'react-router-dom'
+import ExpansionDetails from '../components/ExpansionDetails'
 import FileListTable from '../files/FileListTable'
 import UploadFileButton from '../files/UploadFileButton'
 import FineTuneList from '../fine-tunes/FineTuneList'
-import ExpansionDetails from '../components/ExpansionDetails'
-import React from 'react'
-import Button from '@mui/material/Button'
-import { useNavigate } from 'react-router-dom'
 // TODO @thomageanderson: resolve the type warning on this markdown import
-import { html as CompletionInstructions } from './instructions.md'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { Box, Typography } from '@mui/material'
 import InfoCard from '../components/InfoCard'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+
+import { html as CompletionInstructions } from './instructions.md'
 
 export default function ClassificationList() {
   const navigate = useNavigate()

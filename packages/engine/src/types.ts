@@ -115,7 +115,6 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
 
 export type Env = {
   API_ROOT_URL: string
-  API_URL: string
   APP_SEARCH_SERVER_URL: string
 }
 

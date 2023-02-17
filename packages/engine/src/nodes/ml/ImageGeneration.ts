@@ -9,6 +9,7 @@ import {
 } from '../../types'
 import { stringSocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { API_ROOT_URL } from '../../config'
 
 const info =
   'Image Generation node, leverages the current Automatic1111 build of Stable Diffusion (https://github.com/automatic1111/stable-diffusion-webui) and takes an input string and arbitrary labels and returns the most likely label'
@@ -96,7 +97,7 @@ export class ImageGeneration extends MagickComponent<Promise<InputReturn>> {
     const prompt = inputs['prompt'] && inputs['prompt'][0]
     const endpoint = inputs['endpoint'] && inputs['endpoint'][0]
 
-    const server = endpoint ?? 'http://localhost:3030/image_generation'
+    const server = endpoint ?? `${API_ROOT_URL}/image_generation`
 
     const { images } = await getPrompt(prompt, server)
     const image = images && images[0]

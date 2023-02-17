@@ -1,4 +1,8 @@
-import { Node, Socket, Control, Image, Upload } from '@magickml/client-core'
+import { Node } from '../../plugins/reactRenderPlugin/Node'
+import { Socket } from '../../plugins/reactRenderPlugin/Socket'
+import { Control } from '../../plugins/reactRenderPlugin/Control'
+import { Upload } from '../../plugins/reactRenderPlugin/Upload'
+
 import Icon, { componentCategories } from '../Icon/Icon'
 import css from './Node.module.css'
 
