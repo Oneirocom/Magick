@@ -129,6 +129,8 @@ export default function MiniDrawer({ children }) {
           ) : (
             <img
               style={{
+                marginLeft: "1em",
+                marginTop: "2em",
                 height: 16,
                 // on hover, show the finger cursor
                 cursor: 'pointer',
@@ -137,11 +139,6 @@ export default function MiniDrawer({ children }) {
               onClick={toggleDrawer}
               alt=""
             />
-          )}
-          {open && (
-            <IconButton>
-              <ChevronLeftIcon fontSize="medium" />
-            </IconButton>
           )}
         </DrawerHeader>
         <List
