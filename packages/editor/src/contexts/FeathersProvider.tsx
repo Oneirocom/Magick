@@ -1,14 +1,14 @@
 import { feathers, socketio } from '@feathersjs/client'
+import { createContext, useContext, useEffect, useState } from 'react'
 import io from 'socket.io-client'
-import { useContext, createContext, useEffect, useState } from 'react'
 
-import { magickApiRootUrl } from '../config'
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen'
+import { useConfig } from './ConfigProvider'
 
 const buildFeathersClient = async () => {
   const feathersClient = feathers()
-  console.log('magickApiRootUrl is', magickApiRootUrl)
-  const socket = io(magickApiRootUrl)
+  const config = useConfig()
+  const socket = io(config.apiUrl)
   feathersClient.configure(socketio(socket, { timeout: 10000 }))
 
   // No idea how to type feathers to add io properties to root client.

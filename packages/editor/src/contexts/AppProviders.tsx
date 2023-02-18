@@ -13,6 +13,7 @@ const darkTheme = createTheme({
 })
 
 const providers = [
+  [ConfigProvider, { config }],
   [ThemeProvider, { theme: darkTheme }],
   FeathersProvider,
   PubSubProvider,
@@ -36,7 +37,7 @@ const providers = [
  *
  */
 
-function ComposeProviders({ providers, children }) {
+function ComposeProviders({ config, providers, children }) {
   const _providers = [...providers].reverse()
   return _providers.reduce((acc, current) => {
     const [Provider, props] = Array.isArray(current)
@@ -48,8 +49,8 @@ function ComposeProviders({ providers, children }) {
 }
 
 // Centralize all our providers to avoid nesting hell.
-const AppProviders = ({ children }) => (
-  <ComposeProviders providers={providers}>{children}</ComposeProviders>
+const AppProviders = ({ config, children }) => (
+  <ComposeProviders config={config} providers={providers}>{children}</ComposeProviders>
 )
 
 export default AppProviders

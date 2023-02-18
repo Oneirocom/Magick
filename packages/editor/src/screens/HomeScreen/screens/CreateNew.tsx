@@ -9,7 +9,7 @@ import {
 } from 'unique-names-generator'
 import { useNavigate } from 'react-router-dom'
 
-import { useNewSpellMutation } from '../../../state/api/spells'
+import { getOrCreateSpellApi } from '../../../state/api/spells'
 import Panel from '../../../components/Panel/Panel'
 import emptyImg from '../empty.png'
 import css from '../homeScreen.module.css'
@@ -17,6 +17,7 @@ import TemplatePanel from '../components/TemplatePanel'
 import defaultGraph from '../../../data/graphs/default'
 import threeovGraph from '../../../data/graphs/threeov'
 import md5 from 'md5'
+import { useConfig } from '../../../contexts/ConfigProvider'
 
 const customConfig = {
   dictionaries: [adjectives, colors],
@@ -40,6 +41,9 @@ export const magickTemplates: Template[] = [
 ]
 
 const CreateNew = () => {
+  const config = useConfig()
+  const spellApi = getOrCreateSpellApi(config)
+
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
     magickTemplates[0]
   )
@@ -47,7 +51,7 @@ const CreateNew = () => {
 
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
-  const [newSpell] = useNewSpellMutation()
+  const [newSpell] = spellApi.useNewSpellMutation()
   const { register, handleSubmit } = useForm()
 
   const onCreate = handleSubmit(async data => {

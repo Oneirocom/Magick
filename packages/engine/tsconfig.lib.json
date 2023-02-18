@@ -4,7 +4,6 @@
     "outDir": "../../dist/out-tsc",
     "types": ["node"]
   },
-  "paths": { "@magickml/*": ["dist/packages/*"] },
   "exclude": ["**/*.spec.ts", "**/*.test.ts"],
   "include": ["**/*.ts"]
 }

@@ -1,7 +1,7 @@
 {
   "name": "@magickml/engine",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/engine/src",
+  "sourceRoot": "packages/engine",
   "projectType": "library",
   "tags": [],
   "targets": {

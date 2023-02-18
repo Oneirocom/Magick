@@ -1,17 +1,21 @@
-import { useState } from 'react'
+import md5 from 'md5'
 import { useSnackbar } from 'notistack'
-import { usePatchSpellMutation } from '../../state/api/spells'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Modal from '../Modal/Modal'
-import css from './modalForms.module.css'
-import { closeTab, openTab } from '../../state/tabs'
 import { useDispatch } from 'react-redux'
 
-import md5 from 'md5'
+import { closeTab, openTab } from '../../state/tabs'
+import Modal from '../Modal/Modal'
+import css from './modalForms.module.css'
+import { useConfig } from '../../contexts/ConfigProvider'
+import { getOrCreateSpellApi } from '../../state/api/spells'
 
 const EditSpellModal = ({ closeModal, spellId, name, tab }) => {
+  const config = useConfig()
+  const spellApi = getOrCreateSpellApi(config)
+  
   const [error, setError] = useState('')
-  const [patchSpell, { isLoading }] = usePatchSpellMutation()
+  const [patchSpell, { isLoading }] = spellApi.usePatchSpellMutation()
   const { enqueueSnackbar } = useSnackbar()
   const dispatch = useDispatch()
 

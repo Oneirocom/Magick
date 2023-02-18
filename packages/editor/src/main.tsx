@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import './wdyr'
 import 'regenerator-runtime/runtime'
@@ -9,12 +9,23 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import App from './App'
 import { client } from './wagmi'
 import AppProviders from './contexts/AppProviders'
-import { store } from './state/store'
+import { getOrCreateStore } from './state/store'
 
-const MagickIDE = () => (
+import { AppConfig } from './contexts/ConfigProvider'
+
+export type MagickIDEProps = {
+  config: AppConfig
+}
+
+export const MagickIDE = ({
+  config,
+}: MagickIDEProps) => {
+  const [store, _] = useState(getOrCreateStore(config));
+  if(!config || !store) return (<div>Error, check your config...</div>)
+  return (
   <Router>
     <Provider store={store}>
-      <AppProviders>
+      <AppProviders config={config}>
         <WagmiConfig client={client}>
           <App />
         </WagmiConfig>
@@ -22,5 +33,6 @@ const MagickIDE = () => (
     </Provider>
   </Router>
 )
+  }
 
 export default MagickIDE

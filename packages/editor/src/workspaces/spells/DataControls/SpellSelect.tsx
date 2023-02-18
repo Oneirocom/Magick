@@ -1,24 +1,24 @@
-import { useSnackbar } from 'notistack'
 import { GraphData } from '@magickml/engine'
+import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
 
+import Select from '../../../components/Select/Select'
+import { useConfig } from '../../../contexts/ConfigProvider'
+import { getOrCreateSpellApi } from '../../../state/api/spells'
 import { useAppDispatch } from '../../../state/hooks'
 import { openTab } from '../../../state/tabs'
-// import { useModule } from '../../../contexts/ModuleProvider'
-import Select from '../../../components/Select/Select'
-import {
-  useLazyGetSpellQuery,
-  useGetSpellsQuery,
-  useNewSpellMutation,
-} from '../../../state/api/spells'
+
 import defaultGraph from '../../../data/graphs/default'
 
 const ModuleSelect = ({ control, updateData, initialValue }) => {
+  const config = useConfig()
+  const spellApi = getOrCreateSpellApi(config)
+
   const dispatch = useAppDispatch()
 
-  const [getSpell, { data: spell }] = useLazyGetSpellQuery()
-  const { data: spells } = useGetSpellsQuery()
-  const [newSpell] = useNewSpellMutation()
+  const [getSpell, { data: spell }] = spellApi.useLazyGetSpellQuery()
+  const { data: spells } = spellApi.useGetSpellsQuery()
+  const [newSpell] = spellApi.useNewSpellMutation()
 
   const { enqueueSnackbar } = useSnackbar()
   const { dataKey } = control

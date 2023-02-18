@@ -9,7 +9,8 @@ import React, {
   useEffect,
 } from 'react'
 
-import { useLazyGetSpellQuery } from '../../state/api/spells'
+import { getOrCreateSpellApi } from '../../state/api/spells'
+import { useConfig } from '../../contexts/ConfigProvider'
 
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import { MyNode } from '../../components/Node/Node'
@@ -168,7 +169,10 @@ const EditorProvider = ({ children }) => {
 }
 
 const RawEditor = ({ tab, children }) => {
-  const [getSpell, { data: spell, isLoading }] = useLazyGetSpellQuery()
+  const config = useConfig()
+  const spellApi = getOrCreateSpellApi(config)
+
+  const [getSpell, { data: spell, isLoading }] = spellApi.useLazyGetSpellQuery()
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
   // This will be the main interface between magick and rete

@@ -5,25 +5,26 @@ import { GraphData, Spell } from '@magickml/engine'
 
 import md5 from 'md5'
 
-import {
-  useSaveSpellMutation,
-  useGetSpellQuery,
-  useSaveDiffMutation,
-} from '../../../state/api/spells'
+import { getOrCreateSpellApi } from '../../../state/api/spells'
 import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
 import { useEditor } from '../../../workspaces/contexts/EditorProvider'
 import { diff } from '../../../utils/json0'
 import { useFeathers } from '../../../contexts/FeathersProvider'
 import { RootState } from '../../../state/store'
 
+import { useConfig } from '../../../contexts/ConfigProvider'
+
 const EventHandler = ({ pubSub, tab }) => {
+  const config = useConfig()
+  const spellApi = getOrCreateSpellApi(config)
+
   // only using this to handle events, so not rendering anything with it.
   const { createOrFocus, windowTypes } = useLayout()
   const { enqueueSnackbar } = useSnackbar()
 
-  const [saveSpellMutation] = useSaveSpellMutation()
-  const [saveDiff] = useSaveDiffMutation()
-  const { data: spell } = useGetSpellQuery({
+  const [saveSpellMutation] = spellApi.useSaveSpellMutation()
+  const [saveDiff] = spellApi.useSaveDiffMutation()
+  const { data: spell } = spellApi.useGetSpellQuery({
     spellId: tab.spellId,
   })
   const preferences = useSelector(

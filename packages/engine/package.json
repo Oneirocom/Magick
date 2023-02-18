@@ -5,8 +5,8 @@
   "module": "./src/index.ts",
   "exports": {
     ".": {
-      "import": "./index.mjs",
-      "require": "./index.js"
+      "import": "./src/index.mjs",
+      "require": "./src/index.js"
     }
   }
 }

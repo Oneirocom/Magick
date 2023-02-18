@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import Editor from '@monaco-editor/react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
-
 import {
   upsertLocalState,
   selectStateBySpellId,
@@ -18,11 +17,8 @@ import { useAppSelector } from '../../../state/hooks'
 import { useEditor } from '../../contexts/EditorProvider'
 import { projectId } from '@magickml/engine'
 
-import {
-  useGetSpellQuery,
-  useLazyGetSpellQuery,
-} from '../../../state/api/spells'
-import { notDeepEqual } from 'assert'
+import { getOrCreateSpellApi } from '../../../state/api/spells'
+import { useConfig } from '../../../contexts/ConfigProvider'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
@@ -64,6 +60,9 @@ const defaultPlaytestData = `{
 }`
 
 const Playtest = ({ tab }) => {
+  const config = useConfig()
+  const spellApi = getOrCreateSpellApi(config)
+
   const scrollbars = useRef<any>()
   const [history, setHistory] = useState([])
   const [value, setValue] = useState('')
@@ -74,7 +73,7 @@ const Playtest = ({ tab }) => {
   const dispatch = useDispatch()
   const { serialize } = useEditor()
 
-  const { data: spellData } = useGetSpellQuery(
+  const { data: spellData } = spellApi.useGetSpellQuery(
     { spellId: tab.spellId },
     {
       refetchOnMountOrArgChange: true,
@@ -111,8 +110,10 @@ const Playtest = ({ tab }) => {
 
     console.log('GRAPH!!!', graph)
     const options = Object.values(graph.nodes)
-      .filter(node => node.data.playtestToggle)
-      .map(node => ({
+      .filter((node: any) => {
+        return node.data.playtestToggle
+      })
+      .map((node: any) => ({
         value: node.data.name ?? node.name,
         label: node.data.name ?? node.name,
       }))
