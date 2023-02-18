@@ -4,6 +4,8 @@
     "@capacitor/cli": "^3.6.0"
   },
   "dependencies": {
-    "@capacitor-community/electron": "^4.1.2"
+    "@capacitor-community/electron": "^4.1.2",
+    "@magickml/engine": "*",
+    "@magickml/editor": "*"
   }
 }

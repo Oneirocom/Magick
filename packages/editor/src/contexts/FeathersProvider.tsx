@@ -5,10 +5,9 @@ import io from 'socket.io-client'
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen'
 import { useConfig } from './ConfigProvider'
 
-const buildFeathersClient = async () => {
-  const feathersClient = feathers()
-  const config = useConfig()
+const buildFeathersClient = async (config) => {
   const socket = io(config.apiUrl)
+  const feathersClient = feathers()
   feathersClient.configure(socketio(socket, { timeout: 10000 }))
 
   // No idea how to type feathers to add io properties to root client.
@@ -25,13 +24,14 @@ export const useFeathers = () => useContext(Context)
 
 // Might want to namespace these
 const FeathersProvider = ({ children }) => {
+  const config = useConfig()
   const [client, setClient] = useState<FeathersContext['client']>(null)
 
   useEffect(() => {
     console.log('attempted to connect')
     // We only want to create the feathers connection once we have a user to handle
     ;(async () => {
-      const client = await buildFeathersClient()
+      const client = await buildFeathersClient(config)
 
       client.io.on('connect', () => {
         setClient(client)

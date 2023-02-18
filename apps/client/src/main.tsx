@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import MagickIDE from "@magickml/editor";
+import MagickIDE, { MagickIDEProps } from "@magickml/editor";
 
 // load plugins
 await (async () => {
@@ -11,8 +11,11 @@ await (async () => {
 const container = document.getElementById('root')
 const root = createRoot(container!) // createRoot(container!) if you use TypeScript
 ;(window as any).root = root
+const config: MagickIDEProps = {
+    apiUrl: import.meta.env.VITE_APP_API_URL,
+}
 const Root = () => (
-  <MagickIDE />
+  <MagickIDE config={config} />
 )
 
 root.render(<Root />)
