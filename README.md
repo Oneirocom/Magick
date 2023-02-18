@@ -48,17 +48,9 @@ _Please be aware Magick is under heavy development and changes can cause your DB
 
 The default setup of Magick is connected to a test database on Supabase. It will get you going, but it will likely be wiped regularly and is not a good storage for your spells.
 
-### Deploy your own database
+We recommend either installing the docker desktop app, and running `docker-compose up` at the root of Magick, or getting your own Supabase instance set up for free in the cloud.
 
-To deploy your own database, we suggest using Supabase or another Postgres database. The current setup for events and documents requires the `pgvector` extension to be enabled.
-
-The following documents should help you with setup:
-- https://supabase.com/docs/guides/database/connecting-to-postgres
-- https://supabase.com/blog/openai-embeddings-postgres-vector
-
-To initialize a new database, you will probably need to call migrate. Magick uses Feathers 5 for backend, which in turn uses Knex for making database queries. To migrate the database, cd to apps/server and run `npm run migrate`. 
-
-You will need to change the `connection` property in feathers config. We will offer a better database configuration experience in the future, for now we suggest find and replacing any URLs that point to the database (ctrl f `postgresql://`)
+We will be working on more database docoumentation to help you get your data store up and running.
 
 ## Self signed certificates
 

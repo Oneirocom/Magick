@@ -8,11 +8,6 @@
     "appsDir": "apps",
     "libsDir": "packages"
   },
-  "pluginsConfig": {
-    "@nrwl/js": {
-      "analyzeSourceFiles": true
-    }
-  },
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
@@ -48,8 +43,7 @@
       },
       "library": {
         "style": "css",
-        "linter": "eslint",
-        "unitTestRunner": "jest"
+        "linter": "eslint"
       }
     },
     "@nxext/vite": {
@@ -64,5 +58,5 @@
   "cli": {
     "defaultCollection": "@nxext/vite"
   },
-  "defaultProject": "@magickml/server"
+  "defaultProject": "server"
 }

@@ -42,12 +42,6 @@ const router: Router = new Router()
 const routes: Route[] = [...spells, ...apis, ...serverRoutes]
 
 async function init() {
-  // load plugins
-  await (async () => {
-    let plugins = (await import('./plugins')).default
-    console.log('loaded plugins on server', plugins)
-  })()
-
   new World()
   new worldManager()
   initSpeechServer(false)

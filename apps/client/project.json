@@ -1,9 +1,9 @@
 {
-  "name": "@magickml/client",
+  "name": "client",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/client/src",
   "projectType": "application",
-  "implicitDependencies": ["@magickml/editor", "@magickml/engine"],
+  "implicitDependencies": ["client-core", "engine"],
   "targets": {
     "build": {
       "executor": "@nrwl/vite:build",
@@ -41,16 +41,16 @@
       "defaultConfiguration": "development",
       "dependsOn": ["^build"],
       "options": {
-        "buildTarget": "@magickml/client:build"
+        "buildTarget": "client:build"
       },
       "configurations": {
         "development": {
           "logLevel": "info",
           "hmr": true,
-          "buildTarget": "@magickml/client:build:development"
+          "buildTarget": "client:build:development"
         },
         "production": {
-          "buildTarget": "@magickml/client:build:production",
+          "buildTarget": "client:build:production",
           "hmr": false
         }
       }

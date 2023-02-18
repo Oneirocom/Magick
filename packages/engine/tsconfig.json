@@ -9,10 +9,9 @@
     "skipLibCheck": true,
     "esModuleInterop": true
   },
-  "rootDir": "../..",
   "files": [],
   "include": [
     "src",
-    "src/controls"
-  ]
+    "./"
+  ],
 }

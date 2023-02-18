@@ -1,25 +1,17 @@
 {
-  "name": "@magickml/engine",
+  "name": "engine",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/engine",
+  "sourceRoot": "packages/engine/src",
   "projectType": "library",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@nrwl/vite:build",
-      "configFile": "packages/engine/vite.config.ts",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/engine"
-      },
-      "configurations": {
-        "development": {
-          "mode": "development"
-        },
-        "production": {
-          "mode": "production"
-        }
       }
     },
     "lint": {
