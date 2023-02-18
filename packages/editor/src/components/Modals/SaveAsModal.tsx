@@ -17,7 +17,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const dispatch = useDispatch()
   const [error, setError] = useState('')
   const [saveSpell, { isLoading }] = spellApi.useSaveSpellMutation()
-  const { data: spell } = spellApi?.useGetSpellQuery(
+  const { data: spell } = spellApi.useGetSpellQuery(
     {
       spellId: tab.spellId,
     },

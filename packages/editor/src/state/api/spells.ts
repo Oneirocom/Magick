@@ -40,13 +40,13 @@ export const getOrCreateSpellApi = (config) => {
   const rootApi = getOrCreateRootApi(config);
   spellApi = rootApi.injectEndpoints({
     endpoints: builder => ({
-      getSpells: builder.query<SpellData, void>({
+      getSpells: builder.query({
         providesTags: ['Spells'],
         query: () => ({
           url: `spells`,
         }),
       }),
-      getSpell: builder.query<SpellData, UserSpellArgs>({
+      getSpell: builder.query({
         providesTags: ['Spell'],
         query: ({ spellId }) => {
           return {
@@ -55,7 +55,7 @@ export const getOrCreateSpellApi = (config) => {
           }
         },
       }),
-      runSpell: builder.mutation<Record<string, any>, RunSpell>({
+      runSpell: builder.mutation({
         query: ({ spellId, inputs, state = {} }) => ({
           url: `spells/${spellId}`,
           method: 'POST',
@@ -65,7 +65,7 @@ export const getOrCreateSpellApi = (config) => {
           },
         }),
       }),
-      saveDiff: builder.mutation<void, Diff>({
+      saveDiff: builder.mutation({
         invalidatesTags: ['Spell'],
         query: diffData => ({
           url: 'spells/saveDiff',
@@ -73,7 +73,7 @@ export const getOrCreateSpellApi = (config) => {
           body: diffData,
         }),
       }),
-      spellExists: builder.mutation<boolean, string>({
+      spellExists: builder.mutation({
         query: name => ({
           url: 'spells/exists',
           method: 'POST',
@@ -82,7 +82,7 @@ export const getOrCreateSpellApi = (config) => {
           },
         }),
       }),
-      saveSpell: builder.mutation<Partial<Spell>, Partial<Spell> | Spell>({
+      saveSpell: builder.mutation({
         invalidatesTags: ['Spell'],
         // needed to use queryFn as query option didnt seem to allow async functions.
         async queryFn({ ...spell }, { dispatch }, extraOptions, baseQuery) {
@@ -111,7 +111,7 @@ export const getOrCreateSpellApi = (config) => {
           >
         },
       }),
-      newSpell: builder.mutation<Spell, Partial<Spell>>({
+      newSpell: builder.mutation({
         invalidatesTags: ['Spells'],
         query: spellData => ({
           url: 'spells',
@@ -119,7 +119,7 @@ export const getOrCreateSpellApi = (config) => {
           body: spellData,
         }),
       }),
-      patchSpell: builder.mutation<Spell, PatchArgs>({
+      patchSpell: builder.mutation({
         invalidatesTags: ['Spell'],
         query({ spellId, update }) {
           return {
@@ -131,7 +131,7 @@ export const getOrCreateSpellApi = (config) => {
           }
         },
       }),
-      deleteSpell: builder.mutation<string[], UserSpellArgs>({
+      deleteSpell: builder.mutation({
         invalidatesTags: ['Spells'],
         query: ({ spellId }) => ({
           url: `spells/${spellId}`,
@@ -142,17 +142,3 @@ export const getOrCreateSpellApi = (config) => {
   })
   return spellApi;
 }
-
-
-export const {
-  useGetSpellQuery,
-  useGetSpellsQuery,
-  useSpellExistsMutation,
-  useLazyGetSpellQuery,
-  useNewSpellMutation,
-  useDeleteSpellMutation,
-  useRunSpellMutation,
-  useSaveSpellMutation,
-  useSaveDiffMutation,
-  usePatchSpellMutation,
-} = spellApi
