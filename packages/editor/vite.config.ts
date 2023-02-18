@@ -47,6 +47,7 @@ export default defineConfig({
       plugins: [
         NodeGlobalsPolyfillPlugin({
           process: true,
+          buffer: true,
         }),
         NodeModulesPolyfillPlugin(),
       ],
@@ -67,7 +68,7 @@ export default defineConfig({
     rollupOptions: {
       plugins: [rollupNodePolyFill()],
       // External packages that should not be bundled into your library.
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      external: ['@magickml/engine', 'react', 'react-dom', 'react/jsx-runtime'],
     },
   },
 })

@@ -25,5 +25,5 @@
   "files": [],
   "include": [
     "src"
-  ]
+, "../engine/src/controls", "../engine/src/dataControls/TextInputControl.tsx"  ]
 }

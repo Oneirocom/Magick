@@ -23,7 +23,7 @@ export { default as runPython } from './functions/ProcessPython'
 
 export { SwitchControl } from './dataControls/SwitchControl'
 export { PlaytestControl } from './dataControls/PlaytestControl'
-export { TextInputControl } from './controls/TextInputControl'
+export { TextInputControl } from './dataControls/TextInputControl'
 
 export * from './config'
 
