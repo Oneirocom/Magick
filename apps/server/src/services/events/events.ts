@@ -37,6 +37,7 @@ import {
 
 import type { Application, HookContext } from '../../declarations'
 import { EventService, getOptions } from './events.class'
+import { makeEmbedding } from 'packages/engine/src/functions/makeEmbedding'
 
 export * from './events.class'
 export * from './events.schema'

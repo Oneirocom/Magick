@@ -8,8 +8,7 @@ const plugins = process.env.PLUGINS ? process.env.PLUGINS.split(',') : [];
 const path = require('path');
 const fs  = require('fs');
 function copyExamplePluginsJson() {
-  const pluginsJsPathClient = path.join(__dirname, '..', 'apps', 'client', 'src/plugins.ts');
-  const pluginsJsPathServer = path.join(__dirname, '..', 'apps', 'server', 'src/plugins.ts');
+  const pluginsJsPath = path.join(__dirname, '..', 'packages', 'engine', 'src/plugins.ts');
 
   let i = 0;
 
@@ -20,8 +19,7 @@ function copyExamplePluginsJson() {
   }
   importString += 'export default plugins;';
 
-  fs.writeFileSync(pluginsJsPathClient, importString);
-  fs.writeFileSync(pluginsJsPathServer, importString);
+  fs.writeFileSync(pluginsJsPath, importString);
 }
 
 copyExamplePluginsJson();
