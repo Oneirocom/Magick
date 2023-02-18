@@ -1,1 +1,0 @@
-export const projectId = '3ba699bc-1edb-49ce-a25f-27059541e03e';

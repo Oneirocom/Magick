@@ -9,7 +9,7 @@ import {
   MagickNode,
   MagickWorkerOutputs,
 } from '../../types'
-import { MagickEngine } from '../../engine'
+import { MagickEngine } from '@magickml/engine'
 import { Module } from './module'
 import { ModuleManager } from './module-manager'
 import { addIO, removeIO } from './utils'
