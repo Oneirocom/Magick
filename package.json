@@ -1,7 +1,6 @@
 {
   "name": "magick",
   "version": "0.1.0",
-  "private": true,
   "license": "MIT",
   "scripts": {
     "migrate:make": "nx run server:migrate:make",
@@ -44,7 +43,6 @@
     "@koa/cors": "3.1.0",
     "@koa/router": "^10.1.1",
     "@monaco-editor/react": "^4.4.6",
-    "@magickml/engine": "dist/packages/engine",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.5",
     "@pixiv/three-vrm": "^1.0.6",
