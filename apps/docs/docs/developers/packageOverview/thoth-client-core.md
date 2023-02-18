@@ -1,9 +1,9 @@
 ---
-title: Magick Editor
-description: This is where you will find information relevant to the magick-editor package.
+title: magick Client Core
+description: This is where you will find information relevant to the magick-client-core package.
 hide_table_of_contents: false
 ---
 
-# magick-editor
+# magick-client-core
 
 How are you?
