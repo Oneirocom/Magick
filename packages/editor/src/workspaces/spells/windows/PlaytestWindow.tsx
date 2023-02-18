@@ -15,9 +15,8 @@ import css from '../../../screens/Magick/magick.module.css'
 import { useFeathers } from '../../../contexts/FeathersProvider'
 import { useAppSelector } from '../../../state/hooks'
 import { useEditor } from '../../contexts/EditorProvider'
-import { projectId } from '@magickml/engine'
 
-import { getOrCreateSpellApi } from '../../../state/api/spells'
+import { getSpellApi } from '../../../state/api/spells'
 import { useConfig } from '../../../contexts/ConfigProvider'
 
 const Input = props => {
@@ -61,7 +60,7 @@ const defaultPlaytestData = `{
 
 const Playtest = ({ tab }) => {
   const config = useConfig()
-  const spellApi = getOrCreateSpellApi(config)
+  const spellApi = getSpellApi(config)
 
   const scrollbars = useRef<any>()
   const [history, setHistory] = useState([])
@@ -204,7 +203,7 @@ const Playtest = ({ tab }) => {
 
     client.service('spell-runner').create({
       spellId: tab.spellId,
-      projectId,
+      projectId: config.projectId,
       inputs: {
         [playtestInputName as string]: toSend,
       },

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 let rootApi: any = null; // TODO: type this
-export function getOrCreateRootApi(options){
+export function getRootApi(options){
   console.log('options are', options)
   const apiUrl = options.apiUrl
   if (rootApi) return rootApi;

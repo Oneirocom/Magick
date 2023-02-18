@@ -13,8 +13,8 @@ import {
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
-import { getOrCreateSpellApi } from './api/spells'
-import { getOrCreateRootApi } from './api/api'
+import { getSpellApi } from './api/spells'
+import { getRootApi } from './api/api'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 
 import { combineReducers } from 'redux'
@@ -24,9 +24,9 @@ import localStateSlice from './localState'
 import preferencesReducer from './preferences'
 
 let store: ToolkitStore | null = null
-export const getOrCreateStore = config => {
+export const getStore = config => {
   if (store) return store
-  const spellApi = getOrCreateSpellApi(config)
+  const spellApi = getSpellApi(config)
   const persistConfig = {
     key: 'root',
     version: 1,
@@ -43,7 +43,7 @@ export const getOrCreateStore = config => {
 
   const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-  const rootApi = getOrCreateRootApi(config)
+  const rootApi = getRootApi(config)
   store = configureStore({
     reducer: persistedReducer,
     middleware: getDefaultMiddleware =>

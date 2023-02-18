@@ -7,7 +7,7 @@ import { createContext, useContext, useEffect, useRef } from 'react'
 import { runPython } from '@magickml/engine'
 import { useConfig } from '../../contexts/ConfigProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
-import { getOrCreateSpellApi } from '../../state/api/spells'
+import { getSpellApi } from '../../state/api/spells'
 
 const Context = createContext<EditorContext>(undefined!)
 
@@ -15,7 +15,7 @@ export const useMagickInterface = () => useContext(Context)
 
 const MagickInterfaceProvider = ({ children, tab }) => {
   const config = useConfig()
-  const spellApi = getOrCreateSpellApi(config)
+  const spellApi = getSpellApi(config)
 
   const { events, publish, subscribe } = usePubSub()
   const spellRef = useRef<Spell | null>(null)

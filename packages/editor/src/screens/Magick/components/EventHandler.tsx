@@ -5,7 +5,7 @@ import { GraphData, Spell } from '@magickml/engine'
 
 import md5 from 'md5'
 
-import { getOrCreateSpellApi } from '../../../state/api/spells'
+import { getSpellApi } from '../../../state/api/spells'
 import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
 import { useEditor } from '../../../workspaces/contexts/EditorProvider'
 import { diff } from '../../../utils/json0'
@@ -16,7 +16,7 @@ import { useConfig } from '../../../contexts/ConfigProvider'
 
 const EventHandler = ({ pubSub, tab }) => {
   const config = useConfig()
-  const spellApi = getOrCreateSpellApi(config)
+  const spellApi = getSpellApi(config)
 
   // only using this to handle events, so not rendering anything with it.
   const { createOrFocus, windowTypes } = useLayout()

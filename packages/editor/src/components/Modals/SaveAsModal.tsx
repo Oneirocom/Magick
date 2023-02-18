@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSnackbar } from 'notistack'
-import { getOrCreateSpellApi } from '../../state/api/spells'
+import { getSpellApi } from '../../state/api/spells'
 import { useForm } from 'react-hook-form'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
@@ -12,7 +12,7 @@ import { useConfig } from '../../contexts/ConfigProvider'
 
 const EditSpellModal = ({ tab, closeModal }) => {
   const config = useConfig()
-  const spellApi = getOrCreateSpellApi(config)
+  const spellApi = getSpellApi(config)
 
   const dispatch = useDispatch()
   const [error, setError] = useState('')

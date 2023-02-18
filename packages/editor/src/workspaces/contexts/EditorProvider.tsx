@@ -9,7 +9,7 @@ import React, {
   useEffect,
 } from 'react'
 
-import { getOrCreateSpellApi } from '../../state/api/spells'
+import { getSpellApi } from '../../state/api/spells'
 import { useConfig } from '../../contexts/ConfigProvider'
 
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
@@ -170,7 +170,7 @@ const EditorProvider = ({ children }) => {
 
 const RawEditor = ({ tab, children }) => {
   const config = useConfig()
-  const spellApi = getOrCreateSpellApi(config)
+  const spellApi = getSpellApi(config)
 
   const [getSpell, { data: spell, isLoading }] = spellApi.useLazyGetSpellQuery()
   const [loaded, setLoaded] = useState(false)
