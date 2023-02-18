@@ -12,6 +12,7 @@
   "rootDir": "../..",
   "files": [],
   "include": [
-    "src"
-, "src/controls"  ],
+    "src",
+    "src/controls"
+  ]
 }
