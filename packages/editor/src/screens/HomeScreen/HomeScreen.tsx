@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 
-import { getOrCreateSpellApi } from '../../state/api/spells'
+import { getSpellApi } from '../../state/api/spells'
 import AllProjects from './screens/AllProjects'
 import CreateNew from './screens/CreateNew'
 import OpenProject from './screens/OpenProject'
@@ -17,7 +17,7 @@ import { useConfig } from '../../contexts/ConfigProvider'
 
 const StartScreen = () => {
   const config = useConfig()
-  const spellApi = getOrCreateSpellApi(config)
+  const spellApi = getSpellApi(config)
 
   const dispatch = useDispatch()
 

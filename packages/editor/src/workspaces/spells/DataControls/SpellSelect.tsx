@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 
 import Select from '../../../components/Select/Select'
 import { useConfig } from '../../../contexts/ConfigProvider'
-import { getOrCreateSpellApi } from '../../../state/api/spells'
+import { getSpellApi } from '../../../state/api/spells'
 import { useAppDispatch } from '../../../state/hooks'
 import { openTab } from '../../../state/tabs'
 
@@ -12,7 +12,7 @@ import defaultGraph from '../../../data/graphs/default'
 
 const ModuleSelect = ({ control, updateData, initialValue }) => {
   const config = useConfig()
-  const spellApi = getOrCreateSpellApi(config)
+  const spellApi = getSpellApi(config)
 
   const dispatch = useAppDispatch()
 

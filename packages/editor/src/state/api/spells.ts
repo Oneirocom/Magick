@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
-import { getOrCreateRootApi } from './api'
+import { getRootApi } from './api'
 import { GraphData, Spell } from '@magickml/engine'
 
 import md5 from 'md5'
@@ -35,9 +35,9 @@ export interface SpellData {
 }
 
 let spellApi: any = null;
-export const getOrCreateSpellApi = (config) => {
+export const getSpellApi = (config) => {
   if(spellApi) return spellApi;
-  const rootApi = getOrCreateRootApi(config);
+  const rootApi = getRootApi(config);
   spellApi = rootApi.injectEndpoints({
     endpoints: builder => ({
       getSpells: builder.query({

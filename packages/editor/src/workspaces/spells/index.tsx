@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { useEditor } from '../contexts/EditorProvider'
 import { Layout } from '../contexts/LayoutProvider'
-import { getOrCreateSpellApi } from '../../state/api/spells'
+import { getSpellApi } from '../../state/api/spells'
 import EventHandler from '../../screens/Magick/components/EventHandler'
 import { debounce } from '../../utils/debounce'
 import { useConfig } from '../../contexts/ConfigProvider'
@@ -16,7 +16,7 @@ import AvatarWindow from './windows/AvatarWindow'
 import TextEditor from './windows/TextEditorWindow'
 import DebugConsole from './windows/DebugConsole'
 
-import { Spell, projectId } from '@magickml/engine'
+import { Spell } from '@magickml/engine'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { RootState } from '../../state/store'
 import { useFeathers } from '../../contexts/FeathersProvider'
@@ -24,7 +24,7 @@ import React from 'react'
 
 const Workspace = ({ tab, tabs, pubSub }) => {
   const config = useConfig()
-  const spellApi = getOrCreateSpellApi(config)
+  const spellApi = getSpellApi(config)
 
   const spellRef = useRef<Spell>()
   const { events, publish } = usePubSub()
@@ -84,12 +84,12 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     if (!client) return
     ;(async () => {
       if (!client || !tab || !tab.spellId) return
-      console.log('projectId from client ', projectId)
+      console.log('projectId from client ', config.projectId)
       // make sure to pass the projectId to the service call
       await client.service('spell-runner').get(tab.spellId,
         {
           query: {
-            projectId,
+            projectId: config.projectId,
           },
         }
       )

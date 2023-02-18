@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { GraphData, projectId } from '@magickml/engine'
+import { GraphData } from '@magickml/engine'
 import {
   uniqueNamesGenerator,
   adjectives,
@@ -9,7 +9,7 @@ import {
 } from 'unique-names-generator'
 import { useNavigate } from 'react-router-dom'
 
-import { getOrCreateSpellApi } from '../../../state/api/spells'
+import { getSpellApi } from '../../../state/api/spells'
 import Panel from '../../../components/Panel/Panel'
 import emptyImg from '../empty.png'
 import css from '../homeScreen.module.css'
@@ -42,7 +42,7 @@ export const magickTemplates: Template[] = [
 
 const CreateNew = () => {
   const config = useConfig()
-  const spellApi = getOrCreateSpellApi(config)
+  const spellApi = getSpellApi(config)
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
     magickTemplates[0]
@@ -61,7 +61,7 @@ const CreateNew = () => {
       const response = await newSpell({
         graph: selectedTemplate?.graph,
         name,
-        projectId,
+        projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
       })
 
@@ -69,8 +69,7 @@ const CreateNew = () => {
         console.log('error in response', response.error)
         if ('status' in response.error) {
           const err = response.error
-          // I am annoyed by RTK error typing.
-          // @ts-expect-error
+
           const errMsg = err.data.error.message
           setError(errMsg as string)
           enqueueSnackbar(`Error saving spell. ${errMsg}.`, {

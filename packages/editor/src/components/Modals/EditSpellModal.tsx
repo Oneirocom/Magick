@@ -8,11 +8,11 @@ import { closeTab, openTab } from '../../state/tabs'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
 import { useConfig } from '../../contexts/ConfigProvider'
-import { getOrCreateSpellApi } from '../../state/api/spells'
+import { getSpellApi } from '../../state/api/spells'
 
 const EditSpellModal = ({ closeModal, spellId, name, tab }) => {
   const config = useConfig()
-  const spellApi = getOrCreateSpellApi(config)
+  const spellApi = getSpellApi(config)
   
   const [error, setError] = useState('')
   const [patchSpell, { isLoading }] = spellApi.usePatchSpellMutation()
