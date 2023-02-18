@@ -1,14 +1,16 @@
 import FileInput from '../../screens/HomeScreen/components/FileInput'
 import React, { useEffect, useState } from 'react'
-import { magickApiRootUrl } from '../../config'
+import { useConfig } from '../../contexts/ConfigProvider'
 
 import AgentWindow from './Agent'
 
 const AgentManagerWindow = () => {
+  const config = useConfig()
+
   const [data, setData] = useState<Record<string, unknown> | null>(null)
 
   const resetData = async () => {
-    const res = await fetch(`${magickApiRootUrl}/agents`)
+    const res = await fetch(`${config.apiUrl}/agents`)
     const json = await res.json()
     setData(json.data)
     console.log('res is', json)
@@ -18,7 +20,7 @@ const AgentManagerWindow = () => {
     console.log('data is', data)
     if (!data.spells === undefined) data.spells = []
     // rewrite using fetch instead of axios
-    fetch(`${magickApiRootUrl}/agents`, {
+    fetch(`${config.apiUrl}/agents`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -27,7 +29,7 @@ const AgentManagerWindow = () => {
     })
       .then(async res => {
         console.log('response is', res)
-        const res2 = await fetch(`${magickApiRootUrl}/agents`)
+        const res2 = await fetch(`${config.apiUrl}/agents`)
         const json = await res2.json()
         setData(json.data)
       })
@@ -47,7 +49,7 @@ const AgentManagerWindow = () => {
 
   useEffect(() => {
     ;(async () => {
-      const res = await fetch(`${magickApiRootUrl}/agents`)
+      const res = await fetch(`${config.apiUrl}/agents`)
       const json = await res.json()
       console.log('setting data to ', json)
       setData(json.data)

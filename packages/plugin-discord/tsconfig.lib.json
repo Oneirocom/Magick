@@ -8,7 +8,6 @@
     "esModuleInterop": true, 
 
   },
-  "paths": { "@magickml/*": ["dist/packages/*"] },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
   "include": ["src/**/*.ts"]
 }

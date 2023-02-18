@@ -3,9 +3,10 @@ import { useSelector } from 'react-redux'
 
 import { useEditor } from '../contexts/EditorProvider'
 import { Layout } from '../contexts/LayoutProvider'
-import { useLazyGetSpellQuery } from '../../state/api/spells'
+import { getOrCreateSpellApi } from '../../state/api/spells'
 import EventHandler from '../../screens/Magick/components/EventHandler'
 import { debounce } from '../../utils/debounce'
+import { useConfig } from '../../contexts/ConfigProvider'
 
 import EditorWindow from './windows/EditorWindow'
 import Inspector from './windows/InspectorWindow'
@@ -22,9 +23,12 @@ import { useFeathers } from '../../contexts/FeathersProvider'
 import React from 'react'
 
 const Workspace = ({ tab, tabs, pubSub }) => {
+  const config = useConfig()
+  const spellApi = getOrCreateSpellApi(config)
+
   const spellRef = useRef<Spell>()
   const { events, publish } = usePubSub()
-  const [loadSpell, { data: spellData }] = useLazyGetSpellQuery()
+  const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellQuery()
   const { editor, serialize } = useEditor()
   const FeathersContext = useFeathers()
   const client = FeathersContext?.client

@@ -1,11 +1,7 @@
 import { useState } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 
-import {
-  useGetSpellsQuery,
-  useDeleteSpellMutation,
-  useNewSpellMutation,
-} from '../../state/api/spells'
+import { getOrCreateSpellApi } from '../../state/api/spells'
 import AllProjects from './screens/AllProjects'
 import CreateNew from './screens/CreateNew'
 import OpenProject from './screens/OpenProject'
@@ -15,15 +11,20 @@ import { closeTab, openTab, selectAllTabs } from '../../state/tabs'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../state/store'
 
+import { useConfig } from '../../contexts/ConfigProvider'
+
 //MAIN
 
 const StartScreen = () => {
+  const config = useConfig()
+  const spellApi = getOrCreateSpellApi(config)
+
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
-  const [deleteSpell] = useDeleteSpellMutation()
-  const { data: spells } = useGetSpellsQuery()
-  const [newSpell] = useNewSpellMutation()
+  const [deleteSpell] = spellApi.useDeleteSpellMutation()
+  const { data: spells } = spellApi.useGetSpellsQuery()
+  const [newSpell] = spellApi.useNewSpellMutation()
 
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
 

@@ -1,19 +1,23 @@
 import { useState } from 'react'
 import { useSnackbar } from 'notistack'
-import { useGetSpellQuery, useSaveSpellMutation } from '../../state/api/spells'
+import { getOrCreateSpellApi } from '../../state/api/spells'
 import { useForm } from 'react-hook-form'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
 import { closeTab } from '../../state/tabs'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
-import { v4 as uuidv4 } from 'uuid'
+
+import { useConfig } from '../../contexts/ConfigProvider'
 
 const EditSpellModal = ({ tab, closeModal }) => {
+  const config = useConfig()
+  const spellApi = getOrCreateSpellApi(config)
+
   const dispatch = useDispatch()
   const [error, setError] = useState('')
-  const [saveSpell, { isLoading }] = useSaveSpellMutation()
-  const { data: spell } = useGetSpellQuery(
+  const [saveSpell, { isLoading }] = spellApi.useSaveSpellMutation()
+  const { data: spell } = spellApi?.useGetSpellQuery(
     {
       spellId: tab.spellId,
     },

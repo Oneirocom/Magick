@@ -1,36 +1,27 @@
-import React, { createContext, useContext, useEffect, useRef } from 'react'
-import axios from 'axios'
 import {
-  CreateEventArgs,
-  EditorContext,
-  Spell,
-  MagickWorkerInputs,
-  CompletionBody,
-  QAArgs,
-  VITE_APP_API_URL
+  CompletionBody, EditorContext, MagickWorkerInputs, Spell, VITE_APP_API_URL
 } from '@magickml/engine'
-
-import {
-  useGetSpellQuery,
-  useLazyGetSpellQuery,
-  useRunSpellMutation,
-} from '../../state/api/spells'
-
-import { usePubSub } from '../../contexts/PubSubProvider'
-import { magickApiRootUrl } from '../../config'
+import axios from 'axios'
+import { createContext, useContext, useEffect, useRef } from 'react'
 
 import { runPython } from '@magickml/engine'
+import { useConfig } from '../../contexts/ConfigProvider'
+import { usePubSub } from '../../contexts/PubSubProvider'
+import { getOrCreateSpellApi } from '../../state/api/spells'
 
 const Context = createContext<EditorContext>(undefined!)
 
 export const useMagickInterface = () => useContext(Context)
 
 const MagickInterfaceProvider = ({ children, tab }) => {
+  const config = useConfig()
+  const spellApi = getOrCreateSpellApi(config)
+
   const { events, publish, subscribe } = usePubSub()
   const spellRef = useRef<Spell | null>(null)
-  const [_runSpell] = useRunSpellMutation()
-  const [_getSpell] = useLazyGetSpellQuery()
-  const { data: _spell } = useGetSpellQuery(
+  const [_runSpell] = spellApi.configuseRunSpellMutation()
+  const [_getSpell] = spellApi.useLazyGetSpellQuery()
+  const { data: _spell } = spellApi.useGetSpellQuery(
     {
       spellId: tab.spellId,
     },
@@ -201,7 +192,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const queryGoogle = async (query: string) => {
-    const url = `${magickApiRootUrl}/query_google`
+    const url = `${config.apiUrl}/query_google`
     const response = await axios.post(url, {
       query,
     })

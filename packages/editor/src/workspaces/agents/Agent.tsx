@@ -1,7 +1,7 @@
-import { magickApiRootUrl } from '../../config'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState, useRef } from 'react'
+import { useConfig } from '../../contexts/ConfigProvider'
 
 /* Import All Agent Window Components */
 import { pluginManager } from '@magickml/engine'
@@ -17,6 +17,7 @@ const AgentWindow = ({
   id: number
   updateCallback: any
 }) => {
+  const config = useConfig();
   const { enqueueSnackbar } = useSnackbar()
 
   const [loaded, setLoaded] = useState(false)
@@ -38,7 +39,7 @@ const AgentWindow = ({
     if (!loaded) {
       ;(async () => {
         const res = await axios.get(
-          `${magickApiRootUrl}/agents/` + id
+          `${config.apiUrl}/agents/` + id
         )
 
         if (res.data === null) {
@@ -69,7 +70,7 @@ const AgentWindow = ({
 
   useEffect(() => {
     ;(async () => {
-      const res = await axios.get(`${magickApiRootUrl}/spells`)
+      const res = await axios.get(`${config.apiUrl}/spells`)
       console.log('res', res.data)
       console.log('spellList', res.data)
       setSpellList(res.data?.data)
@@ -78,7 +79,7 @@ const AgentWindow = ({
 
   const _delete = () => {
     axios
-      .delete(`${magickApiRootUrl}/agents/` + id)
+      .delete(`${config.apiUrl}/agents/` + id)
       .then(res => {
         console.log('deleted', res)
         if (res.data === 'internal error') {
@@ -115,7 +116,7 @@ const AgentWindow = ({
     console.log('Update called', _data)
 
     axios
-      .patch(`${magickApiRootUrl}/agents/${id}`, _data)
+      .patch(`${config.apiUrl}/agents/${id}`, _data)
       .then(res => {
         console.log('RESPONSE DATA', res.data)
         if (typeof res.data === 'string' && res.data === 'internal error') {
