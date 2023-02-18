@@ -6,7 +6,7 @@ type PluginProps = {
   agentData: any
   props
 }
-import {API_ROOT_URL} from '@magickml/engine'
+import {API_ROOT_URL} from '../../../engine'
 
 export const DiscordAgentWindow: FC<any> = (props) => {
   props = props.props
