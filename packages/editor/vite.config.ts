@@ -8,7 +8,6 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 import mdPlugin, { Mode } from 'vite-plugin-markdown'
-import { viteExternalsPlugin } from 'vite-plugin-externals'
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/editor',
@@ -47,7 +46,7 @@ export default defineConfig({
       // Enable esbuild polyfill plugins
       plugins: [
         NodeGlobalsPolyfillPlugin({
-          process: false,
+          process: true,
         }),
         NodeModulesPolyfillPlugin(),
       ],
@@ -68,7 +67,7 @@ export default defineConfig({
     rollupOptions: {
       plugins: [rollupNodePolyFill()],
       // External packages that should not be bundled into your library.
-      external: ['@magickml/engine', 'react', 'react-dom', 'react/jsx-runtime'],
+      external: ['react', 'react-dom', 'react/jsx-runtime'],
     },
   },
 })
