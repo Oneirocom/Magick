@@ -1,0 +1,11 @@
+{
+  "name": "@magickml/editor",
+  "version": "0.1.0",
+  "dependencies": {
+    "@magickml/engine": "*"
+    },
+
+  "scripts": {
+    "build": "vite build"
+  }
+}

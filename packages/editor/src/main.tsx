@@ -13,13 +13,11 @@ import { getOrCreateStore } from './state/store'
 
 import { AppConfig } from './contexts/ConfigProvider'
 
-export type MagickIDEProps = {
-  config: AppConfig
-}
+export type MagickIDEProps = AppConfig
 
 export const MagickIDE = ({
   config,
-}: MagickIDEProps) => {
+}: { config: MagickIDEProps }) => {
   const [store, _] = useState(getOrCreateStore(config));
   if(!config || !store) return (<div>Error, check your config...</div>)
   return (

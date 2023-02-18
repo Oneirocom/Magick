@@ -1,4 +1,7 @@
 import * as React from 'react'
+
+import "./App.css"
+
 import { Routes, Route } from 'react-router-dom'
 import MagickPageLayout from './components/MagickPageLayout/MagickPageLayout'
 import FineTuneManagerLayout from './screens/FineTuneManager/PageLayout'

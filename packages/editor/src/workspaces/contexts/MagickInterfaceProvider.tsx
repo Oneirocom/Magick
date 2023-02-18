@@ -19,7 +19,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
   const { events, publish, subscribe } = usePubSub()
   const spellRef = useRef<Spell | null>(null)
-  const [_runSpell] = spellApi.configuseRunSpellMutation()
+  const [_runSpell] = spellApi.useRunSpellMutation()
   const [_getSpell] = spellApi.useLazyGetSpellQuery()
   const { data: _spell } = spellApi.useGetSpellQuery(
     {

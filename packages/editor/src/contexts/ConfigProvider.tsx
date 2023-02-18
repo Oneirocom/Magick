@@ -1,4 +1,4 @@
-import { useContext, createContext, useEffect, useState } from 'react'
+import { useContext, createContext, useState } from 'react'
 
 export type AppConfig = {
   apiUrl: string
@@ -15,12 +15,12 @@ export const useConfig = () => useContext(Context)
 
 export const defaultConfig: AppConfig = {
   // add props here
-  apiUrl: 'http://localhost:3000',
+  apiUrl: 'http://localhost:3030',
 }
 
 // Might want to namespace these
 const ConfigProvider = ({ config = defaultConfig, children }) => {
-  const [apiUrl, setApiUrl] = useState<ConfigContext['apiUrl']>(defaultConfig.apiUrl)
+  const [apiUrl, setApiUrl] = useState<ConfigContext['apiUrl']>(config.apiUrl)
 
   const publicInterface: ConfigContext = {
     apiUrl,
