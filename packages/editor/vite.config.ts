@@ -68,7 +68,7 @@ export default defineConfig({
     rollupOptions: {
       plugins: [rollupNodePolyFill()],
       // External packages that should not be bundled into your library.
-      external: ['@magickml/engine', 'react', 'react-dom', 'react/jsx-runtime'],
+      external: ['react', 'react-dom', 'react/jsx-runtime'],
     },
   },
 })

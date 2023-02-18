@@ -1,7 +1,7 @@
 import { Node, Socket } from 'rete'
 
 import { PubSubBase, MagickEditor, MagickNode } from './types'
-import { MagickEngineComponent } from './'
+import { MagickEngineComponent } from './engine'
 import { Task, TaskOptions } from './plugins/taskPlugin/task'
 import { NodeData } from 'rete/types/core/data'
 

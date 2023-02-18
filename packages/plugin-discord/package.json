@@ -1,8 +1,8 @@
 {
-  "name": "@magickml/editor",
+  "name": "@magickml/plugin-discord",
   "version": "0.1.0",
   "dependencies": {
-    "@magickml/engine": "*"
+    "@magickml/engine": "file:../../dist/packages/engine"
     },
 
   "scripts": {
