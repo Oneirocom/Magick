@@ -1,6 +1,7 @@
 import React from 'react'
 import { createTheme, ThemeProvider } from '@mui/material'
 
+import ConfigProvider from './ConfigProvider'
 import FeathersProvider from './FeathersProvider'
 import PubSubProvider from './PubSubProvider'
 import ToastProvider from './ToastProvider'
@@ -11,15 +12,6 @@ const darkTheme = createTheme({
     mode: 'dark',
   },
 })
-
-const providers = [
-  [ConfigProvider, { config }],
-  [ThemeProvider, { theme: darkTheme }],
-  FeathersProvider,
-  PubSubProvider,
-  ToastProvider,
-  Account,
-]
 
 /**
  * Provided that a list of providers [P1, P2, P3, P4] is passed as props,
@@ -37,8 +29,15 @@ const providers = [
  *
  */
 
-function ComposeProviders({ config, providers, children }) {
-  const _providers = [...providers].reverse()
+function ComposeProviders({ config, children }) {
+  const _providers = [
+    [ConfigProvider, { config }],
+    [ThemeProvider, { theme: darkTheme }],
+    FeathersProvider,
+    PubSubProvider,
+    ToastProvider,
+    Account,
+  ].reverse()
   return _providers.reduce((acc, current) => {
     const [Provider, props] = Array.isArray(current)
       ? [current[0], current[1]]
@@ -50,7 +49,7 @@ function ComposeProviders({ config, providers, children }) {
 
 // Centralize all our providers to avoid nesting hell.
 const AppProviders = ({ config, children }) => (
-  <ComposeProviders config={config} providers={providers}>{children}</ComposeProviders>
+  <ComposeProviders config={config}>{children}</ComposeProviders>
 )
 
 export default AppProviders

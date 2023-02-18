@@ -13,5 +13,5 @@
   "files": [],
   "include": [
     "src"
-  ],
+, "src/controls"  ],
 }
