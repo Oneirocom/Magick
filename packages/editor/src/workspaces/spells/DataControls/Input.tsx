@@ -17,7 +17,7 @@ const Input = ({ control, updateData, initialValue }) => {
   return (
     <div style={{ flex: 1, display: 'flex' }}>
       <InputComponent
-        style={{ flex: 6 }}
+        style={{ width: "100%" }}
         value={value}
         type="text"
         onChange={onChange}

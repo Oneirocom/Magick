@@ -26,6 +26,9 @@ function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
+      <Route path="/events" element={<EventManagerWindow />} />
+          <Route path="/agents" element={<AgentManagerWindow />} />
+
         <Route element={<FineTuneManagerLayout />}>
           <Route path="/fineTuneManager" element={<FineTuneManager />} />
           <Route
@@ -42,8 +45,6 @@ function App() {
           />
         </Route>
         <Route element={<MagickPageLayout />}>
-          <Route path="/events" element={<EventManagerWindow />} />
-          <Route path="/agents" element={<AgentManagerWindow />} />
           {/* todo search corpus component */}
           <Route path="/home/*" element={<HomeScreen />} />
 
