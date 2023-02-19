@@ -78,7 +78,7 @@ const DataControls = ({
           <div
             key={control.name + nodeId + key}
             style={{
-              padding: '15px',
+              marginBottom: '2em',
               borderRadius: '5px',
             }}
           >

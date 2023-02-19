@@ -15,12 +15,14 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import { useLocation } from 'react-router-dom'
 import StorageIcon from '@mui/icons-material/Storage'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories'
+import SettingsIcon from '@mui/icons-material/Settings'
+
 import HubIcon from '@mui/icons-material/Hub'
 
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
 
-const drawerWidth = 240
+const drawerWidth = 150
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -125,7 +127,7 @@ export default function MiniDrawer({ children }) {
         >
           {<img
               style={{
-                marginLeft: "0em",
+                marginLeft: open ? ".5em" : ".0em",
                 marginTop: "2em",
                 height: 16,
                 // on hover, show the finger cursor
@@ -176,6 +178,13 @@ export default function MiniDrawer({ children }) {
             onClick={onClick('/agents')}
             text="Agents"
           />
+            <DrawerItem
+              active={location.pathname.includes('/settings')}
+              Icon={SettingsIcon}
+              open={open}
+              onClick={onClick('/settings')}
+              text="Settings"
+            />
            {/*
          <DrawerItem
             active={location.pathname === '/settings'}
