@@ -1,5 +1,4 @@
 import Rete from 'rete'
-import axios from 'axios'
 import {
   Event,
   EngineContext,
@@ -19,6 +18,7 @@ const info = 'Event Recall is used to get conversation for an agent and user'
 type InputReturn = {
   events: any[]
 }
+
 
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   constructor() {
@@ -78,23 +78,23 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     _outputs: MagickWorkerOutputs,
     { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
+
     const getEventsbyEmbedding = async ( params: any) => {
+      console.log(params)
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
       let embeddings = params['embedding']
+      console.log("INIT")
       console.log(embeddings)
-      const response = await axios.get(urlString, {
-        params: {
-          embedding: "[" + params['embedding'] + "]"
-        }
-      })
-      return response.data
-
-
+      url.searchParams.append("embedding", params["embedding"])
+      const response = await fetch(url.toString())
+      if (response.status !== 200) return null
+      const json = await response.json()
+      return json
     }
     const getEvents = async (params: GetEventArgs) => {
       const urlString = `${API_ROOT_URL}/events`
-  
+      console.log("FIRST")
       const url = new URL(urlString)
       for (let p in params) {
         // append params to url, make sure to preserve arrays
@@ -136,12 +136,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     if(embedding) data['embedding'] = embedding
     if (embedding) {
       if(embedding.length == 1536) {
-        console.log(embedding)
-        const enc_embed = embedding.map(element => {
-          var result  = Math.floor(element*100000)
-          return result
-        })
-        events = await getEventsbyEmbedding({embedding: enc_embed})
+        const enc_embed = new Float32Array(embedding)
+        let uint = new Uint8Array( enc_embed.buffer );
+        console.log( "Convert F32 to Uint8 : Byte Length Test", enc_embed.length * 4, uint.length );
+        let str = btoa( String.fromCharCode.apply( null, uint ) ); 
+        events = await getEventsbyEmbedding({embedding: str})
       } else {
         console.log("Embedding Size not matching with the table")
       }

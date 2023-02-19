@@ -1,0 +1,15 @@
+{
+  "name": "@magickml/client",
+  "description": "Client for Magick",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@magickml/engine": "file:../../packages/engine",
+    "@magickml/editor": "file:../../packages/editor"
+  }
+}

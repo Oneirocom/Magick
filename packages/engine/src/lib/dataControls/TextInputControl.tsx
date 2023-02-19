@@ -1,5 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 import React, { useState, useEffect } from 'react'
 import { Control } from 'rete'
 
@@ -18,7 +17,7 @@ const ReactTextInputControl = props => {
   }
 
   return (
-    <>
+    <React.Fragment>
       {props.label && <label htmlFor="">{props.label}</label>}
       <input
         type="text"
@@ -26,11 +25,14 @@ const ReactTextInputControl = props => {
         style={{ marginTop: 'var((--c1)' }}
         onChange={onChange}
       />
-    </>
+    </React.Fragment>
   )
 }
 
 export class TextInputControl extends Control {
+  render: string
+  component: any
+  props: any
   constructor({ editor, key, value, ...rest }) {
     super(key)
     this.render = 'react'
