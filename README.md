@@ -19,7 +19,7 @@ Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick 
 `Powerful enough for wizards. Easy enough for mere mortals.`
 
 ### Looks cool, but this whole Github thing is way over my head...
-Don't worry, there is a hosted version too! Sign up here: https://www.magickml.com/
+Don't worry, there is a hosted version too! Sign up [here](https://www.magickml.com)
 
 We'll also be releasing a packaged app release you can run (.exe, .app) soon!
 
