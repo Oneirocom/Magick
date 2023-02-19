@@ -17,7 +17,8 @@ import StorageIcon from '@mui/icons-material/Storage'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories'
 import HubIcon from '@mui/icons-material/Hub'
 
-import MagickLogo from './Magick-purple-logo.png'
+import MagickLogo from './purple-logo-full.png'
+import MagickLogoSmall from './purple-logo-small.png'
 
 const drawerWidth = 240
 
@@ -122,24 +123,19 @@ export default function MiniDrawer({ children }) {
           onClick={toggleDrawer}
           sx={{ justifyContent: open ? 'space-between' : 'flex-end' }}
         >
-          {!open ? (
-            <IconButton>
-              <MenuIcon />
-            </IconButton>
-          ) : (
-            <img
+          {<img
               style={{
-                marginLeft: "1em",
+                marginLeft: "0em",
                 marginTop: "2em",
                 height: 16,
                 // on hover, show the finger cursor
                 cursor: 'pointer',
               }}
-              src={MagickLogo}
+              src={open ? MagickLogo : MagickLogoSmall}
               onClick={toggleDrawer}
               alt=""
             />
-          )}
+          }
         </DrawerHeader>
         <List
           sx={{
