@@ -16,7 +16,7 @@ Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick 
 - Many included powertools, including voice and image generation and vector search
 - Graphs can be embedded in subgraphs and shared for rapid community development
 
-![image](https://user-images.githubusercontent.com/18633264/210928740-fec448aa-e6fe-4640-9587-aae109ddea12.png)
+<p align="center"><img src="apps/docs/readme-files/ui.png" /></p>
 
 ### Installation
 
