@@ -57,7 +57,7 @@ const AgentManagerWindow = () => {
   }, [])
 
   return (
-    <div className="agent-editor">
+    <div className="agent-editor" style={{overflow: "auto"}}>
       <div style={{maxWidth: "800px", margin: "1em"}}>
       <p>Agents are running applications that live somewhere on the internet and continue to run as long as they are active.
       <br />If you'd like to use your spells out in the real world, create an agent, configure your preferred services and set your main spell as the root spell.</p>
