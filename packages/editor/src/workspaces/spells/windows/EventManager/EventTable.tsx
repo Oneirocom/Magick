@@ -26,6 +26,7 @@ import { useSnackbar } from 'notistack'
 import axios from 'axios'
 import _ from 'lodash'
 import { CSVLink } from 'react-csv'
+import { useConfig } from '../../../../contexts/ConfigProvider'
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter)
@@ -66,6 +67,7 @@ const DefaultColumnFilter = ({
 
 function EventTable({ events, updateCallback }) {
   const { enqueueSnackbar } = useSnackbar()
+  const config = useConfig()
 
   const columns = useMemo(
     () => [
@@ -130,6 +132,7 @@ function EventTable({ events, updateCallback }) {
     let reqBody = {
       ...rowData,
       [columnId]: value,
+      projectId: config.projectId
     }
     if (!_.isEqual(reqBody, rowData)) {
       const isUpdated = await axios.put(

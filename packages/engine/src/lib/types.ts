@@ -44,6 +44,7 @@ export type Event = {
   client?: string
   channel?: string
   channelType?: string
+  projectId?: string
   agentId?: number | string
   date?: string
 }
@@ -72,6 +73,7 @@ export type GetEventArgs = {
   entities: any[],
   channel: string,
   channelType: string,
+  projectId: string,
   maxCount?: number
 }
 

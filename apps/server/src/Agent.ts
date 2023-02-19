@@ -29,11 +29,13 @@ export class Agent {
   app: any
   loopHandler: any
   spellManager: SpellManager
+  projectId: string
 
   constructor(data: any) {
     this.id = data.id
     this.data = data
     this.name = data.agent ?? data.name ?? 'agent'
+    this.projectId = data.projectId
     this.spellManager = new SpellManager({
       magickInterface: buildMagickInterface({}) as any,
       cache: false,
@@ -79,6 +81,7 @@ export class Agent {
           client: 'loop',
           channel: 'auto',
           channelType: 'loop',
+          projectId: this.projectId,
           entities: [],
         })
       }, loopInterval)

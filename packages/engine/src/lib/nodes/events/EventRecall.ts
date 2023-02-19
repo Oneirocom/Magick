@@ -9,7 +9,13 @@ import {
   GetEventArgs,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, anySocket, eventSocket, stringSocket, arraySocket } from '../../sockets'
+import {
+  triggerSocket,
+  anySocket,
+  eventSocket,
+  stringSocket,
+  arraySocket,
+} from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
 const info = 'Event Recall is used to get conversation for an agent and user'
@@ -18,7 +24,6 @@ const info = 'Event Recall is used to get conversation for an agent and user'
 type InputReturn = {
   events: any[]
 }
-
 
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   constructor() {
@@ -78,15 +83,14 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     _outputs: MagickWorkerOutputs,
     { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
-
-    const getEventsbyEmbedding = async ( params: any) => {
+    const getEventsbyEmbedding = async (params: any) => {
       console.log(params)
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
       let embeddings = params['embedding']
-      console.log("INIT")
+      console.log('INIT')
       console.log(embeddings)
-      url.searchParams.append("embedding", params["embedding"])
+      url.searchParams.append('embedding', params['embedding'])
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
       const json = await response.json()
@@ -94,25 +98,28 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     }
     const getEvents = async (params: GetEventArgs) => {
       const urlString = `${API_ROOT_URL}/events`
-      console.log("FIRST")
+      console.log('FIRST')
       const url = new URL(urlString)
       for (let p in params) {
         // append params to url, make sure to preserve arrays
         if (Array.isArray(params[p])) {
-          params[p].forEach((v) => url.searchParams.append(p, v))
+          params[p].forEach(v => url.searchParams.append(p, v))
         } else {
           url.searchParams.append(p, params[p])
         }
       }
-  
+
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
       const json = await response.json()
       return json.data
     }
-    const event = (inputs['event'] && (inputs['event'][0] ?? inputs['event'])) as Event
-    const embedding = (inputs['embedding'] && (inputs['embedding'][0] ?? inputs['embedding'])) as number[]
-    const { observer, client, channel, channelType, entities } = event
+    const event = (inputs['event'] &&
+      (inputs['event'][0] ?? inputs['event'])) as Event
+    const embedding = (inputs['embedding'] &&
+      (inputs['embedding'][0] ?? inputs['embedding'])) as number[]
+    const { observer, client, channel, channelType, projectId, entities } =
+      event
 
     const typeData = node?.data?.type as string
     const type =
@@ -130,23 +137,28 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       entities,
       channel,
       channelType,
+      projectId,
       maxCount,
     }
     var events
-    if(embedding) data['embedding'] = embedding
+    if (embedding) data['embedding'] = embedding
     if (embedding) {
-      if(embedding.length == 1536) {
+      if (embedding.length == 1536) {
         const enc_embed = new Float32Array(embedding)
-        let uint = new Uint8Array( enc_embed.buffer );
-        console.log( "Convert F32 to Uint8 : Byte Length Test", enc_embed.length * 4, uint.length );
-        let str = btoa( String.fromCharCode.apply( null, uint ) ); 
-        events = await getEventsbyEmbedding({embedding: str})
+        let uint = new Uint8Array(enc_embed.buffer)
+        console.log(
+          'Convert F32 to Uint8 : Byte Length Test',
+          enc_embed.length * 4,
+          uint.length
+        )
+        let str = btoa(String.fromCharCode.apply(null, uint))
+        events = await getEventsbyEmbedding({ embedding: str })
       } else {
-        console.log("Embedding Size not matching with the table")
+        console.log('Embedding Size not matching with the table')
       }
     } else {
       events = await getEvents(data)
-    } 
+    }
     if (!silent) node.display(`Event ${type} found` || 'Not found')
     console.log('events', events)
     return {

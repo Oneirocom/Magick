@@ -35,6 +35,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
         client: 'output',
         channel: 'output',
         channelType: 'output',
+        projectId: 'output',
         agentId: 'output',
         trigger: 'option',
       },
@@ -58,7 +59,12 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
     const observer = new Rete.Output('observer', 'observer', stringSocket)
     const client = new Rete.Output('client', 'client', stringSocket)
     const channel = new Rete.Output('channel', 'channel', stringSocket)
-    const channelType = new Rete.Output('channelType', 'channelType', stringSocket)
+    const channelType = new Rete.Output(
+      'channelType',
+      'channelType',
+      stringSocket
+    )
+    const projectId = new Rete.Output('projectId', 'projectId', stringSocket)
     const agentId = new Rete.Output('agentId', 'agentId', stringSocket)
     const entities = new Rete.Output('entities', 'entities', arraySocket)
 
@@ -76,6 +82,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       .addOutput(agentId)
       .addOutput(entities)
       .addOutput(channelType)
+      .addOutput(projectId)
       .addOutput(out)
       .addOutput(dataOutput)
   }
@@ -83,12 +90,22 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
   // eslint-disable-next-line require-await
   async worker(
     node: NodeData,
-    {event}: MagickWorkerInputs,
+    { event }: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     { silent }: { silent: boolean }
   ) {
-    const { content, sender, observer, client, channel, channelType, entities, agentId} = event && (event[0] ?? event) as Event
-    
+    const {
+      content,
+      sender,
+      observer,
+      client,
+      channel,
+      channelType,
+      projectId,
+      entities,
+      agentId,
+    } = event && ((event[0] ?? event) as Event)
+
     if (!silent) node.display(event)
 
     return {
@@ -98,6 +115,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       client,
       channel,
       channelType,
+      projectId,
       entities,
       agentId,
       trigger: 'option',
