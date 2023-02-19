@@ -1,9 +1,8 @@
-import { createSelector } from '@reduxjs/toolkit'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import { getRootApi } from './api'
-import { GraphData, Spell } from '@magickml/engine'
+import { Spell } from '@magickml/engine'
 
 import md5 from 'md5'
 
@@ -42,26 +41,27 @@ export const getSpellApi = (config) => {
     endpoints: builder => ({
       getSpells: builder.query({
         providesTags: ['Spells'],
-        query: () => ({
-          url: `spells`,
+        query: ({ projectId }) => ({
+          url: `spells?projectId=${projectId}`,
         }),
       }),
       getSpell: builder.query({
         providesTags: ['Spell'],
-        query: ({ spellId }) => {
+        query: ({ spellId, projectId }) => {
           return {
-            url: `spells?name=${spellId}`,
+            url: `spells?name=${spellId}&projectId=${projectId}`,
             params: {},
           }
         },
       }),
       runSpell: builder.mutation({
-        query: ({ spellId, inputs, state = {} }) => ({
+        query: ({ spellId, inputs, state = {}, projectId }) => ({
           url: `spells/${spellId}`,
           method: 'POST',
           body: {
             ...inputs,
             state,
+            projectId
           },
         }),
       }),
@@ -85,7 +85,7 @@ export const getSpellApi = (config) => {
       saveSpell: builder.mutation({
         invalidatesTags: ['Spell'],
         // needed to use queryFn as query option didnt seem to allow async functions.
-        async queryFn({ ...spell }, { dispatch }, extraOptions, baseQuery) {
+        async queryFn({ spell, projectId, }, { dispatch }, extraOptions, baseQuery) {
           // make a copy of spell but remove the id
           const spellCopy = { ...spell } as any
           if (spellCopy.id) delete spellCopy.id
@@ -93,8 +93,8 @@ export const getSpellApi = (config) => {
           if (!spellCopy.created_at)
             spellCopy.created_at = new Date().toISOString()
           spellCopy.updated_at = new Date().toISOString()
+          spellCopy.projectId = spell.projectId ?? projectId
           spellCopy.hash = md5(JSON.stringify(spellCopy.graph.nodes))
-
           console.log('SAVING SPELL')
           const baseQueryOptions = {
             url: 'spells/' + spell.id,

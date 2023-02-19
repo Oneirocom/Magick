@@ -36,7 +36,7 @@ const OpenProject = ({
         </div>
       )}
       <div className={css['open-project-container']}>
-        <h1 style={{ marginLeft: 'var(--small)' }}>Recent Projects</h1>
+        <h1 style={{ marginLeft: 'var(--small)' }}>Recent Spells</h1>
 
         <Panel
           style={{ width: 'var(--c62)', backgroundColor: 'var(--dark-1)' }}

@@ -26,6 +26,7 @@ const EventHandler = ({ pubSub, tab }) => {
   const [saveDiff] = spellApi.useSaveDiffMutation()
   const { data: spell } = spellApi.useGetSpellQuery({
     spellId: tab.spellId,
+    projectId: config.projectId
   })
   const preferences = useSelector(
     (state: RootState) => state.preferences
@@ -65,6 +66,7 @@ const EventHandler = ({ pubSub, tab }) => {
   const saveSpell = async () => {
     const currentSpell = spellRef.current
     const graph = serialize() as GraphData
+    const config = useConfig()
 
     if (!currentSpell) return
 
@@ -75,6 +77,7 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       graph,
       hash: md5(JSON.stringify(graph)),
+      projectId: currentSpell.projectId ?? config.projectId,
     }
 
     console.log('updatedSpell', updatedSpell)
@@ -125,7 +128,7 @@ const EventHandler = ({ pubSub, tab }) => {
       })
       await saveDiff({
         name: currentSpell.name,
-        diff: jsonDiff,
+        diff: jsonDiff
       })
       enqueueSnackbar('Spell saved', {
         variant: 'success',

@@ -24,6 +24,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const { data: _spell } = spellApi.useGetSpellQuery(
     {
       spellId: tab.spellId,
+      projectId: config.projectId
     },
     {
       skip: !tab.spellId,
@@ -138,7 +139,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const getSpell = async spellId => {
-    const spell = await _getSpell(spellId)
+    const spell = await _getSpell({ spellId, projectId: config.projectId })
 
     return spell.data[0] as Spell
   }
@@ -178,7 +179,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const runSpell = async (inputs, spellId) => {
-    const response = await _runSpell({ inputs, spellId })
+    const response = await _runSpell({ inputs, spellId, projectId: config.projectId })
 
     if ('error' in response) {
       throw new Error(`Error running spell ${spellId}`)
