@@ -126,6 +126,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "pgull",
+      "name": "Preston Gull",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9013237?v=4",
+      "profile": "http://prestongull.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
