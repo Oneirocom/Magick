@@ -2,10 +2,13 @@
 //@ts-nocheck
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
+import {
+  DATABASE_URL
+} from '@magickml/engine'
 import pgvector from 'pgvector/pg'
 import postgres from 'postgres'
 import { hooks as schemaHooks } from '@feathersjs/schema' 
-const sql = postgres(process.env.DATABASE_URL)
+const sql = postgres(DATABASE_URL)
 async function getUsersOver(embedding) {
   var users
   try {
@@ -14,6 +17,7 @@ async function getUsersOver(embedding) {
   } catch (e){
     console.log(e)
   }
+  console.log(users)
   return users
 }
   
@@ -34,7 +38,6 @@ import {
 
 import type { Application, HookContext } from '../../declarations'
 import { EventService, getOptions } from './events.class'
-import { makeEmbedding } from 'packages/engine/src/functions/makeEmbedding'
 
 export * from './events.class'
 export * from './events.schema'
@@ -52,14 +55,31 @@ export const event = (app: Application) => {
   app.service('events').hooks({
     around: {
       all: [
-        // process.env.USE_AUTH !== 'true' && process.env.NODE_ENV === 'development' ? authenticate('jwt') : (context: any, next: any) => next(),
         schemaHooks.resolveExternal(eventExternalResolver),
         schemaHooks.resolveResult(eventResolver),
       ]
     },
     before: {
       all: [schemaHooks.validateQuery(eventQueryValidator), schemaHooks.resolveQuery(eventQueryResolver)],
-      find: [],
+      find:[
+        async (context: any) => {
+          if (context.params.query.embedding){
+            console.log("FIND")
+            console.log('context.params.query.embedding', context.params.query.embedding)
+            let blob = atob( context.params.query.embedding );
+            let ary_buf = new ArrayBuffer( blob.length );
+            let dv = new DataView( ary_buf );
+            for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
+            let f32_ary = new Float32Array( ary_buf );
+            console.log( f32_ary );
+            let temp = await getUsersOver("["+f32_ary+"]")
+            return {
+              "result" : temp
+            }
+          }
+          
+        }
+      ],
       get: [
         (context: any) => {
           const { getEmbedding } = context.params.query
@@ -90,33 +110,6 @@ export const event = (app: Application) => {
       create:[
 
       ],
-      find:[
-          async (context: any) => {
-            if (!(context.params.query.embedding)){
-              try {
-                const query = context.service.createQuery(context.params)
-                const cQuery = context.params.query;
-                Object.keys(cQuery).map(key => {
-                  query[key] = cQuery[key];
-                });
-                context.params.query = query;
-              } catch (e){
-                console.log(e)
-              }
-            } else {
-              console.log("FIND")
-              let undecoded_array = JSON.parse(context.params.query.embedding)
-              let embedding_array = undecoded_array.map(element => {
-                  return element/100000.0
-              })
-              let temp = await getUsersOver("["+embedding_array+"]")
-              return {
-                "result" : temp
-              }
-            }
-            
-          }
-        ],
       all: []
     },
     error: {
