@@ -23,7 +23,7 @@ const EventManagerWindow = () => {
   }
 
   return (
-    <div className="agent-container">
+    <div className="event-container" style={{paddingBottom: "1em", width: "100%", height: "100vh", "overflow": "scroll"}}>
       {events && <EventTable events={events} updateCallback={resetEvents} />}
     </div>
   )
