@@ -3,8 +3,9 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "module": "esnext",
-    "types": ["node"]
+    "types": ["node"],
+    "sourceMap": true
   },
   "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"],
-  "include": ["**/*.ts", "./env.d.ts"]
+  "include": ["**/*.ts", "./env.d.ts", "../../packages/server-core/src/types.ts", "../../packages/server-core/src/types.ts"]
 }

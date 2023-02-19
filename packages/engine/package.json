@@ -1,12 +1,12 @@
 {
   "name": "@magickml/engine",
-  "version": "0.0.0",
-  "main": "./engine.umd.js",
-  "module": "./engine.es.js",
+  "version": "0.0.1",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "exports": {
     ".": {
-      "import": "./engine.es.js",
-      "require": "./engine.umd.js"
+      "import": "./index.mjs",
+      "require": "./index.js"
     }
   }
 }

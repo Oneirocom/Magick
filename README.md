@@ -1,9 +1,9 @@
-<p align="center"><img src="files/MAGICK-banner.png" /></p>
+<p align="center"><img src="apps/docs/readme-files/MAGICK-banner.png" /></p>
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 <h1 align="center">MAGICK</h1>
+
+[![](https://dcbadge.vercel.app/api/server/magickml?style=social)](https://discord.gg/magickml)
+![Twitter Follow](https://img.shields.io/twitter/follow/magickml?style=social)
 
 Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and connectors well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.
 
@@ -16,7 +16,12 @@ Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick 
 - Many included powertools, including voice and image generation and vector search
 - Graphs can be embedded in subgraphs and shared for rapid community development
 
-![image](https://user-images.githubusercontent.com/18633264/210928740-fec448aa-e6fe-4640-9587-aae109ddea12.png)
+`Powerful enough for wizards. Easy enough for mere mortals.`
+
+### Looks cool, but this whole Github thing is way over my head...
+Don't worry, there is a hosted version too! Sign up [here](https://www.magickml.com)
+
+We'll also be releasing a packaged app release you can run (.exe, .app) soon!
 
 ### Installation
 
@@ -48,11 +53,28 @@ _Please be aware Magick is under heavy development and changes can cause your DB
 
 The default setup of Magick is connected to a test database on Supabase. It will get you going, but it will likely be wiped regularly and is not a good storage for your spells.
 
-We recommend either installing the docker desktop app, and running `docker-compose up` at the root of Magick, or getting your own Supabase instance set up for free in the cloud.
+### Deploy your own database
 
-We will be working on more database docoumentation to help you get your data store up and running.
+To deploy your own database, we suggest using Supabase or another Postgres database. The current setup for events and documents requires the `pgvector` extension to be enabled.
+
+The following documents should help you with setup:
+- https://supabase.com/docs/guides/database/connecting-to-postgres
+- https://supabase.com/blog/openai-embeddings-postgres-vector
+
+To initialize a new database, you will probably need to call migrate. Magick uses Feathers 5 for backend, which in turn uses Knex for making database queries. To migrate the database, cd to apps/server and run `npm run migrate`. 
+
+You will need to change the `connection` property in feathers config. We will offer a better database configuration experience in the future, for now we suggest find and replacing any URLs that point to the database (ctrl f `postgresql://`)
+
+## Self signed certificates
+
+Developing locally, it can be very helpful to have google chrome accept all self signed cetificates coming from localhost. To do this, simply paste the following snippet into chromes URL bar and enable the feature:
+
+`chrome://flags/#allow-insecure-localhost`
 
 ## Contributors
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=for-the-badge)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -72,6 +94,25 @@ We will be working on more database docoumentation to help you get your data sto
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/khalildh"><img src="https://avatars.githubusercontent.com/u/16530987?v=4?s=100" width="100px;" alt="khalildh"/><br /><sub><b>khalildh</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=khalildh" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/pigloo"><img src="https://avatars.githubusercontent.com/u/1707563?v=4?s=100" width="100px;" alt="Pigloo"/><br /><sub><b>Pigloo</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=pigloo" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/avirtualfuture"><img src="https://avatars.githubusercontent.com/u/118632766?v=4?s=100" width="100px;" alt="avirtualfuture"/><br /><sub><b>avirtualfuture</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=avirtualfuture" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.alexjorgef.com"><img src="https://avatars.githubusercontent.com/u/3478673?v=4?s=100" width="100px;" alt="Alexandre Ferreira"/><br /><sub><b>Alexandre Ferreira</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=alexjorgef" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
+
+## Based on Thoth by Latitude Games
+The original source code was made by the following contributors to Thoth, which is archived [here](http://github.com/latitudegames/thoth)
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/HaruHunab1320"><img src="https://avatars.githubusercontent.com/u/51176775?v=4?s=100" width="100px;" alt="Jakob"/><br /><sub><b>Jakob</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=HaruHunab1320" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://seangillespie.dev"><img src="https://avatars.githubusercontent.com/u/1413443?v=4?s=100" width="100px;" alt="Sean Gillespie"/><br /><sub><b>Sean Gillespie</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=seang" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/michaelsharpe"><img src="https://avatars.githubusercontent.com/u/2397603?v=4?s=100" width="100px;" alt="Michael"/><br /><sub><b>Michael</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=michaelsharpe" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://prestongull.com"><img src="https://avatars.githubusercontent.com/u/9013237?v=4?s=100" width="100px;" alt="Preston Gull"/><br /><sub><b>Preston Gull</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=pgull" title="Code">💻</a><a href="https://github.com/Oneirocom/Magick/commits?author=pgull" title="Design">🎨</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/nickwalton"><img src="https://avatars.githubusercontent.com/u/22206272?v=4?s=100" width="100px;" alt="Nick Walton"/><br /><sub><b>Nick Walton</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=nickwalton" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mitchellgordon95"><img src="https://avatars.githubusercontent.com/u/7490438?v=4?s=100" width="100px;" alt="Mitchell Gordon"/><br /><sub><b>Mitchell Gordon</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=mitchellgordon95" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://generative.ink"><img src="https://avatars.githubusercontent.com/u/19345266?v=4?s=100" width="100px;" alt="?/janus"/><br /><sub><b>?/janus</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=socketteer" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/aawalton"><img src="https://avatars.githubusercontent.com/u/1708223?v=4?s=100" width="100px;" alt="Alan Walton"/><br /><sub><b>Alan Walton</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=aawalton" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
@@ -87,3 +128,10 @@ We will be working on more database docoumentation to help you get your data sto
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+# Come Build With Us!
+We are building Magick as a community in the open on Discord. If you are interested in contributing to the project, we'd love to have you.
+
+Join us here: https://discord.gg/magickml
+
+<p align="center"><img src="apps/docs/readme-files/wizard.png" /></p>
