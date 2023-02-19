@@ -135,6 +135,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "nickwalton",
+      "name": "Nick Walton",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22206272?v=4",
+      "profile": "https://github.com/nickwalton",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
