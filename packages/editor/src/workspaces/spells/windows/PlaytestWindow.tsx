@@ -165,6 +165,8 @@ const Playtest = ({ tab }) => {
     const newHistory = [...history, `You: ${value}`]
     setHistory(newHistory as [])
 
+    // save diff spell
+
     let toSend = value
 
     if (localState?.playtestData !== '{}') {
