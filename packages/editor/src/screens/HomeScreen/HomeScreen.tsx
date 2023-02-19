@@ -23,7 +23,7 @@ const StartScreen = () => {
 
   const navigate = useNavigate()
   const [deleteSpell] = spellApi.useDeleteSpellMutation()
-  const { data: spells } = spellApi.useGetSpellsQuery()
+  const { data: spells } = spellApi.useGetSpellsQuery({projectId: config.projectId})
   const [newSpell] = spellApi.useNewSpellMutation()
 
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
@@ -45,6 +45,7 @@ const StartScreen = () => {
     await newSpell({
       graph: spellData.graph,
       name: spellData.name,
+      projectId: config.projectId,
     })
 
     dispatch(
@@ -66,7 +67,7 @@ const StartScreen = () => {
 
   const onDelete = async spellId => {
     try {
-      await deleteSpell({ spellId })
+      await deleteSpell({ spellId, projectId: config.projectId })
       const [tab] = tabs.filter(tab => tab.spellId === spellId)
       if (tab) {
         dispatch(closeTab(tab.id))

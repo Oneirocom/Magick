@@ -29,7 +29,7 @@ const EditSpellModal = ({ closeModal, spellId, name, tab }) => {
   const onSubmit = handleSubmit(async data => {
     const response: any = await patchSpell({
       spellId: tab.spellId,
-      update: {...data, hash: md5(JSON.stringify(data.graph.nodes))},
+      update: {...data, projectId: data.projectId ?? config.projectId, hash: md5(JSON.stringify(data.graph.nodes))},
     })
 
     if (response.error) {

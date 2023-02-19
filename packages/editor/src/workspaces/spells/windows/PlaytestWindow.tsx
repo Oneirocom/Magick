@@ -73,7 +73,7 @@ const Playtest = ({ tab }) => {
   const { serialize } = useEditor()
 
   const { data: spellData } = spellApi.useGetSpellQuery(
-    { spellId: tab.spellId },
+    { spellId: tab.spellId, projectId: config.projectId },
     {
       refetchOnMountOrArgChange: true,
       skip: !tab.spellId,

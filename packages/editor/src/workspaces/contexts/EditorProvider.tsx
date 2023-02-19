@@ -184,6 +184,7 @@ const RawEditor = ({ tab, children }) => {
     if (tab?.spellId)
       getSpell({
         spellId: tab.spellId,
+        projectId: config.projectId
       })
   }, [tab])
 
