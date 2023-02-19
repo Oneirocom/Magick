@@ -1,7 +1,7 @@
 <p align="center"><img src="apps/docs/readme-files/MAGICK-banner.png" /></p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-14-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <h1 align="center">MAGICK</h1>
 
@@ -89,6 +89,7 @@ Developing locally, it can be very helpful to have google chrome accept all self
       <td align="center" valign="top" width="14.28%"><a href="http://www.alexjorgef.com"><img src="https://avatars.githubusercontent.com/u/3478673?v=4?s=100" width="100px;" alt="Alexandre Ferreira"/><br /><sub><b>Alexandre Ferreira</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=alexjorgef" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/HaruHunab1320"><img src="https://avatars.githubusercontent.com/u/51176775?v=4?s=100" width="100px;" alt="Jakob"/><br /><sub><b>Jakob</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=HaruHunab1320" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://seangillespie.dev"><img src="https://avatars.githubusercontent.com/u/1413443?v=4?s=100" width="100px;" alt="Sean Gillespie"/><br /><sub><b>Sean Gillespie</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=seang" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://prestongull.com"><img src="https://avatars.githubusercontent.com/u/9013237?v=4?s=100" width="100px;" alt="Preston Gull"/><br /><sub><b>Preston Gull</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=pgull" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
