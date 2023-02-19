@@ -1,9 +1,9 @@
 <p align="center"><img src="apps/docs/readme-files/MAGICK-banner.png" /></p>
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 <h1 align="center">MAGICK</h1>
+
+[![](https://dcbadge.vercel.app/api/server/magickml?style=social)](https://discord.gg/magickml)
+![Twitter Follow](https://img.shields.io/twitter/follow/magickml?style=social)
 
 Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and connectors well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.
 
@@ -16,7 +16,12 @@ Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick 
 - Many included powertools, including voice and image generation and vector search
 - Graphs can be embedded in subgraphs and shared for rapid community development
 
-<p align="center"><img src="apps/docs/readme-files/ui.png" /></p>
+`Powerful enough for wizards. Easy enough for mere mortals.`
+
+### Looks cool, but this whole Github thing is way over my head...
+Don't worry, there is a hosted version too! Sign up [here](https://www.magickml.com)
+
+We'll also be releasing a packaged app release you can run (.exe, .app) soon!
 
 ### Installation
 
@@ -67,6 +72,9 @@ Developing locally, it can be very helpful to have google chrome accept all self
 `chrome://flags/#allow-insecure-localhost`
 
 ## Contributors
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=for-the-badge)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -91,6 +99,24 @@ Developing locally, it can be very helpful to have google chrome accept all self
   </tbody>
 </table>
 
+## Based on Thoth by Latitude Games
+The original source code was made by the following contributors to Thoth, which is archived [here](http://github.com/latitudegames/thoth)
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/HaruHunab1320"><img src="https://avatars.githubusercontent.com/u/51176775?v=4?s=100" width="100px;" alt="Jakob"/><br /><sub><b>Jakob</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=HaruHunab1320" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://seangillespie.dev"><img src="https://avatars.githubusercontent.com/u/1413443?v=4?s=100" width="100px;" alt="Sean Gillespie"/><br /><sub><b>Sean Gillespie</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=seang" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/michaelsharpe"><img src="https://avatars.githubusercontent.com/u/2397603?v=4?s=100" width="100px;" alt="Michael"/><br /><sub><b>Michael</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=michaelsharpe" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://prestongull.com"><img src="https://avatars.githubusercontent.com/u/9013237?v=4?s=100" width="100px;" alt="Preston Gull"/><br /><sub><b>Preston Gull</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=pgull" title="Code">💻</a><a href="https://github.com/Oneirocom/Magick/commits?author=pgull" title="Design">🎨</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/nickwalton"><img src="https://avatars.githubusercontent.com/u/22206272?v=4?s=100" width="100px;" alt="Nick Walton"/><br /><sub><b>Nick Walton</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=nickwalton" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mitchellgordon95"><img src="https://avatars.githubusercontent.com/u/7490438?v=4?s=100" width="100px;" alt="Mitchell Gordon"/><br /><sub><b>Mitchell Gordon</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=mitchellgordon95" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://generative.ink"><img src="https://avatars.githubusercontent.com/u/19345266?v=4?s=100" width="100px;" alt="?/janus"/><br /><sub><b>?/janus</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=socketteer" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/aawalton"><img src="https://avatars.githubusercontent.com/u/1708223?v=4?s=100" width="100px;" alt="Alan Walton"/><br /><sub><b>Alan Walton</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=aawalton" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
+
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 
@@ -102,3 +128,10 @@ Developing locally, it can be very helpful to have google chrome accept all self
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+# Come Build With Us!
+We are building Magick as a community in the open on Discord. If you are interested in contributing to the project, we'd love to have you.
+
+Join us here: https://discord.gg/magickml
+
+<p align="center"><img src="apps/docs/readme-files/wizard.png" /></p>

@@ -1,7 +1,7 @@
 {
   "name": "magick",
   "version": "0.1.0",
-  "license": "MIT",
+  "license": "Apache 2.0",
   "scripts": {
     "migrate:make": "nx run server:migrate:make",
     "migrate": "nx run server:migrate",

@@ -20,6 +20,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const { data: spell } = spellApi.useGetSpellQuery(
     {
       spellId: tab.spellId,
+      projectId: config.projectId,
     },
     {
       skip: !tab.spellId,
@@ -36,8 +37,8 @@ const EditSpellModal = ({ tab, closeModal }) => {
 
   const onSubmit = handleSubmit(async data => {
     const saveResponse: any = await saveSpell({
-      ...spell,
-      name: data.name,
+      spell: {...spell, name: data.name},
+      projectId: config.projectId
     })
 
     if (saveResponse.error) {

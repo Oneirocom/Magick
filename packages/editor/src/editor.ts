@@ -168,6 +168,8 @@ export const initEditor = function ({
     return source !== 'dblclick'
   })
 
+  editor.on("multiselectnode", (args) => args.accumulate = args.e.ctrlKey || args.e.metaKey);
+
   editor.on(['click'], () => {
     editor.selected.list = []
   })

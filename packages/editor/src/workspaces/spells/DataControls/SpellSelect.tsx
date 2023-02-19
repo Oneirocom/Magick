@@ -17,7 +17,7 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   const dispatch = useAppDispatch()
 
   const [getSpell, { data: spell }] = spellApi.useLazyGetSpellQuery()
-  const { data: spells } = spellApi.useGetSpellsQuery()
+  const { data: spells } = spellApi.useGetSpellsQuery({projectId: config.projectId})
   const [newSpell] = spellApi.useNewSpellMutation()
 
   const { enqueueSnackbar } = useSnackbar()
@@ -55,6 +55,7 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   const onChange = async ({ value }) => {
     getSpell({
       spellId: value,
+      projectId: config.projectId,
     })
   }
 
@@ -67,6 +68,7 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
       await newSpell({
         name: value,
         graph: defaultGraph as unknown as GraphData,
+        projectId: config.projectId,
       })
 
       getSpell({
