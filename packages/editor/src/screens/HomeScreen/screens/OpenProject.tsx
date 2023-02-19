@@ -10,7 +10,10 @@ import { useSelector } from 'react-redux'
 import { selectAllTabs } from '../../../state/tabs'
 import { RootState } from '../../../state/store'
 
-const getMagickVersion = () => 'alpha-0.2.0'
+import packageJson from '../../../../package.json'
+const version = packageJson.version
+
+const getMagickVersion = () => version
 
 const OpenProject = ({
   spells,

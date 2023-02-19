@@ -13,9 +13,7 @@ const uuid = generateUuid();
 
 let projectId = process.env.PROJECT_ID
 
-console.log('projectId', projectId)
-
-if(!process.env.PROJECT_ID) {
+if(!projectId) {
   // check if there is a ../.env.local, if not copy .env.local.example to it
   const envLocalPath = path.join(__dirname, '..', '.env.local');
   if (!fs.existsSync(envLocalPath)) {
@@ -24,10 +22,10 @@ if(!process.env.PROJECT_ID) {
   }
   // read the .env.local file and replace {uuid}
   const envLocalFile = fs.readFileSync(envLocalPath, 'utf8');
-  let newEnvLocalFile = envLocalFile.replace('{uuid}', uuid);
+  let newEnvLocalFile = envLocalFile.replace('{uuid}', process.env.DEFAULT_PROJECT_ID);
 
   if (!newEnvLocalFile.includes('PROJECT_ID')) {
-    newEnvLocalFile += `\nPROJECT_ID=${uuid}`;
+    newEnvLocalFile += `\nPROJECT_ID=${process.env.DEFAULT_PROJECT_ID}`;
   }
 
   fs.writeFileSync(envLocalPath, newEnvLocalFile);
