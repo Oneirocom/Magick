@@ -16,7 +16,7 @@ const AgentManagerWindow = () => {
     console.log('res is', json)
   }
 
-  const createNew = (data = { spells: [] }) => {
+  const createNew = (data = { projectId: config.projectId, spells: [] }) => {
     console.log('data is', data)
     if (!data.spells === undefined) data.spells = []
     // rewrite using fetch instead of axios
