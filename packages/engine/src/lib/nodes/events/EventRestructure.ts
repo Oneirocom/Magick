@@ -48,6 +48,7 @@ export class EventRestructureComponent extends MagickComponent<
     const observer = new Rete.Input('observer', 'observer', stringSocket)
     const client = new Rete.Input('client', 'client', stringSocket)
     const channelType = new Rete.Input('channelType', 'channelType', stringSocket)
+    const projectId = new Rete.Input('projectId', 'projectId', stringSocket)
     const entity = new Rete.Input('entity', 'entity', stringSocket)
     const entities = new Rete.Input('entities', 'entities', arraySocket)
     
@@ -60,6 +61,7 @@ export class EventRestructureComponent extends MagickComponent<
       .addInput(observer)
       .addInput(client)
       .addInput(channelType)
+      .addInput(projectId)
       .addInput(entity)
       .addInput(entities)
       .addInput(content)

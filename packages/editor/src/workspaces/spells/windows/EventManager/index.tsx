@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import EventTable from './EventTable'
+import { useConfig } from '../../../../contexts/ConfigProvider'
 
 const EventManagerWindow = () => {
+  const config = useConfig()
   const [events, setEvents] = useState(null)
 
   useEffect(() => {
@@ -16,7 +18,7 @@ const EventManagerWindow = () => {
 
   const fetchEvents = async () => {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_APP_API_URL}/events`
+      `${import.meta.env.VITE_APP_API_URL}/events?projectId=${config.projectId}`
     )
     console.log('fetching events', data)
     setEvents(data.data)

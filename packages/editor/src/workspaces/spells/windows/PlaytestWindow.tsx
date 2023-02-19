@@ -47,20 +47,21 @@ const Input = props => {
   )
 }
 
-const defaultPlaytestData = `{
-  "sender": "playtestSender",
-  "observer": "playtestObserver",
-  "type": "playtest",
-  "client": "playtest",
-  "channel": "playtest",
-  "channelType": "playtest",
-  "agentId": 0,
-  "entities": ["playtestSender", "playtestObserver"]
-}`
-
 const Playtest = ({ tab }) => {
   const config = useConfig()
   const spellApi = getSpellApi(config)
+
+  const defaultPlaytestData = `{
+    "sender": "playtestSender",
+    "observer": "playtestObserver",
+    "type": "playtest",
+    "client": "playtest",
+    "channel": "playtest",
+    "channelType": "playtest",
+    "projectId": "${config.projectId}",
+    "agentId": 0,
+    "entities": ["playtestSender", "playtestObserver"]
+  }`
 
   const scrollbars = useRef<any>()
   const [history, setHistory] = useState([])
@@ -184,6 +185,7 @@ const Playtest = ({ tab }) => {
         agentId: 0,
         client: "playtest",
         channel: 'previewChannel',
+        projectId: config.projectId,
         channelType: 'previewChannelType',
         ...JSON.parse(json),
       }

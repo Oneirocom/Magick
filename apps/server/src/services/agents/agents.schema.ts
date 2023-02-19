@@ -26,8 +26,8 @@ export const agentExternalResolver = resolve<Agent, HookContext>({})
 
 // Schema for creating new entries
 export const agentDataSchema = Type.Pick(agentSchema, [
-  'projectId',
   'dirty',
+  'projectId',
   'enabled',
   'updated_at',
   'spells',

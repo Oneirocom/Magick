@@ -66,7 +66,6 @@ const EventHandler = ({ pubSub, tab }) => {
   const saveSpell = async () => {
     const currentSpell = spellRef.current
     const graph = serialize() as GraphData
-    const config = useConfig()
 
     if (!currentSpell) return
 
@@ -76,13 +75,12 @@ const EventHandler = ({ pubSub, tab }) => {
     const updatedSpell = {
       ...currentSpell,
       graph,
-      hash: md5(JSON.stringify(graph)),
-      projectId: currentSpell.projectId ?? config.projectId,
+      hash: md5(JSON.stringify(graph))
     }
 
     console.log('updatedSpell', updatedSpell)
 
-    const response = await saveSpellMutation(updatedSpell)
+    const response = await saveSpellMutation({ spell: updatedSpell, projectId: config.projectId })
     const jsonDiff = diff(currentSpell, updatedSpell)
 
     if (jsonDiff.length !== 0) {
