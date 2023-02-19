@@ -1,7 +1,12 @@
 {
   "name": "@magickml/engine",
-  "version": "0.1.0",
-  "scripts": {
-    "build": "vite build"
+  "version": "0.0.1",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
 }

@@ -1,18 +1,21 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "esnext",
-    "lib": [
-      "esnext",
-      "DOM"
-    ],
-    "skipLibCheck": true,
-    "esModuleInterop": true
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "types": ["vite/client"]
   },
-  "rootDir": "../..",
   "files": [],
-  "include": [
-    "src",
-    "src/controls"
-  ]
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ],
+  "extends": "../../tsconfig.base.json"
 }

@@ -17,6 +17,7 @@ async function getUsersOver(embedding) {
   } catch (e){
     console.log(e)
   }
+  console.log(users)
   return users
 }
   
@@ -60,7 +61,37 @@ export const event = (app: Application) => {
     },
     before: {
       all: [schemaHooks.validateQuery(eventQueryValidator), schemaHooks.resolveQuery(eventQueryResolver)],
-      find: [],
+      find:[
+        async (context: any) => {
+          if (!(context.params.query.embedding)){
+            try {
+              const query = context.service.createQuery(context.params)
+              const cQuery = context.params.query;
+              console.log(cQuery)
+              Object.keys(cQuery).map(key => {
+                query[key] = cQuery[key];
+              });
+              console.log(Query)//Don't Remove
+              context.params.query = query;
+            } catch (e){
+              console.log(e)
+            }
+          } else {
+            console.log("FIND")
+            let blob = atob( context.params.query.embedding );
+            let ary_buf = new ArrayBuffer( blob.length );
+            let dv = new DataView( ary_buf );
+            for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
+            let f32_ary = new Float32Array( ary_buf );
+            console.log( f32_ary );
+            let temp = await getUsersOver("["+f32_ary+"]")
+            return {
+              "result" : temp
+            }
+          }
+          
+        }
+      ],
       get: [
         (context: any) => {
           const { getEmbedding } = context.params.query
@@ -91,33 +122,6 @@ export const event = (app: Application) => {
       create:[
 
       ],
-      find:[
-          async (context: any) => {
-            if (!(context.params.query.embedding)){
-              try {
-                const query = context.service.createQuery(context.params)
-                const cQuery = context.params.query;
-                Object.keys(cQuery).map(key => {
-                  query[key] = cQuery[key];
-                });
-                context.params.query = query;
-              } catch (e){
-                console.log(e)
-              }
-            } else {
-              console.log("FIND")
-              let undecoded_array = JSON.parse(context.params.query.embedding)
-              let embedding_array = undecoded_array.map(element => {
-                  return element/100000.0
-              })
-              let temp = await getUsersOver("["+embedding_array+"]")
-              return {
-                "result" : temp
-              }
-            }
-            
-          }
-        ],
       all: []
     },
     error: {
