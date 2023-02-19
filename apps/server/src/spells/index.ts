@@ -1,4 +1,4 @@
-import { extractModuleInputKeys, Spell, projectId } from '@magickml/engine'
+import { extractModuleInputKeys, Spell } from '@magickml/engine'
 import { app } from "../app"
 import Koa from 'koa'
 import otJson0 from 'ot-json0'
@@ -39,7 +39,7 @@ const runSpellHandler = async (ctx: Koa.Context) => {
 
 const saveDiffHandler = async (ctx: Koa.Context) => {
   const { body } = ctx.request
-  const { name, diff } = body as any
+  const { name, diff, projectId } = body as any
 
   if (!body) throw new ServerError('input-failed', 'No parameters provided')
 
