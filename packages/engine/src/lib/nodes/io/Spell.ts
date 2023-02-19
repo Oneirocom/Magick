@@ -64,14 +64,14 @@ export class SpellComponent extends MagickComponent<
       const event = pubsub.events.OPEN_TAB
       pubsub.publish(event, {
         type: 'spell',
-        spellId: node.data.spellId,
+        spellName: node.data.spellName,
         name: node.data.spell,
         openNew: false,
       })
     }
   }
 
-  subscribe(node: MagickNode, spellId: string) {
+  subscribe(node: MagickNode, spellName: string) {
     if (!this.editor) return
     if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
 
@@ -79,7 +79,7 @@ export class SpellComponent extends MagickComponent<
 
     // Subscribe to any changes to that spell here
     this.subscriptionMap[node.id] = this.editor.onSpellUpdated(
-      spellId,
+      spellName,
       (spell: Spell) => {
         if (!isEqual(spell, cache)) {
           // this can probably be better optimise this
@@ -102,8 +102,8 @@ export class SpellComponent extends MagickComponent<
 
     spellControl.onData = (spell: Spell) => {
       // break out of it the nodes data already exists.
-      if (spell.name === node.data.spellId) return
-      node.data.spellId = spell.name
+      if (spell.name === node.data.spellName) return
+      node.data.spellName = spell.name
 
       // Update the sockets
       this.updateSockets(node, spell)
@@ -122,9 +122,9 @@ export class SpellComponent extends MagickComponent<
     // node.addInput(stateSocket)
     node.inspector.add(spellControl)
 
-    if (node.data.spellId) {
+    if (node.data.spellName) {
       setTimeout(() => {
-        this.subscribe(node, node.data.spellId as string)
+        this.subscribe(node, node.data.spellName as string)
       }, 1000)
     }
 
@@ -174,8 +174,11 @@ export class SpellComponent extends MagickComponent<
 
     if (!magick.runSpell) return {}
     const outputs = await magick.runSpell(
-      flattenedInputs,
-      node.data.spellId as string
+        {
+          inputs: flattenedInputs,
+          spellName: node.data.spellName as string,
+          projectId: 'changeme' // TODO: This needs to be changed to the current project id
+        }
       )
 
     if (!silent) node.display(`${JSON.stringify(outputs)}`)

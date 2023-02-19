@@ -10,7 +10,7 @@ import css from './modalForms.module.css'
 import { useConfig } from '../../contexts/ConfigProvider'
 import { getSpellApi } from '../../state/api/spells'
 
-const EditSpellModal = ({ closeModal, spellId, name, tab }) => {
+const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
   const config = useConfig()
   const spellApi = getSpellApi(config)
   
@@ -28,7 +28,7 @@ const EditSpellModal = ({ closeModal, spellId, name, tab }) => {
 
   const onSubmit = handleSubmit(async data => {
     const response: any = await patchSpell({
-      spellId: tab.spellId,
+      spellName: tab.spellName,
       update: {...data, projectId: data.projectId ?? config.projectId, hash: md5(JSON.stringify(data.graph.nodes))},
     })
 
@@ -46,7 +46,7 @@ const EditSpellModal = ({ closeModal, spellId, name, tab }) => {
     dispatch(
       openTab({
         name: data.name,
-        spellId: data.name,
+        spellName: data.name,
         type: 'spell',
       })
     )

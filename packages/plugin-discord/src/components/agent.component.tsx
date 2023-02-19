@@ -355,7 +355,7 @@ export const DiscordAgentWindow: FC<any> = props => {
                 <Grid item xs={3}>
                   <div className="form-item">
                     <span className="form-item-label">
-                      Voice Default Phrases - Separate using | (n1|n2|...|nN)
+                      Voice Default Phrases (n1|n2|...|nN)
                     </span>
                     <input
                       type="text"

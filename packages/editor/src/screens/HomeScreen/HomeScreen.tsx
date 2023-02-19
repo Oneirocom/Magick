@@ -51,7 +51,7 @@ const StartScreen = () => {
     dispatch(
       openTab({
         name: spellData.name,
-        spellId: spellData.name,
+        spellName: spellData.name,
         type: 'spell',
       })
     )
@@ -65,10 +65,10 @@ const StartScreen = () => {
     reader.readAsText(selectedFile)
   }
 
-  const onDelete = async spellId => {
+  const onDelete = async spellName => {
     try {
-      await deleteSpell({ spellId, projectId: config.projectId })
-      const [tab] = tabs.filter(tab => tab.spellId === spellId)
+      await deleteSpell({ spellName, projectId: config.projectId })
+      const [tab] = tabs.filter(tab => tab.spellName === spellName)
       if (tab) {
         dispatch(closeTab(tab.id))
       }
@@ -78,7 +78,7 @@ const StartScreen = () => {
   }
 
   const openSpell = async spell => {
-    // dispatch(openTab({ name: spell.name, spellId: spell.name, type: 'spell' }))
+    // dispatch(openTab({ name: spell.name, spellName: spell.name, type: 'spell' }))
     navigate(`/magick/${spell.name}`)
   }
 

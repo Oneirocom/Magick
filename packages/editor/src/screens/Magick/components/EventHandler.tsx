@@ -25,7 +25,7 @@ const EventHandler = ({ pubSub, tab }) => {
   const [saveSpellMutation] = spellApi.useSaveSpellMutation()
   const [saveDiff] = spellApi.useSaveDiffMutation()
   const { data: spell } = spellApi.useGetSpellQuery({
-    spellId: tab.spellId,
+    spellName: tab.spellName,
     projectId: config.projectId
   })
   const preferences = useSelector(

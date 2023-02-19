@@ -6,13 +6,13 @@ import {
 } from '@reduxjs/toolkit'
 
 export interface LocalState {
-  spellId: string
+  spellName: string
   playtestData: string
 }
 
 // Entity adapter
 const localAdapater = createEntityAdapter<LocalState>({
-  selectId: localState => localState.spellId,
+  selectId: localState => localState.spellName,
 })
 const localSelectors = localAdapater.getSelectors()
 
@@ -36,9 +36,9 @@ export const { addLocalState, deleteLocalState, upsertLocalState } =
 
 // selectors
 export const selectStateBySpellId = createDraftSafeSelector(
-  [state => localSelectors.selectAll(state), (_, spellId) => spellId],
-  (states, spellId) =>
-    Object.values(states).find(state => state.spellId === spellId)
+  [state => localSelectors.selectAll(state), (_, spellName) => spellName],
+  (states, spellName) =>
+    Object.values(states).find(state => state.spellName === spellName)
 )
 
 export default localStateSlice.reducer

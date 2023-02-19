@@ -1,41 +1,12 @@
-import { extractModuleInputKeys, Spell } from '@magickml/engine'
+import { Spell } from '@magickml/engine'
 import { app } from "../app"
 import Koa from 'koa'
 import otJson0 from 'ot-json0'
 
 import { Route } from '@magickml/server-core'
-import { runSpell } from '../utils/runSpell'
 import { ServerError } from '@magickml/server-core'
 
 import md5 from 'md5'
-
-const runSpellHandler = async (ctx: Koa.Context) => {
-  const { spell: spellName } = ctx.params
-
-  const inputFormatter = graph => {
-    // Extract any keys from the graphs inputs
-    const inputKeys = extractModuleInputKeys(graph) as string[]
-
-    // We should report on them here
-    return inputKeys.reduce((acc: { [x: string]: any[] }, input: string) => {
-      const requestInput = ctx.request.body[input]
-
-      if (requestInput) {
-        acc[input] = requestInput
-      } else {
-        acc[input] = null
-      }
-      return acc
-    }, {} as Record<string, unknown>)
-  }
-
-    const { outputs, name } = await runSpell({
-      spellName,
-      inputFormatter,
-    })
-    // Return the response
-    ctx.body = { spell: name, outputs }
-}
 
 const saveDiffHandler = async (ctx: Koa.Context) => {
   const { body } = ctx.request
@@ -75,9 +46,5 @@ export const spells: Route[] = [
   {
     path: '/spells/saveDiff',
     post: saveDiffHandler,
-  },
-  {
-    path: '/spells/:spell',
-    post: runSpellHandler,
-  },
+  }
 ]

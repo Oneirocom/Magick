@@ -12,18 +12,18 @@ export interface Diff {
 }
 
 export interface PatchArgs {
-  spellId: string
+  spellName: string
   update: Partial<Spell>
 }
 
 export interface RunSpell {
-  spellId: string
+  spellName: string
   inputs: Record<string, any>
   state?: Record<string, any>
 }
 
 export interface UserSpellArgs {
-  spellId: string
+  spellName: string
 }
 
 export interface SpellData {
@@ -47,16 +47,16 @@ export const getSpellApi = (config) => {
       }),
       getSpell: builder.query({
         providesTags: ['Spell'],
-        query: ({ spellId, projectId }) => {
+        query: ({ spellName, projectId }) => {
           return {
-            url: `spells?name=${spellId}&projectId=${projectId}`,
+            url: `spells?name=${spellName}&projectId=${projectId}`,
             params: {},
           }
         },
       }),
       runSpell: builder.mutation({
-        query: ({ spellId, inputs, state = {}, projectId }) => ({
-          url: `spells/${spellId}`,
+        query: ({ spellName, inputs, state = {}, projectId }) => ({
+          url: `spells/${spellName}`,
           method: 'POST',
           body: {
             ...inputs,
@@ -121,9 +121,9 @@ export const getSpellApi = (config) => {
       }),
       patchSpell: builder.mutation({
         invalidatesTags: ['Spell'],
-        query({ spellId, update }) {
+        query({ spellName, update }) {
           return {
-            url: `spells/${spellId}`,
+            url: `spells/${spellName}`,
             body: {
               ...update,
             },
@@ -133,8 +133,8 @@ export const getSpellApi = (config) => {
       }),
       deleteSpell: builder.mutation({
         invalidatesTags: ['Spells'],
-        query: ({ spellId }) => ({
-          url: `spells/${spellId}`,
+        query: ({ spellName }) => ({
+          url: `spells/${spellName}`,
           method: 'DELETE',
         }),
       }),

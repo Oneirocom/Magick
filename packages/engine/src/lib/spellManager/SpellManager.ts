@@ -31,24 +31,26 @@ export default class SpellManager {
   processMagickInterface(magickInterface): EngineContext {
     if (!this.cache) return magickInterface
 
-    const runSpell: EngineContext['runSpell'] = async (
-      flattenedInputs,
-      spellId
+    const runSpell: EngineContext['runSpell'] = async ({
+      inputs,
+      spellName,
+      projectId
+    }
     ) => {
-      if (this.getSpellRunner(spellId)) {
-        const outputs = await this.run(spellId, flattenedInputs)
+      if (this.getSpellRunner(spellName)) {
+        const outputs = await this.run(spellName, inputs)
         return outputs
       }
 
-      const spell = await magickInterface.getSpell(spellId)
+      const spell = await magickInterface.getSpell({spellName, projectId})
 
       if (!spell) {
-        throw new Error(`No spell found with name ${spellId}`)
+        throw new Error(`No spell found with name ${spellName}`)
       }
 
       await this.load(spell)
 
-      const outputs = await this.run(spellId, flattenedInputs)
+      const outputs = await this.run(spellName, inputs)
 
       return outputs
     }
@@ -59,12 +61,12 @@ export default class SpellManager {
     }
   }
 
-  getSpellRunner(spellId: string) {
-    return this.spellRunnerMap.get(spellId)
+  getSpellRunner(spellName: string) {
+    return this.spellRunnerMap.get(spellName)
   }
 
-  hasSpellRunner(spellId: string) {
-    return this.spellRunnerMap.has(spellId)
+  hasSpellRunner(spellName: string) {
+    return this.spellRunnerMap.has(spellName)
   }
 
   clear() {
@@ -88,8 +90,8 @@ export default class SpellManager {
     return spellRunner
   }
 
-  async run(spellId: string, inputs: Record<string, any>) {
-    const runner = this.getSpellRunner(spellId)
+  async run(spellName: string, inputs: Record<string, any>) {
+    const runner = this.getSpellRunner(spellName)
     const result = await runner?.defaultRun(inputs)
 
     return result

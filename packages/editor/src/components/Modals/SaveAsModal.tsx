@@ -19,11 +19,11 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const [saveSpell, { isLoading }] = spellApi.useSaveSpellMutation()
   const { data: spell } = spellApi.useGetSpellQuery(
     {
-      spellId: tab.spellId,
+      spellName: tab.spellName,
       projectId: config.projectId,
     },
     {
-      skip: !tab.spellId,
+      skip: !tab.spellName,
     }
   )
   const { enqueueSnackbar } = useSnackbar()
@@ -81,7 +81,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
             <input
               type="text"
               className={css['input']}
-              defaultValue={tab.spellId}
+              defaultValue={tab.spellName}
               {...register('name')}
             />
           </div>
