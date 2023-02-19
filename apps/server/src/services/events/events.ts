@@ -63,21 +63,9 @@ export const event = (app: Application) => {
       all: [schemaHooks.validateQuery(eventQueryValidator), schemaHooks.resolveQuery(eventQueryResolver)],
       find:[
         async (context: any) => {
-          if (!(context.params.query.embedding)){
-            try {
-              const query = context.service.createQuery(context.params)
-              const cQuery = context.params.query;
-              console.log(cQuery)
-              Object.keys(cQuery).map(key => {
-                query[key] = cQuery[key];
-              });
-              console.log(Query)//Don't Remove
-              context.params.query = query;
-            } catch (e){
-              console.log(e)
-            }
-          } else {
+          if (context.params.query.embedding){
             console.log("FIND")
+            console.log('context.params.query.embedding', context.params.query.embedding)
             let blob = atob( context.params.query.embedding );
             let ary_buf = new ArrayBuffer( blob.length );
             let dv = new DataView( ary_buf );
