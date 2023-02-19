@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import InfoCard from '../components/InfoCard'
 import { Box } from '@mui/material'
+import { OPENAI_ENDPOINT } from '@magickml/engine'
 
 type Fields = {
   model: string
@@ -47,7 +48,7 @@ export default function NewFineTuneForm() {
         )
       }
 
-      const response = await fetch('https://api.openai.com/v1/fine-tunes', {
+      const response = await fetch(`${OPENAI_ENDPOINT}fine-tunes`, {
         method: 'POST',
         headers: { 'content-type': 'application/json', ...headers },
         body: JSON.stringify({

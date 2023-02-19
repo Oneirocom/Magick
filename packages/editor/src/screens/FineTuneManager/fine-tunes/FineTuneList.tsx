@@ -8,7 +8,7 @@ import type { OpenAI } from '../../../../../../@types/openai'
 import Button from '@mui/material/Button'
 import { IconButton, Table, TableCell, TableRow } from '@mui/material'
 import DeleteOutlined from '@mui/icons-material/DeleteOutlined'
-
+import { OPENAI_ENDPOINT } from '@magickml/engine'
 export default function FineTuneList() {
   const { data, error } = useSWR<OpenAI.List<OpenAI.FineTune>>('fine-tunes')
 
@@ -103,7 +103,7 @@ function CancelFineTune({ id }: { id: string }) {
   async function onClick() {
     try {
       setIsLoading(true)
-      await fetch(`https://api.openai.com/v1/fine-tunes/${id}/cancel`, {
+      await fetch(`${OPENAI_ENDPOINT}fine-tunes/${id}/cancel`, {
         method: 'PSOT',
         headers,
       })
@@ -130,7 +130,7 @@ function DeleteFineTune({ id }: { id: string }) {
     try {
       setIsDeleting(true)
       if (window.confirm('Are you sure you want to delete this model?')) {
-        await fetch(`https://api.openai.com/v1/models/${id}`, {
+        await fetch(`${OPENAI_ENDPOINT}models/${id}`, {
           method: 'DELETE',
           headers,
         })
