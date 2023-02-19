@@ -1,31 +1,27 @@
-import './wdyr'
-import 'regenerator-runtime/runtime'
+import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { Provider } from 'react-redux'
-import { WagmiConfig } from 'wagmi'
-import { BrowserRouter as Router } from 'react-router-dom'
-console.log('Running root!')
+import MagickIDE, { MagickIDEProps } from "@magickml/editor";
+import { projectId as _projectId } from '@magickml/engine';
 
-import App from './App'
-import { client } from './wagmi'
-import AppProviders from './contexts/AppProviders'
-import { store } from './state/store'
+// load plugins
+await (async () => {
+  let plugins = (await import('./plugins')).default
+  console.log('loaded plugins on server', plugins)
+})()
 
-import { pluginManager } from '@magickml/engine'
+// check urlParams for projectId and apiUrl
+const projectId = new URLSearchParams(window.location.search).get('projectId') ?? _projectId
+const apiUrl = new URLSearchParams(window.location.search).get('apiUrl') ?? import.meta.env.VITE_APP_API_URL
 
 const container = document.getElementById('root')
 const root = createRoot(container!) // createRoot(container!) if you use TypeScript
 ;(window as any).root = root
+const config: MagickIDEProps = {
+    apiUrl,
+    projectId,
+}
 const Root = () => (
-  <Router>
-    <Provider store={store}>
-      <AppProviders>
-        <WagmiConfig client={client}>
-          <App />
-        </WagmiConfig>
-      </AppProviders>
-    </Provider>
-  </Router>
+  <MagickIDE config={config} />
 )
 
 root.render(<Root />)
