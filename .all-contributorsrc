@@ -108,69 +108,6 @@
       "contributions": [
         "code"
       ]
-    },
-    {
-      "login": "HaruHunab1320",
-      "name": "Jakob",
-      "avatar_url": "https://avatars.githubusercontent.com/u/51176775?v=4",
-      "profile": "https://github.com/HaruHunab1320",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "seang",
-      "name": "Sean Gillespie",
-      "avatar_url": "https://avatars.githubusercontent.com/u/1413443?v=4",
-      "profile": "http://seangillespie.dev",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "pgull",
-      "name": "Preston Gull",
-      "avatar_url": "https://avatars.githubusercontent.com/u/9013237?v=4",
-      "profile": "http://prestongull.com",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "nickwalton",
-      "name": "Nick Walton",
-      "avatar_url": "https://avatars.githubusercontent.com/u/22206272?v=4",
-      "profile": "https://github.com/nickwalton",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "mitchellgordon95",
-      "name": "Mitchell Gordon",
-      "avatar_url": "https://avatars.githubusercontent.com/u/7490438?v=4",
-      "profile": "https://github.com/mitchellgordon95",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "socketteer",
-      "name": "?/janus",
-      "avatar_url": "https://avatars.githubusercontent.com/u/19345266?v=4",
-      "profile": "http://generative.ink",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "aawalton",
-      "name": "Alan Walton",
-      "avatar_url": "https://avatars.githubusercontent.com/u/1708223?v=4",
-      "profile": "https://github.com/aawalton",
-      "contributions": [
-        "code"
-      ]
     }
   ],
   "contributorsPerLine": 7,
