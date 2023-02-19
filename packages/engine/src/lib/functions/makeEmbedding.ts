@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { OPENAI_API_KEY } from '../config';
+import { OPENAI_API_KEY, OPENAI_ENDPOINT } from '../config';
 
 export type EmbeddingData = {
   input: string
@@ -25,7 +25,7 @@ export async function makeEmbedding(
 
   try {
     const resp = await axios.post(
-      `https://api.openai.com/v1/embeddings`,
+      `${OPENAI_ENDPOINT}embeddings`,
       { input, model },
       { headers: headers }
     );

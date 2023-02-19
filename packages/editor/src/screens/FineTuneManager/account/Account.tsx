@@ -5,6 +5,8 @@ import { OpenAI } from '../../../../../../@types/openai'
 import { useLocalStorage } from 'usehooks-ts'
 import requestHeaders from './requestHeaders'
 
+import { OPENAI_ENDPOINT } from '@magickml/engine'
+
 export const AccountContext = React.createContext<{
   headers?: { [key: string]: string }
   isSignedIn: boolean
@@ -30,7 +32,7 @@ export default function Account({ children }) {
     async (path: string) => {
       if (!headers) return null
 
-      const response = await fetch(`https://api.openai.com/v1/${path}`, {
+      const response = await fetch(`${OPENAI_ENDPOINT}${path}`, {
         headers,
       })
       if (response.ok) {

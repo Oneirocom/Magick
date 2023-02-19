@@ -9,6 +9,8 @@ import Button from '@mui/material/Button'
 import Loading from '../components/Loading'
 import { Box } from '@mui/material'
 import DownloadIcon from '@mui/icons-material/Download'
+import { OPENAI_ENDPOINT } from '@magickml/engine'
+
 export type ResultFileRecord = {
   elapsed_examples: number
   elapsed_tokens: number
@@ -29,7 +31,7 @@ export default function FineTuneResultsCard({
 
   async function download(file: OpenAI.File) {
     const response = await fetch(
-      `https://api.openai.com/v1/files/${file.id}/content`,
+      `${OPENAI_ENDPOINT}files/${file.id}/content`,
       { headers }
     )
     if (!response.ok) {

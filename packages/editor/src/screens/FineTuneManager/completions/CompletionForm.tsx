@@ -7,6 +7,9 @@ import { toast } from 'react-toastify'
 import { OpenAI } from '../../../../../../@types/openai'
 import { Box, Button, TextField } from '@mui/material'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+
+import { OPENAI_ENDPOINT } from '@magickml/engine'
+
 export default function CompletionForm({
   fineTune,
 }: {
@@ -32,10 +35,8 @@ export default function CompletionForm({
   const values = form.getValues()
   const request = {
     url: fineTune
-      ? `https://api.openai.com/v1/completions`
-      : `https://api.openai.com/v1/engines/${
-          form.getValues().engine
-        }/completions`,
+      ? `${OPENAI_ENDPOINT}completions`
+      : `${OPENAI_ENDPOINT}engines/${form.getValues().engine}/completions`,
     method: 'POST',
     headers: { ...headers, 'Content-Type': 'application/json' },
     body: {
