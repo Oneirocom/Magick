@@ -11,50 +11,20 @@
     "jsx": "react",
     "target": "esnext",
     "module": "esnext",
-    "lib": [
-      "es2021",
-      "dom"
-    ],
+    "lib": ["es2021", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "esModuleInterop": true,
-    "typeRoots": [
-      "./@types",
-      "./node_modules/@types"
-    ],
+    "typeRoots": ["./@types", "./node_modules/@types"],
     "paths": {
-      "@magickml/client-core": [
-        "packages/client-core/src/index.ts"
-      ],
-      "@magickml/core": [
-        "packages/core/src/index.ts"
-      ],
-      "@magickml/database": [
-        "packages/database/src/index.ts"
-      ],
-      "@magickml/engine": [
-        "packages/engine/src/index.ts"
-      ],
-      "@magickml/plugins": [
-        "packages/plugins/src/index.ts"
-      ],
-      "@magickml/prisma": [
-        "packages/prisma/src/index.ts"
-      ],
-      "@magickml/server-config": [
-        "packages/server-config/src/index.ts"
-      ],
-      "@magickml/systems": [
-        "packages/systems/src/index.ts"
-      ],
-      "@magickml/utils": [
-        "packages/utils/src/index.ts"
-      ]
+      "@magickml/client": ["apps/client/src/index.ts"],
+      "@magickml/editor": ["packages/editor/src/index.ts"],
+      "@magickml/engine": ["packages/engine/src/index.ts"],
+      "@magickml/plugin-discord": ["packages/plugin-discord/src/index.ts"],
+      "@magickml/server": ["apps/server/src/index.ts"],
+      "@magickml/server-core": ["packages/server-core/src/index.ts"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }

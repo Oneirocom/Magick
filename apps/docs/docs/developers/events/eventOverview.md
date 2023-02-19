@@ -23,5 +23,6 @@ type Event = {
   client: string // what platform did the data arrive on?
   channel: string // what channel? this would be a server or a context
   channelType: string // what type of channel? this would indicate, say, a DM vs a public guild 
+  projectId: projectId of the event
   date: string
 }
