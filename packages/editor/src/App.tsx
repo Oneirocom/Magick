@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import "./App.css"
+import './App.css'
 
 import { Routes, Route } from 'react-router-dom'
 import MagickPageLayout from './components/MagickPageLayout/MagickPageLayout'
@@ -16,19 +16,21 @@ import './design-globals/design-globals.css'
 import MainLayout from './components/MainLayout/MainLayout'
 import EventManagerWindow from './workspaces/spells/windows/EventManager'
 import AgentManagerWindow from './workspaces/agents/AgentManagerWindow'
+import SettingsWindow from './workspaces/settings/SettingsWindow'
 
 import FineTuneManager from './screens/FineTuneManager/FineTuneManager'
 import Completions from './screens/FineTuneManager/completions'
 import NewFineTune from './screens/FineTuneManager/screens/NewFineTune'
 import CompletionDetails from './screens/FineTuneManager/completions/CompletionDetails'
 
+const singleUserMode = import.meta.env.VITE_APP_SINGLE_USER_MODE || true
 function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-      <Route path="/events" element={<EventManagerWindow />} />
-          <Route path="/agents" element={<AgentManagerWindow />} />
-
+        <Route path="/events" element={<EventManagerWindow />} />
+        <Route path="/agents" element={<AgentManagerWindow />} />
+        {singleUserMode && <Route path="/settings" element={<SettingsWindow />} />}
         <Route element={<FineTuneManagerLayout />}>
           <Route path="/fineTuneManager" element={<FineTuneManager />} />
           <Route
@@ -51,7 +53,10 @@ function App() {
           <Route path="/" element={<Magick />} />
           <Route path="/magick/*" element={<Magick />} />
           <Route path="/magick/:spellName" element={<Magick />} />
-          <Route path="/contract/:chain/:address/:function" element={<Contract />} />
+          <Route
+            path="/contract/:chain/:address/:function"
+            element={<Contract />}
+          />
           <Route path="/*" element={<Magick />} />
         </Route>
       </Route>
