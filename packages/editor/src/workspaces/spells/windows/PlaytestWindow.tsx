@@ -310,7 +310,7 @@ const Playtest = ({ tab }) => {
             <ul>{history.map(printItem)}</ul>
           </Scrollbars>
         </div>
-        <label htmlFor="playtest-input" style={{ marginTop: 10 }}>
+        <label htmlFor="playtest-input" style={{ display: "none"}}>
           Input
         </label>
         <Input onChange={onChange} value={value} onSend={onSend} />
