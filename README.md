@@ -1,9 +1,9 @@
 <p align="center"><img src="apps/docs/readme-files/MAGICK-banner.png" /></p>
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 <h1 align="center">MAGICK</h1>
+
+[![](https://dcbadge.vercel.app/api/server/magickml?style=social)](https://discord.gg/magickml)
+![Twitter Follow](https://img.shields.io/twitter/follow/magickml?style=social)
 
 Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and connectors well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.
 
@@ -16,7 +16,7 @@ Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick 
 - Many included powertools, including voice and image generation and vector search
 - Graphs can be embedded in subgraphs and shared for rapid community development
 
-<p align="center"><img src="apps/docs/readme-files/ui.png" /></p>
+`Powerful enough for wizards. Easy enough for mere mortals.`
 
 ### Installation
 
@@ -67,6 +67,9 @@ Developing locally, it can be very helpful to have google chrome accept all self
 `chrome://flags/#allow-insecure-localhost`
 
 ## Contributors
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=for-the-badge)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -120,3 +123,10 @@ The original source code was made by the following contributors to Thoth, which 
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+# Come Build With Us!
+We are building Magick as a community in the open on Discord. If you are interested in contributing to the project, we'd love to have you.
+
+Join us here: https://discord.gg/magickml
+
+<p align="center"><img src="apps/docs/readme-files/wizard.png" /></p>
