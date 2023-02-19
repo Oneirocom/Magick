@@ -77,6 +77,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     if (!tab || !tab.spellId) return
     loadSpell({
       spellId: tab.spellId,
+      projectId: config.projectId,
     })
   }, [tab])
 
