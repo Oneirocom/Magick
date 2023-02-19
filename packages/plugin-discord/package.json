@@ -1,10 +1,6 @@
 {
   "name": "@magickml/plugin-discord",
   "version": "0.1.0",
-  "dependencies": {
-    "@magickml/engine": "file:../../dist/packages/engine"
-    },
-
   "scripts": {
     "build": "vite build"
   }
