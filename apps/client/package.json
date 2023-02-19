@@ -7,9 +7,5 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview"
-  },
-  "dependencies": {
-    "@magickml/engine": "file:../../packages/engine",
-    "@magickml/editor": "file:../../packages/editor"
   }
 }
