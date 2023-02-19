@@ -12,7 +12,6 @@ import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, eventSocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
-import { makeEmbedding } from '../../functions/makeEmbedding'
 
 const info = 'Event Store is used to store events for an event and user'
 
