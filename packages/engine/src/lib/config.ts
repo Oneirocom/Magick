@@ -8,7 +8,7 @@ const importMetaEnv = typeof import.meta !== 'undefined' && typeof import.meta.e
 // process is not defined on client
 const processEnv = typeof process === 'undefined' ? importMetaEnv : process.env
 
-export const SERVER_PORT = processEnv.PORT || 3031
+export const SERVER_PORT = processEnv.PORT || 3030
 export const VITE_APP_API_URL = processEnv.VITE_APP_API_URL
 export const API_ROOT_URL = VITE_APP_API_URL || processEnv.API_ROOT_URL || `http://localhost:${SERVER_PORT}`
 export const GOOGLE_APPLICATION_CREDENTIALS =
