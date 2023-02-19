@@ -1,7 +1,7 @@
 import Rete from 'rete'
 
 import { NodeData, MagickNode } from '../../types'
-import { TextInputControl } from '../../controls/TextInputControl'
+import { TextInputControl } from '../../dataControls/TextInputControl'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'

@@ -1,7 +1,7 @@
 import Rete from 'rete'
 
 import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
-import { TextInputControl } from '../../controls/TextInputControl'
+import { TextInputControl } from '../../dataControls/TextInputControl'
 import { stringSocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 const info = `Join an array of events into a conversation formatted for prompt injection.`

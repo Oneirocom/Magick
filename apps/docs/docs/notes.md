@@ -61,7 +61,7 @@ Just going to put some notes in here for now in no particular order to start to 
       - task plugin
   - package overview
     - magick-core
-    - magick-client-core
+    - magick-editor
     - magick-client
     - magick-server-core
     - magick-server
