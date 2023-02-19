@@ -21,7 +21,7 @@ export interface Tab {
   type?: 'spell' | 'module'
   // probably going to need to insert a proper spell type in here
   spell?: string
-  spellId: string
+  spellName: string
   // this will also be a ref to a property somewhere else
   module: string
 }
@@ -42,8 +42,8 @@ const _activeTabSelector = createDraftSafeSelector(
 )
 
 const selectTabBySpellId = createDraftSafeSelector(
-  [state => tabSelectors.selectAll(state), (_, spellId) => spellId],
-  (tabs, spellId) => Object.values(tabs).find(tab => tab.spellId === spellId)
+  [state => tabSelectors.selectAll(state), (_, spellName) => spellName],
+  (tabs, spellName) => Object.values(tabs).find(tab => tab.spellName === spellName)
 )
 
 // Used to build a tab with various defaults set, as well as workspace json and UUID
@@ -75,7 +75,7 @@ export const tabSlice = createSlice({
         })
 
       // Check if the tab is already open.
-      const existingTab = selectTabBySpellId(state, action.payload.spellId)
+      const existingTab = selectTabBySpellId(state, action.payload.spellName)
 
       if (existingTab && !switchActive) return
 

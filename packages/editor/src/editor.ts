@@ -183,8 +183,8 @@ export const initEditor = function ({
   // ██╔═══╝ ██║   ██║██╔══██╗██║     ██║██║
   // ██║     ╚██████╔╝██████╔╝███████╗██║╚██████╗
   // ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝
-  editor.onSpellUpdated = (spellId: string, callback: Function) => {
-    return magick.onSubspellUpdated(spellId, callback)
+  editor.onSpellUpdated = (spellName: string, callback: Function) => {
+    return magick.onSubspellUpdated(spellName, callback)
   }
 
   editor.abort = async () => {

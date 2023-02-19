@@ -111,7 +111,7 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
   declare moduleManager: ModuleManager
   declare runProcess: (callback?: Function | undefined) => Promise<void>
-  declare onSpellUpdated: (spellId: string, callback: Function) => Function
+  declare onSpellUpdated: (spellName: string, callback: Function) => Function
   declare refreshEventTable: () => void
 }
 
@@ -120,14 +120,21 @@ export type Env = {
   APP_SEARCH_SERVER_URL: string
 }
 
+type runSpellType = {
+  inputs: Record<string, any>
+  spellName: string
+  projectId: string
+}
+
 export type EngineContext = {
   env: Env
-  runSpell: (
-    flattenedInputs: Record<string, any>,
-    spellId: string
-  ) => Record<string, any>
+  runSpell: ({
+    inputs,
+    spellName,
+    projectId,
+}: runSpellType) => Record<string, any>
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
-  getSpell: (spellId: string) => Promise<any | Spell>
+  getSpell: ({spellName, projectId}: {spellName: string, projectId: string}) => Promise<any | Spell>
   getCurrentSpell?: () => Spell
   processCode?: (
     code: unknown,

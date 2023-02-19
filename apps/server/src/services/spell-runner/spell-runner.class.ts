@@ -18,11 +18,11 @@ interface Data {}
 
 interface CreateData {
   inputs: Record<string, any>
-  spellId: string
+  spellName: string
   projectId: string
 }
 
-const getSpell = async (app, spellName: string, projectId) => {
+const getSpell = async ({app, spellName, projectId}) => {
   const spell = await app.service('spells').find({
     query: {
       projectId,
@@ -51,7 +51,7 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     if (!spellManager) throw new Error('No spell manager created for user!')
 
-    const spell = await getSpell(app, id as string, query.projectId)
+    const spell = await getSpell({app, spellName: id as string, projectId: query.projectId})
 
     // Load the spell into the spellManager. If there is no spell runner, we make one.
     await spellManager.load(spell as Spell)
@@ -68,24 +68,24 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     if (!user) throw new Error('No user is present in service')
 
-    const { inputs, spellId, projectId } = data
+    const { inputs, spellName, projectId } = data
 
     const spellManager = app.userSpellManagers.get(user.id)
 
     if (!spellManager) throw new Error('No spell manager found for user!')
 
-    if (!spellManager.hasSpellRunner(spellId)) {
-      const spell = await getSpell(app, spellId, projectId)
+    if (!spellManager.hasSpellRunner(spellName)) {
+      const spell = await getSpell({app, spellName: spellName, projectId})
       await spellManager.load(spell as Spell)
     }
 
-    const result = await spellManager.run(spellId, inputs)
+    const result = await spellManager.run(spellName, inputs)
 
     return result || {}
   }
 
   async update(
-    spellId: string,
+    spellName: string,
     data: { diff: Record<string, unknown> },
     params?: SpellRunnerParams
   ): Promise<Data> {
@@ -98,12 +98,12 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     const { diff } = data
 
-    console.log('updated spell, diff is', spellId, diff)
+    console.log('updated spell, diff is', spellName, diff)
 
     const spellManager = app.userSpellManagers.get(user.id)
     if (!spellManager) throw new Error('No spell manager found for user!')
 
-    const spellRunner = spellManager.getSpellRunner(spellId)
+    const spellRunner = spellManager.getSpellRunner(spellName)
     if (!spellRunner) throw new Error('No spell runner found!')
 
     const spell = spellRunner.currentSpell

@@ -7,12 +7,14 @@ export type RunSpellArgs = {
   spellName: string
   inputs?: Record<string, unknown>
   inputFormatter?: (graph: GraphData) => Record<string, unknown>
+  projectId: string
 }
 
 export const runSpell = async ({
   spellName,
   inputs,
   inputFormatter,
+  projectId,
 }: RunSpellArgs) => {
 
   let spell = await app.service('spells').find({ query: { projectId, name: spellName } }) as any

@@ -23,11 +23,11 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const [_getSpell] = spellApi.useLazyGetSpellQuery()
   const { data: _spell } = spellApi.useGetSpellQuery(
     {
-      spellId: tab.spellId,
+      spellName: tab.spellName,
       projectId: config.projectId
     },
     {
-      skip: !tab.spellId,
+      skip: !tab.spellName,
     }
   )
 
@@ -95,8 +95,8 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     })
   }
 
-  const onSubspellUpdated = (spellId: string, callback: Function) => {
-    return subscribe($SUBSPELL_UPDATED(spellId), (event, data) => {
+  const onSubspellUpdated = (spellName: string, callback: Function) => {
+    return subscribe($SUBSPELL_UPDATED(spellName), (event, data) => {
       callback(data)
     })
   }
@@ -138,8 +138,8 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     })
   }
 
-  const getSpell = async spellId => {
-    const spell = await _getSpell({ spellId, projectId: config.projectId })
+  const getSpell = async spellName => {
+    const spell = await _getSpell({ spellName, projectId: config.projectId })
 
     return spell.data[0] as Spell
   }
@@ -178,11 +178,11 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     }
   }
 
-  const runSpell = async (inputs, spellId) => {
-    const response = await _runSpell({ inputs, spellId, projectId: config.projectId })
+  const runSpell = async ({inputs, spellName, projectId}) => {
+    const response = await _runSpell({ inputs, spellName, projectId })
 
     if ('error' in response) {
-      throw new Error(`Error running spell ${spellId}`)
+      throw new Error(`Error running spell ${spellName}`)
     }
 
     return response.data.outputs
