@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import { mutate } from 'swr'
 import { OpenAI } from '../../../../../../@types/openai'
 import * as XLSX from 'xlsx'
+import { OPENAI_ENDPOINT } from '@magickml/engine'
 
 const maxFileSize = 150 * 1024 * 1024
 
@@ -50,7 +51,7 @@ export default function useUploadFile(purpose: string, enforce: Enforce) {
         body.append('purpose', purpose)
         body.append('file', blob, file.name)
         console.log('headers', headers)
-        const response = await fetch('https://api.openai.com/v1/files', {
+        const response = await fetch(`${OPENAI_ENDPOINT}files`, {
           method: 'POST',
           headers,
           body,

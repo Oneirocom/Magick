@@ -2,6 +2,7 @@ import useAuthentication from '../account/useAuthentication'
 import { parse } from 'csv-parse'
 import useSWRImmutable from 'swr/immutable'
 import { ResultFileRecord } from './FineTuneResultsCard'
+import { OPENAI_ENDPOINT } from '@magickml/engine'
 
 export default function useFineTuneResults(fileId?: string): {
   error?: Error
@@ -12,7 +13,7 @@ export default function useFineTuneResults(fileId?: string): {
   const { data: results, error } = useSWRImmutable<ResultFileRecord[]>(
     fileId ? `files/${fileId}/content` : null,
     async resource => {
-      const response = await fetch(`https://api.openai.com/v1/${resource}`, {
+      const response = await fetch(`${OPENAI_ENDPOINT}${resource}`, {
         headers,
       })
       if (!response.ok) throw new Error(response.statusText)
