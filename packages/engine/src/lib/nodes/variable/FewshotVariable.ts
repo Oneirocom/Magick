@@ -61,8 +61,8 @@ export class FewshotVariable extends MagickComponent<InputReturn> {
 
     this.name =
       (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
-    if (fewshot.length == 0) node.display('ERROR: EMPTY STRING')
-    else node.display(fewshot.substring(0, 1000) + '...')
+    //if (fewshot.length == 0) node.display('ERROR: EMPTY STRING')
+    //else node.display(fewshot.substring(0, 1000) + '...')
 
     return {
       output: fewshot,

@@ -9,6 +9,7 @@ import {
   stringSocket,
   triggerSocket,
   eventSocket,
+  numSocket,
 } from '../../sockets'
 import { MagickComponent, MagickTask } from '../../magick-component'
 
@@ -51,7 +52,7 @@ export class EventRestructureComponent extends MagickComponent<
     const projectId = new Rete.Input('projectId', 'projectId', stringSocket)
     const entity = new Rete.Input('entity', 'entity', stringSocket)
     const entities = new Rete.Input('entities', 'entities', arraySocket)
-    
+    const agentId = new Rete.Input('agentId','agentId', numSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const event = new Rete.Output('output', 'output', eventSocket)
@@ -65,6 +66,7 @@ export class EventRestructureComponent extends MagickComponent<
       .addInput(entity)
       .addInput(entities)
       .addInput(content)
+      .addInput(agentId)
       .addInput(dataInput)
       .addOutput(event)
       .addOutput(dataOutput)
@@ -73,7 +75,12 @@ export class EventRestructureComponent extends MagickComponent<
   async worker(_node: NodeData, inputs: MagickWorkerInputs) {
     const output: any = {}
     Object.entries(inputs).map(([k, v]) => {
-      output[k] = v[0]
+      if (k==="agentId") {
+        output[k] = parseInt(v[0] as string)
+      } else {
+        output[k] = v[0]
+      }
+      
     })
     console.log('event ::: ', output)
 
