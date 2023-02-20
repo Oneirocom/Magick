@@ -8,6 +8,11 @@
     "appsDir": "apps",
     "libsDir": "packages"
   },
+  "pluginsConfig": {
+    "@nrwl/js": {
+      "analyzeSourceFiles": true
+    }
+  },
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
@@ -43,20 +48,13 @@
       },
       "library": {
         "style": "css",
-        "linter": "eslint"
-      }
-    },
-    "@nxext/vite": {
-      "application": {
-        "linter": "eslint"
-      },
-      "library": {
-        "linter": "eslint"
+        "linter": "eslint",
+        "unitTestRunner": "jest"
       }
     }
   },
   "cli": {
-    "defaultCollection": "@nxext/vite"
+    "defaultCollection": "@nrwl/node"
   },
-  "defaultProject": "server"
+  "defaultProject": "@magickml/server"
 }

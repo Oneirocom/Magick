@@ -1,6 +1,6 @@
 import { buildMagickInterface } from '../../server/src/buildMagickInterface'
 import { tts, tts_tiktalknet } from '@magickml/server-core'
-import { SpellManager, pluginManager, projectId } from '@magickml/engine'
+import { SpellManager, pluginManager } from '@magickml/engine'
 import { app } from './app'
 
 type StartLoopArgs = {
@@ -29,11 +29,13 @@ export class Agent {
   app: any
   loopHandler: any
   spellManager: SpellManager
+  projectId: string
 
   constructor(data: any) {
     this.id = data.id
     this.data = data
     this.name = data.agent ?? data.name ?? 'agent'
+    this.projectId = data.projectId
     this.spellManager = new SpellManager({
       magickInterface: buildMagickInterface({}) as any,
       cache: false,
@@ -42,7 +44,7 @@ export class Agent {
     this.generateVoices(data);
     (async () => {
       const spell = (await app.service('spells').find({
-        query: { projectId, name: data.root_spell },
+        query: { projectId: data.projectId, name: data.root_spell },
       })).data[0]
 
       const spellRunner = await this.spellManager.load(spell)
@@ -79,6 +81,7 @@ export class Agent {
           client: 'loop',
           channel: 'auto',
           channelType: 'loop',
+          projectId: this.projectId,
           entities: [],
         })
       }, loopInterval)

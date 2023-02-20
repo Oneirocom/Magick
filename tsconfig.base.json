@@ -19,11 +19,11 @@
     "typeRoots": ["./@types", "./node_modules/@types"],
     "paths": {
       "@magickml/client": ["apps/client/src/index.ts"],
-      "@magickml/client-core": ["packages/client-core/src/index.ts"],
+      "@magickml/editor": ["packages/editor/src/index.ts"],
       "@magickml/engine": ["packages/engine/src/index.ts"],
       "@magickml/plugin-discord": ["packages/plugin-discord/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
-      "@magickml/server-core": ["packages/server-core/src/index.ts"]
+      "@magickml/server-core": ["packages/server-core/src/index.ts"],
     }
   },
   "exclude": ["node_modules", "tmp"]
