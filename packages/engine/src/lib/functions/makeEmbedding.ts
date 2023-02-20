@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { OPENAI_API_KEY, OPENAI_ENDPOINT } from '../config';
-
+import { saveRequest } from './saveRequest'
 export type EmbeddingData = {
   input: string
   model?: string
@@ -8,7 +8,8 @@ export type EmbeddingData = {
 }
 
 export async function makeEmbedding(
-  data: EmbeddingData
+  data: EmbeddingData,
+  projectId: string,
 ): Promise<any> {
   const {
     input, model = 'text-embedding-ada-002', apiKey,
@@ -23,12 +24,33 @@ export async function makeEmbedding(
     Authorization: 'Bearer ' + API_KEY,
   };
 
+  // start a timer
+  const start = Date.now()
   try {
     const resp = await axios.post(
       `${OPENAI_ENDPOINT}/embeddings`,
       { input, model },
       { headers: headers }
     );
+    // end the timer
+    const end = Date.now()
+
+    saveRequest({
+      projectId: projectId,
+      requestData: input,
+      responseData: JSON.stringify(resp.data),
+      duration: end - start,
+      statusCode: resp.status,
+      status: resp.statusText,
+      model: model,
+      parameters: null,
+      type: "embedding",
+      provider: "openai",
+      error: null,
+      cost: null,
+      hidden: false,
+      processed: false,
+    })
     return resp.data
   } catch (err) {
     console.log('ERROR');

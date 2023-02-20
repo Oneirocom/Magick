@@ -5,7 +5,6 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  EngineContext,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
@@ -123,6 +122,7 @@ export class TextCompletion extends MagickComponent<
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
+    { projectId }: { projectId: string }
   ) {
     const prompt = inputs['string'][0]
     const settings = ((inputs.settings && inputs.settings[0]) ?? {}) as any
@@ -162,7 +162,7 @@ export class TextCompletion extends MagickComponent<
       stop: filteredStop,
     }
 
-    const data = await makeCompletion(body)
+    const data = await makeCompletion(body, projectId)
 
     const { success, choice } = data
 

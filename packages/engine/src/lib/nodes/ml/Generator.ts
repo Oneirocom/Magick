@@ -133,7 +133,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     node: NodeData,
     rawInputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { magick }: { silent: boolean; magick: EngineContext }
+    { silent, projectId }: { silent: boolean; projectId: string }
   ) {
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
       acc[key] = value[0]
@@ -185,7 +185,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       top_p,
     }
     try {
-      const { success, choice } = await makeCompletion(body)
+      const { success, choice } = await makeCompletion(body, projectId)
 
       if (!success) throw new Error('Error in generator')
 
@@ -193,7 +193,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       const result = raw
       const composed = `${prompt}${result}`
 
-      // if (!silent) node.display(result)
+      if (!silent) node.display(result)
 
       return {
         result,

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { OPENAI_API_KEY, OPENAI_ENDPOINT } from '../config';
+import { saveRequest } from './saveRequest';
 
 export type CompletionData = {
   model: string
@@ -14,7 +15,8 @@ export type CompletionData = {
 }
 
 export async function makeCompletion(
-  data: CompletionData
+  data: CompletionData,
+  projectId
 ): Promise<any> {
   const {
     prompt, model, temperature = 0.7, max_tokens = 256, top_p = 1, frequency_penalty = 0, presence_penalty = 0, stop, apiKey,
@@ -42,6 +44,23 @@ export async function makeCompletion(
       },
       { headers: headers }
     );
+
+    saveRequest({
+      projectId: projectId,
+      requestData: input,
+      responseData: JSON.stringify(resp.data),
+      duration: end - start,
+      statusCode: resp.status,
+      status: resp.statusText,
+      model: model,
+      parameters: null,
+      type: "embedding",
+      provider: "openai",
+      error: null,
+      cost: null,
+      hidden: false,
+      processed: false,
+    })
 
     if (resp.data.choices && resp.data.choices.length > 0) {
       const choice = resp.data.choices[0];
