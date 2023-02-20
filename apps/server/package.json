@@ -30,7 +30,7 @@
   "dependencies": {
     "feathers-swagger": "^2.0.0",
     "knex": "^2.4.2",
-    "@magickml/engine": "file:../../packages/engine",
-    "@magickml/server-core": "file:../../packages/server-core"
+    "@magickml/engine": "file:../../dist/packages/engine",
+    "@magickml/server-core": "file:../../dist/packages/server-core"
   }
 }

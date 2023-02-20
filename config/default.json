@@ -1,4 +1,5 @@
 {
+  "host": "localhost",
   "port": 3030,
   "public": "./public/",
   "origins": [

@@ -1,9 +1,11 @@
 {
-  "name": "client",
-  "devDependencies": {
-    "@capacitor/cli": "^3.6.0"
-  },
-  "dependencies": {
-    "@capacitor-community/electron": "^4.1.2"
+  "name": "@magickml/client",
+  "description": "Client for Magick",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
   }
 }

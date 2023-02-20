@@ -3,6 +3,12 @@ import { ServerError } from '@magickml/server-core'
 import { projectId, ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
 import { app } from './app'
 
+// if the user is running the app locally, sort by their project id
+// this way users can use our demo database without seeing each other's stuff
+// for a multi-tenant case, until we have isolated pods for each user we isolate by project id
+const isSingleUserMode = process.env.SINGLE_USER_MODE === 'true'
+const query = isSingleUserMode ? { query: { projectId }} : {}
+
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -14,9 +20,10 @@ function initEntityLoop(update: Function, lateUpdate: Function) {
   const date = new Date()
 
   async function entityLoop(update: Function, lateUpdate: Function) {
-    const agents = (await app.service('agents').find({
-      query: { projectId },
-    })).data
+    const agents = (await app.service('agents').find(query)).data
+
+    console.log('agents', agents)
+
     const now = new Date()
     const updated = []
 
@@ -63,9 +70,8 @@ export class World {
   }
 
   async updateAgent() {
-    this.newAgents = (await app.service('agents').find({
-      query: { projectId },
-    })).data
+    this.newAgents = (await app.service('agents').find(query)).data
+    console.log('newAgents', this.newAgents)
     const newAgents = this.newAgents
     delete newAgents['updated_at']
     const oldAgents = this.oldAgents ?? []
