@@ -12,8 +12,6 @@ import {
   spellQueryResolver
 } from './spells.schema'
 
-import { ANALYTICS_ENDPOINT } from '@magickml/engine'
-
 import type { Application } from '../../declarations'
 import { SpellService, getOptions } from './spells.class'
 
@@ -46,25 +44,7 @@ export const spell = (app: Application) => {
       remove: []
     },
     after: {
-      all: [
-        // re-send the request to the ANALYTICS_ENDPOINT
-        async (context: any) => {
-          if(!ANALYTICS_ENDPOINT) return
-          const { method, data, params } = context
-          // send a POST to ANALYTICS_ENDPOINT with the data
-          fetch(ANALYTICS_ENDPOINT, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              method,
-              data,
-              params
-            })
-          })
-        } 
-      ],
+      all: [],
       patch: [
         // after saving a spell, we need to update the spell cache
         async (context: any) => {

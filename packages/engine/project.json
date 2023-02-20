@@ -16,6 +16,7 @@
       "executor": "@nrwl/vite:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "configFile": "packages/engine/vite.config.ts",
       "options": {
         "outputPath": "dist/packages/engine"
       },

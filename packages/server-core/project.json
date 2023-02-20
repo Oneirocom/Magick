@@ -1,28 +1,39 @@
 {
-  "name": "server-core",
+  "name": "@magickml/server-core",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server-core/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "packages/server-core/**/*.ts"
-        ]
+        "lintFilePatterns": ["packages/server-core/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "packages/server-core/jest.config.ts",
         "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server-core",
+        "tsConfig": "packages/server-core/tsconfig.lib.json",
+        "packageJson": "packages/server-core/package.json",
+        "main": "packages/server-core/src/index.ts",
+        "assets": ["packages/server-core/*.md"]
       }
     }
   },
