@@ -1,9 +1,4 @@
 {
   "name": "@magickml/server-core",
-  "version": "0.1.0",
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
-  "dependencies": {
-    "@magickml/engine": "file:../engine"
-  }
+  "version": "0.1.0"
 }

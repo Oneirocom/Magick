@@ -13,7 +13,7 @@ export default function useFineTuneResults(fileId?: string): {
   const { data: results, error } = useSWRImmutable<ResultFileRecord[]>(
     fileId ? `files/${fileId}/content` : null,
     async resource => {
-      const response = await fetch(`${OPENAI_ENDPOINT}${resource}`, {
+      const response = await fetch(`${OPENAI_ENDPOINT}/${resource}`, {
         headers,
       })
       if (!response.ok) throw new Error(response.statusText)

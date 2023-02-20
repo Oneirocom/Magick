@@ -31,7 +31,7 @@ export default function FineTuneResultsCard({
 
   async function download(file: OpenAI.File) {
     const response = await fetch(
-      `${OPENAI_ENDPOINT}files/${file.id}/content`,
+      `${OPENAI_ENDPOINT}/files/${file.id}/content`,
       { headers }
     )
     if (!response.ok) {

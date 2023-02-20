@@ -48,7 +48,7 @@ export default function NewFineTuneForm() {
         )
       }
 
-      const response = await fetch(`${OPENAI_ENDPOINT}fine-tunes`, {
+      const response = await fetch(`${OPENAI_ENDPOINT}/fine-tunes`, {
         method: 'POST',
         headers: { 'content-type': 'application/json', ...headers },
         body: JSON.stringify({
