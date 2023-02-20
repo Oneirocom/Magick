@@ -181,9 +181,9 @@ const RawEditor = ({ tab, children }) => {
   useEffect(() => {
     if (!tab || loaded) return
 
-    if (tab?.spellId)
+    if (tab?.spellName)
       getSpell({
-        spellId: tab.spellId,
+        spellName: tab.spellName,
         projectId: config.projectId
       })
   }, [tab])

@@ -42,7 +42,7 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   const _openTab = async spell => {
     const tab = {
       name: spell.name,
-      spellId: spell.name,
+      spellName: spell.name,
       type: 'spell',
       openNew: false,
       switchActive: false,
@@ -54,7 +54,7 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   // TODO fix on change to handle loading a single spell
   const onChange = async ({ value }) => {
     getSpell({
-      spellId: value,
+      spellName: value,
       projectId: config.projectId,
     })
   }
@@ -72,7 +72,8 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
       })
 
       getSpell({
-        spellId: value,
+        spellName: value,
+        projectId: config.projectId,
       })
     } catch (err) {
       // eslint-disable-next-line no-console

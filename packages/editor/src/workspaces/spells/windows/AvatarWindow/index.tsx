@@ -26,7 +26,7 @@ const AvatarWindow = ({ tab }) => {
   const dispatch = useDispatch()
 
   const localState = useAppSelector(state =>
-    selectStateBySpellId(state.localState, tab.spellId)
+    selectStateBySpellId(state.localState, tab.spellName)
   )
 
   const { publish, subscribe, events } = usePubSub()
@@ -98,7 +98,7 @@ const AvatarWindow = ({ tab }) => {
 
   const onDataChange = dataText => {
     console.log('new data text', dataText)
-    dispatch(upsertLocalState({ spellId: tab.spellId, playtestData: dataText }))
+    dispatch(upsertLocalState({ spellName: tab.spellName, playtestData: dataText }))
   }
 
   const toggleData = () => {

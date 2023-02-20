@@ -8,6 +8,8 @@ import InfoCard from '../components/InfoCard'
 import requestHeaders from './requestHeaders'
 import useAuthentication from './useAuthentication'
 
+import { OPENAI_ENDPOINT } from '@magickml/engine'
+
 export default function SigninForm() {
   const navigate = useNavigate()
   const { signIn } = useAuthentication()
@@ -25,7 +27,7 @@ export default function SigninForm() {
     try {
       setIsLoading(true)
 
-      const response = await fetch('https://api.openai.com/v1/engines', {
+      const response = await fetch(`${OPENAI_ENDPOINT}engines`, {
         headers: requestHeaders(formData),
       })
       if (response.ok) {

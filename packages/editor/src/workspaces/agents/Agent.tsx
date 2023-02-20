@@ -5,10 +5,11 @@ import { useConfig } from '../../contexts/ConfigProvider'
 
 /* Import All Agent Window Components */
 import { pluginManager } from '@magickml/engine'
-const RenderComp = (props) =>{
-  return (
-    <props.element props={props} />
-  )
+import { Grid } from '@mui/material'
+import styles from './AgentWindowStyle.module.css'
+
+const RenderComp = props => {
+  return <props.element props={props} />
 }
 const AgentWindow = ({
   id,
@@ -17,7 +18,7 @@ const AgentWindow = ({
   id: number
   updateCallback: any
 }) => {
-  const config = useConfig();
+  const config = useConfig()
   const { enqueueSnackbar } = useSnackbar()
 
   const [loaded, setLoaded] = useState(false)
@@ -30,17 +31,15 @@ const AgentWindow = ({
   const [loop_enabled, setLoopEnabled] = useState(false)
   const [loop_interval, setLoopInterval] = useState('')
 
-  const [root_spell, setRootSpell] = useState('');
+  const [root_spell, setRootSpell] = useState('')
 
-  const agentDatVal = useRef(null);
+  const agentDatVal = useRef(null)
   const [agentDataState, setAgentDataState] = useState<any>({})
   const [spellList, setSpellList] = useState<any[]>([])
   useEffect(() => {
     if (!loaded) {
       ;(async () => {
-        const res = await axios.get(
-          `${config.apiUrl}/agents/` + id
-        )
+        const res = await axios.get(`${config.apiUrl}/agents/` + id)
 
         if (res.data === null) {
           enqueueSnackbar('Agent not found', {
@@ -54,14 +53,14 @@ const AgentWindow = ({
         let agentData = res.data.data
         setEnabled(res.data.enabled === true)
         if (agentData !== null && agentData !== undefined) {
-        agentDatVal.current = agentData
-        setOpenaiApiKey(agentData.openai_api_key)
-        setRootSpell(agentData.root_spell)
-        setEthPrivateKey(agentData.eth_private_key)
-        setEthPublicAddress(agentData.eth_public_address)
+          agentDatVal.current = agentData
+          setOpenaiApiKey(agentData.openai_api_key)
+          setRootSpell(agentData.root_spell)
+          setEthPrivateKey(agentData.eth_private_key)
+          setEthPublicAddress(agentData.eth_public_address)
 
-        setLoopEnabled(agentData.loop_enabled === true)
-        setLoopInterval(agentData.loop_interval)
+          setLoopEnabled(agentData.loop_enabled === true)
+          setLoopInterval(agentData.loop_interval)
         }
         setLoaded(true)
       })()
@@ -155,7 +154,7 @@ const AgentWindow = ({
         openai_api_key,
         loop_enabled,
         loop_interval,
-        root_spell
+        root_spell,
       },
     }
     const fileName = 'agent'
@@ -176,7 +175,7 @@ const AgentWindow = ({
   return !loaded ? (
     <>Loading...</>
   ) : (
-    <div className="agentWindow">
+    <div className={styles["agent-window"]}>
       <div className="form-item">
         <span className="form-item-label">Enabled</span>
         <input
@@ -189,7 +188,9 @@ const AgentWindow = ({
       </div>
       {enabled && (
         <>
-          <div className="form-item agent-select">
+          <Grid container justifyContent="left" style={{ padding: '1em' }}>
+            <Grid item xs={3}>
+              <div className="form-item agent-select">
                 <span className="form-item-label">Root Spell</span>
                 <select
                   name="root_spell"
@@ -207,18 +208,38 @@ const AgentWindow = ({
                     ))}
                 </select>
               </div>
-          <div className="form-item">
-            <span className="form-item-label">OpenAI Key</span>
-            <KeyInput value={openai_api_key} setValue={setOpenaiApiKey} secret={true} />
-          </div>
-          <div className="form-item">
-            <span className="form-item-label">Ethereum Private Key</span>
-            <KeyInput value={eth_private_key} setValue={setEthPrivateKey} secret={true} />
-          </div>
-          <div className="form-item">
-            <span className="form-item-label">Ethereum Public Address</span>
-            <KeyInput value={eth_public_address} setValue={setEthPublicAddress} secret={false} />
-          </div>
+            </Grid>
+            <Grid item xs={3}>
+              <div className="form-item">
+                <span className="form-item-label">OpenAI Key</span>
+                <KeyInput
+                  value={openai_api_key}
+                  setValue={setOpenaiApiKey}
+                  secret={true}
+                />
+              </div>
+            </Grid>
+            <Grid item xs={3}>
+              <div className="form-item">
+                <span className="form-item-label">Ethereum Private Key</span>
+                <KeyInput
+                  value={eth_private_key}
+                  setValue={setEthPrivateKey}
+                  secret={true}
+                />
+              </div>
+            </Grid>
+            <Grid item xs={3}>
+              <div className="form-item">
+                <span className="form-item-label">Ethereum Public Address</span>
+                <KeyInput
+                  value={eth_public_address}
+                  setValue={setEthPublicAddress}
+                  secret={false}
+                />
+              </div>
+            </Grid>
+          </Grid>
 
           {loop_enabled && (
             <>
@@ -236,7 +257,14 @@ const AgentWindow = ({
             </>
           )}
           {pluginManager.getAgentComponents().map((value, index, array) => {
-            return <RenderComp key={index} element={value} agentData={agentDatVal.current} setAgentDataState={setAgentDataState}/>
+            return (
+              <RenderComp
+                key={index}
+                element={value}
+                agentData={agentDatVal.current}
+                setAgentDataState={setAgentDataState}
+              />
+            )
           })}
         </>
       )}
@@ -253,10 +281,17 @@ const AgentWindow = ({
   )
 }
 
-const KeyInput = ({ value, setValue, secret }: { value: string, setValue: any, secret: boolean }) => {
-
+const KeyInput = ({
+  value,
+  setValue,
+  secret,
+}: {
+  value: string
+  setValue: any
+  secret: boolean
+}) => {
   const addKey = (str: string) => {
-      setValue(str)
+    setValue(str)
   }
 
   const removeKey = () => {
@@ -275,7 +310,13 @@ const KeyInput = ({ value, setValue, secret }: { value: string, setValue: any, s
       <button onClick={removeKey}>remove</button>
     </>
   ) : (
-    <input type={secret ? "password" : "input"} value={value} onChange={e => { addKey(e.target.value) }} />
+    <input
+      type={secret ? 'password' : 'input'}
+      value={value}
+      onChange={e => {
+        addKey(e.target.value)
+      }}
+    />
   )
 }
 

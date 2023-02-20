@@ -13,7 +13,7 @@ import { TextInputControl } from '../../dataControls/TextInputControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { PlaytestControl } from '../../dataControls/PlaytestControl'
 import { SwitchControl } from '../../dataControls/SwitchControl'
-import { Task } from '../../plugins/taskPlugin/task'
+// import { Task } from '../../plugins/taskPlugin/task'
 import { anySocket, triggerSocket } from '../../sockets'
 import { MagickComponent, MagickTask } from '../../magick-component'
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
@@ -32,7 +32,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     this.task = {
       outputs: {
         output: 'output',
-        trigger: 'option',
+        // trigger: 'option',
       },
     }
 
@@ -85,11 +85,11 @@ export class InputComponent extends MagickComponent<InputReturn> {
     this.subscribeToPlaytest(node)
 
     const out = new Rete.Output('output', 'output', anySocket)
-    const trigger = new Rete.Output(
-      'trigger',
-      'playtest trigger',
-      triggerSocket
-    )
+    // const trigger = new Rete.Output(
+    //   'trigger',
+    //   'playtest trigger',
+    //   triggerSocket
+    // )
 
     node.data.name = node.data.name || `input-${node.id}`
 
@@ -138,7 +138,9 @@ export class InputComponent extends MagickComponent<InputReturn> {
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    return node.addOutput(out).addOutput(trigger).addControl(defaultInput)
+    return node.addOutput(out)
+    //.addOutput(trigger)
+    .addControl(defaultInput)
   }
 
   worker(
@@ -147,7 +149,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     outputs: MagickWorkerOutputs,
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
-    this._task.closed = ['trigger']
+    // this._task.closed = ['trigger']
 
     const nodeData = node.data as {
       playtestToggle: { receivePlaytest: boolean }
