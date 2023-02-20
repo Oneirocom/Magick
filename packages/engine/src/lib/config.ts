@@ -19,6 +19,7 @@ export const SEARCH_CORPUS_PORT = processEnv.SEARCH_CORPUS_PORT || 65531
 export const ENABLE_SEARCH_CORPUS = processEnv.ENABLE_SEARCH_CORPUS || true
 export const OPENAI_API_KEY = processEnv.OPENAI_API_KEY || ''
 export const OPENAI_ENDPOINT = processEnv.VITE_OPENAI_ENDPOINT || processEnv.NEXT_OPENAI_ENDPOINT || processEnv.OPENAI_ENDPOINT || null
+export const ANALYTICS_ENDPOINT = processEnv.ANALYTICS_ENDPOINT || null
 export const HF_API_KEY = processEnv.HF_API_KEY || ''
 export const USSSL_SPEECH = processEnv.USSSL_SPEECH || true
 export const FILE_SERVER_PORT = processEnv.FILE_SERVER_PORT || 65530
