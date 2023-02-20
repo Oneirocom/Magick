@@ -84,8 +84,7 @@ export class GetCachedEmbedding extends MagickComponent<Promise<InputReturn>> {
     const json = await response.json()
 
     const responseData = json.data[0]
-
-    let embedding = responseData.embedding
+    let embedding = responseData?.embedding
 
     // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
