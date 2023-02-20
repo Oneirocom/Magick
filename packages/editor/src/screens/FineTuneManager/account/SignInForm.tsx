@@ -1,48 +1,24 @@
 import { Box, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import InfoCard from '../components/InfoCard'
-import requestHeaders from './requestHeaders'
 import useAuthentication from './useAuthentication'
-
-import { OPENAI_ENDPOINT } from '@magickml/engine'
 
 export default function SigninForm() {
   const navigate = useNavigate()
   const { signIn } = useAuthentication()
-  const [isLoading, setIsLoading] = useState(false)
   const initialValue = { apiKey: '', organizationId: '' }
-  const form = useForm({ defaultValues: initialValue })
-  const [error, setError] = useState('')
-  const [showOrgId, setShowOrgId] = useState(false)
 
-  form.watch('apiKey')
-
-  const onSubmit = form.handleSubmit(async function (
-    formData: typeof initialValue
-  ) {
-    try {
-      setIsLoading(true)
-
-      const response = await fetch(`${OPENAI_ENDPOINT}/engines`, {
-        headers: requestHeaders(formData),
-      })
-      if (response.ok) {
-        signIn(formData.apiKey, formData.organizationId)
-        navigate('/fineTuneManager/completions')
-      } else {
-        const { error } = await response.json()
-        setError(error.message)
-      }
-    } catch (error) {
-      toast.error(String(error))
-    } finally {
-      setIsLoading(false)
+  useEffect(() => {
+    const openai = window.localStorage.getItem('openai-api-key')
+    if (openai) {
+      const api = JSON.parse(openai)?.apiKey
+      signIn(api, '')
+      navigate('/fineTuneManager/completions')
     }
-  })
+  }, [])
 
   return (
     <section className="space-y-4">
@@ -53,57 +29,19 @@ export default function SigninForm() {
       </Box>
       <InfoCard>
         <Box component={'span'} sx={{ textAlign: 'center' }}>
-          <form className="py-8 space-y-8" onSubmit={onSubmit}>
-            {error && <div className="my-4 text-red-500">{error}</div>}
+          <form className="py-8 space-y-8">
             <div>
-              <input
-                placeholder="Your OpenAI API Key"
-                required
-                type="text"
-                width="100%"
-                {...form.register('apiKey')}
-              />
               <p>
-                Your API key is{' '}
-                <a
-                  href="https://beta.openai.com/account/api-keys"
-                  target="_blank"
-                  rel="noreferrer"
-                  tabIndex={-1}
+                Configure Your Open AI key
+                <Button
+                  style={{ marginLeft: '10px' }}
+                  onClick={() => navigate('/settings')}
                 >
-                  available here.
-                </a>
+                  here.
+                </Button>
               </p>
             </div>
-            <div>
-              {showOrgId ? (
-                <input
-                  placeholder="Organization ID"
-                  type="text"
-                  width="100%"
-                  {...form.register('organizationId')}
-                />
-              ) : (
-                // <Link
-                //   color="primary"
-                //   onClick={event => {
-                //     event.preventDefault()
-                //     setShowOrgId(true)
-                //   }}
-                // >
-                //   I have an organization ID
-                // </Link>
-                <></>
-              )}
-            </div>
-            <div className="flex justify-end ">
-              <Button
-                disabled={form.getValues().apiKey === '' || isLoading}
-                type="submit"
-              >
-                <span className="uppercase">{"Let's go"}</span>
-              </Button>
-            </div>
+            <div></div>
           </form>
         </Box>
 
