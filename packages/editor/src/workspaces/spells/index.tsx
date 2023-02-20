@@ -44,7 +44,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
         if (tab.type === 'spell' && spellRef.current) {
           publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
         }
-      }, 5000) // debounce for 2000 ms
+      }, 1000) // debounce for 2000 ms
     )
 
     return () => {
@@ -74,9 +74,9 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   }, [spellData])
 
   useEffect(() => {
-    if (!tab || !tab.spellId) return
+    if (!tab || !tab.spellName) return
     loadSpell({
-      spellId: tab.spellId,
+      spellName: tab.spellName,
       projectId: config.projectId,
     })
   }, [tab])
@@ -84,10 +84,10 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   useEffect(() => {
     if (!client) return
     ;(async () => {
-      if (!client || !tab || !tab.spellId) return
+      if (!client || !tab || !tab.spellName) return
       console.log('projectId from client ', config.projectId)
       // make sure to pass the projectId to the service call
-      await client.service('spell-runner').get(tab.spellId,
+      await client.service('spell-runner').get(tab.spellName,
         {
           query: {
             projectId: config.projectId,

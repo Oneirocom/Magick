@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { mutate } from 'swr'
 import { IconButton } from '@mui/material'
 import DeleteOutlined from '@mui/icons-material/DeleteOutlined'
+import { OPENAI_ENDPOINT } from '@magickml/engine'
 
 export default function DeleteFileButton({ id }: { id: string }) {
   const { headers } = useAuthentication()
@@ -16,7 +17,7 @@ export default function DeleteFileButton({ id }: { id: string }) {
     try {
       setIsDeleting(true)
       if (window.confirm('Are you sure you want to delete this file?')) {
-        await fetch(`https://api.openai.com/v1/files/${id}`, {
+        await fetch(`${OPENAI_ENDPOINT}files/${id}`, {
           method: 'DELETE',
           headers,
         })

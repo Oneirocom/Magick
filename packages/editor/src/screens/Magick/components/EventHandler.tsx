@@ -25,7 +25,7 @@ const EventHandler = ({ pubSub, tab }) => {
   const [saveSpellMutation] = spellApi.useSaveSpellMutation()
   const [saveDiff] = spellApi.useSaveDiffMutation()
   const { data: spell } = spellApi.useGetSpellQuery({
-    spellId: tab.spellId,
+    spellName: tab.spellName,
     projectId: config.projectId
   })
   const preferences = useSelector(
@@ -88,6 +88,7 @@ const EventHandler = ({ pubSub, tab }) => {
       // save diff to spell runner if something has changed.  Will update spell in spell runner session
       await client.service('spell-runner').update(currentSpell.name, {
         diff: jsonDiff,
+        projectId: config.projectId
       })
     }
 
@@ -123,10 +124,12 @@ const EventHandler = ({ pubSub, tab }) => {
     try {
       await client.service('spell-runner').update(currentSpell.name, {
         diff: jsonDiff,
+        projectId: config.projectId
       })
       await saveDiff({
         name: currentSpell.name,
-        diff: jsonDiff
+        diff: jsonDiff,
+        projectId: config.projectId
       })
       enqueueSnackbar('Spell saved', {
         variant: 'success',

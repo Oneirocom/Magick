@@ -25,7 +25,7 @@ const MenuBar = () => {
   const activeTabRef = useRef<Tab | null>(null)
 
   useEffect(() => {
-    if (!activeTab || !activeTab.spellId) return
+    if (!activeTab || !activeTab.spellName) return
     activeTabRef.current = activeTab
     console.log('changing current to ', activeTabRef.current)
   }, [activeTab])
@@ -71,7 +71,7 @@ const MenuBar = () => {
       modal: 'editSpellModal',
       content: 'This is an example modal',
       tab: activeTabRef.current,
-      spellId: activeTabRef.current.spell,
+      spellName: activeTabRef.current.spell,
       name: activeTabRef.current.spell,
     })
   }

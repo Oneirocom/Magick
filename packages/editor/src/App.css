@@ -258,7 +258,7 @@ input[type='text']:focus-visible {
 }
 
 .form-item {
-  padding: 1em 0;
+  padding: 1em;
 }
 
 .entBtns {

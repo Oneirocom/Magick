@@ -74,15 +74,15 @@ const Playtest = ({ tab }) => {
   const { serialize } = useEditor()
 
   const { data: spellData } = spellApi.useGetSpellQuery(
-    { spellId: tab.spellId, projectId: config.projectId },
+    { spellName: tab.spellName, projectId: config.projectId },
     {
       refetchOnMountOrArgChange: true,
-      skip: !tab.spellId,
+      skip: !tab.spellName,
     }
   )
 
   const localState = useAppSelector(state => {
-    return selectStateBySpellId(state.localState, tab.spellId)
+    return selectStateBySpellId(state.localState, tab.spellName)
   })
 
   const client = FeathersContext?.client
@@ -137,7 +137,7 @@ const Playtest = ({ tab }) => {
   useEffect(() => {
     // Set up a default for the local state here
     if (!localState) {
-      dispatch(addLocalState({ spellId: tab.spellId, playtestData: defaultPlaytestData }))
+      dispatch(addLocalState({ spellName: tab.spellName, playtestData: defaultPlaytestData }))
       return
     }
   }, [localState])
@@ -161,7 +161,7 @@ const Playtest = ({ tab }) => {
     })
   }
 
-  const onSend = () => {
+  const onSend = async () => {
     const newHistory = [...history, `You: ${value}`]
     setHistory(newHistory as [])
 
@@ -204,7 +204,7 @@ const Playtest = ({ tab }) => {
     console.log('FOUND NODE', playtestInputName)
 
     client.service('spell-runner').create({
-      spellId: tab.spellId,
+      spellName: tab.spellName,
       projectId: config.projectId,
       inputs: {
         [playtestInputName as string]: toSend,
@@ -217,7 +217,7 @@ const Playtest = ({ tab }) => {
 
   const onDataChange = dataText => {
     console.log('new data text', dataText)
-    dispatch(upsertLocalState({ spellId: tab.spellId, playtestData: dataText ?? defaultPlaytestData }))
+    dispatch(upsertLocalState({ spellName: tab.spellName, playtestData: dataText ?? defaultPlaytestData }))
   }
 
   const onChange = e => {
