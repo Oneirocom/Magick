@@ -17,7 +17,7 @@ import { configureManager, globalsManager } from '@magickml/engine'
 const app: Application = koa(feathers())
 
 // Expose feathers app to other apps that might want to access feathers services directly
-globalsManager.registerGlobal('feathers', app)
+globalsManager.register('feathers', app)
 
 // Load our app configuration (see config/ folder)
 app.configure(configuration(configurationValidator))

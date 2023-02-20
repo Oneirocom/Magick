@@ -133,7 +133,6 @@ export type EngineContext = {
     spellName,
     projectId,
 }: runSpellType) => Record<string, any>
-  completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: ({spellName, projectId}: {spellName: string, projectId: string}) => Promise<any | Spell>
   getCurrentSpell?: () => Spell
   processCode?: (
