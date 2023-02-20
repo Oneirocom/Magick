@@ -3,7 +3,8 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
 import {
-  DATABASE_URL
+  DATABASE_URL,
+  ANALYTICS_ENDPOINT
 } from '@magickml/engine'
 import pgvector from 'pgvector/pg'
 import postgres from 'postgres'
@@ -110,7 +111,25 @@ export const event = (app: Application) => {
       create:[
 
       ],
-      all: []
+      all: [
+        // re-send the request to the ANALYTICS_ENDPOINT
+        async (context: any) => {
+          if(!ANALYTICS_ENDPOINT) return
+          const { method, data, params } = context
+          // send a POST to ANALYTICS_ENDPOINT with the data
+          fetch(ANALYTICS_ENDPOINT, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              method,
+              data,
+              params
+            })
+          })
+        } 
+      ]
     },
     error: {
       all: []
