@@ -9,13 +9,9 @@ export type RunSpellArgs = {
   inputFormatter?: (graph: GraphData) => Record<string, unknown>
 }
 
-export const runSpell = async ({
-  spellName,
-  inputs,
-  inputFormatter,
-}: RunSpellArgs) => {
-
-  let spell = await app.service('spells').find({ query: { projectId, name: spellName } }) as any
+export const runSpell = async ({ spellName, inputs, inputFormatter }: RunSpellArgs) => {
+  console.log('Finding spell: ', spellName, projectId)
+  let spell = (await app.service('spells').find({ query: { projectId, name: spellName } })) as any
 
   if (!spell?.graph) {
     throw new ServerError('not-found', `Spell with name ${spellName} not found`)
@@ -28,11 +24,11 @@ export const runSpell = async ({
 
   const spellToRun = {
     // TOTAL HACK HERE
-    ...spell,
+    ...spell
   }
 
   // Initialize the spell runner
-  const spellRunner = new SpellRunner({ magickInterface})
+  const spellRunner = new SpellRunner({ magickInterface })
 
   // Load the spell in to the spell runner
   await spellRunner.loadSpell(spellToRun as unknown as SpellType)

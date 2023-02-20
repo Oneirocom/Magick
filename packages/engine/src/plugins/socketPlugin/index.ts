@@ -51,6 +51,7 @@ function install(
             ...args,
           ])
 
+          console.log('Emitting to socket: ', event, result?.output)
           socket?.emit(event, {
             output: result?.output,
           })
