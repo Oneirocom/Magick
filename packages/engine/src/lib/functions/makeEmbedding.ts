@@ -25,7 +25,7 @@ export async function makeEmbedding(
 
   try {
     const resp = await axios.post(
-      `${OPENAI_ENDPOINT}embeddings`,
+      `${OPENAI_ENDPOINT}/embeddings`,
       { input, model },
       { headers: headers }
     );

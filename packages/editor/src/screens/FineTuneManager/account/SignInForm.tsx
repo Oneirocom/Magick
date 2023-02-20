@@ -27,7 +27,7 @@ export default function SigninForm() {
     try {
       setIsLoading(true)
 
-      const response = await fetch(`${OPENAI_ENDPOINT}engines`, {
+      const response = await fetch(`${OPENAI_ENDPOINT}/engines`, {
         headers: requestHeaders(formData),
       })
       if (response.ok) {

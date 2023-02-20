@@ -35,8 +35,8 @@ export default function CompletionForm({
   const values = form.getValues()
   const request = {
     url: fineTune
-      ? `${OPENAI_ENDPOINT}completions`
-      : `${OPENAI_ENDPOINT}engines/${form.getValues().engine}/completions`,
+      ? `${OPENAI_ENDPOINT}/completions`
+      : `${OPENAI_ENDPOINT}/engines/${form.getValues().engine}/completions`,
     method: 'POST',
     headers: { ...headers, 'Content-Type': 'application/json' },
     body: {

@@ -32,7 +32,7 @@ export default function Account({ children }) {
     async (path: string) => {
       if (!headers) return null
 
-      const response = await fetch(`${OPENAI_ENDPOINT}${path}`, {
+      const response = await fetch(`${OPENAI_ENDPOINT}/${path}`, {
         headers,
       })
       if (response.ok) {

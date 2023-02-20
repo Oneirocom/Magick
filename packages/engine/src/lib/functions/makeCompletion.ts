@@ -29,7 +29,7 @@ export async function makeCompletion(
 
   try {
     const resp = await axios.post(
-      `${OPENAI_ENDPOINT}completions`,
+      `${OPENAI_ENDPOINT}/completions`,
       {
         prompt,
         model,

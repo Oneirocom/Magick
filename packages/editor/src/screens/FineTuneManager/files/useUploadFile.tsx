@@ -51,7 +51,7 @@ export default function useUploadFile(purpose: string, enforce: Enforce) {
         body.append('purpose', purpose)
         body.append('file', blob, file.name)
         console.log('headers', headers)
-        const response = await fetch(`${OPENAI_ENDPOINT}files`, {
+        const response = await fetch(`${OPENAI_ENDPOINT}/files`, {
           method: 'POST',
           headers,
           body,

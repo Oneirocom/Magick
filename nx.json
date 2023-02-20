@@ -51,18 +51,10 @@
         "linter": "eslint",
         "unitTestRunner": "jest"
       }
-    },
-    "@nxext/vite": {
-      "application": {
-        "linter": "eslint"
-      },
-      "library": {
-        "linter": "eslint"
-      }
     }
   },
   "cli": {
-    "defaultCollection": "@nxext/vite"
+    "defaultCollection": "@nrwl/node"
   },
   "defaultProject": "@magickml/server"
 }

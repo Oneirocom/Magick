@@ -103,7 +103,7 @@ function CancelFineTune({ id }: { id: string }) {
   async function onClick() {
     try {
       setIsLoading(true)
-      await fetch(`${OPENAI_ENDPOINT}fine-tunes/${id}/cancel`, {
+      await fetch(`${OPENAI_ENDPOINT}/fine-tunes/${id}/cancel`, {
         method: 'PSOT',
         headers,
       })
@@ -130,7 +130,7 @@ function DeleteFineTune({ id }: { id: string }) {
     try {
       setIsDeleting(true)
       if (window.confirm('Are you sure you want to delete this model?')) {
-        await fetch(`${OPENAI_ENDPOINT}models/${id}`, {
+        await fetch(`${OPENAI_ENDPOINT}/models/${id}`, {
           method: 'DELETE',
           headers,
         })
