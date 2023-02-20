@@ -220,7 +220,9 @@ export class World {
 
   async addAgent(obj: any) {
     const data = {...obj.data, id: obj.id, enabled: obj.enabled, dirty: obj.dirty, spells: obj.spells, updated_at: obj.updated_at}
+    console.log("SERVER", data.id)
     if (this.objects[data.id] === undefined) {
+      data.projectId = projectId
       this.objects[data.id] = new Agent(data)
     } else {
       throw new ServerError('already-exists', 'Object already exists')

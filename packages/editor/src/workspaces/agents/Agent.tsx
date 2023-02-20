@@ -69,7 +69,16 @@ const AgentWindow = ({
 
   useEffect(() => {
     ;(async () => {
-      const res = await axios.get(`${config.apiUrl}/spells`)
+      const params = {  
+        projectId : config.projectId
+      };
+      var res
+      try {
+        res = await axios.get(`${config.apiUrl}/spells`,{params})
+      } catch(error) {
+        console.log("ERROR: ", error)
+      }
+      
       console.log('res', res.data)
       console.log('spellList', res.data)
       setSpellList(res.data?.data)
