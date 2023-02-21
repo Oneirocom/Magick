@@ -18,7 +18,7 @@ const EventWindow = () => {
 
   const fetchEvents = async () => {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_APP_API_URL}/events?hidden=false&projectId=${config.projectId}`
+      `${import.meta.env.VITE_APP_API_URL}/events&projectId=${config.projectId}`
     )
     console.log('fetching events', data)
     setEvents(data.data)
