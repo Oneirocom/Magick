@@ -14,7 +14,6 @@ type RequestPayload = {
   hidden?: boolean
   processed?: boolean
   cost?: number
-  estimatedCost?: number
 }
 
 export function saveRequest({
@@ -31,7 +30,6 @@ export function saveRequest({
   hidden,
   processed,
   cost,
-  estimatedCost,
 }: RequestPayload) {
   const app = globalsManager.get('feathers')
   return app.service('request').create({
@@ -48,6 +46,5 @@ export function saveRequest({
     hidden,
     processed,
     cost,
-    estimatedCost,
   })
 }

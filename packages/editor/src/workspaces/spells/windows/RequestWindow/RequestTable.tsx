@@ -23,7 +23,6 @@ import {
 import { VscArrowDown, VscArrowUp, VscTrash } from 'react-icons/vsc'
 import { FaFileCsv } from 'react-icons/fa'
 import { useSnackbar } from 'notistack'
-import axios from 'axios'
 import _ from 'lodash'
 import { CSVLink } from 'react-csv'
 import { useConfig } from '../../../../contexts/ConfigProvider'
@@ -72,54 +71,49 @@ function EventTable({ requests, updateCallback }) {
   const columns = useMemo(
     () => [
       {
-        Header: 'Agent',
-        accessor: 'agentId',
-        disableSortBy: true,
-      },
-      {
-        Header: 'Client',
-        accessor: 'client',
-        disableSortBy: true,
-      },
-      {
-        Header: 'Sender',
-        accessor: 'sender',
-        disableSortBy: true,
-      },
-      {
-        Header: 'Content',
-        accessor: 'content',
-        disableSortBy: true,
+        Header: 'Provider',
+        accessor: 'provider',
       },
       {
         Header: 'Type',
         accessor: 'type',
-        disableSortBy: true,
       },
       {
-        Header: 'Channel',
-        accessor: 'channel',
-        disableSortBy: true,
+        Header: 'Cost',
+        accessor: 'cost',
       },
       {
-        Header: 'Entities',
-        accessor: 'entities',
-        disableFilters: true,
+        Header: 'Req Data',
+        accessor: 'requestData',
       },
       {
-        Header: 'Observer',
-        accessor: 'observer',
-        disableFilters: false,
+        Header: 'Res Data',
+        accessor: 'responseData',
       },
       {
-        Header: 'Date',
-        accessor: 'date',
-        disableFilters: false,
+        Header: 'Req Time',
+        accessor: 'duration',
+      },
+      {
+        Header: 'Status',
+        accessor: 'status',
+      },
+      {
+        Header: 'Code',
+        accessor: 'statusCode',
+      },
+      {
+        Header: 'Model',
+        accessor: 'model',
+      },
+      {
+        Header: 'Parameters',
+        accessor: 'parameters',
       },
       {
         Header: 'Actions',
         Cell: row => (
-          <IconButton onClick={() => handleEventDelete(row.row.original)}>
+          <IconButton onClick={() => handleRequestDelete(row.row.original)}>
             <VscTrash size={16} color="#ffffff" />
           </IconButton>
         ),
@@ -135,11 +129,17 @@ function EventTable({ requests, updateCallback }) {
       projectId: config.projectId
     }
     if (!_.isEqual(reqBody, rowData)) {
-      const isUpdated = await axios.put(
-        `${import.meta.env.VITE_APP_API_URL}/request/${id}`,
-        reqBody
-      )
-      if (isUpdated) enqueueSnackbar('Event updated', { variant: 'success' })
+      const resp = await fetch(`${import.meta.env.VITE_APP_API_URL}/request/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reqBody)
+      })
+
+      const json = await resp.json()
+
+      if (json) enqueueSnackbar('Event updated', { variant: 'success' })
       else enqueueSnackbar('Error updating event', { variant: 'error' })
       updateCallback()
     }
@@ -199,12 +199,20 @@ function EventTable({ requests, updateCallback }) {
     gotoPage(pageIndex)
   }
 
-  const handleEventDelete = async (event: any) => {
+  const handleRequestDelete = async (event: any) => {
     console.log('event to delete ::: ', event)
-    const isDeleted = await axios.delete(
-      `${import.meta.env.VITE_APP_API_URL}/request/${event.id}`
-    )
-    if (isDeleted) enqueueSnackbar('Event deleted', { variant: 'success' })
+      // instead of deleting, call the updateEvent function with param hidden = true
+      const resp = await fetch(`${import.meta.env.VITE_APP_API_URL}/request/${event.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({hidden: true})
+      })
+
+      const json = await resp.json()
+
+    if (json) enqueueSnackbar('Event deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting Event', { variant: 'error' })
     updateCallback()
   }
