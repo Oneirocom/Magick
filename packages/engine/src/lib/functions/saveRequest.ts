@@ -8,13 +8,13 @@ type RequestPayload = {
   duration?: number
   status?: string
   statusCode?: number
-  error?: string
   parameters?: string
   provider?: string
   type?: string
   hidden?: boolean
   processed?: boolean
-  cost: number
+  cost?: number
+  estimatedCost?: number
 }
 
 export function saveRequest({
@@ -25,13 +25,13 @@ export function saveRequest({
   duration,
   status,
   statusCode,
-  error,
   parameters,
   provider,
   type,
   hidden,
   processed,
   cost,
+  estimatedCost,
 }: RequestPayload) {
   const app = globalsManager.get('feathers')
   return app.service('request').create({
@@ -43,11 +43,11 @@ export function saveRequest({
     parameters,
     duration,
     status,
-    error,
     provider,
     type,
     hidden,
     processed,
     cost,
+    estimatedCost,
   })
 }
