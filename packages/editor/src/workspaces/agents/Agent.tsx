@@ -220,16 +220,6 @@ const AgentWindow = ({
             </Grid>
             <Grid item xs={3}>
               <div className="form-item">
-                <span className="form-item-label">OpenAI Key</span>
-                <KeyInput
-                  value={openai_api_key}
-                  setValue={setOpenaiApiKey}
-                  secret={true}
-                />
-              </div>
-            </Grid>
-            <Grid item xs={3}>
-              <div className="form-item">
                 <span className="form-item-label">Ethereum Private Key</span>
                 <KeyInput
                   value={eth_private_key}
