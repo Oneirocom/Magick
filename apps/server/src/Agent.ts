@@ -108,7 +108,7 @@ export class Agent {
 
   async generateVoices(data: any) {
     if (data.use_voice) {
-      const phrases = data.voice_default_phrases
+      const phrases = data.voice_default_phrase
       if (phrases && phrases.length > 0) {
         const pArr = phrases.split('|')
         for (let i = 0; i < pArr.length; i++) {

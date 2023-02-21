@@ -161,6 +161,7 @@ export class discord_client {
     let match
     const emojis = []
     while ((match = reg.exec(message.content)) !== null) {
+      console.log("EMOJIS")
       emojis.push({ name: emoji.getName(match[0]), emoji: match[0] })
       message.content = message.content.replace(
         match[0],
@@ -266,6 +267,8 @@ export class discord_client {
         .replace('!', '')
         .match(client.username_regex)
     const isInDiscussion = this.isInConversation(author.id)
+    console.log("SSS")
+    console.log(content)
     if (!content.startsWith('!') && !otherMention) {
       if (isMention) content = '!ping ' + content.replace(botMention, '').trim()
       else if (isDirectMethion)
@@ -274,7 +277,7 @@ export class discord_client {
         content = '!ping ' + content.replace(client.username_regex, '').trim()
       } else if (isInDiscussion || startConv) content = '!ping ' + content
     }
-
+    console.log(content)
     if (!content.startsWith('!ping')) {
       if (
         this.discussionChannels[channel.id] !== undefined &&
@@ -304,6 +307,7 @@ export class discord_client {
 
     //if the message contains join word, it makes the bot to try to join a voice channel and listen to the users
     if (content.startsWith('!ping')) {
+      console.log("CONTENT STARTS with PING")
       this.sentMessage(author.id)
       const mention = `<@!${client.user.id}>`
       if (
@@ -311,6 +315,7 @@ export class discord_client {
         content.startsWith('!join') ||
         content.startsWith('!ping ' + mention + ' join')
       ) {
+        console.log("MENTIONS JOIN")
         const d = content.split(' ')
         const index = d.indexOf('join') + 1
         console.log('d:', d)
@@ -989,7 +994,7 @@ export class discord_client {
               channel.messages
                 .fetch({ limit: this.client.edit_messages_max_count })
                 .then(async (messages: any[]) => {
-                  messages.forEach(async function (edited: {
+                  messages.forEach(async  (edited: {
                     id: any
                     channel: {
                       send: (
@@ -998,9 +1003,9 @@ export class discord_client {
                       ) => Promise<any>
                       stopTyping: () => void
                     }
-                  }) {
+                  }) => {
                     if (edited.id === message_id) {
-                      Object.keys(responses).map(async function (key, index) {
+                      Object.keys(responses as any).map(async  (key, index) => {
                         log('response: ' + responses)
                         log('response: ' + key)
                         log('response: ' + index)
@@ -1010,19 +1015,19 @@ export class discord_client {
                           responses.length <= 2000 &&
                           responses.length > 0
                         ) {
-                          let text = this.replacePlaceholders(responses)
+                          let text = this.replacePlaceholders(responses as string)
                           msg.edit(text)
                           this.onMessageResponseUpdated(
                             channel.id,
                             edited.id,
                             msg.id
                           )
-                        } else if (responses.length >= 2000) {
-                          let text = this.replacePlaceholders(responses)
+                        } else if (responses?.length >= 2000) {
+                          let text = this.replacePlaceholders(responses as string)
                           if (text.length > 0) {
                             edited.channel
                               .send(text, { split: true })
-                              .then(async function (msg: { id: any }) {
+                              .then(async  (msg: { id: any }) => {
                                 this.onMessageResponseUpdated(
                                   channel.id,
                                   edited.id,
@@ -1228,11 +1233,11 @@ export class discord_client {
 
     if (this.use_voice) {
       const {client, discord_bot_name, agent, spellRunner, voice_provider, voice_character, voice_language_code, tiktalknet_url} = this
-
-      if(typeof window !== 'undefined'){
+      
+      if(typeof window === 'undefined'){
         const { initSpeechClient, recognizeSpeech: _recognizeSpeech } = await import('./discord-voice')
       recognizeSpeech = _recognizeSpeech
-      initSpeechClient({
+      this.client = initSpeechClient({
         client,
         discord_bot_name,
         agent,
@@ -1278,7 +1283,7 @@ export class discord_client {
     // this.client.commands.set('agents', this.agents)
     // this.client.commands.set('ban', this.ban)
     // this.client.commands.set('commands', this.commands)
-    // this.client.commands.set('ping', this.ping)
+    //this.client.commands.set('ping', this.ping)
     // this.client.commands.set('pingagent', this.pingagent)
     // this.client.commands.set('setagent', this.setagent)
     // this.client.commands.set('setname', this.setname)
