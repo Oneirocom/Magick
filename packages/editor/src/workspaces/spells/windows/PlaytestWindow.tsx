@@ -137,7 +137,12 @@ const Playtest = ({ tab }) => {
   useEffect(() => {
     // Set up a default for the local state here
     if (!localState) {
-      dispatch(addLocalState({ spellName: tab.spellName, playtestData: defaultPlaytestData }))
+      dispatch(
+        addLocalState({
+          spellName: tab.spellName,
+          playtestData: defaultPlaytestData,
+        })
+      )
       return
     }
   }, [localState])
@@ -183,7 +188,7 @@ const Playtest = ({ tab }) => {
         sender: 'Speaker',
         observer: 'Agent',
         agentId: 0,
-        client: "playtest",
+        client: 'playtest',
         channel: 'previewChannel',
         projectId: config.projectId,
         channelType: 'previewChannelType',
@@ -217,7 +222,12 @@ const Playtest = ({ tab }) => {
 
   const onDataChange = dataText => {
     console.log('new data text', dataText)
-    dispatch(upsertLocalState({ spellName: tab.spellName, playtestData: dataText ?? defaultPlaytestData }))
+    dispatch(
+      upsertLocalState({
+        spellName: tab.spellName,
+        playtestData: dataText ?? defaultPlaytestData,
+      })
+    )
   }
 
   const onChange = e => {
@@ -245,21 +255,7 @@ const Playtest = ({ tab }) => {
         placeholder="target node"
         creatable={false}
       />
-      <form>
-        <label htmlFor="openai-api-key">API Key</label>
-        <input
-          type="password"
-          id="openai-api-key"
-          name="api-key"
-          value="api-key"
-          onChange={e =>
-            localStorage.setItem(
-              'openai',
-              JSON.stringify({ apiKey: e.target.value })
-            )
-          }
-        />
-      </form>
+
       <button className="small" onClick={onClear}>
         Clear
       </button>
@@ -312,7 +308,7 @@ const Playtest = ({ tab }) => {
             <ul>{history.map(printItem)}</ul>
           </Scrollbars>
         </div>
-        <label htmlFor="playtest-input" style={{ display: "none"}}>
+        <label htmlFor="playtest-input" style={{ display: 'none' }}>
           Input
         </label>
         <Input onChange={onChange} value={value} onSend={onSend} />
