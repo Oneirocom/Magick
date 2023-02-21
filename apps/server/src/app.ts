@@ -1,11 +1,9 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
 import { feathers } from '@feathersjs/feathers'
-import configuration from '@feathersjs/configuration'
 import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
 
 import type { Application } from './declarations'
-import { configurationValidator } from './configuration'
 import { logError } from './hooks/log-error'
 import { postgresql } from './postgresql'
 import { services } from './services/index'
@@ -19,8 +17,20 @@ const app: Application = koa(feathers())
 // Expose feathers app to other apps that might want to access feathers services directly
 globalsManager.register('feathers', app)
 
-// Load our app configuration (see config/ folder)
-app.configure(configuration(configurationValidator))
+const port = parseInt(process.env.PORT || '3030', 10)
+app.set('port', port)
+
+const host = process.env.HOST || 'localhost'
+app.set('host', host)
+
+const paginateDefault = parseInt(process.env.PAGINATE_DEFAULT || '10', 10)
+const paginateMax = parseInt(process.env.PAGINATE_MAX || '50', 10)
+const paginate = {
+  default: paginateDefault,
+  max: paginateMax
+}
+app.set('paginate', paginate)
+
 // app.configure(
 //   swagger({
 //     ui: swagger.swaggerUI({}),
