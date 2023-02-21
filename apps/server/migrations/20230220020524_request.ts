@@ -17,7 +17,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('type').notNullable()
     table.boolean('hidden').notNullable().defaultTo(false)
     table.boolean('processed').notNullable().defaultTo(false),
-    table.integer('cost')
+    table.double('cost')
   })
 }
 

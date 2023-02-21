@@ -1,3 +1,4 @@
+import { v4 } from 'uuid'
 import { globalsManager } from '../globals'
 
 type RequestPayload = {
@@ -31,8 +32,11 @@ export function saveRequest({
   processed,
   cost,
 }: RequestPayload) {
+  console.log('saveRequest', projectId, requestData, responseData, model, duration, status, statusCode, parameters, provider, type, hidden, processed, cost)
   const app = globalsManager.get('feathers')
+  console.log(app.service('request'))
   return app.service('request').create({
+    id: v4(),
     projectId,
     requestData,
     responseData,
