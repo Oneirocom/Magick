@@ -22,8 +22,6 @@ function initEntityLoop(update: Function, lateUpdate: Function) {
   async function entityLoop(update: Function, lateUpdate: Function) {
     const agents = (await app.service('agents').find(query)).data
 
-    console.log('agents', agents)
-
     const now = new Date()
     const updated = []
 
