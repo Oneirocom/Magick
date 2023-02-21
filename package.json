@@ -94,7 +94,6 @@
     "multer": "*",
     "next": "^13.0.0",
     "next-redux-wrapper": "7.0.2",
-    "node-opus": "^0.3.3",
     "notistack": "3.0.0-alpha.11",
     "openai": "^3.1.0",
     "ot-json0": "^1.1.0",
@@ -126,7 +125,6 @@
     "regenerator-runtime": "^0.13.11",
     "rete": "github:Oneirocom/rete",
     "rete-connection-plugin": "^0.9.0",
-    "rete-context-menu-plugin": "github:Oneirocom/context-menu-plugin",
     "rollup-plugin-ignore": "^1.0.10",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "serp": "^2.2.2",
@@ -157,6 +155,9 @@
     "xlsx": "^0.18.5",
     "xmldoc": "^1.2.0",
     "xvfb": "0.4.0"
+  },
+  "peerDependencies": {
+    "jsdom": "^21.1.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.18.6",
