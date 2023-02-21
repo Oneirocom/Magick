@@ -33,8 +33,9 @@ export function initSpeechClient({
   voiceCharacter,
   languageCode,
   tiktalknet_url
-}) {
-  this.spellRunner = spellRunner
+}: any) {
+  console.log("INSIDE INIT SPEECH")
+  //let spellRunner = spellRunner
   addSpeechEvent(client, { group: 'default_' + agent.id })
   const audioPlayer = createAudioPlayer({
     behaviors: {
@@ -42,7 +43,9 @@ export function initSpeechClient({
     },
     debug: true,
   })
+  console.log("CREATING a SPEAKING EVENT LISTNER")
   client.on('speech', async msg => {
+    console.log('SPEAKING')
     const content = msg.content
     const connection = msg.connection
     const author = msg.author
@@ -51,6 +54,7 @@ export function initSpeechClient({
     if(!createReadStream) {
       // dynbamically import createReadStream from fs
       const fs = await import('fs')
+      console.log(process.cwd())
       createReadStream = fs.createReadStream
     }
 
@@ -68,7 +72,7 @@ export function initSpeechClient({
         for (const [memberID, member] of channel.members) {
           entities.push({
             user: member.user.username,
-            inConversation: this.isInConversation(member.user.id),
+            inConversation: client.isInConversation(member.user.id),
             isBot: member.user.bot,
             info3d: '',
           })
@@ -77,7 +81,7 @@ export function initSpeechClient({
 
       console.log(entities)
 
-      const fullResponse = await this.spellRunner.runComponent(
+      const fullResponse = await spellRunner.runComponent(
         {
         inputs: {},
         componentName: "Discord Input",
@@ -112,6 +116,7 @@ export function initSpeechClient({
         } else {
           url = await tts_tiktalknet(response, voiceCharacter, tiktalknet_url)
         }
+        console.log(url)
         if (url) {
           // const url = await tts(response)
           console.log('speech url:', url)
@@ -130,6 +135,7 @@ export function initSpeechClient({
       }
     }
   })
+  return client
 }
 
 /**
