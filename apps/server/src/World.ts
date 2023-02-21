@@ -75,7 +75,14 @@ export class World {
     if (oldAgents['updated_at']) delete oldAgents['updated_at']
     await this.updateSpells();
     if (JSON.stringify(newAgents) === JSON.stringify(oldAgents)) return // They are the same
-
+    //If Discord Enabled is True replace the old Agent with a new one
+    for (const i in newAgents){
+      if (newAgents[i].data.discord_enabled){
+        let temp_agent = this.getAgent(newAgents[i].id)
+        await temp_agent.onDestroy()
+        this.addAgent(newAgents[i])
+      } 
+    }
     // If an entry exists in oldAgents but not in newAgents, it has been deleted
     for (const i in oldAgents) {
       // filter for entries where oldAgents where id === newAgents[i].id
@@ -218,12 +225,9 @@ export class World {
   async addAgent(obj: any) {
     const data = {...obj.data, id: obj.id, enabled: obj.enabled, dirty: obj.dirty, spells: obj.spells, updated_at: obj.updated_at}
     console.log("SERVER", data.id)
-    if (this.objects[data.id] === undefined) {
-      data.projectId = projectId
-      this.objects[data.id] = new Agent(data)
-    } else {
-      throw new ServerError('already-exists', 'Object already exists')
-    }
+    //Overwrites even if already exists
+    data.projectId = projectId
+    this.objects[data.id] = new Agent(data)
   }
 
   async removeAgent(id: number) {
