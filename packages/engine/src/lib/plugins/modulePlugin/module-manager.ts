@@ -150,6 +150,7 @@ export class ModuleManager {
         data,
         args.socketInfo.targetSocket
       )
+      if (!triggeredNode) throw new Error('Triggered node not found')
       // todo need to remember to update this if/when componnet name changes
       const component = engine?.components.get('Trigger In') as ModuleComponent
       await component?.run(triggeredNode)

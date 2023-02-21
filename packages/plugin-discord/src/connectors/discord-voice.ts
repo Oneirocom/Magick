@@ -6,7 +6,7 @@ import {
   StreamType,
   NoSubscriberBehavior,
 } from '@discordjs/voice'
-let createReadStream;
+let createReadStream
 
 import { tts, tts_tiktalknet } from '@magickml/server-core'
 
@@ -32,9 +32,8 @@ export function initSpeechClient({
   voiceProvider,
   voiceCharacter,
   languageCode,
-  tiktalknet_url
+  tiktalknet_url,
 }) {
-  this.spellRunner = spellRunner
   addSpeechEvent(client, { group: 'default_' + agent.id })
   const audioPlayer = createAudioPlayer({
     behaviors: {
@@ -42,13 +41,14 @@ export function initSpeechClient({
     },
     debug: true,
   })
+
   client.on('speech', async msg => {
     const content = msg.content
     const connection = msg.connection
     const author = msg.author
     const channel = msg.channel
 
-    if(!createReadStream) {
+    if (!createReadStream) {
       // dynbamically import createReadStream from fs
       const fs = await import('fs')
       createReadStream = fs.createReadStream
@@ -68,7 +68,9 @@ export function initSpeechClient({
         for (const [memberID, member] of channel.members) {
           entities.push({
             user: member.user.username,
-            inConversation: this.isInConversation(member.user.id),
+            inConversation: false,
+            // TODO this method doesnt exist on the discord voice plugin
+            // inConversation: this.isInConversation(member.user.id),
             isBot: member.user.bot,
             info3d: '',
           })
@@ -77,23 +79,21 @@ export function initSpeechClient({
 
       console.log(entities)
 
-      const fullResponse = await this.spellRunner.runComponent(
-        {
+      const fullResponse = await spellRunner.runComponent({
         inputs: {},
-        componentName: "Discord Input",
+        componentName: 'Discord Input',
         runData: {
-            content,
-            speaker: author?.username ?? 'VoiceSpeaker',
-            agent: discord_bot_name,
-            client: 'discord',
-            channelId: channel.id,
-            agentId: agent.id,
-            entities: entities.map(e => e.user),
-            channel: 'voice',
+          content,
+          speaker: author?.username ?? 'VoiceSpeaker',
+          agent: discord_bot_name,
+          client: 'discord',
+          channelId: channel.id,
+          agentId: agent.id,
+          entities: entities.map(e => e.user),
+          channel: 'voice',
         },
         runSubspell: true,
-      }
-      )
+      })
       let response = Object.values(fullResponse)[0] as string
 
       if (response === undefined || !response || response.length <= 0) {

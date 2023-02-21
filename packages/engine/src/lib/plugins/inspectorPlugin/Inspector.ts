@@ -34,7 +34,6 @@ export class Inspector {
   dataControls: Map<string, DataControl>
   category: string
   info: string
-  img: string
 
   constructor({ component, editor, node }: InspectorConstructor) {
     this.component = component
@@ -74,16 +73,16 @@ export class Inspector {
     return this
   }
 
-  add_html(html: string){
-    this.node.data["html"] = html
+  add_html(html: string) {
+    this.node.data['html'] = html
   }
 
-  add_img(img_url: string){
-    this.node.data["image"] = img_url
+  add_img(img_url: string) {
+    this.node.data['image'] = img_url
   }
 
-  add_func(func: ()=>{}){
-    this.node.data["func"] = func
+  add_func(func: () => {}) {
+    this.node.data['func'] = func
   }
   handleSockets(
     sockets: DataSocketType[],

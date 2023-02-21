@@ -1,3 +1,5 @@
+// todo fix this no check
+//@ts-nocheck
 import Discord, {
   ChannelType,
   EmbedBuilder,
@@ -150,10 +152,7 @@ export class discord_client {
   }
 
   //Event that is trigger when a new message is created (sent)
-  messageCreate = async (
-    client: any,
-    message: any
-  ) => {
+  messageCreate = async (client: any, message: any) => {
     console.log('new message from discord:', message.content)
 
     //gets the emojis from the text and replaces to unix specific type
@@ -391,23 +390,21 @@ export class discord_client {
       content = content.replace('!ping ', '')
     }
 
-    const response = await this.spellRunner.runComponent(
-      {
+    const response = await this.spellRunner.runComponent({
       inputs: {},
-      componentName: "Discord Input",
+      componentName: 'Discord Input',
       runData: {
-          content,
-          speaker: message.author.username,
-          agent: this.discord_bot_name,
-          client: 'discord',
-          channelId: message.channel.id,
-          agentId: this.agent.id,
-          entities: entities.map((e) => e.user),
-          channel: 'msg',
+        content,
+        speaker: message.author.username,
+        agent: this.discord_bot_name,
+        client: 'discord',
+        channelId: message.channel.id,
+        agentId: this.agent.id,
+        entities: entities.map(e => e.user),
+        channel: 'msg',
       },
       runSubspell: true,
-    }
-    )
+    })
 
     const { Output, Image } = response
 
@@ -463,7 +460,7 @@ export class discord_client {
 
     const oldResponse = this.getResponse(channel.id, id)
     if (oldResponse === undefined) {
-      await channel.messages.fetch(id).then(async (msg: any) => { })
+      await channel.messages.fetch(id).then(async (msg: any) => {})
       log('message not found')
       return
     }
@@ -529,7 +526,7 @@ export class discord_client {
   presenceUpdate = async (
     client: any,
     oldMember: { status: any },
-    newMember: { userId: string, status: string | boolean }
+    newMember: { userId: string; status: string | boolean }
   ) => {
     if (!oldMember || !newMember) {
       log('Cannot update presence, oldMember or newMember is null')
@@ -636,8 +633,8 @@ export class discord_client {
               deleted: boolean
               permissionsFor: (arg0: any) => {
                 (): any
-                new(): any
-                has: { (arg0: string[]): any; new(): any }
+                new (): any
+                has: { (arg0: string[]): any; new (): any }
               }
               name: string | boolean
               id: string | boolean
@@ -1167,7 +1164,7 @@ export class discord_client {
     voice_provider,
     voice_character,
     voice_language_code,
-    tiktalknet_url,
+    tiktalknet_url
   ) => {
     console.log('creating discord client')
     this.agent = agent
@@ -1227,23 +1224,33 @@ export class discord_client {
     this.client.embed = embed
 
     if (this.use_voice) {
-      const {client, discord_bot_name, agent, spellRunner, voice_provider, voice_character, voice_language_code, tiktalknet_url} = this
-
-      if(typeof window !== 'undefined'){
-        const { initSpeechClient, recognizeSpeech: _recognizeSpeech } = await import('./discord-voice')
-      recognizeSpeech = _recognizeSpeech
-      initSpeechClient({
+      const {
         client,
         discord_bot_name,
         agent,
         spellRunner,
-        voiceProvider: voice_provider,
-        voiceCharacter: voice_character,
-        languageCode: voice_language_code,
-        tiktalknet_url
-      })
+        voice_provider,
+        voice_character,
+        voice_language_code,
+        tiktalknet_url,
+      } = this
+
+      if (typeof window !== 'undefined') {
+        const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
+          await import('./discord-voice')
+        recognizeSpeech = _recognizeSpeech
+        initSpeechClient({
+          client,
+          discord_bot_name,
+          agent,
+          spellRunner,
+          voiceProvider: voice_provider,
+          voiceCharacter: voice_character,
+          languageCode: voice_language_code,
+          tiktalknet_url,
+        })
+      }
     }
-  }
 
     this.client.on('messageCreate', this.messageCreate.bind(null, this.client))
     // this.client.on('messageDelete', this.messageDelete.bind(null, this.client))

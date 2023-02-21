@@ -172,7 +172,7 @@ class SpellRunner {
       this.currentSpell.graph.nodes,
       this.triggerIns
     )
-    
+
     const inputs = extractNodes(this.currentSpell.graph.nodes, this.inputs)
     return [...triggerIns, ...inputs].find(node => node.name === componentName)
   }
@@ -240,7 +240,7 @@ class SpellRunner {
     // const triggeredNode = this._getFirstNodeTrigger()
 
     if (!component.run) throw new Error('Component does not have a run method')
-
+    if (!triggeredNode) throw new Error('No triggered node found')
     // this running is where the main "work" happens.
     // I do wonder whether we could make this even more elegant by having the node
     // subscribe to a run pubsub and then we just use that.  This would treat running
