@@ -66,14 +66,14 @@ export type QAArgs = {
 export type CreateEventArgs = Event
 
 export type GetEventArgs = {
-  type: string
+  type?: string
   embedding?: number[]
-  observer: string
-  client: string
-  entities: any[]
-  channel: string
-  channelType: string
-  projectId: string
+  observer?: string
+  client?: string
+  entities?: any[]
+  channel?: string
+  channelType?: string
+  projectId?: string
   maxCount?: number
 }
 
@@ -141,7 +141,7 @@ export type EngineContext = {
     spellName: string
     projectId: string
   }) => Promise<any | Spell>
-  getCurrentSpell?: () => Spell
+  getCurrentSpell: () => Spell
   processCode?: (
     code: unknown,
     inputs: MagickWorkerInputs,

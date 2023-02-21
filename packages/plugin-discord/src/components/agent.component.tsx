@@ -12,7 +12,7 @@ import { API_ROOT_URL } from '@magickml/engine'
 export const DiscordAgentWindow: FC<any> = props => {
   props = props.props
   const { enqueueSnackbar } = useSnackbar()
-  const [discord_enabled, setDiscordEnabled] = useState(undefined)
+  const [discord_enabled, setDiscordEnabled] = useState<boolean>(false)
   const [discord_api_key, setDiscordApiKey] = useState('')
   const [discord_starting_words, setDiscordStartingWords] = useState('')
   const [discord_bot_name_regex, setDiscordBotNameRegex] = useState('')
@@ -139,7 +139,7 @@ export const DiscordAgentWindow: FC<any> = props => {
             <input
               key={Math.random()}
               type="checkbox"
-              value={discord_enabled}
+              value={discord_enabled.toString()}
               defaultChecked={discord_enabled}
               onChange={e => {
                 setDiscordEnabled(e.target.checked)
