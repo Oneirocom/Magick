@@ -22,6 +22,7 @@
     "@types/react": "18.0.2"
   },
   "dependencies": {
+    "@banana-dev/banana-dev": "^4.0.0",
     "@discordjs/voice": "^0.14.0",
     "@emotion/styled": "^11.10.5",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
