@@ -72,6 +72,7 @@ const AgentWindow = ({
       const params = {  
         projectId : config.projectId
       };
+      console.log(params)
       var res
       try {
         res = await axios.get(`${config.apiUrl}/spells`,{params})
