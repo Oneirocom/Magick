@@ -2,11 +2,11 @@
 // TODO: This pattern is fine for now, but we should probably use a dependency injection through the interface or something
 class GlobalsManager {
     globals = new Map();
-    registerGlobal(name: string, value: any) {
+    register(name: string, value: any) {
         this.globals.set(name, value);
     }
 
-    getGlobal(name: string) {
+    get(name: string) {
         return this.globals.get(name);
     }
 }

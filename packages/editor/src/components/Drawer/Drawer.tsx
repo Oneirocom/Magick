@@ -5,7 +5,7 @@ import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import BoltIcon from '@mui/icons-material/Bolt'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -177,6 +177,13 @@ export default function MiniDrawer({ children }) {
             open={open}
             onClick={onClick('/agents')}
             text="Agents"
+          />
+          <DrawerItem
+            active={location.pathname === '/requests'}
+            Icon={BoltIcon}
+            open={open}
+            onClick={onClick('/requests')}
+            text="Requests"
           />
             <DrawerItem
               active={location.pathname.includes('/settings')}

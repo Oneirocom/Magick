@@ -1,0 +1,41 @@
+{
+  "name": "@magickml/cost-calculator",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/cost-calculator/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/cost-calculator/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/cost-calculator/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/cost-calculator",
+        "tsConfig": "packages/cost-calculator/tsconfig.lib.json",
+        "packageJson": "packages/cost-calculator/package.json",
+        "main": "packages/cost-calculator/src/index.ts",
+        "assets": ["packages/cost-calculator/*.md"]
+      }
+    }
+  },
+  "tags": []
+}

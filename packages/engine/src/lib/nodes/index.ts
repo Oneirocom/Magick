@@ -24,7 +24,6 @@ import { Code } from './logic/Code'
 import { ExclusiveGate } from './logic/Exclusive Gate'
 import { ForEach } from './logic/ForEach'
 import { IsNullOrUndefined } from './logic/IsNullOrUndefined'
-import { IsQuery } from './logic/IsQuery'
 import { IsVariableTrue } from './logic/IsVariableTrue'
 import { LogicalOperator } from './logic/LogicalOperator'
 import { OrGate } from './logic/OrGate'
@@ -33,7 +32,6 @@ import { RandomGate } from './logic/RandomGate'
 import { SwitchGate } from './logic/SwitchGate'
 import { WaitForAll } from './logic/WaitForAll'
 import { WhileLoop } from './logic/WhileLoop'
-import { Classifier } from './ml/Classifier'
 import { Generator } from './ml/Generator'
 import { ImageGeneration } from './ml/ImageGeneration'
 import { SentenceMatcher } from './ml/SentenceMatcher'
@@ -85,9 +83,7 @@ export let components = {
   stringReplacer: () => new StringReplacer(),
   textToSpeech: () => new TextToSpeech(),
   textCompletion: () => new TextCompletion(),
-  Classifier: () => new Classifier(),
   isNullOrUndefined: () => new IsNullOrUndefined(),
-  isQuery: () => new IsQuery(),
   isVariableTrue: () => new IsVariableTrue(),
   request: () => new Request(),
   jupyterNotebook: () => new JupyterNotebook(),
