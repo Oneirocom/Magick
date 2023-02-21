@@ -1,4 +1,3 @@
-import * as banana from '@banana-dev/banana-dev'
 import Rete from 'rete'
 
 import {
@@ -8,17 +7,20 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
 } from '../../types'
+import {
+  BANANA_API_KEY,
+  BANANA_MODEL_KEY,
+} from '../../config'
 import { audioSocket, stringSocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
-
-const apiKey = process.env.BANANA_API_KEY
-const modelKey = process.env.BANANA_MODEL_KEY
 
 const info = 'Speech to Text node, powered by Whisper on Banana ML'
 
 type InputReturn = {
   output: unknown
 }
+
+let banana = null;
 
 export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
   constructor() {
@@ -67,7 +69,10 @@ export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
       mp3BytesString: audio,
     }
 
-    const output = await banana.run(apiKey, modelKey, modelParameters)
+    if (!banana) {
+      banana = await import('@banana-dev/banana-dev')
+    }
+    const output = await banana.run(BANANA_API_KEY, BANANA_MODEL_KEY, modelParameters)
 
     if (!silent) {
       if (!output) node.display('Error: No output returned', output)
