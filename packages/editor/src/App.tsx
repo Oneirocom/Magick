@@ -14,7 +14,7 @@ import 'flexlayout-react/style/dark.css'
 import './design-globals/design-globals.css'
 
 import MainLayout from './components/MainLayout/MainLayout'
-import EventManagerWindow from './workspaces/spells/windows/EventManager'
+import EventWindow from './workspaces/spells/windows/EventWindow'
 import AgentManagerWindow from './workspaces/agents/AgentManagerWindow'
 import SettingsWindow from './workspaces/settings/SettingsWindow'
 
@@ -22,13 +22,15 @@ import FineTuneManager from './screens/FineTuneManager/FineTuneManager'
 import Completions from './screens/FineTuneManager/completions'
 import NewFineTune from './screens/FineTuneManager/screens/NewFineTune'
 import CompletionDetails from './screens/FineTuneManager/completions/CompletionDetails'
+import RequestWindow from './workspaces/spells/windows/RequestWindow'
 
 const singleUserMode = import.meta.env.VITE_APP_SINGLE_USER_MODE || true
 function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route path="/events" element={<EventManagerWindow />} />
+        <Route path="/events" element={<EventWindow />} />
+        <Route path="/requests" element={<RequestWindow />} />
         <Route path="/agents" element={<AgentManagerWindow />} />
         {singleUserMode && <Route path="/settings" element={<SettingsWindow />} />}
         <Route element={<FineTuneManagerLayout />}>
