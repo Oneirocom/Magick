@@ -16,7 +16,7 @@ export const requestSchema = Type.Object(
     duration: Type.Optional(Type.Number()),
     status: Type.Optional(Type.String()),
     statusCode: Type.Optional(Type.Number()),
-    created_at: Type.Number(),
+    created_at: Type.Optional(Type.Number()),
     provider: Type.String(),
     model: Type.Optional(Type.String()),
     parameters: Type.Optional(Type.String()),
