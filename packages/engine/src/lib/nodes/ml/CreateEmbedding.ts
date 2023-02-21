@@ -49,6 +49,7 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
         node: NodeData,
         inputs: MagickWorkerInputs,
         _outputs: MagickWorkerOutputs,
+        { projectId }: { projectId: string },
     ) {
         const content = (inputs['content'] && inputs['content'][0]) as string
 
@@ -57,7 +58,7 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
         const data = await makeEmbedding({
             input: content,
             model: 'text-embedding-ada-002',
-        })
+        }, projectId)
 
         const [responseData] = data?.data
         const embedding = responseData.embedding

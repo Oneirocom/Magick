@@ -11,6 +11,8 @@ const pluginsJsExamplePath = path.join(__dirname, 'project.example.js');
 
 const uuid = generateUuid();
 
+const defaultProjectId = "bb1b3d24-84e0-424e-b4f1-57603f307a88"
+
 let projectId = process.env.PROJECT_ID
 
 if(!projectId) {
@@ -22,10 +24,10 @@ if(!projectId) {
   }
   // read the .env.local file and replace {uuid}
   const envLocalFile = fs.readFileSync(envLocalPath, 'utf8');
-  let newEnvLocalFile = envLocalFile.replace('{uuid}', process.env.DEFAULT_PROJECT_ID);
+  let newEnvLocalFile = envLocalFile.replace('{uuid}', defaultProjectId);
 
   if (!newEnvLocalFile.includes('PROJECT_ID')) {
-    newEnvLocalFile += `\nPROJECT_ID=${process.env.DEFAULT_PROJECT_ID}`;
+    newEnvLocalFile += `\nPROJECT_ID=${defaultProjectId}`;
   }
 
   fs.writeFileSync(envLocalPath, newEnvLocalFile);
