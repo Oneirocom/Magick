@@ -1,5 +1,4 @@
 import Agent from './Agent'
-import { ServerError } from '@magickml/server-core'
 import { projectId, ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
 import { app } from './app'
 
@@ -78,8 +77,6 @@ export class World {
     //If Discord Enabled is True replace the old Agent with a new one
     for (const i in newAgents){
       if (newAgents[i].data.discord_enabled){
-        let temp_agent = this.getAgent(newAgents[i].id)
-        await temp_agent.onDestroy()
         this.addAgent(newAgents[i])
       } 
     }
@@ -220,8 +217,6 @@ export class World {
     }
   }
 
-  async onDestroy() {}
-
   async addAgent(obj: any) {
     const data = {...obj.data, id: obj.id, enabled: obj.enabled, dirty: obj.dirty, spells: obj.spells, updated_at: obj.updated_at}
     console.log("SERVER", data.id)
@@ -232,7 +227,6 @@ export class World {
 
   async removeAgent(id: number) {
     if (this.objectExists(id)) {
-      await this.objects[id]?.onDestroy()
       this.objects[id] = null
       delete this.objects[id]
     }
