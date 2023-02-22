@@ -6,6 +6,7 @@ import { useConfig } from '../../contexts/ConfigProvider'
 /* Import All Agent Window Components */
 import { pluginManager } from '@magickml/engine'
 import { Grid } from '@mui/material'
+import AgentPubVariables from './AgentPubVariables'
 import styles from './AgentWindowStyle.module.css'
 
 const RenderComp = props => {
@@ -36,6 +37,10 @@ const AgentWindow = ({
   const agentDatVal = useRef(null)
   const [agentDataState, setAgentDataState] = useState<any>({})
   const [spellList, setSpellList] = useState<any[]>([])
+  const selectedSpellPublicVars = Object.values(
+    spellList.find(spell => spell.name === root_spell)?.graph.nodes || {}
+  ).filter(node => node?.data?.Public)
+
   useEffect(() => {
     if (!loaded) {
       ;(async () => {
@@ -68,21 +73,13 @@ const AgentWindow = ({
   }, [loaded])
 
   useEffect(() => {
-    ;(async () => {
-      const params = {  
-        projectId : config.projectId
-      };
-      console.log(params)
-      var res
-      try {
-        res = await axios.get(`${config.apiUrl}/spells`,{params})
-      } catch(error) {
-        console.log("ERROR: ", error)
-      }
+    (async () => {
+      const res = await fetch(`${config.apiUrl}/spells?projectId=${config.projectId}`);
+      const json = await res.json();
       
-      console.log('res', res.data)
-      console.log('spellList', res.data)
-      setSpellList(res.data?.data)
+      console.log('res', json)
+      console.log('spellList', json)
+      setSpellList(json.data)
     })()
   }, [])
 
@@ -185,7 +182,7 @@ const AgentWindow = ({
   return !loaded ? (
     <>Loading...</>
   ) : (
-    <div className={styles["agent-window"]}>
+    <div className={styles['agent-window']}>
       <div className="form-item">
         <span className="form-item-label">Enabled</span>
         <input
@@ -240,6 +237,10 @@ const AgentWindow = ({
               </div>
             </Grid>
           </Grid>
+
+          {selectedSpellPublicVars.length !== 0 && (
+            <AgentPubVariables publicVars={selectedSpellPublicVars} />
+          )}
 
           {loop_enabled && (
             <>
