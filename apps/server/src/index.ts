@@ -50,6 +50,7 @@ async function init() {
   })()
   try{
     new World()
+    console.log("CREATED WORLD")
     new worldManager()
   } catch(e){
     app.service('agents').hooks([

@@ -72,7 +72,6 @@ export class World {
   async updateAgent() {
     this.newAgents = (await app.service('agents').find(query)).data
     console.log('newAgents', this.newAgents)
-    console.log('oldAgents', this.oldAgents)
     const newAgents = this.newAgents
     delete newAgents['updated_at']
     const oldAgents = this.oldAgents ?? []
@@ -81,9 +80,22 @@ export class World {
     if (JSON.stringify(newAgents) === JSON.stringify(oldAgents)) return // They are the same
     //If Discord Enabled is True replace the old Agent with a new one
     for (const i in newAgents){
-      if (newAgents[i].data.discord_enabled){
+      try {
         let temp_agent = this.getAgent(newAgents[i].id)
+        console.log("Inside TRY ")
         await temp_agent.onDestroy()
+      } catch {
+        console.log("Client Does not exist")
+      }
+      if (newAgents[i].data.discord_enabled){
+        try {
+          //Get the agent which was updated.
+          let temp_agent = this.getAgent(newAgents[i].id)
+          //Delete the Agent
+          await temp_agent.onDestroy()
+        } catch(e) {
+          console.log("Couldn't delete the Discord Client.!! Caught Error: ",e)
+        }
         this.addAgent(newAgents[i])
       } 
     }
@@ -106,7 +118,7 @@ export class World {
         undefined
       ) {
         if (newAgents[i].enabled) {
-          await this.addAgent(newAgents[i])
+          if (!(newAgents[i].data.discord_enabled)) await this.addAgent(newAgents[i])
         }
       }
     }
