@@ -57,6 +57,8 @@ const TextEditor = props => {
     const startIndex = textLines.findIndex(line => line.startsWith('function'))
     // get the first line that starts with }
     const endIndex = textLines.findIndex(line => line.startsWith('}'))
+
+    if(startIndex === -1 || endIndex === -1) return
     
     // remove the lines in textLines starting at StartIndex and ending at EndIndex
     // replace with the inputs
@@ -210,7 +212,7 @@ return {
     inputs = [],
     outputs = []
   ) => {
-    let prompt = language === 'text' ? functionText : 
+    let prompt = language === 'plaintext' ? functionText : 
     `// The following is a function written in ${language}.
 
 // Inputs: input1, input2
@@ -237,17 +239,18 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
       })
       .join('')
 
-    if (inputs) {
+    if (inputs.length > 0) {
       prompt = prompt + `\n// Inputs: ${inputString}`
     }
 
-    if (outputs) {
+    if (outputs.length > 0) {
       prompt = prompt + `\n// Outputs: ${outputString}`
     }
 
-    prompt = prompt + `\n// Task: ${functionText}\n`
+    prompt = language === 'plaintext' ? prompt :
+      prompt + `\n// Task: ${functionText}\n`
 
-    prompt = language === 'text' ? prompt :
+    prompt = language === 'plaintext' ? prompt :
       prompt +
       '\n' +
       (language === 'python' ? 'def worker (inputs, data)' : `function worker ({${inputString}}, data)`) + 
@@ -273,12 +276,12 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
     console.log('inspectorData.data', inspectorData?.data)
 
     // @ts-ignore
-    inspectorData?.data.inputs.forEach((input: any) => {
+    inspectorData?.data?.inputs?.forEach((input: any) => {
       _inputs.push(input.socketKey)
     })
 
     // @ts-ignore
-    inspectorData?.data.outputs.forEach((output: any) => {
+    inspectorData?.data?.outputs?.forEach((output: any) => {
       _outputs.push(output.socketKey)
     })
 
@@ -306,11 +309,11 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
       }
     )
 
-    const d = language === 'python' ? '#' : '//'
+    const d = language === 'python' ? '# ' : '// '
     
-    let header = `
-${d} Task: ${functionText}
-${d} Outputs: ${_outputs.join(', ')}
+    let header = language === 'plaintext' ? `Task: ${functionText}\n` :
+`${d}Task: ${functionText}
+${d}Outputs: ${_outputs.join(', ')}
 ${language === 'python' ? 'def ' : 'function '
 + `worker ({\n` + _inputs.map(input => `  ${input},\n`).join('') + `}, data)`
 + (language === 'python' ? ':' : ' {') + '\n'}`
