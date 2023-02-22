@@ -75,6 +75,7 @@ const DiscordPlugin = new Plugin({
   nodes: [DiscordInput, DiscordOutput], 
   services: {'DiscordPlugin': UploadService},
   agentComponents: [DiscordAgentWindow], 
+  startKey: 'discord_enabled',
   windowComponents: [],
   serverInit: null,
   serverRoutes: null,

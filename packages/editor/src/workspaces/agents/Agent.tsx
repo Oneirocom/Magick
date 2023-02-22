@@ -74,7 +74,17 @@ const AgentWindow = ({
 
   useEffect(() => {
     ;(async () => {
-      const res = await axios.get(`${config.apiUrl}/spells`)
+      const params = {
+        projectId: config.projectId,
+      }
+      console.log(params)
+      var res
+      try {
+        res = await axios.get(`${config.apiUrl}/spells`, { params })
+      } catch (error) {
+        console.log('ERROR: ', error)
+      }
+
       console.log('res', res.data)
       console.log('spellList', res.data)
       setSpellList(res.data?.data)
@@ -212,16 +222,6 @@ const AgentWindow = ({
                       </option>
                     ))}
                 </select>
-              </div>
-            </Grid>
-            <Grid item xs={3}>
-              <div className="form-item">
-                <span className="form-item-label">OpenAI Key</span>
-                <KeyInput
-                  value={openai_api_key}
-                  setValue={setOpenaiApiKey}
-                  secret={true}
-                />
               </div>
             </Grid>
             <Grid item xs={3}>
