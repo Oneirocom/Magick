@@ -16,22 +16,18 @@ import { processCode } from '../../functions/processCode'
 const defaultCode = `
 # inputs: dictionary of inputs based on socket names outside the worker function
 # data: internal data of the node to read or write to nodes data state
-# state: access to the current game state in the state manager window. Return state to update the state.
 
 inputs = {}
-def worker(inputs, data, state):
+def worker(inputs, data):
   # Keys of the object returned must match the names
   # of your outputs you defined.
-  # To update the state, you must return the modified state.
   outputs = dict(output1=input1, output2=input2)
-  return outputs, data, state
-worker(inputs, data, state)
+  return outputs, data
 `
 
 const info = `The code component is your swiss army knife when other components won't cut it.  You can define any number of inputs and outputs on it, and then write a custom worker function.  You have access to the data plugged into the inputs you created on your component, and can send data out along your outputs.
 Please note that the return of your function must be an object whose keys are the same value as the names given to your output sockets.  The incoming inputs argument is an object whose keys are the names you defined, and each is an array.
 `
-
 
 export class Python extends MagickComponent<unknown> {
   

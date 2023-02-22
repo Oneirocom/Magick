@@ -169,7 +169,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       return result
     } else if (language == 'python') {
       try {
-        const result = await runPython(code, flattenedInputs, data)
+        const result = await runPython(code+'\n worker(inputs, data)', flattenedInputs, data)
 
         return result
       } catch (err) {

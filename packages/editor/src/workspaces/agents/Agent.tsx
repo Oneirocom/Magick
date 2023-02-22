@@ -74,20 +74,14 @@ const AgentWindow = ({
 
   useEffect(() => {
     ;(async () => {
-      const params = {
-        projectId: config.projectId,
-      }
-      console.log(params)
-      var res
-      try {
-        res = await axios.get(`${config.apiUrl}/spells`, { params })
-      } catch (error) {
-        console.log('ERROR: ', error)
-      }
+      const res = await fetch(
+        `${config.apiUrl}/spells?projectId=${config.projectId}`
+      )
+      const json = await res.json()
 
-      console.log('res', res.data)
-      console.log('spellList', res.data)
-      setSpellList(res.data?.data)
+      console.log('res', json)
+      console.log('spellList', json)
+      setSpellList(json.data)
     })()
   }, [])
 

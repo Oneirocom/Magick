@@ -40,8 +40,9 @@ import folder from './icons/folder.svg'
 import close from './icons/close.svg'
 import tiles from './icons/tiles.svg'
 import trash from './icons/trash.svg'
-import dangerTrash from './icons/dangerTrash.svg'
+import dangerTrash from './icons/danger-trash.svg'
 import nodeLock from './icons/node-lock.svg'
+import lock from './icons/lock.svg'
 
 const icons = {
   account,
@@ -72,7 +73,7 @@ const icons = {
   'state-write': stateWrite,
   stop,
   'stop-sign': stopSign,
-  'switch-icon': switchIcon,
+  'switch': switchIcon,
   temperature,
   text,
   time,
@@ -85,7 +86,8 @@ const icons = {
   tiles,
   trash,
   'danger-trash': dangerTrash,
-  'node-lock': nodeLock
+  'node-lock': nodeLock,
+  'lock': lock,
 }
 
 export const componentCategories = {
