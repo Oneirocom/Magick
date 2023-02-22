@@ -1,6 +1,6 @@
 html,
 body {
-  background-color: var(--dark-0);
+  background-color: var(--dark-1);
   color: var(--dark-4);
   overflow: hidden;
   padding: 0;
@@ -158,74 +158,9 @@ button.disabled {
   background-color: var(--primary) !important;
 }
 
-.context-menu {
-  padding: 0 !important;
-  width: var(--c30) !important;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-  z-index: 999999999 !important;
-}
-
-.context-menu .item {
-  box-sizing: border-box;
-  border: 1px solid var(--dark-3) !important;
-  border-top: 0 !important;
-  border-bottom: 0 !important;
-  position: relative !important;
-  display: inline-block !important;
-  background-color: var(--dark-2) !important;
-  padding: var(--extraSmall) !important;
-  padding-left: var(--small) !important;
-  text-transform: capitalize !important;
-  width: var(--c30) !important;
-}
-
-.context-menu .item:hover {
-  background-color: var(--primary) !important;
-}
-
-.context-menu .item:first-child {
-  border-top: 1px solid var(--dark-3) !important;
-}
-
-.context-menu .item:last-child {
-  border-bottom: 1px solid var(--dark-3) !important;
-}
-
-.context-menu .search {
-  box-sizing: border-box;
-  border: 1px solid var(--dark-3) !important;
-  border-bottom: 0 !important;
-  position: relative !important;
-  display: inline-block !important;
-  background-color: var(--dark-2) !important;
-  padding: var(--extraSmall) !important;
-  text-transform: capitalize !important;
-}
-
-.context-menu .search input {
-  box-sizing: border-box !important;
-  padding: var(--extraSmall) !important;
-  /* not using a var here to optically correct for base + cap of typeface */
-  background-color: var(--dark-2) !important;
-  padding-left: var(--small) !important;
-  padding-right: var(--small) !important;
-  color: #fff !important;
-  border-radius: 4px !important;
-  cursor: default !important;
-  border: 1px solid var(--dark-4) !important;
-  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1) !important;
-  font-family: 'IBM Plex Mono', monospace !important;
-  font-size: 11px !important;
-  height: var(--c4) !important;
-}
-
-.layout-container {
-  position: relative;
-  height: 100%;
-}
-
 .flexlayout__tab {
   overflow: hidden;
+  background-color: var(--dark-1)!important;
   border-radius: 0px 0px 4px 4px;
   border: 1px solid #333;
   border-top: 0;
@@ -533,11 +468,12 @@ input[type='text']:focus-visible {
   font-size: 0.975rem;
 }
 
-.adminActive div {
-  background-color: #05c807 !important;
-  color: red !important;
-}
-
 .input-title, .output-title, div.item {
     font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
+}
+
+.flexlayout__layout {
+  background-color: var(--dark-2)!important;
+  color: var(--dark-4);
+  font-family: "IBM Plex Mono";
 }

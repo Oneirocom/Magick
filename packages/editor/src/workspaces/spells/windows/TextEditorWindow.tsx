@@ -47,12 +47,12 @@ const TextEditor = props => {
     if (Object.keys(JSON.stringify(inspectorData?.data.inputs)) === lastInputs) return
     setLastInputs(JSON.stringify(inspectorData?.data.inputs))
 
-    const inputs = []
+    const inputs: string[] = []
     inspectorData?.data.inputs?.forEach((input: any) => {
       inputs.push('  ' + input.socketKey + ',')
     })
 
-    const textLines = code.split('\n')
+    const textLines = code?.split('\n') ?? []
     // get the index of the first line that starts with function
     const startIndex = textLines.findIndex(line => line.startsWith('function'))
     // get the first line that starts with }
@@ -99,7 +99,7 @@ const TextEditor = props => {
 
   useEffect(() => {
     console.log('props', props)
-    if (!textEditorData || Object.keys(textEditorData).length === 0) return
+    if (!textEditorData || Object.keys(textEditorData).length === 0 || !textEditorData.data) return
 
     console.log('textEditorData', textEditorData)
 
