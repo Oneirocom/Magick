@@ -182,6 +182,7 @@ export class TextCompletion extends MagickComponent<
 
     if (!success) {
       console.error('Error in text completion', data)
+      node.data.error = true
       throw new Error('Error in text completion')
     }
 
