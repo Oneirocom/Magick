@@ -61,6 +61,7 @@ import { FewshotVariable } from './variable/FewshotVariable'
 import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
 import { GetCachedEmbedding } from './ml/GetCachedEmbedding'
+import { SpeechToText } from './ml/SpeechToText'
 
 import { pluginManager } from '../plugin'
 import { EventsToConversation } from './events/EventsToConversation'
@@ -130,8 +131,9 @@ export let components = {
   orGate: () => new OrGate(),
   log: () => new Log(),
   queryGoogle: () => new QueryGoogle(),
-  ImageGeneration: () => new ImageGeneration(),
-  Generator: () => new Generator(),
+  imageGeneration: () => new ImageGeneration(),
+  generator: () => new Generator(),
+  speechToText: () => new SpeechToText(),
 }
 
 function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {

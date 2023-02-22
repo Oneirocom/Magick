@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { calculateEmbeddingCost, CompletionModel } from '@magickml/cost-calculator'
+import { calculateEmbeddingCost, EmbeddingModel } from '@magickml/cost-calculator'
 
 import { OPENAI_API_KEY, OPENAI_ENDPOINT } from '../config';
 import { saveRequest } from './saveRequest';
@@ -40,7 +40,10 @@ export async function makeEmbedding(
 
     const { total_tokens } = resp.data.usage
 
-    const totalCost = calculateEmbeddingCost({tokens: total_tokens, model: CompletionModel.ADA })
+    const totalCost = calculateEmbeddingCost({tokens: total_tokens, model: EmbeddingModel.ADA_002 })
+
+    console.log('total_tokens', total_tokens)
+    console.log('totalCost', totalCost)
 
     saveRequest({
       projectId: projectId,
@@ -50,10 +53,10 @@ export async function makeEmbedding(
       statusCode: resp.status,
       status: resp.statusText,
       model: model,
-      parameters: null,
+      parameters: '{}',
       type: "embedding",
       provider: "openai",
-      cost: totalCost,
+      cost: totalCost ?? 0,
       hidden: false,
       processed: false,
     })

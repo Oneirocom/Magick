@@ -18,7 +18,7 @@ const RequestWindow = () => {
 
   const fetchRequests = async () => {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_APP_API_URL}/request?projectId=${config.projectId}`
+      `${import.meta.env.VITE_APP_API_URL}/request?hidden=false&projectId=${config.projectId}`
     )
     console.log('fetching events', data)
     setRequests(data.data)

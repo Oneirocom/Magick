@@ -42,9 +42,10 @@ export class Agent {
     })
 
     this.generateVoices(data);
+    console.log(data);
     (async () => {
       const spell = (await app.service('spells').find({
-        query: { projectId: data.projectId, name: data.root_spell },
+        query: { projectId: data.projectId}
       })).data[0]
 
       const spellRunner = await this.spellManager.load(spell)
@@ -57,7 +58,8 @@ export class Agent {
       const agentStartMethods = pluginManager.getAgentStartMethods();
       for (const method of Object.keys(agentStartMethods)) {
         console.log('method', method)
-        await agentStartMethods[method]({ ...data, agent: this, spellRunner })
+        console.log(data.discord_enabled)
+        if(data.discord_enabled) await agentStartMethods[method]({ ...data, agent: this, spellRunner })
       }
     })()
   }
@@ -99,7 +101,7 @@ export class Agent {
 
   async onDestroy() {
     const agentStopMethods = pluginManager.getAgentStopMethods();
-    console.log('agentStartMethods', agentStopMethods)
+    console.log('agentStopMethods', agentStopMethods)
     for (const method of Object.keys(agentStopMethods)) {
       console.log('method', method)
       agentStopMethods[method](this)
@@ -108,7 +110,7 @@ export class Agent {
 
   async generateVoices(data: any) {
     if (data.use_voice) {
-      const phrases = data.voice_default_phrase
+      const phrases = data.voice_default_phrases
       if (phrases && phrases.length > 0) {
         const pArr = phrases.split('|')
         for (let i = 0; i < pArr.length; i++) {
