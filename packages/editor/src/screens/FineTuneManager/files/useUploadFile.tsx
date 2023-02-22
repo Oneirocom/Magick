@@ -16,6 +16,7 @@ export const MimeTypes = [
   'application/json',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   'text/csv',
+  '.jsonl',
 ]
 
 export type Enforce = {
@@ -83,7 +84,6 @@ async function parseAndValidate(
   file: File,
   enforce: Enforce
 ): Promise<Array<{ [key: string]: string }>> {
-  console.log('parsing file')
   const records = await parseFile(file, enforce)
   validateRecords(records, enforce)
   console.log({ records })
@@ -94,12 +94,14 @@ async function parseFile(
   file: File,
   enforce: Enforce
 ): Promise<Array<{ [key: string]: string }>> {
-  const parser = {
-    'application/json': parseJSONL,
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-      parseExcel,
-    'text/csv': parseCSV,
-  }[file.type]
+  const parser =
+    {
+      'application/json': parseJSONL,
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+        parseExcel,
+      'text/csv': parseCSV,
+    }[file.type] ||
+    (file.name.endsWith('.jsonl') && parseJSONL)
   if (!parser) throw new Error(`Unsupported file type ${file.type}`)
   console.log('returning parser')
   return await parser(file, enforce)
@@ -110,7 +112,7 @@ async function parseJSONL(file: File) {
     console.log('parsing jsonl')
     const text = await file.text()
     const lines = text.split('\n')
-    return lines.map(line => JSON.parse(line))
+    return lines.filter(v => v != '').map(line => JSON.parse(line))
   } catch (error) {
     console.log({ error })
     throw new Error('This is not a JSONL file')
