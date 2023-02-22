@@ -1,4 +1,5 @@
 import Agent from './Agent'
+import { ServerError } from '@magickml/server-core'
 import { projectId, ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
 import { app } from './app'
 
@@ -20,6 +21,8 @@ function initEntityLoop(update: Function, lateUpdate: Function) {
 
   async function entityLoop(update: Function, lateUpdate: Function) {
     const agents = (await app.service('agents').find(query)).data
+    console.log(query)
+    console.log('agents', agents)
 
     const now = new Date()
     const updated = []
@@ -68,6 +71,8 @@ export class World {
 
   async updateAgent() {
     this.newAgents = (await app.service('agents').find(query)).data
+    console.log('newAgents', this.newAgents)
+    console.log('oldAgents', this.oldAgents)
     const newAgents = this.newAgents
     delete newAgents['updated_at']
     const oldAgents = this.oldAgents ?? []
@@ -77,6 +82,8 @@ export class World {
     //If Discord Enabled is True replace the old Agent with a new one
     for (const i in newAgents){
       if (newAgents[i].data.discord_enabled){
+        let temp_agent = this.getAgent(newAgents[i].id)
+        await temp_agent.onDestroy()
         this.addAgent(newAgents[i])
       } 
     }
@@ -217,6 +224,8 @@ export class World {
     }
   }
 
+  async onDestroy() {}
+
   async addAgent(obj: any) {
     const data = {...obj.data, id: obj.id, enabled: obj.enabled, dirty: obj.dirty, spells: obj.spells, updated_at: obj.updated_at}
     console.log("SERVER", data.id)
@@ -227,6 +236,7 @@ export class World {
 
   async removeAgent(id: number) {
     if (this.objectExists(id)) {
+      await this.objects[id]?.onDestroy()
       this.objects[id] = null
       delete this.objects[id]
     }
