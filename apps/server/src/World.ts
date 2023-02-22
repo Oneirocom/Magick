@@ -66,7 +66,6 @@ export class World {
     this.id = 0
     console.log('creating world')
     World.instance = this
-    throw Error("BADDSD")
     this.onCreate()
   }
 

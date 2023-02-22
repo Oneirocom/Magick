@@ -42,7 +42,7 @@ import tiles from './icons/tiles.svg'
 import trash from './icons/trash.svg'
 import dangerTrash from './icons/danger-trash.svg'
 import nodeLock from './icons/node-lock.svg'
-import lock from './icons/lock.svg'
+import lock from './icons/Lock.svg'
 
 const icons = {
   account,
@@ -87,7 +87,7 @@ const icons = {
   trash,
   'danger-trash': dangerTrash,
   'node-lock': nodeLock,
-  'lock': switchIcon,
+  'lock': lock,
 }
 
 export const componentCategories = {
