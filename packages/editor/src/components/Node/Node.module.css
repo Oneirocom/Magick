@@ -37,7 +37,7 @@
   color: var(--dark-4);
 }
 .node-id.error {
-  color: var(--red);
+  color: #ff0000;
 }
 .node-id.success {
   color: var(--green);
