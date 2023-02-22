@@ -95,7 +95,6 @@
     "multer": "*",
     "next": "^13.0.0",
     "next-redux-wrapper": "7.0.2",
-    "node-opus": "^0.3.3",
     "notistack": "3.0.0-alpha.11",
     "openai": "^3.1.0",
     "ot-json0": "^1.1.0",
