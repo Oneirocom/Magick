@@ -87,7 +87,7 @@ const icons = {
   trash,
   'danger-trash': dangerTrash,
   'node-lock': nodeLock,
-  'lock': lock,
+  'lock': switchIcon,
 }
 
 export const componentCategories = {
