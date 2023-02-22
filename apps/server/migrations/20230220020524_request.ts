@@ -4,14 +4,20 @@ import type { Knex } from 'knex'
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('request', (table) => {
     table.uuid('id').primary()
-    table.integer('projectId').notNullable()
-    table.jsonb('data').notNullable()
+    table.string('projectId').notNullable()
+    table.string('requestData').notNullable()
+    table.string('responseData')
+    table.integer('duration').notNullable()
+    table.string('status')
+    table.integer('statusCode')
+    table.string('model')
+    table.string('parameters')
     table.timestamp('created_at').defaultTo(knex.fn.now())
     table.string('provider').notNullable()
     table.string('type').notNullable()
     table.boolean('hidden').notNullable().defaultTo(false)
     table.boolean('processed').notNullable().defaultTo(false),
-    table.integer('cost')
+    table.double('cost')
   })
 }
 

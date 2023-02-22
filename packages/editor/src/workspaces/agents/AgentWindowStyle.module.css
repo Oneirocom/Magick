@@ -1,5 +1,12 @@
 .agent-window {
-    margin: 1em;
-    padding: 1em;
-    background-color: #111;
+  margin: 1em;
+  padding: 1em;
+  background-color: #111;
+}
+
+.agentPubVars {
+  padding: 2rem;
+  background: var(--dark-3);
+  color: var(--dark-5);
+  margin-bottom: 20px;
 }

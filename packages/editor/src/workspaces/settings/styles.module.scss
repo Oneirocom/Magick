@@ -1,0 +1,42 @@
+.settings-editor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.child {
+  height: 80%;
+  width: 80%;
+  padding: 2rem 5rem;
+  background: var(--dark-2);
+}
+
+.title {
+  display: flex;
+  font-size: 1.8rem;
+}
+
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.md-margin {
+  margin-left: 1rem;
+}
+
+.icon {
+  font-size: 1.8rem !important;
+  box-shadow: none;
+}
+
+.input {
+  width: 30%;
+  padding: 0.5rem 1rem;
+}
+
+.padHorizontal {
+  padding: 0 1.5rem;
+}

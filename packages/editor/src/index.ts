@@ -13,7 +13,8 @@ import Magick from './screens/Magick/Magick'
 import Contract from './screens/Contract/Contract'
 
 import MainLayout from './components/MainLayout/MainLayout'
-import EventManagerWindow from './workspaces/spells/windows/EventManager'
+import EventWindow from './workspaces/spells/windows/EventWindow'
+import RequestWindow from './workspaces/spells/windows/RequestWindow'
 import AgentManagerWindow from './workspaces/agents/AgentManagerWindow'
 
 import FineTuneManager from './screens/FineTuneManager/FineTuneManager'
@@ -28,7 +29,8 @@ export {
     Contract,
     FineTuneManagerLayout,
     MainLayout,
-    EventManagerWindow,
+    EventWindow,
+    RequestWindow,
     AgentManagerWindow,
     FineTuneManager,
     Completions,

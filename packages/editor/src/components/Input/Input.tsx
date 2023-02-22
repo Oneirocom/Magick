@@ -1,6 +1,8 @@
+import { TextField } from '@mui/material'
+
 const Input = ({ value, onChange = e => {}, style = {}, ...props }) => {
   return (
-    <input
+    <TextField
       style={style}
       value={value}
       type="text"

@@ -14,6 +14,7 @@ export type SocketNameType =
   | 'Object'
   | 'Trigger'
   | 'Event'
+  | 'Audio'
 
 export type SocketType =
   | 'anySocket'
@@ -26,6 +27,7 @@ export type SocketType =
   | 'channelDataSocket'
   | 'triggerAndDataSocket'
   | 'eventSocket'
+  | 'audioSocket'
 
 export const socketNameMap: Record<SocketNameType, SocketType> = {
   'Any type': 'anySocket',
@@ -36,6 +38,7 @@ export const socketNameMap: Record<SocketNameType, SocketType> = {
   Object: 'objectSocket',
   Trigger: 'triggerSocket',
   Event: 'eventSocket',
+  Audio: 'audioSocket',
 }
 
 export const anySocket = new Rete.Socket('Any type')
@@ -46,6 +49,7 @@ export const stringSocket = new Rete.Socket('String')
 export const objectSocket = new Rete.Socket('Object')
 export const triggerSocket = new Rete.Socket('Trigger')
 export const eventSocket = new Rete.Socket('Event')
+export const audioSocket = new Rete.Socket('Audio')
 
 const sockets = [
   numSocket,
@@ -54,6 +58,7 @@ const sockets = [
   arraySocket,
   objectSocket,
   eventSocket,
+  audioSocket,
 ]
 
 sockets.forEach(socket => {

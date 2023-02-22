@@ -261,21 +261,7 @@ const Playtest = ({ tab }) => {
         placeholder="target node"
         creatable={false}
       />
-      <form>
-        <label htmlFor="openai-api-key">API Key</label>
-        <input
-          type="password"
-          id="openai-api-key"
-          name="api-key"
-          value="api-key"
-          onChange={e =>
-            localStorage.setItem(
-              'openai',
-              JSON.stringify({ apiKey: e.target.value })
-            )
-          }
-        />
-      </form>
+
       <button className="small" onClick={onClear}>
         Clear
       </button>

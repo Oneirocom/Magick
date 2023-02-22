@@ -128,7 +128,6 @@ const BasicSelect = ({
     valueContainer: () => ({
       width: '100%',
       display: 'flex',
-      zIndex: 10,
       flex: '1',
       alignItems: 'center',
       fontFamily: 'IBM Plex Mono',

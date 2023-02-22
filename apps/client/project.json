@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/client/src",
   "projectType": "application",
-  "implicitDependencies": ["@magickml/editor", "@magickml/engine", "@magickml/plugin-discord"],
+  "implicitDependencies": ["@magickml/cost-calculator", "@magickml/editor", "@magickml/engine", "@magickml/plugin-discord"],
   "targets": {
     "build": {
       "executor": "@nrwl/vite:build",

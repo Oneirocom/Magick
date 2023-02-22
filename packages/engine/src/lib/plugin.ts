@@ -1,8 +1,6 @@
 export class Plugin {
   name: string
-  // todo better typing
   nodes: any
-  // todo better typing of services
   services: any
   windowComponents: []
   agentComponents: []
@@ -12,11 +10,13 @@ export class Plugin {
     stop: Function
   }
   serverRoutes?: Array<any>
+  startkey: any
   constructor({
     name,
     nodes,
     services,
     windowComponents,
+    startKey,
     agentComponents,
     serverInit,
     agentMethods,
@@ -24,6 +24,7 @@ export class Plugin {
   }) {
     this.name = name
     this.nodes = nodes
+    this.startkey = startKey
     this.services = services
     this.windowComponents = windowComponents
     this.agentComponents = agentComponents
@@ -65,7 +66,7 @@ class PluginManager {
     this.pluginList.forEach(plugin => {
       if (plugin.agentMethods) {
         let obj = {}
-        obj[plugin.name] = plugin.agentMethods.start
+        obj[plugin.startkey] = plugin.agentMethods.start
         agentStartMethods = { ...agentStartMethods, ...obj }
       }
     })
@@ -82,6 +83,7 @@ class PluginManager {
         agentStopMethods = { ...agentStopMethods, ...obj }
       }
     })
+    console.log('getAgentStopMethods', agentStopMethods)
     return agentStopMethods
   }
 

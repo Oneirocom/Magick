@@ -160,6 +160,7 @@ export class discord_client {
     let match
     const emojis = []
     while ((match = reg.exec(message.content)) !== null) {
+      console.log('EMOJIS')
       emojis.push({ name: emoji.getName(match[0]), emoji: match[0] })
       message.content = message.content.replace(
         match[0],
@@ -265,6 +266,8 @@ export class discord_client {
         .replace('!', '')
         .match(client.username_regex)
     const isInDiscussion = this.isInConversation(author.id)
+    console.log('SSS')
+    console.log(content)
     if (!content.startsWith('!') && !otherMention) {
       if (isMention) content = '!ping ' + content.replace(botMention, '').trim()
       else if (isDirectMethion)
@@ -273,7 +276,7 @@ export class discord_client {
         content = '!ping ' + content.replace(client.username_regex, '').trim()
       } else if (isInDiscussion || startConv) content = '!ping ' + content
     }
-
+    console.log(content)
     if (!content.startsWith('!ping')) {
       if (
         this.discussionChannels[channel.id] !== undefined &&
@@ -303,6 +306,7 @@ export class discord_client {
 
     //if the message contains join word, it makes the bot to try to join a voice channel and listen to the users
     if (content.startsWith('!ping')) {
+      console.log('CONTENT STARTS with PING')
       this.sentMessage(author.id)
       const mention = `<@!${client.user.id}>`
       if (
@@ -310,6 +314,7 @@ export class discord_client {
         content.startsWith('!join') ||
         content.startsWith('!ping ' + mention + ' join')
       ) {
+        console.log('MENTIONS JOIN')
         const d = content.split(' ')
         const index = d.indexOf('join') + 1
         console.log('d:', d)
@@ -986,52 +991,60 @@ export class discord_client {
               channel.messages
                 .fetch({ limit: this.client.edit_messages_max_count })
                 .then(async (messages: any[]) => {
-                  messages.forEach(async function (edited: {
-                    id: any
-                    channel: {
-                      send: (
-                        arg0: any,
-                        arg1: { split: boolean }
-                      ) => Promise<any>
-                      stopTyping: () => void
-                    }
-                  }) {
-                    if (edited.id === message_id) {
-                      Object.keys(responses).map(async function (key, index) {
-                        log('response: ' + responses)
-                        log('response: ' + key)
-                        log('response: ' + index)
+                  messages.forEach(
+                    async (edited: {
+                      id: any
+                      channel: {
+                        send: (
+                          arg0: any,
+                          arg1: { split: boolean }
+                        ) => Promise<any>
+                        stopTyping: () => void
+                      }
+                    }) => {
+                      if (edited.id === message_id) {
+                        Object.keys(responses as any).map(
+                          async (key, index) => {
+                            log('response: ' + responses)
+                            log('response: ' + key)
+                            log('response: ' + index)
 
-                        if (
-                          responses !== undefined &&
-                          responses.length <= 2000 &&
-                          responses.length > 0
-                        ) {
-                          let text = this.replacePlaceholders(responses)
-                          msg.edit(text)
-                          this.onMessageResponseUpdated(
-                            channel.id,
-                            edited.id,
-                            msg.id
-                          )
-                        } else if (responses.length >= 2000) {
-                          let text = this.replacePlaceholders(responses)
-                          if (text.length > 0) {
-                            edited.channel
-                              .send(text, { split: true })
-                              .then(async function (msg: { id: any }) {
-                                this.onMessageResponseUpdated(
-                                  channel.id,
-                                  edited.id,
-                                  msg.id
-                                )
-                              })
+                            if (
+                              responses !== undefined &&
+                              responses.length <= 2000 &&
+                              responses.length > 0
+                            ) {
+                              let text = this.replacePlaceholders(
+                                responses as string
+                              )
+                              msg.edit(text)
+                              this.onMessageResponseUpdated(
+                                channel.id,
+                                edited.id,
+                                msg.id
+                              )
+                            } else if (responses?.length >= 2000) {
+                              let text = this.replacePlaceholders(
+                                responses as string
+                              )
+                              if (text.length > 0) {
+                                edited.channel
+                                  .send(text, { split: true })
+                                  .then(async (msg: { id: any }) => {
+                                    this.onMessageResponseUpdated(
+                                      channel.id,
+                                      edited.id,
+                                      msg.id
+                                    )
+                                  })
+                              }
+                            }
                           }
-                        }
-                      })
-                      edited.channel.stopTyping()
+                        )
+                        edited.channel.stopTyping()
+                      }
                     }
-                  })
+                  )
                 })
                 .catch((err: string | boolean) => log(err))
             })
@@ -1235,108 +1248,79 @@ export class discord_client {
         tiktalknet_url,
       } = this
 
-      if (typeof window !== 'undefined') {
+      if (typeof window === 'undefined') {
         const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
           await import('./discord-voice')
         recognizeSpeech = _recognizeSpeech
-        initSpeechClient({
+        this.client = initSpeechClient({
           client,
           discord_bot_name,
           agent,
           spellRunner,
-          voiceProvider: voice_provider,
-          voiceCharacter: voice_character,
-          languageCode: voice_language_code,
+          voice_provider,
+          voice_character,
+          voice_language_code,
           tiktalknet_url,
         })
+
+        if (typeof window !== 'undefined') {
+          const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
+            await import('./discord-voice')
+          recognizeSpeech = _recognizeSpeech
+          initSpeechClient({
+            client,
+            discord_bot_name,
+            agent,
+            spellRunner,
+            voiceProvider: voice_provider,
+            voiceCharacter: voice_character,
+            languageCode: voice_language_code,
+            tiktalknet_url,
+          })
+        }
       }
+
+      this.client.on(
+        'messageCreate',
+        this.messageCreate.bind(null, this.client)
+      )
+      // this.client.on('messageDelete', this.messageDelete.bind(null, this.client))
+      // this.client.on('messageUpdate', this.messageUpdate.bind(null, this.client))
+      // this.client.on(
+      //   'presenceUpdate',
+      //   this.presenceUpdate.bind(null, this.client)
+      // )
+
+      // this.client.on(
+      //   'interactionCreate',
+      //   async (interaction: string | boolean) => {
+      //     log('Handling interaction', interaction)
+      //     this.handleSlashCommand(this.client, interaction)
+      //   }
+      // )
+      this.client.on(
+        'guildMemberAdd',
+        async (user: { user: { id: any; username: any } }) => {
+          this.handleGuildMemberAdd(user)
+        }
+      )
+      this.client.on('guildMemberRemove', async (user: any) => {
+        this.handleGuildMemberRemove(user)
+      })
+      this.client.on('messageReactionAdd', async (reaction: any, user: any) => {
+        this.handleMessageReactionAdd(reaction, user)
+      })
+
+      this.client.login(token)
     }
 
-    this.client.on('messageCreate', this.messageCreate.bind(null, this.client))
-    // this.client.on('messageDelete', this.messageDelete.bind(null, this.client))
-    // this.client.on('messageUpdate', this.messageUpdate.bind(null, this.client))
-    // this.client.on(
-    //   'presenceUpdate',
-    //   this.presenceUpdate.bind(null, this.client)
-    // )
+    discussionChannels = {}
 
-    // this.client.on(
-    //   'interactionCreate',
-    //   async (interaction: string | boolean) => {
-    //     log('Handling interaction', interaction)
-    //     this.handleSlashCommand(this.client, interaction)
-    //   }
-    // )
-    this.client.on(
-      'guildMemberAdd',
-      async (user: { user: { id: any; username: any } }) => {
-        this.handleGuildMemberAdd(user)
+    const sendMessageToChannel = (channelId: any, msg: any) => {
+      const channel = await this.client.channels.fetch(channelId)
+      if (channel && channel !== undefined) {
+        channel.send(msg)
       }
-    )
-    this.client.on('guildMemberRemove', async (user: any) => {
-      this.handleGuildMemberRemove(user)
-    })
-    this.client.on('messageReactionAdd', async (reaction: any, user: any) => {
-      this.handleMessageReactionAdd(reaction, user)
-    })
-
-    // this.client.commands = new Discord.Collection()
-
-    // this.client.commands.set('agents', this.agents)
-    // this.client.commands.set('ban', this.ban)
-    // this.client.commands.set('commands', this.commands)
-    // this.client.commands.set('ping', this.ping)
-    // this.client.commands.set('pingagent', this.pingagent)
-    // this.client.commands.set('setagent', this.setagent)
-    // this.client.commands.set('setname', this.setname)
-    // this.client.commands.set('unban', this.unban)
-
-    // setInterval(() => {
-    //   const channelIds: any[] = []
-
-    //   this.client.channels.cache.forEach(async (channel: { topic: string | undefined; id: string | number } | undefined) => {
-    //     if (!channel || !channel.topic) return
-    //     if (channel === undefined || channel.topic === undefined) return
-    //     if (
-    //       channel.topic.length < 0 ||
-    //       channel.topic.toLowerCase() !== 'daily discussion'
-    //     )
-    //       return
-    //     if (channelIds.includes(channel.id)) return
-
-    //     channelIds.push(channel.id)
-    //     if (
-    //       this.discussionChannels[channel.id] === undefined ||
-    //       !this.discussionChannels
-    //     ) {
-    //       this.discussionChannels[channel.id] = {
-    //         timeout: setTimeout(() => {
-    //           delete this.discussionChannels[channel.id]
-    //         }, 1000 * 3600 * 4),
-    //         responded: false,
-    //       }
-    //       // const resp = await spellRunner(
-    //       //   'Tell me about ' + 'butterlifes',
-    //       //   'bot',
-    //       //    this.discord_bot_name ?? 'Agent',
-    //       //   'discord',
-    //       //   message.channel.id,
-    //       //   this.spell_handler,
-    //       // )
-    //       // channel.send(resp)
-    //     }
-    //   })
-    // }, 1000 * 3600)
-
-    this.client.login(token)
-  }
-
-  discussionChannels = {}
-
-  async sendMessageToChannel(channelId: any, msg: any) {
-    const channel = await this.client.channels.fetch(channelId)
-    if (channel && channel !== undefined) {
-      channel.send(msg)
     }
   }
 }

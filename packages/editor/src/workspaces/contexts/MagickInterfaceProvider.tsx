@@ -175,7 +175,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       return result
     } else if (language == 'python') {
       try {
-        const result = await runPython(code, flattenedInputs, data)
+        const result = await runPython(code+'\n worker(inputs, data)', flattenedInputs, data)
 
         return result
       } catch (err) {
@@ -197,46 +197,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const clearTextEditor = () => {
     publish($TEXT_EDITOR_CLEAR(tab.id))
   }
-
-  const queryGoogle = async (query: string) => {
-    const url = `${config.apiUrl}/query_google`
-    const response = await axios.post(url, {
-      query,
-    })
-
-    const summary = response.data.summary
-    const links = response.data.links.join('\n')
-    console.log('summary is ', summary)
-
-    return { summary, links }
-  }
-
-  const completion = async (body: CompletionBody) => {
-    const url = `${VITE_APP_API_URL}/text_completion`
-
-    const apiKey = window.localStorage.getItem('openai-api-key')
-
-    const openAICredentials = window.localStorage.getItem('openai')
-    const resp = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...body,
-        apiKey: openAICredentials ? JSON.parse(openAICredentials).apiKey : '',
-      }),
-    })
-
-    const data = await resp.json()
-
-    console.log('resp.data is ', data)
-
-    const { success, choice } = data
-
-    return { success, choice }
-  }
-
   const publicInterface = {
     env,
     onTrigger,
@@ -254,10 +214,8 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     processCode,
     runSpell,
     refreshEventTable,
-    queryGoogle,
     sendToAvatar,
     getSpell,
-    completion,
     getCurrentSpell,
   }
 

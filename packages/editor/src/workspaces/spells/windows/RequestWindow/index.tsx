@@ -1,34 +1,34 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import EventTable from './EventTable'
+import RequestTable from './RequestTable'
 import { useConfig } from '../../../../contexts/ConfigProvider'
 
-const EventManagerWindow = () => {
+const RequestWindow = () => {
   const config = useConfig()
-  const [events, setEvents] = useState(null)
+  const [requests, setRequests] = useState(null)
 
   useEffect(() => {
-    fetchEvents()
+    fetchRequests()
     console.log('fetching events')
   }, [])
 
   const resetEvents = async () => {
-    await fetchEvents()
+    await fetchRequests()
   }
 
-  const fetchEvents = async () => {
+  const fetchRequests = async () => {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_APP_API_URL}/events?projectId=${config.projectId}`
+      `${import.meta.env.VITE_APP_API_URL}/request?hidden=false&projectId=${config.projectId}`
     )
     console.log('fetching events', data)
-    setEvents(data.data)
+    setRequests(data.data)
   }
 
   return (
     <div className="event-container" style={{paddingBottom: "1em", width: "100%", height: "100vh", "overflow": "scroll"}}>
-      {events && <EventTable events={events} updateCallback={resetEvents} />}
+      {requests && <RequestTable requests={requests} updateCallback={resetEvents} />}
     </div>
   )
 }
 
-export default EventManagerWindow
+export default RequestWindow
