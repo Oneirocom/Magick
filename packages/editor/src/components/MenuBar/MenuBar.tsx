@@ -194,7 +194,7 @@ const MenuBar = () => {
         },
       },
     },
-    windows: {
+    window: {
       items: {
         text_editor: {
           onClick: onTextEditorCreate,
