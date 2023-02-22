@@ -49,15 +49,24 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
         node: NodeData,
         inputs: MagickWorkerInputs,
         _outputs: MagickWorkerOutputs,
+        { projectId }: { projectId: string },
     ) {
         const content = (inputs['content'] && inputs['content'][0]) as string
-
+        console.log('projectId', projectId)
         if (!content) return console.log('Content is null, not storing event')
 
         const data = await makeEmbedding({
             input: content,
             model: 'text-embedding-ada-002',
-        })
+        }, projectId)
+
+        console.log('data', data)
+
+        if(!data || !data.success) {
+            return {
+                embedding: null
+            }
+        }
 
         const [responseData] = data?.data
         const embedding = responseData.embedding

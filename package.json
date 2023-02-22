@@ -22,7 +22,8 @@
     "@types/react": "18.0.2"
   },
   "dependencies": {
-    "@discordjs/voice": "^0.9.0",
+    "@banana-dev/banana-dev": "^4.0.0",
+    "@discordjs/voice": "^0.14.0",
     "@emotion/styled": "^11.10.5",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
@@ -126,7 +127,6 @@
     "regenerator-runtime": "^0.13.11",
     "rete": "github:Oneirocom/rete",
     "rete-connection-plugin": "^0.9.0",
-    "rete-context-menu-plugin": "github:Oneirocom/context-menu-plugin",
     "rollup-plugin-ignore": "^1.0.10",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "serp": "^2.2.2",
@@ -157,6 +157,9 @@
     "xlsx": "^0.18.5",
     "xmldoc": "^1.2.0",
     "xvfb": "0.4.0"
+  },
+  "peerDependencies": {
+    "jsdom": "^21.1.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.18.6",

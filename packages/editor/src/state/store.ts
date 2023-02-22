@@ -55,8 +55,12 @@ export const getStore = config => {
       }).concat(rootApi.middleware),
   })
   setupListeners(store.dispatch)
+  persistStore(store)
+
   return store
 }
+
+// export const persistedStore = persistStore(store)
 
 // TODO: fix hard types here and replace the any
 // these types were causing a race condition on a lazy store load

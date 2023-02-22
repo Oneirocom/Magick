@@ -17,8 +17,7 @@ import { processCode } from '../../functions/processCode'
 const defaultCode = `
 // inputs: dictionary of inputs based on socket names
 // data: internal data of the node to read or write to nodes data state
-// state: access to the current game state in the state manager window. Return state to update the state.
-function worker(inputs, data, state) {
+function worker(inputs, data) {
   // Keys of the object returned must match the names
   // of your outputs you defined.
   // To update the state, you must return the modified state.

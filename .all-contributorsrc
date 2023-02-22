@@ -108,6 +108,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "matei3d",
+      "name": "Matei Anghel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45219403?v=4",
+      "profile": "https://matei3d.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

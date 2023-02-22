@@ -5,7 +5,6 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  EngineContext,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
@@ -123,30 +122,45 @@ export class TextCompletion extends MagickComponent<
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-  ) {
+    { projectId }: { projectId: string }
+  ){
+    
     const prompt = inputs['string'][0]
+    
     const settings = ((inputs.settings && inputs.settings[0]) ?? {}) as any
+    
     const modelName = settings.modelName ?? (node?.data?.modelName as string)
+    
     const temperatureData =
       settings.temperature ?? (node?.data?.temperature as string)
     const temperature = parseFloat(temperatureData)
+    
     const maxTokensData =
       settings.max_tokens ?? (node?.data?.max_tokens as string)
     const max_tokens = parseInt(maxTokensData)
+    
     const topPData = settings.top_p ?? (node?.data?.top_p as string)
     const top_p = parseFloat(topPData)
+
     const frequencyPenaltyData =
       settings.frequency_penalty ?? (node?.data?.frequency_penalty as string)
-    const frequency_penalty = parseFloat(frequencyPenaltyData)
+    const frequency_penalty = parseFloat((frequencyPenaltyData ?? 0))  // Filtering out null inputs. Issue #208
+    
     const presencePenaltyData =
       settings.presence_penalty ?? (node?.data?.presence_penalty as string)
-    const presence_penalty = parseFloat(presencePenaltyData)
-    const stop = settings.stop ?? (node?.data?.stop as string).split(', ')
+    const presence_penalty = parseFloat((presencePenaltyData ?? 0))  // Filtering out null inputs. Issue #208
+    
+    const stopData = settings.stop ?? (node?.data?.stop as string)
+    const stop = (stopData ?? " ").split(', ') // Filtering out null inputs. Issue #208
+
+    
+    
     for (let i = 0; i < stop.length; i++) {
       if (stop[i] === '\\n') {
         stop[i] = '\n'
       }
     }
+
     const filteredStop = stop.filter(function (el: any) {
       return el != null && el !== undefined && el.length > 0
     })
@@ -162,7 +176,7 @@ export class TextCompletion extends MagickComponent<
       stop: filteredStop,
     }
 
-    const data = await makeCompletion(body)
+    const data = await makeCompletion(body, projectId)
 
     const { success, choice } = data
 

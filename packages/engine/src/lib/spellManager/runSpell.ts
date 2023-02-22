@@ -41,6 +41,7 @@ class RunSpell {
       module: this.module,
       magick: this.magickInterface,
       silent: true,
+      projectId: this.currentSpell.projectId,
     }
   }
 
