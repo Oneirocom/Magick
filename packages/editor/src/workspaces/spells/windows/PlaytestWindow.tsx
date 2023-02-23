@@ -18,6 +18,7 @@ import { useEditor } from '../../contexts/EditorProvider'
 
 import { getSpellApi } from '../../../state/api/spells'
 import { useConfig } from '../../../contexts/ConfigProvider'
+import Button from 'packages/editor/src/components/Button'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
@@ -40,9 +41,13 @@ const Input = props => {
         value={props.value}
         onChange={props.onChange}
       ></input>
-      <button className="small" onClick={props.onSend}>
+      <Button
+        className="small"
+        style={{ cursor: 'pointer' }}
+        onClick={props.onSend}
+      >
         Send
-      </button>
+      </Button>
     </div>
   )
 }
@@ -256,12 +261,16 @@ const Playtest = ({ tab }) => {
         creatable={false}
       />
 
-      <button className="small" onClick={onClear}>
+      <Button className="small" style={{ cursor: 'pointer' }} onClick={onClear}>
         Clear
-      </button>
-      <button className="small" onClick={toggleData}>
+      </Button>
+      <Button
+        className="small"
+        style={{ cursor: 'pointer' }}
+        onClick={toggleData}
+      >
         Data
-      </button>
+      </Button>
     </React.Fragment>
   )
   if (document.getElementById('api-key')) {

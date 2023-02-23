@@ -2,15 +2,50 @@ import { Grid } from '@mui/material'
 import styles from './AgentWindowStyle.module.css'
 import Switch from '../../components/Switch/Switch'
 import Input from '../../components/Input/Input'
+import { useState } from 'react'
+import Button from '../../components/Button'
 
 interface Props {
   publicVars: any
+  update: ({}) => void
 }
 
-const AgentPubVariables = ({ publicVars }: Props) => {
+const AgentPubVariables = ({ publicVars, update }: Props) => {
+  const agentPublicVars = publicVars.reduce((acc, obj) => {
+    acc[obj.data?.name] = obj?.data?.fewshot || obj?.data?._var
+    return acc
+  }, {})
+  const [agentPublicInputsState, setAgentPublicInputs] =
+    useState(agentPublicVars)
+
+  const onChange = event => {
+    const { name } = event.target
+    setAgentPublicInputs({
+      ...agentPublicInputsState,
+      [name]:
+        event.target.checked === undefined
+          ? event.target.value
+          : event.target.checked,
+    })
+  }
+
+  const onSave = () => {
+    const _data = {
+      data: {
+        agentPublicInputs: JSON.stringify(agentPublicInputsState),
+      },
+    }
+    update(_data)
+  }
+
   return (
     <div className={styles['agentPubVars']}>
-      <h3>Public Variables</h3>
+      <div className={styles['header']}>
+        <h3>Public Variables</h3>
+        <Button onClick={onSave} className={styles['btn']}>
+          SAVE
+        </Button>
+      </div>
       {publicVars.map(variable => {
         return (
           <Grid
@@ -27,16 +62,17 @@ const AgentPubVariables = ({ publicVars }: Props) => {
               {variable.name.includes('Boolean') ? (
                 <Switch
                   label={''}
-                  checked={variable?.data?._var}
-                  onChange={() => {}}
+                  checked={agentPublicInputsState[variable?.data?.name]}
+                  onChange={onChange}
+                  name={variable?.data?.name}
                 />
               ) : (
                 <Input
                   style={{ width: '100%' }}
-                  value={variable?.data?._var || variable?.data?.fewshot}
+                  value={agentPublicInputsState[variable?.data?.name]}
                   type="text"
-                  onChange={() => {}}
-                  disabled
+                  onChange={onChange}
+                  name={variable?.data?.name}
                   multiline
                 />
               )}

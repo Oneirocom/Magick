@@ -66,14 +66,14 @@ export type QAArgs = {
 export type CreateEventArgs = Event
 
 export type GetEventArgs = {
-  type: string,
-  embedding?: number[],
-  observer: string,
-  client: string,
-  entities: any[],
-  channel: string,
-  channelType: string,
-  projectId: string,
+  type: string
+  embedding?: number[]
+  observer: string
+  client: string
+  entities: any[]
+  channel: string
+  channelType: string
+  projectId: string
   maxCount?: number
 }
 
@@ -132,8 +132,14 @@ export type EngineContext = {
     inputs,
     spellName,
     projectId,
-}: runSpellType) => Record<string, any>
-  getSpell: ({spellName, projectId}: {spellName: string, projectId: string}) => Promise<any | Spell>
+  }: runSpellType) => Record<string, any>
+  getSpell: ({
+    spellName,
+    projectId,
+  }: {
+    spellName: string
+    projectId: string
+  }) => Promise<any | Spell>
   getCurrentSpell?: () => Spell
   processCode?: (
     code: unknown,

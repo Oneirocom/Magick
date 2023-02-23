@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useConfig } from '../../contexts/ConfigProvider'
 
 import AgentWindow from './Agent'
+import Button from '../../components/Button'
 
 const AgentManagerWindow = () => {
   const config = useConfig()
@@ -57,12 +58,21 @@ const AgentManagerWindow = () => {
   }, [])
 
   return (
-    <div className="agent-editor" style={{margin: "1em", width: "100%", height: "100%", overflow: "auto"}}>
-      <div style={{maxWidth: "800px", marginBottom: "1em"}}>
-      <p>Agents are running applications that live somewhere on the internet and continue to run as long as they are active.
-      <br />If you'd like to use your spells out in the real world, create an agent, configure your preferred services and set your main spell as the root spell.</p>
+    <div
+      className="agent-editor"
+      style={{ margin: '1em', width: '100%', height: '100%', overflow: 'auto' }}
+    >
+      <div style={{ maxWidth: '800px', marginBottom: '1em' }}>
+        <p>
+          Agents are running applications that live somewhere on the internet
+          and continue to run as long as they are active.
+          <br />
+          If you'd like to use your spells out in the real world, create an
+          agent, configure your preferred services and set your main spell as
+          the root spell.
+        </p>
       </div>
-     <React.Fragment>
+      <React.Fragment>
         {data &&
           (data as any).map((value, idx) => {
             return (
@@ -77,9 +87,7 @@ const AgentManagerWindow = () => {
           })}
       </React.Fragment>
       <div className="entBtns">
-        <button onClick={() => createNew()} style={{ marginRight: '10px' }}>
-          Create New
-        </button>
+        <Button onClick={() => createNew()}>Create New</Button>
         <FileInput loadFile={loadFile} />
       </div>
     </div>

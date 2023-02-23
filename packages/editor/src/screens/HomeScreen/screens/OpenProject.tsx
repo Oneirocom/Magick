@@ -11,6 +11,7 @@ import { selectAllTabs } from '../../../state/tabs'
 import { RootState } from '../../../state/store'
 
 import packageJson from '../../../../package.json'
+import Button from 'packages/editor/src/components/Button'
 const version = packageJson.version
 
 const getMagickVersion = () => version
@@ -74,33 +75,33 @@ const OpenProject = ({
 
         <div className={css['button-row']}>
           {tabs?.length > 0 && (
-            <button
+            <Button
               onClick={() => {
                 window.history.back()
               }}
             >
               cancel
-            </button>
+            </Button>
           )}
           {tabs?.length < 1 && (
-            <button
+            <Button
               onClick={() => {
                 navigate('/home/create-new')
               }}
             >
               <Icon name="add" style={{ marginRight: 'var(--extraSmall)' }} />
               Create new
-            </button>
+            </Button>
           )}
           <FileInput loadFile={loadFile} />
-          <button
+          <Button
             onClick={() => {
               openSpell(selectedSpell)
             }}
             className={!selectedSpell ? 'disabled' : 'primary'}
           >
             OPEN
-          </button>
+          </Button>
         </div>
       </div>
     </Panel>

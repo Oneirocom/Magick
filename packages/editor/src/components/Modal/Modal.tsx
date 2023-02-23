@@ -1,4 +1,5 @@
 import { useModal } from '../../contexts/ModalProvider'
+import Button from '../Button'
 import Icon from '../Icon/Icon'
 import css from './modal.module.css'
 
@@ -34,25 +35,25 @@ const Modal = ({ options = [], title, icon, onClose = () => {}, ...props }) => {
           </div>
         </div>
         <div className={`${css['modal-action-strip']}`}>
-          <button
+          <Button
             onClick={() => {
               closeModal()
               onClose()
             }}
           >
             Close
-          </button>
+          </Button>
           {options &&
             options.map(item => {
               return (
-                <button
+                <Button
                   key={item.label}
                   disabled={item.disabled || false}
                   onClick={item.onClick}
                   className={`${item.className} ${item.disabled && 'disabled'}`}
                 >
                   {item.label}
-                </button>
+                </Button>
               )
             })}
         </div>
