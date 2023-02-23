@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "license": "Apache 2.0",
   "scripts": {
-    "migrate:make": "nx run server:migrate:make",
-    "migrate": "nx run server:migrate",
+    "migrate:make": "nx run @magickml/server:migrate:make",
+    "migrate": "nx run @magickml/server:migrate",
     "dev": "npx nx run-many --target=serve --projects=@magickml/server,@magickml/client",
     "db:init": "npx prisma db push",
     "containers": "concurrently \"docker-compose up\" \"sleep 20 && npm run db:init && echo database synced!\"",
