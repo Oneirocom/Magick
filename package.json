@@ -90,6 +90,7 @@
     "koa-compose": "4.1.0",
     "koa-mount": "^4.0.0",
     "koa-static": "^5.0.0",
+    "langchain": "^0.0.10",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
     "multer": "*",
