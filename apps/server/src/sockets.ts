@@ -23,7 +23,7 @@ const handleSockets = (app: any) => {
       // Attach the user info to the params or use in services
       socket.feathers.user = user
 
-      const magickInterface = buildMagickInterface({})
+      const magickInterface = buildMagickInterface({}) as any
 
       // probably need to move interface instantiation into the runner rather than the spell manager.
       // Doing it this way makes the interface shared across all spells

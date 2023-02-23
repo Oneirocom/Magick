@@ -6,7 +6,7 @@ import {
   StreamType,
   NoSubscriberBehavior,
 } from '@discordjs/voice'
-let createReadStream
+let createReadStream;
 
 import { tts, tts_tiktalknet } from '@magickml/server-core'
 
@@ -32,9 +32,9 @@ export function initSpeechClient({
   voiceProvider,
   voiceCharacter,
   languageCode,
-  tiktalknet_url,
+  tiktalknet_url
 }: any) {
-  console.log('INSIDE INIT SPEECH')
+  console.log("INSIDE INIT SPEECH")
   //let spellRunner = spellRunner
   addSpeechEvent(client, { group: 'default_' + agent.id })
   const audioPlayer = createAudioPlayer({
@@ -43,7 +43,7 @@ export function initSpeechClient({
     },
     debug: true,
   })
-  console.log('CREATING a SPEAKING EVENT LISTNER')
+  console.log("CREATING a SPEAKING EVENT LISTNER")
   client.on('speech', async msg => {
     console.log('SPEAKING')
     const content = msg.content
@@ -51,7 +51,7 @@ export function initSpeechClient({
     const author = msg.author
     const channel = msg.channel
 
-    if (!createReadStream) {
+    if(!createReadStream) {
       // dynbamically import createReadStream from fs
       const fs = await import('fs')
       console.log(process.cwd())
@@ -81,21 +81,23 @@ export function initSpeechClient({
 
       console.log(entities)
 
-      const fullResponse = await spellRunner.runComponent({
+      const fullResponse = await spellRunner.runComponent(
+        {
         inputs: {},
-        componentName: 'Discord Input',
+        componentName: "Discord Input",
         runData: {
-          content,
-          speaker: author?.username ?? 'VoiceSpeaker',
-          agent: discord_bot_name,
-          client: 'discord',
-          channelId: channel.id,
-          agentId: agent.id,
-          entities: entities.map(e => e.user),
-          channel: 'voice',
+            content,
+            speaker: author?.username ?? 'VoiceSpeaker',
+            agent: discord_bot_name,
+            client: 'discord',
+            channelId: channel.id,
+            agentId: agent.id,
+            entities: entities.map(e => e.user),
+            channel: 'voice',
         },
         runSubspell: true,
-      })
+      }
+      )
       let response = Object.values(fullResponse)[0] as string
 
       if (response === undefined || !response || response.length <= 0) {
