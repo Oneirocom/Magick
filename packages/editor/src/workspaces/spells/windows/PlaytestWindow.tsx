@@ -109,7 +109,8 @@ const Playtest = ({ tab }) => {
 
   useEffect(() => {
     console.log('SPELL DATA!!!', spellData)
-    if (!spellData || !spellData.data[0].graph) return
+
+    if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph) return
 
     const graph = spellData.data[0].graph
 
@@ -211,8 +212,6 @@ const Playtest = ({ tab }) => {
     )?.data.name
 
     if (!playtestInputName) return
-
-    console.log('FOUND NODE', playtestInputName)
 
     client.service('spell-runner').create({
       spellName: tab.spellName,
