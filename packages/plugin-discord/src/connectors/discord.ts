@@ -19,6 +19,7 @@ function log(...s: (string | boolean)[]) {
 }
 
 export class discord_client {
+
   async destroy() {
     await this.client.destroy()
     this.client = null
@@ -58,7 +59,6 @@ export class discord_client {
   //Event that is triggered when a user is removed from the server
   async handleGuildMemberRemove(user: { user: { id: any; username: any } }) {
     const username = user.user.username
-
     const dateNow = new Date()
     const utc = new Date(
       dateNow.getUTCFullYear(),
@@ -1161,11 +1161,11 @@ export class discord_client {
   discord_starting_words: string[] = []
   discord_bot_name_regex: string = ''
   discord_bot_name: string = 'Bot'
-  use_voice: boolean
-  voice_provider: string
-  voice_character: string
-  voice_language_code: string
-  tiktalknet_url: string
+  use_voice: boolean = false
+  voice_provider!: string
+  voice_character!: string
+  voice_language_code!: string
+  tiktalknet_url!: string
   createDiscordClient = async (
     agent: any,
     discord_api_token: string | undefined,
