@@ -213,8 +213,6 @@ const Playtest = ({ tab }) => {
 
     if (!playtestInputName) return
 
-    console.log('FOUND NODE', playtestInputName)
-
     client.service('spell-runner').create({
       spellName: tab.spellName,
       projectId: config.projectId,

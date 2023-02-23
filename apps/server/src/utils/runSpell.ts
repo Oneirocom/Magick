@@ -11,8 +11,10 @@ export type RunSpellArgs = {
 }
 
 export const runSpell = async ({ spellName, inputs, inputFormatter, projectId }: RunSpellArgs) => {
-  let spell = (await app.service('spells').find({ query: { projectId, name: spellName } })) as any
+  let spell = (await app.service('spells').find({ query: { projectId, name: spellName } })).data[0] as any
 
+  console.log('spell', spell)
+  
   if (!spell?.graph) {
     throw new ServerError('not-found', `Spell with name ${spellName} not found`)
   }
