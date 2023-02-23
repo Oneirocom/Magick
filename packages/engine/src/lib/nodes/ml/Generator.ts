@@ -48,17 +48,14 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     const dataOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const resultOut = new Rete.Output('result', 'Result', stringSocket)
     const composedOut = new Rete.Output('composed', 'Composed', stringSocket)
+    const settings = new Rete.Input('settings', 'Settings', anySocket)
 
     node
       .addInput(dataIn)
+      .addInput(settings)
       .addOutput(dataOut)
       .addOutput(resultOut)
       .addOutput(composedOut)
-
-    const nameControl = new InputControl({
-      dataKey: 'name',
-      name: 'Component Name',
-    })
 
     // TODO refactor to a model dropdown to centralize models.
     // Even better to have an endpoint to call.
@@ -91,9 +88,9 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
 
     const stopControl = new InputControl({
       dataKey: 'stop',
-      name: 'Stop',
+      name: 'Stop (Comma Separated)',
       icon: 'stop-sign',
-      defaultValue: '',
+      defaultValue: '###',
     })
 
     const temperatureControl = new InputControl({
@@ -117,7 +114,6 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     })
 
     node.inspector
-      .add(nameControl)
       .add(modelName)
       .add(inputGenerator)
       .add(fewshotControl)
@@ -140,50 +136,61 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       return acc
     }, {} as Record<string, unknown>)
 
-    const modelName = (node.data.modelName as string) || 'text-davinci-002'
-    // const model = node.data.model || 'davinci'
+    const settings = ((inputs.settings && inputs.settings[0]) ?? {}) as any
+    
+    const modelName = settings.modelName ?? (node?.data?.modelName as string)
 
     // Replace carriage returns with newlines because that's what the language models expect
     const fewshot = node.data.fewshot
       ? (node.data.fewshot as string).replace('\r\n', '\n')
       : ''
-    const stopSequence = node.data.stop as string
+
     const topPData = node?.data?.top_p as string
     const top_p = topPData ? parseFloat(topPData) : 1
+   
     const template = Handlebars.compile(fewshot, { noEscape: true })
     const prompt = template(inputs)
 
-    const stop = node?.data?.stop
-      ? stopSequence.split(',').map(i => {
-          if (i.includes('\\n')) return '\n'
-          return i.trim()
-        })
-      : []
+    const temperatureData =
+      settings.temperature ?? (node?.data?.temperature as string)
+    const temperature = parseFloat(temperatureData)
+    
+    const maxTokensData =
+      settings.max_tokens ?? (node?.data?.max_tokens as string)
+    const max_tokens = parseInt(maxTokensData)
 
-    const tempData = node.data.temp as string
-    const temperature = tempData ? parseFloat(tempData) : 0.7
-    const maxTokensData = node?.data?.max_tokens as string
-    const max_tokens = maxTokensData ? parseInt(maxTokensData) : 50
-    const frequencyPenaltyData = node?.data?.frequency_penalty as string
-    const frequency_penalty = frequencyPenaltyData
-      ? parseFloat(frequencyPenaltyData)
-      : 0
+    const frequencyPenaltyData =
+      settings.frequency_penalty ?? (node?.data?.frequency_penalty as string)
+    const frequency_penalty = parseFloat((frequencyPenaltyData ?? 0))
+    
+    const presencePenaltyData =
+      settings.presence_penalty ?? (node?.data?.presence_penalty as string)
+    const presence_penalty = parseFloat((presencePenaltyData ?? 0))
+    
+    const stopData = settings.stop ?? (node?.data?.stop as string)
+    const stop = (stopData ?? "").split(', ')
+    
+    for (let i = 0; i < stop.length; i++) {
+      if (stop[i] === '\\n') {
+        stop[i] = '\n'
+      }
+    }
 
-    const presencePenaltyData = node?.data?.presence_penalty as string
-    const presence_penalty = presencePenaltyData
-      ? parseFloat(presencePenaltyData)
-      : 0
+    const filteredStop = stop.filter(function (el: any) {
+      return el != null && el !== undefined && el.length > 0
+    })
 
     const body: CompletionData = {
       prompt,
-      stop,
-      model: modelName ?? 'text-davinci-003',
-      max_tokens,
       temperature,
+      max_tokens,
+      model: modelName ?? 'text-davinci-002',
+      top_p,
       frequency_penalty,
       presence_penalty,
-      top_p,
+      stop: filteredStop,
     }
+    
     try {
       const { success, choice } = await makeCompletion(body, projectId)
 
