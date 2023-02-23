@@ -6,11 +6,12 @@ import ExpansionDetails from '../components/ExpansionDetails'
 import FileListTable from '../files/FileListTable'
 import UploadFileButton from '../files/UploadFileButton'
 import FineTuneList from '../fine-tunes/FineTuneList'
-// TODO @thomageanderson: resolve the type warning on this markdown import
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { Box, Typography } from '@mui/material'
 import InfoCard from '../components/InfoCard'
 
+// TODO @thomageanderson: resolve the type warning on this markdown import
+//@ts-ignore
 import { html as CompletionInstructions } from './instructions.md'
 
 export default function ClassificationList() {

@@ -86,6 +86,8 @@ const Playtest = ({ tab }) => {
     }
   )
 
+  // const localState = {} as any
+
   const localState = useAppSelector(state => {
     return selectStateBySpellId(state.localState, tab.spellName)
   })
@@ -104,12 +106,16 @@ const Playtest = ({ tab }) => {
 
   // we want to set the options for the dropdown by parsing the spell graph
   // and looking for nodes with the playtestToggle set to true
-  const [playtestOptions, setPlaytestOptions] = useState([])
+  const [playtestOptions, setPlaytestOptions] = useState<Record<
+    string,
+    any
+  > | null>([])
   const [playtestOption, setPlaytestOption] = useState('')
 
   useEffect(() => {
     console.log('SPELL DATA!!!', spellData)
-    if (!spellData || !spellData.data[0].graph) return
+
+    if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph) return
 
     const graph = spellData.data[0].graph
 
@@ -140,6 +146,7 @@ const Playtest = ({ tab }) => {
 
   // Sync up localState into data field for persistence
   useEffect(() => {
+    console.log('Checking for local state!', localState)
     // Set up a default for the local state here
     if (!localState) {
       dispatch(
@@ -210,8 +217,6 @@ const Playtest = ({ tab }) => {
     )?.data.name
 
     if (!playtestInputName) return
-
-    console.log('FOUND NODE', playtestInputName)
 
     client.service('spell-runner').create({
       spellName: tab.spellName,

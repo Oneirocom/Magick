@@ -42,7 +42,9 @@ const Magick = ({ empty = false }) => {
     // If there are still tabs, grab one at random to open to for now.
     // We should do better at this.  Probably with some kind of tab ordering.
     // Could fit in well with drag and drop for tabs
-    if (tabs.length > 0 && !activeTab && !spellName) navigate(`/magick`)
+    if (tabs.length > 0 && !activeTab && !spellName) {
+      navigate(`/magick/${tabs[0].name}`)
+    }
 
     if (tabs.length === 0 && !activeTab && !spellName) navigate('/home')
   }, [tabs])
@@ -96,6 +98,8 @@ const Magick = ({ empty = false }) => {
   )
 
   if (!activeTab) return <LoadingScreen />
+
+  console.log('active tab found', activeTab)
 
   return (
     <>

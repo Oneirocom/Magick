@@ -1,3 +1,5 @@
+// todo remove this and make a new event table component eventually.
+//@ts-nocheck
 import { useEffect, useMemo, useState } from 'react'
 import {
   useAsyncDebounce,

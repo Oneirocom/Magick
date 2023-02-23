@@ -26,7 +26,7 @@ const EventHandler = ({ pubSub, tab }) => {
   const [saveDiff] = spellApi.useSaveDiffMutation()
   const { data: spell } = spellApi.useGetSpellQuery({
     spellName: tab.spellName,
-    projectId: config.projectId
+    projectId: config.projectId,
   })
   const preferences = useSelector(
     (state: RootState) => state.preferences
@@ -69,40 +69,38 @@ const EventHandler = ({ pubSub, tab }) => {
 
     if (!currentSpell) return
 
-    console.log('currentSpell', currentSpell)
-    console.log('graph', graph)
-
     const updatedSpell = {
       ...currentSpell,
       graph,
-      hash: md5(JSON.stringify(graph))
+      hash: md5(JSON.stringify(graph)),
     }
 
     console.log('updatedSpell', updatedSpell)
 
-    const response = await saveSpellMutation({ spell: updatedSpell, projectId: config.projectId })
+    const response = await saveSpellMutation({
+      spell: updatedSpell,
+      projectId: config.projectId,
+    })
     const jsonDiff = diff(currentSpell, updatedSpell)
 
     if (jsonDiff.length !== 0) {
       console.log('Sending json diff to spell runner!')
       // save diff to spell runner if something has changed.  Will update spell in spell runner session
-      await client.service('spell-runner').update(currentSpell.name, {
+      client.service('spell-runner').update(currentSpell.name, {
         diff: jsonDiff,
-        projectId: config.projectId
+        projectId: config.projectId,
       })
     }
+
+    enqueueSnackbar('Spell saved', {
+      variant: 'success',
+    })
 
     if ('error' in response) {
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
       })
       return
-    }
-
-    if (preferences.autoSave) {
-      enqueueSnackbar('Spell saved', {
-        variant: 'success',
-      })
     }
   }
 
@@ -124,12 +122,12 @@ const EventHandler = ({ pubSub, tab }) => {
     try {
       await client.service('spell-runner').update(currentSpell.name, {
         diff: jsonDiff,
-        projectId: config.projectId
+        projectId: config.projectId,
       })
       await saveDiff({
         name: currentSpell.name,
         diff: jsonDiff,
-        projectId: config.projectId
+        projectId: config.projectId,
       })
       enqueueSnackbar('Spell saved', {
         variant: 'success',

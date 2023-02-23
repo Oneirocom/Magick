@@ -121,9 +121,9 @@ export const getSpellApi = (config) => {
       }),
       patchSpell: builder.mutation({
         invalidatesTags: ['Spell'],
-        query({ spellName, update }) {
+        query({ id, update }) {
           return {
-            url: `spells/${spellName}`,
+            url: `spells/${id}`,
             body: {
               ...update,
             },

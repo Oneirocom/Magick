@@ -104,6 +104,7 @@ export class SpellComponent extends MagickComponent<
       // break out of it the nodes data already exists.
       if (spell.name === node.data.spellName) return
       node.data.spellName = spell.name
+      node.data.projectId = spell.projectId
 
       // Update the sockets
       this.updateSockets(node, spell)
@@ -169,15 +170,17 @@ export class SpellComponent extends MagickComponent<
       silent: Boolean
     }
   ) {
+    console.log('node.data', node.data)
+
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
 
-    if (!magick.runSpell) return {}
+    if (!magick.runSpell) throw new Error('Magick runSpell not found')
     const outputs = await magick.runSpell(
         {
           inputs: flattenedInputs,
           spellName: node.data.spellName as string,
-          projectId: 'changeme' // TODO: This needs to be changed to the current project id
+          projectId: node.data.projectId as string,
         }
       )
 
