@@ -44,7 +44,7 @@ export class TextCompletion extends MagickComponent<
     const outp = new Rete.Output('output', 'output', stringSocket)
 
     const modelName = new DropdownControl({
-      name: 'modelName',
+      name: 'Model Name',
       dataKey: 'modelName',
       values: [
         'text-davinci-003',
@@ -56,7 +56,7 @@ export class TextCompletion extends MagickComponent<
         'curie-instruct-beta',
         'davinci-instruct-beta',
       ],
-      defaultValue: 'text-davinci-002',
+      defaultValue: 'text-davinci-003',
     })
 
     const temperature = new InputControl({

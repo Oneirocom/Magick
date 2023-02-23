@@ -13,7 +13,7 @@ import { DropdownControl } from '../../dataControls/DropdownControl'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { stringSocket, triggerSocket } from '../../sockets'
+import { stringSocket, triggerSocket, anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
 const info = `The generator component is our general purpose completion component.  You can define any number of inputs, and utilize those inputs in a templating language known as Handlebars.  Any value which is wrapped like {{this}} in double braces will be replaced with the corresponding value coming in to the input with the same name.  This allows you to write almost any fewshot you might need, and input values from anywhere else in your graph.
@@ -61,7 +61,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     // Even better to have an endpoint to call.
     // we could make a control that takes an arbitrary endpoint to get values from
     const modelName = new DropdownControl({
-      name: 'modelName',
+      name: 'Model Name',
       dataKey: 'modelName',
       values: [
         'text-davinvci-003',
@@ -73,7 +73,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
         'curie-instruct-beta',
         'davinci-instruct-beta',
       ],
-      defaultValue: 'text-davinci-002',
+      defaultValue: 'text-davinci-003',
     })
 
     const inputGenerator = new SocketGeneratorControl({
@@ -83,6 +83,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     })
 
     const fewshotControl = new FewshotControl({
+      name: 'Prompt Template',
       language: 'handlebars',
     })
 
