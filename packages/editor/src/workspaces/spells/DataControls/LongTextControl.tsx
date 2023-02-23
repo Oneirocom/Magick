@@ -1,3 +1,4 @@
+import Button from 'packages/editor/src/components/Button'
 import { useLayout } from '../../contexts/LayoutProvider'
 
 const LongText = () => {
@@ -7,7 +8,7 @@ const LongText = () => {
     createOrFocus(windowTypes.TEXT_EDITOR, 'Text Editor')
   }
 
-  return <button onClick={onClick}>Open in text editor</button>
+  return <Button onClick={onClick}>Open in text editor</Button>
 }
 
 export default LongText

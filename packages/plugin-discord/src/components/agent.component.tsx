@@ -387,7 +387,7 @@ export const DiscordAgentWindow: FC<any> = props => {
               <div className="form-item">
                 <button
                   onClick={() => testVoice()}
-                  style={{ marginRight: '10px' }}
+                  style={{ marginRight: '10px', cursor: 'pointer' }}
                 >
                   Test
                 </button>

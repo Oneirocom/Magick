@@ -8,6 +8,7 @@ import '../../../screens/Magick/magick.module.css'
 import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
 import { RootState } from '../../../state/store'
 import { useSelector } from 'react-redux'
+import Button from 'packages/editor/src/components/Button'
 
 const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)
@@ -141,8 +142,7 @@ const TextEditor = props => {
     inputs = [],
     outputs = []
   ) => {
-    let prompt =
-`// The following is a function written in ${language}.
+    let prompt = `// The following is a function written in ${language}.
 
 // Inputs: input1, input2
 // Outputs: output
@@ -258,9 +258,9 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
       <div style={{ flex: 1, marginTop: 'var(--c1)' }}>
         {textEditorData?.name && textEditorData?.name + ' - ' + language}
       </div>
-      <button onClick={onComplete}>COMPLETE</button>
-      <button onClick={onGenerate}>GENERATE</button>
-      <button onClick={onSave}>SAVE</button>
+      <Button onClick={onComplete}>COMPLETE</Button>
+      <Button onClick={onGenerate}>GENERATE</Button>
+      <Button onClick={onSave}>SAVE</Button>
     </>
   )
 
