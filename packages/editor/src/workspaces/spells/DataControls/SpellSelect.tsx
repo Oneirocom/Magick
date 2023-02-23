@@ -17,7 +17,9 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   const dispatch = useAppDispatch()
 
   const [getSpell, { data: spell }] = spellApi.useLazyGetSpellQuery()
-  const { data: spells } = spellApi.useGetSpellsQuery({projectId: config.projectId})
+  const { data: spells } = spellApi.useGetSpellsQuery({
+    projectId: config.projectId,
+  })
   const [newSpell] = spellApi.useNewSpellMutation()
 
   const { enqueueSnackbar } = useSnackbar()
@@ -27,8 +29,10 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   useEffect(() => {
     if (!spell) return
 
-    update(spell)
-    _openTab(spell)
+    const _spell = spell.data[0]
+
+    update(_spell)
+    _openTab(_spell)
   }, [spell])
 
   const optionArray = () => {
@@ -52,7 +56,10 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   }
 
   // TODO fix on change to handle loading a single spell
-  const onChange = async ({ value }) => {
+  const onChange = async e => {
+    if (!e) return
+    const { value } = e
+
     getSpell({
       spellName: value,
       projectId: config.projectId,

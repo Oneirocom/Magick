@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 
 import Window from '../../../components/Window/Window'
 import WindowMessage from '../../components/WindowMessage'
+import { activeTabSelector, selectAllTabs } from '../../../state/tabs'
 
 import '../../../screens/Magick/magick.module.css'
 import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
@@ -17,11 +18,13 @@ const TextEditor = props => {
   const [editorOptions, setEditorOptions] = useState<Record<string, any>>()
   const [language, setLanguage] = useState<string | undefined>(undefined)
   const codeRef = useRef<string>()
-  const preferences = useSelector((state: RootState) => state.preferences)
   const openaiApiKey = JSON.parse(
     localStorage.getItem('openai-api-key') || '{}'
   ).apiKey
   const { textEditorData, saveTextEditor, inspectorData } = useInspector()
+  const activeTab = useSelector(activeTabSelector)
+
+  const [lastInputs, setLastInputs] = useState('')
 
   // const bottomHeight = 50
   const handleEditorWillMount = monaco => {
@@ -36,7 +39,41 @@ const TextEditor = props => {
   }
 
   useEffect(() => {
-    if (code === textEditorData.data && !code) return
+    console.log('focus')
+    console.log('textEditorData', textEditorData)
+    console.log('inspectorData', inspectorData)
+    if (!inspectorData?.data.inputs) return
+
+    // if inspectorData?.data.inputs is the same as lastInputs, then return
+    if (Object.keys(JSON.stringify(inspectorData?.data.inputs)) === lastInputs)
+      return
+    setLastInputs(JSON.stringify(inspectorData?.data.inputs))
+
+    const inputs: string[] = []
+    inspectorData?.data.inputs?.forEach((input: any) => {
+      inputs.push('  ' + input.socketKey + ',')
+    })
+
+    const textLines = code?.split('\n') ?? []
+    // get the index of the first line that starts with function
+    const startIndex = textLines.findIndex(line => line.startsWith('function'))
+    // get the first line that starts with }
+    const endIndex = textLines.findIndex(line => line.startsWith('}'))
+
+    if (startIndex === -1 || endIndex === -1) return
+
+    // remove the lines in textLines starting at StartIndex and ending at EndIndex
+    // replace with the inputs
+    textLines.splice(startIndex + 1, endIndex - startIndex - 1, ...inputs)
+
+    // join the textLines array back into a string
+    const updatedText = textLines.join('\n')
+    textEditorData.data = updatedText
+    setCode(updatedText)
+  }, [activeTab])
+
+  useEffect(() => {
+    if (code === textEditorData?.data && !code) return
     const delayDebounce = setTimeout(() => {
       save(code)
     }, 3000)
@@ -62,9 +99,41 @@ const TextEditor = props => {
   }, [language])
 
   useEffect(() => {
-    if (!textEditorData) return
+    console.log('props', props)
+    if (
+      !textEditorData ||
+      Object.keys(textEditorData).length === 0 ||
+      !textEditorData.data
+    )
+      return
+
+    console.log('textEditorData', textEditorData)
+
+    console.log('inspectorData', inspectorData)
+
+    const inputs = []
+    inspectorData?.data.inputs?.forEach((input: any) => {
+      inputs.push('  ' + input.socketKey + ',')
+    })
+
+    const textLines = textEditorData.data.split('\n')
+    // get the index of the first line that starts with function
+    const startIndex =
+      textLines.findIndex(line => line.startsWith('function')) + 1
+    // get the first line that starts with }
+    const endIndex = textLines.findIndex(line => line.startsWith('}')) - 1
+
+    // remove the lines in textLines starting at StartIndex and ending at EndIndex
+    // replace with the inputs
+    textLines.splice(startIndex, endIndex - startIndex, ...inputs)
+
+    // join the textLines array back into a string
+    const updatedText = textLines.join('\n')
+
+    textEditorData.data = updatedText
+
     setData(textEditorData)
-    setCode(textEditorData.data as string)
+    setCode(updatedText)
 
     if (textEditorData?.options?.language) {
       setLanguage(textEditorData.options.language)
@@ -107,7 +176,7 @@ const TextEditor = props => {
           top_p: 1,
           frequency_penalty: 0,
           presence_penalty: 0,
-          stop: ['<END>'],
+          stop: ['\n\n', '###'],
         }),
       }
     )
@@ -121,20 +190,25 @@ const TextEditor = props => {
   }
 
   const onComplete = () => {
+    console.log('codeRef.current', codeRef.current)
     complete(codeRef.current)
   }
 
   const functionPromptJs = `function worker (inputs, data) {
-    const { input1, input2 } = inputs
+const { input1, input2 } = inputs
   return {
     output: input1 + input2
   }
-}`
+}
+
+`
 
   const functionPromptPython = `def worker (inputs, data):
-  return {
-    output: inputs['input1'] + inputs['input2']
-  }`
+return {
+  output: inputs['input1'] + inputs['input2']
+}
+
+`
 
   const makeGeneratePrompt = (
     functionText,
@@ -142,12 +216,15 @@ const TextEditor = props => {
     inputs = [],
     outputs = []
   ) => {
-    let prompt = `// The following is a function written in ${language}.
+    let prompt =
+      language === 'plaintext'
+        ? functionText
+        : `// The following is a function written in ${language}.
 
 // Inputs: input1, input2
 // Outputs: output
 // Task: add the inputs together and return the output
-
+###
 ${language === 'python' ? functionPromptPython : functionPromptJs}
 
 // The following is a function written in ${language}.`
@@ -168,22 +245,28 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
       })
       .join('')
 
-    if (inputs) {
+    if (inputs.length > 0) {
       prompt = prompt + `\n// Inputs: ${inputString}`
     }
 
-    if (outputs) {
+    if (outputs.length > 0) {
       prompt = prompt + `\n// Outputs: ${outputString}`
     }
 
-    prompt = prompt + `\n// Task: ${functionText}\n`
+    prompt =
+      language === 'plaintext'
+        ? prompt
+        : prompt + `\n// Task: ${functionText}\n`
 
     prompt =
-      prompt +
-      '\n' +
-      (language === 'python' ? 'def ' : 'function ') +
-      'worker (inputs, data)' +
-      (language === 'python' ? ':' : ' {')
+      language === 'plaintext'
+        ? prompt
+        : prompt +
+          '\n' +
+          (language === 'python'
+            ? 'def worker (inputs, data)'
+            : `function worker ({${inputString}}, data)`) +
+          (language === 'python' ? ':' : ' {')
 
     return prompt
   }
@@ -198,7 +281,23 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
     const functionText = window.prompt('What should this node do?')
     if (functionText === '' || !functionText) return
 
-    const prompt = makeGeneratePrompt(functionText, language)
+    let _inputs = []
+    let _outputs = []
+    console.log('inspectorData', inspectorData)
+
+    console.log('inspectorData.data', inspectorData?.data)
+
+    // @ts-ignore
+    inspectorData?.data?.inputs?.forEach((input: any) => {
+      _inputs.push(input.socketKey)
+    })
+
+    // @ts-ignore
+    inspectorData?.data?.outputs?.forEach((output: any) => {
+      _outputs.push(output.socketKey)
+    })
+
+    const prompt = makeGeneratePrompt(functionText, language, _inputs, _outputs)
 
     console.log('prompt is', prompt)
 
@@ -217,21 +316,35 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
           top_p: 1,
           frequency_penalty: 0,
           presence_penalty: 0,
-          stop: ['// The'],
+          stop: ['\n\n', '###'],
         }),
       }
     )
+
+    const d = language === 'python' ? '# ' : '// '
+
+    let header =
+      language === 'plaintext'
+        ? `Task: ${functionText}\n`
+        : `${d}Task: ${functionText}
+${d}Outputs: ${_outputs.join(', ')}
+${
+  language === 'python'
+    ? 'def '
+    : 'function ' +
+      `worker ({\n` +
+      _inputs.map(input => `  ${input},\n`).join('') +
+      `}, data)` +
+      (language === 'python' ? ':' : ' {') +
+      '\n'
+}`
 
     const json = await response.json()
     console.log('response', json)
 
     const completion = json.choices[0].text
 
-    const update = {
-      ...data,
-      data: prompt + completion,
-    }
-    setCode(prompt + completion)
+    setCode(header + completion)
   }
 
   const onGenerate = () => {
@@ -256,7 +369,7 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
   const toolbar = (
     <>
       <div style={{ flex: 1, marginTop: 'var(--c1)' }}>
-        {textEditorData?.name && textEditorData?.name + ' - ' + language}
+        {textEditorData?.name && textEditorData?.name}
       </div>
       <Button onClick={onComplete}>COMPLETE</Button>
       <Button onClick={onGenerate}>GENERATE</Button>

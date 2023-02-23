@@ -1,11 +1,12 @@
-import { feathers, socketio } from '@feathersjs/client'
+import { feathers } from '@feathersjs/feathers'
+import socketio from '@feathersjs/socketio-client'
 import { createContext, useContext, useEffect, useState } from 'react'
 import io from 'socket.io-client'
 
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen'
 import { useConfig } from './ConfigProvider'
 
-const buildFeathersClient = async (config) => {
+const buildFeathersClient = async config => {
   const socket = io(config.apiUrl)
   const feathersClient = feathers()
   feathersClient.configure(socketio(socket, { timeout: 10000 }))

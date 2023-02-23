@@ -1,4 +1,4 @@
-// import { loadPyodide } from "pyodide";
+import { loadPyodide } from "pyodide";
 const PYODIDE_URL = "https://cdn.jsdelivr.net/pyodide/v0.22.0/full/";
 
 const isBrowser = typeof window !== "undefined";
@@ -8,10 +8,9 @@ let pyodide;
 export default async function runPython (code, entry, data) {
   // inputs renamed to entry for python insertion
   if(!pyodide) {
-    return { data: data, error: "Pyodide not loaded" };
-    // pyodide = await loadPyodide({
-    //   indexURL: isBrowser ? PYODIDE_URL : undefined,
-    // })
+    pyodide = await loadPyodide({
+      indexURL: isBrowser ? PYODIDE_URL : undefined,
+    })
   }
 
   for (const [key, value] of Object.entries(entry)) {
@@ -20,13 +19,13 @@ export default async function runPython (code, entry, data) {
   pyodide.globals.set("data" , data);
   
   
-  let codeResult = pyodide.runPython(code);
-
+  let codeResult = await pyodide.runPython(code);
+  console.log('CODE RESULT', codeResult);
   let toJsResult = codeResult.toJs();
   let codeResultJS = toJsResult[0] instanceof Map ? convertMapToObject(toJsResult[0]) : toJsResult[0];
   let dataResult = toJsResult[1] instanceof Map ? convertMapToObject(toJsResult[1]) : toJsResult[1];
 
-  const result = {...codeResultJS, data: dataResult};
+  const result = {...codeResultJS, data: dataResult}
 
   return result;
 };

@@ -25,7 +25,7 @@ const Contract = () => {
 
   const DEFAULT_RPC = 'https://polygon-mumbai.blockpi.network/v1/rpc/public'
 
-  if (!contractFunction || !contractAddress || !contractChain) return
+  if (!contractFunction || !contractAddress || !contractChain) return null
 
   const contractChainParsed = parseInt(contractChain)
 

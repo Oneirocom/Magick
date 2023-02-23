@@ -66,14 +66,14 @@ export type QAArgs = {
 export type CreateEventArgs = Event
 
 export type GetEventArgs = {
-  type: string
+  type?: string
   embedding?: number[]
-  observer: string
-  client: string
-  entities: any[]
-  channel: string
-  channelType: string
-  projectId: string
+  observer?: string
+  client?: string
+  entities?: any[]
+  channel?: string
+  channelType?: string
+  projectId?: string
   maxCount?: number
 }
 
@@ -133,6 +133,7 @@ export type EngineContext = {
     spellName,
     projectId,
   }: runSpellType) => Record<string, any>
+  completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: ({
     spellName,
     projectId,
@@ -140,7 +141,7 @@ export type EngineContext = {
     spellName: string
     projectId: string
   }) => Promise<any | Spell>
-  getCurrentSpell?: () => Spell
+  getCurrentSpell: () => Spell
   processCode?: (
     code: unknown,
     inputs: MagickWorkerInputs,
@@ -286,6 +287,11 @@ export type Spell = {
   projectId: string
 }
 
+export type NewSpellArgs = {
+  name: string
+  graph: Data
+}
+
 export type MagickReteInput = {
   type: TaskOutputTypes
   outputData: unknown
@@ -308,32 +314,6 @@ export type MagickWorkerInputs = { [key: string]: MagickWorkerInput[] }
 export type MagickWorkerOutputs = WorkerOutputs & {
   [key: string]: TaskOutput
 }
-
-export type WorkerReturn =
-  | Node
-  | MagickWorkerOutputs
-  | void
-  | Promise<void>
-  | Promise<{ actionType: string }>
-  | Promise<{ difficulty?: string; category?: string }>
-  | Promise<{ [output: string]: string } | null>
-  | Promise<never[] | { entities: { name: string; type: string }[] }>
-  | Promise<{ element: unknown } | undefined>
-  | Promise<
-      | { result: { error: unknown; [key: string]: unknown } }
-      | { result?: undefined }
-    >
-  | Promise<{ text: unknown }>
-  | Promise<{ boolean: boolean }>
-  | Promise<null | undefined>
-  | WorkerOutputs[]
-  | { trigger: boolean }
-export type MagickWorker = (
-  node: MagickNode,
-  inputs: WorkerInputs,
-  outputs: WorkerOutputs,
-  ...args: unknown[]
-) => WorkerReturn
 
 // Type definitions for PubSubJS 1.8.0
 // Project: https://github.com/mroderick/PubSubJS

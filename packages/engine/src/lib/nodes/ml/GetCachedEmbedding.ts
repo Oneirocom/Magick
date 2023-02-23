@@ -16,9 +16,11 @@ const info = 'Get a cached embedding for this exact string'
 
 type InputReturn = {
   embedding: number[] | null
-} | void
+}
 
-export class GetCachedEmbedding extends MagickComponent<Promise<InputReturn>> {
+export class GetCachedEmbedding extends MagickComponent<
+  Promise<InputReturn | null>
+> {
   constructor() {
     super('Get Cached Embedding')
 
@@ -54,17 +56,19 @@ export class GetCachedEmbedding extends MagickComponent<Promise<InputReturn>> {
   async worker(
     node: NodeData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
+    _outputs: MagickWorkerOutputs
   ) {
     const content = (inputs['content'] && inputs['content'][0]) as string
 
-    if (!content) return console.log('Content is null, not storing event')
-
+    if (!content) {
+      console.log('Content is null, not storing event')
+      return null
+    }
     // feathers 5 query params
     const params = {
       content: content,
       $limit: 1,
-      getEmbedding: true
+      getEmbedding: true,
     }
 
     const urlString = `${API_ROOT_URL}/events`
@@ -73,7 +77,7 @@ export class GetCachedEmbedding extends MagickComponent<Promise<InputReturn>> {
     for (let p in params) {
       // append params to url, make sure to preserve arrays
       if (Array.isArray(params[p])) {
-        params[p].forEach((v) => url.searchParams.append(p, v))
+        params[p].forEach(v => url.searchParams.append(p, v))
       } else {
         url.searchParams.append(p, params[p])
       }
@@ -98,7 +102,7 @@ export class GetCachedEmbedding extends MagickComponent<Promise<InputReturn>> {
     }
 
     return {
-      embedding
+      embedding,
     }
   }
 }

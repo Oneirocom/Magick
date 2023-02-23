@@ -57,10 +57,11 @@ const CreateNew = () => {
 
   const onCreate = handleSubmit(async data => {
     try {
+      if (!selectedTemplate) return
       const placeholderName = uniqueNamesGenerator(customConfig)
       const name = data.name || placeholderName
       const response = await newSpell({
-        graph: selectedTemplate?.graph,
+        graph: selectedTemplate.graph,
         name,
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),

@@ -60,7 +60,7 @@ export class MagickConsole {
 
   formatMessage(_message: string, type: 'error' | 'log'): Message {
     return {
-      from: this.node.name,
+      from: this.node.name ?? this.component.name,
       nodeId: this.node.id,
       name: (this.node?.data?.name as string) ?? null,
       content: _message,

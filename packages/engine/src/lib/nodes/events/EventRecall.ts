@@ -151,7 +151,12 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
           enc_embed.length * 4,
           uint.length
         )
-        let str = btoa(String.fromCharCode.apply(null, uint))
+        let str = btoa(
+          String.fromCharCode.apply(
+            null,
+            Array.from<number>(new Uint8Array(uint))
+          )
+        )
         events = await getEventsbyEmbedding({ embedding: str })
       } else {
         console.log('Embedding Size not matching with the table')
