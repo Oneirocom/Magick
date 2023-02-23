@@ -62,6 +62,7 @@ import { NumberVariable } from './variable/NumberVariable'
 import { StringVariable } from './variable/StringVariable'
 import { GetCachedEmbedding } from './ml/GetCachedEmbedding'
 import { SpeechToText } from './ml/SpeechToText'
+import { PromptTemplate } from './strings/PromptTemplate'
 
 import { pluginManager } from '../plugin'
 import { EventsToConversation } from './events/EventsToConversation'
@@ -134,6 +135,7 @@ export let components = {
   imageGeneration: () => new ImageGeneration(),
   generator: () => new Generator(),
   speechToText: () => new SpeechToText(),
+  promptTemplate: () => new PromptTemplate(),
 }
 
 function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {
