@@ -15,8 +15,6 @@ node_modules
 .c9/
 *.launch
 .settings/
-.obsidian/
-docs/.obsidian/
 *.sublime-workspace
 
 

@@ -1,4 +1,5 @@
 import Agent from './Agent'
+import { ServerError } from '@magickml/server-core'
 import { projectId, ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
 import { app } from './app'
 
@@ -20,6 +21,8 @@ function initEntityLoop(update: Function, lateUpdate: Function) {
 
   async function entityLoop(update: Function, lateUpdate: Function) {
     const agents = (await app.service('agents').find(query)).data
+    console.log(query)
+    console.log('agents', agents)
 
     const now = new Date()
     const updated = []
@@ -68,6 +71,7 @@ export class World {
 
   async updateAgent() {
     this.newAgents = (await app.service('agents').find(query)).data
+    console.log('newAgents', this.newAgents)
     const newAgents = this.newAgents
     delete newAgents['updated_at']
     const oldAgents = this.oldAgents ?? []
@@ -76,7 +80,22 @@ export class World {
     if (JSON.stringify(newAgents) === JSON.stringify(oldAgents)) return // They are the same
     //If Discord Enabled is True replace the old Agent with a new one
     for (const i in newAgents){
+      try {
+        let temp_agent = this.getAgent(newAgents[i].id)
+        console.log("Inside TRY ")
+        await temp_agent.onDestroy()
+      } catch {
+        console.log("Client Does not exist")
+      }
       if (newAgents[i].data.discord_enabled){
+        try {
+          //Get the agent which was updated.
+          let temp_agent = this.getAgent(newAgents[i].id)
+          //Delete the Agent
+          await temp_agent.onDestroy()
+        } catch(e) {
+          console.log("Couldn't delete the Discord Client.!! Caught Error: ",e)
+        }
         this.addAgent(newAgents[i])
       } 
     }
@@ -99,7 +118,7 @@ export class World {
         undefined
       ) {
         if (newAgents[i].enabled) {
-          await this.addAgent(newAgents[i])
+          if (!(newAgents[i].data.discord_enabled)) await this.addAgent(newAgents[i])
         }
       }
     }
@@ -217,6 +236,8 @@ export class World {
     }
   }
 
+  async onDestroy() {}
+
   async addAgent(obj: any) {
     const data = {...obj.data, id: obj.id, enabled: obj.enabled, dirty: obj.dirty, spells: obj.spells, updated_at: obj.updated_at}
     console.log("SERVER", data.id)
@@ -227,6 +248,7 @@ export class World {
 
   async removeAgent(id: number) {
     if (this.objectExists(id)) {
+      await this.objects[id]?.onDestroy()
       this.objects[id] = null
       delete this.objects[id]
     }

@@ -40,7 +40,7 @@ export const agent = (app: Application) => {
       find: [],
       get: [],
       create: [schemaHooks.validateData(agentDataValidator), schemaHooks.resolveData(agentDataResolver)],
-      patch: [schemaHooks.validateData(agentPatchValidator), schemaHooks.resolveData(agentPatchResolver)],
+      patch: [schemaHooks.validateData(agentPatchValidator), schemaHooks.resolveData(agentPatchResolver),],
       remove: []
     },
     after: {

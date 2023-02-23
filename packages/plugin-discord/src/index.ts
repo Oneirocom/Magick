@@ -42,7 +42,7 @@ function getAgentMethods() {
 
     const discord = new discord_client()
     agent.discord = discord
-    await discord.createDiscordClient(
+    await agent.discord.createDiscordClient(
       agent,
       discord_api_key,
       discord_starting_words,
@@ -58,9 +58,14 @@ function getAgentMethods() {
   }
 
   async function stopDiscord(agent) {
+    console.log("Inside Kill Method")
     if (!agent.discord) throw new Error("Discord isn't running, can't stop it")
-    await agent.discord.destroy()
-    agent.discord = null
+    try{
+      await agent.discord.destroy()
+      agent.discord = null
+    } catch {
+      console.log("Agent does not exist !")
+    }
     console.log('Stopped discord client for agent ' + agent.name)
   }
 
