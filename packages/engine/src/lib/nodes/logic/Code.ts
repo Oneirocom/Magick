@@ -14,10 +14,11 @@ import { triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { processCode } from '../../functions/processCode'
 
-const defaultCode = `
+const defaultCode =`
 // inputs: dictionary of inputs based on socket names
 // data: internal data of the node to read or write to nodes data state
-function worker(inputs, data) {
+function worker({
+}, data) {
   // Keys of the object returned must match the names
   // of your outputs you defined.
   // To update the state, you must return the modified state.
@@ -45,6 +46,16 @@ export class Code extends MagickComponent<unknown> {
   }
 
   builder(node: MagickNode) {
+    console.log('node', node)
+
+    // get the keys of the map
+    const inputMap = node.inputs
+
+    const inputNames = Object.keys(inputMap)
+      .map(key => inputMap[key]).map(key => {
+        return '  ' + key
+      }).join(',\n')
+    
     if (!node.data.code) node.data.code = defaultCode
 
     const outputGenerator = new SocketGeneratorControl({

@@ -61,7 +61,7 @@ export class Inspector {
     control.id = uuidv4()
 
     // If we gave a default value and there isnt already one on the node, add it.
-    if (control.defaultValue && !this.node.data[control.dataKey])
+    if (control.defaultValue !== null && !this.node.data[control.dataKey])
       this.node.data[control.dataKey] = control.defaultValue
 
     list.set(control.dataKey, control)
