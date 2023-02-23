@@ -63,7 +63,7 @@ export class PromptTemplate extends MagickComponent<Promise<WorkerReturn>> {
 
     return node
   }
-
+  // @ts-ignore
   async worker(
     node: NodeData,
     rawInputs: MagickWorkerInputs,
