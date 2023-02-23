@@ -158,12 +158,6 @@ button.disabled {
   background-color: var(--primary) !important;
 }
 
-.flexlayout__layout {
-  background-color: var(--dark-2)!important;
-  color: var(--dark-4);
-  font-family: "IBM Plex Mono";
-}
-
 .flexlayout__tab {
   overflow: hidden;
   background-color: var(--dark-1)!important;
@@ -236,6 +230,10 @@ button.disabled {
   background-color: transparent;
 }
 
+/* .view-line span {
+  font-family: 'IBM Plex Mono', sans-serif;
+} */
+
 input[type='text'] {
   box-sizing: border-box;
   padding: var(--extraSmall);
@@ -257,8 +255,56 @@ input[type='text']:focus-visible {
     outline: 1px solid var(--glow)
 }
 
+.App {
+  width: calc(100% - 180px);
+}
+
+.agents-container {
+  display: flex;
+}
+
+.agent-header {
+  display: flex;
+}
+
+.agent-createModal {
+  position: relative;
+  right: 400px;
+  bottom: 350px;
+}
+
+.nav {
+  width: 180px;
+  float: left;
+  height: 100vh;
+}
+
+.nav-item,
+.nav-item-active {
+  cursor: pointer;
+  margin: 2em;
+  display: block;
+}
+
+.nav-item-active {
+  color: white;
+}
+
+.flex-container {
+  margin: 0.5em;
+  width: calc(100% - 2em);
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-item {
+  display: flex;
+  margin: 0.5em;
+}
+
 .form-item {
-  padding: 1em;
+  padding: 1em 0;
 }
 
 .entBtns {
@@ -271,12 +317,146 @@ input[type='text']:focus-visible {
   margin-bottom: 0.5em;
 }
 
+.form-text-area,
+.agent-select > select,
+.search-corpus > select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--extraSmall);
+  /* not using a var here to optically correct for base + cap of typeface */
+  background-color: var(--dark-2);
+  color: #fff;
+  border-radius: 4px;
+  cursor: default;
+  border: 1px solid var(--dark-4);
+  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
+  font-family: 'IBM Plex Mono', monospace !important;
+  font-size: 11px;
+  height: var(--c4);
+}
+
+.search-corpus-btns {
+  vertical-align: middle;
+  display: inline-flex;
+  justify-content: space-between;
+  margin: 0 1rem;
+  width: 25%;
+}
+
+.search-corpus-documents-list {
+  margin: 1rem 0;
+}
+
+.search-corpus-document,
+.content-obj {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+.search-corpus-document {
+  background: #545454;
+}
+.content-obj {
+  background: var(--dark-3);
+}
+
+.search-corpus-btn {
+  background-color: #2e2e2e;
+  border: none;
+  margin: 0 0.4rem;
+}
+
+.admin-container {
+  margin-left: 11em;
+  margin-top: 1em;
+}
+
+.agentFields {
+  padding-right: 10px;
+}
+
+.agentBtns {
+  display: flex;
+}
+
+.agentBtns button {
+  background-color: #878587;
+}
+
+.agentBtns .updateBtn {
+  margin-left: auto;
+  order: 2;
+}
+
+.agent-Manager select {
+  background: #fff;
+  color: #636363;
+}
+
+.dialogInput {
+  min-height: 100px;
+}
+.gettingsInput {
+  min-height: 80px;
+}
+
+.agent-container {
+  max-width: 100%;
+  padding: 2em;
+  height: calc(100% - 4em);
+  overflow: auto;
+}
+
+.agent-editor {
+  padding: 1em;
+  height: calc(100% - 4em);
+  overflow: auto;
+}
+
+.agentWindow {
+  padding: 1em;
+  margin-bottom: 1em;
+  background-color: #333;
+  border-radius: .25em;
+}
+
 .form-item > input[type='text'] {
   width: 100%;
 }
 
 .form-item > input[type='checkbox'] {
   display: inline-flex;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.justify-content-around {
+  justify-content: space-around;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.custom-checkbox {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.4rem;
+  margin: 0 0.5rem;
 }
 
 .bare-input {
@@ -290,4 +470,10 @@ input[type='text']:focus-visible {
 
 .input-title, .output-title, div.item {
     font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
+}
+
+.flexlayout__layout {
+  background-color: var(--dark-2)!important;
+  color: var(--dark-4);
+  font-family: "IBM Plex Mono";
 }

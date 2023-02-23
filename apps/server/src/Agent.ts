@@ -3,6 +3,7 @@ import { tts, tts_tiktalknet } from '@magickml/server-core'
 import { SpellManager, pluginManager } from '@magickml/engine'
 import { app } from './app'
 
+
 type StartLoopArgs = {
   spellHandler: any
   loop_interval?: string
@@ -59,7 +60,31 @@ export class Agent {
       for (const method of Object.keys(agentStartMethods)) {
         console.log('method', method)
         console.log(data.discord_enabled)
-        if(data.discord_enabled) await agentStartMethods[method]({ ...data, agent: this, spellRunner })
+        try{
+          //Creates an Discord Client if discord_enabled is true
+          if(data.discord_enabled) await agentStartMethods[method]({ ...data, agent: this, spellRunner })
+        } catch(e){
+          if(data.discord_enabled){
+            //Catches Internal Error in Discord Client
+            console.log("ERROR Caught: ", e)
+            try {
+              //Deletes the Client using Agent Stop methods
+              this.onDestroy()
+            } catch {
+              //Catches the errors in Client Deletion
+              console.log("The Discord Client Couldn't be Terminated.")
+            }
+            console.log('The Discord-Client has been terminated')
+            //Creates the client again after the previous client is deleted.
+            try{
+              if(data.discord_enabled) await agentStartMethods[method]({ ...data, agent: this, spellRunner })
+            } catch(e) {
+              console.log("Error Caught: Client Creation Failed", e)
+            }
+          }
+        }
+        
+        
       }
     })()
   }
