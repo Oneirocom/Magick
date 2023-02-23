@@ -1,5 +1,9 @@
 import {
-  CompletionBody, EditorContext, MagickWorkerInputs, Spell, VITE_APP_API_URL
+  CompletionBody,
+  EditorContext,
+  MagickWorkerInputs,
+  Spell,
+  VITE_APP_API_URL,
 } from '@magickml/engine'
 import axios from 'axios'
 import { createContext, useContext, useEffect, useRef } from 'react'
@@ -24,7 +28,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const { data: _spell } = spellApi.useGetSpellQuery(
     {
       spellName: tab.spellName,
-      projectId: config.projectId
+      projectId: config.projectId,
     },
     {
       skip: !tab.spellName,
@@ -141,6 +145,8 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const getSpell = async spellName => {
     const spell = await _getSpell({ spellName, projectId: config.projectId })
 
+    if (!spell.data) return null
+
     return spell.data[0] as Spell
   }
 
@@ -178,7 +184,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     }
   }
 
-  const runSpell = async ({inputs, spellName, projectId}) => {
+  const runSpell = async ({ inputs, spellName, projectId }) => {
     const response = await _runSpell({ inputs, spellName, projectId })
 
     if ('error' in response) {

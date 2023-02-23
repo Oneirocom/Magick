@@ -21,9 +21,6 @@ function initEntityLoop(update: Function, lateUpdate: Function) {
 
   async function entityLoop(update: Function, lateUpdate: Function) {
     const agents = (await app.service('agents').find(query)).data
-    console.log(query)
-    console.log('agents', agents)
-
     const now = new Date()
     const updated = []
 
@@ -71,7 +68,6 @@ export class World {
 
   async updateAgent() {
     this.newAgents = (await app.service('agents').find(query)).data
-    console.log('newAgents', this.newAgents)
     const newAgents = this.newAgents
     delete newAgents['updated_at']
     const oldAgents = this.oldAgents ?? []

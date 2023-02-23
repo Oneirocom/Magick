@@ -98,9 +98,10 @@ export const tabSlice = createSlice({
     clearTabs: tabAdapater.removeAll,
     changeActive: tabAdapater.updateMany,
     saveTabLayout: (state, action) => {
-      state.ids = [action.payload.tabId]
-      state.entities[action.payload.tabId].layoutJson =
-        action.payload?.layoutJson
+      tabAdapater.updateOne(state, {
+        id: action.payload.tabId,
+        changes: { layoutJson: action.payload.layoutJson },
+      })
     },
   },
 })

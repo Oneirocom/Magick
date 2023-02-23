@@ -14,8 +14,4 @@ export class InfoControl extends DataControl {
 
     super(options)
   }
-
-  onData() {
-    return
-  }
 }
