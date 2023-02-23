@@ -1,3 +1,5 @@
+// todo remove this and make a new event table component eventually.
+//@ts-nocheck
 import { useEffect, useMemo, useState } from 'react'
 import {
   useAsyncDebounce,
@@ -132,7 +134,7 @@ function EventTable({ events, updateCallback }) {
     let reqBody = {
       ...rowData,
       [columnId]: value,
-      projectId: config.projectId
+      projectId: config.projectId,
     }
     if (!_.isEqual(reqBody, rowData)) {
       const isUpdated = await axios.put(
@@ -216,7 +218,7 @@ function EventTable({ events, updateCallback }) {
 
   return (
     <Stack spacing={2}>
-      <Grid container justifyContent="left" style={{padding: "1em"}}>
+      <Grid container justifyContent="left" style={{ padding: '1em' }}>
         <Grid item xs={9.5}>
           <GlobalFilter
             globalFilter={state.globalFilter}
@@ -224,29 +226,29 @@ function EventTable({ events, updateCallback }) {
           />
         </Grid>
         <Grid item xs={1.5}>
-        <button
-              style={{marginLeft: "1em", display: 'inline', width: "8em" }}
-              name="refresh"
-              onClick={updateCallback}
-            >
-              Refresh
-            </button>
+          <button
+            style={{ marginLeft: '1em', display: 'inline', width: '8em' }}
+            name="refresh"
+            onClick={updateCallback}
+          >
+            Refresh
+          </button>
         </Grid>
         <Grid item xs={1}>
-        <CSVLink
-              data={originalRows}
-              filename="events.csv"
-              target="_blank"
-              style={{ textDecoration: 'none', display: "inline", width: "8em" }}
-            >
-              <button style={{ textDecoration: 'none', display: "inline" }}>
-                <FaFileCsv size={14} />
-              </button>
-            </CSVLink>
-            </Grid>
+          <CSVLink
+            data={originalRows}
+            filename="events.csv"
+            target="_blank"
+            style={{ textDecoration: 'none', display: 'inline', width: '8em' }}
+          >
+            <button style={{ textDecoration: 'none', display: 'inline' }}>
+              <FaFileCsv size={14} />
+            </button>
+          </CSVLink>
+        </Grid>
       </Grid>
       <TableContainer component={Paper}>
-        <Table  style={{width: "calc(100% - 2em)"}} {...getTableProps()}>
+        <Table style={{ width: 'calc(100% - 2em)' }} {...getTableProps()}>
           <TableHead style={{ backgroundColor: '#000' }}>
             {headerGroups.map((headerGroup, idx) => (
               <TableRow {...headerGroup.getHeaderGroupProps()} key={idx}>

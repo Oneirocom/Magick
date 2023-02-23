@@ -37,6 +37,7 @@
     "@feathersjs/koa": "5.0.0-pre.35",
     "@feathersjs/schema": "5.0.0-pre.35",
     "@feathersjs/socketio": "5.0.0-pre.35",
+    "@feathersjs/socketio-client": "^5.0.0-pre.37",
     "@feathersjs/transport-commons": "5.0.0-pre.35",
     "@feathersjs/typebox": "5.0.0-pre.35",
     "@google-cloud/speech": "^4.10.2",

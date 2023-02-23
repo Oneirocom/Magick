@@ -27,10 +27,20 @@ const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
   console.log('tab ::: ', tab)
 
   const onSubmit = handleSubmit(async data => {
+    console.log('data ::: ', data)
+
+    const spell = await spellApi.getSpell({ spellName: tab.spellName })
+
+    console.log('spell ::: ', spell)
+
     const response: any = await patchSpell({
-      spellName: tab.spellName,
-      update: {...data, projectId: data.projectId ?? config.projectId, hash: md5(JSON.stringify(data.graph.nodes))},
+      id: spell.id,
+      update: {
+        name: data.name,
+      },
     })
+
+    console.log('response.error ::: ', response.error)
 
     if (response.error) {
       setError(response.error.data.error.message)
