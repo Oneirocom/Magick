@@ -10,7 +10,7 @@ import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { DropdownControl } from '../../dataControls/DropdownControl'
-import { makeCompletion } from '../../functions/makeCompletion'
+import { CompletionData, makeCompletion } from '../../functions/makeCompletion'
 
 const info = 'Basic text completion using OpenAI.'
 
@@ -44,7 +44,7 @@ export class TextCompletion extends MagickComponent<
     const outp = new Rete.Output('output', 'output', stringSocket)
 
     const modelName = new DropdownControl({
-      name: 'modelName',
+      name: 'Model Name',
       dataKey: 'modelName',
       values: [
         'text-davinci-003',
@@ -56,12 +56,12 @@ export class TextCompletion extends MagickComponent<
         'curie-instruct-beta',
         'davinci-instruct-beta',
       ],
-      defaultValue: 'text-davinci-002',
+      defaultValue: 'text-davinci-003',
     })
 
     const temperature = new InputControl({
       dataKey: 'temperature',
-      name: 'Temperature',
+      name: 'Temperature (0-1.0)',
       icon: 'moon',
       defaultValue: 0.5,
     })
@@ -75,30 +75,30 @@ export class TextCompletion extends MagickComponent<
 
     const top_p = new InputControl({
       dataKey: 'top_p',
-      name: 'Top P',
+      name: 'Top P (0-1.0)',
       icon: 'moon',
       defaultValue: 1,
     })
 
     const frequency_penalty = new InputControl({
       dataKey: 'frequency_penalty',
-      name: 'Frequency Penalty',
+      name: 'Frequency Penalty (0-2.0)',
       icon: 'moon',
-      defaultValue: 0,
+      defaultValue: 0.0,
     })
 
     const presence_penalty = new InputControl({
       dataKey: 'presence_penalty',
-      name: 'Presence Penalty',
+      name: 'Presence Penalty (0-2.0)',
       icon: 'moon',
       defaultValue: 0,
     })
 
     const stop = new InputControl({
       dataKey: 'stop',
-      name: 'Stop',
+      name: 'Stop (Comma Separated)',
       icon: 'moon',
-      defaultValue: '',
+      defaultValue: '###',
     })
 
     node.inspector
@@ -144,16 +144,14 @@ export class TextCompletion extends MagickComponent<
 
     const frequencyPenaltyData =
       settings.frequency_penalty ?? (node?.data?.frequency_penalty as string)
-    const frequency_penalty = parseFloat((frequencyPenaltyData ?? 0))  // Filtering out null inputs. Issue #208
+    const frequency_penalty = parseFloat((frequencyPenaltyData ?? 0))
     
     const presencePenaltyData =
       settings.presence_penalty ?? (node?.data?.presence_penalty as string)
-    const presence_penalty = parseFloat((presencePenaltyData ?? 0))  // Filtering out null inputs. Issue #208
+    const presence_penalty = parseFloat((presencePenaltyData ?? 0))
     
     const stopData = settings.stop ?? (node?.data?.stop as string)
-    const stop = (stopData ?? " ").split(', ') // Filtering out null inputs. Issue #208
-
-    
+    const stop = (stopData ?? "").split(', ')
     
     for (let i = 0; i < stop.length; i++) {
       if (stop[i] === '\\n') {
@@ -165,7 +163,7 @@ export class TextCompletion extends MagickComponent<
       return el != null && el !== undefined && el.length > 0
     })
 
-    const body = {
+    const body: CompletionData = {
       prompt: prompt as string,
       temperature,
       max_tokens,
