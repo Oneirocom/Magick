@@ -15,14 +15,17 @@ import { processCode } from '../../functions/processCode'
 
 const defaultCode = `
 # inputs: dictionary of inputs based on socket names outside the worker function
+# return: dictionary of outputs based on socket names outside the worker function, and data as the second argument
 # data: internal data of the node to read or write to nodes data state
+# Make sure to call function with inputs and data as arguments
 
-inputs = {}
+inputs = {input1}
 def worker(inputs, data):
   # Keys of the object returned must match the names
   # of your outputs you defined.
-  outputs = dict(output1=input1, output2=input2)
+  outputs = dict(output1=input1)
   return outputs, data
+worker(inputs, data)
 `
 
 const info = `The code component is your swiss army knife when other components won't cut it.  You can define any number of inputs and outputs on it, and then write a custom worker function.  You have access to the data plugged into the inputs you created on your component, and can send data out along your outputs.
