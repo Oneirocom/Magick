@@ -53,9 +53,11 @@ const MenuBar = () => {
   const [menuVisibility, togglemenuVisibility] = useToggle()
 
   const onSave = () => {
+    console.log(activeTabRef.current?.id)
     console.log('SAVING')
-    if (!activeTabRef.current) return
-    publish($SAVE_SPELL(activeTabRef.current.id))
+   // if (!activeTabRef.current) return
+    console.log("GONNA")
+    publish($SAVE_SPELL(activeTabRef.current?.id))
   }
 
   const onSaveAs = () => {

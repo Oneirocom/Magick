@@ -1,6 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { hooks as schemaHooks } from '@feathersjs/schema'
-
+import { randomUUID } from 'crypto'
 import {
   spellDataValidator,
   spellPatchValidator,
@@ -39,15 +39,35 @@ export const spell = (app: Application) => {
       all: [schemaHooks.validateQuery(spellQueryValidator), schemaHooks.resolveQuery(spellQueryResolver)],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(spellDataValidator), schemaHooks.resolveData(spellDataResolver)],
+      create: [schemaHooks.validateData(spellDataValidator), schemaHooks.resolveData(spellDataResolver),
+        
+        async (context:any) => {
+          const { data, service } = context;
+          context.data = {
+            [service.id]:randomUUID(),
+            ...data
+          }
+        },
+        async (context: any) => {
+          
+          console.log(context.data)
+        },
+      ],
       patch: [schemaHooks.validateData(spellPatchValidator), schemaHooks.resolveData(spellPatchResolver)],
       remove: []
     },
     after: {
       all: [],
+      create: [
+        async (context: any) => {
+          console.log("AFTER")
+          console.log(context.data)
+        }
+      ],
       patch: [
         // after saving a spell, we need to update the spell cache
         async (context: any) => {
+          console.log("ISNIDE")
           const { app } = context
           const { id } = context.result
           const spell = await app.service('spells').get(id)

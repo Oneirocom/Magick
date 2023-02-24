@@ -36,6 +36,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
   } = useForm()
 
   const onSubmit = handleSubmit(async data => {
+    console.log("Inside Spell SUbmit")
     const saveResponse: any = await saveSpell({
       spell: {...spell, name: data.name},
       projectId: config.projectId

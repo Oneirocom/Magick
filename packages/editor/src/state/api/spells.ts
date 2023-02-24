@@ -54,6 +54,15 @@ export const getSpellApi = (config) => {
           }
         },
       }),
+      getSpellById: builder.query({
+        providesTags: ['Spell'],
+        query: ({ spellName, projectId, Id }) => {
+          return {
+            url: `spells?name=${spellName}&projectId=${projectId}&id=${Id}`,
+            params: {},
+          }
+        },
+      }),
       runSpell: builder.mutation({
         query: ({ spellName, inputs, state = {}, projectId }) => ({
           url: `spells/${spellName}`,
@@ -87,6 +96,7 @@ export const getSpellApi = (config) => {
         // needed to use queryFn as query option didnt seem to allow async functions.
         async queryFn({ spell, projectId, }, { dispatch }, extraOptions, baseQuery) {
           // make a copy of spell but remove the id
+          console.log(spell)
           const spellCopy = { ...spell } as any
           if (spellCopy.id) delete spellCopy.id
           if (Object.keys(spellCopy).includes('modules')) delete spellCopy.modules

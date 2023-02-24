@@ -28,7 +28,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
   const spellRef = useRef<Spell>()
   const { events, publish } = usePubSub()
-  const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellQuery()
+  const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
   const { editor, serialize } = useEditor()
   const FeathersContext = useFeathers()
   const client = FeathersContext?.client
@@ -75,9 +75,11 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
   useEffect(() => {
     if (!tab || !tab.spellName) return
+    console.log("Inside Load Spell !!")
     loadSpell({
-      spellName: tab.spellName,
+      spellName: "sdbot",
       projectId: config.projectId,
+      Id: tab.id,
     })
   }, [tab])
 

@@ -18,6 +18,7 @@ import defaultGraph from '../../../data/graphs/default'
 import threeovGraph from '../../../data/graphs/threeov'
 import md5 from 'md5'
 import { useConfig } from '../../../contexts/ConfigProvider'
+import { uuidv4 } from 'packages/editor/src/utils/uuid'
 
 const customConfig = {
   dictionaries: [adjectives, colors],
@@ -65,6 +66,8 @@ const CreateNew = () => {
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
       })
+      console.log(name)
+      console.log(response)
 
       if ('error' in response) {
         console.log('error in response', response.error)
@@ -80,7 +83,7 @@ const CreateNew = () => {
         }
       }
 
-      navigate(`/magick/${name}`)
+      navigate(`/magick/${response.data.id}?${name}`)
     } catch (err) {
       console.log('ERROR!!', err)
     }
