@@ -81,11 +81,11 @@ export class ImageGeneration extends MagickComponent<Promise<InputReturn>> {
     const output = new Rete.Output('output', 'Output', stringSocket, true)
 
     return node
-      .addOutput(output)
-      .addOutput(dataOutput)
-      .addInput(promptInput)
       .addInput(triggerInput)
+      .addInput(promptInput)
       .addInput(endpointInput)
+      .addOutput(dataOutput)
+      .addOutput(output)
   }
 
   async worker(
