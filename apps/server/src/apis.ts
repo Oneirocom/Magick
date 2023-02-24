@@ -64,7 +64,7 @@ const handleSpell = async (ctx: Koa.Context) => {
     })
     return outputs
   }
-  const { spellName, inputs, projectId } = ctx.request.bod as any
+  const { spellName, inputs, projectId } = ctx.request.body as any
   const outputs = await runSpell({ spellName, inputs, projectId })
   ctx.body = outputs
 }
