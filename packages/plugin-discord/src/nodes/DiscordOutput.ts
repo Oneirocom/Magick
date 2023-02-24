@@ -1,3 +1,5 @@
+// TODO: This is not finished yet, needs to be added to the agent and selected by the spell handler
+
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
