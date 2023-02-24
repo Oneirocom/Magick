@@ -16,7 +16,6 @@ export class Plugin {
     nodes,
     services,
     windowComponents,
-    startKey,
     agentComponents,
     serverInit,
     agentMethods,
@@ -24,7 +23,6 @@ export class Plugin {
   }) {
     this.name = name
     this.nodes = nodes
-    this.startkey = startKey
     this.services = services
     this.windowComponents = windowComponents
     this.agentComponents = agentComponents
