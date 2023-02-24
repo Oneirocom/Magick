@@ -79,8 +79,8 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
     node.inspector.add(tiktalknet_url)
 
     return node
-      .addInput(textInput)
       .addInput(triggerInput)
+      .addInput(textInput)
       .addInput(voiceProviderInp)
       .addInput(characterInp)
       .addInput(languageCodeInp)

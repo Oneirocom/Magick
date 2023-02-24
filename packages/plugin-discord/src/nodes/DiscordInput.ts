@@ -115,7 +115,7 @@ export class DiscordInput extends MagickComponent<InputReturn> {
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    return node.addOutput(out).addOutput(trigger)
+    return node.addOutput(trigger).addOutput(out)
   }
 
   // @ts-ignore

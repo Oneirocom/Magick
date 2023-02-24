@@ -61,8 +61,8 @@ export class DiscordOutput extends MagickComponent<void> {
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
     return node
-      .addInput(textInput)
       .addInput(triggerInput)
+      .addInput(textInput)
       .addOutput(triggerOutput)
       .addOutput(output)
   }
