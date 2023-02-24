@@ -19,7 +19,7 @@ import { apis } from './apis'
 import { spells } from './spells'
 import { Handler, Method, Middleware, Route } from '@magickml/server-core'
 import { worldManager, pluginManager } from '@magickml/engine'
-import { World } from './World'
+import { AgentManager } from './AgentManager'
 import { HookContext, NextFunction } from '@feathersjs/feathers/lib'
 
 // log node.js errors
@@ -48,19 +48,6 @@ async function init() {
     let plugins = (await import('./plugins')).default
     console.log('loaded plugins on server', plugins)
   })()
-  try{
-    new World()
-    console.log("CREATED WORLD")
-    new worldManager()
-  } catch(e){
-    app.service('agents').hooks([
-      async (context: HookContext) => {
-        throw new Error(e)
-      }
-    ])
-    console.log("ERROR CAUGHT: ",e)
-  }
-  
   
   initSpeechServer(false)
   await initFileServer()
