@@ -14,7 +14,6 @@ import {
 import { useParams } from 'react-router-dom'
 import contractABI from './contract.json'
 import { ethers } from 'ethers'
-import Button from '../../components/Button'
 
 const Contract = () => {
   const {
@@ -158,10 +157,10 @@ const Contract = () => {
         connectors
           .filter(x => x.ready && x.id !== connector?.id)
           .map(x => (
-            <Button key={x.id} onClick={() => connect({ connector: x })}>
+            <button key={x.id} onClick={() => connect({ connector: x })}>
               {`Connect ${x.name}`}
               {isLoading && x.id === pendingConnector?.id && ' (connecting)'}
-            </Button>
+            </button>
           ))}
       {isConnected && (
         <>
@@ -204,32 +203,32 @@ const Contract = () => {
           >
             <span>RPC Endpoint (HTTP/S):</span>
             <input style={{ width: '400px' }} value={DEFAULT_RPC}></input>
-            <Button
+            <button
               key="addCustomRpcHttp"
               onClick={() => addCustomRpcHttp()}
               disabled={!isConnected}
               style={{ marginBottom: '12px' }}
             >
               Add Custom RPC
-            </Button>
+            </button>
           </div>
           <div>
-            <Button onClick={() => switchNetwork?.(contractChainParsed)}>
+            <button onClick={() => switchNetwork?.(contractChainParsed)}>
               Change network
-            </Button>
+            </button>
           </div>
         </div>
       )}
       {isConnected && (
         <div>
-          <Button
+          <button
             key="disconnect"
             onClick={() => disconnect()}
             disabled={!isConnected}
             style={{ marginTop: '20px' }}
           >
             Disconnect
-          </Button>
+          </button>
         </div>
       )}
       <hr
@@ -269,9 +268,9 @@ const Contract = () => {
               )
             </p>
           )}
-          <Button onClick={() => callContractFun()} disabled={!isConnected}>
+          <button onClick={() => callContractFun()} disabled={!isConnected}>
             Call
-          </Button>
+          </button>
           {isCallError && (
             <p style={{ color: 'red' }}>{`Error: ${callError}`}</p>
           )}
