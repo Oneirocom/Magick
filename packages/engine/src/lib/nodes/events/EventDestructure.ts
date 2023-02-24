@@ -75,6 +75,8 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
     return node
       .addInput(dataInput)
       .addInput(eventInput)
+      .addOutput(dataOutput)
+      .addOutput(out)
       .addOutput(sender)
       .addOutput(observer)
       .addOutput(client)
@@ -83,8 +85,6 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       .addOutput(entities)
       .addOutput(channelType)
       .addOutput(projectId)
-      .addOutput(out)
-      .addOutput(dataOutput)
   }
 
   // eslint-disable-next-line require-await

@@ -18,6 +18,7 @@ import defaultGraph from '../../../data/graphs/default'
 import threeovGraph from '../../../data/graphs/threeov'
 import md5 from 'md5'
 import { useConfig } from '../../../contexts/ConfigProvider'
+import Button from 'packages/editor/src/components/Button'
 
 const customConfig = {
   dictionaries: [adjectives, colors],
@@ -127,19 +128,19 @@ const CreateNew = () => {
         ))}
       </div>
       <div className={css['button-row']}>
-        <button
+        <Button
           onClick={() => {
             window.history.back()
           }}
         >
           cancel
-        </button>
-        <button
+        </Button>
+        <Button
           className={!selectedTemplate ? 'disabled' : 'primary'}
           onClick={onCreate}
         >
           CREATE
-        </button>
+        </Button>
       </div>
     </Panel>
   )

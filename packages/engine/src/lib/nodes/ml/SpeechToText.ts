@@ -51,10 +51,10 @@ export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
     const output = new Rete.Output('output', 'Output', stringSocket, true)
 
     return node
-      .addOutput(output)
-      .addOutput(dataOutput)
-      .addInput(audioInput)
       .addInput(triggerInput)
+      .addInput(audioInput)
+      .addOutput(dataOutput)
+      .addOutput(output)
   }
 
   async worker(

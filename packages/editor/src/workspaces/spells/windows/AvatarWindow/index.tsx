@@ -16,6 +16,7 @@ import {
   selectStateBySpellId,
   upsertLocalState,
 } from '../../../../state/localState'
+import Button from 'packages/editor/src/components/Button'
 
 const AvatarWindow = ({ tab }) => {
   const scrollbars = useRef<any>()
@@ -98,7 +99,9 @@ const AvatarWindow = ({ tab }) => {
 
   const onDataChange = dataText => {
     console.log('new data text', dataText)
-    dispatch(upsertLocalState({ spellName: tab.spellName, playtestData: dataText }))
+    dispatch(
+      upsertLocalState({ spellName: tab.spellName, playtestData: dataText })
+    )
   }
 
   const toggleData = () => {
@@ -121,9 +124,9 @@ const AvatarWindow = ({ tab }) => {
           label="Record"
         />
       </FormGroup>
-      <button className="small" onClick={toggleData}>
+      <Button className="small" onClick={toggleData}>
         Data
-      </button>
+      </Button>
     </>
   )
 

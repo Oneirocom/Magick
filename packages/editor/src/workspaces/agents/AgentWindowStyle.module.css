@@ -10,3 +10,12 @@
   color: var(--dark-5);
   margin-bottom: 20px;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  cursor: pointer;
+}

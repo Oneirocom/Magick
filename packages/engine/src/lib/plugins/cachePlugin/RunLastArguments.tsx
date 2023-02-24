@@ -10,7 +10,11 @@ const ReactRunButton = props => {
   }
 
   return (
-    <button className="small" onClick={onButton} style={{ maxWidth: '65%' }}>
+    <button
+      className="small"
+      onClick={onButton}
+      style={{ maxWidth: '65%', cursor: 'pointer' }}
+    >
       Run with last arguments
     </button>
   )

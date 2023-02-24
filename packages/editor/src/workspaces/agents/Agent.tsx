@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState, useRef } from 'react'
 import { useConfig } from '../../contexts/ConfigProvider'
+import Button from '../../components/Button'
 
 /* Import All Agent Window Components */
 import { pluginManager } from '@magickml/engine'
@@ -73,10 +74,12 @@ const AgentWindow = ({
   }, [loaded])
 
   useEffect(() => {
-    (async () => {
-      const res = await fetch(`${config.apiUrl}/spells?projectId=${config.projectId}`);
-      const json = await res.json();
-      
+    ;(async () => {
+      const res = await fetch(
+        `${config.apiUrl}/spells?projectId=${config.projectId}`
+      )
+      const json = await res.json()
+
       console.log('res', json)
       console.log('spellList', json)
       setSpellList(json.data)
@@ -106,19 +109,7 @@ const AgentWindow = ({
       })
   }
 
-  const update = () => {
-    const _data = {
-      enabled,
-      data: {
-        ...agentDataState,
-        openai_api_key,
-        eth_private_key,
-        eth_public_address,
-        loop_enabled,
-        loop_interval,
-        root_spell,
-      },
-    }
+  const update = (_data: {}) => {
     console.log('Update called', _data)
 
     axios
@@ -239,7 +230,10 @@ const AgentWindow = ({
           </Grid>
 
           {selectedSpellPublicVars.length !== 0 && (
-            <AgentPubVariables publicVars={selectedSpellPublicVars} />
+            <AgentPubVariables
+              update={update}
+              publicVars={selectedSpellPublicVars}
+            />
           )}
 
           {loop_enabled && (
@@ -270,13 +264,28 @@ const AgentWindow = ({
         </>
       )}
       <div className="form-item entBtns">
-        <button onClick={() => update()} style={{ marginRight: '10px' }}>
+        <Button
+          onClick={() => {
+            const data = {
+              enabled,
+              data: {
+                ...agentDataState,
+                openai_api_key,
+                eth_private_key,
+                eth_public_address,
+                loop_enabled,
+                loop_interval,
+                root_spell,
+              },
+            }
+            update(data)
+          }}
+          style={{ marginRight: '10px', cursor: 'pointer' }}
+        >
           Update
-        </button>
-        <button onClick={() => _delete()} style={{ marginRight: '10px' }}>
-          Delete
-        </button>
-        <button onClick={() => exportEntity()}>Export</button>
+        </Button>
+        <Button onClick={() => _delete()}>Delete</Button>
+        <Button onClick={() => exportEntity()}>Export</Button>
       </div>
     </div>
   )
@@ -308,7 +317,7 @@ const KeyInput = ({
   return value ? (
     <>
       <p>{secret ? obfuscateKey(value) : value}</p>
-      <button onClick={removeKey}>remove</button>
+      <Button onClick={removeKey}>remove</Button>
     </>
   ) : (
     <input

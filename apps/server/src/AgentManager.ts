@@ -1,5 +1,4 @@
 import Agent from './Agent'
-import { ServerError } from '@magickml/server-core'
 import { projectId, ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
 import { app } from './app'
 
@@ -16,7 +15,7 @@ function randomInt(min, max) {
 const maxMSDiff = 5000
 let interval = 3000
 
-function initEntityLoop(update: Function, lateUpdate: Function) {
+function initAgentManagerLoop(update: Function, lateUpdate: Function) {
   const date = new Date()
 
   async function entityLoop(update: Function, lateUpdate: Function) {
@@ -51,8 +50,7 @@ function initEntityLoop(update: Function, lateUpdate: Function) {
   }, interval)
 }
 
-export class World {
-  static instance: World
+export class AgentManager {
   id = -1
   objects: { [id: number]: any } = {}
   oldAgents: any
@@ -61,8 +59,7 @@ export class World {
 
   constructor() {
     this.id = 0
-    console.log('creating world')
-    World.instance = this
+    console.log('Creating agent manager')
     this.onCreate()
   }
 
@@ -204,7 +201,7 @@ export class World {
 
     this.resetAgentSpells()
 
-    initEntityLoop(
+    initAgentManagerLoop(
       async (id: number) => {
         await this.updateAgent()
         this.updateInstance(id)
@@ -282,3 +279,5 @@ export class World {
     return port
   }
 }
+
+export const agentManager = new AgentManager()

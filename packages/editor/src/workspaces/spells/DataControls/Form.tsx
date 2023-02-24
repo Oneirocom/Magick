@@ -1,3 +1,5 @@
+import Button from 'packages/editor/src/components/Button'
+
 interface Props {
   value: string
   placeHolder: string
@@ -24,9 +26,9 @@ const Form = ({
           required
           placeholder={placeHolder}
         />
-        <button style={{ flex: 1 }} onClick={onAdd} type="submit">
+        <Button style={{ flex: 1 }} onClick={onAdd} type="submit">
           + Add
-        </button>
+        </Button>
       </div>
     </form>
   )

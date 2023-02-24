@@ -29,6 +29,7 @@ import axios from 'axios'
 import _ from 'lodash'
 import { CSVLink } from 'react-csv'
 import { useConfig } from '../../../../contexts/ConfigProvider'
+import Button from 'packages/editor/src/components/Button'
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter)
@@ -226,13 +227,13 @@ function EventTable({ events, updateCallback }) {
           />
         </Grid>
         <Grid item xs={1.5}>
-          <button
+          <Button
             style={{ marginLeft: '1em', display: 'inline', width: '8em' }}
             name="refresh"
             onClick={updateCallback}
           >
             Refresh
-          </button>
+          </Button>
         </Grid>
         <Grid item xs={1}>
           <CSVLink
@@ -241,9 +242,9 @@ function EventTable({ events, updateCallback }) {
             target="_blank"
             style={{ textDecoration: 'none', display: 'inline', width: '8em' }}
           >
-            <button style={{ textDecoration: 'none', display: 'inline' }}>
+            <Button style={{ textDecoration: 'none', display: 'inline' }}>
               <FaFileCsv size={14} />
-            </button>
+            </Button>
           </CSVLink>
         </Grid>
       </Grid>

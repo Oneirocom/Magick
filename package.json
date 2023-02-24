@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "license": "Apache 2.0",
   "scripts": {
-    "migrate:make": "nx run server:migrate:make",
-    "migrate": "nx run server:migrate",
+    "migrate:make": "nx run @magickml/server:migrate:make",
+    "migrate": "nx run @magickml/server:migrate",
     "dev": "npx nx run-many --target=serve --projects=@magickml/server,@magickml/client",
-    "db:init": "npx prisma db push",
     "containers": "concurrently \"docker-compose up\" \"sleep 20 && npm run db:init && echo database synced!\"",
     "build": "npx nx build",
     "build-client": "npx nx build @magickml/client",
@@ -23,6 +22,7 @@
   },
   "dependencies": {
     "@banana-dev/banana-dev": "^4.0.0",
+    "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.14.0",
     "@emotion/styled": "^11.10.5",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
@@ -105,7 +105,7 @@
     "pgvector": "^0.1.0",
     "pm2": "^5.0.0",
     "postgres": "^3.3.3",
-    "prisma": "^4.8.1",
+    "prism-media": "github:Oneirocom/prism-media",
     "pubsub-js": "^1.9.4",
     "pyodide": "^0.22.0",
     "react": "^18.2.0",
@@ -160,6 +160,7 @@
     "xvfb": "0.4.0"
   },
   "peerDependencies": {
+    "@discordjs/opus": "^0.9.0",
     "jsdom": "^21.1.0"
   },
   "devDependencies": {

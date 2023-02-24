@@ -6,6 +6,7 @@ import Window from '../../../components/Window/Window'
 import DataControls from '../DataControls'
 import WindowMessage from '../../components/WindowMessage'
 import { useInspector } from '../../contexts/InspectorProvider'
+import Button from 'packages/editor/src/components/Button'
 
 const Inspector = props => {
   const { inspectorData, saveInspector } = useInspector()
@@ -65,7 +66,7 @@ const Inspector = props => {
       </div>
       {/* I would like to make an "icon button" for this instead of "Help." Leaving it as help just for the function for now.*/}
       {inspectorData?.info && (
-        <button
+        <Button
           onClick={() =>
             openModal({
               modal: 'infoModal',
@@ -75,7 +76,7 @@ const Inspector = props => {
           }
         >
           Help
-        </button>
+        </Button>
       )}
     </>
   )

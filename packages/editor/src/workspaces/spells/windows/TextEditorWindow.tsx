@@ -9,6 +9,7 @@ import '../../../screens/Magick/magick.module.css'
 import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
 import { RootState } from '../../../state/store'
 import { useSelector } from 'react-redux'
+import Button from 'packages/editor/src/components/Button'
 
 const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)
@@ -34,7 +35,7 @@ const TextEditor = props => {
       colors: {
         'editor.background': '#272727',
       },
-    })      
+    })
   }
 
   useEffect(() => {
@@ -44,7 +45,8 @@ const TextEditor = props => {
     if (!inspectorData?.data.inputs) return
 
     // if inspectorData?.data.inputs is the same as lastInputs, then return
-    if (Object.keys(JSON.stringify(inspectorData?.data.inputs)) === lastInputs) return
+    if (Object.keys(JSON.stringify(inspectorData?.data.inputs)) === lastInputs)
+      return
     setLastInputs(JSON.stringify(inspectorData?.data.inputs))
 
     const inputs: string[] = []
@@ -58,17 +60,16 @@ const TextEditor = props => {
     // get the first line that starts with }
     const endIndex = textLines.findIndex(line => line.startsWith('}'))
 
-    if(startIndex === -1 || endIndex === -1) return
-    
+    if (startIndex === -1 || endIndex === -1) return
+
     // remove the lines in textLines starting at StartIndex and ending at EndIndex
     // replace with the inputs
     textLines.splice(startIndex + 1, endIndex - startIndex - 1, ...inputs)
-    
+
     // join the textLines array back into a string
     const updatedText = textLines.join('\n')
     textEditorData.data = updatedText
     setCode(updatedText)
-  
   }, [activeTab])
 
   useEffect(() => {
@@ -99,7 +100,12 @@ const TextEditor = props => {
 
   useEffect(() => {
     console.log('props', props)
-    if (!textEditorData || Object.keys(textEditorData).length === 0 || !textEditorData.data) return
+    if (
+      !textEditorData ||
+      Object.keys(textEditorData).length === 0 ||
+      !textEditorData.data
+    )
+      return
 
     console.log('textEditorData', textEditorData)
 
@@ -112,15 +118,15 @@ const TextEditor = props => {
 
     const textLines = textEditorData.data.split('\n')
     // get the index of the first line that starts with function
-    const startIndex = textLines.findIndex(line => line.startsWith('function')) + 1
+    const startIndex =
+      textLines.findIndex(line => line.startsWith('function')) + 1
     // get the first line that starts with }
     const endIndex = textLines.findIndex(line => line.startsWith('}')) - 1
-    
 
     // remove the lines in textLines starting at StartIndex and ending at EndIndex
     // replace with the inputs
     textLines.splice(startIndex, endIndex - startIndex, ...inputs)
-    
+
     // join the textLines array back into a string
     const updatedText = textLines.join('\n')
 
@@ -188,8 +194,7 @@ const TextEditor = props => {
     complete(codeRef.current)
   }
 
-  const functionPromptJs =
-`function worker (inputs, data) {
+  const functionPromptJs = `function worker (inputs, data) {
 const { input1, input2 } = inputs
   return {
     output: input1 + input2
@@ -198,8 +203,7 @@ const { input1, input2 } = inputs
 
 `
 
-  const functionPromptPython =
-`def worker (inputs, data):
+  const functionPromptPython = `def worker (inputs, data):
 return {
   output: inputs['input1'] + inputs['input2']
 }
@@ -212,8 +216,10 @@ return {
     inputs = [],
     outputs = []
   ) => {
-    let prompt = language === 'plaintext' ? functionText : 
-    `// The following is a function written in ${language}.
+    let prompt =
+      language === 'plaintext'
+        ? functionText
+        : `// The following is a function written in ${language}.
 
 // Inputs: input1, input2
 // Outputs: output
@@ -247,14 +253,20 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
       prompt = prompt + `\n// Outputs: ${outputString}`
     }
 
-    prompt = language === 'plaintext' ? prompt :
-      prompt + `\n// Task: ${functionText}\n`
+    prompt =
+      language === 'plaintext'
+        ? prompt
+        : prompt + `\n// Task: ${functionText}\n`
 
-    prompt = language === 'plaintext' ? prompt :
-      prompt +
-      '\n' +
-      (language === 'python' ? 'def worker (inputs, data)' : `function worker ({${inputString}}, data)`) + 
-      (language === 'python' ? ':' : ' {')
+    prompt =
+      language === 'plaintext'
+        ? prompt
+        : prompt +
+          '\n' +
+          (language === 'python'
+            ? 'def worker (inputs, data)'
+            : `function worker ({${inputString}}, data)`) +
+          (language === 'python' ? ':' : ' {')
 
     return prompt
   }
@@ -310,14 +322,23 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
     )
 
     const d = language === 'python' ? '# ' : '// '
-    
-    let header = language === 'plaintext' ? `Task: ${functionText}\n` :
-`${d}Task: ${functionText}
+
+    let header =
+      language === 'plaintext'
+        ? `Task: ${functionText}\n`
+        : `${d}Task: ${functionText}
 ${d}Outputs: ${_outputs.join(', ')}
-${language === 'python' ? 'def ' : 'function '
-+ `worker ({\n` + _inputs.map(input => `  ${input},\n`).join('') + `}, data)`
-+ (language === 'python' ? ':' : ' {') + '\n'}`
-    
+${
+  language === 'python'
+    ? 'def '
+    : 'function ' +
+      `worker ({\n` +
+      _inputs.map(input => `  ${input},\n`).join('') +
+      `}, data)` +
+      (language === 'python' ? ':' : ' {') +
+      '\n'
+}`
+
     const json = await response.json()
     console.log('response', json)
 
@@ -350,9 +371,9 @@ ${language === 'python' ? 'def ' : 'function '
       <div style={{ flex: 1, marginTop: 'var(--c1)' }}>
         {textEditorData?.name && textEditorData?.name}
       </div>
-      <button onClick={onComplete}>COMPLETE</button>
-      <button onClick={onGenerate}>GENERATE</button>
-      <button onClick={onSave}>SAVE</button>
+      <Button onClick={onComplete}>COMPLETE</Button>
+      <Button onClick={onGenerate}>GENERATE</Button>
+      <Button onClick={onSave}>SAVE</Button>
     </>
   )
 
