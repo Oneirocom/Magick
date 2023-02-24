@@ -31,9 +31,6 @@ const getSpell = async ({app, id, projectId}) => {
       id: id
     }
   })
-  console.log("Inside Load Spell")
-  console.log(projectId,id)
-  console.log(spell.data[0])
   return spell.data[0]
 }
 
@@ -44,7 +41,7 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
   ServiceParams,
   SpellRunnerPatch
 > {
-  async get(id: Id, params?: SpellRunnerParams): Promise<any | {}> {
+  async get(id: string, params?: SpellRunnerParams): Promise<any | {}> {
     if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
     const { user, query } = params as any;
@@ -54,7 +51,6 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
     const spellManager = app.userSpellManagers.get(user.id.toString())
 
     if (!spellManager) throw new Error('No spell manager created for user!')
-    console.log(id)
     let decoded_id = id.slice(0,36)
     const spell = await getSpell({app, id: decoded_id as string, projectId: query.projectId})
 
@@ -81,7 +77,7 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
     if (!spellManager.hasSpellRunner(id)) {
       const spell = await getSpell({app, id: id, projectId})
       await spellManager.load(spell as Spell)
-      console.log("SPELL Loaded")
+
     }
 
     const result = await spellManager.run(id, inputs)

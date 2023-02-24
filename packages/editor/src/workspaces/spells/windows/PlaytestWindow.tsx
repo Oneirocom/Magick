@@ -92,8 +92,6 @@ const Playtest = ({ tab }) => {
   const localState = useAppSelector(state => {
     return selectStateBytabId(state.localState, tab.id)
   })
-  console.log(getStore(config).getState())
-  console.log(localState)
   const client = FeathersContext?.client
   const { $PLAYTEST_INPUT, $PLAYTEST_PRINT } = events
 
