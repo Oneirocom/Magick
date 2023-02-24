@@ -67,7 +67,6 @@ export const spell = (app: Application) => {
       patch: [
         // after saving a spell, we need to update the spell cache
         async (context: any) => {
-          console.log("ISNIDE")
           const { app } = context
           const { id } = context.result
           const spell = await app.service('spells').get(id)

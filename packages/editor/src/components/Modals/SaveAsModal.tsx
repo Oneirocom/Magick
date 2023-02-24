@@ -19,7 +19,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const [saveSpell, { isLoading }] = spellApi.useSaveSpellMutation()
   const { data: spell } = spellApi.useGetSpellQuery(
     {
-      spellName: tab.spellName,
+      spellName: atob(tab.name.split('--')[0].slice(37)),
       projectId: config.projectId,
     },
     {

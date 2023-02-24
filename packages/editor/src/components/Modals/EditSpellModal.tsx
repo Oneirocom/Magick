@@ -29,7 +29,7 @@ const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
   const onSubmit = handleSubmit(async data => {
     console.log('data ::: ', data)
 
-    const spell = await spellApi.getSpell({ spellName: tab.spellName })
+    const spell = await spellApi.getSpell({ spellName: atob(tab.name.split('--')[0].slice(37)), id: tab.id })
 
     console.log('spell ::: ', spell)
 

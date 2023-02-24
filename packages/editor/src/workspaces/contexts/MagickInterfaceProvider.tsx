@@ -24,10 +24,11 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const { events, publish, subscribe } = usePubSub()
   const spellRef = useRef<Spell | null>(null)
   const [_runSpell] = spellApi.useRunSpellMutation()
-  const [_getSpell] = spellApi.useLazyGetSpellQuery()
-  const { data: _spell } = spellApi.useGetSpellQuery(
+  const [_getSpell] = spellApi.useLazyGetSpellByIdQuery()
+  const { data: _spell } = spellApi.useGetSpellByIdQuery(
     {
-      spellName: tab.spellName,
+      spellName: atob(tab.name.split('--')[0].slice(37)),
+      Id: tab.id,
       projectId: config.projectId,
     },
     {
@@ -143,7 +144,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const getSpell = async spellName => {
-    const spell = await _getSpell({ spellName, projectId: config.projectId })
+    const spell = await _getSpell({ spellName, Id: tab.id, projectId: config.projectId })
 
     if (!spell.data) return null
 

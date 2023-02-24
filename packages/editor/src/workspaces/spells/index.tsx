@@ -77,7 +77,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     if (!tab || !tab.spellName) return
     console.log("Inside Load Spell !!")
     loadSpell({
-      spellName: "sdbot",
+      spellName: atob(tab.name.split('--')[0].slice(37)),
       projectId: config.projectId,
       Id: tab.id,
     })

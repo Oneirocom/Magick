@@ -62,6 +62,7 @@ export default class SpellManager {
   }
 
   getSpellRunner(spellName: string) {
+    console.log(this.spellRunnerMap)
     return this.spellRunnerMap.get(spellName)
   }
 
@@ -75,8 +76,8 @@ export default class SpellManager {
 
   async load(spell: Spell, overload = false) {
     if (!spell) throw new Error('No spell provided to load')
-    if (this.spellRunnerMap.has(spell.name) && !overload)
-      return this.getSpellRunner(spell.name)
+    if (this.spellRunnerMap.has(spell.id) && !overload)
+      return this.getSpellRunner(spell.id)
 
     const spellRunner = new SpellRunner({
       magickInterface: this.magickInterface,
@@ -85,7 +86,7 @@ export default class SpellManager {
 
     await spellRunner.loadSpell(spell)
 
-    this.spellRunnerMap.set(spell.name, spellRunner)
+    this.spellRunnerMap.set(spell.id, spellRunner)
 
     return spellRunner
   }

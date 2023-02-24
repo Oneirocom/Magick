@@ -20,7 +20,7 @@ class RunSpell {
       components: getNodes(),
       server: true,
     }) as MagickEngine
-
+    console.log("Engine Created from spell runner")
     // Set up the module to interface with the runtime processes
     this.module = new Module()
 

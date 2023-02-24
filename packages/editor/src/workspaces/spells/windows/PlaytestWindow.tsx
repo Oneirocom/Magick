@@ -3,10 +3,11 @@ import Editor from '@monaco-editor/react'
 import { useDispatch } from 'react-redux'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { getStore } from 'packages/editor/src/state/store'
 import {
   upsertLocalState,
-  selectStateBySpellId,
   addLocalState,
+  selectStateBytabId,
 } from '../../../state/localState'
 import Select from '../../../components/Select/Select'
 import { usePubSub } from '../../../contexts/PubSubProvider'
@@ -73,20 +74,26 @@ const Playtest = ({ tab }) => {
   const dispatch = useDispatch()
   const { serialize } = useEditor()
 
-  const { data: spellData } = spellApi.useGetSpellQuery(
-    { spellName: tab.spellName, projectId: config.projectId },
+  const { data: spellData } = spellApi.useGetSpellByIdQuery(
+    { 
+      spellName: atob(tab.name.split('--')[0].slice(37)), 
+      Id: tab.id, 
+      projectId: config.projectId 
+    },
     {
       refetchOnMountOrArgChange: true,
       skip: !tab.spellName,
     }
   )
+  console.log(spellData)
 
   // const localState = {} as any
 
   const localState = useAppSelector(state => {
-    return selectStateBySpellId(state.localState, tab.spellName)
+    return selectStateBytabId(state.localState, tab.id)
   })
-
+  console.log(getStore(config).getState())
+  console.log(localState)
   const client = FeathersContext?.client
   const { $PLAYTEST_INPUT, $PLAYTEST_PRINT } = events
 
@@ -146,7 +153,7 @@ const Playtest = ({ tab }) => {
     if (!localState) {
       dispatch(
         addLocalState({
-          spellName: tab.spellName,
+          id: tab.id,
           playtestData: defaultPlaytestData,
         })
       )
@@ -174,19 +181,21 @@ const Playtest = ({ tab }) => {
   }
 
   const onSend = async () => {
+   
     const newHistory = [...history, `You: ${value}`]
     setHistory(newHistory as [])
 
     let toSend = value
-
+    console.log("onSned")
+    console.log(value)
     if (localState?.playtestData !== '{}') {
       const json = localState?.playtestData.replace(
         /(['"])?([a-z0-9A-Z_]+)(['"])?:/g,
         '"$2": '
       )
-
+      console.log(localState)
       // IMPLEMENT THIS: https://www.npmjs.com/package/json5
-
+      
       // todo could throw an error here
       if (!json) return
 
@@ -202,6 +211,7 @@ const Playtest = ({ tab }) => {
         ...JSON.parse(json),
       }
     }
+    
 
     // get spell from editor
     const graph = serialize()
@@ -210,17 +220,18 @@ const Playtest = ({ tab }) => {
     const playtestInputName = Object.values(graph.nodes).find(
       node => node.data.playtestToggle && node.name === 'Universal Input'
     )?.data.name
-
+    console.log("Spell Runner Created")
     if (!playtestInputName) return
 
     client.service('spell-runner').create({
-      spellName: tab.spellName,
+      spellName: atob(tab.name.split('--')[0].slice(37)),
+      id: tab.id,
       projectId: config.projectId,
       inputs: {
         [playtestInputName as string]: toSend,
       },
     })
-
+    
     publish($PLAYTEST_INPUT(tab.id), toSend)
     setValue('')
   }
@@ -229,7 +240,7 @@ const Playtest = ({ tab }) => {
     console.log('new data text', dataText)
     dispatch(
       upsertLocalState({
-        spellName: tab.spellName,
+        id: tab.id,
         playtestData: dataText ?? defaultPlaytestData,
       })
     )
@@ -316,6 +327,7 @@ const Playtest = ({ tab }) => {
         <label htmlFor="playtest-input" style={{ display: 'none' }}>
           Input
         </label>
+        {value}
         <Input onChange={onChange} value={value} onSend={onSend} />
       </div>
     </Window>
