@@ -1,3 +1,4 @@
+import Button from 'packages/editor/src/components/Button'
 import React from 'react'
 import { VscDebugBreakpointConditionalUnverified } from 'react-icons/vsc'
 
@@ -15,10 +16,10 @@ const FileInput = ({ loadFile }) => {
   }
   return (
     <>
-      <button onClick={handleClick}>
+      <Button onClick={handleClick}>
         <Icon name="folder" style={{ marginRight: 'var(--extraSmall)' }} />
         Import...
-      </button>
+      </Button>
       <input
         id="import"
         type="file"

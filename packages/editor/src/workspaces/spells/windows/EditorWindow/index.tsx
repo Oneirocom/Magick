@@ -4,6 +4,7 @@ import { createNode } from '../../../../plugins/contextMenu/utils'
 import { Editor, useEditor } from '../../../contexts/EditorProvider'
 import Select from '../../../../components/Select/Select'
 import css from './editorwindow.module.css'
+import Button from 'packages/editor/src/components/Button'
 
 const EditorWindow = ({ tab }) => {
   const { getNodes, getNodeMap, editor } = useEditor()
@@ -64,7 +65,7 @@ const EditorWindow = ({ tab }) => {
   const EditorToolbar = () => {
     return (
       <React.Fragment>
-        <button style={{ opacity: 0 }}>Deploy...</button>
+        <Button style={{ opacity: 0 }}>Deploy...</Button>
         <Select
           searchable
           nested
@@ -77,13 +78,13 @@ const EditorWindow = ({ tab }) => {
           value={null}
           focusKey="cmd+p, ctl+p"
         />
-        <button
+        <Button
           onClick={() => {
             setDeployOpen(true)
           }}
         >
           Deploy
-        </button>
+        </Button>
       </React.Fragment>
     )
   }

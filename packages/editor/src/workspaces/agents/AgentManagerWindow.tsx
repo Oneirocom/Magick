@@ -3,7 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { useConfig } from '../../contexts/ConfigProvider'
 
 import AgentWindow from './Agent'
+<<<<<<< HEAD
 import Layout from './NewAgentWindow'
+=======
+import Button from '../../components/Button'
+>>>>>>> 949dc8c84f9d7ca0c1ab98879b34058b6af711b3
 
 const AgentManagerWindow = () => {
   const config = useConfig()

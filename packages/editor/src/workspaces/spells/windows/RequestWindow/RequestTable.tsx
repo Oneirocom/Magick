@@ -26,6 +26,7 @@ import { useSnackbar } from 'notistack'
 import _ from 'lodash'
 import { CSVLink } from 'react-csv'
 import { useConfig } from '../../../../contexts/ConfigProvider'
+import Button from 'packages/editor/src/components/Button'
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter)
@@ -126,16 +127,19 @@ function EventTable({ requests, updateCallback }) {
     let reqBody = {
       ...rowData,
       [columnId]: value,
-      projectId: config.projectId
+      projectId: config.projectId,
     }
     if (!_.isEqual(reqBody, rowData)) {
-      const resp = await fetch(`${import.meta.env.VITE_APP_API_URL}/request/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(reqBody)
-      })
+      const resp = await fetch(
+        `${import.meta.env.VITE_APP_API_URL}/request/${id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(reqBody),
+        }
+      )
 
       const json = await resp.json()
 
@@ -201,16 +205,19 @@ function EventTable({ requests, updateCallback }) {
 
   const handleRequestDelete = async (event: any) => {
     console.log('event to delete ::: ', event)
-      // instead of deleting, call the updateEvent function with param hidden = true
-      const resp = await fetch(`${import.meta.env.VITE_APP_API_URL}/request/${event.id}`, {
+    // instead of deleting, call the updateEvent function with param hidden = true
+    const resp = await fetch(
+      `${import.meta.env.VITE_APP_API_URL}/request/${event.id}`,
+      {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({hidden: true})
-      })
+        body: JSON.stringify({ hidden: true }),
+      }
+    )
 
-      const json = await resp.json()
+    const json = await resp.json()
 
     if (json) enqueueSnackbar('Event deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting Event', { variant: 'error' })
@@ -224,7 +231,7 @@ function EventTable({ requests, updateCallback }) {
 
   return (
     <Stack spacing={2}>
-      <Grid container justifyContent="left" style={{padding: "1em"}}>
+      <Grid container justifyContent="left" style={{ padding: '1em' }}>
         <Grid item xs={9.5}>
           <GlobalFilter
             globalFilter={state.globalFilter}
@@ -232,29 +239,29 @@ function EventTable({ requests, updateCallback }) {
           />
         </Grid>
         <Grid item xs={1.5}>
-        <button
-              style={{marginLeft: "1em", display: 'inline', width: "8em" }}
-              name="refresh"
-              onClick={updateCallback}
-            >
-              Refresh
-            </button>
+          <Button
+            style={{ marginLeft: '1em', display: 'inline', width: '8em' }}
+            name="refresh"
+            onClick={updateCallback}
+          >
+            Refresh
+          </Button>
         </Grid>
         <Grid item xs={1}>
-        <CSVLink
-              data={originalRows}
-              filename="requests.csv"
-              target="_blank"
-              style={{ textDecoration: 'none', display: "inline", width: "8em" }}
-            >
-              <button style={{ textDecoration: 'none', display: "inline" }}>
-                <FaFileCsv size={14} />
-              </button>
-            </CSVLink>
-            </Grid>
+          <CSVLink
+            data={originalRows}
+            filename="requests.csv"
+            target="_blank"
+            style={{ textDecoration: 'none', display: 'inline', width: '8em' }}
+          >
+            <Button style={{ textDecoration: 'none', display: 'inline' }}>
+              <FaFileCsv size={14} />
+            </Button>
+          </CSVLink>
+        </Grid>
       </Grid>
       <TableContainer component={Paper}>
-        <Table  style={{width: "calc(100% - 2em)"}} {...getTableProps()}>
+        <Table style={{ width: 'calc(100% - 2em)' }} {...getTableProps()}>
           <TableHead style={{ backgroundColor: '#000' }}>
             {headerGroups.map((headerGroup, idx) => (
               <TableRow {...headerGroup.getHeaderGroupProps()} key={idx}>

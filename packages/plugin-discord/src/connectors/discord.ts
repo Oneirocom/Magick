@@ -1,3 +1,4 @@
+import { worldManager } from '@magickml/engine'
 import Discord, {
   ChannelType,
   EmbedBuilder,
@@ -565,9 +566,9 @@ export class discord_client {
         .fetch(newMember.userId)
         .then((user: { username: string | boolean }) => {
           if (newMember.status === 'online') {
-            //worldManager.instance.addUser(user.id, 'discord')
+            worldManager.addUser(user.username, 'discord')
           } else {
-            // worldManager.instance.removeUser(user.id, 'discord')
+            worldManager.removeUser(user.username, 'discord')
           }
           // TODO: Replace message with direct message handler
           log('Discord', newMember.status, user.username, utcStr)
@@ -773,7 +774,7 @@ export class discord_client {
   })
 
   _findCommand = (commandName: any) => {
-    let command = null
+    let command: any = null
     for (const helpField of this.helpFields) {
       for (const c of helpField.commands) {
         const [name, args, description] = c

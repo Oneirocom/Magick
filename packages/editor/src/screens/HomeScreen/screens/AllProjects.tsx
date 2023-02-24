@@ -6,6 +6,7 @@ import Panel from '../../../components/Panel/Panel'
 import css from '../homeScreen.module.css'
 import FileInput from '../components/FileInput'
 import ProjectRow from '../components/ProjectRow'
+import Button from 'packages/editor/src/components/Button'
 
 const AllProjects = ({
   spells,
@@ -17,7 +18,7 @@ const AllProjects = ({
 }) => {
   useEffect(() => {
     if (document.location.href.includes('import')) {
-      document.getElementById('import').click();
+      document.getElementById('import').click()
     }
   }, [])
 
@@ -59,22 +60,22 @@ const AllProjects = ({
       </Panel>
 
       <div className={css['button-row']}>
-        <button
+        <Button
           onClick={() => {
             window.history.back()
           }}
         >
           back
-        </button>
+        </Button>
         <FileInput loadFile={loadFile} />
-        <button
+        <Button
           onClick={() => {
             openSpell(selectedSpell)
           }}
           className={!selectedSpell ? 'disabled' : 'primary'}
         >
           OPEN
-        </button>
+        </Button>
       </div>
     </Panel>
   )

@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import {
-  NodeData,
-  MagickNode,
-} from '../../types'
+import { NodeData, MagickNode } from '../../types'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket } from '../../sockets'

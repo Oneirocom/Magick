@@ -1,13 +1,8 @@
 import world3d from './world3d'
 
-export default class worldManager {
-  static instance
+class WorldManager {
 
   rooms = {}
-
-  constructor() {
-    worldManager.instance = this
-  }
 
   addUser(user, client) {
     if (this.rooms[client] !== undefined) {
@@ -120,3 +115,5 @@ export default class worldManager {
     }
   }
 }
+
+export const worldManager = new WorldManager()
