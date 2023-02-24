@@ -14,7 +14,7 @@ const GreenSwitch = styled(Switch)(({ theme }) => ({
   },
 }))
 
-const SwitchComponent = ({ label: _label, checked, onChange }) => {
+const SwitchComponent = ({ label: _label, checked, onChange, ...props }) => {
   const label = { inputProps: { 'aria-label': _label } }
   return (
     <FormControlLabel
@@ -26,6 +26,7 @@ const SwitchComponent = ({ label: _label, checked, onChange }) => {
           onChange={onChange}
         />
       }
+      {...props}
     />
   )
 }
