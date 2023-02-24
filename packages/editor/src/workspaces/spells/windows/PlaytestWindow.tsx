@@ -325,7 +325,6 @@ const Playtest = ({ tab }) => {
         <label htmlFor="playtest-input" style={{ display: 'none' }}>
           Input
         </label>
-        {value}
         <Input onChange={onChange} value={value} onSend={onSend} />
       </div>
     </Window>
