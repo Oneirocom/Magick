@@ -24,8 +24,9 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const [saveSpellMutation] = spellApi.useSaveSpellMutation()
   const [saveDiff] = spellApi.useSaveDiffMutation()
-  const { data: spell } = spellApi.useGetSpellQuery({
-    spellName: tab.spellName,
+  const { data: spell } = spellApi.useGetSpellByIdQuery({
+    spellName: tab.name,
+    Id: tab.id,
     projectId: config.projectId,
   })
   const preferences = useSelector(
@@ -66,7 +67,8 @@ const EventHandler = ({ pubSub, tab }) => {
   const saveSpell = async () => {
     const currentSpell = spellRef.current
     const graph = serialize() as GraphData
-
+    console.log("RECEIVED")
+    console.log(spellRef)
     if (!currentSpell) return
 
     const updatedSpell = {

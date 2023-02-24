@@ -8,7 +8,7 @@ import { dataValidator, queryValidator } from '../../validators'
 // Main data model schema
 export const spellSchema = Type.Object(
   {
-    id: Type.Number(),
+    id: Type.String(),
     projectId: Type.String(),
     name: Type.String(),
     hash: Type.String(),

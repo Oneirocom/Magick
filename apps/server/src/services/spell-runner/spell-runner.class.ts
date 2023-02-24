@@ -26,7 +26,7 @@ const getSpell = async ({app, spellName, projectId}) => {
   const spell = await app.service('spells').find({
     query: {
       projectId,
-      name: spellName
+      Id: spellName
     }
   })
 
