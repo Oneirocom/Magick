@@ -8,8 +8,6 @@ import {
 
 import { RootState } from './store'
 import defaultJson from '../data/layouts/defaultLayout.json'
-import { getSpellApi } from './api/spells'
-import { useConfig } from '../contexts/ConfigProvider'
 // Used to set workspaces to tabs
 const workspaceMap = {
   default: defaultJson,
@@ -47,12 +45,21 @@ const selectTabBySpellId = createDraftSafeSelector(
   (tabs, spellName) => Object.values(tabs).find(tab => tab.spellName === spellName)
 )
 
+const encodedToName = (uri: string) => {
+  uri = decodeURIComponent(uri)
+  return uri.slice(36)
+} 
+
+const encodedToId = (uri: string) => {
+  uri = decodeURIComponent(uri)
+  return uri.slice(0,36)
+}
 
 // Used to build a tab with various defaults set, as well as workspace json and UUID
 const buildTab = (tab, properties = {}) => ({
   ...tab,
-  name: "sdbot",
-  id: tab.name,
+  id: encodedToId(tab.name),
+  name: decodeURIComponent(tab.name),
   layoutJson: workspaceMap[tab.workspace || 'default'],
   spell: tab?.spell || null,
   type: tab?.type || 'module',

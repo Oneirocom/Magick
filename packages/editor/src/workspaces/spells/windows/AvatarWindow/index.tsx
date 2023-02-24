@@ -13,7 +13,7 @@ import { usePubSub } from '../../../../contexts/PubSubProvider'
 import Avatar from './Avatar'
 import { useAppSelector } from '../../../../state/hooks'
 import {
-  selectStateBySpellId,
+  selectStateBytabId,
   upsertLocalState,
 } from '../../../../state/localState'
 
@@ -26,7 +26,7 @@ const AvatarWindow = ({ tab }) => {
   const dispatch = useDispatch()
 
   const localState = useAppSelector(state =>
-    selectStateBySpellId(state.localState, tab.spellName)
+    selectStateBytabId(state.localState, tab.id)
   )
 
   const { publish, subscribe, events } = usePubSub()

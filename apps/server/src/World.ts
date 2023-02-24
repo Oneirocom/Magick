@@ -181,6 +181,7 @@ export class World {
     const agents = (await app.service('agents').find()).data
     for (const i in agents) {
       // rewrite as a feathers service call to empty
+      //@ts-ignore
       await app.service('agents').patch(agents[i].id, {
         spells: [],
       })

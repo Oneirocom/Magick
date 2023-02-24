@@ -17,7 +17,7 @@ const Tab = ({ tab, activeTab }) => {
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
   const active = tab.id === activeTab?.id
 
-  const title = `${tab.name.split('--')[0]}`
+  const title = `${atob(tab.name.split('--')[0].slice(37))}`
   const tabClass = classnames({
     [css['tabbar-tab']]: true,
     [css['active']]: active,

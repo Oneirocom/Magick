@@ -79,7 +79,7 @@ const StartScreen = () => {
 
   const openSpell = async spell => {
     // dispatch(openTab({ name: spell.name, spellName: spell.name, type: 'spell' }))
-    navigate(`/magick/${spell.name}`)
+    navigate(`/magick/${spell.id}-${encodeURIComponent(btoa(spell.name))}`)
   }
 
   const [selectedSpell, setSelectedSpell] = useState(null)

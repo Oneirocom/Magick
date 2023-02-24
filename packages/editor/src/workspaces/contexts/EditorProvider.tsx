@@ -183,7 +183,7 @@ const RawEditor = ({ tab, children }) => {
 
     if (tab?.spellName)
       getSpell({
-        spellName: tab.name,
+        spellName: atob(tab.name.split('--')[0].slice(37)),
         Id: tab.id,
         projectId: config.projectId,
       })

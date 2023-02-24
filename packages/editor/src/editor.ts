@@ -146,7 +146,7 @@ export const initEditor = function ({
     server: false,
   }) as MagickEngineClient
   engine.magick = magick
-
+  
   if (client) {
     editor.use(ModulePlugin, { engine } as unknown as void)
     editor.use<Plugin, SocketPluginArgs>(SocketPlugin, { client })

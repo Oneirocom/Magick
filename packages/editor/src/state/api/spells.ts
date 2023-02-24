@@ -63,6 +63,15 @@ export const getSpellApi = (config) => {
           }
         },
       }),
+      getSpellByJustId: builder.query({
+        providesTags: ['Spell'],
+        query: ({projectId, Id }) => {
+          return {
+            url: `spells?projectId=${projectId}&id=${Id}`,
+            params: {},
+          }
+        },
+      }),
       runSpell: builder.mutation({
         query: ({ spellName, inputs, state = {}, projectId }) => ({
           url: `spells/${spellName}`,
