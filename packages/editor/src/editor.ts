@@ -26,6 +26,8 @@ import {
   MagickEditor,
   MultiSocketGenerator,
   NodeClickPlugin,
+  ModuleOptions,
+  ModulePluginArgs,
 } from '@magickml/engine'
 
 import AreaPlugin from './plugins/areaPlugin'
@@ -92,8 +94,8 @@ export const initEditor = function ({
   // @seang: temporarily disabling because dependencies of ConnectionReroutePlugin are failing validation on server import of magick-core
   // editor.use(ConnectionReroutePlugin)
   // React rendering for the editor
-  editor.use(ReactRenderPlugin, {
-    // this component parameter is a custom default style for nodes
+  // this component parameter is a custom default style for nodes
+  editor.use<any>(ReactRenderPlugin, {
     component: node as any,
   })
   // renders a context menu on right click that shows available nodes
@@ -148,11 +150,11 @@ export const initEditor = function ({
   engine.magick = magick
 
   if (client) {
-    editor.use(ModulePlugin, { engine } as unknown as void)
+    editor.use<Plugin, ModulePluginArgs>(ModulePlugin, { engine })
     editor.use<Plugin, SocketPluginArgs>(SocketPlugin, { client })
   } else {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
-    editor.use(ModulePlugin, { engine } as unknown as void)
+    editor.use<Plugin, ModulePluginArgs>(ModulePlugin, { engine })
     editor.use(TaskPlugin)
   }
 
@@ -169,7 +171,10 @@ export const initEditor = function ({
     return source !== 'dblclick'
   })
 
-  editor.on("multiselectnode", (args) => args.accumulate = args.e.ctrlKey || args.e.metaKey);
+  editor.on(
+    'multiselectnode',
+    args => (args.accumulate = args.e.ctrlKey || args.e.metaKey)
+  )
 
   editor.on(['click'], () => {
     editor.selected.list = []

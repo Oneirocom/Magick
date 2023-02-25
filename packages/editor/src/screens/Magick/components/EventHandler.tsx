@@ -81,6 +81,7 @@ const EventHandler = ({ pubSub, tab }) => {
       spell: updatedSpell,
       projectId: config.projectId,
     })
+
     const jsonDiff = diff(currentSpell, updatedSpell)
 
     if (jsonDiff.length !== 0) {
@@ -112,27 +113,39 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
-    updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
 
     const jsonDiff = diff(currentSpell, updatedSpell)
+
+    console.log('JSON DIFF', jsonDiff)
+    updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
 
     try {
-      await client.service('spell-runner').update(currentSpell.name, {
+      // save diff to spell runner if something has changed.  Will update spell in spell runner session
+      client.service('spell-runner').update(currentSpell.name, {
         diff: jsonDiff,
         projectId: config.projectId,
       })
-      await saveDiff({
+
+      const diffResponse = await client.service('spells').saveDiff({
+        projectId: config.projectId,
+        diff: jsonDiff,
         name: currentSpell.name,
-        diff: jsonDiff,
-        projectId: config.projectId,
       })
+
+      if ('error' in diffResponse) {
+        enqueueSnackbar('Error saving spell', {
+          variant: 'error',
+        })
+        return
+      }
+
       enqueueSnackbar('Spell saved', {
         variant: 'success',
       })
-    } catch {
+    } catch (err) {
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
       })

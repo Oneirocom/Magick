@@ -11,7 +11,7 @@ function install(
     delay = 1000,
     items = {},
     nodeItems = {},
-    allocate = () => [],
+    allocate = components => [],
     rename = component => component.name,
     Menu = ReactMenu,
   }
