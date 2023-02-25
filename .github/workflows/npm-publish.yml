@@ -1,0 +1,24 @@
+name: Magick Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2.4.0
+        with:
+          node-version: '16.x'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Publish NPM Package
+        run: npm run semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
