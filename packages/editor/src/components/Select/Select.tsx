@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import Creatable from 'react-select/creatable'
 import Select, { SelectInstance, StylesConfig } from 'react-select'
@@ -11,6 +11,7 @@ const BasicSelect = ({
   options,
   onChange,
   placeholder,
+  defaultValue,
   style = {},
   focusKey = '',
   creatable = true,
@@ -20,7 +21,7 @@ const BasicSelect = ({
     true,
   ...props
 }) => {
-  const selectRef = useRef<SelectInstance | null>(null)
+  const selectRef = useRef<SelectInstance | null>(defaultValue)
 
   const DropdownIndicator = () => {
     return props.searchable ? (
@@ -136,7 +137,7 @@ const BasicSelect = ({
       color: 'rgba(255,255,255)',
     }),
   }
-
+  
   return (
     <span className={css['select-dropdown-container']} style={style}>
       {options ? (
@@ -147,6 +148,7 @@ const BasicSelect = ({
               options={options}
               onChange={onChange}
               styles={styles}
+              defaultValue={defaultValue}
               placeholder={placeholder}
               components={{ DropdownIndicator }}
               isSearchable={props.searchable}
@@ -160,6 +162,7 @@ const BasicSelect = ({
               options={options}
               onChange={onChange}
               styles={styles}
+              value={defaultValue}
               placeholder={placeholder}
               components={{ DropdownIndicator }}
               ref={selectRef}

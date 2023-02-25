@@ -86,7 +86,6 @@ export const initSharedEngine = ({
 export const extractNodes = (
   nodes: GraphData['nodes'],
   map: Map<any, any> | Set<unknown>,
-  inputType?: string
 ) => {
   const names = Array.from(map.keys())
 
@@ -94,8 +93,6 @@ export const extractNodes = (
     .filter(
       // make sure node name is in the map
       k => names.includes(nodes[k].name)
-      // if an inputType was provided, make sure the node has that inputType
-      && (!inputType || inputType === 'Default' || nodes[k].data.inputType === inputType)
     )
     .map(k => nodes[k])
     .sort((n1, n2) => n1.position[1] - n2.position[1])

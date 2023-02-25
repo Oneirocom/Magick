@@ -400,8 +400,7 @@ export class discord_client {
     const response = await this.spellRunner.runComponent(
       {
       inputs: {},
-      componentName: "Input",
-      inputType: "Discord (Text)",
+      componentName: "Input - Discord (Text)",
       runData: {
           content,
           speaker: message.author.username,

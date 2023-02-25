@@ -19,6 +19,8 @@ import { useEditor } from '../../contexts/EditorProvider'
 import { getSpellApi } from '../../../state/api/spells'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import Button from 'packages/editor/src/components/Button'
+import { pluginManager } from '@magickml/engine'
+import { toast } from 'react-toastify'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
@@ -56,7 +58,7 @@ const Playtest = ({ tab }) => {
   const config = useConfig()
   const spellApi = getSpellApi(config)
 
-  const defaultPlaytestData = `{
+  const defaultPlaytestData = {
     "sender": "playtestSender",
     "observer": "playtestObserver",
     "type": "playtest",
@@ -66,7 +68,7 @@ const Playtest = ({ tab }) => {
     "projectId": "${config.projectId}",
     "agentId": 0,
     "entities": ["playtestSender", "playtestObserver"]
-  }`
+  }
 
   const scrollbars = useRef<any>()
   const [history, setHistory] = useState([])
@@ -109,27 +111,23 @@ const Playtest = ({ tab }) => {
   const [playtestOptions, setPlaytestOptions] = useState<Record<
     string,
     any
-  > | null>([])
-  const [playtestOption, setPlaytestOption] = useState('')
+  > | null>(['Default'])
+  const [playtestOption, setPlaytestOption] = useState('Default')
 
   useEffect(() => {
     console.log('SPELL DATA!!!', spellData)
 
     if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph) return
 
-    const graph = spellData.data[0].graph
+    const options = ['Default', ...pluginManager.getInputTypes()]
 
-    console.log('GRAPH!!!', graph)
-    const options = Object.values(graph.nodes)
-      .filter((node: any) => {
-        return node.data.playtestToggle
-      })
-      .map((node: any) => ({
-        value: node.data.name ?? node.name,
-        label: node.data.name ?? node.name,
-      }))
+    const optionsObj = options
+    .map((option: any) => ({
+      value: option,
+      label: option,
+    }))
 
-    setPlaytestOptions(options)
+    setPlaytestOptions(optionsObj)
   }, [spellData])
 
   // Keep scrollbar at bottom of its window
@@ -152,7 +150,7 @@ const Playtest = ({ tab }) => {
       dispatch(
         addLocalState({
           spellName: tab.spellName,
-          playtestData: defaultPlaytestData,
+          playtestData: JSON.stringify({...defaultPlaytestData}),
         })
       )
       return
@@ -184,37 +182,58 @@ const Playtest = ({ tab }) => {
 
     let toSend = value
 
-    if (localState?.playtestData !== '{}') {
-      const json = localState?.playtestData.replace(
-        /(['"])?([a-z0-9A-Z_]+)(['"])?:/g,
-        '"$2": '
-      )
+    console.log('value', value)
 
-      // IMPLEMENT THIS: https://www.npmjs.com/package/json5
+    const json = localState?.playtestData.replace(
+      /(['"])?([a-z0-9A-Z_]+)(['"])?:/g,
+      '"$2": '
+    )
 
-      // todo could throw an error here
-      if (!json) return
+    if (!json) {
+      toast.error('No data provided')
+      return;
+    }
 
-      toSend = {
-        content: value,
-        sender: 'Speaker',
-        observer: 'Agent',
-        agentId: 0,
-        client: 'playtest',
-        channel: 'previewChannel',
-        projectId: config.projectId,
-        channelType: 'previewChannelType',
-        ...JSON.parse(json),
-      }
+    // validate the json
+    try {
+      JSON.parse(json)
+    } catch (e) {
+      toast.error('Invalid data - JSON is poorly formatted')
+      return;
+    }
+
+    toSend = {
+      content: value,
+      sender: 'Speaker',
+      observer: 'Agent',
+      agentId: 0,
+      client: 'playtest',
+      channel: 'previewChannel',
+      projectId: config.projectId,
+      channelType: 'previewChannelType',
+      ...JSON.parse(json),
     }
 
     // get spell from editor
     const graph = serialize()
     if (!graph) return
 
-    const playtestInputName = Object.values(graph.nodes).find(
-      node => node.data.playtestToggle && node.name === 'Input'
-    )?.data.name
+    console.log('playtestOption', playtestOption)
+
+    const playtestNode = Object.values(graph.nodes).find(
+      node => {
+        return node.data.playtestToggle && node.data.name === `Input - ${playtestOption}`
+      })
+
+      if(!playtestNode) {
+        toast.error('No input node found for this input type')
+        return;
+      }
+    
+
+    const playtestInputName = playtestNode?.data.name || 'Input - Default'
+
+    console.log('playtestInputName', playtestInputName)
 
     if (!playtestInputName) return
 
@@ -235,7 +254,7 @@ const Playtest = ({ tab }) => {
     dispatch(
       upsertLocalState({
         spellName: tab.spellName,
-        playtestData: dataText ?? defaultPlaytestData,
+        playtestData: dataText ?? JSON.stringify(defaultPlaytestData),
       })
     )
   }
@@ -262,7 +281,8 @@ const Playtest = ({ tab }) => {
         style={{ width: '100%', zIndex: 10 }}
         options={playtestOptions}
         onChange={onSelectChange}
-        placeholder="target node"
+        defaultValue={{value: playtestOption || 'Default', label: playtestOption || 'Default'}}
+        placeholder={playtestOption || 'Default'}
         creatable={false}
       />
 
@@ -304,7 +324,7 @@ const Playtest = ({ tab }) => {
               language="javascript"
               value={localState?.playtestData}
               options={options}
-              defaultValue={localState?.playtestData || defaultPlaytestData}
+              defaultValue={localState?.playtestData || JSON.stringify(defaultPlaytestData)}
               onChange={onDataChange}
               beforeMount={handleEditorWillMount}
             />

@@ -96,6 +96,8 @@ export class InputComponent extends MagickComponent<InputReturn> {
       node.data.name = `Input - ${data}`
     }
 
+    node.data.name = node.data.name === 'Input' ? `Input - Default` : node.data.name
+
     // subscribe the node to the playtest input data stream
     this.subscribeToPlaytest(node)
 

@@ -18,9 +18,8 @@ type RunSpellConstructor = {
 
 type RunComponentArgs = {
   inputs: Record<string, any>
-  componentName: string
+  componentName?: string
   runSubspell?: boolean
-  inputType?: string
   runData?: Record<string, any>
 }
 
@@ -154,30 +153,26 @@ class SpellRunner {
   }
 
   /**
-   * temporary method until we have a better way to target specific nodes
-   * this is basically just using a "Default" trigger in
-   * and does not support multipel triggers in to a spell yet
-   */
-  private _getFirstNodeTrigger() {
-    const extractedNodes = extractNodes(
-      this.currentSpell.graph.nodes,
-      this.triggerIns
-    )
-    return extractedNodes[0]
-  }
-
-  /**
    * Allows us to grab a specific triggered node by name
    */
-  private _getTriggeredNodeByName(componentName, inputType) {
+  private _getTriggeredNodeByName(componentName) {
     const triggerIns = extractNodes(
       this.currentSpell.graph.nodes,
       this.triggerIns,
-      inputType
     )
 
-    const inputs = extractNodes(this.currentSpell.graph.nodes, this.inputs, inputType)
-    return [...triggerIns, ...inputs].find(node => node.name === componentName)
+    console.log('triggerIns', triggerIns)
+
+    const inputs = extractNodes(this.currentSpell.graph.nodes, this.inputs)
+    
+    console.log('inputs', inputs)
+
+    console.log('componentName', componentName)
+
+    return [...triggerIns, ...inputs].find(node => {
+      console.log('node.data.name', node.data.name);
+      return node.data.name === componentName
+    });
   }
 
   /**
@@ -218,8 +213,7 @@ class SpellRunner {
    */
   async runComponent({
     inputs,
-    inputType,
-    componentName,
+    componentName = 'Input',
     runSubspell = false,
     runData = {},
   }: RunComponentArgs) {
@@ -240,10 +234,13 @@ class SpellRunner {
     // load the inputs into module memory
     this._loadInputs(inputs)
 
+    console.log('componentName', componentName || Object.keys(inputs)[0])
+
     const component = this._getComponent(componentName) as ModuleComponent
 
-    const triggeredNode = this._getTriggeredNodeByName(componentName, inputType = null)
-    // const triggeredNode = this._getFirstNodeTrigger()
+    console.log('component', component)
+
+    const triggeredNode = this._getTriggeredNodeByName(Object.keys(inputs)[0])
 
     if (!component.run) throw new Error('Component does not have a run method')
     if (!triggeredNode) throw new Error('No triggered node found')
@@ -253,17 +250,6 @@ class SpellRunner {
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
     await component.run(triggeredNode, runData)
     return this.outputData
-  }
-
-  /**
-   * temporary function to be backwards compatible with current use of run spell
-   */
-  async defaultRun(inputs: Record<string, any>, runSubspell = false) {
-    return await this.runComponent({
-      inputs,
-      componentName: 'Trigger In',
-      runSubspell,
-    })
   }
 }
 
