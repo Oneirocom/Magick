@@ -400,12 +400,13 @@ export class discord_client {
     const response = await this.spellRunner.runComponent(
       {
       inputs: {},
-      componentName: "Discord Input",
+      componentName: "Input",
+      inputType: "Discord (Text)",
       runData: {
           content,
           speaker: message.author.username,
           agent: this.discord_bot_name,
-          client: 'discord',
+          client: 'discord', // TODO: should be typed
           channelId: message.channel.id,
           agentId: this.agent.id,
           entities: entities.map((e) => e.user),

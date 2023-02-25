@@ -20,6 +20,7 @@ type RunComponentArgs = {
   inputs: Record<string, any>
   componentName: string
   runSubspell?: boolean
+  inputType?: string
   runData?: Record<string, any>
 }
 
@@ -168,13 +169,14 @@ class SpellRunner {
   /**
    * Allows us to grab a specific triggered node by name
    */
-  private _getTriggeredNodeByName(componentName) {
+  private _getTriggeredNodeByName(componentName, inputType) {
     const triggerIns = extractNodes(
       this.currentSpell.graph.nodes,
-      this.triggerIns
+      this.triggerIns,
+      inputType
     )
 
-    const inputs = extractNodes(this.currentSpell.graph.nodes, this.inputs)
+    const inputs = extractNodes(this.currentSpell.graph.nodes, this.inputs, inputType)
     return [...triggerIns, ...inputs].find(node => node.name === componentName)
   }
 
@@ -216,6 +218,7 @@ class SpellRunner {
    */
   async runComponent({
     inputs,
+    inputType,
     componentName,
     runSubspell = false,
     runData = {},
@@ -232,12 +235,14 @@ class SpellRunner {
     // ensure we run from a clean slate
     this._resetTasks()
 
+    console.log('inputs', inputs)
+
     // load the inputs into module memory
     this._loadInputs(inputs)
 
     const component = this._getComponent(componentName) as ModuleComponent
 
-    const triggeredNode = this._getTriggeredNodeByName(componentName)
+    const triggeredNode = this._getTriggeredNodeByName(componentName, inputType = null)
     // const triggeredNode = this._getFirstNodeTrigger()
 
     if (!component.run) throw new Error('Component does not have a run method')
