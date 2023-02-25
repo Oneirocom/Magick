@@ -37,7 +37,7 @@ contract SimpleContract {
 }
 `
 
-const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
+const info = `This is Solidity block of code, when trigger the code will be compiled and returned as bytecode`
 
 type InputReturn = {
   output: unknown
@@ -71,7 +71,6 @@ export class Solidity extends MagickComponent<InputReturn> {
     this.contextMenuName = 'Solidity'
     this.displayName = 'Solidity'
   }
-
 
   destroyed(node: MagickNode) {
     console.log('destroyed', node.id)
