@@ -13,6 +13,8 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
+        "port": 7778,
+        "inspect": true,
         "outputPath": "dist/apps/server",
         "main": "apps/server/src/index.ts",
         "assets": ["apps/server/src/certs"],

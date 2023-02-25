@@ -23,17 +23,15 @@ export const spell = (app: Application) => {
   // Register our service on the Feathers application
   app.use('spells', new SpellService(getOptions(app)), {
     // A list of all methods this service exposes externally
-    methods: ['find', 'get', 'create', 'patch', 'remove'],
+    methods: ['find', 'get', 'create', 'patch', 'remove', 'saveDiff'],
     // You can add additional custom events to be sent to clients here
     events: []
   })
+
   // Initialize hooks
   app.service('spells').hooks({
     around: {
-      all: [
-        schemaHooks.resolveExternal(spellExternalResolver),
-        schemaHooks.resolveResult(spellResolver)
-      ]
+      all: [schemaHooks.resolveExternal(spellExternalResolver), schemaHooks.resolveResult(spellResolver)]
     },
     before: {
       all: [schemaHooks.validateQuery(spellQueryValidator), schemaHooks.resolveQuery(spellQueryResolver)],
@@ -52,10 +50,10 @@ export const spell = (app: Application) => {
           const { id } = context.result
           const spell = await app.service('spells').get(id)
           app.userSpellManagers.forEach((userSpellManager) => {
-            if(userSpellManager.spellRunnerMap.has(spell.name)) {
+            if (userSpellManager.spellRunnerMap.has(spell.name)) {
               userSpellManager.spellRunnerMap.get(spell.name).loadSpell(spell)
             }
-          });
+          })
         }
       ]
     },

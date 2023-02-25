@@ -1,18 +1,55 @@
-import { feathers } from '@feathersjs/feathers'
+import {
+  Application,
+  feathers,
+  TransportConnection,
+} from '@feathersjs/feathers'
 import socketio from '@feathersjs/socketio-client'
+import type { SocketService } from '@feathersjs/socketio-client'
 import { createContext, useContext, useEffect, useState } from 'react'
 import io from 'socket.io-client'
 
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen'
 import { useConfig } from './ConfigProvider'
+import { Spell } from '@magickml/engine'
+
+// todo unify this type with the server type in spells
+type SaveDiffData = {
+  name: string
+  diff: Record<string, any>
+  projectId: string
+}
+
+type SaveDiffParams = {}
+
+type ServiceTypes = {
+  // The type is a Socket service extended with custom methods
+  spells: SocketService & {
+    saveDiff(data: SaveDiffData, params: SaveDiffParams): Promise<Spell>
+  }
+}
+
+const configureCustomServices = (
+  app: Application<any, any>,
+  socketClient: TransportConnection<any>
+) => {
+  app.use('spells', socketClient.service('spells'), {
+    methods: ['find', 'get', 'create', 'patch', 'remove', 'saveDiff'],
+  })
+}
 
 const buildFeathersClient = async config => {
   const socket = io(config.apiUrl)
-  const feathersClient = feathers()
-  feathersClient.configure(socketio(socket, { timeout: 10000 }))
+  const app = feathers<ServiceTypes>()
+  const socketClient = socketio(socket, { timeout: 10000 })
+  // todo this needs more than an any here.  Super hacky.
+  app.configure(socketClient as any)
+
+  console.log('app', app)
+
+  configureCustomServices(app, socketClient)
 
   // No idea how to type feathers to add io properties to root client.
-  return feathersClient as any
+  return app as any
 }
 
 interface FeathersContext {

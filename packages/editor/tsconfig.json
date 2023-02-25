@@ -12,7 +12,6 @@
     "rootDir": "../..",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "strict": true,
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
