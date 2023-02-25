@@ -41,6 +41,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
       // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
       'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
       debounce(async data => {
+        console.log('SAVE SPELL DIFF')
         if (tab.type === 'spell' && spellRef.current) {
           publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
         }
@@ -87,13 +88,11 @@ const Workspace = ({ tab, tabs, pubSub }) => {
       if (!client || !tab || !tab.spellName) return
       console.log('projectId from client ', config.projectId)
       // make sure to pass the projectId to the service call
-      await client.service('spell-runner').get(tab.spellName,
-        {
-          query: {
-            projectId: config.projectId,
-          },
-        }
-      )
+      await client.service('spell-runner').get(tab.spellName, {
+        query: {
+          projectId: config.projectId,
+        },
+      })
     })()
   }, [client])
 
