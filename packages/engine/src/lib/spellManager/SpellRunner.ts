@@ -240,7 +240,7 @@ class SpellRunner {
 
     console.log('component', component)
 
-    const triggeredNode = this._getTriggeredNodeByName(Object.keys(inputs)[0])
+    const triggeredNode = this._getTriggeredNodeByName(componentName)
 
     if (!component.run) throw new Error('Component does not have a run method')
     if (!triggeredNode) throw new Error('No triggered node found')
