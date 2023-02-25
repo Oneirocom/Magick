@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   anySocket,
-  EditorContext,
   InputControl,
   MagickComponent,
   MagickNode,
@@ -12,11 +11,9 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   NodeData,
-  Task,
-  PlaytestControl,
-  SwitchControl,
-  TextInputControl,
-  eventSocket,
+  BooleanControl,
+  NumberControl,
+  CodeControl,
   triggerSocket,
 } from '@magickml/engine'
 
@@ -56,6 +53,8 @@ export class Solidity extends MagickComponent<InputReturn> {
     this.task = {
       outputs: {
         output: 'output',
+        bytecode: 'output',
+        abi: 'output',
         trigger: 'option',
       },
     }
@@ -73,71 +72,55 @@ export class Solidity extends MagickComponent<InputReturn> {
     this.displayName = 'Solidity'
   }
 
-  subscriptionMap: Record<string, Function> = {}
-
-  unsubscribe?: () => void
-
-  subscribeToPlaytest(node: MagickNode) {
-    const { onPlaytest } = this.editor?.magick as EditorContext
-
-    // check node for the right data attribute
-    if (onPlaytest) {
-      // store the unsubscribe function in our node map
-      this.subscriptionMap[node.id] = onPlaytest((text: string) => {
-        // if the node doesnt have playtest toggled on, do nothing
-        const playtestToggle = node.data.playtestToggle as unknown as {
-          receivePlaytest: boolean
-        }
-
-        if (!playtestToggle.receivePlaytest) return
-
-        // attach the text to the nodes data for access in worker
-        node.data.text = text
-      })
-    }
-  }
 
   destroyed(node: MagickNode) {
-    if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
-    delete this.subscriptionMap[node.id]
+    console.log('destroyed', node.id)
   }
 
   builder(node: MagickNode) {
     if (!node.data.code) node.data.code = defaultCode
 
-    if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
-    delete this.subscriptionMap[node.id]
-
-    // subscribe the node to the playtest input data stream
-    this.subscribeToPlaytest(node)
-
-    const out = new Rete.Output('output', 'output', eventSocket)
-    const trigger = new Rete.Output('trigger', 'trigger', triggerSocket)
-
-    const data = node?.data?.playtestToggle as
-      | {
-          receivePlaytest: boolean
-        }
-      | undefined
-
-    const togglePlaytest = new PlaytestControl({
-      dataKey: 'playtestToggle',
-      name: 'Receive from playtest input',
-      defaultValue: {
-        receivePlaytest:
-          data?.receivePlaytest !== undefined ? data?.receivePlaytest : true,
-      },
-      ignored: ['output'],
-      label: 'Receive from playtest',
+    const optimizationControl = new BooleanControl({
+      dataKey: 'optimization',
+      name: 'Optimization',
     })
 
-    node.inspector.add(togglePlaytest)
+    const optimizationNumControl = new NumberControl({
+      dataKey: 'optimization_num',
+      name: 'Oprimization Number',
+    })
+
+    const codeControl = new CodeControl({
+      dataKey: 'code',
+      name: 'Code',
+      language: 'solidity'
+    })
+
+    const nameControl = new InputControl({
+      dataKey: 'name',
+      name: 'Component Name',
+    })
+
+    node.inspector
+      .add(optimizationControl)
+      .add(optimizationNumControl)
+      .add(nameControl)
+      .add(codeControl)
+
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const bytecodeOutput = new Rete.Output('bytecode', 'Bytecode', anySocket)
+    const abiOutput = new Rete.Output('abi', 'ABI', anySocket)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     // module components need to have a socket key.
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    return node.addOutput(out).addOutput(trigger)
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(bytecodeOutput)
+      .addOutput(abiOutput)
   }
 
   // @ts-ignore
