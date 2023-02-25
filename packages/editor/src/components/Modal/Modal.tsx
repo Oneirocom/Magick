@@ -17,13 +17,7 @@ const Modal = ({ options = [], title, icon, onClose = () => {}, ...props }) => {
                 style={{ marginRight: 'var(--extraSmall)' }}
               />
             )}
-            <h1
-              type="header"
-              size="large"
-              style={{ marginBottom: 'var(--small)' }}
-            >
-              {title}
-            </h1>
+            <h1 style={{ marginBottom: 'var(--small)' }}>{title}</h1>
           </div>
           <div
             style={{

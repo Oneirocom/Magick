@@ -22,7 +22,7 @@ interface CreateData {
   projectId: string
 }
 
-const getSpell = async ({app, spellName, projectId}) => {
+const getSpell = async ({ app, spellName, projectId }) => {
   const spell = await app.service('spells').find({
     query: {
       projectId,
@@ -43,7 +43,7 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
   async get(id: Id, params?: SpellRunnerParams): Promise<any | {}> {
     if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
-    const { user, query } = params as any;
+    const { user, query } = params as any
 
     if (!user) throw new Error('No user is present in service')
     // Here we get the users spellManagerApp
@@ -51,7 +51,7 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     if (!spellManager) throw new Error('No spell manager created for user!')
 
-    const spell = await getSpell({app, spellName: id as string, projectId: query.projectId})
+    const spell = await getSpell({ app, spellName: id as string, projectId: query.projectId })
 
     // Load the spell into the spellManager. If there is no spell runner, we make one.
     await spellManager.load(spell as Spell)
@@ -75,7 +75,7 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
     if (!spellManager) throw new Error('No spell manager found for user!')
 
     if (!spellManager.hasSpellRunner(spellName)) {
-      const spell = await getSpell({app, spellName: spellName, projectId})
+      const spell = await getSpell({ app, spellName: spellName, projectId })
       await spellManager.load(spell as Spell)
     }
 
@@ -102,6 +102,8 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     const spellManager = app.userSpellManagers.get(user.id)
     if (!spellManager) throw new Error('No spell manager found for user!')
+
+    console.log(' SPELL MANAGER IS', spellManager.spellRunnerMap)
 
     const spellRunner = spellManager.getSpellRunner(spellName)
     if (!spellRunner) throw new Error('No spell runner found!')

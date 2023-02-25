@@ -39,7 +39,7 @@ function ComposeProviders({ config, children }) {
     Account,
   ].reverse()
   return _providers.reduce((acc, current) => {
-    const [Provider, props] = Array.isArray(current)
+    const [Provider, props]: [any, any] = Array.isArray(current)
       ? [current[0], current[1]]
       : [current, {}]
 
