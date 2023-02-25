@@ -23,6 +23,7 @@
       "@magickml/editor": ["packages/editor/src/index.ts"],
       "@magickml/engine": ["packages/engine/src/index.ts"],
       "@magickml/plugin-discord": ["packages/plugin-discord/src/index.ts"],
+      "@magickml/plugin-rest": ["packages/plugin-rest/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-core": ["packages/server-core/src/index.ts"]
     }

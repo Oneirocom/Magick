@@ -3,8 +3,8 @@ import { app } from "../app"
 import Koa from 'koa'
 import otJson0 from 'ot-json0'
 
-import { Route } from '@magickml/server-core'
-import { ServerError } from '@magickml/server-core'
+import { Route } from '../types'
+import { ServerError } from '../ServerError'
 
 import md5 from 'md5'
 

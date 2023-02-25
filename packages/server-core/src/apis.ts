@@ -1,7 +1,10 @@
-import { tts, tts_tiktalknet } from '@magickml/server-core'
 import Koa from 'koa'
-import { Route } from '@magickml/server-core'
-import { queryGoogleSearch, ServerError } from '@magickml/server-core'
+
+import { tts } from './googleTextToSpeech'
+import { queryGoogleSearch } from './queryGoogleSearch'
+import { ServerError } from './ServerError'
+import { tts_tiktalknet } from './tiktalknet'
+import { Route } from './types'
 
 const getTextToSpeech = async (ctx: Koa.Context) => {
   const text = ctx.request.query.text as string
