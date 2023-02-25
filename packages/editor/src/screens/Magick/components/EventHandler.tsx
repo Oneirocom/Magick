@@ -123,12 +123,11 @@ const EventHandler = ({ pubSub, tab }) => {
     if (jsonDiff.length === 0) return
 
     try {
-      // await client.service('spell-runner').update(currentSpell.name, {
-      //   diff: jsonDiff,
-      //   projectId: config.projectId,
-      // })
-
-      console.log('spell services', client.service('spells'))
+      // save diff to spell runner if something has changed.  Will update spell in spell runner session
+      client.service('spell-runner').update(currentSpell.name, {
+        diff: jsonDiff,
+        projectId: config.projectId,
+      })
 
       const diffResponse = await client.service('spells').saveDiff({
         projectId: config.projectId,
