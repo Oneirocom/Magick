@@ -4,19 +4,15 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   anySocket,
-  EditorContext,
-  InputControl,
   MagickComponent,
   MagickNode,
   MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   NodeData,
-  Task,
-  PlaytestControl,
-  SwitchControl,
-  TextInputControl,
-  eventSocket,
+  DropdownControl,
+  stringSocket,
+  numSocket,
   triggerSocket,
 } from '@magickml/engine'
 
@@ -31,7 +27,7 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
 
   constructor() {
     // Name of the component
-    super('CallContractFunctionWriteP')
+    super('CallContractFunctionWrite')
 
     this.task = {
       outputs: {
@@ -49,73 +45,55 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'CallContractFunctionWriteP'
-    this.displayName = 'CallContractFunctionWriteP'
-  }
-
-  subscriptionMap: Record<string, Function> = {}
-
-  unsubscribe?: () => void
-
-  subscribeToPlaytest(node: MagickNode) {
-    const { onPlaytest } = this.editor?.magick as EditorContext
-
-    // check node for the right data attribute
-    if (onPlaytest) {
-      // store the unsubscribe function in our node map
-      this.subscriptionMap[node.id] = onPlaytest((text: string) => {
-        // if the node doesnt have playtest toggled on, do nothing
-        const playtestToggle = node.data.playtestToggle as unknown as {
-          receivePlaytest: boolean
-        }
-
-        if (!playtestToggle.receivePlaytest) return
-
-        // attach the text to the nodes data for access in worker
-        node.data.text = text
-      })
-    }
+    this.contextMenuName = 'CallContractFunctionWrite'
+    this.displayName = 'CallContractFunctionWrite'
   }
 
   destroyed(node: MagickNode) {
-    if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
-    delete this.subscriptionMap[node.id]
+    console.log('destroyed', node.id)
   }
 
   builder(node: MagickNode) {
-    if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
-    delete this.subscriptionMap[node.id]
-
-    // subscribe the node to the playtest input data stream
-    this.subscribeToPlaytest(node)
-
-    const out = new Rete.Output('output', 'output', eventSocket)
-    const trigger = new Rete.Output('trigger', 'trigger', triggerSocket)
-
-    const data = node?.data?.playtestToggle as
-      | {
-          receivePlaytest: boolean
-        }
-      | undefined
-
-    const togglePlaytest = new PlaytestControl({
-      dataKey: 'playtestToggle',
-      name: 'Receive from playtest input',
-      defaultValue: {
-        receivePlaytest:
-          data?.receivePlaytest !== undefined ? data?.receivePlaytest : true,
-      },
-      ignored: ['output'],
-      label: 'Receive from playtest',
-    })
-
-    node.inspector.add(togglePlaytest)
-
     // module components need to have a socket key.
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    return node.addOutput(out).addOutput(trigger)
+    const chainIdControl = new DropdownControl({
+      name: 'Chain',
+      dataKey: 'chain_id',
+      values: [
+        '1',
+        '11155111',
+        '5',
+        '137',
+        '80001'
+      ],
+      defaultValue: '80001',
+      write: true
+    })
+
+    node.inspector
+      .add(chainIdControl)
+
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const contractAddressInput = new Rete.Input('contract_addr', 'Contract Address', stringSocket)
+    const abiInput = new Rete.Input('abi', 'ABI', anySocket)
+    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numSocket)
+    const functionNameInput = new Rete.Input('function_name', 'Function Name', stringSocket)
+    const functionArgsInput = new Rete.Input('function_args', 'Function Arguments', stringSocket)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const urlOutput = new Rete.Output('output', 'Output', stringSocket)
+
+
+    return node
+      .addInput(abiInput)
+      .addInput(chainIdInput)
+      .addInput(functionNameInput)
+      .addInput(functionArgsInput)
+      .addInput(contractAddressInput)
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(urlOutput)
   }
 
   // @ts-ignore
