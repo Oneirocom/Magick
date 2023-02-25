@@ -13,7 +13,7 @@ export const useModal = () => React.useContext(Context)
 
 const ModalContext = ({ children }) => {
   const modalList = getModals()
-  const [activeModal, setActiveModal] = useState('')
+  const [activeModal, setActiveModal] = useState<Record<string, any>>({})
 
   const openModal = modalOptions => {
     setActiveModal({ ...modalOptions, closeModal })
