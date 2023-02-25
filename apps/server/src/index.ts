@@ -1,27 +1,29 @@
 import 'regenerator-runtime/runtime'
 
-import { app } from './app'
-
 import cors from '@koa/cors'
 import Router from '@koa/router'
-import {
-  initFileServer,
-  initTextToSpeech,
-} from '@magickml/server-core'
 import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
-import { initSpeechServer } from '@magickml/server-core'
 
-import { logger } from './logger'
-
-import { apis } from './apis'
-import { spells } from './spells'
-import { Handler, Method, Middleware, Route } from '@magickml/server-core'
 import { worldManager, pluginManager } from '@magickml/engine'
-import { AgentManager } from './AgentManager'
-import { HookContext, NextFunction } from '@feathersjs/feathers/lib'
 
+import {
+  app,
+  initFileServer,
+  initTextToSpeech,
+  initSpeechServer,
+  logger,
+  apis,
+  spells,
+  Handler,
+  Method,
+  Middleware,
+  Route,
+  AgentManager
+ } from '@magickml/server-core'
+
+ 
 // log node.js errors
 process.on('uncaughtException', (err) => {
   console.error('uncaughtException', err)
