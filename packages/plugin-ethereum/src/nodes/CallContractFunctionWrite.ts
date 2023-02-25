@@ -23,8 +23,6 @@ type InputReturn = {
 }
 
 export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
-  nodeTaskMap: Record<number, MagickTask> = {}
-
   constructor() {
     // Name of the component
     super('CallContractFunctionWrite')
