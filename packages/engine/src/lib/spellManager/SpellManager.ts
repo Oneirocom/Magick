@@ -31,26 +31,24 @@ export default class SpellManager {
   processMagickInterface(magickInterface): EngineContext {
     if (!this.cache) return magickInterface
 
-    const runSpell: EngineContext['runSpell'] = async ({
-      inputs,
-      spellName,
-      projectId
-    }
+    const runSpell: EngineContext['runSpell'] = async (
+      flattenedInputs,
+      spellId
     ) => {
-      if (this.getSpellRunner(spellName)) {
-        const outputs = await this.run(spellName, inputs)
+      if (this.getSpellRunner(spellId)) {
+        const outputs = await this.run(spellId, flattenedInputs)
         return outputs
       }
 
-      const spell = await magickInterface.getSpell({spellName, projectId})
+      const spell = await magickInterface.getSpell(spellId)
 
       if (!spell) {
-        throw new Error(`No spell found with name ${spellName}`)
+        throw new Error(`No spell found with name ${spellId}`)
       }
 
       await this.load(spell)
 
-      const outputs = await this.run(spellName, inputs)
+      const outputs = await this.run(spellId, flattenedInputs)
 
       return outputs
     }
@@ -61,12 +59,12 @@ export default class SpellManager {
     }
   }
 
-  getSpellRunner(spellName: string) {
-    return this.spellRunnerMap.get(spellName)
+  getSpellRunner(spellId: string) {
+    return this.spellRunnerMap.get(spellId)
   }
 
-  hasSpellRunner(spellName: string) {
-    return this.spellRunnerMap.has(spellName)
+  hasSpellRunner(spellId: string) {
+    return this.spellRunnerMap.has(spellId)
   }
 
   clear() {
@@ -74,6 +72,7 @@ export default class SpellManager {
   }
 
   async load(spell: Spell, overload = false) {
+    console.log('loading spell', spell)
     if (!spell) throw new Error('No spell provided to load')
     if (this.spellRunnerMap.has(spell.name) && !overload)
       return this.getSpellRunner(spell.name)
@@ -90,8 +89,8 @@ export default class SpellManager {
     return spellRunner
   }
 
-  async run(spellName: string, inputs: Record<string, any>) {
-    const runner = this.getSpellRunner(spellName)
+  async run(spellId: string, inputs: Record<string, any>) {
+    const runner = this.getSpellRunner(spellId)
     const result = await runner?.defaultRun(inputs)
 
     return result

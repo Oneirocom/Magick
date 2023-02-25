@@ -4,6 +4,8 @@ export class Plugin {
   services: any
   windowComponents: []
   agentComponents: []
+  inputTypes: []
+  outputTypes: []
   serverInit?: Function
   agentMethods?: {
     start: Function
@@ -17,6 +19,8 @@ export class Plugin {
     services,
     windowComponents,
     agentComponents,
+    inputTypes,
+    outputTypes,
     serverInit,
     agentMethods,
     serverRoutes,
@@ -27,6 +31,8 @@ export class Plugin {
     this.windowComponents = windowComponents
     this.agentComponents = agentComponents
     this.agentMethods = agentMethods
+    this.inputTypes = inputTypes
+    this.outputTypes = outputTypes
     this.serverInit = serverInit
     this.serverRoutes = serverRoutes
     pluginManager.register(this)
@@ -107,6 +113,26 @@ class PluginManager {
       }
     })
     return serverRoutes
+  }
+
+  getInputTypes() {
+    let inputTypes = []
+    this.pluginList.forEach(plugin => {
+      plugin.inputTypes.forEach(inputType => {
+        inputTypes.push(inputType)
+      })
+    })
+    return inputTypes
+  }
+  
+  getOutputTypes() {
+    let outputTypes = []
+    this.pluginList.forEach(plugin => {
+      plugin.outputTypes.forEach(outputType => {
+        outputTypes.push(outputType)
+      })
+    })
+    return outputTypes
   }
 
   /*

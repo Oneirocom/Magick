@@ -48,7 +48,7 @@ const graph = {
         },
       },
       position: [-200, 100],
-      name: 'Universal Input',
+      name: 'Input',
     },
     '233': {
       id: 233,

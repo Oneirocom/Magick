@@ -9,6 +9,8 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
 } from '../../types'
+import { DropdownControl } from '../../dataControls/DropdownControl'
+import { pluginManager } from '../../plugin'
 import { TextInputControl } from '../../dataControls/TextInputControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { PlaytestControl } from '../../dataControls/PlaytestControl'
@@ -27,12 +29,12 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
   constructor() {
     // Name of the component
-    super('Universal Input')
+    super('Input')
 
     this.task = {
       outputs: {
         output: 'output',
-        // trigger: 'option',
+        trigger: 'option',
       },
     }
 
@@ -81,23 +83,32 @@ export class InputComponent extends MagickComponent<InputReturn> {
     if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
     delete this.subscriptionMap[node.id]
 
+    const values = ['Default', ...pluginManager.getInputTypes()]
+
+    const inputType = new DropdownControl({
+      name: 'Input Type',
+      dataKey: 'inputType',
+      values,
+      defaultValue: 'Default',
+    })
+
+    inputType.onData = (data) => {
+      node.data.name = `Input - ${data}`
+    }
+
     // subscribe the node to the playtest input data stream
     this.subscribeToPlaytest(node)
 
     const out = new Rete.Output('output', 'output', anySocket)
-    // const trigger = new Rete.Output(
-    //   'trigger',
-    //   'playtest trigger',
-    //   triggerSocket
-    // )
+    const trigger = new Rete.Output(
+      'trigger',
+      'trigger',
+      triggerSocket
+    )
 
-    node.data.name = node.data.name || `input-${node.id}`
+      console.log('inputType.data is', inputType)
 
-    const nameInput = new InputControl({
-      dataKey: 'name',
-      name: 'Input name',
-      defaultValue: node.data.name,
-    })
+    node.data.name = node.data.name || `Input - Default`
 
     const data = node?.data?.playtestToggle as
       | {
@@ -123,24 +134,25 @@ export class InputComponent extends MagickComponent<InputReturn> {
       defaultValue: false,
     })
 
-    node.inspector.add(nameInput).add(togglePlaytest).add(toggleDefault)
-
-    node.data.defaultValue = node.data.defaultValue ?? 'Input text here'
-
-    const defaultInput = new TextInputControl({
-      editor: this.editor,
-      key: 'defaultValue',
-      value: node.data.defaultValue,
-      label: 'Default value',
+    const defaultInput = new InputControl({
+      dataKey: 'defaultValue',
+      name: 'Default Input',
+      defaultValue: node?.data?.defaultValue || 'Hello world',
     })
+
+    node.inspector
+      .add(inputType)
+      .add(togglePlaytest)
+      .add(toggleDefault)
+      .add(defaultInput)
 
     // module components need to have a socket key.
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    return node.addOutput(out)
-    //.addOutput(trigger)
-    .addControl(defaultInput)
+    return node
+      .addOutput(trigger)
+      .addOutput(out)
   }
 
   worker(
@@ -149,14 +161,14 @@ export class InputComponent extends MagickComponent<InputReturn> {
     outputs: MagickWorkerOutputs,
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
-    // this._task.closed = ['trigger']
+    this._task.closed = ['trigger']
 
     const nodeData = node.data as {
       playtestToggle: { receivePlaytest: boolean }
     }
 
     // handle data subscription.  If there is data, this is from playtest
-    if (data && !isEmpty(data) && nodeData.playtestToggle.receivePlaytest) {
+    if (data && !isEmpty(data) && node.data.playtestToggle.receivePlaytest) {
       this._task.closed = []
 
       if (!silent) node.display(data)

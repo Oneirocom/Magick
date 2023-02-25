@@ -213,7 +213,7 @@ const Playtest = ({ tab }) => {
     if (!graph) return
 
     const playtestInputName = Object.values(graph.nodes).find(
-      node => node.data.playtestToggle && node.name === 'Universal Input'
+      node => node.data.playtestToggle && node.name === 'Input'
     )?.data.name
 
     if (!playtestInputName) return
