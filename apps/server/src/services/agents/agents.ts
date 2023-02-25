@@ -30,17 +30,14 @@ export const agent = (app: Application) => {
   // Initialize hooks
   app.service('agents').hooks({
     around: {
-      all: [
-        schemaHooks.resolveExternal(agentExternalResolver),
-        schemaHooks.resolveResult(agentResolver)
-      ]
+      all: [schemaHooks.resolveExternal(agentExternalResolver), schemaHooks.resolveResult(agentResolver)]
     },
     before: {
       all: [schemaHooks.validateQuery(agentQueryValidator), schemaHooks.resolveQuery(agentQueryResolver)],
       find: [],
       get: [],
       create: [schemaHooks.validateData(agentDataValidator), schemaHooks.resolveData(agentDataResolver)],
-      patch: [schemaHooks.validateData(agentPatchValidator), schemaHooks.resolveData(agentPatchResolver),],
+      patch: [schemaHooks.validateData(agentPatchValidator), schemaHooks.resolveData(agentPatchResolver)],
       remove: []
     },
     after: {
