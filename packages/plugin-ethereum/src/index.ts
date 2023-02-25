@@ -9,6 +9,8 @@ import { CheckBalanceForERC20 } from "./nodes/CheckBalanceForERC20"
 import { CallContractFunctionWrite } from "./nodes/CallContractFunctionWrite"
 import { CallContractFunctionRead } from "./nodes/CallContractFunctionRead"
 
+import { EthereumComponent } from "./components/ethereum.route"
+
 type StartEthereumArgs = {
   agent: any,
   spellRunner: any
@@ -55,10 +57,11 @@ const EthereumPlugin = new Plugin({
   nodes: [Solidity, GetRecentTransactions, DeployContract, CheckForRecentTransactionsFromWallet, CheckEthBalance, CheckBalanceForERC20, CallContractFunctionWrite, CallContractFunctionRead],
   services: [['EthereumPlugin']],
   agentComponents: [EthereumAgentWindow],
-  windowComponents: [],
-  serverInit: null,
-  serverRoutes: null,
   agentMethods: getAgentMethods(),
+  clientRoutes: [{
+    path: '/ethereum',
+    component: EthereumComponent,
+  }],
 })
 
 export default EthereumPlugin;
