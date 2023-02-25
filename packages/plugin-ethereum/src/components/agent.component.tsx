@@ -25,7 +25,6 @@ export const EthereumAgentWindow: FC<any> = (props) => {
         ethereum_private_key: ethereum_private_key,
         ethereum_custom_rpc: ethereum_custom_rpc,
       })
-
     }
   }, [])
   useEffect(() => {
@@ -36,7 +35,6 @@ export const EthereumAgentWindow: FC<any> = (props) => {
       ethereum_custom_rpc: ethereum_custom_rpc
     })
   }, [ethereum_enabled, ethereum_private_key, ethereum_custom_rpc])
-
 
   return (
     <div style={{

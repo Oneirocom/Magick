@@ -20,6 +20,26 @@ import {
   triggerSocket,
 } from '@magickml/engine'
 
+const defaultCode = `
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.1;
+
+contract SimpleContract {
+
+    uint public myValue = 50;
+    string public myString = "Hello World!";
+
+    function setValue(uint _myValue) public {
+        myValue = _myValue;
+    }
+
+    function setString(string memory _myString) public {
+        myString = _myString;
+    }
+
+}
+`
+
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
 type InputReturn = {
@@ -31,7 +51,7 @@ export class Solidity extends MagickComponent<InputReturn> {
 
   constructor() {
     // Name of the component
-    super('SolidityP')
+    super('Solidity')
 
     this.task = {
       outputs: {
@@ -49,8 +69,8 @@ export class Solidity extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'SolidityP'
-    this.displayName = 'SolidityP'
+    this.contextMenuName = 'Solidity'
+    this.displayName = 'Solidity'
   }
 
   subscriptionMap: Record<string, Function> = {}
@@ -83,6 +103,8 @@ export class Solidity extends MagickComponent<InputReturn> {
   }
 
   builder(node: MagickNode) {
+    if (!node.data.code) node.data.code = defaultCode
+
     if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
     delete this.subscriptionMap[node.id]
 
