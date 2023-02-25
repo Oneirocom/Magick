@@ -17,10 +17,12 @@ import {
   SwitchControl,
   TextInputControl,
   eventSocket,
+  numSocket,
+  stringSocket,
   triggerSocket,
 } from '@magickml/engine'
 
-const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
+const info = `Check the recent transactions of an ethereum wallet`
 
 type InputReturn = {
   output: unknown
@@ -31,7 +33,7 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
 
   constructor() {
     // Name of the component
-    super('GetRecentTransactionsP')
+    super('GetRecentTransactions')
 
     this.task = {
       outputs: {
@@ -49,73 +51,31 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'GetRecentTransactionsP'
-    this.displayName = 'GetRecentTransactionsP'
+    this.contextMenuName = 'GetRecentTransactions'
+    this.displayName = 'GetRecentTransactions'
   }
 
-  subscriptionMap: Record<string, Function> = {}
-
-  unsubscribe?: () => void
-
-  subscribeToPlaytest(node: MagickNode) {
-    const { onPlaytest } = this.editor?.magick as EditorContext
-
-    // check node for the right data attribute
-    if (onPlaytest) {
-      // store the unsubscribe function in our node map
-      this.subscriptionMap[node.id] = onPlaytest((text: string) => {
-        // if the node doesnt have playtest toggled on, do nothing
-        const playtestToggle = node.data.playtestToggle as unknown as {
-          receivePlaytest: boolean
-        }
-
-        if (!playtestToggle.receivePlaytest) return
-
-        // attach the text to the nodes data for access in worker
-        node.data.text = text
-      })
-    }
-  }
 
   destroyed(node: MagickNode) {
-    if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
-    delete this.subscriptionMap[node.id]
+    console.log('destroyed', node.id)
   }
 
   builder(node: MagickNode) {
-    if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
-    delete this.subscriptionMap[node.id]
 
-    // subscribe the node to the playtest input data stream
-    this.subscribeToPlaytest(node)
-
-    const out = new Rete.Output('output', 'output', eventSocket)
-    const trigger = new Rete.Output('trigger', 'trigger', triggerSocket)
-
-    const data = node?.data?.playtestToggle as
-      | {
-          receivePlaytest: boolean
-        }
-      | undefined
-
-    const togglePlaytest = new PlaytestControl({
-      dataKey: 'playtestToggle',
-      name: 'Receive from playtest input',
-      defaultValue: {
-        receivePlaytest:
-          data?.receivePlaytest !== undefined ? data?.receivePlaytest : true,
-      },
-      ignored: ['output'],
-      label: 'Receive from playtest',
-    })
-
-    node.inspector.add(togglePlaytest)
+    const addressInput = new Rete.Input('address', 'Wallet Address', numSocket)
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
 
     // module components need to have a socket key.
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    return node.addOutput(out).addOutput(trigger)
+    return node
+      .addInput(addressInput)
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(balanceOutput)
   }
 
   // @ts-ignore
