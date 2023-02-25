@@ -16,7 +16,7 @@ import {
   triggerSocket,
 } from '@magickml/engine'
 
-const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
+const info = `Call a write function from a contract`
 
 type InputReturn = {
   output: unknown
