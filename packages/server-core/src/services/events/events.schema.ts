@@ -4,7 +4,7 @@ import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/t
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../validators'
+import { dataValidator, queryValidator } from '../../../../../packages/server-core/src/validators'
 
 export const eventSchema = Type.Object(
   {
