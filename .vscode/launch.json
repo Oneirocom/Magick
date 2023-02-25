@@ -20,6 +20,10 @@
           "name": "Client",
           "type": "chrome",
           "request": "launch",
+          "resolveSourceMapLocations": [
+            "${workspaceFolder}/**",
+            "!**/node_modules/**"
+        ],
           "url": "http://localhost:4200"
         },
         {
