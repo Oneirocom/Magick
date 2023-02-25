@@ -79,10 +79,7 @@ const DiscordPlugin = new Plugin({
   name: 'DiscordPlugin', 
   nodes: [DiscordInput, DiscordOutput], 
   services: {'DiscordPlugin': UploadService},
-  agentComponents: [DiscordAgentWindow], 
-  windowComponents: [],
-  serverInit: null,
-  serverRoutes: null,
+  agentComponents: [DiscordAgentWindow],
   agentMethods: getAgentMethods(),
 })
 
