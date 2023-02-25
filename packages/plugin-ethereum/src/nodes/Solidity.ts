@@ -44,7 +44,6 @@ type InputReturn = {
 }
 
 export class Solidity extends MagickComponent<InputReturn> {
-  nodeTaskMap: Record<number, MagickTask> = {}
 
   constructor() {
     // Name of the component
