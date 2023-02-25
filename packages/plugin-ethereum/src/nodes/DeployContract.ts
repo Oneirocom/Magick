@@ -4,34 +4,29 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   anySocket,
-  EditorContext,
   InputControl,
   MagickComponent,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   NodeData,
-  Task,
-  PlaytestControl,
-  SwitchControl,
-  TextInputControl,
-  eventSocket,
+  DropdownControl,
+  stringSocket,
+  numSocket,
   triggerSocket,
 } from '@magickml/engine'
 
-const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
+const info = `Deploys a contract from Solidity code, a standard for defining non-fungible tokens on EVM machines.`
 
 type InputReturn = {
   output: unknown
 }
 
 export class DeployContract extends MagickComponent<InputReturn> {
-  nodeTaskMap: Record<number, MagickTask> = {}
 
   constructor() {
     // Name of the component
-    super('DeployContractP')
+    super('DeployContract')
 
     this.task = {
       outputs: {
@@ -49,73 +44,66 @@ export class DeployContract extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'DeployContractP'
-    this.displayName = 'DeployContractP'
-  }
-
-  subscriptionMap: Record<string, Function> = {}
-
-  unsubscribe?: () => void
-
-  subscribeToPlaytest(node: MagickNode) {
-    const { onPlaytest } = this.editor?.magick as EditorContext
-
-    // check node for the right data attribute
-    if (onPlaytest) {
-      // store the unsubscribe function in our node map
-      this.subscriptionMap[node.id] = onPlaytest((text: string) => {
-        // if the node doesnt have playtest toggled on, do nothing
-        const playtestToggle = node.data.playtestToggle as unknown as {
-          receivePlaytest: boolean
-        }
-
-        if (!playtestToggle.receivePlaytest) return
-
-        // attach the text to the nodes data for access in worker
-        node.data.text = text
-      })
-    }
+    this.contextMenuName = 'DeployContract'
+    this.displayName = 'DeployContract'
   }
 
   destroyed(node: MagickNode) {
-    if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
-    delete this.subscriptionMap[node.id]
+    console.log('destroyed', node.id)
   }
 
   builder(node: MagickNode) {
-    if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
-    delete this.subscriptionMap[node.id]
-
-    // subscribe the node to the playtest input data stream
-    this.subscribeToPlaytest(node)
-
-    const out = new Rete.Output('output', 'output', eventSocket)
-    const trigger = new Rete.Output('trigger', 'trigger', triggerSocket)
-
-    const data = node?.data?.playtestToggle as
-      | {
-          receivePlaytest: boolean
-        }
-      | undefined
-
-    const togglePlaytest = new PlaytestControl({
-      dataKey: 'playtestToggle',
-      name: 'Receive from playtest input',
-      defaultValue: {
-        receivePlaytest:
-          data?.receivePlaytest !== undefined ? data?.receivePlaytest : true,
-      },
-      ignored: ['output'],
-      label: 'Receive from playtest',
-    })
-
-    node.inspector.add(togglePlaytest)
-
     // module components need to have a socket key.
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    return node.addOutput(out).addOutput(trigger)
+    const rpcHttpControl = new InputControl({
+      dataKey: 'rpc_http',
+      name: 'RPC Endpoint',
+    })
+
+    const chainIdControl = new DropdownControl({
+      name: 'Chain',
+      dataKey: 'chain_id',
+      values: [
+        '1',
+        '11155111',
+        '5',
+        '137',
+        '80001'
+      ],
+      defaultValue: '80001',
+    })
+
+    node.inspector
+      .add(rpcHttpControl)
+      .add(chainIdControl)
+
+    const bytecodeInput = new Rete.Input('bytecode', 'Bytecode', anySocket)
+    const abiInput = new Rete.Input('abi', 'ABI', anySocket)
+    const privatekeyInput = new Rete.Input('privatekey', 'Private Key', anySocket)
+    const rpcHttpInput = new Rete.Input('rpc_http', 'RPC HTTP Endpoint', stringSocket)
+    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numSocket)
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const balanceOutput = new Rete.Output('balance', 'Balance', numSocket)
+    const balanceAfterOutput = new Rete.Output('balance_after', 'Balance After', numSocket)
+    const txOutput = new Rete.Output('tx', 'Transaction', stringSocket)
+    const contractAddrOutput = new Rete.Output('contract', 'Contract Address', stringSocket)
+
+    return node
+      .addInput(bytecodeInput)
+      .addInput(abiInput)
+      .addInput(rpcHttpInput)
+      .addInput(chainIdInput)
+      .addInput(privatekeyInput)
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(balanceOutput)
+      .addOutput(balanceAfterOutput)
+      .addOutput(contractAddrOutput)
+      .addOutput(txOutput)
   }
 
   // @ts-ignore

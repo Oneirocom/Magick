@@ -4,19 +4,12 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   anySocket,
-  EditorContext,
-  InputControl,
   MagickComponent,
   MagickNode,
   MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   NodeData,
-  Task,
-  PlaytestControl,
-  SwitchControl,
-  TextInputControl,
-  eventSocket,
   numSocket,
   stringSocket,
   triggerSocket,
@@ -29,7 +22,6 @@ type InputReturn = {
 }
 
 export class GetRecentTransactions extends MagickComponent<InputReturn> {
-  nodeTaskMap: Record<number, MagickTask> = {}
 
   constructor() {
     // Name of the component
