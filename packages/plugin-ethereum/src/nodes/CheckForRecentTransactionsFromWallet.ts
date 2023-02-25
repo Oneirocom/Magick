@@ -31,7 +31,7 @@ export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputR
 
   constructor() {
     // Name of the component
-    super('CheckForRecentTransactionsFromWalletP')
+    super('CheckForRecentTransactionsFromWallet')
 
     this.task = {
       outputs: {
@@ -49,8 +49,8 @@ export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputR
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'CheckForRecentTransactionsFromWalletP'
-    this.displayName = 'CheckForRecentTransactionsFromWalletP'
+    this.contextMenuName = 'CheckForRecentTransactionsFromWallet'
+    this.displayName = 'CheckForRecentTransactionsFromWallet'
   }
 
   subscriptionMap: Record<string, Function> = {}
