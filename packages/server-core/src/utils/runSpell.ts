@@ -1,7 +1,7 @@
 import { SpellRunner, GraphData, Spell as SpellType, projectId } from '@magickml/engine'
 import { app } from '../app'
 import { buildMagickInterface } from '../buildMagickInterface'
-import { ServerError } from '@magickml/server-core'
+import { ServerError } from '../ServerError'
 
 export type RunSpellArgs = {
   spellName: string

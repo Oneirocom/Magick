@@ -1,5 +1,6 @@
-import { buildMagickInterface } from '../../server/src/buildMagickInterface'
-import { tts, tts_tiktalknet } from '@magickml/server-core'
+import { buildMagickInterface } from './buildMagickInterface'
+import { tts_tiktalknet } from './tiktalknet'
+import { tts } from './googleTextToSpeech'
 import { SpellManager, pluginManager } from '@magickml/engine'
 import { app } from './app'
 
