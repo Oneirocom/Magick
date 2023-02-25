@@ -9,6 +9,15 @@
   padding: 15px;
 }
 
+.noSelected {
+  font-size: 20px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
 .mg-btm-small {
   margin-bottom: 10px !important;
 }
@@ -36,6 +45,12 @@
   background: var(--dark-1);
   padding: 5px;
   border-radius: 4px;
+  margin-bottom: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--dark-2);
+  }
 }
 
 .agentItem {
