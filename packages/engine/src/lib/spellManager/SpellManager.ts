@@ -31,9 +31,10 @@ export default class SpellManager {
   processMagickInterface(magickInterface): EngineContext {
     if (!this.cache) return magickInterface
 
-    const runSpell: EngineContext['runSpell'] = async (
-      flattenedInputs,
-      spellId
+    const runSpell: EngineContext['runSpell'] = async ({
+      inputs: flattenedInputs,
+      spellName: spellId
+    }
     ) => {
       if (this.getSpellRunner(spellId)) {
         const outputs = await this.run(spellId, flattenedInputs)
@@ -91,7 +92,10 @@ export default class SpellManager {
 
   async run(spellId: string, inputs: Record<string, any>) {
     const runner = this.getSpellRunner(spellId)
-    const result = await runner?.defaultRun(inputs)
+    console.log('running, inputs are', inputs)
+    const result = await runner?.runComponent({
+      inputs,
+    })
 
     return result
   }
