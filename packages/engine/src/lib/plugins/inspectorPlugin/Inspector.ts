@@ -198,7 +198,7 @@ export class Inspector {
 
   handleDefaultTrigger(update: Record<string, any>) {
     this.editor.nodes
-      .filter(node => node.name === 'Input')
+      .filter(node => node.name === 'Trigger In')
       .map(node => {
         if (node.data.isDefaultTriggerIn) {
           node.data.isDefaultTriggerIn = !node.data.isDefaultTriggerIn

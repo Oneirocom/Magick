@@ -11,12 +11,10 @@ import {
 } from '../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { pluginManager } from '../../plugin'
-import { TextInputControl } from '../../dataControls/TextInputControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { PlaytestControl } from '../../dataControls/PlaytestControl'
 import { SwitchControl } from '../../dataControls/SwitchControl'
-// import { Task } from '../../plugins/taskPlugin/task'
-import { anySocket, triggerSocket } from '../../sockets'
+import { anySocket } from '../../sockets'
 import { MagickComponent, MagickTask } from '../../magick-component'
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
@@ -34,7 +32,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
     this.task = {
       outputs: {
         output: 'output',
-        trigger: 'option',
       },
     }
 
@@ -102,13 +99,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
     this.subscribeToPlaytest(node)
 
     const out = new Rete.Output('output', 'output', anySocket)
-    const trigger = new Rete.Output(
-      'trigger',
-      'trigger',
-      triggerSocket
-    )
-
-      console.log('inputType.data is', inputType)
 
     node.data.name = node.data.name || `Input - Default`
 
@@ -153,7 +143,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
     return node
-      .addOutput(trigger)
       .addOutput(out)
   }
 
@@ -163,8 +152,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
     outputs: MagickWorkerOutputs,
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
-    this._task.closed = ['trigger']
-
     const nodeData = node.data as {
       playtestToggle: { receivePlaytest: boolean }
     }

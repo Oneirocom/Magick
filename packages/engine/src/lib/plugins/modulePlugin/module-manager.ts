@@ -152,7 +152,7 @@ export class ModuleManager {
       )
       if (!triggeredNode) throw new Error('Triggered node not found')
       // todo need to remember to update this if/when componnet name changes
-      const component = engine?.components.get('Input') as ModuleComponent
+      const component = engine?.components.get('Trigger In') as ModuleComponent
       console.log('component', component)
       await component?.run(triggeredNode)
     }

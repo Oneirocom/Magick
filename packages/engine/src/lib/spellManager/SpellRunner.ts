@@ -213,7 +213,7 @@ class SpellRunner {
    */
   async runComponent({
     inputs,
-    componentName = 'Input',
+    componentName = 'Trigger In',
     runSubspell = false,
     runData = {},
   }: RunComponentArgs) {
@@ -234,7 +234,7 @@ class SpellRunner {
     // load the inputs into module memory
     this._loadInputs(inputs)
 
-    console.log('componentName', componentName || Object.keys(inputs)[0])
+    console.log('componentName', componentName)
 
     const component = this._getComponent(componentName) as ModuleComponent
 
