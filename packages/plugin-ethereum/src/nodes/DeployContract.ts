@@ -30,8 +30,11 @@ export class DeployContract extends MagickComponent<InputReturn> {
 
     this.task = {
       outputs: {
-        output: 'output',
         trigger: 'option',
+        balance: 'output',
+        balance_after: 'output',
+        tx: 'output',
+        contract: 'output'
       },
     }
 
