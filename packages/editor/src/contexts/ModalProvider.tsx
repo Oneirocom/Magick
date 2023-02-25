@@ -5,15 +5,15 @@ import { getModals } from '../components/Modals'
 const Context = React.createContext({
   activeModal: '',
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  openModal: options => { },
-  closeModal: () => { },
+  openModal: options => {},
+  closeModal: () => {},
 })
 
 export const useModal = () => React.useContext(Context)
 
 const ModalContext = ({ children }) => {
   const modalList = getModals()
-  const [activeModal, setActiveModal] = useState('')
+  const [activeModal, setActiveModal] = useState<Record<string, any>>({})
 
   const openModal = modalOptions => {
     setActiveModal({ ...modalOptions, closeModal })

@@ -27,7 +27,7 @@ const styles = () => ({
 // }
 
 const ToastProvider = ({ children }) => {
-  return <SnackbarProvider maxSnack="3">{children}</SnackbarProvider>
+  return <SnackbarProvider maxSnack={3}>{children}</SnackbarProvider>
 }
 
 export default ToastProvider

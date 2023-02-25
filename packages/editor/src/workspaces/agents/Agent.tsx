@@ -40,7 +40,7 @@ const AgentWindow = ({
   const [spellList, setSpellList] = useState<any[]>([])
   const selectedSpellPublicVars = Object.values(
     spellList.find(spell => spell.name === root_spell)?.graph.nodes || {}
-  ).filter(node => node?.data?.Public)
+  ).filter((node: any) => node?.data?.Public)
 
   useEffect(() => {
     if (!loaded) {

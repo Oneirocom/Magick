@@ -39,12 +39,12 @@ interface IModuleComponent extends Component {
 
 export type ModulePluginArgs = {
   engine: MagickEngine
-  modules: Record<string, ModuleType>
+  modules?: Record<string, ModuleType>
 }
 
 function install(
   runContext: IRunContextEngine | ModuleIRunContextEditor,
-  { engine, modules }: ModulePluginArgs
+  { engine, modules = {} }: ModulePluginArgs
 ) {
   const moduleManager = new ModuleManager(modules)
 
