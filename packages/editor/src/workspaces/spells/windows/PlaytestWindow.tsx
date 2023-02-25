@@ -65,7 +65,7 @@ const Playtest = ({ tab }) => {
     "client": "playtest",
     "channel": "playtest",
     "channelType": "playtest",
-    "projectId": "${config.projectId}",
+    "projectId": config.projectId,
     "agentId": 0,
     "entities": ["playtestSender", "playtestObserver"]
   }
