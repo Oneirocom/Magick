@@ -4,7 +4,7 @@ import { buildMagickInterface } from '../buildMagickInterface'
 import { ServerError } from '@magickml/server-core'
 
 export type RunSpellArgs = {
-  spellName: string
+  id: string
   inputs?: Record<string, unknown>
   inputFormatter?: (graph: GraphData) => Record<string, unknown>
   projectId: string

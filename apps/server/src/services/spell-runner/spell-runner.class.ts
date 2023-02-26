@@ -90,9 +90,10 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
     data: { diff: Record<string, unknown> },
     params?: SpellRunnerParams
   ): Promise<Data> {
+    console.log("ID is ",id)
     if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
-
+    
     const { user } = params as any
 
     if (!user) throw new Error('No user present in service')
