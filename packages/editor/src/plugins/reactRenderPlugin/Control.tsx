@@ -1,7 +1,13 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 
-export class Control extends React.Component {
+type ControlProps = {
+  innerRef: (el: any, control: any) => void
+  className: string
+  control: any
+}
+
+export class Control extends React.Component<ControlProps> {
   createRef = el => {
     const { innerRef, control } = this.props
 

@@ -9,6 +9,11 @@ console.error = function filterWarnings(msg, ...args) {
   }
 }
 
+export type ReactRenderPluginOptions = {
+  component?: Node
+  createRoot?: Function
+}
+
 function install(editor, { component: NodeComponent = Node, createRoot }) {
   const roots = new Map()
   const render = createRoot
@@ -27,16 +32,18 @@ function install(editor, { component: NodeComponent = Node, createRoot }) {
       const Component = component.component || NodeComponent
 
       node.update = () =>
-        new Promise(res => {
+        new Promise<void>(resolve => {
           render(
-            <Component
-              node={node}
-              editor={editor}
-              bindSocket={bindSocket}
-              bindControl={bindControl}
-            />,
+            (
+              <Component
+                node={node}
+                editor={editor}
+                bindSocket={bindSocket}
+                bindControl={bindControl}
+              />
+            ) as any,
             el,
-            res
+            () => resolve()
           )
         })
       node._reactComponent = true
@@ -49,7 +56,7 @@ function install(editor, { component: NodeComponent = Node, createRoot }) {
     const Component = control.component
 
     control.update = () =>
-      new Promise(res => {
+      new Promise<void>(res => {
         render(<Component {...control.props} />, el, res)
       })
     control.update()

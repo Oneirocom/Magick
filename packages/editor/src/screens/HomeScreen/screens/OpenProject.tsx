@@ -89,7 +89,11 @@ const OpenProject = ({
                 navigate('/home/create-new')
               }}
             >
-              <Icon name="add" style={{ marginRight: 'var(--extraSmall)' }} />
+              <Icon
+                name="add"
+                size={16}
+                style={{ marginRight: 'var(--extraSmall)' }}
+              />
               Create new
             </Button>
           )}
