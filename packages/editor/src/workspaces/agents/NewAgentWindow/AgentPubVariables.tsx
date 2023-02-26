@@ -3,31 +3,27 @@ import styles from '../AgentWindowStyle.module.css'
 import Switch from '../../../components/Switch/Switch'
 import Input from '../../../components/Input/Input'
 import { useState } from 'react'
-import Button from '../../../components/Button'
 
 interface Props {
   publicVars: any
-  update: () => void
+  setPublicVars: (data: any) => void
 }
 
-const AgentPubVariables = ({ publicVars, update }: Props) => {
+const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
   const agentPublicVars = publicVars.reduce((acc, obj) => {
     acc[obj.data?.name] = obj?.data?.fewshot || obj?.data?._var
     return acc
   }, {})
-  const [agentPublicInputsState, setAgentPublicInputs] =
-    useState(agentPublicVars)
 
   const onChange = event => {
-    const { name } = event.target
-    setAgentPublicInputs({
-      ...agentPublicInputsState,
+    const { name } = event.target;
+    setPublicVars({
+      ...publicVars,
       [name]:
         event.target.checked === undefined
           ? event.target.value
           : event.target.checked,
     })
-    update()
   }
 
   return (
@@ -51,14 +47,14 @@ const AgentPubVariables = ({ publicVars, update }: Props) => {
               {variable.name.includes('Boolean') ? (
                 <Switch
                   label={''}
-                  checked={agentPublicInputsState[variable?.data?.name]}
+                  checked={publicVars[variable?.data?.name]}
                   onChange={onChange}
                   name={variable?.data?.name}
                 />
               ) : (
                 <Input
                   style={{ width: '100%' }}
-                  value={agentPublicInputsState[variable?.data?.name]}
+                  value={publicVars[variable?.data?.name]}
                   type="text"
                   onChange={onChange}
                   name={variable?.data?.name}

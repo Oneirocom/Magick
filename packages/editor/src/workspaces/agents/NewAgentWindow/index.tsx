@@ -2,22 +2,17 @@ import { Button, Grid, Typography } from '@mui/material'
 import AgentItem from './AgentItem'
 import styles from './index.module.scss'
 import AgentDetails from './AgentDetails'
-import AgentPubVariables from './AgentPubVariables'
-import Accordion from '../../../components/Accordion'
 import { useState } from 'react'
 
 interface Props {
   data: Array<Object>
-  selectedSpellVars: any
   onCreateAgent: () => void
   update: (data: any) => void
-  onDelete: (id: number) => void
-  children: React.ReactNode
+  onDelete: (id: string) => void
 }
 
 const AgentWindow = ({
   data,
-  selectedSpellVars,
   update,
   onCreateAgent,
   onDelete,

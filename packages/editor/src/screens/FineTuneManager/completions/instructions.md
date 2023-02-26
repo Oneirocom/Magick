@@ -9,9 +9,9 @@ Then create a new model using that training file. You can use a second file for 
 ---
 
 ```json
-{ "prompt": "Company: BHFF insurance\nProduct: allround insurance\nAd:One stop shop for all your insurance needs!\nSupported:",
+{ "prompt": "Company: BHFF cars\nProduct: cars\nAd:One stop shop!\nSupported:",
   "completion": "yes" }
-{ "prompt": "Company: Loft conversion specialists\nProduct: -\nAd:Straight teeth in weeks!\nSupported:",
+{ "prompt": "Company: Loft teeth\nProduct: -\nAd:Straight teeth in weeks!\nSupported:",
   "completion":"no" }
 ```
 
