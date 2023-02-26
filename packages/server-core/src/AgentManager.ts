@@ -294,5 +294,3 @@ export class AgentManager {
     return port
   }
 }
-
-export const agentManager = new AgentManager()

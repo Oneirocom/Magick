@@ -18,7 +18,7 @@ export { default as SocketPlugin } from './lib/plugins/socketPlugin'
 export { default as TaskPlugin } from './lib/plugins/taskPlugin'
 export { default as MultiSocketGenerator } from './lib/plugins/multiSocketGenerator'
 export { default as NodeClickPlugin } from './lib/plugins/nodeClickPlugin'
-export { worldManager } from './lib/world/worldManager'
+export { WorldManager } from './lib/world/worldManager'
 export { default as runPython } from './lib/functions/ProcessPython'
 
 export { SwitchControl } from './lib/dataControls/SwitchControl'
