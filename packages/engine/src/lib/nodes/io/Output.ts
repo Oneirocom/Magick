@@ -47,7 +47,7 @@ export class Output extends MagickComponent<void> {
     const textInput = new Rete.Input('input', 'Outputs', anySocket, true)
     const output = new Rete.Output('output', 'Output', anySocket)
 
-    node.data.name = node.data.name || `output-${node.id}`
+    node.data.name = node.data.name || `Output ${node.id}`
 
     const nameInput = new InputControl({
       dataKey: 'name',
