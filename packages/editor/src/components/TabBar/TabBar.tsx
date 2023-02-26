@@ -9,7 +9,7 @@ import css from './tabBar.module.css'
 import { closeTab, selectAllTabs } from '../../state/tabs'
 import { changeActive } from '../../state/tabs'
 import { RootState } from '../../state/store'
-import Icon from '../Icon/Icon'
+import { Icon } from '@magickml/client-core'
 
 const Tab = ({ tab, activeTab }) => {
   const dispatch = useDispatch()

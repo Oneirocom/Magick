@@ -10,7 +10,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 
 import { getSpellApi } from '../../../state/api/spells'
-import Panel from '../../../components/Panel/Panel'
+import { Panel } from '@magickml/client-core'
 import emptyImg from '../empty.png'
 import css from '../homeScreen.module.css'
 import TemplatePanel from '../components/TemplatePanel'
@@ -18,7 +18,7 @@ import defaultGraph from '../../../data/graphs/default'
 import threeovGraph from '../../../data/graphs/threeov'
 import md5 from 'md5'
 import { useConfig } from '../../../contexts/ConfigProvider'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 
 const customConfig = {
   dictionaries: [adjectives, colors],

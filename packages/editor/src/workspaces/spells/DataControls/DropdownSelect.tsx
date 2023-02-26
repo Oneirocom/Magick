@@ -1,4 +1,4 @@
-import Select from '../../../components/Select/Select'
+import { Select } from '@magickml/client-core' 
 import useSWR from 'swr'
 import type { OpenAI } from '../../../../../../@types/openai'
 import { useEffect, useState } from 'react'

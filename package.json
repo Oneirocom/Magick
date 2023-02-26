@@ -5,7 +5,7 @@
   "scripts": {
     "migrate:make": "nx run @magickml/server:migrate:make",
     "migrate": "nx run @magickml/server:migrate",
-    "dev": "npx nx run-many --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent --parallel=true",
+    "dev": "npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent --parallel --maxParallel=100",
     "containers": "concurrently \"docker-compose up\" \"sleep 20 && npm run db:init && echo database synced!\"",
     "build": "npx nx build",
     "build-client": "npx nx build @magickml/client",

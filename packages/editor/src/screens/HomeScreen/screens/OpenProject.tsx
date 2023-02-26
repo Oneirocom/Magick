@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 
 import thothBanner from '../version-banner-0.2.0-alpha.png'
-import Icon from '../../../components/Icon/Icon'
-import Panel from '../../../components/Panel/Panel'
+import { Icon } from '@magickml/client-core'
+import { Panel } from '@magickml/client-core'
 import css from '../homeScreen.module.css'
 import FileInput from '../components/FileInput'
 import ProjectRow from '../components/ProjectRow'
@@ -11,7 +11,7 @@ import { selectAllTabs } from '../../../state/tabs'
 import { RootState } from '../../../state/store'
 
 import packageJson from '../../../../package.json'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 const version = packageJson.version
 
 const getMagickVersion = () => version

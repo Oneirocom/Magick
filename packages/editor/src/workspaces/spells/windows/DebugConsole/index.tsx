@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { renderToString } from 'react-dom/server'
 import Terminal from 'react-console-emulator'
 import { usePubSub } from '../../../../contexts/PubSubProvider'
-import Window from '../../../../components/Window/Window'
+import { Window } from '@magickml/client-core'
 import { useEditor } from '../../../contexts/EditorProvider'
 
 export type DebugMessage = {

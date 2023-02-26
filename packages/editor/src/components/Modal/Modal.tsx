@@ -1,6 +1,6 @@
 import { useModal } from '../../contexts/ModalProvider'
-import Button from '../Button'
-import Icon from '../Icon/Icon'
+import { Button } from '@magickml/client-core'
+import { Icon } from '@magickml/client-core'
 import css from './modal.module.css'
 
 const Modal = ({ options = [], title, icon, onClose = () => {}, ...props }) => {

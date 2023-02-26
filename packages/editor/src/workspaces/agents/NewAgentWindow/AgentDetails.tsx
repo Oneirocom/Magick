@@ -1,9 +1,6 @@
-import IconBtn from 'packages/editor/src/components/IconButton'
-import Icon from 'packages/editor/src/components/Icon/Icon'
-import {} from '@mui/icons-material'
+import { Icon, IconBtn, Switch} from '@magickml/client-core'
 import { Accordion, Avatar, Button, Typography } from '@mui/material'
 import styles from './index.module.scss'
-import SwitchComponent from 'packages/editor/src/components/Switch/Switch'
 import { useEffect, useState } from 'react'
 import AgentPubVariables from './AgentPubVariables'
 import axios from 'axios'
@@ -140,7 +137,7 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
         <Button onClick={() => _delete()}>Delete</Button>
         <Button onClick={() => exportEntity()}>Export</Button>
       </div>
-        <SwitchComponent
+        <Switch
           label={null}
           checked={agentData.enabled}
           onChange={() => {

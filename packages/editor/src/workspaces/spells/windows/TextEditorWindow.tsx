@@ -1,15 +1,14 @@
 import Editor from '@monaco-editor/react'
 import { useState, useEffect, useRef } from 'react'
 
-import Window from '../../../components/Window/Window'
-import WindowMessage from '../../components/WindowMessage'
+import { Window } from '@magickml/client-core'
 import { activeTabSelector, selectAllTabs } from '../../../state/tabs'
 
 import '../../../screens/Magick/magick.module.css'
 import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
 import { RootState } from '../../../state/store'
 import { useSelector } from 'react-redux'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 
 const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)

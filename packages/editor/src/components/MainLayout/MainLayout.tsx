@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
 
 import ModalProvider from '../../contexts/ModalProvider'
-import Drawer from '../Drawer/Drawer'
+import { Drawer } from '@magickml/client-core'
 
 const MainLayout = () => {
   return (

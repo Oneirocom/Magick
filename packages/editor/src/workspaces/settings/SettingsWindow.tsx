@@ -3,7 +3,7 @@ import { useConfig } from '../../contexts/ConfigProvider'
 import { KeyboardArrowDown, FileCopy, Clear } from '@mui/icons-material/'
 import styles from './styles.module.scss'
 import { IconButton } from '@mui/material'
-import ToolTip from '../../components/ToolTip'
+import { Tooltip } from '@magickml/client-core'
 import useAuthentication from '../../screens/FineTuneManager/account/useAuthentication'
 
 const SettingsWindow = () => {
@@ -61,7 +61,7 @@ const SettingsWindow = () => {
               />
               {apiKey && (
                 <>
-                  <ToolTip title={copy}>
+                  <Tooltip title={copy}>
                     <IconButton
                       className={styles['icon']}
                       onClick={() => {
@@ -74,8 +74,8 @@ const SettingsWindow = () => {
                     >
                       <FileCopy />
                     </IconButton>
-                  </ToolTip>
-                  <ToolTip title={clear}>
+                  </Tooltip>
+                  <Tooltip title={clear}>
                     <IconButton
                       className={styles['icon']}
                       onClick={() => {
@@ -90,7 +90,7 @@ const SettingsWindow = () => {
                     >
                       <Clear />
                     </IconButton>
-                  </ToolTip>
+                  </Tooltip>
                 </>
               )}
             </form>
