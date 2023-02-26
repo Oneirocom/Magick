@@ -12,7 +12,7 @@ async function init() {
   const worldManager = new WorldManager()
   console.log('AGENT: Starting agent manager', agentManager)
   console.log('AGENT: Starting world manager', worldManager.rooms)
-  console.log('AGENT: Loading plugins', pluginManager.plugins.map((p) => p.name).join(', '))
+  console.log('AGENT: Loading plugins', pluginManager.pluginList.map((p) => p.name).join(', '))
 }
 
 init()
