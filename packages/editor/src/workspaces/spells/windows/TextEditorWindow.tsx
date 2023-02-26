@@ -24,7 +24,7 @@ const TextEditor = props => {
   const { textEditorData, saveTextEditor, inspectorData } = useInspector()
   const activeTab = useSelector(activeTabSelector)
 
-  const [lastInputs, setLastInputs] = useState('')
+  const [lastInputs, setLastInputs] = useState<string>('')
 
   // const bottomHeight = 50
   const handleEditorWillMount = monaco => {
@@ -44,9 +44,10 @@ const TextEditor = props => {
     console.log('inspectorData', inspectorData)
     if (!inspectorData?.data.inputs) return
 
+    const stringifiedInputs = JSON.stringify(inspectorData?.data.inputs)
+
     // if inspectorData?.data.inputs is the same as lastInputs, then return
-    if (Object.keys(JSON.stringify(inspectorData?.data.inputs)) === lastInputs)
-      return
+    if (stringifiedInputs === lastInputs) return
     setLastInputs(JSON.stringify(inspectorData?.data.inputs))
 
     const inputs: string[] = []

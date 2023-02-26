@@ -7,9 +7,21 @@ import { Socket } from './Socket'
 import { kebab } from './utils'
 import './styles.css'
 
-export class Node extends React.Component {
-  state = {}
+type NodeProps = {
+  node: any
+  editor: any
+  bindSocket: any
+  bindControl: any
+}
 
+type NodeState = {
+  outputs: any[]
+  controls: any[]
+  inputs: any[]
+  selected: string
+}
+
+export class Node extends React.Component<NodeProps, NodeState> {
   static getDerivedStateFromProps({ node, editor }) {
     return {
       outputs: Array.from(node.outputs.values()),
