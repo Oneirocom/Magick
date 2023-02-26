@@ -1,3 +1,9 @@
+type DrawerItem = {
+  path: string
+  icon: any
+  text: string
+}
+
 type ClientRoute = {
   path: string
   component: any
@@ -22,6 +28,7 @@ export class Plugin {
     start: Function
     stop: Function
   }
+  drawerItems?: Array<DrawerItem>
   clientRoutes?: Array<ClientRoute>
   serverRoutes?: Array<ServerRoute>
   startkey: any
@@ -41,8 +48,9 @@ export class Plugin {
         console.log('stopping plugin')
       }
     },
-    clientRoutes = null,
-    serverRoutes = null,
+    clientRoutes = [],
+    serverRoutes = [],
+    drawerItems = []
   }: {
     name: string
     nodes?: any
@@ -57,6 +65,7 @@ export class Plugin {
     outputTypes?: any[]
     clientRoutes?: Array<ClientRoute>
     serverRoutes?: Array<ServerRoute>
+    drawerItems?: Array<DrawerItem>
   }) {
     this.name = name
     this.nodes = nodes
@@ -68,6 +77,7 @@ export class Plugin {
     this.serverInit = serverInit
     this.clientRoutes = clientRoutes
     this.serverRoutes = serverRoutes
+    this.drawerItems = drawerItems
     pluginManager.register(this)
   }
 }
@@ -158,6 +168,18 @@ class PluginManager {
       }
     })
     return serverRoutes
+  }
+
+  getDrawerItems() {
+    let drawerItems = [] as any[]
+    this.pluginList.forEach(plugin => {
+      if (plugin.drawerItems) {
+        plugin.drawerItems.forEach(drawerItem => {
+          drawerItems.push({...drawerItem, plugin: plugin.name})
+        })
+      }
+    })
+    return drawerItems
   }
 
   getInputTypes() {

@@ -14,7 +14,7 @@ import { useLocation } from 'react-router-dom'
 import StorageIcon from '@mui/icons-material/Storage'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories'
 import SettingsIcon from '@mui/icons-material/Settings'
-
+import { pluginManager } from '@magickml/engine'
 import HubIcon from '@mui/icons-material/Hub'
 
 import MagickLogo from './purple-logo-full.png'
@@ -101,6 +101,36 @@ const DrawerItem = ({ Icon, open, text, active, onClick = () => {} }) => (
   </ListItem>
 )
 
+const PluginDrawerItems = ({onClick, open}) => {
+  const drawerItems = pluginManager.getDrawerItems()
+  let lastPlugin = null
+  let divider = false
+  return (
+    <>
+      {drawerItems.map(item => {
+        if (item.plugin !== lastPlugin) {
+          divider = true
+          lastPlugin = item.plugin
+        } else {
+          divider = false
+        }
+        return (
+          <>
+          {divider && <Divider />}
+          <DrawerItem
+            active={location.pathname.includes(item.path)}
+            Icon={item.icon}
+            open={open}
+            onClick={onClick(item.path)}
+            text={item.text}
+          />
+          </>
+        )
+      })}
+    </>
+  )
+}
+
 export function Drawer({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
@@ -123,10 +153,11 @@ export function Drawer({ children }) {
           onClick={toggleDrawer}
           sx={{ justifyContent: open ? 'space-between' : 'flex-end' }}
         >
-          {<img
+          {
+            <img
               style={{
-                marginLeft: open ? ".5em" : ".0em",
-                marginTop: "2em",
+                marginLeft: open ? '.5em' : '.0em',
+                marginTop: '2em',
                 height: 16,
                 // on hover, show the finger cursor
                 cursor: 'pointer',
@@ -150,13 +181,6 @@ export function Drawer({ children }) {
             text="Spells"
           />
           <DrawerItem
-            active={location.pathname.includes('/fineTuneManager')}
-            Icon={AutoStoriesIcon}
-            open={open}
-            onClick={onClick('/fineTuneManager')}
-            text="Fine Tuning"
-          />
-          <DrawerItem
             active={location.pathname === '/events'}
             Icon={StorageIcon}
             open={open}
@@ -177,14 +201,15 @@ export function Drawer({ children }) {
             onClick={onClick('/requests')}
             text="Requests"
           />
-            <Divider />
-            <DrawerItem
-              active={location.pathname.includes('/settings')}
-              Icon={SettingsIcon}
-              open={open}
-              onClick={onClick('/settings')}
-              text="Settings"
-            />
+          <PluginDrawerItems onClick={onClick} open={open} />
+          <Divider />
+          <DrawerItem
+            active={location.pathname.includes('/settings')}
+            Icon={SettingsIcon}
+            open={open}
+            onClick={onClick('/settings')}
+            text="Settings"
+          />
         </List>
       </StyledDrawer>
       {children}
