@@ -1,6 +1,6 @@
 import { MetadataCard } from '../components/MetadataCard'
 import React from 'react'
-import { OpenAI } from '../../../../../../@types/openai'
+import { OpenAI } from '../types/openai'
 
 export default function FineTuneMetadata({
   fineTune,

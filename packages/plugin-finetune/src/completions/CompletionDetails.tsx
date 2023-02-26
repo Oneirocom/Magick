@@ -1,7 +1,7 @@
 import DetailsPage from '../components/DetailsPage'
 import React from 'react'
 import useSWRImmutable from 'swr/immutable'
-import type { OpenAI } from '../../../../../../@types/openai'
+import { OpenAI } from '../types/openai'
 import FineTuneMetadata from '../fine-tunes/FineTuneMetadata'
 import FineTuneResultsCard from '../fine-tunes/FineTuneResultsCard'
 import CompletionForm from './CompletionForm'

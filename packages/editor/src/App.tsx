@@ -18,9 +18,11 @@ import AgentManagerWindow from './workspaces/agents/AgentManagerWindow'
 import SettingsWindow from './workspaces/settings/SettingsWindow'
 
 import RequestWindow from './workspaces/spells/windows/RequestWindow'
+import { pluginManager } from '@magickml/engine'
 
 const singleUserMode = import.meta.env.VITE_APP_SINGLE_USER_MODE || true
 function App() {
+  const pluginRoutes = pluginManager.getClientRoutes()
   return (
     <Routes>
       <Route element={<MainLayout />}>
@@ -42,6 +44,15 @@ function App() {
           />
           <Route path="/*" element={<Magick />} />
         </Route>
+
+        {pluginRoutes.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={route.element}
+          />
+        ))}
+
       </Route>
     </Routes>
   )

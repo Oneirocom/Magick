@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import { SWRConfig } from 'swr'
-import { OpenAI } from '../../../../../../@types/openai'
+import { OpenAI } from '../types/openai'
 import { useLocalStorage } from 'usehooks-ts'
 import requestHeaders from './requestHeaders'
 

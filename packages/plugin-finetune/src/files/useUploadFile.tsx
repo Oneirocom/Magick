@@ -4,7 +4,7 @@ import { filesize } from 'filesize'
 import { useCallback, useState } from 'react'
 import { toast } from 'react-toastify'
 import { mutate } from 'swr'
-import { OpenAI } from '../../../../../../@types/openai'
+import { OpenAI } from '../types/openai'
 import * as XLSX from 'xlsx'
 import { OPENAI_ENDPOINT } from '@magickml/engine'
 

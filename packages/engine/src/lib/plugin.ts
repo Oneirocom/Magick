@@ -1,29 +1,65 @@
+type ClientRoute = {
+  path: string
+  component: any
+  exact?: boolean
+}
+
+type ServerRoute = {
+  path: string
+  method: string
+  handler: Function
+}
+
 export class Plugin {
   name: string
   nodes: any
   services: any
-  windowComponents: []
-  agentComponents: []
-  inputTypes: []
-  outputTypes: []
+  windowComponents: any[]
+  agentComponents: any[]
+  inputTypes: any[]
+  outputTypes: any[]
   serverInit?: Function
   agentMethods?: {
     start: Function
     stop: Function
   }
-  serverRoutes?: Array<any>
+  clientRoutes?: Array<ClientRoute>
+  serverRoutes?: Array<ServerRoute>
   startkey: any
   constructor({
     name,
-    nodes,
-    services,
-    windowComponents,
+    nodes = [],
+    services = [],
+    windowComponents = [],
     agentComponents,
-    inputTypes,
-    outputTypes,
-    serverInit,
-    agentMethods,
-    serverRoutes,
+    inputTypes = [],
+    outputTypes = [],
+    serverInit = null,
+    agentMethods = {
+      start: () => {
+        console.log('starting plugin')
+      },
+      stop: () => {
+        console.log('stopping plugin')
+      }
+    },
+    clientRoutes = null,
+    serverRoutes = null,
+  }: {
+    name: string
+    nodes?: any
+    services?: any
+    windowComponents?: any[]
+    agentComponents?: any[]
+    serverInit?: Function
+    agentMethods?: {
+      start: Function
+      stop: Function
+    }
+    inputTypes?: any[]
+    outputTypes?: any[]
+    clientRoutes?: Array<ClientRoute>
+    serverRoutes?: Array<ServerRoute>
   }) {
     this.name = name
     this.nodes = nodes
@@ -34,6 +70,7 @@ export class Plugin {
     this.inputTypes = inputTypes
     this.outputTypes = outputTypes
     this.serverInit = serverInit
+    this.clientRoutes = clientRoutes
     this.serverRoutes = serverRoutes
     pluginManager.register(this)
   }
@@ -101,6 +138,18 @@ class PluginManager {
       }
     })
     return serverInits
+  }
+
+  getClientRoutes() {
+    let clientRoutes = [] as any[]
+    this.pluginList.forEach(plugin => {
+      if (plugin.clientRoutes) {
+        plugin.clientRoutes.forEach(route => {
+          clientRoutes.push(route)
+        })
+      }
+    })
+    return clientRoutes
   }
 
   getServerRoutes() {

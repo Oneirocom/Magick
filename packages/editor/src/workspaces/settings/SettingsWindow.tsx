@@ -4,14 +4,12 @@ import { KeyboardArrowDown, FileCopy, Clear } from '@mui/icons-material/'
 import styles from './styles.module.scss'
 import { IconButton } from '@mui/material'
 import { Tooltip } from '@magickml/client-core'
-import useAuthentication from '../../screens/FineTuneManager/account/useAuthentication'
 
 const SettingsWindow = () => {
   const config = useConfig()
   const [apiKey, setApiKey] = useState<any>('')
   const [copy, setCopy] = useState<string>('copy')
   const [clear, setClear] = useState<string>('clear')
-  const { signOut } = useAuthentication()
 
   useEffect(() => {
     const openai = window.localStorage.getItem('openai-api-key')
@@ -80,7 +78,6 @@ const SettingsWindow = () => {
                       className={styles['icon']}
                       onClick={() => {
                         localStorage.removeItem('openai-api-key')
-                        signOut()
                         setApiKey('')
                         setClear('Cleared!')
                         setTimeout(() => {

@@ -1,6 +1,6 @@
 import { Select } from '@magickml/client-core' 
 import useSWR from 'swr'
-import type { OpenAI } from '../../../../../../@types/openai'
+import { OpenAI } from '@magickml/types'
 import { useEffect, useState } from 'react'
 
 const DropdownSelect = ({ control, updateData, initialValue }) => {

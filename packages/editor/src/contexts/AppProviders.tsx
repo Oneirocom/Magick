@@ -5,7 +5,6 @@ import ConfigProvider from './ConfigProvider'
 import FeathersProvider from './FeathersProvider'
 import PubSubProvider from './PubSubProvider'
 import ToastProvider from './ToastProvider'
-import Account from '../screens/FineTuneManager/account/Account'
 
 const darkTheme = createTheme({
   palette: {
@@ -36,7 +35,6 @@ function ComposeProviders({ config, children }) {
     FeathersProvider,
     PubSubProvider,
     ToastProvider,
-    Account,
   ].reverse()
   return _providers.reduce((acc, current) => {
     const [Provider, props]: [any, any] = Array.isArray(current)

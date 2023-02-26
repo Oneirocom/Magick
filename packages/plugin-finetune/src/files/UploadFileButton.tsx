@@ -1,4 +1,4 @@
-import { OpenAI } from '../../../../../../@types/openai'
+import { OpenAI } from '../types/openai'
 import React, { useEffect, useRef } from 'react'
 import useUploadFile, { Enforce, MimeTypes } from './useUploadFile'
 import Button from '@mui/material/Button'
