@@ -71,9 +71,7 @@ export class AgentManager {
     if (oldAgents['updated_at']) delete oldAgents['updated_at']
     await this.updateSpells()
     if (JSON.stringify(newAgents) === JSON.stringify(oldAgents)) return // They are the same
-    //If Discord Enabled is True replace the old Agent with a new one
     for (const i in newAgents) {
-      console.log('Inside For Loop')
       console.log('New Agents: ', newAgents[i])
       try {
         let temp_agent = this.getAgent(newAgents[i].id)
