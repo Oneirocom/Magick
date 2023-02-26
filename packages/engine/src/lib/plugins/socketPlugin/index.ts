@@ -66,6 +66,13 @@ function install(
               stack: err.stack,
             },
           })
+          socket?.emit(`${currentSpell.id}-error`, {
+            error: {
+              message: err.message,
+              stack: err.stack,
+            },
+          })
+          
           // note: we may still want to throw the error here
           throw err
         }

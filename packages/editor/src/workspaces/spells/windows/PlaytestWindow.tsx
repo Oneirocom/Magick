@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { useSnackbar } from 'notistack'
 import Editor from '@monaco-editor/react'
 import { useDispatch } from 'react-redux'
 import { Scrollbars } from 'react-custom-scrollbars-2'
@@ -73,7 +74,7 @@ const Playtest = ({ tab }) => {
   const FeathersContext = useFeathers()
   const dispatch = useDispatch()
   const { serialize } = useEditor()
-
+  const { enqueueSnackbar } = useSnackbar()
   const { data: spellData } = spellApi.useGetSpellByIdQuery(
     { 
       spellName: tab.name.split('--')[0], 
@@ -93,7 +94,7 @@ const Playtest = ({ tab }) => {
     return selectStateBytabId(state.localState, tab.id)
   })
   const client = FeathersContext?.client
-  const { $PLAYTEST_INPUT, $PLAYTEST_PRINT } = events
+  const { $PLAYTEST_INPUT, $PLAYTEST_PRINT, $DEBUG_PRINT } = events
 
   const printToConsole = useCallback(
     (_, _text) => {
@@ -184,7 +185,6 @@ const Playtest = ({ tab }) => {
     setHistory(newHistory as [])
 
     let toSend = value
-    console.log("onSned")
     console.log(value)
     if (localState?.playtestData !== '{}') {
       const json = localState?.playtestData.replace(
@@ -238,6 +238,14 @@ const Playtest = ({ tab }) => {
     })
     
     publish($PLAYTEST_INPUT(tab.id), toSend)
+    client.io.on(`${tab.id}-error`, (data) => {
+      //publish($DEBUG_PRINT(tab.id), (data.error.message))
+      console.log("Error in spell execution")
+      enqueueSnackbar('Error Running the spell. Please Check the Console', {
+        variant: 'error',
+      })
+    })
+    
     setValue('')
   }
 
