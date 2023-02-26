@@ -72,6 +72,7 @@ const InspectorProvider = ({ children, tab }) => {
   }, [events, subscribe, publish])
 
   const saveTextEditor = textData => {
+    console.log('save text editor', textData)
     const textUpdate = {
       [textData.control.dataKey]: textData.data,
     }

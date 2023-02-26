@@ -59,7 +59,11 @@ function useOnDrop(uploadFile: (file: File) => void) {
       function onDrop(event: DragEvent) {
         event.preventDefault()
         const files = event.dataTransfer?.files
-        if (files) for (const file of files) uploadFile(file)
+        if (files) {
+          for (let i = 0; i < files.length; i++) {
+            uploadFile(files[i])
+          }
+        }
       }
 
       document.addEventListener('drop', onDrop)
