@@ -3,7 +3,7 @@ import Loading from '../components/Loading'
 // import Link from 'next/link'
 import React from 'react'
 import useSWR from 'swr'
-import type { OpenAI } from '../../../../../../@types/openai'
+import { OpenAI } from '../types/openai'
 import DeleteFileButton from './DeleteFileButton'
 import { Table, TableCell } from '@mui/material'
 

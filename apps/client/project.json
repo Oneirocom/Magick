@@ -8,7 +8,8 @@
     "@magickml/editor",
     "@magickml/engine",
     "@magickml/plugin-discord",
-    "@magickml/plugin-rest"
+    "@magickml/plugin-rest",
+    "@magickml/plugin-ethereum"
   ],
   "targets": {
     "build": {

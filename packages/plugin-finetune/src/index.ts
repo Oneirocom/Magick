@@ -1,14 +1,13 @@
-import {default as FineTuneManager} from './screens/Home'
+import Home from './screens/Home'
 
 import { Plugin } from "@magickml/engine"
 
 const FineTuneManager = new Plugin({
   name: 'FineTuneManagerPlugin',
   windowComponents: [{
-    element: FineTuneManager,
+    element: () => Home,
     path: '/fineTuneManager',
   }],
-  agentMethods: getAgentMethods(),
 })
 
-export default DiscordPlugin;
+export default FineTuneManager;

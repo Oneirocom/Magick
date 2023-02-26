@@ -1,6 +1,7 @@
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
 import MuiDrawer from '@mui/material/Drawer'
+import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import BoltIcon from '@mui/icons-material/Bolt'
 import ListItem from '@mui/material/ListItem'

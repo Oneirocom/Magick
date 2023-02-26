@@ -4,7 +4,7 @@ import ShowRequestExample from '../components/ShowRequestExample'
 import React, { useState } from 'react'
 import { FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { OpenAI } from '../../../../../../@types/openai'
+import { OpenAI } from '../types/openai'
 import { Box, Button, TextField } from '@mui/material'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 

@@ -1,13 +1,5 @@
 import { MagickComponent } from '../types'
 import { QueryGoogle } from './apis/QueryGoogle'
-import { CheckBalanceForERC20 } from './ethereum/CheckBalanceForERC20'
-import { CheckEthBalance } from './ethereum/CheckEthBalance'
-import { Solidity } from './ethereum/Solidity'
-import { DeployContract } from './ethereum/DeployContract'
-import { CallContractFunctionWrite } from './ethereum/CallContractFunctionWrite'
-import { CallContractFunctionRead } from './ethereum/CallContractFunctionRead'
-import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentTransactionsFromWallet'
-import { GetRecentTransactions } from './ethereum/GetRecentTransactions'
 import { EventDestructureComponent } from './events/EventDestructure'
 import { EventRestructureComponent } from './events/EventRestructure'
 import { EventRecall } from './events/EventRecall'
@@ -119,15 +111,6 @@ export let components = {
   triggerOut: () => new TriggerOut(),
   waitForAll: () => new WaitForAll(),
   exclusiveGate: () => new ExclusiveGate(),
-  checkEthBalance: () => new CheckEthBalance(),
-  checkBalanceForERC20: () => new CheckBalanceForERC20(),
-  getRecentTransactions: () => new GetRecentTransactions(),
-  solidity: () => new Solidity(),
-  deployContract: () => new DeployContract(),
-  callContractFunctionWrite: () => new CallContractFunctionWrite(),
-  callContractFunctionRead: () => new CallContractFunctionRead(),
-  checkForRecentTransactionsFromWallet: () =>
-    new CheckForRecentTransactionsFromWallet(),
   merge: () => new Merge(),
   orGate: () => new OrGate(),
   log: () => new Log(),
