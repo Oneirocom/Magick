@@ -187,11 +187,11 @@ const RawEditor = ({ tab, children }) => {
     console.log(tab)
     if (!tab || loaded) return
 
-    if (tab?.spellName)
-      getSpell({
-        spellName: tab.spellName,
-        projectId: config.projectId,
-      })
+    getSpell({
+      spellName: tab.name,
+      Id: tab.id,
+      projectId: config.projectId,
+    })
   }, [tab])
 
   if (!tab || (tab.type === 'spell' && (isLoading || !spell)))
