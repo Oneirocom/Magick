@@ -1,6 +1,6 @@
 import world3d from './world3d'
 
-class WorldManager {
+export class WorldManager {
 
   rooms = {}
 
@@ -115,5 +115,3 @@ class WorldManager {
     }
   }
 }
-
-export const worldManager = new WorldManager()
