@@ -5,7 +5,7 @@ const style = {
   border: 1,
   borderRadius: '16px',
   borderRepeat: 'no-repeat',
-  width: '40%',
+  width: 'calc(100%-32px)',
   padding: '16px',
   marginTop: '16px',
   marginLeft: 'auto',

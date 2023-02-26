@@ -12,48 +12,10 @@ function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-const maxMSDiff = 5000
-let interval = 3000
-
-function initAgentManagerLoop(update: Function, lateUpdate: Function) {
-  const date = new Date()
-
-  async function entityLoop(update: Function, lateUpdate: Function) {
-    const agents = (await app.service('agents').find(query)).data
-    const now = new Date()
-    const updated = []
-
-    for (let i = 0; i < agents.length; i++) {
-      const id = agents[i].id
-      const lastUpdate = new Date(agents[i].updated_at ?? 0)
-      if (now.valueOf() - lastUpdate.valueOf() > maxMSDiff) {
-        update(id)
-
-        updated.push(id)
-        // TODO: update the db
-        // database.setEntityUpdated(id)
-      }
-    }
-    for (let i = 0; i < updated.length; i++) {
-      lateUpdate(updated[i])
-    }
-  }
-  setInterval(() => {
-    entityLoop(
-      (id: number) => {
-        update(id)
-      },
-      (id: number) => {
-        lateUpdate(id)
-      }
-    )
-  }, interval)
-}
-
 export class AgentManager {
   id = -1
-  objects: { [id: number]: any } = {}
-  oldAgents: any
+  agents: { [id: string]: any } = {}
+  lastAgentData: any
   newAgents: any
   availablePorts: number[] = []
 
@@ -65,70 +27,67 @@ export class AgentManager {
 
   async updateAgent() {
     this.newAgents = (await app.service('agents').find(query)).data
-    const newAgents = this.newAgents
-    delete newAgents['updated_at']
-    const oldAgents = this.oldAgents ?? []
-    if (oldAgents['updated_at']) delete oldAgents['updated_at']
     await this.updateSpells()
-    if (JSON.stringify(newAgents) === JSON.stringify(oldAgents)) return // They are the same
-    for (const i in newAgents) {
-      console.log('New Agents: ', newAgents[i])
+    if (JSON.stringify(this.newAgents) === JSON.stringify(this.lastAgentData ?? [])) return // They are the same
+    for (const i in this.newAgents) {
+      console.log('New Agents: ', this.newAgents[i])
       try {
-        let temp_agent = this.getAgent(newAgents[i].id)
+        let temp_agent = this.getAgent(this.newAgents[i].id)
         console.log('Inside TRY ')
         await temp_agent.onDestroy()
       } catch {
         console.log('Client Does not exist')
       }
-      if (!newAgents[i].data) {
+      if (!this.newAgents[i].data) {
         console.warn('New agent is null data')
-      } else if (newAgents[i].data.discord_enabled) {
-        try {
-          //Get the agent which was updated.
-          let temp_agent = this.getAgent(newAgents[i].id)
-          //Delete the Agent
-          await temp_agent.onDestroy()
-        } catch (e) {
-          console.log("Couldn't delete the Discord Client.!! Caught Error: ", e)
-        }
-        this.addAgent(newAgents[i])
       }
+      // else if (this.newAgents[i].data.discord_enabled) {
+      //   try {
+      //     //Get the agent which was updated.
+      //     let temp_agent = this.getAgent(this.newAgents[i].id)
+      //     //Delete the Agent
+      //     await temp_agent.onDestroy()
+      //   } catch (e) {
+      //     console.log("Couldn't delete the Discord Client.!! Caught Error: ", e)
+      //   }
+      //   this.addAgent(this.newAgents[i])
+      // }
     }
-    // If an entry exists in oldAgents but not in newAgents, it has been deleted
-    for (const i in oldAgents) {
-      // filter for entries where oldAgents where id === newAgents[i].id
+    // If an entry exists in lastAgentData but not in newAgents, it has been deleted
+    for (const i in this.lastAgentData) {
+      // filter for entries where lastAgentData where id === newAgents[i].id
       if (
-        newAgents.filter((x: any) => x.id === oldAgents[i].id)[0] === undefined
+        this.newAgents.filter((x: any) => x.id === this.lastAgentData[i].id)[0] === undefined
       ) {
-        await this.removeAgent(oldAgents[i].id)
+        await this.removeAgent(this.lastAgentData[i].id)
       }
     }
 
-    // If an entry exists in newAgents but not in oldAgents, it has been added
-    for (const i in newAgents) {
-      // filter for entries where oldAgents where id === newAgents[i].id
+    // If an entry exists in newAgents but not in lastAgentData, it has been added
+    for (const i in this.newAgents) {
+      // filter for entries where lastAgentData where id === newAgents[i].id
       if (
-        oldAgents.filter((x: any) => x.id === newAgents[i].id)[0] === undefined
+        this.lastAgentData.filter((x: any) => x.id === this.lastAgentData[i].id)[0] === undefined
       ) {
-        if (newAgents[i].enabled) {
-          if (!newAgents[i].data.discord_enabled)
-            await this.addAgent(newAgents[i])
+        if (this.newAgents[i].enabled) {
+          if (!this.newAgents[i].data.discord_enabled)
+            await this.addAgent(this.newAgents[i])
         }
       }
     }
 
-    for (const i in newAgents) {
-      if (newAgents[i].dirty) {
-        await this.removeAgent(newAgents[i].id)
-        await this.addAgent(newAgents[i])
+    for (const i in this.newAgents) {
+      if (this.newAgents[i].dirty) {
+        await this.removeAgent(this.newAgents[i].id)
+        await this.addAgent(this.newAgents[i])
 
-        await app.service('agents').patch(newAgents[i].id, {
+        await app.service('agents').patch(this.newAgents[i].id, {
           dirty: false,
         })
       }
     }
 
-    this.oldAgents = this.newAgents
+    this.lastAgentData = this.newAgents
   }
 
   async updateSpells() {
@@ -207,33 +166,6 @@ export class AgentManager {
     }
 
     this.resetAgentSpells()
-
-    initAgentManagerLoop(
-      async (id: number) => {
-        await this.updateAgent()
-        this.updateInstance(id)
-      },
-      async (id: number) => {
-        this.lateUpdateInstance(id)
-      }
-    )
-  }
-
-  async updateInstance(id: number) {
-    for (const i in this.objects) {
-      if (this.objects[i].id === id) {
-        // await (this.objects[i]).onUpdate()
-        return
-      }
-    }
-  }
-  async lateUpdateInstance(id: number) {
-    for (const i in this.objects) {
-      if (this.objects[i].id === id) {
-        // await (this.objects[i])?.onLateUpdate()
-        return
-      }
-    }
   }
 
   async onDestroy() {}
@@ -247,39 +179,38 @@ export class AgentManager {
       spells: obj.spells,
       updated_at: obj.updated_at,
     }
-    console.log('SERVER', data.id)
     //Overwrites even if already exists
     data.projectId = projectId
-    this.objects[data.id] = new Agent(data)
+    this.agents[data.id] = new Agent(data)
   }
 
-  async removeAgent(id: number) {
-    if (this.objectExists(id)) {
-      await this.objects[id]?.onDestroy()
-      this.objects[id] = null
-      delete this.objects[id]
+  async removeAgent(id: string) {
+    if (this.agentExists(id)) {
+      await this.agents[id]?.onDestroy()
+      this.agents[id] = null
+      delete this.agents[id]
     }
   }
 
   getAgent(id: any) {
     let res = null
 
-    for (let x in this.objects) {
+    for (let x in this.agents) {
       if (x == id) {
-        res = this.objects[x]
+        res = this.agents[x]
       }
     }
 
     return res
   }
 
-  objectExists(id: any) {
+  agentExists(id: any) {
     return this.getAgent(id) !== null && this.getAgent(id) !== undefined
   }
 
   generateId(): number {
     let id = randomInt(0, 10000)
-    while (this.objectExists(id)) {
+    while (this.agentExists(id)) {
       id = randomInt(0, 10000)
     }
     return id

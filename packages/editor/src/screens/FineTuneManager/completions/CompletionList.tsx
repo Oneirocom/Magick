@@ -72,9 +72,7 @@ export default function ClassificationList() {
         <FileListTable purpose="fine-tune" />
       </InfoCard>
       <InfoCard>
-        <ExpansionDetails title={'Usage Instructions'}>
-          <div dangerouslySetInnerHTML={{ __html: CompletionInstructions }} />
-        </ExpansionDetails>
+        <div dangerouslySetInnerHTML={{ __html: CompletionInstructions }} style={{minWidth: '20em', maxWidth: '80em'}}/>
       </InfoCard>
     </main>
   )

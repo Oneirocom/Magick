@@ -1,9 +1,6 @@
-import FileInput from '../../screens/HomeScreen/components/FileInput'
 import React, { useEffect, useState } from 'react'
 import { useConfig } from '../../contexts/ConfigProvider'
-// import AgentWindow from './Agent'
 import AgentWindow from './NewAgentWindow'
-import Button from '../../components/Button'
 import { useSnackbar } from 'notistack'
 import axios from 'axios'
 
@@ -82,7 +79,7 @@ const AgentManagerWindow = () => {
       })
   }
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     axios
       .delete(`${config.apiUrl}/agents/` + id)
       .then(res => {
@@ -115,32 +112,6 @@ const AgentManagerWindow = () => {
 
 
   return (
-    // <div className="agent-editor" style={{margin: "1em", width: "100%", height: "100%", overflow: "auto"}}>
-    //   <div style={{maxWidth: "800px", marginBottom: "1em"}}>
-    //   <p>Agents are running applications that live somewhere on the internet and continue to run as long as they are active.
-    //   <br />If you'd like to use your spells out in the real world, create an agent, configure your preferred services and set your main spell as the root spell.</p>
-    //   </div>
-    //  <React.Fragment>
-    //     {data &&
-    //       (data as any).map((value, idx) => {
-    //         return (
-    //           <AgentWindow
-    //             id={value.id ?? 0}
-    //             key={idx}
-    //             updateCallback={async () => {
-    //               resetData()
-    //             }}
-    //           />
-    //         )
-    //       })}
-    //   </React.Fragment>
-    //   <div className="entBtns">
-    //     <button onClick={() => createNew()} style={{ marginRight: '10px' }}>
-    //       Create New
-    //     </button>
-    //     <FileInput loadFile={loadFile} />
-    //   </div>
-    // </div>
     <AgentWindow
       data={data}
       onDelete={handleDelete}

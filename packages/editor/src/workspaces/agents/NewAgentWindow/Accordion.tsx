@@ -1,12 +1,12 @@
-import * as React from 'react'
-import { styled } from '@mui/material/styles'
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp'
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion'
-import MuiAccordionSummary, {
-  AccordionSummaryProps,
-} from '@mui/material/AccordionSummary'
 import MuiAccordionDetails from '@mui/material/AccordionDetails'
+import MuiAccordionSummary, {
+  AccordionSummaryProps
+} from '@mui/material/AccordionSummary'
+import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
+import * as React from 'react'
 import styles from './index.module.scss'
 
 const Accordion = styled((props: AccordionProps) => (

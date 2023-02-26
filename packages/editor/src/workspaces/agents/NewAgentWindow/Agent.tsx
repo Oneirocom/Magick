@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState, useRef } from 'react'
-import { useConfig } from '../../contexts/ConfigProvider'
-import Button from '../../components/Button'
+import { useConfig } from '../../../contexts/ConfigProvider'
+import Button from '../../../components/Button'
 
 /* Import All Agent Window Components */
 import { pluginManager } from '@magickml/engine'
@@ -17,7 +17,7 @@ const AgentWindow = ({
   id,
   updateCallback,
 }: {
-  id: number
+  id: string
   updateCallback: any
 }) => {
   const config = useConfig()
@@ -30,13 +30,12 @@ const AgentWindow = ({
 
   const agentDatVal = useRef(null)
   const [spellList, setSpellList] = useState<any[]>([])
-  const selectedSpellPublicVars = Object.values(
-    spellList.find(spell => spell.name === root_spell)?.graph.nodes || {}
-  ).filter((node: any) => node?.data?.Public)
+
+  const [selectedSpellPublicVars, setSelectedSpellPublicVars] = useState<any>([])
 
   useEffect(() => {
     if (!loaded) {
-      (async () => {
+      ;(async () => {
         const res = await axios.get(`${config.apiUrl}/agents/` + id)
 
         if (res.data === null) {
@@ -54,12 +53,17 @@ const AgentWindow = ({
   }, [loaded])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )
       const json = await res.json()
       setSpellList(json.data)
+      setSelectedSpellPublicVars((
+        Object.values(
+          spellList.find(spell => spell.name === root_spell)?.graph.nodes || {}
+        ).filter((node: any) => node?.data?.Public)
+      ))
     })()
   }, [])
 
@@ -179,7 +183,7 @@ const AgentWindow = ({
 
           {selectedSpellPublicVars.length !== 0 && (
             <AgentPubVariables
-              update={update}
+              setPublicVars={setSelectedSpellPublicVars}
               publicVars={selectedSpellPublicVars}
             />
           )}
