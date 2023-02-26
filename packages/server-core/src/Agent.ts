@@ -1,9 +1,8 @@
 import { buildMagickInterface } from './buildMagickInterface'
 import { tts_tiktalknet } from './tiktalknet'
 import { tts } from './googleTextToSpeech'
-import { SpellManager, pluginManager } from '@magickml/engine'
+import { SpellManager, WorldManager, pluginManager } from '@magickml/engine'
 import { app } from './app'
-
 
 type StartLoopArgs = {
   spellHandler: any
@@ -22,18 +21,29 @@ type EntityData = {
   entity?: any
 }
 
+type AgentData = {
+  id: any
+  data: EntityData
+  name: string
+  projectId: string
+  spellManager: SpellManager
+  agent?: string
+}
+
 export class Agent {
   name = ''
   //Clients
   id: any
-  data: EntityData
+  data: AgentData
   router: any
   app: any
   loopHandler: any
   spellManager: SpellManager
   projectId: string
+  worldManager: WorldManager
 
-  constructor(data: any) {
+
+  constructor(data: AgentData) {
     this.id = data.id
     this.data = data
     this.name = data.agent ?? data.name ?? 'agent'
@@ -42,9 +52,8 @@ export class Agent {
       magickInterface: buildMagickInterface({}) as any,
       cache: false,
     })
+    this.worldManager = new WorldManager()
 
-    this.generateVoices(data);
-    console.log(data);
     (async () => {
       const spell = (await app.service('spells').find({
         query: { projectId: data.projectId}
@@ -60,32 +69,7 @@ export class Agent {
       const agentStartMethods = pluginManager.getAgentStartMethods();
       for (const method of Object.keys(agentStartMethods)) {
         console.log('method', method)
-        console.log(data.discord_enabled)
-        try{
-          //Creates an Discord Client if discord_enabled is true
-          if(data.discord_enabled) await agentStartMethods[method]({ ...data, agent: this, spellRunner })
-        } catch(e){
-          if(data.discord_enabled){
-            //Catches Internal Error in Discord Client
-            console.log("ERROR Caught: ", e)
-            try {
-              //Deletes the Client using Agent Stop methods
-              this.onDestroy()
-            } catch {
-              //Catches the errors in Client Deletion
-              console.log("The Discord Client Couldn't be Terminated.")
-            }
-            console.log('The Discord-Client has been terminated')
-            //Creates the client again after the previous client is deleted.
-            try{
-              if(data.discord_enabled) await agentStartMethods[method]({ ...data, agent: this, spellRunner })
-            } catch(e) {
-              console.log("Error Caught: Client Creation Failed", e)
-            }
-          }
-        }
-        
-        
+        await agentStartMethods[method]({ ...data, agent: this, spellRunner, worldManager })
       }
     })()
   }
