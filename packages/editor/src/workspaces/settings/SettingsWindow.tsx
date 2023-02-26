@@ -21,7 +21,7 @@ const SettingsWindow = () => {
   return (
     <div className={styles['settings-editor']}>
       <div className={styles['child']}>
-        <div>
+        <div className={styles['innerChild']}>
           <p className={styles['title']}>
             Your OpenAI Key
             <span className={`${styles['md-margin']} ${styles['flexCenter']}`}>
