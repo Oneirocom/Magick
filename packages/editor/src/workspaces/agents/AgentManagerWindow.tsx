@@ -12,10 +12,7 @@ const AgentManagerWindow = () => {
   const [spellList, setSpellList] = useState<any[]>([])
   const [data, setData] = useState<Array<Object>>([])
   const { enqueueSnackbar } = useSnackbar()
-  const [root_spell, setRootSpell] = useState('default')
-  const selectedSpellPublicVars = Object.values(
-    spellList?.find(spell => spell.name === root_spell)?.graph.nodes || {}
-  ).filter(node => node?.data?.Public)
+
 
   const resetData = async () => {
     const res = await fetch(`${config.apiUrl}/agents`)
@@ -25,7 +22,7 @@ const AgentManagerWindow = () => {
   }
 
   const createNew = (
-    data = { projectId: config.projectId, spells: [], name: 'Discord' }
+    data = { projectId: config.projectId, spells: [], name: 'My Agent' }
   ) => {
     if (!data.spells === undefined) data.spells = []
     // rewrite using fetch instead of axios
@@ -74,10 +71,6 @@ const AgentManagerWindow = () => {
 
           console.log('responseData', responseData)
 
-          // setEnabled(responseData.enabled)
-          // setLoopEnabled(responseData.data.loop_enabled)
-          // setLoopInterval(responseData.data.loop_interval)
-
           resetData()
         }
       })
@@ -119,18 +112,7 @@ const AgentManagerWindow = () => {
     })()
   }, [])
 
-  useEffect(() => {
-    ;(async () => {
-      const res = await fetch(
-        `${config.apiUrl}/spells?projectId=${config.projectId}`
-      )
-      const json = await res.json()
 
-      console.log('res', json)
-      console.log('spellList', json)
-      setSpellList(json.data)
-    })()
-  }, [])
 
   return (
     // <div className="agent-editor" style={{margin: "1em", width: "100%", height: "100%", overflow: "auto"}}>
@@ -163,31 +145,8 @@ const AgentManagerWindow = () => {
       data={data}
       onDelete={handleDelete}
       onCreateAgent={createNew}
-      selectedSpellVars={selectedSpellPublicVars}
       update={update}
-    >
-      <div className="form-item agent-select">
-        <span className="form-item-label">Root Spell</span>
-        <select
-          name="root_spell"
-          id="root_spell"
-          value={root_spell}
-          onChange={event => {
-            setRootSpell(event.target.value)
-          }}
-        >
-          <option disabled value="default" key={0}>
-            Select Spell
-          </option>
-          {spellList?.length > 0 &&
-            spellList.map((spell, idx) => (
-              <option value={spell.name} key={idx}>
-                {spell.name}
-              </option>
-            ))}
-        </select>
-      </div>
-    </AgentWindow>
+    />
   )
 }
 

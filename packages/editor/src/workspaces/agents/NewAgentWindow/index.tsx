@@ -2,7 +2,7 @@ import { Button, Grid, Typography } from '@mui/material'
 import AgentItem from './AgentItem'
 import styles from './index.module.scss'
 import AgentDetails from './AgentDetails'
-import AgentPubVariables from '../AgentPubVariables'
+import AgentPubVariables from './AgentPubVariables'
 import Accordion from '../../../components/Accordion'
 import { useState } from 'react'
 
@@ -21,7 +21,6 @@ const AgentWindow = ({
   update,
   onCreateAgent,
   onDelete,
-  children,
 }: Props) => {
   const [selectedAgent, setSelectedAgent] = useState('')
 
@@ -44,7 +43,6 @@ const AgentWindow = ({
         >
           Add Agent
         </Button>
-        {children}
         {data.map(agent => (
           <AgentItem
             key={agent?.id}
@@ -62,24 +60,7 @@ const AgentWindow = ({
       <Grid item xs={8} className={styles.item}>
         {selectedAgent ? (
           <>
-            <AgentDetails />
-            <Accordion title="Connectors">
-              <div>
-                <Typography>No connectors</Typography>
-              </div>
-            </Accordion>
-            <Accordion title="Variables">
-              <div>
-                {selectedSpellVars.length !== 0 ? (
-                  <AgentPubVariables
-                    update={update}
-                    publicVars={selectedSpellVars}
-                  />
-                ) : (
-                  <Typography>No Public Variables</Typography>
-                )}
-              </div>
-            </Accordion>
+            <AgentDetails agentData={selectedAgent} />
           </>
         ) : (
           <Typography className={styles.noSelected}>Select Agent</Typography>
