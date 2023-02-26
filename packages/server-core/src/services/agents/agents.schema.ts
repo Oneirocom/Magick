@@ -4,12 +4,12 @@ import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/t
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../../../../packages/server-core/src/validators'
+import { dataValidator, queryValidator } from '../../validators'
 
 // Main data model schema
 export const agentSchema = Type.Object(
   {
-    id: Type.Number(),
+    id: Type.String(),
     projectId: Type.String(),
     name: Type.String(),
     dirty: Type.Optional(Type.Boolean()),
