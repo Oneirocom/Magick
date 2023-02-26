@@ -53,8 +53,8 @@ function initAgentManagerLoop(update: Function, lateUpdate: Function) {
 export class AgentManager {
   id = -1
   objects: { [id: number]: any } = {}
-  oldAgents: any
-  newAgents: any
+  lastAgents: any
+  agents: any
   availablePorts: number[] = []
 
   constructor() {
@@ -64,76 +64,76 @@ export class AgentManager {
   }
 
   async updateAgent() {
-    this.newAgents = (await app.service('agents').find(query)).data
-    const newAgents = this.newAgents
-    delete newAgents['updated_at']
-    const oldAgents = this.oldAgents ?? []
-    if (oldAgents['updated_at']) delete oldAgents['updated_at']
+    this.agents = (await app.service('agents').find(query)).data
+    const agents = this.agents
+    delete agents['updated_at']
+    const lastAgents = this.lastAgents ?? []
+    if (lastAgents['updated_at']) delete lastAgents['updated_at']
     await this.updateSpells();
-    if (JSON.stringify(newAgents) === JSON.stringify(oldAgents)) return // They are the same
+    if (JSON.stringify(agents) === JSON.stringify(lastAgents)) return // They are the same
     //If Discord Enabled is True replace the old Agent with a new one
-    for (const i in newAgents){
+    for (const i in agents){
       try {
-        let temp_agent = this.getAgent(newAgents[i].id)
+        let temp_agent = this.getAgent(agents[i].id)
         console.log("Inside TRY ")
         await temp_agent.onDestroy()
       } catch {
         console.log("Client Does not exist")
       }
-      if (newAgents[i].data.discord_enabled){
+      if (agents[i].data.discord_enabled){
         try {
           //Get the agent which was updated.
-          let temp_agent = this.getAgent(newAgents[i].id)
+          let temp_agent = this.getAgent(agents[i].id)
           //Delete the Agent
           await temp_agent.onDestroy()
         } catch(e) {
           console.log("Couldn't delete the Discord Client.!! Caught Error: ",e)
         }
-        this.addAgent(newAgents[i])
+        this.addAgent(agents[i])
       } 
     }
-    // If an entry exists in oldAgents but not in newAgents, it has been deleted
-    for (const i in oldAgents) {
-      // filter for entries where oldAgents where id === newAgents[i].id
+    // If an entry exists in lastAgents but not in agents, it has been deleted
+    for (const i in lastAgents) {
+      // filter for entries where lastAgents where id === agents[i].id
       if (
-        newAgents.filter((x: any) => x.id === oldAgents[i].id)[0] ===
+        agents.filter((x: any) => x.id === lastAgents[i].id)[0] ===
         undefined
       ) {
-        await this.removeAgent(oldAgents[i].id)
+        await this.removeAgent(lastAgents[i].id)
       }
     }
 
-    // If an entry exists in newAgents but not in oldAgents, it has been added
-    for (const i in newAgents) {
-      // filter for entries where oldAgents where id === newAgents[i].id
+    // If an entry exists in agents but not in lastAgents, it has been added
+    for (const i in agents) {
+      // filter for entries where lastAgents where id === agents[i].id
       if (
-        oldAgents.filter((x: any) => x.id === newAgents[i].id)[0] ===
+        lastAgents.filter((x: any) => x.id === agents[i].id)[0] ===
         undefined
       ) {
-        if (newAgents[i].enabled) {
-          if (!(newAgents[i].data.discord_enabled)) await this.addAgent(newAgents[i])
+        if (agents[i].enabled) {
+          if (!(agents[i].data.discord_enabled)) await this.addAgent(agents[i])
         }
       }
     }
 
-    for (const i in newAgents) {
-      if (newAgents[i].dirty) {
-        await this.removeAgent(newAgents[i].id)
-        await this.addAgent(newAgents[i])
+    for (const i in agents) {
+      if (agents[i].dirty) {
+        await this.removeAgent(agents[i].id)
+        await this.addAgent(agents[i])
 
-        await app.service('agents').patch(newAgents[i].id, {
+        await app.service('agents').patch(agents[i].id, {
           dirty: false
         })
 
       }
     }
 
-    this.oldAgents = this.newAgents
+    this.lastAgents = this.agents
   }
 
   async updateSpells() {
-    for (const i in this.newAgents) {
-      const agent = this.newAgents[i]
+    for (const i in this.agents) {
+      const agent = this.agents[i]
       const runningAgent = this.getAgent(agent.id)
       if(!runningAgent) continue;
       // evaluate the root spell
