@@ -11,11 +11,12 @@ export const agentSchema = Type.Object(
   {
     id: Type.Number(),
     projectId: Type.String(),
+    name: Type.String(),
     dirty: Type.Optional(Type.Boolean()),
     enabled: Type.Optional(Type.Boolean()),
     updated_at: Type.Optional(Type.String()),
     spells: Type.Array(Type.String()),
-    data: Type.Optional(Type.Any()),
+    data: Type.Optional(Type.Any())
   },
   { $id: 'Agent', additionalProperties: false }
 )
@@ -25,16 +26,13 @@ export const agentResolver = resolve<Agent, HookContext>({})
 export const agentExternalResolver = resolve<Agent, HookContext>({})
 
 // Schema for creating new entries
-export const agentDataSchema = Type.Pick(agentSchema, [
-  'dirty',
-  'projectId',
-  'enabled',
-  'updated_at',
-  'spells',
-  'data',
-], {
-  $id: 'AgentData'
-})
+export const agentDataSchema = Type.Pick(
+  agentSchema,
+  ['dirty', 'projectId', 'name', 'enabled', 'updated_at', 'spells', 'data'],
+  {
+    $id: 'AgentData'
+  }
+)
 export type AgentData = Static<typeof agentDataSchema>
 export const agentDataValidator = getDataValidator(agentDataSchema, dataValidator)
 export const agentDataResolver = resolve<Agent, HookContext>({})
@@ -53,6 +51,7 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'projectId',
   'dirty',
   'enabled',
+  'name',
   'updated_at',
   'spells',
   'data'

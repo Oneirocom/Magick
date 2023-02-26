@@ -27,6 +27,7 @@ const SwitchComponent = ({ label: _label, checked, onChange, ...props }) => {
           {...props}
         />
       }
+      {...props}
     />
   )
 }

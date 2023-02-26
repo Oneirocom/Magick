@@ -80,7 +80,7 @@ body,
 
 .connection .main-path {
   stroke-width: 2px;
-  stroke: #9D12A4;
+  stroke: #9d12a4;
   /* filter: drop-shadow(0px 1px 0px var(--dark-0))
     drop-shadow(0px -1px 0px var(--dark-0))
     drop-shadow(-1px 0px 0px var(--dark-0))
@@ -160,11 +160,11 @@ button.disabled {
 
 .flexlayout__tab {
   overflow: hidden;
-  background-color: var(--dark-1)!important;
+  background-color: var(--dark-1) !important;
   border-radius: 0px 0px 4px 4px;
   border: 1px solid #333;
   border-top: 0;
-  font-family: "IBM Plex Mono";
+  font-family: 'IBM Plex Mono';
 }
 
 .flexlayout__tabset {
@@ -252,7 +252,7 @@ input[type='text'] {
 }
 
 input[type='text']:focus-visible {
-    outline: 1px solid var(--glow)
+  outline: 1px solid var(--glow);
 }
 
 .App {
@@ -315,6 +315,7 @@ input[type='text']:focus-visible {
 .form-item-label {
   display: block;
   margin-bottom: 0.5em;
+  color: var(--dark-5);
 }
 
 .form-text-area,
@@ -417,7 +418,7 @@ input[type='text']:focus-visible {
   padding: 1em;
   margin-bottom: 1em;
   background-color: #333;
-  border-radius: .25em;
+  border-radius: 0.25em;
 }
 
 .form-item > input[type='text'] {
@@ -468,12 +469,14 @@ input[type='text']:focus-visible {
   font-size: 0.975rem;
 }
 
-.input-title, .output-title, div.item {
-    font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
+.input-title,
+.output-title,
+div.item {
+  font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
 }
 
 .flexlayout__layout {
-  background-color: var(--dark-2)!important;
+  background-color: var(--dark-2) !important;
   color: var(--dark-4);
-  font-family: "IBM Plex Mono";
+  font-family: 'IBM Plex Mono';
 }
