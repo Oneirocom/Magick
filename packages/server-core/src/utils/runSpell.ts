@@ -36,7 +36,9 @@ export const runSpell = async ({ id, inputs, inputFormatter, projectId }: RunSpe
   await spellRunner.loadSpell(spellToRun as unknown as SpellType)
 
   // Get the outputs from running the spell
-  const outputs = await spellRunner.defaultRun(formattedInputs)
+  const outputs = await spellRunner.runComponent({
+    inputs: formattedInputs
+  })
 
   return { outputs, name: spell.name }
 }

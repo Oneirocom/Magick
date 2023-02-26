@@ -396,16 +396,15 @@ export class discord_client {
     }
     const response = await this.spellRunner.runComponent({
       inputs: {},
-      componentName: 'Discord Input',
       runData: {
-        content,
-        speaker: message.author.username,
-        agent: this.discord_bot_name,
-        client: 'discord',
-        channelId: message.channel.id,
-        agentId: this.agent.id,
-        entities: entities.map(e => e.user),
-        channel: 'msg',
+          content,
+          speaker: message.author.username,
+          agent: this.discord_bot_name,
+          client: 'discord', // TODO: should be typed
+          channelId: message.channel.id,
+          agentId: this.agent.id,
+          entities: entities.map((e) => e.user),
+          channel: 'msg',
       },
       runSubspell: true,
     })

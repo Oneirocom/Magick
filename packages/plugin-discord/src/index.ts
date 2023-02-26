@@ -1,7 +1,5 @@
 import { Plugin, WorldManager } from "@magickml/engine"
 import { DiscordAgentWindow } from "./components/agent.component"
-import { DiscordInput } from "./nodes/DiscordInput"
-import { DiscordOutput } from "./nodes/DiscordOutput"
 import { UploadService } from './services/Upload/Upload.class'
 
 type StartDiscordArgs = {
@@ -79,8 +77,10 @@ function getAgentMethods() {
 
 const DiscordPlugin = new Plugin({
   name: 'DiscordPlugin', 
-  nodes: [DiscordInput, DiscordOutput], 
+  nodes: [], 
   services: {'DiscordPlugin': UploadService},
+  inputTypes: ['Discord (Voice)', 'Discord (Text)'],
+  outputTypes: ['Discord (Voice)', 'Discord (Text)'],
   agentComponents: [DiscordAgentWindow], 
   windowComponents: [],
   serverInit: null,

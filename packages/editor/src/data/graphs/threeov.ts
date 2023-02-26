@@ -66,7 +66,7 @@ const threeov = {
 				}
 			},
 			"position": [-498.5704117140466, 62.08164172790682],
-			"name": "Universal Input"
+			"name": "Input"
 		},
 		"233": {
 			"id": 233,
