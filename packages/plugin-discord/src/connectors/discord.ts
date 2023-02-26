@@ -1,4 +1,4 @@
-import { worldManager } from '@magickml/engine'
+import { WorldManager } from '@magickml/engine'
 import Discord, {
   ChannelType,
   EmbedBuilder,
@@ -10,15 +10,14 @@ import emojiRegex from 'emoji-regex'
 
 let recognizeSpeech
 
-export function startsWithCapital(word) {
+export const startsWithCapital = (word) => {
   return word.charAt(0) === word.charAt(0).toUpperCase()
 }
-function log(...s: (string | boolean)[]) {
+const log = (...s: (string | boolean)[]) => {
   console.log(...s)
 }
 
 export class discord_client {
-
   async destroy() {
     await this.client.destroy()
     this.client = null
@@ -151,18 +150,15 @@ export class discord_client {
   }
 
   //Event that is trigger when a new message is created (sent)
-  messageCreate = async (
-    client: any,
-    message: any
-  ) => {
+  messageCreate = async (client: any, message: any) => {
     console.log('new message from discord:', message.content)
 
     //gets the emojis from the text and replaces to unix specific type
     const reg = emojiRegex()
     let match
-    const emojis = []
+    const emojis: any[] = []
     while ((match = reg.exec(message.content)) !== null) {
-      console.log("EMOJIS")
+      console.log('EMOJIS')
       emojis.push({ name: emoji.getName(match[0]), emoji: match[0] })
       message.content = message.content.replace(
         match[0],
@@ -268,7 +264,7 @@ export class discord_client {
         .replace('!', '')
         .match(client.username_regex)
     const isInDiscussion = this.isInConversation(author.id)
-    console.log("SSS")
+    console.log('SSS')
     console.log(content)
     if (!content.startsWith('!') && !otherMention) {
       if (isMention) content = '!ping ' + content.replace(botMention, '').trim()
@@ -308,7 +304,7 @@ export class discord_client {
 
     //if the message contains join word, it makes the bot to try to join a voice channel and listen to the users
     if (content.startsWith('!ping')) {
-      console.log("CONTENT STARTS with PING")
+      console.log('CONTENT STARTS with PING')
       this.sentMessage(author.id)
       const mention = `<@!${client.user.id}>`
       if (
@@ -316,7 +312,7 @@ export class discord_client {
         content.startsWith('!join') ||
         content.startsWith('!ping ' + mention + ' join')
       ) {
-        console.log("MENTIONS JOIN")
+        console.log('MENTIONS JOIN')
         const d = content.split(' ')
         const index = d.indexOf('join') + 1
         console.log('d:', d)
@@ -340,7 +336,9 @@ export class discord_client {
                 channel.type === ChannelType.GuildVoice &&
                 channel.name === channelName
               ) {
-                recognizeSpeech(channel, this.agent.id)
+                if (this.agent) {
+                  recognizeSpeech(channel, this.agent.id)
+                }
                 return false
               }
             }
@@ -396,24 +394,21 @@ export class discord_client {
     if (content.startsWith('!ping ')) {
       content = content.replace('!ping ', '')
     }
-
-    const response = await this.spellRunner.runComponent(
-      {
+    const response = await this.spellRunner.runComponent({
       inputs: {},
-      componentName: "Discord Input",
+      componentName: 'Discord Input',
       runData: {
-          content,
-          speaker: message.author.username,
-          agent: this.discord_bot_name,
-          client: 'discord',
-          channelId: message.channel.id,
-          agentId: this.agent.id,
-          entities: entities.map((e) => e.user),
-          channel: 'msg',
+        content,
+        speaker: message.author.username,
+        agent: this.discord_bot_name,
+        client: 'discord',
+        channelId: message.channel.id,
+        agentId: this.agent.id,
+        entities: entities.map(e => e.user),
+        channel: 'msg',
       },
       runSubspell: true,
-    }
-    )
+    })
 
     const { Output, Image } = response
 
@@ -444,7 +439,7 @@ export class discord_client {
     await channel.messages
       .fetch({ limit: this.client.edit_messages_max_count })
       .then(async (messages: any[]) => {
-        messages.forEach(function (resp: { id: any; delete: () => void }) {
+        messages.forEach((resp: { id: any; delete: () => void }) => {
           if (resp.id === oldResponse) {
             resp.delete()
           }
@@ -469,7 +464,7 @@ export class discord_client {
 
     const oldResponse = this.getResponse(channel.id, id)
     if (oldResponse === undefined) {
-      await channel.messages.fetch(id).then(async (msg: any) => { })
+      await channel.messages.fetch(id).then(async (msg: any) => {})
       log('message not found')
       return
     }
@@ -480,11 +475,11 @@ export class discord_client {
         channel.messages
           .fetch({ limit: this.client.edit_messages_max_count })
           .then(async (messages: any[]) => {
-            messages.forEach(async function (edited: {
+            messages.forEach(async (edited: {
               id: string | boolean
               content: string | boolean
               channel: { id: string | boolean }
-            }) {
+            }) => {
               if (edited.id === id) {
                 const date = new Date()
                 const utc = new Date(
@@ -535,7 +530,7 @@ export class discord_client {
   presenceUpdate = async (
     client: any,
     oldMember: { status: any },
-    newMember: { userId: string, status: string | boolean }
+    newMember: { userId: string; status: string | boolean }
   ) => {
     if (!oldMember || !newMember) {
       log('Cannot update presence, oldMember or newMember is null')
@@ -566,9 +561,9 @@ export class discord_client {
         .fetch(newMember.userId)
         .then((user: { username: string | boolean }) => {
           if (newMember.status === 'online') {
-            worldManager.addUser(user.username, 'discord')
+            this.worldManager.addUser(user.username, 'discord')
           } else {
-            worldManager.removeUser(user.username, 'discord')
+            this.worldManager.removeUser(user.username, 'discord')
           }
           // TODO: Replace message with direct message handler
           log('Discord', newMember.status, user.username, utcStr)
@@ -642,8 +637,8 @@ export class discord_client {
               deleted: boolean
               permissionsFor: (arg0: any) => {
                 (): any
-                new(): any
-                has: { (arg0: string[]): any; new(): any }
+                new (): any
+                has: { (arg0: string[]): any; new (): any }
               }
               name: string | boolean
               id: string | boolean
@@ -668,13 +663,13 @@ export class discord_client {
                 channel.messages
                   .fetch({ limit: 100 })
                   .then(async (messages: any[]) => {
-                    messages.forEach(async function (msg: {
+                    messages.forEach(async (msg: {
                       author: { username: string; isBot: any }
                       deleted: boolean
                       content: string
                       id: any
                       createdTimestamp: any
-                    }) {
+                    }) => {
                       let _author = msg.author.username
                       if (
                         msg.author.isBot ||
@@ -791,9 +786,9 @@ export class discord_client {
   }
 
   _parseWords = (s: string) => {
-    const words = []
+    const words: any = []
     const r = /\S+/g
-    let match
+    let match: any
     while ((match = r.exec(s))) {
       words.push(match)
     }
@@ -934,14 +929,14 @@ export class discord_client {
               if (addPing) {
                 message
                   .reply(text)
-                  .then(async function (msg: any) {
+                  .then(async (msg: any) => {
                     //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
                   })
                   .catch(console.error)
               } else {
                 message.channel
                   .send(text, { split: true })
-                  .then(async function (msg: any) {
+                  .then(async (msg: any) => {
                     //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
                   })
                   .catch(console.error)
@@ -953,14 +948,14 @@ export class discord_client {
             ) {
               let text = this.replacePlaceholders(responses)
               if (addPing) {
-                message.reply(text).then(async function (msg: any) {
+                message.reply(text).then(async (msg: any) => {
                   //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
                 })
               }
               if (text.length > 0) {
                 message.channel
                   .send(text, { split: true })
-                  .then(async function (msg: any) {
+                  .then(async (msg: any) => {
                     //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
                   })
               }
@@ -995,52 +990,60 @@ export class discord_client {
               channel.messages
                 .fetch({ limit: this.client.edit_messages_max_count })
                 .then(async (messages: any[]) => {
-                  messages.forEach(async  (edited: {
-                    id: any
-                    channel: {
-                      send: (
-                        arg0: any,
-                        arg1: { split: boolean }
-                      ) => Promise<any>
-                      stopTyping: () => void
-                    }
-                  }) => {
-                    if (edited.id === message_id) {
-                      Object.keys(responses as any).map(async  (key, index) => {
-                        log('response: ' + responses)
-                        log('response: ' + key)
-                        log('response: ' + index)
+                  messages.forEach(
+                    async (edited: {
+                      id: any
+                      channel: {
+                        send: (
+                          arg0: any,
+                          arg1: { split: boolean }
+                        ) => Promise<any>
+                        stopTyping: () => void
+                      }
+                    }) => {
+                      if (edited.id === message_id) {
+                        Object.keys(responses as any).map(
+                          async (key, index) => {
+                            log('response: ' + responses)
+                            log('response: ' + key)
+                            log('response: ' + index)
 
-                        if (
-                          responses !== undefined &&
-                          responses.length <= 2000 &&
-                          responses.length > 0
-                        ) {
-                          let text = this.replacePlaceholders(responses as string)
-                          msg.edit(text)
-                          this.onMessageResponseUpdated(
-                            channel.id,
-                            edited.id,
-                            msg.id
-                          )
-                        } else if (responses?.length >= 2000) {
-                          let text = this.replacePlaceholders(responses as string)
-                          if (text.length > 0) {
-                            edited.channel
-                              .send(text, { split: true })
-                              .then(async  (msg: { id: any }) => {
-                                this.onMessageResponseUpdated(
-                                  channel.id,
-                                  edited.id,
-                                  msg.id
-                                )
-                              })
+                            if (
+                              responses !== undefined &&
+                              responses.length <= 2000 &&
+                              responses.length > 0
+                            ) {
+                              let text = this.replacePlaceholders(
+                                responses as string
+                              )
+                              msg.edit(text)
+                              this.onMessageResponseUpdated(
+                                channel.id,
+                                edited.id,
+                                msg.id
+                              )
+                            } else if (responses && responses.length && responses.length >= 2000) {
+                              let text = this.replacePlaceholders(
+                                responses as string
+                              )
+                              if (text.length > 0) {
+                                edited.channel
+                                  .send(text, { split: true })
+                                  .then(async (msg: { id: any }) => {
+                                    this.onMessageResponseUpdated(
+                                      channel.id,
+                                      edited.id,
+                                      msg.id
+                                    )
+                                  })
+                              }
+                            }
                           }
-                        }
-                      })
-                      edited.channel.stopTyping()
+                        )
+                        edited.channel.stopTyping()
+                      }
                     }
-                  })
+                  )
                 })
                 .catch((err: string | boolean) => log(err))
             })
@@ -1152,8 +1155,8 @@ export class discord_client {
   }
 
   client = Discord.Client as any
-  agent = undefined
-  spellRunner = null
+  agent: any = undefined
+  spellRunner: any = null
   discord_starting_words: string[] = []
   discord_bot_name_regex: string = ''
   discord_bot_name: string = 'Bot'
@@ -1162,20 +1165,23 @@ export class discord_client {
   voice_character!: string
   voice_language_code!: string
   tiktalknet_url!: string
-  createDiscordClient = async (
-    agent: any,
-    discord_api_token: string | undefined,
-    discord_starting_words: string,
-    discord_bot_name_regex: string,
-    discord_bot_name: string,
-    spellRunner: any,
+  worldManager: WorldManager
+  constructor({
+    agent,
+    discord_api_token,
+    discord_starting_words,
+    discord_bot_name_regex,
+    discord_bot_name,
+    spellRunner,
     use_voice,
     voice_provider,
     voice_character,
     voice_language_code,
     tiktalknet_url,
-  ) => {
+    worldManager,
+  }) {
     console.log('creating discord client')
+    this.worldManager = worldManager
     this.agent = agent
     this.spellRunner = spellRunner
     this.use_voice = use_voice
@@ -1197,137 +1203,153 @@ export class discord_client {
     this.discord_bot_name = discord_bot_name
 
     const token = discord_api_token
-    if (!token) return console.warn('No API token for Discord bot, skipping')
-
-    this.client = new Discord.Client({
-      partials: [Partials.Message, Partials.User, Partials.Reaction],
-      intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildVoiceStates,
-        GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildPresences,
-        GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.GuildVoiceStates,
-      ],
-    })
-    this.client.prefix = '!'
-    this.client.prefixOptionalWhenMentionOrDM = true
-
-    this.client.on('debug', message => {
-      console.log('debug', message)
-    })
-
-    //{ intents: [ Intents.GUILDS, Intents.GUILD_MEMBERS, Intents.GUILD_VOICE_STATES, Intents.GUILD_PRESENCES, Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES] });
-    // We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
-    this.client.helpFields = this.helpFields
-    this.client._findCommand = this._findCommand
-    this.client._parseWords = this._parseWords
-    this.client.name_regex = new RegExp(discord_bot_name, 'ig')
-
-    this.client.username_regex = new RegExp(this.discord_bot_name_regex, 'ig') //'((?:digital|being)(?: |$))'
-    this.client.edit_messages_max_count = 5
-
-    const embed = new EmbedBuilder().setColor(0x00ae86)
-
-    this.client.embed = embed
-
-    if (this.use_voice) {
-      const {client, discord_bot_name, agent, spellRunner, voice_provider, voice_character, voice_language_code, tiktalknet_url} = this
-      
-      if(typeof window === 'undefined'){
-        const { initSpeechClient, recognizeSpeech: _recognizeSpeech } = await import('./discord-voice')
-      recognizeSpeech = _recognizeSpeech
-      this.client = initSpeechClient({
-        client,
-        discord_bot_name,
-        agent,
-        spellRunner,
-        voiceProvider: voice_provider,
-        voiceCharacter: voice_character,
-        languageCode: voice_language_code,
-        tiktalknet_url
+    if (!token) {
+      console.warn('No API token for Discord bot, skipping')
+    } else {
+      this.client = new Discord.Client({
+        partials: [Partials.Message, Partials.User, Partials.Reaction],
+        intents: [
+          GatewayIntentBits.Guilds,
+          GatewayIntentBits.GuildVoiceStates,
+          GatewayIntentBits.MessageContent,
+          GatewayIntentBits.GuildPresences,
+          GatewayIntentBits.GuildMembers,
+          GatewayIntentBits.GuildMessages,
+          GatewayIntentBits.GuildVoiceStates,
+        ],
       })
-    }
-  }
+      this.client.prefix = '!'
+      this.client.prefixOptionalWhenMentionOrDM = true
 
-    this.client.on('messageCreate', this.messageCreate.bind(null, this.client))
-    // this.client.on('messageDelete', this.messageDelete.bind(null, this.client))
-    // this.client.on('messageUpdate', this.messageUpdate.bind(null, this.client))
-    // this.client.on(
-    //   'presenceUpdate',
-    //   this.presenceUpdate.bind(null, this.client)
-    // )
+      this.client.on('debug', message => {
+        console.log('debug', message)
+      })
 
-    // this.client.on(
-    //   'interactionCreate',
-    //   async (interaction: string | boolean) => {
-    //     log('Handling interaction', interaction)
-    //     this.handleSlashCommand(this.client, interaction)
-    //   }
-    // )
-    this.client.on(
-      'guildMemberAdd',
-      async (user: { user: { id: any; username: any } }) => {
-        this.handleGuildMemberAdd(user)
+      //{ intents: [ Intents.GUILDS, Intents.GUILD_MEMBERS, Intents.GUILD_VOICE_STATES, Intents.GUILD_PRESENCES, Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES] });
+      // We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
+      this.client.helpFields = this.helpFields
+      this.client._findCommand = this._findCommand
+      this.client._parseWords = this._parseWords
+      this.client.name_regex = new RegExp(discord_bot_name, 'ig')
+
+      this.client.username_regex = new RegExp(this.discord_bot_name_regex, 'ig') //'((?:digital|being)(?: |$))'
+      this.client.edit_messages_max_count = 5
+
+      const embed = new EmbedBuilder().setColor(0x00ae86)
+
+      this.client.embed = embed
+
+      if (this.use_voice) {
+        const {
+          client,
+          discord_bot_name,
+          agent,
+          spellRunner,
+          voice_provider,
+          voice_character,
+          voice_language_code,
+          tiktalknet_url,
+        } = this
+        ;(async () => {
+          if (typeof window === 'undefined') {
+            const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
+              await import('./discord-voice')
+            recognizeSpeech = _recognizeSpeech
+            this.client = initSpeechClient({
+              client,
+              discord_bot_name,
+              agent,
+              spellRunner,
+              voiceProvider: voice_provider,
+              voiceCharacter: voice_character,
+              languageCode: voice_language_code,
+              tiktalknet_url,
+            })
+          }
+        })()
       }
-    )
-    this.client.on('guildMemberRemove', async (user: any) => {
-      this.handleGuildMemberRemove(user)
-    })
-    this.client.on('messageReactionAdd', async (reaction: any, user: any) => {
-      this.handleMessageReactionAdd(reaction, user)
-    })
 
-    // this.client.commands = new Discord.Collection()
+      this.client.on(
+        'messageCreate',
+        this.messageCreate.bind(null, this.client)
+      )
+      // this.client.on('messageDelete', this.messageDelete.bind(null, this.client))
+      // this.client.on('messageUpdate', this.messageUpdate.bind(null, this.client))
+      // this.client.on(
+      //   'presenceUpdate',
+      //   this.presenceUpdate.bind(null, this.client)
+      // )
 
-    // this.client.commands.set('agents', this.agents)
-    // this.client.commands.set('ban', this.ban)
-    // this.client.commands.set('commands', this.commands)
-    //this.client.commands.set('ping', this.ping)
-    // this.client.commands.set('pingagent', this.pingagent)
-    // this.client.commands.set('setagent', this.setagent)
-    // this.client.commands.set('setname', this.setname)
-    // this.client.commands.set('unban', this.unban)
+      // this.client.on(
+      //   'interactionCreate',
+      //   async (interaction: string | boolean) => {
+      //     log('Handling interaction', interaction)
+      //     this.handleSlashCommand(this.client, interaction)
+      //   }
+      // )
+      this.client.on(
+        'guildMemberAdd',
+        async (user: { user: { id: any; username: any } }) => {
+          this.handleGuildMemberAdd(user)
+        }
+      )
+      this.client.on('guildMemberRemove', async (user: any) => {
+        this.handleGuildMemberRemove(user)
+      })
+      this.client.on('messageReactionAdd', async (reaction: any, user: any) => {
+        this.handleMessageReactionAdd(reaction, user)
+      })
 
-    // setInterval(() => {
-    //   const channelIds: any[] = []
+      // this.client.commands = new Discord.Collection()
 
-    //   this.client.channels.cache.forEach(async (channel: { topic: string | undefined; id: string | number } | undefined) => {
-    //     if (!channel || !channel.topic) return
-    //     if (channel === undefined || channel.topic === undefined) return
-    //     if (
-    //       channel.topic.length < 0 ||
-    //       channel.topic.toLowerCase() !== 'daily discussion'
-    //     )
-    //       return
-    //     if (channelIds.includes(channel.id)) return
+      // this.client.commands.set('agents', this.agents)
+      // this.client.commands.set('ban', this.ban)
+      // this.client.commands.set('commands', this.commands)
+      //this.client.commands.set('ping', this.ping)
+      // this.client.commands.set('pingagent', this.pingagent)
+      // this.client.commands.set('setagent', this.setagent)
+      // this.client.commands.set('setname', this.setname)
+      // this.client.commands.set('unban', this.unban)
 
-    //     channelIds.push(channel.id)
-    //     if (
-    //       this.discussionChannels[channel.id] === undefined ||
-    //       !this.discussionChannels
-    //     ) {
-    //       this.discussionChannels[channel.id] = {
-    //         timeout: setTimeout(() => {
-    //           delete this.discussionChannels[channel.id]
-    //         }, 1000 * 3600 * 4),
-    //         responded: false,
-    //       }
-    //       // const resp = await spellRunner(
-    //       //   'Tell me about ' + 'butterlifes',
-    //       //   'bot',
-    //       //    this.discord_bot_name ?? 'Agent',
-    //       //   'discord',
-    //       //   message.channel.id,
-    //       //   this.spell_handler,
-    //       // )
-    //       // channel.send(resp)
-    //     }
-    //   })
-    // }, 1000 * 3600)
+      // setInterval(() => {
+      //   const channelIds: any[] = []
 
-    this.client.login(token)
+      //   this.client.channels.cache.forEach(async (channel: { topic: string | undefined; id: string | number } | undefined) => {
+      //     if (!channel || !channel.topic) return
+      //     if (channel === undefined || channel.topic === undefined) return
+      //     if (
+      //       channel.topic.length < 0 ||
+      //       channel.topic.toLowerCase() !== 'daily discussion'
+      //     )
+      //       return
+      //     if (channelIds.includes(channel.id)) return
+
+      //     channelIds.push(channel.id)
+      //     if (
+      //       this.discussionChannels[channel.id] === undefined ||
+      //       !this.discussionChannels
+      //     ) {
+      //       this.discussionChannels[channel.id] = {
+      //         timeout: setTimeout(() => {
+      //           delete this.discussionChannels[channel.id]
+      //         }, 1000 * 3600 * 4),
+      //         responded: false,
+      //       }
+      //       // const resp = await spellRunner(
+      //       //   'Tell me about ' + 'butterlifes',
+      //       //   'bot',
+      //       //    this.discord_bot_name ?? 'Agent',
+      //       //   'discord',
+      //       //   message.channel.id,
+      //       //   this.spell_handler,
+      //       // )
+      //       // channel.send(resp)
+      //     }
+      //   })
+      // }, 1000 * 3600)
+
+      this.client.login(token)
+    }
   }
 
   discussionChannels = {}
