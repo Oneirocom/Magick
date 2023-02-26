@@ -2,12 +2,10 @@ import * as React from 'react'
 import Box from '@mui/material/Box'
 const style = {
   color: 'white',
-  border: 1,
-  borderRadius: '16px',
-  borderRepeat: 'no-repeat',
   width: 'calc(100%-32px)',
-  padding: '16px',
-  marginTop: '16px',
+  backgroundColor: '#222',
+  padding: '1em',
+  marginTop: '1em',
   marginLeft: 'auto',
   marginRight: 'auto',
 }

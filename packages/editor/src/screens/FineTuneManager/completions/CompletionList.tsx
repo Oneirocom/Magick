@@ -35,6 +35,7 @@ export default function ClassificationList() {
             <Button
               size="small"
               variant="contained"
+              style={{backgroundColor: 'purple', color: 'white' }}
               onClick={() => navigate('/fineTuneManager/fine-tunes/new')}
               startIcon={<AddCircleOutlineIcon />}
             >
@@ -72,6 +73,7 @@ export default function ClassificationList() {
         <FileListTable purpose="fine-tune" />
       </InfoCard>
       <InfoCard>
+        <h1>Instructions</h1>
         <div dangerouslySetInnerHTML={{ __html: CompletionInstructions }} style={{minWidth: '20em', maxWidth: '80em'}}/>
       </InfoCard>
     </main>

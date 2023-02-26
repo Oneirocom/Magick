@@ -35,6 +35,7 @@ export default function UploadFileButton({
       <Button
         variant="contained"
         disabled={isLoading}
+        style={{backgroundColor: 'purple', color: 'white' }}
         onClick={() => inputRef.current?.click()}
         startIcon={<UploadFileIcon />}
       >

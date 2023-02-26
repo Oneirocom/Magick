@@ -86,6 +86,7 @@ const BasicSelect = ({
       backgroundColor: 'var(--primary)',
     }),
     option: (provided, state) => ({
+      appearance: 'none',
       padding: 'var(--extraSmall)',
       paddingLeft: nested ? 'var(--large)' : 'var(--small)',
       paddingRight: 'var(--small)',
