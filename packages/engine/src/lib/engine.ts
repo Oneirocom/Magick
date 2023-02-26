@@ -87,12 +87,15 @@ export const initSharedEngine = ({
 // this parses through all the nodes in the data and finds the nodes associated with the given map
 export const extractNodes = (
   nodes: GraphData['nodes'],
-  map: Map<any, any> | Set<unknown>
+  map: Map<any, any> | Set<unknown>,
 ) => {
   const names = Array.from(map.keys())
 
   return Object.keys(nodes)
-    .filter(k => names.includes(nodes[k].name))
+    .filter(
+      // make sure node name is in the map
+      k => names.includes(nodes[k].name)
+    )
     .map(k => nodes[k])
     .sort((n1, n2) => n1.position[1] - n2.position[1])
 }
