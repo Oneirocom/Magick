@@ -91,7 +91,7 @@ class PluginManager {
   getAgentComponents() {
     let agentComp = []
     this.pluginList.forEach(plugin => {
-      plugin.agentComponents.forEach(component => {
+      plugin.agentComponents?.forEach(component => {
         agentComp.push(component)
       })
     })
