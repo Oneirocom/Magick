@@ -6,7 +6,7 @@ import { app } from './app'
 // this way users can use our demo database without seeing each other's stuff
 // for a multi-tenant case, until we have isolated pods for each user we isolate by project id
 const isSingleUserMode = process.env.SINGLE_USER_MODE === 'true'
-const query = isSingleUserMode ? { query: { projectId }} : {}
+const query = isSingleUserMode ? { query: { projectId } } : {}
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -53,8 +53,8 @@ function initAgentManagerLoop(update: Function, lateUpdate: Function) {
 export class AgentManager {
   id = -1
   objects: { [id: number]: any } = {}
-  lastAgents: any
-  agents: any
+  oldAgents: any
+  newAgents: any
   availablePorts: number[] = []
 
   constructor() {
@@ -64,90 +64,97 @@ export class AgentManager {
   }
 
   async updateAgent() {
-    this.agents = (await app.service('agents').find(query)).data
-    const agents = this.agents
-    delete agents['updated_at']
-    const lastAgents = this.lastAgents ?? []
-    if (lastAgents['updated_at']) delete lastAgents['updated_at']
-    await this.updateSpells();
-    if (JSON.stringify(agents) === JSON.stringify(lastAgents)) return // They are the same
+    this.newAgents = (await app.service('agents').find(query)).data
+    const newAgents = this.newAgents
+    delete newAgents['updated_at']
+    const oldAgents = this.oldAgents ?? []
+    if (oldAgents['updated_at']) delete oldAgents['updated_at']
+    await this.updateSpells()
+    if (JSON.stringify(newAgents) === JSON.stringify(oldAgents)) return // They are the same
     //If Discord Enabled is True replace the old Agent with a new one
-    for (const i in agents){
+    for (const i in newAgents) {
+      console.log('Inside For Loop')
+      console.log('New Agents: ', newAgents[i])
       try {
-        let temp_agent = this.getAgent(agents[i].id)
-        console.log("Inside TRY ")
+        let temp_agent = this.getAgent(newAgents[i].id)
+        console.log('Inside TRY ')
         await temp_agent.onDestroy()
       } catch {
-        console.log("Client Does not exist")
+        console.log('Client Does not exist')
       }
-      if (agents[i].data.discord_enabled){
+      if (!newAgents[i].data) {
+        console.warn('New agent is null data')
+      } else if (newAgents[i].data.discord_enabled) {
         try {
           //Get the agent which was updated.
-          let temp_agent = this.getAgent(agents[i].id)
+          let temp_agent = this.getAgent(newAgents[i].id)
           //Delete the Agent
           await temp_agent.onDestroy()
-        } catch(e) {
-          console.log("Couldn't delete the Discord Client.!! Caught Error: ",e)
+        } catch (e) {
+          console.log("Couldn't delete the Discord Client.!! Caught Error: ", e)
         }
-        this.addAgent(agents[i])
-      } 
+        this.addAgent(newAgents[i])
+      }
     }
-    // If an entry exists in lastAgents but not in agents, it has been deleted
-    for (const i in lastAgents) {
-      // filter for entries where lastAgents where id === agents[i].id
+    // If an entry exists in oldAgents but not in newAgents, it has been deleted
+    for (const i in oldAgents) {
+      // filter for entries where oldAgents where id === newAgents[i].id
       if (
-        agents.filter((x: any) => x.id === lastAgents[i].id)[0] ===
-        undefined
+        newAgents.filter((x: any) => x.id === oldAgents[i].id)[0] === undefined
       ) {
-        await this.removeAgent(lastAgents[i].id)
+        await this.removeAgent(oldAgents[i].id)
       }
     }
 
-    // If an entry exists in agents but not in lastAgents, it has been added
-    for (const i in agents) {
-      // filter for entries where lastAgents where id === agents[i].id
+    // If an entry exists in newAgents but not in oldAgents, it has been added
+    for (const i in newAgents) {
+      // filter for entries where oldAgents where id === newAgents[i].id
       if (
-        lastAgents.filter((x: any) => x.id === agents[i].id)[0] ===
-        undefined
+        oldAgents.filter((x: any) => x.id === newAgents[i].id)[0] === undefined
       ) {
-        if (agents[i].enabled) {
-          if (!(agents[i].data.discord_enabled)) await this.addAgent(agents[i])
+        if (newAgents[i].enabled) {
+          if (!newAgents[i].data.discord_enabled)
+            await this.addAgent(newAgents[i])
         }
       }
     }
 
-    for (const i in agents) {
-      if (agents[i].dirty) {
-        await this.removeAgent(agents[i].id)
-        await this.addAgent(agents[i])
+    for (const i in newAgents) {
+      if (newAgents[i].dirty) {
+        await this.removeAgent(newAgents[i].id)
+        await this.addAgent(newAgents[i])
 
-        await app.service('agents').patch(agents[i].id, {
-          dirty: false
+        await app.service('agents').patch(newAgents[i].id, {
+          dirty: false,
         })
-
       }
     }
 
-    this.lastAgents = this.agents
+    this.oldAgents = this.newAgents
   }
 
   async updateSpells() {
-    for (const i in this.agents) {
-      const agent = this.agents[i]
+    for (const i in this.newAgents) {
+      const agent = this.newAgents[i]
       const runningAgent = this.getAgent(agent.id)
-      if(!runningAgent) continue;
+      if (!runningAgent) continue
       // evaluate the root spell
       if (agent.data.root_spell) {
-        const spell = (await app.service('spells').find({
-          query: { projectId, name: agent.data.root_spell },
-        })).data[0]
+        const spell = (
+          await app.service('spells').find({
+            query: { projectId, name: agent.data.root_spell },
+          })
+        ).data[0]
 
-          if (!runningAgent.root_spell_hash || spell.hash !== runningAgent.root_spell_hash) {
-            // reload the spell
-            console.log('reloading root spell', spell.name)
-            const spellRunner = await runningAgent.spellManager.load(spell)
-            runningAgent.root_spell_hash = spell.hash
-          }
+        if (
+          !runningAgent.root_spell_hash ||
+          spell.hash !== runningAgent.root_spell_hash
+        ) {
+          // reload the spell
+          console.log('reloading root spell', spell.name)
+          const spellRunner = await runningAgent.spellManager.load(spell)
+          runningAgent.root_spell_hash = spell.hash
+        }
       }
 
       // evaluate all spells
@@ -155,13 +162,15 @@ export class AgentManager {
         // for each spell in agent.spells, get the hash from the db
         // if the hash is not the same as agent.spells.hash, then reload the spell
         // otherwise set agent.spells.hash to the hash of the spell
-        const spells = (await app.service('spells').find({
-          query: { projectId, name: { $in: agent.spells } },
-        })).data
+        const spells = (
+          await app.service('spells').find({
+            query: { projectId, name: { $in: agent.spells } },
+          })
+        ).data
 
         for (const j in spells) {
           const spell = spells[j]
-          if(!runningAgent.spells_hash) runningAgent.spells_hash = []
+          if (!runningAgent.spells_hash) runningAgent.spells_hash = []
           if (spell.hash !== runningAgent.spells_hash[j]) {
             // reload the spell
             console.log('reloading spell', spell.name)
@@ -172,7 +181,6 @@ export class AgentManager {
       }
     }
   }
-
 
   async resetAgentSpells() {
     const agents = (await app.service('agents').find()).data
@@ -232,8 +240,15 @@ export class AgentManager {
   async onDestroy() {}
 
   async addAgent(obj: any) {
-    const data = {...obj.data, id: obj.id, enabled: obj.enabled, dirty: obj.dirty, spells: obj.spells, updated_at: obj.updated_at}
-    console.log("SERVER", data.id)
+    const data = {
+      ...obj.data,
+      id: obj.id,
+      enabled: obj.enabled,
+      dirty: obj.dirty,
+      spells: obj.spells,
+      updated_at: obj.updated_at,
+    }
+    console.log('SERVER', data.id)
     //Overwrites even if already exists
     data.projectId = projectId
     this.objects[data.id] = new Agent(data)
