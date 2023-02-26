@@ -6,10 +6,13 @@
 }
 
 .child {
-  height: 80%;
-  width: 80%;
-  padding: 2rem 5rem;
+  height: 100%;
+  width: 100%;
   background: var(--dark-2);
+}
+
+.innerChild {
+  padding: 2em;
 }
 
 .title {
