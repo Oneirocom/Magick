@@ -121,7 +121,7 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
   return (
     <div>
       <div
-        className={`${styles.agentDetailsContainer} ${styles['mg-btm-medium']}`}
+        className={`${styles.agentDetailsContainer}`}
       >
         <div className={styles.agentDescription}>
           <Avatar className={styles.avatar}>A</Avatar>
@@ -152,6 +152,9 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
       <div className="form-item agent-select">
         <span className="form-item-label">Root Spell</span>
         <select
+        style={{
+          appearance: 'none'
+        }}
           name="root_spell"
           id="root_spell"
           value={root_spell}

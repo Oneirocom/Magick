@@ -25,12 +25,6 @@ const AgentWindow = ({
   return (
     <Grid container className={styles.container}>
       <Grid item xs={3.9} className={styles.item}>
-        <Typography
-          variant="h6"
-          className={`${styles.heading} ${styles['mg-btm-small']}`}
-        >
-          Agents
-        </Typography>
         <Button
           variant="contained"
           className={`${styles.btn} ${styles['mg-btm-medium']}`}
