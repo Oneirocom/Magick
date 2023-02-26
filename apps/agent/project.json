@@ -1,0 +1,74 @@
+{
+  "name": "@magickml/agent",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/agent/src",
+  "projectType": "application",
+  "implicitDependencies": ["@magickml/cost-calculator", "@magickml/server-core", "@magickml/engine"],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "port": 7778,
+        "inspect": true,
+        "outputPath": "dist/apps/agent",
+        "main": "apps/agent/src/index.ts",
+        "assets": ["apps/agent/src/certs"],
+        "tsConfig": "apps/agent/tsconfig.app.json",
+        "webpackConfig": "apps/agent/webpack.config.js"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/agent/environments/environment.ts",
+              "with": "apps/agent/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "@magickml/agent:build",
+        "inspect": true,
+        "port": 7778
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "@magickml/agent:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/agent/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "apps/agent/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

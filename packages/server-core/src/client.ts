@@ -9,11 +9,6 @@ import type {
 } from './services/spell-runner/spell-runner'
 
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
-import type { RestApi, RestApiData, RestApiQuery, RestApiService } from '../../../packages/plugin-rest/src/services/rest-api/rest-api'
-export type { RestApi, RestApiData, RestApiQuery }
-export const restApiServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
-export type RestApiClientService = Pick<RestApiService, (typeof restApiServiceMethods)[number]>
-
 export type { SpellRunner, SpellRunnerData, SpellRunnerQuery }
 export const spellRunnerServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
 export type SpellRunnerClientService = Pick<
@@ -40,7 +35,6 @@ export type RequestClientService = Pick<
 >
 
 export interface ServiceTypes {
-  'rest-api': RestApiClientService
   request: RequestClientService
   'spell-runner': SpellRunnerClientService
   spells: SpellClientService
@@ -71,9 +65,6 @@ export const createClient = <Configuration = any>(connection: TransportConnectio
   })
   client.use('request', connection.service('request'), {
     methods: requestServiceMethods
-  })
-  client.use('rest-api', connection.service('rest-api'), {
-    methods: restApiServiceMethods
   })
   return client
 }

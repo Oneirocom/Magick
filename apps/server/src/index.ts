@@ -6,7 +6,7 @@ import Koa from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
 
-import { worldManager, pluginManager } from '@magickml/engine'
+import { pluginManager } from '@magickml/engine'
 
 import {
   app,
@@ -19,8 +19,7 @@ import {
   Handler,
   Method,
   Middleware,
-  Route,
-  AgentManager
+  Route
  } from '@magickml/server-core'
 
  
