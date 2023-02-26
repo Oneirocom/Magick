@@ -3,7 +3,7 @@ import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('agents', (table) => {
-    table.uuid('id').primary()
+    table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'))
     table.boolean('dirty')
     table.string('name')
     table.boolean('enabled')
