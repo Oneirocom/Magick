@@ -68,6 +68,8 @@ const LoopPlugin = new Plugin({
   serverInit: null,
   serverRoutes: null,
   agentMethods: getAgentMethods(),
+  inputTypes: ['Loop In'],
+  outputTypes: ['Loop Out'],
 })
 
 export default LoopPlugin;
