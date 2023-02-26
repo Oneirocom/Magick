@@ -1,3 +1,4 @@
+import React from 'react'
 import MagickLogo from './Magick-purple-logo.png'
 import css from './tabBar.module.css'
 import Button from '@mui/material/Button'

@@ -19,7 +19,6 @@ const RestPlugin = new Plugin({
   nodes: [], 
   services: {'RestPlugin': RestApiService},
   agentComponents: [RestAgentWindow], 
-  windowComponents: [],
   serverInit: null,
   serverRoutes: null,
   agentMethods: getAgentMethods(),

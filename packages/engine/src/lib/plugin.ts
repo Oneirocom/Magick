@@ -14,7 +14,6 @@ export class Plugin {
   name: string
   nodes: any
   services: any
-  windowComponents: any[]
   agentComponents: any[]
   inputTypes: any[]
   outputTypes: any[]
@@ -30,7 +29,6 @@ export class Plugin {
     name,
     nodes = [],
     services = [],
-    windowComponents = [],
     agentComponents,
     inputTypes = [],
     outputTypes = [],
@@ -49,7 +47,6 @@ export class Plugin {
     name: string
     nodes?: any
     services?: any
-    windowComponents?: any[]
     agentComponents?: any[]
     serverInit?: Function
     agentMethods?: {
@@ -64,7 +61,6 @@ export class Plugin {
     this.name = name
     this.nodes = nodes
     this.services = services
-    this.windowComponents = windowComponents
     this.agentComponents = agentComponents
     this.agentMethods = agentMethods
     this.inputTypes = inputTypes

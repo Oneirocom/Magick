@@ -1,5 +1,5 @@
 import Tooltip from '@mui/material/Tooltip'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useCopyToClipboard } from 'usehooks-ts'
 import InfoCard from './InfoCard'
 import Button from '@mui/material/Button'

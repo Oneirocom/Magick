@@ -82,7 +82,6 @@ const DiscordPlugin = new Plugin({
   inputTypes: ['Discord (Voice)', 'Discord (Text)'],
   outputTypes: ['Discord (Voice)', 'Discord (Text)'],
   agentComponents: [DiscordAgentWindow], 
-  windowComponents: [],
   serverInit: null,
   serverRoutes: null,
   agentMethods: getAgentMethods(),
