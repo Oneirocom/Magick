@@ -17,13 +17,17 @@ const FileInput = ({ loadFile }) => {
   return (
     <>
       <Button onClick={handleClick}>
-        <Icon name="folder" style={{ marginRight: 'var(--extraSmall)' }} />
+        <Icon
+          name="folder"
+          size={16}
+          style={{ marginRight: 'var(--extraSmall)' }}
+        />
         Import...
       </Button>
       <input
         id="import"
         type="file"
-        multiple="multiple"
+        multiple
         ref={hiddenFileInput}
         onChange={handleChange}
         style={{ display: 'none' }}

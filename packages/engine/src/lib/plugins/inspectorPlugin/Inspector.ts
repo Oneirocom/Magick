@@ -20,7 +20,7 @@ export type InspectorData = {
   name: string
   nodeId: number
   dataControls: Record<string, any>
-  data: Record<string, unknown>
+  data: Record<string, any>
   category?: string
   info: string
 }

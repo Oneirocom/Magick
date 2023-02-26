@@ -1,8 +1,6 @@
-
-// @ts-nocheck
 import { DataControl } from '../plugins/inspectorPlugin'
 export class CodeControl extends DataControl {
-  constructor({ dataKey, name, icon = 'feathers', language }) {
+  constructor({ dataKey, name, icon = 'feathers', language = 'javascript' }) {
     const options = {
       dataKey: dataKey,
       name: name,

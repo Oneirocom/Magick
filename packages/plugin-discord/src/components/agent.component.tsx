@@ -13,7 +13,7 @@ import SwitchComponent from './Switch'
 export const DiscordAgentWindow: FC<any> = props => {
   props = props.props
   const { enqueueSnackbar } = useSnackbar()
-  const [discord_enabled, setDiscordEnabled] = useState(undefined)
+  const [discord_enabled, setDiscordEnabled] = useState<boolean>(false)
   const [discord_api_key, setDiscordApiKey] = useState('')
   const [discord_starting_words, setDiscordStartingWords] = useState('')
   const [discord_bot_name_regex, setDiscordBotNameRegex] = useState('')
@@ -141,25 +141,19 @@ export const DiscordAgentWindow: FC<any> = props => {
         style={{ float: 'right' }}
       />
       <h1>Discord</h1>
-
-      <Grid container style={{ padding: '1em' }}>
-        {discord_enabled && (
-          <Grid item xs={6}>
-            <div className="form-item">
-              <span className="form-item-label">API Key</span>
-              <KeyInput
-                value={discord_api_key}
-                setValue={setDiscordApiKey}
-                secret={true}
-              />
-            </div>
-          </Grid>
-        )}
-      </Grid>
-
       {discord_enabled && (
         <>
           <Grid container style={{ padding: '1em' }}>
+            <Grid item xs={6}>
+              <div className="form-item">
+                <span className="form-item-label">API Key</span>
+                <KeyInput
+                  value={discord_api_key}
+                  setValue={setDiscordApiKey}
+                  secret={true}
+                />
+              </div>
+            </Grid>
             <Grid item xs={3}>
               <div className="form-item">
                 <span className="form-item-label">Starting Words (,)</span>
@@ -207,7 +201,7 @@ export const DiscordAgentWindow: FC<any> = props => {
             style={{ float: 'right' }}
           />
 
-        <h3>Voice Enabled</h3>
+          <h3>Voice Enabled</h3>
 
           {use_voice && (
             <>
