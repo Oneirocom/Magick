@@ -21,6 +21,9 @@ export const spellRunner = (app: Application) => {
     },
     before: {
       all: [
+        async (context:any) => {
+          console.log(context.data)
+        }
         
       ],
       find: [],
@@ -30,7 +33,9 @@ export const spellRunner = (app: Application) => {
           console.log(context.data)
         }
       ],
-      patch: [],
+      patch: [
+        
+      ],
       remove: []
     },
     after: {

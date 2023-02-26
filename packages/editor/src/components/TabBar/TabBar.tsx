@@ -15,9 +15,10 @@ const Tab = ({ tab, activeTab }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
+  console.log(tabs)
   const active = tab.id === activeTab?.id
 
-  const title = `${atob(tab.name.split('--')[0].slice(37))}`
+  const title = `${tab.name.split('--')[0]}`
   const tabClass = classnames({
     [css['tabbar-tab']]: true,
     [css['active']]: active,
@@ -41,7 +42,8 @@ const Tab = ({ tab, activeTab }) => {
           }
     )
     dispatch(changeActive(updatedTabs))
-    navigate(`/magick/${tab.name}`)
+    console.log(tab.URI)
+    navigate(`/magick/${tab.URI}`)
   }
 
   // Handle selecting the next tab down is none are active.

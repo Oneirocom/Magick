@@ -98,7 +98,7 @@ const AvatarWindow = ({ tab }) => {
 
   const onDataChange = dataText => {
     console.log('new data text', dataText)
-    dispatch(upsertLocalState({ spellName: tab.spellName, playtestData: dataText }))
+    dispatch(upsertLocalState({ id: tab.id, playtestData: dataText }))
   }
 
   const toggleData = () => {

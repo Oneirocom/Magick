@@ -25,7 +25,7 @@ const EventHandler = ({ pubSub, tab }) => {
   const [saveSpellMutation] = spellApi.useSaveSpellMutation()
   const [saveDiff] = spellApi.useSaveDiffMutation()
   const { data: spell } = spellApi.useGetSpellByIdQuery({
-    spellName: atob(tab.name.split('--')[0].slice(37)),
+    spellName: tab.name.split('--')[0],
     Id: tab.id,
     projectId: config.projectId,
   })

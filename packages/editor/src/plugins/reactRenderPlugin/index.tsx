@@ -4,7 +4,7 @@ import { Node } from './Node'
 const SUPPRESSED_WARNINGS = ['ReactDOM.render'];
 const consoleError = console.error;
 console.error = function filterWarnings(msg, ...args) {
-  if (!SUPPRESSED_WARNINGS.some((entry) => msg.includes(entry))) {
+  if (!SUPPRESSED_WARNINGS.some((entry) => typeof msg === 'string' ?  msg.includes(entry) : false)) {
     consoleError(msg, ...args);
   }
 };
