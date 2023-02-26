@@ -64,7 +64,6 @@ const LoopPlugin = new Plugin({
   nodes: [], 
   services: {},
   agentComponents: [AgentLoopWindow], 
-  windowComponents: [],
   serverInit: null,
   serverRoutes: null,
   agentMethods: getAgentMethods(),

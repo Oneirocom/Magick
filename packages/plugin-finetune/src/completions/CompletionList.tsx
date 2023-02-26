@@ -10,10 +10,6 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { Box, Typography } from '@mui/material'
 import InfoCard from '../components/InfoCard'
 
-// TODO @thomageanderson: resolve the type warning on this markdown import
-//@ts-ignore
-import { html as CompletionInstructions } from './instructions.md'
-
 export default function ClassificationList() {
   const navigate = useNavigate()
   return (
@@ -74,7 +70,20 @@ export default function ClassificationList() {
       </InfoCard>
       <InfoCard>
         <h1>Instructions</h1>
-        <div dangerouslySetInnerHTML={{ __html: CompletionInstructions }} style={{minWidth: '20em', maxWidth: '80em'}}/>
+            <p>
+              To fine-tune the model, first upload a file containing prompts and completions.
+            </p>
+            <p>
+            The file can be CSV, Excel, or JSONL. It must contain two columns, "prompt" and "completion". For Excel, the first column is "prompt", and the second column is "completion". Combined they cannot have more than 2048 tokens. <a href="https://beta.openai.com/docs/guides/fine-tuning/preparing-your-dataset">Learn more</a>.
+            </p>
+            <p>
+              Then create a new model using that training file. You can use a second file for validating the model. Read more about <a href="https://beta.openai.com/docs/guides/completion/prompt-design">prompt design</a> and <a href="https://beta.openai.com/docs/guides/completion/evaluation">evaluation</a>.
+            </p>
+              <h4>For example:</h4>
+            <p>
+            {`{ "prompt": "Company: BHFF cars\nProduct: cars\nAd:One stop shop!\nSupported:", "completion": "yes" }
+{ "prompt": "Company: Loft teeth\nProduct: -\nAd:Straight teeth in weeks!\nSupported:", "completion":"no" }`}
+</p>
       </InfoCard>
     </main>
   )
