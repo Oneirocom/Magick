@@ -56,7 +56,6 @@ const MenuBar = () => {
     console.log(activeTabRef.current?.id)
     console.log('SAVING')
    // if (!activeTabRef.current) return
-    console.log("GONNA")
     publish($SAVE_SPELL(activeTabRef.current?.id))
   }
 
