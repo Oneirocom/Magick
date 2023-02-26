@@ -155,12 +155,6 @@ export function Drawer({ children }) {
             onClick={onClick('/fineTuneManager')}
             text="Fine Tuning"
           />
-          {/* <DrawerItem
-            active={location.pathname === '/spellbook'}
-            Icon={AutoStoriesIcon}
-            open={open}
-            text="Spellbook"
-          /> */}
           <DrawerItem
             active={location.pathname === '/events'}
             Icon={StorageIcon}
@@ -182,6 +176,7 @@ export function Drawer({ children }) {
             onClick={onClick('/requests')}
             text="Requests"
           />
+            <Divider />
             <DrawerItem
               active={location.pathname.includes('/settings')}
               Icon={SettingsIcon}
@@ -189,15 +184,7 @@ export function Drawer({ children }) {
               onClick={onClick('/settings')}
               text="Settings"
             />
-           {/*
-         <DrawerItem
-            active={location.pathname === '/settings'}
-            Icon={SettingsIcon}
-            open={open}
-            text="Settings"
-          /> */}
         </List>
-        {/* <Divider /> */}
       </StyledDrawer>
       {children}
     </div>
