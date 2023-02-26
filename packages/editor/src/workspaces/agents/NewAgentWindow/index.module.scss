@@ -1,0 +1,108 @@
+.container {
+  padding: 10px;
+  justify-content: space-between;
+}
+
+.item {
+  background: var(--dark-3);
+  border-radius: 4px;
+  padding: 15px;
+}
+
+.noSelected {
+  font-size: 20px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.mg-btm-small {
+  margin-bottom: 10px !important;
+}
+
+.mg-btm-medium {
+  margin-bottom: 20px !important;
+}
+
+.heading {
+  color: var(--dark-5);
+  text-align: center;
+}
+
+.btn {
+  width: 100%;
+  padding: 18px 0 !important;
+  color: var(--dark-5) !important;
+  font-size: 1.1rem !important;
+  font-weight: bold;
+}
+
+.agentItemContainer {
+  display: flex;
+  justify-content: space-between;
+  background: var(--dark-1);
+  padding: 5px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--dark-2);
+  }
+}
+
+.agentItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 50%;
+}
+
+.roundedDiv {
+  height: 25px !important;
+  width: 25px !important;
+  background: var(--dark-5) !important;
+}
+
+.agentDetailsContainer {
+  display: flex;
+  justify-content: space-between;
+  color: #a1a1a1;
+}
+
+.agentDescription {
+  display: flex;
+}
+
+.avatar {
+  background: var(--dark-5) !important;
+  margin-right: 15px;
+}
+
+.accordion {
+  border: none;
+}
+
+.collapse {
+  background: #313131 !important;
+}
+
+@media (max-width: 650px) {
+  .container {
+    flex-direction: column !important;
+  }
+
+  .item {
+    max-width: 100% !important;
+  }
+
+  h6 {
+    font-size: 1rem !important;
+  }
+
+  p {
+    font-size: 0.9rem !important;
+  }
+}

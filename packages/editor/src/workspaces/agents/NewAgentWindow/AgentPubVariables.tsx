@@ -1,13 +1,13 @@
 import { Grid } from '@mui/material'
-import styles from './AgentWindowStyle.module.css'
-import Switch from '../../components/Switch/Switch'
-import Input from '../../components/Input/Input'
+import styles from '../AgentWindowStyle.module.css'
+import Switch from '../../../components/Switch/Switch'
+import Input from '../../../components/Input/Input'
 import { useState } from 'react'
-import Button from '../../components/Button'
+import Button from '../../../components/Button'
 
 interface Props {
   publicVars: any
-  update: ({}) => void
+  update: () => void
 }
 
 const AgentPubVariables = ({ publicVars, update }: Props) => {
@@ -27,24 +27,13 @@ const AgentPubVariables = ({ publicVars, update }: Props) => {
           ? event.target.value
           : event.target.checked,
     })
-  }
-
-  const onSave = () => {
-    const _data = {
-      data: {
-        agentPublicInputs: JSON.stringify(agentPublicInputsState),
-      },
-    }
-    update(_data)
+    update()
   }
 
   return (
     <div className={styles['agentPubVars']}>
       <div className={styles['header']}>
         <h3>Public Variables</h3>
-        <Button onClick={onSave} className={styles['btn']}>
-          SAVE
-        </Button>
       </div>
       {publicVars.map(variable => {
         return (
