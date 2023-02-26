@@ -28,7 +28,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
   const spellRef = useRef<Spell>()
   const { events, publish } = usePubSub()
-  const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellQuery()
+  const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
   const { editor, serialize } = useEditor()
   const FeathersContext = useFeathers()
   const client = FeathersContext?.client
@@ -65,7 +65,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
         ...spellRef.current,
         graph: editor.toJSON(),
       }
-      publish(events.$SUBSPELL_UPDATED(spellRef.current.name), spell)
+      publish(events.$SUBSPELL_UPDATED(spellRef.current.id), spell)
     }) as unknown as Function
   }, [editor])
 
@@ -75,24 +75,29 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   }, [spellData])
 
   useEffect(() => {
-    if (!tab || !tab.spellName) return
+    if (!tab || !tab.name) return
+    console.log("Inside Load Spell !!")
     loadSpell({
-      spellName: tab.spellName,
+      spellName: tab.name.split('--')[0],
       projectId: config.projectId,
+      Id: tab.id,
     })
   }, [tab])
 
   useEffect(() => {
     if (!client) return
     ;(async () => {
-      if (!client || !tab || !tab.spellName) return
+      if (!client || !tab || !tab.name) return
       console.log('projectId from client ', config.projectId)
       // make sure to pass the projectId to the service call
-      await client.service('spell-runner').get(tab.spellName, {
-        query: {
-          projectId: config.projectId,
-        },
-      })
+      await client.service('spell-runner').get(tab.id,
+        {
+          query: {
+            projectId: config.projectId,
+          },
+        }
+      )
+      console.log("Spell Runner for: ", tab.id)
     })()
   }, [client])
 

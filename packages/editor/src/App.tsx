@@ -54,7 +54,7 @@ function App() {
 
           <Route path="/" element={<Magick />} />
           <Route path="/magick/*" element={<Magick />} />
-          <Route path="/magick/:spellName" element={<Magick />} />
+          <Route path="/magick/:URI" element={<Magick />} />
           <Route
             path="/contract/:chain/:address/:function"
             element={<Contract />}

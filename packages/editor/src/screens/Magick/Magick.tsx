@@ -24,8 +24,7 @@ const Magick = ({ empty = false }) => {
   const activeTab = useSelector(activeTabSelector)
 
   const pubSub = usePubSub()
-  const { spellName } = useParams()
-
+  const { URI } = useParams()
   const { events, publish, subscribe } = pubSub
 
   // Handle open tab events
@@ -42,32 +41,31 @@ const Magick = ({ empty = false }) => {
     // If there are still tabs, grab one at random to open to for now.
     // We should do better at this.  Probably with some kind of tab ordering.
     // Could fit in well with drag and drop for tabs
-    if (tabs.length > 0 && !activeTab && !spellName) {
-      navigate(`/magick/${tabs[0].name}`)
+    if (tabs.length > 0 && !activeTab && !URI) {
+      navigate(`/magick/${tabs[0].URI}`)
     }
 
-    if (tabs.length === 0 && !activeTab && !spellName) navigate('/home')
+    if (tabs.length === 0 && !activeTab && !URI) navigate('/home')
   }, [tabs])
 
   useEffect(() => {
-    if (!spellName) return
+    if (!URI) return
 
     // Return if navigating to the spell that is already active
-    if (activeTab && activeTab.spellName === spellName) return
+    if (activeTab && activeTab.URI === URI) return
     // Close spell tab if it is exists
-    let spellNameTab = tabs.filter(tab => tab.spellName === spellName)
+    let spellNameTab = tabs.filter(tab => tab.URI === URI)
     let isSpellNameTabPresent = spellNameTab.length
     if (isSpellNameTabPresent) dispatch(closeTab(spellNameTab[0].id))
 
     dispatch(
       openTab({
-        spellName: spellName,
-        name: spellName,
+        name: URI,
         openNew: false,
         type: 'spell',
       })
     )
-  }, [spellName])
+  }, [URI])
 
   useHotkeys(
     'Control+z',

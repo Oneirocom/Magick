@@ -78,7 +78,9 @@ export const initSharedEngine = ({
   components.forEach(c => {
     engine.register(c)
   })
-
+  console.log("Engine Returned")
+  console.log(engine)
+  console.log("Engine Complete")
   return engine
 }
 

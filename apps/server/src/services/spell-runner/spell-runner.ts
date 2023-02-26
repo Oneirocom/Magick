@@ -20,11 +20,20 @@ export const spellRunner = (app: Application) => {
       ]
     },
     before: {
-      all: [],
+      all: [
+        
+        
+      ],
       find: [],
       get: [],
-      create: [],
-      patch: [],
+      create: [
+        
+      ],
+      patch: [
+        async (context:any) => {
+          console.log(context.data)
+        }
+      ],
       remove: []
     },
     after: {
