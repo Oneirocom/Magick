@@ -8,6 +8,7 @@ import { CheckEthBalance } from "./nodes/CheckEthBalance"
 import { CheckBalanceForERC20 } from "./nodes/CheckBalanceForERC20"
 import { CallContractFunctionWrite } from "./nodes/CallContractFunctionWrite"
 import { CallContractFunctionRead } from "./nodes/CallContractFunctionRead"
+import Money from "@mui/icons-material/Money"
 
 import { EthereumComponent } from "./components/ethereum.route"
 
@@ -58,6 +59,13 @@ const EthereumPlugin = new Plugin({
   services: [['EthereumPlugin']],
   agentComponents: [EthereumAgentWindow],
   agentMethods: getAgentMethods(),
+  drawerItems: [
+    {
+      path: '/ethereum',
+      icon: Money,
+      text: 'Ethereum',
+    }
+  ],
   clientRoutes: [{
     path: '/ethereum',
     component: EthereumComponent,
