@@ -1,4 +1,4 @@
-import { Plugin } from "@magickml/engine"
+import { Plugin, WorldManager } from "@magickml/engine"
 import { DiscordAgentWindow } from "./components/agent.component"
 import { DiscordInput } from "./nodes/DiscordInput"
 import { DiscordOutput } from "./nodes/DiscordOutput"
@@ -17,6 +17,7 @@ type StartDiscordArgs = {
   voice_character?: string
   voice_language_code?: string
   tiktalknet_url?: string
+  worldManager: WorldManager
 }
 
 function getAgentMethods() {
@@ -34,15 +35,14 @@ function getAgentMethods() {
     voice_character,
     voice_language_code,
     tiktalknet_url,
+    worldManager
   }: StartDiscordArgs) {
     console.log('starting discord')
     // ignore import if vite
     const module = await import(/* @vite-ignore */ `${typeof window === 'undefined' ? './connectors/discord' : './dummy'}`)
     discord_client = module.discord_client
 
-    const discord = new discord_client()
-    agent.discord = discord
-    await agent.discord.createDiscordClient(
+    const discord = new discord_client({
       agent,
       discord_api_key,
       discord_starting_words,
@@ -53,8 +53,10 @@ function getAgentMethods() {
       voice_provider,
       voice_character,
       voice_language_code,
-      tiktalknet_url
-    )
+      tiktalknet_url,
+      worldManager
+    })
+    agent.discord = discord
   }
 
   async function stopDiscord(agent) {
