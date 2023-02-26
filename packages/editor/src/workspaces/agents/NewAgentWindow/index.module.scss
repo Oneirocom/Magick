@@ -24,7 +24,7 @@
 
 .mg-btm-medium {
   background-color: purple!important;
-  margin-bottom: 20px !important;
+  margin-bottom: 1em !important;
 }
 
 .heading {
@@ -46,11 +46,11 @@
   background: var(--dark-1);
   padding: 5px;
   border-radius: 4px;
-  margin-bottom: 10px;
+  margin-bottom: .5em;
   cursor: pointer;
 
   &:hover {
-    background: var(--dark-2);
+    background: #212121;
   }
 }
 
