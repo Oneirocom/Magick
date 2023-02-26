@@ -8,6 +8,7 @@ type PluginProps = {
   props
 }
 import { API_ROOT_URL } from '@magickml/engine'
+import SwitchComponent from './Switch'
 
 export const DiscordAgentWindow: FC<any> = props => {
   props = props.props
@@ -131,44 +132,37 @@ export const DiscordAgentWindow: FC<any> = props => {
         padding: '1em',
       }}
     >
+      <SwitchComponent
+        label={null}
+        checked={discord_enabled}
+        onChange={e => {
+          setDiscordEnabled(e.target.checked)
+        }}
+        style={{ float: 'right' }}
+      />
       <h1>Discord</h1>
-      <div className="form-item">
-        <Grid container style={{ padding: '1em' }}>
-          <Grid item xs={3}>
-            <span className="form-item-label">Enabled</span>
-            <input
-              key={Math.random()}
-              type="checkbox"
-              value={discord_enabled}
-              defaultChecked={discord_enabled}
-              onChange={e => {
-                setDiscordEnabled(e.target.checked)
-              }}
-            />
+
+      <Grid container style={{ padding: '1em' }}>
+        {discord_enabled && (
+          <Grid item xs={6}>
+            <div className="form-item">
+              <span className="form-item-label">API Key</span>
+              <KeyInput
+                value={discord_api_key}
+                setValue={setDiscordApiKey}
+                secret={true}
+              />
+            </div>
           </Grid>
-          {discord_enabled && (
-            <Grid item xs={6}>
-              <div className="form-item">
-                <span className="form-item-label">API Key</span>
-                <KeyInput
-                  value={discord_api_key}
-                  setValue={setDiscordApiKey}
-                  secret={true}
-                />
-              </div>
-            </Grid>
-          )}
-        </Grid>
-      </div>
+        )}
+      </Grid>
 
       {discord_enabled && (
         <>
           <Grid container style={{ padding: '1em' }}>
             <Grid item xs={3}>
               <div className="form-item">
-                <span className="form-item-label">
-                  Starting Words (word1, word2, etc)
-                </span>
+                <span className="form-item-label">Starting Words (,)</span>
                 <input
                   type="text"
                   defaultValue={discord_starting_words}
@@ -203,17 +197,17 @@ export const DiscordAgentWindow: FC<any> = props => {
               </div>
             </Grid>
           </Grid>
-          <div className="form-item">
-            <span className="form-item-label">Voice Enabled</span>
-            <input
-              type="checkbox"
-              value={use_voice.toString()}
-              defaultChecked={use_voice}
-              onChange={e => {
-                setUseVoice(e.target.checked)
-              }}
-            />
-          </div>
+
+          <SwitchComponent
+            label={null}
+            checked={use_voice}
+            onChange={e => {
+              setUseVoice(e.target.checked)
+            }}
+            style={{ float: 'right' }}
+          />
+
+        <h3>Voice Enabled</h3>
 
           {use_voice && (
             <>
