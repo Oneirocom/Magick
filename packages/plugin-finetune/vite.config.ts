@@ -10,7 +10,7 @@ import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 import mdPlugin, { Mode } from 'vite-plugin-markdown'
 
 export default defineConfig({
-  cacheDir: '../../node_modules/.vite/editor',
+  cacheDir: '../../node_modules/.vite/finetune',
   assetsInclude: ['**/*.vrm', '**/*.svg'],
   resolve: {
     alias: {
@@ -59,7 +59,7 @@ export default defineConfig({
     lib: {
       // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
-      name: 'editor',
+      name: 'finetune',
       fileName: 'index',
       // Change this to the formats you want to support.
       // Don't forgot to update your package.json as well.

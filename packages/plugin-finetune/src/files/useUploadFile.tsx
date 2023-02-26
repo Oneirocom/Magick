@@ -1,5 +1,5 @@
 import useAuthentication from '../account/useAuthentication'
-import { parse } from 'csv-parse/browser/esm'
+import { parse } from 'csv-parse'
 import { filesize } from 'filesize'
 import { useCallback, useState } from 'react'
 import { toast } from 'react-toastify'

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-
+import WindowMessage from '../../components/WindowMessage'
 import { useModal } from '../../../contexts/ModalProvider'
 import { Icon, componentCategories } from '@magickml/client-core'
 import DataControls from '../DataControls'

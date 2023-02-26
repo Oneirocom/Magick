@@ -1,5 +1,6 @@
 import Editor from '@monaco-editor/react'
 import { useState, useEffect, useRef } from 'react'
+import WindowMessage from '../../components/WindowMessage'
 
 import { Window } from '@magickml/client-core'
 import { activeTabSelector, selectAllTabs } from '../../../state/tabs'

@@ -1,3 +1,4 @@
+import * as React from 'react'
 
 import Home from './screens/Home'
 import Completions from './completions'

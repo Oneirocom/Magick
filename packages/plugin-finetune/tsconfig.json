@@ -3,7 +3,6 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "module": "ESNext",
     "lib": [
       "ESNext",
       "DOM",
