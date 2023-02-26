@@ -11,8 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { usePubSub } from '../../contexts/PubSubProvider'
-import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
-import TabLayout from '../../components/TabLayout/TabLayout'
+import { LoadingScreen, TabLayout } from '@magickml/client-core'
 import Workspaces from '../../workspaces'
 
 import TabBar from '../../components/TabBar/TabBar'

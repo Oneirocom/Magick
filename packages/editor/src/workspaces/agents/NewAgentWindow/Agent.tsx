@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState, useRef } from 'react'
 import { useConfig } from '../../../contexts/ConfigProvider'
-import Button from '../../../components/Button'
+import { Button } from '@magickml/client-core'
 
 /* Import All Agent Window Components */
 import { pluginManager } from '@magickml/engine'

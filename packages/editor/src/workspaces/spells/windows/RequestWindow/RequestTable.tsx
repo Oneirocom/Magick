@@ -27,7 +27,7 @@ import { useSnackbar } from 'notistack'
 import _ from 'lodash'
 import { CSVLink } from 'react-csv'
 import { useConfig } from '../../../../contexts/ConfigProvider'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter)

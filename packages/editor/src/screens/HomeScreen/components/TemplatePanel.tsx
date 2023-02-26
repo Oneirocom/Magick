@@ -1,4 +1,4 @@
-import Panel from '../../../components/Panel/Panel'
+import { Panel } from '@magickml/client-core'
 import css from '../homeScreen.module.css'
 
 const TemplatePanel = ({ template, setSelectedTemplate, selectedTemplate }) => {

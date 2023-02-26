@@ -40,7 +40,7 @@ const AgentWindow = ({
             agent={agent}
             style={
               agent?.id === selectedAgent?.id
-                ? { border: '1px solid var(--primary)' }
+                ? { border: '1px solid var(--primary)', backgroundColor: '#212121' }
                 : {}
             }
           />

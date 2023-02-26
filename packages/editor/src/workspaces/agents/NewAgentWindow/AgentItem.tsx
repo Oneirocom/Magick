@@ -1,6 +1,4 @@
-import IconBtn from 'packages/editor/src/components/IconButton'
-import Icon from 'packages/editor/src/components/Icon/Icon'
-import {} from '@mui/icons-material'
+import { Icon, IconBtn } from '@magickml/client-core'
 import { Avatar, Typography } from '@mui/material'
 import styles from './index.module.scss'
 

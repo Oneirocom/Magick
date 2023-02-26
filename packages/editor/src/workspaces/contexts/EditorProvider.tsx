@@ -12,7 +12,7 @@ import React, {
 import { getSpellApi } from '../../state/api/spells'
 import { useConfig } from '../../contexts/ConfigProvider'
 
-import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
+import { LoadingScreen } from '@magickml/client-core'
 import { MyNode } from '../../components/Node/Node'
 import gridimg from '../../grid.png'
 import { usePubSub } from '../../contexts/PubSubProvider'

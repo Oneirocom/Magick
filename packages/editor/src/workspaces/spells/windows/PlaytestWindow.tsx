@@ -9,9 +9,9 @@ import {
   addLocalState,
   selectStateBytabId,
 } from '../../../state/localState'
-import Select from '../../../components/Select/Select'
+import { Select } from '@magickml/client-core' 
 import { usePubSub } from '../../../contexts/PubSubProvider'
-import Window from '../../../components/Window/Window'
+import { Window } from '@magickml/client-core'
 import css from '../../../screens/Magick/magick.module.css'
 import { useFeathers } from '../../../contexts/FeathersProvider'
 import { useAppSelector } from '../../../state/hooks'
@@ -19,7 +19,7 @@ import { useEditor } from '../../contexts/EditorProvider'
 
 import { getSpellApi } from '../../../state/api/spells'
 import { useConfig } from '../../../contexts/ConfigProvider'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 import { pluginManager } from '@magickml/engine'
 import { toast } from 'react-toastify'
 

@@ -1,8 +1,6 @@
 import { Grid } from '@mui/material'
 import styles from '../AgentWindowStyle.module.css'
-import Switch from '../../../components/Switch/Switch'
-import Input from '../../../components/Input/Input'
-import { useState } from 'react'
+import { Switch, Input } from '@magickml/client-core'
 
 interface Props {
   publicVars: any

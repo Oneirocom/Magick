@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import Switch from '../../../components/Switch/Switch'
+import { Switch } from '@magickml/client-core'
 
 const SwitchControl = ({ control, updateData, initialValue }) => {
   const { dataKey, data } = control

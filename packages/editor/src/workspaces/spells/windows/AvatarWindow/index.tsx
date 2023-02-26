@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import Scrollbars from 'react-custom-scrollbars-2'
 import Editor from '@monaco-editor/react'
 
-import Window from '../../../../components/Window/Window'
+import { Window } from '@magickml/client-core'
 import css from '../../../../screens/Magick/magick.module.css'
 import SpeechUtils from '../../../../utils/speechUtils'
 import { usePubSub } from '../../../../contexts/PubSubProvider'
@@ -16,7 +16,7 @@ import {
   selectStateBytabId,
   upsertLocalState,
 } from '../../../../state/localState'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 
 const AvatarWindow = ({ tab }) => {
   const scrollbars = useRef<any>()

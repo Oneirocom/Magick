@@ -2,7 +2,7 @@ import { GraphData } from '@magickml/engine'
 import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
 
-import Select from '../../../components/Select/Select'
+import { Select } from '@magickml/client-core' 
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { getSpellApi } from '../../../state/api/spells'
 import { useAppDispatch } from '../../../state/hooks'
