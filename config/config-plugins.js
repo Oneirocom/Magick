@@ -10,6 +10,7 @@ const fs  = require('fs');
 function copyExamplePluginsJson() {
   const pluginsJsPathClient = path.join(__dirname, '..', 'apps', 'client', 'src/plugins.ts');
   const pluginsJsPathServer = path.join(__dirname, '..', 'apps', 'server', 'src/plugins.ts');
+  const pluginsJsPathAgent = path.join(__dirname, '..', 'apps', 'agent', 'src/plugins.ts');
 
   let i = 0;
 
@@ -22,6 +23,7 @@ function copyExamplePluginsJson() {
 
   fs.writeFileSync(pluginsJsPathClient, importString);
   fs.writeFileSync(pluginsJsPathServer, importString);
+  fs.writeFileSync(pluginsJsPathAgent, importString);
 }
 
 copyExamplePluginsJson();

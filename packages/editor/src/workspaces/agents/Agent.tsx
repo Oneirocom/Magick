@@ -22,21 +22,13 @@ const AgentWindow = ({
 }) => {
   const config = useConfig()
   const { enqueueSnackbar } = useSnackbar()
-
+  const [agentData, setAgentData] = useState<any>({})
   const [loaded, setLoaded] = useState(false)
 
   const [enabled, setEnabled] = useState(false)
-  const [openai_api_key, setOpenaiApiKey] = useState('')
-  const [eth_private_key, setEthPrivateKey] = useState('')
-  const [eth_public_address, setEthPublicAddress] = useState('')
-
-  const [loop_enabled, setLoopEnabled] = useState(false)
-  const [loop_interval, setLoopInterval] = useState('')
-
   const [root_spell, setRootSpell] = useState('')
 
   const agentDatVal = useRef(null)
-  const [agentDataState, setAgentDataState] = useState<any>({})
   const [spellList, setSpellList] = useState<any[]>([])
   const selectedSpellPublicVars = Object.values(
     spellList.find(spell => spell.name === root_spell)?.graph.nodes || {}
@@ -44,7 +36,7 @@ const AgentWindow = ({
 
   useEffect(() => {
     if (!loaded) {
-      ;(async () => {
+      (async () => {
         const res = await axios.get(`${config.apiUrl}/agents/` + id)
 
         if (res.data === null) {
@@ -54,34 +46,19 @@ const AgentWindow = ({
           return
         }
 
-        console.log('res data', res.data)
-
-        let agentData = res.data.data
         setEnabled(res.data.enabled === true)
-        if (agentData !== null && agentData !== undefined) {
-          agentDatVal.current = agentData
-          setOpenaiApiKey(agentData.openai_api_key)
-          setRootSpell(agentData.root_spell)
-          setEthPrivateKey(agentData.eth_private_key)
-          setEthPublicAddress(agentData.eth_public_address)
-
-          setLoopEnabled(agentData.loop_enabled === true)
-          setLoopInterval(agentData.loop_interval)
-        }
+        setAgentData(res.data?.data ?? {})
         setLoaded(true)
       })()
     }
   }, [loaded])
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )
       const json = await res.json()
-
-      console.log('res', json)
-      console.log('spellList', json)
       setSpellList(json.data)
     })()
   }, [])
@@ -124,15 +101,9 @@ const AgentWindow = ({
           enqueueSnackbar('updated agent', {
             variant: 'success',
           })
-          console.log('response on update', JSON.parse(res.config.data))
           let responseData = res && JSON.parse(res?.config?.data)
-
-          console.log('responseData', responseData)
-
           setEnabled(responseData.enabled)
-          setLoopEnabled(responseData.data.loop_enabled)
-          setLoopInterval(responseData.data.loop_interval)
-
+          setAgentData(responseData.data)
           updateCallback()
         }
       })
@@ -148,10 +119,7 @@ const AgentWindow = ({
     const _data = {
       enabled,
       data: {
-        ...agentDataState,
-        openai_api_key,
-        loop_enabled,
-        loop_interval,
+        ...agentData,
         root_spell,
       },
     }
@@ -207,26 +175,6 @@ const AgentWindow = ({
                 </select>
               </div>
             </Grid>
-            <Grid item xs={3}>
-              <div className="form-item">
-                <span className="form-item-label">Ethereum Private Key</span>
-                <KeyInput
-                  value={eth_private_key}
-                  setValue={setEthPrivateKey}
-                  secret={true}
-                />
-              </div>
-            </Grid>
-            <Grid item xs={3}>
-              <div className="form-item">
-                <span className="form-item-label">Ethereum Public Address</span>
-                <KeyInput
-                  value={eth_public_address}
-                  setValue={setEthPublicAddress}
-                  secret={false}
-                />
-              </div>
-            </Grid>
           </Grid>
 
           {selectedSpellPublicVars.length !== 0 && (
@@ -236,28 +184,13 @@ const AgentWindow = ({
             />
           )}
 
-          {loop_enabled && (
-            <>
-              <div className="form-item">
-                <span className="form-item-label">Loop Interval</span>
-                <input
-                  type="text"
-                  pattern="[0-9]*"
-                  defaultValue={loop_interval}
-                  onChange={e => {
-                    setLoopInterval(e.target.value)
-                  }}
-                />
-              </div>
-            </>
-          )}
           {pluginManager.getAgentComponents().map((value, index, array) => {
             return (
               <RenderComp
                 key={index}
                 element={value}
                 agentData={agentDatVal.current}
-                setAgentDataState={setAgentDataState}
+                setAgentData={setAgentData}
               />
             )
           })}
@@ -269,12 +202,7 @@ const AgentWindow = ({
             const data = {
               enabled,
               data: {
-                ...agentDataState,
-                openai_api_key,
-                eth_private_key,
-                eth_public_address,
-                loop_enabled,
-                loop_interval,
+                ...agentData,
                 root_spell,
               },
             }
