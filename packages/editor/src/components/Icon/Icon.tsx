@@ -73,7 +73,7 @@ const icons = {
   'state-write': stateWrite,
   stop,
   'stop-sign': stopSign,
-  'switch': switchIcon,
+  switch: switchIcon,
   temperature,
   text,
   time,
@@ -87,7 +87,7 @@ const icons = {
   trash,
   'danger-trash': dangerTrash,
   'node-lock': nodeLock,
-  'lock': lock,
+  lock: lock,
 }
 
 export const componentCategories = {
@@ -108,12 +108,24 @@ export const dataControlCategories = {
   'Max Tokens': 'moon',
 }
 
-const Icon = ({ name = 'warn', size = 16, style = {}, onClick = () => {} }) => {
+type IconProps = {
+  name?: string
+  size?: number | string
+  style?: React.CSSProperties
+  onClick?: Function
+}
+
+const Icon = ({
+  name = 'warn',
+  size,
+  style = {},
+  onClick = () => {},
+}: IconProps) => {
   return (
     <div
-      onClick={onClick}
+      onClick={e => onClick(e)}
       className={`${css['icon']}`}
-      style={{ height: size, width: size, ...style }}
+      style={{ height: size ?? 16, width: size, ...style }}
     >
       <img src={icons[name]} alt={name} />
     </div>

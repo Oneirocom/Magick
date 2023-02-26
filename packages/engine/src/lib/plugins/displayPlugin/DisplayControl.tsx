@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React from 'react'
 import { Control } from 'rete'
 const ReactTextInputControl = props => {
@@ -11,6 +9,10 @@ const ReactTextInputControl = props => {
 }
 
 export class DisplayControl extends Control {
+  render: string
+  component: React.ElementType
+  props: { display: string }
+  update?: () => void
   constructor({ key, defaultDisplay = '' }) {
     super(key)
     this.render = 'react'
@@ -30,6 +32,7 @@ export class DisplayControl extends Control {
 
     this.putData('display', !valIsString ? JSON.stringify(val) : val)
 
-    this.update()
+    // this is here because the rete library doesnt properly type the update function
+    if (this.update) this.update()
   }
 }
