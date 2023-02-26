@@ -64,7 +64,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
         ...spellRef.current,
         graph: editor.toJSON(),
       }
-      publish(events.$SUBSPELL_UPDATED(spellRef.current.name), spell)
+      publish(events.$SUBSPELL_UPDATED(spellRef.current.id), spell)
     }) as unknown as Function
   }, [editor])
 
@@ -96,6 +96,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
           },
         }
       )
+      console.log("Spell Runner for: ", tab.id)
     })()
   }, [client])
 

@@ -74,6 +74,7 @@ const EditorProvider = ({ children }) => {
 
   const buildEditor = async (container, _spell, tab, magick) => {
     // eslint-disable-next-line no-console
+    console.log("tab:: ", tab)
     const newEditor = await initEditor({
       container,
       pubSub,
@@ -182,7 +183,6 @@ const RawEditor = ({ tab, children }) => {
     console.log(loaded)
     console.log(tab)
     if (!tab || loaded) return
-
     getSpell({
       spellName: tab.name,
       Id: tab.id,
