@@ -54,7 +54,7 @@ export class Agent {
     })
     this.worldManager = new WorldManager()
 
-    (async () => {
+    ;(async () => {
       const spell = (await app.service('spells').find({
         query: { projectId: data.projectId}
       })).data[0]
@@ -69,7 +69,7 @@ export class Agent {
       const agentStartMethods = pluginManager.getAgentStartMethods();
       for (const method of Object.keys(agentStartMethods)) {
         console.log('method', method)
-        await agentStartMethods[method]({ ...data, agent: this, spellRunner, worldManager })
+        await agentStartMethods[method]({ ...data, agent: this, spellRunner, worldManager: this.worldManager })
       }
     })()
   }

@@ -3,6 +3,9 @@ import world3d from './world3d'
 export class WorldManager {
 
   rooms = {}
+  constructor() {
+    this.rooms = {}
+  }
 
   addUser(user, client) {
     if (this.rooms[client] !== undefined) {
