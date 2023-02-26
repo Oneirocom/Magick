@@ -10,9 +10,9 @@ export const buildMagickInterface = (overrides: Record<string, Function> = {}) =
 
   return {
     env,
-    runSpell: async ({spellName, inputs, projectId}) => {
+    runSpell: async ({id, inputs, projectId}) => {
       const { outputs } = await runSpell({
-        spellName,
+        id,
         inputs,
         projectId
       })
@@ -20,6 +20,12 @@ export const buildMagickInterface = (overrides: Record<string, Function> = {}) =
     },
     getSpell: async ({spellName, projectId}) => {
       const spell = await app.service('spells').find({ query: { projectId, name: spellName } })
+
+      return spell
+    },
+
+    getSpellbyId: async ({spellName, projectId, Id}) => {
+      const spell = await app.service('spells').find({ query: { projectId, name: spellName, id: Id } })
 
       return spell
     }

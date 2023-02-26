@@ -24,14 +24,15 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const { events, publish, subscribe } = usePubSub()
   const spellRef = useRef<Spell | null>(null)
   const [_runSpell] = spellApi.useRunSpellMutation()
-  const [_getSpell] = spellApi.useLazyGetSpellQuery()
-  const { data: _spell } = spellApi.useGetSpellQuery(
+  const [_getSpell] = spellApi.useLazyGetSpellByIdQuery()
+  const { data: _spell } = spellApi.useGetSpellByIdQuery(
     {
-      spellName: tab.spellName,
+      spellName: tab.name.split('--')[0],
+      Id: tab.id,
       projectId: config.projectId,
     },
     {
-      skip: !tab.spellName,
+      skip: !tab.name.split('--')[0],
     }
   )
 
@@ -39,10 +40,12 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     API_ROOT_URL: import.meta.env.API_ROOT_URL,
     APP_SEARCH_SERVER_URL: import.meta.env.APP_SEARCH_SERVER_URL,
   }
-
+  console.log("Inside Magick Interface")
+  console.log(tab)
   useEffect(() => {
     if (!_spell) return
     spellRef.current = _spell.data[0]
+    console.log(spellRef.current)
   }, [_spell])
 
   const {
@@ -64,9 +67,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   } = events
 
   const getCurrentSpell = () => {
+    console.log(spellRef.current)
     return spellRef.current
   }
-
+  console.log(getCurrentSpell())
   const onTrigger = (node, callback) => {
     let isDefault = node === 'default' ? 'default' : null
     return subscribe($TRIGGER(tab.id, isDefault ?? node.id), (event, data) => {
@@ -143,7 +147,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const getSpell = async spellName => {
-    const spell = await _getSpell({ spellName, projectId: config.projectId })
+    const spell = await _getSpell({ spellName, Id: tab.id, projectId: config.projectId })
 
     if (!spell.data) return null
 

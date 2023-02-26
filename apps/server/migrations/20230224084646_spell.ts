@@ -3,7 +3,7 @@ import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('spells', (table) => {
-    table.increments('id')
+    table.uuid('id').primary()
     table.string('name')
     table.string('projectId')
     table.string('hash')

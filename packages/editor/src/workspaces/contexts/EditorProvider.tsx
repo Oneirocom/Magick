@@ -74,6 +74,7 @@ const EditorProvider = ({ children }) => {
 
   const buildEditor = async (container, _spell, tab, magick) => {
     // eslint-disable-next-line no-console
+    console.log("tab:: ", tab)
     const newEditor = await initEditor({
       container,
       pubSub,
@@ -87,7 +88,7 @@ const EditorProvider = ({ children }) => {
 
     // set editor to the map
     setEditor(newEditor)
-
+    console.log(_spell)
     // copy spell in case it is read onl
     const spell = JSON.parse(JSON.stringify(_spell))
 
@@ -172,20 +173,22 @@ const RawEditor = ({ tab, children }) => {
   const config = useConfig()
   const spellApi = getSpellApi(config)
 
-  const [getSpell, { data: spell, isLoading }] = spellApi.useLazyGetSpellQuery()
+  const [getSpell, { data: spell, isLoading }] = spellApi.useLazyGetSpellByIdQuery()
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
   // This will be the main interface between magick and rete
   const reteInterface = useMagickInterface()
-
+  console.log(tab)
   useEffect(() => {
+    console.log(loaded)
+    console.log(tab)
     if (!tab || loaded) return
-
-    if (tab?.spellName)
-      getSpell({
-        spellName: tab.spellName,
-        projectId: config.projectId
-      })
+    getSpell({
+      spellName: tab.name,
+      Id: tab.id,
+      projectId: config.projectId,
+    })
+    console.log(spell)
   }, [tab])
 
   if (!tab || (tab.type === 'spell' && (isLoading || !spell)))

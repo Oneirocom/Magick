@@ -80,17 +80,21 @@ export class AgentManager {
       } catch {
         console.log("Client Does not exist")
       }
-      if (newAgents[i].data.discord_enabled){
-        try {
-          //Get the agent which was updated.
-          let temp_agent = this.getAgent(newAgents[i].id)
-          //Delete the Agent
-          await temp_agent.onDestroy()
-        } catch(e) {
-          console.log("Couldn't delete the Discord Client.!! Caught Error: ",e)
-        }
-        this.addAgent(newAgents[i])
-      } 
+      try {
+        if (newAgents[i].data.discord_enabled){
+          try {
+            //Get the agent which was updated.
+            let temp_agent = this.getAgent(newAgents[i].id)
+            //Delete the Agent
+            await temp_agent.onDestroy()
+          } catch(e) {
+            console.log("Couldn't delete the Discord Client.!! Caught Error: ",e)
+          }
+          this.addAgent(newAgents[i])
+        } 
+      } catch {
+        console.log("No Agents Present")
+      }
     }
     // If an entry exists in oldAgents but not in newAgents, it has been deleted
     for (const i in oldAgents) {
@@ -178,6 +182,7 @@ export class AgentManager {
     const agents = (await app.service('agents').find()).data
     for (const i in agents) {
       // rewrite as a feathers service call to empty
+      //@ts-ignore
       await app.service('agents').patch(agents[i].id, {
         spells: [],
       })

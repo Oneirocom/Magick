@@ -13,7 +13,7 @@ import { usePubSub } from '../../../../contexts/PubSubProvider'
 import Avatar from './Avatar'
 import { useAppSelector } from '../../../../state/hooks'
 import {
-  selectStateBySpellId,
+  selectStateBytabId,
   upsertLocalState,
 } from '../../../../state/localState'
 import Button from 'packages/editor/src/components/Button'
@@ -27,7 +27,7 @@ const AvatarWindow = ({ tab }) => {
   const dispatch = useDispatch()
 
   const localState = useAppSelector(state =>
-    selectStateBySpellId(state.localState, tab.spellName)
+    selectStateBytabId(state.localState, tab.id)
   )
 
   const { publish, subscribe, events } = usePubSub()
@@ -99,9 +99,7 @@ const AvatarWindow = ({ tab }) => {
 
   const onDataChange = dataText => {
     console.log('new data text', dataText)
-    dispatch(
-      upsertLocalState({ spellName: tab.spellName, playtestData: dataText })
-    )
+    dispatch(upsertLocalState({ id: tab.id, playtestData: dataText }))
   }
 
   const toggleData = () => {

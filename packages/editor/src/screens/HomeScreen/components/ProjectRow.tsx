@@ -29,6 +29,7 @@ const ProjectRow = ({
         css[selectedSpell?.name === label ? 'selected' : '']
       }`}
       onClick={e => {
+        console.log(selectedSpell)
         onClick(e)
       }}
       style={style}
