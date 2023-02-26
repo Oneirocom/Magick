@@ -76,13 +76,13 @@ const Playtest = ({ tab }) => {
 
   const { data: spellData } = spellApi.useGetSpellByIdQuery(
     { 
-      spellName: atob(tab.name.split('--')[0].slice(37)), 
+      spellName: tab.name.split('--')[0], 
       Id: tab.id, 
       projectId: config.projectId 
     },
     {
       refetchOnMountOrArgChange: true,
-      skip: !tab.spellName,
+      skip: !tab.name.split('--')[0],
     }
   )
   console.log(spellData)
@@ -220,9 +220,16 @@ const Playtest = ({ tab }) => {
     )?.data.name
     console.log("Spell Runner Created")
     if (!playtestInputName) return
-
+    console.log({
+      spellName: tab.name.split('--')[0],
+      id: tab.id,
+      projectId: config.projectId,
+      inputs: {
+        [playtestInputName as string]: toSend,
+      },
+    })
     client.service('spell-runner').create({
-      spellName: atob(tab.name.split('--')[0].slice(37)),
+      spellName: tab.name.split('--')[0],
       id: tab.id,
       projectId: config.projectId,
       inputs: {

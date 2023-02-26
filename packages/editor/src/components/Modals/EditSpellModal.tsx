@@ -30,7 +30,7 @@ const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
 
   const onSubmit = handleSubmit(async data => {
     let name = data.name
-    data.name = tab.id + "-" + btoa(data.name)
+    data.name = tab.id + "-" + encodeURIComponent(btoa(data.name))
     console.log('data ::: ', data)
     console.log(spellApi)
     //console.log('spell ::: ', spell)

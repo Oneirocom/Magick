@@ -25,7 +25,7 @@ const MenuBar = () => {
   const activeTabRef = useRef<Tab | null>(null)
 
   useEffect(() => {
-    if (!activeTab || !activeTab.spellName) return
+    if (!activeTab || !activeTab.name) return
     activeTabRef.current = activeTab
     console.log('changing current to ', activeTabRef.current)
   }, [activeTab])

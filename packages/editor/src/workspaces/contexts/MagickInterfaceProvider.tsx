@@ -27,12 +27,12 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const [_getSpell] = spellApi.useLazyGetSpellByIdQuery()
   const { data: _spell } = spellApi.useGetSpellByIdQuery(
     {
-      spellName: atob(tab.name.split('--')[0].slice(37)),
+      spellName: tab.name.split('--')[0],
       Id: tab.id,
       projectId: config.projectId,
     },
     {
-      skip: !tab.spellName,
+      skip: !tab.name.split('--')[0],
     }
   )
 
@@ -40,10 +40,12 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     API_ROOT_URL: import.meta.env.API_ROOT_URL,
     APP_SEARCH_SERVER_URL: import.meta.env.APP_SEARCH_SERVER_URL,
   }
-
+  console.log("Inside Magick Interface")
+  
   useEffect(() => {
     if (!_spell) return
     spellRef.current = _spell.data[0]
+    console.log(spellRef.current)
   }, [_spell])
 
   const {
@@ -65,9 +67,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   } = events
 
   const getCurrentSpell = () => {
+    console.log(spellRef.current)
     return spellRef.current
   }
-
+  console.log(getCurrentSpell())
   const onTrigger = (node, callback) => {
     let isDefault = node === 'default' ? 'default' : null
     return subscribe($TRIGGER(tab.id, isDefault ?? node.id), (event, data) => {

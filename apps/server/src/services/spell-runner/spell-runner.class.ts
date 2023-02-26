@@ -86,7 +86,7 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
   }
 
   async update(
-    spellName: string,
+    id: string,
     data: { diff: Record<string, unknown> },
     params?: SpellRunnerParams
   ): Promise<Data> {
@@ -99,12 +99,12 @@ export class SpellRunnerService<ServiceParams extends Params = SpellRunnerParams
 
     const { diff } = data
 
-    console.log('updated spell, diff is', spellName, diff)
+    console.log('updated spell, diff is', id, diff)
 
     const spellManager = app.userSpellManagers.get(user.id)
     if (!spellManager) throw new Error('No spell manager found for user!')
 
-    const spellRunner = spellManager.getSpellRunner(spellName)
+    const spellRunner = spellManager.getSpellRunner(id)
     if (!spellRunner) throw new Error('No spell runner found!')
 
     const spell = spellRunner.currentSpell

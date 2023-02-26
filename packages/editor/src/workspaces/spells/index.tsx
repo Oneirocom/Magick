@@ -74,10 +74,10 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   }, [spellData])
 
   useEffect(() => {
-    if (!tab || !tab.spellName) return
+    if (!tab || !tab.name) return
     console.log("Inside Load Spell !!")
     loadSpell({
-      spellName: atob(tab.name.split('--')[0].slice(37)),
+      spellName: tab.name.split('--')[0],
       projectId: config.projectId,
       Id: tab.id,
     })
@@ -86,10 +86,10 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   useEffect(() => {
     if (!client) return
     ;(async () => {
-      if (!client || !tab || !tab.spellName) return
+      if (!client || !tab || !tab.name) return
       console.log('projectId from client ', config.projectId)
       // make sure to pass the projectId to the service call
-      await client.service('spell-runner').get(tab.spellName,
+      await client.service('spell-runner').get(tab.id,
         {
           query: {
             projectId: config.projectId,

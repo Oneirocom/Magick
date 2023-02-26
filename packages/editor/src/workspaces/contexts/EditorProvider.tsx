@@ -179,14 +179,16 @@ const RawEditor = ({ tab, children }) => {
   const reteInterface = useMagickInterface()
   console.log(tab)
   useEffect(() => {
+    console.log(loaded)
+    console.log(tab)
     if (!tab || loaded) return
 
-    if (tab?.spellName)
-      getSpell({
-        spellName: atob(tab.name.split('--')[0].slice(37)),
-        Id: tab.id,
-        projectId: config.projectId,
-      })
+    getSpell({
+      spellName: tab.name,
+      Id: tab.id,
+      projectId: config.projectId,
+    })
+    console.log(spell)
   }, [tab])
 
   if (!tab || (tab.type === 'spell' && (isLoading || !spell)))

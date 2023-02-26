@@ -19,11 +19,11 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const [saveSpell, { isLoading }] = spellApi.useSaveSpellMutation()
   const { data: spell } = spellApi.useGetSpellQuery(
     {
-      spellName: atob(tab.name.split('--')[0].slice(37)),
+      spellName: tab.name,
       projectId: config.projectId,
     },
     {
-      skip: !tab.spellName,
+      skip: !tab.name,
     }
   )
   const { enqueueSnackbar } = useSnackbar()
@@ -38,10 +38,10 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const onSubmit = handleSubmit(async data => {
     console.log("Inside Spell SUbmit")
     const saveResponse: any = await saveSpell({
-      spell: {...spell, name: data.name},
+      spell: {...spell.data[0], name: data.name},
       projectId: config.projectId
     })
-
+    console.log(saveResponse)
     if (saveResponse.error) {
       // show snackbar
       enqueueSnackbar('Error saving spell', {
@@ -55,7 +55,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
 
     // close current tab and navigate to the new spell
     dispatch(closeTab(tab.id))
-    navigate(`/magick/${data.name}`)
+    navigate(`/magick/${tab.id}-${encodeURIComponent(atob(data.name))}`)
 
     closeModal()
   })
@@ -82,7 +82,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
             <input
               type="text"
               className={css['input']}
-              defaultValue={tab.spellName}
+              defaultValue={tab.name}
               {...register('name')}
             />
           </div>
