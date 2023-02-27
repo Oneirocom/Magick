@@ -210,7 +210,7 @@ function confirmLargeRecords(
     `These records will not be processed. Continue anyway?`,
   ].join('\n')
 
-  return window.confirm(message)
+  return typeof window !== 'undefined' && window.confirm(message)
 }
 
 function toJSONL(records: Array<{ [key: string]: string }>): string {

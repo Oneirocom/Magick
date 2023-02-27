@@ -129,7 +129,7 @@ function DeleteFineTune({ id }: { id: string }) {
   async function onClick() {
     try {
       setIsDeleting(true)
-      if (window.confirm('Are you sure you want to delete this model?')) {
+      if (typeof window !== 'undefined' && window.confirm('Are you sure you want to delete this model?')) {
         await fetch(`${OPENAI_ENDPOINT}/models/${id}`, {
           method: 'DELETE',
           headers,

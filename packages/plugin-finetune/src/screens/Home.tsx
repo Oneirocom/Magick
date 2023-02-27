@@ -8,6 +8,7 @@ export default function HomePage() {
   const navigate = useNavigate()
   useEffect(() => {
     if (isSignedIn) {
+      console.log('isSignedIn', isSignedIn)
       navigate('/fineTuneManager/completions')
     }
   }, [isSignedIn])

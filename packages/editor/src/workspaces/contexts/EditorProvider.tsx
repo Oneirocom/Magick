@@ -91,13 +91,9 @@ const EditorProvider = ({ children }) => {
 
     // set editor to the map
     setEditor(newEditor)
-    console.log(_spell)
     // copy spell in case it is read onl
     const spell = JSON.parse(JSON.stringify(_spell))
-
-    console.log('Loading graph in build editor', spell)
     const graph = spell.graph
-    console.log('graph', graph)
     newEditor?.loadGraph(graph)
   }
 
@@ -181,10 +177,7 @@ const RawEditor = ({ tab, children }) => {
   const { buildEditor } = useEditor()
   // This will be the main interface between magick and rete
   const reteInterface = useMagickInterface()
-  console.log(tab)
   useEffect(() => {
-    console.log(loaded)
-    console.log(tab)
     if (!tab || loaded) return
 
     getSpell({

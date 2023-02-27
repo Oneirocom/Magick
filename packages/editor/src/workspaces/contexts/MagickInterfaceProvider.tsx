@@ -40,12 +40,9 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     API_ROOT_URL: import.meta.env.API_ROOT_URL,
     APP_SEARCH_SERVER_URL: import.meta.env.APP_SEARCH_SERVER_URL,
   }
-  console.log("Inside Magick Interface")
-  console.log(tab)
   useEffect(() => {
     if (!_spell) return
     spellRef.current = _spell.data[0]
-    console.log(spellRef.current)
   }, [_spell])
 
   const {
@@ -67,7 +64,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   } = events
 
   const getCurrentSpell = () => {
-    console.log(spellRef.current)
     return spellRef.current
   }
   console.log(getCurrentSpell())

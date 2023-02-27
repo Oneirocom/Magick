@@ -20,17 +20,38 @@ import SettingsWindow from './workspaces/settings/SettingsWindow'
 import RequestWindow from './workspaces/spells/windows/RequestWindow'
 import { pluginManager } from '@magickml/engine'
 
+const RenderComp = props => {
+  return <props.element props={props} />
+}
+
 const singleUserMode = import.meta.env.VITE_APP_SINGLE_USER_MODE || true
 function App() {
-  const pluginRoutes = pluginManager.getClientRoutes()
   return (
     <Routes>
       <Route element={<MainLayout />}>
+      {pluginManager.getGroupedClientRoutes().map(pluginRouteGroup => {
+          const ClientPageLayout = pluginRouteGroup.layout ?? MagickPageLayout
+          return (
+            <Route element={<ClientPageLayout />}>
+              {pluginRouteGroup.routes.map(route => {
+                return (
+                  <Route
+                    key={route.path}
+                    path={route.path}
+                    element={<RenderComp element={route.component} />}
+                  />
+                )
+              })}
+            </Route>
+          )
+        })}
         <Route path="/events" element={<EventWindow />} />
         <Route path="/requests" element={<RequestWindow />} />
         <Route path="/agents" element={<AgentManagerWindow />} />
-        {singleUserMode && <Route path="/settings" element={<SettingsWindow />} />}
-        
+        {singleUserMode && (
+          <Route path="/settings" element={<SettingsWindow />} />
+        )}
+
         <Route element={<MagickPageLayout />}>
           {/* todo search corpus component */}
           <Route path="/home/*" element={<HomeScreen />} />
@@ -44,15 +65,6 @@ function App() {
           />
           <Route path="/*" element={<Magick />} />
         </Route>
-
-        {pluginRoutes.map((route) => (
-          <Route
-            key={route.path}
-            path={route.path}
-            element={route.element}
-          />
-        ))}
-
       </Route>
     </Routes>
   )
