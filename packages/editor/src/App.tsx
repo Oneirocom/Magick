@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 
 import './App.css'
 
@@ -29,10 +29,14 @@ function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-      {pluginManager.getGroupedClientRoutes().map(pluginRouteGroup => {
+        {pluginManager.getGroupedClientRoutes().map(pluginRouteGroup => {
           const ClientPageLayout = pluginRouteGroup.layout ?? MagickPageLayout
           return (
-            <Route key={pluginRouteGroup.routes[0].path} element={<ClientPageLayout />}>
+            
+            <Route
+              key={pluginRouteGroup.routes[0].path}
+              element={<Suspense fallback={<div>Loading...</div>}><ClientPageLayout /> </Suspense>}
+            >
               {pluginRouteGroup.routes.map(route => {
                 return (
                   <Route
@@ -43,6 +47,7 @@ function App() {
                 )
               })}
             </Route>
+           
           )
         })}
         <Route path="/events" element={<EventWindow />} />
