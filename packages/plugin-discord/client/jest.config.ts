@@ -12,5 +12,5 @@ export default {
     '^.+\\.[tj]sx?$': 'ts-jest'
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/packages/plugin-discord'
+  coverageDirectory: '../../coverage/packages/plugin-discord/client'
 };

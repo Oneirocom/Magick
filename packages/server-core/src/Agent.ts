@@ -61,11 +61,6 @@ export class Agent {
 
       const spellRunner = await this.spellManager.load(spell)
 
-      // TODO: reenable loop
-      // if (data.loop_enabled) {
-      //   this.startLoop({ ...data, spellRunner })
-      // }
-
       const agentStartMethods = pluginManager.getAgentStartMethods();
       for (const method of Object.keys(agentStartMethods)) {
         console.log('method', method)

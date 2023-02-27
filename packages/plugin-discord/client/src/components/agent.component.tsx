@@ -8,7 +8,7 @@ type PluginProps = {
   props
 }
 import { API_ROOT_URL } from '@magickml/engine'
-import SwitchComponent from './Switch' // TODO: Remove me
+import { Switch } from '@magickml/client-core'
 
 export const DiscordAgentWindow: FC<any> = props => {
   props = props.props
@@ -132,7 +132,7 @@ export const DiscordAgentWindow: FC<any> = props => {
         padding: '1em',
       }}
     >
-      <SwitchComponent
+      <Switch
         label={null}
         checked={discord_enabled}
         onChange={e => {
@@ -192,7 +192,7 @@ export const DiscordAgentWindow: FC<any> = props => {
             </Grid>
           </Grid>
 
-          <SwitchComponent
+          <Switch
             label={null}
             checked={use_voice}
             onChange={e => {
