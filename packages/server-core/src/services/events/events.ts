@@ -2,20 +2,15 @@
 //@ts-nocheck
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
-import {
-  DATABASE_URL
-} from '@magickml/engine'
 import pgvector from 'pgvector/pg'
-import postgres from 'postgres'
+import type { Knex } from 'knex'
 import { hooks as schemaHooks } from '@feathersjs/schema' 
-const sql = postgres(DATABASE_URL)
-async function getUsersOver(embedding) {
-  let users
+async function getUsersOver(db: Knex, embedding) {
+  var users
   try {
-    users = await sql`
-    select * from events order by embedding <-> ${embedding} limit 1;`
-  } catch (error){
-    console.error(error)
+    users = await db.raw(`select * from events order by embedding <-> ${embedding} limit 1;`)
+  } catch (e){
+    console.log(e)
   }
   return users
 }
@@ -67,8 +62,8 @@ export const event = (app: Application) => {
             const ary_buf = new ArrayBuffer( blob.length );
             const dv = new DataView( ary_buf );
             for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
-            const f32_ary = new Float32Array( ary_buf );
-            const temp = await getUsersOver("["+f32_ary+"]")
+            let f32_ary = new Float32Array( ary_buf );
+            let temp = await getUsersOver(app.get('dbClient'), "["+f32_ary+"]")
             return {
               "result" : temp
             }

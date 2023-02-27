@@ -19,7 +19,7 @@ export class RequestService<ServiceParams extends Params = RequestParams> extend
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),
-    Model: app.get('postgresqlClient'),
+    Model: app.get('dbClient'),
     name: 'request'
   }
 }
