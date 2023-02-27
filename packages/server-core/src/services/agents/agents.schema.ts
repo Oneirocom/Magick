@@ -67,3 +67,4 @@ export const agentQuerySchema = Type.Intersect(
 export type AgentQuery = Static<typeof agentQuerySchema>
 export const agentQueryValidator = getValidator(agentQuerySchema, queryValidator)
 export const agentQueryResolver = resolve<AgentQuery, HookContext>({})
+export const agentJsonFields = ['spells', 'data']
