@@ -10,10 +10,12 @@ import {
   spellDataResolver,
   spellPatchResolver,
   spellQueryResolver,
+  spellJsonFields
 } from './spells.schema'
 
 import type { Application } from '../../declarations'
 import { SpellService, getOptions } from './spells.class'
+import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
 
 export * from './spells.class'
 export * from './spells.schema'
@@ -34,7 +36,8 @@ export const spell = (app: Application) => {
       all: [
         schemaHooks.resolveExternal(spellExternalResolver),
         schemaHooks.resolveResult(spellResolver),
-      ],
+        schemaHooks.resolveResult(jsonResolver(spellJsonFields)),
+      ]
     },
     before: {
       all: [
@@ -43,40 +46,13 @@ export const spell = (app: Application) => {
       ],
       find: [],
       get: [],
-      create: [
-        schemaHooks.validateData(spellDataValidator),
-        schemaHooks.resolveData(spellDataResolver),
-        async (context: any) => {
-          const { data, service } = context
-          context.data = {
-            [service.id]: randomUUID(),
-            ...data,
-          }
-          await context.service.find({
-            query: {
-                name: data.name
-            }
-          }).then(async (param) => {
-              if (param.data.length >= 1) {
-                console.log(data.name+'(%)')
-                await context.service.find({
-                  query: {
-                    name: {
-                      $ilike: data.name+' (%)'
-                    }
-                  }
-                }).then((val) => {                 
-                  context.data.name = data.name + " (" + (1+val.data.length) +")"
-                })
-          }
-
-          });
-        },
-      ],
+      create: [schemaHooks.validateData(spellDataValidator), schemaHooks.resolveData(spellDataResolver)],
       patch: [
         schemaHooks.validateData(spellPatchValidator),
-        schemaHooks.resolveData(spellPatchResolver),
-      ],
+        schemaHooks.resolveData(spellPatchResolver), 
+        handleJSONFieldsUpdate(spellJsonFields)
+      ], 
+      update: [handleJSONFieldsUpdate(spellJsonFields)],
       remove: [],
     },
     after: {

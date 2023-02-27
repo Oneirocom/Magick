@@ -141,6 +141,7 @@
     "socket.io": "^4.5.4",
     "socket.io-client": "^4.5.4",
     "solc": "^0.8.18",
+    "sqlite3": "^5.1.4",
     "stream-browserify": "^3.0.0",
     "styled-components": "^5.3.6",
     "swagger-ui-dist": "^4.15.5",

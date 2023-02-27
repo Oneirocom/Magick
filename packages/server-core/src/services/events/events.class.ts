@@ -20,7 +20,7 @@ export class EventService<ServiceParams extends Params = EventParams> extends Kn
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),
-    Model: app.get('postgresqlClient'),
+    Model: app.get('dbClient'),
     name: 'events'
   }
 }
