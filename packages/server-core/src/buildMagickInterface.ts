@@ -24,8 +24,8 @@ export const buildMagickInterface = (overrides: Record<string, Function> = {}) =
       return spell
     },
 
-    getSpellbyId: async ({spellName, projectId, Id}) => {
-      const spell = await app.service('spells').find({ query: { projectId, name: spellName, id: Id } })
+    getSpellbyId: async ({spellName, projectId, id}) => {
+      const spell = await app.service('spells').find({ query: { projectId, name: spellName, id } })
 
       return spell
     }

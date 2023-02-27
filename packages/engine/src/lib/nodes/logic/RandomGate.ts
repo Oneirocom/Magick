@@ -38,7 +38,8 @@ export class RandomGate extends MagickComponent<void> {
     })
 
     node.inspector.add(outputToggles)
-    return node.addInput(dataInput)
+    return node
+      .addInput(dataInput)
   }
 
   // the worker contains the main business logic of the node.  It will pass those results

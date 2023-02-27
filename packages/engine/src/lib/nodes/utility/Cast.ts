@@ -74,7 +74,9 @@ export class Cast extends MagickComponent<void> {
     }
 
     node.inspector.add(socketDropdown)
-    node.addInput(input).addOutput(output)
+    node
+      .addInput(input)
+      .addOutput(output)
 
     if (node.data.socketType) {
       this.addSocket(node, node.data.socketType as sockets.SocketNameType)

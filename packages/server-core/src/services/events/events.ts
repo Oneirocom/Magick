@@ -14,10 +14,9 @@ async function getUsersOver(embedding) {
   try {
     users = await sql`
     select * from events order by embedding <-> ${embedding} limit 1;`
-  } catch (e){
-    console.log(e)
+  } catch (error){
+    console.error(error)
   }
-  console.log(users)
   return users
 }
   
@@ -64,14 +63,11 @@ export const event = (app: Application) => {
       find:[
         async (context: any) => {
           if (context.params.query.embedding){
-            console.log("FIND")
-            console.log('context.params.query.embedding', context.params.query.embedding)
             let blob = atob( context.params.query.embedding );
             let ary_buf = new ArrayBuffer( blob.length );
             let dv = new DataView( ary_buf );
             for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
             let f32_ary = new Float32Array( ary_buf );
-            console.log( f32_ary );
             let temp = await getUsersOver("["+f32_ary+"]")
             return {
               "result" : temp

@@ -40,27 +40,11 @@ export const Select = ({
       {data.label}
     </span>
   )
-
-  // const focusSelect = () => {
-  //   if (!selectRef.current) return
-  //   // selectRef.current.focus()
-  // }
-
+  
   const blurSelect = () => {
     if (!selectRef.current) return
     selectRef.current.blur()
   }
-
-  // useHotkeys(
-  //   focusKey,
-  //   event => {
-  //     console.log('event', event)
-  //     event.preventDefault()
-  //     focusSelect()
-  //   },
-  //   { enableOnTags: 'INPUT' as any },
-  //   [focusSelect]
-  // )
 
   useHotkeys(
     'enter, esc',

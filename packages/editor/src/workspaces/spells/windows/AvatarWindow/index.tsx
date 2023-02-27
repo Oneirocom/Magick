@@ -34,11 +34,7 @@ const AvatarWindow = ({ tab }) => {
   const { $PLAYTEST_INPUT, $SEND_TO_AVATAR } = events
 
   const handleAvatarData = (event, data) => {
-    // break out if this isnt a url
-    console.log({ data })
-    console.log({ file })
     if (data === file) return
-    console.log('Setting file', data)
     setFile(data)
   }
 
@@ -98,7 +94,7 @@ const AvatarWindow = ({ tab }) => {
   }
 
   const onDataChange = dataText => {
-    console.log('new data text', dataText)
+    
     dispatch(upsertLocalState({ id: tab.id, playtestData: dataText }))
   }
 
