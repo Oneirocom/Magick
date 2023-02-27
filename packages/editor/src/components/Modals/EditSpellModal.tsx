@@ -28,7 +28,7 @@ const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
   } = useForm()
 
   const onSubmit = handleSubmit(async data => {
-    let name = data.name
+    const name = data.name
     data.name = tab.id + "-" + encodeURIComponent(btoa(data.name))
 
     const response: any = await patchSpell({

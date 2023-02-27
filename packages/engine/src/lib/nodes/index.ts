@@ -60,7 +60,7 @@ import { pluginManager } from '../plugin'
 import { EventsToConversation } from './events/EventsToConversation'
 import { CreateEmbedding } from './ml/CreateEmbedding'
 
-export let components = {
+export const components = {
   alert: () => new Alert(),
   booleanGate: () => new BooleanGate(),
   randomGate: () => new RandomGate(),

@@ -46,7 +46,7 @@ const routes: Route[] = [...spells, ...apis, ...serverRoutes]
 async function init() {
   // load plugins
   await (async () => {
-    let plugins = (await import('./plugins')).default
+    const plugins = (await import('./plugins')).default
     console.log('loaded plugins on server', plugins)
   })()
   

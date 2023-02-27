@@ -1,5 +1,4 @@
 import MagickIDE from "./main";
-export type { MagickIDEProps } from "./main";
 
 import 'flexlayout-react/style/dark.css'
 import './design-globals/design-globals.css'
@@ -15,6 +14,7 @@ import MainLayout from './components/MainLayout/MainLayout'
 import EventWindow from './workspaces/spells/windows/EventWindow'
 import RequestWindow from './workspaces/spells/windows/RequestWindow'
 import AgentManagerWindow from './workspaces/agents/AgentManagerWindow'
+export type { MagickIDEProps } from "./main";
 
 export {
     MagickPageLayout,

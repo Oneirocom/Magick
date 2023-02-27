@@ -279,8 +279,8 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
     const functionText = window.prompt('What should this node do?')
     if (functionText === '' || !functionText) return
 
-    let _inputs = []
-    let _outputs = []
+    const _inputs = []
+    const _outputs = []
     
 
     
@@ -321,7 +321,7 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
 
     const d = language === 'python' ? '# ' : '// '
 
-    let header =
+    const header =
       language === 'plaintext'
         ? `Task: ${functionText}\n`
         : `${d}Task: ${functionText}

@@ -52,7 +52,7 @@ const Tab = ({ tab, activeTab }) => {
   }
 
   const iconStyle = {
-    position: 'relative' as 'relative',
+    position: 'relative' as const,
     right: 8,
     top: 1,
     color: 'var(--yellow)',

@@ -39,7 +39,7 @@ export class Upload extends React.Component<UploadProps, UploadState> {
     this.setState({
       file: URL.createObjectURL(event.target.files[0]),
     })
-    let file = event.target.files[0]
+    const file = event.target.files[0]
     fileToDataUri(file).then(dataUri => {
       axios({
         method: 'post',

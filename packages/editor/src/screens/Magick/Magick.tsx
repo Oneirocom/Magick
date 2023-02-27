@@ -53,8 +53,8 @@ const Magick = ({ empty = false }) => {
     // Return if navigating to the spell that is already active
     if (activeTab && activeTab.URI === URI) return
     // Close spell tab if it is exists
-    let spellNameTab = tabs.filter(tab => tab.URI === URI)
-    let isSpellNameTabPresent = spellNameTab.length
+    const spellNameTab = tabs.filter(tab => tab.URI === URI)
+    const isSpellNameTabPresent = spellNameTab.length
     if (isSpellNameTabPresent) dispatch(closeTab(spellNameTab[0].id))
 
     dispatch(

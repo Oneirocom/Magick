@@ -19,21 +19,21 @@ export default async function runPython (code, entry, data) {
   pyodide.globals.set("data" , data);
   
   
-  let codeResult = await pyodide.runPython(code);
+  const codeResult = await pyodide.runPython(code);
   console.log('CODE RESULT', codeResult);
-  let toJsResult = codeResult.toJs();
-  let codeResultJS = toJsResult[0] instanceof Map ? convertMapToObject(toJsResult[0]) : toJsResult[0];
-  let dataResult = toJsResult[1] instanceof Map ? convertMapToObject(toJsResult[1]) : toJsResult[1];
+  const toJsResult = codeResult.toJs();
+  const codeResultJS = toJsResult[0] instanceof Map ? convertMapToObject(toJsResult[0]) : toJsResult[0];
+  const dataResult = toJsResult[1] instanceof Map ? convertMapToObject(toJsResult[1]) : toJsResult[1];
 
   const result = {...codeResultJS, data: dataResult}
 
   return result;
-};
+}
 
 
 function convertMapToObject(inputMap) {
-  let outputObject = {};
-  for (let [key, value] of inputMap) {
+  const outputObject = {};
+  for (const [key, value] of inputMap) {
       if (value instanceof Map) {
           outputObject[key] = convertMapToObject(value);
       } else {

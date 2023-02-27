@@ -6,7 +6,7 @@ import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import type { Application } from '../../declarations'
 import type { Event, EventData, EventPatch, EventQuery } from './events.schema'
 
-export interface EventParams extends KnexAdapterParams<EventQuery> {}
+export type EventParams = KnexAdapterParams<EventQuery>
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class EventService<ServiceParams extends Params = EventParams> extends KnexService<

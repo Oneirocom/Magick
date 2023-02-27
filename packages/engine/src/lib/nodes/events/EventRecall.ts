@@ -87,7 +87,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
-      let embeddings = params['embedding']
+      const embeddings = params['embedding']
       
       url.searchParams.append('embedding', params['embedding'])
       const response = await fetch(url.toString())
@@ -99,7 +99,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       const urlString = `${API_ROOT_URL}/events`
       
       const url = new URL(urlString)
-      for (let p in params) {
+      for (const p in params) {
         // append params to url, make sure to preserve arrays
         if (Array.isArray(params[p])) {
           params[p].forEach(v => url.searchParams.append(p, v))
@@ -139,13 +139,13 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       projectId,
       maxCount,
     }
-    var events
+    let events
     if (embedding) data['embedding'] = embedding
     if (embedding) {
       if (embedding.length == 1536) {
         const enc_embed = new Float32Array(embedding)
-        let uint = new Uint8Array(enc_embed.buffer)
-        let str = btoa(
+        const uint = new Uint8Array(enc_embed.buffer)
+        const str = btoa(
           String.fromCharCode.apply(
             null,
             Array.from<number>(new Uint8Array(uint))

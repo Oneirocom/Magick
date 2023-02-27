@@ -5,7 +5,7 @@ import { AgentManager } from '@magickml/server-core'
 async function init() {
   // load plugins
   await (async () => {
-    let plugins = (await import('./plugins')).default
+    const plugins = (await import('./plugins')).default
     console.log('loaded plugins on server', Object.values(plugins).map((p: any) => p.name).join(', '));
   })()
   const agentManager = new AgentManager()

@@ -32,7 +32,7 @@ export class AgentManager {
     for (const i in this.newAgents) {
       
       try {
-        let temp_agent = this.getAgent(this.newAgents[i].id)
+        const temp_agent = this.getAgent(this.newAgents[i].id)
         
         await temp_agent.onDestroy()
       } catch {
@@ -195,7 +195,7 @@ export class AgentManager {
   getAgent(id: any) {
     let res = null
 
-    for (let x in this.agents) {
+    for (const x in this.agents) {
       if (x == id) {
         res = this.agents[x]
       }

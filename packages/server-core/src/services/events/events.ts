@@ -10,7 +10,7 @@ import postgres from 'postgres'
 import { hooks as schemaHooks } from '@feathersjs/schema' 
 const sql = postgres(DATABASE_URL)
 async function getUsersOver(embedding) {
-  var users
+  let users
   try {
     users = await sql`
     select * from events order by embedding <-> ${embedding} limit 1;`
@@ -63,12 +63,12 @@ export const event = (app: Application) => {
       find:[
         async (context: any) => {
           if (context.params.query.embedding){
-            let blob = atob( context.params.query.embedding );
-            let ary_buf = new ArrayBuffer( blob.length );
-            let dv = new DataView( ary_buf );
+            const blob = atob( context.params.query.embedding );
+            const ary_buf = new ArrayBuffer( blob.length );
+            const dv = new DataView( ary_buf );
             for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
-            let f32_ary = new Float32Array( ary_buf );
-            let temp = await getUsersOver("["+f32_ary+"]")
+            const f32_ary = new Float32Array( ary_buf );
+            const temp = await getUsersOver("["+f32_ary+"]")
             return {
               "result" : temp
             }
