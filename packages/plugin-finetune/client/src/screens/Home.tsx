@@ -12,8 +12,7 @@ export default function HomePage() {
     }
   }, [isSignedIn])
   return (
-    <>
-      <div className="mx-auto max-w-6xl">
+    <div className="mx-auto max-w-6xl">
         <Header />
         <div className="flex flex-col lg:flex-row gap-x-20 gap-y-8 my-10">
           <div className="lg:my-20 lg:w-1/3 shrink-0">
@@ -21,7 +20,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-    </>
   )
 }
 

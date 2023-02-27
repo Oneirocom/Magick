@@ -38,7 +38,7 @@ export default function ShowRequestExample({
         <pre>{code}</pre>
       </div>
       <p>
-        <a href={reference} target="_blank">
+        <a href={reference} target="_blank" rel="noreferrer">
           OpenAI Reference
         </a>
       </p>
