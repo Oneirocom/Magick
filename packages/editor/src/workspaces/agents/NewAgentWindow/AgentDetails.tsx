@@ -17,7 +17,6 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
   const [root_spell, setRootSpell] = useState('default')
   const [spellList, setSpellList] = useState<any[]>([])
   const [agentData, setAgentData] = useState<any>(_agentData)
-  const [agentDataState, setAgentDataState] = useState<any>({})
 
   const config = useConfig()
 
@@ -136,7 +135,6 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
         >
           Update
         </Button>
-        <Button onClick={() => _delete()}>Delete</Button>
         <Button onClick={() => exportEntity()}>Export</Button>
       </div>
         <Switch
@@ -191,7 +189,7 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
                 key={index}
                 element={value}
                 agentData={agentData}
-                setAgentDataState={setAgentDataState}
+                setAgentData={setAgentData}
               />
             )
           })}
