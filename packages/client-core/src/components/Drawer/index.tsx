@@ -116,17 +116,18 @@ const PluginDrawerItems = ({onClick, open}) => {
           divider = false
         }
         return (
-          <>
+          <div
+          key={item.path}
+          >
           {divider && <Divider />}
           <DrawerItem
-            key={index}
             active={location.pathname.includes(item.path)}
             Icon={item.icon}
             open={open}
             onClick={onClick(item.path)}
             text={item.text}
           />
-          </>
+          </div>
         )
       })}
     </>

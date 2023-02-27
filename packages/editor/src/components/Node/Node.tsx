@@ -9,6 +9,15 @@ import css from './Node.module.css'
 export class MyNode extends Node {
   declare props: any
   declare state: any
+  constructor(props) {
+    super(props)
+    this.state = {
+      outputs: [],
+      controls: [],
+      inputs: [],
+      selected: false,
+    }
+  }
   render() {
     const { node, bindSocket, bindControl } = this.props
     const { outputs, controls, inputs, selected } = this.state
