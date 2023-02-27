@@ -3,6 +3,8 @@ import { useSnackbar } from 'notistack'
 import React, { FC, useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
 import { KeyInput } from './utils'
+import { Switch } from '@magickml/client-core'
+
 type PluginProps = {
   agentData: any
   props
@@ -11,6 +13,7 @@ import { API_ROOT_URL } from '@magickml/engine'
 
 export const RestAgentWindow: FC<any> = props => {
   props = props.props
+  const { agentData, setAgentData } = props
   const { enqueueSnackbar } = useSnackbar()
   const [discord_enabled, setRestEnabled] = useState(undefined)
   const [discord_api_key, setRestApiKey] = useState('')
@@ -42,7 +45,7 @@ export const RestAgentWindow: FC<any> = props => {
       setVoiceLanguageCode(props.agentData.voice_language_code)
       setVoiceDefaultPhrases(props.agentData.voice_default_phrases)
       setTikTalkNetUrl(props.agentData.tiktalknet_url)
-      props.setAgentDataState({
+      setAgentData({
         discord_enabled: discord_enabled,
         discord_api_key: discord_api_key,
         discord_starting_words: discord_starting_words,
@@ -59,7 +62,7 @@ export const RestAgentWindow: FC<any> = props => {
   }, [])
   useEffect(() => {
     //console.log(discord_enabled, discord_api_key, discord_starting_words, discord_bot_name, discord_bot_name_regex, use_voice, voice_provider, voice_character, voice_default_phrases, voice_language_code, tiktalknet_url)
-    props.setAgentDataState({
+    setAgentData({
       discord_enabled: discord_enabled,
       discord_api_key: discord_api_key,
       discord_starting_words: discord_starting_words,
@@ -129,23 +132,21 @@ export const RestAgentWindow: FC<any> = props => {
       style={{
         backgroundColor: '#222',
         padding: '1em',
+        position: 'relative',
       }}
     >
       <h1>REST API</h1>
+      <div style={{ position: 'absolute', right: '1em', top: '0' }}>
+        <Switch
+          checked={agentData.rest_enabled}
+          onChange={e => {
+            setAgentData({ agentData, rest_enabled: e.target.checked })
+          }}
+          label={''}
+        />
+      </div>
       <div className="form-item">
         <Grid container style={{ padding: '1em' }}>
-          <Grid item xs={3}>
-            <span className="form-item-label">Enabled</span>
-            <input
-              key={Math.random()}
-              type="checkbox"
-              value={discord_enabled}
-              defaultChecked={discord_enabled}
-              onChange={e => {
-                setRestEnabled(e.target.checked)
-              }}
-            />
-          </Grid>
           {discord_enabled && (
             <Grid item xs={6}>
               <div className="form-item">

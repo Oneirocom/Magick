@@ -7,7 +7,7 @@ type PluginProps = {
   }
 }
 import { Grid } from '@mui/material'
-
+import { Switch } from '@magickml/client-core'
 export const AgentLoopWindow: FC<PluginProps> = props => {
   const { agentData, setAgentData } = props.props
   return (
@@ -15,23 +15,21 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
       style={{
         backgroundColor: '#222',
         padding: '1em',
+        position: 'relative'
       }}
     >
       <h1>Agent Update Loop</h1>
+      <div style={{ position: 'absolute', right: '1em', top: '0' }}>
+        <Switch
+          checked={agentData.loop_enabled}
+          onChange={e => {
+            setAgentData({ agentData, loop_enabled: e.target.checked })
+          }}
+          label={''}
+        />
+      </div>
       <div className="form-item">
         <Grid container style={{ padding: '1em' }}>
-          <Grid item xs={3}>
-            <span className="form-item-label">Enabled</span>
-            <input
-              key={Math.random()}
-              type="checkbox"
-              value={agentData.loop_enabled === true ? 'true' : 'false'}
-              defaultChecked={agentData.loop_enabled}
-              onChange={e => {
-                setAgentData({agentData, loop_enabled: e.target.checked})
-              }}
-            />
-          </Grid>
           {agentData.loop_enabled && (
             <>
               <div className="form-item">
@@ -41,7 +39,10 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
                   pattern="[0-9]*"
                   defaultValue={agentData.loop_interval}
                   onChange={e => {
-                    setAgentData({...agentData, loop_interval: e.target.value})
+                    setAgentData({
+                      ...agentData,
+                      loop_interval: e.target.value,
+                    })
                   }}
                 />
               </div>

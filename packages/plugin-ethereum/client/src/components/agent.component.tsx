@@ -3,6 +3,8 @@ import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { FC, useState, useEffect } from 'react'
 import { KeyInput } from './utils'
+import { Switch } from '@magickml/client-core'
+
 type PluginProps = {
   agentData: any
   props
@@ -14,13 +16,15 @@ export const EthereumAgentWindow: FC<any> = (props) => {
   const [ethereum_private_key, setEthereumPrivateKey] = useState('')
   const [ethereum_custom_rpc, setEthereumCustomRpc] = useState('')
 
+  const { agentData, setAgentData } = props
+
   useEffect(() => {
     if (props.agentData !== null && props.agentData !== undefined) {
       console.log(props.agentData)
       setEthereumEnabled(props.agentData.ethereum_enabled)
       setEthereumPrivateKey(props.agentData.ethereum_private_key)
       setEthereumCustomRpc(props.agentData.ethereum_custom_rpc)
-      props.setAgentDataState({
+      setAgentData({
         ethereum_enabled: ethereum_enabled,
         ethereum_private_key: ethereum_private_key,
         ethereum_custom_rpc: ethereum_custom_rpc,
@@ -29,7 +33,7 @@ export const EthereumAgentWindow: FC<any> = (props) => {
   }, [])
   useEffect(() => {
     //console.log(ethereum_enabled, ethereum_private_key, ethereum_custom_rpc)
-    props.setAgentDataState({
+    setAgentData({
       ethereum_enabled: ethereum_enabled,
       ethereum_private_key: ethereum_private_key,
       ethereum_custom_rpc: ethereum_custom_rpc
@@ -39,20 +43,18 @@ export const EthereumAgentWindow: FC<any> = (props) => {
   return (
     <div style={{
       backgroundColor: '#222',
-      padding: "1em"
+      padding: "1em",
+      position: 'relative'
     }}>
       <h1>Ethereum</h1>
-      <div className="form-item">
-        <span className="form-item-label">Enabled</span>
-        <input
-          key={Math.random()}
-          type="checkbox"
-          value={ethereum_enabled}
-          defaultChecked={ethereum_enabled}
+      <div style={{position: 'absolute', right: '1em', top: '0' }} >
+        <Switch
+          checked={ethereum_enabled}
           onChange={e => {
             setEthereumEnabled(e.target.checked)
           }}
-        />
+          label={''}
+          />
       </div>
 
       {ethereum_enabled && (
