@@ -3,27 +3,47 @@ dotenv.config('../');
 
 console.log('Installation plugins', process.env.PLUGINS)
 
-const plugins = process.env.PLUGINS ? process.env.PLUGINS.split(',') : [];
+const serverPlugins = process.env.SERVER_PLUGINS ? process.env.SERVER_PLUGINS.split(',').map(
+  (plugin) => {
+    return `@magickml/plugin-${plugin}`;
+  }
+) : [];
+const clientPlugins = process.env.CLIENT_PLUGINS ? process.env.CLIENT_PLUGINS.split(',').map(
+  (plugin) => {
+    return `@magickml/plugin-${plugin}`;
+  }
+) : [];
 
 const path = require('path');
 const fs  = require('fs');
+
+const pluginsJsPathClient = path.join(__dirname, '..', 'apps', 'client', 'src/plugins.ts');
+const pluginsJsPathServer = path.join(__dirname, '..', 'apps', 'server', 'src/plugins.ts');
+const pluginsJsPathAgent = path.join(__dirname, '..', 'apps', 'agent', 'src/plugins.ts');
+
 function copyExamplePluginsJson() {
-  const pluginsJsPathClient = path.join(__dirname, '..', 'apps', 'client', 'src/plugins.ts');
-  const pluginsJsPathServer = path.join(__dirname, '..', 'apps', 'server', 'src/plugins.ts');
-  const pluginsJsPathAgent = path.join(__dirname, '..', 'apps', 'agent', 'src/plugins.ts');
 
   let i = 0;
 
   let importString = 'const plugins = {}\n';
-  for (const plugin of plugins) {
+  for (const plugin of serverPlugins) {
+    importString += `import {default as plugin${i}} from '${plugin}';\nplugins['${plugin}'] = plugin${i};\n`;
+    i++;
+  }
+  importString += 'export default plugins;';
+
+  fs.writeFileSync(pluginsJsPathServer, importString);
+  fs.writeFileSync(pluginsJsPathAgent, importString);
+
+  importString = 'const plugins = {}\n';
+  for (const plugin of clientPlugins) {
     importString += `import {default as plugin${i}} from '${plugin}';\nplugins['${plugin}'] = plugin${i};\n`;
     i++;
   }
   importString += 'export default plugins;';
 
   fs.writeFileSync(pluginsJsPathClient, importString);
-  fs.writeFileSync(pluginsJsPathServer, importString);
-  fs.writeFileSync(pluginsJsPathAgent, importString);
+
 }
 
 copyExamplePluginsJson();

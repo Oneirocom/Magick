@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/plugin-discord",
+  "name": "@magickml/plugin-discord-client",
   "version": "0.1.0",
   "scripts": {
     "build": "vite build"

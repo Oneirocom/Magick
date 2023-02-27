@@ -6,10 +6,7 @@
   "implicitDependencies": [
     "@magickml/cost-calculator",
     "@magickml/editor",
-    "@magickml/engine",
-    "@magickml/plugin-discord",
-    "@magickml/plugin-rest",
-    "@magickml/plugin-ethereum"
+    "@magickml/engine"
   ],
   "targets": {
     "build": {

@@ -8,7 +8,6 @@ import type { Application } from '../declarations'
 import { pluginManager } from '@magickml/engine'
 export const services = async (app: Application) => {
   app.configure(request)
-  console.log(pluginManager)
   const service_list = pluginManager.getServices()
   app.configure(spell)
   app.configure(agent)
