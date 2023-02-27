@@ -14,127 +14,8 @@ import { API_ROOT_URL } from '@magickml/engine'
 export const RestAgentWindow: FC<any> = props => {
   props = props.props
   const { agentData, setAgentData } = props
-  const { enqueueSnackbar } = useSnackbar()
   const [rest_enabled, setRestEnabled] = useState(undefined)
   const [rest_api_key, setRestApiKey] = useState('')
-  const [rest_starting_words, setRestStartingWords] = useState('')
-  const [rest_bot_name_regex, setRestBotNameRegex] = useState('')
-  const [rest_bot_name, setRestBotName] = useState('')
-
-  const [use_voice, setUseVoice] = useState(false)
-  const [voice_provider, setVoiceProvider] = useState<string | null>(null)
-  const [voice_character, setVoiceCharacter] = useState('')
-  const [voice_language_code, setVoiceLanguageCode] = useState('')
-  const [voice_default_phrases, setVoiceDefaultPhrases] = useState('')
-  const [tiktalknet_url, setTikTalkNetUrl] = useState('')
-  const [playingAudio, setPlayingAudio] = useState(false)
-
-  useEffect(() => {
-    if (props.agentData !== null && props.agentData !== undefined) {
-      console.log(props.agentData)
-      setRestEnabled(props.agentData.data?.rest_enabled)
-      setRestApiKey(props.agentData.data?.rest_api_key)
-      setRestStartingWords(props.agentData.data?.rest_starting_words)
-      setRestBotNameRegex(props.agentData.data?.rest_bot_name_regex)
-      setRestBotName(props.agentData.data?.rest_bot_name)
-      setUseVoice(
-        props.agentData !== undefined &&
-          props.agentData.data?.use_voice === true
-      )
-      setVoiceProvider(props.agentData.data?.voice_provider)
-      setVoiceCharacter(props.agentData.data?.voice_character)
-      setVoiceLanguageCode(props.agentData.data?.voice_language_code)
-      setVoiceDefaultPhrases(props.agentData.data?.voice_default_phrases)
-      setTikTalkNetUrl(props.agentData.data?.tiktalknet_url)
-      setAgentData({
-        ...agentData,
-        data: {
-          ...agentData.data,
-          rest_enabled: rest_enabled,
-          rest_api_key: rest_api_key,
-          rest_starting_words: rest_starting_words,
-          rest_bot_name: rest_bot_name,
-          rest_bot_name_regex: rest_bot_name,
-          use_voice: use_voice,
-          voice_provider: voice_provider,
-          voice_character: voice_character,
-          voice_language_code: voice_language_code,
-          voice_default_phrases: voice_default_phrases,
-          tiktalknet_url: tiktalknet_url,
-        },
-      })
-    }
-  }, [])
-  useEffect(() => {
-    setAgentData({
-      ...agentData,
-      data: {
-        ...agentData.data,
-        rest_enabled: rest_enabled,
-        rest_api_key: rest_api_key,
-        rest_starting_words: rest_starting_words,
-        rest_bot_name: rest_bot_name,
-        rest_bot_name_regex: rest_bot_name,
-        use_voice: use_voice,
-        voice_provider: voice_provider,
-        voice_character: voice_character,
-        voice_language_code: voice_language_code,
-        voice_default_phrases: voice_default_phrases,
-        tiktalknet_url: tiktalknet_url,
-      },
-    })
-  }, [
-    rest_enabled,
-    rest_api_key,
-    rest_starting_words,
-    rest_bot_name,
-    rest_bot_name_regex,
-    use_voice,
-    voice_provider,
-    voice_character,
-    voice_default_phrases,
-    voice_language_code,
-    tiktalknet_url,
-  ])
-
-  const testVoice = async () => {
-    if ((voice_provider && voice_character) || playingAudio) {
-      if (voice_provider === 'tiktalknet' && tiktalknet_url?.length <= 0) {
-        return
-      }
-
-      const resp = await axios.get(`${API_ROOT_URL}/text_to_speech`, {
-        params: {
-          text: 'Hello there! How are you?',
-          voice_provider: voice_provider,
-          voice_character: voice_character,
-          voice_language_code: voice_language_code,
-          tiktalknet_url: tiktalknet_url,
-        },
-      })
-
-      const url =
-        voice_provider === 'google' || voice_provider === 'tiktalknet'
-          ? (import.meta as any).env.VITE_APP_FILE_SERVER_URL + '/' + resp.data
-          : resp.data
-      if (url && url.length > 0) {
-        setPlayingAudio(true)
-        console.log('url:', url)
-        const audio = new Audio(url)
-        audio.onended = function () {
-          setPlayingAudio(false)
-        }
-        audio.play()
-      }
-    } else {
-      enqueueSnackbar(
-        'You need to setup the voice variables to test the voice or already playing another test',
-        {
-          variant: 'error',
-        }
-      )
-    }
-  }
   return (
     <div
       style={{
@@ -148,25 +29,15 @@ export const RestAgentWindow: FC<any> = props => {
         <Switch
           checked={agentData.data?.rest_enabled}
           onChange={e => {
-            if (!e.target.checked) {
-              setRestApiKey('')
-              setRestStartingWords('')
-              setRestBotNameRegex('')
-              setRestBotName('')
-              setUseVoice(false)
-              setVoiceProvider('')
-              setVoiceCharacter('')
-              setVoiceLanguageCode('')
-              setVoiceDefaultPhrases('')
-              setTikTalkNetUrl('')
-            }
-
-            setRestEnabled(e.target.checked)
+              setAgentData({
+                ...agentData,
+                data: { ...agentData.data, rest_enabled: e.target.checked },
+              })
           }}
           label={''}
         />
       </div>
-      {rest_enabled && (
+      {agentData.data.rest_enabled && (
         <div className="form-item">
           <Grid container style={{ padding: '1em' }}>
             <Grid item xs={6}>

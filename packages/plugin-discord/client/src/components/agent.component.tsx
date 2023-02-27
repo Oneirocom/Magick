@@ -214,7 +214,7 @@ export const DiscordAgentWindow: FC<any> = props => {
                   xs={3}
                   style={{ paddingLeft: '1em', paddingRight: '1em' }}
                 >
-                  <div className="form-item agent-select">
+                  <div className="form-item">
                     <span className="form-item-label">Voice Provider</span>
                     <select
                       name="voice_provider"
@@ -383,12 +383,12 @@ export const DiscordAgentWindow: FC<any> = props => {
                   {agentData.data?.voice_provider === 'tiktalknet' && (
                     <div className="form-item">
                       <span className="form-item-label">
-                        Tiktalknet URL - URL where Tiktalknet is hosted and the
-                        requests will be sent there
+                        Provider URL
                       </span>
                       <input
                         type="text"
                         defaultValue={agentData.data?.tiktalknet_url}
+                        placeholder={'http://voice.metaverse.com/tts'}
                         onChange={e => {
                           setAgentData({
                             ...agentData,

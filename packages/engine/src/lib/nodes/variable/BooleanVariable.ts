@@ -54,9 +54,6 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
 
   worker(node: NodeData) {
     const _var = node?.data?._var == true
-
-    this.name =
-      (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
     if (_var) node.display('TRUE')
     else node.display('FALSE')
 
