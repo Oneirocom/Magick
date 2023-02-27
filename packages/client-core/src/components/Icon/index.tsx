@@ -1,3 +1,4 @@
+import * as React from 'react'
 import css from './icon.module.css'
 
 import account from './icons/account.svg'

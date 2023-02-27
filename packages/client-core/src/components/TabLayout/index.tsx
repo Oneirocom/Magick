@@ -1,3 +1,4 @@
+import * as React from 'react'
 import css from './TabLayout.module.css'
 
 export const TabLayout = ({ children }) => {

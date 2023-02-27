@@ -1,3 +1,4 @@
+import * as React from 'react'
 import ankh from './ankh.gif'
 
 export const LoadingScreen = () => (
