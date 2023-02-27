@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton'
 interface Props {
   Icon: React.ReactNode
   label: string
-  onClick?: () => void
+  onClick?: (e?) => void
   style?: {}
 }
 

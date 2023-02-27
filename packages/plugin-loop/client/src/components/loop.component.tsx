@@ -15,41 +15,58 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
       style={{
         backgroundColor: '#222',
         padding: '1em',
-        position: 'relative'
+        position: 'relative',
       }}
     >
-      <h1>Agent Update Loop</h1>
+      <h3>Agent Update Loop</h3>
       <div style={{ position: 'absolute', right: '1em', top: '0' }}>
         <Switch
-          checked={agentData.loop_enabled}
+          checked={agentData.data?.loop_enabled}
           onChange={e => {
-            setAgentData({ agentData, loop_enabled: e.target.checked })
+            if (!e.target.checked) {
+              setAgentData({
+                ...agentData,
+                data: {
+                  ...agentData.data,
+                  loop_interval: '',
+                  loop_enabled: false,
+                },
+              })
+            } else {
+              setAgentData({
+                ...agentData,
+                data: { ...agentData.data, loop_enabled: e.target.checked },
+              })
+            }
           }}
           label={''}
         />
       </div>
-      <div className="form-item">
-        <Grid container style={{ padding: '1em' }}>
-          {agentData.loop_enabled && (
+      {agentData.data?.loop_enabled && (
+        <div className="form-item">
+          <Grid container style={{ padding: '1em' }}>
             <>
               <div className="form-item">
                 <span className="form-item-label">Loop Interval</span>
                 <input
                   type="text"
                   pattern="[0-9]*"
-                  defaultValue={agentData.loop_interval}
+                  defaultValue={agentData.data?.loop_interval}
                   onChange={e => {
                     setAgentData({
                       ...agentData,
-                      loop_interval: e.target.value,
+                      data: {
+                        ...agentData.data,
+                        loop_interval: e.target.value,
+                      },
                     })
                   }}
                 />
               </div>
             </>
-          )}
-        </Grid>
-      </div>
+          </Grid>
+        </div>
+      )}
     </div>
   )
 }

@@ -17,23 +17,30 @@ export const DiscordAgentWindow: FC<any> = props => {
   const [playingAudio, setPlayingAudio] = useState(false)
 
   const testVoice = async () => {
-    if ((voice_provider && voice_character) || playingAudio) {
-      if (voice_provider === 'tiktalknet' && tiktalknet_url?.length <= 0) {
+    if (
+      (agentData.data?.voice_provider && agentData.data?.voice_character) ||
+      playingAudio
+    ) {
+      if (
+        agentData.data?.voice_provider === 'tiktalknet' &&
+        agentData.data?.tiktalknet_url?.length <= 0
+      ) {
         return
       }
 
       const resp = await axios.get(`${API_ROOT_URL}/text_to_speech`, {
         params: {
           text: 'Hello there! How are you?',
-          voice_provider: voice_provider,
-          voice_character: voice_character,
-          voice_language_code: voice_language_code,
-          tiktalknet_url: tiktalknet_url,
+          voice_provider: agentData.data?.voice_provider,
+          voice_character: agentData.data?.voice_character,
+          voice_language_code: agentData.data?.voice_language_code,
+          tiktalknet_url: agentData.data?.tiktalknet_url,
         },
       })
 
       const url =
-        voice_provider === 'google' || voice_provider === 'tiktalknet'
+        agentData.data?.voice_provider === 'google' ||
+        agentData.data?.voice_provider === 'tiktalknet'
           ? (import.meta as any).env.VITE_APP_FILE_SERVER_URL + '/' + resp.data
           : resp.data
       if (url && url.length > 0) {
@@ -64,87 +71,164 @@ export const DiscordAgentWindow: FC<any> = props => {
     >
       <Switch
         label={null}
-        checked={agentData.discord_enabled}
+        checked={agentData.data?.discord_enabled}
         onChange={e => {
-          setAgentData({...agentData, discord_enabled: e.target.checked})
+          if (!e.target.checked) {
+            setAgentData({
+              ...agentData,
+              data: {
+                ...agentData.data,
+                use_voice: 'off',
+                discord_bot_name_regex: '',
+                discord_api_key: '',
+                discord_bot_name: '',
+                discord_starting_words: '',
+                voice_character: '',
+                voice_provider: '',
+                voice_language_code: '',
+                tiktalknet_url: '',
+                discord_enabled: false,
+              },
+            })
+          } else {
+            setAgentData({
+              ...agentData,
+              data: { ...agentData.data, discord_enabled: e.target.checked },
+            })
+          }
         }}
         style={{ float: 'right' }}
       />
-      <h1>Discord</h1>
-      {agentData.discord_enabled && (
+      <h3>Discord</h3>
+      {agentData.data?.discord_enabled && (
         <>
           <Grid container style={{ padding: '1em' }}>
             <Grid item xs={12}>
               <div className="form-item">
                 <span className="form-item-label">API Key</span>
                 <KeyInput
-                  value={agentData.discord_api_key}
-                  setValue={e => setAgentData({...agentData, discord_api_key: e.target.value})}
+                  value={agentData.data?.discord_api_key}
+                  setValue={value =>
+                    setAgentData({
+                      ...agentData,
+                      data: {
+                        ...agentData.data,
+                        discord_api_key: value,
+                      },
+                    })
+                  }
                   secret={true}
                 />
               </div>
             </Grid>
-            <Grid item xs={4} style={{paddingLeft: '1em', paddingRight: '1em'}}>
+            <Grid
+              item
+              xs={4}
+              style={{ paddingLeft: '1em', paddingRight: '1em' }}
+            >
               <div className="form-item">
                 <input
                   type="text"
-                  defaultValue={agentData.discord_starting_words}
+                  defaultValue={agentData.data?.discord_starting_words}
                   placeholder={'Starting Words (,)'}
                   onChange={e => {
-                    setAgentData({...agentData, discord_starting_words: e.target.value})
+                    setAgentData({
+                      ...agentData,
+                      data: {
+                        ...agentData.data,
+                        discord_starting_words: e.target.value,
+                      },
+                    })
                   }}
                 />
               </div>
             </Grid>
-            <Grid item xs={4} style={{paddingLeft: '1em', paddingRight: '1em'}}>
+            <Grid
+              item
+              xs={4}
+              style={{ paddingLeft: '1em', paddingRight: '1em' }}
+            >
               <div className="form-item">
                 <input
                   type="text"
-                  defaultValue={agentData.discord_bot_name_regex}
+                  defaultValue={agentData.data?.discord_bot_name_regex}
                   placeholder={'Bot Name Regex'}
                   onChange={e => {
-                    setAgentData({...agentData, discord_bot_name_regex: e.target.value})
+                    setAgentData({
+                      ...agentData,
+                      data: {
+                        ...agentData.data,
+                        discord_bot_name_regex: e.target.value,
+                      },
+                    })
                   }}
                 />
               </div>
             </Grid>
-            <Grid item xs={4} style={{paddingLeft: '1em', paddingRight: '1em'}}>
+            <Grid
+              item
+              xs={4}
+              style={{ paddingLeft: '1em', paddingRight: '1em' }}
+            >
               <div className="form-item">
                 <input
                   type="text"
-                  defaultValue={agentData.discord_bot_name}
+                  defaultValue={agentData.data?.discord_bot_name}
                   placeholder={'Bot Name'}
                   onChange={e => {
-                    setAgentData({...agentData, discord_bot_name: e.target.value})
+                    setAgentData({
+                      ...agentData,
+                      data: {
+                        ...agentData.data,
+                        discord_bot_name: e.target.value,
+                      },
+                    })
                   }}
                 />
               </div>
             </Grid>
           </Grid>
 
-        <div style={{position: 'relative'}}>
-          <Switch
-            label={'Voice Enabled'}
-            checked={agentData.use_voice === 'on'}
-            onChange={e => {
-              setAgentData({...agentData, use_voice: agentData.use_voice === 'on' ? 'off' : 'on'})
-            }}
-          />
+          <div style={{ position: 'relative' }}>
+            <Switch
+              label={'Voice Enabled'}
+              checked={agentData.data?.use_voice === 'on'}
+              onChange={e => {
+                setAgentData({
+                  ...agentData,
+                  data: {
+                    ...agentData.data,
+                    use_voice:
+                      agentData?.data?.use_voice === 'on' ? 'off' : 'on',
+                  },
+                })
+              }}
+            />
           </div>
 
-          {agentData.use_voice ==='on' && (
+          {agentData.data?.use_voice === 'on' && (
             <>
               <Grid container>
-                <Grid item xs={3} style={{paddingLeft: '1em', paddingRight: '1em'}}>
+                <Grid
+                  item
+                  xs={3}
+                  style={{ paddingLeft: '1em', paddingRight: '1em' }}
+                >
                   <div className="form-item agent-select">
                     <span className="form-item-label">Voice Provider</span>
                     <select
                       name="voice_provider"
                       id="voice_provider"
-                      value={agentData.voice_provider}
+                      value={agentData.data?.voice_provider}
                       placeholder={'Voice Provider'}
                       onChange={e => {
-                        setAgentData({...agentData, voice_provider: e.target.value, voice_character: ''})
+                        setAgentData({
+                          ...agentData,
+                          data: {
+                            ...agentData.data,
+                            voice_provider: e.target.value,
+                          },
+                        })
                       }}
                     >
                       <option hidden></option>
@@ -153,16 +237,26 @@ export const DiscordAgentWindow: FC<any> = props => {
                     </select>
                   </div>
                 </Grid>
-                <Grid item xs={3} style={{paddingLeft: '1em', paddingRight: '1em'}}>
+                <Grid
+                  item
+                  xs={3}
+                  style={{ paddingLeft: '1em', paddingRight: '1em' }}
+                >
                   <div className="form-item">
                     <span className="form-item-label">Character</span>
-                    {agentData.voice_provider === 'google' ? (
+                    {agentData.data?.voice_provider === 'google' ? (
                       <select
                         name="voice_character"
                         id="voice_character"
-                        value={agentData.voice_character}
+                        value={agentData.data?.voice_character}
                         onChange={e => {
-                          setAgentData({...agentData, voice_character: e.target.value})
+                          setAgentData({
+                            ...agentData,
+                            data: {
+                              ...agentData.data,
+                              voice_character: e.target.value,
+                            },
+                          })
                         }}
                       >
                         <option hidden></option>
@@ -231,9 +325,15 @@ export const DiscordAgentWindow: FC<any> = props => {
                       <select
                         name="voice_character"
                         id="voice_character"
-                        value={agentData.voice_character}
+                        value={agentData.data?.voice_character}
                         onChange={e => {
-                          setAgentData({...agentData, voice_character: e.target.value})
+                          setAgentData({
+                            ...agentData,
+                            data: {
+                              ...agentData.data,
+                              voice_character: e.target.value,
+                            },
+                          })
                         }}
                       >
                         <option hidden></option>
@@ -253,24 +353,34 @@ export const DiscordAgentWindow: FC<any> = props => {
                     )}
                   </div>
                 </Grid>
-                <Grid item xs={3} style={{paddingLeft: '1em', paddingRight: '1em'}}>
+                <Grid
+                  item
+                  xs={3}
+                  style={{ paddingLeft: '1em', paddingRight: '1em' }}
+                >
                   <div className="form-item">
                     <span className="form-item-label">Language Code</span>
                     <select
                       name="voice_language_code"
                       id="voice_language_code"
-                      value={agentData.voice_language_code}
+                      value={agentData.data?.voice_language_code}
                       onChange={e => {
-                        setAgentData({...agentData, voice_language_code: e.target.value})
+                        setAgentData({
+                          ...agentData,
+                          data: {
+                            ...agentData.data,
+                            voice_language_code: e.target.value,
+                          },
+                        })
                       }}
                     >
                       <option value={'en-US'}>none</option>
-                      <option value={'en-US'}>en-GB</option>
+                      <option value={'en-GB'}>en-GB</option>
                     </select>
                   </div>
                 </Grid>
                 <Grid item xs={3}>
-                  {agentData.voice_provider === 'tiktalknet' && (
+                  {agentData.data?.voice_provider === 'tiktalknet' && (
                     <div className="form-item">
                       <span className="form-item-label">
                         Tiktalknet URL - URL where Tiktalknet is hosted and the
@@ -278,9 +388,15 @@ export const DiscordAgentWindow: FC<any> = props => {
                       </span>
                       <input
                         type="text"
-                        defaultValue={agentData.tiktalknet_url}
+                        defaultValue={agentData.data?.tiktalknet_url}
                         onChange={e => {
-                          setAgentData({...agentData, tiktalknet_url: e.target.value})
+                          setAgentData({
+                            ...agentData,
+                            data: {
+                              ...agentData.data,
+                              tiktalknet_url: e.target.value,
+                            },
+                          })
                         }}
                       />
                     </div>

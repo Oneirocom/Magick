@@ -9,7 +9,7 @@ import {
   agentExternalResolver,
   agentDataResolver,
   agentPatchResolver,
-  agentQueryResolver
+  agentQueryResolver,
 } from './agents.schema'
 
 import type { Application } from '../../declarations'
@@ -25,27 +25,39 @@ export const agent = (app: Application) => {
     // A list of all methods this service exposes externally
     methods: ['find', 'get', 'create', 'patch', 'remove'],
     // You can add additional custom events to be sent to clients here
-    events: []
+    events: [],
   })
   // Initialize hooks
   app.service('agents').hooks({
     around: {
-      all: [schemaHooks.resolveExternal(agentExternalResolver), schemaHooks.resolveResult(agentResolver)]
+      all: [
+        schemaHooks.resolveExternal(agentExternalResolver),
+        schemaHooks.resolveResult(agentResolver),
+      ],
     },
     before: {
-      all: [schemaHooks.validateQuery(agentQueryValidator), schemaHooks.resolveQuery(agentQueryResolver)],
+      all: [
+        schemaHooks.validateQuery(agentQueryValidator),
+        schemaHooks.resolveQuery(agentQueryResolver),
+      ],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(agentDataValidator), schemaHooks.resolveData(agentDataResolver)],
-      patch: [schemaHooks.validateData(agentPatchValidator), schemaHooks.resolveData(agentPatchResolver)],
-      remove: []
+      create: [
+        schemaHooks.validateData(agentDataValidator),
+        schemaHooks.resolveData(agentDataResolver),
+      ],
+      patch: [
+        schemaHooks.validateData(agentPatchValidator),
+        schemaHooks.resolveData(agentPatchResolver),
+      ],
+      remove: [],
     },
     after: {
-      all: []
+      all: [],
     },
     error: {
-      all: []
-    }
+      all: [],
+    },
   })
 }
 
