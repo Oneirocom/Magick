@@ -186,8 +186,6 @@ const Playtest = ({ tab }) => {
 
     let toSend = value
 
-    console.log('value', value)
-
     const json = localState?.playtestData.replace(
       /(['"])?([a-z0-9A-Z_]+)(['"])?:/g,
       '"$2": '
