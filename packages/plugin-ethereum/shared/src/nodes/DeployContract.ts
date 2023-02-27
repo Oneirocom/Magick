@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash'
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
