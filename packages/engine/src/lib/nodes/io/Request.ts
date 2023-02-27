@@ -67,7 +67,10 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
 
     node.inspector.add(nameControl).add(inputGenerator).add(url).add(method)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(outp)
   }
 
   async worker(

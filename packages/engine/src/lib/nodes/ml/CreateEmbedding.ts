@@ -39,8 +39,8 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
         const out = new Rete.Output('embedding', 'Events', arraySocket)
 
         return node
-            .addInput(contentInput)
             .addInput(dataInput)
+            .addInput(contentInput)
             .addOutput(dataOutput)
             .addOutput(out)
     }

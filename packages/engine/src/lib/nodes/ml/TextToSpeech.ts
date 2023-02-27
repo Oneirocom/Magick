@@ -8,11 +8,9 @@ import axios from 'axios'
 import Rete from 'rete'
 
 import {
-  EngineContext,
   NodeData,
   MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs,
 } from '../../types'
 import {
   API_ROOT_URL

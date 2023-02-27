@@ -1,15 +1,14 @@
 import Handlebars from 'handlebars'
 import Rete from 'rete'
-import {
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../types'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { stringSocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { stringSocket, triggerSocket } from '../../sockets'
+import {
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs, NodeData
+} from '../../types'
 
 const info = `The generator component is our general purpose completion component.  You can define any number of inputs, and utilize those inputs in a templating language known as Handlebars.  Any value which is wrapped like {{this}} in double braces will be replaced with the corresponding value coming in to the input with the same name.  This allows you to write almost any fewshot you might need, and input values from anywhere else in your graph.
 

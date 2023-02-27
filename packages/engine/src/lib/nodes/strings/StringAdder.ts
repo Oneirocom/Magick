@@ -1,19 +1,12 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import {
-  EngineContext,
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
-import { triggerSocket, stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { stringSocket, triggerSocket } from '../../sockets'
+import {
+  MagickNode,
+  MagickWorkerInputs, NodeData
+} from '../../types'
 
 const info = 'String Adder adds a string in the current input.'
 

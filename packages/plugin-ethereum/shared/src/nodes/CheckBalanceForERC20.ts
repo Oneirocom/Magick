@@ -21,7 +21,6 @@ type InputReturn = {
 }
 
 export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
-
   constructor() {
     // Name of the component
     super('CheckBalanceForERC20')
@@ -66,9 +65,9 @@ export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
     const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
 
     return node
+      .addInput(dataInput)
       .addInput(addressInput)
       .addInput(contractAddressInput)
-      .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(balanceOutput)
   }

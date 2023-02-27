@@ -42,12 +42,11 @@ export class GetCachedEmbedding extends MagickComponent<
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const success = new Rete.Output('success', 'Success', triggerSocket)
     const fail = new Rete.Output('failure', 'Failure', triggerSocket)
-
     const out = new Rete.Output('embedding', 'Events', arraySocket)
 
     return node
-      .addInput(contentInput)
       .addInput(dataInput)
+      .addInput(contentInput)
       .addOutput(success)
       .addOutput(fail)
       .addOutput(out)

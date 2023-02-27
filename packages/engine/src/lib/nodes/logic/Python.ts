@@ -33,7 +33,6 @@ Please note that the return of your function must be an object whose keys are th
 `
 
 export class Python extends MagickComponent<unknown> {
-  
   constructor() {
     // Name of the component
     super('Python')
@@ -67,9 +66,8 @@ export class Python extends MagickComponent<unknown> {
     const codeControl = new CodeControl({
       dataKey: 'code',
       name: 'Code',
-      language: 'python'
+      language: 'python',
     })
-
 
     const nameControl = new InputControl({
       dataKey: 'name',

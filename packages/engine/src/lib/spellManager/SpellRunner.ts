@@ -228,11 +228,12 @@ class SpellRunner {
     // load the inputs into module memory
     this._loadInputs(inputs)
 
+    console.log('inputs', inputs)
     
 
     const component = this._getComponent(componentName) as ModuleComponent
 
-    
+    console.log('component', component)
 
     const triggeredNode = this._getTriggeredNodeByName(componentName)
 
@@ -242,7 +243,7 @@ class SpellRunner {
     // I do wonder whether we could make this even more elegant by having the node
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
-    await component.run(triggeredNode, runData)
+    await component.run(triggeredNode, inputs)
     return this.outputData
   }
 }
