@@ -112,38 +112,6 @@ export class Agent {
       agentStopMethods[method](this)
     }
   }
-
-  async generateVoices(data: any) {
-    if (data.use_voice) {
-      const phrases = data.voice_default_phrases
-      if (phrases && phrases.length > 0) {
-        const pArr = phrases.split('|')
-        for (let i = 0; i < pArr.length; i++) {
-          pArr[i] = pArr[i].trim()
-        }
-        const filtered = pArr.filter(
-          (p: string) => p && p !== undefined && p?.length > 0
-        )
-
-        for (let i = 0; i < filtered.length; i++) {
-          let url: any = ''
-          if (data.voice_provider === 'google') {
-            url = await tts(
-              filtered[i],
-              data.voice_character,
-              data.voice_language_code
-            )
-          } else {
-            url = await tts_tiktalknet(
-              filtered[i],
-              data.voice_character,
-              data.tiktalknet_url
-            )
-          }
-        }
-      }
-    }
-  }
 }
 
 export default Agent

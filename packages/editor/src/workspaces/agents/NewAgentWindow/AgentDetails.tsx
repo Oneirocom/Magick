@@ -183,7 +183,6 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
       <Accordion title="Connectors">
         <div>
         {pluginManager.getAgentComponents().map((value, index, array) => {
-          console.log('value', value)
             return (
               <RenderComp
                 key={index}
