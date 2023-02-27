@@ -21,6 +21,8 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
 
   const config = useConfig()
 
+  console.log('pluginManager.getAgentComponents()', pluginManager.getAgentComponents())
+
   const [selectedSpellPublicVars, setSelectedSpellPublicVars] = useState<any[]>([])
 
   useEffect(() => {
@@ -183,6 +185,7 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
       <Accordion title="Connectors">
         <div>
         {pluginManager.getAgentComponents().map((value, index, array) => {
+          console.log('value', value)
             return (
               <RenderComp
                 key={index}

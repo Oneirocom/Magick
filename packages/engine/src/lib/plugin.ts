@@ -61,6 +61,7 @@ export class ClientPlugin extends Plugin {
       outputTypes,
     })
     this.clientPageLayout = clientPageLayout
+    this.agentComponents = agentComponents
     this.clientRoutes = clientRoutes
     this.drawerItems = drawerItems
     pluginManager.register(this)
@@ -177,7 +178,7 @@ class ClientPluginManager extends PluginManager {
   getAgentComponents() {
     let agentComp = []
     this.pluginList.forEach((plugin: ClientPlugin) => {
-      plugin.agentComponents?.forEach(component => {
+      plugin.agentComponents.forEach(component => {
         agentComp.push(component)
       })
     })

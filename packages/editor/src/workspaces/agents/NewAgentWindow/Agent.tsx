@@ -189,6 +189,7 @@ const AgentWindow = ({
           )}
 
           {pluginManager.getAgentComponents().map((value, index, array) => {
+            console.log('value', value)
             return (
               <RenderComp
                 key={index}
