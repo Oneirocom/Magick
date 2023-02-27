@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 /* eslint-disable no-empty */
 import { DataControl } from '../plugins/inspectorPlugin'
 

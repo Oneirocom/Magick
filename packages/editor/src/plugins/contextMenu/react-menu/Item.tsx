@@ -2,7 +2,22 @@ import Context from './context'
 import styles from './style.module.scss'
 import React, { Component } from 'react'
 
-class Item extends Component {
+type ItemProps = {
+  item: {
+    title: string
+    subitems?: any[]
+    onClick?: (args: any) => void
+  }
+}
+
+type ItemState = {
+  visibleSubitems: boolean
+}
+
+// todo convert to functional component
+class Item extends Component<ItemProps, ItemState> {
+  static contextType = Context
+
   constructor(props) {
     super(props)
     this.state = {
@@ -14,7 +29,11 @@ class Item extends Component {
     const {
       item: { onClick },
     } = this.props
+
+    // Doing this for now since we will be converting to functional components
+    // @ts-ignore
     const { args, onClose } = this.context
+
     e.stopPropagation()
 
     if (onClick) onClick(args)

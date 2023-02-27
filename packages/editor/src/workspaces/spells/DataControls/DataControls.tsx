@@ -34,6 +34,27 @@ const controlMap = {
   checkbox: CheckBoxControl,
 }
 
+type DataControl = {
+  component: string
+  dataKey: string
+  label: string
+  type: string
+  options?: any
+  name?: string
+  data: Record<string, any>
+}
+
+type DataControlsProps = {
+  dataControls: { [key: string]: DataControl }
+  updateData: Function
+  updateControl: Function
+  width: number
+  data: unknown
+  inspectorData: Record<string, any>
+  nodeId: number
+  tab?: string
+}
+
 const DataControls = ({
   dataControls,
   updateData,
@@ -43,7 +64,7 @@ const DataControls = ({
   inspectorData,
   nodeId,
   tab = null,
-}) => {
+}: DataControlsProps) => {
   if (!dataControls)
     return <p className={css['message']}>No component selected</p>
   if (Object.keys(dataControls).length < 1)

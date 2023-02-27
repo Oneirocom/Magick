@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Rete from 'rete'
 
 import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'

@@ -4,7 +4,9 @@ import { Plugin } from 'rete/types/core/plugin'
 import ContextMenuPlugin from './plugins/contextMenu'
 import { Data } from 'rete/types/core/data'
 import CommentPlugin from './plugins/commentPlugin'
-import ReactRenderPlugin from './plugins/reactRenderPlugin'
+import ReactRenderPlugin, {
+  ReactRenderPluginOptions,
+} from './plugins/reactRenderPlugin'
 
 import {
   // CachePlugin,
@@ -95,7 +97,7 @@ export const initEditor = function ({
   // editor.use(ConnectionReroutePlugin)
   // React rendering for the editor
   // this component parameter is a custom default style for nodes
-  editor.use<any>(ReactRenderPlugin, {
+  editor.use<Plugin, ReactRenderPluginOptions>(ReactRenderPlugin, {
     component: node as any,
   })
   // renders a context menu on right click that shows available nodes

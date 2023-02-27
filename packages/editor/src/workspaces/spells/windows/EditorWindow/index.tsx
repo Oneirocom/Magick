@@ -27,9 +27,10 @@ const EditorWindow = ({ tab }) => {
 
     // Checks if a category already exists in the array and returns its address,
     // otherwise returns false, and the nodeList map below creates a category.
-    const doesCategoryExist = (arr, category) => {
+    const doesCategoryExist = (arr, category): string | false => {
       let address = false
       if (arr.length === 0) return false
+
       arr.forEach((obj, index) => {
         if (obj.label === category) address = index
       })
@@ -41,7 +42,7 @@ const EditorWindow = ({ tab }) => {
       Object.keys(nodeList).map(item => {
         if (doesCategoryExist(arr, nodeList[item].category) !== false) {
           return arr[
-            doesCategoryExist(arr, nodeList[item].category)
+            doesCategoryExist(arr, nodeList[item].category) as string
           ].options.push({
             label: nodeList[item].name,
             value: nodeList[item].name,

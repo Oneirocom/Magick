@@ -3,7 +3,16 @@ import React from 'react'
 
 import { kebab } from './utils'
 
-export class Socket extends React.Component {
+type SocketProps = {
+  innerRef: (el: any, type: string, io: any) => void
+  type: string
+  io: any
+  socket: {
+    name: string
+  }
+}
+
+export class Socket extends React.Component<SocketProps> {
   createRef = el => {
     const { innerRef, type, io } = this.props
 
