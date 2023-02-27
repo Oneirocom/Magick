@@ -23,13 +23,27 @@
 }
 
 .mg-btm-medium {
-  background-color: purple!important;
+  background-color: purple !important;
   margin-bottom: 1em !important;
 }
 
 .heading {
   color: var(--dark-5);
   text-align: center;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.btns {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 20%;
 }
 
 .btn {
@@ -46,7 +60,7 @@
   background: var(--dark-1);
   padding: 5px;
   border-radius: 4px;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
   cursor: pointer;
 
   &:hover {
@@ -84,6 +98,15 @@
 
 .accordion {
   border: none;
+}
+
+.connectorsLong {
+  height: calc(70vh);
+  overflow: auto;
+}
+.connectors {
+  height: calc(50vh);
+  overflow: auto;
 }
 
 .collapse {

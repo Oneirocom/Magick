@@ -2,9 +2,17 @@ import { Icon, IconBtn } from '@magickml/client-core'
 import { Avatar, Typography } from '@mui/material'
 import styles from './index.module.scss'
 
-const AgentItem = ({ agent, onDelete, onClick, style }) => {
+const AgentItem = ({
+  keyId,
+  agent,
+  setSelectedAgent,
+  onDelete,
+  onClick,
+  style,
+}) => {
   return (
     <div
+      key={keyId}
       className={styles.agentItemContainer}
       onClick={() => onClick(agent)}
       style={style}
@@ -18,7 +26,11 @@ const AgentItem = ({ agent, onDelete, onClick, style }) => {
       <IconBtn
         label={'delete'}
         Icon={<Icon name="trash" size={20} style={{ color: 'black' }} />}
-        onClick={() => onDelete(agent?.id)}
+        onClick={e => {
+          e.stopPropagation()
+          onDelete(agent?.id)
+          setSelectedAgent('')
+        }}
       />{' '}
     </div>
   )

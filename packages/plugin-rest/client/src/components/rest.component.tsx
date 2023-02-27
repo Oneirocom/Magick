@@ -15,11 +15,11 @@ export const RestAgentWindow: FC<any> = props => {
   props = props.props
   const { agentData, setAgentData } = props
   const { enqueueSnackbar } = useSnackbar()
-  const [discord_enabled, setRestEnabled] = useState(undefined)
-  const [discord_api_key, setRestApiKey] = useState('')
-  const [discord_starting_words, setRestStartingWords] = useState('')
-  const [discord_bot_name_regex, setRestBotNameRegex] = useState('')
-  const [discord_bot_name, setRestBotName] = useState('')
+  const [rest_enabled, setRestEnabled] = useState(undefined)
+  const [rest_api_key, setRestApiKey] = useState('')
+  const [rest_starting_words, setRestStartingWords] = useState('')
+  const [rest_bot_name_regex, setRestBotNameRegex] = useState('')
+  const [rest_bot_name, setRestBotName] = useState('')
 
   const [use_voice, setUseVoice] = useState(false)
   const [voice_provider, setVoiceProvider] = useState<string | null>(null)
@@ -32,55 +32,63 @@ export const RestAgentWindow: FC<any> = props => {
   useEffect(() => {
     if (props.agentData !== null && props.agentData !== undefined) {
       console.log(props.agentData)
-      setRestEnabled(props.agentData.discord_enabled)
-      setRestApiKey(props.agentData.discord_api_key)
-      setRestStartingWords(props.agentData.discord_starting_words)
-      setRestBotNameRegex(props.agentData.discord_bot_name_regex)
-      setRestBotName(props.agentData.discord_bot_name)
+      setRestEnabled(props.agentData.data?.rest_enabled)
+      setRestApiKey(props.agentData.data?.rest_api_key)
+      setRestStartingWords(props.agentData.data?.rest_starting_words)
+      setRestBotNameRegex(props.agentData.data?.rest_bot_name_regex)
+      setRestBotName(props.agentData.data?.rest_bot_name)
       setUseVoice(
-        props.agentData !== undefined && props.agentData.use_voice === true
+        props.agentData !== undefined &&
+          props.agentData.data?.use_voice === true
       )
-      setVoiceProvider(props.agentData.voice_provider)
-      setVoiceCharacter(props.agentData.voice_character)
-      setVoiceLanguageCode(props.agentData.voice_language_code)
-      setVoiceDefaultPhrases(props.agentData.voice_default_phrases)
-      setTikTalkNetUrl(props.agentData.tiktalknet_url)
+      setVoiceProvider(props.agentData.data?.voice_provider)
+      setVoiceCharacter(props.agentData.data?.voice_character)
+      setVoiceLanguageCode(props.agentData.data?.voice_language_code)
+      setVoiceDefaultPhrases(props.agentData.data?.voice_default_phrases)
+      setTikTalkNetUrl(props.agentData.data?.tiktalknet_url)
       setAgentData({
-        discord_enabled: discord_enabled,
-        discord_api_key: discord_api_key,
-        discord_starting_words: discord_starting_words,
-        discord_bot_name: discord_bot_name,
-        discord_bot_name_regex: discord_bot_name,
+        ...agentData,
+        data: {
+          ...agentData.data,
+          rest_enabled: rest_enabled,
+          rest_api_key: rest_api_key,
+          rest_starting_words: rest_starting_words,
+          rest_bot_name: rest_bot_name,
+          rest_bot_name_regex: rest_bot_name,
+          use_voice: use_voice,
+          voice_provider: voice_provider,
+          voice_character: voice_character,
+          voice_language_code: voice_language_code,
+          voice_default_phrases: voice_default_phrases,
+          tiktalknet_url: tiktalknet_url,
+        },
+      })
+    }
+  }, [])
+  useEffect(() => {
+    setAgentData({
+      ...agentData,
+      data: {
+        ...agentData.data,
+        rest_enabled: rest_enabled,
+        rest_api_key: rest_api_key,
+        rest_starting_words: rest_starting_words,
+        rest_bot_name: rest_bot_name,
+        rest_bot_name_regex: rest_bot_name,
         use_voice: use_voice,
         voice_provider: voice_provider,
         voice_character: voice_character,
         voice_language_code: voice_language_code,
         voice_default_phrases: voice_default_phrases,
         tiktalknet_url: tiktalknet_url,
-      })
-    }
-  }, [])
-  useEffect(() => {
-    //console.log(discord_enabled, discord_api_key, discord_starting_words, discord_bot_name, discord_bot_name_regex, use_voice, voice_provider, voice_character, voice_default_phrases, voice_language_code, tiktalknet_url)
-    setAgentData({
-      discord_enabled: discord_enabled,
-      discord_api_key: discord_api_key,
-      discord_starting_words: discord_starting_words,
-      discord_bot_name: discord_bot_name,
-      discord_bot_name_regex: discord_bot_name,
-      use_voice: use_voice,
-      voice_provider: voice_provider,
-      voice_character: voice_character,
-      voice_language_code: voice_language_code,
-      voice_default_phrases: voice_default_phrases,
-      tiktalknet_url: tiktalknet_url,
+      },
     })
   }, [
-    discord_enabled,
-    discord_api_key,
-    discord_starting_words,
-    discord_bot_name,
-    discord_bot_name_regex,
+    rest_enabled,
+    rest_api_key,
+    rest_starting_words,
+    rest_bot_name,
+    rest_bot_name_regex,
     use_voice,
     voice_provider,
     voice_character,
@@ -135,36 +143,53 @@ export const RestAgentWindow: FC<any> = props => {
         position: 'relative',
       }}
     >
-      <h1>REST API</h1>
+      <h3>REST API</h3>
       <div style={{ position: 'absolute', right: '1em', top: '0' }}>
         <Switch
-          checked={agentData.rest_enabled}
+          checked={agentData.data?.rest_enabled}
           onChange={e => {
-            setAgentData({ agentData, rest_enabled: e.target.checked })
+            if (!e.target.checked) {
+              setRestApiKey('')
+              setRestStartingWords('')
+              setRestBotNameRegex('')
+              setRestBotName('')
+              setUseVoice(false)
+              setVoiceProvider('')
+              setVoiceCharacter('')
+              setVoiceLanguageCode('')
+              setVoiceDefaultPhrases('')
+              setTikTalkNetUrl('')
+            }
+
+            setRestEnabled(e.target.checked)
           }}
           label={''}
         />
       </div>
-      <div className="form-item">
-        <Grid container style={{ padding: '1em' }}>
-          {discord_enabled && (
+      {rest_enabled && (
+        <div className="form-item">
+          <Grid container style={{ padding: '1em' }}>
             <Grid item xs={6}>
               <div className="form-item">
                 <span className="form-item-label">API Key</span>
                 <KeyInput
-                  value={discord_api_key}
+                  value={rest_api_key}
                   setValue={setRestApiKey}
                   secret={true}
                 />
               </div>
             </Grid>
-          )}
-        </Grid>
-      </div>
+          </Grid>
+        </div>
+      )}
 
-      {discord_enabled && (
+      {rest_enabled && (
         <>
-          <Grid container style={{ padding: '1em' }}>
+          <Grid
+            container
+            style={{ padding: '1em' }}
+            justifyContent="space-between"
+          >
             <Grid item xs={3}>
               <div className="form-item">
                 <span className="form-item-label">
@@ -172,7 +197,7 @@ export const RestAgentWindow: FC<any> = props => {
                 </span>
                 <input
                   type="text"
-                  defaultValue={discord_starting_words}
+                  defaultValue={rest_starting_words}
                   onChange={e => {
                     setRestStartingWords(e.target.value)
                   }}
@@ -184,7 +209,7 @@ export const RestAgentWindow: FC<any> = props => {
                 <span className="form-item-label">Bot Name Regex</span>
                 <input
                   type="text"
-                  defaultValue={discord_bot_name_regex}
+                  defaultValue={rest_bot_name_regex}
                   onChange={e => {
                     setRestBotNameRegex(e.target.value)
                   }}
@@ -196,7 +221,7 @@ export const RestAgentWindow: FC<any> = props => {
                 <span className="form-item-label">Bot Name</span>
                 <input
                   type="text"
-                  defaultValue={discord_bot_name}
+                  defaultValue={rest_bot_name}
                   onChange={e => {
                     setRestBotName(e.target.value)
                   }}
@@ -349,7 +374,7 @@ export const RestAgentWindow: FC<any> = props => {
                       }}
                     >
                       <option value={'en-US'}>none</option>
-                      <option value={'en-US'}>en-GB</option>
+                      <option value={'en-GB'}>en-GB</option>
                     </select>
                   </div>
                 </Grid>
