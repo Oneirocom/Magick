@@ -1,37 +1,43 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import ReactMenu from "./Menu";
-import Menu from "../menu";
-import { injectItem } from "../utils";
+import React from 'react'
+import ReactDOM from 'react-dom'
+import ReactMenu from './Menu'
+import Menu from '../menu'
+import { injectItem } from '../utils'
 
 export default class extends Menu {
+  items: any[]
+  position: number[]
+  visible: boolean
+  el: HTMLDivElement
+  args: any
+  props: any
   constructor(editor, props) {
-    super();
-    this.props = props;
-    this.items = [];
-    this.position = [0, 0];
-    this.visible = false;
-    this.el = document.createElement("div");
-    editor.view.container.appendChild(this.el);
+    super(editor, props)
+    this.props = props
+    this.items = []
+    this.position = [0, 0]
+    this.visible = false
+    this.el = document.createElement('div')
+    editor.view.container.appendChild(this.el)
 
-    this.render();
+    this.render()
   }
 
   addItem(title, onClick, path = []) {
-    injectItem(this.items, title, onClick, path);
-    this.render();
+    injectItem(this.items, title, onClick, path)
+    this.render()
   }
 
   show(x, y, args) {
-    this.position = [x, y];
-    this.args = args;
-    this.visible = true;
-    this.render();
+    this.position = [x, y]
+    this.args = args
+    this.visible = true
+    this.render()
   }
 
   hide() {
-    this.visible = false;
-    this.render();
+    this.visible = false
+    this.render()
   }
 
   render() {
@@ -45,8 +51,8 @@ export default class extends Menu {
         onClose={() => this.hide()}
       />,
       this.el
-    );
+    )
   }
 }
 
-export { Menu };
+export { Menu }

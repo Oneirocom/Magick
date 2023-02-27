@@ -18,6 +18,7 @@ import gridimg from '../../grid.png'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import { useFeathers } from '../../contexts/FeathersProvider'
+import { Component } from 'rete/types/engine'
 
 export type MagickTab = {
   layoutJson: string
@@ -29,29 +30,31 @@ export type MagickTab = {
   active: boolean
 }
 
-// TODO give better typing to the editor
-const Context = createContext({
-  run: () => {},
-  getEditor: (): MagickEditor | null => null,
-  editor: {} as MagickEditor | null,
-  serialize: (): GraphData | undefined => undefined,
+type EditorContextType = {
+  run: () => void
+  getEditor: () => MagickEditor | null
+  editor: MagickEditor | null
+  serialize: () => GraphData | undefined
   buildEditor: (
     el: HTMLDivElement,
     // todo update this to use proper spell type
     spell: Spell | undefined,
     tab: MagickTab,
     reteInterface: EditorContext
-  ) => {},
-  setEditor: (editor: any) => {},
-  getNodeMap: () => {},
-  getNodes: () => {},
-  loadGraph: (graph: any) => {},
-  setContainer: () => {},
-  undo: () => {},
-  redo: () => {},
-  del: () => {},
-  centerNode: (nodeId: number): void => {},
-})
+  ) => void
+  setEditor: (editor: any) => void
+  getNodeMap: () => Map<string, Component>
+  getNodes: () => any
+  loadGraph: (graph: any) => void
+  setContainer: (container: HTMLDivElement) => void
+  undo: () => void
+  redo: () => void
+  del: () => void
+  centerNode: (nodeId: number) => void
+}
+
+// TODO give better typing to the editor
+const Context = createContext<EditorContextType>(undefined!)
 
 export const useEditor = () => useContext(Context)
 
@@ -184,7 +187,7 @@ const RawEditor = ({ tab, children }) => {
     if (tab?.spellName)
       getSpell({
         spellName: tab.spellName,
-        projectId: config.projectId
+        projectId: config.projectId,
       })
   }, [tab])
 
