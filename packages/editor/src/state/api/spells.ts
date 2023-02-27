@@ -56,18 +56,18 @@ export const getSpellApi = (config) => {
       }),
       getSpellById: builder.query({
         providesTags: ['Spell'],
-        query: ({ spellName, projectId, Id }) => {
+        query: ({ spellName, projectId, id }) => {
           return {
-            url: `spells?name=${spellName}&projectId=${projectId}&id=${Id}`,
+            url: `spells?name=${spellName}&projectId=${projectId}&id=${id}`,
             params: {},
           }
         },
       }),
       getSpellByJustId: builder.query({
         providesTags: ['Spell'],
-        query: ({projectId, Id }) => {
+        query: ({projectId, id }) => {
           return {
-            url: `spells?projectId=${projectId}&id=${Id}`,
+            url: `spells?projectId=${projectId}&id=${id}`,
             params: {},
           }
         },

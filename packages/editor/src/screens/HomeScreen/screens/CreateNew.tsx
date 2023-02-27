@@ -19,6 +19,7 @@ import threeovGraph from '../../../data/graphs/threeov'
 import md5 from 'md5'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { Button } from '@magickml/client-core'
+import { uuidv4 } from 'packages/editor/src/utils/uuid'
 
 const customConfig = {
   dictionaries: [adjectives, colors],

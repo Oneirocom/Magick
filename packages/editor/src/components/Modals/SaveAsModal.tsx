@@ -7,9 +7,9 @@ import css from './modalForms.module.css'
 import { closeTab } from '../../state/tabs'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
-
+import defaultGraph from '../../data/graphs/default'
 import { useConfig } from '../../contexts/ConfigProvider'
-
+import md5 from 'md5'
 const EditSpellModal = ({ tab, closeModal }) => {
   const config = useConfig()
   const spellApi = getSpellApi(config)
@@ -17,9 +17,12 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const dispatch = useDispatch()
   const [error, setError] = useState('')
   const [saveSpell, { isLoading }] = spellApi.useSaveSpellMutation()
-  const { data: spell } = spellApi.useGetSpellQuery(
+  const [newSpell] = spellApi.useNewSpellMutation()
+  console.log(tab)
+  const { data: spell } = spellApi.useGetSpellByIdQuery(
     {
       spellName: tab.name,
+      id: tab.id,
       projectId: config.projectId,
     },
     {
@@ -37,8 +40,15 @@ const EditSpellModal = ({ tab, closeModal }) => {
 
   const onSubmit = handleSubmit(async data => {
     console.log("Inside Spell SUbmit")
+    console.log(spell)
+    const response = await newSpell({
+      graph: defaultGraph,
+      name: data.name,
+      projectId: config.projectId,
+      hash: md5(JSON.stringify(defaultGraph.nodes)),
+    })
     const saveResponse: any = await saveSpell({
-      spell: {...spell.data[0], name: data.name},
+      spell: {...spell.data[0], name: data.name, id: response.data.id},
       projectId: config.projectId
     })
     console.log(saveResponse)
@@ -54,8 +64,8 @@ const EditSpellModal = ({ tab, closeModal }) => {
     enqueueSnackbar('Spell saved', { variant: 'success' })
 
     // close current tab and navigate to the new spell
-    dispatch(closeTab(tab.id))
-    navigate(`/magick/${tab.id}-${encodeURIComponent(atob(data.name))}`)
+    //dispatch(closeTab(tab.id))
+    navigate(`/magick/${response.data.id +"-"+ encodeURIComponent(btoa(data.name))}`)
 
     closeModal()
   })

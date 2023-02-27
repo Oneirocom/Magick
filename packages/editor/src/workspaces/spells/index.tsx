@@ -80,7 +80,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     loadSpell({
       spellName: tab.name.split('--')[0],
       projectId: config.projectId,
-      Id: tab.id,
+      id: tab.id,
     })
   }, [tab])
 

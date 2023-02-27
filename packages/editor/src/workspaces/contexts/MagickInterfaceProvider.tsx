@@ -28,7 +28,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const { data: _spell } = spellApi.useGetSpellByIdQuery(
     {
       spellName: tab.name.split('--')[0],
-      Id: tab.id,
+      id: tab.id,
       projectId: config.projectId,
     },
     {
@@ -43,6 +43,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   useEffect(() => {
     if (!_spell) return
     spellRef.current = _spell.data[0]
+    console.log(spellRef.current)
   }, [_spell])
 
   const {
@@ -64,6 +65,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   } = events
 
   const getCurrentSpell = () => {
+    console.log(spellRef.current)
     return spellRef.current
   }
   console.log(getCurrentSpell())
@@ -143,7 +145,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const getSpell = async spellName => {
-    const spell = await _getSpell({ spellName, Id: tab.id, projectId: config.projectId })
+    const spell = await _getSpell({ spellName, id: tab.id, projectId: config.projectId })
 
     if (!spell.data) return null
 

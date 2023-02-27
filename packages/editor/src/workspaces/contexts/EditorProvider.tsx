@@ -178,11 +178,12 @@ const RawEditor = ({ tab, children }) => {
   // This will be the main interface between magick and rete
   const reteInterface = useMagickInterface()
   useEffect(() => {
+    console.log(loaded)
+    console.log(tab)
     if (!tab || loaded) return
-
     getSpell({
       spellName: tab.name,
-      Id: tab.id,
+      id: tab.id,
       projectId: config.projectId,
     })
   }, [tab])

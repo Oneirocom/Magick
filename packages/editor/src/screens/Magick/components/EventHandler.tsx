@@ -26,7 +26,7 @@ const EventHandler = ({ pubSub, tab }) => {
   const [saveDiff] = spellApi.useSaveDiffMutation()
   const { data: spell } = spellApi.useGetSpellByIdQuery({
     spellName: tab.name.split('--')[0],
-    Id: tab.id,
+    id: tab.id,
     projectId: config.projectId,
   })
   const preferences = useSelector(
@@ -125,8 +125,7 @@ const EventHandler = ({ pubSub, tab }) => {
     if (jsonDiff.length === 0) return
 
     try {
-      // save diff to spell runner if something has changed.  Will update spell in spell runner session
-      client.service('spell-runner').update(currentSpell.name, {
+      await client.service('spell-runner').update(currentSpell.id, {
         diff: jsonDiff,
         projectId: config.projectId,
       })
