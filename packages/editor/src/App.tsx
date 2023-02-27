@@ -32,7 +32,7 @@ function App() {
       {pluginManager.getGroupedClientRoutes().map(pluginRouteGroup => {
           const ClientPageLayout = pluginRouteGroup.layout ?? MagickPageLayout
           return (
-            <Route element={<ClientPageLayout />}>
+            <Route key={pluginRouteGroup.routes[0].path} element={<ClientPageLayout />}>
               {pluginRouteGroup.routes.map(route => {
                 return (
                   <Route
