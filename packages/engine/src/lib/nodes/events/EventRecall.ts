@@ -52,12 +52,14 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     const nameInput = new InputControl({
       dataKey: 'name',
       name: 'Input name',
+      placeholder: 'Conversation'
     })
 
     const type = new InputControl({
       dataKey: 'type',
       name: 'Type',
       icon: 'moon',
+      placeholder: 'conversation'
     })
 
     const max_count = new InputControl({

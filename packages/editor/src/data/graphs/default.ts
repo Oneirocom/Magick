@@ -1,26 +1,6 @@
 const graph = {
   id: 'demo@0.1.0',
   nodes: {
-    '124': {
-      id: 124,
-      data: {
-        name: 'default',
-        socketKey: '20c0d2db-1916-433f-88c6-69d3ae123217',
-        dataControls: {
-          name: {
-            expanded: true,
-          },
-        },
-      },
-      inputs: {},
-      outputs: {
-        trigger: {
-          connections: [],
-        },
-      },
-      position: [-200, -100],
-      name: 'Trigger In',
-    },
     '232': {
       id: 232,
       data: {

@@ -207,7 +207,7 @@ class SpellRunner {
    */
   async runComponent({
     inputs,
-    componentName = 'Trigger In',
+    componentName = 'Input',
     runSubspell = false,
     runData = {},
   }: RunComponentArgs) {
@@ -235,7 +235,10 @@ class SpellRunner {
 
     console.log('component', component)
 
-    const triggeredNode = this._getTriggeredNodeByName(componentName)
+    const firstInput = Object.keys(inputs)[0]
+
+    const triggeredNode = this._getTriggeredNodeByName(firstInput)
+    console.log('triggeredNode', triggeredNode)
 
     if (!component.run) throw new Error('Component does not have a run method')
     if (!triggeredNode) throw new Error('No triggered node found')

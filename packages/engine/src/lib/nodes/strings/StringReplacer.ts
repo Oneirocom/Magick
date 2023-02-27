@@ -75,8 +75,6 @@ export class StringReplacer extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   async worker(node: NodeData, rawInputs: MagickWorkerInputs) {
-    this.name = node?.data?.name as string
-
     let input = rawInputs['input'][0] as string
 
     const match = ((rawInputs['match'] && rawInputs['match'][0]) ||

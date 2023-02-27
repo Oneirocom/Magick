@@ -74,9 +74,6 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
     //node.display(res.toString())
     if (res === undefined) node.display('undefined value')
 
-    this.name =
-      (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
-
     return {
       output: res,
     }

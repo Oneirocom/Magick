@@ -14,7 +14,7 @@ import { pluginManager } from '../../plugin'
 import { InputControl } from '../../dataControls/InputControl'
 import { PlaytestControl } from '../../dataControls/PlaytestControl'
 import { SwitchControl } from '../../dataControls/SwitchControl'
-import { anySocket } from '../../sockets'
+import { anySocket, eventSocket, triggerSocket } from '../../sockets'
 import { MagickComponent, MagickTask } from '../../magick-component'
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
@@ -32,6 +32,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     this.task = {
       outputs: {
         output: 'output',
+        trigger: 'option',
       },
     }
 
@@ -98,8 +99,15 @@ export class InputComponent extends MagickComponent<InputReturn> {
     // subscribe the node to the playtest input data stream
     this.subscribeToPlaytest(node)
 
-    const out = new Rete.Output('output', 'output', anySocket)
+    const out = new Rete.Output('output', 'output', eventSocket)
 
+    const trigger = new Rete.Output(
+      'trigger',
+      'trigger',
+      triggerSocket
+    )
+
+    
     node.data.name = node.data.name || `Input - Default`
 
     const data = node?.data?.playtestToggle as
@@ -143,6 +151,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
     return node
+      .addOutput(trigger)
       .addOutput(out)
   }
 
@@ -152,9 +161,8 @@ export class InputComponent extends MagickComponent<InputReturn> {
     outputs: MagickWorkerOutputs,
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
-    const nodeData = node.data as {
-      playtestToggle: { receivePlaytest: boolean }
-    }
+    
+    this._task.closed = ['trigger']
 
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data) && node.data.playtestToggle.receivePlaytest) {

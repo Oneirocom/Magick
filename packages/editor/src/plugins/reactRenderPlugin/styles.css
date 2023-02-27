@@ -42,13 +42,13 @@
 .socket {
   display: inline-block;
   cursor: pointer;
-  border: 1px solid white;
+  border: 1px solid #ffffffaa;
   border-radius: 12px;
   width: 24px;
   height: 24px;
   margin: 6px;
   vertical-align: middle;
-  background: #96b38a;
+  background: #969696;
   z-index: 2;
   box-sizing: border-box; }
   .socket:hover {

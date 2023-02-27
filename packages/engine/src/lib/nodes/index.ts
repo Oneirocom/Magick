@@ -9,7 +9,6 @@ import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
 import { Request } from './io/Request'
 import { SpellComponent } from './io/Spell'
-import { TriggerIn } from './io/TriggerIn'
 import { TriggerOut } from './io/TriggerOut'
 import { BooleanGate } from './logic/BooleanGate'
 import { Code } from './logic/Code'
@@ -107,7 +106,6 @@ export const components = {
   imgs: () => new Image(),
   stringProcessor: () => new StringProcessor(),
   switchGate: () => new SwitchGate(),
-  triggerIn: () => new TriggerIn(),
   triggerOut: () => new TriggerOut(),
   waitForAll: () => new WaitForAll(),
   exclusiveGate: () => new ExclusiveGate(),
