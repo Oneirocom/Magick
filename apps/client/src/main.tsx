@@ -20,8 +20,10 @@ if (window !== window.parent) {
     'message',
     event => {
       console.log('event', event.data)
+      const cloudUrl =
+        import.meta.env.VITE_APP_CLOUD_URL || 'http://localhost:3000'
       // here we check that the sender is coming from a trusted source
-      if (event.origin !== 'http://localhost:3000') return
+      if (event.origin !== cloudUrl) return
 
       const { data } = event
       const { type, payload } = data
