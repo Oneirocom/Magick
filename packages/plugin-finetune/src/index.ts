@@ -1,12 +1,12 @@
 import * as React from 'react'
 
 import Home from './screens/Home'
-import Completions from './completions'
+import Completions from './completions/CompletionList'
 import NewFineTune from './screens/NewFineTune'
 import CompletionDetails from './completions/CompletionDetails'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories'
-
 import { Plugin } from '@magickml/engine'
+
 
 const FineTuneManager = new Plugin({
   name: 'FineTuneManagerPlugin',
@@ -17,6 +17,7 @@ const FineTuneManager = new Plugin({
       text: 'Fine Tuning',
     }
   ],
+  clientPageLayout: React.lazy(() => import('./PageLayout')),
   clientRoutes: [
     {
       path: '/fineTuneManager',

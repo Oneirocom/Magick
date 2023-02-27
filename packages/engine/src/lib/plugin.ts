@@ -29,9 +29,10 @@ export class Plugin {
     stop: Function
   }
   drawerItems?: Array<DrawerItem>
+  clientPageLayout?: any
   clientRoutes?: Array<ClientRoute>
   serverRoutes?: Array<ServerRoute>
-  startkey: any
+  startKey?: string
   constructor({
     name,
     nodes = [],
@@ -48,6 +49,7 @@ export class Plugin {
         console.log('stopping plugin')
       }
     },
+    clientPageLayout = null,
     clientRoutes = [],
     serverRoutes = [],
     drawerItems = []
@@ -63,6 +65,7 @@ export class Plugin {
     }
     inputTypes?: any[]
     outputTypes?: any[]
+    clientPageLayout?: any
     clientRoutes?: Array<ClientRoute>
     serverRoutes?: Array<ServerRoute>
     drawerItems?: Array<DrawerItem>
@@ -75,6 +78,7 @@ export class Plugin {
     this.inputTypes = inputTypes
     this.outputTypes = outputTypes
     this.serverInit = serverInit
+    this.clientPageLayout = clientPageLayout
     this.clientRoutes = clientRoutes
     this.serverRoutes = serverRoutes
     this.drawerItems = drawerItems
@@ -113,7 +117,7 @@ class PluginManager {
     this.pluginList.forEach(plugin => {
       if (plugin.agentMethods) {
         let obj = {}
-        obj[plugin.startkey] = plugin.agentMethods.start
+        obj[plugin.startKey] = plugin.agentMethods.start
         agentStartMethods = { ...agentStartMethods, ...obj }
       }
     })
@@ -149,13 +153,46 @@ class PluginManager {
   getClientRoutes() {
     let clientRoutes = [] as any[]
     this.pluginList.forEach(plugin => {
+      console.log('clientRoutes', plugin.clientRoutes, 'plugin', plugin.name, 'plugin')
       if (plugin.clientRoutes) {
         plugin.clientRoutes.forEach(route => {
-          clientRoutes.push(route)
+          clientRoutes.push({...route, plugin: plugin.name})
         })
       }
     })
     return clientRoutes
+  }
+
+  getGroupedClientRoutes() {
+    let lastPluginRoute = ''
+    const pluginRoutes = this.getClientRoutes()
+     const pluginRoutesGrouped = pluginRoutes.reduce((acc, route) => {
+      if (route.plugin !== lastPluginRoute) {
+        acc.push({
+          plugin: route.plugin,
+          routes: [route],
+        })
+      } else {
+        acc[acc.length - 1].routes.push(route)
+      }
+      lastPluginRoute = route.plugin
+      return acc
+    }, [])
+  
+    pluginRoutesGrouped.map(pluginRouteGroup => {
+      console.log('pluginRouteGroup', pluginRouteGroup)
+      const ClientPageLayout =
+        pluginManager.getClientPageLayout(pluginRouteGroup.plugin) || null
+      pluginRouteGroup.layout = ClientPageLayout
+    })
+    return pluginRoutesGrouped
+  }
+
+  getClientPageLayout(p) {
+    let clientPageLayout = null
+    const plugin = this.pluginList.filter(plugin => plugin.name === p)[0]
+    
+    return plugin.clientPageLayout
   }
 
   getServerRoutes() {

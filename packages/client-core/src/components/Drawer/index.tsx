@@ -107,7 +107,7 @@ const PluginDrawerItems = ({onClick, open}) => {
   let divider = false
   return (
     <>
-      {drawerItems.map(item => {
+      {drawerItems.map((item, index) => {
         if (item.plugin !== lastPlugin) {
           divider = true
           lastPlugin = item.plugin
@@ -118,6 +118,7 @@ const PluginDrawerItems = ({onClick, open}) => {
           <>
           {divider && <Divider />}
           <DrawerItem
+            key={index}
             active={location.pathname.includes(item.path)}
             Icon={item.icon}
             open={open}

@@ -16,7 +16,7 @@ export default function DeleteFileButton({ id }: { id: string }) {
   async function onClick() {
     try {
       setIsDeleting(true)
-      if (window.confirm('Are you sure you want to delete this file?')) {
+      if (typeof window !== 'undefined' && window.confirm('Are you sure you want to delete this file?')) {
         await fetch(`${OPENAI_ENDPOINT}/files/${id}`, {
           method: 'DELETE',
           headers,
