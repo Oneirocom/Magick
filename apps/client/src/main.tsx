@@ -1,23 +1,54 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import MagickIDE, { MagickIDEProps } from "@magickml/editor";
-import { projectId as _projectId } from '@magickml/engine';
+import MagickIDE, { MagickIDEProps } from '@magickml/editor'
+import { projectId as _projectId } from '@magickml/engine'
 
-import "./plugins";
+import './plugins'
 
 // check urlParams for projectId and apiUrl
-const projectId = new URLSearchParams(window.location.search).get('projectId') ?? _projectId
-const apiUrl = new URLSearchParams(window.location.search).get('apiUrl') ?? import.meta.env.VITE_APP_API_URL ?? 'http://localhost:3030'
+const projectId =
+  new URLSearchParams(window.location.search).get('projectId') ?? _projectId
+const apiUrl =
+  new URLSearchParams(window.location.search).get('apiUrl') ??
+  import.meta.env.VITE_APP_API_URL ??
+  'http://localhost:3030'
 
-const container = document.getElementById('root')
-const root = createRoot(container!) // createRoot(container!) if you use TypeScript
-;(window as any).root = root
-const config: MagickIDEProps = {
+// we need some way to turn this on when we need it.
+
+if (window !== window.parent) {
+  window.addEventListener(
+    'message',
+    event => {
+      console.log('event', event.data)
+      // here we check that the sender is coming from a trusted source
+      if (event.origin !== 'http://localhost:3000') return
+
+      const { data } = event
+      const { type, payload } = data
+
+      // not sure when we would use different types, but good to be sure.
+      if (type === 'INIT') {
+        // to do - we shold store this stuiff in localstorage
+        const { config } = payload
+
+        const Root = () => <MagickIDE config={config} />
+        const container = document.getElementById('root')
+        const root = createRoot(container!) // createRoot(container!) if you use TypeScript
+        ;(window as any).root = root
+        root.render(<Root />)
+      }
+    },
+    false
+  )
+} else {
+  const container = document.getElementById('root')
+  const root = createRoot(container!) // createRoot(container!) if you use TypeScript
+  ;(window as any).root = root
+  const config: MagickIDEProps = {
     apiUrl,
     projectId,
-}
-const Root = () => (
-  <MagickIDE config={config} />
-)
+  }
+  const Root = () => <MagickIDE config={config} />
 
-root.render(<Root />)
+  root.render(<Root />)
+}
