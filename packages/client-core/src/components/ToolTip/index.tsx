@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { Tooltip as MUITooltip, TooltipProps } from '@mui/material'
 
 interface Props {

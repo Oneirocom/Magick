@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { ReactElement, useEffect, useRef } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 

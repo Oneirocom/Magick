@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { Icon } from '@magickml/client-core'
 import css from './chip.module.css'
 

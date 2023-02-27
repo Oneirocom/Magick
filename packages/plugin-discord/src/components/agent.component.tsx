@@ -8,7 +8,7 @@ type PluginProps = {
   props
 }
 import { API_ROOT_URL } from '@magickml/engine'
-import SwitchComponent from './Switch'
+import SwitchComponent from './Switch' // TODO: Remove me
 
 export const DiscordAgentWindow: FC<any> = props => {
   props = props.props
