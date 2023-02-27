@@ -73,7 +73,7 @@ export default class SpellManager {
   }
 
   async load(spell: Spell, overload = false) {
-    console.log('loading spell', spell)
+    
     if (!spell) throw new Error('No spell provided to load')
     if (this.spellRunnerMap.has(spell.id) && !overload)
       return this.getSpellRunner(spell.id)
@@ -92,7 +92,7 @@ export default class SpellManager {
 
   async run(spellId: string, inputs: Record<string, any>) {
     const runner = this.getSpellRunner(spellId)
-    console.log('running, inputs are', inputs)
+    
     const result = await runner?.runComponent({
       inputs,
     })

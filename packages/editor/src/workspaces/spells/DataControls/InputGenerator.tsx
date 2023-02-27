@@ -35,7 +35,7 @@ const InputGenerator = ({ updateData, control, initialValue }) => {
     const newInputs = initialValue.filter(
       input => !data.ignored.some(ignored => ignored.name === input.name)
     )
-    console.log('new inputs', newInputs)
+    
     setInputs(newInputs)
   }, [initialValue])
 
@@ -54,8 +54,7 @@ const InputGenerator = ({ updateData, control, initialValue }) => {
       name: input,
       socketType: data.socketType,
     }
-    console.log('Adding new input', newInput)
-
+    
     const newInputs = [...inputs, newInput]
 
     setInputs(newInputs)

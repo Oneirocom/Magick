@@ -26,14 +26,10 @@ const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
     handleSubmit,
     // formState: { errors },
   } = useForm()
-  console.log('tab ::: ', tab)
 
   const onSubmit = handleSubmit(async data => {
     let name = data.name
     data.name = tab.id + "-" + encodeURIComponent(btoa(data.name))
-    console.log('data ::: ', data)
-    console.log(spellApi)
-    //console.log('spell ::: ', spell)
 
     const response: any = await patchSpell({
       id: tab.id,
@@ -41,8 +37,6 @@ const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
         name: name,
       },
     })
-
-    console.log('response.error ::: ', response.error)
 
     if (response.error) {
       setError(response.error.data.error.message)

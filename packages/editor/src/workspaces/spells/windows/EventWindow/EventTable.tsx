@@ -206,7 +206,6 @@ function EventTable({ events, updateCallback }) {
   }
 
   const handleEventDelete = async (event: any) => {
-    console.log('event to delete ::: ', event)
     const isDeleted = await axios.delete(
       `${import.meta.env.VITE_APP_API_URL}/events/${event.id}`
     )

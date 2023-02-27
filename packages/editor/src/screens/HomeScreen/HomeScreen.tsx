@@ -39,7 +39,7 @@ const StartScreen = () => {
     } */
     // TODO check for proper values here and throw errors
 
-    console.log('spellData', spellData)
+    
 
     // Create new spell
     const response = await newSpell({
@@ -73,7 +73,7 @@ const StartScreen = () => {
         dispatch(closeTab(tab.id))
       }
     } catch (err) {
-      console.log('Error deleting spell', err)
+      console.error('Error deleting spell', err)
     }
   }
 

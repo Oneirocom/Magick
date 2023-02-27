@@ -84,12 +84,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
     const getEventsbyEmbedding = async (params: any) => {
-      console.log(params)
+      
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
       let embeddings = params['embedding']
-      console.log('INIT')
-      console.log(embeddings)
+      
       url.searchParams.append('embedding', params['embedding'])
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
@@ -98,7 +97,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     }
     const getEvents = async (params: GetEventArgs) => {
       const urlString = `${API_ROOT_URL}/events`
-      console.log('FIRST')
+      
       const url = new URL(urlString)
       for (let p in params) {
         // append params to url, make sure to preserve arrays
@@ -146,11 +145,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       if (embedding.length == 1536) {
         const enc_embed = new Float32Array(embedding)
         let uint = new Uint8Array(enc_embed.buffer)
-        console.log(
-          'Convert F32 to Uint8 : Byte Length Test',
-          enc_embed.length * 4,
-          uint.length
-        )
         let str = btoa(
           String.fromCharCode.apply(
             null,
@@ -159,13 +153,13 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
         )
         events = await getEventsbyEmbedding({ embedding: str })
       } else {
-        console.log('Embedding Size not matching with the table')
+        
       }
     } else {
       events = await getEvents(data)
     }
     if (!silent) node.display(`Event ${type} found` || 'Not found')
-    console.log('events', events)
+    
     return {
       events,
     }

@@ -67,11 +67,11 @@ const CreateNew = () => {
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
       })
-      console.log(name)
-      console.log(response)
+      
+      
 
       if ('error' in response) {
-        console.log('error in response', response.error)
+        
         if ('status' in response.error) {
           const err = response.error
 
@@ -86,7 +86,7 @@ const CreateNew = () => {
 
       navigate(`/magick/${response.data.id +"-"+ encodeURIComponent(btoa(name))}`)
     } catch (err) {
-      console.log('ERROR!!', err)
+      console.error('ERROR!', err)
     }
   })
 

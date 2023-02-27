@@ -78,10 +78,9 @@ export class World {
     for (const i in newAgents){
       try {
         let temp_agent = this.getAgent(newAgents[i].id)
-        console.log("Inside TRY ")
         await temp_agent.onDestroy()
       } catch {
-        console.log("Client Does not exist")
+        console.error("Client Does not exist")
       }
       try {
         if (newAgents[i].data.discord_enabled){
@@ -91,12 +90,12 @@ export class World {
             //Delete the Agent
             await temp_agent.onDestroy()
           } catch(e) {
-            console.log("Couldn't delete the Discord Client.!! Caught Error: ",e)
+            console.error("Couldn't delete the Discord Client.Caught Error: ", e)
           }
           this.addAgent(newAgents[i])
         } 
-      } catch {
-        console.log("No Agents Present")
+      } catch (e) {
+        console.error("No Agents Present", e)
       }
     }
     // If an entry exists in oldAgents but not in newAgents, it has been deleted

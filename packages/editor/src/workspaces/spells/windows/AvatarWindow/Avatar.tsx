@@ -25,10 +25,6 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
   const { scene, camera } = useThree()
   const gltf = useGLTF('/avatar.vrm')
 
-  useEffect(() => {
-    console.log('SPEECH URL', speechUrl)
-  }, [speechUrl])
-
   // settings
   const talktime = true
   let mouththreshold = 10
@@ -164,7 +160,7 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
   const [lastUrl, setLastUrl] = useState<string | null>(null)
 
   useEffect(() => {
-    console.log('SPEECH URL CHANGED', speechUrl)
+    
     if (!speechUrl) return
 
     pause()
@@ -208,7 +204,7 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
         var inputvolume = average
 
         // audio in spectrum expressed as array
-        // console.log(array.toString());
+        // 
         // useful for mouth shape variance
 
         // move the interface slider

@@ -38,11 +38,6 @@ const Contract = () => {
 
   const { chain } = useNetwork()
 
-  useEffect(() => {
-    if (!contractAddress) return
-    console.log(contractAddress)
-  }, [contractAddress])
-
   const { connector, isConnected, address } = useAccount()
   const { disconnect } = useDisconnect()
   const { connect, connectors, error, isLoading, pendingConnector } =
@@ -102,9 +97,7 @@ const Contract = () => {
   const callContractFun = async () => {
     const res = await contractWrite?.()
     setLastTx(res?.hash as string)
-    console.log(res?.hash)
     const called = await res?.wait()
-    console.log(called)
   }
 
   const {

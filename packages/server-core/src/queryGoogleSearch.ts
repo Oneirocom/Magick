@@ -45,7 +45,6 @@ export const queryGoogleSearch = async (searchTerm: string) => {
   })
 
   const output = `${searchDirectResponse}\n${formattedSerpSearch.join('\n')}`
-  console.log(output);
   return {
     summary: searchDirectResponse,
     links: formattedSerpSearch
