@@ -1,6 +1,6 @@
-import { isEmpty } from 'lodash'
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
+import * as ethers from 'ethers'
 
 import {
   anySocket,
@@ -94,17 +94,30 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ) {
-    this._task.closed = ['trigger']
-    console.log('********* processing input to ethereum input *********')
-    console.log(data)
+    const rpcHttp = node.data?.rpc_http as string
 
-    // handle data subscription.  If there is data, this is from playtest
-    if (data && !isEmpty(data)) {
-      this._task.closed = []
+    const contractAddress = (inputs['tx'] && inputs['tx'][0]) as string
+    const contractAbi = (inputs['abi'] && inputs['abi'][0]) as string
 
       return {
         output: data,
       }
+    }
+
+    let res = undefined
+    try {
+      // TODO: call read with dynamic function name and params as client do with wagmi package
+      res = await contract?.myString();
+    } catch {
+      console.error("call reverted");
+      return
+    }
+
+    // TODO: need to be fixed, issue of loosing display() function from NodeData context
+    // node.display(res)
+
+    return {
+      output: res,
     }
   }
 }
