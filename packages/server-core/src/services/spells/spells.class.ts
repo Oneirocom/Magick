@@ -10,7 +10,7 @@ import type { Spell, SpellData, SpellPatch, SpellQuery } from './spells.schema'
 import { app } from '../../app'
 import { BadRequest } from '@feathersjs/errors/lib'
 
-export interface SpellParams extends KnexAdapterParams<SpellQuery> {}
+export type SpellParams = KnexAdapterParams<SpellQuery>
 
 export type SaveDiffData = {
   name: string

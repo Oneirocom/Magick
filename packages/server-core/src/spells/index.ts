@@ -14,7 +14,7 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
 
   if (!body) throw new ServerError('input-failed', 'No parameters provided')
 
-  let spell = await app.service('spells').find({ query: { projectId, name } })
+  const spell = await app.service('spells').find({ query: { projectId, name } })
 
   if (!spell)
     throw new ServerError('input-failed', `No spell with ${name} name found.`)

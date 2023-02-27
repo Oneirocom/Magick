@@ -80,7 +80,7 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
   }
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )

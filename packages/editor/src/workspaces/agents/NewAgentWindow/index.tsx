@@ -63,13 +63,11 @@ const AgentWindow = ({
       </Grid>
       <Grid item xs={8} className={styles.item}>
         {selectedAgent ? (
-          <>
-            <AgentDetails
+          <AgentDetails
               agentData={selectedAgent}
               setSelectedAgent={setSelectedAgent}
               updateCallback={updateCallBack}
             />
-          </>
         ) : (
           <Typography className={styles.noSelected}>Select Agent</Typography>
         )}

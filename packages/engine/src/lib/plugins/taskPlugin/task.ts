@@ -56,7 +56,7 @@ export class Task {
     this.closed = []
 
     this.getInputs('option').forEach((key: string) => {
-      ;(this.inputs[key] as MagickReteInput[]).forEach(
+      (this.inputs[key] as MagickReteInput[]).forEach(
         (workerInput: MagickReteInput) => {
           workerInput.task.next.push({ key: workerInput.key, task: this })
         }

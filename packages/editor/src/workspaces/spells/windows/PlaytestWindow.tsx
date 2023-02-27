@@ -104,7 +104,7 @@ const Playtest = ({ tab }) => {
 
   const printToConsole = useCallback(
     (_, _text) => {
-      let text = typeof _text === 'object' ? JSON.stringify(_text) : _text
+      const text = typeof _text === 'object' ? JSON.stringify(_text) : _text
       const newHistory = [...history, text]
       setHistory(newHistory as [])
     },
@@ -163,7 +163,7 @@ const Playtest = ({ tab }) => {
     minimap: {
       enabled: false,
     },
-    wordWrap: 'bounded' as 'bounded',
+    wordWrap: 'bounded' as const,
     fontSize: 14,
   }
 

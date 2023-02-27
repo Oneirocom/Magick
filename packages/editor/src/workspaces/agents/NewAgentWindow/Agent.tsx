@@ -35,7 +35,7 @@ const AgentWindow = ({
 
   useEffect(() => {
     if (!loaded) {
-      ;(async () => {
+      (async () => {
         const res = await axios.get(`${config.apiUrl}/agents/` + id)
 
         if (res.data === null) {
@@ -53,7 +53,7 @@ const AgentWindow = ({
   }, [loaded])
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )
@@ -105,7 +105,7 @@ const AgentWindow = ({
           enqueueSnackbar('updated agent', {
             variant: 'success',
           })
-          let responseData = res && JSON.parse(res?.config?.data)
+          const responseData = res && JSON.parse(res?.config?.data)
           setEnabled(responseData.enabled)
           setAgentData(responseData.data)
           updateCallback()

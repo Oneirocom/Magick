@@ -1,6 +1,6 @@
 import { DataControl } from '../plugins/inspectorPlugin'
 
-let nonce = 0
+const nonce = 0
 export class InputControl extends DataControl {
   constructor({
     dataKey = '',

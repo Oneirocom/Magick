@@ -68,7 +68,7 @@ const AvatarWindow = ({ tab }) => {
     minimap: {
       enabled: false,
     },
-    wordWrap: 'bounded' as 'bounded',
+    wordWrap: 'bounded' as const,
     fontSize: 14,
   }
 

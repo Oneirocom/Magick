@@ -72,7 +72,7 @@ const Contract = () => {
   useEffect(() => {
     const newStr = makeid(8)
     setFunctionParam(newStr)
-    let cFunctionList: string[] = []
+    const cFunctionList: string[] = []
     for (const functionName in contract?.functions) {
       cFunctionList.push(functionName)
     }
@@ -175,7 +175,7 @@ const Contract = () => {
             {`Address: ${address}`} (
             <a
               href={`https://mumbai.polygonscan.com/address/${address}`}
-              target="_blank"
+              target="_blank" rel="noreferrer"
             >
               URL
             </a>
@@ -238,7 +238,7 @@ const Contract = () => {
         {`Address: ${contractAddress}`} (
         <a
           href={`https://mumbai.polygonscan.com/address/${contractAddress}`}
-          target="_blank"
+          target="_blank" rel="noreferrer"
         >
           URL
         </a>
@@ -254,7 +254,7 @@ const Contract = () => {
               {`Transaction: ${lastTx}`} (
               <a
                 href={`https://mumbai.polygonscan.com/tx/${lastTx}`}
-                target="_blank"
+                target="_blank" rel="noreferrer"
               >
                 URL
               </a>

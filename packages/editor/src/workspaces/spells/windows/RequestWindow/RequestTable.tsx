@@ -128,7 +128,7 @@ function EventTable({ requests, updateCallback }) {
   )
 
   const updateEvent = async ({ id, ...rowData }, columnId, value) => {
-    let reqBody = {
+    const reqBody = {
       ...rowData,
       [columnId]: value,
       projectId: config.projectId,

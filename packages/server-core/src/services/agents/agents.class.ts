@@ -6,7 +6,7 @@ import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 
-export interface AgentParams extends KnexAdapterParams<AgentQuery> {}
+export type AgentParams = KnexAdapterParams<AgentQuery>
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class AgentService<ServiceParams extends Params = AgentParams> extends KnexService<

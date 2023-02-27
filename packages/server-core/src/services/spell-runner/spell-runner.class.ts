@@ -12,8 +12,7 @@ export type SpellRunnerData = any
 export type SpellRunnerPatch = any
 export type SpellRunnerQuery = any
 
-export interface SpellRunnerParams
-  extends KnexAdapterParams<SpellRunnerQuery> {}
+export type SpellRunnerParams = KnexAdapterParams<SpellRunnerQuery>
 
 interface Data {}
 
@@ -53,7 +52,7 @@ export class SpellRunnerService<
     const spellManager = app.userSpellManagers.get(user.id.toString())
 
     if (!spellManager) throw new Error('No spell manager created for user!')
-    let decoded_id = id.slice(0, 36)
+    const decoded_id = id.slice(0, 36)
     const spell = await getSpell({
       app,
       id: decoded_id as string,

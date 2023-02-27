@@ -76,8 +76,8 @@ const AgentManagerWindow = () => {
           enqueueSnackbar('updated agent', {
             variant: 'success',
           })
-
-          let responseData = res && JSON.parse(res?.config?.data)
+          
+          const responseData = res && JSON.parse(res?.config?.data)
 
           resetData()
         }
@@ -113,6 +113,7 @@ const AgentManagerWindow = () => {
   }
 
   useEffect(() => {
+    if(!config.apiUrl || isLoading) return
     setIsLoading(true)
     ;(async () => {
       const res = await fetch(`${config.apiUrl}/agents`)
@@ -121,7 +122,7 @@ const AgentManagerWindow = () => {
       setData(json.data)
       setIsLoading(false)
     })()
-  }, [])
+  }, [config.apiUrl])
 
   return isLoading ? (
     <LoadingScreen />

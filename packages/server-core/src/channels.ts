@@ -60,4 +60,4 @@ export default function(app: Application): void {
   //     app.channel(`emails/${data.recipientEmail}`)
   //   ];
   // });
-};
+}

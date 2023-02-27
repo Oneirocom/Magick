@@ -8,7 +8,7 @@ import { Route } from './types'
 
 const getTextToSpeech = async (ctx: Koa.Context) => {
   const text = ctx.request.query.text as string
-  let character = ctx.request.query.character ?? 'none'
+  const character = ctx.request.query.character ?? 'none'
   
   const voice_provider = ctx.request.query.voice_provider as string
   const voice_character = ctx.request.query.voice_character as string

@@ -167,7 +167,7 @@ export class SpellComponent extends MagickComponent<
     }: {
       module: { outputs: ModuleWorkerOutput[] }
       magick: EngineContext
-      silent: Boolean
+      silent: boolean
     }
   ) {
     console.log('node.data', node.data)

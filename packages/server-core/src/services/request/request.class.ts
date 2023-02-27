@@ -6,7 +6,7 @@ import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import type { Application } from '../../declarations'
 import type { Request, RequestData, RequestPatch, RequestQuery } from './request.schema'
 
-export interface RequestParams extends KnexAdapterParams<RequestQuery> {}
+export type RequestParams = KnexAdapterParams<RequestQuery>
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class RequestService<ServiceParams extends Params = RequestParams> extends KnexService<
