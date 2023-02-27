@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash'
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -6,7 +5,6 @@ import {
   anySocket,
   MagickComponent,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   NodeData,
@@ -102,21 +100,34 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
   // @ts-ignore
   async worker(
     node: NodeData,
-    _inputs: MagickWorkerInputs,
+    inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ) {
-    this._task.closed = ['trigger']
-    console.log('********* processing input to ethereum input *********')
-    console.log(data)
+    let chainId = 80001
+    if (node.data?.chain_id) {
+      const parsed = parseInt(node.data?.chain_id as string);
+      if (!isNaN(parsed)) {
+        chainId = parsed
+      }
+    }
+    if (inputs['chain_id']) {
+      const parsed = parseInt(inputs['chain_id'][0] as string);
+      if (!isNaN(parsed)) {
+        chainId = parsed
+      }
+    }
 
-    // handle data subscription.  If there is data, this is from playtest
-    if (data && !isEmpty(data)) {
-      this._task.closed = []
+    const contractAddress = (inputs['contract_addr'] && inputs['contract_addr'][0]) as string
+    const functionName = (inputs['function_name'] && inputs['function_name'][0]) as string
 
       return {
         output: data,
       }
+    }
+
+    return {
+      output: `http://localhost:4200/contract/${chainId}/${contractAddress}/${functionName}`,
     }
   }
 }
