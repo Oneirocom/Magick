@@ -12,7 +12,7 @@ export interface RestApiServiceOptions {
   app: Application
 }
 
-export interface RestApiParams extends Params<RestApiQuery> {}
+export type RestApiParams = Params<RestApiQuery>
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
 export class RestApiService implements ServiceInterface<RestApi, RestApiData, RestApiParams, RestApiPatch> {
