@@ -59,37 +59,41 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
     const chainIdControl = new DropdownControl({
       name: 'Chain',
       dataKey: 'chain_id',
-      values: [
-        '1',
-        '11155111',
-        '5',
-        '137',
-        '80001'
-      ],
+      values: ['1', '11155111', '5', '137', '80001'],
       defaultValue: '80001',
-      write: true
+      write: true,
     })
 
-    node.inspector
-      .add(chainIdControl)
+    node.inspector.add(chainIdControl)
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const contractAddressInput = new Rete.Input('contract_addr', 'Contract Address', stringSocket)
+    const contractAddressInput = new Rete.Input(
+      'contract_addr',
+      'Contract Address',
+      stringSocket
+    )
     const abiInput = new Rete.Input('abi', 'ABI', anySocket)
     const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numSocket)
-    const functionNameInput = new Rete.Input('function_name', 'Function Name', stringSocket)
-    const functionArgsInput = new Rete.Input('function_args', 'Function Arguments', stringSocket)
+    const functionNameInput = new Rete.Input(
+      'function_name',
+      'Function Name',
+      stringSocket
+    )
+    const functionArgsInput = new Rete.Input(
+      'function_args',
+      'Function Arguments',
+      stringSocket
+    )
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const urlOutput = new Rete.Output('output', 'Output', stringSocket)
 
-
     return node
+      .addInput(dataInput)
       .addInput(abiInput)
       .addInput(chainIdInput)
       .addInput(functionNameInput)
       .addInput(functionArgsInput)
       .addInput(contractAddressInput)
-      .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(urlOutput)
   }

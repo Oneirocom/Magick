@@ -98,8 +98,8 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     const isFalse = new Rete.Output('false', 'False', triggerSocket)
 
     return node
+    .addInput(dataInput)
       .addInput(inp)
-      .addInput(dataInput)
       .addOutput(isTrue)
       .addOutput(isFalse)
   }

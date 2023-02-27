@@ -21,7 +21,6 @@ type InputReturn = {
 }
 
 export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputReturn> {
-
   constructor() {
     // Name of the component
     super('CheckForRecentTransactionsFromWallet')
@@ -58,9 +57,9 @@ export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputR
     const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
 
     return node
+      .addInput(dataInput)
       .addInput(addressInput)
       .addInput(senderInput)
-      .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(balanceOutput)
   }

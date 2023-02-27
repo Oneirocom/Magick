@@ -22,7 +22,6 @@ type InputReturn = {
 }
 
 export class GetRecentTransactions extends MagickComponent<InputReturn> {
-
   constructor() {
     // Name of the component
     super('GetRecentTransactions')
@@ -48,7 +47,6 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
   }
 
   builder(node: MagickNode) {
-
     const addressInput = new Rete.Input('address', 'Wallet Address', numSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -59,8 +57,8 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
     return node
-      .addInput(addressInput)
       .addInput(dataInput)
+      .addInput(addressInput)
       .addOutput(dataOutput)
       .addOutput(balanceOutput)
   }

@@ -121,6 +121,7 @@ const PluginDrawerItems = ({onClick, open}) => {
           >
           {divider && <Divider />}
           <DrawerItem
+            key={item.path}
             active={location.pathname.includes(item.path)}
             Icon={item.icon}
             open={open}

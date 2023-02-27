@@ -51,7 +51,10 @@ export class InputsToJSON extends MagickComponent<Promise<WorkerReturn>> {
 
     node.inspector.add(inputGenerator)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(outp)
   }
 
   async worker(_node: NodeData, rawInputs: MagickWorkerInputs) {

@@ -21,7 +21,6 @@ type InputReturn = {
 }
 
 export class CallContractFunctionRead extends MagickComponent<InputReturn> {
-
   constructor() {
     // Name of the component
     super('CallContractFunctionReadP')
@@ -56,8 +55,16 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
     const contractInput = new Rete.Input('tx', 'Contract', stringSocket)
-    const functionInput = new Rete.Input('function', 'Function Name', stringSocket)
-    const functionParamsInput = new Rete.Input('functionParams', 'Function Params', stringSocket)
+    const functionInput = new Rete.Input(
+      'function',
+      'Function Name',
+      stringSocket
+    )
+    const functionParamsInput = new Rete.Input(
+      'functionParams',
+      'Function Params',
+      stringSocket
+    )
     const abiInput = new Rete.Input('abi', 'ABI', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -68,15 +75,14 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
       name: 'RPC Endpoint',
     })
 
-    node.inspector
-      .add(rpcHttpControl)
+    node.inspector.add(rpcHttpControl)
 
     return node
+      .addInput(dataInput)
       .addInput(contractInput)
       .addInput(functionInput)
       .addInput(functionParamsInput)
       .addInput(abiInput)
-      .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(resultOutput)
   }

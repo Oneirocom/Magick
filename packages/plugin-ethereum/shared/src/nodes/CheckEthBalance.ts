@@ -23,7 +23,6 @@ type InputReturn = {
 }
 
 export class CheckEthBalance extends MagickComponent<InputReturn> {
-
   constructor() {
     // Name of the component
     super('CheckEthBalance')
@@ -57,7 +56,6 @@ export class CheckEthBalance extends MagickComponent<InputReturn> {
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-
     const rpcHttpControl = new InputControl({
       dataKey: 'rpc_http',
       name: 'RPC Endpoint',
@@ -66,32 +64,28 @@ export class CheckEthBalance extends MagickComponent<InputReturn> {
     const chainIdControl = new DropdownControl({
       name: 'Chain',
       dataKey: 'chain_id',
-      values: [
-        '1',
-        '11155111',
-        '5',
-        '137',
-        '80001'
-      ],
+      values: ['1', '11155111', '5', '137', '80001'],
       defaultValue: '80001',
     })
 
-    node.inspector
-      .add(rpcHttpControl)
-      .add(chainIdControl)
+    node.inspector.add(rpcHttpControl).add(chainIdControl)
 
     const addressInput = new Rete.Input('address', 'Address', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const rpcHttpInput = new Rete.Input('rpc_http', 'RPC HTTP Endpoint', stringSocket)
+    const rpcHttpInput = new Rete.Input(
+      'rpc_http',
+      'RPC HTTP Endpoint',
+      stringSocket
+    )
     const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numSocket)
     const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
 
     return node
+      .addInput(dataInput)
       .addInput(addressInput)
       .addInput(rpcHttpInput)
       .addInput(chainIdInput)
-      .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(balanceOutput)
   }

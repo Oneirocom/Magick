@@ -66,10 +66,10 @@ export class StringReplacer extends MagickComponent<Promise<WorkerReturn>> {
     const outp = new Rete.Output('output', 'output', stringSocket)
 
     return node
+      .addInput(dataInput)
       .addInput(strInput)
       .addInput(agentInput)
       .addInput(speakerInput)
-      .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(outp)
   }

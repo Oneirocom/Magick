@@ -70,9 +70,9 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     node.inspector.add(nameInput).add(type).add(max_count)
 
     return node
+      .addInput(dataInput)
       .addInput(eventInput)
       .addInput(embedding)
-      .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(out)
   }
