@@ -112,7 +112,7 @@ const AgentWindow = ({
         }
       })
       .catch(e => {
-        console.log('ERROR', e)
+        console.error('ERROR', e)
         enqueueSnackbar('internal error updating entity', {
           variant: 'error',
         })

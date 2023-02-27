@@ -43,7 +43,10 @@ export class SwitchGate extends MagickComponent<void> {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const defaultOutput = new Rete.Output('default', 'Default', triggerSocket)
 
-    node.addInput(input).addInput(dataInput).addOutput(defaultOutput)
+    node
+      .addInput(input)
+      .addInput(dataInput)
+      .addOutput(defaultOutput)
 
     return node
   }

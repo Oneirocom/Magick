@@ -19,6 +19,7 @@ import threeovGraph from '../../../data/graphs/threeov'
 import md5 from 'md5'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { Button } from '@magickml/client-core'
+import { uuidv4 } from 'packages/editor/src/utils/uuid'
 
 const customConfig = {
   dictionaries: [adjectives, colors],
@@ -66,11 +67,11 @@ const CreateNew = () => {
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
       })
-      console.log(name)
-      console.log(response)
+      
+      
 
       if ('error' in response) {
-        console.log('error in response', response.error)
+        
         if ('status' in response.error) {
           const err = response.error
 
@@ -85,7 +86,7 @@ const CreateNew = () => {
 
       navigate(`/magick/${response.data.id +"-"+ encodeURIComponent(btoa(name))}`)
     } catch (err) {
-      console.log('ERROR!!', err)
+      console.error('ERROR!', err)
     }
   })
 

@@ -9,7 +9,6 @@ const EventWindow = () => {
 
   useEffect(() => {
     fetchEvents()
-    console.log('fetching events')
   }, [])
 
   const resetEvents = async () => {
@@ -20,7 +19,6 @@ const EventWindow = () => {
     const { data } = await axios.get(
       `${import.meta.env.VITE_APP_API_URL}/events?projectId=${config.projectId}`
     )
-    console.log('fetching events', data)
     setEvents(data.data)
   }
 

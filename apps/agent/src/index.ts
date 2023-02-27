@@ -10,8 +10,7 @@ async function init() {
   })()
   const agentManager = new AgentManager()
   const worldManager = new WorldManager()
-  console.log('AGENT: Starting agent manager', agentManager)
-  console.log('AGENT: Starting world manager', worldManager.rooms)
+  console.log('AGENT: Starting...')
 }
 
 init()

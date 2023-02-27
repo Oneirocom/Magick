@@ -35,7 +35,7 @@ const request = {
 
 export async function initSpeechServer(ignoreDotEnv: boolean) {
   if (ignoreDotEnv === false && ENABLE_SPEECH_SERVER === 'false') {
-    console.log('Speech server disabled')
+    
     return
   }
 
@@ -59,12 +59,12 @@ export async function initSpeechServer(ignoreDotEnv: boolean) {
     })
   }
 
-  console.log('speech server started on port', PORT)
+  
 
   speechClient = new SpeechClient()
 
   io.on('connection', function (client: any) {
-    console.log('speech client connected')
+    
     let recognizeStream: any = null
 
     client.on('join', function (data: any) {
@@ -88,11 +88,11 @@ export async function initSpeechServer(ignoreDotEnv: boolean) {
           recognizeStream !== undefined &&
           recognizeStream.destroyed === false
         ) {
-          // console.log('received data:', data)
+          // 
           recognizeStream.write(data)
         }
       } catch (e) {
-        console.log('error in binaryData :::: ', e)
+        console.error('error in binaryData :::: ', e)
       }
     })
 
@@ -100,10 +100,10 @@ export async function initSpeechServer(ignoreDotEnv: boolean) {
       recognizeStream = speechClient
         .streamingRecognize(request)
         .on('error', err => {
-          console.log(err)
+          console.error(err)
         })
         .on('data', data => {
-          console.log('data :::: ', data)
+          
           client.emit('speechData', data)
           if (data.results[0] && data.results[0].isFinal) {
             stopRecognitionStream()

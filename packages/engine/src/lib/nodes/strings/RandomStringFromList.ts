@@ -1,20 +1,11 @@
-/* eslint-disable camelcase */
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import {
-  EngineContext,
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../types'
 import { FewshotControl } from '../../dataControls/FewshotControl'
-import { triggerSocket, stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { stringSocket, triggerSocket } from '../../sockets'
+import {
+  MagickNode, NodeData
+} from '../../types'
 
 const info =
   'Random String From List returns a randomly selected string from an array, it keeps memory of recently selected strings'
@@ -57,7 +48,10 @@ export class RandomStringFromList extends MagickComponent<
 
     node.inspector.add(fewshotControl)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(outp)
   }
 
   async worker(node: NodeData) {

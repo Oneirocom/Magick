@@ -38,13 +38,12 @@ const AgentManagerWindow = () => {
       data: data,
     })
       .then(async res => {
-        console.log('response is', res)
         const res2 = await fetch(`${config.apiUrl}/agents`)
         const json = await res2.json()
         setData(json.data)
       })
       .catch(err => {
-        console.log('error is', err)
+        console.error('error is', err)
       })
   }
 
@@ -66,12 +65,9 @@ const AgentManagerWindow = () => {
   }
 
   const update = (_data: {}) => {
-    console.log('Update called', _data)
-
     axios
       .patch(`${config.apiUrl}/agents/${'id'}`, _data)
       .then(res => {
-        console.log('RESPONSE DATA', res.data)
         if (typeof res.data === 'string' && res.data === 'internal error') {
           enqueueSnackbar('internal error updating agent', {
             variant: 'error',
@@ -80,16 +76,14 @@ const AgentManagerWindow = () => {
           enqueueSnackbar('updated agent', {
             variant: 'success',
           })
-          console.log('response on update', JSON.parse(res.config.data))
-          let responseData = res && JSON.parse(res?.config?.data)
 
-          console.log('responseData', responseData)
+          let responseData = res && JSON.parse(res?.config?.data)
 
           resetData()
         }
       })
       .catch(e => {
-        console.log('ERROR', e)
+        console.error('ERROR', e)
         enqueueSnackbar('internal error updating entity', {
           variant: 'error',
         })

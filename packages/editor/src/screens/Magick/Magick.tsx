@@ -29,7 +29,7 @@ const Magick = ({ empty = false }) => {
   // Handle open tab events
   useEffect(() => {
     return subscribe(events.OPEN_TAB, (_event, tabData) => {
-      console.log('OPEN_TAB', tabData)
+      
       dispatch(openTab(tabData))
     }) as () => void
   })
@@ -96,7 +96,7 @@ const Magick = ({ empty = false }) => {
 
   if (!activeTab) return <LoadingScreen />
 
-  console.log('active tab found', activeTab)
+  
 
   return (
     <>

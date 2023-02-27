@@ -9,12 +9,12 @@ import { Route } from './types'
 const getTextToSpeech = async (ctx: Koa.Context) => {
   const text = ctx.request.query.text as string
   let character = ctx.request.query.character ?? 'none'
-  console.log('text and character are', text, character)
+  
   const voice_provider = ctx.request.query.voice_provider as string
   const voice_character = ctx.request.query.voice_character as string
   const tiktalknet_url = ctx.request.query.tiktalknet_url as string
 
-  console.log('text and character are', text, voice_character)
+  
 
   let url = ''
 
@@ -24,21 +24,21 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
       url = await tts_tiktalknet(text, voice_character, tiktalknet_url)
     }
 
-  console.log('stt url:', url)
+  
 
   return (ctx.body = url)
 }
 const queryGoogle = async (ctx: Koa.Context) => {
   const body = ctx.request.body as any
-  console.log('QUERY', body?.query)
+  
   if (!body?.query)
     throw new ServerError('input-failed', 'No query provided in request body')
   const query = body?.query as string
   const data = await queryGoogleSearch(query)
-  console.log('DATA', data)
+  
   const { summary, links } = data
-  console.log('SUMMARY', summary)
-  console.log('LINKS', links)
+  
+  
   return (ctx.body = { summary, links })
 }
 

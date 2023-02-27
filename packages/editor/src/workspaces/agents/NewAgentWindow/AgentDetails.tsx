@@ -42,7 +42,6 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
     axios
       .patch(`${config.apiUrl}/agents/${id}`, _data)
       .then(res => {
-        console.log('RESPONSE DATA', res.data)
         if (typeof res.data === 'string' && res.data === 'internal error') {
           enqueueSnackbar('internal error updating agent', {
             variant: 'error',
@@ -56,7 +55,7 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
         }
       })
       .catch(e => {
-        console.log('ERROR', e)
+        console.error('ERROR', e)
         enqueueSnackbar('internal error updating entity', {
           variant: 'error',
         })
@@ -87,8 +86,6 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
       )
       const json = await res.json()
 
-      console.log('res', json)
-      console.log('spellList', json)
       setSpellList(json.data)
     })()
   }, [])

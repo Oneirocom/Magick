@@ -90,7 +90,9 @@ export class Code extends MagickComponent<unknown> {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
-    return node.addOutput(dataOutput).addInput(dataInput)
+    return node
+      .addOutput(dataOutput)
+      .addInput(dataInput)
   }
 
   // the worker contains the main business logic of the node.  It will pass those results

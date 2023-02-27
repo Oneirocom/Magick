@@ -9,7 +9,12 @@ import {
   MagickWorkerOutputs,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, stringSocket, eventSocket, arraySocket } from '../../sockets'
+import {
+  triggerSocket,
+  stringSocket,
+  eventSocket,
+  arraySocket,
+} from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
 
@@ -52,9 +57,9 @@ export class EventStore extends MagickComponent<Promise<void>> {
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     return node
+      .addInput(dataInput)
       .addInput(contentInput)
       .addInput(eventInput)
-      .addInput(dataInput)
       .addInput(embedding)
       .addOutput(dataOutput)
   }
@@ -65,10 +70,10 @@ export class EventStore extends MagickComponent<Promise<void>> {
     _outputs: MagickWorkerOutputs,
     { silent }: { silent: boolean }
   ) {
-
     const event = inputs['event'][0] as Event
     const content = (inputs['content'] && inputs['content'][0]) as string
-    const embedding = (inputs['embedding'] && inputs['embedding'][0]) as number[]
+    const embedding = (inputs['embedding'] &&
+      inputs['embedding'][0]) as number[]
     const typeData = node?.data?.type as string
     const type =
       typeData !== undefined && typeData.length > 0
@@ -81,10 +86,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     if (embedding) data.embedding = embedding
 
     if (content && content !== '') {
-      const response = await axios.post(
-        `${API_ROOT_URL}/events`,
-        data
-      )
+      const response = await axios.post(`${API_ROOT_URL}/events`, data)
 
       if (!silent) node.display(JSON.stringify(response.data))
     } else {

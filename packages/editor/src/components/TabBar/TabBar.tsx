@@ -15,7 +15,6 @@ const Tab = ({ tab, activeTab }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
-  console.log(tabs)
   const active = tab.id === activeTab?.id
 
   const title = `${tab.name.split('--')[0]}`
@@ -42,7 +41,6 @@ const Tab = ({ tab, activeTab }) => {
           }
     )
     dispatch(changeActive(updatedTabs))
-    console.log(tab.URI)
     navigate(`/magick/${tab.URI}`)
   }
 

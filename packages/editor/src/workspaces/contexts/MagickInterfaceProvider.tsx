@@ -28,7 +28,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const { data: _spell } = spellApi.useGetSpellByIdQuery(
     {
       spellName: tab.name.split('--')[0],
-      Id: tab.id,
+      id: tab.id,
       projectId: config.projectId,
     },
     {
@@ -43,6 +43,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   useEffect(() => {
     if (!_spell) return
     spellRef.current = _spell.data[0]
+    
   }, [_spell])
 
   const {
@@ -64,9 +65,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   } = events
 
   const getCurrentSpell = () => {
+    
     return spellRef.current
   }
-  console.log(getCurrentSpell())
+  
   const onTrigger = (node, callback) => {
     let isDefault = node === 'default' ? 'default' : null
     return subscribe($TRIGGER(tab.id, isDefault ?? node.id), (event, data) => {
@@ -143,7 +145,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const getSpell = async spellName => {
-    const spell = await _getSpell({ spellName, Id: tab.id, projectId: config.projectId })
+    const spell = await _getSpell({ spellName, id: tab.id, projectId: config.projectId })
 
     if (!spell.data) return null
 
@@ -165,7 +167,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       {} as Record<string, any>
     )
     if (language == 'javascript') {
-      console.log('processCode, javascript')
+      
 
       // eslint-disable-next-line no-new-func
       const result = new Function('"use strict";return (' + code + ')')()(
@@ -179,7 +181,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
         return result
       } catch (err) {
-        console.log({ err })
+        console.error({ err })
       }
     }
   }

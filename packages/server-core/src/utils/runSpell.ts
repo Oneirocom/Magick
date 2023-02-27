@@ -12,8 +12,6 @@ export type RunSpellArgs = {
 
 export const runSpell = async ({ id, inputs, inputFormatter, projectId }: RunSpellArgs) => {
   let spell = (await app.service('spells').find({ query: { projectId, id: id } })).data[0] as any
-
-  console.log('spell', spell)
   
   if (!spell?.graph) {
     throw new ServerError('not-found', `Spell with id ${id} not found`)

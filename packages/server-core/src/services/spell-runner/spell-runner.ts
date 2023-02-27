@@ -29,11 +29,7 @@ export const spellRunner = (app: Application) => {
       create: [
         
       ],
-      patch: [
-        async (context:any) => {
-          console.log(context.data)
-        }
-      ],
+      patch: [],
       remove: []
     },
     after: {

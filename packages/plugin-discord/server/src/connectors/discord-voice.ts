@@ -34,7 +34,6 @@ export function initSpeechClient({
   languageCode,
   tiktalknet_url
 }: any) {
-  console.log("INSIDE INIT SPEECH")
   //let spellRunner = spellRunner
   addSpeechEvent(client, { group: 'default_' + agent.id })
   const audioPlayer = createAudioPlayer({
@@ -43,9 +42,7 @@ export function initSpeechClient({
     },
     debug: true,
   })
-  console.log("CREATING a SPEAKING EVENT LISTNER")
   client.on('speech', async msg => {
-    console.log('SPEAKING')
     const content = msg.content
     const connection = msg.connection
     const author = msg.author
@@ -54,7 +51,6 @@ export function initSpeechClient({
     if(!createReadStream) {
       // dynbamically import createReadStream from fs
       const fs = await import('fs')
-      console.log(process.cwd())
       createReadStream = fs.createReadStream
     }
 
@@ -77,10 +73,9 @@ export function initSpeechClient({
             info3d: '',
           })
         }
-      } catch (e) {}
-
-      console.log(entities)
-
+      } catch (e) {
+        console.log('error getting members', e)
+      }
       const fullResponse = await spellRunner.runComponent(
         {
         inputs: {},
@@ -105,20 +100,15 @@ export function initSpeechClient({
 
       response = removeEmojisFromString(response as string)
 
-      console.log('response is', response)
       let url
       if (response) {
         if (voiceProvider === 'google') {
-          console.log('discord voice tts:', response)
           // google tts
           url = await tts(response, voiceCharacter, languageCode)
         } else {
           url = await tts_tiktalknet(response, voiceCharacter, tiktalknet_url)
         }
-        console.log(url)
         if (url) {
-          // const url = await tts(response)
-          console.log('speech url:', url)
           const audioResource = createAudioResource(createReadStream(url), {
             inputType: StreamType.Arbitrary,
             inlineVolume: true,

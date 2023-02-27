@@ -39,19 +39,19 @@ const StartScreen = () => {
     } */
     // TODO check for proper values here and throw errors
 
-    console.log('spellData', spellData)
+    
 
     // Create new spell
-    await newSpell({
+    const response = await newSpell({
       graph: spellData.graph,
       name: spellData.name,
       projectId: config.projectId,
+      hash: spellData.hash
     })
 
     dispatch(
       openTab({
-        name: spellData.name,
-        spellName: spellData.name,
+        name: response.data.id +"-"+ encodeURIComponent(btoa(spellData.name)),
         type: 'spell',
       })
     )
@@ -73,7 +73,7 @@ const StartScreen = () => {
         dispatch(closeTab(tab.id))
       }
     } catch (err) {
-      console.log('Error deleting spell', err)
+      console.error('Error deleting spell', err)
     }
   }
 

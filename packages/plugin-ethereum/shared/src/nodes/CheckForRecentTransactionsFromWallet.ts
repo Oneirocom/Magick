@@ -21,7 +21,6 @@ type InputReturn = {
 }
 
 export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputReturn> {
-
   constructor() {
     // Name of the component
     super('CheckForRecentTransactionsFromWallet')
@@ -46,10 +45,6 @@ export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputR
     this.displayName = 'CheckForRecentTransactionsFromWallet'
   }
 
-  destroyed(node: MagickNode) {
-    console.log('destroyed', node.id)
-  }
-
   builder(node: MagickNode) {
     // module components need to have a socket key.
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
@@ -62,9 +57,9 @@ export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputR
     const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
 
     return node
+      .addInput(dataInput)
       .addInput(addressInput)
       .addInput(senderInput)
-      .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(balanceOutput)
   }
@@ -77,8 +72,6 @@ export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputR
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
     this._task.closed = ['trigger']
-    console.log('********* processing input to ethereum input *********')
-    console.log(data)
 
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data)) {

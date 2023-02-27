@@ -23,7 +23,6 @@ type InputReturn = {
 }
 
 export class DeployContract extends MagickComponent<InputReturn> {
-
   constructor() {
     // Name of the component
     super('DeployContract')
@@ -34,7 +33,7 @@ export class DeployContract extends MagickComponent<InputReturn> {
         balance: 'output',
         balance_after: 'output',
         tx: 'output',
-        contract: 'output'
+        contract: 'output',
       },
     }
 
@@ -50,11 +49,6 @@ export class DeployContract extends MagickComponent<InputReturn> {
     this.contextMenuName = 'DeployContract'
     this.displayName = 'DeployContract'
   }
-
-  destroyed(node: MagickNode) {
-    console.log('destroyed', node.id)
-  }
-
   builder(node: MagickNode) {
     // module components need to have a socket key.
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
@@ -68,40 +62,48 @@ export class DeployContract extends MagickComponent<InputReturn> {
     const chainIdControl = new DropdownControl({
       name: 'Chain',
       dataKey: 'chain_id',
-      values: [
-        '1',
-        '11155111',
-        '5',
-        '137',
-        '80001'
-      ],
+      values: ['1', '11155111', '5', '137', '80001'],
       defaultValue: '80001',
     })
 
-    node.inspector
-      .add(rpcHttpControl)
-      .add(chainIdControl)
+    node.inspector.add(rpcHttpControl).add(chainIdControl)
 
     const bytecodeInput = new Rete.Input('bytecode', 'Bytecode', anySocket)
     const abiInput = new Rete.Input('abi', 'ABI', anySocket)
-    const privatekeyInput = new Rete.Input('privatekey', 'Private Key', anySocket)
-    const rpcHttpInput = new Rete.Input('rpc_http', 'RPC HTTP Endpoint', stringSocket)
+    const privatekeyInput = new Rete.Input(
+      'privatekey',
+      'Private Key',
+      anySocket
+    )
+    const rpcHttpInput = new Rete.Input(
+      'rpc_http',
+      'RPC HTTP Endpoint',
+      stringSocket
+    )
     const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
 
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const balanceOutput = new Rete.Output('balance', 'Balance', numSocket)
-    const balanceAfterOutput = new Rete.Output('balance_after', 'Balance After', numSocket)
+    const balanceAfterOutput = new Rete.Output(
+      'balance_after',
+      'Balance After',
+      numSocket
+    )
     const txOutput = new Rete.Output('tx', 'Transaction', stringSocket)
-    const contractAddrOutput = new Rete.Output('contract', 'Contract Address', stringSocket)
+    const contractAddrOutput = new Rete.Output(
+      'contract',
+      'Contract Address',
+      stringSocket
+    )
 
     return node
+      .addInput(dataInput)
       .addInput(bytecodeInput)
       .addInput(abiInput)
       .addInput(rpcHttpInput)
       .addInput(chainIdInput)
       .addInput(privatekeyInput)
-      .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(balanceOutput)
       .addOutput(balanceAfterOutput)
@@ -117,8 +119,6 @@ export class DeployContract extends MagickComponent<InputReturn> {
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
     this._task.closed = ['trigger']
-    console.log('********* processing input to ethereum input *********')
-    console.log(data)
 
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data)) {

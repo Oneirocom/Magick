@@ -100,7 +100,10 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
       .add(file_name)
       .add(authorization_key)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(outp)
   }
 
   async worker(

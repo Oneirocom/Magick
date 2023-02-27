@@ -10,7 +10,6 @@ import LoginRequired from '../account/LoginRequired'
 
 export default function CompletionDetails() {
   const { fineTuneId } = useParams()
-  console.log({ fineTuneId })
   if (!fineTuneId) return <></>
   const { data: fineTune, error } = useSWRImmutable<OpenAI.FineTune>(
     `fine-tunes/${fineTuneId}`

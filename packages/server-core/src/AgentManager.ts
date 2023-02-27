@@ -21,7 +21,7 @@ export class AgentManager {
 
   constructor() {
     this.id = 0
-    console.log('Creating agent manager')
+    
     this.onCreate()
   }
 
@@ -30,13 +30,13 @@ export class AgentManager {
     await this.updateSpells()
     if (JSON.stringify(this.newAgents) === JSON.stringify(this.lastAgentData ?? [])) return // They are the same
     for (const i in this.newAgents) {
-      console.log('New Agents: ', this.newAgents[i])
+      
       try {
         let temp_agent = this.getAgent(this.newAgents[i].id)
-        console.log('Inside TRY ')
+        
         await temp_agent.onDestroy()
       } catch {
-        console.log('Client Does not exist')
+        
       }
       if (!this.newAgents[i].data) {
         console.warn('New agent is null data')
@@ -48,7 +48,7 @@ export class AgentManager {
       //     //Delete the Agent
       //     await temp_agent.onDestroy()
       //   } catch (e) {
-      //     console.log("Couldn't delete the Discord Client.!! Caught Error: ", e)
+      //     
       //   }
       //   this.addAgent(this.newAgents[i])
       // }
@@ -108,7 +108,7 @@ export class AgentManager {
           spell.hash !== runningAgent.root_spell_hash
         ) {
           // reload the spell
-          console.log('reloading root spell', spell.name)
+          
           const spellRunner = await runningAgent.spellManager.load(spell)
           runningAgent.root_spell_hash = spell.hash
         }
@@ -130,7 +130,7 @@ export class AgentManager {
           if (!runningAgent.spells_hash) runningAgent.spells_hash = []
           if (spell.hash !== runningAgent.spells_hash[j]) {
             // reload the spell
-            console.log('reloading spell', spell.name)
+            
             const spellRunner = await runningAgent.spellManager.load(spell)
             runningAgent.spells_hash[j] = spell.hash
           }
