@@ -208,7 +208,6 @@ function EventTable({ requests, updateCallback }) {
   }
 
   const handleRequestDelete = async (event: any) => {
-    console.log('event to delete ::: ', event)
     // instead of deleting, call the updateEvent function with param hidden = true
     const resp = await fetch(
       `${import.meta.env.VITE_APP_API_URL}/request/${event.id}`,

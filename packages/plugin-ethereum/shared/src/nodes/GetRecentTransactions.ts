@@ -47,11 +47,6 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
     this.displayName = 'GetRecentTransactions'
   }
 
-
-  destroyed(node: MagickNode) {
-    console.log('destroyed', node.id)
-  }
-
   builder(node: MagickNode) {
 
     const addressInput = new Rete.Input('address', 'Wallet Address', numSocket)
@@ -78,8 +73,6 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
     this._task.closed = ['trigger']
-    console.log('********* processing input to ethereum input *********')
-    console.log(data)
 
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data)) {

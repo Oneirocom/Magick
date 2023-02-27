@@ -38,10 +38,10 @@ export default function useUploadFile(purpose: string, enforce: Enforce) {
     async function (file: File) {
       try {
         setIsLoading(true)
-        console.log('Uploading file', file)
+        
         const records = await parseAndValidate(file, enforce)
         const largeRecords = await findLargeRecords(records, enforce)
-        console.log('checking record length')
+        
         if (largeRecords.length > 0) {
           const confirmed = confirmLargeRecords(largeRecords, enforce.maxTokens)
           if (!confirmed) return
@@ -51,7 +51,7 @@ export default function useUploadFile(purpose: string, enforce: Enforce) {
         const body = new FormData()
         body.append('purpose', purpose)
         body.append('file', blob, file.name)
-        console.log('headers', headers)
+        
         const response = await fetch(`${OPENAI_ENDPOINT}/files`, {
           method: 'POST',
           headers,
@@ -86,7 +86,7 @@ async function parseAndValidate(
 ): Promise<Array<{ [key: string]: string }>> {
   const records = await parseFile(file, enforce)
   validateRecords(records, enforce)
-  console.log({ records })
+  
   return records
 }
 
@@ -103,18 +103,18 @@ async function parseFile(
     }[file.type] ||
     (file.name.endsWith('.jsonl') && parseJSONL)
   if (!parser) throw new Error(`Unsupported file type ${file.type}`)
-  console.log('returning parser')
+  
   return await parser(file, enforce)
 }
 
 async function parseJSONL(file: File) {
   try {
-    console.log('parsing jsonl')
+    
     const text = await file.text()
     const lines = text.split('\n')
     return lines.filter(v => v != '').map(line => JSON.parse(line))
   } catch (error) {
-    console.log({ error })
+    console.error({ error })
     throw new Error('This is not a JSONL file')
   }
 }

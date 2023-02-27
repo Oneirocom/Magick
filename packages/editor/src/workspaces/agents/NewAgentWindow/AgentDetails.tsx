@@ -20,24 +20,18 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
 
   const config = useConfig()
 
-  console.log('pluginManager.getAgentComponents()', pluginManager.getAgentComponents())
-
   const [selectedSpellPublicVars, setSelectedSpellPublicVars] = useState<any[]>([])
 
   useEffect(() => {
     setSelectedSpellPublicVars(Object.values(
       spellList?.find(spell => spell.name === root_spell)?.graph.nodes || {}
     ).filter(node => node?.data?.Public))
-    console.log('selectedSpellPublicVars', selectedSpellPublicVars)
   }, [root_spell, spellList])
 
   const update = (_data = agentData) => {
-    console.log('Update called', _data)
-
     axios
       .patch(`${config.apiUrl}/agents/${id}`, _data)
       .then(res => {
-        console.log('RESPONSE DATA', res.data)
         if (typeof res.data === 'string' && res.data === 'internal error') {
           enqueueSnackbar('internal error updating agent', {
             variant: 'error',
@@ -46,17 +40,15 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
           enqueueSnackbar('updated agent', {
             variant: 'success',
           })
-          console.log('response on update', JSON.parse(res.config.data))
           let responseData = res && JSON.parse(res?.config?.data)
 
-          console.log('responseData', responseData)
           setAgentData(responseData)
 
           updateCallback()
         }
       })
       .catch(e => {
-        console.log('ERROR', e)
+        console.error('ERROR', e)
         enqueueSnackbar('internal error updating entity', {
           variant: 'error',
         })
@@ -67,7 +59,6 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
     axios
       .delete(`${config.apiUrl}/agents/` + id)
       .then(res => {
-        console.log('deleted', res)
         if (res.data === 'internal error') {
           enqueueSnackbar('Server Error deleting agent with id: ' + id, {
             variant: 'error',
@@ -109,9 +100,7 @@ const AgentDetails = ({ agentData: _agentData, updateCallback = () => {console.l
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )
       const json = await res.json()
-
-      console.log('res', json)
-      console.log('spellList', json)
+      
       setSpellList(json.data)
     })()
   }, [])

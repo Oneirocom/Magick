@@ -31,7 +31,6 @@ export const RestAgentWindow: FC<any> = props => {
 
   useEffect(() => {
     if (props.agentData !== null && props.agentData !== undefined) {
-      console.log(props.agentData)
       setRestEnabled(props.agentData.discord_enabled)
       setRestApiKey(props.agentData.discord_api_key)
       setRestStartingWords(props.agentData.discord_starting_words)

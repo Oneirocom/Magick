@@ -41,7 +41,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
       // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
       'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
       debounce(async data => {
-        console.log('SAVE SPELL DIFF')
+        
         if (tab.type === 'spell' && spellRef.current) {
           publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
         }
@@ -76,7 +76,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
   useEffect(() => {
     if (!tab || !tab.name) return
-    console.log("Inside Load Spell !!")
+    
     loadSpell({
       spellName: tab.name.split('--')[0],
       projectId: config.projectId,
@@ -88,7 +88,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     if (!client) return
     ;(async () => {
       if (!client || !tab || !tab.name) return
-      console.log('projectId from client ', config.projectId)
+      
       // make sure to pass the projectId to the service call
       await client.service('spell-runner').get(tab.id,
         {
@@ -97,7 +97,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
           },
         }
       )
-      console.log("Spell Runner for: ", tab.id)
+      
     })()
   }, [client])
 

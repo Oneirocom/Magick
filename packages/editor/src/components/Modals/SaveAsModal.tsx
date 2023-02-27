@@ -18,7 +18,6 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const [error, setError] = useState('')
   const [saveSpell, { isLoading }] = spellApi.useSaveSpellMutation()
   const [newSpell] = spellApi.useNewSpellMutation()
-  console.log(tab)
   const { data: spell } = spellApi.useGetSpellByIdQuery(
     {
       spellName: tab.name,
@@ -39,8 +38,6 @@ const EditSpellModal = ({ tab, closeModal }) => {
   } = useForm()
 
   const onSubmit = handleSubmit(async data => {
-    console.log("Inside Spell SUbmit")
-    console.log(spell)
     const response = await newSpell({
       graph: defaultGraph,
       name: data.name,
@@ -51,7 +48,6 @@ const EditSpellModal = ({ tab, closeModal }) => {
       spell: {...spell.data[0], name: data.name, id: response.data.id},
       projectId: config.projectId
     })
-    console.log(saveResponse)
     if (saveResponse.error) {
       // show snackbar
       enqueueSnackbar('Error saving spell', {

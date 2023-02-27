@@ -9,7 +9,7 @@ import {
   spellExternalResolver,
   spellDataResolver,
   spellPatchResolver,
-  spellQueryResolver
+  spellQueryResolver,
 } from './spells.schema'
 
 import type { Application } from '../../declarations'
@@ -25,60 +25,61 @@ export const spell = (app: Application) => {
     // A list of all methods this service exposes externally
     methods: ['find', 'get', 'create', 'patch', 'remove', 'saveDiff'],
     // You can add additional custom events to be sent to clients here
-    events: []
+    events: [],
   })
 
   // Initialize hooks
   app.service('spells').hooks({
     around: {
-      all: [schemaHooks.resolveExternal(spellExternalResolver), schemaHooks.resolveResult(spellResolver)]
+      all: [
+        schemaHooks.resolveExternal(spellExternalResolver),
+        schemaHooks.resolveResult(spellResolver),
+      ],
     },
     before: {
-      all: [schemaHooks.validateQuery(spellQueryValidator), schemaHooks.resolveQuery(spellQueryResolver)],
+      all: [
+        schemaHooks.validateQuery(spellQueryValidator),
+        schemaHooks.resolveQuery(spellQueryResolver),
+      ],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(spellDataValidator), schemaHooks.resolveData(spellDataResolver),
-        
-        async (context:any) => {
-          const { data, service } = context;
+      create: [
+        schemaHooks.validateData(spellDataValidator),
+        schemaHooks.resolveData(spellDataResolver),
+        async (context: any) => {
+          const { data, service } = context
           context.data = {
-            [service.id]:randomUUID(),
-            ...data
+            [service.id]: randomUUID(),
+            ...data,
           }
         },
-        async (context: any) => {
-          
-          console.log(context.data)
-        },
       ],
-      patch: [schemaHooks.validateData(spellPatchValidator), schemaHooks.resolveData(spellPatchResolver)],
-      remove: []
+      patch: [
+        schemaHooks.validateData(spellPatchValidator),
+        schemaHooks.resolveData(spellPatchResolver),
+      ],
+      remove: [],
     },
     after: {
       all: [],
-      create: [
-        async (context: any) => {
-          console.log("AFTER")
-          console.log(context.data)
-        }
-      ],
+      create: [],
       patch: [
         // after saving a spell, we need to update the spell cache
         async (context: any) => {
           const { app } = context
           const { id } = context.result
           const spell = await app.service('spells').get(id)
-          app.userSpellManagers.forEach((userSpellManager) => {
+          app.userSpellManagers.forEach(userSpellManager => {
             if (userSpellManager.spellRunnerMap.has(spell.name)) {
               userSpellManager.spellRunnerMap.get(spell.name).loadSpell(spell)
             }
           })
-        }
-      ]
+        },
+      ],
     },
     error: {
-      all: []
-    }
+      all: [],
+    },
   })
 }
 

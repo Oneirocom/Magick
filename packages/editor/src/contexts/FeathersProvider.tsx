@@ -44,8 +44,6 @@ const buildFeathersClient = async config => {
   // todo this needs more than an any here.  Super hacky.
   app.configure(socketClient as any)
 
-  console.log('app', app)
-
   configureCustomServices(app, socketClient)
 
   // No idea how to type feathers to add io properties to root client.

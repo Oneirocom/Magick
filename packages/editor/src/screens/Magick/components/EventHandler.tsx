@@ -67,8 +67,6 @@ const EventHandler = ({ pubSub, tab }) => {
   const saveSpell = async () => {
     const currentSpell = spellRef.current
     const graph = serialize() as GraphData
-    console.log("RECEIVED")
-    console.log(spellRef)
     if (!currentSpell) return
 
     const updatedSpell = {
@@ -77,8 +75,7 @@ const EventHandler = ({ pubSub, tab }) => {
       hash: md5(JSON.stringify(graph)),
     }
 
-    console.log('updatedSpell', updatedSpell)
-
+    
     const response = await saveSpellMutation({
       spell: updatedSpell,
       projectId: config.projectId,
@@ -87,8 +84,7 @@ const EventHandler = ({ pubSub, tab }) => {
     const jsonDiff = diff(currentSpell, updatedSpell)
 
     if (jsonDiff.length !== 0) {
-      console.log('Sending json diff to spell runner!')
-      // save diff to spell runner if something has changed.  Will update spell in spell runner session
+            // save diff to spell runner if something has changed.  Will update spell in spell runner session
       client.service('spell-runner').update(currentSpell.id, {
         diff: jsonDiff,
         projectId: config.projectId,
@@ -118,8 +114,7 @@ const EventHandler = ({ pubSub, tab }) => {
 
     const jsonDiff = diff(currentSpell, updatedSpell)
 
-    console.log('JSON DIFF', jsonDiff)
-    updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
+        updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
@@ -185,8 +180,7 @@ const EventHandler = ({ pubSub, tab }) => {
     const editor = getEditor()
     if (!editor) return
 
-    console.log('RUNNING PROCESS')
-
+    
     editor.runProcess()
   }
 
@@ -204,8 +198,7 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const onExport = async () => {
     // refetch spell from local DB to ensure it is the most up to date
-    console.log('ON EXPORT')
-    const spell = { ...spellRef.current }
+        const spell = { ...spellRef.current }
     spell.graph = serialize() as GraphData
 
     const json = JSON.stringify(spell)

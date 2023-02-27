@@ -9,7 +9,6 @@ const RequestWindow = () => {
 
   useEffect(() => {
     fetchRequests()
-    console.log('fetching events')
   }, [])
 
   const resetEvents = async () => {
@@ -20,7 +19,6 @@ const RequestWindow = () => {
     const { data } = await axios.get(
       `${import.meta.env.VITE_APP_API_URL}/request?hidden=false&projectId=${config.projectId}`
     )
-    console.log('fetching events', data)
     setRequests(data.data)
   }
 

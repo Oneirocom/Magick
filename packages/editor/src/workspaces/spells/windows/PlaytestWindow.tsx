@@ -93,7 +93,6 @@ const Playtest = ({ tab }) => {
       skip: !tab.name.split('--')[0],
     }
   )
-  console.log(spellData)
 
   // const localState = {} as any
 
@@ -148,7 +147,6 @@ const Playtest = ({ tab }) => {
 
   // Sync up localState into data field for persistence
   useEffect(() => {
-    console.log('Checking for local state!', localState)
     // Set up a default for the local state here
     if (!localState) {
       dispatch(
@@ -223,8 +221,6 @@ const Playtest = ({ tab }) => {
     const graph = serialize()
     if (!graph) return
 
-    console.log('playtestOption', playtestOption)
-
     const playtestNode = Object.values(graph.nodes).find(
       node => {
         return node.data.playtestToggle && node.data.name === `Input - ${playtestOption}`
@@ -238,17 +234,7 @@ const Playtest = ({ tab }) => {
 
     const playtestInputName = playtestNode?.data.name || 'Input - Default'
 
-    console.log('playtestInputName', playtestInputName)
-
     if (!playtestInputName) return
-    console.log({
-      spellName: tab.name.split('--')[0],
-      id: tab.id,
-      projectId: config.projectId,
-      inputs: {
-        [playtestInputName as string]: toSend,
-      },
-    })
     client.service('spell-runner').create({
       spellName: tab.name.split('--')[0],
       id: tab.id,
@@ -261,7 +247,7 @@ const Playtest = ({ tab }) => {
     publish($PLAYTEST_INPUT(tab.id), toSend)
     client.io.on(`${tab.id}-error`, (data) => {
       //publish($DEBUG_PRINT(tab.id), (data.error.message))
-      console.log("Error in spell execution")
+      console.error("Error in spell execution")
       enqueueSnackbar('Error Running the spell. Please Check the Console', {
         variant: 'error',
       })
@@ -271,7 +257,6 @@ const Playtest = ({ tab }) => {
   }
 
   const onDataChange = dataText => {
-    console.log('new data text', dataText)
     dispatch(
       upsertLocalState({
         id: tab.id,

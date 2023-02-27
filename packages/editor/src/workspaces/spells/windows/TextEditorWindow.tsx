@@ -39,9 +39,6 @@ const TextEditor = props => {
   }
 
   useEffect(() => {
-    console.log('focus')
-    console.log('textEditorData', textEditorData)
-    console.log('inspectorData', inspectorData)
     if (!inspectorData?.data.inputs) return
 
     const stringifiedInputs = JSON.stringify(inspectorData?.data.inputs)
@@ -100,7 +97,7 @@ const TextEditor = props => {
   }, [language])
 
   useEffect(() => {
-    console.log('props', props)
+    
     if (
       !textEditorData ||
       Object.keys(textEditorData).length === 0 ||
@@ -108,9 +105,9 @@ const TextEditor = props => {
     )
       return
 
-    console.log('textEditorData', textEditorData)
+    
 
-    console.log('inspectorData', inspectorData)
+    
 
     const inputs = []
     inspectorData?.data.inputs?.forEach((input: any) => {
@@ -185,13 +182,13 @@ const TextEditor = props => {
     const json = await response.json()
     const completion = json.choices[0].text
 
-    console.log('completion', completion)
+    
 
     updateCode(code + completion)
   }
 
   const onComplete = () => {
-    console.log('codeRef.current', codeRef.current)
+    
     complete(codeRef.current)
   }
 
@@ -284,9 +281,9 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
 
     let _inputs = []
     let _outputs = []
-    console.log('inspectorData', inspectorData)
+    
 
-    console.log('inspectorData.data', inspectorData?.data)
+    
 
     // @ts-ignore
     inspectorData?.data?.inputs?.forEach((input: any) => {
@@ -300,7 +297,7 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
 
     const prompt = makeGeneratePrompt(functionText, language, _inputs, _outputs)
 
-    console.log('prompt is', prompt)
+    
 
     const response = await fetch(
       'https://api.openai.com/v1/engines/code-davinci-002/completions',
@@ -341,7 +338,7 @@ ${
 }`
 
     const json = await response.json()
-    console.log('response', json)
+    
 
     const completion = json.choices[0].text
 

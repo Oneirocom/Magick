@@ -43,7 +43,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   useEffect(() => {
     if (!_spell) return
     spellRef.current = _spell.data[0]
-    console.log(spellRef.current)
+    
   }, [_spell])
 
   const {
@@ -65,10 +65,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   } = events
 
   const getCurrentSpell = () => {
-    console.log(spellRef.current)
+    
     return spellRef.current
   }
-  console.log(getCurrentSpell())
+  
   const onTrigger = (node, callback) => {
     let isDefault = node === 'default' ? 'default' : null
     return subscribe($TRIGGER(tab.id, isDefault ?? node.id), (event, data) => {
@@ -167,7 +167,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       {} as Record<string, any>
     )
     if (language == 'javascript') {
-      console.log('processCode, javascript')
+      
 
       // eslint-disable-next-line no-new-func
       const result = new Function('"use strict";return (' + code + ')')()(
@@ -181,7 +181,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
         return result
       } catch (err) {
-        console.log({ err })
+        console.error({ err })
       }
     }
   }

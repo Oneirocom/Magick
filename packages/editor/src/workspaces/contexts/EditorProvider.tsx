@@ -77,7 +77,7 @@ const EditorProvider = ({ children }) => {
 
   const buildEditor = async (container, _spell, tab, magick) => {
     // eslint-disable-next-line no-console
-    console.log("tab:: ", tab)
+    
     const newEditor = await initEditor({
       container,
       pubSub,
@@ -98,7 +98,7 @@ const EditorProvider = ({ children }) => {
   }
 
   const run = () => {
-    // console.log('RUN')
+    // 
   }
 
   const undo = () => {
@@ -139,12 +139,12 @@ const EditorProvider = ({ children }) => {
 
   const loadGraph = graph => {
     if (!editorRef.current) return
-    console.log('loading graph', graph)
+    
     editorRef.current.loadGraph(graph)
   }
 
   const setContainer = () => {
-    // console.log('set container')
+    // 
   }
 
   const publicInterface = {
@@ -178,8 +178,8 @@ const RawEditor = ({ tab, children }) => {
   // This will be the main interface between magick and rete
   const reteInterface = useMagickInterface()
   useEffect(() => {
-    console.log(loaded)
-    console.log(tab)
+    
+    
     if (!tab || loaded) return
     getSpell({
       spellName: tab.name,
