@@ -5,12 +5,12 @@ console.log('Installation plugins', process.env.PLUGINS)
 
 const serverPlugins = process.env.SERVER_PLUGINS ? process.env.SERVER_PLUGINS.split(',').map(
   (plugin) => {
-    return `@magickml/plugin-${plugin}`;
+    return `@magickml/plugin-${plugin}-server`;
   }
 ) : [];
 const clientPlugins = process.env.CLIENT_PLUGINS ? process.env.CLIENT_PLUGINS.split(',').map(
   (plugin) => {
-    return `@magickml/plugin-${plugin}`;
+    return `@magickml/plugin-${plugin}-client`;
   }
 ) : [];
 
