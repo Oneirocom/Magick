@@ -100,11 +100,11 @@ const TextEditor = props => {
     
     if (
       !textEditorData ||
-      Object.keys(textEditorData).length === 0 ||
-      !textEditorData.data
+      Object.keys(textEditorData).length === 0 
+      //|| !textEditorData.data
     )
       return
-
+    //Removed !textEditorData.data causing state issues between text editor instances.
     
 
     
