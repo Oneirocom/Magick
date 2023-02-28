@@ -4,6 +4,7 @@
 import { authenticate } from '@feathersjs/authentication'
 import pgvector from 'pgvector/pg'
 import type { Knex } from 'knex'
+<<<<<<< HEAD:packages/server-core/src/services/events/events.ts
 import { hooks as schemaHooks } from '@feathersjs/schema' 
 async function getUsersOver(db: Knex, embedding) {
   var users
@@ -15,6 +16,9 @@ async function getUsersOver(db: Knex, embedding) {
   return users
 }
   
+=======
+import { hooks as schemaHooks } from '@feathersjs/schema'   
+>>>>>>> 56efb3b2 (feat: add sqlite required extensions):apps/server/src/services/events/events.ts
 
 // array 1536 values in length
 const nullArray = new Array(1536).fill(0)
@@ -30,14 +34,30 @@ import {
   eventQueryResolver
 } from './events.schema'
 
-import type { Application, HookContext } from '../../declarations'
+import { Application, HookContext } from '../../declarations'
 import { EventService, getOptions } from './events.class'
+import { dbDialect, SupportedDbs } from '../../dbClient'
 
 export * from './events.class'
 export * from './events.schema'
 
+async function findSimilarEmbeddings(db: Knex, embedding) {
+  const query: Record<SupportedDbs, Knex.QueryBuilder> = {
+    [SupportedDbs.pg]: async () => await db.raw(`select * from events order by embedding <-> ${embedding} limit 1;`),
+    [SupportedDbs.sqlite3]: async () => await db.raw(`select rowid from vss_events order by vss_distance_l2(${embedding}) limit 1;`)
+  }
+  try {
+    embeddings = await query[dbDialect]()
+  } catch (e){
+    console.log(e)
+  }
+  console.log(embeddings)
+  return embeddings
+}
+
 // A configure function that registers the service and its hooks via `app.configure`
 export const event = (app: Application) => {
+  const db = app.get('dbClient')
   // Register our service on the Feathers application
   app.use('events', new EventService(getOptions(app)), {
     // A list of all methods this service exposes externally
@@ -56,23 +76,22 @@ export const event = (app: Application) => {
     before: {
       all: [schemaHooks.validateQuery(eventQueryValidator), schemaHooks.resolveQuery(eventQueryResolver)],
       find:[
-        async (context: any) => {
+        async (context: HookContext) => {
           if (context.params.query.embedding){
             const blob = atob( context.params.query.embedding );
             const ary_buf = new ArrayBuffer( blob.length );
             const dv = new DataView( ary_buf );
             for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
             let f32_ary = new Float32Array( ary_buf );
-            let temp = await getUsersOver(app.get('dbClient'), "["+f32_ary+"]")
-            return {
-              "result" : temp
-            }
+            console.log( f32_ary );
+            const result = await findSimilarEmbeddings(db, "["+f32_ary+"]")
+            return { result }
           }
           
         }
       ],
       get: [
-        (context: any) => {
+        (context: HookContext) => {
           const { getEmbedding } = context.params.query
           if (getEmbedding) {
             context.params.query.$limit = 1
@@ -83,7 +102,7 @@ export const event = (app: Application) => {
       ],
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
-        (context: any) => {
+        (context: HookContext) => {
           const { embedding } = context.data
           // if embedding is not null and not null array, then cast to pgvector
           if( embedding && embedding.length > 0 && embedding[0] !== 0 ) {
@@ -93,13 +112,21 @@ export const event = (app: Application) => {
           }
           return context
         },
-        schemaHooks.validateData(eventDataValidator), schemaHooks.resolveData(eventDataResolver)],
+        schemaHooks.validateData(eventDataValidator), schemaHooks.resolveData(eventDataResolver)
+      ],
       patch: [schemaHooks.validateData(eventPatchValidator), schemaHooks.resolveData(eventPatchResolver)],
       remove: []
     },
     after: {
       create:[
-
+        async (context: HookContext) => {
+          const { id } = context.result
+          // store the data in the virtual vss table
+          if (dbDialect === SupportedDbs.sqlite3) {
+            await db.raw(`insert into vss_events(rowid, event_embedding) select id, embedding from events where id = ${id};`)
+          }
+          return context
+        }
       ],
       all: []
     },
