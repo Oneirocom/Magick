@@ -51,7 +51,22 @@ There are a few things to keep in mind while this project is actively being work
 
 ### Local Sqlite (default)
 
-Simply add a relative or absolute path to your sqlite file in the `.env`, run `npm run migrate` and you're all set.
+> NOTE: If you're using Microsoft Windows, required sqlite extensions won't work, please use `postgres`.
+
+Simply add a relative or absolute path to your sqlite file in the `.env`, run `npm run migrate`.
+
+#### NOTE: 
+  There are two sqlite extensions used, `sqlite-vector` and `sqlite-vss`
+
+  based on the [docs](https://github.com/asg017/sqlite-vss#documentation),
+  on Linux machines, you'll have to install some packages to make it work:
+
+  ```
+    sudo apt-get update
+    sudo apt-get install -y libgomp1 libatlas-base-dev liblapack-dev 
+  ```
+
+  No extra steps for MacOS.
 
 ### Supabase public database 
 
