@@ -6,10 +6,10 @@ import FileInput from '../../../screens/HomeScreen/components/FileInput'
 import { useState } from 'react'
 
 interface Props {
-  data: Array<Object>
+  data: Array<object>
   onCreateAgent: () => void
   updateCallBack: () => void
-  update: (data: any) => void
+  update: (id: string, data: object) => void
   onDelete: (id: string) => void
   onLoadFile: (selectedFile: any) => void
 }
@@ -52,6 +52,7 @@ const AgentWindow = ({
             onDelete={onDelete}
             setSelectedAgent={setSelectedAgent}
             onClick={onClickHandler}
+            update={update}
             agent={agent}
             style={
               agent?.id === selectedAgent?.id
@@ -64,10 +65,10 @@ const AgentWindow = ({
       <Grid item xs={8} className={styles.item}>
         {selectedAgent ? (
           <AgentDetails
-              agentData={selectedAgent}
-              setSelectedAgent={setSelectedAgent}
-              updateCallback={updateCallBack}
-            />
+            agentData={selectedAgent}
+            setSelectedAgent={setSelectedAgent}
+            updateCallback={updateCallBack}
+          />
         ) : (
           <Typography className={styles.noSelected}>Select Agent</Typography>
         )}

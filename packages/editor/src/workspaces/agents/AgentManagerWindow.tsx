@@ -64,9 +64,10 @@ const AgentManagerWindow = () => {
     }
   }
 
-  const update = (_data: {}) => {
+  const update = (id: string, _data: object) => {
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', id, _data)
     axios
-      .patch(`${config.apiUrl}/agents/${'id'}`, _data)
+      .patch(`${config.apiUrl}/agents/${id}`, _data)
       .then(res => {
         if (typeof res.data === 'string' && res.data === 'internal error') {
           enqueueSnackbar('internal error updating agent', {
@@ -76,8 +77,6 @@ const AgentManagerWindow = () => {
           enqueueSnackbar('updated agent', {
             variant: 'success',
           })
-          
-          const responseData = res && JSON.parse(res?.config?.data)
 
           resetData()
         }
@@ -113,7 +112,7 @@ const AgentManagerWindow = () => {
   }
 
   useEffect(() => {
-    if(!config.apiUrl || isLoading) return
+    if (!config.apiUrl || isLoading) return
     setIsLoading(true)
     ;(async () => {
       const res = await fetch(`${config.apiUrl}/agents`)

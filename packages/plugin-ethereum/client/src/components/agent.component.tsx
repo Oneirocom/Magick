@@ -52,7 +52,7 @@ export const EthereumAgentWindow: FC<any> = props => {
     <div
       style={{
         backgroundColor: '#222',
-        padding: '1em',
+        padding: '2em',
         position: 'relative',
       }}
     >
