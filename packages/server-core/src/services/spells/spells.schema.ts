@@ -61,7 +61,11 @@ export const spellQueryProperties = Type.Pick(spellSchema, [
 ])
 export const spellQuerySchema = Type.Intersect(
   [
-    querySyntax(spellQueryProperties),
+    querySyntax(spellQueryProperties,{
+      name: {
+        $ilike: Type.String()
+      }
+    }),
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],
