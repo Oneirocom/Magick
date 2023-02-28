@@ -1,15 +1,22 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/databases.html
 import knex from 'knex'
 import type { Knex } from 'knex'
-import type { Application, SupportedDbs } from './declarations'
+import type { Application } from './declarations'
 
 declare module './declarations' {
   interface Configuration {
     dbClient: Knex
   }
 
-  type SupportedDbs = 'pg' | 'sqlite3'
+
 }
+export enum SupportedDbs {
+    pg = 'pg',
+    sqlite3 = 'sqlite3'
+}
+
+export const dbDialect: SupportedDbs = process.env.DATABASE_TYPE as SupportedDbs
+
 const getDatabaseConfig = () => {
   const dbType = process.env.DATABASE_TYPE || ''
   const dbURL = process.env.DATABASE_URL
@@ -32,27 +39,27 @@ const getDatabaseConfig = () => {
       // sqlite does not support inserting default values
       useNullAsDefault: true,
       pool: {
-        // afterCreate: function (conn, done) {
-        //   // in this example we use pg driver's connection API
-        //   conn.query('SET timezone="UTC";', function (err) {
-        //     if (err) {
-        //       // first query failed, 
-        //       // return error and don't try to make next query
-        //       done(err, conn);
-        //     } else {
-        //       // do the second query...
-        //       conn.query(
-        //         'SELECT set_limit(0.01);', 
-        //         function (err) {
-        //           // if err is not falsy, 
-        //           //  connection is discarded from pool
-        //           // if connection aquire was triggered by a 
-        //           // query the error is passed to query promise
-        //           done(err, conn);
-        //         });
-        //     }
-        //   });
-        // }
+        afterCreate: function (conn, done) {
+          console.log('loading sqlite extensions')
+          // NOTE: the extension files are relative to the repository root directory
+          conn.loadExtension('./lib/vector0', err => {
+            if (err) console.error(err)
+            conn.loadExtension('./lib/vss0', err => {
+              if (err) console.error(err)
+              conn.get("select vss_version();", (err, res) => {
+                if (err) console.error(err)
+                console.log('sqlite extensions loaded successfully')
+                console.log(res) // should yield `{ 'vss_version()': 'v0.0.1' }`
+                // create vss_events virtual table if not already exists.
+                conn.get('create virtual table if not exists vss_events using vss0(event_embedding(1536));', err => {
+                  if (err) console.error(err)
+                })
+              })
+              done(null, conn)
+            })
+            done(null, conn)
+          })
+        }
       }
     }
 
@@ -66,8 +73,8 @@ export const dbClient = (app: Application) => {
 }
 
 const dbSupportJson: Record<SupportedDbs, boolean> = {
-  'pg': true,
-  'sqlite3': false
+  [SupportedDbs.pg]: true,
+  [SupportedDbs.sqlite3]: false
 }
 
-export const doesDbSupportJson = () :boolean => dbSupportJson[process.env.DATABASE_TYPE]
+export const doesDbSupportJson = () :boolean => dbSupportJson[dbDialect]
