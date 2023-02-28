@@ -14,7 +14,7 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
     <div
       style={{
         backgroundColor: '#222',
-        padding: '1em',
+        padding: '2em',
         position: 'relative',
       }}
     >
@@ -44,7 +44,7 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
       </div>
       {agentData.data?.loop_enabled && (
         <div className="form-item">
-          <Grid container style={{ padding: '1em' }}>
+          <Grid container>
             <>
               <div className="form-item">
                 <span className="form-item-label">Loop Interval</span>

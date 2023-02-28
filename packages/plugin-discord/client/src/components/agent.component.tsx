@@ -65,7 +65,7 @@ export const DiscordAgentWindow: FC<any> = props => {
     <div
       style={{
         backgroundColor: '#222',
-        padding: '1em',
+        padding: '2em',
         position: 'relative',
       }}
     >
@@ -102,7 +102,7 @@ export const DiscordAgentWindow: FC<any> = props => {
       <h3>Discord</h3>
       {agentData.data?.discord_enabled && (
         <>
-          <Grid container style={{ padding: '1em' }}>
+          <Grid container>
             <Grid item xs={12}>
               <div className="form-item">
                 <span className="form-item-label">API Key</span>
@@ -121,11 +121,7 @@ export const DiscordAgentWindow: FC<any> = props => {
                 />
               </div>
             </Grid>
-            <Grid
-              item
-              xs={4}
-              style={{ paddingLeft: '1em', paddingRight: '1em' }}
-            >
+            <Grid item xs={4} style={{ paddingRight: '1em' }}>
               <div className="form-item">
                 <input
                   type="text"
@@ -143,11 +139,7 @@ export const DiscordAgentWindow: FC<any> = props => {
                 />
               </div>
             </Grid>
-            <Grid
-              item
-              xs={4}
-              style={{ paddingLeft: '1em', paddingRight: '1em' }}
-            >
+            <Grid item xs={4} style={{ paddingRight: '1em' }}>
               <div className="form-item">
                 <input
                   type="text"
@@ -165,11 +157,7 @@ export const DiscordAgentWindow: FC<any> = props => {
                 />
               </div>
             </Grid>
-            <Grid
-              item
-              xs={4}
-              style={{ paddingLeft: '1em', paddingRight: '1em' }}
-            >
+            <Grid item xs={4} style={{ paddingRight: '1em' }}>
               <div className="form-item">
                 <input
                   type="text"
@@ -209,16 +197,13 @@ export const DiscordAgentWindow: FC<any> = props => {
           {agentData.data?.use_voice === 'on' && (
             <>
               <Grid container>
-                <Grid
-                  item
-                  xs={3}
-                  style={{ paddingLeft: '1em', paddingRight: '1em' }}
-                >
+                <Grid item xs={3} style={{ paddingRight: '1em' }}>
                   <div className="form-item">
                     <span className="form-item-label">Voice Provider</span>
                     <select
                       name="voice_provider"
                       id="voice_provider"
+                      className="select"
                       value={agentData.data?.voice_provider}
                       placeholder={'Voice Provider'}
                       onChange={e => {
@@ -237,15 +222,12 @@ export const DiscordAgentWindow: FC<any> = props => {
                     </select>
                   </div>
                 </Grid>
-                <Grid
-                  item
-                  xs={3}
-                  style={{ paddingLeft: '1em', paddingRight: '1em' }}
-                >
+                <Grid item xs={3} style={{ paddingRight: '1em' }}>
                   <div className="form-item">
                     <span className="form-item-label">Character</span>
                     {agentData.data?.voice_provider === 'google' ? (
                       <select
+                        className="select"
                         name="voice_character"
                         id="voice_character"
                         value={agentData.data?.voice_character}
@@ -325,6 +307,7 @@ export const DiscordAgentWindow: FC<any> = props => {
                       <select
                         name="voice_character"
                         id="voice_character"
+                        className="select"
                         value={agentData.data?.voice_character}
                         onChange={e => {
                           setAgentData({
@@ -353,16 +336,13 @@ export const DiscordAgentWindow: FC<any> = props => {
                     )}
                   </div>
                 </Grid>
-                <Grid
-                  item
-                  xs={3}
-                  style={{ paddingLeft: '1em', paddingRight: '1em' }}
-                >
+                <Grid item xs={3} style={{ paddingRight: '1em' }}>
                   <div className="form-item">
                     <span className="form-item-label">Language Code</span>
                     <select
                       name="voice_language_code"
                       id="voice_language_code"
+                      className="select"
                       value={agentData.data?.voice_language_code}
                       onChange={e => {
                         setAgentData({
@@ -382,9 +362,7 @@ export const DiscordAgentWindow: FC<any> = props => {
                 <Grid item xs={3}>
                   {agentData.data?.voice_provider === 'tiktalknet' && (
                     <div className="form-item">
-                      <span className="form-item-label">
-                        Provider URL
-                      </span>
+                      <span className="form-item-label">Provider URL</span>
                       <input
                         type="text"
                         defaultValue={agentData.data?.tiktalknet_url}

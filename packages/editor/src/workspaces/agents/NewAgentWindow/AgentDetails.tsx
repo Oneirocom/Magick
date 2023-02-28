@@ -1,6 +1,5 @@
-import { Icon, IconBtn, Switch } from '@magickml/client-core'
+import { Switch } from '@magickml/client-core'
 import { Avatar, Button, Typography } from '@mui/material'
-import Accordion from './Accordion'
 import styles from './index.module.scss'
 import { useEffect, useState } from 'react'
 import AgentPubVariables from './AgentPubVariables'
@@ -80,7 +79,7 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )

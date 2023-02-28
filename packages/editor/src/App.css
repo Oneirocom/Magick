@@ -234,7 +234,7 @@ button.disabled {
   font-family: 'IBM Plex Mono', sans-serif;
 } */
 
-input[type='text'] {
+input {
   box-sizing: border-box;
   padding: var(--extraSmall);
   /* not using a var here to optically correct for base + cap of typeface */
@@ -251,7 +251,7 @@ input[type='text'] {
   height: var(--c4);
 }
 
-input[type='text']:focus-visible {
+input:focus-visible {
   outline: 1px solid var(--glow);
 }
 
@@ -315,7 +315,16 @@ input[type='text']:focus-visible {
 .form-item-label {
   display: block;
   margin-bottom: 0.5em;
+  font-family: 'IBM Plex Mono', monospace !important;
+
   color: var(--dark-5);
+}
+
+.select {
+  padding: 0.4em;
+  width: 60%;
+  border: 1px solid var(--dark-4);
+  border-radius: 4px;
 }
 
 .form-text-area,
