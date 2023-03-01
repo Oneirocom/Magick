@@ -94,6 +94,8 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
     _outputs: MagickWorkerOutputs,
     { silent }: { silent: boolean }
   ) {
+    const eventValue = event[0] ?? event
+
     const {
       content,
       sender,
@@ -104,7 +106,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       projectId,
       entities,
       agentId,
-    } = event && ((event[0] ?? event) as Event)
+    } = eventValue as Event
 
     if (!silent) node.display(event)
 
