@@ -52,6 +52,7 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
                   type="text"
                   pattern="[0-9]*"
                   defaultValue={agentData.data?.loop_interval}
+                  placeholder="Insert loop interval here"
                   onChange={e => {
                     setAgentData({
                       ...agentData,

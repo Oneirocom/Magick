@@ -67,11 +67,8 @@ const CreateNew = () => {
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
       })
-      
-      
 
       if ('error' in response) {
-        
         if ('status' in response.error) {
           const err = response.error
 
@@ -84,7 +81,11 @@ const CreateNew = () => {
         }
       }
 
-      navigate(`/magick/${response.data.id +"-"+ encodeURIComponent(btoa(response.data.name))}`)
+      navigate(
+        `/magick/${
+          response.data.id + '-' + encodeURIComponent(btoa(response.data.name))
+        }`
+      )
     } catch (err) {
       console.error('ERROR!', err)
     }
@@ -107,6 +108,7 @@ const CreateNew = () => {
             type="text"
             className={css['input']}
             defaultValue=""
+            placeholder="Enter spell name here"
             {...register('name')}
           />
           {error && <span className={css['error-message']}>{error}</span>}
