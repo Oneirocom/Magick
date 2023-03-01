@@ -4,21 +4,7 @@
 import { authenticate } from '@feathersjs/authentication'
 import pgvector from 'pgvector/pg'
 import type { Knex } from 'knex'
-<<<<<<< HEAD:packages/server-core/src/services/events/events.ts
-import { hooks as schemaHooks } from '@feathersjs/schema' 
-async function getUsersOver(db: Knex, embedding) {
-  var users
-  try {
-    users = await db.raw(`select * from events order by embedding <-> ${embedding} limit 1;`)
-  } catch (e){
-    console.log(e)
-  }
-  return users
-}
-  
-=======
 import { hooks as schemaHooks } from '@feathersjs/schema'   
->>>>>>> 56efb3b2 (feat: add sqlite required extensions):apps/server/src/services/events/events.ts
 
 // array 1536 values in length
 const nullArray = new Array(1536).fill(0)
@@ -97,8 +83,7 @@ export const event = (app: Application) => {
             const ary_buf = new ArrayBuffer( blob.length );
             const dv = new DataView( ary_buf );
             for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
-            let f32_ary = new Float32Array( ary_buf );
-            console.log( f32_ary );
+            const f32_ary = new Float32Array( ary_buf );
             const result = await findSimilarEventByEmbedding(db, "["+f32_ary+"]")
             return { result }
           }
