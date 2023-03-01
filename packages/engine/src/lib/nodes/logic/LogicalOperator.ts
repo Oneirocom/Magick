@@ -53,9 +53,9 @@ export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
     node.inspector.add(operationType).add(testt)
 
     return node
+    .addInput(dataInput)
       .addInput(inp1)
       .addInput(inp2)
-      .addInput(dataInput)
       .addOutput(isTrue)
       .addOutput(isFalse)
       .addOutput(outp)

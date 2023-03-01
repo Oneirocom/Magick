@@ -9,13 +9,11 @@ function configProject() {
 const pluginsJsPath = path.join(__dirname, '..', 'packages', 'engine', 'src/project.ts');
 const pluginsJsExamplePath = path.join(__dirname, 'project.example.js');
 
-const uuid = generateUuid();
-
-const newProjectId = uuid;
-
 let projectId = process.env.PROJECT_ID
 
 if(!projectId) {
+  const uuid = generateUuid();
+  const newProjectId = uuid;
   // check if there is a ../.env.local, if not copy .env.local.example to it
   const envLocalPath = path.join(__dirname, '..', '.env.local');
   if (!fs.existsSync(envLocalPath)) {

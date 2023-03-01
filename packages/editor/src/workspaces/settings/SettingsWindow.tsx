@@ -3,15 +3,13 @@ import { useConfig } from '../../contexts/ConfigProvider'
 import { KeyboardArrowDown, FileCopy, Clear } from '@mui/icons-material/'
 import styles from './styles.module.scss'
 import { IconButton } from '@mui/material'
-import ToolTip from '../../components/ToolTip'
-import useAuthentication from '../../screens/FineTuneManager/account/useAuthentication'
+import { Tooltip } from '@magickml/client-core'
 
 const SettingsWindow = () => {
   const config = useConfig()
   const [apiKey, setApiKey] = useState<any>('')
   const [copy, setCopy] = useState<string>('copy')
   const [clear, setClear] = useState<string>('clear')
-  const { signOut } = useAuthentication()
 
   useEffect(() => {
     const openai = window.localStorage.getItem('openai-api-key')
@@ -21,7 +19,7 @@ const SettingsWindow = () => {
   return (
     <div className={styles['settings-editor']}>
       <div className={styles['child']}>
-        <div>
+        <div className={styles['innerChild']}>
           <p className={styles['title']}>
             Your OpenAI Key
             <span className={`${styles['md-margin']} ${styles['flexCenter']}`}>
@@ -61,7 +59,7 @@ const SettingsWindow = () => {
               />
               {apiKey && (
                 <>
-                  <ToolTip title={copy}>
+                  <Tooltip title={copy}>
                     <IconButton
                       className={styles['icon']}
                       onClick={() => {
@@ -74,13 +72,12 @@ const SettingsWindow = () => {
                     >
                       <FileCopy />
                     </IconButton>
-                  </ToolTip>
-                  <ToolTip title={clear}>
+                  </Tooltip>
+                  <Tooltip title={clear}>
                     <IconButton
                       className={styles['icon']}
                       onClick={() => {
                         localStorage.removeItem('openai-api-key')
-                        signOut()
                         setApiKey('')
                         setClear('Cleared!')
                         setTimeout(() => {
@@ -90,7 +87,7 @@ const SettingsWindow = () => {
                     >
                       <Clear />
                     </IconButton>
-                  </ToolTip>
+                  </Tooltip>
                 </>
               )}
             </form>

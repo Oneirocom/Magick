@@ -8,7 +8,7 @@ import {
 } from 'flexlayout-react'
 import { useContext, createContext, useEffect, useState, useRef } from 'react'
 
-import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
+import { LoadingScreen } from '@magickml/client-core'
 import { saveTabLayout } from '../../state/tabs'
 import { useDispatch } from 'react-redux'
 // Component types are listed here which are used to load components from the data sent by rete

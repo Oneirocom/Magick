@@ -1,8 +1,5 @@
 import io from 'socket.io-client'
-import {
-  API_ROOT_URL,
-  SPEECH_SERVER_PORT
-} from '@magickml/engine'
+import { API_ROOT_URL, SPEECH_SERVER_PORT } from '../config';
 
 const SPEECH_SERVER_URL = `${API_ROOT_URL}:${SPEECH_SERVER_PORT}`
 
@@ -86,7 +83,7 @@ class speechUtils {
       const dataFinal = undefined || data.results[0].isFinal
 
       if (dataFinal === true) {
-        let finalString = data.results[0].alternatives[0].transcript
+        const finalString = data.results[0].alternatives[0].transcript
         console.log('Speech Recognition:', dataFinal)
         //ChatService.sendMessage(`!voice|${finalString}`)
 
@@ -117,7 +114,7 @@ class speechUtils {
     this.streamStreaming = false
     this.socket.emit('endGoogleCloudStream', '')
 
-    let track = this.globalStream.getTracks()[0]
+    const track = this.globalStream.getTracks()[0]
     track.stop()
 
     this.input.disconnect(this.processor)
@@ -141,7 +138,7 @@ class speechUtils {
     }
     const sampleRateRatio = sampleRate / outSampleRate
     const newLength = Math.round(buffer.length / sampleRateRatio)
-    let result = new Int16Array(newLength)
+    const result = new Int16Array(newLength)
     let offsetResult = 0
     let offsetBuffer = 0
     while (offsetResult < result.length) {

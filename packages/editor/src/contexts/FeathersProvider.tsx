@@ -8,7 +8,7 @@ import type { SocketService } from '@feathersjs/socketio-client'
 import { createContext, useContext, useEffect, useState } from 'react'
 import io from 'socket.io-client'
 
-import LoadingScreen from '../components/LoadingScreen/LoadingScreen'
+import { LoadingScreen } from '@magickml/client-core'
 import { useConfig } from './ConfigProvider'
 import { Spell } from '@magickml/engine'
 
@@ -43,8 +43,6 @@ const buildFeathersClient = async config => {
   const socketClient = socketio(socket, { timeout: 10000 })
   // todo this needs more than an any here.  Super hacky.
   app.configure(socketClient as any)
-
-  console.log('app', app)
 
   configureCustomServices(app, socketClient)
 

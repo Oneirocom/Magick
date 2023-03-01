@@ -1,15 +1,15 @@
 import Editor from '@monaco-editor/react'
 import { useState, useEffect, useRef } from 'react'
-
-import Window from '../../../components/Window/Window'
 import WindowMessage from '../../components/WindowMessage'
+
+import { Window } from '@magickml/client-core'
 import { activeTabSelector, selectAllTabs } from '../../../state/tabs'
 
 import '../../../screens/Magick/magick.module.css'
 import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
 import { RootState } from '../../../state/store'
 import { useSelector } from 'react-redux'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 
 const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)
@@ -39,9 +39,6 @@ const TextEditor = props => {
   }
 
   useEffect(() => {
-    console.log('focus')
-    console.log('textEditorData', textEditorData)
-    console.log('inspectorData', inspectorData)
     if (!inspectorData?.data.inputs) return
 
     const stringifiedInputs = JSON.stringify(inspectorData?.data.inputs)
@@ -100,24 +97,24 @@ const TextEditor = props => {
   }, [language])
 
   useEffect(() => {
-    console.log('props', props)
+    
     if (
       !textEditorData ||
-      Object.keys(textEditorData).length === 0 ||
-      !textEditorData.data
+      Object.keys(textEditorData).length === 0 
+      //|| !textEditorData.data
     )
       return
+    //Removed !textEditorData.data causing state issues between text editor instances.
+    
 
-    console.log('textEditorData', textEditorData)
-
-    console.log('inspectorData', inspectorData)
+    
 
     const inputs = []
     inspectorData?.data.inputs?.forEach((input: any) => {
       inputs.push('  ' + input.socketKey + ',')
     })
 
-    const textLines = textEditorData.data.split('\n')
+    const textLines = textEditorData.data?.split('\n') ?? []
     // get the index of the first line that starts with function
     const startIndex =
       textLines.findIndex(line => line.startsWith('function')) + 1
@@ -185,13 +182,13 @@ const TextEditor = props => {
     const json = await response.json()
     const completion = json.choices[0].text
 
-    console.log('completion', completion)
+    
 
     updateCode(code + completion)
   }
 
   const onComplete = () => {
-    console.log('codeRef.current', codeRef.current)
+    
     complete(codeRef.current)
   }
 
@@ -282,11 +279,11 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
     const functionText = window.prompt('What should this node do?')
     if (functionText === '' || !functionText) return
 
-    let _inputs = []
-    let _outputs = []
-    console.log('inspectorData', inspectorData)
+    const _inputs = []
+    const _outputs = []
+    
 
-    console.log('inspectorData.data', inspectorData?.data)
+    
 
     // @ts-ignore
     inspectorData?.data?.inputs?.forEach((input: any) => {
@@ -300,7 +297,7 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
 
     const prompt = makeGeneratePrompt(functionText, language, _inputs, _outputs)
 
-    console.log('prompt is', prompt)
+    
 
     const response = await fetch(
       'https://api.openai.com/v1/engines/code-davinci-002/completions',
@@ -324,7 +321,7 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
 
     const d = language === 'python' ? '# ' : '// '
 
-    let header =
+    const header =
       language === 'plaintext'
         ? `Task: ${functionText}\n`
         : `${d}Task: ${functionText}
@@ -341,7 +338,7 @@ ${
 }`
 
     const json = await response.json()
-    console.log('response', json)
+    
 
     const completion = json.choices[0].text
 

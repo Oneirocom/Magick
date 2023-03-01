@@ -31,7 +31,7 @@ export function fitViewport([x, y], element) {
 }
 
 export function injectItem(items, title, onClick, path) {
-  for (let level of path) {
+  for (const level of path) {
     let exist = items.find(i => i.title === level)
 
     if (!exist) {

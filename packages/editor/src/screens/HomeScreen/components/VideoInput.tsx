@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Icon from '../../../components/Icon/Icon'
+import { Icon } from '@magickml/client-core'
 
 const VideoInput = ({ loadFile }) => {
   const hiddenFileInput = React.useRef(null)

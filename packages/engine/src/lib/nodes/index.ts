@@ -1,13 +1,5 @@
 import { MagickComponent } from '../types'
 import { QueryGoogle } from './apis/QueryGoogle'
-import { CheckBalanceForERC20 } from './ethereum/CheckBalanceForERC20'
-import { CheckEthBalance } from './ethereum/CheckEthBalance'
-import { Solidity } from './ethereum/Solidity'
-import { DeployContract } from './ethereum/DeployContract'
-import { CallContractFunctionWrite } from './ethereum/CallContractFunctionWrite'
-import { CallContractFunctionRead } from './ethereum/CallContractFunctionRead'
-import { CheckForRecentTransactionsFromWallet } from './ethereum/CheckForRecentTransactionsFromWallet'
-import { GetRecentTransactions } from './ethereum/GetRecentTransactions'
 import { EventDestructureComponent } from './events/EventDestructure'
 import { EventRestructureComponent } from './events/EventRestructure'
 import { EventRecall } from './events/EventRecall'
@@ -17,7 +9,6 @@ import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
 import { Request } from './io/Request'
 import { SpellComponent } from './io/Spell'
-import { TriggerIn } from './io/TriggerIn'
 import { TriggerOut } from './io/TriggerOut'
 import { BooleanGate } from './logic/BooleanGate'
 import { Code } from './logic/Code'
@@ -68,7 +59,7 @@ import { pluginManager } from '../plugin'
 import { EventsToConversation } from './events/EventsToConversation'
 import { CreateEmbedding } from './ml/CreateEmbedding'
 
-export let components = {
+export const components = {
   alert: () => new Alert(),
   booleanGate: () => new BooleanGate(),
   randomGate: () => new RandomGate(),
@@ -115,19 +106,9 @@ export let components = {
   imgs: () => new Image(),
   stringProcessor: () => new StringProcessor(),
   switchGate: () => new SwitchGate(),
-  triggerIn: () => new TriggerIn(),
   triggerOut: () => new TriggerOut(),
   waitForAll: () => new WaitForAll(),
   exclusiveGate: () => new ExclusiveGate(),
-  checkEthBalance: () => new CheckEthBalance(),
-  checkBalanceForERC20: () => new CheckBalanceForERC20(),
-  getRecentTransactions: () => new GetRecentTransactions(),
-  solidity: () => new Solidity(),
-  deployContract: () => new DeployContract(),
-  callContractFunctionWrite: () => new CallContractFunctionWrite(),
-  callContractFunctionRead: () => new CallContractFunctionRead(),
-  checkForRecentTransactionsFromWallet: () =>
-    new CheckForRecentTransactionsFromWallet(),
   merge: () => new Merge(),
   orGate: () => new OrGate(),
   log: () => new Log(),

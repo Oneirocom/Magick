@@ -9,6 +9,7 @@ import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
 import { useConfig } from '../../contexts/ConfigProvider'
 import { getSpellApi } from '../../state/api/spells'
+import { getStore } from '../../state/store'
 
 const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
   const config = useConfig()
@@ -16,6 +17,7 @@ const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
   
   const [error, setError] = useState('')
   const [patchSpell, { isLoading }] = spellApi.usePatchSpellMutation()
+
   const { enqueueSnackbar } = useSnackbar()
   const dispatch = useDispatch()
 
@@ -24,23 +26,17 @@ const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
     handleSubmit,
     // formState: { errors },
   } = useForm()
-  console.log('tab ::: ', tab)
 
   const onSubmit = handleSubmit(async data => {
-    console.log('data ::: ', data)
-
-    const spell = await spellApi.getSpell({ spellName: tab.spellName })
-
-    console.log('spell ::: ', spell)
+    const name = data.name
+    data.name = tab.id + "-" + encodeURIComponent(btoa(data.name))
 
     const response: any = await patchSpell({
-      id: spell.id,
+      id: tab.id,
       update: {
-        name: data.name,
+        name: name,
       },
     })
-
-    console.log('response.error ::: ', response.error)
 
     if (response.error) {
       setError(response.error.data.error.message)

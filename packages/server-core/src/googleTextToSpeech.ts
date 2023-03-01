@@ -26,8 +26,6 @@ export async function tts(
     audioConfig: { audioEncoding: 2 /*MP3*/ },
   }
 
-  console.log('ttsRequest is', ttsRequest)
-
   const fileName = makeid(8) + '.mp3'
   const outputFile = 'files/' + fileName
   if (fs.existsSync(outputFile)) {
@@ -37,16 +35,16 @@ export async function tts(
   const [response] = await client.synthesizeSpeech(ttsRequest)
   const writeFile = util.promisify(fs.writeFile)
   await writeFile(outputFile, response.audioContent as string, 'binary')
-  console.log(`Audio content written to file: ${outputFile}`)
+  
   return outputFile
 }
 
 function makeid(length: number) {
-  var result = ''
-  var characters =
+  let result = ''
+  const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  var charactersLength = characters.length
-  for (var i = 0; i < length; i++) {
+  const charactersLength = characters.length
+  for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
   return result

@@ -42,12 +42,11 @@ export class GetCachedEmbedding extends MagickComponent<
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const success = new Rete.Output('success', 'Success', triggerSocket)
     const fail = new Rete.Output('failure', 'Failure', triggerSocket)
-
     const out = new Rete.Output('embedding', 'Events', arraySocket)
 
     return node
-      .addInput(contentInput)
       .addInput(dataInput)
+      .addInput(contentInput)
       .addOutput(success)
       .addOutput(fail)
       .addOutput(out)
@@ -74,7 +73,7 @@ export class GetCachedEmbedding extends MagickComponent<
     const urlString = `${API_ROOT_URL}/events`
 
     const url = new URL(urlString)
-    for (let p in params) {
+    for (const p in params) {
       // append params to url, make sure to preserve arrays
       if (Array.isArray(params[p])) {
         params[p].forEach(v => url.searchParams.append(p, v))

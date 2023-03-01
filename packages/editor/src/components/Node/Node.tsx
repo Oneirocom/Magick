@@ -3,12 +3,21 @@ import { Socket } from '../../plugins/reactRenderPlugin/Socket'
 import { Control } from '../../plugins/reactRenderPlugin/Control'
 import { Upload } from '../../plugins/reactRenderPlugin/Upload'
 
-import Icon, { componentCategories } from '../Icon/Icon'
+import {Icon, componentCategories } from '@magickml/client-core'
 import css from './Node.module.css'
 
 export class MyNode extends Node {
   declare props: any
   declare state: any
+  constructor(props) {
+    super(props)
+    this.state = {
+      outputs: [],
+      controls: [],
+      inputs: [],
+      selected: false,
+    }
+  }
   render() {
     const { node, bindSocket, bindControl } = this.props
     const { outputs, controls, inputs, selected } = this.state

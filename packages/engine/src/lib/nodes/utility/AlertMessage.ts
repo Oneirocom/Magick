@@ -35,7 +35,9 @@ export class Alert extends MagickComponent<void> {
       value,
     })
 
-    return node.addInput(dataInput).addControl(input)
+    return node
+      .addInput(dataInput)
+      .addControl(input)
   }
 
   // the worker contains the main business logic of the node.  It will pass those results

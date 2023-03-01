@@ -48,11 +48,11 @@ export class SentenceMatcher extends MagickComponent<Promise<InputReturn>> {
     const output = new Rete.Output('output', 'Output', stringSocket, true)
 
     return node
-      .addOutput(output)
+      .addInput(dataInput)
       .addOutput(dataOutput)
+      .addOutput(output)
       .addInput(sentences)
       .addInput(source)
-      .addInput(dataInput)
   }
 
   async worker(

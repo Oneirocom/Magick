@@ -1,0 +1,5 @@
+# Ignore built ts files
+dist/**/*
+
+# Dependency
+node_modules

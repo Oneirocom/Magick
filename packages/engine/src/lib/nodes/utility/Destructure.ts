@@ -42,11 +42,14 @@ export class Destructure extends MagickComponent<void> {
       ignored: ['trigger'],
     })
 
-    node.inspector.add(socketGenerator)
-    return node
+    node
       .addInput(dataInput)
       .addInput(objectInput)
       .addOutput(outputTrigger)
+
+    node.inspector.add(socketGenerator)
+
+    return node
   }
 
   // the worker contains the main business logic of the node.  It will pass those results

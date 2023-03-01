@@ -1,6 +1,6 @@
 import { Spell } from '@magickml/engine'
 import { CSSProperties } from 'react'
-import Icon from '../../../components/Icon/Icon'
+import { Icon } from '@magickml/client-core'
 import css from '../homeScreen.module.css'
 
 type ProjectProps = {

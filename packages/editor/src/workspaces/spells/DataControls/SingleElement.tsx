@@ -1,6 +1,5 @@
-import IconBtn from '../../../components/IconButton'
 import { GridViewRounded, ArrowForwardIosTwoTone } from '@mui/icons-material'
-import Icon from '../../../components/Icon/Icon'
+import { Icon, IconBtn } from '@magickml/client-core'
 import styles from './datacontrols.module.css'
 
 interface Props {

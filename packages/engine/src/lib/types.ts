@@ -282,7 +282,7 @@ export type Spell = {
   graph: Data
   created_at?: string
   updated_at?: string
-  id: number
+  id: string
   hash?: string
   projectId: string
 }

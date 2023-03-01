@@ -12,7 +12,7 @@ import React, {
 import { getSpellApi } from '../../state/api/spells'
 import { useConfig } from '../../contexts/ConfigProvider'
 
-import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
+import { LoadingScreen } from '@magickml/client-core'
 import { MyNode } from '../../components/Node/Node'
 import gridimg from '../../grid.png'
 import { usePubSub } from '../../contexts/PubSubProvider'
@@ -77,6 +77,7 @@ const EditorProvider = ({ children }) => {
 
   const buildEditor = async (container, _spell, tab, magick) => {
     // eslint-disable-next-line no-console
+    
     const newEditor = await initEditor({
       container,
       pubSub,
@@ -90,18 +91,14 @@ const EditorProvider = ({ children }) => {
 
     // set editor to the map
     setEditor(newEditor)
-
     // copy spell in case it is read onl
     const spell = JSON.parse(JSON.stringify(_spell))
-
-    console.log('Loading graph in build editor', spell)
     const graph = spell.graph
-    console.log('graph', graph)
     newEditor?.loadGraph(graph)
   }
 
   const run = () => {
-    // console.log('RUN')
+    // 
   }
 
   const undo = () => {
@@ -142,12 +139,12 @@ const EditorProvider = ({ children }) => {
 
   const loadGraph = graph => {
     if (!editorRef.current) return
-    console.log('loading graph', graph)
+    
     editorRef.current.loadGraph(graph)
   }
 
   const setContainer = () => {
-    // console.log('set container')
+    // 
   }
 
   const publicInterface = {
@@ -175,20 +172,20 @@ const RawEditor = ({ tab, children }) => {
   const config = useConfig()
   const spellApi = getSpellApi(config)
 
-  const [getSpell, { data: spell, isLoading }] = spellApi.useLazyGetSpellQuery()
+  const [getSpell, { data: spell, isLoading }] = spellApi.useLazyGetSpellByIdQuery()
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
   // This will be the main interface between magick and rete
   const reteInterface = useMagickInterface()
-
   useEffect(() => {
+    
+    
     if (!tab || loaded) return
-
-    if (tab?.spellName)
-      getSpell({
-        spellName: tab.spellName,
-        projectId: config.projectId,
-      })
+    getSpell({
+      spellName: tab.name,
+      id: tab.id,
+      projectId: config.projectId,
+    })
   }, [tab])
 
   if (!tab || (tab.type === 'spell' && (isLoading || !spell)))

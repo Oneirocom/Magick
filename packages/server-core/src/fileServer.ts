@@ -43,7 +43,7 @@ async function initSSL(): Promise<boolean> {
           filePath = './index.html'
         }
 
-        let extname = path.extname(filePath)
+        const extname = path.extname(filePath)
         let contentType = 'text/html'
 
         switch (extname) {
@@ -110,7 +110,7 @@ async function initNoSSL() {
         filePath = './index.html'
       }
 
-      let extname = path.extname(filePath)
+      const extname = path.extname(filePath)
       let contentType = 'text/html'
 
       switch (extname) {

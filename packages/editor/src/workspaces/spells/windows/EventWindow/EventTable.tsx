@@ -29,7 +29,7 @@ import axios from 'axios'
 import _ from 'lodash'
 import { CSVLink } from 'react-csv'
 import { useConfig } from '../../../../contexts/ConfigProvider'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter)
@@ -45,7 +45,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
         onChange(e.target.value)
       }}
       placeholder="Search events..."
-      style={{ width: '100%' }}
+      style={{ width: '40em', border:0, margin: 0 }}
     />
   )
 }
@@ -60,9 +60,12 @@ const DefaultColumnFilter = ({
       onChange={e => {
         setFilter(e.target.value || undefined)
       }}
-      placeholder={'Search ' + Header}
+      placeholder={Header}
       style={{
         width: '100%',
+        border: 0,
+        // 0 radius
+        borderRadius: 0,
       }}
     />
   )
@@ -132,7 +135,7 @@ function EventTable({ events, updateCallback }) {
   )
 
   const updateEvent = async ({ id, ...rowData }, columnId, value) => {
-    let reqBody = {
+    const reqBody = {
       ...rowData,
       [columnId]: value,
       projectId: config.projectId,
@@ -203,7 +206,6 @@ function EventTable({ events, updateCallback }) {
   }
 
   const handleEventDelete = async (event: any) => {
-    console.log('event to delete ::: ', event)
     const isDeleted = await axios.delete(
       `${import.meta.env.VITE_APP_API_URL}/events/${event.id}`
     )
@@ -220,49 +222,61 @@ function EventTable({ events, updateCallback }) {
   return (
     <Stack spacing={2}>
       <Grid container justifyContent="left" style={{ padding: '1em' }}>
-        <Grid item xs={9.5}>
           <GlobalFilter
             globalFilter={state.globalFilter}
             setGlobalFilter={setGlobalFilter}
           />
-        </Grid>
-        <Grid item xs={1.5}>
           <Button
-            style={{ marginLeft: '1em', display: 'inline', width: '8em' }}
+            style={{
+              display: 'inline',
+              backgroundColor: 'purple',
+              border: 'none',
+              color: 'white',
+              marginRight: '.5em',
+              marginLeft: 'auto',
+            }}
             name="refresh"
             onClick={updateCallback}
           >
             Refresh
           </Button>
-        </Grid>
-        <Grid item xs={1}>
           <CSVLink
             data={originalRows}
             filename="events.csv"
             target="_blank"
-            style={{ textDecoration: 'none', display: 'inline', width: '8em' }}
+            style={{ 
+              textDecoration: 'none',
+              display: 'inline',
+              marginLeft: '.5em',
+              marginRight: '.5em',
+            }}
           >
-            <Button style={{ textDecoration: 'none', display: 'inline' }}>
+            <Button style={{ 
+                            textDecoration: 'none',
+                            display: 'inline',
+                            backgroundColor: 'purple',
+                            color: 'white',
+                            border: 'none',
+             }}>
               <FaFileCsv size={14} />
             </Button>
           </CSVLink>
-        </Grid>
       </Grid>
-      <TableContainer component={Paper}>
-        <Table style={{ width: 'calc(100% - 2em)' }} {...getTableProps()}>
-          <TableHead style={{ backgroundColor: '#000' }}>
+      <TableContainer component={Paper} style={{ width: '100%', padding: 0, margin: 0 }}>
+        <Table style={{ width: '100%', padding: 0, margin: 0 }} {...getTableProps()}>
+          <TableHead style={{ backgroundImage: 'none', padding: 0, margin: 0 }}>
             {headerGroups.map((headerGroup, idx) => (
-              <TableRow {...headerGroup.getHeaderGroupProps()} key={idx}>
+              <TableRow {...headerGroup.getHeaderGroupProps()} key={idx} style={{ backgroundImage: 'none', padding: 0, margin: 0 }}>
                 {headerGroup.headers.map((column, idx) => (
                   <TableCell
                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                    style={{ fontSize: '0.985rem' }}
+                    style={{ fontSize: '0.985rem', padding: '0em', margin: '0em', border: 0 }}
                     key={idx}
                   >
                     <Stack spacing={1}>
-                      <div>
-                        {column.render('Header')}{' '}
-                        <span>
+                      <div style={{position: 'relative'}}>
+                        {column.canFilter ? column.render('Filter') : null}
+                        <span style={{position: 'absolute', top: '.75em', right: '.75em', zIndex: '10'}}>
                           {column.isSorted ? (
                             column.isSortedDesc ? (
                               <VscArrowDown size={14} />
@@ -273,10 +287,7 @@ function EventTable({ events, updateCallback }) {
                             ''
                           )}
                         </span>
-                      </div>
-                      <div>
-                        {column.canFilter ? column.render('Filter') : null}
-                      </div>
+                        </div>
                     </Stack>
                   </TableCell>
                 ))}

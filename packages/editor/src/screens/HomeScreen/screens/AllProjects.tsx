@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 
-import Icon from '../../../components/Icon/Icon'
-import Panel from '../../../components/Panel/Panel'
+import { Icon } from '@magickml/client-core'
+import { Panel } from '@magickml/client-core'
 import css from '../homeScreen.module.css'
 import FileInput from '../components/FileInput'
 import ProjectRow from '../components/ProjectRow'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 
 const AllProjects = ({
   spells,

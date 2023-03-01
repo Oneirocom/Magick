@@ -1,0 +1,53 @@
+import { ServerPlugin } from "@magickml/engine"
+import Nodes from '@magickml/plugin-ethereum-shared'
+import Money from "@mui/icons-material/Money"
+
+type StartEthereumArgs = {
+  agent: any,
+  spellRunner: any
+}
+
+function getAgentMethods() {
+  // if we are in node, we need to import the ethereum client
+  if(typeof window !== 'undefined') return
+
+  let ethereum_client
+
+  async function startEthereumWs({
+    agent,
+    spellRunner,
+  }: StartEthereumArgs) {
+    console.log('starting ethereum ws')
+    // ignore import if vite
+    const module = await import(/* @vite-ignore */ `${typeof window === 'undefined' ? './connectors/ethereum' : './dummy'}`)
+    ethereum_client = module.ethereum_client
+
+    const ethereum = new ethereum_client()
+    agent.ethereum = ethereum
+    await ethereum.createEthereumClient(
+      agent,
+      spellRunner,
+    )
+  }
+
+  async function stopEthereumWs(agent) {
+    if (!agent.ethereum) throw new Error("Ethereum WS isn't running, can't stop it")
+    await agent.ethereum.destroy()
+    agent.ethereum = null
+    console.log('Stopped Ethereum WS client for agent ' + agent.name)
+  }
+
+  return {
+    start: startEthereumWs,
+    stop: stopEthereumWs,
+  }
+}
+
+const EthereumPlugin = new ServerPlugin({
+  name: 'EthereumPlugin',
+  nodes: Nodes,
+  services: [['EthereumPlugin']],
+  agentMethods: getAgentMethods(),
+})
+
+export default EthereumPlugin;

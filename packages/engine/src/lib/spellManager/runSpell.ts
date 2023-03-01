@@ -20,7 +20,7 @@ class RunSpell {
       components: getNodes(),
       server: true,
     }) as MagickEngine
-
+    console.log("Engine Created from spell runner")
     // Set up the module to interface with the runtime processes
     this.module = new Module()
 
@@ -113,13 +113,13 @@ class RunSpell {
     this._loadInputs(inputs)
 
     const component = this._getComponent(componentName) as ModuleComponent
-    const triggeredNopde = this._getFirstNodeTrigger()
+    const triggeredNode = this._getFirstNodeTrigger()
 
     // this running is where the main "work" happens.
     // I do wonder whether we could make this even more elegant by having the node
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
-    await component.run(triggeredNopde)
+    await component.run(triggeredNode)
   }
 }
 

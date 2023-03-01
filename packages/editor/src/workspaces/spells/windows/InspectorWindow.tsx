@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
-
-import { useModal } from '../../../contexts/ModalProvider'
-import Icon, { componentCategories } from '../../../components/Icon/Icon'
-import Window from '../../../components/Window/Window'
-import DataControls from '../DataControls'
 import WindowMessage from '../../components/WindowMessage'
+import { useModal } from '../../../contexts/ModalProvider'
+import { Icon, componentCategories } from '@magickml/client-core'
+import DataControls from '../DataControls'
+import { Window } from '@magickml/client-core'
 import { useInspector } from '../../contexts/InspectorProvider'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 
 const Inspector = props => {
   const { inspectorData, saveInspector } = useInspector()

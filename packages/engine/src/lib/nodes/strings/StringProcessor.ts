@@ -48,10 +48,16 @@ export class StringProcessor extends MagickComponent<Record<string, string>> {
       name: 'code',
     })
 
-    node.inspector.add(outputGenerator)
-    node.inspector.add(codeControl)
+    node
+      .addInput(triggerIn)
+      .addInput(input)
+      .addOutput(triggerOut)
 
-    return node.addInput(input).addInput(triggerIn).addOutput(triggerOut)
+    node.inspector
+      .add(outputGenerator)
+      .add(codeControl)
+
+      return node
   }
 
   worker(node: NodeData, inputs: MagickWorkerInputs) {
