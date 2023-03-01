@@ -41,10 +41,25 @@ import { dbDialect, SupportedDbs } from '../../dbClient'
 export * from './events.class'
 export * from './events.schema'
 
-async function findSimilarEmbeddings(db: Knex, embedding) {
+async function findSimilarEventByEmbedding(db: Knex, embedding) {
   const query: Record<SupportedDbs, Knex.QueryBuilder> = {
     [SupportedDbs.pg]: async () => await db.raw(`select * from events order by embedding <-> ${embedding} limit 1;`),
-    [SupportedDbs.sqlite3]: async () => await db.raw(`select rowid from vss_events order by vss_distance_l2(${embedding}) limit 1;`)
+    [SupportedDbs.sqlite3]: async () => {
+      const eventInVssTable = await db.raw(
+        `select rowid, distance from vss_events
+         where vss_search(
+            event_embedding, 
+            vss_search_params(
+              ${embedding},
+              1
+            )
+          )
+        ;`
+      )
+      if (!eventInVssTable?.rowid) return null
+      const event = await db('events').where('id', eventInVssTable.rowid).first()
+      return event
+    }
   }
   try {
     embeddings = await query[dbDialect]()
@@ -84,7 +99,7 @@ export const event = (app: Application) => {
             for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
             let f32_ary = new Float32Array( ary_buf );
             console.log( f32_ary );
-            const result = await findSimilarEmbeddings(db, "["+f32_ary+"]")
+            const result = await findSimilarEventByEmbedding(db, "["+f32_ary+"]")
             return { result }
           }
           
@@ -123,7 +138,10 @@ export const event = (app: Application) => {
           const { id } = context.result
           // store the data in the virtual vss table
           if (dbDialect === SupportedDbs.sqlite3) {
-            await db.raw(`insert into vss_events(rowid, event_embedding) select id, embedding from events where id = ${id};`)
+            await db.raw(`
+              insert into vss_events(rowid, event_embedding) 
+              select id, embedding from events where id = ${id};
+            `)
           }
           return context
         }
