@@ -10,10 +10,13 @@ import {
   agentDataResolver,
   agentPatchResolver,
   agentQueryResolver,
+  agentJsonFields
 } from './agents.schema'
 
-import type { Application } from '../../declarations'
+import type { Application, HookContext } from '../../declarations'
 import { AgentService, getOptions } from './agents.class'
+import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
+import { randomUUID } from 'crypto'
 
 export * from './agents.class'
 export * from './agents.schema'
@@ -33,7 +36,8 @@ export const agent = (app: Application) => {
       all: [
         schemaHooks.resolveExternal(agentExternalResolver),
         schemaHooks.resolveResult(agentResolver),
-      ],
+        schemaHooks.resolveResult(jsonResolver(agentJsonFields)),
+      ]
     },
     before: {
       all: [
@@ -45,12 +49,18 @@ export const agent = (app: Application) => {
       create: [
         schemaHooks.validateData(agentDataValidator),
         schemaHooks.resolveData(agentDataResolver),
+        async (context: HookContext) => {
+          context.data.id = randomUUID()
+          return context
+        }
       ],
       patch: [
         schemaHooks.validateData(agentPatchValidator),
         schemaHooks.resolveData(agentPatchResolver),
+        handleJSONFieldsUpdate(agentJsonFields)
       ],
-      remove: [],
+      update: [handleJSONFieldsUpdate(agentJsonFields)],
+      remove: []
     },
     after: {
       all: [],
