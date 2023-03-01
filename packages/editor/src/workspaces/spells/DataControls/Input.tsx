@@ -17,10 +17,11 @@ const InputControl = ({ control, updateData, initialValue }) => {
   return (
     <div style={{ flex: 1, display: 'flex' }}>
       <Input
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
         value={value}
         type="text"
         onChange={onChange}
+        placeHolder={`Enter ${control.name} here`}
       />
     </div>
   )

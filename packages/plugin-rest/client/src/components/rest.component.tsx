@@ -208,6 +208,7 @@ export const RestAgentWindow: FC<any> = props => {
                 <input
                   type="text"
                   defaultValue={agentData.data?.rest_starting_words}
+                  placeholder="Starting words (,)"
                   onChange={e => {
                     setRestStartingWords(e.target.value)
                   }}
@@ -220,6 +221,7 @@ export const RestAgentWindow: FC<any> = props => {
                 <input
                   type="text"
                   defaultValue={agentData.data?.rest_bot_name_regex}
+                  placeholder="Bot Name Regex"
                   onChange={e => {
                     setRestBotNameRegex(e.target.value)
                   }}
@@ -232,6 +234,7 @@ export const RestAgentWindow: FC<any> = props => {
                 <input
                   type="text"
                   defaultValue={agentData.data?.rest_bot_name}
+                  placeholder="Bot Name"
                   onChange={e => {
                     setRestBotName(e.target.value)
                   }}
@@ -399,6 +402,7 @@ export const RestAgentWindow: FC<any> = props => {
                     </span>
                     <input
                       type="text"
+                      placeholder="Voice default phrases"
                       defaultValue={agentData.data?.rest_voice_default_phrases}
                       onChange={e => {
                         setVoiceDefaultPhrases(e.target.value)
@@ -415,6 +419,7 @@ export const RestAgentWindow: FC<any> = props => {
                       </span>
                       <input
                         type="text"
+                        placeholder="Tiktalknet URL"
                         defaultValue={agentData.data?.rest_tiktalknet_url}
                         onChange={e => {
                           setTikTalkNetUrl(e.target.value)
