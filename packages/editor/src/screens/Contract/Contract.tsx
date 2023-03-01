@@ -175,7 +175,8 @@ const Contract = () => {
             {`Address: ${address}`} (
             <a
               href={`https://mumbai.polygonscan.com/address/${address}`}
-              target="_blank" rel="noreferrer"
+              target="_blank"
+              rel="noreferrer"
             >
               URL
             </a>
@@ -195,7 +196,11 @@ const Contract = () => {
             }}
           >
             <span>RPC Endpoint (HTTP/S):</span>
-            <input style={{ width: '400px' }} value={DEFAULT_RPC}></input>
+            <input
+              style={{ width: '400px' }}
+              value={DEFAULT_RPC}
+              placeholder="Enter RPC Endpoint here"
+            ></input>
             <button
               key="addCustomRpcHttp"
               onClick={() => addCustomRpcHttp()}
@@ -238,7 +243,8 @@ const Contract = () => {
         {`Address: ${contractAddress}`} (
         <a
           href={`https://mumbai.polygonscan.com/address/${contractAddress}`}
-          target="_blank" rel="noreferrer"
+          target="_blank"
+          rel="noreferrer"
         >
           URL
         </a>
@@ -254,7 +260,8 @@ const Contract = () => {
               {`Transaction: ${lastTx}`} (
               <a
                 href={`https://mumbai.polygonscan.com/tx/${lastTx}`}
-                target="_blank" rel="noreferrer"
+                target="_blank"
+                rel="noreferrer"
               >
                 URL
               </a>

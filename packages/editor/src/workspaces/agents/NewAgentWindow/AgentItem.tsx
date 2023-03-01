@@ -32,6 +32,7 @@ const AgentItem = ({
               value={name}
               onClick={e => e.stopPropagation()}
               onChange={e => setName(e.target.value)}
+              placeholder="Add new agent name here"
             />
           </div>
           <div>

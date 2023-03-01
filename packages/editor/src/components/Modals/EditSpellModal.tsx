@@ -14,7 +14,7 @@ import { getStore } from '../../state/store'
 const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
   const config = useConfig()
   const spellApi = getSpellApi(config)
-  
+
   const [error, setError] = useState('')
   const [patchSpell, { isLoading }] = spellApi.usePatchSpellMutation()
 
@@ -29,7 +29,7 @@ const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
 
   const onSubmit = handleSubmit(async data => {
     const name = data.name
-    data.name = tab.id + "-" + encodeURIComponent(btoa(data.name))
+    data.name = tab.id + '-' + encodeURIComponent(btoa(data.name))
 
     const response: any = await patchSpell({
       id: tab.id,
@@ -87,6 +87,7 @@ const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
               className={css['input']}
               defaultValue={name}
               {...register('name')}
+              placeholder="Enter spell name here"
             />
           </div>
           {/* errors will return when field validation fails  */}

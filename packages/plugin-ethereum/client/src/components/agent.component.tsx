@@ -89,6 +89,7 @@ export const EthereumAgentWindow: FC<any> = props => {
             <input
               type="text"
               defaultValue={ethereum_custom_rpc}
+              placeholder="Insert Ethereum starting words here"
               onChange={e => {
                 setEthereumCustomRpc(e.target.value)
               }}
