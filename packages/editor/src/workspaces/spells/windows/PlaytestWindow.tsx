@@ -10,7 +10,7 @@ import {
   addLocalState,
   selectStateBytabId,
 } from '../../../state/localState'
-import { Select } from '@magickml/client-core' 
+import { Select } from '@magickml/client-core'
 import { usePubSub } from '../../../contexts/PubSubProvider'
 import { Window } from '@magickml/client-core'
 import css from '../../../screens/Magick/magick.module.css'
@@ -44,6 +44,7 @@ const Input = props => {
         type="text"
         value={props.value}
         onChange={props.onChange}
+        placeholder="Type play test input here"
       ></input>
       <Button
         className="small"
@@ -61,15 +62,15 @@ const Playtest = ({ tab }) => {
   const spellApi = getSpellApi(config)
 
   const defaultPlaytestData = {
-    "sender": "playtestSender",
-    "observer": "playtestObserver",
-    "type": "playtest",
-    "client": "playtest",
-    "channel": "playtest",
-    "channelType": "playtest",
-    "projectId": config.projectId,
-    "agentId": 0,
-    "entities": ["playtestSender", "playtestObserver"]
+    sender: 'playtestSender',
+    observer: 'playtestObserver',
+    type: 'playtest',
+    client: 'playtest',
+    channel: 'playtest',
+    channelType: 'playtest',
+    projectId: config.projectId,
+    agentId: 0,
+    entities: ['playtestSender', 'playtestObserver'],
   }
 
   const scrollbars = useRef<any>()
@@ -83,10 +84,10 @@ const Playtest = ({ tab }) => {
   const { serialize } = useEditor()
   const { enqueueSnackbar } = useSnackbar()
   const { data: spellData } = spellApi.useGetSpellByIdQuery(
-    { 
-      spellName: tab.name.split('--')[0], 
-      id: tab.id, 
-      projectId: config.projectId 
+    {
+      spellName: tab.name.split('--')[0],
+      id: tab.id,
+      projectId: config.projectId,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -120,12 +121,12 @@ const Playtest = ({ tab }) => {
   const [playtestOption, setPlaytestOption] = useState('Default')
 
   useEffect(() => {
-    if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph) return
+    if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
+      return
 
     const options = ['Default', ...pluginManager.getInputTypes()]
 
-    const optionsObj = options
-    .map((option: any) => ({
+    const optionsObj = options.map((option: any) => ({
       value: option,
       label: option,
     }))
@@ -152,7 +153,7 @@ const Playtest = ({ tab }) => {
       dispatch(
         addLocalState({
           id: tab.id,
-          playtestData: JSON.stringify({...defaultPlaytestData}),
+          playtestData: JSON.stringify({ ...defaultPlaytestData }),
         })
       )
       return
@@ -179,7 +180,6 @@ const Playtest = ({ tab }) => {
   }
 
   const onSend = async () => {
-   
     const newHistory = [...history, `You: ${value}`]
     setHistory(newHistory as [])
 
@@ -191,21 +191,30 @@ const Playtest = ({ tab }) => {
     )
 
     if (!json) {
+<<<<<<< HEAD
       enqueueSnackbar('No data provided', {
         variant: 'error',
       })
       return;
+=======
+      toast.error('No data provided')
+      return
+>>>>>>> 87eaa3e0 (added placeholders to all inputs)
     }
-    
 
     // validate the json
     try {
       JSON.parse(json)
     } catch (e) {
+<<<<<<< HEAD
       enqueueSnackbar('Invalid data - JSON is poorly formatted', {
         variant: 'error',
       })
       return;
+=======
+      toast.error('Invalid data - JSON is poorly formatted')
+      return
+>>>>>>> 87eaa3e0 (added placeholders to all inputs)
     }
 
     toSend = {
@@ -219,26 +228,28 @@ const Playtest = ({ tab }) => {
       channelType: 'previewChannelType',
       ...JSON.parse(json),
     }
-    
 
     // get spell from editor
     const graph = serialize()
     if (!graph) return
 
-    const playtestNode = Object.values(graph.nodes).find(
-      node => {
-        return node.data.playtestToggle && node.data.name === `Input - ${playtestOption}`
-      })
+    const playtestNode = Object.values(graph.nodes).find(node => {
+      return (
+        node.data.playtestToggle &&
+        node.data.name === `Input - ${playtestOption}`
+      )
+    })
 
-      if(!playtestNode) {
-        toast.error('No input node found for this input type')
-        return;
-      }
-    
+    if (!playtestNode) {
+      toast.error('No input node found for this input type')
+      return
+    }
 
     const playtestInputName = playtestNode?.data.name || 'Input - Default'
 
     if (!playtestInputName) return
+    publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
+
     client.service('spell-runner').create({
       spellName: tab.name.split('--')[0],
       id: tab.id,
@@ -247,16 +258,15 @@ const Playtest = ({ tab }) => {
         [playtestInputName as string]: toSend,
       },
     })
-    publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
     publish($PLAYTEST_INPUT(tab.id), toSend)
-    client.io.on(`${tab.id}-error`, (data) => {
+    client.io.on(`${tab.id}-error`, data => {
       //publish($DEBUG_PRINT(tab.id), (data.error.message))
-      console.error("Error in spell execution")
+      console.error('Error in spell execution')
       enqueueSnackbar('Error Running the spell. Please Check the Console', {
         variant: 'error',
       })
     })
-    
+
     setValue('')
   }
 
@@ -291,7 +301,10 @@ const Playtest = ({ tab }) => {
         style={{ width: '100%', zIndex: 10 }}
         options={playtestOptions}
         onChange={onSelectChange}
-        defaultValue={{value: playtestOption || 'Default', label: playtestOption || 'Default'}}
+        defaultValue={{
+          value: playtestOption || 'Default',
+          label: playtestOption || 'Default',
+        }}
         placeholder={playtestOption || 'Default'}
         creatable={false}
       />
@@ -334,7 +347,9 @@ const Playtest = ({ tab }) => {
               language="javascript"
               value={localState?.playtestData}
               options={options}
-              defaultValue={localState?.playtestData || JSON.stringify(defaultPlaytestData)}
+              defaultValue={
+                localState?.playtestData || JSON.stringify(defaultPlaytestData)
+              }
               onChange={onDataChange}
               beforeMount={handleEditorWillMount}
             />

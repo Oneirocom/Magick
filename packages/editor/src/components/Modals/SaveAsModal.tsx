@@ -45,8 +45,8 @@ const EditSpellModal = ({ tab, closeModal }) => {
       hash: md5(JSON.stringify(defaultGraph.nodes)),
     })
     const saveResponse: any = await saveSpell({
-      spell: {...spell.data[0], name: data.name, id: response.data.id},
-      projectId: config.projectId
+      spell: { ...spell.data[0], name: data.name, id: response.data.id },
+      projectId: config.projectId,
     })
     if (saveResponse.error) {
       // show snackbar
@@ -61,7 +61,9 @@ const EditSpellModal = ({ tab, closeModal }) => {
 
     // close current tab and navigate to the new spell
     //dispatch(closeTab(tab.id))
-    navigate(`/magick/${response.data.id +"-"+ encodeURIComponent(btoa(data.name))}`)
+    navigate(
+      `/magick/${response.data.id + '-' + encodeURIComponent(btoa(data.name))}`
+    )
 
     closeModal()
   })
@@ -90,6 +92,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
               className={css['input']}
               defaultValue={tab.name}
               {...register('name')}
+              placeholder="Enter new spell name here"
             />
           </div>
           {/* errors will return when field validation fails  */}
