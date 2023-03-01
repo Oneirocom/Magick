@@ -93,6 +93,11 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
       icon: 'moon',
     })
 
+    node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(outp)
+
     node.inspector
       .add(nameControl)
       .add(inputGenerator)
@@ -100,7 +105,7 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
       .add(file_name)
       .add(authorization_key)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)
+    return node
   }
 
   async worker(
@@ -117,23 +122,23 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
     }, {} as Record<string, unknown>)
 
     //URL of the Jupyter Server Eg: http://localhost:8888 (No Slash at the end)
-    let url = node?.data?.url as string
+    const url = node?.data?.url as string
     let authorization_key = node?.data?.url as string
     authorization_key = 'Token ' + authorization_key
-    let config = {
+    const config = {
       headers: {
         Authorization: authorization_key,
       },
     }
     //Gets the Active Kernel from the Jupyter Tornado Server (REST/POST)
-    let kernel = await axios.post(
+    const kernel = await axios.post(
       url + '/api/kernels' + '?timestamp=' + Math.random().toString(36),
       config
     )
-    let notebook_path = ('/' + node?.data?.file_name) as string
+    const notebook_path = ('/' + node?.data?.file_name) as string
 
     //Gets the Cell Contents of the notebook of which the filename is specified (REST/GET)
-    let file = await axios.get(
+    const file = await axios.get(
       url +
         '/api/contents' +
         notebook_path +
@@ -151,11 +156,11 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
     }
 
     //Create a UUID for exectuion
-    let uniqueId =
+    const uniqueId =
       Date.now().toString(36) + Math.random().toString(36).substring(2)
 
     //Initializing the WebSocket link with the Jupyter Server
-    let ws = new WebSocket(
+    const ws = new WebSocket(
       'ws://' +
         removeProtocol(url) +
         '/api/kernels/' +
@@ -166,9 +171,9 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
     )
 
     //Specifc Headers Required for Code Execution
-    let msg_type = 'execute_request'
-    let content = { code: code['0']['source'], silent: false }
-    let hdr = {
+    const msg_type = 'execute_request'
+    const content = { code: code['0']['source'], silent: false }
+    const hdr = {
       msg_id: parseInt(uniqueId, 10).toString(16),
       username: 'test',
       session: parseInt(uniqueId, 10).toString(16),
@@ -176,7 +181,7 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
       msg_type: msg_type,
       version: '5.0',
     }
-    let msg = {
+    const msg = {
       header: hdr,
       parent_header: hdr,
       metadata: {},
@@ -188,7 +193,7 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
       this.send(JSON.stringify(msg))
     }
 
-    var code_output = 'Nothing'
+    let code_output = 'Nothing'
     //Event Listener when the server responds back with the code
     ws.onmessage = async function (e) {
       e = JSON.parse(e.data)

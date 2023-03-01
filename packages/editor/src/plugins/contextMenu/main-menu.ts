@@ -10,6 +10,19 @@ export default function (Menu) {
         y: editor.view.area.mouse.y,
       }
 
+      let nodePositionAvailable = false
+
+      editor.on('click contextmenu', () => {
+        nodePositionAvailable = false
+        editor.on('mousemove', ({ x, y }) => {
+          if (!nodePositionAvailable) {
+            initialPosition.x = x
+            initialPosition.y = y
+            nodePositionAvailable = true
+          }
+        })
+      })
+
       editor.on('componentregister', component => {
         const path = allocate(component)
 

@@ -6,7 +6,7 @@ export async function processCode(
   code: unknown,
   inputs: MagickWorkerInputs,
   data: Record<string, any>,
-  language: string = 'javascript'
+  language = 'javascript'
 ) {
   // Inputs are flattened before we inject them for a better code experience
   const flattenInputs = Object.entries(inputs).reduce(

@@ -1,34 +1,6 @@
 const threeov = {
 	"id": "demo@0.1.0",
 	"nodes": {
-		"124": {
-			"id": 124,
-			"data": {
-				"name": "default",
-				"success": false,
-				"socketKey": "20c0d2db-1916-433f-88c6-69d3ae123217",
-				"dataControls": {
-					"name": {
-						"expanded": true
-					}
-				},
-				"playtestToggle": {
-					"receivePlaytest": true
-				}
-			},
-			"inputs": {},
-			"outputs": {
-				"trigger": {
-					"connections": [{
-						"node": 236,
-						"input": "trigger",
-						"data": {}
-					}]
-				}
-			},
-			"position": [-511.63051250369966, -100],
-			"name": "Trigger In"
-		},
 		"232": {
 			"id": 232,
 			"data": {
@@ -66,7 +38,7 @@ const threeov = {
 				}
 			},
 			"position": [-498.5704117140466, 62.08164172790682],
-			"name": "Universal Input"
+			"name": "Input"
 		},
 		"233": {
 			"id": 233,

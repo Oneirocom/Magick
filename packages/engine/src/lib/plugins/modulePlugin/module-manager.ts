@@ -122,6 +122,8 @@ export class ModuleManager {
     const module = new Module()
     const engine = this.engine?.clone()
 
+    console.log('inputs', inputs)
+
     const parsedInputs = Object.entries(inputs).reduce((acc, input) => {
       const [key, value] = input
       const nodeInputs = node.data.inputs as ModuleSocketType[]
@@ -133,6 +135,8 @@ export class ModuleManager {
         return acc
       }
     }, {} as any)
+
+    console.log('parsedInputs', parsedInputs)
 
     module.read(parsedInputs)
     await engine?.process(
@@ -146,13 +150,15 @@ export class ModuleManager {
     }
 
     if (args?.socketInfo?.targetSocket) {
+      console.log('data', data)
       const triggeredNode = this.getTriggeredNode(
         data,
         args.socketInfo.targetSocket
       )
       if (!triggeredNode) throw new Error('Triggered node not found')
       // todo need to remember to update this if/when componnet name changes
-      const component = engine?.components.get('Trigger In') as ModuleComponent
+      const component = engine?.components.get('Input') as ModuleComponent
+      console.log('component', component)
       await component?.run(triggeredNode)
     }
     // gather the outputs

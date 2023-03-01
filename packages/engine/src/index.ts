@@ -18,12 +18,16 @@ export { default as SocketPlugin } from './lib/plugins/socketPlugin'
 export { default as TaskPlugin } from './lib/plugins/taskPlugin'
 export { default as MultiSocketGenerator } from './lib/plugins/multiSocketGenerator'
 export { default as NodeClickPlugin } from './lib/plugins/nodeClickPlugin'
-export { worldManager } from './lib/world/worldManager'
+export { WorldManager } from './lib/world/worldManager'
 export { default as runPython } from './lib/functions/ProcessPython'
 
 export { SwitchControl } from './lib/dataControls/SwitchControl'
 export { PlaytestControl } from './lib/dataControls/PlaytestControl'
 export { TextInputControl } from './lib/dataControls/TextInputControl'
+export { BooleanControl } from './lib/dataControls/BooleanControl'
+export { NumberControl } from './lib/dataControls/NumberControl'
+export { CodeControl } from './lib/dataControls/CodeControl'
+export { DropdownControl } from './lib/dataControls/DropdownControl'
 
 export * from './lib/config'
 

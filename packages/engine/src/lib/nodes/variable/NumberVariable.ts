@@ -54,9 +54,6 @@ export class NumberVariable extends MagickComponent<InputReturn> {
   worker(node: NodeData, inputs, outputs, { silent }) {
     const _var = node?.data?._var as number
 
-    this.name =
-      (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
-
     if (!silent) {
       node.display(_var.toString())
     }

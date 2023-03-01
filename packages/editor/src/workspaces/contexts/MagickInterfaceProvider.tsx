@@ -24,14 +24,15 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const { events, publish, subscribe } = usePubSub()
   const spellRef = useRef<Spell | null>(null)
   const [_runSpell] = spellApi.useRunSpellMutation()
-  const [_getSpell] = spellApi.useLazyGetSpellQuery()
-  const { data: _spell } = spellApi.useGetSpellQuery(
+  const [_getSpell] = spellApi.useLazyGetSpellByIdQuery()
+  const { data: _spell } = spellApi.useGetSpellByIdQuery(
     {
-      spellName: tab.spellName,
+      spellName: tab.name.split('--')[0],
+      id: tab.id,
       projectId: config.projectId,
     },
     {
-      skip: !tab.spellName,
+      skip: !tab.name.split('--')[0],
     }
   )
 
@@ -39,10 +40,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     API_ROOT_URL: import.meta.env.API_ROOT_URL,
     APP_SEARCH_SERVER_URL: import.meta.env.APP_SEARCH_SERVER_URL,
   }
-
   useEffect(() => {
     if (!_spell) return
     spellRef.current = _spell.data[0]
+    
   }, [_spell])
 
   const {
@@ -64,11 +65,12 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   } = events
 
   const getCurrentSpell = () => {
+    
     return spellRef.current
   }
-
+  
   const onTrigger = (node, callback) => {
-    let isDefault = node === 'default' ? 'default' : null
+    const isDefault = node === 'default' ? 'default' : null
     return subscribe($TRIGGER(tab.id, isDefault ?? node.id), (event, data) => {
       publish($PROCESS(tab.id))
       // weird hack.  This staggers the process slightly to allow the published event to finish before the callback runs.
@@ -143,7 +145,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const getSpell = async spellName => {
-    const spell = await _getSpell({ spellName, projectId: config.projectId })
+    const spell = await _getSpell({ spellName, id: tab.id, projectId: config.projectId })
 
     if (!spell.data) return null
 
@@ -165,7 +167,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       {} as Record<string, any>
     )
     if (language == 'javascript') {
-      console.log('processCode, javascript')
+      
 
       // eslint-disable-next-line no-new-func
       const result = new Function('"use strict";return (' + code + ')')()(
@@ -179,7 +181,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
         return result
       } catch (err) {
-        console.log({ err })
+        console.error({ err })
       }
     }
   }

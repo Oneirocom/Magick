@@ -36,7 +36,6 @@ export class Image extends MagickComponent<any> {
 
   builder(node: MagickNode) {
     const out = new Rete.Output('output', 'output', anySocket)
-    const inp = new Rete.Input('string', 'String', stringSocket)
     const _var = new InputControl({
       dataKey: '_var',
       name: 'Value',
@@ -62,8 +61,6 @@ export class Image extends MagickComponent<any> {
     const _var = node?.data?._var as string
     const params = new URLSearchParams([['id', node.id]]);
     const result = await axios.get(`${API_ROOT_URL}/DiscordPlugin`, { params });
-    this.name =
-      (node?.data?.name as string) + '_' + Math.floor(Math.random() * 1000)
     return {
       output: result ? (result.data as any) : '',
     }

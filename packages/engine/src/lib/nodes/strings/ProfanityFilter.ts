@@ -1,18 +1,12 @@
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { hasBadWords } from 'expletives'
 import Rete from 'rete'
 
-import {
-  EngineContext,
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../types'
-import { triggerSocket, stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { stringSocket, triggerSocket } from '../../sockets'
+import {
+  MagickNode,
+  MagickWorkerInputs, NodeData
+} from '../../types'
 
 const info = 'Does some basic checks'
 
@@ -36,8 +30,8 @@ export class ProfanityFilter extends MagickComponent<Promise<void>> {
     const isFalse = new Rete.Output('false', 'Clean', triggerSocket)
 
     return node
+    .addInput(dataInput)
       .addInput(inp)
-      .addInput(dataInput)
       .addOutput(isTrue)
       .addOutput(isFalse)
   }

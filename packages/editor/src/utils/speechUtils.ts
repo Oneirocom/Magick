@@ -44,7 +44,7 @@ class speechUtils {
   }
 
   initRecording = (newMessageCallback: Function) => {
-    console.log('init recording')
+    
     this.socket.emit('startGoogleCloudStream', '')
     this.streamStreaming = true
     this.AudioContext =
@@ -61,7 +61,7 @@ class speechUtils {
 
       this.processor.onaudioprocess = (e: any) => {
         if (this.paused) return
-        console.log('AUDIO PROCESS')
+        
         this.microphoneProcess(e)
       }
     }
@@ -69,23 +69,23 @@ class speechUtils {
     navigator.mediaDevices.getUserMedia(this.constraints).then(handleSuccess)
 
     this.socket.on('connect', () => {
-      console.log('connected to speech server')
+      
       this.socket.emit('join', 'connected')
     })
 
     this.socket.on('messages', (data: any) => {
-      console.log('messages', data)
-      console.log('messages: ', data)
+      
+      
     })
 
     this.socket.on('speechData', (data: any) => {
       const dataFinal = undefined || data.results[0].isFinal
 
-      console.log('Speech data', data)
+      
       if (dataFinal === true) {
         let finalString = data.results[0].alternatives[0].transcript
-        console.log("Google Speech sent 'final' Sentence and it is:")
-        console.log(finalString)
+        
+        
         newMessageCallback(finalString)
 
         this.finalWord = true
@@ -101,12 +101,12 @@ class speechUtils {
   }
 
   pause() {
-    console.log('RECORDING PAUSED')
+    
     this.paused = true
   }
 
   unpause() {
-    console.log('RECODING UNPAUSED')
+    
     this.paused = false
   }
 

@@ -145,7 +145,7 @@ async function search({
   return _.get(parsedData, 'feed.entry', []).map(parseArxivObject)
 }
 
-;(async (includeQueries, excludeQueries) => {
+(async (includeQueries, excludeQueries) => {
   const papers = await search({
     searchQueryParams: [
       {

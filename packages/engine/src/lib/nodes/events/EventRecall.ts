@@ -52,12 +52,14 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     const nameInput = new InputControl({
       dataKey: 'name',
       name: 'Input name',
+      placeholder: 'Conversation'
     })
 
     const type = new InputControl({
       dataKey: 'type',
       name: 'Type',
       icon: 'moon',
+      placeholder: 'conversation'
     })
 
     const max_count = new InputControl({
@@ -70,9 +72,9 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     node.inspector.add(nameInput).add(type).add(max_count)
 
     return node
+      .addInput(dataInput)
       .addInput(eventInput)
       .addInput(embedding)
-      .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(out)
   }
@@ -84,12 +86,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
     const getEventsbyEmbedding = async (params: any) => {
-      console.log(params)
+      
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
-      let embeddings = params['embedding']
-      console.log('INIT')
-      console.log(embeddings)
+      const embeddings = params['embedding']
+      
       url.searchParams.append('embedding', params['embedding'])
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
@@ -98,9 +99,9 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     }
     const getEvents = async (params: GetEventArgs) => {
       const urlString = `${API_ROOT_URL}/events`
-      console.log('FIRST')
+      
       const url = new URL(urlString)
-      for (let p in params) {
+      for (const p in params) {
         // append params to url, make sure to preserve arrays
         if (Array.isArray(params[p])) {
           params[p].forEach(v => url.searchParams.append(p, v))
@@ -140,18 +141,13 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       projectId,
       maxCount,
     }
-    var events
+    let events
     if (embedding) data['embedding'] = embedding
     if (embedding) {
       if (embedding.length == 1536) {
         const enc_embed = new Float32Array(embedding)
-        let uint = new Uint8Array(enc_embed.buffer)
-        console.log(
-          'Convert F32 to Uint8 : Byte Length Test',
-          enc_embed.length * 4,
-          uint.length
-        )
-        let str = btoa(
+        const uint = new Uint8Array(enc_embed.buffer)
+        const str = btoa(
           String.fromCharCode.apply(
             null,
             Array.from<number>(new Uint8Array(uint))
@@ -159,13 +155,13 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
         )
         events = await getEventsbyEmbedding({ embedding: str })
       } else {
-        console.log('Embedding Size not matching with the table')
+        
       }
     } else {
       events = await getEvents(data)
     }
     if (!silent) node.display(`Event ${type} found` || 'Not found')
-    console.log('events', events)
+    
     return {
       events,
     }

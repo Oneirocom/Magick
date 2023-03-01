@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-import InputComponent from '../../../components/Input/Input'
+import { Input } from '@magickml/client-core'
 
-const Input = ({ control, updateData, initialValue }) => {
+const InputControl = ({ control, updateData, initialValue }) => {
   const [value, setValue] = useState(initialValue)
   const { dataKey } = control
 
@@ -16,7 +16,7 @@ const Input = ({ control, updateData, initialValue }) => {
 
   return (
     <div style={{ flex: 1, display: 'flex' }}>
-      <InputComponent
+      <Input
         style={{ width: "100%" }}
         value={value}
         type="text"
@@ -26,4 +26,4 @@ const Input = ({ control, updateData, initialValue }) => {
   )
 }
 
-export default Input
+export default InputControl

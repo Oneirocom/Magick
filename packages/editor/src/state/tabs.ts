@@ -8,7 +8,6 @@ import {
 
 import { RootState } from './store'
 import defaultJson from '../data/layouts/defaultLayout.json'
-
 // Used to set workspaces to tabs
 const workspaceMap = {
   default: defaultJson,
@@ -16,12 +15,13 @@ const workspaceMap = {
 export interface Tab {
   id: string
   name: string
+  URI: string
   active: boolean
   layoutJson: Record<string, unknown>
   type?: 'spell' | 'module'
   // probably going to need to insert a proper spell type in here
   spell?: string
-  spellName: string
+  spellName:string
   // this will also be a ref to a property somewhere else
   module: string
 }
@@ -41,16 +41,31 @@ const _activeTabSelector = createDraftSafeSelector(
   }
 )
 
-const selectTabBySpellId = createDraftSafeSelector(
+/* const selectTabBySpellId = createDraftSafeSelector(
   [state => tabSelectors.selectAll(state), (_, spellName) => spellName],
   (tabs, spellName) => Object.values(tabs).find(tab => tab.spellName === spellName)
+) */
+const selectTabBySpellUUID = createDraftSafeSelector(
+  [state => tabSelectors.selectAll(state), (_, id) => id],
+  (tabs, id) => Object.values(tabs).find(tab => tab.id === id)
 )
+
+const encodedToName = (uri: string) => {
+  uri = decodeURIComponent(uri)
+  return atob(uri.slice(37))
+} 
+
+const encodedToId = (uri: string) => {
+  uri = decodeURIComponent(uri)
+  return uri.slice(0,36)
+}
 
 // Used to build a tab with various defaults set, as well as workspace json and UUID
 const buildTab = (tab, properties = {}) => ({
   ...tab,
-  name: tab.name || 'Untitled',
-  id: uuidv4(),
+  id: encodedToId(tab.name),
+  URI: encodeURIComponent(tab.name),
+  name: encodedToName(tab.name),
   layoutJson: workspaceMap[tab.workspace || 'default'],
   spell: tab?.spell || null,
   type: tab?.type || 'module',
@@ -75,8 +90,9 @@ export const tabSlice = createSlice({
         })
 
       // Check if the tab is already open.
-      const existingTab = selectTabBySpellId(state, action.payload.spellName)
+      //const existingTab = selectTabBySpellId(state, action.payload.spellName)
 
+      const existingTab = selectTabBySpellUUID(state, encodedToId(action.payload.name) )
       if (existingTab && !switchActive) return
 
       if (existingTab && !action.payload.openNew) {

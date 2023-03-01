@@ -109,7 +109,7 @@ const SocketGenerator = ({ updateData, control, initialValue }) => {
     update(newSockets)
   }
 
-  let socketNames: string[] = []
+  const socketNames: string[] = []
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
@@ -121,7 +121,7 @@ const SocketGenerator = ({ updateData, control, initialValue }) => {
         const nextShortName = sockets[i + 1]
           ? sockets[i + 1].name.split(' ')[0]
           : ''
-        let isLast = i === sockets.length - 1 || nextShortName !== shortName
+        const isLast = i === sockets.length - 1 || nextShortName !== shortName
         return (
           <SingleSocket
             name={socket.name}

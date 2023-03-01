@@ -1,4 +1,4 @@
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 import { useLayout } from '../../contexts/LayoutProvider'
 
 const LongText = () => {

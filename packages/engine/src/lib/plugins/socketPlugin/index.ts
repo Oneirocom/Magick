@@ -39,7 +39,7 @@ function install(
       ...args
     ) => {
       const currentSpell = context.magick.getCurrentSpell()
-      const event = `${currentSpell.name}-${node.id}`
+      const event = `${currentSpell.id}-${node.id}`
 
       if (server) {
         try {
@@ -51,7 +51,6 @@ function install(
             ...args,
           ])
 
-          console.log('Emitting to socket: ', event, result?.output)
           socket?.emit(event, {
             output: result?.output,
           })
@@ -66,6 +65,13 @@ function install(
               stack: err.stack,
             },
           })
+          socket?.emit(`${currentSpell.id}-error`, {
+            error: {
+              message: err.message,
+              stack: err.stack,
+            },
+          })
+          
           // note: we may still want to throw the error here
           throw err
         }

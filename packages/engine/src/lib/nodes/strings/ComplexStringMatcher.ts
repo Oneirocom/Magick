@@ -98,8 +98,8 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     const isFalse = new Rete.Output('false', 'False', triggerSocket)
 
     return node
+    .addInput(dataInput)
       .addInput(inp)
-      .addInput(dataInput)
       .addOutput(isTrue)
       .addOutput(isFalse)
   }
@@ -116,18 +116,18 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     }
 
     let input = inputs['input'][0] as string
-    console.log('input:::::', input)
+    
     const str = input + ''
     const i1 = str.toString().replace(/<.*>/, '')
 
-    console.log('input:::::', i1)
+    
 
     input = replaceAll(
       replaceAll(i1.replace(/ /, ''), '"', ''),
       "'",
       ''
     ).toLowerCase()
-    console.log('input:::::', input)
+    
 
     const stringMinLength = (node.data.stringMinLength ?? 0) as number
     const stringMaxLength = (node.data.stringMaxLength ?? 0) as number
@@ -234,7 +234,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     if (matchBeginningStringArray.length > 0) {
       const matched = matchStart(input, matchBeginningStringArray)
       if (matched) {
-        // console.log('matched beginning')
+        // 
         isMatched = true
       }
     }
@@ -242,7 +242,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     if (matchEndStringArray.length > 0) {
       const matched = matchEnd(input, matchEndStringArray)
       if (matched) {
-        // console.log('matched beginning')
+        // 
         isMatched = true
       } else {
         isMatched = false
@@ -251,7 +251,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     if (matchAnyStringArray.length > 0) {
       const matched = match(input, matchAnyStringArray)
       if (matched) {
-        // console.log('matched beginning')
+        // 
         isMatched = true
       } else {
         isMatched = false

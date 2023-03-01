@@ -33,7 +33,6 @@ Please note that the return of your function must be an object whose keys are th
 `
 
 export class Python extends MagickComponent<unknown> {
-  
   constructor() {
     // Name of the component
     super('Python')
@@ -67,14 +66,16 @@ export class Python extends MagickComponent<unknown> {
     const codeControl = new CodeControl({
       dataKey: 'code',
       name: 'Code',
-      language: 'python'
+      language: 'python',
     })
-
 
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Component Name',
     })
+
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     node.inspector
       .add(nameControl)
@@ -82,10 +83,11 @@ export class Python extends MagickComponent<unknown> {
       .add(outputGenerator)
       .add(codeControl)
 
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+      node
+      .addOutput(dataOutput)
+      .addInput(dataInput)
 
-    return node.addOutput(dataOutput).addInput(dataInput)
+      return node
   }
 
   // the worker contains the main business logic of the node.  It will pass those results

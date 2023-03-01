@@ -1,8 +1,7 @@
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 import React from 'react'
-import { VscDebugBreakpointConditionalUnverified } from 'react-icons/vsc'
 
-import Icon from '../../../components/Icon/Icon'
+import { Icon } from '@magickml/client-core'
 
 const FileInput = ({ loadFile }) => {
   const hiddenFileInput = React.useRef(null)

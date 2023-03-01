@@ -25,23 +25,19 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
   const { scene, camera } = useThree()
   const gltf = useGLTF('/avatar.vrm')
 
-  useEffect(() => {
-    console.log('SPEECH URL', speechUrl)
-  }, [speechUrl])
-
   // settings
   const talktime = true
-  let mouththreshold = 10
-  let mouthboost = 10
-  let bodythreshold = 10
-  let bodymotion = 10
-  let expression = 80
+  const mouththreshold = 10
+  const mouthboost = 10
+  const bodythreshold = 10
+  const bodymotion = 10
+  const expression = 80
   let expressionyay = 0
   let expressionoof = 0
-  let expressionlimityay = 0.5
-  let expressionlimitoof = 0.5
-  let expressionease = 100
-  let expressionintensity = 0.75
+  const expressionlimityay = 0.5
+  const expressionlimitoof = 0.5
+  const expressionease = 100
+  const expressionintensity = 0.75
   let lookAtTarget
 
   const avatar = useRef<any | null>(null)
@@ -122,7 +118,7 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
         vrm.springBoneManager?.reset()
 
         function blink() {
-          var blinktimeout = Math.floor(Math.random() * 250) + 50
+          const blinktimeout = Math.floor(Math.random() * 250) + 50
 
           lookAtTarget.position.y =
             camera.position.y - camera.position.y * 2 + 1.25
@@ -147,8 +143,8 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
           )
         }
 
-        ;(function loop() {
-          var rand = Math.round(Math.random() * 10000) + 1000
+        (function loop() {
+          const rand = Math.round(Math.random() * 10000) + 1000
           setTimeout(function () {
             blink()
             loop()
@@ -164,7 +160,7 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
   const [lastUrl, setLastUrl] = useState<string | null>(null)
 
   useEffect(() => {
-    console.log('SPEECH URL CHANGED', speechUrl)
+    
     if (!speechUrl) return
 
     pause()
@@ -196,19 +192,19 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
       interval = setInterval(function () {
         analyser.getByteFrequencyData(array)
 
-        var values = 0
+        let values = 0
 
-        var length = array.length
-        for (var i = 0; i < length; i++) {
+        const length = array.length
+        for (let i = 0; i < length; i++) {
           values += array[i]
         }
 
         // audio in expressed as one number
-        var average = values / length
-        var inputvolume = average
+        const average = values / length
+        const inputvolume = average
 
         // audio in spectrum expressed as array
-        // console.log(array.toString());
+        // 
         // useful for mouth shape variance
 
         // move the interface slider
@@ -218,8 +214,8 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
         if (avatar.current != undefined) {
           const vrm = avatar.current as any
           if (talktime == true) {
-            var voweldamp = 53
-            var vowelmin = 12
+            const voweldamp = 53
+            const vowelmin = 12
             if (inputvolume > mouththreshold * 2) {
               vrm.expressionManager.setValue(
                 VRMExpressionPresetName.Aa,
@@ -231,8 +227,8 @@ const Avatar = ({ speechUrl, pause, unpause }) => {
           }
 
           // move body
-          var damping = 750 / (bodymotion / 10)
-          var springback = 1.001
+          const damping = 750 / (bodymotion / 10)
+          const springback = 1.001
 
           if (average > 1 * bodythreshold) {
             vrm.humanoid.getNormalizedBoneNode(

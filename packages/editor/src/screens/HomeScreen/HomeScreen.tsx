@@ -6,7 +6,7 @@ import AllProjects from './screens/AllProjects'
 import CreateNew from './screens/CreateNew'
 import OpenProject from './screens/OpenProject'
 import css from './homeScreen.module.css'
-import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
+import { LoadingScreen } from '@magickml/client-core'
 import { closeTab, openTab, selectAllTabs } from '../../state/tabs'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../state/store'
@@ -39,19 +39,19 @@ const StartScreen = () => {
     } */
     // TODO check for proper values here and throw errors
 
-    console.log('spellData', spellData)
+    
 
     // Create new spell
-    await newSpell({
+    const response = await newSpell({
       graph: spellData.graph,
       name: spellData.name,
       projectId: config.projectId,
+      hash: spellData.hash
     })
 
     dispatch(
       openTab({
-        name: spellData.name,
-        spellName: spellData.name,
+        name: response.data.id +"-"+ encodeURIComponent(btoa(spellData.name)),
         type: 'spell',
       })
     )
@@ -68,18 +68,18 @@ const StartScreen = () => {
   const onDelete = async spellName => {
     try {
       await deleteSpell({ spellName, projectId: config.projectId })
-      const [tab] = tabs.filter(tab => tab.spellName === spellName)
+      const [tab] = tabs.filter(tab => tab.URI === spellName)
       if (tab) {
         dispatch(closeTab(tab.id))
       }
     } catch (err) {
-      console.log('Error deleting spell', err)
+      console.error('Error deleting spell', err)
     }
   }
 
   const openSpell = async spell => {
     // dispatch(openTab({ name: spell.name, spellName: spell.name, type: 'spell' }))
-    navigate(`/magick/${spell.name}`)
+    navigate(`/magick/${spell.id}-${encodeURIComponent(btoa(spell.name))}`)
   }
 
   const [selectedSpell, setSelectedSpell] = useState(null)

@@ -6,6 +6,7 @@ import {
   usePagination,
   useSortBy,
   useTable,
+  Row,
 } from 'react-table'
 import {
   TableContainer,
@@ -26,7 +27,7 @@ import { useSnackbar } from 'notistack'
 import _ from 'lodash'
 import { CSVLink } from 'react-csv'
 import { useConfig } from '../../../../contexts/ConfigProvider'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter)
@@ -42,7 +43,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
         onChange(e.target.value)
       }}
       placeholder="Search requests..."
-      style={{ width: '100%' }}
+      style={{ width: '40em', border:0, margin: 0 }}
     />
   )
 }
@@ -57,9 +58,12 @@ const DefaultColumnFilter = ({
       onChange={e => {
         setFilter(e.target.value || undefined)
       }}
-      placeholder={'Search ' + Header}
+      placeholder={Header}
       style={{
         width: '100%',
+        border: 0,
+        margin: 0,
+        borderRadius: 0,
       }}
     />
   )
@@ -112,7 +116,7 @@ function EventTable({ requests, updateCallback }) {
         accessor: 'parameters',
       },
       {
-        Header: 'Actions',
+        Header: ' ',
         Cell: row => (
           <IconButton onClick={() => handleRequestDelete(row.row.original)}>
             <VscTrash size={16} color="#ffffff" />
@@ -124,7 +128,7 @@ function EventTable({ requests, updateCallback }) {
   )
 
   const updateEvent = async ({ id, ...rowData }, columnId, value) => {
-    let reqBody = {
+    const reqBody = {
       ...rowData,
       [columnId]: value,
       projectId: config.projectId,
@@ -196,7 +200,7 @@ function EventTable({ requests, updateCallback }) {
     useGlobalFilter,
     useSortBy,
     usePagination
-  )
+  ) as any
 
   const handlePageChange = (page: number) => {
     const pageIndex = page - 1
@@ -204,7 +208,6 @@ function EventTable({ requests, updateCallback }) {
   }
 
   const handleRequestDelete = async (event: any) => {
-    console.log('event to delete ::: ', event)
     // instead of deleting, call the updateEvent function with param hidden = true
     const resp = await fetch(
       `${import.meta.env.VITE_APP_API_URL}/request/${event.id}`,
@@ -232,49 +235,63 @@ function EventTable({ requests, updateCallback }) {
   return (
     <Stack spacing={2}>
       <Grid container justifyContent="left" style={{ padding: '1em' }}>
-        <Grid item xs={9.5}>
-          <GlobalFilter
-            globalFilter={state.globalFilter}
-            setGlobalFilter={setGlobalFilter}
-          />
-        </Grid>
-        <Grid item xs={1.5}>
+        <GlobalFilter
+          globalFilter={(state as any).globalFilter} // typing is wrong for this?
+          setGlobalFilter={setGlobalFilter}
+        />
+        <Button
+          style={{
+            display: 'inline',
+            backgroundColor: 'purple',
+            border: 'none',
+            color: 'white',
+            marginRight: '.5em',
+            marginLeft: 'auto',
+          }}
+          name="refresh"
+          onClick={updateCallback}
+        >
+          Refresh
+        </Button>
+        <CSVLink
+          data={originalRows}
+          filename="requests.csv"
+          target="_blank"
+          style={{
+            textDecoration: 'none',
+            display: 'inline',
+            marginLeft: '.5em',
+            marginRight: '.5em',
+          }}
+        >
           <Button
-            style={{ marginLeft: '1em', display: 'inline', width: '8em' }}
-            name="refresh"
-            onClick={updateCallback}
+            style={{
+              textDecoration: 'none',
+              display: 'inline',
+              backgroundColor: 'purple',
+              color: 'white',
+              border: 'none',
+            }}
           >
-            Refresh
+            <FaFileCsv size={14} />
           </Button>
-        </Grid>
-        <Grid item xs={1}>
-          <CSVLink
-            data={originalRows}
-            filename="requests.csv"
-            target="_blank"
-            style={{ textDecoration: 'none', display: 'inline', width: '8em' }}
-          >
-            <Button style={{ textDecoration: 'none', display: 'inline' }}>
-              <FaFileCsv size={14} />
-            </Button>
-          </CSVLink>
-        </Grid>
+        </CSVLink>
       </Grid>
-      <TableContainer component={Paper}>
-        <Table style={{ width: 'calc(100% - 2em)' }} {...getTableProps()}>
-          <TableHead style={{ backgroundColor: '#000' }}>
+      <TableContainer component={Paper} style={{ width: '100%', padding: 0, margin: 0 }}>
+        <Table style={{ width: '100%', padding: 0, margin: 0 }} {...getTableProps()}>
+          <TableHead style={{ backgroundImage: 'none', padding: 0, margin: 0 }}>
             {headerGroups.map((headerGroup, idx) => (
-              <TableRow {...headerGroup.getHeaderGroupProps()} key={idx}>
+              <TableRow {...headerGroup.getHeaderGroupProps()} key={idx} style={{ backgroundImage: 'none', padding: 0, margin: 0 }}>
                 {headerGroup.headers.map((column, idx) => (
                   <TableCell
                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                    style={{ fontSize: '0.985rem' }}
+                    style={{ fontSize: '0.985rem', padding: '0em', margin: '0em', border: 0 }}
                     key={idx}
                   >
                     <Stack spacing={1}>
-                      <div>
-                        {column.render('Header')}{' '}
-                        <span>
+                      <div style={{position: 'relative'}}>
+                        {column.canFilter ? column.render('Filter') : null}
+                        <span style={{position: 'absolute', top: '.75em', right: '.75em', zIndex: '10'}}>
                           {column.isSorted ? (
                             column.isSortedDesc ? (
                               <VscArrowDown size={14} />
@@ -285,10 +302,7 @@ function EventTable({ requests, updateCallback }) {
                             ''
                           )}
                         </span>
-                      </div>
-                      <div>
-                        {column.canFilter ? column.render('Filter') : null}
-                      </div>
+                        </div>
                     </Stack>
                   </TableCell>
                 ))}

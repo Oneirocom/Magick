@@ -18,6 +18,7 @@ export abstract class DataControl {
   icon: string
   write: boolean
   type: string
+  placeholder: string
 
   constructor({
     dataKey,
@@ -29,6 +30,7 @@ export abstract class DataControl {
     icon = 'ankh',
     defaultValue = null,
     type = 'string',
+    placeholder = ''
   }: {
     dataKey: string
     name: string
@@ -39,6 +41,7 @@ export abstract class DataControl {
     icon?: string
     defaultValue?: unknown
     type?: string
+    placeholder?: string
   }) {
     if (!dataKey) throw new Error(`Data key is required`)
     if (!name) throw new Error(`Name is required`)
@@ -53,6 +56,7 @@ export abstract class DataControl {
     this.write = write
     this.defaultValue = defaultValue
     this.type = type
+    this.placeholder = placeholder
   }
 
   //Serializer to easily extract the data controls information for publishing
@@ -66,6 +70,7 @@ export abstract class DataControl {
       id: this.id,
       icon: this.icon,
       type: this.type,
+      placeholder: this.placeholder
     }
   }
 

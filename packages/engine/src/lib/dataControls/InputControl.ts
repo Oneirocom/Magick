@@ -1,17 +1,19 @@
 import { DataControl } from '../plugins/inspectorPlugin'
 
-let nonce = 0
+const nonce = 0
 export class InputControl extends DataControl {
   constructor({
     dataKey = '',
     name = '',
     icon = 'hand',
     defaultValue,
+    placeholder
   }: {
     dataKey: string
     name: string
     icon?: string
     defaultValue?: unknown
+    placeholder?: string
   }) {
     super({
       dataKey: dataKey,
@@ -19,6 +21,7 @@ export class InputControl extends DataControl {
       component: 'input',
       defaultValue,
       icon,
+      placeholder
     })
   }
 

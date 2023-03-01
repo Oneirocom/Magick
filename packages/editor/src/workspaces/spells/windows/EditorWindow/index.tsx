@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { createNode } from '../../../../plugins/contextMenu/utils'
 
 import { Editor, useEditor } from '../../../contexts/EditorProvider'
-import Select from '../../../../components/Select/Select'
+import { Select } from '@magickml/client-core' 
 import css from './editorwindow.module.css'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 
 const EditorWindow = ({ tab }) => {
   const { getNodes, getNodeMap, editor } = useEditor()

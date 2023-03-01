@@ -6,17 +6,17 @@ import { useEffect, useRef, useState } from 'react'
 import Scrollbars from 'react-custom-scrollbars-2'
 import Editor from '@monaco-editor/react'
 
-import Window from '../../../../components/Window/Window'
+import { Window } from '@magickml/client-core'
 import css from '../../../../screens/Magick/magick.module.css'
 import SpeechUtils from '../../../../utils/speechUtils'
 import { usePubSub } from '../../../../contexts/PubSubProvider'
 import Avatar from './Avatar'
 import { useAppSelector } from '../../../../state/hooks'
 import {
-  selectStateBySpellId,
+  selectStateBytabId,
   upsertLocalState,
 } from '../../../../state/localState'
-import Button from 'packages/editor/src/components/Button'
+import { Button } from '@magickml/client-core'
 
 const AvatarWindow = ({ tab }) => {
   const scrollbars = useRef<any>()
@@ -27,18 +27,14 @@ const AvatarWindow = ({ tab }) => {
   const dispatch = useDispatch()
 
   const localState = useAppSelector(state =>
-    selectStateBySpellId(state.localState, tab.spellName)
+    selectStateBytabId(state.localState, tab.id)
   )
 
   const { publish, subscribe, events } = usePubSub()
   const { $PLAYTEST_INPUT, $SEND_TO_AVATAR } = events
 
   const handleAvatarData = (event, data) => {
-    // break out if this isnt a url
-    console.log({ data })
-    console.log({ file })
     if (data === file) return
-    console.log('Setting file', data)
     setFile(data)
   }
 
@@ -72,7 +68,7 @@ const AvatarWindow = ({ tab }) => {
     minimap: {
       enabled: false,
     },
-    wordWrap: 'bounded' as 'bounded',
+    wordWrap: 'bounded' as const,
     fontSize: 14,
   }
 
@@ -98,10 +94,8 @@ const AvatarWindow = ({ tab }) => {
   }
 
   const onDataChange = dataText => {
-    console.log('new data text', dataText)
-    dispatch(
-      upsertLocalState({ spellName: tab.spellName, playtestData: dataText })
-    )
+    
+    dispatch(upsertLocalState({ id: tab.id, playtestData: dataText }))
   }
 
   const toggleData = () => {

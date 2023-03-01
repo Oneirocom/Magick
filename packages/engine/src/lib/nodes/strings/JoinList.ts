@@ -48,7 +48,10 @@ export class JoinListComponent extends MagickComponent<WorkerReturn> {
       value: separator,
     })
 
-    return node.addOutput(out).addControl(input).addInput(inputList)
+    return node
+      .addOutput(out)
+      .addControl(input)
+      .addInput(inputList)
   }
 
   // the worker contains the main business logic of the node.  It will pass those results

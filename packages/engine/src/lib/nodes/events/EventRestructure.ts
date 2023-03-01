@@ -48,16 +48,22 @@ export class EventRestructureComponent extends MagickComponent<
     const sender = new Rete.Input('sender', 'sender', stringSocket)
     const observer = new Rete.Input('observer', 'observer', stringSocket)
     const client = new Rete.Input('client', 'client', stringSocket)
-    const channelType = new Rete.Input('channelType', 'channelType', stringSocket)
+    const channelType = new Rete.Input(
+      'channelType',
+      'channelType',
+      stringSocket
+    )
     const projectId = new Rete.Input('projectId', 'projectId', stringSocket)
     const entity = new Rete.Input('entity', 'entity', stringSocket)
     const entities = new Rete.Input('entities', 'entities', arraySocket)
-    const agentId = new Rete.Input('agentId','agentId', numSocket)
+    const agentId = new Rete.Input('agentId', 'agentId', numSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const event = new Rete.Output('output', 'output', eventSocket)
 
     return node
+      .addInput(dataInput)
+      .addInput(content)
       .addInput(sender)
       .addInput(observer)
       .addInput(client)
@@ -65,27 +71,24 @@ export class EventRestructureComponent extends MagickComponent<
       .addInput(projectId)
       .addInput(entity)
       .addInput(entities)
-      .addInput(content)
       .addInput(agentId)
-      .addInput(dataInput)
-      .addOutput(event)
       .addOutput(dataOutput)
+      .addOutput(event)
   }
 
   async worker(_node: NodeData, inputs: MagickWorkerInputs) {
     const output: any = {}
     Object.entries(inputs).map(([k, v]) => {
-      if (k==="agentId") {
+      if (k === 'agentId') {
         output[k] = parseInt(v[0] as string)
       } else {
         output[k] = v[0]
       }
-      
     })
     console.log('event ::: ', output)
 
     return {
-      output
+      output,
     }
   }
 }
