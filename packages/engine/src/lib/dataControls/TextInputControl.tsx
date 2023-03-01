@@ -22,6 +22,7 @@ const ReactTextInputControl = props => {
       <input
         type="text"
         value={value}
+        placeholder={`Insert ${props.label} here`}
         style={{ marginTop: 'var((--c1)' }}
         onChange={onChange}
       />
