@@ -39,7 +39,9 @@ export const spellDataSchema = Type.Pick(spellSchema, [
 })
 export type SpellData = Static<typeof spellDataSchema>
 export const spellDataValidator = getDataValidator(spellDataSchema, dataValidator)
-export const spellDataResolver = resolve<Spell, HookContext>({})
+export const spellDataResolver = resolve<Spell, HookContext>({
+  created_at: async () => Date.now().toString()
+})
 
 // Schema for updating existing entries
 export const spellPatchSchema = Type.Partial(spellDataSchema, {
@@ -47,7 +49,9 @@ export const spellPatchSchema = Type.Partial(spellDataSchema, {
 })
 export type SpellPatch = Static<typeof spellPatchSchema>
 export const spellPatchValidator = getDataValidator(spellPatchSchema, dataValidator)
-export const spellPatchResolver = resolve<Spell, HookContext>({})
+export const spellPatchResolver = resolve<Spell, HookContext>({
+  updated_at: async () => Date.now().toString(),
+})
 
 // Schema for allowed query properties
 export const spellQueryProperties = Type.Pick(spellSchema, [
@@ -74,3 +78,4 @@ export const spellQuerySchema = Type.Intersect(
 export type SpellQuery = Static<typeof spellQuerySchema>
 export const spellQueryValidator = getValidator(spellQuerySchema, queryValidator)
 export const spellQueryResolver = resolve<SpellQuery, HookContext>({})
+export const spellJsonFields = ['graph']

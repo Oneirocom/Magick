@@ -52,7 +52,7 @@ export class SpellService<ServiceParams extends Params = SpellParams> extends Kn
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),
-    Model: app.get('postgresqlClient'),
+    Model: app.get('dbClient'),
     name: 'spells'
   }
 }

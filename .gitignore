@@ -47,3 +47,5 @@ package-lock.json
 yarn.lock
 
 ./files/
+
+*.sqlite

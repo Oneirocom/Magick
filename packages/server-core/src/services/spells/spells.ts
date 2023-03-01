@@ -10,10 +10,12 @@ import {
   spellDataResolver,
   spellPatchResolver,
   spellQueryResolver,
+  spellJsonFields
 } from './spells.schema'
 
-import type { Application } from '../../declarations'
+import type { Application, HookContext } from '../../declarations'
 import { SpellService, getOptions } from './spells.class'
+import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
 
 export * from './spells.class'
 export * from './spells.schema'
@@ -34,7 +36,8 @@ export const spell = (app: Application) => {
       all: [
         schemaHooks.resolveExternal(spellExternalResolver),
         schemaHooks.resolveResult(spellResolver),
-      ],
+        schemaHooks.resolveResult(jsonResolver(spellJsonFields)),
+      ]
     },
     before: {
       all: [
@@ -68,15 +71,16 @@ export const spell = (app: Application) => {
                 }).then((val) => {                 
                   context.data.name = data.name + " (" + (1+val.data.length) +")"
                 })
-          }
-
+              }
           });
         },
       ],
       patch: [
         schemaHooks.validateData(spellPatchValidator),
-        schemaHooks.resolveData(spellPatchResolver),
-      ],
+        schemaHooks.resolveData(spellPatchResolver), 
+        handleJSONFieldsUpdate(spellJsonFields)
+      ], 
+      update: [handleJSONFieldsUpdate(spellJsonFields)],
       remove: [],
     },
     after: {

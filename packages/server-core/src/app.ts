@@ -5,7 +5,7 @@ import socketio from '@feathersjs/socketio'
 
 import type { Application } from './declarations'
 import { logError } from './hooks'
-import { postgresql } from './postgresql'
+import { dbClient } from './dbClient'
 import { services } from './services'
 import channels from './channels'
 // import swagger from 'feathers-swagger'
@@ -68,7 +68,7 @@ app.configure(
     handleSockets(app)
   )
 )
-app.configure(postgresql)
+app.configure(dbClient)
 app.configure(services)
 app.configure(channels)
 

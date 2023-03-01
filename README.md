@@ -49,9 +49,32 @@ There are a few things to keep in mind while this project is actively being work
 
 ## Database
 
+### Local Sqlite (default)
+
+> NOTE: If you're using Microsoft Windows, required sqlite extensions won't work, please use `postgres`.
+
+Simply add a relative or absolute path to your sqlite file in the `.env`, run `npm run migrate`.
+
+#### NOTE: 
+  There are two sqlite extensions used, `sqlite-vector` and `sqlite-vss`
+
+  based on the [docs](https://github.com/asg017/sqlite-vss#documentation),
+  on Linux machines, you'll have to install some packages to make it work:
+
+  ```
+    sudo apt-get update
+    sudo apt-get install -y libgomp1 libatlas-base-dev liblapack-dev 
+  ```
+
+  No extra steps for MacOS.
+
+### Supabase public database 
+
 _Please be aware Magick is under heavy development and changes can cause your DB to be wiped. Back up your spells via export regularly._
 
-The default setup of Magick is connected to a test database on Supabase. It will get you going, but it will likely be wiped regularly and is not a good storage for your spells.
+Magick can connect to a test database on Supabase. It will get you going, but it will likely be wiped regularly and is not a good storage for your spells.
+
+just enable the pg database in the `.env` file.
 
 ### Deploy your own database
 
