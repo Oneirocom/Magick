@@ -114,7 +114,7 @@ const TextEditor = props => {
       inputs.push('  ' + input.socketKey + ',')
     })
 
-    const textLines = textEditorData.data.split('\n')
+    const textLines = textEditorData.data?.split('\n') ?? []
     // get the index of the first line that starts with function
     const startIndex =
       textLines.findIndex(line => line.startsWith('function')) + 1

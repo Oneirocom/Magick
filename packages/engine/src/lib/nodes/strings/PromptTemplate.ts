@@ -40,10 +40,6 @@ export class PromptTemplate extends MagickComponent<Promise<WorkerReturn>> {
     const dataIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const prompt = new Rete.Output('prompt', 'Prompt', stringSocket)
-    node
-      .addInput(dataIn)
-      .addOutput(dataOut)
-      .addOutput(prompt)
 
     const inputGenerator = new SocketGeneratorControl({
       connectionType: 'input',
@@ -59,6 +55,11 @@ export class PromptTemplate extends MagickComponent<Promise<WorkerReturn>> {
     node.inspector
       .add(inputGenerator)
       .add(fewshotControl)
+
+    node
+      .addInput(dataIn)
+      .addOutput(dataOut)
+      .addOutput(prompt)
 
     return node
   }

@@ -32,7 +32,7 @@ export class InputGeneratorControl extends DataControl {
     this.node.data.inputs = inputs
 
     const existingInputs = []
-    const ignored = this?.control?.data?.ignored.map(input => input.name) || []
+    // const ignored = this?.control?.data?.ignored.map(input => input.name) || []
 
     this.node.inputs.forEach(out => {
       existingInputs.push(out.key)
@@ -41,8 +41,8 @@ export class InputGeneratorControl extends DataControl {
     // Any inputs existing on the current node that arent incoming have been deleted
     // and need to be removed.
     existingInputs
-      .filter(existing => !inputs.some(incoming => incoming.name === existing))
-      .filter(existing => ignored.some(input => input !== existing))
+      // .filter(existing => !inputs.some(incoming => incoming.name === existing))
+      // .filter(existing => ignored.some(input => input !== existing))
       .forEach(key => {
         const output = this.node.inputs.get(key)
 
