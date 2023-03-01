@@ -161,18 +161,21 @@ export class InputComponent extends MagickComponent<InputReturn> {
     outputs: MagickWorkerOutputs,
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
-    
-    this._task.closed = ['trigger']
 
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data) && node.data.playtestToggle.receivePlaytest) {
       this._task.closed = []
 
+      const output = Object.values(data)[0] as string
+
       if (!silent) node.display(data)
+      
       return {
-        output: data,
+        output,
       }
     }
+
+    this._task.closed = ['trigger']
 
     // send default value if 'use default' is explicity toggled on
     if (node.data.useDefault) {
@@ -180,6 +183,11 @@ export class InputComponent extends MagickComponent<InputReturn> {
         output: node.data.defaultValue as string,
       }
     }
+
+    if (Object.values(outputs.output).length > 0) {
+      return { output: Object.values(outputs)[0] }
+    }
+
 
     // If there are outputs, we are running as a module input and we use that value
     if (outputs.output && !outputs?.output.task) {

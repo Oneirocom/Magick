@@ -84,7 +84,7 @@ const CreateNew = () => {
         }
       }
 
-      navigate(`/magick/${response.data.id +"-"+ encodeURIComponent(btoa(name))}`)
+      navigate(`/magick/${response.data.id +"-"+ encodeURIComponent(btoa(response.data.name))}`)
     } catch (err) {
       console.error('ERROR!', err)
     }
