@@ -191,7 +191,9 @@ const Playtest = ({ tab }) => {
     )
 
     if (!json) {
-      toast.error('No data provided')
+      enqueueSnackbar('No data provided', {
+        variant: 'error',
+      })
       return;
     }
     
@@ -200,7 +202,9 @@ const Playtest = ({ tab }) => {
     try {
       JSON.parse(json)
     } catch (e) {
-      toast.error('Invalid data - JSON is poorly formatted')
+      enqueueSnackbar('Invalid data - JSON is poorly formatted', {
+        variant: 'error',
+      })
       return;
     }
 
