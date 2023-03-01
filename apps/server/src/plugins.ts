@@ -9,4 +9,6 @@ import {default as plugin3} from '@magickml/plugin-finetune-server';
 plugins['@magickml/plugin-finetune-server'] = plugin3;
 import {default as plugin4} from '@magickml/plugin-ethereum-server';
 plugins['@magickml/plugin-ethereum-server'] = plugin4;
+import {default as plugin5} from '@magickml/plugin-esoterica-server';
+plugins['@magickml/plugin-esoterica-server'] = plugin5;
 export default plugins;
