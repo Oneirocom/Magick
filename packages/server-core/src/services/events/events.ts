@@ -123,10 +123,14 @@ export const event = (app: Application) => {
           const { id } = context.result
           // store the data in the virtual vss table
           if (dbDialect === SupportedDbs.sqlite3) {
-            await db.raw(`
-              insert into vss_events(rowid, event_embedding) 
-              select id, embedding from events where id = ${id};
-            `)
+            try {
+              await db.raw(`
+                insert into vss_events(rowid, event_embedding) 
+                select id, embedding from events where id = ${id};
+              `)
+            } catch (error) {
+              console.error('after event created error, sqlite', error)
+            }
           }
           return context
         }
