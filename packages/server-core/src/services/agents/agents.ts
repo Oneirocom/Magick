@@ -13,9 +13,10 @@ import {
   agentJsonFields
 } from './agents.schema'
 
-import type { Application } from '../../declarations'
+import type { Application, HookContext } from '../../declarations'
 import { AgentService, getOptions } from './agents.class'
 import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
+import { v4 } from 'uuid'
 
 export * from './agents.class'
 export * from './agents.schema'
@@ -45,7 +46,14 @@ export const agent = (app: Application) => {
       ],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(agentDataValidator), schemaHooks.resolveData(agentDataResolver)],
+      create: [
+        schemaHooks.validateData(agentDataValidator),
+        schemaHooks.resolveData(agentDataResolver),
+        async (context: HookContext) => {
+          context.data.id = v4()
+          return context
+        }
+      ],
       patch: [
         schemaHooks.validateData(agentPatchValidator),
         schemaHooks.resolveData(agentPatchResolver),
