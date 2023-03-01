@@ -38,6 +38,7 @@ export const KeyInput = ({
     <input
       type={secret ? 'password' : 'input'}
       defaultValue={value}
+      placeholder="Insert your key here"
       onChange={e => {
         addKey(e.target.value)
       }}
