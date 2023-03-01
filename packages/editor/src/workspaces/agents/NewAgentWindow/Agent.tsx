@@ -31,11 +31,13 @@ const AgentWindow = ({
   const agentDatVal = useRef(null)
   const [spellList, setSpellList] = useState<any[]>([])
 
-  const [selectedSpellPublicVars, setSelectedSpellPublicVars] = useState<any>([])
+  const [selectedSpellPublicVars, setSelectedSpellPublicVars] = useState<any>(
+    []
+  )
 
   useEffect(() => {
     if (!loaded) {
-      (async () => {
+      ;(async () => {
         const res = await axios.get(`${config.apiUrl}/agents/` + id)
 
         if (res.data === null) {
@@ -53,17 +55,17 @@ const AgentWindow = ({
   }, [loaded])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )
       const json = await res.json()
       setSpellList(json.data)
-      setSelectedSpellPublicVars((
+      setSelectedSpellPublicVars(
         Object.values(
           spellList.find(spell => spell.name === root_spell)?.graph.nodes || {}
         ).filter((node: any) => node?.data?.Public)
-      ))
+      )
     })()
   }, [])
 
@@ -255,6 +257,7 @@ const KeyInput = ({
     <input
       type={secret ? 'password' : 'input'}
       value={value}
+      placeholder="Insert your key here"
       onChange={e => {
         addKey(e.target.value)
       }}

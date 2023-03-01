@@ -14,7 +14,7 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
   }, {})
 
   const onChange = event => {
-    const { name } = event.target;
+    const { name } = event.target
     setPublicVars({
       ...publicVars,
       [name]:
@@ -56,6 +56,7 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
                   type="text"
                   onChange={onChange}
                   name={variable?.data?.name}
+                  placeholder="Add new value here"
                   multiline
                 />
               )}

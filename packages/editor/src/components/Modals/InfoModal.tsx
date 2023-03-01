@@ -4,7 +4,7 @@ interface InfoModal {
   title: string
   content: string
   checkbox?: {
-    onClick: () => {}
+    onClick: () => void
     label: string
   }
 }
@@ -25,6 +25,7 @@ const InfoModal = ({ title, content, checkbox }: InfoModal) => {
             id="acknowledgment-input"
             type="checkbox"
             onClick={checkbox.onClick}
+            placeholder={checkbox.label}
           />
         </div>
       )}

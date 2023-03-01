@@ -45,7 +45,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
         onChange(e.target.value)
       }}
       placeholder="Search events..."
-      style={{ width: '40em', border:0, margin: 0 }}
+      style={{ width: '40em', border: 0, margin: 0 }}
     />
   )
 }
@@ -222,61 +222,85 @@ function EventTable({ events, updateCallback }) {
   return (
     <Stack spacing={2}>
       <Grid container justifyContent="left" style={{ padding: '1em' }}>
-          <GlobalFilter
-            globalFilter={state.globalFilter}
-            setGlobalFilter={setGlobalFilter}
-          />
+        <GlobalFilter
+          globalFilter={state.globalFilter}
+          setGlobalFilter={setGlobalFilter}
+        />
+        <Button
+          style={{
+            display: 'inline',
+            backgroundColor: 'purple',
+            border: 'none',
+            color: 'white',
+            marginRight: '.5em',
+            marginLeft: 'auto',
+          }}
+          name="refresh"
+          onClick={updateCallback}
+        >
+          Refresh
+        </Button>
+        <CSVLink
+          data={originalRows}
+          filename="events.csv"
+          target="_blank"
+          style={{
+            textDecoration: 'none',
+            display: 'inline',
+            marginLeft: '.5em',
+            marginRight: '.5em',
+          }}
+        >
           <Button
             style={{
-              display: 'inline',
-              backgroundColor: 'purple',
-              border: 'none',
-              color: 'white',
-              marginRight: '.5em',
-              marginLeft: 'auto',
-            }}
-            name="refresh"
-            onClick={updateCallback}
-          >
-            Refresh
-          </Button>
-          <CSVLink
-            data={originalRows}
-            filename="events.csv"
-            target="_blank"
-            style={{ 
               textDecoration: 'none',
               display: 'inline',
-              marginLeft: '.5em',
-              marginRight: '.5em',
+              backgroundColor: 'purple',
+              color: 'white',
+              border: 'none',
             }}
           >
-            <Button style={{ 
-                            textDecoration: 'none',
-                            display: 'inline',
-                            backgroundColor: 'purple',
-                            color: 'white',
-                            border: 'none',
-             }}>
-              <FaFileCsv size={14} />
-            </Button>
-          </CSVLink>
+            <FaFileCsv size={14} />
+          </Button>
+        </CSVLink>
       </Grid>
-      <TableContainer component={Paper} style={{ width: '100%', padding: 0, margin: 0 }}>
-        <Table style={{ width: '100%', padding: 0, margin: 0 }} {...getTableProps()}>
+      <TableContainer
+        component={Paper}
+        style={{ width: '100%', padding: 0, margin: 0 }}
+      >
+        <Table
+          style={{ width: '100%', padding: 0, margin: 0 }}
+          {...getTableProps()}
+        >
           <TableHead style={{ backgroundImage: 'none', padding: 0, margin: 0 }}>
             {headerGroups.map((headerGroup, idx) => (
-              <TableRow {...headerGroup.getHeaderGroupProps()} key={idx} style={{ backgroundImage: 'none', padding: 0, margin: 0 }}>
+              <TableRow
+                {...headerGroup.getHeaderGroupProps()}
+                key={idx}
+                style={{ backgroundImage: 'none', padding: 0, margin: 0 }}
+              >
                 {headerGroup.headers.map((column, idx) => (
                   <TableCell
                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                    style={{ fontSize: '0.985rem', padding: '0em', margin: '0em', border: 0 }}
+                    style={{
+                      fontSize: '0.985rem',
+                      padding: '0em',
+                      margin: '0em',
+                      border: 0,
+                    }}
                     key={idx}
                   >
                     <Stack spacing={1}>
-                      <div style={{position: 'relative'}}>
+                      <div style={{ position: 'relative' }}>
                         {column.canFilter ? column.render('Filter') : null}
-                        <span style={{position: 'absolute', top: '.75em', right: '.75em', zIndex: '10'}}>
+                        <span
+                          style={{
+                            position: 'absolute',
+                            top: '.75em',
+                            right: '.75em',
+                            zIndex: '10',
+                          }}
+                        >
                           {column.isSorted ? (
                             column.isSortedDesc ? (
                               <VscArrowDown size={14} />
@@ -287,7 +311,7 @@ function EventTable({ events, updateCallback }) {
                             ''
                           )}
                         </span>
-                        </div>
+                      </div>
                     </Stack>
                   </TableCell>
                 ))}
