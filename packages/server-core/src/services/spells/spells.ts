@@ -49,10 +49,31 @@ export const spell = (app: Application) => {
       create: [
         schemaHooks.validateData(spellDataValidator),
         schemaHooks.resolveData(spellDataResolver),
-        async (context: HookContext) => {
-          context.data.id = randomUUID()
-          return context
-        }
+        async (context: any) => {
+          const { data, service } = context
+          context.data = {
+            [service.id]: randomUUID(),
+            ...data,
+          }
+          await context.service.find({
+            query: {
+                name: data.name
+            }
+          }).then(async (param) => {
+              if (param.data.length >= 1) {
+                console.log(data.name+'(%)')
+                await context.service.find({
+                  query: {
+                    name: {
+                      $ilike: data.name+' (%)'
+                    }
+                  }
+                }).then((val) => {                 
+                  context.data.name = data.name + " (" + (1+val.data.length) +")"
+                })
+              }
+          });
+        },
       ],
       patch: [
         schemaHooks.validateData(spellPatchValidator),
