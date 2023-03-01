@@ -13,7 +13,7 @@ import {
   spellJsonFields
 } from './spells.schema'
 
-import type { Application } from '../../declarations'
+import type { Application, HookContext } from '../../declarations'
 import { SpellService, getOptions } from './spells.class'
 import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
 
@@ -46,7 +46,14 @@ export const spell = (app: Application) => {
       ],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(spellDataValidator), schemaHooks.resolveData(spellDataResolver)],
+      create: [
+        schemaHooks.validateData(spellDataValidator),
+        schemaHooks.resolveData(spellDataResolver),
+        async (context: HookContext) => {
+          context.data.id = randomUUID()
+          return context
+        }
+      ],
       patch: [
         schemaHooks.validateData(spellPatchValidator),
         schemaHooks.resolveData(spellPatchResolver), 
