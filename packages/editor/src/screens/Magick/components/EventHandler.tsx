@@ -104,6 +104,7 @@ const EventHandler = ({ pubSub, tab }) => {
   }
 
   const onSaveDiff = async (event, update) => {
+    
     if (!spellRef.current) return
 
     const currentSpell = spellRef.current
@@ -111,34 +112,31 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
-
+    
     const jsonDiff = diff(currentSpell, updatedSpell)
 
         updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
-
+    console.log(jsonDiff)
     try {
       await client.service('spell-runner').update(currentSpell.id, {
         diff: jsonDiff,
         projectId: config.projectId,
       })
-
       const diffResponse = await client.service('spells').saveDiff({
         projectId: config.projectId,
         diff: jsonDiff,
         name: currentSpell.name,
       })
-
       if ('error' in diffResponse) {
-        enqueueSnackbar('Error saving spell', {
+        enqueueSnackbar('Error Updating spell', {
           variant: 'error',
         })
         return
       }
-
-      enqueueSnackbar('Spell saved', {
+      enqueueSnackbar('Spell updated', {
         variant: 'success',
       })
     } catch (err) {
@@ -147,6 +145,7 @@ const EventHandler = ({ pubSub, tab }) => {
       })
       return
     }
+
   }
 
   const createAvatarWindow = () => {

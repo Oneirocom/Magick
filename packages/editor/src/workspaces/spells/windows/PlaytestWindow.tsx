@@ -100,7 +100,7 @@ const Playtest = ({ tab }) => {
     return selectStateBytabId(state.localState, tab.id)
   })
   const client = FeathersContext?.client
-  const { $PLAYTEST_INPUT, $PLAYTEST_PRINT, $DEBUG_PRINT } = events
+  const { $PLAYTEST_INPUT, $PLAYTEST_PRINT, $DEBUG_PRINT, $SAVE_SPELL_DIFF } = events
 
   const printToConsole = useCallback(
     (_, _text) => {
@@ -191,7 +191,9 @@ const Playtest = ({ tab }) => {
     )
 
     if (!json) {
-      toast.error('No data provided')
+      enqueueSnackbar('No data provided', {
+        variant: 'error',
+      })
       return;
     }
     
@@ -200,7 +202,9 @@ const Playtest = ({ tab }) => {
     try {
       JSON.parse(json)
     } catch (e) {
-      toast.error('Invalid data - JSON is poorly formatted')
+      enqueueSnackbar('Invalid data - JSON is poorly formatted', {
+        variant: 'error',
+      })
       return;
     }
 
@@ -243,7 +247,7 @@ const Playtest = ({ tab }) => {
         [playtestInputName as string]: toSend,
       },
     })
-    
+    publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
     publish($PLAYTEST_INPUT(tab.id), toSend)
     client.io.on(`${tab.id}-error`, (data) => {
       //publish($DEBUG_PRINT(tab.id), (data.error.message))
