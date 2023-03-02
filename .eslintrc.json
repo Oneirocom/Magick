@@ -44,7 +44,9 @@
       "extends": [
         "plugin:@nrwl/nx/typescript"
       ],
-      "rules": {}
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
     },
     {
       "files": [
