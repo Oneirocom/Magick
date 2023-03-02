@@ -99,22 +99,15 @@ export class SpellRunnerService<
   ): Promise<Data> {
     if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
-
     const { user } = params as any
-
     if (!user) throw new Error('No user present in service')
-
     const { diff } = data
-
     const spellManager = app.userSpellManagers.get(user.id)
     if (!spellManager) throw new Error('No spell manager found for user!')
-
     const spellRunner = spellManager.getSpellRunner(id)
     if (!spellRunner) throw new Error('No spell runner found!')
-
     const spell = spellRunner.currentSpell
     const updatedSpell = otJson0.type.apply(spell, diff)
-
     spellManager.load(updatedSpell, true)
     return updatedSpell
   }

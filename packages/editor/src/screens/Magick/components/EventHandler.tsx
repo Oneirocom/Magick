@@ -24,7 +24,7 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const [saveSpellMutation] = spellApi.useSaveSpellMutation()
   const [saveDiff] = spellApi.useSaveDiffMutation()
-  const { data: spell } = spellApi.useGetSpellByIdQuery({
+  const [getSpell, { data: spell, isLoading }] = spellApi.useLazyGetSpellByIdQuery({
     spellName: tab.name.split('--')[0],
     id: tab.id,
     projectId: config.projectId,
@@ -39,8 +39,14 @@ const EventHandler = ({ pubSub, tab }) => {
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
   useEffect(() => {
-    if (!spell || !spell?.data[0]) return
-    spellRef.current = spell.data[0]
+    //if (!spell || !spell?.data[0]) return
+    getSpell({
+      spellName: tab.name,
+      id: tab.id,
+      projectId: config.projectId,
+    })
+    console.log("Updated")
+    spellRef.current = spell?.data[0]
   }, [spell])
 
   const { serialize, getEditor, undo, redo, del } = useEditor()
@@ -104,6 +110,7 @@ const EventHandler = ({ pubSub, tab }) => {
   }
 
   const onSaveDiff = async (event, update) => {
+    
     if (!spellRef.current) return
 
     const currentSpell = spellRef.current
@@ -111,34 +118,36 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
-
+    
     const jsonDiff = diff(currentSpell, updatedSpell)
 
         updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
-
+    console.log(jsonDiff)
     try {
       await client.service('spell-runner').update(currentSpell.id, {
         diff: jsonDiff,
         projectId: config.projectId,
       })
-
       const diffResponse = await client.service('spells').saveDiff({
         projectId: config.projectId,
         diff: jsonDiff,
         name: currentSpell.name,
       })
-
+      getSpell({
+        spellName: tab.name,
+        id: tab.id,
+        projectId: config.projectId,
+      })
       if ('error' in diffResponse) {
-        enqueueSnackbar('Error saving spell', {
+        enqueueSnackbar('Error Updating spell', {
           variant: 'error',
         })
         return
       }
-
-      enqueueSnackbar('Spell saved', {
+      enqueueSnackbar('Spell updated', {
         variant: 'success',
       })
     } catch (err) {
@@ -147,6 +156,7 @@ const EventHandler = ({ pubSub, tab }) => {
       })
       return
     }
+
   }
 
   const createAvatarWindow = () => {
