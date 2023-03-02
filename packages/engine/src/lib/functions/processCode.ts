@@ -1,6 +1,12 @@
 import { MagickWorkerInputs } from '../types';
-// import vm2 from 'vm2';
 import runPython from '../functions/ProcessPython';
+let vm2;
+// if process is not undefined, dynamically import vm2
+if (typeof process !== 'undefined') {
+  (async () => {
+    vm2 = await import('vm2');
+  })()
+}
 
 export async function processCode(
   code: unknown,
@@ -18,27 +24,26 @@ export async function processCode(
   );
 
   if (language === 'javascript') {
-    // const { VM } = vm2;
-    // const vm = new VM();
+    const { VM } = vm2;
+    const vm = new VM();
 
-    // // Freeze the variables we are injecting into the VM
-    // vm.freeze(data, 'data');
-    // vm.freeze(flattenInputs, 'input');
+    // Freeze the variables we are injecting into the VM
+    vm.freeze(data, 'data');
+    vm.freeze(flattenInputs, 'input');
 
-    // // run the code
-    // const codeToRun = `"use strict"; function runFn(input,data){ return (${code})(input,data)}; runFn(input,data);`;
+    // run the code
+    const codeToRun = `"use strict"; function runFn(input,data){ return (${code})(input,data)}; runFn(input,data);`;
 
-    // try {
-    //   const codeResult = vm.run(codeToRun);
-    //   console.log('CODE RESULT', codeResult);
-    //   return codeResult;
-    // } catch (err) {
-    //   console.log({ err });
-    //   throw new ServerError(
-    //     'server-error',
-    //     'Error in spell runner: processCode component: ' + code
-    //   );
-    // }
+    try {
+      const codeResult = vm.run(codeToRun);
+      console.log('CODE RESULT', codeResult);
+      return codeResult;
+    } catch (err) {
+      console.log({ err });
+      throw new Error(
+        'Error in spell runner: processCode component: ' + code
+      );
+    }
   } else {
     try {
 
