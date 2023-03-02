@@ -89,7 +89,7 @@ export class Code extends MagickComponent<unknown> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  worker(
+  async worker(
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
@@ -99,7 +99,8 @@ export class Code extends MagickComponent<unknown> {
 
     try {
       // const value = runCodeWithArguments(node.data.code)
-      const value = processCode(node.data.code, inputs, data, 'javascript')
+      const value = await processCode(node.data.code, inputs, data, 'javascript')
+      console.log('value', value)
 
       return value
     } catch (err) {
