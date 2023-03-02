@@ -223,22 +223,14 @@ class SpellRunner {
     // ensure we run from a clean slate
     this._resetTasks()
 
-    
-
     // load the inputs into module memory
-    this._loadInputs(inputs)
-
-    console.log('inputs', inputs)
-    
+    this._loadInputs(inputs)    
 
     const component = this._getComponent(componentName) as ModuleComponent
-
-    console.log('component', component)
 
     const firstInput = Object.keys(inputs)[0]
 
     const triggeredNode = this._getTriggeredNodeByName(firstInput)
-    console.log('triggeredNode', triggeredNode)
 
     if (!component.run) throw new Error('Component does not have a run method')
     if (!triggeredNode) throw new Error('No triggered node found')
