@@ -52,13 +52,14 @@ export class Merge extends MagickComponent<void> {
       name: 'Property Name',
     })
 
-    node.inspector.add(nameInput).add(socketGenerator)
-
     node
       .addInput(dataInput)
       .addInput(objectInput)
       .addOutput(outputTrigger)
       .addOutput(objectOutput)
+
+    node.inspector.add(nameInput).add(socketGenerator)
+
     return node
   }
 
