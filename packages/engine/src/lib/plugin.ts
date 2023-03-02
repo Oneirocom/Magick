@@ -16,16 +16,19 @@ type ServerRoute = {
   handler: Function
 }
 
+type PluginConstuctor = {
+  name: string
+  nodes?: any
+  inputTypes?: any[]
+  outputTypes?: any[]
+}
 class Plugin {
   name: string
   nodes: any
   inputTypes: any[]
   outputTypes: any[]
-  constructor({
-    name, nodes = [],
-    inputTypes = [] as any[],
-    outputTypes = [] as any[]
-  }) {
+  startKey!: string
+  constructor({ name, nodes = [], inputTypes = [], outputTypes = [] }: PluginConstuctor) {
     this.name = name
     this.nodes = nodes
     this.inputTypes = inputTypes
@@ -85,7 +88,7 @@ export class ServerPlugin extends Plugin {
     services = [],
     inputTypes = [],
     outputTypes = [],
-    serverInit = () => {},
+    serverInit = () => null,
     agentMethods = {
       start: () => {
         console.log('starting plugin')
@@ -136,7 +139,7 @@ class PluginManager {
   }
 
   getInputTypes() {
-    const inputTypes = []
+    const inputTypes = [] as any[]
     this.pluginList.forEach(plugin => {
       plugin.inputTypes.forEach(inputType => {
         inputTypes.push(inputType)
@@ -146,7 +149,7 @@ class PluginManager {
   }
 
   getOutputTypes() {
-    const outputTypes = []
+    const outputTypes = [] as any[]
     this.pluginList.forEach(plugin => {
       plugin.outputTypes.forEach(outputType => {
         outputTypes.push(outputType)
@@ -185,8 +188,8 @@ class ClientPluginManager extends PluginManager {
   }
 
   getAgentComponents() {
-    const agentComp = []
-    this.pluginList.forEach((plugin: ClientPlugin) => {
+    const agentComp = [] as any[]
+    (this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       plugin.agentComponents.forEach(component => {
         agentComp.push(component)
       })
@@ -196,7 +199,7 @@ class ClientPluginManager extends PluginManager {
 
   getClientRoutes() {
     const clientRoutes = [] as any[]
-    this.pluginList.forEach((plugin: ClientPlugin) => {
+    (this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       if (plugin.clientRoutes) {
         plugin.clientRoutes.forEach(route => {
           clientRoutes.push({ ...route, plugin: plugin.name })
@@ -231,7 +234,6 @@ class ClientPluginManager extends PluginManager {
   }
 
   getClientPageLayout(p) {
-    const clientPageLayout = null
     const plugin = this.pluginList.filter(
       plugin => plugin.name === p
     )[0] as ClientPlugin
@@ -241,7 +243,7 @@ class ClientPluginManager extends PluginManager {
 
   getDrawerItems() {
     const drawerItems = [] as any[]
-    this.pluginList.forEach((plugin: ClientPlugin) => {
+    (this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       if (plugin.drawerItems) {
         plugin.drawerItems.forEach(drawerItem => {
           drawerItems.push({ ...drawerItem, plugin: plugin.name })
@@ -252,7 +254,7 @@ class ClientPluginManager extends PluginManager {
   }
 
   getInputTypes() {
-    const inputTypes = []
+    const inputTypes = [] as any[]
     this.pluginList.forEach(plugin => {
       plugin.inputTypes.forEach(inputType => {
         inputTypes.push(inputType)
@@ -262,7 +264,7 @@ class ClientPluginManager extends PluginManager {
   }
 
   getOutputTypes() {
-    const outputTypes = []
+    const outputTypes = [] as any[]
     this.pluginList.forEach(plugin => {
       plugin.outputTypes.forEach(outputType => {
         outputTypes.push(outputType)
@@ -280,8 +282,8 @@ class ServerPluginManager extends PluginManager {
   }
   
   getAgentStartMethods() {
-    let agentStartMethods = {}
-    this.pluginList.forEach((plugin: ServerPlugin) => {
+    let agentStartMethods = {};
+    (this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
       if (plugin.agentMethods) {
         const obj = {}
         obj[plugin.name] = plugin.agentMethods.start
@@ -292,8 +294,8 @@ class ServerPluginManager extends PluginManager {
   }
 
   getAgentStopMethods() {
-    let agentStopMethods = {}
-    this.pluginList.forEach((plugin: ServerPlugin) => {
+    let agentStopMethods = {};
+    (this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
       if (plugin.agentMethods) {
         const obj = {}
         obj[plugin.name] = plugin.agentMethods.stop
@@ -305,7 +307,7 @@ class ServerPluginManager extends PluginManager {
 
   getServices() {
     const serviceList = [] as any[]
-    this.pluginList.forEach((plugin: ServerPlugin) => {
+    (this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
       Object.keys(plugin.services).forEach(key => {
         serviceList.push([key, plugin.services[key]])
       })
@@ -314,8 +316,8 @@ class ServerPluginManager extends PluginManager {
   }
 
   getServerInits() {
-    let serverInits = {}
-    this.pluginList.forEach((plugin: ServerPlugin) => {
+    let serverInits = {};
+    (this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
       if (plugin.serverInit) {
         const obj = {}
         obj[plugin.name] = plugin.serverInit
@@ -327,7 +329,7 @@ class ServerPluginManager extends PluginManager {
 
   getServerRoutes() {
     const serverRoutes = [] as any[]
-    this.pluginList.forEach((plugin: ServerPlugin) => {
+    (this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
       if (plugin.serverRoutes) {
         plugin.serverRoutes.forEach(route => {
           serverRoutes.push(route)
