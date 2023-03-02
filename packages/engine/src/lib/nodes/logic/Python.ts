@@ -74,16 +74,20 @@ export class Python extends MagickComponent<unknown> {
       name: 'Component Name',
     })
 
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+
     node.inspector
       .add(nameControl)
       .add(inputGenerator)
       .add(outputGenerator)
       .add(codeControl)
 
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+      node
+      .addOutput(dataOutput)
+      .addInput(dataInput)
 
-    return node.addOutput(dataOutput).addInput(dataInput)
+      return node
   }
 
   // the worker contains the main business logic of the node.  It will pass those results

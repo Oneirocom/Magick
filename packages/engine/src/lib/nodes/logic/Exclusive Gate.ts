@@ -39,12 +39,12 @@ export class ExclusiveGate extends MagickComponent<void> {
       name: 'Triggers',
     })
 
-    node.inspector.add(multiInputGenerator)
-
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const dataOutput = new Rete.Output('output', 'Output', anySocket)
 
     node.addOutput(dataOutput).addOutput(triggerOutput)
+
+    node.inspector.add(multiInputGenerator)
 
     return node
   }
