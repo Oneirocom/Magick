@@ -65,12 +65,18 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
       icon: 'moon',
     })
 
-    node.inspector.add(nameControl).add(inputGenerator).add(url).add(method)
-
-    return node
+    node
       .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(outp)
+
+    node.inspector
+      .add(nameControl)
+      .add(inputGenerator)
+      .add(url)
+      .add(method)
+
+    return node
   }
 
   async worker(

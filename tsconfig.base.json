@@ -46,7 +46,11 @@
 
       "@magickml/plugin-ethereum-client": ["packages/plugin-ethereum/client/src/index.ts"],
       "@magickml/plugin-ethereum-server": ["packages/plugin-ethereum/server/src/index.ts"],
-      "@magickml/plugin-ethereum-shared": ["packages/plugin-ethereum/shared/src/index.ts"]
+      "@magickml/plugin-ethereum-shared": ["packages/plugin-ethereum/shared/src/index.ts"],
+
+      "@magickml/plugin-esoterica-client": ["packages/plugin-esoterica/client/src/index.ts"],
+      "@magickml/plugin-esoterica-server": ["packages/plugin-esoterica/server/src/index.ts"],
+      "@magickml/plugin-esoterica-shared": ["packages/plugin-esoterica/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

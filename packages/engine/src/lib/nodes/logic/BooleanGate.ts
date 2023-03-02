@@ -27,8 +27,8 @@ export class BooleanGate extends MagickComponent<void> {
     const isFalse = new Rete.Output('false', 'False', triggerSocket)
 
     return node
-      .addInput(bool)
       .addInput(dataInput)
+      .addInput(bool)
       .addOutput(isTrue)
       .addOutput(isFalse)
   }

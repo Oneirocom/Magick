@@ -59,7 +59,7 @@ const SocketGenerator = ({ updateData, control, initialValue }) => {
       socketType: data.socketType,
     }    
 
-    const newSockets = [...sockets, newSocket]
+    const newSockets = [newSocket, ...sockets]
 
     setSockets(newSockets)
     update(newSockets)
