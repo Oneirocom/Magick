@@ -24,7 +24,7 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const [saveSpellMutation] = spellApi.useSaveSpellMutation()
   const [saveDiff] = spellApi.useSaveDiffMutation()
-  const { data: spell } = spellApi.useGetSpellByIdQuery({
+  const [getSpell, { data: spell, isLoading }] = spellApi.useLazyGetSpellByIdQuery({
     spellName: tab.name.split('--')[0],
     id: tab.id,
     projectId: config.projectId,
@@ -39,8 +39,14 @@ const EventHandler = ({ pubSub, tab }) => {
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
   useEffect(() => {
-    if (!spell || !spell?.data[0]) return
-    spellRef.current = spell.data[0]
+    //if (!spell || !spell?.data[0]) return
+    getSpell({
+      spellName: tab.name,
+      id: tab.id,
+      projectId: config.projectId,
+    })
+    console.log("Updated")
+    spellRef.current = spell?.data[0]
   }, [spell])
 
   const { serialize, getEditor, undo, redo, del } = useEditor()
@@ -129,6 +135,11 @@ const EventHandler = ({ pubSub, tab }) => {
         projectId: config.projectId,
         diff: jsonDiff,
         name: currentSpell.name,
+      })
+      getSpell({
+        spellName: tab.name,
+        id: tab.id,
+        projectId: config.projectId,
       })
       if ('error' in diffResponse) {
         enqueueSnackbar('Error Updating spell', {
