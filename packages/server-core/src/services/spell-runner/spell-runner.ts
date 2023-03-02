@@ -9,7 +9,7 @@ export const spellRunner = (app: Application) => {
   // Register our service on the Feathers application
   app.use('spell-runner', new SpellRunnerService(getOptions(app)), {
     // A list of all methods this service exposes externally
-    methods: ['find', 'get', 'create', 'patch', 'remove'],
+    methods: ['find', 'get', 'create','update', 'patch', 'remove'],
     // You can add additional custom events to be sent to clients here
     events: []
   })
@@ -24,13 +24,24 @@ export const spellRunner = (app: Application) => {
         
         
       ],
-      find: [],
-      get: [],
+      find: [
+        
+      ],
+      get: [
+        
+      ],
       create: [
         
       ],
-      patch: [],
-      remove: []
+      update: [
+        
+      ],
+      patch: [
+        
+      ],
+      remove: [
+        
+      ]
     },
     after: {
       all: []
