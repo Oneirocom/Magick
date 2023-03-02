@@ -9,6 +9,7 @@ export type SocketPluginArgs = {
   client?: any
 }
 
+
 export type SocketData = {
   output?: unknown
   error?: {
@@ -59,7 +60,7 @@ function install(
           console.log('CAUGHT ERROR')
           console.log(err)
           // handle errors here so they dont crash the process, and are communicated to the client
-          socket?.emit(`${node.id}`, {
+          socket?.emit(`${currentSpell.id}-${node.id}-error`, {
             error: {
               message: err.message,
               stack: err.stack,
@@ -71,7 +72,9 @@ function install(
               stack: err.stack,
             },
           })
-          
+          socket?.emit(event, {
+            output: { error: true},
+          })
           // note: we may still want to throw the error here
           throw err
         }
