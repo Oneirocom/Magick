@@ -88,6 +88,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     const values = [...defaultInputTypes, ...pluginManager.getInputTypes()]
     const trigger = new Rete.Output('trigger', 'trigger', triggerSocket)
     const out = new Rete.Output('output', 'output', values[0].socket)
+    node.data.isInput = true;
 
     node.addOutput(trigger).addOutput(out)
 
@@ -112,7 +113,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
         node.removeOutput(out)
         node.addOutput(newOut)
       }
-
       node.data.name = node.data.name ?? `Input - ${currentValue.name}`
     
     }
@@ -169,6 +169,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     outputs: MagickWorkerOutputs,
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
+    node.data.isInput = true;
     // handle data subscription.  If there is data, this is from playtest
     if (
       data &&
