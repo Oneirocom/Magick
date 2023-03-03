@@ -1,6 +1,5 @@
 import React, { FC, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
-import { KeyInput } from './utils'
 import { Switch } from '@magickml/client-core'
 import md5 from 'md5'
 import { Button, Input } from '@mui/material'
@@ -54,10 +53,13 @@ export const RestAgentWindow: FC<any> = props => {
           <Grid container>
             <Grid item xs={9}>
               <span className="form-item-label">API Key</span>
-              <Input value={agentData.data?.rest_api_key} readOnly style={{width: '20em' }} />
-              {/* add api key copy button */}
+              <Input
+                value={agentData.data?.rest_api_key}
+                readOnly
+                style={{ width: '20em' }}
+              />
               <Button
-              style={{marginLeft: '1em'}}
+                style={{ marginLeft: '1em' }}
                 onClick={() => {
                   navigator.clipboard.writeText(agentData.data?.rest_api_key)
                 }}

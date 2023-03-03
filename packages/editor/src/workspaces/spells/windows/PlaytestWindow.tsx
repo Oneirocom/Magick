@@ -119,7 +119,7 @@ const Playtest = ({ tab }) => {
   > | null>(['Default'])
   const [playtestOption, setPlaytestOption] = useState('Default')
 
-  useEffect(() => {
+  useEffect(() => {setPlaytestOption
     if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
       return
 
@@ -133,12 +133,9 @@ const Playtest = ({ tab }) => {
         label: node.data.name ?? node.name,
       }))
 
-    // const optionsObj = options.map((option: any) => ({
-    //   value: option,
-    //   label: option,
-    // }))
-
     setPlaytestOptions(options)
+    console.log('options', options)
+    setPlaytestOption(options[0].value)
   }, [spellData])
 
   // Keep scrollbar at bottom of its window
