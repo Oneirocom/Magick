@@ -123,12 +123,7 @@ const Playtest = ({ tab }) => {
     if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
       return
 
-    const optionsTest = ['Default', ...pluginManager.getInputTypes()]
-    console.log('OPTIONS TEST', optionsTest)
-
     const graph = spellData.data[0].graph
-
-    console.log('GRAPH!!!', graph)
     const options = Object.values(graph.nodes)
       .filter((node: any) => {
         return node.data.playtestToggle
@@ -249,6 +244,7 @@ const Playtest = ({ tab }) => {
     if (!playtestInputName) return
     publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
 
+    // Todo should move run spell into an event to be used globally.
     client.service('spell-runner').create({
       spellName: tab.name.split('--')[0],
       id: tab.id,
