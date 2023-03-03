@@ -1,12 +1,19 @@
-import { ClientPlugin } from "@magickml/engine"
-import { RestAgentWindow } from "./components/rest.component"
+import { ClientPlugin, eventSocket, anySocket } from '@magickml/engine'
+import { RestAgentWindow } from './components/rest.component'
 
 const RestPlugin = new ClientPlugin({
-  name: 'RestPlugin', 
-  nodes: [], 
+  name: 'RestPlugin',
   agentComponents: [RestAgentWindow],
-  inputTypes: ['REST API (GET)', 'REST API (POST)', 'REST API (PUT)', 'REST API (PATCH)', 'REST API (DELETE)'],
-  outputTypes: ['REST API (Response)'],
+  inputTypes: [
+    { name: 'REST API (GET)', trigger: true, socket: eventSocket },
+    { name: 'REST API (POST)', trigger: true, socket: eventSocket },
+    { name: 'REST API (PUT)', trigger: true, socket: eventSocket },
+    { name: 'REST API (PATCH)', trigger: true, socket: eventSocket },
+    { name: 'REST API (DELETE)', trigger: true, socket: eventSocket },
+  ],
+  outputTypes: [
+    { name: 'REST API (Response)', trigger: true, socket: anySocket },
+  ],
 })
 
-export default RestPlugin;
+export default RestPlugin
