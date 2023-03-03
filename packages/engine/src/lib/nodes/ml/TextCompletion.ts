@@ -5,6 +5,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  EngineContext,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
@@ -18,9 +19,7 @@ type WorkerReturn = {
   output: string
 }
 
-export class TextCompletion extends MagickComponent<
-  Promise<WorkerReturn>
-> {
+export class TextCompletion extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('Text Completion')
 
@@ -122,37 +121,37 @@ export class TextCompletion extends MagickComponent<
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { projectId }: { projectId: string }
-  ){
-    
+    { projectId, magick }: { projectId: string; magick: EngineContext }
+  ) {
+    const currentSpell = magick.getCurrentSpell()
     const prompt = inputs['string'][0]
-    
+
     const settings = ((inputs.settings && inputs.settings[0]) ?? {}) as any
-    
+
     const modelName = settings.modelName ?? (node?.data?.modelName as string)
-    
+
     const temperatureData =
       settings.temperature ?? (node?.data?.temperature as string)
     const temperature = parseFloat(temperatureData)
-    
+
     const maxTokensData =
       settings.max_tokens ?? (node?.data?.max_tokens as string)
     const max_tokens = parseInt(maxTokensData)
-    
+
     const topPData = settings.top_p ?? (node?.data?.top_p as string)
     const top_p = parseFloat(topPData)
 
     const frequencyPenaltyData =
       settings.frequency_penalty ?? (node?.data?.frequency_penalty as string)
-    const frequency_penalty = parseFloat((frequencyPenaltyData ?? 0))
-    
+    const frequency_penalty = parseFloat(frequencyPenaltyData ?? 0)
+
     const presencePenaltyData =
       settings.presence_penalty ?? (node?.data?.presence_penalty as string)
-    const presence_penalty = parseFloat((presencePenaltyData ?? 0))
-    
+    const presence_penalty = parseFloat(presencePenaltyData ?? 0)
+
     const stopData = settings.stop ?? (node?.data?.stop as string)
-    const stop = (stopData ?? "").split(', ')
-    
+    const stop = (stopData ?? '').split(', ')
+
     for (let i = 0; i < stop.length; i++) {
       if (stop[i] === '\\n') {
         stop[i] = '\n'
@@ -176,7 +175,7 @@ export class TextCompletion extends MagickComponent<
 
     const data = await makeCompletion(body, {
       projectId,
-      spell: node.data.spell,
+      spell: currentSpell,
       nodeId: node.id,
     })
 
