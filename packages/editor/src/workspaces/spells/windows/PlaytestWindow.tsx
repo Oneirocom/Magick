@@ -4,7 +4,6 @@ import Editor from '@monaco-editor/react'
 import { useDispatch } from 'react-redux'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { getStore } from 'packages/editor/src/state/store'
 import {
   upsertLocalState,
   addLocalState,
@@ -335,7 +334,7 @@ const Playtest = ({ tab }) => {
 
   return (
     <Window toolbar={toolbar}>
-      {/*  This will slide down here and show another text area where you can input a javascript object for injection into the playtest.  Good for things that dont change often.  Ideal for Agents. */}
+      {/*  This will slide down here and show another text area where you can input a json object for injection into the playtest.  Good for things that dont change often.  Ideal for Agents. */}
       <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
         <div
           className={css['playtest-output']}
@@ -344,7 +343,7 @@ const Playtest = ({ tab }) => {
           <Scrollbars ref={ref => (scrollbars.current = ref)}>
             <Editor
               theme="sds-dark"
-              language="javascript"
+              language="json"
               value={localState?.playtestData}
               options={options}
               defaultValue={

@@ -1,21 +1,17 @@
-import Koa from 'koa'
+// TODO: replace with a feathers service
 
+import Koa from 'koa'
 import { tts } from './googleTextToSpeech'
 import { queryGoogleSearch } from './queryGoogleSearch'
 import { ServerError } from './ServerError'
 import { tts_tiktalknet } from './tiktalknet'
 import { Route } from './types'
-import { runSpell } from './utils'
-
 const getTextToSpeech = async (ctx: Koa.Context) => {
   const text = ctx.request.query.text as string
-  const character = ctx.request.query.character ?? 'none'
   
   const voice_provider = ctx.request.query.voice_provider as string
   const voice_character = ctx.request.query.voice_character as string
   const tiktalknet_url = ctx.request.query.tiktalknet_url as string
-
-  
 
   let url = ''
 
@@ -24,8 +20,6 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
     } else {
       url = await tts_tiktalknet(text, voice_character, tiktalknet_url)
     }
-
-  
 
   return (ctx.body = url)
 }

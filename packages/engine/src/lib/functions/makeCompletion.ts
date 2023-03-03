@@ -20,7 +20,11 @@ export type CompletionData = {
 
 export async function makeCompletion(
   data: CompletionData,
-  projectId
+  {
+    projectId,
+    spell,
+    nodeId
+  }
 ): Promise<any> {
   const {
     prompt,
@@ -92,6 +96,8 @@ export async function makeCompletion(
       cost: totalCost,
       hidden: false,
       processed: false,
+      spell,
+      nodeId
     })
 
     if (resp.data.choices && resp.data.choices.length > 0) {
