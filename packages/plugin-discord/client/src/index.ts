@@ -1,12 +1,22 @@
-import { ClientPlugin, WorldManager } from "@magickml/engine"
-import { DiscordAgentWindow } from "./components/agent.component"
+import {
+  anySocket,
+  ClientPlugin,
+  eventSocket,
+  WorldManager,
+} from '@magickml/engine'
+import { DiscordAgentWindow } from './components/agent.component'
 
 const DiscordPlugin = new ClientPlugin({
-  name: 'DiscordPlugin', 
-  nodes: [],
+  name: 'DiscordPlugin',
   agentComponents: [DiscordAgentWindow],
-  inputTypes: ['Discord (Voice)', 'Discord (Text)'],
-  outputTypes: ['Discord (Voice)', 'Discord (Text)'],
+  inputTypes: [
+    { name: 'Discord (Voice)', trigger: true, socket: eventSocket },
+    { name: 'Discord (Text)', trigger: true, socket: eventSocket },
+  ],
+  outputTypes: [
+    { name: 'Discord (Voice)', trigger: true, socket: eventSocket },
+    { name: 'Discord (Text)', trigger: true, socket: eventSocket },
+  ],
 })
 
-export default DiscordPlugin;
+export default DiscordPlugin

@@ -1,12 +1,10 @@
-import { ClientPlugin } from "@magickml/engine"
-import { AgentLoopWindow } from "./components/loop.component"
+import { eventSocket, ClientPlugin } from '@magickml/engine'
+import { AgentLoopWindow } from './components/loop.component'
 
 const LoopPlugin = new ClientPlugin({
-  name: 'LoopPlugin', 
-  nodes: [], 
+  name: 'LoopPlugin',
   agentComponents: [AgentLoopWindow],
-  inputTypes: ['Loop In'],
-  outputTypes: ['Loop Out'],
+  inputTypes: [{ name: 'Loop In', trigger: true, socket: eventSocket }],
 })
 
-export default LoopPlugin;
+export default LoopPlugin
