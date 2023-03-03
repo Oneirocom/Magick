@@ -59,7 +59,7 @@ export class Output extends MagickComponent<void> {
       dataKey: 'sendToPlaytest',
       name: 'Send to Playtest',
       label: 'Playtest',
-      defaultValue: node.data.sendToPlaytest || false,
+      defaultValue: node.data.sendToPlaytest || true,
     })
 
     const avatarControl = new SwitchControl({

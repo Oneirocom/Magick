@@ -241,6 +241,8 @@ const Playtest = ({ tab }) => {
     if (!playtestInputName) return
     publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
 
+    publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
+
     // Todo should move run spell into an event to be used globally.
     client.service('spell-runner').create({
       spellName: tab.name.split('--')[0],
@@ -250,6 +252,10 @@ const Playtest = ({ tab }) => {
         [playtestInputName as string]: toSend,
       },
     })
+<<<<<<< HEAD
+=======
+
+>>>>>>> a3321c98 (Comment out send to playtest in input, default true in output)
     publish($PLAYTEST_INPUT(tab.id), toSend)
     client.io.on(`${tab.id}-error`, data => {
       //publish($DEBUG_PRINT(tab.id), (data.error.message))
