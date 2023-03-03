@@ -100,7 +100,7 @@ const Playtest = ({ tab }) => {
     return selectStateBytabId(state.localState, tab.id)
   })
   const client = FeathersContext?.client
-  const { $PLAYTEST_INPUT, $PLAYTEST_PRINT, $DEBUG_PRINT, $SAVE_SPELL_DIFF } = events
+  const { $PLAYTEST_INPUT, $PLAYTEST_PRINT, $SAVE_SPELL_DIFF } = events
 
   const printToConsole = useCallback(
     (_, _text) => {
@@ -123,14 +123,27 @@ const Playtest = ({ tab }) => {
     if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
       return
 
-    const options = ['Default', ...pluginManager.getInputTypes()]
+    const optionsTest = ['Default', ...pluginManager.getInputTypes()]
+    console.log('OPTIONS TEST', optionsTest)
 
-    const optionsObj = options.map((option: any) => ({
-      value: option,
-      label: option,
-    }))
+    const graph = spellData.data[0].graph
 
-    setPlaytestOptions(optionsObj)
+    console.log('GRAPH!!!', graph)
+    const options = Object.values(graph.nodes)
+      .filter((node: any) => {
+        return node.data.playtestToggle
+      })
+      .map((node: any) => ({
+        value: node.data.name ?? node.name,
+        label: node.data.name ?? node.name,
+      }))
+
+    // const optionsObj = options.map((option: any) => ({
+    //   value: option,
+    //   label: option,
+    // }))
+
+    setPlaytestOptions(options)
   }, [spellData])
 
   // Keep scrollbar at bottom of its window
@@ -190,30 +203,20 @@ const Playtest = ({ tab }) => {
     )
 
     if (!json) {
-<<<<<<< HEAD
       enqueueSnackbar('No data provided', {
         variant: 'error',
       })
-      return;
-=======
-      toast.error('No data provided')
       return
->>>>>>> 87eaa3e0 (added placeholders to all inputs)
     }
 
     // validate the json
     try {
       JSON.parse(json)
     } catch (e) {
-<<<<<<< HEAD
       enqueueSnackbar('Invalid data - JSON is poorly formatted', {
         variant: 'error',
       })
-      return;
-=======
-      toast.error('Invalid data - JSON is poorly formatted')
       return
->>>>>>> 87eaa3e0 (added placeholders to all inputs)
     }
 
     toSend = {
@@ -233,10 +236,7 @@ const Playtest = ({ tab }) => {
     if (!graph) return
 
     const playtestNode = Object.values(graph.nodes).find(node => {
-      return (
-        node.data.playtestToggle &&
-        node.data.name === `Input - ${playtestOption}`
-      )
+      return node.data.playtestToggle && node.data.name === playtestOption
     })
 
     if (!playtestNode) {
