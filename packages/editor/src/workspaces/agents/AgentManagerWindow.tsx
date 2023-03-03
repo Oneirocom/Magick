@@ -52,6 +52,7 @@ const AgentManagerWindow = () => {
     fileReader.onload = event => {
       const data = JSON.parse(event?.target?.result as string)
       data.dirty = data?.dirty ? data.dirty : false
+      data.enabled = data?.enabled ? true : false
       data.updated_at = data?.updated_at || ''
       data.spells = Array.isArray(data?.spells) ? data.spells : []
 
