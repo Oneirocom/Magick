@@ -43,6 +43,28 @@ export const agent = (app: Application) => {
       all: [
         schemaHooks.validateQuery(agentQueryValidator),
         schemaHooks.resolveQuery(agentQueryResolver),
+        // ensure that "dirty" is always a boolean, if it is a 0 or 1 it will be converted to a boolean
+        async (context: HookContext) => {
+          console.log('CONTEXT params', context.params)
+          if(!context.params.query) return context
+          if (context.params.query.dirty === '0') {
+            context.params.query.dirty = false
+          } else if (context.params.query.dirty === '1') {
+            context.params.query.dirty = true
+          }
+          return context
+        },
+        // do the same for patch requests
+        async (context: HookContext) => {
+          if(!context.data) return context
+          console.log('context.data', context.data)
+          if (context.data.dirty === '0') {
+            context.data.dirty = false
+          } else if (context.data.dirty === '1') {
+            context.data.dirty = true
+          }
+          return context
+        }
       ],
       find: [],
       get: [],
