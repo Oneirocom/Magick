@@ -5,6 +5,7 @@ import { queryGoogleSearch } from './queryGoogleSearch'
 import { ServerError } from './ServerError'
 import { tts_tiktalknet } from './tiktalknet'
 import { Route } from './types'
+import { runSpell } from './utils'
 
 const getTextToSpeech = async (ctx: Koa.Context) => {
   const text = ctx.request.query.text as string
@@ -58,30 +59,12 @@ const image_generation = async (ctx: Koa.Context) => {
   ctx.body = data
 }
 
-const handleSpell = async (ctx: Koa.Context) => {
-  const runSpell = async ({spellName, inputs, projectId}) => {
-    const { outputs } = await runSpell({
-      spellName,
-      inputs,
-      projectId
-    })
-    return outputs
-  }
-  const { spellName, inputs, projectId } = ctx.request.body as any
-  const outputs = await runSpell({ spellName, inputs, projectId })
-  ctx.body = outputs
-}
-
-
 export const apis: Route[] = [
   {
     path: '/text_to_speech',
     get: getTextToSpeech,
   },
-  {
-    path: '/run_spell',
-    post: handleSpell,
-  },
+
   {
     path: '/query_google',
     post: queryGoogle,
