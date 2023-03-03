@@ -38,6 +38,7 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
     // Avoid server-side validation error
     _data.spells = Array.isArray(_data?.spells) ? _data.spells : []
     _data.dirty = true
+    _data.enabled = _data.enabled ? true : false
     axios
       .patch(`${config.apiUrl}/agents/${id}`, _data)
       .then(res => {
@@ -110,9 +111,9 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
         </div>
         <Switch
           label={null}
-          checked={agentData.enabled}
+          checked={agentData.enabled ? true : false}
           onChange={() => {
-            setSelectedAgent({ ...agentData, enabled: !agentData.enabled })
+            setSelectedAgent({ ...agentData, enabled: agentData.enabled ? false : true })
           }}
           style={{ alignSelf: 'self-start' }}
         />

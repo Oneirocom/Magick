@@ -27,7 +27,6 @@ class Plugin {
   nodes: any
   inputTypes: any[]
   outputTypes: any[]
-  startKey!: string
   constructor({ name, nodes = [], inputTypes = [], outputTypes = [] }: PluginConstuctor) {
     this.name = name
     this.nodes = nodes
@@ -181,6 +180,12 @@ class PluginManager {
 }
 
 class ClientPluginManager extends PluginManager {
+  pluginList: Array<ClientPlugin>
+  constructor() {
+    super()
+    this.pluginList = new Array<ClientPlugin>()
+  }
+
   getAgentComponents() {
     const agentComp = [] as any[]
     (this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
@@ -269,12 +274,18 @@ class ClientPluginManager extends PluginManager {
 }
 
 class ServerPluginManager extends PluginManager {
+  pluginList: Array<ServerPlugin>
+  constructor() {
+    super()
+    this.pluginList = new Array<ServerPlugin>()
+  }
+  
   getAgentStartMethods() {
     let agentStartMethods = {};
     (this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
       if (plugin.agentMethods) {
         const obj = {}
-        obj[plugin.startKey] = plugin.agentMethods.start
+        obj[plugin.name] = plugin.agentMethods.start
         agentStartMethods = { ...agentStartMethods, ...obj }
       }
     })
