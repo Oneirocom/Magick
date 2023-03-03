@@ -22,6 +22,10 @@ type InputReturn = {
   output: unknown
 }
 
+const defaultInputTypes = [
+  { name: 'Default', trigger: true, socket: anySocket },
+]
+
 export class InputComponent extends MagickComponent<InputReturn> {
   nodeTaskMap: Record<number, MagickTask> = {}
 
@@ -81,34 +85,40 @@ export class InputComponent extends MagickComponent<InputReturn> {
     if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
     delete this.subscriptionMap[node.id]
 
-    const values = ['Default', ...pluginManager.getInputTypes()]
+    const values = [...defaultInputTypes, ...pluginManager.getInputTypes()]
+    const trigger = new Rete.Output('trigger', 'trigger', triggerSocket)
+    const out = new Rete.Output('output', 'output', values[0].socket)
+    node.data.isInput = true;
+
+    node.addOutput(trigger).addOutput(out)
 
     const inputType = new DropdownControl({
       name: 'Input Type',
       dataKey: 'inputType',
-      values,
-      defaultValue: 'Default',
+      values: values.map(v => v.name),
+      defaultValue: values[0].name,
     })
 
-    inputType.onData = (data) => {
+    inputType.onData = data => {
       node.data.name = `Input - ${data}`
-    }
 
-    node.data.name = node.data.name === 'Input' ? `Input - Default` : node.data.name
+      let currentValue = values.find(v => v.name === data)
+
+      if (!currentValue.trigger) {
+        node.removeOutput(trigger)
+      }
+      const newOut = new Rete.Output('output', 'output', currentValue.socket)
+
+      if (currentValue.socket) {
+        node.removeOutput(out)
+        node.addOutput(newOut)
+      }
+      node.data.name = node.data.name ?? `Input - ${currentValue.name}`
+    
+    }
 
     // subscribe the node to the playtest input data stream
     this.subscribeToPlaytest(node)
-
-    const out = new Rete.Output('output', 'output', eventSocket)
-
-    const trigger = new Rete.Output(
-      'trigger',
-      'trigger',
-      triggerSocket
-    )
-
-    
-    node.data.name = node.data.name || `Input - Default`
 
     // const data = node?.data?.playtestToggle as
     //   | {
@@ -151,8 +161,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
     return node
-      .addOutput(trigger)
-      .addOutput(out)
   }
 
   worker(
@@ -161,15 +169,18 @@ export class InputComponent extends MagickComponent<InputReturn> {
     outputs: MagickWorkerOutputs,
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
-
+    node.data.isInput = true;
     // handle data subscription.  If there is data, this is from playtest
-    if (data && !isEmpty(data) /* && node.data.playtestToggle.receivePlaytest*/) {
+    if (
+      data &&
+      !isEmpty(data) /* && node.data.playtestToggle.receivePlaytest*/
+    ) {
       this._task.closed = []
 
       const output = Object.values(data)[0] as string
 
       if (!silent) node.display(data)
-      
+
       return {
         output,
       }
@@ -187,7 +198,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
     if (Object.values(outputs.output).length > 0) {
       return { output: Object.values(outputs)[0] }
     }
-
 
     // If there are outputs, we are running as a module input and we use that value
     if (outputs.output && !outputs?.output.task) {

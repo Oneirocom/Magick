@@ -13,7 +13,7 @@ export const RestAgentWindow: FC<any> = props => {
   const { agentData, setAgentData } = props
 
   useEffect(() => {
-    if (agentData.data?.rest_api_key === undefined) {
+    if (!agentData.data?.rest_api_key) {
       setAgentData({
         ...agentData,
         data: {
@@ -22,7 +22,7 @@ export const RestAgentWindow: FC<any> = props => {
         },
       })
     }
-  }, [])
+  }, [agentData.data])
 
   return (
     <div
