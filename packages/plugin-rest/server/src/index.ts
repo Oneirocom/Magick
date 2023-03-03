@@ -1,8 +1,7 @@
-import { ServerPlugin } from "@magickml/engine"
+import { anySocket, eventSocket, ServerPlugin } from '@magickml/engine'
 import { ApiService } from './services/api/api.class'
 
 function getAgentMethods() {
-
   return {
     start: () => {
       console.log('starting rest')
@@ -14,12 +13,19 @@ function getAgentMethods() {
 }
 
 const RestPlugin = new ServerPlugin({
-  name: 'RestPlugin', 
-  nodes: [], 
-  services: {'api': ApiService},
+  name: 'RestPlugin',
+  services: { api: ApiService },
   agentMethods: getAgentMethods(),
-  inputTypes: ['REST API (GET)', 'REST API (POST)', 'REST API (PUT)', 'REST API (PATCH)', 'REST API (DELETE)'],
-  outputTypes: ['REST API (Response)'],
+  inputTypes: [
+    { name: 'REST API (GET)', trigger: true, socket: eventSocket },
+    { name: 'REST API (POST)', trigger: true, socket: eventSocket },
+    { name: 'REST API (PUT)', trigger: true, socket: eventSocket },
+    { name: 'REST API (PATCH)', trigger: true, socket: eventSocket },
+    { name: 'REST API (DELETE)', trigger: true, socket: eventSocket },
+  ],
+  outputTypes: [
+    { name: 'REST API (Response)', trigger: true, socket: anySocket },
+  ],
 })
 
-export default RestPlugin;
+export default RestPlugin
