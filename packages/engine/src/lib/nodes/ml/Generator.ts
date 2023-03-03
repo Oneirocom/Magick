@@ -129,15 +129,20 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     node: NodeData,
     rawInputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent, projectId }: { silent: boolean; projectId: string }
+    {
+      silent,
+      projectId,
+      magick,
+    }: { silent: boolean; projectId: string; magick: EngineContext }
   ) {
+    const currentSpell = magick.getCurrentSpell()
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
       acc[key] = value[0]
       return acc
     }, {} as Record<string, unknown>)
 
     const settings = ((inputs.settings && inputs.settings[0]) ?? {}) as any
-    
+
     const modelName = settings.modelName ?? (node?.data?.modelName as string)
 
     // Replace carriage returns with newlines because that's what the language models expect
@@ -147,29 +152,29 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
 
     const topPData = node?.data?.top_p as string
     const top_p = topPData ? parseFloat(topPData) : 1
-   
+
     const template = Handlebars.compile(fewshot, { noEscape: true })
     const prompt = template(inputs)
 
     const temperatureData =
       settings.temperature ?? (node?.data?.temperature as string)
     const temperature = parseFloat(temperatureData)
-    
+
     const maxTokensData =
       settings.max_tokens ?? (node?.data?.max_tokens as string)
     const max_tokens = parseInt(maxTokensData)
 
     const frequencyPenaltyData =
       settings.frequency_penalty ?? (node?.data?.frequency_penalty as string)
-    const frequency_penalty = parseFloat((frequencyPenaltyData ?? 0))
-    
+    const frequency_penalty = parseFloat(frequencyPenaltyData ?? 0)
+
     const presencePenaltyData =
       settings.presence_penalty ?? (node?.data?.presence_penalty as string)
-    const presence_penalty = parseFloat((presencePenaltyData ?? 0))
-    
+    const presence_penalty = parseFloat(presencePenaltyData ?? 0)
+
     const stopData = settings.stop ?? (node?.data?.stop as string)
-    const stop = (stopData ?? "").split(', ')
-    
+    const stop = (stopData ?? '').split(', ')
+
     for (let i = 0; i < stop.length; i++) {
       if (stop[i] === '\\n') {
         stop[i] = '\n'
@@ -191,12 +196,10 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       stop: filteredStop,
     }
 
-
-    
     try {
       const { success, choice } = await makeCompletion(body, {
         projectId,
-        spell: node.data.spell,
+        spell: currentSpell,
         nodeId: node.id,
       })
 
