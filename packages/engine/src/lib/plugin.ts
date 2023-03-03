@@ -27,7 +27,6 @@ class Plugin {
   nodes: any
   inputTypes: any[]
   outputTypes: any[]
-  startKey!: string
   constructor({ name, nodes = [], inputTypes = [], outputTypes = [] }: PluginConstuctor) {
     this.name = name
     this.nodes = nodes
