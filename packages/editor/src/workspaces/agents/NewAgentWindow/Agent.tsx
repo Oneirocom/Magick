@@ -108,7 +108,7 @@ const AgentWindow = ({
             variant: 'success',
           })
           const responseData = res && JSON.parse(res?.config?.data)
-          setEnabled(responseData.enabled)
+          setEnabled(!!responseData.enabled)
           setAgentData(responseData.data)
           updateCallback()
         }
@@ -123,7 +123,7 @@ const AgentWindow = ({
 
   const exportEntity = () => {
     const _data = {
-      enabled,
+      enabled: enabled ? true : false,
       data: {
         ...agentData,
         root_spell,
@@ -206,7 +206,8 @@ const AgentWindow = ({
         <Button
           onClick={() => {
             const data = {
-              enabled,
+              enabled: enabled ? true : false,
+              dirty: true,
               data: {
                 ...agentData,
                 root_spell,
