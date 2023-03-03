@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { OPENAI_API_KEY, OPENAI_ENDPOINT } from '../config'
+import { OPENAI_ENDPOINT } from '../config'
 import { saveRequest } from './saveRequest'
 import {
   calculateCompletionCost,
@@ -37,12 +37,9 @@ export async function makeCompletion(
     stop,
     apiKey,
   } = data
-
-  const API_KEY = apiKey || OPENAI_API_KEY
-
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + API_KEY,
+    Authorization: 'Bearer ' + apiKey,
   }
 
   try {
