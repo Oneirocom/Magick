@@ -52,10 +52,10 @@ export class SpellRunnerService<
     const spellManager = app.userSpellManagers.get(user.id.toString())
 
     if (!spellManager) throw new Error('No spell manager created for user!')
-    const decoded_id = id.slice(0, 36)
+    const decodedId = id.length > 36 ? id.slice(0, 36) : id
     const spell = await getSpell({
       app,
-      id: decoded_id as string,
+      id: decodedId as string,
       projectId: query.projectId,
     })
 
@@ -77,13 +77,14 @@ export class SpellRunnerService<
 
     if (!user) throw new Error('No user is present in service')
 
-    const { inputs, projectId, id, spellName } = data
+    const { inputs, projectId, id } = data
+    const decodedId = id.length > 36 ? id.slice(0, 36) : id
     const spellManager = app.userSpellManagers.get(user.id)
 
     if (!spellManager) throw new Error('No spell manager found for user!')
 
-    if (!spellManager.hasSpellRunner(id)) {
-      const spell = await getSpell({ app, id: id, projectId })
+    if (!spellManager.hasSpellRunner(decodedId)) {
+      const spell = await getSpell({ app, id: decodedId, projectId })
       await spellManager.load(spell as Spell)
     }
 
@@ -99,15 +100,22 @@ export class SpellRunnerService<
   ): Promise<Data> {
     if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
+
     const { user } = params as any
     if (!user) throw new Error('No user present in service')
+
     const { diff } = data
     const spellManager = app.userSpellManagers.get(user.id)
     if (!spellManager) throw new Error('No spell manager found for user!')
-    const spellRunner = spellManager.getSpellRunner(id)
+
+    const decodedId = id.length > 36 ? id.slice(0, 36) : id
+
+    const spellRunner = spellManager.getSpellRunner(decodedId)
     if (!spellRunner) throw new Error('No spell runner found!')
+
     const spell = spellRunner.currentSpell
     const updatedSpell = otJson0.type.apply(spell, diff)
+
     spellManager.load(updatedSpell, true)
     return updatedSpell
   }
