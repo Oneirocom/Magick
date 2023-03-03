@@ -97,17 +97,13 @@ const TextEditor = props => {
   }, [language])
 
   useEffect(() => {
-    
     if (
       !textEditorData ||
-      Object.keys(textEditorData).length === 0 
+      Object.keys(textEditorData).length === 0
       //|| !textEditorData.data
     )
       return
     //Removed !textEditorData.data causing state issues between text editor instances.
-    
-
-    
 
     const inputs = []
     inspectorData?.data.inputs?.forEach((input: any) => {
@@ -182,13 +178,10 @@ const TextEditor = props => {
     const json = await response.json()
     const completion = json.choices[0].text
 
-    
-
     updateCode(code + completion)
   }
 
   const onComplete = () => {
-    
     complete(codeRef.current)
   }
 
@@ -215,7 +208,7 @@ return {
     outputs = []
   ) => {
     let prompt =
-      language === 'plaintext'
+      language === 'plaintext' || language === 'handlebars'
         ? functionText
         : `// The following is a function written in ${language}.
 
@@ -252,12 +245,12 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
     }
 
     prompt =
-      language === 'plaintext'
+      language === 'plaintext' || language === 'handlebars'
         ? prompt
         : prompt + `\n// Task: ${functionText}\n`
 
     prompt =
-      language === 'plaintext'
+      language === 'plaintext' || language === 'handlebars'
         ? prompt
         : prompt +
           '\n' +
@@ -281,9 +274,6 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
 
     const _inputs = []
     const _outputs = []
-    
-
-    
 
     // @ts-ignore
     inspectorData?.data?.inputs?.forEach((input: any) => {
@@ -296,8 +286,6 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
     })
 
     const prompt = makeGeneratePrompt(functionText, language, _inputs, _outputs)
-
-    
 
     const response = await fetch(
       'https://api.openai.com/v1/engines/code-davinci-002/completions',
@@ -322,7 +310,7 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
     const d = language === 'python' ? '# ' : '// '
 
     const header =
-      language === 'plaintext'
+      language === 'plaintext' || language === 'handlebars'
         ? `Task: ${functionText}\n`
         : `${d}Task: ${functionText}
 ${d}Outputs: ${_outputs.join(', ')}
@@ -338,7 +326,6 @@ ${
 }`
 
     const json = await response.json()
-    
 
     const completion = json.choices[0].text
 
