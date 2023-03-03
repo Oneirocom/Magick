@@ -62,13 +62,19 @@ export const spell = (app: Application) => {
           }).then(async (param) => {
               if (param.data.length >= 1) {
                 console.log(data.name+'(%)')
+
                 await context.service.find({
                   query: {
-                    name: {
+                    name: process.env.DB_TYPE === 'postgres' ? {
                       $ilike: data.name+' (%)'
+                    } : {
+                      // ilike is not supported by sqlite
+                      $like: data.name+' (%)'
                     }
                   }
-                }).then((val) => {                 
+                })
+                
+                .then((val) => {                 
                   context.data.name = data.name + " (" + (1+val.data.length) +")"
                 })
               }

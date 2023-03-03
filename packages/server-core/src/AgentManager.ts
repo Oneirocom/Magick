@@ -1,5 +1,5 @@
 import Agent from './Agent'
-import { projectId, ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
+import { projectId, AGENT_WEBSERVER_PORT_RANGE } from '@magickml/engine'
 import { app } from './app'
 
 // if the user is running the app locally, sort by their project id
@@ -148,7 +148,7 @@ export class AgentManager {
   }
 
   async onCreate() {
-    const ports: string[] = ((ENTITY_WEBSERVER_PORT_RANGE?.split(
+    const ports: string[] = ((AGENT_WEBSERVER_PORT_RANGE?.split(
       '-'
     ) as any) ?? ['10001', '10100']) as string[]
     let portStart: number = parseInt(ports[0])
