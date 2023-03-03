@@ -16,7 +16,7 @@ function getAgentMethods() {
 const RestPlugin = new ServerPlugin({
   name: 'RestPlugin', 
   nodes: [], 
-  services: {'RestPlugin': ApiService},
+  services: {'api': ApiService},
   agentMethods: getAgentMethods(),
   inputTypes: ['REST API (GET)', 'REST API (POST)', 'REST API (PUT)', 'REST API (PATCH)', 'REST API (DELETE)'],
   outputTypes: ['REST API (Response)'],
