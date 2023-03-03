@@ -11,12 +11,13 @@ class LoopManager {
     this.agents = new Map()
   }
   addAgent({ agent }) {
-    const loopInterval = parseInt(agent.data.loop_interval)
+    const loopInterval = parseInt(agent.data.loop_interval) * 1000
     if (!loopInterval) {
       return console.error('Loop Interval must be a number greater than 0')
     }
     this.agents.set(agent.projectId + '-' + agent.id, agent)
     agent.loopHandler = setInterval(async () => {
+      console.log('running loop')
       const resp = await agent.spellHandler({
         content: 'loop',
         sender: 'loop',
