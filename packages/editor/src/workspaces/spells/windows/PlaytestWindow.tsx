@@ -239,7 +239,6 @@ const Playtest = ({ tab }) => {
     const playtestInputName = playtestNode?.data.name || 'Input - Default'
 
     if (!playtestInputName) return
-    publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
 
     publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
 
@@ -252,10 +251,7 @@ const Playtest = ({ tab }) => {
         [playtestInputName as string]: toSend,
       },
     })
-<<<<<<< HEAD
-=======
-
->>>>>>> a3321c98 (Comment out send to playtest in input, default true in output)
+    
     publish($PLAYTEST_INPUT(tab.id), toSend)
     client.io.on(`${tab.id}-error`, data => {
       //publish($DEBUG_PRINT(tab.id), (data.error.message))
