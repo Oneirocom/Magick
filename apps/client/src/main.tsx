@@ -35,7 +35,7 @@ if (window !== window.parent) {
 
         const Root = () => <MagickIDE config={config} />
         const container = document.getElementById('root')
-        const root = createRoot(container!) // createRoot(container!) if you use TypeScript
+        const root = createRoot(container) // createRoot(container!) if you use TypeScript
         ;(window as any).root = root
         root.render(<Root />)
       }
@@ -44,7 +44,7 @@ if (window !== window.parent) {
   )
 } else {
   const container = document.getElementById('root')
-  const root = createRoot(container!) // createRoot(container!) if you use TypeScript
+  const root = createRoot(container) // createRoot(container!) if you use TypeScript
   ;(window as any).root = root
   const config: MagickIDEProps = {
     apiUrl,
