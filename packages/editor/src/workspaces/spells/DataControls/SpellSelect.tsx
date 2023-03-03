@@ -1,13 +1,12 @@
 import { GraphData } from '@magickml/engine'
 import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
-
-import { Select } from '@magickml/client-core' 
+import md5 from 'md5'
+import { Select } from '@magickml/client-core'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { getSpellApi } from '../../../state/api/spells'
 import { useAppDispatch } from '../../../state/hooks'
 import { openTab } from '../../../state/tabs'
-
 import defaultGraph from '../../../data/graphs/default'
 
 const ModuleSelect = ({ control, updateData, initialValue }) => {
@@ -76,6 +75,7 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
         name: value,
         graph: defaultGraph as unknown as GraphData,
         projectId: config.projectId,
+        hash: md5(Math.random()),
       })
 
       getSpell({
