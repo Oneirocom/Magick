@@ -141,7 +141,7 @@ export class AgentManager {
       // rewrite as a feathers service call to empty
       //@ts-ignore
       await app.service('agents').patch(agents[i].id, {
-        dirty: 'true',
+        dirty: true,
         spells: [],
       })
     }
@@ -171,7 +171,7 @@ export class AgentManager {
     const data = {
       ...obj.data,
       id: obj.id,
-      enabled: obj.enabled,
+      enabled: obj.enabled ? true : false,
       dirty: obj.dirty ? true : false,
       spells: obj.spells,
       updated_at: obj.updated_at,
