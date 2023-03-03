@@ -150,7 +150,7 @@ export const initEditor = function ({
     server: false,
   }) as MagickEngineClient
   engine.magick = magick
-  
+
   if (client) {
     editor.use<Plugin, ModulePluginArgs>(ModulePlugin, { engine })
     editor.use<Plugin, SocketPluginArgs>(SocketPlugin, { client })
@@ -191,7 +191,7 @@ export const initEditor = function ({
   // ██╔═══╝ ██║   ██║██╔══██╗██║     ██║██║
   // ██║     ╚██████╔╝██████╔╝███████╗██║╚██████╗
   // ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝
-  editor.onSpellUpdated = (spellName: string, callback: Function) => {
+  editor.onSpellUpdated = (spellName: string, callback: () => void) => {
     return magick.onSubspellUpdated(spellName, callback)
   }
 
