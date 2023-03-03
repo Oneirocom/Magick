@@ -104,6 +104,11 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
       let currentValue = values.find(v => v.name === data)
 
+      const connections = node.getConnections()
+      connections.forEach(c => {
+        this.editor?.removeConnection(c)
+      })
+      
       if (!currentValue.trigger) {
         node.removeOutput(trigger)
       }
