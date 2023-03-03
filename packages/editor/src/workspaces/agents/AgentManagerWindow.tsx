@@ -24,7 +24,6 @@ const AgentManagerWindow = () => {
     data = {
       projectId: config.projectId,
       spells: [],
-      dirty: true,
       enabled: true,
       name: 'My Agent',
       updated_at: '',

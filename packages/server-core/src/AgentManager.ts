@@ -80,10 +80,6 @@ export class AgentManager {
       if (this.newAgents[i].dirty) {
         await this.removeAgent(this.newAgents[i].id)
         await this.addAgent(this.newAgents[i])
-
-        await app.service('agents').patch(this.newAgents[i].id, {
-          dirty: false,
-        })
       }
     }
 
@@ -145,6 +141,7 @@ export class AgentManager {
       // rewrite as a feathers service call to empty
       //@ts-ignore
       await app.service('agents').patch(agents[i].id, {
+        dirty: 'true',
         spells: [],
       })
     }
@@ -175,7 +172,7 @@ export class AgentManager {
       ...obj.data,
       id: obj.id,
       enabled: obj.enabled,
-      dirty: obj.dirty,
+      dirty: obj.dirty ? true : false,
       spells: obj.spells,
       updated_at: obj.updated_at,
     }

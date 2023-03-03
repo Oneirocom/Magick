@@ -37,7 +37,7 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
     }
     // Avoid server-side validation error
     _data.spells = Array.isArray(_data?.spells) ? _data.spells : []
-
+    _data.dirty = true
     axios
       .patch(`${config.apiUrl}/agents/${id}`, _data)
       .then(res => {
