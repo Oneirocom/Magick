@@ -21,8 +21,11 @@ class Plugin {
   nodes: any
   inputTypes: any[]
   outputTypes: any[]
-  startKey?: string
-  constructor({ name, nodes = [], inputTypes = [], outputTypes = [] }) {
+  constructor({
+    name, nodes = [],
+    inputTypes = [] as any[],
+    outputTypes = [] as any[]
+  }) {
     this.name = name
     this.nodes = nodes
     this.inputTypes = inputTypes
@@ -82,7 +85,7 @@ export class ServerPlugin extends Plugin {
     services = [],
     inputTypes = [],
     outputTypes = [],
-    serverInit = null,
+    serverInit = () => {},
     agentMethods = {
       start: () => {
         console.log('starting plugin')
@@ -175,6 +178,12 @@ class PluginManager {
 }
 
 class ClientPluginManager extends PluginManager {
+  pluginList: Array<ClientPlugin>
+  constructor() {
+    super()
+    this.pluginList = new Array<ClientPlugin>()
+  }
+
   getAgentComponents() {
     const agentComp = []
     this.pluginList.forEach((plugin: ClientPlugin) => {
@@ -264,12 +273,18 @@ class ClientPluginManager extends PluginManager {
 }
 
 class ServerPluginManager extends PluginManager {
+  pluginList: Array<ServerPlugin>
+  constructor() {
+    super()
+    this.pluginList = new Array<ServerPlugin>()
+  }
+  
   getAgentStartMethods() {
     let agentStartMethods = {}
     this.pluginList.forEach((plugin: ServerPlugin) => {
       if (plugin.agentMethods) {
         const obj = {}
-        obj[plugin.startKey] = plugin.agentMethods.start
+        obj[plugin.name] = plugin.agentMethods.start
         agentStartMethods = { ...agentStartMethods, ...obj }
       }
     })
