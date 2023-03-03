@@ -24,6 +24,8 @@ export const requestSchema = Type.Object(
     hidden: Type.Boolean(),
     processed: Type.Boolean(),
     cost: Type.Optional(Type.Number()),
+    spell: Type.Optional(Type.String()),
+    nodeId: Type.Optional(Type.Number()),
   },
   { $id: 'Request', additionalProperties: false }
 )
@@ -49,6 +51,8 @@ export const requestDataSchema = Type.Pick(requestSchema, [
   'hidden',
   'processed',
   'cost',
+  'spell',
+  'nodeId',
 ], {
   $id: 'RequestData'
 })
@@ -81,6 +85,8 @@ export const requestQueryProperties = Type.Pick(requestSchema, [
   'hidden',
   'processed',
   'cost',
+  'spell',
+  'nodeId',
 ])
 export const requestQuerySchema = Type.Intersect(
   [

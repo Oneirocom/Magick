@@ -111,9 +111,9 @@ export class TextCompletion extends MagickComponent<
       .add(stop)
 
     return node
+      .addInput(dataInput)
       .addInput(inp)
       .addInput(settings)
-      .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(outp)
   }
@@ -174,7 +174,11 @@ export class TextCompletion extends MagickComponent<
       stop: filteredStop,
     }
 
-    const data = await makeCompletion(body, projectId)
+    const data = await makeCompletion(body, {
+      projectId,
+      spell: node.data.spell,
+      nodeId: node.id,
+    })
 
     const { success, choice } = data
 

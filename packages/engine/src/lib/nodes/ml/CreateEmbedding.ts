@@ -58,7 +58,11 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
         const data = await makeEmbedding({
             input: content,
             model: 'text-embedding-ada-002',
-        }, projectId)
+        }, {
+            projectId,
+            spell: node.spell,
+            nodeId: node.id,
+        })
 
         console.log('data', data)
 
