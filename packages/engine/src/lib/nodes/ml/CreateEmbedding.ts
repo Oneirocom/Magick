@@ -56,6 +56,7 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
         if (!content) return console.log('Content is null, not storing event')
 
         const data = await makeEmbedding({
+            apiKey: null,
             input: content,
             model: 'text-embedding-ada-002',
         }, {
