@@ -1,7 +1,8 @@
 const dotenv = require('dotenv-flow');
 dotenv.config('../');
 
-console.log('Installation plugins', process.env.PLUGINS)
+console.log('Server plugins', process.env.SERVER_PLUGINS)
+console.log('Client plugins', process.env.CLIENT_PLUGINS)
 
 const serverPlugins = process.env.SERVER_PLUGINS ? process.env.SERVER_PLUGINS.split(',').map(
   (plugin) => {

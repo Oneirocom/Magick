@@ -2,7 +2,7 @@ import axios from 'axios';
 import { calculateEmbeddingCost, EmbeddingModel } from '@magickml/cost-calculator'
 
 import { OPENAI_API_KEY, OPENAI_ENDPOINT } from '../config';
-import { saveRequest } from './saveRequest';
+import { saveRequest, RequestData } from './saveRequest';
 
 export type EmbeddingData = {
   input: string
@@ -12,7 +12,11 @@ export type EmbeddingData = {
 
 export async function makeEmbedding(
   data: EmbeddingData,
-  projectId: string,
+  {
+    projectId,
+    spell,
+    nodeId,
+  }: RequestData
 ): Promise<any> {
   const {
     input, model = 'text-embedding-ada-002', apiKey,
@@ -59,6 +63,8 @@ export async function makeEmbedding(
       cost: totalCost ?? 0,
       hidden: false,
       processed: false,
+      spell,
+      nodeId
     })
     return resp.data
   } catch (err) {
