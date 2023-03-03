@@ -311,6 +311,7 @@ class ServerPluginManager extends PluginManager {
         serviceList.push([key, plugin.services[key]])
       })
     })
+    console.log('got services', serviceList)
     return serviceList
   }
 
