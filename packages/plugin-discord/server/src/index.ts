@@ -1,5 +1,5 @@
 import { ServerPlugin, WorldManager } from "@magickml/engine"
-import { UploadService } from './services/Upload/Upload.class'
+import { UploadService } from '../../../server-core/src/services/Upload.class'
 
 type StartDiscordArgs = {
   agent: any,
@@ -77,7 +77,6 @@ function getAgentMethods() {
 const DiscordPlugin = new ServerPlugin({
   name: 'DiscordPlugin', 
   nodes: [], 
-  services: {'DiscordPlugin': UploadService},
   inputTypes: ['Discord (Voice)', 'Discord (Text)'],
   outputTypes: ['Discord (Voice)', 'Discord (Text)'],
   serverInit: null,

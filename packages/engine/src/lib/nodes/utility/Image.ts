@@ -60,7 +60,7 @@ export class Image extends MagickComponent<any> {
   async worker(node: NodeData) {
     const _var = node?.data?._var as string
     const params = new URLSearchParams([['id', node.id]]);
-    const result = await axios.get(`${API_ROOT_URL}/DiscordPlugin`, { params });
+    const result = await axios.get(`${API_ROOT_URL}/upload`, { params });
     return {
       output: result ? (result.data as any) : '',
     }
