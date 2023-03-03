@@ -1,29 +1,10 @@
 import { buildMagickInterface } from './buildMagickInterface'
-import { tts_tiktalknet } from './tiktalknet'
-import { tts } from './googleTextToSpeech'
 import { SpellManager, WorldManager, pluginManager } from '@magickml/engine'
 import { app } from './app'
 
-type StartLoopArgs = {
-  spellHandler: any
-  loop_interval?: string
-  agent_name?: string
-}
-
-type EntityData = {
-  loop_enabled?: boolean
-  loop_interval?: string
-  root_spell?: string
-  agent_name?: string
-  eth_private_key?: string
-  eth_public_address?: string
-  openai_api_key?: string
-  entity?: any
-}
-
 type AgentData = {
   id: any
-  data: EntityData
+  data: any
   name: string
   projectId: string
   spellManager: SpellManager
@@ -42,7 +23,6 @@ export class Agent {
   projectId: string
   worldManager: WorldManager
 
-
   constructor(data: AgentData) {
     this.id = data.id
     this.data = data
@@ -53,59 +33,30 @@ export class Agent {
       cache: false,
     })
     this.worldManager = new WorldManager()
-
     ;(async () => {
-      const spell = (await app.service('spells').find({
-        query: { projectId: data.projectId}
-      })).data[0]
+      const spell = (
+        await app.service('spells').find({
+          query: { projectId: data.projectId },
+        })
+      ).data[0]
 
       const spellRunner = await this.spellManager.load(spell)
 
-      const agentStartMethods = pluginManager.getAgentStartMethods();
+      const agentStartMethods = pluginManager.getAgentStartMethods()
       for (const method of Object.keys(agentStartMethods)) {
         console.log('method', method)
-        await agentStartMethods[method]({ ...data, agent: this, spellRunner, worldManager: this.worldManager })
+        await agentStartMethods[method]({
+          ...data,
+          agent: this,
+          spellRunner,
+          worldManager: this.worldManager,
+        })
       }
     })()
   }
 
-  async startLoop({
-    spellHandler,
-    loop_interval,
-    agent_name,
-  }: StartLoopArgs) {
-    if (this.loopHandler) {
-      throw new Error('Loop already running for this client on this instance')
-    }
-
-    const loopInterval = parseInt(loop_interval)
-    if (typeof loopInterval === 'number' && loopInterval > 0) {
-      this.loopHandler = setInterval(async () => {
-        const resp = await spellHandler({
-          content: 'loop',
-          sender: 'loop',
-          observer: agent_name,
-          client: 'loop',
-          channel: 'auto',
-          channelType: 'loop',
-          projectId: this.projectId,
-          entities: [],
-        })
-      }, loopInterval)
-    } else {
-      throw new Error('Loop Interval must be a number greater than 0')
-    }
-  }
-  async stopLoop() {
-    if (this.loopHandler && this.loopHandler !== undefined) {
-      clearInterval(this.loopHandler)
-      this.loopHandler = null
-    }
-  }
-
-
   async onDestroy() {
-    const agentStopMethods = pluginManager.getAgentStopMethods();
+    const agentStopMethods = pluginManager.getAgentStopMethods()
     console.log('agentStopMethods', agentStopMethods)
     for (const method of Object.keys(agentStopMethods)) {
       console.log('method', method)

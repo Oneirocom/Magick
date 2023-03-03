@@ -204,8 +204,7 @@ export const DiscordAgentWindow: FC<any> = props => {
                       name="voice_provider"
                       id="voice_provider"
                       className="select"
-                      value={agentData.data?.voice_provider}
-                      placeholder={'Voice Provider'}
+                      value={agentData.data?.voice_provider ?? 'Google'}
                       onChange={e => {
                         setAgentData({
                           ...agentData,
@@ -216,7 +215,6 @@ export const DiscordAgentWindow: FC<any> = props => {
                         })
                       }}
                     >
-                      <option hidden></option>
                       <option value={'google'}>Google</option>
                       <option value={'tiktalknet'}>Tiktalknet</option>
                     </select>
@@ -230,7 +228,7 @@ export const DiscordAgentWindow: FC<any> = props => {
                         className="select"
                         name="voice_character"
                         id="voice_character"
-                        value={agentData.data?.voice_character}
+                        value={agentData.data?.voice_character ?? 'en-US-Standard-A'}
                         onChange={e => {
                           setAgentData({
                             ...agentData,
@@ -241,7 +239,6 @@ export const DiscordAgentWindow: FC<any> = props => {
                           })
                         }}
                       >
-                        <option hidden></option>
                         <option value={'en-US-Standard-A'}>
                           en-US-Standard-A
                         </option>
@@ -343,7 +340,7 @@ export const DiscordAgentWindow: FC<any> = props => {
                       name="voice_language_code"
                       id="voice_language_code"
                       className="select"
-                      value={agentData.data?.voice_language_code}
+                      value={agentData.data?.voice_language_code ?? 'none'}
                       onChange={e => {
                         setAgentData({
                           ...agentData,
