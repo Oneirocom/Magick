@@ -100,7 +100,7 @@ const Playtest = ({ tab }) => {
     return selectStateBytabId(state.localState, tab.id)
   })
   const client = FeathersContext?.client
-  const { $PLAYTEST_INPUT, $PLAYTEST_PRINT, $DEBUG_PRINT, $SAVE_SPELL_DIFF } = events
+  const { $PLAYTEST_INPUT, $PLAYTEST_PRINT, $SAVE_SPELL_DIFF } = events
 
   const printToConsole = useCallback(
     (_, _text) => {
@@ -123,14 +123,27 @@ const Playtest = ({ tab }) => {
     if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
       return
 
-    const options = ['Default', ...pluginManager.getInputTypes()]
+    const optionsTest = ['Default', ...pluginManager.getInputTypes()]
+    console.log('OPTIONS TEST', optionsTest)
 
-    const optionsObj = options.map((option: any) => ({
-      value: option,
-      label: option,
-    }))
+    const graph = spellData.data[0].graph
 
-    setPlaytestOptions(optionsObj)
+    console.log('GRAPH!!!', graph)
+    const options = Object.values(graph.nodes)
+      .filter((node: any) => {
+        return node.data.playtestToggle
+      })
+      .map((node: any) => ({
+        value: node.data.name ?? node.name,
+        label: node.data.name ?? node.name,
+      }))
+
+    // const optionsObj = options.map((option: any) => ({
+    //   value: option,
+    //   label: option,
+    // }))
+
+    setPlaytestOptions(options)
   }, [spellData])
 
   // Keep scrollbar at bottom of its window
@@ -193,7 +206,7 @@ const Playtest = ({ tab }) => {
       enqueueSnackbar('No data provided', {
         variant: 'error',
       })
-      return;
+      return
     }
 
     // validate the json
@@ -203,7 +216,7 @@ const Playtest = ({ tab }) => {
       enqueueSnackbar('Invalid data - JSON is poorly formatted', {
         variant: 'error',
       })
-      return;
+      return
     }
 
     toSend = {
@@ -223,10 +236,7 @@ const Playtest = ({ tab }) => {
     if (!graph) return
 
     const playtestNode = Object.values(graph.nodes).find(node => {
-      return (
-        node.data.playtestToggle &&
-        node.data.name === `Input - ${playtestOption}`
-      )
+      return node.data.playtestToggle && node.data.name === playtestOption
     })
 
     if (!playtestNode) {
@@ -237,6 +247,7 @@ const Playtest = ({ tab }) => {
     const playtestInputName = playtestNode?.data.name || 'Input - Default'
 
     if (!playtestInputName) return
+
     client.service('spell-runner').create({
       spellName: tab.name.split('--')[0],
       id: tab.id,
@@ -245,6 +256,7 @@ const Playtest = ({ tab }) => {
         [playtestInputName as string]: toSend,
       },
     })
+
     publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
     publish($PLAYTEST_INPUT(tab.id), toSend)
     client.io.on(`${tab.id}-error`, data => {
