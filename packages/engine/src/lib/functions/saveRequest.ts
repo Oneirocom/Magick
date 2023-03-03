@@ -15,6 +15,14 @@ type RequestPayload = {
   hidden?: boolean
   processed?: boolean
   cost?: number
+  spell?: any
+  nodeId?: number
+}
+
+export type RequestData = {
+  spell: string
+  projectId: string
+  nodeId: number
 }
 
 export function saveRequest({
@@ -31,6 +39,8 @@ export function saveRequest({
   hidden,
   processed,
   cost,
+  spell,
+  nodeId,
 }: RequestPayload) {
   console.log('saveRequest', projectId, requestData, responseData, model, duration, status, statusCode, parameters, provider, type, hidden, processed, cost)
   const app = globalsManager.get('feathers')
@@ -50,5 +60,7 @@ export function saveRequest({
     hidden,
     processed,
     cost,
+    spell,
+    nodeId
   })
 }
