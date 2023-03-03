@@ -24,11 +24,12 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const [saveSpellMutation] = spellApi.useSaveSpellMutation()
   const [saveDiff] = spellApi.useSaveDiffMutation()
-  const [getSpell, { data: spell, isLoading }] = spellApi.useLazyGetSpellByIdQuery({
-    spellName: tab.name.split('--')[0],
-    id: tab.id,
-    projectId: config.projectId,
-  })
+  const [getSpell, { data: spell, isLoading }] =
+    spellApi.useLazyGetSpellByIdQuery({
+      spellName: tab.name.split('--')[0],
+      id: tab.id,
+      projectId: config.projectId,
+    })
   const preferences = useSelector(
     (state: RootState) => state.preferences
   ) as any
@@ -45,7 +46,7 @@ const EventHandler = ({ pubSub, tab }) => {
       id: tab.id,
       projectId: config.projectId,
     })
-    console.log("Updated")
+    console.log('Updated')
     spellRef.current = spell?.data[0]
   }, [spell])
 
@@ -81,7 +82,6 @@ const EventHandler = ({ pubSub, tab }) => {
       hash: md5(JSON.stringify(graph)),
     }
 
-    
     const response = await saveSpellMutation({
       spell: updatedSpell,
       projectId: config.projectId,
@@ -90,7 +90,7 @@ const EventHandler = ({ pubSub, tab }) => {
     const jsonDiff = diff(currentSpell, updatedSpell)
 
     if (jsonDiff.length !== 0) {
-            // save diff to spell runner if something has changed.  Will update spell in spell runner session
+      // save diff to spell runner if something has changed.  Will update spell in spell runner session
       client.service('spell-runner').update(currentSpell.id, {
         diff: jsonDiff,
         projectId: config.projectId,
@@ -110,7 +110,6 @@ const EventHandler = ({ pubSub, tab }) => {
   }
 
   const onSaveDiff = async (event, update) => {
-    
     if (!spellRef.current) return
 
     const currentSpell = spellRef.current
@@ -118,14 +117,14 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
-    
+
     const jsonDiff = diff(currentSpell, updatedSpell)
 
-        updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
+    updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
-    console.log(jsonDiff)
+
     try {
       await client.service('spell-runner').update(currentSpell.id, {
         diff: jsonDiff,
@@ -156,7 +155,6 @@ const EventHandler = ({ pubSub, tab }) => {
       })
       return
     }
-
   }
 
   const createAvatarWindow = () => {
@@ -190,7 +188,6 @@ const EventHandler = ({ pubSub, tab }) => {
     const editor = getEditor()
     if (!editor) return
 
-    
     editor.runProcess()
   }
 
@@ -208,7 +205,7 @@ const EventHandler = ({ pubSub, tab }) => {
 
   const onExport = async () => {
     // refetch spell from local DB to ensure it is the most up to date
-        const spell = { ...spellRef.current }
+    const spell = { ...spellRef.current }
     spell.graph = serialize() as GraphData
 
     const json = JSON.stringify(spell)
