@@ -43,7 +43,7 @@ export class Upload extends React.Component<UploadProps, UploadState> {
     fileToDataUri(file).then(dataUri => {
       axios({
         method: 'post',
-        url: `${VITE_APP_API_URL}/DiscordPlugin`,
+        url: `${VITE_APP_API_URL}/upload`,
         data: {
           id: this.id_image,
           uri: dataUri,
