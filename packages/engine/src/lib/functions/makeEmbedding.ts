@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { calculateEmbeddingCost, EmbeddingModel } from '@magickml/cost-calculator'
 
-import { OPENAI_API_KEY, OPENAI_ENDPOINT } from '../config';
+import { OPENAI_ENDPOINT } from '../config';
 import { saveRequest, RequestData } from './saveRequest';
 
 export type EmbeddingData = {
   input: string
   model?: string
-  apiKey?: string
+  apiKey: string
 }
 
 export async function makeEmbedding(
@@ -22,13 +22,9 @@ export async function makeEmbedding(
     input, model = 'text-embedding-ada-002', apiKey,
   } = data;
 
-  const API_KEY = apiKey || OPENAI_API_KEY;
-
-  console.log('API_KEY', API_KEY)
-
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + API_KEY,
+    Authorization: 'Bearer ' + apiKey,
   };
 
   // start a timer

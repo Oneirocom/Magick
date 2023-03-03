@@ -1,11 +1,10 @@
 import { runSpell } from './utils/runSpell'
-import { API_ROOT_URL, APP_SEARCH_SERVER_URL } from '@magickml/engine'
+import { API_ROOT_URL } from '@magickml/engine'
 import { app } from './app'
 
 export const buildMagickInterface = (overrides: Record<string, Function> = {}) => {
   const env = {
     API_ROOT_URL,
-    APP_SEARCH_SERVER_URL
   }
 
   return {
