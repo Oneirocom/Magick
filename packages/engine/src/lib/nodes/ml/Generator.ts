@@ -83,7 +83,6 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     })
 
     const fewshotControl = new FewshotControl({
-      name: 'Prompt Template',
       language: 'handlebars',
     })
 
@@ -191,9 +190,15 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       presence_penalty,
       stop: filteredStop,
     }
+
+
     
     try {
-      const { success, choice } = await makeCompletion(body, projectId)
+      const { success, choice } = await makeCompletion(body, {
+        projectId,
+        spell: node.data.spell,
+        nodeId: node.id,
+      })
 
       if (!success) throw new Error('Error in generator')
 

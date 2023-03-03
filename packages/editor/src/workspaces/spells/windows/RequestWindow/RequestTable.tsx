@@ -84,6 +84,14 @@ function EventTable({ requests, updateCallback }) {
         accessor: 'type',
       },
       {
+        Header: 'Spell',
+        accessor: 'spell',
+      },
+      {
+        Header: 'Node ID',
+        accessor: 'nodeId',
+      },
+      {
         Header: 'Cost',
         accessor: 'cost',
       },

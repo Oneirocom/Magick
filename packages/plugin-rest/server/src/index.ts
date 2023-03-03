@@ -1,5 +1,5 @@
 import { ServerPlugin } from "@magickml/engine"
-import { RestApiService } from './services/rest-api/rest-api.class'
+import { ApiService } from './services/api/api.class'
 
 function getAgentMethods() {
 
@@ -16,9 +16,7 @@ function getAgentMethods() {
 const RestPlugin = new ServerPlugin({
   name: 'RestPlugin', 
   nodes: [], 
-  services: {'RestPlugin': RestApiService},
-  serverInit: null,
-  serverRoutes: null,
+  services: {'RestPlugin': ApiService},
   agentMethods: getAgentMethods(),
   inputTypes: ['REST API (GET)', 'REST API (POST)', 'REST API (PUT)', 'REST API (PATCH)', 'REST API (DELETE)'],
   outputTypes: ['REST API (Response)'],
