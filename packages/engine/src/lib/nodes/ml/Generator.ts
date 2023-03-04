@@ -94,7 +94,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     })
 
     const temperatureControl = new InputControl({
-      dataKey: 'temp',
+      dataKey: 'temperature',
       name: 'Temperature',
       icon: 'temperature',
       defaultValue: 0.7,
@@ -136,8 +136,6 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       projectId,
       magick,
     } = context
-
-    console.log('context', context)
 
     const currentSpell = magick.getCurrentSpell()
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
