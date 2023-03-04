@@ -17,6 +17,7 @@ export const spellRunner = (app: Application) => {
   app.service('spell-runner').hooks({
     around: {
       all: [
+        
       ]
     },
     before: {

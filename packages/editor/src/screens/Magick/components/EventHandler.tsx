@@ -124,6 +124,9 @@ const EventHandler = ({ pubSub, tab }) => {
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
+    //While Importing spell, the graph is first created, then the imported graph is loaded
+    //This might be causing issue at the server end.
+    if ((updatedSpell.graph.nodes.length) === 0) return
 
     try {
       await client.service('spell-runner').update(currentSpell.id, {

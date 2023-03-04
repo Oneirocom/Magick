@@ -69,37 +69,38 @@ export const DiscordAgentWindow: FC<any> = props => {
         position: 'relative',
       }}
     >
-      <Switch
-        label={null}
-        checked={agentData.data?.discord_enabled}
-        onChange={e => {
-          if (!e.target.checked) {
-            setAgentData({
-              ...agentData,
-              data: {
-                ...agentData.data,
-                use_voice: 'off',
-                discord_bot_name_regex: '',
-                discord_api_key: '',
-                discord_bot_name: '',
-                discord_starting_words: '',
-                voice_character: '',
-                voice_provider: '',
-                voice_language_code: '',
-                tiktalknet_url: '',
-                discord_enabled: false,
-              },
-            })
-          } else {
-            setAgentData({
-              ...agentData,
-              data: { ...agentData.data, discord_enabled: e.target.checked },
-            })
-          }
-        }}
-        style={{ float: 'right' }}
-      />
       <h3>Discord</h3>
+      <div style={{ position: 'absolute', right: '1em', top: '0' }}>
+        <Switch
+          label={null}
+          checked={agentData.data?.discord_enabled}
+          onChange={e => {
+            if (!e.target.checked) {
+              setAgentData({
+                ...agentData,
+                data: {
+                  ...agentData.data,
+                  use_voice: 'off',
+                  discord_bot_name_regex: '',
+                  discord_api_key: '',
+                  discord_bot_name: '',
+                  discord_starting_words: '',
+                  voice_character: '',
+                  voice_provider: '',
+                  voice_language_code: '',
+                  tiktalknet_url: '',
+                  discord_enabled: false,
+                },
+              })
+            } else {
+              setAgentData({
+                ...agentData,
+                data: { ...agentData.data, discord_enabled: e.target.checked },
+              })
+            }
+          }}
+        />
+      </div>
       {agentData.data?.discord_enabled && (
         <>
           <Grid container>

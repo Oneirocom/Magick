@@ -54,6 +54,7 @@ const CreateNew = () => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const [newSpell] = spellApi.useNewSpellMutation()
+  const [spellExists] = spellApi.useLazyGetSpellQuery()
   const { register, handleSubmit } = useForm()
 
   const onCreate = handleSubmit(async data => {
@@ -61,6 +62,17 @@ const CreateNew = () => {
       if (!selectedTemplate) return
       const placeholderName = uniqueNamesGenerator(customConfig)
       const name = data.name || placeholderName
+      const spellCheck = await spellExists({
+        spellName: name,
+        projectId: config.projectId,
+        hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
+      })
+      if (spellCheck.data.total > 0){
+        enqueueSnackbar("A spell with that name already exists", {
+          variant: 'error',
+        })
+        return;
+      }
       const response = await newSpell({
         graph: selectedTemplate.graph,
         name,
