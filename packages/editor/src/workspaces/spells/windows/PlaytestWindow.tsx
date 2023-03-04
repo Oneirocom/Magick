@@ -116,8 +116,8 @@ const Playtest = ({ tab }) => {
   const [playtestOptions, setPlaytestOptions] = useState<Record<
     string,
     any
-  > | null>(['Default'])
-  const [playtestOption, setPlaytestOption] = useState('Default')
+  > | null>([])
+  const [playtestOption, setPlaytestOption] = useState(null)
 
   useEffect(() => {setPlaytestOption
     if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
@@ -136,7 +136,6 @@ const Playtest = ({ tab }) => {
     setPlaytestOptions(options)
     if(options.length > 0)
       setPlaytestOption(options[0].value)
-    else setPlaytestOption('Default')
   }, [spellData])
 
   // Keep scrollbar at bottom of its window
@@ -300,10 +299,9 @@ const Playtest = ({ tab }) => {
         options={playtestOptions}
         onChange={onSelectChange}
         defaultValue={{
-          value: playtestOption || 'Default',
-          label: playtestOption || 'Default',
+          value: playtestOption || null,
+          label: playtestOption || 'No Inputs Found',
         }}
-        placeholder={playtestOption || 'Default'}
         creatable={false}
       />
 

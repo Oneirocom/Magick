@@ -39,11 +39,11 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const agentService = this.options.app.service('agents')
     // get the agent by id
     const agent = await agentService.get(id)
-    // get the agentData
-    const agentData = agent.data
-    console.log('AGENT DATA', agentData)
-    // get the agentData's spells
-    const rootSpell = agentData.root_spell
+    // get the selectedAgentData
+    const selectedAgentData = agent.data
+    console.log('AGENT DATA', selectedAgentData)
+    // get the selectedAgentData's spells
+    const rootSpell = selectedAgentData.root_spell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
@@ -73,11 +73,11 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const agentService = this.options.app.service('agents')
     // get the agent by id
     const agent = await agentService.get(id)
-    // get the agentData
-    const agentData = agent.data
-    console.log('AGENT DATA', agentData)
-    // get the agentData's spells
-    const rootSpell = agentData.root_spell
+    // get the selectedAgentData
+    const selectedAgentData = agent.data
+    console.log('AGENT DATA', selectedAgentData)
+    // get the selectedAgentData's spells
+    const rootSpell = selectedAgentData.root_spell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
@@ -105,11 +105,11 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const agentService = this.options.app.service('agents')
     // get the agent by id
     const agent = await agentService.get(id)
-    // get the agentData
-    const agentData = agent.data
-    console.log('AGENT DATA', agentData)
-    // get the agentData's spells
-    const rootSpell = agentData.root_spell
+    // get the selectedAgentData
+    const selectedAgentData = agent.data
+    console.log('AGENT DATA', selectedAgentData)
+    // get the selectedAgentData's spells
+    const rootSpell = selectedAgentData.root_spell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
@@ -137,11 +137,11 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const agentService = this.options.app.service('agents')
     // get the agent by id
     const agent = await agentService.get(id)
-    // get the agentData
-    const agentData = agent.data
-    console.log('AGENT DATA', agentData)
-    // get the agentData's spells
-    const rootSpell = agentData.root_spell
+    // get the selectedAgentData
+    const selectedAgentData = agent.data
+    console.log('AGENT DATA', selectedAgentData)
+    // get the selectedAgentData's spells
+    const rootSpell = selectedAgentData.root_spell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
@@ -165,11 +165,11 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const agentService = this.options.app.service('agents')
     // get the agent by id
     const agent = await agentService.get(id)
-    // get the agentData
-    const agentData = agent.data
-    console.log('AGENT DATA', agentData)
-    // get the agentData's spells
-    const rootSpell = agentData.root_spell
+    // get the selectedAgentData
+    const selectedAgentData = agent.data
+    console.log('AGENT DATA', selectedAgentData)
+    // get the selectedAgentData's spells
+    const rootSpell = selectedAgentData.root_spell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({

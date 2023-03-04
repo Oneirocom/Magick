@@ -89,6 +89,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     const trigger = new Rete.Output('trigger', 'trigger', triggerSocket)
     const out = new Rete.Output('output', 'output', values[0].socket)
     node.data.isInput = true;
+    node.data.name = node.data.name ?? `Input - ${values[0].name}`
 
     node.addOutput(trigger).addOutput(out)
 
@@ -99,15 +100,19 @@ export class InputComponent extends MagickComponent<InputReturn> {
       defaultValue: values[0].name,
     })
 
+    let lastValue = null
     inputType.onData = data => {
       node.data.name = `Input - ${data}`
 
       let currentValue = values.find(v => v.name === data)
 
-      const connections = node.getConnections()
-      connections.forEach(c => {
-        this.editor?.removeConnection(c)
-      })
+      if(currentValue !== lastValue) {
+        const connections = node.getConnections()
+        connections.forEach(c => {
+          this.editor?.removeConnection(c)
+        })
+        lastValue = currentValue
+      }
       
       if (!currentValue.trigger) {
         node.removeOutput(trigger)
@@ -117,9 +122,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
       if (currentValue.socket) {
         node.removeOutput(out)
         node.addOutput(newOut)
-      }
-      node.data.name = node.data.name ?? `Input - ${currentValue.name}`
-    
+      }    
     }
 
     // subscribe the node to the playtest input data stream

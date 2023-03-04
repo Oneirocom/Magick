@@ -22,13 +22,12 @@ const AgentWindow = ({
 }) => {
   const config = useConfig()
   const { enqueueSnackbar } = useSnackbar()
-  const [agentData, setAgentData] = useState<any>({})
+  const [selectedAgentData, setSelectedAgentData] = useState<any>({})
   const [loaded, setLoaded] = useState(false)
 
   const [enabled, setEnabled] = useState(false)
   const [root_spell, setRootSpell] = useState('')
 
-  const agentDatVal = useRef(null)
   const [spellList, setSpellList] = useState<any[]>([])
 
   const [selectedSpellPublicVars, setSelectedSpellPublicVars] = useState<any>(
@@ -48,7 +47,7 @@ const AgentWindow = ({
         }
 
         setEnabled(res.data.enabled === true)
-        setAgentData(res.data?.data ?? {})
+        setSelectedAgentData(res.data?.data ?? {})
         setLoaded(true)
       })()
     }
@@ -61,11 +60,12 @@ const AgentWindow = ({
       )
       const json = await res.json()
       setSpellList(json.data)
-      setSelectedSpellPublicVars(
-        Object.values(
+      setSelectedAgentData({
+        ...selectedAgentData,
+        public_vars: Object.values(
           spellList.find(spell => spell.name === root_spell)?.graph.nodes || {}
-        ).filter((node: any) => node?.data?.Public)
-      )
+        ).filter((node: any) => node?.data?.isPublic),
+      })
     })()
   }, [])
 
@@ -109,7 +109,7 @@ const AgentWindow = ({
           })
           const responseData = res && JSON.parse(res?.config?.data)
           setEnabled(!!responseData.enabled)
-          setAgentData(responseData.data)
+          setSelectedAgentData(responseData.data)
           updateCallback()
         }
       })
@@ -125,7 +125,7 @@ const AgentWindow = ({
     const _data = {
       enabled: enabled ? true : false,
       data: {
-        ...agentData,
+        ...selectedAgentData,
         root_spell,
       },
     }
@@ -195,8 +195,8 @@ const AgentWindow = ({
               <RenderComp
                 key={index}
                 element={value}
-                agentData={agentDatVal.current}
-                setAgentData={setAgentData}
+                selectedAgentData={selectedAgentData}
+                setSelectedAgentData={setSelectedAgentData}
               />
             )
           })}
@@ -209,7 +209,7 @@ const AgentWindow = ({
               enabled: enabled ? true : false,
               dirty: true,
               data: {
-                ...agentData,
+                ...selectedAgentData,
                 root_spell,
               },
             }

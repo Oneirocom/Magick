@@ -1,15 +1,15 @@
 import React, { FC } from 'react'
 type PluginProps = {
-  agentData: any
+  selectedAgentData: any
   props: {
-    agentData: any
-    setAgentData: any
+    selectedAgentData: any
+    setSelectedAgentData: any
   }
 }
 import { Grid } from '@mui/material'
 import { Switch } from '@magickml/client-core'
 export const AgentLoopWindow: FC<PluginProps> = props => {
-  const { agentData, setAgentData } = props.props
+  const { selectedAgentData, setSelectedAgentData } = props.props
   return (
     <div
       style={{
@@ -21,28 +21,28 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
       <h3>Agent Update Loop</h3>
       <div style={{ position: 'absolute', right: '1em', top: '0' }}>
         <Switch
-          checked={agentData.data?.loop_enabled}
+          checked={selectedAgentData.data?.loop_enabled}
           onChange={e => {
             if (!e.target.checked) {
-              setAgentData({
-                ...agentData,
+              setSelectedAgentData({
+                ...selectedAgentData,
                 data: {
-                  ...agentData.data,
+                  ...selectedAgentData.data,
                   loop_interval: '',
                   loop_enabled: false,
                 },
               })
             } else {
-              setAgentData({
-                ...agentData,
-                data: { ...agentData.data, loop_enabled: e.target.checked },
+              setSelectedAgentData({
+                ...selectedAgentData,
+                data: { ...selectedAgentData.data, loop_enabled: e.target.checked },
               })
             }
           }}
           label={''}
         />
       </div>
-      {agentData.data?.loop_enabled && (
+      {selectedAgentData.data?.loop_enabled && (
         <div className="form-item">
           <Grid container>
             <>
@@ -51,13 +51,13 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
                 <input
                   type="text"
                   pattern="[0-9]*"
-                  defaultValue={agentData.data?.loop_interval}
+                  defaultValue={selectedAgentData.data?.loop_interval}
                   placeholder="Run every X seconds"
                   onChange={e => {
-                    setAgentData({
-                      ...agentData,
+                    setSelectedAgentData({
+                      ...selectedAgentData,
                       data: {
-                        ...agentData.data,
+                        ...selectedAgentData.data,
                         loop_interval: e.target.value,
                       },
                     })
