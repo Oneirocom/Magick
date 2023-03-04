@@ -1,5 +1,5 @@
-import { Switch } from '@magickml/client-core'
-import { Avatar, Button, Typography } from '@mui/material'
+import { IconBtn, Switch } from '@magickml/client-core'
+import { Avatar, Box, Button, Typography } from '@mui/material'
 import styles from './index.module.scss'
 import { useEffect, useState } from 'react'
 import AgentPubVariables from './AgentPubVariables'
@@ -7,6 +7,7 @@ import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { pluginManager } from '@magickml/engine'
+import { Edit, Done, Close } from '@mui/icons-material'
 
 const RenderComp = props => {
   return <props.element props={props} />
@@ -14,8 +15,10 @@ const RenderComp = props => {
 
 const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
   const [root_spell, setRootSpell] = useState('default')
+  const [editMode, setEditMode] = useState(false)
   const [spellList, setSpellList] = useState<any[]>([])
   const [updatedPubVars, setPublicVars] = useState<any>('')
+  const [name, setName] = useState<string>(agentData?.name || '')
   const config = useConfig()
 
   const [selectedSpellPublicVars, setSelectedSpellPublicVars] = useState<any[]>(
@@ -94,9 +97,44 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
     <div>
       <div className={`${styles.agentDetailsContainer}`}>
         <div className={styles.agentDescription}>
-          <Avatar className={styles.avatar}>A</Avatar>
-          <div>
-            <Typography variant="h5">{agentData.name}</Typography>
+          <Avatar className={styles.avatar}>{agentData?.name?.at(0) || 'A'}</Avatar>
+          <div onDoubleClick={()=>{setEditMode(true)}}>
+             {editMode ? (
+                  <>
+                    <Box component="div" sx={{ display: 'inline-block' }}>
+                      <input
+                          type="text"
+                          name="name"
+                          value={name}
+                          onClick={e => e.stopPropagation()}
+                          onChange={e => setName(e.target.value)}
+                          placeholder="Add new agent name here"
+                        />
+                    </Box>
+                    <Box component="div" sx={{ display: 'inline-block' }}>
+                    <div>
+                      <IconBtn
+                        label={'Done'}
+                        Icon={<Done />}
+                        onClick={e => {
+                          e.stopPropagation()
+                          update(agentData.id, { name })
+                          setEditMode(true)
+                        }}
+                      />
+                      <IconBtn
+                        label={'close'}
+                        Icon={<Close />}
+                        onClick={e => {
+                          e.stopPropagation()
+                          setEditMode(false)
+                          setName(agentData.name)
+                        }}
+                      />
+                    </div>
+                    </Box>
+                  </>
+                ) : (<Typography variant="h5" >{agentData.name}</Typography>)}
           </div>
         </div>
         <div className={styles.btns}>

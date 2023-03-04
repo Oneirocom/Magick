@@ -51,7 +51,7 @@ const StartScreen = () => {
 
     dispatch(
       openTab({
-        name: response.data.id +"-"+ encodeURIComponent(btoa(spellData.name)),
+        name: response.data.id +"-"+ encodeURIComponent(btoa(response.data.name)),
         type: 'spell',
       })
     )
