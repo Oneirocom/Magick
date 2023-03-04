@@ -92,10 +92,10 @@ export class AgentManager {
       const runningAgent = this.getAgent(agent.id)
       if (!runningAgent) continue
       // evaluate the root spell
-      if (agent.data.root_spell) {
+      if (agent.rootSpell) {
         const spell = (
           await app.service('spells').find({
-            query: { projectId, name: agent.data.root_spell },
+            query: { projectId, name: agent.rootSpell },
           })
         ).data[0]
 
@@ -108,6 +108,8 @@ export class AgentManager {
           const spellRunner = await runningAgent.spellManager.load(spell)
           runningAgent.root_spell_hash = spell.hash
         }
+      } else {
+        console.error('Agent has no root spell')
       }
 
       // evaluate all spells
@@ -174,7 +176,7 @@ export class AgentManager {
       enabled: obj.enabled ? true : false,
       dirty: obj.dirty ? true : false,
       spells: obj.spells,
-      updated_at: obj.updated_at,
+      updatedAt: obj.updatedAt,
     }
     //Overwrites even if already exists
     data.projectId = projectId

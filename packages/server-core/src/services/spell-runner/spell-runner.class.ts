@@ -21,6 +21,7 @@ interface CreateData {
   id: string
   spellName: string
   projectId: string
+  secrets: Record<string, string>
 }
 
 const getSpell = async ({ app, id, projectId }) => {
@@ -77,7 +78,7 @@ export class SpellRunnerService<
 
     if (!user) throw new Error('No user is present in service')
 
-    const { inputs, projectId, id } = data
+    const { inputs, projectId, secrets, id } = data
     const decodedId = id.length > 36 ? id.slice(0, 36) : id
     const spellManager = app.userSpellManagers.get(user.id)
 
@@ -88,7 +89,7 @@ export class SpellRunnerService<
       await spellManager.load(spell as Spell)
     }
 
-    const result = await spellManager.run(id, inputs)
+    const result = await spellManager.run(id, inputs, secrets)
 
     return result || {}
   }

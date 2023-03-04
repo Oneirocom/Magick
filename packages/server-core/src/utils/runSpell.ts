@@ -8,9 +8,11 @@ export type RunSpellArgs = {
   inputs?: Record<string, unknown>
   inputFormatter?: (graph: GraphData) => Record<string, unknown>
   projectId: string
+  secrets?: Record<string, string>
+  publicVariables?: Record<string, unknown>
 }
 
-export const runSpell = async ({ id, inputs, inputFormatter, projectId }: RunSpellArgs) => {
+export const runSpell = async ({ id, inputs, inputFormatter, projectId, secrets, publicVariables }: RunSpellArgs) => {
   const spell = (await app.service('spells').find({ query: { projectId, id: id } })).data[0] as any
   
   if (!spell?.graph) {
@@ -35,7 +37,9 @@ export const runSpell = async ({ id, inputs, inputFormatter, projectId }: RunSpe
 
   // Get the outputs from running the spell
   const outputs = await spellRunner.runComponent({
-    inputs: formattedInputs
+    inputs: formattedInputs as Record<string, any>,
+    secrets,
+    publicVariables,
   })
 
   return { outputs, name: spell.name }

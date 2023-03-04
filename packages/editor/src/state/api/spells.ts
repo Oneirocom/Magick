@@ -109,9 +109,9 @@ export const getSpellApi = (config) => {
           const spellCopy = { ...spell } as any
           if (spellCopy.id) delete spellCopy.id
           if (Object.keys(spellCopy).includes('modules')) delete spellCopy.modules
-          if (!spellCopy.created_at)
-            spellCopy.created_at = new Date().toISOString()
-          spellCopy.updated_at = new Date().toISOString()
+          if (!spellCopy.createdAt)
+            spellCopy.createdAt = new Date().toISOString()
+          spellCopy.updatedAt = new Date().toISOString()
           spellCopy.projectId = spell.projectId ?? projectId
           spellCopy.hash = md5(JSON.stringify(spellCopy.graph.nodes))
           

@@ -13,7 +13,7 @@ export namespace OpenAI {
     id: string
     object: 'fine-tune'
     model: FineTuneModel
-    created_at: number
+    createdAt: number
     events: FineTuneEvent[]
     fine_tuned_model: string
     hyperparams: Hyperparams
@@ -22,13 +22,13 @@ export namespace OpenAI {
     status: string
     validation_files: File[]
     training_files: File[]
-    updated_at: number
+    updatedAt: number
     user_id: string
   }
 
   export type FineTuneEvent = {
     object: 'fine-tune-event'
-    created_at: number
+    createdAt: number
     level: string
     message: string
   }
@@ -52,7 +52,7 @@ export namespace OpenAI {
     id: string
     object: string
     bytes: number
-    created_at: number
+    createdAt: number
     filename: string
     purpose: Purpose
   }

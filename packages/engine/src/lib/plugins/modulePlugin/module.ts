@@ -1,13 +1,27 @@
 export class Module {
+  secrets?: Record<string, string>
+  publicVariables?: Record<string, string>
   inputs: Record<string, unknown>
   outputs: Record<string, unknown>
   constructor() {
     this.inputs = {}
     this.outputs = {}
+    this.secrets = {}
+    this.publicVariables = {}
   }
 
-  read(inputs: Record<string, unknown[]>) {
+  read({
+    inputs,
+    secrets,
+    publicVariables,
+  }) {
+    console.log('read', '********')
+    console.log('inputs', inputs, '********')
+    console.log('secrets', secrets, '********')
+    console.log('publicVariables', publicVariables, '********')
     this.inputs = inputs
+    this.secrets = secrets || {} as Record<string, string>
+    this.publicVariables = publicVariables || {} as Record<string, string>
   }
 
   write(outputs: Record<string, any>) {
@@ -22,5 +36,13 @@ export class Module {
 
   setOutput(key: string, value: unknown) {
     this.outputs[key] = value
+  }
+
+  getSecrets() {
+    return this.secrets
+  }
+
+  getPublicVariables() {
+    return this.publicVariables
   }
 }

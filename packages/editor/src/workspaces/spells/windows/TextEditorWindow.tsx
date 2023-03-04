@@ -18,13 +18,20 @@ const TextEditor = props => {
   const [editorOptions, setEditorOptions] = useState<Record<string, any>>()
   const [language, setLanguage] = useState<string | undefined>(undefined)
   const codeRef = useRef<string>()
-  const openaiApiKey = JSON.parse(
-    localStorage.getItem('openai-api-key') || '{}'
-  ).apiKey
+  const [openaiApiKey, setOpenaiApiKey] = useState<string | undefined>(undefined)
+
   const { textEditorData, saveTextEditor, inspectorData } = useInspector()
   const activeTab = useSelector(activeTabSelector)
 
   const [lastInputs, setLastInputs] = useState<string>('')
+
+  useEffect(() => {
+    const secrets = localStorage.getItem('secrets')
+    if (secrets) {
+      const parsedSecrets = JSON.parse(secrets)
+      setOpenaiApiKey(parsedSecrets['openai-api-key'])
+    }
+  }, [])
 
   // const bottomHeight = 50
   const handleEditorWillMount = monaco => {

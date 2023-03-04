@@ -11,7 +11,7 @@ import {
 } from '../../types'
 import { MagickEngine } from '../../engine'
 import { Module } from './module'
-import { ModuleManager } from './module-manager'
+import { ModuleContext, ModuleManager } from './module-manager'
 import { addIO, removeIO } from './utils'
 
 //need to fix this interface.  For some reason doing the joing
@@ -209,7 +209,7 @@ function install(
           node: NodeData,
           inputs: WorkerInputs,
           outputs: MagickWorkerOutputs,
-          context: { socketInfo: { targetSocket: string } }
+          context: ModuleContext
         ) => {
           const module = await moduleManager.workerModule.call(
             moduleManager,

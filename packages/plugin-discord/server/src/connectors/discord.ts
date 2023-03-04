@@ -10,7 +10,7 @@ import emojiRegex from 'emoji-regex'
 
 let recognizeSpeech
 
-export const startsWithCapital = (word) => {
+export const startsWithCapital = word => {
   return word.charAt(0) === word.charAt(0).toUpperCase()
 }
 const log = (...s: (string | boolean)[]) => {
@@ -395,17 +395,20 @@ export class discord_client {
       content = content.replace('!ping ', '')
     }
     const response = await this.spellRunner.runComponent({
-      inputs: {},
-      runData: {
+      inputs: {
+        'Input - Discord (Text)': {
           content,
           speaker: message.author.username,
           agent: this.discord_bot_name,
           client: 'discord', // TODO: should be typed
           channelId: message.channel.id,
           agentId: this.agent.id,
-          entities: entities.map((e) => e.user),
+          entities: entities.map(e => e.user),
           channel: 'msg',
+        },
       },
+      secrets: this.agent.secrets,
+      publicVariables: this.agent.publicVariables,
       runSubspell: true,
     })
 
@@ -474,52 +477,54 @@ export class discord_client {
         channel.messages
           .fetch({ limit: this.client.edit_messages_max_count })
           .then(async (messages: any[]) => {
-            messages.forEach(async (edited: {
-              id: string | boolean
-              content: string | boolean
-              channel: { id: string | boolean }
-            }) => {
-              if (edited.id === id) {
-                const date = new Date()
-                const utc = new Date(
-                  date.getUTCFullYear(),
-                  date.getUTCMonth(),
-                  date.getUTCDate(),
-                  date.getUTCHours(),
-                  date.getUTCMinutes(),
-                  date.getUTCSeconds()
-                )
-                const utcStr =
-                  date.getDate() +
-                  '/' +
-                  (date.getMonth() + 1) +
-                  '/' +
-                  date.getFullYear() +
-                  ' ' +
-                  utc.getHours() +
-                  ':' +
-                  utc.getMinutes() +
-                  ':' +
-                  utc.getSeconds()
+            messages.forEach(
+              async (edited: {
+                id: string | boolean
+                content: string | boolean
+                channel: { id: string | boolean }
+              }) => {
+                if (edited.id === id) {
+                  const date = new Date()
+                  const utc = new Date(
+                    date.getUTCFullYear(),
+                    date.getUTCMonth(),
+                    date.getUTCDate(),
+                    date.getUTCHours(),
+                    date.getUTCMinutes(),
+                    date.getUTCSeconds()
+                  )
+                  const utcStr =
+                    date.getDate() +
+                    '/' +
+                    (date.getMonth() + 1) +
+                    '/' +
+                    date.getFullYear() +
+                    ' ' +
+                    utc.getHours() +
+                    ':' +
+                    utc.getMinutes() +
+                    ':' +
+                    utc.getSeconds()
 
-                let parentId = ''
-                if (channel.type === ChannelType.PublicThread) {
-                  parentId = channel.prefixOptionalWhenMentionOrDM
+                  let parentId = ''
+                  if (channel.type === ChannelType.PublicThread) {
+                    parentId = channel.prefixOptionalWhenMentionOrDM
+                  }
+
+                  // TODO: Replace message with direct message handler
+                  log(
+                    edited.content,
+                    edited.id,
+                    'Discord',
+                    edited.channel.id,
+                    utcStr,
+                    false,
+                    'parentId:' + parentId
+                  )
+                  // MessageClient.instance.sendMessageEdit(edited.content, edited.id, 'Discord', edited.channel.id, utcStr, false, 'parentId:' + parentId)
                 }
-
-                // TODO: Replace message with direct message handler
-                log(
-                  edited.content,
-                  edited.id,
-                  'Discord',
-                  edited.channel.id,
-                  utcStr,
-                  false,
-                  'parentId:' + parentId
-                )
-                // MessageClient.instance.sendMessageEdit(edited.content, edited.id, 'Discord', edited.channel.id, utcStr, false, 'parentId:' + parentId)
               }
-            })
+            )
           })
       })
       .catch((err: string) => log(err))
@@ -662,27 +667,29 @@ export class discord_client {
                 channel.messages
                   .fetch({ limit: 100 })
                   .then(async (messages: any[]) => {
-                    messages.forEach(async (msg: {
-                      author: { username: string; isBot: any }
-                      deleted: boolean
-                      content: string
-                      id: any
-                      createdTimestamp: any
-                    }) => {
-                      let _author = msg.author.username
-                      if (
-                        msg.author.isBot ||
-                        msg.author.username
-                          .toLowerCase()
-                          .includes('digital being')
-                      )
-                        _author = this.discord_bot_name
+                    messages.forEach(
+                      async (msg: {
+                        author: { username: string; isBot: any }
+                        deleted: boolean
+                        content: string
+                        id: any
+                        createdTimestamp: any
+                      }) => {
+                        let _author = msg.author.username
+                        if (
+                          msg.author.isBot ||
+                          msg.author.username
+                            .toLowerCase()
+                            .includes('digital being')
+                        )
+                          _author = this.discord_bot_name
 
-                      if (msg.deleted === true) {
-                        // await deleteMessageFromHistory(channel.id, msg.id)
-                        log('deleted message: ' + msg.content)
+                        if (msg.deleted === true) {
+                          // await deleteMessageFromHistory(channel.id, msg.id)
+                          log('deleted message: ' + msg.content)
+                        }
                       }
-                    })
+                    )
                   })
               }
             }
@@ -1021,7 +1028,11 @@ export class discord_client {
                                 edited.id,
                                 msg.id
                               )
-                            } else if (responses && responses.length && responses.length >= 2000) {
+                            } else if (
+                              responses &&
+                              responses.length &&
+                              responses.length >= 2000
+                            ) {
                               let text = this.replacePlaceholders(
                                 responses as string
                               )

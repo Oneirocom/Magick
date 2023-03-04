@@ -16,8 +16,8 @@ export const spellSchema = Type.Object(
       id: Type.String(),
       nodes: Type.Object({})
     }),
-    created_at: Type.Optional(Type.String()),
-    updated_at: Type.Optional(Type.String()),
+    createdAt: Type.Optional(Type.String()),
+    updatedAt: Type.Optional(Type.String()),
   },
   { $id: 'Spell', additionalProperties: false }
 )
@@ -31,8 +31,8 @@ export const spellDataSchema = Type.Pick(spellSchema, [
   'name',
   'projectId',
   'graph',
-  'created_at',
-  'updated_at',
+  'createdAt',
+  'updatedAt',
   'hash',
 ], {
   $id: 'SpellData'
@@ -40,7 +40,7 @@ export const spellDataSchema = Type.Pick(spellSchema, [
 export type SpellData = Static<typeof spellDataSchema>
 export const spellDataValidator = getDataValidator(spellDataSchema, dataValidator)
 export const spellDataResolver = resolve<Spell, HookContext>({
-  created_at: async () => Date.now().toString()
+  createdAt: async () => Date.now().toString()
 })
 
 // Schema for updating existing entries
@@ -50,7 +50,7 @@ export const spellPatchSchema = Type.Partial(spellDataSchema, {
 export type SpellPatch = Static<typeof spellPatchSchema>
 export const spellPatchValidator = getDataValidator(spellPatchSchema, dataValidator)
 export const spellPatchResolver = resolve<Spell, HookContext>({
-  updated_at: async () => Date.now().toString(),
+  updatedAt: async () => Date.now().toString(),
 })
 
 // Schema for allowed query properties
@@ -59,8 +59,8 @@ export const spellQueryProperties = Type.Pick(spellSchema, [
   'name',
   'projectId',
   'graph',
-  'created_at',
-  'updated_at',
+  'createdAt',
+  'updatedAt',
   'hash',
 ])
 export const spellQuerySchema = Type.Intersect(
