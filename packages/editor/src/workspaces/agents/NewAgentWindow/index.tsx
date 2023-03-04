@@ -22,10 +22,10 @@ const AgentWindow = ({
   onDelete,
   onLoadFile,
 }: Props) => {
-  const [selectedAgent, setSelectedAgent] = useState('')
+  const [selectedAgentData, setSelectedAgentData] = useState({ id: null })
 
   const onClickHandler = agent => {
-    setSelectedAgent(agent)
+    setSelectedAgentData(agent)
   }
 
   return (
@@ -45,17 +45,17 @@ const AgentWindow = ({
         >
           Add Agent
         </Button>
-        {data.map(agent => (
+        {data.map((agent: { id: string }) => (
           <AgentItem
             key={agent?.id}
             keyId={agent?.id}
             onDelete={onDelete}
-            setSelectedAgent={setSelectedAgent}
+            setSelectedAgentData={setSelectedAgentData}
             onClick={onClickHandler}
             update={update}
             agent={agent}
             style={
-              agent?.id === selectedAgent?.id
+              agent?.id === selectedAgentData?.id
                 ? { border: '1px solid var(--primary)' }
                 : {}
             }
@@ -63,10 +63,10 @@ const AgentWindow = ({
         ))}
       </Grid>
       <Grid item xs={8} className={styles.item}>
-        {selectedAgent ? (
+        {selectedAgentData ? (
           <AgentDetails
-            agentData={selectedAgent}
-            setSelectedAgent={setSelectedAgent}
+          selectedAgentData={selectedAgentData}
+            setSelectedAgentData={setSelectedAgentData}
             updateCallback={updateCallBack}
           />
         ) : (

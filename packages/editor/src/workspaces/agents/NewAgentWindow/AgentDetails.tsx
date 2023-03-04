@@ -12,10 +12,9 @@ const RenderComp = props => {
   return <props.element props={props} />
 }
 
-const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
+const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback }) => {
   const [root_spell, setRootSpell] = useState('default')
   const [spellList, setSpellList] = useState<any[]>([])
-  const [updatedPubVars, setPublicVars] = useState<any>('')
   const config = useConfig()
 
   const [selectedSpellPublicVars, setSelectedSpellPublicVars] = useState<any[]>(
@@ -23,15 +22,18 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
   )
 
   useEffect(() => {
-    setSelectedSpellPublicVars(
-      Object.values(
+    setSelectedAgentData(
+      {
+        ...selectedAgentData,
+        public_vars: Object.values(
         spellList?.find(spell => spell.name === root_spell)?.graph.nodes || {}
-      ).filter(node => node?.data?.Public)
+      ).filter((node: { data }) => node?.data?.isPublic)
+    }
     )
     console.log('selectedSpellPublicVars', selectedSpellPublicVars)
   }, [root_spell, spellList])
 
-  const update = (id, _data = agentData) => {
+  const update = (id, _data = selectedAgentData) => {
     if (_data.hasOwnProperty('id')) {
       delete _data.id
     }
@@ -64,7 +66,7 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
 
   const exportEntity = () => {
     const fileName = 'agent'
-    const json = JSON.stringify(agentData)
+    const json = JSON.stringify(selectedAgentData)
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))
     const link = document.createElement('a')
@@ -96,24 +98,41 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
         <div className={styles.agentDescription}>
           <Avatar className={styles.avatar}>A</Avatar>
           <div>
-            <Typography variant="h5">{agentData.name}</Typography>
+            <Typography variant="h5">{selectedAgentData.name}</Typography>
           </div>
         </div>
         <div className={styles.btns}>
           <Button
             onClick={() => {
-              update(agentData?.id)
+              update(selectedAgentData?.id)
+            }}
+            style={{
+              margin: '1em',
+              color: 'white',
+              backgroundColor: 'purple',
             }}
           >
             Update
           </Button>
-          <Button onClick={() => exportEntity()}>Export</Button>
+          <Button
+            style={{
+              margin: '1em',
+              color: 'white',
+              backgroundColor: 'purple',
+            }}
+            onClick={() => exportEntity()}
+          >
+            Export
+          </Button>
         </div>
         <Switch
           label={null}
-          checked={agentData.enabled ? true : false}
+          checked={selectedAgentData.enabled ? true : false}
           onChange={() => {
-            setSelectedAgent({ ...agentData, enabled: agentData.enabled ? false : true })
+            setSelectedAgentData({
+              ...selectedAgentData,
+              enabled: selectedAgentData.enabled ? false : true,
+            })
           }}
           style={{ alignSelf: 'self-start' }}
         />
@@ -151,8 +170,13 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
       >
         {selectedSpellPublicVars.length !== 0 ? (
           <AgentPubVariables
-            setPublicVars={setPublicVars}
-            publicVars={selectedSpellPublicVars}
+            setPublicVars={(data) => {
+              setSelectedAgentData({
+                ...selectedAgentData,
+                public_vars: data,
+            })
+          }}
+            publicVars={selectedAgentData.public_vars}
           />
         ) : (
           <Typography>No Public Variables</Typography>
@@ -170,8 +194,8 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
             <RenderComp
               key={index}
               element={value}
-              agentData={agentData}
-              setAgentData={setSelectedAgent}
+              selectedAgentData={selectedAgentData}
+              setSelectedAgentData={setSelectedAgentData}
             />
           )
         })}

@@ -18,7 +18,7 @@ const graph = {
             expanded: true,
           },
         },
-        name: 'Input',
+        name: 'Input - Default',
         outputs: [],
       },
       inputs: {},
