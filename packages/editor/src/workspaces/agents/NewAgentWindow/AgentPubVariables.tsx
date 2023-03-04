@@ -8,11 +8,6 @@ interface Props {
 }
 
 const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
-  const agentPublicVars = publicVars.reduce((acc, obj) => {
-    acc[obj.data?.name] = obj?.data?.fewshot || obj?.data?._var
-    return acc
-  }, {})
-
   const onChange = event => {
     const { name } = event.target
     setPublicVars({
@@ -56,7 +51,7 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
                   type="text"
                   onChange={onChange}
                   name={variable?.data?.name}
-                  placeholder="Add new value here"
+                  placeHolder={"Add new value here"}
                   multiline
                 />
               )}

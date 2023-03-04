@@ -26,7 +26,7 @@ const AgentManagerWindow = () => {
       spells: [],
       enabled: true,
       name: 'My Agent',
-      updated_at: '',
+      updatedAt: '',
     }
   ) => {
     if (!data.spells === undefined) data.spells = []
@@ -53,7 +53,7 @@ const AgentManagerWindow = () => {
       const data = JSON.parse(event?.target?.result as string)
       data.dirty = data?.dirty ? data.dirty : false
       data.enabled = data?.enabled ? true : false
-      data.updated_at = data?.updated_at || ''
+      data.updatedAt = data?.updatedAt || ''
       data.spells = Array.isArray(data?.spells) ? data.spells : []
 
       // Check if the "id" property exists in the object

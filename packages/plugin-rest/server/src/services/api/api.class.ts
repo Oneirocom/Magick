@@ -43,7 +43,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const selectedAgentData = agent.data
     console.log('AGENT DATA', selectedAgentData)
     // get the selectedAgentData's spells
-    const rootSpell = selectedAgentData.root_spell
+    const rootSpell = selectedAgentData.rootSpell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
@@ -52,6 +52,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       inputs: {
         'Input - REST API (GET)': { ...json.inputs },
       },
+      secrets: payload.secrets ?? {},
+      publicVariables: agent.publicVariables,
     })
 
     return {
@@ -77,7 +79,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const selectedAgentData = agent.data
     console.log('AGENT DATA', selectedAgentData)
     // get the selectedAgentData's spells
-    const rootSpell = selectedAgentData.root_spell
+    const rootSpell = selectedAgentData.rootSpell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
@@ -86,6 +88,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       inputs: {
         'Input - REST API (POST)': { ...json.inputs },
       },
+      secrets: payload.secrets ?? {},
+      publicVariables: agent.publicVariables,
     })
 
     return {
@@ -109,7 +113,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const selectedAgentData = agent.data
     console.log('AGENT DATA', selectedAgentData)
     // get the selectedAgentData's spells
-    const rootSpell = selectedAgentData.root_spell
+    const rootSpell = selectedAgentData.rootSpell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
@@ -118,6 +122,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       inputs: {
         'Input - REST API (PUT)': { ...json.inputs },
       },
+      secrets: payload.secrets ?? {},
+      publicVariables: agent.publicVariables,
     })
 
     return {
@@ -141,7 +147,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const selectedAgentData = agent.data
     console.log('AGENT DATA', selectedAgentData)
     // get the selectedAgentData's spells
-    const rootSpell = selectedAgentData.root_spell
+    const rootSpell = selectedAgentData.rootSpell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
@@ -150,6 +156,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       inputs: {
         'Input - REST API (PATCH)': { ...json.inputs },
       },
+      secrets: payload.secrets ?? {},
+      publicVariables: agent.publicVariables,
     })
 
     return {
@@ -169,7 +177,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const selectedAgentData = agent.data
     console.log('AGENT DATA', selectedAgentData)
     // get the selectedAgentData's spells
-    const rootSpell = selectedAgentData.root_spell
+    const rootSpell = selectedAgentData.rootSpell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
@@ -178,6 +186,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       inputs: {
         'Input - REST API (DELETE)': { ...json.inputs },
       },
+      secrets: payload.secrets ?? {},
+      publicVariables: agent.publicVariables,
     })
 
     return {

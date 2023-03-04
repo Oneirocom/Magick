@@ -9,11 +9,13 @@ export const buildMagickInterface = (overrides: Record<string, Function> = {}) =
 
   return {
     env,
-    runSpell: async ({id, inputs, projectId}) => {
+    runSpell: async ({id, inputs, projectId, secrets, publicVariables}) => {
       const { outputs } = await runSpell({
         id,
         inputs,
-        projectId
+        projectId,
+        secrets,
+        publicVariables,
       })
       return outputs
     },

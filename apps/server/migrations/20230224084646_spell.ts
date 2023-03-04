@@ -8,8 +8,8 @@ export async function up(knex: Knex): Promise<void> {
     table.string('projectId')
     table.string('hash')
     table.jsonb('graph')
-    table.string('created_at')
-    table.string('updated_at')
+    table.string('createdAt')
+    table.string('updatedAt')
   })
 }
 

@@ -22,7 +22,7 @@ const SettingsWindowChild = ({
         placeholder="Paste Your API Key"
         id={keyName}
         name={keyName}
-        value={getKey(keyName)}
+        value={getKey(keyName) || ''}
         onChange={e => {
           setKey(keyName, e.target.value)
         }}
@@ -65,11 +65,20 @@ const SettingsWindowChild = ({
 const SettingsWindow = () => {
   let [nonce, setNonce] = useState(0)
   const getKey = key => {
-    return window.localStorage.getItem(key)
+    if (!window.localStorage.getItem('secrets')) {
+      window.localStorage.setItem('secrets', JSON.stringify({}))
+    }
+
+    const secrets = window.localStorage.getItem('secrets')
+
+    return JSON.parse(secrets)[key]
   }
 
   const setKey = (newKey, newValue) => {
-    window.localStorage.setItem(newKey, newValue)
+    const secrets = window.localStorage.getItem('secrets')
+    const json = secrets ? JSON.parse(secrets) : {}
+    const newJsonString = JSON.stringify({ ...json, [newKey]: newValue })
+    window.localStorage.setItem('secrets', newJsonString)
     setNonce(nonce + 1)
   }
 

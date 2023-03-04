@@ -13,7 +13,7 @@ const RenderComp = props => {
 }
 
 const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback }) => {
-  const [root_spell, setRootSpell] = useState('default')
+  const [rootSpell, setRootSpell] = useState('default')
   const [spellList, setSpellList] = useState<any[]>([])
   const config = useConfig()
 
@@ -25,13 +25,13 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
     setSelectedAgentData(
       {
         ...selectedAgentData,
-        public_vars: Object.values(
-        spellList?.find(spell => spell.name === root_spell)?.graph.nodes || {}
+        publicVariables: Object.values(
+        spellList?.find(spell => spell.name === rootSpell)?.graph.nodes || {}
       ).filter((node: { data }) => node?.data?.isPublic)
     }
     )
     console.log('selectedSpellPublicVars', selectedSpellPublicVars)
-  }, [root_spell, spellList])
+  }, [rootSpell, spellList])
 
   const update = (id, _data = selectedAgentData) => {
     if (_data.hasOwnProperty('id')) {
@@ -143,9 +143,9 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
           style={{
             appearance: 'none',
           }}
-          name="root_spell"
-          id="root_spell"
-          value={root_spell}
+          name="rootSpell"
+          id="rootSpell"
+          value={rootSpell}
           onChange={event => {
             setRootSpell(event.target.value)
           }}
@@ -173,10 +173,10 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
             setPublicVars={(data) => {
               setSelectedAgentData({
                 ...selectedAgentData,
-                public_vars: data,
+                publicVariables: data,
             })
           }}
-            publicVars={selectedAgentData.public_vars}
+            publicVars={selectedAgentData.publicVariables}
           />
         ) : (
           <Typography>No Public Variables</Typography>

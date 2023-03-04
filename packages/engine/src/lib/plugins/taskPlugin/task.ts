@@ -213,9 +213,6 @@ x
 
       // if (!socketInfo.targetSocket) debugger
 
-      console.log('socketInfo is', socketInfo)
-      console.log('data is', data)
-
       // the main output data of the task, which is gathered up when the next node gets this nodes value
       this.outputData = await this.worker(this, inputs, data, socketInfo)
 

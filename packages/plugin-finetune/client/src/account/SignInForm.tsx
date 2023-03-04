@@ -12,7 +12,8 @@ export default function SigninForm() {
   const initialValue = { apiKey: '', organizationId: '' }
 
   useEffect(() => {
-    const openai = typeof window !== 'undefined' && window.localStorage.getItem('openai-api-key')
+    const secrets = window.localStorage.getItem('openai-api-key') || '{}'
+    const { openai } = JSON.parse(secrets)
     if (openai) {
       const api = JSON.parse(openai)?.apiKey
       signIn(api, '')

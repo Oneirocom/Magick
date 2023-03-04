@@ -129,17 +129,23 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     node: NodeData,
     rawInputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    {
+    context: { module: any, secrets: Record<string, string>; silent: boolean; projectId: string; magick: EngineContext }
+  ) {
+    const {
       silent,
       projectId,
       magick,
-    }: { silent: boolean; projectId: string; magick: EngineContext }
-  ) {
+    } = context
+
+    console.log('context', context)
+
     const currentSpell = magick.getCurrentSpell()
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
       acc[key] = value[0]
       return acc
     }, {} as Record<string, unknown>)
+
+
 
     const settings = ((inputs.settings && inputs.settings[0]) ?? {}) as any
 
@@ -194,6 +200,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       frequency_penalty,
       presence_penalty,
       stop: filteredStop,
+      apiKey: context.module.secrets['openai-api-key']
     }
 
     try {

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { Button } from '@magickml/client-core'
 
@@ -25,14 +25,7 @@ const AgentWindow = ({
   const [selectedAgentData, setSelectedAgentData] = useState<any>({})
   const [loaded, setLoaded] = useState(false)
 
-  const [enabled, setEnabled] = useState(false)
-  const [root_spell, setRootSpell] = useState('')
-
   const [spellList, setSpellList] = useState<any[]>([])
-
-  const [selectedSpellPublicVars, setSelectedSpellPublicVars] = useState<any>(
-    []
-  )
 
   useEffect(() => {
     if (!loaded) {
@@ -46,7 +39,6 @@ const AgentWindow = ({
           return
         }
 
-        setEnabled(res.data.enabled === true)
         setSelectedAgentData(res.data?.data ?? {})
         setLoaded(true)
       })()
@@ -62,8 +54,9 @@ const AgentWindow = ({
       setSpellList(json.data)
       setSelectedAgentData({
         ...selectedAgentData,
-        public_vars: Object.values(
-          spellList.find(spell => spell.name === root_spell)?.graph.nodes || {}
+        publicVariables: Object.values(
+          spellList.find(spell => spell.name === selectedAgentData.rootSpell)
+            ?.graph.nodes || {}
         ).filter((node: any) => node?.data?.isPublic),
       })
     })()
@@ -108,7 +101,6 @@ const AgentWindow = ({
             variant: 'success',
           })
           const responseData = res && JSON.parse(res?.config?.data)
-          setEnabled(!!responseData.enabled)
           setSelectedAgentData(responseData.data)
           updateCallback()
         }
@@ -123,10 +115,9 @@ const AgentWindow = ({
 
   const exportEntity = () => {
     const _data = {
-      enabled: enabled ? true : false,
+      ...selectedAgentData,
       data: {
-        ...selectedAgentData,
-        root_spell,
+        ...selectedAgentData.data,
       },
     }
     const fileName = 'agent'
@@ -152,24 +143,36 @@ const AgentWindow = ({
         <span className="form-item-label">Enabled</span>
         <input
           type="checkbox"
-          defaultChecked={enabled}
+          defaultChecked={selectedAgentData.enabled}
           onChange={e => {
-            setEnabled(e.target.checked)
+            selectedAgentData({
+              ...selectedAgentData,
+              enabled: e.target.checked,
+              dirty: true,
+            })
           }}
         />
       </div>
-      {enabled && (
+      {selectedAgentData.enabled && (
         <>
           <Grid container justifyContent="left" style={{ padding: '1em' }}>
             <Grid item xs={3}>
               <div className="form-item agent-select">
                 <span className="form-item-label">Root Spell</span>
                 <select
-                  name="root_spell"
-                  id="root_spell"
-                  value={root_spell}
+                  name="rootSpell"
+                  id="rootSpell"
+                  value={selectedAgentData.rootSpell}
                   onChange={event => {
-                    setRootSpell(event.target.value)
+                    setSelectedAgentData({
+                      ...selectedAgentData,
+                      rootSpell: event.target.value,
+                      publicVariables: Object.values(
+                        spellList.find(
+                          spell => spell.name === event.target.value
+                        )?.graph.nodes || {}
+                      ).filter((node: any) => node?.data?.isPublic),
+                    })
                   }}
                 >
                   {spellList.length > 0 &&
@@ -183,10 +186,15 @@ const AgentWindow = ({
             </Grid>
           </Grid>
 
-          {selectedSpellPublicVars.length !== 0 && (
+          {selectedAgentData.publicVariables.length !== 0 && (
             <AgentPubVariables
-              setPublicVars={setSelectedSpellPublicVars}
-              publicVars={selectedSpellPublicVars}
+              setPublicVars={(publicVariables: any) => {
+                setSelectedAgentData({
+                  ...selectedAgentData,
+                  publicVariables,
+                })
+              }}
+              publicVars={selectedAgentData.publicVariables}
             />
           )}
 
@@ -206,12 +214,14 @@ const AgentWindow = ({
         <Button
           onClick={() => {
             const data = {
-              enabled: enabled ? true : false,
-              dirty: true,
-              data: {
-                ...selectedAgentData,
-                root_spell,
-              },
+              ...selectedAgentData,
+              publicVariables:
+                selectedAgentData.publicVariables ??
+                Object.values(
+                  spellList.find(
+                    spell => spell.name === selectedAgentData.rootSpell
+                  )?.graph.nodes || {}
+                ).filter((node: any) => node?.data?.isPublic),
             }
             update(data)
           }}
