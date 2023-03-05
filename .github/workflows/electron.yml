@@ -20,6 +20,8 @@ jobs:
         uses: actions/setup-node@v2.4.0
         with:
           node-version: ${{ matrix.node-version }}
+      - name: npm Install Dependencies
+        run: npm install --prefix apps/client
       - name: Install Dependencies
         run: npm ci --prefix apps/client
       - name: Clean Output Folder
