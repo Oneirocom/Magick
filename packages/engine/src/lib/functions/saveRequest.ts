@@ -42,7 +42,7 @@ export function saveRequest({
   spell,
   nodeId,
 }: RequestPayload) {
-  console.log('saveRequest', projectId, requestData, responseData, model, duration, status, statusCode, parameters, provider, type, hidden, processed, cost)
+  console.log('saveRequest')
   const app = globalsManager.get('feathers')
   console.log(app.service('request'))
   return app.service('request').create({
@@ -60,7 +60,8 @@ export function saveRequest({
     hidden,
     processed,
     cost,
-    spell,
+    // if spell is json, stringify it
+    spell: typeof spell === 'string' ? spell : JSON.stringify(spell),
     nodeId
   })
 }

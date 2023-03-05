@@ -39,19 +39,21 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const agentService = this.options.app.service('agents')
     // get the agent by id
     const agent = await agentService.get(id)
-    // get the agentData
-    const agentData = agent.data
-    console.log('AGENT DATA', agentData)
-    // get the agentData's spells
-    const rootSpell = agentData.root_spell
+    // get the selectedAgentData
+    const selectedAgentData = agent.data
+    console.log('AGENT DATA', selectedAgentData)
+    // get the selectedAgentData's spells
+    const rootSpell = JSON.parse(selectedAgentData.rootSpell)
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
-      id: rootSpell,
+      id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (GET)': { ...json.inputs },
       },
+      secrets: payload.secrets ?? {},
+      publicVariables: agent.publicVariables,
     })
 
     return {
@@ -73,19 +75,21 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const agentService = this.options.app.service('agents')
     // get the agent by id
     const agent = await agentService.get(id)
-    // get the agentData
-    const agentData = agent.data
-    console.log('AGENT DATA', agentData)
-    // get the agentData's spells
-    const rootSpell = agentData.root_spell
+    // get the selectedAgentData
+    const selectedAgentData = agent.data
+    console.log('AGENT DATA', selectedAgentData)
+    // get the selectedAgentData's spells
+    const rootSpell = selectedAgentData.rootSpell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
-      id: rootSpell,
+      id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (POST)': { ...json.inputs },
       },
+      secrets: payload.secrets ?? {},
+      publicVariables: agent.publicVariables,
     })
 
     return {
@@ -105,19 +109,21 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const agentService = this.options.app.service('agents')
     // get the agent by id
     const agent = await agentService.get(id)
-    // get the agentData
-    const agentData = agent.data
-    console.log('AGENT DATA', agentData)
-    // get the agentData's spells
-    const rootSpell = agentData.root_spell
+    // get the selectedAgentData
+    const selectedAgentData = agent.data
+    console.log('AGENT DATA', selectedAgentData)
+    // get the selectedAgentData's spells
+    const rootSpell = selectedAgentData.rootSpell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
-      id: rootSpell,
+      id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (PUT)': { ...json.inputs },
       },
+      secrets: payload.secrets ?? {},
+      publicVariables: agent.publicVariables,
     })
 
     return {
@@ -137,19 +143,21 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const agentService = this.options.app.service('agents')
     // get the agent by id
     const agent = await agentService.get(id)
-    // get the agentData
-    const agentData = agent.data
-    console.log('AGENT DATA', agentData)
-    // get the agentData's spells
-    const rootSpell = agentData.root_spell
+    // get the selectedAgentData
+    const selectedAgentData = agent.data
+    console.log('AGENT DATA', selectedAgentData)
+    // get the selectedAgentData's spells
+    const rootSpell = selectedAgentData.rootSpell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
-      id: rootSpell,
+      id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (PATCH)': { ...json.inputs },
       },
+      secrets: payload.secrets ?? {},
+      publicVariables: agent.publicVariables,
     })
 
     return {
@@ -165,19 +173,21 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const agentService = this.options.app.service('agents')
     // get the agent by id
     const agent = await agentService.get(id)
-    // get the agentData
-    const agentData = agent.data
-    console.log('AGENT DATA', agentData)
-    // get the agentData's spells
-    const rootSpell = agentData.root_spell
+    // get the selectedAgentData
+    const selectedAgentData = agent.data
+    console.log('AGENT DATA', selectedAgentData)
+    // get the selectedAgentData's spells
+    const rootSpell = selectedAgentData.rootSpell
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
-      id: rootSpell,
+      id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (DELETE)': { ...json.inputs },
       },
+      secrets: payload.secrets ?? {},
+      publicVariables: agent.publicVariables,
     })
 
     return {

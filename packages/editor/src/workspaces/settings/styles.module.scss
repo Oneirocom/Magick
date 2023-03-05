@@ -1,18 +1,10 @@
 .settings-editor {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
 }
 
-.child {
-  height: 100%;
-  width: 100%;
-  background: var(--dark-2);
-}
-
-.innerChild {
+.settings-editor > .child {
   padding: 2em;
+  width: 100%;
 }
 
 .title {

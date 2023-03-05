@@ -11,16 +11,17 @@ import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
 import { Module } from '../plugins/modulePlugin/module'
 import { extractModuleInputKeys } from './graphHelpers'
 
-type RunSpellConstructor = {
+export type RunSpellConstructor = {
   magickInterface: EngineContext
   socket?: io.Socket
 }
 
-type RunComponentArgs = {
+export type RunComponentArgs = {
   inputs: Record<string, any>
   componentName?: string
   runSubspell?: boolean
-  runData?: Record<string, any>
+  secrets?: Record<string, string>
+  publicVariables?: Record<string, any>
 }
 
 class SpellRunner {
@@ -79,6 +80,7 @@ class SpellRunner {
       magick: this.magickInterface,
       silent: true,
       projectId: this.currentSpell.projectId,
+      // TODO: add the secrets and publicVariables through the spellrunner for context
     }
   }
 
@@ -108,7 +110,7 @@ class SpellRunner {
    * of shape { key: [value]}.  This shape isa required when running the spell
    * since that is the shape that rete inputs take when processing the graph.
    */
-  private _formatInputs(inputs: Record<string, unknown>) {
+  private _formatInputs(inputs) {
     return this.inputKeys.reduce((inputList, inputKey) => {
       inputList[inputKey] = [inputs[inputKey]]
       return inputList
@@ -120,14 +122,6 @@ class SpellRunner {
    */
   private _getComponent(componentName: string) {
     return this.engine.components.get(componentName)
-  }
-
-  /**
-   * Takes a dictionary of inputs, converts them to the module format required
-   * and puts those values into the module in preparation for processing.
-   */
-  private _loadInputs(inputs: Record<string, unknown>): void {
-    this.module.read(this._formatInputs(inputs))
   }
 
   /**
@@ -209,7 +203,8 @@ class SpellRunner {
     inputs,
     componentName = 'Input',
     runSubspell = false,
-    runData = {},
+    secrets,
+    publicVariables,
   }: RunComponentArgs) {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
@@ -223,8 +218,9 @@ class SpellRunner {
     // ensure we run from a clean slate
     this._resetTasks()
 
+    console.log('reading module - spellRunner.ts')
     // load the inputs into module memory
-    this._loadInputs(inputs)    
+    this.module.read({inputs: this._formatInputs(inputs), secrets, publicVariables})
 
     const component = this._getComponent(componentName) as ModuleComponent
 

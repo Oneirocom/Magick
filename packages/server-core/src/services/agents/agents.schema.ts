@@ -11,12 +11,15 @@ export const agentSchema = Type.Object(
   {
     id: Type.String(),
     projectId: Type.String(),
+    rootSpell: Type.Optional(Type.String()),
     name: Type.String(),
     dirty: Type.Optional(Type.Boolean()),
     enabled: Type.Optional(Type.Boolean()),
-    updated_at: Type.Optional(Type.String()),
+    updatedAt: Type.Optional(Type.String()),
     spells: Type.Array(Type.String()),
-    data: Type.Optional(Type.Any())
+    data: Type.Optional(Type.Any()),
+    publicVariables: Type.Optional(Type.Any()),
+    secrets: Type.Optional(Type.String()),
   },
   { $id: 'Agent', additionalProperties: false }
 )
@@ -28,7 +31,7 @@ export const agentExternalResolver = resolve<Agent, HookContext>({})
 // Schema for creating new entries
 export const agentDataSchema = Type.Pick(
   agentSchema,
-  ['dirty', 'projectId', 'name', 'enabled', 'updated_at', 'spells', 'data'],
+  ['dirty', 'projectId', 'rootSpell', 'name', 'enabled', 'updatedAt', 'spells', 'data', 'publicVariables', 'secrets'],
   {
     $id: 'AgentData'
   }
@@ -49,12 +52,15 @@ export const agentPatchResolver = resolve<Agent, HookContext>({})
 export const agentQueryProperties = Type.Pick(agentSchema, [
   'id',
   'projectId',
+  'rootSpell',
   'dirty',
   'enabled',
   'name',
-  'updated_at',
+  'updatedAt',
   'spells',
-  'data'
+  'data',
+  'publicVariables',
+  'secrets'
 ])
 export const agentQuerySchema = Type.Intersect(
   [

@@ -33,11 +33,13 @@ export default class SpellManager {
 
     const runSpell: EngineContext['runSpell'] = async ({
       inputs: flattenedInputs,
-      spellName: spellId
+      spellName: spellId,
+      secrets,
+      publicVariables,
     }
     ) => {
       if (this.getSpellRunner(spellId)) {
-        const outputs = await this.run(spellId, flattenedInputs)
+        const outputs = await this.run(spellId, flattenedInputs, secrets, publicVariables)
         return outputs
       }
 
@@ -49,7 +51,7 @@ export default class SpellManager {
 
       await this.load(spell)
 
-      const outputs = await this.run(spellId, flattenedInputs)
+      const outputs = await this.run(spellId, flattenedInputs, secrets, publicVariables)
 
       return outputs
     }
@@ -90,11 +92,14 @@ export default class SpellManager {
     return spellRunner
   }
 
-  async run(spellId: string, inputs: Record<string, any>) {
+  async run(spellId: string, inputs: Record<string, any>, secrets: Record<string, string>, publicVariables) {
     const runner = this.getSpellRunner(spellId)
     
+    console.log('calling runComponent from SpellManager.ts')
     const result = await runner?.runComponent({
       inputs,
+      secrets,
+      publicVariables,
     })
 
     return result

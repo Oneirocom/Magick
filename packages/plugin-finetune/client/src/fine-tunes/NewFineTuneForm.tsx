@@ -35,7 +35,7 @@ export default function NewFineTuneForm() {
     .filter(file => file.purpose === 'fine-tune')
     .map(file => ({
       label: `${file.filename} (${new Date(
-        file.created_at * 1000
+        file.createdAt * 1000
       ).toDateString()})`,
       value: file.id,
     }))

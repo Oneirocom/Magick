@@ -48,8 +48,8 @@ export class Image extends MagickComponent<any> {
     })
 
     const _public = new BooleanControl({
-      dataKey: 'Public',
-      name: 'Public',
+      dataKey: 'isPublic',
+      name: 'isPublic',
     })
 
     node.inspector.add(name).add(_var).add(_public).add_img(node.id.toString())

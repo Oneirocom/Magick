@@ -17,6 +17,11 @@ const DiscordPlugin = new ClientPlugin({
     { name: 'Discord (Voice)', trigger: true, socket: eventSocket },
     { name: 'Discord (Text)', trigger: true, socket: eventSocket },
   ],
+  secrets: [{
+    name: 'Discord API Key',
+    key: 'discord_api_key',
+    global: false
+  }]
 })
 
 export default DiscordPlugin

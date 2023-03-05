@@ -84,24 +84,13 @@ function EventTable({ requests, updateCallback }) {
         accessor: 'type',
       },
       {
-        Header: 'Spell',
-        accessor: 'spell',
-      },
-      {
         Header: 'Node ID',
         accessor: 'nodeId',
       },
       {
         Header: 'Cost',
         accessor: 'cost',
-      },
-      {
-        Header: 'Req Data',
-        accessor: 'requestData',
-      },
-      {
-        Header: 'Res Data',
-        accessor: 'responseData',
+        Cell: (obj) => '$' + obj.value.toFixed(7),
       },
       {
         Header: 'Req Time',
@@ -120,8 +109,20 @@ function EventTable({ requests, updateCallback }) {
         accessor: 'model',
       },
       {
+        Header: 'Req Data',
+        accessor: 'requestData',
+      },
+      {
+        Header: 'Res Data',
+        accessor: 'responseData',
+      },
+      {
         Header: 'Parameters',
         accessor: 'parameters',
+      },
+      {
+        Header: 'Spell',
+        accessor: 'spell',
       },
       {
         Header: ' ',

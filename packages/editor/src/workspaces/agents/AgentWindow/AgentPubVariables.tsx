@@ -8,55 +8,55 @@ interface Props {
 }
 
 const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
-  const agentPublicVars = publicVars.reduce((acc, obj) => {
-    acc[obj.data?.name] = obj?.data?.fewshot || obj?.data?._var
-    return acc
-  }, {})
-
-  const onChange = event => {
-    const { name } = event.target
-    setPublicVars({
-      ...publicVars,
-      [name]:
+  const onChange = (variable, event) => {
+    const newVar = {
+      ...variable,
+      value:
         event.target.checked === undefined
           ? event.target.value
           : event.target.checked,
+    }
+
+    setPublicVars({
+      ...publicVars,
+      [newVar.id]: newVar
     })
   }
-
+  
   return (
     <div className={styles['agentPubVars']}>
       <div className={styles['header']}>
         <h3>Public Variables</h3>
       </div>
-      {publicVars.map(variable => {
+      {Object.values(publicVars).map((variable: any) => {
+        console.log('variable is', variable)
         return (
           <Grid
             container
-            key={variable?.id}
+            key={variable.id}
             style={{ alignItems: 'center', marginBottom: '10px' }}
           >
             <Grid item>
               <p style={{ marginRight: '20px' }}>
-                {`${variable?.data?.name}: `}
+                {`${variable.name}: `}
               </p>
             </Grid>
             <Grid item xs={8}>
               {variable.name.includes('Boolean') ? (
                 <Switch
                   label={''}
-                  checked={publicVars[variable?.data?.name]}
-                  onChange={onChange}
-                  name={variable?.data?.name}
+                  checked={variable.value}
+                  onChange={(e) => onChange(variable, e)}
+                  name={variable.name}
                 />
               ) : (
                 <Input
                   style={{ width: '100%' }}
-                  value={publicVars[variable?.data?.name]}
+                  value={variable.value}
                   type="text"
-                  onChange={onChange}
-                  name={variable?.data?.name}
-                  placeholder="Add new value here"
+                  onChange={(e) => onChange(variable, e)}
+                  name={variable.name}
+                  placeHolder={"Add new value here"}
                   multiline
                 />
               )}

@@ -1,14 +1,6 @@
 import { ClientPlugin } from '@magickml/engine'
 import { EthereumAgentWindow } from './components/agent.component'
 import Nodes from '@magickml/plugin-ethereum-shared'
-import { Solidity } from './nodes/Solidity'
-import { GetRecentTransactions } from './nodes/GetRecentTransactions'
-import { DeployContract } from './nodes/DeployContract'
-import { CheckForRecentTransactionsFromWallet } from './nodes/CheckForRecentTransactionsFromWallet'
-import { CheckEthBalance } from './nodes/CheckEthBalance'
-import { CheckBalanceForERC20 } from './nodes/CheckBalanceForERC20'
-import { CallContractFunctionWrite } from './nodes/CallContractFunctionWrite'
-import { CallContractFunctionRead } from './nodes/CallContractFunctionRead'
 import Money from '@mui/icons-material/Money'
 
 import { EthereumComponent } from './components/ethereum.route'
@@ -35,6 +27,18 @@ const EthereumPlugin = new ClientPlugin({
       component: EthereumComponent,
     },
   ],
+  secrets: [
+    {
+      name: 'Ethereum Private Key',
+      key: 'ethereum_private_key',
+      global: false,
+    },
+    {
+      name: 'Ethereum Public Address',
+      key: 'ethereum_public_address',
+      global: false,
+    }
+  ]
 })
 
 export default EthereumPlugin

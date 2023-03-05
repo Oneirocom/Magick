@@ -1,5 +1,5 @@
 import Agent from './Agent'
-import { projectId, ENTITY_WEBSERVER_PORT_RANGE } from '@magickml/engine'
+import { projectId, AGENT_WEBSERVER_PORT_RANGE } from '@magickml/engine'
 import { app } from './app'
 
 // if the user is running the app locally, sort by their project id
@@ -92,10 +92,10 @@ export class AgentManager {
       const runningAgent = this.getAgent(agent.id)
       if (!runningAgent) continue
       // evaluate the root spell
-      if (agent.data.root_spell) {
+      if (agent.rootSpell) {
         const spell = (
           await app.service('spells').find({
-            query: { projectId, name: agent.data.root_spell },
+            query: { projectId, id: JSON.parse(agent.rootSpell ?? '{}').id },
           })
         ).data[0]
 
@@ -108,6 +108,8 @@ export class AgentManager {
           const spellRunner = await runningAgent.spellManager.load(spell)
           runningAgent.root_spell_hash = spell.hash
         }
+      } else {
+        console.error('Agent has no root spell')
       }
 
       // evaluate all spells
@@ -148,7 +150,7 @@ export class AgentManager {
   }
 
   async onCreate() {
-    const ports: string[] = ((ENTITY_WEBSERVER_PORT_RANGE?.split(
+    const ports: string[] = ((AGENT_WEBSERVER_PORT_RANGE?.split(
       '-'
     ) as any) ?? ['10001', '10100']) as string[]
     let portStart: number = parseInt(ports[0])
@@ -174,7 +176,7 @@ export class AgentManager {
       enabled: obj.enabled ? true : false,
       dirty: obj.dirty ? true : false,
       spells: obj.spells,
-      updated_at: obj.updated_at,
+      updatedAt: obj.updatedAt ?? new Date(),
     }
     //Overwrites even if already exists
     data.projectId = projectId

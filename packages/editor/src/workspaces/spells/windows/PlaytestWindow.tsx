@@ -116,8 +116,8 @@ const Playtest = ({ tab }) => {
   const [playtestOptions, setPlaytestOptions] = useState<Record<
     string,
     any
-  > | null>(['Default'])
-  const [playtestOption, setPlaytestOption] = useState('Default')
+  > | null>([])
+  const [playtestOption, setPlaytestOption] = useState(null)
 
   useEffect(() => {setPlaytestOption
     if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
@@ -136,7 +136,6 @@ const Playtest = ({ tab }) => {
     setPlaytestOptions(options)
     if(options.length > 0)
       setPlaytestOption(options[0].value)
-    else setPlaytestOption('Default')
   }, [spellData])
 
   // Keep scrollbar at bottom of its window
@@ -185,10 +184,12 @@ const Playtest = ({ tab }) => {
   }
 
   const onSend = async () => {
+    console.log('onSend')
     const newHistory = [...history, `You: ${value}`]
     setHistory(newHistory as [])
 
     let toSend = value
+    setValue('')
 
     const json = localState?.playtestData.replace(
       /(['"])?([a-z0-9A-Z_]+)(['"])?:/g,
@@ -246,17 +247,24 @@ const Playtest = ({ tab }) => {
     // wait .2. seconds for spell_diff to take effect
     await new Promise(resolve => setTimeout(resolve, 200))
 
-    // Todo should move run spell into an event to be used globally.
-    client.service('spell-runner').create({
+    const finalData = {
       spellName: tab.name.split('--')[0],
       id: tab.id,
       projectId: config.projectId,
       inputs: {
         [playtestInputName as string]: toSend,
       },
-    })
+      // retrun an array of all nodes where node.data.isPublic is true
+      publicVariables: JSON.stringify(Object.values(
+        graph.nodes || {}
+      ).filter((node: { data }) => node?.data?.isPublic)),
+      secrets: JSON.parse(localStorage.getItem('secrets') || '{}')
+    }
+    
+    // Todo should move run spell into an event to be used globally.
+    client.service('spell-runner').create(finalData)
 
-    publish($PLAYTEST_INPUT(tab.id), toSend)
+    publish($PLAYTEST_INPUT(tab.id), finalData)
     client.io.on(`${tab.id}-error`, data => {
       //publish($DEBUG_PRINT(tab.id), (data.error.message))
       console.error('Error in spell execution')
@@ -300,10 +308,10 @@ const Playtest = ({ tab }) => {
         options={playtestOptions}
         onChange={onSelectChange}
         defaultValue={{
-          value: playtestOption || 'Default',
-          label: playtestOption || 'Default',
+          value: playtestOption || null,
+          label: playtestOption || 'No Inputs Found',
         }}
-        placeholder={playtestOption || 'Default'}
+        placeholder="Select Input"
         creatable={false}
       />
 
