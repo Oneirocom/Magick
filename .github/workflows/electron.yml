@@ -16,21 +16,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Change directory
-        run: cd apps/client
       - name: Set up Node.js
         uses: actions/setup-node@v2.4.0
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci --prefix apps/client
+      - name: Clean Output Folder
+        run: rm -rf apps/client/electron/output
+      - name: Install cross-env
+        run: npm install -g cross-env
+      - name: Set NODE_ENV to production
+        run: cross-env NODE_ENV=production
       - name: Build Electron
-        run: npx cap add electron && npx cap copy && npx cap open electron
+        run: cd apps/client && npx cap add electron && npx cap copy && npx cap open electron
       - name: Archive Artifact
         uses: actions/upload-artifact@v2
         with:
           name: release-${{ matrix.os }}
-          path: ./electron/output
+          path: ./apps/client/electron/output
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.1
@@ -47,6 +51,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./electron/output
+          asset_path: ./apps/client/electron/output
           asset_name: magick-electron-${{ matrix.os }}-${{ github.ref }}
           asset_content_type: application/zip
+      - name: Upload Source Maps
+        uses: honeybadger-io/github-upload-sourcemap-action@master
+        with:
+          working_directory: ./apps/client/electron/output
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
