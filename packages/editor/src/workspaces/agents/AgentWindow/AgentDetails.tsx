@@ -19,9 +19,11 @@ const AgentDetails = ({
   updateCallback,
 }) => {
   const [spellList, setSpellList] = useState<any[]>([])
+  const [rootSpell, setRootSpell] = useState<any>({})
   const config = useConfig()
 
-  const update = (id, _data = selectedAgentData) => {
+  const update = id => {
+    const _data = selectedAgentData
     if (_data.hasOwnProperty('id')) {
       delete _data.id
     }
@@ -30,6 +32,7 @@ const AgentDetails = ({
     _data.spells = Array.isArray(_data?.spells) ? _data.spells : []
     _data.dirty = true
     _data.enabled = _data.enabled ? true : false
+    _data.updatedAt = new Date().toISOString()
     axios
       .patch(`${config.apiUrl}/agents/${id}`, _data)
       .then(res => {
@@ -71,6 +74,12 @@ const AgentDetails = ({
   }
 
   useEffect(() => {
+    if ( selectedAgentData?.rootSpell !== '{}') {
+      console.log('JSON.parse(selectedAgentData.rootSpell)', JSON.parse(selectedAgentData.rootSpell))
+      setRootSpell(JSON.parse(selectedAgentData.rootSpell).name)
+    } else {
+      setRootSpell({})
+    }
     ;(async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
@@ -80,8 +89,6 @@ const AgentDetails = ({
       setSpellList(json.data)
     })()
   }, [])
-
-  console.log('selectedAgentData', selectedAgentData)
 
   return (
     <div>
@@ -136,26 +143,44 @@ const AgentDetails = ({
           }}
           name="rootSpell"
           id="rootSpell"
-          value={JSON.parse(selectedAgentData?.rootSpell ?? '{ "name": "default" }').name}
+          value={JSON.parse(selectedAgentData.rootSpell).name || 'default'}
           onChange={event => {
+            console.log('event', event.target.value)
+            setRootSpell(event.target.value)
+            const newRootSpell = spellList.find(
+              spell => spell.name === event.target.value
+            )
+            console.log('newRootSpell', newRootSpell)
             setSelectedAgentData({
               ...selectedAgentData,
-              rootSpell: JSON.stringify(event.target.value),
-              publicVariables:
-                JSON.stringify(
-                  Object.values(JSON.parse(event.target.value).graph.nodes as any)
-                  .filter((node: { data }) => node?.data?.isPublic).map((node: { data }) => { return { id: node?.data?.id, name: node?.data?.name, value: node?.data?.value }})
-                ),
-              updatedAt: new Date().toISOString(),
+              rootSpell: JSON.stringify(newRootSpell),
+              publicVariables: JSON.stringify(
+                Object.values(newRootSpell.graph.nodes as any)
+                  // get the public nodes
+                  .filter((node: { data }) => node?.data?.isPublic)
+                  // map to an array of objects
+                  .map((node: { data; id }) => {
+                    return {
+                      id: node?.id,
+                      name: node?.data?.name,
+                      value: node?.data?.value,
+                    }
+                  })
+                  // map to an object with the id as the key
+                  .reduce((acc, cur) => {
+                    acc[cur.id] = cur
+                    return acc
+                  }, {})
+              ),
             })
           }}
         >
-          <option disabled value="default" key={0}>
+          <option disabled value={'default'} key={0}>
             Select Spell
           </option>
           {spellList?.length > 0 &&
             spellList.map((spell, idx) => (
-              <option value={JSON.stringify(spell)} key={idx}>
+              <option value={spell.name} key={idx}>
                 {spell.name}
               </option>
             ))}
@@ -164,8 +189,10 @@ const AgentDetails = ({
       <div>
         {pluginManager.getSecrets(true).map((value, index, array) => {
           return (
-            <div key={index} style={{marginBottom: '1em'}}>
-              <div style={{width: '100%', marginBottom: '1em'}}>{value.name}</div>
+            <div key={value.name+index} style={{ marginBottom: '1em' }}>
+              <div style={{ width: '100%', marginBottom: '1em' }}>
+                {value.name}
+              </div>
               <Input
                 type="password"
                 name={value.key}
@@ -174,7 +201,7 @@ const AgentDetails = ({
                 value={
                   selectedAgentData.secrets
                     ? JSON.parse(selectedAgentData.secrets)[value.key]
-                    : ''
+                    : null
                 }
                 onChange={event => {
                   setSelectedAgentData({
@@ -182,7 +209,7 @@ const AgentDetails = ({
                     secrets: JSON.stringify({
                       ...JSON.parse(selectedAgentData.secrets),
                       [value.key]: event.target.value,
-                    })
+                    }),
                   })
                 }}
               />
@@ -193,7 +220,7 @@ const AgentDetails = ({
       <div
         style={{
           height: `${
-            selectedAgentData.public && 
+            selectedAgentData.public &&
             selectedAgentData.publicVariables !== '[]'
               ? 'auto'
               : '150px'
@@ -202,17 +229,18 @@ const AgentDetails = ({
           marginBottom: '10px',
         }}
       >
-        {selectedAgentData.publicVariables && selectedAgentData.publicVariables !== '[]' && (
-          <AgentPubVariables
-            setPublicVars={data => {
-              setSelectedAgentData({
-                ...selectedAgentData,
-                publicVariables: JSON.stringify(data),
-              })
-            }}
-            publicVars={JSON.parse(selectedAgentData.publicVariables)}
-          />
-        )}
+        {selectedAgentData.publicVariables &&
+          selectedAgentData.publicVariables !== '[]' && (
+            <AgentPubVariables
+              setPublicVars={data => {
+                setSelectedAgentData({
+                  ...selectedAgentData,
+                  publicVariables: JSON.stringify(data),
+                })
+              }}
+              publicVars={JSON.parse(selectedAgentData.publicVariables)}
+            />
+          )}
       </div>
       <div
         className={`${

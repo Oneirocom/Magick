@@ -27,7 +27,7 @@ const AgentWindow = ({
   const [selectedAgentData, setSelectedAgentData] = useState({ id: null })
 
   const onClickHandler = agent => {
-    setSelectedAgentData({secrets: '{}', ...agent})
+    setSelectedAgentData(agent)
   }
 
   useEffect(() => {
