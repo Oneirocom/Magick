@@ -29,7 +29,7 @@ export const agentExternalResolver = resolve<Agent, HookContext>({})
 // Schema for creating new entries
 export const agentDataSchema = Type.Pick(
   agentSchema,
-  ['dirty', 'projectId', 'name', 'enabled', 'updatedAt', 'spells', 'data'],
+  ['dirty', 'projectId', 'name', 'enabled', 'updatedAt', 'spells', 'data', 'publicVariables'],
   {
     $id: 'AgentData'
   }
@@ -55,7 +55,8 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'name',
   'updatedAt',
   'spells',
-  'data'
+  'data',
+  'publicVariables'
 ])
 export const agentQuerySchema = Type.Intersect(
   [

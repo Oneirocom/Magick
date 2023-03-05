@@ -7,7 +7,6 @@ import { activeTabSelector, selectAllTabs } from '../../../state/tabs'
 
 import '../../../screens/Magick/magick.module.css'
 import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
-import { RootState } from '../../../state/store'
 import { useSelector } from 'react-redux'
 import { Button } from '@magickml/client-core'
 
@@ -16,9 +15,10 @@ const TextEditor = props => {
   const [data, setData] = useState<TextEditorData | null>(null)
   // const [height, setHeight] = useState<number>()
   const [editorOptions, setEditorOptions] = useState<Record<string, any>>()
-  const [language, setLanguage] = useState<string | undefined>(undefined)
   const codeRef = useRef<string>()
-  const [openaiApiKey, setOpenaiApiKey] = useState<string | undefined>(undefined)
+  const [openaiApiKey, setOpenaiApiKey] = useState<string | undefined>(
+    undefined
+  )
 
   const { textEditorData, saveTextEditor, inspectorData } = useInspector()
   const activeTab = useSelector(activeTabSelector)
@@ -59,6 +59,8 @@ const TextEditor = props => {
       inputs.push('  ' + input.socketKey + ',')
     })
 
+    // if inspectorData options is javascript or python...
+
     const textLines = code?.split('\n') ?? []
     // get the index of the first line that starts with function
     const startIndex = textLines.findIndex(line => line.startsWith('function'))
@@ -74,7 +76,22 @@ const TextEditor = props => {
     // join the textLines array back into a string
     const updatedText = textLines.join('\n')
     textEditorData.data = updatedText
-    setCode(updatedText)
+    const { language } = textEditorData?.options
+    const options = {
+      lineNumbers: language === 'javascript' || language === 'python',
+      minimap: {
+        enabled: false,
+      },
+      suggest: {
+        preview: language === 'javascript' || language === 'python',
+      },
+      wordWrap: 'bounded',
+
+      // fontFamily: '"IBM Plex Mono", sans-serif !important',
+    }
+
+    setEditorOptions(options)
+    setCode(language === 'javascript' || language === 'python' ? updatedText : code)
   }, [activeTab])
 
   useEffect(() => {
@@ -85,23 +102,6 @@ const TextEditor = props => {
 
     return () => clearTimeout(delayDebounce)
   }, [code])
-
-  useEffect(() => {
-    const options = {
-      lineNumbers: language === 'javascript',
-      minimap: {
-        enabled: false,
-      },
-      suggest: {
-        preview: language === 'javascript',
-      },
-      wordWrap: 'bounded',
-
-      // fontFamily: '"IBM Plex Mono", sans-serif !important',
-    }
-
-    setEditorOptions(options)
-  }, [language])
 
   useEffect(() => {
     if (
@@ -127,6 +127,7 @@ const TextEditor = props => {
     // remove the lines in textLines starting at StartIndex and ending at EndIndex
     // replace with the inputs
     textLines.splice(startIndex, endIndex - startIndex, ...inputs)
+    const { language } = textEditorData?.options
 
     // join the textLines array back into a string
     const updatedText = textLines.join('\n')
@@ -134,11 +135,7 @@ const TextEditor = props => {
     textEditorData.data = updatedText
 
     setData(textEditorData)
-    setCode(updatedText)
-
-    if (textEditorData?.options?.language) {
-      setLanguage(textEditorData.options.language)
-    }
+    setCode(language === 'javascript' || language === 'python' ? updatedText : code)
   }, [textEditorData])
 
   const save = code => {
@@ -292,6 +289,8 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
       _outputs.push(output.socketKey)
     })
 
+    const language = textEditorData?.options?.language
+
     const prompt = makeGeneratePrompt(functionText, language, _inputs, _outputs)
 
     const response = await fetch(
@@ -377,7 +376,7 @@ ${
       <Editor
         theme="sds-dark"
         // height={height} // This seemed to have been causing issues.
-        language={language}
+        language={textEditorData?.options?.language}
         value={code}
         options={editorOptions}
         defaultValue={code}

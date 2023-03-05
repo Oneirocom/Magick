@@ -158,12 +158,12 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
       </div>
       <div
         style={{
-          height: `${JSON.parse(selectedAgentData.publicVariables ?? []).length === 0 ? 'auto' : '150px'}`,
+          height: `${selectedAgentData.publicVariables?.length === 0 ? 'auto' : '150px'}`,
           overflow: 'auto',
           marginBottom: '10px',
         }}
       >
-        {JSON.parse(selectedAgentData.publicVariables).length !== 0 ? (
+        {selectedAgentData.publicVariables?.length !== 0 ? (
           <AgentPubVariables
             setPublicVars={(data) => {
               setSelectedAgentData({
@@ -171,7 +171,7 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
                 publicVariables: data,
             })
           }}
-            publicVars={JSON.parse(selectedAgentData.publicVariables)}
+            publicVars={selectedAgentData.publicVariables}
           />
         ) : (
           <Typography>No Public Variables</Typography>
@@ -179,7 +179,7 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
       </div>
       <div
         className={`${
-          JSON.parse(selectedAgentData.publicVariables).length === 0
+          selectedAgentData.publicVariables?.length === 0
             ? styles.connectorsLong
             : styles.connectors
         }`}
