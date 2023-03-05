@@ -3,11 +3,12 @@ import AgentItem from './AgentItem'
 import styles from './index.module.scss'
 import AgentDetails from './AgentDetails'
 import FileInput from '../../../screens/HomeScreen/components/FileInput'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useConfig } from '../../../contexts/ConfigProvider'
 
 interface Props {
   data: Array<object>
-  onCreateAgent: () => void
+  onCreateAgent: (data: any) => void
   updateCallBack: () => void
   update: (id: string, data: object) => void
   onDelete: (id: string) => void
@@ -22,11 +23,19 @@ const AgentWindow = ({
   onDelete,
   onLoadFile,
 }: Props) => {
+  const config = useConfig()
   const [selectedAgentData, setSelectedAgentData] = useState({ id: null })
 
   const onClickHandler = agent => {
-    setSelectedAgentData(agent)
+    setSelectedAgentData({secrets: '[]', ...agent})
   }
+
+  useEffect(() => {
+    console.log('data is', data)
+    if(!selectedAgentData.id && data.length > 0) {
+      setSelectedAgentData(data[0] as any)
+    }
+  }, [data])
 
   return (
     <Grid container className={styles.container}>
@@ -41,7 +50,14 @@ const AgentWindow = ({
         <Button
           variant="contained"
           className={`${styles.btn} ${styles['mg-btm-medium']}`}
-          onClick={() => onCreateAgent()}
+          onClick={() => onCreateAgent({
+            name: 'New Agent',
+            projectId: config.projectId,
+            enabled: false,
+            spells: [],
+            publicVariables: '[]',
+            secrets: '[]',
+          })}
         >
           Add Agent
         </Button>
@@ -63,9 +79,9 @@ const AgentWindow = ({
         ))}
       </Grid>
       <Grid item xs={8} className={styles.item}>
-        {selectedAgentData ? (
+        {selectedAgentData.id ? (
           <AgentDetails
-          selectedAgentData={selectedAgentData}
+            selectedAgentData={selectedAgentData}
             setSelectedAgentData={setSelectedAgentData}
             updateCallback={updateCallBack}
           />

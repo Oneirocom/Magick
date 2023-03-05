@@ -43,11 +43,11 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const selectedAgentData = agent.data
     console.log('AGENT DATA', selectedAgentData)
     // get the selectedAgentData's spells
-    const rootSpell = selectedAgentData.rootSpell
+    const rootSpell = JSON.parse(selectedAgentData.rootSpell)
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
-      id: rootSpell,
+      id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (GET)': { ...json.inputs },
@@ -83,7 +83,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
-      id: rootSpell,
+      id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (POST)': { ...json.inputs },
@@ -117,7 +117,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
-      id: rootSpell,
+      id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (PUT)': { ...json.inputs },
@@ -151,7 +151,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
-      id: rootSpell,
+      id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (PATCH)': { ...json.inputs },
@@ -181,7 +181,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     console.log('ROOT SPELL', rootSpell)
     // run the spell
     const result = await runSpell({
-      id: rootSpell,
+      id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (DELETE)': { ...json.inputs },

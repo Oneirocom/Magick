@@ -1,3 +1,9 @@
+type Secret = {
+  name: string
+  key: string
+  global?: boolean
+}
+
 type DrawerItem = {
   path: string
   icon: any
@@ -21,17 +27,20 @@ type PluginConstuctor = {
   nodes?: any
   inputTypes?: any[]
   outputTypes?: any[]
+  secrets?: Secret[]
 }
 class Plugin {
   name: string
   nodes: any
   inputTypes: any[]
   outputTypes: any[]
-  constructor({ name, nodes = [], inputTypes = [], outputTypes = [] }: PluginConstuctor) {
+  secrets: Secret[] = []
+  constructor({ name, nodes = [], inputTypes = [], outputTypes = [], secrets = [] }: PluginConstuctor) {
     this.name = name
     this.nodes = nodes
     this.inputTypes = inputTypes
     this.outputTypes = outputTypes
+    this.secrets = secrets
   }
 }
 
@@ -49,6 +58,7 @@ export class ClientPlugin extends Plugin {
     clientPageLayout = null,
     clientRoutes = [],
     drawerItems = [],
+    secrets = [],
   }: {
     name: string
     nodes?: any
@@ -58,12 +68,14 @@ export class ClientPlugin extends Plugin {
     clientPageLayout?: any
     clientRoutes?: Array<ClientRoute>
     drawerItems?: Array<DrawerItem>
+    secrets?: Secret[]
   }) {
     super({
       name,
       nodes,
       inputTypes,
       outputTypes,
+      secrets,
     })
     this.clientPageLayout = clientPageLayout
     this.agentComponents = agentComponents
@@ -97,6 +109,7 @@ export class ServerPlugin extends Plugin {
       },
     },
     serverRoutes = [],
+    secrets = [],
   }: {
     name: string
     nodes?: any
@@ -109,12 +122,14 @@ export class ServerPlugin extends Plugin {
     inputTypes?: any[]
     outputTypes?: any[]
     serverRoutes?: Array<ServerRoute>
+    secrets?: Secret[]
   }) {
     super({
       name,
       nodes,
       inputTypes,
       outputTypes,
+      secrets,
     })
     this.services = services
     this.agentMethods = agentMethods
@@ -172,6 +187,18 @@ class PluginManager {
     })
 
     return nodes
+  }
+
+  getSecrets(global = false) {
+    const secrets = [] as any[]
+    this.pluginList.forEach(plugin => {
+      plugin.secrets.forEach(secret => {
+        if(global && !secret.global) return
+        secrets.push(secret)
+      })
+    })
+    console.log('secrets', secrets)
+    return secrets
   }
 
   async teardown(plugin: Plugin) {
