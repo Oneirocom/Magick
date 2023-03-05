@@ -2,6 +2,7 @@ import { EngineContext, GraphData, ModuleComponent, Spell } from '../types'
 import { getNodes } from '../nodes'
 import { initSharedEngine, extractNodes, MagickEngine } from '../engine'
 import { Module } from '../plugins/modulePlugin/module'
+import { RunComponentArgs } from './SpellRunner'
 
 type RunSpellConstructor = {
   magickInterface: EngineContext
@@ -47,10 +48,6 @@ class RunSpell {
 
   private _getComponent(componentName: string) {
     return this.engine.components.get(componentName)
-  }
-
-  private _loadInputs(inputs: Record<string, any>) {
-    this.module.read(inputs)
   }
 
   private _formatOutputs(rawOutputs: Record<string, any>) {
@@ -105,14 +102,16 @@ class RunSpell {
    * component, and ran the one triggered rather than this slightly hacky hard coded
    * method.
    */
-  async runComponent(inputs: Record<string, any>, componentName: string) {
+  async runComponent({inputs, componentName, secrets, publicVariables}: RunComponentArgs) {
     // ensaure we run from a clean sloate
     this._resetTasks()
 
+    console.log('reading module - runSpell.ts')
     // laod the inputs into module memory
-    this._loadInputs(inputs)
+    this.module.read({inputs, secrets, publicVariables})
 
-    const component = this._getComponent(componentName) as ModuleComponent
+    const component = this._getComponent(componentName as string) as ModuleComponent
+    
     const triggeredNode = this._getFirstNodeTrigger()
 
     // this running is where the main "work" happens.

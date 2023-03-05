@@ -6,7 +6,7 @@ import {
   StreamType,
   NoSubscriberBehavior,
 } from '@discordjs/voice'
-let createReadStream;
+let createReadStream
 
 import { tts, tts_tiktalknet } from '@magickml/server-core'
 
@@ -32,7 +32,7 @@ export function initSpeechClient({
   voiceProvider,
   voiceCharacter,
   languageCode,
-  tiktalknet_url
+  tiktalknet_url,
 }: any) {
   //let spellRunner = spellRunner
   addSpeechEvent(client, { group: 'default_' + agent.id })
@@ -48,7 +48,7 @@ export function initSpeechClient({
     const author = msg.author
     const channel = msg.channel
 
-    if(!createReadStream) {
+    if (!createReadStream) {
       // dynbamically import createReadStream from fs
       const fs = await import('fs')
       createReadStream = fs.createReadStream
@@ -76,10 +76,10 @@ export function initSpeechClient({
       } catch (e) {
         console.log('error getting members', e)
       }
-      const fullResponse = await spellRunner.runComponent(
-        {
-        inputs: {},
-        runData: {
+      console.log('calling runComponent from discord-voice.ts')
+      const fullResponse = await spellRunner.runComponent({
+        inputs: {
+          'Input - Discord (Voice)': {
             content,
             speaker: author?.username ?? 'VoiceSpeaker',
             agent: discord_bot_name,
@@ -88,10 +88,12 @@ export function initSpeechClient({
             agentId: agent.id,
             entities: entities.map(e => e.user),
             channel: 'voice',
+          },
         },
+        secrets: agent.secrets ?? {},
+        publicVariables: agent.publicVariables ?? {},
         runSubspell: true,
-      }
-      )
+      })
       let response = Object.values(fullResponse)[0] as string
 
       if (response === undefined || !response || response.length <= 0) {

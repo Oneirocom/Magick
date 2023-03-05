@@ -7,7 +7,7 @@ import styles from './index.module.scss'
 const AgentItem = ({
   keyId,
   agent,
-  setSelectedAgent,
+  setSelectedAgentData,
   update,
   onDelete,
   onClick,
@@ -79,7 +79,7 @@ const AgentItem = ({
               onClick={e => {
                 e.stopPropagation()
                 onDelete(agent?.id)
-                setSelectedAgent('')
+                setSelectedAgentData('')
               }}
             />
           </div>

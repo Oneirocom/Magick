@@ -3,11 +3,12 @@ import AgentItem from './AgentItem'
 import styles from './index.module.scss'
 import AgentDetails from './AgentDetails'
 import FileInput from '../../../screens/HomeScreen/components/FileInput'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useConfig } from '../../../contexts/ConfigProvider'
 
 interface Props {
   data: Array<object>
-  onCreateAgent: () => void
+  onCreateAgent: (data: any) => void
   updateCallBack: () => void
   update: (id: string, data: object) => void
   onDelete: (id: string) => void
@@ -22,11 +23,19 @@ const AgentWindow = ({
   onDelete,
   onLoadFile,
 }: Props) => {
-  const [selectedAgent, setSelectedAgent] = useState('')
+  const config = useConfig()
+  const [selectedAgentData, setSelectedAgentData] = useState({ id: null })
 
   const onClickHandler = agent => {
-    setSelectedAgent(agent)
+    setSelectedAgentData(agent)
   }
+
+  useEffect(() => {
+    console.log('data is', data)
+    if(!selectedAgentData.id && data.length > 0) {
+      setSelectedAgentData(data[0] as any)
+    }
+  }, [data])
 
   return (
     <Grid container className={styles.container}>
@@ -41,21 +50,29 @@ const AgentWindow = ({
         <Button
           variant="contained"
           className={`${styles.btn} ${styles['mg-btm-medium']}`}
-          onClick={() => onCreateAgent()}
+          onClick={() => onCreateAgent({
+            name: 'New Agent',
+            projectId: config.projectId,
+            enabled: false,
+            spells: [],
+            rootSpell: '{}',
+            publicVariables: '{}',
+            secrets: '{}',
+          })}
         >
           Add Agent
         </Button>
-        {data.map(agent => (
+        {data.map((agent: { id: string }) => (
           <AgentItem
             key={agent?.id}
             keyId={agent?.id}
             onDelete={onDelete}
-            setSelectedAgent={setSelectedAgent}
+            setSelectedAgentData={setSelectedAgentData}
             onClick={onClickHandler}
             update={update}
             agent={agent}
             style={
-              agent?.id === selectedAgent?.id
+              agent?.id === selectedAgentData?.id
                 ? { border: '1px solid var(--primary)' }
                 : {}
             }
@@ -63,10 +80,10 @@ const AgentWindow = ({
         ))}
       </Grid>
       <Grid item xs={8} className={styles.item}>
-        {selectedAgent ? (
+        {selectedAgentData.id ? (
           <AgentDetails
-            agentData={selectedAgent}
-            setSelectedAgent={setSelectedAgent}
+            selectedAgentData={selectedAgentData}
+            setSelectedAgentData={setSelectedAgentData}
             updateCallback={updateCallBack}
           />
         ) : (

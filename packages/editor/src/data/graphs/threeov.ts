@@ -4,7 +4,7 @@ const threeov = {
 		"232": {
 			"id": 232,
 			"data": {
-				"name": "Input",
+				"name": "Input - Default",
 				"text": "",
 				"display": "",
 				"outputs": [],

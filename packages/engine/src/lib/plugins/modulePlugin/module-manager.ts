@@ -15,6 +15,12 @@ import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'
 import { Module } from './module'
 
+export type ModuleContext = {
+  secrets?: Record<string, string>
+  publicVariables?: Record<string, string>
+  socketInfo: { targetSocket: string }
+}
+
 export type ModuleSocketType = {
   name: SocketNameType
   socketKey: string
@@ -113,7 +119,7 @@ export class ModuleManager {
     node: NodeData,
     inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
-    args: { socketInfo: { targetSocket: string } }
+    context: ModuleContext
   ) {
     if (!node.data.spell) return
     if (!this.modules[node.data.spell as number]) return
@@ -121,8 +127,6 @@ export class ModuleManager {
     const data = this.modules[moduleName].data as any
     const module = new Module()
     const engine = this.engine?.clone()
-
-    console.log('inputs', inputs)
 
     const parsedInputs = Object.entries(inputs).reduce((acc, input) => {
       const [key, value] = input
@@ -136,24 +140,27 @@ export class ModuleManager {
       }
     }, {} as any)
 
-    console.log('parsedInputs', parsedInputs)
-
-    module.read(parsedInputs)
+    console.log('reading module - module-manager.ts')
+    module.read({
+      inputs: parsedInputs,
+      secrets: context?.secrets,
+      publicVariables: context?.publicVariables,
+    })
     await engine?.process(
       data,
       null,
-      Object.assign({}, args, { module, silent: true })
+      Object.assign({}, context, { module, silent: true })
     )
 
-    if ((args?.socketInfo as any)?.targetNode) {
-      console.log('targetNode', (args?.socketInfo as any).targetNode)
+    if ((context?.socketInfo as any)?.targetNode) {
+      console.log('targetNode', (context?.socketInfo as any).targetNode)
     }
 
-    if (args?.socketInfo?.targetSocket) {
+    if (context?.socketInfo?.targetSocket) {
       console.log('data', data)
       const triggeredNode = this.getTriggeredNode(
         data,
-        args.socketInfo.targetSocket
+        context.socketInfo.targetSocket
       )
       if (!triggeredNode) throw new Error('Triggered node not found')
       // todo need to remember to update this if/when componnet name changes

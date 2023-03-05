@@ -117,13 +117,14 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
 
 export type Env = {
   API_ROOT_URL: string
-  APP_SEARCH_SERVER_URL: string
 }
 
 type runSpellType = {
   inputs: Record<string, any>
   spellName: string
   projectId: string
+  secrets: Record<string, any>
+  publicVariables: Record<string, any>
 }
 
 export type EngineContext = {
@@ -132,6 +133,8 @@ export type EngineContext = {
     inputs,
     spellName,
     projectId,
+    secrets,
+    publicVariables
   }: runSpellType) => Record<string, any>
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: ({
@@ -209,8 +212,8 @@ export type ModuleType = {
   id: string
   name: string
   data: GraphData
-  created_at: string
-  updated_at: string
+  createdAt: string
+  updatedAt: string
 }
 
 export type ModelCompletionOpts = {
@@ -280,8 +283,8 @@ export type Module = { name: string; id: string; data: Data }
 export type Spell = {
   name: string
   graph: Data
-  created_at?: string
-  updated_at?: string
+  createdAt?: string
+  updatedAt?: string
   id: string
   hash?: string
   projectId: string

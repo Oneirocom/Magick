@@ -2,99 +2,111 @@ import React, { useEffect, useState } from 'react'
 import { useConfig } from '../../contexts/ConfigProvider'
 import { KeyboardArrowDown, FileCopy, Clear } from '@mui/icons-material/'
 import styles from './styles.module.scss'
-import { IconButton } from '@mui/material'
+import { IconButton, Input } from '@mui/material'
 import { Tooltip } from '@magickml/client-core'
 
-const SettingsWindow = () => {
-  const config = useConfig()
-  const [apiKey, setApiKey] = useState<any>('')
-  const [copy, setCopy] = useState<string>('copy')
-  const [clear, setClear] = useState<string>('clear')
-
-  useEffect(() => {
-    const openai = window.localStorage.getItem('openai-api-key')
-    setApiKey(openai ? JSON.parse(openai).apiKey : '')
-  }, [])
-
+const SettingsWindowChild = ({
+  displayName,
+  keyName,
+  getUrl,
+  setKey,
+  getKey,
+}) => {
   return (
-    <div className={styles['settings-editor']}>
-      <div className={styles['child']}>
-        <div className={styles['innerChild']}>
-          <p className={styles['title']}>
-            Your OpenAI Key
-            <span className={`${styles['md-margin']} ${styles['flexCenter']}`}>
-              <KeyboardArrowDown className={styles['icon']} />
-            </span>{' '}
-          </p>
-          <div className={styles['padHorizontal']}>
-            <div>
-              <p>
-                Your API key is{' '}
-                <a
-                  href="https://beta.openai.com/account/api-keys"
-                  target="_blank"
-                  rel="noreferrer"
-                  tabIndex={-1}
-                >
-                  available here.
-                </a>
-              </p>
-            </div>
+    <div className={styles['child']}>
+      <p className={styles['title']}>{displayName}</p>
 
-            <form>
-              <input
-                className={styles['input']}
-                type="password"
-                placeholder="Paste Your OpenAI API Key"
-                id="openai-api-key"
-                name="api-key"
-                value={apiKey}
-                onChange={e => {
-                  setApiKey(e.target.value)
-                  localStorage.setItem(
-                    'openai-api-key',
-                    JSON.stringify({ apiKey: e.target.value })
-                  )
-                }}
-              />
-              {apiKey && (
-                <>
-                  <Tooltip title={copy}>
-                    <IconButton
-                      className={styles['icon']}
-                      onClick={() => {
-                        navigator.clipboard.writeText(apiKey)
-                        setCopy('copied!')
-                        setTimeout(() => {
-                          setCopy('copy')
-                        }, 2000)
-                      }}
-                    >
-                      <FileCopy />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title={clear}>
-                    <IconButton
-                      className={styles['icon']}
-                      onClick={() => {
-                        localStorage.removeItem('openai-api-key')
-                        setApiKey('')
-                        setClear('Cleared!')
-                        setTimeout(() => {
-                          setClear('clear')
-                        }, 2000)
-                      }}
-                    >
-                      <Clear />
-                    </IconButton>
-                  </Tooltip>
-                </>
-              )}
-            </form>
-          </div>
-        </div>
+      <Input
+        className={styles['input']}
+        type="password"
+        placeholder="Paste Your API Key"
+        id={keyName}
+        name={keyName}
+        value={getKey(keyName) || ''}
+        onChange={e => {
+          setKey(keyName, e.target.value)
+        }}
+      />
+      {getKey(keyName) && getKey(keyName) !== '' && (
+        <>
+          <Tooltip title={'Copy'}>
+            <IconButton
+              className={styles['icon']}
+              onClick={() => {
+                navigator.clipboard.writeText(getKey(keyName))
+              }}
+            >
+              <FileCopy />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={'Clear'}>
+            <IconButton
+              className={styles['icon']}
+              onClick={() => {
+                setKey(keyName, '')
+              }}
+            >
+              <Clear />
+            </IconButton>
+          </Tooltip>
+        </>
+      )}
+
+      <div>
+        Your API key is{' '}
+        <a href={getUrl} target="_blank" rel="noreferrer" tabIndex={-1}>
+          available here.
+        </a>
       </div>
     </div>
+  )
+}
+
+const SettingsWindow = () => {
+  let [nonce, setNonce] = useState(0)
+  const getKey = key => {
+    if (!window.localStorage.getItem('secrets')) {
+      window.localStorage.setItem('secrets', JSON.stringify({}))
+    }
+
+    const secrets = window.localStorage.getItem('secrets')
+
+    return JSON.parse(secrets)[key]
+  }
+
+  const setKey = (newKey, newValue) => {
+    const secrets = window.localStorage.getItem('secrets')
+    const json = secrets ? JSON.parse(secrets) : {}
+    const newJsonString = JSON.stringify({ ...json, [newKey]: newValue })
+    window.localStorage.setItem('secrets', newJsonString)
+    setNonce(nonce + 1)
+  }
+
+  return (
+    nonce !== null && (
+      <div className={styles['settings-editor']}>
+        <SettingsWindowChild
+          displayName={'OpenAI'}
+          keyName={'openai_api_key'}
+          getUrl={'https://beta.openai.com/account/api-keys'}
+          setKey={setKey}
+          getKey={getKey}
+        />
+        <SettingsWindowChild
+          displayName={'BananaML'}
+          keyName={'banana-api-key'}
+          getUrl={'https://app.banana.dev/'}
+          setKey={setKey}
+          getKey={getKey}
+        />
+        <div className={styles['child']}>
+          <p>
+            We do not keep your API keys. They are stored in your browser's
+            local storage.
+          </p>
+        </div>
+      </div>
+    )
   )
 }
 

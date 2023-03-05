@@ -89,6 +89,11 @@ const DiscordPlugin = new ServerPlugin({
     { name: 'Discord (Text)', trigger: false, socket: eventSocket },
   ],
   agentMethods: getAgentMethods(),
+  secrets: [{
+    name: 'Discord API Key',
+    key: 'discord_api_key',
+    global: false
+  }]
 })
 
 export default DiscordPlugin

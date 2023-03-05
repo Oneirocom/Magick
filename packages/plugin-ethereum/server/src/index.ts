@@ -1,6 +1,5 @@
 import { ServerPlugin } from "@magickml/engine"
 import Nodes from '@magickml/plugin-ethereum-shared'
-import Money from "@mui/icons-material/Money"
 
 type StartEthereumArgs = {
   agent: any,
@@ -48,6 +47,18 @@ const EthereumPlugin = new ServerPlugin({
   nodes: Nodes,
   services: [['EthereumPlugin']],
   agentMethods: getAgentMethods(),
+  secrets: [
+    {
+      name: 'Ethereum Private Key',
+      key: 'ethereum_private_key',
+      global: false,
+    },
+    {
+      name: 'Ethereum Public Address',
+      key: 'ethereum_public_address',
+      global: false,
+    }
+  ]
 })
 
 export default EthereumPlugin;

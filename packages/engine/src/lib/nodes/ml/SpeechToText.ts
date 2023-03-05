@@ -7,7 +7,6 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
 } from '../../types'
-import { BANANA_API_KEY, BANANA_MODEL_KEY } from '../../config'
 import { audioSocket, stringSocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
@@ -69,6 +68,9 @@ export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
     if (!banana) {
       banana = await import('@banana-dev/banana-dev')
     }
+
+    const BANANA_API_KEY = ''
+    const BANANA_MODEL_KEY = ''
 
     const output = await banana.run(
       BANANA_API_KEY,

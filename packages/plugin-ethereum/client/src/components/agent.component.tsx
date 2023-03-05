@@ -6,7 +6,7 @@ import { KeyInput } from './utils'
 import { Switch } from '@magickml/client-core'
 
 type PluginProps = {
-  agentData: any
+  selectedAgentData: any
   props
 }
 
@@ -16,18 +16,18 @@ export const EthereumAgentWindow: FC<any> = props => {
   const [ethereum_private_key, setEthereumPrivateKey] = useState('')
   const [ethereum_custom_rpc, setEthereumCustomRpc] = useState('')
 
-  const { agentData, setAgentData } = props
+  const { selectedAgentData, setSelectedAgentData } = props
 
   useEffect(() => {
-    if (props.agentData !== null && props.agentData !== undefined) {
-      console.log(props.agentData)
-      setEthereumEnabled(props.agentData.data?.ethereum_enabled)
-      setEthereumPrivateKey(props.agentData.data?.ethereum_private_key)
-      setEthereumCustomRpc(props.agentData.data?.ethereum_custom_rpc)
-      setAgentData({
-        ...agentData,
+    if (props.selectedAgentData !== null && props.selectedAgentData !== undefined) {
+      console.log(props.selectedAgentData)
+      setEthereumEnabled(props.selectedAgentData.data?.ethereum_enabled)
+      setEthereumPrivateKey(props.selectedAgentData.data?.ethereum_private_key)
+      setEthereumCustomRpc(props.selectedAgentData.data?.ethereum_custom_rpc)
+      setSelectedAgentData({
+        ...selectedAgentData,
         data: {
-          ...agentData.data,
+          ...selectedAgentData.data,
           ethereum_enabled: ethereum_enabled,
           ethereum_private_key: ethereum_private_key,
           ethereum_custom_rpc: ethereum_custom_rpc,
@@ -37,10 +37,10 @@ export const EthereumAgentWindow: FC<any> = props => {
   }, [])
   useEffect(() => {
     //console.log(ethereum_enabled, ethereum_private_key, ethereum_custom_rpc)
-    setAgentData({
-      ...agentData,
+    setSelectedAgentData({
+      ...selectedAgentData,
       data: {
-        ...agentData.data,
+        ...selectedAgentData.data,
         ethereum_enabled: ethereum_enabled,
         ethereum_private_key: ethereum_private_key,
         ethereum_custom_rpc: ethereum_custom_rpc,

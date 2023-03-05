@@ -43,8 +43,8 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
     })
 
     const _public = new BooleanControl({
-      dataKey: 'Public',
-      name: 'Public',
+      dataKey: 'isPublic',
+      name: 'isPublic',
     })
 
     node.inspector.add(name).add(_var).add(_public)

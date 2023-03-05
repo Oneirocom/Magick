@@ -21,6 +21,8 @@ interface CreateData {
   id: string
   spellName: string
   projectId: string
+  secrets: Record<string, string>
+  publicVariables: Record<string, any>
 }
 
 const getSpell = async ({ app, id, projectId }) => {
@@ -77,7 +79,7 @@ export class SpellRunnerService<
 
     if (!user) throw new Error('No user is present in service')
 
-    const { inputs, projectId, id } = data
+    const { inputs, projectId, secrets, publicVariables, id } = data
     const decodedId = id.length > 36 ? id.slice(0, 36) : id
     const spellManager = app.userSpellManagers.get(user.id)
 
@@ -88,7 +90,7 @@ export class SpellRunnerService<
       await spellManager.load(spell as Spell)
     }
 
-    const result = await spellManager.run(id, inputs)
+    const result = await spellManager.run(id, inputs, secrets, publicVariables)
 
     return result || {}
   }
@@ -114,10 +116,17 @@ export class SpellRunnerService<
     if (!spellRunner) throw new Error('No spell runner found!')
 
     const spell = spellRunner.currentSpell
-    const updatedSpell = otJson0.type.apply(spell, diff)
+    try {
+      const updatedSpell = otJson0.type.apply(spell, diff)
 
-    spellManager.load(updatedSpell, true)
-    return updatedSpell
+      spellManager.load(updatedSpell, true)
+      return updatedSpell
+    } catch (e) {
+      console.error('Error diffing spell. Recaching spell')
+      app.services.spells.get(id, params)
+      spellManager.load(spell, true)
+      return spell
+    }
   }
 
   // async patch(id: NullableId, data: Data, params?: Params): Promise<Data> {
@@ -133,6 +142,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),
     Model: app.get('dbClient'),
-    name: 'spell-runner'
+    name: 'spell-runner',
   }
 }

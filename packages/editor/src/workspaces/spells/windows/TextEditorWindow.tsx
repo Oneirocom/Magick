@@ -7,7 +7,6 @@ import { activeTabSelector, selectAllTabs } from '../../../state/tabs'
 
 import '../../../screens/Magick/magick.module.css'
 import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
-import { RootState } from '../../../state/store'
 import { useSelector } from 'react-redux'
 import { Button } from '@magickml/client-core'
 
@@ -16,15 +15,23 @@ const TextEditor = props => {
   const [data, setData] = useState<TextEditorData | null>(null)
   // const [height, setHeight] = useState<number>()
   const [editorOptions, setEditorOptions] = useState<Record<string, any>>()
-  const [language, setLanguage] = useState<string | undefined>(undefined)
   const codeRef = useRef<string>()
-  const openaiApiKey = JSON.parse(
-    localStorage.getItem('openai-api-key') || '{}'
-  ).apiKey
+  const [openaiApiKey, setOpenaiApiKey] = useState<string | undefined>(
+    undefined
+  )
+
   const { textEditorData, saveTextEditor, inspectorData } = useInspector()
   const activeTab = useSelector(activeTabSelector)
 
   const [lastInputs, setLastInputs] = useState<string>('')
+
+  useEffect(() => {
+    const secrets = localStorage.getItem('secrets')
+    if (secrets) {
+      const parsedSecrets = JSON.parse(secrets)
+      setOpenaiApiKey(parsedSecrets['openai_api_key'])
+    }
+  }, [])
 
   // const bottomHeight = 50
   const handleEditorWillMount = monaco => {
@@ -40,7 +47,8 @@ const TextEditor = props => {
 
   useEffect(() => {
     if (!inspectorData?.data.inputs) return
-
+    const { language } = textEditorData.options
+    console.log('language', language)
     const stringifiedInputs = JSON.stringify(inspectorData?.data.inputs)
 
     // if inspectorData?.data.inputs is the same as lastInputs, then return
@@ -48,11 +56,14 @@ const TextEditor = props => {
     setLastInputs(JSON.stringify(inspectorData?.data.inputs))
 
     const inputs: string[] = []
+    const textLines = code?.split('\n') ?? []
     inspectorData?.data.inputs?.forEach((input: any) => {
+      // if the textLines includes the input.socketKey, then return
+      if(!textLines.includes('  ' + input.socketKey + ',') &&
+      (language === 'python' || language === 'javascript'))
       inputs.push('  ' + input.socketKey + ',')
     })
 
-    const textLines = code?.split('\n') ?? []
     // get the index of the first line that starts with function
     const startIndex = textLines.findIndex(line => line.startsWith('function'))
     // get the first line that starts with }
@@ -66,7 +77,14 @@ const TextEditor = props => {
 
     // join the textLines array back into a string
     const updatedText = textLines.join('\n')
-    textEditorData.data = updatedText
+    const newTextEditorData = {
+      ...textEditorData,
+    }
+    if(language === 'javascript' || language === 'python') {
+      newTextEditorData.data = updatedText
+    }
+    
+    setData(newTextEditorData)
     setCode(updatedText)
   }, [activeTab])
 
@@ -80,23 +98,6 @@ const TextEditor = props => {
   }, [code])
 
   useEffect(() => {
-    const options = {
-      lineNumbers: language === 'javascript',
-      minimap: {
-        enabled: false,
-      },
-      suggest: {
-        preview: language === 'javascript',
-      },
-      wordWrap: 'bounded',
-
-      // fontFamily: '"IBM Plex Mono", sans-serif !important',
-    }
-
-    setEditorOptions(options)
-  }, [language])
-
-  useEffect(() => {
     if (
       !textEditorData ||
       Object.keys(textEditorData).length === 0
@@ -106,11 +107,17 @@ const TextEditor = props => {
     //Removed !textEditorData.data causing state issues between text editor instances.
 
     const inputs = []
+    const { language } = textEditorData.options
+    const textLines = textEditorData.data?.split('\n') ?? []
+    console.log('language', language)
+    console.log('textLines', textLines)
     inspectorData?.data.inputs?.forEach((input: any) => {
+      // if the textLines includes the input.socketKey, then return
+      if(!textLines.includes('  ' + input.socketKey + ',') &&
+      (language === 'python' || language === 'javascript'))
       inputs.push('  ' + input.socketKey + ',')
     })
 
-    const textLines = textEditorData.data?.split('\n') ?? []
     // get the index of the first line that starts with function
     const startIndex =
       textLines.findIndex(line => line.startsWith('function')) + 1
@@ -123,15 +130,15 @@ const TextEditor = props => {
 
     // join the textLines array back into a string
     const updatedText = textLines.join('\n')
-
-    textEditorData.data = updatedText
-
-    setData(textEditorData)
-    setCode(updatedText)
-
-    if (textEditorData?.options?.language) {
-      setLanguage(textEditorData.options.language)
+    const newTextEditorData = {
+      ...textEditorData,
     }
+    if(language === 'javascript' || language === 'python') {
+      newTextEditorData.data = updatedText
+    }
+
+    setData(newTextEditorData)
+    setCode(updatedText)
   }, [textEditorData])
 
   const save = code => {
@@ -285,6 +292,8 @@ ${language === 'python' ? functionPromptPython : functionPromptJs}
       _outputs.push(output.socketKey)
     })
 
+    const language = textEditorData?.options?.language
+
     const prompt = makeGeneratePrompt(functionText, language, _inputs, _outputs)
 
     const response = await fetch(
@@ -370,7 +379,7 @@ ${
       <Editor
         theme="sds-dark"
         // height={height} // This seemed to have been causing issues.
-        language={language}
+        language={textEditorData?.options?.language}
         value={code}
         options={editorOptions}
         defaultValue={code}

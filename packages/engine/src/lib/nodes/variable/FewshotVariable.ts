@@ -42,8 +42,8 @@ export class FewshotVariable extends MagickComponent<InputReturn> {
     })
 
     const _public = new BooleanControl({
-      dataKey: 'Public',
-      name: 'Public',
+      dataKey: 'isPublic',
+      name: 'isPublic',
     })
 
     const fewshotControl = new FewshotControl({})

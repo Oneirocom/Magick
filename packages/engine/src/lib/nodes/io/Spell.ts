@@ -164,10 +164,14 @@ export class SpellComponent extends MagickComponent<
     {
       magick,
       silent,
+      secrets,
+      publicVariables,
     }: {
       module: { outputs: ModuleWorkerOutput[] }
       magick: EngineContext
       silent: boolean
+      secrets: Record<string, string>
+      publicVariables: Record<string, string>
     }
   ) {
     console.log('node.data', node.data)
@@ -181,6 +185,8 @@ export class SpellComponent extends MagickComponent<
           inputs: flattenedInputs,
           spellName: node.data.spellName as string,
           projectId: node.data.projectId as string,
+          secrets,
+          publicVariables,
         }
       )
 

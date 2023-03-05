@@ -1,20 +1,21 @@
 import { runSpell } from './utils/runSpell'
-import { API_ROOT_URL, APP_SEARCH_SERVER_URL } from '@magickml/engine'
+import { API_ROOT_URL } from '@magickml/engine'
 import { app } from './app'
 
 export const buildMagickInterface = (overrides: Record<string, Function> = {}) => {
   const env = {
     API_ROOT_URL,
-    APP_SEARCH_SERVER_URL
   }
 
   return {
     env,
-    runSpell: async ({id, inputs, projectId}) => {
+    runSpell: async ({id, inputs, projectId, secrets, publicVariables}) => {
       const { outputs } = await runSpell({
         id,
         inputs,
-        projectId
+        projectId,
+        secrets,
+        publicVariables,
       })
       return outputs
     },

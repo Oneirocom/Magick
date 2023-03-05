@@ -20,7 +20,7 @@ export default function FineTuneMetadata({
           label: 'Validation',
           value: fineTune.validation_files[0]?.filename,
         },
-        { label: 'Updated', value: new Date(fineTune.updated_at * 1000) },
+        { label: 'Updated', value: new Date(fineTune.updatedAt * 1000) },
       ]}
     />
   )

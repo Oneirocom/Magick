@@ -30,7 +30,7 @@ export default function FileListTable({
   return (
     <Table>
       {files
-        .sort((a, b) => b.created_at - a.created_at)
+        .sort((a, b) => b.createdAt - a.createdAt)
         .map((file, index) => (
           <tr className={index % 2 === 0 ? 'bg-gray-100' : ''} key={file.id}>
             <TableCell className="p-2 max-w-0 truncate" title={file.id}>
@@ -47,9 +47,9 @@ export default function FileListTable({
             </TableCell>
             <TableCell
               className="p-2 max-w-0 truncate"
-              title={new Date(file.created_at * 1000).toISOString()}
+              title={new Date(file.createdAt * 1000).toISOString()}
             >
-              {new Date(file.created_at * 1000).toLocaleString()}
+              {new Date(file.createdAt * 1000).toLocaleString()}
             </TableCell>
             <TableCell className="p-2 w-8">
               <DeleteFileButton id={file.id} />
