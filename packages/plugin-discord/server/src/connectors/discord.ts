@@ -399,8 +399,8 @@ export class discord_client {
       inputs: {
         'Input - Discord (Text)': {
           content,
-          speaker: message.author.username,
-          agent: this.discord_bot_name,
+          sender: message.author.username,
+          observer: this.discord_bot_name,
           client: 'discord', // TODO: should be typed
           channelId: message.channel.id,
           agentId: this.agent.id,
