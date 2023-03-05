@@ -92,9 +92,10 @@ export default class SpellManager {
     return spellRunner
   }
 
-  async run(spellId: string, inputs: Record<string, any>, secrets: Record<string, string> = {}, publicVariables = {}) {
+  async run(spellId: string, inputs: Record<string, any>, secrets: Record<string, string>, publicVariables) {
     const runner = this.getSpellRunner(spellId)
     
+    console.log('calling runComponent from SpellManager.ts')
     const result = await runner?.runComponent({
       inputs,
       secrets,

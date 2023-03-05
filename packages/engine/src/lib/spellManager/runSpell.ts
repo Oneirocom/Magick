@@ -106,6 +106,7 @@ class RunSpell {
     // ensaure we run from a clean sloate
     this._resetTasks()
 
+    console.log('reading module - runSpell.ts')
     // laod the inputs into module memory
     this.module.read({inputs, secrets, publicVariables})
 

@@ -394,6 +394,7 @@ export class discord_client {
     if (content.startsWith('!ping ')) {
       content = content.replace('!ping ', '')
     }
+    console.log('calling runComponent from discord.ts')
     const response = await this.spellRunner.runComponent({
       inputs: {
         'Input - Discord (Text)': {

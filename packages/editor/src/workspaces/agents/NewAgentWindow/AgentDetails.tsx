@@ -17,20 +17,15 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
   const [spellList, setSpellList] = useState<any[]>([])
   const config = useConfig()
 
-  const [selectedSpellPublicVars, setSelectedSpellPublicVars] = useState<any[]>(
-    []
-  )
-
   useEffect(() => {
     setSelectedAgentData(
       {
         ...selectedAgentData,
-        publicVariables: Object.values(
+        publicVariables: selectedAgentData.publicVariables ?? JSON.stringify(Object.values(
         spellList?.find(spell => spell.name === rootSpell)?.graph.nodes || {}
-      ).filter((node: { data }) => node?.data?.isPublic)
+      ).filter((node: { data }) => node?.data?.isPublic))
     }
     )
-    console.log('selectedSpellPublicVars', selectedSpellPublicVars)
   }, [rootSpell, spellList])
 
   const update = (id, _data = selectedAgentData) => {
@@ -163,12 +158,12 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
       </div>
       <div
         style={{
-          height: `${selectedSpellPublicVars.length === 0 ? 'auto' : '150px'}`,
+          height: `${JSON.parse(selectedAgentData.publicVariables ?? []).length === 0 ? 'auto' : '150px'}`,
           overflow: 'auto',
           marginBottom: '10px',
         }}
       >
-        {selectedSpellPublicVars.length !== 0 ? (
+        {JSON.parse(selectedAgentData.publicVariables).length !== 0 ? (
           <AgentPubVariables
             setPublicVars={(data) => {
               setSelectedAgentData({
@@ -176,7 +171,7 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
                 publicVariables: data,
             })
           }}
-            publicVars={selectedAgentData.publicVariables}
+            publicVars={JSON.parse(selectedAgentData.publicVariables)}
           />
         ) : (
           <Typography>No Public Variables</Typography>
@@ -184,7 +179,7 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
       </div>
       <div
         className={`${
-          selectedSpellPublicVars.length === 0
+          JSON.parse(selectedAgentData.publicVariables).length === 0
             ? styles.connectorsLong
             : styles.connectors
         }`}
