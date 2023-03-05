@@ -12,11 +12,10 @@ export default function SigninForm() {
   const initialValue = { apiKey: '', organizationId: '' }
 
   useEffect(() => {
-    const secrets = window.localStorage.getItem('openai_api_key') || '{}'
-    const { openai } = JSON.parse(secrets)
-    if (openai) {
-      const api = JSON.parse(openai)?.apiKey
-      signIn(api, '')
+    const secrets = JSON.parse(window.localStorage.getItem('secrets') || '{}')
+    const openai = secrets['openai-api-key']
+    if(openai) {
+      signIn(openai, '')
       navigate('/fineTuneManager/completions')
     } else {
       console.log('no api key found')
