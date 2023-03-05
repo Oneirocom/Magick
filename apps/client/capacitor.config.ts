@@ -10,9 +10,15 @@ const config: CapacitorConfig = {
       enabled: true,
     },
     CapacitorHttp: {
-      enabled: true
-    }
-  }
+      enabled: true,
+    },
+  },
+  electron: {
+    packager: {
+      platform: ['win32', 'darwin', 'linux'],
+      arch: 'x64',
+    },
+  },
 }
 
 export default config
