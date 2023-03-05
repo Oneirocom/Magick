@@ -22,6 +22,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install npx
         run: npm install -g npx --force
+      - name: Install Capacitor
+        run: npm install -g @capacitor/cli --force
       - name: npm Install Dependencies
         run: npm install && npm i vite
       - name: Install Dependencies
@@ -32,8 +34,12 @@ jobs:
         run: npm install -g cross-env
       - name: Set NODE_ENV to production
         run: cross-env NODE_ENV=production
-      - name: Build Electron
-        run: cd apps/client && npx cap add electron && npx cap copy && npx cap open electron
+      - name: Add Electron Platform to Capacitor
+        run: cd apps/client && npx cap add electron
+      - name: Copy Web Assets to Electron
+        run: cd apps/client && npx cap copy electron
+      - name: Open Electron
+        run: cd apps/client && npx cap open electron
       - name: Archive Artifact
         uses: actions/upload-artifact@v2
         with:
