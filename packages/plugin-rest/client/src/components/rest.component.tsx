@@ -15,6 +15,8 @@ export const RestAgentWindow: FC<any> = props => {
 
   const [showGetExample, setShowGetExample] = useState(false)
   const [showPostExample, setShowPostExample] = useState(false)
+  const [showPutExample, setShowPutExample] = useState(false)
+  const [showDeleteExample, setShowDeleteExample] = useState(false)
 
   useEffect(() => {
     if (!selectedAgentData.data?.rest_api_key) {
@@ -55,7 +57,7 @@ export const RestAgentWindow: FC<any> = props => {
       {selectedAgentData.data?.rest_enabled && (
         <div className="form-item">
           <Grid container>
-          <Grid item xs={12}>
+            <Grid item xs={12}>
               <span className="form-item-label">Agent ID</span>
               <Input
                 value={selectedAgentData.id}
@@ -68,13 +70,17 @@ export const RestAgentWindow: FC<any> = props => {
               />
             </Grid>
             <Grid item xs={12}>
-              <span style={{ marginTop: '2em' }} className="form-item-label">API Key</span>
+              <span style={{ marginTop: '2em' }} className="form-item-label">
+                API Key
+              </span>
               <Input
                 value={selectedAgentData.data?.rest_api_key}
                 readOnly
                 style={{ width: '20em' }}
                 onClick={() => {
-                  navigator.clipboard.writeText(selectedAgentData.data?.rest_api_key)
+                  navigator.clipboard.writeText(
+                    selectedAgentData.data?.rest_api_key
+                  )
                   enqueueSnackbar('Copied to clipboard', { variant: 'success' })
                 }}
               />
@@ -94,7 +100,9 @@ export const RestAgentWindow: FC<any> = props => {
                   border: 'none',
                 }}
                 onClick={() => {
-                  navigator.clipboard.writeText(selectedAgentData.data?.rest_api_key)
+                  navigator.clipboard.writeText(
+                    selectedAgentData.data?.rest_api_key
+                  )
                   enqueueSnackbar('Copied to clipboard', { variant: 'success' })
                 }}
               />
@@ -109,7 +117,7 @@ export const RestAgentWindow: FC<any> = props => {
                   style={{
                     float: 'right',
                     color: 'white',
-                    backgroundColor: 'purple'
+                    backgroundColor: 'purple',
                   }}
                 >
                   {showGetExample ? 'Hide' : 'Show'}
@@ -118,33 +126,6 @@ export const RestAgentWindow: FC<any> = props => {
               </span>
               {showGetExample && (
                 <div>
-                  <span className="form-item-label">cURL</span>
-                  <Input
-                    value={`curl -X GET ${
-                      import.meta.env.VITE_APP_API_URL
-                    }/api/${selectedAgentData.id}?apiKey=${
-                      selectedAgentData.data?.rest_api_key
-                    }&content=Hello+World`}
-                    readOnly
-                    style={{
-                      width: '100%',
-                      textDecoration: 'none',
-                      border: 'none',
-                    }}
-                    onClick={() => {
-                      navigator.clipboard.writeText(
-                        `curl -X GET ${import.meta.env.VITE_APP_API_URL}/api/${
-                          selectedAgentData.id
-                        }?apiKey=${
-                          selectedAgentData.data?.rest_api_key
-                        }&content=Hello+World`
-                      )
-                      enqueueSnackbar('Copied to clipboard', {
-                        variant: 'success',
-                      })
-                    }}
-                  />
-                  {/* now in fetch */}
                   <span
                     style={{ marginTop: '1em' }}
                     className="form-item-label"
@@ -186,7 +167,7 @@ export const RestAgentWindow: FC<any> = props => {
                   style={{
                     float: 'right',
                     color: 'white',
-                    backgroundColor: 'purple'
+                    backgroundColor: 'purple',
                   }}
                 >
                   {showPostExample ? 'Hide' : 'Show'}
@@ -195,32 +176,6 @@ export const RestAgentWindow: FC<any> = props => {
               </span>
               {showPostExample && (
                 <div>
-                  <span className="form-item-label">cURL</span>
-                  <Input
-                    value={`curl -X POST -H "Content-Type: application/json" -d '{"apiKey": ${
-                      selectedAgentData.data?.rest_api_key
-                    }", "content": "Hello World"}' ${
-                      import.meta.env.VITE_APP_API_URL
-                    }/api/${selectedAgentData.id}`}
-                    readOnly
-                    style={{
-                      width: '100%',
-                      textDecoration: 'none',
-                      border: 'none',
-                    }}
-                    onClick={() => {
-                      // copy the value of the input
-                      navigator.clipboard.writeText(
-                        `curl -X POST -H "Content-Type: application/json" -d '{"content": "Hello World"}' ${
-                          import.meta.env.VITE_APP_API_URL
-                        }/api/${selectedAgentData.data?.rest_api_key}`
-                      )
-                      enqueueSnackbar('Copied to clipboard', {
-                        variant: 'success',
-                      })
-                    }}
-                  />
-                  {/* now in fetch */}
                   <span
                     style={{ marginTop: '1em' }}
                     className="form-item-label"
@@ -228,16 +183,16 @@ export const RestAgentWindow: FC<any> = props => {
                     Fetch
                   </span>
                   <Input
-                    value={`fetch('${import.meta.env.VITE_APP_API_URL}/api/${
-                      selectedAgentData.id
-                    }', {
+                    value={`fetch('${import.meta.env.VITE_APP_API_URL}/api', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
   },
-  body: JSON.stringify({ apiKey: '${
-    selectedAgentData.data?.rest_api_key
-  }', content: 'Hello World' }),
+  body: JSON.stringify({
+    id: '${selectedAgentData.id}',
+    apiKey: '${selectedAgentData.data?.rest_api_key}',
+    content: 'Hello World'
+  }),
 })`}
                     readOnly
                     onClick={() => {
@@ -260,6 +215,139 @@ export const RestAgentWindow: FC<any> = props => {
                       width: '100%',
                       textDecoration: 'none',
                       border: 'none',
+                    }}
+                  />
+                </div>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <span style={{ marginTop: '2em' }} className="form-item-label">
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setShowPutExample(!showPutExample)
+                  }}
+                  style={{
+                    float: 'right',
+                    color: 'white',
+                    backgroundColor: 'purple',
+                  }}
+                >
+                  {showPutExample ? 'Hide' : 'Show'}
+                </Button>
+                <h4>PUT Example</h4>
+              </span>
+              {showPutExample && (
+                <div>
+                  <span
+                    style={{ marginTop: '1em' }}
+                    className="form-item-label"
+                  >
+                    Fetch
+                  </span>
+                  <Input
+                    value={`fetch('${import.meta.env.VITE_APP_API_URL}/api', {
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    id: '${selectedAgentData.id}',
+    apiKey: '${selectedAgentData.data?.rest_api_key}',
+    content: 'Hello World'
+  }),
+})`}
+                    readOnly
+                    onClick={() => {
+                      // copy the value of the input
+                      navigator.clipboard.writeText(
+                        `fetch('${import.meta.env.VITE_APP_API_URL}/api', {
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    id: '${selectedAgentData.id}',
+    apiKey: '${selectedAgentData.data?.rest_api_key}',
+    content: 'Hello World'
+  }),
+})`
+                      )
+                    }}
+                    style={{
+                      width: '100%',
+                      textDecoration: 'none',
+                      border: 'none',
+                    }}
+                  />
+                </div>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <span style={{ marginTop: '2em' }} className="form-item-label">
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setShowDeleteExample(!showDeleteExample)
+                  }}
+                  style={{
+                    float: 'right',
+                    color: 'white',
+                    backgroundColor: 'purple',
+                  }}
+                >
+                  {showDeleteExample ? 'Hide' : 'Show'}
+                </Button>
+                <h4>DELETE Example</h4>
+              </span>
+              {showDeleteExample && (
+                <div>
+                  <span
+                    style={{ marginTop: '1em' }}
+                    className="form-item-label"
+                  >
+                    Fetch
+                  </span>
+                  <Input
+                    value={
+`fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+    selectedAgentData.id
+  }?apiKey=${
+    selectedAgentData.data?.rest_api_key
+  }&content=Hello+World', {
+  method: 'DELETE',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    apiKey: '${selectedAgentData.data?.rest_api_key}',
+    content: 'Hello World' // optional
+  }),
+})`
+                }
+                    readOnly
+                    style={{
+                      width: '100%',
+                      textDecoration: 'none',
+                      border: 'none',
+                    }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+`fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+  selectedAgentData.id
+}?apiKey=${
+  selectedAgentData.data?.rest_api_key
+}&content=Hello+World', {
+method: 'DELETE',
+headers: {
+  'Content-Type': 'application/json',
+},
+body: JSON.stringify({
+  apiKey: '${selectedAgentData.data?.rest_api_key}',
+  content: 'Hello World' // optional
+}),
+})`
+                      )
                     }}
                   />
                 </div>
