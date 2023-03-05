@@ -29,7 +29,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci 
       - name: Clean Output Folder
-        run: rm -rf apps/client/electron/output
+        run: rm -rf apps/client/electron/output && mkdir -p apps/client/electron/output
       - name: Install cross-env
         run: npm install -g cross-env
       - name: Set NODE_ENV to production
@@ -51,7 +51,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ github.sha }}
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
