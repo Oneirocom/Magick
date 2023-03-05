@@ -4,7 +4,7 @@ import Creatable from 'react-select/creatable'
 import ReactSelect, { SelectInstance, StylesConfig } from 'react-select'
 
 import { Chip } from '../Chip'
-import {Icon,  componentCategories } from '../Icon'
+import { Icon, componentCategories } from '../Icon'
 import css from './select.module.css'
 
 export const Select = ({
@@ -40,7 +40,7 @@ export const Select = ({
       {data.label}
     </span>
   )
-  
+
   const blurSelect = () => {
     if (!selectRef.current) return
     selectRef.current.blur()
@@ -62,6 +62,8 @@ export const Select = ({
       borderRadius: 4,
       boxShadow: '0px 5px 5px rgba(0,0,0,0.3)',
       border: '1px solid var(--dark-3)',
+      maxHeight: '200px',
+      overflow: 'auto',
     }),
     menuPortal: () => ({
       height: 'var(--c2)',
@@ -122,9 +124,9 @@ export const Select = ({
       color: 'rgba(255,255,255)',
     }),
   }
-  
+
   return (
-    <span className={css['select-dropdown-container']} style={style}>
+    <span style={style}>
       {options ? (
         <>
           {creatable && (

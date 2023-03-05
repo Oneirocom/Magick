@@ -1,8 +1,8 @@
-import { ServerPlugin, WorldManager } from "@magickml/engine"
+import { eventSocket, ServerPlugin, WorldManager } from '@magickml/engine'
 import { UploadService } from '../../../server-core/src/services/Upload.class'
 
 type StartDiscordArgs = {
-  agent: any,
+  agent: any
   spellRunner: any
   discord_enabled?: boolean
   discord_api_key?: string
@@ -19,11 +19,11 @@ type StartDiscordArgs = {
 
 function getAgentMethods() {
   let discord_client
-  
+
   async function startDiscord({
     agent,
     spellRunner,
-    discord_api_key,  
+    discord_api_key,
     discord_starting_words,
     discord_bot_name_regex,
     discord_bot_name,
@@ -32,11 +32,15 @@ function getAgentMethods() {
     voice_character,
     voice_language_code,
     tiktalknet_url,
-    worldManager
+    worldManager,
   }: StartDiscordArgs) {
     console.log('starting discord')
     // ignore import if vite
-    const module = await import(/* @vite-ignore */ `${typeof window === 'undefined' ? './connectors/discord' : './dummy'}`)
+    const module = await import(
+      /* @vite-ignore */ `${
+        typeof window === 'undefined' ? './connectors/discord' : './dummy'
+      }`
+    )
     discord_client = module.discord_client
 
     const discord = new discord_client({
@@ -51,19 +55,19 @@ function getAgentMethods() {
       voice_character,
       voice_language_code,
       tiktalknet_url,
-      worldManager
+      worldManager,
     })
     agent.discord = discord
   }
 
   async function stopDiscord(agent) {
-    console.log("Inside Kill Method")
+    console.log('Inside Kill Method')
     if (!agent.discord) throw new Error("Discord isn't running, can't stop it")
-    try{
+    try {
       await agent.discord.destroy()
       agent.discord = null
     } catch {
-      console.log("Agent does not exist !")
+      console.log('Agent does not exist !')
     }
     console.log('Stopped discord client for agent ' + agent.name)
   }
@@ -75,13 +79,16 @@ function getAgentMethods() {
 }
 
 const DiscordPlugin = new ServerPlugin({
-  name: 'DiscordPlugin', 
-  nodes: [], 
-  inputTypes: ['Discord (Voice)', 'Discord (Text)'],
-  outputTypes: ['Discord (Voice)', 'Discord (Text)'],
-  serverInit: null,
-  serverRoutes: null,
+  name: 'DiscordPlugin',
+  inputTypes: [
+    { name: 'Discord (Voice)', trigger: true, socket: eventSocket },
+    { name: 'Discord (Text)', trigger: true, socket: eventSocket },
+  ],
+  outputTypes: [
+    { name: 'Discord (Voice)', trigger: false, socket: eventSocket },
+    { name: 'Discord (Text)', trigger: false, socket: eventSocket },
+  ],
   agentMethods: getAgentMethods(),
 })
 
-export default DiscordPlugin;
+export default DiscordPlugin
