@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useConfig } from '../../contexts/ConfigProvider'
-import AgentWindow from './NewAgentWindow'
+import AgentWindow from './AgentWindow'
 import { useSnackbar } from 'notistack'
 import axios from 'axios'
 import { LoadingScreen } from '@magickml/client-core'
@@ -21,15 +21,16 @@ const AgentManagerWindow = () => {
   }
 
   const createNew = (
-    data = {
-      projectId: config.projectId,
-      spells: [],
+    data: {
+      projectId: string,
+      rootSpell: string,
+      spells: string,
       enabled: true,
-      name: 'My Agent',
-      updatedAt: '',
+      name: string,
+      updatedAt: string,
+      secrets : string,
     }
   ) => {
-    if (!data.spells === undefined) data.spells = []
     // rewrite using fetch instead of axios
     axios({
       url: `${config.apiUrl}/agents`,
@@ -51,10 +52,16 @@ const AgentManagerWindow = () => {
     fileReader.readAsText(selectedFile)
     fileReader.onload = event => {
       const data = JSON.parse(event?.target?.result as string)
+      data.projectId = config.projectId
       data.dirty = data?.dirty ? data.dirty : false
       data.enabled = data?.enabled ? true : false
       data.updatedAt = data?.updatedAt || ''
+      data.rootSpell = data?.rootSpell || '{}'
       data.spells = Array.isArray(data?.spells) ? data.spells : []
+      data.secrets = Array.isArray(data?.secrets) ? data.secrets : []
+      data.publicVariables = data?.publicVariables || JSON.stringify(Object.values(
+        data.rootSpell & data?.spells?.find(spell => spell.name === JSON.parse(data.rootSpell ?? '{}').name)?.graph.nodes || {}
+      ).filter((node: { data }) => node?.data?.isPublic))
 
       // Check if the "id" property exists in the object
       if (data.hasOwnProperty('id')) {

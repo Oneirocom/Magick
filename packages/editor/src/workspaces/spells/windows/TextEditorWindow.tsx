@@ -29,7 +29,7 @@ const TextEditor = props => {
     const secrets = localStorage.getItem('secrets')
     if (secrets) {
       const parsedSecrets = JSON.parse(secrets)
-      setOpenaiApiKey(parsedSecrets['openai-api-key'])
+      setOpenaiApiKey(parsedSecrets['openai_api_key'])
     }
   }, [])
 

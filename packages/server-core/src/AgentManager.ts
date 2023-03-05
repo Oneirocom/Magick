@@ -95,7 +95,7 @@ export class AgentManager {
       if (agent.rootSpell) {
         const spell = (
           await app.service('spells').find({
-            query: { projectId, name: agent.rootSpell },
+            query: { projectId, id: JSON.parse(agent.rootSpell ?? '{}').id },
           })
         ).data[0]
 
@@ -176,7 +176,7 @@ export class AgentManager {
       enabled: obj.enabled ? true : false,
       dirty: obj.dirty ? true : false,
       spells: obj.spells,
-      updatedAt: obj.updatedAt,
+      updatedAt: obj.updatedAt ?? new Date(),
     }
     //Overwrites even if already exists
     data.projectId = projectId

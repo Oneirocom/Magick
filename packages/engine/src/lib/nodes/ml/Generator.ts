@@ -198,7 +198,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       frequency_penalty,
       presence_penalty,
       stop: filteredStop,
-      apiKey: context.module.secrets['openai-api-key']
+      apiKey: context.module.secrets['openai_api_key']
     }
 
     try {

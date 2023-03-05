@@ -41,6 +41,15 @@
       "@magickml/plugin-loop-client": ["packages/plugin-loop/client/src/index.ts"],
       "@magickml/plugin-loop-server": ["packages/plugin-loop/server/src/index.ts"],
 
+      "@magickml/plugin-openai-client": ["packages/plugin-openai/client/src/index.ts"],
+      "@magickml/plugin-openai-server": ["packages/plugin-openai/server/src/index.ts"],
+
+      "@magickml/plugin-banana-client": ["packages/plugin-banana/client/src/index.ts"],
+      "@magickml/plugin-banana-server": ["packages/plugin-banana/server/src/index.ts"],
+
+      "@magickml/plugin-twitter-client": ["packages/plugin-twitter/client/src/index.ts"],
+      "@magickml/plugin-twitter-server": ["packages/plugin-twitter/server/src/index.ts"],     
+
       "@magickml/plugin-finetune-client": ["packages/plugin-finetune/client/src/index.ts"],
       "@magickml/plugin-finetune-server": ["packages/plugin-finetune/server/src/index.ts"],
 

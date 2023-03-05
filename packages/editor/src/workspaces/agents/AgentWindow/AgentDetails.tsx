@@ -7,31 +7,40 @@ import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { pluginManager } from '@magickml/engine'
+import { Input } from '@mui/material'
 
 const RenderComp = props => {
   return <props.element props={props} />
 }
 
-const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback }) => {
-  const [rootSpell, setRootSpell] = useState('default')
+const AgentDetails = ({
+  selectedAgentData,
+  setSelectedAgentData,
+  updateCallback,
+}) => {
   const [spellList, setSpellList] = useState<any[]>([])
   const config = useConfig()
 
   useEffect(() => {
-    setSelectedAgentData(
-      {
-        ...selectedAgentData,
-        publicVariables: selectedAgentData.publicVariables ?? JSON.stringify(Object.values(
-        spellList?.find(spell => spell.name === rootSpell)?.graph.nodes || {}
-      ).filter((node: { data }) => node?.data?.isPublic))
-    }
-    )
-  }, [rootSpell, spellList])
+    setSelectedAgentData({
+      ...selectedAgentData,
+      publicVariables:
+        selectedAgentData.publicVariables ??
+        JSON.stringify(
+          Object.values(
+            selectedAgentData.rootSpell &
+              spellList?.find(spell => spell.name === selectedAgentData)?.graph
+                .nodes || {}
+          ).filter((node: { data }) => node?.data?.isPublic)
+        ),
+    })
+  }, [spellList])
 
   const update = (id, _data = selectedAgentData) => {
     if (_data.hasOwnProperty('id')) {
       delete _data.id
     }
+    console.log('update', _data)
     // Avoid server-side validation error
     _data.spells = Array.isArray(_data?.spells) ? _data.spells : []
     _data.dirty = true
@@ -140,9 +149,16 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
           }}
           name="rootSpell"
           id="rootSpell"
-          value={rootSpell}
+          value={
+            JSON.parse(selectedAgentData.rootSpell ?? '{ "name": "default" }')
+              .name
+          }
           onChange={event => {
-            setRootSpell(event.target.value)
+            setSelectedAgentData({
+              ...selectedAgentData,
+              rootSpell: JSON.stringify(event.target.value),
+              updatedAt: new Date().toISOString(),
+            })
           }}
         >
           <option disabled value="default" key={0}>
@@ -150,27 +166,60 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
           </option>
           {spellList?.length > 0 &&
             spellList.map((spell, idx) => (
-              <option value={spell.name} key={idx}>
+              <option value={JSON.stringify(spell)} key={idx}>
                 {spell.name}
               </option>
             ))}
         </select>
       </div>
+      <div>
+        {pluginManager.getSecrets(true).map((value, index, array) => {
+          return (
+            <div key={index} style={{marginBottom: '1em'}}>
+              <div style={{width: '100%', marginBottom: '1em'}}>{value.name}</div>
+              <Input
+                type="password"
+                name={value.key}
+                id={value.key}
+                style={{ width: '100%' }}
+                value={
+                  selectedAgentData.secrets
+                    ? JSON.parse(selectedAgentData.secrets)[value.key]
+                    : ''
+                }
+                onChange={event => {
+                  setSelectedAgentData({
+                    ...selectedAgentData,
+                    secrets: JSON.stringify({
+                      ...JSON.parse(selectedAgentData.secrets),
+                      [value.key]: event.target.value,
+                    })
+                  })
+                }}
+              />
+            </div>
+          )
+        })}
+      </div>
       <div
         style={{
-          height: `${selectedAgentData.publicVariables?.length === 0 ? 'auto' : '150px'}`,
+          height: `${
+            JSON.parse(selectedAgentData.publicVariables ?? '[]').length === 0
+              ? 'auto'
+              : '150px'
+          }`,
           overflow: 'auto',
           marginBottom: '10px',
         }}
       >
-        {selectedAgentData.publicVariables?.length !== 0 ? (
+        {JSON.parse(selectedAgentData.publicVariables ?? '[]').length !== 0 ? (
           <AgentPubVariables
-            setPublicVars={(data) => {
+            setPublicVars={data => {
               setSelectedAgentData({
                 ...selectedAgentData,
                 publicVariables: data,
-            })
-          }}
+              })
+            }}
             publicVars={selectedAgentData.publicVariables}
           />
         ) : (
@@ -179,7 +228,7 @@ const AgentDetails = ({ selectedAgentData, setSelectedAgentData, updateCallback 
       </div>
       <div
         className={`${
-          selectedAgentData.publicVariables?.length === 0
+          JSON.parse(selectedAgentData.publicVariables ?? '[]').length === 0
             ? styles.connectorsLong
             : styles.connectors
         }`}
