@@ -47,6 +47,15 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const agentService = this.options.app.service('agents')
     // get the agent by id
     const agent = await agentService.get(id)
+
+    const agentRestApiKey = agent?.data?.rest_api_key
+
+    if (agentRestApiKey !== apiKey) {
+      return {
+        error: 'The `apiKey` is invalid',
+      }
+    }
+
     // get the selectedAgentData's spells
     const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
     // run the spell
@@ -73,17 +82,39 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     data: ApiData | ApiData[],
     params: ServiceParams
   ): Promise<Api | any /* TODO: type me */> {
-    // get the params from the data
     const { id, content, apiKey } = data as any
-    // get the agent service
+
+    if (!id) {
+      return {
+        error: 'The `id` field is required',
+      }
+    }
+
+    if (!apiKey) {
+      return {
+        error: 'The `apiKey` field is required',
+      }
+    }
+
+    if(!content) {
+      return {
+        error: 'The `content` field is required. if you want to pass an object, stringify it first',
+      }
+    }
+
     const agentService = this.options.app.service('agents')
-    // get the agent by id
+
     const agent = await agentService.get(id)
-    // get the selectedAgentData
-    // get the selectedAgentData's spells
+
+    const agentRestApiKey = agent?.data?.rest_api_key
+    if (agentRestApiKey !== apiKey) {
+      return {
+        error: 'The `apiKey` is invalid',
+      }
+    }
+    
     const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
-    console.log('ROOT SPELL', rootSpell)
-    // run the spell
+    
     const result = await runSpell({
       id: rootSpell.id,
       projectId: agent.projectId,
@@ -105,13 +136,37 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     _params?: ServiceParams
   ): Promise<Api | any> {
     const { content, apiKey } = data as any
-    // get the agent service
+
+    if (!id) {
+      return {
+        error: 'The `id` parameter is required',
+      }
+    }
+
+    if (!apiKey) {
+      return {
+        error: 'The `apiKey` field is required',
+      }
+    }
+
+    if(!content) {
+      return {
+        error: 'The `content` field is required. if you want to pass an object, stringify it first',
+      }
+    }
+
     const agentService = this.options.app.service('agents')
-    // get the agent by id
     const agent = await agentService.get(id)
-    // get the selectedAgentData
+
+    const agentRestApiKey = agent?.data?.rest_api_key
+    if (agentRestApiKey !== apiKey) {
+      return {
+        error: 'The `apiKey` is invalid',
+      }
+    }
+
     const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
-    // run the spell
+
     const result = await runSpell({
       id: rootSpell.id,
       projectId: agent.projectId,
@@ -130,12 +185,29 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
   async remove(id: Id, _params?: ServiceParams): Promise<Api | any> {
 
     const { content, apiKey } = _params?.query as any
+    if (!id) {
+      return {
+        error: 'The `id` parameter is required. It should be formatted like /api/<id>',
+      }
+    }
 
-    // get the agent service
+    if (!apiKey) {
+      return {
+        error: 'The `apiKey` field is required',
+      }
+    }
     const agentService = this.options.app.service('agents')
-    // get the agent by id
+
     const agent = await agentService.get(id)
-    // get the selectedAgentData's spells
+
+    const agentRestApiKey = agent?.data?.rest_api_key
+
+    if (agentRestApiKey !== apiKey) {
+      return {
+        error: 'The `apiKey` is invalid',
+      }
+    }
+
     const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
     // run the spell
     const result = await runSpell({
