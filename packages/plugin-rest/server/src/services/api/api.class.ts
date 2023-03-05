@@ -1,9 +1,5 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
-import type {
-  Id,
-  Params,
-  ServiceInterface,
-} from '@feathersjs/feathers'
+import type { Id, Params, ServiceInterface } from '@feathersjs/feathers'
 
 import { Application, runSpell } from '@magickml/server-core'
 import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema'
@@ -38,9 +34,10 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    if(!content) {
+    if (!content) {
       return {
-        error: 'The `content` field is required. if you want to pass an object, stringify it first',
+        error:
+          'The `content` field is required. if you want to pass an object, stringify it first',
       }
     }
     // get the agent service
@@ -65,6 +62,13 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       inputs: {
         'Input - REST API (GET)': {
           content,
+          sender: 'api',
+          observer: agent.name,
+          client: 'rest',
+          channelId: id,
+          agentId: agent.id,
+          entities: ['api', agent.name],
+          channel: 'GET',
         },
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
@@ -96,9 +100,10 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    if(!content) {
+    if (!content) {
       return {
-        error: 'The `content` field is required. if you want to pass an object, stringify it first',
+        error:
+          'The `content` field is required. if you want to pass an object, stringify it first',
       }
     }
 
@@ -112,14 +117,23 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
         error: 'The `apiKey` is invalid',
       }
     }
-    
+
     const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
-    
+
     const result = await runSpell({
       id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
-        'Input - REST API (POST)': { content },
+        'Input - REST API (POST)': {
+          content,
+          sender: 'api',
+          observer: agent.name,
+          client: 'rest',
+          channelId: id,
+          agentId: agent.id,
+          entities: ['api', agent.name],
+          channel: 'POST',
+        },
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
@@ -149,9 +163,10 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    if(!content) {
+    if (!content) {
       return {
-        error: 'The `content` field is required. if you want to pass an object, stringify it first',
+        error:
+          'The `content` field is required. if you want to pass an object, stringify it first',
       }
     }
 
@@ -171,7 +186,16 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
-        'Input - REST API (PUT)': { content },
+        'Input - REST API (PUT)': {
+          content,
+          sender: 'api',
+          observer: agent.name,
+          client: 'rest',
+          channelId: id,
+          agentId: agent.id,
+          entities: ['api', agent.name],
+          channel: 'PUT',
+        },
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
@@ -183,11 +207,11 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
   }
 
   async remove(id: Id, _params?: ServiceParams): Promise<Api | any> {
-
     const { content, apiKey } = _params?.query as any
     if (!id) {
       return {
-        error: 'The `id` parameter is required. It should be formatted like /api/<id>',
+        error:
+          'The `id` parameter is required. It should be formatted like /api/<id>',
       }
     }
 
@@ -214,7 +238,16 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
-        'Input - REST API (DELETE)': { content },
+        'Input - REST API (DELETE)': {
+          content,
+          sender: 'api',
+          observer: agent.name,
+          client: 'rest',
+          channelId: id,
+          agentId: agent.id,
+          entities: ['api', agent.name],
+          channel: 'DELETE',
+        },
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,

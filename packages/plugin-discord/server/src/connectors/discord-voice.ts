@@ -81,8 +81,8 @@ export function initSpeechClient({
         inputs: {
           'Input - Discord (Voice)': {
             content,
-            speaker: author?.username ?? 'VoiceSpeaker',
-            agent: discord_bot_name,
+            sender: author?.username ?? 'VoiceSpeaker',
+            observer: discord_bot_name,
             client: 'discord',
             channelId: channel.id,
             agentId: agent.id,
