@@ -132,6 +132,8 @@ export class Solidity extends MagickComponent<InputReturn> {
       if (!silent) node.display(data)
       return {
         output: data,
+        bytecode: '0x',
+        abi: '[]',
       }
     }
   }
