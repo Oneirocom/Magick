@@ -1,12 +1,9 @@
 import { config } from 'dotenv-flow'
+import { importMetaEnv } from './import-meta-env'
+
 config({
   path: '../../../.env.*',
 })
-
-const importMetaEnv =
-  typeof import.meta !== 'undefined' && typeof import.meta.env !== 'undefined'
-    ? import.meta.env
-    : ({} as any)
 
 // process is not defined on client
 const processEnv = typeof process === 'undefined' ? importMetaEnv : process.env
