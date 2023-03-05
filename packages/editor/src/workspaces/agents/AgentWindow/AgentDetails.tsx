@@ -21,21 +21,6 @@ const AgentDetails = ({
   const [spellList, setSpellList] = useState<any[]>([])
   const config = useConfig()
 
-  useEffect(() => {
-    setSelectedAgentData({
-      ...selectedAgentData,
-      publicVariables:
-        selectedAgentData.publicVariables ??
-        JSON.stringify(
-          Object.values(
-            selectedAgentData.rootSpell &
-              spellList?.find(spell => spell.name === selectedAgentData)?.graph
-                .nodes || {}
-          ).filter((node: { data }) => node?.data?.isPublic)
-        ),
-    })
-  }, [spellList])
-
   const update = (id, _data = selectedAgentData) => {
     if (_data.hasOwnProperty('id')) {
       delete _data.id
@@ -96,6 +81,8 @@ const AgentDetails = ({
     })()
   }, [])
 
+  console.log('selectedAgentData', selectedAgentData)
+
   return (
     <div>
       <div className={`${styles.agentDetailsContainer}`}>
@@ -149,14 +136,16 @@ const AgentDetails = ({
           }}
           name="rootSpell"
           id="rootSpell"
-          value={
-            JSON.parse(selectedAgentData.rootSpell ?? '{ "name": "default" }')
-              .name
-          }
+          value={JSON.parse(selectedAgentData?.rootSpell ?? '{ "name": "default" }').name}
           onChange={event => {
             setSelectedAgentData({
               ...selectedAgentData,
               rootSpell: JSON.stringify(event.target.value),
+              publicVariables:
+                JSON.stringify(
+                  Object.values(JSON.parse(event.target.value).graph.nodes as any)
+                  .filter((node: { data }) => node?.data?.isPublic).map((node: { data }) => { return { id: node?.data?.id, name: node?.data?.name, value: node?.data?.value }})
+                ),
               updatedAt: new Date().toISOString(),
             })
           }}
@@ -204,7 +193,8 @@ const AgentDetails = ({
       <div
         style={{
           height: `${
-            JSON.parse(selectedAgentData.publicVariables ?? '[]').length === 0
+            selectedAgentData.public && 
+            selectedAgentData.publicVariables !== '[]'
               ? 'auto'
               : '150px'
           }`,
@@ -212,23 +202,21 @@ const AgentDetails = ({
           marginBottom: '10px',
         }}
       >
-        {JSON.parse(selectedAgentData.publicVariables ?? '[]').length !== 0 ? (
+        {selectedAgentData.publicVariables && selectedAgentData.publicVariables !== '[]' && (
           <AgentPubVariables
             setPublicVars={data => {
               setSelectedAgentData({
                 ...selectedAgentData,
-                publicVariables: data,
+                publicVariables: JSON.stringify(data),
               })
             }}
-            publicVars={selectedAgentData.publicVariables}
+            publicVars={JSON.parse(selectedAgentData.publicVariables)}
           />
-        ) : (
-          <Typography>No Public Variables</Typography>
         )}
       </div>
       <div
         className={`${
-          JSON.parse(selectedAgentData.publicVariables ?? '[]').length === 0
+          selectedAgentData.publicVariables !== '[]'
             ? styles.connectorsLong
             : styles.connectors
         }`}

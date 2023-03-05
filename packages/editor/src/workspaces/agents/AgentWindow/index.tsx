@@ -27,7 +27,7 @@ const AgentWindow = ({
   const [selectedAgentData, setSelectedAgentData] = useState({ id: null })
 
   const onClickHandler = agent => {
-    setSelectedAgentData({secrets: '[]', ...agent})
+    setSelectedAgentData({secrets: '{}', ...agent})
   }
 
   useEffect(() => {
@@ -55,8 +55,9 @@ const AgentWindow = ({
             projectId: config.projectId,
             enabled: false,
             spells: [],
-            publicVariables: '[]',
-            secrets: '[]',
+            rootSpell: '{}',
+            publicVariables: '{}',
+            secrets: '{}',
           })}
         >
           Add Agent
