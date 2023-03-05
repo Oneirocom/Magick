@@ -20,7 +20,6 @@ const RestPlugin = new ServerPlugin({
     { name: 'REST API (GET)', trigger: true, socket: eventSocket },
     { name: 'REST API (POST)', trigger: true, socket: eventSocket },
     { name: 'REST API (PUT)', trigger: true, socket: eventSocket },
-    { name: 'REST API (PATCH)', trigger: true, socket: eventSocket },
     { name: 'REST API (DELETE)', trigger: true, socket: eventSocket },
   ],
   outputTypes: [

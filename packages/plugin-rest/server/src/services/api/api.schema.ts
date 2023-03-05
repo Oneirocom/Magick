@@ -23,6 +23,7 @@ export const apiExternalResolver = resolve<Api, HookContext>({})
 
 // Schema for creating new entries
 export const apiDataSchema = Type.Pick(apiSchema, [
+  'id',
   'content',
   'apiKey'
 ], {
@@ -42,6 +43,7 @@ export const apiPatchResolver = resolve<Api, HookContext>({})
 
 // Schema for allowed query properties
 export const apiQueryProperties = Type.Pick(apiSchema, [
+  'id',
   'content',
   'apiKey'
 ])
@@ -51,6 +53,7 @@ export const apiQuerySchema = Type.Intersect(
     querySyntax(apiQueryProperties),
     // Add additional query properties here
     Type.Object({
+      'id': Type.Optional(Type.String()),
       'content': Type.String(),
       'apiKey': Type.String(),
     }, { additionalProperties: false })

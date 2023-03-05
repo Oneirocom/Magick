@@ -25,7 +25,7 @@ declare module '@magickml/server-core' {
 }
 
 export const apiPath = 'api'
-export const apiMethods = ['get', 'create', 'patch', 'update', 'remove'] as const
+export const apiMethods = ['get', 'create', 'update', 'remove'] as const
 
 export * from './api.class'
 export * from './api.schema'
@@ -46,11 +46,9 @@ export const api = (app: Application) => {
     },
     before: {
       all: [schemaHooks.validateQuery(apiQueryValidator), schemaHooks.resolveQuery(apiQueryResolver)],
-      find: [],
       get: [],
       update: [schemaHooks.validateData(apiDataValidator), schemaHooks.resolveData(apiDataResolver)],
       create: [schemaHooks.validateData(apiDataValidator), schemaHooks.resolveData(apiDataResolver)],
-      patch: [schemaHooks.validateData(apiPatchValidator), schemaHooks.resolveData(apiPatchResolver)],
       remove: []
     },
     after: {
