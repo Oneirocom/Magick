@@ -1,5 +1,5 @@
 import { runSpell } from './utils/runSpell'
-import { API_ROOT_URL } from '@magickml/engine'
+import { API_ROOT_URL, pluginManager } from '@magickml/engine'
 import { app } from './app'
 
 export const buildMagickInterface = (overrides: Record<string, Function> = {}) => {

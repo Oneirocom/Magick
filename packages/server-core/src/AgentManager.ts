@@ -1,5 +1,5 @@
 import Agent from './Agent'
-import { projectId, AGENT_WEBSERVER_PORT_RANGE } from '@magickml/engine'
+import { projectId, AGENT_WEBSERVER_PORT_RANGE, pluginManager } from '@magickml/engine'
 import { app } from './app'
 
 // if the user is running the app locally, sort by their project id

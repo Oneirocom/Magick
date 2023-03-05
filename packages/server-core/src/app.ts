@@ -2,15 +2,14 @@
 import { feathers } from '@feathersjs/feathers'
 import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
-
 import type { Application } from './declarations'
 import { logError } from './hooks'
 import { dbClient } from './dbClient'
-import { services } from './services'
 import channels from './channels'
 // import swagger from 'feathers-swagger'
 import handleSockets from './sockets'
-import { configureManager, globalsManager } from '@magickml/engine'
+import { pluginManager, configureManager, globalsManager } from '@magickml/engine'
+import { services } from './services'
 
 const app: Application = koa(feathers())
 

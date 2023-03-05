@@ -47,7 +47,7 @@ async function init() {
   // load plugins
   await (async () => {
     const plugins = (await import('./plugins')).default
-    console.log('loaded plugins on server', plugins)
+    console.log('loaded plugins on server', Object.values(plugins).map((p: any) => p.name).join(', '));
   })()
   
   initSpeechServer(false)

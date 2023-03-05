@@ -1,6 +1,6 @@
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
 import { KnexService } from '@feathersjs/knex'
-import { Spell } from '@magickml/engine'
+import { Spell, pluginManager } from '@magickml/engine'
 import otJson0 from 'ot-json0'
 import { app } from '../../app'
 import { Id, Params } from '@feathersjs/feathers'
