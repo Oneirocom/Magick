@@ -60,7 +60,7 @@ const AgentManagerWindow = () => {
       data.spells = Array.isArray(data?.spells) ? data.spells : []
       data.secrets = Array.isArray(data?.secrets) ? data.secrets : []
       data.publicVariables = data?.publicVariables || JSON.stringify(Object.values(
-        data.rootSpell & data?.spells?.find(spell => spell.name === JSON.parse(data.rootSpell ?? '{}').name)?.graph.nodes || {}
+        data.rootSpell && data.rootSpell.graph.nodes || {}
       ).filter((node: { data }) => node?.data?.isPublic))
 
       // Check if the "id" property exists in the object
