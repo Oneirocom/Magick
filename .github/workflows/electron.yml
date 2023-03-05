@@ -12,27 +12,20 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        node-version: [16.x]
+        node-version: [19.x]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up Node.js
         uses: actions/setup-node@v2.4.0
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install npx
-        run: |
-          if ! command -v npx &> /dev/null; then
-            npm install -g npx --force
-          fi
+        run: npm install -g npx --force
       - name: npm Install Dependencies
-        run: |
-          cd apps/client
-          npm install
+        run: npm install && npm i vite
       - name: Install Dependencies
-        run: |
-          cd apps/client
-          npm ci
+        run: npm ci 
       - name: Clean Output Folder
         run: rm -rf apps/client/electron/output
       - name: Install cross-env
@@ -40,30 +33,13 @@ jobs:
       - name: Set NODE_ENV to production
         run: cross-env NODE_ENV=production
       - name: Build Electron
-        run: |
-          cd apps/client
-          if command -v npx &> /dev/null; then
-            npx cap add electron && npx cap copy && npx cap open electron
-          else
-            npm install -g npx --force && npx cap add electron && npx cap copy && npx cap open electron
-          fi
-        continue-on-error: true
-      - name: Verify Build
-        run: |
-          cd apps/client/electron/output
-          if ! [ -f "electron.zip" ]; then
-            echo "Build failed: electron.zip not found"
-            exit 1
-          fi
-        continue-on-error: true
+        run: cd apps/client && npx cap add electron && npx cap copy && npx cap open electron
       - name: Archive Artifact
-        if: ${{ success() }}
         uses: actions/upload-artifact@v2
         with:
           name: release-${{ matrix.os }}
           path: ./apps/client/electron/output
       - name: Create Release
-        if: ${{ success() }}
         id: create_release
         uses: actions/create-release@v1.0.1
         env:
@@ -74,7 +50,6 @@ jobs:
           draft: false
           prerelease: false
       - name: Attach Artifact
-        if: ${{ success() }}
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -84,7 +59,6 @@ jobs:
           asset_name: magick-electron-${{ matrix.os }}-${{ github.ref }}
           asset_content_type: application/zip
       - name: Upload Source Maps
-        if: ${{ success() }
         uses: honeybadger-io/github-upload-sourcemap-action@master
         with:
           working_directory: ./apps/client/electron/output
