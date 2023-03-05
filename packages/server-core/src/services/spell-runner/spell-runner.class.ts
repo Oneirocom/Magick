@@ -116,10 +116,17 @@ export class SpellRunnerService<
     if (!spellRunner) throw new Error('No spell runner found!')
 
     const spell = spellRunner.currentSpell
-    const updatedSpell = otJson0.type.apply(spell, diff)
+    try {
+      const updatedSpell = otJson0.type.apply(spell, diff)
 
-    spellManager.load(updatedSpell, true)
-    return updatedSpell
+      spellManager.load(updatedSpell, true)
+      return updatedSpell
+    } catch (e) {
+      console.error('Error diffing spell. Recaching spell')
+      app.services.spells.get(id, params)
+      spellManager.load(spell, true)
+      return spell
+    }
   }
 
   // async patch(id: NullableId, data: Data, params?: Params): Promise<Data> {
@@ -135,6 +142,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),
     Model: app.get('dbClient'),
-    name: 'spell-runner'
+    name: 'spell-runner',
   }
 }

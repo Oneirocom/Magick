@@ -47,7 +47,8 @@ const TextEditor = props => {
 
   useEffect(() => {
     if (!inspectorData?.data.inputs) return
-
+    const { language } = textEditorData.options
+    console.log('language', language)
     const stringifiedInputs = JSON.stringify(inspectorData?.data.inputs)
 
     // if inspectorData?.data.inputs is the same as lastInputs, then return
@@ -55,13 +56,14 @@ const TextEditor = props => {
     setLastInputs(JSON.stringify(inspectorData?.data.inputs))
 
     const inputs: string[] = []
+    const textLines = code?.split('\n') ?? []
     inspectorData?.data.inputs?.forEach((input: any) => {
+      // if the textLines includes the input.socketKey, then return
+      if(!textLines.includes('  ' + input.socketKey + ',') &&
+      (language === 'python' || language === 'javascript'))
       inputs.push('  ' + input.socketKey + ',')
     })
 
-    // if inspectorData options is javascript or python...
-
-    const textLines = code?.split('\n') ?? []
     // get the index of the first line that starts with function
     const startIndex = textLines.findIndex(line => line.startsWith('function'))
     // get the first line that starts with }
@@ -75,23 +77,15 @@ const TextEditor = props => {
 
     // join the textLines array back into a string
     const updatedText = textLines.join('\n')
-    textEditorData.data = updatedText
-    const { language } = textEditorData?.options
-    const options = {
-      lineNumbers: language === 'javascript' || language === 'python',
-      minimap: {
-        enabled: false,
-      },
-      suggest: {
-        preview: language === 'javascript' || language === 'python',
-      },
-      wordWrap: 'bounded',
-
-      // fontFamily: '"IBM Plex Mono", sans-serif !important',
+    const newTextEditorData = {
+      ...textEditorData,
     }
-
-    setEditorOptions(options)
-    setCode(language === 'javascript' || language === 'python' ? updatedText : code)
+    if(language === 'javascript' || language === 'python') {
+      newTextEditorData.data = updatedText
+    }
+    
+    setData(newTextEditorData)
+    setCode(updatedText)
   }, [activeTab])
 
   useEffect(() => {
@@ -113,11 +107,17 @@ const TextEditor = props => {
     //Removed !textEditorData.data causing state issues between text editor instances.
 
     const inputs = []
+    const { language } = textEditorData.options
+    const textLines = textEditorData.data?.split('\n') ?? []
+    console.log('language', language)
+    console.log('textLines', textLines)
     inspectorData?.data.inputs?.forEach((input: any) => {
+      // if the textLines includes the input.socketKey, then return
+      if(!textLines.includes('  ' + input.socketKey + ',') &&
+      (language === 'python' || language === 'javascript'))
       inputs.push('  ' + input.socketKey + ',')
     })
 
-    const textLines = textEditorData.data?.split('\n') ?? []
     // get the index of the first line that starts with function
     const startIndex =
       textLines.findIndex(line => line.startsWith('function')) + 1
@@ -127,15 +127,18 @@ const TextEditor = props => {
     // remove the lines in textLines starting at StartIndex and ending at EndIndex
     // replace with the inputs
     textLines.splice(startIndex, endIndex - startIndex, ...inputs)
-    const { language } = textEditorData?.options
 
     // join the textLines array back into a string
     const updatedText = textLines.join('\n')
+    const newTextEditorData = {
+      ...textEditorData,
+    }
+    if(language === 'javascript' || language === 'python') {
+      newTextEditorData.data = updatedText
+    }
 
-    textEditorData.data = updatedText
-
-    setData(textEditorData)
-    setCode(language === 'javascript' || language === 'python' ? updatedText : code)
+    setData(newTextEditorData)
+    setCode(updatedText)
   }, [textEditorData])
 
   const save = code => {
