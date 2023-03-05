@@ -7,7 +7,8 @@ interface Props {
   setPublicVars: (data: any) => void
 }
 
-const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
+const AgentPubVariables = ({ publicVars = [], setPublicVars }: Props) => {
+  console.log('publicVars', publicVars)
   const onChange = event => {
     const { name } = event.target
     setPublicVars({
@@ -24,7 +25,10 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
       <div className={styles['header']}>
         <h3>Public Variables</h3>
       </div>
-      {publicVars.map(variable => {
+      {(() => {
+        console.log(publicVars)
+        return publicVars
+      })() && publicVars?.map && publicVars?.map(variable => {
         return (
           <Grid
             container

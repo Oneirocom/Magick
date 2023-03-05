@@ -123,8 +123,8 @@ type runSpellType = {
   inputs: Record<string, any>
   spellName: string
   projectId: string
-  secrets?: Record<string, any>
-  publicVariables? : Record<string, any>
+  secrets: Record<string, any>
+  publicVariables: Record<string, any>
 }
 
 export type EngineContext = {
