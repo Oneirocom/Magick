@@ -74,7 +74,7 @@ export const EthereumAgentWindow: FC<any> = props => {
       {ethereum_enabled && (
         <>
           <div className="form-item">
-            <span className="form-item-label">Ethereum Private Key</span>
+            <span className="form-item-label">Private Key</span>
             <KeyInput
               value={ethereum_private_key}
               setValue={setEthereumPrivateKey}
@@ -84,12 +84,12 @@ export const EthereumAgentWindow: FC<any> = props => {
 
           <div className="form-item">
             <span className="form-item-label">
-              Ethereum Starting Words - Separated by ,
+              Custom RPC Provider
             </span>
             <input
               type="text"
               defaultValue={ethereum_custom_rpc}
-              placeholder="Insert Ethereum starting words here"
+              placeholder="https://mainnet.infura.io/v3/..."
               onChange={e => {
                 setEthereumCustomRpc(e.target.value)
               }}

@@ -126,7 +126,7 @@ const Playtest = ({ tab }) => {
     const graph = spellData.data[0].graph
     const options = Object.values(graph.nodes)
       .filter((node: any) => {
-        return node.data.playtestToggle
+        return node.data.isInput
       })
       .map((node: any) => ({
         value: node.data.name ?? node.name,
@@ -134,8 +134,9 @@ const Playtest = ({ tab }) => {
       }))
 
     setPlaytestOptions(options)
-    console.log('options', options)
-    setPlaytestOption(options[0].value)
+    if(options.length > 0)
+      setPlaytestOption(options[0].value)
+    else setPlaytestOption('Default')
   }, [spellData])
 
   // Keep scrollbar at bottom of its window
