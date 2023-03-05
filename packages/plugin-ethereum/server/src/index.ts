@@ -45,7 +45,7 @@ function getAgentMethods() {
 const EthereumPlugin = new ServerPlugin({
   name: 'EthereumPlugin',
   nodes: Nodes,
-  services: [['EthereumPlugin']],
+  services: [],
   agentMethods: getAgentMethods(),
   secrets: [
     {

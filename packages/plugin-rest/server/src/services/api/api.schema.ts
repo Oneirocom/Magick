@@ -10,7 +10,8 @@ import { dataValidator, queryValidator } from '@magickml/server-core'
 export const apiSchema = Type.Object(
   {
     id: Type.String(),
-    payload: Type.String(),
+    content: Type.String(),
+    apiKey: Type.String(),
   },
   { $id: 'Api', additionalProperties: false }
 )
@@ -22,7 +23,8 @@ export const apiExternalResolver = resolve<Api, HookContext>({})
 
 // Schema for creating new entries
 export const apiDataSchema = Type.Pick(apiSchema, [
-  'payload'
+  'content',
+  'apiKey'
 ], {
   $id: 'ApiData'
 })
@@ -40,8 +42,8 @@ export const apiPatchResolver = resolve<Api, HookContext>({})
 
 // Schema for allowed query properties
 export const apiQueryProperties = Type.Pick(apiSchema, [
-  'id',
-  'payload'
+  'content',
+  'apiKey'
 ])
 
 export const apiQuerySchema = Type.Intersect(
@@ -49,7 +51,8 @@ export const apiQuerySchema = Type.Intersect(
     querySyntax(apiQueryProperties),
     // Add additional query properties here
     Type.Object({
-      'payload': Type.String(),
+      'content': Type.String(),
+      'apiKey': Type.String(),
     }, { additionalProperties: false })
   ],
   { additionalProperties: false }

@@ -8,15 +8,15 @@ import { UploadService } from './Upload.class'
 import type { Application } from '../declarations'
 import { pluginManager } from '@magickml/engine'
 export const services = async (app: Application) => {
-  const service_list = pluginManager.getServices()
   app.configure(request)
   app.configure(spell)
   app.configure(agent)
   app.configure(event)
   app.configure(spellRunner)
   app.use('upload' as any, new UploadService())
-  service_list.forEach((service) => {
-    console.log('************ service', service)
-    app.use(service[0], new service[1]())
+  // TODO: handle this stupid race condition
+  await new Promise((resolve) => setTimeout(resolve, 1))
+  pluginManager.getServices().forEach((service) => {
+    app.configure(service[1])
   })
 }

@@ -1,5 +1,5 @@
 import { anySocket, eventSocket, ServerPlugin } from '@magickml/engine'
-import { ApiService } from './services/api/api.class'
+import { api } from './services/api/api'
 
 function getAgentMethods() {
   return {
@@ -14,7 +14,7 @@ function getAgentMethods() {
 
 const RestPlugin = new ServerPlugin({
   name: 'RestPlugin',
-  services: { api: ApiService },
+  services: { api },
   agentMethods: getAgentMethods(),
   inputTypes: [
     { name: 'REST API (GET)', trigger: true, socket: eventSocket },

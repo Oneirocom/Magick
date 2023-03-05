@@ -30,29 +30,25 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     id: Id,
     _params?: ServiceParams
   ): Promise<ApiGetResponse | any /* TODO: remove */> {
-    console.log('GET PARAMS', _params)
-    const { payload } = _params as any // TODO: why is this error
-    // payload is JSON encoded string
-    const json = JSON.parse(payload)
-
+    const { apiKey, content } = _params.query as any // TODO: why is this error
+    console.log('apiKey', apiKey)
+    console.log('content', content)
     // get the agent service
     const agentService = this.options.app.service('agents')
     // get the agent by id
     const agent = await agentService.get(id)
-    // get the selectedAgentData
-    const selectedAgentData = agent.data
-    console.log('AGENT DATA', selectedAgentData)
     // get the selectedAgentData's spells
-    const rootSpell = JSON.parse(selectedAgentData.rootSpell)
-    console.log('ROOT SPELL', rootSpell)
+    const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
     // run the spell
     const result = await runSpell({
       id: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
-        'Input - REST API (GET)': { ...json.inputs },
+        'Input - REST API (GET)': {
+          content,
+        },
       },
-      secrets: payload.secrets ?? {},
+      secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
     })
 
