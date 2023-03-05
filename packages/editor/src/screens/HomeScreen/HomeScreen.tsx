@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 
 import { getSpellApi } from '../../state/api/spells'
@@ -24,6 +24,7 @@ const StartScreen = () => {
   const navigate = useNavigate()
   const [deleteSpell] = spellApi.useDeleteSpellMutation()
   const { data: spells } = spellApi.useGetSpellsQuery({projectId: config.projectId})
+  const [getSpells, { data: spell, isLoading }] = spellApi.useLazyGetSpellsQuery({projectId: config.projectId})
   const [newSpell] = spellApi.useNewSpellMutation()
 
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
@@ -58,7 +59,11 @@ const StartScreen = () => {
 
     navigate('/magick')
   }
-
+  useEffect(()=>{
+    getSpells({
+      projectId: config.projectId
+    })
+  },[spells])
   const loadFile = selectedFile => {
     const reader = new FileReader()
     reader.onload = onReaderLoad
