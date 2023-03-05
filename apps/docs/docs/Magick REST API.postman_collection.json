@@ -1,0 +1,147 @@
+{
+	"info": {
+		"_postman_id": "bc85c5cd-fd3a-466f-aeb9-c787986a16e1",
+		"name": "Magick REST API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9003266"
+	},
+	"item": [
+		{
+			"name": "Magick GET",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test2@gmail.com\",\n    \"password\": \"testpassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3030/api/481edb66-1e6f-486c-a182-846b15dbdcc2?apiKey=a21090ccb3adfe3b0328f02cb0e72feb&content=Hello World",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"api",
+						"481edb66-1e6f-486c-a182-846b15dbdcc2"
+					],
+					"query": [
+						{
+							"key": "apiKey",
+							"value": "a21090ccb3adfe3b0328f02cb0e72feb"
+						},
+						{
+							"key": "content",
+							"value": "Hello World"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Magick DELETE",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test2@gmail.com\",\n    \"password\": \"testpassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3030/api/481edb66-1e6f-486c-a182-846b15dbdcc2?apiKey=a21090ccb3adfe3b0328f02cb0e72feb&content=Hello World",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"api",
+						"481edb66-1e6f-486c-a182-846b15dbdcc2"
+					],
+					"query": [
+						{
+							"key": "apiKey",
+							"value": "a21090ccb3adfe3b0328f02cb0e72feb"
+						},
+						{
+							"key": "content",
+							"value": "Hello World"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Magick POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"481edb66-1e6f-486c-a182-846b15dbdcc2\",\n    \"apiKey\": \"a21090ccb3adfe3b0328f02cb0e72feb\",\n    \"content\": \"Hello World\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3030/api",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"api"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Magick PUT",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"481edb66-1e6f-486c-a182-846b15dbdcc2\",\n    \"apiKey\": \"a21090ccb3adfe3b0328f02cb0e72feb\",\n    \"content\": \"Hello World\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3030/api",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"api"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
