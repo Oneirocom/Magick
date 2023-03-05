@@ -254,14 +254,13 @@ const Playtest = ({ tab }) => {
       inputs: {
         [playtestInputName as string]: toSend,
       },
-      publicVariables: {},
+      // retrun an array of all nodes where node.data.isPublic is true
+      publicVariables: JSON.stringify(Object.values(
+        graph.nodes || {}
+      ).filter((node: { data }) => node?.data?.isPublic)),
       secrets: JSON.parse(localStorage.getItem('secrets') || '{}')
     }
-
-    console.log('**************** SENDING DATA ****************')
-    console.log(finalData)
-    console.log('**************** END DATA ****************')
-
+    
     // Todo should move run spell into an event to be used globally.
     client.service('spell-runner').create(finalData)
 

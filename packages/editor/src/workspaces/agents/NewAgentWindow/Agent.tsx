@@ -54,10 +54,10 @@ const AgentWindow = ({
       setSpellList(json.data)
       setSelectedAgentData({
         ...selectedAgentData,
-        publicVariables: Object.values(
+        publicVariables: selectedAgentData.publicVariables ?? JSON.stringify(Object.values(
           spellList.find(spell => spell.name === selectedAgentData.rootSpell)
             ?.graph.nodes || {}
-        ).filter((node: any) => node?.data?.isPublic),
+        ).filter((node: any) => node?.data?.isPublic)),
       })
     })()
   }, [])
@@ -167,11 +167,6 @@ const AgentWindow = ({
                     setSelectedAgentData({
                       ...selectedAgentData,
                       rootSpell: event.target.value,
-                      publicVariables: Object.values(
-                        spellList.find(
-                          spell => spell.name === event.target.value
-                        )?.graph.nodes || {}
-                      ).filter((node: any) => node?.data?.isPublic),
                     })
                   }}
                 >
@@ -186,15 +181,15 @@ const AgentWindow = ({
             </Grid>
           </Grid>
 
-          {selectedAgentData.publicVariables.length !== 0 && (
+          {JSON.parse(selectedAgentData.publicVariables ?? []).length !== 0 && (
             <AgentPubVariables
-              setPublicVars={(publicVariables: any) => {
+              setPublicVars={(_publicVariables: any) => {
                 setSelectedAgentData({
                   ...selectedAgentData,
-                  publicVariables,
+                  publicVariables: JSON.stringify(_publicVariables),
                 })
               }}
-              publicVars={selectedAgentData.publicVariables}
+              publicVars={JSON.parse(selectedAgentData.publicVariables)}
             />
           )}
 
@@ -217,11 +212,11 @@ const AgentWindow = ({
               ...selectedAgentData,
               publicVariables:
                 selectedAgentData.publicVariables ??
-                Object.values(
+                JSON.stringify(Object.values(
                   spellList.find(
                     spell => spell.name === selectedAgentData.rootSpell
                   )?.graph.nodes || {}
-                ).filter((node: any) => node?.data?.isPublic),
+                ).filter((node: any) => node?.data?.isPublic)),
             }
             update(data)
           }}

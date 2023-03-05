@@ -76,6 +76,7 @@ export function initSpeechClient({
       } catch (e) {
         console.log('error getting members', e)
       }
+      console.log('calling runComponent from discord-voice.ts')
       const fullResponse = await spellRunner.runComponent({
         inputs: {
           'Input - Discord (Voice)': {
