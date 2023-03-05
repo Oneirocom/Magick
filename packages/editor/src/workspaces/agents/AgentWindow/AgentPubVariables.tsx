@@ -7,8 +7,7 @@ interface Props {
   setPublicVars: (data: any) => void
 }
 
-const AgentPubVariables = ({ publicVars = [], setPublicVars }: Props) => {
-  console.log('publicVars', publicVars)
+const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
   const onChange = event => {
     const { name } = event.target
     setPublicVars({
@@ -28,33 +27,33 @@ const AgentPubVariables = ({ publicVars = [], setPublicVars }: Props) => {
       {(() => {
         console.log(publicVars)
         return publicVars
-      })() && publicVars?.map && publicVars?.map(variable => {
+      })() && publicVars.map && publicVars.map(variable => {
         return (
           <Grid
             container
-            key={variable?.id}
+            key={variable.id}
             style={{ alignItems: 'center', marginBottom: '10px' }}
           >
             <Grid item>
               <p style={{ marginRight: '20px' }}>
-                {`${variable?.data?.name}: `}
+                {`${variable.name}: `}
               </p>
             </Grid>
             <Grid item xs={8}>
               {variable.name.includes('Boolean') ? (
                 <Switch
                   label={''}
-                  checked={publicVars[variable?.data?.name]}
+                  checked={publicVars[variable.name]}
                   onChange={onChange}
-                  name={variable?.data?.name}
+                  name={variable.name}
                 />
               ) : (
                 <Input
                   style={{ width: '100%' }}
-                  value={publicVars[variable?.data?.name]}
+                  value={publicVars[variable.name]}
                   type="text"
                   onChange={onChange}
-                  name={variable?.data?.name}
+                  name={variable.name}
                   placeHolder={"Add new value here"}
                   multiline
                 />
