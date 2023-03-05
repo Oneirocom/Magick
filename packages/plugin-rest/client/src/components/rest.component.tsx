@@ -55,8 +55,20 @@ export const RestAgentWindow: FC<any> = props => {
       {selectedAgentData.data?.rest_enabled && (
         <div className="form-item">
           <Grid container>
+          <Grid item xs={12}>
+              <span className="form-item-label">Agent ID</span>
+              <Input
+                value={selectedAgentData.id}
+                readOnly
+                style={{ width: '20em' }}
+                onClick={() => {
+                  navigator.clipboard.writeText(selectedAgentData.id)
+                  enqueueSnackbar('Copied to clipboard', { variant: 'success' })
+                }}
+              />
+            </Grid>
             <Grid item xs={12}>
-              <span className="form-item-label">API Key</span>
+              <span style={{ marginTop: '2em' }} className="form-item-label">API Key</span>
               <Input
                 value={selectedAgentData.data?.rest_api_key}
                 readOnly
