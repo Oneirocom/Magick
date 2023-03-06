@@ -1179,7 +1179,7 @@ export class discord_client {
   worldManager: WorldManager
   constructor({
     agent,
-    discord_api_token,
+    discord_api_key,
     discord_starting_words,
     discord_bot_name_regex,
     discord_bot_name,
@@ -1191,7 +1191,7 @@ export class discord_client {
     tiktalknet_url,
     worldManager,
   }) {
-    console.log('creating discord client')
+    console.log('creating discord client', discord_api_key)
     this.worldManager = worldManager
     this.agent = agent
     this.spellRunner = spellRunner
@@ -1213,7 +1213,7 @@ export class discord_client {
     this.discord_bot_name_regex = discord_bot_name_regex
     this.discord_bot_name = discord_bot_name
 
-    const token = discord_api_token
+    const token = discord_api_key
     if (!token) {
       console.warn('No API token for Discord bot, skipping')
     } else {

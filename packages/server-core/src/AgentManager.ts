@@ -23,9 +23,14 @@ export class AgentManager {
     this.id = 0
     
     this.onCreate()
+
+    setInterval(async () => {
+      console.log('updating agents')
+      await this.updateAgents()
+    }, 1000);
   }
 
-  async updateAgent() {
+  async updateAgents() {
     this.newAgents = (await app.service('agents').find(query)).data
     await this.updateSpells()
     if (JSON.stringify(this.newAgents) === JSON.stringify(this.lastAgentData ?? [])) return // They are the same
@@ -54,7 +59,7 @@ export class AgentManager {
       // }
     }
     // If an entry exists in lastAgentData but not in newAgents, it has been deleted
-    for (const i in this.lastAgentData) {
+    for (const i in this.lastAgentData ?? []) {
       // filter for entries where lastAgentData where id === newAgents[i].id
       if (
         this.newAgents.filter((x: any) => x.id === this.lastAgentData[i].id)[0] === undefined
@@ -67,7 +72,7 @@ export class AgentManager {
     for (const i in this.newAgents) {
       // filter for entries where lastAgentData where id === newAgents[i].id
       if (
-        this.lastAgentData.filter((x: any) => x.id === this.lastAgentData[i].id)[0] === undefined
+        this.lastAgentData?.filter((x: any) => x.id === this.lastAgentData[i].id)[0] === undefined
       ) {
         if (this.newAgents[i].enabled) {
           if (!this.newAgents[i].data.discord_enabled)
@@ -140,8 +145,6 @@ export class AgentManager {
   async resetAgentSpells() {
     const agents = (await app.service('agents').find()).data
     for (const i in agents) {
-      // rewrite as a feathers service call to empty
-      //@ts-ignore
       await app.service('agents').patch(agents[i].id, {
         dirty: true,
         spells: [],
@@ -171,12 +174,8 @@ export class AgentManager {
 
   async addAgent(obj: any) {
     const data = {
-      ...obj.data,
-      id: obj.id,
-      enabled: obj.enabled ? true : false,
-      dirty: obj.dirty ? true : false,
-      spells: obj.spells,
-      updatedAt: obj.updatedAt ?? new Date(),
+      ...obj,
+      updatedAt: obj.updatedAt ?? new Date().toISOString(),
     }
     //Overwrites even if already exists
     data.projectId = projectId
