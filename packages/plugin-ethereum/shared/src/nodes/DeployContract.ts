@@ -26,13 +26,17 @@ type InputReturn = {
 export class DeployContract extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
+<<<<<<< refs/remotes/origin/development
     super('Deploy Contract')
+=======
+    super('PluginEthDeployContract')
+>>>>>>> plugin(eth): change node's names and display names
 
     this.task = {
       outputs: {
         trigger: 'option',
+        balance_before: 'output',
         balance: 'output',
-        balance_after: 'output',
         tx: 'output',
         contract: 'output',
       },
@@ -78,23 +82,31 @@ export class DeployContract extends MagickComponent<InputReturn> {
     )
     const rpcHttpInput = new Rete.Input(
       'rpc_http',
-      'RPC HTTP Endpoint',
+      'RPC HTTP',
       stringSocket
     )
     const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
 
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+<<<<<<< refs/remotes/origin/development
     const balanceOutput = new Rete.Output('balance', 'Balance', numberSocket)
     const balanceAfterOutput = new Rete.Output(
       'balance_after',
       'Balance After',
       numberSocket
+=======
+    const balanceOutput = new Rete.Output('balance_before', 'Balance Before', numSocket)
+    const balanceAfterOutput = new Rete.Output(
+      'balance',
+      'Balance',
+      numSocket
+>>>>>>> plugin(eth): change node's names and display names
     )
     const txOutput = new Rete.Output('tx', 'Transaction', stringSocket)
     const contractAddrOutput = new Rete.Output(
       'contract',
-      'Contract Address',
+      'Contract Addr',
       stringSocket
     )
 
@@ -157,14 +169,14 @@ export class DeployContract extends MagickComponent<InputReturn> {
     const wallet = new ethers.Wallet(privateKey, provider)
     const factory = new ethers.ContractFactory(contractAbi, contractByteCode, wallet);
 
-    const balance = await provider.getBalance(wallet.address)
-    const balanceInEth = ethers.utils.formatEther(balance).toString()
+    const balanceBefore = await provider.getBalance(wallet.address)
+    const balanceBeforeInEth = ethers.utils.formatEther(balanceBefore).toString()
 
     const contract = await factory.deploy();
     await contract.deployTransaction.wait()
 
-    const balanceAfter = await provider.getBalance(wallet.address)
-    const balanceAfterInEth = ethers.utils.formatEther(balanceAfter).toString()
+    const balance = await provider.getBalance(wallet.address)
+    const balanceInEth = ethers.utils.formatEther(balance).toString()
 
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data)) {
@@ -172,8 +184,8 @@ export class DeployContract extends MagickComponent<InputReturn> {
 
       return {
         output: data,
+        balance_before: balanceBeforeInEth,
         balance: balanceInEth,
-        balance_after: balanceAfterInEth,
         tx: contract.deployTransaction.hash,
         contract: contract.address
       }

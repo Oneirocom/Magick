@@ -44,11 +44,11 @@ type InputReturn = {
   output: unknown
 }
 
-export class Solidity extends MagickComponent<InputReturn> {
+export class CompileContract extends MagickComponent<InputReturn> {
 
   constructor() {
     // Name of the component
-    super('Solidity')
+    super('PluginEthCompileContract')
 
     this.task = {
       outputs: {
@@ -68,8 +68,8 @@ export class Solidity extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'Solidity'
-    this.displayName = 'Solidity'
+    this.contextMenuName = 'Compile Contract'
+    this.displayName = 'Compile Contract'
   }
 
   builder(node: MagickNode) {

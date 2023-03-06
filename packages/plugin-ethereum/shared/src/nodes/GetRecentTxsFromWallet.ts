@@ -21,10 +21,14 @@ type InputReturn = {
   output: unknown
 }
 
-export class GetRecentTransactions extends MagickComponent<InputReturn> {
+export class GetRecentTxsFromWallet extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
+<<<<<<< refs/remotes/origin/development:packages/plugin-ethereum/shared/src/nodes/GetRecentTransactions.ts
     super('Get Recent Transactions')
+=======
+    super('PluginEthGetRecentTxsFromWallet')
+>>>>>>> plugin(eth): change node's names and display names:packages/plugin-ethereum/shared/src/nodes/GetRecentTxsFromWallet.ts
 
     this.task = {
       outputs: {

@@ -4,28 +4,30 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   anySocket,
-  InputControl,
   MagickComponent,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   NodeData,
-  DropdownControl,
-  stringSocket,
   numberSocket,
+  stringSocket,
   triggerSocket,
 } from '@magickml/engine'
 
-const info = `Check the balance of an ethereum wallet`
+const info = `Check the balance of an ethereum wallet for an ERC20 at a contract address`
 
 type InputReturn = {
   output: unknown
 }
 
-export class CheckEthBalance extends MagickComponent<InputReturn> {
+export class GetERC20BalanceFromWallet extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-    super('Check Eth Balance')
+<<<<<<< refs/remotes/origin/development:packages/plugin-ethereum/shared/src/nodes/CheckBalanceForERC20.ts
+    super('Check ERC20 Balance')
+=======
+    super('PluginEthGetERC20BalanceFromWallet')
+>>>>>>> plugin(eth): change node's names and display names:packages/plugin-ethereum/shared/src/nodes/GetERC20BalanceFromWallet.ts
 
     this.task = {
       outputs: {
@@ -43,8 +45,8 @@ export class CheckEthBalance extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'Check Eth Balance'
-    this.displayName = 'Check Eth Balance'
+    this.contextMenuName = 'Check ERC20 Balance'
+    this.displayName = 'Check ERC20 Balance'
   }
 
   destroyed(node: MagickNode) {
@@ -56,36 +58,20 @@ export class CheckEthBalance extends MagickComponent<InputReturn> {
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    const rpcHttpControl = new InputControl({
-      dataKey: 'rpc_http',
-      name: 'RPC Endpoint',
-    })
-
-    const chainIdControl = new DropdownControl({
-      name: 'Chain',
-      dataKey: 'chain_id',
-      values: ['1', '11155111', '5', '137', '80001'],
-      defaultValue: '80001',
-    })
-
-    node.inspector.add(rpcHttpControl).add(chainIdControl)
-
-    const addressInput = new Rete.Input('address', 'Address', stringSocket)
+    const addressInput = new Rete.Input('address', 'Wallet Address', numberSocket)
+    const contractAddressInput = new Rete.Input(
+      'contract',
+      'Contract Address',
+      numberSocket
+    )
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const rpcHttpInput = new Rete.Input(
-      'rpc_http',
-      'RPC HTTP Endpoint',
-      stringSocket
-    )
-    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket)
     const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
 
     return node
       .addInput(dataInput)
       .addInput(addressInput)
-      .addInput(rpcHttpInput)
-      .addInput(chainIdInput)
+      .addInput(contractAddressInput)
       .addOutput(dataOutput)
       .addOutput(balanceOutput)
   }
