@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
-import { useSelector } from 'react-redux'
 import { GraphData, Spell } from '@magickml/engine'
 
 import md5 from 'md5'
@@ -10,7 +9,6 @@ import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
 import { useEditor } from '../../../workspaces/contexts/EditorProvider'
 import { diff } from '../../../utils/json0'
 import { useFeathers } from '../../../contexts/FeathersProvider'
-import { RootState } from '../../../state/store'
 
 import { useConfig } from '../../../contexts/ConfigProvider'
 
@@ -23,22 +21,18 @@ const EventHandler = ({ pubSub, tab }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [saveSpellMutation] = spellApi.useSaveSpellMutation()
-  const [saveDiff] = spellApi.useSaveDiffMutation()
   const [getSpell, { data: spell, isLoading }] =
     spellApi.useLazyGetSpellByIdQuery({
       spellName: tab.name.split('--')[0],
       id: tab.id,
       projectId: config.projectId,
     })
-  const preferences = useSelector(
-    (state: RootState) => state.preferences
-  ) as any
-
   // Spell ref because callbacks cant hold values from state without them
   const spellRef = useRef<Spell | null>(null)
 
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
+
   useEffect(() => {
     //if (!spell || !spell?.data[0]) return
     getSpell({
@@ -46,13 +40,32 @@ const EventHandler = ({ pubSub, tab }) => {
       id: tab.id,
       projectId: config.projectId,
     })
-    console.log('Updated')
     spellRef.current = spell?.data[0]
   }, [spell])
 
+  // this may be better suited somewhere else.  Was moved from playtest window
+  useEffect(() => {
+    if (!client.io || !tab.id || !enqueueSnackbar) return
+
+    const listener = data => {
+      //publish($DEBUG_PRINT(tab.id), (data.error.message))
+      console.error('Error in spell execution')
+      enqueueSnackbar('Error Running the spell. Please Check the Console', {
+        variant: 'error',
+      })
+    }
+
+    client.io.on(`${tab.id}-error`, listener)
+
+    // Handle cleaning up the subscription
+    return () => {
+      client.io.off(`${tab.id}-error`, listener)
+    }
+  }, [client.io, tab.id, enqueueSnackbar])
+
   const { serialize, getEditor, undo, redo, del } = useEditor()
 
-  const { events, subscribe } = pubSub
+  const { events, subscribe, publish } = pubSub
 
   const {
     $DELETE,
@@ -69,6 +82,7 @@ const EventHandler = ({ pubSub, tab }) => {
     $EXPORT,
     $CLOSE_EDITOR,
     $PROCESS,
+    $RUN_SPELL,
   } = events
 
   const saveSpell = async () => {
@@ -97,16 +111,18 @@ const EventHandler = ({ pubSub, tab }) => {
       })
     }
 
-    enqueueSnackbar('Spell saved', {
-      variant: 'success',
-    })
-
     if ('error' in response) {
+      console.log('UPDATED SPELL', updatedSpell)
+      console.error(response.error)
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
       })
       return
     }
+
+    enqueueSnackbar('Spell saved', {
+      variant: 'success',
+    })
   }
 
   const onSaveDiff = async (event, update) => {
@@ -126,7 +142,7 @@ const EventHandler = ({ pubSub, tab }) => {
     if (jsonDiff.length === 0) return
     //While Importing spell, the graph is first created, then the imported graph is loaded
     //This might be causing issue at the server end.
-    if ((updatedSpell.graph.nodes.length) === 0) return
+    if (updatedSpell.graph.nodes.length === 0) return
 
     try {
       await client.service('spell-runner').update(currentSpell.id, {
@@ -149,9 +165,6 @@ const EventHandler = ({ pubSub, tab }) => {
         })
         return
       }
-      enqueueSnackbar('Spell updated', {
-        variant: 'success',
-      })
     } catch (err) {
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
@@ -238,6 +251,19 @@ const EventHandler = ({ pubSub, tab }) => {
     if (editor.moduleSubscription) editor.moduleSubscription.unsubscribe()
   }
 
+  const runSpell = async (event, data) => {
+    console.log('DATA IN EVENT HANDLER', data)
+
+    // We are publishing the diff just to ensure that the spell runner has the latest version of the spell
+    // publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
+
+    // wait .2. seconds for spell_diff to take effect
+    await new Promise(resolve => setTimeout(resolve, 200))
+
+    // run the spell in the spell runner service
+    client.service('spell-runner').create(data)
+  }
+
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,
@@ -253,6 +279,7 @@ const EventHandler = ({ pubSub, tab }) => {
     [$DELETE(tab.id)]: onDelete,
     [$PROCESS(tab.id)]: onProcess,
     [$SAVE_SPELL_DIFF(tab.id)]: onSaveDiff,
+    [$RUN_SPELL(tab.id)]: runSpell,
   }
 
   useEffect(() => {
