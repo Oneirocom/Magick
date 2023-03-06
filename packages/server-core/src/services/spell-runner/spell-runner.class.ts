@@ -1,20 +1,9 @@
-import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
-import { KnexService } from '@feathersjs/knex'
-import { Spell, pluginManager } from '@magickml/engine'
+import { Spell } from '@magickml/engine'
 import otJson0 from 'ot-json0'
 import { app } from '../../app'
-import { Id, Params } from '@feathersjs/feathers'
+import { Params } from '@feathersjs/feathers'
 
-import type { Application } from '../../declarations'
-
-export type SpellRunner = any
-export type SpellRunnerData = any
-export type SpellRunnerPatch = any
-export type SpellRunnerQuery = any
-
-export type SpellRunnerParams = KnexAdapterParams<SpellRunnerQuery>
-
-interface Data {}
+import { getSpell } from '../../helpers/getSpell'
 
 interface CreateData {
   inputs: Record<string, any>
@@ -25,29 +14,20 @@ interface CreateData {
   publicVariables: Record<string, any>
 }
 
-const getSpell = async ({ app, id, projectId }) => {
-  const spell = await app.service('spells').find({
-    query: {
-      projectId,
-      id: id,
-    },
-  })
-  return spell.data[0]
+export interface SpellRunnerParams extends Params {
+  user: any
 }
+
+// interface Data {}
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class SpellRunnerService<
   ServiceParams extends Params = SpellRunnerParams
-> extends KnexService<
-  SpellRunner,
-  SpellRunnerData,
-  ServiceParams,
-  SpellRunnerPatch
 > {
-  async get(id: string, params?: SpellRunnerParams): Promise<any | {}> {
-    if (!app.userSpellManagers) return {}
+  async get(id: string, params?: SpellRunnerParams): Promise<Spell | null> {
+    if (!app.userSpellManagers) return null
     if (!params) throw new Error('No params present in service')
-    const { user, query } = params as any
+    const { user, query } = params
 
     if (!user) throw new Error('No user is present in service')
     // Here we get the users spellManagerApp
@@ -67,10 +47,10 @@ export class SpellRunnerService<
     return spell
   }
 
-  // @ts-ignore
+  // todo type this service properly
   async create(
     data: CreateData,
-    params?: SpellRunnerParams
+    params?: ServiceParams
   ): Promise<Record<string, unknown>> {
     if (!app.userSpellManagers) return {}
     if (!params) throw new Error('No params present in service')
@@ -97,16 +77,17 @@ export class SpellRunnerService<
 
   async update(
     id: string,
-    data: { diff: Record<string, unknown> },
+    data: { diff?: Record<string, unknown>, spellUpdate?: Spell, projectId: string},
     params?: SpellRunnerParams
-  ): Promise<Data> {
-    if (!app.userSpellManagers) return {}
+  ): Promise<Spell> {
+    console.log("ID**********************", id)
+    if (!app.userSpellManagers) return null
     if (!params) throw new Error('No params present in service')
 
     const { user } = params as any
     if (!user) throw new Error('No user present in service')
 
-    const { diff } = data
+    const { diff, spellUpdate } = data
     const spellManager = app.userSpellManagers.get(user.id)
     if (!spellManager) throw new Error('No spell manager found for user!')
 
@@ -115,18 +96,27 @@ export class SpellRunnerService<
     const spellRunner = spellManager.getSpellRunner(decodedId)
     if (!spellRunner) throw new Error('No spell runner found!')
 
-    const spell = spellRunner.currentSpell
-    try {
-      const updatedSpell = otJson0.type.apply(spell, diff)
+    if (diff) {
+      const spell = spellRunner.currentSpell
+      try {
+        const updatedSpell = otJson0.type.apply(spell, diff)
 
-      spellManager.load(updatedSpell, true)
-      return updatedSpell
-    } catch (e) {
-      console.error('Error diffing spell. Recaching spell')
-      app.services.spells.get(id, params)
-      spellManager.load(spell, true)
-      return spell
+        spellManager.load(updatedSpell, true)
+        return updatedSpell
+      } catch (e) {
+        console.error('Error diffing spell. Recaching spell')
+        app.services.spells.get(id, params)
+        spellManager.load(spell, true)
+        return spell
+      }
     }
+
+    if (spellUpdate) {
+      spellManager.load(spellUpdate, true)
+      return spellUpdate
+    }
+
+    throw new Error('No diff or spellUpdate present in update data')
   }
 
   // async patch(id: NullableId, data: Data, params?: Params): Promise<Data> {
@@ -136,12 +126,4 @@ export class SpellRunnerService<
   // async remove(id: NullableId, params?: Params): Promise<Data> {
   //   return { id }
   // }
-}
-
-export const getOptions = (app: Application): KnexAdapterOptions => {
-  return {
-    paginate: app.get('paginate'),
-    Model: app.get('dbClient'),
-    name: 'spell-runner',
-  }
 }
