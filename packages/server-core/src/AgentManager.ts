@@ -40,7 +40,7 @@ export class AgentManager {
 
         await temp_agent.onDestroy()
       } catch {
-
+        console.warn('Agent not found')
       }
       if (!this.newAgents[i].data) {
         console.warn('New agent is null data')
@@ -109,7 +109,7 @@ export class AgentManager {
         ) {
           // reload the spell
 
-          const spellRunner = await runningAgent.spellManager.load(spell)
+          await runningAgent.spellManager.load(spell)
           runningAgent.root_spell_hash = spell.hash
         }
       } else {
@@ -133,7 +133,7 @@ export class AgentManager {
           if (spell.hash !== runningAgent.spells_hash[j]) {
             // reload the spell
 
-            const spellRunner = await runningAgent.spellManager.load(spell)
+            await runningAgent.spellManager.load(spell)
             runningAgent.spells_hash[j] = spell.hash
           }
         }
