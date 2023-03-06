@@ -104,6 +104,7 @@ export class SpellRunnerService<
         spellManager.load(updatedSpell, true)
         return updatedSpell
       } catch (e) {
+        console.error(e)
         console.error('Error diffing spell. Recaching spell')
         app.services.spells.get(id, params)
         spellManager.load(spell, true)
