@@ -48,14 +48,6 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     const dataOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const resultOut = new Rete.Output('result', 'Result', stringSocket)
     const composedOut = new Rete.Output('composed', 'Composed', stringSocket)
-    const settings = new Rete.Input('settings', 'Settings', anySocket)
-
-    node
-      .addInput(dataIn)
-      .addInput(settings)
-      .addOutput(dataOut)
-      .addOutput(resultOut)
-      .addOutput(composedOut)
 
     // TODO refactor to a model dropdown to centralize models.
     // Even better to have an endpoint to call.
@@ -122,6 +114,12 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       .add(maxTokenControl)
       .add(frequency_penalty)
 
+      node
+      .addInput(dataIn)
+      .addOutput(dataOut)
+      .addOutput(resultOut)
+      .addOutput(composedOut)
+
     return node
   }
 
@@ -143,11 +141,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       return acc
     }, {} as Record<string, unknown>)
 
-
-
-    const settings = ((inputs.settings && inputs.settings[0]) ?? {}) as any
-
-    const modelName = settings.modelName ?? (node?.data?.modelName as string)
+    const modelName = node?.data?.modelName as string
 
     // Replace carriage returns with newlines because that's what the language models expect
     const fewshot = node.data.fewshot
@@ -160,23 +154,19 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     const template = Handlebars.compile(fewshot, { noEscape: true })
     const prompt = template(inputs)
 
-    const temperatureData =
-      settings.temperature ?? (node?.data?.temperature as string)
+    const temperatureData = node?.data?.temperature as string
     const temperature = parseFloat(temperatureData)
 
-    const maxTokensData =
-      settings.max_tokens ?? (node?.data?.max_tokens as string)
+    const maxTokensData = node?.data?.max_tokens as string
     const max_tokens = parseInt(maxTokensData)
 
-    const frequencyPenaltyData =
-      settings.frequency_penalty ?? (node?.data?.frequency_penalty as string)
+    const frequencyPenaltyData = node?.data?.frequency_penalty as string
     const frequency_penalty = parseFloat(frequencyPenaltyData ?? 0)
 
-    const presencePenaltyData =
-      settings.presence_penalty ?? (node?.data?.presence_penalty as string)
+    const presencePenaltyData = node?.data?.presence_penalty as string
     const presence_penalty = parseFloat(presencePenaltyData ?? 0)
 
-    const stopData = settings.stop ?? (node?.data?.stop as string)
+    const stopData = node?.data?.stop as string
     const stop = (stopData ?? '').split(', ')
 
     for (let i = 0; i < stop.length; i++) {
