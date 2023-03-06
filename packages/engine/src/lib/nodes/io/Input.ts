@@ -3,7 +3,6 @@ import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
-  EditorContext,
   NodeData,
   MagickNode,
   MagickWorkerInputs,
@@ -12,9 +11,8 @@ import {
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { pluginManager } from '../../plugin'
 import { InputControl } from '../../dataControls/InputControl'
-import { PlaytestControl } from '../../dataControls/PlaytestControl'
 import { SwitchControl } from '../../dataControls/SwitchControl'
-import { anySocket, eventSocket, triggerSocket } from '../../sockets'
+import { anySocket, triggerSocket } from '../../sockets'
 import { MagickComponent, MagickTask } from '../../magick-component'
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
@@ -52,39 +50,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     this.displayName = 'Input'
   }
 
-  subscriptionMap: Record<string, Function> = {}
-
-  unsubscribe?: () => void
-
-  subscribeToPlaytest(node: MagickNode) {
-    const { onPlaytest } = this.editor?.magick as EditorContext
-
-    // check node for the right data attribute
-    if (onPlaytest) {
-      // store the unsubscribe function in our node map
-      this.subscriptionMap[node.id] = onPlaytest((text: string) => {
-        // if the node doesnt have playtest toggled on, do nothing
-        // const playtestToggle = node.data.playtestToggle as unknown as {
-        //   receivePlaytest: boolean
-        // }
-
-        // if (!playtestToggle.receivePlaytest) return
-
-        // attach the text to the nodes data for access in worker
-        node.data.text = text
-      })
-    }
-  }
-
-  destroyed(node: MagickNode) {
-    if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
-    delete this.subscriptionMap[node.id]
-  }
-
   builder(node: MagickNode) {
-    if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
-    delete this.subscriptionMap[node.id]
-
     const values = [...defaultInputTypes, ...pluginManager.getInputTypes()]
     const trigger = new Rete.Output('trigger', 'trigger', triggerSocket)
     const out = new Rete.Output('output', 'output', values[0].socket)
@@ -104,7 +70,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     inputType.onData = data => {
       node.data.name = `Input - ${data}`
 
-      let currentValue = values.find(v => v.name === data)
+      const currentValue = values.find(v => v.name === data)
 
       if(currentValue !== lastValue) {
         const connections = node.getConnections()
@@ -113,7 +79,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
         })
         lastValue = currentValue
       }
-      
+
       if (!currentValue.trigger) {
         node.removeOutput(trigger)
       }
@@ -122,11 +88,8 @@ export class InputComponent extends MagickComponent<InputReturn> {
       if (currentValue.socket) {
         node.removeOutput(out)
         node.addOutput(newOut)
-      }    
+      }
     }
-
-    // subscribe the node to the playtest input data stream
-    this.subscribeToPlaytest(node)
 
     // const data = node?.data?.playtestToggle as
     //   | {
