@@ -10,22 +10,17 @@ export type RunSpellArgs = {
   spell: Spell
 }
 
-export const runSpell = async ({ spell, inputs, inputFormatter, projectId }: RunSpellArgs) => {
+export const runSpell = async ({ spell, inputs, inputFormatter }: RunSpellArgs) => {
   const graph = spell.graph as unknown as GraphData
   const magickInterface = buildMagickInterface() as any
 
   const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs
 
-  const spellToRun = {
-    // TOTAL HACK HERE
-    ...spell
-  }
-
   // Initialize the spell runner
   const spellRunner = new SpellRunner({ magickInterface })
 
   // Load the spell in to the spell runner
-  await spellRunner.loadSpell(spellToRun as unknown as Spell)
+  await spellRunner.loadSpell(spell)
 
   // Get the outputs from running the spell
   const outputs = await spellRunner.runComponent({
