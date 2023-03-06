@@ -16,6 +16,7 @@ import {
 import type { Application, HookContext } from '../../declarations'
 import { SpellService, getOptions } from './spells.class'
 import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
+import { updateSpellInManager } from '../../hooks/spellmanagerHooks'
 
 export * from './spells.class'
 export * from './spells.schema'
@@ -49,7 +50,7 @@ export const spell = (app: Application) => {
       create: [
         schemaHooks.validateData(spellDataValidator),
         schemaHooks.resolveData(spellDataResolver),
-        async (context: any) => {
+        async (context: HookContext) => {
           const { data, service } = context
           context.data = {
             [service.id]: randomUUID(),
@@ -72,9 +73,7 @@ export const spell = (app: Application) => {
                       $like: data.name+' (%)'
                     }
                   }
-                })
-                
-                .then((val) => {                 
+                }).then((val) => {
                   context.data.name = data.name + " (" + (1+val.data.length) +")"
                 })
               }
@@ -83,10 +82,11 @@ export const spell = (app: Application) => {
       ],
       patch: [
         schemaHooks.validateData(spellPatchValidator),
-        schemaHooks.resolveData(spellPatchResolver), 
-        handleJSONFieldsUpdate(spellJsonFields)
-      ], 
-      update: [handleJSONFieldsUpdate(spellJsonFields)],
+        schemaHooks.resolveData(spellPatchResolver),
+        handleJSONFieldsUpdate(spellJsonFields),
+        updateSpellInManager
+      ],
+      update: [handleJSONFieldsUpdate(spellJsonFields), updateSpellInManager],
       remove: [],
     },
     after: {
@@ -94,7 +94,7 @@ export const spell = (app: Application) => {
       create: [],
       patch: [
         // after saving a spell, we need to update the spell cache
-        async (context: any) => {
+        async (context: HookContext) => {
           const { app } = context
           const { id } = context.result
           const spell = await app.service('spells').get(id)
@@ -105,6 +105,8 @@ export const spell = (app: Application) => {
           })
         },
       ],
+      saveDiff: [
+      ]
     },
     error: {
       all: [],
