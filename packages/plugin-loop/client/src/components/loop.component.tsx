@@ -1,15 +1,20 @@
 import React, { FC } from 'react'
+import { debounce } from 'lodash'
+
 type PluginProps = {
   agentData: any
   props: {
     agentData: any
     setAgentData: any
+    update: (id: string, data: object) => void
   }
 }
 import { Grid } from '@mui/material'
 import { Switch } from '@magickml/client-core'
 export const AgentLoopWindow: FC<PluginProps> = props => {
-  const { agentData, setAgentData } = props.props
+  const { agentData, setAgentData, update } = props.props
+  const debouncedFunction = debounce((id, data) => update(id, data), 1000)
+
   return (
     <div
       style={{
@@ -23,21 +28,17 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
         <Switch
           checked={agentData.data?.loop_enabled}
           onChange={e => {
-            if (!e.target.checked) {
-              setAgentData({
-                ...agentData,
-                data: {
-                  ...agentData.data,
-                  loop_interval: '',
-                  loop_enabled: false,
-                },
-              })
-            } else {
-              setAgentData({
-                ...agentData,
-                data: { ...agentData.data, loop_enabled: e.target.checked },
-              })
-            }
+            debouncedFunction(agentData.id, {
+              ...agentData,
+              data: {
+                ...agentData.data,
+                loop_enabled: e.target.checked,
+              },
+            })
+            setAgentData({
+              ...agentData,
+              data: { ...agentData.data, loop_enabled: e.target.checked },
+            })
           }}
           label={''}
         />

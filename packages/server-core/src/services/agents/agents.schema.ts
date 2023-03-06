@@ -1,6 +1,11 @@
 // // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema'
-import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
+import {
+  Type,
+  getDataValidator,
+  getValidator,
+  querySyntax,
+} from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
@@ -16,7 +21,7 @@ export const agentSchema = Type.Object(
     enabled: Type.Optional(Type.Boolean()),
     updated_at: Type.Optional(Type.String()),
     spells: Type.Array(Type.String()),
-    data: Type.Optional(Type.Any())
+    data: Type.Optional(Type.Any()),
   },
   { $id: 'Agent', additionalProperties: false }
 )
@@ -30,19 +35,43 @@ export const agentDataSchema = Type.Pick(
   agentSchema,
   ['dirty', 'projectId', 'name', 'enabled', 'updated_at', 'spells', 'data'],
   {
-    $id: 'AgentData'
+    $id: 'AgentData',
+  }
+)
+
+// Schema for creating new entries
+export const agentPatchDataSchema = Type.Pick(
+  agentSchema,
+  [
+    'id',
+    'dirty',
+    'projectId',
+    'name',
+    'enabled',
+    'updated_at',
+    'spells',
+    'data',
+  ],
+  {
+    $id: 'AgentData',
   }
 )
 export type AgentData = Static<typeof agentDataSchema>
-export const agentDataValidator = getDataValidator(agentDataSchema, dataValidator)
+export const agentDataValidator = getDataValidator(
+  agentDataSchema,
+  dataValidator
+)
 export const agentDataResolver = resolve<Agent, HookContext>({})
 
 // Schema for updating existing entries
-export const agentPatchSchema = Type.Partial(agentDataSchema, {
-  $id: 'AgentPatch'
+export const agentPatchSchema = Type.Partial(agentPatchDataSchema, {
+  $id: 'AgentPatch',
 })
 export type AgentPatch = Static<typeof agentPatchSchema>
-export const agentPatchValidator = getDataValidator(agentPatchSchema, dataValidator)
+export const agentPatchValidator = getDataValidator(
+  agentPatchSchema,
+  dataValidator
+)
 export const agentPatchResolver = resolve<Agent, HookContext>({})
 
 // Schema for allowed query properties
@@ -54,17 +83,20 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'name',
   'updated_at',
   'spells',
-  'data'
+  'data',
 ])
 export const agentQuerySchema = Type.Intersect(
   [
     querySyntax(agentQueryProperties),
     // Add additional query properties here
-    Type.Object({}, { additionalProperties: false })
+    Type.Object({}, { additionalProperties: false }),
   ],
   { additionalProperties: false }
 )
 export type AgentQuery = Static<typeof agentQuerySchema>
-export const agentQueryValidator = getValidator(agentQuerySchema, queryValidator)
+export const agentQueryValidator = getValidator(
+  agentQuerySchema,
+  queryValidator
+)
 export const agentQueryResolver = resolve<AgentQuery, HookContext>({})
 export const agentJsonFields = ['spells', 'data']

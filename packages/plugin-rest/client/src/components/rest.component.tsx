@@ -4,6 +4,7 @@ import { Switch } from '@magickml/client-core'
 import md5 from 'md5'
 import { Button, Input } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
+import { debounce } from 'lodash'
 
 const randomHash = () => {
   return md5(Math.random().toString())
@@ -11,8 +12,8 @@ const randomHash = () => {
 
 export const RestAgentWindow: FC<any> = props => {
   props = props.props
-  const { agentData, setAgentData } = props
-
+  const { agentData, setAgentData, update } = props
+  const debouncedFunction = debounce((id, data) => update(id, data), 1000)
   const [showGetExample, setShowGetExample] = useState(false)
   const [showPostExample, setShowPostExample] = useState(false)
 
@@ -41,11 +42,18 @@ export const RestAgentWindow: FC<any> = props => {
         <Switch
           checked={agentData.data?.rest_enabled}
           onChange={e => {
+            debouncedFunction(agentData.id, {
+              ...agentData,
+              data: {
+                ...agentData.data,
+                rest_enabled: e.target.checked,
+              },
+            })
             setAgentData({
               ...agentData,
               data: {
                 ...agentData.data,
-                rest_enabled: e.target.checked ? true : false,
+                rest_enabled: e.target.checked,
               },
             })
           }}

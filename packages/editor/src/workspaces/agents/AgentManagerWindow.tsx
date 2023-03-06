@@ -8,8 +8,10 @@ import { LoadingScreen } from '@magickml/client-core'
 const AgentManagerWindow = () => {
   const config = useConfig()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [data, setData] = useState<Array<Object>>([])
+  const [data, setData] = useState<Array<object>>([])
   const { enqueueSnackbar } = useSnackbar()
+  const [selectedAgent, setSelectedAgent] = useState<object>({})
+  const [root_spell, setRootSpell] = useState('default')
 
   const resetData = async () => {
     setIsLoading(true)
@@ -65,7 +67,6 @@ const AgentManagerWindow = () => {
   }
 
   const update = (id: string, _data: object) => {
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', id, _data)
     axios
       .patch(`${config.apiUrl}/agents/${id}`, _data)
       .then(res => {
@@ -77,7 +78,6 @@ const AgentManagerWindow = () => {
           enqueueSnackbar('updated agent', {
             variant: 'success',
           })
-
           resetData()
         }
       })
@@ -102,6 +102,7 @@ const AgentManagerWindow = () => {
             variant: 'success',
           })
         }
+        if (selectedAgent?.id === id) setSelectedAgent({})
         resetData()
       })
       .catch(e => {
@@ -133,6 +134,10 @@ const AgentManagerWindow = () => {
       update={update}
       updateCallBack={resetData}
       onLoadFile={loadFile}
+      setSelectedAgent={setSelectedAgent}
+      selectedAgent={selectedAgent}
+      rootSpell={root_spell}
+      setRootSpell={setRootSpell}
     />
   )
 }

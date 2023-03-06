@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { TextField } from '@mui/material'
-
+import styles from './input.module.scss'
 export const Input = ({
   value,
   type,
@@ -11,6 +11,7 @@ export const Input = ({
 }) => {
   return (
     <TextField
+      classes={{ root: styles.root }}
       style={style}
       value={value}
       type={type}

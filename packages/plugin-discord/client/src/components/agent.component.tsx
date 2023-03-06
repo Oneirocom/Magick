@@ -3,6 +3,8 @@ import { useSnackbar } from 'notistack'
 import React, { FC, useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
 import { KeyInput } from './utils'
+import { debounce } from 'lodash'
+
 type PluginProps = {
   agentData: any
   props
@@ -12,7 +14,9 @@ import { Switch } from '@magickml/client-core'
 
 export const DiscordAgentWindow: FC<any> = props => {
   props = props.props
-  const { agentData, setAgentData } = props
+  const { agentData, setAgentData, update } = props
+  const debouncedFunction = debounce((id, data) => update(id, data), 1000)
+
   const { enqueueSnackbar } = useSnackbar()
   const [playingAudio, setPlayingAudio] = useState(false)
 
@@ -69,37 +73,38 @@ export const DiscordAgentWindow: FC<any> = props => {
         position: 'relative',
       }}
     >
-      <Switch
-        label={null}
-        checked={agentData.data?.discord_enabled}
-        onChange={e => {
-          if (!e.target.checked) {
+      <h3>Discord</h3>
+      <div
+        style={{
+          position: 'absolute',
+          right: '1em',
+          top: '0',
+          paddingTop: '1em',
+        }}
+      >
+        <Switch
+          label={null}
+          checked={agentData.data?.discord_enabled}
+          onChange={e => {
+            debouncedFunction(agentData.id, {
+              ...agentData,
+              data: {
+                ...agentData.data,
+                discord_enabled: e.target.checked,
+              },
+            })
             setAgentData({
               ...agentData,
               data: {
                 ...agentData.data,
-                use_voice: 'off',
-                discord_bot_name_regex: '',
-                discord_api_key: '',
-                discord_bot_name: '',
-                discord_starting_words: '',
-                voice_character: '',
-                voice_provider: '',
-                voice_language_code: '',
-                tiktalknet_url: '',
-                discord_enabled: false,
+                discord_enabled: e.target.checked,
               },
             })
-          } else {
-            setAgentData({
-              ...agentData,
-              data: { ...agentData.data, discord_enabled: e.target.checked },
-            })
-          }
-        }}
-        style={{ float: 'right' }}
-      />
-      <h3>Discord</h3>
+          }}
+          style={{ float: 'right' }}
+        />
+      </div>
+
       {agentData.data?.discord_enabled && (
         <>
           <Grid container>
@@ -182,6 +187,15 @@ export const DiscordAgentWindow: FC<any> = props => {
               label={'Voice Enabled'}
               checked={agentData.data?.use_voice === 'on'}
               onChange={e => {
+                debouncedFunction(agentData.id, {
+                  ...agentData,
+                  data: {
+                    ...agentData.data,
+                    use_voice:
+                      agentData?.data?.use_voice === 'on' ? 'off' : 'on',
+                  },
+                })
+
                 setAgentData({
                   ...agentData,
                   data: {
@@ -228,7 +242,9 @@ export const DiscordAgentWindow: FC<any> = props => {
                         className="select"
                         name="voice_character"
                         id="voice_character"
-                        value={agentData.data?.voice_character ?? 'en-US-Standard-A'}
+                        value={
+                          agentData.data?.voice_character ?? 'en-US-Standard-A'
+                        }
                         onChange={e => {
                           setAgentData({
                             ...agentData,
