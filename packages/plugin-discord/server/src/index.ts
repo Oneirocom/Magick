@@ -1,19 +1,9 @@
 import { eventSocket, ServerPlugin, WorldManager } from '@magickml/engine'
-import { UploadService } from '../../../server-core/src/services/Upload.class'
 
 type StartDiscordArgs = {
   agent: any
   spellRunner: any
-  discord_enabled?: boolean
-  discord_api_key?: string
-  discord_starting_words?: string
-  discord_bot_name_regex?: string
-  discord_bot_name?: string
-  use_voice?: boolean
-  voice_provider?: string
-  voice_character?: string
-  voice_language_code?: string
-  tiktalknet_url?: string
+  data: any
   worldManager: WorldManager
 }
 
@@ -21,17 +11,9 @@ function getAgentMethods() {
   let discord_client
 
   async function startDiscord({
+    data,
     agent,
     spellRunner,
-    discord_api_key,
-    discord_starting_words,
-    discord_bot_name_regex,
-    discord_bot_name,
-    use_voice,
-    voice_provider,
-    voice_character,
-    voice_language_code,
-    tiktalknet_url,
     worldManager,
   }: StartDiscordArgs) {
     console.log('starting discord')
@@ -43,6 +25,30 @@ function getAgentMethods() {
     )
     discord_client = module.discord_client
 
+      const {
+      discord_api_key,
+      discord_starting_words,
+      discord_bot_name_regex,
+      discord_bot_name,
+      use_voice,
+      voice_provider,
+      voice_character,
+      voice_language_code,
+      tiktalknet_url,
+      } = data
+
+    console.log({
+      discord_api_key,
+      discord_starting_words,
+      discord_bot_name_regex,
+      discord_bot_name,
+      use_voice,
+      voice_provider,
+      voice_character,
+      voice_language_code,
+      tiktalknet_url,
+    })
+    console.log('discord_api_key', discord_api_key)
     const discord = new discord_client({
       agent,
       discord_api_key,
