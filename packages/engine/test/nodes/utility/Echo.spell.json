@@ -1,0 +1,177 @@
+{
+  "id": "66c3d3e0-5a20-416a-b331-b36760e10b43",
+  "name": "yi",
+  "projectId": "2f13ac61-b996-4dfb-8f4a-ea9de393283b",
+  "hash": "72b5eb884a9fc8a08bfe7351e42f8d21",
+  "created_at": "1678022268491",
+  "updated_at": "1678036997817",
+  "graph": {
+    "id": "demo@0.1.0",
+    "nodes": {
+      "232": {
+        "id": 232,
+        "data": {
+          "playtestToggle": {
+            "receivePlaytest": false,
+            "outputs": []
+          },
+          "socketKey": "9d61118c-3c5a-4379-9dae-41965e56207f",
+          "dataControls": {
+            "inputType": {
+              "expanded": true
+            },
+            "useDefault": {
+              "expanded": true
+            },
+            "defaultValue": {
+              "expanded": true
+            }
+          },
+          "name": "Input",
+          "outputs": [],
+          "isInput": true,
+          "useDefault": true,
+          "defaultValue": "hello",
+          "success": false
+        },
+        "inputs": {},
+        "outputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 234,
+                "input": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "output": {
+            "connections": [
+              {
+                "node": 234,
+                "input": "string",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "position": [
+          -714.4349116196453,
+          -341.30451335067227
+        ],
+        "name": "Input"
+      },
+      "233": {
+        "id": 233,
+        "data": {
+          "name": "Output 233",
+          "sendToPlaytest": true,
+          "sendToAvatar": false,
+          "socketKey": "5dafc7a3-66a4-47b0-b93b-29478cc05a16",
+          "success": false
+        },
+        "inputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 234,
+                "output": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "input": {
+            "connections": [
+              {
+                "node": 234,
+                "output": "output",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "outputs": {
+          "trigger": {
+            "connections": []
+          },
+          "output": {
+            "connections": []
+          }
+        },
+        "position": [
+          454.69908496871136,
+          -220.95183870896847
+        ],
+        "name": "Output"
+      },
+      "234": {
+        "id": 234,
+        "data": {
+          "success": false
+        },
+        "inputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 232,
+                "output": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "string": {
+            "connections": [
+              {
+                "node": 232,
+                "output": "output",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "outputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 233,
+                "input": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "output": {
+            "connections": [
+              {
+                "node": 233,
+                "input": "input",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "position": [
+          -12.226504429973126,
+          -378.7233391891964
+        ],
+        "name": "Echo"
+      }
+    },
+    "comments": []
+  }
+}
