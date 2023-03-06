@@ -6,15 +6,19 @@ type AgentData = {
   id: any
   data: any
   name: string
+  secrets: string
+  publicVariables: any[]
   projectId: string
   spellManager: SpellManager
-  agent?: string
+  agent?: Object
 }
 
 export class Agent {
   name = ''
   //Clients
   id: any
+  secrets: Object
+  publicVariables: any[]
   data: AgentData
   router: any
   app: any
@@ -24,16 +28,20 @@ export class Agent {
   worldManager: WorldManager
 
   constructor(data: AgentData) {
+    // if ,data,secrets is a string, JSON parse it
+    this.secrets = JSON.parse(data.secrets)
+    this.publicVariables = data.publicVariables
     this.id = data.id
     this.data = data
-    this.name = data.agent ?? data.name ?? 'agent'
+    this.name = data.name ?? 'agent'
     this.projectId = data.projectId
     this.spellManager = new SpellManager({
       magickInterface: buildMagickInterface({}) as any,
       cache: false,
     })
     this.worldManager = new WorldManager()
-    ;(async () => {
+    ;
+    (async () => {
       const spell = (
         await app.service('spells').find({
           query: { projectId: data.projectId },
@@ -41,12 +49,12 @@ export class Agent {
       ).data[0]
 
       const spellRunner = await this.spellManager.load(spell)
-
+        console.log('agent.data', data.data)
       const agentStartMethods = pluginManager.getAgentStartMethods()
       for (const method of Object.keys(agentStartMethods)) {
         console.log('method', method)
         await agentStartMethods[method]({
-          ...data,
+          data: data.data,
           agent: this,
           spellRunner,
           worldManager: this.worldManager,
