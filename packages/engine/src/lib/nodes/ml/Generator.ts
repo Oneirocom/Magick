@@ -48,6 +48,14 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     const dataOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const resultOut = new Rete.Output('result', 'Result', stringSocket)
     const composedOut = new Rete.Output('composed', 'Composed', stringSocket)
+    const settings = new Rete.Input('settings', 'Settings', anySocket)
+
+    node
+      .addInput(dataIn)
+      .addInput(settings)
+      .addOutput(dataOut)
+      .addOutput(resultOut)
+      .addOutput(composedOut)
 
     // TODO refactor to a model dropdown to centralize models.
     // Even better to have an endpoint to call.
@@ -114,12 +122,6 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       .add(maxTokenControl)
       .add(frequency_penalty)
 
-      node
-      .addInput(dataIn)
-      .addOutput(dataOut)
-      .addOutput(resultOut)
-      .addOutput(composedOut)
-
     return node
   }
 
@@ -161,10 +163,10 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     const max_tokens = parseInt(maxTokensData)
 
     const frequencyPenaltyData = node?.data?.frequency_penalty as string
-    const frequency_penalty = parseFloat(frequencyPenaltyData ?? 0)
+    const frequency_penalty = parseFloat(frequencyPenaltyData)
 
     const presencePenaltyData = node?.data?.presence_penalty as string
-    const presence_penalty = parseFloat(presencePenaltyData ?? 0)
+    const presence_penalty = parseFloat(presencePenaltyData)
 
     const stopData = node?.data?.stop as string
     const stop = (stopData ?? '').split(', ')
