@@ -5,9 +5,9 @@ import { getSpell } from "../helpers/getSpell"
 
 
 export const checkForSpellInManager = async (context: HookContext) => {
-  const { app, params, id, data } = context
+  const { app, params, data } = context
   const { user } = params
-  const { projectId } = data
+  const { projectId, id } = data
 
   if (!user) throw new Error('No user is present in service')
   // Here we get the users spellManagerApp
@@ -26,9 +26,9 @@ export const checkForSpellInManager = async (context: HookContext) => {
 
 // When the spell updates on the server, we need to update the spell in the spell manager
 export const updateSpellInManager = async (context: HookContext) => {
-  const { app, params, id, data } = context
+  const { app, params, data } = context
   const { user } = params
-  const { spellUpdate, diff } = data
+  const { spellUpdate, diff, id } = data
 
   // Here we get the users spellManagerApp
   const spellManager = app.userSpellManagers.get(user.id.toString())
