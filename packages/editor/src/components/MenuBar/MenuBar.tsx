@@ -27,7 +27,6 @@ const MenuBar = () => {
   useEffect(() => {
     if (!activeTab || !activeTab.name) return
     activeTabRef.current = activeTab
-    console.log('changing current to ', activeTabRef.current)
   }, [activeTab])
 
   // grab all events we need
@@ -55,7 +54,7 @@ const MenuBar = () => {
   const onSave = () => {
     console.log(activeTabRef.current?.id)
     console.log('SAVING')
-   // if (!activeTabRef.current) return
+    // if (!activeTabRef.current) return
     publish($SAVE_SPELL(activeTabRef.current?.id))
   }
 
@@ -305,7 +304,7 @@ const MenuBar = () => {
   const handleClick = func => {
     //Initially intended to control the visibility with a state, but this triggers a re-render and hides the menu anyway! :D
     //Keeping this intact just in case.
-    (togglemenuVisibility as Function)(menuVisibility)
+    ;(togglemenuVisibility as Function)(menuVisibility)
     // eslint-disable-next-line no-eval
     eval(func)
   }

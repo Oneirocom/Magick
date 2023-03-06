@@ -1,11 +1,4 @@
-import {
-  CompletionBody,
-  EditorContext,
-  MagickWorkerInputs,
-  Spell,
-  VITE_APP_API_URL,
-} from '@magickml/engine'
-import axios from 'axios'
+import { EditorContext, MagickWorkerInputs, Spell } from '@magickml/engine'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
 import { runPython } from '@magickml/engine'
@@ -42,7 +35,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   useEffect(() => {
     if (!_spell) return
     spellRef.current = _spell.data[0]
-    
   }, [_spell])
 
   const {
@@ -64,10 +56,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   } = events
 
   const getCurrentSpell = () => {
-    
     return spellRef.current
   }
-  
+
+  // todo tech debt.  Check if this is still needed
   const onTrigger = (node, callback) => {
     const isDefault = node === 'default' ? 'default' : null
     return subscribe($TRIGGER(tab.id, isDefault ?? node.id), (event, data) => {
@@ -100,7 +92,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     })
   }
 
-  const onSubspellUpdated = (spellName: string, callback: Function) => {
+  const onSubspellUpdated = (
+    spellName: string,
+    callback: (data: unknown) => void
+  ) => {
     return subscribe($SUBSPELL_UPDATED(spellName), (event, data) => {
       callback(data)
     })
@@ -144,7 +139,11 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const getSpell = async spellName => {
-    const spell = await _getSpell({ spellName, id: tab.id, projectId: config.projectId })
+    const spell = await _getSpell({
+      spellName,
+      id: tab.id,
+      projectId: config.projectId,
+    })
 
     if (!spell.data) return null
 
@@ -165,18 +164,20 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       },
       {} as Record<string, any>
     )
-    if (language == 'javascript') {
-      
-
+    if (language === 'javascript') {
       // eslint-disable-next-line no-new-func
       const result = new Function('"use strict";return (' + code + ')')()(
         flattenedInputs,
         data
       )
       return result
-    } else if (language == 'python') {
+    } else if (language === 'python') {
       try {
-        const result = await runPython(code+'\n worker(inputs, data)', flattenedInputs, data)
+        const result = await runPython(
+          code + '\n worker(inputs, data)',
+          flattenedInputs,
+          data
+        )
 
         return result
       } catch (err) {
