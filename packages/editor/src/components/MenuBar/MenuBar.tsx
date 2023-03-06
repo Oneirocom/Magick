@@ -173,7 +173,7 @@ const MenuBar = () => {
           onClick: onSave,
           hotKey: 'option+s',
         },
-        save_spell_as: {
+        save_a_copy: {
           onClick: onSaveAs,
           hotKey: 'option+shift+s',
         },
