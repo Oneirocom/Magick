@@ -62,8 +62,6 @@ export const Select = ({
       borderRadius: 4,
       boxShadow: '0px 5px 5px rgba(0,0,0,0.3)',
       border: '1px solid var(--dark-3)',
-      maxHeight: '200px',
-      overflow: 'auto',
     }),
     menuPortal: () => ({
       height: 'var(--c2)',
@@ -132,6 +130,7 @@ export const Select = ({
           {creatable && (
             <Creatable
               isClearable
+              maxMenuHeight={150}
               options={options}
               onChange={onChange}
               styles={styles}
@@ -146,6 +145,7 @@ export const Select = ({
           )}
           {!creatable && (
             <ReactSelect
+              maxMenuHeight={150}
               options={options}
               onChange={onChange}
               styles={styles}

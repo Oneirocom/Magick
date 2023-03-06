@@ -74,8 +74,11 @@ const AgentDetails = ({
   }
 
   useEffect(() => {
-    if ( selectedAgentData?.rootSpell !== '{}') {
-      console.log('JSON.parse(selectedAgentData.rootSpell)', JSON.parse(selectedAgentData.rootSpell))
+    if (selectedAgentData?.rootSpell !== '{}') {
+      console.log(
+        'JSON.parse(selectedAgentData.rootSpell)',
+        JSON.parse(selectedAgentData.rootSpell)
+      )
       setRootSpell(JSON.parse(selectedAgentData.rootSpell).name)
     } else {
       setRootSpell({})
@@ -189,7 +192,7 @@ const AgentDetails = ({
       <div>
         {pluginManager.getSecrets(true).map((value, index, array) => {
           return (
-            <div key={value.name+index} style={{ marginBottom: '1em' }}>
+            <div key={value.name + index} style={{ marginBottom: '1em' }}>
               <div style={{ width: '100%', marginBottom: '1em' }}>
                 {value.name}
               </div>
