@@ -46,6 +46,8 @@ interface MagickEngineClient extends MagickEngine {
 */
 
 const editorTabMap: Record<string, MagickEditor> = {}
+
+// todo clean this up by making it a well organized class with proper load functions, etc
 export const initEditor = function ({
   container,
   pubSub,
