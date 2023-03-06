@@ -42,7 +42,7 @@ const AgentItem = ({
               onClick={e => {
                 e.stopPropagation()
                 update(agent.id, { name })
-                setEditMode(true)
+                setEditMode(false)
               }}
             />
             <IconBtn
@@ -79,7 +79,6 @@ const AgentItem = ({
               onClick={e => {
                 e.stopPropagation()
                 onDelete(agent?.id)
-                setSelectedAgent('')
               }}
             />
           </div>

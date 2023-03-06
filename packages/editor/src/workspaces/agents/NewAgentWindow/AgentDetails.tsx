@@ -7,16 +7,24 @@ import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { pluginManager } from '@magickml/engine'
+import { debounce } from 'lodash'
 
 const RenderComp = props => {
   return <props.element props={props} />
 }
 
-const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
-  const [root_spell, setRootSpell] = useState('default')
+const AgentDetails = ({
+  agentData,
+  rootSpell,
+  setRootSpell,
+  setSelectedAgent,
+  updateCallback,
+}) => {
+  // const [rootSpell, setRootSpell] = useState('default')
   const [spellList, setSpellList] = useState<any[]>([])
   const [updatedPubVars, setPublicVars] = useState<any>('')
   const config = useConfig()
+  const debouncedFunction = debounce((id, data) => update(id, data), 1000)
 
   const [selectedSpellPublicVars, setSelectedSpellPublicVars] = useState<any[]>(
     []
@@ -25,16 +33,13 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
   useEffect(() => {
     setSelectedSpellPublicVars(
       Object.values(
-        spellList?.find(spell => spell.name === root_spell)?.graph.nodes || {}
+        spellList?.find(spell => spell.name === rootSpell)?.graph.nodes || {}
       ).filter(node => node?.data?.Public)
     )
     console.log('selectedSpellPublicVars', selectedSpellPublicVars)
-  }, [root_spell, spellList])
+  }, [rootSpell, spellList])
 
   const update = (id, _data = agentData) => {
-    if (_data.hasOwnProperty('id')) {
-      delete _data.id
-    }
     // Avoid server-side validation error
     _data.spells = Array.isArray(_data?.spells) ? _data.spells : []
     _data.dirty = true
@@ -50,7 +55,6 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
           enqueueSnackbar('updated agent', {
             variant: 'success',
           })
-
           updateCallback()
         }
       })
@@ -113,7 +117,14 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
           label={null}
           checked={agentData.enabled ? true : false}
           onChange={() => {
-            setSelectedAgent({ ...agentData, enabled: agentData.enabled ? false : true })
+            debouncedFunction(agentData.id, {
+              ...agentData,
+              enabled: agentData.enabled ? false : true,
+            })
+            setSelectedAgent({
+              ...agentData,
+              enabled: agentData.enabled ? false : true,
+            })
           }}
           style={{ alignSelf: 'self-start' }}
         />
@@ -124,9 +135,9 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
           style={{
             appearance: 'none',
           }}
-          name="root_spell"
-          id="root_spell"
-          value={root_spell}
+          name="rootSpell"
+          id="rootSpell"
+          value={rootSpell}
           onChange={event => {
             setRootSpell(event.target.value)
           }}
@@ -172,6 +183,7 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
               element={value}
               agentData={agentData}
               setAgentData={setSelectedAgent}
+              update={update}
             />
           )
         })}

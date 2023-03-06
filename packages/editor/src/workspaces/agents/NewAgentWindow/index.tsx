@@ -7,6 +7,10 @@ import { useState } from 'react'
 
 interface Props {
   data: Array<object>
+  selectedAgent: object
+  rootSpell: string
+  setRootSpell: (spell: string) => void
+  setSelectedAgent: (data: object) => void
   onCreateAgent: () => void
   updateCallBack: () => void
   update: (id: string, data: object) => void
@@ -16,13 +20,17 @@ interface Props {
 
 const AgentWindow = ({
   data,
+  selectedAgent,
+  rootSpell,
+  setRootSpell,
+  setSelectedAgent,
   update,
   updateCallBack,
   onCreateAgent,
   onDelete,
   onLoadFile,
 }: Props) => {
-  const [selectedAgent, setSelectedAgent] = useState('')
+  console.log('*********************************', selectedAgent)
 
   const onClickHandler = agent => {
     setSelectedAgent(agent)
@@ -63,11 +71,13 @@ const AgentWindow = ({
         ))}
       </Grid>
       <Grid item xs={8} className={styles.item}>
-        {selectedAgent ? (
+        {Object.keys(selectedAgent).length !== 0 ? (
           <AgentDetails
             agentData={selectedAgent}
             setSelectedAgent={setSelectedAgent}
             updateCallback={updateCallBack}
+            rootSpell={rootSpell}
+            setRootSpell={setRootSpell}
           />
         ) : (
           <Typography className={styles.noSelected}>Select Agent</Typography>

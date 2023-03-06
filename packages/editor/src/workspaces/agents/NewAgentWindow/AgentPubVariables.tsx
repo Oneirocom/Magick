@@ -16,7 +16,7 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
   const onChange = event => {
     const { name } = event.target
     setPublicVars({
-      ...publicVars,
+      ...agentPublicVars,
       [name]:
         event.target.checked === undefined
           ? event.target.value
@@ -45,14 +45,14 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
               {variable.name.includes('Boolean') ? (
                 <Switch
                   label={''}
-                  checked={publicVars[variable?.data?.name]}
+                  checked={agentPublicVars[variable?.data?.name]}
                   onChange={onChange}
                   name={variable?.data?.name}
                 />
               ) : (
                 <Input
                   style={{ width: '100%' }}
-                  value={publicVars[variable?.data?.name]}
+                  value={agentPublicVars[variable?.data?.name]}
                   type="text"
                   onChange={onChange}
                   name={variable?.data?.name}
