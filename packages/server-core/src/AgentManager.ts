@@ -21,11 +21,10 @@ export class AgentManager {
 
   constructor() {
     this.id = 0
-    
+
     this.onCreate()
 
     setInterval(async () => {
-      console.log('updating agents')
       await this.updateAgents()
     }, 1000);
   }
@@ -35,13 +34,13 @@ export class AgentManager {
     await this.updateSpells()
     if (JSON.stringify(this.newAgents) === JSON.stringify(this.lastAgentData ?? [])) return // They are the same
     for (const i in this.newAgents) {
-      
+
       try {
         const temp_agent = this.getAgent(this.newAgents[i].id)
-        
+
         await temp_agent.onDestroy()
       } catch {
-        
+
       }
       if (!this.newAgents[i].data) {
         console.warn('New agent is null data')
@@ -53,7 +52,7 @@ export class AgentManager {
       //     //Delete the Agent
       //     await temp_agent.onDestroy()
       //   } catch (e) {
-      //     
+      //
       //   }
       //   this.addAgent(this.newAgents[i])
       // }
@@ -109,7 +108,7 @@ export class AgentManager {
           spell.hash !== runningAgent.root_spell_hash
         ) {
           // reload the spell
-          
+
           const spellRunner = await runningAgent.spellManager.load(spell)
           runningAgent.root_spell_hash = spell.hash
         }
@@ -133,7 +132,7 @@ export class AgentManager {
           if (!runningAgent.spells_hash) runningAgent.spells_hash = []
           if (spell.hash !== runningAgent.spells_hash[j]) {
             // reload the spell
-            
+
             const spellRunner = await runningAgent.spellManager.load(spell)
             runningAgent.spells_hash[j] = spell.hash
           }
