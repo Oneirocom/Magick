@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash'
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
+import { API_ROOT_URL } from '@magickml/engine'
 
 import {
   anySocket,
@@ -125,15 +126,33 @@ export class Solidity extends MagickComponent<InputReturn> {
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
     this._task.closed = ['trigger']
-    // handle data subscription.  If there is data, this is from playtest
+
+    const server = `${API_ROOT_URL}/ethereum/compile`
+
+    const form = new FormData();
+    form.append("code", defaultCode);
+
+    const requestOptions = {
+      method: 'POST',
+      body: form,
+    }
+
+    const r = await fetch(server, requestOptions as any).catch(error =>
+      console.log('error', error)
+    )
+
+    const result = await (r as Response).json()
+
+    const contract = result.output.contracts['code.sol']['SimpleContract']
+
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
       if (!silent) node.display(data)
       return {
         output: data,
-        bytecode: '0x',
-        abi: '[]',
+        bytecode: contract.evm.bytecode.object,
+        abi: contract.abi,
       }
     }
   }
