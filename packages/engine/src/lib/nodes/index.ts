@@ -54,6 +54,7 @@ import { StringVariable } from './variable/StringVariable'
 import { GetCachedEmbedding } from './ml/GetCachedEmbedding'
 import { SpeechToText } from './ml/SpeechToText'
 import { PromptTemplate } from './strings/PromptTemplate'
+import { ParseJSON } from './utility/ParseJSON'
 
 import { pluginManager } from '../plugin'
 import { EventsToConversation } from './events/EventsToConversation'
@@ -117,6 +118,7 @@ export const components = {
   generator: () => new Generator(),
   speechToText: () => new SpeechToText(),
   promptTemplate: () => new PromptTemplate(),
+  parseJSON: () => new ParseJSON(),
 }
 
 function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {

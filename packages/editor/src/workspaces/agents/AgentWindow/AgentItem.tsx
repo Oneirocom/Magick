@@ -23,68 +23,25 @@ const AgentItem = ({
       onClick={() => onClick(agent)}
       style={style}
     >
-      {editMode ? (
-        <>
-          <div>
-            <input
-              type="text"
-              name="name"
-              value={name}
-              onClick={e => e.stopPropagation()}
-              onChange={e => setName(e.target.value)}
-              placeholder="Add new agent name here"
-            />
-          </div>
-          <div>
-            <IconBtn
-              label={'Done'}
-              Icon={<Done />}
-              onClick={e => {
-                e.stopPropagation()
-                update(agent.id, { name })
-                setEditMode(true)
-              }}
-            />
-            <IconBtn
-              label={'close'}
-              Icon={<Close />}
-              onClick={e => {
-                e.stopPropagation()
-                setEditMode(false)
-                setName(agent.name)
-              }}
-            />
-          </div>
-        </>
-      ) : (
-        <>
-          <div className={styles.agentItem}>
-            <Avatar className={styles.roundedDiv}>
-              {agent?.name?.at(0) || 'A'}
-            </Avatar>
-            <Typography variant="h6">{agent?.name}</Typography>
-          </div>
-          <div>
-            <IconBtn
-              label={'edit'}
-              Icon={<Edit />}
-              onClick={e => {
-                e.stopPropagation()
-                setEditMode(true)
-              }}
-            />
-            <IconBtn
-              label={'delete'}
-              Icon={<Icon name="trash" size={20} />}
-              onClick={e => {
-                e.stopPropagation()
-                onDelete(agent?.id)
-                setSelectedAgentData('')
-              }}
-            />
-          </div>
-        </>
-      )}
+      <>
+        <div className={styles.agentItem}>
+          <Avatar className={styles.roundedDiv}>
+            {agent?.name?.at(0) || 'A'}
+          </Avatar>
+          <Typography variant="h6">{agent?.name}</Typography>
+        </div>
+        <div>
+          <IconBtn
+            label={'delete'}
+            Icon={<Icon name="trash" size={20} />}
+            onClick={e => {
+              e.stopPropagation()
+              onDelete(agent?.id)
+              setSelectedAgent('')
+            }}
+          />
+        </div>
+      </>
     </div>
   )
 }

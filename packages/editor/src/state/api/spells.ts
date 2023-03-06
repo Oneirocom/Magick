@@ -92,11 +92,12 @@ export const getSpellApi = (config) => {
         }),
       }),
       spellExists: builder.mutation({
-        query: name => ({
+        query: ({ name, projectId }) => ({
           url: 'spells/exists',
-          method: 'POST',
+          method: 'GET',
           body: {
             name,
+            projectId,
           },
         }),
       }),
