@@ -20,7 +20,6 @@ import { useEditor } from '../../contexts/EditorProvider'
 import { getSpellApi } from '../../../state/api/spells'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { Button } from '@magickml/client-core'
-import { pluginManager } from '@magickml/engine'
 import { toast } from 'react-toastify'
 
 const Input = props => {
@@ -100,7 +99,7 @@ const Playtest = ({ tab }) => {
     return selectStateBytabId(state.localState, tab.id)
   })
   const client = FeathersContext?.client
-  const { $PLAYTEST_INPUT, $PLAYTEST_PRINT, $SAVE_SPELL_DIFF } = events
+  const { $PLAYTEST_INPUT, $PLAYTEST_PRINT, $RUN_SPELL } = events
 
   const printToConsole = useCallback(
     (_, _text) => {
@@ -119,7 +118,7 @@ const Playtest = ({ tab }) => {
   > | null>([])
   const [playtestOption, setPlaytestOption] = useState(null)
 
-  useEffect(() => {setPlaytestOption
+  useEffect(() => {
     if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
       return
 
@@ -134,8 +133,7 @@ const Playtest = ({ tab }) => {
       }))
 
     setPlaytestOptions(options)
-    if(options.length > 0)
-      setPlaytestOption(options[0].value)
+    if (options.length > 0) setPlaytestOption(options[0].value)
   }, [spellData])
 
   // Keep scrollbar at bottom of its window
@@ -242,12 +240,7 @@ const Playtest = ({ tab }) => {
 
     if (!playtestInputName) return
 
-    publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
-
-    // wait .2. seconds for spell_diff to take effect
-    await new Promise(resolve => setTimeout(resolve, 200))
-
-    const finalData = {
+    const data = {
       spellName: tab.name.split('--')[0],
       id: tab.id,
       projectId: config.projectId,
@@ -255,23 +248,16 @@ const Playtest = ({ tab }) => {
         [playtestInputName as string]: toSend,
       },
       // retrun an array of all nodes where node.data.isPublic is true
-      publicVariables: JSON.stringify(Object.values(
-        graph.nodes || {}
-      ).filter((node: { data }) => node?.data?.isPublic)),
-      secrets: JSON.parse(localStorage.getItem('secrets') || '{}')
+      // todo we should move functions like this into a single spell helper
+      publicVariables: JSON.stringify(
+        Object.values(graph.nodes || {}).filter(
+          (node: { data }) => node?.data?.isPublic
+        )
+      ),
+      secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
     }
-    
-    // Todo should move run spell into an event to be used globally.
-    client.service('spell-runner').create(finalData)
 
-    publish($PLAYTEST_INPUT(tab.id), finalData)
-    client.io.on(`${tab.id}-error`, data => {
-      //publish($DEBUG_PRINT(tab.id), (data.error.message))
-      console.error('Error in spell execution')
-      enqueueSnackbar('Error Running the spell. Please Check the Console', {
-        variant: 'error',
-      })
-    })
+    publish($RUN_SPELL(tab.id), data)
 
     setValue('')
   }
