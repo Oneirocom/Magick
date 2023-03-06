@@ -23,7 +23,11 @@ type InputReturn = {
 export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
+<<<<<<< refs/remotes/origin/development
     super('Contract Write')
+=======
+    super('PluginEthCallContractFunctionWrite')
+>>>>>>> plugin(eth): change node's names and display names
 
     this.task = {
       outputs: {
@@ -41,8 +45,13 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
+<<<<<<< refs/remotes/origin/development
     this.contextMenuName = 'Contract Write'
     this.displayName = 'Contract Write'
+=======
+    this.contextMenuName = 'Call Contract Write'
+    this.displayName = 'Call Contract Write-Function'
+>>>>>>> plugin(eth): change node's names and display names
   }
 
   destroyed(node: MagickNode) {
@@ -67,19 +76,19 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const contractAddressInput = new Rete.Input(
       'contract_addr',
-      'Contract Address',
+      'Contract Addr',
       stringSocket
     )
     const abiInput = new Rete.Input('abi', 'ABI', anySocket)
     const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket)
     const functionNameInput = new Rete.Input(
       'function_name',
-      'Function Name',
+      'Func Name',
       stringSocket
     )
     const functionArgsInput = new Rete.Input(
       'function_args',
-      'Function Arguments',
+      'Func Params',
       stringSocket
     )
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)

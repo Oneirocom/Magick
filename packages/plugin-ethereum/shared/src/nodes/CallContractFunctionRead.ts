@@ -23,7 +23,11 @@ type InputReturn = {
 export class CallContractFunctionRead extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
+<<<<<<< refs/remotes/origin/development
     super('Contract Read')
+=======
+    super('PluginEthCallContractFunctionRead')
+>>>>>>> plugin(eth): change node's names and display names
 
     this.task = {
       outputs: {
@@ -41,8 +45,13 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
+<<<<<<< refs/remotes/origin/development
     this.contextMenuName = 'Contract Read'
     this.displayName = 'Contract Read'
+=======
+    this.contextMenuName = 'Call Contract Read'
+    this.displayName = 'Call Contract Read-Function'
+>>>>>>> plugin(eth): change node's names and display names
   }
 
   destroyed(node: MagickNode) {
@@ -54,15 +63,15 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    const contractInput = new Rete.Input('tx', 'Contract', stringSocket)
+    const contractInput = new Rete.Input('tx', 'Contract Addr', stringSocket)
     const functionInput = new Rete.Input(
       'function',
-      'Function Name',
+      'Func Name',
       stringSocket
     )
     const functionParamsInput = new Rete.Input(
       'functionParams',
-      'Function Params',
+      'Func Params',
       stringSocket
     )
     const abiInput = new Rete.Input('abi', 'ABI', anySocket)
