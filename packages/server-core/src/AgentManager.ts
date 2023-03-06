@@ -169,7 +169,7 @@ export class AgentManager {
     this.resetAgentSpells()
   }
 
-  async onDestroy() {}
+  // async onDestroy() {}
 
   async addAgent(obj: any) {
     const data = {
