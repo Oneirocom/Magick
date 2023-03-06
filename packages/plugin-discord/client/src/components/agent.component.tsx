@@ -18,7 +18,8 @@ export const DiscordAgentWindow: FC<any> = props => {
 
   const testVoice = async () => {
     if (
-      (selectedAgentData.data?.voice_provider && selectedAgentData.data?.voice_character) ||
+      (selectedAgentData.data?.voice_provider &&
+        selectedAgentData.data?.voice_character) ||
       playingAudio
     ) {
       if (
@@ -69,37 +70,41 @@ export const DiscordAgentWindow: FC<any> = props => {
         position: 'relative',
       }}
     >
-      <Switch
-        label={null}
-        checked={selectedAgentData.data?.discord_enabled}
-        onChange={e => {
-          if (!e.target.checked) {
-            setSelectedAgentData({
-              ...selectedAgentData,
-              data: {
-                ...selectedAgentData.data,
-                use_voice: 'off',
-                discord_bot_name_regex: '',
-                discord_api_key: '',
-                discord_bot_name: '',
-                discord_starting_words: '',
-                voice_character: '',
-                voice_provider: '',
-                voice_language_code: '',
-                tiktalknet_url: '',
-                discord_enabled: false,
-              },
-            })
-          } else {
-            setSelectedAgentData({
-              ...selectedAgentData,
-              data: { ...selectedAgentData.data, discord_enabled: e.target.checked },
-            })
-          }
-        }}
-        style={{ float: 'right' }}
-      />
       <h3>Discord</h3>
+      <div style={{ position: 'absolute', right: '1em', top: '0' }}>
+        <Switch
+          label={null}
+          checked={selectedAgentData.data?.discord_enabled}
+          onChange={e => {
+            if (!e.target.checked) {
+              setSelectedAgentData({
+                ...selectedAgentData,
+                data: {
+                  ...selectedAgentData.data,
+                  use_voice: 'off',
+                  discord_bot_name_regex: '',
+                  discord_api_key: '',
+                  discord_bot_name: '',
+                  discord_starting_words: '',
+                  voice_character: '',
+                  voice_provider: '',
+                  voice_language_code: '',
+                  tiktalknet_url: '',
+                  discord_enabled: false,
+                },
+              })
+            } else {
+              setSelectedAgentData({
+                ...selectedAgentData,
+                data: {
+                  ...selectedAgentData.data,
+                  discord_enabled: e.target.checked,
+                },
+              })
+            }
+          }}
+        />
+      </div>
       {selectedAgentData.data?.discord_enabled && (
         <>
           <Grid container>
@@ -187,7 +192,9 @@ export const DiscordAgentWindow: FC<any> = props => {
                   data: {
                     ...selectedAgentData.data,
                     use_voice:
-                      selectedAgentData?.data?.use_voice === 'on' ? 'off' : 'on',
+                      selectedAgentData?.data?.use_voice === 'on'
+                        ? 'off'
+                        : 'on',
                   },
                 })
               }}
@@ -228,7 +235,10 @@ export const DiscordAgentWindow: FC<any> = props => {
                         className="select"
                         name="voice_character"
                         id="voice_character"
-                        value={selectedAgentData.data?.voice_character ?? 'en-US-Standard-A'}
+                        value={
+                          selectedAgentData.data?.voice_character ??
+                          'en-US-Standard-A'
+                        }
                         onChange={e => {
                           setSelectedAgentData({
                             ...selectedAgentData,
@@ -340,7 +350,9 @@ export const DiscordAgentWindow: FC<any> = props => {
                       name="voice_language_code"
                       id="voice_language_code"
                       className="select"
-                      value={selectedAgentData.data?.voice_language_code ?? 'none'}
+                      value={
+                        selectedAgentData.data?.voice_language_code ?? 'none'
+                      }
                       onChange={e => {
                         setSelectedAgentData({
                           ...selectedAgentData,
