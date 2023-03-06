@@ -13,7 +13,7 @@ import { DropdownControl } from '../../dataControls/DropdownControl'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { stringSocket, triggerSocket, anySocket } from '../../sockets'
+import { stringSocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
 const info = `The generator component is our general purpose completion component.  You can define any number of inputs, and utilize those inputs in a templating language known as Handlebars.  Any value which is wrapped like {{this}} in double braces will be replaced with the corresponding value coming in to the input with the same name.  This allows you to write almost any fewshot you might need, and input values from anywhere else in your graph.
@@ -161,10 +161,10 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     const max_tokens = parseInt(maxTokensData)
 
     const frequencyPenaltyData = node?.data?.frequency_penalty as string
-    const frequency_penalty = parseFloat(frequencyPenaltyData ?? 0)
+    const frequency_penalty = parseFloat(frequencyPenaltyData ?? "0")
 
     const presencePenaltyData = node?.data?.presence_penalty as string
-    const presence_penalty = parseFloat(presencePenaltyData ?? 0)
+    const presence_penalty = parseFloat(presencePenaltyData ?? "0")
 
     const stopData = node?.data?.stop as string
     const stop = (stopData ?? '').split(', ')
