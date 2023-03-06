@@ -84,9 +84,9 @@ export const spell = (app: Application) => {
         schemaHooks.validateData(spellPatchValidator),
         schemaHooks.resolveData(spellPatchResolver),
         handleJSONFieldsUpdate(spellJsonFields),
-        updateSpellInManager
+        // updateSpellInManager
       ],
-      update: [handleJSONFieldsUpdate(spellJsonFields), updateSpellInManager],
+      update: [handleJSONFieldsUpdate(spellJsonFields)],
       remove: [],
     },
     after: {
