@@ -4,7 +4,6 @@ import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
 import { publicProvider } from 'wagmi/providers/public'
 
@@ -27,10 +26,6 @@ const { chains, provider, webSocketProvider } = configureChains(
         chain.id === polygonMumbai.id
           ? { http: 'https://polygon-mumbai.blockpi.network/v1/rpc/public' }
           : null,
-    }),
-    alchemyProvider({
-      apiKey: import.meta.env
-        .VITE_APP_ETH_PROVIDER_ALCHEMY_KEY_MUMBAI as string,
     }),
   ]
 )
