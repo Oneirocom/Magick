@@ -18,8 +18,6 @@ export type SaveDiffData = {
   projectId: string
 }
 
-export type SaveDiffParams = {}
-
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class SpellService<ServiceParams extends Params = SpellParams> extends KnexService<
   Spell,
@@ -27,7 +25,7 @@ export class SpellService<ServiceParams extends Params = SpellParams> extends Kn
   ServiceParams,
   SpellPatch
 > {
-  async saveDiff(data: SaveDiffData, params: SaveDiffParams) {
+  async saveDiff(data: SaveDiffData) {
     const { name, diff, projectId } = data
 
     const spellData = await app.service('spells').find({ query: { projectId, name } })
