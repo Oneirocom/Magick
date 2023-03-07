@@ -48,11 +48,9 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     const dataOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const resultOut = new Rete.Output('result', 'Result', stringSocket)
     const composedOut = new Rete.Output('composed', 'Composed', stringSocket)
-    const settings = new Rete.Input('settings', 'Settings', anySocket)
 
     node
       .addInput(dataIn)
-      .addInput(settings)
       .addOutput(dataOut)
       .addOutput(resultOut)
       .addOutput(composedOut)
@@ -194,7 +192,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       prompt,
       temperature,
       max_tokens,
-      model: modelName ?? 'text-davinci-002',
+      model: modelName ?? 'text-davinci-003',
       top_p,
       frequency_penalty,
       presence_penalty,
@@ -209,11 +207,15 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
         nodeId: node.id,
       })
 
+      console.log('success, choice', success, choice)
+
       if (!success) throw new Error('Error in generator')
 
       const raw = choice.text
       const result = raw
       const composed = `${prompt}${result}`
+
+      console.log('result', result)
 
       if (!silent) node.display(result)
 
@@ -226,7 +228,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       // Typescript reporting wrong about number of arguments for error constructor
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore:next-line
-      throw new Error('Error in Generator component.', { cause: err })
+      throw new Error('Error in Generator component.' + err)
     }
   }
 }
