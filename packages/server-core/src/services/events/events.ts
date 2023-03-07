@@ -5,6 +5,12 @@ import { authenticate } from '@feathersjs/authentication'
 import pgvector from 'pgvector/pg'
 import type { Knex } from 'knex'
 import { hooks as schemaHooks } from '@feathersjs/schema'   
+import os from 'os'
+const cpuCore = os.cpus()
+const isM1 = cpuCore[0].model.includes("Apple M1") || cpuCore[0].model.includes("Apple M2")
+const isWindows = os.platform() === 'win32'
+
+// get 
 
 // array 1536 values in length
 const nullArray = new Array(1536).fill(0)
@@ -122,7 +128,7 @@ export const event = (app: Application) => {
         async (context: HookContext) => {
           const { id } = context.result
           // store the data in the virtual vss table
-          if (dbDialect === SupportedDbs.sqlite3) {
+          if (dbDialect === SupportedDbs.sqlite3 && !isM1 && !isWindows) {
             try {
               await db.raw(`
                 insert into vss_events(rowid, event_embedding) 

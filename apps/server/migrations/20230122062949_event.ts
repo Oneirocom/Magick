@@ -12,7 +12,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('channelType')
     table.string('projectId')
     table.string('content')
-    table.integer('agentId')
+    table.string('agentId')
     table.specificType('entities', 'text ARRAY')
     table.specificType('embedding', 'vector(1536)')
     table.string('date')

@@ -15,11 +15,15 @@ import emptyImg from '../empty.png'
 import css from '../homeScreen.module.css'
 import TemplatePanel from '../components/TemplatePanel'
 import defaultGraph from '../../../data/graphs/default'
+
+// TODO: move these into plugins
+import discordGraph from '../../../data/graphs/discord'
+import restGraph from '../../../data/graphs/rest'
+
 import threeovGraph from '../../../data/graphs/threeov'
 import md5 from 'md5'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { Button } from '@magickml/client-core'
-import { uuidv4 } from 'packages/editor/src/utils/uuid'
 
 const customConfig = {
   dictionaries: [adjectives, colors],
@@ -35,6 +39,8 @@ export type Template = {
 
 export const magickTemplates: Template[] = [
   { label: 'Starter', bg: emptyImg, graph: defaultGraph as any as GraphData },
+  { label: 'Discord Bot', bg: emptyImg, graph: discordGraph as any as GraphData },
+  { label: 'REST API', bg: emptyImg, graph: restGraph as any as GraphData },
   {
     label: '3OV for WordPress',
     bg: emptyImg,
@@ -132,6 +138,7 @@ const CreateNew = () => {
           backgroundColor: 'var(--dark-2)',
           display: 'flex',
           flexDirection: 'row',
+          flexWrap: 'wrap',
           gap: 'var(--extraSmall)',
         }}
       >

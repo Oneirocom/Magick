@@ -68,7 +68,7 @@ const Playtest = ({ tab }) => {
     channel: 'playtest',
     channelType: 'playtest',
     projectId: config.projectId,
-    agentId: 0,
+    agentId: 'preview',
     entities: ['playtestSender', 'playtestObserver'],
   }
 
@@ -216,7 +216,7 @@ const Playtest = ({ tab }) => {
       content: value,
       sender: 'Speaker',
       observer: 'Agent',
-      agentId: 0,
+      agentId: 'preview',
       client: 'playtest',
       channel: 'previewChannel',
       projectId: config.projectId,
