@@ -1,6 +1,6 @@
 // import io from 'socket.io'
 import { SpellManager } from '@magickml/engine'
-import { buildMagickInterface } from './buildMagickInterface'
+import { buildMagickInterface } from '../helpers/buildMagickInterface'
 
 import {v4} from 'uuid'
 

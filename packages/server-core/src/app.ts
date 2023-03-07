@@ -5,10 +5,10 @@ import socketio from '@feathersjs/socketio'
 import type { Application } from './declarations'
 import { logError } from './hooks'
 import { dbClient } from './dbClient'
-import channels from './channels'
+import channels from './sockets/channels'
 // import swagger from 'feathers-swagger'
-import handleSockets from './sockets'
-import { pluginManager, configureManager, globalsManager } from '@magickml/engine'
+import handleSockets from './sockets/sockets'
+import { configureManager, globalsManager } from '@magickml/engine'
 import { services } from './services'
 
 const app: Application = koa(feathers())

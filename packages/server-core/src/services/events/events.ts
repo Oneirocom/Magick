@@ -4,7 +4,7 @@
 import { authenticate } from '@feathersjs/authentication'
 import pgvector from 'pgvector/pg'
 import type { Knex } from 'knex'
-import { hooks as schemaHooks } from '@feathersjs/schema'   
+import { hooks as schemaHooks } from '@feathersjs/schema'
 
 // array 1536 values in length
 const nullArray = new Array(1536).fill(0)
@@ -34,7 +34,7 @@ async function findSimilarEventByEmbedding(db: Knex, embedding) {
       const eventInVssTable = await db.raw(
         `select rowid, distance from vss_events
          where vss_search(
-            event_embedding, 
+            event_embedding,
             vss_search_params(
               ${embedding},
               1
@@ -87,7 +87,7 @@ export const event = (app: Application) => {
             const result = await findSimilarEventByEmbedding(db, "["+f32_ary+"]")
             return { result }
           }
-          
+
         }
       ],
       get: [
@@ -125,7 +125,7 @@ export const event = (app: Application) => {
           if (dbDialect === SupportedDbs.sqlite3) {
             try {
               await db.raw(`
-                insert into vss_events(rowid, event_embedding) 
+                insert into vss_events(rowid, event_embedding)
                 select id, embedding from events where id = ${id};
               `)
             } catch (error) {

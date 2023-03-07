@@ -25,13 +25,12 @@ export const spellRunner = (app: Application) => {
     before: {
       all: [
 
-
       ],
       get: [
 
       ],
       create: [
-        checkForSpellInManager
+        // checkForSpellInManager
       ],
       update: [
 
