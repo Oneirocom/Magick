@@ -6,7 +6,7 @@
 .item {
   background: var(--dark-2);
   border-radius: 4px;
-  padding: 15px;
+  padding: 1em;
 }
 
 .noSelected {
@@ -85,6 +85,7 @@
   display: flex;
   justify-content: space-between;
   color: #a1a1a1;
+  overflow-y: scroll;
 }
 
 .agentDescription {
