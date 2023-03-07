@@ -214,7 +214,6 @@ const AgentDetails = ({
                   .filter((node: { data }) => node?.data?.isPublic)
                   // map to an array of objects
                   .map((node: { data; id; name }) => {
-                    console.log('//////////////////////////////////////', node)
                     return {
                       id: node?.id,
                       name: node?.data?.name,
