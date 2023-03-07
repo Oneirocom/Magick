@@ -1,6 +1,7 @@
 import { buildMagickInterface } from './buildMagickInterface'
 import { SpellManager, WorldManager, pluginManager } from '@magickml/engine'
 import { app } from './app'
+import { AgentManager } from './AgentManager'
 
 type AgentData = {
   id: any
@@ -26,21 +27,24 @@ export class Agent {
   spellManager: SpellManager
   projectId: string
   worldManager: WorldManager
+  agentManager: AgentManager
 
-  constructor(data: AgentData) {
+  constructor(data: AgentData, agentManager: AgentManager) {
+    console.log('data', data)
     // if ,data,secrets is a string, JSON parse it
     this.secrets = JSON.parse(data.secrets)
     this.publicVariables = data.publicVariables
     this.id = data.id
     this.data = data
+    this.agentManager = agentManager
     this.name = data.name ?? 'agent'
     this.projectId = data.projectId
+    this.worldManager = new WorldManager()
+
     this.spellManager = new SpellManager({
       magickInterface: buildMagickInterface({}) as any,
       cache: false,
-    })
-    this.worldManager = new WorldManager()
-    ;
+    });
     (async () => {
       const spell = (
         await app.service('spells').find({
@@ -49,11 +53,11 @@ export class Agent {
       ).data[0]
 
       const spellRunner = await this.spellManager.load(spell)
-        console.log('agent.data', data.data)
       const agentStartMethods = pluginManager.getAgentStartMethods()
       for (const method of Object.keys(agentStartMethods)) {
-        console.log('method', method)
         await agentStartMethods[method]({
+          agentManager,
+          projectId: data.projectId,
           data: data.data,
           agent: this,
           spellRunner,

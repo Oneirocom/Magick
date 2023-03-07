@@ -24,7 +24,6 @@ const RenderComp = props => {
   return <props.element props={props} />
 }
 
-const singleUserMode = import.meta.env.VITE_APP_SINGLE_USER_MODE || true
 function App() {
   return (
     <Routes>
@@ -53,9 +52,7 @@ function App() {
         <Route path="/events" element={<EventWindow />} />
         <Route path="/requests" element={<RequestWindow />} />
         <Route path="/agents" element={<AgentManagerWindow />} />
-        {singleUserMode && (
-          <Route path="/settings" element={<SettingsWindow />} />
-        )}
+        <Route path="/settings" element={<SettingsWindow />} />
 
         <Route element={<MagickPageLayout />}>
           {/* todo search corpus component */}

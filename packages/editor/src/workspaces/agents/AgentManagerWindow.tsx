@@ -59,6 +59,7 @@ const AgentManagerWindow = () => {
       data.rootSpell = data?.rootSpell || '{}'
       data.spells = Array.isArray(data?.spells) ? data.spells : []
       data.secrets = Array.isArray(data?.secrets) ? data.secrets : []
+      // if the agent's public variable keys don't match the spell's public variable keys, update the agent
       data.publicVariables = data?.publicVariables || JSON.stringify(Object.values(
         data.rootSpell && data.rootSpell.graph.nodes || {}
       ).filter((node: { data }) => node?.data?.isPublic))

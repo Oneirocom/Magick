@@ -113,15 +113,22 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       defaultValue: 0,
     })
 
+    const presence_penalty = new InputControl({
+      dataKey: 'presence_penalty',
+      name: 'presence_penalty Penalty',
+      defaultValue: 0,
+    })
+
     node.inspector
       .add(modelName)
       .add(inputGenerator)
       .add(fewshotControl)
-      .add(stopControl)
       .add(temperatureControl)
       .add(maxTokenControl)
       .add(frequency_penalty)
-
+      .add(presence_penalty)
+      .add(stopControl)
+      
     return node
   }
 
@@ -136,6 +143,8 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       projectId,
       magick,
     } = context
+
+    console.log('projectId', projectId)
 
     const currentSpell = magick.getCurrentSpell()
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
@@ -163,12 +172,12 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     const max_tokens = parseInt(maxTokensData)
 
     const frequencyPenaltyData = node?.data?.frequency_penalty as string
-    const frequency_penalty = parseFloat(frequencyPenaltyData)
+    const frequency_penalty = parseFloat(frequencyPenaltyData ?? "0")
 
     const presencePenaltyData = node?.data?.presence_penalty as string
-    const presence_penalty = parseFloat(presencePenaltyData)
+    const presence_penalty = parseFloat(presencePenaltyData ?? "0")
 
-    const stopData = node?.data?.stop as string
+    const stopData = node?.data?.stop as string 
     const stop = (stopData ?? '').split(', ')
 
     for (let i = 0; i < stop.length; i++) {
@@ -190,7 +199,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       frequency_penalty,
       presence_penalty,
       stop: filteredStop,
-      apiKey: context.module.secrets['openai_api_key']
+      apiKey: context.module.secrets['openai_api_key'],
     }
 
     try {
