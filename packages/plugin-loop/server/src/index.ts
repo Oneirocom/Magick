@@ -3,21 +3,23 @@ import { eventSocket, ServerPlugin } from '@magickml/engine'
 type StartLoopArgs = {
   spellHandler: any
   agent: any
+  agentManager: any
 }
 
 class LoopManager {
-  agents: Map<string, any> = new Map()
-  constructor() {
-    this.agents = new Map()
-  }
+  agentManager: any
+  constructor(agentManager) {
+    this.agentManager = agentManager
+    this.agentManager.registerAddAgentHandler(this.addAgent.bind(this))
+    this.agentManager.registerRemoveAgentHandler(this.removeAgent.bind(this))
+  } 
+
   addAgent({ agent }) {
     const loopInterval = parseInt(agent.data.loop_interval) * 1000
     if (!loopInterval) {
       return console.error('Loop Interval must be a number greater than 0')
     }
-    this.agents.set(agent.projectId + '-' + agent.id, agent)
     agent.loopHandler = setInterval(async () => {
-      console.log('running loop')
       const resp = await agent.spellHandler({
         content: 'loop',
         sender: 'loop',
@@ -30,26 +32,26 @@ class LoopManager {
       })
     }, loopInterval)
   }
-  removeLoop({ agent }) {
-    const _agent = this.getAgent({ agent })
+
+  removeAgent({ agent }) {
+    const _agent = this.agentManager.getAgent({ agent })
+    if(!_agent || !_agent.loopHandler) return
     clearInterval(_agent.loopHandler)
-    this.agents.delete(agent.projectId + '-' + agent.id)
-  }
-  getAgent({ agent }) {
-    return this.agents.get(agent.projectId + '-' + agent)
   }
 }
 
-const loopManager = new LoopManager()
 
 function getAgentMethods() {
+  let loopManager: LoopManager | null = null;
   return {
-    start: async ({ spellHandler, agent }: StartLoopArgs) => {
+    start: async ({ spellHandler, agent, agentManager }: StartLoopArgs) => {
+      if(!loopManager) loopManager = new LoopManager(agentManager)
       agent.spellHandler = spellHandler
       loopManager.addAgent({ agent })
     },
     stop: async ({ agent }) => {
-      loopManager.removeLoop({ agent })
+      if(!loopManager) return console.error('Loop Manager not initialized')
+      loopManager.removeAgent({ agent })
     },
   }
 }

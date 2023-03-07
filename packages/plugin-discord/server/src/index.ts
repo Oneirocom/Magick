@@ -1,5 +1,5 @@
 import { eventSocket, ServerPlugin, WorldManager } from '@magickml/engine'
-
+import { discord_client } from './connectors/discord'
 type StartDiscordArgs = {
   agent: any
   spellRunner: any
@@ -17,14 +17,6 @@ function getAgentMethods() {
     worldManager,
   }: StartDiscordArgs) {
     console.log('starting discord')
-    // ignore import if vite
-    const module = await import(
-      /* @vite-ignore */ `${
-        typeof window === 'undefined' ? './connectors/discord' : './dummy'
-      }`
-    )
-    discord_client = module.discord_client
-
       const {
       discord_api_key,
       discord_starting_words,

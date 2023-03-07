@@ -184,7 +184,6 @@ const Playtest = ({ tab }) => {
   }
 
   const onSend = async () => {
-    console.log('onSend')
     const newHistory = [...history, `You: ${value}`]
     setHistory(newHistory as [])
 
@@ -225,22 +224,39 @@ const Playtest = ({ tab }) => {
       ...JSON.parse(json),
     }
 
+    console.log('onSend', toSend)
+
     // get spell from editor
     const graph = serialize()
-    if (!graph) return
+    if (!graph) {
+      enqueueSnackbar('No graph found', {
+        variant: 'error',
+      })
+    } 
+
+    console.log('playtestOption', playtestOption)
 
     const playtestNode = Object.values(graph.nodes).find(node => {
-      return node.data.playtestToggle && node.data.name === playtestOption
+      return node.data.name === playtestOption
     })
 
     if (!playtestNode) {
-      toast.error('No input node found for this input type')
+      enqueueSnackbar('No input node found for this input type', {
+        variant: 'error',
+      })
       return
     }
 
-    const playtestInputName = playtestNode?.data.name || 'Input - Default'
+    console.log('playtestNode', playtestNode) 
 
-    if (!playtestInputName) return
+    const playtestInputName = playtestNode?.data.name
+
+    if (!playtestInputName) {
+      enqueueSnackbar('No input node found for this input type', {
+        variant: 'error',
+      })
+      return
+    } 
 
     publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
 
