@@ -1,4 +1,4 @@
-import { Application } from './../declarations';
+import { Application } from '../declarations';
 type GetSpell = {
   app: Application
   id: string

@@ -3,8 +3,8 @@ import { app } from "../app"
 import Koa from 'koa'
 import otJson0 from 'ot-json0'
 
-import { Route } from '../types'
-import { ServerError } from '../ServerError'
+import { Route } from '../config/types'
+import { ServerError } from '../utils/ServerError'
 
 import md5 from 'md5'
 

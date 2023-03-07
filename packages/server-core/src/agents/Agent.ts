@@ -1,6 +1,6 @@
-import { buildMagickInterface } from './buildMagickInterface'
+import { buildMagickInterface } from '../helpers/buildMagickInterface'
 import { SpellManager, WorldManager, pluginManager } from '@magickml/engine'
-import { app } from './app'
+import { app } from '../app'
 
 type AgentData = {
   id: any
@@ -10,14 +10,14 @@ type AgentData = {
   publicVariables: any[]
   projectId: string
   spellManager: SpellManager
-  agent?: Object
+  agent?: Record<string, any>
 }
 
 export class Agent {
   name = ''
   //Clients
   id: any
-  secrets: Object
+  secrets: Record<string, any>
   publicVariables: any[]
   data: AgentData
   router: any
