@@ -42,7 +42,7 @@ export function saveRequest({
   spell,
   nodeId,
 }: RequestPayload) {
-  console.log('saveRequest', projectId)
+
   const app = globalsManager.get('feathers')
   return app.service('request').create({
     id: v4(),

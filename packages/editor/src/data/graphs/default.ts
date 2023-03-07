@@ -25,10 +25,7 @@ const graph = {
             },
           },
           publicVariables: '[]',
-          secrets: {
-            openai_api_key:
-              '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',
-          },
+          secrets: {},
         },
         dataControls: {
           name: { expanded: true },
