@@ -94,7 +94,7 @@ const AgentDetails = ({
   }, [])
 
   return (
-    <div>
+    <div style={{ overflowY: 'scroll', height: '100vh' }}>
       <div className={`${styles.agentDetailsContainer}`}>
         <div className={styles.agentDescription}>
           <Avatar className={styles.avatar}>A</Avatar>
