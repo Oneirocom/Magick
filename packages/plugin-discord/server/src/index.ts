@@ -8,8 +8,6 @@ type StartDiscordArgs = {
 }
 
 function getAgentMethods() {
-  let discord_client
-
   async function startDiscord({
     data,
     agent,
