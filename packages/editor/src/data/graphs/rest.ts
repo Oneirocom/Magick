@@ -25,13 +25,7 @@ const graph = {
             },
           },
           publicVariables: '[]',
-          secrets: {
-            'openai-api-key':
-              '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',
-            openai_api_key:
-              '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',
-            'banana-api-key': 'asdß',
-          },
+          secrets: {},
         },
         dataControls: {
           inputType: { expanded: true },
@@ -86,13 +80,7 @@ const graph = {
             },
           },
           publicVariables: '[]',
-          secrets: {
-            'openai-api-key':
-              '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',
-            openai_api_key:
-              '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',
-            'banana-api-key': 'asdß',
-          },
+          secrets: {},
         },
         dataControls: {
           inputType: { expanded: true },
@@ -147,13 +135,7 @@ const graph = {
             },
           },
           publicVariables: '[]',
-          secrets: {
-            'openai-api-key':
-              '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',
-            openai_api_key:
-              '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',
-            'banana-api-key': 'asdß',
-          },
+          secrets: {},
         },
         dataControls: {
           inputType: { expanded: true },
@@ -208,13 +190,7 @@ const graph = {
             },
           },
           publicVariables: '[]',
-          secrets: {
-            'openai-api-key':
-              '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',
-            openai_api_key:
-              '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',
-            'banana-api-key': 'asdß',
-          },
+          secrets: {},
         },
         dataControls: {
           inputType: { expanded: true },
