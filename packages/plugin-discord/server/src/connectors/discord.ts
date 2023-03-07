@@ -402,10 +402,10 @@ export class discord_client {
           sender: message.author.username,
           observer: this.discord_bot_name,
           client: 'discord', // TODO: should be typed
-          channelId: message.channel.id,
+          channel: message.channel.id,
           agentId: this.agent.id,
           entities: entities.map(e => e.user),
-          channel: 'msg',
+          channelType: 'msg',
         },
       },
       secrets: this.agent.secrets,

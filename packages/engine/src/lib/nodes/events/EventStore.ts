@@ -70,8 +70,13 @@ export class EventStore extends MagickComponent<Promise<void>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent }: { silent: boolean }
+    context
   ) {
+    const {
+      silent,
+      projectId,
+    } = context
+
     const event = inputs['event'][0] as Event
     const content = (inputs['content'] && inputs['content'][0]) as string
     const embedding = (inputs['embedding'] &&
@@ -84,7 +89,9 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     if (!content) return console.log('Content is null, not storing event')
 
-    const data = { ...event, content, type } as any
+    console.log('event is', event)
+
+    const data = { ...event, projectId, content, type } as any
     if (embedding) data.embedding = embedding
 
     if (content && content !== '') {
