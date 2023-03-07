@@ -19,51 +19,59 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
 
     setPublicVars({
       ...publicVars,
-      [newVar.id]: newVar
+      [newVar.id]: newVar,
     })
   }
-  
+
   return (
     <div className={styles['agentPubVars']}>
       <div className={styles['header']}>
         <h3>Public Variables</h3>
       </div>
-      {Object.values(publicVars).map((variable: any) => {
-        console.log('variable is', variable)
-        return (
-          <Grid
-            container
-            key={variable.id}
-            style={{ alignItems: 'center', marginBottom: '10px' }}
-          >
-            <Grid item>
-              <p style={{ marginRight: '20px' }}>
-                {`${variable.name}: `}
-              </p>
+      <div
+        style={{
+          maxHeight: '150px',
+          overflow: 'auto',
+          marginBottom: '10px',
+        }}
+      >
+        {Object.values(publicVars).map((variable: any) => {
+          console.log('variable is', variable)
+          return (
+            <Grid
+              container
+              key={variable.id}
+              style={{
+                alignItems: 'center',
+                marginBottom: '10px',
+              }}
+            >
+              <Grid item>
+                <p style={{ marginRight: '20px' }}>{`${variable.name}: `}</p>
+              </Grid>
+              <Grid item xs={8}>
+                {variable?.type?.includes('Boolean') ? (
+                  <Switch
+                    label={''}
+                    checked={variable.value}
+                    onChange={e => onChange(variable, e)}
+                    name={variable.name}
+                  />
+                ) : (
+                  <Input
+                    style={{ width: '100%' }}
+                    value={variable.value}
+                    type="text"
+                    onChange={e => onChange(variable, e)}
+                    name={variable.name}
+                    placeHolder={'Add new value here'}
+                  />
+                )}
+              </Grid>
             </Grid>
-            <Grid item xs={8}>
-              {variable.name.includes('Boolean') ? (
-                <Switch
-                  label={''}
-                  checked={variable.value}
-                  onChange={(e) => onChange(variable, e)}
-                  name={variable.name}
-                />
-              ) : (
-                <Input
-                  style={{ width: '100%' }}
-                  value={variable.value}
-                  type="text"
-                  onChange={(e) => onChange(variable, e)}
-                  name={variable.name}
-                  placeHolder={"Add new value here"}
-                  multiline
-                />
-              )}
-            </Grid>
-          </Grid>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   )
 }

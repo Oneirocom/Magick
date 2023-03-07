@@ -490,6 +490,6 @@ div.item {
   font-family: 'IBM Plex Mono';
 }
 
-.MuiInputBase-root {
-  padding: 10px !important;
+.MuiInputBase-root input {
+  padding: 13px !important;
 }
