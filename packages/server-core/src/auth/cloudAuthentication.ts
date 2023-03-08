@@ -21,7 +21,6 @@ async function getDerivedEncryptionKey(secret: string | Buffer) {
 export class CloudJwtService extends AuthenticationService {
   async getPayload(authResult, params) {
     // Call original `getPayload` first
-    console.log('getPayload', authResult, params)
     const payload = await super.getPayload(authResult, params)
     const { user } = authResult
 
@@ -58,7 +57,6 @@ export class CloudJwtService extends AuthenticationService {
     params: AuthenticationParams,
     ...allowed: string[]
   ): Promise<AuthenticationResult> {
-    // console.log('authenticate', authentication, params, allowed)
     const result = await super.authenticate(authentication, params, ...allowed)
     return result
   }

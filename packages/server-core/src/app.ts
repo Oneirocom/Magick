@@ -19,6 +19,7 @@ import handleSockets from './sockets/sockets'
 import { configureManager, globalsManager } from '@magickml/engine'
 import { services } from './services'
 import { authentication } from './auth/authentication'
+import { NotAuthenticated } from '@feathersjs/errors/lib'
 
 const app: Application = koa(feathers())
 
@@ -104,15 +105,33 @@ app.hooks({
     all: [
       logError,
       authenticate('jwt'),
+      // attach the user from the payload to the params
       async (context: HookContext, next) => {
-        if (context.authenticated) {
-          context.params.user = context.authentication.payload.user
-          context.params.projectid = context.authentication.payload.projectid
-          console.log('Set uer to params', context.params.user)
+        const { params } = context
+        const { authentication, authenticated } = params
+
+        // First check if this is authenticated
+        if (authenticated) {
+          context.params.user = authentication.payload.user
+          context.params.projectId = authentication.payload.projectId
+
+          // Now we check to see if the query has a project id on it.
+          // If it does, we check to see if the user is authorized to access that project
+          if (context?.params?.query?.projectId) {
+            const projectId = context.params.query.projectId
+
+            // todo we should change this in payload from project to projectId
+            if (authentication.payload.project !== projectId) {
+              throw new NotAuthenticated(
+                'User not authorized to access project'
+              )
+            }
+          }
         }
 
         await next()
       },
+      // authorize user to access project from query params
     ],
   },
   before: {
