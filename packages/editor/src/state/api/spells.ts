@@ -33,10 +33,11 @@ export interface SpellData {
   data: Spell[]
 }
 
-let spellApi: any = null;
-export const getSpellApi = (config) => {
-  if(spellApi) return spellApi;
-  const rootApi = getRootApi(config);
+let spellApi: any = null
+export const getSpellApi = (config, token) => {
+  if (spellApi) return spellApi
+
+  const rootApi = getRootApi(config, token)
   spellApi = rootApi.injectEndpoints({
     endpoints: builder => ({
       getSpells: builder.query({
@@ -65,7 +66,7 @@ export const getSpellApi = (config) => {
       }),
       getSpellByJustId: builder.query({
         providesTags: ['Spell'],
-        query: ({projectId, id }) => {
+        query: ({ projectId, id }) => {
           return {
             url: `spells?projectId=${projectId}&id=${id}`,
             params: {},
@@ -79,7 +80,7 @@ export const getSpellApi = (config) => {
           body: {
             ...inputs,
             state,
-            projectId
+            projectId,
           },
         }),
       }),
@@ -104,18 +105,24 @@ export const getSpellApi = (config) => {
       saveSpell: builder.mutation({
         invalidatesTags: ['Spell'],
         // needed to use queryFn as query option didnt seem to allow async functions.
-        async queryFn({ spell, projectId, }, { dispatch }, extraOptions, baseQuery) {
+        async queryFn(
+          { spell, projectId },
+          { dispatch },
+          extraOptions,
+          baseQuery
+        ) {
           // make a copy of spell but remove the id
-          
+
           const spellCopy = { ...spell } as any
           if (spellCopy.id) delete spellCopy.id
-          if (Object.keys(spellCopy).includes('modules')) delete spellCopy.modules
+          if (Object.keys(spellCopy).includes('modules'))
+            delete spellCopy.modules
           if (!spellCopy.createdAt)
             spellCopy.createdAt = new Date().toISOString()
           spellCopy.updatedAt = new Date().toISOString()
           spellCopy.projectId = spell.projectId ?? projectId
           spellCopy.hash = md5(JSON.stringify(spellCopy.graph.nodes))
-          
+
           const baseQueryOptions = {
             url: 'spells/' + spell.id,
             body: spellCopy,
@@ -160,5 +167,5 @@ export const getSpellApi = (config) => {
       }),
     }),
   })
-  return spellApi;
+  return spellApi
 }

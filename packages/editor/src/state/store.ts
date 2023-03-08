@@ -24,9 +24,9 @@ import localStateSlice from './localState'
 import preferencesReducer from './preferences'
 
 let store: ToolkitStore | null = null
-export const getStore = config => {
+export const getStore = (config, token) => {
   if (store) return store
-  const spellApi = getSpellApi(config)
+  const spellApi = getSpellApi(config, token)
   const persistConfig = {
     key: 'root',
     version: 1,
@@ -43,7 +43,8 @@ export const getStore = config => {
 
   const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-  const rootApi = getRootApi(config)
+  const rootApi = getRootApi(config, token)
+
   store = configureStore({
     reducer: persistedReducer,
     middleware: getDefaultMiddleware =>

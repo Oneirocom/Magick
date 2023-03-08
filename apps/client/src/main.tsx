@@ -19,7 +19,6 @@ if (window !== window.parent) {
   window.addEventListener(
     'message',
     event => {
-      console.log('event', event.data)
       const cloudUrl =
         import.meta.env.VITE_APP_CLOUD_URL || 'http://localhost:3000'
       // here we check that the sender is coming from a trusted source
@@ -31,9 +30,9 @@ if (window !== window.parent) {
       // not sure when we would use different types, but good to be sure.
       if (type === 'INIT') {
         // to do - we shold store this stuiff in localstorage
-        const { config } = payload
+        const { config, token } = payload
 
-        const Root = () => <MagickIDE config={config} />
+        const Root = () => <MagickIDE config={config} token={token} />
         const container = document.getElementById('root')
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
         ;(window as any).root = root
@@ -50,7 +49,7 @@ if (window !== window.parent) {
     apiUrl,
     projectId,
   }
-  const Root = () => <MagickIDE config={config} />
+  const Root = () => <MagickIDE config={config} token={null} />
 
   root.render(<Root />)
 }
