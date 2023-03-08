@@ -10,7 +10,7 @@ import {
 } from '@feathersjs/koa'
 import { authenticate } from '@feathersjs/authentication/lib/hooks'
 import socketio from '@feathersjs/socketio'
-import type { Application } from './declarations'
+import type { Application, HookContext } from './declarations'
 import { logError } from './hooks'
 import { dbClient } from './dbClient'
 import channels from './sockets/channels'
@@ -101,10 +101,22 @@ app.configure(channels)
 // Register hooks that run on all service methods
 app.hooks({
   around: {
-    all: [logError],
+    all: [
+      logError,
+      authenticate('jwt'),
+      async (context: HookContext, next) => {
+        if (context.authenticated) {
+          context.params.user = context.authentication.payload.user
+          context.params.projectid = context.authentication.payload.projectid
+          console.log('Set uer to params', context.params.user)
+        }
+
+        await next()
+      },
+    ],
   },
   before: {
-    all: [authenticate('jwt')],
+    all: [],
   },
   after: {},
   error: {},
