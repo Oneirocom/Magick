@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import MagickIDE, { MagickIDEProps } from '@magickml/editor'
+import { MagickIDE, MagickIDEProps } from '@magickml/editor'
 import { projectId as _projectId } from '@magickml/engine'
 
 import './plugins'

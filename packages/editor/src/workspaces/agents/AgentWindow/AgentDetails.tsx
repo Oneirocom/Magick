@@ -34,7 +34,6 @@ const AgentDetails = ({
     console.log('update', _data)
     // Avoid server-side validation error
     _data.spells = Array.isArray(_data?.spells) ? _data.spells : []
-    _data.dirty = true
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
     axios

@@ -1,7 +1,7 @@
 import { eventSocket, ServerPlugin } from '@magickml/engine'
 
 type StartLoopArgs = {
-  spellHandler: any
+  spellRunner: any
   agent: any
   agentManager: any
 }
@@ -22,7 +22,7 @@ class LoopManager {
       return console.error('Loop Interval must be a number greater than 0')
     }
     agent.loopHandler = setInterval(async () => {
-      const resp = await agent.spellHandler({
+      const resp = await agent.spellRunner({
         content: 'loop',
         sender: 'loop',
         observer: agent.name,
@@ -47,9 +47,9 @@ class LoopManager {
 function getAgentMethods() {
   let loopManager: LoopManager | null = null;
   return {
-    start: async ({ spellHandler, agent, agentManager }: StartLoopArgs) => {
+    start: async ({ spellRunner, agent, agentManager }: StartLoopArgs) => {
       if(!loopManager) loopManager = new LoopManager(agentManager)
-      agent.data.spellHandler = spellHandler
+      agent.data.spellRunner = spellRunner
       loopManager.addAgent({ agent })
     },
     stop: async ({ agent }) => {

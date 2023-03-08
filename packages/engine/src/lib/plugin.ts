@@ -102,10 +102,8 @@ export class ServerPlugin extends Plugin {
     serverInit = () => null,
     agentMethods = {
       start: () => {
-        console.log('starting plugin')
       },
       stop: () => {
-        console.log('stopping plugin')
       },
     },
     serverRoutes = [],

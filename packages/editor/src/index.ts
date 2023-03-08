@@ -1,2 +1,2 @@
-export type { MagickIDEProps } from "./main";
-export { default as MagickIDE } from "./main";
+export type { AppConfig } from './contexts/ConfigProvider'
+export { MagickIDE } from "./main";

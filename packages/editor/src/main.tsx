@@ -13,23 +13,17 @@ import { getStore } from './state/store'
 
 import { AppConfig } from './contexts/ConfigProvider'
 
-export type MagickIDEProps = AppConfig
-
-export const MagickIDE = ({
-  config,
-}: { config: MagickIDEProps }) => {
-  const [store, _] = useState(getStore(config));
+export const MagickIDE = ({ config }: { config: AppConfig }) => {
+  const [store, _] = useState(getStore(config))
   return (
-  <Router>
-    <Provider store={store}>
-      <AppProviders config={config}>
-        <WagmiConfig client={client}>
-          <App />
-        </WagmiConfig>
-      </AppProviders>
-    </Provider>
-  </Router>
-)
-  }
-
-export default MagickIDE
+    <Router>
+      <Provider store={store}>
+        <AppProviders config={config}>
+          <WagmiConfig client={client}>
+            <App />
+          </WagmiConfig>
+        </AppProviders>
+      </Provider>
+    </Router>
+  )
+}

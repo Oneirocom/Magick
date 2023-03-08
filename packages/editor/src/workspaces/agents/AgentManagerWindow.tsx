@@ -55,7 +55,6 @@ const AgentManagerWindow = () => {
     fileReader.onload = event => {
       const data = JSON.parse(event?.target?.result as string)
       data.projectId = config.projectId
-      data.dirty = data?.dirty ? data.dirty : false
       data.enabled = data?.enabled ? true : false
       data.updatedAt = data?.updatedAt || ''
       data.rootSpell = data?.rootSpell || '{}'

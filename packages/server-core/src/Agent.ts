@@ -24,23 +24,24 @@ export class Agent {
   data: AgentData
   router: any
   app: any
-  loopHandler: any
   spellManager: SpellManager
   projectId: string
   worldManager: WorldManager
   agentManager: AgentManager
-  spellHandler: any
+  spellRunner: any
 
-  constructor(data: AgentData, agentManager: AgentManager) {
-    console.log('data', data)
+  updateInterval: any
+
+  constructor(agentData: AgentData, agentManager: AgentManager) {
+    console.log('constructing agent', agentData.id)
     // if ,data,secrets is a string, JSON parse it
-    this.secrets = JSON.parse(data.secrets)
-    this.publicVariables = data.publicVariables
-    this.id = data.id
-    this.data = data
+    this.secrets = JSON.parse(agentData.secrets)
+    this.publicVariables = agentData.publicVariables
+    this.id = agentData.id
+    this.data = agentData
     this.agentManager = agentManager
-    this.name = data.name ?? 'agent'
-    this.projectId = data.projectId
+    this.name = agentData.name ?? 'agent'
+    this.projectId = agentData.projectId
     this.worldManager = new WorldManager()
 
     this.spellManager = new SpellManager({
@@ -50,35 +51,47 @@ export class Agent {
     (async () => {
       const spell = (
         await app.service('spells').find({
-          query: { projectId: data.projectId },
+          query: { projectId: agentData.projectId },
         })
       ).data[0]
 
-      this.spellHandler = await this.spellManager.load(spell)
+      this.spellRunner = await this.spellManager.load(spell)
       const agentStartMethods = pluginManager.getAgentStartMethods()
       for (const method of Object.keys(agentStartMethods)) {
         await agentStartMethods[method]({
           agentManager,
           agent: this,
-          spellHandler: this.spellHandler,
+          spellRunner: this.spellRunner,
           worldManager: this.worldManager,
         })
       }
+
+      this.updateInterval = setInterval(() => {
+        // every second, update the agent, set updatedAt to now
+        app.service('agents').patch(this.id, {
+          updatedAt: new Date().toISOString(),
+        })
+      }, 1000)
+        
     })()
   }
 
   async onDestroy() {
+    if(this.updateInterval){
+      clearInterval(this.updateInterval)
+    }
     const agentStopMethods = pluginManager.getAgentStopMethods()
     console.log('agentStopMethods', agentStopMethods)
-    for (const method of Object.keys(agentStopMethods)) {
-      console.log('method', method)
-      agentStopMethods[method]({
-        agentManager: this.agentManager,
-        agent: this,
-        spellHandler: this.spellHandler,
-        worldManager: this.worldManager
-       })
-    }
+    if(agentStopMethods)
+      for (const method of Object.keys(agentStopMethods)) {
+        agentStopMethods[method]({
+          agentManager: this.agentManager,
+          agent: this,
+          spellRunner: this.spellRunner,
+          worldManager: this.worldManager
+        })
+      }
+      console.log('destroyed agent', this.id)
   }
 }
 
