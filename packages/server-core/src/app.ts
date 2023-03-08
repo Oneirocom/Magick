@@ -1,6 +1,14 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
 import { feathers } from '@feathersjs/feathers'
-import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors } from '@feathersjs/koa'
+import {
+  koa,
+  rest,
+  bodyParser,
+  errorHandler,
+  parseAuthentication,
+  cors,
+} from '@feathersjs/koa'
+import { authenticate } from '@feathersjs/authentication/lib/hooks'
 import socketio from '@feathersjs/socketio'
 import type { Application } from './declarations'
 import { logError } from './hooks'
@@ -10,6 +18,7 @@ import channels from './sockets/channels'
 import handleSockets from './sockets/sockets'
 import { configureManager, globalsManager } from '@magickml/engine'
 import { services } from './services'
+import { authentication } from './auth/authentication'
 
 const app: Application = koa(feathers())
 
@@ -26,7 +35,7 @@ const paginateDefault = parseInt(process.env.PAGINATE_DEFAULT || '10', 10)
 const paginateMax = parseInt(process.env.PAGINATE_MAX || '50', 10)
 const paginate = {
   default: paginateDefault,
-  max: paginateMax
+  max: paginateMax,
 }
 app.set('paginate', paginate)
 
@@ -49,6 +58,24 @@ app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
 
+// this will configure out stateless JWT authentication
+app.set('authentication', {
+  // We will want to use the same secret as the cloud is using for shared authentication
+  secret: process.env.JWT_SECRET || 'secret',
+  entity: null,
+  authStrategies: ['jwt'],
+  jwtOptions: {
+    header: { typ: 'access' },
+    audience: 'https://yourdomain.com',
+    issuer: 'feathers',
+    algorithm: 'HS256',
+    expiresIn: '1d',
+  },
+})
+
+app.configure(authentication)
+// app.use(authenticate('jwt'))
+
 // Configure services and transports
 app.configure(rest())
 
@@ -61,8 +88,8 @@ app.configure(
         origin: '*',
         methods: ['GET', 'POST'],
         allowedHeaders: ['Authorization'],
-        credentials: true
-      }
+        credentials: true,
+      },
     },
     handleSockets(app)
   )
@@ -74,16 +101,18 @@ app.configure(channels)
 // Register hooks that run on all service methods
 app.hooks({
   around: {
-    all: [logError]
+    all: [logError],
   },
-  before: {},
+  before: {
+    all: [authenticate('jwt')],
+  },
   after: {},
-  error: {}
+  error: {},
 })
 // Register application setup and teardown hooks here
 app.hooks({
   setup: [],
-  teardown: []
+  teardown: [],
 })
 
 export { app }

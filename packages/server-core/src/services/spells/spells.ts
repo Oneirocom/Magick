@@ -10,13 +10,14 @@ import {
   spellDataResolver,
   spellPatchResolver,
   spellQueryResolver,
-  spellJsonFields
+  spellJsonFields,
 } from './spells.schema'
 
 import type { Application, HookContext } from '../../declarations'
 import { SpellService, getOptions } from './spells.class'
 import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
 import { updateSpellInManager } from '../../hooks/spellmanagerHooks'
+import { authenticate } from '@feathersjs/koa/lib'
 
 export * from './spells.class'
 export * from './spells.schema'
@@ -38,7 +39,7 @@ export const spell = (app: Application) => {
         schemaHooks.resolveExternal(spellExternalResolver),
         schemaHooks.resolveResult(spellResolver),
         schemaHooks.resolveResult(jsonResolver(spellJsonFields)),
-      ]
+      ],
     },
     before: {
       all: [
@@ -56,35 +57,43 @@ export const spell = (app: Application) => {
             [service.id]: randomUUID(),
             ...data,
           }
-          await context.service.find({
-            query: {
-                name: data.name
-            }
-          }).then(async (param) => {
+          await context.service
+            .find({
+              query: {
+                name: data.name,
+              },
+            })
+            .then(async param => {
               if (param.data.length >= 1) {
-                console.log(data.name+'(%)')
+                console.log(data.name + '(%)')
 
-                await context.service.find({
-                  query: {
-                    name: process.env.DB_TYPE === 'postgres' ? {
-                      $ilike: data.name+' (%)'
-                    } : {
-                      // ilike is not supported by sqlite
-                      $like: data.name+' (%)'
-                    }
-                  }
-                }).then((val) => {
-                  context.data.name = data.name + " (" + (1+val.data.length) +")"
-                })
+                await context.service
+                  .find({
+                    query: {
+                      name:
+                        process.env.DB_TYPE === 'postgres'
+                          ? {
+                              $ilike: data.name + ' (%)',
+                            }
+                          : {
+                              // ilike is not supported by sqlite
+                              $like: data.name + ' (%)',
+                            },
+                    },
+                  })
+                  .then(val => {
+                    context.data.name =
+                      data.name + ' (' + (1 + val.data.length) + ')'
+                  })
               }
-          });
+            })
         },
       ],
       patch: [
         schemaHooks.validateData(spellPatchValidator),
         schemaHooks.resolveData(spellPatchResolver),
         handleJSONFieldsUpdate(spellJsonFields),
-        updateSpellInManager
+        updateSpellInManager,
       ],
       update: [handleJSONFieldsUpdate(spellJsonFields)],
       remove: [],
@@ -105,8 +114,7 @@ export const spell = (app: Application) => {
           })
         },
       ],
-      saveDiff: [
-      ]
+      saveDiff: [],
     },
     error: {
       all: [],

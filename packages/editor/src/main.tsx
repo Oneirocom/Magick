@@ -17,19 +17,23 @@ export type MagickIDEProps = AppConfig
 
 export const MagickIDE = ({
   config,
-}: { config: MagickIDEProps }) => {
-  const [store, _] = useState(getStore(config));
+  token,
+}: {
+  config: MagickIDEProps
+  token: string
+}) => {
+  const [store] = useState(getStore(config, token))
   return (
-  <Router>
-    <Provider store={store}>
-      <AppProviders config={config}>
-        <WagmiConfig client={client}>
-          <App />
-        </WagmiConfig>
-      </AppProviders>
-    </Provider>
-  </Router>
-)
-  }
+    <Router>
+      <Provider store={store}>
+        <AppProviders config={config}>
+          <WagmiConfig client={client}>
+            <App />
+          </WagmiConfig>
+        </AppProviders>
+      </Provider>
+    </Router>
+  )
+}
 
 export default MagickIDE

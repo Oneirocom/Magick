@@ -1,10 +1,9 @@
 import { otJson0 } from 'ot-json0';
 import { Spell } from "../client"
-import { Application, HookContext } from "../declarations"
+import { HookContext } from "../declarations"
 import { getSpell } from "../helpers/getSpell"
-import { SpellService } from '../services/spells/spells.class';
 
-export const checkForSpellInManager = async (context: HookContext<SpellService >) => {
+export const checkForSpellInManager = async (context: HookContext) => {
   const { app, params, data } = context
   const { user } = params
   const { projectId, id } = data
