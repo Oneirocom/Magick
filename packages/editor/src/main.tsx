@@ -26,7 +26,7 @@ export const MagickIDE = ({
   return (
     <Router>
       <Provider store={store}>
-        <AppProviders config={config}>
+        <AppProviders config={config} token={token}>
           <WagmiConfig client={client}>
             <App />
           </WagmiConfig>

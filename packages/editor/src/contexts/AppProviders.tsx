@@ -28,11 +28,11 @@ const darkTheme = createTheme({
  *
  */
 
-function ComposeProviders({ config, children }) {
+function ComposeProviders({ config, children, token }) {
   const _providers = [
     [ConfigProvider, { config }],
     [ThemeProvider, { theme: darkTheme }],
-    FeathersProvider,
+    [FeathersProvider, { token }],
     PubSubProvider,
     ToastProvider,
   ].reverse()
@@ -46,8 +46,10 @@ function ComposeProviders({ config, children }) {
 }
 
 // Centralize all our providers to avoid nesting hell.
-const AppProviders = ({ config, children }) => (
-  <ComposeProviders config={config}>{children}</ComposeProviders>
+const AppProviders = ({ config, children, token }) => (
+  <ComposeProviders config={config} token={token}>
+    {children}
+  </ComposeProviders>
 )
 
 export default AppProviders
