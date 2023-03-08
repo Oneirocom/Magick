@@ -71,6 +71,7 @@ export const initEditor = function ({
 
   editorTabMap[tab.id] = editor
 
+  // Add grid background
   container.style.backgroundImage = `url('${gridimg}')`
   container.style.transition = 'transform 330ms ease-in-out'
 
@@ -78,8 +79,9 @@ export const initEditor = function ({
     container.style.transform = `scale(${zoomFactor})`
   }
 
+  // Listern on zoom to dynamical zoo the background grid
   container.addEventListener('wheel', event => {
-    const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1
+    const zoomFactor = event.deltaY > 0 ? 0.99 : 1.2
     zoomCanvas(zoomFactor)
   })
 
