@@ -60,7 +60,8 @@ function getAgentMethods() {
     agent.discord = discord
   }
 
-  async function stopDiscord(agent) {
+  async function stopDiscord({agent}) {
+    console.log('**************** STOPPING DISCORD')
     console.log('Inside Kill Method')
     if (!agent.discord) return console.warn("Discord isn't running, can't stop it")
     try {

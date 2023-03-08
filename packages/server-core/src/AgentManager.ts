@@ -46,9 +46,10 @@ export class AgentManager {
           return
 
         const id = this.currentAgents[i].id
-        const agent = this.currentAgents[id]
+        const agent = this.agents[id]
+        console.log('agent', agent)
+        await agent.onDestroy()
         this.removeHandlers.forEach((handler) => handler({agent}))
-        await agent?.onDestroy()
         this.agents[id] = null
         delete this.currentAgents[i]
         console.log('deleted agent', id)
@@ -81,8 +82,8 @@ export class AgentManager {
 
       console.log('Agent already exists, destroying', agent.id)
       this.removeHandlers.forEach((handler) => handler({agent: oldAgent}))
-      await oldAgent?.onDestroy()
-      this.agents[agent.id] = null
+      if(oldAgent)
+        await oldAgent.onDestroy()
       // delete this.currentAgents value where id = agent.id
       this.currentAgents = this.currentAgents.filter((a) => a.id !== agent.id)
       console.log('deleted agent', agent.id)
@@ -91,7 +92,7 @@ export class AgentManager {
         ...agent,
         updatedAt: new Date().toISOString(),
       }
-      this.agents[data.id] = new Agent(data, this)
+      this.agents[agent.id] = new Agent(data, this)
       this.currentAgents.push(agent)
       this.addHandlers.forEach((handler) => handler({agent}))
       console.log('updated agent', data.id)
