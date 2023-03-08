@@ -193,28 +193,14 @@ const RawEditor = ({ tab, children }) => {
   return (
     <>
       <div
-        style={{
-          textAlign: 'left',
-          width: '100vw',
-          height: '100vh',
-          position: 'absolute',
-          backgroundColor: '#191919',
+        style={{ width: '100vh', height: '100vh' }}
+        ref={el => {
+          if (el && !loaded && spell) {
+            buildEditor(el, spell.data[0], tab, reteInterface)
+            setLoaded(true)
+          }
         }}
-        onDragOver={e => {
-          e.preventDefault()
-        }}
-        onDrop={e => {}}
-      >
-        <div
-          style={{ width: '100%', height: '100%' }}
-          ref={el => {
-            if (el && !loaded && spell) {
-              buildEditor(el, spell.data[0], tab, reteInterface)
-              setLoaded(true)
-            }
-          }}
-        />
-      </div>
+      />
       {children}
     </>
   )
