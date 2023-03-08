@@ -1,7 +1,7 @@
 import { ClientPlugin } from '@magickml/engine'
 import { EthereumAgentWindow } from './components/agent.component'
 import Nodes from '@magickml/plugin-ethereum-shared'
-import Money from '@mui/icons-material/Money'
+import Money from '@mui/icons-material/AttachMoney'
 
 import { EthereumComponent } from './components/ethereum.route'
 
@@ -16,14 +16,14 @@ const EthereumPlugin = new ClientPlugin({
   agentComponents: [EthereumAgentWindow],
   drawerItems: [
     {
-      path: '/ethereum',
+      path: '/ethereum/:chain/:address/:function',
       icon: Money,
       text: 'Ethereum',
     },
   ],
   clientRoutes: [
     {
-      path: '/ethereum',
+      path: "/ethereum/:chain/:address/:function",
       component: EthereumComponent,
     },
   ],
