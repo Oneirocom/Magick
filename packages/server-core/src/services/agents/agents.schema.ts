@@ -18,7 +18,6 @@ export const agentSchema = Type.Object(
     projectId: Type.String(),
     rootSpell: Type.Optional(Type.String()),
     name: Type.String(),
-    dirty: Type.Optional(Type.Boolean()),
     enabled: Type.Optional(Type.Boolean()),
     updatedAt: Type.Optional(Type.String()),
     spells: Type.Array(Type.String()),
@@ -37,7 +36,6 @@ export const agentExternalResolver = resolve<Agent, HookContext>({})
 export const agentDataSchema = Type.Pick(
   agentSchema,
   [
-    'dirty',
     'projectId',
     'rootSpell',
     'name',
@@ -58,7 +56,6 @@ export const agentPatchDataSchema = Type.Pick(
   agentSchema,
   [
     'id',
-    'dirty',
     'projectId',
     'rootSpell',
     'name',
@@ -96,7 +93,6 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'id',
   'projectId',
   'rootSpell',
-  'dirty',
   'enabled',
   'name',
   'updatedAt',

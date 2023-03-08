@@ -9,6 +9,7 @@ export class AgentManager {
   removeHandlers: any = []
 
   getAgent({ agent }) {
+    if(!agent) return
     return this.agents[agent.id]
   }
 
@@ -29,47 +30,71 @@ export class AgentManager {
 
   async updateAgents() {
     this.newAgents = (await app.service('agents').find()).data
-    if (
-      JSON.stringify(this.newAgents) === JSON.stringify(this.currentAgents)
-    )
-      return // They are the same
-
     // If an entry exists in currentAgents but not in newAgents, it has been deleted
-    for (const i in this.currentAgents ?? []) {
-      if (
-        this.newAgents.filter((x: any) => x.id === this.currentAgents[i].id)[0] === undefined
-      ) {
+    for (const i in this.currentAgents) {
+        // find any agentsin newAgents that have the save id as the current agent
+        const newAgent = this.newAgents.find((agent) => agent.id === this.currentAgents[i].id)
+        if(!this.currentAgents[i]) return;
+        const oldA = {...this.currentAgents[i], ...this.currentAgents[i]?.data}
+        delete oldA.updatedAt
+
+        const newA = {...newAgent, ...newAgent.data}
+        delete newA.updatedAt
+
+        // if the objects are the same, return
+        if(JSON.stringify(oldA) === JSON.stringify(newA))
+          return
+
         const id = this.currentAgents[i].id
-        if(this.agents[id] !== undefined){
-          const agent = this.agents[id]
-          this.removeHandlers.forEach((handler) => handler({agent}))
-          await this.agents[id]?.onDestroy()
-          this.agents[id] = null
-          delete this.agents[id]
-          console.log('deleted agent', id)
-        }
-      }
+        const agent = this.currentAgents[id]
+        this.removeHandlers.forEach((handler) => handler({agent}))
+        await agent?.onDestroy()
+        this.agents[id] = null
+        delete this.currentAgents[i]
+        console.log('deleted agent', id)
     }
 
     this.newAgents.forEach(async (agent: any) => {
-      if(!agent.enabled) return console.log('Agent is disabled', agent.id)      
-      if(!agent.rootSpell) return console.log('Agent has no root spell', agent.id)
+      if(!agent.enabled) return  
+      if(!agent.rootSpell) return
+
+      // when was the agent last updated?
+      const updatedAt = new Date(agent.updatedAt)
+
+      // if it was updated less than 5 seconds ago, return
+      if(((new Date().getTime() - updatedAt.getTime()) * 1000) < 5000)
+        return console.log('Agent has been pinged recently', agent.id, new Date().getTime() - updatedAt.getTime())
       
+      console.log('Agent is enabled and has not been pinged, starting', agent.id)
+
       const oldAgent = this.agents[agent.id]
-      if(!oldAgent || !oldAgent.enabled || JSON.stringify(oldAgent) !== JSON.stringify(agent)){
-        const data = {
-          ...agent,
-          dirty: false,
-          updatedAt: new Date().toISOString(),
-        }
-        this.agents[data.id] = new Agent(data, this)
-        this.addHandlers.forEach((handler) => handler({agent}))
 
-        // tell the feathers 'agents' service to update the agent and set dirty to false
-        await app.service('agents').patch(data.id, { dirty: false })
+      const oldA = {...oldAgent, ...oldAgent?.data}
+      delete oldA.updatedAt
+
+      const newA = {...agent, ...agent.data}
+      delete newA.updatedAt
+
+      // if the objects are the same, return
+      if(JSON.stringify(oldA) === JSON.stringify(newA))
+        return
+
+      console.log('Agent already exists, destroying', agent.id)
+      this.removeHandlers.forEach((handler) => handler({agent: oldAgent}))
+      await oldAgent?.onDestroy()
+      this.agents[agent.id] = null
+      // delete this.currentAgents value where id = agent.id
+      this.currentAgents = this.currentAgents.filter((a) => a.id !== agent.id)
+      console.log('deleted agent', agent.id)
+        
+      const data = {
+        ...agent,
+        updatedAt: new Date().toISOString(),
       }
+      this.agents[data.id] = new Agent(data, this)
+      this.currentAgents.push(agent)
+      this.addHandlers.forEach((handler) => handler({agent}))
+      console.log('updated agent', data.id)
     })
-
-    this.currentAgents = this.newAgents
   }
 }

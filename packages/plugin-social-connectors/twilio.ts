@@ -37,7 +37,7 @@ export class twilio_client {
       }
     }
 
-    const resp = this.spellHandler(
+    const resp = this.spellRunner(
       req.body.Body,
       req.body.From,
       this.settings.twilio_bot_name ?? 'Agent',
@@ -114,7 +114,7 @@ export class twilio_client {
 
   client: any
   settings: any
-  spellHandler: any
+  spellRunner: any
   haveCustomCommands: any
   custom_commands: any
 
@@ -122,10 +122,10 @@ export class twilio_client {
     app: any,
     router: express.Router,
     settings: any,
-    spellHandler: any
+    spellRunner: any
   ) => {
     this.settings = settings
-    this.spellHandler = spellHandler
+    this.spellRunner = spellRunner
     this.haveCustomCommands = settings.haveCustomCommands
     this.custom_commands = settings.custom_commands
 

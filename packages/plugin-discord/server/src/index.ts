@@ -12,8 +12,9 @@ function getAgentMethods() {
     spellRunner,
     worldManager,
   }: StartDiscordArgs) {
-    const { data } = agent
+    const { data } = agent.data
     if(!data) return console.log("No data for this agent")
+    console.log('data', data)
     if(!data.discord_enabled) return console.log("Discord is not enabled for this agent")
     if(!data.discord_api_key) return console.log("Discord API key is not set for this agent")
 

@@ -37,7 +37,7 @@ const createTwitterClientV2 = (bearerKey: string) => {
 }
 
 export class twitter_client {
-  automatic_tweet = async spellHandler => {
+  automatic_tweet = async spellRunner => {
     const interval =
       randomInt(
         this.twitter_auto_tweet_interval_min,
@@ -46,7 +46,7 @@ export class twitter_client {
     console.log('await interval:', interval)
     await sleep(interval)
 
-    const resp = await spellHandler(
+    const resp = await spellRunner(
       '',
       'user',
       this.settings.twitter_bot_name ?? 'Agent',
@@ -59,7 +59,7 @@ export class twitter_client {
     console.log('generated automatic tweet:', resp)
 
     this.twitterv1.v1.tweet(resp)
-    this.automatic_tweet(spellHandler)
+    this.automatic_tweet(spellRunner)
   }
 
   async handleMessage(response, chat_id, args) {
@@ -90,7 +90,7 @@ export class twitter_client {
   twitterv1: TwitterApi
   twitterv2: TwitterApi
   twitterv2_replies: TwitterApi
-  spellHandler
+  spellRunner
   spellHandlerAuto
   settings
   entity
@@ -100,12 +100,12 @@ export class twitter_client {
   twitter_auto_tweet_interval_max: number = 0
 
   createTwitterClient = async (
-    spellHandler,
+    spellRunner,
     spellHandlerAuto,
     settings,
     entity
   ) => {
-    this.spellHandler = spellHandler
+    this.spellRunner = spellRunner
     this.spellHandlerAuto = spellHandlerAuto
     this.settings = settings
     this.entity = entity
@@ -186,7 +186,7 @@ export class twitter_client {
         //     '@' + localUser.data.username,
         //     ''
         //   )
-        //   const resp = await this.spellHandler(
+        //   const resp = await this.spellRunner(
         //     input,
         //     author.data.name,
         //     this.settings.twitter_bot_name ?? 'Agent',
@@ -282,7 +282,7 @@ export class twitter_client {
               // )
 
               // if (!handled) {
-              //   const resp = await this.spellHandler(
+              //   const resp = await this.spellRunner(
               //     twit.data.text,
               //     author.data.name,
               //     this.settings.twitter_bot_name ?? 'Agent',
