@@ -86,8 +86,8 @@ app.configure(
     {
       cors: {
         origin: '*',
-        methods: ['GET', 'POST'],
-        allowedHeaders: ['Authorization'],
+        methods: ['GET', 'POST', 'OPTIONS'],
+        allowedHeaders: ['Authorization', 'socketauthorization'],
         credentials: true,
       },
     },

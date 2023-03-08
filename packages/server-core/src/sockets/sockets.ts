@@ -2,7 +2,9 @@
 import { SpellManager } from '@magickml/engine'
 import { buildMagickInterface } from '../helpers/buildMagickInterface'
 
-import {v4} from 'uuid'
+import { v4 } from 'uuid'
+
+const isSingleUserMode = process.env.SINGLE_USER_MODE === 'true'
 
 const handleSockets = (app: any) => {
   return (io: any) => {
@@ -10,15 +12,29 @@ const handleSockets = (app: any) => {
     io.on('connection', async function (socket: any) {
       console.log('CONNECTION ESTABLISHED')
       // Disable auth for now
-      // const sessionId = socket.handshake.headers.authorization.split(' ')[1]
 
-      // if (!sessionId) throw new Error('No session id provided for handshake')
-      // Authenticate with the auth headers here
+      // todo wound up using a custom header here for the handshake.
+      // Using the standard authorization header was causing issues with feathers auth
+      const sessionId =
+        socket.handshake.headers.socketauthorization.split(' ')[1]
 
-      // hard coding user for now.
-      const id = v4()
-      const user = {
-        id: id,
+      // auth services will verify the token
+      const payload = await app
+        .service('authentication')
+        .verifyAccessToken(sessionId)
+
+      // user will be set to the payload if we are not in single user mode
+      let user
+
+      // Single user mode is for local usage of magick.  If we are in the cloud, we want auth here.
+      if (isSingleUserMode) {
+        const id = v4()
+        user = {
+          id: id,
+        }
+      } else {
+        if (!sessionId) throw new Error('No session id provided for handshake')
+        user = payload.user
       }
       // Attach the user info to the params or use in services
       socket.feathers.user = user
