@@ -4,11 +4,23 @@ import {
   AuthenticationResult,
   AuthenticationService,
 } from '@feathersjs/authentication'
+import { jwtDecrypt } from 'jose'
+import hkdf from '@panva/hkdf'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
 import jsonwebtoken, { Secret, VerifyOptions } from 'jsonwebtoken'
 
 export interface JwtVerifyOptions extends VerifyOptions {
   algorithm?: string | string[]
+}
+
+async function getDerivedEncryptionKey(secret: string | Buffer) {
+  return await hkdf(
+    'sha256',
+    secret,
+    '',
+    'NextAuth.js Generated Encryption Key',
+    32
+  )
 }
 
 export class CloudJwtService extends AuthenticationService {
@@ -26,31 +38,21 @@ export class CloudJwtService extends AuthenticationService {
   }
 
   async verifyAccessToken(
-    accessToken: string,
+    token: string,
     optsOverride?: JwtVerifyOptions,
-    secretOverride?: Secret
+    secretOverride?: string
   ) {
-    const { secret, jwtOptions } = this.configuration
-    const jwtSecret = secretOverride || secret
-    const options = {
-      ...jwtOptions,
-      ...optsOverride,
-    }
-    const { algorithm } = options
-
-    // Normalize the `algorithm` setting into the algorithms array
-    if (algorithm && !options.algorithms) {
-      // @ts-ignore
-      options.algorithms = (Array.isArray(algorithm)
-        ? algorithm
-        : [algorithm]) as unknown as Algorithm[]
-      delete options.algorithm
-    }
+    const { secret } = this.configuration
+    const encryptionSecret = await getDerivedEncryptionKey(
+      secretOverride || secret
+    )
 
     try {
-      const verified = jsonwebtoken.verify(accessToken, jwtSecret, options)
+      const { payload } = await jwtDecrypt(token, encryptionSecret, {
+        clockTolerance: 15,
+      })
 
-      return verified as any
+      return payload as any
     } catch (error: any) {
       throw new NotAuthenticated(error.message, error)
     }
@@ -61,9 +63,8 @@ export class CloudJwtService extends AuthenticationService {
     params: AuthenticationParams,
     ...allowed: string[]
   ): Promise<AuthenticationResult> {
-    console.log('authenticate', authentication, params, allowed)
+    // console.log('authenticate', authentication, params, allowed)
     const result = await super.authenticate(authentication, params, ...allowed)
-    console.log('authenticate result', result)
     return result
   }
 }

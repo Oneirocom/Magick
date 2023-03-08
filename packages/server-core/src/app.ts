@@ -68,7 +68,7 @@ app.set('authentication', {
     header: { typ: 'access' },
     audience: 'https://yourdomain.com',
     issuer: 'feathers',
-    algorithm: 'HS256',
+    algorithm: 'A256GCM',
     expiresIn: '1d',
   },
 })
