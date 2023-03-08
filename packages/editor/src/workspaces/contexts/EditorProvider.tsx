@@ -77,7 +77,7 @@ const EditorProvider = ({ children }) => {
 
   const buildEditor = async (container, _spell, tab, magick) => {
     // eslint-disable-next-line no-console
-    
+
     const newEditor = await initEditor({
       container,
       pubSub,
@@ -98,7 +98,7 @@ const EditorProvider = ({ children }) => {
   }
 
   const run = () => {
-    // 
+    //
   }
 
   const undo = () => {
@@ -139,12 +139,12 @@ const EditorProvider = ({ children }) => {
 
   const loadGraph = graph => {
     if (!editorRef.current) return
-    
+
     editorRef.current.loadGraph(graph)
   }
 
   const setContainer = () => {
-    // 
+    //
   }
 
   const publicInterface = {
@@ -172,14 +172,13 @@ const RawEditor = ({ tab, children }) => {
   const config = useConfig()
   const spellApi = getSpellApi(config)
 
-  const [getSpell, { data: spell, isLoading }] = spellApi.useLazyGetSpellByIdQuery()
+  const [getSpell, { data: spell, isLoading }] =
+    spellApi.useLazyGetSpellByIdQuery()
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
   // This will be the main interface between magick and rete
   const reteInterface = useMagickInterface()
   useEffect(() => {
-    
-    
     if (!tab || loaded) return
     getSpell({
       spellName: tab.name,
@@ -200,7 +199,6 @@ const RawEditor = ({ tab, children }) => {
           height: '100vh',
           position: 'absolute',
           backgroundColor: '#191919',
-          backgroundImage: `url('${gridimg}')`,
         }}
         onDragOver={e => {
           e.preventDefault()
@@ -208,6 +206,7 @@ const RawEditor = ({ tab, children }) => {
         onDrop={e => {}}
       >
         <div
+          style={{ width: '100%', height: '100%' }}
           ref={el => {
             if (el && !loaded && spell) {
               buildEditor(el, spell.data[0], tab, reteInterface)

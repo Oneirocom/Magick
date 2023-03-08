@@ -7,6 +7,7 @@ import CommentPlugin from './plugins/commentPlugin'
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
+import gridimg from './grid.png'
 
 import {
   // CachePlugin,
@@ -69,6 +70,18 @@ export const initEditor = function ({
   const editor = new MagickEditor('demo@0.1.0', container)
 
   editorTabMap[tab.id] = editor
+
+  container.style.backgroundImage = `url('${gridimg}')`
+  container.style.transition = 'transform 330ms ease-in-out'
+
+  function zoomCanvas(zoomFactor) {
+    container.style.transform = `scale(${zoomFactor})`
+  }
+
+  container.addEventListener('wheel', event => {
+    const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1
+    zoomCanvas(zoomFactor)
+  })
 
   // Set up the reactcontext pubsub on the editor so rete components can talk to react
   editor.pubSub = pubSub
