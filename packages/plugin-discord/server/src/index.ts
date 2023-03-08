@@ -3,17 +3,20 @@ import { discord_client } from './connectors/discord'
 type StartDiscordArgs = {
   agent: any
   spellRunner: any
-  data: any
   worldManager: WorldManager
 }
 
 function getAgentMethods() {
   async function startDiscord({
-    data,
     agent,
     spellRunner,
     worldManager,
   }: StartDiscordArgs) {
+    const { data } = agent
+    if(!data) return console.log("No data for this agent")
+    if(!data.discord_enabled) return console.log("Discord is not enabled for this agent")
+    if(!data.discord_api_key) return console.log("Discord API key is not set for this agent")
+
     console.log('starting discord')
       const {
       discord_api_key,
@@ -58,7 +61,7 @@ function getAgentMethods() {
 
   async function stopDiscord(agent) {
     console.log('Inside Kill Method')
-    if (!agent.discord) throw new Error("Discord isn't running, can't stop it")
+    if (!agent.discord) return console.warn("Discord isn't running, can't stop it")
     try {
       await agent.discord.destroy()
       agent.discord = null

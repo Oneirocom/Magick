@@ -11,14 +11,15 @@ type AgentData = {
   publicVariables: any[]
   projectId: string
   spellManager: SpellManager
-  agent?: Object
+  agent?: any
+  enabled: boolean
 }
 
 export class Agent {
   name = ''
   //Clients
   id: any
-  secrets: Object
+  secrets: any
   publicVariables: any[]
   data: AgentData
   router: any
@@ -28,6 +29,7 @@ export class Agent {
   projectId: string
   worldManager: WorldManager
   agentManager: AgentManager
+  spellHandler: any
 
   constructor(data: AgentData, agentManager: AgentManager) {
     console.log('data', data)
@@ -52,15 +54,13 @@ export class Agent {
         })
       ).data[0]
 
-      const spellRunner = await this.spellManager.load(spell)
+      this.spellHandler = await this.spellManager.load(spell)
       const agentStartMethods = pluginManager.getAgentStartMethods()
       for (const method of Object.keys(agentStartMethods)) {
         await agentStartMethods[method]({
           agentManager,
-          projectId: data.projectId,
-          data: data.data,
           agent: this,
-          spellRunner,
+          spellHandler: this.spellHandler,
           worldManager: this.worldManager,
         })
       }
@@ -72,7 +72,12 @@ export class Agent {
     console.log('agentStopMethods', agentStopMethods)
     for (const method of Object.keys(agentStopMethods)) {
       console.log('method', method)
-      agentStopMethods[method](this)
+      agentStopMethods[method]({
+        agentManager: this.agentManager,
+        agent: this,
+        spellHandler: this.spellHandler,
+        worldManager: this.worldManager
+       })
     }
   }
 }

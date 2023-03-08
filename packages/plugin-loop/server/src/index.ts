@@ -10,11 +10,13 @@ class LoopManager {
   agentManager: any
   constructor(agentManager) {
     this.agentManager = agentManager
-    this.agentManager.registerAddAgentHandler(this.addAgent.bind(this))
-    this.agentManager.registerRemoveAgentHandler(this.removeAgent.bind(this))
+    this.agentManager.registerAddAgentHandler(({agent}) => this.addAgent({ agent }))
+    this.agentManager.registerRemoveAgentHandler(({agent}) => this.removeAgent({ agent }))
   } 
 
   addAgent({ agent }) {
+    if(!agent.data) return console.log("No data for this agent", agent.id)
+    if(!agent.data.loop_enabled) return console.log("Loop is not enabled for this agent")
     const loopInterval = parseInt(agent.data.loop_interval) * 1000
     if (!loopInterval) {
       return console.error('Loop Interval must be a number greater than 0')
@@ -31,6 +33,7 @@ class LoopManager {
         entities: [],
       })
     }, loopInterval)
+    console.log('Added agent to loop', agent.id)
   }
 
   removeAgent({ agent }) {
@@ -46,7 +49,7 @@ function getAgentMethods() {
   return {
     start: async ({ spellHandler, agent, agentManager }: StartLoopArgs) => {
       if(!loopManager) loopManager = new LoopManager(agentManager)
-      agent.spellHandler = spellHandler
+      agent.data.spellHandler = spellHandler
       loopManager.addAgent({ agent })
     },
     stop: async ({ agent }) => {

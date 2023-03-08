@@ -157,7 +157,6 @@ export class ModuleManager {
     }
 
     if (context?.socketInfo?.targetSocket) {
-      console.log('data', data)
       const triggeredNode = this.getTriggeredNode(
         data,
         context.socketInfo.targetSocket

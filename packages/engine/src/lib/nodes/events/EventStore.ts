@@ -50,6 +50,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     })
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
+    const senderInput = new Rete.Input('sender', 'Sender Override', stringSocket)
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
     const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
 
@@ -61,6 +62,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     return node
       .addInput(dataInput)
       .addInput(contentInput)
+      .addInput(senderInput)
       .addInput(eventInput)
       .addInput(embedding)
       .addOutput(dataOutput)
@@ -78,6 +80,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     } = context
 
     const event = inputs['event'][0] as Event
+    const sender = (inputs['sender'] && inputs['sender'][0]) as string
     const content = (inputs['content'] && inputs['content'][0]) as string
     const embedding = (inputs['embedding'] &&
       inputs['embedding'][0]) as number[]
@@ -90,8 +93,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     if (!content) return console.log('Content is null, not storing event')
 
     console.log('event is', event)
-
-    const data = { ...event, projectId, content, type } as any
+    const data = { ...event, sender: sender ?? event.sender, projectId, content, type } as any
     if (embedding) data.embedding = embedding
 
     if (content && content !== '') {
