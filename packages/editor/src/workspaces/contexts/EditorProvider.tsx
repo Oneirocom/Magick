@@ -8,7 +8,7 @@ import React, {
   useState,
   useEffect,
 } from 'react'
-
+import styles from './styles.module.scss'
 import { getSpellApi } from '../../state/api/spells'
 import { useConfig } from '../../contexts/ConfigProvider'
 
@@ -193,7 +193,7 @@ const RawEditor = ({ tab, children }) => {
   return (
     <>
       <div
-        style={{ width: '100vh', height: '100vh' }}
+        className={styles['editor-container']}
         ref={el => {
           if (el && !loaded && spell) {
             buildEditor(el, spell.data[0], tab, reteInterface)
