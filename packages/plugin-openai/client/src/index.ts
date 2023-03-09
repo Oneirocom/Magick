@@ -1,13 +1,11 @@
-import {
-  ClientPlugin,
-} from '@magickml/engine'
+import { ClientPlugin } from '@magickml/engine'
 
 const OpenAIPlugin = new ClientPlugin({
   name: 'OpenAIPlugin',
   secrets: [
     {
       name: 'OpenAI API Key',
-      key: 'openai_api_key',
+      key: 'openai-api-key',
       global: true,
     },
   ],
