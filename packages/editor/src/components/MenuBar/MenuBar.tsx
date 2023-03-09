@@ -41,6 +41,8 @@ const MenuBar = () => {
     $EXPORT,
     $UNDO,
     $REDO,
+    $MULTI_SELECT_COPY,
+    $MULTI_SELECT_PASTE
   } = events
 
   const useToggle = (initialValue = false) => {
@@ -146,6 +148,16 @@ const MenuBar = () => {
     publish($REDO(activeTabRef.current.id))
   }
 
+  const onMultiSelectCopy = () => {
+    if (!activeTabRef.current) return
+    publish($MULTI_SELECT_COPY(activeTabRef.current.id))
+  }
+
+  const onMultiSelectPaste = () => {
+    if (!activeTabRef.current) return
+    publish($MULTI_SELECT_PASTE(activeTabRef.current.id))
+  }
+
   const toggleSave = () => {
     dispatch(toggleAutoSave())
   }
@@ -192,6 +204,14 @@ const MenuBar = () => {
         redo: {
           onClick: onRedo,
           hotKey: 'option+shift+z',
+        },
+        copy: {
+          onClick: onMultiSelectCopy,
+          hotKey: 'option+c'
+        },
+        paste: {
+          onClick: onMultiSelectPaste,
+          hotKey: 'option+v'
         },
       },
     },
