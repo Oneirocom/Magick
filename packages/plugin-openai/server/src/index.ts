@@ -5,7 +5,7 @@ const OpenAIPlugin = new ServerPlugin({
   secrets: [
     {
       name: 'OpenAI API Key',
-      key: 'openai_api_key',
+      key: 'openai-api-key',
       global: true,
     },
   ],
