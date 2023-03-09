@@ -109,7 +109,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
     } = eventValue as Event
 
     if (!silent) node.display(event)
-
+    console.log('sender, ', sender)
     return {
       content,
       sender,

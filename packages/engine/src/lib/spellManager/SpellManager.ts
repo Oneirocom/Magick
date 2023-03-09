@@ -75,10 +75,8 @@ export default class SpellManager {
   }
 
   async load(spell: Spell, overload = false) {
-    console.log('trying to load spell', spell.id, spell.name)
     if (!spell) throw new Error('No spell provided to load')
     if (this.spellRunnerMap.has(spell.id) && !overload){
-      console.log('spell already loaded', spell.id, spell.name)
       return this.getSpellRunner(spell.id)
     }
 
@@ -86,8 +84,6 @@ export default class SpellManager {
       magickInterface: this.magickInterface,
       socket: this.socket,
     })
-
-    console.log('created new spell runner', spellRunner)
 
     await spellRunner.loadSpell(spell)
 
@@ -99,7 +95,6 @@ export default class SpellManager {
   async run(spellId: string, inputs: Record<string, any>, secrets: Record<string, string>, publicVariables) {
     const runner = this.getSpellRunner(spellId)
     
-    console.log('calling runComponent from SpellManager.ts')
     const result = await runner?.runComponent({
       inputs,
       secrets,

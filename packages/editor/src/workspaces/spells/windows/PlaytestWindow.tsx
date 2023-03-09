@@ -62,14 +62,14 @@ const Playtest = ({ tab }) => {
 
   const defaultPlaytestData = {
     sender: 'playtestSender',
-    observer: 'playtestObserver',
+    observer: 'Agent',
     type: 'playtest',
     client: 'playtest',
     channel: 'playtest',
     channelType: 'playtest',
     projectId: config.projectId,
     agentId: 'preview',
-    entities: ['playtestSender', 'playtestObserver'],
+    entities: ['playtestSender', 'Agent'],
   }
 
   const scrollbars = useRef<any>()
@@ -104,8 +104,9 @@ const Playtest = ({ tab }) => {
 
   const printToConsole = useCallback(
     (_, _text) => {
-      const text = typeof _text === 'object' ? JSON.stringify(_text) : _text
-      const newHistory = [...history, text]
+      console.log('_text', _text)
+      const text = (`Agent: ` + _text).split('\n')
+      const newHistory = [...history, ...text]
       setHistory(newHistory as [])
     },
     [history]
@@ -190,10 +191,11 @@ const Playtest = ({ tab }) => {
     let toSend = value
     setValue('')
 
-    const json = localState?.playtestData.replace(
-      /(['"])?([a-z0-9A-Z_]+)(['"])?:/g,
-      '"$2": '
-    )
+    const json = localState?.playtestData
+    // .replace(
+    //   /(['"])?([a-z0-9A-Z_]+)(['"])?:/g,
+    //   '"$2": '
+    // )
 
     if (!json) {
       enqueueSnackbar('No data provided', {
@@ -296,7 +298,7 @@ const Playtest = ({ tab }) => {
     dispatch(
       upsertLocalState({
         id: tab.id,
-        playtestData: dataText ?? JSON.stringify(defaultPlaytestData),
+        playtestData: dataText ?? defaultPlaytestData,
       })
     )
   }
@@ -386,7 +388,10 @@ const Playtest = ({ tab }) => {
         ></div>
         <div className={css['playtest-output']}>
           <Scrollbars ref={ref => (scrollbars.current = ref)}>
-            <ul>{history.map(printItem)}</ul>
+            <ul>{history.map((printItem: string, key: any) => {
+              return <li key={key}>{printItem}</li>
+            })}
+            </ul>
           </Scrollbars>
         </div>
         <label htmlFor="playtest-input" style={{ display: 'none' }}>
