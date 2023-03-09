@@ -8,6 +8,7 @@ type AgentData = {
   data: any
   name: string
   secrets: string
+  rootSpell: string
   publicVariables: any[]
   projectId: string
   spellManager: SpellManager
@@ -29,6 +30,7 @@ export class Agent {
   worldManager: WorldManager
   agentManager: AgentManager
   spellRunner: any
+  rootSpell: any
 
   updateInterval: any
 
@@ -39,6 +41,7 @@ export class Agent {
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
     this.data = agentData
+    this.rootSpell = JSON.parse(agentData.rootSpell ?? '{}')
     this.agentManager = agentManager
     this.name = agentData.name ?? 'agent'
     this.projectId = agentData.projectId
@@ -51,11 +54,19 @@ export class Agent {
     (async () => {
       const spell = (
         await app.service('spells').find({
-          query: { projectId: agentData.projectId },
+          query: {
+            projectId: agentData.projectId,
+            id: this.rootSpell.id 
+          },
         })
       ).data[0]
 
-      this.spellRunner = await this.spellManager.load(spell)
+      // if the spell has changed, override it
+      const spellData = JSON.stringify(spell)
+      const rootSpellData = JSON.stringify(this.rootSpell)
+      let override = spellData !== rootSpellData
+
+      this.spellRunner = await this.spellManager.load(spell, override)
       const agentStartMethods = pluginManager.getAgentStartMethods()
       for (const method of Object.keys(agentStartMethods)) {
         await agentStartMethods[method]({

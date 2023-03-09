@@ -145,6 +145,8 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     console.log('projectId', projectId)
 
     const currentSpell = magick.getCurrentSpell()
+    console.log('currentSpell')
+    console.log(currentSpell)
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
       acc[key] = value[0]
       return acc
@@ -192,7 +194,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       prompt,
       temperature,
       max_tokens,
-      model: modelName ?? 'text-davinci-003',
+      model: modelName ?? 'text-davinci-002',
       top_p,
       frequency_penalty,
       presence_penalty,

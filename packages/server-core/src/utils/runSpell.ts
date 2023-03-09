@@ -13,11 +13,16 @@ export type RunSpellArgs = {
 }
 
 export const runSpell = async ({ id, inputs, inputFormatter, projectId, secrets, publicVariables }: RunSpellArgs) => {
-  const spell = (await app.service('spells').find({ query: { projectId, id: id } })).data[0] as any
+  console.log('calling runSpell from runSpell.ts')
+  console.log('id', id)
+  const spells = (await app.service('spells').find({ query: { projectId, id: id } })).data
+  const spell = spells[0] as any
   
   if (!spell?.graph) {
     throw new ServerError('not-found', `Spell with id ${id} not found`)
   }
+
+
 
   const graph = spell.graph as unknown as GraphData
   const magickInterface = buildMagickInterface() as any
