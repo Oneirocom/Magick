@@ -54,27 +54,27 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
   subscriptionMap: Record<string, Function> = {}
 
-  unsubscribe?: () => void
+  // unsubscribe?: () => void
 
-  subscribeToPlaytest(node: MagickNode) {
-    const { onPlaytest } = this.editor?.magick as EditorContext
+  // subscribeToPlaytest(node: MagickNode) {
+  //   const { onPlaytest } = this.editor?.magick as EditorContext
 
-    // check node for the right data attribute
-    if (onPlaytest) {
-      // store the unsubscribe function in our node map
-      this.subscriptionMap[node.id] = onPlaytest((text: string) => {
-        // if the node doesnt have playtest toggled on, do nothing
-        // const playtestToggle = node.data.playtestToggle as unknown as {
-        //   receivePlaytest: boolean
-        // }
+  //   // check node for the right data attribute
+  //   if (onPlaytest) {
+  //     // store the unsubscribe function in our node map
+  //     this.subscriptionMap[node.id] = onPlaytest((text: string) => {
+  //       // if the node doesnt have playtest toggled on, do nothing
+  //       // const playtestToggle = node.data.playtestToggle as unknown as {
+  //       //   receivePlaytest: boolean
+  //       // }
 
-        // if (!playtestToggle.receivePlaytest) return
+  //       // if (!playtestToggle.receivePlaytest) return
 
-        // attach the text to the nodes data for access in worker
-        node.data.text = text
-      })
-    }
-  }
+  //       // attach the text to the nodes data for access in worker
+  //       // node.data.text = text
+  //     })
+  //   }
+  // }
 
   destroyed(node: MagickNode) {
     if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
@@ -126,7 +126,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     }
 
     // subscribe the node to the playtest input data stream
-    this.subscribeToPlaytest(node)
+    // this.subscribeToPlaytest(node)
 
     // const data = node?.data?.playtestToggle as
     //   | {
