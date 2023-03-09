@@ -211,7 +211,24 @@ const EventHandler = ({ pubSub, tab }) => {
     const spell = { ...spellRef.current }
     spell.graph = serialize() as GraphData
 
+    // remove secrets, if there are any
+    function recurse (obj) {
+      for (const key in obj) {
+        if (key === 'secrets') {
+          obj[key] = {}
+          console.log('removed secrets')
+        }
+        if (typeof obj[key] === 'object') {
+          recurse(obj[key])
+        }
+      }
+    }
+
+    recurse(spell)
+
+    // traverse the json. replace any 
     const json = JSON.stringify(spell)
+
 
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))

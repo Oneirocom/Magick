@@ -105,7 +105,7 @@ const AgentManagerWindow = () => {
             variant: 'error',
           })
         } else {
-          enqueueSnackbar('Entity with id: ' + id + ' deleted successfully', {
+          enqueueSnackbar('Agent with id: ' + id + ' deleted successfully', {
             variant: 'success',
           })
         }

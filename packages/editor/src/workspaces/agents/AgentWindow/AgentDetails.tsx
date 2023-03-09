@@ -59,9 +59,23 @@ const AgentDetails = ({
       })
   }
 
-  const exportEntity = () => {
+  const exportAgent = () => {
     const fileName = 'agent'
-    const json = JSON.stringify(selectedAgentData)
+
+    const exportAgentData = {...selectedAgentData}
+
+    exportAgentData.secrets = {}
+
+    // HACK: iterate through _data and remove any keys that include api, token, or secret
+    Object.keys(exportAgentData.data).forEach(key => {
+      if (key.includes('api') || key.includes('token') || key.includes('secret')) {
+        delete exportAgentData.data[key]
+        console.log('deleted key', key)
+      }
+    })
+
+    const json = JSON.stringify(exportAgentData)
+
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))
     const link = document.createElement('a')
@@ -171,7 +185,7 @@ const AgentDetails = ({
               color: 'white',
               backgroundColor: 'purple',
             }}
-            onClick={() => exportEntity()}
+            onClick={() => exportAgent()}
           >
             Export
           </Button>
