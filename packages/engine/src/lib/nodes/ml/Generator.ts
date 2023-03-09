@@ -215,7 +215,11 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
 
       const raw = choice.text
       const result = raw
-      const composed = `${prompt}${result}`
+      // trim any newlines from the beginning and end
+        .replace(/^\n+|\n+$/g, '')
+        // trim any spaces from the beginning and end
+        .replace(/^\s+|\s+$/g, '')
+      const composed = `${prompt} ${result}`
 
       console.log('result', result)
 

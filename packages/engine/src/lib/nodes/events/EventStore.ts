@@ -80,10 +80,9 @@ export class EventStore extends MagickComponent<Promise<void>> {
     } = context
 
     const event = inputs['event'][0] as Event
-    const sender = (inputs['sender'] && inputs['sender'][0]) as string
-    const content = (inputs['content'] && inputs['content'][0]) as string
-    const embedding = (inputs['embedding'] &&
-      inputs['embedding'][0]) as number[]
+    const sender = (inputs['sender'] ? inputs['sender'][0] : null) as string
+    const content = (inputs['content'] ? inputs['content'][0] : null) as string
+    const embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[]
     const typeData = node?.data?.type as string
     const type =
       typeData !== undefined && typeData.length > 0
@@ -92,7 +91,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     if (!content) return console.log('Content is null, not storing event')
 
-    console.log('event is', event)
+    console.log('sender is', sender ?? event.sender)
     const data = { ...event, sender: sender ?? event.sender, projectId, content, type } as any
     if (embedding) data.embedding = embedding
 

@@ -15,10 +15,6 @@ export class Module {
     secrets,
     publicVariables,
   }) {
-    console.log('read', '********')
-    console.log('inputs', inputs, '********')
-    console.log('secrets', secrets, '********')
-    console.log('publicVariables', publicVariables, '********')
     this.inputs = inputs
     this.secrets = secrets || {} as Record<string, string>
     this.publicVariables = publicVariables || {} as Record<string, string>

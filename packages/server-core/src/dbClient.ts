@@ -45,13 +45,13 @@ const getDatabaseConfig = () => {
         afterCreate: function (conn, done) {
           if(isM1) {
             console.warn(
-              'Error loading extensions, vectors currently not supported on ARM64/M1'
+              'Could not load VSS extension, vectors currently not supported on ARM64/M1 (this is fine)'
             )
             return done(null, conn)
           }
           if(isWindows) {
             console.warn(
-              'Error loading extensions, vectors currently not supported on Win64'
+              'Could not load VSS extension, vectors currently not supported on Win32 (this is fine)'
             )
             return done(null, conn)
           }
@@ -77,7 +77,7 @@ const getDatabaseConfig = () => {
                 })
               } catch (err) {
                 console.warn(
-                  'Error loading extensions, vectors currently not supported on Win64 or ARM64/M1'
+                  'Could not load extensions, vectors currently not supported on Win32 or ARM64/M1 (this is fine)'
                 )
               }
               done(null, conn)
