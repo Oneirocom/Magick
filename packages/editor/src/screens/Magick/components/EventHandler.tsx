@@ -50,7 +50,7 @@ const EventHandler = ({ pubSub, tab }) => {
     spellRef.current = spell?.data[0]
   }, [spell])
 
-  const { serialize, getEditor, undo, redo, del } = useEditor()
+  const { serialize, getEditor, undo, redo, del, multiSelectCopy, multiSelectPaste } = useEditor()
 
   const { events, subscribe } = pubSub
 
@@ -58,6 +58,8 @@ const EventHandler = ({ pubSub, tab }) => {
     $DELETE,
     $UNDO,
     $REDO,
+    $MULTI_SELECT_COPY,
+    $MULTI_SELECT_PASTE,
     $SAVE_SPELL,
     $SAVE_SPELL_DIFF,
     $CREATE_AVATAR_WINDOW,
@@ -206,6 +208,14 @@ const EventHandler = ({ pubSub, tab }) => {
     del()
   }
 
+  const onMultiSelectCopy = () => {
+    multiSelectCopy()
+  }
+
+  const onMultiSelectPaste = () => {
+    multiSelectPaste()
+  }
+
   const onExport = async () => {
     // refetch spell from local DB to ensure it is the most up to date
     const spell = { ...spellRef.current }
@@ -251,6 +261,8 @@ const EventHandler = ({ pubSub, tab }) => {
     [$UNDO(tab.id)]: onUndo,
     [$REDO(tab.id)]: onRedo,
     [$DELETE(tab.id)]: onDelete,
+    [$MULTI_SELECT_COPY(tab.id)]: onMultiSelectCopy,
+    [$MULTI_SELECT_PASTE(tab.id)]: onMultiSelectPaste,
     [$PROCESS(tab.id)]: onProcess,
     [$SAVE_SPELL_DIFF(tab.id)]: onSaveDiff,
   }
