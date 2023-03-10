@@ -286,16 +286,6 @@ class ClientPluginManager extends PluginManager {
     })
     return inputTypes
   }
-
-  getOutputTypes() {
-    const outputTypes = [] as any[]
-    this.pluginList.forEach(plugin => {
-      plugin.outputTypes.forEach(outputType => {
-        outputTypes.push(outputType)
-      })
-    })
-    return outputTypes
-  }
 }
 
 class ServerPluginManager extends PluginManager {

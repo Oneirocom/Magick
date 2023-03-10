@@ -1,5 +1,5 @@
 import { eventSocket, ServerPlugin, WorldManager } from '@magickml/engine'
-import { discord_client } from './connectors/discord'
+import { DiscordConnector } from './connectors/discord'
 type StartDiscordArgs = {
   agent: any
   spellRunner: any
@@ -43,7 +43,7 @@ function getAgentMethods() {
       tiktalknet_url,
     })
     console.log('discord_api_key', discord_api_key)
-    const discord = new discord_client({
+    const discord = new DiscordConnector({
       agent,
       discord_api_key,
       discord_starting_words,
@@ -79,6 +79,19 @@ function getAgentMethods() {
   }
 }
 
+async function handleResponse(
+  {
+    output,
+    agent,
+    event
+  }
+) {
+  console.log('event is', event)
+  console.log('event.channel is', event.channel)
+  await agent.discord.sendMessageToChannel(event.channel, output)
+  console.log('********* SENT MESSAGE TO DISCORD', agent.id, output, event)
+}
+
 const DiscordPlugin = new ServerPlugin({
   name: 'DiscordPlugin',
   inputTypes: [
@@ -86,8 +99,17 @@ const DiscordPlugin = new ServerPlugin({
     { name: 'Discord (Text)', trigger: true, socket: eventSocket },
   ],
   outputTypes: [
-    { name: 'Discord (Voice)', trigger: false, socket: eventSocket },
-    { name: 'Discord (Text)', trigger: false, socket: eventSocket },
+    { name: 'Discord (Voice)', trigger: true, socket: eventSocket, handler: async ({
+      output, agent, event
+    }) => {
+      await handleResponse({output, agent, event})
+    }},
+    { name: 'Discord (Text)', trigger: true, socket: eventSocket, handler: async ({
+      output, agent, event
+    }) => {
+      console.log('output is', output)
+      await handleResponse({output, agent, event})
+    }},
   ],
   agentMethods: getAgentMethods(),
   secrets: [{
