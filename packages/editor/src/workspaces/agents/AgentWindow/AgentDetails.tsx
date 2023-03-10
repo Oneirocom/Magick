@@ -21,14 +21,13 @@ const AgentDetails = ({
   updateCallback,
 }) => {
   const [spellList, setSpellList] = useState<any[]>([])
-  const [rootSpell, setRootSpell] = useState<any>({})
   const config = useConfig()
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
 
   const update = id => {
     const _data = selectedAgentData
-    if (_data.hasOwnProperty('id')) {
+    if (_data['id']) {
       delete _data.id
     }
     console.log('update', _data)
@@ -59,9 +58,23 @@ const AgentDetails = ({
       })
   }
 
-  const exportEntity = () => {
+  const exportAgent = () => {
     const fileName = 'agent'
-    const json = JSON.stringify(selectedAgentData)
+
+    const exportAgentData = {...selectedAgentData}
+
+    exportAgentData.secrets = {}
+
+    // HACK: iterate through _data and remove any keys that include api, token, or secret
+    Object.keys(exportAgentData.data).forEach(key => {
+      if (key.includes('api') || key.includes('token') || key.includes('secret')) {
+        delete exportAgentData.data[key]
+        console.log('deleted key', key)
+      }
+    })
+
+    const json = JSON.stringify(exportAgentData)
+
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))
     const link = document.createElement('a')
@@ -77,7 +90,7 @@ const AgentDetails = ({
   }
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )
@@ -85,15 +98,6 @@ const AgentDetails = ({
 
       setSpellList(json.data)
     })()
-    if (selectedAgentData?.rootSpell !== '{}') {
-      console.log(
-        'JSON.parse(selectedAgentData.rootSpell)',
-        JSON.parse(selectedAgentData.rootSpell)
-      )
-      setRootSpell(JSON.parse(selectedAgentData.rootSpell).name)
-    } else {
-      setRootSpell({})
-    }
   }, [])
 
   return (
@@ -171,7 +175,7 @@ const AgentDetails = ({
               color: 'white',
               backgroundColor: 'purple',
             }}
-            onClick={() => exportEntity()}
+            onClick={() => exportAgent()}
           >
             Export
           </Button>
@@ -198,12 +202,9 @@ const AgentDetails = ({
           id="rootSpell"
           value={JSON.parse(selectedAgentData.rootSpell).name || 'default'}
           onChange={event => {
-            console.log('event', event.target.value)
-            setRootSpell(event.target.value)
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value
             )
-            console.log('newRootSpell', newRootSpell)
             setSelectedAgentData({
               ...selectedAgentData,
               rootSpell: JSON.stringify(newRootSpell),
@@ -271,10 +272,10 @@ const AgentDetails = ({
           )
         })}
       </div>
-      {selectedAgentData.publicVariables &&
-        selectedAgentData.publicVariables !== '{}' && (
+      {selectedAgentData.publicVariables !== '{}' && (
           <AgentPubVariables
             setPublicVars={data => {
+              console.log('new daa', data)
               setSelectedAgentData({
                 ...selectedAgentData,
                 publicVariables: JSON.stringify(data),

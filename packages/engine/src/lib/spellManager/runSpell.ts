@@ -102,13 +102,12 @@ class RunSpell {
    * component, and ran the one triggered rather than this slightly hacky hard coded
    * method.
    */
-  async runComponent({inputs, componentName, secrets, publicVariables}: RunComponentArgs) {
+  async runComponent({inputs, componentName, secrets, agent, publicVariables}: RunComponentArgs) {
     // ensaure we run from a clean sloate
     this._resetTasks()
 
-    console.log('reading module - runSpell.ts')
     // laod the inputs into module memory
-    this.module.read({inputs, secrets, publicVariables})
+    this.module.read({inputs, secrets, agent, publicVariables})
 
     const component = this._getComponent(componentName as string) as ModuleComponent
     
