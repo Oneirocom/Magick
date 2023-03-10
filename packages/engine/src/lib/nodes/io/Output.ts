@@ -11,7 +11,7 @@ import {
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { pluginManager } from '../../plugin'
 import { SwitchControl } from '../../dataControls/SwitchControl'
-import { triggerSocket, anySocket } from '../../sockets'
+import { triggerSocket, anySocket, eventSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 const info = `The output component will pass values out from your spell.  You can have multiple outputs in a spell and all output values will be collected. It also has an option to send the output to the playtest area for easy testing.`
 
@@ -51,9 +51,10 @@ export class Output extends MagickComponent<void> {
     )
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const textInput = new Rete.Input('input', 'Outputs', anySocket, true)
+    const event = new Rete.Input('event', 'Even Override', eventSocket)
     const output = new Rete.Output('output', 'Output', anySocket)
 
-    const values = [...defaultOutputTypes]
+    const values = [...defaultOutputTypes, ...pluginManager.getOutputTypes()]
     node.data.isOutput = true;
     node.data.name = node.data.name ?? `Output - ${values[0].name}`
 
@@ -92,6 +93,7 @@ export class Output extends MagickComponent<void> {
     return node
       .addInput(triggerInput)
       .addInput(textInput)
+      .addInput(event)
       .addOutput(triggerOutput)
       .addOutput(output)
   }
@@ -105,6 +107,7 @@ export class Output extends MagickComponent<void> {
     if (!inputs.input) throw new Error('No input provided to output component')
 
     const output = inputs.input.filter(Boolean)[0] as string
+    const event = inputs.event?.[0]
 
     const outputType = node.data.outputType
 
@@ -131,6 +134,31 @@ export class Output extends MagickComponent<void> {
     }
 
     if (!silent) node.display(output as string)
+
+    const outputType = node.data.outputType
+
+    if(module.agent) {
+      // find the outputType in the outputTypes array
+      const t = module.agent.outputTypes.find(t => t.name === outputType)
+
+      console.log('t is', t)
+
+      console.log('module', module)
+      
+      // find outputType in outputTypes where name is outputType
+      if(t) {
+        console.log('t is not null',  t)
+        if(!t.handler) {
+          console.error('output type handler is not defined', t)
+        } else {
+          t.handler({
+            output, 
+            agent: module.agent,
+            event
+          })
+        }
+      }
+    }
 
     return {
       output,

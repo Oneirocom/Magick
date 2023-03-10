@@ -32,6 +32,8 @@ export class Agent {
   spellRunner: any
   rootSpell: any
 
+  outputTypes = {}
+
   updateInterval: any
 
   constructor(agentData: AgentData, agentManager: AgentManager) {
@@ -64,7 +66,7 @@ export class Agent {
       // if the spell has changed, override it
       const spellData = JSON.stringify(spell)
       const rootSpellData = JSON.stringify(this.rootSpell)
-      let override = spellData !== rootSpellData
+      const override = spellData !== rootSpellData
 
       this.spellRunner = await this.spellManager.load(spell, override)
       const agentStartMethods = pluginManager.getAgentStartMethods()
@@ -76,6 +78,9 @@ export class Agent {
           worldManager: this.worldManager,
         })
       }
+
+      const outputTypes = pluginManager.getOutputTypes()
+      this.outputTypes = outputTypes
 
       this.updateInterval = setInterval(() => {
         // every second, update the agent, set updatedAt to now
