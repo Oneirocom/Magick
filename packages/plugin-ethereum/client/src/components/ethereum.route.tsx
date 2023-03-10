@@ -50,6 +50,12 @@ export const EthereumComponent: FC<any> = (props) => {
     chainId: contractChainParsed,
   })
 
+  const contract = useContract({
+    address: contractAddress,
+    abi: contractABI,
+    signerOrProvider: signer,
+  })
+
   const { connector, isConnected, address } = useAccount()
   const { disconnect } = useDisconnect()
   const { connect, connectors, error, isLoading, pendingConnector } =
@@ -57,6 +63,28 @@ export const EthereumComponent: FC<any> = (props) => {
       chainId: contractChainParsed,
     })
 
+  const makeid = length => {
+    let result = ''
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    const charactersLength = characters.length
+    let counter = 0
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength))
+      counter += 1
+    }
+    return result
+  }
+
+  useEffect(() => {
+    const newStr = makeid(8)
+    setFunctionParam(newStr)
+    const cFunctionList: string[] = []
+    for (const functionName in contract?.functions) {
+      cFunctionList.push(functionName)
+    }
+    setContractFunctions(cFunctionList)
+  }, [])
 
   const { config: contractConfig } = usePrepareContractWrite({
     address: `0x${contractAddress.substring(2, contractAddress.length)}`,
@@ -122,148 +150,186 @@ export const EthereumComponent: FC<any> = (props) => {
   const isCorrectNetwork = chain?.id === contractChainParsed
 
   return (
-    <div style={{ padding: '50px' }}>
-      <h2>Web3 Wallet</h2>
-      {!isConnected &&
-        connectors
-          .filter(x => x.ready && x.id !== connector?.id)
-          .map(x => (
-            <button key={x.id} onClick={() => connect({ connector: x })}>
-              {`Connect ${x.name}`}
-              {isLoading && x.id === pendingConnector?.id && ' (connecting)'}
-            </button>
-          ))}
-      {isConnected && (
-        <>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <span>{`Network: ${chain?.id} (${chain?.name})`}</span>
-            {!isCorrectNetwork && (
-              <span
-                style={{ marginLeft: '6px', color: 'red' }}
-              >{`Wrong network (please change network or add a custom for ${contractChain} chain)`}</span>
-            )}
-          </div>
-          <p>
-            {`Address: ${address}`} (
-            <a
-              href={`https://mumbai.polygonscan.com/address/${address}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              URL
-            </a>
-            )
-          </p>
-        </>
-      )}
-      {isConnected && !isCorrectNetwork && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginBottom: '12px',
-              gap: '20px',
-            }}
-          >
-            <span>RPC Endpoint (HTTP/S):</span>
-            <input
-              style={{ width: '400px' }}
-              value={DEFAULT_RPC}
-              placeholder="Enter RPC Endpoint here"
-            ></input>
-            <button
-              key="addCustomRpcHttp"
-              onClick={() => addCustomRpcHttp()}
-              disabled={!isConnected}
-              style={{ marginBottom: '12px' }}
-            >
-              Add Custom RPC
-            </button>
+    <div style={{ padding: '50px', fontSize: '12px' }}>
+      <h2>Contract</h2>
+      <div style={{ marginTop: '30px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div>
+            <span style={{ fontSize: '14px', fontWeight: 'bold', marginRight: '6px' }}>Network:</span>
+            <span>{contractChain}</span>
           </div>
           <div>
-            <button onClick={() => switchNetwork?.(contractChainParsed)}>
-              Change network
-            </button>
-          </div>
-        </div>
-      )}
-      {isConnected && (
-        <div>
-          <button
-            key="disconnect"
-            onClick={() => disconnect()}
-            disabled={!isConnected}
-            style={{ marginTop: '20px' }}
-          >
-            Disconnect
-          </button>
-        </div>
-      )}
-      <hr
-        style={{
-          marginTop: '40px',
-          marginBottom: '40px',
-          borderWidth: '1px',
-          borderColor: '#383838',
-        }}
-      />
-      <h2>Contract Information</h2>
-      <p>{`Network: ${contractChain}`}</p>
-      <p>
-        {`Address: ${contractAddress}`} (
-        <a
-          href={`https://mumbai.polygonscan.com/address/${contractAddress}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          URL
-        </a>
-        )
-      </p>
-      <h3>Contract Execution</h3>
-      <p>{`Function Name: ${contractFunction}`}</p>
-      <p>{`Function Param: ${functionParam} (${typeof functionParam})`}</p>
-      {isConnected && isCorrectNetwork && (
-        <>
-          {isCallSuccess && (
-            <p>
-              {`Transaction: ${lastTx}`} (
+            <span style={{ fontSize: '14px', fontWeight: 'bold', marginRight: '6px' }}>Address:</span>
+            <span>
+              {contractAddress} (
               <a
-                href={`https://mumbai.polygonscan.com/tx/${lastTx}`}
+                href={`https://mumbai.polygonscan.com/address/${contractAddress}`}
                 target="_blank"
                 rel="noreferrer"
               >
                 URL
-              </a>
-              )
-            </p>
-          )}
-          <button onClick={() => callContractFun()} disabled={!isConnected}>
-            Call
-          </button>
-          {isCallError && (
-            <p style={{ color: 'red' }}>{`Error: ${callError}`}</p>
-          )}
-          <h3>Contract Functions</h3>
-          <div>
-            <ul>
-              {contractFunctions &&
-                contractFunctions.map((f, i) => {
-                  const keyStr = `${i}-${f}`
-                  return <li key={keyStr}>- {f}</li>
-                })}
-            </ul>
+              </a>)
+            </span>
           </div>
-        </>
-      )}
+          {contractFunctions && (contractFunctions.length > 0) && (
+            <>
+              <h3>Contract Functions</h3>
+              <div>
+                <ul style={{ paddingLeft: '12px' }}>
+                  {contractFunctions.map((f, i) => {
+                    const keyStr = `${i}-${f}`
+                    return <li key={keyStr}>- {f}</li>
+                  })}
+                </ul>
+              </div>
+            </>
+          )}
+          <div>
+            <span style={{ fontSize: '14px', fontWeight: 'bold', marginRight: '6px' }}>Selected Function:</span>
+            <span>{contractFunction}</span>
+          </div>
+          <div>
+            <span style={{ fontSize: '14px', fontWeight: 'bold', marginRight: '6px' }}>Function Param:</span>
+            <span>
+              {`${functionParam} (${typeof functionParam})`}
+            </span>
+          </div>
+          {isConnected && isCorrectNetwork && (
+            <div style={{ marginTop: '12px' }}>
+              <button onClick={() => callContractFun()} disabled={!isConnected}>
+                Call Function
+              </button>
+              {isCallSuccess && (
+                <p>
+                  {`Transaction: ${lastTx}`} (
+                  <a
+                    href={`https://mumbai.polygonscan.com/tx/${lastTx}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    URL
+                  </a>
+                  )
+                </p>
+              )}
+              {isCallError && (
+                <p style={{ color: 'red' }}>{`Error: ${callError}`}</p>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+      <hr
+        style={{
+          marginTop: '40px',
+          marginBottom: '40px',
+          borderWidth: '0px',
+          borderColor: '#383838',
+        }}
+      />
+      <hr
+        style={{
+          marginTop: '40px',
+          marginBottom: '40px',
+          borderWidth: '0px',
+          borderColor: '#383838',
+        }}
+      />
+      <h2>Web3 Wallet</h2>
+      <div style={{ marginTop: '30px' }}>
+        {!isConnected && connectors
+          .filter(x => x.ready && x.id !== connector?.id)
+          .map(x => (
+            <div style={{ marginBottom: '8px' }}>
+              <button key={x.id} onClick={() => connect({ connector: x })}>
+                {`Connect ${x.name}`}
+                {isLoading && x.id === pendingConnector?.id && ' (connecting)'}
+              </button>
+            </div>
+          ))}
+        {isConnected && isCorrectNetwork && (
+          <>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '6px'
+              }}
+            >
+              <div>
+                <span style={{ fontSize: '14px', fontWeight: 'bold', marginRight: '6px' }}>Network:</span>
+                <span>{`${chain?.id} (${chain?.name})`}</span>
+              </div>
+              <div>
+                <span style={{ fontSize: '14px', fontWeight: 'bold', marginRight: '6px' }}>Address:</span>{`${address}`} (
+                <span>
+
+                  <a
+                    href={`https://mumbai.polygonscan.com/address/${address}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    URL
+                  </a>
+                  )
+                </span>
+              </div>
+            </div>
+          </>
+        )}
+        {(isConnected && !isCorrectNetwork) && (
+          <>
+            <span
+              style={{ color: 'red'}}
+            >{`Your wallet are connected to a wrong network, please change it to ${contractChain} chain`}</span>
+            <div style={{ marginTop: '20px' }}>
+              <button onClick={() => switchNetwork?.(contractChainParsed)}>
+                Change network
+              </button>
+            </div>
+            {/* <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginBottom: '12px',
+                  gap: '20px',
+                }}
+              >
+                <span style={{ fontSize: '14px', fontWeight: 'bold', marginRight: '6px' }}>RPC Endpoint (HTTP/S):</span>
+              </div>
+              <div>
+                <input
+                  style={{ width: '400px' }}
+                  value={DEFAULT_RPC}
+                  placeholder="Enter RPC Endpoint here"
+                ></input>
+                <button
+                  key="addCustomRpcHttp"
+                  onClick={() => addCustomRpcHttp()}
+                  disabled={!isConnected}
+                  style={{ marginBottom: '12px' }}
+                >
+                  Add Custom RPC
+                </button>
+              </div>
+            </div> */}
+          </>
+        )}
+        {isConnected && (
+          <div>
+            <button
+              key="disconnect"
+              onClick={() => disconnect()}
+              disabled={!isConnected}
+              style={{ marginTop: '20px' }}
+            >
+              Disconnect
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
