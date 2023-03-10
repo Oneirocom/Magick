@@ -36,7 +36,7 @@ export * from './events.schema'
 async function findSimilarEventByEmbedding(db: Knex, embedding) {
   const query: Record<SupportedDbs, Knex.QueryBuilder> = {
     [SupportedDbs.pg]: async () => await db.raw(`select * from events order by embedding <-> ${embedding} limit 1;`),
-    [SupportedDbs.sqlite3]: async () => {
+    [SupportedDbs.sqlite]: async () => {
       const eventInVssTable = await db.raw(
         `select rowid, distance from vss_events
          where vss_search(
@@ -126,9 +126,10 @@ export const event = (app: Application) => {
     after: {
       create:[
         async (context: HookContext) => {
+          if(!context.data.embedding || context.data.embedding.length === 0) return context
           const { id } = context.result
           // store the data in the virtual vss table
-          if (dbDialect === SupportedDbs.sqlite3 && !isM1 && !isWindows) {
+          if (dbDialect === SupportedDbs.sqlite && !isM1 && !isWindows) {
             try {
               await db.raw(`
                 insert into vss_events(rowid, event_embedding) 

@@ -49,7 +49,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           tag_name: ${{ github.sha }}
           release_name: Release ${{ github.ref }}
@@ -58,7 +58,7 @@ jobs:
       - name: Attach Artifact
         uses: actions/upload-release-asset@v1.0.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./apps/client/electron/output
@@ -69,4 +69,4 @@ jobs:
         with:
           working_directory: ./apps/client/electron/output
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_TOKEN }}
