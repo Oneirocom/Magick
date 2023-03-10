@@ -396,6 +396,7 @@ export class discord_client {
     }
     console.log('calling runComponent from discord.ts')
     console.log('spellRunner', this.spellRunner)
+    console.log('publicVariables', this.agent.publicVariables)
     const response = await this.spellRunner.runComponent({
       inputs: {
         'Input - Discord (Text)': {
@@ -409,6 +410,7 @@ export class discord_client {
           channelType: 'msg',
         },
       },
+      agent: this.agent,
       secrets: this.agent.secrets,
       publicVariables: this.agent.publicVariables,
       runSubspell: true,

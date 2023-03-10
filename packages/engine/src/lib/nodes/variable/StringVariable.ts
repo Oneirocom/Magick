@@ -51,8 +51,13 @@ export class StringVariable extends MagickComponent<InputReturn> {
     return node.addOutput(out)
   }
 
-  worker(node: NodeData) {
-    const _var = node?.data?._var as string
+  worker(node: NodeData, inputs: any, outputs: any, context: any) {
+    let _var = node?.data?._var as string
+    const publicVars = JSON.parse(context.module.publicVariables)
+    if(node?.data?.isPublic) {
+      _var = publicVars[node.id].value
+    }
+
     return {
       output: _var,
     }

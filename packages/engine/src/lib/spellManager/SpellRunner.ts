@@ -18,6 +18,7 @@ export type RunSpellConstructor = {
 
 export type RunComponentArgs = {
   inputs: Record<string, any>
+  agent?: any
   componentName?: string
   runSubspell?: boolean
   secrets?: Record<string, string>
@@ -203,6 +204,7 @@ class SpellRunner {
     inputs,
     componentName = 'Input',
     runSubspell = false,
+    agent,
     secrets,
     publicVariables,
   }: RunComponentArgs) {
@@ -220,7 +222,7 @@ class SpellRunner {
 
     console.log('reading module - spellRunner.ts')
     // load the inputs into module memory
-    this.module.read({inputs: this._formatInputs(inputs), secrets, publicVariables})
+    this.module.read({inputs: this._formatInputs(inputs), secrets, agent, publicVariables})
 
     const component = this._getComponent(componentName) as ModuleComponent
 
