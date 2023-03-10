@@ -9,13 +9,15 @@ interface Props {
 
 const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
   const onChange = (variable, event) => {
+    event.preventDefault()
     function applyNativeEventToValue(inputValue, nativeEventData) {
       inputValue = inputValue || ''
       // if the native event is a backspace
       if (nativeEventData.inputType === 'deleteContentBackward') {
         // remove the last character
-        return inputValue.length > 0 ? inputValue.slice(0, -1) : ''
+        inputValue = inputValue.length > 0 ? inputValue.slice(0, -1) : inputValue
       }
+      
       // otherwise, add the native event to the current variable value
       return inputValue + nativeEventData.data
     }
@@ -25,7 +27,7 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
       value: event.nativeEvent.data
         ? // apply the native event to the current variable value
           applyNativeEventToValue(variable.value, event.nativeEvent)
-        : event.target.checked === undefined && event.target.checked !== false
+        : event.target.checked
         ? event.target.value
         : event.target.checked,
     }
@@ -75,6 +77,7 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
                     value={variable.value ? variable.value : ''}
                     type="text"
                     onChange={e => onChange(variable, e)}
+                    onDelete={e => onChange(variable, e)}
                     name={variable.name}
                     placeHolder={'Add new value here'}
                   />
