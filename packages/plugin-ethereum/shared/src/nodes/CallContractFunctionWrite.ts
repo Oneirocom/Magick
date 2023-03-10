@@ -136,7 +136,7 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
     }
 
     return {
-      output: `http://localhost:4200/contract/${chainId}/${contractAddress}/${functionName}`,
+      output: `http://localhost:4200/ethereum/contract/${chainId}/${contractAddress}/${functionName}`,
     }
   }
 }
