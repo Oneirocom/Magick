@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { useEditor } from '../contexts/EditorProvider'
 import { Layout } from '../contexts/LayoutProvider'
-import { getSpellApi } from '../../state/api/spells'
+import { spellApi } from '../../state/api/spells'
 import EventHandler from '../../screens/Magick/components/EventHandler'
 import { debounce } from '../../utils/debounce'
 import { useConfig } from '../../contexts/ConfigProvider'
@@ -24,7 +24,6 @@ import React from 'react'
 
 const Workspace = ({ tab, tabs, pubSub }) => {
   const config = useConfig()
-  const spellApi = getSpellApi(config)
 
   const spellRef = useRef<Spell>()
   const { events, publish } = usePubSub()
@@ -41,7 +40,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
       // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
       'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
       debounce(async data => {
-        
         if (tab.type === 'spell' && spellRef.current) {
           publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
         }
@@ -76,7 +74,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
   useEffect(() => {
     if (!tab || !tab.name) return
-    
+
     loadSpell({
       spellName: tab.name.split('--')[0],
       projectId: config.projectId,
@@ -88,16 +86,13 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     if (!client) return
     ;(async () => {
       if (!client || !tab || !tab.name) return
-      
+
       // make sure to pass the projectId to the service call
-      await client.service('spell-runner').get(tab.id,
-        {
-          query: {
-            projectId: config.projectId,
-          },
-        }
-      )
-      
+      await client.service('spell-runner').get(tab.id, {
+        query: {
+          projectId: config.projectId,
+        },
+      })
     })()
   }, [client])
 

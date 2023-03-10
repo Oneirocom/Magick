@@ -4,7 +4,7 @@ import { GraphData, Spell } from '@magickml/engine'
 
 import md5 from 'md5'
 
-import { getSpellApi } from '../../../state/api/spells'
+import { spellApi } from '../../../state/api/spells'
 import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
 import { useEditor } from '../../../workspaces/contexts/EditorProvider'
 import { diff } from '../../../utils/json0'
@@ -14,7 +14,6 @@ import { useConfig } from '../../../contexts/ConfigProvider'
 
 const EventHandler = ({ pubSub, tab }) => {
   const config = useConfig()
-  const spellApi = getSpellApi(config)
 
   // only using this to handle events, so not rendering anything with it.
   const { createOrFocus, windowTypes } = useLayout()
@@ -101,15 +100,15 @@ const EventHandler = ({ pubSub, tab }) => {
       projectId: config.projectId,
     })
 
-    const jsonDiff = diff(currentSpell, updatedSpell)
+    // const jsonDiff = diff(currentSpell, updatedSpell)
 
-    if (jsonDiff.length !== 0) {
-      // save diff to spell runner if something has changed.  Will update spell in spell runner session
-      client.service('spell-runner').update(currentSpell.id, {
-        diff: jsonDiff,
-        projectId: config.projectId,
-      })
-    }
+    // if (jsonDiff.length !== 0) {
+    //   // save diff to spell runner if something has changed.  Will update spell in spell runner session
+    //   client.service('spell-runner').update(currentSpell.id, {
+    //     diff: jsonDiff,
+    //     projectId: config.projectId,
+    //   })
+    // }
 
     if ('error' in response) {
       console.log('UPDATED SPELL', updatedSpell)
@@ -145,10 +144,10 @@ const EventHandler = ({ pubSub, tab }) => {
     if (updatedSpell.graph.nodes.length === 0) return
 
     try {
-      await client.service('spell-runner').update(currentSpell.id, {
-        diff: jsonDiff,
-        projectId: config.projectId,
-      })
+      // await client.service('spell-runner').update(currentSpell.id, {
+      //   diff: jsonDiff,
+      //   projectId: config.projectId,
+      // })
       const diffResponse = await client.service('spells').saveDiff({
         projectId: config.projectId,
         diff: jsonDiff,

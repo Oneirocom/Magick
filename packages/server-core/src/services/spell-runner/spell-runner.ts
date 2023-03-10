@@ -10,39 +10,30 @@ export const spellRunner = (app: Application) => {
   // Register our service on the Feathers application
   app.use('spell-runner', new SpellRunnerService(), {
     // A list of all methods this service exposes externally
-    methods: ['get', 'create','update'],
+    methods: ['get', 'create', 'update'],
     // You can add additional custom events to be sent to clients here
-    events: []
+    events: [],
   })
 
   // Initialize hooks
   app.service('spell-runner').hooks({
     around: {
-      all: [
-
-      ]
+      all: [],
     },
     before: {
-      all: [
-
-      ],
-      get: [
-
-      ],
+      all: [],
+      get: [],
       create: [
         // checkForSpellInManager
       ],
-      update: [
-
-      ]
+      update: [],
     },
     after: {
       all: [],
-
     },
     error: {
-      all: []
-    }
+      all: [],
+    },
   })
 }
 

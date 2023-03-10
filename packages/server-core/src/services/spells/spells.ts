@@ -16,8 +16,10 @@ import {
 import type { Application, HookContext } from '../../declarations'
 import { SpellService, getOptions } from './spells.class'
 import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
-import { updateSpellInManager } from '../../hooks/spellmanagerHooks'
-import { authenticate } from '@feathersjs/koa/lib'
+import {
+  checkForSpellInManager,
+  updateSpellInManager,
+} from '../../hooks/spellmanagerHooks'
 
 export * from './spells.class'
 export * from './spells.schema'
@@ -93,7 +95,6 @@ export const spell = (app: Application) => {
         schemaHooks.validateData(spellPatchValidator),
         schemaHooks.resolveData(spellPatchResolver),
         handleJSONFieldsUpdate(spellJsonFields),
-        updateSpellInManager,
       ],
       update: [handleJSONFieldsUpdate(spellJsonFields)],
       remove: [],
@@ -113,8 +114,10 @@ export const spell = (app: Application) => {
             }
           })
         },
+        checkForSpellInManager,
+        updateSpellInManager,
       ],
-      saveDiff: [],
+      saveDiff: [checkForSpellInManager, updateSpellInManager],
     },
     error: {
       all: [],

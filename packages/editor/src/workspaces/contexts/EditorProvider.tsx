@@ -9,7 +9,7 @@ import React, {
   useEffect,
 } from 'react'
 
-import { getSpellApi } from '../../state/api/spells'
+import { spellApi } from '../../state/api/spells'
 import { useConfig } from '../../contexts/ConfigProvider'
 
 import { LoadingScreen } from '@magickml/client-core'
@@ -77,7 +77,7 @@ const EditorProvider = ({ children }) => {
 
   const buildEditor = async (container, _spell, tab, magick) => {
     // eslint-disable-next-line no-console
-    
+
     const newEditor = await initEditor({
       container,
       pubSub,
@@ -98,7 +98,7 @@ const EditorProvider = ({ children }) => {
   }
 
   const run = () => {
-    // 
+    //
   }
 
   const undo = () => {
@@ -139,12 +139,12 @@ const EditorProvider = ({ children }) => {
 
   const loadGraph = graph => {
     if (!editorRef.current) return
-    
+
     editorRef.current.loadGraph(graph)
   }
 
   const setContainer = () => {
-    // 
+    //
   }
 
   const publicInterface = {
@@ -170,16 +170,14 @@ const EditorProvider = ({ children }) => {
 
 const RawEditor = ({ tab, children }) => {
   const config = useConfig()
-  const spellApi = getSpellApi(config)
 
-  const [getSpell, { data: spell, isLoading }] = spellApi.useLazyGetSpellByIdQuery()
+  const [getSpell, { data: spell, isLoading }] =
+    spellApi.useLazyGetSpellByIdQuery()
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
   // This will be the main interface between magick and rete
   const reteInterface = useMagickInterface()
   useEffect(() => {
-    
-    
     if (!tab || loaded) return
     getSpell({
       spellName: tab.name,
@@ -205,7 +203,6 @@ const RawEditor = ({ tab, children }) => {
         onDragOver={e => {
           e.preventDefault()
         }}
-        onDrop={e => {}}
       >
         <div
           ref={el => {

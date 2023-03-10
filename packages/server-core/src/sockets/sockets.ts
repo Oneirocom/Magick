@@ -15,8 +15,7 @@ const handleSockets = (app: any) => {
 
       // todo wound up using a custom header here for the handshake.
       // Using the standard authorization header was causing issues with feathers auth
-      const sessionId =
-        socket.handshake.headers.socketauthorization.split(' ')[1]
+      const sessionId = socket.handshake.headers.authorization.split(' ')[1]
 
       // auth services will verify the token
       const payload = await app

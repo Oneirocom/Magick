@@ -1,20 +1,15 @@
 import { useState } from 'react'
 import { useSnackbar } from 'notistack'
-import { getSpellApi } from '../../state/api/spells'
+import { spellApi } from '../../state/api/spells'
 import { useForm } from 'react-hook-form'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
-import { closeTab } from '../../state/tabs'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
 import defaultGraph from '../../data/graphs/default'
 import { useConfig } from '../../contexts/ConfigProvider'
 import md5 from 'md5'
 const EditSpellModal = ({ tab, closeModal }) => {
   const config = useConfig()
-  const spellApi = getSpellApi(config)
-
-  const dispatch = useDispatch()
   const [error, setError] = useState('')
   const [saveSpell, { isLoading }] = spellApi.useSaveSpellMutation()
   const [newSpell] = spellApi.useNewSpellMutation()
