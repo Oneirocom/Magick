@@ -109,6 +109,16 @@ export class Output extends MagickComponent<void> {
     const output = inputs.input.filter(Boolean)[0] as string
     const event = inputs.event?.[0]
 
+    const outputType = node.data.outputType
+
+    if(module.agent) {
+      console.log('running on agent')
+      console.log('**** HANDLE ME', outputType)
+    } else {
+      console.log('running on editor or rest api')
+      console.log('**** HANDLE ME', outputType)
+    }
+
     if(magick) {
 
       //just need a new check here for playtest send boolean
