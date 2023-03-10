@@ -9,12 +9,25 @@ interface Props {
 
 const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
   const onChange = (variable, event) => {
+    function applyNativeEventToValue(inputValue, nativeEventData) {
+      inputValue = inputValue || ''
+      // if the native event is a backspace
+      if (nativeEventData.inputType === 'deleteContentBackward') {
+        // remove the last character
+        return inputValue.length > 0 ? inputValue.slice(0, -1) : ''
+      }
+      // otherwise, add the native event to the current variable value
+      return inputValue + nativeEventData.data
+    }
+
     const newVar = {
       ...variable,
-      value:
-        event.target.checked === undefined
-          ? event.target.value
-          : event.target.checked,
+      value: event.nativeEvent.data
+        ? // apply the native event to the current variable value
+          applyNativeEventToValue(variable.value, event.nativeEvent)
+        : event.target.checked === undefined && event.target.checked !== false
+        ? event.target.value
+        : event.target.checked,
     }
 
     setPublicVars({
@@ -36,7 +49,6 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
         }}
       >
         {Object.values(publicVars).map((variable: any) => {
-          console.log('variable is', variable)
           return (
             <Grid
               container
@@ -53,14 +65,14 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
                 {variable?.type?.includes('Boolean') ? (
                   <Switch
                     label={''}
-                    checked={variable.value}
+                    checked={variable.value ?? ''}
                     onChange={e => onChange(variable, e)}
                     name={variable.name}
                   />
                 ) : (
                   <Input
                     style={{ width: '100%' }}
-                    value={variable.value}
+                    value={variable.value ? variable.value : ''}
                     type="text"
                     onChange={e => onChange(variable, e)}
                     name={variable.name}
