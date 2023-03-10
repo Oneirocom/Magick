@@ -71,9 +71,7 @@ const AgentWindow = ({
             key={agent?.id}
             keyId={agent?.id}
             onDelete={onDelete}
-            setSelectedAgentData={setSelectedAgentData}
             onClick={onClickHandler}
-            update={update}
             agent={agent}
             style={
               agent?.id === selectedAgentData?.id

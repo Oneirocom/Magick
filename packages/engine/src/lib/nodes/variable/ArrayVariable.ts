@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+// TODO: Currently array variable is not working. Need to fix this.
 import Rete from 'rete'
 
 import { NodeData, MagickNode } from '../../types'
@@ -36,10 +36,10 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
       icon: 'moon',
     })
 
-    const _public = new BooleanControl({
-      dataKey: 'isPublic',
-      name: 'isPublic',
-    })
+    // const _public = new BooleanControl({
+    //   dataKey: 'isPublic',
+    //   name: 'isPublic',
+    // })
 
     const _var = new InputControl({
       dataKey: '_var',
@@ -58,7 +58,8 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
       icon: 'moon',
     })
 
-    node.inspector.add(name).add(_var).add(splitter).add(keepEmpty).add(_public)
+    node.inspector.add(name).add(_var).add(splitter).add(keepEmpty)
+    // .add(_public)
 
     return node.addOutput(out)
   }
@@ -66,7 +67,7 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
   worker(node: NodeData) {
     const _var = node?.data?._var as string
     const splitter = node?.data?.splitter as string
-    const keepEmpty = node?.data?.keepEmpty == 'true'
+    const keepEmpty = node?.data?.keepEmpty === 'true'
     const res = !keepEmpty
       ? _var.split(splitter).filter(el => el.length > 0)
       : _var.split(splitter)
