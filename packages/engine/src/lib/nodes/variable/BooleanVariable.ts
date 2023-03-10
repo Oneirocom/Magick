@@ -55,13 +55,14 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
   worker(node: NodeData, inputs: any, outputs: any, context: any) {
     let _var = node?.data?._var === true
     const publicVars = JSON.parse(context.module.publicVariables)
-    if(node?.data?.isPublic) {
+    if (node?.data?.isPublic && publicVars[node.id]) {
       _var = publicVars[node.id].value
     }
 
-
-    if (_var) node.display('TRUE')
-    else node.display('FALSE')
+    if (!context.silent) {
+      if (_var) node.display('TRUE')
+      else node.display('FALSE')
+    }
 
     return {
       output: _var,
