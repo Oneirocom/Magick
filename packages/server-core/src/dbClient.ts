@@ -15,7 +15,7 @@ declare module './declarations' {
 }
 export enum SupportedDbs {
   pg = 'pg',
-  sqlite3 = 'sqlite3',
+  sqlite = 'sqlite',
 }
 
 export const dbDialect: SupportedDbs = process.env.DATABASE_TYPE as SupportedDbs
@@ -33,7 +33,7 @@ const getDatabaseConfig = () => {
       connection: dbURL,
     }
   // sqlite config
-  if (dbType === 'sqlite3' || dbType === 'sqlite')
+  if (dbType === 'sqlite')
     return {
       client: dbType,
       connection: {
@@ -86,7 +86,7 @@ const getDatabaseConfig = () => {
       },
     }
 
-  throw new Error('Unsupported database type, use `pg` or `sqlite3`')
+  throw new Error('Unsupported database type, use `pg` or `sqlite`')
 }
 
 export const dbClient = (app: Application) => {
@@ -97,7 +97,7 @@ export const dbClient = (app: Application) => {
 
 const dbSupportJson: Record<SupportedDbs, boolean> = {
   [SupportedDbs.pg]: true,
-  [SupportedDbs.sqlite3]: false,
+  [SupportedDbs.sqlite]: false,
 }
 
 export const doesDbSupportJson = (): boolean => dbSupportJson[dbDialect]
