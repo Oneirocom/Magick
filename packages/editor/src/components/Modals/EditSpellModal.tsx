@@ -1,4 +1,3 @@
-import md5 from 'md5'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -7,14 +6,9 @@ import { useDispatch } from 'react-redux'
 import { closeTab, openTab } from '../../state/tabs'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
-import { useConfig } from '../../contexts/ConfigProvider'
-import { getSpellApi } from '../../state/api/spells'
-import { getStore } from '../../state/store'
+import { spellApi } from '../../state/api/spells'
 
 const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
-  const config = useConfig()
-  const spellApi = getSpellApi(config)
-
   const [error, setError] = useState('')
   const [patchSpell, { isLoading }] = spellApi.usePatchSpellMutation()
 

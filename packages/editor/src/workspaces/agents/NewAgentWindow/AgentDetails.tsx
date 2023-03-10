@@ -84,6 +84,7 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
 
   useEffect(() => {
     ;(async () => {
+      console.log('GETTING SPELLS')
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )
@@ -97,44 +98,52 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
     <div>
       <div className={`${styles.agentDetailsContainer}`}>
         <div className={styles.agentDescription}>
-          <Avatar className={styles.avatar}>{agentData?.name?.at(0) || 'A'}</Avatar>
-          <div onDoubleClick={()=>{setEditMode(true)}}>
-             {editMode ? (
-                  <>
-                    <Box component="div" sx={{ display: 'inline-block' }}>
-                      <input
-                          type="text"
-                          name="name"
-                          value={name}
-                          onClick={e => e.stopPropagation()}
-                          onChange={e => setName(e.target.value)}
-                          placeholder="Add new agent name here"
-                        />
-                    </Box>
-                    <Box component="div" sx={{ display: 'inline-block' }}>
-                    <div>
-                      <IconBtn
-                        label={'Done'}
-                        Icon={<Done />}
-                        onClick={e => {
-                          e.stopPropagation()
-                          update(agentData.id, { name })
-                          setEditMode(true)
-                        }}
-                      />
-                      <IconBtn
-                        label={'close'}
-                        Icon={<Close />}
-                        onClick={e => {
-                          e.stopPropagation()
-                          setEditMode(false)
-                          setName(agentData.name)
-                        }}
-                      />
-                    </div>
-                    </Box>
-                  </>
-                ) : (<Typography variant="h5" >{agentData.name}</Typography>)}
+          <Avatar className={styles.avatar}>
+            {agentData?.name?.at(0) || 'A'}
+          </Avatar>
+          <div
+            onDoubleClick={() => {
+              setEditMode(true)
+            }}
+          >
+            {editMode ? (
+              <>
+                <Box component="div" sx={{ display: 'inline-block' }}>
+                  <input
+                    type="text"
+                    name="name"
+                    value={name}
+                    onClick={e => e.stopPropagation()}
+                    onChange={e => setName(e.target.value)}
+                    placeholder="Add new agent name here"
+                  />
+                </Box>
+                <Box component="div" sx={{ display: 'inline-block' }}>
+                  <div>
+                    <IconBtn
+                      label={'Done'}
+                      Icon={<Done />}
+                      onClick={e => {
+                        e.stopPropagation()
+                        update(agentData.id, { name })
+                        setEditMode(true)
+                      }}
+                    />
+                    <IconBtn
+                      label={'close'}
+                      Icon={<Close />}
+                      onClick={e => {
+                        e.stopPropagation()
+                        setEditMode(false)
+                        setName(agentData.name)
+                      }}
+                    />
+                  </div>
+                </Box>
+              </>
+            ) : (
+              <Typography variant="h5">{agentData.name}</Typography>
+            )}
           </div>
         </div>
         <div className={styles.btns}>
@@ -151,7 +160,10 @@ const AgentDetails = ({ agentData, setSelectedAgent, updateCallback }) => {
           label={null}
           checked={agentData.enabled ? true : false}
           onChange={() => {
-            setSelectedAgent({ ...agentData, enabled: agentData.enabled ? false : true })
+            setSelectedAgent({
+              ...agentData,
+              enabled: agentData.enabled ? false : true,
+            })
           }}
           style={{ alignSelf: 'self-start' }}
         />
