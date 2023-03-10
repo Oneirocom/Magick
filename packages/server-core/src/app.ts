@@ -59,6 +59,8 @@ app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
 
+app.configure(configureManager())
+
 // this will configure out stateless JWT authentication
 app.set('authentication', {
   // We will want to use the same secret as the cloud is using for shared authentication
@@ -75,13 +77,12 @@ app.set('authentication', {
 })
 
 app.configure(authentication)
-// app.use(authenticate('jwt'))
+app.use(authenticate('jwt'))
 
 // Configure services and transports
 app.configure(rest())
 
 // configures this needed for the spellManager
-app.configure(configureManager())
 app.configure(
   socketio(
     {
@@ -104,7 +105,14 @@ app.hooks({
   around: {
     all: [
       logError,
-      authenticate('jwt'),
+      async (context: HookContext, next) => {
+        await next()
+      },
+      context => {
+        if (context.path !== 'authentication') {
+          return authenticate('jwt')(context)
+        }
+      },
       // attach the user from the payload to the params
       async (context: HookContext, next) => {
         const { params } = context
@@ -122,6 +130,7 @@ app.hooks({
 
             // todo we should change this in payload from project to projectId
             if (authentication.payload.project !== projectId) {
+              console.log('User not authorized to access project')
               throw new NotAuthenticated(
                 'User not authorized to access project'
               )
