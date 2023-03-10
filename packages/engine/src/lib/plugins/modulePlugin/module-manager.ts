@@ -16,6 +16,7 @@ import { SocketNameType } from '../../sockets'
 import { Module } from './module'
 
 export type ModuleContext = {
+  agent?: any
   secrets?: Record<string, string>
   publicVariables?: Record<string, string>
   socketInfo: { targetSocket: string }
@@ -142,6 +143,7 @@ export class ModuleManager {
 
     console.log('reading module - module-manager.ts')
     module.read({
+      agent: context.agent,
       inputs: parsedInputs,
       secrets: context?.secrets,
       publicVariables: context?.publicVariables,

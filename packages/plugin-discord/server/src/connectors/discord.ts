@@ -17,7 +17,7 @@ const log = (...s: (string | boolean)[]) => {
   console.log(...s)
 }
 
-export class discord_client {
+export class DiscordConnector {
   async destroy() {
     await this.client.destroy()
     this.client = null
@@ -195,10 +195,6 @@ export class discord_client {
         120000
       )
     }
-    //if there are many users in the conversation simulation or the previous message is from someone else, it adds a ping
-    const addPing =
-      (_prev !== undefined && _prev !== '' && _prev !== author) ||
-      this.moreThanOneInConversation()
     // Ignore all bots
     if (author.bot) {
       console.log('author is bot')
@@ -395,36 +391,32 @@ export class discord_client {
       content = content.replace('!ping ', '')
     }
     console.log('calling runComponent from discord.ts')
-    console.log('spellRunner', this.spellRunner)
+    console.log('publicVariables', this.agent.publicVariables)
     const response = await this.spellRunner.runComponent({
       inputs: {
         'Input - Discord (Text)': {
           content,
           sender: message.author.username,
           observer: this.discord_bot_name,
-          client: 'discord', // TODO: should be typed
+          client: 'discord',
           channel: message.channel.id,
           agentId: this.agent.id,
           entities: entities.map(e => e.user),
           channelType: 'msg',
         },
       },
+      agent: this.agent,
       secrets: this.agent.secrets,
       publicVariables: this.agent.publicVariables,
       runSubspell: true,
     })
 
-    const { Output, Image } = response
+    const { Output /*Image*/ } = response
 
     // get the value of the first entry in the object
-    const firstValue = Object.values(response)[0]
-    this.handleMessage({
-      chat_id: message.channel.id,
-      message_id: message.id,
-      responses: Output ?? (!Image && firstValue),
-      addPing: false,
-      image: Image,
-    })
+    const firstValue = Output || Object.values(response)[0]
+
+    console.log('handled response', firstValue)
   }
 
   //Event that is triggered when a message is deleted
@@ -468,7 +460,7 @@ export class discord_client {
 
     const oldResponse = this.getResponse(channel.id, id)
     if (oldResponse === undefined) {
-      await channel.messages.fetch(id).then(async (msg: any) => {})
+      await channel.messages.fetch(id).then(async (msg: any) => { })
       log('message not found')
       return
     }
@@ -643,8 +635,8 @@ export class discord_client {
               deleted: boolean
               permissionsFor: (arg0: any) => {
                 (): any
-                new (): any
-                has: { (arg0: string[]): any; new (): any }
+                new(): any
+                has: { (arg0: string[]): any; new(): any }
               }
               name: string | boolean
               id: string | boolean
@@ -702,367 +694,7 @@ export class discord_client {
 
     log('client is ready')
   }
-
-  embedColor = '#000000'
-  _commandToValue = ([name, args, description]) =>
-    ['.' + name, args.join(' '), '-', description].join(' ')
-  _commandToDescription = ([name, args, description]) =>
-    '```css\n' +
-    ['.' + name, args.join(' '), '-', description].join(' ') +
-    '```'
-  _commandsToValue = (commands: any[]) =>
-    '```css\n' +
-    commands
-      .map((command: [any, any, any]) => this._commandToValue(command))
-      .join('\n') +
-    '```'
-
-  helpFields = [
-    {
-      name: 'Tweak',
-      shortname: 'tweak',
-      commands: [
-        [
-          'ping',
-          ['HandleMessage'],
-          ['sender', 'message', 'client_name', 'chat_id'],
-          'ping all agents',
-        ],
-        [
-          'slash_command',
-          ['HandleSlashCommand'],
-          ['sender', 'command', 'args', 'client_name', 'chat_id', 'createdAt'],
-          'handle slash command',
-        ],
-        [
-          'user_update',
-          ['HandleUserUpdate'],
-          ['username', 'event', 'createdAt'],
-          'handle user update',
-        ],
-        [
-          'message_reaction',
-          ['HandleMessageReaction'],
-          [
-            'client_name',
-            'chat_id',
-            'message_id',
-            'content',
-            'user',
-            'reaction',
-            'createdAt',
-          ],
-          'handle message reaction',
-        ],
-        [
-          'pingagent',
-          ['InvokeSoloAgent'],
-          ['sender', 'message', 'agent', 'createdAt'],
-          'ping a single agent',
-        ],
-        ['agents', ['GetAgents'], [''], 'show all selected agents'],
-        [
-          'setagent',
-          ['SetAgentFields'],
-          ['name', 'context'],
-          'update agents parameters',
-        ],
-        ['commands', [''], [''], 'Shows all available commands'],
-      ],
-      value: '',
-    },
-  ].map(o => {
-    o.value = this._commandsToValue(o.commands)
-    return o
-  })
-
-  _findCommand = (commandName: any) => {
-    let command: any = null
-    for (const helpField of this.helpFields) {
-      for (const c of helpField.commands) {
-        const [name, args, description] = c
-        if (name === commandName) {
-          command = c
-          break
-        }
-      }
-      if (command !== null) {
-        break
-      }
-    }
-    return command
-  }
-
-  _parseWords = (s: string) => {
-    const words: any = []
-    const r = /\S+/g
-    let match: any
-    while ((match = r.exec(s))) {
-      words.push(match)
-    }
-    return words
-  }
-
-  replacePlaceholders(text: string | undefined) {
-    if (text === undefined || text === '') return ''
-
-    if (text.includes('{time_now}')) {
-      const now = new Date()
-      const time =
-        now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds()
-      text = text.replace('{time_now}', time)
-    }
-    if (text.includes('{date_now}')) {
-      const today = new Date()
-      const date =
-        today.getDay() + '/' + today.getMonth() + '/' + today.getFullYear()
-      text = text.replace('{date_now}', date)
-    }
-    if (text.includes('{year_now}')) {
-      text = text.replace('{year_now', new Date().getFullYear().toString())
-    }
-    if (text.includes('{month_now}')) {
-      text = text.replace('{month_now}', new Date().getMonth().toString())
-    }
-    if (text.includes('{day_now}')) {
-      text = text.replace('{day_now}', new Date().getDay().toString())
-    }
-    if (text.includes('{name}')) {
-      text = text.replace('{name}', this.discord_bot_name)
-    }
-
-    return text
-  }
-
-  async sendSlashCommandResponse(
-    client: any,
-    interaction: { id: any; token: any },
-    chat_id: any,
-    text: any
-  ) {
-    this.client.api
-      .interactions(interaction.id, interaction.token)
-      .callback.post({
-        data: {
-          type: 4,
-          data: {
-            content: text,
-          },
-        },
-      })
-      .catch(console.error)
-  }
-
-  async handleSlashCommand(
-    client: any,
-    interaction: {
-      data: { name: string; options: { value: string | boolean }[] }
-      member: { user: { username: string } }
-      channel_id: string
-    }
-  ) {
-    const command = interaction.data.name.toLowerCase()
-    const sender = interaction.member.user.username + ''
-    const chatId = interaction.channel_id + ''
-
-    const dateNow = new Date()
-    const utc = new Date(
-      dateNow.getUTCFullYear(),
-      dateNow.getUTCMonth(),
-      dateNow.getUTCDate(),
-      dateNow.getUTCHours(),
-      dateNow.getUTCMinutes(),
-      dateNow.getUTCSeconds()
-    )
-    const utcStr =
-      dateNow.getDate() +
-      '/' +
-      (dateNow.getMonth() + 1) +
-      '/' +
-      dateNow.getFullYear() +
-      ' ' +
-      utc.getHours() +
-      ':' +
-      utc.getMinutes() +
-      ':' +
-      utc.getSeconds()
-    // TODO: Replace message with direct message handler
-    log(
-      sender,
-      command,
-      command === 'say' ? interaction.data.options[0].value : 'none',
-      'Discord',
-      chatId,
-      utcStr
-    )
-    // MessageClient.instance.sendSlashCommand(sender, command, command === 'say' ? interaction.data.options[0].value : 'none', 'Discord', chatId, utcStr)
-  }
-
-  async handleSlashCommandResponse(chat_id: any, response: any) {
-    this.client.channels
-      .fetch(chat_id)
-      .then(
-        (channel: { send: (arg0: any) => void; stopTyping: () => void }) => {
-          channel.send(response)
-          channel.stopTyping()
-        }
-      )
-      .catch((err: string | boolean) => log(err))
-  }
-
-  async handleUserUpdateEvent(response: string) {
-    log('handleUserUpdateEvent: ' + response)
-  }
-
-  async handleMessage({ chat_id, message_id, responses, addPing, image }) {
-    this.client.channels
-      .fetch(chat_id)
-      .then((channel: { messages: { fetch: (arg0: any) => Promise<any> } }) => {
-        channel.messages.fetch(message_id).then(
-          (message: {
-            reply: (arg0: string) => Promise<any>
-            channel: {
-              send: (
-                arg0: string,
-                arg1: { split: boolean } | undefined
-              ) => Promise<any>
-            }
-          }) => {
-            if (
-              responses !== undefined &&
-              responses.length <= 2000 &&
-              responses.length > 0
-            ) {
-              let text = this.replacePlaceholders(responses)
-              if (addPing) {
-                message
-                  .reply(text)
-                  .then(async (msg: any) => {
-                    //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
-                  })
-                  .catch(console.error)
-              } else {
-                message.channel
-                  .send(text, { split: true })
-                  .then(async (msg: any) => {
-                    //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
-                  })
-                  .catch(console.error)
-              }
-            } else if (
-              responses &&
-              responses !== undefined &&
-              responses.length >= 2000
-            ) {
-              let text = this.replacePlaceholders(responses)
-              if (addPing) {
-                message.reply(text).then(async (msg: any) => {
-                  //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
-                })
-              }
-              if (text.length > 0) {
-                message.channel
-                  .send(text, { split: true })
-                  .then(async (msg: any) => {
-                    //this.onMessageResponseUpdated(channel.id, message.id, msg.id)
-                  })
-              }
-            }
-          }
-        )
-      })
-      .catch((err: string | boolean) => log(err))
-  }
-
-  async handleMessageEdit(
-    message_id: any,
-    chat_id: any,
-    responses: string | any[] | undefined,
-    addPing: any
-  ) {
-    this.client.channels
-      .fetch(chat_id)
-      .then(
-        async (channel: {
-          id: any
-          messages: { fetch: (arg0: { limit: any }) => Promise<any> }
-        }) => {
-          const oldResponse = this.getResponse(channel.id, message_id)
-          if (oldResponse === undefined) {
-            return
-          }
-
-          channel.messages
-            .fetch(oldResponse)
-            .then(async (msg: { edit: (arg0: string) => void; id: any }) => {
-              channel.messages
-                .fetch({ limit: this.client.edit_messages_max_count })
-                .then(async (messages: any[]) => {
-                  messages.forEach(
-                    async (edited: {
-                      id: any
-                      channel: {
-                        send: (
-                          arg0: any,
-                          arg1: { split: boolean }
-                        ) => Promise<any>
-                        stopTyping: () => void
-                      }
-                    }) => {
-                      if (edited.id === message_id) {
-                        Object.keys(responses as any).map(
-                          async (key, index) => {
-                            log('response: ' + responses)
-                            log('response: ' + key)
-                            log('response: ' + index)
-
-                            if (
-                              responses !== undefined &&
-                              responses.length <= 2000 &&
-                              responses.length > 0
-                            ) {
-                              let text = this.replacePlaceholders(
-                                responses as string
-                              )
-                              msg.edit(text)
-                              this.onMessageResponseUpdated(
-                                channel.id,
-                                edited.id,
-                                msg.id
-                              )
-                            } else if (
-                              responses &&
-                              responses.length &&
-                              responses.length >= 2000
-                            ) {
-                              let text = this.replacePlaceholders(
-                                responses as string
-                              )
-                              if (text.length > 0) {
-                                edited.channel
-                                  .send(text, { split: true })
-                                  .then(async (msg: { id: any }) => {
-                                    this.onMessageResponseUpdated(
-                                      channel.id,
-                                      edited.id,
-                                      msg.id
-                                    )
-                                  })
-                              }
-                            }
-                          }
-                        )
-                        edited.channel.stopTyping()
-                      }
-                    }
-                  )
-                })
-                .catch((err: string | boolean) => log(err))
-            })
-        }
-      )
-  }
-
+  
   prevMessage = {}
   prevMessageTimers = {}
   messageResponses = {}
@@ -1075,15 +707,6 @@ export class discord_client {
     ) {
       delete this.messageResponses[channel][messageId]
     }
-  }
-  onMessageResponseUpdated(
-    channel: string | number,
-    messageId: string | number,
-    newResponse: any
-  ) {
-    if (this.messageResponses[channel] === undefined)
-      this.messageResponses[channel] = {}
-    this.messageResponses[channel][messageId] = newResponse
   }
 
   getMessage(
@@ -1151,28 +774,13 @@ export class discord_client {
     return this.messageResponses[channel][message]
   }
 
-  moreThanOneInConversation() {
-    let count = 0
-    for (const c in this.conversation) {
-      if (this.conversation[c] === undefined) continue
-      if (
-        this.conversation[c].isInConversation !== undefined &&
-        this.conversation[c].isInConversation === true &&
-        this.conversation[c].timeOutFinished === false
-      )
-        count++
-    }
-
-    return count > 1
-  }
-
   client = Discord.Client as any
   agent: any = undefined
   spellRunner: any = null
   discord_starting_words: string[] = []
-  discord_bot_name_regex: string = ''
-  discord_bot_name: string = 'Bot'
-  use_voice: boolean = false
+  discord_bot_name_regex = ''
+  discord_bot_name = 'Bot'
+  use_voice = false
   voice_provider!: string
   voice_character!: string
   voice_language_code!: string
@@ -1192,7 +800,6 @@ export class discord_client {
     tiktalknet_url,
     worldManager,
   }) {
-    console.log('creating discord client', discord_api_key)
     this.worldManager = worldManager
     this.agent = agent
     this.spellRunner = spellRunner
@@ -1237,11 +844,6 @@ export class discord_client {
         console.log('debug', message)
       })
 
-      //{ intents: [ Intents.GUILDS, Intents.GUILD_MEMBERS, Intents.GUILD_VOICE_STATES, Intents.GUILD_PRESENCES, Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES] });
-      // We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
-      this.client.helpFields = this.helpFields
-      this.client._findCommand = this._findCommand
-      this.client._parseWords = this._parseWords
       this.client.name_regex = new RegExp(discord_bot_name, 'ig')
 
       this.client.username_regex = new RegExp(this.discord_bot_name_regex, 'ig') //'((?:digital|being)(?: |$))'
@@ -1262,43 +864,30 @@ export class discord_client {
           voice_language_code,
           tiktalknet_url,
         } = this
-        ;(async () => {
-          if (typeof window === 'undefined') {
-            const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
-              await import('./discord-voice')
-            recognizeSpeech = _recognizeSpeech
-            this.client = initSpeechClient({
-              client,
-              discord_bot_name,
-              agent,
-              spellRunner,
-              voiceProvider: voice_provider,
-              voiceCharacter: voice_character,
-              languageCode: voice_language_code,
-              tiktalknet_url,
-            })
-          }
-        })()
+          ; (async () => {
+            if (typeof window === 'undefined') {
+              const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
+                await import('./discord-voice')
+              recognizeSpeech = _recognizeSpeech
+              this.client = initSpeechClient({
+                client,
+                discord_bot_name,
+                agent,
+                spellRunner,
+                voiceProvider: voice_provider,
+                voiceCharacter: voice_character,
+                languageCode: voice_language_code,
+                tiktalknet_url,
+              })
+            }
+          })()
       }
 
       this.client.on(
         'messageCreate',
         this.messageCreate.bind(null, this.client)
       )
-      // this.client.on('messageDelete', this.messageDelete.bind(null, this.client))
-      // this.client.on('messageUpdate', this.messageUpdate.bind(null, this.client))
-      // this.client.on(
-      //   'presenceUpdate',
-      //   this.presenceUpdate.bind(null, this.client)
-      // )
 
-      // this.client.on(
-      //   'interactionCreate',
-      //   async (interaction: string | boolean) => {
-      //     log('Handling interaction', interaction)
-      //     this.handleSlashCommand(this.client, interaction)
-      //   }
-      // )
       this.client.on(
         'guildMemberAdd',
         async (user: { user: { id: any; username: any } }) => {
@@ -1311,54 +900,6 @@ export class discord_client {
       this.client.on('messageReactionAdd', async (reaction: any, user: any) => {
         this.handleMessageReactionAdd(reaction, user)
       })
-
-      // this.client.commands = new Discord.Collection()
-
-      // this.client.commands.set('agents', this.agents)
-      // this.client.commands.set('ban', this.ban)
-      // this.client.commands.set('commands', this.commands)
-      //this.client.commands.set('ping', this.ping)
-      // this.client.commands.set('pingagent', this.pingagent)
-      // this.client.commands.set('setagent', this.setagent)
-      // this.client.commands.set('setname', this.setname)
-      // this.client.commands.set('unban', this.unban)
-
-      // setInterval(() => {
-      //   const channelIds: any[] = []
-
-      //   this.client.channels.cache.forEach(async (channel: { topic: string | undefined; id: string | number } | undefined) => {
-      //     if (!channel || !channel.topic) return
-      //     if (channel === undefined || channel.topic === undefined) return
-      //     if (
-      //       channel.topic.length < 0 ||
-      //       channel.topic.toLowerCase() !== 'daily discussion'
-      //     )
-      //       return
-      //     if (channelIds.includes(channel.id)) return
-
-      //     channelIds.push(channel.id)
-      //     if (
-      //       this.discussionChannels[channel.id] === undefined ||
-      //       !this.discussionChannels
-      //     ) {
-      //       this.discussionChannels[channel.id] = {
-      //         timeout: setTimeout(() => {
-      //           delete this.discussionChannels[channel.id]
-      //         }, 1000 * 3600 * 4),
-      //         responded: false,
-      //       }
-      //       // const resp = await spellRunner(
-      //       //   'Tell me about ' + 'butterlifes',
-      //       //   'bot',
-      //       //    this.discord_bot_name ?? 'Agent',
-      //       //   'discord',
-      //       //   message.channel.id,
-      //       //   this.spell_handler,
-      //       // )
-      //       // channel.send(resp)
-      //     }
-      //   })
-      // }, 1000 * 3600)
 
       this.client.login(token)
     }
@@ -1374,4 +915,4 @@ export class discord_client {
   }
 }
 
-export default discord_client
+export default DiscordConnector
