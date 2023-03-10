@@ -29,7 +29,7 @@ const TextEditor = props => {
     const secrets = localStorage.getItem('secrets')
     if (secrets) {
       const parsedSecrets = JSON.parse(secrets)
-      setOpenaiApiKey(parsedSecrets['openai_api_key'])
+      setOpenaiApiKey(parsedSecrets['openai-api-key'])
     }
   }, [])
 
@@ -59,9 +59,11 @@ const TextEditor = props => {
     const textLines = code?.split('\n') ?? []
     inspectorData?.data.inputs?.forEach((input: any) => {
       // if the textLines includes the input.socketKey, then return
-      if(!textLines.includes('  ' + input.socketKey + ',') &&
-      (language === 'python' || language === 'javascript'))
-      inputs.push('  ' + input.socketKey + ',')
+      if (
+        !textLines.includes('  ' + input.socketKey + ',') &&
+        (language === 'python' || language === 'javascript')
+      )
+        inputs.push('  ' + input.socketKey + ',')
     })
 
     // get the index of the first line that starts with function
@@ -80,10 +82,10 @@ const TextEditor = props => {
     const newTextEditorData = {
       ...textEditorData,
     }
-    if(language === 'javascript' || language === 'python') {
+    if (language === 'javascript' || language === 'python') {
       newTextEditorData.data = updatedText
     }
-    
+
     setData(newTextEditorData)
     setCode(updatedText)
   }, [activeTab])
@@ -113,9 +115,11 @@ const TextEditor = props => {
     console.log('textLines', textLines)
     inspectorData?.data.inputs?.forEach((input: any) => {
       // if the textLines includes the input.socketKey, then return
-      if(!textLines.includes('  ' + input.socketKey + ',') &&
-      (language === 'python' || language === 'javascript'))
-      inputs.push('  ' + input.socketKey + ',')
+      if (
+        !textLines.includes('  ' + input.socketKey + ',') &&
+        (language === 'python' || language === 'javascript')
+      )
+        inputs.push('  ' + input.socketKey + ',')
     })
 
     // get the index of the first line that starts with function
@@ -133,7 +137,7 @@ const TextEditor = props => {
     const newTextEditorData = {
       ...textEditorData,
     }
-    if(language === 'javascript' || language === 'python') {
+    if (language === 'javascript' || language === 'python') {
       newTextEditorData.data = updatedText
     }
 

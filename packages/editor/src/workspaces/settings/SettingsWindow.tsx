@@ -87,7 +87,7 @@ const SettingsWindow = () => {
       <div className={styles['settings-editor']}>
         <SettingsWindowChild
           displayName={'OpenAI'}
-          keyName={'openai_api_key'}
+          keyName={'openai-api-key'}
           getUrl={'https://beta.openai.com/account/api-keys'}
           setKey={setKey}
           getKey={getKey}
