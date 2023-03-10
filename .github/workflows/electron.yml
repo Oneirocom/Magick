@@ -3,7 +3,7 @@ name: Electron Build and Release
 on:
   push:
     branches:
-      - main
+      - release
 
 jobs:
   build:
