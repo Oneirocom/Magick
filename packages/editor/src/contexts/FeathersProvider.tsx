@@ -43,7 +43,7 @@ const buildFeathersClient = async (config, token) => {
     transportOptions: {
       polling: {
         extraHeaders: {
-          SocketAuthorization: `Bearer ${token}`,
+          authorization: `Bearer ${token}`,
         },
       },
     },
