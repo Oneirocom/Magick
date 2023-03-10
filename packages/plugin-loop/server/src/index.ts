@@ -9,15 +9,14 @@ type StartLoopArgs = {
 class LoopManager {
   agentManager: any
   loopHandlers = new Map<string, any>();
-  spellRunner: any
   constructor(agentManager, spellRunner) {
-    this.spellRunner = spellRunner
+    console.log('new loop manager created')
     this.agentManager = agentManager
-    this.agentManager.registerAddAgentHandler(({agent, agentData}) => this.addAgent({ agent, agentData }))
+    this.agentManager.registerAddAgentHandler(({agent, agentData}) => this.addAgent({ spellRunner, agent, agentData }))
     this.agentManager.registerRemoveAgentHandler(({agent}) => this.removeAgent({ agent }))
   } 
 
-  addAgent({ agent, agentData }) {
+  addAgent({ spellRunner, agent, agentData }) {
     console.log('addAgent', agent)
     if(!agentData) return console.log("No data for this agent", agent.id)
     if(!agentData.data.loop_enabled) return console.log("Loop is not enabled for this agent")
@@ -26,7 +25,10 @@ class LoopManager {
       return console.error('Loop Interval must be a number greater than 0')
     }
     const loopHandler = setInterval(async () => {
-      const resp = await this.spellRunner({
+      console.log('running loop handler')
+      const resp = await spellRunner.runComponent({
+        inputs: {
+          'Input - Loop In': {
         content: 'loop',
         sender: 'loop',
         observer: agent.name,
@@ -35,7 +37,13 @@ class LoopManager {
         channelType: 'loop',
         projectId: agent.projectId,
         entities: [],
+          }
+        },
+        agent,
+        secrets: agent.secrets,
+        publicVariables: agent.publicVariables,
       })
+      console.log('output is', resp)
     }, loopInterval)
     this.loopHandlers[agent.id] = loopHandler
     console.log('Added agent to loop', agent.id)
@@ -53,8 +61,9 @@ class LoopManager {
 function getAgentMethods() {
   let loopManager: LoopManager | null = null;
   return {
-    start: async ({ spellRunner, agentManager }: StartLoopArgs) => {
+    start: async ({ spellRunner, agent, agentManager }: StartLoopArgs) => {
       if(!loopManager) loopManager = new LoopManager(agentManager, spellRunner)
+      loopManager.addAgent({ spellRunner, agent, agentData: agent.data })
     },
     stop: async () => {
       if(!loopManager) return console.error('Loop Manager not initialized')
