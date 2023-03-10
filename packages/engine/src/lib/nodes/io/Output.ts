@@ -135,8 +135,6 @@ export class Output extends MagickComponent<void> {
 
     if (!silent) node.display(output as string)
 
-    const outputType = node.data.outputType
-
     if(module.agent) {
       // find the outputType in the outputTypes array
       const t = module.agent.outputTypes.find(t => t.name === outputType)

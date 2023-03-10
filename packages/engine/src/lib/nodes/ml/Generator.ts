@@ -1,20 +1,17 @@
-/* eslint-disable no-console */
 import Handlebars from 'handlebars'
 import Rete from 'rete'
-import { CompletionData, makeCompletion } from '../../functions/makeCompletion'
-import {
-  EngineContext,
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { stringSocket, triggerSocket, anySocket } from '../../sockets'
+import { CompletionData, makeCompletion } from '../../functions/makeCompletion'
 import { MagickComponent } from '../../magick-component'
+import { stringSocket, triggerSocket } from '../../sockets'
+import {
+  EngineContext, MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs, NodeData
+} from '../../types'
 
 const info = `The generator component is our general purpose completion component.  You can define any number of inputs, and utilize those inputs in a templating language known as Handlebars.  Any value which is wrapped like {{this}} in double braces will be replaced with the corresponding value coming in to the input with the same name.  This allows you to write almost any fewshot you might need, and input values from anywhere else in your graph.
 
@@ -126,10 +123,12 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       .add(frequency_penalty)
       .add(presence_penalty)
       .add(stopControl)
-      
+
     return node
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   async worker(
     node: NodeData,
     rawInputs: MagickWorkerInputs,
@@ -142,11 +141,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       magick,
     } = context
 
-    console.log('projectId', projectId)
-
     const currentSpell = magick.getCurrentSpell()
-    console.log('currentSpell')
-    console.log(currentSpell)
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
       acc[key] = value[0]
       return acc
@@ -177,7 +172,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     const presencePenaltyData = node?.data?.presence_penalty as string
     const presence_penalty = parseFloat(presencePenaltyData ?? "0")
 
-    const stopData = node?.data?.stop as string 
+    const stopData = node?.data?.stop as string
     const stop = (stopData ?? '').split(', ')
 
     for (let i = 0; i < stop.length; i++) {
@@ -209,19 +204,15 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
         nodeId: node.id,
       })
 
-      console.log('success, choice', success, choice)
-
       if (!success) throw new Error('Error in generator')
 
       const raw = choice.text
       const result = raw
-      // trim any newlines from the beginning and end
+        // trim any newlines from the beginning and end
         .replace(/^\n+|\n+$/g, '')
         // trim any spaces from the beginning and end
         .replace(/^\s+|\s+$/g, '')
       const composed = `${prompt} ${result}`
-
-      console.log('result', result)
 
       if (!silent) node.display(result)
 
@@ -230,11 +221,11 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
         composed,
       }
     } catch (err) {
-      console.log({ err })
+      if (!silent) node.display(err)
       // Typescript reporting wrong about number of arguments for error constructor
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore:next-line
-      throw new Error('Error in Generator component.' + err)
+      console.error('Error in Generator component.' + err)
     }
   }
 }
