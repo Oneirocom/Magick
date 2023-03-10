@@ -54,10 +54,13 @@ const AgentManagerWindow = () => {
       const data = JSON.parse(event?.target?.result as string)
       data.projectId = config.projectId
       data.enabled = data?.enabled ? true : false
+      data.dirty = data?.dirty ? true : false
       data.updatedAt = data?.updatedAt || ''
       data.rootSpell = data?.rootSpell || '{}'
       data.spells = Array.isArray(data?.spells) ? data.spells : []
-      data.secrets = Array.isArray(data?.secrets) ? data.secrets : []
+      data.secrets = JSON.stringify(
+        Array.isArray(data?.secrets) ? data.secrets : []
+      )
       // if the agent's public variable keys don't match the spell's public variable keys, update the agent
       data.publicVariables =
         data?.publicVariables ||

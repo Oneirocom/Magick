@@ -15,9 +15,10 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
       // if the native event is a backspace
       if (nativeEventData.inputType === 'deleteContentBackward') {
         // remove the last character
-        inputValue = inputValue.length > 0 ? inputValue.slice(0, -1) : inputValue
+        inputValue =
+          inputValue.length > 0 ? inputValue.slice(0, -1) : inputValue
       }
-      
+
       // otherwise, add the native event to the current variable value
       return inputValue + nativeEventData.data
     }
@@ -77,7 +78,6 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
                     value={variable.value ? variable.value : ''}
                     type="text"
                     onChange={e => onChange(variable, e)}
-                    onDelete={e => onChange(variable, e)}
                     name={variable.name}
                     placeHolder={'Add new value here'}
                   />
