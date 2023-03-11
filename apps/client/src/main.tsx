@@ -30,9 +30,9 @@ if (window !== window.parent) {
       // not sure when we would use different types, but good to be sure.
       if (type === 'INIT') {
         // to do - we shold store this stuiff in localstorage
-        const { config, token } = payload
+        const { config } = payload
 
-        const Root = () => <MagickIDE config={config} token={token} />
+        const Root = () => <MagickIDE config={config} />
         const container = document.getElementById('root')
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
         ;(window as any).root = root
@@ -48,8 +48,9 @@ if (window !== window.parent) {
   const config: MagickIDEProps = {
     apiUrl,
     projectId,
+    token: '',
   }
-  const Root = () => <MagickIDE config={config} token={null} />
+  const Root = () => <MagickIDE config={config} />
 
   root.render(<Root />)
 }

@@ -54,7 +54,7 @@
     "@pixiv/three-vrm": "^1.0.6",
     "@react-three/drei": "^9.53.0",
     "@react-three/fiber": "^8.10.0",
-    "@reduxjs/toolkit": "^1.9.1",
+    "@reduxjs/toolkit": "^1.9.3",
     "@types/dotenv-flow": "^3.2.0",
     "@types/filesize": "^5.0.0",
     "@wagmi/core": "^0.9.5",
