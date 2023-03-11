@@ -4,7 +4,10 @@ import { GraphData, Spell } from '@magickml/engine'
 
 import md5 from 'md5'
 
-import { spellApi } from '../../../state/api/spells'
+import {
+  useLazyGetSpellByIdQuery,
+  useSaveSpellMutation,
+} from '../../../state/api/spells'
 import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
 import { useEditor } from '../../../workspaces/contexts/EditorProvider'
 import { diff } from '../../../utils/json0'
@@ -19,13 +22,12 @@ const EventHandler = ({ pubSub, tab }) => {
   const { createOrFocus, windowTypes } = useLayout()
   const { enqueueSnackbar } = useSnackbar()
 
-  const [saveSpellMutation] = spellApi.useSaveSpellMutation()
-  const [getSpell, { data: spell, isLoading }] =
-    spellApi.useLazyGetSpellByIdQuery({
-      spellName: tab.name.split('--')[0],
-      id: tab.id,
-      projectId: config.projectId,
-    })
+  const [saveSpellMutation] = useSaveSpellMutation()
+  const [getSpell, { data: spell, isLoading }] = useLazyGetSpellByIdQuery({
+    spellName: tab.name.split('--')[0],
+    id: tab.id,
+    projectId: config.projectId,
+  })
   // Spell ref because callbacks cant hold values from state without them
   const spellRef = useRef<Spell | null>(null)
 
@@ -100,16 +102,6 @@ const EventHandler = ({ pubSub, tab }) => {
       projectId: config.projectId,
     })
 
-    // const jsonDiff = diff(currentSpell, updatedSpell)
-
-    // if (jsonDiff.length !== 0) {
-    //   // save diff to spell runner if something has changed.  Will update spell in spell runner session
-    //   client.service('spell-runner').update(currentSpell.id, {
-    //     diff: jsonDiff,
-    //     projectId: config.projectId,
-    //   })
-    // }
-
     if ('error' in response) {
       console.log('UPDATED SPELL', updatedSpell)
       console.error(response.error)
@@ -144,20 +136,21 @@ const EventHandler = ({ pubSub, tab }) => {
     if (updatedSpell.graph.nodes.length === 0) return
 
     try {
-      // await client.service('spell-runner').update(currentSpell.id, {
-      //   diff: jsonDiff,
-      //   projectId: config.projectId,
-      // })
+      // We save the diff.  Doing this via feathers but may want to switch to rtk query
       const diffResponse = await client.service('spells').saveDiff({
         projectId: config.projectId,
         diff: jsonDiff,
         name: currentSpell.name,
+        id: currentSpell.id,
       })
+
+      // refresh the spell after saving
       getSpell({
         spellName: tab.name,
         id: tab.id,
         projectId: config.projectId,
       })
+
       if ('error' in diffResponse) {
         enqueueSnackbar('Error Updating spell', {
           variant: 'error',
