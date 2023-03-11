@@ -135,6 +135,24 @@ const Magick = ({ empty = false }) => {
     [pubSub, activeTab]
   )
 
+  useHotkeys(
+    'Control+c',
+    () => {
+      if (!pubSub || !activeTab) return
+      publish(events.$MULTI_SELECT_COPY(activeTab.id))
+    },
+    [pubSub, activeTab]
+  )
+
+  useHotkeys(
+    'Control+v',
+    () => {
+      if (!pubSub || !activeTab) return
+      publish(events.$MULTI_SELECT_PASTE(activeTab.id))
+    },
+    [pubSub, activeTab]
+  )
+
   if (!activeTab) return <LoadingScreen />
 
   

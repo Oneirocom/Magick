@@ -50,6 +50,8 @@ type EditorContextType = {
   undo: () => void
   redo: () => void
   del: () => void
+  multiSelectCopy: () => void
+  multiSelectPaste: () => void
   centerNode: (nodeId: number) => void
 }
 
@@ -124,6 +126,16 @@ const EditorProvider = ({ children }) => {
     editorRef.current.trigger('delete')
   }
 
+  const multiSelectCopy = () => {
+    if (!editorRef.current) return
+    editorRef.current.trigger('multiselectcopy')
+  }
+
+  const multiSelectPaste = () => {
+    if (!editorRef.current) return
+    editorRef.current.trigger('multiselectpaste')
+  }
+
   const serialize = () => {
     if (!editorRef.current) return
     return editorRef.current.toJSON()
@@ -161,6 +173,8 @@ const EditorProvider = ({ children }) => {
     undo,
     redo,
     del,
+    multiSelectCopy,
+    multiSelectPaste,
     setContainer,
     centerNode,
   }
