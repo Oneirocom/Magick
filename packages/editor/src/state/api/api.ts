@@ -5,7 +5,7 @@ import {
   fetchBaseQuery,
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react'
-import { createStore, RootState } from '../store'
+import { RootState } from '../store'
 
 const dynamicBaseQuery: BaseQueryFn<
   string | FetchArgs,
