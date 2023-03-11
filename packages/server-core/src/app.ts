@@ -16,7 +16,7 @@ import { dbClient } from './dbClient'
 import channels from './sockets/channels'
 // import swagger from 'feathers-swagger'
 import handleSockets from './sockets/sockets'
-import { configureManager, globalsManager } from '@magickml/engine'
+import { configureManager, globalsManager, IGNORE_AUTH } from '@magickml/engine'
 import { services } from './services'
 import { authentication } from './auth/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
@@ -61,6 +61,7 @@ app.use(bodyParser())
 
 app.configure(configureManager())
 
+if(!IGNORE_AUTH){
 // this will configure out stateless JWT authentication
 app.set('authentication', {
   // We will want to use the same secret as the cloud is using for shared authentication
@@ -77,6 +78,7 @@ app.set('authentication', {
 })
 
 app.configure(authentication)
+}
 // app.use(authenticate('jwt'))
 
 // Configure services and transports
@@ -106,6 +108,7 @@ app.hooks({
     all: [
       logError,
       async (context, next) => {
+        if(IGNORE_AUTH) return await next()
         if (context.path !== 'authentication') {
           return authenticate('jwt')(context, next)
         }
@@ -115,6 +118,11 @@ app.hooks({
       // attach the user from the payload to the params
       async (context: HookContext, next) => {
         const { params } = context
+
+        if(IGNORE_AUTH) {
+          return await next()
+        }
+
         const { authentication, authenticated } = params
 
         // First check if this is authenticated

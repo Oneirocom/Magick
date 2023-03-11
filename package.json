@@ -15,7 +15,7 @@
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
     "find unused deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
-    "postinstall": "node config/config-plugins.js && node config/config-project.js && node config/config-db.js",
+    "postinstall": "node config/config-plugins.js && node config/config-db.js",
     "version": "standard-version",
     "publish": "npm publish",
     "semantic-release": "semantic-release"
@@ -264,6 +264,9 @@
     "vite-plugin-markdown": "^2.1.0",
     "vitest": "^0.25.8",
     "webpack-merge": "^5.8.0"
+  },
+  "optionalDependencies": {
+    "@esbuild/darwin-arm64": "^0.17.11"
   },
   "overrides": {
     "vite-plugin-markdown": {

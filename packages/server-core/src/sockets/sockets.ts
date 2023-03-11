@@ -1,24 +1,19 @@
 // import io from 'socket.io'
-import { SpellManager } from '@magickml/engine'
+import { SpellManager, IGNORE_AUTH } from '@magickml/engine'
 import { buildMagickInterface } from '../helpers/buildMagickInterface'
-
 import { v4 } from 'uuid'
-
-const ignoreAuth = process.env.IGNORE_AUTH === 'true'
 
 const handleSockets = (app: any) => {
   return (io: any) => {
     // Another gross 'any' here
     io.on('connection', async function (socket: any) {
       console.log('CONNECTION ESTABLISHED')
-      
+
       // user will be set to the payload if we are not in single user mode
       let user
 
-      console.log('socket.handshake.headers.authorization', socket.handshake.headers.authorization)
-
       // Single user mode is for local usage of magick.  If we are in the cloud, we want auth here.
-      if (ignoreAuth) {
+      if (IGNORE_AUTH) {
         const id = v4()
         user = {
           id: id,
@@ -27,8 +22,6 @@ const handleSockets = (app: any) => {
         // todo wound up using a custom header here for the handshake.
         // Using the standard authorization header was causing issues with feathers auth
         const sessionId = socket.handshake.headers.authorization.split(' ')[1]
-        console.log('*********************************************')
-        console.log('sessionId', sessionId)
         // auth services will verify the token
         const payload = await app
           .service('authentication')
