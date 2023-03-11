@@ -1,74 +1,13 @@
-/* eslint-disable prefer-const */
-/* eslint-disable no-invalid-this */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable camelcase */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 import { TwitterApi, ETwitterStreamEvent } from 'twitter-api-v2'
 
-function randomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
-function log(...s: (string | boolean)[]) {
-  console.log(...s)
-}
-
-const createTwitterClientV1 = (
-  appKey: string,
-  appSecret: string,
-  accessToken: string,
-  accessSecret: string
-) => {
-  return new TwitterApi({
-    appKey: appKey,
-    appSecret: appSecret,
-    accessToken: accessToken,
-    accessSecret: accessSecret,
-  })
-}
-
-function sleep(ms) {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms)
-  })
-}
-
-const createTwitterClientV2 = (bearerKey: string) => {
-  return new TwitterApi(bearerKey)
-}
-
-export class twitter_client {
-  automatic_tweet = async spellRunner => {
-    const interval =
-      randomInt(
-        this.twitter_auto_tweet_interval_min,
-        this.twitter_auto_tweet_interval_max
-      ) * 60000
-    console.log('await interval:', interval)
-    await sleep(interval)
-
-    const resp = await spellRunner(
-      '',
-      'user',
-      this.settings.twitter_bot_name ?? 'Agent',
-      'twitter',
-      'auto_tweet',
-      this.settings.entity,
-      [],
-      'auto'
-    )
-    console.log('generated automatic tweet:', resp)
-
-    this.twitterv1.v1.tweet(resp)
-    this.automatic_tweet(spellRunner)
-  }
-
+export class TwitterConnector {
   async handleMessage(response, chat_id, args) {
     if (args === 'DM') {
-      const dmSent = await this.twitterv1.v1.sendDm({
+      await this.twitterv1.v1.sendDm({
         recipient_id: chat_id,
         text: response,
       })
-    } else if (args === 'Twit') {
+    } else if (args === 'feed') {
       await this.twitterv1.v1.reply(response, chat_id)
     }
   }
@@ -93,22 +32,20 @@ export class twitter_client {
   spellRunner
   spellHandlerAuto
   settings
-  entity
-  twitter_enable_twits: boolean = false
-  twitter_tweet_rules: string = ''
-  twitter_auto_tweet_interval_min: number = 0
-  twitter_auto_tweet_interval_max: number = 0
+  agent
+  twitter_enable_twits = false
+  twitter_tweet_rules = ''
 
-  createTwitterClient = async (
+  constructor ({
     spellRunner,
     spellHandlerAuto,
     settings,
-    entity
-  ) => {
+    agent,
+  }) {
     this.spellRunner = spellRunner
     this.spellHandlerAuto = spellHandlerAuto
     this.settings = settings
-    this.entity = entity
+    this.agent = agent
     this.twitter_enable_twits =
       settings.twitter_enable_twits === true ||
       settings.twitter_enable_twits === 'true'
@@ -118,22 +55,24 @@ export class twitter_client {
       this.twitter_enable_twits = false
     }
 
-    const temp_min = settings.twitter_auto_tweet_interval_min
-    const temp_max = settings.twitter_auto_tweet_interval_max
-
-    if (temp_min && temp_min.length > 0) {
-      this.twitter_auto_tweet_interval_min = parseInt(temp_min)
-    }
-    if (temp_max && temp_max.length > 0) {
-      this.twitter_auto_tweet_interval_max = parseInt(temp_max)
-    }
-
-    const bearerToken = settings.twitter_token
-    const twitterUser = settings.twitter_id
-    const twitterAppToken = settings.twitter_app_token
-    const twitterAppTokenSecret = settings.twitter_app_token_secret
-    const twitterAccessToken = settings.twitter_access_token
-    const twitterAccessTokenSecret = settings.twitter_access_token_secret
+    const bearerToken = getSetting(
+      settings.twitter_bearer_token,
+      'Bearer Token (Twitter API V2)'
+    )
+    const twitterUser = getSetting(settings.twitter_userid, 'User ID (@)')
+    const twitterAppToken = getSetting(settings.twitter_app_token, 'App Token')
+    const twitterAppTokenSecret = getSetting(
+      settings.twitter_app_token_secret,
+      'App Token Secret'
+    )
+    const twitterAccessToken = getSetting(
+      settings.twitter_access_token,
+      'Access Token'
+    )
+    const twitterAccessTokenSecret = getSetting(
+      settings.twitter_access_token_secret,
+      'Access Token Secret'
+    )
 
     if (
       !bearerToken ||
@@ -142,26 +81,38 @@ export class twitter_client {
       !twitterAccessToken ||
       !twitterAccessTokenSecret ||
       !twitterUser
-    )
-      return console.warn('No API token for Twitter bot, skipping')
+    ) {
+      console.log(
+        `Twitter is not configured properly for agent ${this.agent.id} - skipping`
+      )
+      return
+    }
 
-    this.twitterv1 = createTwitterClientV1(
-      twitterAppToken,
-      twitterAppTokenSecret,
-      twitterAccessToken,
-      twitterAccessTokenSecret
-    )
+    this.twitterv1 = new TwitterApi({
+      appKey: twitterAppToken,
+      appSecret: twitterAppTokenSecret,
+      accessToken: twitterAccessToken,
+      accessSecret: twitterAccessTokenSecret,
+    })
 
-    this.twitterv2 = createTwitterClientV2(bearerToken)
-    this.twitterv2_replies = createTwitterClientV2(bearerToken)
+    this.twitterv2 = new TwitterApi(bearerToken)
+    this.twitterv2_replies = TwitterApi(bearerToken)
+    this.initialize({settings})
+  }
+
+  async initialize({settings}) {
+    const twitterUser = getSetting(settings.twitter_userid, 'User ID (@)')
+
     const localUser = await this.twitterv2.v2.userByUsername(twitterUser)
 
     const stream = await this.twitterv2_replies.v2.searchStream({
       'tweet.fields': ['referenced_tweets', 'author_id'],
       expansions: ['referenced_tweets.id'],
     })
+
     stream.autoReconnect = true
     stream.on(ETwitterStreamEvent.Data, async twit => {
+      
       if (
         twit.data.referenced_tweets &&
         twit.includes &&
@@ -172,152 +123,135 @@ export class twitter_client {
         twit.data.author_id !== localUser.data.id &&
         twit.data.text.startsWith('@' + localUser.data.username)
       ) {
-        console.log(twit.data)
-        console.log(twit.includes)
-        // TODO: redo this to use use read and create events
-        // const handled: boolean = await database.dataIsHandled(
-        //   twit.data.id,
-        //   'twitter'
-        // )
-        // if (!handled) {
-        //   const author = await this.twitterv2.v2.user(twit.data.author_id)
+        const author = await this.twitterv2.v2.user(twit.data.author_id)
+        const entities = [author.data.name, twitterUser]
 
-        //   const input = twit.data.text.replace(
-        //     '@' + localUser.data.username,
-        //     ''
-        //   )
-        //   const resp = await this.spellRunner(
-        //     input,
-        //     author.data.name,
-        //     this.settings.twitter_bot_name ?? 'Agent',
-        //     'twitter',
-        //     twit.data.id,
-        //     settings.entity,
-        //     [],
-        //     'tweet'
-        //   )
+        const input = twit.data.text.replace('@' + localUser.data.username, '')
 
-        //   if (resp && resp !== undefined && resp?.length > 0) {
-        //     if (resp === 'like' || resp === 'heart') {
-        //       await this.twitterv2.v2.like(localUser.data.id, twit.data.id)
-        //     } else if (resp !== 'ignore') {
-        //       await this.handleMessage(resp, twit.data.id, 'Twit')
-        //     } else if (resp === 'retweet') {
-        //       await this.twitterv2.v2.retweet(localUser.data.id, twit.data.id)
-        //     }
-        //   }
+        if(author === twitterUser) {
+          return console.warn('Bot was going to reply to self, ignoring tweet:', input)
+        }
+        
+        const resp = await this.spellRunner.runComponent({
+          inputs: {
+            'Input - Twitter': {
+              content: input,
+              sender: author.data.name,
+              observer: twitterUser,
+              client: 'twitter',
+              channel: twit.data.id,
+              agentId: this.agent.id,
+              entities,
+              channelType: 'feed',
+            },
+          },
+          agent: this.agent,
+          secrets: this.agent.secrets,
+          publicVariables: this.agent.publicVariables,
+          runSubspell: true,
+        });
 
-        //   // todo not sure if the third argument here is correct
-        //   database.setDataHandled(twit.data.id, 'twitter', resp)
-        // }
+        if (resp && resp !== undefined && resp?.length > 0) {
+          if (resp === 'like' || resp === 'heart') {
+            await this.twitterv2.v2.like(localUser.data.id, twit.data.id)
+          } else if (resp !== 'ignore') {
+            await this.handleMessage(resp, twit.data.id, 'feed')
+          } else if (resp === 'retweet') {
+            await this.twitterv2.v2.retweet(localUser.data.id, twit.data.id)
+          }
+        }
       }
     })
 
-    if (
-      this.twitter_auto_tweet_interval_min > 0 &&
-      this.twitter_auto_tweet_interval_max > 0 &&
-      this.twitter_auto_tweet_interval_min <
-        this.twitter_auto_tweet_interval_max
-    ) {
-      try {
-        this.automatic_tweet(spellHandlerAuto)
-      } catch (e) {
-        console.log(e)
-      }
-    }
-
-    if (this.twitter_enable_twits) {
-      try {
-        const client = this.twitterv2
-        const rules = await client.v2.streamRules()
-        if (rules.data?.length) {
-          await client.v2.updateStreamRules({
-            delete: { ids: rules.data.map(rule => rule.id) },
-          })
-        }
-        const tweetRules = this.twitter_tweet_rules.split(',')
-        const _rules = []
-        const regex = []
-        for (let x in tweetRules) {
-          _rules.push({ value: tweetRules[x] })
-          regex.push(tweetRules[x])
-        }
+    try {
+      const client = this.twitterv2
+      const rules = await client.v2.streamRules()
+      if (rules.data?.length) {
         await client.v2.updateStreamRules({
-          add: _rules,
+          delete: { ids: rules.data.map(rule => rule.id) },
         })
-        const stream = await client.v2.searchStream({
-          'tweet.fields': ['referenced_tweets', 'author_id'],
-          expansions: ['referenced_tweets.id'],
-        })
-        stream.autoReconnect = true
-        stream.on(ETwitterStreamEvent.Data, async twit => {
-          const isARt =
-            twit.data.referenced_tweets?.some(
-              twit => twit.type === 'retweeted'
-            ) ?? false
-          const isReply =
-            twit.data.referenced_tweets &&
-            twit.includes &&
-            twit.data.referenced_tweets !== undefined &&
-            twit.includes !== undefined &&
-            twit.includes.tweets.length > 0 &&
-            twit.includes.tweets[0].author_id == localUser.data.id
+      }
+      const tweetRules = this.twitter_tweet_rules.split(',') as any[]
+      const _rules = [] as any[]
+      const regex = [] as any[]
+      for (const x in tweetRules) {
+        _rules.push({ value: tweetRules[x] })
+        regex.push(tweetRules[x])
+      }
+      await client.v2.updateStreamRules({
+        add: _rules,
+      })
+      const stream = await client.v2.searchStream({
+        'tweet.fields': ['referenced_tweets', 'author_id'],
+        expansions: ['referenced_tweets.id'],
+      })
+      stream.autoReconnect = true
+      stream.on(ETwitterStreamEvent.Data, async twit => {
+        const isARt =
+          twit.data.referenced_tweets?.some(
+            twit => twit.type === 'retweeted'
+          ) ?? false
+        const isReply =
+          twit.data.referenced_tweets &&
+          twit.includes &&
+          twit.data.referenced_tweets !== undefined &&
+          twit.includes !== undefined &&
+          twit.includes.tweets.length > 0 &&
+          twit.includes.tweets[0].author_id == localUser.data.id
 
-          if (
-            isARt ||
-            isReply ||
-            (localUser !== undefined &&
-              twit.data.author_id == localUser.data.id)
-          ) {
+        if (
+          isARt ||
+          isReply ||
+          (localUser !== undefined && twit.data.author_id == localUser.data.id)
+        ) {
+          return
+        } else {
+          if (!this.regexMatch(regex, twit.data.text)) {
+            return
           } else {
-            if (!this.regexMatch(regex, twit.data.text)) {
-            } else {
-              let authorName = 'unknown'
-              const author = await this.twitterv2.v2.user(twit.data.author_id)
-              if (author) authorName = author.data.username
+            const author = await this.twitterv2.v2.user(twit.data.author_id)
+            const entities = [author.data.name, twitterUser]
+            const resp = await this.spellRunner.runComponent({
+              inputs: {
+                'Input - Twitter': {
+                  content: twit.data.text,
+                  sender: author.data.name,
+                  observer: twitterUser,
+                  client: 'twitter',
+                  channel: twit.data.id,
+                  agentId: this.agent.id,
+                  entities,
+                  channelType: 'feed',
+                },
+              },
+              agent: this.agent,
+              secrets: this.agent.secrets,
+              publicVariables: this.agent.publicVariables,
+              runSubspell: true,
+            });
 
-              // const handled: boolean = await database.dataIsHandled(
-              //   twit.data.id,
-              //   'twitter'
-              // )
-
-              // if (!handled) {
-              //   const resp = await this.spellRunner(
-              //     twit.data.text,
-              //     author.data.name,
-              //     this.settings.twitter_bot_name ?? 'Agent',
-              //     'twitter',
-              //     twit.data.id,
-              //     settings.entity,
-              //     [],
-              //     'tweet'
-              //   )
-
-              //   if (resp && resp !== undefined && resp?.length > 0) {
-              //     if (resp === 'like' || resp === 'heart') {
-              //       await this.twitterv2.v2.like(
-              //         localUser.data.id,
-              //         twit.data.id
-              //       )
-              //     } else if (resp !== 'ignore') {
-              //       await this.handleMessage(resp, twit.data.id, 'Twit')
-              //     } else if (resp === 'retweet') {
-              //       await this.twitterv2.v2.retweet(
-              //         localUser.data.id,
-              //         twit.data.id
-              //       )
-              //     }
-              //   }
-
-              //   // todo not sure about this third argument
-              //   // database.setDataHandled(twit.data.id, 'twitter', resp)
-              // }
+            if (resp && resp !== undefined && resp?.length > 0) {
+              if (resp === 'like' || resp === 'heart') {
+                await this.twitterv2.v2.like(localUser.data.id, twit.data.id)
+              } else if (resp !== 'ignore') {
+                await this.handleMessage(resp, twit.data.id, 'feed')
+              } else if (resp === 'retweet') {
+                await this.twitterv2.v2.retweet(localUser.data.id, twit.data.id)
+              }
             }
           }
-        })
-      } catch (e) {
-        console.log(e)
-      }
+        }
+      })
+    } catch (e) {
+      console.log(e)
     }
   }
+}
+
+function getSetting(setting, settingName) {
+  if (!setting) {
+    console.warn(`Could not get Twitter setting for '${settingName}'`)
+    return null
+  }
+  return setting
 }
