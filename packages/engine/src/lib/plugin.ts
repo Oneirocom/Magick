@@ -195,7 +195,6 @@ class PluginManager {
         secrets.push(secret)
       })
     })
-    console.log('secrets', secrets)
     return secrets
   }
 
