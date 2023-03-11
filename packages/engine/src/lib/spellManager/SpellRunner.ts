@@ -152,15 +152,14 @@ class SpellRunner {
   private _getTriggeredNodeByName(componentName) {
     const triggerIns = extractNodes(
       this.currentSpell.graph.nodes,
-      this.triggerIns,
+      this.triggerIns
     )
 
     const inputs = extractNodes(this.currentSpell.graph.nodes, this.inputs)
-    
+
     return [...triggerIns, ...inputs].find(node => {
-      
       return node.data.name === componentName
-    });
+    })
   }
 
   /**
@@ -187,10 +186,15 @@ class SpellRunner {
    * Loads a spell into the spell runner.
    */
   async loadSpell(spell: SpellType) {
+    console.log('LOADING SPELL', spell)
     this.currentSpell = spell
 
+    // We need to parse the graph if it is a string
+    const graph =
+      typeof spell.graph === 'string' ? JSON.parse(spell.graph) : spell.graph
+
     // We process the graph for the new spell which will set up all the task workers
-    await this.engine.process(spell.graph as GraphData, null, this.context)
+    await this.engine.process(graph as GraphData, null, this.context)
   }
 
   /**
@@ -220,7 +224,11 @@ class SpellRunner {
 
     console.log('reading module - spellRunner.ts')
     // load the inputs into module memory
-    this.module.read({inputs: this._formatInputs(inputs), secrets, publicVariables})
+    this.module.read({
+      inputs: this._formatInputs(inputs),
+      secrets,
+      publicVariables,
+    })
 
     const component = this._getComponent(componentName) as ModuleComponent
 
