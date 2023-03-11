@@ -18,14 +18,6 @@ function getAgentMethods() {
     if(!data.twitter_enabled) return console.log("Twitter is not enabled for this agent")
     if(!data.twitter_api_key) return console.log("Twitter API key is not set for this agent")
 
-    console.log('starting twitter')
-      // const {
-      // twitter_app_key,
-      // twitter_app_secret
-      // twitter_access_token,
-      // twitter_access_secret,
-      // } = data
-
     const twitter = new TwitterConnector({
       ...data,
       agent,
@@ -36,8 +28,6 @@ function getAgentMethods() {
   }
 
   async function stopTwitter({agent}) {
-    console.log('**************** STOPPING DISCORD')
-    console.log('Inside Kill Method')
     if (!agent.twitter) return console.warn("Twitter isn't running, can't stop it")
     try {
       await agent.twitter.destroy()
@@ -61,37 +51,68 @@ async function handleResponse(
     event
   }
 ) {
+  console.log('********* SENT MESSAGE TO TWITTER', agent.id, output, event)
   console.log('event is', event)
   console.log('event.channel is', event.channel)
-  await agent.twitter.sendMessageToChannel(event.channel, output)
-  console.log('********* SENT MESSAGE TO DISCORD', agent.id, output, event)
+
+  const resp = output
+  if (resp && resp !== undefined && resp?.length > 0) {
+    if (resp === 'like' || resp === 'heart') {
+      await agent.twitter.twitterv2.v2.like(agent.twitter.localUser.data.id, event.channel)
+    } else if (resp !== 'ignore') {
+      await agent.twitter.handleMessage(resp, event.channel, 'feed')
+    } else if (resp === 'retweet') {
+      await agent.twitter.twitterv2.v2.retweet(agent.twitter.localUser.data.id, event.channel)
+    }
+  }
 }
 
 const TwitterPlugin = new ServerPlugin({
   name: 'TwitterPlugin',
   inputTypes: [
-    { name: 'Twitter (Voice)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (Voice)' },
-    { name: 'Twitter (Text)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (Text)' },
+    { name: 'Twitter (Feed)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (Feed)' },
+    { name: 'Twitter (DM)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (DM)' },
   ],
   outputTypes: [
-    { name: 'Twitter (Voice)', trigger: true, socket: eventSocket, handler: async ({
+    { name: 'Twitter (Feed)', trigger: true, socket: eventSocket, handler: async ({
       output, agent, event
     }) => {
       await handleResponse({output, agent, event})
     }},
-    { name: 'Twitter (Text)', trigger: true, socket: eventSocket, handler: async ({
+    { name: 'Twitter (DM)', trigger: true, socket: eventSocket, handler: async ({
       output, agent, event
     }) => {
-      console.log('output is', output)
       await handleResponse({output, agent, event})
     }},
   ],
   agentMethods: getAgentMethods(),
-  secrets: [{
-    name: 'Twitter API Key',
-    key: 'twitter_api_key',
+  secrets: [
+  {
+    name: 'Bearer Token (API v2)',
+    key: 'twitter_bearer_token',
     global: false
-  }]
+  },
+  {
+    name: 'App Token (API v1)',
+    key: 'twitter_app_token',
+    global: false
+  },
+  {
+    name: 'App Token Secret (API v1)',
+    key: 'twitter_app_token_secret',
+    global: false
+  },
+  {
+    name: 'Access Token (API v1)',
+    key: 'twitter_access_token',
+    global: false
+  },
+  {
+    name: 'Access Token Secret (API v1)',
+    key: 'twitter_access_token_secret',
+    global: false
+  },
+]
 })
 
 export default TwitterPlugin
