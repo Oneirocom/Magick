@@ -4,9 +4,12 @@ import { HookContext } from '../declarations'
 import { getSpell } from '../helpers/getSpell'
 
 export const checkForSpellInManager = async (context: HookContext) => {
-  const { app, params, data, id } = context
+  const { app, params, data, id: contextId } = context
   const { user } = params
+  const { id: dataId } = data
 
+  // We do this because the id comes from different places in sockets vs rest
+  const id = dataId || contextId
   const projectId = data.projectId || params.query.projectId
 
   if (!user) return
@@ -26,9 +29,12 @@ export const checkForSpellInManager = async (context: HookContext) => {
 
 // When the spell updates on the server, we need to update the spell in the spell manager
 export const updateSpellInManager = async (context: HookContext) => {
-  const { app, params, data, id } = context
+  const { app, params, data, id: contextId } = context
   const { user } = params
-  const { spellUpdate, diff } = data
+  const { spellUpdate, diff, id: dataId } = data
+
+  // We do this because the id comes from different places in sockets vs rest
+  const id = dataId || contextId
 
   // Here we get the users spellManagerApp
   const spellManager = app.userSpellManagers.get(user.id.toString())
@@ -39,15 +45,9 @@ export const updateSpellInManager = async (context: HookContext) => {
 
   if (!spellRunner) return
 
-  if (diff) {
-    const spell = spellRunner.currentSpell
-    const updatedSpell = otJson0.type.apply(spell, diff)
-    spellManager.load(updatedSpell, true)
-    return updatedSpell
-  }
+  if (!context.result) return
 
-  if (spellUpdate) {
-    spellManager.load(spellUpdate, true)
-    return spellUpdate
-  }
+  // We just store the result here of the update
+  // This hook only run after save spell calls, so there should always be a spell to laod in.
+  spellManager.load(context.result, true)
 }
