@@ -8,6 +8,10 @@ import { useConfig } from '../../../contexts/ConfigProvider'
 
 interface Props {
   data: Array<object>
+  selectedAgent: object
+  rootSpell: string
+  setRootSpell: (spell: string) => void
+  setSelectedAgent: (data: object) => void
   onCreateAgent: (data: any) => void
   updateCallBack: () => void
   update: (id: string, data: object) => void
@@ -67,9 +71,7 @@ const AgentWindow = ({
             key={agent?.id}
             keyId={agent?.id}
             onDelete={onDelete}
-            setSelectedAgentData={setSelectedAgentData}
             onClick={onClickHandler}
-            update={update}
             agent={agent}
             style={
               agent?.id === selectedAgentData?.id

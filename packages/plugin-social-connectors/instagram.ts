@@ -6,12 +6,12 @@
 import { IgApiClient } from 'instagram-private-api'
 
 export class instagram_client {
-  spellHandler
+  spellRunner
   settings
   entity
 
-  createInstagramClient = async (spellHandler, settings, entity) => {
-    this.spellHandler = spellHandler
+  createInstagramClient = async (spellRunner, settings, entity) => {
+    this.spellRunner = spellRunner
     this.settings = settings
     this.entity = entity
 
@@ -36,7 +36,7 @@ export class instagram_client {
           const { text } = last_permanent_item
           const userIds = users.map(user => user.pk)
 
-          const resp = await this.spellHandler(
+          const resp = await this.spellRunner(
             text,
             inviter.username,
             this.settings.instagram_bot_name ?? 'Agent',
@@ -46,7 +46,7 @@ export class instagram_client {
             [],
             'msg'
           )
-          console.log('resp of spellHandler ::: ', resp)
+          console.log('resp of spellRunner ::: ', resp)
           const thread = ig.entity.directThread(userIds)
           await thread.broadcastText(resp)
         }

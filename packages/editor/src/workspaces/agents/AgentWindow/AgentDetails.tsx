@@ -8,6 +8,8 @@ import { enqueueSnackbar } from 'notistack'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { pluginManager } from '@magickml/engine'
 import { Input } from '@mui/material'
+import { Icon, IconBtn } from '@magickml/client-core'
+import { Edit, Done, Close } from '@mui/icons-material'
 
 const RenderComp = props => {
   return <props.element props={props} />
@@ -19,18 +21,19 @@ const AgentDetails = ({
   updateCallback,
 }) => {
   const [spellList, setSpellList] = useState<any[]>([])
-  const [rootSpell, setRootSpell] = useState<any>({})
   const config = useConfig()
+  const [editMode, setEditMode] = useState<boolean>(false)
+  const [oldName, setOldName] = useState<string>('')
 
   const update = id => {
+    console.log('calling update, data is', selectedAgentData)
     const _data = selectedAgentData
-    if (_data.hasOwnProperty('id')) {
+    if (_data['id']) {
       delete _data.id
     }
     console.log('update', _data)
     // Avoid server-side validation error
     _data.spells = Array.isArray(_data?.spells) ? _data.spells : []
-    _data.dirty = true
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
     axios
@@ -56,9 +59,27 @@ const AgentDetails = ({
       })
   }
 
-  const exportEntity = () => {
+  const exportAgent = () => {
     const fileName = 'agent'
-    const json = JSON.stringify(selectedAgentData)
+
+    const exportAgentData = { ...selectedAgentData }
+
+    exportAgentData.secrets = {}
+
+    // HACK: iterate through _data and remove any keys that include api, token, or secret
+    Object.keys(exportAgentData.data).forEach(key => {
+      if (
+        key.includes('api') ||
+        key.includes('token') ||
+        key.includes('secret')
+      ) {
+        delete exportAgentData.data[key]
+        console.log('deleted key', key)
+      }
+    })
+
+    const json = JSON.stringify(exportAgentData)
+
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))
     const link = document.createElement('a')
@@ -74,12 +95,6 @@ const AgentDetails = ({
   }
 
   useEffect(() => {
-    if ( selectedAgentData?.rootSpell !== '{}') {
-      console.log('JSON.parse(selectedAgentData.rootSpell)', JSON.parse(selectedAgentData.rootSpell))
-      setRootSpell(JSON.parse(selectedAgentData.rootSpell).name)
-    } else {
-      setRootSpell({})
-    }
     ;(async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
@@ -91,14 +106,61 @@ const AgentDetails = ({
   }, [])
 
   return (
-    <div>
+    <div style={{ overflowY: 'scroll', height: '100vh' }}>
       <div className={`${styles.agentDetailsContainer}`}>
-        <div className={styles.agentDescription}>
-          <Avatar className={styles.avatar}>A</Avatar>
-          <div>
-            <Typography variant="h5">{selectedAgentData.name}</Typography>
+        {editMode ? (
+          <>
+            <div className={styles.agentDescription}>
+              <input
+                type="text"
+                name="name"
+                value={selectedAgentData.name}
+                onChange={e =>
+                  setSelectedAgentData({
+                    ...selectedAgentData,
+                    name: e.target.value,
+                  })
+                }
+                placeholder="Add new agent name here"
+              />
+              <IconBtn
+                label={'Done'}
+                Icon={<Done />}
+                onClick={e => {
+                  update(selectedAgentData.id)
+                  setEditMode(false)
+                  setOldName('')
+                }}
+              />
+              <IconBtn
+                label={'close'}
+                Icon={<Close />}
+                onClick={e => {
+                  setSelectedAgentData({ ...selectedAgentData, name: oldName })
+                  setOldName('')
+                  setEditMode(false)
+                }}
+              />
+            </div>
+            <div></div>
+          </>
+        ) : (
+          <div className={styles.agentDescription}>
+            <Avatar className={styles.avatar}>A</Avatar>
+            <div>
+              <Typography variant="h5">{selectedAgentData.name}</Typography>
+            </div>
+            <IconBtn
+              label={'edit'}
+              Icon={<Edit />}
+              onClick={e => {
+                setEditMode(true)
+                setOldName(selectedAgentData.name)
+              }}
+            />
           </div>
-        </div>
+        )}
+
         <div className={styles.btns}>
           <Button
             onClick={() => {
@@ -118,7 +180,7 @@ const AgentDetails = ({
               color: 'white',
               backgroundColor: 'purple',
             }}
-            onClick={() => exportEntity()}
+            onClick={() => exportAgent()}
           >
             Export
           </Button>
@@ -145,12 +207,9 @@ const AgentDetails = ({
           id="rootSpell"
           value={JSON.parse(selectedAgentData.rootSpell).name || 'default'}
           onChange={event => {
-            console.log('event', event.target.value)
-            setRootSpell(event.target.value)
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value
             )
-            console.log('newRootSpell', newRootSpell)
             setSelectedAgentData({
               ...selectedAgentData,
               rootSpell: JSON.stringify(newRootSpell),
@@ -159,11 +218,12 @@ const AgentDetails = ({
                   // get the public nodes
                   .filter((node: { data }) => node?.data?.isPublic)
                   // map to an array of objects
-                  .map((node: { data; id }) => {
+                  .map((node: { data; id; name }) => {
                     return {
                       id: node?.id,
                       name: node?.data?.name,
                       value: node?.data?.value,
+                      type: node?.name,
                     }
                   })
                   // map to an object with the id as the key
@@ -189,7 +249,7 @@ const AgentDetails = ({
       <div>
         {pluginManager.getSecrets(true).map((value, index, array) => {
           return (
-            <div key={value.name+index} style={{ marginBottom: '1em' }}>
+            <div key={value.name + index} style={{ marginBottom: '1em' }}>
               <div style={{ width: '100%', marginBottom: '1em' }}>
                 {value.name}
               </div>
@@ -217,34 +277,21 @@ const AgentDetails = ({
           )
         })}
       </div>
-      <div
-        style={{
-          height: `${
-            selectedAgentData.public &&
-            selectedAgentData.publicVariables !== '[]'
-              ? 'auto'
-              : '150px'
-          }`,
-          overflow: 'auto',
-          marginBottom: '10px',
-        }}
-      >
-        {selectedAgentData.publicVariables &&
-          selectedAgentData.publicVariables !== '[]' && (
-            <AgentPubVariables
-              setPublicVars={data => {
-                setSelectedAgentData({
-                  ...selectedAgentData,
-                  publicVariables: JSON.stringify(data),
-                })
-              }}
-              publicVars={JSON.parse(selectedAgentData.publicVariables)}
-            />
-          )}
-      </div>
+      {selectedAgentData.publicVariables !== '{}' && (
+        <AgentPubVariables
+          setPublicVars={data => {
+            console.log('new daa', data)
+            setSelectedAgentData({
+              ...selectedAgentData,
+              publicVariables: JSON.stringify(data),
+            })
+          }}
+          publicVars={JSON.parse(selectedAgentData.publicVariables)}
+        />
+      )}
       <div
         className={`${
-          selectedAgentData.publicVariables !== '[]'
+          selectedAgentData.publicVariables !== '{}'
             ? styles.connectorsLong
             : styles.connectors
         }`}

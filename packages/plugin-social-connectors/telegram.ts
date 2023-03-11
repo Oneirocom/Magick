@@ -158,7 +158,7 @@ export class telegram_client {
     this.updateMessage(msg.chat.id, msg.message_id, msg.text)
     if (msg.from.is_bot) return
 
-    const resp = await this.spellHandler(
+    const resp = await this.spellRunner(
       msg.text,
       msg.from.first_name ?? 'User',
       this.settings.telegram_bot_name ?? 'Agent',
@@ -322,7 +322,7 @@ export class telegram_client {
       content = '!ping ' + content
     }
 
-    const resp = await this.spellHandler(
+    const resp = await this.spellRunner(
       msg.text,
       msg.from.first_name ?? 'User',
       this.settings.telegram_bot_name ?? 'Agent',
@@ -445,14 +445,14 @@ export class telegram_client {
 
   async updateMessage(chatId, messageId, newContent) {}
 
-  spellHandler
+  spellRunner
   settings
   bot
   haveCustomCommands
   custom_commands
 
-  createTelegramClient = async (spellHandler, settings) => {
-    this.spellHandler = spellHandler
+  createTelegramClient = async (spellRunner, settings) => {
+    this.spellRunner = spellRunner
     this.settings = settings
     this.haveCustomCommands = settings.haveCustomCommands
     this.custom_commands = settings.custom_commands

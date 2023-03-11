@@ -28,16 +28,16 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
 
     this.task = {
       outputs: {
+        trigger: 'option',
+        agentId: 'output',
         content: 'output',
-        sender: 'output',
-        observer: 'output',
-        entities: 'output',
-        client: 'output',
         channel: 'output',
         channelType: 'output',
+        client: 'output',
+        entities: 'output',
+        observer: 'output',
         projectId: 'output',
-        agentId: 'output',
-        trigger: 'option',
+        sender: 'output',
       },
       init: (task = {} as Task, node: MagickNode) => {
         this.nodeTaskMap[node.id] = task
@@ -76,15 +76,15 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       .addInput(dataInput)
       .addInput(eventInput)
       .addOutput(dataOutput)
+      .addOutput(agentId)
       .addOutput(out)
-      .addOutput(sender)
-      .addOutput(observer)
       .addOutput(client)
       .addOutput(channel)
-      .addOutput(agentId)
-      .addOutput(entities)
       .addOutput(channelType)
+      .addOutput(entities)
       .addOutput(projectId)
+      .addOutput(observer)
+      .addOutput(sender)
   }
 
   // eslint-disable-next-line require-await
@@ -109,7 +109,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
     } = eventValue as Event
 
     if (!silent) node.display(event)
-
+    console.log('sender, ', sender)
     return {
       content,
       sender,

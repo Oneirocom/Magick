@@ -203,8 +203,12 @@ function install(editor: NodeEditor, params: Cfg) {
       return
     }
 
+    editor.selected.list = []
+
     selectedNodes.forEach(node => {
-      editor.selectNode(node, accumulate)
+      const payload = { node, accumulate };
+
+      editor.trigger('selectnode', payload);
     })
   }
 
@@ -216,9 +220,6 @@ function install(editor: NodeEditor, params: Cfg) {
       return
     }
     if (!pressing) {
-      return
-    }
-    if (editor.selected.list.length > 0) {
       return
     }
 

@@ -5,6 +5,39 @@ import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 
 import type { Application } from '../../declarations'
 import type { Event, EventData, EventPatch, EventQuery } from './events.schema'
+import { dbDialect, SupportedDbs } from '../../dbClient'
+import { Knex } from 'knex'
+import { app } from '../../app'
+
+async function findSimilarEventByEmbedding(db: Knex, embedding) {
+  const query: Record<SupportedDbs, any> = {
+    [SupportedDbs.pg]: async () => await db.raw(`select * from events order by embedding <-> ${embedding} limit 1;`),
+    [SupportedDbs.sqlite]: async () => {
+      const eventInVssTable = await db.raw(
+        `select rowid, distance from vss_events
+         where vss_search(
+            event_embedding,
+            vss_search_params(
+              ${embedding},
+              1
+            )
+          )
+        ;`
+      )
+      if (!eventInVssTable?.rowid) return null
+      const event = await db('events').where('id', eventInVssTable.rowid).first()
+      return event
+    }
+  }
+  let embeddings = null
+  try {
+    embeddings = await query[dbDialect]()
+  } catch (e) {
+    console.log(e)
+  }
+  console.log(embeddings)
+  return embeddings
+}
 
 export type EventParams = KnexAdapterParams<EventQuery>
 
@@ -14,7 +47,25 @@ export class EventService<ServiceParams extends Params = EventParams> extends Kn
   EventData,
   ServiceParams,
   EventPatch
-> {}
+> {
+  async find(params?: ServiceParams) {
+    const db = app.get('dbClient')
+    if (params.query.embedding) {
+      const blob = atob(params.query.embedding);
+      const ary_buf = new ArrayBuffer(blob.length);
+      const dv = new DataView(ary_buf);
+      for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i));
+      const f32_ary = new Float32Array(ary_buf);
+      const result = await findSimilarEventByEmbedding(db, "[" + f32_ary + "]")
+
+      if (result) {
+        return result
+      }
+    }
+    return super.find(params)
+  }
+
+}
 
 
 export const getOptions = (app: Application): KnexAdapterOptions => {
