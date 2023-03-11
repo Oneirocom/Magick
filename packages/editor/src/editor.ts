@@ -31,6 +31,7 @@ import {
   MultiSocketGenerator,
   NodeClickPlugin,
   ModuleOptions,
+  MultiCopyPlugin,
   ModulePluginArgs,
 } from '@magickml/engine'
 
@@ -129,6 +130,8 @@ export const initEditor = function ({
       return {
         Deleted: true,
         Clone: true,
+        Copy: true,
+        Paste: true
       }
     },
     allocate: (component: MagickComponent<unknown>) => {
@@ -142,6 +145,7 @@ export const initEditor = function ({
   })
 
   // This should only be needed on client, not server
+  editor.use(MultiCopyPlugin)
   editor.use(ConsolePlugin)
   editor.use(SocketGeneratorPlugin)
   editor.use(MultiSocketGenerator)
