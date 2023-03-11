@@ -1,4 +1,3 @@
-import { projectId } from '@magickml/engine'
 import { configureStore, ThunkAction, Action, Dispatch } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query/react'
 
@@ -21,7 +20,7 @@ import { rootApi } from './api/api'
 import tabReducer from './tabs'
 import localStateReducer from './localState'
 import preferencesReducer from './preferences'
-import globalConfigReducer, { globalConfigSlice } from './globalConfig'
+import globalConfigReducer from './globalConfig'
 import { MagickIDEProps } from '../main'
 
 const rootReducer = combineReducers({

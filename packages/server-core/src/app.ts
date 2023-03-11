@@ -105,10 +105,6 @@ app.hooks({
   around: {
     all: [
       logError,
-      async (context: HookContext, next) => {
-        console.log('MESSAGE RECEIVED', context.path, context.method)
-        await next()
-      },
       async (context, next) => {
         if (context.path !== 'authentication') {
           return authenticate('jwt')(context, next)
