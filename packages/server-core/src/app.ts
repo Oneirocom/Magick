@@ -77,7 +77,7 @@ app.set('authentication', {
 })
 
 app.configure(authentication)
-app.use(authenticate('jwt'))
+// app.use(authenticate('jwt'))
 
 // Configure services and transports
 app.configure(rest())
@@ -89,7 +89,7 @@ app.configure(
       cors: {
         origin: '*',
         methods: ['GET', 'POST', 'OPTIONS'],
-        allowedHeaders: ['Authorization', 'socketauthorization'],
+        allowedHeaders: ['Authorization'],
         credentials: true,
       },
     },
@@ -106,12 +106,15 @@ app.hooks({
     all: [
       logError,
       async (context: HookContext, next) => {
+        console.log('MESSAGE RECEIVED', context.path, context.method)
         await next()
       },
-      context => {
+      async (context, next) => {
         if (context.path !== 'authentication') {
-          return authenticate('jwt')(context)
+          return authenticate('jwt')(context, next)
         }
+
+        await next()
       },
       // attach the user from the payload to the params
       async (context: HookContext, next) => {
