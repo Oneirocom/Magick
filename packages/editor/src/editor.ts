@@ -7,7 +7,6 @@ import CommentPlugin from './plugins/commentPlugin'
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
-import gridimg from './grid.png'
 
 import {
   // CachePlugin,
@@ -72,11 +71,11 @@ export const initEditor = function ({
   editorTabMap[tab.id] = editor
 
   // Add grid background
-  container.style.backgroundImage = `url('${gridimg}')`
-  container.style.transition = 'transform 330ms ease-in-out'
+  const background = document.getElementById('background') as HTMLElement
+  background.style.transition = 'transform 330ms ease-in-out'
 
   function zoomCanvas(zoomFactor) {
-    container.style.transform = `scale(${zoomFactor})`
+    background.style.transform = `scale(${zoomFactor})`
   }
 
   // Listern on zoom to dynamical zoo the background grid
