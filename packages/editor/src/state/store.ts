@@ -1,4 +1,4 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
+import { configureStore, ThunkAction, Action, Dispatch } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query/react'
 
 import {
@@ -12,61 +12,62 @@ import {
   // REGISTER,
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-
-import { getSpellApi } from './api/spells'
-import { getRootApi } from './api/api'
-import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
-
+// import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { combineReducers } from 'redux'
 
+import { spellApi } from './api/spells'
+import { rootApi } from './api/api'
 import tabReducer from './tabs'
-import localStateSlice from './localState'
+import localStateReducer from './localState'
 import preferencesReducer from './preferences'
+import globalConfigReducer from './globalConfig'
+import { MagickIDEProps } from '../main'
 
-let store: ToolkitStore | null = null
-export const getStore = config => {
-  if (store) return store
-  const spellApi = getSpellApi(config)
+const rootReducer = combineReducers({
+  globalConfig: globalConfigReducer,
+  tabs: tabReducer,
+  preferences: preferencesReducer,
+  [spellApi.reducerPath]: spellApi.reducer,
+  localState: localStateReducer,
+})
+
+let _store = null
+export const createStore = (config?: MagickIDEProps) => {
+  if (_store) return _store
+
   const persistConfig = {
-    key: 'root',
+    key: config.projectId,
     version: 1,
     storage,
-    blacklist: [spellApi.reducerPath],
+    blacklist: [spellApi.reducerPath, 'globalConfig'],
   }
 
-  const rootReducer = combineReducers({
-    tabs: tabReducer,
-    preferences: preferencesReducer,
-    [spellApi.reducerPath]: spellApi.reducer,
-    localState: localStateSlice,
-  })
-
-  const persistedReducer = persistReducer(persistConfig, rootReducer)
-
-  const rootApi = getRootApi(config)
-  store = configureStore({
-    reducer: persistedReducer,
+  const store = configureStore({
+    reducer: persistReducer(persistConfig, rootReducer),
+    // reducer: rootReducer,
+    preloadedState: {
+      globalConfig: config,
+    },
     middleware: getDefaultMiddleware =>
       getDefaultMiddleware({
         serializableCheck: false,
-        // serializableCheck: {
-        //   ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        // },
       }).concat(rootApi.middleware),
   })
+
   setupListeners(store.dispatch)
   persistStore(store)
 
+  _store = store
+
   return store
 }
-
 // export const persistedStore = persistStore(store)
 
 // TODO: fix hard types here and replace the any
 // these types were causing a race condition on a lazy store load
 // the lazy pattern is useful for letting the component be initialized from an external app
-export type AppDispatch = any // typeof store.dispatch
-export type RootState = ReturnType<any> // ReturnType<typeof store.getState>
+export type AppDispatch = Dispatch
+export type RootState = ReturnType<typeof rootReducer>
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,

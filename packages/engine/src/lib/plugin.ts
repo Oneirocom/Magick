@@ -204,7 +204,7 @@ class PluginManager {
 }
 
 class ClientPluginManager extends PluginManager {
-  pluginList: Array<ClientPlugin>
+  declare pluginList: Array<ClientPlugin>
   constructor() {
     super()
     this.pluginList = new Array<ClientPlugin>()
@@ -293,7 +293,7 @@ class ServerPluginManager extends PluginManager {
     super()
     this.pluginList = new Array<ServerPlugin>()
   }
-  
+
   getAgentStartMethods() {
     let agentStartMethods = {};
     (this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {

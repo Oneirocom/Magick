@@ -1,9 +1,9 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/typescript.html
 import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
 import { Application as FeathersApplication } from '@feathersjs/koa'
-import { ApplicationConfiguration } from './configuration'
+import { ApplicationConfiguration } from './config/configuration'
 import { SpellManager } from '@magickml/engine'
- 
+
 export { NextFunction }
 
 // The types for app.get(name) and app.set(name)

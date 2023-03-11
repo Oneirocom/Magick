@@ -28,6 +28,7 @@ import _ from 'lodash'
 import { CSVLink } from 'react-csv'
 import { useConfig } from '../../../../contexts/ConfigProvider'
 import { Button } from '@magickml/client-core'
+import { API_ROOT_URL } from '@magickml/engine'
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter)
@@ -144,7 +145,7 @@ function EventTable({ requests, updateCallback }) {
     }
     if (!_.isEqual(reqBody, rowData)) {
       const resp = await fetch(
-        `${import.meta.env.VITE_APP_API_URL}/request/${id}`,
+        `${API_ROOT_URL}/request/${id}`,
         {
           method: 'PUT',
           headers: {
@@ -219,7 +220,7 @@ function EventTable({ requests, updateCallback }) {
   const handleRequestDelete = async (event: any) => {
     // instead of deleting, call the updateEvent function with param hidden = true
     const resp = await fetch(
-      `${import.meta.env.VITE_APP_API_URL}/request/${event.id}`,
+      `${API_ROOT_URL}/request/${event.id}`,
       {
         method: 'PUT',
         headers: {

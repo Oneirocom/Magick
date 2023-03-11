@@ -1,14 +1,14 @@
 // TODO: replace with a feathers service
 
 import Koa from 'koa'
-import { tts } from './googleTextToSpeech'
-import { queryGoogleSearch } from './queryGoogleSearch'
-import { ServerError } from './ServerError'
-import { tts_tiktalknet } from './tiktalknet'
-import { Route } from './types'
+import { tts } from '../servers/googleTextToSpeech'
+import { queryGoogleSearch } from '../servers/queryGoogleSearch'
+import { ServerError } from '../utils/ServerError'
+import { tts_tiktalknet } from '../servers/tiktalknet'
+import { Route } from '../config/types'
 const getTextToSpeech = async (ctx: Koa.Context) => {
   const text = ctx.request.query.text as string
-  
+
   const voice_provider = ctx.request.query.voice_provider as string
   const voice_character = ctx.request.query.voice_character as string
   const tiktalknet_url = ctx.request.query.tiktalknet_url as string
@@ -25,15 +25,15 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
 }
 const queryGoogle = async (ctx: Koa.Context) => {
   const body = ctx.request.body as any
-  
+
   if (!body?.query)
     throw new ServerError('input-failed', 'No query provided in request body')
   const query = body?.query as string
   const data = await queryGoogleSearch(query)
-  
+
   const { summary, links } = data
-  
-  
+
+
   return (ctx.body = { summary, links })
 }
 
