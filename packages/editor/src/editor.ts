@@ -4,6 +4,7 @@ import { Plugin } from 'rete/types/core/plugin'
 import ContextMenuPlugin from './plugins/contextMenu'
 import { Data } from 'rete/types/core/data'
 import CommentPlugin from './plugins/commentPlugin'
+import { SelectionPlugin } from "@magickml/engine"
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
@@ -175,7 +176,7 @@ export const initEditor = function ({
     editor.use(TaskPlugin)
   }
 
-  // editor.use(SelectionPlugin, { enabled: true })
+  editor.use(SelectionPlugin, { enabled: true })
 
   // WARNING all the plugins from the editor get installed onto the component and modify it.  This effects the components registered in the engine, which already have plugins installed.
   components.forEach((c: any) => {
