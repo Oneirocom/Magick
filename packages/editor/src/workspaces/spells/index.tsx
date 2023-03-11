@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { useEditor } from '../contexts/EditorProvider'
 import { Layout } from '../contexts/LayoutProvider'
-import { getSpellApi } from '../../state/api/spells'
+import { spellApi } from '../../state/api/spells'
 import EventHandler from '../../screens/Magick/components/EventHandler'
 import { debounce } from '../../utils/debounce'
 import { useConfig } from '../../contexts/ConfigProvider'
@@ -24,7 +24,6 @@ import React from 'react'
 
 const Workspace = ({ tab, tabs, pubSub }) => {
   const config = useConfig()
-  const spellApi = getSpellApi(config)
 
   const spellRef = useRef<Spell>()
   const { events, publish } = usePubSub()
@@ -41,11 +40,10 @@ const Workspace = ({ tab, tabs, pubSub }) => {
       // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
       'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
       debounce(async data => {
-        
         if (tab.type === 'spell' && spellRef.current) {
           publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
         }
-      }, 5000) // debounce for 2000 ms
+      }, 2000) // debounce for 2000 ms
     )
 
     return () => {
@@ -56,7 +54,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   useEffect(() => {
     if (!editor?.on) return
 
-    editor.on('nodecreated noderemoved', (node: any) => {
+    const unsubscribe = editor.on('nodecreated noderemoved', (node: any) => {
       if (!spellRef.current) return
       if (node.category !== 'I/O') return
       // TODO we can probably send this update to a spell namespace for this spell.
@@ -66,19 +64,24 @@ const Workspace = ({ tab, tabs, pubSub }) => {
         graph: editor.toJSON(),
       }
       publish(events.$SUBSPELL_UPDATED(spellRef.current.id), spell)
-    }) as unknown as Function
+    })
+
+    return () => {
+      unsubscribe()
+    }
   }, [editor])
 
   useEffect(() => {
+    console.log('SPELL DATA', spellData)
     if (!spellData) return
     spellRef.current = spellData.data[0]
   }, [spellData])
 
   useEffect(() => {
     if (!tab || !tab.name) return
-    
+
     loadSpell({
-      spellName: tab.name.split('--')[0],
+      spellName: tab.name,
       projectId: config.projectId,
       id: tab.id,
     })
@@ -88,16 +91,13 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     if (!client) return
     ;(async () => {
       if (!client || !tab || !tab.name) return
-      
+
       // make sure to pass the projectId to the service call
-      await client.service('spell-runner').get(tab.id,
-        {
-          query: {
-            projectId: config.projectId,
-          },
-        }
-      )
-      
+      await client.service('spell-runner').get(tab.id, {
+        query: {
+          projectId: config.projectId,
+        },
+      })
     })()
   }, [client])
 

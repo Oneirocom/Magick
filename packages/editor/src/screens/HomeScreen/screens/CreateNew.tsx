@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { GraphData } from '@magickml/engine'
 import {
@@ -9,7 +9,7 @@ import {
 } from 'unique-names-generator'
 import { useNavigate } from 'react-router-dom'
 
-import { getSpellApi } from '../../../state/api/spells'
+import { spellApi } from '../../../state/api/spells'
 import { Panel } from '@magickml/client-core'
 import emptyImg from '../empty.png'
 import css from '../homeScreen.module.css'
@@ -50,7 +50,6 @@ export const magickTemplates: Template[] = [
 
 const CreateNew = () => {
   const config = useConfig()
-  const spellApi = getSpellApi(config)
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
     magickTemplates[0]
@@ -73,11 +72,11 @@ const CreateNew = () => {
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
       })
-      if (spellCheck.data.total > 0){
-        enqueueSnackbar("A spell with that name already exists", {
+      if (spellCheck.data.total > 0) {
+        enqueueSnackbar('A spell with that name already exists', {
           variant: 'error',
         })
-        return;
+        return
       }
       const response = await newSpell({
         graph: selectedTemplate.graph,

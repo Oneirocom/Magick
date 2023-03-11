@@ -19,7 +19,7 @@ type SaveDiffData = {
   projectId: string
 }
 
-type SaveDiffParams = {}
+type SaveDiffParams = Record<string, any>
 
 type ServiceTypes = {
   // The type is a Socket service extended with custom methods
@@ -37,8 +37,17 @@ const configureCustomServices = (
   })
 }
 
-const buildFeathersClient = async config => {
-  const socket = io(config.apiUrl)
+const buildFeathersClient = async (config, token) => {
+  const socket = io(config.apiUrl, {
+    // Send the authorization header in the initial connection request
+    transportOptions: {
+      polling: {
+        extraHeaders: {
+          authorization: `Bearer ${token}`,
+        },
+      },
+    },
+  })
   const app = feathers<ServiceTypes>()
   const socketClient = socketio(socket, { timeout: 10000 })
   // todo this needs more than an any here.  Super hacky.
@@ -59,7 +68,7 @@ const Context = createContext<FeathersContext>(undefined!)
 export const useFeathers = () => useContext(Context)
 
 // Might want to namespace these
-const FeathersProvider = ({ children }) => {
+const FeathersProvider = ({ children, token }) => {
   const config = useConfig()
   const [client, setClient] = useState<FeathersContext['client']>(null)
 
@@ -67,7 +76,7 @@ const FeathersProvider = ({ children }) => {
     console.log('attempted to connect')
     // We only want to create the feathers connection once we have a user to handle
     ;(async () => {
-      const client = await buildFeathersClient(config)
+      const client = await buildFeathersClient(config, token)
 
       client.io.on('connect', () => {
         setClient(client)
