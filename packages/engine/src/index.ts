@@ -49,5 +49,3 @@ export * from './lib/functions/processCode'
 export * from './lib/plugin'
 export * from './lib/sockets'
 export * from './lib/globals'
-
-export { projectId } from './project'

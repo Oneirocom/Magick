@@ -5,7 +5,6 @@ export type CustomErrorCodes =
   | 'already-exists'
   | 'authentication-error'
 
-// eslint-disable-next-line functional/no-class
 export class ServerError extends Error {
   public code: CustomErrorCodes
   public status: number
@@ -17,12 +16,10 @@ export class ServerError extends Error {
     details?: string
   ) {
     super()
-    /* eslint-disable functional/no-this-expression */
     this.code = code
     this.message = message
     this.details = details
     this.status = mapStatusCode(code)
-    /* eslint-enable functional/no-this-expression */
   }
 }
 

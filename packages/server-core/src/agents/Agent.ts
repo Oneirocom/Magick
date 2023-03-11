@@ -1,6 +1,6 @@
-import { buildMagickInterface } from './buildMagickInterface'
+import { buildMagickInterface } from '../helpers/buildMagickInterface'
 import { SpellManager, WorldManager, pluginManager } from '@magickml/engine'
-import { app } from './app'
+import { app } from '../app'
 import { AgentManager } from './AgentManager'
 
 type AgentData = {
