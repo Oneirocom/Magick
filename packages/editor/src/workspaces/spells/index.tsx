@@ -43,7 +43,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
         if (tab.type === 'spell' && spellRef.current) {
           publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
         }
-      }, 5000) // debounce for 2000 ms
+      }, 2000) // debounce for 2000 ms
     )
 
     return () => {
@@ -54,7 +54,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   useEffect(() => {
     if (!editor?.on) return
 
-    editor.on('nodecreated noderemoved', (node: any) => {
+    const unsubscribe = editor.on('nodecreated noderemoved', (node: any) => {
       if (!spellRef.current) return
       if (node.category !== 'I/O') return
       // TODO we can probably send this update to a spell namespace for this spell.
@@ -64,21 +64,24 @@ const Workspace = ({ tab, tabs, pubSub }) => {
         graph: editor.toJSON(),
       }
       publish(events.$SUBSPELL_UPDATED(spellRef.current.id), spell)
-    }) as unknown as Function
+    })
+
+    return () => {
+      unsubscribe()
+    }
   }, [editor])
 
   useEffect(() => {
+    console.log('SPELL DATA', spellData)
     if (!spellData) return
-    console.log('SPELL DATA RECEIVED')
     spellRef.current = spellData.data[0]
   }, [spellData])
 
   useEffect(() => {
     if (!tab || !tab.name) return
 
-    console.log('loading spell!', tab.name, tab)
     loadSpell({
-      spellName: tab.id,
+      spellName: tab.name,
       projectId: config.projectId,
       id: tab.id,
     })
