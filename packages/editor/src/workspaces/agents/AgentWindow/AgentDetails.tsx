@@ -26,6 +26,7 @@ const AgentDetails = ({
   const [oldName, setOldName] = useState<string>('')
 
   const update = id => {
+    console.log('calling update, data is', selectedAgentData)
     const _data = selectedAgentData
     if (_data['id']) {
       delete _data.id
