@@ -61,13 +61,17 @@ const AgentDetails = ({
   const exportAgent = () => {
     const fileName = 'agent'
 
-    const exportAgentData = {...selectedAgentData}
+    const exportAgentData = { ...selectedAgentData }
 
     exportAgentData.secrets = {}
 
     // HACK: iterate through _data and remove any keys that include api, token, or secret
     Object.keys(exportAgentData.data).forEach(key => {
-      if (key.includes('api') || key.includes('token') || key.includes('secret')) {
+      if (
+        key.includes('api') ||
+        key.includes('token') ||
+        key.includes('secret')
+      ) {
         delete exportAgentData.data[key]
         console.log('deleted key', key)
       }
@@ -90,7 +94,7 @@ const AgentDetails = ({
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )
@@ -273,17 +277,17 @@ const AgentDetails = ({
         })}
       </div>
       {selectedAgentData.publicVariables !== '{}' && (
-          <AgentPubVariables
-            setPublicVars={data => {
-              console.log('new daa', data)
-              setSelectedAgentData({
-                ...selectedAgentData,
-                publicVariables: JSON.stringify(data),
-              })
-            }}
-            publicVars={JSON.parse(selectedAgentData.publicVariables)}
-          />
-        )}
+        <AgentPubVariables
+          setPublicVars={data => {
+            console.log('new daa', data)
+            setSelectedAgentData({
+              ...selectedAgentData,
+              publicVariables: JSON.stringify(data),
+            })
+          }}
+          publicVars={JSON.parse(selectedAgentData.publicVariables)}
+        />
+      )}
       <div
         className={`${
           selectedAgentData.publicVariables !== '{}'

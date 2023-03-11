@@ -14,7 +14,7 @@ export default function SigninForm() {
   useEffect(() => {
     const secrets = JSON.parse(window.localStorage.getItem('secrets') || '{}')
     const openai = secrets['openai-api-key']
-    if(openai) {
+    if (openai) {
       signIn(openai, '')
       navigate('/fineTuneManager/completions')
     } else {

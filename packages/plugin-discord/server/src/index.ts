@@ -95,8 +95,8 @@ async function handleResponse(
 const DiscordPlugin = new ServerPlugin({
   name: 'DiscordPlugin',
   inputTypes: [
-    { name: 'Discord (Voice)', trigger: true, socket: eventSocket },
-    { name: 'Discord (Text)', trigger: true, socket: eventSocket },
+    { name: 'Discord (Voice)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Discord (Voice)' },
+    { name: 'Discord (Text)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Discord (Text)' },
   ],
   outputTypes: [
     { name: 'Discord (Voice)', trigger: true, socket: eventSocket, handler: async ({
