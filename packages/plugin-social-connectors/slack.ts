@@ -1,7 +1,7 @@
 import { App } from '@slack/bolt'
 
 export class slack_client {
-  spellHandler: any
+  spellRunner: any
   settings: any
   entity: any
   haveCustomCommands: boolean
@@ -11,7 +11,7 @@ export class slack_client {
   app: App
 
   //to verify use: url/slack/events
-  async createSlackClient(spellHandler: any, settings: any, entity: any) {
+  async createSlackClient(spellRunner: any, settings: any, entity: any) {
     if (
       !settings.slack_token ||
       !settings.slack_signing_secret ||
@@ -21,7 +21,7 @@ export class slack_client {
       return
     }
 
-    this.spellHandler = spellHandler
+    this.spellRunner = spellRunner
     this.settings = settings
     this.entity = entity
     this.haveCustomCommands = settings.haveCustomCommands
@@ -79,7 +79,7 @@ export class slack_client {
         }
       }
 
-      const response = await spellHandler(
+      const response = await spellRunner(
         text,
         user,
         this.settings.slack_bot_name,

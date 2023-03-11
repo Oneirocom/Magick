@@ -9,7 +9,7 @@ import { log } from 'console'
 
 export class messenger_client {
   static instance: messenger_client
-  spellHandler
+  spellRunner
   settings
   entity
 
@@ -18,7 +18,7 @@ export class messenger_client {
     console.log('receivedMessage: ' + text + ' from: ' + senderPsid)
 
     if (receivedMessage.text) {
-      const resp = await this.spellHandler(
+      const resp = await this.spellRunner(
         text,
         senderPsid,
         'MessengerBot',
@@ -65,12 +65,12 @@ export class messenger_client {
   createMessengerClient = async (
     app,
     router,
-    spellHandler,
+    spellRunner,
     settings,
     entity
   ) => {
     messenger_client.instance = this
-    this.spellHandler = spellHandler
+    this.spellRunner = spellRunner
     this.settings = settings
     this.entity = entity
 

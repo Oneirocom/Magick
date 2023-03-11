@@ -51,10 +51,14 @@ export class NumberVariable extends MagickComponent<InputReturn> {
     return node.addOutput(out)
   }
 
-  worker(node: NodeData, inputs, outputs, { silent }) {
-    const _var = node?.data?._var as number
+  worker(node: NodeData, inputs, outputs, context) {
+    let _var = node?.data?._var as number
+    const publicVars = JSON.parse(context.module.publicVariables)
+    if(node?.data?.isPublic && publicVars[node.id]) {
+      _var = publicVars[node.id].value
+    }
 
-    if (!silent) {
+    if (!context.silent) {
       node.display(_var.toString())
     }
 

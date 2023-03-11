@@ -102,10 +102,8 @@ export class ServerPlugin extends Plugin {
     serverInit = () => null,
     agentMethods = {
       start: () => {
-        console.log('starting plugin')
       },
       stop: () => {
-        console.log('stopping plugin')
       },
     },
     serverRoutes = [],
@@ -197,7 +195,6 @@ class PluginManager {
         secrets.push(secret)
       })
     })
-    console.log('secrets', secrets)
     return secrets
   }
 
@@ -287,16 +284,6 @@ class ClientPluginManager extends PluginManager {
       })
     })
     return inputTypes
-  }
-
-  getOutputTypes() {
-    const outputTypes = [] as any[]
-    this.pluginList.forEach(plugin => {
-      plugin.outputTypes.forEach(outputType => {
-        outputTypes.push(outputType)
-      })
-    })
-    return outputTypes
   }
 }
 

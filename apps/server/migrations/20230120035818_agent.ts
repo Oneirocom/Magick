@@ -4,7 +4,6 @@ import type { Knex } from 'knex'
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('agents', (table) => {
     table.uuid('id').primary()
-    table.boolean('dirty')
     table.jsonb('rootSpell')
     table.string('publicVariables')
     table.string('secrets')

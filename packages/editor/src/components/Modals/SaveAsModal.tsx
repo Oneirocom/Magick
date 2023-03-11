@@ -66,14 +66,14 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const options = [
     {
       className: `${css['loginButton']} primary`,
-      label: 'Save spell as',
+      label: 'Save A Copy',
       onClick: onSubmit,
       disabled: isLoading,
     },
   ]
 
   return (
-    <Modal title="Save As" options={options} icon="info">
+    <Modal title="Save A Copy" options={options} icon="info">
       <div className={css['login-container']}>
         {error && <span className={css['error-message']}>{error}</span>}
         <form>

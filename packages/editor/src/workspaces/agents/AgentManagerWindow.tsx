@@ -8,8 +8,10 @@ import { LoadingScreen } from '@magickml/client-core'
 const AgentManagerWindow = () => {
   const config = useConfig()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [data, setData] = useState<Array<Object>>([])
+  const [data, setData] = useState<Array<object>>([])
   const { enqueueSnackbar } = useSnackbar()
+  const [selectedAgent, setSelectedAgent] = useState<object>({})
+  const [root_spell, setRootSpell] = useState('default')
 
   const resetData = async () => {
     setIsLoading(true)
@@ -20,17 +22,15 @@ const AgentManagerWindow = () => {
     console.log('res is', json)
   }
 
-  const createNew = (
-    data: {
-      projectId: string,
-      rootSpell: string,
-      spells: string,
-      enabled: true,
-      name: string,
-      updatedAt: string,
-      secrets : string,
-    }
-  ) => {
+  const createNew = (data: {
+    projectId: string
+    rootSpell: string
+    spells: string
+    enabled: true
+    name: string
+    updatedAt: string
+    secrets: string
+  }) => {
     // rewrite using fetch instead of axios
     axios({
       url: `${config.apiUrl}/agents`,
@@ -53,15 +53,21 @@ const AgentManagerWindow = () => {
     fileReader.onload = event => {
       const data = JSON.parse(event?.target?.result as string)
       data.projectId = config.projectId
-      data.dirty = data?.dirty ? data.dirty : false
       data.enabled = data?.enabled ? true : false
       data.updatedAt = data?.updatedAt || ''
       data.rootSpell = data?.rootSpell || '{}'
       data.spells = Array.isArray(data?.spells) ? data.spells : []
-      data.secrets = Array.isArray(data?.secrets) ? data.secrets : []
-      data.publicVariables = data?.publicVariables || JSON.stringify(Object.values(
-        data.rootSpell && data.rootSpell.graph.nodes || {}
-      ).filter((node: { data }) => node?.data?.isPublic))
+      data.secrets = JSON.stringify(
+        Array.isArray(data?.secrets) ? data.secrets : []
+      )
+      // if the agent's public variable keys don't match the spell's public variable keys, update the agent
+      data.publicVariables =
+        data?.publicVariables ||
+        JSON.stringify(
+          Object.values(
+            (data.rootSpell && data.rootSpell.graph.nodes) || {}
+          ).filter((node: { data }) => node?.data?.isPublic)
+        )
 
       // Check if the "id" property exists in the object
       if (data.hasOwnProperty('id')) {
@@ -72,7 +78,6 @@ const AgentManagerWindow = () => {
   }
 
   const update = (id: string, _data: object) => {
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', id, _data)
     axios
       .patch(`${config.apiUrl}/agents/${id}`, _data)
       .then(res => {
@@ -84,7 +89,6 @@ const AgentManagerWindow = () => {
           enqueueSnackbar('updated agent', {
             variant: 'success',
           })
-
           resetData()
         }
       })
@@ -105,10 +109,11 @@ const AgentManagerWindow = () => {
             variant: 'error',
           })
         } else {
-          enqueueSnackbar('Entity with id: ' + id + ' deleted successfully', {
+          enqueueSnackbar('Agent with id: ' + id + ' deleted successfully', {
             variant: 'success',
           })
         }
+        if (selectedAgent?.id === id) setSelectedAgent({})
         resetData()
       })
       .catch(e => {
@@ -140,6 +145,10 @@ const AgentManagerWindow = () => {
       update={update}
       updateCallBack={resetData}
       onLoadFile={loadFile}
+      setSelectedAgent={setSelectedAgent}
+      selectedAgent={selectedAgent}
+      rootSpell={root_spell}
+      setRootSpell={setRootSpell}
     />
   )
 }

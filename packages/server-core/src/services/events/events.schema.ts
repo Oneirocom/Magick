@@ -17,7 +17,7 @@ export const eventSchema = Type.Object(
     channel: Type.Optional(Type.String()),
     channelType: Type.Optional(Type.String()),
     content: Type.Optional(Type.String()),
-    agentId: Type.Number(),
+    agentId: Type.String(),
     projectId: Type.String(),
     date: Type.Optional(Type.String()),
     embedding: Type.Optional(Type.Any()),
