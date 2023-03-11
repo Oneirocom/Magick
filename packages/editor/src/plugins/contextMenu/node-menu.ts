@@ -22,6 +22,20 @@ export default function (Menu) {
         editor.addNode(node)
       })
 
+      this.addItem('Copy', args => {
+        const pubSub = editor.pubSub
+        const tabId = editor.tab.id
+        const event = pubSub.events.$MULTI_SELECT_COPY(tabId)
+        pubSub.publish(event)
+      })
+
+      this.addItem('Paste', args => {
+        const pubSub = editor.pubSub
+        const tabId = editor.tab.id
+        const event = pubSub.events.$MULTI_SELECT_PASTE(tabId)
+        pubSub.publish(event)
+      })
+
       traverse(nodeItems, (name, func, path) => this.addItem(name, func, path))
     }
   }
