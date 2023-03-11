@@ -18,6 +18,139 @@ const log = (...s: (string | boolean)[]) => {
 }
 
 export class DiscordConnector {
+  client = Discord.Client as any
+  agent: any = undefined
+  spellRunner: any = null
+  discord_starting_words: string[] = []
+  discord_bot_name_regex = ''
+  discord_bot_name = 'Bot'
+  use_voice = false
+  voice_provider!: string
+  voice_character!: string
+  voice_language_code!: string
+  tiktalknet_url!: string
+  worldManager: WorldManager
+  constructor({
+    agent,
+    discord_api_key,
+    discord_starting_words,
+    discord_bot_name_regex,
+    discord_bot_name,
+    spellRunner,
+    use_voice,
+    voice_provider,
+    voice_character,
+    voice_language_code,
+    tiktalknet_url,
+    worldManager,
+  }) {
+    this.worldManager = worldManager
+    this.agent = agent
+    this.spellRunner = spellRunner
+    this.use_voice = use_voice
+    this.voice_provider = voice_provider
+    this.voice_character = voice_character
+    this.voice_language_code = voice_language_code
+    this.tiktalknet_url = tiktalknet_url
+    if (!discord_starting_words || discord_starting_words?.length <= 0) {
+      this.discord_starting_words = ['hi', 'hey']
+    } else {
+      this.discord_starting_words = discord_starting_words?.split(',')
+      for (let i = 0; i < this.discord_starting_words.length; i++) {
+        this.discord_starting_words[i] = this.discord_starting_words[i]
+          .trim()
+          .toLowerCase()
+      }
+    }
+    this.discord_bot_name_regex = discord_bot_name_regex
+    this.discord_bot_name = discord_bot_name
+
+    const token = discord_api_key
+    if (!token) {
+      console.warn('No API token for Discord bot, skipping')
+    } else {
+      this.client = new Discord.Client({
+        partials: [Partials.Message, Partials.User, Partials.Reaction],
+        intents: [
+          GatewayIntentBits.Guilds,
+          GatewayIntentBits.GuildVoiceStates,
+          GatewayIntentBits.MessageContent,
+          GatewayIntentBits.GuildPresences,
+          GatewayIntentBits.GuildMembers,
+          GatewayIntentBits.GuildMessages,
+          GatewayIntentBits.GuildVoiceStates,
+        ],
+      })
+      this.client.prefix = '!'
+      this.client.prefixOptionalWhenMentionOrDM = true
+
+      this.client.on('debug', message => {
+        console.log('debug', message)
+      })
+
+      this.client.name_regex = new RegExp(discord_bot_name, 'ig')
+
+      this.client.username_regex = new RegExp(this.discord_bot_name_regex, 'ig') //'((?:digital|being)(?: |$))'
+      this.client.edit_messages_max_count = 5
+
+      const embed = new EmbedBuilder().setColor(0x00ae86)
+
+      this.client.embed = embed
+
+      if (this.use_voice) {
+        const {
+          client,
+          discord_bot_name,
+          agent,
+          spellRunner,
+          voice_provider,
+          voice_character,
+          voice_language_code,
+          tiktalknet_url,
+        } = this
+          ; (async () => {
+            if (typeof window === 'undefined') {
+              const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
+                await import('./discord-voice')
+              recognizeSpeech = _recognizeSpeech
+              this.client = initSpeechClient({
+                client,
+                discord_bot_name,
+                agent,
+                spellRunner,
+                voiceProvider: voice_provider,
+                voiceCharacter: voice_character,
+                languageCode: voice_language_code,
+                tiktalknet_url,
+              })
+            }
+          })()
+      }
+
+      this.client.on(
+        'messageCreate',
+        this.messageCreate.bind(null, this.client)
+      )
+
+      this.client.on(
+        'guildMemberAdd',
+        async (user: { user: { id: any; username: any } }) => {
+          this.handleGuildMemberAdd(user)
+        }
+      )
+      this.client.on('guildMemberRemove', async (user: any) => {
+        this.handleGuildMemberRemove(user)
+      })
+      this.client.on('messageReactionAdd', async (reaction: any, user: any) => {
+        this.handleMessageReactionAdd(reaction, user)
+      })
+
+      this.client.login(token)
+    }
+  }
+
+  discussionChannels = {}
+
   async destroy() {
     await this.client.destroy()
     this.client = null
@@ -773,139 +906,6 @@ export class DiscordConnector {
     if (this.messageResponses[channel] === undefined) return undefined
     return this.messageResponses[channel][message]
   }
-
-  client = Discord.Client as any
-  agent: any = undefined
-  spellRunner: any = null
-  discord_starting_words: string[] = []
-  discord_bot_name_regex = ''
-  discord_bot_name = 'Bot'
-  use_voice = false
-  voice_provider!: string
-  voice_character!: string
-  voice_language_code!: string
-  tiktalknet_url!: string
-  worldManager: WorldManager
-  constructor({
-    agent,
-    discord_api_key,
-    discord_starting_words,
-    discord_bot_name_regex,
-    discord_bot_name,
-    spellRunner,
-    use_voice,
-    voice_provider,
-    voice_character,
-    voice_language_code,
-    tiktalknet_url,
-    worldManager,
-  }) {
-    this.worldManager = worldManager
-    this.agent = agent
-    this.spellRunner = spellRunner
-    this.use_voice = use_voice
-    this.voice_provider = voice_provider
-    this.voice_character = voice_character
-    this.voice_language_code = voice_language_code
-    this.tiktalknet_url = tiktalknet_url
-    if (!discord_starting_words || discord_starting_words?.length <= 0) {
-      this.discord_starting_words = ['hi', 'hey']
-    } else {
-      this.discord_starting_words = discord_starting_words?.split(',')
-      for (let i = 0; i < this.discord_starting_words.length; i++) {
-        this.discord_starting_words[i] = this.discord_starting_words[i]
-          .trim()
-          .toLowerCase()
-      }
-    }
-    this.discord_bot_name_regex = discord_bot_name_regex
-    this.discord_bot_name = discord_bot_name
-
-    const token = discord_api_key
-    if (!token) {
-      console.warn('No API token for Discord bot, skipping')
-    } else {
-      this.client = new Discord.Client({
-        partials: [Partials.Message, Partials.User, Partials.Reaction],
-        intents: [
-          GatewayIntentBits.Guilds,
-          GatewayIntentBits.GuildVoiceStates,
-          GatewayIntentBits.MessageContent,
-          GatewayIntentBits.GuildPresences,
-          GatewayIntentBits.GuildMembers,
-          GatewayIntentBits.GuildMessages,
-          GatewayIntentBits.GuildVoiceStates,
-        ],
-      })
-      this.client.prefix = '!'
-      this.client.prefixOptionalWhenMentionOrDM = true
-
-      this.client.on('debug', message => {
-        console.log('debug', message)
-      })
-
-      this.client.name_regex = new RegExp(discord_bot_name, 'ig')
-
-      this.client.username_regex = new RegExp(this.discord_bot_name_regex, 'ig') //'((?:digital|being)(?: |$))'
-      this.client.edit_messages_max_count = 5
-
-      const embed = new EmbedBuilder().setColor(0x00ae86)
-
-      this.client.embed = embed
-
-      if (this.use_voice) {
-        const {
-          client,
-          discord_bot_name,
-          agent,
-          spellRunner,
-          voice_provider,
-          voice_character,
-          voice_language_code,
-          tiktalknet_url,
-        } = this
-          ; (async () => {
-            if (typeof window === 'undefined') {
-              const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
-                await import('./discord-voice')
-              recognizeSpeech = _recognizeSpeech
-              this.client = initSpeechClient({
-                client,
-                discord_bot_name,
-                agent,
-                spellRunner,
-                voiceProvider: voice_provider,
-                voiceCharacter: voice_character,
-                languageCode: voice_language_code,
-                tiktalknet_url,
-              })
-            }
-          })()
-      }
-
-      this.client.on(
-        'messageCreate',
-        this.messageCreate.bind(null, this.client)
-      )
-
-      this.client.on(
-        'guildMemberAdd',
-        async (user: { user: { id: any; username: any } }) => {
-          this.handleGuildMemberAdd(user)
-        }
-      )
-      this.client.on('guildMemberRemove', async (user: any) => {
-        this.handleGuildMemberRemove(user)
-      })
-      this.client.on('messageReactionAdd', async (reaction: any, user: any) => {
-        this.handleMessageReactionAdd(reaction, user)
-      })
-
-      this.client.login(token)
-    }
-  }
-
-  discussionChannels = {}
 
   async sendMessageToChannel(channelId: any, msg: any) {
     const channel = await this.client.channels.fetch(channelId)

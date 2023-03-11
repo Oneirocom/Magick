@@ -152,6 +152,7 @@
     "three": "^0.149.0",
     "ts-node": "10.9.1",
     "tslib": "^2.4.1",
+    "twitter-api-v2": "^1.14.2",
     "unique-names-generator": "^4.7.1",
     "unirest": "^0.6.0",
     "url": "^0.11.0",
