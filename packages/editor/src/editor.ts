@@ -4,9 +4,11 @@ import { Plugin } from 'rete/types/core/plugin'
 import ContextMenuPlugin from './plugins/contextMenu'
 import { Data } from 'rete/types/core/data'
 import CommentPlugin from './plugins/commentPlugin'
+import { SelectionPlugin } from "@magickml/engine"
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
+import gridimg from './grid.png'
 
 import {
   // CachePlugin,
@@ -29,6 +31,7 @@ import {
   MultiSocketGenerator,
   NodeClickPlugin,
   ModuleOptions,
+  MultiCopyPlugin,
   ModulePluginArgs,
 } from '@magickml/engine'
 
@@ -71,6 +74,20 @@ export const initEditor = function ({
   const editor = new MagickEditor('demo@0.1.0', container)
 
   editorTabMap[tab.id] = editor
+
+  // Add grid background
+  container.style.backgroundImage = `url('${gridimg}')`
+  container.style.transition = 'transform 330ms ease-in-out'
+
+  function zoomCanvas(zoomFactor) {
+    container.style.transform = `scale(${zoomFactor})`
+  }
+
+  // Listern on zoom to dynamical zoo the background grid
+  container.addEventListener('wheel', event => {
+    const zoomFactor = event.deltaY > 0 ? 0.99 : 1.2
+    zoomCanvas(zoomFactor)
+  })
 
   // Set up the reactcontext pubsub on the editor so rete components can talk to react
   editor.pubSub = pubSub
@@ -115,6 +132,8 @@ export const initEditor = function ({
       return {
         Deleted: true,
         Clone: true,
+        Copy: true,
+        Paste: true
       }
     },
     allocate: (component: MagickComponent<unknown>) => {
@@ -128,6 +147,7 @@ export const initEditor = function ({
   })
 
   // This should only be needed on client, not server
+  editor.use(MultiCopyPlugin)
   editor.use(ConsolePlugin)
   editor.use(SocketGeneratorPlugin)
   editor.use(MultiSocketGenerator)
@@ -162,7 +182,7 @@ export const initEditor = function ({
     editor.use(TaskPlugin)
   }
 
-  // editor.use(SelectionPlugin, { enabled: true })
+  editor.use(SelectionPlugin, { enabled: true })
 
   // WARNING all the plugins from the editor get installed onto the component and modify it.  This effects the components registered in the engine, which already have plugins installed.
   components.forEach((c: any) => {
@@ -179,10 +199,6 @@ export const initEditor = function ({
     'multiselectnode',
     args => (args.accumulate = args.e.ctrlKey || args.e.metaKey)
   )
-
-  editor.on(['click'], () => {
-    editor.selected.list = []
-  })
 
   editor.bind('run')
   editor.bind('save')

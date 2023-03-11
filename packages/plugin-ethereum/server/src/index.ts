@@ -30,7 +30,7 @@ function getAgentMethods() {
   }
 
   async function stopEthereumWs(agent) {
-    if (!agent.ethereum) throw new Error("Ethereum WS isn't running, can't stop it")
+    if (!agent.ethereum) return
     await agent.ethereum.destroy()
     agent.ethereum = null
     console.log('Stopped Ethereum WS client for agent ' + agent.name)

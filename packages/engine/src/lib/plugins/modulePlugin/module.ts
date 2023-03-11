@@ -3,6 +3,7 @@ export class Module {
   publicVariables?: Record<string, string>
   inputs: Record<string, unknown>
   outputs: Record<string, unknown>
+  agent: any
   constructor() {
     this.inputs = {}
     this.outputs = {}
@@ -14,14 +15,12 @@ export class Module {
     inputs,
     secrets,
     publicVariables,
+    agent
   }) {
-    console.log('read', '********')
-    console.log('inputs', inputs, '********')
-    console.log('secrets', secrets, '********')
-    console.log('publicVariables', publicVariables, '********')
     this.inputs = inputs
     this.secrets = secrets || {} as Record<string, string>
     this.publicVariables = publicVariables || {} as Record<string, string>
+    this.agent = agent
   }
 
   write(outputs: Record<string, any>) {

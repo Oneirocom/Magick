@@ -107,14 +107,14 @@ export class reddit_client {
     }
   }
 
-  spellHandler
+  spellRunner
   settings
   entity
   haveCustomCommands
   custom_commands
 
-  createRedditClient = async (spellHandler, settings, entity) => {
-    this.spellHandler = spellHandler
+  createRedditClient = async (spellRunner, settings, entity) => {
+    this.spellRunner = spellRunner
     this.settings = settings
     this.entity = entity
     this.haveCustomCommands = settings.haveCustomCommands
@@ -159,7 +159,7 @@ export class reddit_client {
         const chat_id = post.link_url.split('/')[6]
         const author = post.author.name
         const body = post.body
-        const resp = await this.spellHandler(
+        const resp = await this.spellRunner(
           body,
           author ?? 'Sender',
           this.settings.reddit_bot_name ?? 'Agent',
@@ -176,7 +176,7 @@ export class reddit_client {
         const chat_id = post.link_url.split('/')[6]
         const author = post.author
         const body = post.body
-        const resp = await this.spellHandler(
+        const resp = await this.spellRunner(
           body,
           author ?? 'Sender',
           this.settings.reddit_bot_name ?? 'Agent',
@@ -206,7 +206,7 @@ export class reddit_client {
         const chat_id = post.id
         const author = post.author.name
         const body = post.selftext
-        const resp = await this.spellHandler(
+        const resp = await this.spellRunner(
           body,
           author ?? 'Sender',
           this.settings.reddit_bot_name ?? 'Agent',
@@ -223,7 +223,7 @@ export class reddit_client {
         const chat_id = post.id
         const author = post.author
         const body = post.selftext
-        const resp = await this.spellHandler(
+        const resp = await this.spellRunner(
           body,
           author ?? 'Sender',
           this.settings.reddit_bot_name ?? 'Agent',
@@ -275,7 +275,7 @@ export class reddit_client {
             }
           }
 
-          const resp = await this.spellHandler(
+          const resp = await this.spellRunner(
             body,
             author ?? 'Sender',
             this.settings.reddit_bot_name ?? 'Agent',

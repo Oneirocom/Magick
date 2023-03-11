@@ -51,6 +51,8 @@ export const events = {
   $UNDO: tabId => `undo:${tabId}`,
   $REDO: tabId => `redo:${tabId}`,
   $DELETE: tabId => `delete:${tabId}`,
+  $MULTI_SELECT_COPY: tabId => `multiSelectCopy:${tabId}`,
+  $MULTI_SELECT_PASTE: tabId => `multiSelectPaste:${tabId}`,
   $REFRESH_EVENT_TABLE: tabId => `refreshEventTable:${tabId}`,
   $SEND_TO_AVATAR: tabId => `sendToAvatar:${tabId}`,
 }

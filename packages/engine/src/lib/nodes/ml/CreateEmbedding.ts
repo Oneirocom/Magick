@@ -49,14 +49,20 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
         node: NodeData,
         inputs: MagickWorkerInputs,
         _outputs: MagickWorkerOutputs,
-        { projectId }: { projectId: string },
+        { projectId, module }: { projectId: string, module: any },
     ) {
         const content = (inputs['content'] && inputs['content'][0]) as string
-        console.log('projectId', projectId)
+
         if (!content) return console.log('Content is null, not storing event')
 
+        if(!module.secrets['openai_api_key']) {
+            return console.log('No OpenAI API key found')
+        }
+
+        // TODO: fix this
+
         const data = await makeEmbedding({
-            apiKey: null,
+            apiKey: module.secrets['openai_api_key'],
             input: content,
             model: 'text-embedding-ada-002',
         }, {
@@ -64,8 +70,6 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
             spell: node.spell,
             nodeId: node.id,
         })
-
-        console.log('data', data)
 
         if(!data || !data.success) {
             return {

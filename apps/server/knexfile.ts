@@ -5,7 +5,7 @@ const configs = {
     client: dbType,
     connection: dbURL
   },
-  sqlite3: {
+  sqlite: {
     client: dbType, 
     connection: {
       // handling both absolute and relative paths, 

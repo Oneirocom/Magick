@@ -42,9 +42,8 @@ export function saveRequest({
   spell,
   nodeId,
 }: RequestPayload) {
-  console.log('saveRequest')
+
   const app = globalsManager.get('feathers')
-  console.log(app.service('request'))
   return app.service('request').create({
     id: v4(),
     projectId,

@@ -50,6 +50,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     })
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
+    const senderInput = new Rete.Input('sender', 'Sender Override', stringSocket)
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
     const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
 
@@ -61,6 +62,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     return node
       .addInput(dataInput)
       .addInput(contentInput)
+      .addInput(senderInput)
       .addInput(eventInput)
       .addInput(embedding)
       .addOutput(dataOutput)
@@ -70,12 +72,17 @@ export class EventStore extends MagickComponent<Promise<void>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent }: { silent: boolean }
+    context
   ) {
+    const {
+      silent,
+      projectId,
+    } = context
+
     const event = inputs['event'][0] as Event
-    const content = (inputs['content'] && inputs['content'][0]) as string
-    const embedding = (inputs['embedding'] &&
-      inputs['embedding'][0]) as number[]
+    const sender = (inputs['sender'] ? inputs['sender'][0] : null) as string
+    const content = (inputs['content'] ? inputs['content'][0] : null) as string
+    const embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[]
     const typeData = node?.data?.type as string
     const type =
       typeData !== undefined && typeData.length > 0
@@ -84,7 +91,8 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     if (!content) return console.log('Content is null, not storing event')
 
-    const data = { ...event, content, type } as any
+    console.log('sender is', sender ?? event.sender)
+    const data = { ...event, sender: sender ?? event.sender, projectId, content, type } as any
     if (embedding) data.embedding = embedding
 
     if (content && content !== '') {
