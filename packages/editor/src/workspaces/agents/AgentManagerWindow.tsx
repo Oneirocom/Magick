@@ -54,7 +54,6 @@ const AgentManagerWindow = () => {
       const data = JSON.parse(event?.target?.result as string)
       data.projectId = config.projectId
       data.enabled = data?.enabled ? true : false
-      data.dirty = data?.dirty ? true : false
       data.updatedAt = data?.updatedAt || ''
       data.rootSpell = data?.rootSpell || '{}'
       data.spells = Array.isArray(data?.spells) ? data.spells : []
