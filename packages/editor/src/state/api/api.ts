@@ -16,7 +16,6 @@ const dynamicBaseQuery: BaseQueryFn<
   const apiUrl = state.globalConfig.apiUrl
   const token = state.globalConfig.token
 
-  console.log('SENDING REQUEST TO API URL', apiUrl)
   // gracefully handle scenarios where data to generate the URL is missing
   if (!apiUrl) {
     return {
@@ -31,7 +30,6 @@ const dynamicBaseQuery: BaseQueryFn<
   const rawBaseQuery = fetchBaseQuery({
     baseUrl: apiUrl,
     prepareHeaders: async headers => {
-      console.log('Building headers with token', token)
       if (token) headers.set('authorization', `Bearer ${token}`)
       return headers
     },
