@@ -35,13 +35,10 @@ export class TwitterConnector {
   agent
   twitter_enable_twits = false
   twitter_tweet_rules = ''
+  localUser: any
 
-  constructor ({
-    spellRunner,
-    spellHandlerAuto,
-    settings,
-    agent,
-  }) {
+  constructor({ spellRunner, spellHandlerAuto, settings, agent }) {
+    agent.twitter = this
     this.spellRunner = spellRunner
     this.spellHandlerAuto = spellHandlerAuto
     this.settings = settings
@@ -97,13 +94,13 @@ export class TwitterConnector {
 
     this.twitterv2 = new TwitterApi(bearerToken)
     this.twitterv2_replies = TwitterApi(bearerToken)
-    this.initialize({settings})
+    this.initialize({ settings })
   }
 
-  async initialize({settings}) {
+  async initialize({ settings }) {
     const twitterUser = getSetting(settings.twitter_userid, 'User ID (@)')
 
-    const localUser = await this.twitterv2.v2.userByUsername(twitterUser)
+    this.localUser = await this.twitterv2.v2.userByUsername(twitterUser)
 
     const stream = await this.twitterv2_replies.v2.searchStream({
       'tweet.fields': ['referenced_tweets', 'author_id'],
@@ -112,26 +109,31 @@ export class TwitterConnector {
 
     stream.autoReconnect = true
     stream.on(ETwitterStreamEvent.Data, async twit => {
-      
       if (
         twit.data.referenced_tweets &&
         twit.includes &&
         twit.data.referenced_tweets !== undefined &&
         twit.includes !== undefined &&
         twit.includes.tweets.length > 0 &&
-        twit.includes.tweets[0].author_id == localUser.data.id &&
-        twit.data.author_id !== localUser.data.id &&
-        twit.data.text.startsWith('@' + localUser.data.username)
+        twit.includes.tweets[0].author_id == this.localUser.data.id &&
+        twit.data.author_id !== this.localUser.data.id &&
+        twit.data.text.startsWith('@' + this.localUser.data.username)
       ) {
         const author = await this.twitterv2.v2.user(twit.data.author_id)
         const entities = [author.data.name, twitterUser]
 
-        const input = twit.data.text.replace('@' + localUser.data.username, '')
+        const input = twit.data.text.replace(
+          '@' + this.localUser.data.username,
+          ''
+        )
 
-        if(author === twitterUser) {
-          return console.warn('Bot was going to reply to self, ignoring tweet:', input)
+        if (author === twitterUser) {
+          return console.warn(
+            'Bot was going to reply to self, ignoring tweet:',
+            input
+          )
         }
-        
+
         const resp = await this.spellRunner.runComponent({
           inputs: {
             'Input - Twitter': {
@@ -149,17 +151,7 @@ export class TwitterConnector {
           secrets: this.agent.secrets,
           publicVariables: this.agent.publicVariables,
           runSubspell: true,
-        });
-
-        if (resp && resp !== undefined && resp?.length > 0) {
-          if (resp === 'like' || resp === 'heart') {
-            await this.twitterv2.v2.like(localUser.data.id, twit.data.id)
-          } else if (resp !== 'ignore') {
-            await this.handleMessage(resp, twit.data.id, 'feed')
-          } else if (resp === 'retweet') {
-            await this.twitterv2.v2.retweet(localUser.data.id, twit.data.id)
-          }
-        }
+        })
       }
     })
 
@@ -197,12 +189,13 @@ export class TwitterConnector {
           twit.data.referenced_tweets !== undefined &&
           twit.includes !== undefined &&
           twit.includes.tweets.length > 0 &&
-          twit.includes.tweets[0].author_id == localUser.data.id
+          twit.includes.tweets[0].author_id === this.localUser.data.id
 
         if (
           isARt ||
           isReply ||
-          (localUser !== undefined && twit.data.author_id == localUser.data.id)
+          (this.localUser !== undefined &&
+            twit.data.author_id == this.localUser.data.id)
         ) {
           return
         } else {
@@ -228,17 +221,7 @@ export class TwitterConnector {
               secrets: this.agent.secrets,
               publicVariables: this.agent.publicVariables,
               runSubspell: true,
-            });
-
-            if (resp && resp !== undefined && resp?.length > 0) {
-              if (resp === 'like' || resp === 'heart') {
-                await this.twitterv2.v2.like(localUser.data.id, twit.data.id)
-              } else if (resp !== 'ignore') {
-                await this.handleMessage(resp, twit.data.id, 'feed')
-              } else if (resp === 'retweet') {
-                await this.twitterv2.v2.retweet(localUser.data.id, twit.data.id)
-              }
-            }
+            })
           }
         }
       })
