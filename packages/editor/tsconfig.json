@@ -10,6 +10,7 @@
       "DOM.Iterable"
     ],
     "rootDir": "../..",
+    "outDir": "lib",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "moduleResolution": "Node",

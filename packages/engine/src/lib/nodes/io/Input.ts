@@ -54,7 +54,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     const values = [...defaultInputTypes, ...pluginManager.getInputTypes()]
     const trigger = new Rete.Output('trigger', 'trigger', triggerSocket)
     const out = new Rete.Output('output', 'output', values[0].socket)
-    node.data.isInput = true;
+    node.data.isInput = true
     node.data.name = node.data.name ?? `Input - ${values[0].name}`
 
     node.addOutput(trigger).addOutput(out)
@@ -72,7 +72,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
       const currentValue = values.find(v => v.name === data)
 
-      if(currentValue !== lastValue) {
+      if (currentValue !== lastValue) {
         const connections = node.getConnections()
         connections.forEach(c => {
           this.editor?.removeConnection(c)
@@ -90,23 +90,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
         node.addOutput(newOut)
       }
     }
-
-    // const data = node?.data?.playtestToggle as
-    //   | {
-    //       receivePlaytest: boolean
-    //     }
-    //   | undefined
-
-    // const togglePlaytest = new PlaytestControl({
-    //   dataKey: 'playtestToggle',
-    //   name: 'Receive from playtest input',
-    //   defaultValue: {
-    //     receivePlaytest:
-    //       data?.receivePlaytest !== undefined ? data?.receivePlaytest : true,
-    //   },
-    //   ignored: ['output'],
-    //   label: 'Receive from playtest',
-    // })
 
     const toggleDefault = new SwitchControl({
       dataKey: 'useDefault',
@@ -140,7 +123,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     outputs: MagickWorkerOutputs,
     { silent, data }: { silent: boolean; data: string | undefined }
   ) {
-    node.data.isInput = true;
+    node.data.isInput = true
     // handle data subscription.  If there is data, this is from playtest
     if (
       data &&

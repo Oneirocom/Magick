@@ -121,8 +121,14 @@ export class TextCompletion extends MagickComponent<Promise<WorkerReturn>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { projectId, magick }: { projectId: string; magick: EngineContext }
+    context: { module: any, secrets: Record<string, string>; silent: boolean; projectId: string; magick: EngineContext }
   ) {
+    const {
+      silent,
+      projectId,
+      magick,
+    } = context
+
     const currentSpell = magick.getCurrentSpell()
     const prompt = inputs['string'][0]
 
@@ -171,6 +177,7 @@ export class TextCompletion extends MagickComponent<Promise<WorkerReturn>> {
       frequency_penalty,
       presence_penalty,
       stop: filteredStop,
+      apiKey: context.module.secrets['openai_api_key'],
     }
 
     const data = await makeCompletion(body, {

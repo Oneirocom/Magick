@@ -1,6 +1,4 @@
-import {
-  ClientPlugin,
-} from '@magickml/engine'
+import { ClientPlugin } from '@magickml/engine'
 
 const OpenAIPlugin = new ClientPlugin({
   name: 'OpenAIPlugin',

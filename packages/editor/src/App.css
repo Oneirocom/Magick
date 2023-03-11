@@ -489,3 +489,7 @@ div.item {
   color: var(--dark-4);
   font-family: 'IBM Plex Mono';
 }
+
+.MuiInputBase-root input {
+  padding: 13px !important;
+}

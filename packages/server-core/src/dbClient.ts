@@ -15,7 +15,7 @@ declare module './declarations' {
 }
 export enum SupportedDbs {
   pg = 'pg',
-  sqlite3 = 'sqlite3',
+  sqlite = 'sqlite',
 }
 
 export const dbDialect: SupportedDbs = process.env.DATABASE_TYPE as SupportedDbs
@@ -33,7 +33,7 @@ const getDatabaseConfig = () => {
       connection: dbURL,
     }
   // sqlite config
-  if (dbType === 'sqlite3' || dbType === 'sqlite')
+  if (dbType === 'sqlite')
     return {
       client: dbType,
       connection: {
@@ -45,13 +45,13 @@ const getDatabaseConfig = () => {
         afterCreate: function (conn, done) {
           if(isM1) {
             console.warn(
-              'Error loading extensions, vectors currently not supported on ARM64/M1'
+              'Could not load VSS extension, vectors currently not supported on ARM64/M1 (this is fine)'
             )
             return done(null, conn)
           }
           if(isWindows) {
             console.warn(
-              'Error loading extensions, vectors currently not supported on Win64'
+              'Could not load VSS extension, vectors currently not supported on Win32 (this is fine)'
             )
             return done(null, conn)
           }
@@ -77,7 +77,7 @@ const getDatabaseConfig = () => {
                 })
               } catch (err) {
                 console.warn(
-                  'Error loading extensions, vectors currently not supported on Win64 or ARM64/M1'
+                  'Could not load extensions, vectors currently not supported on Win32 or ARM64/M1 (this is fine)'
                 )
               }
               done(null, conn)
@@ -86,7 +86,7 @@ const getDatabaseConfig = () => {
       },
     }
 
-  throw new Error('Unsupported database type, use `pg` or `sqlite3`')
+  throw new Error('Unsupported database type, use `pg` or `sqlite`')
 }
 
 export const dbClient = (app: Application) => {
@@ -97,7 +97,7 @@ export const dbClient = (app: Application) => {
 
 const dbSupportJson: Record<SupportedDbs, boolean> = {
   [SupportedDbs.pg]: true,
-  [SupportedDbs.sqlite3]: false,
+  [SupportedDbs.sqlite]: false,
 }
 
 export const doesDbSupportJson = (): boolean => dbSupportJson[dbDialect]

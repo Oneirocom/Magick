@@ -60,14 +60,14 @@ const Playtest = ({ tab }) => {
 
   const defaultPlaytestData = {
     sender: 'playtestSender',
-    observer: 'playtestObserver',
+    observer: 'Agent',
     type: 'playtest',
     client: 'playtest',
     channel: 'playtest',
     channelType: 'playtest',
     projectId: config.projectId,
-    agentId: 0,
-    entities: ['playtestSender', 'playtestObserver'],
+    agentId: 'preview',
+    entities: ['playtestSender', 'Agent'],
   }
 
   const scrollbars = useRef<any>()
@@ -102,8 +102,9 @@ const Playtest = ({ tab }) => {
 
   const printToConsole = useCallback(
     (_, _text) => {
-      const text = typeof _text === 'object' ? JSON.stringify(_text) : _text
-      const newHistory = [...history, text]
+      console.log('_text', _text)
+      const text = (`Agent: ` + _text).split('\n')
+      const newHistory = [...history, ...text]
       setHistory(newHistory as [])
     },
     [history]
@@ -181,17 +182,17 @@ const Playtest = ({ tab }) => {
   }
 
   const onSend = async () => {
-    console.log('onSend')
     const newHistory = [...history, `You: ${value}`]
     setHistory(newHistory as [])
 
     let toSend = value
     setValue('')
 
-    const json = localState?.playtestData.replace(
-      /(['"])?([a-z0-9A-Z_]+)(['"])?:/g,
-      '"$2": '
-    )
+    const json = localState?.playtestData
+    // .replace(
+    //   /(['"])?([a-z0-9A-Z_]+)(['"])?:/g,
+    //   '"$2": '
+    // )
 
     if (!json) {
       enqueueSnackbar('No data provided', {
@@ -214,7 +215,7 @@ const Playtest = ({ tab }) => {
       content: value,
       sender: 'Speaker',
       observer: 'Agent',
-      agentId: 0,
+      agentId: 'preview',
       client: 'playtest',
       channel: 'previewChannel',
       projectId: config.projectId,
@@ -222,22 +223,39 @@ const Playtest = ({ tab }) => {
       ...JSON.parse(json),
     }
 
+    console.log('onSend', toSend)
+
     // get spell from editor
     const graph = serialize()
-    if (!graph) return
+    if (!graph) {
+      enqueueSnackbar('No graph found', {
+        variant: 'error',
+      })
+    } 
+
+    console.log('playtestOption', playtestOption)
 
     const playtestNode = Object.values(graph.nodes).find(node => {
-      return node.data.playtestToggle && node.data.name === playtestOption
+      return node.data.name === playtestOption
     })
 
     if (!playtestNode) {
-      toast.error('No input node found for this input type')
+      enqueueSnackbar('No input node found for this input type', {
+        variant: 'error',
+      })
       return
     }
 
-    const playtestInputName = playtestNode?.data.name || 'Input - Default'
+    console.log('playtestNode', playtestNode) 
 
-    if (!playtestInputName) return
+    const playtestInputName = playtestNode?.data.name
+
+    if (!playtestInputName) {
+      enqueueSnackbar('No input node found for this input type', {
+        variant: 'error',
+      })
+      return
+    } 
 
     const data = {
       spellName: tab.name.split('--')[0],
@@ -265,7 +283,7 @@ const Playtest = ({ tab }) => {
     dispatch(
       upsertLocalState({
         id: tab.id,
-        playtestData: dataText ?? JSON.stringify(defaultPlaytestData),
+        playtestData: dataText ?? defaultPlaytestData,
       })
     )
   }
@@ -355,7 +373,10 @@ const Playtest = ({ tab }) => {
         ></div>
         <div className={css['playtest-output']}>
           <Scrollbars ref={ref => (scrollbars.current = ref)}>
-            <ul>{history.map(printItem)}</ul>
+            <ul>{history.map((printItem: string, key: any) => {
+              return <li key={key}>{printItem}</li>
+            })}
+            </ul>
           </Scrollbars>
         </div>
         <label htmlFor="playtest-input" style={{ display: 'none' }}>

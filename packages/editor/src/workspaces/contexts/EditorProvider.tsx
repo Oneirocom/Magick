@@ -11,10 +11,10 @@ import React, {
 
 import { spellApi } from '../../state/api/spells'
 import { useConfig } from '../../contexts/ConfigProvider'
+import styles from './styles.module.scss'
 
 import { LoadingScreen } from '@magickml/client-core'
 import { MyNode } from '../../components/Node/Node'
-import gridimg from '../../grid.png'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import { useFeathers } from '../../contexts/FeathersProvider'
@@ -50,6 +50,8 @@ type EditorContextType = {
   undo: () => void
   redo: () => void
   del: () => void
+  multiSelectCopy: () => void
+  multiSelectPaste: () => void
   centerNode: (nodeId: number) => void
 }
 
@@ -124,6 +126,16 @@ const EditorProvider = ({ children }) => {
     editorRef.current.trigger('delete')
   }
 
+  const multiSelectCopy = () => {
+    if (!editorRef.current) return
+    editorRef.current.trigger('multiselectcopy')
+  }
+
+  const multiSelectPaste = () => {
+    if (!editorRef.current) return
+    editorRef.current.trigger('multiselectpaste')
+  }
+
   const serialize = () => {
     if (!editorRef.current) return
     return editorRef.current.toJSON()
@@ -161,6 +173,8 @@ const EditorProvider = ({ children }) => {
     undo,
     redo,
     del,
+    multiSelectCopy,
+    multiSelectPaste,
     setContainer,
     centerNode,
   }
@@ -192,27 +206,14 @@ const RawEditor = ({ tab, children }) => {
   return (
     <>
       <div
-        style={{
-          textAlign: 'left',
-          width: '100vw',
-          height: '100vh',
-          position: 'absolute',
-          backgroundColor: '#191919',
-          backgroundImage: `url('${gridimg}')`,
+        className={styles['editor-container']}
+        ref={el => {
+          if (el && !loaded && spell) {
+            buildEditor(el, spell.data[0], tab, reteInterface)
+            setLoaded(true)
+          }
         }}
-        onDragOver={e => {
-          e.preventDefault()
-        }}
-      >
-        <div
-          ref={el => {
-            if (el && !loaded && spell) {
-              buildEditor(el, spell.data[0], tab, reteInterface)
-              setLoaded(true)
-            }
-          }}
-        />
-      </div>
+      />
       {children}
     </>
   )

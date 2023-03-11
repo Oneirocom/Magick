@@ -25,7 +25,7 @@ function removeEmojisFromString(str: string): string {
 export class zoom_client {
   ent = null
 
-  async createZoomClient(spellHandler, settings, entity) {
+  async createZoomClient(spellRunner, settings, entity) {
     try {
       const ent = {}
       ent.xvfb = new Xvfb()
@@ -39,7 +39,7 @@ export class zoom_client {
         }
 
         console.log('started virtual window')
-        ent.zoomObj = new zoom(spellHandler, settings, entity)
+        ent.zoomObj = new zoom(spellRunner, settings, entity)
         await ent.zoomObj.init()
       })
     } catch (e) {
@@ -63,7 +63,7 @@ export class zoom_client {
 }
 
 export class zoom {
-  spellHandler
+  spellRunner
   settings
   entity
 
@@ -73,8 +73,8 @@ export class zoom {
   page
   socket
 
-  constructor(spellHandler, settings, entity) {
-    this.spellHandler = spellHandler
+  constructor(spellRunner, settings, entity) {
+    this.spellRunner = spellRunner
     this.settings = settings
     this.entity = entity
   }
@@ -192,8 +192,8 @@ export class zoom {
           }
 
           this.lastMessage = text
-          console.log('spellHandler:', this.spellHandler)
-          let response = await this.spellHandler(
+          console.log('spellRunner:', this.spellRunner)
+          let response = await this.spellRunner(
             text,
             meetingHost ?? 'User',
             this.settings.zoom_bot_name ?? 'Agent',
