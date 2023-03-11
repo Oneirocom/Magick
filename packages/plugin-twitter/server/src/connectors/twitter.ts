@@ -57,10 +57,10 @@ export class TwitterConnector {
       'Bearer Token (Twitter API V2)'
     )
     const twitterUser = getSetting(settings.twitter_userid, 'User ID (@)')
-    const twitterAppToken = getSetting(settings.twitter_app_token, 'App Token')
-    const twitterAppTokenSecret = getSetting(
-      settings.twitter_app_token_secret,
-      'App Token Secret'
+    const twitterApiKey = getSetting(settings.twitter_api_key, 'API Key')
+    const twitterApiKeySecret = getSetting(
+      settings.twitter_api_key_secret,
+      'API Key Secret'
     )
     const twitterAccessToken = getSetting(
       settings.twitter_access_token,
@@ -73,8 +73,8 @@ export class TwitterConnector {
 
     if (
       !bearerToken ||
-      !twitterAppToken ||
-      !twitterAppTokenSecret ||
+      !twitterApiKey ||
+      !twitterApiKeySecret ||
       !twitterAccessToken ||
       !twitterAccessTokenSecret ||
       !twitterUser
@@ -86,8 +86,8 @@ export class TwitterConnector {
     }
 
     this.twitterv1 = new TwitterApi({
-      appKey: twitterAppToken,
-      appSecret: twitterAppTokenSecret,
+      appKey: twitterApiKey,
+      appSecret: twitterApiKeySecret,
       accessToken: twitterAccessToken,
       accessSecret: twitterAccessTokenSecret,
     })

@@ -86,15 +86,15 @@ export const TwitterAgentWindow: FC<any> = props => {
                 />
             </Grid>
             <Grid item xs={3}>
-                <span className="form-item-label">App Token</span>
+                <span className="form-item-label">API Key</span>
                 <KeyInput
-                  value={selectedAgentData.data?.twitter_app_token}
+                  value={selectedAgentData.data?.twitter_api_key}
                   setValue={value =>
                     setSelectedAgentData({
                       ...selectedAgentData,
                       data: {
                         ...selectedAgentData.data,
-                        twitter_app_token: value,
+                        twitter_api_key: value,
                       },
                     })
                   }
@@ -102,15 +102,15 @@ export const TwitterAgentWindow: FC<any> = props => {
                 />
             </Grid>
             <Grid item xs={3}>
-                <span className="form-item-label">App Token Secret</span>
+                <span className="form-item-label">API Key Secret</span>
                 <KeyInput
-                  value={selectedAgentData.data?.twitter_app_token_secret}
+                  value={selectedAgentData.data?.twitter_api_key_secret}
                   setValue={value =>
                     setSelectedAgentData({
                       ...selectedAgentData,
                       data: {
                         ...selectedAgentData.data,
-                        twitter_app_token_secret: value,
+                        twitter_api_key_secret: value,
                       },
                     })
                   }
