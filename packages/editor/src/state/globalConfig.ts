@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, Slice } from '@reduxjs/toolkit'
 
 export interface GlobalConfig {
   apiUrl: string
@@ -6,7 +6,7 @@ export interface GlobalConfig {
   projectId: string
 }
 
-export const globalConfigSlice = createSlice({
+export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
   name: 'globalConfig',
   initialState: {
     apiUrl: '',
@@ -15,7 +15,10 @@ export const globalConfigSlice = createSlice({
   },
   reducers: {
     setConfig: (state, action) => {
-      state = action.payload
+      const { apiUrl, token, projectId } = action.payload
+      state.apiUrl = apiUrl
+      state.token = token
+      state.projectId = projectId
     },
   },
 })

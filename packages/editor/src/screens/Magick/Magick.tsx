@@ -16,6 +16,7 @@ import { LoadingScreen, TabLayout } from '@magickml/client-core'
 import Workspaces from '../../workspaces'
 import TabBar from '../../components/TabBar/TabBar'
 import axios from 'axios'
+import { useLazyGetSpellQuery } from '../../state/api/spells'
 
 const Magick = ({ empty = false }) => {
   const config = useConfig()
@@ -28,6 +29,8 @@ const Magick = ({ empty = false }) => {
   const { URI } = useParams()
   const { events, publish, subscribe } = pubSub
 
+  const [getSpell] = useLazyGetSpellQuery()
+
   // Handle open tab events
   useEffect(() => {
     return subscribe(events.OPEN_TAB, (_event, tabData) => {
@@ -38,53 +41,54 @@ const Magick = ({ empty = false }) => {
   useEffect(() => {
     if (!tabs) return
 
-    console.log('TABS CHANGED')
     //Check If exists
     if (activeTab) {
+      // ;(async () => {
+      //   const reault = useLazyGetSpellQuery()
+      // })()
       //If No spell Exist on Project id
-      axios
-        .get(config.apiUrl + '/spells', {
-          params: {
-            projectId: config.projectId,
-          },
-        })
-        .then(function (response) {
-          if (response.data.total == 0) {
-            navigate('/home')
-          }
-        })
+      // axios
+      //   .get(config.apiUrl + '/spells', {
+      //     params: {
+      //       projectId: config.projectId,
+      //     },
+      //   })
+      //   .then(function (response) {
+      //     if (response.data.total == 0) {
+      //       navigate('/home')
+      //     }
+      //   })
       //Check on Page load if the spell exsists
       //Redux Query gives undefined
-      axios
-        .get(config.apiUrl + '/spells', {
-          params: {
-            id: activeTab.id,
-          },
-        })
-        .then(function (response) {
-          if (response.data.total == 0) {
-            dispatch(closeTab(activeTab.id))
-
-            let temp_tabs = tabs.filter(item => item.id !== activeTab.id)
-            console.log(temp_tabs)
-            if (temp_tabs.length === 0) navigate('/home')
-            let idx = Math.floor(Math.random() * temp_tabs.length)
-            if (temp_tabs.length > 0) navigate(`/magick/${temp_tabs[idx].URI}`)
-            dispatch(
-              openTab({
-                name: temp_tabs[idx].URI,
-                openNew: false,
-                type: 'spell',
-              })
-            )
-            enqueueSnackbar(
-              'You are trying to access spell, that no longer exists ',
-              {
-                variant: 'error',
-              }
-            )
-          }
-        })
+      // axios
+      //   .get(config.apiUrl + '/spells', {
+      //     params: {
+      //       id: activeTab.id,
+      //     },
+      //   })
+      //   .then(function (response) {
+      //     if (response.data.total == 0) {
+      //       dispatch(closeTab(activeTab.id))
+      //       let temp_tabs = tabs.filter(item => item.id !== activeTab.id)
+      //       console.log(temp_tabs)
+      //       if (temp_tabs.length === 0) navigate('/home')
+      //       let idx = Math.floor(Math.random() * temp_tabs.length)
+      //       if (temp_tabs.length > 0) navigate(`/magick/${temp_tabs[idx].URI}`)
+      //       dispatch(
+      //         openTab({
+      //           name: temp_tabs[idx].URI,
+      //           openNew: false,
+      //           type: 'spell',
+      //         })
+      //       )
+      //       enqueueSnackbar(
+      //         'You are trying to access spell, that no longer exists ',
+      //         {
+      //           variant: 'error',
+      //         }
+      //       )
+      //     }
+      //   })
     }
     // If there are still tabs, grab one at random to open to for now.
     // We should do better at this.  Probably with some kind of tab ordering.
@@ -154,5 +158,7 @@ const Magick = ({ empty = false }) => {
     </>
   )
 }
+
+Magick.whyDidYouRender = true
 
 export default Magick

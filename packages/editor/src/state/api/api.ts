@@ -5,7 +5,7 @@ import {
   fetchBaseQuery,
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react'
-import { RootState } from '../store'
+import { createStore, RootState } from '../store'
 
 const dynamicBaseQuery: BaseQueryFn<
   string | FetchArgs,
@@ -15,6 +15,8 @@ const dynamicBaseQuery: BaseQueryFn<
   const state = api.getState() as RootState
   const apiUrl = state.globalConfig.apiUrl
   const token = state.globalConfig.token
+
+  console.log('SENDING REQUEST TO API URL', apiUrl)
   // gracefully handle scenarios where data to generate the URL is missing
   if (!apiUrl) {
     return {

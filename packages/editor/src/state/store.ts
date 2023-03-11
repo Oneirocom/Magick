@@ -1,3 +1,4 @@
+import { projectId } from '@magickml/engine'
 import { configureStore, ThunkAction, Action, Dispatch } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query/react'
 
@@ -20,43 +21,44 @@ import { rootApi } from './api/api'
 import tabReducer from './tabs'
 import localStateReducer from './localState'
 import preferencesReducer from './preferences'
-import globalConfigReducer from './globalConfig'
+import globalConfigReducer, { globalConfigSlice } from './globalConfig'
 import { MagickIDEProps } from '../main'
 
-const persistConfig = {
-  key: 'root',
-  version: 1,
-  storage,
-  blacklist: [spellApi.reducerPath],
-}
-
 const rootReducer = combineReducers({
+  globalConfig: globalConfigReducer,
   tabs: tabReducer,
   preferences: preferencesReducer,
   [spellApi.reducerPath]: spellApi.reducer,
   localState: localStateReducer,
-  globalConfig: globalConfigReducer,
 })
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+let _store = null
+export const createStore = (config?: MagickIDEProps) => {
+  if (_store) return _store
 
-export const createStore = (config: MagickIDEProps) => {
+  const persistConfig = {
+    key: config.projectId,
+    version: 1,
+    storage,
+    blacklist: [spellApi.reducerPath, 'globalConfig'],
+  }
+
   const store = configureStore({
-    reducer: persistedReducer,
+    reducer: persistReducer(persistConfig, rootReducer),
+    // reducer: rootReducer,
     preloadedState: {
       globalConfig: config,
     },
     middleware: getDefaultMiddleware =>
       getDefaultMiddleware({
         serializableCheck: false,
-        // serializableCheck: {
-        //   ignoredActions: [mFLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        // },
       }).concat(rootApi.middleware),
   })
 
   setupListeners(store.dispatch)
   persistStore(store)
+
+  _store = store
 
   return store
 }

@@ -69,14 +69,16 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
   useEffect(() => {
     if (!spellData) return
+    console.log('SPELL DATA RECEIVED')
     spellRef.current = spellData.data[0]
   }, [spellData])
 
   useEffect(() => {
     if (!tab || !tab.name) return
 
+    console.log('loading spell!', tab.name, tab)
     loadSpell({
-      spellName: tab.name.split('--')[0],
+      spellName: tab.id,
       projectId: config.projectId,
       id: tab.id,
     })

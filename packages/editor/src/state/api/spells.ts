@@ -160,3 +160,19 @@ export const spellApi = rootApi.injectEndpoints({
     }),
   }),
 })
+
+export const {
+  useGetSpellsQuery,
+  useLazyGetSpellQuery,
+  useLazyGetSpellByIdQuery,
+  useGetSpellQuery,
+  useGetSpellByIdQuery,
+  useGetSpellByJustIdQuery,
+  useRunSpellMutation,
+  useSaveDiffMutation,
+  useSpellExistsMutation,
+  useSaveSpellMutation,
+  useNewSpellMutation,
+  usePatchSpellMutation,
+  useDeleteSpellMutation,
+} = spellApi
