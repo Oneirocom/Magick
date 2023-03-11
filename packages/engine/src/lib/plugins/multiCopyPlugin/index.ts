@@ -9,8 +9,6 @@ function install(editor: IRunContextEditor) {
   // Define variables and constants
   const storedNodesKey = 'selectedNodes'
   const connectedPairKey = 'connectedNodePairs'
-  let accumulate = false;
-  let copiedNodes: MagickNode[] = [];
   let mouse = { x: 0, y: 0 }
 
   // Store the current mouse position on click event
@@ -18,16 +16,11 @@ function install(editor: IRunContextEditor) {
     mouse = { x: editor.view.area.mouse.x, y: editor.view.area.mouse.y }
   })
 
-  // Handle multiple node selection with Ctrl/Cmd key
-  editor.on('multiselectnode', (args) => {
-    accumulate = args.e.ctrlKey || args.e.metaKey
-  })
-
   // Copy the selected nodes and their connections
   editor.on('multiselectcopy', () => {
-    if (!accumulate) return
+    if (!editor.selected.list.length) return
 
-    copiedNodes = []
+    const copiedNodes: MagickNode[] = []
     editor.selected.each((node) => {
       copiedNodes.push(node as MagickNode)
     })
