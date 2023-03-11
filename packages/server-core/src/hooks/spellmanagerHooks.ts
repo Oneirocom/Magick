@@ -31,7 +31,7 @@ export const checkForSpellInManager = async (context: HookContext) => {
 export const updateSpellInManager = async (context: HookContext) => {
   const { app, params, data, id: contextId } = context
   const { user } = params
-  const { spellUpdate, diff, id: dataId } = data
+  const { id: dataId } = data
 
   // We do this because the id comes from different places in sockets vs rest
   const id = dataId || contextId
@@ -49,5 +49,6 @@ export const updateSpellInManager = async (context: HookContext) => {
 
   // We just store the result here of the update
   // This hook only run after save spell calls, so there should always be a spell to laod in.
+  console.log('UPDATING SPELL IN MANAGER')
   spellManager.load(context.result, true)
 }
