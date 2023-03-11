@@ -6,6 +6,7 @@ type PubSubData = Record<string, any> | string | any[]
 
 type PubSubContext = {
   publish: (event: string, data?: PubSubData) => void
+  // eslint-disable-next-line @typescript-eslint/ban-types
   subscribe: (event: string, callback: Function) => Function
   PubSub: typeof PubSub
   events: Record<string, any>
@@ -44,6 +45,7 @@ export const events = {
   $CREATE_AVATAR_WINDOW: tabId => `createAvatarWindow:${tabId}`,
   $CREATE_DEBUG_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $CREATE_CONSOLE: tabId => `createDebugConsole:${tabId}`,
+  $RUN_SPELL: tabId => `runSpell:${tabId}`,
   $PROCESS: tabId => `process:${tabId}`,
   $EXPORT: tabId => `export:${tabId}`,
   $UNDO: tabId => `undo:${tabId}`,

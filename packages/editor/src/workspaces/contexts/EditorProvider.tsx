@@ -8,13 +8,13 @@ import React, {
   useState,
   useEffect,
 } from 'react'
-import styles from './styles.module.scss'
-import { getSpellApi } from '../../state/api/spells'
+
+import { spellApi } from '../../state/api/spells'
 import { useConfig } from '../../contexts/ConfigProvider'
+import styles from './styles.module.scss'
 
 import { LoadingScreen } from '@magickml/client-core'
 import { MyNode } from '../../components/Node/Node'
-import gridimg from '../../grid.png'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import { useFeathers } from '../../contexts/FeathersProvider'
@@ -184,7 +184,6 @@ const EditorProvider = ({ children }) => {
 
 const RawEditor = ({ tab, children }) => {
   const config = useConfig()
-  const spellApi = getSpellApi(config)
 
   const [getSpell, { data: spell, isLoading }] =
     spellApi.useLazyGetSpellByIdQuery()

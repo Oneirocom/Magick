@@ -2,20 +2,9 @@
 import { feathers } from '@feathersjs/feathers'
 import type { TransportConnection, Params } from '@feathersjs/feathers'
 import type {
-  SpellRunner,
-  SpellRunnerData,
-  SpellRunnerQuery,
   SpellRunnerService
 } from './services/spell-runner/spell-runner'
-
-import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
-export type { SpellRunner, SpellRunnerData, SpellRunnerQuery }
-export const spellRunnerServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
-export type SpellRunnerClientService = Pick<
-  SpellRunnerService<Params<SpellRunnerQuery>>,
-  (typeof spellRunnerServiceMethods)[number]
->
-
+export const spellRunnerServiceMethods = ['get', 'create', 'update'] as const
 import type { Spell, SpellData, SpellQuery, SpellService } from './services/spells/spells'
 export type { Spell, SpellData, SpellQuery }
 export const spellServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
@@ -36,7 +25,7 @@ export type RequestClientService = Pick<
 
 export interface ServiceTypes {
   request: RequestClientService
-  'spell-runner': SpellRunnerClientService
+  'spell-runner': SpellRunnerService
   spells: SpellClientService
   agents: AgentClientService
   //

@@ -19,7 +19,6 @@ if (window !== window.parent) {
   window.addEventListener(
     'message',
     event => {
-      console.log('event', event.data)
       const cloudUrl =
         import.meta.env.VITE_APP_CLOUD_URL || 'http://localhost:3000'
       // here we check that the sender is coming from a trusted source
@@ -49,6 +48,7 @@ if (window !== window.parent) {
   const config: MagickIDEProps = {
     apiUrl,
     projectId,
+    token: '',
   }
   const Root = () => <MagickIDE config={config} />
 
