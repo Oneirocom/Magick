@@ -62,7 +62,7 @@ export const EthereumAgentWindow: FC<any> = props => {
                   },
                 })
               }
-              secret={true}
+              secret={false}
             />
           </div>
 
