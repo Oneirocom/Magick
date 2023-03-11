@@ -207,6 +207,16 @@ const RawEditor = ({ tab, children }) => {
   return (
     <>
       <div
+        id="background"
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          zIndex: '1',
+          backgroundImage: `url('${gridimg}')`,
+        }}
+      ></div>
+      <div
         className={styles['editor-container']}
         ref={el => {
           if (el && !loaded && spell) {
