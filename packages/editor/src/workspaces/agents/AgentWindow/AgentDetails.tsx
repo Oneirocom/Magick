@@ -34,7 +34,6 @@ const AgentDetails = ({
     // Avoid server-side validation error
     _data.spells = Array.isArray(_data?.spells) ? _data.spells : []
     _data.enabled = _data.enabled ? true : false
-    _data.dirty = _data.dirty ? true : false
     _data.updatedAt = new Date().toISOString()
     axios
       .patch(`${config.apiUrl}/agents/${id}`, _data)
