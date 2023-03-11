@@ -1,75 +1,112 @@
 import { buildMagickInterface } from '../helpers/buildMagickInterface'
 import { SpellManager, WorldManager, pluginManager } from '@magickml/engine'
 import { app } from '../app'
+import { AgentManager } from './AgentManager'
 
 type AgentData = {
   id: any
   data: any
   name: string
   secrets: string
+  rootSpell: string
   publicVariables: any[]
   projectId: string
   spellManager: SpellManager
-  agent?: Record<string, any>
+  agent?: any
+  enabled: boolean
 }
 
 export class Agent {
   name = ''
   //Clients
   id: any
-  secrets: Record<string, any>
+  secrets: any
   publicVariables: any[]
   data: AgentData
   router: any
   app: any
-  loopHandler: any
   spellManager: SpellManager
   projectId: string
   worldManager: WorldManager
+  agentManager: AgentManager
+  spellRunner: any
+  rootSpell: any
 
-  constructor(data: AgentData) {
+  outputTypes = {}
+
+  updateInterval: any
+
+  constructor(agentData: AgentData, agentManager: AgentManager) {
+    console.log('constructing agent', agentData.id)
     // if ,data,secrets is a string, JSON parse it
-    this.secrets = JSON.parse(data.secrets)
-    this.publicVariables = data.publicVariables
-    this.id = data.id
-    this.data = data
-    this.name = data.name ?? 'agent'
-    this.projectId = data.projectId
+    this.secrets = JSON.parse(agentData.secrets)
+    this.publicVariables = agentData.publicVariables
+    this.id = agentData.id
+    this.data = agentData
+    this.rootSpell = JSON.parse(agentData.rootSpell ?? '{}')
+    this.agentManager = agentManager
+    this.name = agentData.name ?? 'agent'
+    this.projectId = agentData.projectId
+    this.worldManager = new WorldManager()
+
     this.spellManager = new SpellManager({
       magickInterface: buildMagickInterface({}) as any,
       cache: false,
     })
-    this.worldManager = new WorldManager()
-    ;
-    (async () => {
+    ;(async () => {
       const spell = (
         await app.service('spells').find({
-          query: { projectId: data.projectId },
+          query: {
+            projectId: agentData.projectId,
+            id: this.rootSpell.id,
+          },
         })
       ).data[0]
 
-      const spellRunner = await this.spellManager.load(spell)
-        console.log('agent.data', data.data)
+      // if the spell has changed, override it
+      const spellData = JSON.stringify(spell)
+      const rootSpellData = JSON.stringify(this.rootSpell)
+      const override = spellData !== rootSpellData
+
+      this.spellRunner = await this.spellManager.load(spell, override)
       const agentStartMethods = pluginManager.getAgentStartMethods()
       for (const method of Object.keys(agentStartMethods)) {
-        console.log('method', method)
         await agentStartMethods[method]({
-          data: data.data,
+          agentManager,
           agent: this,
-          spellRunner,
+          spellRunner: this.spellRunner,
           worldManager: this.worldManager,
         })
       }
+
+      const outputTypes = pluginManager.getOutputTypes()
+      this.outputTypes = outputTypes
+
+      this.updateInterval = setInterval(() => {
+        // every second, update the agent, set updatedAt to now
+        app.service('agents').patch(this.id, {
+          updatedAt: new Date().toISOString(),
+        })
+      }, 1000)
     })()
   }
 
   async onDestroy() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval)
+    }
     const agentStopMethods = pluginManager.getAgentStopMethods()
     console.log('agentStopMethods', agentStopMethods)
-    for (const method of Object.keys(agentStopMethods)) {
-      console.log('method', method)
-      agentStopMethods[method](this)
-    }
+    if (agentStopMethods)
+      for (const method of Object.keys(agentStopMethods)) {
+        agentStopMethods[method]({
+          agentManager: this.agentManager,
+          agent: this,
+          spellRunner: this.spellRunner,
+          worldManager: this.worldManager,
+        })
+      }
+    console.log('destroyed agent', this.id)
   }
 }
 

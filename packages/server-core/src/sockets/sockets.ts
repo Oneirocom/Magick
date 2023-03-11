@@ -15,6 +15,8 @@ const handleSockets = (app: any) => {
       // user will be set to the payload if we are not in single user mode
       let user
 
+      console.log('socket.handshake.headers.authorization', socket.handshake.headers.authorization)
+
       // Single user mode is for local usage of magick.  If we are in the cloud, we want auth here.
       if (ignoreAuth) {
         const id = v4()
@@ -25,6 +27,7 @@ const handleSockets = (app: any) => {
         // todo wound up using a custom header here for the handshake.
         // Using the standard authorization header was causing issues with feathers auth
         const sessionId = socket.handshake.headers.authorization.split(' ')[1]
+        console.log('*********************************************')
         console.log('sessionId', sessionId)
         // auth services will verify the token
         const payload = await app

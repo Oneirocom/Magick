@@ -40,11 +40,13 @@ export class CloudJwtService extends AuthenticationService {
     const encryptionSecret = await getDerivedEncryptionKey(
       secretOverride || secret
     )
-
+    
     try {
       const { payload } = await jwtDecrypt(token, encryptionSecret, {
         clockTolerance: 15,
       })
+
+      console.log('payload', payload)
 
       return payload as any
     } catch (error: any) {
