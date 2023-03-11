@@ -72,6 +72,7 @@ const TwitterPlugin = new ServerPlugin({
   inputTypes: [
     { name: 'Twitter (Feed)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (Feed)' },
     { name: 'Twitter (DM)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (DM)' },
+    { name: 'Twitter (Mention', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (Mention'}
   ],
   outputTypes: [
     { name: 'Twitter (Feed)', trigger: true, socket: eventSocket, handler: async ({
@@ -93,13 +94,13 @@ const TwitterPlugin = new ServerPlugin({
     global: false
   },
   {
-    name: 'App Token (API v1)',
-    key: 'twitter_app_token',
+    name: 'API Key (API v1)',
+    key: 'twitter_api_key',
     global: false
   },
   {
-    name: 'App Token Secret (API v1)',
-    key: 'twitter_app_token_secret',
+    name: 'API Key Secret (API v1)',
+    key: 'twitter_api_key_secret',
     global: false
   },
   {
