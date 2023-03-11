@@ -10,7 +10,7 @@ const AgentManagerWindow = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [data, setData] = useState<Array<object>>([])
   const { enqueueSnackbar } = useSnackbar()
-  const [selectedAgent, setSelectedAgent] = useState<object>({})
+  const [selectedAgent, setSelectedAgent] = useState<any>({id: null})
   const [root_spell, setRootSpell] = useState('default')
 
   const resetData = async () => {
@@ -70,6 +70,7 @@ const AgentManagerWindow = () => {
         )
 
       // Check if the "id" property exists in the object
+      // eslint-disable-next-line no-prototype-builtins
       if (data.hasOwnProperty('id')) {
         delete data.id
       }
@@ -113,7 +114,7 @@ const AgentManagerWindow = () => {
             variant: 'success',
           })
         }
-        if (selectedAgent?.id === id) setSelectedAgent({})
+        if (selectedAgent.id === id) setSelectedAgent({ id: null})
         resetData()
       })
       .catch(e => {

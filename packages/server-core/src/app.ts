@@ -68,7 +68,7 @@ app.set('authentication', {
   entity: null,
   authStrategies: ['jwt'],
   jwtOptions: {
-    header: { typ: 'access' },
+    header: { type: 'access' },
     audience: 'https://yourdomain.com',
     issuer: 'feathers',
     algorithm: 'A256GCM',
