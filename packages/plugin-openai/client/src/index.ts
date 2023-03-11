@@ -5,7 +5,7 @@ const OpenAIPlugin = new ClientPlugin({
   secrets: [
     {
       name: 'OpenAI API Key',
-      key: 'openai-api-key',
+      key: 'openai_api_key',
       global: true,
     },
   ],

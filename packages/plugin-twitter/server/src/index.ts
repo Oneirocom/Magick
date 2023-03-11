@@ -14,12 +14,10 @@ function getAgentMethods() {
   }: StartTwitterArgs) {
     const { data } = agent.data
     if(!data) return console.log("No data for this agent")
-    console.log('data', data)
     if(!data.twitter_enabled) return console.log("Twitter is not enabled for this agent")
     if(!data.twitter_api_key) return console.log("Twitter API key is not set for this agent")
-
+    console.log('starting twitter connect')
     const twitter = new TwitterConnector({
-      ...data,
       agent,
       spellRunner,
       worldManager,
@@ -54,6 +52,7 @@ async function handleResponse(
   console.log('********* SENT MESSAGE TO TWITTER', agent.id, output, event)
   console.log('event is', event)
   console.log('event.channel is', event.channel)
+  return;
 
   const resp = output
   if (resp && resp !== undefined && resp?.length > 0) {
