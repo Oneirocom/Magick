@@ -26,12 +26,10 @@ const AgentDetails = ({
   const [oldName, setOldName] = useState<string>('')
 
   const update = id => {
-    console.log('calling update, data is', selectedAgentData)
     const _data = selectedAgentData
     if (_data['id']) {
       delete _data.id
     }
-    console.log('update', _data)
     // Avoid server-side validation error
     _data.spells = Array.isArray(_data?.spells) ? _data.spells : []
     _data.enabled = _data.enabled ? true : false
@@ -40,11 +38,11 @@ const AgentDetails = ({
       .patch(`${config.apiUrl}/agents/${id}`, _data)
       .then(res => {
         if (typeof res.data === 'string' && res.data === 'internal error') {
-          enqueueSnackbar('internal error updating agent', {
+          enqueueSnackbar('Internal error updating agent', {
             variant: 'error',
           })
         } else {
-          enqueueSnackbar('updated agent', {
+          enqueueSnackbar('Updated agent', {
             variant: 'success',
           })
 
