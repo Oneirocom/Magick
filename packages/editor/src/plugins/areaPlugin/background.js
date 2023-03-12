@@ -1,4 +1,4 @@
-const scaleFactor = .02
+const scaleFactor = .04
 
 export class Background {
   constructor(editor, element) {
@@ -7,12 +7,12 @@ export class Background {
     editor.on('translate', (event) => {
       const { k, x, y } = event.transform
       element.style.backgroundPosition = `${x}px ${y}px`
-      element.style.backgroundSize = `${(k * 100 * scaleFactor)}%`
+      element.style.backgroundSize = `${Math.max(k, .25) * 100 * scaleFactor}%`
     })
 
     editor.on('zoom', (event) => {
       const { k, x, y } = event.transform
-      element.style.backgroundSize = `${k * 100 * scaleFactor}%`
+      element.style.backgroundSize = `${Math.max(k, .25) * 100 * scaleFactor}%`
       element.style.backgroundPosition = `${x}px ${y}px`
     })
   }
