@@ -6,20 +6,18 @@
   "implicitDependencies": ["@magickml/engine"],
   "targets": {
     "build": {
-      "executor": "@nrwl/vite:build",
-      "outputs": ["{options.outputPath}"],
-      "configFile": "packages/plugin-rest/server/vite.config.ts",
-      "defaultConfiguration": "production",
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
-        "outputPath": "dist/packages/plugin-rest-server"
-      },
-      "configurations": {
-        "development": {
-          "mode": "development"
-        },
-        "production": {
-          "mode": "production"
-        }
+        "outputPath": "dist/packages/plugin-rest/server",
+        "tsConfig": "packages/plugin-rest/server/tsconfig.lib.json",
+        "packageJson": "packages/plugin-rest/server/package.json",
+        "main": "packages/plugin-rest/server/src/index.ts",
+        "assets": [
+          "packages/plugin-rest/server/*.md"
+        ]
       }
     },
     "lint": {

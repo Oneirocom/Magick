@@ -1,6 +1,7 @@
 // require dotenv
 const dotenv = require('dotenv-flow');
 dotenv.config('../');
+const path = require('path');
 
 const isAgent = process.env.SERVER_TYPE === 'agent';
 
