@@ -5,7 +5,7 @@
   "scripts": {
     "migrate:make": "nx run @magickml/server:migrate:make",
     "migrate": "nx run @magickml/server:migrate",
-    "dev": "node scripts/check-install.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent --parallel --maxParallel=100",
+    "dev": "node scripts/check-install.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent,@magickml/docs --parallel --maxParallel=100",
     "build": "node scripts/build-server.js",
     "build-client": "npx nx build @magickml/client",
     "build-server": "npx nx build @magickml/server",
@@ -209,7 +209,7 @@
     "@nrwl/web": "15.7.1",
     "@nrwl/workspace": "15.7.1",
     "@nx-plus/docusaurus": "^15.0.0-rc.0",
-    "@nxext/capacitor": "^15.6.0",
+    "@nxext/capacitor": "^15.7.0",
     "@pyodide/webpack-plugin": "1.0.0-alpha.2",
     "@semantic-release/changelog": "^6.0.2",
     "@semantic-release/commit-analyzer": "^9.0.2",
