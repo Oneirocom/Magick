@@ -49,3 +49,7 @@ yarn.lock
 ./files/
 
 *.sqlite
+
+# Generated Docusaurus files
+.docusaurus/
+.cache-loader/
