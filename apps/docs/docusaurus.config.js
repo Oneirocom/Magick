@@ -26,11 +26,6 @@ const config = {
           // Please change this to your repo.
           editUrl: 'https://github.com/oneirocom/magickml/tree/main/docs',
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl: 'https://github.com/oneirocom/magickml/tree/main/docs',
-        },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -78,7 +73,6 @@ const config = {
             position: 'left',
             label: 'Developers',
           },
-          // { to: "/blog", label: "Blog", position: "left" },
           {
             href: 'https://github.com/oneirocom/magickml',
             label: 'GitHub',
@@ -110,10 +104,6 @@ const config = {
           {
             title: 'More',
             items: [
-              // {
-              //   label: "Blog",
-              //   to: "/blog",
-              // },
               {
                 label: 'GitHub',
                 href: 'https://github.com/oneirocom/magickml',

@@ -8,20 +8,11 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  background: '#424242';
-}
-
-.heroBanner img {
-  width: 70%;
 }
 
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2rem;
-  }
-
-  .heroBanner img {
-    width: 100%;
   }
 }
 
@@ -29,10 +20,4 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.githubButtons {
-  display: flex;
-  left: 1%;
-  position: relative;
 }
