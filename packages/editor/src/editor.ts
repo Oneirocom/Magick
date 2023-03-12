@@ -142,7 +142,7 @@ export const initEditor = function ({
   const background = document.getElementById('background')
 
   editor.use(AreaPlugin, {
-    scaleExtent: { min: 0.025, max: 1.5 },
+    scaleExtent: { min: 0.1, max: 1.5 },
     background,
     // snap: true - TODO: add ability to enable and disable snapping to UI
   })
