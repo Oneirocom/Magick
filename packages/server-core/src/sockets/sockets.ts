@@ -1,3 +1,4 @@
+import { DEFAULT_USER_ID } from '@magickml/engine'
 // import io from 'socket.io'
 import { SpellManager, IGNORE_AUTH } from '@magickml/engine'
 import { buildMagickInterface } from '../helpers/buildMagickInterface'
@@ -14,9 +15,8 @@ const handleSockets = (app: any) => {
 
       // Single user mode is for local usage of magick.  If we are in the cloud, we want auth here.
       if (IGNORE_AUTH) {
-        const id = v4()
         user = {
-          id: id,
+          id: DEFAULT_USER_ID,
         }
       } else {
         // todo wound up using a custom header here for the handshake.
