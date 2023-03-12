@@ -103,7 +103,7 @@ const config = {
             items: [
               {
                 label: 'Magick Discord',
-                href: 'https://discord.gg/8WkayXw8a4',
+                href: 'https://discord.gg/magickml',
               },
             ],
           },
