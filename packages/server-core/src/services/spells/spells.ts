@@ -102,21 +102,7 @@ export const spell = (app: Application) => {
     after: {
       all: [],
       create: [],
-      patch: [
-        // after saving a spell, we need to update the spell cache
-        async (context: HookContext) => {
-          const { app } = context
-          const { id } = context.result
-          const spell = await app.service('spells').get(id)
-          app.userSpellManagers.forEach(userSpellManager => {
-            if (userSpellManager.spellRunnerMap.has(spell.name)) {
-              userSpellManager.spellRunnerMap.get(spell.name).loadSpell(spell)
-            }
-          })
-        },
-        checkForSpellInManager,
-        updateSpellInManager,
-      ],
+      patch: [checkForSpellInManager, updateSpellInManager],
       saveDiff: [checkForSpellInManager, updateSpellInManager],
     },
     error: {

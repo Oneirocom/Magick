@@ -1,3 +1,4 @@
+import { DEFAULT_PROJECT_ID, DEFAULT_USER_ID } from '@magickml/engine'
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
 import { feathers } from '@feathersjs/feathers'
 import {
@@ -61,23 +62,23 @@ app.use(bodyParser())
 
 app.configure(configureManager())
 
-if(!IGNORE_AUTH){
-// this will configure out stateless JWT authentication
-app.set('authentication', {
-  // We will want to use the same secret as the cloud is using for shared authentication
-  secret: process.env.JWT_SECRET || 'secret',
-  entity: null,
-  authStrategies: ['jwt'],
-  jwtOptions: {
-    header: { type: 'access' },
-    audience: 'https://yourdomain.com',
-    issuer: 'feathers',
-    algorithm: 'A256GCM',
-    expiresIn: '1d',
-  },
-})
+if (!IGNORE_AUTH) {
+  // this will configure out stateless JWT authentication
+  app.set('authentication', {
+    // We will want to use the same secret as the cloud is using for shared authentication
+    secret: process.env.JWT_SECRET || 'secret',
+    entity: null,
+    authStrategies: ['jwt'],
+    jwtOptions: {
+      header: { type: 'access' },
+      audience: 'https://yourdomain.com',
+      issuer: 'feathers',
+      algorithm: 'A256GCM',
+      expiresIn: '1d',
+    },
+  })
 
-app.configure(authentication)
+  app.configure(authentication)
 }
 // app.use(authenticate('jwt'))
 
@@ -108,7 +109,7 @@ app.hooks({
     all: [
       logError,
       async (context, next) => {
-        if(IGNORE_AUTH) return await next()
+        if (IGNORE_AUTH) return await next()
         if (context.path !== 'authentication') {
           return authenticate('jwt')(context, next)
         }
@@ -119,7 +120,11 @@ app.hooks({
       async (context: HookContext, next) => {
         const { params } = context
 
-        if(IGNORE_AUTH) {
+        if (IGNORE_AUTH) {
+          context.params.user = {
+            id: DEFAULT_USER_ID,
+          }
+          context.params.projectId = DEFAULT_PROJECT_ID
           return await next()
         }
 
