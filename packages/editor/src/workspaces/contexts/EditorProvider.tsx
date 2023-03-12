@@ -206,7 +206,7 @@ const RawEditor = ({ tab, children }) => {
 
   return (
     <>
-      <div
+      {/* <div
         id="background"
         style={{
           position: 'absolute',
@@ -216,7 +216,7 @@ const RawEditor = ({ tab, children }) => {
           backgroundImage: `url('${gridimg}')`,
           backgroundSize: '4%',
         }}
-      ></div>
+      ></div> */}
       <div
         style={{}}
         id="editor-container"
