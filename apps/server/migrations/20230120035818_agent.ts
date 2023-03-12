@@ -10,6 +10,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('name')
     table.boolean('enabled')
     table.string('updatedAt')
+    table.string('pingedAt')
     table.string('projectId')
     table.jsonb('spells')
     table.jsonb('data')

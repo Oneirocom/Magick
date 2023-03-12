@@ -35,7 +35,7 @@ const AgentManagerWindow = () => {
     axios({
       url: `${config.apiUrl}/agents`,
       method: 'POST',
-      data: data,
+      data: {...data, updatedAt: new Date().toISOString()},
     })
       .then(async res => {
         const res2 = await fetch(`${config.apiUrl}/agents`)
@@ -80,14 +80,14 @@ const AgentManagerWindow = () => {
 
   const update = (id: string, _data: object) => {
     axios
-      .patch(`${config.apiUrl}/agents/${id}`, _data)
+      .patch(`${config.apiUrl}/agents/${id}`, {..._data, updatedAt: new Date().toISOString()})
       .then(res => {
         if (typeof res.data === 'string' && res.data === 'internal error') {
           enqueueSnackbar('internal error updating agent', {
             variant: 'error',
           })
         } else {
-          enqueueSnackbar('updated agent', {
+          enqueueSnackbar('Updated agent', {
             variant: 'success',
           })
           resetData()
