@@ -4,10 +4,11 @@ import { Plugin } from 'rete/types/core/plugin'
 import ContextMenuPlugin from './plugins/contextMenu'
 import { Data } from 'rete/types/core/data'
 import CommentPlugin from './plugins/commentPlugin'
-import { SelectionPlugin } from "@magickml/engine"
+import { SelectionPlugin } from '@magickml/engine'
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
+import gridimg from './grid.png'
 
 import {
   // CachePlugin,
@@ -117,7 +118,7 @@ export const initEditor = function ({
         Deleted: true,
         Clone: true,
         Copy: true,
-        Paste: true
+        Paste: true,
       }
     },
     allocate: (component: MagickComponent<unknown>) => {
@@ -139,7 +140,10 @@ export const initEditor = function ({
   editor.use(InspectorPlugin)
   editor.use(NodeClickPlugin)
 
-  const background = document.getElementById('background')
+  const background = document.createElement('div') as HTMLElement
+  background.classList.add('background-grid')
+  background.style.backgroundImage = `url('${gridimg}')`
+  container.insertAdjacentElement('beforebegin', background)
 
   editor.use(AreaPlugin, {
     scaleExtent: { min: 0.1, max: 1.5 },
