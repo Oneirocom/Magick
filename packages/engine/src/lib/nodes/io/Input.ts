@@ -12,7 +12,7 @@ import { DropdownControl } from '../../dataControls/DropdownControl'
 import { pluginManager } from '../../plugin'
 import { InputControl } from '../../dataControls/InputControl'
 import { SwitchControl } from '../../dataControls/SwitchControl'
-import { anySocket, triggerSocket } from '../../sockets'
+import { anySocket, triggerSocket, eventSocket } from '../../sockets'
 import { MagickComponent, MagickTask } from '../../magick-component'
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
@@ -21,7 +21,7 @@ type InputReturn = {
 }
 
 const defaultInputTypes = [
-  { name: 'Default', trigger: true, socket: anySocket },
+  { name: 'Default', trigger: true, socket: eventSocket },
 ]
 
 export class InputComponent extends MagickComponent<InputReturn> {
@@ -66,30 +66,52 @@ export class InputComponent extends MagickComponent<InputReturn> {
       defaultValue: values[0].name,
     })
 
-    let lastValue = null
+    // let lastValue = null
+    
     inputType.onData = data => {
       node.data.name = `Input - ${data}`
 
-      const currentValue = values.find(v => v.name === data)
+      // const currentValue = values.find(v => v.name === data)
+      // if(currentValue === lastValue) return
 
-      if (currentValue !== lastValue) {
-        const connections = node.getConnections()
-        connections.forEach(c => {
-          this.editor?.removeConnection(c)
-        })
-        lastValue = currentValue
-      }
+      // console.log('currentValue on input')
+      // console.log(currentValue)
+      // {
+        // name
+        // socket {
+        // compatible: [
+          // {
+          //   compatible: [
+          //     {
+          //       name
+          //     }
+          //   ]
+          // }
+        // ]
+        // }
+      // }
 
-      if (!currentValue.trigger) {
-        node.removeOutput(trigger)
-      }
-      const newOut = new Rete.Output('output', 'output', currentValue.socket)
+      // TODO: dynamic connection types, add and remove nodes as necessary
+      // const oldConnections = [] as any[]
 
-      if (currentValue.socket) {
-        node.removeOutput(out)
-        node.addOutput(newOut)
-      }
+      // const connections = node.getConnections()
+      // connections.forEach(c => {
+      //   oldConnections.push(c)
+      //   this.editor?.removeConnection(c)
+      // })
+
+      // lastValue = currentValue
+
+      // const newOut = new Rete.Output('output', 'output', currentValue.socket)
+
+      // if (currentValue.socket) {
+      //   node.removeOutput(out)
+      //   node.addOutput(newOut)
+      // }
+      // console.log('oldConnections', oldConnections)
     }
+
+    inputType.onData((node.data.name as any).replace('Input - ', ''))
 
     const toggleDefault = new SwitchControl({
       dataKey: 'useDefault',
