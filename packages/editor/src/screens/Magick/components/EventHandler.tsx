@@ -35,14 +35,13 @@ const EventHandler = ({ pubSub, tab }) => {
   const client = FeathersContext.client
 
   useEffect(() => {
-    if (!spell || !spell?.data[0]) return
     getSpell({
       spellName: tab.name,
       id: tab.id,
       projectId: config.projectId,
     })
     spellRef.current = spell?.data[0]
-  }, [spell])
+  }, [config.projectId, getSpell, spell, tab.id, tab.name])
 
   useEffect(() => {
     if (!client.io || !tab.id || !enqueueSnackbar) return
