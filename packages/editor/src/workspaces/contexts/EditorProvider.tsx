@@ -1,6 +1,7 @@
 import { GraphData, EditorContext, Spell, MagickEditor } from '@magickml/engine'
 import { initEditor } from '../../editor'
 import { zoomAt } from '../../plugins/areaPlugin/zoom-at'
+import gridimg from '../../grid.png'
 import React, {
   useRef,
   useContext,
@@ -212,7 +213,7 @@ const RawEditor = ({ tab, children }) => {
           width: '100%',
           height: '100%',
           zIndex: '1',
-          // backgroundImage: `url('${gridimg}')`,
+          backgroundImage: `url('${gridimg}')`,
         }}
       ></div>
       <div
