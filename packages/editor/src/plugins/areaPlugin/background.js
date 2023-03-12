@@ -1,10 +1,19 @@
+const scaleFactor = .02
+
 export class Background {
   constructor(editor, element) {
-    if (!element) return
-    const el =
-      element instanceof HTMLElement ? element : document.createElement('div')
+    if (!element) return console.log('no element found for background')
 
-    el.classList += ` rete-background ${element === true ? 'default' : ''}`
-    editor.view.area.appendChild(el)
+    editor.on('translate', (event) => {
+      const { k, x, y } = event.transform
+      element.style.backgroundPosition = `${x}px ${y}px`
+      element.style.backgroundSize = `${(k * 100 * scaleFactor)}%`
+    })
+
+    editor.on('zoom', (event) => {
+      const { k, x, y } = event.transform
+      element.style.backgroundSize = `${k * 100 * scaleFactor}%`
+      element.style.backgroundPosition = `${x}px ${y}px`
+    })
   }
 }
