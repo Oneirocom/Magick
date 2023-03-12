@@ -4,6 +4,8 @@ config({
 })
 
 const importMetaEnv =
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
   typeof import.meta !== 'undefined' && typeof import.meta.env !== 'undefined'
     ? import.meta.env
     : ({} as any)
@@ -16,6 +18,7 @@ function getVarForEnvironment(env){
 }
 
 export const IGNORE_AUTH = getVarForEnvironment('IGNORE_AUTH') === 'true'
+export const SKIP_DB_EXTENSIONS = getVarForEnvironment('SKIP_DB_EXTENSIONS') === 'true'
 export const DEFAULT_PROJECT_ID = getVarForEnvironment('PROJECT_ID') || 'bb1b3d24-84e0-424e-b4f1-57603f307a89'
 export const SERVER_PORT = getVarForEnvironment('PORT') || 3030
 export const API_ROOT_URL = getVarForEnvironment('APP_API_URL') || `http://localhost:${SERVER_PORT}`

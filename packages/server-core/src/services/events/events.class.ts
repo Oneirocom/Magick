@@ -8,11 +8,22 @@ import type { Event, EventData, EventPatch, EventQuery } from './events.schema'
 import { dbDialect, SupportedDbs } from '../../dbClient'
 import { Knex } from 'knex'
 import { app } from '../../app'
+import { SKIP_DB_EXTENSIONS } from '@magickml/engine'
 
 async function findSimilarEventByEmbedding(db: Knex, embedding) {
   const query: Record<SupportedDbs, any> = {
-    [SupportedDbs.pg]: async () => await db.raw(`select * from events order by embedding <-> ${embedding} limit 1;`),
+    [SupportedDbs.pg]: async () => {
+      if(SKIP_DB_EXTENSIONS) {
+        console.warn('Skipping embedding on postgres, extensions are not loaded')
+        return null
+      }
+      return await db.raw(`select * from events order by embedding <-> ${embedding} limit 1;`)
+    },
     [SupportedDbs.sqlite]: async () => {
+      if(SKIP_DB_EXTENSIONS) {
+        console.warn('Skipping embedding on sqlite, extensions are not loaded')
+        return null
+      }
       const eventInVssTable = await db.raw(
         `select rowid, distance from vss_events
          where vss_search(

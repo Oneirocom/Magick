@@ -2,6 +2,7 @@ import { hooks as schemaHooks } from '@feathersjs/schema'
 import type { Knex } from 'knex'
 import os from 'os'
 import pgvector from 'pgvector/pg'
+import { SKIP_DB_EXTENSIONS } from '@magickml/engine'
 const cpuCore = os.cpus()
 const isM1 = cpuCore[0].model.includes("Apple M1") || cpuCore[0].model.includes("Apple M2")
 const isWindows = os.platform() === 'win32'
@@ -47,6 +48,7 @@ export const event = (app: Application) => {
       find: [],
       get: [
         (context: HookContext) => {
+          if(SKIP_DB_EXTENSIONS) return context
           const { getEmbedding } = context.params.query
           if (getEmbedding) {
             context.params.query.$limit = 1
@@ -58,6 +60,7 @@ export const event = (app: Application) => {
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         (context: HookContext) => {
+          if(SKIP_DB_EXTENSIONS) return context
           const { embedding } = context.data
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
@@ -75,6 +78,9 @@ export const event = (app: Application) => {
     after: {
       create: [
         async (context: HookContext) => {
+          if(SKIP_DB_EXTENSIONS) {
+            return context
+          }
           if (!context.data.embedding || context.data.embedding.length === 0) return context
           const { id } = context.result
           // store the data in the virtual vss table
