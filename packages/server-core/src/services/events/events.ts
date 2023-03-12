@@ -4,17 +4,24 @@ import os from 'os'
 import pgvector from 'pgvector/pg'
 import { SKIP_DB_EXTENSIONS } from '@magickml/engine'
 const cpuCore = os.cpus()
-const isM1 = cpuCore[0].model.includes("Apple M1") || cpuCore[0].model.includes("Apple M2")
+const isM1 =
+  cpuCore[0].model.includes('Apple M1') || cpuCore[0].model.includes('Apple M2')
 const isWindows = os.platform() === 'win32'
 
-// get 
+// get
 
 // array 1536 values in length
 const nullArray = new Array(1536).fill(0)
 
 import {
-  eventDataResolver, eventDataValidator, eventExternalResolver, eventPatchResolver, eventPatchValidator, eventQueryResolver, eventQueryValidator,
-  eventResolver
+  eventDataResolver,
+  eventDataValidator,
+  eventExternalResolver,
+  eventPatchResolver,
+  eventPatchValidator,
+  eventQueryResolver,
+  eventQueryValidator,
+  eventResolver,
 } from './events.schema'
 
 import { dbDialect, SupportedDbs } from '../../dbClient'
@@ -24,7 +31,6 @@ import { EventService, getOptions } from './events.class'
 export * from './events.class'
 export * from './events.schema'
 
-
 // A configure function that registers the service and its hooks via `app.configure`
 export const event = (app: Application) => {
   const db = app.get('dbClient')
@@ -33,7 +39,7 @@ export const event = (app: Application) => {
     // A list of all methods this service exposes externally
     methods: ['find', 'get', 'create', 'patch', 'remove'],
     // You can add additional custom events to be sent to clients here
-    events: []
+    events: [],
   })
   // Initialize hooks
   app.service('events').hooks({
@@ -41,26 +47,29 @@ export const event = (app: Application) => {
       all: [
         schemaHooks.resolveExternal(eventExternalResolver),
         schemaHooks.resolveResult(eventResolver),
-      ]
+      ],
     },
     before: {
-      all: [schemaHooks.validateQuery(eventQueryValidator), schemaHooks.resolveQuery(eventQueryResolver)],
+      all: [
+        schemaHooks.validateQuery(eventQueryValidator),
+        schemaHooks.resolveQuery(eventQueryResolver),
+      ],
       find: [],
       get: [
         (context: HookContext) => {
-          if(SKIP_DB_EXTENSIONS) return context
+          if (SKIP_DB_EXTENSIONS) return context
           const { getEmbedding } = context.params.query
           if (getEmbedding) {
             context.params.query.$limit = 1
             context.params.query.embedding = { $ne: pgvector.toSql(nullArray) }
           }
           return context
-        }
+        },
       ],
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         (context: HookContext) => {
-          if(SKIP_DB_EXTENSIONS) return context
+          if (SKIP_DB_EXTENSIONS) return context
           const { embedding } = context.data
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
@@ -70,19 +79,30 @@ export const event = (app: Application) => {
           }
           return context
         },
-        schemaHooks.validateData(eventDataValidator), schemaHooks.resolveData(eventDataResolver)
+        schemaHooks.validateData(eventDataValidator),
+        schemaHooks.resolveData(eventDataResolver),
       ],
-      patch: [schemaHooks.validateData(eventPatchValidator), schemaHooks.resolveData(eventPatchResolver)],
-      remove: []
+      patch: [
+        schemaHooks.validateData(eventPatchValidator),
+        schemaHooks.resolveData(eventPatchResolver),
+      ],
+      remove: [],
     },
     after: {
       create: [
         async (context: HookContext) => {
-          if(SKIP_DB_EXTENSIONS) return context
-          if (!context.data.embedding || context.data.embedding.length === 0) return context
+          if (SKIP_DB_EXTENSIONS) return context
+          if (!context.data.embedding || context.data.embedding.length === 0)
+            return context
           const { id } = context.result
           // store the data in the virtual vss table
-          if (dbDialect === SupportedDbs.sqlite && !isM1 && !isWindows) {
+          if (dbDialect === SupportedDbs.sqlite) {
+            if (isM1 || isWindows) {
+              console.warn(
+                'Could not load VSS extension, you may want to set SKIP_DB_EXTENSIONS to true in your .env'
+              )
+              return context
+            }
             try {
               await db.raw(`
                 insert into vss_events(rowid, event_embedding)
@@ -93,13 +113,13 @@ export const event = (app: Application) => {
             }
           }
           return context
-        }
+        },
       ],
-      all: []
+      all: [],
     },
     error: {
-      all: []
-    }
+      all: [],
+    },
   })
 }
 
