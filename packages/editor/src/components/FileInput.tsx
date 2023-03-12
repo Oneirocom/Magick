@@ -23,6 +23,7 @@ const FileInput = ({ loadFile, sx, innerText = 'Import', Icon = <> </> }) => {
         multiple
         ref={hiddenFileInput}
         onChange={handleChange}
+        accept="application/JSON"
         style={{ display: 'none' }}
       />
     </>
