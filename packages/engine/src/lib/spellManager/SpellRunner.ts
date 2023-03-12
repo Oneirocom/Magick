@@ -187,7 +187,6 @@ class SpellRunner {
    * Loads a spell into the spell runner.
    */
   async loadSpell(spell: SpellType) {
-    console.log('LOADING SPELL', spell)
     this.currentSpell = spell
 
     // We need to parse the graph if it is a string
