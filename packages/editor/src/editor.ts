@@ -4,7 +4,7 @@ import { Plugin } from 'rete/types/core/plugin'
 import ContextMenuPlugin from './plugins/contextMenu'
 import { Data } from 'rete/types/core/data'
 import CommentPlugin from './plugins/commentPlugin'
-import { SelectionPlugin } from "@magickml/engine"
+import { SelectionPlugin } from '@magickml/engine'
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
@@ -117,7 +117,7 @@ export const initEditor = function ({
         Deleted: true,
         Clone: true,
         Copy: true,
-        Paste: true
+        Paste: true,
       }
     },
     allocate: (component: MagickComponent<unknown>) => {
