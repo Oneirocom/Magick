@@ -43,6 +43,12 @@ const getDatabaseConfig = () => {
       useNullAsDefault: true,
       pool: {
         afterCreate: function (conn, done) {
+          if(process.env.SKIP_DB_EXTENSIONS === 'true') {
+            console.warn(
+              'Skipping loading of sqlite extensions as SKIP_DB_EXTENSIONS is set to true'
+            )
+            return done(null, conn)
+          }
           if(isM1) {
             console.warn(
               'Could not load VSS extension, vectors currently not supported on ARM64/M1 (this is fine)'
@@ -56,6 +62,7 @@ const getDatabaseConfig = () => {
             return done(null, conn)
           }
           // NOTE: the extension files are relative to the repository root directory
+          try {
             conn.loadExtension('./lib/vector0', err => {
               if( err ) return
               try {
@@ -67,7 +74,7 @@ const getDatabaseConfig = () => {
                     conn.get(
                       'create virtual table if not exists vss_events using vss0(event_embedding(1536));',
                       err => {
-                        if (err) console.error(err)
+                        if (err) return console.error(err)
                         else
                           console.log('sqlite extensions loaded successfully')
                       }
@@ -82,6 +89,11 @@ const getDatabaseConfig = () => {
               }
               done(null, conn)
             })
+          } catch (err) {
+            console.warn(
+              'Could not load extensions, vectors currently not supported on Win32 or ARM64/M1 (this is fine)'
+            )
+          }
         },
       },
     }
