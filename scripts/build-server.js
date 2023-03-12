@@ -6,14 +6,17 @@ const isAgent = process.env.SERVER_TYPE === 'agent';
 
 // if is agent, call npx nx build @magickml/agent
 if (isAgent) {
-    const { execSync } = require('child_process');
-    // get the logs from the exec
-    const logs = execSync('npx nx build @magickml/agent');
-    // print the logs
-    console.log(logs.toString());
+    // if agent, asynchrounously call npm run build-agent
+    const { spawn } = require('child_process');
+    const child = spawn('npx', ['nx', 'build', '@magickml/agent'], {
+        cwd: path.join(__dirname, '../'),
+        stdio: 'inherit',
+    });
 } else {
-    // if is server, call npx nx build @magickml/server
-    const { execSync } = require('child_process');
-    const logs = execSync('npx nx build @magickml/server');
-    console.log(logs.toString());
+    // if server, asynchrounously call npm run build-server
+    const { spawn } = require('child_process');
+    const child = spawn('npx', ['nx', 'build', '@magickml/server'], {
+        cwd: path.join(__dirname, '../'),
+        stdio: 'inherit',
+    });
 }
