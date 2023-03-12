@@ -16,7 +16,7 @@ import {
 import type { Application, HookContext } from '../../declarations'
 import { AgentService, getOptions } from './agents.class'
 import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
-import { randomUUID } from 'crypto'
+import { v4 as uuidv4 } from 'uuid'
 
 export * from './agents.class'
 export * from './agents.schema'
@@ -50,7 +50,7 @@ export const agent = (app: Application) => {
         schemaHooks.validateData(agentDataValidator),
         schemaHooks.resolveData(agentDataResolver),
         async (context: HookContext) => {
-          context.data.id = randomUUID()
+          context.data.id = uuidv4()
           return context
         }
       ],

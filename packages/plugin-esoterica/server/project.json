@@ -6,20 +6,18 @@
   "implicitDependencies": ["@magickml/engine"],
   "targets": {
     "build": {
-      "executor": "@nrwl/vite:build",
-      "outputs": ["{options.outputPath}"],
-      "configFile": "packages/plugin-esoterica/server/vite.config.ts",
-      "defaultConfiguration": "production",
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
-        "outputPath": "dist/packages/plugin-esoterica-server"
-      },
-      "configurations": {
-        "development": {
-          "mode": "development"
-        },
-        "production": {
-          "mode": "production"
-        }
+        "outputPath": "dist/packages/plugin-esoteria/server",
+        "tsConfig": "packages/plugin-esoteria/server/tsconfig.lib.json",
+        "packageJson": "packages/plugin-esoteria/server/package.json",
+        "main": "packages/plugin-esoteria/server/src/index.ts",
+        "assets": [
+          "packages/plugin-esoteria/server/*.md"
+        ]
       }
     },
     "lint": {

@@ -1,5 +1,13 @@
 import { eventSocket, ServerPlugin, WorldManager } from '@magickml/engine'
-import { TwitterConnector } from './connectors/twitter'
+
+let TwitterConnector = null as any;
+// dynamically import { TwitterConnector } from './connectors/twitter' if we are in node.js using esm syntax
+if(typeof window === 'undefined') {
+  import('./connectors/twitter').then((module) => {
+    TwitterConnector = module.TwitterConnector
+  })
+}
+
 type StartTwitterArgs = {
   agent: any
   spellRunner: any
