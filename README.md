@@ -23,18 +23,13 @@ Don't worry, there is a hosted version too! Sign up [here](https://www.magickml.
 
 We'll also be releasing a packaged app release you can run (.exe, .app) soon!
 
-### Installation
+### Setup
 
 First, clone and set up Magick
 
 ```
 git clone https://github.com/Oneirocom/Magick
-```
-
-Next, install dependencies
-
-```
-npm install
+cd Magick
 ```
 
 # Run Magick!
@@ -42,6 +37,7 @@ npm install
 ```
 npm run dev
 ```
+Note: Most Node projects require `npm install` - With Magick, dependencies will automatically be installed for you
 
 # Development
 

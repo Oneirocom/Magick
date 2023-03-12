@@ -18,12 +18,18 @@
     "esModuleInterop": true,
     "typeRoots": ["./packages/@types", "./node_modules/@types"],
     "paths": {
+      "@magickml/types": ["packages/@types/src/index.ts"],
       "@magickml/agent": ["apps/agent/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
+      "@magickml/server": ["apps/server/src/index.ts"],
+      "@magickml/docs": ["apps/docs/src/index.ts"],
+
       "@magickml/client-core": ["packages/client-core/src/index.ts"],
+      "@magickml/server-core": ["packages/server-core/src/index.ts"],
       "@magickml/cost-calculator": ["packages/cost-calculator/src/index.ts"],
       "@magickml/editor": ["packages/editor/src/index.ts"],
       "@magickml/engine": ["packages/engine/src/index.ts"],
+
       "@magickml/plugin-banana-client": [
         "packages/plugin-banana/client/src/index.ts"
       ],
@@ -83,10 +89,7 @@
       ],
       "@magickml/plugin-twitter-server": [
         "packages/plugin-twitter/server/src/index.ts"
-      ],
-      "@magickml/server": ["apps/server/src/index.ts"],
-      "@magickml/server-core": ["packages/server-core/src/index.ts"],
-      "@magickml/types": ["packages/@types/src/index.ts"]
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
