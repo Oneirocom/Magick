@@ -78,9 +78,7 @@ export const event = (app: Application) => {
     after: {
       create: [
         async (context: HookContext) => {
-          if(SKIP_DB_EXTENSIONS) {
-            return context
-          }
+          if(SKIP_DB_EXTENSIONS) return context
           if (!context.data.embedding || context.data.embedding.length === 0) return context
           const { id } = context.result
           // store the data in the virtual vss table

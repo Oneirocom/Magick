@@ -2,6 +2,7 @@
 import knex from 'knex'
 import type { Knex } from 'knex'
 import type { Application } from './declarations'
+import { SKIP_DB_EXTENSIONS } from "@magickml/engine"
 
 import os from 'os'
 const cpuCore = os.cpus()
@@ -43,7 +44,7 @@ const getDatabaseConfig = () => {
       useNullAsDefault: true,
       pool: {
         afterCreate: function (conn, done) {
-          if(process.env.SKIP_DB_EXTENSIONS === 'true') {
+          if(SKIP_DB_EXTENSIONS) {
             console.warn(
               'Skipping loading of sqlite extensions as SKIP_DB_EXTENSIONS is set to true'
             )
