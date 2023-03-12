@@ -212,7 +212,7 @@ const RawEditor = ({ tab, children }) => {
           width: '100%',
           height: '100%',
           zIndex: '1',
-          backgroundImage: `url('${gridimg}')`,
+          // backgroundImage: `url('${gridimg}')`,
         }}
       ></div>
       <div
