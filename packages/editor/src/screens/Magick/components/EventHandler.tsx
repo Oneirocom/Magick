@@ -23,7 +23,7 @@ const EventHandler = ({ pubSub, tab }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [saveSpellMutation] = useSaveSpellMutation()
-  const [getSpell, { data: spell, isLoading }] = useLazyGetSpellByIdQuery({
+  const [getSpell, { data: spell }] = useLazyGetSpellByIdQuery({
     spellName: tab.name.split('--')[0],
     id: tab.id,
     projectId: config.projectId,
@@ -62,9 +62,17 @@ const EventHandler = ({ pubSub, tab }) => {
     }
   }, [client.io, tab.id, enqueueSnackbar])
 
-  const { serialize, getEditor, undo, redo, del, multiSelectCopy, multiSelectPaste } = useEditor()
+  const {
+    serialize,
+    getEditor,
+    undo,
+    redo,
+    del,
+    multiSelectCopy,
+    multiSelectPaste,
+  } = useEditor()
 
-  const { events, subscribe, publish } = pubSub
+  const { events, subscribe } = pubSub
 
   const {
     $DELETE,
@@ -114,6 +122,8 @@ const EventHandler = ({ pubSub, tab }) => {
     enqueueSnackbar('Spell saved', {
       variant: 'success',
     })
+
+    onProcess()
   }
 
   const onSaveDiff = async (event, update) => {
@@ -163,6 +173,8 @@ const EventHandler = ({ pubSub, tab }) => {
       })
       return
     }
+
+    onProcess()
   }
 
   const createAvatarWindow = () => {
@@ -239,9 +251,8 @@ const EventHandler = ({ pubSub, tab }) => {
 
     recurse(spell)
 
-    // traverse the json. replace any 
+    // traverse the json. replace any
     const json = JSON.stringify(spell)
-
 
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))
