@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import RequestTable from './RequestTable'
 import { useConfig } from '../../../../contexts/ConfigProvider'
+import { API_ROOT_URL } from '@magickml/engine'
 
 const RequestWindow = () => {
   const config = useConfig()
@@ -17,7 +18,7 @@ const RequestWindow = () => {
 
   const fetchRequests = async () => {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_APP_API_URL}/request?hidden=false&projectId=${config.projectId}`
+      `${API_ROOT_URL}/request?hidden=false&projectId=${config.projectId}`
     )
     setRequests(data.data)
   }

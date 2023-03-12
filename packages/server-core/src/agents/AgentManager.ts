@@ -1,5 +1,5 @@
 import Agent from './Agent'
-import { app } from './app'
+import { app } from '../app'
 
 export class AgentManager {
   agents: { [id: string]: any } = {}
@@ -94,7 +94,7 @@ export class AgentManager {
       }
       this.agents[agent.id] = new Agent(data, this)
       this.currentAgents.push(agent)
-      this.addHandlers.forEach((handler) => handler({agent}))
+      this.addHandlers.forEach((handler) => handler({agent: this.agents[agent.id], agentData: agent}))
       console.log('updated agent', data.id)
     })
   }

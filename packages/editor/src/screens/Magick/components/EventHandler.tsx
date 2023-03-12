@@ -1,63 +1,77 @@
 import { useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
-import { useSelector } from 'react-redux'
 import { GraphData, Spell } from '@magickml/engine'
 
 import md5 from 'md5'
 
-import { getSpellApi } from '../../../state/api/spells'
+import {
+  useLazyGetSpellByIdQuery,
+  useSaveSpellMutation,
+} from '../../../state/api/spells'
 import { useLayout } from '../../../workspaces/contexts/LayoutProvider'
 import { useEditor } from '../../../workspaces/contexts/EditorProvider'
 import { diff } from '../../../utils/json0'
 import { useFeathers } from '../../../contexts/FeathersProvider'
-import { RootState } from '../../../state/store'
 
 import { useConfig } from '../../../contexts/ConfigProvider'
 
 const EventHandler = ({ pubSub, tab }) => {
   const config = useConfig()
-  const spellApi = getSpellApi(config)
 
   // only using this to handle events, so not rendering anything with it.
   const { createOrFocus, windowTypes } = useLayout()
   const { enqueueSnackbar } = useSnackbar()
 
-  const [saveSpellMutation] = spellApi.useSaveSpellMutation()
-  const [saveDiff] = spellApi.useSaveDiffMutation()
-  const [getSpell, { data: spell, isLoading }] =
-    spellApi.useLazyGetSpellByIdQuery({
-      spellName: tab.name.split('--')[0],
-      id: tab.id,
-      projectId: config.projectId,
-    })
-  const preferences = useSelector(
-    (state: RootState) => state.preferences
-  ) as any
-
+  const [saveSpellMutation] = useSaveSpellMutation()
+  const [getSpell, { data: spell, isLoading }] = useLazyGetSpellByIdQuery({
+    spellName: tab.name.split('--')[0],
+    id: tab.id,
+    projectId: config.projectId,
+  })
   // Spell ref because callbacks cant hold values from state without them
   const spellRef = useRef<Spell | null>(null)
 
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
+
   useEffect(() => {
-    //if (!spell || !spell?.data[0]) return
     getSpell({
       spellName: tab.name,
       id: tab.id,
       projectId: config.projectId,
     })
-    console.log('Updated')
     spellRef.current = spell?.data[0]
-  }, [spell])
+  }, [config.projectId, getSpell, spell, tab.id, tab.name])
 
-  const { serialize, getEditor, undo, redo, del } = useEditor()
+  useEffect(() => {
+    if (!client.io || !tab.id || !enqueueSnackbar) return
 
-  const { events, subscribe } = pubSub
+    const listener = data => {
+      //publish($DEBUG_PRINT(tab.id), (data.error.message))
+      console.error('Error in spell execution')
+      enqueueSnackbar('Error Running the spell. Please Check the Console', {
+        variant: 'error',
+      })
+    }
+
+    client.io.on(`${tab.id}-error`, listener)
+
+    // Handle cleaning up the subscription
+    return () => {
+      client.io.off(`${tab.id}-error`, listener)
+    }
+  }, [client.io, tab.id, enqueueSnackbar])
+
+  const { serialize, getEditor, undo, redo, del, multiSelectCopy, multiSelectPaste } = useEditor()
+
+  const { events, subscribe, publish } = pubSub
 
   const {
     $DELETE,
     $UNDO,
     $REDO,
+    $MULTI_SELECT_COPY,
+    $MULTI_SELECT_PASTE,
     $SAVE_SPELL,
     $SAVE_SPELL_DIFF,
     $CREATE_AVATAR_WINDOW,
@@ -69,6 +83,7 @@ const EventHandler = ({ pubSub, tab }) => {
     $EXPORT,
     $CLOSE_EDITOR,
     $PROCESS,
+    $RUN_SPELL,
   } = events
 
   const saveSpell = async () => {
@@ -87,26 +102,18 @@ const EventHandler = ({ pubSub, tab }) => {
       projectId: config.projectId,
     })
 
-    const jsonDiff = diff(currentSpell, updatedSpell)
-
-    if (jsonDiff.length !== 0) {
-      // save diff to spell runner if something has changed.  Will update spell in spell runner session
-      client.service('spell-runner').update(currentSpell.id, {
-        diff: jsonDiff,
-        projectId: config.projectId,
-      })
-    }
-
-    enqueueSnackbar('Spell saved', {
-      variant: 'success',
-    })
-
     if ('error' in response) {
+      console.log('UPDATED SPELL', updatedSpell)
+      console.error(response.error)
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
       })
       return
     }
+
+    enqueueSnackbar('Spell saved', {
+      variant: 'success',
+    })
   }
 
   const onSaveDiff = async (event, update) => {
@@ -126,32 +133,30 @@ const EventHandler = ({ pubSub, tab }) => {
     if (jsonDiff.length === 0) return
     //While Importing spell, the graph is first created, then the imported graph is loaded
     //This might be causing issue at the server end.
-    if ((updatedSpell.graph.nodes.length) === 0) return
+    if (updatedSpell.graph.nodes.length === 0) return
 
     try {
-      await client.service('spell-runner').update(currentSpell.id, {
-        diff: jsonDiff,
-        projectId: config.projectId,
-      })
+      // We save the diff.  Doing this via feathers but may want to switch to rtk query
       const diffResponse = await client.service('spells').saveDiff({
         projectId: config.projectId,
         diff: jsonDiff,
         name: currentSpell.name,
+        id: currentSpell.id,
       })
+
+      // refresh the spell after saving
       getSpell({
         spellName: tab.name,
         id: tab.id,
         projectId: config.projectId,
       })
+
       if ('error' in diffResponse) {
         enqueueSnackbar('Error Updating spell', {
           variant: 'error',
         })
         return
       }
-      enqueueSnackbar('Spell updated', {
-        variant: 'success',
-      })
     } catch (err) {
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
@@ -206,13 +211,21 @@ const EventHandler = ({ pubSub, tab }) => {
     del()
   }
 
+  const onMultiSelectCopy = () => {
+    multiSelectCopy()
+  }
+
+  const onMultiSelectPaste = () => {
+    multiSelectPaste()
+  }
+
   const onExport = async () => {
     // refetch spell from local DB to ensure it is the most up to date
     const spell = { ...spellRef.current }
     spell.graph = serialize() as GraphData
 
     // remove secrets, if there are any
-    function recurse (obj) {
+    function recurse(obj) {
       for (const key in obj) {
         if (key === 'secrets') {
           obj[key] = {}
@@ -255,6 +268,20 @@ const EventHandler = ({ pubSub, tab }) => {
     if (editor.moduleSubscription) editor.moduleSubscription.unsubscribe()
   }
 
+  const runSpell = async (event, data) => {
+    console.log('DATA IN EVENT HANDLER', data)
+
+    // We are publishing the diff just to ensure that the spell runner has the latest version of the spell
+    // publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
+
+    // wait .2. seconds for spell_diff to take effect
+    await new Promise(resolve => setTimeout(resolve, 200))
+
+    // run the spell in the spell runner service
+    client.service('spell-runner').create(data)
+  }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,
@@ -268,8 +295,11 @@ const EventHandler = ({ pubSub, tab }) => {
     [$UNDO(tab.id)]: onUndo,
     [$REDO(tab.id)]: onRedo,
     [$DELETE(tab.id)]: onDelete,
+    [$MULTI_SELECT_COPY(tab.id)]: onMultiSelectCopy,
+    [$MULTI_SELECT_PASTE(tab.id)]: onMultiSelectPaste,
     [$PROCESS(tab.id)]: onProcess,
     [$SAVE_SPELL_DIFF(tab.id)]: onSaveDiff,
+    [$RUN_SPELL(tab.id)]: runSpell,
   }
 
   useEffect(() => {
@@ -285,7 +315,7 @@ const EventHandler = ({ pubSub, tab }) => {
         unsubscribe()
       })
     }
-  }, [tab, client])
+  }, [tab, client, spell, handlerMap, subscribe])
 
   return null
 }

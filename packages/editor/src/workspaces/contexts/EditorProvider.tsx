@@ -8,13 +8,14 @@ import React, {
   useState,
   useEffect,
 } from 'react'
+import gridimg from '../../grid.png'
 
-import { getSpellApi } from '../../state/api/spells'
+import { spellApi } from '../../state/api/spells'
 import { useConfig } from '../../contexts/ConfigProvider'
+import styles from './styles.module.scss'
 
 import { LoadingScreen } from '@magickml/client-core'
 import { MyNode } from '../../components/Node/Node'
-import gridimg from '../../grid.png'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import { useFeathers } from '../../contexts/FeathersProvider'
@@ -50,6 +51,8 @@ type EditorContextType = {
   undo: () => void
   redo: () => void
   del: () => void
+  multiSelectCopy: () => void
+  multiSelectPaste: () => void
   centerNode: (nodeId: number) => void
 }
 
@@ -77,7 +80,7 @@ const EditorProvider = ({ children }) => {
 
   const buildEditor = async (container, _spell, tab, magick) => {
     // eslint-disable-next-line no-console
-    
+
     const newEditor = await initEditor({
       container,
       pubSub,
@@ -98,7 +101,7 @@ const EditorProvider = ({ children }) => {
   }
 
   const run = () => {
-    // 
+    //
   }
 
   const undo = () => {
@@ -124,6 +127,16 @@ const EditorProvider = ({ children }) => {
     editorRef.current.trigger('delete')
   }
 
+  const multiSelectCopy = () => {
+    if (!editorRef.current) return
+    editorRef.current.trigger('multiselectcopy')
+  }
+
+  const multiSelectPaste = () => {
+    if (!editorRef.current) return
+    editorRef.current.trigger('multiselectpaste')
+  }
+
   const serialize = () => {
     if (!editorRef.current) return
     return editorRef.current.toJSON()
@@ -139,12 +152,12 @@ const EditorProvider = ({ children }) => {
 
   const loadGraph = graph => {
     if (!editorRef.current) return
-    
+
     editorRef.current.loadGraph(graph)
   }
 
   const setContainer = () => {
-    // 
+    //
   }
 
   const publicInterface = {
@@ -161,6 +174,8 @@ const EditorProvider = ({ children }) => {
     undo,
     redo,
     del,
+    multiSelectCopy,
+    multiSelectPaste,
     setContainer,
     centerNode,
   }
@@ -170,16 +185,14 @@ const EditorProvider = ({ children }) => {
 
 const RawEditor = ({ tab, children }) => {
   const config = useConfig()
-  const spellApi = getSpellApi(config)
 
-  const [getSpell, { data: spell, isLoading }] = spellApi.useLazyGetSpellByIdQuery()
+  const [getSpell, { data: spell, isLoading }] =
+    spellApi.useLazyGetSpellByIdQuery()
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
   // This will be the main interface between magick and rete
   const reteInterface = useMagickInterface()
   useEffect(() => {
-    
-    
     if (!tab || loaded) return
     getSpell({
       spellName: tab.name,
@@ -194,28 +207,27 @@ const RawEditor = ({ tab, children }) => {
   return (
     <>
       <div
+        id="background"
         style={{
-          textAlign: 'left',
-          width: '100vw',
-          height: '100vh',
           position: 'absolute',
-          backgroundColor: '#191919',
+          width: '100%',
+          height: '100%',
+          zIndex: '1',
           backgroundImage: `url('${gridimg}')`,
+          backgroundSize: '4%'
         }}
-        onDragOver={e => {
-          e.preventDefault()
+      ></div>
+      <div
+        style={{}}
+        id="editor-container"
+        className={styles['editor-container']}
+        ref={el => {
+          if (el && !loaded && spell) {
+            buildEditor(el, spell.data[0], tab, reteInterface)
+            setLoaded(true)
+          }
         }}
-        onDrop={e => {}}
-      >
-        <div
-          ref={el => {
-            if (el && !loaded && spell) {
-              buildEditor(el, spell.data[0], tab, reteInterface)
-              setLoaded(true)
-            }
-          }}
-        />
-      </div>
+      />
       {children}
     </>
   )

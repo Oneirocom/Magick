@@ -1,66 +1,35 @@
-
-//@ts-nocheck
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
-import { authenticate } from '@feathersjs/authentication'
-import pgvector from 'pgvector/pg'
+import { hooks as schemaHooks } from '@feathersjs/schema'
 import type { Knex } from 'knex'
-import { hooks as schemaHooks } from '@feathersjs/schema'   
 import os from 'os'
+import pgvector from 'pgvector/pg'
+import { SKIP_DB_EXTENSIONS } from '@magickml/engine'
 const cpuCore = os.cpus()
-const isM1 = cpuCore[0].model.includes("Apple M1") || cpuCore[0].model.includes("Apple M2")
+const isM1 =
+  cpuCore[0].model.includes('Apple M1') || cpuCore[0].model.includes('Apple M2')
 const isWindows = os.platform() === 'win32'
 
-// get 
+// get
 
 // array 1536 values in length
 const nullArray = new Array(1536).fill(0)
 
 import {
+  eventDataResolver,
   eventDataValidator,
+  eventExternalResolver,
+  eventPatchResolver,
   eventPatchValidator,
+  eventQueryResolver,
   eventQueryValidator,
   eventResolver,
-  eventExternalResolver,
-  eventDataResolver,
-  eventPatchResolver,
-  eventQueryResolver
 } from './events.schema'
 
+import { dbDialect, SupportedDbs } from '../../dbClient'
 import { Application, HookContext } from '../../declarations'
 import { EventService, getOptions } from './events.class'
-import { dbDialect, SupportedDbs } from '../../dbClient'
 
 export * from './events.class'
 export * from './events.schema'
-
-async function findSimilarEventByEmbedding(db: Knex, embedding) {
-  const query: Record<SupportedDbs, Knex.QueryBuilder> = {
-    [SupportedDbs.pg]: async () => await db.raw(`select * from events order by embedding <-> ${embedding} limit 1;`),
-    [SupportedDbs.sqlite]: async () => {
-      const eventInVssTable = await db.raw(
-        `select rowid, distance from vss_events
-         where vss_search(
-            event_embedding, 
-            vss_search_params(
-              ${embedding},
-              1
-            )
-          )
-        ;`
-      )
-      if (!eventInVssTable?.rowid) return null
-      const event = await db('events').where('id', eventInVssTable.rowid).first()
-      return event
-    }
-  }
-  try {
-    embeddings = await query[dbDialect]()
-  } catch (e){
-    console.log(e)
-  }
-  console.log(embeddings)
-  return embeddings
-}
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const event = (app: Application) => {
@@ -70,7 +39,7 @@ export const event = (app: Application) => {
     // A list of all methods this service exposes externally
     methods: ['find', 'get', 'create', 'patch', 'remove'],
     // You can add additional custom events to be sent to clients here
-    events: []
+    events: [],
   })
   // Initialize hooks
   app.service('events').hooks({
@@ -78,61 +47,65 @@ export const event = (app: Application) => {
       all: [
         schemaHooks.resolveExternal(eventExternalResolver),
         schemaHooks.resolveResult(eventResolver),
-      ]
+      ],
     },
     before: {
-      all: [schemaHooks.validateQuery(eventQueryValidator), schemaHooks.resolveQuery(eventQueryResolver)],
-      find:[
-        async (context: HookContext) => {
-          if (context.params.query.embedding){
-            const blob = atob( context.params.query.embedding );
-            const ary_buf = new ArrayBuffer( blob.length );
-            const dv = new DataView( ary_buf );
-            for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
-            const f32_ary = new Float32Array( ary_buf );
-            const result = await findSimilarEventByEmbedding(db, "["+f32_ary+"]")
-            return { result }
-          }
-          
-        }
+      all: [
+        schemaHooks.validateQuery(eventQueryValidator),
+        schemaHooks.resolveQuery(eventQueryResolver),
       ],
+      find: [],
       get: [
         (context: HookContext) => {
+          if (SKIP_DB_EXTENSIONS) return context
           const { getEmbedding } = context.params.query
           if (getEmbedding) {
             context.params.query.$limit = 1
             context.params.query.embedding = { $ne: pgvector.toSql(nullArray) }
           }
           return context
-        }
+        },
       ],
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         (context: HookContext) => {
+          if (SKIP_DB_EXTENSIONS) return context
           const { embedding } = context.data
           // if embedding is not null and not null array, then cast to pgvector
-          if( embedding && embedding.length > 0 && embedding[0] !== 0 ) {
+          if (embedding && embedding.length > 0 && embedding[0] !== 0) {
             context.data.embedding = pgvector.toSql(embedding)
           } else {
             context.data.embedding = pgvector.toSql(nullArray)
           }
           return context
         },
-        schemaHooks.validateData(eventDataValidator), schemaHooks.resolveData(eventDataResolver)
+        schemaHooks.validateData(eventDataValidator),
+        schemaHooks.resolveData(eventDataResolver),
       ],
-      patch: [schemaHooks.validateData(eventPatchValidator), schemaHooks.resolveData(eventPatchResolver)],
-      remove: []
+      patch: [
+        schemaHooks.validateData(eventPatchValidator),
+        schemaHooks.resolveData(eventPatchResolver),
+      ],
+      remove: [],
     },
     after: {
-      create:[
+      create: [
         async (context: HookContext) => {
-          if(!context.data.embedding || context.data.embedding.length === 0) return context
+          if (SKIP_DB_EXTENSIONS) return context
+          if (!context.data.embedding || context.data.embedding.length === 0)
+            return context
           const { id } = context.result
           // store the data in the virtual vss table
-          if (dbDialect === SupportedDbs.sqlite && !isM1 && !isWindows) {
+          if (dbDialect === SupportedDbs.sqlite) {
+            if (isM1 || isWindows) {
+              console.warn(
+                'Could not load VSS extension, you may want to set SKIP_DB_EXTENSIONS to true in your .env'
+              )
+              return context
+            }
             try {
               await db.raw(`
-                insert into vss_events(rowid, event_embedding) 
+                insert into vss_events(rowid, event_embedding)
                 select id, embedding from events where id = ${id};
               `)
             } catch (error) {
@@ -140,13 +113,13 @@ export const event = (app: Application) => {
             }
           }
           return context
-        }
+        },
       ],
-      all: []
+      all: [],
     },
     error: {
-      all: []
-    }
+      all: [],
+    },
   })
 }
 

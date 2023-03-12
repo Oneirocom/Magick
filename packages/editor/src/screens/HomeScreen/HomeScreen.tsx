@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 
-import { getSpellApi } from '../../state/api/spells'
+import { spellApi } from '../../state/api/spells'
 import AllProjects from './screens/AllProjects'
 import CreateNew from './screens/CreateNew'
 import OpenProject from './screens/OpenProject'
@@ -17,14 +17,16 @@ import { useConfig } from '../../contexts/ConfigProvider'
 
 const StartScreen = () => {
   const config = useConfig()
-  const spellApi = getSpellApi(config)
 
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
   const [deleteSpell] = spellApi.useDeleteSpellMutation()
-  const { data: spells } = spellApi.useGetSpellsQuery({projectId: config.projectId})
-  const [getSpells, { data: spell, isLoading }] = spellApi.useLazyGetSpellsQuery({projectId: config.projectId})
+  const { data: spells } = spellApi.useGetSpellsQuery({
+    projectId: config.projectId,
+  })
+  const [getSpells, { data: spell, isLoading }] =
+    spellApi.useLazyGetSpellsQuery({ projectId: config.projectId })
   const [newSpell] = spellApi.useNewSpellMutation()
 
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
@@ -40,30 +42,29 @@ const StartScreen = () => {
     } */
     // TODO check for proper values here and throw errors
 
-    
-
     // Create new spell
     const response = await newSpell({
       graph: spellData.graph,
       name: spellData.name,
       projectId: config.projectId,
-      hash: spellData.hash
+      hash: spellData.hash,
     })
 
     dispatch(
       openTab({
-        name: response.data.id +"-"+ encodeURIComponent(btoa(response.data.name)),
+        name:
+          response.data.id + '-' + encodeURIComponent(btoa(response.data.name)),
         type: 'spell',
       })
     )
 
     navigate('/magick')
   }
-  useEffect(()=>{
+  useEffect(() => {
     getSpells({
-      projectId: config.projectId
+      projectId: config.projectId,
     })
-  },[spells])
+  }, [spells])
   const loadFile = selectedFile => {
     const reader = new FileReader()
     reader.onload = onReaderLoad

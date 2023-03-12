@@ -10,12 +10,16 @@ import {
   spellDataResolver,
   spellPatchResolver,
   spellQueryResolver,
-  spellJsonFields
+  spellJsonFields,
 } from './spells.schema'
 
 import type { Application, HookContext } from '../../declarations'
 import { SpellService, getOptions } from './spells.class'
 import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
+import {
+  checkForSpellInManager,
+  updateSpellInManager,
+} from '../../hooks/spellmanagerHooks'
 
 export * from './spells.class'
 export * from './spells.schema'
@@ -37,7 +41,7 @@ export const spell = (app: Application) => {
         schemaHooks.resolveExternal(spellExternalResolver),
         schemaHooks.resolveResult(spellResolver),
         schemaHooks.resolveResult(jsonResolver(spellJsonFields)),
-      ]
+      ],
     },
     before: {
       all: [
@@ -49,43 +53,49 @@ export const spell = (app: Application) => {
       create: [
         schemaHooks.validateData(spellDataValidator),
         schemaHooks.resolveData(spellDataResolver),
-        async (context: any) => {
+        async (context: HookContext) => {
           const { data, service } = context
           context.data = {
             [service.id]: randomUUID(),
             ...data,
           }
-          await context.service.find({
-            query: {
-                name: data.name
-            }
-          }).then(async (param) => {
+          await context.service
+            .find({
+              query: {
+                name: data.name,
+              },
+            })
+            .then(async param => {
               if (param.data.length >= 1) {
-                console.log(data.name+'(%)')
+                console.log(data.name + '(%)')
 
-                await context.service.find({
-                  query: {
-                    name: process.env.DB_TYPE === 'postgres' ? {
-                      $ilike: data.name+' (%)'
-                    } : {
-                      // ilike is not supported by sqlite
-                      $like: data.name+' (%)'
-                    }
-                  }
-                })
-                
-                .then((val) => {                 
-                  context.data.name = data.name + " (" + (1+val.data.length) +")"
-                })
+                await context.service
+                  .find({
+                    query: {
+                      name:
+                        process.env.DB_TYPE === 'postgres'
+                          ? {
+                              $ilike: data.name + ' (%)',
+                            }
+                          : {
+                              // ilike is not supported by sqlite
+                              $like: data.name + ' (%)',
+                            },
+                    },
+                  })
+                  .then(val => {
+                    context.data.name =
+                      data.name + ' (' + (1 + val.data.length) + ')'
+                  })
               }
-          });
+            })
         },
       ],
       patch: [
         schemaHooks.validateData(spellPatchValidator),
-        schemaHooks.resolveData(spellPatchResolver), 
-        handleJSONFieldsUpdate(spellJsonFields)
-      ], 
+        schemaHooks.resolveData(spellPatchResolver),
+        handleJSONFieldsUpdate(spellJsonFields),
+      ],
       update: [handleJSONFieldsUpdate(spellJsonFields)],
       remove: [],
     },
@@ -94,7 +104,7 @@ export const spell = (app: Application) => {
       create: [],
       patch: [
         // after saving a spell, we need to update the spell cache
-        async (context: any) => {
+        async (context: HookContext) => {
           const { app } = context
           const { id } = context.result
           const spell = await app.service('spells').get(id)
@@ -104,7 +114,10 @@ export const spell = (app: Application) => {
             }
           })
         },
+        checkForSpellInManager,
+        updateSpellInManager,
       ],
+      saveDiff: [checkForSpellInManager, updateSpellInManager],
     },
     error: {
       all: [],

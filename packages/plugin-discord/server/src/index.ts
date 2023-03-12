@@ -13,62 +13,29 @@ function getAgentMethods() {
     worldManager,
   }: StartDiscordArgs) {
     const { data } = agent.data
-    if(!data) return console.log("No data for this agent")
-    console.log('data', data)
-    if(!data.discord_enabled) return console.log("Discord is not enabled for this agent")
-    if(!data.discord_api_key) return console.log("Discord API key is not set for this agent")
+    if (!data) return console.log('No data for this agent')
+    if (!data.discord_enabled)
+      return console.log('Discord is not enabled for this agent')
+    if (!data.discord_api_key)
+      return console.log('Discord API key is not set for this agent')
 
-    console.log('starting discord')
-      const {
-      discord_api_key,
-      discord_starting_words,
-      discord_bot_name_regex,
-      discord_bot_name,
-      use_voice,
-      voice_provider,
-      voice_character,
-      voice_language_code,
-      tiktalknet_url,
-      } = data
-
-    console.log({
-      discord_api_key,
-      discord_starting_words,
-      discord_bot_name_regex,
-      discord_bot_name,
-      use_voice,
-      voice_provider,
-      voice_character,
-      voice_language_code,
-      tiktalknet_url,
-    })
-    console.log('discord_api_key', discord_api_key)
     const discord = new DiscordConnector({
+      ...data,
       agent,
-      discord_api_key,
-      discord_starting_words,
-      discord_bot_name_regex,
-      discord_bot_name,
       spellRunner,
-      use_voice,
-      voice_provider,
-      voice_character,
-      voice_language_code,
-      tiktalknet_url,
       worldManager,
     })
     agent.discord = discord
   }
 
-  async function stopDiscord({agent}) {
-    console.log('**************** STOPPING DISCORD')
-    console.log('Inside Kill Method')
-    if (!agent.discord) return console.warn("Discord isn't running, can't stop it")
+  async function stopDiscord({ agent }) {
+    if (!agent.discord)
+      return console.warn("Discord isn't running, can't stop it")
     try {
       await agent.discord.destroy()
       agent.discord = null
     } catch {
-      console.log('Agent does not exist !')
+      console.warn('Agent does not exist!')
     }
     console.log('Stopped discord client for agent ' + agent.name)
   }
@@ -79,44 +46,53 @@ function getAgentMethods() {
   }
 }
 
-async function handleResponse(
-  {
-    output,
-    agent,
-    event
-  }
-) {
-  console.log('event is', event)
-  console.log('event.channel is', event.channel)
+async function handleResponse({ output, agent, event }) {
   await agent.discord.sendMessageToChannel(event.channel, output)
-  console.log('********* SENT MESSAGE TO DISCORD', agent.id, output, event)
 }
 
 const DiscordPlugin = new ServerPlugin({
   name: 'DiscordPlugin',
   inputTypes: [
-    { name: 'Discord (Voice)', trigger: true, socket: eventSocket },
-    { name: 'Discord (Text)', trigger: true, socket: eventSocket },
+    {
+      name: 'Discord (Voice)',
+      trigger: true,
+      socket: eventSocket,
+      defaultResponseOutput: 'Discord (Voice)',
+    },
+    {
+      name: 'Discord (Text)',
+      trigger: true,
+      socket: eventSocket,
+      defaultResponseOutput: 'Discord (Text)',
+    },
   ],
   outputTypes: [
-    { name: 'Discord (Voice)', trigger: true, socket: eventSocket, handler: async ({
-      output, agent, event
-    }) => {
-      await handleResponse({output, agent, event})
-    }},
-    { name: 'Discord (Text)', trigger: true, socket: eventSocket, handler: async ({
-      output, agent, event
-    }) => {
-      console.log('output is', output)
-      await handleResponse({output, agent, event})
-    }},
+    {
+      name: 'Discord (Voice)',
+      trigger: true,
+      socket: eventSocket,
+      handler: async ({ output, agent, event }) => {
+        await handleResponse({ output, agent, event })
+      },
+    },
+    {
+      name: 'Discord (Text)',
+      trigger: true,
+      socket: eventSocket,
+      handler: async ({ output, agent, event }) => {
+        console.log('output is', output)
+        await handleResponse({ output, agent, event })
+      },
+    },
   ],
   agentMethods: getAgentMethods(),
-  secrets: [{
-    name: 'Discord API Key',
-    key: 'discord_api_key',
-    global: false
-  }]
+  secrets: [
+    {
+      name: 'Discord API Key',
+      key: 'discord_api_key',
+      global: false,
+    },
+  ],
 })
 
 export default DiscordPlugin

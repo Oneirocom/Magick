@@ -1,8 +1,6 @@
 import {
-  anySocket,
   ClientPlugin,
   eventSocket,
-  WorldManager,
 } from '@magickml/engine'
 import { DiscordAgentWindow } from './components/agent.component'
 
@@ -10,7 +8,7 @@ const DiscordPlugin = new ClientPlugin({
   name: 'DiscordPlugin',
   agentComponents: [DiscordAgentWindow],
   inputTypes: [
-    { name: 'Discord (Voice)', trigger: true, socket: eventSocket },
+    { name: 'Discord (Voice)', trigger: true, socket: eventSocket},
     { name: 'Discord (Text)', trigger: true, socket: eventSocket },
   ],
   outputTypes: [

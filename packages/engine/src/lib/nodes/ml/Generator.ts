@@ -133,13 +133,15 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     node: NodeData,
     rawInputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: { module: any, secrets: Record<string, string>; silent: boolean; projectId: string; magick: EngineContext }
+    context: {
+      module: any
+      secrets: Record<string, string>
+      silent: boolean
+      projectId: string
+      magick: EngineContext
+    }
   ) {
-    const {
-      silent,
-      projectId,
-      magick,
-    } = context
+    const { silent, projectId, magick } = context
 
     const currentSpell = magick.getCurrentSpell()
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
@@ -167,10 +169,10 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     const max_tokens = parseInt(maxTokensData)
 
     const frequencyPenaltyData = node?.data?.frequency_penalty as string
-    const frequency_penalty = parseFloat(frequencyPenaltyData ?? "0")
+    const frequency_penalty = parseFloat(frequencyPenaltyData ?? '0')
 
     const presencePenaltyData = node?.data?.presence_penalty as string
-    const presence_penalty = parseFloat(presencePenaltyData ?? "0")
+    const presence_penalty = parseFloat(presencePenaltyData ?? '0')
 
     const stopData = node?.data?.stop as string
     const stop = (stopData ?? '').split(', ')

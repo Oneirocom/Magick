@@ -9,7 +9,7 @@ import {
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../validators'
+import { dataValidator, queryValidator } from '../../config/validators'
 
 // Main data model schema
 export const agentSchema = Type.Object(
