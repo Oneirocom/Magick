@@ -6,20 +6,18 @@
   "implicitDependencies": ["@magickml/engine"],
   "targets": {
     "build": {
-      "executor": "@nrwl/vite:build",
-      "outputs": ["{options.outputPath}"],
-      "configFile": "plugin-openai/server/vite.config.ts",
-      "defaultConfiguration": "production",
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
-        "outputPath": "dist/plugin/openai-server"
-      },
-      "configurations": {
-        "development": {
-          "mode": "development"
-        },
-        "production": {
-          "mode": "production"
-        }
+        "outputPath": "dist/packages/plugin-openai/server",
+        "tsConfig": "packages/plugin-openai/server/tsconfig.lib.json",
+        "packageJson": "packages/plugin-openai/server/package.json",
+        "main": "packages/plugin-openai/server/src/index.ts",
+        "assets": [
+          "packages/plugin-openai/server/*.md"
+        ]
       }
     },
     "lint": {
