@@ -1,6 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import { randomUUID } from 'crypto'
+import { v4 as uuidv4 } from 'uuid'
 import {
   spellDataValidator,
   spellPatchValidator,
@@ -56,7 +56,7 @@ export const spell = (app: Application) => {
         async (context: HookContext) => {
           const { data, service } = context
           context.data = {
-            [service.id]: randomUUID(),
+            [service.id]: uuidv4(),
             ...data,
           }
           await context.service
