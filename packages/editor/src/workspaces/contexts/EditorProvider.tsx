@@ -1,7 +1,6 @@
 import { GraphData, EditorContext, Spell, MagickEditor } from '@magickml/engine'
 import { initEditor } from '../../editor'
 import { zoomAt } from '../../plugins/areaPlugin/zoom-at'
-import gridimg from '../../grid.png'
 import React, {
   useRef,
   useContext,
@@ -9,6 +8,7 @@ import React, {
   useState,
   useEffect,
 } from 'react'
+import gridimg from '../../grid.png'
 
 import { spellApi } from '../../state/api/spells'
 import { useConfig } from '../../contexts/ConfigProvider'
@@ -217,6 +217,9 @@ const RawEditor = ({ tab, children }) => {
         }}
       ></div>
       <div
+              style={{
+              }}
+              id="editor-container"
         className={styles['editor-container']}
         ref={el => {
           if (el && !loaded && spell) {

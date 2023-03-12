@@ -15,10 +15,6 @@
 .window.darker .window-layout {
   background-color: var(--dark-1);
 }
-.window.grid .window-layout {
-  background-image: url('./grid.png');
-  background-color: var(--dark-1);
-}
 .window-layout {
   border-radius: 4px;
   flex-grow: 28;

@@ -35,7 +35,6 @@ import {
 } from '@magickml/engine'
 
 import AreaPlugin from './plugins/areaPlugin'
-import { zoomAt } from './plugins/areaPlugin/zoom-at'
 
 import { initSharedEngine, MagickEngine } from '@magickml/engine'
 
@@ -73,20 +72,6 @@ export const initEditor = function ({
   const editor = new MagickEditor('demo@0.1.0', container)
 
   editorTabMap[tab.id] = editor
-
-  // Add grid background
-  const background = document.getElementById('background') as HTMLElement
-  background.style.transition = 'transform 330ms ease-in-out'
-
-  function zoomCanvas(zoomFactor) {
-    background.style.transform = `scale(${zoomFactor})`
-  }
-
-  // Listern on zoom to dynamical zoo the background grid
-  container.addEventListener('wheel', event => {
-    const zoomFactor = event.deltaY > 0 ? 0.99 : 1.2
-    zoomCanvas(zoomFactor)
-  })
 
   // Set up the reactcontext pubsub on the editor so rete components can talk to react
   editor.pubSub = pubSub
@@ -153,12 +138,17 @@ export const initEditor = function ({
   editor.use(DisplayPlugin)
   editor.use(InspectorPlugin)
   editor.use(NodeClickPlugin)
+
+  const background = document.getElementById('background')
+
   editor.use(AreaPlugin, {
     scaleExtent: { min: 0.025, max: 1.5 },
+    background,
+    // snap: true - TODO: add ability to enable and disable snapping to UI
   })
 
   editor.use(CommentPlugin, {
-    margin: 20, // indent for new frame comments by default 30 (px)
+    margin: 30, // indent for new frame comments by default 30 (px)
   })
 
   editor.use(KeyCodePlugin)
@@ -226,22 +216,7 @@ export const initEditor = function ({
     const graph = JSON.parse(JSON.stringify(_graph))
     await engine.abort()
     editor.fromJSON(graph)
-    const nodes = graph.nodes
-    // get the first node in the graph (which is an object)
-    const firstNode = nodes[Object.keys(nodes)[0]]
 
-    if (firstNode) {
-      firstNode.position = [
-        (firstNode.position && firstNode.position[0] + 250) || 0,
-        (firstNode.position && firstNode.position[1] + 500) || 0,
-      ]
-
-      setTimeout(() => {
-        zoomAt(editor, [firstNode])
-      }, 100)
-    }
-
-    editor.view.area.translate(0, 0)
     editor.view.resize()
     editor.runProcess()
   }

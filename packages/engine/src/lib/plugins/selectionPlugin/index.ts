@@ -127,7 +127,7 @@ function install(editor: NodeEditor, params: Cfg) {
   selectionMode.classList.add('selection-mode')
   selectionMode.style.position = 'absolute'
   selectionMode.style.pointerEvents = 'none'
-  selectionMode.innerText = (cfg.mode ?? [])[0] ?? '单选模式'
+  selectionMode.innerText = '' // (cfg.mode ?? [])[0] ?? '单选模式'
   // #endregion
 
   // #region
