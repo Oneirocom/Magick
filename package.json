@@ -5,8 +5,7 @@
   "scripts": {
     "migrate:make": "nx run @magickml/server:migrate:make",
     "migrate": "nx run @magickml/server:migrate",
-    "dev": "npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent --parallel --maxParallel=100",
-    "containers": "concurrently \"docker-compose up\" \"sleep 20 && npm run db:init && echo database synced!\"",
+    "dev": "node scripts/check-install.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent --parallel --maxParallel=100",
     "build": "node scripts/build-server.js",
     "build-client": "npx nx build @magickml/client",
     "build-server": "npx nx build @magickml/server",
@@ -33,8 +32,8 @@
     "@banana-dev/banana-dev": "^4.0.0",
     "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.14.0",
-    "@docusaurus/core": "2.1.0",
-    "@docusaurus/preset-classic": "2.1.0",
+    "@docusaurus/core": "^2.3.1",
+    "@docusaurus/preset-classic": "^2.3.1",
     "@emotion/styled": "^11.10.5",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
@@ -182,7 +181,9 @@
   },
   "peerDependencies": {
     "@discordjs/opus": "^0.9.0",
-    "jsdom": "^21.1.0"
+    "jsdom": "^21.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.18.6",
@@ -284,6 +285,14 @@
   "overrides": {
     "vite-plugin-markdown": {
       "vite": "$vite"
+    },
+    "@docusaurus/core": {
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
+    },
+    "@docusaurus/preset-classic": {
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
     }
   }
 }

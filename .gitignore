@@ -53,3 +53,5 @@ yarn.lock
 # Generated Docusaurus files
 .docusaurus/
 .cache-loader/
+
+scripts/.cache
