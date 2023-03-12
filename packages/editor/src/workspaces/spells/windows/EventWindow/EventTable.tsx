@@ -30,6 +30,7 @@ import _ from 'lodash'
 import { CSVLink } from 'react-csv'
 import { useConfig } from '../../../../contexts/ConfigProvider'
 import { Button } from '@magickml/client-core'
+import { API_ROOT_URL } from '@magickml/engine'
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter)
@@ -141,10 +142,7 @@ function EventTable({ events, updateCallback }) {
       projectId: config.projectId,
     }
     if (!_.isEqual(reqBody, rowData)) {
-      const isUpdated = await axios.put(
-        `${import.meta.env.VITE_APP_API_URL}/events/${id}`,
-        reqBody
-      )
+      const isUpdated = await axios.put(`${API_ROOT_URL}/events/${id}`, reqBody)
       if (isUpdated) enqueueSnackbar('Event updated', { variant: 'success' })
       else enqueueSnackbar('Error updating event', { variant: 'error' })
       updateCallback()
@@ -206,9 +204,7 @@ function EventTable({ events, updateCallback }) {
   }
 
   const handleEventDelete = async (event: any) => {
-    const isDeleted = await axios.delete(
-      `${import.meta.env.VITE_APP_API_URL}/events/${event.id}`
-    )
+    const isDeleted = await axios.delete(`${API_ROOT_URL}/events/${event.id}`)
     if (isDeleted) enqueueSnackbar('Event deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting Event', { variant: 'error' })
     updateCallback()

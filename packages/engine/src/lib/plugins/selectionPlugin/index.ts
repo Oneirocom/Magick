@@ -127,7 +127,7 @@ function install(editor: NodeEditor, params: Cfg) {
   selectionMode.classList.add('selection-mode')
   selectionMode.style.position = 'absolute'
   selectionMode.style.pointerEvents = 'none'
-  selectionMode.innerText = (cfg.mode ?? [])[0] ?? '单选模式'
+  selectionMode.innerText = '' // (cfg.mode ?? [])[0] ?? '单选模式'
   // #endregion
 
   // #region
@@ -203,8 +203,12 @@ function install(editor: NodeEditor, params: Cfg) {
       return
     }
 
+    editor.selected.list = []
+
     selectedNodes.forEach(node => {
-      editor.selectNode(node, accumulate)
+      const payload = { node, accumulate };
+
+      editor.trigger('selectnode', payload);
     })
   }
 
@@ -216,9 +220,6 @@ function install(editor: NodeEditor, params: Cfg) {
       return
     }
     if (!pressing) {
-      return
-    }
-    if (editor.selected.list.length > 0) {
       return
     }
 

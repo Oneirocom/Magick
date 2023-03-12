@@ -4,6 +4,7 @@ import { Plugin } from 'rete/types/core/plugin'
 import ContextMenuPlugin from './plugins/contextMenu'
 import { Data } from 'rete/types/core/data'
 import CommentPlugin from './plugins/commentPlugin'
+import { SelectionPlugin } from "@magickml/engine"
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
@@ -29,11 +30,11 @@ import {
   MultiSocketGenerator,
   NodeClickPlugin,
   ModuleOptions,
+  MultiCopyPlugin,
   ModulePluginArgs,
 } from '@magickml/engine'
 
 import AreaPlugin from './plugins/areaPlugin'
-import { zoomAt } from './plugins/areaPlugin/zoom-at'
 
 import { initSharedEngine, MagickEngine } from '@magickml/engine'
 
@@ -46,6 +47,8 @@ interface MagickEngineClient extends MagickEngine {
 */
 
 const editorTabMap: Record<string, MagickEditor> = {}
+
+// todo clean this up by making it a well organized class with proper load functions, etc
 export const initEditor = function ({
   container,
   pubSub,
@@ -113,6 +116,8 @@ export const initEditor = function ({
       return {
         Deleted: true,
         Clone: true,
+        Copy: true,
+        Paste: true
       }
     },
     allocate: (component: MagickComponent<unknown>) => {
@@ -126,18 +131,24 @@ export const initEditor = function ({
   })
 
   // This should only be needed on client, not server
+  editor.use(MultiCopyPlugin)
   editor.use(ConsolePlugin)
   editor.use(SocketGeneratorPlugin)
   editor.use(MultiSocketGenerator)
   editor.use(DisplayPlugin)
   editor.use(InspectorPlugin)
   editor.use(NodeClickPlugin)
+
+  const background = document.getElementById('background')
+
   editor.use(AreaPlugin, {
-    scaleExtent: { min: 0.025, max: 1.5 },
+    scaleExtent: { min: 0.1, max: 1.5 },
+    background,
+    // snap: true - TODO: add ability to enable and disable snapping to UI
   })
 
   editor.use(CommentPlugin, {
-    margin: 20, // indent for new frame comments by default 30 (px)
+    margin: 30, // indent for new frame comments by default 30 (px)
   })
 
   editor.use(KeyCodePlugin)
@@ -160,7 +171,7 @@ export const initEditor = function ({
     editor.use(TaskPlugin)
   }
 
-  // editor.use(SelectionPlugin, { enabled: true })
+  editor.use(SelectionPlugin, { enabled: true })
 
   // WARNING all the plugins from the editor get installed onto the component and modify it.  This effects the components registered in the engine, which already have plugins installed.
   components.forEach((c: any) => {
@@ -177,10 +188,6 @@ export const initEditor = function ({
     'multiselectnode',
     args => (args.accumulate = args.e.ctrlKey || args.e.metaKey)
   )
-
-  editor.on(['click'], () => {
-    editor.selected.list = []
-  })
 
   editor.bind('run')
   editor.bind('save')
@@ -209,22 +216,7 @@ export const initEditor = function ({
     const graph = JSON.parse(JSON.stringify(_graph))
     await engine.abort()
     editor.fromJSON(graph)
-    const nodes = graph.nodes
-    // get the first node in the graph (which is an object)
-    const firstNode = nodes[Object.keys(nodes)[0]]
 
-    if (firstNode) {
-      firstNode.position = [
-        (firstNode.position && firstNode.position[0] + 250) || 0,
-        (firstNode.position && firstNode.position[1] + 500) || 0,
-      ]
-
-      setTimeout(() => {
-        zoomAt(editor, [firstNode])
-      }, 100)
-    }
-
-    editor.view.area.translate(0, 0)
     editor.view.resize()
     editor.runProcess()
   }

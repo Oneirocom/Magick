@@ -10,7 +10,7 @@ const AgentManagerWindow = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [data, setData] = useState<Array<object>>([])
   const { enqueueSnackbar } = useSnackbar()
-  const [selectedAgent, setSelectedAgent] = useState<object>({})
+  const [selectedAgent, setSelectedAgent] = useState<any>({id: null})
   const [root_spell, setRootSpell] = useState('default')
 
   const resetData = async () => {
@@ -22,17 +22,15 @@ const AgentManagerWindow = () => {
     console.log('res is', json)
   }
 
-  const createNew = (
-    data: {
-      projectId: string,
-      rootSpell: string,
-      spells: string,
-      enabled: true,
-      name: string,
-      updatedAt: string,
-      secrets : string,
-    }
-  ) => {
+  const createNew = (data: {
+    projectId: string
+    rootSpell: string
+    spells: string
+    enabled: true
+    name: string
+    updatedAt: string
+    secrets: string
+  }) => {
     // rewrite using fetch instead of axios
     axios({
       url: `${config.apiUrl}/agents`,
@@ -59,13 +57,20 @@ const AgentManagerWindow = () => {
       data.updatedAt = data?.updatedAt || ''
       data.rootSpell = data?.rootSpell || '{}'
       data.spells = Array.isArray(data?.spells) ? data.spells : []
-      data.secrets = Array.isArray(data?.secrets) ? data.secrets : []
+      data.secrets = JSON.stringify(
+        Array.isArray(data?.secrets) ? data.secrets : []
+      )
       // if the agent's public variable keys don't match the spell's public variable keys, update the agent
-      data.publicVariables = data?.publicVariables || JSON.stringify(Object.values(
-        data.rootSpell && data.rootSpell.graph.nodes || {}
-      ).filter((node: { data }) => node?.data?.isPublic))
+      data.publicVariables =
+        data?.publicVariables ||
+        JSON.stringify(
+          Object.values(
+            (data.rootSpell && data.rootSpell.graph.nodes) || {}
+          ).filter((node: { data }) => node?.data?.isPublic)
+        )
 
       // Check if the "id" property exists in the object
+      // eslint-disable-next-line no-prototype-builtins
       if (data.hasOwnProperty('id')) {
         delete data.id
       }
@@ -109,7 +114,7 @@ const AgentManagerWindow = () => {
             variant: 'success',
           })
         }
-        if (selectedAgent?.id === id) setSelectedAgent({})
+        if (selectedAgent.id === id) setSelectedAgent({ id: null})
         resetData()
       })
       .catch(e => {

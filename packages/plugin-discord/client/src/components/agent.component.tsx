@@ -2,7 +2,6 @@ import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { FC, useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
-import { KeyInput } from './utils'
 import { debounce } from 'lodash'
 
 type PluginProps = {
@@ -112,18 +111,18 @@ export const DiscordAgentWindow: FC<any> = props => {
             <Grid item xs={12}>
               <div className="form-item">
                 <span className="form-item-label">API Key</span>
-                <KeyInput
-                  value={selectedAgentData.data?.discord_api_key}
-                  setValue={value =>
+                <input
+                  type="password"
+                  defaultValue={selectedAgentData.data?.discord_api_key}
+                  onChange={e =>
                     setSelectedAgentData({
                       ...selectedAgentData,
                       data: {
                         ...selectedAgentData.data,
-                        discord_api_key: value,
+                        discord_api_key: e.target.value,
                       },
                     })
                   }
-                  secret={true}
                 />
               </div>
             </Grid>

@@ -1,6 +1,6 @@
-import { buildMagickInterface } from './buildMagickInterface'
+import { buildMagickInterface } from '../helpers/buildMagickInterface'
 import { SpellManager, WorldManager, pluginManager } from '@magickml/engine'
-import { app } from './app'
+import { app } from '../app'
 import { AgentManager } from './AgentManager'
 
 type AgentData = {
@@ -52,13 +52,13 @@ export class Agent {
     this.spellManager = new SpellManager({
       magickInterface: buildMagickInterface({}) as any,
       cache: false,
-    });
-    (async () => {
+    })
+    ;(async () => {
       const spell = (
         await app.service('spells').find({
           query: {
             projectId: agentData.projectId,
-            id: this.rootSpell.id 
+            id: this.rootSpell.id,
           },
         })
       ).data[0]
@@ -88,26 +88,25 @@ export class Agent {
           updatedAt: new Date().toISOString(),
         })
       }, 1000)
-        
     })()
   }
 
   async onDestroy() {
-    if(this.updateInterval){
+    if (this.updateInterval) {
       clearInterval(this.updateInterval)
     }
     const agentStopMethods = pluginManager.getAgentStopMethods()
     console.log('agentStopMethods', agentStopMethods)
-    if(agentStopMethods)
+    if (agentStopMethods)
       for (const method of Object.keys(agentStopMethods)) {
         agentStopMethods[method]({
           agentManager: this.agentManager,
           agent: this,
           spellRunner: this.spellRunner,
-          worldManager: this.worldManager
+          worldManager: this.worldManager,
         })
       }
-      console.log('destroyed agent', this.id)
+    console.log('destroyed agent', this.id)
   }
 }
 

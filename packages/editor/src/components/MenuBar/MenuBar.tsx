@@ -27,7 +27,6 @@ const MenuBar = () => {
   useEffect(() => {
     if (!activeTab || !activeTab.name) return
     activeTabRef.current = activeTab
-    console.log('changing current to ', activeTabRef.current)
   }, [activeTab])
 
   // grab all events we need
@@ -41,6 +40,8 @@ const MenuBar = () => {
     $EXPORT,
     $UNDO,
     $REDO,
+    $MULTI_SELECT_COPY,
+    $MULTI_SELECT_PASTE
   } = events
 
   const useToggle = (initialValue = false) => {
@@ -55,7 +56,7 @@ const MenuBar = () => {
   const onSave = () => {
     console.log(activeTabRef.current?.id)
     console.log('SAVING')
-   // if (!activeTabRef.current) return
+    // if (!activeTabRef.current) return
     publish($SAVE_SPELL(activeTabRef.current?.id))
   }
 
@@ -146,6 +147,16 @@ const MenuBar = () => {
     publish($REDO(activeTabRef.current.id))
   }
 
+  const onMultiSelectCopy = () => {
+    if (!activeTabRef.current) return
+    publish($MULTI_SELECT_COPY(activeTabRef.current.id))
+  }
+
+  const onMultiSelectPaste = () => {
+    if (!activeTabRef.current) return
+    publish($MULTI_SELECT_PASTE(activeTabRef.current.id))
+  }
+
   const toggleSave = () => {
     dispatch(toggleAutoSave())
   }
@@ -192,6 +203,14 @@ const MenuBar = () => {
         redo: {
           onClick: onRedo,
           hotKey: 'option+shift+z',
+        },
+        copy: {
+          onClick: onMultiSelectCopy,
+          hotKey: 'option+c'
+        },
+        paste: {
+          onClick: onMultiSelectPaste,
+          hotKey: 'option+v'
         },
       },
     },
@@ -305,7 +324,7 @@ const MenuBar = () => {
   const handleClick = func => {
     //Initially intended to control the visibility with a state, but this triggers a re-render and hides the menu anyway! :D
     //Keeping this intact just in case.
-    (togglemenuVisibility as Function)(menuVisibility)
+    ;(togglemenuVisibility as Function)(menuVisibility)
     // eslint-disable-next-line no-eval
     eval(func)
   }

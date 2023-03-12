@@ -36,7 +36,10 @@
           "name": "Server",
           "type": "node",
           "request": "attach",
-          "port": 7778
+          "port": 7778,
+          "outFiles": [
+            "${workspaceFolder}/dist/**/*.js"
+          ]
         },
         {
           "name": "AgentServer",

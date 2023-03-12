@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { VITE_APP_API_URL } from '@magickml/engine'
+import { API_ROOT_URL } from '@magickml/engine'
 
 const fileToDataUri = file =>
   new Promise((resolve, reject) => {
@@ -43,7 +43,7 @@ export class Upload extends React.Component<UploadProps, UploadState> {
     fileToDataUri(file).then(dataUri => {
       axios({
         method: 'post',
-        url: `${VITE_APP_API_URL}/upload`,
+        url: `${API_ROOT_URL}/upload`,
         data: {
           id: this.id_image,
           uri: dataUri,
