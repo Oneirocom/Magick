@@ -38,7 +38,9 @@ jobs:
         run: npm run build-client
       - name: Copy Web Assets to Electron
         run: cd apps/client && npx cap copy electron
-      - name: Build electron
+      - name: Install electron packages
+        run: cd apps/client/electron && npm install
+      - name: Package electron
         run: npm run package-electron-${{ matrix.os }}
       - name: Archive Artifact
         uses: actions/upload-artifact@v2
