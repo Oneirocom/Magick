@@ -65,7 +65,7 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
 
     const arrayElement = input[element]
 
-    if (!silent) node.display(input as string)
+    node.display(input as string)
 
     return {
       output: arrayElement,

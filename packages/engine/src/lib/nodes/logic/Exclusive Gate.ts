@@ -73,7 +73,6 @@ export class ExclusiveGate extends MagickComponent<void> {
       key.includes(triggerFilterName)
     )
 
-    if (!silent)
       node.display(
         'triggerFilterName: ' + triggerFilterName + ' | ' + outputKey ?? 'error'
       )

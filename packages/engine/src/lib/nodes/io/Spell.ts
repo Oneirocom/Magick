@@ -190,10 +190,7 @@ export class SpellComponent extends MagickComponent<
         }
       )
 
-    if (!silent) node.display(`${JSON.stringify(outputs)}`)
-    else {
-      console.log('outputs in spell!', outputs)
-    }
+    node.display(`${JSON.stringify(outputs)}`)
 
     return this.formatOutputs(node, outputs)
   }

@@ -155,7 +155,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
       const output = Object.values(data)[0] as string
 
-      if (!silent) node.display(data)
+      node.display(data)
 
       return {
         output,

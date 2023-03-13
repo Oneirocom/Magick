@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { DisplayControl } from './DisplayControl'
 
 function install(editor) {
@@ -26,9 +25,10 @@ function install(editor) {
     component.worker = (node, inputs, outputs, data, ...args) => {
       if (displayMap[node.id])
         node.display = displayMap[node.id].display.bind(displayMap[node.id])
-
-      // handle modules, which are in the engine run
-      if (data?.silent) node.display = () => {}
+      
+      if(!node.display) node.display = (status) => {
+        console.log("Node " + node.id + ": " + JSON.stringify(status))
+      }
 
       return worker.apply(component, [node, inputs, outputs, data, ...args])
     }

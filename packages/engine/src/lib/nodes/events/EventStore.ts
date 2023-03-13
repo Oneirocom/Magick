@@ -98,9 +98,9 @@ export class EventStore extends MagickComponent<Promise<void>> {
     if (content && content !== '') {
       const response = await axios.post(`${API_ROOT_URL}/events`, data)
 
-      if (!silent) node.display(JSON.stringify(response.data))
+      node.display(JSON.stringify(response.data))
     } else {
-      if (!silent) node.display('No input')
+      node.display('No input')
     }
   }
 }

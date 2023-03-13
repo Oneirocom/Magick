@@ -121,7 +121,7 @@ export class Output extends MagickComponent<void> {
       }
     }
 
-    if (!silent) node.display(output as string)
+    node.display(output as string)
 
     if (module.agent) {
       if (outputType === 'Default') {
