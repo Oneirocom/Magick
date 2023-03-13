@@ -81,7 +81,7 @@ export const initSharedEngine = ({
   components.forEach(c => {
     engine.register(c)
   })
-  console.log("Engine Started")
+
   return engine
 }
 
