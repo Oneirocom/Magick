@@ -45,17 +45,9 @@ export const RestAgentWindow: FC<any> = props => {
           checked={selectedAgentData.data?.rest_enabled}
           onChange={e => {
             debouncedFunction(selectedAgentData.id, {
-              ...selectedAgentData,
               data: {
                 ...selectedAgentData.data,
                 rest_enabled: e.target.checked,
-              },
-            })
-            setSelectedAgentData({
-              ...selectedAgentData,
-              data: {
-                ...selectedAgentData.data,
-                rest_enabled: e.target.checked ? true : false,
               },
             })
           }}
@@ -317,12 +309,11 @@ export const RestAgentWindow: FC<any> = props => {
                     Fetch
                   </span>
                   <Input
-                    value={
-`fetch('${import.meta.env.VITE_APP_API_URL}/api/${
-    selectedAgentData.id
-  }?apiKey=${
-    selectedAgentData.data?.rest_api_key
-  }&content=Hello+World', {
+                    value={`fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+                      selectedAgentData.id
+                    }?apiKey=${
+                      selectedAgentData.data?.rest_api_key
+                    }&content=Hello+World', {
   method: 'DELETE',
   headers: {
     'Content-Type': 'application/json',
@@ -331,8 +322,7 @@ export const RestAgentWindow: FC<any> = props => {
     apiKey: '${selectedAgentData.data?.rest_api_key}',
     content: 'Hello World' // optional
   }),
-})`
-                }
+})`}
                     readOnly
                     style={{
                       width: '100%',
@@ -341,11 +331,11 @@ export const RestAgentWindow: FC<any> = props => {
                     }}
                     onClick={() => {
                       navigator.clipboard.writeText(
-`fetch('${import.meta.env.VITE_APP_API_URL}/api/${
-  selectedAgentData.id
-}?apiKey=${
-  selectedAgentData.data?.rest_api_key
-}&content=Hello+World', {
+                        `fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+                          selectedAgentData.id
+                        }?apiKey=${
+                          selectedAgentData.data?.rest_api_key
+                        }&content=Hello+World', {
 method: 'DELETE',
 headers: {
   'Content-Type': 'application/json',

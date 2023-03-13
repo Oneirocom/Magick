@@ -25,14 +25,16 @@ const AgentDetails = ({
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
 
-  const update = id => {
-    const _data = selectedAgentData
+  const update = (id, data = undefined) => {
+    const _data = data || selectedAgentData
+    id = id || _data.id
     if (_data['id']) {
       delete _data.id
     }
     // Avoid server-side validation error
     _data.spells = Array.isArray(_data?.spells) ? _data.spells : []
     _data.enabled = _data.enabled ? true : false
+    _data.dirty = _data.dirty ? true : false
     _data.updatedAt = new Date().toISOString()
     axios
       .patch(`${config.apiUrl}/agents/${id}`, _data)
@@ -301,6 +303,7 @@ const AgentDetails = ({
               element={value}
               selectedAgentData={selectedAgentData}
               setSelectedAgentData={setSelectedAgentData}
+              update={update}
             />
           )
         })}

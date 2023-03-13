@@ -231,7 +231,7 @@ const Playtest = ({ tab }) => {
       enqueueSnackbar('No graph found', {
         variant: 'error',
       })
-    } 
+    }
 
     console.log('playtestOption', playtestOption)
 
@@ -246,7 +246,7 @@ const Playtest = ({ tab }) => {
       return
     }
 
-    console.log('playtestNode', playtestNode) 
+    console.log('playtestNode', playtestNode)
 
     const playtestInputName = playtestNode?.data.name
 
@@ -255,7 +255,7 @@ const Playtest = ({ tab }) => {
         variant: 'error',
       })
       return
-    } 
+    }
 
     const data = {
       spellName: tab.name.split('--')[0],
@@ -307,7 +307,7 @@ const Playtest = ({ tab }) => {
   const toolbar = (
     <React.Fragment>
       <Select
-        style={{ width: '100%', zIndex: 10 }}
+        style={{ width: '100%', zIndex: 0 }}
         options={playtestOptions}
         onChange={onSelectChange}
         defaultValue={{
@@ -373,9 +373,10 @@ const Playtest = ({ tab }) => {
         ></div>
         <div className={css['playtest-output']}>
           <Scrollbars ref={ref => (scrollbars.current = ref)}>
-            <ul>{history.map((printItem: string, key: any) => {
-              return <li key={key}>{printItem}</li>
-            })}
+            <ul>
+              {history.map((printItem: string, key: any) => {
+                return <li key={key}>{printItem}</li>
+              })}
             </ul>
           </Scrollbars>
         </div>
