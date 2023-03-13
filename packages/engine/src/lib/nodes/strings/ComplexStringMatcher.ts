@@ -278,8 +278,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       }
     }
 
-    if (!silent)
-      node.display('isMatched: ' + isMatched + ' | invalidated: ' + invalidated)
+    node.display('isMatched: ' + isMatched + ' | invalidated: ' + invalidated)
 
     this._task.closed = !invalidated && isMatched ? ['false'] : ['true']
   }

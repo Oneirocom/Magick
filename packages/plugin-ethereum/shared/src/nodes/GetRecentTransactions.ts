@@ -76,7 +76,7 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
-      if (!silent) node.display(data)
+      node.display(data)
       return {
         output: data,
       }

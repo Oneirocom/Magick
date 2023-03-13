@@ -67,7 +67,7 @@ export class SentenceMatcher extends MagickComponent<Promise<InputReturn>> {
     console.log('source setences is', sourceSentence)
     console.log('sentences are', sentences)
 
-    if (!silent) node.display('Processing')
+    node.display('Processing')
 
     let bestScore = 0
     let bestSentence = ''
@@ -81,10 +81,9 @@ export class SentenceMatcher extends MagickComponent<Promise<InputReturn>> {
       }
     }
 
-    if (!silent)
-      node.display(
-        'Best Score is: ' + bestScore + ' | Top label is ' + bestSentence
-      )
+    node.display(
+      'Best Score is: ' + bestScore + ' | Top label is ' + bestSentence
+    )
     return { output: bestSentence }
   }
 }

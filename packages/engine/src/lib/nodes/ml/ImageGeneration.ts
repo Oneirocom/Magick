@@ -102,10 +102,8 @@ export class ImageGeneration extends MagickComponent<Promise<InputReturn>> {
     const { images } = await getPrompt(prompt, server)
     const image = images && images[0]
 
-    if (!silent) {
-      if (!image) node.display('Error: No data returned', image)
-      else node.display('Response is', image)
-    }
+    if (!image) node.display('Error: No data returned', image)
+    else node.display('Response is', image)
 
     return { output: image }  }
 }

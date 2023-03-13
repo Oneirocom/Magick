@@ -52,10 +52,7 @@ export class Echo extends MagickComponent<Promise<WorkerReturn>> {
     { silent }: { silent: boolean }
   ) {
     const input = inputs.string[0] as string
-    if (!silent) node.display(input as string)
-    else {
-      console.log('*** ECHO: ', input)
-    }
+    node.display(input as string)
 
     return {
       output: input,

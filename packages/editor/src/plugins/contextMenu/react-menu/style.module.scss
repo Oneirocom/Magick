@@ -9,7 +9,7 @@
   width: $width;
   margin-top: -20px;
   margin-left: calc($width/2*-1);
-  z-index:10000000;
+  z-index:10000000000;
   .item {
     @extend .item;
     &.hasSubitems:after {

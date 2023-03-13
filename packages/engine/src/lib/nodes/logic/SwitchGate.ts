@@ -65,9 +65,7 @@ export class SwitchGate extends MagickComponent<void> {
     // close all outputs
     this._task.closed = ['default', ...nodeOutputs.map(out => out.name)]
 
-    if (!silent) {
-      node.display(input as string)
-    }
+    node.display(input as string)
 
     if (this._task.closed.includes(input)) {
       // If the ouputs closed has the incoming text, filter closed outputs to not include it

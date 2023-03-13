@@ -155,7 +155,7 @@ export class ComputeNatalChart extends MagickComponent<Promise<WorkerReturn>> {
       pluto: plutoZodSign,
     }
 
-    if (!silent) node.display(JSON.stringify(returned))
+    node.display(JSON.stringify(returned))
 
     return {
       output: returned,

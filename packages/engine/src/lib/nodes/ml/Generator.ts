@@ -216,14 +216,14 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
         .replace(/^\s+|\s+$/g, '')
       const composed = `${prompt} ${result}`
 
-      if (!silent) node.display(result)
+      node.display(result)
 
       return {
         result,
         composed,
       }
     } catch (err) {
-      if (!silent) node.display(err)
+      node.display(err)
       // Typescript reporting wrong about number of arguments for error constructor
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore:next-line

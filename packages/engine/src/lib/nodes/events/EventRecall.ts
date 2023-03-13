@@ -160,7 +160,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     } else {
       events = await getEvents(data)
     }
-    if (!silent) node.display(`Event ${type} found` || 'Not found')
+    node.display(`Event ${type} found` || 'Not found')
     
     return {
       events,

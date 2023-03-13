@@ -78,10 +78,8 @@ export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
       modelParameters
     )
 
-    if (!silent) {
-      if (!output) node.display('Error: No output returned', output)
-      else node.display('Response is', output)
-    }
+    if (!output) node.display('Error: No output returned', output)
+    else node.display('Response is', output)
 
     return { output }
   }

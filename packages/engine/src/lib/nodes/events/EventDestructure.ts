@@ -108,7 +108,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       agentId,
     } = eventValue as Event
 
-    if (!silent) node.display(event)
+    node.display(event)
     console.log('sender, ', sender)
     return {
       content,
