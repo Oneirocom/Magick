@@ -16,7 +16,7 @@
     "serve": {
       "executor": "@nx-plus/docusaurus:dev-server",
       "options": {
-        "port": 3000
+        "port": 3001
       }
     }
   },

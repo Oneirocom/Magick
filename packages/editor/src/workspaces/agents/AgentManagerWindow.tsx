@@ -35,7 +35,7 @@ const AgentManagerWindow = () => {
     axios({
       url: `${config.apiUrl}/agents`,
       method: 'POST',
-      data: {...data, updatedAt: new Date().toISOString()},
+      data: {...data, updatedAt: new Date().toISOString(), pingedAt: new Date().toISOString()},
     })
       .then(async res => {
         const res2 = await fetch(`${config.apiUrl}/agents`)
