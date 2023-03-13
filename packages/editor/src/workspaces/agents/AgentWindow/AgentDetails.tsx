@@ -144,7 +144,7 @@ const AgentDetails = ({
           </>
         ) : (
           <div className={styles.agentDescription}>
-            <Avatar className={styles.avatar}>A</Avatar>
+            <Avatar className={styles.avatar}>{selectedAgentData.name.slice(0, 1)[0]} </Avatar>
             <div>
               <Typography variant="h5">{selectedAgentData.name}</Typography>
             </div>
