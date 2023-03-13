@@ -11,6 +11,8 @@
     "build-server": "npx nx build @magickml/server",
     "build-agent": "npx nx build @magickml/agent",
     "build-docs": "npx nx build @magickml/docs",
+    "build-electron": "npx nx run @magickml/client:build --platform @capacitor-community/electron",
+    "start-electron": "npx nx run @magickml/client:open --platform @capacitor-community/electron",
     "start": "node scripts/start-server.js",
     "start-server": "node dist/apps/server/main.js",
     "start-agent": "node dist/apps/agent/main.js",
@@ -84,9 +86,6 @@
     "diff-match-patch": "^1.0.5",
     "discord.js": "^14.7.1",
     "dotenv-flow": "3.2.0",
-    "electron": "^23.1.2",
-    "electron-builder": "^24.0.0",
-    "electron-packager": "^17.1.1",
     "emoji-dictionary": "1.0.11",
     "emoji-regex": "10.0.0",
     "ethers": "^5.7.2",
@@ -191,7 +190,7 @@
     "@capacitor/android": "^4.6.2",
     "@capacitor/cli": "^4.6.2",
     "@capacitor/core": "^4.6.2",
-    "@capacitor/ios": "^4.6.2",
+    "@capacitor/ios": "^4.7.0",
     "@docusaurus/module-type-aliases": "2.1.0",
     "@feathersjs/cli": "^5.0.0",
     "@feathersjs/rest-client": "^5.0.0",
@@ -293,6 +292,9 @@
     "@docusaurus/preset-classic": {
       "react": "^18.2.0",
       "react-dom": "^18.2.0"
+    },
+    "**": {
+      "@types/node": "18.11.9"
     }
   }
 }
