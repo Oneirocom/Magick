@@ -1,4 +1,5 @@
 export enum CompletionModel {
+  GPT4 = 'gpt-4',
   DAVINCI = 'davinci',
   CURIE = 'curie',
   BABBAGE = 'babbage',
@@ -18,6 +19,7 @@ export const COST_PER_TOKEN: CostPerToken<CompletionModel | EmbeddingModel> = {
   [CompletionModel.BABBAGE]: 0.0005 / 1000,
   [CompletionModel.CURIE]: 0.002 / 1000,
   [CompletionModel.DAVINCI]: 0.02 / 1000,
+  [CompletionModel.GPT4]: 0.02 / 1000,
   [EmbeddingModel.ADA_002]: 0.0004 / 1000,
 }
 
