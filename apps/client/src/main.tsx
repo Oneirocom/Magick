@@ -6,7 +6,8 @@ import './plugins'
 
 // check urlParams for projectId and apiUrl
 const projectId =
-  new URLSearchParams(window.location.search).get('projectId') ?? DEFAULT_PROJECT_ID
+  new URLSearchParams(window.location.search).get('projectId') ??
+  DEFAULT_PROJECT_ID
 const apiUrl =
   new URLSearchParams(window.location.search).get('apiUrl') ??
   API_ROOT_URL ??
@@ -20,8 +21,14 @@ if (window !== window.parent) {
     event => {
       const cloudUrl =
         import.meta.env.VITE_APP_TRUSTED_PARENT_URL || 'http://localhost:3000'
+
+      console.log('event.origin', event.origin)
+      console.log('cloudUrl', cloudUrl)
       // here we check that the sender is coming from a trusted source
-      if (event.origin !== cloudUrl) return
+      if (event.origin !== cloudUrl) {
+        console.warn('untrusted origin', event.origin)
+        return
+      }
 
       const { data } = event
       const { type, payload } = data
