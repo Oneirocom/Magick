@@ -3,7 +3,7 @@ import css from '../homeScreen.module.css'
 
 const TemplatePanel = ({ template, setSelectedTemplate, selectedTemplate }) => {
   const isSelected =
-    selectedTemplate?.label && selectedTemplate.label === template.label
+    selectedTemplate?.name && selectedTemplate.name === template.name
   return (
     <div
       className={`${css['template-container']} ${
@@ -23,7 +23,7 @@ const TemplatePanel = ({ template, setSelectedTemplate, selectedTemplate }) => {
         }}
         className={css['template-panel']}
       ></Panel>
-      <p>{template.label}</p>
+      <p>{template.name}</p>
     </div>
   )
 }

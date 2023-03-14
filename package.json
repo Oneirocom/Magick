@@ -12,6 +12,7 @@
     "migrate": "nx run @magickml/server:migrate",
     "build": "node scripts/build-server.js",
     "build-client": "npx nx build @magickml/client",
+    "build-templates": "npx nx build @magickml/templates",
     "build-server": "npx nx build @magickml/server",
     "build-agent": "npx nx build @magickml/agent",
     "build-docs": "npx nx build @magickml/docs",
@@ -29,7 +30,7 @@
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
     "find unused deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
-    "postinstall": "node scripts/config-plugins.js && node scripts/config-db.js"
+    "postinstall": "node scripts/config-plugins.js && node scripts/config-db.js && npm run build-templates"
   },
   "resolutions": {
     "@types/react": "18.0.2"

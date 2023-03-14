@@ -14,13 +14,8 @@ import { Panel } from '@magickml/client-core'
 import emptyImg from '../empty.png'
 import css from '../homeScreen.module.css'
 import TemplatePanel from '../components/TemplatePanel'
-import defaultGraph from '../../../data/graphs/default'
+import templates from '@magickml/templates'
 
-// TODO: move these into plugins
-import discordGraph from '../../../data/graphs/discord'
-import restGraph from '../../../data/graphs/rest'
-
-import threeovGraph from '../../../data/graphs/threeov'
 import md5 from 'md5'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { Button } from '@magickml/client-core'
@@ -37,16 +32,7 @@ export type Template = {
   graph: GraphData
 }
 
-export const magickTemplates: Template[] = [
-  { label: 'Starter', bg: emptyImg, graph: defaultGraph as any as GraphData },
-  { label: 'Discord Bot', bg: emptyImg, graph: discordGraph as any as GraphData },
-  { label: 'REST API', bg: emptyImg, graph: restGraph as any as GraphData },
-  {
-    label: '3OV for WordPress',
-    bg: emptyImg,
-    graph: threeovGraph as any as GraphData,
-  },
-]
+export const magickTemplates = templates.spells
 
 const CreateNew = () => {
   const config = useConfig()
@@ -145,7 +131,7 @@ const CreateNew = () => {
           <TemplatePanel
             setSelectedTemplate={setSelectedTemplate}
             selectedTemplate={selectedTemplate}
-            template={template}
+            template={{...template, bg: emptyImg}}
             key={i}
           />
         ))}

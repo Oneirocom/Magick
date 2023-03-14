@@ -5,9 +5,12 @@ import { useForm } from 'react-hook-form'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
 import { useNavigate } from 'react-router'
-import defaultGraph from '../../data/graphs/default'
+import templates from '@magickml/templates'
 import { useConfig } from '../../contexts/ConfigProvider'
 import md5 from 'md5'
+
+const defaultGraph = templates.spells[0].graph
+
 const EditSpellModal = ({ tab, closeModal }) => {
   const config = useConfig()
   const [error, setError] = useState('')

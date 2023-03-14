@@ -87,6 +87,7 @@
       ],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-core": ["packages/server-core/src/index.ts"],
+      "@magickml/templates": ["packages/templates/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"]
     }
   },
