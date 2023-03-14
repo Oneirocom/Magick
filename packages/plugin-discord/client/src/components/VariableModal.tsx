@@ -1,156 +1,138 @@
-import Grid from '@mui/material/Grid'
 import { Switch, Modal } from '@magickml/client-core'
+import { useState } from 'react'
 
 const VariableModal = ({
   selectedAgentData,
-  setSelectedAgentData,
   editMode,
   testVoice,
   setEditMode,
   update,
 }) => {
+  const [state, setState] = useState({
+    discord_api_key: selectedAgentData?.data?.discord_api_key,
+    discord_starting_words: selectedAgentData?.data?.discord_starting_words,
+    discord_bot_name_regex: selectedAgentData?.data?.discord_bot_name_regex,
+    discord_bot_name: selectedAgentData?.data?.discord_bot_name,
+    use_voice: selectedAgentData?.data?.use_voice,
+    voice_provider: selectedAgentData?.data?.voice_provider,
+    voice_character: selectedAgentData?.data?.voice_character,
+    voice_language_code: selectedAgentData?.data?.voice_language_code,
+    tiktalknet_url: selectedAgentData?.data?.tiktalknet_url,
+  })
+
+  const handleOnChange = e => {
+    const { name, value } = e.target
+    if (name === 'use_voice')
+      setState({ ...state, [name]: e.target.checked ? 'on' : 'off' })
+    else setState({ ...state, [name]: value })
+  }
+
+  const handleSave = () => {
+    const data = {
+      ...selectedAgentData,
+      data: {
+        ...selectedAgentData.data,
+        ...state,
+      },
+    }
+
+    update(selectedAgentData.id, data)
+  }
+
   return (
     editMode && (
-      <Modal open={editMode} setOpen={setEditMode} handleAction={update}>
-        <Grid container>
-          <Grid item xs={12}>
-            <div className="form-item">
-              <span className="form-item-label">API Key</span>
-              <input
-                type="password"
-                defaultValue={selectedAgentData.data?.discord_api_key}
-                onChange={e =>
-                  setSelectedAgentData({
-                    ...selectedAgentData,
-                    data: {
-                      ...selectedAgentData.data,
-                      discord_api_key: e.target.value,
-                    },
-                  })
-                }
-              />
-            </div>
-          </Grid>
-          <Grid item xs={4} style={{ paddingRight: '1em' }}>
-            <div className="form-item">
-              <input
-                type="text"
-                defaultValue={selectedAgentData.data?.discord_starting_words}
-                placeholder={'Starting Words (,)'}
-                onChange={e => {
-                  setSelectedAgentData({
-                    ...selectedAgentData,
-                    data: {
-                      ...selectedAgentData.data,
-                      discord_starting_words: e.target.value,
-                    },
-                  })
-                }}
-              />
-            </div>
-          </Grid>
-          <Grid item xs={4} style={{ paddingRight: '1em' }}>
-            <div className="form-item">
-              <input
-                type="text"
-                defaultValue={selectedAgentData.data?.discord_bot_name_regex}
-                placeholder={'Bot Name Regex'}
-                onChange={e => {
-                  setSelectedAgentData({
-                    ...selectedAgentData,
-                    data: {
-                      ...selectedAgentData.data,
-                      discord_bot_name_regex: e.target.value,
-                    },
-                  })
-                }}
-              />
-            </div>
-          </Grid>
-          <Grid item xs={4} style={{ paddingRight: '1em' }}>
-            <div className="form-item">
-              <input
-                type="text"
-                defaultValue={selectedAgentData.data?.discord_bot_name}
-                placeholder={'Bot Name'}
-                onChange={e => {
-                  setSelectedAgentData({
-                    ...selectedAgentData,
-                    data: {
-                      ...selectedAgentData.data,
-                      discord_bot_name: e.target.value,
-                    },
-                  })
-                }}
-              />
-            </div>
-          </Grid>
-        </Grid>
+      <Modal open={editMode} setOpen={setEditMode} handleAction={handleSave}>
+        <div style={{ marginBottom: '1em' }}>
+          <div>
+            <span className="form-item-label">API Key</span>
+            <input
+              type="password"
+              style={{ width: '100%' }}
+              name="discord_api_key"
+              defaultValue={state.discord_api_key}
+              onChange={handleOnChange}
+            />
+          </div>
+        </div>
+        <div>
+          <span className="form-item-label">Starting Words (,)</span>
+          <div style={{ marginBottom: '1em' }}>
+            <input
+              type="text"
+              style={{ width: '100%' }}
+              defaultValue={state.discord_starting_words}
+              name="discord_starting_words"
+              placeholder={'Starting Words (,)'}
+              onChange={handleOnChange}
+            />
+          </div>
+        </div>
+        <div style={{ marginBottom: '1em' }}>
+          <span className="form-item-label">Bot Name Regex</span>
+          <div>
+            <input
+              style={{ width: '100%' }}
+              type="text"
+              defaultValue={state.discord_bot_name_regex}
+              name="discord_bot_name_regex"
+              placeholder={'Bot Name Regex'}
+              onChange={handleOnChange}
+            />
+          </div>
+        </div>
+        <div style={{ marginBottom: '1em' }}>
+          <span className="form-item-label">Bot Name</span>
+          <div>
+            <input
+              type="text"
+              name="discord_bot_name"
+              style={{ width: '100%' }}
+              defaultValue={state.discord_bot_name}
+              placeholder={'Bot Name'}
+              onChange={handleOnChange}
+            />
+          </div>
+        </div>
 
         <div style={{ position: 'relative' }}>
           <Switch
             label={'Voice Enabled'}
-            checked={selectedAgentData.data?.use_voice === 'on'}
-            onChange={e => {
-              setSelectedAgentData({
-                ...selectedAgentData,
-                data: {
-                  ...selectedAgentData.data,
-                  use_voice:
-                    selectedAgentData?.data?.use_voice === 'on' ? 'off' : 'on',
-                },
-              })
-            }}
+            checked={state.use_voice === 'on'}
+            name="use_voice"
+            onChange={handleOnChange}
           />
         </div>
 
-        {selectedAgentData.data?.use_voice === 'on' && (
+        {state.use_voice === 'on' && (
           <>
-            <Grid container>
-              <Grid item xs={3} style={{ paddingRight: '1em' }}>
-                <div className="form-item">
+            <div>
+              <div style={{ marginBottom: '1em' }}>
+                <div>
                   <span className="form-item-label">Voice Provider</span>
                   <select
+                    style={{ width: '100%' }}
                     name="voice_provider"
                     id="voice_provider"
                     className="select"
-                    value={selectedAgentData.data?.voice_provider ?? 'Google'}
-                    onChange={e => {
-                      setSelectedAgentData({
-                        ...selectedAgentData,
-                        data: {
-                          ...selectedAgentData.data,
-                          voice_provider: e.target.value,
-                        },
-                      })
-                    }}
+                    value={state.voice_provider ?? 'Google'}
+                    onChange={handleOnChange}
                   >
                     <option value={'google'}>Google</option>
                     <option value={'tiktalknet'}>Tiktalknet</option>
                   </select>
                 </div>
-              </Grid>
-              <Grid item xs={3} style={{ paddingRight: '1em' }}>
-                <div className="form-item">
+              </div>
+              <div style={{ marginBottom: '1em' }}>
+                <div>
                   <span className="form-item-label">Character</span>
-                  {selectedAgentData.data?.voice_provider === 'google' ? (
+                  {state.voice_provider === 'google' ? (
                     <select
                       className="select"
+                      style={{ width: '100%' }}
                       name="voice_character"
                       id="voice_character"
-                      value={
-                        selectedAgentData.data?.voice_character ??
-                        'en-US-Standard-A'
-                      }
-                      onChange={e => {
-                        setSelectedAgentData({
-                          ...selectedAgentData,
-                          data: {
-                            ...selectedAgentData.data,
-                            voice_character: e.target.value,
-                          },
-                        })
-                      }}
+                      value={state.voice_character ?? 'en-US-Standard-A'}
+                      onChange={handleOnChange}
                     >
                       <option value={'en-US-Standard-A'}>
                         en-US-Standard-A
@@ -197,17 +179,10 @@ const VariableModal = ({
                     <select
                       name="voice_character"
                       id="voice_character"
+                      style={{ width: '100%' }}
                       className="select"
-                      value={selectedAgentData.data?.voice_character}
-                      onChange={e => {
-                        setSelectedAgentData({
-                          ...selectedAgentData,
-                          data: {
-                            ...selectedAgentData.data,
-                            voice_character: e.target.value,
-                          },
-                        })
-                      }}
+                      value={state.voice_character}
+                      onChange={handleOnChange}
                     >
                       <option hidden></option>
                       <option value={'1_ztAbe5YArCMwyyQ_G9lUiz74ym5xJKC'}>
@@ -225,55 +200,40 @@ const VariableModal = ({
                     </select>
                   )}
                 </div>
-              </Grid>
-              <Grid item xs={3} style={{ paddingRight: '1em' }}>
-                <div className="form-item">
+              </div>
+              <div style={{ marginBottom: '1em' }}>
+                <div>
                   <span className="form-item-label">Language Code</span>
                   <select
                     name="voice_language_code"
                     id="voice_language_code"
                     className="select"
-                    value={
-                      selectedAgentData.data?.voice_language_code ?? 'none'
-                    }
-                    onChange={e => {
-                      setSelectedAgentData({
-                        ...selectedAgentData,
-                        data: {
-                          ...selectedAgentData.data,
-                          voice_language_code: e.target.value,
-                        },
-                      })
-                    }}
+                    style={{ width: '100%' }}
+                    value={state.voice_language_code ?? 'none'}
+                    onChange={handleOnChange}
                   >
                     <option value={'en-US'}>none</option>
                     <option value={'en-GB'}>en-GB</option>
                   </select>
                 </div>
-              </Grid>
-              <Grid item xs={3}>
-                {selectedAgentData.data?.voice_provider === 'tiktalknet' && (
-                  <div className="form-item">
+              </div>
+              <div style={{ marginBottom: '1em' }}>
+                {state.voice_provider === 'tiktalknet' && (
+                  <div>
                     <span className="form-item-label">Provider URL</span>
                     <input
                       type="text"
-                      defaultValue={selectedAgentData.data?.tiktalknet_url}
+                      style={{ width: '100%' }}
+                      name="tiktalknet_url"
+                      defaultValue={state.tiktalknet_url}
                       placeholder={'http://voice.metaverse.com/tts'}
-                      onChange={e => {
-                        setSelectedAgentData({
-                          ...selectedAgentData,
-                          data: {
-                            ...selectedAgentData.data,
-                            tiktalknet_url: e.target.value,
-                          },
-                        })
-                      }}
+                      onChange={handleOnChange}
                     />
                   </div>
                 )}
-              </Grid>
-            </Grid>
-            <div className="form-item">
+              </div>
+            </div>
+            <div>
               <button
                 onClick={() => testVoice()}
                 style={{ marginRight: '10px', cursor: 'pointer' }}

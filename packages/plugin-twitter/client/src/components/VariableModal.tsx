@@ -1,16 +1,46 @@
 import { Modal, Switch } from '@magickml/client-core'
 import Grid from '@mui/material/Grid'
+import { useState } from 'react'
 
 const VariableModal = ({
   selectedAgentData,
-  setSelectedAgentData,
   editMode,
   setEditMode,
-  debouncedFunction,
   update,
 }) => {
+  const [state, setState] = useState({
+    twitter_userid: selectedAgentData?.data?.twitter_userid,
+    twitter_bearer_token: selectedAgentData?.data?.twitter_bearer_token,
+    twitter_api_key: selectedAgentData?.data?.twitter_api_key,
+    twitter_api_key_secret: selectedAgentData?.data?.twitter_api_key_secret,
+    twitter_access_token: selectedAgentData?.data?.twitter_access_token,
+    twitter_access_token_secret:
+      selectedAgentData?.data?.twitter_access_token_secret,
+    twitter_stream_rules: selectedAgentData?.data?.twitter_stream_rules,
+    twitter_feed_enable: selectedAgentData?.data?.twitter_feed_enable,
+  })
+
+  const handleOnChange = e => {
+    const { name, value } = e.target
+    if (name === 'twitter_feed_enable')
+      setState({ ...state, [name]: e.target.checked ? 'on' : 'off' })
+    else setState({ ...state, [name]: value })
+  }
+
+  const handleSave = () => {
+    const data = {
+      ...selectedAgentData,
+      data: {
+        ...selectedAgentData.data,
+        ...state,
+      },
+    }
+
+    update(selectedAgentData.id, data)
+  }
+
   return (
-    <Modal open={editMode} setOpen={setEditMode} handleAction={update}>
+    <Modal open={editMode} setOpen={setEditMode} handleAction={handleSave}>
       <Grid container>
         <Grid item xs={12}>
           <p style={{ marginTop: '1em' }}>
@@ -26,23 +56,16 @@ const VariableModal = ({
           </p>
         </Grid>
       </Grid>
-      <div>
-        <div style={{ marginBottom: '1em' }}>
+      <div style={{ marginBottom: '1em' }}>
+        <div>
           <span className="form-item-label">User ID</span>
           <input
             style={{ width: '100%' }}
             type="text"
-            defaultValue={selectedAgentData.data?.twitter_userid}
+            name="twitter_userid"
+            defaultValue={state.twitter_userid}
             placeholder={'@'}
-            onChange={e => {
-              setSelectedAgentData({
-                ...selectedAgentData,
-                data: {
-                  ...selectedAgentData.data,
-                  twitter_userid: e.target.value,
-                },
-              })
-            }}
+            onChange={handleOnChange}
           />
         </div>
       </div>
@@ -52,16 +75,9 @@ const VariableModal = ({
           <input
             style={{ width: '100%' }}
             type="password"
-            value={selectedAgentData.data?.twitter_bearer_token}
-            onChange={e =>
-              setSelectedAgentData({
-                ...selectedAgentData,
-                data: {
-                  ...selectedAgentData.data,
-                  twitter_bearer_token: e.target.value,
-                },
-              })
-            }
+            name="twitter_bearer_token"
+            value={state.twitter_bearer_token}
+            onChange={handleOnChange}
           />
         </div>
       </div>
@@ -71,16 +87,9 @@ const VariableModal = ({
           <input
             style={{ width: '100%' }}
             type="password"
-            value={selectedAgentData.data?.twitter_api_key}
-            onChange={e =>
-              setSelectedAgentData({
-                ...selectedAgentData,
-                data: {
-                  ...selectedAgentData.data,
-                  twitter_api_key: e.target.value,
-                },
-              })
-            }
+            name="twitter_api_key"
+            value={state.twitter_api_key}
+            onChange={handleOnChange}
           />
         </div>
       </div>
@@ -90,16 +99,9 @@ const VariableModal = ({
           <input
             style={{ width: '100%' }}
             type="password"
-            defaultValue={selectedAgentData.data?.twitter_api_key_secret}
-            onChange={e =>
-              setSelectedAgentData({
-                ...selectedAgentData,
-                data: {
-                  ...selectedAgentData.data,
-                  twitter_api_key_secret: e.target.value,
-                },
-              })
-            }
+            name="twitter_api_key_secret"
+            defaultValue={state.twitter_api_key_secret}
+            onChange={handleOnChange}
           />
         </div>
       </div>
@@ -109,16 +111,9 @@ const VariableModal = ({
           <input
             style={{ width: '100%' }}
             type="password"
-            defaultValue={selectedAgentData.data?.twitter_access_token}
-            onChange={e =>
-              setSelectedAgentData({
-                ...selectedAgentData,
-                data: {
-                  ...selectedAgentData.data,
-                  twitter_access_token: e.target.value,
-                },
-              })
-            }
+            name="twitter_access_token"
+            defaultValue={state.twitter_access_token}
+            onChange={handleOnChange}
           />
         </div>
       </div>
@@ -128,16 +123,9 @@ const VariableModal = ({
           <input
             style={{ width: '100%' }}
             type="password"
-            value={selectedAgentData.data?.twitter_access_token_secret}
-            onChange={e =>
-              setSelectedAgentData({
-                ...selectedAgentData,
-                data: {
-                  ...selectedAgentData.data,
-                  twitter_access_token_secret: e.target.value,
-                },
-              })
-            }
+            name="twitter_access_token_secret"
+            value={state.twitter_access_token_secret}
+            onChange={handleOnChange}
           />
         </div>
       </div>
@@ -145,23 +133,13 @@ const VariableModal = ({
       <div style={{ position: 'relative' }}>
         <Switch
           label={'Enable Feed'}
-          checked={selectedAgentData.data?.twitter_feed_enable === 'on'}
-          onChange={e => {
-            setSelectedAgentData({
-              ...selectedAgentData,
-              data: {
-                ...selectedAgentData.data,
-                twitter_feed_enable:
-                  selectedAgentData?.data?.twitter_feed_enable === 'on'
-                    ? 'off'
-                    : 'on',
-              },
-            })
-          }}
+          checked={state.twitter_feed_enable === 'on'}
+          name="twitter_feed_enable"
+          onChange={handleOnChange}
         />
       </div>
 
-      {selectedAgentData.data?.twitter_feed_enable === 'on' && (
+      {state.twitter_feed_enable === 'on' && (
         <>
           <Grid container>
             <Grid item xs={12}>
@@ -176,17 +154,10 @@ const VariableModal = ({
               <input
                 style={{ width: '100%' }}
                 type="text"
-                defaultValue={selectedAgentData.data?.twitter_stream_rules}
+                name="twitter_stream_rules"
+                defaultValue={state.twitter_stream_rules}
                 placeholder={'grumpy cat OR #catmeme, #MadeWithMagick'}
-                onChange={e => {
-                  setSelectedAgentData({
-                    ...selectedAgentData,
-                    data: {
-                      ...selectedAgentData.data,
-                      twitter_stream_rules: e.target.value,
-                    },
-                  })
-                }}
+                onChange={handleOnChange}
               />
             </Grid>
           </Grid>

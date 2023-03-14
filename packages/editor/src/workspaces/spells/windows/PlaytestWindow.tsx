@@ -20,7 +20,6 @@ import { useEditor } from '../../contexts/EditorProvider'
 import { spellApi } from '../../../state/api/spells'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { Button } from '@magickml/client-core'
-import { toast } from 'react-toastify'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>

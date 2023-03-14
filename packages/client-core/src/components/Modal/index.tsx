@@ -17,9 +17,8 @@ export const Modal = ({ open, setOpen, handleAction, ...props }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         classes={{ paper: styles.paper }}
-        style={{ padding: '1rem' }}
       >
-        <DialogContent>
+        <DialogContent classes={{ root: styles.content }}>
           <DialogContentText id="alert-dialog-description">
             {props.children}
           </DialogContentText>
@@ -28,15 +27,17 @@ export const Modal = ({ open, setOpen, handleAction, ...props }) => {
           <Button onClick={handleClose} className={styles.btnCancel}>
             Cancel
           </Button>
-          <Button
-            onClick={() => {
-              handleAction()
-              handleClose()
-            }}
-            className={styles.btnAction}
-          >
-            Save
-          </Button>
+          {handleAction !== undefined && (
+            <Button
+              onClick={() => {
+                handleAction()
+                handleClose()
+              }}
+              className={styles.btnAction}
+            >
+              Save
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </div>
