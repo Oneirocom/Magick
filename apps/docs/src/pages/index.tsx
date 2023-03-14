@@ -7,19 +7,21 @@ import HomepageFeatures from '@site/src/components/HomepageFeatures'
 
 import styles from './index.module.css'
 
+import banner from '@site/static/img/wizard.png'
+
+
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext()
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
+    <header className={clsx(styles.heroBanner)}>
+      <div className="container" style={{padding: "5em 0"}}>
+        <h1 className="hero__title">Your Journey Is About To Begin</h1>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro"
+            to="/docs/getting-started/Intro"
           >
-            Docusaurus Tutorial - 5min ⏱️
+            Start Here
           </Link>
         </div>
       </div>
@@ -34,9 +36,9 @@ export default function Home(): JSX.Element {
       title={`Hello from ${siteConfig.title}`}
       description="Description will go into a meta tag in <head />"
     >
-      <HomepageHeader />
       <main>
-        <HomepageFeatures />
+        <HomepageHeader />
+        <img src={banner} style={{width:"100%"}} />
       </main>
     </Layout>
   )

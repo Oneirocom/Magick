@@ -21,8 +21,8 @@ export class DiscordConnector {
   client = Discord.Client as any
   agent: any = undefined
   spellRunner: any = null
-  discord_starting_words: string[] = []
-  discord_bot_name_regex = ''
+  discord_wake_words: string[] = []
+  discord_userid = ''
   discord_bot_name = 'Bot'
   use_voice = false
   voice_provider!: string
@@ -33,8 +33,8 @@ export class DiscordConnector {
   constructor({
     agent,
     discord_api_key,
-    discord_starting_words,
-    discord_bot_name_regex,
+    discord_wake_words,
+    discord_userid,
     discord_bot_name,
     spellRunner,
     use_voice,
@@ -52,17 +52,17 @@ export class DiscordConnector {
     this.voice_character = voice_character
     this.voice_language_code = voice_language_code
     this.tiktalknet_url = tiktalknet_url
-    if (!discord_starting_words || discord_starting_words?.length <= 0) {
-      this.discord_starting_words = ['hi', 'hey']
+    if (!discord_wake_words || discord_wake_words?.length <= 0) {
+      this.discord_wake_words = ['hi', 'hey']
     } else {
-      this.discord_starting_words = discord_starting_words?.split(',')
-      for (let i = 0; i < this.discord_starting_words.length; i++) {
-        this.discord_starting_words[i] = this.discord_starting_words[i]
+      this.discord_wake_words = discord_wake_words?.split(',')
+      for (let i = 0; i < this.discord_wake_words.length; i++) {
+        this.discord_wake_words[i] = this.discord_wake_words[i]
           .trim()
           .toLowerCase()
       }
     }
-    this.discord_bot_name_regex = discord_bot_name_regex
+    this.discord_userid = discord_userid
     this.discord_bot_name = discord_bot_name
 
     const token = discord_api_key
@@ -90,7 +90,7 @@ export class DiscordConnector {
 
       this.client.name_regex = new RegExp(discord_bot_name, 'ig')
 
-      this.client.username_regex = new RegExp(this.discord_bot_name_regex, 'ig') //'((?:digital|being)(?: |$))'
+      this.client.username_regex = new RegExp(this.discord_userid, 'ig') //'((?:digital|being)(?: |$))'
       this.client.edit_messages_max_count = 5
 
       const embed = new EmbedBuilder().setColor(0x00ae86)
@@ -347,8 +347,8 @@ export class DiscordConnector {
     //it works with the word hi and the next word should either not exist or start with a lower letter to start the conversation
     if (!isMention && !isDM && !otherMention) {
       const trimmed = content.trimStart()
-      for (let i = 0; i < this.discord_starting_words.length; i++) {
-        if (trimmed.toLowerCase().startsWith(this.discord_starting_words[i])) {
+      for (let i = 0; i < this.discord_wake_words.length; i++) {
+        if (trimmed.toLowerCase().startsWith(this.discord_wake_words[i])) {
           const parts = trimmed.split(' ')
           if (parts.length > 1) {
             if (!startsWithCapital(parts[1])) {
@@ -358,7 +358,7 @@ export class DiscordConnector {
               startConvName = parts[1]
             }
           } else {
-            if (trimmed.toLowerCase() === this.discord_starting_words[i]) {
+            if (trimmed.toLowerCase() === this.discord_wake_words[i]) {
               startConv = true
             }
           }

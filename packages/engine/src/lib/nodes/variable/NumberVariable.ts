@@ -58,10 +58,6 @@ export class NumberVariable extends MagickComponent<InputReturn> {
       _var = publicVars[node.id].value
     }
 
-    if (!context.silent) {
-      node.display(_var.toString())
-    }
-
     return {
       output: _var,
     }

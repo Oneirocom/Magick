@@ -58,16 +58,10 @@ export class SentenceMatcher extends MagickComponent<Promise<InputReturn>> {
   async worker(
     node: NodeData,
     inputs: MagickWorkerInputs,
-    { silent }: { silent: boolean }
   ) {
     const sourceSentence = (inputs['source'][0] ?? inputs['source']) as string
     const sentences = (inputs['sentences'][0] ??
       inputs['sentences']) as string[]
-
-    console.log('source setences is', sourceSentence)
-    console.log('sentences are', sentences)
-
-    node.display('Processing')
 
     let bestScore = 0
     let bestSentence = ''
@@ -81,9 +75,6 @@ export class SentenceMatcher extends MagickComponent<Promise<InputReturn>> {
       }
     }
 
-    node.display(
-      'Best Score is: ' + bestScore + ' | Top label is ' + bestSentence
-    )
     return { output: bestSentence }
   }
 }

@@ -35,7 +35,6 @@ const OpenProject = ({
         >
           <div style={{ flex: 1 }}>
             <span style={{ float: 'right' }}>{getMagickVersion()}</span>
-            <span>&copy; 2023 Oneirocom Systems Inc.</span>
           </div>
         </div>
       )}

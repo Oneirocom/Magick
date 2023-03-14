@@ -85,7 +85,7 @@ export class Agent {
       this.updateInterval = setInterval(() => {
         // every second, update the agent, set updatedAt to now
         app.service('agents').patch(this.id, {
-          updatedAt: new Date().toISOString(),
+          pingedAt: new Date().toISOString(),
         })
       }, 1000)
     })()
@@ -96,7 +96,6 @@ export class Agent {
       clearInterval(this.updateInterval)
     }
     const agentStopMethods = pluginManager.getAgentStopMethods()
-    console.log('agentStopMethods', agentStopMethods)
     if (agentStopMethods)
       for (const method of Object.keys(agentStopMethods)) {
         agentStopMethods[method]({

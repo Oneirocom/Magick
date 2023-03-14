@@ -35,7 +35,7 @@ export class AgentManager {
       const oldAgent = this.currentAgents[i]
       if(!oldAgent) return;
 
-      if(_.isEqual(oldAgent, newAgent)) {
+      if(_.isEqual({...oldAgent, pingedAt: null}, {...newAgent, pingedAt: null})) {
         return
       }
 
@@ -63,21 +63,26 @@ export class AgentManager {
       const pingedAt = new Date(agent.pingedAt)
 
       // if it was updated less than 5 seconds ago, return
-      if(((new Date().getTime() - pingedAt.getTime()) * 1000) < 5000)
-        return console.log('Agent has been pinged recently', agent.id, new Date().getTime() - pingedAt.getTime())
+      if(((new Date().getTime() - pingedAt.getTime())) < 5000)
+        return // console.log('Agent has been pinged recently', agent.id, new Date().getTime() - pingedAt.getTime())
       
-      console.log('Agent is enabled and has not been pinged, starting', agent.id)
+        // make sure to get the first value in the array
+      const old = this.currentAgents?.find((a) => a.id === agent.id)
+
+      if(old && _.isEqual({...old, pingedAt: null}, {...agent, pingedAt: null})) {
+        return // console.log('Agent has not changed, skipping', agent.id)
+      }
 
       const oldAgent = this.agents[agent.id]
 
-      if(_.isEqual(oldAgent, agent)) {
-        return
-      }
+      console.log('Agent is enabled and has not been pinged, starting', agent.id)
 
       this.removeHandlers.forEach((handler) => handler({agent: oldAgent}))
-      if(oldAgent)
+
+      if(oldAgent){
         await oldAgent.onDestroy()
-      // delete this.currentAgents value where id = agent.id
+      }
+
       this.currentAgents = this.currentAgents.filter((a) => a.id !== agent.id)
         
       const data = {

@@ -163,13 +163,11 @@ export class SpellComponent extends MagickComponent<
     _outputs: { [key: string]: string },
     {
       magick,
-      silent,
       secrets,
       publicVariables,
     }: {
       module: { outputs: ModuleWorkerOutput[] }
       magick: EngineContext
-      silent: boolean
       secrets: Record<string, string>
       publicVariables: Record<string, string>
     }
@@ -189,8 +187,6 @@ export class SpellComponent extends MagickComponent<
           publicVariables,
         }
       )
-
-    node.display(`${JSON.stringify(outputs)}`)
 
     return this.formatOutputs(node, outputs)
   }

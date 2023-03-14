@@ -98,9 +98,8 @@ export class Output extends MagickComponent<void> {
     _outputs: MagickWorkerOutputs,
     {
       module,
-      silent,
       magick,
-    }: { module: any; silent: boolean; magick: EditorContext }
+    }: { module: any; magick: EditorContext }
   ) {
     if (!inputs.input) throw new Error('No input provided to output component')
     const outputType = node.data.outputType
@@ -120,8 +119,6 @@ export class Output extends MagickComponent<void> {
         sendToAvatar(output)
       }
     }
-
-    node.display(output as string)
 
     if (module.agent) {
       if (outputType === 'Default') {
