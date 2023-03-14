@@ -108,7 +108,6 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent }: { silent: boolean }
   ) {
     // implement a function that replaces all instances of a string with another string
     const replaceAll = (str: string, find: string, replace: string) => {
@@ -277,8 +276,6 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
         invalidated = true
       }
     }
-
-    node.display('isMatched: ' + isMatched + ' | invalidated: ' + invalidated)
 
     this._task.closed = !invalidated && isMatched ? ['false'] : ['true']
   }

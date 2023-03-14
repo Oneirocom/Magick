@@ -121,10 +121,9 @@ export class TextCompletion extends MagickComponent<Promise<WorkerReturn>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: { module: any, secrets: Record<string, string>; silent: boolean; projectId: string; magick: EngineContext }
+    context: { module: any, secrets: Record<string, string>; projectId: string; magick: EngineContext }
   ) {
     const {
-      silent,
       projectId,
       magick,
     } = context

@@ -57,15 +57,12 @@ export class SwitchGate extends MagickComponent<void> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent }: { silent: boolean }
   ) {
     const input = inputs['input'][0] as string
     const nodeOutputs = node.data.outputs as DataSocketType[]
 
     // close all outputs
     this._task.closed = ['default', ...nodeOutputs.map(out => out.name)]
-
-    node.display(input as string)
 
     if (this._task.closed.includes(input)) {
       // If the ouputs closed has the incoming text, filter closed outputs to not include it

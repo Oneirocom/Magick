@@ -58,14 +58,11 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent }: { silent: boolean }
   ) {
     const input = inputs.array[0] as string
     const element = node.data.element as number
 
     const arrayElement = input[element]
-
-    node.display(input as string)
 
     return {
       output: arrayElement,
