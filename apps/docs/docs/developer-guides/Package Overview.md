@@ -6,4 +6,4 @@ hide_table_of_contents: false
 
 # Architecture
 
-How are you?
+This section has not been written yet.

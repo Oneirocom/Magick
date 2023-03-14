@@ -7,4 +7,4 @@ sidebar_position: 5
 
 # Connectors
 
-How are you?
+This section has not been written yet.

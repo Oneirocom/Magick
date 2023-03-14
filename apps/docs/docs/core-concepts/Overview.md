@@ -1,10 +1,10 @@
 ---
-title: Core Concepts Overview
+title: Overview
 description: The core concepts of Magick
 hide_table_of_contents: false
-sidebar_position: 5
+sidebar_position: 1
 ---
 
 # Few Shot
 
-How are you?
+This section has not been written yet.

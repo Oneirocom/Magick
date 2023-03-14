@@ -7,4 +7,4 @@ sidebar_position: 2
 
 # Connecting Components
 
-How are you?
+This section has not been written yet.

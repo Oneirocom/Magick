@@ -7,4 +7,4 @@ sidebar_position: 6
 
 # Console
 
-How are you?
+This section has not been written yet.
