@@ -131,7 +131,7 @@ const CreateNew = () => {
           <TemplatePanel
             setSelectedTemplate={setSelectedTemplate}
             selectedTemplate={selectedTemplate}
-            template={{...template, bg: emptyImg}}
+            template={{...template, bg: template.bg ?? emptyImg}}
             key={i}
           />
         ))}
