@@ -9,13 +9,13 @@ const TwitterPlugin = new ClientPlugin({
   agentComponents: [TwitterAgentWindow],
   inputTypes: [
     { name: 'Twitter (Feed)', trigger: true, socket: eventSocket},
-    { name: 'Twitter (DM)', trigger: true, socket: eventSocket },
-    { name: 'Twitter (Mention)', trigger: true, socket: eventSocket },
+    // { name: 'Twitter (DM)', trigger: true, socket: eventSocket },
+    // { name: 'Twitter (Mention)', trigger: true, socket: eventSocket },
   ],
   outputTypes: [
     { name: 'Twitter (Feed)', trigger: false, socket: eventSocket },
-    { name: 'Twitter (DM)', trigger: false, socket: eventSocket },
-    { name: 'Twitter (Mention)', trigger: false, socket: eventSocket },
+    // { name: 'Twitter (DM)', trigger: false, socket: eventSocket },
+    // { name: 'Twitter (Mention)', trigger: false, socket: eventSocket },
   ],
   secrets: [
     {

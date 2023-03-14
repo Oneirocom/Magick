@@ -57,7 +57,6 @@ export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent }: { silent: boolean; magick: EngineContext }
   ) {
     const audio = inputs['audio'] && inputs['audio'][0]
 
@@ -77,9 +76,6 @@ export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
       BANANA_MODEL_KEY,
       modelParameters
     )
-
-    if (!output) node.display('Error: No output returned', output)
-    else node.display('Response is', output)
 
     return { output }
   }

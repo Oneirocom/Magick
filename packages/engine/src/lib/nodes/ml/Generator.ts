@@ -136,12 +136,11 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     context: {
       module: any
       secrets: Record<string, string>
-      silent: boolean
       projectId: string
       magick: EngineContext
     }
   ) {
-    const { silent, projectId, magick } = context
+    const { projectId, magick } = context
 
     const currentSpell = magick.getCurrentSpell()
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
@@ -216,17 +215,11 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
         .replace(/^\s+|\s+$/g, '')
       const composed = `${prompt} ${result}`
 
-      node.display(result)
-
       return {
         result,
         composed,
       }
     } catch (err) {
-      node.display(err)
-      // Typescript reporting wrong about number of arguments for error constructor
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore:next-line
       console.error('Error in Generator component.' + err)
     }
   }

@@ -35,7 +35,7 @@ export const DiscordAgentWindow: FC<any> = props => {
 
       const resp = await axios.get(`${API_ROOT_URL}/text_to_speech`, {
         params: {
-          text: 'Hello there! How are you?',
+          text: 'Hello there! This section has not been written yet.',
           voice_provider: selectedAgentData.data?.voice_provider,
           voice_character: selectedAgentData.data?.voice_character,
           voice_language_code: selectedAgentData.data?.voice_language_code,

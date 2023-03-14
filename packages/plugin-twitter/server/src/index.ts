@@ -78,8 +78,8 @@ const TwitterPlugin = new ServerPlugin({
   name: 'TwitterPlugin',
   inputTypes: [
     { name: 'Twitter (Feed)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (Feed)' },
-    { name: 'Twitter (DM)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (DM)' },
-    { name: 'Twitter (Mention', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (Mention'}
+    // { name: 'Twitter (DM)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (DM)' },
+    // { name: 'Twitter (Mention', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (Mention'}
   ],
   outputTypes: [
     { name: 'Twitter (Feed)', trigger: true, socket: eventSocket, handler: async ({
@@ -87,11 +87,11 @@ const TwitterPlugin = new ServerPlugin({
     }) => {
       await handleResponse({output, agent, event})
     }},
-    { name: 'Twitter (DM)', trigger: true, socket: eventSocket, handler: async ({
-      output, agent, event
-    }) => {
-      await handleResponse({output, agent, event})
-    }},
+    // { name: 'Twitter (DM)', trigger: true, socket: eventSocket, handler: async ({
+    //   output, agent, event
+    // }) => {
+    //   await handleResponse({output, agent, event})
+    // }},
   ],
   agentMethods: getAgentMethods(),
   secrets: [

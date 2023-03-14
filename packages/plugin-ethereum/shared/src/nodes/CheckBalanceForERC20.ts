@@ -77,7 +77,7 @@ export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
     node: NodeData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
-    { silent, data }: { silent: boolean; data: string | undefined }
+    { data }: { data: string | undefined }
   ) {
     this._task.closed = ['trigger']
     console.log('********* processing input to ethereum input *********')
@@ -87,7 +87,6 @@ export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
-      node.display(data)
       return {
         output: data,
       }
