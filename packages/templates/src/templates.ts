@@ -1,12 +1,12 @@
 export default {
   "spells": [
     {
-      "id": "3faa7f55-6ac2-4e40-aaef-c7d387b5d8b9",
-      "name": "Discord Bot",
-      "projectId": "clf6olzur0003la082z39ju77",
-      "hash": "c8e87b76d59767290a3267c29f556440",
-      "createdAt": "1678830850157",
-      "updatedAt": null,
+      "id": "584398a2-cae3-4410-961b-2ef6310d055f",
+      "name": "Discort Bot",
+      "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+      "hash": "ee30d3235b59fb88034728b332ccc2d0",
+      "createdAt": "1678740354815",
+      "updatedAt": "1678834871012",
       "graph": {
         "id": "demo@0.1.0",
         "nodes": {
@@ -14,22 +14,22 @@ export default {
             "id": 260,
             "data": {
               "name": "Output",
-              "error": false,
-              "success": false,
+              "sendToPlaytest": true,
+              "sendToAvatar": false,
               "socketKey": "faedf39a-0504-4da7-91f4-9a8118fb8248",
               "dataControls": {
                 "name": {
                   "expanded": true
                 },
-                "sendToAvatar": {
+                "sendToPlaytest": {
                   "expanded": true
                 },
-                "sendToPlaytest": {
+                "sendToAvatar": {
                   "expanded": true
                 }
               },
-              "sendToAvatar": false,
-              "sendToPlaytest": true,
+              "success": false,
+              "error": false,
               "isOutput": true
             },
             "inputs": {
@@ -48,7 +48,7 @@ export default {
                 "connections": [
                   {
                     "node": 261,
-                    "output": "composed",
+                    "output": "result",
                     "data": {
                       "hello": "hello"
                     }
@@ -93,44 +93,11 @@ export default {
             "id": 261,
             "data": {
               "stop": "###,\\n",
-              "error": false,
-              "inputs": [
-                {
-                  "name": "input",
-                  "taskType": "output",
-                  "socketKey": "input",
-                  "socketType": "anySocket",
-                  "connectionType": "input"
-                },
-                {
-                  "name": "conversation",
-                  "taskType": "output",
-                  "socketKey": "conversation",
-                  "socketType": "anySocket",
-                  "connectionType": "input"
-                },
-                {
-                  "name": "speakerName",
-                  "taskType": "output",
-                  "socketKey": "speakerName",
-                  "socketType": "anySocket",
-                  "connectionType": "input"
-                },
-                {
-                  "name": "agentName",
-                  "taskType": "output",
-                  "socketKey": "agentName",
-                  "socketType": "anySocket",
-                  "connectionType": "input"
-                }
-              ],
-              "fewshot": "The following is a conversation between {{speakerName}} and {{agentName}}. {{agentName}} is a helpful chatbot.\n{{conversation}}\n{{speakerName}}: {{input}}\n{{agentName}}:",
-              "success": false,
-              "modelName": "text-ada-001",
-              "max_tokens": 50,
               "temperature": 0.7,
+              "max_tokens": 50,
+              "frequency_penalty": 0,
               "dataControls": {
-                "stop": {
+                "modelName": {
                   "expanded": true
                 },
                 "inputs": {
@@ -139,24 +106,57 @@ export default {
                 "fewshot": {
                   "expanded": true
                 },
-                "modelName": {
+                "temperature": {
                   "expanded": true
                 },
                 "max_tokens": {
                   "expanded": true
                 },
-                "temperature": {
+                "frequency_penalty": {
                   "expanded": true
                 },
                 "presence_penalty": {
                   "expanded": true
                 },
-                "frequency_penalty": {
+                "stop": {
                   "expanded": true
                 }
               },
-              "presence_penalty": 0,
-              "frequency_penalty": 0
+              "fewshot": "The following is a conversation between {{speakerName}} and {{agentName}}. {{agentName}} is a helpful chatbot.\n{{conversation}}\n{{speakerName}}: {{input}}\n{{agentName}}:",
+              "inputs": [
+                {
+                  "name": "input",
+                  "taskType": "output",
+                  "socketKey": "input",
+                  "connectionType": "input",
+                  "socketType": "anySocket"
+                },
+                {
+                  "name": "conversation",
+                  "taskType": "output",
+                  "socketKey": "conversation",
+                  "connectionType": "input",
+                  "socketType": "anySocket"
+                },
+                {
+                  "name": "speakerName",
+                  "taskType": "output",
+                  "socketKey": "speakerName",
+                  "connectionType": "input",
+                  "socketType": "anySocket"
+                },
+                {
+                  "name": "agentName",
+                  "taskType": "output",
+                  "socketKey": "agentName",
+                  "connectionType": "input",
+                  "socketType": "anySocket"
+                }
+              ],
+              "modelName": "text-ada-001",
+              "error": false,
+              "success": false,
+              "presence_penalty": 0
             },
             "inputs": {
               "input": {
@@ -228,9 +228,6 @@ export default {
                 ]
               },
               "result": {
-                "connections": []
-              },
-              "composed": {
                 "connections": [
                   {
                     "node": 260,
@@ -240,6 +237,9 @@ export default {
                     }
                   }
                 ]
+              },
+              "composed": {
+                "connections": []
               }
             },
             "position": [
@@ -251,9 +251,6 @@ export default {
           "286": {
             "id": 286,
             "data": {
-              "name": "conversation",
-              "type": "conversation",
-              "error": false,
               "success": false,
               "dataControls": {
                 "name": {
@@ -262,7 +259,10 @@ export default {
                 "type": {
                   "expanded": true
                 }
-              }
+              },
+              "name": "conversation",
+              "type": "conversation",
+              "error": false
             },
             "inputs": {
               "trigger": {
@@ -327,10 +327,6 @@ export default {
           "288": {
             "id": 288,
             "data": {
-              "name": "conversation",
-              "type": "conversation",
-              "error": false,
-              "success": false,
               "max_count": "6",
               "dataControls": {
                 "name": {
@@ -342,7 +338,11 @@ export default {
                 "max_count": {
                   "expanded": true
                 }
-              }
+              },
+              "name": "conversation",
+              "type": "conversation",
+              "success": false,
+              "error": false
             },
             "inputs": {
               "trigger": {
@@ -404,8 +404,8 @@ export default {
           "317": {
             "id": 317,
             "data": {
-              "success": false,
-              "socketKey": "6fc09be7-92d9-45c5-af9c-7d669d5c7664"
+              "socketKey": "6fc09be7-92d9-45c5-af9c-7d669d5c7664",
+              "success": false
             },
             "inputs": {
               "trigger": {
@@ -487,6 +487,13 @@ export default {
                     "data": {
                       "hello": "hello"
                     }
+                  },
+                  {
+                    "node": 379,
+                    "input": "sender",
+                    "data": {
+                      "hello": "hello"
+                    }
                   }
                 ]
               },
@@ -524,6 +531,9 @@ export default {
                     }
                   }
                 ]
+              },
+              "trigger": {
+                "connections": []
               }
             },
             "outputs": {
@@ -537,6 +547,9 @@ export default {
                     }
                   }
                 ]
+              },
+              "trigger": {
+                "connections": []
               }
             },
             "position": [
@@ -548,8 +561,6 @@ export default {
           "379": {
             "id": 379,
             "data": {
-              "name": "conversation",
-              "type": "conversation",
               "error": false,
               "success": false,
               "dataControls": {
@@ -559,7 +570,9 @@ export default {
                 "type": {
                   "expanded": true
                 }
-              }
+              },
+              "name": "conversation",
+              "type": "conversation"
             },
             "inputs": {
               "trigger": {
@@ -585,7 +598,15 @@ export default {
                 ]
               },
               "sender": {
-                "connections": []
+                "connections": [
+                  {
+                    "node": 317,
+                    "output": "observer",
+                    "data": {
+                      "hello": "hello"
+                    }
+                  }
+                ]
               },
               "event": {
                 "connections": [
@@ -616,36 +637,36 @@ export default {
           "388": {
             "id": 388,
             "data": {
+              "isInput": true,
               "name": "Input - Discord (Text)",
+              "useDefault": false,
+              "defaultValue": "Hello world",
+              "socketKey": "2255eef5-2b18-4f0f-b0f5-1c8fb8e347f7",
               "text": {
+                "spellName": "Discord Example",
                 "id": "4305e4af-f91d-4869-b570-f317c1ed9058",
+                "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
                 "inputs": {
                   "Input - Discord (Voice)": {
-                    "type": "playtest",
-                    "client": "playtest",
-                    "sender": "playtestSender",
-                    "agentId": "preview",
-                    "channel": "playtest",
                     "content": "hello",
+                    "sender": "playtestSender",
+                    "observer": "Agent",
+                    "agentId": "preview",
+                    "client": "playtest",
+                    "channel": "playtest",
+                    "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+                    "channelType": "playtest",
+                    "type": "playtest",
                     "entities": [
                       "playtestSender",
                       "Agent"
-                    ],
-                    "observer": "Agent",
-                    "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-                    "channelType": "playtest"
+                    ]
                   }
                 },
-                "secrets": {},
-                "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-                "spellName": "Discord Example",
-                "publicVariables": "[]"
+                "publicVariables": "[]",
+                "secrets": {}
               },
-              "isInput": true,
               "success": false,
-              "inputType": "Discord (Text)",
-              "socketKey": "2255eef5-2b18-4f0f-b0f5-1c8fb8e347f7",
-              "useDefault": false,
               "dataControls": {
                 "inputType": {
                   "expanded": true
@@ -657,7 +678,7 @@ export default {
                   "expanded": true
                 }
               },
-              "defaultValue": "Hello world"
+              "inputType": "Discord (Text)"
             },
             "inputs": {},
             "outputs": {
@@ -693,36 +714,11 @@ export default {
           "417": {
             "id": 417,
             "data": {
-              "name": "Input - Discord (Voice)",
-              "text": {
-                "id": "4305e4af-f91d-4869-b570-f317c1ed9058",
-                "inputs": {
-                  "Input - Discord (Voice)": {
-                    "type": "playtest",
-                    "client": "playtest",
-                    "sender": "playtestSender",
-                    "agentId": "preview",
-                    "channel": "playtest",
-                    "content": "hello",
-                    "entities": [
-                      "playtestSender",
-                      "Agent"
-                    ],
-                    "observer": "Agent",
-                    "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-                    "channelType": "playtest"
-                  }
-                },
-                "secrets": {},
-                "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-                "spellName": "Discord Example",
-                "publicVariables": "[]"
-              },
               "isInput": true,
-              "success": false,
-              "inputType": "Discord (Voice)",
-              "socketKey": "5907593e-a177-4123-8fa8-d743d60ed342",
+              "name": "Input - Discord (Voice)",
               "useDefault": false,
+              "defaultValue": "Hello world",
+              "socketKey": "5907593e-a177-4123-8fa8-d743d60ed342",
               "dataControls": {
                 "inputType": {
                   "expanded": true
@@ -734,7 +730,32 @@ export default {
                   "expanded": true
                 }
               },
-              "defaultValue": "Hello world"
+              "inputType": "Discord (Voice)",
+              "text": {
+                "spellName": "Discord Example",
+                "id": "4305e4af-f91d-4869-b570-f317c1ed9058",
+                "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+                "inputs": {
+                  "Input - Discord (Voice)": {
+                    "content": "hello",
+                    "sender": "playtestSender",
+                    "observer": "Agent",
+                    "agentId": "preview",
+                    "client": "playtest",
+                    "channel": "playtest",
+                    "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+                    "channelType": "playtest",
+                    "type": "playtest",
+                    "entities": [
+                      "playtestSender",
+                      "Agent"
+                    ]
+                  }
+                },
+                "publicVariables": "[]",
+                "secrets": {}
+              },
+              "success": false
             },
             "inputs": {},
             "outputs": {
@@ -770,42 +791,42 @@ export default {
           "418": {
             "id": 418,
             "data": {
+              "dataControls": {
+                "inputs": {
+                  "expanded": true
+                }
+              },
               "inputs": [
                 {
                   "name": "text trigger",
                   "taskType": "option",
                   "socketKey": "text trigger",
-                  "socketType": "triggerSocket",
-                  "connectionType": "input"
+                  "connectionType": "input",
+                  "socketType": "triggerSocket"
                 },
                 {
                   "name": "text data",
                   "taskType": "output",
                   "socketKey": "text data",
-                  "socketType": "anySocket",
-                  "connectionType": "input"
+                  "connectionType": "input",
+                  "socketType": "anySocket"
                 },
                 {
                   "name": "voice trigger",
                   "taskType": "option",
                   "socketKey": "voice trigger",
-                  "socketType": "triggerSocket",
-                  "connectionType": "input"
+                  "connectionType": "input",
+                  "socketType": "triggerSocket"
                 },
                 {
                   "name": "voice data",
                   "taskType": "output",
                   "socketKey": "voice data",
-                  "socketType": "anySocket",
-                  "connectionType": "input"
+                  "connectionType": "input",
+                  "socketType": "anySocket"
                 }
               ],
-              "success": false,
-              "dataControls": {
-                "inputs": {
-                  "expanded": true
-                }
-              }
+              "success": false
             },
             "inputs": {
               "text trigger": {
@@ -1021,8 +1042,8 @@ export default {
               -69.14012304787181
             ],
             "links": [
-              417,
-              388
+              388,
+              417
             ],
             "type": "frame",
             "width": 304.3241457459012,
@@ -1032,12 +1053,12 @@ export default {
       }
     },
     {
-      "id": "0fd5cb9f-ee40-4789-8380-90fa7ff58ebd",
+      "id": "5fb3fd48-f866-45ee-91a6-a1c3e2fdc5e8",
       "name": "REST API",
-      "projectId": "clf6olzur0003la082z39ju77",
-      "hash": "91970e65a823fd694ae7755645fe48e7",
-      "createdAt": "1678830953500",
-      "updatedAt": null,
+      "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+      "hash": "2a72f1fcd8954e673938a0400a96631f",
+      "createdAt": "1678834897709",
+      "updatedAt": "1678834917468",
       "graph": {
         "id": "demo@0.1.0",
         "nodes": {
@@ -2052,6 +2073,13 @@ export default {
                     "data": {
                       "hello": "hello"
                     }
+                  },
+                  {
+                    "node": 319,
+                    "input": "sender",
+                    "data": {
+                      "hello": "hello"
+                    }
                   }
                 ]
               },
@@ -2089,6 +2117,9 @@ export default {
                     }
                   }
                 ]
+              },
+              "trigger": {
+                "connections": []
               }
             },
             "outputs": {
@@ -2102,6 +2133,9 @@ export default {
                     }
                   }
                 ]
+              },
+              "trigger": {
+                "connections": []
               }
             },
             "position": [
@@ -2149,7 +2183,15 @@ export default {
                 ]
               },
               "sender": {
-                "connections": []
+                "connections": [
+                  {
+                    "node": 317,
+                    "output": "observer",
+                    "data": {
+                      "hello": "hello"
+                    }
+                  }
+                ]
               },
               "event": {
                 "connections": [
@@ -2186,10 +2228,10 @@ export default {
               -72.60005287439716
             ],
             "links": [
-              232,
               244,
               242,
-              241
+              241,
+              232
             ],
             "type": "frame",
             "width": 302.74198664808796,
@@ -2305,12 +2347,12 @@ export default {
       }
     },
     {
-      "id": "1cb95fcd-1af0-4725-b910-964f3da230cb",
+      "id": "454ebe81-de1e-43c0-a9fe-fed9aa9e653d",
       "name": "Starter",
-      "projectId": "clf6olzur0003la082z39ju77",
-      "hash": "98b1f07c93cabfc737bbc9dc9294b95a",
-      "createdAt": "1678830834915",
-      "updatedAt": null,
+      "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+      "hash": "d77560be63efd7bf3945a0c153441f8a",
+      "createdAt": "1678834942490",
+      "updatedAt": "1678834952146",
       "graph": {
         "id": "demo@0.1.0",
         "nodes": {
@@ -2348,10 +2390,13 @@ export default {
               "socketKey": "9d61118c-3c5a-4379-9dae-41965e56207f",
               "useDefault": false,
               "dataControls": {
-                "name": {
+                "inputType": {
                   "expanded": true
                 },
-                "playtestToggle": {
+                "useDefault": {
+                  "expanded": true
+                },
+                "defaultValue": {
                   "expanded": true
                 }
               },
@@ -2359,7 +2404,8 @@ export default {
               "playtestToggle": {
                 "outputs": [],
                 "receivePlaytest": false
-              }
+              },
+              "inputType": "Default"
             },
             "inputs": {},
             "outputs": {
@@ -2596,311 +2642,6 @@ export default {
               -0.98828125
             ],
             "name": "Event Destructure"
-          }
-        },
-        "comments": []
-      }
-    },
-    {
-      "id": "7b8eebda-23bf-4441-b311-b550be98d4b4",
-      "name": "THREEOV",
-      "projectId": "clf6olzur0003la082z39ju77",
-      "hash": "21ed4a2d4029933d921cb8e4caba215c",
-      "createdAt": "1678830968145",
-      "updatedAt": null,
-      "graph": {
-        "id": "demo@0.1.0",
-        "nodes": {
-          "232": {
-            "id": 232,
-            "data": {
-              "name": "Input - Default",
-              "text": "",
-              "display": "",
-              "outputs": [],
-              "success": false,
-              "socketKey": "9d61118c-3c5a-4379-9dae-41965e56207f",
-              "useDefault": false,
-              "dataControls": {
-                "name": {
-                  "expanded": true
-                },
-                "useDefault": {
-                  "expanded": true
-                },
-                "playtestToggle": {
-                  "expanded": true
-                }
-              },
-              "defaultValue": "hmmmmmm",
-              "playtestToggle": {
-                "receivePlaytest": true
-              },
-              "isInput": true
-            },
-            "inputs": {},
-            "outputs": {
-              "trigger": {
-                "connections": []
-              },
-              "output": {
-                "connections": [
-                  {
-                    "node": 236,
-                    "input": "threeov",
-                    "data": {
-                      "hello": "hello"
-                    }
-                  }
-                ]
-              }
-            },
-            "position": [
-              -498.5704117140466,
-              62.08164172790682
-            ],
-            "name": "Input"
-          },
-          "233": {
-            "id": 233,
-            "data": {
-              "name": "output-233",
-              "display": "test",
-              "success": false,
-              "socketKey": "a4362936-dc54-4d46-9966-eca1440ce22b",
-              "dataControls": {
-                "name": {
-                  "expanded": true
-                },
-                "sendToAvatar": {
-                  "expanded": true
-                },
-                "sendToPlaytest": {
-                  "expanded": true
-                }
-              },
-              "sendToAvatar": false,
-              "sendToPlaytest": true,
-              "isOutput": true
-            },
-            "inputs": {
-              "trigger": {
-                "connections": [
-                  {
-                    "node": 235,
-                    "output": "trigger",
-                    "data": {
-                      "hello": "hello"
-                    }
-                  }
-                ]
-              },
-              "input": {
-                "connections": [
-                  {
-                    "node": 235,
-                    "output": "output",
-                    "data": {
-                      "hello": "hello"
-                    }
-                  }
-                ]
-              },
-              "event": {
-                "connections": []
-              }
-            },
-            "outputs": {
-              "trigger": {
-                "connections": []
-              },
-              "output": {
-                "connections": []
-              }
-            },
-            "position": [
-              640.3969066644225,
-              -16.699914345651415
-            ],
-            "name": "Output"
-          },
-          "235": {
-            "id": 235,
-            "data": {
-              "stop": "###",
-              "topP": 1,
-              "maxTokens": 100,
-              "modelName": "text-davinci-003",
-              "temperature": 0.5,
-              "dataControls": {
-                "stop": {
-                  "expanded": true
-                },
-                "topP": {
-                  "expanded": true
-                },
-                "maxTokens": {
-                  "expanded": true
-                },
-                "modelName": {
-                  "expanded": true
-                },
-                "temperature": {
-                  "expanded": true
-                },
-                "presencePenalty": {
-                  "expanded": true
-                },
-                "frequencyPenalty": {
-                  "expanded": true
-                }
-              },
-              "max_tokens": 100,
-              "top_p": 1,
-              "frequency_penalty": 0,
-              "presence_penalty": 0
-            },
-            "inputs": {
-              "trigger": {
-                "connections": [
-                  {
-                    "node": 236,
-                    "output": "trigger",
-                    "data": {
-                      "hello": "hello"
-                    }
-                  }
-                ]
-              },
-              "string": {
-                "connections": [
-                  {
-                    "node": 236,
-                    "output": "finalOutput",
-                    "data": {
-                      "hello": "hello"
-                    }
-                  }
-                ]
-              },
-              "settings": {
-                "connections": []
-              }
-            },
-            "outputs": {
-              "trigger": {
-                "connections": [
-                  {
-                    "node": 233,
-                    "input": "trigger",
-                    "data": {
-                      "hello": "hello"
-                    }
-                  }
-                ]
-              },
-              "output": {
-                "connections": [
-                  {
-                    "node": 233,
-                    "input": "input",
-                    "data": {
-                      "hello": "hello"
-                    }
-                  }
-                ]
-              }
-            },
-            "position": [
-              250.17839681186064,
-              89.12812712670575
-            ],
-            "name": "Text Completion"
-          },
-          "236": {
-            "id": 236,
-            "data": {
-              "code": "\n// inputs: dictionary of inputs based on socket names\n// data: internal data of the node to read or write to nodes data state\n// state: access to the current game state in the state manager window. Return state to update the state.\nfunction worker({\n  threeov,\n  }, data)  {\n  // Keys of the object returned must match the names\n  // of your outputs you defined.\n  // To update the state, you must return the modified state.\n  console.log(\"data\", data)\n  console.log(\"threeov\", threeov)\n    let output = threeov;\n    let prompt = output.personality;\n    let finalPrompt = prompt\n        .replaceAll('#speaker', output.Speaker)\n        .replaceAll('#input', output.Input)\n        .replaceAll('#agent', output.Agent)\n        .replaceAll('#conversation', output.Conversation)\n        .replaceAll('undefined\\n','' ).replaceAll('undefined','')\n        .slice(-5000)\n\n    let finaloutput = finalPrompt;\n\n  return { \n    finalOutput: finaloutput\n    }\n}\n",
-              "error": false,
-              "inputs": [
-                {
-                  "name": "threeov",
-                  "taskType": "output",
-                  "socketKey": "threeov",
-                  "socketType": "anySocket",
-                  "connectionType": "input"
-                }
-              ],
-              "outputs": [
-                {
-                  "name": "finalOutput",
-                  "taskType": "output",
-                  "socketKey": "finalOutput",
-                  "socketType": "anySocket",
-                  "connectionType": "output"
-                }
-              ],
-              "success": false,
-              "dataControls": {
-                "code": {
-                  "expanded": true
-                },
-                "name": {
-                  "expanded": true
-                },
-                "inputs": {
-                  "expanded": true
-                },
-                "outputs": {
-                  "expanded": true
-                }
-              }
-            },
-            "inputs": {
-              "threeov": {
-                "connections": [
-                  {
-                    "node": 232,
-                    "output": "output",
-                    "data": {
-                      "hello": "hello"
-                    }
-                  }
-                ]
-              },
-              "trigger": {
-                "connections": []
-              }
-            },
-            "outputs": {
-              "finalOutput": {
-                "connections": [
-                  {
-                    "node": 235,
-                    "input": "string",
-                    "data": {
-                      "hello": "hello"
-                    }
-                  }
-                ]
-              },
-              "trigger": {
-                "connections": [
-                  {
-                    "node": 235,
-                    "input": "trigger",
-                    "data": {
-                      "hello": "hello"
-                    }
-                  }
-                ]
-              }
-            },
-            "position": [
-              -113.03281692890891,
-              39.467032562717385
-            ],
-            "name": "Code"
           }
         },
         "comments": []
