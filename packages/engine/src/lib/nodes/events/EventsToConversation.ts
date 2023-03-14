@@ -47,7 +47,7 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
     let conversation = '';
 
     // for each event in events,
-    if(events) events.forEach((event) => {
+    if(events) events.rows.forEach((event) => {
       conversation += event.sender + ': ' + event.content + '\n';
     });
 
