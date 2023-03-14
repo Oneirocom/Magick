@@ -33,7 +33,7 @@ function getPromiseFromEvent(item, event) {
   return new Promise<void>(resolve => {
     const listener = e => {
       e = JSON.parse(e.data)
-      if (e['msg_type'] == 'stream') {
+      if (e['msg_type'] === 'stream') {
         item.removeEventListener(event, listener)
         resolve()
       }
@@ -132,7 +132,7 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
     }
     //Gets the Active Kernel from the Jupyter Tornado Server (REST/POST)
     const kernel = await axios.post(
-      url + '/api/kernels' + '?timestamp=' + Math.random().toString(36),
+      url + '/api/kernels?timestamp=' + Math.random().toString(36),
       config
     )
     const notebook_path = ('/' + node?.data?.file_name) as string
@@ -149,7 +149,7 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
 
     //Selects the last cell
     let code = file['data']['content']['cells']
-    if (code.slice(-1)[0]['source'] == '') {
+    if (code.slice(-1)[0]['source'] === '') {
       code = code.slice(-2)
     } else {
       code = code.slice(-1)
@@ -198,7 +198,7 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
     ws.onmessage = async function (e) {
       e = JSON.parse(e.data)
       code_output = 'Hello This is text'
-      if (e['msg_type'] == 'stream') {
+      if (e['msg_type'] === 'stream') {
         //Wait till the message with 'stream' status is obtained then the promise is resolved
         code_output = await e['content']['text']
       }

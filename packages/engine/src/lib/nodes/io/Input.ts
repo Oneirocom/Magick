@@ -143,7 +143,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     node: NodeData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
-    { silent, data }: { silent: boolean; data: string | undefined }
+    { data }: { data: string | undefined }
   ) {
     node.data.isInput = true
     // handle data subscription.  If there is data, this is from playtest
@@ -154,8 +154,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
       this._task.closed = []
 
       const output = Object.values(data)[0] as string
-
-      node.display(data)
 
       return {
         output,

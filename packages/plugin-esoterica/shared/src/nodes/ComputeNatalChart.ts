@@ -97,7 +97,6 @@ export class ComputeNatalChart extends MagickComponent<Promise<WorkerReturn>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent }: { silent: boolean }
   ) {
     const month = inputs.month ? inputs.month[0] : '1'
     const day = inputs.day && inputs.day[0] ? inputs.day[0] : '1'
@@ -154,8 +153,6 @@ export class ComputeNatalChart extends MagickComponent<Promise<WorkerReturn>> {
       neptune: neptuneZodSign,
       pluto: plutoZodSign,
     }
-
-    node.display(JSON.stringify(returned))
 
     return {
       output: returned,

@@ -55,12 +55,10 @@ export class ExclusiveGate extends MagickComponent<void> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: { silent: boolean; socketInfo: { targetSocket: any } }
+    context: { socketInfo: { targetSocket: any } }
   ) {
     const trigger = context.socketInfo.targetSocket
 
-    const silent = context.silent
-    //remove ' trigger' from the end of the name
     const triggerFilterName = trigger?.replace('trigger', '')
 
     const nodeInputs = Object.entries(inputs).reduce((acc, [key, value]) => {
@@ -72,10 +70,6 @@ export class ExclusiveGate extends MagickComponent<void> {
     const outputKey = Object.keys(nodeInputs).find(key =>
       key.includes(triggerFilterName)
     )
-
-      node.display(
-        'triggerFilterName: ' + triggerFilterName + ' | ' + outputKey ?? 'error'
-      )
 
     if (!outputKey) return { output: 'error' }
 
