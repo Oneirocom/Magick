@@ -59,11 +59,6 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
       _var = publicVars[node.id].value
     }
 
-    if (!context.silent) {
-      if (_var) node.display('TRUE')
-      else node.display('FALSE')
-    }
-
     return {
       output: _var,
     }

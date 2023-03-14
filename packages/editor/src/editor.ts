@@ -14,7 +14,6 @@ import {
   // CachePlugin,
   SocketPluginArgs,
   ConsolePlugin,
-  DisplayPlugin,
   HistoryPlugin,
   InspectorPlugin,
   KeyCodePlugin,
@@ -136,7 +135,6 @@ export const initEditor = function ({
   editor.use(ConsolePlugin)
   editor.use(SocketGeneratorPlugin)
   editor.use(MultiSocketGenerator)
-  editor.use(DisplayPlugin)
   editor.use(InspectorPlugin)
   editor.use(NodeClickPlugin)
 

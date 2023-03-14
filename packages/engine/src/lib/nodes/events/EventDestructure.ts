@@ -92,7 +92,6 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
     node: NodeData,
     { event }: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent }: { silent: boolean }
   ) {
     const eventValue = event[0] ?? event
 
@@ -108,8 +107,6 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       agentId,
     } = eventValue as Event
 
-    node.display(event)
-    console.log('sender, ', sender)
     return {
       content,
       sender,

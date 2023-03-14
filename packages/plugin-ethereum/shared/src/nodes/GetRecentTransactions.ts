@@ -68,7 +68,7 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
     node: NodeData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
-    { silent, data }: { silent: boolean; data: string | undefined }
+    { data }: { data: string | undefined }
   ) {
     this._task.closed = ['trigger']
 
@@ -76,7 +76,6 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
-      node.display(data)
       return {
         output: data,
       }

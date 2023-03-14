@@ -69,7 +69,7 @@ export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputR
     node: NodeData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
-    { silent, data }: { silent: boolean; data: string | undefined }
+    { data }: { data: string | undefined }
   ) {
     this._task.closed = ['trigger']
 
@@ -77,7 +77,6 @@ export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputR
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
-      node.display(data)
       return {
         output: data,
       }
