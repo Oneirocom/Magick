@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Magick',
-  tagline: 'A low code IDE for building AI driven experiences and agents.',
+  tagline: 'AI superpowers for mere mortals.',
   url: 'https://magick.ml',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -24,7 +24,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/oneirocom/magickml/tree/main/docs',
+          editUrl: 'https://github.com/oneirocom/magick/tree/main/docs',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -37,7 +37,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       colorMode: {
-        defaultMode: 'light',
+        defaultMode: 'dark',
         disableSwitch: false,
         respectPrefersColorScheme: false,
       },
@@ -51,33 +51,40 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'intro',
+            docId: 'getting-started/Intro',
             position: 'left',
-            label: 'Intro',
+            label: 'Getting Started',
           },
           {
             type: 'doc',
-            docId: 'core-concepts/ConceptsOverview',
+            docId: 'core-concepts/Overview',
             position: 'left',
-            label: 'Concepts',
+            label: 'Core Concepts',
+          },
+          // {
+          //   type: 'doc',
+          //   docId: 'user-interface/Overview',
+          //   position: 'left',
+          //   label: 'User Interface',
+          // },
+          {
+            type: 'doc',
+            docId: 'nodes/Overview',
+            position: 'left',
+            label: 'Nodes',
           },
           {
             type: 'doc',
-            docId: 'creators/gettingStarted/CreatorWelcome',
+            docId: 'connectors/Overview',
             position: 'left',
-            label: 'Creators',
+            label: 'Connectors',
           },
-          {
-            type: 'doc',
-            docId: 'developers/getting started/intro',
-            position: 'left',
-            label: 'Developers',
-          },
-          {
-            href: 'https://github.com/oneirocom/magickml',
-            label: 'GitHub',
-            position: 'right',
-          },
+          // {
+          //   type: 'doc',
+          //   docId: 'developer-guides/Overview',
+          //   position: 'right',
+          //   label: 'Developer Guides',
+          // },
         ],
       },
       footer: {
@@ -106,7 +113,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/oneirocom/magickml',
+                href: 'https://github.com/oneirocom/magick',
               },
             ],
           },
