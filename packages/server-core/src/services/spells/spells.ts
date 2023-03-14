@@ -73,7 +73,7 @@ export const spell = (app: Application) => {
                   .find({
                     query: {
                       name:
-                        process.env.DB_TYPE === 'postgres'
+                        process.env.DATABASE_TYPE === 'postgres'
                           ? {
                               $ilike: data.name + ' (%)',
                             }
