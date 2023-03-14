@@ -10,7 +10,7 @@ const config = {
   tagline: 'AI superpowers for mere mortals.',
   url: 'https://magick.ml',
   baseUrl: '/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'ignore',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'Oneirocom, Inc.', // Usually your GitHub org/user name.
