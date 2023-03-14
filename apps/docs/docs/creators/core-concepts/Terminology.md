@@ -1,6 +1,6 @@
 ---
-title: Concepts Overview
-description: Get started with the core concepts of magick
+title: Terminology
+description: Important words
 hide_table_of_contents: false
 sidebar_position: 0
 ---
