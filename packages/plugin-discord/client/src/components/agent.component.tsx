@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
-import React, { FC, useState, useEffect } from 'react'
-import Button from '@mui/material/Button'
+import React, { FC, useState } from 'react'
 import { debounce } from 'lodash'
 
 type PluginProps = {
@@ -86,19 +85,14 @@ export const DiscordAgentWindow: FC<any> = props => {
             paddingTop: '1em',
           }}
         >
-          <Button
+          <button
             onClick={() => {
               setEditMode(true)
             }}
-            style={{
-              margin: '1em',
-              color: 'white',
-              backgroundColor: 'purple',
-            }}
+            style={{ marginRight: '10px', cursor: 'pointer' }}
           >
             Edit
-          </Button>
-
+          </button>
           <Switch
             label={null}
             checked={selectedAgentData.data?.discord_enabled}
@@ -117,7 +111,6 @@ export const DiscordAgentWindow: FC<any> = props => {
       {editMode && (
         <VariableModal
           selectedAgentData={selectedAgentData}
-          setSelectedAgentData={setSelectedAgentData}
           testVoice={testVoice}
           editMode={editMode}
           setEditMode={setEditMode}

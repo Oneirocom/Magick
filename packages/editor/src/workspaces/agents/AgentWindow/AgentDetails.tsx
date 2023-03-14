@@ -8,7 +8,7 @@ import { enqueueSnackbar } from 'notistack'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { pluginManager } from '@magickml/engine'
 import { Input } from '@mui/material'
-import { Icon, IconBtn } from '@magickml/client-core'
+import { IconBtn } from '@magickml/client-core'
 import { Edit, Done, Close } from '@mui/icons-material'
 
 const RenderComp = props => {
@@ -31,6 +31,7 @@ const AgentDetails = ({
     if (_data['id']) {
       delete _data.id
     }
+
     // Avoid server-side validation error
     _data.spells = Array.isArray(_data?.spells) ? _data.spells : []
     _data.enabled = _data.enabled ? true : false
@@ -95,7 +96,7 @@ const AgentDetails = ({
   }
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )
@@ -109,41 +110,38 @@ const AgentDetails = ({
     <div style={{ overflowY: 'scroll', height: '100vh' }}>
       <div className={`${styles.agentDetailsContainer}`}>
         {editMode ? (
-          <>
-            <div className={styles.agentDescription}>
-              <input
-                type="text"
-                name="name"
-                value={selectedAgentData.name}
-                onChange={e =>
-                  setSelectedAgentData({
-                    ...selectedAgentData,
-                    name: e.target.value,
-                  })
-                }
-                placeholder="Add new agent name here"
-              />
-              <IconBtn
-                label={'Done'}
-                Icon={<Done />}
-                onClick={e => {
-                  update(selectedAgentData.id)
-                  setEditMode(false)
-                  setOldName('')
-                }}
-              />
-              <IconBtn
-                label={'close'}
-                Icon={<Close />}
-                onClick={e => {
-                  setSelectedAgentData({ ...selectedAgentData, name: oldName })
-                  setOldName('')
-                  setEditMode(false)
-                }}
-              />
-            </div>
-            <div></div>
-          </>
+          <div className={styles.agentDescription}>
+            <input
+              type="text"
+              name="name"
+              value={selectedAgentData.name}
+              onChange={e =>
+                setSelectedAgentData({
+                  ...selectedAgentData,
+                  name: e.target.value,
+                })
+              }
+              placeholder="Add new agent name here"
+            />
+            <IconBtn
+              label={'Done'}
+              Icon={<Done />}
+              onClick={e => {
+                update(selectedAgentData.id)
+                setEditMode(false)
+                setOldName('')
+              }}
+            />
+            <IconBtn
+              label={'close'}
+              Icon={<Close />}
+              onClick={e => {
+                setSelectedAgentData({ ...selectedAgentData, name: oldName })
+                setOldName('')
+                setEditMode(false)
+              }}
+            />
+          </div>
         ) : (
           <div className={styles.agentDescription}>
             <Avatar className={styles.avatar}>A</Avatar>

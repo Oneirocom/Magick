@@ -8,8 +8,6 @@ import React, {
   useState,
   useEffect,
 } from 'react'
-import gridimg from '../../grid.png'
-
 import { spellApi } from '../../state/api/spells'
 import { useConfig } from '../../contexts/ConfigProvider'
 import styles from './styles.module.scss'

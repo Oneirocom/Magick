@@ -1,5 +1,13 @@
 .paper {
   padding: 1rem;
+  width: 600px;
+}
+
+.content {
+  overflow: hidden !important;
+  &:hover {
+    overflow: auto !important;
+  }
 }
 
 .btnCancel {
