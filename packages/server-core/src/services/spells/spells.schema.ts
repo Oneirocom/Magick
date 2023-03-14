@@ -66,7 +66,7 @@ export const spellQueryProperties = Type.Pick(spellSchema, [
 export const spellQuerySchema = Type.Intersect(
   [
     querySyntax(spellQueryProperties,{
-      name: process.env.DATABASE_TYPE === 'postgres' ? {
+      name: process.env.DATABASE_TYPE === 'pg' ? {
         $ilike: Type.String()
       } : {
         $like: Type.String()
