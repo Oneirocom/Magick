@@ -1,7 +1,7 @@
 ---
 title: Plugins
 description: This is where you will find information relevant to the plugin system.
-hide_table_of_contents: false
+hide_table_of_contents: true
 ---
 
 # Plugins

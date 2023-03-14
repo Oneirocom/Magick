@@ -1,7 +1,7 @@
 ---
 title: Introduction
 description: Introduction to Magick
-hide_table_of_contents: false
+hide_table_of_contents: true
 sidebar_position: 1
 ---
 

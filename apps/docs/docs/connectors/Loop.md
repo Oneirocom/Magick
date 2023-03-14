@@ -1,7 +1,7 @@
 ---
 title: Loop Connector
 description: Running Agents at Regular Intervals
-hide_table_of_contents: false
+hide_table_of_contents: true
 ---
 
 # Loop Connector

@@ -61,12 +61,12 @@ const config = {
             position: 'left',
             label: 'Core Concepts',
           },
-          // {
-          //   type: 'doc',
-          //   docId: 'user-interface/Overview',
-          //   position: 'left',
-          //   label: 'User Interface',
-          // },
+          {
+            type: 'doc',
+            docId: 'user-interface/Overview',
+            position: 'left',
+            label: 'User Interface',
+          },
           {
             type: 'doc',
             docId: 'nodes/Overview',
@@ -79,12 +79,12 @@ const config = {
             position: 'left',
             label: 'Connectors',
           },
-          // {
-          //   type: 'doc',
-          //   docId: 'developer-guides/Overview',
-          //   position: 'right',
-          //   label: 'Developer Guides',
-          // },
+          {
+            type: 'doc',
+            docId: 'developer-guides/Overview',
+            position: 'right',
+            label: 'Developer Guides',
+          },
         ],
       },
       footer: {

@@ -1,7 +1,7 @@
 ---
 title: Installation and Setup
 description: This is where you will learn how to connect your first component.
-hide_table_of_contents: false
+hide_table_of_contents: true
 sidebar_position: 2
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Discord Connector
 description: Using Magick agents with Discord
-hide_table_of_contents: false
+hide_table_of_contents: true
 ---
 
 # Magick Discord Connector
