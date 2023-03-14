@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Magick',
-  tagline: 'AI superpowers for mere mortals.',
+  tagline: 'Documentation for .',
   url: 'https://magick.ml',
   baseUrl: '/',
   onBrokenLinks: 'ignore',
