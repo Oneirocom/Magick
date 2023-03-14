@@ -23,6 +23,8 @@ Don't worry, there is a hosted version too! Sign up [here](https://www.magickml.
 
 We'll also be releasing a packaged app release you can run (.exe, .app) soon!
 
+<p align="center"><img src="apps/docs/readme-files/ui.png" /></p>
+
 ### Setup
 
 First, clone and set up Magick
