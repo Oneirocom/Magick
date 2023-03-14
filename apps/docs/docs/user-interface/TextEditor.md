@@ -7,4 +7,4 @@ sidebar_position: 4
 
 # Text Editor
 
-How are you?
+This section has not been written yet.

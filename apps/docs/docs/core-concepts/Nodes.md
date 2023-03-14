@@ -2,7 +2,7 @@
 title: Nodes
 description: This is where you will find information relevant to the Nodes.
 hide_table_of_contents: false
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Nodes
@@ -13,10 +13,10 @@ sidebar_position: 2
 
 ## Socket Inputs
 
-How are you?
+This section has not been written yet.
 
 ## Socket Outputs
 
-How are you?
+This section has not been written yet.
 
 ## Node Inspector

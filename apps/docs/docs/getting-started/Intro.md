@@ -2,9 +2,9 @@
 title: Introduction
 description: Introduction to Magick
 hide_table_of_contents: false
-sidebar_position: 6
+sidebar_position: 1
 ---
 
 # Getting Started
 
-How are you?
+This section has not been written yet.
