@@ -128,16 +128,17 @@ export const DiscordAgentWindow: FC<any> = props => {
             </Grid>
             <Grid item xs={4} style={{ paddingRight: '1em' }}>
               <div className="form-item">
+                <span className="form-item-label">Wake Words</span>
                 <input
                   type="text"
-                  defaultValue={selectedAgentData.data?.discord_starting_words}
-                  placeholder={'Starting Words (,)'}
+                  defaultValue={selectedAgentData.data?.discord_wake_words}
+                  placeholder={'hey, hello, etc.'}
                   onChange={e => {
                     setSelectedAgentData({
                       ...selectedAgentData,
                       data: {
                         ...selectedAgentData.data,
-                        discord_starting_words: e.target.value,
+                        discord_wake_words: e.target.value,
                       },
                     })
                   }}
@@ -146,16 +147,17 @@ export const DiscordAgentWindow: FC<any> = props => {
             </Grid>
             <Grid item xs={4} style={{ paddingRight: '1em' }}>
               <div className="form-item">
+              <span className="form-item-label">User ID</span>
                 <input
                   type="text"
-                  defaultValue={selectedAgentData.data?.discord_bot_name_regex}
-                  placeholder={'Bot Name Regex'}
+                  defaultValue={selectedAgentData.data?.discord_userid}
+                  placeholder={'bot#1234'}
                   onChange={e => {
                     setSelectedAgentData({
                       ...selectedAgentData,
                       data: {
                         ...selectedAgentData.data,
-                        discord_bot_name_regex: e.target.value,
+                        discord_userid: e.target.value,
                       },
                     })
                   }}
@@ -164,10 +166,11 @@ export const DiscordAgentWindow: FC<any> = props => {
             </Grid>
             <Grid item xs={4} style={{ paddingRight: '1em' }}>
               <div className="form-item">
+              <span className="form-item-label">Bot Name</span>
                 <input
                   type="text"
                   defaultValue={selectedAgentData.data?.discord_bot_name}
-                  placeholder={'Bot Name'}
+                  placeholder={'goat'}
                   onChange={e => {
                     setSelectedAgentData({
                       ...selectedAgentData,
