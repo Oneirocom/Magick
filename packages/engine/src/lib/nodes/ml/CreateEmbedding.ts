@@ -71,7 +71,7 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
             nodeId: node.id,
         })
 
-        if(!data || !data.success) {
+        if(!data) {
             return {
                 embedding: null
             }
@@ -79,7 +79,6 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
 
         const [responseData] = data?.data
         const embedding = responseData.embedding
-
         return {
             embedding
         }
