@@ -20,11 +20,7 @@ export type CompletionData = {
 
 export async function makeCompletion(
   data: CompletionData,
-  {
-    projectId,
-    spell,
-    nodeId
-  }
+  { projectId, spell, nodeId }
 ): Promise<any> {
   const {
     prompt,
@@ -60,7 +56,9 @@ export async function makeCompletion(
     )
     const end = Date.now()
 
-    const completionModel = model.includes('davinci')
+    const completionModel = model.includes('gpt-4')
+      ? CompletionModel.GPT4
+      : model.includes('davinci')
       ? CompletionModel.DAVINCI
       : model.includes('curie')
       ? CompletionModel.CURIE
@@ -70,7 +68,10 @@ export async function makeCompletion(
 
     const usage = resp.data.usage
 
-    const totalCost = calculateCompletionCost({totalTokens: usage.total_tokens, model: completionModel})
+    const totalCost = calculateCompletionCost({
+      totalTokens: usage.total_tokens,
+      model: completionModel,
+    })
 
     saveRequest({
       projectId: projectId,
@@ -94,7 +95,7 @@ export async function makeCompletion(
       hidden: false,
       processed: false,
       spell,
-      nodeId
+      nodeId,
     })
 
     if (resp.data.choices && resp.data.choices.length > 0) {
