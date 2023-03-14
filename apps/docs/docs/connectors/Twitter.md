@@ -1,7 +1,7 @@
 ---
 title: Twitter Connector
 description: Using Magick agents with Twitter
-hide_table_of_contents: false
+hide_table_of_contents: true
 ---
 
 # Magick Twitter Connector

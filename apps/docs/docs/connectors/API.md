@@ -1,7 +1,7 @@
 ---
 title: API Connector
 description: Using Magick agents as a backend API
-hide_table_of_contents: false
+hide_table_of_contents: true
 ---
 
 # API Connector
