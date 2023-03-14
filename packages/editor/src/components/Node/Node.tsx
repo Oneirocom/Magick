@@ -3,7 +3,7 @@ import { Socket } from '../../plugins/reactRenderPlugin/Socket'
 import { Control } from '../../plugins/reactRenderPlugin/Control'
 import { Upload } from '../../plugins/reactRenderPlugin/Upload'
 
-import {Icon, componentCategories } from '@magickml/client-core'
+import { Icon, componentCategories } from '@magickml/client-core'
 import css from './Node.module.css'
 
 export class MyNode extends Node {

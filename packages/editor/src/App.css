@@ -322,7 +322,6 @@ input:focus-visible {
 
 .select {
   padding: 0.4em;
-  width: 60%;
   border: 1px solid var(--dark-4);
   border-radius: 4px;
 }
