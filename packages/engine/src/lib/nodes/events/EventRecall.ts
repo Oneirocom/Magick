@@ -83,13 +83,12 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent, magick }: { silent: boolean; magick: EngineContext }
   ) {
     const getEventsbyEmbedding = async (params: any) => {
       
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
-      const embeddings = params['embedding']
+      
       url.searchParams.append('embedding', params['embedding'])
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
@@ -153,13 +152,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
           )
         )
         events = await getEventsbyEmbedding({ embedding: str })
-      } else {
-        //return { output: "The dimmension of the cached embedding is incorrect."}
       }
     } else {
       events = await getEvents(data)
     }
-    //node.display(`Event ${type} found` || 'Not found')
+    
     return {
       events,
     }

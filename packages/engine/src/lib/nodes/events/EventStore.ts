@@ -68,6 +68,8 @@ export class EventStore extends MagickComponent<Promise<void>> {
       .addOutput(dataOutput)
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   async worker(
     node: NodeData,
     inputs: MagickWorkerInputs,
@@ -75,7 +77,6 @@ export class EventStore extends MagickComponent<Promise<void>> {
     context
   ) {
     const {
-      silent,
       projectId,
     } = context
 
@@ -98,10 +99,9 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     if (content && content !== '') {
       const response = await axios.post(`${API_ROOT_URL}/events`, data)
-
-      node.display(JSON.stringify(response.data))
-    } else {
-      node.display('No input')
+      return {
+        output: response.data,
+      }
     }
   }
 }

@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "license": "Apache 2.0",
   "scripts": {
+    "dev": "node scripts/check-install.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent,@magickml/docs --parallel --maxParallel=100",
+    "start": "node scripts/start-server.js",
+    "start-server": "node dist/apps/server/main.js",
+    "start-agent": "node dist/apps/agent/main.js",
+    "start-docs": "npx nx serve @magickml/docs",
     "migrate:make": "nx run @magickml/server:migrate:make",
     "migrate": "nx run @magickml/server:migrate",
-    "dev": "node scripts/check-install.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent,@magickml/docs --parallel --maxParallel=100",
     "build": "node scripts/build-server.js",
     "build-client": "npx nx build @magickml/client",
     "build-server": "npx nx build @magickml/server",
@@ -13,19 +17,19 @@
     "build-docs": "npx nx build @magickml/docs",
     "build-electron": "npx nx run @magickml/client:build --platform @capacitor-community/electron",
     "start-electron": "npx nx run @magickml/client:open --platform @capacitor-community/electron",
-    "start": "node scripts/start-server.js",
-    "start-server": "node dist/apps/server/main.js",
-    "start-agent": "node dist/apps/agent/main.js",
-    "start-docs": "npx nx serve @magickml/docs",
+    "package-electron-all": "npx electron-packager ./apps/client/electron --overwrite --platform=linux,win32,darwin --arch=x64,arm64 --icon=apps/client/src/favicon.png --out=dist/apps/client/electron",
+    "package-electron-macos-latest": "npx electron-packager ./apps/client/electron --overwrite --platform=darwin --arch=arm64 --icon=apps/client/src/favicon.png --out=dist/apps/client/electron",
+    "package-electron-ubuntu-latest": "npx electron-packager ./apps/client/electron --overwrite --platform=linux --arch=x64 --icon=apps/client/src/favicon.png --out=dist/apps/client/electron",
+    "package-electron-windows-latest": "npx electron-packager ./apps/client/electron --overwrite --platform=win32 --arch=x64 --icon=apps/client/src/favicon.png --out=dist/apps/client/electron",
     "test": "npx nx test",
+    "version": "standard-version",
+    "semantic-release": "semantic-release",
+    "publish": "npm publish",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
     "find unused deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
-    "postinstall": "node scripts/config-plugins.js && node scripts/config-db.js",
-    "version": "standard-version",
-    "publish": "npm publish",
-    "semantic-release": "semantic-release"
+    "postinstall": "node scripts/config-plugins.js && node scripts/config-db.js"
   },
   "resolutions": {
     "@types/react": "18.0.2"
@@ -135,8 +139,8 @@
     "react-hotkeys-hook": "^3.4.7",
     "react-icons": "^4.7.1",
     "react-redux": "^7.2.9",
-    "react-router": "^6.7.0",
-    "react-router-dom": "^6.7.0",
+    "react-router": "^6.9.0",
+    "react-router-dom": "^6.9.0",
     "react-select": "^5.7.0",
     "react-table": "7.8.0",
     "react-toastify": "^9.1.1",
@@ -286,15 +290,12 @@
       "vite": "$vite"
     },
     "@docusaurus/core": {
-      "react": "^18.2.0",
-      "react-dom": "^18.2.0"
+      "react": "$react",
+      "react-dom": "$react-dom"
     },
     "@docusaurus/preset-classic": {
-      "react": "^18.2.0",
-      "react-dom": "^18.2.0"
-    },
-    "**": {
-      "@types/node": "18.11.9"
+      "react": "$react",
+      "react-dom": "$react-dom"
     }
   }
 }

@@ -4,7 +4,6 @@ export * from './lib/engine'
 // PLUGINS
 export { default as CachePlugin } from './lib/plugins/cachePlugin'
 export { default as ConsolePlugin } from './lib/plugins/consolePlugin'
-export { default as DisplayPlugin } from './lib/plugins/displayPlugin'
 export { default as ErrorPlugin } from './lib/plugins/errorPlugin'
 export { default as HistoryPlugin } from './lib/plugins/historyPlugin'
 export { default as MultiCopyPlugin } from './lib/plugins/multiCopyPlugin'

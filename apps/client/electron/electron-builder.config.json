@@ -1,5 +1,5 @@
 {
-  "appId": "com.yourdoamnin.yourapp",
+  "appId": "com.magickml.ide",
   "directories": {
     "buildResources": "resources"
   },
@@ -22,7 +22,7 @@
     "icon": "assets/appIcon.ico"
   },
   "mac": {
-    "category": "your.app.category.type",
+    "category": "public.app-category.developer-tools",
     "target": "dmg"
   }
 }
