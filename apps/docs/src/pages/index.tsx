@@ -14,7 +14,7 @@ function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext()
   return (
     <header className={clsx(styles.heroBanner)}>
-      <div className="container">
+      <div className="container" style={{padding: "5em 0"}}>
         <h1 className="hero__title">Your Journey Is About To Begin</h1>
         <div className={styles.buttons}>
           <Link
