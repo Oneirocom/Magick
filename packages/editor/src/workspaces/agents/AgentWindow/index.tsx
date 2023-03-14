@@ -39,7 +39,7 @@ const AgentWindow = ({
     if(!selectedAgentData.id && data.length > 0) {
       setSelectedAgentData(data[0] as any)
     }
-  }, [data])
+  }, [data, selectedAgentData.id])
 
   return (
     <Grid container className={styles.container}>
@@ -66,7 +66,7 @@ const AgentWindow = ({
         >
           Add Agent
         </Button>
-        {data.map((agent: { id: string }) => (
+        {data?.map((agent: { id: string }) => (
           <AgentItem
             key={agent?.id}
             keyId={agent?.id}
