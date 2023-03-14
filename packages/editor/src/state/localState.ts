@@ -7,7 +7,8 @@ import {
 
 export interface LocalState {
   id: string
-  playtestData: string
+  playtestData?: string
+  chatwindowData?: string
 }
 
 // Entity adapter
@@ -43,7 +44,7 @@ export const { addLocalState, deleteLocalState, upsertLocalState } =
 
 export const selectStateBytabId = createDraftSafeSelector(
   [state => localSelectors.selectAll(state), (_, id) => id],
-  (states, id) => 
+  (states, id) =>
     Object.values(states).find(state => state.id === id)
 )
 export default localStateSlice.reducer
