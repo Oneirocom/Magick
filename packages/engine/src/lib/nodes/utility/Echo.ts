@@ -49,10 +49,8 @@ export class Echo extends MagickComponent<Promise<WorkerReturn>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { silent }: { silent: boolean }
   ) {
     const input = inputs.string[0] as string
-    node.display(input as string)
 
     return {
       output: input,

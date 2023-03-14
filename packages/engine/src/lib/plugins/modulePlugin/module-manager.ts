@@ -151,7 +151,7 @@ export class ModuleManager {
     await engine?.process(
       data,
       null,
-      Object.assign({}, context, { module, silent: true })
+      Object.assign({}, context, { module })
     )
 
     if ((context?.socketInfo as any)?.targetNode) {

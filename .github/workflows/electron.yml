@@ -34,12 +34,14 @@ jobs:
         run: npm install -g cross-env
       - name: Set NODE_ENV to production
         run: cross-env NODE_ENV=production
-      - name: Add Electron Platform to Capacitor
-        run: cd apps/client && npx cap add electron
+      - name: Build client
+        run: npm run build-client
       - name: Copy Web Assets to Electron
         run: cd apps/client && npx cap copy electron
-      - name: Open Electron
-        run: cd apps/client && npx cap open electron
+      - name: Install electron packages
+        run: cd apps/client/electron && npm install
+      - name: Package electron
+        run: npm run package-electron-${{ matrix.os }}
       - name: Archive Artifact
         uses: actions/upload-artifact@v2
         with:
@@ -62,7 +64,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./apps/client/electron/output
-          asset_name: magick-electron-${{ matrix.os }}-${{ github.ref }}
+          asset_name: magick-${{ matrix.os }}-${{ github.ref }}
           asset_content_type: application/zip
       - name: Upload Source Maps
         uses: honeybadger-io/github-upload-sourcemap-action@master

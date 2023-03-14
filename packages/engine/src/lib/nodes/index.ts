@@ -28,7 +28,7 @@ import { ImageGeneration } from './ml/ImageGeneration'
 import { SentenceMatcher } from './ml/SentenceMatcher'
 import { TextCompletion } from './ml/TextCompletion'
 import { TextToSpeech } from './ml/TextToSpeech'
-import { Image } from './utility/Image'
+import { Image } from './variable/Image'
 import { ComplexStringMatcher } from './strings/ComplexStringMatcher'
 import { JoinListComponent } from './strings/JoinList'
 import { ProfanityFilter } from './strings/ProfanityFilter'
@@ -59,6 +59,7 @@ import { ParseJSON } from './utility/ParseJSON'
 import { pluginManager } from '../plugin'
 import { EventsToConversation } from './events/EventsToConversation'
 import { CreateEmbedding } from './ml/CreateEmbedding'
+import { ObjectToJSON } from './utility/ObjectToJSON'
 
 export const components = {
   alert: () => new Alert(),
@@ -119,6 +120,7 @@ export const components = {
   speechToText: () => new SpeechToText(),
   promptTemplate: () => new PromptTemplate(),
   parseJSON: () => new ParseJSON(),
+  objectToJSON: () => new ObjectToJSON(),
 }
 
 function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {
