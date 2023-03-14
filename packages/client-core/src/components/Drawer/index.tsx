@@ -4,7 +4,6 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
 import DocumentIcon from '@mui/icons-material/Description'
 import SettingsIcon from '@mui/icons-material/Settings'
-import ProjectIcon from '@mui/icons-material/Home'
 import StorageIcon from '@mui/icons-material/Storage'
 import Divider from '@mui/material/Divider'
 import MuiDrawer from '@mui/material/Drawer'
@@ -17,6 +16,8 @@ import { CSSObject, styled, Theme } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { SetAPIKeys } from './SetAPIKeys'
+import ChatIcon from '@mui/icons-material/Chat'
+
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
 
@@ -225,6 +226,14 @@ export function Drawer({ children }) {
           />
           <DrawerItem
             active={location.pathname === '/events'}
+            active={location.pathname.includes('/chat')}
+            Icon={ChatIcon}
+            open={open}
+            onClick={onClick('/chat')}
+            text="MagickChat"
+          />
+          <DrawerItem
+            active={location.pathname === '/requests'}
             Icon={BoltIcon}
             open={open}
             onClick={onClick('/events')}
