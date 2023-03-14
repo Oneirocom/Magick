@@ -7,7 +7,9 @@ import { useConfig } from '../../../contexts/ConfigProvider'
 import { spellApi } from '../../../state/api/spells'
 import { useAppDispatch } from '../../../state/hooks'
 import { openTab } from '../../../state/tabs'
-import defaultGraph from '../../../data/graphs/default'
+import templates from '@magickml/templates'
+
+const defaultGraph = templates.spells[0].graph
 
 const ModuleSelect = ({ control, updateData, initialValue }) => {
   const config = useConfig()
