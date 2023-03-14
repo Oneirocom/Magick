@@ -139,8 +139,8 @@
     "react-hotkeys-hook": "^3.4.7",
     "react-icons": "^4.7.1",
     "react-redux": "^7.2.9",
-    "react-router": "^6.7.0",
-    "react-router-dom": "^6.7.0",
+    "react-router": "^6.9.0",
+    "react-router-dom": "^6.9.0",
     "react-select": "^5.7.0",
     "react-table": "7.8.0",
     "react-toastify": "^9.1.1",
@@ -290,15 +290,12 @@
       "vite": "$vite"
     },
     "@docusaurus/core": {
-      "react": "^18.2.0",
-      "react-dom": "^18.2.0"
+      "react": "$react",
+      "react-dom": "$react-dom"
     },
     "@docusaurus/preset-classic": {
-      "react": "^18.2.0",
-      "react-dom": "^18.2.0"
-    },
-    "**": {
-      "@types/node": "18.11.9"
+      "react": "$react",
+      "react-dom": "$react-dom"
     }
   }
 }
