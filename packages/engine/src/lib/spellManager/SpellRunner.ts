@@ -79,7 +79,6 @@ class SpellRunner {
     return {
       module: this.module,
       magick: this.magickInterface,
-      silent: true,
       projectId: this.currentSpell.projectId,
       // TODO: add the secrets and publicVariables through the spellrunner for context
     }

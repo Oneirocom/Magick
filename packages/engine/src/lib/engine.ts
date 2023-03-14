@@ -1,7 +1,6 @@
 import Rete, { Engine } from 'rete'
 import { Plugin } from 'rete/types/core/plugin'
 import io from 'socket.io'
-import { DisplayPlugin } from '..'
 
 import consolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
 import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
@@ -74,7 +73,6 @@ export const initSharedEngine = ({
     engine.use(TaskPlugin)
   }
 
-  engine.use(DisplayPlugin)
 
   engine.bind('run')
 

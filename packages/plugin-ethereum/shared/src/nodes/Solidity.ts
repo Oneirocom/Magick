@@ -122,14 +122,13 @@ export class Solidity extends MagickComponent<InputReturn> {
     node: NodeData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
-    { silent, data }: { silent: boolean; data: string | undefined }
+    { data }: { data: string | undefined }
   ) {
     this._task.closed = ['trigger']
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
-      node.display(data)
       return {
         output: data,
       }
