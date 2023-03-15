@@ -85,12 +85,12 @@ export class GetCachedEmbedding extends MagickComponent<
     const response = await fetch(url.toString())
     if (response.status !== 200) return null
     const json = await response.json()
-
     const responseData = json.data[0]
     let embedding = responseData?.embedding
 
     // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
+      embedding = JSON.stringify(embedding)
       embedding = JSON.parse(embedding)
     }
 
@@ -99,7 +99,6 @@ export class GetCachedEmbedding extends MagickComponent<
     } else {
       this._task.closed = ['success']
     }
-
     return {
       embedding,
     }

@@ -59,6 +59,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       name: 'Model Name',
       dataKey: 'modelName',
       values: [
+        'gpt-4',
         'text-davinci-003',
         'text-davinci-002',
         'text-davinci-001',

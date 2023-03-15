@@ -67,7 +67,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     })
 
     // let lastValue = null
-    
+
     inputType.onData = data => {
       node.data.name = `Input - ${data}`
 
@@ -77,18 +77,18 @@ export class InputComponent extends MagickComponent<InputReturn> {
       // console.log('currentValue on input')
       // console.log(currentValue)
       // {
-        // name
-        // socket {
-        // compatible: [
-          // {
-          //   compatible: [
-          //     {
-          //       name
-          //     }
-          //   ]
-          // }
-        // ]
-        // }
+      // name
+      // socket {
+      // compatible: [
+      // {
+      //   compatible: [
+      //     {
+      //       name
+      //     }
+      //   ]
+      // }
+      // ]
+      // }
       // }
 
       // TODO: dynamic connection types, add and remove nodes as necessary
