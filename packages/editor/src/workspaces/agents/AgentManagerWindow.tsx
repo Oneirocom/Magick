@@ -4,14 +4,16 @@ import AgentWindow from './AgentWindow'
 import { useSnackbar } from 'notistack'
 import axios from 'axios'
 import { LoadingScreen } from '@magickml/client-core'
+import { useSelector } from 'react-redux'
 
 const AgentManagerWindow = () => {
   const config = useConfig()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [data, setData] = useState<Array<object>>([])
   const { enqueueSnackbar } = useSnackbar()
-  const [selectedAgent, setSelectedAgent] = useState<any>({id: null})
+  const [selectedAgent, setSelectedAgent] = useState<any>({ id: null })
   const [root_spell, setRootSpell] = useState('default')
+  const globalConfig = useSelector((state: any) => state.globalConfig)
 
   const resetData = async () => {
     setIsLoading(true)
@@ -31,11 +33,26 @@ const AgentManagerWindow = () => {
     updatedAt: string
     secrets: string
   }) => {
-    // rewrite using fetch instead of axios
+    const token = globalConfig?.token
+
+    if (!token) {
+      enqueueSnackbar('You must be logged in to create an agent', {
+        variant: 'error',
+      })
+      return
+    }
+
     axios({
       url: `${config.apiUrl}/agents`,
       method: 'POST',
-      data: {...data, updatedAt: new Date().toISOString(), pingedAt: new Date().toISOString()},
+      data: {
+        ...data,
+        updatedAt: new Date().toISOString(),
+        pingedAt: new Date().toISOString(),
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then(async res => {
         const res2 = await fetch(`${config.apiUrl}/agents`)
@@ -80,7 +97,10 @@ const AgentManagerWindow = () => {
 
   const update = (id: string, _data: object) => {
     axios
-      .patch(`${config.apiUrl}/agents/${id}`, {..._data, updatedAt: new Date().toISOString()})
+      .patch(`${config.apiUrl}/agents/${id}`, {
+        ..._data,
+        updatedAt: new Date().toISOString(),
+      })
       .then(res => {
         if (typeof res.data === 'string' && res.data === 'internal error') {
           enqueueSnackbar('internal error updating agent', {
@@ -114,7 +134,7 @@ const AgentManagerWindow = () => {
             variant: 'success',
           })
         }
-        if (selectedAgent.id === id) setSelectedAgent({ id: null})
+        if (selectedAgent.id === id) setSelectedAgent({ id: null })
         resetData()
       })
       .catch(e => {
