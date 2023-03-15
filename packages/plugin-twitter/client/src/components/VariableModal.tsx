@@ -43,11 +43,11 @@ const VariableModal = ({
     <Modal open={editMode} setOpen={setEditMode} handleAction={handleSave}>
       <Grid container>
         <Grid item xs={12}>
-          <p style={{ marginTop: '1em' }}>
+          <p style={{ marginTop: '1em' }} className="modal-element">
             To set up a Twitter bot, you will need to set up a Twitter{' '}
             <a href="https://developer.twitter.com/">Developer account</a>.
           </p>
-          <p style={{ marginBottom: '2em' }}>
+          <p style={{ marginBottom: '2em' }} className="modal-element">
             For <b>API keys and credentials</b> you will need to create a{' '}
             <a href="https://developer.twitter.com/en/docs/apps/app-management">
               new app
@@ -60,7 +60,7 @@ const VariableModal = ({
         <div>
           <span className="form-item-label">User ID</span>
           <input
-            style={{ width: '100%' }}
+            className="modal-element"
             type="text"
             name="twitter_userid"
             defaultValue={state.twitter_userid}
@@ -73,7 +73,7 @@ const VariableModal = ({
         <div style={{ marginBottom: '1em' }}>
           <span className="form-item-label">Bearer Token (API v2)</span>
           <input
-            style={{ width: '100%' }}
+            className="modal-element"
             type="password"
             name="twitter_bearer_token"
             value={state.twitter_bearer_token}
@@ -85,7 +85,7 @@ const VariableModal = ({
         <div style={{ marginBottom: '1em' }}>
           <span className="form-item-label">API Key</span>
           <input
-            style={{ width: '100%' }}
+            className="modal-element"
             type="password"
             name="twitter_api_key"
             value={state.twitter_api_key}
@@ -97,7 +97,7 @@ const VariableModal = ({
         <div style={{ marginBottom: '1em' }}>
           <span className="form-item-label">API Key Secret</span>
           <input
-            style={{ width: '100%' }}
+            className="modal-element"
             type="password"
             name="twitter_api_key_secret"
             defaultValue={state.twitter_api_key_secret}
@@ -109,7 +109,7 @@ const VariableModal = ({
         <div style={{ marginBottom: '1em' }}>
           <span className="form-item-label">Access Token</span>
           <input
-            style={{ width: '100%' }}
+            className="modal-element"
             type="password"
             name="twitter_access_token"
             defaultValue={state.twitter_access_token}
@@ -121,7 +121,7 @@ const VariableModal = ({
         <div style={{ marginBottom: '1em' }}>
           <span className="form-item-label">Access Token Secret</span>
           <input
-            style={{ width: '100%' }}
+            className="modal-element"
             type="password"
             name="twitter_access_token_secret"
             value={state.twitter_access_token_secret}
@@ -152,7 +152,7 @@ const VariableModal = ({
                 .
               </p>
               <input
-                style={{ width: '100%' }}
+                className="modal-element"
                 type="text"
                 name="twitter_stream_rules"
                 defaultValue={state.twitter_stream_rules}
