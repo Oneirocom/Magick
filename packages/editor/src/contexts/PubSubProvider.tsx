@@ -48,6 +48,7 @@ export const events = {
   $RUN_SPELL: tabId => `runSpell:${tabId}`,
   $PROCESS: tabId => `process:${tabId}`,
   $EXPORT: tabId => `export:${tabId}`,
+  $EXPORT_PROJECT: tabId => `exportProject:${tabId}`,
   $UNDO: tabId => `undo:${tabId}`,
   $REDO: tabId => `redo:${tabId}`,
   $DELETE: tabId => `delete:${tabId}`,

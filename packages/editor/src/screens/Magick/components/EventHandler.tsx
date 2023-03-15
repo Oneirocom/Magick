@@ -5,6 +5,7 @@ import { GraphData, Spell } from '@magickml/engine'
 import md5 from 'md5'
 
 import {
+  useLazyGetSpellsQuery,
   useLazyGetSpellByIdQuery,
   useSaveSpellMutation,
 } from '../../../state/api/spells'
@@ -28,6 +29,11 @@ const EventHandler = ({ pubSub, tab }) => {
     id: tab.id,
     projectId: config.projectId,
   })
+
+  const [getSpells, { data: spells }] = useLazyGetSpellsQuery({
+    projectId: config.projectId
+  })
+
   // Spell ref because callbacks cant hold values from state without them
   const spellRef = useRef<Spell | null>(null)
 
@@ -41,6 +47,11 @@ const EventHandler = ({ pubSub, tab }) => {
       projectId: config.projectId,
     })
     spellRef.current = spell?.data[0]
+
+    getSpells({
+      projectId: config.projectId,
+    })
+    console.log("spells:", spells, spellRef.current)
   }, [config.projectId, getSpell, spell, tab.id, tab.name])
 
   useEffect(() => {
@@ -89,6 +100,7 @@ const EventHandler = ({ pubSub, tab }) => {
     $CREATE_CONSOLE,
     $CREATE_TEXT_EDITOR,
     $EXPORT,
+    $EXPORT_PROJECT,
     $CLOSE_EDITOR,
     $PROCESS,
     $RUN_SPELL,
@@ -272,6 +284,54 @@ const EventHandler = ({ pubSub, tab }) => {
     link.parentNode.removeChild(link)
   }
 
+  const onExportProject = async () => {
+    console.log("export project:", spells)
+    let allSpells = [];
+
+    // remove secrets, if there are any
+    function recurse(obj) {
+      for (const key in obj) {
+        if (key === 'secrets') {
+          obj[key] = {}
+          console.log('removed secrets')
+        }
+        if (typeof obj[key] === 'object') {
+          recurse(obj[key])
+        }
+      }
+    }
+
+    for(let i=0; i<spells.data.length; i++) {
+      console.log("spell:", i, spells.data[i], spellRef.current)
+      // refetch spell from local DB to ensure it is the most up to date
+      const spell = { ...spells.data[i] }
+      spell.graph = serialize() as GraphData    
+      recurse(spell)
+      allSpells.push(spell)
+    }
+
+
+    // traverse the json. replace any
+    const json = JSON.stringify(allSpells)
+
+    const blob = new Blob([json], { type: 'application/json' })
+    const url = window.URL.createObjectURL(new Blob([blob]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `${config.projectId}.project.json`)
+
+    // Append to html link element page
+    document.body.appendChild(link)
+
+    // Start download
+    link.click()
+
+    if (!link.parentNode) return
+
+    // Clean up and remove the link
+    link.parentNode.removeChild(link)
+  }
+
   // clean up anything inside the editor which we need to shut down.
   // mainly subscriptions, etc.
   const onCloseEditor = () => {
@@ -302,6 +362,7 @@ const EventHandler = ({ pubSub, tab }) => {
     [$CREATE_TEXT_EDITOR(tab.id)]: createTextEditor,
     [$CREATE_CONSOLE(tab.id)]: createConsole,
     [$EXPORT(tab.id)]: onExport,
+    [$EXPORT_PROJECT(tab.id)]: onExportProject,
     [$CLOSE_EDITOR(tab.id)]: onCloseEditor,
     [$UNDO(tab.id)]: onUndo,
     [$REDO(tab.id)]: onRedo,

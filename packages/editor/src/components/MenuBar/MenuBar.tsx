@@ -38,6 +38,7 @@ const MenuBar = () => {
     $CREATE_TEXT_EDITOR,
     $CREATE_CONSOLE,
     $EXPORT,
+    $EXPORT_PROJECT,
     $UNDO,
     $REDO,
     $MULTI_SELECT_COPY,
@@ -110,6 +111,11 @@ const MenuBar = () => {
   const onExport = () => {
     if (!activeTabRef.current) return
     publish($EXPORT(activeTabRef.current.id))
+  }
+
+  const onExportProject = () => {
+    if (!activeTabRef.current) return
+    publish($EXPORT_PROJECT(activeTabRef.current.id))
   }
 
   const onConsole = () => {
@@ -190,6 +196,10 @@ const MenuBar = () => {
         },
         export_spell: {
           onClick: onExport,
+          hotKey: 'option+shift+e',
+        },
+        export_project: {
+          onClick: onExportProject,
           hotKey: 'option+shift+e',
         },
       },
