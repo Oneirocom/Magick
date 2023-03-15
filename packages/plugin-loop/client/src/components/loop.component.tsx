@@ -10,7 +10,6 @@ type PluginProps = {
   }
 }
 import { Modal, Switch } from '@magickml/client-core'
-import Button from '@mui/material/Button'
 
 export const AgentLoopWindow: FC<PluginProps> = props => {
   const { selectedAgentData, update } = props.props
