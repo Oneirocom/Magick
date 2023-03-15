@@ -5,7 +5,7 @@ interface Props {
   Icon: React.ReactNode
   label: string
   onClick?: (e?) => void
-  style?: {}
+  style?: object
 }
 
 export const IconBtn = (props: Props) => {

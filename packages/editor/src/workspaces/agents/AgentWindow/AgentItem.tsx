@@ -1,7 +1,5 @@
-import { useState } from 'react'
 import { Icon, IconBtn } from '@magickml/client-core'
 import { Avatar, Typography } from '@mui/material'
-import { Edit, Done, Close } from '@mui/icons-material'
 import styles from './index.module.scss'
 
 const AgentItem = ({ keyId, agent, onDelete, onClick, style }) => {
