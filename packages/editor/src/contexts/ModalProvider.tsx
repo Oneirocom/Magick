@@ -1,13 +1,20 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React, { useState } from 'react'
 
 import { getModals } from '../components/Modals'
 
+type MyContextType = {
+  activeModal: object
+  modalName: string
+  openModal: (options: object) => void
+  closeModal: () => void
+}
+
 // todo this whole thing is really messy.  Fix. Maybe find a robust modal library
-const Context = React.createContext({
+const Context = React.createContext<MyContextType>({
   activeModal: {},
   modalName: '',
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  openModal: options => {},
+  openModal: (options: object) => {},
   closeModal: () => {},
 })
 

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import WindowMessage from '../../components/WindowMessage'
 import { useModal } from '../../../contexts/ModalProvider'
-import { Icon, componentCategories } from '@magickml/client-core'
+import { Icon, componentCategories, Tooltip } from '@magickml/client-core'
 import DataControls from '../DataControls'
 import { Window } from '@magickml/client-core'
 import { useInspector } from '../../contexts/InspectorProvider'
-import { Button } from '@magickml/client-core'
+import { Help } from '@mui/icons-material'
+import { IconButton } from '@mui/material'
 
 const Inspector = props => {
   const { inspectorData, saveInspector } = useInspector()
@@ -63,19 +64,21 @@ const Inspector = props => {
         />
         {inspectorData?.name}
       </div>
-      {/* I would like to make an "icon button" for this instead of "Help." Leaving it as help just for the function for now.*/}
       {inspectorData?.info && (
-        <Button
-          onClick={() =>
-            openModal({
-              modal: 'infoModal',
-              content: inspectorData?.info,
-              title: inspectorData?.name,
-            })
-          }
-        >
-          Help
-        </Button>
+        <Tooltip title="Help" placement="bottom">
+          <IconButton
+            style={{ height: '30px', width: '30px' }}
+            onClick={() =>
+              openModal({
+                modal: 'infoModal',
+                content: inspectorData?.info,
+                title: inspectorData?.name,
+              })
+            }
+          >
+            <Help fontSize="large" />
+          </IconButton>
+        </Tooltip>
       )}
     </>
   )
