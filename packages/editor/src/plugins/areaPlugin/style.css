@@ -21,6 +21,10 @@
   background-size: 4%;
 }
 
+.modal-element {
+  width: 560px;
+}
+
 ::-webkit-scrollbar-thumb {
   background-color: var(--dark-4);
   border-radius: 10px;

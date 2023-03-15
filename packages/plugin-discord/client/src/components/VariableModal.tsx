@@ -47,7 +47,7 @@ const VariableModal = ({
             <span className="form-item-label">API Key</span>
             <input
               type="password"
-              style={{ width: '100%' }}
+              className="modal-element"
               name="discord_api_key"
               defaultValue={state.discord_api_key}
               onChange={handleOnChange}
@@ -59,7 +59,7 @@ const VariableModal = ({
           <div style={{ marginBottom: '1em' }}>
             <input
               type="text"
-              style={{ width: '100%' }}
+              className="modal-element"
               defaultValue={state.discord_starting_words}
               name="discord_starting_words"
               placeholder={'Starting Words (,)'}
@@ -71,7 +71,7 @@ const VariableModal = ({
           <span className="form-item-label">Bot Name Regex</span>
           <div>
             <input
-              style={{ width: '100%' }}
+              className="modal-element"
               type="text"
               defaultValue={state.discord_bot_name_regex}
               name="discord_bot_name_regex"
@@ -86,7 +86,7 @@ const VariableModal = ({
             <input
               type="text"
               name="discord_bot_name"
-              style={{ width: '100%' }}
+              className="modal-element"
               defaultValue={state.discord_bot_name}
               placeholder={'Bot Name'}
               onChange={handleOnChange}
@@ -110,10 +110,9 @@ const VariableModal = ({
                 <div>
                   <span className="form-item-label">Voice Provider</span>
                   <select
-                    style={{ width: '100%' }}
                     name="voice_provider"
                     id="voice_provider"
-                    className="select"
+                    className="select modal-element"
                     value={state.voice_provider ?? 'Google'}
                     onChange={handleOnChange}
                   >
@@ -127,8 +126,7 @@ const VariableModal = ({
                   <span className="form-item-label">Character</span>
                   {state.voice_provider === 'google' ? (
                     <select
-                      className="select"
-                      style={{ width: '100%' }}
+                      className="select modal-element"
                       name="voice_character"
                       id="voice_character"
                       value={state.voice_character ?? 'en-US-Standard-A'}
@@ -179,8 +177,7 @@ const VariableModal = ({
                     <select
                       name="voice_character"
                       id="voice_character"
-                      style={{ width: '100%' }}
-                      className="select"
+                      className="select modal-element"
                       value={state.voice_character}
                       onChange={handleOnChange}
                     >
@@ -207,8 +204,7 @@ const VariableModal = ({
                   <select
                     name="voice_language_code"
                     id="voice_language_code"
-                    className="select"
-                    style={{ width: '100%' }}
+                    className="select modal-element"
                     value={state.voice_language_code ?? 'none'}
                     onChange={handleOnChange}
                   >
@@ -223,7 +219,7 @@ const VariableModal = ({
                     <span className="form-item-label">Provider URL</span>
                     <input
                       type="text"
-                      style={{ width: '100%' }}
+                      className="modal-element"
                       name="tiktalknet_url"
                       defaultValue={state.tiktalknet_url}
                       placeholder={'http://voice.metaverse.com/tts'}

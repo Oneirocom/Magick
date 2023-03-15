@@ -77,11 +77,11 @@ export const RestAgentWindow: FC<any> = props => {
           <div className="form-item">
             <Grid container>
               <Grid item xs={12}>
-                <span className="form-item-label">Agent ID</span>
+                <span className="form-item-label modal-element">Agent ID</span>
                 <Input
                   value={selectedAgentData.id}
                   readOnly
-                  style={{ width: '100%' }}
+                  className="modal-element"
                   onClick={() => {
                     navigator.clipboard.writeText(selectedAgentData.id)
                     enqueueSnackbar('Copied to clipboard', {
@@ -91,13 +91,16 @@ export const RestAgentWindow: FC<any> = props => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <span style={{ marginTop: '2em' }} className="form-item-label">
+                <span
+                  style={{ marginTop: '2em' }}
+                  className="form-item-label modal-element"
+                >
                   API Key
                 </span>
                 <Input
                   value={selectedAgentData.data?.rest_api_key}
                   readOnly
-                  style={{ width: '100%' }}
+                  className="modal-element"
                   onClick={() => {
                     navigator.clipboard.writeText(
                       selectedAgentData.data?.rest_api_key
@@ -109,7 +112,10 @@ export const RestAgentWindow: FC<any> = props => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <span style={{ marginTop: '2em' }} className="form-item-label">
+                <span
+                  style={{ marginTop: '2em' }}
+                  className="form-item-label modal-element"
+                >
                   URL
                 </span>
                 <Input
@@ -117,8 +123,8 @@ export const RestAgentWindow: FC<any> = props => {
                     selectedAgentData.data?.rest_api_key
                   }`}
                   readOnly
+                  className="modal-element"
                   style={{
-                    width: '100%',
                     textDecoration: 'none',
                     border: 'none',
                   }}
@@ -133,7 +139,10 @@ export const RestAgentWindow: FC<any> = props => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <span style={{ marginTop: '2em' }} className="form-item-label">
+                <span
+                  style={{ marginTop: '2em' }}
+                  className="form-item-label modal-element"
+                >
                   <Button
                     variant="contained"
                     onClick={() => {
@@ -153,7 +162,7 @@ export const RestAgentWindow: FC<any> = props => {
                   <div>
                     <span
                       style={{ marginTop: '1em' }}
-                      className="form-item-label"
+                      className="form-item-label modal-element"
                     >
                       Fetch
                     </span>
@@ -164,8 +173,8 @@ export const RestAgentWindow: FC<any> = props => {
                         selectedAgentData.data?.rest_api_key
                       }&content=Hello+World')`}
                       readOnly
+                      className="modal-element"
                       style={{
-                        width: '100%',
                         textDecoration: 'none',
                         border: 'none',
                       }}
@@ -183,7 +192,10 @@ export const RestAgentWindow: FC<any> = props => {
                 )}
               </Grid>
               <Grid item xs={12}>
-                <span style={{ marginTop: '2em' }} className="form-item-label">
+                <span
+                  style={{ marginTop: '2em' }}
+                  className="form-item-label modal-element"
+                >
                   <Button
                     variant="contained"
                     onClick={() => {
@@ -203,7 +215,7 @@ export const RestAgentWindow: FC<any> = props => {
                   <div>
                     <span
                       style={{ marginTop: '1em' }}
-                      className="form-item-label"
+                      className="form-item-label modal-element"
                     >
                       Fetch
                     </span>
@@ -236,8 +248,8 @@ export const RestAgentWindow: FC<any> = props => {
 })`
                         )
                       }}
+                      className="modal-element"
                       style={{
-                        width: '100%',
                         textDecoration: 'none',
                         border: 'none',
                       }}
@@ -246,7 +258,10 @@ export const RestAgentWindow: FC<any> = props => {
                 )}
               </Grid>
               <Grid item xs={12}>
-                <span style={{ marginTop: '2em' }} className="form-item-label">
+                <span
+                  style={{ marginTop: '2em' }}
+                  className="form-item-label modal-element"
+                >
                   <Button
                     variant="contained"
                     onClick={() => {
@@ -266,7 +281,7 @@ export const RestAgentWindow: FC<any> = props => {
                   <div>
                     <span
                       style={{ marginTop: '1em' }}
-                      className="form-item-label"
+                      className="form-item-label modal-element"
                     >
                       Fetch
                     </span>
@@ -299,8 +314,8 @@ export const RestAgentWindow: FC<any> = props => {
 })`
                         )
                       }}
+                      className="modal-element"
                       style={{
-                        width: '100%',
                         textDecoration: 'none',
                         border: 'none',
                       }}
@@ -309,7 +324,10 @@ export const RestAgentWindow: FC<any> = props => {
                 )}
               </Grid>
               <Grid item xs={12}>
-                <span style={{ marginTop: '2em' }} className="form-item-label">
+                <span
+                  style={{ marginTop: '2em' }}
+                  className="form-item-label modal-element"
+                >
                   <Button
                     variant="contained"
                     onClick={() => {
@@ -329,7 +347,7 @@ export const RestAgentWindow: FC<any> = props => {
                   <div>
                     <span
                       style={{ marginTop: '1em' }}
-                      className="form-item-label"
+                      className="form-item-label modal-element"
                     >
                       Fetch
                     </span>
@@ -349,8 +367,8 @@ export const RestAgentWindow: FC<any> = props => {
   }),
 })`}
                       readOnly
+                      className="modal-element"
                       style={{
-                        width: '100%',
                         textDecoration: 'none',
                         border: 'none',
                       }}
