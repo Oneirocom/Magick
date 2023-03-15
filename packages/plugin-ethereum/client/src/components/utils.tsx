@@ -5,10 +5,12 @@ export const KeyInput = ({
   value,
   setValue,
   secret,
+  style,
 }: {
   value: string
   setValue: any
   secret: boolean
+  style: any
 }) => {
   const addKey = (str: string) => {
     // discount random key presses, could def have better sense checking
@@ -36,6 +38,7 @@ export const KeyInput = ({
   ) : (
     <input
       type={secret ? 'password' : 'input'}
+      style={style}
       defaultValue={value}
       onChange={e => {
         addKey(e.target.value)
