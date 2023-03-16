@@ -8,7 +8,7 @@ import './plugins'
 if (window === window.parent) {
   const container = document.getElementById('root')
   const root = createRoot(container) // createRoot(container!) if you use TypeScript
-    ; (window as any).root = root
+  ;(window as any).root = root
 
   // check urlParams for projectId and apiUrl
   const projectId =
@@ -38,9 +38,18 @@ else {
       const cloudUrl =
         import.meta.env.VITE_APP_TRUSTED_PARENT_URL || 'http://localhost:3000'
 
-      if (event.source !== window &&
-        event.origin !== window.location.origin
-        && event.origin !== cloudUrl) {
+      console.log(
+        event.source,
+        event.origin,
+        window,
+        window.location.origin,
+        cloudUrl
+      )
+      if (
+        event.source !== window &&
+        event.origin !== window.location.origin &&
+        event.origin !== cloudUrl
+      ) {
         console.warn('untrusted origin', event.origin)
         return
       }
@@ -56,7 +65,7 @@ else {
         const Root = () => <MagickIDE config={config} />
         const container = document.getElementById('root')
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
-          ; (window as any).root = root
+        ;(window as any).root = root
         root.render(<Root />)
       }
     },

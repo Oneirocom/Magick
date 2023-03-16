@@ -22,7 +22,7 @@ export const defaultConfig: AppConfig = {
   // add props here
   apiUrl: 'http://localhost:3030',
   projectId: DEFAULT_PROJECT_ID,
-  token: ''
+  token: '',
 }
 
 // Might want to namespace these
