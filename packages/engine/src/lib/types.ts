@@ -192,7 +192,8 @@ export type DataSocketType = {
   useSocketName: boolean
 }
 
-export type MagicNodeOutput = { name: string;  [key: string]: unknown; socketType: SocketType; }
+export type MagicNodeInput = Input & { socketType: SocketType; }
+export type MagicNodeOutput = Output & { taskType?: 'output' | 'option'; socketType: SocketType; }
 
 export type MagickNode = Node & {
   inspector: Inspector
@@ -200,6 +201,7 @@ export type MagickNode = Node & {
   outputs: MagicNodeOutput[]
   data: {
     outputs?: MagicNodeOutput[]
+    inputs?: MagicNodeInput[]
   }
   category?: string
   displayName?: string
@@ -255,9 +257,18 @@ export type Subspell = { name: string; id: string; data: GraphData }
 
 export type GraphData = Data
 
-export type ComponentData = {
+export type InputTaskType = 'input' | 'option'
+export type OutputTaskType = 'output' | 'option'
+
+export type ComponentData<T=InputTaskType|OutputTaskType> =  Record<string, unknown> & {
   ignored?: { name: string }[]
+  socketType?: SocketType
+  taskType?: T
+  icon?: string
 }
+
+export type InputComponentData = ComponentData<InputTaskType>
+export type OutputComponentData = ComponentData<OutputTaskType>
 
 export type ModuleComponent = MagickComponent<unknown> & {
   run: Function
@@ -330,11 +341,11 @@ export type MagickWorkerOutputs = WorkerOutputs & {
 
 export interface PubSubBase
   extends CountSubscriptions,
-    ClearAllSubscriptions,
-    GetSubscriptions,
-    Publish,
-    Subscribe,
-    Unsubscribe {
+  ClearAllSubscriptions,
+  GetSubscriptions,
+  Publish,
+  Subscribe,
+  Unsubscribe {
   name: string
 }
 
