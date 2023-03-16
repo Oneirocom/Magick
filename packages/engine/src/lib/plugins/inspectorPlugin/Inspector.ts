@@ -273,7 +273,9 @@ export class Inspector {
     this.editor.trigger('save')
   }
 
-  get() {}
+  get() {
+    return
+  }
 
   // returns all data prepared for the pubsub to send it.
   data(): InspectorData {
