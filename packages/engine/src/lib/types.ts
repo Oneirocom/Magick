@@ -1,24 +1,19 @@
-import { Connection, Input, Output, NodeEditor } from 'rete'
+import { Connection, Input, NodeEditor, Output } from 'rete'
 import { Node } from 'rete/types'
 import {
-  Data,
-  NodeData as ReteNodeData,
-  WorkerInputs,
-  WorkerOutputs,
+  Data, WorkerOutputs
 } from 'rete/types/core/data'
 
+import { MagickComponent, MagickTask, PubSubContext } from './magick-component'
 import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
 import { Inspector } from './plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
-import { PubSubContext, MagickTask, MagickComponent } from './magick-component'
-import e from 'express'
 
 export { MagickComponent } from './magick-component'
 //@seang this was causing test enviroment issues to have it shared client/server
 // export { MagickEditor } from './src/editor'
-
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 
 export type ImageType = {
@@ -197,10 +192,15 @@ export type DataSocketType = {
   useSocketName: boolean
 }
 
+export type MagicNodeOutput = { name: string;  [key: string]: unknown; socketType: SocketType; }
+
 export type MagickNode = Node & {
   inspector: Inspector
   display: (content: string) => void
-  outputs: { name: string; [key: string]: unknown }[]
+  outputs: MagicNodeOutput[]
+  data: {
+    outputs?: MagicNodeOutput[]
+  }
   category?: string
   displayName?: string
   info: string
@@ -254,6 +254,10 @@ export type OpenAIResponse = {
 export type Subspell = { name: string; id: string; data: GraphData }
 
 export type GraphData = Data
+
+export type ComponentData = {
+  ignored?: { name: string }[]
+}
 
 export type ModuleComponent = MagickComponent<unknown> & {
   run: Function
