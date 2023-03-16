@@ -1,7 +1,7 @@
 import * as React from 'react'
 import MUISwitch from '@mui/material/Switch'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import { alpha, styled } from '@mui/material/styles'
+import { styled } from '@mui/material/styles'
 
 const GreenSwitch = styled(MUISwitch)(({ theme }) => ({
   '& .MuiSwitch-switchBase.Mui-checked': {
