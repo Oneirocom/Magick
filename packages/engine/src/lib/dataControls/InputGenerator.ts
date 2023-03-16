@@ -2,7 +2,7 @@ import Rete from 'rete'
 
 import { DataControl } from '../plugins/inspectorPlugin'
 import * as sockets from '../sockets'
-import { InputComponentData, MagicNodeInput } from '../types'
+import { DataSocketType, InputComponentData } from '../types'
 
 export class InputGeneratorControl extends DataControl {
   socketType: sockets.SocketType
@@ -35,7 +35,7 @@ export class InputGeneratorControl extends DataControl {
     this.socketType = socketType
   }
 
-  onData(inputs: MagicNodeInput[]) {
+  onData(inputs: DataSocketType[]) {
     if (!inputs) return
 
     if (this.node === null) throw new TypeError('Node is null')
