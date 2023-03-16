@@ -192,16 +192,16 @@ export type DataSocketType = {
   useSocketName: boolean
 }
 
-export type MagicNodeInput = Input & { socketType: SocketType; }
-export type MagicNodeOutput = Output & { taskType?: 'output' | 'option'; socketType: SocketType; }
+export type MagicNodeInput = Input & { socketType: DataSocketType; }
+export type MagicNodeOutput = Output & { taskType?: 'output' | 'option'; socketType: DataSocketType; }
 
 export type MagickNode = Node & {
   inspector: Inspector
   display: (content: string) => void
   outputs: MagicNodeOutput[]
   data: {
-    outputs?: MagicNodeOutput[]
-    inputs?: MagicNodeInput[]
+    outputs?: DataSocketType[]
+    inputs?: DataSocketType[]
   }
   category?: string
   displayName?: string
