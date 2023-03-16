@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 import VariableModal from './VariableModal'
 export const TwitterAgentWindow: FC<any> = props => {
   props = props.props
-  const { selectedAgentData, update } = props
+  const { selectedAgentData, setSelectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
 
@@ -41,6 +41,15 @@ export const TwitterAgentWindow: FC<any> = props => {
             checked={selectedAgentData.data?.twitter_enabled}
             onChange={e => {
               debouncedFunction(selectedAgentData.id, {
+                ...selectedAgentData,
+                data: {
+                  ...selectedAgentData.data,
+                  twitter_enabled: e.target.checked,
+                },
+              })
+
+              setSelectedAgentData({
+                ...selectedAgentData,
                 data: {
                   ...selectedAgentData.data,
                   twitter_enabled: e.target.checked,
