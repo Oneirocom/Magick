@@ -66,9 +66,8 @@ export class EventService<ServiceParams extends Params = EventParams> extends Kn
       const ary_buf = new ArrayBuffer(blob.length);
       const dv = new DataView(ary_buf);
       for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i));
-      
       const f32_ary = new Float32Array(ary_buf);
-      const result = await findSimilarEventByEmbedding(db, "'[" + f32_ary.toString() + "]'")
+      const result = await findSimilarEventByEmbedding(db, "[" + f32_ary + "]")
 
       if (result) {
         return result

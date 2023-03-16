@@ -48,7 +48,7 @@ export async function makeEmbedding(
     saveRequest({
       projectId: projectId,
       requestData: input,
-      responseData: JSON.stringify(resp.data).slice(0,10),
+      responseData: JSON.stringify(resp.data),
       duration: end - start,
       statusCode: resp.status,
       status: resp.statusText,

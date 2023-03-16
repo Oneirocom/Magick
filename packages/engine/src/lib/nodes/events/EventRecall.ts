@@ -115,8 +115,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     }
     const event = (inputs['event'] &&
       (inputs['event'][0] ?? inputs['event'])) as Event
-    let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[]
-    if (typeof(embedding) == 'string') embedding = (embedding as any).replace('[',"").replace(']',"");embedding = (embedding as any)?.split(',')
+    const embedding = (inputs['embedding'] &&
+      (inputs['embedding'][0] ?? inputs['embedding'])) as number[]
     const { observer, client, channel, channelType, projectId, entities } =
       event
 
