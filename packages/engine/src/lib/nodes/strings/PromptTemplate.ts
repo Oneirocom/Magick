@@ -17,8 +17,7 @@ Controls have also been added which give you control of some of the fundamental 
 The componet has two returns.  The composed will output your entire fewshot plus the completion, whereas the result output will only be the result of the completion. `
 
 type WorkerReturn = {
-  result: string
-  composed: string
+  prompt: string
 }
 
 export class PromptTemplate extends MagickComponent<Promise<WorkerReturn>> {
@@ -63,7 +62,6 @@ export class PromptTemplate extends MagickComponent<Promise<WorkerReturn>> {
 
     return node
   }
-  // @ts-ignore
   async worker(
     node: NodeData,
     rawInputs: MagickWorkerInputs,
