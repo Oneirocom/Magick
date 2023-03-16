@@ -44,14 +44,20 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
   worker(node: NodeData, inputs: MagickWorkerInputs & { events: any[] }) {
 
     const events = inputs.events[0];
-
     let conversation = '';
-
-    // for each event in events,
-    if(events) events.rows.forEach((event) => {
+    //Events.rows when the data is fetched using embedding
+    if(events.rows) {
+      events.rows.forEach((event) => {
+        conversation += event.sender + ': ' + event.content + '\n';
+      });
+      return {
+        conversation,
+      }
+    }
+    //Events when the data is fetched using query
+    if(events) events.forEach((event) => {
       conversation += event.sender + ': ' + event.content + '\n';
     });
-
     return {
         conversation,
     }
