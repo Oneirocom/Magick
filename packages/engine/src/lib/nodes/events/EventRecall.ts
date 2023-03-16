@@ -96,6 +96,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       return json
     }
     const getEvents = async (params: GetEventArgs) => {
+      console.log('getting events', params)
       const urlString = `${API_ROOT_URL}/events`
       
       const url = new URL(urlString)
@@ -115,6 +116,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     }
     const event = (inputs['event'] &&
       (inputs['event'][0] ?? inputs['event'])) as Event
+
+    console.log('event recall', event)
     let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[]
     if (typeof(embedding) == 'string') embedding = (embedding as any).replace('[',"").replace(']',"");embedding = (embedding as any)?.split(',')
     const { observer, client, channel, channelType, projectId, entities } =
