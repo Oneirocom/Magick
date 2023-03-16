@@ -12,6 +12,7 @@
     "migrate": "nx run @magickml/server:migrate",
     "build": "node scripts/build-server.js",
     "build-client": "npx nx build @magickml/client",
+    "heroku-prebuild": "npm i -g @nrwl/cli",
     "build-templates": "npx nx build @magickml/templates",
     "build-server": "npx nx build @magickml/server",
     "build-agent": "npx nx build @magickml/agent",
