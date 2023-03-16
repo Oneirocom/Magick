@@ -1,19 +1,25 @@
 import Rete from 'rete'
 
 import { DataControl } from '../plugins/inspectorPlugin'
-// eslint-disable-next-line import/no-namespace
 import * as sockets from '../sockets'
-import { MagicNodeOutput } from '../types'
+import { MagicNodeOutput, OutputComponentData } from '../types'
 
 export class OutputGeneratorControl extends DataControl {
-  socketType: string
+  socketType: sockets.SocketType
+  declare options : {
+    dataKey: string
+    name: string
+    component: string
+    icon: string
+    data: OutputComponentData
+  }
 
   constructor({
     socketType = 'anySocket',
     taskType = 'output',
     ignored = [],
     icon = 'properties',
-  }) {
+  }: OutputComponentData) {
     const options = {
       dataKey: 'outputs',
       name: 'Data Outputs',
@@ -35,7 +41,7 @@ export class OutputGeneratorControl extends DataControl {
     this.node.data.outputs = outputs
 
     const existingOutputs: string[] = []
-    const ignored =
+    const ignored:string[] =
       this?.control?.data?.ignored?.map(output => output.name) || []
 
     this.node.outputs.forEach(out => {
@@ -50,7 +56,6 @@ export class OutputGeneratorControl extends DataControl {
       .forEach(key => {
         if (this.node === null) throw new TypeError('Node is null')
         const output = this.node.outputs.get(key)
-        if (output === undefined) return
 
         this.node
           .getConnections()
@@ -59,6 +64,7 @@ export class OutputGeneratorControl extends DataControl {
             this.editor?.removeConnection(con)
           })
 
+        if (output === undefined) throw new TypeError('Output is undefined')
         this.node.removeOutput(output)
         delete this.component?.task.outputs[key]
       })
