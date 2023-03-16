@@ -23,7 +23,7 @@ export const Modal = ({ open, setOpen, handleAction, ...props }) => {
             {props.children}
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions classes={{ root: styles.actions }}>
           <Button onClick={handleClose} className={styles.btnCancel}>
             Cancel
           </Button>
