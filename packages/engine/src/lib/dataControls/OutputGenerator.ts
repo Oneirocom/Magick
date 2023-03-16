@@ -1,11 +1,13 @@
-//@ts-nocheck
 import Rete from 'rete'
 
 import { DataControl } from '../plugins/inspectorPlugin'
 // eslint-disable-next-line import/no-namespace
 import * as sockets from '../sockets'
+import { MagicNodeOutput } from '../types'
 
 export class OutputGeneratorControl extends DataControl {
+  socketType: string
+
   constructor({
     socketType = 'anySocket',
     taskType = 'output',
@@ -28,12 +30,13 @@ export class OutputGeneratorControl extends DataControl {
     this.socketType = socketType
   }
 
-  onData(outputs = []) {
+  onData(outputs: MagicNodeOutput[] = []) {
+    if (this.node === null) throw new TypeError('Node is null')
     this.node.data.outputs = outputs
 
-    const existingOutputs = []
+    const existingOutputs: string[] = []
     const ignored =
-      this?.control?.data?.ignored.map(output => output.name) || []
+      this?.control?.data?.ignored?.map(output => output.name) || []
 
     this.node.outputs.forEach(out => {
       existingOutputs.push(out.key)
@@ -45,17 +48,19 @@ export class OutputGeneratorControl extends DataControl {
       .filter(existing => !outputs.some(incoming => incoming.name === existing))
       .filter(existing => ignored.some(out => out !== existing))
       .forEach(key => {
+        if (this.node === null) throw new TypeError('Node is null')
         const output = this.node.outputs.get(key)
+        if (output === undefined) return
 
         this.node
           .getConnections()
           .filter(con => con.output.key === key)
           .forEach(con => {
-            this.editor.removeConnection(con)
+            this.editor?.removeConnection(con)
           })
 
         this.node.removeOutput(output)
-        delete this.component.task.outputs[key]
+        delete this.component?.task.outputs[key]
       })
 
     // any incoming outputs not already on the node are new and will be added.
@@ -64,7 +69,9 @@ export class OutputGeneratorControl extends DataControl {
     )
 
     // Here we are running over and ensuring that the outputs are in the task
-    this.component.task.outputs = this.node.data.outputs.reduce(
+    if (this.component === null)
+      throw new TypeError('Component is null')
+    this.component.task.outputs = this.node.data.outputs?.reduce(
       (acc, out) => {
         acc[out.name] = out.taskType || 'output'
         return acc
@@ -79,6 +86,7 @@ export class OutputGeneratorControl extends DataControl {
         output.name,
         sockets[output.socketType]
       )
+      if (this.node === null) throw new TypeError('Node is null')
       this.node.addOutput(newOutput)
     })
 
