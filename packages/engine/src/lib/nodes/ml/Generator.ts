@@ -149,6 +149,8 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       return acc
     }, {} as Record<string, unknown>)
 
+    const speakerName = inputs.speakerName
+
     const modelName = node?.data?.modelName as string
 
     // Replace carriage returns with newlines because that's what the language models expect
@@ -175,13 +177,18 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
     const presence_penalty = parseFloat(presencePenaltyData ?? '0')
 
     const stopData = node?.data?.stop as string
-    const stop = (stopData ?? '').split(', ')
+    const stop = (stopData ?? '').split(',')
 
     for (let i = 0; i < stop.length; i++) {
+      // trim any spaces from the beginning and end
+      stop[i] = stop[i].replace(/^\s+|\s+$/g, '')
       if (stop[i] === '\\n') {
         stop[i] = '\n'
       }
     }
+
+    stop.push(speakerName + ':')
+    console.log('stop', stop)
 
     const filteredStop = stop.filter(function (el: any) {
       return el != null && el !== undefined && el.length > 0

@@ -5,6 +5,7 @@ import { useSnackbar } from 'notistack'
 import axios from 'axios'
 import { LoadingScreen } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
+import { IGNORE_AUTH } from '@magickml/engine'
 
 const AgentManagerWindow = () => {
   const config = useConfig()
@@ -35,7 +36,7 @@ const AgentManagerWindow = () => {
   }) => {
     const token = globalConfig?.token
 
-    if (!token) {
+    if (!token && !IGNORE_AUTH) {
       enqueueSnackbar('You must be logged in to create an agent', {
         variant: 'error',
       })
@@ -50,7 +51,7 @@ const AgentManagerWindow = () => {
         updatedAt: new Date().toISOString(),
         pingedAt: new Date().toISOString(),
       },
-      headers: {
+      headers: IGNORE_AUTH ? {} : {
         Authorization: `Bearer ${token}`,
       },
     })
@@ -71,7 +72,7 @@ const AgentManagerWindow = () => {
       const data = JSON.parse(event?.target?.result as string)
       data.projectId = config.projectId
       data.enabled = data?.enabled ? true : false
-      data.updatedAt = data?.updatedAt || ''
+      data.updatedAt = new Date().toISOString()
       data.rootSpell = data?.rootSpell || '{}'
       data.spells = Array.isArray(data?.spells) ? data.spells : []
       data.secrets = JSON.stringify(

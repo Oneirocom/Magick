@@ -41,14 +41,14 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  worker(node: NodeData, inputs: MagickWorkerInputs & { events: any[] }) {
+  worker(node: NodeData, inputs: MagickWorkerInputs) {
 
-    const events = inputs.events[0];
-
+    const events = inputs.events[0] as any;
+    console.log('events to conversation', events)
     let conversation = '';
 
     // for each event in events,
-    if(events) events.rows.forEach((event) => {
+    if(events) events.rows?.forEach((event) => {
       conversation += event.sender + ': ' + event.content + '\n';
     });
 
