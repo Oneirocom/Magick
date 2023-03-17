@@ -63,12 +63,6 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'user-interface/Overview',
-            position: 'left',
-            label: 'User Interface',
-          },
-          {
-            type: 'doc',
             docId: 'nodes/Overview',
             position: 'left',
             label: 'Nodes',
