@@ -1,6 +1,6 @@
 ---
-title: Architecture
-description: This is where you will find information relevant to the architecture of magick.
+title: Package Overview
+description: Information about the packages in Magick.
 hide_table_of_contents: true
 ---
 

@@ -75,7 +75,7 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'developer-guides/Overview',
+            docId: 'developer-guides/Setup',
             position: 'right',
             label: 'Developer Guides',
           },
