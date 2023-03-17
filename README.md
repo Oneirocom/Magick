@@ -18,6 +18,8 @@ Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick 
 
 `Powerful enough for wizards. Easy enough for mere mortals.`
 
+## Documentation is [Here](https://magick-docs.vercel.app/)
+
 <p align="center"><img src="apps/docs/readme-files/ui.png" /></p>
 
 ### Setup
