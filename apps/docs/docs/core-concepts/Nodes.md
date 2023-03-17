@@ -1,6 +1,6 @@
 ---
 title: Nodes
-description: This is where you will find information relevant to the Nodes.
+description: This is where you will find information relevant to nodes in Magick.
 hide_table_of_contents: true
 sidebar_position: 3
 ---
