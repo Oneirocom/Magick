@@ -45,7 +45,6 @@
     "@emotion/styled": "^11.10.5",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
-    "@esbuild/linux-x64": "^0.17.11",
     "@feathersjs/adapter-commons": "^5.0.0",
     "@feathersjs/authentication": "^5.0.0",
     "@feathersjs/client": "^5.0.0",
@@ -288,7 +287,8 @@
     "webpack-merge": "^5.8.0"
   },
   "optionalDependencies": {
-    "@esbuild/darwin-arm64": "^0.17.11"
+    "@esbuild/darwin-arm64": "^0.17.11",
+    "@esbuild/linux-x64": "^0.17.11"
   },
   "overrides": {
     "vite-plugin-markdown": {
