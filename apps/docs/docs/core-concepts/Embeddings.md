@@ -1,6 +1,6 @@
 ---
-title: Events
-description: Information about events.
+title: Embeddings
+description: Information about embeddings and vector search/similarity search.
 hide_table_of_contents: true
 sidebar_position: 5
 ---

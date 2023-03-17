@@ -11,8 +11,6 @@ In Magick, the collection of data, nodes, variable presets etc for each graph is
 
 Spell is not a machine learning term. We just like it.
 
-## Spells Describe How Data Flows
-
 A spell is a pipeline that describes data moving from one place to another. The moves through different processes we call "nodes", via wires we call "connections".
 
 ## Input
@@ -52,3 +50,7 @@ When creating an agent, you will need to select a root spell. Each agent must ha
 One of the most powerful features of Magick is that spells can be placed within other spells. This allows you to build and test isolated skills and then extend them to incredible complexity.
 
 You can add a subspell by dropping a Spell node into your graph. Each subspell can have one input, but you can add more inputs by exposing variables to the parent spell by enabling their "isPublic" setting.
+
+## Loop Connector
+
+The Loop connector also alllows the agent to wake up and run a spell.

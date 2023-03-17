@@ -1,6 +1,6 @@
 ---
 title: Overview
-description: The core concepts of Magick
+description: Overview of the core concepts of Magick
 hide_table_of_contents: true
 sidebar_position: 1
 ---
@@ -11,4 +11,6 @@ Magick is powerful, and you can wield that power immediately by using the spells
 
 We are all on this journey together. Nobody has used Magick to it's full potential, not even the grand wizards who made it. There are no rules, no one way to do anything, and this codebase is open for you to change.
 
-The core concepts documented here are quick notes from the wizards to help you grasp the terminology and understand the various parts of Magick before diving in. Please submit a ticket on the Magick repo if you need additional clarity on any topic, or submit a pull request if you'd like to clarify yourself!
+The core concepts documented here are quick notes from the wizards to help you grasp the terminology and understand the various parts of Magick before diving in. Please submit a ticket on the Magick repo if you need additional clarity on any topic, or submit a pull request if you'd like to clarify yourself.
+
+Good luck brave adventurer!
