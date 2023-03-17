@@ -2,7 +2,7 @@
 title: Building Executables
 description: Information about building a binary executable of the Magick client and server.
 hide_table_of_contents: true
-sidebar_position: 5
+sidebar_position: 7
 ---
 
 # Building Executables

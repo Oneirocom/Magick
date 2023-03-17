@@ -2,8 +2,51 @@
 title: Package Overview
 description: Information about the packages in Magick.
 hide_table_of_contents: true
+sidebar_position: 1
 ---
 
-# Architecture
+# Package Overview
 
-This section has not been written yet.
+## Apps
+### Client
+@magickml/client (./apps/client)
+Frontend application. Everything the user sees in Magick IDE is exposed through the client, although most of the code lives in client-core and editor packages, as well as engine. Thin, mostly contains build settings and Capacitor configuration (for binary builds).
+
+### Server
+@magickml/server (./apps/server)
+Backend server application. Depends on server-core and engine. Thin, mostly contains startup code and configuration for the server. Provides an API which the client talks to, and runs preview spells for clients.
+
+### Agent
+@magickml/agent (./apps/agent)
+Backend agent application. Depends on server-core and engine. Thin, startups the AgentManager and manages agents from the database. Talks directly to the database, not to the server.
+
+### Docs
+@magickml/docs (./apps/docs)
+Documentation server build on Docusaurus.
+
+## Shared Packages
+### Engine
+@magickml/engine (./packages/engine)
+Core runtime code for Magick. Contains all of the spell and spell running code, common interfaces and nodes. Available for install via [npm](https://www.npmjs.com/package/@magickml/engine)
+
+### Cost Calculator
+@magickml/cost-calculator (./packages/cost-calculator)
+Basic functions for calculating the cost of ML and other types of requests in Magick.
+
+### Templates
+@magickml/templates (./packages/templates)
+Template spells, agents and projects for Magick.
+
+## Front End Packages
+### Client Core
+@magickml/client-core (./packages/client-core)
+Frontend UI components and common code.
+
+### Editor
+@magickml/editor
+Application code for the IDE, including windows, providers and state. Used in the client. Exports the entire Magick editor as components which can be imported whole or individually for custom routing (for example, in a Next.js frontend). Available for install via [npm](https://www.npmjs.com/package/@magickml/editor)
+
+## Server Packages
+### Server Core
+@magickml/server-core (./packages/server-core)
+Contains all of the server code, imported by the server and agent apps.
