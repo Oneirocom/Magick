@@ -2,6 +2,7 @@
 title: Libraries and Frameworks
 description: Information about the libraries and frameworks used in Magick.
 hide_table_of_contents: true
+sidebar_position: 2
 ---
 
 # Libraries and Frameworks
