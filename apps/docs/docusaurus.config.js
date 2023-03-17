@@ -51,7 +51,7 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'getting-started/Intro',
+            docId: 'Getting Started',
             position: 'left',
             label: 'Getting Started',
           },
@@ -60,12 +60,6 @@ const config = {
             docId: 'core-concepts/Overview',
             position: 'left',
             label: 'Core Concepts',
-          },
-          {
-            type: 'doc',
-            docId: 'user-interface/Overview',
-            position: 'left',
-            label: 'User Interface',
           },
           {
             type: 'doc',

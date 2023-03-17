@@ -285,7 +285,8 @@
     "webpack-merge": "^5.8.0"
   },
   "optionalDependencies": {
-    "@esbuild/darwin-arm64": "^0.17.11"
+    "@esbuild/darwin-arm64": "^0.17.11",
+    "@esbuild/linux-x64": "^0.17.11"
   },
   "overrides": {
     "vite-plugin-markdown": {
