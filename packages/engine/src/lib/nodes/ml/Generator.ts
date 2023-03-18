@@ -82,37 +82,46 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       language: 'handlebars',
     })
 
-    const stopControl = new InputControl({
-      dataKey: 'stop',
-      name: 'Stop (Comma Separated)',
-      icon: 'stop-sign',
-      defaultValue: '###',
-    })
-
     const temperatureControl = new InputControl({
       dataKey: 'temperature',
-      name: 'Temperature',
-      icon: 'temperature',
-      defaultValue: 0.7,
+      name: 'Temperature (0-1.0)',
+      icon: 'moon',
+      defaultValue: 0.5,
     })
 
-    const maxTokenControl = new InputControl({
+    const maxTokensControl = new InputControl({
       dataKey: 'max_tokens',
       name: 'Max Tokens',
       icon: 'moon',
-      defaultValue: 50,
+      defaultValue: 100,
+    })
+
+    const topPControl = new InputControl({
+      dataKey: 'top_p',
+      name: 'Top P (0-1.0)',
+      icon: 'moon',
+      defaultValue: 1,
     })
 
     const frequency_penalty = new InputControl({
       dataKey: 'frequency_penalty',
-      name: 'Frequency Penalty',
-      defaultValue: 0,
+      name: 'Frequency Penalty (0-2.0)',
+      icon: 'moon',
+      defaultValue: 0.0,
     })
 
     const presence_penalty = new InputControl({
       dataKey: 'presence_penalty',
-      name: 'presence_penalty Penalty',
+      name: 'Presence Penalty (0-2.0)',
+      icon: 'moon',
       defaultValue: 0,
+    })
+
+    const stopControl = new InputControl({
+      dataKey: 'stop',
+      name: 'Stop (Comma Separated)',
+      icon: 'moon',
+      defaultValue: '###',
     })
 
     node.inspector
@@ -120,7 +129,8 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       .add(inputGenerator)
       .add(fewshotControl)
       .add(temperatureControl)
-      .add(maxTokenControl)
+      .add(maxTokensControl)
+      .add(topPControl)
       .add(frequency_penalty)
       .add(presence_penalty)
       .add(stopControl)

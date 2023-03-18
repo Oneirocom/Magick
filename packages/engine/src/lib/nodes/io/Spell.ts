@@ -1,4 +1,5 @@
 import isEqual from 'lodash/isEqual'
+import Rete from 'rete'
 
 import {
   EngineContext,
@@ -10,6 +11,8 @@ import {
 } from '../../types'
 import { SpellControl } from '../../dataControls/SpellControl'
 import { MagickComponent } from '../../magick-component'
+import { stringSocket, triggerSocket } from '../../sockets'
+
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
 type Socket = {
@@ -51,7 +54,7 @@ export class SpellComponent extends MagickComponent<
       skip: true,
     }
     this.task = {
-      outputs: {},
+      outputs: { trigger: 'option' },
     }
     this.category = 'I/O'
     this.info = info
@@ -92,6 +95,13 @@ export class SpellComponent extends MagickComponent<
   }
 
   builder(node: MagickNode) {
+    const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
+
+    node
+      .addInput(triggerIn)
+      .addOutput(triggerOut)
+
     const spellControl = new SpellControl({
       name: 'Spell Select',
       write: false,
@@ -104,6 +114,7 @@ export class SpellComponent extends MagickComponent<
       // break out of it the nodes data already exists.
       if (spell.name === node.data.spellName) return
       node.data.spellName = spell.name
+      node.data.spellId = spell.id
       node.data.projectId = spell.projectId
 
       // Update the sockets
@@ -177,14 +188,16 @@ export class SpellComponent extends MagickComponent<
 
     if (!magick.runSpell) throw new Error('Magick runSpell not found')
     const outputs = await magick.runSpell(
-        {
-          inputs: flattenedInputs,
-          spellName: node.data.spellName as string,
-          projectId: node.data.projectId as string,
-          secrets,
-          publicVariables,
-        }
-      )
+      {
+        inputs: flattenedInputs,
+        spellId: node.data.spellId as string,
+        projectId: node.data.projectId as string,
+        secrets,
+        publicVariables,
+      }
+    )
+
+      console.log('******************** outputs', outputs)
 
     return this.formatOutputs(node, outputs)
   }

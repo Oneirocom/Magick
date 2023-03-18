@@ -37,7 +37,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
     }
 
     this.module = {
-      nodeType: 'module',
+      nodeType: 'triggerIn',
       socket: anySocket,
     }
 

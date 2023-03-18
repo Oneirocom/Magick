@@ -24,7 +24,7 @@ export const events = {
   UPDATE_SUBSPELL: 'updateSubspell',
   DELETE_SUBSPELL: 'deleteSubspell',
   OPEN_TAB: 'openTab',
-  $SUBSPELL_UPDATED: spellName => `subspellUpdated:${spellName}`,
+  $SUBSPELL_UPDATED: spellId => `subspellUpdated:${spellId}`,
   $TRIGGER: (tabId, nodeId) => `triggerNode:${tabId}:${nodeId ?? 'default'}`,
   $PLAYTEST_INPUT: tabId => `playtestInput:${tabId}`,
   $PLAYTEST_PRINT: tabId => `playtestPrint:${tabId}`,
