@@ -2,7 +2,6 @@
 import type { Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
-
 import type { Application } from '../../declarations'
 import type { Event, EventData, EventPatch, EventQuery } from './events.schema'
 import { app } from '../../app'
@@ -16,6 +15,11 @@ export class EventService<ServiceParams extends Params = EventParams> extends Kn
   ServiceParams,
   EventPatch
 > {
+  //@ts-ignore
+  async create(data: EventData, params: EventParams): Promise<any> {
+    return data;
+  }
+  //@ts-ignore
   async find(params?: ServiceParams) {
     const db = app.get('dbClient')
     if (params.query.embedding) {
@@ -28,14 +32,16 @@ export class EventService<ServiceParams extends Params = EventParams> extends Kn
       let vectordb = app.get('vectordb')
       const query = f32_ary as unknown as number[];
       const k = 2;
-      const results = vectordb.search(query, k);
-      let result_s = await db('events').where('id', results[0]).first()
-      console.log(result_s)
-      if (result_s) {
-        return result_s
+      const results = vectordb.search(query, params?.query?.$limit);
+      console.log(results)
+      if (results) {
+        return {events : results }
       }
     }
-    return super.find(params)
+    let vectordb = app.get('vectordb')
+    let { $limit: _, ...param } = params.query
+    let r = vectordb.searchData(param as unknown as number[], params?.query?.$limit);
+    return {events : r }
   }
 
 }
