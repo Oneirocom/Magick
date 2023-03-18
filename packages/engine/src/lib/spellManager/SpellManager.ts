@@ -46,7 +46,7 @@ export default class SpellManager {
       const spell = await magickInterface.getSpell(spellId)
 
       if (!spell) {
-        throw new Error(`No spell found with name ${spellId}`)
+        return console.error(`No spell found with name ${spellId}`)
       }
 
       await this.load(spell)

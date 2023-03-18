@@ -106,7 +106,7 @@ export class Code extends MagickComponent<unknown> {
     } catch (err) {
       // close the data socket so it doesnt error out
       this._task.closed = ['data']
-      throw err
+      return console.error(err)
     }
   }
 }

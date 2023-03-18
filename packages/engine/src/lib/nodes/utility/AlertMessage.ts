@@ -15,8 +15,6 @@ export class Alert extends MagickComponent<void> {
 
     this.task = {
       outputs: {},
-      init: () => {},
-      onRun: () => {},
     } as TaskOptions
     this.category = 'Utility'
     this.info = info

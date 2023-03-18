@@ -12,9 +12,9 @@ function install(editor: MagickEditor) {
     const component = _component as unknown as MagickComponent<unknown>
 
     if (!component.task)
-      throw new Error('Task plugin requires a task property in component')
+      return console.error('Task plugin requires a task property in component')
     if (component.task.outputs.constructor !== Object)
-      throw new Error(
+      return console.error(
         'The "outputs" field must be an object whose keys correspond to the Output\'s keys'
       )
 

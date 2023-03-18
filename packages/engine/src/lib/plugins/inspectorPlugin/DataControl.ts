@@ -1,18 +1,19 @@
-import { Node, NodeEditor } from 'rete'
+import { NodeEditor } from 'rete'
 
 import { MagickComponent } from '../../magick-component'
+import { ComponentData, MagickNode } from '../../types'
 import { Inspector } from './Inspector'
 export type RestProps = {}
 export abstract class DataControl {
   inspector: Inspector | null = null
   editor: NodeEditor | null = null
-  node: Node | null = null
+  node: MagickNode | null = null
   component: MagickComponent<unknown> | null = null
   id: string | null = null
   dataKey: string
   name: string
   defaultValue: unknown
-  componentData: object
+  componentData: ComponentData
   componentKey: string
   options: object
   icon: string
@@ -35,7 +36,7 @@ export abstract class DataControl {
     dataKey: string
     name: string
     component: string
-    data?: Record<string, unknown>
+    data?: ComponentData
     options?: Record<string, unknown>
     write?: boolean
     icon?: string

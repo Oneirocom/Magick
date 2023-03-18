@@ -76,7 +76,7 @@ function install(
             output: { error: true},
           })
           // note: we may still want to throw the error here
-          throw err
+          return console.error(err)
         }
       }
 

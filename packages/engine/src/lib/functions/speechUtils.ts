@@ -134,7 +134,7 @@ class speechUtils {
       return buffer
     }
     if (outSampleRate > sampleRate) {
-      throw 'downsampling rate should be smaller than original sample rate'
+      return console.error('downsampling rate should be smaller than original sample rate')
     }
     const sampleRateRatio = sampleRate / outSampleRate
     const newLength = Math.round(buffer.length / sampleRateRatio)
