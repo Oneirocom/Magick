@@ -47,7 +47,7 @@ export abstract class MagickComponent<
   onDoubleClick?: (node: MagickNode) => void
   declare module: ModuleOptions
   contextMenuName: string | undefined
-  workspaceType: 'module' | 'spell' | null | undefined
+  workspaceType: 'spell' | null | undefined
   displayName: string | undefined
 
   nodeTaskMap: Record<number, MagickTask> = {}

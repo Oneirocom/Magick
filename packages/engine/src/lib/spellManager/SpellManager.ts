@@ -33,7 +33,7 @@ export default class SpellManager {
 
     const runSpell: EngineContext['runSpell'] = async ({
       inputs: flattenedInputs,
-      spellName: spellId,
+      spellId,
       secrets,
       publicVariables,
     }

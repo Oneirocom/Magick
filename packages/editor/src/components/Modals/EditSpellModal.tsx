@@ -8,7 +8,7 @@ import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
 import { spellApi } from '../../state/api/spells'
 
-const EditSpellModal = ({ closeModal, spellName, name, tab }) => {
+const EditSpellModal = ({ closeModal, name, tab }) => {
   const [error, setError] = useState('')
   const [patchSpell, { isLoading }] = spellApi.usePatchSpellMutation()
 
