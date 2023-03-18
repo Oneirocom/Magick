@@ -7,8 +7,6 @@ import { LoadingScreen } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
 import { IGNORE_AUTH } from '@magickml/engine'
 
-console.log('IGNORE_AUTH', IGNORE_AUTH)
-
 const AgentManagerWindow = () => {
   const config = useConfig()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -53,9 +51,11 @@ const AgentManagerWindow = () => {
         updatedAt: new Date().toISOString(),
         pingedAt: new Date().toISOString(),
       },
-      headers: IGNORE_AUTH ? {} : {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: IGNORE_AUTH
+        ? {}
+        : {
+            Authorization: `Bearer ${token}`,
+          },
     })
       .then(async res => {
         const res2 = await fetch(`${config.apiUrl}/agents`)

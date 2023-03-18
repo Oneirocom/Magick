@@ -9,13 +9,7 @@ import {
   GetEventArgs,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
-import {
-  triggerSocket,
-  anySocket,
-  eventSocket,
-  stringSocket,
-  arraySocket,
-} from '../../sockets'
+import { triggerSocket, eventSocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
 const info = 'Event Recall is used to get conversation for an agent and user'
