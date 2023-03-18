@@ -54,7 +54,7 @@ const VariableModal = ({
             />
           </div>
         </div>
-        <div>
+        {/* <div>
           <span className="form-item-label">Starting Words (,)</span>
           <div style={{ marginBottom: '1em' }}>
             <input
@@ -92,7 +92,7 @@ const VariableModal = ({
               onChange={handleOnChange}
             />
           </div>
-        </div>
+        </div> */}
 
         <div style={{ position: 'relative' }}>
           <Switch
