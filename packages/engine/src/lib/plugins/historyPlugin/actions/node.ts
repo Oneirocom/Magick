@@ -1,8 +1,9 @@
-// @ts-nocheck
-
+import { Node, NodeEditor } from 'rete'
 import Action from '../action'
 
 class NodeAction extends Action {
+  protected editor: NodeEditor
+  protected node: Node
   constructor(editor, node) {
     super()
     this.editor = editor
@@ -31,7 +32,9 @@ export class RemoveNodeAction extends NodeAction {
 }
 
 export class DragNodeAction extends NodeAction {
-  constructor(editor, node, prev) {
+  prev: [number, number]
+  new: [number, number]
+  constructor(editor: NodeEditor, node: Node, prev: [number, number]) {
     super(editor, node)
 
     this.prev = [...prev]
@@ -39,7 +42,10 @@ export class DragNodeAction extends NodeAction {
   }
 
   _translate(position) {
-    this.editor.view.nodes.get(this.node).translate(...position)
+    const node = this.editor.view.nodes.get(this.node)
+    //TODO: maybe just return if node is undefined?
+    if (node === undefined) throw new TypeError('Node not found in editor view')
+    node.translate(position.x, position.y)
   }
 
   undo() {
@@ -50,7 +56,7 @@ export class DragNodeAction extends NodeAction {
     this._translate(this.new)
   }
 
-  update(node) {
+  update(node: Node) {
     this.new = [...node.position]
   }
 }
