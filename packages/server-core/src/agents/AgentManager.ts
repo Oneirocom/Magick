@@ -55,7 +55,7 @@ export class AgentManager {
     // If an entry exists in currentAgents but not in newAgents, it has been deleted
     await this.deleteOldAgents()
 
-    this.newAgents.forEach(async (agent: any) => {
+    this.newAgents?.forEach(async (agent: any) => {
       if(!agent.enabled) return  
       if(!agent.rootSpell) return
 
@@ -67,7 +67,7 @@ export class AgentManager {
         return // console.log('Agent has been pinged recently', agent.id, new Date().getTime() - pingedAt.getTime())
       
         // make sure to get the first value in the array
-      const old = this.currentAgents?.find((a) => a.id === agent.id)
+      const old = this.currentAgents?.find((a) => a && a.id === agent.id)
 
       if(old && _.isEqual({...old, pingedAt: null}, {...agent, pingedAt: null})) {
         return // console.log('Agent has not changed, skipping', agent.id)
