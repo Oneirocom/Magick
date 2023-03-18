@@ -1,8 +1,8 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
-import { stringSocket, arraySocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
+import { MagickNode, MagickWorkerInputs, NodeData } from '../../types'
 const info = `Join an array of events into a conversation formatted for prompt injection.`
 
 type WorkerReturn = {
@@ -19,8 +19,6 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
         conversation: 'output',
         trigger: 'option',
       },
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      init: () => {},
     }
 
     this.category = 'Events'

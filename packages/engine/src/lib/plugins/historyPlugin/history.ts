@@ -1,13 +1,18 @@
-// @ts-nocheck
+import Action from "./action"
 
+type HistoryAction = 'undo' | 'redo'
 export default class History {
+  active:boolean
+  produced:Action[]
+  reserved:Action[]
+  
   constructor() {
     this.active = false
     this.produced = []
     this.reserved = []
   }
 
-  add(action) {
+  add(action:Action) {
     if (this.active) return
     this.produced.push(action)
     this.reserved = []
@@ -17,7 +22,7 @@ export default class History {
     return this.produced[this.produced.length - 1]
   }
 
-  _do(from, to, type) {
+  _do(from:Action[], to:Action[], type:HistoryAction) {
     const action = from.pop()
 
     if (!action) return
