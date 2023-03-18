@@ -3,7 +3,6 @@ import Rete from 'rete'
 import {
   NodeData,
   MagickNode,
-  MagickWorkerOutputs,
   MagickWorkerInputs,
 } from '../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
@@ -67,6 +66,7 @@ export class Cast extends MagickComponent<void> {
       defaultValue: 'any Type',
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this
 
     socketDropdown.onData = function (data) {

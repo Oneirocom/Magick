@@ -172,8 +172,6 @@ export class SpellComponent extends MagickComponent<
       publicVariables: Record<string, string>
     }
   ) {
-    console.log('node.data', node.data)
-
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
 

@@ -213,7 +213,7 @@ class SpellRunner {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
-      throw new Error('Infinite loop detected.  Exiting.')
+      return console.error('Infinite loop detected.  Exiting.')
     }
     // Set the current spell into the cache of spells that have run now.
     if (runSubspell) this.ranSpells.push(this.currentSpell.name)
@@ -232,8 +232,8 @@ class SpellRunner {
 
     const triggeredNode = this._getTriggeredNodeByName(firstInput)
 
-    if (!component.run) throw new Error('Component does not have a run method')
-    if (!triggeredNode) throw new Error('No triggered node found')
+    if (!component.run) return console.error('Component does not have a run method')
+    if (!triggeredNode) return console.error('No triggered node found')
     // this running is where the main "work" happens.
     // I do wonder whether we could make this even more elegant by having the node
     // subscribe to a run pubsub and then we just use that.  This would treat running

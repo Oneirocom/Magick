@@ -12,7 +12,8 @@ const info = `The forEach component takes in an array, and will iterate over eac
 
 type WorkerReturn = {
   element?: string | string[] | unknown | {}
-}
+} | void
+
 export class ForEach extends MagickComponent<Promise<WorkerReturn | undefined>> {
   constructor() {
     super('ForEach')
@@ -56,7 +57,7 @@ export class ForEach extends MagickComponent<Promise<WorkerReturn | undefined>> 
           )
         )
       } catch (err) {
-        throw new Error('Error in ForEach Component.')
+        return console.error('Error in ForEach Component.')
       }
 
       this._task.closed = ['act']
