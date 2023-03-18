@@ -44,7 +44,7 @@ export class DragNodeAction extends NodeAction {
   _translate(position) {
     const node = this.editor.view.nodes.get(this.node)
     //TODO: maybe just return if node is undefined?
-    if (node === undefined) throw new TypeError('Node not found in editor view')
+    if (node === undefined) return console.error('Node not found in editor view')
     node.translate(position.x, position.y)
   }
 

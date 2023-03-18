@@ -38,7 +38,7 @@ export class OutputGeneratorControl extends DataControl {
   }
 
   onData(outputs: DataSocketType[] = []) {
-    if (this.node === null) throw new TypeError('Node is null')
+    if (this.node === null) return console.error('Node is null')
     this.node.data.outputs = outputs
 
     const existingOutputs: string[] = []
@@ -55,7 +55,7 @@ export class OutputGeneratorControl extends DataControl {
       .filter(existing => !outputs.some(incoming => incoming.name === existing))
       .filter(existing => ignored.some(out => out !== existing))
       .forEach(key => {
-        if (this.node === null) throw new TypeError('Node is null')
+        if (this.node === null) return console.error('Node is null')
         const output = this.node.outputs.get(key)
 
         this.node
@@ -65,7 +65,7 @@ export class OutputGeneratorControl extends DataControl {
             this.editor?.removeConnection(con)
           })
 
-        if (output === undefined) throw new TypeError('Output is undefined')
+        if (output === undefined) return console.error('Output is undefined')
         this.node.removeOutput(output)
         delete this.component?.task.outputs[key]
       })
@@ -77,7 +77,7 @@ export class OutputGeneratorControl extends DataControl {
 
     // Here we are running over and ensuring that the outputs are in the task
     if (this.component === null)
-      throw new TypeError('Component is null')
+      return console.error('Component is null')
     this.component.task.outputs = this.node.data.outputs?.reduce(
       (acc, out) => {
         acc[out.name] = out.taskType || 'output'
@@ -93,7 +93,8 @@ export class OutputGeneratorControl extends DataControl {
         output.name,
         sockets[output.socketType]
       )
-      if (this.node === null) throw new TypeError('Node is null')
+      if (this.node === null)
+        return console.error('Node is null')
       this.node.addOutput(newOutput)
     })
 
