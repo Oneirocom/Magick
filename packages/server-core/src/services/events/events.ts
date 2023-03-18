@@ -76,19 +76,23 @@ export const event = (app: Application) => {
           const { embedding } = context.data
           const { data, service } = context
           let id = uuidv4()
+          //Add UUID for events.
           context.data = {
             [service.id]: id,
             ...data,
           }
+
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
-            context.data.embedding = pgvector.toSql(embedding)
+            //context.data.embedding = pgvector.toSql(embedding)
             let vectordb = app.get('vectordb')
-            vectordb.add(id, embedding)
+            vectordb.add(id, embedding, context.data)
           } else {
-            context.data.embedding = pgvector.toSql(nullArray)
+            //context.data.embedding = pgvector.toSql(nullArray)
+            let vectordb = app.get('vectordb')
+            vectordb.add(id, nullArray, context.data)
           }
-          return context
+          return;
         }
       ],
       patch: [

@@ -46,7 +46,6 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
     const events = inputs.events[0];
     let conversation = '';
     //Events.rows when the data is fetched using embedding
-    
     if (Array.isArray(events)){
       //@ts-ignore
       if(events.rows) {

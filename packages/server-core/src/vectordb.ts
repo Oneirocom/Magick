@@ -5,6 +5,7 @@ import fs from 'fs';
 interface Node<T> {
     id: string;
     vector: T;
+    data: any;
     neighbors: Array<string | null>;
     level: number;
   }
@@ -18,24 +19,27 @@ interface Config {
 type DistanceFunction<T> = (a: T, b: T) => number;
 
 class HNSW<T> {
-  public nodes: Node<T>[] = [];
+  public nodes: Map<string, Node<T>>;
   public config: Config;
   public distanceFunction: DistanceFunction<T>;
 
   constructor(config: Config, distanceFunction: DistanceFunction<T>) {
     this.config = config;
     this.distanceFunction = distanceFunction;
+    this.nodes = new Map<string, Node<T>>();
   }
 
-  public addNode(id: string, vector: T): void {
+
+  public addNode(id: string, vector: T, data: any = {}): void {
     const level = this.getRandomLevel();
     const node: Node<T> = {
       id,
       vector,
+      data,
       neighbors: new Array(this.config.maxLevel).fill(null),
       level,
     };
-    this.nodes.push(node);
+    this.nodes.set(id,node);
     this.addToGraph(node, level);
   }
 
@@ -50,7 +54,7 @@ class HNSW<T> {
     );
 
     for (const neighborId of neighbors) {
-      const neighbor = this.nodes[neighborId];
+      const neighbor = this.nodes.get(neighborId);
       const distance = this.distanceFunction(node.vector, neighbor.vector);
       heap.push({ id: neighborId, distance });
 
@@ -61,7 +65,7 @@ class HNSW<T> {
 
     for (let i = heap.size() - 1; i >= 0; i--) {
       const neighborId = heap.peek()?.id as string;
-      const neighbor = this.nodes[neighborId];
+      const neighbor = this.nodes.get(neighborId);
       node.neighbors[level - 1] = neighborId;
       neighbor.neighbors[level] = node.id;
     }
@@ -84,7 +88,8 @@ class HNSW<T> {
     let neighborId = node.neighbors[level - 1];
     while (neighborId !== null) {
       neighbors.push(neighborId);
-      neighborId = this.nodes.find((n) => n.id === neighborId)?.neighbors[level - 1] || null;
+      let neighbor = this.nodes.get(neighborId);
+      neighborId = neighbor ? neighbor.neighbors[level - 1] : null;
     }
     return neighbors;
   }
@@ -102,13 +107,12 @@ interface VectorDatabase<T> {
 }
 
 interface HNSWIndex<T> {
-  nodes: Node<T>[];
+  nodes: any;
   config: Config;
 }
 
 class HNSWVectorDatabase<T> implements VectorDatabase<T> {
   private readonly index: HNSW<T>;
-  private readonly vectors: Map<string, T> = new Map<string, T>();
   private readonly indexPath: string;
 
   constructor(indexPath: string, distanceFunction: DistanceFunction<T>) {
@@ -117,10 +121,7 @@ class HNSWVectorDatabase<T> implements VectorDatabase<T> {
       const data = fs.readFileSync(indexPath, 'utf-8');
       const index: HNSWIndex<T> = JSON.parse(data);
       this.index = new HNSW<T>(index.config, distanceFunction);
-      this.index.nodes = index.nodes;
-      for (const node of index.nodes) {
-        this.vectors.set(node.id, node.vector);
-      }
+      this.index.nodes = new Map(Object.entries(index.nodes));
     } catch (err) {
       this.index = new HNSW<T>({
         maxLevel: 6,
@@ -130,32 +131,57 @@ class HNSWVectorDatabase<T> implements VectorDatabase<T> {
     }
   }
 
-  public add(id: string, vector: T): void {
-    this.index.addNode(id, vector);
-    this.vectors.set(id, vector);
+  public add(id: string, vector: T, data: any = {content: 'random'}): void {
+    this.index.addNode(id, vector, data);
     this.saveIndex();
+  }
+  private compareArrays(arr1: any[], arr2: any[]): boolean {
+    if (arr1.length < 2 || arr2.length < 2) {
+      return false; // Arrays must have at least two elements to compare the first two
+    }
+    const firstTwo1 = arr1.slice(0, 2);
+    const firstTwo2 = arr2.slice(0, 2);
+    return firstTwo1.every((val, index) => val === firstTwo2[index]);
+  }
+  public searchData(query: Partial<{ [key in keyof T]: T[key] }>, k: number): any[] {
+    const result: Node<T>[] = [];
+    this.index.nodes.forEach((node,id) => {
+      if (this.isMatch(node.data, query)) {
+        result.push(node.data);
+      }
+    })
+    return result.slice(0, k);
+  }
+  private isMatch(data: any, query: Partial<{ [key in keyof T]: T[key] }>): boolean {
+    for (const key in query) {
+      if (Array.isArray(query[key])) return this.compareArrays(query[key] as any[], data[key])
+      if (data && query[key] !== undefined && data[key] !== query[key]) {
+        return false;
+      }
+    }
+    return true;
   }
 
   public search(query: T, k: number): string[] {
-    const distances = new Heap<{ id: string; distance: number }>((a, b) =>
+    const distances = new Heap<{ id: string; distance: number; data: any }>((a, b) =>
       b.distance - a.distance
     );
-    for (const [id, vector] of this.vectors.entries()) {
-      const distance = this.index.getDistance(query, vector);
-      distances.push({ id, distance });
+    this.index.nodes.forEach((node, id) => {
+      const distance = this.index.getDistance(query, node.vector);
+      distances.push({ id, distance, data: node.data });
       if (distances.size() > k) {
         distances.pop();
       }
-    }
+    });
     return distances
       .toArray()
       .reverse()
-      .map((item) => item.id);
+      .map((item) => item.data);
   }
 
   private saveIndex(): void {
     const index: HNSWIndex<T> = {
-      nodes: this.index.nodes,
+      nodes: Object.fromEntries(this.index.nodes),
       config: this.index.config,
     };
     fs.writeFileSync(this.indexPath, JSON.stringify(index));
