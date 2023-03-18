@@ -12,7 +12,7 @@ const AgentManagerWindow = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [data, setData] = useState<Array<object>>([])
   const { enqueueSnackbar } = useSnackbar()
-  const [selectedAgent, setSelectedAgent] = useState<any>({ id: null })
+  const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
   const [root_spell, setRootSpell] = useState('default')
   const globalConfig = useSelector((state: any) => state.globalConfig)
 
@@ -137,7 +137,7 @@ const AgentManagerWindow = () => {
             variant: 'success',
           })
         }
-        if (selectedAgent.id === id) setSelectedAgent({ id: null })
+        if (selectedAgentData.id === id) setSelectedAgentData(undefined)
         resetData()
       })
       .catch(e => {
@@ -169,8 +169,8 @@ const AgentManagerWindow = () => {
       update={update}
       updateCallBack={resetData}
       onLoadFile={loadFile}
-      setSelectedAgent={setSelectedAgent}
-      selectedAgent={selectedAgent}
+      setSelectedAgentData={setSelectedAgentData}
+      selectedAgentData={selectedAgentData}
       rootSpell={root_spell}
       setRootSpell={setRootSpell}
     />
