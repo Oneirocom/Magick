@@ -213,7 +213,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
         nodeId: node.id,
       })
 
-      if (!success) throw new Error('Error in generator')
+      if (!success) return console.error('Error in generator')
 
       const raw = choice.text
       const result = raw

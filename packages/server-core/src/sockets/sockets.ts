@@ -27,7 +27,7 @@ const handleSockets = (app: any) => {
           .service('authentication')
           .verifyAccessToken(sessionId)
 
-        if (!sessionId) throw new Error('No session id provided for handshake')
+        if (!sessionId) return console.error('No session id provided for handshake')
         user = payload.user
       }
       // Attach the user info to the params or use in services
