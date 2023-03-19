@@ -1,19 +1,24 @@
 import { NodeData } from 'rete/types/core/data'
 
-import { MagickReteInput, MagickWorkerInputs } from '../../types'
+import { MagickReteInput, MagickWorkerInputs, MagickWorkerOutputs } from '../../types'
 import { MagickComponent, MagickTask } from '../../magick-component'
 
 type TaskRef = {
   key: string
   task: MagickTask
-  run?: Function
-  next?: any[]
+  run?: (data: unknown, options: RunOptions) => void
+  next?: TaskRef[]
+}
+
+type SocketInfo = {
+  targetSocket: string | null,
+  targetNode: NodeData | null,
 }
 
 export type TaskOptions = {
   outputs: Record<string, unknown>
-  init?: Function
-  onRun?: Function
+  init?: (task:Task, node: NodeData) => void
+  onRun?: (node: NodeData, task: Task, data: unknown, socketInfo:SocketInfo) => void
   runOneInput?: boolean
 }
 
@@ -32,11 +37,12 @@ export type TaskOutputTypes = 'option' | 'output'
 //   return Object.values(task.component.task.outputs).includes('option')
 // }
 
+type TaskWorker =  (task:Task, inputs: MagickWorkerInputs, data:unknown, socketInfo) => MagickWorkerOutputs
 export class Task {
   node: NodeData
   inputs: MagickWorkerInputs
   component: MagickComponent<unknown>
-  worker: Function
+  worker: TaskWorker
   next: TaskRef[]
   outputData: Record<string, unknown> | null
   closed: string[]
@@ -45,7 +51,7 @@ export class Task {
     inputs: MagickWorkerInputs,
     component: MagickComponent<unknown>,
     node: NodeData,
-    worker: Function
+    worker: TaskWorker
   ) {
     this.node = node
     this.inputs = inputs as MagickWorkerInputs
@@ -63,7 +69,7 @@ export class Task {
       )
     })
   }
-x
+  x
   getInputs(type: TaskOutputTypes): string[] {
     return Object.keys(this.inputs)
       .filter(key => this.inputs[key][0])
@@ -88,8 +94,8 @@ x
     return input
   }
 
-  getInputByNodeId(node, fromSocket) {
-    let value: null | any = null
+  getInputByNodeId(node, fromSocket): string | null {
+    let value: null | string = null
     Object.entries(this.inputs).forEach(([key, input]) => {
       const found = (input as MagickReteInput[]).find(
         (con: MagickReteInput) => con && con.task.node.id === node.id

@@ -1,19 +1,9 @@
 import { Node, Socket } from 'rete'
 
-import { PubSubBase, MagickEditor, MagickNode } from './types'
+import { MagickEditor, MagickNode } from './types'
 import { MagickEngineComponent } from './engine'
 import { Task, TaskOptions } from './plugins/taskPlugin/task'
 import { NodeData } from 'rete/types/core/data'
-
-// Note: We do this so Typescript knows what extra properties we're
-// adding to the NodeEditor (in rete/editor.js). In an ideal world, we
-// would be extending the class there, when we instantiate it.
-export type PubSubContext = {
-  publish: (event: string, data: unknown) => boolean
-  subscribe: (event: string, callback: Function) => void
-  events: Record<string, any>
-  PubSub: PubSubBase
-}
 
 export interface MagickTask extends Task {
   outputs?: { [key: string]: string }

@@ -4,7 +4,7 @@ import {
   Data, WorkerOutputs
 } from 'rete/types/core/data'
 
-import { MagickComponent, MagickTask, PubSubContext } from './magick-component'
+import { MagickComponent, MagickTask } from './magick-component'
 import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
 import { Inspector } from './plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
@@ -101,7 +101,7 @@ export type OnSubspellUpdated = (spellName: string, callback: (PubSubData) => vo
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
-  declare pubSub: PubSubContext
+  declare pubSub: PubSubData
   declare magick: EditorContext
   declare tab: { type: string }
   declare abort: unknown
@@ -352,50 +352,6 @@ export type MagickWorkerInput = string | unknown | MagickReteInput
 export type MagickWorkerInputs = { [key: string]: MagickWorkerInput[] }
 export type MagickWorkerOutputs = WorkerOutputs & {
   [key: string]: TaskOutput
-}
-
-// Type definitions for PubSubJS 1.8.0
-// Project: https://github.com/mroderick/PubSubJS
-// Definitions by: Boris Yankov <https://github.com/borisyankov>
-//                 Matthias Lindinger <https://github.com/morpheus-87>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
-export interface PubSubBase
-  extends CountSubscriptions,
-  ClearAllSubscriptions,
-  GetSubscriptions,
-  Publish,
-  Subscribe,
-  Unsubscribe {
-  name: string
-}
-
-interface CountSubscriptions {
-  countSubscriptions(token: any): number
-}
-
-interface ClearAllSubscriptions {
-  clearAllSubscriptions(token?: any): void
-}
-
-interface GetSubscriptions {
-  getSubscriptions(token: any): any[]
-}
-
-interface Publish {
-  publish(message: string | symbol, data?: any): boolean
-
-  publishSync(message: string | symbol, data?: any): boolean
-}
-
-interface Subscribe {
-  subscribe(message: string | symbol, func: Function): string
-
-  subscribeOnce(message: string | symbol, func: Function): any
-}
-
-interface Unsubscribe {
-  unsubscribe(tokenOrFunction: any): any
 }
 
 // Go-inspired function return
