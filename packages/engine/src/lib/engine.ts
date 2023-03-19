@@ -14,7 +14,7 @@ interface WorkerOutputs {
 
 export interface MagickEngine extends Engine {
   tasks: Task[]
-  activateDebugger?: Function
+  // activateDebugger?: Function
   moduleManager?: any
 }
 export abstract class MagickEngineComponent<WorkerReturnType> {
@@ -41,7 +41,7 @@ export type InitEngineArguments = {
   name: string
   components: any[]
   server: boolean
-  throwError?: Function
+  throwError?: (message: any)=>void
   socket?: io.Socket
 }
 
