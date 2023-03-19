@@ -1,17 +1,17 @@
 {
-  "name": "@magickml/plugin-search-shared",
+  "name": "@magickml/plugin-pinecone-shared",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/plugin-search/shared/src",
+  "sourceRoot": "packages/plugin-pinecone/shared/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/engine"],
   "targets": {
     "build": {
       "executor": "@nrwl/vite:build",
       "outputs": ["{options.outputPath}"],
-      "configFile": "packages/plugin-search/shared/vite.config.ts",
+      "configFile": "packages/plugin-pinecone/shared/vite.config.ts",
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/packages/plugin-search/shared"
+        "outputPath": "dist/packages/plugin-pinecone/shared"
       },
       "configurations": {
         "development": {
@@ -26,14 +26,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/plugin-search/shared/**/*.ts"]
+        "lintFilePatterns": ["packages/plugin-pinecone/shared/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/plugin-search/shared/jest.config.ts",
+        "jestConfig": "packages/plugin-pinecone/shared/jest.config.ts",
         "passWithNoTests": true
       }
     }

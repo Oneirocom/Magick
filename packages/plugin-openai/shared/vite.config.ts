@@ -10,7 +10,7 @@ import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 import mdPlugin, { Mode } from 'vite-plugin-markdown'
 
 export default defineConfig({
-  cacheDir: '../../node_modules/.vite/plugin-search',
+  cacheDir: '../../node_modules/.vite/plugin-openai',
   assetsInclude: ['**/*.vrm', '**/*.svg'],
   resolve: {
     alias: {
@@ -58,7 +58,7 @@ export default defineConfig({
     lib: {
       // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
-      name: 'plugin-search-shared',
+      name: 'plugin-openai-shared',
       fileName: 'index',
       // Change this to the formats you want to support.
       // Don't forgot to update your package.json as well.

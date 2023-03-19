@@ -1,4 +1,4 @@
 {
-  "name": "@magickml/plugin-search-client",
+  "name": "@magickml/plugin-pinecone-client",
   "version": "0.1.0"
 }

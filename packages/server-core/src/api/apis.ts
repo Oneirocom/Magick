@@ -1,11 +1,9 @@
 // TODO: replace with a feathers service
 
 import Koa from 'koa'
-import { tts } from '../servers/googleTextToSpeech'
-import { queryGoogleSearch } from '../servers/queryGoogleSearch'
-import { ServerError } from '../utils/ServerError'
-import { tts_tiktalknet } from '../servers/tiktalknet'
 import { Route } from '../config/types'
+import { tts } from '../servers/googleTextToSpeech'
+import { tts_tiktalknet } from '../servers/tiktalknet'
 const getTextToSpeech = async (ctx: Koa.Context) => {
   const text = ctx.request.query.text as string
 

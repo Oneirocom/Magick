@@ -1,4 +1,4 @@
 {
-  "name": "@magickml/plugin-search-shared",
+  "name": "@magickml/plugin-pinecone-shared",
   "version": "0.1.0"
 }
