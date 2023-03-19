@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { debounce } from 'lodash'
 
 type PluginProps = {
@@ -16,10 +16,24 @@ export const DiscordAgentWindow: FC<any> = props => {
   const { selectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
-
+  const [checked, setChecked] = useState(selectedAgentData.data.discord_enabled)
+  const [disable, setDisable] = useState(selectedAgentData.data.disable)
   const { enqueueSnackbar } = useSnackbar()
   const [playingAudio, setPlayingAudio] = useState(false)
-
+  useEffect(()=>{
+    if (props.enable["DiscordPlugin"] == false) {
+      selectedAgentData.data.discord_enabled = false
+      selectedAgentData.data.disable = true
+      setChecked(false)
+      setDisable(true)
+    }
+    if (props.enable['DiscordPlugin'] == true){
+      selectedAgentData.data.discord_enabled = true
+      selectedAgentData.data.disable = false
+      setChecked(true)
+      setDisable(false)
+    }
+  }, [props.enable])
   const testVoice = async () => {
     if (
       (selectedAgentData.data?.voice_provider &&
@@ -76,6 +90,8 @@ export const DiscordAgentWindow: FC<any> = props => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          pointerEvents: disable ? 'none' : 'auto',
+          opacity: disable ? 0.2 : 1,
         }}
       >
         <h3>Discord</h3>
@@ -95,8 +111,9 @@ export const DiscordAgentWindow: FC<any> = props => {
           </button>
           <Switch
             label={null}
-            checked={selectedAgentData.data?.discord_enabled}
+            checked={checked}
             onChange={e => {
+              setChecked(!checked)
               debouncedFunction(selectedAgentData.id, {
                 data: {
                   ...selectedAgentData.data,

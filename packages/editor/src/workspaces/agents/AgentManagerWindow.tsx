@@ -5,6 +5,8 @@ import { useSnackbar } from 'notistack'
 import axios from 'axios'
 import { LoadingScreen } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
+import { pluginManager } from '@magickml/engine'
+import validateSpellData from './AgentWindow/spellValidator'
 
 const AgentManagerWindow = () => {
   const config = useConfig()
@@ -13,6 +15,7 @@ const AgentManagerWindow = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [selectedAgent, setSelectedAgent] = useState<any>({ id: null })
   const [root_spell, setRootSpell] = useState('default')
+  const [enable, setEnable] = useState("")
   const globalConfig = useSelector((state: any) => state.globalConfig)
 
   const resetData = async () => {
@@ -22,6 +25,13 @@ const AgentManagerWindow = () => {
     setData(json.data)
     setIsLoading(false)
     console.log('res is', json)
+    let spellAgent = JSON.parse(json.data[0].rootSpell)
+    let inputs = pluginManager.getInputByName()
+    let plugin_list = pluginManager.getPlugins()
+    for (let key of Object.keys(plugin_list)){
+      plugin_list[key] = validateSpellData(spellAgent, inputs[key])
+    }
+    setEnable(plugin_list)
   }
 
   const createNew = (data: {
@@ -156,6 +166,7 @@ const AgentManagerWindow = () => {
     })()
   }, [config.apiUrl])
 
+
   return isLoading ? (
     <LoadingScreen />
   ) : (
@@ -170,6 +181,7 @@ const AgentManagerWindow = () => {
       selectedAgent={selectedAgent}
       rootSpell={root_spell}
       setRootSpell={setRootSpell}
+      onLoadEnables={enable}
     />
   )
 }

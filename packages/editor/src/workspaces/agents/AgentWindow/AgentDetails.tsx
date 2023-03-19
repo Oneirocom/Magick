@@ -1,7 +1,7 @@
 import { Switch } from '@magickml/client-core'
 import { Avatar, Button, Typography } from '@mui/material'
 import styles from './index.module.scss'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import AgentPubVariables from './AgentPubVariables'
 import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
@@ -20,12 +20,13 @@ const AgentDetails = ({
   selectedAgentData,
   setSelectedAgentData,
   updateCallback,
+  onLoadEnables,
 }) => {
   const [spellList, setSpellList] = useState<any[]>([])
   const config = useConfig()
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
-
+  const [enable, setEnable] = useState(onLoadEnables)
   const update = (id, data = undefined) => {
     const _data = data || selectedAgentData
     id = id || _data.id
@@ -59,7 +60,7 @@ const AgentDetails = ({
         })
       })
   }
-
+  
   const exportAgent = () => {
     const fileName = 'agent'
 
@@ -208,11 +209,31 @@ const AgentDetails = ({
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value
             )
-            if (!validateSpellData(newRootSpell, selectedAgentData.data)){
+            let inputs = pluginManager.getInputByName()
+            let plugin_list = pluginManager.getPlugins()
+            for (let key of Object.keys(plugin_list)){
+              plugin_list[key] = validateSpellData(newRootSpell, inputs[key])
+            }
+            console.log(plugin_list)
+            setEnable(plugin_list)
+            enqueueSnackbar('Greyed out components are not available because of the selected spell.', {
+              variant: 'info',
+            })
+            /* for (let key in plugin_list){
+              console.log(key)
+              console.log(JSON.parse(inputs)[key])
+              console.log(validateSpellData(newRootSpell, inputs[key]))
+            } */
+            /* if (!validateSpellData(newRootSpell, selectedAgentData.data)){
               enqueueSnackbar('The selected input is not present in the spell.', {
                 variant: 'warning',
               })
-            }
+            } */
+            setSelectedAgentData({
+              enabled: true,
+              ...selectedAgentData
+            })
+            //setEnable("DiscordPlugin")
             setSelectedAgentData({
               ...selectedAgentData,
               rootSpell: JSON.stringify(newRootSpell),
@@ -303,6 +324,7 @@ const AgentDetails = ({
           return (
             <RenderComp
               key={index}
+              enable={enable}
               element={value}
               selectedAgentData={selectedAgentData}
               setSelectedAgentData={setSelectedAgentData}

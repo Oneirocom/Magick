@@ -90,46 +90,33 @@ type Data = {
   };
   
   const validateNodes = (nodes: { [key: string]: Node | null }, data: Data = {}): boolean => {
-    const ajv = new Ajv();
-    const validate = ajv.compile({ type: 'array', items: schema });
     const nodesArray = Object.values(nodes).filter((n) => n !== null) as Node[];
-    const inputRegex = /^Input - (.+)$/;
-  
-    let inputTypeSet: Set<string> = new Set([
-      'Default',
-    ]);
-  
-    
-    if (data) {
-        console.log(data)
-        inputTypeSet = new Set(['Default']);
-        for (const [key, value] of Object.entries(data)) {
-            if (value && inputTypeMapping[key]) {
-            const inputTypes = inputTypeMapping[key];
-            inputTypes.forEach((inputType) => {
-                inputTypeSet.add(inputType);
-            });
+    const ajv = new Ajv({ allErrors: true });
+    const validate = ajv.compile(schema);
+
+    // Check if each node in nodesArray has a valid schema
+    for (const node of nodesArray) {
+        const valid = validate(node);
+        if (!valid) {
+        console.error(validate.errors);
+        return false;
+        }
+    }
+
+    //@ts-ignore
+    const enabledInputs = data.map(ele => ele.name)
+    console.log(enabledInputs)
+    // Check if each node with isInput true has a data object with a name property
+    // that matches at least one of the input types specified in the data object
+    for (const node of nodesArray) {
+        if (node.data?.isInput === true && node.data?.name) {
+            const inputMatch = /Input - (.*)/.exec(node.data.name);
+            if (!inputMatch || enabledInputs.includes(inputMatch[1])) {
+                return true;
             }
         }
     }
-    //Rewrite Required for Multi Input, example Discord + REST
-    //Presently would check if inputs in the spell have a match in array of inputs created from *-enabled property
-    for (const node of nodesArray) {
-      if (node.data?.isInput === true && node.data?.name) {
-        const inputMatch = inputRegex.exec(node.data.name);
-        if (!inputMatch || !inputTypeSet.has(inputMatch[1])) {
-          return false;
-        }
-      }
-    }
-    try {
-        let rsp = validate(nodesArray)
-        console.log(validate.errors)
-        return rsp
-    } catch(e) {
-        console.log(e)
-        return false;
-    }
+    return false;
   };
 
 const validateSpellData = (spellData: SpellData | null, data: any): boolean => {

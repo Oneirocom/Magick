@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid'
 import { debounce } from 'lodash'
 import { Switch } from '@magickml/client-core'
@@ -9,7 +9,18 @@ export const TwitterAgentWindow: FC<any> = props => {
   const { selectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
-
+  const [checked, setChecked] = useState(selectedAgentData.data.twitter_enabled)
+  const [disable, setDisable] = useState(false)
+  useEffect(()=>{
+    if (props.enable["TwitterPlugin"] == false) {
+      setChecked(false)
+      setDisable(true)
+    }
+    if (props.enable['TwitterPlugin'] == true){
+      setChecked(true)
+      setDisable(false)
+    }
+  }, [props.enable])
   return (
     <>
       <div
@@ -19,6 +30,8 @@ export const TwitterAgentWindow: FC<any> = props => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          pointerEvents: disable ? 'none' : 'auto',
+          opacity: disable ? 0.2 : 1,
         }}
       >
         <h3>Twitter</h3>
@@ -38,8 +51,9 @@ export const TwitterAgentWindow: FC<any> = props => {
           </button>
           <Switch
             label={null}
-            checked={selectedAgentData.data?.twitter_enabled}
+            checked={checked}
             onChange={e => {
+              setChecked(!checked)
               debouncedFunction(selectedAgentData.id, {
                 data: {
                   ...selectedAgentData.data,
