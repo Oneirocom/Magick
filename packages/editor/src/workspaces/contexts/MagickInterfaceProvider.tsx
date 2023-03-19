@@ -1,4 +1,4 @@
-import { EditorContext, MagickWorkerInputs, Spell } from '@magickml/engine'
+import { EditorContext, MagickWorkerInputs, OnSubspellUpdated, Spell } from '@magickml/engine'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
 import { runPython } from '@magickml/engine'
@@ -90,10 +90,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     })
   }
 
-  const onSubspellUpdated = (
-    spellName: string,
-    callback: (data: unknown) => void
-  ) => {
+  const onSubspellUpdated: OnSubspellUpdated = (spellName, callback) => {
     return subscribe($SUBSPELL_UPDATED(spellName), (event, data) => {
       callback(data)
     })
