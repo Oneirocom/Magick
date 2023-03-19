@@ -97,6 +97,10 @@ export type CompletionResponse = {
   choice: any
 }
 
+// TODO: Maybe use data:unknown to allow for any data
+export type SubspellUpdatedCallback = (spell: Spell) => void
+export type OnSubspellUpdated = (spellName: string, callback: SubspellUpdatedCallback) => void
+
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
   declare pubSub: PubSubContext
@@ -105,8 +109,8 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare abort: unknown
   declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
   declare moduleManager: ModuleManager
-  declare runProcess: (callback?: Function | undefined) => Promise<void>
-  declare onSpellUpdated: (spellName: string, callback: Function) => Function
+  declare runProcess: (callback?: ()=>void | undefined) => Promise<void>
+  declare onSpellUpdated: (spellName: string, callback: SubspellUpdatedCallback) => OnSubspellUpdated
   declare refreshEventTable: () => void
 }
 
