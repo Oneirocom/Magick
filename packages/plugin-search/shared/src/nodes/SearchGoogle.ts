@@ -1,3 +1,4 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import Rete from 'rete'
 
 import {
@@ -5,23 +6,23 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-} from '../../types'
-import { TaskOptions } from '../../plugins/taskPlugin/task'
-import { stringSocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
-// import { queryGoogleSearch } from '../../functions/queryGoogle'
-
+  TaskOptions,
+  stringSocket,
+  triggerSocket,
+  MagickComponent,
+  API_ROOT_URL,
+} from '@magickml/engine'
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
 type WorkerReturn = {
-  summary: string,
+  summary: string
   links: string
 }
 
-export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
+export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     // Name of the component
-    super('Query Google')
+    super('Search Google')
 
     this.task = {
       outputs: {
@@ -30,7 +31,7 @@ export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
         trigger: 'option',
       },
     } as TaskOptions
-    this.category = 'APIs'
+    this.category = 'Search'
     this.info = info
   }
   // the builder is used to "assemble" the node component.
@@ -56,14 +57,28 @@ export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
   async worker(
     _node: NodeData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
+    _outputs: MagickWorkerOutputs
   ) {
-    const query = inputs.query[0] as string
-    const {summary, links} = {summary: "changeme", links: ["changeme"]} as any // await queryGoogleSearch(query)
-    console.log('summary, links', summary, links)
+    const url = `${API_ROOT_URL}/query_google`
+
+    const body = JSON.stringify({ query: inputs.query[0] })
+
+    // write a fetch post to SERVER_URL/query_google with the parameter query in the body
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body,
+    })
+
+    const json = await response.json()
+
+    const { summary, links } = json
+
     return {
       summary,
-      links
+      links,
     }
   }
 }

@@ -1,17 +1,15 @@
 import isEqual from 'lodash/isEqual'
 import Rete from 'rete'
 
-import {
-  EngineContext,
-  ModuleWorkerOutput,
-  NodeData,
-  Spell,
-  MagickNode,
-  MagickWorkerInputs,
-} from '../../types'
 import { SpellControl } from '../../dataControls/SpellControl'
 import { MagickComponent } from '../../magick-component'
-import { stringSocket, triggerSocket } from '../../sockets'
+import { triggerSocket } from '../../sockets'
+import {
+  EngineContext, MagickNode,
+  MagickWorkerInputs, ModuleWorkerOutput,
+  NodeData,
+  Spell
+} from '../../types'
 
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
@@ -65,10 +63,15 @@ export class SpellComponent extends MagickComponent<
       console.log('double click', node)
       const pubsub = this.editor.pubSub
       const event = pubsub.events.OPEN_TAB
+      const encodedToId = (uri: string) => {
+        uri = decodeURIComponent(uri)
+        return uri.slice(0,36)
+      }
       pubsub.publish(event, {
         type: 'spell',
+        id: encodedToId(node.data.spellName as string),
         spellName: node.data.spellName,
-        name: node.data.spell,
+        name: encodedToId(node.data.spellName as string),
         openNew: false,
       })
     }
@@ -116,6 +119,9 @@ export class SpellComponent extends MagickComponent<
       node.data.spellName = spell.name
       node.data.spellId = spell.id
       node.data.projectId = spell.projectId
+
+      // TODO: Set the public variables from the public variables of the spell
+      //node.data.publicVariables = 
 
       // Update the sockets
       this.updateSockets(node, spell)
@@ -196,8 +202,6 @@ export class SpellComponent extends MagickComponent<
         publicVariables,
       }
     )
-
-      console.log('******************** outputs', outputs)
 
     return this.formatOutputs(node, outputs)
   }

@@ -23,19 +23,6 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
 
   return (ctx.body = url)
 }
-const queryGoogle = async (ctx: Koa.Context) => {
-  const body = ctx.request.body as any
-
-  if (!body?.query)
-    throw new ServerError('input-failed', 'No query provided in request body')
-  const query = body?.query as string
-  const data = await queryGoogleSearch(query)
-
-  const { summary, links } = data
-
-
-  return (ctx.body = { summary, links })
-}
 
 const image_generation = async (ctx: Koa.Context) => {
   const url = 'http://localhost:7860/sdapi/v1/txt2img'
@@ -57,11 +44,6 @@ export const apis: Route[] = [
   {
     path: '/text_to_speech',
     get: getTextToSpeech,
-  },
-
-  {
-    path: '/query_google',
-    post: queryGoogle,
   },
   {
     path: '/image_generation',

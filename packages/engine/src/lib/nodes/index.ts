@@ -1,5 +1,4 @@
 import { MagickComponent } from '../types'
-import { QueryGoogle } from './apis/QueryGoogle'
 import { EventDestructureComponent } from './events/EventDestructure'
 import { EventRestructureComponent } from './events/EventRestructure'
 import { EventRecall } from './events/EventRecall'
@@ -114,7 +113,6 @@ export const components = {
   merge: () => new Merge(),
   orGate: () => new OrGate(),
   log: () => new Log(),
-  queryGoogle: () => new QueryGoogle(),
   imageGeneration: () => new ImageGeneration(),
   generator: () => new Generator(),
   speechToText: () => new SpeechToText(),
