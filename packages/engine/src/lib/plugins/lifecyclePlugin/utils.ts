@@ -1,6 +1,17 @@
 import { NodeEditor } from 'rete'
 
-export function getHook<T extends unknown>(
+import {
+  OnCreated,
+  OnDestroyed,
+  OnConnect,
+  OnConnected,
+  OnDisconnect,
+  OnDisconnected,
+} from './interfaces'
+
+type HookActions = OnCreated | OnDestroyed | OnConnect | OnConnected | OnDisconnect | OnDisconnected
+
+export function getHook<T extends HookActions>(
   editor: NodeEditor,
   name: undefined | string,
   method: keyof T
@@ -9,8 +20,8 @@ export function getHook<T extends unknown>(
 
   const component = editor.getComponent(name)
 
-  if (method in component) {
-    const c = component as T
+  if (typeof method in component) {
+    const c = component as unknown as T
     const func = c[method] as unknown as Function
 
     return func.bind(component)

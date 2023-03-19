@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material'
 import styles from '../AgentWindowStyle.module.css'
-import { Switch, Input } from '@magickml/client-core'
+import { Input, Switch } from '@magickml/client-core'
 
 interface Props {
   publicVars: any
@@ -8,8 +8,7 @@ interface Props {
 }
 
 const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
-  const onChange = (variable, event) => {
-    event.preventDefault()
+  const onChangeHandler = (variable, event) => {
     function applyNativeEventToValue(inputValue, nativeEventData) {
       inputValue = inputValue || ''
       // if the native event is a backspace
@@ -20,17 +19,16 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
       }
 
       // otherwise, add the native event to the current variable value
-      return inputValue + nativeEventData.data
+      return inputValue + (nativeEventData.data ? nativeEventData.data : '')
     }
 
     const newVar = {
       ...variable,
-      value: event.nativeEvent.data
-        ? // apply the native event to the current variable value
-          applyNativeEventToValue(variable.value, event.nativeEvent)
-        : event.target.checked
-        ? event.target.value
-        : event.target.checked,
+      value:
+        event.nativeEvent.data === null || event.nativeEvent.data
+          ? // apply the native event to the current variable value
+            applyNativeEventToValue(variable.value, event.nativeEvent)
+          : event.target.checked,
     }
 
     setPublicVars({
@@ -68,16 +66,15 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
                 {variable?.type?.includes('Boolean') ? (
                   <Switch
                     label={''}
-                    checked={variable.value ?? ''}
-                    onChange={e => onChange(variable, e)}
-                    name={variable.name}
+                    checked={variable.value}
+                    onChange={e => onChangeHandler(variable, e)}
                   />
                 ) : (
                   <Input
                     style={{ width: '100%' }}
-                    value={variable.value ? variable.value : ''}
+                    value={variable.value}
                     type="text"
-                    onChange={e => onChange(variable, e)}
+                    onChange={e => onChangeHandler(variable, e)}
                     name={variable.name}
                     placeHolder={'Add new value here'}
                   />

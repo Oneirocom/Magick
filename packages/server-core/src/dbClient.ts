@@ -9,6 +9,7 @@ const cpuCore = os.cpus()
 const isM1 = cpuCore[0].model.includes("Apple M1") || cpuCore[0].model.includes("Apple M2")
 const isWindows = os.platform() === 'win32'
 
+
 declare module './declarations' {
   interface Configuration {
     dbClient: Knex
@@ -42,6 +43,7 @@ const getDatabaseConfig = () => {
       },
       // sqlite does not support inserting default values
       useNullAsDefault: true,
+      /* 
       pool: {
         afterCreate: function (conn, done) {
           if(SKIP_DB_EXTENSIONS) {
@@ -96,7 +98,7 @@ const getDatabaseConfig = () => {
             )
           }
         },
-      },
+      },*/
     }
 
   throw new Error('Unsupported database type, use `pg` or `sqlite`')
