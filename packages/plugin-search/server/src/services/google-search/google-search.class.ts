@@ -8,7 +8,8 @@ export interface GoogleSearchParams extends Params {
 }
 
 export const queryGoogleSearch = async (searchTerm: string) => {
-  async function searchDirectly() {
+  async function searchDirectly(searchTerm) {
+    console.log('searching directly')
     const query = searchTerm.split(' ').join('+')
     const response = await unirest
       .get(`https://www.google.com/search?q=${query}&gl=us&hl=en`)
@@ -24,8 +25,13 @@ export const queryGoogleSearch = async (searchTerm: string) => {
     if (featuredResult) return featuredResult
 
     const snippets = $('.g .VwiC3b ')
+      let text = ''
+    snippets.each((i, el) => {
+      text += $(el).text()
+    })
 
-    return $(snippets[0]).text()
+
+    return text
   }
 
   // promise.all serpSearch and searchDirectly
@@ -39,7 +45,7 @@ export const queryGoogleSearch = async (searchTerm: string) => {
       },
       num: 10,
     }),
-    searchDirectly(),
+    searchDirectly(searchTerm),
   ])
 
   // example serpSearch
@@ -47,11 +53,14 @@ export const queryGoogleSearch = async (searchTerm: string) => {
   [{"url":"https://www.youtube.com/watch?v=mHONNcZbwDY","title":"Lionel Richie - Hello (Official Music Video) - YouTube"},{"url":"https://en.wikipedia.org/wiki/Hello#:~:text=Hello%20might%20be%20derived%20from,publications%20as%20early%20as%201803.","title":"Hello - Wikipedia"},{"url":"https://mollysmusic.org/blog/hard-songs-to-sing-hello-by-adele/#:~:text=The%20belt%20notes%20in%20%E2%80%9CHello,makes%20the%20belt%20more%20precarious.","title":"Hard Songs to Sing: Hello, by Adele - Molly's Music"}]
   */
   // for each item in serpSearch, format into a string, with the title and url
-  const formattedSerpSearch = serpSearch.map(item => {
+  const formattedSerpSearch = serpSearch?.map(item => {
     return `${item.title} | URL: ${item.url}`
-  })
+  }) ?? []
 
   const output = `${searchDirectResponse}\n${formattedSerpSearch.join('\n')}`
+  
+  console.log('output', output)
+  
   return {
     summary: searchDirectResponse,
     links: formattedSerpSearch,
@@ -62,10 +71,12 @@ export const queryGoogleSearch = async (searchTerm: string) => {
 export class GoogleSearchService<
   ServiceParams extends Params = GoogleSearchParams
 > {
-  async get(
+  async find(
     params: GoogleSearchParams
   ): Promise<{ summary: string; links: string }> {
+    console.log('params', params)
     const query = params.query.query as string
+    console.log('query', query)
 
     const data = await queryGoogleSearch(query)
 

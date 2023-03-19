@@ -22,10 +22,10 @@ type WorkerReturn = {
   error?: string
 }
 
-export class Pinecone extends MagickComponent<Promise<WorkerReturn>> {
+export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     // Name of the component
-    super('Pinecone')
+    super('Query Pinecone')
 
     this.task = {
       outputs: {

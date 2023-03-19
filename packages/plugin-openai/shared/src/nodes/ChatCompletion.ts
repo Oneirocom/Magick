@@ -28,8 +28,7 @@ export class ChatCompletion extends MagickComponent<Promise<WorkerReturn>> {
 
     this.task = {
       outputs: {
-        summary: 'output',
-        links: 'output',
+        result: 'output',
         trigger: 'option',
       },
     } as TaskOptions
@@ -101,10 +100,11 @@ export class ChatCompletion extends MagickComponent<Promise<WorkerReturn>> {
       const userMessage = { role: 'user', content: input }
       messages.push(userMessage)
     } else {
+      console.error('No input provided')
       return { error: 'No input provided' }
     }
 
-    const configuration = new Configuration({
+    const configuration = new Configuration({ 
       apiKey: context.module.secrets['openai_api_key'],
     })
     const openai = new OpenAIApi(configuration)
@@ -114,8 +114,14 @@ export class ChatCompletion extends MagickComponent<Promise<WorkerReturn>> {
       messages,
     })
 
+    console.log('completion.data', completion.data)
+
     const result = completion.data.choices[0].message?.content
 
-    return { result }
+    console.log('result', result)
+
+    const string = JSON.stringify(result)
+
+    return { result: string }
   }
 }
