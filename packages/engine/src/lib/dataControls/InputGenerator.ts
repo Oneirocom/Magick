@@ -15,7 +15,7 @@ export class InputGeneratorControl extends DataControl {
   }
   constructor({
     socketType = 'anySocket',
-    taskType = 'input',
+    taskType = 'output',
     ignored = [],
     icon = 'properties',
   }: InputComponentData) {

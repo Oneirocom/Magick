@@ -183,17 +183,20 @@ export interface IRunContextEditor extends NodeEditor {
   abort: Function
 }
 
+export type TaskType = 'output' | 'option'
+export type ConnectionType = 'input' | 'output'
+
 export type DataSocketType = {
   name: SocketNameType
-  taskType: 'output' | 'option'
+  taskType: TaskType
   socketKey: string
-  connectionType: 'input' | 'output'
+  connectionType: ConnectionType
   socketType: SocketType
   useSocketName: boolean
 }
 
 export type MagicNodeInput = Input & { socketType: DataSocketType; }
-export type MagicNodeOutput = Output & { taskType?: 'output' | 'option'; socketType: DataSocketType; }
+export type MagicNodeOutput = Output & { taskType?: TaskType; socketType: DataSocketType; }
 
 export type MagickNode = Node & {
   inspector: Inspector
@@ -267,8 +270,8 @@ export type ComponentData<T=InputTaskType|OutputTaskType> =  Record<string, unkn
   icon?: string
 }
 
-export type InputComponentData = ComponentData<InputTaskType>
-export type OutputComponentData = ComponentData<OutputTaskType>
+export type InputComponentData = ComponentData<TaskType>
+export type OutputComponentData = ComponentData<TaskType>
 
 export type ModuleComponent = MagickComponent<unknown> & {
   run: Function
