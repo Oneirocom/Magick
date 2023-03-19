@@ -7,6 +7,7 @@ import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { pluginManager } from '@magickml/engine'
+import validateSpellData from './spellValidator'
 import { Input } from '@mui/material'
 import { IconBtn } from '@magickml/client-core'
 import { Edit, Done, Close } from '@mui/icons-material'
@@ -207,6 +208,11 @@ const AgentDetails = ({
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value
             )
+            if (!validateSpellData(newRootSpell, selectedAgentData.data)){
+              enqueueSnackbar('The selected input is not present in the spell.', {
+                variant: 'warning',
+              })
+            }
             setSelectedAgentData({
               ...selectedAgentData,
               rootSpell: JSON.stringify(newRootSpell),
