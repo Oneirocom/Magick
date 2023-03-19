@@ -1,6 +1,7 @@
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import type { Knex } from 'knex'
 import os from 'os'
+import { v4 as uuidv4 } from 'uuid'
 import pgvector from 'pgvector/pg'
 import { SKIP_DB_EXTENSIONS } from '@magickml/engine'
 const cpuCore = os.cpus()
@@ -67,20 +68,28 @@ export const event = (app: Application) => {
         },
       ],
       create: [
+        schemaHooks.validateData(eventDataValidator),
+        schemaHooks.resolveData(eventDataResolver),
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         (context: HookContext) => {
           if (SKIP_DB_EXTENSIONS) return context
           const { embedding } = context.data
+          const { data, service } = context
+          let id = uuidv4()
+          context.data = {
+            [service.id]: id,
+            ...data,
+          }
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
             context.data.embedding = pgvector.toSql(embedding)
+            let vectordb = app.get('vectordb')
+            vectordb.add(id, embedding)
           } else {
             context.data.embedding = pgvector.toSql(nullArray)
           }
           return context
-        },
-        schemaHooks.validateData(eventDataValidator),
-        schemaHooks.resolveData(eventDataResolver),
+        }
       ],
       patch: [
         schemaHooks.validateData(eventPatchValidator),
@@ -90,7 +99,7 @@ export const event = (app: Application) => {
     },
     after: {
       create: [
-        async (context: HookContext) => {
+        /* async (context: HookContext) => {
           if (SKIP_DB_EXTENSIONS) return context
           if (!context.data.embedding || context.data.embedding.length === 0)
             return context
@@ -113,7 +122,7 @@ export const event = (app: Application) => {
             }
           }
           return context
-        },
+        }, */
       ],
       all: [],
     },

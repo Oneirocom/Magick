@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useConfig } from '../../contexts/ConfigProvider'
-import { KeyboardArrowDown, FileCopy, Clear } from '@mui/icons-material/'
+import { FileCopy, Clear } from '@mui/icons-material/'
 import styles from './styles.module.scss'
 import { IconButton, Input } from '@mui/material'
 import { Tooltip } from '@magickml/client-core'
@@ -12,6 +12,9 @@ const SettingsWindowChild = ({
   setKey,
   getKey,
 }) => {
+  const [copy, setCopy] = useState('Copy')
+  const [clear, setClear] = useState('Clear')
+
   return (
     <div className={styles['child']}>
       <p className={styles['title']}>{displayName}</p>
@@ -29,21 +32,29 @@ const SettingsWindowChild = ({
       />
       {getKey(keyName) && getKey(keyName) !== '' && (
         <>
-          <Tooltip title={'Copy'}>
+          <Tooltip title={copy}>
             <IconButton
               className={styles['icon']}
               onClick={() => {
                 navigator.clipboard.writeText(getKey(keyName))
+                setCopy('Copied')
+                setTimeout(() => {
+                  setCopy('Copy')
+                }, 1000)
               }}
             >
               <FileCopy />
             </IconButton>
           </Tooltip>
-          <Tooltip title={'Clear'}>
+          <Tooltip title={clear}>
             <IconButton
               className={styles['icon']}
               onClick={() => {
                 setKey(keyName, '')
+                setClear('Cleared')
+                setTimeout(() => {
+                  setClear('Clear')
+                }, 1000)
               }}
             >
               <Clear />
@@ -52,7 +63,7 @@ const SettingsWindowChild = ({
         </>
       )}
 
-      <div>
+      <div className={styles['info']}>
         Your API key is{' '}
         <a href={getUrl} target="_blank" rel="noreferrer" tabIndex={-1}>
           available here.

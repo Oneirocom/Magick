@@ -46,12 +46,12 @@ export class Inspector {
   // addede DataControl[]
   _add(list: Map<string, DataControl>, control: DataControl) {
     if (list.has(control.dataKey))
-      throw new Error(
+      return console.error(
         `Item with dataKey '${control.dataKey}' already been added to the inspector`
       )
 
     if (control['inspector'] !== null)
-      throw new Error('Inspector has already been added to some control')
+    return console.error('Inspector has already been added to some control')
 
     // Attach the inspector to the incoming control instance
     control['inspector'] = this
@@ -273,7 +273,9 @@ export class Inspector {
     this.editor.trigger('save')
   }
 
-  get() {}
+  get() {
+    return
+  }
 
   // returns all data prepared for the pubsub to send it.
   data(): InspectorData {
@@ -297,6 +299,4 @@ export class Inspector {
       info: this.node.info,
     }
   }
-
-  remove() {}
 }

@@ -29,8 +29,6 @@ export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
         links: 'output',
         trigger: 'option',
       },
-      init: () => {},
-      onRun: () => {},
     } as TaskOptions
     this.category = 'APIs'
     this.info = info

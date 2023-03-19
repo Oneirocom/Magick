@@ -65,7 +65,7 @@ export abstract class MagickComponent<
 
   async run(node: NodeData, data: unknown = {}) {
     if (!node || node === undefined) {
-      throw new Error('node is undefined')
+      return console.error('node is undefined')
     }
 
     const task = this.nodeTaskMap[node?.id]
