@@ -65,7 +65,8 @@ export type GetEventArgs = {
   embedding?: number[]
   observer?: string
   client?: string
-  entities?: any[]
+  //TODO: entities not used anywhere
+  // entities?: any[]
   channel?: string
   channelType?: string
   projectId?: string
@@ -88,12 +89,18 @@ export type CompletionBody = {
   topP: number
   presencePenalty: number
   frequencyPenalty: number
+  // TODO: Type not used anywhere
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   stop: any
   apiKey?: string
 }
 
 export type CompletionResponse = {
+  // TODO: Type not used anywhere
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   success: any
+  // TODO: Type not used anywhere
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   choice: any
 }
 
@@ -117,10 +124,10 @@ export type Env = {
 }
 
 export type runSpellType = {
-  inputs: Record<string, any>
+  inputs: MagickSpellInput
   spellName: string
   projectId: string
-  secrets: Record<string, any>
+  secrets: Record<string, string>
   publicVariables: Record<string, any>
 }
 export type SupportedLanguages = 'python' | 'javascript'
@@ -325,6 +332,9 @@ export type Spell = {
   hash?: string
   projectId: string
 }
+
+export type MagickSpellInput = Record<string, unknown>
+export type MagickSpellOutput = Record<string, unknown>
 
 export type NewSpellArgs = {
   name: string
