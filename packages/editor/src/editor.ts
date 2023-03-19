@@ -204,6 +204,7 @@ export const initEditor = function ({
     return magick.onSubspellUpdated(spellName, callback)
   }
 
+  // TODO: should this return a promise?
   editor.abort = async () => {
     await engine.abort()
   }
