@@ -1,6 +1,6 @@
-import { NodeData } from 'rete/types/core/data'
+import { NodeData, NodeDataOrEmpty } from 'rete/types/core/data'
 
-import { MagickReteInput, MagickWorkerInputs, MagickWorkerOutputs } from '../../types'
+import { MagickNode, MagickReteInput, MagickWorkerInputs } from '../../types'
 import { MagickComponent, MagickTask } from '../../magick-component'
 
 type TaskRef = {
@@ -10,15 +10,15 @@ type TaskRef = {
   next?: TaskRef[]
 }
 
-type SocketInfo = {
+export type TaskSocketInfo = {
   targetSocket: string | null,
   targetNode: NodeData | null,
 }
 
 export type TaskOptions = {
   outputs: Record<string, unknown>
-  init?: (task:Task, node: NodeData) => void
-  onRun?: (node: NodeData, task: Task, data: unknown, socketInfo:SocketInfo) => void
+  init?: (task:Task|undefined, node: MagickNode) => void
+  onRun?: (node: NodeData, task: Task, data: unknown, socketInfo:TaskSocketInfo) => void
   runOneInput?: boolean
 }
 
@@ -37,7 +37,9 @@ export type TaskOutputTypes = 'option' | 'output'
 //   return Object.values(task.component.task.outputs).includes('option')
 // }
 
-type TaskWorker =  (task:Task, inputs: MagickWorkerInputs, data:unknown, socketInfo) => MagickWorkerOutputs
+// TODO: the TaskWorker should 
+type TaskWorker = (_ctx: unknown, inputs: MagickWorkerInputs, data: NodeDataOrEmpty, socketInfo: TaskSocketInfo | string | null) => Promise<Record<string, unknown> | null>
+// type TaskWorker = TaskWorker1 | TaskWorker2
 export class Task {
   node: NodeData
   inputs: MagickWorkerInputs
@@ -133,7 +135,7 @@ export class Task {
     this.closed = []
   }
 
-  async run(data: unknown = {}, options: RunOptions = {}) {
+  async run(data: NodeDataOrEmpty = {}, options: RunOptions = {}) {
     const {
       needReset = true,
       garbage = [] as Task[],

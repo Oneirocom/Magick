@@ -2,13 +2,13 @@ import { Node, Socket } from 'rete'
 
 import { MagickEditor, MagickNode } from './types'
 import { MagickEngineComponent } from './engine'
-import { Task, TaskOptions } from './plugins/taskPlugin/task'
-import { NodeData } from 'rete/types/core/data'
+import { Task, TaskOptions, TaskSocketInfo } from './plugins/taskPlugin/task'
+import { NodeData, NodeDataOrEmpty } from 'rete/types/core/data'
 
 export interface MagickTask extends Task {
   outputs?: { [key: string]: string }
   init?: (task?: MagickTask, node?: MagickNode) => void
-  onRun?: Function
+  onRun?: (node: NodeData, task: Task, data: unknown, socketInfo:TaskSocketInfo) => void
 }
 
 export interface ModuleOptions {
@@ -53,7 +53,7 @@ export abstract class MagickComponent<
     return node
   }
 
-  async run(node: NodeData, data: unknown = {}) {
+  async run(node: MagickNode, data: NodeDataOrEmpty = {}) {
     if (!node || node === undefined) {
       return console.error('node is undefined')
     }
