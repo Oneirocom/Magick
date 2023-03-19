@@ -114,18 +114,11 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
 Nodes are created in the composer window of the "Spells" tab. You can right-click in the composer and add nodes from the context menu. You can also drag and drop nodes from the "Nodes" tab into the composer. Nodes can be dragged and dropped around the composer to re-arrange them. Nodes can be deleted by right-clicking on them and selecting "Delete".
 
 #### Node Types
-##### Prompt Template Node
-##### Code Node
- Lets you define both inputs and outputs.
-##### Generator Node
-Lets you define your own input sockets and then work with that data inside of the node. 
-  ###### Uses
-  * short term conversational memory 
-  * personal assistant, data retrieval
-  * processing for an automation agent
-  * tool to visit websites and scrape data.
-##### Wait For All Node 
-Used to wait for different execution branches to complete before joining back into a single branch -- this is a good way to do several slow tasks at once.
+* Input Node
+* Prompt Template 
+* Code Node: Lets you define both inputs and outputs.
+* Generator Node: Lets you define your own input sockets and then work with that data inside of the node. 
+* Wait For All Node: Used to wait for different execution branches to complete before joining back into a single branch -- this is a good way to do several slow tasks at once.
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
