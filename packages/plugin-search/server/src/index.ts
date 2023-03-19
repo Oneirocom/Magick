@@ -7,7 +7,6 @@ const SearchPlugin = new ServerPlugin({
   services: [
     {
       name: 'google-search',
-      
     }
   ]
 })
