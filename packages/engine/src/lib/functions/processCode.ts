@@ -40,9 +40,7 @@ export async function processCode(
       return codeResult;
     } catch (err) {
       console.log({ err });
-      throw new Error(
-        'Error in spell runner: processCode component: ' + code
-      );
+      return 'Error in spell runner: processCode component: ' + code
     }
   } else {
     try {

@@ -38,7 +38,7 @@ export class InputGeneratorControl extends DataControl {
   onData(inputs: DataSocketType[]) {
     if (!inputs) return
 
-    if (this.node === null) throw new TypeError('Node is null')
+    if (this.node === null) return console.error('Node is null')
     this.node.data.inputs = inputs
 
     const existingInputs: string[] = []
@@ -54,14 +54,14 @@ export class InputGeneratorControl extends DataControl {
       // .filter(existing => !inputs.some(incoming => incoming.name === existing))
       // .filter(existing => ignored.some(input => input !== existing))
       .forEach(key => {
-        if (this.node === null) throw new TypeError('Node is null')
+        if (this.node === null) return console.error('Node is null')
         const input = this.node.inputs.get(key)
 
         this.node
           .getConnections()
           .filter(con => con.input.key === key)
           .forEach(con => {
-            if (this.editor === null) throw new TypeError('Editor is null')
+            if (this.editor === null) return console.error('Editor is null')
             this.editor.removeConnection(con)
           })
 
@@ -81,7 +81,7 @@ export class InputGeneratorControl extends DataControl {
         input.name,
         sockets[input.socketType]
       )
-      if (this.node === null) throw new TypeError('Node is null')
+      if (this.node === null) return console.error('Node is null')
       this.node.addInput(newInput)
     })
 

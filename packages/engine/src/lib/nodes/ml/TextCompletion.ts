@@ -17,7 +17,7 @@ const info = 'Basic text completion using OpenAI.'
 
 type WorkerReturn = {
   output: string
-}
+} | void
 
 export class TextCompletion extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
@@ -191,7 +191,7 @@ export class TextCompletion extends MagickComponent<Promise<WorkerReturn>> {
     if (!success) {
       console.error('Error in text completion', data)
       node.data.error = true
-      throw new Error('Error in text completion')
+      return console.error('Error in text completion')
     }
 
     const res =

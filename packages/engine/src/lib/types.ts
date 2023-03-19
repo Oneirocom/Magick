@@ -260,8 +260,11 @@ export type Subspell = { name: string; id: string; data: GraphData }
 
 export type GraphData = Data
 
-export type ComponentData<T=TaskType> =  Record<string, unknown> & {
-  ignored?: { name: string }[]
+export type InputTaskType = 'input' | 'option'
+export type OutputTaskType = 'output' | 'option'
+
+export type ComponentData<T=InputTaskType|OutputTaskType> =  Record<string, unknown> & {
+  ignored?: string[]
   socketType?: SocketType
   taskType?: T
   icon?: string

@@ -5,13 +5,14 @@ import { useSnackbar } from 'notistack'
 import axios from 'axios'
 import { LoadingScreen } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
+import { IGNORE_AUTH } from '@magickml/engine'
 
 const AgentManagerWindow = () => {
   const config = useConfig()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [data, setData] = useState<Array<object>>([])
   const { enqueueSnackbar } = useSnackbar()
-  const [selectedAgent, setSelectedAgent] = useState<any>({ id: null })
+  const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
   const [root_spell, setRootSpell] = useState('default')
   const globalConfig = useSelector((state: any) => state.globalConfig)
 
@@ -35,7 +36,7 @@ const AgentManagerWindow = () => {
   }) => {
     const token = globalConfig?.token
 
-    if (!token) {
+    if (!token && !IGNORE_AUTH) {
       enqueueSnackbar('You must be logged in to create an agent', {
         variant: 'error',
       })
@@ -50,9 +51,11 @@ const AgentManagerWindow = () => {
         updatedAt: new Date().toISOString(),
         pingedAt: new Date().toISOString(),
       },
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: IGNORE_AUTH
+        ? {}
+        : {
+            Authorization: `Bearer ${token}`,
+          },
     })
       .then(async res => {
         const res2 = await fetch(`${config.apiUrl}/agents`)
@@ -71,7 +74,7 @@ const AgentManagerWindow = () => {
       const data = JSON.parse(event?.target?.result as string)
       data.projectId = config.projectId
       data.enabled = data?.enabled ? true : false
-      data.updatedAt = data?.updatedAt || ''
+      data.updatedAt = new Date().toISOString()
       data.rootSpell = data?.rootSpell || '{}'
       data.spells = Array.isArray(data?.spells) ? data.spells : []
       data.secrets = JSON.stringify(
@@ -134,7 +137,7 @@ const AgentManagerWindow = () => {
             variant: 'success',
           })
         }
-        if (selectedAgent.id === id) setSelectedAgent({ id: null })
+        if (selectedAgentData.id === id) setSelectedAgentData(undefined)
         resetData()
       })
       .catch(e => {
@@ -166,8 +169,8 @@ const AgentManagerWindow = () => {
       update={update}
       updateCallBack={resetData}
       onLoadFile={loadFile}
-      setSelectedAgent={setSelectedAgent}
-      selectedAgent={selectedAgent}
+      setSelectedAgentData={setSelectedAgentData}
+      selectedAgentData={selectedAgentData}
       rootSpell={root_spell}
       setRootSpell={setRootSpell}
     />

@@ -62,6 +62,14 @@ export const RestAgentWindow: FC<any> = props => {
             checked={selectedAgentData.data?.rest_enabled}
             onChange={e => {
               debouncedFunction(selectedAgentData.id, {
+                ...selectedAgentData,
+                data: {
+                  ...selectedAgentData.data,
+                  rest_enabled: e.target.checked,
+                },
+              })
+              setSelectedAgentData({
+                ...selectedAgentData,
                 data: {
                   ...selectedAgentData.data,
                   rest_enabled: e.target.checked,

@@ -26,10 +26,11 @@ const AgentDetails = ({
   const [oldName, setOldName] = useState<string>('')
 
   const update = (id, data = undefined) => {
-    const _data = data || selectedAgentData
+    const _data = data || { ...selectedAgentData }
     id = id || _data.id
     if (_data['id']) {
       delete _data.id
+      delete _data?.dirty
     }
 
     // Avoid server-side validation error
@@ -95,7 +96,7 @@ const AgentDetails = ({
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )
@@ -143,7 +144,9 @@ const AgentDetails = ({
           </div>
         ) : (
           <div className={styles.agentDescription}>
-            <Avatar className={styles.avatar}>{selectedAgentData.name.slice(0, 1)[0]} </Avatar>
+            <Avatar className={styles.avatar}>
+              {selectedAgentData.name.slice(0, 1)[0]}{' '}
+            </Avatar>
             <div>
               <Typography variant="h5">{selectedAgentData.name}</Typography>
             </div>

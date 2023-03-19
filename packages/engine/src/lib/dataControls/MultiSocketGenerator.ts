@@ -19,14 +19,6 @@ export class MultiSocketGeneratorControl extends DataControl {
     connectionType: 'input' | 'output'
     name: string
   }) {
-    if (
-      !connectionType ||
-      (connectionType !== 'input' && connectionType !== 'output')
-    )
-      throw new Error(
-        "connectionType of your generator must be defined and of the value 'input' or 'output'."
-      )
-
     const name = nameInput || `${socketTypes.join('|')} ${connectionType}s`
 
     const options = {
