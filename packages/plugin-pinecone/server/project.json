@@ -1,0 +1,40 @@
+{
+  "name": "@magickml/plugin-search-server",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/plugin-search/server/src",
+  "projectType": "library",
+  "implicitDependencies": ["@magickml/engine"],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/packages/plugin-search/server",
+        "tsConfig": "packages/plugin-search/server/tsconfig.lib.json",
+        "packageJson": "packages/plugin-search/server/package.json",
+        "main": "packages/plugin-search/server/src/index.ts",
+        "assets": [
+          "packages/plugin-search/server/*.md"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/plugin-search/server/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/plugin-search/server/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

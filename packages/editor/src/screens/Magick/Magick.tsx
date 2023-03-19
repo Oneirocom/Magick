@@ -1,35 +1,27 @@
-import { RootState } from '../../state/store'
-import {
-  activeTabSelector,
-  selectAllTabs,
-  openTab,
-  closeTab,
-} from '../../state/tabs'
+import { LoadingScreen, TabLayout } from '@magickml/client-core'
+import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
-import { useConfig } from '../../contexts/ConfigProvider'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useSnackbar } from 'notistack'
-import { usePubSub } from '../../contexts/PubSubProvider'
-import { LoadingScreen, TabLayout } from '@magickml/client-core'
-import Workspaces from '../../workspaces'
 import TabBar from '../../components/TabBar/TabBar'
-import axios from 'axios'
+import { useConfig } from '../../contexts/ConfigProvider'
+import { usePubSub } from '../../contexts/PubSubProvider'
 import { useLazyGetSpellQuery } from '../../state/api/spells'
+import { RootState } from '../../state/store'
+import {
+  activeTabSelector, closeTab, openTab, selectAllTabs
+} from '../../state/tabs'
+import Workspaces from '../../workspaces'
 
 const Magick = ({ empty = false }) => {
-  const config = useConfig()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { enqueueSnackbar } = useSnackbar()
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
   const activeTab = useSelector(activeTabSelector)
   const pubSub = usePubSub()
   const { URI } = useParams()
   const { events, publish, subscribe } = pubSub
-
-  const [getSpell] = useLazyGetSpellQuery()
 
   // Handle open tab events
   useEffect(() => {

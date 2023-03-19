@@ -21,7 +21,7 @@ type InputReturn = {
 }
 
 const defaultInputTypes = [
-  { name: 'Default', trigger: true, socket: eventSocket },
+  { name: 'Default', trigger: true, socket: anySocket },
 ]
 
 export class InputComponent extends MagickComponent<InputReturn> {
