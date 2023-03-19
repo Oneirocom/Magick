@@ -43,6 +43,7 @@ export const event = (app: Application) => {
     events: [],
   })
   // Initialize hooks
+  const vectordb = app.get('vectordb')
   app.service('events').hooks({
     around: {
       all: [
@@ -84,12 +85,10 @@ export const event = (app: Application) => {
 
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
-            //context.data.embedding = pgvector.toSql(embedding)
-            let vectordb = app.get('vectordb')
+            //context.data.embedding = pgvector.toSql(embedding)    
             vectordb.add(id, embedding, context.data)
           } else {
             //context.data.embedding = pgvector.toSql(nullArray)
-            let vectordb = app.get('vectordb')
             vectordb.add(id, nullArray, context.data)
           }
           return;

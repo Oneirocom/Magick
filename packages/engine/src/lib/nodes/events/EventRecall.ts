@@ -91,7 +91,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       
 
       url.searchParams.append('embedding', params['embedding'])
-      console.log(url.toString())
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
       const json = await response.json()

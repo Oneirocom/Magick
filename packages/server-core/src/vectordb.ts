@@ -178,7 +178,12 @@ class HNSWVectorDatabase<T> implements VectorDatabase<T> {
       .reverse()
       .map((item) => item.data);
   }
-
+  public delete(id: string) {
+    let k = this.index.nodes.get(id)
+    this.index.nodes.delete(id)
+    this.saveIndex()
+    return {events: k.data}
+  }
   private saveIndex(): void {
     const index: HNSWIndex<T> = {
       nodes: Object.fromEntries(this.index.nodes),
