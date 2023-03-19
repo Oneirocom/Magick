@@ -17,6 +17,10 @@ The connection between the frontend and backend is called an <strong>API</strong
 If you'd like to know more about this topic, here is a video that covers it well.
 https://www.youtube.com/watch?v=ByGJQzlzxQg
 
-# Usage
+## Usage
 
 The API can be enabled on any running agent. Each agent will have a different API and different token. For example payloads see the REST API properties panel in the agent window.
+
+## Postman Collection
+
+A postman collection is available [here](https://raw.githubusercontent.com/Oneirocom/Magick/development/apps/docs/docs/Magick%20REST%20API.postman_collection.json)

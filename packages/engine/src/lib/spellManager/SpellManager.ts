@@ -46,7 +46,7 @@ export default class SpellManager {
       const spell = await magickInterface.getSpell(spellId)
 
       if (!spell) {
-        throw new Error(`No spell found with name ${spellId}`)
+        return console.error(`No spell found with name ${spellId}`)
       }
 
       await this.load(spell)
@@ -75,7 +75,10 @@ export default class SpellManager {
   }
 
   async load(spell: Spell, overload = false) {
-    if (!spell) throw new Error('No spell provided to load')
+    if (!spell) {
+      console.error('No spell provided')
+      return
+    }
     if (this.spellRunnerMap.has(spell.id) && !overload){
       return this.getSpellRunner(spell.id)
     }

@@ -44,18 +44,27 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
     const events = inputs.events[0];
     let conversation = '';
     //Events.rows when the data is fetched using embedding
-    if(events.rows) {
-      events.rows.forEach((event) => {
+    
+    if (Array.isArray(events)){
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      if(events.rows) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        events.rows.forEach((event) => {
+          conversation += event.sender + ': ' + event.content + '\n';
+        });
+        return {
+          conversation,
+        }
+      }
+      //Events when the data is fetched using query
+      if(events) events.forEach((event) => {
         conversation += event.sender + ': ' + event.content + '\n';
       });
-      return {
-        conversation,
-      }
+    } else {
+      conversation += events.sender + ': ' + events.content + '\n';
     }
-    //Events when the data is fetched using query
-    if(events) events.forEach((event) => {
-      conversation += event.sender + ': ' + event.content + '\n';
-    });
     return {
         conversation,
     }

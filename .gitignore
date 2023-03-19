@@ -57,3 +57,4 @@ yarn.lock
 scripts/.cache
 
 apps/docs/build
+data.json
