@@ -20,6 +20,12 @@ export class EventService<ServiceParams extends Params = EventParams> extends Kn
     return data;
   }
   //@ts-ignore
+  async remove(id: string, params?: ServiceParams) : any{
+    let vectordb = app.get('vectordb')
+    let r = vectordb.delete(id)
+    return r
+  }
+  //@ts-ignore
   async find(params?: ServiceParams) {
     const db = app.get('dbClient')
     if (params.query.embedding) {
@@ -33,7 +39,6 @@ export class EventService<ServiceParams extends Params = EventParams> extends Kn
       const query = f32_ary as unknown as number[];
       const k = 2;
       const results = vectordb.search(query, params?.query?.$limit);
-      console.log(results)
       if (results) {
         return {events : results }
       }
