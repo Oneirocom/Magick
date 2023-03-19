@@ -292,7 +292,7 @@ export type InputComponentData = ComponentData<TaskType>
 export type OutputComponentData = ComponentData<TaskType>
 
 export type ModuleComponent = MagickComponent<unknown> & {
-  run: Function
+  run: (node: NodeData, data?: unknown) => Promise<void>
 }
 
 export type NodeConnections = {
