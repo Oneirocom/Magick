@@ -97,9 +97,7 @@ export type CompletionResponse = {
   choice: any
 }
 
-// TODO: Maybe use data:unknown to allow for any data
-export type SubspellUpdatedCallback = (spell: Spell) => void
-export type OnSubspellUpdated = (spellName: string, callback: SubspellUpdatedCallback) => void
+export type OnSubspellUpdated = (spellName: string, callback: (PubSubData)=>void) => void
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
@@ -109,8 +107,8 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare abort: unknown
   declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
   declare moduleManager: ModuleManager
-  declare runProcess: (callback?: ()=>void | undefined) => Promise<void>
-  declare onSpellUpdated: (spellName: string, callback: SubspellUpdatedCallback) => OnSubspellUpdated
+  declare runProcess: (callback?: () => void | undefined) => Promise<void>
+  declare onSpellUpdated: (spellName: string, callback: PubSubCallback) => OnSubspellUpdated
   declare refreshEventTable: () => void
 }
 
@@ -153,16 +151,23 @@ export type EngineContext = {
 }
 
 export type EventPayload = Record<string, any>
+export type PubSubData = Record<string, any> | string | any[]
+export type PubSubCallback = (event: string, data: PubSubData) => void
 
+export type OnInspectorCallback = (data: PubSubData) => void
+export type OnInspector = (node: MagickNode, callback: OnInspectorCallback) => ()=>void
 export interface EditorContext extends EngineContext {
   sendToAvatar: (data: any) => void
-  onTrigger: (node: MagickNode | string, callback: Function) => Function
+  /**
+  * @deprecated The method should not be used
+  */
+  onTrigger: (node: MagickNode | string, callback: (data: unknown) => void) => ()=>void
   sendToPlaytest: (data: string) => void
   sendToInspector: (data: EventPayload) => void
   sendToDebug: (data: EventPayload) => void
-  onInspector: (node: MagickNode, callback: Function) => Function
-  onPlaytest: (callback: Function) => Function
-  onDebug: (node: NodeData, callback: Function) => Function
+  onInspector: (node: MagickNode, callback: OnInspectorCallback) => ()=>void
+  onPlaytest: (callback: PubSubCallback) => ()=>void
+  onDebug: (node: NodeData, callback: PubSubCallback) => ()=>void
   clearTextEditor: () => void
   refreshEventTable: () => void
 }
@@ -264,11 +269,8 @@ export type Subspell = { name: string; id: string; data: GraphData }
 
 export type GraphData = Data
 
-export type InputTaskType = 'input' | 'option'
-export type OutputTaskType = 'output' | 'option'
-
-export type ComponentData<T=InputTaskType|OutputTaskType> =  Record<string, unknown> & {
-  ignored?: string[]
+export type ComponentData<T = TaskType> = Record<string, unknown> & {
+  ignored?: { name: string }[]
   socketType?: SocketType
   taskType?: T
   icon?: string

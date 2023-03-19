@@ -1,4 +1,4 @@
-import { EditorContext, MagickWorkerInputs, OnSubspellUpdated, Spell } from '@magickml/engine'
+import { EditorContext, MagickWorkerInputs, OnInspector, OnSubspellUpdated, Spell } from '@magickml/engine'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
 import { runPython } from '@magickml/engine'
@@ -6,6 +6,8 @@ import { useConfig } from '../../contexts/ConfigProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { spellApi } from '../../state/api/spells'
 
+// TODO: does it also work without the !?
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const Context = createContext<EditorContext>(undefined!)
 
 export const useMagickInterface = () => useContext(Context)
@@ -57,7 +59,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return spellRef.current
   }
 
-  // todo tech debt.  Check if this is still needed
+  // TODO: tech debt.  Check if this is still needed
+  /**
+  * @deprecated The method should not be used
+  */
   const onTrigger = (node, callback) => {
     const isDefault = node === 'default' ? 'default' : null
     return subscribe($TRIGGER(tab.id, isDefault ?? node.id), (event, data) => {
@@ -72,7 +77,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return publish($REFRESH_EVENT_TABLE(tab.id))
   }
 
-  const onInspector = (node, callback) => {
+  const onInspector:OnInspector = (node, callback) => {
     return subscribe($NODE_SET(tab.id, node.id), (event, data) => {
       callback(data)
     })
