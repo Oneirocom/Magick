@@ -189,7 +189,7 @@ export type EventsTypes = {
 
 export interface IRunContextEditor extends NodeEditor {
   magick: EditorContext
-  abort: Function
+  abort: () => void
 }
 
 export type TaskType = 'output' | 'option'
