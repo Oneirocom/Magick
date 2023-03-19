@@ -1,6 +1,6 @@
 import io from 'socket.io'
 
-import { EngineContext, Spell } from '../types'
+import { EngineContext, MagickSpellInput, Spell } from '../types'
 import SpellRunner from './SpellRunner'
 
 type SpellManagerArgs = {
@@ -95,7 +95,7 @@ export default class SpellManager {
     return spellRunner
   }
 
-  async run(spellId: string, inputs: Record<string, any>, secrets: Record<string, string>, publicVariables) {
+  async run(spellId: string, inputs: MagickSpellInput, secrets: Record<string, string>, publicVariables) {
     const runner = this.getSpellRunner(spellId)
     
     const result = await runner?.runComponent({
