@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { KeyInput } from './utils'
 import { Modal, Switch } from '@magickml/client-core'
 import { debounce } from 'lodash'
@@ -13,11 +13,22 @@ export const EthereumAgentWindow: FC<any> = props => {
   const { selectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
+  const [checked, setChecked] = useState(selectedAgentData.data.ethereum_enabled)
+  const [disable, setDisable] = useState(false)
   const [state, setState] = useState({
     ethereum_private_key: selectedAgentData?.data?.ethereum_private_key,
     ethereum_custom_rpc: selectedAgentData?.data?.ethereum_custom_rpc,
   })
-
+  useEffect(()=>{
+    if (props.enable["EthereumPlugin"] == false) {
+      setChecked(false)
+      setDisable(true)
+    }
+    if (props.enable['EthereumPlugin'] == true){
+      setChecked(true)
+      setDisable(false)
+    }
+  }, [props.enable])
   const handleOnChange = e => {
     const { name, value } = e.target
     setState({ ...state, [name]: value })
@@ -44,6 +55,8 @@ export const EthereumAgentWindow: FC<any> = props => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          pointerEvents: disable ? 'none' : 'auto',
+          opacity: disable ? 0.2 : 1,
         }}
       >
         <h3>Ethereum</h3>
@@ -62,8 +75,9 @@ export const EthereumAgentWindow: FC<any> = props => {
             Edit
           </button>
           <Switch
-            checked={selectedAgentData.data?.ethereum_enabled}
+            checked={checked}
             onChange={e => {
+              setChecked(!checked)
               debouncedFunction(selectedAgentData.id, {
                 data: {
                   ...selectedAgentData.data,

@@ -10,6 +10,7 @@ interface Props {
   data: Array<object>
   selectedAgent: object
   rootSpell: string
+  onLoadEnables: Object
   setRootSpell: (spell: string) => void
   setSelectedAgent: (data: object) => void
   onCreateAgent: (data: any) => void
@@ -26,6 +27,7 @@ const AgentWindow = ({
   onCreateAgent,
   onDelete,
   onLoadFile,
+  onLoadEnables,
 }: Props) => {
   const config = useConfig()
   const [selectedAgentData, setSelectedAgentData] = useState({ id: null })
@@ -87,6 +89,7 @@ const AgentWindow = ({
             selectedAgentData={selectedAgentData}
             setSelectedAgentData={setSelectedAgentData}
             updateCallback={updateCallBack}
+            onLoadEnables={onLoadEnables}
           />
         ) : (
           <Typography className={styles.noSelected}>Select Agent</Typography>
