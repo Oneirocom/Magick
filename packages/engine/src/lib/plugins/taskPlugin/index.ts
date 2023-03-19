@@ -1,9 +1,9 @@
 import { Component } from 'rete'
-import { NodeData } from 'rete/types/core/data'
+import { NodeData, NodeDataOrEmpty } from 'rete/types/core/data'
 
 import { MagickEditor, MagickWorkerInputs } from '../../types'
 import { MagickComponent } from '../../magick-component'
-import { Task } from './task'
+import { Task, TaskSocketInfo } from './task'
 
 function install(editor: MagickEditor) {
   editor.on('componentregister', (_component: Component) => {
@@ -50,11 +50,12 @@ function install(editor: MagickEditor) {
       const taskCaller = async (
         _ctx: unknown,
         inputs: MagickWorkerInputs,
-        data: NodeData,
-        socketInfo: string | null
+        data: NodeDataOrEmpty,
+        socketInfo: TaskSocketInfo | string | null
       ) => {
         component._task = task
-        // might change this interface, since we swap out data for outputs here, which just feels wrong.
+        // TODO: might change this interface, since we swap out data for outputs here, which just feels wrong.
+        // TODO: Also improve typing of TaskWorker when done
 
         const result = await taskWorker.call(
           component,
@@ -65,7 +66,8 @@ function install(editor: MagickEditor) {
           ...rest
         )
 
-        return result
+        // TODO: Make sure that the result is correct
+        return result as Record<string, unknown> | null
       }
 
       const task = new Task(inputs, component, node, taskCaller)
