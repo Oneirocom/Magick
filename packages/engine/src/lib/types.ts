@@ -97,7 +97,7 @@ export type CompletionResponse = {
   choice: any
 }
 
-export type OnSubspellUpdated = (spellName: string, callback: (PubSubData)=>void) => void
+export type OnSubspellUpdated = (spellName: string, callback: (PubSubData) => void) => void
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
@@ -116,58 +116,70 @@ export type Env = {
   API_ROOT_URL: string
 }
 
-type runSpellType = {
+export type runSpellType = {
   inputs: Record<string, any>
   spellName: string
   projectId: string
   secrets: Record<string, any>
   publicVariables: Record<string, any>
 }
+export type SupportedLanguages = 'python' | 'javascript'
+
+export type GetSpell = ({
+  spellName,
+  projectId,
+}: {
+  spellName: string
+  projectId: string
+}) => Promise<any | Spell>
+
+export type ProcessCode = (
+  code: unknown,
+  inputs: MagickWorkerInputs,
+  data: Record<string, any>,
+  language?: SupportedLanguages
+) => any | void
+
+export type RunSpell = ({
+  inputs,
+  spellName,
+  projectId,
+  secrets,
+  publicVariables
+}: runSpellType) => Record<string, any>
 
 export type EngineContext = {
   env: Env
-  runSpell: ({
-    inputs,
-    spellName,
-    projectId,
-    secrets,
-    publicVariables
-  }: runSpellType) => Record<string, any>
+  runSpell: RunSpell
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
-  getSpell: ({
-    spellName,
-    projectId,
-  }: {
-    spellName: string
-    projectId: string
-  }) => Promise<any | Spell>
+  getSpell: GetSpell
   getCurrentSpell: () => Spell
-  processCode?: (
-    code: unknown,
-    inputs: MagickWorkerInputs,
-    data: Record<string, any>,
-    language?: string
-  ) => any | void
+  processCode?: ProcessCode
 }
 
-export type EventPayload = Record<string, any>
 export type PubSubData = Record<string, any> | string | any[]
 export type PubSubCallback = (event: string, data: PubSubData) => void
 
-export type OnInspectorCallback = (data: PubSubData) => void
-export type OnInspector = (node: MagickNode, callback: OnInspectorCallback) => ()=>void
+export type OnInspectorCallback = (data: Record<string, any>) => void
+export type OnInspector = (node: MagickNode, callback: OnInspectorCallback) => () => void
+export type OnEditorCallback = (data: PubSubData) => void
+export type OnEditor = (callback: OnEditorCallback) => () => void
+export type OnDebug = (node: MagickNode, callback: OnEditorCallback) => () => void
+
+export type PublishEditorEvent = (data: PubSubData) => void
+
 export interface EditorContext extends EngineContext {
   sendToAvatar: (data: any) => void
   /**
   * @deprecated The method should not be used
   */
-  onTrigger: (node: MagickNode | string, callback: (data: unknown) => void) => ()=>void
+  onTrigger: (node: MagickNode | string, callback: (data: unknown) => void) => () => void
   sendToPlaytest: (data: string) => void
-  sendToInspector: (data: EventPayload) => void
-  sendToDebug: (data: EventPayload) => void
-  onInspector: (node: MagickNode, callback: OnInspectorCallback) => ()=>void
-  onPlaytest: (callback: PubSubCallback) => ()=>void
-  onDebug: (node: NodeData, callback: PubSubCallback) => ()=>void
+  sendToInspector: PublishEditorEvent
+  sendToDebug: PublishEditorEvent
+  onInspector: OnInspector
+  onPlaytest: OnEditor
+  onDebug: OnDebug
   clearTextEditor: () => void
   refreshEventTable: () => void
 }
@@ -218,7 +230,7 @@ export type MagickNode = Node & {
   category?: string
   displayName?: string
   info: string
-  subscription: Function
+  subscription: PubSubCallback
   console: MagickConsole
 }
 
