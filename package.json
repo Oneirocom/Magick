@@ -124,6 +124,8 @@
     "langchain": "^0.0.10",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
+    "movier": "^3.0.0",
+    "name-to-imdb": "^3.0.4",
     "notistack": "^3.0.1",
     "openai": "^3.2.1",
     "ot-json0": "^1.1.0",

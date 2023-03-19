@@ -1,5 +1,5 @@
-import { Pinecone } from './nodes/Pinecone'
+import { QueryPinecone } from './nodes/QueryPinecone'
 
 export default [
-  Pinecone,
+  QueryPinecone,
 ]

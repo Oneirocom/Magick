@@ -9,7 +9,7 @@ export const googleSearch = (app: Application) => {
   // Register our service on the Feathers application
   app.use('google-search' as any, new GoogleSearchService(), {
     // A list of all methods this service exposes externally
-    methods: ['get'],
+    methods: ['find'],
     // You can add additional custom events to be sent to clients here
     events: [],
   })
@@ -22,9 +22,7 @@ export const googleSearch = (app: Application) => {
     before: {
       all: [],
       get: [],
-      create: [
-        // checkForSpellInManager
-      ],
+      create: [],
       update: [],
     },
     after: {

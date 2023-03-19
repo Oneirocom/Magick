@@ -59,20 +59,14 @@ export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs
   ) {
-    const url = `${API_ROOT_URL}/query_google`
-
-    const body = JSON.stringify({ query: inputs.query[0] })
+    const url = `${API_ROOT_URL}/google-search?query=${inputs.query[0]}`
 
     // write a fetch post to SERVER_URL/query_google with the parameter query in the body
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body,
-    })
+    const response = await fetch(url)
 
     const json = await response.json()
+
+    console.log('json', json)
 
     const { summary, links } = json
 
