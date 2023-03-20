@@ -7,7 +7,7 @@ export class PlaytestControl extends DataControl {
     icon = 'hand',
     label = 'Toggle',
     defaultValue = {},
-    ignored = [] as string[],
+    ignored = [] as {name: string}[],
   }) {
     const options = {
       dataKey: dataKey,
