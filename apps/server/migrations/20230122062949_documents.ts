@@ -7,7 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('type')
     table.string('owner')
     table.string('projectId')
-    table.string('content')
+    table.text('content')
     table.specificType('embedding', 'vector(1536)')
     table.string('date')
   })

@@ -1,16 +1,14 @@
 import Rete from 'rete'
-import {
-  Document,
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  GetDocumentArgs,
-} from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, eventSocket, arraySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../magick-component'
+import { arraySocket, triggerSocket } from '../../sockets'
+import {
+  GetDocumentArgs, MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs, NodeData
+} from '../../types'
+
 const info = 'Get documents from a store'
 
 //add option to get only documents from max time difference (time diff, if set to 0 or -1, will get all documents, otherwise will count in minutes)
@@ -61,7 +59,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       },
     }
 
-    this.category = 'Documents'
+    this.category = 'Document'
     this.display = true
     this.info = info
     this.runFromCache = true

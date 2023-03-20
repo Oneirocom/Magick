@@ -29,7 +29,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
       },
     }
 
-    this.category = 'Documents'
+    this.category = 'Document'
     this.display = true
     this.info = info
   }
