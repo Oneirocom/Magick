@@ -15,7 +15,7 @@ type RequestPayload = {
   hidden?: boolean
   processed?: boolean
   cost?: number
-  spell?: any
+  spell?: string
   nodeId?: number
 }
 
