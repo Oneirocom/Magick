@@ -16,7 +16,7 @@ import css from '../../../screens/Magick/magick.module.css'
 import { useFeathers } from '../../../contexts/FeathersProvider'
 import { useAppSelector } from '../../../state/hooks'
 import { useEditor } from '../../contexts/EditorProvider'
-
+import { useInspector } from '../../contexts/InspectorProvider'
 import { spellApi } from '../../../state/api/spells'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import { Button } from '@magickml/client-core'
@@ -56,6 +56,7 @@ const Input = props => {
 
 const Playtest = ({ tab }) => {
   const config = useConfig()
+  const { inspectorData, saveInspector } = useInspector()
 
   const defaultPlaytestData = {
     sender: 'playtestSender',
@@ -118,6 +119,10 @@ const Playtest = ({ tab }) => {
   const [playtestOption, setPlaytestOption] = useState(null)
 
   useEffect(() => {
+    if (inspectorData) setPlaytestOption(inspectorData.data.inputType)
+  }, [inspectorData])
+
+  useEffect(() => {
     if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
       return
 
@@ -132,7 +137,6 @@ const Playtest = ({ tab }) => {
       }))
 
     setPlaytestOptions(options)
-    if (options.length > 0) setPlaytestOption(options[0].value)
   }, [spellData])
 
   // Keep scrollbar at bottom of its window
@@ -306,7 +310,7 @@ const Playtest = ({ tab }) => {
   const toolbar = (
     <React.Fragment>
       <Select
-        style={{ width: '100%', zIndex: 0 }}
+        style={{ width: '100%', zIndex: 1 }}
         options={playtestOptions}
         onChange={onSelectChange}
         defaultValue={{
