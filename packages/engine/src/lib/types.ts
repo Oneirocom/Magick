@@ -11,6 +11,8 @@ import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
 
+import PubSub from 'pubsub-js'
+
 export { MagickComponent } from './magick-component'
 //@seang this was causing test enviroment issues to have it shared client/server
 // export { MagickEditor } from './src/editor'
@@ -104,18 +106,18 @@ export type CompletionResponse = {
   choice: any
 }
 
-export type OnSubspellUpdated = (spellName: string, callback: (PubSubData) => void) => void
+export type OnSubspellUpdated = (spell: Spell) => void
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
-  declare pubSub: PubSubData
+  declare pubSub: PubSubContext
   declare magick: EditorContext
   declare tab: { type: string }
   declare abort: unknown
   declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
   declare moduleManager: ModuleManager
   declare runProcess: (callback?: () => void | undefined) => Promise<void>
-  declare onSpellUpdated: (spellName: string, callback: PubSubCallback) => OnSubspellUpdated
+  declare onSpellUpdated: (spellName: string, callback: (spell: Spell) => void) => () => void
   declare refreshEventTable: () => void
 }
 
@@ -165,6 +167,51 @@ export type EngineContext<DataType=Record<string, unknown>> = {
   getSpell: GetSpell
   getCurrentSpell: () => Spell
   processCode?: ProcessCode
+}
+
+export type PubSubEvents = {
+  ADD_SUBSPELL: string
+  UPDATE_SUBSPELL: string
+  DELETE_SUBSPELL: string
+  OPEN_TAB: string
+  $SUBSPELL_UPDATED: (spellName: string) => string
+  $TRIGGER: (tabId: string, nodeId?: string) => string
+  $PLAYTEST_INPUT: (tabId: string) => string
+  $PLAYTEST_PRINT: (tabId: string) => string
+  $DEBUG_PRINT: (tabId: string) => string
+  $DEBUG_INPUT: (tabId: string) => string
+  $INSPECTOR_SET: (tabId: string) => string
+  $TEXT_EDITOR_SET: (tabId: string) => string
+  $TEXT_EDITOR_CLEAR: (tabId: string) => string
+  $CLOSE_EDITOR: (tabId: string) => string
+  $NODE_SET: (tabId: string, nodeId: string) => string
+  $SAVE_SPELL: (tabId: string) => string
+  $SAVE_SPELL_DIFF: (tabId: string) => string
+  $CREATE_MESSAGE_REACTION_EDITOR: (tabId: string) => string
+  $CREATE_PLAYTEST: (tabId: string) => string
+  $CREATE_INSPECTOR: (tabId: string) => string
+  $CREATE_TEXT_EDITOR: (tabId: string) => string
+  $CREATE_AVATAR_WINDOW: (tabId: string) => string
+  $CREATE_DEBUG_CONSOLE: (tabId: string) => string
+  $CREATE_CONSOLE: (tabId: string) => string
+  $RUN_SPELL: (tabId: string) => string
+  $PROCESS: (tabId: string) => string
+  $EXPORT: (tabId: string) => string
+  $UNDO: (tabId: string) => string
+  $REDO: (tabId: string) => string
+  $DELETE: (tabId: string) => string
+  $MULTI_SELECT_COPY: (tabId: string) => string
+  $MULTI_SELECT_PASTE: (tabId: string) => string
+  $REFRESH_EVENT_TABLE: (tabId: string) => string
+  $SEND_TO_AVATAR: (tabId: string) => string
+}
+
+export interface PubSubContext {
+  publish: (event: string, data?: PubSubData) => boolean
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  subscribe(event: string, func: PubSubJS.SubscriptionListener<PubSubData>): () => void;
+  PubSub: typeof PubSub
+  events: PubSubEvents
 }
 
 export type PubSubData = Record<string, unknown> | string | unknown[]
@@ -289,8 +336,12 @@ export type Subspell = { name: string; id: string; data: GraphData }
 
 export type GraphData = Data
 
+export type IgnoredList = {
+  name: string
+}[] | string[]
+
 export type ComponentData<T = TaskType> = Record<string, unknown> & {
-  ignored?: { name: string }[]
+  ignored?: IgnoredList
   socketType?: SocketType
   taskType?: T
   icon?: string
@@ -300,7 +351,7 @@ export type InputComponentData = ComponentData<TaskType>
 export type OutputComponentData = ComponentData<TaskType>
 
 export type ModuleComponent = MagickComponent<unknown> & {
-  run: (node: MagickNodeData, data?: unknown) => Promise<void>
+  run: (node: MagickNode, data?: unknown) => Promise<void>
 }
 
 export type NodeConnections = {

@@ -3,7 +3,6 @@ import isEqual from 'lodash/isEqual'
 import {
   EngineContext,
   ModuleWorkerOutput,
-  MagickNodeData,
   Spell,
   MagickNode,
   MagickWorkerInputs,
@@ -11,6 +10,8 @@ import {
 } from '../../types'
 import { SpellControl } from '../../dataControls/SpellControl'
 import { MagickComponent } from '../../magick-component'
+import { Data } from 'rete/types/core/data'
+import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
 type Socket = {
@@ -135,7 +136,7 @@ export class SpellComponent extends MagickComponent<
   }
 
   updateSockets(node: MagickNode, spell: Spell) {
-    const graph = JSON.parse(JSON.stringify(spell.graph))
+    const graph = JSON.parse(JSON.stringify(spell.graph)) as Data
     this.updateModuleSockets(node, graph, true)
     node.update()
   }
@@ -146,7 +147,7 @@ export class SpellComponent extends MagickComponent<
       if (!socketKey) return acc
       acc[socketKey] = value
       return acc
-    }, {} as Record<string, any>)
+    }, {} as Record<string, unknown>)
   }
 
   formatInputs(node: WorkerData, inputs: MagickWorkerInputs) {
@@ -156,7 +157,7 @@ export class SpellComponent extends MagickComponent<
 
       acc[name] = value[0]
       return acc
-    }, {} as Record<string, any>)
+    }, {} as Record<string, unknown>)
   }
 
   async worker(
