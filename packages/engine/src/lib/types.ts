@@ -123,7 +123,8 @@ export type Env = {
   API_ROOT_URL: string
 }
 
-export type UnknownSpellData = Record<string, unknown>
+export type UnknownData = Record<string, unknown>
+export type UnknownSpellData = UnknownData
 
 export type runSpellType<DataType=UnknownSpellData> = {
   inputs: MagickSpellInput
