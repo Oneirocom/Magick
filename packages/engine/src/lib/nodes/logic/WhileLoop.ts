@@ -4,10 +4,11 @@
 import Rete from 'rete'
 
 import {
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { triggerSocket } from '../../sockets'
@@ -47,7 +48,7 @@ export class WhileLoop extends MagickComponent<
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     _inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     { element }: { element: number }

@@ -6,10 +6,11 @@ import Rete from 'rete'
 
 import {
   EngineContext,
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket, stringSocket, objectSocket } from '../../sockets'
@@ -53,7 +54,7 @@ export class ParseJSON extends MagickComponent<Promise<WorkerReturn>> {
     return node
   }
 
-  async worker(_node: NodeData, rawInputs: MagickWorkerInputs) {
+  async worker(_node: WorkerData, rawInputs: MagickWorkerInputs) {
     const str = rawInputs.input[0] as string
 
     return {

@@ -1,12 +1,11 @@
 import Rete from 'rete'
 import {
   Event,
-  EngineContext,
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   GetEventArgs,
+  WorkerData,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, eventSocket, arraySocket } from '../../sockets'
@@ -74,7 +73,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {

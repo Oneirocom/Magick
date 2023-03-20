@@ -4,11 +4,10 @@
 import Rete from 'rete'
 
 import {
-  EngineContext,
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
@@ -105,7 +104,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {

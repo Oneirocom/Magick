@@ -1,9 +1,10 @@
 import Rete from 'rete'
 
 import {
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
+  WorkerData,
 } from '../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
@@ -85,7 +86,7 @@ export class Cast extends MagickComponent<void> {
     return node
   }
 
-  worker(node: NodeData, inputs: MagickWorkerInputs) {
+  worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const value = inputs.input[0]
     const key = sockets.socketNameMap[node.data.socketType as SocketNameType]
 

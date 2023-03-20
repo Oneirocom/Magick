@@ -9,20 +9,20 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData,
   DropdownControl,
   stringSocket,
   numSocket,
   triggerSocket,
+  WorkerData,
 } from '@magickml/engine'
 
 const info = `Deploys a contract from Solidity code, a standard for defining non-fungible tokens on EVM machines.`
 
 type InputReturn = {
-  output: unknown
-}
+  output: string
+} | undefined
 
-export class DeployContract extends MagickComponent<InputReturn> {
+export class DeployContract extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
     super('DeployContract')
@@ -111,9 +111,8 @@ export class DeployContract extends MagickComponent<InputReturn> {
       .addOutput(txOutput)
   }
 
-  // @ts-ignore
   async worker(
-    node: NodeData,
+    node: WorkerData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }

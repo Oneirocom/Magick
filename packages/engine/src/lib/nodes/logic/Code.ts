@@ -2,10 +2,11 @@ import Rete from 'rete'
 
 import {
   EngineContext,
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
 import { InputControl } from '../../dataControls/InputControl'
@@ -90,7 +91,7 @@ export class Code extends MagickComponent<unknown> {
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context: { data: { code: unknown } }

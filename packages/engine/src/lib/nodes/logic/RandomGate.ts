@@ -1,11 +1,13 @@
 import Rete from 'rete'
 
 import {
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   DataSocketType,
+  WorkerData,
+  AsDataSocket,
 } from '../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
@@ -48,7 +50,7 @@ export class RandomGate extends MagickComponent<void> {
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
   worker(
-    node: NodeData,
+    node: WorkerData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs
   ) {
@@ -60,7 +62,8 @@ export class RandomGate extends MagickComponent<void> {
         ]
       ]
     const randomName = randomOutput.key as string
-    const nodeOutputs = node.data.outputs as DataSocketType[]
+    // TODO: make sure you don't want node.outputs
+    const nodeOutputs = node.data.outputs as Array<{name:string}>
 
     // close all outputs
     this._task.closed = [...nodeOutputs.map(out => out.name)]

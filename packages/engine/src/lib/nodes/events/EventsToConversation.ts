@@ -2,7 +2,7 @@ import Rete from 'rete'
 
 import { MagickComponent } from '../../magick-component'
 import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
-import { MagickNode, MagickWorkerInputs, NodeData } from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 const info = `Join an array of events into a conversation formatted for prompt injection.`
 
 type WorkerReturn = {
@@ -39,7 +39,7 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  worker(node: NodeData, inputs: MagickWorkerInputs & { events: unknown[] }) {
+  worker(node: WorkerData, inputs: MagickWorkerInputs & { events: unknown[] }) {
 
     const events = inputs.events[0];
     let conversation = '';

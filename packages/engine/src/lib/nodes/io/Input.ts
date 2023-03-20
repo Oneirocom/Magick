@@ -3,10 +3,11 @@ import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { pluginManager } from '../../plugin'
@@ -111,7 +112,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
       // console.log('oldConnections', oldConnections)
     }
 
-    inputType.onData((node.data.name as any).replace('Input - ', ''))
+    inputType.onData((node.data.name).replace('Input - ', ''))
 
     const toggleDefault = new SwitchControl({
       dataKey: 'useDefault',
@@ -140,7 +141,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
   }
 
   worker(
-    node: NodeData,
+    node: WorkerData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }

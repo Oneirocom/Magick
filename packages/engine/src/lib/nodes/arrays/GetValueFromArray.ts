@@ -1,10 +1,10 @@
 import Rete from 'rete'
 
 import {
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { triggerSocket, stringSocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -55,14 +55,14 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
 
   // eslint-disable-next-line @typescript-eslint/require-await, require-await
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
     const input = inputs.array[0] as string
     // TODO: Check if node.data is defined instead of using as keyword
     // const element = node.data.element as number
-    const element = (node.data as {element:number}).element
+    const element = node.data.element as number
 
     const arrayElement = input[element]
 

@@ -1,10 +1,10 @@
-import { IRunContextEditor, NodeData } from '../../types'
+import { IRunContextEditor, MagickNode } from '../../types'
 import { MagickComponent } from '../../magick-component'
 
 type ConsoleConstructor = {
   component: MagickComponent<unknown>
   editor: IRunContextEditor
-  node: NodeData
+  node: MagickNode
   server: boolean
   throwError?: Function
   isEngine?: boolean
@@ -19,7 +19,7 @@ export type Message = {
 }
 
 export class MagickConsole {
-  node: NodeData
+  node: MagickNode
   editor: IRunContextEditor
   component: MagickComponent<unknown>
   nodeView: any

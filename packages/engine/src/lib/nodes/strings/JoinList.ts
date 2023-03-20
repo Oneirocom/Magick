@@ -1,6 +1,6 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 import { TextInputControl } from '../../dataControls/TextInputControl'
 import { stringSocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -55,7 +55,7 @@ export class JoinListComponent extends MagickComponent<WorkerReturn> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  worker(node: NodeData, inputs: MagickWorkerInputs & { list: [string][] }) {
+  worker(node: WorkerData, inputs: MagickWorkerInputs & { list: [string][] }) {
     return {
       text: inputs.list[0].join(node.data.separator as string),
     }

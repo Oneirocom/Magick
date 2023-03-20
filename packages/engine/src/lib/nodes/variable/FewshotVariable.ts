@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import { NodeData, MagickNode } from '../../types'
+import { MagickNode, MagickWorkerInputs, MagickWorkerOutputs, WorkerData } from '../../types'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket } from '../../sockets'
@@ -53,7 +53,7 @@ export class FewshotVariable extends MagickComponent<InputReturn> {
     return node.addOutput(out)
   }
 
-  worker(node: NodeData, inputs: any, outputs: any, context: any) {
+  worker(node: WorkerData, _inputs: MagickWorkerInputs, _outputs: MagickWorkerOutputs, context: { module: { publicVariables: string } }) {
     let fewshot = node.data.fewshot as string
     const publicVars = JSON.parse(context.module.publicVariables)
     if(node?.data?.isPublic && publicVars[node.id]) {

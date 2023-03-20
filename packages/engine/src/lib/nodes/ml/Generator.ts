@@ -10,7 +10,8 @@ import { stringSocket, triggerSocket } from '../../sockets'
 import {
   EngineContext, MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs, NodeData
+  MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
 
 const info = `The generator component is our general purpose completion component.  You can define any number of inputs, and utilize those inputs in a templating language known as Handlebars.  Any value which is wrapped like {{this}} in double braces will be replaced with the corresponding value coming in to the input with the same name.  This allows you to write almost any fewshot you might need, and input values from anywhere else in your graph.
@@ -131,7 +132,7 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async worker(
-    node: NodeData,
+    node: WorkerData,
     rawInputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context: {

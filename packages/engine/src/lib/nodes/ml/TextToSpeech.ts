@@ -8,9 +8,9 @@ import axios from 'axios'
 import Rete from 'rete'
 
 import {
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
+  WorkerData,
 } from '../../types'
 import {
   API_ROOT_URL
@@ -86,7 +86,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(node: WorkerData, inputs: MagickWorkerInputs) {
     console.log('INPUTS:', inputs)
     const action = inputs['input'][0]
     const voiceProvider = inputs['voiceProvider'][0]

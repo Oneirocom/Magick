@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { triggerSocket, stringSocket } from '../../sockets'
@@ -61,7 +61,7 @@ export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const inp1 = inputs['input1'][0] as string
     const inp2 = inputs['input2'][0] as string
     const operationTypeData = node?.data?.operationType as string

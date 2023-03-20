@@ -5,7 +5,8 @@ import { MagickComponent } from '../../magick-component'
 import { stringSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
-  MagickWorkerInputs, NodeData
+  MagickWorkerInputs,
+  WorkerData
 } from '../../types'
 
 const info = 'String Adder adds a string in the current input.'
@@ -53,7 +54,7 @@ export class StringAdder extends MagickComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const input = inputs['string'][0] as string
     const newInput = inputs['newInput'][0] as string
     const newLineStarting =

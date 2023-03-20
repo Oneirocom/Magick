@@ -4,11 +4,12 @@ import axios from 'axios'
 import Rete from 'rete'
 
 import {
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   EngineContext,
+  WorkerData,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
@@ -80,7 +81,7 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     rawInputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     { magick }: { magick: EngineContext }

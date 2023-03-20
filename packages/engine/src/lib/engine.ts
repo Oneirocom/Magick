@@ -8,7 +8,7 @@ import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
-import { GraphData, MagickWorkerInputs, NodeData, UnknownData } from './types'
+import { GraphData, MagickWorkerInputs, UnknownData, MagickComponent, WorkerData } from './types'
 
 interface WorkerOutputs {
   [key: string]: unknown
@@ -29,10 +29,10 @@ export abstract class MagickEngineComponent<WorkerReturnType> {
   }
 
   abstract worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     outputs: WorkerOutputs,
-    context: UnknownData,
+    context: UnknownData | { module: { publicVariables: string } },
     ...args: unknown[]
   ): WorkerReturnType
 }
@@ -41,7 +41,7 @@ export abstract class MagickEngineComponent<WorkerReturnType> {
 
 export type InitEngineArguments = {
   name: string
-  components: Component[]
+  components: MagickComponent<unknown>[]
   server: boolean
   throwError?: (message: unknown)=>void
   socket?: io.Socket

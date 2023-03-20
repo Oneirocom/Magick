@@ -1,10 +1,11 @@
 import { Component, Control } from 'rete'
 
 import {
-  NodeData,
+  MagickNodeData,
   MagickComponent,
   MagickEditor,
   MagickNode,
+  WorkerData,
 } from '../../types'
 import { Task } from '../taskPlugin'
 import { RunButtonControl } from './RunLastArguments'
@@ -20,7 +21,7 @@ function install(editor: MagickEditor) {
     /**
      * Here we create a worker wrapper that will cache all the arguments being sent in to worker for later use
      */
-    component.worker = (node: NodeData, inputs, outputs, context, ...args) => {
+    component.worker = (node: WorkerData, inputs, outputs, context, ...args) => {
       component.cache[node.id] = {
         node,
         inputs,
@@ -38,7 +39,7 @@ function install(editor: MagickEditor) {
     component.builder = (node: MagickNode) => {
       if (component.runFromCache) {
         // Run function runs the worker with old args and returns the result.
-        const run = async (node: NodeData) => {
+        const run = async (node: WorkerData) => {
           const cache = component.cache[node.id]
 
           if (!cache) return null

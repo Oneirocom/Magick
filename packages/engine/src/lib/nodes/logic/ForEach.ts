@@ -1,17 +1,18 @@
 import Rete from 'rete'
 
 import {
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { arraySocket, triggerSocket, anySocket } from '../../sockets'
 import { MagickComponent, MagickTask } from '../../magick-component'
 const info = `The forEach component takes in an array, and will iterate over each item in the array, firing a new trigger signal with the appropriate value, until all items in the array have been processed.`
 
 type WorkerReturn = {
-  element?: string | string[] | unknown | {}
+  element?: string | string[] | unknown | object
 } | void
 
 export class ForEach extends MagickComponent<Promise<WorkerReturn | undefined>> {
@@ -40,7 +41,7 @@ export class ForEach extends MagickComponent<Promise<WorkerReturn | undefined>> 
   }
 
   async worker(
-    _node: NodeData,
+    _node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     { element }: { element: unknown }

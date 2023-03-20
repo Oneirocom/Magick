@@ -1,10 +1,10 @@
 import Rete from 'rete'
 
 import {
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { stringSocket, triggerSocket } from '../../sockets'
@@ -54,7 +54,7 @@ export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
   async worker(
-    _node: NodeData,
+    _node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {

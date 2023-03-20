@@ -17,7 +17,7 @@ export type TaskSocketInfo = {
 
 export type TaskOptions = {
   outputs: Record<string, unknown>
-  init?: (task:Task|undefined, node: MagickNode) => void
+  init?: (task:Task|undefined, node: NodeData) => void
   onRun?: (node: NodeData, task: Task, data: unknown, socketInfo:TaskSocketInfo) => void
   runOneInput?: boolean
 }

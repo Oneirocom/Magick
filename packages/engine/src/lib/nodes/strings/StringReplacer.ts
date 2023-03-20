@@ -7,9 +7,9 @@
 import Rete from 'rete'
 
 import {
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
+  WorkerData,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket } from '../../sockets'
@@ -74,7 +74,7 @@ export class StringReplacer extends MagickComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, rawInputs: MagickWorkerInputs) {
+  async worker(node: WorkerData, rawInputs: MagickWorkerInputs) {
     let input = rawInputs['input'][0] as string
 
     const match = ((rawInputs['match'] && rawInputs['match'][0]) ||

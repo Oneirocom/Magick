@@ -46,7 +46,8 @@ export default class SpellManager {
       const spell = await magickInterface.getSpell(spellId)
 
       if (!spell) {
-        return console.error(`No spell found with name ${spellId}`)
+        console.error(`No spell found with name ${spellId}`)
+        return {}
       }
 
       await this.load(spell)
@@ -104,6 +105,6 @@ export default class SpellManager {
       publicVariables,
     })
 
-    return result
+    return result || {}
   }
 }

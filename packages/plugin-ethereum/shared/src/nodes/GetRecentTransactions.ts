@@ -6,22 +6,21 @@ import {
   anySocket,
   MagickComponent,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData,
   numSocket,
   stringSocket,
   triggerSocket,
+  WorkerData,
 } from '@magickml/engine'
 
 const info = `Check the recent transactions of an ethereum wallet`
 
 type InputReturn = {
-  output: unknown
-}
+  output: string
+} | undefined
 
-export class GetRecentTransactions extends MagickComponent<InputReturn> {
+export class GetRecentTransactions extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
     super('GetRecentTransactions')
@@ -63,9 +62,8 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
       .addOutput(balanceOutput)
   }
 
-  // @ts-ignore
   async worker(
-    node: NodeData,
+    node: WorkerData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
