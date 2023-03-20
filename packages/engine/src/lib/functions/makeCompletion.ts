@@ -21,7 +21,7 @@ export type CompletionData = {
 export async function makeCompletion(
   data: CompletionData,
   { projectId, spell, nodeId }
-): Promise<any> {
+): Promise<{success:boolean, choice?: {text:string}}> {
   const {
     prompt,
     model,
@@ -107,4 +107,5 @@ export async function makeCompletion(
     console.error(err)
     return { success: false }
   }
+  return { success: false }
 }
