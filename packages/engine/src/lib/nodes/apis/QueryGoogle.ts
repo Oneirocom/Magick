@@ -15,7 +15,7 @@ const info = `When the alert component is triggered, it will fire an alert with 
 
 type WorkerReturn = {
   summary: string,
-  links: string
+  links: string[]
 }
 
 export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
@@ -59,7 +59,7 @@ export class QueryGoogle extends MagickComponent<Promise<WorkerReturn>> {
     _outputs: MagickWorkerOutputs,
   ) {
     const query = inputs.query[0] as string
-    const {summary, links} = {summary: "changeme", links: ["changeme"]} as any // await queryGoogleSearch(query)
+    const {summary, links} = {summary: "changeme", links: ["changeme"]} // await queryGoogleSearch(query)
     console.log('summary, links', summary, links)
     return {
       summary,
