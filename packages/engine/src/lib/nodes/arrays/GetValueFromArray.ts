@@ -60,7 +60,9 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
     _outputs: MagickWorkerOutputs,
   ) {
     const input = inputs.array[0] as string
-    const element = node.data.element as number
+    // TODO: Check if node.data is defined instead of using as keyword
+    // const element = node.data.element as number
+    const element = (node.data as {element:number}).element
 
     const arrayElement = input[element]
 

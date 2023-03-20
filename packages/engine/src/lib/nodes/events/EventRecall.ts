@@ -135,8 +135,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     if (embedding) data['embedding'] = embedding
     if (embedding) {
       if (embedding.length === 1536) {
-        //TODO: fix this
-        const enc_embed = new Float32Array(embedding)
+        //TODO: fix this bug instead of using as
+        const enc_embed = new Float32Array(embedding as Iterable<number>)
         const uint = new Uint8Array(enc_embed.buffer)
         const str = btoa(
           String.fromCharCode.apply(
