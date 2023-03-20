@@ -117,6 +117,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Trentalantar",
+      "name": "Trentalantar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28672708?v=4",
+      "profile": "https://github.com/Trentalantar",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
