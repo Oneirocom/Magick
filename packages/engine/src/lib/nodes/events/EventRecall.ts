@@ -16,7 +16,7 @@ const info = 'Event Recall is used to get conversation for an agent and user'
 
 //add option to get only events from max time difference (time diff, if set to 0 or -1, will get all events, otherwise will count in minutes)
 type InputReturn = {
-  events: any[]
+  events: unknown[]
 }
 
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
@@ -78,11 +78,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
-    const getEventsbyEmbedding = async (params: any) => {
-      
+    const getEventsbyEmbedding = async (params: { embedding: string }) => {
+
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
-      
+
       url.searchParams.append('embedding', params['embedding'])
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
@@ -107,16 +107,18 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       return json.data
     }
     const event = (inputs['event'] && (inputs['event'][0] ?? inputs['event'])) as Event
-    let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[]
-    if (typeof(embedding) == 'string') embedding = (embedding as any).replace('[',"").replace(']',"");embedding = (embedding as any)?.split(',')
+    let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[] | string | string []
+    if (typeof (embedding) == 'string') embedding = (embedding as string).replace('[', "").replace(']', ""); embedding = (embedding as string)?.split(',')
     const { observer, client, channel, channelType, projectId, entities } = event
-    const typeData = node?.data?.type as string
+    // TODO: check if defined instead of as {type:string}
+    const typeData = (node?.data as { type: string })?.type
     const type =
       typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
         : 'none'
 
-    const maxCountData = node.data?.max_count as string
+    // TODO: check if defined instead of as {type:string}
+    const maxCountData = (node?.data as { max_count: string })?.max_count
     const maxCount = maxCountData ? parseInt(maxCountData) : 10
 
     const data = {
@@ -132,7 +134,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     let events
     if (embedding) data['embedding'] = embedding
     if (embedding) {
-      if (embedding.length == 1536) {
+      if (embedding.length === 1536) {
+        //TODO: fix this
         const enc_embed = new Float32Array(embedding)
         const uint = new Uint8Array(enc_embed.buffer)
         const str = btoa(
@@ -146,7 +149,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     } else {
       events = await getEvents(data)
     }
-    
+
     return {
       events,
     }

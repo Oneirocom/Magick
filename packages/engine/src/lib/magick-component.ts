@@ -1,6 +1,6 @@
 import { Node, Socket } from 'rete'
 
-import { MagickEditor, MagickNode } from './types'
+import { MagickEditor, MagickNode, UnknownData } from './types'
 import { MagickEngineComponent } from './engine'
 import { Task, TaskOptions, TaskSocketInfo } from './plugins/taskPlugin/task'
 import { NodeData, NodeDataOrEmpty } from 'rete/types/core/data'
@@ -24,7 +24,7 @@ export abstract class MagickComponent<
   // Original interface for task and _task: IComponentWithTask from the Rete Task Plugin
   declare task: TaskOptions
   declare _task: MagickTask
-  declare cache: Record<string, any>
+  declare cache: UnknownData
   editor: MagickEditor | null = null
   data: unknown = {}
   declare category: string
@@ -42,9 +42,6 @@ export abstract class MagickComponent<
 
   nodeTaskMap: Record<number, MagickTask> = {}
 
-  constructor(name: string) {
-    super(name)
-  }
   abstract builder(node: MagickNode): Promise<MagickNode> | MagickNode | void
 
   async build(node: MagickNode) {
