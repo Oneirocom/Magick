@@ -21,7 +21,7 @@ export type CompletionData = {
 export async function makeCompletion(
   data: CompletionData,
   { projectId, spell, nodeId }
-): Promise<{success:boolean, choice?: {text:string}}> {
+): Promise<{success:false, choice?: undefined} | {success:true, choice: {text:string}}> {
   const {
     prompt,
     model,
