@@ -123,12 +123,14 @@ export type Env = {
   API_ROOT_URL: string
 }
 
-export type runSpellType = {
+export type UnknownSpellData = Record<string, unknown>
+
+export type runSpellType<DataType=UnknownSpellData> = {
   inputs: MagickSpellInput
   spellName: string
   projectId: string
   secrets: Record<string, string>
-  publicVariables: Record<string, any>
+  publicVariables: DataType
 }
 export type SupportedLanguages = 'python' | 'javascript'
 
@@ -138,22 +140,22 @@ export type GetSpell = ({
 }: {
   spellName: string
   projectId: string
-}) => Promise<any | Spell>
+}) => Promise<Spell>
 
 export type ProcessCode = (
   code: unknown,
   inputs: MagickWorkerInputs,
-  data: Record<string, any>,
+  data: UnknownSpellData,
   language?: SupportedLanguages
-) => any | void
+) => unknown | void
 
-export type RunSpell = ({
+export type RunSpell<DataType=Record<string, unknown>> = ({
   inputs,
   spellName,
   projectId,
   secrets,
   publicVariables
-}: runSpellType) => Record<string, any>
+}: runSpellType<DataType>) => DataType
 
 export type EngineContext = {
   env: Env
@@ -164,10 +166,10 @@ export type EngineContext = {
   processCode?: ProcessCode
 }
 
-export type PubSubData = Record<string, any> | string | any[]
+export type PubSubData = Record<string, unknown> | string | unknown[]
 export type PubSubCallback = (event: string, data: PubSubData) => void
 
-export type OnInspectorCallback = (data: Record<string, any>) => void
+export type OnInspectorCallback = (data: Record<string, unknown>) => void
 export type OnInspector = (node: MagickNode, callback: OnInspectorCallback) => () => void
 export type OnEditorCallback = (data: PubSubData) => void
 export type OnEditor = (callback: OnEditorCallback) => () => void
@@ -176,7 +178,7 @@ export type OnDebug = (node: MagickNode, callback: OnEditorCallback) => () => vo
 export type PublishEditorEvent = (data: PubSubData) => void
 
 export interface EditorContext extends EngineContext {
-  sendToAvatar: (data: any) => void
+  sendToAvatar: (data: unknown) => void
   /**
   * @deprecated The method should not be used
   */
@@ -271,7 +273,8 @@ export type OpenAIResultChoice = {
   text: string
   index: number
   logprobs: number[]
-  top_logprobs: any[]
+  // TODO: Didn't find any docummantation or usage of this field
+  top_logprobs: unknown[]
   text_offset: number[]
 }
 
@@ -318,7 +321,7 @@ export type NodeOutputs = {
 export type NodeData = {
   socketKey?: string
   name?: string
-  [DataKey: string]: any
+  [DataKey: string]: unknown
 }
 
 export type Module = { name: string; id: string; data: Data }
@@ -354,9 +357,7 @@ export type TaskOutput = {
   key: string
 }
 
-export type ModuleWorkerOutput = WorkerOutputs & {
-  [key: string]: any
-}
+export type ModuleWorkerOutput = WorkerOutputs
 
 export type MagickWorkerInput = string | unknown | MagickReteInput
 export type MagickWorkerInputs = { [key: string]: MagickWorkerInput[] }
@@ -368,11 +369,11 @@ export type MagickWorkerOutputs = WorkerOutputs & {
 export type GoFn = [
   boolean, // Ok
   string | null, // Message
-  any // body
+  unknown // body
 ]
 
 // Elixir-inspired function return
-export type ExFn = [true, any] | [false, string]
+export type ExFn = [true, unknown] | [false, string]
 
 export type SearchSchema = {
   title: string
@@ -384,11 +385,11 @@ export type ClassifierSchema = {
   examples: string[] | string
 }
 
-type MessagingWebhookBody = {
+export type MessagingWebhookBody = {
   MessageSid: string
   Body: string
   From: string
   To: string
 }
 
-export type MessagingRequest = any
+export type MessagingRequest = unknown
