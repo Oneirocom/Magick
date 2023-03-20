@@ -34,7 +34,7 @@ export class EventRestructureComponent extends MagickComponent<
       },
     }
 
-    this.category = 'Events'
+    this.category = 'Event'
     this.info = info
     this.display = true
   }

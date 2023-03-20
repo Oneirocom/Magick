@@ -21,7 +21,7 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
       },
     }
 
-    this.category = 'Events'
+    this.category = 'Event'
     this.info = info
   }
 
