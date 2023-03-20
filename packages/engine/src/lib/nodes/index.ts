@@ -138,10 +138,10 @@ export const getNodes = () => {
   const allComponents = { ...components, ...pluginNodes }
   const sortedComponents = Object.keys(allComponents)
     .sort()
-    .reduce<Record<any, any>>((acc: any, key) => {
+    .reduce((acc, key) => {
       acc[key] = allComponents[key]
       return acc
-    }, {} as Record<any, any>)
+    }, {} as Record<string, ()=>MagickComponent<unknown>>)
   return Object.values(sortedComponents)
     .map(component => component())
     .sort(compare)

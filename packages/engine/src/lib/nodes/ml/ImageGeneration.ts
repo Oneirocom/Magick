@@ -1,10 +1,11 @@
 import Rete from 'rete'
 
 import {
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { stringSocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -87,7 +88,7 @@ export class ImageGeneration extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs
   ) {

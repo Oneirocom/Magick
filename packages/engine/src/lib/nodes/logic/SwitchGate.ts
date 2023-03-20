@@ -2,10 +2,11 @@ import Rete from 'rete'
 
 import {
   DataSocketType,
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { anySocket, triggerSocket } from '../../sockets'
@@ -54,7 +55,7 @@ export class SwitchGate extends MagickComponent<void> {
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
   worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {

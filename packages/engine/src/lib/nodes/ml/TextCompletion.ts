@@ -1,11 +1,11 @@
 import Rete from 'rete'
 
 import {
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   EngineContext,
+  WorkerData,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
@@ -119,7 +119,7 @@ export class TextCompletion extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context: { module: any, secrets: Record<string, string>; projectId: string; magick: EngineContext }

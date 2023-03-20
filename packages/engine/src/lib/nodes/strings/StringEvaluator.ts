@@ -5,11 +5,9 @@
 import Rete from 'rete'
 
 import {
-  EngineContext,
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
@@ -59,7 +57,7 @@ export class StringEvaluator extends MagickComponent<Promise<void>> {
       .addOutput(isFalse)
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(node:WorkerData, inputs: MagickWorkerInputs) {
     const action = inputs['string'][0] as string
     const fewshot = (node.data.fewshot as string).trim()
     const operationTypeData = node?.data?.operationType as string

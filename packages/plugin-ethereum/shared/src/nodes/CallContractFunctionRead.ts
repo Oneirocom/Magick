@@ -9,18 +9,18 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData,
   stringSocket,
   triggerSocket,
+  WorkerData,
 } from '@magickml/engine'
 
 const info = `Call a arbitary function from a contract`
 
 type InputReturn = {
-  output: unknown
-}
+  output: string
+} | undefined
 
-export class CallContractFunctionRead extends MagickComponent<InputReturn> {
+export class CallContractFunctionRead extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
     super('CallContractFunctionReadP')
@@ -87,13 +87,12 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
       .addOutput(resultOutput)
   }
 
-  // @ts-ignore
   async worker(
-    node: NodeData,
+    _node: WorkerData,
     _inputs: MagickWorkerInputs,
-    outputs: MagickWorkerOutputs,
+    _outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
-  ) {
+  ): Promise<InputReturn> {
     this._task.closed = ['trigger']
     console.log('********* processing input to ethereum input *********')
     console.log(data)

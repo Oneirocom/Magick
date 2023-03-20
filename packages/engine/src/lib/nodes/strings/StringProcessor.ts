@@ -1,6 +1,6 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { stringSocket, triggerSocket } from '../../sockets'
@@ -59,7 +59,7 @@ export class StringProcessor extends MagickComponent<Record<string, string>> {
       return node
   }
 
-  worker(node: NodeData, inputs: MagickWorkerInputs) {
+  worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const input = inputs['input'][0]
 
     // TODO (mitchg) - obviously this is bad, but we want this for games week. Figure out security later.

@@ -1,10 +1,11 @@
 import Rete from 'rete'
 
 import {
-    NodeData,
+    MagickNodeData,
     MagickNode,
     MagickWorkerInputs,
     MagickWorkerOutputs,
+    WorkerData,
 } from '../../types'
 import { triggerSocket, stringSocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -46,7 +47,7 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
     }
 
     async worker(
-        node: NodeData,
+        node: WorkerData,
         inputs: MagickWorkerInputs,
         _outputs: MagickWorkerOutputs,
         { projectId, module }: { projectId: string, module: any },
@@ -67,7 +68,8 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
             model: 'text-embedding-ada-002',
         }, {
             projectId,
-            spell: node.spell,
+            // TODO: check if present
+            spell: node.spell as string,
             nodeId: node.id,
         })
 

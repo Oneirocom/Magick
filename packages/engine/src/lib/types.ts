@@ -1,7 +1,7 @@
 import { Connection, Input, NodeEditor, Output } from 'rete'
 import { Node } from 'rete/types'
 import {
-  Data, WorkerOutputs
+  Data, InputData, InputsData, NodeData, OutputData, OutputsData, WorkerOutputs
 } from 'rete/types/core/data'
 
 import { MagickComponent, MagickTask } from './magick-component'
@@ -156,11 +156,11 @@ export type RunSpell<DataType=Record<string, unknown>> = ({
   projectId,
   secrets,
   publicVariables
-}: runSpellType<DataType>) => DataType
+}: runSpellType<DataType>) => Promise<DataType>
 
-export type EngineContext = {
+export type EngineContext<DataType=Record<string, unknown>> = {
   env: Env
-  runSpell: RunSpell
+  runSpell: RunSpell<DataType>
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
   getCurrentSpell: () => Spell
@@ -233,10 +233,7 @@ export type MagickNode = Node & {
   inspector: Inspector
   display: (content: string) => void
   outputs: MagicNodeOutput[]
-  data: {
-    outputs?: DataSocketType[]
-    inputs?: DataSocketType[]
-  }
+  data: WorkerData
   category?: string
   displayName?: string
   info: string
@@ -303,7 +300,7 @@ export type InputComponentData = ComponentData<TaskType>
 export type OutputComponentData = ComponentData<TaskType>
 
 export type ModuleComponent = MagickComponent<unknown> & {
-  run: (node: NodeData, data?: unknown) => Promise<void>
+  run: (node: MagickNodeData, data?: unknown) => Promise<void>
 }
 
 export type NodeConnections = {
@@ -319,10 +316,38 @@ export type NodeOutputs = {
   }
 }
 
-export type NodeData = {
+export type MagickNodeData = {
   socketKey?: string
   name?: string
+  isInput?: boolean; 
+  useDefault?: boolean; 
+  defaultValue?: string
+  element?: number
   [DataKey: string]: unknown
+}
+
+export type WorkerData = NodeData & {
+  // outputs: DataSocketOutput
+  // inputs: DataSocketInput
+  spell?: string
+  data?: MagickNodeData
+  [key: string]: unknown;
+}
+
+export function AsDataSocket(data: InputsData | OutputsData): DataSocketType[] {
+  return data as unknown as DataSocketType[]
+}
+
+export function AsInputsData(data: DataSocketType[]): InputsData {
+  return data as unknown as InputsData
+}
+
+export function AsOutputsData(data: DataSocketType[]): OutputsData {
+  return data as unknown as OutputsData
+}
+
+export function AsInputsAndOutputsData(data: DataSocketType[]): InputsData & OutputsData {
+  return data as unknown as InputsData & OutputsData
 }
 
 export type Module = { name: string; id: string; data: Data }

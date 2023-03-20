@@ -6,7 +6,7 @@ import Rete from 'rete'
 //@ts-ignore
 import similarity from 'similarity'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { anySocket, stringSocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -56,7 +56,7 @@ export class SentenceMatcher extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    _node: WorkerData,
     inputs: MagickWorkerInputs,
   ) {
     const sourceSentence = (inputs['source'][0] ?? inputs['source']) as string

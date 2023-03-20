@@ -1,10 +1,11 @@
 import Rete from 'rete'
 
 import {
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { MultiSocketGeneratorControl } from '../../dataControls/MultiSocketGenerator'
 import { anySocket, triggerSocket } from '../../sockets'
@@ -52,7 +53,7 @@ export class ExclusiveGate extends MagickComponent<void> {
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
   worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context: { socketInfo: { targetSocket: any } }

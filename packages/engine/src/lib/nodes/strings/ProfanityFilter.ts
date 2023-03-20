@@ -5,7 +5,8 @@ import { MagickComponent } from '../../magick-component'
 import { stringSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
-  MagickWorkerInputs, NodeData
+  MagickWorkerInputs,
+  WorkerData
 } from '../../types'
 
 const info = 'Does some basic checks'
@@ -36,7 +37,7 @@ export class ProfanityFilter extends MagickComponent<Promise<void>> {
       .addOutput(isFalse)
   }
 
-  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
     console.log('inputs is', inputs)
     console.log("inputs['string'] is", inputs['string'])
 

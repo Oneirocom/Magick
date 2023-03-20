@@ -6,23 +6,22 @@ import {
   anySocket,
   MagickComponent,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData,
   DropdownControl,
   stringSocket,
   numSocket,
   triggerSocket,
+  WorkerData,
 } from '@magickml/engine'
 
 const info = `Call a write function from a contract`
 
 type InputReturn = {
-  output: unknown
-}
+  output: string
+} | undefined
 
-export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
+export class CallContractFunctionWrite extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
     super('CallContractFunctionWrite')
@@ -98,10 +97,8 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
       .addOutput(urlOutput)
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   async worker(
-    node: NodeData,
+    node: WorkerData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }

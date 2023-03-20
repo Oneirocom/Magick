@@ -4,7 +4,7 @@ import { FewshotControl } from '../../dataControls/FewshotControl'
 import { MagickComponent } from '../../magick-component'
 import { stringSocket, triggerSocket } from '../../sockets'
 import {
-  MagickNode, NodeData
+  MagickNode, WorkerData
 } from '../../types'
 
 const info =
@@ -54,7 +54,7 @@ export class RandomStringFromList extends MagickComponent<
       .addOutput(outp)
   }
 
-  async worker(node: NodeData) {
+  async worker(node: WorkerData) {
     const fewshot = node.data.fewshot as string
     const strings = fewshot.split('\n')
     if (strings.length <= 0) {
