@@ -18,7 +18,7 @@ export type SocketNameType =
 
 export type SocketType =
   | 'anySocket'
-  | 'numSocket'
+  | 'numberSocket'
   | 'booleanSocket'
   | 'arraySocket'
   | 'stringSocket'
@@ -31,7 +31,7 @@ export type SocketType =
 
 export const socketNameMap: Record<SocketNameType, SocketType> = {
   'Any type': 'anySocket',
-  Number: 'numSocket',
+  Number: 'numberSocket',
   Boolean: 'booleanSocket',
   Array: 'arraySocket',
   String: 'stringSocket',
@@ -42,7 +42,7 @@ export const socketNameMap: Record<SocketNameType, SocketType> = {
 }
 
 export const anySocket = new Rete.Socket('Any type')
-export const numSocket = new Rete.Socket('Number')
+export const numberSocket = new Rete.Socket('Number')
 export const booleanSocket = new Rete.Socket('Boolean')
 export const arraySocket = new Rete.Socket('Array')
 export const stringSocket = new Rete.Socket('String')
@@ -52,7 +52,7 @@ export const eventSocket = new Rete.Socket('Event')
 export const audioSocket = new Rete.Socket('Audio')
 
 const sockets = [
-  numSocket,
+  numberSocket,
   booleanSocket,
   stringSocket,
   arraySocket,

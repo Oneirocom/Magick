@@ -3,7 +3,7 @@ import Rete from 'rete'
 import { NodeData, MagickNode } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
-import { numSocket } from '../../sockets'
+import { numberSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 
@@ -29,7 +29,7 @@ export class NumberVariable extends MagickComponent<InputReturn> {
   }
 
   builder(node: MagickNode) {
-    const out = new Rete.Output('output', 'output', numSocket)
+    const out = new Rete.Output('output', 'output', numberSocket)
     const _var = new NumberControl({
       dataKey: '_var',
       name: 'Value',

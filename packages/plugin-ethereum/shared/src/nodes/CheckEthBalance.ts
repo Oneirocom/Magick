@@ -12,7 +12,7 @@ import {
   NodeData,
   DropdownControl,
   stringSocket,
-  numSocket,
+  numberSocket,
   triggerSocket,
 } from '@magickml/engine'
 
@@ -78,7 +78,7 @@ export class CheckEthBalance extends MagickComponent<InputReturn> {
       'RPC HTTP Endpoint',
       stringSocket
     )
-    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numSocket)
+    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket)
     const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
 
     return node

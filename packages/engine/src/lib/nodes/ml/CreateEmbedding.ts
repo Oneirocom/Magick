@@ -36,7 +36,7 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const out = new Rete.Output('embedding', 'Events', arraySocket)
+    const out = new Rete.Output('embedding', 'Embedding', arraySocket)
 
     return node
       .addInput(dataInput)
@@ -59,8 +59,6 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
       return console.log('No OpenAI API key found')
     }
 
-    // TODO: fix this
-
     const data = await makeEmbedding(
       {
         apiKey: module.secrets['openai_api_key'],
@@ -80,12 +78,11 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
       }
     }
 
-    // TODO: check if data is valid
-    // eslint-disable-next-line no-unsafe-optional-chaining
-    const [responseData] = data?.data
-    const embedding = responseData.embedding
+    console.log('embedding data', data)
+    
+    const responseData = data?.data[0]?.embedding
     return {
-      embedding,
+      embedding: responseData,
     }
   }
 }
