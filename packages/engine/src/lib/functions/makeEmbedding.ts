@@ -17,6 +17,8 @@ export async function makeEmbedding(
     spell,
     nodeId,
   }: RequestData
+  // TODO fix call then add typing
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
   const {
     input, model = 'text-embedding-ada-002', apiKey,
