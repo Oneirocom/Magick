@@ -42,8 +42,7 @@ module.exports = {
 const parseStringPromisified = util.promisify(parseString)
 
 const getArxivUrl = ({ searchQuery, sortBy, sortOrder, start, maxResults }) =>
-  `http://export.arxiv.org/api/query?search_query=${searchQuery}&start=${start}&max_results=${maxResults}${
-    sortBy ? `&sortBy=${sortBy}` : ''
+  `http://export.arxiv.org/api/query?search_query=${searchQuery}&start=${start}&max_results=${maxResults}${sortBy ? `&sortBy=${sortBy}` : ''
   }${sortOrder ? `&sortOrder=${sortOrder}` : ''}`
 
 /**
@@ -51,19 +50,19 @@ const getArxivUrl = ({ searchQuery, sortBy, sortOrder, start, maxResults }) =>
  * @param {Object} entry.
  * @returns {Object} formatted arXiv entry object.
  */
-function parseArxivObject(entry: any) {
+function parseArxivObject(entry: unknown) {
   return {
     id: _.get(entry, 'id[0]', ''),
     title: _.get(entry, 'title[0]', ''),
     summary: _.get(entry, 'summary[0]', '').trim(),
     authors: _.get(entry, 'author', []).map(
-      (author: { name: any }) => author.name
+      (author: { name: string }) => author.name
     ),
-    links: _.get(entry, 'link', []).map((link: { $: any }) => link.$),
+    links: _.get(entry, 'link', []).map((link: { $: string }) => link.$),
     published: _.get(entry, 'published[0]', ''),
     updated: _.get(entry, 'updated[0]', ''),
     categories: _.get(entry, 'category', []).map(
-      (category: { $: any }) => category.$
+      (category: { $: string }) => category.$
     ),
   }
 }
@@ -97,9 +96,8 @@ function parseTags({ include, exclude = [] }) {
   if (include.length === 0) {
     return console.error('include is a mandatory field')
   }
-  return `${include.map(parseTag).join(SEPARATORS.AND)}${
-    exclude.length > 0 ? SEPARATORS.ANDNOT : ''
-  }${exclude.map(parseTag).join(SEPARATORS.ANDNOT)}`
+  return `${include.map(parseTag).join(SEPARATORS.AND)}${exclude.length > 0 ? SEPARATORS.ANDNOT : ''
+    }${exclude.map(parseTag).join(SEPARATORS.ANDNOT)}`
 }
 
 /**
@@ -161,9 +159,10 @@ async function search({
     maxResults: 10,
   } as any)
 
-  for (const article in papers) {
-    console.log(papers[article].title)
-  }
+  if (papers)
+    for (const article in papers) {
+      console.log(papers[article].title)
+    }
 
   console.log(papers)
 })()
