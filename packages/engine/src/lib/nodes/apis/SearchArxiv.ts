@@ -143,13 +143,17 @@ async function search({
   return _.get(parsedData, 'feed.entry', []).map(parseArxivObject)
 }
 
+
 (async (includeQueries, excludeQueries) => {
+// TODO: this function never receives any parameters
   const papers = await search({
     searchQueryParams: [
       {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         include: (includeQueries as any).map((query: any) => {
           return { name: query }
         }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         exclude: (excludeQueries as any).map((query: any) => {
           return { name: query }
         }),
@@ -157,8 +161,8 @@ async function search({
     ],
     start: 0,
     maxResults: 10,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any)
-
   if (papers)
     for (const article in papers) {
       console.log(papers[article].title)
@@ -167,7 +171,7 @@ async function search({
   console.log(papers)
 })()
 
-export async function getArticle(id: any) {
+export async function getArticle(id: string) {
   // ID is expected to be in [S2PaperId | DOI | ArXivId]
   const response = await fetch(`https://api.semanticscholar.org/v1/paper/${id}`)
   const data = await response.text()
