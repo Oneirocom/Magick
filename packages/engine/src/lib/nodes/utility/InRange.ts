@@ -2,7 +2,7 @@ import Rete from 'rete'
 
 import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, numSocket } from '../../sockets'
+import { triggerSocket, numberSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
 const info = `The In Range component takes either a manually input set of numbers or a dynamically generated set of numbers as a boundary. When supplied with a value to test its existance between the set range, will trigger 1 of 2 outputs. If the number exists within the range including the start and end number, will trigger the true output else will trigger the false output.`
@@ -22,14 +22,14 @@ export class InRange extends MagickComponent<void> {
     const startNumSocket = new Rete.Input(
       'startNumber',
       'Start Number',
-      numSocket,
+      numberSocket,
       false
     )
 
     const endNumSocket = new Rete.Input(
       'endNumber',
       'End Number',
-      numSocket,
+      numberSocket,
       false
     )
     const inspectorStartNumSocket = new InputControl({
@@ -44,7 +44,7 @@ export class InRange extends MagickComponent<void> {
     })
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const testInput = new Rete.Input('input', 'Input To Test', numSocket)
+    const testInput = new Rete.Input('input', 'Input To Test', numberSocket)
 
     const isTrue = new Rete.Output('true', 'True', triggerSocket)
     const isFalse = new Rete.Output('false', 'False', triggerSocket)

@@ -2,6 +2,7 @@
 import Rete from 'rete'
 
 import {
+  arraySocket,
   InputControl,
   MagickComponent,
   MagickNode,
@@ -42,6 +43,7 @@ export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
   builder(node: MagickNode): MagickNode {
     // create inputs here. First argument is the name, second is the type (matched to other components sockets), and third is the socket the i/o will use
     const query = new Rete.Input('query', 'Query', stringSocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const result = new Rete.Output('result', 'Result', stringSocket)
@@ -60,19 +62,12 @@ export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
       icon: 'moon',
       placeholder: '',
     })
-
-    const namespace = new InputControl({
-      dataKey: 'namespace',
-      name: 'Namespace',
-      icon: 'moon',
-      placeholder: '',
-    })
-
-    node.inspector.add(input).add(index).add(namespace)
+    node.inspector.add(input).add(index)
 
     return node
       .addInput(triggerIn)
       .addInput(query)
+      .addInput(embedding)
       .addOutput(triggerOut)
       .addOutput(result)
       .addOutput(error)
@@ -84,38 +79,47 @@ export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    module: any
+    context: any
   ) {
     const pinecone = new PineconeClient()
 
-    if (!module.secrets['pinecone_api_key']) {
+    if (!context.module.secrets['pinecone_api_key']) {
       console.log('No Pinecode API key found')
       return { error: 'No Pinecode API key found' }
     }
     const environment = node.data.environment as string
 
-    const namespace = node.data.namespace as string
+    const embedding = inputs['embedding'][0] as Array<number>
 
     await pinecone.init({
       environment,
-      apiKey: module.secrets['pinecone_api_key'],
+      apiKey: context.module.secrets['pinecone_api_key'],
     })
 
-    const query = inputs['query'][0] as string
-    const index = inputs['index'][0] as string
+    let query = inputs['query'][0] as string
+
+    console.log('query is', query)
+    if(!query) {
+      console.error('No query provided')
+      return { error: 'No query provided' }
+    }
+    query = JSON.parse(query)
+    console.log('query is', query)
+    const index = node.data.index as string
 
     const pineconeIndex = pinecone.Index(index)
 
+    console.log('embedding is', embedding)
+
     const queryRequest = {
-      vector: [0.1, 0.2, 0.3, 0.4],
-      topK: 10,
-      includeValues: true,
-      includeMetadata: true,
-      filters: query,
-      namespace,
+        vector: embedding,
+        topK: 3,
+        includeValues: true,
     }
 
-    const queryResponse = await pineconeIndex.query({ queryRequest })
+    const queryResponse = await pineconeIndex.query({queryRequest})
+
+    console.log('queryResponse', queryResponse)
 
     return {
       result: JSON.stringify(queryResponse),

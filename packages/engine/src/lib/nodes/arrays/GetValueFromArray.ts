@@ -6,7 +6,7 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
 } from '../../types'
-import { triggerSocket, stringSocket, arraySocket } from '../../sockets'
+import { triggerSocket, stringSocket, anySocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { InputControl } from '../../dataControls/InputControl'
 
@@ -18,7 +18,7 @@ type WorkerReturn = {
 
 export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Echo')
+    super('Get Value From Array')
 
     this.task = {
       outputs: {
@@ -36,7 +36,7 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
     const inp = new Rete.Input('array', 'Array', arraySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const outp = new Rete.Output('output', 'String', stringSocket)
+    const outp = new Rete.Output('output', 'String', anySocket)
 
     const element = new InputControl({
       dataKey: 'element',

@@ -60,6 +60,12 @@ import { EventsToConversation } from './events/EventsToConversation'
 import { CreateEmbedding } from './ml/CreateEmbedding'
 import { ObjectToJSON } from './utility/ObjectToJSON'
 
+import { GetDocuments } from './documents/GetDocuments'
+import { StoreDocument} from './documents/StoreDocument'
+
+import { GetValueFromArray } from './arrays/GetValueFromArray'
+import { CosineSimilarity } from './ml/CosineSimilarity'
+
 export const components = {
   alert: () => new Alert(),
   booleanGate: () => new BooleanGate(),
@@ -119,6 +125,10 @@ export const components = {
   promptTemplate: () => new PromptTemplate(),
   parseJSON: () => new ParseJSON(),
   objectToJSON: () => new ObjectToJSON(),
+  getDocuments: () => new GetDocuments(),
+  storeDocument: () => new StoreDocument(),
+  getValueFromArray: () => new GetValueFromArray(),
+  cosineSimilarity: () => new CosineSimilarity(),
 }
 
 function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>) {

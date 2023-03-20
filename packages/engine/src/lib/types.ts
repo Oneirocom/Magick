@@ -29,6 +29,22 @@ export type ImageCacheResponse = {
   images: ImageType[]
 }
 
+export type Document = {
+  id?: number
+  type?: string
+  content?: string
+  owner?: string
+  embedding?: number[]
+  projectId?: string
+  date?: string
+}
+
+export type CreateDocumentArgs = Document
+
+export type GetDocumentArgs = Document & {
+  maxCount?: number
+}
+
 export type Event = {
   id?: number
   type?: string

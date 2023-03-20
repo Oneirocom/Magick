@@ -10,7 +10,7 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   NodeData,
-  numSocket,
+  numberSocket,
   stringSocket,
   triggerSocket,
 } from '@magickml/engine'
@@ -47,7 +47,7 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
   }
 
   builder(node: MagickNode) {
-    const addressInput = new Rete.Input('address', 'Wallet Address', numSocket)
+    const addressInput = new Rete.Input('address', 'Wallet Address', numberSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const balanceOutput = new Rete.Output('output', 'Output', stringSocket)

@@ -9,7 +9,7 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   NodeData,
-  numSocket,
+  numberSocket,
   stringSocket,
   triggerSocket,
 } from '@magickml/engine'
@@ -50,8 +50,8 @@ export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputR
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    const addressInput = new Rete.Input('address', 'Wallet Address', numSocket)
-    const senderInput = new Rete.Input('sender', 'Sender Address', numSocket)
+    const addressInput = new Rete.Input('address', 'Wallet Address', numberSocket)
+    const senderInput = new Rete.Input('sender', 'Sender Address', numberSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const balanceOutput = new Rete.Output('output', 'Output', stringSocket)

@@ -12,7 +12,7 @@ import {
   NodeData,
   DropdownControl,
   stringSocket,
-  numSocket,
+  numberSocket,
   triggerSocket,
 } from '@magickml/engine'
 
@@ -80,15 +80,15 @@ export class DeployContract extends MagickComponent<InputReturn> {
       'RPC HTTP Endpoint',
       stringSocket
     )
-    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numSocket)
+    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
 
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const balanceOutput = new Rete.Output('balance', 'Balance', numSocket)
+    const balanceOutput = new Rete.Output('balance', 'Balance', numberSocket)
     const balanceAfterOutput = new Rete.Output(
       'balance_after',
       'Balance After',
-      numSocket
+      numberSocket
     )
     const txOutput = new Rete.Output('tx', 'Transaction', stringSocket)
     const contractAddrOutput = new Rete.Output(

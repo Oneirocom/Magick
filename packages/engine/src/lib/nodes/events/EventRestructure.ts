@@ -9,7 +9,7 @@ import {
   stringSocket,
   triggerSocket,
   eventSocket,
-  numSocket,
+  numberSocket,
 } from '../../sockets'
 import { MagickComponent, MagickTask } from '../../magick-component'
 
