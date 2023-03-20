@@ -7,7 +7,6 @@
 
 Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and connectors well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.
 
-`Powerful enough for wizards. Easy enough for mere mortals.`
 ## Key Features
 
 - Realtime agents which can perform actions on their own, interact with users and other agents in different modalities with a unified memory and self
@@ -16,6 +15,8 @@ Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick 
 - Many included powertools, including voice and image generation and vector search
 - Powerful graph-based IDE for complex data pipelines
 - Graphs can be embedded in subgraphs and shared for rapid community development
+
+`Powerful enough for wizards. Easy enough for mere mortals.`
 
 ## Documentation is [here](https://magick-docs.vercel.app/)
 
