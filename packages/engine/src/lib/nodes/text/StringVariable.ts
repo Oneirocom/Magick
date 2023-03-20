@@ -7,15 +7,15 @@ import { stringSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 
-const info = `Text Variable`
+const info = `String Variable`
 
 type InputReturn = {
   output: string
 }
 
-export class TextVariable extends MagickComponent<InputReturn> {
+export class StringVariable extends MagickComponent<InputReturn> {
   constructor() {
-    super('Text Variable')
+    super('String Variable')
 
     this.task = {
       outputs: {

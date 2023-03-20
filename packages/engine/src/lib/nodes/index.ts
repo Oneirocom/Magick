@@ -54,6 +54,7 @@ import { Destructure } from './utility/Destructure'
 import { Echo } from './utility/Echo'
 import { IsNullOrUndefined } from './flow/IsNullOrUndefined'
 import { Log } from './utility/Log'
+import { StringVariable } from './text/StringVariable'
 
 export const components = {
   booleanGate: () => new BooleanGate(),
@@ -78,6 +79,7 @@ export const components = {
   stringEvaluator: () => new EvaluateText(),
   combineText: () => new CombineText(),
   textVariable: () => new TextVariable(),
+  stringVariable: () => new StringVariable(),
   chatCompletion: () => new ChatCompletion(),
   profanityFilter: () => new ProfanityFilter(),
   numberVariable: () => new NumberVariable(),
