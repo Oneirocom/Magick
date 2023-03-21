@@ -82,10 +82,18 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     const event = inputs['event'][0] as Event
     const sender = (inputs['sender'] ? inputs['sender'][0] : null) as string
+<<<<<<< HEAD
     let content = (inputs['content'] ? inputs['content'][0] : null) as string
     let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[]
     if (typeof(embedding) == 'string') embedding = (embedding as any).split(',')
     const typeData = node?.data?.type as string
+=======
+    const content = (inputs['content'] ? inputs['content'][0] : null) as string
+    let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[] | string []
+    if (typeof(embedding) == 'string') embedding = (embedding as string).split(',')
+    // TODO: Remove as and check if field is there
+    const typeData = (node?.data as {type:string})?.type
+>>>>>>> pizzooid/typings
     const type =
       typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
@@ -99,8 +107,15 @@ export class EventStore extends MagickComponent<Promise<void>> {
     }
 
     console.log('sender is', sender ?? event.sender)
+<<<<<<< HEAD
     const data = { ...event, sender: sender ?? event.sender, projectId, content, type } as any
     if (embedding) data.embedding = embedding    
+=======
+    type Data = {sender: string, projectId: string, content: string, type: string, embedding?: number[] | string[]}
+    const data:Data = { ...event, sender: sender ?? event.sender, projectId, content, type }
+    if (embedding) data.embedding = embedding
+
+>>>>>>> pizzooid/typings
     if (content && content !== '') {
       const response = await axios.post(`${API_ROOT_URL}/events`, data)
       return {

@@ -15,8 +15,13 @@ import {
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
 type WorkerReturn = {
+<<<<<<< HEAD:packages/plugin-search/shared/src/nodes/SearchGoogle.ts
   summary: string
   links: string
+=======
+  summary: string,
+  links: string[]
+>>>>>>> pizzooid/typings:packages/engine/src/lib/nodes/apis/QueryGoogle.ts
 }
 
 export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
@@ -59,6 +64,7 @@ export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs
   ) {
+<<<<<<< HEAD:packages/plugin-search/shared/src/nodes/SearchGoogle.ts
     const url = `${API_ROOT_URL}/google-search?query=${inputs.query[0]}`
 
     // write a fetch post to SERVER_URL/query_google with the parameter query in the body
@@ -70,6 +76,11 @@ export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
 
     const { summary, links } = json
 
+=======
+    const query = inputs.query[0] as string
+    const {summary, links} = {summary: "changeme", links: ["changeme"]} // await queryGoogleSearch(query)
+    console.log('summary, links', summary, links)
+>>>>>>> pizzooid/typings:packages/engine/src/lib/nodes/apis/QueryGoogle.ts
     return {
       summary,
       links,

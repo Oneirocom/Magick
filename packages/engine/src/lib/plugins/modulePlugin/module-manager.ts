@@ -81,7 +81,7 @@ export class ModuleManager {
 
   socketFactory(
     node: NodeData,
-    socket: Socket | Function | undefined
+    socket: Socket | ((node:NodeData)=>Socket) | undefined
   ): SocketType {
     // eslint-disable-next-line no-param-reassign
     socket = typeof socket === 'function' ? socket(node) : socket

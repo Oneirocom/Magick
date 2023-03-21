@@ -13,6 +13,7 @@ import { MagickEngine } from '../../engine'
 import { Module } from './module'
 import { ModuleContext, ModuleManager } from './module-manager'
 import { addIO, removeIO } from './utils'
+import { ComponentBuilder } from 'rete/types/component'
 
 //need to fix this interface.  For some reason doing the joing
 interface IRunContextEngine extends Engine {
@@ -31,8 +32,13 @@ type ModuleOptions = {
   skip?: boolean
 }
 
+export type UpdateModuleSockets = (
+  node: MagickNode,
+  graphData?: GraphData,
+  useSocketName?: boolean
+) => () => void
 interface IModuleComponent extends Component {
-  updateModuleSockets: Function
+  updateModuleSockets: UpdateModuleSockets
   module: ModuleOptions
   noBuildUpdate: boolean
 }
@@ -147,7 +153,7 @@ function install(
         }
         break
       case 'module':
-        const builder: Function | undefined = component.builder
+        const builder: ComponentBuilder | undefined = component.builder
 
         if (builder) {
           component.updateModuleSockets = (

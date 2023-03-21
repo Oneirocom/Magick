@@ -1,7 +1,34 @@
 import { calculateCompletionCost } from '@magickml/cost-calculator'
 import { v4 } from 'uuid'
 import { globalsManager } from '../globals'
+<<<<<<< HEAD
 import { RequestPayload } from '../types'
+=======
+
+type RequestPayload = {
+  projectId: string
+  requestData: string
+  responseData?: string
+  model?: string
+  duration?: number
+  status?: string
+  statusCode?: number
+  parameters?: string
+  provider?: string
+  type?: string
+  hidden?: boolean
+  processed?: boolean
+  cost?: number
+  spell?: string
+  nodeId?: number
+}
+
+export type RequestData = {
+  spell: string
+  projectId: string
+  nodeId: number
+}
+>>>>>>> pizzooid/typings
 
 export function saveRequest({
   projectId,
