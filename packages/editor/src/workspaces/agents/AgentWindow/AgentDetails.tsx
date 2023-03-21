@@ -207,7 +207,7 @@ const AgentDetails = ({
           }}
           name="rootSpell"
           id="rootSpell"
-          value={selectedAgentData.rootSpell?.name || 'default'}
+          value={JSON.parse(selectedAgentData.rootSpell)?.name || 'default'}
           onChange={event => {
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value
