@@ -20,7 +20,7 @@ export class EventDelete extends MagickComponent<Promise<any>> {
       },
     }
 
-    this.category = 'Events'
+    this.category = 'Event'
     this.info = info
   }
 
