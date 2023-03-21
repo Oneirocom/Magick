@@ -21,13 +21,23 @@ const handleSockets = (app: any) => {
       } else {
         // todo wound up using a custom header here for the handshake.
         // Using the standard authorization header was causing issues with feathers auth
-        const sessionId = socket.handshake.headers.authorization.split(' ')[1]
+        const auth = socket.handshake?.headers?.authorization
+        if (!auth) {
+          return console.error(
+            'No Authorization header was provided in handshake'
+          )
+        }
+
+        const sessionId = auth.split(' ')[1]
+        if (!sessionId) {
+          return console.error('No session id provided for handshake')
+        }
+
         // auth services will verify the token
         const payload = await app
           .service('authentication')
           .verifyAccessToken(sessionId)
 
-        if (!sessionId) return console.error('No session id provided for handshake')
         user = payload.user
       }
       // Attach the user info to the params or use in services
