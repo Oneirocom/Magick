@@ -25,11 +25,14 @@ const AgentDetails = ({
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
 
+  console.log('selectedAgentData', selectedAgentData)
+
   const update = (id, data = undefined) => {
-    const _data = data || selectedAgentData
+    const _data = data || { ...selectedAgentData }
     id = id || _data.id
     if (_data['id']) {
       delete _data.id
+      delete _data?.dirty
     }
 
     // Avoid server-side validation error
@@ -95,7 +98,7 @@ const AgentDetails = ({
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )
@@ -143,7 +146,9 @@ const AgentDetails = ({
           </div>
         ) : (
           <div className={styles.agentDescription}>
-            <Avatar className={styles.avatar}>{selectedAgentData.name.slice(0, 1)[0]} </Avatar>
+            <Avatar className={styles.avatar}>
+              {selectedAgentData.name.slice(0, 1)[0]}{' '}
+            </Avatar>
             <div>
               <Typography variant="h5">{selectedAgentData.name}</Typography>
             </div>
@@ -202,7 +207,7 @@ const AgentDetails = ({
           }}
           name="rootSpell"
           id="rootSpell"
-          value={JSON.parse(selectedAgentData.rootSpell).name || 'default'}
+          value={JSON.parse(selectedAgentData.rootSpell)?.name || 'default'}
           onChange={event => {
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value

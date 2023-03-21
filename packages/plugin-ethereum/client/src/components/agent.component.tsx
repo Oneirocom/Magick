@@ -10,7 +10,7 @@ type PluginProps = {
 
 export const EthereumAgentWindow: FC<any> = props => {
   props = props.props
-  const { selectedAgentData, update } = props
+  const { selectedAgentData, setSelectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [state, setState] = useState({
@@ -65,6 +65,15 @@ export const EthereumAgentWindow: FC<any> = props => {
             checked={selectedAgentData.data?.ethereum_enabled}
             onChange={e => {
               debouncedFunction(selectedAgentData.id, {
+                ...selectedAgentData,
+                data: {
+                  ...selectedAgentData.data,
+                  ethereum_enabled: e.target.checked,
+                },
+              })
+
+              setSelectedAgentData({
+                ...selectedAgentData,
                 data: {
                   ...selectedAgentData.data,
                   ethereum_enabled: e.target.checked,

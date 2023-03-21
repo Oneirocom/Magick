@@ -90,8 +90,7 @@ export class GetCachedEmbedding extends MagickComponent<
 
     // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
-      embedding = JSON.stringify(embedding)
-      embedding = JSON.parse(embedding)
+      embedding = JSON.parse(JSON.stringify(embedding))
     }
 
     if (embedding) {

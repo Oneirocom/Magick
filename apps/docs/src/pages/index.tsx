@@ -19,7 +19,7 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/getting-started/Intro"
+            to="/docs/Getting Started"
           >
             Start Here
           </Link>
@@ -33,8 +33,8 @@ export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext()
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title={`Magick IDE Docs`}
+      description="Creator and developer documentation for Magick."
     >
       <main>
         <HomepageHeader />

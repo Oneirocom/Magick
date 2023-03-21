@@ -2,6 +2,7 @@ import { buildMagickInterface } from '../helpers/buildMagickInterface'
 import { SpellManager, WorldManager, pluginManager } from '@magickml/engine'
 import { app } from '../app'
 import { AgentManager } from './AgentManager'
+import _ from 'lodash'
 
 type AgentData = {
   id: any
@@ -57,16 +58,13 @@ export class Agent {
       const spell = (
         await app.service('spells').find({
           query: {
-            projectId: agentData.projectId,
+            projectId: this.rootSpell.projectId,
             id: this.rootSpell.id,
           },
         })
       ).data[0]
 
-      // if the spell has changed, override it
-      const spellData = JSON.stringify(spell)
-      const rootSpellData = JSON.stringify(this.rootSpell)
-      const override = spellData !== rootSpellData
+      const override = _.isEqual(spell, this.rootSpell)
 
       this.spellRunner = await this.spellManager.load(spell, override)
       const agentStartMethods = pluginManager.getAgentStartMethods()
@@ -83,7 +81,7 @@ export class Agent {
       this.outputTypes = outputTypes
 
       this.updateInterval = setInterval(() => {
-        // every second, update the agent, set updatedAt to now
+        // every second, update the agent, set pingedAt to now
         app.service('agents').patch(this.id, {
           pingedAt: new Date().toISOString(),
         })
