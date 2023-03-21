@@ -14,6 +14,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import { useLocation } from 'react-router-dom'
 import StorageIcon from '@mui/icons-material/Storage'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories'
+import DocumentIcon from '@mui/icons-material/Description'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { pluginManager } from '@magickml/engine'
 import HubIcon from '@mui/icons-material/Hub'
@@ -183,6 +184,13 @@ export function Drawer({ children }) {
             open={open}
             onClick={onClick('/magick')}
             text="Spells"
+          />
+          <DrawerItem
+            active={location.pathname === '/documents'}
+            Icon={DocumentIcon}
+            open={open}
+            onClick={onClick('/documents')}
+            text="Documents"
           />
           <DrawerItem
             active={location.pathname === '/events'}

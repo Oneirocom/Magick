@@ -1,13 +1,15 @@
-import {
-  EmbeddingModel
-} from '@magickml/cost-calculator'
+import { EmbeddingModel } from '@magickml/cost-calculator'
 import { CompletionHandlerInputData, saveRequest } from '@magickml/engine'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
 
 export async function makeEmbedding(
   data: CompletionHandlerInputData
-): Promise<{success: boolean, result?: string | null, error?: string | null}> {
+): Promise<{
+  success: boolean
+  result?: string | null
+  error?: string | null
+}> {
   const { node, inputs, context } = data
 
   const content = (inputs['content'] && inputs['content'][0]) as string
