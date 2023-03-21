@@ -1,8 +1,10 @@
 import Button from '@mui/material/Button'
 import React from 'react'
+// import axios from 'axios'
+// import { API_ROOT_URL } from '@magickml/engine'
 
 import { useNavigate } from 'react-router-dom'
-import ExpansionDetails from '../components/ExpansionDetails'
+// import ExpansionDetails from '../components/ExpansionDetails'
 import FileListTable from '../files/FileListTable'
 import UploadFileButton from '../files/UploadFileButton'
 import FineTuneList from '../fine-tunes/FineTuneList'
@@ -31,7 +33,7 @@ export default function ClassificationList() {
             <Button
               size="small"
               variant="contained"
-              style={{backgroundColor: 'purple', color: 'white' }}
+              style={{ backgroundColor: 'purple', color: 'white' }}
               onClick={() => navigate('/fineTuneManager/fine-tunes/new')}
               startIcon={<AddCircleOutlineIcon />}
             >
@@ -69,21 +71,116 @@ export default function ClassificationList() {
         <FileListTable purpose="fine-tune" />
       </InfoCard>
       <InfoCard>
+        {/* <Button
+          onClick={() => {
+            console.log('clicked')
+            axios({
+              url: `${API_ROOT_URL}/datasets`,
+              method: 'GET',
+              headers: {},
+            })
+              .then(async res => {
+                console.log(res.data)
+              })
+              .catch(err => {
+                console.error('error is', err)
+              })
+          }}
+        >
+          Get Datasets
+        </Button>
+        <Button
+          onClick={() => {
+            console.log('clicked')
+            axios({
+              url: `${API_ROOT_URL}/datasets`,
+              method: 'POST',
+              headers: {},
+              data: {
+                dataset: {
+                  data: `TEST_DATASET_FILE_CONTENTS_HERE
+                  `,
+                },
+              },
+            })
+              .then(async res => {
+                console.log(res.data)
+              })
+              .catch(err => {
+                console.error('error is', err)
+              })
+          }}
+        >
+          Post Dataset
+        </Button>
+        <Button
+          onClick={() => {
+            console.log('clicked')
+            axios({
+              url: `${API_ROOT_URL}/datasets`,
+              method: 'PUT',
+              headers: {},
+            })
+              .then(async res => {
+                console.log(res.data)
+              })
+              .catch(err => {
+                console.error('error is', err)
+              })
+          }}
+        >
+          Update Dataset
+        </Button>
+        <Button
+          onClick={() => {
+            console.log('clicked')
+            axios({
+              url: `${API_ROOT_URL}/datasets/1`,
+              method: 'DELETE',
+              headers: {},
+            })
+              .then(async res => {
+                console.log(res.data)
+              })
+              .catch(err => {
+                console.error('error is', err)
+              })
+          }}
+        >
+          Remove Dataset
+        </Button> */}
         <h1>Instructions</h1>
-            <p>
-              To fine-tune the model, first upload a file containing prompts and completions.
-            </p>
-            <p>
-            The file can be CSV, Excel, or JSONL. It must contain two columns, "prompt" and "completion". For Excel, the first column is "prompt", and the second column is "completion". Combined they cannot have more than 2048 tokens. <a href="https://beta.openai.com/docs/guides/fine-tuning/preparing-your-dataset">Learn more</a>.
-            </p>
-            <p>
-              Then create a new model using that training file. You can use a second file for validating the model. Read more about <a href="https://beta.openai.com/docs/guides/completion/prompt-design">prompt design</a> and <a href="https://beta.openai.com/docs/guides/completion/evaluation">evaluation</a>.
-            </p>
-              <h4>For example:</h4>
-            <p>
-            {`{ "prompt": "Company: BHFF cars\nProduct: cars\nAd:One stop shop!\nSupported:", "completion": "yes" }
+        <p>
+          To fine-tune the model, first upload a file containing prompts and
+          completions.
+        </p>
+        <p>
+          The file can be CSV, Excel, or JSONL. It must contain two columns,
+          "prompt" and "completion". For Excel, the first column is "prompt",
+          and the second column is "completion". Combined they cannot have more
+          than 2048 tokens.{' '}
+          <a href="https://beta.openai.com/docs/guides/fine-tuning/preparing-your-dataset">
+            Learn more
+          </a>
+          .
+        </p>
+        <p>
+          Then create a new model using that training file. You can use a second
+          file for validating the model. Read more about{' '}
+          <a href="https://beta.openai.com/docs/guides/completion/prompt-design">
+            prompt design
+          </a>{' '}
+          and{' '}
+          <a href="https://beta.openai.com/docs/guides/completion/evaluation">
+            evaluation
+          </a>
+          .
+        </p>
+        <h4>For example:</h4>
+        <p>
+          {`{ "prompt": "Company: BHFF cars\nProduct: cars\nAd:One stop shop!\nSupported:", "completion": "yes" }
 { "prompt": "Company: Loft teeth\nProduct: -\nAd:Straight teeth in weeks!\nSupported:", "completion":"no" }`}
-</p>
+        </p>
       </InfoCard>
     </main>
   )
