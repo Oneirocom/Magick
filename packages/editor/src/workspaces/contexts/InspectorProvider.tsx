@@ -1,9 +1,11 @@
-import { InspectorData } from '@magickml/engine'
+import { InspectorData, SupportedLanguages } from '@magickml/engine'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 export type TextEditorData = {
-  options?: Record<string, any> | undefined
+  options?: Record<string, any> | undefined & {
+    language?: SupportedLanguages
+  }
   data?: string
   control?: Record<string, any> | undefined
   name?: string

@@ -78,8 +78,8 @@ export class EventRestructureComponent extends MagickComponent<
   }
 
   async worker(_node: NodeData, inputs: MagickWorkerInputs) {
-    const output: any = {}
-    Object.entries(inputs).map(([k, v]) => {
+    const output: Record<string, unknown> = {}
+    Object.entries(inputs).forEach(([k, v]) => {
       if (k === 'agentId') {
         output[k] = parseInt(v[0] as string)
       } else {

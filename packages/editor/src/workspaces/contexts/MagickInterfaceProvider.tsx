@@ -1,4 +1,4 @@
-import { EditorContext, MagickWorkerInputs, Spell } from '@magickml/engine'
+import { EditorContext, GetSpell, MagickWorkerInputs, OnDebug, OnEditor, OnInspector, ProcessCode, PublishEditorEvent, runSpellType, Spell, SupportedLanguages } from '@magickml/engine'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
 import { runPython } from '@magickml/engine'
@@ -6,6 +6,8 @@ import { useConfig } from '../../contexts/ConfigProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import { spellApi } from '../../state/api/spells'
 
+// TODO: does it also work without the !?
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const Context = createContext<EditorContext>(undefined!)
 
 export const useMagickInterface = () => useContext(Context)
@@ -57,7 +59,10 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return spellRef.current
   }
 
-  // todo tech debt.  Check if this is still needed
+  // TODO: tech debt.  Check if this is still needed
+  /**
+  * @deprecated The method should not be used
+  */
   const onTrigger = (node, callback) => {
     const isDefault = node === 'default' ? 'default' : null
     return subscribe($TRIGGER(tab.id, isDefault ?? node.id), (event, data) => {
@@ -72,63 +77,63 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return publish($REFRESH_EVENT_TABLE(tab.id))
   }
 
-  const onInspector = (node, callback) => {
-    return subscribe($NODE_SET(tab.id, node.id), (event, data) => {
+  const onInspector: OnInspector = (node, callback) => {
+    return subscribe($NODE_SET(tab.id, node.id), (_event, data) => {
+      // TODO: handle this more gracefully?
+      if (typeof data === 'string') { throw new Error('onInspector: data is a string') }
       callback(data)
     })
   }
 
-  const onAddModule = callback => {
+  const onAddModule:OnEditor = callback => {
     return subscribe(ADD_SUBSPELL, (event, data) => {
       callback(data)
     })
   }
 
-  const onUpdateModule = callback => {
+  const onUpdateModule:OnEditor = callback => {
     return subscribe(UPDATE_SUBSPELL, (event, data) => {
       callback(data)
     })
   }
 
-  const onSubspellUpdated = (
-    spellName: string,
-    callback: (data: unknown) => void
-  ) => {
+  const onSubspellUpdated: OnDebug = (spellName, callback) => {
     return subscribe($SUBSPELL_UPDATED(spellName), (event, data) => {
       callback(data)
     })
   }
 
-  const onDeleteModule = callback => {
+  const onDeleteModule:OnEditor = callback => {
     return subscribe(UPDATE_SUBSPELL, (event, data) => {
       callback(data)
     })
   }
 
-  const sendToInspector = data => {
+  const sendToInspector:PublishEditorEvent = data => {
+    // TODO: should the return value be used?
     publish($INSPECTOR_SET(tab.id), data)
   }
 
-  const sendToDebug = data => {
+  const sendToDebug:PublishEditorEvent = data => {
     publish($DEBUG_PRINT(tab.id), data)
   }
 
-  const onDebug = (node, callback) => {
+  const onDebug:OnDebug = (node, callback) => {
     return subscribe($DEBUG_INPUT(tab.id, node.id), (event, data) => {
       callback(data)
     })
   }
 
-  const sendToPlaytest = data => {
+  const sendToPlaytest:(data: string) => void = data => {
     console.log('sending to playtest', data)
     publish($PLAYTEST_PRINT(tab.id), data)
   }
 
-  const sendToAvatar = data => {
+  const sendToAvatar:PublishEditorEvent = data => {
     publish($SEND_TO_AVATAR(tab.id), data)
   }
 
-  const onPlaytest = callback => {
+  const onPlaytest:OnEditor = callback => {
     return subscribe($PLAYTEST_INPUT(tab.id), (event, data) => {
       // publish($PROCESS(tab.id))
       // weird hack.  This staggers the process slightly to allow the published event to finish before the callback runs.
@@ -137,7 +142,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     })
   }
 
-  const getSpell = async spellName => {
+  const getSpell:GetSpell = async spellName => {
     const spell = await _getSpell({
       spellName,
       id: tab.id,
@@ -149,12 +154,13 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     return spell.data[0] as Spell
   }
 
-  const processCode = async (
-    code,
-    inputs,
-    data,
+  const processCode:ProcessCode = async (
+    code:unknown,
+    inputs:MagickWorkerInputs,
+    data: unknown,
+    //TODO: remove unused state which is not used in interface?
     state,
-    language = 'javascript'
+    language:SupportedLanguages = 'javascript' 
   ) => {
     const flattenedInputs = Object.entries(inputs as MagickWorkerInputs).reduce(
       (acc, [key, value]) => {
@@ -185,7 +191,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     }
   }
 
-  const runSpell = async ({ inputs, spellName, projectId }) => {
+  const runSpell = async ({ inputs, spellName, projectId }:runSpellType) => {
     const response = await _runSpell({ inputs, spellName, projectId })
 
     if ('error' in response) {

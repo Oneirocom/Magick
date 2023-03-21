@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { SelectionPlugin } from '@magickml/engine'
 import ConnectionPlugin from 'rete-connection-plugin'
 import { Data } from 'rete/types/core/data'
@@ -5,6 +6,15 @@ import { Plugin } from 'rete/types/core/plugin'
 import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
 import ContextMenuPlugin from './plugins/contextMenu'
+=======
+import ConnectionPlugin from 'rete-connection-plugin'
+import { Plugin } from 'rete/types/core/plugin'
+// import ConnectionReroutePlugin from 'rete-connection-reroute-plugin'
+import ContextMenuPlugin from './plugins/contextMenu'
+import { Data } from 'rete/types/core/data'
+import CommentPlugin from './plugins/commentPlugin'
+import { PubSubCallback, SelectionPlugin } from '@magickml/engine'
+>>>>>>> pizzooid/typings
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
@@ -197,10 +207,16 @@ export const initEditor = function ({
   // ██╔═══╝ ██║   ██║██╔══██╗██║     ██║██║
   // ██║     ╚██████╔╝██████╔╝███████╗██║╚██████╗
   // ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝
+<<<<<<< HEAD
   editor.onSpellUpdated = (spellId: string, callback: () => void) => {
     return magick.onSubspellUpdated(spellId, callback)
+=======
+  editor.onSpellUpdated = (spellName: string, callback: PubSubCallback) => {
+    return magick.onSubspellUpdated(spellName, callback)
+>>>>>>> pizzooid/typings
   }
 
+  // TODO: should this return a promise?
   editor.abort = async () => {
     await engine.abort()
   }
