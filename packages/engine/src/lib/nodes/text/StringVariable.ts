@@ -23,7 +23,7 @@ export class StringVariable extends MagickComponent<InputReturn> {
       },
     }
 
-    this.category = 'Variable'
+    this.category = 'Text'
     this.info = info
     this.display = true
   }

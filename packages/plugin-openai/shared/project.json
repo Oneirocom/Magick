@@ -1,17 +1,17 @@
 {
-  "name": "@magickml/plugin-openai-client",
+  "name": "@magickml/plugin-openai-shared",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/plugin-openai/client/src",
+  "sourceRoot": "packages/plugin-openai/shared/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/engine"],
   "targets": {
     "build": {
       "executor": "@nrwl/vite:build",
       "outputs": ["{options.outputPath}"],
-      "configFile": "packages/plugin-openai/client/vite.config.ts",
+      "configFile": "packages/plugin-openai/shared/vite.config.ts",
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/packages/plugin-openai/client"
+        "outputPath": "dist/packages/plugin-openai/shared"
       },
       "configurations": {
         "development": {
@@ -26,14 +26,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/plugin-openai/client/**/*.ts"]
+        "lintFilePatterns": ["packages/plugin-openai/shared/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/plugin-openai/client/jest.config.ts",
+        "jestConfig": "packages/plugin-openai/shared/jest.config.ts",
         "passWithNoTests": true
       }
     }

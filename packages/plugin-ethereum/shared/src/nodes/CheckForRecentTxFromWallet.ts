@@ -20,10 +20,10 @@ type InputReturn = {
   output: unknown
 }
 
-export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputReturn> {
+export class CheckForRecentTxFromWallet extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-    super('CheckForRecentTransactionsFromWallet')
+    super('Check For Recent Transactions')
 
     this.task = {
       outputs: {
@@ -41,8 +41,8 @@ export class CheckForRecentTransactionsFromWallet extends MagickComponent<InputR
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'CheckForRecentTransactionsFromWallet'
-    this.displayName = 'CheckForRecentTransactionsFromWallet'
+    this.contextMenuName = 'Check For Recent Transactions'
+    this.displayName = 'Check For Recent Transactions'
   }
 
   builder(node: MagickNode) {
