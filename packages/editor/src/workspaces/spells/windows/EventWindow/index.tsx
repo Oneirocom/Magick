@@ -20,7 +20,7 @@ const EventWindow = () => {
     const { data } = await axios.get(
       `${API_ROOT_URL}/events?projectId=${config.projectId}`
     )
-    setEvents(data.data)
+    setEvents(data.events)
   }
 
   return (

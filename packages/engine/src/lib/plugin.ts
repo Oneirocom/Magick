@@ -178,6 +178,7 @@ class PluginManager {
     return inputTypes
   }
 
+  
   getOutputTypes() {
     const outputTypes = [] as any[]
     this.pluginList.forEach(plugin => {
@@ -311,6 +312,24 @@ class ClientPluginManager extends PluginManager {
     })
     return inputTypes
   }
+
+  getInputByName(){
+    const inputTypes = {}
+    this.pluginList.forEach(plugin => {
+      inputTypes[plugin.name] = plugin.inputTypes
+    })
+    return inputTypes
+  }
+
+  getPlugins(){
+    const pluginList = {}
+    this.pluginList.forEach(plugin => {
+      pluginList[plugin.name] = 'NONE'
+    })
+    return pluginList
+  }
+
+  
 }
 
 class ServerPluginManager extends PluginManager {

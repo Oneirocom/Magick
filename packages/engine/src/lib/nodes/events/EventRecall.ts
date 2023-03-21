@@ -83,11 +83,12 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
       
+
       url.searchParams.append('embedding', params['embedding'])
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
       const json = await response.json()
-      return json
+      return json.events
     }
     const getEvents = async (params: GetEventArgs) => {
       console.log('getting events', params)
@@ -104,7 +105,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
       const json = await response.json()
-      return json.data
+      return json.events
     }
     const event = (inputs['event'] && (inputs['event'][0] ?? inputs['event'])) as Event
     let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[]
@@ -117,7 +118,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
         : 'none'
 
     const maxCountData = node.data?.max_count as string
-    const maxCount = maxCountData ? parseInt(maxCountData) : 10
+    const limit = maxCountData ? parseInt(maxCountData) : 10
 
     const data = {
       type,
@@ -127,7 +128,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       channel,
       channelType,
       projectId,
-      maxCount,
+      limit,
     }
     let events
     if (embedding) data['embedding'] = embedding
@@ -146,7 +147,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     } else {
       events = await getEvents(data)
     }
-    
     return {
       events,
     }
