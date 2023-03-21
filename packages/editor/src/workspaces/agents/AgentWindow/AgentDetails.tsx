@@ -25,6 +25,8 @@ const AgentDetails = ({
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
 
+  console.log('selectedAgentData', selectedAgentData)
+
   const update = (id, data = undefined) => {
     const _data = data || { ...selectedAgentData }
     id = id || _data.id
@@ -205,7 +207,7 @@ const AgentDetails = ({
           }}
           name="rootSpell"
           id="rootSpell"
-          value={JSON.parse(selectedAgentData.rootSpell).name || 'default'}
+          value={selectedAgentData.rootSpell?.name || 'default'}
           onChange={event => {
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value
