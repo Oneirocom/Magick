@@ -89,8 +89,7 @@ export class GetCachedEmbedding extends MagickComponent<
     let embedding = responseData?.embedding?.toString()
     // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
-      embedding = JSON.stringify(embedding)
-      embedding = JSON.parse(embedding)
+      embedding = JSON.parse(JSON.stringify(embedding))
     }
     if (embedding) {
       this._task.closed = ['failure']

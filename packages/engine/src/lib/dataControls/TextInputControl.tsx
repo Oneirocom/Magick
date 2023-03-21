@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 import React, { useState, useEffect } from 'react'
 import { Control } from 'rete'
 
@@ -47,7 +46,7 @@ export class TextInputControl extends Control {
       name: key,
       label,
       value,
-      putData: (...args) => this.putData.apply(this, args as any),
+      putData: (key: string, data: unknown) => this.putData(key, data),
     }
   }
 }

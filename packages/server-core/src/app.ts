@@ -27,15 +27,17 @@ import HNSWVectorDatabase from './vectordb'
 
 // Define a distance function for the vectors
 function euclideanDistance(a: number[], b: number[]): number {
-  let distance = 0;
+  let distance = 0
   for (let i = 0; i < a.length; i++) {
-    distance += (a[i] - b[i]) ** 2;
+    distance += (a[i] - b[i]) ** 2
   }
-  return Math.sqrt(distance);
+  return Math.sqrt(distance)
 }
 
-const vectordb = new HNSWVectorDatabase<number[]>("data.json", euclideanDistance);
-
+const vectordb = new HNSWVectorDatabase<number[]>(
+  'data.json',
+  euclideanDistance
+)
 
 // Expose feathers app to other apps that might want to access feathers services directly
 globalsManager.register('feathers', app)

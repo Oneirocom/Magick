@@ -20,7 +20,6 @@ export class JoinListComponent extends MagickComponent<WorkerReturn> {
         text: 'output',
         trigger: 'option',
       },
-      init: () => {},
     }
 
     this.category = 'Strings'

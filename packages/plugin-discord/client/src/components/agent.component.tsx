@@ -13,7 +13,7 @@ import VariableModal from './VariableModal'
 
 export const DiscordAgentWindow: FC<any> = props => {
   props = props.props
-  const { selectedAgentData, update } = props
+  const { selectedAgentData, update, setSelectedAgentData } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [checked, setChecked] = useState(selectedAgentData.data.discord_enabled)
@@ -115,6 +115,14 @@ export const DiscordAgentWindow: FC<any> = props => {
             onChange={e => {
               setChecked(!checked)
               debouncedFunction(selectedAgentData.id, {
+                ...selectedAgentData,
+                data: {
+                  ...selectedAgentData.data,
+                  discord_enabled: e.target.checked,
+                },
+              })
+              setSelectedAgentData({
+                ...selectedAgentData,
                 data: {
                   ...selectedAgentData.data,
                   discord_enabled: e.target.checked,

@@ -13,7 +13,7 @@ type PluginProps = {
 import { Modal, Switch } from '@magickml/client-core'
 
 export const AgentLoopWindow: FC<PluginProps> = props => {
-  const { selectedAgentData, update, enable } = props.props
+  const { selectedAgentData, setSelectedAgentData, update, enable } = props.props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [checked, setChecked] = useState(selectedAgentData.data.loop_enabled)
@@ -81,6 +81,15 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
             onChange={e => {
               setChecked(!checked)
               debouncedFunction(selectedAgentData.id, {
+                ...selectedAgentData,
+                data: {
+                  ...selectedAgentData.data,
+                  loop_enabled: e.target.checked,
+                },
+              })
+
+              setSelectedAgentData({
+                ...selectedAgentData,
                 data: {
                   ...selectedAgentData.data,
                   loop_enabled: e.target.checked,

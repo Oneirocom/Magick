@@ -5,22 +5,23 @@ import { useSnackbar } from 'notistack'
 import axios from 'axios'
 import { LoadingScreen } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
-import { pluginManager } from '@magickml/engine'
-import validateSpellData from './AgentWindow/spellValidator'
 
 const AgentManagerWindow = () => {
   const config = useConfig()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [data, setData] = useState<Array<object>>([])
   const { enqueueSnackbar } = useSnackbar()
-  const [selectedAgent, setSelectedAgent] = useState<any>({ id: null })
+  const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
   const [root_spell, setRootSpell] = useState('default')
   const [enable, setEnable] = useState("")
   const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
 
   const resetData = async () => {
     setIsLoading(true)
-    const res = await fetch(`${config.apiUrl}/agents`)
+    const res = await fetch(`${config.apiUrl}/agents`, {
+      headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+    })
     const json = await res.json()
     setData(json.data)
     setIsLoading(false)
@@ -43,9 +44,7 @@ const AgentManagerWindow = () => {
     updatedAt: string
     secrets: string
   }) => {
-    const token = globalConfig?.token
-
-    if (!token) {
+    if (!token && !IGNORE_AUTH) {
       enqueueSnackbar('You must be logged in to create an agent', {
         variant: 'error',
       })
@@ -60,12 +59,12 @@ const AgentManagerWindow = () => {
         updatedAt: new Date().toISOString(),
         pingedAt: new Date().toISOString(),
       },
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
     })
       .then(async res => {
-        const res2 = await fetch(`${config.apiUrl}/agents`)
+        const res2 = await fetch(`${config.apiUrl}/agents`, {
+          headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+        })
         const json = await res2.json()
         setData(json.data)
       })
@@ -81,7 +80,7 @@ const AgentManagerWindow = () => {
       const data = JSON.parse(event?.target?.result as string)
       data.projectId = config.projectId
       data.enabled = data?.enabled ? true : false
-      data.updatedAt = data?.updatedAt || ''
+      data.updatedAt = new Date().toISOString()
       data.rootSpell = data?.rootSpell || '{}'
       data.spells = Array.isArray(data?.spells) ? data.spells : []
       data.secrets = JSON.stringify(
@@ -107,10 +106,14 @@ const AgentManagerWindow = () => {
 
   const update = (id: string, _data: any) => {
     axios
-      .patch(`${config.apiUrl}/agents/${id}`, {
-        ..._data,
-        updatedAt: new Date().toISOString(),
-      })
+      .patch(
+        `${config.apiUrl}/agents/${id}`,
+        {
+          ..._data,
+          updatedAt: new Date().toISOString(),
+        },
+        { headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` } }
+      )
       .then(res => {
         if (typeof res.data === 'string' && res.data === 'internal error') {
           enqueueSnackbar('internal error updating agent', {
@@ -133,7 +136,9 @@ const AgentManagerWindow = () => {
 
   const handleDelete = (id: string) => {
     axios
-      .delete(`${config.apiUrl}/agents/` + id)
+      .delete(`${config.apiUrl}/agents/` + id, {
+        headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+      })
       .then(res => {
         if (res.data === 'internal error') {
           enqueueSnackbar('Server Error deleting agent with id: ' + id, {
@@ -144,7 +149,7 @@ const AgentManagerWindow = () => {
             variant: 'success',
           })
         }
-        if (selectedAgent.id === id) setSelectedAgent({ id: null })
+        if (selectedAgentData.id === id) setSelectedAgentData(undefined)
         resetData()
       })
       .catch(e => {
@@ -158,7 +163,9 @@ const AgentManagerWindow = () => {
     if (!config.apiUrl || isLoading) return
     setIsLoading(true)
     ;(async () => {
-      const res = await fetch(`${config.apiUrl}/agents`)
+      const res = await fetch(`${config.apiUrl}/agents`, {
+        headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+      })
       const json = await res.json()
       console.log('res data', json.data)
       setData(json.data)
@@ -192,8 +199,8 @@ const AgentManagerWindow = () => {
       update={update}
       updateCallBack={resetData}
       onLoadFile={loadFile}
-      setSelectedAgent={setSelectedAgent}
-      selectedAgent={selectedAgent}
+      setSelectedAgentData={setSelectedAgentData}
+      selectedAgentData={selectedAgentData}
       rootSpell={root_spell}
       setRootSpell={setRootSpell}
       onLoadEnables={enable}
