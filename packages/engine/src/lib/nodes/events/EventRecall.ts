@@ -9,13 +9,7 @@ import {
   GetEventArgs,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
-import {
-  triggerSocket,
-  anySocket,
-  eventSocket,
-  stringSocket,
-  arraySocket,
-} from '../../sockets'
+import { triggerSocket, eventSocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
 const info = 'Event Recall is used to get conversation for an agent and user'
@@ -96,8 +90,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       return json
     }
     const getEvents = async (params: GetEventArgs) => {
+      console.log('getting events', params)
       const urlString = `${API_ROOT_URL}/events`
-      
       const url = new URL(urlString)
       for (const p in params) {
         // append params to url, make sure to preserve arrays
@@ -107,19 +101,15 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
           url.searchParams.append(p, params[p])
         }
       }
-
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
       const json = await response.json()
       return json.data
     }
-    const event = (inputs['event'] &&
-      (inputs['event'][0] ?? inputs['event'])) as Event
+    const event = (inputs['event'] && (inputs['event'][0] ?? inputs['event'])) as Event
     let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[]
     if (typeof(embedding) == 'string') embedding = (embedding as any).replace('[',"").replace(']',"");embedding = (embedding as any)?.split(',')
-    const { observer, client, channel, channelType, projectId, entities } =
-      event
-
+    const { observer, client, channel, channelType, projectId, entities } = event
     const typeData = node?.data?.type as string
     const type =
       typeData !== undefined && typeData.length > 0

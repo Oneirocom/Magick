@@ -77,6 +77,8 @@ export class CreateEmbedding extends MagickComponent<Promise<InputReturn>> {
             }
         }
 
+        // TODO: check if data is valid
+        // eslint-disable-next-line no-unsafe-optional-chaining
         const [responseData] = data?.data
         const embedding = responseData.embedding
         return {

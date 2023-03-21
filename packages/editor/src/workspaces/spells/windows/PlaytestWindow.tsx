@@ -105,6 +105,7 @@ const Playtest = ({ tab }) => {
       console.log('_text', _text)
       const text = (`Agent: ` + _text).split('\n')
       const newHistory = [...history, ...text]
+      console.log('newHistory', newHistory)
       setHistory(newHistory as [])
     },
     [history]
@@ -149,7 +150,7 @@ const Playtest = ({ tab }) => {
 
     // return a clean up function
     return unsubscribe as () => void
-  }, [subscribe, printToConsole, $PLAYTEST_PRINT])
+  }, [subscribe, printToConsole, $PLAYTEST_PRINT, tab.id])
 
   // Sync up localState into data field for persistence
   useEffect(() => {
@@ -163,7 +164,7 @@ const Playtest = ({ tab }) => {
       )
       return
     }
-  }, [localState])
+  }, [defaultPlaytestData, dispatch, localState, tab.id])
 
   const options = {
     minimap: {
