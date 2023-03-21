@@ -11,7 +11,7 @@ export async function makeTextCompletion(
 
   const spell = magick.getCurrentSpell()
 
-  const prompt = inputs['prompt'][0]
+  const prompt = inputs['input'][0]
 
   const settings = ((inputs.settings && inputs.settings[0]) ?? {
     model: node?.data?.model,
@@ -38,9 +38,13 @@ export async function makeTextCompletion(
 
     const usage = resp.data.usage
 
+    console.log('data', data)
+    console.log('responseData', resp.data)
+    console.log('settings', settings)
+
     saveRequest({
       projectId: projectId,
-      requestData: JSON.stringify(data),
+      requestData: JSON.stringify(settings),
       responseData: JSON.stringify(resp.data),
       startTime: start,
       statusCode: resp.status,
@@ -58,7 +62,8 @@ export async function makeTextCompletion(
 
     if (resp.data.choices && resp.data.choices.length > 0) {
       const choice = resp.data.choices[0]
-      return { success: true, result: choice }
+      console.log('choice', choice)
+      return { success: true, result: choice.text }
     }
     return { success: false, error: 'No choices returned' }
   } catch (err: any) {

@@ -64,7 +64,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
 
     node.inspector.add(modelName)
 
-    node.addInput(dataInput).addInput(settings).addOutput(dataOutput)
+    node.addInput(dataInput).addOutput(dataOutput)
 
     let lastInputSockets: CompletionSocket[] | undefined = []
     let lastOutputSockets: CompletionSocket[] | undefined = []
@@ -75,7 +75,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       const provider = completionProviders.find(provider =>
         provider.models.includes(model)
       ) as CompletionProvider
-      node.data.provider = provider
+      // node.data.provider = provider
       const inspectorControls = provider.inspectorControls
       const inputSockets = provider.inputs
       const outputSockets = provider.outputs
@@ -91,19 +91,19 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       }
       if (inputSockets !== lastInputSockets) {
         lastInputSockets?.forEach(socket => {
-          if (node.inputs.has(socket.name)) node.inputs.delete(socket.name)
+          if (node.inputs.has(socket.socket)) node.inputs.delete(socket.socket)
         })
         inputSockets.forEach(socket => {
-          node.addInput(new Rete.Input(socket.name, socket.name, socket.type))
+          node.addInput(new Rete.Input(socket.socket, socket.name, socket.type))
         })
         lastInputSockets = inputSockets
       }
       if (outputSockets !== lastOutputSockets) {
         lastOutputSockets?.forEach(socket => {
-          if (node.outputs.has(socket.name)) node.outputs.delete(socket.name)
+          if (node.outputs.has(socket.socket)) node.outputs.delete(socket.socket)
         })
         outputSockets.forEach(socket => {
-          node.addOutput(new Rete.Output(socket.name, socket.name, socket.type))
+          node.addOutput(new Rete.Output(socket.socket, socket.name, socket.type))
         })
         lastOutputSockets = outputSockets
       }
@@ -116,6 +116,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
 
     if (!node.data.model) node.data.model = models[0]
     configureNode()
+    node.addInput(settings)
     return node
   }
 
@@ -130,7 +131,17 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       magick: EngineContext
     }
   ) {
-    const provider = node.data.provider as CompletionProvider
+    console.log('running work', node, inputs, outputs, context)
+    const completionProviders = pluginManager.getCompletionProviders('text', [
+      'text',
+      'chat',
+    ]) as CompletionProvider[]
+
+    const model = node.data.model as string
+    // get the provider for the selected model
+    const provider = completionProviders.find(provider =>
+      provider.models.includes(model)
+    ) as CompletionProvider
 
     const completionHandler = provider.handler
 
@@ -140,7 +151,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
         success: false,
       }
     }
-
+    console.log('completionHandler', completionHandler)
     const { success, result } = await completionHandler({
       node,
       inputs,
