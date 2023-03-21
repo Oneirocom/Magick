@@ -93,7 +93,7 @@ const EditorProvider = ({ children }) => {
     // set editor to the map
     setEditor(newEditor)
     // copy spell in case it is read onl
-    const spell = JSON.parse(JSON.stringify(_spell))
+    const spell = JSON.parse(JSON.stringify(_spell ?? '{}'))
     const graph = spell.graph
     newEditor?.loadGraph(graph)
   }

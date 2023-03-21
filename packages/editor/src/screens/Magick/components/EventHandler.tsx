@@ -137,13 +137,13 @@ const EventHandler = ({ pubSub, tab }) => {
 
     const jsonDiff = diff(currentSpell, updatedSpell)
 
-    updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
-
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
     //While Importing spell, the graph is first created, then the imported graph is loaded
     //This might be causing issue at the server end.
     if (updatedSpell.graph.nodes.length === 0) return
+
+    updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
 
     try {
       // We save the diff.  Doing this via feathers but may want to switch to rtk query

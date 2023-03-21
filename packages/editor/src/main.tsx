@@ -13,6 +13,9 @@ import { createStore } from './state/store'
 
 import { AppConfig } from './contexts/ConfigProvider'
 
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+
 export type MagickIDEProps = AppConfig
 
 export const MagickIDE = ({ config }: { config: MagickIDEProps }) => {
@@ -20,9 +23,11 @@ export const MagickIDE = ({ config }: { config: MagickIDEProps }) => {
     <Router>
       <Provider store={createStore(config)}>
         <AppProviders config={config}>
-          <WagmiConfig client={client}>
-            <App />
-          </WagmiConfig>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <WagmiConfig client={client}>
+              <App />
+            </WagmiConfig>
+          </LocalizationProvider>
         </AppProviders>
       </Provider>
     </Router>

@@ -44,7 +44,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       },
     }
 
-    this.category = 'Events'
+    this.category = 'Event'
     this.info = info
     this.display = true
   }

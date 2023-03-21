@@ -13,19 +13,17 @@ function install(
     nodeItems = {},
     allocate = components => [],
     rename = component => component.name,
-    Menu = ReactMenu,
   }
 ) {
-  if (!Menu) throw new TypeError('Menu must be defined')
 
   editor.bind('hidecontextmenu')
-  const mainMenu = new (getMainMenu(Menu))(
+  const mainMenu = new (getMainMenu())(
     editor,
     { searchBar, searchKeep, delay },
     { items, allocate, rename }
   )
 
-  const nodeMenu = new (getNodeMenu(Menu))(
+  const nodeMenu = new (getNodeMenu())(
     editor,
     { searchBar: false, delay },
     nodeItems
