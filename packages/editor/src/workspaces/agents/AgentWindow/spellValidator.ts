@@ -123,6 +123,8 @@ const validateSpellData = (spellData: SpellData | null, data: any): boolean => {
   if (!spellData) {
     return true;
   }
+
+  if (!spellData.graph.nodes) return false
   return validateNodes(spellData.graph.nodes, data);
 };
 

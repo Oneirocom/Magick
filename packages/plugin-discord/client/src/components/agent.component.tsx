@@ -16,21 +16,17 @@ export const DiscordAgentWindow: FC<any> = props => {
   const { selectedAgentData, update, setSelectedAgentData } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
-  const [checked, setChecked] = useState(selectedAgentData.data.discord_enabled)
-  const [disable, setDisable] = useState(selectedAgentData.data.disable)
+  const [checked, setChecked] = useState(selectedAgentData.data?.discord_enabled || false)
+  const [disable, setDisable] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const [playingAudio, setPlayingAudio] = useState(false)
   useEffect(()=>{
     if (props.enable["DiscordPlugin"] == false) {
-      selectedAgentData.data.discord_enabled = false
-      selectedAgentData.data.disable = true
       setChecked(false)
       setDisable(true)
     }
     if (props.enable['DiscordPlugin'] == true){
-      selectedAgentData.data.discord_enabled = true
-      selectedAgentData.data.disable = false
-      setChecked(true)
+      setChecked(selectedAgentData.data.discord_enabled)
       setDisable(false)
     }
   }, [props.enable])
