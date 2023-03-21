@@ -68,6 +68,7 @@ export class Agent {
 
       this.spellRunner = await this.spellManager.load(spell, override)
       const agentStartMethods = pluginManager.getAgentStartMethods()
+      
       for (const method of Object.keys(agentStartMethods)) {
         await agentStartMethods[method]({
           agentManager,

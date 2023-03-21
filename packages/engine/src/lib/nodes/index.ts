@@ -10,6 +10,10 @@ import { Javascript } from './code/Javascript'
 import { Python } from './code/Python'
 import { GetDocuments } from './documents/GetDocuments'
 import { StoreDocument } from './documents/StoreDocument'
+import { CosineSimilarity } from './embedding/CosineSimilarity'
+import { CreateTextEmbedding } from './embedding/CreateTextEmbedding'
+import { FindTextEmbedding } from './embedding/FindTextEmbedding'
+import { EventDelete } from './events/EventDelete'
 import { EventDestructureComponent } from './events/EventDestructure'
 import { EventRecall } from './events/EventRecall'
 import { EventRestructureComponent } from './events/EventRestructure'
@@ -40,9 +44,7 @@ import { Merge } from './object/MergeObjects'
 import { ObjectToJSON } from './object/ObjectToJSON'
 import { CombineText } from './text/CombineText'
 import { ComplexStringMatcher } from './text/ComplexStringMatcher'
-import { CreateTextEmbedding } from './embedding/CreateTextEmbedding'
 import { EvaluateText } from './text/EvaluateText'
-import { FindTextEmbedding } from './embedding/FindTextEmbedding'
 import { GenerateText } from './text/GenerateText'
 import { ProfanityFilter } from './text/ProfanityFilter'
 import { ReplaceText } from './text/ReplaceText'
@@ -53,7 +55,7 @@ import { Cast } from './utility/Cast'
 import { Destructure } from './utility/Destructure'
 import { Echo } from './utility/Echo'
 import { Log } from './utility/Log'
-import { CosineSimilarity } from './embedding/CosineSimilarity'
+
 
 export const components = {
   booleanGate: () => new BooleanGate(),
@@ -69,6 +71,7 @@ export const components = {
   getCachedEmbedding: () => new FindTextEmbedding(),
   replaceText: () => new ReplaceText(),
   textCompletion: () => new GenerateText(),
+  eventdelete: () => new EventDelete(),
   isNullOrUndefined: () => new IsNullOrUndefined(),
   isVariableTrue: () => new IsVariableTrue(),
   request: () => new Request(),

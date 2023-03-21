@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
 
 type PluginProps = {
@@ -6,19 +6,31 @@ type PluginProps = {
   props: {
     selectedAgentData: any
     setSelectedAgentData: any
+    enable: Object
     update: (id: string, data: object) => void
   }
 }
 import { Modal, Switch } from '@magickml/client-core'
 
 export const AgentLoopWindow: FC<PluginProps> = props => {
-  const { selectedAgentData, setSelectedAgentData, update } = props.props
+  const { selectedAgentData, setSelectedAgentData, update, enable } = props.props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
+  const [checked, setChecked] = useState(selectedAgentData.data?.loop_enabled)
+  const [disable, setDisable] = useState(false)
   const [state, setState] = useState({
     loop_interval: selectedAgentData?.data?.loop_interval,
   })
-
+  useEffect(()=>{
+    if (enable["LoopPlugin"] == false) {
+      setChecked(false)
+      setDisable(true)
+    }
+    if (enable['LoopPlugin'] == true){
+      setChecked(selectedAgentData.data?.loop_enabled)
+      setDisable(false)
+    }
+  }, [enable])
   const handleOnChange = e => {
     const { name, value } = e.target
     setState({ ...state, [name]: value })
@@ -45,6 +57,8 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          pointerEvents: disable ? 'none' : 'auto',
+          opacity: disable ? 0.2 : 1,
         }}
       >
         <h3>Agent Update Loop</h3>
@@ -63,8 +77,9 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
             Edit
           </button>
           <Switch
-            checked={selectedAgentData.data?.loop_enabled}
+            checked={checked}
             onChange={e => {
+              setChecked(!checked)
               debouncedFunction(selectedAgentData.id, {
                 ...selectedAgentData,
                 data: {

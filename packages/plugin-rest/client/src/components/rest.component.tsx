@@ -19,7 +19,18 @@ export const RestAgentWindow: FC<any> = props => {
   const [showPutExample, setShowPutExample] = useState(false)
   const [showDeleteExample, setShowDeleteExample] = useState(false)
   const [viewMode, setViewMode] = useState<boolean>(false)
-
+  const [checked, setChecked] = useState(selectedAgentData.data?.rest_enabled)
+  const [disable, setDisable] = useState(false)
+  useEffect(()=>{
+    if (props.enable["RestPlugin"] == false) {
+      setChecked(false)
+      setDisable(true)
+    }
+    if (props.enable['RestPlugin'] == true){
+      setChecked(selectedAgentData.data?.rest_enabled)
+      setDisable(false)
+    }
+  }, [props.enable])
   useEffect(() => {
     if (!selectedAgentData.data?.rest_api_key) {
       setSelectedAgentData({
@@ -41,6 +52,8 @@ export const RestAgentWindow: FC<any> = props => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          pointerEvents: disable ? 'none' : 'auto',
+          opacity: disable ? 0.2 : 1,
         }}
       >
         <h3>REST API</h3>
@@ -59,8 +72,9 @@ export const RestAgentWindow: FC<any> = props => {
             View
           </button>
           <Switch
-            checked={selectedAgentData.data?.rest_enabled}
+            checked={checked}
             onChange={e => {
+              setChecked(!checked)
               debouncedFunction(selectedAgentData.id, {
                 ...selectedAgentData,
                 data: {

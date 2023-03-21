@@ -10,6 +10,7 @@ interface Props {
   data: Array<object>
   selectedAgentData: object
   rootSpell: string
+  onLoadEnables: Object
   setRootSpell: (spell: string) => void
   setSelectedAgentData: (data: object) => void
   onCreateAgent: (data: any) => void
@@ -27,6 +28,7 @@ const AgentWindow = ({
   setSelectedAgentData,
   onDelete,
   onLoadFile,
+  onLoadEnables,
 }: Props) => {
   const config = useConfig()
 
@@ -90,6 +92,7 @@ const AgentWindow = ({
             selectedAgentData={selectedAgentData}
             setSelectedAgentData={setSelectedAgentData}
             updateCallback={updateCallBack}
+            onLoadEnables={onLoadEnables}
           />
         ) : (
           <Typography className={styles.noSelected}>Select Agent</Typography>
