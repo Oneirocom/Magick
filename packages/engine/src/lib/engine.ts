@@ -73,7 +73,6 @@ export const initSharedEngine = ({
     engine.use(TaskPlugin)
   }
 
-
   engine.bind('run')
 
   components.forEach(c => {
@@ -86,7 +85,7 @@ export const initSharedEngine = ({
 // this parses through all the nodes in the data and finds the nodes associated with the given map
 export const extractNodes = (
   nodes: GraphData['nodes'],
-  map: Map<any, any> | Set<unknown>,
+  map: Map<any, any> | Set<unknown>
 ) => {
   const names = Array.from(map.keys())
 

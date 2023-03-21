@@ -1,8 +1,9 @@
-import useAuthentication from '../account/useAuthentication'
 import { parse } from 'csv-parse'
 import useSWRImmutable from 'swr/immutable'
+import useAuthentication from '../account/useAuthentication'
 import { ResultFileRecord } from './FineTuneResultsCard'
-import { OPENAI_ENDPOINT } from '@magickml/engine'
+
+import { OPENAI_ENDPOINT } from '../constants'
 
 export default function useFineTuneResults(fileId?: string): {
   error?: Error

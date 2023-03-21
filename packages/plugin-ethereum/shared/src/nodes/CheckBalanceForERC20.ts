@@ -23,7 +23,7 @@ type InputReturn = {
 export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-    super('CheckBalanceForERC20')
+    super('Check ERC20 Balance')
 
     this.task = {
       outputs: {
@@ -41,8 +41,8 @@ export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'CheckBalanceForERC20'
-    this.displayName = 'CheckBalanceForERC20'
+    this.contextMenuName = 'Check ERC20 Balance'
+    this.displayName = 'Check ERC20 Balance'
   }
 
   destroyed(node: MagickNode) {

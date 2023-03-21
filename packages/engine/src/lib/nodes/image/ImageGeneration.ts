@@ -11,7 +11,7 @@ import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
 
 const info =
-  'Image Generation node, leverages the current Automatic1111 build of Stable Diffusion (https://github.com/automatic1111/stable-diffusion-webui) and takes an input string and arbitrary labels and returns the most likely label'
+  'Leverages the current Automatic1111 build of Stable Diffusion (https://github.com/automatic1111/stable-diffusion-webui) and takes an input string and arbitrary labels and returns the most likely label'
 
 type InputReturn = {
   output: unknown
@@ -52,7 +52,7 @@ async function getPrompt(prompt, server) {
 
 export class ImageGeneration extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Image Generation')
+    super('Generate Image')
 
     this.task = {
       outputs: {
@@ -61,7 +61,7 @@ export class ImageGeneration extends MagickComponent<Promise<InputReturn>> {
       },
     }
 
-    this.category = 'Generation'
+    this.category = 'Image'
     this.display = true
     this.info = info
   }

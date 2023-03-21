@@ -6,7 +6,7 @@ import Rete from 'rete'
 // Used in the module manager utils addIO function
 
 export type SocketNameType =
-  | 'Any type'
+  | 'Any'
   | 'Number'
   | 'Boolean'
   | 'Array'
@@ -15,6 +15,8 @@ export type SocketNameType =
   | 'Trigger'
   | 'Event'
   | 'Audio'
+  | 'Vector'
+  | 'Document'
 
 export type SocketType =
   | 'anySocket'
@@ -24,13 +26,13 @@ export type SocketType =
   | 'stringSocket'
   | 'objectSocket'
   | 'triggerSocket'
-  | 'channelDataSocket'
-  | 'triggerAndDataSocket'
   | 'eventSocket'
   | 'audioSocket'
+  | 'vectorSocket'
+  | 'documentSocket'
 
 export const socketNameMap: Record<SocketNameType, SocketType> = {
-  'Any type': 'anySocket',
+  'Any': 'anySocket',
   Number: 'numberSocket',
   Boolean: 'booleanSocket',
   Array: 'arraySocket',
@@ -39,9 +41,11 @@ export const socketNameMap: Record<SocketNameType, SocketType> = {
   Trigger: 'triggerSocket',
   Event: 'eventSocket',
   Audio: 'audioSocket',
+  Vector: 'vectorSocket',
+  Document: 'documentSocket',
 }
 
-export const anySocket = new Rete.Socket('Any type')
+export const anySocket = new Rete.Socket('Any')
 export const numberSocket = new Rete.Socket('Number')
 export const booleanSocket = new Rete.Socket('Boolean')
 export const arraySocket = new Rete.Socket('Array')
@@ -50,6 +54,8 @@ export const objectSocket = new Rete.Socket('Object')
 export const triggerSocket = new Rete.Socket('Trigger')
 export const eventSocket = new Rete.Socket('Event')
 export const audioSocket = new Rete.Socket('Audio')
+export const vectorSocket = new Rete.Socket('Vector')
+export const documentSocket = new Rete.Socket('Document')
 
 const sockets = [
   numberSocket,
@@ -59,6 +65,8 @@ const sockets = [
   objectSocket,
   eventSocket,
   audioSocket,
+  vectorSocket,
+  documentSocket,
 ]
 
 sockets.forEach(socket => {

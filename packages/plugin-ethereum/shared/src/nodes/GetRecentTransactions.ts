@@ -24,7 +24,7 @@ type InputReturn = {
 export class GetRecentTransactions extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-    super('GetRecentTransactions')
+    super('Get Recent Transactions')
 
     this.task = {
       outputs: {
@@ -42,8 +42,8 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'GetRecentTransactions'
-    this.displayName = 'GetRecentTransactions'
+    this.contextMenuName = 'Get Recent Transactions'
+    this.displayName = 'Get Recent Transactions'
   }
 
   builder(node: MagickNode) {

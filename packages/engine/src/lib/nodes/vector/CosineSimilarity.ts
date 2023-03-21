@@ -6,7 +6,7 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
 } from '../../types'
-import { triggerSocket, stringSocket, numberSocket } from '../../sockets'
+import { triggerSocket, stringSocket, numberSocket, vectorSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
 const info = 'Event Store is used to store events for an event and user'
@@ -26,14 +26,14 @@ export class CosineSimilarity extends MagickComponent<Promise<InputReturn>> {
       },
     }
 
-    this.category = 'Embedding'
+    this.category = 'Vector'
     this.display = true
     this.info = info
   }
 
   builder(node: MagickNode) {
-    const vectorInputA = new Rete.Input('vectorA', 'Vector A', stringSocket)
-    const vectorInputB = new Rete.Input('vectorB', 'Vector B', stringSocket)
+    const vectorInputA = new Rete.Input('vectorA', 'Vector A', vectorSocket)
+    const vectorInputB = new Rete.Input('vectorB', 'Vector B', vectorSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const out = new Rete.Output('similarity', 'Similarity', numberSocket)

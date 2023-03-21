@@ -5,66 +5,45 @@
   left: 0;
   top: 0;
   position: fixed;
-  width: 400px;
-  z-index:10000000;
-  max-height: 400px;
-  direction: rtl;
+  padding: 10px;
+  width: 150px;
+  margin-top: -20px;
+  margin-left: calc($width/2*-1);
+  z-index:10000000000!important;
 
-  /* show scrollbar only when needed and on the left side */
-  overflow-y: scroll;
-  overflow-x: none;
-  
-    /* make the scrollbar 1.5em wide */
-    &::-webkit-scrollbar {
-      width: 1.5em;
-      border-radius: 10px 0 0 10px;
-
-      /* square handle */
-      &-thumb {
-        border-radius: 10px 0 0 10px;
-      }
-      /* red track */
-      &-track {
-        background: var(--dark-2);
-        border-radius: 10px 0 0 10px;
-
-      }
+  .search-bar {
+    width: calc(100% + 10px);
+    // remove border on search bar
+    border: 0;
+    // remove border when focused
+    &:focus {
+      outline: none;
     }
-  .context-menu-inner {
+    border-radius: 0;
+  }
 
-    border-radius: 0 10px 0 10px;
-
-    direction: ltr;
-    width:200px;
-    overflow-x: none;
-
-
-
-    .item {
-      margin-left:calc(-200px + 1.5em);
-
-      @extend .item;
-      &.hasSubitems:after {
-        content: '►';
-        position: absolute;
-        opacity: 0.6;
-        right: 5px;
-        top: 5px;
-      }
-      .subitems {
-        position: absolute;
-        top: 0;
-        right:calc(-400px + 1.5em);
-        width: 200px;
-        .subitem {
-          @extend .item;
-        }
+  max-height: 400px;;
+  .item {
+    @extend .item;
+    &.hasSubitems:after {
+      content: '►';
+      position: absolute;
+      opacity: 0.6;
+      right: 5px;
+      top: 5px;
+    }
+    .subitems {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      min-width: 150px;
+      max-width: 250px;
+      .subitem {
+        @extend .item;
       }
     }
   }
 }
-
-
 
 /*
 .context-menu {

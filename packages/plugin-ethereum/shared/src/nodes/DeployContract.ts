@@ -25,7 +25,7 @@ type InputReturn = {
 export class DeployContract extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-    super('DeployContract')
+    super('Deploy Contract')
 
     this.task = {
       outputs: {
@@ -46,8 +46,8 @@ export class DeployContract extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'DeployContract'
-    this.displayName = 'DeployContract'
+    this.contextMenuName = 'Deploy Contract'
+    this.displayName = 'Deploy Contract'
   }
   builder(node: MagickNode) {
     // module components need to have a socket key.

@@ -10,9 +10,6 @@ import { Javascript } from './code/Javascript'
 import { Python } from './code/Python'
 import { GetDocuments } from './documents/GetDocuments'
 import { StoreDocument } from './documents/StoreDocument'
-import { CosineSimilarity } from './embedding/CosineSimilarity'
-import { CreateEmbedding } from './embedding/CreateEmbedding'
-import { GetCachedEmbedding } from './embedding/GetCachedEmbedding'
 import { EventDestructureComponent } from './events/EventDestructure'
 import { EventRecall } from './events/EventRecall'
 import { EventRestructureComponent } from './events/EventRestructure'
@@ -21,15 +18,14 @@ import { EventStore } from './events/EventStore'
 import { BooleanGate } from './flow/BooleanGate'
 import { ExclusiveGate } from './flow/Exclusive Gate'
 import { ForEach } from './flow/ForEach'
+import { IsNullOrUndefined } from './flow/IsNullOrUndefined'
 import { OrGate } from './flow/OrGate'
 import { RandomGate } from './flow/RandomGate'
 import { SwitchGate } from './flow/SwitchGate'
 import { WaitForAll } from './flow/WaitForAll'
 import { WhileLoop } from './flow/WhileLoop'
-import { ChatCompletion } from './generation/ChatCompletion'
-import { ImageGeneration } from './generation/ImageGeneration'
-import { TextCompletion } from './generation/TextCompletion'
 import { Image } from './image/Image'
+import { ImageGeneration } from './image/ImageGeneration'
 import { InputComponent } from './io/Input'
 import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
@@ -44,32 +40,35 @@ import { Merge } from './object/MergeObjects'
 import { ObjectToJSON } from './object/ObjectToJSON'
 import { CombineText } from './text/CombineText'
 import { ComplexStringMatcher } from './text/ComplexStringMatcher'
+import { CreateTextEmbedding } from './text/CreateTextEmbedding'
 import { EvaluateText } from './text/EvaluateText'
+import { FindTextEmbedding } from './text/FindTextEmbedding'
+import { GenerateText } from './text/GenerateText'
 import { ProfanityFilter } from './text/ProfanityFilter'
 import { ReplaceText } from './text/ReplaceText'
+import { StringVariable } from './text/StringVariable'
 import { TextTemplate } from './text/TextTemplate'
 import { TextVariable } from './text/TextVariable'
 import { Cast } from './utility/Cast'
 import { Destructure } from './utility/Destructure'
 import { Echo } from './utility/Echo'
-import { IsNullOrUndefined } from './flow/IsNullOrUndefined'
 import { Log } from './utility/Log'
-import { StringVariable } from './text/StringVariable'
+import { CosineSimilarity } from './vector/CosineSimilarity'
 
 export const components = {
   booleanGate: () => new BooleanGate(),
   randomGate: () => new RandomGate(),
   cast: () => new Cast(),
-  createEmbedding: () => new CreateEmbedding(),
+  createEmbedding: () => new CreateTextEmbedding(),
   inRange: () => new InRange(),
   javascript: () => new Javascript(),
   python: () => new Python(),
   destructure: () => new Destructure(),
   complexStringMatcher: () => new ComplexStringMatcher(),
   echo: () => new Echo(),
-  getCachedEmbedding: () => new GetCachedEmbedding(),
+  getCachedEmbedding: () => new FindTextEmbedding(),
   replaceText: () => new ReplaceText(),
-  textCompletion: () => new TextCompletion(),
+  textCompletion: () => new GenerateText(),
   isNullOrUndefined: () => new IsNullOrUndefined(),
   isVariableTrue: () => new IsVariableTrue(),
   request: () => new Request(),
@@ -80,7 +79,6 @@ export const components = {
   combineText: () => new CombineText(),
   textVariable: () => new TextVariable(),
   stringVariable: () => new StringVariable(),
-  chatCompletion: () => new ChatCompletion(),
   profanityFilter: () => new ProfanityFilter(),
   numberVariable: () => new NumberVariable(),
   booleanVariable: () => new BooleanVariable(),

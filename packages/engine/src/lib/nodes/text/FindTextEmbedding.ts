@@ -10,19 +10,17 @@ import { triggerSocket, stringSocket, arraySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
 
-import qs from 'qs'
-
 const info = 'Get a cached embedding for this exact string'
 
 type InputReturn = {
   embedding: number[] | null
 }
 
-export class GetCachedEmbedding extends MagickComponent<
+export class FindTextEmbedding extends MagickComponent<
   Promise<InputReturn | null>
 > {
   constructor() {
-    super('Get Cached Embedding')
+    super('Find Text Embedding')
 
     this.task = {
       outputs: {
@@ -32,7 +30,7 @@ export class GetCachedEmbedding extends MagickComponent<
       },
     }
 
-    this.category = 'Embedding'
+    this.category = 'Text'
     this.display = true
     this.info = info
   }

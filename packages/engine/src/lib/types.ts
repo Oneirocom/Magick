@@ -1,4 +1,4 @@
-import { Connection, Input, NodeEditor, Output } from 'rete'
+import { Connection, Input, NodeEditor, Output, Socket } from 'rete'
 import { Node } from 'rete/types'
 import {
   Data, WorkerOutputs
@@ -421,3 +421,105 @@ type MessagingWebhookBody = {
 }
 
 export type MessagingRequest = any
+
+
+export type CompletionType = 'image' | 'text'
+
+export type ImageCompletionSubtype = 'text2image' | 'image2image' | 'image2text'
+
+export type TextCompletionSubtype = 'text' | 'embedding' | 'chat'
+
+export type CompletionSocket = {
+  socket: string
+  name: string
+  type: Socket
+}
+
+export type CompletionInspectorControls = {
+  type: any
+  dataKey: string
+  name: string
+  icon: string
+  defaultValue: any
+}
+
+export type CompletionProvider = {
+  type: CompletionType
+  subtype: ImageCompletionSubtype | TextCompletionSubtype
+  handler?: Function // server only
+  inspectorControls?: CompletionInspectorControls[] // client only
+  inputs: CompletionSocket[]
+  outputs: CompletionSocket[]
+  models: string[]
+}
+
+export type TextCompletionData = {
+  model: string
+  prompt: string
+  temperature: number
+  max_tokens: number
+  top_p: number
+  frequency_penalty: number
+  presence_penalty: number
+  stop: string[]
+  apiKey?: string
+}
+
+export type ChatMessage = {role: 'system' | 'user' | 'assistant', content: string}
+
+export type ChatCompletionData = {
+  model: string
+  systemMessage: string
+  conversationMessages: ChatMessage[]
+  userMessage: string
+  temperature: number
+  max_tokens: number
+  top_p: number
+  frequency_penalty: number
+  presence_penalty: number
+  stop: string[]
+  apiKey?: string
+}
+
+export type EmbeddingData = {
+  input: string
+  model?: string
+  apiKey: string
+}
+
+
+export type RequestPayload = {
+  projectId: string
+  requestData: string
+  responseData?: string
+  model: string
+  startTime: number
+  status?: string
+  statusCode?: number
+  parameters?: string
+  provider?: string
+  type?: string
+  hidden?: boolean
+  processed?: boolean
+  totalTokens?: number
+  spell?: any
+  nodeId?: number
+}
+
+export type RequestData = {
+  spell: string
+  projectId: string
+  nodeId: number
+}
+
+export type CompletionHandlerInputData = {
+  node: NodeData
+  inputs: MagickWorkerInputs
+  outputs: MagickWorkerOutputs
+  context: {
+    module: any
+    secrets: Record<string, string>
+    projectId: string
+    magick: EngineContext
+  }
+}
