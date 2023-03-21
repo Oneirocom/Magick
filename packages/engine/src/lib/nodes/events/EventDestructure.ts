@@ -106,7 +106,6 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       entities,
       agentId,
     } = eventValue as Event
-
     return {
       content,
       sender,
