@@ -12,7 +12,7 @@ import {
   NodeData,
   DropdownControl,
   stringSocket,
-  numSocket,
+  numberSocket,
   triggerSocket,
 } from '@magickml/engine'
 
@@ -25,7 +25,7 @@ type InputReturn = {
 export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-    super('CallContractFunctionWrite')
+    super('Contract Write')
 
     this.task = {
       outputs: {
@@ -43,8 +43,8 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'CallContractFunctionWrite'
-    this.displayName = 'CallContractFunctionWrite'
+    this.contextMenuName = 'Contract Write'
+    this.displayName = 'Contract Write'
   }
 
   destroyed(node: MagickNode) {
@@ -73,7 +73,7 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
       stringSocket
     )
     const abiInput = new Rete.Input('abi', 'ABI', anySocket)
-    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numSocket)
+    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket)
     const functionNameInput = new Rete.Input(
       'function_name',
       'Function Name',

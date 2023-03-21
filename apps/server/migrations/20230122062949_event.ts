@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('channel')
     table.string('channelType')
     table.string('projectId')
-    table.string('content')
+    table.text('content')
     table.string('agentId')
     table.specificType('entities', 'text ARRAY')
     table.specificType('embedding', 'vector(1536)')

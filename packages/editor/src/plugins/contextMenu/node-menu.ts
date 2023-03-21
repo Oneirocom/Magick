@@ -1,9 +1,10 @@
+import { ReactMenu } from '.'
 import { createNode, traverse } from './utils'
 
-export default function (Menu) {
-  return class NodeMenu extends Menu {
+export default function () {
+  return class NodeMenu extends ReactMenu {
     constructor(editor, props, nodeItems) {
-      super(editor, props)
+      super(editor, {...props, type: 'node'})
 
       this.addItem('Delete', ({ node }) => editor.removeNode(node))
       this.addItem('Clone', async args => {

@@ -132,6 +132,7 @@ async function init() {
       createRoute('put', path, _middleware, route.put)
     }
     if (route.post) {
+      console.log('post', path, _middleware, route.post)
       createRoute('post', path, _middleware, route.post)
     }
     if (route.delete) {

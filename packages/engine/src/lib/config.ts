@@ -37,8 +37,6 @@ export const SPEECH_SERVER_PORT =
   getVarForEnvironment('SPEECH_SERVER_PORT') || 65532
 export const ENABLE_SPEECH_SERVER =
   getVarForEnvironment('ENABLE_SPEECH_SERVER') || true
-export const OPENAI_ENDPOINT =
-  getVarForEnvironment('OPENAI_ENDPOINT') || 'https://api.openai.com/v1'
 export const USSSL_SPEECH = getVarForEnvironment('USSSL_SPEECH') || true
 export const FILE_SERVER_PORT =
   getVarForEnvironment('FILE_SERVER_PORT') || 65530

@@ -1,7 +1,7 @@
 import { Solidity } from './nodes/Solidity'
 import { GetRecentTransactions } from './nodes/GetRecentTransactions'
 import { DeployContract } from './nodes/DeployContract'
-import { CheckForRecentTransactionsFromWallet } from './nodes/CheckForRecentTransactionsFromWallet'
+import { CheckForRecentTxFromWallet } from './nodes/CheckForRecentTxFromWallet'
 import { CheckEthBalance } from './nodes/CheckEthBalance'
 import { CheckBalanceForERC20 } from './nodes/CheckBalanceForERC20'
 import { CallContractFunctionWrite } from './nodes/CallContractFunctionWrite'
@@ -10,7 +10,7 @@ export default [
   Solidity,
   GetRecentTransactions,
   DeployContract,
-  CheckForRecentTransactionsFromWallet,
+  CheckForRecentTxFromWallet,
   CheckEthBalance,
   CheckBalanceForERC20,
   CallContractFunctionWrite,

@@ -6,10 +6,23 @@
   top: 0;
   position: fixed;
   padding: 10px;
-  width: $width;
+  width: 150px;
   margin-top: -20px;
   margin-left: calc($width/2*-1);
-  z-index:10000000000;
+  z-index:10000000000!important;
+
+  .search-bar {
+    width: calc(100% + 10px);
+    // remove border on search bar
+    border: 0;
+    // remove border when focused
+    &:focus {
+      outline: none;
+    }
+    border-radius: 0;
+  }
+
+  max-height: 400px;;
   .item {
     @extend .item;
     &.hasSubitems:after {
@@ -23,7 +36,8 @@
       position: absolute;
       top: 0;
       left: 100%;
-      width: $width;
+      min-width: 150px;
+      max-width: 250px;
       .subitem {
         @extend .item;
       }

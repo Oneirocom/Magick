@@ -7,21 +7,6 @@
     "@magickml/engine"
   ],
   "targets": {
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "options": {
-        "outputPath": "dist/packages/plugin-twitter/server",
-        "tsConfig": "packages/plugin-twitter/server/tsconfig.lib.json",
-        "packageJson": "packages/plugin-twitter/server/package.json",
-        "main": "packages/plugin-twitter/server/src/index.ts",
-        "assets": [
-          "packages/plugin-twitter/server/*.md"
-        ]
-      }
-    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": [

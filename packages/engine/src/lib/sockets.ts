@@ -6,7 +6,7 @@ import Rete from 'rete'
 // Used in the module manager utils addIO function
 
 export type SocketNameType =
-  | 'Any type'
+  | 'Any'
   | 'Number'
   | 'Boolean'
   | 'Array'
@@ -15,23 +15,25 @@ export type SocketNameType =
   | 'Trigger'
   | 'Event'
   | 'Audio'
+  | 'Embedding'
+  | 'Document'
 
 export type SocketType =
   | 'anySocket'
-  | 'numSocket'
+  | 'numberSocket'
   | 'booleanSocket'
   | 'arraySocket'
   | 'stringSocket'
   | 'objectSocket'
   | 'triggerSocket'
-  | 'channelDataSocket'
-  | 'triggerAndDataSocket'
   | 'eventSocket'
   | 'audioSocket'
+  | 'embeddingSocket'
+  | 'documentSocket'
 
 export const socketNameMap: Record<SocketNameType, SocketType> = {
-  'Any type': 'anySocket',
-  Number: 'numSocket',
+  'Any': 'anySocket',
+  Number: 'numberSocket',
   Boolean: 'booleanSocket',
   Array: 'arraySocket',
   String: 'stringSocket',
@@ -39,10 +41,12 @@ export const socketNameMap: Record<SocketNameType, SocketType> = {
   Trigger: 'triggerSocket',
   Event: 'eventSocket',
   Audio: 'audioSocket',
+  Embedding: 'embeddingSocket',
+  Document: 'documentSocket',
 }
 
-export const anySocket = new Rete.Socket('Any type')
-export const numSocket = new Rete.Socket('Number')
+export const anySocket = new Rete.Socket('Any')
+export const numberSocket = new Rete.Socket('Number')
 export const booleanSocket = new Rete.Socket('Boolean')
 export const arraySocket = new Rete.Socket('Array')
 export const stringSocket = new Rete.Socket('String')
@@ -50,15 +54,19 @@ export const objectSocket = new Rete.Socket('Object')
 export const triggerSocket = new Rete.Socket('Trigger')
 export const eventSocket = new Rete.Socket('Event')
 export const audioSocket = new Rete.Socket('Audio')
+export const embeddingSocket = new Rete.Socket('Embedding')
+export const documentSocket = new Rete.Socket('Document')
 
 const sockets = [
-  numSocket,
+  numberSocket,
   booleanSocket,
   stringSocket,
   arraySocket,
   objectSocket,
   eventSocket,
   audioSocket,
+  embeddingSocket,
+  documentSocket,
 ]
 
 sockets.forEach(socket => {

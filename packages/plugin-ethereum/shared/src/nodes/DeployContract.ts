@@ -12,7 +12,7 @@ import {
   NodeData,
   DropdownControl,
   stringSocket,
-  numSocket,
+  numberSocket,
   triggerSocket,
 } from '@magickml/engine'
 
@@ -25,7 +25,7 @@ type InputReturn = {
 export class DeployContract extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-    super('DeployContract')
+    super('Deploy Contract')
 
     this.task = {
       outputs: {
@@ -46,8 +46,8 @@ export class DeployContract extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'DeployContract'
-    this.displayName = 'DeployContract'
+    this.contextMenuName = 'Deploy Contract'
+    this.displayName = 'Deploy Contract'
   }
   builder(node: MagickNode) {
     // module components need to have a socket key.
@@ -80,15 +80,15 @@ export class DeployContract extends MagickComponent<InputReturn> {
       'RPC HTTP Endpoint',
       stringSocket
     )
-    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numSocket)
+    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
 
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const balanceOutput = new Rete.Output('balance', 'Balance', numSocket)
+    const balanceOutput = new Rete.Output('balance', 'Balance', numberSocket)
     const balanceAfterOutput = new Rete.Output(
       'balance_after',
       'Balance After',
-      numSocket
+      numberSocket
     )
     const txOutput = new Rete.Output('tx', 'Transaction', stringSocket)
     const contractAddrOutput = new Rete.Output(

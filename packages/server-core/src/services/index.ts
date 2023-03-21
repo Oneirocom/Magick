@@ -2,6 +2,7 @@ import { request } from './request/request'
 import { spell } from './spells/spells'
 import { agent } from './agents/agents'
 import { event } from './events/events'
+import { document } from './documents/documents'
 import { spellRunner } from './spell-runner/spell-runner'
 import { UploadService } from './Upload.class'
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
@@ -12,6 +13,7 @@ export const services = async (app: Application) => {
   app.configure(spell)
   app.configure(agent)
   app.configure(event)
+  app.configure(document)
   app.configure(spellRunner)
   app.use('upload' as any, new UploadService())
   // TODO: handle this stupid race condition

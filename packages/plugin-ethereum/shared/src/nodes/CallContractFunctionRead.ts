@@ -23,7 +23,7 @@ type InputReturn = {
 export class CallContractFunctionRead extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-    super('CallContractFunctionReadP')
+    super('Contract Read')
 
     this.task = {
       outputs: {
@@ -41,8 +41,8 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'CallContractFunctionReadP'
-    this.displayName = 'CallContractFunctionReadP'
+    this.contextMenuName = 'Contract Read'
+    this.displayName = 'Contract Read'
   }
 
   destroyed(node: MagickNode) {

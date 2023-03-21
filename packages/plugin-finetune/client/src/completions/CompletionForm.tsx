@@ -8,7 +8,7 @@ import { OpenAI } from '../types/openai'
 import { Box, Button, TextField } from '@mui/material'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 
-import { OPENAI_ENDPOINT } from '@magickml/engine'
+import { OPENAI_ENDPOINT } from '../constants'
 
 export default function CompletionForm({
   fineTune,

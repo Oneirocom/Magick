@@ -1,11 +1,9 @@
 // TODO: replace with a feathers service
 
 import Koa from 'koa'
-import { tts } from '../servers/googleTextToSpeech'
-import { queryGoogleSearch } from '../servers/queryGoogleSearch'
-import { ServerError } from '../utils/ServerError'
-import { tts_tiktalknet } from '../servers/tiktalknet'
 import { Route } from '../config/types'
+import { tts } from '../servers/googleTextToSpeech'
+import { tts_tiktalknet } from '../servers/tiktalknet'
 const getTextToSpeech = async (ctx: Koa.Context) => {
   const text = ctx.request.query.text as string
 
@@ -22,19 +20,6 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
     }
 
   return (ctx.body = url)
-}
-const queryGoogle = async (ctx: Koa.Context) => {
-  const body = ctx.request.body as any
-
-  if (!body?.query)
-    throw new ServerError('input-failed', 'No query provided in request body')
-  const query = body?.query as string
-  const data = await queryGoogleSearch(query)
-
-  const { summary, links } = data
-
-
-  return (ctx.body = { summary, links })
 }
 
 const image_generation = async (ctx: Koa.Context) => {
@@ -57,11 +42,6 @@ export const apis: Route[] = [
   {
     path: '/text_to_speech',
     get: getTextToSpeech,
-  },
-
-  {
-    path: '/query_google',
-    post: queryGoogle,
   },
   {
     path: '/image_generation',

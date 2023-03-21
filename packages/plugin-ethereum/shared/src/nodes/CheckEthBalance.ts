@@ -12,7 +12,7 @@ import {
   NodeData,
   DropdownControl,
   stringSocket,
-  numSocket,
+  numberSocket,
   triggerSocket,
 } from '@magickml/engine'
 
@@ -25,7 +25,7 @@ type InputReturn = {
 export class CheckEthBalance extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-    super('CheckEthBalance')
+    super('Check Eth Balance')
 
     this.task = {
       outputs: {
@@ -43,8 +43,8 @@ export class CheckEthBalance extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'CheckEthBalance'
-    this.displayName = 'CheckEthBalance'
+    this.contextMenuName = 'Check Eth Balance'
+    this.displayName = 'Check Eth Balance'
   }
 
   destroyed(node: MagickNode) {
@@ -78,7 +78,7 @@ export class CheckEthBalance extends MagickComponent<InputReturn> {
       'RPC HTTP Endpoint',
       stringSocket
     )
-    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numSocket)
+    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket)
     const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
 
     return node

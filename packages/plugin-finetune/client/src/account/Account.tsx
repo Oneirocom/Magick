@@ -5,7 +5,7 @@ import { OpenAI } from '../types/openai'
 import { useLocalStorage } from 'usehooks-ts'
 import requestHeaders from './requestHeaders'
 
-import { OPENAI_ENDPOINT } from '@magickml/engine'
+import { OPENAI_ENDPOINT } from '../constants'
 
 export const AccountContext = React.createContext<{
   headers?: { [key: string]: string }
