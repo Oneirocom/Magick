@@ -70,7 +70,7 @@ const DefaultColumnFilter = ({
   )
 }
 
-function EventTable({ requests, updateCallback }) {
+function RequestTable({ requests, updateCallback }) {
   const { enqueueSnackbar } = useSnackbar()
   const config = useConfig()
 
@@ -137,7 +137,7 @@ function EventTable({ requests, updateCallback }) {
     []
   )
 
-  const updateEvent = async ({ id, ...rowData }, columnId, value) => {
+  const updateRequest = async ({ id, ...rowData }, columnId, value) => {
     const reqBody = {
       ...rowData,
       [columnId]: value,
@@ -147,7 +147,7 @@ function EventTable({ requests, updateCallback }) {
       const resp = await fetch(
         `${API_ROOT_URL}/request/${id}`,
         {
-          method: 'PUT',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -157,7 +157,7 @@ function EventTable({ requests, updateCallback }) {
 
       const json = await resp.json()
 
-      if (json) enqueueSnackbar('Event updated', { variant: 'success' })
+      if (json) enqueueSnackbar('Request updated', { variant: 'success' })
       else enqueueSnackbar('Error updating event', { variant: 'error' })
       updateCallback()
     }
@@ -167,11 +167,11 @@ function EventTable({ requests, updateCallback }) {
     value = '',
     row: { original: row },
     column: { id },
-    updateEvent,
+    updateRequest,
   }) => {
     const [val, setVal] = useState(value)
     const onChange = e => typeof val !== 'object' && setVal(e.target.value)
-    const onBlur = e => updateEvent(row, id, val)
+    const onBlur = e => updateRequest(row, id, val)
     useEffect(() => setVal(value), [value])
     return (
       <input
@@ -204,7 +204,7 @@ function EventTable({ requests, updateCallback }) {
       columns,
       data: requests,
       defaultColumn,
-      updateEvent,
+      updateRequest,
     },
     useFilters,
     useGlobalFilter,
@@ -218,11 +218,11 @@ function EventTable({ requests, updateCallback }) {
   }
 
   const handleRequestDelete = async (event: any) => {
-    // instead of deleting, call the updateEvent function with param hidden = true
+    // instead of deleting, call the updateRequest function with param hidden = true
     const resp = await fetch(
       `${API_ROOT_URL}/request/${event.id}`,
       {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -232,8 +232,8 @@ function EventTable({ requests, updateCallback }) {
 
     const json = await resp.json()
 
-    if (json) enqueueSnackbar('Event deleted', { variant: 'success' })
-    else enqueueSnackbar('Error deleting Event', { variant: 'error' })
+    if (json) enqueueSnackbar('Request deleted', { variant: 'success' })
+    else enqueueSnackbar('Error deleting Request', { variant: 'error' })
     updateCallback()
   }
 
@@ -346,4 +346,4 @@ function EventTable({ requests, updateCallback }) {
   )
 }
 
-export default EventTable
+export default RequestTable
