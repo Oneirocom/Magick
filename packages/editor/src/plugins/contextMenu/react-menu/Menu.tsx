@@ -3,13 +3,16 @@ import Item from './Item'
 import Context from './context'
 import { useEffect, useState } from 'react'
 
-export default ({ items, position: [x, y], visible, args, onClose }) => {
+export default ({ items, position: [x, y], visible, args, onClose, type = 'list' }) => {
   if (!visible) return null
+  console.log('type', type)
   const [search, setsearch] = useState('')
   // set focus on the search bar
   useEffect(() => {
     const searchbar = document.querySelector('.context-menu-search-bar')
-    searchbar.focus()
+    if(searchbar){
+      (searchbar as any).focus()
+    }
   }, [])
   return (
     <Context.Provider value={{ args, onClose }}>
@@ -17,14 +20,15 @@ export default ({ items, position: [x, y], visible, args, onClose }) => {
         className={styles['context-menu']}
         style={{ left: x + 'px', top: y + 'px' }}
       >
-        {/* add a search bar here */}
-        <input
+        {type ==='list' && (
+          <input
           type="text"
           placeholder="Search"
           className={styles['search-bar'] + ' context-menu-search-bar'}
           value={search}
           onChange={e => setsearch(e.target.value)}
-        />
+          />
+          )}
         <div className={styles['context-menu-inner']} >
           {items.map(item => {
             console.log('item', item)
