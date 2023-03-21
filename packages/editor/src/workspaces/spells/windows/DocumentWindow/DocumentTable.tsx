@@ -200,18 +200,11 @@ function DocumentTable({ documents, updateCallback }) {
   }
 
   const handleDatabaseDelete = async (event: any) => {
-    const resp = await fetch(`${API_ROOT_URL}/documents/${event.id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ hidden: true }),
+    const isDeleted = await fetch(`${API_ROOT_URL}/documents/${event.id}`, {
+      method: 'DELETE',
     })
-
-    const json = await resp.json()
-
-    if (json) enqueueSnackbar('Document deleted', { variant: 'success' })
-    else enqueueSnackbar('Error deleting Document', { variant: 'error' })
+    if (isDeleted) enqueueSnackbar('Document deleted', { variant: 'success' })
+    else enqueueSnackbar('Error deleting document', { variant: 'error' })
     updateCallback()
   }
 
@@ -293,6 +286,10 @@ function DocumentTable({ documents, updateCallback }) {
             onChange={e =>
               setNewDocument({ ...newDocument, content: e.target.value })
             }
+          />
+          <DatePicker
+            label="Date"
+            onChange={date => setNewDocument({ ...newDocument, date: date.toISOString() })}
           />
           <TextField
             label="Embedding"
