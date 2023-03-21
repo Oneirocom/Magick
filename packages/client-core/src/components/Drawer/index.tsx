@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
 import MuiDrawer from '@mui/material/Drawer'
@@ -9,7 +8,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import { useLocation } from 'react-router-dom'
 import StorageIcon from '@mui/icons-material/Storage'
@@ -17,6 +16,8 @@ import AutoStoriesIcon from '@mui/icons-material/AutoStories'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { pluginManager } from '@magickml/engine'
 import HubIcon from '@mui/icons-material/Hub'
+import InfoDialog from '../InfoDialog'
+import { title, body } from '../../constants'
 
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
@@ -102,7 +103,7 @@ const DrawerItem = ({ Icon, open, text, active, onClick = () => {} }) => (
   </ListItem>
 )
 
-const PluginDrawerItems = ({onClick, open}) => {
+const PluginDrawerItems = ({ onClick, open }) => {
   const drawerItems = pluginManager.getDrawerItems()
   let lastPlugin = null
   let divider = false
@@ -116,18 +117,16 @@ const PluginDrawerItems = ({onClick, open}) => {
           divider = false
         }
         return (
-          <div
-          key={item.path}
-          >
-          {divider && <Divider />}
-          <DrawerItem
-            key={item.path}
-            active={location.pathname.includes(item.path)}
-            Icon={item.icon}
-            open={open}
-            onClick={onClick(item.path)}
-            text={item.text}
-          />
+          <div key={item.path}>
+            {divider && <Divider />}
+            <DrawerItem
+              key={item.path}
+              active={location.pathname.includes(item.path)}
+              Icon={item.icon}
+              open={open}
+              onClick={onClick(item.path)}
+              text={item.text}
+            />
           </div>
         )
       })}
@@ -138,6 +137,7 @@ const PluginDrawerItems = ({onClick, open}) => {
 export function Drawer({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
+  const [isOpenAPISet, setOpenAPISet] = useState(true)
 
   const [open, setOpen] = useState<boolean>(false)
 
@@ -148,6 +148,14 @@ export function Drawer({ children }) {
   const onClick = location => () => {
     navigate(location)
   }
+
+  useEffect(() => {
+    const secrets = localStorage.getItem('secrets')
+    if (secrets) {
+      const parsedSecrets = JSON.parse(secrets)
+      setOpenAPISet(!!parsedSecrets['openai_api_key'])
+    }
+  }, [])
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -214,6 +222,18 @@ export function Drawer({ children }) {
             onClick={onClick('/settings')}
             text="Settings"
           />
+          {!!isOpenAPISet && (
+            <InfoDialog
+              title={title}
+              body={body}
+              style={{
+                width: '100%',
+                height: '1px',
+                marginLeft: '89%',
+                marginTop: '-40%',
+              }}
+            />
+          )}
         </List>
       </StyledDrawer>
       {children}
