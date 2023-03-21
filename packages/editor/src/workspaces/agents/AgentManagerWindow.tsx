@@ -105,7 +105,7 @@ const AgentManagerWindow = () => {
     }
   }
 
-  const update = (id: string, _data: object) => {
+  const update = (id: string, _data: any) => {
     axios
       .patch(`${config.apiUrl}/agents/${id}`, {
         ..._data,
@@ -166,7 +166,22 @@ const AgentManagerWindow = () => {
     })()
   }, [config.apiUrl])
 
-
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(`${config.apiUrl}/agents`)
+      const json = await res.json()
+      console.log('res data', json.data)
+      let spellAgent = JSON.parse(json.data[0].rootSpell)
+      let inputs = pluginManager.getInputByName()
+      let plugin_list = pluginManager.getPlugins()
+      for (let key of Object.keys(plugin_list)){
+        plugin_list[key] = validateSpellData(spellAgent, inputs[key])
+      }
+      console.log(plugin_list)
+      setEnable(plugin_list)
+    })()
+    
+  }, [])
   return isLoading ? (
     <LoadingScreen />
   ) : (
