@@ -1,22 +1,20 @@
-import * as React from 'react'
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles'
-import { useNavigate } from 'react-router-dom'
-import MuiDrawer from '@mui/material/Drawer'
-import Divider from '@mui/material/Divider'
-import List from '@mui/material/List'
+import { pluginManager } from '@magickml/engine'
+import AppsIcon from '@mui/icons-material/Apps'
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
+import DocumentIcon from '@mui/icons-material/Description'
+import SettingsIcon from '@mui/icons-material/Settings'
+import StorageIcon from '@mui/icons-material/Storage'
+import Divider from '@mui/material/Divider'
+import MuiDrawer from '@mui/material/Drawer'
+import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
+import { CSSObject, styled, Theme } from '@mui/material/styles'
 import { useState } from 'react'
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
-import { useLocation } from 'react-router-dom'
-import StorageIcon from '@mui/icons-material/Storage'
-import AutoStoriesIcon from '@mui/icons-material/AutoStories'
-import SettingsIcon from '@mui/icons-material/Settings'
-import { pluginManager } from '@magickml/engine'
-import HubIcon from '@mui/icons-material/Hub'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
@@ -102,7 +100,7 @@ const DrawerItem = ({ Icon, open, text, active, onClick = () => {} }) => (
   </ListItem>
 )
 
-const PluginDrawerItems = ({onClick, open}) => {
+const PluginDrawerItems = ({ onClick, open }) => {
   const drawerItems = pluginManager.getDrawerItems()
   let lastPlugin = null
   let divider = false
@@ -116,18 +114,16 @@ const PluginDrawerItems = ({onClick, open}) => {
           divider = false
         }
         return (
-          <div
-          key={item.path}
-          >
-          {divider && <Divider />}
-          <DrawerItem
-            key={item.path}
-            active={location.pathname.includes(item.path)}
-            Icon={item.icon}
-            open={open}
-            onClick={onClick(item.path)}
-            text={item.text}
-          />
+          <div key={item.path}>
+            {divider && <Divider />}
+            <DrawerItem
+              key={item.path}
+              active={location.pathname.includes(item.path)}
+              Icon={item.icon}
+              open={open}
+              onClick={onClick(item.path)}
+              text={item.text}
+            />
           </div>
         )
       })}
@@ -178,29 +174,39 @@ export function Drawer({ children }) {
           }}
         >
           <DrawerItem
-            active={location.pathname.includes('/magick')}
+            active={
+              location.pathname.includes('/magick') ||
+              location.pathname.includes('/home')
+            }
             Icon={AutoFixHighIcon}
             open={open}
             onClick={onClick('/magick')}
             text="Spells"
           />
           <DrawerItem
-            active={location.pathname === '/events'}
-            Icon={StorageIcon}
-            open={open}
-            onClick={onClick('/events')}
-            text="Events"
-          />
-          <DrawerItem
             active={location.pathname === '/agents'}
-            Icon={HubIcon}
+            Icon={AppsIcon}
             open={open}
             onClick={onClick('/agents')}
             text="Agents"
           />
           <DrawerItem
-            active={location.pathname === '/requests'}
+            active={location.pathname === '/documents'}
+            Icon={DocumentIcon}
+            open={open}
+            onClick={onClick('/documents')}
+            text="Documents"
+          />
+          <DrawerItem
+            active={location.pathname === '/events'}
             Icon={BoltIcon}
+            open={open}
+            onClick={onClick('/events')}
+            text="Events"
+          />
+          <DrawerItem
+            active={location.pathname === '/requests'}
+            Icon={StorageIcon}
             open={open}
             onClick={onClick('/requests')}
             text="Requests"

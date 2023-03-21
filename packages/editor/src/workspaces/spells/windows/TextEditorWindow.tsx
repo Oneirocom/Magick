@@ -14,7 +14,7 @@ const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)
   const [data, setData] = useState<TextEditorData | null>(null)
   // const [height, setHeight] = useState<number>()
-  const [editorOptions, setEditorOptions] = useState<Record<string, any>>()
+  const [editorOptions, setEditorOptions] = useState<Record<string, any>>({wordWrap: 'on', minimap: {enabled: false}})
   const codeRef = useRef<string>()
   const [openaiApiKey, setOpenaiApiKey] = useState<string | undefined>(
     undefined
@@ -39,6 +39,7 @@ const TextEditor = props => {
       base: 'vs-dark',
       inherit: true,
       rules: [],
+      wordWrap: true,
       colors: {
         'editor.background': '#272727',
       },

@@ -1,36 +1,14 @@
+import { calculateCompletionCost } from '@magickml/cost-calculator'
 import { v4 } from 'uuid'
 import { globalsManager } from '../globals'
-
-type RequestPayload = {
-  projectId: string
-  requestData: string
-  responseData?: string
-  model?: string
-  duration?: number
-  status?: string
-  statusCode?: number
-  parameters?: string
-  provider?: string
-  type?: string
-  hidden?: boolean
-  processed?: boolean
-  cost?: number
-  spell?: any
-  nodeId?: number
-}
-
-export type RequestData = {
-  spell: string
-  projectId: string
-  nodeId: number
-}
+import { RequestPayload } from '../types'
 
 export function saveRequest({
   projectId,
   requestData,
   responseData,
   model,
-  duration,
+  startTime,
   status,
   statusCode,
   parameters,
@@ -38,10 +16,18 @@ export function saveRequest({
   type,
   hidden,
   processed,
-  cost,
+  totalTokens,
   spell,
   nodeId,
 }: RequestPayload) {
+  const cost = calculateCompletionCost({
+    totalTokens,
+    model,
+  })
+
+  const end = Date.now()
+
+  const duration = end - startTime
 
   const app = globalsManager.get('feathers')
   return app.service('request').create({

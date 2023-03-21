@@ -24,7 +24,7 @@ export class Output extends MagickComponent<void> {
     this.task = {
       runOneInput: true,
       outputs: {
-        text: 'output',
+        output: 'output',
         trigger: 'option',
       },
     }

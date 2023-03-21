@@ -105,8 +105,15 @@ const SettingsWindow = () => {
         />
         <SettingsWindowChild
           displayName={'BananaML'}
-          keyName={'banana-api-key'}
+          keyName={'banana_api_key'}
           getUrl={'https://app.banana.dev/'}
+          setKey={setKey}
+          getKey={getKey}
+        />
+        <SettingsWindowChild
+          displayName={'Pinceone'}
+          keyName={'pinecone_api_key'}
+          getUrl={'https://app.pinecone.io/'}
           setKey={setKey}
           getKey={getKey}
         />

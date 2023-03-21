@@ -1,15 +1,15 @@
+import DownloadIcon from '@mui/icons-material/Download'
+import { Box } from '@mui/material'
+import Button from '@mui/material/Button'
+import { toast } from 'react-toastify'
 import useAuthentication from '../account/useAuthentication'
 import ErrorMessage from '../components/ErrorMessage'
 import InfoCard from '../components/InfoCard'
-import React from 'react'
-import { toast } from 'react-toastify'
+import Loading from '../components/Loading'
 import { OpenAI } from '../types/openai'
 import useFineTuneResults from './useFineTuneResults'
-import Button from '@mui/material/Button'
-import Loading from '../components/Loading'
-import { Box } from '@mui/material'
-import DownloadIcon from '@mui/icons-material/Download'
-import { OPENAI_ENDPOINT } from '@magickml/engine'
+
+import { OPENAI_ENDPOINT } from '../constants'
 
 export type ResultFileRecord = {
   elapsed_examples: number

@@ -57,7 +57,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
     // run the spell
     const result = await runSpell({
-      id: rootSpell.id,
+      spellId: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (GET)': {
@@ -121,7 +121,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
 
     const result = await runSpell({
-      id: rootSpell.id,
+      spellId: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (POST)': {
@@ -183,7 +183,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
 
     const result = await runSpell({
-      id: rootSpell.id,
+      spellId: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (PUT)': {
@@ -235,7 +235,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
     // run the spell
     const result = await runSpell({
-      id: rootSpell.id,
+      spellId: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (DELETE)': {

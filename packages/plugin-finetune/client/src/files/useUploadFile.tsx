@@ -1,17 +1,17 @@
-import useAuthentication from '../account/useAuthentication'
 import { parse } from 'csv-parse'
 import { filesize } from 'filesize'
 import { useCallback, useState } from 'react'
 import { toast } from 'react-toastify'
 import { mutate } from 'swr'
-import { OpenAI } from '../types/openai'
 import * as XLSX from 'xlsx'
-import { OPENAI_ENDPOINT } from '@magickml/engine'
+import useAuthentication from '../account/useAuthentication'
+import { OpenAI } from '../types/openai'
+
+import { OPENAI_ENDPOINT } from '../constants'
 
 const maxFileSize = 150 * 1024 * 1024
 
 export const MimeTypes = [
-  // eslint-disable-next-line sonarjs/no-duplicate-string
   'application/jsonl',
   'application/json',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

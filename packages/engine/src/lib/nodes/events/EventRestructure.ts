@@ -9,7 +9,7 @@ import {
   stringSocket,
   triggerSocket,
   eventSocket,
-  numSocket,
+  numberSocket,
 } from '../../sockets'
 import { MagickComponent, MagickTask } from '../../magick-component'
 
@@ -34,7 +34,7 @@ export class EventRestructureComponent extends MagickComponent<
       },
     }
 
-    this.category = 'Events'
+    this.category = 'Event'
     this.info = info
     this.display = true
   }

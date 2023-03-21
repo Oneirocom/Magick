@@ -9,7 +9,7 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   NodeData,
-  numSocket,
+  numberSocket,
   stringSocket,
   triggerSocket,
 } from '@magickml/engine'
@@ -23,7 +23,7 @@ type InputReturn = {
 export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-    super('CheckBalanceForERC20')
+    super('Check ERC20 Balance')
 
     this.task = {
       outputs: {
@@ -41,8 +41,8 @@ export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'CheckBalanceForERC20'
-    this.displayName = 'CheckBalanceForERC20'
+    this.contextMenuName = 'Check ERC20 Balance'
+    this.displayName = 'Check ERC20 Balance'
   }
 
   destroyed(node: MagickNode) {
@@ -54,11 +54,11 @@ export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    const addressInput = new Rete.Input('address', 'Wallet Address', numSocket)
+    const addressInput = new Rete.Input('address', 'Wallet Address', numberSocket)
     const contractAddressInput = new Rete.Input(
       'contract',
       'Contract Address',
-      numSocket
+      numberSocket
     )
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
