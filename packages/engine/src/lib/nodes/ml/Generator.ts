@@ -214,7 +214,6 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
       })
 
       if (!success) return console.error('Error in generator')
-
       const raw = choice.text
       const result = raw
         // trim any newlines from the beginning and end
@@ -222,7 +221,6 @@ export class Generator extends MagickComponent<Promise<WorkerReturn>> {
         // trim any spaces from the beginning and end
         .replace(/^\s+|\s+$/g, '')
       const composed = `${prompt} ${result}`
-
       return {
         result,
         composed,

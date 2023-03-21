@@ -393,7 +393,7 @@ export class DiscordConnector {
         .replace('!', '')
         .match(client.username_regex)
     const isInDiscussion = this.isInConversation(author.id)
-    console.log('SSS')
+
     console.log(content)
     if (!content.startsWith('!') && !otherMention) {
       if (isMention) content = '!ping ' + content.replace(botMention, '').trim()
@@ -430,7 +430,6 @@ export class DiscordConnector {
         }
       }
     }
-
     //if the message contains join word, it makes the bot to try to join a voice channel and listen to the users
     if (content.startsWith('!ping')) {
       console.log('CONTENT STARTS with PING')
@@ -523,12 +522,13 @@ export class DiscordConnector {
     if (content.startsWith('!ping ')) {
       content = content.replace('!ping ', '')
     }
+    console.log(content)
     console.log('calling runComponent from discord.ts')
     console.log('publicVariables', this.agent.publicVariables)
     const response = await this.spellRunner.runComponent({
       inputs: {
         'Input - Discord (Text)': {
-          content,
+          content: content,
           sender: message.author.username,
           observer: this.discord_bot_name,
           client: 'discord',
@@ -543,13 +543,15 @@ export class DiscordConnector {
       publicVariables: this.agent.publicVariables,
       runSubspell: true,
     })
-
     const { Output /*Image*/ } = response
 
     // get the value of the first entry in the object
     const firstValue = Output || Object.values(response)[0]
 
     console.log('handled response', firstValue)
+    if (firstValue == "") {
+      message.channel.send("Error: Empty Resonse")
+    } else message.channel.send(firstValue)
   }
 
   //Event that is triggered when a message is deleted
