@@ -3,19 +3,25 @@ import Rete from 'rete'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../magick-component'
 import { pluginManager } from '../../plugin'
-import { anySocket, stringSocket, triggerSocket } from '../../sockets'
+import { anySocket, triggerSocket } from '../../sockets'
 import {
-  EngineContext, MagickNode,
+  CompletionInspectorControls,
+  CompletionProvider,
+  CompletionSocket,
+  EngineContext,
+  MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs, NodeData
+  MagickWorkerOutputs,
+  NodeData
 } from '../../types'
 
 const info = 'Basic text completion using OpenAI.'
 
 type WorkerReturn = {
   success: boolean
-  output: string
-} | void
+  result?: string
+  error?: string
+}
 
 export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
@@ -23,7 +29,8 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
 
     this.task = {
       outputs: {
-        output: 'output',
+        error: 'option',
+        result: 'output',
         trigger: 'option',
       },
     }
@@ -34,78 +41,123 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   builder(node: MagickNode) {
-    const inp = new Rete.Input('string', 'Text', stringSocket)
     const settings = new Rete.Input('settings', 'Settings', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const outp = new Rete.Output('output', 'output', stringSocket)
 
-
-    const completionProviders = pluginManager.getCompletionProviders('text', ['embedding'])
+    const completionProviders = pluginManager.getCompletionProviders('text', [
+      'text',
+      'chat',
+    ]) as CompletionProvider[]
 
     console.log('completionProviders', completionProviders)
 
+    // get the models from the completion providers and flatten into a single array
+    const models = completionProviders.map(provider => provider.models).flat()
+
     const modelName = new DropdownControl({
       name: 'Model Name',
-      dataKey: 'modelName',
-      values: [
-        'text-davinci-003',
-        'text-davinci-002',
-        'text-davinci-001',
-        'text-curie-001',
-        'text-babbage-001',
-        'text-ada-001',
-        'curie-instruct-beta',
-        'davinci-instruct-beta',
-      ],
-      defaultValue: 'text-davinci-003',
+      dataKey: 'model',
+      values: models,
+      defaultValue: models[0],
     })
 
-    node.inspector
-      .add(modelName)
+    node.inspector.add(modelName)
 
+    node.addInput(dataInput).addInput(settings).addOutput(dataOutput)
+
+    let lastInputSockets: CompletionSocket[] | undefined = []
+    let lastOutputSockets: CompletionSocket[] | undefined = []
+    let lastInspectorControls: CompletionInspectorControls[] | undefined = []
+
+    function configureNode() {
+      const model = node.data.model as string
+      const provider = completionProviders.find(provider =>
+        provider.models.includes(model)
+      ) as CompletionProvider
+      node.data.provider = provider
+      const inspectorControls = provider.inspectorControls
+      const inputSockets = provider.inputs
+      const outputSockets = provider.outputs
+      if (inspectorControls !== lastInspectorControls) {
+        lastInspectorControls?.forEach(control => {
+          node.inspector.dataControls.delete(control.dataKey)
+        })
+        inspectorControls?.forEach(control => {
+          const _control = new control.type(control)
+          node.inspector.add(_control)
+        })
+        lastInspectorControls = inspectorControls
+      }
+      if (inputSockets !== lastInputSockets) {
+        lastInputSockets?.forEach(socket => {
+          if (node.inputs.has(socket.name)) node.inputs.delete(socket.name)
+        })
+        inputSockets.forEach(socket => {
+          node.addInput(new Rete.Input(socket.name, socket.name, socket.type))
+        })
+        lastInputSockets = inputSockets
+      }
+      if (outputSockets !== lastOutputSockets) {
+        lastOutputSockets?.forEach(socket => {
+          if (node.outputs.has(socket.name)) node.outputs.delete(socket.name)
+        })
+        outputSockets.forEach(socket => {
+          node.addOutput(new Rete.Output(socket.name, socket.name, socket.type))
+        })
+        lastOutputSockets = outputSockets
+      }
+    }
+
+    modelName.onData = (value: string) => {
+      node.data.model = value
+      configureNode()
+    }
+
+    if (!node.data.model) node.data.model = models[0]
+    configureNode()
     return node
-      .addInput(dataInput)
-      .addInput(inp)
-      .addInput(settings)
-      .addOutput(dataOutput)
-      .addOutput(outp)
   }
 
   async worker(
     node: NodeData,
     inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
-    context: { module: any, secrets: Record<string, string>; projectId: string; magick: EngineContext }
+    context: {
+      module: any
+      secrets: Record<string, string>
+      projectId: string
+      magick: EngineContext
+    }
   ) {
-    
-    
-    // const { success, result } = await makeTextCompletion(
-    //   {node,
-    //   inputs,
-    //   outputs,
-    //   context,
-    //   }
-    // )
+    const provider = node.data.provider as CompletionProvider
 
-    // if (!success) {
-    //   node.data.error = true
-    //   console.error('Error in text completion')
-    //   return {
-    //     succes: false,
-    //   }
-    // }
+    const completionHandler = provider.handler
 
-    const success = false
+    if (!completionHandler) {
+      console.error('No completion handler found for provider', provider)
+      return {
+        success: false,
+      }
+    }
 
-    // const res =
-    //   success !== 'false' && success !== false ? result.text : '<error>'
+    const { success, result } = await completionHandler({
+      node,
+      inputs,
+      outputs,
+      context,
+    })
 
-    // console.log('success:', success, 'choice:', result.text, 'res:', res)
+    if (!success) {
+      return {
+        success: false,
+        result,
+      }
+    }
 
     return {
       success: true,
-      output: null// res,
+      result,
     }
   }
 }

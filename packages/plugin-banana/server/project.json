@@ -5,21 +5,6 @@
   "projectType": "library",
   "implicitDependencies": ["@magickml/engine"],
   "targets": {
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "options": {
-        "outputPath": "dist/packages/plugin-banana/server",
-        "tsConfig": "packages/plugin-banana/server/tsconfig.lib.json",
-        "packageJson": "packages/plugin-banana/server/package.json",
-        "main": "packages/plugin-banana/server/src/index.ts",
-        "assets": [
-          "packages/plugin-banana/server/*.md"
-        ]
-      }
-    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

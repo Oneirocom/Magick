@@ -24,17 +24,6 @@
           "codeCoverage": true
         }
       }
-    },
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/cost-calculator",
-        "tsConfig": "packages/cost-calculator/tsconfig.lib.json",
-        "packageJson": "packages/cost-calculator/package.json",
-        "main": "packages/cost-calculator/src/index.ts",
-        "assets": ["packages/cost-calculator/*.md"]
-      }
     }
   },
   "tags": []

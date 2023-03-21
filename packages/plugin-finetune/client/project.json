@@ -13,23 +13,6 @@
         "lintFilePatterns": ["packages/plugin-finetune/client/**/*.{ts,tsx,js,jsx}"]
       }
     },
-    "build": {
-      "executor": "@nrwl/vite:build",
-      "outputs": ["{options.outputPath}"],
-      "configFile": "packages/plugin-finetune/client/vite.config.ts",
-      "defaultConfiguration": "production",
-      "options": {
-        "outputPath": "dist/packages/plugin-finetune/client"
-      },
-      "configurations": {
-        "development": {
-          "mode": "development"
-        },
-        "production": {
-          "mode": "production"
-        }
-      }
-    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
