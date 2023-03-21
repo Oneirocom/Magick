@@ -94,7 +94,6 @@ const AvatarWindow = ({ tab }) => {
   }
 
   const onDataChange = dataText => {
-    
     dispatch(upsertLocalState({ id: tab.id, playtestData: dataText }))
   }
 
