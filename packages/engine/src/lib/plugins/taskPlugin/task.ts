@@ -1,7 +1,7 @@
-import { NodeData, NodeDataOrEmpty } from 'rete/types/core/data'
+import { NodeData } from 'rete/types/core/data'
 
-import { MagickNode, MagickReteInput, MagickWorkerInputs } from '../../types'
 import { MagickComponent, MagickTask } from '../../magick-component'
+import { MagickNode, MagickReteInput, MagickWorkerInputs } from '../../types'
 
 type TaskRef = {
   key: string
@@ -33,13 +33,7 @@ type RunOptions = {
 
 export type TaskOutputTypes = 'option' | 'output'
 
-// const hasTrigger = (task: Task) => {
-//   return Object.values(task.component.task.outputs).includes('option')
-// }
-
-// TODO: the TaskWorker should 
-type TaskWorker = (_ctx: unknown, inputs: MagickWorkerInputs, data: NodeDataOrEmpty, socketInfo: TaskSocketInfo | string | null) => Promise<Record<string, unknown> | null>
-// type TaskWorker = TaskWorker1 | TaskWorker2
+type TaskWorker = (_ctx: unknown, inputs: MagickWorkerInputs, data: NodeData, socketInfo: TaskSocketInfo | string | null) => Promise<Record<string, unknown> | null>
 export class Task {
   node: NodeData
   inputs: MagickWorkerInputs
@@ -135,7 +129,7 @@ export class Task {
     this.closed = []
   }
 
-  async run(data: NodeDataOrEmpty = {}, options: RunOptions = {}) {
+  async run(data: NodeData, options: RunOptions = {}) {
     const {
       needReset = true,
       garbage = [] as Task[],

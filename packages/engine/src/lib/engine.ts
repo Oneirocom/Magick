@@ -87,11 +87,7 @@ export const initSharedEngine = ({
 // this parses through all the nodes in the data and finds the nodes associated with the given map
 export const extractNodes = (
   nodes: GraphData['nodes'],
-<<<<<<< HEAD
-  map: Map<any, any> | Set<unknown>
-=======
   map: Map<string, unknown> | Set<string>,
->>>>>>> pizzooid/typings
 ) => {
   const names = Array.from(map.keys())
 

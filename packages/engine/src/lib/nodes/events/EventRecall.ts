@@ -82,10 +82,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
-<<<<<<< HEAD
-      
-=======
->>>>>>> pizzooid/typings
 
       url.searchParams.append('embedding', params['embedding'])
       const response = await fetch(url.toString())
@@ -121,14 +117,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
         ? typeData.toLowerCase().trim()
         : 'none'
 
-<<<<<<< HEAD
-    const maxCountData = node.data?.max_count as string
+    const maxCountData = node?.data?.max_count as string && (node?.data as { max_count: string })?.max_count
     const limit = maxCountData ? parseInt(maxCountData) : 10
-=======
-    // TODO: check if defined instead of as {type:string}
-    const maxCountData = (node?.data as { max_count: string })?.max_count
-    const maxCount = maxCountData ? parseInt(maxCountData) : 10
->>>>>>> pizzooid/typings
 
     const data = {
       type,
@@ -158,10 +148,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     } else {
       events = await getEvents(data)
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> pizzooid/typings
     return {
       events,
     }

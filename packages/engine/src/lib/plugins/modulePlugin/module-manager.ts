@@ -165,8 +165,12 @@ export class ModuleManager {
       )
       if (!triggeredNode) throw new Error('Triggered node not found')
       // todo need to remember to update this if/when componnet name changes
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
       const component = engine?.components.get('Input') as ModuleComponent
       console.log('component', component)
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
       await component?.run(triggeredNode)
     }
     // gather the outputs

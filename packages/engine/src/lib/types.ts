@@ -1,8 +1,6 @@
 import { Connection, Input, NodeEditor, Output, Socket } from 'rete'
 import { Node } from 'rete/types'
-import {
-  Data, WorkerOutputs
-} from 'rete/types/core/data'
+import { Data, WorkerOutputs } from 'rete/types/core/data'
 
 import { MagickComponent, MagickTask } from './magick-component'
 import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
@@ -120,7 +118,10 @@ export type CompletionResponse = {
   choice: any
 }
 
-export type OnSubspellUpdated = (spellName: string, callback: (PubSubData) => void) => void
+export type OnSubspellUpdated = (
+  spellName: string,
+  callback: (PubSubData) => void
+) => void
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
@@ -130,13 +131,11 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare abort: unknown
   declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
   declare moduleManager: ModuleManager
-<<<<<<< HEAD
-  declare runProcess: (callback?: Function | undefined) => Promise<void>
-  declare onSpellUpdated: (spellId: string, callback: Function) => Function
-=======
   declare runProcess: (callback?: () => void | undefined) => Promise<void>
-  declare onSpellUpdated: (spellName: string, callback: PubSubCallback) => OnSubspellUpdated
->>>>>>> pizzooid/typings
+  declare onSpellUpdated: (
+    spellName: string,
+    callback: any
+  ) => OnSubspellUpdated
   declare refreshEventTable: () => void
 }
 
@@ -144,18 +143,12 @@ export type Env = {
   API_ROOT_URL: string
 }
 
-<<<<<<< HEAD
-type runSpellType = {
-  inputs: Record<string, any>
-  spellId: string
-=======
 export type UnknownData = Record<string, unknown>
 export type UnknownSpellData = UnknownData
 
-export type runSpellType<DataType=UnknownSpellData> = {
+export type runSpellType<DataType = UnknownSpellData> = {
   inputs: MagickSpellInput
-  spellName: string
->>>>>>> pizzooid/typings
+  spellId: string
   projectId: string
   secrets: Record<string, string>
   publicVariables: DataType
@@ -177,37 +170,19 @@ export type ProcessCode = (
   language?: SupportedLanguages
 ) => unknown | void
 
-export type RunSpell<DataType=Record<string, unknown>> = ({
+export type RunSpell<DataType = Record<string, unknown>> = ({
   inputs,
-  spellName,
+  spellId,
   projectId,
   secrets,
-  publicVariables
+  publicVariables,
 }: runSpellType<DataType>) => DataType
 
 export type EngineContext = {
   env: Env
-<<<<<<< HEAD
-  runSpell: ({
-    spellId,
-    inputs,
-    projectId,
-    secrets,
-    publicVariables
-  }: runSpellType) => Record<string, any>
-  completion?: (body: CompletionBody) => Promise<CompletionResponse>
-  getSpell: ({
-    spellId,
-    projectId,
-  }: {
-    spellId: string
-    projectId: string
-  }) => Promise<any | Spell>
-=======
   runSpell: RunSpell
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
->>>>>>> pizzooid/typings
   getCurrentSpell: () => Spell
   processCode?: ProcessCode
 }
@@ -216,19 +191,28 @@ export type PubSubData = Record<string, unknown> | string | unknown[]
 export type PubSubCallback = (event: string, data: PubSubData) => void
 
 export type OnInspectorCallback = (data: Record<string, unknown>) => void
-export type OnInspector = (node: MagickNode, callback: OnInspectorCallback) => () => void
+export type OnInspector = (
+  node: MagickNode,
+  callback: OnInspectorCallback
+) => () => void
 export type OnEditorCallback = (data: PubSubData) => void
 export type OnEditor = (callback: OnEditorCallback) => () => void
-export type OnDebug = (node: MagickNode, callback: OnEditorCallback) => () => void
+export type OnDebug = (
+  node: MagickNode,
+  callback: OnEditorCallback
+) => () => void
 
 export type PublishEditorEvent = (data: PubSubData) => void
 
 export interface EditorContext extends EngineContext {
   sendToAvatar: (data: unknown) => void
   /**
-  * @deprecated The method should not be used
-  */
-  onTrigger: (node: MagickNode | string, callback: (data: unknown) => void) => () => void
+   * @deprecated The method should not be used
+   */
+  onTrigger: (
+    node: MagickNode | string,
+    callback: (data: unknown) => void
+  ) => () => void
   sendToPlaytest: (data: string) => void
   sendToInspector: PublishEditorEvent
   sendToDebug: PublishEditorEvent
@@ -271,8 +255,11 @@ export type DataSocketType = {
   useSocketName: boolean
 }
 
-export type MagicNodeInput = Input & { socketType: DataSocketType; }
-export type MagicNodeOutput = Output & { taskType?: TaskType; socketType: DataSocketType; }
+export type MagicNodeInput = Input & { socketType: DataSocketType }
+export type MagicNodeOutput = Output & {
+  taskType?: TaskType
+  socketType: DataSocketType
+}
 
 export type MagickNode = Node & {
   inspector: Inspector
@@ -347,8 +334,10 @@ export type NodeOutputs = {
 }
 
 export type NodeData = {
+  id: number
   socketKey?: string
   name?: string
+  data: Record<string, unknown>
   [DataKey: string]: unknown
 }
 
@@ -420,10 +409,6 @@ export type MessagingWebhookBody = {
   To: string
 }
 
-<<<<<<< HEAD
-export type MessagingRequest = any
-
-
 export type CompletionType = 'image' | 'text'
 
 export type ImageCompletionSubtype = 'text2image' | 'image2image' | 'image2text'
@@ -466,7 +451,10 @@ export type TextCompletionData = {
   apiKey?: string
 }
 
-export type ChatMessage = {role: 'system' | 'user' | 'assistant' | string, content: string}
+export type ChatMessage = {
+  role: 'system' | 'user' | 'assistant' | string
+  content: string
+}
 
 export type ChatCompletionData = {
   model: string
@@ -488,6 +476,19 @@ export type EmbeddingData = {
   apiKey: string
 }
 
+export type CompletionHandlerInputData = {
+  node: NodeData
+  inputs: MagickWorkerInputs
+  outputs: MagickWorkerOutputs
+  context: {
+    module: any
+    secrets: Record<string, string>
+    projectId: string
+    magick: EngineContext
+  }
+}
+
+export type MessagingRequest = unknown
 
 export type RequestPayload = {
   projectId: string
@@ -512,18 +513,3 @@ export type RequestData = {
   projectId: string
   nodeId: number
 }
-
-export type CompletionHandlerInputData = {
-  node: NodeData
-  inputs: MagickWorkerInputs
-  outputs: MagickWorkerOutputs
-  context: {
-    module: any
-    secrets: Record<string, string>
-    projectId: string
-    magick: EngineContext
-  }
-}
-=======
-export type MessagingRequest = unknown
->>>>>>> pizzooid/typings
