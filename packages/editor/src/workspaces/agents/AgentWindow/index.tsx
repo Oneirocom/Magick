@@ -8,11 +8,11 @@ import { useConfig } from '../../../contexts/ConfigProvider'
 
 interface Props {
   data: Array<object>
-  selectedAgent: object
+  selectedAgentData: object
   rootSpell: string
   onLoadEnables: Object
   setRootSpell: (spell: string) => void
-  setSelectedAgent: (data: object) => void
+  setSelectedAgentData: (data: object) => void
   onCreateAgent: (data: any) => void
   updateCallBack: () => void
   update: (id: string, data: object) => void
@@ -22,26 +22,25 @@ interface Props {
 
 const AgentWindow = ({
   data,
-  update,
+  selectedAgentData,
   updateCallBack,
   onCreateAgent,
+  setSelectedAgentData,
   onDelete,
   onLoadFile,
   onLoadEnables,
 }: Props) => {
   const config = useConfig()
-  const [selectedAgentData, setSelectedAgentData] = useState({ id: null })
 
   const onClickHandler = agent => {
     setSelectedAgentData(agent)
   }
 
   useEffect(() => {
-    console.log('data is', data)
-    if(!selectedAgentData.id && data.length > 0) {
+    if (!selectedAgentData) {
       setSelectedAgentData(data[0] as any)
     }
-  }, [data, selectedAgentData.id])
+  }, [data, selectedAgentData, setSelectedAgentData])
 
   return (
     <Grid container className={styles.container}>
@@ -56,35 +55,39 @@ const AgentWindow = ({
         <Button
           variant="contained"
           className={`${styles.btn} ${styles['mg-btm-medium']}`}
-          onClick={() => onCreateAgent({
-            name: 'New Agent',
-            projectId: config.projectId,
-            enabled: false,
-            spells: [],
-            rootSpell: '{}',
-            publicVariables: '{}',
-            secrets: '{}',
-          })}
+          onClick={() =>
+            onCreateAgent({
+              name: 'New Agent',
+              projectId: config.projectId,
+              enabled: false,
+              spells: [],
+              rootSpell: '{}',
+              publicVariables: '{}',
+              secrets: '{}',
+            })
+          }
         >
           Add Agent
         </Button>
-        {data?.map((agent: { id: string }) => (
-          <AgentItem
-            key={agent?.id}
-            keyId={agent?.id}
-            onDelete={onDelete}
-            onClick={onClickHandler}
-            agent={agent}
-            style={
-              agent?.id === selectedAgentData?.id
-                ? { border: '1px solid var(--primary)' }
-                : {}
-            }
-          />
-        ))}
+        {data?.map((agent: { id: string }) => {
+          return (
+            <AgentItem
+              key={agent?.id}
+              keyId={agent?.id}
+              onDelete={onDelete}
+              onClick={onClickHandler}
+              agent={agent}
+              style={
+                agent?.id === selectedAgentData?.id
+                  ? { border: '1px solid var(--primary)' }
+                  : {}
+              }
+            />
+          )
+        })}
       </Grid>
       <Grid item xs={8} className={styles.item}>
-        {selectedAgentData.id ? (
+        {selectedAgentData ? (
           <AgentDetails
             selectedAgentData={selectedAgentData}
             setSelectedAgentData={setSelectedAgentData}

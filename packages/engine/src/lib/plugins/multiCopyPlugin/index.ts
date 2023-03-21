@@ -44,7 +44,7 @@ function install(editor: IRunContextEditor) {
   editor.on('multiselectpaste', async () => {
     if (!mouse.x || !mouse.y) return
 
-    let selectedNodes = await localStorage.getItem(storedNodesKey)
+    const selectedNodes = await localStorage.getItem(storedNodesKey)
     if (!selectedNodes) return
 
     const parsedNodes = JSON.parse(selectedNodes)
@@ -67,7 +67,7 @@ function install(editor: IRunContextEditor) {
 }
 
 const createConnections = async(editor, nodeMapping) => {    
-  let pairs = await localStorage.getItem('connectedNodePairs')
+  const pairs = await localStorage.getItem('connectedNodePairs')
   if (!pairs) return
   const parsedPairs = JSON.parse(pairs)
 
@@ -139,7 +139,7 @@ const pasteNodesAndConnections = async (editor, jsonNodes, mouse, posDiff) => {
     cloneNodesMap = {...cloneNodesMap, [id]: cloneItem}
 
     i++
-  };
+  }
 
   // Wait for the nodes to be fully created before proceeding
   // 1000 milis is a random number. Assume that user will copy a large amounts of nodes

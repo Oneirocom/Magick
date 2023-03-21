@@ -1,9 +1,8 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
-import { TextInputControl } from '../../dataControls/TextInputControl'
-import { stringSocket, arraySocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
+import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
+import { MagickNode, MagickWorkerInputs, NodeData } from '../../types'
 const info = `Join an array of events into a conversation formatted for prompt injection.`
 
 type WorkerReturn = {
@@ -20,7 +19,6 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
         conversation: 'output',
         trigger: 'option',
       },
-      init: () => {},
     }
 
     this.category = 'Events'
@@ -47,8 +45,10 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
     let conversation = '';
     //Events.rows when the data is fetched using embedding
     if (Array.isArray(events)){
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       if(events.rows) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
         events.rows.forEach((event) => {
           conversation += event.sender + ': ' + event.content + '\n';

@@ -77,10 +77,10 @@ function parseArxivObject(entry: any) {
  */
 function parseTag({ name, prefix = PREFIXES.ALL }) {
   if (!_.isString(name) || _.isEmpty(name)) {
-    throw new Error('you must specify tag name')
+    return console.error('you must specify tag name')
   }
   if (!Object.values(PREFIXES).includes(prefix)) {
-    throw new Error(`unsupported prefix: ${prefix}`)
+    return console.error(`unsupported prefix: ${prefix}`)
   }
   return `${prefix}:${name}`
 }
@@ -92,10 +92,10 @@ function parseTag({ name, prefix = PREFIXES.ALL }) {
  */
 function parseTags({ include, exclude = [] }) {
   if (!Array.isArray(include) || !Array.isArray(exclude)) {
-    throw new Error('include and exclude must be arrays')
+    return console.error('include and exclude must be arrays')
   }
   if (include.length === 0) {
-    throw new Error('include is a mandatory field')
+    return console.error('include is a mandatory field')
   }
   return `${include.map(parseTag).join(SEPARATORS.AND)}${
     exclude.length > 0 ? SEPARATORS.ANDNOT : ''
@@ -121,17 +121,17 @@ async function search({
   maxResults = 10,
 }) {
   if (!Array.isArray(searchQueryParams)) {
-    throw new Error('query param must be an array')
+    return console.error('query param must be an array')
   }
   if (sortBy && !Object.values(SORT_BY).includes(sortBy)) {
-    throw new Error(
+    return console.error(
       `unsupported sort by option. should be one of: ${Object.values(
         SORT_BY
       ).join(' ')}`
     )
   }
   if (sortOrder && !Object.values(SORT_ORDER).includes(sortOrder)) {
-    throw new Error(
+    return console.error(
       `unsupported sort order option. should be one of: ${Object.values(
         SORT_ORDER
       ).join(' ')}`

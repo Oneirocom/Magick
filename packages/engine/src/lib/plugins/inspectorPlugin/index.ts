@@ -8,7 +8,7 @@ function install(editor: IRunContextEditor) {
     const builder = component.builder
 
     if (!component.info)
-      throw new Error(
+      return console.error(
         'All components must contain an info property describing the component to the end user.'
       )
 

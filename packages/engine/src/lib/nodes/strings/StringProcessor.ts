@@ -16,7 +16,6 @@ export class StringProcessor extends MagickComponent<Record<string, string>> {
 
     this.task = {
       outputs: { trigger: 'option' },
-      init: () => {},
     }
     this.category = 'Strings'
     this.info = info
