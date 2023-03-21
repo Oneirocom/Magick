@@ -1,5 +1,5 @@
 import { Component } from 'rete'
-import { NodeData, NodeDataOrEmpty } from 'rete/types/core/data'
+import { NodeData } from 'rete/types/core/data'
 
 import { MagickEditor, MagickWorkerInputs } from '../../types'
 import { MagickComponent } from '../../magick-component'
@@ -38,7 +38,8 @@ function install(editor: MagickEditor) {
 
     const taskWorker = component.worker
     const taskOptions = component.task
-
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     component.worker = (
       node: any,
       inputs,
@@ -50,7 +51,7 @@ function install(editor: MagickEditor) {
       const taskCaller = async (
         _ctx: unknown,
         inputs: MagickWorkerInputs,
-        data: NodeDataOrEmpty,
+        data: NodeData,
         socketInfo: TaskSocketInfo | string | null
       ) => {
         component._task = task

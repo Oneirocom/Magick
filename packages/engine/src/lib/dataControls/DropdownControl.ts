@@ -16,7 +16,7 @@ export class DropdownControl extends DataControl {
     values: string[]
     icon?: string
     write?: boolean
-    ignored?: {name: string}[]
+    ignored?: string[]
   }) {
     const options = {
       dataKey,

@@ -14,7 +14,7 @@ export class SocketGeneratorControl extends DataControl {
   }: {
     socketType?: SocketType
     taskType?: TaskType
-    ignored?: {name: string}[]
+    ignored?: string[]
     icon?: string
     connectionType: 'input' | 'output'
     name: string
