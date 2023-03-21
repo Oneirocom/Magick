@@ -222,7 +222,7 @@ export function Drawer({ children }) {
             onClick={onClick('/settings')}
             text="Settings"
           />
-          {!!isOpenAPISet && (
+          {!isOpenAPISet && (
             <InfoDialog
               title={title}
               body={body}
