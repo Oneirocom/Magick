@@ -55,6 +55,7 @@ import { GetCachedEmbedding } from './ml/GetCachedEmbedding'
 import { SpeechToText } from './ml/SpeechToText'
 import { PromptTemplate } from './strings/PromptTemplate'
 import { ParseJSON } from './utility/ParseJSON'
+import { EventDelete } from './events/EventDelete'
 
 import { pluginManager } from '../plugin'
 import { EventsToConversation } from './events/EventsToConversation'
@@ -74,6 +75,7 @@ export const components = {
   destructure: () => new Destructure(),
   complexStringMatcher: () => new ComplexStringMatcher(),
   echo: () => new Echo(),
+  eventdelete: () => new EventDelete(),
   getCachedEmbedding: () => new GetCachedEmbedding(),
   stringReplacer: () => new StringReplacer(),
   textToSpeech: () => new TextToSpeech(),
