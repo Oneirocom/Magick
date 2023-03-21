@@ -40,6 +40,7 @@ const completionControls = [
     defaultValue: 0,
   },
   {
+    type: InputControl,
     dataKey: 'stop',
     name: 'Stop (Comma Separated)',
     icon: 'moon',

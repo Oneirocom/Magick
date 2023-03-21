@@ -5,23 +5,6 @@
   "projectType": "library",
   "implicitDependencies": ["@magickml/engine"],
   "targets": {
-    "build": {
-      "executor": "@nrwl/vite:build",
-      "outputs": ["{options.outputPath}"],
-      "configFile": "packages/plugin-pinecone/client/vite.config.ts",
-      "defaultConfiguration": "production",
-      "options": {
-        "outputPath": "dist/packages/plugin-pinecone/client"
-      },
-      "configurations": {
-        "development": {
-          "mode": "development"
-        },
-        "production": {
-          "mode": "production"
-        }
-      }
-    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
