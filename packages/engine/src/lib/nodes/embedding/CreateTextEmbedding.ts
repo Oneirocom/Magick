@@ -2,58 +2,54 @@ import Rete from 'rete'
 
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../magick-component'
-import { pluginManager } from '../../plugin'
-import { anySocket, triggerSocket } from '../../sockets'
+import { triggerSocket } from '../../sockets'
 import {
   CompletionInspectorControls,
   CompletionProvider,
   CompletionSocket,
-  EngineContext,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData
+  NodeData,
 } from '../../types'
 
-const info = 'Basic text completion using OpenAI.'
+import { pluginManager } from '../../plugin'
 
-type WorkerReturn = {
+const info = 'Event Store is used to store events for an event and user'
+
+type InputReturn = {
   success: boolean
-  result?: string
   error?: string
+  result?: number[]
 }
 
-export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
+export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Generate Text')
+    super('Create Text Embedding')
 
     this.task = {
       outputs: {
-        error: 'option',
-        result: 'output',
         trigger: 'option',
+        result: 'output',
+        success: 'output',
       },
     }
 
-    this.category = 'Text'
+    this.category = 'Embedding'
     this.display = true
     this.info = info
   }
 
   builder(node: MagickNode) {
-    const settings = new Rete.Input('settings', 'Settings', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     const completionProviders = pluginManager.getCompletionProviders('text', [
-      'text',
-      'chat',
-    ]) as CompletionProvider[]
+      'embedding',
+    ])
 
-    console.log('completionProviders', completionProviders)
-
-    // get the models from the completion providers and flatten into a single array
-    const models = completionProviders.map(provider => provider.models).flat()
+    // get the models from the completion providers
+    const models = completionProviders.map(p => p.models).flat()
 
     const modelName = new DropdownControl({
       name: 'Model Name',
@@ -94,7 +90,6 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       if (inputSockets !== lastInputSockets) {
         // remove connections to deleted sockets
 
-
         lastInputSockets?.forEach(socket => {
           if (node.inputs.has(socket.socket)) {
             connections.forEach(c => {
@@ -112,10 +107,13 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       }
       if (outputSockets !== lastOutputSockets) {
         lastOutputSockets?.forEach(socket => {
-          if (node.outputs.has(socket.socket)) node.outputs.delete(socket.socket)
+          if (node.outputs.has(socket.socket))
+            node.outputs.delete(socket.socket)
         })
         outputSockets.forEach(socket => {
-          node.addOutput(new Rete.Output(socket.socket, socket.name, socket.type))
+          node.addOutput(
+            new Rete.Output(socket.socket, socket.name, socket.type)
+          )
         })
         lastOutputSockets = outputSockets
       }
@@ -128,7 +126,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
 
     if (!node.data.model) node.data.model = models[0]
     configureNode()
-    node.addInput(settings)
+
     return node
   }
 
@@ -136,20 +134,17 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
-    context: {
-      module: any
-      secrets: Record<string, string>
-      projectId: string
-      magick: EngineContext
-    }
-  ) {
-    console.log('running work', node, inputs, outputs, context)
+    context
+  ): Promise<InputReturn> {
     const completionProviders = pluginManager.getCompletionProviders('text', [
-      'text',
-      'chat',
+      'embedding',
     ]) as CompletionProvider[]
 
+    console.log('inputs', inputs)
+
     const model = node.data.model as string
+    console.log('completionProviders', completionProviders)
+
     // get the provider for the selected model
     const provider = completionProviders.find(provider =>
       provider.models.includes(model)
@@ -158,13 +153,14 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     const completionHandler = provider.handler
 
     if (!completionHandler) {
-      console.error('No completion handler found for provider', provider)
+      console.error('No completion handler found')
       return {
         success: false,
+        error: 'No completion handler found',
       }
     }
 
-    const { success, result } = await completionHandler({
+    const { success, result, error } = await completionHandler({
       node,
       inputs,
       outputs,
@@ -174,13 +170,13 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     if (!success) {
       return {
         success: false,
-        result,
+        error,
       }
     }
 
     return {
       success: true,
-      result,
+      result: result,
     }
   }
 }

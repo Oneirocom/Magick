@@ -15,7 +15,7 @@ export type SocketNameType =
   | 'Trigger'
   | 'Event'
   | 'Audio'
-  | 'Vector'
+  | 'Embedding'
   | 'Document'
 
 export type SocketType =
@@ -28,7 +28,7 @@ export type SocketType =
   | 'triggerSocket'
   | 'eventSocket'
   | 'audioSocket'
-  | 'vectorSocket'
+  | 'embeddingSocket'
   | 'documentSocket'
 
 export const socketNameMap: Record<SocketNameType, SocketType> = {
@@ -41,7 +41,7 @@ export const socketNameMap: Record<SocketNameType, SocketType> = {
   Trigger: 'triggerSocket',
   Event: 'eventSocket',
   Audio: 'audioSocket',
-  Vector: 'vectorSocket',
+  Embedding: 'embeddingSocket',
   Document: 'documentSocket',
 }
 
@@ -54,7 +54,7 @@ export const objectSocket = new Rete.Socket('Object')
 export const triggerSocket = new Rete.Socket('Trigger')
 export const eventSocket = new Rete.Socket('Event')
 export const audioSocket = new Rete.Socket('Audio')
-export const vectorSocket = new Rete.Socket('Vector')
+export const embeddingSocket = new Rete.Socket('Embedding')
 export const documentSocket = new Rete.Socket('Document')
 
 const sockets = [
@@ -65,7 +65,7 @@ const sockets = [
   objectSocket,
   eventSocket,
   audioSocket,
-  vectorSocket,
+  embeddingSocket,
   documentSocket,
 ]
 

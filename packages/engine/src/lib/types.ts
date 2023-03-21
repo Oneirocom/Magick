@@ -468,7 +468,7 @@ export type TextCompletionData = {
   apiKey?: string
 }
 
-export type ChatMessage = {role: 'system' | 'user' | 'assistant', content: string}
+export type ChatMessage = {role: 'system' | 'user' | 'assistant' | string, content: string}
 
 export type ChatCompletionData = {
   model: string

@@ -14,6 +14,7 @@ export enum TextModel {
 
 export enum EmbeddingModel {
   ADA_002 = 'text-embedding-ada-002',
+  ADA_001 = 'text-embedding-ada-001',
 }
 
 export type CostPerToken<T extends TextModel | EmbeddingModel | ChatModel> = {
@@ -32,6 +33,7 @@ export const COST_PER_TOKEN: CostPerToken<
   [ChatModel.GPT4]: 0.06 / 1000,
   [ChatModel.GPT35Turbo]: 0.002 / 1000,
   [EmbeddingModel.ADA_002]: 0.0004 / 1000,
+  [EmbeddingModel.ADA_001]: 0.0004 / 1000,
 }
 
 export const calculateCompletionCost = ({ model, totalTokens }): number => {

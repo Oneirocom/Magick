@@ -31,13 +31,19 @@ export async function makeChatCompletion(
     conversationMessages.push(message)
   })
 
-  const input = inputs['input']?.[0]
+  const input = inputs['input']?.[0] as string
 
   const systemMessage = { role: 'system', content: system }
 
   const userMessage = { role: 'user', content: input }
 
-  const messages = [systemMessage, ...conversationMessages, userMessage]
+  let messages: ChatMessage[] = []
+
+  if(system)  {
+    messages.push(systemMessage)
+  }
+
+  messages = [...messages, ...conversationMessages, userMessage]
 
   settings.messages = messages
 
@@ -49,18 +55,22 @@ export async function makeChatCompletion(
   try {
     const start = Date.now()
     const completion = await axios.post(
-      `${OPENAI_ENDPOINT}/completions`,
+      `${OPENAI_ENDPOINT}/chat/completions`,
       settings,
       { headers: headers }
     )
 
     const result = completion.data?.choices[0]?.message?.content
 
+
+      console.log('*********** completion', completion)
+      console.log('*********** result', result)
+
     const usage = completion.data.usage
 
     saveRequest({
       projectId: context.projectId,
-      requestData: JSON.stringify(data),
+      requestData: JSON.stringify(settings),
       responseData: JSON.stringify(completion.data),
       startTime: start,
       statusCode: completion.status,

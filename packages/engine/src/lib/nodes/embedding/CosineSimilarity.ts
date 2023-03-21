@@ -6,7 +6,7 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
 } from '../../types'
-import { triggerSocket, stringSocket, numberSocket, vectorSocket } from '../../sockets'
+import { triggerSocket, stringSocket, numberSocket, embeddingSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 
 const info = 'Event Store is used to store events for an event and user'
@@ -26,22 +26,22 @@ export class CosineSimilarity extends MagickComponent<Promise<InputReturn>> {
       },
     }
 
-    this.category = 'Vector'
+    this.category = 'Embedding'
     this.display = true
     this.info = info
   }
 
   builder(node: MagickNode) {
-    const vectorInputA = new Rete.Input('vectorA', 'Vector A', vectorSocket)
-    const vectorInputB = new Rete.Input('vectorB', 'Vector B', vectorSocket)
+    const embeddingInputA = new Rete.Input('embeddingA', 'Embedding A', embeddingSocket)
+    const embeddingInputB = new Rete.Input('embeddingB', 'Embedding B', embeddingSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const out = new Rete.Output('similarity', 'Similarity', numberSocket)
 
     return node
       .addInput(dataInput)
-      .addInput(vectorInputA)
-      .addInput(vectorInputB)
+      .addInput(embeddingInputA)
+      .addInput(embeddingInputB)
       .addOutput(dataOutput)
       .addOutput(out)
   }
@@ -52,8 +52,8 @@ export class CosineSimilarity extends MagickComponent<Promise<InputReturn>> {
     _outputs: MagickWorkerOutputs,
     { projectId, module }: { projectId: string; module: any }
   ) {
-    const x = inputs.vectorA[0] as string
-    const y = inputs.vectorB[0] as string
+    const x = inputs.embeddingA[0] as string
+    const y = inputs.embeddingB[0] as string
 
     const s = similarity( x, y );
 
