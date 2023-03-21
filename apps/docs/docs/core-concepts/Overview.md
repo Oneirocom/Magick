@@ -13,4 +13,4 @@ We are all on this journey together. Nobody has used Magick to its full potentia
 
 The core concepts documented here are quick notes from the wizards to help you grasp the terminology and understand the various parts of Magick before diving in. Please submit a ticket on the Magick repo if you need additional clarity on any topic, or submit a pull request if you'd like to clarify yourself.
 
-Good luck brave adventurer!
+Good luck brave explorer!
