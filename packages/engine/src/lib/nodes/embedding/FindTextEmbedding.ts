@@ -30,7 +30,7 @@ export class FindTextEmbedding extends MagickComponent<
       },
     }
 
-    this.category = 'Text'
+    this.category = 'Embedding'
     this.display = true
     this.info = info
   }

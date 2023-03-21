@@ -1,4 +1,4 @@
-import { arraySocket, CompletionProvider, vectorSocket, stringSocket } from "@magickml/engine"
+import { arraySocket, CompletionProvider, embeddingSocket, stringSocket } from "@magickml/engine"
 
 const secrets = [
   {
@@ -53,7 +53,7 @@ const completionProviders: CompletionProvider[] = [
       {
         socket: 'result',
         name: 'Result',
-        type: vectorSocket,
+        type: embeddingSocket,
       },
       {
         socket: 'error',
@@ -77,7 +77,7 @@ const completionProviders: CompletionProvider[] = [
       },
       {
         socket: 'conversation',
-        name: 'Conversation History',
+        name: 'Conversation ',
         type: arraySocket,
       },
       {
@@ -90,7 +90,7 @@ const completionProviders: CompletionProvider[] = [
       {
         socket: 'result',
         name: 'Result',
-        type: vectorSocket,
+        type: embeddingSocket,
       },
       {
         socket: 'error',

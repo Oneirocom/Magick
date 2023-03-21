@@ -2,7 +2,7 @@ import { ServerPlugin } from '@magickml/engine'
 import shared from '@magickml/plugin-openai-shared'
 import { makeTextCompletion } from './functions/makeTextCompletion'
 import { makeChatCompletion } from './functions/makeChatCompletion'
-import { makeEmbedding } from './functions/makeEmbedding'
+import { makeTextEmbedding } from './functions/makeTextEmbedding'
 
 const {secrets, completionProviders} = shared
 
@@ -10,7 +10,7 @@ const completionHandlers = {
   text: {
     text: makeTextCompletion,
     chat: makeChatCompletion,
-    embedding: makeEmbedding
+    embedding: makeTextEmbedding
   }
 }
 

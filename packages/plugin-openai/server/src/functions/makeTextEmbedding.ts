@@ -3,7 +3,7 @@ import { CompletionHandlerInputData, saveRequest } from '@magickml/engine'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
 
-export async function makeEmbedding(
+export async function makeTextEmbedding(
   data: CompletionHandlerInputData
 ): Promise<{
   success: boolean
@@ -12,8 +12,8 @@ export async function makeEmbedding(
 }> {
   const { node, inputs, context } = data
 
-  const content = (inputs['content'] && inputs['content'][0]) as string
-  if (!content) {
+  const input = (inputs['input'] && inputs['input'][0]) as string
+  if (!input) {
     return {
       success: false,
       error: 'Content is null, not storing event',
@@ -27,7 +27,7 @@ export async function makeEmbedding(
     Authorization: 'Bearer ' + apiKey,
   }
 
-  const requestData = { input: content, model: node.data.model }
+  const requestData = { input: input, model: node.data.model }
 
   // start a timer
   const start = Date.now()
@@ -55,13 +55,13 @@ export async function makeEmbedding(
       provider: 'openai',
       hidden: false,
       processed: false,
-      totalTokens: resp.data.usage,
+      totalTokens: resp.data.usage.total_tokens,
       spell,
       nodeId: node.id,
     })
-    return { success: true, result: resp.data.embeddings }
+    return { success: true, result: resp.data.data[0].embedding }
   } catch (err: any) {
-    console.error('makeEmbedding error:', err)
+    console.error('makeTextEmbedding error:', err)
     return { success: false, error: err.message }
   }
 }
