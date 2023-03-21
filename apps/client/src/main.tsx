@@ -41,8 +41,6 @@ else {
       // remove possible trailing slash on only the end
       const cloudUrl = cloudUrlRaw.replace(/\/+$/, '')
 
-      console.log(import.meta.env, cloudUrl)
-
       if (
         event.source !== window &&
         event.origin !== window.location.origin &&
