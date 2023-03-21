@@ -1,4 +1,4 @@
-import { GridViewRounded, ArrowForwardIosTwoTone } from '@mui/icons-material'
+import { GridViewRounded } from '@mui/icons-material'
 import { Icon, IconBtn } from '@magickml/client-core'
 import styles from './datacontrols.module.css'
 
@@ -22,7 +22,7 @@ const SingleElement = (props: Props) => {
         <p style={{ display: 'inline' }}>{props.name}</p>
       </div>
       <div className={styles.flexCenterBtn}>
-        <div className={`${styles.flexCenterStart} ${styles.typeInfo}`}>
+        {/* <div className={`${styles.flexCenterStart} ${styles.typeInfo}`}>
           <IconBtn
             label={props.name}
             style={{ cursor: 'auto' }}
@@ -33,7 +33,7 @@ const SingleElement = (props: Props) => {
             }
           />
           <p style={{ textTransform: 'capitalize' }}>{props.type}</p>
-        </div>
+        </div> */}
         <IconBtn
           label={props.name}
           Icon={<Icon name="trash" size={20} />}

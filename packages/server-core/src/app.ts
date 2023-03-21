@@ -21,6 +21,7 @@ import { configureManager, globalsManager, IGNORE_AUTH } from '@magickml/engine'
 import { services } from './services'
 import { authentication } from './auth/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
+import { apis } from './api/apis'
 
 const app: Application = koa(feathers())
 import HNSWVectorDatabase from './vectordb'

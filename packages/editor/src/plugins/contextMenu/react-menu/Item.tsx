@@ -8,6 +8,7 @@ type ItemProps = {
     subitems?: any[]
     onClick?: (args: any) => void
   }
+  search?: string
 }
 
 type ItemState = {
@@ -43,6 +44,7 @@ class Item extends Component<ItemProps, ItemState> {
   render() {
     const {
       item: { title, subitems },
+      search
     } = this.props
     const { visibleSubitems } = this.state
 
@@ -58,9 +60,14 @@ class Item extends Component<ItemProps, ItemState> {
         {title}
         {subitems && visibleSubitems && (
           <div className={styles['subitems']}>
-            {subitems.map(subitem => (
-              <Item item={subitem} key={subitem.title} />
-            ))}
+            {subitems.map(subitem =>
+            (search !== '' &&
+              !subitem.title
+                .toLowerCase()
+                .includes(search.toLowerCase())) ? null : (
+                <Item item={subitem} key={subitem.title} />
+              )
+            )}
           </div>
         )}
       </div>

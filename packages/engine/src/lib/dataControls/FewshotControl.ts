@@ -15,6 +15,7 @@ export class FewshotControl extends DataControl {
       options: {
         editor: true,
         language: language,
+        wordWrap: true
       },
     }
 

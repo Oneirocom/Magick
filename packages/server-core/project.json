@@ -24,17 +24,6 @@
           "codeCoverage": true
         }
       }
-    },
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/server-core",
-        "tsConfig": "packages/server-core/tsconfig.lib.json",
-        "packageJson": "packages/server-core/package.json",
-        "main": "packages/server-core/src/index.ts",
-        "assets": ["packages/server-core/*.md"]
-      }
     }
   },
   "tags": []

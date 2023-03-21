@@ -10,7 +10,6 @@ export const Modal = ({ open, setOpen, handleAction, ...props }) => {
   }
 
   return (
-    <div>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -40,6 +39,5 @@ export const Modal = ({ open, setOpen, handleAction, ...props }) => {
           )}
         </DialogActions>
       </Dialog>
-    </div>
   )
 }

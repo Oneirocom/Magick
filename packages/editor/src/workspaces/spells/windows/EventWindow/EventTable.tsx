@@ -204,7 +204,9 @@ function EventTable({ events, updateCallback }) {
   }
 
   const handleEventDelete = async (event: any) => {
-    const isDeleted = await axios.delete(`${API_ROOT_URL}/events/${event.id}`)
+    const isDeleted = await fetch(`${API_ROOT_URL}/events/${event.id}`, {
+      method: 'DELETE',
+    })
     if (isDeleted) enqueueSnackbar('Event deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting Event', { variant: 'error' })
     updateCallback()

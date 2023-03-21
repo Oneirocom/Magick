@@ -1,4 +1,4 @@
-import { Connection, Input, NodeEditor, Output } from 'rete'
+import { Connection, Input, NodeEditor, Output, Socket } from 'rete'
 import { Node } from 'rete/types'
 import {
   Data, WorkerOutputs
@@ -27,6 +27,22 @@ export type ImageType = {
 
 export type ImageCacheResponse = {
   images: ImageType[]
+}
+
+export type Document = {
+  id?: number
+  type?: string
+  content?: string
+  owner?: string
+  embedding?: number[]
+  projectId?: string
+  date?: string
+}
+
+export type CreateDocumentArgs = Document
+
+export type GetDocumentArgs = Document & {
+  maxCount?: number
 }
 
 export type Event = {
@@ -106,7 +122,7 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
   declare moduleManager: ModuleManager
   declare runProcess: (callback?: Function | undefined) => Promise<void>
-  declare onSpellUpdated: (spellName: string, callback: Function) => Function
+  declare onSpellUpdated: (spellId: string, callback: Function) => Function
   declare refreshEventTable: () => void
 }
 
@@ -116,7 +132,7 @@ export type Env = {
 
 type runSpellType = {
   inputs: Record<string, any>
-  spellName: string
+  spellId: string
   projectId: string
   secrets: Record<string, any>
   publicVariables: Record<string, any>
@@ -125,18 +141,18 @@ type runSpellType = {
 export type EngineContext = {
   env: Env
   runSpell: ({
+    spellId,
     inputs,
-    spellName,
     projectId,
     secrets,
     publicVariables
   }: runSpellType) => Record<string, any>
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: ({
-    spellName,
+    spellId,
     projectId,
   }: {
-    spellName: string
+    spellId: string
     projectId: string
   }) => Promise<any | Spell>
   getCurrentSpell: () => Spell
@@ -408,3 +424,105 @@ type MessagingWebhookBody = {
 }
 
 export type MessagingRequest = any
+
+
+export type CompletionType = 'image' | 'text'
+
+export type ImageCompletionSubtype = 'text2image' | 'image2image' | 'image2text'
+
+export type TextCompletionSubtype = 'text' | 'embedding' | 'chat'
+
+export type CompletionSocket = {
+  socket: string
+  name: string
+  type: Socket
+}
+
+export type CompletionInspectorControls = {
+  type: any
+  dataKey: string
+  name: string
+  icon: string
+  defaultValue: any
+}
+
+export type CompletionProvider = {
+  type: CompletionType
+  subtype: ImageCompletionSubtype | TextCompletionSubtype
+  handler?: Function // server only
+  inspectorControls?: CompletionInspectorControls[] // client only
+  inputs: CompletionSocket[]
+  outputs: CompletionSocket[]
+  models: string[]
+}
+
+export type TextCompletionData = {
+  model: string
+  prompt: string
+  temperature: number
+  max_tokens: number
+  top_p: number
+  frequency_penalty: number
+  presence_penalty: number
+  stop: string[]
+  apiKey?: string
+}
+
+export type ChatMessage = {role: 'system' | 'user' | 'assistant' | string, content: string}
+
+export type ChatCompletionData = {
+  model: string
+  systemMessage: string
+  conversationMessages: ChatMessage[]
+  userMessage: string
+  temperature: number
+  max_tokens: number
+  top_p: number
+  frequency_penalty: number
+  presence_penalty: number
+  stop: string[]
+  apiKey?: string
+}
+
+export type EmbeddingData = {
+  input: string
+  model?: string
+  apiKey: string
+}
+
+
+export type RequestPayload = {
+  projectId: string
+  requestData: string
+  responseData?: string
+  model: string
+  startTime: number
+  status?: string
+  statusCode?: number
+  parameters?: string
+  provider?: string
+  type?: string
+  hidden?: boolean
+  processed?: boolean
+  totalTokens?: number
+  spell?: any
+  nodeId?: number
+}
+
+export type RequestData = {
+  spell: string
+  projectId: string
+  nodeId: number
+}
+
+export type CompletionHandlerInputData = {
+  node: NodeData
+  inputs: MagickWorkerInputs
+  outputs: MagickWorkerOutputs
+  context: {
+    module: any
+    secrets: Record<string, string>
+    projectId: string
+    magick: EngineContext
+  }
+}

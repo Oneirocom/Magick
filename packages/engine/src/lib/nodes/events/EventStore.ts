@@ -30,7 +30,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       },
     }
 
-    this.category = 'Events'
+    this.category = 'Event'
     this.display = true
     this.info = info
   }
@@ -95,8 +95,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     console.log('sender is', sender ?? event.sender)
     const data = { ...event, sender: sender ?? event.sender, projectId, content, type } as any
-    if (embedding) data.embedding = embedding
-
+    if (embedding) data.embedding = embedding    
     if (content && content !== '') {
       const response = await axios.post(`${API_ROOT_URL}/events`, data)
       return {
