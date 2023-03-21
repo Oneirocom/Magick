@@ -19,7 +19,7 @@ export const RestAgentWindow: FC<any> = props => {
   const [showPutExample, setShowPutExample] = useState(false)
   const [showDeleteExample, setShowDeleteExample] = useState(false)
   const [viewMode, setViewMode] = useState<boolean>(false)
-  const [checked, setChecked] = useState(selectedAgentData.data.rest_enabled)
+  const [checked, setChecked] = useState(selectedAgentData.data?.rest_enabled)
   const [disable, setDisable] = useState(false)
   useEffect(()=>{
     if (props.enable["RestPlugin"] == false) {
@@ -27,7 +27,7 @@ export const RestAgentWindow: FC<any> = props => {
       setDisable(true)
     }
     if (props.enable['RestPlugin'] == true){
-      setChecked(true)
+      setChecked(selectedAgentData.data?.rest_enabled)
       setDisable(false)
     }
   }, [props.enable])

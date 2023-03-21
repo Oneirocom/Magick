@@ -5,6 +5,8 @@ import { useSnackbar } from 'notistack'
 import axios from 'axios'
 import { LoadingScreen } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
+import { IGNORE_AUTH, pluginManager } from '@magickml/engine'
+import validateSpellData from './AgentWindow/spellValidator'
 
 const AgentManagerWindow = () => {
   const config = useConfig()

@@ -13,7 +13,7 @@ export const EthereumAgentWindow: FC<any> = props => {
   const { selectedAgentData, setSelectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
-  const [checked, setChecked] = useState(selectedAgentData.data.ethereum_enabled)
+  const [checked, setChecked] = useState(selectedAgentData.data?.ethereum_enabled || false)
   const [disable, setDisable] = useState(false)
   const [state, setState] = useState({
     ethereum_private_key: selectedAgentData?.data?.ethereum_private_key,
@@ -25,7 +25,7 @@ export const EthereumAgentWindow: FC<any> = props => {
       setDisable(true)
     }
     if (props.enable['EthereumPlugin'] == true){
-      setChecked(true)
+      setChecked(selectedAgentData.data?.ethereum_enabled)
       setDisable(false)
     }
   }, [props.enable])

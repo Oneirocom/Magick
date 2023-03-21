@@ -16,7 +16,7 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
   const { selectedAgentData, setSelectedAgentData, update, enable } = props.props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
-  const [checked, setChecked] = useState(selectedAgentData.data.loop_enabled)
+  const [checked, setChecked] = useState(selectedAgentData.data?.loop_enabled)
   const [disable, setDisable] = useState(false)
   const [state, setState] = useState({
     loop_interval: selectedAgentData?.data?.loop_interval,
@@ -27,7 +27,7 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
       setDisable(true)
     }
     if (enable['LoopPlugin'] == true){
-      setChecked(true)
+      setChecked(selectedAgentData.data?.loop_enabled)
       setDisable(false)
     }
   }, [enable])
