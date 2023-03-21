@@ -62,10 +62,6 @@ export async function makeChatCompletion(
 
     const result = completion.data?.choices[0]?.message?.content
 
-
-      console.log('*********** completion', completion)
-      console.log('*********** result', result)
-
     const usage = completion.data.usage
 
     saveRequest({
