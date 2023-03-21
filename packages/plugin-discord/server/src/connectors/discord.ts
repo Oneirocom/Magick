@@ -4,6 +4,7 @@ import Discord, {
   EmbedBuilder,
   GatewayIntentBits,
   Partials,
+  SnowflakeUtil
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
 import emojiRegex from 'emoji-regex'
@@ -16,7 +17,12 @@ export const startsWithCapital = word => {
 const log = (...s: (string | boolean)[]) => {
   console.log(...s)
 }
-
+interface UserObject {
+  user: string;
+  inConversation: boolean;
+  isBot: boolean;
+  info3d: string;
+}
 export class DiscordConnector {
   client = Discord.Client as any
   agent: any = undefined
@@ -186,7 +192,85 @@ export class DiscordConnector {
     log('Discord', 'join', username, utcStr)
     // MessageClient.instance.sendUserUpdateEvent('Discord', 'join', username, utcStr)
   }
-
+  
+  async getActiveUsers(channel: any, k: number) {
+    try {
+      // Fetch the last 200 messages
+      const messages = await channel.messages.fetch({ limit: 100 });
+      console.log(`Fetched ${messages.size} messages.`);
+  
+      // Get the timestamp of the last message
+      const lastTimestamp = messages.last().createdTimestamp;
+  
+      // Calculate the time one hour ago
+      const now = new Date();
+      const pastHour = new Date(now.getTime() - 60 * 60 * 1000);
+  
+      // Filter messages sent within the past hour
+      const messagesWithinPastHour = messages.filter(message => message.createdTimestamp >= pastHour);
+  
+      const activeUsers: UserObject[] = [];
+  
+      if (messagesWithinPastHour.size > 100) {
+        // Count the number of messages sent by each user
+        const userCounts = {};
+        messagesWithinPastHour.forEach(message => {
+          const userId = message.author.id;
+          userCounts[userId] = (userCounts[userId] || 0) + 1;
+        });
+  
+        // Get the list of top active users
+        const topActiveUserIds = Object.keys(userCounts)
+          .sort((a, b) => userCounts[b] - userCounts[a])
+          .slice(0, k);
+  
+        // Get the member objects for the top active users
+        const topActiveMembers = await Promise.all(topActiveUserIds.map(userId => channel.guild.members.fetch(userId)));
+  
+        // Add each top active member to the activeUsers array
+        topActiveMembers.forEach(member => {
+          activeUsers.push({
+            user: member.user.username,
+            inConversation: this.isInConversation(member.user.id), // replace this with your own method to check if the user is in conversation
+            isBot: member.user.bot,
+            info3d: '',
+          });
+        });
+  
+        console.log(`Found ${activeUsers.length} active users with more than 100 messages sent within the past hour.`);
+      }
+      else {
+        // Get the list of all users who sent messages within the past hour
+        const allUserIds = Array.from(new Set(messagesWithinPastHour.map(message => message.author.id)));
+  
+        // Get the member objects for all users
+        const allMembers = await Promise.all(allUserIds.map(userId => channel.guild.members.fetch(userId)));
+  
+        // Add each member to the activeUsers array
+        allMembers.forEach(member => {
+          activeUsers.push({
+            user: member.user.username,
+            inConversation: this.isInConversation(member.user.id), // replace this with your own method to check if the user is in conversation
+            isBot: member.user.bot,
+            info3d: '',
+          });
+        });
+  
+        console.log(`Found ${activeUsers.length} active users with less than 100 messages sent within the past hour.`);
+      }
+  
+      // do something with the activeUsers array
+      console.log(activeUsers);
+      return activeUsers
+    }
+    catch (error) {
+      console.error(error);
+    }
+    return []
+  }
+  
+  
+  
   //Event that is triggered when a user is removed from the server
   async handleGuildMemberRemove(user: { user: { id: any; username: any } }) {
     const username = user.user.username
@@ -509,16 +593,19 @@ export class DiscordConnector {
       isBot: boolean
       info3d: string
     }[] = []
-    if (channel && channel.members)
-      for (const [memberID, member] of channel.members) {
-        entities.push({
-          user: member.user.username,
-          inConversation: this.isInConversation(member.user.id),
-          isBot: member.user.bot,
-          info3d: '',
-        })
-      }
-
+    let now = new Date();
+    let pastHour = new Date(now.getTime() - 60 * 60 * 1000); // calculate the time one hour ago
+    const snowflake = SnowflakeUtil.generate();
+    let msgs = await this.getActiveUsers(channel, 12) as unknown as any[]
+    console.log(msgs)
+    msgs.forEach(element => {
+      entities.push({
+        user: element.user,
+        inConversation: element.inConversation,
+        isBot: element.isBot,
+        info3d: '',
+      })
+    });
     if (content.startsWith('!ping ')) {
       content = content.replace('!ping ', '')
     }
