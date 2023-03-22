@@ -1,15 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import * as React from 'react'
 import { PubSubData } from '@magickml/engine';
 import PubSub from 'pubsub-js'
 import { useContext, createContext } from 'react'
-
-export interface PubSubContext {
-  publish: (event: string, data?: PubSubData) => boolean
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  subscribe(event: string, func: PubSubJS.SubscriptionListener<PubSubData>): () => void;
-  PubSub: typeof PubSub
-  events: Record<string, any>
-}
 
 // TODO: does it also work without the !?
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

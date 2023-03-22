@@ -42,7 +42,7 @@ export class SocketGeneratorControl extends DataControl {
       },
     }
 
-    super(options)
+    super(options as any)
 
     this.connectionType = connectionType
   }

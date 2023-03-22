@@ -21,13 +21,11 @@ import { EventsToConversation } from './events/EventsToConversation'
 import { EventStore } from './events/EventStore'
 import { BooleanGate } from './flow/BooleanGate'
 import { ExclusiveGate } from './flow/Exclusive Gate'
-import { ForEach } from './flow/ForEach'
 import { IsNullOrUndefined } from './flow/IsNullOrUndefined'
 import { OrGate } from './flow/OrGate'
 import { RandomGate } from './flow/RandomGate'
 import { SwitchGate } from './flow/SwitchGate'
 import { WaitForAll } from './flow/WaitForAll'
-import { WhileLoop } from './flow/WhileLoop'
 import { Image } from './image/Image'
 import { ImageGeneration } from './image/ImageGeneration'
 import { InputComponent } from './io/Input'
@@ -76,8 +74,6 @@ export const components = {
   isVariableTrue: () => new IsVariableTrue(),
   request: () => new Request(),
   jupyterNotebook: () => new JupyterNotebook(),
-  forEach: () => new ForEach(),
-  whileLoop: () => new WhileLoop(),
   stringEvaluator: () => new EvaluateText(),
   combineText: () => new CombineText(),
   textVariable: () => new TextVariable(),
