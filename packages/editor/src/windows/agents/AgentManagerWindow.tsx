@@ -15,7 +15,7 @@ const AgentManagerWindow = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
   const [root_spell, setRootSpell] = useState('default')
-  const [enable, setEnable] = useState("")
+  const [enable, setEnable] = useState('')
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 
@@ -31,7 +31,7 @@ const AgentManagerWindow = () => {
     let spellAgent = JSON.parse(json.data[0].rootSpell)
     let inputs = pluginManager.getInputByName()
     let plugin_list = pluginManager.getPlugins()
-    for (let key of Object.keys(plugin_list)){
+    for (let key of Object.keys(plugin_list)) {
       plugin_list[key] = validateSpellData(spellAgent, inputs[key])
     }
     setEnable(plugin_list)
@@ -183,13 +183,12 @@ const AgentManagerWindow = () => {
       let spellAgent = JSON.parse(json.data[0].rootSpell)
       let inputs = pluginManager.getInputByName()
       let plugin_list = pluginManager.getPlugins()
-      for (let key of Object.keys(plugin_list)){
+      for (let key of Object.keys(plugin_list)) {
         plugin_list[key] = validateSpellData(spellAgent, inputs[key])
       }
       console.log(plugin_list)
       setEnable(plugin_list)
     })()
-    
   }, [])
   return isLoading ? (
     <LoadingScreen />
