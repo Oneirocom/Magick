@@ -143,7 +143,7 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-14-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -168,6 +168,9 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
       <td align="center" valign="top" width="14.28%"><a href="https://matei3d.com"><img src="https://avatars.githubusercontent.com/u/45219403?v=4?s=100" width="100px;" alt="Matei Anghel"/><br /><sub><b>Matei Anghel</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=matei3d" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Trentalantar"><img src="https://avatars.githubusercontent.com/u/28672708?v=4?s=100" width="100px;" alt="Trentalantar"/><br /><sub><b>Trentalantar</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=Trentalantar" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/DavinciDreams"><img src="https://avatars.githubusercontent.com/u/64185677?v=4?s=100" width="100px;" alt="Lisa Mega Watts"/><br /><sub><b>Lisa Mega Watts</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=DavinciDreams" title="Documentation">📖</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/rjphnx"><img src="https://avatars.githubusercontent.com/u/12023783?v=4?s=100" width="100px;" alt="r2"/><br /><sub><b>r2</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=rjphnx" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
