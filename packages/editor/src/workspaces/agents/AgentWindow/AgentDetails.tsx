@@ -275,7 +275,7 @@ const AgentDetails = ({
         </select>
       </div>
       <div>
-        {pluginManager.getSecrets(true).map((value, index, array) => {
+        {pluginManager.getSecrets(true).map((value, index) => {
           return (
             <div key={value.name + index} style={{ marginBottom: '1em' }}>
               <div style={{ width: '100%', marginBottom: '1em' }}>
