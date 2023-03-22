@@ -1,18 +1,19 @@
-import { Connection, Input, NodeEditor, Output, Socket } from 'rete'
-import { Node } from 'rete/types'
-import { Data, WorkerOutputs } from 'rete/types/core/data'
+import { Connection, Input, NodeEditor, Output, Socket } from 'rete';
+import { Node } from 'rete/types';
+import { Data, WorkerOutputs } from 'rete/types/core/data';
+import PubSub from 'pubsub-js'
 
-import { MagickComponent, MagickTask } from './magick-component'
-import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
-import { Inspector } from './plugins/inspectorPlugin/Inspector'
-import { ModuleManager } from './plugins/modulePlugin/module-manager'
-import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
-import { SocketNameType, SocketType } from './sockets'
+import { MagickComponent, MagickTask } from './magick-component';
+import { MagickConsole } from './plugins/consolePlugin/MagickConsole';
+import { Inspector } from './plugins/inspectorPlugin/Inspector';
+import { ModuleManager } from './plugins/modulePlugin/module-manager';
+import { Task, TaskOutputTypes } from './plugins/taskPlugin/task';
+import { SocketNameType, SocketType } from './sockets';
 
-export { MagickComponent } from './magick-component'
+export { MagickComponent } from './magick-component';
 //@seang this was causing test enviroment issues to have it shared client/server
 // export { MagickEditor } from './src/editor'
-export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
+export type { InspectorData } from './plugins/inspectorPlugin/Inspector';
 
 export type ImageType = {
   id: string
@@ -125,7 +126,7 @@ export type OnSubspellUpdated = (
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
-  declare pubSub: PubSubData
+  declare pubSub: PubSubContext
   declare magick: EditorContext
   declare tab: { type: string }
   declare abort: unknown
@@ -512,4 +513,12 @@ export type RequestData = {
   spell: string
   projectId: string
   nodeId: number
+}
+
+export interface PubSubContext {
+  publish: (event: string, data?: PubSubData) => boolean
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  subscribe(event: string, func: PubSubJS.SubscriptionListener<PubSubData>): () => void;
+  PubSub: typeof PubSub
+  events: Record<string, any>
 }

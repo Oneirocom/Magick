@@ -31,6 +31,6 @@ export class DropdownControl extends DataControl {
       },
     }
 
-    super(options)
+    super(options as any)
   }
 }
