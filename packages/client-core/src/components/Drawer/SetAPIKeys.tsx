@@ -1,8 +1,8 @@
 import InfoDialog from '../InfoDialog'
 
-const title = 'Important Notice: Set Your API Keys in the Editor Settings'
+const title = 'Set Your API Keys'
 const body =
-  'We want to make sure that your experience using Magick editor is as smooth as possible. To achieve this, we require all users to set their OpenAI API key in the editor settings. Not setting your API key may lead to issues with the editor.'
+  'Please set your API keys in the editor settings to use external APIs. You will need to do this before you can use any AI features'
 
 export const SetAPIKeys = () => {
   return (
