@@ -1,24 +1,14 @@
 import { Node, Socket } from 'rete'
 
-import { PubSubBase, MagickEditor, MagickNode } from './types'
+import { MagickEditor, MagickNode, UnknownData } from './types'
 import { MagickEngineComponent } from './engine'
-import { Task, TaskOptions } from './plugins/taskPlugin/task'
+import { Task, TaskOptions, TaskSocketInfo } from './plugins/taskPlugin/task'
 import { NodeData } from 'rete/types/core/data'
-
-// Note: We do this so Typescript knows what extra properties we're
-// adding to the NodeEditor (in rete/editor.js). In an ideal world, we
-// would be extending the class there, when we instantiate it.
-export type PubSubContext = {
-  publish: (event: string, data: unknown) => boolean
-  subscribe: (event: string, callback: Function) => void
-  events: Record<string, any>
-  PubSub: PubSubBase
-}
 
 export interface MagickTask extends Task {
   outputs?: { [key: string]: string }
   init?: (task?: MagickTask, node?: MagickNode) => void
-  onRun?: Function
+  onRun?: (node: NodeData, task: Task, data: unknown, socketInfo:TaskSocketInfo) => void
 }
 
 export interface ModuleOptions {
@@ -34,7 +24,7 @@ export abstract class MagickComponent<
   // Original interface for task and _task: IComponentWithTask from the Rete Task Plugin
   declare task: TaskOptions
   declare _task: MagickTask
-  declare cache: Record<string, any>
+  declare cache: UnknownData
   editor: MagickEditor | null = null
   data: unknown = {}
   declare category: string
@@ -52,9 +42,6 @@ export abstract class MagickComponent<
 
   nodeTaskMap: Record<number, MagickTask> = {}
 
-  constructor(name: string) {
-    super(name)
-  }
   abstract builder(node: MagickNode): Promise<MagickNode> | MagickNode | void
 
   async build(node: MagickNode) {
@@ -63,7 +50,7 @@ export abstract class MagickComponent<
     return node
   }
 
-  async run(node: NodeData, data: unknown = {}) {
+  async run(node: MagickNode, data: NodeData) {
     if (!node || node === undefined) {
       return console.error('node is undefined')
     }

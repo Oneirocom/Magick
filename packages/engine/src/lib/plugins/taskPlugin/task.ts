@@ -1,19 +1,24 @@
 import { NodeData } from 'rete/types/core/data'
 
-import { MagickReteInput, MagickWorkerInputs } from '../../types'
 import { MagickComponent, MagickTask } from '../../magick-component'
+import { MagickNode, MagickReteInput, MagickWorkerInputs } from '../../types'
 
 type TaskRef = {
   key: string
   task: MagickTask
-  run?: Function
-  next?: any[]
+  run?: (data: unknown, options: RunOptions) => void
+  next?: TaskRef[]
+}
+
+export type TaskSocketInfo = {
+  targetSocket: string | null,
+  targetNode: NodeData | null,
 }
 
 export type TaskOptions = {
   outputs: Record<string, unknown>
-  init?: Function
-  onRun?: Function
+  init?: (task:Task|undefined, node: MagickNode) => void
+  onRun?: (node: NodeData, task: Task, data: unknown, socketInfo:TaskSocketInfo) => void
   runOneInput?: boolean
 }
 
@@ -28,15 +33,12 @@ type RunOptions = {
 
 export type TaskOutputTypes = 'option' | 'output'
 
-// const hasTrigger = (task: Task) => {
-//   return Object.values(task.component.task.outputs).includes('option')
-// }
-
+type TaskWorker = (_ctx: unknown, inputs: MagickWorkerInputs, data: NodeData, socketInfo: TaskSocketInfo | string | null) => Promise<Record<string, unknown> | null>
 export class Task {
   node: NodeData
   inputs: MagickWorkerInputs
   component: MagickComponent<unknown>
-  worker: Function
+  worker: TaskWorker
   next: TaskRef[]
   outputData: Record<string, unknown> | null
   closed: string[]
@@ -45,7 +47,7 @@ export class Task {
     inputs: MagickWorkerInputs,
     component: MagickComponent<unknown>,
     node: NodeData,
-    worker: Function
+    worker: TaskWorker
   ) {
     this.node = node
     this.inputs = inputs as MagickWorkerInputs
@@ -63,7 +65,7 @@ export class Task {
       )
     })
   }
-x
+  x
   getInputs(type: TaskOutputTypes): string[] {
     return Object.keys(this.inputs)
       .filter(key => this.inputs[key][0])
@@ -88,8 +90,8 @@ x
     return input
   }
 
-  getInputByNodeId(node, fromSocket) {
-    let value: null | any = null
+  getInputByNodeId(node, fromSocket): string | null {
+    let value: null | string = null
     Object.entries(this.inputs).forEach(([key, input]) => {
       const found = (input as MagickReteInput[]).find(
         (con: MagickReteInput) => con && con.task.node.id === node.id
@@ -127,7 +129,7 @@ x
     this.closed = []
   }
 
-  async run(data: unknown = {}, options: RunOptions = {}) {
+  async run(data: NodeData, options: RunOptions = {}) {
     const {
       needReset = true,
       garbage = [] as Task[],

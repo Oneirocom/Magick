@@ -1,18 +1,17 @@
 /* eslint-disable no-case-declarations */
-import { Engine, Component, Socket } from 'rete/types'
+import { Component, Engine, Socket } from 'rete/types'
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data'
 
+import { MagickEngine } from '../../engine'
 import {
   GraphData,
-  IRunContextEditor,
-  ModuleType,
-  MagickNode,
-  MagickWorkerOutputs,
+  IRunContextEditor, MagickNode,
+  MagickWorkerOutputs, ModuleType
 } from '../../types'
-import { MagickEngine } from '../../engine'
 import { Module } from './module'
 import { ModuleContext, ModuleManager } from './module-manager'
 import { addIO, removeIO } from './utils'
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
 //need to fix this interface.  For some reason doing the joing
 interface IRunContextEngine extends Engine {
@@ -31,8 +30,13 @@ type ModuleOptions = {
   skip?: boolean
 }
 
+export type UpdateModuleSockets = (
+  node: MagickNode,
+  graphData?: GraphData,
+  useSocketName?: boolean
+) => () => void
 interface IModuleComponent extends Component {
-  updateModuleSockets: Function
+  updateModuleSockets: UpdateModuleSockets
   module: ModuleOptions
   noBuildUpdate: boolean
 }
@@ -147,7 +151,7 @@ function install(
         }
         break
       case 'module':
-        const builder: Function | undefined = component.builder
+        const builder: any | undefined = component.builder
 
         if (builder) {
           component.updateModuleSockets = (
@@ -196,6 +200,8 @@ function install(
           }
 
           component.builder = async node => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
             if (!component.noBuildUpdate) component.updateModuleSockets(node)
             await builder.call(component, node)
           }

@@ -1,22 +1,16 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import {
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-} from '../../types'
-import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { triggerSocket, stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
-import { TextInputControl } from '../../dataControls/TextInputControl'
 import { InputControl } from '../../dataControls/InputControl'
+import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
+import { MagickComponent } from '../../magick-component'
+import { stringSocket, triggerSocket } from '../../sockets'
+import {
+  MagickNode,
+  MagickWorkerInputs, NodeData
+} from '../../types'
 
 const info =
-  'Combine Text is used to add two strings twogether - Add a new socket with the string and the value like this - Agent Replacer (will replace all the $agent from the input with the input assigned)'
+  'Combine Text is used to add two strings together - Add a new socket with the string and the value like this - Agent Replacer (will replace all the $agent from the input with the input assigned)'
 
 type WorkerReturn = {
   output: string

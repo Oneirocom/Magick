@@ -4,12 +4,12 @@ import axios from 'axios'
 import {
   NodeData,
   MagickNode,
-} from '../../types'
-import { API_ROOT_URL } from '../../config'
-import { InputControl } from '../../dataControls/InputControl'
-import { anySocket, stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
-import { BooleanControl } from '../../dataControls/BooleanControl'
+} from '../../../types'
+import { API_ROOT_URL } from '../../../config'
+import { InputControl } from '../../../dataControls/InputControl'
+import { anySocket, stringSocket } from '../../../sockets'
+import { MagickComponent } from '../../../magick-component'
+import { BooleanControl } from '../../../dataControls/BooleanControl'
 
 const info = `Image Variable`
 
@@ -59,7 +59,7 @@ export class Image extends MagickComponent<any> {
 
   async worker(node: NodeData) {
     const _var = node?.data?._var as string
-    const params = new URLSearchParams([['id', node.id]]);
+    const params = new URLSearchParams([['id', node.id.toString()]]);
     const result = await axios.get(`${API_ROOT_URL}/upload`, { params });
     return {
       output: result ? (result.data as any) : '',

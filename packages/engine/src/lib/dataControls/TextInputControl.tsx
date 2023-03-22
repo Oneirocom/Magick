@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Control } from 'rete'
+import { MagickEditor } from '../types'
 
-const ReactTextInputControl = props => {
+type ReactTextInputProps = {
+  editor: MagickEditor | null
+  value: string
+  name: string
+  putData: (name: string, value: string) => void
+  label?: string
+}
+const ReactTextInputControl:React.FC<ReactTextInputProps> = props => {
   const [value, setValue] = useState('')
 
   useEffect(() => {
@@ -31,14 +39,12 @@ const ReactTextInputControl = props => {
 
 export class TextInputControl extends Control {
   render: string
-  component: any
-  props: any
-  constructor({ editor, key, value, ...rest }) {
+  component: React.FC<ReactTextInputProps>
+  props: ReactTextInputProps
+  constructor({ editor, key, value, label=undefined }: { editor: MagickEditor|null; key: string; value: string, label?: string }) {
     super(key)
     this.render = 'react'
     this.component = ReactTextInputControl
-
-    const label = rest.label || null
 
     // we define the props that are passed into the rendered react component here
     this.props = {

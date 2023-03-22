@@ -1,19 +1,15 @@
+import { Button, Window } from '@magickml/client-core'
 import Editor from '@monaco-editor/react'
-import { useState, useEffect, useRef } from 'react'
-import WindowMessage from '../../components/WindowMessage'
-
-import { Window } from '@magickml/client-core'
-import { activeTabSelector, selectAllTabs } from '../../../state/tabs'
-
-import '../../../screens/Magick/magick.module.css'
-import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
+import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Button } from '@magickml/client-core'
+import '../../../screens/Magick/magick.module.css'
+import { activeTabSelector } from '../../../state/tabs'
+import WindowMessage from '../../components/WindowMessage'
+import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
 
 const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)
   const [data, setData] = useState<TextEditorData | null>(null)
-  // const [height, setHeight] = useState<number>()
   const [editorOptions, setEditorOptions] = useState<Record<string, any>>({wordWrap: 'on', minimap: {enabled: false}})
   const codeRef = useRef<string>()
   const [openaiApiKey, setOpenaiApiKey] = useState<string | undefined>(

@@ -5,7 +5,8 @@ import { useSnackbar } from 'notistack'
 import axios from 'axios'
 import { LoadingScreen } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
-import { IGNORE_AUTH } from '@magickml/engine'
+import { IGNORE_AUTH, pluginManager } from '@magickml/engine'
+import validateSpellData from './AgentWindow/spellValidator'
 
 const AgentManagerWindow = () => {
   const config = useConfig()
@@ -14,6 +15,7 @@ const AgentManagerWindow = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
   const [root_spell, setRootSpell] = useState('default')
+  const [enable, setEnable] = useState("")
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 
@@ -26,6 +28,13 @@ const AgentManagerWindow = () => {
     setData(json.data)
     setIsLoading(false)
     console.log('res is', json)
+    let spellAgent = JSON.parse(json.data[0].rootSpell)
+    let inputs = pluginManager.getInputByName()
+    let plugin_list = pluginManager.getPlugins()
+    for (let key of Object.keys(plugin_list)){
+      plugin_list[key] = validateSpellData(spellAgent, inputs[key])
+    }
+    setEnable(plugin_list)
   }
 
   const createNew = (data: {
@@ -97,7 +106,7 @@ const AgentManagerWindow = () => {
     }
   }
 
-  const update = (id: string, _data: object) => {
+  const update = (id: string, _data: any) => {
     axios
       .patch(
         `${config.apiUrl}/agents/${id}`,
@@ -166,6 +175,22 @@ const AgentManagerWindow = () => {
     })()
   }, [config.apiUrl])
 
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(`${config.apiUrl}/agents`)
+      const json = await res.json()
+      console.log('res data', json.data)
+      let spellAgent = JSON.parse(json.data[0].rootSpell)
+      let inputs = pluginManager.getInputByName()
+      let plugin_list = pluginManager.getPlugins()
+      for (let key of Object.keys(plugin_list)){
+        plugin_list[key] = validateSpellData(spellAgent, inputs[key])
+      }
+      console.log(plugin_list)
+      setEnable(plugin_list)
+    })()
+    
+  }, [])
   return isLoading ? (
     <LoadingScreen />
   ) : (
@@ -180,6 +205,7 @@ const AgentManagerWindow = () => {
       selectedAgentData={selectedAgentData}
       rootSpell={root_spell}
       setRootSpell={setRootSpell}
+      onLoadEnables={enable}
     />
   )
 }
