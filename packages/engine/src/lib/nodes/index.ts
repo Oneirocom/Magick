@@ -26,8 +26,6 @@ import { OrGate } from './flow/OrGate'
 import { RandomGate } from './flow/RandomGate'
 import { SwitchGate } from './flow/SwitchGate'
 import { WaitForAll } from './flow/WaitForAll'
-import { Image } from './_tofix/image/Image'
-import { ImageGeneration } from './_tofix/image/ImageGeneration'
 import { InputComponent } from './io/Input'
 import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
@@ -93,7 +91,6 @@ export const components = {
   joinListComponent: () => new JoinListComponent(),
   moduleComponent: () => new SpellComponent(),
   output: () => new Output(),
-  image: () => new Image(),
   switchGate: () => new SwitchGate(),
   triggerOut: () => new TriggerOut(),
   waitForAll: () => new WaitForAll(),
@@ -101,7 +98,6 @@ export const components = {
   merge: () => new Merge(),
   orGate: () => new OrGate(),
   log: () => new Log(),
-  imageGeneration: () => new ImageGeneration(),
   promptTemplate: () => new TextTemplate(),
   parseJSON: () => new ParseJSON(),
   objectToJSON: () => new ObjectToJSON(),
