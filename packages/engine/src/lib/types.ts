@@ -1,14 +1,14 @@
 import { Connection, Input, NodeEditor, Output, Socket } from 'rete';
 import { Node } from 'rete/types';
-import { Data, WorkerOutputs } from 'rete/types/core/data';
+import { Data, InputsData, NodeData, OutputsData, WorkerOutputs } from 'rete/types/core/data';
 import PubSub from 'pubsub-js'
 
-import { MagickComponent, MagickTask } from './magick-component';
-import { MagickConsole } from './plugins/consolePlugin/MagickConsole';
-import { Inspector } from './plugins/inspectorPlugin/Inspector';
-import { ModuleManager } from './plugins/modulePlugin/module-manager';
-import { Task, TaskOutputTypes } from './plugins/taskPlugin/task';
-import { SocketNameType, SocketType } from './sockets';
+import { MagickComponent, MagickTask } from './magick-component'
+import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
+import { Inspector } from './plugins/inspectorPlugin/Inspector'
+import { ModuleManager } from './plugins/modulePlugin/module-manager'
+import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
+import { SocketNameType, SocketType } from './sockets'
 
 export { MagickComponent } from './magick-component';
 //@seang this was causing test enviroment issues to have it shared client/server
@@ -119,10 +119,7 @@ export type CompletionResponse = {
   choice: any
 }
 
-export type OnSubspellUpdated = (
-  spellName: string,
-  callback: (PubSubData) => void
-) => void
+export type OnSubspellUpdated = (spell: Spell) => void
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
@@ -133,10 +130,7 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
   declare moduleManager: ModuleManager
   declare runProcess: (callback?: () => void | undefined) => Promise<void>
-  declare onSpellUpdated: (
-    spellName: string,
-    callback: any
-  ) => OnSubspellUpdated
+  declare onSpellUpdated: (spellName: string, callback: (spell: Spell) => void) => () => void
   declare refreshEventTable: () => void
 }
 
@@ -176,32 +170,71 @@ export type RunSpell<DataType = Record<string, unknown>> = ({
   spellId,
   projectId,
   secrets,
-  publicVariables,
-}: runSpellType<DataType>) => DataType
+  publicVariables
+}: runSpellType<DataType>) => Promise<DataType>
 
-export type EngineContext = {
+export type EngineContext<DataType=Record<string, unknown>> = {
   env: Env
-  runSpell: RunSpell
+  runSpell: RunSpell<DataType>
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
   getCurrentSpell: () => Spell
   processCode?: ProcessCode
 }
 
+export type PubSubEvents = {
+  ADD_SUBSPELL: string
+  UPDATE_SUBSPELL: string
+  DELETE_SUBSPELL: string
+  OPEN_TAB: string
+  $SUBSPELL_UPDATED: (spellName: string) => string
+  $TRIGGER: (tabId: string, nodeId?: string) => string
+  $PLAYTEST_INPUT: (tabId: string) => string
+  $PLAYTEST_PRINT: (tabId: string) => string
+  $DEBUG_PRINT: (tabId: string) => string
+  $DEBUG_INPUT: (tabId: string) => string
+  $INSPECTOR_SET: (tabId: string) => string
+  $TEXT_EDITOR_SET: (tabId: string) => string
+  $TEXT_EDITOR_CLEAR: (tabId: string) => string
+  $CLOSE_EDITOR: (tabId: string) => string
+  $NODE_SET: (tabId: string, nodeId: string) => string
+  $SAVE_SPELL: (tabId: string) => string
+  $SAVE_SPELL_DIFF: (tabId: string) => string
+  $CREATE_MESSAGE_REACTION_EDITOR: (tabId: string) => string
+  $CREATE_PLAYTEST: (tabId: string) => string
+  $CREATE_INSPECTOR: (tabId: string) => string
+  $CREATE_TEXT_EDITOR: (tabId: string) => string
+  $CREATE_AVATAR_WINDOW: (tabId: string) => string
+  $CREATE_DEBUG_CONSOLE: (tabId: string) => string
+  $CREATE_CONSOLE: (tabId: string) => string
+  $RUN_SPELL: (tabId: string) => string
+  $PROCESS: (tabId: string) => string
+  $EXPORT: (tabId: string) => string
+  $UNDO: (tabId: string) => string
+  $REDO: (tabId: string) => string
+  $DELETE: (tabId: string) => string
+  $MULTI_SELECT_COPY: (tabId: string) => string
+  $MULTI_SELECT_PASTE: (tabId: string) => string
+  $REFRESH_EVENT_TABLE: (tabId: string) => string
+  $SEND_TO_AVATAR: (tabId: string) => string
+}
+
+export interface PubSubContext {
+  publish: (event: string, data?: PubSubData) => boolean
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  subscribe(event: string, func: PubSubJS.SubscriptionListener<PubSubData>): () => void;
+  PubSub: typeof PubSub
+  events: PubSubEvents
+}
+
 export type PubSubData = Record<string, unknown> | string | unknown[]
 export type PubSubCallback = (event: string, data: PubSubData) => void
 
 export type OnInspectorCallback = (data: Record<string, unknown>) => void
-export type OnInspector = (
-  node: MagickNode,
-  callback: OnInspectorCallback
-) => () => void
+export type OnInspector = (node: MagickNode, callback: OnInspectorCallback) => () => void
 export type OnEditorCallback = (data: PubSubData) => void
 export type OnEditor = (callback: OnEditorCallback) => () => void
-export type OnDebug = (
-  node: MagickNode,
-  callback: OnEditorCallback
-) => () => void
+export type OnDebug = (node: MagickNode, callback: OnEditorCallback) => () => void
 
 export type PublishEditorEvent = (data: PubSubData) => void
 
@@ -210,10 +243,7 @@ export interface EditorContext extends EngineContext {
   /**
    * @deprecated The method should not be used
    */
-  onTrigger: (
-    node: MagickNode | string,
-    callback: (data: unknown) => void
-  ) => () => void
+  onTrigger: (node: MagickNode | string, callback: (data: unknown) => void) => () => void
   sendToPlaytest: (data: string) => void
   sendToInspector: PublishEditorEvent
   sendToDebug: PublishEditorEvent
@@ -256,20 +286,14 @@ export type DataSocketType = {
   useSocketName: boolean
 }
 
-export type MagicNodeInput = Input & { socketType: DataSocketType }
-export type MagicNodeOutput = Output & {
-  taskType?: TaskType
-  socketType: DataSocketType
-}
+export type MagicNodeInput = Input & { socketType: DataSocketType; }
+export type MagicNodeOutput = Output & { taskType?: TaskType; socketType: DataSocketType; }
 
 export type MagickNode = Node & {
   inspector: Inspector
   display: (content: string) => void
   outputs: MagicNodeOutput[]
-  data: {
-    outputs?: DataSocketType[]
-    inputs?: DataSocketType[]
-  }
+  data: WorkerData
   category?: string
   displayName?: string
   info: string
@@ -307,8 +331,12 @@ export type Subspell = { name: string; id: string; data: GraphData }
 
 export type GraphData = Data
 
+export type IgnoredList = {
+  name: string
+}[] | string[]
+
 export type ComponentData<T = TaskType> = Record<string, unknown> & {
-  ignored?: { name: string }[]
+  ignored?: IgnoredList
   socketType?: SocketType
   taskType?: T
   icon?: string
@@ -318,7 +346,7 @@ export type InputComponentData = ComponentData<TaskType>
 export type OutputComponentData = ComponentData<TaskType>
 
 export type ModuleComponent = MagickComponent<unknown> & {
-  run: (node: NodeData, data?: unknown) => Promise<void>
+  run: (node: MagickNode, data?: unknown) => Promise<void>
 }
 
 export type NodeConnections = {
@@ -334,12 +362,38 @@ export type NodeOutputs = {
   }
 }
 
-export type NodeData = {
-  id: number
+export type MagickNodeData = {
   socketKey?: string
   name?: string
-  data: Record<string, unknown>
+  isInput?: boolean; 
+  useDefault?: boolean; 
+  defaultValue?: string
+  element?: number
   [DataKey: string]: unknown
+}
+
+export type WorkerData = NodeData & {
+  // outputs: DataSocketOutput
+  // inputs: DataSocketInput
+  spell?: string
+  data?: MagickNodeData
+  [key: string]: unknown;
+}
+
+export function AsDataSocket(data: InputsData | OutputsData): DataSocketType[] {
+  return data as unknown as DataSocketType[]
+}
+
+export function AsInputsData(data: DataSocketType[]): InputsData {
+  return data as unknown as InputsData
+}
+
+export function AsOutputsData(data: DataSocketType[]): OutputsData {
+  return data as unknown as OutputsData
+}
+
+export function AsInputsAndOutputsData(data: DataSocketType[]): InputsData & OutputsData {
+  return data as unknown as InputsData & OutputsData
 }
 
 export type Module = { name: string; id: string; data: Data }
@@ -513,12 +567,4 @@ export type RequestData = {
   spell: string
   projectId: string
   nodeId: number
-}
-
-export interface PubSubContext {
-  publish: (event: string, data?: PubSubData) => boolean
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  subscribe(event: string, func: PubSubJS.SubscriptionListener<PubSubData>): () => void;
-  PubSub: typeof PubSub
-  events: Record<string, any>
 }

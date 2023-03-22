@@ -1,10 +1,11 @@
 import Rete from 'rete'
 
 import {
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
@@ -61,7 +62,7 @@ export class Merge extends MagickComponent<void> {
     return node
   }
 
-  worker(_node: NodeData, inputs: MagickWorkerInputs) {
+  worker(_node: WorkerData, inputs: MagickWorkerInputs) {
     const object = inputs.object[0] as Record<string, any>
     const combinedInputs = Object.entries(inputs).reduce(
       (acc, [key, value]) => {

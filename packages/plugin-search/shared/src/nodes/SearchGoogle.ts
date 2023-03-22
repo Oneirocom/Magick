@@ -2,16 +2,17 @@
 import Rete from 'rete'
 
 import {
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs,
   TaskOptions,
   stringSocket,
   triggerSocket,
   MagickComponent,
   API_ROOT_URL,
+  WorkerData,
 } from '@magickml/engine'
+// import { queryGoogleSearch } from '../../functions/queryGoogle'
+
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
 type WorkerReturn = {
@@ -55,7 +56,7 @@ export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
   async worker(
-    _node: NodeData,
+    _node: WorkerData,
     inputs: MagickWorkerInputs,
   ) {
     const url = `${API_ROOT_URL}/google-search?query=${inputs.query[0]}`

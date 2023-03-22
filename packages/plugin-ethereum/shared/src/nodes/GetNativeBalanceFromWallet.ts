@@ -9,20 +9,19 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData,
   DropdownControl,
   stringSocket,
   numberSocket,
   triggerSocket,
+  WorkerData,
 } from '@magickml/engine'
 
 const info = `Check the balance of an ethereum wallet`
 
 type InputReturn = {
-  output: unknown
-}
-
-export class GetNativeBalanceFromWallet extends MagickComponent<InputReturn> {
+  output: string
+} | undefined
+export class GetNativeBalanceFromWallet extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
     super('Check Eth Balance')
@@ -90,9 +89,8 @@ export class GetNativeBalanceFromWallet extends MagickComponent<InputReturn> {
       .addOutput(balanceOutput)
   }
 
-  // @ts-ignore
   async worker(
-    node: NodeData,
+    node: WorkerData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }

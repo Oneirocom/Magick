@@ -3,10 +3,11 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   EditorContext,
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { pluginManager } from '../../plugin'
@@ -93,7 +94,7 @@ export class Output extends MagickComponent<void> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     { module, magick }: { module: any; magick: EditorContext }

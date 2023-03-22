@@ -6,7 +6,8 @@ import { anySocket, arraySocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs, NodeData
+  MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 
 const info = 'Returns the same output as the input'
@@ -54,14 +55,14 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
 
   // eslint-disable-next-line @typescript-eslint/require-await, require-await
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
     const input = inputs.array[0] as string
     // TODO: Check if node.data is defined instead of using as keyword
     // const element = node.data.element as number
-    const element = (node.data as {element:number}).element
+    const element = node.data.element as number
 
     const arrayElement = input[element]
 

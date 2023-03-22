@@ -1,6 +1,6 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, numberSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -60,7 +60,7 @@ export class InRange extends MagickComponent<void> {
     node.inspector.add(inspectorStartNumSocket).add(inspectorEndNumSocket)
   }
 
-  worker(node: NodeData, inputs: MagickWorkerInputs) {
+  worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const startRange =
       (inputs['startNumber'][0] as number) ?? (node.data.startNumber as number)
     const endRange =

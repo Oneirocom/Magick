@@ -2,8 +2,7 @@
 import Rete from 'rete'
 import axios from 'axios'
 import {
-  NodeData,
-  MagickNode,
+  MagickNode, WorkerData,
 } from '../../../types'
 import { API_ROOT_URL } from '../../../config'
 import { InputControl } from '../../../dataControls/InputControl'
@@ -57,7 +56,7 @@ export class Image extends MagickComponent<any> {
     return node.addOutput(out)
   }
 
-  async worker(node: NodeData) {
+  async worker(node: WorkerData) {
     const _var = node?.data?._var as string
     const params = new URLSearchParams([['id', node.id.toString()]]);
     const result = await axios.get(`${API_ROOT_URL}/upload`, { params });

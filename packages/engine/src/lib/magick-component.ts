@@ -1,9 +1,9 @@
 import { Node, Socket } from 'rete'
 
-import { MagickEditor, MagickNode, UnknownData } from './types'
+import { MagickEditor, MagickNode, UnknownData, WorkerData } from './types'
 import { MagickEngineComponent } from './engine'
 import { Task, TaskOptions, TaskSocketInfo } from './plugins/taskPlugin/task'
-import { NodeData } from 'rete/types/core/data'
+import { NodeData, NodeDataOrEmpty } from 'rete/types/core/data'
 
 export interface MagickTask extends Task {
   outputs?: { [key: string]: string }
@@ -50,19 +50,20 @@ export abstract class MagickComponent<
     return node
   }
 
-  async run(node: MagickNode, data: NodeData) {
+  async run(node: NodeData, data: NodeDataOrEmpty = {}) {
     if (!node || node === undefined) {
       return console.error('node is undefined')
     }
 
     const task = this.nodeTaskMap[node?.id]
-    if (task) await task.run(data)
+    // TODO: Check if data is defined
+    if (task) await task.run(data as NodeData)
   }
 
   async createNode(data = {}) {
     const node = new Node(this.name) as MagickNode
 
-    node.data = data
+    node.data = data as WorkerData
     await this.build(node)
 
     return node

@@ -5,10 +5,11 @@ import Rete from 'rete'
 
 import {
   EngineContext,
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { triggerSocket, stringSocket, anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -41,8 +42,8 @@ export class IsNullOrUndefined extends MagickComponent<Promise<void>> {
       .addOutput(isFalse)
   }
 
-  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
-    const action = inputs['input'][0] ?? inputs['input']
+  async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
+    const action = inputs['string'][0] ?? inputs['string']
     const is =
       action === null || action === undefined || (action as string).length <= 0
     console.log('found null or empty input:', is)

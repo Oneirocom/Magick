@@ -9,7 +9,8 @@ import { MagickComponent } from '../../magick-component'
 import { objectSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
-  MagickWorkerInputs, NodeData
+  MagickWorkerInputs,
+  WorkerData,
 } from '../../types'
 
 const info =
@@ -56,7 +57,7 @@ export class ComposeObject extends MagickComponent<Promise<WorkerReturn>> {
     return node
   }
 
-  async worker(_node: NodeData, rawInputs: MagickWorkerInputs) {
+  async worker(_node: WorkerData, rawInputs: MagickWorkerInputs) {
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
       acc[key] = value[0]
       return acc

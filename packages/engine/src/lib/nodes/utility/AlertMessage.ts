@@ -1,6 +1,6 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode } from '../../types'
+import { MagickNode, WorkerData } from '../../types'
 import { TextInputControl } from '../../dataControls/TextInputControl'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { triggerSocket } from '../../sockets'
@@ -42,7 +42,7 @@ export class Alert extends MagickComponent<void> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  worker(node: NodeData) {
+  worker(node: WorkerData) {
     const text = _.get(node, 'data.text', `node has no data: ${JSON.stringify(node)}`)
     alert(text)
   }

@@ -5,10 +5,11 @@ import Rete from 'rete'
 
 import {
   EngineContext,
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { triggerSocket, anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -41,7 +42,7 @@ export class IsVariableTrue extends MagickComponent<void> {
       .addOutput(isFalse)
   }
 
-  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
     const action = inputs['input'][0]
     const type = typeof action
     let is = false
