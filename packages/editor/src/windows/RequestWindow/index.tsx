@@ -18,7 +18,7 @@ const RequestWindow = () => {
 
   const fetchRequests = async () => {
     const { data } = await axios.get(
-      `${API_ROOT_URL}/request?hidden=false&projectId=${config.projectId}`
+      `${API_ROOT_URL}/requests?hidden=false&projectId=${config.projectId}`
     )
     setRequests(data.data)
   }

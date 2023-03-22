@@ -131,7 +131,7 @@ function RequestTable({ requests, updateCallback }) {
     }
     if (!_.isEqual(reqBody, rowData)) {
       const resp = await fetch(
-        `${API_ROOT_URL}/request/${id}`,
+        `${API_ROOT_URL}/requests/${id}`,
         {
           method: 'PATCH',
           headers: {
@@ -206,7 +206,7 @@ function RequestTable({ requests, updateCallback }) {
   const handleRequestDelete = async (event: any) => {
     // instead of deleting, call the updateRequest function with param hidden = true
     const resp = await fetch(
-      `${API_ROOT_URL}/request/${event.id}`,
+      `${API_ROOT_URL}/requests/${event.id}`,
       {
         method: 'PATCH',
         headers: {

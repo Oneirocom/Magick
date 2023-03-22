@@ -4,7 +4,7 @@ import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 
 import type { Application } from '../../declarations'
-import type { Request, RequestData, RequestPatch, RequestQuery } from './request.schema'
+import type { Request, RequestData, RequestPatch, RequestQuery } from './requests.schema'
 
 export type RequestParams = KnexAdapterParams<RequestQuery>
 

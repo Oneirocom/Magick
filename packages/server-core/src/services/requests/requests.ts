@@ -11,13 +11,13 @@ import {
   requestDataResolver,
   requestPatchResolver,
   requestQueryResolver
-} from './request.schema'
+} from './requests.schema'
 
 import type { Application } from '../../declarations'
-import { RequestService, getOptions } from './request.class'
+import { RequestService, getOptions } from './requests.class'
 
-export * from './request.class'
-export * from './request.schema'
+export * from './requests.class'
+export * from './requests.schema'
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const request = (app: Application) => {
