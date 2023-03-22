@@ -23,11 +23,7 @@ type InputReturn = {
 export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-<<<<<<< refs/remotes/origin/development
     super('Contract Write')
-=======
-    super('PluginEthCallContractFunctionWrite')
->>>>>>> plugin(eth): change node's names and display names
 
     this.task = {
       outputs: {
@@ -45,13 +41,8 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-<<<<<<< refs/remotes/origin/development
     this.contextMenuName = 'Contract Write'
     this.displayName = 'Contract Write'
-=======
-    this.contextMenuName = 'Call Contract Write'
-    this.displayName = 'Call Contract Write-Function'
->>>>>>> plugin(eth): change node's names and display names
   }
 
   destroyed(node: MagickNode) {
@@ -130,14 +121,6 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
     const contractAddress = (inputs['contract_addr'] && inputs['contract_addr'][0]) as string
     const functionName = (inputs['function_name'] && inputs['function_name'][0]) as string
 
-<<<<<<< refs/remotes/origin/development
-      return {
-        output: data,
-      }
-    }
-
-=======
->>>>>>> remove display
     return {
       output: `http://localhost:4200/ethereum/contract/${chainId}/${contractAddress}/${functionName}`,
     }

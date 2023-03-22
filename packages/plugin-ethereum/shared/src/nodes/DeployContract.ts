@@ -26,11 +26,7 @@ type InputReturn = {
 export class DeployContract extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-<<<<<<< refs/remotes/origin/development
     super('Deploy Contract')
-=======
-    super('PluginEthDeployContract')
->>>>>>> plugin(eth): change node's names and display names
 
     this.task = {
       outputs: {
@@ -89,26 +85,10 @@ export class DeployContract extends MagickComponent<InputReturn> {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
 
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-<<<<<<< refs/remotes/origin/development
-    const balanceOutput = new Rete.Output('balance', 'Balance', numberSocket)
-    const balanceAfterOutput = new Rete.Output(
-      'balance_after',
-      'Balance After',
-      numberSocket
-=======
-    const balanceOutput = new Rete.Output('balance_before', 'Balance Before', numSocket)
-    const balanceAfterOutput = new Rete.Output(
-      'balance',
-      'Balance',
-      numSocket
->>>>>>> plugin(eth): change node's names and display names
-    )
+    const balanceOutput = new Rete.Output('balance_before', 'Balance Before', numberSocket)
+    const balanceAfterOutput = new Rete.Output('balance', 'Balance', numberSocket)
     const txOutput = new Rete.Output('tx', 'Transaction', stringSocket)
-    const contractAddrOutput = new Rete.Output(
-      'contract',
-      'Contract Addr',
-      stringSocket
-    )
+    const contractAddrOutput = new Rete.Output('contract', 'Contract Addr', stringSocket)
 
     return node
       .addInput(dataInput)
@@ -182,10 +162,6 @@ export class DeployContract extends MagickComponent<InputReturn> {
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
-<<<<<<< refs/remotes/origin/development
-=======
-
->>>>>>> remove display
       return {
         output: data,
         balance_before: balanceBeforeInEth,

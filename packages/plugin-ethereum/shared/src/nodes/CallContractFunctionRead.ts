@@ -23,11 +23,7 @@ type InputReturn = {
 export class CallContractFunctionRead extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-<<<<<<< refs/remotes/origin/development
     super('Contract Read')
-=======
-    super('PluginEthCallContractFunctionRead')
->>>>>>> plugin(eth): change node's names and display names
 
     this.task = {
       outputs: {
@@ -45,13 +41,8 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-<<<<<<< refs/remotes/origin/development
     this.contextMenuName = 'Contract Read'
     this.displayName = 'Contract Read'
-=======
-    this.contextMenuName = 'Call Contract Read'
-    this.displayName = 'Call Contract Read-Function'
->>>>>>> plugin(eth): change node's names and display names
   }
 
   destroyed(node: MagickNode) {
@@ -99,13 +90,8 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
   // @ts-ignore
   async worker(
     node: NodeData,
-<<<<<<< refs/remotes/origin/development
-    _inputs: MagickWorkerInputs,
-    outputs: MagickWorkerOutputs,
-=======
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
->>>>>>> remove display
+    outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ) {
     const rpcHttp = node.data?.rpc_http as string
@@ -113,15 +99,12 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
     const contractAddress = (inputs['tx'] && inputs['tx'][0]) as string
     const contractAbi = (inputs['abi'] && inputs['abi'][0]) as string
 
-      return {
-        output: data,
-      }
-    }
 
-    let res = undefined
+    const res = null
+
     try {
       // TODO: call read with dynamic function name and params as client do with wagmi package
-      res = await contract?.myString();
+      // res = await contract?.myString();
     } catch {
       console.error("call reverted");
       return

@@ -23,11 +23,7 @@ type InputReturn = {
 export class GetERC20BalanceFromWallet extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-<<<<<<< refs/remotes/origin/development:packages/plugin-ethereum/shared/src/nodes/CheckBalanceForERC20.ts
     super('Check ERC20 Balance')
-=======
-    super('PluginEthGetERC20BalanceFromWallet')
->>>>>>> plugin(eth): change node's names and display names:packages/plugin-ethereum/shared/src/nodes/GetERC20BalanceFromWallet.ts
 
     this.task = {
       outputs: {
@@ -91,10 +87,6 @@ export class GetERC20BalanceFromWallet extends MagickComponent<InputReturn> {
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
-<<<<<<< refs/remotes/origin/development
-=======
-
->>>>>>> remove display
       return {
         output: data,
       }
