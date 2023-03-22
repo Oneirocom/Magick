@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 export namespace OpenAI {
   export type Engine =
     | 'ada'
@@ -120,6 +121,7 @@ export namespace OpenAI {
   }
 
   // https://beta.openai.com/docs/api-reference/searches
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   export namespace Search {
     export type Request = {
       file?: string
