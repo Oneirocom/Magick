@@ -130,11 +130,14 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
     const contractAddress = (inputs['contract_addr'] && inputs['contract_addr'][0]) as string
     const functionName = (inputs['function_name'] && inputs['function_name'][0]) as string
 
+<<<<<<< refs/remotes/origin/development
       return {
         output: data,
       }
     }
 
+=======
+>>>>>>> remove display
     return {
       output: `http://localhost:4200/ethereum/contract/${chainId}/${contractAddress}/${functionName}`,
     }

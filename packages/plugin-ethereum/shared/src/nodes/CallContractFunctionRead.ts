@@ -99,8 +99,13 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
   // @ts-ignore
   async worker(
     node: NodeData,
+<<<<<<< refs/remotes/origin/development
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
+=======
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+>>>>>>> remove display
     { data }: { data: string | undefined }
   ) {
     const rpcHttp = node.data?.rpc_http as string
@@ -121,9 +126,6 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
       console.error("call reverted");
       return
     }
-
-    // TODO: need to be fixed, issue of loosing display() function from NodeData context
-    // node.display(res)
 
     return {
       output: res,
