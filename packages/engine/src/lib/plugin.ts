@@ -1,4 +1,4 @@
-import { CompletionProvider } from "./types"
+import { CompletionProvider } from './types'
 
 export type PluginSecret = {
   name: string
@@ -146,7 +146,7 @@ export class ServerPlugin extends Plugin {
       inputTypes,
       outputTypes,
       secrets,
-      completionProviders
+      completionProviders,
     })
     this.services = services
     this.agentMethods = agentMethods
@@ -179,7 +179,6 @@ class PluginManager {
     return inputTypes
   }
 
-  
   getOutputTypes() {
     const outputTypes = [] as any[]
     this.pluginList.forEach(plugin => {
@@ -218,12 +217,15 @@ class PluginManager {
     return secrets
   }
 
-  getCompletionProviders(type = null, subtypes: null | string[] = null): CompletionProvider[] {
+  getCompletionProviders(
+    type = null,
+    subtypes: null | string[] = null
+  ): CompletionProvider[] {
     const completionProviders = [] as any[]
     this.pluginList.forEach(plugin => {
       plugin.completionProviders.forEach(provider => {
-        if(type && provider.type !== type) return
-        if(subtypes && !subtypes.includes(provider.subtype)) return
+        if (type && provider.type !== type) return
+        if (subtypes && !subtypes.includes(provider.subtype)) return
         completionProviders.push(provider)
       })
     })
@@ -314,7 +316,7 @@ class ClientPluginManager extends PluginManager {
     return inputTypes
   }
 
-  getInputByName(){
+  getInputByName() {
     const inputTypes = {}
     this.pluginList.forEach(plugin => {
       inputTypes[plugin.name] = plugin.inputTypes
@@ -322,19 +324,17 @@ class ClientPluginManager extends PluginManager {
     return inputTypes
   }
 
-  getPlugins(){
+  getPlugins() {
     const pluginList = {}
     this.pluginList.forEach(plugin => {
       pluginList[plugin.name] = 'NONE'
     })
     return pluginList
   }
-
-  
 }
 
 class ServerPluginManager extends PluginManager {
-  pluginList: Array<ServerPlugin>
+  declare pluginList: Array<ServerPlugin>
   constructor() {
     super()
     this.pluginList = new Array<ServerPlugin>()
