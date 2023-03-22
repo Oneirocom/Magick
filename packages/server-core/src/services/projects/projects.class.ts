@@ -16,8 +16,7 @@ export interface ProjectParams extends Params {
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class ProjectsService {
-  async get(
-    id: string,
+  async find(
     params?: ProjectParams
   ): Promise<{ agents: any; spells: any; documents: any }> {
     const { query } = params
@@ -43,9 +42,9 @@ export class ProjectsService {
     ])
 
     return {
-      agents,
-      spells,
-      documents,
+      agents: agents.data,
+      spells: spells.data,
+      documents: documents.data,
     }
   }
 

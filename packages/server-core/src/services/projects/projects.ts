@@ -8,7 +8,7 @@ export const projects = (app: Application) => {
   // Register our service on the Feathers application
   app.use('projects', new ProjectsService(), {
     // A list of all methods this service exposes externally
-    methods: ['get', 'create'],
+    methods: ['find', 'create'],
     // You can add additional custom events to be sent to clients here
     events: [],
   })
@@ -20,7 +20,7 @@ export const projects = (app: Application) => {
     },
     before: {
       all: [],
-      get: [],
+      find: [],
       create: [
       ],
     },
