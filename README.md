@@ -1,13 +1,23 @@
 <p align="center"><img src="apps/docs/readme-files/MAGICK-banner.png" /></p>
 
-<h1 align="center">MAGICK</h1>
+<p align="center">
+  <a href="https://discord.gg/magickml">
+    <img src="https://dcbadge.vercel.app/api/server/magickml?style=social" alt="Join Discord">
+  </a>
+  <a href="https://twitter.com/magickml">
+    <img src="https://img.shields.io/twitter/follow/magickml?style=social" alt="Follow on Twitter">
+  </a>
+  <a href="https://www.linkedin.com/company/magickml/about/">
+    <img src="https://img.shields.io/badge/LinkedIn-Follow-blue?style=social&logo=linkedin" alt="Follow on LinkedIn">
+  </a>
+  <a href="https://www.youtube.com/@magickml">
+    <img src="https://img.shields.io/badge/YouTube-Subscribe-red?style=social&logo=youtube" alt="Subscribe on YouTube">
+  </a>
+</p>
 
-[![](https://dcbadge.vercel.app/api/server/magickml?style=social)](https://discord.gg/magickml)
-![Twitter Follow](https://img.shields.io/twitter/follow/magickml?style=social)
+<h3 align = "center">Magick is a groundbreaking visual AIDE (Artificial Intelligence Development Environment) for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and templates well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.</h3>
 
-Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and connectors well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.
-
-## Key Features
+## 🗝 Key Features
 
 - Realtime agents which can perform actions on their own, interact with users and other agents in different modalities with a unified memory and self
 - Social connectors to Discord, Twitter and Twilio -- Zoom, Google Meet, Reddit, Slack connectors will be available soon as plugins!
@@ -16,13 +26,28 @@ Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick 
 - Powerful graph-based IDE for complex data pipelines
 - Graphs can be embedded in subgraphs and shared for rapid community development
 
-`Powerful enough for wizards. Easy enough for mere mortals.`
+## 🔮 Magick: Enchanting AI App Development Made Easy
 
-## Documentation is [here](https://magick-docs.vercel.app/)
+With Magick, you can unleash the power of AI without needing to know how to code. Using our intuitive environment, you can seamlessly connect to popular services and explore a world of pre-built nodes and connectors to bring your vision to life.
+
+`Powerful enough for wizards. Easy enough for mere mortals.`
 
 <p align="center"><img src="apps/docs/readme-files/ui.png" /></p>
 
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=Xy7tMmKluvE" target="_blank">
+    <img src="https://img.youtube.com/vi/Xy7tMmKluvE/0.jpg" alt="Magick - AI for Mere Mortals" style="width:65%;max-width:640px;">
+  </a>
+  <br>
+  ▶️ <strong>Click the image above to watch the <a href="https://www.youtube.com/watch?v=Xy7tMmKluvE" target="_blank">video</a></strong>
+</p>
+
+<hr>
+
 # Installation
+
+  ## 📚 [Documentation / Guide](https://magick-docs.vercel.app/)
+
 Local development is straightforward. You will need git and node.js 18+ installed.
 ```
 git clone https://github.com/Oneirocom/Magick
