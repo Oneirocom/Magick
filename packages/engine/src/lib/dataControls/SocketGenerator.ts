@@ -1,5 +1,6 @@
 import { DataControl } from '../plugins/inspectorPlugin'
 import { SocketType } from '../sockets'
+import { TaskType } from '../types'
 
 export class SocketGeneratorControl extends DataControl {
   connectionType: string
@@ -12,7 +13,7 @@ export class SocketGeneratorControl extends DataControl {
     name: nameInput,
   }: {
     socketType?: SocketType
-    taskType?: 'input' | 'output' | 'option'
+    taskType?: TaskType
     ignored?: string[]
     icon?: string
     connectionType: 'input' | 'output'
@@ -41,7 +42,7 @@ export class SocketGeneratorControl extends DataControl {
       },
     }
 
-    super(options)
+    super(options as any)
 
     this.connectionType = connectionType
   }

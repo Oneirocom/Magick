@@ -14,7 +14,7 @@ export class MultiSocketGeneratorControl extends DataControl {
   }: {
     socketTypes: string[]
     taskTypes: string[]
-    ignored?: string[]
+    ignored?: {name:string}[]
     icon?: string
     connectionType: 'input' | 'output'
     name: string

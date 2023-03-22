@@ -3,7 +3,9 @@ import io from 'socket.io'
 import {
   EngineContext,
   GraphData,
+  MagickNode,
   ModuleComponent,
+  NodeData,
   Spell as SpellType,
 } from '../types'
 import { getNodes } from '../nodes'
@@ -226,7 +228,7 @@ class SpellRunner {
     // load the inputs into module memory
     this.module.read({ inputs: this._formatInputs(inputs), secrets, agent, publicVariables })
 
-    const component = this._getComponent(componentName) as ModuleComponent
+    const component = this._getComponent(componentName) as unknown as ModuleComponent
 
     const firstInput = Object.keys(inputs)[0]
 
@@ -238,7 +240,10 @@ class SpellRunner {
     // I do wonder whether we could make this even more elegant by having the node
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
-    await component.run(triggeredNode, inputs)
+    // 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await component.run(triggeredNode as unknown as MagickNode, inputs as NodeData)
     return this.outputData
   }
 }
