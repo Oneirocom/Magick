@@ -64,6 +64,7 @@
     "@mdx-js/react": "^1.6.22",
     "@monaco-editor/react": "^4.4.6",
     "@mui/icons-material": "^5.11.0",
+    "@mui/lab": "^5.0.0-alpha.124",
     "@mui/material": "^5.11.5",
     "@mui/x-date-pickers": "^6.0.2",
     "@nrwl/nx-plugin": "^15.8.5",

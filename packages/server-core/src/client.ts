@@ -15,7 +15,7 @@ export type { Agent, AgentData, AgentQuery }
 export const agentServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
 export type AgentClientService = Pick<AgentService<Params<AgentQuery>>, (typeof agentServiceMethods)[number]>
 
-import type { Request, RequestData, RequestQuery, RequestService } from './services/request/request'
+import type { Request, RequestData, RequestQuery, RequestService } from './services/requests/requests'
 export type { Request, RequestData, RequestQuery }
 export const requestServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
 export type RequestClientService = Pick<

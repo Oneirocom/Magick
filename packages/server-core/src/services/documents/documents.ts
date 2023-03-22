@@ -26,7 +26,6 @@ export * from './documents.schema'
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const document = (app: Application) => {
-  const db = app.get('dbClient')
   // Register our service on the Feathers application
   app.use('documents', new DocumentService(getOptions(app)), {
     // A list of all methods this service exposes externally
