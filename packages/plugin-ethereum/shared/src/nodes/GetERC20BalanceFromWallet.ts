@@ -6,7 +6,6 @@ import {
   anySocket,
   MagickComponent,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   NodeData,
@@ -15,16 +14,20 @@ import {
   triggerSocket,
 } from '@magickml/engine'
 
-const info = `Check the recent transactions of an ethereum wallet`
+const info = `Check the balance of an ethereum wallet for an ERC20 at a contract address`
 
 type InputReturn = {
   output: unknown
 }
 
-export class GetRecentTransactions extends MagickComponent<InputReturn> {
+export class GetERC20BalanceFromWallet extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-    super('Get Recent Transactions')
+<<<<<<< refs/remotes/origin/development:packages/plugin-ethereum/shared/src/nodes/CheckBalanceForERC20.ts
+    super('Check ERC20 Balance')
+=======
+    super('PluginEthGetERC20BalanceFromWallet')
+>>>>>>> plugin(eth): change node's names and display names:packages/plugin-ethereum/shared/src/nodes/GetERC20BalanceFromWallet.ts
 
     this.task = {
       outputs: {
@@ -42,23 +45,33 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'Get Recent Transactions'
-    this.displayName = 'Get Recent Transactions'
+    this.contextMenuName = 'Check ERC20 Balance'
+    this.displayName = 'Check ERC20 Balance'
+  }
+
+  destroyed(node: MagickNode) {
+    console.log('destroyed', node.id)
   }
 
   builder(node: MagickNode) {
-    const addressInput = new Rete.Input('address', 'Wallet Address', numberSocket)
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
-
     // module components need to have a socket key.
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
+    const addressInput = new Rete.Input('address', 'Wallet Address', numberSocket)
+    const contractAddressInput = new Rete.Input(
+      'contract',
+      'Contract Address',
+      numberSocket
+    )
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
+
     return node
       .addInput(dataInput)
       .addInput(addressInput)
+      .addInput(contractAddressInput)
       .addOutput(dataOutput)
       .addOutput(balanceOutput)
   }
@@ -71,11 +84,17 @@ export class GetRecentTransactions extends MagickComponent<InputReturn> {
     { data }: { data: string | undefined }
   ) {
     this._task.closed = ['trigger']
+    console.log('********* processing input to ethereum input *********')
+    console.log(data)
 
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
+<<<<<<< refs/remotes/origin/development
+=======
+
+>>>>>>> remove display
       return {
         output: data,
       }

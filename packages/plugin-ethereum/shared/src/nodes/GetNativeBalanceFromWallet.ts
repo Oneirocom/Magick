@@ -4,26 +4,32 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   anySocket,
+  InputControl,
   MagickComponent,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   NodeData,
-  numberSocket,
+  DropdownControl,
   stringSocket,
+  numberSocket,
   triggerSocket,
 } from '@magickml/engine'
 
-const info = `Check the balance of an ethereum wallet for an ERC20 at a contract address`
+const info = `Check the balance of an ethereum wallet`
 
 type InputReturn = {
   output: unknown
 }
 
-export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
+export class GetNativeBalanceFromWallet extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-    super('Check ERC20 Balance')
+<<<<<<< refs/remotes/origin/development:packages/plugin-ethereum/shared/src/nodes/CheckEthBalance.ts
+    super('Check Eth Balance')
+=======
+    super('PluginEthGetNativeBalanceFromWallet')
+>>>>>>> plugin(eth): change node's names and display names:packages/plugin-ethereum/shared/src/nodes/GetNativeBalanceFromWallet.ts
 
     this.task = {
       outputs: {
@@ -41,8 +47,8 @@ export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'Check ERC20 Balance'
-    this.displayName = 'Check ERC20 Balance'
+    this.contextMenuName = 'Check Eth Balance'
+    this.displayName = 'Check Eth Balance'
   }
 
   destroyed(node: MagickNode) {
@@ -54,20 +60,36 @@ export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    const addressInput = new Rete.Input('address', 'Wallet Address', numberSocket)
-    const contractAddressInput = new Rete.Input(
-      'contract',
-      'Contract Address',
-      numberSocket
-    )
+    const rpcHttpControl = new InputControl({
+      dataKey: 'rpc_http',
+      name: 'RPC Endpoint',
+    })
+
+    const chainIdControl = new DropdownControl({
+      name: 'Chain',
+      dataKey: 'chain_id',
+      values: ['1', '11155111', '5', '137', '80001'],
+      defaultValue: '80001',
+    })
+
+    node.inspector.add(rpcHttpControl).add(chainIdControl)
+
+    const addressInput = new Rete.Input('address', 'Address', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const rpcHttpInput = new Rete.Input(
+      'rpc_http',
+      'RPC HTTP Endpoint',
+      stringSocket
+    )
+    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket)
     const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
 
     return node
       .addInput(dataInput)
       .addInput(addressInput)
-      .addInput(contractAddressInput)
+      .addInput(rpcHttpInput)
+      .addInput(chainIdInput)
       .addOutput(dataOutput)
       .addOutput(balanceOutput)
   }
@@ -87,6 +109,10 @@ export class CheckBalanceForERC20 extends MagickComponent<InputReturn> {
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
+<<<<<<< refs/remotes/origin/development
+=======
+
+>>>>>>> remove display
       return {
         output: data,
       }
