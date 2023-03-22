@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react'
-import { PubSubData } from '@magickml/engine';
+import { PubSubContext, PubSubData } from '@magickml/engine';
 import PubSub from 'pubsub-js'
 import { useContext, createContext } from 'react'
 
-// TODO: does it also work without the !?
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const Context = createContext<PubSubContext>(undefined!)
 
 export const usePubSub = () => useContext<PubSubContext>(Context)

@@ -1,24 +1,25 @@
 import { CompletionProvider } from "./types"
 
-type Secret = {
+export type PluginSecret = {
   name: string
   key: string
   global?: boolean
+  getUrl?: string
 }
 
-type DrawerItem = {
+export type PluginDrawerItem = {
   path: string
   icon: any
   text: string
 }
 
-type ClientRoute = {
+export type PluginClientRoute = {
   path: string
   component: any
   exact?: boolean
 }
 
-type ServerRoute = {
+export type PluginServerRoute = {
   path: string
   method: string
   handler: Function
@@ -29,7 +30,7 @@ type PluginConstuctor = {
   nodes?: any
   inputTypes?: any[]
   outputTypes?: any[]
-  secrets?: Secret[]
+  secrets?: PluginSecret[]
   completionProviders?: any[]
 }
 class Plugin {
@@ -37,7 +38,7 @@ class Plugin {
   nodes: any
   inputTypes: any[]
   outputTypes: any[]
-  secrets: Secret[] = []
+  secrets: PluginSecret[] = []
   completionProviders: any[] = []
   constructor({
     name,
@@ -58,9 +59,9 @@ class Plugin {
 
 export class ClientPlugin extends Plugin {
   agentComponents: any[]
-  drawerItems?: Array<DrawerItem>
+  drawerItems?: Array<PluginDrawerItem>
   clientPageLayout?: any
-  clientRoutes?: Array<ClientRoute>
+  clientRoutes?: Array<PluginClientRoute>
   constructor({
     name,
     nodes = [],
@@ -79,9 +80,9 @@ export class ClientPlugin extends Plugin {
     inputTypes?: any[]
     outputTypes?: any[]
     clientPageLayout?: any
-    clientRoutes?: Array<ClientRoute>
-    drawerItems?: Array<DrawerItem>
-    secrets?: Secret[]
+    clientRoutes?: Array<PluginClientRoute>
+    drawerItems?: Array<PluginDrawerItem>
+    secrets?: PluginSecret[]
     completionProviders?: any[]
   }) {
     super({
@@ -107,7 +108,7 @@ export class ServerPlugin extends Plugin {
     start: Function
     stop: Function
   }
-  serverRoutes?: Array<ServerRoute>
+  serverRoutes?: Array<PluginServerRoute>
   constructor({
     name,
     nodes = [],
@@ -135,8 +136,8 @@ export class ServerPlugin extends Plugin {
     }
     inputTypes?: any[]
     outputTypes?: any[]
-    serverRoutes?: Array<ServerRoute>
-    secrets?: Secret[]
+    serverRoutes?: Array<PluginServerRoute>
+    secrets?: PluginSecret[]
     completionProviders?: any[]
   }) {
     super({

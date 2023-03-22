@@ -1,0 +1,230 @@
+{
+    "id": "bf734943-f491-466e-b1be-e25cc877a281",
+    "name": "Destructure",
+    "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+    "hash": "dd61d60d1ac212c8fe4322f6aa432d79",
+    "createdAt": "1679456293377",
+    "updatedAt": "1679456648678",
+    "graph": {
+        "id": "demo@0.1.0",
+        "nodes": {
+            "232": {
+                "id": 232,
+                "data": {
+                    "name": "Input - Default",
+                    "text": {
+                        "id": "2eb64348-adee-4118-bcca-19697ca3a16a",
+                        "inputs": {
+                            "Input - Default": {
+                                "type": "playtest",
+                                "client": "playtest",
+                                "sender": "playtestSender",
+                                "agentId": "preview",
+                                "channel": "playtest",
+                                "content": "testing",
+                                "entities": [
+                                    "playtestSender",
+                                    "Agent"
+                                ],
+                                "observer": "Agent",
+                                "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+                                "channelType": "playtest"
+                            }
+                        },
+                        "secrets": {},
+                        "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+                        "spellName": "Starter",
+                        "publicVariables": "[]"
+                    },
+                    "isInput": true,
+                    "outputs": [],
+                    "success": false,
+                    "socketKey": "9d61118c-3c5a-4379-9dae-41965e56207f",
+                    "useDefault": false,
+                    "dataControls": {
+                        "inputType": {
+                            "expanded": true
+                        },
+                        "useDefault": {
+                            "expanded": true
+                        },
+                        "defaultValue": {
+                            "expanded": true
+                        }
+                    },
+                    "defaultValue": "Hello world",
+                    "playtestToggle": {
+                        "outputs": [],
+                        "receivePlaytest": false
+                    },
+                    "inputType": "Default"
+                },
+                "inputs": {},
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 507,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 507,
+                                "input": "object",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -619.70703125,
+                    -3.83203125
+                ],
+                "name": "Input"
+            },
+            "233": {
+                "id": 233,
+                "data": {
+                    "name": "Output",
+                    "success": false,
+                    "socketKey": "0f17a35e-1380-428b-bc87-4a38d207fefc",
+                    "dataControls": {
+                        "name": {
+                            "expanded": true
+                        },
+                        "sendToAvatar": {
+                            "expanded": true
+                        },
+                        "sendToPlaytest": {
+                            "expanded": true
+                        }
+                    },
+                    "sendToAvatar": false,
+                    "sendToPlaytest": true,
+                    "isOutput": true
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 507,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "input": {
+                        "connections": [
+                            {
+                                "node": 507,
+                                "output": "content",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "event": {
+                        "connections": []
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": []
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    -31.35546875,
+                    -9.39453125
+                ],
+                "name": "Output"
+            },
+            "507": {
+                "id": 507,
+                "data": {
+                    "dataControls": {
+                        "outputs": {
+                            "expanded": true
+                        }
+                    },
+                    "outputs": [
+                        {
+                            "name": "content",
+                            "taskType": "output",
+                            "socketKey": "content",
+                            "connectionType": "output",
+                            "socketType": "anySocket"
+                        }
+                    ]
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 232,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "object": {
+                        "connections": [
+                            {
+                                "node": 232,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "outputs": {
+                    "content": {
+                        "connections": [
+                            {
+                                "node": 233,
+                                "input": "input",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 233,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -330.90234375,
+                    -6.67578125
+                ],
+                "name": "Destructure"
+            }
+        },
+        "comments": []
+    }
+}

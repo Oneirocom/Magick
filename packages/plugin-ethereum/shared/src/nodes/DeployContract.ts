@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash'
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
+import * as ethers from 'ethers'
 
 import {
   anySocket,
@@ -30,8 +31,8 @@ export class DeployContract extends MagickComponent<InputReturn> {
     this.task = {
       outputs: {
         trigger: 'option',
+        balance_before: 'output',
         balance: 'output',
-        balance_after: 'output',
         tx: 'output',
         contract: 'output',
       },
@@ -77,25 +78,17 @@ export class DeployContract extends MagickComponent<InputReturn> {
     )
     const rpcHttpInput = new Rete.Input(
       'rpc_http',
-      'RPC HTTP Endpoint',
+      'RPC HTTP',
       stringSocket
     )
     const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
 
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const balanceOutput = new Rete.Output('balance', 'Balance', numberSocket)
-    const balanceAfterOutput = new Rete.Output(
-      'balance_after',
-      'Balance After',
-      numberSocket
-    )
+    const balanceOutput = new Rete.Output('balance_before', 'Balance Before', numberSocket)
+    const balanceAfterOutput = new Rete.Output('balance', 'Balance', numberSocket)
     const txOutput = new Rete.Output('tx', 'Transaction', stringSocket)
-    const contractAddrOutput = new Rete.Output(
-      'contract',
-      'Contract Address',
-      stringSocket
-    )
+    const contractAddrOutput = new Rete.Output('contract', 'Contract Addr', stringSocket)
 
     return node
       .addInput(dataInput)
@@ -114,11 +107,56 @@ export class DeployContract extends MagickComponent<InputReturn> {
   // @ts-ignore
   async worker(
     node: NodeData,
-    _inputs: MagickWorkerInputs,
+    inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ) {
     this._task.closed = ['trigger']
+
+    const defaultNetwork = {
+      name: 'maticmaticmum',
+      chainId: 80001,
+      _defaultProvider: (providers) => new providers.JsonRpcProvider('https://rpc.ankr.com/polygon_mumbai')
+    };
+
+    let chainId = defaultNetwork.chainId
+    if (node.data?.chain_id) {
+      const parsed = parseInt(node.data?.chain_id as string);
+      if (!isNaN(parsed)) {
+        chainId = parsed
+      }
+    }
+    if (inputs['chain_id']) {
+      const parsed = parseInt(inputs['chain_id'][0] as string);
+      if (!isNaN(parsed)) {
+        chainId = parsed
+      }
+    }
+
+    let provider = ethers.getDefaultProvider(defaultNetwork)
+    if (node.data?.rpc_http) {
+      provider = new ethers.providers.JsonRpcProvider(node.data?.rpc_http as string, chainId)
+    }
+    if (inputs['rpc_http']) {
+      provider = new ethers.providers.JsonRpcProvider(inputs['rpc_http'][0] as string, chainId)
+    }
+
+    const privateKey = (inputs['privatekey'] && inputs['privatekey'][0]) as string
+    const contractAbi = (inputs['abi'] && inputs['abi'][0]) as string
+    const contractByteCode = (inputs['bytecode'] && inputs['bytecode'][0]) as string
+
+    // TODO: check if privateKey is valid
+    const wallet = new ethers.Wallet(privateKey, provider)
+    const factory = new ethers.ContractFactory(contractAbi, contractByteCode, wallet);
+
+    const balanceBefore = await provider.getBalance(wallet.address)
+    const balanceBeforeInEth = ethers.utils.formatEther(balanceBefore).toString()
+
+    const contract = await factory.deploy();
+    await contract.deployTransaction.wait()
+
+    const balance = await provider.getBalance(wallet.address)
+    const balanceInEth = ethers.utils.formatEther(balance).toString()
 
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data)) {
@@ -126,6 +164,10 @@ export class DeployContract extends MagickComponent<InputReturn> {
 
       return {
         output: data,
+        balance_before: balanceBeforeInEth,
+        balance: balanceInEth,
+        tx: contract.deployTransaction.hash,
+        contract: contract.address
       }
     }
   }

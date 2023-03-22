@@ -1,17 +1,16 @@
+import { LoadingScreen } from '@magickml/client-core'
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 
-import { spellApi } from '../../state/api/spells'
-import AllProjects from './screens/AllProjects'
-import CreateNew from './screens/CreateNew'
-import OpenProject from './screens/OpenProject'
-import css from './homeScreen.module.css'
-import { LoadingScreen } from '@magickml/client-core'
-import { closeTab, openTab, selectAllTabs } from '../../state/tabs'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../state/store'
-
 import { useConfig } from '../../contexts/ConfigProvider'
+import { spellApi } from '../../state/api/spells'
+import { RootState } from '../../state/store'
+import { closeTab, openTab, selectAllTabs } from '../../state/tabs'
+import AllProjects from './AllProjects'
+import CreateNew from './CreateNew'
+import css from './homeScreen.module.css'
+import OpenProject from './OpenProject'
 
 //MAIN
 

@@ -1,14 +1,9 @@
 import { config } from 'dotenv-flow'
+import { importMetaEnv } from './import-meta-env'
+
 config({
   path: '../../../.env.*',
 })
-
-const importMetaEnv:ImportMetaEnv|Record<string, never> =
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  typeof import.meta !== 'undefined' && typeof import.meta.env !== 'undefined'
-    ? import.meta.env
-    : ({}) as Record<string, never>
 
 // process is not defined on client
 const processEnv = typeof process === 'undefined' ? importMetaEnv : process.env
