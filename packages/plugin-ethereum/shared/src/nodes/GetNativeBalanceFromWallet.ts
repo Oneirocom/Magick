@@ -25,11 +25,7 @@ type InputReturn = {
 export class GetNativeBalanceFromWallet extends MagickComponent<InputReturn> {
   constructor() {
     // Name of the component
-<<<<<<< refs/remotes/origin/development:packages/plugin-ethereum/shared/src/nodes/CheckEthBalance.ts
     super('Check Eth Balance')
-=======
-    super('PluginEthGetNativeBalanceFromWallet')
->>>>>>> plugin(eth): change node's names and display names:packages/plugin-ethereum/shared/src/nodes/GetNativeBalanceFromWallet.ts
 
     this.task = {
       outputs: {
@@ -109,10 +105,6 @@ export class GetNativeBalanceFromWallet extends MagickComponent<InputReturn> {
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
-<<<<<<< refs/remotes/origin/development
-=======
-
->>>>>>> remove display
       return {
         output: data,
       }
