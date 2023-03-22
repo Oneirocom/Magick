@@ -143,7 +143,7 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -171,6 +171,7 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rjphnx"><img src="https://avatars.githubusercontent.com/u/12023783?v=4?s=100" width="100px;" alt="r2"/><br /><sub><b>r2</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=rjphnx" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/FabriceIRANKUNDA"><img src="https://avatars.githubusercontent.com/u/58092199?v=4?s=100" width="100px;" alt="IRANKUNDA Fabrice"/><br /><sub><b>IRANKUNDA Fabrice</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=FabriceIRANKUNDA" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
