@@ -127,14 +127,19 @@ export class CompileContract extends MagickComponent<InputReturn> {
   ) {
     this._task.closed = ['trigger']
 
-    const server = `${API_ROOT_URL}/ethereum/compile`
+    const server = `${API_ROOT_URL}/solidity`
 
     const form = new FormData();
     form.append("code", defaultCode);
 
     const requestOptions = {
       method: 'POST',
-      body: form,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        code: node.data.code,
+      },
     }
 
     const r = await fetch(server, requestOptions as any).catch(error =>
