@@ -1,9 +1,6 @@
 import { ServerPlugin } from "@magickml/engine"
 import Nodes from '@magickml/plugin-ethereum-shared'
-import Money from "@mui/icons-material/Money"
-import { Route } from "@magickml/server-core"
-
-import { sol } from './routes/sol'
+import { solidity } from "./services/solidity/solidity"
 
 type StartEthereumArgs = {
   agent: any,
@@ -49,8 +46,7 @@ function getAgentMethods() {
 const EthereumPlugin = new ServerPlugin({
   name: 'EthereumPlugin',
   nodes: Nodes,
-  services: [],
-  serverRoutes: [...sol],
+  services: [solidity],
   agentMethods: getAgentMethods(),
   secrets: [
     {
