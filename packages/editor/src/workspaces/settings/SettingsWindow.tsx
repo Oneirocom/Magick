@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { useConfig } from '../../contexts/ConfigProvider'
-import { FileCopy, Clear } from '@mui/icons-material/'
-import styles from './styles.module.scss'
-import { IconButton, Input } from '@mui/material'
 import { Tooltip } from '@magickml/client-core'
+import { pluginManager } from '@magickml/engine'
+import { Clear, FileCopy } from '@mui/icons-material/'
+import { IconButton, Input } from '@mui/material'
+import { useState } from 'react'
+import styles from './styles.module.scss'
 
 const SettingsWindowChild = ({
   displayName,
@@ -74,7 +74,7 @@ const SettingsWindowChild = ({
 }
 
 const SettingsWindow = () => {
-  let [nonce, setNonce] = useState(0)
+  const [nonce, setNonce] = useState(0)
   const getKey = key => {
     if (!window.localStorage.getItem('secrets')) {
       window.localStorage.setItem('secrets', JSON.stringify({}))
@@ -93,30 +93,22 @@ const SettingsWindow = () => {
     setNonce(nonce + 1)
   }
 
+  const globalSecrets = pluginManager.getSecrets(true)
+
   return (
     nonce !== null && (
       <div className={styles['settings-editor']}>
-        <SettingsWindowChild
-          displayName={'OpenAI'}
-          keyName={'openai_api_key'}
-          getUrl={'https://beta.openai.com/account/api-keys'}
-          setKey={setKey}
-          getKey={getKey}
-        />
-        <SettingsWindowChild
-          displayName={'BananaML'}
-          keyName={'banana_api_key'}
-          getUrl={'https://app.banana.dev/'}
-          setKey={setKey}
-          getKey={getKey}
-        />
-        <SettingsWindowChild
-          displayName={'Pinceone'}
-          keyName={'pinecone_api_key'}
-          getUrl={'https://app.pinecone.io/'}
-          setKey={setKey}
-          getKey={getKey}
-        />
+        {globalSecrets.map((value, index) => {
+          return (
+            <SettingsWindowChild
+              displayName={value.name}
+              keyName={value.key}
+              getUrl={value.getUrl}
+              setKey={setKey}
+              getKey={getKey}
+            />
+          )
+        })}
         <div className={styles['child']}>
           <p>
             We do not keep your API keys. They are stored in your browser's
