@@ -1,22 +1,20 @@
 import { pluginManager } from '@magickml/engine'
+import 'flexlayout-react/style/dark.css'
 import { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import './App.css'
-
-import MagickPageLayout from './components/MagickPageLayout/MagickPageLayout'
-import MainLayout from './components/MainLayout/MainLayout'
-
+import MagickPageLayout from './layouts/MagickPageLayout/MagickPageLayout'
+import MainLayout from './layouts/MainLayout/MainLayout'
+import './design-globals/design-globals.css'
 import HomeScreen from './screens/HomeScreen/HomeScreen'
 import Magick from './screens/Magick/Magick'
-import AgentManagerWindow from './workspaces/agents/AgentManagerWindow'
-import SettingsWindow from './workspaces/settings/SettingsWindow'
-import EventWindow from './workspaces/spells/windows/EventWindow'
-import RequestWindow from './workspaces/spells/windows/RequestWindow'
-
-import 'flexlayout-react/style/dark.css'
-import './design-globals/design-globals.css'
-import DocumentWindow from './workspaces/spells/windows/DocumentWindow'
+import AgentManagerWindow from './windows/agents/AgentManagerWindow'
+import DocumentWindow from './windows/DocumentWindow'
+import EventWindow from './windows/EventWindow'
+import RequestWindow from './windows/RequestWindow'
+import SettingsWindow from './windows/settings/SettingsWindow'
+import ProjectWindow from './windows/ProjectWindow'
 
 const RenderComp = props => {
   return <props.element props={props} />
@@ -49,6 +47,7 @@ const MyRoutes = () => (
       )
     })}
     <Route path="/documents" element={<DocumentWindow />} />
+    <Route path="/project" element={<ProjectWindow />} />
     <Route path="/events" element={<EventWindow />} />
     <Route path="/requests" element={<RequestWindow />} />
     <Route path="/agents" element={<AgentManagerWindow />} />
