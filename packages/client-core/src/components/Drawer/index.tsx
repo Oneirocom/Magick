@@ -4,6 +4,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
 import DocumentIcon from '@mui/icons-material/Description'
 import SettingsIcon from '@mui/icons-material/Settings'
+import ProjectIcon from '@mui/icons-material/Home'
 import StorageIcon from '@mui/icons-material/Storage'
 import Divider from '@mui/material/Divider'
 import MuiDrawer from '@mui/material/Drawer'
@@ -232,6 +233,13 @@ export function Drawer({ children }) {
           <PluginDrawerItems onClick={onClick} open={open} />
           <Divider />
           <DrawerItem
+            active={location.pathname === '/project'}
+            Icon={ProjectIcon}
+            open={open}
+            onClick={onClick('/project')}
+            text="Project"
+          />
+          <DrawerItem
             active={location.pathname.includes('/settings')}
             Icon={SettingsIcon}
             open={open}
@@ -239,7 +247,7 @@ export function Drawer({ children }) {
             text="Settings"
           />
           {!isAPIKeysSet && (
-            <SetAPIKeys setAPIKeysSet={setAPIKeysSet} />
+            <SetAPIKeys />
           )}
         </List>
       </StyledDrawer>
