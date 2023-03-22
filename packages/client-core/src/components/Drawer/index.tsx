@@ -76,7 +76,15 @@ const StyledDrawer = styled(MuiDrawer, {
   }),
 }))
 
-const DrawerItem = ({ Icon, open, text, active, onClick = () => { /* null handler */ } }) => (
+const DrawerItem = ({
+  Icon,
+  open,
+  text,
+  active,
+  onClick = () => {
+    /* null handler */
+  },
+}) => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
     <ListItemButton
       sx={{
@@ -151,7 +159,7 @@ export function Drawer({ children }) {
   useEffect(() => {
     const secrets = localStorage.getItem('secrets')
     if (secrets) {
-      let secretHasBeenSet = false;
+      let secretHasBeenSet = false
       const parsedSecrets = JSON.parse(secrets)
       // check if any of the parsed secrets are not ''
       Object.keys(parsedSecrets).forEach(key => {
@@ -159,7 +167,6 @@ export function Drawer({ children }) {
           secretHasBeenSet = true
         }
       })
-
       setAPIKeysSet(secretHasBeenSet)
     }
   }, [])
@@ -246,9 +253,7 @@ export function Drawer({ children }) {
             onClick={onClick('/settings')}
             text="Settings"
           />
-          {!isAPIKeysSet && (
-            <SetAPIKeys />
-          )}
+          {!isAPIKeysSet && <SetAPIKeys />}
         </List>
       </StyledDrawer>
       {children}
