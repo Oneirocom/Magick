@@ -1,12 +1,14 @@
 import Rete, { Engine } from 'rete'
 import { Plugin } from 'rete/types/core/plugin'
+import { Component } from 'rete/types/engine'
 import io from 'socket.io'
 
 import consolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
 import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
+import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
-import { GraphData, MagickWorkerInputs, NodeData } from './types'
+import { GraphData, MagickWorkerInputs, NodeData, UnknownData } from './types'
 
 interface WorkerOutputs {
   [key: string]: unknown
@@ -14,8 +16,8 @@ interface WorkerOutputs {
 
 export interface MagickEngine extends Engine {
   tasks: Task[]
-  activateDebugger?: Function
-  moduleManager?: any
+  // activateDebugger?: Function
+  moduleManager: ModuleManager
 }
 export abstract class MagickEngineComponent<WorkerReturnType> {
   name: string
@@ -30,7 +32,7 @@ export abstract class MagickEngineComponent<WorkerReturnType> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     outputs: WorkerOutputs,
-    context: Record<string, any>,
+    context: UnknownData,
     ...args: unknown[]
   ): WorkerReturnType
 }
@@ -39,9 +41,9 @@ export abstract class MagickEngineComponent<WorkerReturnType> {
 
 export type InitEngineArguments = {
   name: string
-  components: any[]
+  components: Component[]
   server: boolean
-  throwError?: Function
+  throwError?: (message: unknown)=>void
   socket?: io.Socket
 }
 
@@ -63,7 +65,7 @@ export const initSharedEngine = ({
     })
     engine.use<Plugin, ModulePluginArgs>(ModulePlugin, {
       engine,
-    } as any)
+    })
     if (socket) {
       engine.use<Plugin, SocketPluginArgs>(SocketPlugin, {
         socket,
@@ -85,7 +87,7 @@ export const initSharedEngine = ({
 // this parses through all the nodes in the data and finds the nodes associated with the given map
 export const extractNodes = (
   nodes: GraphData['nodes'],
-  map: Map<any, any> | Set<unknown>
+  map: Map<string, unknown> | Set<string>,
 ) => {
   const names = Array.from(map.keys())
 
@@ -102,7 +104,7 @@ export const extractNodes = (
 export const getTriggeredNode = (
   data: GraphData,
   socketKey: string,
-  map: Map<any, any> | Set<unknown>
+  map: Map<string, unknown> | Set<string>
 ) => {
   return extractNodes(data.nodes, map).find(
     node => node.data.socketKey === socketKey

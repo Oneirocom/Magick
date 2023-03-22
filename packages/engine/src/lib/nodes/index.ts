@@ -8,8 +8,12 @@ import { IsVariableTrue } from './boolean/IsVariableTrue'
 import { LogicalOperator } from './boolean/LogicalOperator'
 import { Javascript } from './code/Javascript'
 import { Python } from './code/Python'
-import { GetDocuments } from './documents/GetDocuments'
-import { StoreDocument } from './documents/StoreDocument'
+import { GetDocuments } from './document/GetDocuments'
+import { StoreDocument } from './document/StoreDocument'
+import { CosineSimilarity } from './embedding/CosineSimilarity'
+import { CreateTextEmbedding } from './embedding/CreateTextEmbedding'
+import { FindTextEmbedding } from './embedding/FindTextEmbedding'
+import { EventDelete } from './events/EventDelete'
 import { EventDestructureComponent } from './events/EventDestructure'
 import { EventRecall } from './events/EventRecall'
 import { EventRestructureComponent } from './events/EventRestructure'
@@ -17,15 +21,11 @@ import { EventsToConversation } from './events/EventsToConversation'
 import { EventStore } from './events/EventStore'
 import { BooleanGate } from './flow/BooleanGate'
 import { ExclusiveGate } from './flow/Exclusive Gate'
-import { ForEach } from './flow/ForEach'
 import { IsNullOrUndefined } from './flow/IsNullOrUndefined'
 import { OrGate } from './flow/OrGate'
 import { RandomGate } from './flow/RandomGate'
 import { SwitchGate } from './flow/SwitchGate'
 import { WaitForAll } from './flow/WaitForAll'
-import { WhileLoop } from './flow/WhileLoop'
-import { Image } from './image/Image'
-import { ImageGeneration } from './image/ImageGeneration'
 import { InputComponent } from './io/Input'
 import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
@@ -40,9 +40,7 @@ import { Merge } from './object/MergeObjects'
 import { ObjectToJSON } from './object/ObjectToJSON'
 import { CombineText } from './text/CombineText'
 import { ComplexStringMatcher } from './text/ComplexStringMatcher'
-import { CreateTextEmbedding } from './embedding/CreateTextEmbedding'
 import { EvaluateText } from './text/EvaluateText'
-import { FindTextEmbedding } from './embedding/FindTextEmbedding'
 import { GenerateText } from './text/GenerateText'
 import { ProfanityFilter } from './text/ProfanityFilter'
 import { ReplaceText } from './text/ReplaceText'
@@ -53,7 +51,7 @@ import { Cast } from './utility/Cast'
 import { Destructure } from './utility/Destructure'
 import { Echo } from './utility/Echo'
 import { Log } from './utility/Log'
-import { CosineSimilarity } from './embedding/CosineSimilarity'
+
 
 export const components = {
   booleanGate: () => new BooleanGate(),
@@ -69,12 +67,11 @@ export const components = {
   getCachedEmbedding: () => new FindTextEmbedding(),
   replaceText: () => new ReplaceText(),
   textCompletion: () => new GenerateText(),
+  eventdelete: () => new EventDelete(),
   isNullOrUndefined: () => new IsNullOrUndefined(),
   isVariableTrue: () => new IsVariableTrue(),
   request: () => new Request(),
   jupyterNotebook: () => new JupyterNotebook(),
-  forEach: () => new ForEach(),
-  whileLoop: () => new WhileLoop(),
   stringEvaluator: () => new EvaluateText(),
   combineText: () => new CombineText(),
   textVariable: () => new TextVariable(),
@@ -94,7 +91,6 @@ export const components = {
   joinListComponent: () => new JoinListComponent(),
   moduleComponent: () => new SpellComponent(),
   output: () => new Output(),
-  image: () => new Image(),
   switchGate: () => new SwitchGate(),
   triggerOut: () => new TriggerOut(),
   waitForAll: () => new WaitForAll(),
@@ -102,7 +98,6 @@ export const components = {
   merge: () => new Merge(),
   orGate: () => new OrGate(),
   log: () => new Log(),
-  imageGeneration: () => new ImageGeneration(),
   promptTemplate: () => new TextTemplate(),
   parseJSON: () => new ParseJSON(),
   objectToJSON: () => new ObjectToJSON(),

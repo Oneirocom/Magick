@@ -1,20 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import * as React from 'react'
+import { PubSubData } from '@magickml/engine';
 import PubSub from 'pubsub-js'
 import { useContext, createContext } from 'react'
 
-type PubSubData = Record<string, any> | string | any[]
-
-type PubSubContext = {
-  publish: (event: string, data?: PubSubData) => void
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  subscribe: (event: string, callback: Function) => Function
-  PubSub: typeof PubSub
-  events: Record<string, any>
-}
-
+// TODO: does it also work without the !?
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const Context = createContext<PubSubContext>(undefined!)
 
-export const usePubSub = () => useContext(Context)
+export const usePubSub = () => useContext<PubSubContext>(Context)
 
 export { PubSub }
 
@@ -62,7 +56,7 @@ const PubSubProvider = ({ children }) => {
     return PubSub.publish(event, data)
   }
 
-  const subscribe = (event, callback) => {
+  const subscribe = (event: string, callback: PubSubJS.SubscriptionListener<PubSubData>): () => void => {
     const token = PubSub.subscribe(event, callback)
 
     return () => {

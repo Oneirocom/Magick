@@ -57,7 +57,7 @@ export async function makeTextCompletion(
       hidden: false,
       processed: false,
       spell,
-      nodeId: node.id,
+      nodeId: node.id as number,
     })
 
     if (resp.data.choices && resp.data.choices.length > 0) {

@@ -1,20 +1,19 @@
-import { Connection, Input, NodeEditor, Output, Socket } from 'rete'
-import { Node } from 'rete/types'
-import {
-  Data, WorkerOutputs
-} from 'rete/types/core/data'
+import { Connection, Input, NodeEditor, Output, Socket } from 'rete';
+import { Node } from 'rete/types';
+import { Data, WorkerOutputs } from 'rete/types/core/data';
+import PubSub from 'pubsub-js'
 
-import { MagickComponent, MagickTask, PubSubContext } from './magick-component'
-import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
-import { Inspector } from './plugins/inspectorPlugin/Inspector'
-import { ModuleManager } from './plugins/modulePlugin/module-manager'
-import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
-import { SocketNameType, SocketType } from './sockets'
+import { MagickComponent, MagickTask } from './magick-component';
+import { MagickConsole } from './plugins/consolePlugin/MagickConsole';
+import { Inspector } from './plugins/inspectorPlugin/Inspector';
+import { ModuleManager } from './plugins/modulePlugin/module-manager';
+import { Task, TaskOutputTypes } from './plugins/taskPlugin/task';
+import { SocketNameType, SocketType } from './sockets';
 
-export { MagickComponent } from './magick-component'
+export { MagickComponent } from './magick-component';
 //@seang this was causing test enviroment issues to have it shared client/server
 // export { MagickEditor } from './src/editor'
-export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
+export type { InspectorData } from './plugins/inspectorPlugin/Inspector';
 
 export type ImageType = {
   id: string
@@ -81,7 +80,8 @@ export type GetEventArgs = {
   embedding?: number[]
   observer?: string
   client?: string
-  entities?: any[]
+  //TODO: entities not used anywhere
+  // entities?: any[]
   channel?: string
   channelType?: string
   projectId?: string
@@ -104,14 +104,25 @@ export type CompletionBody = {
   topP: number
   presencePenalty: number
   frequencyPenalty: number
+  // TODO: Type not used anywhere
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   stop: any
   apiKey?: string
 }
 
 export type CompletionResponse = {
+  // TODO: Type not used anywhere
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   success: any
+  // TODO: Type not used anywhere
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   choice: any
 }
+
+export type OnSubspellUpdated = (
+  spellName: string,
+  callback: (PubSubData) => void
+) => void
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
@@ -121,8 +132,11 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare abort: unknown
   declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
   declare moduleManager: ModuleManager
-  declare runProcess: (callback?: Function | undefined) => Promise<void>
-  declare onSpellUpdated: (spellId: string, callback: Function) => Function
+  declare runProcess: (callback?: () => void | undefined) => Promise<void>
+  declare onSpellUpdated: (
+    spellName: string,
+    callback: any
+  ) => OnSubspellUpdated
   declare refreshEventTable: () => void
 }
 
@@ -130,51 +144,82 @@ export type Env = {
   API_ROOT_URL: string
 }
 
-type runSpellType = {
-  inputs: Record<string, any>
+export type UnknownData = Record<string, unknown>
+export type UnknownSpellData = UnknownData
+
+export type runSpellType<DataType = UnknownSpellData> = {
+  inputs: MagickSpellInput
   spellId: string
   projectId: string
-  secrets: Record<string, any>
-  publicVariables: Record<string, any>
+  secrets: Record<string, string>
+  publicVariables: DataType
 }
+export type SupportedLanguages = 'python' | 'javascript'
+
+export type GetSpell = ({
+  spellName,
+  projectId,
+}: {
+  spellName: string
+  projectId: string
+}) => Promise<Spell>
+
+export type ProcessCode = (
+  code: unknown,
+  inputs: MagickWorkerInputs,
+  data: UnknownSpellData,
+  language?: SupportedLanguages
+) => unknown | void
+
+export type RunSpell<DataType = Record<string, unknown>> = ({
+  inputs,
+  spellId,
+  projectId,
+  secrets,
+  publicVariables,
+}: runSpellType<DataType>) => DataType
 
 export type EngineContext = {
   env: Env
-  runSpell: ({
-    spellId,
-    inputs,
-    projectId,
-    secrets,
-    publicVariables
-  }: runSpellType) => Record<string, any>
+  runSpell: RunSpell
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
-  getSpell: ({
-    spellId,
-    projectId,
-  }: {
-    spellId: string
-    projectId: string
-  }) => Promise<any | Spell>
+  getSpell: GetSpell
   getCurrentSpell: () => Spell
-  processCode?: (
-    code: unknown,
-    inputs: MagickWorkerInputs,
-    data: Record<string, any>,
-    language?: string
-  ) => any | void
+  processCode?: ProcessCode
 }
 
-export type EventPayload = Record<string, any>
+export type PubSubData = Record<string, unknown> | string | unknown[]
+export type PubSubCallback = (event: string, data: PubSubData) => void
+
+export type OnInspectorCallback = (data: Record<string, unknown>) => void
+export type OnInspector = (
+  node: MagickNode,
+  callback: OnInspectorCallback
+) => () => void
+export type OnEditorCallback = (data: PubSubData) => void
+export type OnEditor = (callback: OnEditorCallback) => () => void
+export type OnDebug = (
+  node: MagickNode,
+  callback: OnEditorCallback
+) => () => void
+
+export type PublishEditorEvent = (data: PubSubData) => void
 
 export interface EditorContext extends EngineContext {
-  sendToAvatar: (data: any) => void
-  onTrigger: (node: MagickNode | string, callback: Function) => Function
+  sendToAvatar: (data: unknown) => void
+  /**
+   * @deprecated The method should not be used
+   */
+  onTrigger: (
+    node: MagickNode | string,
+    callback: (data: unknown) => void
+  ) => () => void
   sendToPlaytest: (data: string) => void
-  sendToInspector: (data: EventPayload) => void
-  sendToDebug: (data: EventPayload) => void
-  onInspector: (node: MagickNode, callback: Function) => Function
-  onPlaytest: (callback: Function) => Function
-  onDebug: (node: NodeData, callback: Function) => Function
+  sendToInspector: PublishEditorEvent
+  sendToDebug: PublishEditorEvent
+  onInspector: OnInspector
+  onPlaytest: OnEditor
+  onDebug: OnDebug
   clearTextEditor: () => void
   refreshEventTable: () => void
 }
@@ -196,7 +241,7 @@ export type EventsTypes = {
 
 export interface IRunContextEditor extends NodeEditor {
   magick: EditorContext
-  abort: Function
+  abort: () => void
 }
 
 export type TaskType = 'output' | 'option'
@@ -211,8 +256,11 @@ export type DataSocketType = {
   useSocketName: boolean
 }
 
-export type MagicNodeInput = Input & { socketType: DataSocketType; }
-export type MagicNodeOutput = Output & { taskType?: TaskType; socketType: DataSocketType; }
+export type MagicNodeInput = Input & { socketType: DataSocketType }
+export type MagicNodeOutput = Output & {
+  taskType?: TaskType
+  socketType: DataSocketType
+}
 
 export type MagickNode = Node & {
   inspector: Inspector
@@ -225,7 +273,7 @@ export type MagickNode = Node & {
   category?: string
   displayName?: string
   info: string
-  subscription: Function
+  subscription: PubSubCallback
   console: MagickConsole
 }
 
@@ -255,32 +303,12 @@ export type ModelCompletionOpts = {
   logitBias?: { [token: string]: number }
 }
 
-export type OpenAIResultChoice = {
-  text: string
-  index: number
-  logprobs: number[]
-  top_logprobs: any[]
-  text_offset: number[]
-}
-
-export type OpenAIResponse = {
-  id: string
-  object: string
-  created: number
-  model: string
-  choices: OpenAIResultChoice[]
-  finish_reason: string
-}
-
 export type Subspell = { name: string; id: string; data: GraphData }
 
 export type GraphData = Data
 
-export type InputTaskType = 'input' | 'option'
-export type OutputTaskType = 'output' | 'option'
-
-export type ComponentData<T=InputTaskType|OutputTaskType> =  Record<string, unknown> & {
-  ignored?: string[]
+export type ComponentData<T = TaskType> = Record<string, unknown> & {
+  ignored?: { name: string }[]
   socketType?: SocketType
   taskType?: T
   icon?: string
@@ -290,7 +318,7 @@ export type InputComponentData = ComponentData<TaskType>
 export type OutputComponentData = ComponentData<TaskType>
 
 export type ModuleComponent = MagickComponent<unknown> & {
-  run: Function
+  run: (node: NodeData, data?: unknown) => Promise<void>
 }
 
 export type NodeConnections = {
@@ -307,9 +335,11 @@ export type NodeOutputs = {
 }
 
 export type NodeData = {
+  id: number
   socketKey?: string
   name?: string
-  [DataKey: string]: any
+  data: Record<string, unknown>
+  [DataKey: string]: unknown
 }
 
 export type Module = { name: string; id: string; data: Data }
@@ -323,6 +353,9 @@ export type Spell = {
   hash?: string
   projectId: string
 }
+
+export type MagickSpellInput = Record<string, unknown>
+export type MagickSpellOutput = Record<string, unknown>
 
 export type NewSpellArgs = {
   name: string
@@ -342,9 +375,7 @@ export type TaskOutput = {
   key: string
 }
 
-export type ModuleWorkerOutput = WorkerOutputs & {
-  [key: string]: any
-}
+export type ModuleWorkerOutput = WorkerOutputs
 
 export type MagickWorkerInput = string | unknown | MagickReteInput
 export type MagickWorkerInputs = { [key: string]: MagickWorkerInput[] }
@@ -352,59 +383,15 @@ export type MagickWorkerOutputs = WorkerOutputs & {
   [key: string]: TaskOutput
 }
 
-// Type definitions for PubSubJS 1.8.0
-// Project: https://github.com/mroderick/PubSubJS
-// Definitions by: Boris Yankov <https://github.com/borisyankov>
-//                 Matthias Lindinger <https://github.com/morpheus-87>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
-export interface PubSubBase
-  extends CountSubscriptions,
-  ClearAllSubscriptions,
-  GetSubscriptions,
-  Publish,
-  Subscribe,
-  Unsubscribe {
-  name: string
-}
-
-interface CountSubscriptions {
-  countSubscriptions(token: any): number
-}
-
-interface ClearAllSubscriptions {
-  clearAllSubscriptions(token?: any): void
-}
-
-interface GetSubscriptions {
-  getSubscriptions(token: any): any[]
-}
-
-interface Publish {
-  publish(message: string | symbol, data?: any): boolean
-
-  publishSync(message: string | symbol, data?: any): boolean
-}
-
-interface Subscribe {
-  subscribe(message: string | symbol, func: Function): string
-
-  subscribeOnce(message: string | symbol, func: Function): any
-}
-
-interface Unsubscribe {
-  unsubscribe(tokenOrFunction: any): any
-}
-
 // Go-inspired function return
 export type GoFn = [
   boolean, // Ok
   string | null, // Message
-  any // body
+  unknown // body
 ]
 
 // Elixir-inspired function return
-export type ExFn = [true, any] | [false, string]
+export type ExFn = [true, unknown] | [false, string]
 
 export type SearchSchema = {
   title: string
@@ -416,15 +403,12 @@ export type ClassifierSchema = {
   examples: string[] | string
 }
 
-type MessagingWebhookBody = {
+export type MessagingWebhookBody = {
   MessageSid: string
   Body: string
   From: string
   To: string
 }
-
-export type MessagingRequest = any
-
 
 export type CompletionType = 'image' | 'text'
 
@@ -468,7 +452,10 @@ export type TextCompletionData = {
   apiKey?: string
 }
 
-export type ChatMessage = {role: 'system' | 'user' | 'assistant' | string, content: string}
+export type ChatMessage = {
+  role: 'system' | 'user' | 'assistant' | string
+  content: string
+}
 
 export type ChatCompletionData = {
   model: string
@@ -490,6 +477,19 @@ export type EmbeddingData = {
   apiKey: string
 }
 
+export type CompletionHandlerInputData = {
+  node: NodeData
+  inputs: MagickWorkerInputs
+  outputs: MagickWorkerOutputs
+  context: {
+    module: any
+    secrets: Record<string, string>
+    projectId: string
+    magick: EngineContext
+  }
+}
+
+export type MessagingRequest = unknown
 
 export type RequestPayload = {
   projectId: string
@@ -515,14 +515,10 @@ export type RequestData = {
   nodeId: number
 }
 
-export type CompletionHandlerInputData = {
-  node: NodeData
-  inputs: MagickWorkerInputs
-  outputs: MagickWorkerOutputs
-  context: {
-    module: any
-    secrets: Record<string, string>
-    projectId: string
-    magick: EngineContext
-  }
+export interface PubSubContext {
+  publish: (event: string, data?: PubSubData) => boolean
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  subscribe(event: string, func: PubSubJS.SubscriptionListener<PubSubData>): () => void;
+  PubSub: typeof PubSub
+  events: Record<string, any>
 }

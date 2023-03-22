@@ -15,7 +15,7 @@ import {
   NodeData
 } from '../../types'
 
-const info = 'Basic text completion using OpenAI.'
+const info = 'Generate text using any of the providers available in Magick.'
 
 type WorkerReturn = {
   success: boolean

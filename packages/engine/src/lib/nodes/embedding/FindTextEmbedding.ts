@@ -79,18 +79,16 @@ export class FindTextEmbedding extends MagickComponent<
         url.searchParams.append(p, params[p])
       }
     }
-
     const response = await fetch(url.toString())
     if (response.status !== 200) return null
     const json = await response.json()
-    const responseData = json.data[0]
-    let embedding = responseData?.embedding
-
+    
+    const responseData = json.events[0]
+    let embedding = responseData?.embedding?.toString()
     // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
       embedding = JSON.parse(JSON.stringify(embedding))
     }
-
     if (embedding) {
       this._task.closed = ['failure']
     } else {

@@ -15,8 +15,8 @@ import {
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
 type WorkerReturn = {
-  summary: string
-  links: string
+  summary: string,
+  links: string[]
 }
 
 export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
@@ -57,7 +57,6 @@ export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
   async worker(
     _node: NodeData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs
   ) {
     const url = `${API_ROOT_URL}/google-search?query=${inputs.query[0]}`
 

@@ -1,6 +1,6 @@
 import io from 'socket.io'
 
-import { EngineContext, Spell } from '../types'
+import { EngineContext, MagickSpellInput, Spell } from '../types'
 import SpellRunner from './SpellRunner'
 
 type SpellManagerArgs = {
@@ -30,30 +30,32 @@ export default class SpellManager {
   // this runSpell will add spells to the cache
   processMagickInterface(magickInterface): EngineContext {
     if (!this.cache) return magickInterface
-
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const runSpell: EngineContext['runSpell'] = async ({
       inputs: flattenedInputs,
       spellId,
       secrets,
       publicVariables,
     }
-    ) => {
+    ): Promise<Record<string, unknown>> => {
       if (this.getSpellRunner(spellId)) {
         const outputs = await this.run(spellId, flattenedInputs, secrets, publicVariables)
-        return outputs
+        return outputs as Record<string, unknown>
       }
 
       const spell = await magickInterface.getSpell(spellId)
 
       if (!spell) {
-        return console.error(`No spell found with name ${spellId}`)
+        console.error(`No spell found with name ${spellId}`)
+        return {}
       }
 
       await this.load(spell)
 
       const outputs = await this.run(spellId, flattenedInputs, secrets, publicVariables)
 
-      return outputs
+      return outputs as Record<string, unknown>
     }
 
     return {
@@ -95,7 +97,7 @@ export default class SpellManager {
     return spellRunner
   }
 
-  async run(spellId: string, inputs: Record<string, any>, secrets: Record<string, string>, publicVariables) {
+  async run(spellId: string, inputs: MagickSpellInput, secrets: Record<string, string>, publicVariables) {
     const runner = this.getSpellRunner(spellId)
     
     const result = await runner?.runComponent({

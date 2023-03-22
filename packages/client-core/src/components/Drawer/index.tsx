@@ -13,9 +13,9 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { CSSObject, styled, Theme } from '@mui/material/styles'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-
+import { SetAPIKeys } from './SetAPIKeys'
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
 
@@ -75,7 +75,7 @@ const StyledDrawer = styled(MuiDrawer, {
   }),
 }))
 
-const DrawerItem = ({ Icon, open, text, active, onClick = () => {} }) => (
+const DrawerItem = ({ Icon, open, text, active, onClick = () => { /* null handler */ } }) => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
     <ListItemButton
       sx={{
@@ -101,6 +101,7 @@ const DrawerItem = ({ Icon, open, text, active, onClick = () => {} }) => (
 )
 
 const PluginDrawerItems = ({ onClick, open }) => {
+  const location = useLocation()
   const drawerItems = pluginManager.getDrawerItems()
   let lastPlugin = null
   let divider = false
@@ -134,6 +135,7 @@ const PluginDrawerItems = ({ onClick, open }) => {
 export function Drawer({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
+  const [isAPIKeysSet, setAPIKeysSet] = useState(false)
 
   const [open, setOpen] = useState<boolean>(false)
 
@@ -144,6 +146,22 @@ export function Drawer({ children }) {
   const onClick = location => () => {
     navigate(location)
   }
+
+  useEffect(() => {
+    const secrets = localStorage.getItem('secrets')
+    if (secrets) {
+      let secretHasBeenSet = false;
+      const parsedSecrets = JSON.parse(secrets)
+      // check if any of the parsed secrets are not ''
+      Object.keys(parsedSecrets).forEach(key => {
+        if (parsedSecrets[key] !== '' && parsedSecrets[key]) {
+          secretHasBeenSet = true
+        }
+      })
+
+      setAPIKeysSet(secretHasBeenSet)
+    }
+  }, [])
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -220,6 +238,9 @@ export function Drawer({ children }) {
             onClick={onClick('/settings')}
             text="Settings"
           />
+          {!isAPIKeysSet && (
+            <SetAPIKeys setAPIKeysSet={setAPIKeysSet} />
+          )}
         </List>
       </StyledDrawer>
       {children}
