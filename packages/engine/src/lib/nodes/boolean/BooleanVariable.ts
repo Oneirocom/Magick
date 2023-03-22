@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import { NodeData, MagickNode } from '../../types'
+import { MagickNode, MagickWorkerInputs, MagickWorkerOutputs, WorkerData } from '../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { booleanSocket } from '../../sockets'
@@ -52,7 +52,7 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
     return node.addOutput(out)
   }
 
-  worker(node: NodeData, inputs: any, outputs: any, context: any) {
+  worker(node: WorkerData, inputs: MagickWorkerInputs, outputs: MagickWorkerOutputs, context: { module: { publicVariables: string } }) {
     let _var = node?.data?._var === true
     const publicVars = JSON.parse(context.module.publicVariables)
     if (node?.data?.isPublic && publicVars[node.id]) {

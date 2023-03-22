@@ -1,6 +1,6 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { triggerSocket, anySocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -34,7 +34,7 @@ export class Log extends MagickComponent<void> {
     return node.addInput(dataInput).addInput(inp)
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const input = inputs.string[0] as string
 
     console.log(`Output from ${node.data.name || 'log component'}`, input)

@@ -2,9 +2,10 @@ import Rete from 'rete'
 
 import {
   DataSocketType,
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
+  WorkerData,
 } from '../../types'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { triggerSocket } from '../../sockets'
@@ -44,10 +45,10 @@ export class WaitForAll extends MagickComponent<void> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  worker(_node: NodeData, inputs: MagickWorkerInputs) {
+  worker(_node: WorkerData, inputs: MagickWorkerInputs) {
     const nodeInputs = Object.values(inputs as any).filter(
       (input: any) => !!input
-    ) as DataSocketType[]
+    ) as Array<{ name: string }>
 
     // close all outputs
     this._task.closed = [...nodeInputs.map(out => out.name)]

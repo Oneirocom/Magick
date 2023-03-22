@@ -2,7 +2,7 @@ import deepEqual from 'deep-equal'
 import Rete, { Input, Output } from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { DataSocketType, IRunContextEditor, MagickNode } from '../../types'
+import { AsDataSocket, AsInputsAndOutputsData, DataSocketType, IRunContextEditor, MagickNode } from '../../types'
 import * as socketMap from '../../sockets'
 import { MagickComponent } from '../../magick-component'
 import { DataControl } from './DataControl'
@@ -93,7 +93,7 @@ export class Inspector {
     // and that the data key is set to 'inputs' or 'outputs'
     const isOutput = type === 'outputs'
 
-    this.node.data[type] = sockets
+    this.node.data[type] = AsInputsAndOutputsData(sockets)
 
     // get all sockets currently on the node
     const existingSockets: string[] = []
@@ -150,7 +150,7 @@ export class Inspector {
     // Here we are running over and ensuring that the outputs are in the tasks outputs
     // We only need to do this with outputs, as inputs don't need to be in the task
     if (isOutput) {
-      const dataOutputs = this.node.data.outputs as DataSocketType[]
+      const dataOutputs = AsDataSocket(this.node.data.outputs)
       this.component.task.outputs = dataOutputs.reduce(
         (acc, out) => {
           acc[out.socketKey] = out.taskType || 'output'

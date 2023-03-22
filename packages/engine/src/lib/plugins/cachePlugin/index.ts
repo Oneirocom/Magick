@@ -1,10 +1,10 @@
 import { Component, Control } from 'rete'
 
 import {
-  NodeData,
   MagickComponent,
   MagickEditor,
   MagickNode,
+  WorkerData,
 } from '../../types'
 import { Task } from '../taskPlugin'
 import { RunButtonControl } from './RunLastArguments'
@@ -20,7 +20,7 @@ function install(editor: MagickEditor) {
     /**
      * Here we create a worker wrapper that will cache all the arguments being sent in to worker for later use
      */
-    component.worker = (node: NodeData, inputs, outputs, context, ...args) => {
+    component.worker = (node: WorkerData, inputs, outputs, context, ...args) => {
       component.cache[node.id] = {
         node,
         inputs,
@@ -35,10 +35,10 @@ function install(editor: MagickEditor) {
     /**
      * Create a builder wrapper which will add on the run button if a compoonent has the proper   boolean defined on it.
      */
-    component.builder = (node: MagickNode) => {
+    component.builder = (_node: MagickNode) => {
       if (component.runFromCache) {
         // Run function runs the worker with old args and returns the result.
-        const run = async (node: NodeData) => {
+        const run = async (node: WorkerData) => {
           const cache = component.cache[node.id] as { inputs; outputs; context}
 
           if (!cache) return null
@@ -60,10 +60,10 @@ function install(editor: MagickEditor) {
 
         const runControl = new RunButtonControl({ key: 'runControl', run })
 
-        node.addControl(runControl as Control)
+        _node.addControl(runControl as Control)
       }
 
-      return builder.call(component, node)
+      return builder.call(component, _node)
     }
   })
 }

@@ -2,10 +2,11 @@ import Rete from 'rete'
 
 import {
   EngineContext,
-  NodeData,
+  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { audioSocket, stringSocket, triggerSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -54,7 +55,7 @@ export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
