@@ -49,18 +49,37 @@ export class ProjectsService {
   }
 
   async create(data: CreateData): Promise<void> {
-    const { agents, documents, spells, projectId } = data
+    let { agents, documents, spells, projectId } = data
 
+    // remove the 'id' field from each agent, document, spell
+    agents = agents
+    documents = documents
+
+
+    console.log('create data', data)
+    const agentPromise = agents.length > 0 ? app
+      .service('agents')
+      .create(agents.map(agent => {
+        delete agent.id
+        return agent
+      }).map(agent => ({ ...agent, projectId }))) : Promise.resolve()
+    const documentPromise = documents.length > 0 ? app
+      .service('documents')
+      .create(documents.map(doc => {
+        delete doc.id
+        return doc
+      }).map(doc => ({ ...doc, projectId }))) : Promise.resolve()
+    const spellPromise = spells.length > 0 ? app
+      .service('spells')
+      .create(spells.map(spell => {
+        delete spell.id
+        delete spell.updatedAt
+        return spell
+      }).map(spell => ({ ...spell, projectId }))) : Promise.resolve()
     await Promise.all([
-      app
-        .service('agents')
-        .create(agents.map(agent => ({ ...agent, projectId }))),
-      app
-        .service('documents')
-        .create(documents.map(doc => ({ ...doc, projectId }))),
-      app
-        .service('spells')
-        .create(spells.map(spell => ({ ...spell, projectId }))),
+      agentPromise,
+      documentPromise,
+      spellPromise,
     ])
 
     return
