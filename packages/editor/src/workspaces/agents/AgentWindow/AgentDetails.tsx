@@ -1,16 +1,14 @@
-import { Switch } from '@magickml/client-core'
-import { Avatar, Button, Typography } from '@mui/material'
-import styles from './index.module.scss'
-import { useEffect, useRef, useState } from 'react'
-import AgentPubVariables from './AgentPubVariables'
+import { IconBtn, Switch } from '@magickml/client-core'
+import { pluginManager } from '@magickml/engine'
+import { Close, Done, Edit } from '@mui/icons-material'
+import { Avatar, Button, Input, Typography } from '@mui/material'
 import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
+import { useEffect, useState } from 'react'
 import { useConfig } from '../../../contexts/ConfigProvider'
-import { pluginManager } from '@magickml/engine'
+import AgentPubVariables from './AgentPubVariables'
+import styles from './index.module.scss'
 import validateSpellData from './spellValidator'
-import { Input } from '@mui/material'
-import { IconBtn } from '@magickml/client-core'
-import { Edit, Done, Close } from '@mui/icons-material'
 
 const RenderComp = props => {
   return <props.element props={props} />

@@ -1,25 +1,22 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { useSnackbar } from 'notistack'
+import { Button, Select, Window } from '@magickml/client-core'
 import Editor from '@monaco-editor/react'
-import { useDispatch } from 'react-redux'
+import { useSnackbar } from 'notistack'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { useDispatch } from 'react-redux'
+import { useConfig } from '../../../contexts/ConfigProvider'
+import { usePubSub } from '../../../contexts/PubSubProvider'
+import css from '../../../screens/Magick/magick.module.css'
+import { spellApi } from '../../../state/api/spells'
+import { useAppSelector } from '../../../state/hooks'
 import {
-  upsertLocalState,
   addLocalState,
   selectStateBytabId,
+  upsertLocalState,
 } from '../../../state/localState'
-import { Select } from '@magickml/client-core'
-import { usePubSub } from '../../../contexts/PubSubProvider'
-import { Window } from '@magickml/client-core'
-import css from '../../../screens/Magick/magick.module.css'
-import { useFeathers } from '../../../contexts/FeathersProvider'
-import { useAppSelector } from '../../../state/hooks'
 import { useEditor } from '../../contexts/EditorProvider'
 import { useInspector } from '../../contexts/InspectorProvider'
-import { spellApi } from '../../../state/api/spells'
-import { useConfig } from '../../../contexts/ConfigProvider'
-import { Button } from '@magickml/client-core'
 
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
@@ -54,21 +51,20 @@ const Input = props => {
   )
 }
 
+const defaultPlaytestData = {
+  sender: 'playtestSender',
+  observer: 'Agent',
+  type: 'playtest',
+  client: 'playtest',
+  channel: 'playtest',
+  channelType: 'playtest',
+  agentId: 'preview',
+  entities: ['playtestSender', 'Agent'],
+}
+
 const Playtest = ({ tab }) => {
   const config = useConfig()
-  const { inspectorData, saveInspector } = useInspector()
-
-  const defaultPlaytestData = {
-    sender: 'playtestSender',
-    observer: 'Agent',
-    type: 'playtest',
-    client: 'playtest',
-    channel: 'playtest',
-    channelType: 'playtest',
-    projectId: config.projectId,
-    agentId: 'preview',
-    entities: ['playtestSender', 'Agent'],
-  }
+  const { inspectorData } = useInspector()
 
   const scrollbars = useRef<any>()
   const [history, setHistory] = useState([])
@@ -76,7 +72,6 @@ const Playtest = ({ tab }) => {
   const [openData, setOpenData] = useState<boolean>(false)
 
   const { publish, subscribe, events } = usePubSub()
-  const FeathersContext = useFeathers()
   const dispatch = useDispatch()
   const { serialize } = useEditor()
   const { enqueueSnackbar } = useSnackbar()
@@ -92,13 +87,10 @@ const Playtest = ({ tab }) => {
     }
   )
 
-  // const localState = {} as any
-
   const localState = useAppSelector(state => {
     return selectStateBytabId(state.localState, tab.id)
   })
-  const client = FeathersContext?.client
-  const { $PLAYTEST_INPUT, $PLAYTEST_PRINT, $RUN_SPELL } = events
+  const { $PLAYTEST_PRINT, $RUN_SPELL } = events
 
   const printToConsole = useCallback(
     (_, _text) => {
@@ -120,7 +112,9 @@ const Playtest = ({ tab }) => {
   const [playtestOption, setPlaytestOption] = useState(null)
 
   useEffect(() => {
-    if (inspectorData) setPlaytestOption(inspectorData.data.inputType)
+    if (!inspectorData || inspectorData.name !== 'Input')
+      return
+    setPlaytestOption('Input - ' + inspectorData.data.inputType ?? 'Default')
   }, [inspectorData])
 
   useEffect(() => {
@@ -138,6 +132,7 @@ const Playtest = ({ tab }) => {
       }))
 
     setPlaytestOptions(options)
+    if (!playtestOption) setPlaytestOption(options[0].value)
   }, [spellData])
 
   // Keep scrollbar at bottom of its window
@@ -159,12 +154,15 @@ const Playtest = ({ tab }) => {
       dispatch(
         addLocalState({
           id: tab.id,
-          playtestData: JSON.stringify({ ...defaultPlaytestData }),
+          playtestData: JSON.stringify({
+            ...defaultPlaytestData,
+            projectId: config.projectId,
+          }),
         })
       )
       return
     }
-  }, [defaultPlaytestData, dispatch, localState, tab.id])
+  }, [config.projectId, dispatch, localState, tab.id])
 
   const options = {
     minimap: {
@@ -343,8 +341,6 @@ const Playtest = ({ tab }) => {
         }
       })
   }
-
-  const printItem = (text, key) => <li key={key}>{text}</li>
 
   return (
     <Window toolbar={toolbar}>

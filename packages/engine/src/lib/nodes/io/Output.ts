@@ -96,12 +96,10 @@ export class Output extends MagickComponent<void> {
     node: NodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    {
-      module,
-      magick,
-    }: { module: any; magick: EditorContext }
+    { module, magick }: { module: any; magick: EditorContext }
   ) {
-    if (!inputs.input) return console.error('No input provided to output component')
+    if (!inputs.input)
+      return console.error('No input provided to output component')
     const outputType = node.data.outputType
     const output = inputs.input.filter(Boolean)[0] as string
     const event =
