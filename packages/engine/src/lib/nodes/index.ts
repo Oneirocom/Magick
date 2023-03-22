@@ -8,8 +8,8 @@ import { IsVariableTrue } from './boolean/IsVariableTrue'
 import { LogicalOperator } from './boolean/LogicalOperator'
 import { Javascript } from './code/Javascript'
 import { Python } from './code/Python'
-import { GetDocuments } from './documents/GetDocuments'
-import { StoreDocument } from './documents/StoreDocument'
+import { GetDocuments } from './document/GetDocuments'
+import { StoreDocument } from './document/StoreDocument'
 import { CosineSimilarity } from './embedding/CosineSimilarity'
 import { CreateTextEmbedding } from './embedding/CreateTextEmbedding'
 import { FindTextEmbedding } from './embedding/FindTextEmbedding'
@@ -21,15 +21,11 @@ import { EventsToConversation } from './events/EventsToConversation'
 import { EventStore } from './events/EventStore'
 import { BooleanGate } from './flow/BooleanGate'
 import { ExclusiveGate } from './flow/Exclusive Gate'
-import { ForEach } from './flow/ForEach'
 import { IsNullOrUndefined } from './flow/IsNullOrUndefined'
 import { OrGate } from './flow/OrGate'
 import { RandomGate } from './flow/RandomGate'
 import { SwitchGate } from './flow/SwitchGate'
 import { WaitForAll } from './flow/WaitForAll'
-import { WhileLoop } from './flow/WhileLoop'
-import { Image } from './image/Image'
-import { ImageGeneration } from './image/ImageGeneration'
 import { InputComponent } from './io/Input'
 import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
@@ -76,8 +72,6 @@ export const components = {
   isVariableTrue: () => new IsVariableTrue(),
   request: () => new Request(),
   jupyterNotebook: () => new JupyterNotebook(),
-  forEach: () => new ForEach(),
-  whileLoop: () => new WhileLoop(),
   stringEvaluator: () => new EvaluateText(),
   combineText: () => new CombineText(),
   textVariable: () => new TextVariable(),
@@ -97,7 +91,6 @@ export const components = {
   joinListComponent: () => new JoinListComponent(),
   moduleComponent: () => new SpellComponent(),
   output: () => new Output(),
-  image: () => new Image(),
   switchGate: () => new SwitchGate(),
   triggerOut: () => new TriggerOut(),
   waitForAll: () => new WaitForAll(),
@@ -105,7 +98,6 @@ export const components = {
   merge: () => new Merge(),
   orGate: () => new OrGate(),
   log: () => new Log(),
-  imageGeneration: () => new ImageGeneration(),
   promptTemplate: () => new TextTemplate(),
   parseJSON: () => new ParseJSON(),
   objectToJSON: () => new ObjectToJSON(),
