@@ -15,9 +15,7 @@ import ListItemText from '@mui/material/ListItemText'
 import { CSSObject, styled, Theme } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { body, title } from '../../constants'
-import InfoDialog from '../InfoDialog'
-
+import { SetAPIKeys } from './SetAPIKeys'
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
 
@@ -137,7 +135,7 @@ const PluginDrawerItems = ({ onClick, open }) => {
 export function Drawer({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
-  const [isOpenAPISet, setOpenAPISet] = useState(true)
+  const [isAPIKeysSet, setAPIKeysSet] = useState(false)
 
   const [open, setOpen] = useState<boolean>(false)
 
@@ -152,8 +150,16 @@ export function Drawer({ children }) {
   useEffect(() => {
     const secrets = localStorage.getItem('secrets')
     if (secrets) {
+      let secretHasBeenSet = false;
       const parsedSecrets = JSON.parse(secrets)
-      setOpenAPISet(!!parsedSecrets['openai_api_key'])
+      // check if any of the parsed secrets are not ''
+      Object.keys(parsedSecrets).forEach(key => {
+        if (parsedSecrets[key] !== '' && parsedSecrets[key]) {
+          secretHasBeenSet = true
+        }
+      })
+
+      setAPIKeysSet(secretHasBeenSet)
     }
   }, [])
 
@@ -232,17 +238,8 @@ export function Drawer({ children }) {
             onClick={onClick('/settings')}
             text="Settings"
           />
-          {!isOpenAPISet && (
-            <InfoDialog
-              title={title}
-              body={body}
-              style={{
-                width: '100%',
-                height: '1px',
-                marginLeft: '89%',
-                marginTop: '-40%',
-              }}
-            />
+          {!isAPIKeysSet && (
+            <SetAPIKeys setAPIKeysSet={setAPIKeysSet} />
           )}
         </List>
       </StyledDrawer>
