@@ -9,6 +9,7 @@ const PineconePlugin = new ClientPlugin({
       name: 'Pinecone API Key',
       key: 'pinecone_api_key',
       global: true,
+      getUrl: 'https://app.pinecone.io/'
     }
   ],
 })

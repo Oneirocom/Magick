@@ -7,6 +7,7 @@ const BananaPlugin = new ClientPlugin({
       name: 'Banana API Key',
       key: 'banana_api_key',
       global: true,
+      getUrl: 'https://app.banana.dev/'
     },
   ],
 })
