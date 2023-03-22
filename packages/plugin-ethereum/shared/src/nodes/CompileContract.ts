@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash'
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
+import { API_ROOT_URL } from '@magickml/engine'
 
 import {
   anySocket,
@@ -43,11 +44,11 @@ type InputReturn = {
   output: unknown
 }
 
-export class Solidity extends MagickComponent<InputReturn> {
+export class CompileContract extends MagickComponent<InputReturn> {
 
   constructor() {
     // Name of the component
-    super('Solidity')
+    super('PluginEthCompileContract')
 
     this.task = {
       outputs: {
@@ -67,8 +68,8 @@ export class Solidity extends MagickComponent<InputReturn> {
     this.category = 'Ethereum'
     this.info = info
     this.display = true
-    this.contextMenuName = 'Solidity'
-    this.displayName = 'Solidity'
+    this.contextMenuName = 'Compile Contract'
+    this.displayName = 'Compile Contract'
   }
 
   builder(node: MagickNode) {
@@ -125,12 +126,32 @@ export class Solidity extends MagickComponent<InputReturn> {
     { data }: { data: string | undefined }
   ) {
     this._task.closed = ['trigger']
-    // handle data subscription.  If there is data, this is from playtest
+
+    const server = `${API_ROOT_URL}/ethereum/compile`
+
+    const form = new FormData();
+    form.append("code", defaultCode);
+
+    const requestOptions = {
+      method: 'POST',
+      body: form,
+    }
+
+    const r = await fetch(server, requestOptions as any).catch(error =>
+      console.log('error', error)
+    )
+
+    const result = await (r as Response).json()
+
+    const contract = result.output.contracts['code.sol']['SimpleContract']
+
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
       return {
         output: data,
+        bytecode: contract.evm.bytecode.object,
+        abi: contract.abi,
       }
     }
   }
