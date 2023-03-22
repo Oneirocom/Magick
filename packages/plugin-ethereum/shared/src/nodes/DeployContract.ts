@@ -182,6 +182,10 @@ export class DeployContract extends MagickComponent<InputReturn> {
     if (data && !isEmpty(data)) {
       this._task.closed = []
 
+<<<<<<< refs/remotes/origin/development
+=======
+
+>>>>>>> remove display
       return {
         output: data,
         balance_before: balanceBeforeInEth,
