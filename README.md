@@ -143,7 +143,7 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-20-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-21-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -176,6 +176,7 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/BMO-tech"><img src="https://avatars.githubusercontent.com/u/7051219?v=4?s=100" width="100px;" alt="Ben Moore"/><br /><sub><b>Ben Moore</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=BMO-tech" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/stackedq"><img src="https://avatars.githubusercontent.com/u/20498757?v=4?s=100" width="100px;" alt="Q"/><br /><sub><b>Q</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=stackedq" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/thomageanderson"><img src="https://avatars.githubusercontent.com/u/122855509?v=4?s=100" width="100px;" alt="thomageanderson"/><br /><sub><b>thomageanderson</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=thomageanderson" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/codingsh"><img src="https://avatars.githubusercontent.com/u/58003006?v=4?s=100" width="100px;" alt="codingsh"/><br /><sub><b>codingsh</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=codingsh" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
