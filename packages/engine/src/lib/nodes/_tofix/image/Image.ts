@@ -4,12 +4,12 @@ import axios from 'axios'
 import {
   NodeData,
   MagickNode,
-} from '../../types'
-import { API_ROOT_URL } from '../../config'
-import { InputControl } from '../../dataControls/InputControl'
-import { anySocket, stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
-import { BooleanControl } from '../../dataControls/BooleanControl'
+} from '../../../types'
+import { API_ROOT_URL } from '../../../config'
+import { InputControl } from '../../../dataControls/InputControl'
+import { anySocket, stringSocket } from '../../../sockets'
+import { MagickComponent } from '../../../magick-component'
+import { BooleanControl } from '../../../dataControls/BooleanControl'
 
 const info = `Image Variable`
 
