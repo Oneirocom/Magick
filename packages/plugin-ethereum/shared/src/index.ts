@@ -1,18 +1,18 @@
-import { Solidity } from './nodes/Solidity'
-import { GetRecentTransactions } from './nodes/GetRecentTransactions'
-import { DeployContract } from './nodes/DeployContract'
-import { CheckForRecentTxFromWallet } from './nodes/CheckForRecentTxFromWallet'
-import { CheckEthBalance } from './nodes/CheckEthBalance'
-import { CheckBalanceForERC20 } from './nodes/CheckBalanceForERC20'
-import { CallContractFunctionWrite } from './nodes/CallContractFunctionWrite'
 import { CallContractFunctionRead } from './nodes/CallContractFunctionRead'
+import { CallContractFunctionWrite } from './nodes/CallContractFunctionWrite'
+import { CheckForRecentTxFromWallet } from './nodes/CheckForRecentTxFromWallet'
+import { CompileContract } from './nodes/CompileContract'
+import { DeployContract } from './nodes/DeployContract'
+import { GetERC20BalanceFromWallet } from './nodes/GetERC20BalanceFromWallet'
+import { GetNativeBalanceFromWallet } from './nodes/GetNativeBalanceFromWallet'
+import { GetRecentTxsFromWallet } from './nodes/GetRecentTxsFromWallet'
 export default [
-  Solidity,
-  GetRecentTransactions,
+  CompileContract,
   DeployContract,
   CheckForRecentTxFromWallet,
-  CheckEthBalance,
-  CheckBalanceForERC20,
   CallContractFunctionWrite,
   CallContractFunctionRead,
+  GetRecentTxsFromWallet,
+  GetNativeBalanceFromWallet,
+  GetERC20BalanceFromWallet,
 ]

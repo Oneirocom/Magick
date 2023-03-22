@@ -10,10 +10,10 @@ import HomeScreen from './screens/HomeScreen/HomeScreen'
 import Magick from './screens/Magick/Magick'
 import Contract from './screens/Contract/Contract'
 
-import MainLayout from './components/MainLayout/MainLayout'
+import MainLayout from './layouts/MainLayout/MainLayout'
 import EventWindow from './workspaces/spells/windows/EventWindow'
 import RequestWindow from './workspaces/spells/windows/RequestWindow'
-import AgentManagerWindow from './workspaces/agents/AgentManagerWindow'
+import AgentManagerWindow from './windows/agents/AgentManagerWindow'
 
 export {
     MagickPageLayout,

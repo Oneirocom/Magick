@@ -1,6 +1,6 @@
-import { isEmpty } from 'lodash'
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
+import * as ethers from 'ethers'
 
 import {
   anySocket,
@@ -54,15 +54,15 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
     // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    const contractInput = new Rete.Input('tx', 'Contract', stringSocket)
+    const contractInput = new Rete.Input('tx', 'Contract Addr', stringSocket)
     const functionInput = new Rete.Input(
       'function',
-      'Function Name',
+      'Func Name',
       stringSocket
     )
     const functionParamsInput = new Rete.Input(
       'functionParams',
-      'Function Params',
+      'Func Params',
       stringSocket
     )
     const abiInput = new Rete.Input('abi', 'ABI', anySocket)
@@ -90,21 +90,28 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
   // @ts-ignore
   async worker(
     node: NodeData,
-    _inputs: MagickWorkerInputs,
+    inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ) {
-    this._task.closed = ['trigger']
-    console.log('********* processing input to ethereum input *********')
-    console.log(data)
+    const rpcHttp = node.data?.rpc_http as string
 
-    // handle data subscription.  If there is data, this is from playtest
-    if (data && !isEmpty(data)) {
-      this._task.closed = []
+    const contractAddress = (inputs['tx'] && inputs['tx'][0]) as string
+    const contractAbi = (inputs['abi'] && inputs['abi'][0]) as string
 
-      return {
-        output: data,
-      }
+
+    const res = null
+
+    try {
+      // TODO: call read with dynamic function name and params as client do with wagmi package
+      // res = await contract?.myString();
+    } catch {
+      console.error("call reverted");
+      return
+    }
+
+    return {
+      output: res,
     }
   }
 }

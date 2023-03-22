@@ -1,9 +1,10 @@
-// TODO: replace with a feathers service
-
 import Koa from 'koa'
+import solc from 'solc'
 import { Route } from '../config/types'
 import { tts } from '../servers/googleTextToSpeech'
 import { tts_tiktalknet } from '../servers/tiktalknet'
+import { ServerError } from '../utils/ServerError'
+
 const getTextToSpeech = async (ctx: Koa.Context) => {
   const text = ctx.request.query.text as string
 
@@ -24,6 +25,9 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
 
 const image_generation = async (ctx: Koa.Context) => {
   const url = 'http://localhost:7860/sdapi/v1/txt2img'
+
+  console.log(url)
+  console.log(ctx)
 
   // proxy the request to the url and then return the respons
   const response = await fetch(url, {
@@ -46,5 +50,5 @@ export const apis: Route[] = [
   {
     path: '/image_generation',
     post: image_generation,
-  },
+  }
 ]

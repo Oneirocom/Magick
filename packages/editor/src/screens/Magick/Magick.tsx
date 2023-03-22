@@ -1,18 +1,15 @@
 import { LoadingScreen, TabLayout } from '@magickml/client-core'
-import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import TabBar from '../../components/TabBar/TabBar'
-import { useConfig } from '../../contexts/ConfigProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
-import { useLazyGetSpellQuery } from '../../state/api/spells'
 import { RootState } from '../../state/store'
 import {
   activeTabSelector, closeTab, openTab, selectAllTabs
 } from '../../state/tabs'
-import Workspaces from '../../workspaces'
+import Workspaces from '../../components/Workspaces'
 
 const Magick = ({ empty = false }) => {
   const dispatch = useDispatch()
