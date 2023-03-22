@@ -199,6 +199,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "pizzooid",
+      "name": "Pietro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3073099?v=4",
+      "profile": "http://palmesi.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
