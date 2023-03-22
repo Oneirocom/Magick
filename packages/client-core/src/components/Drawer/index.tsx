@@ -13,8 +13,10 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { CSSObject, styled, Theme } from '@mui/material/styles'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { body, title } from '../../constants'
+import InfoDialog from '../InfoDialog'
 
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
@@ -75,7 +77,7 @@ const StyledDrawer = styled(MuiDrawer, {
   }),
 }))
 
-const DrawerItem = ({ Icon, open, text, active, onClick = () => {} }) => (
+const DrawerItem = ({ Icon, open, text, active, onClick = () => { /* null handler */ } }) => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
     <ListItemButton
       sx={{
@@ -101,6 +103,7 @@ const DrawerItem = ({ Icon, open, text, active, onClick = () => {} }) => (
 )
 
 const PluginDrawerItems = ({ onClick, open }) => {
+  const location = useLocation()
   const drawerItems = pluginManager.getDrawerItems()
   let lastPlugin = null
   let divider = false
@@ -134,6 +137,7 @@ const PluginDrawerItems = ({ onClick, open }) => {
 export function Drawer({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
+  const [isOpenAPISet, setOpenAPISet] = useState(true)
 
   const [open, setOpen] = useState<boolean>(false)
 
@@ -144,6 +148,14 @@ export function Drawer({ children }) {
   const onClick = location => () => {
     navigate(location)
   }
+
+  useEffect(() => {
+    const secrets = localStorage.getItem('secrets')
+    if (secrets) {
+      const parsedSecrets = JSON.parse(secrets)
+      setOpenAPISet(!!parsedSecrets['openai_api_key'])
+    }
+  }, [])
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -220,6 +232,18 @@ export function Drawer({ children }) {
             onClick={onClick('/settings')}
             text="Settings"
           />
+          {!isOpenAPISet && (
+            <InfoDialog
+              title={title}
+              body={body}
+              style={{
+                width: '100%',
+                height: '1px',
+                marginLeft: '89%',
+                marginTop: '-40%',
+              }}
+            />
+          )}
         </List>
       </StyledDrawer>
       {children}

@@ -9,53 +9,52 @@ import { app } from '../../app'
 export type EventParams = KnexAdapterParams<EventQuery>
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
-export class EventService<ServiceParams extends Params = EventParams> extends KnexService<
-  Event,
-  EventData,
-  ServiceParams,
-  EventPatch
-> {
-  //@ts-ignore
-  async create(data: EventData, params: EventParams): Promise<any> {
-    return data;
+export class EventService<
+  ServiceParams extends Params = EventParams
+> extends KnexService<Event, EventData, ServiceParams, EventPatch> {
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+  async create(data: EventData): Promise<any> {
+    return data
   }
-  //@ts-ignore
-  async remove(id: string, params?: ServiceParams) : any{
-    let vectordb = app.get('vectordb')
-    let r = vectordb.delete(id)
+
+  async remove(id: string): Promise<any> {
+    const vectordb = app.get('vectordb')
+    const r = vectordb.delete(id)
     return r
   }
-  //@ts-ignore
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   async find(params?: ServiceParams) {
-    const db = app.get('dbClient')
     if (params.query.embedding) {
-      const blob = atob(params.query.embedding);
-      const ary_buf = new ArrayBuffer(blob.length);
-      const dv = new DataView(ary_buf);
-      for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i));
-      const f32_ary = new Float32Array(ary_buf);
-      //const result = await findSimilarEventByEmbedding(db, "'[" + f32_ary.toString() + "]'")
-      let vectordb = app.get('vectordb')
-      const query = f32_ary as unknown as number[];
-      const k = 2;
-      const results = vectordb.search(query, params?.query?.$limit);
+      const blob = atob(params.query.embedding)
+      const ary_buf = new ArrayBuffer(blob.length)
+      const dv = new DataView(ary_buf)
+      for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
+      const f32_ary = new Float32Array(ary_buf)
+      const vectordb = app.get('vectordb')
+      const query = f32_ary as unknown as number[]
+      const results = vectordb.search(query, params?.query?.$limit)
       if (results) {
-        return {events : results }
+        return { events: results }
       }
     }
-    let vectordb = app.get('vectordb')
-    let { $limit: _, ...param } = params.query
-    let r = vectordb.searchData(param as unknown as number[], params?.query?.$limit);
-    return {events : r }
+    const vectordb = app.get('vectordb')
+    const { $limit: _, ...param } = params.query
+    const r = vectordb.searchData(
+      param as unknown as number[],
+      params?.query?.$limit
+    )
+    return { events: r }
   }
-
 }
-
 
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),
     Model: app.get('dbClient'),
-    name: 'events'
+    name: 'events',
   }
 }

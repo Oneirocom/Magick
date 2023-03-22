@@ -1,0 +1,16 @@
+.root {
+  height: fit-content;
+  overflow: visible !important;
+}
+
+.sharp-edge-menu {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 0;
+  left: -10px;
+  border-top: 12px solid #2e2e2e;
+  border-bottom: 12px solid transparent;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+}
