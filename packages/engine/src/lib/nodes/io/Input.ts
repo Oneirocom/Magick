@@ -10,9 +10,11 @@ import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
 import { anySocket, triggerSocket } from '../../sockets'
 import {
-  MagickNode, MagickTask, MagickWorkerInputs,
+  MagickNode,
+  MagickTask,
+  MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData
+  WorkerData,
 } from '../../types'
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
@@ -67,68 +69,45 @@ export class InputComponent extends MagickComponent<InputReturn> {
       defaultValue: values[0].name,
     })
 
-    const inputName = new InputControl({
-      name: 'Input Name',
-      dataKey: 'inputName',
-      defaultValue: 'Custom',
-    })
 
-    let isCustom = node.data.isCustom;
 
-    inputName.onData = (data) => {
-      if(!isCustom) return console.error('Cannot set input name when not in custom mode')
-      node.data.name = `Input - ${data}`
+    node.inspector.add(inputType)
+
+    const createInput = () => {
+      console.log('createInput')
+      const inputName = new InputControl({
+        name: 'Input Name',
+        dataKey: 'inputName',
+        defaultValue: 'Custom',
+      })
+
+      inputName.onData = data => {
+        node.data.name = `Input - ${data}`
+      }
+
+      node.inspector.add(inputName)
+      console.log(node.inspector.dataControls.get('inputName'))
+      node.data.name = `Input - ${node.data.inputName}`
     }
 
     inputType.onData = data => {
-      if(data === 'Custom') {
-        isCustom = true
-        node.data.isCustom = true
+      console.log('inputType.onData', data)
+      if (data === 'Custom') {
+        console.log(node.inspector.dataControls.get('inputName'))
+        // if inputName is not added to the node, add it
+        if (!node.inspector.dataControls.get('inputName')) {
+          createInput()
+        }
         return
       }
+      console.log('maybe destroy inputName')
+      console.log(node.inspector.dataControls.get('inputName'))
+      if(node.inspector.dataControls.get('inputName'))
+        node.inspector.dataControls.delete('inputName')
       node.data.name = `Input - ${data}`
-
-      // const currentValue = values.find(v => v.name === data)
-      // if(currentValue === lastValue) return
-
-      // console.log('currentValue on input')
-      // console.log(currentValue)
-      // {
-      // name
-      // socket {
-      // compatible: [
-      // {
-      //   compatible: [
-      //     {
-      //       name
-      //     }
-      //   ]
-      // }
-      // ]
-      // }
-      // }
-
-      // TODO: dynamic connection types, add and remove nodes as necessary
-      // const oldConnections = [] as any[]
-
-      // const connections = node.getConnections()
-      // connections.forEach(c => {
-      //   oldConnections.push(c)
-      //   this.editor?.removeConnection(c)
-      // })
-
-      // lastValue = currentValue
-
-      // const newOut = new Rete.Output('output', 'output', currentValue.socket)
-
-      // if (currentValue.socket) {
-      //   node.removeOutput(out)
-      //   node.addOutput(newOut)
-      // }
-      // console.log('oldConnections', oldConnections)
     }
 
-    inputType.onData((node.data.name).replace('Input - ', ''))
+    inputType.onData(node.data.name.replace('Input - ', ''))
 
     const toggleDefault = new SwitchControl({
       dataKey: 'useDefault',
@@ -143,9 +122,11 @@ export class InputComponent extends MagickComponent<InputReturn> {
       defaultValue: node?.data?.defaultValue || 'Hello world',
     })
 
+    if(node.data.inputType === 'Custom') {
+      createInput()
+    }
+
     node.inspector
-      .add(inputType)
-      // .add(togglePlaytest)
       .add(toggleDefault)
       .add(defaultInput)
 

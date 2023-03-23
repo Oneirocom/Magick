@@ -73,6 +73,16 @@ export class Inspector {
     return this
   }
 
+  remove(dataKey) {
+    const control = this.dataControls.get(dataKey)
+    if(!control) {
+      return console.warn(`No control with dataKey '${dataKey}' found`)
+    }
+    this.dataControls.delete(dataKey)
+    control.onRemove()
+    return this
+  }
+
   add_html(html: string) {
     this.node.data['html'] = html
   }
