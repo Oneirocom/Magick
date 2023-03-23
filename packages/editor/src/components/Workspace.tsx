@@ -11,7 +11,8 @@ import { useConfig } from '../contexts/ConfigProvider'
 import EditorWindow from '../windows/EditorWindow'
 import Inspector from '../windows/InspectorWindow'
 import Playtest from '../windows/PlaytestWindow'
-import AvatarWindow from '../windows/AvatarWindow'
+import AvatarWindow from '../../../plugin-avatar/client/src/AvatarWindow'
+import ProjectWindow from '../windows/ProjectWindow'
 
 import TextEditor from '../windows/TextEditorWindow'
 import DebugConsole from '../windows/DebugConsole'
@@ -119,8 +120,8 @@ const Workspace = ({ tab, tabs, pubSub }) => {
           return <EditorWindow {...props} />
         case 'debugConsole':
           return <DebugConsole {...props} />
-        case 'avatar':
-          return <AvatarWindow {...props} />
+        case 'project':
+          return <ProjectWindow {...props} />
         default:
           return <p></p>
       }
