@@ -1,5 +1,5 @@
-import { IRunContextEditor, MagickNode } from '../../types'
-import { Inspector } from './Inspector'
+import { IRunContextEditor, MagickNode, PubSubData } from '../../types'
+import { HandleDataArgs, Inspector } from './Inspector'
 
 function install(editor: IRunContextEditor) {
   const { onInspector, sendToInspector, clearTextEditor } = editor.magick
@@ -30,8 +30,8 @@ function install(editor: IRunContextEditor) {
 
       if (!onInspector) return
 
-      node.subscription = onInspector(node, (data: Record<string, any>) => {
-        node.inspector.handleData(data)
+      node.subscription = onInspector(node, (data) => {
+        node.inspector.handleData(data as HandleDataArgs)
         editor.trigger('nodecreated', node)
         // NOTE might still need this.  Keep an eye out.
         // sendToInspector(node.inspector.data());
