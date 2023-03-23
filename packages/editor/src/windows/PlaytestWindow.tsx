@@ -52,14 +52,14 @@ const Input = props => {
 }
 
 const defaultPlaytestData = {
-  sender: 'playtestSender',
-  observer: 'Agent',
+  sender: 'user',
+  observer: 'assistant',
   type: 'playtest',
   client: 'playtest',
   channel: 'playtest',
   channelType: 'playtest',
   agentId: 'preview',
-  entities: ['playtestSender', 'Agent'],
+  entities: ['user', 'assistant'],
 }
 
 const Playtest = ({ tab }) => {
@@ -215,13 +215,14 @@ const Playtest = ({ tab }) => {
 
     toSend = {
       content: value,
-      sender: 'Speaker',
-      observer: 'Agent',
+      sender: 'user',
+      observer: 'assistant',
       agentId: 'preview',
       client: 'playtest',
       channel: 'previewChannel',
       projectId: config.projectId,
       channelType: 'previewChannelType',
+      entities: ['user', 'assistant'],
       ...JSON.parse(json),
     }
 
