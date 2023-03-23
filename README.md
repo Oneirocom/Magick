@@ -75,22 +75,11 @@ _Please be aware Magick is under heavy development which may cause breaking chan
 Magick installs [mydb.sqlite](apps/server/mydb.sqlite) by default. This is a local sqlite database. It is not recommended for production use, but is fine for development. _Database can be wiped by breaking changes, back up your spells via export regularly._
 
 ### Local Sqlite Installation:
-Add a relative or absolute path to your sqlite file in the [`.env` file](.env)
+If you want to set up a custom sqlite database, add a relative or absolute path to your sqlite file in the [`.env` file](.env)
 Next migrate to the new database by running:
 ```
 npm run migrate
 ```
-
-> Windows: Required sqlite extensions won't work if you're using Microsoft Windows, please use [`postgres`](https://www.postgresql.org/).
-
-> Linux:   There are two sqlite extensions used, `sqlite-vector` and `sqlite-vss`
-  based on the [docs](https://github.com/asg017/sqlite-vss#documentation),
-  on Linux machines, you'll have to install some packages to make it work:
-  ```
-    sudo apt-get update
-    sudo apt-get install -y libgomp1 libatlas-base-dev liblapack-dev 
-  ```
-> Mac:   No extra steps required.
 
 ### Supabase public database 
 
@@ -100,7 +89,7 @@ Magick can connect to a test database on [Supabase](https://supabase.com/). It i
 
 Instead, one should enable Postgres database in the [`.env` file](.env)
 
-### Deploy your own database
+### Deploy your own Postgres database
 
 To deploy your own database, we suggest using Supabase or another Postgres database. The current setup for events and documents requires the [`pgvector`](https://supabase.com/docs/guides/database/extensions/pgvector) extension to be enabled.
 
