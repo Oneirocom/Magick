@@ -53,6 +53,7 @@ export class Output extends MagickComponent<void> {
     const values = [...defaultOutputTypes, ...pluginManager.getOutputTypes()]
     node.data.isOutput = true
     node.data.name = node.data.name ?? `Output - ${values[0].name}`
+    node.data.sendToPlaytest = true
 
     const outputType = new DropdownControl({
       name: 'Output Type',
