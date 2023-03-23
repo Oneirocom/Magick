@@ -26,7 +26,7 @@ export const DiscordAgentWindow: FC<any> = props => {
       setDisable(true)
     }
     if (props.enable['DiscordPlugin'] == true){
-      setChecked(selectedAgentData.data.discord_enabled)
+      setChecked(selectedAgentData?.data?.discord_enabled)
       setDisable(false)
     }
   }, [props.enable])

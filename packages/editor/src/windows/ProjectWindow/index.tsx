@@ -40,11 +40,12 @@ const ProjectWindow = ({ tab }) => {
         headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
       })
         .then(async res => {
-          const res2 = await fetch(`${config.apiUrl}/projects`, {
+          const res2 = await fetch(`${config.apiUrl}/projects?projectId=${config.projectId}`, {
             headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
           })
           const json = await res2.json()
-          setData(json.data)
+          console.log('json', json)
+          setData(json)
         })
         .catch(err => {
           console.error('error is', err)
@@ -136,6 +137,7 @@ const ProjectWindow = ({ tab }) => {
             </span>
           </Grid>
           {/* show tree view of project - Agents, Spells, Documents */}
+          {data &&
           <Grid item xs={12} style={{ padding: '1em', marginTop: '2em', overflowX: 'hidden' }}>
             <TreeView
               defaultCollapseIcon={<ExpandMoreIcon />}
@@ -143,7 +145,7 @@ const ProjectWindow = ({ tab }) => {
               sx={{ flexGrow: 1, width: '100%' }}
             >
               <TreeItem nodeId="0" label="Agents">
-                {data.agents.map((agent, index) => (
+                {data?.agents?.map((agent, index) => (
                   <TreeItem
                     key={index}
                     style={{ width: '100%' }}
@@ -170,7 +172,7 @@ const ProjectWindow = ({ tab }) => {
                     key={index}
                     style={{ width: '100%' }}
                     nodeId={30 + index.toString()}
-                    label={document.name}
+                    label={document.content.slice(0, 12)}
                   />
                   )
                 }
@@ -178,6 +180,7 @@ const ProjectWindow = ({ tab }) => {
               </TreeItem>
             </TreeView>
           </Grid>
+          }
           {/* show details of selected item */}
         </Grid>
       </div>
