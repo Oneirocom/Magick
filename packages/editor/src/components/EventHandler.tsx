@@ -23,11 +23,12 @@ const EventHandler = ({ pubSub, tab }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [saveSpellMutation] = useSaveSpellMutation()
+  // TODO: is this a bug?
   const [getSpell, { data: spell }] = useLazyGetSpellByIdQuery({
     spellName: tab.name.split('--')[0],
     id: tab.id,
     projectId: config.projectId,
-  })
+  } as any)
   // Spell ref because callbacks cant hold values from state without them
   const spellRef = useRef<Spell | null>(null)
 

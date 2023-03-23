@@ -13,7 +13,7 @@ import { Inspector } from './plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
-import { Application as FeathersApplication } from '@feathersjs/koa'
+import { Application as FeathersApplication, Koa } from '@feathersjs/koa'
 
 import { TaskSocketInfo } from './plugins/taskPlugin/task'
 
@@ -610,4 +610,33 @@ export interface ModuleOptions {
   socket?: Socket
   skip?: boolean
   hide?: boolean
+}
+
+export type Middleware = (ctx: Koa.Context, next: any) => any
+
+export type Method =
+  | 'get'
+  | 'head'
+  | 'post'
+  | 'put'
+  | 'delete'
+  | 'connect'
+  | 'options'
+  | 'trace'
+  | 'patch'
+
+export type Handler = (ctx: Koa.Context) => any
+
+export type Route = {
+  method?: Method
+  path: string
+  middleware?: Middleware[]
+  handler?: Handler
+  get?: Handler
+  put?: Handler
+  post?: Handler
+  del?: Handler
+  delete?: Handler
+  head?: Handler
+  patch?: Handler
 }
