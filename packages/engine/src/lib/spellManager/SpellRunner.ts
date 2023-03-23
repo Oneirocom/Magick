@@ -224,7 +224,6 @@ class SpellRunner {
     // ensure we run from a clean slate
     this._resetTasks()
 
-    console.log('reading module - spellRunner.ts')
     // load the inputs into module memory
     this.module.read({ inputs: this._formatInputs(inputs), secrets, agent, publicVariables })
 

@@ -12,17 +12,9 @@
                 "id": 260,
                 "data": {
                     "name": "Output - Default",
-                    "sendToPlaytest": true,
-                    "sendToAvatar": false,
                     "socketKey": "faedf39a-0504-4da7-91f4-9a8118fb8248",
                     "dataControls": {
                         "outputType": {
-                            "expanded": true
-                        },
-                        "sendToPlaytest": {
-                            "expanded": true
-                        },
-                        "sendToAvatar": {
                             "expanded": true
                         }
                     },

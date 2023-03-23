@@ -100,7 +100,6 @@ export class EventStore extends MagickComponent<Promise<void>> {
       if (!content) console.log('Content is null, not storing the event !!')
     }
 
-    console.log('sender is', sender ?? event.sender)
     type Data = {
       sender: string
       projectId: string

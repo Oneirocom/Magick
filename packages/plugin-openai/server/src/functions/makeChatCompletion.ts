@@ -34,8 +34,6 @@ export async function makeChatCompletion(
   }) as any
 
   const conversationMessages: ChatMessage[] = []
-  console.log('event.sender', inputData.sender)
-  console.log('inputData', inputData)
 
   conversation?.forEach(event => {
     const message = { role: event.observer === inputData.observer ? 'assistant' : 'user', content: event.content }

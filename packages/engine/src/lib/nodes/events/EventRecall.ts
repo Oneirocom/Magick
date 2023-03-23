@@ -87,7 +87,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       return json.events
     }
     const getEvents = async (params: GetEventArgs) => {
-      console.log('getting events', params)
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
       for (const p in params) {

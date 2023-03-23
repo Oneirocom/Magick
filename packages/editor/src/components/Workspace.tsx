@@ -73,7 +73,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   }, [editor])
 
   useEffect(() => {
-    console.log('SPELL DATA', spellData)
     if (!spellData) return
     spellRef.current = spellData.data[0]
   }, [spellData])
