@@ -373,7 +373,7 @@ ${
   )
 
   if (!textEditorData?.control)
-    return <WindowMessage content="Component has no editable text" />
+    return <WindowMessage content="Select a node with a text field" />
 
   return (
     <Window key={inspectorData?.nodeId} toolbar={toolbar}>

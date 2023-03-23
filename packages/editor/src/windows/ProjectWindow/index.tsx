@@ -163,14 +163,18 @@ const ProjectWindow = ({ tab }) => {
                 ))}
               </TreeItem>
               <TreeItem nodeId="20" label="Documents">
-                {data.documents.map((document, index) => (
+                {data.documents.map((document, index) => {
+                  console.log('document', document)
+                  return (
                   <TreeItem
                     key={index}
                     style={{ width: '100%' }}
                     nodeId={30 + index.toString()}
                     label={document.name}
                   />
-                ))}
+                  )
+                }
+                )}
               </TreeItem>
             </TreeView>
           </Grid>
