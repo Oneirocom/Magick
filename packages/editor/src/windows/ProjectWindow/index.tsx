@@ -73,7 +73,6 @@ const ProjectWindow = ({ tab }) => {
         `${API_ROOT_URL}/projects?projectId=${config.projectId}`
       )
       setData(data)
-      console.log('data', data)
     }
     fetchData()
   }, [])
@@ -166,7 +165,6 @@ const ProjectWindow = ({ tab }) => {
               </TreeItem>
               <TreeItem nodeId="20" label="Documents">
                 {data.documents.map((document, index) => {
-                  console.log('document', document)
                   return (
                   <TreeItem
                     key={index}

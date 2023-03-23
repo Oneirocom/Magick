@@ -64,22 +64,7 @@ export class Output extends MagickComponent<void> {
     outputType.onData = data => {
       node.data.name = `Output - ${data}`
     }
-
-    const switchControl = new SwitchControl({
-      dataKey: 'sendToPlaytest',
-      name: 'Send to Playtest',
-      label: 'Playtest',
-      defaultValue: node.data.sendToPlaytest || true,
-    })
-
-    const avatarControl = new SwitchControl({
-      dataKey: 'sendToAvatar',
-      name: 'Send to Avatar',
-      label: 'Avatar',
-      defaultValue: node.data.sendToAvatar || false,
-    })
-
-    node.inspector.add(outputType).add(switchControl).add(avatarControl)
+    node.inspector.add(outputType)
     // need to automate this part!  Wont workw without a socket key
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
@@ -106,15 +91,9 @@ export class Output extends MagickComponent<void> {
 
     if (magick) {
       //just need a new check here for playtest send boolean
-      const { sendToPlaytest, sendToAvatar } = magick
+      const { sendToPlaytest } = magick
 
-      if (node.data.sendToPlaytest && sendToPlaytest) {
-        sendToPlaytest(output)
-      }
-
-      if (node.data.sendToAvatar && sendToAvatar) {
-        sendToAvatar(output)
-      }
+      sendToPlaytest(output)
     }
 
     if (module.agent) {

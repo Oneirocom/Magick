@@ -47,8 +47,6 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       'chat',
     ]) as CompletionProvider[]
 
-    console.log('completionProviders', completionProviders)
-
     // get the models from the completion providers and flatten into a single array
     const models = completionProviders.map(provider => provider.models).flat()
 
