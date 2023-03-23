@@ -649,7 +649,7 @@ export class DiscordConnector {
     const firstValue = Output || Object.values(response)[0]
 
     console.log('handled response', firstValue)
-    if (firstValue == "") {
+    if (!firstValue || firstValue === "") {
       message.channel.send("Error: Empty Resonse")
     } else message.channel.send(firstValue)
   }
@@ -1011,8 +1011,10 @@ export class DiscordConnector {
 
   async sendMessageToChannel(channelId: any, msg: any) {
     const channel = await this.client.channels.fetch(channelId)
-    if (channel && channel !== undefined) {
+    if (msg && msg !== '' && channel && channel !== undefined) {
       channel.send(msg)
+    } else {
+      console.error('could not send message to channel: ' + channelId, 'msg = ' + msg, 'channel = ' + channel)
     }
   }
 }
