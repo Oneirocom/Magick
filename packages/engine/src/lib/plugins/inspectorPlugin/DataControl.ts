@@ -79,5 +79,9 @@ export abstract class DataControl {
     return
   }
 
+  onRemove() {
+    return
+  }
+
   onData?(...args: any[]): Promise<void> | void
 }
