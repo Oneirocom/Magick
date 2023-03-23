@@ -3,7 +3,7 @@ import shared from '@magickml/plugin-openai-shared'
 
 const { secrets, completionProviders } = shared
 
-const completionControls = [
+const textCompletionControls = [
   {
     type: InputControl,
     dataKey: 'temperature',
@@ -48,9 +48,40 @@ const completionControls = [
   },
 ]
 
+const chatCompletionControls = [
+  {
+    type: InputControl,
+    dataKey: 'temperature',
+    name: 'Temperature (0-1.0)',
+    icon: 'moon',
+    defaultValue: 0.5,
+  },
+  {
+    type: InputControl,
+    dataKey: 'top_p',
+    name: 'Top P (0-1.0)',
+    icon: 'moon',
+    defaultValue: 1,
+  },
+  {
+    type: InputControl,
+    dataKey: 'frequency_penalty',
+    name: 'Frequency Penalty (0-2.0)',
+    icon: 'moon',
+    defaultValue: 0.0,
+  },
+  {
+    type: InputControl,
+    dataKey: 'presence_penalty',
+    name: 'Presence Penalty (0-2.0)',
+    icon: 'moon',
+    defaultValue: 0,
+  }
+]
+
 const inspectorControls = {
-  text: completionControls,
-  chat: completionControls,
+  text: textCompletionControls,
+  chat: chatCompletionControls,
   embedding: [],
 }
 
