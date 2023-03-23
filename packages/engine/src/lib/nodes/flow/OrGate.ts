@@ -1,8 +1,8 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
+import { MagickComponent } from '../../engine'
 import { triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickNode } from '../../types'
 
 const info = `The or gate will be triggered when either of two triggers are triggered off.`
 

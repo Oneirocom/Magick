@@ -1,19 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react'
-import { PubSubData } from '@magickml/engine';
+import { PubSubContext, PubSubData, PubSubEvents } from '@magickml/engine';
 import PubSub from 'pubsub-js'
 import { useContext, createContext } from 'react'
 
-// TODO: does it also work without the !?
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const Context = createContext<PubSubContext>(undefined!)
+const Context = createContext<PubSubContext>(undefined)
 
 export const usePubSub = () => useContext<PubSubContext>(Context)
 
 export { PubSub }
 
 // Might want to namespace these
-export const events = {
+export const events: PubSubEvents = {
   ADD_SUBSPELL: 'addSubspell',
   UPDATE_SUBSPELL: 'updateSubspell',
   DELETE_SUBSPELL: 'deleteSubspell',
@@ -36,7 +34,7 @@ export const events = {
   $CREATE_PLAYTEST: tabId => `createPlaytest:${tabId}`,
   $CREATE_INSPECTOR: tabId => `createInspector:${tabId}`,
   $CREATE_TEXT_EDITOR: tabId => `createTextEditor:${tabId}`,
-  $CREATE_AVATAR_WINDOW: tabId => `createAvatarWindow:${tabId}`,
+  $CREATE_PROJECT_WINDOW: tabId => `createProjectWindow:${tabId}`,
   $CREATE_DEBUG_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $CREATE_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $RUN_SPELL: tabId => `runSpell:${tabId}`,
@@ -48,7 +46,6 @@ export const events = {
   $MULTI_SELECT_COPY: tabId => `multiSelectCopy:${tabId}`,
   $MULTI_SELECT_PASTE: tabId => `multiSelectPaste:${tabId}`,
   $REFRESH_EVENT_TABLE: tabId => `refreshEventTable:${tabId}`,
-  $SEND_TO_AVATAR: tabId => `sendToAvatar:${tabId}`,
 }
 
 const PubSubProvider = ({ children }) => {

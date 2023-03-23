@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import { NodeData, MagickNode } from '../../types'
+import { BooleanControl } from '../../dataControls/BooleanControl'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
 import { anySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
-import { BooleanControl } from '../../dataControls/BooleanControl'
-
+import { MagickNode, MagickWorkerInputs, MagickWorkerOutputs, WorkerData } from '../../types'
 const info = `Text Variable`
 
 const text = ``
@@ -53,8 +52,8 @@ export class TextVariable extends MagickComponent<InputReturn> {
     return node.addOutput(out)
   }
 
-  worker(node: NodeData, inputs: any, outputs: any, context: any) {
-    let text = node.data.text as string
+  worker(node: WorkerData, _inputs: MagickWorkerInputs, _outputs: MagickWorkerOutputs, context: { module: { publicVariables: string } }) {
+    let text = node.data.fewshot as string
     const publicVars = JSON.parse(context.module.publicVariables)
     if(node?.data?.isPublic && publicVars[node.id]) {
       console.log('publicVars[node.id is', publicVars[node.id])

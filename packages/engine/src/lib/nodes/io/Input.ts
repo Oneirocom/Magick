@@ -5,13 +5,16 @@ import { v4 as uuidv4 } from 'uuid'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { SwitchControl } from '../../dataControls/SwitchControl'
-import { MagickComponent, MagickTask } from '../../magick-component'
+import { TextInputControl } from '../../dataControls/TextInputControl'
+import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
 import { anySocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
+  MagickTask,
   MagickWorkerInputs,
-  MagickWorkerOutputs, NodeData
+  MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
@@ -21,6 +24,7 @@ type InputReturn = {
 
 const defaultInputTypes = [
   { name: 'Default', trigger: true, socket: anySocket },
+  { name: 'Custom', trigger: true, socket: true },
 ]
 
 export class InputComponent extends MagickComponent<InputReturn> {
@@ -65,52 +69,45 @@ export class InputComponent extends MagickComponent<InputReturn> {
       defaultValue: values[0].name,
     })
 
-    // let lastValue = null
 
-    inputType.onData = data => {
-      node.data.name = `Input - ${data}`
 
-      // const currentValue = values.find(v => v.name === data)
-      // if(currentValue === lastValue) return
+    node.inspector.add(inputType)
 
-      // console.log('currentValue on input')
-      // console.log(currentValue)
-      // {
-      // name
-      // socket {
-      // compatible: [
-      // {
-      //   compatible: [
-      //     {
-      //       name
-      //     }
-      //   ]
-      // }
-      // ]
-      // }
-      // }
+    const createInput = () => {
+      console.log('createInput')
+      const inputName = new InputControl({
+        name: 'Input Name',
+        dataKey: 'inputName',
+        defaultValue: 'Custom',
+      })
 
-      // TODO: dynamic connection types, add and remove nodes as necessary
-      // const oldConnections = [] as any[]
+      inputName.onData = data => {
+        node.data.name = `Input - ${data}`
+      }
 
-      // const connections = node.getConnections()
-      // connections.forEach(c => {
-      //   oldConnections.push(c)
-      //   this.editor?.removeConnection(c)
-      // })
-
-      // lastValue = currentValue
-
-      // const newOut = new Rete.Output('output', 'output', currentValue.socket)
-
-      // if (currentValue.socket) {
-      //   node.removeOutput(out)
-      //   node.addOutput(newOut)
-      // }
-      // console.log('oldConnections', oldConnections)
+      node.inspector.add(inputName)
+      console.log(node.inspector.dataControls.get('inputName'))
+      node.data.name = `Input - ${node.data.inputName}`
     }
 
-    inputType.onData((node.data.name as any).replace('Input - ', ''))
+    inputType.onData = data => {
+      console.log('inputType.onData', data)
+      if (data === 'Custom') {
+        console.log(node.inspector.dataControls.get('inputName'))
+        // if inputName is not added to the node, add it
+        if (!node.inspector.dataControls.get('inputName')) {
+          createInput()
+        }
+        return
+      }
+      console.log('maybe destroy inputName')
+      console.log(node.inspector.dataControls.get('inputName'))
+      if(node.inspector.dataControls.get('inputName'))
+        node.inspector.dataControls.delete('inputName')
+      node.data.name = `Input - ${data}`
+    }
+
+    inputType.onData(node.data.name.replace('Input - ', ''))
 
     const toggleDefault = new SwitchControl({
       dataKey: 'useDefault',
@@ -125,9 +122,11 @@ export class InputComponent extends MagickComponent<InputReturn> {
       defaultValue: node?.data?.defaultValue || 'Hello world',
     })
 
+    if(node.data.inputType === 'Custom') {
+      createInput()
+    }
+
     node.inspector
-      .add(inputType)
-      // .add(togglePlaytest)
       .add(toggleDefault)
       .add(defaultInput)
 
@@ -139,7 +138,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
   }
 
   worker(
-    node: NodeData,
+    node: WorkerData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }

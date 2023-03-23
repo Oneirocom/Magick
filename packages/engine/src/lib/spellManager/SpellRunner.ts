@@ -5,7 +5,7 @@ import {
   GraphData,
   MagickNode,
   ModuleComponent,
-  NodeData,
+  MagickNodeData,
   Spell as SpellType,
 } from '../types'
 import { getNodes } from '../nodes'
@@ -224,7 +224,6 @@ class SpellRunner {
     // ensure we run from a clean slate
     this._resetTasks()
 
-    console.log('reading module - spellRunner.ts')
     // load the inputs into module memory
     this.module.read({ inputs: this._formatInputs(inputs), secrets, agent, publicVariables })
 
@@ -243,7 +242,7 @@ class SpellRunner {
     // 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    await component.run(triggeredNode as unknown as MagickNode, inputs as NodeData)
+    await component.run(triggeredNode as unknown as MagickNode, inputs as MagickNodeData)
     return this.outputData
   }
 }

@@ -2,8 +2,6 @@ import { createRoot } from 'react-dom/client'
 import { MagickIDE, AppConfig } from '@magickml/editor'
 import { DEFAULT_PROJECT_ID, API_ROOT_URL } from '@magickml/engine'
 
-import './plugins'
-
 // The editor is in its own window running standalone
 if (window === window.parent) {
   const container = document.getElementById('root')

@@ -1,5 +1,6 @@
-import { IRunContextEditor, NodeData, MagickComponent } from '../../types'
-import { MagickConsole } from '../consolePlugin/MagickConsole'
+import { MagickComponent } from '../../engine';
+import { IRunContextEditor, MagickNode } from '../../types';
+import { MagickConsole } from '../consolePlugin/MagickConsole';
 
 function install(
   engine: IRunContextEditor,
@@ -7,7 +8,7 @@ function install(
 ) {
   engine.on(
     'error',
-    ({ message, data }: { message: string; data: NodeData }) => {
+    ({ message, data }: { message: string; data: MagickNode }) => {
       const component = engine.components.get(
         data.name as string
       ) as unknown as MagickComponent<unknown>

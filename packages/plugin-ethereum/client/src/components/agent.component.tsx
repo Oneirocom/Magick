@@ -13,18 +13,20 @@ export const EthereumAgentWindow: FC<any> = props => {
   const { selectedAgentData, setSelectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
-  const [checked, setChecked] = useState(selectedAgentData.data?.ethereum_enabled || false)
+  const [checked, setChecked] = useState(
+    selectedAgentData.data?.ethereum_enabled || false
+  )
   const [disable, setDisable] = useState(false)
   const [state, setState] = useState({
     ethereum_private_key: selectedAgentData?.data?.ethereum_private_key,
     ethereum_custom_rpc: selectedAgentData?.data?.ethereum_custom_rpc,
   })
-  useEffect(()=>{
-    if (props.enable["EthereumPlugin"] == false) {
+  useEffect(() => {
+    if (props.enable['EthereumPlugin'] == false) {
       setChecked(false)
       setDisable(true)
     }
-    if (props.enable['EthereumPlugin'] == true){
+    if (props.enable['EthereumPlugin'] == true) {
       setChecked(selectedAgentData.data?.ethereum_enabled)
       setDisable(false)
     }
@@ -103,7 +105,7 @@ export const EthereumAgentWindow: FC<any> = props => {
           <div>
             <span className="form-item-label">Private Key</span>
             <KeyInput
-              value={selectedAgentData.data?.ethereum_private_key}
+              value={state?.ethereum_private_key}
               style={{ width: '100%' }}
               setValue={value =>
                 setState({

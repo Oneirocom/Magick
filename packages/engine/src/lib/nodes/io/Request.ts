@@ -3,17 +3,15 @@
 import axios from 'axios'
 import Rete from 'rete'
 
-import {
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  EngineContext,
-} from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { triggerSocket, stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
+import { stringSocket, triggerSocket } from '../../sockets'
+import {
+  EngineContext, MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs, WorkerData
+} from '../../types'
 
 const info = 'Request is used to make a web request to a server.'
 
@@ -80,7 +78,7 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     rawInputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     { magick }: { magick: EngineContext }

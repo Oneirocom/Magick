@@ -11,40 +11,20 @@
     "jsx": "react",
     "target": "esnext",
     "module": "esnext",
-    "lib": [
-      "es2021",
-      "dom"
-    ],
+    "lib": ["es2021", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "esModuleInterop": true,
-    "typeRoots": [
-      "./packages/@types",
-      "./node_modules/@types"
-    ],
+    "typeRoots": ["./packages/@types", "./node_modules/@types"],
     "paths": {
-      "@magickml/agent": [
-        "apps/agent/src/index.ts"
-      ],
-      "@magickml/client": [
-        "apps/client/src/index.ts"
-      ],
-      "@magickml/client-core": [
-        "packages/client-core/src/index.ts"
-      ],
-      "@magickml/cost-calculator": [
-        "packages/cost-calculator/src/index.ts"
-      ],
-      "@magickml/docs": [
-        "apps/docs/src/index.ts"
-      ],
-      "@magickml/editor": [
-        "packages/editor/src/index.ts"
-      ],
-      "@magickml/engine": [
-        "packages/engine/src/index.ts"
-      ],
+      "@magickml/agent": ["apps/agent/src/index.ts"],
+      "@magickml/client": ["apps/client/src/index.ts"],
+      "@magickml/client-core": ["packages/client-core/src/index.ts"],
+      "@magickml/cost-calculator": ["packages/cost-calculator/src/index.ts"],
+      "@magickml/docs": ["apps/docs/src/index.ts"],
+      "@magickml/editor": ["packages/editor/src/index.ts"],
+      "@magickml/engine": ["packages/engine/src/index.ts"],
       "@magickml/plugin-banana-client": [
         "packages/plugin-banana/client/src/index.ts"
       ],
@@ -96,17 +76,20 @@
       "@magickml/plugin-openai-shared": [
         "packages/plugin-openai/shared/src/index.ts"
       ],
+      "@magickml/plugin-pinecone-client": [
+        "packages/plugin-pinecone/client/src/index.ts"
+      ],
+      "@magickml/plugin-pinecone-server": [
+        "packages/plugin-pinecone/server/src/index.ts"
+      ],
+      "@magickml/plugin-pinecone-shared": [
+        "packages/plugin-pinecone/shared/src/index.ts"
+      ],
       "@magickml/plugin-rest-client": [
         "packages/plugin-rest/client/src/index.ts"
       ],
       "@magickml/plugin-rest-server": [
         "packages/plugin-rest/server/src/index.ts"
-      ],
-      "@magickml/plugin-twitter-client": [
-        "packages/plugin-twitter/client/src/index.ts"
-      ],
-      "@magickml/plugin-twitter-server": [
-        "packages/plugin-twitter/server/src/index.ts"
       ],
       "@magickml/plugin-search-client": [
         "packages/plugin-search/client/src/index.ts"
@@ -117,31 +100,16 @@
       "@magickml/plugin-search-shared": [
         "packages/plugin-search/shared/src/index.ts"
       ],
-      "@magickml/plugin-pinecone-client": [
-        "packages/plugin-pinecone/client/src/index.ts"
+      "@magickml/plugin-twitter-client": [
+        "packages/plugin-twitter/client/src/index.ts"
       ],
-      "@magickml/plugin-pinecone-server": [
-        "packages/plugin-pinecone/server/src/index.ts"
+      "@magickml/plugin-twitter-server": [
+        "packages/plugin-twitter/server/src/index.ts"
       ],
-      "@magickml/plugin-pinecone-shared": [
-        "packages/plugin-pinecone/shared/src/index.ts"
-      ],
-      "@magickml/server": [
-        "apps/server/src/index.ts"
-      ],
-      "@magickml/server-core": [
-        "packages/server-core/src/index.ts"
-      ],
-      "@magickml/templates": [
-        "packages/templates/src/index.ts"
-      ],
-      "@magickml/types": [
-        "packages/@types/src/index.ts"
-      ]
+      "@magickml/server": ["apps/server/src/index.ts"],
+      "@magickml/server-core": ["packages/server-core/src/index.ts"],
+      "@magickml/types": ["packages/@types/src/index.ts"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }

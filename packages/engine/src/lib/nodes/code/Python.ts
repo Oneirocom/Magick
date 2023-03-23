@@ -1,17 +1,17 @@
 import Rete from 'rete'
 
-import {
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { processCode } from '../../functions/processCode'
+import { triggerSocket } from '../../sockets'
+import {
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData
+} from '../../types'
 
 const defaultCode = `
 # inputs: dictionary of inputs based on socket names outside the worker function
@@ -93,7 +93,7 @@ export class Python extends MagickComponent<unknown> {
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
   worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context: { data: { code: unknown } }

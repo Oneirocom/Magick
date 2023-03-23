@@ -1,17 +1,14 @@
 import Rete from 'rete'
-import {
-  Event,
-  EngineContext,
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  GetEventArgs,
-} from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, eventSocket, arraySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
+import { arraySocket, eventSocket, triggerSocket } from '../../sockets'
+import {
+  Event, GetEventArgs, MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs, WorkerData
+} from '../../types'
+
 const info = 'Event Recall is used to get conversation for an agent and user'
 
 //add option to get only events from max time difference (time diff, if set to 0 or -1, will get all events, otherwise will count in minutes)
@@ -74,7 +71,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
@@ -90,7 +87,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       return json.events
     }
     const getEvents = async (params: GetEventArgs) => {
-      console.log('getting events', params)
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
       for (const p in params) {

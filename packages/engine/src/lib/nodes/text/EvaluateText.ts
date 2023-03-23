@@ -2,12 +2,9 @@ import Rete from 'rete'
 
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
-import {
-  MagickNode,
-  MagickWorkerInputs, NodeData
-} from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 const fewshot = ``
 
@@ -52,7 +49,7 @@ export class EvaluateText extends MagickComponent<Promise<void>> {
       .addOutput(isFalse)
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(node:WorkerData, inputs: MagickWorkerInputs) {
     const action = inputs['string'][0] as string
     const fewshot = (node.data.fewshot as string).trim()
     const operationTypeData = node?.data?.operationType as string

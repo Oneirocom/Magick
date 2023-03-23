@@ -1,13 +1,11 @@
-import Rete from 'rete'
 import similarity from 'compute-cosine-similarity'
+import Rete from 'rete'
+import { MagickComponent } from '../../engine'
+import { embeddingSocket, numberSocket, triggerSocket } from '../../sockets'
 import {
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
+  MagickNode, MagickNodeData, MagickWorkerInputs,
+  MagickWorkerOutputs
 } from '../../types'
-import { triggerSocket, stringSocket, numberSocket, embeddingSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info = 'Event Store is used to store events for an event and user'
 
@@ -47,7 +45,7 @@ export class CosineSimilarity extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: MagickNodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     { projectId, module }: { projectId: string; module: any }

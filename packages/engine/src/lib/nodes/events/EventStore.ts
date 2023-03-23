@@ -1,22 +1,18 @@
-import Rete from 'rete'
 import axios from 'axios'
+import Rete from 'rete'
 
+import { API_ROOT_URL } from '../../config'
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
 import {
-  Event,
-  NodeData,
-  MagickNode,
+  arraySocket, eventSocket, stringSocket, triggerSocket
+} from '../../sockets'
+import {
+  Event, MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import {
-  triggerSocket,
-  stringSocket,
-  eventSocket,
-  arraySocket,
-} from '../../sockets'
-import { MagickComponent } from '../../magick-component'
-import { API_ROOT_URL } from '../../config'
 
 const info = 'Event Store is used to store events for an event and user'
 
@@ -75,7 +71,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context
@@ -104,7 +100,6 @@ export class EventStore extends MagickComponent<Promise<void>> {
       if (!content) console.log('Content is null, not storing the event !!')
     }
 
-    console.log('sender is', sender ?? event.sender)
     type Data = {
       sender: string
       projectId: string

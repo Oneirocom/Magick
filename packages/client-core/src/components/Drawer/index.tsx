@@ -4,6 +4,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
 import DocumentIcon from '@mui/icons-material/Description'
 import SettingsIcon from '@mui/icons-material/Settings'
+import ProjectIcon from '@mui/icons-material/Home'
 import StorageIcon from '@mui/icons-material/Storage'
 import Divider from '@mui/material/Divider'
 import MuiDrawer from '@mui/material/Drawer'
@@ -75,7 +76,15 @@ const StyledDrawer = styled(MuiDrawer, {
   }),
 }))
 
-const DrawerItem = ({ Icon, open, text, active, onClick = () => { /* null handler */ } }) => (
+const DrawerItem = ({
+  Icon,
+  open,
+  text,
+  active,
+  onClick = () => {
+    /* null handler */
+  },
+}) => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
     <ListItemButton
       sx={{
@@ -150,7 +159,7 @@ export function Drawer({ children }) {
   useEffect(() => {
     const secrets = localStorage.getItem('secrets')
     if (secrets) {
-      let secretHasBeenSet = false;
+      let secretHasBeenSet = false
       const parsedSecrets = JSON.parse(secrets)
       // check if any of the parsed secrets are not ''
       Object.keys(parsedSecrets).forEach(key => {
@@ -158,7 +167,6 @@ export function Drawer({ children }) {
           secretHasBeenSet = true
         }
       })
-
       setAPIKeysSet(secretHasBeenSet)
     }
   }, [])
@@ -238,9 +246,7 @@ export function Drawer({ children }) {
             onClick={onClick('/settings')}
             text="Settings"
           />
-          {!isAPIKeysSet && (
-            <SetAPIKeys setAPIKeysSet={setAPIKeysSet} />
-          )}
+          {!isAPIKeysSet && <SetAPIKeys />}
         </List>
       </StyledDrawer>
       {children}

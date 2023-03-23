@@ -1,4 +1,10 @@
-import { EngineContext, GraphData, ModuleComponent, Spell } from '../types'
+import {
+  EngineContext,
+  GraphData,
+  ModuleComponent,
+  NodeData,
+  Spell,
+} from '../types'
 import { getNodes } from '../nodes'
 import { initSharedEngine, extractNodes, MagickEngine } from '../engine'
 import { Module } from '../plugins/modulePlugin/module'
@@ -21,7 +27,7 @@ class RunSpell {
       components: getNodes(),
       server: true,
     }) as MagickEngine
-    console.log("Engine Created from spell runner")
+    console.log('Engine Created from spell runner')
     // Set up the module to interface with the runtime processes
     this.module = new Module()
 
@@ -101,16 +107,28 @@ class RunSpell {
    * component, and ran the one triggered rather than this slightly hacky hard coded
    * method.
    */
-  async runComponent({inputs, componentName, secrets, agent, publicVariables}: RunComponentArgs) {
+  async runComponent({
+    inputs,
+    componentName,
+    secrets,
+    agent,
+    publicVariables,
+  }: RunComponentArgs) {
     // ensaure we run from a clean sloate
     this._resetTasks()
 
     // laod the inputs into module memory
-    this.module.read({inputs, secrets, agent, publicVariables})
+    this.module.read({ inputs, secrets, agent, publicVariables })
 
-    const component = this._getComponent(componentName as string) as ModuleComponent
-    
-    const triggeredNode = this._getFirstNodeTrigger()
+    const component = this._getComponent(componentName as string) as
+      | ModuleComponent
+      | undefined
+
+    const triggeredNode = this._getFirstNodeTrigger() as NodeData
+
+    if (!component) {
+      throw new Error(`Component ${componentName} not found`)
+    }
 
     // this running is where the main "work" happens.
     // I do wonder whether we could make this even more elegant by having the node

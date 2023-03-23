@@ -7,6 +7,7 @@ import CompletionDetails from './completions/CompletionDetails'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories'
 import { ClientPlugin } from '@magickml/engine'
 
+export * from './types/openai'
 
 const FineTuneManager = new ClientPlugin({
   name: 'FineTuneManagerPlugin',
@@ -15,7 +16,7 @@ const FineTuneManager = new ClientPlugin({
       path: '/fineTuneManager',
       icon: AutoStoriesIcon,
       text: 'Fine Tuning',
-    }
+    },
   ],
   clientPageLayout: React.lazy(() => import('./PageLayout')),
   clientRoutes: [

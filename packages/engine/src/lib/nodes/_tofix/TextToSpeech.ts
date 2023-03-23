@@ -8,16 +8,16 @@ import axios from 'axios'
 import Rete from 'rete'
 
 import {
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-} from '../../types'
-import {
   API_ROOT_URL
 } from '../../config'
 import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, stringSocket, anySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
+import { anySocket, stringSocket, triggerSocket } from '../../sockets'
+import {
+  MagickNode,
+  MagickWorkerInputs,
+  WorkerData
+} from '../../types'
 
 const info = 'Returns the input string as voice'
 
@@ -86,7 +86,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(node: WorkerData, inputs: MagickWorkerInputs) {
     console.log('INPUTS:', inputs)
     const action = inputs['input'][0]
     const voiceProvider = inputs['voiceProvider'][0]
