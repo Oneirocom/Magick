@@ -1,6 +1,6 @@
 import { Button, Panel } from '@magickml/client-core'
 import { GraphData } from '@magickml/engine'
-import templates from '@magickml/templates'
+import { templates } from '@magickml/client-core'
 import md5 from 'md5'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
@@ -8,7 +8,8 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import {
   adjectives,
-  colors, uniqueNamesGenerator
+  colors,
+  uniqueNamesGenerator,
 } from 'unique-names-generator'
 import TemplatePanel from '../../components/TemplatePanel'
 import { useConfig } from '../../contexts/ConfigProvider'
@@ -29,6 +30,7 @@ export type Template = {
 }
 
 export const magickTemplates = templates.spells
+console.log('magickTemplates', magickTemplates)
 
 const CreateNew = () => {
   const config = useConfig()
@@ -127,7 +129,7 @@ const CreateNew = () => {
           <TemplatePanel
             setSelectedTemplate={setSelectedTemplate}
             selectedTemplate={selectedTemplate}
-            template={{...template, bg: template.bg ?? emptyImg}}
+            template={{ ...template, bg: template.bg ?? emptyImg }}
             key={i}
           />
         ))}
