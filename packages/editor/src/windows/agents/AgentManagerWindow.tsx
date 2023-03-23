@@ -27,12 +27,11 @@ const AgentManagerWindow = () => {
     const json = await res.json()
     setData(json.data)
     setIsLoading(false)
-    console.log('res is', json)
-    if(!json.data || !json.data[0]) return;
-    const spellAgent = JSON.parse(json.data[0].rootSpell)
+    if (!json.data || !json.data[0]) return
+    const spellAgent = json.data[0]?.rootSpell ?? {}
     const inputs = pluginManager.getInputByName()
     const plugin_list = pluginManager.getPlugins()
-    for (const key of Object.keys(plugin_list)){
+    for (const key of Object.keys(plugin_list)) {
       plugin_list[key] = validateSpellData(spellAgent, inputs[key])
     }
     setEnable(plugin_list)
@@ -84,7 +83,7 @@ const AgentManagerWindow = () => {
       data.projectId = config.projectId
       data.enabled = data?.enabled ? true : false
       data.updatedAt = new Date().toISOString()
-      data.rootSpell = data?.rootSpell || '{}'
+      data.rootSpell = data?.rootSpell || {}
       data.spells = Array.isArray(data?.spells) ? data.spells : []
       data.secrets = JSON.stringify(
         Array.isArray(data?.secrets) ? data.secrets : []
@@ -177,15 +176,15 @@ const AgentManagerWindow = () => {
   }, [config.apiUrl])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const res = await fetch(`${config.apiUrl}/agents`)
       const json = await res.json()
       console.log('res data', json.data)
-      if(!json.data || !json.data[0]) return;
-      const spellAgent = JSON.parse(json.data[0].rootSpell)
+      if (!json.data || !json.data[0]) return
+      const spellAgent = json.data[0]?.rootSpell ?? {}
       const inputs = pluginManager.getInputByName()
       const plugin_list = pluginManager.getPlugins()
-      for (const key of Object.keys(plugin_list)){
+      for (const key of Object.keys(plugin_list)) {
         plugin_list[key] = validateSpellData(spellAgent, inputs[key])
       }
       console.log(plugin_list)
