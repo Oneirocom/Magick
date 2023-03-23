@@ -1,13 +1,23 @@
 <p align="center"><img src="apps/docs/readme-files/MAGICK-banner.png" /></p>
 
-<h1 align="center">MAGICK</h1>
+<p align="center">
+  <a href="https://discord.gg/magickml">
+    <img src="https://dcbadge.vercel.app/api/server/magickml?style=social" alt="Join Discord">
+  </a>
+  <a href="https://twitter.com/magickml">
+    <img src="https://img.shields.io/twitter/follow/magickml?style=social" alt="Follow on Twitter">
+  </a>
+  <a href="https://www.linkedin.com/company/magickml/about/">
+    <img src="https://img.shields.io/badge/LinkedIn-Follow-blue?style=social&logo=linkedin" alt="Follow on LinkedIn">
+  </a>
+  <a href="https://www.youtube.com/@magickml">
+    <img src="https://img.shields.io/badge/YouTube-Subscribe-red?style=social&logo=youtube" alt="Subscribe on YouTube">
+  </a>
+</p>
 
-[![](https://dcbadge.vercel.app/api/server/magickml?style=social)](https://discord.gg/magickml)
-![Twitter Follow](https://img.shields.io/twitter/follow/magickml?style=social)
+<h3 align = "center">Magick is a groundbreaking visual AIDE (Artificial Intelligence Development Environment) for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and templates well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.</h3>
 
-Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and connectors well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.
-
-## Key Features
+## 🗝 Key Features
 
 - Realtime agents which can perform actions on their own, interact with users and other agents in different modalities with a unified memory and self
 - Social connectors to Discord, Twitter and Twilio -- Zoom, Google Meet, Reddit, Slack connectors will be available soon as plugins!
@@ -16,13 +26,28 @@ Magick is a visual IDE for no-code data pipelines and multimodal agents. Magick 
 - Powerful graph-based IDE for complex data pipelines
 - Graphs can be embedded in subgraphs and shared for rapid community development
 
-`Powerful enough for wizards. Easy enough for mere mortals.`
+## 🔮 Magick: Enchanting AI App Development Made Easy
 
-## Documentation is [here](https://magick-docs.vercel.app/)
+With Magick, you can unleash the power of AI without needing to know how to code. Using our intuitive environment, you can seamlessly connect to popular services and explore a world of pre-built nodes and connectors to bring your vision to life.
+
+`Powerful enough for wizards. Easy enough for mere mortals.`
 
 <p align="center"><img src="apps/docs/readme-files/ui.png" /></p>
 
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=Xy7tMmKluvE" target="_blank">
+    <img src="https://img.youtube.com/vi/Xy7tMmKluvE/0.jpg" alt="Magick - AI for Mere Mortals" style="width:65%;max-width:640px;">
+  </a>
+  <br>
+  ▶️ <strong>Click the image above to watch the <a href="https://www.youtube.com/watch?v=Xy7tMmKluvE" target="_blank">video</a></strong>
+</p>
+
+<hr>
+
 # Installation
+
+  ## 📚 [Documentation / Guide](https://magick-docs.vercel.app/)
+
 Local development is straightforward. You will need git and node.js 18+ installed.
 ```
 git clone https://github.com/Oneirocom/Magick
@@ -50,32 +75,13 @@ _Please be aware Magick is under heavy development which may cause breaking chan
 Magick installs [mydb.sqlite](apps/server/mydb.sqlite) by default. This is a local sqlite database. It is not recommended for production use, but is fine for development. _Database can be wiped by breaking changes, back up your spells via export regularly._
 
 ### Local Sqlite Installation:
-Add a relative or absolute path to your sqlite file in the [`.env` file](.env)
+If you want to set up a custom sqlite database, add a relative or absolute path to your sqlite file in the [`.env` file](.env)
 Next migrate to the new database by running:
 ```
 npm run migrate
 ```
 
-> Windows: Required sqlite extensions won't work if you're using Microsoft Windows, please use [`postgres`](https://www.postgresql.org/).
-
-> Linux:   There are two sqlite extensions used, `sqlite-vector` and `sqlite-vss`
-  based on the [docs](https://github.com/asg017/sqlite-vss#documentation),
-  on Linux machines, you'll have to install some packages to make it work:
-  ```
-    sudo apt-get update
-    sudo apt-get install -y libgomp1 libatlas-base-dev liblapack-dev 
-  ```
-> Mac:   No extra steps required.
-
-### Supabase public database 
-
-> Note: This is a public database, so _please don't store any sensitive data here_.
-
-Magick can connect to a test database on [Supabase](https://supabase.com/). It is ok to use for trial purposes, but it will be wiped regularly and is not a good place to store your spells.
-
-Instead, one should enable Postgres database in the [`.env` file](.env)
-
-### Deploy your own database
+### Deploy your own Postgres database
 
 To deploy your own database, we suggest using Supabase or another Postgres database. The current setup for events and documents requires the [`pgvector`](https://supabase.com/docs/guides/database/extensions/pgvector) extension to be enabled.
 
@@ -118,7 +124,7 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-14-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-22-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -138,11 +144,23 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/khalildh"><img src="https://avatars.githubusercontent.com/u/16530987?v=4?s=100" width="100px;" alt="khalildh"/><br /><sub><b>khalildh</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=khalildh" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/pigloo"><img src="https://avatars.githubusercontent.com/u/1707563?v=4?s=100" width="100px;" alt="Pigloo"/><br /><sub><b>Pigloo</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=pigloo" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/avirtualfuture"><img src="https://avatars.githubusercontent.com/u/118632766?v=4?s=100" width="100px;" alt="avirtualfuture"/><br /><sub><b>avirtualfuture</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=avirtualfuture" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/avirtualfuture"><img src="https://avatars.githubusercontent.com/u/118632766?v=4?s=100" width="100px;" alt="avirtualfuture"/><br /><sub><b>avirtualfuture</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=avirtualfuture" title="Code">💻</a> <a href="https://github.com/Oneirocom/Magick/commits?author=avirtualfuture" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://www.alexjorgef.com"><img src="https://avatars.githubusercontent.com/u/3478673?v=4?s=100" width="100px;" alt="Alexandre Ferreira"/><br /><sub><b>Alexandre Ferreira</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=alexjorgef" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://matei3d.com"><img src="https://avatars.githubusercontent.com/u/45219403?v=4?s=100" width="100px;" alt="Matei Anghel"/><br /><sub><b>Matei Anghel</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=matei3d" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Trentalantar"><img src="https://avatars.githubusercontent.com/u/28672708?v=4?s=100" width="100px;" alt="Trentalantar"/><br /><sub><b>Trentalantar</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=Trentalantar" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/DavinciDreams"><img src="https://avatars.githubusercontent.com/u/64185677?v=4?s=100" width="100px;" alt="Lisa Mega Watts"/><br /><sub><b>Lisa Mega Watts</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=DavinciDreams" title="Documentation">📖</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/rjphnx"><img src="https://avatars.githubusercontent.com/u/12023783?v=4?s=100" width="100px;" alt="r2"/><br /><sub><b>r2</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=rjphnx" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/FabriceIRANKUNDA"><img src="https://avatars.githubusercontent.com/u/58092199?v=4?s=100" width="100px;" alt="IRANKUNDA Fabrice"/><br /><sub><b>IRANKUNDA Fabrice</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=FabriceIRANKUNDA" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://kiennguyensys.blogspot.com/"><img src="https://avatars.githubusercontent.com/u/24317011?v=4?s=100" width="100px;" alt="Kien Nguyen"/><br /><sub><b>Kien Nguyen</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=kiennguyensys" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/BMO-tech"><img src="https://avatars.githubusercontent.com/u/7051219?v=4?s=100" width="100px;" alt="Ben Moore"/><br /><sub><b>Ben Moore</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=BMO-tech" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/stackedq"><img src="https://avatars.githubusercontent.com/u/20498757?v=4?s=100" width="100px;" alt="Q"/><br /><sub><b>Q</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=stackedq" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/thomageanderson"><img src="https://avatars.githubusercontent.com/u/122855509?v=4?s=100" width="100px;" alt="thomageanderson"/><br /><sub><b>thomageanderson</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=thomageanderson" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/codingsh"><img src="https://avatars.githubusercontent.com/u/58003006?v=4?s=100" width="100px;" alt="codingsh"/><br /><sub><b>codingsh</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=codingsh" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://palmesi.com"><img src="https://avatars.githubusercontent.com/u/3073099?v=4?s=100" width="100px;" alt="Pietro"/><br /><sub><b>Pietro</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=pizzooid" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

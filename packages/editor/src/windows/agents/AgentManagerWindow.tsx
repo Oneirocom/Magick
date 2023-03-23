@@ -15,7 +15,7 @@ const AgentManagerWindow = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
   const [root_spell, setRootSpell] = useState('default')
-  const [enable, setEnable] = useState("")
+  const [enable, setEnable] = useState('')
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 
@@ -191,7 +191,6 @@ const AgentManagerWindow = () => {
       console.log(plugin_list)
       setEnable(plugin_list)
     })()
-    
   }, [])
   return isLoading ? (
     <LoadingScreen />

@@ -30,6 +30,7 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
             right: 8,
             top: 8,
             color: theme => theme.palette.grey[500],
+            background: 'var(--dark-2)',
           }}
         >
           <Close />
@@ -66,12 +67,12 @@ const InfoDialog = ({ title, body, style }) => {
         <Menu
           id="basic-menu"
           anchorEl={anchorEl}
+          onClose={handleClose}
           open={open}
           classes={{ paper: styles.root }}
           MenuListProps={{
             'aria-labelledby': 'basic-button',
           }}
-          hideBackdrop
         >
           <div className={styles['sharp-edge-menu']}></div>
           <BootstrapDialogTitle
