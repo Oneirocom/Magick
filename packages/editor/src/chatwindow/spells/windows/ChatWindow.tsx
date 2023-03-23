@@ -21,7 +21,7 @@ import { useFeathers } from '../../../contexts/FeathersProvider'
 import { useAppSelector } from '../../../state/hooks'
 import { useEditor } from '../../contexts/EditorProvider'
 
-import { getSpellApi } from '../../../state/api/spells'
+import { spellApi } from '../../../state/api/spells'
 import { useConfig } from '../../../contexts/ConfigProvider'
 
 import ChatUI from '../../../components/ChatUI'
@@ -70,7 +70,6 @@ const Input = props => {
 
 const ChatWindow = ({ tab }) => {
   const config = useConfig()
-  const spellApi = getSpellApi(config)
 
   const defaultchatwindowData = {
     sender: 'chatwindowSender',
