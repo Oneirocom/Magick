@@ -240,13 +240,6 @@ export function Drawer({ children }) {
           <PluginDrawerItems onClick={onClick} open={open} />
           <Divider />
           <DrawerItem
-            active={location.pathname === '/project'}
-            Icon={ProjectIcon}
-            open={open}
-            onClick={onClick('/project')}
-            text="Project"
-          />
-          <DrawerItem
             active={location.pathname.includes('/settings')}
             Icon={SettingsIcon}
             open={open}

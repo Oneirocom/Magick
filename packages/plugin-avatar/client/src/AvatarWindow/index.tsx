@@ -7,13 +7,13 @@ import { useEffect, useRef, useState } from 'react'
 import Scrollbars from 'react-custom-scrollbars-2'
 import { useDispatch } from 'react-redux'
 import css from '../../screens/Magick/magick.module.css'
-import { usePubSub } from '../../contexts/PubSubProvider'
-import { useAppSelector } from '../../state/hooks'
+import { usePubSub } from '../../../../editor/src/contexts/PubSubProvider'
+import { useAppSelector } from '../../../../editor/src/state/hooks'
 import {
   selectStateBytabId,
   upsertLocalState
-} from '../../state/localState'
-import SpeechUtils from '../../utils/speechUtils'
+} from '../../../../editor/src/state/localState'
+import SpeechUtils from '../../../../editor/src/utils/speechUtils'
 import Avatar from './Avatar'
 
 const AvatarWindow = ({ tab }) => {

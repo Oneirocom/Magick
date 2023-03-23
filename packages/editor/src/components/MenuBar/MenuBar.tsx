@@ -32,7 +32,7 @@ const MenuBar = () => {
   // grab all events we need
   const {
     $SAVE_SPELL,
-    $CREATE_AVATAR_WINDOW,
+    $CREATE_PROJECT_WINDOW,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
     $CREATE_TEXT_EDITOR,
@@ -88,8 +88,8 @@ const MenuBar = () => {
     navigate('/home/all-projects?import')
   }
 
-  const onAvatarWindowCreate = () => {
-    publish($CREATE_AVATAR_WINDOW(activeTabRef.current?.id))
+  const onProjectWindowCreate = () => {
+    publish($CREATE_PROJECT_WINDOW(activeTabRef.current?.id))
   }
 
   const onPlaytestCreate = () => {
@@ -222,8 +222,8 @@ const MenuBar = () => {
         inspector: {
           onClick: onInspectorCreate,
         },
-        avatar: {
-          onClick: onAvatarWindowCreate,
+        project: {
+          onClick: onProjectWindowCreate,
         },
         playtest: {
           onClick: onPlaytestCreate,
