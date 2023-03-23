@@ -31,7 +31,7 @@ Please note that the return of your function must be an object whose keys are th
 export class Javascript extends MagickComponent<unknown> {
   constructor() {
     // Name of the component
-    super('Code')
+    super('Javascript')
 
     this.task = {
       outputs: {
