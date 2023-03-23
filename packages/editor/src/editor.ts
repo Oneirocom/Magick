@@ -143,6 +143,7 @@ export const initEditor = function ({
   editor.use(AreaPlugin, {
     scaleExtent: { min: 0.1, max: 1.5 },
     background,
+    tab
     // snap: true - TODO: add ability to enable and disable snapping to UI
   })
 
