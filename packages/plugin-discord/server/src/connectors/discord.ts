@@ -36,20 +36,22 @@ export class DiscordConnector {
   voice_language_code!: string
   tiktalknet_url!: string
   worldManager: WorldManager
-  constructor({
-    agent,
-    discord_api_key,
-    discord_wake_words,
-    discord_userid,
-    discord_bot_name,
-    spellRunner,
-    use_voice,
-    voice_provider,
-    voice_character,
-    voice_language_code,
-    tiktalknet_url,
-    worldManager,
-  }) {
+  constructor(options) {
+    console.log('options are', options)
+    const {
+      agent,
+      discord_api_key,
+      discord_wake_words,
+      discord_userid,
+      discord_bot_name,
+      spellRunner,
+      use_voice,
+      voice_provider,
+      voice_character,
+      voice_language_code,
+      tiktalknet_url,
+      worldManager,
+    } = options
     this.worldManager = worldManager
     this.agent = agent
     this.spellRunner = spellRunner
@@ -463,7 +465,7 @@ export class DiscordConnector {
       }
     }
     //checks if the user is in discussion with the but, or includes !ping or started the conversation, if so it adds (if not exists) !ping in the start to handle the message the ping command
-    const isDirectMethion =
+    const isDirectMention =
       !content.startsWith('!') &&
       content.toLowerCase().includes(this.discord_bot_name?.toLowerCase())
     const isUserNameMention =
@@ -481,7 +483,7 @@ export class DiscordConnector {
     console.log(content)
     if (!content.startsWith('!') && !otherMention) {
       if (isMention) content = '!ping ' + content.replace(botMention, '').trim()
-      else if (isDirectMethion)
+      else if (isDirectMention)
         content = '!ping ' + content.replace(client.name_regex, '').trim()
       else if (isUserNameMention) {
         content = '!ping ' + content.replace(client.username_regex, '').trim()
@@ -630,7 +632,18 @@ export class DiscordConnector {
       publicVariables: this.agent.publicVariables,
       runSubspell: true,
     })
+
+    if(!response) {
+      console.warn('Discord: No response outputs')
+      return
+    }
+
     const { Output /*Image*/ } = response
+
+    if(!Output) {
+      console.warn('Discord: No Output')
+      return
+    }
 
     // get the value of the first entry in the object
     const firstValue = Output || Object.values(response)[0]
