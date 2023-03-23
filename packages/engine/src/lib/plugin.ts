@@ -1,9 +1,10 @@
 import { FC, LazyExoticComponent } from "react"
 import { Handler } from "koa/lib/application"
-import { CompletionProvider } from "./types"
-import { MagickComponentArray } from "./magick-component"
+import { CompletionProvider, Route } from "./types"
 import { Socket } from "rete"
 import { Service, ServiceInterface } from "@feathersjs/feathers/lib"
+import {Application} from "@feathersjs/koa"
+import { MagickComponentArray } from "./engine"
 
 export type PluginSecret = {
   name: string
@@ -25,11 +26,7 @@ export type PluginClientRoute = {
   plugin: string
 }
 
-export type PluginServerRoute = {
-  path: string
-  method: string
-  handler: Handler
-}
+export type PluginServerRoute = Route
 
 // inputTypes: [
 //   { name: 'Discord (Voice)', trigger: true, socket: eventSocket},
@@ -48,6 +45,8 @@ export type PluginIOType = {
   name: string
   trigger: boolean
   socket: Socket
+  defaultResponseOutput?: string
+  handler?: ({ output, agent, event }) => Promise<void>
 }
 
 
@@ -133,11 +132,11 @@ export class ClientPlugin extends Plugin {
 export type ServerInit = () => (Promise<void> | null | void)
 export type ServerInits = Record<string, ServerInit>
 export class ServerPlugin extends Plugin {
-  services: ServiceInterface[]
+  services: ((app:Application)=>void)[]
   serverInit?: ServerInit
   agentMethods?: {
-    start: ()=>void
-    stop: ()=>void
+    start: (args)=>Promise<void> | void
+    stop: (args)=>Promise<void> | void
   }
   serverRoutes?: Array<PluginServerRoute>
   constructor({
@@ -157,11 +156,11 @@ export class ServerPlugin extends Plugin {
     secrets = [],
     completionProviders = [],
   }: PluginConstuctor & {
-    services?: Service[]
+    services?: ((app:Application)=>void)[]
     serverInit?: ServerInit
     agentMethods?: {
-      start: ()=>void
-      stop: ()=>void
+      start: (args)=>Promise<void> | void
+      stop: (args)=>Promise<void> | void
     }
     serverRoutes?: Array<PluginServerRoute>
   }) {
@@ -255,7 +254,7 @@ class PluginManager {
   }
 }
 
-class ClientPluginManager extends PluginManager {
+export class ClientPluginManager extends PluginManager {
   declare pluginList: Array<ClientPlugin>
   constructor() {
     super()
@@ -373,9 +372,29 @@ class ClientPluginManager extends PluginManager {
     })
     return pluginList
   }
+
+  getAgentStartMethods(): Record<string, (args: any) => void | Promise<void>> {
+    return {}
+  }
+  getAgentStopMethods(): Record<string, (args: any) => void | Promise<void>> {
+    return {}
+  }
+  getServices() {
+    const serviceList = [] as ([string, (app:Application)=>void])[]
+    return serviceList
+  }
+  getServerInits() {
+    const serverInits:ServerInits = {}
+    return serverInits
+  }
+
+  getServerRoutes() {
+    const serverRoutes = [] as PluginServerRoute[]
+    return serverRoutes
+  }
 }
 
-class ServerPluginManager extends PluginManager {
+export class ServerPluginManager extends PluginManager {
   declare pluginList: Array<ServerPlugin>
   constructor() {
     super()
@@ -383,8 +402,8 @@ class ServerPluginManager extends PluginManager {
   }
 
   getAgentStartMethods() {
-    let agentStartMethods = {}
-    ;(this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
+    let agentStartMethods:Record<string, (args: any) => void | Promise<void>> = {}
+    ;(this.pluginList).forEach((plugin: ServerPlugin) => {
       if (plugin.agentMethods) {
         const obj = {}
         obj[plugin.name] = plugin.agentMethods.start
@@ -395,8 +414,8 @@ class ServerPluginManager extends PluginManager {
   }
 
   getAgentStopMethods() {
-    let agentStopMethods = {}
-    ;(this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
+    let agentStopMethods:Record<string, (args: any) => void | Promise<void>> = {}
+    ;(this.pluginList).forEach((plugin: ServerPlugin) => {
       if (plugin.agentMethods) {
         const obj = {}
         obj[plugin.name] = plugin.agentMethods.stop
@@ -407,8 +426,8 @@ class ServerPluginManager extends PluginManager {
   }
 
   getServices() {
-    const serviceList = [] as ([string, ServiceInterface])[]
-    ;(this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
+    const serviceList = [] as ([string, (app:Application)=>void])[]
+    ;(this.pluginList).forEach((plugin: ServerPlugin) => {
       Object.keys(plugin.services).forEach(key => {
         serviceList.push([key, plugin.services[key]])
       })
@@ -418,7 +437,7 @@ class ServerPluginManager extends PluginManager {
 
   getServerInits() {
     let serverInits:ServerInits = {}
-    ;(this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
+    ;(this.pluginList).forEach((plugin: ServerPlugin) => {
       if (plugin.serverInit) {
         const obj = {}
         obj[plugin.name] = plugin.serverInit
@@ -430,7 +449,7 @@ class ServerPluginManager extends PluginManager {
 
   getServerRoutes() {
     const serverRoutes = [] as PluginServerRoute[]
-    ;(this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
+    ;(this.pluginList).forEach((plugin: ServerPlugin) => {
       if (plugin.serverRoutes) {
         plugin.serverRoutes.forEach(route => {
           serverRoutes.push(route)

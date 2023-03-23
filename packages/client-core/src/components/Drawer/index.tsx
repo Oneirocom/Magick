@@ -1,4 +1,4 @@
-import { pluginManager } from '@magickml/engine'
+import { ClientPlugin, ClientPluginManager, pluginManager } from '@magickml/engine'
 import AppsIcon from '@mui/icons-material/Apps'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
@@ -111,8 +111,8 @@ const DrawerItem = ({
 
 const PluginDrawerItems = ({ onClick, open }) => {
   const location = useLocation()
-  const drawerItems = pluginManager.getDrawerItems()
-  let lastPlugin = null
+  const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
+  let lastPlugin:string|null = null
   let divider = false
   return (
     <>
