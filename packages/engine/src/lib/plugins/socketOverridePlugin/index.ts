@@ -6,7 +6,9 @@ function install(editor: IRunContextEditor) {
       const { sendToPlaytest } = magick
 
       // Might be a bit hacky to do it this way, but it works for now
-      sendToPlaytest(socketOutput.output)
+      if (node.data.sendToPlaytest && sendToPlaytest) {
+        sendToPlaytest(socketOutput.output)
+      }
 
       if (socketOutput) {
         return socketOutput
