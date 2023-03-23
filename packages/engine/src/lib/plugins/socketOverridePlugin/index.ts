@@ -1,4 +1,4 @@
-import { IRunContextEditor, MagickComponent } from '../../types'
+import { IRunContextEditor } from '../../types'
 
 function install(editor: IRunContextEditor) {
   editor.on('componentregister', (component: any) => {
@@ -7,7 +7,6 @@ function install(editor: IRunContextEditor) {
 
       // Might be a bit hacky to do it this way, but it works for now
       if (node.data.sendToPlaytest && sendToPlaytest) {
-        console.log('socketOutput.output is', socketOutput.output)
         sendToPlaytest(socketOutput.output)
       }
 

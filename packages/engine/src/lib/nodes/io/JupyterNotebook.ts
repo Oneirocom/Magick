@@ -3,16 +3,16 @@
 import axios from 'axios'
 import Rete from 'rete'
 
+import { InputControl } from '../../dataControls/InputControl'
+import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
+import { MagickComponent } from '../../engine'
+import { stringSocket, triggerSocket } from '../../sockets'
 import {
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { triggerSocket, stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info =
   'Call a Jupyter Notebook with the given name and inputs, and return the output.'
@@ -109,7 +109,7 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     rawInputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs
   ) {

@@ -48,11 +48,11 @@ export async function processCode(
     }
   } else {
     try {
-
       const codeResult = await runPython(code, flattenInputs, data);
       return codeResult;
     } catch (err) {
       console.log({ err });
     }
   }
+
 }

@@ -37,11 +37,7 @@ export async function makeTextCompletion(
     })
 
     const usage = resp.data.usage
-
-    console.log('data', data)
-    console.log('responseData', resp.data)
-    console.log('settings', settings)
-
+    
     saveRequest({
       projectId: projectId,
       requestData: JSON.stringify(settings),

@@ -1,17 +1,11 @@
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
+import { MagickComponent } from '../../engine'
+import { anySocket, triggerSocket } from '../../sockets'
 import {
-  EngineContext,
-  NodeData,
   MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
+  MagickWorkerInputs, WorkerData
 } from '../../types'
-import { triggerSocket, stringSocket, anySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info = 'Is Null Or Undefined checks if the input is null or undefined'
 
@@ -41,8 +35,8 @@ export class IsNullOrUndefined extends MagickComponent<Promise<void>> {
       .addOutput(isFalse)
   }
 
-  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
-    const action = inputs['input'][0] ?? inputs['input']
+  async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
+    const action = inputs['string'][0] ?? inputs['string']
     const is =
       action === null || action === undefined || (action as string).length <= 0
     console.log('found null or empty input:', is)

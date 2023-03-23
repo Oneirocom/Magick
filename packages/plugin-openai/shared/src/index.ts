@@ -1,10 +1,11 @@
-import { arraySocket, CompletionProvider, embeddingSocket, stringSocket } from "@magickml/engine"
+import { arraySocket, CompletionProvider, embeddingSocket, PluginSecret, stringSocket } from "@magickml/engine"
 
-const secrets = [
+const secrets: PluginSecret[] = [
   {
     name: 'OpenAI API Key',
     key: 'openai_api_key',
     global: true,
+    getUrl: 'https://beta.openai.com/account/api-keys'
   },
 ]
 const completionProviders: CompletionProvider[] = [
@@ -90,7 +91,7 @@ const completionProviders: CompletionProvider[] = [
       {
         socket: 'result',
         name: 'Result',
-        type: embeddingSocket,
+        type: stringSocket,
       },
       {
         socket: 'error',

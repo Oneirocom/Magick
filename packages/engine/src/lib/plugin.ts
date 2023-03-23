@@ -1,24 +1,25 @@
-import { CompletionProvider } from "./types"
+import { CompletionProvider } from './types'
 
-type Secret = {
+export type PluginSecret = {
   name: string
   key: string
   global?: boolean
+  getUrl?: string
 }
 
-type DrawerItem = {
+export type PluginDrawerItem = {
   path: string
   icon: any
   text: string
 }
 
-type ClientRoute = {
+export type PluginClientRoute = {
   path: string
   component: any
   exact?: boolean
 }
 
-type ServerRoute = {
+export type PluginServerRoute = {
   path: string
   method: string
   handler: Function
@@ -29,7 +30,7 @@ type PluginConstuctor = {
   nodes?: any
   inputTypes?: any[]
   outputTypes?: any[]
-  secrets?: Secret[]
+  secrets?: PluginSecret[]
   completionProviders?: any[]
 }
 class Plugin {
@@ -37,7 +38,7 @@ class Plugin {
   nodes: any
   inputTypes: any[]
   outputTypes: any[]
-  secrets: Secret[] = []
+  secrets: PluginSecret[] = []
   completionProviders: any[] = []
   constructor({
     name,
@@ -58,9 +59,11 @@ class Plugin {
 
 export class ClientPlugin extends Plugin {
   agentComponents: any[]
-  drawerItems?: Array<DrawerItem>
+  drawerItems?: Array<PluginDrawerItem>
   clientPageLayout?: any
-  clientRoutes?: Array<ClientRoute>
+  clientRoutes?: Array<PluginClientRoute>
+  spellTemplates?: any[]
+  projectTemplates?: any[]
   constructor({
     name,
     nodes = [],
@@ -72,6 +75,8 @@ export class ClientPlugin extends Plugin {
     drawerItems = [],
     secrets = [],
     completionProviders = [],
+    spellTemplates = [],
+    projectTemplates = []
   }: {
     name: string
     nodes?: any
@@ -79,10 +84,12 @@ export class ClientPlugin extends Plugin {
     inputTypes?: any[]
     outputTypes?: any[]
     clientPageLayout?: any
-    clientRoutes?: Array<ClientRoute>
-    drawerItems?: Array<DrawerItem>
-    secrets?: Secret[]
+    clientRoutes?: Array<PluginClientRoute>
+    drawerItems?: Array<PluginDrawerItem>
+    secrets?: PluginSecret[]
     completionProviders?: any[]
+    spellTemplates?: any[]
+    projectTemplates?: any[]  
   }) {
     super({
       name,
@@ -96,6 +103,8 @@ export class ClientPlugin extends Plugin {
     this.agentComponents = agentComponents
     this.clientRoutes = clientRoutes
     this.drawerItems = drawerItems
+    this.spellTemplates = spellTemplates
+    this.projectTemplates = projectTemplates
     pluginManager.register(this)
   }
 }
@@ -107,7 +116,7 @@ export class ServerPlugin extends Plugin {
     start: Function
     stop: Function
   }
-  serverRoutes?: Array<ServerRoute>
+  serverRoutes?: Array<PluginServerRoute>
   constructor({
     name,
     nodes = [],
@@ -135,8 +144,8 @@ export class ServerPlugin extends Plugin {
     }
     inputTypes?: any[]
     outputTypes?: any[]
-    serverRoutes?: Array<ServerRoute>
-    secrets?: Secret[]
+    serverRoutes?: Array<PluginServerRoute>
+    secrets?: PluginSecret[]
     completionProviders?: any[]
   }) {
     super({
@@ -145,7 +154,7 @@ export class ServerPlugin extends Plugin {
       inputTypes,
       outputTypes,
       secrets,
-      completionProviders
+      completionProviders,
     })
     this.services = services
     this.agentMethods = agentMethods
@@ -178,7 +187,6 @@ class PluginManager {
     return inputTypes
   }
 
-  
   getOutputTypes() {
     const outputTypes = [] as any[]
     this.pluginList.forEach(plugin => {
@@ -217,12 +225,15 @@ class PluginManager {
     return secrets
   }
 
-  getCompletionProviders(type = null, subtypes: null | string[] = null): CompletionProvider[] {
+  getCompletionProviders(
+    type = null,
+    subtypes: null | string[] = null
+  ): CompletionProvider[] {
     const completionProviders = [] as any[]
     this.pluginList.forEach(plugin => {
       plugin.completionProviders.forEach(provider => {
-        if(type && provider.type !== type) return
-        if(subtypes && !subtypes.includes(provider.subtype)) return
+        if (type && provider.type !== type) return
+        if (subtypes && !subtypes.includes(provider.subtype)) return
         completionProviders.push(provider)
       })
     })
@@ -245,6 +256,26 @@ class ClientPluginManager extends PluginManager {
       })
     })
     return agentComp
+  }
+
+  getSpellTemplates() {
+    const spellTemplates = [] as any[]
+    ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
+      plugin.spellTemplates?.forEach(spellTemplate => {
+        spellTemplates.push(spellTemplate)
+      })
+    })
+    return spellTemplates
+  }
+
+  getProjectTemplates() {
+    const projectTemplates = [] as any[]
+    ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
+      plugin.projectTemplates?.forEach(projectTemplate => {
+        projectTemplates.push(projectTemplate)
+      })
+    })
+    return projectTemplates
   }
 
   getClientRoutes() {
@@ -313,7 +344,7 @@ class ClientPluginManager extends PluginManager {
     return inputTypes
   }
 
-  getInputByName(){
+  getInputByName() {
     const inputTypes = {}
     this.pluginList.forEach(plugin => {
       inputTypes[plugin.name] = plugin.inputTypes
@@ -321,19 +352,17 @@ class ClientPluginManager extends PluginManager {
     return inputTypes
   }
 
-  getPlugins(){
+  getPlugins() {
     const pluginList = {}
     this.pluginList.forEach(plugin => {
       pluginList[plugin.name] = 'NONE'
     })
     return pluginList
   }
-
-  
 }
 
 class ServerPluginManager extends PluginManager {
-  pluginList: Array<ServerPlugin>
+  declare pluginList: Array<ServerPlugin>
   constructor() {
     super()
     this.pluginList = new Array<ServerPlugin>()

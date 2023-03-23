@@ -1,10 +1,11 @@
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { MagickNode } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
 import { triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickNode } from '../../types'
+
 const info = `The trigger out component is mainly used to add an output to a spell when it is being run as a module, ie inside a component of another spell.  It will pass the trigger signal out of the spell to the higher level spell.`
 
 type WorkerReturn = {

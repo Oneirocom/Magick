@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Rete from 'rete'
 import axios from 'axios'
-import {
-  NodeData,
-  MagickNode,
-} from '../../../types'
+import Rete from 'rete'
 import { API_ROOT_URL } from '../../../config'
-import { InputControl } from '../../../dataControls/InputControl'
-import { anySocket, stringSocket } from '../../../sockets'
-import { MagickComponent } from '../../../magick-component'
 import { BooleanControl } from '../../../dataControls/BooleanControl'
+import { InputControl } from '../../../dataControls/InputControl'
+import { MagickComponent } from '../../../engine'
+import { anySocket } from '../../../sockets'
+import {
+  MagickNode, WorkerData
+} from '../../../types'
 
 const info = `Image Variable`
 
@@ -57,7 +56,7 @@ export class Image extends MagickComponent<any> {
     return node.addOutput(out)
   }
 
-  async worker(node: NodeData) {
+  async worker(node: WorkerData) {
     const _var = node?.data?._var as string
     const params = new URLSearchParams([['id', node.id.toString()]]);
     const result = await axios.get(`${API_ROOT_URL}/upload`, { params });

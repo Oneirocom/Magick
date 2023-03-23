@@ -1,14 +1,12 @@
 import Rete from 'rete'
 
-import {
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../types'
+import { MagickComponent } from '../../engine'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { objectSocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import {
+  MagickNode,
+  MagickWorkerInputs, WorkerData
+} from '../../types'
 import { SocketGeneratorControl } from './../../dataControls/SocketGenerator'
 
 const info = `Destructure properties out of an object`
@@ -54,7 +52,7 @@ export class Destructure extends MagickComponent<void> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  worker(node: NodeData, inputs: MagickWorkerInputs) {
+  worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const object = inputs.object[0] as Record<string, any>
 
     const output = Object.keys(node.outputs).reduce((acc, key) => {

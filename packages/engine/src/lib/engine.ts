@@ -1,6 +1,6 @@
-import Rete, { Engine } from 'rete'
+import Rete, { Node, Engine } from 'rete'
+import { NodeData } from 'rete/types/core/data'
 import { Plugin } from 'rete/types/core/plugin'
-import { Component } from 'rete/types/engine'
 import io from 'socket.io'
 
 import consolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
@@ -8,7 +8,8 @@ import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
-import { GraphData, MagickWorkerInputs, NodeData, UnknownData } from './types'
+import { TaskOptions } from './plugins/taskPlugin/task'
+import { GraphData, MagickEditor, MagickNode, MagickTask, MagickWorkerInputs, ModuleOptions, UnknownData, WorkerData } from './types'
 
 interface WorkerOutputs {
   [key: string]: unknown
@@ -29,10 +30,10 @@ export abstract class MagickEngineComponent<WorkerReturnType> {
   }
 
   abstract worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     outputs: WorkerOutputs,
-    context: UnknownData,
+    context: UnknownData | { module: { publicVariables: string } },
     ...args: unknown[]
   ): WorkerReturnType
 }
@@ -41,7 +42,7 @@ export abstract class MagickEngineComponent<WorkerReturnType> {
 
 export type InitEngineArguments = {
   name: string
-  components: Component[]
+  components: MagickComponent<unknown>[]
   server: boolean
   throwError?: (message: unknown)=>void
   socket?: io.Socket
@@ -56,7 +57,6 @@ export const initSharedEngine = ({
 }: InitEngineArguments) => {
   const engine = new Rete.Engine(name) as MagickEngine
 
-  console.log('STARTING ENGINE')
   if (server) {
     // WARNING: ModulePlugin needs to be initialized before TaskPlugin during engine setup
     engine.use<Plugin, DebuggerArgs>(consolePlugin, {
@@ -109,4 +109,59 @@ export const getTriggeredNode = (
   return extractNodes(data.nodes, map).find(
     node => node.data.socketKey === socketKey
   )
+}
+
+export abstract class MagickComponent<
+  WorkerReturnType
+> extends MagickEngineComponent<WorkerReturnType> {
+  // Original interface for task and _task: IComponentWithTask from the Rete Task Plugin
+  declare task: TaskOptions
+  declare _task: MagickTask
+  declare cache: UnknownData
+  editor: MagickEditor | null = null
+  data: unknown = {}
+  declare category: string
+  declare info: string
+  declare display: boolean
+  dev = false
+  hide = false
+  runFromCache = false
+  deprecated? = false
+  onDoubleClick?: (node: MagickNode) => void
+  declare module: ModuleOptions
+  contextMenuName: string | undefined
+  workspaceType: 'spell' | null | undefined
+  displayName: string | undefined
+
+  nodeTaskMap: Record<number, MagickTask> = {}
+
+  abstract builder(node: MagickNode): Promise<MagickNode> | MagickNode | void
+
+  async build(node: MagickNode) {
+    await this.builder(node)
+
+    return node
+  }
+
+  async run(node: NodeData, data = {}) {
+    if (!node || node === undefined) {
+      return console.error('node is undefined')
+    }
+
+    const task = this.nodeTaskMap[node?.id]
+
+    if(!data || Object.keys(data).length === 0) {
+      return console.error('data is undefined')
+    }
+    if (task) await task.run(data as NodeData)
+  }
+
+  async createNode(data = {}) {
+    const node = new Node(this.name) as MagickNode
+
+    node.data = data as WorkerData
+    await this.build(node)
+
+    return node
+  }
 }

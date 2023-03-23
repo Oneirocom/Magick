@@ -9,7 +9,7 @@ type AgentData = {
   data: any
   name: string
   secrets: string
-  rootSpell: string
+  rootSpell: any
   publicVariables: any[]
   projectId: string
   spellManager: SpellManager
@@ -39,12 +39,14 @@ export class Agent {
 
   constructor(agentData: AgentData, agentManager: AgentManager) {
     console.log('constructing agent', agentData.id)
+    console.log('projectId', agentData.projectId)
+    console.log('agentData', agentData)
     // if ,data,secrets is a string, JSON parse it
     this.secrets = JSON.parse(agentData.secrets)
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
     this.data = agentData
-    this.rootSpell = JSON.parse(agentData.rootSpell ?? '{}')
+    this.rootSpell = agentData.rootSpell ?? {}
     this.agentManager = agentManager
     this.name = agentData.name ?? 'agent'
     this.projectId = agentData.projectId
@@ -55,10 +57,15 @@ export class Agent {
       cache: false,
     })
     ;(async () => {
+      if(!this.rootSpell) {
+        console.warn("No root spell found for agent", this.id)
+        return
+      }
+      console.log('this.rootSpell.projectId', this.projectId, this.rootSpell.id)
       const spell = (
         await app.service('spells').find({
           query: {
-            projectId: this.rootSpell.projectId,
+            projectId: this.projectId,
             id: this.rootSpell.id,
           },
         })
@@ -68,7 +75,7 @@ export class Agent {
 
       this.spellRunner = await this.spellManager.load(spell, override)
       const agentStartMethods = pluginManager.getAgentStartMethods()
-      
+
       for (const method of Object.keys(agentStartMethods)) {
         await agentStartMethods[method]({
           agentManager,

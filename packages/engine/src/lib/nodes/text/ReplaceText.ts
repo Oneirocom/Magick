@@ -6,14 +6,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
+import { stringSocket, triggerSocket } from '../../sockets'
 import {
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
+  WorkerData
 } from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info =
   'Replace Text is used to replace one string with another. Useful for variable injection.'
@@ -74,7 +74,7 @@ export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  async worker(node: NodeData, rawInputs: MagickWorkerInputs) {
+  async worker(node: WorkerData, rawInputs: MagickWorkerInputs) {
     let input = rawInputs['input'][0] as string
 
     const match = ((rawInputs['match'] && rawInputs['match'][0]) ||

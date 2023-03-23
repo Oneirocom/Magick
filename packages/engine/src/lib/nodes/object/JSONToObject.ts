@@ -1,19 +1,11 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
+import { MagickComponent } from '../../engine'
+import { objectSocket, stringSocket, triggerSocket } from '../../sockets'
 import {
-  EngineContext,
-  NodeData,
   MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
+  MagickWorkerInputs, WorkerData
 } from '../../types'
-import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { triggerSocket, stringSocket, objectSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info =
   'InputsToJSON runs JSON.stringify on the inputs and returns the result'
@@ -53,7 +45,7 @@ export class ParseJSON extends MagickComponent<Promise<WorkerReturn>> {
     return node
   }
 
-  async worker(_node: NodeData, rawInputs: MagickWorkerInputs) {
+  async worker(_node: WorkerData, rawInputs: MagickWorkerInputs) {
     const str = rawInputs.input[0] as string
 
     return {

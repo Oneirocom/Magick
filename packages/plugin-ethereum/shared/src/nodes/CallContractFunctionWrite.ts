@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash'
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -6,23 +5,22 @@ import {
   anySocket,
   MagickComponent,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData,
   DropdownControl,
   stringSocket,
   numberSocket,
   triggerSocket,
+  WorkerData,
 } from '@magickml/engine'
 
 const info = `Call a write function from a contract`
 
 type InputReturn = {
-  output: unknown
-}
+  output: string
+} | undefined
 
-export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
+export class CallContractFunctionWrite extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
     super('Contract Write')
@@ -69,19 +67,19 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const contractAddressInput = new Rete.Input(
       'contract_addr',
-      'Contract Address',
+      'Contract Addr',
       stringSocket
     )
     const abiInput = new Rete.Input('abi', 'ABI', anySocket)
     const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket)
     const functionNameInput = new Rete.Input(
       'function_name',
-      'Function Name',
+      'Func Name',
       stringSocket
     )
     const functionArgsInput = new Rete.Input(
       'function_args',
-      'Function Arguments',
+      'Func Params',
       stringSocket
     )
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -98,25 +96,29 @@ export class CallContractFunctionWrite extends MagickComponent<InputReturn> {
       .addOutput(urlOutput)
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   async worker(
-    node: NodeData,
-    _inputs: MagickWorkerInputs,
-    outputs: MagickWorkerOutputs,
-    { data }: { data: string | undefined }
+    node: WorkerData,
+    inputs: MagickWorkerInputs,
   ) {
-    this._task.closed = ['trigger']
-    console.log('********* processing input to ethereum input *********')
-    console.log(data)
-
-    // handle data subscription.  If there is data, this is from playtest
-    if (data && !isEmpty(data)) {
-      this._task.closed = []
-
-      return {
-        output: data,
+    let chainId = 80001
+    if (node.data?.chain_id) {
+      const parsed = parseInt(node.data?.chain_id as string);
+      if (!isNaN(parsed)) {
+        chainId = parsed
       }
+    }
+    if (inputs['chain_id']) {
+      const parsed = parseInt(inputs['chain_id'][0] as string);
+      if (!isNaN(parsed)) {
+        chainId = parsed
+      }
+    }
+
+    const contractAddress = (inputs['contract_addr'] && inputs['contract_addr'][0]) as string
+    const functionName = (inputs['function_name'] && inputs['function_name'][0]) as string
+
+    return {
+      output: `http://localhost:4200/ethereum/contract/${chainId}/${contractAddress}/${functionName}`,
     }
   }
 }

@@ -106,6 +106,6 @@ export default class SpellManager {
       publicVariables,
     })
 
-    return result
+    return result || {}
   }
 }

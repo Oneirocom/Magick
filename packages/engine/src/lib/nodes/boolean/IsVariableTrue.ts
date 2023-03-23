@@ -3,15 +3,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
+import { MagickComponent } from '../../engine'
+import { anySocket, triggerSocket } from '../../sockets'
 import {
-  EngineContext,
-  NodeData,
   MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
+  MagickWorkerInputs, WorkerData
 } from '../../types'
-import { triggerSocket, anySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info =
   'Is Variable true checks if input is true - string or boolean are checked as true or false, numbers are checked as 0 or 1, undifined or null are checked as false'
@@ -41,7 +38,7 @@ export class IsVariableTrue extends MagickComponent<void> {
       .addOutput(isFalse)
   }
 
-  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
     const action = inputs['input'][0]
     const type = typeof action
     let is = false
