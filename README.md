@@ -81,14 +81,6 @@ Next migrate to the new database by running:
 npm run migrate
 ```
 
-### Supabase public database 
-
-> Note: This is a public database, so _please don't store any sensitive data here_.
-
-Magick can connect to a test database on [Supabase](https://supabase.com/). It is ok to use for trial purposes, but it will be wiped regularly and is not a good place to store your spells.
-
-Instead, one should enable Postgres database in the [`.env` file](.env)
-
 ### Deploy your own Postgres database
 
 To deploy your own database, we suggest using Supabase or another Postgres database. The current setup for events and documents requires the [`pgvector`](https://supabase.com/docs/guides/database/extensions/pgvector) extension to be enabled.
