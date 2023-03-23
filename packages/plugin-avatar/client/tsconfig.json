@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -9,10 +9,10 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "rootDir": "../..",
-    "outDir": "lib",
+    "rootDir": "../../..",
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "strict": true,
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -26,5 +26,5 @@
   "files": [],
   "include": [
     "src"
-, "../plugin-avatar/client/src/AvatarWindow"  ]
+  ]
 }

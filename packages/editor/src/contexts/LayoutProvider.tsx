@@ -15,7 +15,7 @@ const windowTypes: WindowTypes = {
   EDITOR: 'editor',
   PLAYTEST: 'playtest',
   CONSOLE: 'debugConsole',
-  AVATAR: 'avatar',
+  PROJECT: 'project'
 }
 
 type WindowType =
@@ -25,7 +25,7 @@ type WindowType =
   | 'playtest'
   | 'debugConsole'
   | 'settings'
-  | 'avatar'
+  | 'project'
 type WindowTypes = Record<string, WindowType>
 
 // helpful resources

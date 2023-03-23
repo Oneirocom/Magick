@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux'
 import FileInput from '../../components/FileInput'
 import { useConfig } from '../../contexts/ConfigProvider'
 
-const ProjectWindow = () => {
+const ProjectWindow = ({ tab }) => {
   const config = useConfig()
   const globalConfig = useSelector((state: any) => state.globalConfig)
 
