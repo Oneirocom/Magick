@@ -50,6 +50,8 @@ export class Output extends MagickComponent<void> {
     const event = new Rete.Input('event', 'Event Override', eventSocket)
     const output = new Rete.Output('output', 'Output', anySocket)
 
+    node.data.sendToPlaytest = true
+    
     const values = [...defaultOutputTypes, ...pluginManager.getOutputTypes()]
     node.data.isOutput = true
     node.data.name = node.data.name ?? `Output - ${values[0].name}`
@@ -88,6 +90,14 @@ export class Output extends MagickComponent<void> {
     const output = inputs.input.filter(Boolean)[0] as string
     const event =
       inputs.event?.[0] || (Object.values(module.inputs)[0] as any)[0]
+
+      if (magick) {
+        const { sendToPlaytest } = magick
+        if (sendToPlaytest) {
+          console.log('sending to playtest', output)
+          sendToPlaytest(output)
+        }
+      }
 
     if (module.agent) {
       console.log('outputType', outputType)

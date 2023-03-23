@@ -1,27 +1,26 @@
 import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
+import { useConfig } from '../contexts/ConfigProvider'
 import { useEditor } from '../contexts/EditorProvider'
 import { Layout } from '../contexts/LayoutProvider'
 import { spellApi } from '../state/api/spells'
-import EventHandler from './EventHandler'
 import { debounce } from '../utils/debounce'
-import { useConfig } from '../contexts/ConfigProvider'
+import EventHandler from './EventHandler'
 
 import EditorWindow from '../windows/EditorWindow'
 import Inspector from '../windows/InspectorWindow'
 import Playtest from '../windows/PlaytestWindow'
-import AvatarWindow from '../../../plugin-avatar/client/src/AvatarWindow'
 import ProjectWindow from '../windows/ProjectWindow'
 
-import TextEditor from '../windows/TextEditorWindow'
 import DebugConsole from '../windows/DebugConsole'
+import TextEditor from '../windows/TextEditorWindow'
 
 import { Spell } from '@magickml/engine'
+import React from 'react'
+import { useFeathers } from '../contexts/FeathersProvider'
 import { usePubSub } from '../contexts/PubSubProvider'
 import { RootState } from '../state/store'
-import { useFeathers } from '../contexts/FeathersProvider'
-import React from 'react'
 
 const Workspace = ({ tab, tabs, pubSub }) => {
   const config = useConfig()

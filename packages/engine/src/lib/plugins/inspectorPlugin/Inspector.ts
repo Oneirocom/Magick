@@ -78,8 +78,8 @@ export class Inspector {
     if(!control) {
       return console.warn(`No control with dataKey '${dataKey}' found`)
     }
-    this.dataControls.delete(dataKey)
     control.onRemove()
+    this.dataControls.delete(dataKey)
     return this
   }
 
