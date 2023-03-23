@@ -3,7 +3,6 @@ import 'regenerator-runtime/runtime'
 export * from './lib/engine'
 // PLUGINS
 
-
 export { default as CachePlugin } from './lib/plugins/cachePlugin'
 export { default as ConsolePlugin } from './lib/plugins/consolePlugin'
 export { default as ErrorPlugin } from './lib/plugins/errorPlugin'
@@ -40,9 +39,7 @@ export * from './lib/plugins/modulePlugin'
 export * from './lib/plugins/taskPlugin/task'
 export * from './lib/plugins/consolePlugin'
 export * from './lib/plugins/modulePlugin/module-manager'
-export * from './lib/magick-component'
 export * from './lib/nodes'
-export * from './lib/engine'
 export * from './lib/spellManager'
 export * from './lib/types'
 export * from './lib/functions/saveRequest'

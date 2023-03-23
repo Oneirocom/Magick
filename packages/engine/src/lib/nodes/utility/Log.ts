@@ -1,9 +1,9 @@
 import Rete from 'rete'
 
-import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, anySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
+import { anySocket, triggerSocket } from '../../sockets'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 const info = 'Logs a value to the console'
 

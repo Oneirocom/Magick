@@ -1,7 +1,7 @@
 import Rete from 'rete'
 import { API_ROOT_URL } from '../../config'
 import { InputControl } from '../../dataControls/InputControl'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { arraySocket, triggerSocket } from '../../sockets'
 import {
   GetDocumentArgs, MagickNode,
@@ -105,16 +105,23 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
     
     let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[]
     if (typeof(embedding) == 'string') embedding = (embedding as any).replace('[',"").replace(']',"");embedding = (embedding as any)?.split(',')
-    const typeData = node?.data?.type as string
+    
+    const nodeData = node.data as {
+      type: string
+      max_count: string
+      owner: string
+    }
+    
+    const typeData = nodeData.type as string
     const type =
       typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
         : 'none'
 
-    const maxCountData = node.data?.max_count as string
+    const maxCountData = nodeData.max_count as string
     const maxCount = maxCountData ? parseInt(maxCountData) : 10
 
-    const owner = node.data?.owner as string
+    const owner = nodeData.owner as string
 
     const data = {
       type,

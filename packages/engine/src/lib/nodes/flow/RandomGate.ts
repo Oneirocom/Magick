@@ -1,17 +1,13 @@
 import Rete from 'rete'
 
+import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
+import { MagickComponent } from '../../engine'
+import { triggerSocket } from '../../sockets'
 import {
-  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs,
-  DataSocketType,
-  WorkerData,
-  AsDataSocket,
+  MagickWorkerOutputs, WorkerData
 } from '../../types'
-import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info = `The random gate takes a trigger input, and randomly fires one of the connected outputs.`
 

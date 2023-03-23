@@ -1,5 +1,5 @@
 import { pluginManager } from '../plugin'
-import { MagickComponent } from '../types'
+import { MagickComponent } from '../engine'
 import { ArrayVariable } from './array/ArrayVariable'
 import { GetValueFromArray } from './array/GetValueFromArray'
 import { JoinListComponent } from './array/JoinList'

@@ -2,17 +2,14 @@
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { MagickNode, MagickWorkerInputs, Event, WorkerData } from '../../types'
+import { NodeData } from 'rete/types/core/data'
+import { MagickComponent } from '../../engine'
 import { Task } from '../../plugins/taskPlugin/task'
 import {
-  arraySocket,
-  stringSocket,
-  triggerSocket,
-  eventSocket,
-  numberSocket,
+  arraySocket, eventSocket, stringSocket,
+  triggerSocket
 } from '../../sockets'
-import { MagickComponent, MagickTask } from '../../magick-component'
-import { NodeData } from 'rete/types/core/data'
+import { Event, MagickNode, MagickTask, MagickWorkerInputs, WorkerData } from '../../types'
 
 const info = `Restructure Event Data`
 

@@ -1,21 +1,17 @@
-import Rete from 'rete'
 import axios from 'axios'
+import Rete from 'rete'
 
-import {
-  Document,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  WorkerData,
-} from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import {
-  triggerSocket,
-  stringSocket,
-  arraySocket,
-} from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
+import {
+  arraySocket, stringSocket, triggerSocket
+} from '../../sockets'
+import {
+  Document, MagickNode, MagickNodeData, MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData
+} from '../../types'
 
 const info = 'Store documents'
 
@@ -80,7 +76,10 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
       inputs['embedding'] ? inputs['embedding'][0] : null
     ) as number[]
     if (typeof embedding == 'string') embedding = (embedding as any).split(',')
-    const typeData = node?.data?.type as string
+    const nodeData = node.data as {
+      type: string
+    }
+    const typeData = nodeData.type as string
     const type =
       typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()

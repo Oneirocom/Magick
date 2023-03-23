@@ -1,13 +1,13 @@
-import Rete from 'rete'
 import similarity from 'compute-cosine-similarity'
+import Rete from 'rete'
+import { MagickComponent } from '../../engine'
+import { embeddingSocket, numberSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   WorkerData,
 } from '../../types'
-import { triggerSocket, stringSocket, numberSocket, embeddingSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info = 'Event Store is used to store events for an event and user'
 

@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Rete from 'rete'
 import axios from 'axios'
-import {
-  MagickNode, WorkerData,
-} from '../../../types'
+import Rete from 'rete'
 import { API_ROOT_URL } from '../../../config'
-import { InputControl } from '../../../dataControls/InputControl'
-import { anySocket, stringSocket } from '../../../sockets'
-import { MagickComponent } from '../../../magick-component'
 import { BooleanControl } from '../../../dataControls/BooleanControl'
+import { InputControl } from '../../../dataControls/InputControl'
+import { MagickComponent } from '../../../engine'
+import { anySocket } from '../../../sockets'
+import {
+  MagickNode, WorkerData
+} from '../../../types'
 
 const info = `Image Variable`
 

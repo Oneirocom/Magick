@@ -1,14 +1,14 @@
 import Rete from 'rete'
 
+import { API_ROOT_URL } from '../../config'
+import { MagickComponent } from '../../engine'
+import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData,
+  WorkerData
 } from '../../types'
-import { triggerSocket, stringSocket, arraySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
-import { API_ROOT_URL } from '../../config'
 
 const info = 'Get a cached embedding for this exact string'
 

@@ -1,6 +1,7 @@
 import {
   ChatMessage,
   CompletionHandlerInputData,
+  Event,
   saveRequest
 } from '@magickml/engine'
 import axios from 'axios'
@@ -10,6 +11,14 @@ export async function makeChatCompletion(
   data: CompletionHandlerInputData
 ): Promise<{success: boolean, result?: string | null, error?: string | null}> {
   const { node, inputs, context } = data
+  console.log('context.module.inputs', context.module.inputs)
+
+  // get the values of all keys (which are arrays) in context.module.inputs and filter out undefined
+  const inputKeys = Object.values(context.module.inputs).filter((input: any) => {
+    return Object.values(input).filter(Boolean).length > 0
+  })[0]
+
+  const inputData = (inputKeys as Event[]).filter(Boolean)[0] as Event
 
   const system = inputs['system']?.[0] as string
   const conversation = inputs['conversation']?.[0] as any
@@ -17,19 +26,20 @@ export async function makeChatCompletion(
   const settings = ((inputs.settings && inputs.settings[0]) ?? {
     model: node?.data?.model,
     temperature: node?.data?.temperature,
-    max_tokens: node?.data?.max_tokens,
+    // max_tokens: node?.data?.max_tokens,
     top_p: node?.data?.top_p,
     frequency_penalty: node?.data?.frequency_penalty,
     presence_penalty: node?.data?.presence_penalty,
-    stop: node?.data?.stop,
+    // stop: node?.data?.stop,
   }) as any
 
   const conversationMessages: ChatMessage[] = []
 
   conversation?.forEach(event => {
-    const message = { role: event.sender, content: event.content }
+    const message = { role: event.observer === inputData.observer ? 'assistant' : 'user', content: event.content }
     conversationMessages.push(message)
   })
+
 
   const input = inputs['input']?.[0] as string
 
@@ -59,6 +69,10 @@ export async function makeChatCompletion(
       settings,
       { headers: headers }
     )
+
+    if(completion.data.error){
+      console.error('OpenAI Error', completion.data.error)
+    }
 
     const result = completion.data?.choices[0]?.message?.content
 

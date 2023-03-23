@@ -1,18 +1,11 @@
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
+import { MagickComponent } from '../../engine'
+import { anySocket, triggerSocket } from '../../sockets'
 import {
-  EngineContext,
-  MagickNodeData,
   MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  WorkerData,
+  MagickWorkerInputs, WorkerData
 } from '../../types'
-import { triggerSocket, stringSocket, anySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info = 'Is Null Or Undefined checks if the input is null or undefined'
 

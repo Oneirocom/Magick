@@ -1,6 +1,6 @@
 import Rete from 'rete'
 
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 const info = `Join an array of events into a conversation formatted for prompt injection.`
@@ -24,12 +24,12 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
 
   builder(node: MagickNode) {
     // create inputs here. First argument is the name, second is the type (matched to other components sockets), and third is the socket the i/o will use
-    const out = new Rete.Output('conversation', 'Conversation', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const out = new Rete.Output('conversation', 'Conversation', stringSocket)
     const inputList = new Rete.Input('events', 'Events', arraySocket)
 
-    return node.addOutput(out).addInput(inputList).addInput(dataInput).addOutput(dataOutput)
+    return node.addInput(dataInput).addOutput(dataOutput).addOutput(out).addInput(inputList)
   }
 
   // the worker contains the main business logic of the node.  It will pass those results

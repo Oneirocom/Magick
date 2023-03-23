@@ -97,7 +97,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/118632766?v=4",
       "profile": "https://github.com/avirtualfuture",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -134,6 +135,87 @@
       "profile": "https://github.com/DavinciDreams",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "rjphnx",
+      "name": "r2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12023783?v=4",
+      "profile": "https://github.com/rjphnx",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "FabriceIRANKUNDA",
+      "name": "IRANKUNDA Fabrice",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58092199?v=4",
+      "profile": "https://github.com/FabriceIRANKUNDA",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kiennguyensys",
+      "name": "Kien Nguyen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24317011?v=4",
+      "profile": "https://kiennguyensys.blogspot.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "BMO-tech",
+      "name": "Ben Moore",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7051219?v=4",
+      "profile": "https://github.com/BMO-tech",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "stackedq",
+      "name": "Q",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20498757?v=4",
+      "profile": "https://github.com/stackedq",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "thomageanderson",
+      "name": "thomageanderson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/122855509?v=4",
+      "profile": "https://github.com/thomageanderson",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "codingsh",
+      "name": "codingsh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58003006?v=4",
+      "profile": "https://github.com/codingsh",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pizzooid",
+      "name": "Pietro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3073099?v=4",
+      "profile": "http://palmesi.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "developerfred",
+      "name": "codingsh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/57037080?v=4",
+      "profile": "http://twitter.com/codingsh",
+      "contributions": [
+        "code"
       ]
     }
   ],

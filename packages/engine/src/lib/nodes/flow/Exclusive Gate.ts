@@ -1,15 +1,14 @@
 import Rete from 'rete'
 
+import { MultiSocketGeneratorControl } from '../../dataControls/MultiSocketGenerator'
+import { MagickComponent } from '../../engine'
+import { anySocket, triggerSocket } from '../../sockets'
 import {
-  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData,
+  WorkerData
 } from '../../types'
-import { MultiSocketGeneratorControl } from '../../dataControls/MultiSocketGenerator'
-import { anySocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info = `Fires once all connected triggers have fired.`
 

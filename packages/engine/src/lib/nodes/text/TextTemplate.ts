@@ -2,12 +2,10 @@ import Handlebars from 'handlebars'
 import Rete from 'rete'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
 import {
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
+  MagickNode, MagickWorkerInputs, MagickWorkerOutputs,
   WorkerData
 } from '../../types'
 

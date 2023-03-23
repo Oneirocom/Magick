@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
 import { useNavigate } from 'react-router'
-import templates from '@magickml/templates'
+import { templates } from '@magickml/client-core'
 import { useConfig } from '../../contexts/ConfigProvider'
 import md5 from 'md5'
 
@@ -36,12 +36,12 @@ const EditSpellModal = ({ tab, closeModal }) => {
   } = useForm()
 
   const onSubmit = handleSubmit(async data => {
-    const response = await newSpell({
+    const response = (await newSpell({
       graph: defaultGraph,
       name: data.name,
       projectId: config.projectId,
       hash: md5(JSON.stringify(defaultGraph.nodes)),
-    })
+    })) as any
     const saveResponse: any = await saveSpell({
       spell: { ...spell.data[0], name: data.name, id: response.data.id },
       projectId: config.projectId,

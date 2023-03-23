@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import { MagickNode, MagickWorkerInputs, MagickWorkerOutputs, WorkerData } from '../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
 import { booleanSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickNode, MagickWorkerInputs, MagickWorkerOutputs, WorkerData } from '../../types'
 
 const info = `Boolean Variable`
 

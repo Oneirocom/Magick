@@ -1,11 +1,11 @@
 import Rete from 'rete'
 
-import { MagickNode, WorkerData } from '../../types'
+import _ from 'lodash'
 import { TextInputControl } from '../../dataControls/TextInputControl'
+import { MagickComponent } from '../../engine'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
-import _ from 'lodash'
+import { MagickNode, WorkerData } from '../../types'
 
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 

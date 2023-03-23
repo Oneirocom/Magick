@@ -8,16 +8,16 @@ import axios from 'axios'
 import Rete from 'rete'
 
 import {
-  MagickNode,
-  MagickWorkerInputs,
-  WorkerData,
-} from '../../types'
-import {
   API_ROOT_URL
 } from '../../config'
 import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, stringSocket, anySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
+import { anySocket, stringSocket, triggerSocket } from '../../sockets'
+import {
+  MagickNode,
+  MagickWorkerInputs,
+  WorkerData
+} from '../../types'
 
 const info = 'Returns the input string as voice'
 

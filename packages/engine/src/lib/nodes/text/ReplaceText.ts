@@ -6,14 +6,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
+import { stringSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
-  WorkerData,
+  WorkerData
 } from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import { triggerSocket, stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info =
   'Replace Text is used to replace one string with another. Useful for variable injection.'

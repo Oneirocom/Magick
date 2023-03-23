@@ -1,18 +1,17 @@
 import Rete from 'rete'
 
-import {
-  MagickNodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  WorkerData,
-} from '../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { processCode } from '../../functions/processCode'
+import { triggerSocket } from '../../sockets'
+import {
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData
+} from '../../types'
 
 const defaultCode = `
 # inputs: dictionary of inputs based on socket names outside the worker function

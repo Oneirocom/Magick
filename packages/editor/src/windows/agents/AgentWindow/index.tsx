@@ -9,8 +9,8 @@ import { useConfig } from '../../../contexts/ConfigProvider'
 interface Props {
   data: Array<object>
   selectedAgentData: object
-  rootSpell: string
-  onLoadEnables: Object
+  rootSpell: object
+  onLoadEnables: object
   setRootSpell: (spell: string) => void
   setSelectedAgentData: (data: object) => void
   onCreateAgent: (data: any) => void
@@ -61,7 +61,7 @@ const AgentWindow = ({
               projectId: config.projectId,
               enabled: false,
               spells: '[]',
-              rootSpell: '{}',
+              rootSpell: {},
               publicVariables: '{}',
               secrets: '{}',
             })

@@ -1,7 +1,7 @@
 import { NodeData } from 'rete/types/core/data'
 
-import { MagickComponent, MagickTask } from '../../magick-component'
-import { MagickNode, MagickReteInput, MagickWorkerInputs } from '../../types'
+import { MagickReteInput, MagickTask, MagickWorkerInputs } from '../../types'
+import { MagickComponent } from '../../engine'
 
 type TaskRef = {
   key: string

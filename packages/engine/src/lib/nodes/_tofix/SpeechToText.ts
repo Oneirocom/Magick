@@ -1,15 +1,13 @@
 import Rete from 'rete'
 
+import { MagickComponent } from '../../engine'
+import { audioSocket, stringSocket, triggerSocket } from '../../sockets'
 import {
-  EngineContext,
-  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData,
+  WorkerData
 } from '../../types'
-import { audioSocket, stringSocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info = 'Speech to Text node, powered by Whisper on Banana ML'
 

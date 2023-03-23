@@ -5,11 +5,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch } from 'react-redux'
-import css from '../screens/Magick/magick.module.css'
 import { useConfig } from '../contexts/ConfigProvider'
 import { useEditor } from '../contexts/EditorProvider'
 import { useInspector } from '../contexts/InspectorProvider'
 import { usePubSub } from '../contexts/PubSubProvider'
+import css from '../screens/Magick/magick.module.css'
 import { spellApi } from '../state/api/spells'
 import { useAppSelector } from '../state/hooks'
 import {
@@ -52,14 +52,14 @@ const Input = props => {
 }
 
 const defaultPlaytestData = {
-  sender: 'playtestSender',
-  observer: 'Agent',
+  sender: 'user',
+  observer: 'assistant',
   type: 'playtest',
   client: 'playtest',
   channel: 'playtest',
   channelType: 'playtest',
   agentId: 'preview',
-  entities: ['playtestSender', 'Agent'],
+  entities: ['user', 'assistant'],
 }
 
 const Playtest = ({ tab }) => {
@@ -94,10 +94,8 @@ const Playtest = ({ tab }) => {
 
   const printToConsole = useCallback(
     (_, _text) => {
-      console.log('_text', _text)
       const text = (`Agent: ` + _text).split('\n')
       const newHistory = [...history, ...text]
-      console.log('newHistory', newHistory)
       setHistory(newHistory as [])
     },
     [history]
@@ -215,17 +213,16 @@ const Playtest = ({ tab }) => {
 
     toSend = {
       content: value,
-      sender: 'Speaker',
-      observer: 'Agent',
+      sender: 'user',
+      observer: 'assistant',
       agentId: 'preview',
       client: 'playtest',
       channel: 'previewChannel',
       projectId: config.projectId,
       channelType: 'previewChannelType',
+      entities: ['user', 'assistant'],
       ...JSON.parse(json),
     }
-
-    console.log('onSend', toSend)
 
     // get spell from editor
     const graph = serialize()
@@ -234,8 +231,6 @@ const Playtest = ({ tab }) => {
         variant: 'error',
       })
     }
-
-    console.log('playtestOption', playtestOption)
 
     const playtestNode = Object.values(graph.nodes).find(node => {
       return node.data.name === playtestOption
@@ -247,8 +242,6 @@ const Playtest = ({ tab }) => {
       })
       return
     }
-
-    console.log('playtestNode', playtestNode)
 
     const playtestInputName = playtestNode?.data.name
 

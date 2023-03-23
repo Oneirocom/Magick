@@ -120,7 +120,7 @@ type Data = {
   };
 
 const validateSpellData = (spellData: SpellData | null, data: any): boolean => {
-  if (!spellData) {
+  if (!spellData || !spellData.graph) {
     return true;
   }
 

@@ -1,11 +1,11 @@
 // TODO: Currently array variable is not working. Need to fix this.
 import Rete from 'rete'
 
-import { MagickNode, WorkerData } from '../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
 import { arraySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickNode, WorkerData } from '../../types'
 
 const info = `Array Variable`
 

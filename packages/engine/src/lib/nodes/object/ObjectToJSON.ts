@@ -1,20 +1,11 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
+import { MagickComponent } from '../../engine'
+import { objectSocket, stringSocket, triggerSocket } from '../../sockets'
 import {
-  EngineContext,
-  MagickNodeData,
   MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  WorkerData,
+  MagickWorkerInputs, WorkerData
 } from '../../types'
-import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { triggerSocket, stringSocket, objectSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info =
   'Convert an object into a JSON string.'

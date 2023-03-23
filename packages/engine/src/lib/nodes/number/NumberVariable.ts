@@ -1,11 +1,11 @@
 import Rete from 'rete'
 
-import { MagickNode, WorkerData } from '../../types'
+import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
+import { MagickComponent } from '../../engine'
 import { numberSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
-import { BooleanControl } from '../../dataControls/BooleanControl'
+import { MagickNode, WorkerData } from '../../types'
 
 const info = `Number Variable`
 

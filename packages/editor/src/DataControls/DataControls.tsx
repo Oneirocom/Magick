@@ -69,7 +69,7 @@ const DataControls = ({
   if (Object.keys(dataControls).length < 1)
     return (
       <p className={css['message']}>
-        Selected component has nothing to inspect
+        Selected component has no controls
       </p>
     )
 

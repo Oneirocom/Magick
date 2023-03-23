@@ -1,10 +1,10 @@
 import Rete from 'rete'
 
-import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
-import { triggerSocket, stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
+import { stringSocket, triggerSocket } from '../../sockets'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 const info =
   'Logical Operator is used to compare two values - options: equal, not equal, greater than, less greater than'

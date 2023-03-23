@@ -1,5 +1,6 @@
 import 'regenerator-runtime/runtime'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { WorldManager, pluginManager } from '@magickml/engine'
 import { AgentManager } from '@magickml/server-core'
 async function init() {

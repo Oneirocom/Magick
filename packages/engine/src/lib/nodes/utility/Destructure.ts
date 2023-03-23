@@ -1,15 +1,12 @@
 import Rete from 'rete'
 
-import {
-  MagickNodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  WorkerData,
-} from '../../types'
+import { MagickComponent } from '../../engine'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { objectSocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import {
+  MagickNode,
+  MagickWorkerInputs, WorkerData
+} from '../../types'
 import { SocketGeneratorControl } from './../../dataControls/SocketGenerator'
 
 const info = `Destructure properties out of an object`

@@ -1,13 +1,9 @@
 import { hasBadWords } from 'expletives'
 import Rete from 'rete'
 
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
-import {
-  MagickNode,
-  MagickWorkerInputs,
-  WorkerData
-} from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 const info = 'Does some basic checks'
 

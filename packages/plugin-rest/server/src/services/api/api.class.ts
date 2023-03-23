@@ -54,7 +54,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     }
 
     // get the selectedAgentData's spells
-    const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
+    const rootSpell = agent.rootSpell ?? {}
     // run the spell
     const result = await runSpell({
       spellId: rootSpell.id,
@@ -118,7 +118,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
+    const rootSpell = agent.rootSpell ?? {}
 
     const result = await runSpell({
       spellId: rootSpell.id,
@@ -180,7 +180,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
+    const rootSpell = agent.rootSpell ?? {}
 
     const result = await runSpell({
       spellId: rootSpell.id,
@@ -232,7 +232,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
+    const rootSpell = agent.rootSpell ?? {}
     // run the spell
     const result = await runSpell({
       spellId: rootSpell.id,

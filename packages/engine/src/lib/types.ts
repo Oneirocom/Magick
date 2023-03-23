@@ -1,9 +1,13 @@
-import { Connection, Input, NodeEditor, Output, Socket } from 'rete';
-import { Node } from 'rete/types';
-import { Data, InputsData, NodeData, OutputsData, WorkerOutputs } from 'rete/types/core/data';
 import PubSub from 'pubsub-js'
-
-import { MagickComponent, MagickTask } from './magick-component'
+import { Connection, Input, Node, NodeEditor, Output, Socket } from 'rete'
+import {
+  Data,
+  InputsData,
+  NodeData,
+  OutputsData,
+  WorkerOutputs
+} from 'rete/types/core/data'
+import { MagickComponent } from './engine'
 import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
 import { Inspector } from './plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
@@ -11,10 +15,9 @@ import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
 import { Application as FeathersApplication } from '@feathersjs/koa'
 
-export { MagickComponent } from './magick-component';
-//@seang this was causing test enviroment issues to have it shared client/server
-// export { MagickEditor } from './src/editor'
-export type { InspectorData } from './plugins/inspectorPlugin/Inspector';
+import { TaskSocketInfo } from './plugins/taskPlugin/task'
+
+export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 
 export type ImageType = {
   id: string
@@ -131,7 +134,10 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
   declare moduleManager: ModuleManager
   declare runProcess: (callback?: () => void | undefined) => Promise<void>
-  declare onSpellUpdated: (spellName: string, callback: (spell: Spell) => void) => () => void
+  declare onSpellUpdated: (
+    spellName: string,
+    callback: (spell: Spell) => void
+  ) => () => void
   declare refreshEventTable: () => void
 }
 
@@ -171,10 +177,10 @@ export type RunSpell<DataType = Record<string, unknown>> = ({
   spellId,
   projectId,
   secrets,
-  publicVariables
+  publicVariables,
 }: runSpellType<DataType>) => Promise<DataType>
 
-export type EngineContext<DataType=Record<string, unknown>> = {
+export type EngineContext<DataType = Record<string, unknown>> = {
   env: Env
   runSpell: RunSpell<DataType>
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
@@ -205,7 +211,7 @@ export type PubSubEvents = {
   $CREATE_PLAYTEST: (tabId: string) => string
   $CREATE_INSPECTOR: (tabId: string) => string
   $CREATE_TEXT_EDITOR: (tabId: string) => string
-  $CREATE_AVATAR_WINDOW: (tabId: string) => string
+  $CREATE_PROJECT_WINDOW: (tabId: string) => string
   $CREATE_DEBUG_CONSOLE: (tabId: string) => string
   $CREATE_CONSOLE: (tabId: string) => string
   $RUN_SPELL: (tabId: string) => string
@@ -217,13 +223,15 @@ export type PubSubEvents = {
   $MULTI_SELECT_COPY: (tabId: string) => string
   $MULTI_SELECT_PASTE: (tabId: string) => string
   $REFRESH_EVENT_TABLE: (tabId: string) => string
-  $SEND_TO_AVATAR: (tabId: string) => string
 }
 
 export interface PubSubContext {
   publish: (event: string, data?: PubSubData) => boolean
   // eslint-disable-next-line @typescript-eslint/ban-types
-  subscribe(event: string, func: PubSubJS.SubscriptionListener<PubSubData>): () => void;
+  subscribe(
+    event: string,
+    func: PubSubJS.SubscriptionListener<PubSubData>
+  ): () => void
   PubSub: typeof PubSub
   events: PubSubEvents
 }
@@ -232,19 +240,27 @@ export type PubSubData = Record<string, unknown> | string | unknown[]
 export type PubSubCallback = (event: string, data: PubSubData) => void
 
 export type OnInspectorCallback = (data: Record<string, unknown>) => void
-export type OnInspector = (node: MagickNode, callback: OnInspectorCallback) => () => void
+export type OnInspector = (
+  node: MagickNode,
+  callback: OnInspectorCallback
+) => () => void
 export type OnEditorCallback = (data: PubSubData) => void
 export type OnEditor = (callback: OnEditorCallback) => () => void
-export type OnDebug = (node: MagickNode, callback: OnEditorCallback) => () => void
+export type OnDebug = (
+  node: MagickNode,
+  callback: OnEditorCallback
+) => () => void
 
 export type PublishEditorEvent = (data: PubSubData) => void
 
 export interface EditorContext extends EngineContext {
-  sendToAvatar: (data: unknown) => void
   /**
    * @deprecated The method should not be used
    */
-  onTrigger: (node: MagickNode | string, callback: (data: unknown) => void) => () => void
+  onTrigger: (
+    node: MagickNode | string,
+    callback: (data: unknown) => void
+  ) => () => void
   sendToPlaytest: (data: string) => void
   sendToInspector: PublishEditorEvent
   sendToDebug: PublishEditorEvent
@@ -287,8 +303,11 @@ export type DataSocketType = {
   useSocketName: boolean
 }
 
-export type MagicNodeInput = Input & { socketType: DataSocketType; }
-export type MagicNodeOutput = Output & { taskType?: TaskType; socketType: DataSocketType; }
+export type MagicNodeInput = Input & { socketType: DataSocketType }
+export type MagicNodeOutput = Output & {
+  taskType?: TaskType
+  socketType: DataSocketType
+}
 
 export type MagickNode = Node & {
   inspector: Inspector
@@ -332,9 +351,11 @@ export type Subspell = { name: string; id: string; data: GraphData }
 
 export type GraphData = Data
 
-export type IgnoredList = {
-  name: string
-}[] | string[]
+export type IgnoredList =
+  | {
+      name: string
+    }[]
+  | string[]
 
 export type ComponentData<T = TaskType> = Record<string, unknown> & {
   ignored?: IgnoredList
@@ -366,8 +387,8 @@ export type NodeOutputs = {
 export type MagickNodeData = {
   socketKey?: string
   name?: string
-  isInput?: boolean; 
-  useDefault?: boolean; 
+  isInput?: boolean
+  useDefault?: boolean
   defaultValue?: string
   element?: number
   [DataKey: string]: unknown
@@ -378,7 +399,7 @@ export type WorkerData = NodeData & {
   // inputs: DataSocketInput
   spell?: string
   data?: MagickNodeData
-  [key: string]: unknown;
+  [key: string]: unknown
 }
 
 export function AsDataSocket(data: InputsData | OutputsData): DataSocketType[] {
@@ -393,7 +414,9 @@ export function AsOutputsData(data: DataSocketType[]): OutputsData {
   return data as unknown as OutputsData
 }
 
-export function AsInputsAndOutputsData(data: DataSocketType[]): InputsData & OutputsData {
+export function AsInputsAndOutputsData(
+  data: DataSocketType[]
+): InputsData & OutputsData {
   return data as unknown as InputsData & OutputsData
 }
 
@@ -571,3 +594,20 @@ export type RequestData = {
 }
 
 export type AppService = (app: FeathersApplication) => void
+export interface MagickTask extends Task {
+  outputs?: { [key: string]: string }
+  init?: (task?: MagickTask, node?: MagickNode) => void
+  onRun?: (
+    node: NodeData,
+    task: Task,
+    data: unknown,
+    socketInfo: TaskSocketInfo
+  ) => void
+}
+
+export interface ModuleOptions {
+  nodeType: 'input' | 'output' | 'triggerIn' | 'triggerOut' | 'module'
+  socket?: Socket
+  skip?: boolean
+  hide?: boolean
+}
