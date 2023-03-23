@@ -23,14 +23,12 @@ type InputReturn = {
 export class CheckForRecentTxFromWallet extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
-    super('Check For Recent Transactions')
-
-    this.task = {
+    super('Check For Recent Transactions', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Ethereum', info)
 
     this.module = {
       nodeType: 'triggerIn',
@@ -38,8 +36,6 @@ export class CheckForRecentTxFromWallet extends MagickComponent<Promise<InputRet
       hide: true,
     }
 
-    this.category = 'Ethereum'
-    this.info = info
     this.display = true
     this.contextMenuName = 'Check For Recent Transactions'
     this.displayName = 'Check For Recent Transactions'

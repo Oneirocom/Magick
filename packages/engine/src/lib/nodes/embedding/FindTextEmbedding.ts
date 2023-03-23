@@ -1,7 +1,6 @@
 import Rete from 'rete'
 
 import {
-  MagickNodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
@@ -21,19 +20,15 @@ export class FindTextEmbedding extends MagickComponent<
   Promise<InputReturn | null>
 > {
   constructor() {
-    super('Find Text Embedding')
-
-    this.task = {
+    super('Find Text Embedding', {
       outputs: {
         embedding: 'output',
         failure: 'option',
         success: 'option',
       },
-    }
+    }, 'Embedding', info)
 
-    this.category = 'Embedding'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

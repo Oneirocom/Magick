@@ -46,16 +46,14 @@ type InputReturn = {
 export class CompileContract extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
-    super('PluginEthCompileContract')
-
-    this.task = {
+    super('PluginEthCompileContract', {
       outputs: {
         output: 'output',
         bytecode: 'output',
         abi: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Ethereum', info)
 
     this.module = {
       nodeType: 'triggerIn',
@@ -63,8 +61,6 @@ export class CompileContract extends MagickComponent<Promise<InputReturn>> {
       hide: true,
     }
 
-    this.category = 'Ethereum'
-    this.info = info
     this.display = true
     this.contextMenuName = 'Compile Contract'
     this.displayName = 'Compile Contract'

@@ -6,7 +6,8 @@ import { arraySocket, triggerSocket } from '../../sockets'
 import {
   GetDocumentArgs, MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs, NodeData
+  MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
 
 const info = 'Get documents from a store'
@@ -50,18 +51,13 @@ const getDocuments = async (params: GetDocumentArgs) => {
 
 export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Get Documents')
-
-    this.task = {
+    super('Get Documents', {
       outputs: {
         documents: 'output',
         trigger: 'option',
       },
-    }
-
-    this.category = 'Document'
+    }, 'Document', info)
     this.display = true
-    this.info = info
     this.runFromCache = true
   }
 
@@ -102,7 +98,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {

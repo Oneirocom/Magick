@@ -23,16 +23,14 @@ type WorkerReturn = {
 
 export class TextTemplate extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Text Template')
-    this.task = {
+    super('Text Template', {
       outputs: {
         prompt: 'output',
         trigger: 'option',
       },
-    }
-    this.category = 'Text'
+    }, 'Text', info)
+    
     this.runFromCache = true
-    this.info = info
     this.display = false
   }
 

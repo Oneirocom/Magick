@@ -18,15 +18,11 @@ const info = 'Is Null Or Undefined checks if the input is null or undefined'
 
 export class IsNullOrUndefined extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Is Null Or Undefined')
-
-    this.task = {
+    super('Is Null Or Undefined', {
       outputs: { true: 'option', false: 'option' },
-    }
+    }, 'Flow', info)
 
-    this.category = 'Flow'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

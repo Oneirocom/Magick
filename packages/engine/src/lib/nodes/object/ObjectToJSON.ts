@@ -25,18 +25,13 @@ type WorkerReturn = {
 
 export class ObjectToJSON extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Object To JSON')
-
-    this.task = {
+    super('Object To JSON', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
-
-    this.category = 'Object'
+    }, 'Object', info)
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

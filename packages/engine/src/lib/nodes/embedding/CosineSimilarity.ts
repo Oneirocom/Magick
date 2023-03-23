@@ -1,10 +1,10 @@
 import Rete from 'rete'
 import similarity from 'compute-cosine-similarity'
 import {
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { triggerSocket, stringSocket, numberSocket, embeddingSocket } from '../../sockets'
 import { MagickComponent } from '../../magick-component'
@@ -17,18 +17,14 @@ type InputReturn = {
 
 export class CosineSimilarity extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Cosine Similarity')
-
-    this.task = {
+    super('Cosine Similarity', {
       outputs: {
         similarity: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Embedding', info)
 
-    this.category = 'Embedding'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {
@@ -47,7 +43,7 @@ export class CosineSimilarity extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     { projectId, module }: { projectId: string; module: any }

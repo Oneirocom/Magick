@@ -10,7 +10,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData,
+  WorkerData,
 } from '../../types'
 
 import { pluginManager } from '../../plugin'
@@ -25,19 +25,14 @@ type InputReturn = {
 
 export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Create Text Embedding')
-
-    this.task = {
+    super('Create Text Embedding', {
       outputs: {
         trigger: 'option',
         result: 'output',
         success: 'output',
       },
-    }
-
-    this.category = 'Embedding'
+    }, 'Embedding', info)
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {
@@ -131,7 +126,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     context

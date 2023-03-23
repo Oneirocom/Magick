@@ -18,14 +18,9 @@ const info = `The random gate takes a trigger input, and randomly fires one of t
 export class RandomGate extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Random Gate')
-
-    this.task = {
+    super('Random Gate', {
       outputs: {},
-    }
-
-    this.category = 'Flow'
-    this.info = info
+    }, 'Flow', info)
   }
 
   // the builder is used to "assemble" the node component.

@@ -5,8 +5,8 @@ import {
   GraphData,
   MagickNode,
   ModuleComponent,
-  NodeData,
   Spell as SpellType,
+  WorkerData,
 } from '../types'
 import { getNodes } from '../nodes'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
@@ -241,9 +241,7 @@ class SpellRunner {
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
     // 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    await component.run(triggeredNode as unknown as MagickNode, inputs as NodeData)
+    await component.run(triggeredNode as unknown as MagickNode, inputs as WorkerData)
     return this.outputData
   }
 }

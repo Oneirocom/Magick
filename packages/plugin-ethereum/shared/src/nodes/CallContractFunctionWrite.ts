@@ -6,7 +6,6 @@ import {
   MagickComponent,
   MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs,
   DropdownControl,
   stringSocket,
   numberSocket,
@@ -23,14 +22,12 @@ type InputReturn = {
 export class CallContractFunctionWrite extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
-    super('Contract Write')
-
-    this.task = {
+    super('Contract Write', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Ethereum', info)
 
     this.module = {
       nodeType: 'triggerIn',
@@ -38,8 +35,6 @@ export class CallContractFunctionWrite extends MagickComponent<Promise<InputRetu
       hide: true,
     }
 
-    this.category = 'Ethereum'
-    this.info = info
     this.display = true
     this.contextMenuName = 'Contract Write'
     this.displayName = 'Contract Write'

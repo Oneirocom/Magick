@@ -3,10 +3,10 @@ import axios from 'axios'
 
 import {
   Document,
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import {
@@ -21,17 +21,13 @@ const info = 'Store documents'
 
 export class StoreDocument extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Store Document')
-
-    this.task = {
+    super('Store Document', {
       outputs: {
         trigger: 'option',
       },
-    }
+    }, 'Document', info)
 
-    this.category = 'Document'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {
@@ -70,7 +66,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context

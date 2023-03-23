@@ -12,13 +12,9 @@ const info = `When the alert component is triggered, it will fire an alert with 
 export class Alert extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Alert')
-
-    this.task = {
+    super('Alert', {
       outputs: {},
-    } as TaskOptions
-    this.category = 'Utility'
-    this.info = info
+    }, 'Utility', info)
   }
   // the builder is used to "assemble" the node component.
 

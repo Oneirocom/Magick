@@ -22,18 +22,14 @@ type WorkerReturn = {
 
 export class ComposeObject extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Compose Object')
-
-    this.task = {
+    super('Compose Object', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Object', info)
 
-    this.category = 'Object'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

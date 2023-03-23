@@ -18,18 +18,14 @@ type WorkerReturn = {
 
 export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Get Value From Array')
-
-    this.task = {
+    super('Get Value From Array', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Array', info)
 
-    this.category = 'Array'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

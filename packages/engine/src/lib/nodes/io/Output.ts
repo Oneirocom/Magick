@@ -20,24 +20,20 @@ const defaultOutputTypes = [{ name: 'Default', socket: anySocket }]
 
 export class Output extends MagickComponent<void> {
   constructor() {
-    super('Output')
-
-    this.task = {
+    super('Output', {
       runOneInput: true,
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'I/O', info)
 
     this.module = {
       nodeType: 'output',
       socket: anySocket,
     }
 
-    this.category = 'I/O'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

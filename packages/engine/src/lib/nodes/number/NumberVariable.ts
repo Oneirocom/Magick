@@ -15,16 +15,12 @@ type InputReturn = {
 
 export class NumberVariable extends MagickComponent<InputReturn> {
   constructor() {
-    super('Number Variable')
-
-    this.task = {
+    super('Number Variable', {
       outputs: {
         output: 'output',
       },
-    }
+    }, 'Number', info)
 
-    this.category = 'Number'
-    this.info = info
     this.display = true
   }
 

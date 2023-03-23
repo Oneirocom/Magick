@@ -12,17 +12,12 @@ type WorkerReturn = {
 export class EventsToConversation extends MagickComponent<WorkerReturn> {
   constructor() {
     // Name of the component
-    super('Events to Conversation')
-
-    this.task = {
+    super('Events to Conversation', {
       outputs: {
         conversation: 'output',
         trigger: 'option',
       },
-    }
-
-    this.category = 'Event'
-    this.info = info
+    }, 'Event', info)
   }
 
   // the builder is used to "assemble" the node component.
