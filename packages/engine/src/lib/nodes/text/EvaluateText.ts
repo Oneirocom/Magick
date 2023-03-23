@@ -2,12 +2,9 @@ import Rete from 'rete'
 
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
-import {
-  MagickNode,
-  MagickWorkerInputs, WorkerData
-} from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 const fewshot = ``
 

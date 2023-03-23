@@ -15,7 +15,7 @@ const AgentManagerWindow = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
   const [root_spell, setRootSpell] = useState('default')
-  const [enable, setEnable] = useState("")
+  const [enable, setEnable] = useState('')
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 
@@ -27,11 +27,11 @@ const AgentManagerWindow = () => {
     const json = await res.json()
     setData(json.data)
     setIsLoading(false)
-    console.log('res is', json)
-    let spellAgent = JSON.parse(json.data[0].rootSpell)
-    let inputs = pluginManager.getInputByName()
-    let plugin_list = pluginManager.getPlugins()
-    for (let key of Object.keys(plugin_list)){
+    if (!json.data || !json.data[0]) return
+    const spellAgent = json.data[0]?.rootSpell ?? {}
+    const inputs = pluginManager.getInputByName()
+    const plugin_list = pluginManager.getPlugins()
+    for (const key of Object.keys(plugin_list)) {
       plugin_list[key] = validateSpellData(spellAgent, inputs[key])
     }
     setEnable(plugin_list)
@@ -83,7 +83,7 @@ const AgentManagerWindow = () => {
       data.projectId = config.projectId
       data.enabled = data?.enabled ? true : false
       data.updatedAt = new Date().toISOString()
-      data.rootSpell = data?.rootSpell || '{}'
+      data.rootSpell = data?.rootSpell || {}
       data.spells = Array.isArray(data?.spells) ? data.spells : []
       data.secrets = JSON.stringify(
         Array.isArray(data?.secrets) ? data.secrets : []
@@ -176,20 +176,20 @@ const AgentManagerWindow = () => {
   }, [config.apiUrl])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const res = await fetch(`${config.apiUrl}/agents`)
       const json = await res.json()
       console.log('res data', json.data)
-      let spellAgent = JSON.parse(json.data[0].rootSpell)
-      let inputs = pluginManager.getInputByName()
-      let plugin_list = pluginManager.getPlugins()
-      for (let key of Object.keys(plugin_list)){
+      if (!json.data || !json.data[0]) return
+      const spellAgent = json.data[0]?.rootSpell ?? {}
+      const inputs = pluginManager.getInputByName()
+      const plugin_list = pluginManager.getPlugins()
+      for (const key of Object.keys(plugin_list)) {
         plugin_list[key] = validateSpellData(spellAgent, inputs[key])
       }
       console.log(plugin_list)
       setEnable(plugin_list)
     })()
-    
   }, [])
   return isLoading ? (
     <LoadingScreen />

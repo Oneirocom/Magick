@@ -141,7 +141,6 @@ export class ModuleManager {
       }
     }, {} as any)
 
-    console.log('reading module - module-manager.ts')
     module.read({
       agent: context.agent,
       inputs: parsedInputs,

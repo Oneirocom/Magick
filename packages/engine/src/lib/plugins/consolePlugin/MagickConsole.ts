@@ -1,5 +1,5 @@
+import { MagickComponent } from '../../engine'
 import { IRunContextEditor, MagickNode } from '../../types'
-import { MagickComponent } from '../../magick-component'
 
 type ConsoleConstructor = {
   component: MagickComponent<unknown>

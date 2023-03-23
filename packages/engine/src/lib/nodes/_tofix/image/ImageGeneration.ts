@@ -1,14 +1,14 @@
 import Rete from 'rete'
 
+import { API_ROOT_URL } from '../../../config'
+import { stringSocket, triggerSocket } from '../../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData,
+  WorkerData
 } from '../../../types'
-import { stringSocket, triggerSocket } from '../../../sockets'
-import { MagickComponent } from '../../../magick-component'
-import { API_ROOT_URL } from '../../../config'
+import { MagickComponent } from '../../../engine'
 
 const info =
   'Leverages the current Automatic1111 build of Stable Diffusion (https://github.com/automatic1111/stable-diffusion-webui) and takes an input string and arbitrary labels and returns the most likely label'

@@ -47,7 +47,6 @@ const MyRoutes = () => (
       )
     })}
     <Route path="/documents" element={<DocumentWindow />} />
-    <Route path="/project" element={<ProjectWindow />} />
     <Route path="/events" element={<EventWindow />} />
     <Route path="/requests" element={<RequestWindow />} />
     <Route path="/agents" element={<AgentManagerWindow />} />

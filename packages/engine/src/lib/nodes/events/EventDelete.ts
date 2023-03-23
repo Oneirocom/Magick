@@ -1,10 +1,10 @@
 import Rete from 'rete'
 
-import { MagickComponent } from '../../magick-component'
-import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
-import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 import axios from 'axios'
 import { API_ROOT_URL } from '../../config'
+import { MagickComponent } from '../../engine'
+import { arraySocket, triggerSocket } from '../../sockets'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 const info = `Join an array of events into a conversation formatted for prompt injection.`
 
 

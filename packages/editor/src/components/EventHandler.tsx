@@ -82,7 +82,7 @@ const EventHandler = ({ pubSub, tab }) => {
     $MULTI_SELECT_PASTE,
     $SAVE_SPELL,
     $SAVE_SPELL_DIFF,
-    $CREATE_AVATAR_WINDOW,
+    $CREATE_PROJECT_WINDOW,
     $CREATE_MESSAGE_REACTION_EDITOR,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
@@ -177,8 +177,8 @@ const EventHandler = ({ pubSub, tab }) => {
     onProcess()
   }
 
-  const createAvatarWindow = () => {
-    createOrFocus(windowTypes.AVATAR, 'Avatar Window')
+  const createProjectWindow = () => {
+    createOrFocus(windowTypes.PROJECT, 'Project Window')
   }
 
   const createMessageReactionEditor = () => {
@@ -280,14 +280,6 @@ const EventHandler = ({ pubSub, tab }) => {
   }
 
   const runSpell = async (event, data) => {
-    console.log('DATA IN EVENT HANDLER', data)
-
-    // We are publishing the diff just to ensure that the spell runner has the latest version of the spell
-    // publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
-
-    // wait .2. seconds for spell_diff to take effect
-    await new Promise(resolve => setTimeout(resolve, 200))
-
     // run the spell in the spell runner service
     client.service('spell-runner').create(data)
   }
@@ -296,7 +288,7 @@ const EventHandler = ({ pubSub, tab }) => {
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,
-    [$CREATE_AVATAR_WINDOW(tab.id)]: createAvatarWindow,
+    [$CREATE_PROJECT_WINDOW(tab.id)]: createProjectWindow,
     [$CREATE_PLAYTEST(tab.id)]: createPlaytest,
     [$CREATE_INSPECTOR(tab.id)]: createInspector,
     [$CREATE_TEXT_EDITOR(tab.id)]: createTextEditor,

@@ -1,11 +1,12 @@
 import { Component, Control } from 'rete'
 
+import { MagickComponent } from '../../engine'
 import {
-  MagickComponent,
   MagickEditor,
   MagickNode,
-  WorkerData,
+  WorkerData
 } from '../../types'
+
 import { Task } from '../taskPlugin'
 import { RunButtonControl } from './RunLastArguments'
 

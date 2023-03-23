@@ -1,8 +1,8 @@
 import Rete from 'rete'
 
-import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
+import { MagickComponent } from '../../engine'
 import { booleanSocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 const info = `The boolean gate takes a boolean input, and depending on whether the value is true or false will only trigger one output or the other.`
 

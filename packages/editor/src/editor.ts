@@ -213,6 +213,7 @@ export const initEditor = function ({
   }
 
   editor.loadGraph = async (_graph: Data) => {
+    if(!_graph) return console.error('No graph to load')
     const graph = JSON.parse(JSON.stringify(_graph))
     await engine.abort()
     editor.fromJSON(graph)

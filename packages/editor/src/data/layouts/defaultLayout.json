@@ -9,75 +9,110 @@
     "id": "#root",
     "children": [
       {
-        "type": "tabset",
-        "id": "#3",
-        "weight": 10,
+        "type": "row",
+        "id": "#311b4548-d97d-4136-8a52-428df5b18b46",
+        "weight": 8.270856285820575,
         "children": [
           {
-            "type": "tab",
-            "id": "#31",
-            "name": "Inspector",
-            "component": "inspector"
+            "type": "tabset",
+            "id": "#157c8b9b-9606-4318-8852-320632c3d017",
+            "weight": 57.369062119366625,
+            "children": [
+              {
+                "type": "tab",
+                "id": "#31",
+                "name": "Inspector",
+                "component": "inspector"
+              }
+            ]
+          },
+          {
+            "type": "tabset",
+            "id": "#746d3ea2-45b9-4904-933c-85ee787c4014",
+            "weight": 42.630937880633375,
+            "children": [
+              {
+                "type": "tab",
+                "id": "#b5ca119e-6c2f-4ae7-b2c3-42cc2cee3a60",
+                "name": "Project Window",
+                "component": "project"
+              }
+            ]
           }
         ]
       },
       {
         "type": "row",
         "id": "#9",
-        "weight": 53.03349282296651,
+        "weight": 27.17567065341046,
         "children": [
           {
-            "type": "tabset",
-            "id": "#15",
+            "type": "row",
+            "id": "#450a1b4f-ad0d-464a-a5e8-2391756d2070",
             "weight": 60,
             "children": [
               {
-                "type": "tab",
-                "id": "#21",
-                "name": "Composer",
-                "component": "editorWindow",
-                "enableClose": false,
-                "className": "editor-tab"
+                "type": "tabset",
+                "id": "#15",
+                "weight": 58.797127468581685,
+                "children": [
+                  {
+                    "type": "tab",
+                    "id": "#21",
+                    "name": "Composer",
+                    "component": "editorWindow",
+                    "enableClose": false,
+                    "className": "editor-tab"
+                  }
+                ]
+              },
+              {
+                "type": "tabset",
+                "id": "#49908c21-6f95-45b8-8b79-b9a6069bdcb6",
+                "weight": 41.202872531418315,
+                "children": [
+                  {
+                    "type": "tab",
+                    "id": "#40",
+                    "name": "Text Editor",
+                    "component": "textEditor"
+                  }
+                ]
               }
             ]
           },
           {
-            "type": "tabset",
-            "id": "#8",
+            "type": "row",
+            "id": "#76df7889-b60a-425e-8f0c-8f064b43f680",
             "weight": 30,
             "children": [
               {
-                "type": "tab",
-                "id": "#22",
-                "name": "Playtest",
-                "component": "playtest"
+                "type": "tabset",
+                "id": "#8",
+                "weight": 50,
+                "children": [
+                  {
+                    "type": "tab",
+                    "id": "#22",
+                    "name": "Playtest",
+                    "component": "playtest"
+                  }
+                ],
+                "active": true
               },
               {
-                "type": "tab",
-                "id": "44",
-                "name": "Console",
-                "component": "debugConsole",
-                "className": "debug-console"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "type": "row",
-        "id": "#7",
-        "weight": 10,
-        "children": [
-          {
-            "type": "tabset",
-            "id": "#14",
-            "weight": 62.108108108108105,
-            "children": [
-              {
-                "type": "tab",
-                "id": "#40",
-                "name": "Text Editor",
-                "component": "textEditor"
+                "type": "tabset",
+                "id": "#0eca02af-8282-4d36-98b0-3d688b095b71",
+                "weight": 50,
+                "children": [
+                  {
+                    "type": "tab",
+                    "id": "44",
+                    "name": "Console",
+                    "component": "debugConsole",
+                    "className": "debug-console"
+                  }
+                ]
               }
             ]
           }

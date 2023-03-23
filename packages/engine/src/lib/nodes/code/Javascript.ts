@@ -1,19 +1,17 @@
 import Rete from 'rete'
 
-import {
-  EngineContext,
-  MagickNodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  WorkerData,
-} from '../../types'
 import { CodeControl } from '../../dataControls/CodeControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { processCode } from '../../functions/processCode'
+import { triggerSocket } from '../../sockets'
+import {
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData
+} from '../../types'
 
 const defaultCode =`
 // inputs: dictionary of inputs based on socket names
@@ -33,7 +31,7 @@ Please note that the return of your function must be an object whose keys are th
 export class Javascript extends MagickComponent<unknown> {
   constructor() {
     // Name of the component
-    super('Code', {
+    super('Javascript', {
       outputs: {
         trigger: 'option',
       },

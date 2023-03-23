@@ -23,8 +23,4 @@ export class InputControl extends DataControl {
       placeholder
     })
   }
-
-  onData = () => {
-    return
-  }
 }

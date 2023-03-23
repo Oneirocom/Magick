@@ -1,17 +1,9 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { objectSocket, triggerSocket } from '../../sockets'
-import {
-  MagickNode,
-  MagickWorkerInputs,
-  WorkerData,
-} from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 const info =
   'ComposeObject runs JSON.stringify on the inputs and returns the result'

@@ -1,16 +1,15 @@
 import Rete from 'rete'
 
-import {
-  MagickNodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  WorkerData,
-} from '../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
+import { MagickComponent } from '../../engine'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import * as sockets from '../../sockets'
 import { SocketNameType } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import {
+  MagickNode,
+  MagickWorkerInputs,
+  WorkerData
+} from '../../types'
 // import { DropdownControl } from '../../dataControls/DropdownControl';
 
 const info = `Used to cast any socket into another socket type.  Be sure you know the type of input to your any to cast it into your socket type, as it might break things otherwise.`

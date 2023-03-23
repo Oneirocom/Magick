@@ -1,19 +1,17 @@
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
+import { DropdownControl } from '../../dataControls/DropdownControl'
+import { SwitchControl } from '../../dataControls/SwitchControl'
+import { MagickComponent } from '../../engine'
+import { pluginManager } from '../../plugin'
+import { anySocket, eventSocket, triggerSocket } from '../../sockets'
 import {
-  EditorContext,
-  MagickNodeData,
-  MagickNode,
+  EditorContext, MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData,
+  WorkerData
 } from '../../types'
-import { DropdownControl } from '../../dataControls/DropdownControl'
-import { pluginManager } from '../../plugin'
-import { SwitchControl } from '../../dataControls/SwitchControl'
-import { triggerSocket, anySocket, eventSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 const info = `The output component will pass values out from your spell.  You can have multiple outputs in a spell and all output values will be collected. It also has an option to send the output to the playtest area for easy testing.`
 
 const defaultOutputTypes = [{ name: 'Default', socket: anySocket }]
@@ -51,6 +49,7 @@ export class Output extends MagickComponent<void> {
     const values = [...defaultOutputTypes, ...pluginManager.getOutputTypes()]
     node.data.isOutput = true
     node.data.name = node.data.name ?? `Output - ${values[0].name}`
+    node.data.sendToPlaytest = true
 
     const outputType = new DropdownControl({
       name: 'Output Type',
@@ -62,22 +61,7 @@ export class Output extends MagickComponent<void> {
     outputType.onData = data => {
       node.data.name = `Output - ${data}`
     }
-
-    const switchControl = new SwitchControl({
-      dataKey: 'sendToPlaytest',
-      name: 'Send to Playtest',
-      label: 'Playtest',
-      defaultValue: node.data.sendToPlaytest || true,
-    })
-
-    const avatarControl = new SwitchControl({
-      dataKey: 'sendToAvatar',
-      name: 'Send to Avatar',
-      label: 'Avatar',
-      defaultValue: node.data.sendToAvatar || false,
-    })
-
-    node.inspector.add(outputType).add(switchControl).add(avatarControl)
+    node.inspector.add(outputType)
     // need to automate this part!  Wont workw without a socket key
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
@@ -102,21 +86,9 @@ export class Output extends MagickComponent<void> {
     const event =
       inputs.event?.[0] || (Object.values(module.inputs)[0] as any)[0]
 
-    if (magick) {
-      //just need a new check here for playtest send boolean
-      const { sendToPlaytest, sendToAvatar } = magick
-
-      if (node.data.sendToPlaytest && sendToPlaytest) {
-        sendToPlaytest(output)
-      }
-
-      if (node.data.sendToAvatar && sendToAvatar) {
-        sendToAvatar(output)
-      }
-    }
-
     if (module.agent) {
-      if (outputType === 'Default') {
+      console.log('outputType', outputType)
+      if ((outputType as string).includes('Default')) {
         const inputType = pluginManager.getInputTypes().find(inputType => {
           return (
             inputType.name ===
@@ -127,6 +99,7 @@ export class Output extends MagickComponent<void> {
         const t = module.agent.outputTypes.find(
           t => t.name === responseOutputType
         )
+        console.log('handling', responseOutputType, t)
         t.handler({
           output,
           agent: module.agent,
@@ -142,6 +115,7 @@ export class Output extends MagickComponent<void> {
         } else if (!t.handler) {
           console.error('output type handler is not defined', t)
         } else {
+          console.log('handling', outputType, t)
           t.handler({
             output,
             agent: module.agent,
@@ -150,6 +124,8 @@ export class Output extends MagickComponent<void> {
         }
       }
     }
+
+    console.log('output', output)
 
     return {
       output,

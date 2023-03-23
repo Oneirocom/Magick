@@ -26,6 +26,7 @@ const AgentDetails = ({
   const [oldName, setOldName] = useState<string>('')
   const [enable, setEnable] = useState(onLoadEnables)
   console.log('selectedAgentData', selectedAgentData)
+
   const update = (id, data = undefined) => {
     const _data = data || { ...selectedAgentData }
     id = id || _data.id
@@ -35,7 +36,9 @@ const AgentDetails = ({
     }
 
     // Avoid server-side validation error
-    _data.spells = Array.isArray(_data?.spells) ? JSON.stringify(_data.spells) : '[]'
+    _data.spells = Array.isArray(_data?.spells)
+      ? JSON.stringify(_data.spells)
+      : '[]'
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
     axios
@@ -50,7 +53,7 @@ const AgentDetails = ({
             variant: 'success',
           })
 
-          updateCallback()
+          setSelectedAgentData(res.data)
         }
       })
       .catch(e => {
@@ -60,7 +63,7 @@ const AgentDetails = ({
         })
       })
   }
-  
+
   const exportAgent = () => {
     const fileName = 'agent'
 
@@ -86,7 +89,7 @@ const AgentDetails = ({
     const url = window.URL.createObjectURL(new Blob([blob]))
     const link = document.createElement('a')
     link.href = url
-    link.setAttribute('download', `${fileName}.ent.json`)
+    link.setAttribute('download', `${fileName}.agent.json`)
     // Append to html link element page
     document.body.appendChild(link)
     // Start download
@@ -97,6 +100,7 @@ const AgentDetails = ({
   }
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-extra-semi
     ;(async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
@@ -206,21 +210,24 @@ const AgentDetails = ({
           }}
           name="rootSpell"
           id="rootSpell"
-          value={JSON.parse(selectedAgentData.rootSpell)?.name || 'default'}
+          value={selectedAgentData.rootSpell?.name || 'default'}
           onChange={event => {
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value
             )
-            let inputs = pluginManager.getInputByName()
-            let plugin_list = pluginManager.getPlugins()
-            for (let key of Object.keys(plugin_list)){
+            const inputs = pluginManager.getInputByName()
+            const plugin_list = pluginManager.getPlugins()
+            for (const key of Object.keys(plugin_list)) {
+              if (!newRootSpell) continue
               plugin_list[key] = validateSpellData(newRootSpell, inputs[key])
             }
-            console.log(plugin_list)
             setEnable(plugin_list)
-            enqueueSnackbar('Greyed out components are not available because of the selected spell.', {
-              variant: 'info',
-            })
+            enqueueSnackbar(
+              'Greyed out components are not available because of the selected spell.',
+              {
+                variant: 'info',
+              }
+            )
             /* for (let key in plugin_list){
               console.log(key)
               console.log(JSON.parse(inputs)[key])
@@ -233,12 +240,12 @@ const AgentDetails = ({
             } */
             setSelectedAgentData({
               enabled: true,
-              ...selectedAgentData
+              ...selectedAgentData,
             })
             //setEnable("DiscordPlugin")
             setSelectedAgentData({
               ...selectedAgentData,
-              rootSpell: JSON.stringify(newRootSpell),
+              rootSpell: newRootSpell,
               publicVariables: JSON.stringify(
                 Object.values(newRootSpell.graph.nodes as any)
                   // get the public nodes
@@ -261,7 +268,7 @@ const AgentDetails = ({
             })
           }}
         >
-          <option disabled value={'default'} key={0}>
+          <option disabled value={'default'}>
             Select Spell
           </option>
           {spellList?.length > 0 &&
@@ -306,7 +313,6 @@ const AgentDetails = ({
       {selectedAgentData.publicVariables !== '{}' && (
         <AgentPubVariables
           setPublicVars={data => {
-            console.log('new daa', data)
             setSelectedAgentData({
               ...selectedAgentData,
               publicVariables: JSON.stringify(data),

@@ -81,6 +81,8 @@ export const Select = ({
       color: '#fff',
       backgroundColor: 'transparent',
       boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.1) !important',
+      flex: 1,
+      opacity: `${props.searchable ? 1 : 0}`,
     }),
 
     control: (provided, state) => ({
@@ -113,13 +115,15 @@ export const Select = ({
     }),
     valueContainer: () => ({
       width: '100%',
-      display: 'flex',
+      display: props.searchable ? 'flex' : 'block',
+      marginTop: props.searchable ? '0' : '8px',
       flex: '1',
       alignItems: 'center',
       fontFamily: 'IBM Plex Mono',
     }),
     singleValue: () => ({
       color: 'rgba(255,255,255)',
+      flex: '1 0 50px',
     }),
   }
 

@@ -34,7 +34,7 @@ export const events: PubSubEvents = {
   $CREATE_PLAYTEST: tabId => `createPlaytest:${tabId}`,
   $CREATE_INSPECTOR: tabId => `createInspector:${tabId}`,
   $CREATE_TEXT_EDITOR: tabId => `createTextEditor:${tabId}`,
-  $CREATE_AVATAR_WINDOW: tabId => `createAvatarWindow:${tabId}`,
+  $CREATE_PROJECT_WINDOW: tabId => `createProjectWindow:${tabId}`,
   $CREATE_DEBUG_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $CREATE_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $RUN_SPELL: tabId => `runSpell:${tabId}`,
@@ -46,7 +46,6 @@ export const events: PubSubEvents = {
   $MULTI_SELECT_COPY: tabId => `multiSelectCopy:${tabId}`,
   $MULTI_SELECT_PASTE: tabId => `multiSelectPaste:${tabId}`,
   $REFRESH_EVENT_TABLE: tabId => `refreshEventTable:${tabId}`,
-  $SEND_TO_AVATAR: tabId => `sendToAvatar:${tabId}`,
 }
 
 const PubSubProvider = ({ children }) => {

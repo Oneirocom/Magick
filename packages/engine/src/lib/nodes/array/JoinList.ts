@@ -1,9 +1,10 @@
 import Rete from 'rete'
 
-import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 import { TextInputControl } from '../../dataControls/TextInputControl'
-import { stringSocket, arraySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
+import { arraySocket, stringSocket } from '../../sockets'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
+
 const info = `The Join List component takes in an array, and will join each item in the array together with a seperator, defined in the components input field.`
 
 type WorkerReturn = {

@@ -1,22 +1,19 @@
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  Event,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  WorkerData,
-} from '../../types'
+import { NodeData } from 'rete/types/core/data'
+import { MagickComponent } from '../../engine'
 import { Task } from '../../plugins/taskPlugin/task'
 import {
-  eventSocket,
-  arraySocket,
-  stringSocket,
-  triggerSocket,
+  arraySocket, eventSocket, stringSocket,
+  triggerSocket
 } from '../../sockets'
-import { MagickComponent, MagickTask } from '../../magick-component'
-import { NodeData } from 'rete/types/core/data'
+import {
+  Event,
+  MagickNode, MagickTask, MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData
+} from '../../types'
 
 const info = `The input component allows you to pass a single value to your graph. You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 

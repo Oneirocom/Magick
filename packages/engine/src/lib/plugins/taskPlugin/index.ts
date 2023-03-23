@@ -2,7 +2,8 @@ import { Component } from 'rete'
 import { NodeData, WorkerOutputs } from 'rete/types/core/data'
 
 import { MagickEditor, MagickWorkerInputs, UnknownData, WorkerData } from '../../types'
-import { MagickComponent } from '../../magick-component'
+
+import { MagickComponent } from '../../engine'
 import { Task, TaskSocketInfo } from './task'
 
 function install(editor: MagickEditor) {

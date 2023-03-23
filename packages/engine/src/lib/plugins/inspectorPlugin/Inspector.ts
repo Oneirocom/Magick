@@ -2,9 +2,9 @@ import deepEqual from 'deep-equal'
 import Rete, { Input, Output } from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { AsDataSocket, AsInputsAndOutputsData, DataSocketType, IRunContextEditor, MagickNode } from '../../types'
+import { MagickComponent } from '../../engine'
 import * as socketMap from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { AsDataSocket, AsInputsAndOutputsData, DataSocketType, IRunContextEditor, MagickNode } from '../../types'
 import { DataControl } from './DataControl'
 
 type InspectorConstructor = {
@@ -70,6 +70,16 @@ export class Inspector {
   add(dataControl: DataControl) {
     this._add(this.dataControls, dataControl)
     dataControl.onAdd()
+    return this
+  }
+
+  remove(dataKey) {
+    const control = this.dataControls.get(dataKey)
+    if(!control) {
+      return console.warn(`No control with dataKey '${dataKey}' found`)
+    }
+    this.dataControls.delete(dataKey)
+    control.onRemove()
     return this
   }
 

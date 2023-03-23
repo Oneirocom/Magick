@@ -1,19 +1,16 @@
 import isEqual from 'lodash/isEqual'
 import Rete from 'rete'
 
+import { Data } from 'rete/types/core/data'
+import { SpellControl } from '../../dataControls/SpellControl'
+import { MagickComponent } from '../../engine'
+import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 import { triggerSocket } from '../../sockets'
 import {
-  EngineContext,
-  ModuleWorkerOutput,
-  Spell,
-  MagickNode,
-  MagickWorkerInputs,
-  WorkerData,
+  EngineContext, MagickNode,
+  MagickWorkerInputs, ModuleWorkerOutput,
+  Spell, WorkerData
 } from '../../types'
-import { SpellControl } from '../../dataControls/SpellControl'
-import { MagickComponent } from '../../magick-component'
-import { Data } from 'rete/types/core/data'
-import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
 type Socket = {

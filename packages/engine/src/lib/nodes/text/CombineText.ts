@@ -2,7 +2,7 @@ import Rete from 'rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,

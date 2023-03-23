@@ -163,6 +163,7 @@ export const spellApi = rootApi.injectEndpoints({
 
 export const {
   useGetSpellsQuery,
+  useLazyGetSpellsQuery,
   useLazyGetSpellQuery,
   useLazyGetSpellByIdQuery,
   useGetSpellQuery,

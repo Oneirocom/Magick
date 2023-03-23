@@ -1,13 +1,13 @@
 import Rete from 'rete'
 
 import { InputControl } from '../../dataControls/InputControl'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { anySocket, arraySocket, triggerSocket } from '../../sockets'
+import { MagickWorkerInputs } from '../../types'
+
 import {
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  WorkerData,
+  MagickNode, MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
 
 const info = 'Returns the same output as the input'

@@ -23,7 +23,7 @@ ul {
 }
 
 /* Hide Dropdowns by Default */
-ul ul {
+.menu-bar ul {
   display: none;
   position: absolute;
   top: var(--c4); /* the height of the main nav */
