@@ -1,9 +1,7 @@
 import { Button } from '@magickml/client-core'
 import React from 'react'
 
-import { Icon } from '@magickml/client-core'
-
-const FileInput = ({ loadFile }) => {
+const FileInput = ({ loadFile, sx, innerText = 'Import', Icon = <> </> }) => {
   const hiddenFileInput = React.useRef(null)
 
   const handleClick = () => {
@@ -15,13 +13,9 @@ const FileInput = ({ loadFile }) => {
   }
   return (
     <>
-      <Button onClick={handleClick}>
-        <Icon
-          name="folder"
-          size={16}
-          style={{ marginRight: 'var(--extraSmall)' }}
-        />
-        Import...
+      <Button onClick={handleClick} style={{...sx}}>
+        {Icon}
+        {innerText}
       </Button>
       <input
         id="import"

@@ -1,30 +1,24 @@
 import { DEFAULT_PROJECT_ID, DEFAULT_USER_ID } from '@magickml/engine'
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
+import { authenticate } from '@feathersjs/authentication/lib/hooks'
 import { feathers } from '@feathersjs/feathers'
 import {
-  koa,
-  rest,
-  bodyParser,
-  errorHandler,
-  parseAuthentication,
-  cors,
+  bodyParser, cors, errorHandler, koa, parseAuthentication, rest
 } from '@feathersjs/koa'
-import { authenticate } from '@feathersjs/authentication/lib/hooks'
 import socketio from '@feathersjs/socketio'
+import { dbClient } from './dbClient'
 import type { Application, HookContext } from './declarations'
 import { logError } from './hooks'
-import { dbClient } from './dbClient'
 import channels from './sockets/channels'
 // import swagger from 'feathers-swagger'
-import handleSockets from './sockets/sockets'
-import { configureManager, globalsManager, IGNORE_AUTH } from '@magickml/engine'
-import { services } from './services'
-import { authentication } from './auth/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
-import { apis } from './api/apis'
+import { configureManager, globalsManager, IGNORE_AUTH } from '@magickml/engine'
+import { authentication } from './auth/authentication'
+import { services } from './services'
+import handleSockets from './sockets/sockets'
+import HNSWVectorDatabase from './vectordb'
 
 const app: Application = koa(feathers())
-import HNSWVectorDatabase from './vectordb'
 
 // Define a distance function for the vectors
 function euclideanDistance(a: number[], b: number[]): number {
