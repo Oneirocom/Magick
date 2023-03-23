@@ -17,14 +17,11 @@ const info = `The Switch Gate component takes a single input, and allows you to 
 export class SwitchGate extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Switch')
-
-    this.task = {
+    super('Switch', {
       outputs: { default: 'option' },
-    }
+    }, 'Flow', info)
+    
     this.display = true
-    this.category = 'Flow'
-    this.info = info
   }
 
   node = {}

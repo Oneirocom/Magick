@@ -13,15 +13,11 @@ const info = 'Does some basic checks'
 
 export class ProfanityFilter extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Profanity Filter')
-
-    this.task = {
+    super('Profanity Filter', {
       outputs: { true: 'option', false: 'option' },
-    }
+    }, 'Text', info)
 
-    this.category = 'Text'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

@@ -16,13 +16,9 @@ const info = `Fires once all connected triggers have fired.`
 export class WaitForAll extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Wait For All')
-
-    this.task = {
+    super('Wait For All', {
       outputs: { default: 'option' },
-    }
-    this.category = 'Flow'
-    this.info = info
+    }, 'Flow', info)
   }
 
   node = {}

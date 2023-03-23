@@ -23,9 +23,7 @@ export class EventRestructureComponent extends MagickComponent<
 
   constructor() {
     // Name of the component
-    super('Event Restructure')
-
-    this.task = {
+    super('Event Restructure', {
       outputs: {
         output: 'output',
         trigger: 'option',
@@ -33,10 +31,8 @@ export class EventRestructureComponent extends MagickComponent<
       init: (task = {} as Task, node: NodeData) => {
         this.nodeTaskMap[node.id] = task
       },
-    }
-
-    this.category = 'Event'
-    this.info = info
+    }, 'Event', info)
+    
     this.display = true
   }
 

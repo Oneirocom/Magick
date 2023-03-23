@@ -52,18 +52,14 @@ async function getPrompt(prompt, server) {
 
 export class ImageGeneration extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Generate Image')
-
-    this.task = {
+    super('Generate Image', {
       outputs: {
         trigger: 'option',
         output: 'output',
       },
-    }
+    }, 'Image', info)
 
-    this.category = 'Image'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

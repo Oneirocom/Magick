@@ -1,4 +1,7 @@
-import { CompletionProvider } from "./types"
+import { FC, LazyExoticComponent } from "react"
+import { Handler } from "koa/lib/application"
+import { CompletionProvider, MagickComponent } from "./types"
+import { MagickComponentArray } from "./magick-component"
 
 export type PluginSecret = {
   name: string
@@ -9,25 +12,25 @@ export type PluginSecret = {
 
 export type PluginDrawerItem = {
   path: string
-  icon: any
+  icon: FC
   text: string
 }
 
 export type PluginClientRoute = {
   path: string
-  component: any
+  component: FC
   exact?: boolean
 }
 
 export type PluginServerRoute = {
   path: string
   method: string
-  handler: Function
+  handler: Handler
 }
 
 type PluginConstuctor = {
   name: string
-  nodes?: any
+  nodes?: MagickComponentArray
   inputTypes?: any[]
   outputTypes?: any[]
   secrets?: PluginSecret[]
@@ -35,7 +38,7 @@ type PluginConstuctor = {
 }
 class Plugin {
   name: string
-  nodes: any
+  nodes: MagickComponentArray
   inputTypes: any[]
   outputTypes: any[]
   secrets: PluginSecret[] = []
@@ -58,9 +61,9 @@ class Plugin {
 }
 
 export class ClientPlugin extends Plugin {
-  agentComponents: any[]
+  agentComponents: FC[]
   drawerItems?: Array<PluginDrawerItem>
-  clientPageLayout?: any
+  clientPageLayout?: LazyExoticComponent<() => JSX.Element> | null
   clientRoutes?: Array<PluginClientRoute>
   constructor({
     name,
@@ -73,17 +76,11 @@ export class ClientPlugin extends Plugin {
     drawerItems = [],
     secrets = [],
     completionProviders = [],
-  }: {
-    name: string
-    nodes?: any
-    agentComponents?: any
-    inputTypes?: any[]
-    outputTypes?: any[]
-    clientPageLayout?: any
+  }: PluginConstuctor & {
+    agentComponents?: FC[]
+    clientPageLayout?: LazyExoticComponent<() => JSX.Element> | null
     clientRoutes?: Array<PluginClientRoute>
     drawerItems?: Array<PluginDrawerItem>
-    secrets?: PluginSecret[]
-    completionProviders?: any[]
   }) {
     super({
       name,
@@ -127,7 +124,7 @@ export class ServerPlugin extends Plugin {
     completionProviders = [],
   }: {
     name: string
-    nodes?: any
+    nodes?: MagickComponentArray
     services?: any
     serverInit?: Function
     agentMethods?: {

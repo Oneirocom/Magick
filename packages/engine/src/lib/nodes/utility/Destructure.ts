@@ -17,17 +17,13 @@ const info = `Destructure properties out of an object`
 export class Destructure extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Destructure')
-
-    this.task = {
+    super('Destructure', {
       outputs: {
         trigger: 'option',
       },
       init: () => {},
       onRun: () => {},
-    } as TaskOptions
-    this.category = 'Utility'
-    this.info = info
+    } as TaskOptions, 'Utility', info)
   }
   // the builder is used to "assemble" the node component.
 

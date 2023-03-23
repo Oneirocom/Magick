@@ -25,18 +25,14 @@ type WorkerReturn = {
 
 export class ParseJSON extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('JSON To Object')
-
-    this.task = {
+    super('JSON To Object', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Object', info)
 
-    this.category = 'Object'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

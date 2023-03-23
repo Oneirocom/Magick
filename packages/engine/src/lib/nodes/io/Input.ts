@@ -29,22 +29,18 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
   constructor() {
     // Name of the component
-    super('Input')
-
-    this.task = {
+    super('Input', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'I/O', info)
 
     this.module = {
       nodeType: 'input',
       socket: anySocket,
     }
 
-    this.category = 'I/O'
-    this.info = info
     this.display = true
     this.contextMenuName = 'Input'
     this.displayName = 'Input'

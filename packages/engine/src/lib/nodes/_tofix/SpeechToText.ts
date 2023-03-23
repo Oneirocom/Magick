@@ -21,18 +21,13 @@ let banana: any = null
 
 export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Speech To Text')
-
-    this.task = {
+    super('Speech To Text', {
       outputs: {
         trigger: 'option',
         output: 'output',
       },
-    }
-
-    this.category = 'Generation'
+    }, 'Generation', info)
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

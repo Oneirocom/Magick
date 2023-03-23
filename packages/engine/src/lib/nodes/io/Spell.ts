@@ -49,16 +49,14 @@ export class SpellComponent extends MagickComponent<
   noBuildUpdate: boolean
 
   constructor() {
-    super('Spell')
+    super('Spell', {
+      outputs: { trigger: 'option' },
+    }, 'I/O', info)
+
     this.module = {
       nodeType: 'module',
       skip: true,
     }
-    this.task = {
-      outputs: { trigger: 'option' },
-    }
-    this.category = 'I/O'
-    this.info = info
     this.noBuildUpdate = true
     this.display = true
     this.onDoubleClick = (node: MagickNode) => {

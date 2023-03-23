@@ -20,16 +20,12 @@ export class Image extends MagickComponent<any> {
   static Image_Val
   id_image: any
   constructor() {
-    super('Image Variable')
-
-    this.task = {
+    super('Image Variable', {
       outputs: {
         output: 'output',
       },
-    }
+    }, 'Image', info)
 
-    this.category = 'Image'
-    this.info = info
     this.display = true
   }
 

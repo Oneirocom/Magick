@@ -9,13 +9,9 @@ const info = `The or gate will be triggered when either of two triggers are trig
 export class OrGate extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Or Gate')
-
-    this.task = {
+    super('Or Gate', {
       outputs: { trigger: 'option' },
-    }
-    this.category = 'Flow'
-    this.info = info
+    }, 'Flow', info)
   }
 
   // the builder is used to "assemble" the node component.

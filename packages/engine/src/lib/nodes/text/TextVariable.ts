@@ -18,16 +18,12 @@ type InputReturn = {
 
 export class TextVariable extends MagickComponent<InputReturn> {
   constructor() {
-    super('Text Variable')
-
-    this.task = {
+    super('Text Variable', {
       outputs: {
         output: 'output',
       },
-    }
+    }, 'Text', info)
 
-    this.category = 'Text'
-    this.info = info
     this.display = true
   }
 
@@ -54,15 +50,16 @@ export class TextVariable extends MagickComponent<InputReturn> {
   }
 
   worker(node: WorkerData, _inputs: MagickWorkerInputs, _outputs: MagickWorkerOutputs, context: { module: { publicVariables: string } }) {
-    let fewshot = node.data.fewshot as string
+    let _text = text
+    // let fewshot = node.data.fewshot as string
     const publicVars = JSON.parse(context.module.publicVariables)
     if(node?.data?.isPublic && publicVars[node.id]) {
       console.log('publicVars[node.id is', publicVars[node.id])
-      text = publicVars[node.id].value
+      _text = publicVars[node.id].value
     }
 
     return {
-      output: text,
+      output: _text,
     }
   }
 }

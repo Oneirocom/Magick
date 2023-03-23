@@ -14,23 +14,20 @@ type WorkerReturn = {
 export class TriggerOut extends MagickComponent<WorkerReturn> {
   constructor() {
     // Name of the component
-    super('Trigger Out')
-    this.contextMenuName = 'Trigger Out'
-
-    this.task = {
+    super('Trigger Out', {
       outputs: {
         trigger: 'output',
       },
-    }
+    }, 'I/O', info)
+    this.contextMenuName = 'Trigger Out'
+
 
     this.module = {
       nodeType: 'triggerOut',
       socket: triggerSocket,
     }
 
-    this.category = 'I/O'
     this.displayName = 'Trigger Out'
-    this.info = info
   }
 
   // the builder is used to "assemble" the node component.
