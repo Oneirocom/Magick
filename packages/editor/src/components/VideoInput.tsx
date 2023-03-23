@@ -17,7 +17,7 @@ const VideoInput = ({ loadFile }) => {
     <>
       <button onClick={handleClick}>
         <Icon name="folder" style={{ marginRight: 'var(--extraSmall)' }} />
-        Import...
+        Import
       </button>
       <input
         type="file"
