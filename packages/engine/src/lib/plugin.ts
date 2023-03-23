@@ -1,7 +1,9 @@
 import { FC, LazyExoticComponent } from "react"
 import { Handler } from "koa/lib/application"
-import { CompletionProvider, MagickComponent } from "./types"
+import { CompletionProvider } from "./types"
 import { MagickComponentArray } from "./magick-component"
+import { Socket } from "rete"
+import { Service, ServiceInterface } from "@feathersjs/feathers/lib"
 
 export type PluginSecret = {
   name: string
@@ -20,6 +22,7 @@ export type PluginClientRoute = {
   path: string
   component: FC
   exact?: boolean
+  plugin: string
 }
 
 export type PluginServerRoute = {
@@ -28,21 +31,41 @@ export type PluginServerRoute = {
   handler: Handler
 }
 
+// inputTypes: [
+//   { name: 'Discord (Voice)', trigger: true, socket: eventSocket},
+//   { name: 'Discord (Text)', trigger: true, socket: eventSocket },
+// ],
+// outputTypes: [
+//   { name: 'Discord (Voice)', trigger: false, socket: eventSocket },
+//   { name: 'Discord (Text)', trigger: false, socket: eventSocket },
+// ],
+// secrets: [{
+//   name: 'Discord API Key',
+//   key: 'discord_api_key',
+//   global: false
+// }]
+export type PluginIOType = {
+  name: string
+  trigger: boolean
+  socket: Socket
+}
+
+
 type PluginConstuctor = {
   name: string
   nodes?: MagickComponentArray
-  inputTypes?: any[]
-  outputTypes?: any[]
+  inputTypes?: PluginIOType[]
+  outputTypes?: PluginIOType[]
   secrets?: PluginSecret[]
-  completionProviders?: any[]
+  completionProviders?: CompletionProvider[]
 }
 class Plugin {
   name: string
   nodes: MagickComponentArray
-  inputTypes: any[]
-  outputTypes: any[]
-  secrets: PluginSecret[] = []
-  completionProviders: any[] = []
+  inputTypes: PluginIOType[]
+  outputTypes: PluginIOType[]
+  secrets: PluginSecret[]
+  completionProviders: CompletionProvider[]
   constructor({
     name,
     nodes = [],
@@ -60,10 +83,11 @@ class Plugin {
   }
 }
 
+export type PageLayout = LazyExoticComponent<() => JSX.Element> | null
 export class ClientPlugin extends Plugin {
   agentComponents: FC[]
   drawerItems?: Array<PluginDrawerItem>
-  clientPageLayout?: LazyExoticComponent<() => JSX.Element> | null
+  clientPageLayout?: PageLayout
   clientRoutes?: Array<PluginClientRoute>
   constructor({
     name,
@@ -78,7 +102,7 @@ export class ClientPlugin extends Plugin {
     completionProviders = [],
   }: PluginConstuctor & {
     agentComponents?: FC[]
-    clientPageLayout?: LazyExoticComponent<() => JSX.Element> | null
+    clientPageLayout?: PageLayout
     clientRoutes?: Array<PluginClientRoute>
     drawerItems?: Array<PluginDrawerItem>
   }) {
@@ -98,12 +122,14 @@ export class ClientPlugin extends Plugin {
   }
 }
 
+export type ServerInit = () => (Promise<void> | null | void)
+export type ServerInits = Record<string, ServerInit>
 export class ServerPlugin extends Plugin {
-  services: any
-  serverInit?: Function
+  services: ServiceInterface[]
+  serverInit?: ServerInit
   agentMethods?: {
-    start: Function
-    stop: Function
+    start: ()=>void
+    stop: ()=>void
   }
   serverRoutes?: Array<PluginServerRoute>
   constructor({
@@ -122,20 +148,14 @@ export class ServerPlugin extends Plugin {
     serverRoutes = [],
     secrets = [],
     completionProviders = [],
-  }: {
-    name: string
-    nodes?: MagickComponentArray
-    services?: any
-    serverInit?: Function
+  }: PluginConstuctor & {
+    services?: Service[]
+    serverInit?: ServerInit
     agentMethods?: {
-      start: Function
-      stop: Function
+      start: ()=>void
+      stop: ()=>void
     }
-    inputTypes?: any[]
-    outputTypes?: any[]
     serverRoutes?: Array<PluginServerRoute>
-    secrets?: PluginSecret[]
-    completionProviders?: any[]
   }) {
     super({
       name,
@@ -155,7 +175,7 @@ export class ServerPlugin extends Plugin {
 
 class PluginManager {
   pluginList: Array<ClientPlugin | ServerPlugin>
-  componentList: Object
+  componentList: Record<string, never> // TODO: componentList is never used, remove it?
   plugins
   constructor() {
     this.pluginList = new Array<ClientPlugin | ServerPlugin>()
@@ -167,7 +187,7 @@ class PluginManager {
   }
 
   getInputTypes() {
-    const inputTypes = [] as any[]
+    const inputTypes:PluginIOType[] = []
     this.pluginList.forEach(plugin => {
       plugin.inputTypes.forEach(inputType => {
         inputTypes.push(inputType)
@@ -178,7 +198,7 @@ class PluginManager {
 
   
   getOutputTypes() {
-    const outputTypes = [] as any[]
+    const outputTypes:PluginIOType[] = []
     this.pluginList.forEach(plugin => {
       plugin.outputTypes.forEach(outputType => {
         outputTypes.push(outputType)
@@ -205,7 +225,7 @@ class PluginManager {
   }
 
   getSecrets(global = false) {
-    const secrets = [] as any[]
+    const secrets:PluginSecret[] = []
     this.pluginList.forEach(plugin => {
       plugin.secrets.forEach(secret => {
         if (global && !secret.global) return
@@ -215,8 +235,8 @@ class PluginManager {
     return secrets
   }
 
-  getCompletionProviders(type = null, subtypes: null | string[] = null): CompletionProvider[] {
-    const completionProviders = [] as any[]
+  getCompletionProviders(type:string|null = null, subtypes: null | string[] = null): CompletionProvider[] {
+    const completionProviders:CompletionProvider[] = []
     this.pluginList.forEach(plugin => {
       plugin.completionProviders.forEach(provider => {
         if(type && provider.type !== type) return
@@ -236,7 +256,7 @@ class ClientPluginManager extends PluginManager {
   }
 
   getAgentComponents() {
-    const agentComp = [] as any[]
+    const agentComp:FC[] = []
     ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       plugin.agentComponents.forEach(component => {
         agentComp.push(component)
@@ -246,7 +266,7 @@ class ClientPluginManager extends PluginManager {
   }
 
   getClientRoutes() {
-    const clientRoutes = [] as any[]
+    const clientRoutes:PluginClientRoute[] = []
     ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       if (plugin.clientRoutes) {
         plugin.clientRoutes.forEach(route => {
@@ -271,14 +291,14 @@ class ClientPluginManager extends PluginManager {
       }
       lastPluginRoute = route.plugin
       return acc
-    }, [])
+    }, [] as { plugin: string; routes: PluginClientRoute[], layout?:PageLayout }[])
 
-    pluginRoutesGrouped.map(pluginRouteGroup => {
+    pluginRoutesGrouped.forEach(pluginRouteGroup => {
       const ClientPageLayout =
-        pluginManager.getClientPageLayout(pluginRouteGroup.plugin) || null
+        (pluginManager as ClientPluginManager).getClientPageLayout(pluginRouteGroup.plugin) || null
       pluginRouteGroup.layout = ClientPageLayout
     })
-    return pluginRoutesGrouped
+    return pluginRoutesGrouped as { plugin: string; routes: PluginClientRoute[], layout:PageLayout }[]
   }
 
   getClientPageLayout(p) {
@@ -290,7 +310,7 @@ class ClientPluginManager extends PluginManager {
   }
 
   getDrawerItems() {
-    const drawerItems = [] as any[]
+    const drawerItems = [] as (PluginDrawerItem & {plugin:string})[]
     ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       if (plugin.drawerItems) {
         plugin.drawerItems.forEach(drawerItem => {
@@ -302,7 +322,7 @@ class ClientPluginManager extends PluginManager {
   }
 
   getInputTypes() {
-    const inputTypes = [] as any[]
+    const inputTypes = [] as PluginIOType[]
     this.pluginList.forEach(plugin => {
       plugin.inputTypes.forEach(inputType => {
         inputTypes.push(inputType)
@@ -362,7 +382,7 @@ class ServerPluginManager extends PluginManager {
   }
 
   getServices() {
-    const serviceList = [] as any[]
+    const serviceList = [] as ([string, ServiceInterface])[]
     ;(this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
       Object.keys(plugin.services).forEach(key => {
         serviceList.push([key, plugin.services[key]])
@@ -372,7 +392,7 @@ class ServerPluginManager extends PluginManager {
   }
 
   getServerInits() {
-    let serverInits = {}
+    let serverInits:ServerInits = {}
     ;(this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
       if (plugin.serverInit) {
         const obj = {}
@@ -384,7 +404,7 @@ class ServerPluginManager extends PluginManager {
   }
 
   getServerRoutes() {
-    const serverRoutes = [] as any[]
+    const serverRoutes = [] as PluginServerRoute[]
     ;(this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
       if (plugin.serverRoutes) {
         plugin.serverRoutes.forEach(route => {
@@ -396,7 +416,7 @@ class ServerPluginManager extends PluginManager {
   }
 }
 
-export const pluginManager =
+export const pluginManager:ClientPluginManager|ServerPluginManager =
   typeof window !== 'undefined'
     ? new ClientPluginManager()
-    : (new ServerPluginManager() as any)
+    : (new ServerPluginManager())
