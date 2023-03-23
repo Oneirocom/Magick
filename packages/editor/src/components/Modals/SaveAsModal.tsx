@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
 import { useNavigate } from 'react-router'
-import templates from '@magickml/templates'
+import { templates } from '@magickml/client-core'
 import { useConfig } from '../../contexts/ConfigProvider'
 import md5 from 'md5'
 

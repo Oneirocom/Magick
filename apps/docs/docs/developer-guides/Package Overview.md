@@ -33,10 +33,6 @@ Core runtime code for Magick. Contains all of the spell and spell running code, 
 @magickml/cost-calculator (./packages/cost-calculator)
 Basic functions for calculating the cost of ML and other types of requests in Magick.
 
-### Templates
-@magickml/templates (./packages/templates)
-Template spells, agents and projects for Magick.
-
 ## Front End Packages
 ### Client Core
 @magickml/client-core (./packages/client-core)

@@ -4,9 +4,12 @@ import {
 } from '@magickml/engine'
 import { DiscordAgentWindow } from './components/agent.component'
 
+import DiscordSpellTemplate from './templates/spells/Discord Bot.spell.json'
+
 const DiscordPlugin = new ClientPlugin({
   name: 'DiscordPlugin',
   agentComponents: [DiscordAgentWindow],
+  spellTemplates: [DiscordSpellTemplate],
   inputTypes: [
     { name: 'Discord (Voice)', trigger: true, socket: eventSocket},
     { name: 'Discord (Text)', trigger: true, socket: eventSocket },

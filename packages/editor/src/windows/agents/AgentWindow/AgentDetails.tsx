@@ -89,7 +89,7 @@ const AgentDetails = ({
     const url = window.URL.createObjectURL(new Blob([blob]))
     const link = document.createElement('a')
     link.href = url
-    link.setAttribute('download', `${fileName}.ent.json`)
+    link.setAttribute('download', `${fileName}.agent.json`)
     // Append to html link element page
     document.body.appendChild(link)
     // Start download
