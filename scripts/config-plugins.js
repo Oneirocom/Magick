@@ -18,7 +18,7 @@ const clientPlugins = process.env.CLIENT_PLUGINS ? process.env.CLIENT_PLUGINS.sp
 const path = require('path');
 const fs  = require('fs');
 
-const pluginsJsPathClient = path.join(__dirname, '..', 'apps', 'client', 'src/plugins.ts');
+const pluginsJsPathClient = path.join(__dirname, '..', 'packages', 'client-core', 'src/plugins.ts');
 const pluginsJsPathServer = path.join(__dirname, '..', 'apps', 'server', 'src/plugins.ts');
 const pluginsJsPathAgent = path.join(__dirname, '..', 'apps', 'agent', 'src/plugins.ts');
 

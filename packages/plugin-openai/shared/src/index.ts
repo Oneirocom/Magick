@@ -91,7 +91,7 @@ const completionProviders: CompletionProvider[] = [
       {
         socket: 'result',
         name: 'Result',
-        type: embeddingSocket,
+        type: stringSocket,
       },
       {
         socket: 'error',

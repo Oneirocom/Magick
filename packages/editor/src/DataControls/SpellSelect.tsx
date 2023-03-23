@@ -1,6 +1,6 @@
 import { Select } from '@magickml/client-core'
 import { GraphData } from '@magickml/engine'
-import templates from '@magickml/templates'
+import { templates } from '@magickml/client-core'
 import md5 from 'md5'
 import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
