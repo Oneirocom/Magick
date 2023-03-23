@@ -35,7 +35,9 @@ const AgentDetails = ({
     }
 
     // Avoid server-side validation error
-    _data.spells = Array.isArray(_data?.spells) ? JSON.stringify(_data.spells) : '[]'
+    _data.spells = Array.isArray(_data?.spells)
+      ? JSON.stringify(_data.spells)
+      : '[]'
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
     axios
@@ -50,7 +52,7 @@ const AgentDetails = ({
             variant: 'success',
           })
 
-          updateCallback()
+          setSelectedAgentData(res.data)
         }
       })
       .catch(e => {
@@ -60,7 +62,7 @@ const AgentDetails = ({
         })
       })
   }
-  
+
   const exportAgent = () => {
     const fileName = 'agent'
 
@@ -219,9 +221,12 @@ const AgentDetails = ({
             }
             console.log(plugin_list)
             setEnable(plugin_list)
-            enqueueSnackbar('Greyed out components are not available because of the selected spell.', {
-              variant: 'info',
-            })
+            enqueueSnackbar(
+              'Greyed out components are not available because of the selected spell.',
+              {
+                variant: 'info',
+              }
+            )
             /* for (let key in plugin_list){
               console.log(key)
               console.log(JSON.parse(inputs)[key])
@@ -234,7 +239,7 @@ const AgentDetails = ({
             } */
             setSelectedAgentData({
               enabled: true,
-              ...selectedAgentData
+              ...selectedAgentData,
             })
             //setEnable("DiscordPlugin")
             setSelectedAgentData({
