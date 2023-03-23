@@ -89,15 +89,9 @@ export class Output extends MagickComponent<void> {
     const event =
       inputs.event?.[0] || (Object.values(module.inputs)[0] as any)[0]
 
-    if (magick) {
-      //just need a new check here for playtest send boolean
-      const { sendToPlaytest } = magick
-
-      sendToPlaytest(output)
-    }
-
     if (module.agent) {
-      if (outputType === 'Default') {
+      console.log('outputType', outputType)
+      if ((outputType as string).includes('Default')) {
         const inputType = pluginManager.getInputTypes().find(inputType => {
           return (
             inputType.name ===
@@ -108,6 +102,7 @@ export class Output extends MagickComponent<void> {
         const t = module.agent.outputTypes.find(
           t => t.name === responseOutputType
         )
+        console.log('handling', responseOutputType, t)
         t.handler({
           output,
           agent: module.agent,
@@ -123,6 +118,7 @@ export class Output extends MagickComponent<void> {
         } else if (!t.handler) {
           console.error('output type handler is not defined', t)
         } else {
+          console.log('handling', outputType, t)
           t.handler({
             output,
             agent: module.agent,
@@ -131,6 +127,8 @@ export class Output extends MagickComponent<void> {
         }
       }
     }
+
+    console.log('output', output)
 
     return {
       output,
