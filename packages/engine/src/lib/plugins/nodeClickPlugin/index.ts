@@ -1,4 +1,5 @@
-import { IRunContextEditor, MagickComponent, MagickNode } from '../../types'
+import { MagickComponent } from '../../engine'
+import { IRunContextEditor, MagickNode } from '../../types'
 
 function install(editor: IRunContextEditor) {
   // handle publishing and subscribing to inspector

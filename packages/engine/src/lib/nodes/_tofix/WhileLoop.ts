@@ -11,7 +11,7 @@
 // } from '../../types'
 // import { NumberControl } from '../../dataControls/NumberControl'
 // import { triggerSocket } from '../../sockets'
-// import { MagickComponent, MagickTask } from '../../magick-component'
+// import { MagickComponent, MagickTask } from '../../types'
 
 // const info = `While loop is used to execute a series of tasks for x times`
 

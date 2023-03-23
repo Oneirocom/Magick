@@ -1,8 +1,8 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode, MagickWorkerInputs } from '../../types'
+import { MagickComponent } from '../../engine'
 import { booleanSocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 const info = `The boolean gate takes a boolean input, and depending on whether the value is true or false will only trigger one output or the other.`
 
@@ -35,7 +35,7 @@ export class BooleanGate extends MagickComponent<void> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  worker(_node: NodeData, inputs: MagickWorkerInputs) {
+  worker(_node: WorkerData, inputs: MagickWorkerInputs) {
     const isTrue = inputs['boolean'][0]
 
     if (isTrue) {

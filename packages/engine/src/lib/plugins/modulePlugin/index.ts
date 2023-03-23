@@ -1,12 +1,16 @@
 /* eslint-disable no-case-declarations */
-import { Component, Engine, Socket } from 'rete/types'
+import { Engine, Component, Socket } from 'rete/types'
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data'
 
 import { MagickEngine } from '../../engine'
 import {
   GraphData,
-  IRunContextEditor, MagickNode,
-  MagickWorkerOutputs, ModuleType
+  IRunContextEditor,
+  ModuleType,
+  MagickNode,
+  MagickWorkerOutputs,
+  AsInputsData,
+  AsOutputsData,
 } from '../../types'
 import { Module } from './module'
 import { ModuleContext, ModuleManager } from './module-manager'
@@ -163,8 +167,8 @@ function install(
             const currentNodeModule = node.data.spellId as string
             if (!modules[currentNodeModule] && !graphData) return
 
-            if (!node.data.inputs) node.data.inputs = []
-            if (!node.data.outputs) node.data.outputs = []
+            if (!node.data.inputs) node.data.inputs = AsInputsData([])
+            if (!node.data.outputs) node.data.outputs = AsOutputsData([])
 
             const data = modules[currentNodeModule]
               ? modules[currentNodeModule].data

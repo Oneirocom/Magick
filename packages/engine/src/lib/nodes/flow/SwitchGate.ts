@@ -1,15 +1,14 @@
 import Rete from 'rete'
 
+import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
+import { MagickComponent } from '../../engine'
+import { anySocket, triggerSocket } from '../../sockets'
 import {
-  DataSocketType,
-  NodeData,
-  MagickNode,
+  DataSocketType, MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
-import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { anySocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info = `The Switch Gate component takes a single input, and allows you to define any number of outputs.  It works the same as the javascript switch.  The component will try to match the value of the input to one of the output socket names you have created.  It will route the trigger signal through that socket.`
 
@@ -54,7 +53,7 @@ export class SwitchGate extends MagickComponent<void> {
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
   worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {

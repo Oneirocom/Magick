@@ -1,13 +1,13 @@
 import Rete from 'rete'
 
+import { MagickComponent } from '../../engine'
+import { stringSocket, triggerSocket } from '../../sockets'
 import {
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
-import { triggerSocket, stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info = 'Returns the same output as the input'
 
@@ -46,7 +46,7 @@ export class Echo extends MagickComponent<Promise<WorkerReturn>> {
 
   // eslint-disable-next-line @typescript-eslint/require-await, require-await
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {

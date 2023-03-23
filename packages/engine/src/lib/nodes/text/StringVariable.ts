@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
-import { NodeData, MagickNode } from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import { stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 import { BooleanControl } from '../../dataControls/BooleanControl'
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
+import { stringSocket } from '../../sockets'
+import { MagickNode, WorkerData } from '../../types'
 
 const info = `String Variable`
 
@@ -51,7 +51,7 @@ export class StringVariable extends MagickComponent<InputReturn> {
     return node.addOutput(out)
   }
 
-  worker(node: NodeData, inputs: any, outputs: any, context: any) {
+  worker(node: WorkerData, _inputs, _outputs, context: { module: { publicVariables: string } }) {
     let _var = node?.data?._var as string
     const publicVars = JSON.parse(context.module.publicVariables)
     if(node?.data?.isPublic && publicVars[node.id]) {

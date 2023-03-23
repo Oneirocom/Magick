@@ -1,14 +1,13 @@
 import Rete from 'rete'
 
+import { MagickComponent } from '../../engine'
+import { audioSocket, stringSocket, triggerSocket } from '../../sockets'
 import {
-  EngineContext,
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
-import { audioSocket, stringSocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info = 'Speech to Text node, powered by Whisper on Banana ML'
 
@@ -54,7 +53,7 @@ export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {

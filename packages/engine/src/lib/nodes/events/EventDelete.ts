@@ -1,10 +1,10 @@
 import Rete from 'rete'
 
-import { MagickComponent } from '../../magick-component'
-import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
-import { MagickNode, MagickWorkerInputs, NodeData } from '../../types'
 import axios from 'axios'
 import { API_ROOT_URL } from '../../config'
+import { MagickComponent } from '../../engine'
+import { arraySocket, triggerSocket } from '../../sockets'
+import { MagickNode, MagickNodeData, MagickWorkerInputs } from '../../types'
 const info = `Join an array of events into a conversation formatted for prompt injection.`
 
 
@@ -37,7 +37,7 @@ export class EventDelete extends MagickComponent<Promise<any>> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  async worker(node: NodeData, inputs: MagickWorkerInputs & { events: any[] }) {
+  async worker(node: MagickNodeData, inputs: MagickWorkerInputs & { events: any[] }) {
     try {
         const events = inputs.events[0];
     //Events.rows when the data is fetched using embedding

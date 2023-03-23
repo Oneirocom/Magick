@@ -1,11 +1,11 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode } from '../../types'
+import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
+import { MagickComponent } from '../../engine'
 import { numberSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
-import { BooleanControl } from '../../dataControls/BooleanControl'
+import { MagickNode, WorkerData } from '../../types'
 
 const info = `Number Variable`
 
@@ -51,7 +51,7 @@ export class NumberVariable extends MagickComponent<InputReturn> {
     return node.addOutput(out)
   }
 
-  worker(node: NodeData, inputs, outputs, context) {
+  worker(node: WorkerData, _inputs, _outputs, context: { module: { publicVariables: string } }) {
     let _var = node?.data?._var as number
     const publicVars = JSON.parse(context.module.publicVariables)
     if(node?.data?.isPublic && publicVars[node.id]) {

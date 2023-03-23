@@ -8,14 +8,13 @@ import {
   InputControl,
   MagickComponent,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData,
   BooleanControl,
   NumberControl,
   CodeControl,
   triggerSocket,
+  WorkerData,
 } from '@magickml/engine'
 
 const defaultCode = `
@@ -41,11 +40,10 @@ contract SimpleContract {
 const info = `This is Solidity block of code, when trigger the code will be compiled and returned as bytecode`
 
 type InputReturn = {
-  output: unknown
-}
+  output: string
+} | undefined
 
-export class CompileContract extends MagickComponent<InputReturn> {
-
+export class CompileContract extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
     super('PluginEthCompileContract')
@@ -118,9 +116,8 @@ export class CompileContract extends MagickComponent<InputReturn> {
       .addOutput(abiOutput)
   }
 
-  // @ts-ignore
   async worker(
-    node: NodeData,
+    node: WorkerData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }

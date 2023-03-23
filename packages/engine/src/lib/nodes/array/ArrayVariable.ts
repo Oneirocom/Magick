@@ -1,11 +1,11 @@
 // TODO: Currently array variable is not working. Need to fix this.
 import Rete from 'rete'
 
-import { NodeData, MagickNode } from '../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
 import { arraySocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickNode, WorkerData } from '../../types'
 
 const info = `Array Variable`
 
@@ -64,7 +64,7 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
     return node.addOutput(out)
   }
 
-  worker(node: NodeData) {
+  worker(node: WorkerData) {
     const _var = node?.data?._var as string
     const splitter = node?.data?.splitter as string
     const keepEmpty = node?.data?.keepEmpty === 'true'

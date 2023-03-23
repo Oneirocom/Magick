@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react'
-import { PubSubContext, PubSubData } from '@magickml/engine';
+import { PubSubContext, PubSubData, PubSubEvents } from '@magickml/engine';
 import PubSub from 'pubsub-js'
 import { useContext, createContext } from 'react'
 
-const Context = createContext<PubSubContext>(undefined!)
+const Context = createContext<PubSubContext>(undefined)
 
 export const usePubSub = () => useContext<PubSubContext>(Context)
 
 export { PubSub }
 
 // Might want to namespace these
-export const events = {
+export const events: PubSubEvents = {
   ADD_SUBSPELL: 'addSubspell',
   UPDATE_SUBSPELL: 'updateSubspell',
   DELETE_SUBSPELL: 'deleteSubspell',

@@ -1,16 +1,13 @@
 import Rete from 'rete'
 
 import { DropdownControl } from '../../dataControls/DropdownControl'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { triggerSocket } from '../../sockets'
 import {
   CompletionInspectorControls,
   CompletionProvider,
   CompletionSocket,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  NodeData,
+  MagickNode, MagickNodeData, MagickWorkerInputs, MagickWorkerOutputs
 } from '../../types'
 
 import { pluginManager } from '../../plugin'
@@ -131,7 +128,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: MagickNodeData,
     inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     context
@@ -142,7 +139,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
 
     console.log('inputs', inputs)
 
-    const model = node.data.model as string
+    const model = (node.data as {model: string}).model as string
     console.log('completionProviders', completionProviders)
 
     // get the provider for the selected model

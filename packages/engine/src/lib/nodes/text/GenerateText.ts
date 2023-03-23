@@ -1,7 +1,7 @@
 import Rete from 'rete'
 
 import { DropdownControl } from '../../dataControls/DropdownControl'
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
 import { anySocket, triggerSocket } from '../../sockets'
 import {
@@ -9,10 +9,7 @@ import {
   CompletionProvider,
   CompletionSocket,
   EngineContext,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  NodeData
+  MagickNode, MagickNodeData, MagickWorkerInputs, MagickWorkerOutputs
 } from '../../types'
 
 const info = 'Generate text using any of the providers available in Magick.'
@@ -133,7 +130,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: MagickNodeData,
     inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     context: {
@@ -149,7 +146,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       'chat',
     ]) as CompletionProvider[]
 
-    const model = node.data.model as string
+    const model = (node.data as {model: string}).model as string
     // get the provider for the selected model
     const provider = completionProviders.find(provider =>
       provider.models.includes(model)

@@ -211,9 +211,10 @@ const AgentDetails = ({
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value
             )
-            let inputs = pluginManager.getInputByName()
-            let plugin_list = pluginManager.getPlugins()
-            for (let key of Object.keys(plugin_list)){
+            const inputs = pluginManager.getInputByName()
+            const plugin_list = pluginManager.getPlugins()
+            for (const key of Object.keys(plugin_list)){
+              if(!newRootSpell) continue
               plugin_list[key] = validateSpellData(newRootSpell, inputs[key])
             }
             console.log(plugin_list)

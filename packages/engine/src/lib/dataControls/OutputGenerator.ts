@@ -3,11 +3,13 @@ import Rete from 'rete'
 import { DataControl } from '../plugins/inspectorPlugin'
 import { SocketType } from '../sockets'
 import * as sockets from '../sockets'
-import { DataSocketType, OutputComponentData } from '../types'
+import { DataSocketType, WorkerData, OutputComponentData, AsDataSocket } from '../types'
+import { OutputsData } from 'rete/types/core/data'
 
 export class OutputGeneratorControl extends DataControl {
+  // outputs: OutputsData & DataSocketType[]
   socketType: SocketType
-  declare options : {
+  declare options: {
     dataKey: string
     name: string
     component: string
@@ -36,8 +38,7 @@ export class OutputGeneratorControl extends DataControl {
     super(options)
     this.socketType = socketType
   }
-
-  onData(outputs: DataSocketType[] = []) {
+  onData(outputs: OutputsData & DataSocketType[] = ([] as unknown as OutputsData & DataSocketType[])) {
     if (this.node === null) return console.error('Node is null')
     this.node.data.outputs = outputs
 
@@ -78,7 +79,7 @@ export class OutputGeneratorControl extends DataControl {
     // Here we are running over and ensuring that the outputs are in the task
     if (this.component === null)
       return console.error('Component is null')
-    this.component.task.outputs = this.node.data.outputs?.reduce(
+    this.component.task.outputs = AsDataSocket(this.node.data.outputs)?.reduce(
       (acc, out) => {
         acc[out.name] = out.taskType || 'output'
         return acc

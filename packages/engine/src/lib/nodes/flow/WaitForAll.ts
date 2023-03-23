@@ -1,14 +1,13 @@
 import Rete from 'rete'
 
+import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
+import { MagickComponent } from '../../engine'
+import { triggerSocket } from '../../sockets'
 import {
-  DataSocketType,
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
+  WorkerData
 } from '../../types'
-import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info = `Fires once all connected triggers have fired.`
 
@@ -44,10 +43,10 @@ export class WaitForAll extends MagickComponent<void> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  worker(_node: NodeData, inputs: MagickWorkerInputs) {
+  worker(_node: WorkerData, inputs: MagickWorkerInputs) {
     const nodeInputs = Object.values(inputs as any).filter(
       (input: any) => !!input
-    ) as DataSocketType[]
+    ) as Array<{ name: string }>
 
     // close all outputs
     this._task.closed = [...nodeInputs.map(out => out.name)]
