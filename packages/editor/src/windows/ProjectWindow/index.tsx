@@ -78,13 +78,13 @@ const ProjectWindow = ({ tab }) => {
   }, [])
 
   return (
-    <>
       <div
         className="project-container"
         style={{
           width: '100%',
-          height: 'calc(100% - 2em)',
-          overflow: 'scroll',
+          height: '100%',
+          overflowY: 'scroll',
+          overflowX: 'hidden',
         }}
       >
         {/* Show Project ID */}
@@ -182,29 +182,6 @@ const ProjectWindow = ({ tab }) => {
           {/* show details of selected item */}
         </Grid>
       </div>
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          height: '2.5em',
-          width: '100%',
-          margin: 0,
-        }}
-      >
-        <p
-          style={{
-            margin: '.5em',
-            // make small
-            fontSize: '0.8em',
-            opacity: 0.5,
-          }}
-        >
-          <b>Project ID</b>
-          <br />
-          {config.projectId}
-        </p>
-      </div>
-    </>
   )
 }
 

@@ -138,7 +138,6 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       magick: EngineContext
     }
   ) {
-    console.log('running work', node, inputs, outputs, context)
     const completionProviders = pluginManager.getCompletionProviders('text', [
       'text',
       'chat',

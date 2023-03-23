@@ -8,7 +8,7 @@ const LongText = () => {
     createOrFocus(windowTypes.TEXT_EDITOR, 'Text Editor')
   }
 
-  return <Button onClick={onClick}>Open in text editor</Button>
+  return <Button style={{width:'5em'}} onClick={onClick}>Open in text editor</Button>
 }
 
 export default LongText
