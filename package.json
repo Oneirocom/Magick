@@ -13,7 +13,6 @@
     "build": "npx nx run-many --target=build --projects=@magickml/server,@magickml/agent",
     "build-client": "npx nx build @magickml/client",
     "heroku-prebuild": "npm i -g @nrwl/cli",
-    "build-templates": "npx nx build @magickml/templates",
     "build-server": "npx nx build @magickml/server",
     "build-agent": "npx nx build @magickml/agent",
     "build-docs": "npx nx build @magickml/docs",
@@ -29,7 +28,7 @@
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
     "find unused deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
-    "postinstall": "node scripts/config-plugins.js && node scripts/config-db.js && npm run build-templates"
+    "postinstall": "node scripts/config-plugins.js && node scripts/config-db.js"
   },
   "resolutions": {
     "@types/react": "18.0.2"

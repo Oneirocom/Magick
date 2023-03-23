@@ -62,6 +62,8 @@ export class ClientPlugin extends Plugin {
   drawerItems?: Array<PluginDrawerItem>
   clientPageLayout?: any
   clientRoutes?: Array<PluginClientRoute>
+  spellTemplates?: any[]
+  projectTemplates?: any[]
   constructor({
     name,
     nodes = [],
@@ -73,6 +75,8 @@ export class ClientPlugin extends Plugin {
     drawerItems = [],
     secrets = [],
     completionProviders = [],
+    spellTemplates = [],
+    projectTemplates = []
   }: {
     name: string
     nodes?: any
@@ -84,6 +88,8 @@ export class ClientPlugin extends Plugin {
     drawerItems?: Array<PluginDrawerItem>
     secrets?: PluginSecret[]
     completionProviders?: any[]
+    spellTemplates?: any[]
+    projectTemplates?: any[]  
   }) {
     super({
       name,
@@ -97,6 +103,8 @@ export class ClientPlugin extends Plugin {
     this.agentComponents = agentComponents
     this.clientRoutes = clientRoutes
     this.drawerItems = drawerItems
+    this.spellTemplates = spellTemplates
+    this.projectTemplates = projectTemplates
     pluginManager.register(this)
   }
 }
@@ -248,6 +256,26 @@ class ClientPluginManager extends PluginManager {
       })
     })
     return agentComp
+  }
+
+  getSpellTemplates() {
+    const spellTemplates = [] as any[]
+    ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
+      plugin.spellTemplates?.forEach(spellTemplate => {
+        spellTemplates.push(spellTemplate)
+      })
+    })
+    return spellTemplates
+  }
+
+  getProjectTemplates() {
+    const projectTemplates = [] as any[]
+    ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
+      plugin.projectTemplates?.forEach(projectTemplate => {
+        projectTemplates.push(projectTemplate)
+      })
+    })
+    return projectTemplates
   }
 
   getClientRoutes() {

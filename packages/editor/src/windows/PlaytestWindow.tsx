@@ -5,11 +5,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch } from 'react-redux'
-import css from '../screens/Magick/magick.module.css'
 import { useConfig } from '../contexts/ConfigProvider'
 import { useEditor } from '../contexts/EditorProvider'
 import { useInspector } from '../contexts/InspectorProvider'
 import { usePubSub } from '../contexts/PubSubProvider'
+import css from '../screens/Magick/magick.module.css'
 import { spellApi } from '../state/api/spells'
 import { useAppSelector } from '../state/hooks'
 import {
@@ -52,14 +52,14 @@ const Input = props => {
 }
 
 const defaultPlaytestData = {
-  sender: 'playtestSender',
-  observer: 'Agent',
+  sender: 'user',
+  observer: 'assistant',
   type: 'playtest',
   client: 'playtest',
   channel: 'playtest',
   channelType: 'playtest',
   agentId: 'preview',
-  entities: ['playtestSender', 'Agent'],
+  entities: ['user', 'assistant'],
 }
 
 const Playtest = ({ tab }) => {
@@ -215,13 +215,14 @@ const Playtest = ({ tab }) => {
 
     toSend = {
       content: value,
-      sender: 'Speaker',
-      observer: 'Agent',
+      sender: 'user',
+      observer: 'assistant',
       agentId: 'preview',
       client: 'playtest',
       channel: 'previewChannel',
       projectId: config.projectId,
       channelType: 'previewChannelType',
+      entities: ['user', 'assistant'],
       ...JSON.parse(json),
     }
 
