@@ -73,7 +73,6 @@ const FeathersProvider = ({ children, token }) => {
   const [client, setClient] = useState<FeathersContext['client']>(null)
 
   useEffect(() => {
-    console.log('attempted to connect')
     // We only want to create the feathers connection once we have a user to handle
     ;(async () => {
       const client = await buildFeathersClient(config, token)

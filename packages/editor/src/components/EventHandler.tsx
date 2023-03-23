@@ -280,14 +280,6 @@ const EventHandler = ({ pubSub, tab }) => {
   }
 
   const runSpell = async (event, data) => {
-    console.log('DATA IN EVENT HANDLER', data)
-
-    // We are publishing the diff just to ensure that the spell runner has the latest version of the spell
-    // publish($SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
-
-    // wait .2. seconds for spell_diff to take effect
-    await new Promise(resolve => setTimeout(resolve, 200))
-
     // run the spell in the spell runner service
     client.service('spell-runner').create(data)
   }

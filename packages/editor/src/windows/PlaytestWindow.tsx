@@ -94,10 +94,8 @@ const Playtest = ({ tab }) => {
 
   const printToConsole = useCallback(
     (_, _text) => {
-      console.log('_text', _text)
       const text = (`Agent: ` + _text).split('\n')
       const newHistory = [...history, ...text]
-      console.log('newHistory', newHistory)
       setHistory(newHistory as [])
     },
     [history]
@@ -226,8 +224,6 @@ const Playtest = ({ tab }) => {
       ...JSON.parse(json),
     }
 
-    console.log('onSend', toSend)
-
     // get spell from editor
     const graph = serialize()
     if (!graph) {
@@ -235,8 +231,6 @@ const Playtest = ({ tab }) => {
         variant: 'error',
       })
     }
-
-    console.log('playtestOption', playtestOption)
 
     const playtestNode = Object.values(graph.nodes).find(node => {
       return node.data.name === playtestOption
@@ -248,8 +242,6 @@ const Playtest = ({ tab }) => {
       })
       return
     }
-
-    console.log('playtestNode', playtestNode)
 
     const playtestInputName = playtestNode?.data.name
 

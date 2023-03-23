@@ -99,16 +99,8 @@
                     "dataControls": {
                         "name": {
                             "expanded": true
-                        },
-                        "sendToAvatar": {
-                            "expanded": true
-                        },
-                        "sendToPlaytest": {
-                            "expanded": true
                         }
                     },
-                    "sendToAvatar": false,
-                    "sendToPlaytest": true,
                     "isOutput": true
                 },
                 "inputs": {

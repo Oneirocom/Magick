@@ -136,11 +136,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
     const completionProviders = pluginManager.getCompletionProviders('text', [
       'embedding',
     ]) as CompletionProvider[]
-
-    console.log('inputs', inputs)
-
     const model = (node.data as {model: string}).model as string
-    console.log('completionProviders', completionProviders)
 
     // get the provider for the selected model
     const provider = completionProviders.find(provider =>
