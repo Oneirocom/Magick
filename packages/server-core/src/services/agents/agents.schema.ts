@@ -16,7 +16,7 @@ export const agentSchema = Type.Object(
   {
     id: Type.String(),
     projectId: Type.String(),
-    rootSpell: Type.Optional(Type.String()),
+    rootSpell: Type.Optional(Type.Any()),
     name: Type.String(),
     enabled: Type.Optional(Type.Boolean()),
     updatedAt: Type.String(),
@@ -106,9 +106,7 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'secrets',
 ])
 export const agentQuerySchema = Type.Intersect(
-  [
-    querySyntax(agentQueryProperties),
-  ],
+  [querySyntax(agentQueryProperties)],
   { additionalProperties: false }
 )
 export type AgentQuery = Static<typeof agentQuerySchema>
@@ -117,4 +115,4 @@ export const agentQueryValidator = getValidator(
   queryValidator
 )
 export const agentQueryResolver = resolve<AgentQuery, HookContext>({})
-export const agentJsonFields = ['spells', 'data']
+export const agentJsonFields = ['rootSpell', 'spells', 'data']

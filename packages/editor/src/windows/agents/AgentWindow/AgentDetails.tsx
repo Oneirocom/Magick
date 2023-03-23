@@ -26,6 +26,7 @@ const AgentDetails = ({
   const [oldName, setOldName] = useState<string>('')
   const [enable, setEnable] = useState(onLoadEnables)
   console.log('selectedAgentData', selectedAgentData)
+
   const update = (id, data = undefined) => {
     const _data = data || { ...selectedAgentData }
     id = id || _data.id
@@ -99,6 +100,7 @@ const AgentDetails = ({
   }
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-extra-semi
     ;(async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
@@ -208,18 +210,17 @@ const AgentDetails = ({
           }}
           name="rootSpell"
           id="rootSpell"
-          value={JSON.parse(selectedAgentData.rootSpell)?.name || 'default'}
+          value={selectedAgentData.rootSpell?.name || 'default'}
           onChange={event => {
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value
             )
             const inputs = pluginManager.getInputByName()
             const plugin_list = pluginManager.getPlugins()
-            for (const key of Object.keys(plugin_list)){
-              if(!newRootSpell) continue
+            for (const key of Object.keys(plugin_list)) {
+              if (!newRootSpell) continue
               plugin_list[key] = validateSpellData(newRootSpell, inputs[key])
             }
-            console.log(plugin_list)
             setEnable(plugin_list)
             enqueueSnackbar(
               'Greyed out components are not available because of the selected spell.',
@@ -244,7 +245,7 @@ const AgentDetails = ({
             //setEnable("DiscordPlugin")
             setSelectedAgentData({
               ...selectedAgentData,
-              rootSpell: JSON.stringify(newRootSpell),
+              rootSpell: newRootSpell,
               publicVariables: JSON.stringify(
                 Object.values(newRootSpell.graph.nodes as any)
                   // get the public nodes
@@ -267,7 +268,7 @@ const AgentDetails = ({
             })
           }}
         >
-          <option disabled value={'default'} key={0}>
+          <option disabled value={'default'}>
             Select Spell
           </option>
           {spellList?.length > 0 &&
@@ -312,7 +313,6 @@ const AgentDetails = ({
       {selectedAgentData.publicVariables !== '{}' && (
         <AgentPubVariables
           setPublicVars={data => {
-            console.log('new daa', data)
             setSelectedAgentData({
               ...selectedAgentData,
               publicVariables: JSON.stringify(data),
