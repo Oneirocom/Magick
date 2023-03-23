@@ -62,7 +62,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     $PROCESS,
     $TRIGGER,
     $REFRESH_EVENT_TABLE,
-    $SEND_TO_AVATAR,
   } = events
 
   const getCurrentSpell = () => {
@@ -139,10 +138,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const sendToPlaytest: (data: string) => void = data => {
     console.log('sending to playtest', data)
     publish($PLAYTEST_PRINT(tab.id), data)
-  }
-
-  const sendToAvatar: PublishEditorEvent = data => {
-    publish($SEND_TO_AVATAR(tab.id), data)
   }
 
   const onPlaytest: OnEditor = callback => {
@@ -233,7 +228,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     processCode,
     runSpell,
     refreshEventTable,
-    sendToAvatar,
     getSpell,
     getCurrentSpell,
   }

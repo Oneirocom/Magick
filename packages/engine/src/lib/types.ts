@@ -222,7 +222,6 @@ export type PubSubEvents = {
   $MULTI_SELECT_COPY: (tabId: string) => string
   $MULTI_SELECT_PASTE: (tabId: string) => string
   $REFRESH_EVENT_TABLE: (tabId: string) => string
-  $SEND_TO_AVATAR: (tabId: string) => string
 }
 
 export interface PubSubContext {
@@ -254,7 +253,6 @@ export type OnDebug = (
 export type PublishEditorEvent = (data: PubSubData) => void
 
 export interface EditorContext extends EngineContext {
-  sendToAvatar: (data: unknown) => void
   /**
    * @deprecated The method should not be used
    */

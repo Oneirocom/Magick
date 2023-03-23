@@ -8,7 +8,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData,
+  MagickNodeData,
   stringSocket,
   TaskOptions,
   triggerSocket,
@@ -76,7 +76,7 @@ export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
   async worker(
-    node: NodeData,
+    node: MagickNodeData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context: any
@@ -87,7 +87,7 @@ export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
       console.log('No Pinecode API key found')
       return { error: 'No Pinecode API key found' }
     }
-    const environment = node.data.environment as string
+    const environment = (node.data as { environment: string }).environment
 
     const embedding = inputs['embedding'][0] as Array<number>
 
@@ -105,7 +105,7 @@ export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
     }
     query = JSON.parse(query)
     console.log('query is', query)
-    const index = node.data.index as string
+    const index = (node.data as { index: string }).index
 
     const pineconeIndex = pinecone.Index(index)
 

@@ -8,8 +8,6 @@ export * from './plugins'
 const spellTemplates = pluginManager.getSpellTemplates()
 const projectTemplates = pluginManager.getProjectTemplates()
 
-console.log('spellTemplates', spellTemplates)
-
 export const templates = {
     projects: [
         ...defaultTemplates.projects,

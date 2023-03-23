@@ -1,3 +1,5 @@
+// TODO: New avatar system coming :)
+
 import { ClientPlugin } from '@magickml/engine'
 
 const AvatarPlugin = new ClientPlugin({

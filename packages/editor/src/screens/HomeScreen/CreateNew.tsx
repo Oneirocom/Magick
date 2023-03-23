@@ -30,7 +30,6 @@ export type Template = {
 }
 
 export const magickTemplates = templates.spells
-console.log('magickTemplates', magickTemplates)
 
 const CreateNew = () => {
   const config = useConfig()

@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { SwitchControl } from '../../dataControls/SwitchControl'
+import { TextInputControl } from '../../dataControls/TextInputControl'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
 import { anySocket, triggerSocket } from '../../sockets'
@@ -21,6 +22,7 @@ type InputReturn = {
 
 const defaultInputTypes = [
   { name: 'Default', trigger: true, socket: anySocket },
+  { name: 'Custom', trigger: true, socket: true },
 ]
 
 export class InputComponent extends MagickComponent<InputReturn> {
@@ -65,9 +67,25 @@ export class InputComponent extends MagickComponent<InputReturn> {
       defaultValue: values[0].name,
     })
 
-    // let lastValue = null
+    const inputName = new InputControl({
+      name: 'Input Name',
+      dataKey: 'inputName',
+      defaultValue: 'Custom',
+    })
+
+    let isCustom = node.data.isCustom;
+
+    inputName.onData = (data) => {
+      if(!isCustom) return console.error('Cannot set input name when not in custom mode')
+      node.data.name = `Input - ${data}`
+    }
 
     inputType.onData = data => {
+      if(data === 'Custom') {
+        isCustom = true
+        node.data.isCustom = true
+        return
+      }
       node.data.name = `Input - ${data}`
 
       // const currentValue = values.find(v => v.name === data)
