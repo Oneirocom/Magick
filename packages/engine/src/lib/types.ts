@@ -9,6 +9,7 @@ import { Inspector } from './plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
+import { Application as FeathersApplication } from '@feathersjs/koa'
 
 export { MagickComponent } from './magick-component';
 //@seang this was causing test enviroment issues to have it shared client/server
@@ -568,3 +569,5 @@ export type RequestData = {
   projectId: string
   nodeId: number
 }
+
+export type AppService = (app: FeathersApplication) => void
