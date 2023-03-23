@@ -5,7 +5,7 @@ import {
   GraphData,
   MagickNode,
   ModuleComponent,
-  NodeData,
+  MagickNodeData,
   Spell as SpellType,
 } from '../types'
 import { getNodes } from '../nodes'
@@ -243,7 +243,7 @@ class SpellRunner {
     // 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    await component.run(triggeredNode as unknown as MagickNode, inputs as NodeData)
+    await component.run(triggeredNode as unknown as MagickNode, inputs as MagickNodeData)
     return this.outputData
   }
 }

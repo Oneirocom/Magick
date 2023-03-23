@@ -1,16 +1,14 @@
 import Rete from 'rete'
 
-import {
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
+import { MagickComponent } from '../../engine'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { objectSocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import {
+  MagickNode,
+  MagickWorkerInputs, WorkerData
+} from '../../types'
 
 const info = `Merge can take in any number of properties in the form of named sockets, and compose them together iinto an object.  Additionally, another object can be added in, in which case merge will add in any proprties from that object, but overwrite them with any from the sockets.`
 
@@ -61,7 +59,7 @@ export class Merge extends MagickComponent<void> {
     return node
   }
 
-  worker(_node: NodeData, inputs: MagickWorkerInputs) {
+  worker(_node: WorkerData, inputs: MagickWorkerInputs) {
     const object = inputs.object[0] as Record<string, any>
     const combinedInputs = Object.entries(inputs).reduce(
       (acc, [key, value]) => {

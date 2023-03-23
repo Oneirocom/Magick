@@ -1,10 +1,10 @@
-import { PubSubCallback, SelectionPlugin } from '@magickml/engine'
 import ConnectionPlugin from 'rete-connection-plugin'
 import { Data } from 'rete/types/core/data'
 import { Plugin } from 'rete/types/core/plugin'
 import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
 import ContextMenuPlugin from './plugins/contextMenu'
+import { OnSubspellUpdated, PubSubCallback, PubSubContext, SelectionPlugin } from '@magickml/engine'
 import ReactRenderPlugin, {
   ReactRenderPluginOptions
 } from './plugins/reactRenderPlugin'
@@ -55,7 +55,7 @@ export const initEditor = function ({
   client,
 }: {
   container: any
-  pubSub: any
+  pubSub: PubSubContext
   magick: any
   tab: any
   node: any
@@ -197,7 +197,7 @@ export const initEditor = function ({
   // ██╔═══╝ ██║   ██║██╔══██╗██║     ██║██║
   // ██║     ╚██████╔╝██████╔╝███████╗██║╚██████╗
   // ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝
-  editor.onSpellUpdated = (spellId: string, callback: () => PubSubCallback) => {
+  editor.onSpellUpdated = (spellId: string, callback: OnSubspellUpdated) => {
     return magick.onSubspellUpdated(spellId, callback)
   }
 

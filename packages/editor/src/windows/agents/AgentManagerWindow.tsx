@@ -28,10 +28,11 @@ const AgentManagerWindow = () => {
     setData(json.data)
     setIsLoading(false)
     console.log('res is', json)
-    let spellAgent = JSON.parse(json.data[0].rootSpell)
-    let inputs = pluginManager.getInputByName()
-    let plugin_list = pluginManager.getPlugins()
-    for (let key of Object.keys(plugin_list)){
+    if(!json.data || !json.data[0]) return;
+    const spellAgent = JSON.parse(json.data[0].rootSpell)
+    const inputs = pluginManager.getInputByName()
+    const plugin_list = pluginManager.getPlugins()
+    for (const key of Object.keys(plugin_list)){
       plugin_list[key] = validateSpellData(spellAgent, inputs[key])
     }
     setEnable(plugin_list)
@@ -180,10 +181,11 @@ const AgentManagerWindow = () => {
       const res = await fetch(`${config.apiUrl}/agents`)
       const json = await res.json()
       console.log('res data', json.data)
-      let spellAgent = JSON.parse(json.data[0].rootSpell)
-      let inputs = pluginManager.getInputByName()
-      let plugin_list = pluginManager.getPlugins()
-      for (let key of Object.keys(plugin_list)){
+      if(!json.data || !json.data[0]) return;
+      const spellAgent = JSON.parse(json.data[0].rootSpell)
+      const inputs = pluginManager.getInputByName()
+      const plugin_list = pluginManager.getPlugins()
+      for (const key of Object.keys(plugin_list)){
         plugin_list[key] = validateSpellData(spellAgent, inputs[key])
       }
       console.log(plugin_list)

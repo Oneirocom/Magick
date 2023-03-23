@@ -1,6 +1,6 @@
 import { NodeEditor } from 'rete'
 
-import { MagickComponent } from '../../magick-component'
+import { MagickComponent } from '../../engine'
 import { ComponentData, MagickNode } from '../../types'
 import { Inspector } from './Inspector'
 export type RestProps = {}

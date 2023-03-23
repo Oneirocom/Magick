@@ -16,11 +16,11 @@ export interface PatchArgs {
   update: Partial<Spell>
 }
 
-export interface RunSpell {
-  spellName: string
-  inputs: Record<string, any>
-  state?: Record<string, any>
-}
+// export interface RunSpell {
+//   spellName: string
+//   inputs: Record<string, any>
+//   state?: Record<string, any>
+// }
 
 export interface UserSpellArgs {
   spellName: string

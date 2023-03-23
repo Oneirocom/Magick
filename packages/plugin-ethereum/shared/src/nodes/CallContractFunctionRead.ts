@@ -9,18 +9,18 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData,
   stringSocket,
   triggerSocket,
+  WorkerData,
 } from '@magickml/engine'
 
 const info = `Call a arbitary function from a contract`
 
 type InputReturn = {
-  output: unknown
-}
+  output: string | null
+} | undefined
 
-export class CallContractFunctionRead extends MagickComponent<InputReturn> {
+export class CallContractFunctionRead extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
     super('Contract Read')
@@ -87,12 +87,9 @@ export class CallContractFunctionRead extends MagickComponent<InputReturn> {
       .addOutput(resultOutput)
   }
 
-  // @ts-ignore
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
-    outputs: MagickWorkerOutputs,
-    { data }: { data: string | undefined }
   ) {
     const rpcHttp = node.data?.rpc_http as string
 

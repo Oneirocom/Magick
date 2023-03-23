@@ -2,16 +2,14 @@
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { NodeData, MagickNode, MagickWorkerInputs, Event } from '../../types'
+import { NodeData } from 'rete/types/core/data'
+import { MagickComponent } from '../../engine'
 import { Task } from '../../plugins/taskPlugin/task'
 import {
-  arraySocket,
-  stringSocket,
-  triggerSocket,
-  eventSocket,
-  numberSocket,
+  arraySocket, eventSocket, stringSocket,
+  triggerSocket
 } from '../../sockets'
-import { MagickComponent, MagickTask } from '../../magick-component'
+import { Event, MagickNode, MagickTask, MagickWorkerInputs, WorkerData } from '../../types'
 
 const info = `Restructure Event Data`
 
@@ -29,7 +27,7 @@ export class EventRestructureComponent extends MagickComponent<
         output: 'output',
         trigger: 'option',
       },
-      init: (task = {} as Task, node: MagickNode) => {
+      init: (task = {} as Task, node: NodeData) => {
         this.nodeTaskMap[node.id] = task
       },
     }
@@ -77,7 +75,7 @@ export class EventRestructureComponent extends MagickComponent<
       .addOutput(event)
   }
 
-  async worker(_node: NodeData, inputs: MagickWorkerInputs) {
+  async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
     const output: Record<string, unknown> = {}
     Object.entries(inputs).forEach(([k, v]) => {
       if (k === 'agentId') {

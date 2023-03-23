@@ -1,11 +1,11 @@
 import Rete from 'rete'
 
-import { NodeData, MagickNode } from '../../types'
+import _ from 'lodash'
 import { TextInputControl } from '../../dataControls/TextInputControl'
+import { MagickComponent } from '../../engine'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
-import _ from 'lodash'
+import { MagickNode, WorkerData } from '../../types'
 
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
@@ -42,7 +42,7 @@ export class Alert extends MagickComponent<void> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  worker(node: NodeData) {
+  worker(node: WorkerData) {
     const text = _.get(node, 'data.text', `node has no data: ${JSON.stringify(node)}`)
     alert(text)
   }
