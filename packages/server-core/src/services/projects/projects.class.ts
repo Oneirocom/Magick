@@ -48,40 +48,68 @@ export class ProjectsService {
     }
   }
 
-  async create(data: CreateData): Promise<void> {
-    let { agents, documents, spells, projectId } = data
+  async create(data: CreateData): Promise<{
+    agents: any
+    spells: any
+    documents: any
+  }> {
+    const { agents, documents, spells, projectId } = data
 
-    // remove the 'id' field from each agent, document, spell
-    agents = agents
-    documents = documents
+    const mappedAgents = agents.map(agent => {
+      delete agent.id
+      // stringify spells
+      agent.spells = '[]'
+      if (!agent.data) agent.data = '{}'
+      agent.enabled = false
+      agent.projectId = projectId
+      return agent
+    })
 
+    const mappedDocuments = documents.map(doc => {
+      delete doc.id
+      doc.projectId = projectId
+      return doc
+    })
 
-    console.log('create data', data)
-    const agentPromise = agents.length > 0 ? app
-      .service('agents')
-      .create(agents.map(agent => {
-        delete agent.id
-        return agent
-      }).map(agent => ({ ...agent, projectId }))) : Promise.resolve()
-    const documentPromise = documents.length > 0 ? app
-      .service('documents')
-      .create(documents.map(doc => {
-        delete doc.id
-        return doc
-      }).map(doc => ({ ...doc, projectId }))) : Promise.resolve()
-    const spellPromise = spells.length > 0 ? app
-      .service('spells')
-      .create(spells.map(spell => {
-        delete spell.id
-        delete spell.updatedAt
-        return spell
-      }).map(spell => ({ ...spell, projectId }))) : Promise.resolve()
-    await Promise.all([
-      agentPromise,
-      documentPromise,
-      spellPromise,
-    ])
+    const mappedSpells = spells.map(spell => {
+      delete spell.id
+      delete spell.updatedAt
+      spell.projectId = projectId
+      return spell
+    })
 
-    return
+    const agentResponse = []
+    if (mappedAgents.length > 0) {
+      mappedAgents.forEach(async agent => {
+        console.log('setting agent', agent)
+        const r = await app.service('agents').create(agent)
+        agentResponse.push(r)
+      })
+    }
+
+    const documentResponse = []
+    if (mappedDocuments.length > 0) {
+      mappedDocuments.forEach(async doc => {
+        console.log('setting doc', doc)
+        const r = await app.service('documents').create(doc)
+        documentResponse.push(r)
+      })
+    }
+
+    const spellResponse = []
+
+    if (mappedSpells.length > 0) {
+      mappedSpells.forEach(async spell => {
+        console.log('setting spell', spell)
+        const r = await app.service('spells').create(spell)
+        spellResponse.push(r)
+      })
+    }
+
+    return {
+      agents: agentResponse,
+      spells: documentResponse,
+      documents: spellResponse,
+    }
   }
 }
