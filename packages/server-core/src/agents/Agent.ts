@@ -9,7 +9,7 @@ type AgentData = {
   data: any
   name: string
   secrets: string
-  rootSpell: string
+  rootSpell: any
   publicVariables: any[]
   projectId: string
   spellManager: SpellManager
@@ -44,7 +44,7 @@ export class Agent {
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
     this.data = agentData
-    this.rootSpell = JSON.parse(agentData.rootSpell ?? '{}')
+    this.rootSpell = agentData.rootSpell ?? {}
     this.agentManager = agentManager
     this.name = agentData.name ?? 'agent'
     this.projectId = agentData.projectId
@@ -68,7 +68,7 @@ export class Agent {
 
       this.spellRunner = await this.spellManager.load(spell, override)
       const agentStartMethods = pluginManager.getAgentStartMethods()
-      
+
       for (const method of Object.keys(agentStartMethods)) {
         await agentStartMethods[method]({
           agentManager,
