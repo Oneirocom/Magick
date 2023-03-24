@@ -1,6 +1,6 @@
 import { FC, LazyExoticComponent } from "react"
 import { Handler } from "koa/lib/application"
-import { CompletionProvider, Route } from "./types"
+import { CompletionProvider, Route, SpellInterface } from "./types"
 import { Socket } from "rete"
 import { Service, ServiceInterface } from "@feathersjs/feathers/lib"
 import {Application} from "@feathersjs/koa"
@@ -88,7 +88,8 @@ export class ClientPlugin extends Plugin {
   drawerItems?: Array<PluginDrawerItem>
   clientPageLayout?: PageLayout
   clientRoutes?: Array<PluginClientRoute>
-  spellTemplates?: any[]
+  spellTemplates?: SpellInterface[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   projectTemplates?: any[]
   constructor({
     name,
@@ -108,7 +109,8 @@ export class ClientPlugin extends Plugin {
     clientPageLayout?: PageLayout
     clientRoutes?: Array<PluginClientRoute>
     drawerItems?: Array<PluginDrawerItem>
-    spellTemplates?: any[]
+    spellTemplates?: SpellInterface[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     projectTemplates?: any[]  
   }) {
     super({
@@ -272,7 +274,7 @@ export class ClientPluginManager extends PluginManager {
   }
 
   getSpellTemplates() {
-    const spellTemplates = [] as any[]
+    const spellTemplates = [] as SpellInterface[]
     ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       plugin.spellTemplates?.forEach(spellTemplate => {
         spellTemplates.push(spellTemplate)
@@ -282,6 +284,7 @@ export class ClientPluginManager extends PluginManager {
   }
 
   getProjectTemplates() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const projectTemplates = [] as any[]
     ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       plugin.projectTemplates?.forEach(projectTemplate => {
@@ -373,9 +376,11 @@ export class ClientPluginManager extends PluginManager {
     return pluginList
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getAgentStartMethods(): Record<string, (args: any) => void | Promise<void>> {
     return {}
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getAgentStopMethods(): Record<string, (args: any) => void | Promise<void>> {
     return {}
   }
@@ -402,6 +407,7 @@ export class ServerPluginManager extends PluginManager {
   }
 
   getAgentStartMethods() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let agentStartMethods:Record<string, (args: any) => void | Promise<void>> = {}
     ;(this.pluginList).forEach((plugin: ServerPlugin) => {
       if (plugin.agentMethods) {
@@ -414,6 +420,7 @@ export class ServerPluginManager extends PluginManager {
   }
 
   getAgentStopMethods() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let agentStopMethods:Record<string, (args: any) => void | Promise<void>> = {}
     ;(this.pluginList).forEach((plugin: ServerPlugin) => {
       if (plugin.agentMethods) {

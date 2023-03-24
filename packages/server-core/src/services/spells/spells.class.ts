@@ -6,7 +6,7 @@ import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 
 import type { Application } from '../../declarations'
-import type { Spell, SpellData, SpellPatch, SpellQuery } from './spells.schema'
+import type { SpellType, SpellData, SpellPatch, SpellQuery } from './spells.schema'
 import { app } from '../../app'
 import { BadRequest } from '@feathersjs/errors/lib'
 
@@ -20,7 +20,7 @@ export type SaveDiffData = {
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class SpellService<ServiceParams extends Params = SpellParams> extends KnexService<
-  Spell,
+  SpellType,
   SpellData,
   ServiceParams,
   SpellPatch
@@ -36,7 +36,7 @@ export class SpellService<ServiceParams extends Params = SpellParams> extends Kn
 
     const spellUpdate = otJson0.type.apply(spell, diff)
 
-    if (Object.keys((spellUpdate as Spell).graph.nodes).length === 0)
+    if (Object.keys((spellUpdate as SpellType).graph.nodes).length === 0)
       throw new BadRequest('Graph would be cleared.  Aborting.')
 
     const hash = md5(JSON.stringify(spellUpdate.graph.nodes))

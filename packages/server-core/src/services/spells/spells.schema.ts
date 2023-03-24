@@ -4,27 +4,12 @@ import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../config/validators'
+import { SpellInterface, spellSchema } from '@magickml/engine'
 
-// Main data model schema
-export const spellSchema = Type.Object(
-  {
-    id: Type.String(),
-    projectId: Type.String(),
-    name: Type.String(),
-    hash: Type.String(),
-    graph: Type.Object({
-      id: Type.String(),
-      nodes: Type.Object({})
-    }),
-    createdAt: Type.Optional(Type.String()),
-    updatedAt: Type.Optional(Type.String()),
-  },
-  { $id: 'Spell', additionalProperties: false }
-)
-export type Spell = Static<typeof spellSchema>
-export const spellResolver = resolve<Spell, HookContext>({})
+export type SpellType = SpellInterface
+export const spellResolver = resolve<SpellType, HookContext>({})
 
-export const spellExternalResolver = resolve<Spell, HookContext>({})
+export const spellExternalResolver = resolve<SpellType, HookContext>({})
 
 // Schema for creating new entries
 export const spellDataSchema = Type.Pick(spellSchema, [
@@ -39,7 +24,7 @@ export const spellDataSchema = Type.Pick(spellSchema, [
 })
 export type SpellData = Static<typeof spellDataSchema>
 export const spellDataValidator = getDataValidator(spellDataSchema, dataValidator)
-export const spellDataResolver = resolve<Spell, HookContext>({
+export const spellDataResolver = resolve<SpellType, HookContext>({
   createdAt: async () => Date.now().toString()
 })
 
@@ -49,7 +34,7 @@ export const spellPatchSchema = Type.Partial(spellDataSchema, {
 })
 export type SpellPatch = Static<typeof spellPatchSchema>
 export const spellPatchValidator = getDataValidator(spellPatchSchema, dataValidator)
-export const spellPatchResolver = resolve<Spell, HookContext>({
+export const spellPatchResolver = resolve<SpellType, HookContext>({
   updatedAt: async () => Date.now().toString(),
 })
 

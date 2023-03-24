@@ -16,8 +16,11 @@ import { SocketNameType, SocketType } from './sockets'
 import { Application as FeathersApplication, Koa } from '@feathersjs/koa'
 
 import { TaskSocketInfo } from './plugins/taskPlugin/task'
+import { SpellInterface } from './schemas'
 
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
+
+export * from './schemas'
 
 export type ImageType = {
   id: string
@@ -123,7 +126,7 @@ export type CompletionResponse = {
   choice: any
 }
 
-export type OnSubspellUpdated = (spell: Spell) => void
+export type OnSubspellUpdated = (spell: SpellInterface) => void
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
@@ -136,7 +139,7 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare runProcess: (callback?: () => void | undefined) => Promise<void>
   declare onSpellUpdated: (
     spellName: string,
-    callback: (spell: Spell) => void
+    callback: (spell: SpellInterface) => void
   ) => () => void
   declare refreshEventTable: () => void
 }
@@ -163,7 +166,7 @@ export type GetSpell = ({
 }: {
   spellName: string
   projectId: string
-}) => Promise<Spell>
+}) => Promise<SpellInterface>
 
 export type ProcessCode = (
   code: unknown,
@@ -185,7 +188,7 @@ export type EngineContext<DataType = Record<string, unknown>> = {
   runSpell: RunSpell<DataType>
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
-  getCurrentSpell: () => Spell
+  getCurrentSpell: () => SpellInterface
   processCode?: ProcessCode
 }
 
@@ -421,16 +424,6 @@ export function AsInputsAndOutputsData(
 }
 
 export type Module = { name: string; id: string; data: Data }
-
-export type Spell = {
-  name: string
-  graph: Data
-  createdAt?: string
-  updatedAt?: string
-  id: string
-  hash?: string
-  projectId: string
-}
 
 export type MagickSpellInput = Record<string, unknown>
 export type MagickSpellOutput = Record<string, unknown>

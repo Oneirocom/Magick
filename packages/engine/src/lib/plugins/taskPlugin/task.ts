@@ -76,7 +76,7 @@ export class Task {
   }
 
   getInputFromConnection(socketKey: string) {
-    let input: null | any = null
+    let input: null | string = null
     Object.entries(this.inputs).forEach(([key, value]) => {
       if (
         (value as MagickReteInput[]).some(
@@ -100,7 +100,7 @@ export class Task {
         task: { closed: string[] }
       }
       if (found) {
-        if (found?.task && found.key == fromSocket) value = key
+        if (found?.task && found.key === fromSocket) value = key
       }
     })
 
@@ -171,6 +171,8 @@ export class Task {
 
               // return true if the input is from a triggerless component
               if (!con.task.node.outputs.trigger) return true
+              // TODO: check if default should be false
+              return false
             })
             .map(async (con: MagickReteInput) => {
               // if the task has come from a node with output data that is not the calling node, use that data

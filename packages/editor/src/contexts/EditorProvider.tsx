@@ -1,5 +1,5 @@
 import { LoadingScreen } from '@magickml/client-core'
-import { EditorContext, GraphData, MagickEditor, Spell } from '@magickml/engine'
+import { EditorContext, GraphData, MagickEditor, SpellInterface } from '@magickml/engine'
 import React, {
   createContext, useContext, useEffect, useRef, useState
 } from 'react'
@@ -33,7 +33,7 @@ type EditorContextType = {
   buildEditor: (
     el: HTMLDivElement,
     // todo update this to use proper spell type
-    spell: Spell | undefined,
+    spell: SpellInterface | undefined,
     tab: MagickTab,
     reteInterface: EditorContext
   ) => void

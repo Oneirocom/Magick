@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
-import { GraphData, Spell } from '@magickml/engine'
+import { GraphData, SpellInterface } from '@magickml/engine'
 
 import md5 from 'md5'
 
@@ -30,7 +30,7 @@ const EventHandler = ({ pubSub, tab }) => {
     projectId: config.projectId,
   } as any)
   // Spell ref because callbacks cant hold values from state without them
-  const spellRef = useRef<Spell | null>(null)
+  const spellRef = useRef<SpellInterface | null>(null)
 
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
