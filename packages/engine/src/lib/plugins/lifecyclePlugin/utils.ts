@@ -22,7 +22,7 @@ export function getHook<T extends HookActions>(
 
   if (typeof method in component) {
     const c = component as unknown as T
-    const func = c[method] as unknown as Function
+    const func = c[method] as () => unknown
 
     return func.bind(component)
   }

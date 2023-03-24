@@ -1,8 +1,9 @@
 /* eslint-disable no-case-declarations */
-import { Engine, Component, Socket } from 'rete/types'
-import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data'
+import { Socket } from 'rete/types'
+import { WorkerInputs, WorkerOutputs } from 'rete/types/core/data'
 
-import { MagickEngine } from '../../engine'
+import { MagickComponent, MagickEngine } from '../../engine'
+import { anySocket } from '../../sockets'
 import {
   GraphData,
   IRunContextEditor,
@@ -11,18 +12,13 @@ import {
   MagickWorkerOutputs,
   AsInputsData,
   AsOutputsData,
+  WorkerData,
 } from '../../types'
 import { Module } from './module'
 import { ModuleContext, ModuleManager } from './module-manager'
 import { addIO, removeIO } from './utils'
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
-//need to fix this interface.  For some reason doing the joing
-interface IRunContextEngine extends Engine {
-  moduleManager: ModuleManager
-  on: any
-  trigger: any
-}
 
 export interface ModuleIRunContextEditor extends IRunContextEditor {
   moduleManager: ModuleManager
@@ -39,8 +35,8 @@ export type UpdateModuleSockets = (
   graphData?: GraphData,
   useSocketName?: boolean
 ) => () => void
-interface IModuleComponent extends Component {
-  updateModuleSockets: UpdateModuleSockets
+interface IModuleComponent extends MagickComponent<MagickWorkerOutputs | Promise<MagickWorkerOutputs>> {
+  updateModuleSockets: (UpdateModuleSockets) => void
   module: ModuleOptions
   noBuildUpdate: boolean
 }
@@ -51,7 +47,7 @@ export type ModulePluginArgs = {
 }
 
 function install(
-  runContext: IRunContextEngine | ModuleIRunContextEditor,
+  runContext: ModuleIRunContextEditor, // | IRunContextEngine,
   { engine, modules = {} }: ModulePluginArgs
 ) {
   const moduleManager = new ModuleManager(modules)
@@ -60,11 +56,13 @@ function install(
 
   moduleManager.setEngine(engine)
 
-  runContext.on('componentregister', (component: IModuleComponent) => {
+  runContext.on('componentregister', (component:IModuleComponent):void => {
     if (!component.module) return
 
     // socket - Rete.Socket instance or function that returns a socket instance
-    const { nodeType, socket, skip } = component.module
+    // TODO: Check this assignment
+    const socket = component.module.socket || anySocket
+    const { nodeType, skip } = component.module
     const name = component.name
 
     switch (nodeType) {
@@ -76,7 +74,7 @@ function install(
         if (skip) return
 
         component.worker = (
-          node: NodeData,
+          node: WorkerData,
           inputs: WorkerInputs,
           outputs: WorkerOutputs,
           context
@@ -90,24 +88,25 @@ function install(
           )
           if (inputsWorker)
             return inputsWorker.call(component, node, inputs, outputs, context)
+          return {}
         }
         break
       case 'triggerOut':
-        const triggersWorker = component.worker as any
+        const triggersWorker = component.worker
 
         moduleManager.registerTriggerOut(name, socket)
 
         if (skip) return
 
-        component.worker = (
-          node: NodeData,
+        component.worker = async (
+          node: WorkerData,
           inputs: WorkerInputs,
           outputs: MagickWorkerOutputs,
           context
         ) => {
           let _outputs = outputs
           if (triggersWorker) {
-            _outputs = triggersWorker.call(
+            _outputs = await triggersWorker.call(
               component,
               node,
               inputs,
@@ -115,13 +114,15 @@ function install(
               context
             )
           }
-          return moduleManager.workerTriggerOuts.call(
+          const ret = moduleManager.workerTriggerOuts.call(
             moduleManager,
             node,
             inputs,
             _outputs,
             context as { module: Module }
           )
+          if(ret!==undefined) return ret
+          else return {}
         }
         break
       case 'triggerIn':
@@ -132,7 +133,7 @@ function install(
         if (skip) return
 
         component.worker = (
-          node: NodeData,
+          node: WorkerData,
           inputs: WorkerInputs,
           outputs: MagickWorkerOutputs,
           context
@@ -142,7 +143,7 @@ function install(
             node,
             inputs,
             outputs,
-            context as any
+            context
           )
           if (triggerInWorker)
             return triggerInWorker.call(
@@ -152,10 +153,11 @@ function install(
               outputs,
               context
             )
+          return {}
         }
         break
       case 'module':
-        const builder: any | undefined = component.builder
+        const builder = component.builder
 
         if (builder) {
           component.updateModuleSockets = (
@@ -216,7 +218,7 @@ function install(
         if (skip) return
 
         component.worker = async (
-          node: NodeData,
+          node: WorkerData,
           inputs: WorkerInputs,
           outputs: MagickWorkerOutputs,
           context: ModuleContext
@@ -229,11 +231,13 @@ function install(
             context
           )
 
-          if (moduleWorker)
+          if (moduleWorker) {
             return moduleWorker.call(component, node, inputs, outputs, {
               ...context,
               module,
             })
+          }
+          return {}
         }
         break
       case 'output':
@@ -244,7 +248,7 @@ function install(
         if (skip) return
 
         component.worker = async (
-          node: NodeData,
+          node: WorkerData,
           inputs: WorkerInputs,
           outputs: MagickWorkerOutputs,
           context
@@ -257,14 +261,16 @@ function install(
             context as { module: Module }
           )
 
-          if (outputsWorker)
-            return await outputsWorker.call(
+          if (outputsWorker){
+             return await outputsWorker.call(
               component,
               node,
               inputs,
               outputs,
               context
             )
+          }
+          return {}
         }
         break
       default:
