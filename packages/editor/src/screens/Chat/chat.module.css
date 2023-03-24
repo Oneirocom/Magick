@@ -1,5 +1,4 @@
 .th-sidepanel {
-  position: absolute;
   height: calc(100vh - 70px - var(--small) - var(--small));
   width: 25vw;
   right: var(--small);
@@ -148,4 +147,71 @@
   height: var(--c4);
   margin-right: var(--extraSmall);
   padding: var(--c2);
+}
+
+.mainContainer {
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  color: #ffffff;
+  font-size: 0.875rem;
+}
+
+.navbarContainer {
+  width: 100%;
+  position: fixed;
+  top: 0;
+}
+
+@media (min-width: 640px) {
+  .navbarContainer {
+    display: none;
+  }
+}
+
+.mainArticle {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  padding-top: 48px;
+}
+
+@media (min-width: 640px) {
+  .mainArticle {
+    padding-top: 0;
+  }
+}
+
+.arrowBack,
+.arrowForward {
+  position: fixed;
+  top: 0.625rem;
+  left: 1rem;
+  color: #a1a1aa;
+  cursor: pointer;
+  height: 1.75rem;
+  width: 1.75rem;
+  z-index: 50;
+}
+
+.arrowBack:hover,
+.arrowForward:hover {
+  color: #a0aec0;
+}
+
+@media (min-width: 640px) {
+
+  .arrowBack,
+  .arrowForward {
+    top: 0.25rem;
+    left: 1rem;
+    color: #4a5568;
+    height: 2rem;
+    width: 2rem;
+  }
+}
+
+.arrowBackHidden,
+.arrowForwardHidden {
+  display: none;
 }

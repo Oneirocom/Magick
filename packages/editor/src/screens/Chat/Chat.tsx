@@ -155,8 +155,6 @@ const Chat = ({ empty = false }) => {
 
   if (!activeTab) return <LoadingScreen />
 
-
-
   console.log("🚀 ~ file: Chat.tsx:164 ~ Chat ~ tabs:", tabs)
   return (
     <>
