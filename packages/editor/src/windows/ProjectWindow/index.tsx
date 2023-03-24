@@ -20,6 +20,7 @@ const ProjectWindow = ({ tab }) => {
   const [data, setData] = useState({ agents: [], spells: [], documents: [] })
   const [loaded, setLoaded] = useState(false)
   const token = globalConfig?.token
+  const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
 
   const loadFile = selectedFile => {
     if (!token && !IGNORE_AUTH) {
@@ -37,12 +38,13 @@ const ProjectWindow = ({ tab }) => {
         url: `${config.apiUrl}/projects`,
         method: 'POST',
         data: { ...data, projectId: config.projectId },
-        headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+        headers,
       })
         .then(async res => {
-          const res2 = await fetch(`${config.apiUrl}/projects?projectId=${config.projectId}`, {
-            headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
-          })
+          const res2 = await fetch(
+            `${config.apiUrl}/projects?projectId=${config.projectId}`,
+            { headers }
+          )
           const json = await res2.json()
           console.log('json', json)
           setData(json)
@@ -70,7 +72,8 @@ const ProjectWindow = ({ tab }) => {
     setLoaded(true)
     const fetchData = async () => {
       const { data } = await axios.get(
-        `${API_ROOT_URL}/projects?projectId=${config.projectId}`
+        `${API_ROOT_URL}/projects?projectId=${config.projectId}`,
+        { headers }
       )
       setData(data)
     }
@@ -78,66 +81,88 @@ const ProjectWindow = ({ tab }) => {
   }, [])
 
   return (
-      <div
-        className="project-container"
-        style={{
-          width: '100%',
-          height: '100%',
-          overflowY: 'scroll',
-          overflowX: 'hidden',
-        }}
-      >
-        {/* Show Project ID */}
-        <Grid container spacing={2}>
-          <Grid item xs={12} style={{width:'100%', height: '1em'}}>
-            <span style={{
+    <div
+      className="project-container"
+      style={{
+        width: '100%',
+        height: '100%',
+        overflowY: 'scroll',
+        overflowX: 'hidden',
+      }}
+    >
+      {/* Show Project ID */}
+      <Grid container spacing={2}>
+        <Grid item xs={12} style={{ width: '100%', height: '1em' }}>
+          <span
+            style={{
               position: 'absolute',
               top: '0',
               right: '0',
-              zIndex: 10000
-              }}>
-              <FileInput
-                loadFile={loadFile}
-                sx={{
-                  display: 'inline-block',
-                  minWidth: '0',
-                  padding: 0,
-                  margin: 0,
-                  color: 'rgba(255,255,255,.5)',
-                  backgroundColor: 'rgba(0,0,0,0)',
-                  /* hide drop shadow */
-                  boxShadow: 'none',
-                  border: 0,
-                }}
-                Icon={<FileUpload style={{height:'1em', width: '1em', position: 'relative', top: '.25em'}} />}
-                innerText={'Import'}
-              />
-              <Button
-                /* hide button, only show inner icon */
-                variant="contained"
+              zIndex: 10000,
+            }}
+          >
+            <FileInput
+              loadFile={loadFile}
+              sx={{
+                display: 'inline-block',
+                minWidth: '0',
+                padding: 0,
+                margin: 0,
+                color: 'rgba(255,255,255,.5)',
+                backgroundColor: 'rgba(0,0,0,0)',
+                /* hide drop shadow */
+                boxShadow: 'none',
+                border: 0,
+              }}
+              Icon={
+                <FileUpload
+                  style={{
+                    height: '1em',
+                    width: '1em',
+                    position: 'relative',
+                    top: '.25em',
+                  }}
+                />
+              }
+              innerText={'Import'}
+            />
+            <Button
+              /* hide button, only show inner icon */
+              variant="contained"
+              style={{
+                minWidth: '0',
+                display: 'inline-block',
+                // align text to the top
+                verticalAlign: 'top',
+                // make sure text is not cut off
+                padding: '0!important',
+                margin: '0!important',
+                color: 'rgba(255,255,255,.5)',
+                backgroundColor: 'rgba(0,0,0,0)',
+                /* hide drop shadow */
+                boxShadow: 'none',
+              }}
+              onClick={() => exportProject()}
+            >
+              <FileDownload
                 style={{
-                  minWidth: '0',
-                  display: 'inline-block',
-                  // align text to the top
-                  verticalAlign: 'top',
-                  // make sure text is not cut off
-                  padding: '0!important',
-                  margin: '0!important',
-                  color: 'rgba(255,255,255,.5)',
-                  backgroundColor: 'rgba(0,0,0,0)',
-                  /* hide drop shadow */
-                  boxShadow: 'none',
+                  height: '1em',
+                  width: '1em',
+                  position: 'relative',
+                  top: '.25em',
                 }}
-                onClick={() => exportProject()}
-              >
-                <FileDownload style={{height:'1em', width: '1em', position: 'relative', top: '.25em'}} />
-                Export
-              </Button>
-            </span>
-          </Grid>
-          {/* show tree view of project - Agents, Spells, Documents */}
-          {data &&
-          <Grid item xs={12} style={{ padding: '1em', marginTop: '2em', overflowX: 'hidden' }}>
+              />
+              Export
+            </Button>
+          </span>
+        </Grid>
+        {/* show tree view of project - Agents, Spells, Documents */}
+        {data && (
+          <Grid
+            item
+            xs={12}
+            style={{ padding: '1em', marginTop: '2em', overflowX: 'hidden' }}
+          >
             <TreeView
               defaultCollapseIcon={<ExpandMoreIcon />}
               defaultExpandIcon={<ChevronRightIcon />}
@@ -166,22 +191,21 @@ const ProjectWindow = ({ tab }) => {
               <TreeItem nodeId="20" label="Documents">
                 {data.documents.map((document, index) => {
                   return (
-                  <TreeItem
-                    key={index}
-                    style={{ width: '100%' }}
-                    nodeId={30 + index.toString()}
-                    label={document.content.slice(0, 12)}
-                  />
+                    <TreeItem
+                      key={index}
+                      style={{ width: '100%' }}
+                      nodeId={30 + index.toString()}
+                      label={document.content.slice(0, 12)}
+                    />
                   )
-                }
-                )}
+                })}
               </TreeItem>
             </TreeView>
           </Grid>
-          }
-          {/* show details of selected item */}
-        </Grid>
-      </div>
+        )}
+        {/* show details of selected item */}
+      </Grid>
+    </div>
   )
 }
 
