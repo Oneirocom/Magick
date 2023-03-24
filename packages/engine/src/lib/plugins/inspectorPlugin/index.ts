@@ -1,10 +1,11 @@
+import { MagickComponent } from '../../engine'
 import { IRunContextEditor, MagickNode, PubSubData } from '../../types'
 import { HandleDataArgs, Inspector } from './Inspector'
 
 function install(editor: IRunContextEditor) {
   const { onInspector, sendToInspector, clearTextEditor } = editor.magick
 
-  editor.on('componentregister', (component: any) => {
+  editor.on('componentregister', (component: MagickComponent<unknown>) => {
     const builder = component.builder
 
     if (!component.info)
