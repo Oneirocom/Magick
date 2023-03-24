@@ -137,6 +137,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const sendToPlaytest: (data: string) => void = data => {
+    console.log('sending to playtest', data)
     publish($PLAYTEST_PRINT(tab.id), data)
   }
 
