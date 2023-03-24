@@ -407,6 +407,7 @@ export type WorkerData = NodeData & {
   // inputs: DataSocketInput
   spell?: string
   data?: MagickNodeData
+  console?: MagickConsole
   [key: string]: unknown
 }
 
