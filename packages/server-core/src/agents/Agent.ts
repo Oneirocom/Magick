@@ -1,8 +1,10 @@
 import { buildMagickInterface } from '../helpers/buildMagickInterface'
-import { SpellManager, WorldManager, pluginManager } from '@magickml/engine'
+import { SpellManager, WorldManager, pluginManager, SpellRunner, AgentInterface, SpellInterface } from '@magickml/engine'
 import { app } from '../app'
 import { AgentManager } from './AgentManager'
+import Router from '@koa/router'
 import _ from 'lodash'
+import { Application } from '../declarations'
 
 type AgentData = {
   id: any
@@ -17,21 +19,22 @@ type AgentData = {
   enabled: boolean
 }
 
-export class Agent {
+export class Agent implements AgentInterface {
   name = ''
   //Clients
   id: any
   secrets: any
   publicVariables: any[]
   data: AgentData
-  router: any
-  app: any
+  router: Router
+  app: Application
   spellManager: SpellManager
   projectId: string
   worldManager: WorldManager
   agentManager: AgentManager
-  spellRunner: any
-  rootSpell: any
+  spellRunner: SpellRunner
+  rootSpell: SpellInterface
+  updatedAt: string
 
   outputTypes = {}
 

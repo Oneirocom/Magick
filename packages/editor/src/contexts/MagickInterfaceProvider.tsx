@@ -7,7 +7,7 @@ import {
   OnInspector,
   ProcessCode,
   PublishEditorEvent, runPython, runSpellType,
-  Spell,
+  SpellInterface,
   SupportedLanguages
 } from '@magickml/engine'
 import { createContext, useContext, useEffect, useRef } from 'react'
@@ -26,7 +26,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const config = useConfig()
 
   const { events, publish, subscribe } = usePubSub()
-  const spellRef = useRef<Spell | null>(null)
+  const spellRef = useRef<SpellInterface | null>(null)
   const [_runSpell] = spellApi.useRunSpellMutation()
   const [_getSpell] = spellApi.useLazyGetSpellByIdQuery()
   const { data: _spell } = spellApi.useGetSpellByIdQuery(
@@ -158,7 +158,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
     if (!spell.data) return null
 
-    return spell.data[0] as Spell
+    return spell.data[0] as SpellInterface
   }
 
   const processCode: ProcessCode = async (

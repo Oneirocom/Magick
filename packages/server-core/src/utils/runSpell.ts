@@ -1,4 +1,4 @@
-import { SpellRunner, GraphData, Spell as SpellType } from '@magickml/engine'
+import { SpellRunner, GraphData, SpellInterface as SpellType } from '@magickml/engine'
 import { app } from '../app'
 import { buildMagickInterface } from '../helpers/buildMagickInterface'
 import { ServerError } from './ServerError'

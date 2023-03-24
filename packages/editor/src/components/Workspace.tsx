@@ -17,7 +17,7 @@ import ProjectWindow from '../windows/ProjectWindow'
 import TextEditor from '../windows/TextEditorWindow'
 import DebugConsole from '../windows/DebugConsole'
 
-import { Spell } from '@magickml/engine'
+import { SpellInterface } from '@magickml/engine'
 import { usePubSub } from '../contexts/PubSubProvider'
 import { RootState } from '../state/store'
 import { useFeathers } from '../contexts/FeathersProvider'
@@ -26,7 +26,7 @@ import React from 'react'
 const Workspace = ({ tab, tabs, pubSub }) => {
   const config = useConfig()
 
-  const spellRef = useRef<Spell>()
+  const spellRef = useRef<SpellInterface>()
   const { events, publish } = usePubSub()
   const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
   const { editor, serialize } = useEditor()

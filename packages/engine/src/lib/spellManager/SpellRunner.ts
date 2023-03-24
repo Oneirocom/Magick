@@ -4,13 +4,15 @@ import {
   EngineContext,
   GraphData,
   MagickNode,
+  MagickSpellInput,
   ModuleComponent,
-  Spell as SpellType,
+  SpellInterface as SpellType,
 } from '../types'
 import { getNodes } from '../nodes'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
 import { Module } from '../plugins/modulePlugin/module'
 import { extractModuleInputKeys } from './graphHelpers'
+import { AgentInterface } from '../schemas'
 
 export type RunSpellConstructor = {
   magickInterface: EngineContext
@@ -18,12 +20,12 @@ export type RunSpellConstructor = {
 }
 
 export type RunComponentArgs = {
-  inputs: Record<string, any>
-  agent?: any
+  inputs: MagickSpellInput
+  agent?: AgentInterface
   componentName?: string
   runSubspell?: boolean
   secrets?: Record<string, string>
-  publicVariables?: Record<string, any>
+  publicVariables?: Record<string, unknown>
 }
 
 class SpellRunner {
@@ -130,18 +132,18 @@ class SpellRunner {
    * and swaps the socket key for the socket name for human readable outputs.
    */
   private _formatOutputs(
-    rawOutputs: Record<string, any>
+    rawOutputs: Record<string, unknown>
   ): Record<string, unknown> {
     const outputs = {} as Record<string, unknown>
     const graph = this.currentSpell.graph
 
-    Object.values(graph.nodes)
-      .filter((node: any) => {
+    Object.values(graph.nodes as MagickNode[])
+      .filter((node) => {
         return node.name.includes('Output')
       })
-      .forEach((node: any) => {
-        outputs[(node as any).data.name as string] =
-          rawOutputs[(node as any).data.socketKey as string]
+      .forEach(node => {
+        outputs[node.data.name as string] =
+          rawOutputs[node.data.socketKey as string]
       })
 
     return outputs

@@ -5,11 +5,12 @@ import { Data } from 'rete/types/core/data'
 import { SpellControl } from '../../dataControls/SpellControl'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
+import { SpellInterface } from '../../schemas'
 import { triggerSocket } from '../../sockets'
 import {
   EngineContext, MagickNode,
   MagickWorkerInputs, ModuleWorkerOutput,
-  Spell, WorkerData
+  WorkerData
 } from '../../types'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
@@ -80,12 +81,12 @@ export class SpellComponent extends MagickComponent<
     if (!this.editor) return
     if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
 
-    let cache: Spell
+    let cache: SpellInterface
 
     // Subscribe to any changes to that spell here
     this.subscriptionMap[node.id] = this.editor.onSpellUpdated(
       spellName,
-      (spell: Spell) => {
+      (spell: SpellInterface) => {
         if (!isEqual(spell, cache)) {
           // this can probably be better optimise this
           this.updateSockets(node, spell)
@@ -112,7 +113,7 @@ export class SpellComponent extends MagickComponent<
 
     // const stateSocket = new Rete.Input('state', 'State', objectSocket)
 
-    spellControl.onData = (spell: Spell) => {
+    spellControl.onData = (spell: SpellInterface) => {
       // break out of it the nodes data already exists.
       if (spell.name === node.data.spellName) return
       node.data.spellName = spell.name
@@ -148,7 +149,7 @@ export class SpellComponent extends MagickComponent<
     return node
   }
 
-  updateSockets(node: MagickNode, spell: Spell) {
+  updateSockets(node: MagickNode, spell: SpellInterface) {
     const graph = JSON.parse(JSON.stringify(spell.graph)) as Data
     this.updateModuleSockets(node, graph, true)
     node.update()

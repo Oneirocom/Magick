@@ -3,7 +3,7 @@ import {
   GraphData,
   ModuleComponent,
   NodeData,
-  Spell,
+  SpellInterface,
 } from '../types'
 import { getNodes } from '../nodes'
 import { initSharedEngine, extractNodes, MagickEngine } from '../engine'
@@ -16,7 +16,7 @@ type RunSpellConstructor = {
 
 class RunSpell {
   engine: MagickEngine
-  currentSpell!: Spell
+  currentSpell!: SpellInterface
   module: Module
   magickInterface: EngineContext
 
@@ -94,7 +94,7 @@ class RunSpell {
     return this._formatOutputs(rawOutputs)
   }
 
-  loadSpell(spell: Spell) {
+  loadSpell(spell: SpellInterface) {
     this.currentSpell = spell
 
     // We process the graph for the new spell which will set up all the task workers
