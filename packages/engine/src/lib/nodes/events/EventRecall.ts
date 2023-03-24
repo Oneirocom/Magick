@@ -18,18 +18,16 @@ type InputReturn = {
 
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Event Recall')
-
-    this.task = {
+    super('Event Recall',
+    {
       outputs: {
         events: 'output',
         trigger: 'option',
       },
-    }
+    },
+    'Event',
+    info)
 
-    this.category = 'Event'
-    this.display = true
-    this.info = info
     this.runFromCache = true
   }
 
@@ -107,7 +105,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     if (typeof (embedding) == 'string') embedding = (embedding as string).replace('[', "").replace(']', ""); embedding = (embedding as string)?.split(',')
     const { observer, client, channel, channelType, projectId, entities } = event
     // TODO: check if defined instead of as {type:string}
-    const typeData = (node?.data as { type: string })?.type
+    const typeData = (node.data as { type: string })?.type
     const type =
       typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()

@@ -17,16 +17,12 @@ const info = `Used to cast any socket into another socket type.  Be sure you kno
 export class Cast extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Cast')
-
-    this.task = {
+    super('Cast', {
       outputs: {
         trigger: 'option',
         output: 'output',
       },
-    } as TaskOptions
-    this.category = 'Utility'
-    this.info = info
+    }, 'Utility', info)
   }
 
   addSocket(node: MagickNode, name: sockets.SocketNameType) {

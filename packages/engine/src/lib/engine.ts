@@ -111,18 +111,20 @@ export const getTriggeredNode = (
   )
 }
 
+export type MagicComponentCategory = 'Esoterica' | 'Object' | 'Number' | 'I/O' | 'Flow' | 'Embedding' | 'Document' | 'Code' | 'Boolean' | 'Array' | 'Image' | 'Generation' | 'Event' | 'Text' | 'Utility' | ' Esoterica' | 'Ethereum' | 'Pinecone' | 'Search'
+
 export abstract class MagickComponent<
   WorkerReturnType
 > extends MagickEngineComponent<WorkerReturnType> {
   // Original interface for task and _task: IComponentWithTask from the Rete Task Plugin
-  declare task: TaskOptions
-  declare _task: MagickTask
-  declare cache: UnknownData
+  task: TaskOptions
+  _task?: MagickTask
+  cache: UnknownData
   editor: MagickEditor | null = null
   data: unknown = {}
-  declare category: string
-  declare info: string
-  declare display: boolean
+  category: MagicComponentCategory
+  info: string
+  display?: boolean
   dev = false
   hide = false
   runFromCache = false
@@ -134,6 +136,14 @@ export abstract class MagickComponent<
   displayName: string | undefined
 
   nodeTaskMap: Record<number, MagickTask> = {}
+
+  constructor(name: string, task: TaskOptions, category: MagicComponentCategory, info: string) {
+    super(name)
+    this.task = task
+    this.category = category
+    this.info = info
+    this.cache = {}
+  }
 
   abstract builder(node: MagickNode): Promise<MagickNode> | MagickNode | void
 
@@ -165,3 +175,6 @@ export abstract class MagickComponent<
     return node
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type MagickComponentArray<T extends MagickComponent<unknown>=any> = T[]

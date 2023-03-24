@@ -15,16 +15,12 @@ const info = `Merge can take in any number of properties in the form of named so
 export class Merge extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Merge Objects')
-
-    this.task = {
+    super('Merge Objects', {
       outputs: {
         trigger: 'option',
         object: 'output',
       },
-    } as TaskOptions
-    this.category = 'Object'
-    this.info = info
+    }, 'Object', info)
   }
 
   builder(node: MagickNode): MagickNode {

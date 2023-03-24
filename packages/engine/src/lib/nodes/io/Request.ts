@@ -21,18 +21,14 @@ type WorkerReturn = {
 
 export class Request extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Request')
-
-    this.task = {
+    super('Request', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'I/O', info)
 
-    this.category = 'I/O'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

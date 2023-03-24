@@ -14,15 +14,10 @@ const info =
   'Is Variable true checks if input is true - string or boolean are checked as true or false, numbers are checked as 0 or 1, undifined or null are checked as false'
 export class IsVariableTrue extends MagickComponent<void> {
   constructor() {
-    super('Is Variable True')
-
-    this.task = {
+    super('Is Variable True', {
       outputs: { true: 'option', false: 'option' },
-    }
-
-    this.category = 'Boolean'
+    }, 'Boolean', info)
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

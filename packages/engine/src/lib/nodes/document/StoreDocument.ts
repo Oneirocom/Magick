@@ -9,24 +9,21 @@ import {
 } from '../../sockets'
 import {
   Document, MagickNode, MagickNodeData, MagickWorkerInputs,
-  MagickWorkerOutputs
+  MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
 
 const info = 'Store documents'
 
 export class StoreDocument extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Store Document')
-
-    this.task = {
+    super('Store Document', {
       outputs: {
         trigger: 'option',
       },
-    }
+    }, 'Document', info)
 
-    this.category = 'Document'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {
@@ -65,7 +62,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async worker(
-    node: MagickNodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context

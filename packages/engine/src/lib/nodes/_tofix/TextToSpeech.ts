@@ -27,23 +27,19 @@ type WorkerReturn = {
 
 export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Text to Speech')
-
-    this.task = {
+    super('Text to Speech', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Generation', info)
 
     this.module = {
       nodeType: 'triggerIn',
       socket: anySocket,
     }
 
-    this.category = 'Generation'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

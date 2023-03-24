@@ -44,18 +44,13 @@ function getPromiseFromEvent(item, event) {
 
 export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Jupyter Notebook')
-
-    this.task = {
+    super('Jupyter Notebook', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
-
-    this.category = 'I/O'
+    }, 'I/O', info)
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

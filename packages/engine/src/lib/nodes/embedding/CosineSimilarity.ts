@@ -3,8 +3,10 @@ import Rete from 'rete'
 import { MagickComponent } from '../../engine'
 import { embeddingSocket, numberSocket, triggerSocket } from '../../sockets'
 import {
-  MagickNode, MagickNodeData, MagickWorkerInputs,
-  MagickWorkerOutputs
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 
 const info = 'Event Store is used to store events for an event and user'
@@ -15,18 +17,14 @@ type InputReturn = {
 
 export class CosineSimilarity extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Cosine Similarity')
-
-    this.task = {
+    super('Cosine Similarity', {
       outputs: {
         similarity: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Embedding', info)
 
-    this.category = 'Embedding'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {
@@ -45,7 +43,7 @@ export class CosineSimilarity extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: MagickNodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     { projectId, module }: { projectId: string; module: any }
