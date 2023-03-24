@@ -21,9 +21,12 @@ const AgentManagerWindow = () => {
 
   const resetData = async () => {
     setIsLoading(true)
-    const res = await fetch(`${config.apiUrl}/agents`, {
-      headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
-    })
+    const res = await fetch(
+      `${config.apiUrl}/agents?projectId=${config.projectId}`,
+      {
+        headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+      }
+    )
     const json = await res.json()
     setData(json.data)
     setIsLoading(false)
@@ -64,9 +67,12 @@ const AgentManagerWindow = () => {
       headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
     })
       .then(async res => {
-        const res2 = await fetch(`${config.apiUrl}/agents`, {
-          headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
-        })
+        const res2 = await fetch(
+          `${config.apiUrl}/agents?projectId=${config.projectId}`,
+          {
+            headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+          }
+        )
         const json = await res2.json()
         setData(json.data)
       })
@@ -165,9 +171,12 @@ const AgentManagerWindow = () => {
     if (!config.apiUrl || isLoading) return
     setIsLoading(true)
     ;(async () => {
-      const res = await fetch(`${config.apiUrl}/agents`, {
-        headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
-      })
+      const res = await fetch(
+        `${config.apiUrl}/agents?projectId=${config.projectId}`,
+        {
+          headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+        }
+      )
       const json = await res.json()
       console.log('res data', json.data)
       setData(json.data)
@@ -177,7 +186,12 @@ const AgentManagerWindow = () => {
 
   useEffect(() => {
     ;(async () => {
-      const res = await fetch(`${config.apiUrl}/agents`)
+      const res = await fetch(
+        `${config.apiUrl}/agents?projectId=${config.projectId}`,
+        {
+          headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+        }
+      )
       const json = await res.json()
       console.log('res data', json.data)
       if (!json.data || !json.data[0]) return
