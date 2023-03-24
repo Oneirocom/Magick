@@ -20,7 +20,7 @@ const info = 'Event Store is used to store events for an event and user'
 type InputReturn = {
   success: boolean
   error?: string
-  result?: number[]
+  result?: string
 }
 
 export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {

@@ -1,4 +1,4 @@
-import { SpellRunner, GraphData, SpellInterface as SpellType } from '@magickml/engine'
+import { SpellRunner, GraphData, SpellInterface } from '@magickml/engine'
 import { app } from '../app'
 import { buildMagickInterface } from '../helpers/buildMagickInterface'
 import { ServerError } from './ServerError'
@@ -37,7 +37,7 @@ export const runSpell = async ({ spellId, inputs, inputFormatter, projectId, sec
   const spellRunner = new SpellRunner({ magickInterface })
 
   // Load the spell in to the spell runner
-  await spellRunner.loadSpell(spellToRun as unknown as SpellType)
+  await spellRunner.loadSpell(spellToRun as unknown as SpellInterface)
 
   // Get the outputs from running the spell
   const outputs = await spellRunner.runComponent({

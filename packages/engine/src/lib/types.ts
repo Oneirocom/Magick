@@ -17,6 +17,8 @@ import { Application as FeathersApplication, Koa } from '@feathersjs/koa'
 
 import { TaskSocketInfo } from './plugins/taskPlugin/task'
 import { SpellInterface } from './schemas'
+import { DataControl } from './plugins/inspectorPlugin'
+import { SpellManager } from './spellManager'
 
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 
@@ -266,7 +268,7 @@ export interface EditorContext extends EngineContext {
   ) => () => void
   sendToPlaytest: (data: string) => void
   sendToInspector: PublishEditorEvent
-  sendToDebug: PublishEditorEvent
+  sendToDebug: (message: unknown)=>void
   onInspector: OnInspector
   onPlaytest: OnEditor
   onDebug: OnDebug
@@ -493,18 +495,26 @@ export type CompletionSocket = {
   type: Socket
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface DataControlImplementation extends DataControl {
+  new(control:CompletionInspectorControls): DataControl
+}
+
 export type CompletionInspectorControls = {
-  type: any
+  type: DataControlImplementation
   dataKey: string
   name: string
   icon: string
-  defaultValue: any
+  defaultValue: string
 }
 
 export type CompletionProvider = {
   type: CompletionType
   subtype: ImageCompletionSubtype | TextCompletionSubtype
-  handler?: Function // server only
+  handler?: (attrs:{node:WorkerData,
+    inputs:MagickWorkerInputs,
+    outputs:MagickWorkerOutputs,
+    context:unknown}) => {success:boolean, result: string, error:string} // server only
   inspectorControls?: CompletionInspectorControls[] // client only
   inputs: CompletionSocket[]
   outputs: CompletionSocket[]
@@ -553,6 +563,7 @@ export type CompletionHandlerInputData = {
   inputs: MagickWorkerInputs
   outputs: MagickWorkerOutputs
   context: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     module: any
     secrets: Record<string, string>
     projectId: string
@@ -576,7 +587,7 @@ export type RequestPayload = {
   hidden?: boolean
   processed?: boolean
   totalTokens?: number
-  spell?: any
+  spell?: SpellInterface
   nodeId?: number
 }
 
@@ -605,6 +616,7 @@ export interface ModuleOptions {
   hide?: boolean
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Middleware = (ctx: Koa.Context, next: any) => any
 
 export type Method =
@@ -618,6 +630,7 @@ export type Method =
   | 'trace'
   | 'patch'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Handler = (ctx: Koa.Context) => any
 
 export type Route = {
@@ -632,4 +645,11 @@ export type Route = {
   delete?: Handler
   head?: Handler
   patch?: Handler
+}
+
+export type UserSpellManager = Map<string, SpellManager>
+
+export type RunSpellConstructor = {
+  magickInterface: EngineContext
+  socket?: io.Socket
 }

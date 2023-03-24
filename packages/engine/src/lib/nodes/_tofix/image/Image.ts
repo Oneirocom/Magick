@@ -13,12 +13,12 @@ import {
 const info = `Image Variable`
 
 type InputReturn = {
-  output: string
+  output: string | Image
 }
 
-export class Image extends MagickComponent<any> {
+export class Image extends MagickComponent<Promise<InputReturn>> {
   static Image_Val
-  id_image: any
+  id_image: unknown
   constructor() {
     super('Image Variable', {
       outputs: {
@@ -55,9 +55,9 @@ export class Image extends MagickComponent<any> {
   async worker(node: WorkerData) {
     const _var = node?.data?._var as string
     const params = new URLSearchParams([['id', node.id.toString()]]);
-    const result = await axios.get(`${API_ROOT_URL}/upload`, { params });
+    const result = await axios.get<Image|string>(`${API_ROOT_URL}/upload`, { params });
     return {
-      output: result ? (result.data as any) : '',
+      output: result ? (result.data) : '',
     }
   }
 }

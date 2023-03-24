@@ -74,7 +74,7 @@ export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
         is = inp1 < inp2
       }
     } catch (e) {
-      error = (e as any).message
+      error = (e as Error).message
     }
 
     this._task.closed = is ? ['false'] : ['true']

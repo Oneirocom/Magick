@@ -15,7 +15,11 @@ type InputReturn = {
   output: unknown
 }
 
-let banana: any = null
+let banana:null|{
+  run(apiKey: string, modelKey: string, modelInputs?: object): Promise<object>;
+  start(apiKey: string, modelKey: string, modelInputs?: object): Promise<string>;
+  check(apiKey: string, callID: string): Promise<object>;
+} = null
 
 export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
   constructor() {

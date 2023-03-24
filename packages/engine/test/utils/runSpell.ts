@@ -12,7 +12,7 @@ export type RunSpellArgs = {
 
 export const runSpell = async ({ spell, inputs, inputFormatter }: RunSpellArgs) => {
   const graph = spell.graph as unknown as GraphData
-  const magickInterface = buildMagickInterface() as any
+  const magickInterface = buildMagickInterface()
 
   const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs
 
