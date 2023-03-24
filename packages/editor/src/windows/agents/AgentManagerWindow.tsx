@@ -177,7 +177,9 @@ const AgentManagerWindow = () => {
 
   useEffect(() => {
     ;(async () => {
-      const res = await fetch(`${config.apiUrl}/agents`)
+      const res = await fetch(`${config.apiUrl}/agents`, {
+        headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+      })
       const json = await res.json()
       console.log('res data', json.data)
       if (!json.data || !json.data[0]) return
