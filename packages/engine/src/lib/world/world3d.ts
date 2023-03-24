@@ -81,9 +81,9 @@ export class world3d {
   }
 
   print() {
-    for (const i in this.users) {
-      // console.log('user: ' + i + ' - distance: ' + this.users[i])
-    }
+    // for (const i in this.users) {
+    //   console.log('user: ' + i + ' - distance: ' + this.users[i])
+    // }
   }
 }
 

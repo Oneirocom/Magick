@@ -1,8 +1,6 @@
 import { FC, LazyExoticComponent } from "react"
-import { Handler } from "koa/lib/application"
 import { CompletionProvider, Route, SpellInterface } from "./types"
 import { Socket } from "rete"
-import { Service, ServiceInterface } from "@feathersjs/feathers/lib"
 import {Application} from "@feathersjs/koa"
 import { MagickComponentArray } from "./engine"
 

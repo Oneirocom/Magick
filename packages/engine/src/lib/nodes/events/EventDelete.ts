@@ -5,7 +5,7 @@ import { API_ROOT_URL } from '../../config'
 import { MagickComponent } from '../../engine'
 import { arraySocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
-import _, { has } from 'lodash'
+import _ from 'lodash'
 const info = `Join an array of events into a conversation formatted for prompt injection.`
 
 
@@ -44,17 +44,17 @@ export class EventDelete extends MagickComponent<Promise<void>> {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           //@ts-ignore
           events.rows.forEach(async (event) => {
-            const isDeleted = await axios.delete(`${API_ROOT_URL}/events/${event.id}`)
+            await axios.delete(`${API_ROOT_URL}/events/${event.id}`)
           });
         }
         //Events when the data is fetched using query
         if (events) events.forEach(async (event) => {
-          const isDeleted = await axios.delete(`${API_ROOT_URL}/events/${event.id}`)
+          await axios.delete(`${API_ROOT_URL}/events/${event.id}`)
         });
       } else {
         const id:string|null = _.get(events, 'id', null)
         if(id===null) throw new Error('Event ID not found')
-        const isDeleted = await axios.delete(`${API_ROOT_URL}/events/${id}`)
+        await axios.delete(`${API_ROOT_URL}/events/${id}`)
       }
     } catch (e) {
       console.log("Error: ", e)
