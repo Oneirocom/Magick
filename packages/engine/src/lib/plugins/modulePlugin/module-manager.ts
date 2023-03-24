@@ -10,16 +10,20 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleComponent,
+  AgentInterface,
 } from '../../types'
 import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'
 import { Module } from './module'
 
 export type ModuleContext = {
-  agent?: any
+  agent?: AgentInterface
   secrets?: Record<string, string>
   publicVariables?: Record<string, string>
-  socketInfo: { targetSocket: string }
+  socketInfo: {
+     targetSocket: string
+     targetNode: MagickNode
+   }
 }
 
 export type ModuleSocketType = {
@@ -125,7 +129,7 @@ export class ModuleManager {
     if (!node.data.spell) return
     if (!this.modules[node.data.spell as number]) return
     const moduleName = node.data.spell as string
-    const data = this.modules[moduleName].data as any
+    const data = this.modules[moduleName].data
     const module = new Module()
     const engine = this.engine?.clone()
 
@@ -139,7 +143,8 @@ export class ModuleManager {
         acc[name] = value
         return acc
       }
-    }, {} as any)
+      return acc
+    }, {} as Record<string, unknown>)
 
     module.read({
       agent: context.agent,
@@ -153,8 +158,8 @@ export class ModuleManager {
       Object.assign({}, context, { module })
     )
 
-    if ((context?.socketInfo as any)?.targetNode) {
-      console.log('targetNode', (context?.socketInfo as any).targetNode)
+    if (context?.socketInfo?.targetNode) {
+      console.log('targetNode', context?.socketInfo.targetNode)
     }
 
     if (context?.socketInfo?.targetSocket) {
@@ -206,7 +211,7 @@ export class ModuleManager {
     node: NodeData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
-    { module, data }: { module: Module; data: Record<string, any> }
+    { module, data }: { module: Module; data: Record<string, unknown> }
   ) {
     if (!module) return
 

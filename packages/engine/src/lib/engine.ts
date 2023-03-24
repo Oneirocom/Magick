@@ -149,7 +149,7 @@ export abstract class MagickComponent<
     this._task = {} as MagickTask
   }
 
-  abstract builder(node: MagickNode): Promise<MagickNode> | MagickNode | void
+  abstract builder(node: MagickNode): Promise<MagickNode> | MagickNode | void | Promise<void>
 
   async build(node: MagickNode) {
     await this.builder(node)

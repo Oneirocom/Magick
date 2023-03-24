@@ -1,9 +1,11 @@
+import { AgentInterface } from "../../schemas"
+
 export class Module {
   secrets?: Record<string, string>
   publicVariables?: Record<string, string>
   inputs: Record<string, unknown>
   outputs: Record<string, unknown>
-  agent: any
+  agent?: AgentInterface
   constructor() {
     this.inputs = {}
     this.outputs = {}
@@ -23,7 +25,7 @@ export class Module {
     this.agent = agent
   }
 
-  write(outputs: Record<string, any>) {
+  write(outputs: Record<string, unknown>) {
     Object.keys(this.outputs).forEach(key => {
       outputs[key] = this.outputs[key]
     })
