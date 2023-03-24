@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
 import { useEditor } from '../contexts/EditorProvider'
@@ -11,7 +11,6 @@ import { useConfig } from '../contexts/ConfigProvider'
 import EditorWindow from '../windows/EditorWindow'
 import Inspector from '../windows/InspectorWindow'
 import Playtest from '../windows/PlaytestWindow'
-import AvatarWindow from '../../../plugin-avatar/client/src/AvatarWindow'
 import ProjectWindow from '../windows/ProjectWindow'
 
 import TextEditor from '../windows/TextEditorWindow'
@@ -21,7 +20,6 @@ import { Spell } from '@magickml/engine'
 import { usePubSub } from '../contexts/PubSubProvider'
 import { RootState } from '../state/store'
 import { useFeathers } from '../contexts/FeathersProvider'
-import React from 'react'
 
 const Workspace = ({ tab, tabs, pubSub }) => {
   const config = useConfig()
@@ -89,16 +87,16 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
   useEffect(() => {
     if (!client) return
-    ;(async () => {
-      if (!client || !tab || !tab.name) return
+      ; (async () => {
+        if (!client || !tab || !tab.name) return
 
-      // make sure to pass the projectId to the service call
-      await client.service('spell-runner').get(tab.id, {
-        query: {
-          projectId: config.projectId,
-        },
-      })
-    })()
+        // make sure to pass the projectId to the service call
+        await client.service('spell-runner').get(tab.id, {
+          query: {
+            projectId: config.projectId,
+          },
+        })
+      })()
   }, [client])
 
   const factory = tab => {

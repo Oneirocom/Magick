@@ -14,7 +14,7 @@ import DocumentWindow from './windows/DocumentWindow'
 import EventWindow from './windows/EventWindow'
 import RequestWindow from './windows/RequestWindow'
 import SettingsWindow from './windows/settings/SettingsWindow'
-import Chat from './screens/Chat/Chat'
+import Chat from './screens/Chat/index.tsx'
 
 import 'flexlayout-react/style/dark.css'
 import './design-globals/design-globals.css'

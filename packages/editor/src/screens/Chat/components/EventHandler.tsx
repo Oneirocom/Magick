@@ -5,8 +5,6 @@ import { Spell } from '@magickml/engine'
 import {
   useLazyGetSpellByIdQuery
 } from '../../../state/api/spells'
-import { useLayout } from '../../../chatwindow/contexts/LayoutProvider'
-import { useEditor } from '../../../chatwindow/contexts/EditorProvider'
 import { useFeathers } from '../../../contexts/FeathersProvider'
 
 import { useConfig } from '../../../contexts/ConfigProvider'
@@ -15,7 +13,6 @@ const EventHandler = ({ pubSub, tab }) => {
   const config = useConfig()
 
   // only using this to handle events, so not rendering anything with it.
-  const { createOrFocus, windowTypes } = useLayout()
   const { enqueueSnackbar } = useSnackbar()
 
   const [getSpell, { data: spell }] = useLazyGetSpellByIdQuery({
@@ -57,37 +54,14 @@ const EventHandler = ({ pubSub, tab }) => {
     }
   }, [client.io, tab.id, enqueueSnackbar])
 
-  const {
-    getEditor,
-  } = useEditor()
-
   const { events, subscribe } = pubSub
 
   const {
-    $CREATE_CHAT_WINDOW,
-    $CLOSE_EDITOR,
-    $PROCESS,
     $RUN_SPELL,
   } = events
 
-  const createChatWindow = () => {
-    createOrFocus(windowTypes.CHAT, 'Chat')
-  }
-
-  const onProcess = () => {
-    const editor = getEditor()
-    if (!editor) return
-
-    editor.runProcess()
-  }
-
   // clean up anything inside the editor which we need to shut down.
   // mainly subscriptions, etc.
-  const onCloseEditor = () => {
-    const editor = getEditor() as Record<string, any>
-    if (editor.moduleSubscription) editor.moduleSubscription.unsubscribe()
-  }
-
   const runSpell = async (event, data) => {
     console.log('DATA IN EVENT HANDLER', data)
 
@@ -97,9 +71,6 @@ const EventHandler = ({ pubSub, tab }) => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handlerMap = {
-    [$CREATE_CHAT_WINDOW(tab.id)]: createChatWindow,
-    [$CLOSE_EDITOR(tab.id)]: onCloseEditor,
-    [$PROCESS(tab.id)]: onProcess,
     [$RUN_SPELL(tab.id)]: runSpell,
   }
 
