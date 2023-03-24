@@ -1,5 +1,5 @@
 import { MagickComponent } from '../../engine'
-import { IRunContextEditor, MagickNode, PubSubData } from '../../types'
+import { IRunContextEditor, MagickNode } from '../../types'
 import { HandleDataArgs, Inspector } from './Inspector'
 
 function install(editor: IRunContextEditor) {

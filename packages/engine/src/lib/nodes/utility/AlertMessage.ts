@@ -3,7 +3,6 @@ import Rete from 'rete'
 import _ from 'lodash'
 import { TextInputControl } from '../../dataControls/TextInputControl'
 import { MagickComponent } from '../../engine'
-import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { triggerSocket } from '../../sockets'
 import { MagickNode, WorkerData } from '../../types'
 

@@ -1,4 +1,4 @@
-import { Engine, Socket, Component } from 'rete'
+import { Engine, Socket } from 'rete'
 import { Socket as SocketType } from 'rete/types'
 import { NodeData } from 'rete/types/core/data'
 
@@ -208,9 +208,9 @@ export class ModuleManager {
   }
 
   workerTriggerIns(
-    node: NodeData,
-    _inputs: MagickWorkerInputs,
-    outputs: MagickWorkerOutputs,
+    _node,
+    _inputs,
+    _outputs,
     { module, data }: { module: Module; data: Record<string, unknown> }
   ) {
     if (!module) return

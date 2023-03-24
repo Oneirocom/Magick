@@ -117,7 +117,7 @@ const pasteNodesAndConnections = async (editor, jsonNodes, mouse, posDiff) => {
     const {
       name,
       id,
-      position: [x, y],
+      position,
       ...params
     } = node
 

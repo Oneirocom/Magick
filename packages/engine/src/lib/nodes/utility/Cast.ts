@@ -2,7 +2,6 @@ import Rete from 'rete'
 
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
-import { TaskOptions } from '../../plugins/taskPlugin/task'
 import * as sockets from '../../sockets'
 import { SocketNameType } from '../../sockets'
 import {
