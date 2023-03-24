@@ -69,26 +69,73 @@ export class InputComponent extends MagickComponent<InputReturn> {
       defaultValue: values[0].name,
     })
 
-
-
     node.inspector.add(inputType)
 
-    const createInput = () => {
-      console.log('createInput')
-      const inputName = new InputControl({
-        name: 'Input Name',
-        dataKey: 'inputName',
-        defaultValue: 'Custom',
-      })
+    let lastSockets: any[] | undefined = []
+    let lastInspectorControls: any[] | undefined = []
 
-      inputName.onData = data => {
-        node.data.name = `Input - ${data}`
+    const configureNode = () => {
+      const inputType = node.data.inputType as string
+      const isCustom = inputType === 'Custom'
+      
+      const connections = node.getConnections()
+
+      const inspectorControls: any[] = []
+
+      if(isCustom){
+        const inputName = new InputControl({
+          name: 'Input Name',
+          dataKey: 'inputName',
+          defaultValue: 'Custom',
+        })
+
+        inputName.onData = data => {
+          node.data.name = `Input - ${data}`
+        }
+
+        inspectorControls.push(inputName)
+        node.inspector.add(inputName)
+        
+        const useTrigger = new SwitchControl({
+          name: 'Use Trigger',
+          label: 'Use Trigger',
+          dataKey: 'useTrigger',
+          defaultValue: true,
+        })
+
+        inspectorControls.push(useTrigger)
+        node.inspector.add(useTrigger)
+      }
+  
+      if (inspectorControls !== lastInspectorControls) {
+        lastInspectorControls?.forEach(control => {
+          node.inspector.dataControls.delete(control.dataKey)
+        })
+        inspectorControls?.forEach(control => {
+          const _control = new control.type(control)
+          node.inspector.add(_control)
+        })
+        lastInspectorControls = inspectorControls
       }
 
-      node.inspector.add(inputName)
-      console.log(node.inspector.dataControls.get('inputName'))
-      node.data.name = `Input - ${node.data.inputName}`
+      // if (sockets !== lastSockets) {
+      //   lastSockets?.forEach(socket => {
+      //     if (node.outputs.has(socket.socket)) node.outputs.delete(socket.socket)
+      //   })
+      //   sockets.forEach(socket => {
+      //     node.addOutput(new Rete.Output(socket.socket, socket.name, socket.type))
+      //   })
+      //   lastSockets = sockets
+      // }
     }
+
+    // const createInput = () => {
+    //   console.log('createInput')
+
+    //   node.inspector.add(inputName)
+    //   console.log(node.inspector.dataControls.get('inputName'))
+    //   node.data.name = `Input - ${node.data.inputName}`
+    // }
 
     inputType.onData = data => {
       console.log('inputType.onData', data)
@@ -96,7 +143,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
         console.log(node.inspector.dataControls.get('inputName'))
         // if inputName is not added to the node, add it
         if (!node.inspector.dataControls.get('inputName')) {
-          createInput()
+          // createInput()
         }
         return
       }
@@ -123,7 +170,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     })
 
     if(node.data.inputType === 'Custom') {
-      createInput()
+      // createInput()
     }
 
     node.inspector
