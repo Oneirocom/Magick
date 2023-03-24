@@ -1,10 +1,11 @@
 import { IconBtn, Switch } from '@magickml/client-core'
-import { pluginManager } from '@magickml/engine'
+import { IGNORE_AUTH, pluginManager } from '@magickml/engine'
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography } from '@mui/material'
 import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
@@ -25,7 +26,9 @@ const AgentDetails = ({
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
   const [enable, setEnable] = useState(onLoadEnables)
-  console.log('selectedAgentData', selectedAgentData)
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
+  const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
 
   const update = (id, data = undefined) => {
     const _data = data || { ...selectedAgentData }
@@ -42,7 +45,7 @@ const AgentDetails = ({
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
     axios
-      .patch(`${config.apiUrl}/agents/${id}`, _data)
+      .patch(`${config.apiUrl}/agents/${id}`, _data, { headers })
       .then(res => {
         if (typeof res.data === 'string' && res.data === 'internal error') {
           enqueueSnackbar('Internal error updating agent', {
@@ -103,7 +106,8 @@ const AgentDetails = ({
     // eslint-disable-next-line @typescript-eslint/no-extra-semi
     ;(async () => {
       const res = await fetch(
-        `${config.apiUrl}/spells?projectId=${config.projectId}`
+        `${config.apiUrl}/spells?projectId=${config.projectId}`,
+        { headers }
       )
       const json = await res.json()
 
