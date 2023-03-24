@@ -48,9 +48,7 @@ export const agentDataSchema = Type.Pick(
     'publicVariables',
     'secrets',
   ],
-  {
-    $id: 'AgentData',
-  }
+  { $id: 'AgentData' }
 )
 
 // Schema for creating new entries
@@ -69,9 +67,7 @@ export const agentPatchDataSchema = Type.Pick(
     'publicVariables',
     'secrets',
   ],
-  {
-    $id: 'AgentData',
-  }
+  { $id: 'AgentData', additionalProperties: true }
 )
 export type AgentData = Static<typeof agentDataSchema>
 export const agentDataValidator = getDataValidator(
