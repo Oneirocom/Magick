@@ -1,7 +1,7 @@
 import { Static, Type } from '@feathersjs/typebox'
 
 // Main data model schema
-export const spellSchema = Type.Object(
+const spellSchema = Type.Object(
   {
     id: Type.String(),
     projectId: Type.String(),
@@ -9,12 +9,13 @@ export const spellSchema = Type.Object(
     hash: Type.String(),
     graph: Type.Object({
       id: Type.String(),
+      // TODO: add magick node schema validation
       nodes: Type.Any()
     }),
     createdAt: Type.Optional(Type.String()),
     updatedAt: Type.Optional(Type.String()),
   },
-  { $id: 'Spell', additionalProperties: false }
+  { $id: 'Spell2', additionalProperties: false }
 )
 
 export type SpellInterface = Static<typeof spellSchema>
@@ -38,3 +39,17 @@ export const agentSchema = Type.Object(
 )
 export type Agent = Static<typeof agentSchema>
 export type AgentInterface = Agent
+
+export const documentSchema = Type.Object(
+  {
+    id: Type.String(),
+    type: Type.Optional(Type.String()),
+    owner: Type.Optional(Type.String()),
+    content: Type.Optional(Type.String()),
+    projectId: Type.String(),
+    date: Type.Optional(Type.String()),
+    embedding: Type.Optional(Type.Any()),
+  },
+  { $id: 'Document', additionalProperties: false }
+)
+export type Document = Static<typeof documentSchema>

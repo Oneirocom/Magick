@@ -1,3 +1,4 @@
+import { NodeView } from 'rete/types/view/node'
 import { MagickComponent } from '../../engine'
 import { IRunContextEditor, MagickNode } from '../../types'
 
@@ -6,7 +7,7 @@ type ConsoleConstructor = {
   editor: IRunContextEditor
   node: MagickNode
   server: boolean
-  throwError?: Function
+  throwError?: (error: unknown)=>void
   isEngine?: boolean
 }
 
@@ -18,13 +19,21 @@ export type Message = {
   type: 'error' | 'log'
 }
 
+interface OutputError {
+  output: {
+    error: string
+  }
+}
+function isOutputError(value: unknown): value is OutputError {
+  return !!value && !!(value as OutputError).output && !!(value as OutputError).output.error;
+}
 export class MagickConsole {
   node: MagickNode
   editor: IRunContextEditor
   component: MagickComponent<unknown>
-  nodeView: any
+  nodeView?: NodeView
   isServer: boolean
-  throwError?: Function
+  throwError?: (error:unknown)=>void
   isEngine: boolean
 
   constructor({
@@ -49,7 +58,7 @@ export class MagickConsole {
 
     if (!foundNode) return
 
-    this.nodeView = foundNode[1] as any
+    this.nodeView = foundNode[1]
   }
 
   updateNodeView() {
@@ -68,7 +77,7 @@ export class MagickConsole {
     }
   }
 
-  formatErrorMessage(error: any) {
+  formatErrorMessage(error: Error) {
     return this.formatMessage(error.message, 'error')
   }
 
@@ -85,13 +94,13 @@ export class MagickConsole {
     this.node.data.success = false
   }
 
-  log(_message: any) {
+  log(_message: unknown) {
     if (this.isServer) return
 
     const message =
       typeof _message !== 'string' ? JSON.stringify(_message) : _message
     this.sendToDebug(this.formatMessage(message, 'log'))
-    if (_message.output?.error) {
+    if (isOutputError(_message)) {
       this.renderError()
     } else {
       this.renderLog()
@@ -99,7 +108,7 @@ export class MagickConsole {
     
   }
 
-  error(error: any) {
+  error(error: Error) {
     const message = this.formatErrorMessage(error)
     this.throwServerError(message)
     if (!this.isServer) {
@@ -108,16 +117,16 @@ export class MagickConsole {
     }
   }
 
-  sendSuccess(result: any) {
+  sendSuccess(result: unknown) {
     console.log('Success', result)
   }
 
-  sendToDebug(message: any) {
+  sendToDebug(message: unknown) {
     if (this.editor && this.editor.magick && this.editor.magick.sendToDebug)
       this.editor.magick.sendToDebug(message)
   }
 
-  throwServerError(message: any) {
+  throwServerError(message: unknown) {
     if (this.isServer && this.throwError) this.throwError(message)
   }
 }

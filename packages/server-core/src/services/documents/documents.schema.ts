@@ -10,20 +10,8 @@ import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../config/validators'
+import { documentSchema } from '@magickml/engine'
 
-export const documentSchema = Type.Object(
-  {
-    id: Type.String(),
-    type: Type.Optional(Type.String()),
-    owner: Type.Optional(Type.String()),
-    content: Type.Optional(Type.String()),
-    projectId: Type.String(),
-    date: Type.Optional(Type.String()),
-    embedding: Type.Optional(Type.Any()),
-  },
-  { $id: 'Document', additionalProperties: false }
-)
-export type Document = Static<typeof documentSchema>
 export const documentResolver = resolve<Document, HookContext>({})
 
 export const documentExternalResolver = resolve<Document, HookContext>({})

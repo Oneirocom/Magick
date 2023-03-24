@@ -6,6 +6,8 @@ import { MagickConsole } from '../consolePlugin/MagickConsole'
 export type SocketPluginArgs = {
   server?: boolean
   socket?: io.Socket
+  // Need to better type the feathers client here
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   client?: any
 }
 

@@ -4,7 +4,7 @@
 /* eslint-disable no-console */
 /* eslint-disable require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import Rete from 'rete'
 
 import {
@@ -22,7 +22,7 @@ import {
 const info = 'Returns the input string as voice'
 
 type WorkerReturn = {
-  output: string
+  output: string | undefined
 }
 
 export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
@@ -92,10 +92,10 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
 
     const isCommand = (action as string).startsWith('/')
 
-    let url: any = undefined
+    let url: AxiosResponse<string>|undefined = undefined
 
     if (!isCommand && action) {
-      url = await axios.get(`${API_ROOT_URL}/text_to_speech`, {
+      url = await axios.get<string>(`${API_ROOT_URL}/text_to_speech`, {
         params: {
           text: action,
           voice_provider: voiceProvider,
@@ -107,7 +107,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
     }
  
     return {
-      output: isCommand ? (action as string) : (url.data as string),
+      output: isCommand ? (action as string) : (url?.data),
     }
   }
 }

@@ -6,18 +6,14 @@ import {
   MagickNode,
   MagickSpellInput,
   ModuleComponent,
-  SpellInterface as SpellType,
+  RunSpellConstructor,
+  SpellInterface,
 } from '../types'
 import { getNodes } from '../nodes'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
 import { Module } from '../plugins/modulePlugin/module'
 import { extractModuleInputKeys } from './graphHelpers'
 import { AgentInterface } from '../schemas'
-
-export type RunSpellConstructor = {
-  magickInterface: EngineContext
-  socket?: io.Socket
-}
 
 export type RunComponentArgs = {
   inputs: MagickSpellInput
@@ -30,7 +26,7 @@ export type RunComponentArgs = {
 
 class SpellRunner {
   engine: MagickEngine
-  currentSpell!: SpellType
+  currentSpell!: SpellInterface
   module: Module
   magickInterface: EngineContext
   ranSpells: string[] = []
@@ -188,7 +184,7 @@ class SpellRunner {
   /**
    * Loads a spell into the spell runner.
    */
-  async loadSpell(spell: SpellType) {
+  async loadSpell(spell: SpellInterface) {
     this.currentSpell = spell
 
     // We need to parse the graph if it is a string

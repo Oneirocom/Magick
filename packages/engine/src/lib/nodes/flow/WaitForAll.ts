@@ -40,8 +40,9 @@ export class WaitForAll extends MagickComponent<void> {
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
   worker(_node: WorkerData, inputs: MagickWorkerInputs) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const nodeInputs = Object.values(inputs as any).filter(
-      (input: any) => !!input
+      (input) => !!input
     ) as Array<{ name: string }>
 
     // close all outputs

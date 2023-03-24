@@ -38,11 +38,11 @@ export class IsVariableTrue extends MagickComponent<void> {
     const type = typeof action
     let is = false
     if (type === 'string') {
-      is = action == 'true'
+      is = action === 'true'
     } else if (type === 'boolean') {
-      is = action == true
+      is = action === true
     } else if (type === 'number') {
-      is = action == 1
+      is = action === 1
     }
 
     this._task.closed = is ? ['false'] : ['true']

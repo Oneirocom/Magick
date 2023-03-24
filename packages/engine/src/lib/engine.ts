@@ -6,7 +6,7 @@ import io from 'socket.io'
 import consolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
 import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
-import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
+import SocketPlugin, { SocketData, SocketPluginArgs } from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
 import { TaskOptions } from './plugins/taskPlugin/task'
 import { GraphData, MagickEditor, MagickNode, MagickTask, MagickWorkerInputs, ModuleOptions, UnknownData, WorkerData } from './types'
@@ -33,7 +33,8 @@ export abstract class MagickEngineComponent<WorkerReturnType> {
     node: WorkerData,
     inputs: MagickWorkerInputs,
     outputs: WorkerOutputs,
-    context: UnknownData | { module: { publicVariables: string } },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    context: any,
     ...args: unknown[]
   ): WorkerReturnType
 }
@@ -44,7 +45,7 @@ export type InitEngineArguments = {
   name: string
   components: MagickComponent<unknown>[]
   server: boolean
-  throwError?: (message: unknown)=>void
+  throwError?: (message: unknown) => void
   socket?: io.Socket
 }
 
@@ -118,7 +119,7 @@ export abstract class MagickComponent<
 > extends MagickEngineComponent<WorkerReturnType> {
   // Original interface for task and _task: IComponentWithTask from the Rete Task Plugin
   task: TaskOptions
-  _task?: MagickTask
+  _task: MagickTask
   cache: UnknownData
   editor: MagickEditor | null = null
   data: unknown = {}
@@ -128,7 +129,7 @@ export abstract class MagickComponent<
   dev = false
   hide = false
   runFromCache = false
-  deprecated? = false
+  deprecated?= false
   onDoubleClick?: (node: MagickNode) => void
   declare module: ModuleOptions
   contextMenuName: string | undefined
@@ -143,6 +144,9 @@ export abstract class MagickComponent<
     this.category = category
     this.info = info
     this.cache = {}
+
+    // TODO: This will be assignd later, check somehow
+    this._task = {} as MagickTask
   }
 
   abstract builder(node: MagickNode): Promise<MagickNode> | MagickNode | void
@@ -160,7 +164,7 @@ export abstract class MagickComponent<
 
     const task = this.nodeTaskMap[node?.id]
 
-    if(!data || Object.keys(data).length === 0) {
+    if (!data || Object.keys(data).length === 0) {
       return console.error('data is undefined')
     }
     if (task) await task.run(data as NodeData)
@@ -177,4 +181,4 @@ export abstract class MagickComponent<
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type MagickComponentArray<T extends MagickComponent<unknown>=any> = T[]
+export type MagickComponentArray<T extends MagickComponent<unknown> = any> = T[]

@@ -34,14 +34,12 @@ async function getPrompt(prompt, server) {
     sampler_index: 'Euler',
   })
 
-  const requestOptions = {
+  const r = await fetch(server, {
     method: 'POST',
     headers: myHeaders,
     body: raw,
     redirect: 'follow',
-  }
-
-  const r = await fetch(server, requestOptions as any).catch(error =>
+  }).catch(error =>
     console.log('error', error)
   )
 

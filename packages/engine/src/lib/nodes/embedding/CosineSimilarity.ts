@@ -46,7 +46,7 @@ export class CosineSimilarity extends MagickComponent<Promise<InputReturn>> {
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { projectId, module }: { projectId: string; module: any }
+    // { projectId, module }: { projectId: string; module: any }
   ) {
     const x = inputs.embeddingA[0] as string
     const y = inputs.embeddingB[0] as string

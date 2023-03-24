@@ -131,7 +131,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     context: {
-      module: any
+      module: unknown
       secrets: Record<string, string>
       projectId: string
       magick: EngineContext

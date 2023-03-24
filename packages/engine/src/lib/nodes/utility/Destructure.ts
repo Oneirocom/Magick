@@ -18,8 +18,6 @@ export class Destructure extends MagickComponent<void> {
       outputs: {
         trigger: 'option',
       },
-      init: () => {},
-      onRun: () => {},
     } as TaskOptions, 'Utility', info)
   }
   // the builder is used to "assemble" the node component.
@@ -49,12 +47,12 @@ export class Destructure extends MagickComponent<void> {
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
   worker(node: WorkerData, inputs: MagickWorkerInputs) {
-    const object = inputs.object[0] as Record<string, any>
+    const object = inputs.object[0] as Record<string, unknown>
 
     const output = Object.keys(node.outputs).reduce((acc, key) => {
       acc[key] = object[key]
       return acc
-    }, {} as Record<any, any>)
+    }, {} as Record<string, unknown>)
 
     console.log('Destructured output', output)
 

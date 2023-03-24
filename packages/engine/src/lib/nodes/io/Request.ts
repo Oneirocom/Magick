@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import Rete from 'rete'
 
 import { InputControl } from '../../dataControls/InputControl'
@@ -16,7 +16,7 @@ import {
 const info = 'Request is used to make a web request to a server.'
 
 type WorkerReturn = {
-  output: any
+  output: unknown
 }
 
 export class Request extends MagickComponent<Promise<WorkerReturn>> {
@@ -94,7 +94,7 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
       url = url.replace('server', env.API_ROOT_URL as string)
     }
 
-    let resp = undefined as any
+    let resp = undefined as AxiosResponse<unknown> | undefined
     if (method === 'post') {
       resp = await axios.post(url, inputs)
     } else if (method === 'get') {
@@ -110,7 +110,7 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     }
 
     return {
-      output: resp ? (resp.data as any) : '',
+      output: resp ? resp.data : '',
     }
   }
 }

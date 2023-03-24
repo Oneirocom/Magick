@@ -5,8 +5,8 @@ import type {
   SpellRunnerService
 } from './services/spell-runner/spell-runner'
 export const spellRunnerServiceMethods = ['get', 'create', 'update'] as const
-import type { SpellType, SpellData, SpellQuery, SpellService } from './services/spells/spells'
-export type { SpellType, SpellData, SpellQuery }
+import type { SpellData, SpellQuery, SpellService } from './services/spells/spells'
+export type { SpellData, SpellQuery }
 export const spellServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
 export type SpellClientService = Pick<SpellService<Params<SpellQuery>>, (typeof spellServiceMethods)[number]>
 

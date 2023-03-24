@@ -52,7 +52,7 @@ export class ExclusiveGate extends MagickComponent<void> {
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: { socketInfo: { targetSocket: any } }
+    context: { socketInfo: { targetSocket: string } }
   ) {
     const trigger = context.socketInfo.targetSocket
 

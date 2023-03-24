@@ -9,7 +9,7 @@ const info =
   'ComposeObject runs JSON.stringify on the inputs and returns the result'
 
 type WorkerReturn = {
-  output: Object
+  output: Record<string, unknown>
 }
 
 export class ComposeObject extends MagickComponent<Promise<WorkerReturn>> {
@@ -51,7 +51,7 @@ export class ComposeObject extends MagickComponent<Promise<WorkerReturn>> {
       return acc
     }, {} as Record<string, unknown>)
 
-    const data: { [key: string]: any } = {}
+    const data: Record<string, unknown> = {}
     for (const x in inputs) {
       data[x.toLowerCase().trim()] = inputs[x]
     }
