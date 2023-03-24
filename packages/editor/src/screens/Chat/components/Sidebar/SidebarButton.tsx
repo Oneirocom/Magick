@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { Button } from '@magickml/client-core'
 
 interface Props {
   text: string;
@@ -8,12 +9,13 @@ interface Props {
 
 export const SidebarButton: FC<Props> = ({ text, icon, onClick }) => {
   return (
-    <div
-      className="flex py-3 px-3 gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer w-full items-center"
+    <Button
+      className="small"
+      style={{ cursor: 'pointer' }}
       onClick={onClick}
     >
       <div>{icon}</div>
       <div>{text}</div>
-    </div>
+    </Button>
   );
 };

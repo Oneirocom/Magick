@@ -101,7 +101,7 @@ const AgentDetails = ({
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-extra-semi
-    ;(async () => {
+    ; (async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`
       )
@@ -322,11 +322,10 @@ const AgentDetails = ({
         />
       )}
       <div
-        className={`${
-          selectedAgentData.publicVariables !== '{}'
+        className={`${selectedAgentData.publicVariables !== '{}'
             ? styles.connectorsLong
             : styles.connectors
-        }`}
+          }`}
       >
         {pluginManager.getAgentComponents().map((value, index, array) => {
           return (

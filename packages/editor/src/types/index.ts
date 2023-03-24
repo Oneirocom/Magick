@@ -1,3 +1,21 @@
+import { Spell } from '@magickml/engine'
+
+export interface Spells {
+  data: Spell[];
+  total: number;
+  limit: number;
+  skip: number;
+}
+
+
+export interface Conversation {
+  id: number;
+  name: string;
+  spell: Spell;
+  messages: Message[];
+  prompt: string;
+}
+
 export interface OpenAIModel {
   id: string;
   name: string;
@@ -25,14 +43,6 @@ export interface Message {
 }
 
 export type Role = "assistant" | "user";
-
-export interface Conversation {
-  id: number;
-  name: string;
-  messages: Message[];
-  model: OpenAIModel;
-  prompt: string;
-}
 
 export interface ChatBody {
   model: OpenAIModel;

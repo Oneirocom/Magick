@@ -9,6 +9,7 @@ import { saveConversation, saveConversations, updateConversation } from "../../u
 import { exportConversations, importConversations } from "../../utils/app/data";
 import { ArrowBack, ArrowForward } from '@mui/icons-material/'
 import styles from './chat.module.css';
+import { Spell } from '@magickml/engine'
 
 import {
     useDeleteSpellMutation,
@@ -23,7 +24,7 @@ export default function Home() {
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [selectedConversation, setSelectedConversation] = useState<Conversation>();
     const [loading, setLoading] = useState<boolean>(false);
-    const [models, setModels] = useState<OpenAIModel[]>([]);
+    const [spells, setSpells] = useState<Spell[]>([]);
     const [messageIsStreaming, setMessageIsStreaming] = useState<boolean>(false);
     const [showSidebar, setShowSidebar] = useState<boolean>(true);
     const [messageError, setMessageError] = useState<boolean>(false);
@@ -32,10 +33,16 @@ export default function Home() {
     const pubSub = usePubSub()
 
     const config = useConfig()
-
-    const { data: spells } = useGetSpellsQuery({
+    const { data: spellsData } = useGetSpellsQuery({
         projectId: config.projectId,
     })
+
+    useEffect(() => {
+        if (spellsData) {
+            setSpells(spellsData.data)
+        }
+    }, [spellsData])
+
 
 
     const handleSend = async (message: Message, isResend: boolean) => {
@@ -180,34 +187,6 @@ export default function Home() {
         }
     };
 
-    // TODO: Remove this
-    const fetchModels = async (key: string) => {
-        const response = await fetch("/api/models", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                key
-            })
-        });
-
-        if (!response.ok) {
-            setModelError(true);
-            return;
-        }
-
-        const data = await response.json();
-
-        if (!data) {
-            setModelError(true);
-            return;
-        }
-
-        setModels(data);
-        setModelError(false);
-    };
-
     const handleExportConversations = () => {
         exportConversations();
     };
@@ -229,8 +208,8 @@ export default function Home() {
         const newConversation: Conversation = {
             id: lastConversation ? lastConversation.id + 1 : 1,
             name: `Conversation ${lastConversation ? lastConversation.id + 1 : 1}`,
+            spell: null,
             messages: [],
-            model: OpenAIModels[OpenAIModelID.GPT_3_5],
             prompt: DEFAULT_SYSTEM_PROMPT
         };
 
@@ -258,7 +237,7 @@ export default function Home() {
                 id: 1,
                 name: "New conversation",
                 messages: [],
-                model: OpenAIModels[OpenAIModelID.GPT_3_5],
+                spell: conversation?.spell ?? null,
                 prompt: DEFAULT_SYSTEM_PROMPT
             });
             localStorage.removeItem("selectedConversation");
@@ -285,7 +264,7 @@ export default function Home() {
             id: 1,
             name: "New conversation",
             messages: [],
-            model: OpenAIModels[OpenAIModelID.GPT_3_5],
+            spell: null,
             prompt: DEFAULT_SYSTEM_PROMPT
         });
         localStorage.removeItem("selectedConversation");
@@ -319,7 +298,7 @@ export default function Home() {
                 id: 1,
                 name: "New conversation",
                 messages: [],
-                model: OpenAIModels[OpenAIModelID.GPT_3_5],
+                spell: null,
                 prompt: DEFAULT_SYSTEM_PROMPT
             });
         }
@@ -372,7 +351,6 @@ export default function Home() {
                             spells={spells}
                             modelError={modelError}
                             messageError={messageError}
-                            models={models}
                             loading={loading}
                             onSend={handleSend}
                             onUpdateConversation={handleUpdateConversation}
