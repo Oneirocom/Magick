@@ -8,6 +8,7 @@ import { DEFAULT_SYSTEM_PROMPT } from "../../utils/app/const";
 import { saveConversation, saveConversations, updateConversation } from "../../utils/app/conversation";
 import { exportConversations, importConversations } from "../../utils/app/data";
 import { ArrowBack, ArrowForward } from '@mui/icons-material/'
+import styles from './chat.module.css';
 
 import {
     useDeleteSpellMutation,
@@ -328,15 +329,15 @@ export default function Home() {
         <section>
             {/* <EventHandler pubSub={pubSub} /> */}
             {selectedConversation && (
-                <main className={`flex flex-col h-screen w-screen text-white dark:text-white text-sm`}>
-                    <div className="sm:hidden w-full fixed top-0">
+                <main className={styles.mainContainer}>
+                    <div className={styles.navbarContainer}>
                         <Navbar
                             selectedConversation={selectedConversation}
                             onNewConversation={handleNewConversation}
                         />
                     </div>
 
-                    <article className="flex h-full w-full pt-[48px] sm:pt-0">
+                    <article className={styles.mainArticle}>
                         {showSidebar ? (
                             <>
                                 <Sidebar
@@ -354,13 +355,13 @@ export default function Home() {
                                 />
 
                                 <ArrowBack
-                                    className="fixed top-2.5 left-4 sm:top-1 sm:left-4 sm:text-neutral-700 dark:text-white cursor-pointer hover:text-gray-400 dark:hover:text-gray-300 h-7 w-7 sm:h-8 sm:w-8 sm:hidden"
+                                    className={styles.arrowBack}
                                     onClick={() => setShowSidebar(!showSidebar)}
                                 />
                             </>
                         ) : (
                             <ArrowForward
-                                className="fixed text-white z-50 top-2.5 left-4 sm:top-1.5 sm:left-4 sm:text-neutral-700 dark:text-white cursor-pointer hover:text-gray-400 dark:hover:text-gray-300 h-7 w-7 sm:h-8 sm:w-8"
+                                className={styles.arrowForward}
                                 onClick={() => setShowSidebar(!showSidebar)}
                             />
                         )}
