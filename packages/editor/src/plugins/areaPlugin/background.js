@@ -1,3 +1,4 @@
+import { refreshNodeEditor } from "./utils"
 const scaleFactor = .04
 
 export class Background {
@@ -17,6 +18,9 @@ export class Background {
       editor.view.area.transform.x = parsedZoomValues?.translateValues?.x
       editor.view.area.transform.y = parsedZoomValues?.translateValues?.y
       editor.view.area.transform.k = parsedZoomValues?.translateValues?.k 
+      
+      // Refresh NodeEditor to show up restored transformation
+      refreshNodeEditor(tab.id)
     }
 
     editor.on('translate', (event) => {
