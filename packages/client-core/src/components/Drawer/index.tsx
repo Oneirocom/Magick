@@ -225,7 +225,6 @@ export function Drawer({ children }) {
             text="Documents"
           />
           <DrawerItem
-            active={location.pathname === '/events'}
             active={location.pathname.includes('/chat')}
             Icon={ChatIcon}
             open={open}
