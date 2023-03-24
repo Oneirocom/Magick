@@ -20,9 +20,12 @@ import { SpellInterface } from './schemas'
 import { DataControl } from './plugins/inspectorPlugin'
 import { SpellManager } from './spellManager'
 
+import io from 'socket.io'
+
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 
 export * from './schemas'
+
 
 export type ImageType = {
   id: string
