@@ -49,9 +49,15 @@
 }
 
 
-.modelContainer {
+.spellContainer {
     display: flex;
     flex-direction: column;
+}
+
+.innerSelectContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .innerContainer {
@@ -143,6 +149,7 @@
     height: var(--c4);
     margin-right: var(--extraSmall);
     padding: var(--c2);
+    cursor: text;
 }
 
 .textarea:focus {
@@ -217,19 +224,14 @@
     color: #2d3748;
 }
 
-.modelOptions {
+.spellOptions {
     display: flex;
     flex-direction: column;
     height: 100%;
     gap: 1rem;
-    padding: 1rem;
-    border-width: 1px;
-    border-color: #cbd5e0;
-    border-style: solid;
-    border-radius: 0.375rem;
 }
 
-.modelName {
+.spellName {
     display: flex;
     justify-content: center;
     padding-top: 0.5rem;
@@ -265,11 +267,11 @@
 }
 
 .dark .textSubTitle,
-.dark .modelName {
+.dark .spellName {
     color: #a0aec0;
 }
 
-.dark .modelName {
+.dark .spellName {
     background-color: #444654;
     border-width: 0;
 }
@@ -343,7 +345,7 @@
 .label {
     text-align: left;
     margin-bottom: 0.5rem;
-    color: #4a5568;
+    color: white;
 }
 
 .select {
@@ -352,6 +354,7 @@
     color: #1a202c;
     background-color: #343541;
     border: 1px solid #a0aec0;
+    color: white;
     border-radius: 0.5rem;
     appearance: none;
     cursor: pointer;
@@ -492,4 +495,10 @@
     @media (prefers-color-scheme: dark) {
         border-color: white;
     }
+}
+
+.icon {
+    position: absolute;
+    right: 0.5rem;
+    pointer-events: none;
 }

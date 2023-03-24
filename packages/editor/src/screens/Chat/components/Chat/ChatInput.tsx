@@ -1,18 +1,19 @@
 import { FC, KeyboardEvent, MutableRefObject, useEffect, useRef, useState } from "react";
-import { Message, OpenAIModel, OpenAIModelID } from "../../../../types";
 import { StopCircle } from '@mui/icons-material'
 import { Button } from '@magickml/client-core'
 import styles from './styles.module.css';
 import magickCSS from '../../../Magick/magick.module.css'
 
+import { Spell } from '@magickml/engine'
+import { Message } from "../../../../types";
 interface Props {
   messageIsStreaming: boolean;
   onSend: (message: Message) => void;
-  model: OpenAIModel;
+  spell: Spell;
   stopConversationRef: MutableRefObject<boolean>;
 }
 
-export const ChatInput: FC<Props> = ({ onSend, messageIsStreaming, model, stopConversationRef }) => {
+export const ChatInput: FC<Props> = ({ onSend, messageIsStreaming, spell, stopConversationRef }) => {
   const [content, setContent] = useState<string>();
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
@@ -20,7 +21,8 @@ export const ChatInput: FC<Props> = ({ onSend, messageIsStreaming, model, stopCo
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-    const maxLength = model.id === OpenAIModelID.GPT_3_5 ? 12000 : 24000;
+    // TODO: Define max length
+    const maxLength = 24000; // spell.id === OpenAIModelID.GPT_3_5 ? 12000 : 24000;
 
     if (value.length > maxLength) {
       alert(`Message limit is ${maxLength} characters`);

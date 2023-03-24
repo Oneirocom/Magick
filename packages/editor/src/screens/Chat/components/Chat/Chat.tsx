@@ -1,25 +1,17 @@
-import { Conversation, KeyValuePair, Message, OpenAIModel } from "../../../../types";
+import { Conversation, KeyValuePair, Message } from "../../../../types";
 import { FC, MutableRefObject, useEffect, useRef, useState } from "react";
 import { ChatInput } from "./ChatInput";
 import { ChatLoader } from "./ChatLoader";
 import { ChatMessage } from "./ChatMessage";
-import { ModelSelect } from "./ModelSelect";
+import { SpellSelect } from "./SpellSelect";
 import { Regenerate } from "./Regenerate";
 import { SystemPrompt } from "./SystemPrompt";
-import { Spell } from '@magickml/engine'
 import chatStyles from './styles.module.css';
-
-type Spells = {
-  data: Spell[];
-  total: number;
-  limit: number;
-  skip: number;
-};
+import { Spell } from '@magickml/engine'
 
 interface Props {
   conversation: Conversation;
-  models: OpenAIModel[];
-  spells: Spells;
+  spells: Spell[];
   messageIsStreaming: boolean;
   modelError: boolean;
   messageError: boolean;
@@ -29,7 +21,7 @@ interface Props {
   stopConversationRef: MutableRefObject<boolean>;
 }
 
-export const Chat: FC<Props> = ({ conversation, models, spells, messageIsStreaming, modelError, messageError, loading, onSend, onUpdateConversation, stopConversationRef }) => {
+export const Chat: FC<Props> = ({ conversation, spells, messageIsStreaming, modelError, messageError, loading, onSend, onUpdateConversation, stopConversationRef }) => {
   const [currentMessage, setCurrentMessage] = useState<Message>();
   const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
 
@@ -71,9 +63,12 @@ export const Chat: FC<Props> = ({ conversation, models, spells, messageIsStreami
     }
   }, []);
 
+  console.log("🚀 ~ file: Chat.tsx:124 ~ spells?.total:", spells?.length)
+
+
   return (
     <div className={chatStyles.container}>
-      {spells?.data?.length === 0 ? (
+      {spells?.length === 0 ? (
         <div className={chatStyles.flexCenter}>
           <div className={chatStyles.textTitle}>Spell Required</div>
           <div className={chatStyles.textSubTitle}>Please create a spell.</div>
@@ -92,27 +87,26 @@ export const Chat: FC<Props> = ({ conversation, models, spells, messageIsStreami
           >
             {conversation.messages.length === 0 ? (
               <div className={chatStyles.initialContent}>
-                <div className={chatStyles.initialTitle}>{models.length === 0 ? "Loading..." : "Chatbot UI"}</div>
+                <div className={chatStyles.initialTitle}>{spells?.length === 0 ? "Loading..." : ""}</div>
 
-                {models.length > 0 && (
-                  <div className={chatStyles.modelOptions}>
-                    {/* TODO: Change model for SpellSelect */}
-                    <ModelSelect
-                      model={conversation.model}
-                      models={models}
-                      onModelChange={(model) => onUpdateConversation(conversation, { key: "model", value: model })}
+                {spells?.length > 0 && (
+                  <div className={chatStyles.spellOptions}>
+                    <SpellSelect
+                      spell={conversation.spell}
+                      spells={spells}
+                      onSpellChange={(spell) => onUpdateConversation(conversation, { key: "spell", value: spell })}
                     />
 
-                    <SystemPrompt
+                    {/* <SystemPrompt
                       conversation={conversation}
                       onChangePrompt={(prompt) => onUpdateConversation(conversation, { key: "prompt", value: prompt })}
-                    />
+                    /> */}
                   </div>
                 )}
               </div>
             ) : (
               <>
-                <div className={chatStyles.modelName}>Model: {conversation.model.name}</div>
+                <div className={chatStyles.spellName}>Spell: {conversation.spell.name}</div>
 
                 {conversation.messages.map((message, index) => (
                   <ChatMessage
@@ -147,7 +141,7 @@ export const Chat: FC<Props> = ({ conversation, models, spells, messageIsStreami
                 setCurrentMessage(message);
                 onSend(message, false);
               }}
-              model={conversation.model}
+              spell={conversation.spell}
             />
           )}
         </>

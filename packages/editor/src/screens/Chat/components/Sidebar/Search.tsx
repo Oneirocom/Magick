@@ -1,6 +1,6 @@
+import React, { FC } from "react";
 import { Close } from '@mui/icons-material'
-import { FC } from "react";
-import styles from './styles.module.css';
+import searchStyles from "./styles.module.css";
 
 interface Props {
   searchTerm: string;
@@ -8,18 +8,19 @@ interface Props {
 }
 
 export const Search: FC<Props> = ({ searchTerm, onSearch }) => {
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(e.target.value);
   };
 
   const clearSearch = () => {
-    onSearch("");
+    onSearch('');
   };
 
   return (
-    <div className="relative flex items-center">
+    <div className={searchStyles.searchWrapper}>
       <input
-        className="flex-1 w-full pr-10 bg-[#202123] border border-neutral-600 text-sm rounded-md px-4 py-3 text-white"
+        className={searchStyles.searchInput}
         type="text"
         placeholder="Search conversations..."
         value={searchTerm}
@@ -28,10 +29,12 @@ export const Search: FC<Props> = ({ searchTerm, onSearch }) => {
 
       {searchTerm && (
         <Close
-          className="absolute right-4 text-neutral-300 cursor-pointer hover:text-neutral-400"
+          className={searchStyles.closeIcon}
           onClick={clearSearch}
         />
       )}
     </div>
   );
 };
+
+export default Search;

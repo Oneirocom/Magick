@@ -1,10 +1,12 @@
-import { Conversation } from "../../../../types";
 import { FileDownload } from '@mui/icons-material'
 
 import { FC } from "react";
 import { ClearConversations } from "./ClearConversations";
-import { Import } from "./Import";
+// import { Import } from "./Import";
 import { SidebarButton } from "./SidebarButton";
+import styles from './styles.module.css';
+
+import { Conversation } from "../../../../types";
 
 interface Props {
   onClearConversations: () => void;
@@ -14,10 +16,11 @@ interface Props {
 
 export const SidebarSettings: FC<Props> = ({ onClearConversations, onExportConversations, onImportConversations }) => {
   return (
-    <div className="flex flex-col pt-1 items-center border-t border-white/20 text-sm space-y-1">
+
+    <div className={styles.bottomButtons}>
       <ClearConversations onClearConversations={onClearConversations} />
 
-      <Import onImport={onImportConversations} />
+      {/* <Import onImport={onImportConversations} /> */}
 
       <SidebarButton
         text="Export conversations"
