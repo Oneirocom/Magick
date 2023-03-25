@@ -17,18 +17,14 @@ type WorkerReturn = {
 
 export class Echo extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Echo')
-
-    this.task = {
+    super('Echo', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Utility', info)
 
-    this.category = 'Utility'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

@@ -24,14 +24,12 @@ type InputReturn = {
 export class GetNativeBalanceFromWallet extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
-    super('Check Eth Balance')
-
-    this.task = {
+    super('Check Eth Balance', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Ethereum', info)
 
     this.module = {
       nodeType: 'triggerIn',
@@ -39,8 +37,6 @@ export class GetNativeBalanceFromWallet extends MagickComponent<Promise<InputRet
       hide: true,
     }
 
-    this.category = 'Ethereum'
-    this.info = info
     this.display = true
     this.contextMenuName = 'Check Eth Balance'
     this.displayName = 'Check Eth Balance'

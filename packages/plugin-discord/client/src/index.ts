@@ -1,10 +1,14 @@
 import {
   ClientPlugin,
   eventSocket,
+  SpellInterface,
 } from '@magickml/engine'
 import { DiscordAgentWindow } from './components/agent.component'
 
-import DiscordSpellTemplate from './templates/spells/Discord Bot.spell.json'
+import _DiscordSpellTemplate from './templates/spells/Discord Bot.spell.json'
+
+// TODO: add schema validation with e.g. zod
+const DiscordSpellTemplate = _DiscordSpellTemplate as unknown as SpellInterface
 
 const DiscordPlugin = new ClientPlugin({
   name: 'DiscordPlugin',

@@ -1,4 +1,4 @@
-import { WorldManager } from '@magickml/engine'
+import { AgentInterface, WorldManager } from '@magickml/engine'
 import Discord, {
   ChannelType,
   EmbedBuilder,
@@ -25,7 +25,7 @@ interface UserObject {
 }
 export class DiscordConnector {
   client = Discord.Client as any
-  agent: any = undefined
+  agent?: AgentInterface
   spellRunner: any = null
   discord_wake_words: string[] = []
   discord_userid = ''

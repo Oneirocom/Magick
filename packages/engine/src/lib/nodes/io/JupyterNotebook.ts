@@ -18,7 +18,7 @@ const info =
   'Call a Jupyter Notebook with the given name and inputs, and return the output.'
 
 type WorkerReturn = {
-  output: any
+  output: string
 }
 
 const removeProtocol = url => {
@@ -44,18 +44,13 @@ function getPromiseFromEvent(item, event) {
 
 export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Jupyter Notebook')
-
-    this.task = {
+    super('Jupyter Notebook', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
-
-    this.category = 'I/O'
+    }, 'I/O', info)
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {
@@ -205,7 +200,7 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
     }
     await getPromiseFromEvent(ws, 'message')
     return {
-      output: code_output ? (code_output as any) : '',
+      output: code_output ? code_output : '',
     }
   }
 }

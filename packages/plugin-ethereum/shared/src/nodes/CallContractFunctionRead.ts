@@ -23,14 +23,12 @@ type InputReturn = {
 export class CallContractFunctionRead extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
-    super('Contract Read')
-
-    this.task = {
+    super('Contract Read', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Ethereum', info)
 
     this.module = {
       nodeType: 'triggerIn',
@@ -38,8 +36,6 @@ export class CallContractFunctionRead extends MagickComponent<Promise<InputRetur
       hide: true,
     }
 
-    this.category = 'Ethereum'
-    this.info = info
     this.display = true
     this.contextMenuName = 'Contract Read'
     this.displayName = 'Contract Read'

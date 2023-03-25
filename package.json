@@ -10,7 +10,7 @@
     "start-docs": "npx nx serve @magickml/docs",
     "migrate:make": "nx run @magickml/server:migrate:make",
     "migrate": "nx run @magickml/server:migrate",
-    "build": "npx nx run-many --target=build --projects=@magickml/server,@magickml/agent",
+    "build": "npx nx lint @magickml/engine && npx nx run-many --target=build --projects=@magickml/server,@magickml/agent",
     "build-client": "npx nx build @magickml/client",
     "heroku-prebuild": "npm i -g @nrwl/cli",
     "build-server": "npx nx build @magickml/server",

@@ -3,7 +3,7 @@ import { api } from './services/api/api'
 
 const RestPlugin = new ServerPlugin({
   name: 'RestPlugin',
-  services: { api },
+  services: [ api ],
   inputTypes: [
     { name: 'REST API (GET)', trigger: true, socket: eventSocket },
     { name: 'REST API (POST)', trigger: true, socket: eventSocket },

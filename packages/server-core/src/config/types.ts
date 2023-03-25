@@ -1,30 +1,14 @@
-import Koa from 'koa'
+import { 
+  Route as _Route, 
+  Middleware as _Middleware, 
+  Method as _Method,
+  Handler as _Handler
+ } from '@magickml/engine'
 
-export type Middleware = (ctx: Koa.Context, next: any) => any
+export type Middleware = _Middleware
 
-export type Method =
-  | 'get'
-  | 'head'
-  | 'post'
-  | 'put'
-  | 'delete'
-  | 'connect'
-  | 'options'
-  | 'trace'
-  | 'patch'
+export type Method = _Method
 
-export type Handler = (ctx: Koa.Context) => any
+export type Handler = _Handler
 
-export type Route = {
-  method?: Method
-  path: string
-  middleware?: Middleware[]
-  handler?: Handler
-  get?: Handler
-  put?: Handler
-  post?: Handler
-  del?: Handler
-  delete?: Handler
-  head?: Handler
-  patch?: Handler
-}
+export type Route = _Route

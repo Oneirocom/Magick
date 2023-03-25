@@ -23,17 +23,13 @@ type WorkerReturn = {
 export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     // Name of the component
-    super('Search Google')
-
-    this.task = {
+    super('Search Google', {
       outputs: {
         summary: 'output',
         links: 'output',
         trigger: 'option',
       },
-    } as TaskOptions
-    this.category = 'Search'
-    this.info = info
+    }, 'Search', info)
   }
   // the builder is used to "assemble" the node component.
 
