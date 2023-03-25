@@ -30,7 +30,7 @@ export const EthereumAgentWindow: FC<any> = props => {
       setChecked(selectedAgentData.data?.ethereum_enabled)
       setDisable(false)
     }
-  }, [props.enable])
+  }, [props.enable, selectedAgentData])
   const handleOnChange = e => {
     const { name, value } = e.target
     setState({ ...state, [name]: value })

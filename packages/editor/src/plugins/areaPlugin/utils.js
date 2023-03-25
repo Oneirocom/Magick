@@ -27,3 +27,17 @@ export function nodesBBox(editor, nodes) {
     },
   }
 }
+
+export function refreshNodeEditor(id){
+  setTimeout(() => {
+    const element = document.getElementById(`editor-container-${id}`)
+    const event = new MouseEvent('dblclick', {
+      bubbles: true,
+      cancelable: true,
+      view: window,
+    })
+
+    // Dispatch an event on to trick the NodeEditor to render translation
+    element.dispatchEvent(event)
+  }, 10)
+}

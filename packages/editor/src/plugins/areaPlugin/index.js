@@ -10,9 +10,10 @@ function install(editor, params) {
   const snap = params.snap || false
   const scaleExtent = params.scaleExtent || false
   const translateExtent = params.translateExtent || false
+  const tab = params.tab
 
   if (background) {
-    this._background = new Background(editor, background)
+    this._background = new Background(editor, background, tab)
   }
   
   if (scaleExtent || translateExtent) {
