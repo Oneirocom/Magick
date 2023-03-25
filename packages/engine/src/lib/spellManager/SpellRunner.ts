@@ -1,5 +1,9 @@
 import io from 'socket.io'
 
+import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
+import { getNodes } from '../nodes'
+import { Module } from '../plugins/modulePlugin/module'
+import { AgentInterface } from '../schemas'
 import {
   EngineContext,
   GraphData,
@@ -7,13 +11,9 @@ import {
   MagickSpellInput,
   ModuleComponent,
   RunSpellConstructor,
-  SpellInterface,
+  SpellInterface
 } from '../types'
-import { getNodes } from '../nodes'
-import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
-import { Module } from '../plugins/modulePlugin/module'
 import { extractModuleInputKeys } from './graphHelpers'
-import { AgentInterface } from '../schemas'
 
 export type RunComponentArgs = {
   inputs: MagickSpellInput

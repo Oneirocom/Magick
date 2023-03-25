@@ -1,8 +1,8 @@
+import { Application } from "@feathersjs/koa"
 import { FC, LazyExoticComponent } from "react"
-import { CompletionProvider, Route, SpellInterface } from "./types"
 import { Socket } from "rete"
-import {Application} from "@feathersjs/koa"
 import { MagickComponentArray } from "./engine"
+import { CompletionProvider, Route, SpellInterface } from "./types"
 
 export type PluginSecret = {
   name: string
