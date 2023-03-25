@@ -1,10 +1,10 @@
 import { resolve } from '@feathersjs/schema'
-import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
+import { getDataValidator, getValidator, querySyntax, Type } from '@feathersjs/typebox'
 
-import type { HookContext } from '../../declarations'
+import { SpellInterface, spellSchema } from '@magickml/engine'
 import { dataValidator, queryValidator } from '../../config/validators'
-import { spellSchema, SpellInterface } from '@magickml/engine'
+import type { HookContext } from '../../declarations'
 
 export const spellResolver = resolve<SpellInterface, HookContext>({})
 

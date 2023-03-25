@@ -25,7 +25,7 @@ export const agentSchema = Type.Object(
   {
     id: Type.String(),
     projectId: Type.String(),
-    rootSpell: Type.Optional(Type.Any()),
+    rootSpell: Type.Optional(Type.Any()), // TODO: type me!
     name: Type.String(),
     enabled: Type.Optional(Type.Boolean()),
     updatedAt: Type.String(),
