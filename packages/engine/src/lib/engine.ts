@@ -119,7 +119,7 @@ export abstract class MagickComponent<
 > extends MagickEngineComponent<WorkerReturnType> {
   // Original interface for task and _task: IComponentWithTask from the Rete Task Plugin
   task: TaskOptions
-  _task?: MagickTask
+  _task: MagickTask
   cache: UnknownData
   editor: MagickEditor | null = null
   data: unknown = {}
@@ -144,6 +144,9 @@ export abstract class MagickComponent<
     this.category = category
     this.info = info
     this.cache = {}
+
+    // TODO: This will be assignd later, check somehow
+    this._task = {} as MagickTask
   }
 
   abstract builder(node: MagickNode): Promise<MagickNode> | MagickNode | void | Promise<void>

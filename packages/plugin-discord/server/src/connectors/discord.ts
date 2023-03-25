@@ -37,7 +37,6 @@ export class DiscordConnector {
   tiktalknet_url!: string
   worldManager: WorldManager
   constructor(options) {
-    console.log('options are', options)
     const {
       agent,
       discord_api_key,
