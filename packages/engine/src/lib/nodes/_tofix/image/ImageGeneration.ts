@@ -34,14 +34,12 @@ async function getPrompt(prompt, server) {
     sampler_index: 'Euler',
   })
 
-  const requestOptions = {
+  const r = await fetch(server, {
     method: 'POST',
     headers: myHeaders,
     body: raw,
     redirect: 'follow',
-  }
-
-  const r = await fetch(server, requestOptions as any).catch(error =>
+  }).catch(error =>
     console.log('error', error)
   )
 
@@ -52,18 +50,14 @@ async function getPrompt(prompt, server) {
 
 export class ImageGeneration extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Generate Image')
-
-    this.task = {
+    super('Generate Image', {
       outputs: {
         trigger: 'option',
         output: 'output',
       },
-    }
+    }, 'Image', info)
 
-    this.category = 'Image'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

@@ -14,17 +14,12 @@ type WorkerReturn = {
 export class JoinListComponent extends MagickComponent<WorkerReturn> {
   constructor() {
     // Name of the component
-    super('Join List')
-
-    this.task = {
+    super('Join List', {
       outputs: {
         text: 'output',
         trigger: 'option',
       },
-    }
-
-    this.category = 'Array'
-    this.info = info
+    }, 'Array', info)
   }
 
   // the builder is used to "assemble" the node component.

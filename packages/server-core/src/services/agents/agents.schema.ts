@@ -10,24 +10,8 @@ import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../config/validators'
+import { agentSchema } from '@magickml/engine'
 
-// Main data model schema
-export const agentSchema = Type.Object(
-  {
-    id: Type.String(),
-    projectId: Type.String(),
-    rootSpell: Type.Optional(Type.Any()),
-    name: Type.String(),
-    enabled: Type.Optional(Type.Boolean()),
-    updatedAt: Type.String(),
-    pingedAt: Type.Optional(Type.String()),
-    spells: Type.Optional(Type.String()),
-    data: Type.Optional(Type.Any()),
-    publicVariables: Type.Optional(Type.Any()),
-    secrets: Type.Optional(Type.String()),
-  },
-  { $id: 'Agent', additionalProperties: false }
-)
 export type Agent = Static<typeof agentSchema>
 export const agentResolver = resolve<Agent, HookContext>({})
 

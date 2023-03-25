@@ -1,5 +1,4 @@
-import { otJson0 } from 'ot-json0'
-import { Spell } from '../client'
+import { SpellInterface } from '@magickml/engine'
 import { HookContext } from '../declarations'
 import { getSpell } from '../helpers/getSpell'
 
@@ -23,7 +22,7 @@ export const checkForSpellInManager = async (context: HookContext) => {
 
   if (!spellManager.hasSpellRunner(decodedId)) {
     const spell = await getSpell({ app, id: decodedId, projectId })
-    await spellManager.load(spell as Spell)
+    await spellManager.load(spell as SpellInterface)
   }
 }
 

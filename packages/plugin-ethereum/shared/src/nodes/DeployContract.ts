@@ -26,9 +26,7 @@ type InputReturn = {
 export class DeployContract extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
-    super('Deploy Contract')
-
-    this.task = {
+    super('Deploy Contract', {
       outputs: {
         trigger: 'option',
         balance_before: 'output',
@@ -36,7 +34,7 @@ export class DeployContract extends MagickComponent<Promise<InputReturn>> {
         tx: 'output',
         contract: 'output',
       },
-    }
+    }, 'Ethereum', info)
 
     this.module = {
       nodeType: 'triggerIn',
@@ -44,8 +42,6 @@ export class DeployContract extends MagickComponent<Promise<InputReturn>> {
       hide: true,
     }
 
-    this.category = 'Ethereum'
-    this.info = info
     this.display = true
     this.contextMenuName = 'Deploy Contract'
     this.displayName = 'Deploy Contract'

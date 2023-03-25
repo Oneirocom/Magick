@@ -9,13 +9,9 @@ const info = `The In Range component takes either a manually input set of number
 
 export class InRange extends MagickComponent<void> {
   constructor() {
-    super('In Range')
-
-    this.task = {
+    super('In Range', {
       outputs: { true: 'option', false: 'option' },
-    }
-    this.category = 'Number'
-    this.info = info
+    }, 'Number', info)
   }
 
   builder(node: MagickNode) {

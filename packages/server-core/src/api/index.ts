@@ -1,4 +1,4 @@
-import { Spell } from '@magickml/engine'
+import { SpellInterface } from '@magickml/engine'
 import { app } from "../app"
 import Koa from 'koa'
 import otJson0 from 'ot-json0'
@@ -23,7 +23,7 @@ const saveDiffHandler = async (ctx: Koa.Context) => {
 
     const spellUpdate = otJson0.type.apply(spell, diff)
 
-    if (Object.keys((spellUpdate as Spell).graph.nodes).length === 0)
+    if (Object.keys((spellUpdate as SpellInterface).graph.nodes).length === 0)
       throw new ServerError(
         'input-failed',
         'Graph would be cleared.  Aborting.'

@@ -5,7 +5,6 @@ import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 
 import type { Application } from '../../declarations'
 import type {
-  Document,
   DocumentData,
   DocumentPatch,
   DocumentQuery,
