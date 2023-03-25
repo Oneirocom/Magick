@@ -115,8 +115,12 @@ export class SpellComponent extends MagickComponent<
     // const stateSocket = new Rete.Input('state', 'State', objectSocket)
 
     spellControl.onData = (spell: Spell) => {
+      console.log("CHAGNED")
+      console.log(spell.name)
+      
       // break out of it the nodes data already exists.
       if (spell.name === node.data.spellName) return
+      console.log(node.data.id)
       node.data.spellName = spell.name
       node.data.spellId = spell.id
       node.data.projectId = spell.projectId

@@ -12,14 +12,14 @@ export async function makeTextEmbedding(
 }> {
   const { node, inputs, context } = data
 
-  const input = (inputs['input'] && inputs['input'][0]) as string
+  let input = (inputs['input'] && inputs['input'][0]) as Object;
+  input = (input as {content: string})?.content;
   if (!input) {
     return {
       success: false,
       error: 'Content is null, not storing event',
     }
   }
-
   const apiKey = context.module.secrets['openai_api_key']
 
   const headers = {
@@ -61,6 +61,7 @@ export async function makeTextEmbedding(
     })
     return { success: true, result: resp.data.data[0].embedding }
   } catch (err: any) {
+    console.log(err.response.data.error)
     console.error('makeTextEmbedding error:', err)
     return { success: false, error: err.message }
   }
