@@ -202,7 +202,7 @@ const RawEditor = ({ tab, children }) => {
     <>
       <div
         style={{}}
-        id="editor-container"
+        id={`editor-container-${tab.id}`}
         className={styles['editor-container']}
         ref={el => {
           if (el && !loaded && spell) {

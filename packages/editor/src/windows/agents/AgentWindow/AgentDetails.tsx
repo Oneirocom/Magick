@@ -55,8 +55,8 @@ const AgentDetails = ({
           enqueueSnackbar('Updated agent', {
             variant: 'success',
           })
-
           setSelectedAgentData(res.data)
+          updateCallback()
         }
       })
       .catch(e => {
@@ -131,6 +131,11 @@ const AgentDetails = ({
                 })
               }
               placeholder="Add new agent name here"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  update(selectedAgentData.id)
+                }
+              }}
             />
             <IconBtn
               label={'Done'}
@@ -298,7 +303,7 @@ const AgentDetails = ({
                 value={
                   selectedAgentData.secrets
                     ? JSON.parse(selectedAgentData.secrets)[value.key]
-                    : null
+                    : 'null'
                 }
                 onChange={event => {
                   setSelectedAgentData({
