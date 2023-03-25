@@ -15,22 +15,21 @@ type InputReturn = {
   output: unknown
 }
 
-let banana: any = null
+let banana:null|{
+  run(apiKey: string, modelKey: string, modelInputs?: object): Promise<object>;
+  start(apiKey: string, modelKey: string, modelInputs?: object): Promise<string>;
+  check(apiKey: string, callID: string): Promise<object>;
+} = null
 
 export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Speech To Text')
-
-    this.task = {
+    super('Speech To Text', {
       outputs: {
         trigger: 'option',
         output: 'output',
       },
-    }
-
-    this.category = 'Generation'
+    }, 'Generation', info)
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

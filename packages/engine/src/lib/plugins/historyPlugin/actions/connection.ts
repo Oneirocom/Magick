@@ -9,9 +9,9 @@ function findNewConnection(oldConnection) {
 }
 
 class ConnectionActionHelper {
-  editor:NodeEditor<any>
+  editor:NodeEditor<unknown>
   connection:Connection
-  constructor(editor:NodeEditor<any>, connection:Connection) {
+  constructor(editor:NodeEditor<unknown>, connection:Connection) {
     this.editor = editor
     this.connection = connection
   }

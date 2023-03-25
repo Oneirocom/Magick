@@ -18,17 +18,13 @@ const info = 'Event Store is used to store events for an event and user'
 
 export class EventStore extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Store Event')
-
-    this.task = {
+    super('Store Event', {
       outputs: {
         trigger: 'option',
       },
-    }
+    }, 'Event', info)
 
-    this.category = 'Event'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

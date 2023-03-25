@@ -15,16 +15,12 @@ type InputReturn = {
 
 export class ArrayVariable extends MagickComponent<InputReturn> {
   constructor() {
-    super('Array Variable')
-
-    this.task = {
+    super('Array Variable', {
       outputs: {
         output: 'output',
       },
-    }
+    }, 'Array', info)
 
-    this.category = 'Array'
-    this.info = info
     this.display = true
   }
 

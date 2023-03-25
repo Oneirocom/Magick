@@ -1,7 +1,8 @@
+import { MagickComponent } from '../../engine'
 import { IRunContextEditor } from '../../types'
 
 function install(editor: IRunContextEditor) {
-  editor.on('componentregister', (component: any) => {
+  editor.on('componentregister', (component: MagickComponent<unknown>) => {
     component.worker = (node, _inputs, _outputs, { magick, socketOutput }) => {
       const { sendToPlaytest } = magick
 

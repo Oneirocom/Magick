@@ -1,6 +1,6 @@
 import io from 'socket.io'
 
-import { EngineContext, MagickSpellInput, Spell } from '../types'
+import { EngineContext, MagickSpellInput, SpellInterface } from '../types'
 import SpellRunner from './SpellRunner'
 
 type SpellManagerArgs = {
@@ -76,7 +76,7 @@ export default class SpellManager {
     this.spellRunnerMap = new Map()
   }
 
-  async load(spell: Spell, overload = false) {
+  async load(spell: SpellInterface, overload = false) {
     if (!spell) {
       console.error('No spell provided')
       return

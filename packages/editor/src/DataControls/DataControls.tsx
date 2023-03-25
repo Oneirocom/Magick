@@ -43,7 +43,7 @@ type DataControl = {
   data: Record<string, any>
 }
 
-type DataControlsProps = {
+export type DataControlsProps = {
   dataControls: { [key: string]: DataControl }
   updateData: Function
   updateControl: Function

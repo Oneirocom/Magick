@@ -15,17 +15,14 @@ const info = `Fires once all connected triggers have fired.`
 export class ExclusiveGate extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Exclusive Gate')
-
-    this.task = {
+    super('Exclusive Gate', {
       runOneInput: true,
       outputs: {
         trigger: 'option',
         output: 'output',
       },
-    }
-    this.category = 'Flow'
-    this.info = info
+    }, 'Flow', info)
+
     this.display = true
   }
 
@@ -55,7 +52,7 @@ export class ExclusiveGate extends MagickComponent<void> {
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: { socketInfo: { targetSocket: any } }
+    context: { socketInfo: { targetSocket: string } }
   ) {
     const trigger = context.socketInfo.targetSocket
 
