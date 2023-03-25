@@ -4,7 +4,7 @@ import { MagickConsole } from '../consolePlugin/MagickConsole';
 
 function install(
   engine: IRunContextEditor,
-  { server = false, throwError }: { server?: boolean; throwError?: Function }
+  { server = false, throwError }: { server?: boolean; throwError?: (error:unknown)=>void }
 ) {
   engine.on(
     'error',

@@ -1,5 +1,5 @@
 import { buildMagickInterface } from './buildMagickInterface'
-import { GraphData, Spell } from '../../src/lib/types'
+import { GraphData, SpellInterface } from '../../src/lib/types'
 import { SpellRunner } from '../../src/lib/spellManager'
 
 export type RunSpellArgs = {
@@ -7,12 +7,12 @@ export type RunSpellArgs = {
   inputs: Record<string, unknown>
   inputFormatter?: (graph: GraphData) => Record<string, unknown>
   projectId: string
-  spell: Spell
+  spell: SpellInterface
 }
 
 export const runSpell = async ({ spell, inputs, inputFormatter }: RunSpellArgs) => {
   const graph = spell.graph as unknown as GraphData
-  const magickInterface = buildMagickInterface() as any
+  const magickInterface = buildMagickInterface()
 
   const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs
 

@@ -1,12 +1,11 @@
-import { pluginManager } from '@magickml/engine'
+import { ClientPluginManager, pluginManager } from '@magickml/engine'
 
 import defaultTemplates from './templates'
 export * from './components'
 
-export * from './plugins'
-
-const spellTemplates = pluginManager.getSpellTemplates()
-const projectTemplates = pluginManager.getProjectTemplates()
+// TODO: Check if cast is correct
+const spellTemplates = (pluginManager as ClientPluginManager).getSpellTemplates()
+const projectTemplates = (pluginManager as ClientPluginManager).getProjectTemplates()
 
 export const templates = {
     projects: [

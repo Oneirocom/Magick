@@ -2,9 +2,9 @@ import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import { DropdownControl } from '../../dataControls/DropdownControl'
-import { SwitchControl } from '../../dataControls/SwitchControl'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
+import { Module } from '../../plugins/modulePlugin/module'
 import { anySocket, eventSocket, triggerSocket } from '../../sockets'
 import {
   EditorContext, MagickNode,
@@ -18,24 +18,20 @@ const defaultOutputTypes = [{ name: 'Default', socket: anySocket }]
 
 export class Output extends MagickComponent<void> {
   constructor() {
-    super('Output')
-
-    this.task = {
+    super('Output', {
       runOneInput: true,
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'I/O', info)
 
     this.module = {
       nodeType: 'output',
       socket: anySocket,
     }
 
-    this.category = 'I/O'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {
@@ -83,14 +79,14 @@ export class Output extends MagickComponent<void> {
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { module, magick }: { module: any; magick: EditorContext }
+    { module, magick }: { module: Module; magick: EditorContext }
   ) {
     if (!inputs.input)
       return console.error('No input provided to output component')
     const outputType = node.data.outputType
     const output = inputs.input.filter(Boolean)[0] as string
     const event =
-      inputs.event?.[0] || (Object.values(module.inputs)[0] as any)[0]
+      inputs.event?.[0] || (Object.values(module.inputs)[0] as unknown[])[0]
 
       if (magick) {
         const { sendToPlaytest } = magick
@@ -109,7 +105,7 @@ export class Output extends MagickComponent<void> {
             Object.keys(module.inputs)[0].replace('Input - ', '')
           )
         })
-        const responseOutputType = inputType.defaultResponseOutput
+        const responseOutputType = inputType?.defaultResponseOutput
         const t = module.agent.outputTypes.find(
           t => t.name === responseOutputType
         )

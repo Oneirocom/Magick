@@ -1,11 +1,14 @@
 import io from 'socket.io'
+import { MagickComponent } from '../../engine'
 
-import { EngineContext, IRunContextEditor } from '../../types'
+import { EngineContext, IRunContextEditor, MagickNode } from '../../types'
 import { MagickConsole } from '../consolePlugin/MagickConsole'
 
 export type SocketPluginArgs = {
   server?: boolean
   socket?: io.Socket
+  // Need to better type the feathers client here
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   client?: any
 }
 
@@ -29,7 +32,7 @@ function install(
 ) {
   const subscriptionMap = new Map()
 
-  editor.on('componentregister', (component: any) => {
+  editor.on('componentregister', (component: MagickComponent<Promise<{ output: unknown } | void>>) => {
     const worker = component.worker
 
     component.worker = async (
@@ -56,24 +59,29 @@ function install(
             output: result?.output,
           })
           return result
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.log('CAUGHT ERROR')
           console.log(err)
-          // handle errors here so they dont crash the process, and are communicated to the client
-          socket?.emit(`${currentSpell.id}-${node.id}-error`, {
-            error: {
-              message: err.message,
-              stack: err.stack,
-            },
-          })
-          socket?.emit(`${currentSpell.id}-error`, {
-            error: {
-              message: err.message,
-              stack: err.stack,
-            },
-          })
+          if (err instanceof Error) {
+            // handle errors here so they dont crash the process, and are communicated to the client
+            socket?.emit(`${currentSpell.id}-${node.id}-error`, {
+              error: {
+                message: err.message,
+                stack: err.stack,
+              },
+            })
+            socket?.emit(`${currentSpell.id}-error`, {
+              error: {
+                message: err.message,
+                stack: err.stack,
+              },
+            })
+          }
+          else {
+            throw err
+          }
           socket?.emit(event, {
-            output: { error: true},
+            output: { error: true },
           })
           // note: we may still want to throw the error here
           return console.error(err)
@@ -82,7 +90,7 @@ function install(
 
       if (client) {
         node.console = new MagickConsole({
-          node,
+          node: node as unknown as MagickNode,
           component,
           editor,
           server,
@@ -102,7 +110,7 @@ function install(
             if (socketData?.error) {
               const error = new Error(socketData.error.message)
               error.stack = socketData.error.stack
-              node.console.error(error)
+              node.console?.error(error)
               return
             }
 

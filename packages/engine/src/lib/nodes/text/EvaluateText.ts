@@ -13,15 +13,11 @@ const info =
 
 export class EvaluateText extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Evaluate Text')
-
-    this.task = {
+    super('Evaluate Text', {
       outputs: { true: 'option', false: 'option', output: 'output' },
-    }
+    }, 'Text', info)
 
-    this.category = 'Text'
     this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

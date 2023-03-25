@@ -13,10 +13,19 @@ import { Inspector } from './plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
+import { Application as FeathersApplication, Koa } from '@feathersjs/koa'
 
 import { TaskSocketInfo } from './plugins/taskPlugin/task'
+import { SpellInterface } from './schemas'
+import { DataControl } from './plugins/inspectorPlugin'
+import { SpellManager } from './spellManager'
+
+import io from 'socket.io'
 
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
+
+export * from './schemas'
+
 
 export type ImageType = {
   id: string
@@ -122,7 +131,7 @@ export type CompletionResponse = {
   choice: any
 }
 
-export type OnSubspellUpdated = (spell: Spell) => void
+export type OnSubspellUpdated = (spell: SpellInterface) => void
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
@@ -135,7 +144,7 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare runProcess: (callback?: () => void | undefined) => Promise<void>
   declare onSpellUpdated: (
     spellName: string,
-    callback: (spell: Spell) => void
+    callback: (spell: SpellInterface) => void
   ) => () => void
   declare refreshEventTable: () => void
 }
@@ -162,7 +171,7 @@ export type GetSpell = ({
 }: {
   spellName: string
   projectId: string
-}) => Promise<Spell>
+}) => Promise<SpellInterface>
 
 export type ProcessCode = (
   code: unknown,
@@ -184,7 +193,7 @@ export type EngineContext<DataType = Record<string, unknown>> = {
   runSpell: RunSpell<DataType>
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
-  getCurrentSpell: () => Spell
+  getCurrentSpell: () => SpellInterface
   processCode?: ProcessCode
 }
 
@@ -262,7 +271,7 @@ export interface EditorContext extends EngineContext {
   ) => () => void
   sendToPlaytest: (data: string) => void
   sendToInspector: PublishEditorEvent
-  sendToDebug: PublishEditorEvent
+  sendToDebug: (message: unknown)=>void
   onInspector: OnInspector
   onPlaytest: OnEditor
   onDebug: OnDebug
@@ -398,6 +407,7 @@ export type WorkerData = NodeData & {
   // inputs: DataSocketInput
   spell?: string
   data?: MagickNodeData
+  console?: MagickConsole
   [key: string]: unknown
 }
 
@@ -420,16 +430,6 @@ export function AsInputsAndOutputsData(
 }
 
 export type Module = { name: string; id: string; data: Data }
-
-export type Spell = {
-  name: string
-  graph: Data
-  createdAt?: string
-  updatedAt?: string
-  id: string
-  hash?: string
-  projectId: string
-}
 
 export type MagickSpellInput = Record<string, unknown>
 export type MagickSpellOutput = Record<string, unknown>
@@ -499,18 +499,26 @@ export type CompletionSocket = {
   type: Socket
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface DataControlImplementation extends DataControl {
+  new(control:CompletionInspectorControls): DataControl
+}
+
 export type CompletionInspectorControls = {
-  type: any
+  type: DataControlImplementation
   dataKey: string
   name: string
   icon: string
-  defaultValue: any
+  defaultValue: string
 }
 
 export type CompletionProvider = {
   type: CompletionType
   subtype: ImageCompletionSubtype | TextCompletionSubtype
-  handler?: Function // server only
+  handler?: (attrs:{node:WorkerData,
+    inputs:MagickWorkerInputs,
+    outputs:MagickWorkerOutputs,
+    context:unknown}) => {success:boolean, result: string, error:string} // server only
   inspectorControls?: CompletionInspectorControls[] // client only
   inputs: CompletionSocket[]
   outputs: CompletionSocket[]
@@ -559,6 +567,7 @@ export type CompletionHandlerInputData = {
   inputs: MagickWorkerInputs
   outputs: MagickWorkerOutputs
   context: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     module: any
     secrets: Record<string, string>
     projectId: string
@@ -582,7 +591,7 @@ export type RequestPayload = {
   hidden?: boolean
   processed?: boolean
   totalTokens?: number
-  spell?: any
+  spell?: SpellInterface
   nodeId?: number
 }
 
@@ -592,6 +601,7 @@ export type RequestData = {
   nodeId: number
 }
 
+export type AppService = (app: FeathersApplication) => void
 export interface MagickTask extends Task {
   outputs?: { [key: string]: string }
   init?: (task?: MagickTask, node?: MagickNode) => void
@@ -608,4 +618,42 @@ export interface ModuleOptions {
   socket?: Socket
   skip?: boolean
   hide?: boolean
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Middleware = (ctx: Koa.Context, next: any) => any
+
+export type Method =
+  | 'get'
+  | 'head'
+  | 'post'
+  | 'put'
+  | 'delete'
+  | 'connect'
+  | 'options'
+  | 'trace'
+  | 'patch'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Handler = (ctx: Koa.Context) => any
+
+export type Route = {
+  method?: Method
+  path: string
+  middleware?: Middleware[]
+  handler?: Handler
+  get?: Handler
+  put?: Handler
+  post?: Handler
+  del?: Handler
+  delete?: Handler
+  head?: Handler
+  patch?: Handler
+}
+
+export type UserSpellManager = Map<string, SpellManager>
+
+export type RunSpellConstructor = {
+  magickInterface: EngineContext
+  socket?: io.Socket
 }

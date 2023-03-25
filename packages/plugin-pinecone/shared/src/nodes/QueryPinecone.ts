@@ -10,7 +10,6 @@ import {
   MagickWorkerOutputs,
   MagickNodeData,
   stringSocket,
-  TaskOptions,
   triggerSocket,
 } from '@magickml/engine'
 
@@ -26,17 +25,19 @@ type WorkerReturn = {
 export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     // Name of the component
-    super('Query Pinecone')
-
-    this.task = {
-      outputs: {
-        summary: 'output',
-        links: 'output',
-        trigger: 'option',
+    super(
+      'Query Pinecone',
+      {
+        runOneInput: true,
+        outputs: {
+          result: 'output',
+          error: 'output',
+          trigger: 'option',
+        },
       },
-    } as TaskOptions
-    this.category = 'Pinecone'
-    this.info = info
+      'Pinecone',
+      info
+    )
   }
   // the builder is used to "assemble" the node component.
 
@@ -99,7 +100,7 @@ export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
     let query = inputs['query'][0] as string
 
     console.log('query is', query)
-    if(!query) {
+    if (!query) {
       console.error('No query provided')
       return { error: 'No query provided' }
     }
@@ -112,12 +113,12 @@ export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
     console.log('embedding is', embedding)
 
     const queryRequest = {
-        vector: embedding,
-        topK: 3,
-        includeValues: true,
+      vector: embedding,
+      topK: 3,
+      includeValues: true,
     }
 
-    const queryResponse = await pineconeIndex.query({queryRequest})
+    const queryResponse = await pineconeIndex.query({ queryRequest })
 
     console.log('queryResponse', queryResponse)
 

@@ -1,9 +1,10 @@
 import {
   EngineContext,
   GraphData,
+  MagickNode,
   ModuleComponent,
-  NodeData,
-  Spell,
+  SpellInterface,
+  WorkerData,
 } from '../types'
 import { getNodes } from '../nodes'
 import { initSharedEngine, extractNodes, MagickEngine } from '../engine'
@@ -16,7 +17,7 @@ type RunSpellConstructor = {
 
 class RunSpell {
   engine: MagickEngine
-  currentSpell!: Spell
+  currentSpell!: SpellInterface
   module: Module
   magickInterface: EngineContext
 
@@ -55,17 +56,17 @@ class RunSpell {
     return this.engine.components.get(componentName)
   }
 
-  private _formatOutputs(rawOutputs: Record<string, any>) {
+  private _formatOutputs(rawOutputs: Record<string, unknown>) {
     const outputs = {} as Record<string, unknown>
     const graph = this.currentSpell.graph
 
-    Object.values(graph.nodes)
-      .filter((node: any) => {
+    Object.values(graph.nodes as MagickNode)
+      .filter((node) => {
         return node.name.includes('Output')
       })
-      .forEach((node: any) => {
-        outputs[(node as any).data.name as string] =
-          rawOutputs[(node as any).data.socketKey as string]
+      .forEach((node) => {
+        outputs[(node).data.name as string] =
+          rawOutputs[(node).data.socketKey as string]
       })
 
     return outputs
@@ -94,7 +95,7 @@ class RunSpell {
     return this._formatOutputs(rawOutputs)
   }
 
-  loadSpell(spell: Spell) {
+  loadSpell(spell: SpellInterface) {
     this.currentSpell = spell
 
     // We process the graph for the new spell which will set up all the task workers
@@ -124,7 +125,7 @@ class RunSpell {
       | ModuleComponent
       | undefined
 
-    const triggeredNode = this._getFirstNodeTrigger() as NodeData
+    const triggeredNode = this._getFirstNodeTrigger() as WorkerData
 
     if (!component) {
       throw new Error(`Component ${componentName} not found`)

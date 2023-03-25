@@ -1,7 +1,8 @@
+import { RunSpellConstructor } from '../../src/lib/types'
 import { API_ROOT_URL } from '../../src/lib/config'
 import { runSpell } from './runSpell'
 
-export const buildMagickInterface = (overrides: Record<string, Function> = {}) => {
+export const buildMagickInterface = (overrides: Record<string, unknown> = {}): RunSpellConstructor => {
   const env = {
     API_ROOT_URL,
     APP_SEARCH_SERVER_URL: 'test'

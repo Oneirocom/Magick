@@ -14,13 +14,9 @@ const info = `Fires once all connected triggers have fired.`
 export class WaitForAll extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Wait For All')
-
-    this.task = {
+    super('Wait For All', {
       outputs: { default: 'option' },
-    }
-    this.category = 'Flow'
-    this.info = info
+    }, 'Flow', info)
   }
 
   node = {}
@@ -44,8 +40,9 @@ export class WaitForAll extends MagickComponent<void> {
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
   worker(_node: WorkerData, inputs: MagickWorkerInputs) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const nodeInputs = Object.values(inputs as any).filter(
-      (input: any) => !!input
+      (input) => !!input
     ) as Array<{ name: string }>
 
     // close all outputs

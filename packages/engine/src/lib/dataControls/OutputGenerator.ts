@@ -3,7 +3,7 @@ import Rete from 'rete'
 import { DataControl } from '../plugins/inspectorPlugin'
 import { SocketType } from '../sockets'
 import * as sockets from '../sockets'
-import { DataSocketType, WorkerData, OutputComponentData, AsDataSocket } from '../types'
+import { DataSocketType, OutputComponentData, AsDataSocket } from '../types'
 import { OutputsData } from 'rete/types/core/data'
 
 export class OutputGeneratorControl extends DataControl {

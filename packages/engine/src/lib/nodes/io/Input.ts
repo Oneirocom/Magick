@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { SwitchControl } from '../../dataControls/SwitchControl'
-import { TextInputControl } from '../../dataControls/TextInputControl'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
 import { anySocket, triggerSocket } from '../../sockets'
@@ -24,7 +23,7 @@ type InputReturn = {
 
 const defaultInputTypes = [
   { name: 'Default', trigger: true, socket: anySocket },
-  { name: 'Custom', trigger: true, socket: true },
+  { name: 'Custom', trigger: true, socket: anySocket }, // TODO: is anySocket the right socket for custom?
 ]
 
 export class InputComponent extends MagickComponent<InputReturn> {
@@ -32,22 +31,18 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
   constructor() {
     // Name of the component
-    super('Input')
-
-    this.task = {
+    super('Input', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'I/O', info)
 
     this.module = {
       nodeType: 'input',
       socket: anySocket,
     }
 
-    this.category = 'I/O'
-    this.info = info
     this.display = true
     this.contextMenuName = 'Input'
     this.displayName = 'Input'

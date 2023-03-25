@@ -1,6 +1,5 @@
 import { runTestSpell } from '../../utils/spellHandler'
 import * as echoTest from './Template.spell.json'
-import fs from 'fs'
 
 describe('Template', () => {
   it('should run', async () => {
