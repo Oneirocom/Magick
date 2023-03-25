@@ -1,205 +1,317 @@
-import _ from 'lodash';
-import Heap from 'heap-js';
 import fs from 'fs';
+import path from "node:path";
+import {
+  HierarchicalNSW,
+  HierarchicalNSW as HierarchicalNSWT,
+  SpaceName,
+} from "hnswlib-node";
+import { Embeddings } from "langchain/dist/embeddings/base";
+import {Document} from "langchain/document"
+//import { Document } from "langchain/dist/document";
+//import InMemoryDocstore from "langchain";
+import { InMemoryDocstore } from "langchain/docstore";
+import { result } from "lodash";
+import { SaveableVectorStore } from 'langchain/dist/vectorstores';
+//import { InMemoryDocstore } from "langchain/dist/docstore";
+//import {SaveableVectorStore} from "langchain";
+//import { SaveableVectorStore } from "langchain/vectorstores";
+//import { SaveableVectorStore } from "langchain/dist/vectorstores/base";
+//import Document from "langchain"
 
-interface Node<T> {
-    id: string;
-    vector: T;
-    data: any;
-    neighbors: Array<string | null>;
-    level: number;
-  }
 
-interface Config {
-  maxLevel: number;
-  neighborSize: number;
-  efConstruction: number;
+
+export interface HNSWLibBase {
+  space: SpaceName;
+  numDimensions?: number;
 }
 
-type DistanceFunction<T> = (a: T, b: T) => number;
+export interface HNSWLibArgs extends HNSWLibBase {
+  docstore?: InMemoryDocstore;
+  index?: HierarchicalNSWT;
+}
 
-class HNSW<T> {
-  public nodes: Map<string, Node<T>>;
-  public config: Config;
-  public distanceFunction: DistanceFunction<T>;
+export interface EmbeddingWithData {
+  embedding: number[] | null;
+  data: Record<string, unknown>;
+}
 
-  constructor(config: Config, distanceFunction: DistanceFunction<T>) {
-    this.config = config;
-    this.distanceFunction = distanceFunction;
-    this.nodes = new Map<string, Node<T>>();
+export class HNSWLib extends SaveableVectorStore{
+  _index?: HierarchicalNSWT;
+
+  docstore: InMemoryDocstore;
+
+  args: HNSWLibBase;
+
+  declare embeddings: Embeddings;
+
+  constructor(embeddings: Embeddings, args: HNSWLibArgs) {
+    super(embeddings, args);
+    this._index = args.index;
+
+    this.args = args;
+    this.embeddings = embeddings;
+    this.docstore = args?.docstore ?? new InMemoryDocstore();
   }
 
+  async addDocuments(documents: Document[]): Promise<void> {
+    const texts = documents.map(({ pageContent }) => pageContent);
+    return this.addVectors(
+      await this.embeddings.embedDocuments(texts),
+      documents
+    );
+  }
+  async add(id:any, embedding:any, a:any="sss") {}
+  async search(a:any, b:any){}
+  async searchData(a:any, b:any){}
+  async delete(a:any){}
+  async extractMetadataFromResults(query: number[], k: number): Promise<Record<string, unknown>[]> {
+    const results = await this.similaritySearchVectorWithScore(query, k);
+    return results.map(([doc, _]) => doc.metadata);
+  }
+  async addEmbeddingWithMetadata(
+    embedding: number[],
+    metadata: Document
+  ): Promise<void> {
+    if (embedding.length !== this.args.numDimensions) {
+      throw new Error(
+        `Embedding must have the same length as the number of dimensions (${this.args.numDimensions})`
+      );
+    }
+    const docstoreSize = this.docstore.count;
+    this.index.addPoint(embedding, docstoreSize);
+    this.docstore.add({ [docstoreSize]: metadata });
+    await this.save("./database")
+    await this.saveIndex();
+  }
+  
 
-  public addNode(id: string, vector: T, data: any = {}): void {
-    const level = this.getRandomLevel();
-    const node: Node<T> = {
-      id,
-      vector,
-      data,
-      neighbors: new Array(this.config.maxLevel).fill(null),
-      level,
-    };
-    this.nodes.set(id,node);
-    this.addToGraph(node, level);
+  async addEmbeddingsWithData(embeddings: EmbeddingWithData[]): Promise<void> {
+    const vectors: number[][] = [];
+    const documents: Document[] = [];
+    for (const { embedding, data } of embeddings) {
+      if (embedding) {
+        if (embedding.length !== this.args.numDimensions) {
+          throw new Error(
+            `Embedding must have the same length as the number of dimensions (${this.args.numDimensions})`
+          );
+        }
+        vectors.push(embedding);
+      }
+      documents.push(new Document(data));
+    }
+    
+    await this.addVectors(vectors, documents);
   }
 
-  private addToGraph(node: Node<T>, level: number): void {
-    if (level === 0) {
+  
+
+  private static async getHierarchicalNSW(args: HNSWLibBase) {
+    const { HierarchicalNSW } = await HNSWLib.imports();
+    if (!args.space) {
+      throw new Error("hnswlib-node requires a space argument");
+    }
+    if (args.numDimensions === undefined) {
+      throw new Error("hnswlib-node requires a numDimensions argument");
+    }
+    return new HierarchicalNSW(args.space, args.numDimensions);
+  }
+
+  private async initIndex(vectors: number[][]) {
+    if (!this._index) {
+      if (this.args.numDimensions === undefined) {
+        this.args.numDimensions = vectors[0].length;
+      }
+      this.index = await HNSWLib.getHierarchicalNSW(this.args);
+    }
+    if (!this.index.getCurrentCount()) {
+      this.index.initIndex(vectors.length);
+    }
+  }
+
+  public get index(): HierarchicalNSWT {
+    if (!this._index) {
+      throw new Error(
+        "Vector store not initialised yet. Try calling addTexts first."
+      );
+    }
+    return this._index;
+  }
+
+  private set index(index: HierarchicalNSWT) {
+    this._index = index;
+  }
+
+  async addVectors(vectors: number[][], documents: Document[]) {
+    if (vectors.length === 0) {
       return;
     }
+    await this.initIndex(vectors);
+    // TODO here we could optionally normalise the vectors to unit length
+    // so that dot product is equivalent to cosine similarity, like this
+    // https://github.com/nmslib/hnswlib/issues/384#issuecomment-1155737730
+    // While we only support OpenAI embeddings this isn't necessary
+    if (vectors.length !== documents.length) {
+      throw new Error(`Vectors and metadatas must have the same length`);
+    }
+    if (vectors[0].length !== this.args.numDimensions) {
+      throw new Error(
+        `Vectors must have the same length as the number of dimensions (${this.args.numDimensions})`
+      );
+    }
+    const capacity = this.index.getMaxElements();
+    const needed = this.index.getCurrentCount() + vectors.length;
+    if (needed > capacity) {
+      this.index.resizeIndex(needed);
+    }
+    const docstoreSize = this.docstore.count;
+    for (let i = 0; i < vectors.length; i += 1) {
+      this.index.addPoint(vectors[i], docstoreSize + i);
+      this.docstore.add({ [docstoreSize + i]: documents[i] });
+    }
+    await this.save("./database")
+    await this.saveIndex();
+  }
 
-    const neighbors = this.getNeighbors(node, level - 1);
-    const heap = new Heap<{ id: string; distance: number }>((a, b) =>
-      a.distance - b.distance
+  async similaritySearchVectorWithScore(query: number[], k: number): Promise<[Document, number][]> {
+    if (query.length !== this.args.numDimensions) {
+      throw new Error(`Query vector must have the same length as the number of dimensions (${this.args.numDimensions})`);
+    }
+    if (k > this.index.getCurrentCount()) {
+      const total = this.index.getCurrentCount();
+      console.warn(`k (${k}) is greater than the number of elements in the index (${total}), setting k to ${total}`);
+      k = total;
+    }
+    const result = this.index.searchKnn(Array.from(query), k);
+    return result.neighbors.map(
+      (docIndex, resultIndex) =>
+        [this.docstore.search(String(docIndex)), result.distances[resultIndex]] as [Document, number]
     );
-
-    for (const neighborId of neighbors) {
-      const neighbor = this.nodes.get(neighborId);
-      const distance = this.distanceFunction(node.vector, neighbor.vector);
-      heap.push({ id: neighborId, distance });
-
-      if (heap.size() > this.config.efConstruction) {
-        heap.pop();
-      }
-    }
-
-    for (let i = heap.size() - 1; i >= 0; i--) {
-      const neighborId = heap.peek()?.id as string;
-      const neighbor = this.nodes.get(neighborId);
-      node.neighbors[level - 1] = neighborId;
-      neighbor.neighbors[level] = node.id;
-    }
   }
-
-  private getRandomLevel(): number {
-    let level = 0;
-    while (Math.random() < 0.5 && level < this.config.maxLevel - 1) {
-      level++;
-    }
-    return level;
-  }
-
-  private getNeighbors(node: Node<T>, level: number): string[] {
-    if (level === 0) {
-      return [];
-    }
   
-    const neighbors = [];
-    let neighborId = node.neighbors[level - 1];
-    while (neighborId !== null) {
-      neighbors.push(neighborId);
-      let neighbor = this.nodes.get(neighborId);
-      neighborId = neighbor ? neighbor.neighbors[level - 1] : null;
+
+  async save(directory: string) {
+    await fs.promises.mkdir(directory, { recursive: true });
+    await Promise.all([
+      this.index.writeIndex(path.join(directory, "hnswlib.index")),
+      await fs.promises.writeFile(
+        path.join(directory, "docstore.json"),
+        JSON.stringify(Array.from(this.docstore._docs.entries()))
+      ),
+    ]);
+  }
+
+  async saveIndex() {
+    if (!this.index) {
+      return;
     }
-    return neighbors;
+    await this.index.writeIndex(path.join(".", "hnswlib.index"));
   }
-
-  public getDistance(a: T, b: T): number {
-    return this.distanceFunction(a, b);
+  static async load(directory: string, embeddings: Embeddings): Promise<SaveableVectorStore> {
+    let db = new HNSWLib(embeddings, {space: "cosine"});
+    db.docstore = new InMemoryDocstore();
+    return db;
   }
-}
-
-
-
-interface VectorDatabase<T> {
-  add(id: string, vector: T): void;
-  search(query: T, k: number): string[];
-}
-
-interface HNSWIndex<T> {
-  nodes: any;
-  config: Config;
-}
-
-class HNSWVectorDatabase<T> implements VectorDatabase<T> {
-  private readonly index: HNSW<T>;
-  private readonly indexPath: string;
-
-  constructor(indexPath: string, distanceFunction: DistanceFunction<T>) {
-    this.indexPath = indexPath;
+  static load_data(directory: string, embeddings: Embeddings, args:{space: any, numDimensions: any}) {
+    const index = new HierarchicalNSW(args.space, args.numDimensions);
     try {
-      const data = fs.readFileSync(indexPath, 'utf-8');
-      const index: HNSWIndex<T> = JSON.parse(data);
-      this.index = new HNSW<T>(index.config, distanceFunction);
-      this.index.nodes = new Map(Object.entries(index.nodes));
-    } catch (err) {
-      this.index = new HNSW<T>({
-        maxLevel: 6,
-        neighborSize: 32,
-        efConstruction: 200,
-      }, distanceFunction);
+        const docstoreFiles = JSON.parse(fs.readFileSync(path.join(directory, "docstore.json"), "utf8"));
+        index.readIndex(path.join(directory, "hnswlib.index"));
+        let db = new HNSWLib(embeddings, args);
+        db.index = index;
+        let doc_map = docstoreFiles.map(([k,v])=>{
+          return {
+           ...v
+          }
+        })
+        db.docstore.add(doc_map)
+        return db;
+    } catch {
+        let db = new HNSWLib(embeddings, args);
+        db.docstore = new InMemoryDocstore();
+        return db;
     }
+}
+  async getDataWithMetadata(query: Record<string, unknown>, k: number=1): Promise<Record<string, unknown>[]> {
+    const queryKeys = Object.keys(query);
+    const matchingDocs: Record<string, unknown>[] = [];
+    for (const doc of this.docstore._docs.values()) {
+      for (const key of queryKeys) {
+        if (doc.metadata[key] === query[key]) {
+          matchingDocs.push(doc.metadata);
+          break;
+        }
+      }
+    }
+    return matchingDocs;
+  }
+  
+  static async fromTexts(
+    texts: string[],
+    metadatas: object[],
+    embeddings: Embeddings,
+    dbConfig?: {
+      docstore?: InMemoryDocstore;
+    }
+  ): Promise<HNSWLib> {
+    const docs: Document[] = [];
+    for (let i = 0; i < texts.length; i += 1) {
+      const newDoc = new Document({
+        pageContent: texts[i],
+        metadata: metadatas[i],
+      });
+      docs.push(newDoc);
+    }
+    return HNSWLib.fromDocuments(docs, embeddings, dbConfig);
   }
 
-  public add(id: string, vector: T, data: any = {content: 'random'}): void {
-    this.index.addNode(id, vector, data);
-    this.saveIndex();
-  }
-  private compareArrays(arr1: any[], arr2: any[]): boolean {
-    if (arr1.length < 2 || arr2.length < 2) {
-      return false; // Arrays must have at least two elements to compare the first two
+  static async fromDocuments(
+    docs: Document[],
+    embeddings: Embeddings,
+    dbConfig?: {
+      docstore?: InMemoryDocstore;
     }
-    const firstTwo1 = arr1.slice(0, 2);
-    const firstTwo2 = arr2.slice(0, 2);
-    return firstTwo1.every((val, index) => val === firstTwo2[index]);
-  }
-  public searchData(query: Partial<{ [key in keyof T]: T[key] }>, k: number): any[] {
-    const result: Node<T>[] = [];
-    this.index.nodes.forEach((node,id) => {
-      if (this.isMatch(node.data, query)) {
-        result.push(node.data);
-      }
-    })
-    return result.slice(0, k);
-  }
-  private isMatch(data: any, query: Partial<{ [key in keyof T]: T[key] }>): boolean {
-    for (const key in query) {
-      if (Array.isArray(query[key])) return this.compareArrays(query[key] as any[], data[key])
-      if (data && query[key] !== undefined && data[key] !== query[key]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  public search(query: T, k: number): string[] {
-    const distances = new Heap<{ id: string; distance: number; data: any }>((a, b) =>
-      b.distance - a.distance
-    );
-    this.index.nodes.forEach((node, id) => {
-      const distance = this.index.getDistance(query, node.vector);
-      distances.push({ id, distance, data: node.data });
-      if (distances.size() > k) {
-        distances.pop();
-      }
-    });
-    return distances
-      .toArray()
-      .reverse()
-      .map((item) => item.data);
-  }
-  public delete(id: string) {
-    let k = this.index.nodes.get(id)
-    this.index.nodes.delete(id)
-    this.saveIndex()
-    return {events: k.data}
-  }
-  private saveIndex(): void {
-    const index: HNSWIndex<T> = {
-      nodes: Object.fromEntries(this.index.nodes),
-      config: this.index.config,
+  ): Promise<HNSWLib> {
+    const args: HNSWLibArgs = {
+      docstore: dbConfig?.docstore,
+      space: "cosine",
     };
-    fs.writeFileSync(this.indexPath, JSON.stringify(index));
+    const instance = new this(embeddings, args);
+    await instance.addDocuments(docs);
+    return instance;
+  }
+
+
+  static async fromEmbeddingsWithData(
+    embeddings: EmbeddingWithData[],
+    embeddingsModel: Embeddings,
+    dbConfig?: {
+      docstore?: InMemoryDocstore;
+    }
+  ): Promise<HNSWLib> {
+    const args: HNSWLibArgs = {
+      docstore: dbConfig?.docstore,
+      space: "cosine",
+    };
+    const instance = new this(embeddingsModel, args);
+    await instance.addEmbeddingsWithData(embeddings);
+    return instance;
+  }
+
+  static async imports(): Promise<{
+    HierarchicalNSW: typeof HierarchicalNSWT;
+  }> {
+    try {
+      const {
+        default: { HierarchicalNSW },
+      } = await import("hnswlib-node");
+
+      return { HierarchicalNSW };
+    } catch (err) {
+      throw new Error(
+        "Please install hnswlib-node as a dependency with, e.g. npm install -S hnswlib-node"
+      );
+    }
   }
 }
 
-function euclideanDistance(a: number[], b: number[]): number {
-  let sum = 0;
-  for (let i = 0; i < a.length; i++) {
-    sum += Math.pow(a[i] - b[i], 2);
-  }
-  return Math.sqrt(sum);
-}
-
-
-export default HNSWVectorDatabase
+export default HNSWLib;

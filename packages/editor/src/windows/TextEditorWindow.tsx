@@ -44,7 +44,7 @@ const TextEditor = props => {
 
   useEffect(() => {
     if (!inspectorData?.data.inputs) return
-    const { language } = textEditorData.options
+    const { language } = textEditorData.options || "javascript" as any
     console.log('language', language)
     const stringifiedInputs = JSON.stringify(inspectorData?.data.inputs)
 

@@ -8,6 +8,7 @@ import { IsVariableTrue } from './boolean/IsVariableTrue'
 import { LogicalOperator } from './boolean/LogicalOperator'
 import { Javascript } from './code/Javascript'
 import { Python } from './code/Python'
+import { QuerySystem } from './code/QuerySystem'
 import { GetDocuments } from './document/GetDocuments'
 import { StoreDocument } from './document/StoreDocument'
 import { CosineSimilarity } from './embedding/CosineSimilarity'
@@ -51,6 +52,7 @@ import { Cast } from './utility/Cast'
 import { Destructure } from './utility/Destructure'
 import { Echo } from './utility/Echo'
 import { Log } from './utility/Log'
+import { Wolfram } from './code/Wolfram'
 
 
 export const components = {
@@ -64,6 +66,8 @@ export const components = {
   destructure: () => new Destructure(),
   complexStringMatcher: () => new ComplexStringMatcher(),
   echo: () => new Echo(),
+  querysystem: () => new QuerySystem(),
+  wolfram: () => new Wolfram(),
   getCachedEmbedding: () => new FindTextEmbedding(),
   replaceText: () => new ReplaceText(),
   textCompletion: () => new GenerateText(),

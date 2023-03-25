@@ -36,18 +36,17 @@ export class EventService<
       const f32_ary = new Float32Array(ary_buf)
       const vectordb = app.get('vectordb')
       const query = f32_ary as unknown as number[]
-      const results = vectordb.search(query, params?.query?.$limit)
-      if (results) {
-        return { events: results }
+      let search_result = await vectordb.extractMetadataFromResults(query, 2)
+      console.log("RSULST")
+      console.log(search_result)
+      if (search_result) {
+        return { events: search_result }
       }
     }
     const vectordb = app.get('vectordb')
     const { $limit: _, ...param } = params.query
-    const r = vectordb.searchData(
-      param as unknown as number[],
-      params?.query?.$limit
-    )
-    return { events: r }
+    let tr = await vectordb.getDataWithMetadata(param, 10);
+    return { events: tr }
   }
 }
 

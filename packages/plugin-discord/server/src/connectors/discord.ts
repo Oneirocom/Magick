@@ -4,7 +4,8 @@ import Discord, {
   EmbedBuilder,
   GatewayIntentBits,
   Partials,
-  SnowflakeUtil
+  SnowflakeUtil,
+  AttachmentBuilder
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
 import emojiRegex from 'emoji-regex'
@@ -1008,6 +1009,18 @@ export class DiscordConnector {
     if (this.messageResponses[channel] === undefined) return undefined
     return this.messageResponses[channel][message]
   }
+
+  async sendImageToChannel(channelId: any, imageUri: any) {
+    try {
+      const channel = await this.client.channels.fetch(channelId)
+      const buffer = Buffer.from(imageUri, 'base64');
+      const attachment = new AttachmentBuilder(buffer, { name: 'image.png' });
+      await channel.send(attachment);
+    } catch (error) {
+      console.error(`Error sending image to channel: ${error}`);
+    }
+  }
+  
 
   async sendMessageToChannel(channelId: any, msg: any) {
     const channel = await this.client.channels.fetch(channelId)

@@ -51,6 +51,11 @@ async function handleResponse({ output, agent, event }) {
   await agent.discord.sendMessageToChannel(event.channel, output)
 }
 
+async function handleImageReponse({ output, agent, event }) {
+  if(!output || output === '') return console.warn('No output to send to discord')
+  await agent.discord.sendMessageToChannel(event.channel, output)
+}
+
 const DiscordPlugin = new ServerPlugin({
   name: 'DiscordPlugin',
   inputTypes: [
@@ -78,6 +83,15 @@ const DiscordPlugin = new ServerPlugin({
     },
     {
       name: 'Discord (Text)',
+      trigger: true,
+      socket: eventSocket,
+      handler: async ({ output, agent, event }) => {
+        console.log('output is', output)
+        await handleResponse({ output, agent, event })
+      },
+    },
+    {
+      name: 'Discord (Image)',
       trigger: true,
       socket: eventSocket,
       handler: async ({ output, agent, event }) => {

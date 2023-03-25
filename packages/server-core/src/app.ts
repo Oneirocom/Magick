@@ -16,11 +16,14 @@ import { configureManager, globalsManager, IGNORE_AUTH } from '@magickml/engine'
 import { authentication } from './auth/authentication'
 import { services } from './services'
 import handleSockets from './sockets/sockets'
-import HNSWVectorDatabase from './vectordb'
+import { OpenAIEmbeddings } from "langchain/embeddings";
+import { HNSWLib } from "./vectordb";
+
+const embeddings = new OpenAIEmbeddings
 
 const app: Application = koa(feathers())
 
-// Define a distance function for the vectors
+/* // Define a distance function for the vectors
 function euclideanDistance(a: number[], b: number[]): number {
   let distance = 0
   for (let i = 0; i < a.length; i++) {
@@ -32,17 +35,32 @@ function euclideanDistance(a: number[], b: number[]): number {
 const vectordb = new HNSWVectorDatabase<number[]>(
   'data.json',
   euclideanDistance
-)
+) */
+
+/* const vectordb = new HNSWLib(embeddings, {
+  space: "cosine",
+  numDimensions: 1536,
+}); */
+
+const vectordb = HNSWLib.load_data("./database",embeddings,{
+  space: "cosine",
+  numDimensions: 1536,
+})
+
+const vectorStoreInfo = {
+  name: "DB for Magick Events",
+  description: "Stores all the event along with their metadata",
+  vectordb,
+};
 
 // Expose feathers app to other apps that might want to access feathers services directly
 globalsManager.register('feathers', app)
 
 const port = parseInt(process.env.PORT || '3030', 10)
 app.set('port', port)
-
 const host = process.env.HOST || 'localhost'
 app.set('host', host)
-
+app.set("vectordb", vectordb)
 const paginateDefault = parseInt(process.env.PAGINATE_DEFAULT || '10', 10)
 const paginateMax = parseInt(process.env.PAGINATE_MAX || '50', 10)
 const paginate = {
@@ -111,7 +129,7 @@ app.configure(
 )
 declare module './declarations' {
   interface Configuration {
-    vectordb: HNSWVectorDatabase<number[]>
+    vectordb: HNSWLib
   }
 }
 
