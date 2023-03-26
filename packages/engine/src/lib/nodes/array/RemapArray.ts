@@ -61,9 +61,6 @@ export class RemapArray extends MagickComponent<Promise<WorkerReturn>> {
     // get values
     const values = (node.data.values as string).split(',').map((v) => v.trim())
 
-
-    console.log('***************** input')
-    console.log(input)
     return {
       output: input.map((obj => {
         const newObject = {}
