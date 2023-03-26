@@ -141,7 +141,7 @@ export class SpellComponent extends MagickComponent<
       console.log('publicVariables', publicVariables)
 
       publicVariables.forEach((pNode) => {
-        const { data, name } = pNode as {data: { name: string, value: any}, name:string}
+        const { data, name } = pNode as {data: { name: string, value: any, fewshot: string}, name:string}
         console.log('name is', name)
         console.log('adding public variable', name, data)
         if(name === 'Text Variable' || name === 'String Variable'){
