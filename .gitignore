@@ -61,3 +61,4 @@ scripts/.cache
 apps/docs/build
 data.json
 /logs
+docstore.json

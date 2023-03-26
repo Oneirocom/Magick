@@ -24,24 +24,52 @@ import { import_ } from '@brillout/import'
 // Same as `import()`
 
 
-
+//Dynamic Import using top lvl await
 const modules = import_('langchain/embeddings')
-const {OpenAIEmbeddings} = await modules;
-const embeddings = new OpenAIEmbeddings();
+const {FakeEmbeddings} = await modules;
+const agentpro = import_('langchain/agents')
+const {VectorStoreToolkit,createVectorStoreAgent,VectorStoreInfo} = await agentpro;
+const openaipro = import_('langchain')
+const {OpenAI} = await openaipro;
+const embeddings = new FakeEmbeddings();
+const  { Headers, Request, Response } = await import_('node-fetch')
+const fetch = await import_('node-fetch').then((mod) => mod.default)
+
+if (!globalThis.fetch) globalThis.fetch = fetch
+if (!globalThis.Headers) globalThis.Headers = Headers
+if (!globalThis.Request) globalThis.Request = Request
+if (!globalThis.Response) globalThis.Response = Response
+
+const OPENAI_API_KEY = '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'
+const model = new OpenAI({ openAIApiKey: OPENAI_API_KEY, temperature: 0.9 })
 
 const app: Application = koa(feathers())
 
-const vectordb = HNSWLib.load_data("./database",embeddings,{
+const vectordb = HNSWLib.load_data(".",embeddings,{
   space: "cosine",
   numDimensions: 1536,
 })
-
-const vectorStoreInfo = {
+/* 
+const vectorStoreInfo: typeof VectorStoreInfo = {
   name: "DB for Magick Events",
   description: "Stores all the event along with their metadata",
-  vectordb,
+  vectorStore: vectordb,
 };
-
+const toolkit = new VectorStoreToolkit(vectorStoreInfo, model);
+const agent = createVectorStoreAgent(model, toolkit);
+const input =
+    "What is this data about?";
+  console.log(`Executing: ${input}`);
+  const result = await agent.call({ input });
+  console.log(`Got output ${result.output}`);
+  console.log(
+    `Got intermediate steps ${JSON.stringify(
+      result.intermediateSteps,
+      null,
+      2
+    )}`
+  );
+ */
 // Expose feathers app to other apps that might want to access feathers services directly
 globalsManager.register('feathers', app)
 

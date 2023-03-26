@@ -28,22 +28,19 @@ export class EventService<
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async find(params?: ServiceParams) {
+    const vectordb = app.get('vectordb')
     if (params.query.embedding) {
       const blob = atob(params.query.embedding)
       const ary_buf = new ArrayBuffer(blob.length)
       const dv = new DataView(ary_buf)
       for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
       const f32_ary = new Float32Array(ary_buf)
-      const vectordb = app.get('vectordb')
       const query = f32_ary as unknown as number[]
       let search_result = await vectordb.extractMetadataFromResults(query, 2)
-      console.log("RSULST")
-      console.log(search_result)
       if (search_result) {
         return { events: search_result }
       }
     }
-    const vectordb = app.get('vectordb')
     const { $limit: _, ...param } = params.query
     let tr = await vectordb.getDataWithMetadata(param, 10);
     return { events: tr }
