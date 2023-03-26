@@ -6,7 +6,7 @@ type PluginProps = {
   props: {
     selectedAgentData: any
     setSelectedAgentData: any
-    enable: Object
+    enable: boolean
     update: (id: string, data: object) => void
   }
 }

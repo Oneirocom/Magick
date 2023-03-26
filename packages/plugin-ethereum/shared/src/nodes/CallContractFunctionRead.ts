@@ -33,7 +33,6 @@ export class CallContractFunctionRead extends MagickComponent<Promise<InputRetur
     this.module = {
       nodeType: 'triggerIn',
       socket: anySocket,
-      hide: true,
     }
 
     this.display = true

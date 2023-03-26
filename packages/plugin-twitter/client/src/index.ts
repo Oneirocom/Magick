@@ -1,19 +1,42 @@
 import {
   ClientPlugin,
   eventSocket,
+  triggerSocket,
 } from '@magickml/engine'
 import { TwitterAgentWindow } from './components/agent.component'
+
+
+const inputSockets = [
+  {
+    socket: 'output',
+    name: 'output',
+    type: eventSocket,
+  },
+  {
+    socket: 'trigger',
+    name: 'trigger',
+    type: triggerSocket,
+  }
+]
+
+const outputSockets = [
+  {
+    socket: 'output',
+    name: 'output',
+    type: eventSocket,
+  }
+]
 
 const TwitterPlugin = new ClientPlugin({
   name: 'TwitterPlugin',
   agentComponents: [TwitterAgentWindow],
   inputTypes: [
-    { name: 'Twitter (Feed)', trigger: true, socket: eventSocket},
+    { name: 'Twitter (Feed)', sockets: inputSockets},
     // { name: 'Twitter (DM)', trigger: true, socket: eventSocket },
     // { name: 'Twitter (Mention)', trigger: true, socket: eventSocket },
   ],
   outputTypes: [
-    { name: 'Twitter (Feed)', trigger: false, socket: eventSocket },
+    { name: 'Twitter (Feed)', sockets: outputSockets },
     // { name: 'Twitter (DM)', trigger: false, socket: eventSocket },
     // { name: 'Twitter (Mention)', trigger: false, socket: eventSocket },
   ],

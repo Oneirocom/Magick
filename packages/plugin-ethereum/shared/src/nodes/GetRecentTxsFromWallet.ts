@@ -33,7 +33,6 @@ export class GetRecentTxsFromWallet extends MagickComponent<Promise<InputReturn>
     this.module = {
       nodeType: 'triggerIn',
       socket: anySocket,
-      hide: true,
     }
 
     this.display = true
