@@ -1,3 +1,4 @@
+
 import Rete from 'rete'
 
 import { API_ROOT_URL } from '../../config'
@@ -53,8 +54,12 @@ export class FindTextEmbedding extends MagickComponent<
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs
+    _outputs: MagickWorkerOutputs,
+    context
   ) {
+
+    const { projectId } = context
+
     const content = (inputs['content'] && inputs['content'][0]) as string
 
     if (!content) {
@@ -66,6 +71,7 @@ export class FindTextEmbedding extends MagickComponent<
       content: content,
       $limit: 1,
       getEmbedding: true,
+      projectId: projectId
     }
 
     const urlString = `${API_ROOT_URL}/events`
