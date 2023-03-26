@@ -5,7 +5,7 @@ import {
   InputsData,
   NodeData,
   OutputsData,
-  WorkerOutputs
+  WorkerOutputs,
 } from 'rete/types/core/data'
 import { MagickComponent } from './engine'
 import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
@@ -25,7 +25,6 @@ import io from 'socket.io'
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 
 export * from './schemas'
-
 
 export type ImageType = {
   id: string
@@ -135,11 +134,13 @@ export type OnSubspellUpdated = (spell: SpellInterface) => void
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
+  declare currentSpell: { id: string }
   declare pubSub: PubSubContext
   declare magick: EditorContext
   declare tab: { type: string }
   declare abort: unknown
   declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
+  declare loadSpell: (graph: Data, relaoding?: boolean) => Promise<void>
   declare moduleManager: ModuleManager
   declare runProcess: (callback?: () => void | undefined) => Promise<void>
   declare onSpellUpdated: (
@@ -271,7 +272,7 @@ export interface EditorContext extends EngineContext {
   ) => () => void
   sendToPlaytest: (data: string) => void
   sendToInspector: PublishEditorEvent
-  sendToDebug: (message: unknown)=>void
+  sendToDebug: (message: unknown) => void
   onInspector: OnInspector
   onPlaytest: OnEditor
   onDebug: OnDebug
@@ -501,7 +502,7 @@ export type CompletionSocket = {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface DataControlImplementation extends DataControl {
-  new(control:CompletionInspectorControls): DataControl
+  new (control: CompletionInspectorControls): DataControl
 }
 
 export type CompletionInspectorControls = {
@@ -515,10 +516,12 @@ export type CompletionInspectorControls = {
 export type CompletionProvider = {
   type: CompletionType
   subtype: ImageCompletionSubtype | TextCompletionSubtype
-  handler?: (attrs:{node:WorkerData,
-    inputs:MagickWorkerInputs,
-    outputs:MagickWorkerOutputs,
-    context:unknown}) => {success:boolean, result: string, error:string} // server only
+  handler?: (attrs: {
+    node: WorkerData
+    inputs: MagickWorkerInputs
+    outputs: MagickWorkerOutputs
+    context: unknown
+  }) => { success: boolean; result: string; error: string } // server only
   inspectorControls?: CompletionInspectorControls[] // client only
   inputs: CompletionSocket[]
   outputs: CompletionSocket[]

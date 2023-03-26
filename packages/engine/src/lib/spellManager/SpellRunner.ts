@@ -11,7 +11,7 @@ import {
   MagickSpellInput,
   ModuleComponent,
   RunSpellConstructor,
-  SpellInterface
+  SpellInterface,
 } from '../types'
 import { extractModuleInputKeys } from './graphHelpers'
 
@@ -78,6 +78,7 @@ class SpellRunner {
     return {
       module: this.module,
       magick: this.magickInterface,
+      currentSpell: this.currentSpell,
       projectId: this.currentSpell.projectId,
       // TODO: add the secrets and publicVariables through the spellrunner for context
     }
@@ -134,7 +135,7 @@ class SpellRunner {
     const graph = this.currentSpell.graph
 
     Object.values(graph.nodes as MagickNode[])
-      .filter((node) => {
+      .filter(node => {
         return node.name.includes('Output')
       })
       .forEach(node => {
@@ -185,6 +186,7 @@ class SpellRunner {
    * Loads a spell into the spell runner.
    */
   async loadSpell(spell: SpellInterface) {
+    console.log('LOADING SPELL', spell.name, spell.id)
     this.currentSpell = spell
 
     // We need to parse the graph if it is a string
@@ -222,21 +224,29 @@ class SpellRunner {
     this._resetTasks()
 
     // load the inputs into module memory
-    this.module.read({ inputs: this._formatInputs(inputs), secrets, agent, publicVariables })
+    this.module.read({
+      inputs: this._formatInputs(inputs),
+      secrets,
+      agent,
+      publicVariables,
+    })
 
-    const component = this._getComponent(componentName) as unknown as ModuleComponent
+    const component = this._getComponent(
+      componentName
+    ) as unknown as ModuleComponent
 
     const firstInput = Object.keys(inputs)[0]
 
     const triggeredNode = this._getTriggeredNodeByName(firstInput)
 
-    if (!component.run) return console.error('Component does not have a run method')
+    if (!component.run)
+      return console.error('Component does not have a run method')
     if (!triggeredNode) return console.error('No triggered node found')
     // this running is where the main "work" happens.
     // I do wonder whether we could make this even more elegant by having the node
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
-    // 
+    //
     await component.run(triggeredNode as unknown as MagickNode, inputs)
     return this.outputData
   }
