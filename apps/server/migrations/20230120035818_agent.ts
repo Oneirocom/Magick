@@ -5,8 +5,8 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('agents', (table) => {
     table.uuid('id').primary()
     table.jsonb('rootSpell')
-    table.string('publicVariables')
-    table.string('secrets')
+    table.text('publicVariables')
+    table.text('secrets')
     table.string('name')
     table.boolean('enabled')
     table.string('updatedAt')

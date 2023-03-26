@@ -49,7 +49,8 @@ export class RemapArray extends MagickComponent<Promise<WorkerReturn>> {
       .addOutput(outp)
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await, require-await
+  // eslint-disable-next-line @typescript-eslint/require-await, require-await, @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
@@ -60,6 +61,8 @@ export class RemapArray extends MagickComponent<Promise<WorkerReturn>> {
 
     // get values
     const values = (node.data.values as string).split(',').map((v) => v.trim())
+
+    
 
     return {
       output: input.map((obj => {
