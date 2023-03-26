@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 
 export default ({ items, position: [x, y], visible, args, onClose, type = 'list' }) => {
   if (!visible) return null
-  console.log('type', type)
   const [search, setsearch] = useState('')
   // set focus on the search bar
   useEffect(() => {
@@ -31,7 +30,6 @@ export default ({ items, position: [x, y], visible, args, onClose, type = 'list'
           )}
         <div className={styles['context-menu-inner']} >
           {items.map(item => {
-            console.log('item', item)
             if(search === '') return <Item item={item} key={item.title} search={search} />
             // get the title of all subitems
             const subitems = item.subitems.map(subItem => {
