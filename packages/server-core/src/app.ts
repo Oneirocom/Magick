@@ -40,7 +40,7 @@ if (!globalThis.Headers) globalThis.Headers = Headers
 if (!globalThis.Request) globalThis.Request = Request
 if (!globalThis.Response) globalThis.Response = Response
 
-const OPENAI_API_KEY = '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'
+const OPENAI_API_KEY = 'API_KEY_HERE'
 const model = new OpenAI({ openAIApiKey: OPENAI_API_KEY, temperature: 0.9 })
 
 const app: Application = koa(feathers())
