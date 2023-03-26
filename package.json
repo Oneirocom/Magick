@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@banana-dev/banana-dev": "^4.0.0",
+    "@brillout/import": "^0.2.2",
     "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.14.0",
     "@docusaurus/core": "^2.3.1",

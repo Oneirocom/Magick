@@ -1,3 +1,4 @@
+
 import fs from 'fs';
 import path from "node:path";
 import {
@@ -6,27 +7,30 @@ import {
   SpaceName,
 } from "hnswlib-node";
 import { Embeddings } from "langchain/dist/embeddings/base";
-import {Document} from "langchain/document"
-//import { Document } from "langchain/dist/document";
-//import InMemoryDocstore from "langchain";
-import { InMemoryDocstore } from "langchain/docstore";
 import { result } from "lodash";
-import { SaveableVectorStore } from 'langchain/dist/vectorstores';
-//import { InMemoryDocstore } from "langchain/dist/docstore";
-//import {SaveableVectorStore} from "langchain";
-//import { SaveableVectorStore } from "langchain/vectorstores";
-//import { SaveableVectorStore } from "langchain/dist/vectorstores/base";
-//import Document from "langchain"
+import import_ from '@brillout/import';
 
 
+//Using dynamic Imports, Resolving the imports into Promise and then waiting for them to resolve
+//direct import await, causing the Featherjs application creation to stall
+const InMemoryDocstorePro = import_("langchain/docstore");
+const {InMemoryDocstore} = await InMemoryDocstorePro;
+const DocumentPro = import_("langchain/document");
+const {Document} = await DocumentPro;
+const SaveableVectorStorePro = import_("langchain/vectorstores");
+const {SaveableVectorStore} = await SaveableVectorStorePro;
 
+export type Document = {
+  metadata: Object,
+  pageContent: any
+}
 export interface HNSWLibBase {
   space: SpaceName;
   numDimensions?: number;
 }
 
 export interface HNSWLibArgs extends HNSWLibBase {
-  docstore?: InMemoryDocstore;
+  docstore?: typeof InMemoryDocstore;
   index?: HierarchicalNSWT;
 }
 
@@ -38,7 +42,7 @@ export interface EmbeddingWithData {
 export class HNSWLib extends SaveableVectorStore{
   _index?: HierarchicalNSWT;
 
-  docstore: InMemoryDocstore;
+  docstore: typeof InMemoryDocstore;
 
   args: HNSWLibBase;
 
@@ -64,7 +68,7 @@ export class HNSWLib extends SaveableVectorStore{
   async search(a:any, b:any){}
   async searchData(a:any, b:any){}
   async delete(a:any){}
-  async extractMetadataFromResults(query: number[], k: number): Promise<Record<string, unknown>[]> {
+  async extractMetadataFromResults(query: number[], k: number): Promise<Record<string, any>> {
     const results = await this.similaritySearchVectorWithScore(query, k);
     return results.map(([doc, _]) => doc.metadata);
   }
@@ -106,7 +110,7 @@ export class HNSWLib extends SaveableVectorStore{
   
 
   private static async getHierarchicalNSW(args: HNSWLibBase) {
-    const { HierarchicalNSW } = await HNSWLib.imports();
+    //const { HierarchicalNSW } = await HNSWLib.imports();
     if (!args.space) {
       throw new Error("hnswlib-node requires a space argument");
     }
@@ -206,7 +210,7 @@ export class HNSWLib extends SaveableVectorStore{
     }
     await this.index.writeIndex(path.join(".", "hnswlib.index"));
   }
-  static async load(directory: string, embeddings: Embeddings): Promise<SaveableVectorStore> {
+  static async load(directory: string, embeddings: Embeddings): Promise<typeof SaveableVectorStore> {
     let db = new HNSWLib(embeddings, {space: "cosine"});
     db.docstore = new InMemoryDocstore();
     return db;
@@ -250,7 +254,7 @@ export class HNSWLib extends SaveableVectorStore{
     metadatas: object[],
     embeddings: Embeddings,
     dbConfig?: {
-      docstore?: InMemoryDocstore;
+      docstore?: typeof InMemoryDocstore;
     }
   ): Promise<HNSWLib> {
     const docs: Document[] = [];
@@ -268,7 +272,7 @@ export class HNSWLib extends SaveableVectorStore{
     docs: Document[],
     embeddings: Embeddings,
     dbConfig?: {
-      docstore?: InMemoryDocstore;
+      docstore?: typeof InMemoryDocstore;
     }
   ): Promise<HNSWLib> {
     const args: HNSWLibArgs = {
@@ -285,7 +289,7 @@ export class HNSWLib extends SaveableVectorStore{
     embeddings: EmbeddingWithData[],
     embeddingsModel: Embeddings,
     dbConfig?: {
-      docstore?: InMemoryDocstore;
+      docstore?: typeof InMemoryDocstore;
     }
   ): Promise<HNSWLib> {
     const args: HNSWLibArgs = {
@@ -295,22 +299,6 @@ export class HNSWLib extends SaveableVectorStore{
     const instance = new this(embeddingsModel, args);
     await instance.addEmbeddingsWithData(embeddings);
     return instance;
-  }
-
-  static async imports(): Promise<{
-    HierarchicalNSW: typeof HierarchicalNSWT;
-  }> {
-    try {
-      const {
-        default: { HierarchicalNSW },
-      } = await import("hnswlib-node");
-
-      return { HierarchicalNSW };
-    } catch (err) {
-      throw new Error(
-        "Please install hnswlib-node as a dependency with, e.g. npm install -S hnswlib-node"
-      );
-    }
   }
 }
 

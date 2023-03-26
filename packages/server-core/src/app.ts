@@ -16,31 +16,20 @@ import { configureManager, globalsManager, IGNORE_AUTH } from '@magickml/engine'
 import { authentication } from './auth/authentication'
 import { services } from './services'
 import handleSockets from './sockets/sockets'
-import { OpenAIEmbeddings } from "langchain/embeddings";
-import { HNSWLib } from "./vectordb";
 
-const embeddings = new OpenAIEmbeddings
+import { HNSWLib } from "./vectordb";
+import HNSWVectorDatabase from './vectordata'
+import { import_ } from '@brillout/import'
+
+// Same as `import()`
+
+
+
+const modules = import_('langchain/embeddings')
+const {OpenAIEmbeddings} = await modules;
+const embeddings = new OpenAIEmbeddings();
 
 const app: Application = koa(feathers())
-
-/* // Define a distance function for the vectors
-function euclideanDistance(a: number[], b: number[]): number {
-  let distance = 0
-  for (let i = 0; i < a.length; i++) {
-    distance += (a[i] - b[i]) ** 2
-  }
-  return Math.sqrt(distance)
-}
-
-const vectordb = new HNSWVectorDatabase<number[]>(
-  'data.json',
-  euclideanDistance
-) */
-
-/* const vectordb = new HNSWLib(embeddings, {
-  space: "cosine",
-  numDimensions: 1536,
-}); */
 
 const vectordb = HNSWLib.load_data("./database",embeddings,{
   space: "cosine",
@@ -60,7 +49,6 @@ const port = parseInt(process.env.PORT || '3030', 10)
 app.set('port', port)
 const host = process.env.HOST || 'localhost'
 app.set('host', host)
-app.set("vectordb", vectordb)
 const paginateDefault = parseInt(process.env.PAGINATE_DEFAULT || '10', 10)
 const paginateMax = parseInt(process.env.PAGINATE_MAX || '50', 10)
 const paginate = {
