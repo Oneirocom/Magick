@@ -2,7 +2,9 @@ import isEqual from 'lodash/isEqual'
 import Rete from 'rete'
 
 import { Data } from 'rete/types/core/data'
+import { InputControl } from '../../dataControls/InputControl'
 import { SpellControl } from '../../dataControls/SpellControl'
+import { TextInputControl } from '../../dataControls/TextInputControl'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 import { SpellInterface } from '../../schemas'
@@ -113,15 +115,48 @@ export class SpellComponent extends MagickComponent<
 
     // const stateSocket = new Rete.Input('state', 'State', objectSocket)
 
+    if(node.data.spellData){
+            // TODO: Set the public variables from the public variables of the spell
+            const publicVariables = Object.values(
+              ((node.data.spellData as any).graph.nodes)
+              ).filter((node) => (node as {data: { isPublic: boolean}}).data?.isPublic)
+  
+        console.log('publicVariables', publicVariables)
+    }
+
     spellControl.onData = (spell: SpellInterface) => {
+      console.log('spellControl.onData', spell)
       // break out of it the nodes data already exists.
-      if (spell.name === node.data.spellName) return
+      // if (spell.name === node.data.spellName) return
       node.data.spellName = spell.name
       node.data.spellId = spell.id
       node.data.projectId = spell.projectId
+      node.data.spellData = spell
 
       // TODO: Set the public variables from the public variables of the spell
-      //node.data.publicVariables = 
+      const publicVariables = Object.values(
+            (spell.graph.nodes) || {}
+            ).filter((node) => (node as {data: { isPublic: boolean}}).data?.isPublic)
+
+      console.log('publicVariables', publicVariables)
+
+      publicVariables.forEach((pNode) => {
+        const { data, name } = pNode as {data: { name: string, value: any}, name:string}
+        console.log('name is', name)
+        console.log('adding public variable', name, data)
+        if(name === 'Text Variable' || name === 'String Variable'){
+          console.log('text variable', data.fewshot)
+          const textInputControl = new InputControl({
+            name: name,
+            dataKey: data.name,
+            defaultValue: (data as any).fewshot || data.value,
+          })
+          if(!node.inspector.dataControls.has(textInputControl.dataKey)){
+          node.inspector.add(textInputControl)
+          }
+        }
+
+      });
 
       // Update the sockets
       this.updateSockets(node, spell)
@@ -135,6 +170,8 @@ export class SpellComponent extends MagickComponent<
       // subscribe to changes form the spell to update the sockets if there are changes
       // Note: We could store all spells in a spell map here and rather than receive the whole spell, only receive the diff, make the changes, update the sockets, etc.  Mayb improve speed?
       this.subscribe(node, spell.name)
+
+
     }
 
     // node.addInput(stateSocket)
