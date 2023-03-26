@@ -51,6 +51,12 @@ export class InputComponent extends MagickComponent<InputReturn> {
   }
 
   builder(node: MagickNode) {
+    if(node.data.useTrigger === undefined) {
+      node.data.useTrigger = true
+    }
+    if(node.data.useData === undefined) {
+      node.data.useData = true
+    }
     // Setup dynamic controls
     const inputName = {
       type: InputControl,
@@ -68,7 +74,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
       name: 'Use Trigger',
       label: 'Use Trigger',
       dataKey: 'useTrigger',
-      defaultValue: node.data.useTrigger || false,
+      defaultValue: node.data.useTrigger,
       onData: data => {
         console.log('trigger switch')
         configureNode();
@@ -80,7 +86,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
       name: 'Use Data',
       label: 'Use Data',
       dataKey: 'useData',
-      defaultValue: node.data.useData || false,
+      defaultValue: node.data.useData,
       onData: data => {
         console.log('data switch', data)
         configureNode();
@@ -120,7 +126,11 @@ export class InputComponent extends MagickComponent<InputReturn> {
     console.log('inputTypes[0].name', inputTypes[0].name)
 
      // Set the default name if there is none
-     node.data.name = node.data.name ?? `Input - ${inputTypes[0].name}`
+     if(!node.data.name) {
+      
+       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       node.data.name ?? `Input - ${inputTypes[0].name}`
+     }
 
     // Setup default controls
     const inputType = new DropdownControl({
@@ -263,7 +273,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     }
 
     // Prevent accidentally setting to 'Input - Input -'
-    inputType.onData(node.data.name.replace('Input - ', ''))
+    inputType.onData(node.data.name?.replace('Input - ', ''))
 
     // Configure node when builder is called
     configureNode()
