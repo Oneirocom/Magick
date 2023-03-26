@@ -58,7 +58,6 @@ export class CompileContract extends MagickComponent<Promise<InputReturn>> {
     this.module = {
       nodeType: 'triggerIn',
       socket: anySocket,
-      hide: true,
     }
 
     this.display = true

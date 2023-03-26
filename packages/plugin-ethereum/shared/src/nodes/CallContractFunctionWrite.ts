@@ -32,7 +32,6 @@ export class CallContractFunctionWrite extends MagickComponent<Promise<InputRetu
     this.module = {
       nodeType: 'triggerIn',
       socket: anySocket,
-      hide: true,
     }
 
     this.display = true
