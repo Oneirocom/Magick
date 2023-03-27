@@ -134,13 +134,16 @@ export type OnSubspellUpdated = (spell: SpellInterface) => void
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
-  declare currentSpell: { id: string }
+  declare currentSpell: SpellInterface
   declare pubSub: PubSubContext
   declare magick: EditorContext
   declare tab: { type: string }
   declare abort: unknown
-  declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
-  declare loadSpell: (graph: Data, relaoding?: boolean) => Promise<void>
+  declare loadGraph: (graph: Data, reloading?: boolean) => Promise<void>
+  declare loadSpell: (
+    spell: SpellInterface,
+    reloading?: boolean
+  ) => Promise<void>
   declare moduleManager: ModuleManager
   declare runProcess: (callback?: () => void | undefined) => Promise<void>
   declare onSpellUpdated: (
