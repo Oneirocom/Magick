@@ -4,12 +4,16 @@ import { OPENAI_ENDPOINT } from '../constants'
 
 export async function makeTextCompletion(
   data: CompletionHandlerInputData
-): Promise<{success: boolean, result?: string | null, error?: string | null}> {
+): Promise<{
+  success: boolean
+  result?: string | null
+  error?: string | null
+}> {
   const { node, inputs, context } = data
 
-  const { projectId, magick } = context
+  const { projectId, currentSpell } = context
 
-  const spell = magick.getCurrentSpell()
+  const spell = currentSpell
 
   const prompt = inputs['input'][0]
 
@@ -37,7 +41,7 @@ export async function makeTextCompletion(
     })
 
     const usage = resp.data.usage
-    
+
     saveRequest({
       projectId: projectId,
       requestData: JSON.stringify(settings),
