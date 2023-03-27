@@ -1,5 +1,12 @@
 import { buildMagickInterface } from '../helpers/buildMagickInterface'
-import { SpellManager, WorldManager, pluginManager, SpellRunner, AgentInterface, SpellInterface } from '@magickml/engine'
+import {
+  SpellManager,
+  WorldManager,
+  pluginManager,
+  SpellRunner,
+  AgentInterface,
+  SpellInterface,
+} from '@magickml/engine'
 import { app } from '../app'
 import { AgentManager } from './AgentManager'
 import Router from '@koa/router'
@@ -56,8 +63,8 @@ export class Agent implements AgentInterface {
       cache: false,
     })
     ;(async () => {
-      if(!this.rootSpell) {
-        console.warn("No root spell found for agent", this.id)
+      if (!this.rootSpell) {
+        console.warn('No root spell found for agent', this.id)
         return
       }
       console.log('this.rootSpell.projectId', this.projectId, this.rootSpell.id)
