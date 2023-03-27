@@ -37,7 +37,7 @@ export async function makeTextEmbedding(
       requestData,
       { headers: headers }
     )
-    const spell = context.magick.getCurrentSpell()
+    const spell = context.currentSpell
     const model = node.data.model as EmbeddingModel
 
     const projectId = context.projectId
