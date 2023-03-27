@@ -49,10 +49,6 @@ class SpellRunner {
     // Set the interface that this runner will use when running workers
     this.magickInterface = magickInterface
 
-    this.magickInterface.getCurrentSpell = () => {
-      return this.currentSpell
-    }
-
     // We should probably load up here all the "modules" the spell needds to run
     // This would basicallyt be an array of spells pulled from the DB
   }
