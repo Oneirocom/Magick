@@ -1,14 +1,13 @@
 import ConnectionPlugin from 'rete-connection-plugin'
-import { Data } from 'rete/types/core/data'
 import { Plugin } from 'rete/types/core/plugin'
 import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
 import ContextMenuPlugin from './plugins/contextMenu'
 import {
   OnSubspellUpdated,
-  PubSubCallback,
   PubSubContext,
   SelectionPlugin,
+  SpellInterface,
 } from '@magickml/engine'
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
@@ -221,7 +220,7 @@ export const initEditor = function ({
     if (callback) callback()
   }
 
-  editor.loadSpell = async (spell: any) => {
+  editor.loadSpell = async (spell: SpellInterface) => {
     if (!spell) return console.error('No spell to load')
     const _graph = spell.graph
     const graph = JSON.parse(JSON.stringify(_graph))
