@@ -186,12 +186,13 @@ class SpellRunner {
    * Loads a spell into the spell runner.
    */
   async loadSpell(spell: SpellInterface) {
-    console.log('LOADING SPELL', spell.name, spell.id)
-    this.currentSpell = spell
-
     // We need to parse the graph if it is a string
     const graph =
       typeof spell.graph === 'string' ? JSON.parse(spell.graph) : spell.graph
+
+    spell.graph = graph
+
+    this.currentSpell = spell
 
     // We process the graph for the new spell which will set up all the task workers
     await this.engine.process(graph as GraphData, null, this.context)
