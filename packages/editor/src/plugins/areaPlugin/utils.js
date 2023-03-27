@@ -41,3 +41,9 @@ export function refreshNodeEditor(id){
     element.dispatchEvent(event)
   }, 10)
 }
+
+export function getLocalStorage(key){
+  const value = localStorage.getItem(key)
+  if(value) return JSON.parse(value)
+  return undefined
+}
