@@ -64,15 +64,9 @@ export class SpellComponent extends MagickComponent<
       const pubsub = this.editor.pubSub
       // TODO: Check if events are defined instead of as
       const event = pubsub.events.OPEN_TAB
-      const encodedToId = (uri: string) => {
-        uri = decodeURIComponent(uri)
-        return uri.slice(0,36)
-      }
       pubsub.publish(event, {
         type: 'spell',
-        id: encodedToId(node.data.spellName as string),
-        spellName: node.data.spellName,
-        name: encodedToId(node.data.spellName as string),
+        name: node.data.spellId + "-" + encodeURIComponent(btoa(node.data.name)),
         openNew: false,
       })
     }
@@ -115,16 +109,12 @@ export class SpellComponent extends MagickComponent<
     // const stateSocket = new Rete.Input('state', 'State', objectSocket)
 
     spellControl.onData = (spell: Spell) => {
-      console.log("CHAGNED")
-      console.log(spell.name)
-      
       // break out of it the nodes data already exists.
       if (spell.name === node.data.spellName) return
-      console.log(node.data.id)
       node.data.spellName = spell.name
       node.data.spellId = spell.id
       node.data.projectId = spell.projectId
-
+      
       // TODO: Set the public variables from the public variables of the spell
       //node.data.publicVariables = 
 
@@ -144,7 +134,6 @@ export class SpellComponent extends MagickComponent<
 
     // node.addInput(stateSocket)
     node.inspector.add(spellControl)
-
     if (node.data.spellName) {
       setTimeout(() => {
         this.subscribe(node, node.data.spellName as string)

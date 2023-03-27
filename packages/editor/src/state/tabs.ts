@@ -81,7 +81,6 @@ export const tabSlice = createSlice({
     openTab: (state, action) => {
       const switchActive =
         'switchActive' in action.payload ? action.payload.switchActive : true
-
       const activeTab = _activeTabSelector(state) as Tab
       if (activeTab && switchActive)
         tabAdapater.updateOne(state, {

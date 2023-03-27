@@ -14,15 +14,12 @@ const defaultGraph = templates.spells[0].graph
 
 const ModuleSelect = ({ control, updateData, initialValue }) => {
   const config = useConfig()
-
   const dispatch = useAppDispatch()
-
-  const [getSpell, { data: spell }] = spellApi.useLazyGetSpellQuery()
+  const [getSpell, { data: spell }] = spellApi.useLazyGetSpellByJustIdQuery()
   const { data: spells } = spellApi.useGetSpellsQuery({
     projectId: config.projectId,
   })
   const [newSpell] = spellApi.useNewSpellMutation()
-
   const { enqueueSnackbar } = useSnackbar()
   const { dataKey } = control
 
@@ -31,7 +28,6 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
     if (!spell) return
 
     const _spell = spell.data[0]
-
     update(_spell)
     _openTab(_spell)
   }, [spell])
@@ -39,14 +35,14 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   const optionArray = () => {
     if (!spells) return
     return spells.data.map((module, index) => ({
-      value: module.name,
+      value: module,
       label: module.name,
     }))
   }
 
   const _openTab = async spell => {
     const tab = {
-      name: spell.name,
+      name: spell.id + "-" + encodeURIComponent(btoa(spell.name)),
       spellName: spell.name,
       type: 'spell',
       openNew: false,
@@ -56,14 +52,13 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
     dispatch(openTab(tab))
   }
 
-  // TODO fix on change to handle loading a single spell
+  
   const onChange = async e => {
     if (!e) return
-    const { value } = e
-
+    const spell  = {...e.value}
     getSpell({
-      spellName: value,
       projectId: config.projectId,
+      id: spell.id,
     })
   }
 
@@ -73,7 +68,7 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
 
   const onCreateOption = async value => {
     try {
-      await newSpell({
+      const response = await newSpell({
         name: value,
         graph: defaultGraph as unknown as GraphData,
         projectId: config.projectId,
@@ -81,7 +76,7 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
       })
 
       getSpell({
-        spellName: value,
+        id: (response as {data: {id: String}}).data.id,
         projectId: config.projectId,
       })
     } catch (err) {
