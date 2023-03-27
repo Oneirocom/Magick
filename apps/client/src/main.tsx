@@ -40,6 +40,7 @@ else {
       const cloudUrl = cloudUrlRaw.replace(/\/+$/, '')
 
       if (
+        !import.meta.env.UNTRUSTED_IFRAME &&
         event.source !== window &&
         event.origin !== window.location.origin &&
         event.origin !== cloudUrl
