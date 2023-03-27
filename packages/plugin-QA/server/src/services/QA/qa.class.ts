@@ -1,9 +1,10 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
 import type { PaginationParams, Params, ServiceInterface } from '@feathersjs/feathers';
-
+import { API_ROOT_URL } from '@magickml/engine';
 import { app, Application } from '@magickml/server-core'
 import { QA, QAData, QAQuery } from './qa.schema';
 import import_ from '@brillout/import';
+import { config } from 'dotenv-flow';
 
 
 //Dynamic Imports
@@ -36,7 +37,7 @@ export class QAService<ServiceParams extends QAParams = QAParams>
             const { OpenAI } = await OpenAIPro;
             if (app.get("vectordb")){
                 let vectorStore = app.get("vectordb")
-                const model = new OpenAI({ openAIApiKey: "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", temperature: 0.9 })
+                const model = new OpenAI({ openAIApiKey: "OPENAI KEY HERE", temperature: 0.9 })
                 const chain = ConversationalRetrievalQAChain.fromLLM(
                     model,
                     vectorStore.asRetriever()
