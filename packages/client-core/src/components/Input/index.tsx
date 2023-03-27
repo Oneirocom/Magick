@@ -6,6 +6,7 @@ export const Input = ({
   type,
   placeHolder,
   onChange = e => {},
+  multiline=false,
   style = {},
   ...props
 }) => {
@@ -17,6 +18,7 @@ export const Input = ({
       type={type}
       onChange={onChange}
       placeholder={placeHolder}
+      multiline={multiline}
       {...props}
     />
   )
