@@ -44,7 +44,7 @@ export class Background {
 
         window.localStorage.setItem(
          `zoomValues-${tab.id}`,
-          JSON.stringify({ ...previousZoomValues, zoomLevelValues: { x, y, k} })
+          JSON.stringify({ ...previousZoomValues, zoomLevelValues: { x, y, k}, translateValues:{ x, y, k}})
         )
       }
     })
