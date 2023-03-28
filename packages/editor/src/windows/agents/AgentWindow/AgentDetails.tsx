@@ -67,6 +67,8 @@ const AgentDetails = ({
       })
   }
 
+  console.log("***********************************", selectedAgentData.publicVariables)
+
   const exportAgent = () => {
     const fileName = 'agent'
 
@@ -264,7 +266,7 @@ const AgentDetails = ({
                     return {
                       id: node?.id,
                       name: node?.data?.name,
-                      value: node?.data?.value,
+                      value: node?.data?.value || node?.data?.text || node?.data?.fewshot || node?.data?._var,
                       type: node?.name,
                     }
                   })
@@ -281,11 +283,13 @@ const AgentDetails = ({
             Select Spell
           </option>
           {spellList?.length > 0 &&
-            spellList.map((spell, idx) => (
+            spellList.map((spell, idx) =>{
+              console.log(spell)
+              return(
               <option value={spell.name} key={idx}>
                 {spell.name}
               </option>
-            ))}
+            )})}
         </select>
       </div>
       <div>
