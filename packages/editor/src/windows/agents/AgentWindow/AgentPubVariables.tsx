@@ -8,6 +8,7 @@ interface Props {
 }
 
 const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
+  console.log("....................", publicVars)
   const onChangeHandler = (variable, event) => {
     const input = event.target
     function applyNativeEventToValue(inputValue, nativeEventData) {
