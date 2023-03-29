@@ -11,6 +11,7 @@ export type RunSpellArgs = {
 }
 
 export const runSpell = async ({ spell, inputs, inputFormatter }: RunSpellArgs) => {
+  console.log('RUNNING SPELL', spell.name, spell.id, spell)
   const graph = spell.graph as unknown as GraphData
   const magickInterface = buildMagickInterface()
 

@@ -38,7 +38,7 @@ export type UpdateModuleSockets = (
 interface IModuleComponent extends MagickComponent<MagickWorkerOutputs | Promise<MagickWorkerOutputs>> {
   updateModuleSockets: (UpdateModuleSockets) => void
   module: ModuleOptions
-  noBuildUpdate: boolean
+  isSubspell: boolean
 }
 
 export type ModulePluginArgs = {
@@ -212,7 +212,7 @@ function install(
           component.builder = async node => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-            if (!component.noBuildUpdate) component.updateModuleSockets(node)
+            if (!component.isSubspell) component.updateModuleSockets(node)
             await builder.call(component, node)
           }
         }

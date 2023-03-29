@@ -1,3 +1,4 @@
+import { Agent } from '@magickml/server-core'
 import isEqual from 'lodash/isEqual'
 import Rete from 'rete'
 
@@ -11,6 +12,7 @@ import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 import { SpellInterface } from '../../schemas'
 import { triggerSocket } from '../../sockets'
+import { SpellManager } from '../../spellManager'
 import {
   EngineContext,
   MagickNode,
@@ -50,7 +52,7 @@ export class SpellComponent extends MagickComponent<
 > {
   declare updateModuleSockets: UpdateModuleSockets
   subscriptionMap: Record<number, () => void> = {}
-  noBuildUpdate: boolean
+  isSubspell: boolean
 
   constructor() {
     super(
@@ -66,7 +68,7 @@ export class SpellComponent extends MagickComponent<
       nodeType: 'module',
       skip: true,
     }
-    this.noBuildUpdate = true
+    this.isSubspell = true
     // this.onDoubleClick = (node: MagickNode) => {
     //   if (!this.editor) return
     //   console.log('double click', node)
@@ -266,6 +268,8 @@ export class SpellComponent extends MagickComponent<
   }
 
   updateSockets(node: MagickNode, spell: SpellInterface) {
+    if (!spell.graph) throw new Error('No spell.graph found')
+
     const graph = JSON.parse(JSON.stringify(spell.graph)) as Data
     this.updateModuleSockets(node, graph, true)
     node.update()
@@ -295,11 +299,12 @@ export class SpellComponent extends MagickComponent<
     inputs: MagickWorkerInputs,
     _outputs: { [key: string]: string },
     {
+      module,
       magick,
       secrets,
       publicVariables,
     }: {
-      module: { outputs: ModuleWorkerOutput[] }
+      module: { agent: Agent; outputs: ModuleWorkerOutput[] }
       magick: EngineContext
       secrets: Record<string, string>
       publicVariables: Record<string, string>
@@ -308,15 +313,47 @@ export class SpellComponent extends MagickComponent<
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
 
-    if (!magick.runSpell) throw new Error('Magick runSpell not found')
-    const outputs = await magick.runSpell({
-      inputs: flattenedInputs,
-      spellId: node.data.spellId as string,
-      projectId: node.data.projectId as string,
-      secrets,
-      publicVariables,
-    })
+    console.log('running spell')
 
-    return this.formatOutputs(node, outputs)
+    if (module.agent) {
+      console.log('running on agent', module.agent.id)
+      const spellManager = module.agent.spellManager as SpellManager
+      if (spellManager) {
+        console.log('spellManager is real')
+        const spellRunner = await spellManager.getSpellRunner(
+          node.data.spellId as string
+        )
+        if (spellRunner) {
+          console.log('running spellRunner')
+          console.log('flattenedInputs', flattenedInputs)
+          const obj = {
+            inputs: flattenedInputs,
+            runSubspell: false,
+            agent: module.agent,
+            secrets: module.agent.secrets ?? secrets as any,
+            publicVariables: module.agent.publicVariables as any ?? publicVariables as any,
+          }
+          console.log('obj', obj)
+          const outputs = await spellRunner.runComponent(obj)
+          console.log('ran, outputs are', outputs)
+          return this.formatOutputs(node, outputs as any)
+        } else {
+          console.warn('spell runner not found')
+        }
+      } else {
+        console.warn('spell manager not found')
+      }
+    } else {
+      if (!magick.runSpell) throw new Error('Magick runSpell not found')
+      const outputs = await magick.runSpell({
+        inputs: flattenedInputs,
+        spellId: node.data.spellId as string,
+        projectId: node.data.projectId as string,
+        secrets,
+        publicVariables,
+      })
+
+      return this.formatOutputs(node, outputs)
+    }
   }
 }

@@ -186,7 +186,6 @@ class SpellRunner {
    * Loads a spell into the spell runner.
    */
   async loadSpell(spell: SpellInterface) {
-    console.log('LOADING SPELL', spell.name, spell.id)
     this.currentSpell = spell
 
     // We need to parse the graph if it is a string
@@ -195,6 +194,7 @@ class SpellRunner {
 
     // We process the graph for the new spell which will set up all the task workers
     await this.engine.process(graph as GraphData, null, this.context)
+    console.log('processed')
   }
 
   /**
@@ -211,6 +211,9 @@ class SpellRunner {
     secrets,
     publicVariables,
   }: RunComponentArgs) {
+
+    // How do we make this work efficiently with subspells
+
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
