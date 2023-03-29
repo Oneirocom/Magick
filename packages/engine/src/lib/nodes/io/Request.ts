@@ -28,7 +28,6 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
       },
     }, 'I/O', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

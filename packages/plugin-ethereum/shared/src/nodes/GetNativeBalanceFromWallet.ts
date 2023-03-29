@@ -36,7 +36,6 @@ export class GetNativeBalanceFromWallet extends MagickComponent<Promise<InputRet
       socket: anySocket,
     }
 
-    this.display = true
     this.contextMenuName = 'Check Eth Balance'
     this.displayName = 'Check Eth Balance'
   }

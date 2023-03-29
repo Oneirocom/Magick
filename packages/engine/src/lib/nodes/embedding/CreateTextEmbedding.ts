@@ -32,7 +32,6 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
         success: 'output',
       },
     }, 'Embedding', info)
-    this.display = true
   }
 
   builder(node: MagickNode) {

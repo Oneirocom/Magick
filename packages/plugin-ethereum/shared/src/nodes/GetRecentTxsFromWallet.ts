@@ -35,7 +35,6 @@ export class GetRecentTxsFromWallet extends MagickComponent<Promise<InputReturn>
       socket: anySocket,
     }
 
-    this.display = true
     this.contextMenuName = 'Get Recent Transactions'
     this.displayName = 'Get Recent Transactions'
   }

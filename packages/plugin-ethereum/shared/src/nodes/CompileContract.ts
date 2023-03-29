@@ -60,7 +60,6 @@ export class CompileContract extends MagickComponent<Promise<InputReturn>> {
       socket: anySocket,
     }
 
-    this.display = true
     this.contextMenuName = 'Compile Contract'
     this.displayName = 'Compile Contract'
   }

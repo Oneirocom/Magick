@@ -35,7 +35,6 @@ export class CheckForRecentTxFromWallet extends MagickComponent<Promise<InputRet
       socket: anySocket,
     }
 
-    this.display = true
     this.contextMenuName = 'Check For Recent Transactions'
     this.displayName = 'Check For Recent Transactions'
   }

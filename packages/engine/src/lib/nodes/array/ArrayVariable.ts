@@ -21,7 +21,6 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
       },
     }, 'Array', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

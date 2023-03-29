@@ -24,7 +24,6 @@ export class CosineSimilarity extends MagickComponent<Promise<InputReturn>> {
       },
     }, 'Embedding', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

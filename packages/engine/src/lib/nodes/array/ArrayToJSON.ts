@@ -22,7 +22,6 @@ export class ArrayToJSON extends MagickComponent<Promise<WorkerReturn>> {
         trigger: 'option',
       },
     }, 'Array', info)
-    this.display = true
   }
 
   builder(node: MagickNode) {

@@ -22,7 +22,6 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     super('Text Rule Matcher', {
       outputs: { true: 'option', false: 'option' },
     }, 'Text', info)
-    this.display = true
   }
 
   builder(node: MagickNode) {

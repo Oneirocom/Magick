@@ -17,7 +17,6 @@ export class IsVariableTrue extends MagickComponent<void> {
     super('Is Variable True', {
       outputs: { true: 'option', false: 'option' },
     }, 'Boolean', info)
-    this.display = true
   }
 
   builder(node: MagickNode) {

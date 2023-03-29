@@ -35,7 +35,6 @@ export class CallContractFunctionRead extends MagickComponent<Promise<InputRetur
       socket: anySocket,
     }
 
-    this.display = true
     this.contextMenuName = 'Contract Read'
     this.displayName = 'Contract Read'
   }

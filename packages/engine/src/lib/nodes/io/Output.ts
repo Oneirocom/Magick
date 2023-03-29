@@ -31,7 +31,6 @@ export class Output extends MagickComponent<void> {
       socket: anySocket,
     }
 
-    this.display = true
   }
 
   builder(node: MagickNode) {
