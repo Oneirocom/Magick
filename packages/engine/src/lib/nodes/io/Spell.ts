@@ -67,25 +67,24 @@ export class SpellComponent extends MagickComponent<
       skip: true,
     }
     this.noBuildUpdate = true
-    this.display = true
-    this.onDoubleClick = (node: MagickNode) => {
-      if (!this.editor) return
-      console.log('double click', node)
-      const pubsub = this.editor.pubSub
-      // TODO: Check if events are defined instead of as
-      const event = pubsub.events.OPEN_TAB
-      const encodedToId = (uri: string) => {
-        uri = decodeURIComponent(uri)
-        return uri.slice(0, 36)
-      }
-      pubsub.publish(event, {
-        type: 'spell',
-        id: encodedToId(node.data.spellName as string),
-        spellName: node.data.spellName,
-        name: encodedToId(node.data.spellName as string),
-        openNew: false,
-      })
-    }
+    // this.onDoubleClick = (node: MagickNode) => {
+    //   if (!this.editor) return
+    //   console.log('double click', node)
+    //   const pubsub = this.editor.pubSub
+    //   // TODO: Check if events are defined instead of as
+    //   const event = pubsub.events.OPEN_TAB
+    //   const encodedToId = (uri: string) => {
+    //     uri = decodeURIComponent(uri)
+    //     return uri.slice(0, 36)
+    //   }
+    //   pubsub.publish(event, {
+    //     type: 'spell',
+    //     id: encodedToId(node.data.name as string),
+    //     spellName: node.data.name,
+    //     name: encodedToId(node.data.name as string),
+    //     openNew: false,
+    //   })
+    // }
   }
 
   subscribe(node: MagickNode, spellName: string) {
@@ -135,6 +134,7 @@ export class SpellComponent extends MagickComponent<
       if (!node.data.publicVariables) {
         node.data.publicVariables = {} as { [key: string]: unknown }
       }
+
       publicVariables.forEach(pNode => {
         const { data, name } = pNode as {
           data: { name: string; value: any; fewshot: string }
@@ -204,11 +204,18 @@ export class SpellComponent extends MagickComponent<
     spellControl.onData = async (spell: SpellInterface) => {
       if (!spell.name) return console.warn('spell name not found', spell)
       // break out of it the nodes data already exists.
-      if (spell.name === node.data.spellName) return
-      node.data.spellName = spell.name
+      if (spell.name === node.data.name) return
+
+      node.data.name = spell.name
       node.data.spellId = spell.id
       node.data.projectId = spell.projectId
       node.data.graph = spell.graph
+
+      // delete all the old controls
+      node.inspector.dataControls.forEach(control => {
+        if (control instanceof SpellControl) return
+        node.inspector.remove(control.dataKey)
+      })
 
       console.log('getPublicVariables', spell)
       // TODO: Set the public variables from the public variables of the spell
@@ -231,6 +238,15 @@ export class SpellComponent extends MagickComponent<
       // subscribe to changes form the spell to update the sockets if there are changes
       // Note: We could store all spells in a spell map here and rather than receive the whole spell, only receive the diff, make the changes, update the sockets, etc.  Mayb improve speed?
       this.subscribe(node, spell.name)
+
+      console.log('node.inspector.data()', node.inspector.data())
+
+      const context = this.editor && this.editor.magick
+      if (!context) return
+      const { sendToInspector } = context
+      if (sendToInspector) {
+        sendToInspector(node.inspector.data())
+      }
     }
 
     // node.addInput(stateSocket)
@@ -240,9 +256,9 @@ export class SpellComponent extends MagickComponent<
       createInspectorForPublicVariables(publicVariables)
     }
 
-    if (node.data.spellName) {
+    if (node.data.name) {
       setTimeout(() => {
-        this.subscribe(node, node.data.spellName as string)
+        this.subscribe(node, node.data.name as string)
       }, 1000)
     }
 
