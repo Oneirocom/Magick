@@ -39,10 +39,8 @@ export class DeployContract extends MagickComponent<Promise<InputReturn>> {
     this.module = {
       nodeType: 'triggerIn',
       socket: anySocket,
-      hide: true,
     }
 
-    this.display = true
     this.contextMenuName = 'Deploy Contract'
     this.displayName = 'Deploy Contract'
   }

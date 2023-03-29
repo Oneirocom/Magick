@@ -178,9 +178,13 @@ function install(
 
             if (!data) return
             const inputs = moduleManager.getInputs(data)
+            console.log('inputs are', inputs)
             const outputs = moduleManager.getOutputs(data)
             const triggerOuts = moduleManager.getTriggerOuts(data)
+            console.log('triggerOuts', triggerOuts)
             const triggerIns = moduleManager.getTriggerIns(data)
+            console.log('triggerIns', triggerIns)
+
 
             // TODO OPTIMIZATION should find a way to cache these so we dont run over the whole add/remove IO sequence if we don't need to.
             removeIO(

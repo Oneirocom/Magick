@@ -30,7 +30,6 @@ export class EventRestructureComponent extends MagickComponent<
       },
     }, 'Event', info)
     
-    this.display = true
   }
 
   builder(node: MagickNode) {

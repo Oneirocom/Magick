@@ -50,7 +50,6 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
         trigger: 'option',
       },
     }, 'I/O', info)
-    this.display = true
   }
 
   builder(node: MagickNode) {

@@ -24,7 +24,6 @@ export class EventStore extends MagickComponent<Promise<void>> {
       },
     }, 'Event', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

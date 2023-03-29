@@ -24,7 +24,6 @@ export class Echo extends MagickComponent<Promise<WorkerReturn>> {
       },
     }, 'Utility', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

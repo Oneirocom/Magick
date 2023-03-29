@@ -41,8 +41,8 @@ export type PluginServerRoute = Route
 // }]
 export type PluginIOType = {
   name: string
-  trigger: boolean
-  socket: Socket
+  inspectorControls?: any[]
+  sockets?: any[]
   defaultResponseOutput?: string
   handler?: ({ output, agent, event }) => Promise<void>
 }
@@ -102,7 +102,7 @@ export class ClientPlugin extends Plugin {
     spellTemplates = [],
     projectTemplates = [],
   }: PluginConstuctor & {
-    agentComponents?: FC[]
+    agentComponents?: FC<any>[]
     clientPageLayout?: PageLayout
     clientRoutes?: Array<PluginClientRoute>
     drawerItems?: Array<PluginDrawerItem>
@@ -199,6 +199,7 @@ class PluginManager {
         inputTypes.push(inputType)
       })
     })
+    console.log('inputTypes', inputTypes)
     return inputTypes
   }
 
@@ -354,16 +355,6 @@ export class ClientPluginManager extends PluginManager {
       }
     })
     return drawerItems
-  }
-
-  getInputTypes() {
-    const inputTypes = [] as PluginIOType[]
-    this.pluginList.forEach(plugin => {
-      plugin.inputTypes.forEach(inputType => {
-        inputTypes.push(inputType)
-      })
-    })
-    return inputTypes
   }
 
   getInputByName() {

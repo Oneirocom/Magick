@@ -67,7 +67,6 @@ export class ComputeNatalChart extends MagickComponent<Promise<WorkerReturn>> {
       },
     }, 'Esoterica', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

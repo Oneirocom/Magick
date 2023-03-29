@@ -57,7 +57,6 @@ export class ImageGeneration extends MagickComponent<Promise<InputReturn>> {
       },
     }, 'Image', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

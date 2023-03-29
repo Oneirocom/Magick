@@ -30,6 +30,8 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   useEffect(() => {
     if (!spell) return
 
+    console.log('new spell', spell)
+
     const _spell = spell.data[0]
 
     update(_spell)

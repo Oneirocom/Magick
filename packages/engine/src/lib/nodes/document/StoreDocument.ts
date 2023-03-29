@@ -23,7 +23,6 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
       },
     }, 'Document', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

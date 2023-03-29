@@ -21,7 +21,6 @@ export class StringVariable extends MagickComponent<InputReturn> {
       },
     }, 'Text', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

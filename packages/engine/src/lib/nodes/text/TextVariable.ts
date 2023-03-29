@@ -9,8 +9,6 @@ import { anySocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, MagickWorkerOutputs, WorkerData } from '../../types'
 const info = `Text Variable`
 
-const text = ``
-
 type InputReturn = {
   output: string
 }
@@ -23,11 +21,10 @@ export class TextVariable extends MagickComponent<InputReturn> {
       },
     }, 'Text', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {
-    if (!node.data.text) node.data.text = text
+    if (!node.data.fewshot) node.data.fewshot = ''
     const out = new Rete.Output('output', 'output', anySocket)
 
     const name = new InputControl({
