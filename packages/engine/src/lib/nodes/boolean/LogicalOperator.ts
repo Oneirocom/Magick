@@ -18,7 +18,6 @@ export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
     super('Logical Operator', {
       outputs: { true: 'option', false: 'option', error: 'output' },
     }, 'Boolean', info)
-    this.display = true
   }
 
   builder(node: MagickNode) {

@@ -29,7 +29,6 @@ export class SpeechToText extends MagickComponent<Promise<InputReturn>> {
         output: 'output',
       },
     }, 'Generation', info)
-    this.display = true
   }
 
   builder(node: MagickNode) {

@@ -13,7 +13,6 @@ export class Log extends MagickComponent<void> {
       outputs: {},
     }, 'Utility', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

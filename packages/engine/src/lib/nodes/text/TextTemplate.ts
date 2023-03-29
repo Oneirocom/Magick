@@ -29,7 +29,6 @@ export class TextTemplate extends MagickComponent<Promise<WorkerReturn>> {
     }, 'Text', info)
     
     this.runFromCache = true
-    this.display = false
   }
 
   builder(node: MagickNode) {

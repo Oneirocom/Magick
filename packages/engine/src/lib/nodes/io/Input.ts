@@ -45,7 +45,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
       socket: anySocket,
     }
 
-    this.display = true
     this.contextMenuName = 'Input'
     this.displayName = 'Input'
   }

@@ -19,7 +19,6 @@ export class SwitchGate extends MagickComponent<void> {
       outputs: { default: 'option' },
     }, 'Flow', info)
     
-    this.display = true
   }
 
   node = {}

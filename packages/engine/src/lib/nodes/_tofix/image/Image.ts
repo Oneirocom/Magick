@@ -26,7 +26,6 @@ export class Image extends MagickComponent<Promise<InputReturn>> {
       },
     }, 'Image', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

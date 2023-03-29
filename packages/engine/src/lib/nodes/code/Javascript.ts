@@ -36,7 +36,6 @@ export class Javascript extends MagickComponent<unknown> {
         trigger: 'option',
       },
     }, 'Code', info)
-    this.display = false
     this.runFromCache = true
   }
 

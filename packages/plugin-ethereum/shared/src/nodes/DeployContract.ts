@@ -41,7 +41,6 @@ export class DeployContract extends MagickComponent<Promise<InputReturn>> {
       socket: anySocket,
     }
 
-    this.display = true
     this.contextMenuName = 'Deploy Contract'
     this.displayName = 'Deploy Contract'
   }

@@ -13,7 +13,6 @@ export class ProfanityFilter extends MagickComponent<Promise<void>> {
       outputs: { true: 'option', false: 'option' },
     }, 'Text', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

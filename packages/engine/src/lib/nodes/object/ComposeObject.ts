@@ -21,7 +21,6 @@ export class ComposeObject extends MagickComponent<Promise<WorkerReturn>> {
       },
     }, 'Object', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

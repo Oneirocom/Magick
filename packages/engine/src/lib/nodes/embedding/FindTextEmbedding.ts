@@ -28,7 +28,6 @@ export class FindTextEmbedding extends MagickComponent<
       },
     }, 'Embedding', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

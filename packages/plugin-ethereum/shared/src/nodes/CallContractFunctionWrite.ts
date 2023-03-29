@@ -34,7 +34,6 @@ export class CallContractFunctionWrite extends MagickComponent<Promise<InputRetu
       socket: anySocket,
     }
 
-    this.display = true
     this.contextMenuName = 'Contract Write'
     this.displayName = 'Contract Write'
   }

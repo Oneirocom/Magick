@@ -22,7 +22,6 @@ export class ObjectToJSON extends MagickComponent<Promise<WorkerReturn>> {
         trigger: 'option',
       },
     }, 'Object', info)
-    this.display = true
   }
 
   builder(node: MagickNode) {

@@ -25,7 +25,6 @@ export class RemapArray extends MagickComponent<Promise<WorkerReturn>> {
       },
     }, 'Array', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

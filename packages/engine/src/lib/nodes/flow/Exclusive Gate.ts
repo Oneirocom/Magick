@@ -23,7 +23,6 @@ export class ExclusiveGate extends MagickComponent<void> {
       },
     }, 'Flow', info)
 
-    this.display = true
   }
 
   node = {}
