@@ -12,8 +12,7 @@ export type RunSpellArgs = {
   publicVariables?: Record<string, unknown>
 }
 
-export const runSpell = async ({ spellId, inputs, inputFormatter, projectId, secrets = {}, publicVariables = {} }: RunSpellArgs) => {
-  console.log('***', new Error().stack)
+export const runSpell = async ({ spellId, inputs, inputFormatter, projectId, secrets, publicVariables }: RunSpellArgs) => {
   console.log('runSpell', { spellId, inputs, inputFormatter, projectId, secrets, publicVariables })
   const spells = (await app.service('spells').find({ query: { projectId, id: spellId } })).data
   const spell = spells[0] as any
