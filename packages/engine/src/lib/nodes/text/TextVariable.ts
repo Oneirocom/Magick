@@ -47,7 +47,6 @@ export class TextVariable extends MagickComponent<InputReturn> {
 
   worker(node: WorkerData, _inputs: MagickWorkerInputs, _outputs: MagickWorkerOutputs, context: { module: { publicVariables: string } }) {
     let text = node.data.fewshot as string
-    console.log('context.module.publicVariables', context.module.publicVariables)
     const publicVars = JSON.parse(context.module.publicVariables)
     if(node?.data?.isPublic && publicVars[node.id]) {
       console.log('publicVars[node.id is', publicVars[node.id])
