@@ -27,7 +27,6 @@ export const agentDataSchema = Type.Pick(
     'enabled',
     'updatedAt',
     'pingedAt',
-    'spells',
     'data',
     'publicVariables',
     'secrets',
@@ -46,7 +45,6 @@ export const agentPatchDataSchema = Type.Pick(
     'enabled',
     'updatedAt',
     'pingedAt',
-    'spells',
     'data',
     'publicVariables',
     'secrets',
@@ -80,7 +78,6 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'name',
   'updatedAt',
   'pingedAt',
-  'spells',
   'data',
   'publicVariables',
   'secrets',
@@ -95,4 +92,4 @@ export const agentQueryValidator = getValidator(
   queryValidator
 )
 export const agentQueryResolver = resolve<AgentQuery, HookContext>({})
-export const agentJsonFields = ['rootSpell', 'spells', 'data']
+export const agentJsonFields = ['rootSpell', 'data']
