@@ -93,8 +93,8 @@ export class HNSWLib extends SaveableVectorStore {
     return docId as any || [];
   }
 
-  async extractMetadataFromResults(query: number[], k: number): Promise<Record<string, any>> {
-    const results = await this.similaritySearchVectorWithScore(query, k);
+  async extractMetadataFromResults(query: number[], k: number, query_data: Record<string, unknown> = {}): Promise<Record<string, any>> {
+    const results = await this.similaritySearchVectorWithScore(query, k, query_data);
     return results.map(([doc, _]) => doc.metadata);
   }
   async addEmbeddingWithMetadata(
@@ -221,7 +221,32 @@ export class HNSWLib extends SaveableVectorStore {
         this.docstore.search(String(docIndex)) as Document
     );
   }
-  async similaritySearchVectorWithScore(query: number[], k: number): Promise<[Document, number][]> {
+
+
+  async similaritySearchVectorWithScore(query: number[],k = 10, quer_data: Record<string, unknown> = {}): Promise<[Document, number][]> {
+    var filterByLabel = (label: any) => {return true}
+    if (Object.keys(quer_data).length == 0) {
+      filterByLabel = (label) => {return true}
+    } else {
+      var matchingDocs = await this.getDataWithMetadata(quer_data);
+      filterByLabel = (label) => {
+        let result = false;
+        try {
+          for (let i = 0; i < matchingDocs.length; i++) {
+
+            const idHash = HNSWLib.sha256ToDecimal((matchingDocs[i] as {id: String}).id);
+            if (idHash === label) {
+              result = true;
+              break;
+            }
+          }
+        } catch(e) {
+            console.log(e)
+        }
+        return result;
+      };
+    }
+    
     if (query.length !== this.args.numDimensions) {
       throw new Error(`Query vector must have the same length as the number of dimensions (${this.args.numDimensions})`);
     }
@@ -230,7 +255,8 @@ export class HNSWLib extends SaveableVectorStore {
       console.warn(`k (${k}) is greater than the number of elements in the index (${total}), setting k to ${total}`);
       k = total;
     }
-    const result = this.index.searchKnn(Array.from(query), k);
+    
+    const result = this.index.searchKnn(Array.from(query), k, filterByLabel);
     return result.neighbors.map(
       (docIndex, resultIndex) =>
         [this.docstore.search(String(docIndex)), result.distances[resultIndex]] as [Document, number]
@@ -281,9 +307,12 @@ export class HNSWLib extends SaveableVectorStore {
   async getDataWithMetadata(query: Record<string, unknown>, k: number = 1): Promise<Record<string, unknown>[]> {
     const queryKeys = Object.keys(query);
     const matchingDocs: Record<string, unknown>[] = [];
+    //console.log(this.docstore._docs.entries())
     for (const doc of this.docstore._docs.values()) {
       for (const key of queryKeys) {
+        
         if ((query["content"] == undefined) && (doc.metadata["projectId"] == query["projectId"])) {
+          //console.log(doc.metadata[key], query[key])
           matchingDocs.push(doc.metadata);
           break;
         }

@@ -36,7 +36,8 @@ export class EventService<
       for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
       const f32_ary = new Float32Array(ary_buf)
       const query = f32_ary as unknown as number[]
-      let search_result = await vectordb.extractMetadataFromResults(query, 2)
+      const { $limit: _, ...param } = params.query
+      let search_result = await vectordb.extractMetadataFromResults(query, 2, param)
       if (search_result) {
         return { events: search_result }
       }
