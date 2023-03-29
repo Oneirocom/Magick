@@ -265,6 +265,13 @@ export class InputComponent extends MagickComponent<InputReturn> {
       }
 
         handleSockets(sockets)
+
+        const context = this.editor && this.editor.magick
+        if (!context) return
+        const { sendToInspector } = context
+        if (sendToInspector) {
+          sendToInspector(node.inspector.data())
+        }
     }
 
     inputType.onData = data => {

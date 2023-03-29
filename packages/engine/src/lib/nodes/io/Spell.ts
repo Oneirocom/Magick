@@ -259,7 +259,7 @@ export class SpellComponent extends MagickComponent<
     if (node.data.name) {
       setTimeout(() => {
         this.subscribe(node, node.data.name as string)
-      }, 1000)
+      }, 100)
     }
 
     return node
