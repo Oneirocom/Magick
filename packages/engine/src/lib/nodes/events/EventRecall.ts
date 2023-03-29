@@ -75,12 +75,18 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
-    const getEventsbyEmbedding = async (params: { embedding: string }) => {
+    const getEventsbyEmbedding = async (params: GetEventArgs & {embedding: string }) => {
 
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
-
-      url.searchParams.append('embedding', params['embedding'])
+      for (const p in params) {
+        // append params to url, make sure to preserve arrays
+        if (Array.isArray(params[p])) {
+          params[p].forEach(v => url.searchParams.append(p, v))
+        } else {
+          url.searchParams.append(p, params[p])
+        }
+      }
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
       const json = await response.json()
@@ -139,7 +145,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
             Array.from<number>(new Uint8Array(uint))
           )
         )
-        events = await getEventsbyEmbedding({ embedding: str })
+        events = await getEventsbyEmbedding({ ...data, embedding: str })
       }
     } else {
       events = await getEvents(data)
