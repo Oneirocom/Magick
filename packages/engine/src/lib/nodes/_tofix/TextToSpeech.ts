@@ -39,7 +39,6 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
       socket: anySocket,
     }
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

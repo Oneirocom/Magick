@@ -21,7 +21,6 @@ export class NumberVariable extends MagickComponent<InputReturn> {
       },
     }, 'Number', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

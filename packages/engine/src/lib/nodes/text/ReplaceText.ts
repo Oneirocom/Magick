@@ -31,7 +31,6 @@ export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
       },
     }, 'Text', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

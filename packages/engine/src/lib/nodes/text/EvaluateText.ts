@@ -17,7 +17,6 @@ export class EvaluateText extends MagickComponent<Promise<void>> {
       outputs: { true: 'option', false: 'option', output: 'output' },
     }, 'Text', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

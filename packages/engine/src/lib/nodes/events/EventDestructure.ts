@@ -40,7 +40,6 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       },
     }, 'Event', info)
     
-    this.display = true
   }
 
   builder(node: MagickNode) {

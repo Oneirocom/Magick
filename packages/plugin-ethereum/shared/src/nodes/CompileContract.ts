@@ -58,10 +58,8 @@ export class CompileContract extends MagickComponent<Promise<InputReturn>> {
     this.module = {
       nodeType: 'triggerIn',
       socket: anySocket,
-      hide: true,
     }
 
-    this.display = true
     this.contextMenuName = 'Compile Contract'
     this.displayName = 'Compile Contract'
   }

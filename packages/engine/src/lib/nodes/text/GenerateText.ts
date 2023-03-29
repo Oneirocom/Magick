@@ -33,7 +33,6 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       },
     }, 'Text', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

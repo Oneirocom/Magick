@@ -31,7 +31,6 @@ export class Output extends MagickComponent<void> {
       socket: anySocket,
     }
 
-    this.display = true
   }
 
   builder(node: MagickNode) {
@@ -86,7 +85,7 @@ export class Output extends MagickComponent<void> {
     const outputType = node.data.outputType
     const output = inputs.input.filter(Boolean)[0] as string
     const event =
-      inputs.event?.[0] || (Object.values(module.inputs)[0] as unknown[])[0]
+      inputs.event?.[0] || (module.inputs && (Object.values(module.inputs)[0] as unknown[])?.[0])
 
       if (magick) {
         const { sendToPlaytest } = magick
@@ -97,7 +96,6 @@ export class Output extends MagickComponent<void> {
       }
 
     if (module.agent) {
-      console.log('outputType', outputType)
       if ((outputType as string).includes('Default')) {
         const inputType = pluginManager.getInputTypes().find(inputType => {
           return (

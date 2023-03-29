@@ -33,10 +33,8 @@ export class GetERC20BalanceFromWallet extends MagickComponent<Promise<InputRetu
     this.module = {
       nodeType: 'triggerIn',
       socket: anySocket,
-      hide: true,
     }
 
-    this.display = true
     this.contextMenuName = 'Check ERC20 Balance'
     this.displayName = 'Check ERC20 Balance'
   }

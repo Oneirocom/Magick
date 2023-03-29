@@ -76,11 +76,11 @@ export class ModuleManager {
   }
 
   getTriggerOuts(data: GraphData): ModuleSocketType[] {
-    return this.getSockets(data, this.triggerOuts, 'trigger')
+    return this.getSockets(data, this.outputs, 'trigger')
   }
 
   getTriggerIns(data: GraphData) {
-    return this.getSockets(data, this.triggerIns, 'trigger')
+    return this.getSockets(data, this.inputs, 'trigger')
   }
 
   socketFactory(

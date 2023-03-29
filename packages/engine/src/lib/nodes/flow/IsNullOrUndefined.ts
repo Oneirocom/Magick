@@ -15,7 +15,6 @@ export class IsNullOrUndefined extends MagickComponent<Promise<void>> {
       outputs: { true: 'option', false: 'option' },
     }, 'Flow', info)
 
-    this.display = true
   }
 
   builder(node: MagickNode) {

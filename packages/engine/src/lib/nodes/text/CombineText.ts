@@ -25,7 +25,6 @@ export class CombineText extends MagickComponent<Promise<WorkerReturn>> {
         trigger: 'option',
       },
     }, 'Text', info)
-    this.display = true
   }
 
   builder(node: MagickNode) {

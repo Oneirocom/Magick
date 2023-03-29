@@ -1,7 +1,7 @@
 import Rete from 'rete'
 
 import { MagickComponent } from '../../engine'
-import { objectSocket, stringSocket, triggerSocket } from '../../sockets'
+import { arraySocket, objectSocket, stringSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs, WorkerData
@@ -14,21 +14,21 @@ type WorkerReturn = {
   output: string
 }
 
-export class ObjectToJSON extends MagickComponent<Promise<WorkerReturn>> {
+export class ArrayToJSON extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Object To JSON', {
+    super('Array To JSON', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }, 'Object', info)
+    }, 'Array', info)
   }
 
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const output = new Rete.Output('output', 'String', stringSocket)
-    const input = new Rete.Input('input', 'Object', objectSocket)
+    const input = new Rete.Input('input', 'Array', arraySocket)
 
     node
       .addInput(dataInput)
@@ -40,6 +40,7 @@ export class ObjectToJSON extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   async worker(_node: WorkerData, rawInputs: MagickWorkerInputs) {
+    console.log('input', rawInputs.input)
     const obj = rawInputs.input[0] as string
 
     return {
