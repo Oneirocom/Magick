@@ -49,8 +49,6 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
 
   worker(node: WorkerData, inputs: MagickWorkerInputs, outputs: MagickWorkerOutputs, context: { module: { publicVariables: string } }) {
     let _var = node?.data?._var === true
-    if(!context.module.publicVariables) throw new Error('No pubvars found')
-
     const publicVars = JSON.parse(context.module.publicVariables)
     if (node?.data?.isPublic && publicVars[node.id]) {
       _var = publicVars[node.id].value
