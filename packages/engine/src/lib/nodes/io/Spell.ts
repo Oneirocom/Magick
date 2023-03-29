@@ -52,7 +52,7 @@ export class SpellComponent extends MagickComponent<
 > {
   declare updateModuleSockets: UpdateModuleSockets
   subscriptionMap: Record<number, () => void> = {}
-  isSubspell: boolean
+  noBuildUpdate: boolean
 
   constructor() {
     super(
@@ -68,7 +68,7 @@ export class SpellComponent extends MagickComponent<
       nodeType: 'module',
       skip: true,
     }
-    this.isSubspell = true
+    this.noBuildUpdate = true
     // this.onDoubleClick = (node: MagickNode) => {
     //   if (!this.editor) return
     //   console.log('double click', node)
