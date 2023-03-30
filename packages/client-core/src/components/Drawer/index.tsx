@@ -1,27 +1,34 @@
-import { ClientPlugin, ClientPluginManager, pluginManager } from '@magickml/engine'
-import AppsIcon from '@mui/icons-material/Apps'
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
-import BoltIcon from '@mui/icons-material/Bolt'
-import DocumentIcon from '@mui/icons-material/Description'
-import SettingsIcon from '@mui/icons-material/Settings'
-import ProjectIcon from '@mui/icons-material/Home'
-import StorageIcon from '@mui/icons-material/Storage'
-import Divider from '@mui/material/Divider'
-import MuiDrawer from '@mui/material/Drawer'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import { CSSObject, styled, Theme } from '@mui/material/styles'
-import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { SetAPIKeys } from './SetAPIKeys'
-import MagickLogo from './purple-logo-full.png'
-import MagickLogoSmall from './purple-logo-small.png'
+// GENERATED 
+import { ClientPlugin, ClientPluginManager, pluginManager } from '@magickml/engine';
+import AppsIcon from '@mui/icons-material/Apps';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import BoltIcon from '@mui/icons-material/Bolt';
+import DocumentIcon from '@mui/icons-material/Description';
+import SettingsIcon from '@mui/icons-material/Settings';
+import ProjectIcon from '@mui/icons-material/Home';
+import StorageIcon from '@mui/icons-material/Storage';
+import Divider from '@mui/material/Divider';
+import MuiDrawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import { CSSObject, styled, Theme } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { SetAPIKeys } from './SetAPIKeys';
+import MagickLogo from './purple-logo-full.png';
+import MagickLogoSmall from './purple-logo-small.png';
 
-const drawerWidth = 150
+// Drawer width
+const drawerWidth = 150;
 
+/**
+ * CSS mixin for opening the drawer.
+ * @param {Theme} theme - A MUI theme object.
+ * @returns {CSSObject} - The CSS object for open drawer.
+ */
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -29,8 +36,13 @@ const openedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: 'hidden',
-})
+});
 
+/**
+ * CSS mixin for closing the drawer.
+ * @param {Theme} theme - A MUI theme object.
+ * @returns {CSSObject} - The CSS object for closed drawer.
+ */
 const closedMixin = (theme: Theme): CSSObject => ({
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -41,14 +53,17 @@ const closedMixin = (theme: Theme): CSSObject => ({
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(5)} + 1px)`,
   },
-})
+});
 
 type HeaderProps = {
-  open: boolean
-}
+  open: boolean;
+};
 
+/**
+ * Drawer header styled component.
+ */
 const DrawerHeader = styled('div', {
-  shouldForwardProp: prop => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== 'open',
 })<HeaderProps>(({ theme, open }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
@@ -57,10 +72,13 @@ const DrawerHeader = styled('div', {
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-}))
+}));
 
+/**
+ * Styled drawer component.
+ */
 const StyledDrawer = styled(MuiDrawer, {
-  shouldForwardProp: prop => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   width: drawerWidth,
   flexShrink: 0,
@@ -74,8 +92,18 @@ const StyledDrawer = styled(MuiDrawer, {
     ...closedMixin(theme),
     '& .MuiDrawer-paper': closedMixin(theme),
   }),
-}))
+}));
 
+/**
+ * Component for a single drawer item.
+ * @param {object} props - The component properties.
+ * @param {React.ReactNode} props.Icon - The icon component for the drawer item.
+ * @param {boolean} props.open - Drawer open state.
+ * @param {string} props.text - The drawer item text.
+ * @param {boolean} props.active - The drawer item active state.
+ * @param {Function} [props.onClick] - The onClick event handler for the drawer item.
+ * @returns {JSX.Element} - The drawer item component.
+ */
 const DrawerItem = ({
   Icon,
   open,
@@ -84,7 +112,7 @@ const DrawerItem = ({
   onClick = () => {
     /* null handler */
   },
-}) => (
+}): JSX.Element => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
     <ListItemButton
       sx={{
@@ -107,21 +135,28 @@ const DrawerItem = ({
       <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
     </ListItemButton>
   </ListItem>
-)
+);
 
-const PluginDrawerItems = ({ onClick, open }) => {
-  const location = useLocation()
-  const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
-  let lastPlugin:string|null = null
-  let divider = false
+/**
+ * Component for plugin drawer items.
+ * @param {object} params - The component properties.
+ * @param {Function} [params.onClick] - The onClick event handler for the plugin drawer items.
+ * @param {boolean} [params.open] - Drawer open state.
+ * @returns {JSX.Element} - The plugin drawer items component.
+ */
+const PluginDrawerItems = ({ onClick, open }): JSX.Element => {
+  const location = useLocation();
+  const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems();
+  let lastPlugin: string | null = null;
+  let divider = false;
   return (
     <>
       {drawerItems.map((item, index) => {
         if (item.plugin !== lastPlugin) {
-          divider = true
-          lastPlugin = item.plugin
+          divider = true;
+          lastPlugin = item.plugin;
         } else {
-          divider = false
+          divider = false;
         }
         return (
           <div key={item.path}>
@@ -135,41 +170,56 @@ const PluginDrawerItems = ({ onClick, open }) => {
               text={item.text}
             />
           </div>
-        )
+        );
       })}
     </>
-  )
-}
+  );
+};
 
-export function Drawer({ children }) {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const [isAPIKeysSet, setAPIKeysSet] = useState(false)
+/**
+ * Main Drawer component.
+ * @param {object} props - The component properties.
+ * @param {React.ReactNode} props.children - The children components.
+ * @returns {JSX.Element} - The Drawer component.
+ */
+export function Drawer({ children }): JSX.Element {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isAPIKeysSet, setAPIKeysSet] = useState(false);
 
-  const [open, setOpen] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false);
 
-  const toggleDrawer = () => {
-    setOpen(!open)
-  }
+  /**
+   * Toggles the drawer open state.
+   */
+  const toggleDrawer = (): void => {
+    setOpen(!open);
+  };
 
-  const onClick = location => () => {
-    navigate(location)
-  }
+  /**
+   * Handles the onClick event for drawer items.
+   * @param {string} location - The target location for navigation.
+   * @returns {Function} - A callback function to navigate when a drawer item is clicked.
+   */
+  const onClick = (location): (() => void) => (): void => {
+    navigate(location);
+  };
 
+  // Update local storage for API keys
   useEffect(() => {
-    const secrets = localStorage.getItem('secrets')
+    const secrets = localStorage.getItem('secrets');
     if (secrets) {
-      let secretHasBeenSet = false
-      const parsedSecrets = JSON.parse(secrets)
+      let secretHasBeenSet = false;
+      const parsedSecrets = JSON.parse(secrets);
       // check if any of the parsed secrets are not ''
-      Object.keys(parsedSecrets).forEach(key => {
+      Object.keys(parsedSecrets).forEach((key) => {
         if (parsedSecrets[key] !== '' && parsedSecrets[key]) {
-          secretHasBeenSet = true
+          secretHasBeenSet = true;
         }
-      })
-      setAPIKeysSet(secretHasBeenSet)
+      });
+      setAPIKeysSet(secretHasBeenSet);
     }
-  }, [])
+  }, []);
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -251,5 +301,5 @@ export function Drawer({ children }) {
       </StyledDrawer>
       {children}
     </div>
-  )
+  );
 }
