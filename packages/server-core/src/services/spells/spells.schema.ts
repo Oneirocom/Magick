@@ -1,16 +1,17 @@
-import { resolve } from '@feathersjs/schema'
-import type { Static } from '@feathersjs/typebox'
-import { getDataValidator, getValidator, querySyntax, Type } from '@feathersjs/typebox'
+// GENERATED 
+import { resolve } from '@feathersjs/schema';
+import type { Static } from '@feathersjs/typebox';
+import { getDataValidator, getValidator, querySyntax, Type } from '@feathersjs/typebox';
 
-import { SpellInterface, spellSchema } from '@magickml/engine'
-import { dataValidator, queryValidator } from '../../config/validators'
-import type { HookContext } from '../../declarations'
+import { SpellInterface, spellSchema } from '@magickml/engine';
+import { dataValidator, queryValidator } from '../../config/validators';
+import type { HookContext } from '../../declarations';
 
-export const spellResolver = resolve<SpellInterface, HookContext>({})
+// Resolvers for SpellInterface
+export const spellResolver = resolve<SpellInterface, HookContext>({});
+export const spellExternalResolver = resolve<SpellInterface, HookContext>({});
 
-export const spellExternalResolver = resolve<SpellInterface, HookContext>({})
-
-// Schema for creating new entries
+// Schema for creating new entries, removing additional fields
 export const spellDataSchema = Type.Pick(spellSchema, [
   'name',
   'projectId',
@@ -20,22 +21,22 @@ export const spellDataSchema = Type.Pick(spellSchema, [
   'hash',
 ], {
   $id: 'SpellData'
-})
-export type SpellData = Static<typeof spellDataSchema>
-export const spellDataValidator = getDataValidator(spellDataSchema, dataValidator)
+});
+export type SpellData = Static<typeof spellDataSchema>;
+export const spellDataValidator = getDataValidator(spellDataSchema, dataValidator);
 export const spellDataResolver = resolve<SpellInterface, HookContext>({
-  createdAt: async () => Date.now().toString()
-})
+  createdAt: async () => Date.now().toString(),
+});
 
-// Schema for updating existing entries
+// Schema for updating existing entries, making all properties optional
 export const spellPatchSchema = Type.Partial(spellDataSchema, {
   $id: 'SpellPatch'
-})
-export type SpellPatch = Static<typeof spellPatchSchema>
-export const spellPatchValidator = getDataValidator(spellPatchSchema, dataValidator)
+});
+export type SpellPatch = Static<typeof spellPatchSchema>;
+export const spellPatchValidator = getDataValidator(spellPatchSchema, dataValidator);
 export const spellPatchResolver = resolve<SpellInterface, HookContext>({
   updatedAt: async () => Date.now().toString(),
-})
+});
 
 // Schema for allowed query properties
 export const spellQueryProperties = Type.Pick(spellSchema, [
@@ -46,10 +47,10 @@ export const spellQueryProperties = Type.Pick(spellSchema, [
   'createdAt',
   'updatedAt',
   'hash',
-])
+]);
 export const spellQuerySchema = Type.Intersect(
   [
-    querySyntax(spellQueryProperties,{
+    querySyntax(spellQueryProperties, {
       name: process.env.DATABASE_TYPE === 'pg' ? {
         $ilike: Type.String()
       } : {
@@ -60,8 +61,8 @@ export const spellQuerySchema = Type.Intersect(
     Type.Object({}, { additionalProperties: false })
   ],
   { additionalProperties: false }
-)
-export type SpellQuery = Static<typeof spellQuerySchema>
-export const spellQueryValidator = getValidator(spellQuerySchema, queryValidator)
-export const spellQueryResolver = resolve<SpellQuery, HookContext>({})
-export const spellJsonFields = ['graph']
+);
+export type SpellQuery = Static<typeof spellQuerySchema>;
+export const spellQueryValidator = getValidator(spellQuerySchema, queryValidator);
+export const spellQueryResolver = resolve<SpellQuery, HookContext>({});
+export const spellJsonFields = ['graph'];

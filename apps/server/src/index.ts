@@ -29,7 +29,7 @@ process.on('uncaughtException', (err: Error) => {
   console.error('uncaughtException', err)
 })
 
-process.on('unhandledRejection', (reason: {}, p: Promise<any>) =>
+process.on('unhandledRejection', (reason: {/* null */}, p: Promise<any>) =>
   logger.error('Unhandled Rejection at: Promise ', p, reason)
 )
 
@@ -55,7 +55,7 @@ async function init() {
   await initFileServer()
   await initTextToSpeech()
 
-  const serverInits: Record<string, Function> = pluginManager.getServerInits();
+  const serverInits: Record<string, any> = pluginManager.getServerInits();
   
   for (const method of Object.keys(serverInits)) {
     await serverInits[method]();

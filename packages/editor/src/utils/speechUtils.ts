@@ -59,6 +59,7 @@ class SpeechUtils {
    * Initialize and start recording.
    * @param {Function} newMessageCallback - The callback function to handle received transcript.
    */
+  // eslint-disable-next-line @typescript-eslint/ban-types
   initRecording = (newMessageCallback: Function) => {
     this.socket.emit('startGoogleCloudStream', '');
     this.streamStreaming = true;
@@ -86,7 +87,7 @@ class SpeechUtils {
       this.socket.emit('join', 'connected');
     });
 
-    this.socket.on('messages', (data: any) => {});
+    this.socket.on('messages', (data: any) => {/* null */});
 
     this.socket.on('speechData', (data: any) => {
       const dataFinal = data.results[0]?.isFinal;

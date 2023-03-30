@@ -1,28 +1,42 @@
-import { Params } from '@feathersjs/feathers'
-import { app } from '../../app'
+// GENERATED 
+import { Params } from '@feathersjs/feathers';
+import { app } from '../../app';
 
+/**
+ * Interface for CreateData objects
+ */
 interface CreateData {
-  agents
-  documents
-  spells
-  projectId: string
+  agents: any; // Add specific type if possible
+  documents: any; // Add specific type if possible
+  spells: any; // Add specific type if possible
+  projectId: string;
 }
 
+/**
+ * Interface for custom params including user information
+ */
 export interface ProjectParams extends Params {
-  user: any
+  user: any; // Add specific type if possible
 }
 
-// interface Data {}
-
-// By default calls the standard Knex adapter service methods but can be customized with your own functionality.
+/**
+ * ProjectsService class provides functionality to find and create projects.
+ * By default, it calls the standard Knex adapter service methods,
+ * but can be customized with your own functionality.
+ */
 export class ProjectsService {
+  /**
+   * Find projects with matching projectId and return their agents, spells, and documents.
+   * @param params - Project and user parameters
+   * @returns - An object containing the agents, spells and documents of the project
+   */
   async find(
-    params?: ProjectParams
+    params?: ProjectParams,
   ): Promise<{ agents: any; spells: any; documents: any }> {
-    const { query } = params
-    const projectId = query.projectId
+    const { query } = params;
+    const projectId = query.projectId;
 
-    // get all agents for this projectId
+    // Get all agents, spells, and documents for this projectId
     const [agents, spells, documents] = await Promise.all([
       app.service('agents').find({
         query: {
@@ -39,77 +53,82 @@ export class ProjectsService {
           projectId,
         },
       }),
-    ])
+    ]);
 
     return {
       agents: agents.data,
       spells: spells.data,
       documents: documents.data,
-    }
+    };
   }
 
+  /**
+   * Create a new project with the given data (agents, documents, spells, projectId)
+   * @param data - The data required to create a new project
+   * @returns - An object containing the created agents, spells and documents
+   */
   async create(data: CreateData): Promise<{
-    agents: any
-    spells: any
-    documents: any
+    agents: any;
+    spells: any;
+    documents: any;
   }> {
-    const { agents, documents, spells, projectId } = data
+    const { agents, documents, spells, projectId } = data;
 
+    // Map agents, documents, and spells with updated information for the new project
     const mappedAgents = agents.map(agent => {
-      delete agent.id
-      // stringify spells
-      agent.spells = '[]'
-      if (!agent.data) agent.data = '{}'
-      agent.enabled = false
-      agent.projectId = projectId
-      return agent
-    })
+      delete agent.id;
+      agent.spells = '[]';
+      if (!agent.data) agent.data = '{}';
+      agent.enabled = false;
+      agent.projectId = projectId;
+      return agent;
+    });
 
     const mappedDocuments = documents.map(doc => {
-      delete doc.id
-      doc.projectId = projectId
-      return doc
-    })
+      delete doc.id;
+      doc.projectId = projectId;
+      return doc;
+    });
 
     const mappedSpells = spells.map(spell => {
-      delete spell.id
-      delete spell.updatedAt
-      spell.projectId = projectId
-      return spell
-    })
+      delete spell.id;
+      delete spell.updatedAt;
+      spell.projectId = projectId;
+      return spell;
+    });
 
-    const agentResponse = []
+    // Create and store new agents, documents, and spells
+    const agentResponse: any[] = [];
     if (mappedAgents.length > 0) {
       mappedAgents.forEach(async agent => {
-        console.log('setting agent', agent)
-        const r = await app.service('agents').create(agent)
-        agentResponse.push(r)
-      })
+        console.log('setting agent', agent);
+        const r = await app.service('agents').create(agent);
+        agentResponse.push(r);
+      });
     }
 
-    const documentResponse = []
+    const documentResponse: any[] = [];
     if (mappedDocuments.length > 0) {
       mappedDocuments.forEach(async doc => {
-        console.log('setting doc', doc)
-        const r = await app.service('documents').create(doc)
-        documentResponse.push(r)
-      })
+        console.log('setting doc', doc);
+        const r = await app.service('documents').create(doc);
+        documentResponse.push(r);
+      });
     }
 
-    const spellResponse = []
-
+    const spellResponse: any[] = [];
     if (mappedSpells.length > 0) {
       mappedSpells.forEach(async spell => {
-        console.log('setting spell', spell)
-        const r = await app.service('spells').create(spell)
-        spellResponse.push(r)
-      })
+        console.log('setting spell', spell);
+        const r = await app.service('spells').create(spell);
+        spellResponse.push(r);
+      });
     }
 
     return {
       agents: agentResponse,
       spells: documentResponse,
       documents: spellResponse,
-    }
+    };
   }
 }

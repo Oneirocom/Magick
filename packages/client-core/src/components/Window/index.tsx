@@ -1,10 +1,19 @@
+// GENERATED 
 import * as React from 'react'
 import { ReactElement, useEffect, useRef } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 
 import css from './window.module.css'
 
-const WindowLayout = ({ scrollToBottom, children }) => {
+/**
+ * A layout component to handle scrolling to the bottom.
+ *
+ * @param {object} props - The properties.
+ * @param {boolean} props.scrollToBottom - If true, the content will scroll to bottom on change.
+ * @param {React.ReactNode} props.children - The content to be rendered within the layout.
+ * @return {ReactElement} The WindowLayout component.
+ */
+const WindowLayout: React.FC<{ scrollToBottom: boolean; children: React.ReactNode }> = ({ scrollToBottom, children }) => {
   const scrollbars = useRef<any>()
 
   useEffect(() => {
@@ -28,15 +37,35 @@ type Props = {
   grid?: boolean
   scrollToBottom?: boolean
   toolbar?: ReactElement<any, any> | false
-  lock?: ReactElement<any, any> | false
   children: ReactElement<any, any> | ReactElement<any, any>[]
 }
 
-export const WindowToolbar = props => {
-  return <div className={css['window-toolbar']}>{props.children}</div>
+/**
+ * A wrapper component for the window toolbar.
+ *
+ * @param {object} props - The properties.
+ * @param {React.ReactNode} props.children - The content to be rendered within the toolbar.
+ * @return {ReactElement} The WindowToolbar component.
+ */
+export const WindowToolbar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <div className={css['window-toolbar']}>{children}</div>
 }
 
-export const Window = (props: Props) => {
+/**
+ * A window component with optional styling and layout features.
+ *
+ * @param {Props} props - The properties.
+ * @param {boolean} [props.outline=false] - If true, an outline will be added around the window.
+ * @param {boolean} [props.dark=false] - If true, a dark background will be applied.
+ * @param {boolean} [props.borderless=false] - If true, padding will be removed.
+ * @param {boolean} [props.darker=false] - If true, a darker background will be applied.
+ * @param {boolean} [props.grid=false] - If true, a grid layout will be applied.
+ * @param {boolean} [props.scrollToBottom=false] - If true, will scroll to bottom on changes.
+ * @param {ReactElement | false} [props.toolbar=false] - The toolbar component, if present.
+ * @param {ReactElement | ReactElement[]} props.children - The content to be rendered within the window.
+ * @return {ReactElement} The Window component.
+ */
+export const Window: React.FC<Props> = (props) => {
   const {
     outline = false,
     dark = false,

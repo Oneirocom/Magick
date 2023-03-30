@@ -43,9 +43,9 @@ const DebugConsole = ({ tab }): JSX.Element => {
   /**
    * Trigger a node.
    *
-   * @param {string} nodeId - Node ID.
+   * @param {number} nodeId - Node ID.
    */
-  const trigger = (nodeId: string): void => {
+  const trigger = (nodeId: number): void => {
     publish($TRIGGER(tab.id, nodeId));
   };
 
@@ -138,13 +138,14 @@ const DebugConsole = ({ tab }): JSX.Element => {
       description: 'Echo a passed string.',
       usage: 'echo <string>',
       fn: function () {
+        // eslint-disable-next-line prefer-rest-params
         return `${Array.from(arguments).join(' ')}`;
       },
     },
     node: {
       description: 'Center a node on the editor',
       usage: 'node <nodeId>',
-      fn: function (nodeId: string) {
+      fn: function (nodeId: number) {
         centerNode(nodeId);
         return '';
       },

@@ -1,11 +1,15 @@
-// // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
-import { resolve } from '@feathersjs/schema'
-import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
-import type { Static } from '@feathersjs/typebox'
+// GENERATED 
+// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 
-import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../config/validators'
+// Import necessary helper functions and types
+import { resolve } from '@feathersjs/schema';
+import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox';
+import type { Static } from '@feathersjs/typebox';
 
+import type { HookContext } from '../../declarations';
+import { dataValidator, queryValidator } from '../../config/validators';
+
+// Define the eventSchema
 export const eventSchema = Type.Object(
   {
     id: Type.String(),
@@ -23,13 +27,12 @@ export const eventSchema = Type.Object(
     embedding: Type.Optional(Type.Any()),
   },
   { $id: 'Event', additionalProperties: false }
-)
-export type Event = Static<typeof eventSchema>
-export const eventResolver = resolve<Event, HookContext>({})
+);
+export type Event = Static<typeof eventSchema>;
+export const eventResolver = resolve<Event, HookContext>({});
+export const eventExternalResolver = resolve<Event, HookContext>({});
 
-export const eventExternalResolver = resolve<Event, HookContext>({})
-
-// Schema for creating new entries
+// Define the eventDataSchema to create new entries
 export const eventDataSchema = Type.Pick(eventSchema, [
   'type',
   'observer',
@@ -45,20 +48,24 @@ export const eventDataSchema = Type.Pick(eventSchema, [
   'embedding'
 ], {
   $id: 'EventData'
-})
-export type EventData = Static<typeof eventDataSchema>
-export const eventDataValidator = getDataValidator(eventDataSchema, dataValidator)
-export const eventDataResolver = resolve<Event, HookContext>({})
+});
+export type EventData = Static<typeof eventDataSchema>;
 
-// Schema for updating existing entries
+// Define the eventDataValidator
+export const eventDataValidator = getDataValidator(eventDataSchema, dataValidator);
+export const eventDataResolver = resolve<Event, HookContext>({});
+
+// Define the eventPatchSchema to update existing entries
 export const eventPatchSchema = Type.Partial(eventDataSchema, {
   $id: 'EventPatch'
-})
-export type EventPatch = Static<typeof eventPatchSchema>
-export const eventPatchValidator = getDataValidator(eventPatchSchema, dataValidator)
-export const eventPatchResolver = resolve<Event, HookContext>({})
+});
+export type EventPatch = Static<typeof eventPatchSchema>;
 
-// Schema for allowed query properties
+// Define the eventPatchValidator for eventPatchSchema
+export const eventPatchValidator = getDataValidator(eventPatchSchema, dataValidator);
+export const eventPatchResolver = resolve<Event, HookContext>({});
+
+// Define the eventQueryProperties and eventQuerySchema
 export const eventQueryProperties = Type.Pick(eventSchema, [
   'id',
   'type',
@@ -73,7 +80,7 @@ export const eventQueryProperties = Type.Pick(eventSchema, [
   'agentId',
   'date',
   'embedding'
-])
+]);
 export const eventQuerySchema = Type.Intersect(
   [
     querySyntax(eventQueryProperties),
@@ -81,7 +88,9 @@ export const eventQuerySchema = Type.Intersect(
     Type.Object({}, { additionalProperties: false })
   ],
   { additionalProperties: false }
-)
-export type EventQuery = Static<typeof eventQuerySchema>
-export const eventQueryValidator = getValidator(eventQuerySchema, queryValidator)
-export const eventQueryResolver = resolve<EventQuery, HookContext>({})
+);
+
+// Define the query validator and resolver for eventQuerySchema
+export type EventQuery = Static<typeof eventQuerySchema>;
+export const eventQueryValidator = getValidator(eventQuerySchema, queryValidator);
+export const eventQueryResolver = resolve<EventQuery, HookContext>({});

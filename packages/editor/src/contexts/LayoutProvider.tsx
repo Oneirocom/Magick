@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { LoadingScreen } from '@magickml/client-core'
 import {
   Actions,
@@ -90,16 +91,16 @@ const LayoutProvider = ({ children, tab }) => {
 
     // TODO the types provided by react flex layout are wrong for these constructors. Fix with a PR or a fork of the library?
     const rootNode = currentModel.getRoot()
-    // @ts-expect-error
+    // @ts-expect-error - The types provided by react flex layout are wrong for these constructors. Fix with a PR or a fork of the library?
     const tabNode = new TabNode(currentModel, tabJson)
-    // @ts-expect-error
+    // @ts-expect-error - The types provided by react flex layout are wrong for these constructors. Fix with a PR or a fork of the library?
     const tabSetNode = new TabSetNode(currentModel, {
       type: 'tabset',
       weight: 12,
     })
 
     // We are here using a provate variable, so TS isnt picking it up
-    // @ts-expect-error
+    // @ts-expect-error - We are here using a provate variable, so TS isnt picking it up
     rootNode._addChild(tabSetNode)
 
     currentModel.doAction(
@@ -115,11 +116,11 @@ const LayoutProvider = ({ children, tab }) => {
   const createOrFocus = (componentName, title) => {
     if (!currentModelRef.current) return
     // We are here using a provate variable, so TS isnt picking it up
-    // @ts-expect-error
+    // @ts-expect-error - We are here using a provate variable, so TS isnt picking it up
     const component = Object.entries(currentModelRef.current._idMap).find(
       ([, value]) => {
         // Since there is not type for _idMap, we don't know the type value is.
-        // @ts-expect-error
+        // @ts-expect-error - Since there is not type for _idMap, we don't know the type value is.
         return value._attributes?.component === componentName
       }
     )

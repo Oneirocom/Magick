@@ -1,8 +1,7 @@
-import { Application } from "@feathersjs/koa"
-import { FC, LazyExoticComponent } from "react"
-import { Socket } from "rete"
-import { MagickComponentArray } from "./engine"
-import { CompletionProvider, Route, SpellInterface } from "./types"
+import { Application } from '@feathersjs/koa'
+import { FC, LazyExoticComponent } from 'react'
+import { MagickComponentArray } from './engine'
+import { CompletionProvider, Route, SpellInterface } from './types'
 
 export type PluginSecret = {
   name: string
@@ -46,7 +45,6 @@ export type PluginIOType = {
   defaultResponseOutput?: string
   handler?: ({ output, agent, event }) => Promise<void>
 }
-
 
 type PluginConstuctor = {
   name: string
@@ -101,7 +99,7 @@ export class ClientPlugin extends Plugin {
     secrets = [],
     completionProviders = [],
     spellTemplates = [],
-    projectTemplates = []
+    projectTemplates = [],
   }: PluginConstuctor & {
     agentComponents?: FC<any>[]
     clientPageLayout?: PageLayout
@@ -109,7 +107,7 @@ export class ClientPlugin extends Plugin {
     drawerItems?: Array<PluginDrawerItem>
     spellTemplates?: SpellInterface[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    projectTemplates?: any[]  
+    projectTemplates?: any[]
   }) {
     super({
       name,
@@ -129,14 +127,14 @@ export class ClientPlugin extends Plugin {
   }
 }
 
-export type ServerInit = () => (Promise<void> | null | void)
+export type ServerInit = () => Promise<void> | null | void
 export type ServerInits = Record<string, ServerInit>
 export class ServerPlugin extends Plugin {
-  services: ((app:Application)=>void)[]
+  services: ((app: Application) => void)[]
   serverInit?: ServerInit
   agentMethods?: {
-    start: (args)=>Promise<void> | void
-    stop: (args)=>Promise<void> | void
+    start: (args) => Promise<void> | void
+    stop: (args) => Promise<void> | void
   }
   serverRoutes?: Array<PluginServerRoute>
   constructor({
@@ -156,11 +154,11 @@ export class ServerPlugin extends Plugin {
     secrets = [],
     completionProviders = [],
   }: PluginConstuctor & {
-    services?: ((app:Application)=>void)[]
+    services?: ((app: Application) => void)[]
     serverInit?: ServerInit
     agentMethods?: {
-      start: (args)=>Promise<void> | void
-      stop: (args)=>Promise<void> | void
+      start: (args) => Promise<void> | void
+      stop: (args) => Promise<void> | void
     }
     serverRoutes?: Array<PluginServerRoute>
   }) {
@@ -194,7 +192,7 @@ class PluginManager {
   }
 
   getInputTypes() {
-    const inputTypes:PluginIOType[] = []
+    const inputTypes: PluginIOType[] = []
     this.pluginList.forEach(plugin => {
       plugin.inputTypes.forEach(inputType => {
         inputTypes.push(inputType)
@@ -205,7 +203,7 @@ class PluginManager {
   }
 
   getOutputTypes() {
-    const outputTypes:PluginIOType[] = []
+    const outputTypes: PluginIOType[] = []
     this.pluginList.forEach(plugin => {
       plugin.outputTypes.forEach(outputType => {
         outputTypes.push(outputType)
@@ -232,7 +230,7 @@ class PluginManager {
   }
 
   getSecrets(global = false) {
-    const secrets:PluginSecret[] = []
+    const secrets: PluginSecret[] = []
     this.pluginList.forEach(plugin => {
       plugin.secrets.forEach(secret => {
         if (global && !secret.global) return
@@ -242,8 +240,11 @@ class PluginManager {
     return secrets
   }
 
-  getCompletionProviders(type:string|null = null, subtypes: null | string[] = null): CompletionProvider[] {
-    const completionProviders:CompletionProvider[] = []
+  getCompletionProviders(
+    type: string | null = null,
+    subtypes: null | string[] = null
+  ): CompletionProvider[] {
+    const completionProviders: CompletionProvider[] = []
     this.pluginList.forEach(plugin => {
       plugin.completionProviders.forEach(provider => {
         if (type && provider.type !== type) return
@@ -263,7 +264,7 @@ export class ClientPluginManager extends PluginManager {
   }
 
   getAgentComponents() {
-    const agentComp:FC[] = []
+    const agentComp: FC[] = []
     ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       plugin.agentComponents.forEach(component => {
         agentComp.push(component)
@@ -294,7 +295,7 @@ export class ClientPluginManager extends PluginManager {
   }
 
   getClientRoutes() {
-    const clientRoutes:PluginClientRoute[] = []
+    const clientRoutes: PluginClientRoute[] = []
     ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       if (plugin.clientRoutes) {
         plugin.clientRoutes.forEach(route => {
@@ -319,14 +320,20 @@ export class ClientPluginManager extends PluginManager {
       }
       lastPluginRoute = route.plugin
       return acc
-    }, [] as { plugin: string; routes: PluginClientRoute[], layout?:PageLayout }[])
+    }, [] as { plugin: string; routes: PluginClientRoute[]; layout?: PageLayout }[])
 
     pluginRoutesGrouped.forEach(pluginRouteGroup => {
       const ClientPageLayout =
-        (pluginManager as ClientPluginManager).getClientPageLayout(pluginRouteGroup.plugin) || null
+        (pluginManager as ClientPluginManager).getClientPageLayout(
+          pluginRouteGroup.plugin
+        ) || null
       pluginRouteGroup.layout = ClientPageLayout
     })
-    return pluginRoutesGrouped as { plugin: string; routes: PluginClientRoute[], layout:PageLayout }[]
+    return pluginRoutesGrouped as {
+      plugin: string
+      routes: PluginClientRoute[]
+      layout: PageLayout
+    }[]
   }
 
   getClientPageLayout(p) {
@@ -338,7 +345,7 @@ export class ClientPluginManager extends PluginManager {
   }
 
   getDrawerItems() {
-    const drawerItems = [] as (PluginDrawerItem & {plugin:string})[]
+    const drawerItems = [] as (PluginDrawerItem & { plugin: string })[]
     ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       if (plugin.drawerItems) {
         plugin.drawerItems.forEach(drawerItem => {
@@ -374,11 +381,11 @@ export class ClientPluginManager extends PluginManager {
     return {}
   }
   getServices() {
-    const serviceList = [] as ([string, (app:Application)=>void])[]
+    const serviceList = [] as [string, (app: Application) => void][]
     return serviceList
   }
   getServerInits() {
-    const serverInits:ServerInits = {}
+    const serverInits: ServerInits = {}
     return serverInits
   }
 
@@ -397,8 +404,9 @@ export class ServerPluginManager extends PluginManager {
 
   getAgentStartMethods() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let agentStartMethods:Record<string, (args: any) => void | Promise<void>> = {}
-    ;(this.pluginList).forEach((plugin: ServerPlugin) => {
+    let agentStartMethods: Record<string, (args: any) => void | Promise<void>> =
+      {}
+    this.pluginList.forEach((plugin: ServerPlugin) => {
       if (plugin.agentMethods) {
         const obj = {}
         obj[plugin.name] = plugin.agentMethods.start
@@ -410,8 +418,9 @@ export class ServerPluginManager extends PluginManager {
 
   getAgentStopMethods() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let agentStopMethods:Record<string, (args: any) => void | Promise<void>> = {}
-    ;(this.pluginList).forEach((plugin: ServerPlugin) => {
+    let agentStopMethods: Record<string, (args: any) => void | Promise<void>> =
+      {}
+    this.pluginList.forEach((plugin: ServerPlugin) => {
       if (plugin.agentMethods) {
         const obj = {}
         obj[plugin.name] = plugin.agentMethods.stop
@@ -422,8 +431,8 @@ export class ServerPluginManager extends PluginManager {
   }
 
   getServices() {
-    const serviceList = [] as ([string, (app:Application)=>void])[]
-    ;(this.pluginList).forEach((plugin: ServerPlugin) => {
+    const serviceList = [] as [string, (app: Application) => void][]
+    this.pluginList.forEach((plugin: ServerPlugin) => {
       Object.keys(plugin.services).forEach(key => {
         serviceList.push([key, plugin.services[key]])
       })
@@ -432,8 +441,8 @@ export class ServerPluginManager extends PluginManager {
   }
 
   getServerInits() {
-    let serverInits:ServerInits = {}
-    ;(this.pluginList).forEach((plugin: ServerPlugin) => {
+    let serverInits: ServerInits = {}
+    this.pluginList.forEach((plugin: ServerPlugin) => {
       if (plugin.serverInit) {
         const obj = {}
         obj[plugin.name] = plugin.serverInit
@@ -445,7 +454,7 @@ export class ServerPluginManager extends PluginManager {
 
   getServerRoutes() {
     const serverRoutes = [] as PluginServerRoute[]
-    ;(this.pluginList).forEach((plugin: ServerPlugin) => {
+    this.pluginList.forEach((plugin: ServerPlugin) => {
       if (plugin.serverRoutes) {
         plugin.serverRoutes.forEach(route => {
           serverRoutes.push(route)
@@ -456,7 +465,7 @@ export class ServerPluginManager extends PluginManager {
   }
 }
 
-export const pluginManager:ClientPluginManager|ServerPluginManager =
+export const pluginManager: ClientPluginManager | ServerPluginManager =
   typeof window !== 'undefined'
     ? new ClientPluginManager()
-    : (new ServerPluginManager())
+    : new ServerPluginManager()

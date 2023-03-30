@@ -22,7 +22,7 @@ export default abstract class Menu {
    * @param onClick - The callback function to execute when the item is clicked
    * @param path - Optional parameter to specify the icon path
    */
-  addItem(title: string, onClick: () => void, path?: string): void {}
+  addItem(title: string, onClick: () => void, path?: string): void {/* null */}
 
   /**
    * Displays the menu at the specified x and y coordinates
@@ -30,10 +30,10 @@ export default abstract class Menu {
    * @param y - The y-coordinate to position the menu
    * @param args - Additional arguments to pass to the menu
    */
-  show(x: number, y: number, args: any): void {}
+  show(x: number, y: number, args: any): void {/* null */}
 
   /**
    * Hides the menu from view
    */
-  hide(): void {}
+  hide(): void {/* null */}
 }

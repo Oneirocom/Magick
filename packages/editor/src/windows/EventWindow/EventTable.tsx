@@ -1,68 +1,70 @@
-// GENERATED 
-/**
- * A utility component for global filtering.
- *
- * @param {{ globalFilter: string, setGlobalFilter: Function }} props
- * @return {JSX.Element}
- */
-const GlobalFilter = ({ globalFilter, setGlobalFilter }): JSX.Element => {
-  const [value, setValue] = useState(globalFilter);
-  const onChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || undefined);
-  }, 500);
+// todo remove this and make a new event table component eventually.
+//@ts-nocheck
+import { Button } from '@magickml/client-core'
+import { API_ROOT_URL } from '@magickml/engine'
+import {
+  Grid, IconButton, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
+} from '@mui/material'
+import axios from 'axios'
+import _ from 'lodash'
+import { useSnackbar } from 'notistack'
+import { useEffect, useMemo, useState } from 'react'
+import { CSVLink } from 'react-csv'
+import { FaFileCsv } from 'react-icons/fa'
+import { VscArrowDown, VscArrowUp, VscTrash } from 'react-icons/vsc'
+import {
+  useAsyncDebounce, useFilters, useGlobalFilter, usePagination,
+  useSortBy,
+  useTable
+} from 'react-table'
+import { useConfig } from '../../contexts/ConfigProvider'
 
+const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
+  const [value, setValue] = useState(globalFilter)
+  const onChange = useAsyncDebounce(value => {
+    setGlobalFilter(value || undefined)
+  }, 500)
   return (
     <input
       type="text"
       value={value || ''}
-      onChange={(e) => {
-        setValue(e.target.value);
-        onChange(e.target.value);
+      onChange={e => {
+        setValue(e.target.value)
+        onChange(e.target.value)
       }}
       placeholder="Search events..."
       style={{ width: '40em', border: 0, margin: 0 }}
     />
-  );
-};
+  )
+}
 
-/**
- * A utility component for default column filtering.
- *
- * @param {{ column: { filterValue: string, setFilter: Function, Header: string } }} props
- * @return {JSX.Element}
- */
 const DefaultColumnFilter = ({
   column: { filterValue, setFilter, Header },
-}): JSX.Element => {
+}) => {
   return (
     <input
       type="text"
       value={filterValue || ''}
-      onChange={(e) => {
-        setFilter(e.target.value || undefined);
+      onChange={e => {
+        setFilter(e.target.value || undefined)
       }}
       placeholder={Header}
       style={{
         width: '100%',
         border: 0,
+        // 0 radius
         borderRadius: 0,
       }}
     />
-  );
-};
+  )
+}
 
-/**
- * EventTable component for rendering a table of events, allowing filtering, editing, and pagination.
- *
- * @param {{ events: any[], updateCallback: Function }} props
- * @return {JSX.Element}
- */
-function EventTable({ events, updateCallback }): JSX.Element {
-  const { enqueueSnackbar } = useSnackbar();
-  const config = useConfig();
+function EventTable({ events, updateCallback }) {
+  const { enqueueSnackbar } = useSnackbar()
+  const config = useConfig()
 
-  // Define columns for the table
-  const columns = useMemo(() => [
+  const columns = useMemo(
+    () => [
       {
         Header: 'Agent',
         accessor: 'agentId',
@@ -110,7 +112,7 @@ function EventTable({ events, updateCallback }): JSX.Element {
       },
       {
         Header: 'Actions',
-        Cell: (row) => (
+        Cell: row => (
           <IconButton onClick={() => handleEventDelete(row.row.original)}>
             <VscTrash size={16} color="#ffffff" />
           </IconButton>
@@ -118,57 +120,47 @@ function EventTable({ events, updateCallback }): JSX.Element {
       },
     ],
     []
-  );
+  )
 
-  // Update the event function
   const updateEvent = async ({ id, ...rowData }, columnId, value) => {
     const reqBody = {
       ...rowData,
       [columnId]: value,
       projectId: config.projectId,
-    };
-    if (!_.isEqual(reqBody, rowData)) {
-      const isUpdated = await axios.put(`${API_ROOT_URL}/events/${id}`, reqBody);
-      if (isUpdated) {
-        enqueueSnackbar('Event updated', { variant: 'success' });
-      } else {
-        enqueueSnackbar('Error updating event', { variant: 'error' });
-      }
-      updateCallback();
     }
-  };
+    if (!_.isEqual(reqBody, rowData)) {
+      const isUpdated = await axios.put(`${API_ROOT_URL}/events/${id}`, reqBody)
+      if (isUpdated) enqueueSnackbar('Event updated', { variant: 'success' })
+      else enqueueSnackbar('Error updating event', { variant: 'error' })
+      updateCallback()
+    }
+  }
 
-  // EditableCell component
   const EditableCell = ({
     value = '',
     row: { original: row },
     column: { id },
     updateEvent,
-  }): JSX.Element => {
-    const [val, setVal] = useState(value);
-    const onChange = (e) => typeof val !== 'object' && setVal(e.target.value);
-    const onBlur = (e) => updateEvent(row, id, val);
-    useEffect(() => setVal(value), [value]);
-
+  }) => {
+    const [val, setVal] = useState(value)
+    const onChange = e => typeof val !== 'object' && setVal(e.target.value)
+    const onBlur = e => updateEvent(row, id, val)
+    useEffect(() => setVal(value), [value])
     return (
       <input
-        value={
-          val && typeof val === 'object' ? JSON.stringify(val.data) : val
-        }
+        value={val && typeof val === 'object' ? JSON.stringify(val.data) : val}
         onChange={onChange}
         onBlur={onBlur}
         className="bare-input"
       />
-    );
-  };
+    )
+  }
 
-  // Set default column properties
   const defaultColumn = {
     Cell: EditableCell,
     Filter: DefaultColumnFilter,
-  };
+  }
 
-  // Initialize table instance
   const {
     getTableProps,
     getTableBodyProps,
@@ -191,32 +183,26 @@ function EventTable({ events, updateCallback }): JSX.Element {
     useGlobalFilter,
     useSortBy,
     usePagination
-  );
+  )
 
-  // Handle page change
   const handlePageChange = (page: number) => {
-    const pageIndex = page - 1;
-    gotoPage(pageIndex);
-  };
+    const pageIndex = page - 1
+    gotoPage(pageIndex)
+  }
 
-  // Handle event delete
   const handleEventDelete = async (event: any) => {
     const isDeleted = await fetch(`${API_ROOT_URL}/events/${event.id}`, {
       method: 'DELETE',
-    });
-    if (isDeleted) {
-      enqueueSnackbar('Event deleted', { variant: 'success' });
-    } else {
-      enqueueSnackbar('Error deleting Event', { variant: 'error' });
-    }
-    updateCallback();
-  };
+    })
+    if (isDeleted) enqueueSnackbar('Event deleted', { variant: 'success' })
+    else enqueueSnackbar('Error deleting Event', { variant: 'error' })
+    updateCallback()
+  }
 
-  // Calculate originalRows for exporting CSV
   const originalRows = useMemo(
-    () => flatRows.map((row) => row.original),
+    () => flatRows.map(row => row.original),
     [flatRows]
-  );
+  )
 
   return (
     <Stack spacing={2}>
@@ -319,7 +305,7 @@ function EventTable({ events, updateCallback }): JSX.Element {
           </TableHead>
           <TableBody {...getTableBodyProps()}>
             {page.map((row: Row<object>, idx: number) => {
-              prepareRow(row);
+              prepareRow(row)
               return (
                 <TableRow {...row.getRowProps()} key={idx}>
                   {row.cells.map((cell, idx) => (
@@ -328,7 +314,7 @@ function EventTable({ events, updateCallback }): JSX.Element {
                     </TableCell>
                   ))}
                 </TableRow>
-              );
+              )
             })}
           </TableBody>
         </Table>
@@ -341,7 +327,7 @@ function EventTable({ events, updateCallback }): JSX.Element {
         showLastButton
       />
     </Stack>
-  );
+  )
 }
 
-export default EventTable;
+export default EventTable
