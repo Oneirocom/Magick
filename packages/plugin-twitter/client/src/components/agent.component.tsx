@@ -20,7 +20,7 @@ export const TwitterAgentWindow: FC<any> = props => {
       setChecked(selectedAgentData.data?.twitter_enabled)
       setDisable(false)
     }
-  }, [props.enable])
+  }, [props.enable, selectedAgentData])
   return (
     <>
       <div

@@ -1,4 +1,4 @@
-import { DEFAULT_PROJECT_ID, DEFAULT_USER_ID } from '@magickml/engine'
+import { configureManager, DEFAULT_PROJECT_ID, DEFAULT_USER_ID, globalsManager, IGNORE_AUTH } from '@magickml/engine'
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
 import { authenticate } from '@feathersjs/authentication/lib/hooks'
 import { feathers } from '@feathersjs/feathers'
@@ -12,7 +12,6 @@ import { logError } from './hooks'
 import channels from './sockets/channels'
 // import swagger from 'feathers-swagger'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
-import { configureManager, globalsManager, IGNORE_AUTH } from '@magickml/engine'
 import { authentication } from './auth/authentication'
 import { services } from './services'
 import handleSockets from './sockets/sockets'

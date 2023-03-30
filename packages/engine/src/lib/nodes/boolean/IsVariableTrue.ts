@@ -14,15 +14,9 @@ const info =
   'Is Variable true checks if input is true - string or boolean are checked as true or false, numbers are checked as 0 or 1, undifined or null are checked as false'
 export class IsVariableTrue extends MagickComponent<void> {
   constructor() {
-    super('Is Variable True')
-
-    this.task = {
+    super('Is Variable True', {
       outputs: { true: 'option', false: 'option' },
-    }
-
-    this.category = 'Boolean'
-    this.display = true
-    this.info = info
+    }, 'Boolean', info)
   }
 
   builder(node: MagickNode) {
@@ -43,11 +37,11 @@ export class IsVariableTrue extends MagickComponent<void> {
     const type = typeof action
     let is = false
     if (type === 'string') {
-      is = action == 'true'
+      is = action === 'true'
     } else if (type === 'boolean') {
-      is = action == true
+      is = action === true
     } else if (type === 'number') {
-      is = action == 1
+      is = action === 1
     }
 
     this._task.closed = is ? ['false'] : ['true']

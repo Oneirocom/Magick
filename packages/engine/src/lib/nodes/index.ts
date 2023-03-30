@@ -1,8 +1,10 @@
-import { pluginManager } from '../plugin'
 import { MagickComponent } from '../engine'
+import { pluginManager } from '../plugin'
+import { ArrayToJSON } from './array/ArrayToJSON'
 import { ArrayVariable } from './array/ArrayVariable'
 import { GetValueFromArray } from './array/GetValueFromArray'
 import { JoinListComponent } from './array/JoinList'
+import { RemapArray } from './array/RemapArray'
 import { BooleanVariable } from './boolean/BooleanVariable'
 import { IsVariableTrue } from './boolean/IsVariableTrue'
 import { LogicalOperator } from './boolean/LogicalOperator'
@@ -89,6 +91,7 @@ export const components = {
   eventsToConversation: () => new EventsToConversation(),
   composeObject: () => new ComposeObject(),
   joinListComponent: () => new JoinListComponent(),
+  remapArray: () => new RemapArray(),
   moduleComponent: () => new SpellComponent(),
   output: () => new Output(),
   switchGate: () => new SwitchGate(),
@@ -101,6 +104,7 @@ export const components = {
   promptTemplate: () => new TextTemplate(),
   parseJSON: () => new ParseJSON(),
   objectToJSON: () => new ObjectToJSON(),
+  arrayToJSON: () => new ArrayToJSON(),
   getDocuments: () => new GetDocuments(),
   storeDocument: () => new StoreDocument(),
   getValueFromArray: () => new GetValueFromArray(),

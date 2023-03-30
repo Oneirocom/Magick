@@ -10,7 +10,7 @@ import io from 'socket.io-client'
 
 import { LoadingScreen } from '@magickml/client-core'
 import { useConfig } from './ConfigProvider'
-import { Spell } from '@magickml/engine'
+import { SpellInterface } from '@magickml/engine'
 
 // todo unify this type with the server type in spells
 type SaveDiffData = {
@@ -24,7 +24,7 @@ type SaveDiffParams = Record<string, any>
 type ServiceTypes = {
   // The type is a Socket service extended with custom methods
   spells: SocketService & {
-    saveDiff(data: SaveDiffData, params: SaveDiffParams): Promise<Spell>
+    saveDiff(data: SaveDiffData, params: SaveDiffParams): Promise<SpellInterface>
   }
 }
 

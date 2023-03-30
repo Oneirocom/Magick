@@ -60,18 +60,13 @@ function getZodiacSign(degString) {
 
 export class ComputeNatalChart extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Compute Natal Chart')
-
-    this.task = {
+    super('Compute Natal Chart', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Esoterica', info)
 
-    this.category = 'Esoterica'
-    this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

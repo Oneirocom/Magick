@@ -15,15 +15,9 @@ type WorkerReturn = {
 
 export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Logical Operator')
-
-    this.task = {
+    super('Logical Operator', {
       outputs: { true: 'option', false: 'option', error: 'output' },
-    }
-
-    this.category = 'Boolean'
-    this.display = true
-    this.info = info
+    }, 'Boolean', info)
   }
 
   builder(node: MagickNode) {
@@ -79,7 +73,7 @@ export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
         is = inp1 < inp2
       }
     } catch (e) {
-      error = (e as any).message
+      error = (e as Error).message
     }
 
     this._task.closed = is ? ['false'] : ['true']

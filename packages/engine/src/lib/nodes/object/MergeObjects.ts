@@ -3,7 +3,6 @@ import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
-import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { objectSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
@@ -15,16 +14,12 @@ const info = `Merge can take in any number of properties in the form of named so
 export class Merge extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Merge Objects')
-
-    this.task = {
+    super('Merge Objects', {
       outputs: {
         trigger: 'option',
         object: 'output',
       },
-    } as TaskOptions
-    this.category = 'Object'
-    this.info = info
+    }, 'Object', info)
   }
 
   builder(node: MagickNode): MagickNode {
@@ -60,14 +55,14 @@ export class Merge extends MagickComponent<void> {
   }
 
   worker(_node: WorkerData, inputs: MagickWorkerInputs) {
-    const object = inputs.object[0] as Record<string, any>
+    const object = inputs.object[0] as Record<string, unknown>
     const combinedInputs = Object.entries(inputs).reduce(
       (acc, [key, value]) => {
         if (key === 'object') return acc
         acc[key] = value[0]
         return acc
       },
-      {} as Record<string, any>
+      {} as Record<string, unknown>
     )
 
     const combined = {

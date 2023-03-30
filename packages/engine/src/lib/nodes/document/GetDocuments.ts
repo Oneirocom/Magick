@@ -3,21 +3,26 @@ import { API_ROOT_URL } from '../../config'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { arraySocket, triggerSocket } from '../../sockets'
-import { GetDocumentArgs, MagickNode, MagickNodeData, MagickWorkerInputs, MagickWorkerOutputs } from '../../types'
+import {
+  GetDocumentArgs, MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData
+} from '../../types'
 
 const info = 'Get documents from a store'
 
 //add option to get only documents from max time difference (time diff, if set to 0 or -1, will get all documents, otherwise will count in minutes)
 type InputReturn = {
-  documents: any[]
+  documents: Document[]
 }
 
-const getDocumentsbyEmbedding = async (params: any) => {
-      
+const getDocumentsbyEmbedding = async (params: Record<string, string>) => {
+
   const urlString = `${API_ROOT_URL}/documents`
   const url = new URL(urlString)
 
-  Object.entries(params).forEach((p: any) => {
+  Object.entries(params).forEach((p) => {
     url.searchParams.append(p[0], p[1])
   })
 
@@ -41,27 +46,21 @@ const getDocuments = async (params: GetDocumentArgs) => {
   const response = await fetch(url.toString())
   if (response.status !== 200) return null
   const json = await response.json()
-  return json.data
+  return json.data as Document //TODO: Validate
 }
 
 export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Get Documents')
-
-    this.task = {
+    super('Get Documents', {
       outputs: {
         documents: 'output',
         trigger: 'option',
       },
-    }
-
-    this.category = 'Document'
-    this.display = true
-    this.info = info
+    }, 'Document', info)
     this.runFromCache = true
   }
 
-  builder(node: MagickNode) {    
+  builder(node: MagickNode) {
     const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
     const out = new Rete.Output('documents', 'Documents', arraySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
@@ -98,20 +97,27 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: MagickNodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
-    
+
     let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[]
-    if (typeof(embedding) == 'string') embedding = (embedding as any).replace('[',"").replace(']',"");embedding = (embedding as any)?.split(',')
-    
+    // if (typeof(embedding) == 'string') embedding = (embedding as any).replace('[',"").replace(']',"");embedding = (embedding as any)?.split(',')
+    if (typeof (embedding) == 'string')
+      embedding = (embedding as string)
+        .replace('[', "")
+        .replace(']', "")
+        .split(',')
+        .map(parseFloat)
+
+
     const nodeData = node.data as {
       type: string
       max_count: string
       owner: string
     }
-    
+
     const typeData = nodeData.type as string
     const type =
       typeData !== undefined && typeData.length > 0
@@ -140,12 +146,12 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
             Array.from<number>(new Uint8Array(uint))
           )
         )
-        documents = await getDocumentsbyEmbedding({...data, embedding: str })
+        documents = await getDocumentsbyEmbedding({ ...data, maxCount: data.maxCount.toString(), embedding: str })
       }
     } else {
       documents = await getDocuments(data)
     }
-    
+
     return {
       documents,
     }

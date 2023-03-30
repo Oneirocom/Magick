@@ -1,4 +1,4 @@
-import { Spell } from '@magickml/engine'
+import { SpellInterface } from '@magickml/engine'
 import otJson0 from 'ot-json0'
 import { app } from '../../app'
 import { Params } from '@feathersjs/feathers'
@@ -24,7 +24,7 @@ export interface SpellRunnerParams extends Params {
 export class SpellRunnerService<
   ServiceParams extends Params = SpellRunnerParams
 > {
-  async get(id: string, params?: SpellRunnerParams): Promise<Spell | void> {
+  async get(id: string, params?: SpellRunnerParams): Promise<SpellInterface | void> {
     if (!app.userSpellManagers) return null
     if (!params) return console.error('No params present in service')
     const { user, query } = params
@@ -42,7 +42,7 @@ export class SpellRunnerService<
     })
 
     // Load the spell into the spellManager. If there is no spell runner, we make one.
-    await spellManager.load(spell as Spell)
+    await spellManager.load(spell as SpellInterface)
 
     return spell
   }
@@ -67,7 +67,7 @@ export class SpellRunnerService<
 
     if (!spellManager.hasSpellRunner(decodedId)) {
       const spell = await getSpell({ app, id: decodedId, projectId })
-      await spellManager.load(spell as Spell)
+      await spellManager.load(spell as SpellInterface)
     }
 
     const result = await spellManager.run(id, inputs, secrets, publicVariables)
@@ -77,9 +77,9 @@ export class SpellRunnerService<
 
   async update(
     id: string,
-    data: { diff?: Record<string, unknown>, spellUpdate?: Spell, projectId: string},
+    data: { diff?: Record<string, unknown>, spellUpdate?: SpellInterface, projectId: string},
     params?: SpellRunnerParams
-  ): Promise<Spell | void> {
+  ): Promise<SpellInterface | void> {
     if (!app.userSpellManagers) return null
     if (!params) return console.error('No params present in service')
 

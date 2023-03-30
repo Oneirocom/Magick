@@ -6,9 +6,11 @@ import {
   OnEditor,
   OnInspector,
   ProcessCode,
-  PublishEditorEvent, runPython, runSpellType,
-  Spell,
-  SupportedLanguages
+  PublishEditorEvent,
+  runPython,
+  runSpellType,
+  SpellInterface,
+  SupportedLanguages,
 } from '@magickml/engine'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
@@ -26,7 +28,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   const config = useConfig()
 
   const { events, publish, subscribe } = usePubSub()
-  const spellRef = useRef<Spell | null>(null)
+  const spellRef = useRef<SpellInterface | null>(null)
   const [_runSpell] = spellApi.useRunSpellMutation()
   const [_getSpell] = spellApi.useLazyGetSpellByIdQuery()
   const { data: _spell } = spellApi.useGetSpellByIdQuery(
@@ -62,12 +64,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     $PROCESS,
     $TRIGGER,
     $REFRESH_EVENT_TABLE,
-    $SEND_TO_AVATAR,
   } = events
-
-  const getCurrentSpell = () => {
-    return spellRef.current
-  }
 
   // TODO: tech debt.  Check if this is still needed
   /**
@@ -93,7 +90,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       if (typeof data === 'string') {
         throw new Error('onInspector: data is a string')
       }
-      callback(data)
+      callback(data as Record<string, unknown>)
     })
   }
 
@@ -131,12 +128,13 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const onDebug: OnDebug = (node, callback) => {
-    return subscribe($DEBUG_INPUT(tab.id, node.id), (event, data) => {
+    return subscribe($DEBUG_INPUT(tab.id), (event, data) => {
       callback(data)
     })
   }
 
   const sendToPlaytest: (data: string) => void = data => {
+    console.log('sending to playtest', data)
     publish($PLAYTEST_PRINT(tab.id), data)
   }
 
@@ -158,7 +156,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
 
     if (!spell.data) return null
 
-    return spell.data[0] as Spell
+    return spell.data[0] as SpellInterface
   }
 
   const processCode: ProcessCode = async (
@@ -229,7 +227,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     runSpell,
     refreshEventTable,
     getSpell,
-    getCurrentSpell,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>

@@ -1,4 +1,5 @@
 import Rete from 'rete'
+import { InputControl } from '../../dataControls/InputControl'
 
 import { TextInputControl } from '../../dataControls/TextInputControl'
 import { MagickComponent } from '../../engine'
@@ -14,17 +15,12 @@ type WorkerReturn = {
 export class JoinListComponent extends MagickComponent<WorkerReturn> {
   constructor() {
     // Name of the component
-    super('Join List')
-
-    this.task = {
+    super('Join List', {
       outputs: {
         text: 'output',
         trigger: 'option',
       },
-    }
-
-    this.category = 'Array'
-    this.info = info
+    }, 'Array', info)
   }
 
   // the builder is used to "assemble" the node component.
@@ -42,13 +38,14 @@ export class JoinListComponent extends MagickComponent<WorkerReturn> {
 
     // controls are the internals of the node itself
     // This default control sample has a text field.
-    const input = new TextInputControl({
-      editor: this.editor,
-      key: 'separator',
-      value: separator,
+    const input = new InputControl({
+      name: 'Separator',
+      dataKey: 'separator',
+      defaultValue: separator,
     })
+    node.inspector.add(input)
 
-    return node.addOutput(out).addControl(input).addInput(inputList)
+    return node.addOutput(out).addInput(inputList)
   }
 
   // the worker contains the main business logic of the node.  It will pass those results

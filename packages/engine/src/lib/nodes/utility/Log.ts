@@ -9,15 +9,10 @@ const info = 'Logs a value to the console'
 
 export class Log extends MagickComponent<void> {
   constructor() {
-    super('Log')
-
-    this.task = {
+    super('Log', {
       outputs: {},
-    }
+    }, 'Utility', info)
 
-    this.category = 'Utility'
-    this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

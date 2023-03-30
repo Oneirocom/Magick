@@ -8,9 +8,18 @@ interface Props {
 }
 
 const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
+  console.log("....................", publicVars)
   const onChangeHandler = (variable, event) => {
+    const input = event.target
     function applyNativeEventToValue(inputValue, nativeEventData) {
       inputValue = inputValue || ''
+
+      // if input is selected to delete all
+      if (input.selectionStart === 0 && input.selectionEnd === input.value.length) {
+        // All text is selected, delete it
+        inputValue = "";
+      }
+
       // if the native event is a backspace
       if (nativeEventData.inputType === 'deleteContentBackward') {
         // remove the last character
@@ -71,12 +80,13 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
                   />
                 ) : (
                   <Input
-                    style={{ width: '100%' }}
+                    style={{ width: '100%', padding: '13px !important' }}
                     value={variable.value}
                     type="text"
                     onChange={e => onChangeHandler(variable, e)}
                     name={variable.name}
                     placeHolder={'Add new value here'}
+                    multiline={true}
                   />
                 )}
               </Grid>
