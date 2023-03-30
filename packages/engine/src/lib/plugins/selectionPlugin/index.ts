@@ -272,14 +272,14 @@ function install(editor: NodeEditor, params: Cfg) {
   editor.on('keydown', e => {
     if (e.shiftKey) {
       accumulate = true
-      selectionMode.innerText = (cfg.mode ?? [])[1] ?? 'multi'
+      // selectionMode.innerText = (cfg.mode ?? [])[1] ?? 'multi'
     }
   })
 
   editor.on('keyup', () => {
     if (accumulate) {
       accumulate = false
-      selectionMode.innerText = (cfg.mode ?? [])[0] ?? 'single'
+      // selectionMode.innerText = (cfg.mode ?? [])[0] ?? 'single'
     }
   })
 

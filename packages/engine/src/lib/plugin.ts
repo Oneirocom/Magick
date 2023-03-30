@@ -1,54 +1,92 @@
-type Secret = {
+import { Application } from '@feathersjs/koa'
+import { FC, LazyExoticComponent } from 'react'
+import { MagickComponentArray } from './engine'
+import { CompletionProvider, Route, SpellInterface } from './types'
+
+export type PluginSecret = {
   name: string
   key: string
   global?: boolean
+  getUrl?: string
 }
 
-type DrawerItem = {
+export type PluginDrawerItem = {
   path: string
-  icon: any
+  icon: FC
   text: string
 }
 
-type ClientRoute = {
+export type PluginClientRoute = {
   path: string
-  component: any
+  component: FC
   exact?: boolean
+  plugin: string
 }
 
-type ServerRoute = {
-  path: string
-  method: string
-  handler: Function
+export type PluginServerRoute = Route
+
+// inputTypes: [
+//   { name: 'Discord (Voice)', trigger: true, socket: eventSocket},
+//   { name: 'Discord (Text)', trigger: true, socket: eventSocket },
+// ],
+// outputTypes: [
+//   { name: 'Discord (Voice)', trigger: false, socket: eventSocket },
+//   { name: 'Discord (Text)', trigger: false, socket: eventSocket },
+// ],
+// secrets: [{
+//   name: 'Discord API Key',
+//   key: 'discord_api_key',
+//   global: false
+// }]
+export type PluginIOType = {
+  name: string
+  inspectorControls?: any[]
+  sockets?: any[]
+  defaultResponseOutput?: string
+  handler?: ({ output, agent, event }) => Promise<void>
 }
 
 type PluginConstuctor = {
   name: string
-  nodes?: any
-  inputTypes?: any[]
-  outputTypes?: any[]
-  secrets?: Secret[]
+  nodes?: MagickComponentArray
+  inputTypes?: PluginIOType[]
+  outputTypes?: PluginIOType[]
+  secrets?: PluginSecret[]
+  completionProviders?: CompletionProvider[]
 }
 class Plugin {
   name: string
-  nodes: any
-  inputTypes: any[]
-  outputTypes: any[]
-  secrets: Secret[] = []
-  constructor({ name, nodes = [], inputTypes = [], outputTypes = [], secrets = [] }: PluginConstuctor) {
+  nodes: MagickComponentArray
+  inputTypes: PluginIOType[]
+  outputTypes: PluginIOType[]
+  secrets: PluginSecret[]
+  completionProviders: CompletionProvider[]
+  constructor({
+    name,
+    nodes = [],
+    inputTypes = [],
+    outputTypes = [],
+    secrets = [],
+    completionProviders = [],
+  }: PluginConstuctor) {
     this.name = name
     this.nodes = nodes
     this.inputTypes = inputTypes
     this.outputTypes = outputTypes
     this.secrets = secrets
+    this.completionProviders = completionProviders
   }
 }
 
+export type PageLayout = LazyExoticComponent<() => JSX.Element> | null
 export class ClientPlugin extends Plugin {
-  agentComponents: any[]
-  drawerItems?: Array<DrawerItem>
-  clientPageLayout?: any
-  clientRoutes?: Array<ClientRoute>
+  agentComponents: FC[]
+  drawerItems?: Array<PluginDrawerItem>
+  clientPageLayout?: PageLayout
+  clientRoutes?: Array<PluginClientRoute>
+  spellTemplates?: SpellInterface[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  projectTemplates?: any[]
   constructor({
     name,
     nodes = [],
@@ -59,16 +97,17 @@ export class ClientPlugin extends Plugin {
     clientRoutes = [],
     drawerItems = [],
     secrets = [],
-  }: {
-    name: string
-    nodes?: any
-    agentComponents?: any
-    inputTypes?: any[]
-    outputTypes?: any[]
-    clientPageLayout?: any
-    clientRoutes?: Array<ClientRoute>
-    drawerItems?: Array<DrawerItem>
-    secrets?: Secret[]
+    completionProviders = [],
+    spellTemplates = [],
+    projectTemplates = [],
+  }: PluginConstuctor & {
+    agentComponents?: FC<any>[]
+    clientPageLayout?: PageLayout
+    clientRoutes?: Array<PluginClientRoute>
+    drawerItems?: Array<PluginDrawerItem>
+    spellTemplates?: SpellInterface[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    projectTemplates?: any[]
   }) {
     super({
       name,
@@ -76,23 +115,28 @@ export class ClientPlugin extends Plugin {
       inputTypes,
       outputTypes,
       secrets,
+      completionProviders,
     })
     this.clientPageLayout = clientPageLayout
     this.agentComponents = agentComponents
     this.clientRoutes = clientRoutes
     this.drawerItems = drawerItems
+    this.spellTemplates = spellTemplates
+    this.projectTemplates = projectTemplates
     pluginManager.register(this)
   }
 }
 
+export type ServerInit = () => Promise<void> | null | void
+export type ServerInits = Record<string, ServerInit>
 export class ServerPlugin extends Plugin {
-  services: any
-  serverInit?: Function
+  services: ((app: Application) => void)[]
+  serverInit?: ServerInit
   agentMethods?: {
-    start: Function
-    stop: Function
+    start: (args) => Promise<void> | void
+    stop: (args) => Promise<void> | void
   }
-  serverRoutes?: Array<ServerRoute>
+  serverRoutes?: Array<PluginServerRoute>
   constructor({
     name,
     nodes = [],
@@ -101,26 +145,22 @@ export class ServerPlugin extends Plugin {
     outputTypes = [],
     serverInit = () => null,
     agentMethods = {
-      start: () => {
-      },
-      stop: () => {
-      },
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      start: () => {},
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      stop: () => {},
     },
     serverRoutes = [],
     secrets = [],
-  }: {
-    name: string
-    nodes?: any
-    services?: any
-    serverInit?: Function
+    completionProviders = [],
+  }: PluginConstuctor & {
+    services?: ((app: Application) => void)[]
+    serverInit?: ServerInit
     agentMethods?: {
-      start: Function
-      stop: Function
+      start: (args) => Promise<void> | void
+      stop: (args) => Promise<void> | void
     }
-    inputTypes?: any[]
-    outputTypes?: any[]
-    serverRoutes?: Array<ServerRoute>
-    secrets?: Secret[]
+    serverRoutes?: Array<PluginServerRoute>
   }) {
     super({
       name,
@@ -128,6 +168,7 @@ export class ServerPlugin extends Plugin {
       inputTypes,
       outputTypes,
       secrets,
+      completionProviders,
     })
     this.services = services
     this.agentMethods = agentMethods
@@ -139,7 +180,7 @@ export class ServerPlugin extends Plugin {
 
 class PluginManager {
   pluginList: Array<ClientPlugin | ServerPlugin>
-  componentList: Object
+  componentList: Record<string, never> // TODO: componentList is never used, remove it?
   plugins
   constructor() {
     this.pluginList = new Array<ClientPlugin | ServerPlugin>()
@@ -151,17 +192,18 @@ class PluginManager {
   }
 
   getInputTypes() {
-    const inputTypes = [] as any[]
+    const inputTypes: PluginIOType[] = []
     this.pluginList.forEach(plugin => {
       plugin.inputTypes.forEach(inputType => {
         inputTypes.push(inputType)
       })
     })
+    console.log('inputTypes', inputTypes)
     return inputTypes
   }
 
   getOutputTypes() {
-    const outputTypes = [] as any[]
+    const outputTypes: PluginIOType[] = []
     this.pluginList.forEach(plugin => {
       plugin.outputTypes.forEach(outputType => {
         outputTypes.push(outputType)
@@ -188,22 +230,33 @@ class PluginManager {
   }
 
   getSecrets(global = false) {
-    const secrets = [] as any[]
+    const secrets: PluginSecret[] = []
     this.pluginList.forEach(plugin => {
       plugin.secrets.forEach(secret => {
-        if(global && !secret.global) return
+        if (global && !secret.global) return
         secrets.push(secret)
       })
     })
     return secrets
   }
 
-  async teardown(plugin: Plugin) {
-    this.pluginList.pop()
+  getCompletionProviders(
+    type: string | null = null,
+    subtypes: null | string[] = null
+  ): CompletionProvider[] {
+    const completionProviders: CompletionProvider[] = []
+    this.pluginList.forEach(plugin => {
+      plugin.completionProviders.forEach(provider => {
+        if (type && provider.type !== type) return
+        if (subtypes && !subtypes.includes(provider.subtype)) return
+        completionProviders.push(provider)
+      })
+    })
+    return completionProviders
   }
 }
 
-class ClientPluginManager extends PluginManager {
+export class ClientPluginManager extends PluginManager {
   declare pluginList: Array<ClientPlugin>
   constructor() {
     super()
@@ -211,8 +264,8 @@ class ClientPluginManager extends PluginManager {
   }
 
   getAgentComponents() {
-    const agentComp = [] as any[]
-    (this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
+    const agentComp: FC[] = []
+    ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       plugin.agentComponents.forEach(component => {
         agentComp.push(component)
       })
@@ -220,9 +273,30 @@ class ClientPluginManager extends PluginManager {
     return agentComp
   }
 
+  getSpellTemplates() {
+    const spellTemplates = [] as SpellInterface[]
+    ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
+      plugin.spellTemplates?.forEach(spellTemplate => {
+        spellTemplates.push(spellTemplate)
+      })
+    })
+    return spellTemplates
+  }
+
+  getProjectTemplates() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const projectTemplates = [] as any[]
+    ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
+      plugin.projectTemplates?.forEach(projectTemplate => {
+        projectTemplates.push(projectTemplate)
+      })
+    })
+    return projectTemplates
+  }
+
   getClientRoutes() {
-    const clientRoutes = [] as any[]
-    (this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
+    const clientRoutes: PluginClientRoute[] = []
+    ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       if (plugin.clientRoutes) {
         plugin.clientRoutes.forEach(route => {
           clientRoutes.push({ ...route, plugin: plugin.name })
@@ -246,14 +320,20 @@ class ClientPluginManager extends PluginManager {
       }
       lastPluginRoute = route.plugin
       return acc
-    }, [])
+    }, [] as { plugin: string; routes: PluginClientRoute[]; layout?: PageLayout }[])
 
-    pluginRoutesGrouped.map(pluginRouteGroup => {
+    pluginRoutesGrouped.forEach(pluginRouteGroup => {
       const ClientPageLayout =
-        pluginManager.getClientPageLayout(pluginRouteGroup.plugin) || null
+        (pluginManager as ClientPluginManager).getClientPageLayout(
+          pluginRouteGroup.plugin
+        ) || null
       pluginRouteGroup.layout = ClientPageLayout
     })
-    return pluginRoutesGrouped
+    return pluginRoutesGrouped as {
+      plugin: string
+      routes: PluginClientRoute[]
+      layout: PageLayout
+    }[]
   }
 
   getClientPageLayout(p) {
@@ -265,8 +345,8 @@ class ClientPluginManager extends PluginManager {
   }
 
   getDrawerItems() {
-    const drawerItems = [] as any[]
-    (this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
+    const drawerItems = [] as (PluginDrawerItem & { plugin: string })[]
+    ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       if (plugin.drawerItems) {
         plugin.drawerItems.forEach(drawerItem => {
           drawerItems.push({ ...drawerItem, plugin: plugin.name })
@@ -276,27 +356,57 @@ class ClientPluginManager extends PluginManager {
     return drawerItems
   }
 
-  getInputTypes() {
-    const inputTypes = [] as any[]
+  getInputByName() {
+    const inputTypes = {}
     this.pluginList.forEach(plugin => {
-      plugin.inputTypes.forEach(inputType => {
-        inputTypes.push(inputType)
-      })
+      inputTypes[plugin.name] = plugin.inputTypes
     })
     return inputTypes
   }
+
+  getPlugins() {
+    const pluginList = {}
+    this.pluginList.forEach(plugin => {
+      pluginList[plugin.name] = 'NONE'
+    })
+    return pluginList
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getAgentStartMethods(): Record<string, (args: any) => void | Promise<void>> {
+    return {}
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getAgentStopMethods(): Record<string, (args: any) => void | Promise<void>> {
+    return {}
+  }
+  getServices() {
+    const serviceList = [] as [string, (app: Application) => void][]
+    return serviceList
+  }
+  getServerInits() {
+    const serverInits: ServerInits = {}
+    return serverInits
+  }
+
+  getServerRoutes() {
+    const serverRoutes = [] as PluginServerRoute[]
+    return serverRoutes
+  }
 }
 
-class ServerPluginManager extends PluginManager {
-  pluginList: Array<ServerPlugin>
+export class ServerPluginManager extends PluginManager {
+  declare pluginList: Array<ServerPlugin>
   constructor() {
     super()
     this.pluginList = new Array<ServerPlugin>()
   }
 
   getAgentStartMethods() {
-    let agentStartMethods = {};
-    (this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let agentStartMethods: Record<string, (args: any) => void | Promise<void>> =
+      {}
+    this.pluginList.forEach((plugin: ServerPlugin) => {
       if (plugin.agentMethods) {
         const obj = {}
         obj[plugin.name] = plugin.agentMethods.start
@@ -307,8 +417,10 @@ class ServerPluginManager extends PluginManager {
   }
 
   getAgentStopMethods() {
-    let agentStopMethods = {};
-    (this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let agentStopMethods: Record<string, (args: any) => void | Promise<void>> =
+      {}
+    this.pluginList.forEach((plugin: ServerPlugin) => {
       if (plugin.agentMethods) {
         const obj = {}
         obj[plugin.name] = plugin.agentMethods.stop
@@ -319,8 +431,8 @@ class ServerPluginManager extends PluginManager {
   }
 
   getServices() {
-    const serviceList = [] as any[]
-    (this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
+    const serviceList = [] as [string, (app: Application) => void][]
+    this.pluginList.forEach((plugin: ServerPlugin) => {
       Object.keys(plugin.services).forEach(key => {
         serviceList.push([key, plugin.services[key]])
       })
@@ -329,8 +441,8 @@ class ServerPluginManager extends PluginManager {
   }
 
   getServerInits() {
-    let serverInits = {};
-    (this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
+    let serverInits: ServerInits = {}
+    this.pluginList.forEach((plugin: ServerPlugin) => {
       if (plugin.serverInit) {
         const obj = {}
         obj[plugin.name] = plugin.serverInit
@@ -341,8 +453,8 @@ class ServerPluginManager extends PluginManager {
   }
 
   getServerRoutes() {
-    const serverRoutes = [] as any[]
-    (this.pluginList as ServerPlugin[]).forEach((plugin: ServerPlugin) => {
+    const serverRoutes = [] as PluginServerRoute[]
+    this.pluginList.forEach((plugin: ServerPlugin) => {
       if (plugin.serverRoutes) {
         plugin.serverRoutes.forEach(route => {
           serverRoutes.push(route)
@@ -353,7 +465,7 @@ class ServerPluginManager extends PluginManager {
   }
 }
 
-export const pluginManager =
+export const pluginManager: ClientPluginManager | ServerPluginManager =
   typeof window !== 'undefined'
     ? new ClientPluginManager()
-    : (new ServerPluginManager() as any)
+    : new ServerPluginManager()

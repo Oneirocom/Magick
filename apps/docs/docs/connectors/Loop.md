@@ -6,7 +6,7 @@ hide_table_of_contents: true
 
 # Loop Connector
 
-The loop connector allows the agent to run continuously at a fixed interval. This allows the agent to perform regular tasks, check on updates or actively engage users using other connector outputs
+The loop connector allows the agent to run continuously at a fixed interval. This allows the agent to perform regular tasks, check on updates, or actively engage users using other connector outputs.
 
 # Usage
 

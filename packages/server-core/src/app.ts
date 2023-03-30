@@ -1,28 +1,37 @@
-import { DEFAULT_PROJECT_ID, DEFAULT_USER_ID } from '@magickml/engine'
+import { configureManager, DEFAULT_PROJECT_ID, DEFAULT_USER_ID, globalsManager, IGNORE_AUTH } from '@magickml/engine'
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
+import { authenticate } from '@feathersjs/authentication/lib/hooks'
 import { feathers } from '@feathersjs/feathers'
 import {
-  koa,
-  rest,
-  bodyParser,
-  errorHandler,
-  parseAuthentication,
-  cors,
+  bodyParser, cors, errorHandler, koa, parseAuthentication, rest
 } from '@feathersjs/koa'
-import { authenticate } from '@feathersjs/authentication/lib/hooks'
 import socketio from '@feathersjs/socketio'
+import { dbClient } from './dbClient'
 import type { Application, HookContext } from './declarations'
 import { logError } from './hooks'
-import { dbClient } from './dbClient'
 import channels from './sockets/channels'
 // import swagger from 'feathers-swagger'
-import handleSockets from './sockets/sockets'
-import { configureManager, globalsManager, IGNORE_AUTH } from '@magickml/engine'
-import { services } from './services'
-import { authentication } from './auth/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
+import { authentication } from './auth/authentication'
+import { services } from './services'
+import handleSockets from './sockets/sockets'
+import HNSWVectorDatabase from './vectordb'
 
 const app: Application = koa(feathers())
+
+// Define a distance function for the vectors
+function euclideanDistance(a: number[], b: number[]): number {
+  let distance = 0
+  for (let i = 0; i < a.length; i++) {
+    distance += (a[i] - b[i]) ** 2
+  }
+  return Math.sqrt(distance)
+}
+
+const vectordb = new HNSWVectorDatabase<number[]>(
+  'data.json',
+  euclideanDistance
+)
 
 // Expose feathers app to other apps that might want to access feathers services directly
 globalsManager.register('feathers', app)
@@ -99,6 +108,13 @@ app.configure(
     handleSockets(app)
   )
 )
+declare module './declarations' {
+  interface Configuration {
+    vectordb: HNSWVectorDatabase<number[]>
+  }
+}
+
+app.set('vectordb', vectordb)
 app.configure(dbClient)
 app.configure(services)
 app.configure(channels)

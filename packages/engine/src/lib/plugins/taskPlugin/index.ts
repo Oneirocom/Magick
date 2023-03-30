@@ -1,9 +1,10 @@
 import { Component } from 'rete'
-import { NodeData } from 'rete/types/core/data'
+import { NodeData, WorkerOutputs } from 'rete/types/core/data'
 
-import { MagickEditor, MagickWorkerInputs } from '../../types'
-import { MagickComponent } from '../../magick-component'
-import { Task } from './task'
+import { MagickEditor, MagickWorkerInputs, UnknownData, WorkerData } from '../../types'
+
+import { MagickComponent } from '../../engine'
+import { Task, TaskSocketInfo } from './task'
 
 function install(editor: MagickEditor) {
   editor.on('componentregister', (_component: Component) => {
@@ -12,9 +13,9 @@ function install(editor: MagickEditor) {
     const component = _component as unknown as MagickComponent<unknown>
 
     if (!component.task)
-      throw new Error('Task plugin requires a task property in component')
+      return console.error('Task plugin requires a task property in component')
     if (component.task.outputs.constructor !== Object)
-      throw new Error(
+      return console.error(
         'The "outputs" field must be an object whose keys correspond to the Output\'s keys'
       )
 
@@ -38,12 +39,13 @@ function install(editor: MagickEditor) {
 
     const taskWorker = component.worker
     const taskOptions = component.task
-
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     component.worker = (
-      node: any,
-      inputs,
-      outputs,
-      args: unknown[],
+      node: WorkerData,
+      inputs: MagickWorkerInputs,
+      outputs: WorkerOutputs,
+      args: UnknownData | { module: { publicVariables: string } },
       ...rest
     ) => {
       // Task caller is what actually gets run once the task runs itself.  It is called inside the run function.
@@ -51,10 +53,11 @@ function install(editor: MagickEditor) {
         _ctx: unknown,
         inputs: MagickWorkerInputs,
         data: NodeData,
-        socketInfo: string | null
+        socketInfo: TaskSocketInfo | string | null
       ) => {
         component._task = task
-        // might change this interface, since we swap out data for outputs here, which just feels wrong.
+        // TODO: might change this interface, since we swap out data for outputs here, which just feels wrong.
+        // TODO: Also improve typing of TaskWorker when done
 
         const result = await taskWorker.call(
           component,
@@ -65,7 +68,8 @@ function install(editor: MagickEditor) {
           ...rest
         )
 
-        return result
+        // TODO: Make sure that the result is correct
+        return result as Record<string, unknown> | null
       }
 
       const task = new Task(inputs, component, node, taskCaller)

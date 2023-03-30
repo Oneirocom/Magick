@@ -54,10 +54,10 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     }
 
     // get the selectedAgentData's spells
-    const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
+    const rootSpell = agent.rootSpell ?? {id: `no rootspell present for agent ${agent.name}`}
     // run the spell
     const result = await runSpell({
-      id: rootSpell.id,
+      spellId: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (GET)': {
@@ -118,10 +118,10 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
+    const rootSpell = agent.rootSpell ?? {id: `no rootspell present for agent ${agent.name}`}
 
     const result = await runSpell({
-      id: rootSpell.id,
+      spellId: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (POST)': {
@@ -180,10 +180,10 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
+    const rootSpell = agent.rootSpell ?? {id: `no rootspell present for agent ${agent.name}`}
 
     const result = await runSpell({
-      id: rootSpell.id,
+      spellId: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (PUT)': {
@@ -232,10 +232,10 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    const rootSpell = JSON.parse(agent.rootSpell ?? '{}')
+    const rootSpell = agent.rootSpell ?? {id: `no rootspell present for agent ${agent.name}`}
     // run the spell
     const result = await runSpell({
-      id: rootSpell.id,
+      spellId: rootSpell.id,
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (DELETE)': {

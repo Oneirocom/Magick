@@ -3,7 +3,7 @@ import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('events', (table) => {
-    table.increments('id').primary()
+    table.uuid('id').primary()
     table.string('type')
     table.string('observer')
     table.string('sender')
@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('channel')
     table.string('channelType')
     table.string('projectId')
-    table.string('content')
+    table.text('content')
     table.string('agentId')
     table.specificType('entities', 'text ARRAY')
     table.specificType('embedding', 'vector(1536)')

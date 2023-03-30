@@ -1,14 +1,9 @@
 import { config } from 'dotenv-flow'
+import { importMetaEnv } from './import-meta-env'
+
 config({
   path: '../../../.env.*',
 })
-
-const importMetaEnv =
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  typeof import.meta !== 'undefined' && typeof import.meta.env !== 'undefined'
-    ? import.meta.env
-    : ({} as any)
 
 // process is not defined on client
 const processEnv = typeof process === 'undefined' ? importMetaEnv : process.env
@@ -37,8 +32,6 @@ export const SPEECH_SERVER_PORT =
   getVarForEnvironment('SPEECH_SERVER_PORT') || 65532
 export const ENABLE_SPEECH_SERVER =
   getVarForEnvironment('ENABLE_SPEECH_SERVER') || true
-export const OPENAI_ENDPOINT =
-  getVarForEnvironment('OPENAI_ENDPOINT') || 'https://api.openai.com/v1'
 export const USSSL_SPEECH = getVarForEnvironment('USSSL_SPEECH') || true
 export const FILE_SERVER_PORT =
   getVarForEnvironment('FILE_SERVER_PORT') || 65530

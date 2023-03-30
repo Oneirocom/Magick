@@ -1,14 +1,16 @@
+import DeleteOutlined from '@mui/icons-material/DeleteOutlined'
+import { IconButton, Table, TableCell, TableRow } from '@mui/material'
+import Button from '@mui/material/Button'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+import useSWR, { mutate } from 'swr'
 import useAuthentication from '../account/useAuthentication'
 import ErrorMessage from '../components/ErrorMessage'
 import Loading from '../components/Loading'
-import React, { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import useSWR, { mutate } from 'swr'
 import { OpenAI } from '../types/openai'
-import Button from '@mui/material/Button'
-import { IconButton, Table, TableCell, TableRow } from '@mui/material'
-import DeleteOutlined from '@mui/icons-material/DeleteOutlined'
-import { OPENAI_ENDPOINT } from '@magickml/engine'
+
+import { OPENAI_ENDPOINT } from '../constants'
+
 export default function FineTuneList() {
   const { data, error } = useSWR<OpenAI.List<OpenAI.FineTune>>('fine-tunes')
 

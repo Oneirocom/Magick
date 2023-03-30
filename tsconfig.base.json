@@ -73,11 +73,32 @@
       "@magickml/plugin-openai-server": [
         "packages/plugin-openai/server/src/index.ts"
       ],
+      "@magickml/plugin-openai-shared": [
+        "packages/plugin-openai/shared/src/index.ts"
+      ],
+      "@magickml/plugin-pinecone-client": [
+        "packages/plugin-pinecone/client/src/index.ts"
+      ],
+      "@magickml/plugin-pinecone-server": [
+        "packages/plugin-pinecone/server/src/index.ts"
+      ],
+      "@magickml/plugin-pinecone-shared": [
+        "packages/plugin-pinecone/shared/src/index.ts"
+      ],
       "@magickml/plugin-rest-client": [
         "packages/plugin-rest/client/src/index.ts"
       ],
       "@magickml/plugin-rest-server": [
         "packages/plugin-rest/server/src/index.ts"
+      ],
+      "@magickml/plugin-search-client": [
+        "packages/plugin-search/client/src/index.ts"
+      ],
+      "@magickml/plugin-search-server": [
+        "packages/plugin-search/server/src/index.ts"
+      ],
+      "@magickml/plugin-search-shared": [
+        "packages/plugin-search/shared/src/index.ts"
       ],
       "@magickml/plugin-twitter-client": [
         "packages/plugin-twitter/client/src/index.ts"

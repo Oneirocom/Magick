@@ -1,7 +1,7 @@
 import { createNode, traverse } from './utils'
-
-export default function (Menu) {
-  return class MainMenu extends Menu {
+import ReactMenu from './react-menu'
+export default function () {
+  return class MainMenu extends ReactMenu {
     constructor(editor, props, { items, allocate, rename }) {
       super(editor, props)
 

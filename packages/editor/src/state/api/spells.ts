@@ -2,7 +2,7 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import { rootApi } from './api'
-import { Spell } from '@magickml/engine'
+import { SpellInterface } from '@magickml/engine'
 
 import md5 from 'md5'
 
@@ -13,14 +13,14 @@ export interface Diff {
 
 export interface PatchArgs {
   spellName: string
-  update: Partial<Spell>
+  update: Partial<SpellInterface>
 }
 
-export interface RunSpell {
-  spellName: string
-  inputs: Record<string, any>
-  state?: Record<string, any>
-}
+// export interface RunSpell {
+//   spellName: string
+//   inputs: Record<string, any>
+//   state?: Record<string, any>
+// }
 
 export interface UserSpellArgs {
   spellName: string
@@ -30,7 +30,7 @@ export interface SpellData {
   limit: number
   skip: number
   total: number
-  data: Spell[]
+  data: SpellInterface[]
 }
 
 export const spellApi = rootApi.injectEndpoints({
@@ -125,7 +125,7 @@ export const spellApi = rootApi.injectEndpoints({
         // cast into proper response shape expected by queryFn return
         // probbably a way to directly pass in type args to baseQuery but couldnt find.
         return baseQuery(baseQueryOptions) as QueryReturnValue<
-          Partial<Spell>,
+          Partial<SpellInterface>,
           FetchBaseQueryError,
           unknown
         >
@@ -163,6 +163,7 @@ export const spellApi = rootApi.injectEndpoints({
 
 export const {
   useGetSpellsQuery,
+  useLazyGetSpellsQuery,
   useLazyGetSpellQuery,
   useLazyGetSpellByIdQuery,
   useGetSpellQuery,

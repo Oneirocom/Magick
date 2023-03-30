@@ -26,6 +26,7 @@
   overflow-y: auto;
   background-color: var(--dark-2);
   max-height: calc(100vh - 100px);
+  max-width: calc(100vw - 50%);
 }
 
 .modal-panel-content {

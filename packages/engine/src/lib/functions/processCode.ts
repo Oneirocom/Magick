@@ -1,4 +1,4 @@
-import { MagickWorkerInputs } from '../types';
+import { MagickWorkerInputs, SupportedLanguages, UnknownData } from '../types';
 import runPython from '../functions/ProcessPython';
 let vm2;
 // if process is not undefined, dynamically import vm2
@@ -11,16 +11,20 @@ if (typeof process !== 'undefined') {
 export async function processCode(
   code: unknown,
   inputs: MagickWorkerInputs,
-  data: Record<string, any>,
-  language = 'javascript'
+  data: UnknownData,
+  language: SupportedLanguages = 'javascript'
 ) {
   // Inputs are flattened before we inject them for a better code experience
   const flattenInputs = Object.entries(inputs).reduce(
-    (acc, [key, value]: [string, any]) => {
+    (acc, [key, value]: [string, unknown]) => {
+      // TODO: check if if(!value) is correct and if
+      if (!value)
+        // TODO: handle more gracefully?
+        throw new TypeError('Input value is undefined or null: ' + key)
       acc[key] = value[0];
       return acc;
     },
-    {} as Record<string, any>
+    {} as UnknownData
   );
 
   if (language === 'javascript') {
@@ -40,17 +44,15 @@ export async function processCode(
       return codeResult;
     } catch (err) {
       console.log({ err });
-      throw new Error(
-        'Error in spell runner: processCode component: ' + code
-      );
+      return 'Error in spell runner: processCode component: ' + code
     }
   } else {
     try {
-
       const codeResult = await runPython(code, flattenInputs, data);
       return codeResult;
     } catch (err) {
       console.log({ err });
     }
   }
+
 }

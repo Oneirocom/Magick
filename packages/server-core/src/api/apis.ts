@@ -1,11 +1,10 @@
-// TODO: replace with a feathers service
-
 import Koa from 'koa'
-import { tts } from '../servers/googleTextToSpeech'
-import { queryGoogleSearch } from '../servers/queryGoogleSearch'
-import { ServerError } from '../utils/ServerError'
-import { tts_tiktalknet } from '../servers/tiktalknet'
+import solc from 'solc'
 import { Route } from '../config/types'
+import { tts } from '../servers/googleTextToSpeech'
+import { tts_tiktalknet } from '../servers/tiktalknet'
+import { ServerError } from '../utils/ServerError'
+
 const getTextToSpeech = async (ctx: Koa.Context) => {
   const text = ctx.request.query.text as string
 
@@ -23,22 +22,12 @@ const getTextToSpeech = async (ctx: Koa.Context) => {
 
   return (ctx.body = url)
 }
-const queryGoogle = async (ctx: Koa.Context) => {
-  const body = ctx.request.body as any
-
-  if (!body?.query)
-    throw new ServerError('input-failed', 'No query provided in request body')
-  const query = body?.query as string
-  const data = await queryGoogleSearch(query)
-
-  const { summary, links } = data
-
-
-  return (ctx.body = { summary, links })
-}
 
 const image_generation = async (ctx: Koa.Context) => {
   const url = 'http://localhost:7860/sdapi/v1/txt2img'
+
+  console.log(url)
+  console.log(ctx)
 
   // proxy the request to the url and then return the respons
   const response = await fetch(url, {
@@ -58,13 +47,8 @@ export const apis: Route[] = [
     path: '/text_to_speech',
     get: getTextToSpeech,
   },
-
-  {
-    path: '/query_google',
-    post: queryGoogle,
-  },
   {
     path: '/image_generation',
     post: image_generation,
-  },
+  }
 ]

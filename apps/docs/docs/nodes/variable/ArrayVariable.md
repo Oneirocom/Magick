@@ -1,3 +1,0 @@
-# ArrayV ariable
-
-Array Variable

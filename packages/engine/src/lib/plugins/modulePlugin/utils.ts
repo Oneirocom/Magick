@@ -1,6 +1,6 @@
 import { Input, NodeEditor, Output } from 'rete'
 
-import { DataSocketType, MagickNode, IRunContextEditor } from '../../types'
+import { DataSocketType, MagickNode, IRunContextEditor, AsDataSocket, AsInputsData, AsOutputsData } from '../../types'
 import { socketNameMap, SocketNameType } from '../../sockets'
 import { ModuleSocketType } from './module-manager'
 export type ThroughPutType = 'outputs' | 'inputs'
@@ -57,27 +57,27 @@ const updateSockets = (node: MagickNode, sockets: ModuleSocketType[]) => {
       input.name = name
       node.inputs.set(socketKey, input)
       // Update the nodes data sockets as well
-      const nodeInputs = node.data.inputs as DataSocketType[]
-      node.data.inputs = nodeInputs.map((n: DataSocketType) => {
+      const nodeInputs = AsDataSocket(node.data.inputs)
+      node.data.inputs = AsInputsData(nodeInputs.map((n: DataSocketType) => {
         if (n.socketKey === socketKey) {
           n.name = name
         }
 
         return n
-      })
+      }))
     }
     if (node.outputs.has(socketKey)) {
       const output = node.outputs.get(socketKey) as Output
       output.name = name
       node.outputs.set(socketKey, output)
-      const nodeOutputs = node.data.outputs as DataSocketType[]
-      node.data.outputs = nodeOutputs.map(n => {
+      const nodeOutputs = node.data.outputs as unknown as DataSocketType[]
+      node.data.outputs = AsOutputsData(nodeOutputs.map(n => {
         if (n.socketKey === socketKey) {
           n.name = name
         }
 
         return n
-      })
+      }))
     }
   })
 }
@@ -92,22 +92,21 @@ type AddSockets = {
 
 const addSockets = ({
   node,
-  sockets: _sockets,
+  sockets,
   connectionType,
   taskType = 'output',
   useSocketName = false,
 }: AddSockets) => {
-  const sockets = _sockets.filter(socket => !socket.hide)
   const uniqueCount = new Set(sockets.map(i => i.name)).size
-  const currentConnection = node.data[
+  const currentConnection = AsDataSocket(node.data[
     (connectionType + 's') as ThroughPutType
-  ] as DataSocketType[]
+  ])
   const existingSockets = currentConnection.map(
     (soc: DataSocketType) => soc.socketKey
   )
 
   if (uniqueCount !== sockets.length)
-    throw new Error(
+    return console.error(
       `Module ${node.data.spell} has duplicate ${
         taskType === 'option' ? 'trigger' : ''
       } ${connectionType}s`
@@ -127,9 +126,9 @@ const addSockets = ({
 
       const Socket = connectionType === 'output' ? Output : Input
       const addMethod = connectionType === 'output' ? 'addOutput' : 'addInput'
-      const currentConnection = node.data[
+      const currentConnection = AsDataSocket(node.data[
         (connectionType + 's') as ThroughPutType
-      ] as DataSocketType[]
+      ])
 
       currentConnection.push({
         name: name as SocketNameType,
@@ -209,8 +208,8 @@ export function removeIO(
   inputs: ModuleSocketType[],
   outputs: ModuleSocketType[]
 ) {
-  const existingInputs = node.data.inputs as DataSocketType[]
-  const existingOutputs = node.data.outputs as DataSocketType[]
+  const existingInputs = AsDataSocket(node.data.inputs)
+  const existingOutputs = AsDataSocket(node.data.outputs)
   const inputRemovals = getRemovedSockets(existingInputs, inputs)
   const outputRemovals = getRemovedSockets(existingOutputs, outputs)
 

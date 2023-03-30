@@ -1,16 +1,10 @@
 import Rete from 'rete'
 
-import {
-  NodeData,
-  MagickNode,
-  MagickWorkerOutputs,
-  MagickWorkerInputs,
-} from '../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
-import { TaskOptions } from '../../plugins/taskPlugin/task'
+import { MagickComponent } from '../../engine'
 import * as sockets from '../../sockets'
 import { SocketNameType } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 // import { DropdownControl } from '../../dataControls/DropdownControl';
 
 const info = `Used to cast any socket into another socket type.  Be sure you know the type of input to your any to cast it into your socket type, as it might break things otherwise.`
@@ -18,16 +12,17 @@ const info = `Used to cast any socket into another socket type.  Be sure you kno
 export class Cast extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Cast')
-
-    this.task = {
-      outputs: {
-        trigger: 'option',
-        output: 'output',
+    super(
+      'Cast',
+      {
+        outputs: {
+          trigger: 'option',
+          output: 'output',
+        },
       },
-    } as TaskOptions
-    this.category = 'Utility'
-    this.info = info
+      'Utility',
+      info
+    )
   }
 
   addSocket(node: MagickNode, name: sockets.SocketNameType) {
@@ -67,16 +62,15 @@ export class Cast extends MagickComponent<void> {
       defaultValue: 'any Type',
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this
 
-    socketDropdown.onData = function (data) {
+    socketDropdown.onData = function (data: SocketNameType) {
       that.addSocket.apply(that, [node, data])
     }
 
     node.inspector.add(socketDropdown)
-    node
-      .addInput(input)
-      .addOutput(output)
+    node.addInput(input).addOutput(output)
 
     if (node.data.socketType) {
       this.addSocket(node, node.data.socketType as sockets.SocketNameType)
@@ -85,7 +79,7 @@ export class Cast extends MagickComponent<void> {
     return node
   }
 
-  worker(node: NodeData, inputs: MagickWorkerInputs) {
+  worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const value = inputs.input[0]
     const key = sockets.socketNameMap[node.data.socketType as SocketNameType]
 

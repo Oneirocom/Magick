@@ -1,30 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import * as React from 'react'
+import { PubSubContext, PubSubData, PubSubEvents } from '@magickml/engine';
 import PubSub from 'pubsub-js'
 import { useContext, createContext } from 'react'
 
-type PubSubData = Record<string, any> | string | any[]
+const Context = createContext<PubSubContext>(undefined)
 
-type PubSubContext = {
-  publish: (event: string, data?: PubSubData) => void
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  subscribe: (event: string, callback: Function) => Function
-  PubSub: typeof PubSub
-  events: Record<string, any>
-}
-
-const Context = createContext<PubSubContext>(undefined!)
-
-export const usePubSub = () => useContext(Context)
+export const usePubSub = () => useContext<PubSubContext>(Context)
 
 export { PubSub }
 
 // Might want to namespace these
-export const events = {
+export const events: PubSubEvents = {
   ADD_SUBSPELL: 'addSubspell',
   UPDATE_SUBSPELL: 'updateSubspell',
   DELETE_SUBSPELL: 'deleteSubspell',
   OPEN_TAB: 'openTab',
-  $SUBSPELL_UPDATED: spellName => `subspellUpdated:${spellName}`,
+  $SUBSPELL_UPDATED: spellId => `subspellUpdated:${spellId}`,
   $TRIGGER: (tabId, nodeId) => `triggerNode:${tabId}:${nodeId ?? 'default'}`,
   $PLAYTEST_INPUT: tabId => `playtestInput:${tabId}`,
   $PLAYTEST_PRINT: tabId => `playtestPrint:${tabId}`,
@@ -42,7 +34,7 @@ export const events = {
   $CREATE_PLAYTEST: tabId => `createPlaytest:${tabId}`,
   $CREATE_INSPECTOR: tabId => `createInspector:${tabId}`,
   $CREATE_TEXT_EDITOR: tabId => `createTextEditor:${tabId}`,
-  $CREATE_AVATAR_WINDOW: tabId => `createAvatarWindow:${tabId}`,
+  $CREATE_PROJECT_WINDOW: tabId => `createProjectWindow:${tabId}`,
   $CREATE_DEBUG_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $CREATE_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $RUN_SPELL: tabId => `runSpell:${tabId}`,
@@ -54,7 +46,6 @@ export const events = {
   $MULTI_SELECT_COPY: tabId => `multiSelectCopy:${tabId}`,
   $MULTI_SELECT_PASTE: tabId => `multiSelectPaste:${tabId}`,
   $REFRESH_EVENT_TABLE: tabId => `refreshEventTable:${tabId}`,
-  $SEND_TO_AVATAR: tabId => `sendToAvatar:${tabId}`,
 }
 
 const PubSubProvider = ({ children }) => {
@@ -62,7 +53,7 @@ const PubSubProvider = ({ children }) => {
     return PubSub.publish(event, data)
   }
 
-  const subscribe = (event, callback) => {
+  const subscribe = (event: string, callback: PubSubJS.SubscriptionListener<PubSubData>): () => void => {
     const token = PubSub.subscribe(event, callback)
 
     return () => {

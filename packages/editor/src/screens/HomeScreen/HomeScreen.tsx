@@ -1,17 +1,20 @@
-import { useEffect, useState } from 'react'
+import { LoadingScreen } from '@magickml/client-core'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 
-import { spellApi } from '../../state/api/spells'
-import AllProjects from './screens/AllProjects'
-import CreateNew from './screens/CreateNew'
-import OpenProject from './screens/OpenProject'
-import css from './homeScreen.module.css'
-import { LoadingScreen } from '@magickml/client-core'
-import { closeTab, openTab, selectAllTabs } from '../../state/tabs'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../state/store'
-
 import { useConfig } from '../../contexts/ConfigProvider'
+import {
+  useDeleteSpellMutation,
+  useGetSpellsQuery,
+  useNewSpellMutation,
+} from '../../state/api/spells'
+import { RootState } from '../../state/store'
+import { closeTab, openTab, selectAllTabs } from '../../state/tabs'
+import AllProjects from './AllProjects'
+import CreateNew from './CreateNew'
+import css from './homeScreen.module.css'
+import OpenProject from './OpenProject'
 
 //MAIN
 
@@ -21,13 +24,11 @@ const StartScreen = () => {
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
-  const [deleteSpell] = spellApi.useDeleteSpellMutation()
-  const { data: spells } = spellApi.useGetSpellsQuery({
+  const [deleteSpell] = useDeleteSpellMutation()
+  const { data: spells } = useGetSpellsQuery({
     projectId: config.projectId,
   })
-  const [getSpells, { data: spell, isLoading }] =
-    spellApi.useLazyGetSpellsQuery({ projectId: config.projectId })
-  const [newSpell] = spellApi.useNewSpellMutation()
+  const [newSpell] = useNewSpellMutation()
 
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
 
@@ -43,12 +44,18 @@ const StartScreen = () => {
     // TODO check for proper values here and throw errors
 
     // Create new spell
-    const response = await newSpell({
+    const response = (await newSpell({
       graph: spellData.graph,
       name: spellData.name,
       projectId: config.projectId,
       hash: spellData.hash,
-    })
+    })) as any
+
+    // handle error Property 'data' does not exist on type error
+    if (response.error) {
+      console.error('Error creating spell', response.error)
+      return
+    }
 
     dispatch(
       openTab({
@@ -60,11 +67,6 @@ const StartScreen = () => {
 
     navigate('/magick')
   }
-  useEffect(() => {
-    getSpells({
-      projectId: config.projectId,
-    })
-  }, [spells])
   const loadFile = selectedFile => {
     const reader = new FileReader()
     reader.onload = onReaderLoad

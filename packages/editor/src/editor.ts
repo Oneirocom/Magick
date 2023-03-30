@@ -1,37 +1,38 @@
 import ConnectionPlugin from 'rete-connection-plugin'
 import { Plugin } from 'rete/types/core/plugin'
-// import ConnectionReroutePlugin from 'rete-connection-reroute-plugin'
-import ContextMenuPlugin from './plugins/contextMenu'
-import { Data } from 'rete/types/core/data'
+import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
-import { SelectionPlugin } from '@magickml/engine'
+import ContextMenuPlugin from './plugins/contextMenu'
+import {
+  OnSubspellUpdated,
+  PubSubContext,
+  SelectionPlugin,
+  SpellInterface,
+} from '@magickml/engine'
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
-import gridimg from './grid.png'
 
 import {
-  // CachePlugin,
-  SocketPluginArgs,
   ConsolePlugin,
+  EditorContext,
+  getNodes,
   HistoryPlugin,
   InspectorPlugin,
   KeyCodePlugin,
   LifecyclePlugin,
+  MagickComponent,
+  MagickEditor,
   ModulePlugin,
+  ModulePluginArgs,
+  MultiCopyPlugin,
+  MultiSocketGenerator,
+  NodeClickPlugin,
   SocketGeneratorPlugin,
   SocketOverridePlugin,
   SocketPlugin,
+  SocketPluginArgs,
   TaskPlugin,
-  EditorContext,
-  MagickComponent,
-  getNodes,
-  MagickEditor,
-  MultiSocketGenerator,
-  NodeClickPlugin,
-  ModuleOptions,
-  MultiCopyPlugin,
-  ModulePluginArgs,
 } from '@magickml/engine'
 
 import AreaPlugin from './plugins/areaPlugin'
@@ -58,7 +59,7 @@ export const initEditor = function ({
   client,
 }: {
   container: any
-  pubSub: any
+  pubSub: PubSubContext
   magick: any
   tab: any
   node: any
@@ -146,6 +147,7 @@ export const initEditor = function ({
   editor.use(AreaPlugin, {
     scaleExtent: { min: 0.1, max: 1.5 },
     background,
+    tab,
     // snap: true - TODO: add ability to enable and disable snapping to UI
   })
 
@@ -200,27 +202,34 @@ export const initEditor = function ({
   // ██╔═══╝ ██║   ██║██╔══██╗██║     ██║██║
   // ██║     ╚██████╔╝██████╔╝███████╗██║╚██████╗
   // ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝
-  editor.onSpellUpdated = (spellName: string, callback: () => void) => {
-    return magick.onSubspellUpdated(spellName, callback)
+  editor.onSpellUpdated = (spellId: string, callback: OnSubspellUpdated) => {
+    return magick.onSubspellUpdated(spellId, callback)
   }
 
+  // TODO: should this return a promise?
   editor.abort = async () => {
     await engine.abort()
   }
 
   editor.runProcess = async callback => {
     await engine.abort()
-    await engine.process(editor.toJSON(), null, { magick: magick })
+    await engine.process(editor.toJSON(), null, {
+      magick: magick,
+      currentSpell: editor.currentSpell,
+    })
     if (callback) callback()
   }
 
-  editor.loadGraph = async (_graph: Data) => {
+  editor.loadSpell = async (spell: SpellInterface) => {
+    if (!spell) return console.error('No spell to load')
+    const _graph = spell.graph
     const graph = JSON.parse(JSON.stringify(_graph))
     await engine.abort()
     editor.fromJSON(graph)
 
     editor.view.resize()
     editor.runProcess()
+    editor.currentSpell = spell
   }
 
   // Start the engine off on first load

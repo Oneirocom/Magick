@@ -13,21 +13,6 @@
         "lintFilePatterns": ["packages/plugin-finetune/server/**/*.{ts,tsx,js,jsx}"]
       }
     },
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "options": {
-        "outputPath": "dist/packages/plugin-finetune/server",
-        "tsConfig": "packages/plugin-finetune/server/tsconfig.lib.json",
-        "packageJson": "packages/plugin-finetune/server/package.json",
-        "main": "packages/plugin-finetune/server/src/index.ts",
-        "assets": [
-          "packages/plugin-finetune/server/*.md"
-        ]
-      }
-    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],

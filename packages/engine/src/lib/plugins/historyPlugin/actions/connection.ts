@@ -1,5 +1,4 @@
-// @ts-nocheck
-
+import { Connection, NodeEditor } from 'rete'
 import Action from '../action'
 
 // The saved connection may have been removed and recreated, so make sure we are working with the correct reference
@@ -10,7 +9,9 @@ function findNewConnection(oldConnection) {
 }
 
 class ConnectionActionHelper {
-  constructor(editor, connection) {
+  editor:NodeEditor<unknown>
+  connection:Connection
+  constructor(editor:NodeEditor<unknown>, connection:Connection) {
     this.editor = editor
     this.connection = connection
   }
@@ -25,6 +26,7 @@ class ConnectionActionHelper {
 }
 
 export class AddConnectionAction extends Action {
+  helper:ConnectionActionHelper
   constructor(editor, connection) {
     super()
     this.helper = new ConnectionActionHelper(editor, connection)
@@ -40,6 +42,7 @@ export class AddConnectionAction extends Action {
 }
 
 export class RemoveConnectionAction extends Action {
+  helper:ConnectionActionHelper
   constructor(editor, connection) {
     super()
     this.helper = new ConnectionActionHelper(editor, connection)

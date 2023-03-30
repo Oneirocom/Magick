@@ -12,7 +12,12 @@ interface InfoModal {
 const InfoModal = ({ title, content, checkbox }: InfoModal) => {
   return (
     <Modal title={title} icon="info">
-      <p style={{ whiteSpace: 'pre-line' }}> {content} </p>
+      <p
+        style={{ whiteSpace: 'pre-line', fontSize: '14px', lineHeight: '24px' }}
+      >
+        {' '}
+        {content}{' '}
+      </p>
       {checkbox && (
         <div
           style={{

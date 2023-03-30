@@ -1,13 +1,13 @@
 import Rete from 'rete'
 
+import { MagickComponent } from '../../engine'
+import { stringSocket, triggerSocket } from '../../sockets'
 import {
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
-import { triggerSocket, stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info = 'Returns the same output as the input'
 
@@ -17,18 +17,13 @@ type WorkerReturn = {
 
 export class Echo extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Echo')
-
-    this.task = {
+    super('Echo', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Utility', info)
 
-    this.category = 'Utility'
-    this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {
@@ -46,7 +41,7 @@ export class Echo extends MagickComponent<Promise<WorkerReturn>> {
 
   // eslint-disable-next-line @typescript-eslint/require-await, require-await
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {

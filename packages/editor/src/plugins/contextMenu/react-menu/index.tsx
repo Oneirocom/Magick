@@ -11,12 +11,14 @@ export default class extends Menu {
   el: HTMLDivElement
   args: any
   props: any
+  type: string
   constructor(editor, props) {
     super(editor, props)
     this.props = props
     this.items = []
     this.position = [0, 0]
     this.visible = false
+    this.type = props.type
     this.el = document.createElement('div')
     editor.view.container.appendChild(this.el)
 
@@ -49,6 +51,7 @@ export default class extends Menu {
         position={this.position}
         visible={this.visible}
         onClose={() => this.hide()}
+        type={this.type}
       />,
       this.el
     )
