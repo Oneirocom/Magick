@@ -16,10 +16,11 @@ import { authentication } from './auth/authentication'
 import { services } from './services'
 import handleSockets from './sockets/sockets'
 
+
+//Vector DB Related Imports
 import { HNSWLib } from "./vectordb";
 import HNSWVectorDatabase from './vectordata'
 import { import_ } from '@brillout/import'
-
 // Same as `import()`
 
 
@@ -31,6 +32,7 @@ const {VectorStoreToolkit,createVectorStoreAgent,VectorStoreInfo} = await agentp
 const openaipro = import_('langchain')
 const {OpenAI} = await openaipro;
 const embeddings = new FakeEmbeddings();
+
 const  { Headers, Request, Response } = await import_('node-fetch')
 const fetch = await import_('node-fetch').then((mod) => mod.default)
 
@@ -44,10 +46,25 @@ const model = new OpenAI({ openAIApiKey: "OPENAI_API_KEY", temperature: 0.9 })
 
 const app: Application = koa(feathers())
 
-const vectordb = HNSWLib.load_data(".",embeddings,{
-  space: "cosine",
-  numDimensions: 1536,
-})
+
+
+
+declare module './declarations' {
+  interface Configuration {
+    vectordb: HNSWLib & any;
+  }
+}
+if (process.env.DATABASE_TYPE == "sqlite") {
+  console.log("Setting up vector store")
+  const vectordb = HNSWLib.load_data(".",embeddings,{
+    space: "cosine",
+    numDimensions: 1536
+  })
+  app.set('vectordb', vectordb)
+} else {
+  app.set("vectordb", "postgres")
+}
+
 /* 
 const vectorStoreInfo: typeof VectorStoreInfo = {
   name: "DB for Magick Events",
@@ -142,13 +159,7 @@ app.configure(
     handleSockets(app)
   )
 )
-declare module './declarations' {
-  interface Configuration {
-    vectordb: HNSWLib
-  }
-}
 
-app.set('vectordb', vectordb)
 app.configure(dbClient)
 app.configure(services)
 app.configure(channels)
