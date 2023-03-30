@@ -1,14 +1,32 @@
-import { GridViewRounded } from '@mui/icons-material'
-import { Icon, IconBtn } from '@magickml/client-core'
-import styles from './datacontrols.module.css'
-
-interface Props {
-  name: string
-  type: string
-  delete: (name: string) => void
+// GENERATED 
+/**
+ * The Props for the SingleElement function component.
+ * @interface
+ */
+interface SingleElementProps {
+  /**
+   * The name of the element.
+   */
+  name: string;
+  /**
+   * The type of the element.
+   */
+  type: string;
+  /**
+   * The function that deletes the element.
+   * 
+   * @param name - The name of the element to be deleted.
+   */
+  delete: (name: string) => void;
 }
 
-const SingleElement = (props: Props) => {
+/**
+ * A function component that renders a single element.
+ * 
+ * @param props - The props of the SingleElement component.
+ * @returns The JSX representation of the component.
+ */
+const SingleElement = (props: SingleElementProps) => {
   return (
     <div className={`${styles.flexCenterBtn} ${styles.inputContainer}`}>
       <div className={styles.flexCenterBtn}>
@@ -22,18 +40,6 @@ const SingleElement = (props: Props) => {
         <p style={{ display: 'inline' }}>{props.name}</p>
       </div>
       <div className={styles.flexCenterBtn}>
-        {/* <div className={`${styles.flexCenterStart} ${styles.typeInfo}`}>
-          <IconBtn
-            label={props.name}
-            style={{ cursor: 'auto' }}
-            Icon={
-              <ArrowForwardIosTwoTone
-                style={{ fontSize: '8px', cursor: 'auto' }}
-              />
-            }
-          />
-          <p style={{ textTransform: 'capitalize' }}>{props.type}</p>
-        </div> */}
         <IconBtn
           label={props.name}
           Icon={<Icon name="trash" size={20} />}
@@ -41,7 +47,7 @@ const SingleElement = (props: Props) => {
         />
       </div>
     </div>
-  )
+  );
 }
 
-export default SingleElement
+export default SingleElement;

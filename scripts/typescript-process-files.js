@@ -37,7 +37,7 @@ async function doStuff(file) {
         },
         body: JSON.stringify({
             messages: messages,
-            model: 'gpt-3.5-turbo',
+            model: 'gpt-4',
         })
 
     })

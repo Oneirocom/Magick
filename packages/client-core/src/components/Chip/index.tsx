@@ -1,23 +1,37 @@
-import * as React from 'react'
-import { Icon } from '../Icon'
-import css from './chip.module.css'
+// GENERATED 
+import * as React from 'react';
+import { Icon } from '../Icon';
+import css from './chip.module.css';
 
-export const Chip = ({
+/**
+ * Chip component properties.
+ */
+interface ChipProps {
+  label: string;
+  onClick?: () => void;
+  noEvents?: boolean;
+}
+
+/**
+ * A Chip component.
+ * @param {ChipProps} props - Properties to configure the chip component.
+ * @returns {React.ReactElement} A Chip element with an optional close Icon.
+ */
+export const Chip: React.FC<ChipProps> = ({
   label,
   onClick,
   noEvents,
-}: {
-  label: string
-  onClick?: () => void
-  noEvents?: boolean
-}) => {
+}: ChipProps): React.ReactElement => {
+  // Set the classNames for the chip component
+  const classNames = `${css.chip} ${noEvents ? css['no-events'] : ''}`;
+
   return (
     <div
-      className={`${css['chip']} ${noEvents && css['no-events']}`}
+      className={classNames}
       onClick={onClick}
     >
       {label}
       {!noEvents && <Icon name="close" />}
     </div>
-  )
-}
+  );
+};
