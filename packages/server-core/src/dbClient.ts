@@ -1,14 +1,7 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/databases.html
-import knex from 'knex'
 import type { Knex } from 'knex'
+import knex from 'knex'
 import type { Application } from './declarations'
-import { SKIP_DB_EXTENSIONS } from "@magickml/engine"
-
-import os from 'os'
-const cpuCore = os.cpus()
-const isM1 = cpuCore[0].model.includes("Apple M1") || cpuCore[0].model.includes("Apple M2")
-const isWindows = os.platform() === 'win32'
-
 
 declare module './declarations' {
   interface Configuration {

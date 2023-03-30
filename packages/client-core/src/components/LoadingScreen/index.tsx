@@ -1,7 +1,12 @@
-import * as React from 'react'
-import ankh from './ankh.gif'
+// GENERATED 
+import * as React from 'react';
+import ankh from './ankh.gif';
 
-export const LoadingScreen = () => (
+/**
+ * A loading screen component that displays a centered loading animation
+ * with a "Please wait..." message.
+ */
+export const LoadingScreen = (): JSX.Element => (
   <div
     style={{
       height: '100%',
@@ -9,6 +14,7 @@ export const LoadingScreen = () => (
       backgroundColor: 'var(--dark-3)',
     }}
   >
+    {/* Centered loading animation and message */}
     <div
       style={{
         position: 'absolute',
@@ -18,6 +24,7 @@ export const LoadingScreen = () => (
         textAlign: 'center',
       }}
     >
+      {/* Loading animation */}
       <img
         style={{
           height: 'var(--7)',
@@ -25,9 +32,10 @@ export const LoadingScreen = () => (
           display: 'inline-block',
         }}
         src={ankh}
-        alt={'loading'}
+        alt="loading"
       />
+      {/* "Please wait..." message */}
       <p>Please wait...</p>
     </div>
   </div>
-)
+);

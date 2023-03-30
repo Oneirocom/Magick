@@ -1,7 +1,10 @@
 // GENERATED 
+import { Connection, Input, Node, Output } from 'rete';
+
 /**
  * Namespace for interfaces related to Rete Editor events.
  */
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ReteEventInterfaces {
 
   /**
@@ -46,11 +49,6 @@ export namespace ReteEventInterfaces {
     disconnected(io: Connection): void;
   }
 }
-
-/**
- * Import Rete components.
- */
-import { Input, Output, Node, Connection } from 'rete';
 
 /**
  * Type definition for OnCreated interface.

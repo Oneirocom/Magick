@@ -1,14 +1,10 @@
 import Rete from 'rete'
 
 import { MagickComponent } from '../../engine'
-import { arraySocket, objectSocket, stringSocket, triggerSocket } from '../../sockets'
-import {
-  MagickNode,
-  MagickWorkerInputs, WorkerData
-} from '../../types'
+import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
-const info =
-  'Convert an object into a JSON string.'
+const info = 'Convert an object into a JSON string.'
 
 type WorkerReturn = {
   output: string
@@ -16,12 +12,17 @@ type WorkerReturn = {
 
 export class ArrayToJSON extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Array To JSON', {
-      outputs: {
-        output: 'output',
-        trigger: 'option',
+    super(
+      'Array To JSON',
+      {
+        outputs: {
+          output: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'Array', info)
+      'Array',
+      info
+    )
   }
 
   builder(node: MagickNode) {

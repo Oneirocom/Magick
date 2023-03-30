@@ -4,11 +4,7 @@ import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
 import * as sockets from '../../sockets'
 import { SocketNameType } from '../../sockets'
-import {
-  MagickNode,
-  MagickWorkerInputs,
-  WorkerData
-} from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 // import { DropdownControl } from '../../dataControls/DropdownControl';
 
 const info = `Used to cast any socket into another socket type.  Be sure you know the type of input to your any to cast it into your socket type, as it might break things otherwise.`
@@ -16,12 +12,17 @@ const info = `Used to cast any socket into another socket type.  Be sure you kno
 export class Cast extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Cast', {
-      outputs: {
-        trigger: 'option',
-        output: 'output',
+    super(
+      'Cast',
+      {
+        outputs: {
+          trigger: 'option',
+          output: 'output',
+        },
       },
-    }, 'Utility', info)
+      'Utility',
+      info
+    )
   }
 
   addSocket(node: MagickNode, name: sockets.SocketNameType) {
@@ -64,14 +65,12 @@ export class Cast extends MagickComponent<void> {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this
 
-    socketDropdown.onData = function (data) {
+    socketDropdown.onData = function (data: SocketNameType) {
       that.addSocket.apply(that, [node, data])
     }
 
     node.inspector.add(socketDropdown)
-    node
-      .addInput(input)
-      .addOutput(output)
+    node.addInput(input).addOutput(output)
 
     if (node.data.socketType) {
       this.addSocket(node, node.data.socketType as sockets.SocketNameType)

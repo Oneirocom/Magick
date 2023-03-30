@@ -1,4 +1,3 @@
-import { Agent } from '@magickml/server-core'
 import isEqual from 'lodash/isEqual'
 import Rete from 'rete'
 
@@ -304,7 +303,7 @@ export class SpellComponent extends MagickComponent<
       secrets,
       publicVariables,
     }: {
-      module: { agent: Agent; outputs: ModuleWorkerOutput[] }
+      module: { agent: any; outputs: ModuleWorkerOutput[] }
       magick: EngineContext
       secrets: Record<string, string>
       publicVariables: Record<string, string>

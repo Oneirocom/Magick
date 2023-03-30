@@ -30,18 +30,22 @@ const FineTuneManager = new ClientPlugin({
     {
       path: '/fineTuneManager',
       component: Home,
+      plugin: 'fineTuneManager',
     },
     {
       path: '/fineTuneManager/completions',
       component: Completions,
+      plugin: 'fineTuneManager/completions',
     },
     {
       path: '/fineTuneManager/fine-tunes/new',
       component: NewFineTune,
+      plugin: 'fineTuneManager/fine-tunes/new',
     },
     {
       path: '/fineTuneManager/fine-tune/:fineTuneId',
       component: CompletionDetails,
+      plugin: 'fineTuneManager/fine-tune/:fineTuneId',
     },
   ],
 });

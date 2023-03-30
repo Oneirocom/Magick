@@ -3,9 +3,9 @@ import { listenWindow } from './utils'
 export default class Draggable {
   constructor(
     el,
-    onStart = () => {},
-    onTranslate = () => {},
-    onDrag = () => {}
+    onStart = () => {/* null */},
+    onTranslate = () => {/* null */},
+    onDrag = () => {/* null */}
   ) {
     this.mouseStart = null
 
@@ -65,5 +65,5 @@ export default class Draggable {
   }
 
   // mutable method
-  destroy() {}
+  destroy() {/* null */}
 }

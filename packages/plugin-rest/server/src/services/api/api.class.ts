@@ -10,9 +10,10 @@ export interface ApiServiceOptions {
   app: Application
 }
 
-export interface ApiParams extends Params<ApiQuery> {}
+export type ApiParams = Params<ApiQuery>
 
 export type ApiGetResponse = {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   result: Object
 }
 

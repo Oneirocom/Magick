@@ -1,4 +1,5 @@
-import { calculateCompletionCost, ChatModel, TextModel } from '@magickml/cost-calculator'
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { calculateCompletionCost } from '@magickml/cost-calculator'
 import { v4 } from 'uuid'
 import { globalsManager } from '../globals'
 import { RequestPayload } from '../types'
@@ -22,14 +23,14 @@ export function saveRequest({
 }: RequestPayload) {
   const cost = calculateCompletionCost({
     totalTokens,
-    model: model as TextModel | ChatModel,
+    model: model as any,
   })
 
   const end = Date.now()
 
   const duration = end - startTime
 
-  const app = globalsManager.get('feathers') as { service: any }
+  const app = globalsManager.get('feathers') as any
   return app.service('request').create({
     id: v4(),
     projectId,
@@ -47,6 +48,6 @@ export function saveRequest({
     cost,
     // if spell is json, stringify it
     spell: typeof spell === 'string' ? spell : JSON.stringify(spell),
-    nodeId
+    nodeId,
   })
 }
