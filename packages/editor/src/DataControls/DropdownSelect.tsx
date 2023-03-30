@@ -1,3 +1,12 @@
+// GENERATED 
+/**
+ * A component that displays a dropdown select menu based on some control object
+ * @param control - The control object that contains the dataKey, data, etc.
+ * @param updateData - The update function to update the selected value in the parent component state
+ * @param initialValue - The initial selected value
+ */
+
+
 import { Select } from '@magickml/client-core'
 import useSWR from 'swr'
 import { OpenAI } from '../types/openai'
@@ -9,7 +18,9 @@ const DropdownSelect = ({ control, updateData, initialValue }) => {
   const { values, defaultValue } = data
   const [compositeValues, setCompositeValues] = useState(values)
 
-  // @thomageanderson TODO: This is a hack to get the fine-tunes to show up in the dropdown until we have a vendor provider solution
+  /**
+   * wait for the fine-tune data before updating the composite values with the model name
+   */
   const { data: fineTuneData } =
     useSWR<OpenAI.List<OpenAI.FineTune>>('fine-tunes')
 
@@ -31,10 +42,16 @@ const DropdownSelect = ({ control, updateData, initialValue }) => {
 
   const defaultVal = { value, label: value }
 
+  /**
+   * Called when the user selects a new value from the dropdown
+   */
   const onChange = async ({ value }) => {
     update(value)
   }
 
+  /**
+   * Updates the selected value in the parent component state
+   */
   const update = update => {
     updateData({ [dataKey]: update })
   }

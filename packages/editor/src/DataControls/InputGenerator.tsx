@@ -1,20 +1,35 @@
-import { useState, useEffect } from 'react'
-import Form from './Form'
-import SingleElement from './SingleElement'
+// GENERATED 
+/**
+ * A component that generates multiple inputs based on the `initialValue`.
+ * @param {Object} props - Component props.
+ * @param {Function} props.updateData - Function to update the data.
+ * @param {Object} props.control - Provides access to the `data` and `dataKey`.
+ * @param {Array} props.initialValue - Initial values that will populate the input fields.
+ * @returns {JSX.Element} A component that generates multiple input fields.
+ */
 
-const AddNewInput = props => {
-  const [value, setValue] = useState('')
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import Form from './Form';
+import SingleElement from './SingleElement';
 
-  const onChange = e => {
-    setValue(e.target.value)
-  }
+const AddNewInput = ({ addInput }) => {
+  const [value, setValue] = useState('');
 
-  const onAdd = e => {
-    if (!value) return
-    e.preventDefault()
-    props.addInput(value)
-    setValue('')
-  }
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  const onAdd = (e) => {
+    e.preventDefault();
+
+    if (!value) {
+      return;
+    }
+
+    addInput(value);
+    setValue('');
+  };
 
   return (
     <Form
@@ -23,57 +38,90 @@ const AddNewInput = props => {
       onChange={onChange}
       onAdd={onAdd}
     />
-  )
-}
+  );
+};
+
+AddNewInput.propTypes = {
+  addInput: PropTypes.func.isRequired,
+};
 
 const InputGenerator = ({ updateData, control, initialValue }) => {
-  const [inputs, setInputs] = useState([...initialValue])
-  const { data, dataKey } = control
+  const [inputs, setInputs] = useState([]);
+  const { data, dataKey } = control;
 
   useEffect(() => {
-    if (!initialValue) return
+    if (!initialValue) {
+      return;
+    }
+
     const newInputs = initialValue.filter(
-      input => !data.ignored.some(ignored => ignored.name === input.name)
-    )
-    
-    setInputs(newInputs)
-  }, [initialValue])
+      (input) =>
+        !data.ignored.some((ignored) => ignored.name === input.name)
+    );
 
-  const onDelete = name => {
-    const newInputs = inputs.filter(input => input.name !== name)
-    setInputs(newInputs)
-    update(newInputs)
-  }
+    setInputs(newInputs);
+  }, [data.ignored, initialValue]);
 
-  const update = update => {
-    updateData({ [dataKey]: update })
-  }
+  const update = (update) => {
+    updateData({ [dataKey]: update });
+  };
 
-  const addInput = input => {
+  const onDelete = (name) => {
+    const newInputs = inputs.filter((input) => input.name !== name);
+    setInputs(newInputs);
+    update(newInputs);
+  };
+
+  const addInput = (input) => {
     const newInput = {
       name: input,
       socketType: data.socketType,
-    }
-    
-    const newInputs = [...inputs, newInput]
+    };
 
-    setInputs(newInputs)
-    update(newInputs)
-  }
+    const newInputs = [...inputs, newInput];
+    setInputs(newInputs);
+
+    update(newInputs);
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-      {inputs.map((input, i) => (
+      {inputs.map(({ name, socketType }, i) => (
         <SingleElement
-          name={input.name}
           key={i}
-          delete={onDelete}
-          type={input.socketType}
+          name={name}
+          socketType={socketType}
+          delete={() => onDelete(name)}
         />
       ))}
       <AddNewInput addInput={addInput} />
     </div>
-  )
-}
+  );
+};
 
-export default InputGenerator
+InputGenerator.propTypes = {
+  updateData: PropTypes.func.isRequired,
+  control: PropTypes.shape({
+    data: PropTypes.shape({
+      ignored: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string.isRequired,
+        })
+      ).isRequired,
+      socketType: PropTypes.string.isRequired,
+    }).isRequired,
+    dataKey: PropTypes.string.isRequired,
+  }).isRequired,
+  initialValue: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      socketType: PropTypes.string.isRequired,
+    })
+  ),
+};
+
+InputGenerator.defaultProps = {
+  initialValue: [],
+};
+
+export default InputGenerator;
