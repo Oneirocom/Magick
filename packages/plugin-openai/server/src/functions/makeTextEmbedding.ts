@@ -1,47 +1,61 @@
-import { EmbeddingModel } from '@magickml/cost-calculator'
-import { CompletionHandlerInputData, saveRequest } from '@magickml/engine'
-import axios from 'axios'
-import { OPENAI_ENDPOINT } from '../constants'
+// GENERATED 
+/**
+ * This function returns an embedding of text using the OpenAI API.
+ * @param data - The completionHandler input data containing information about the request.
+ * @returns A promise that resolves to an object with a success boolean and a result string, or an error string.
+ */
+import { EmbeddingModel } from '@magickml/cost-calculator';
+import { CompletionHandlerInputData, saveRequest } from '@magickml/engine';
+import axios from 'axios';
+import { OPENAI_ENDPOINT } from '../constants';
 
 export async function makeTextEmbedding(
   data: CompletionHandlerInputData
 ): Promise<{
-  success: boolean
-  result?: string | null
+  success: boolean,
+  result?: string | null,
   error?: string | null
 }> {
-  const { node, inputs, context } = data
 
-  const input = (inputs['input'] && inputs['input'][0]) as string
+  const { node, inputs, context } = data;
+  const input = (inputs['input'] && inputs['input'][0]) as string;
+
+  // Return an error if there is no content to embed
   if (!input) {
     return {
       success: false,
-      error: 'Content is null, not storing event',
-    }
+      error: 'Content is null, not storing event'
+    };
   }
 
-  const apiKey = context.module.secrets['openai_api_key']
-
+  const apiKey = context.module.secrets['openai_api_key'];
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + apiKey,
-  }
+    Authorization: 'Bearer ' + apiKey
+  };
+  
+  // Prepare the request data for the API call
+  const requestData = {
+    input: input,
+    model: node.data.model
+  };
 
-  const requestData = { input: input, model: node.data.model }
+  // Start a timer to measure the time taken to make the request
+  const start = Date.now();
 
-  // start a timer
-  const start = Date.now()
   try {
+    // Make the API request to retrieve the text embedding
     const resp = await axios.post(
       `${OPENAI_ENDPOINT}/embeddings`,
       requestData,
       { headers: headers }
-    )
-    const spell = context.magick.getCurrentSpell()
-    const model = node.data.model as EmbeddingModel
+    );
+    
+    const spell = context.magick.getCurrentSpell();
+    const model = node.data.model as EmbeddingModel;
+    const projectId = context.projectId;
 
-    const projectId = context.projectId
-
+    // Save the request data and response data to the database for later reference
     saveRequest({
       projectId: projectId,
       requestData: JSON.stringify(requestData),
@@ -58,10 +72,14 @@ export async function makeTextEmbedding(
       totalTokens: resp.data.usage.total_tokens,
       spell,
       nodeId: node.id,
-    })
-    return { success: true, result: resp.data.data[0].embedding }
+    });
+
+    // Return the resulting text embedding
+    return { success: true, result: resp.data.data[0].embedding };
+
   } catch (err: any) {
-    console.error('makeTextEmbedding error:', err)
-    return { success: false, error: err.message }
+    // Log and return an error if the API request fails
+    console.error('makeTextEmbedding error:', err);
+    return { success: false, error: err.message };
   }
 }

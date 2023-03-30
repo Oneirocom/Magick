@@ -1,21 +1,23 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
-import type { Application } from '@magickml/server-core'
-import { GoogleSearchService } from './google-search.class'
+// GENERATED 
+/**
+ * Initializes the GoogleSearchService and its hooks via `app.configured`.
+ * Registers the GoogleSearchService on the Feathers application.
+ * @param app - The application in which the service is to be registered.
+ * @returns void
+ */
 
-export * from './google-search.class'
+import type { Application } from '@magickml/server-core';
+import { GoogleSearchService } from './google-search.class';
 
-// A configure function that registers the service and its hooks via `app.configure`
-export const googleSearch = (app: Application) => {
-  // Register our service on the Feathers application
-  app.use('google-search' as any, new GoogleSearchService(), {
-    // A list of all methods this service exposes externally
-    methods: ['find'],
-    // You can add additional custom events to be sent to clients here
-    events: [],
-  })
+export * from './google-search.class';
 
-  // Initialize hooks
-  app.service('google-search' as any).hooks({
+export const googleSearch = (app: Application): void => {
+  app.use('google-search', new GoogleSearchService(), {
+    methods: ['find'], // Exposes the 'find' method of the GoogleSearchService externally.
+    events: [], // Can add custom events to be sent to clients.
+  });
+
+  app.service('google-search').hooks({
     around: {
       all: [],
     },
@@ -31,5 +33,5 @@ export const googleSearch = (app: Application) => {
     error: {
       all: [],
     },
-  })
-}
+  });
+};

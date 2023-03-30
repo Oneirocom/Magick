@@ -1,47 +1,67 @@
-import * as React from 'react'
-import { useFormContext } from 'react-hook-form'
-import Select from 'react-select'
+// GENERATED 
+/**
+ * A SelectEngine component that renders a dropdown menu of engine options.
+ * @param {Object} props - React props object
+ * @param {string[]} props.engines - The engines to display in the dropdown menu
+ * @param {string} [props.name='model'] - The name of the form field associated with the SelectEngine component
+ * @param {boolean} [props.required=false] - Whether the SelectEngine component is a required form field
+ */
+import * as React from 'react';
+import { useFormContext } from 'react-hook-form';
+import Select from 'react-select';
 
-export const BaseEngines = ['ada', 'babbage', 'curie', 'davinci', 'gpt-4']
-export const InstructEngines = ['davinci-instruct-beta', 'curie-instruct-beta']
+// Available base engines
+export const BaseEngines: string[] = ['ada', 'babbage', 'curie', 'davinci', 'gpt-4'];
 
-export default function SelectEngine({
-  engines = BaseEngines,
-  name = 'model',
-  required,
-}: {
-  engines?: string[]
-  name: string
-  required?: boolean
+// Available instruct engines
+export const InstructEngines: string[] = ['davinci-instruct-beta', 'curie-instruct-beta'];
+
+export default function SelectEngine(props: {
+  engines?: string[];
+  name?: string;
+  required?: boolean;
 }) {
-  const form = useFormContext()
+  const { engines = BaseEngines, name = 'model', required } = props;
 
-  const options = engines.map(engine => ({
+  // Get the form and register the field with the specified name
+  const { register, getValues, setValue } = useFormContext();
+
+  // Build the array of options to display in the dropdown menu
+  const options = engines.map((engine) => ({
     label: engine,
     value: engine,
-  }))
+  }));
+
+  /**
+   * onChange event handler that updates the field value in the form.
+   * @param {Object} selection - The selected engine option
+   * @param {string} selection.value - The value property of the selected engine option
+   */
+  function handleOnChange(selection: { value: string }) {
+    setValue(name, selection?.value ?? '');
+  }
 
   return (
     <Select
-      {...form.register(name, { required })}
+      {...register(name, { required })}
       className="w-44"
       classNamePrefix="react-select"
       defaultValue={options.find(
-        option => option.value === form.getValues()[name]
+        (option) => option.value === getValues()[name]
       )}
       isClearable={!required}
       escapeClearsValue
       isSearchable={false}
-      onChange={selection => form.setValue(name, selection?.value ?? '')}
+      onChange={handleOnChange}
       options={options}
       styles={{
-        option: styles => {
+        option: (styles) => {
           return {
             ...styles,
             color: 'black',
-          }
+          };
         },
       }}
     />
-  )
+  );
 }

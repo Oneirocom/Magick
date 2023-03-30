@@ -1,3 +1,11 @@
+// GENERATED 
+/**
+ * A plugin used for the Pinecone integration with MagickML engine.
+ *
+ * @param name - the name of the plugin.
+ * @param nodes - the nodes used by the plugin.
+ * @param secrets - an array of secrets used by the plugin.
+ */
 import { ServerPlugin } from "@magickml/engine"
 import Nodes from '@magickml/plugin-pinecone-shared'
 
@@ -12,6 +20,6 @@ const PineconePlugin = new ServerPlugin({
       getUrl: 'https://app.pinecone.io/'
     }
   ],
-})
+});
 
 export default PineconePlugin;
