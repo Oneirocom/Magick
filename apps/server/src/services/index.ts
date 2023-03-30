@@ -1,10 +1,16 @@
-// NOTE: this file is left here as a stub so that we can generate new services here
+// GENERATED 
+/**
+ * This file serves as a stub to generate new services.
+ * For more information about this file, visit https://dove.feathersjs.com/guides/cli/application.html#configure-functions.
+ */
 
-// import { api } from './api/api'
-// // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
 import type { Application } from '@magickml/server-core'
+// import { api } from './api/api'
 
-export const services = async (app: Application) => {
-//   app.configure(api)
-
+/**
+ * This function configures the services for the given application.
+ * @param app An instance of the application.
+ */
+export const configureServices = async (app: Application): Promise<void> => {
+  // app.configure(api)
 }
