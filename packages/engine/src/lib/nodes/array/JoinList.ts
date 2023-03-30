@@ -1,7 +1,5 @@
 import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
-
-import { TextInputControl } from '../../dataControls/TextInputControl'
 import { MagickComponent } from '../../engine'
 import { arraySocket, stringSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
@@ -15,12 +13,17 @@ type WorkerReturn = {
 export class JoinListComponent extends MagickComponent<WorkerReturn> {
   constructor() {
     // Name of the component
-    super('Join List', {
-      outputs: {
-        text: 'output',
-        trigger: 'option',
+    super(
+      'Join List',
+      {
+        outputs: {
+          text: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'Array', info)
+      'Array',
+      info
+    )
   }
 
   // the builder is used to "assemble" the node component.
