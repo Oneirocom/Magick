@@ -1,30 +1,34 @@
-import Modal from '../Modal/Modal'
-
-interface InfoModal {
-  title: string
-  content: string
+// GENERATED 
+/**
+ * Represents the contents and behavior of an information modal that displays a title, some content and an optional checkbox.
+ */
+interface InfoModalProps {
+  /** Title of the information modal */
+  title: string;
+  /** Content of the information modal */
+  content: string;
+  /** Checkbox information, if any */
   checkbox?: {
-    onClick: () => void
-    label: string
-  }
+    /** Checkbox click handler */
+    onClick: () => void;
+    /** Checkbox label */
+    label: string;
+  };
 }
 
-const InfoModal = ({ title, content, checkbox }: InfoModal) => {
+/**
+ * Renders an information modal containing the provided title, content and optional checkbox.
+ * @param props The InfoModalProps object containing the title, content and optional checkbox.
+ * @returns A JSX element of the information modal.
+ */
+const InfoModal = ({ title, content, checkbox }: InfoModalProps): JSX.Element => {
   return (
     <Modal title={title} icon="info">
-      <p
-        style={{ whiteSpace: 'pre-line', fontSize: '14px', lineHeight: '24px' }}
-      >
-        {' '}
-        {content}{' '}
-      </p>
-      {checkbox && (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
+      {/* Use white-space pre-line to preserve line breaks in content */}
+      <p style={{ whiteSpace: 'pre-line', fontSize: '14px', lineHeight: '24px' }}>{content}</p>
+      {/* Render the checkbox if it exists */}
+      {checkbox &&
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <label htmlFor="acknowledgment-input">{checkbox.label}</label>
           <input
             id="acknowledgment-input"
@@ -33,9 +37,9 @@ const InfoModal = ({ title, content, checkbox }: InfoModal) => {
             placeholder={checkbox.label}
           />
         </div>
-      )}
+      }
     </Modal>
-  )
-}
+  );
+};
 
-export default InfoModal
+export default InfoModal;

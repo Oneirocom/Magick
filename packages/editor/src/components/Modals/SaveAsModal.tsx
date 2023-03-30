@@ -1,21 +1,37 @@
-import { useState } from 'react'
-import { useSnackbar } from 'notistack'
-import { spellApi } from '../../state/api/spells'
-import { useForm } from 'react-hook-form'
-import Modal from '../Modal/Modal'
-import css from './modalForms.module.css'
-import { useNavigate } from 'react-router'
-import { templates } from '@magickml/client-core'
-import { useConfig } from '../../contexts/ConfigProvider'
-import md5 from 'md5'
+// GENERATED 
+import { useState } from 'react';
+import { useSnackbar } from 'notistack';
+import { spellApi } from '../../state/api/spells';
+import { useForm } from 'react-hook-form';
+import Modal from '../Modal/Modal';
+import css from './modalForms.module.css';
+import { useNavigate } from 'react-router';
+import { templates } from '@magickml/client-core';
+import { useConfig } from '../../contexts/ConfigProvider';
+import md5 from 'md5';
 
-const defaultGraph = templates.spells[0].graph
+// Initial graph for the spell
+const defaultGraph = templates.spells[0].graph;
 
+/**
+ * EditSpellModal component for saving a copy of an existing spell.
+ * @param {Object} props - Component properties
+ * @param {Object} props.tab - Tab data
+ * @param {Function} props.closeModal - Function to close the component modal
+ * @returns {JSX.Element} - EditSpellModal component
+ */
 const EditSpellModal = ({ tab, closeModal }) => {
-  const config = useConfig()
-  const [error, setError] = useState('')
-  const [saveSpell, { isLoading }] = spellApi.useSaveSpellMutation()
-  const [newSpell] = spellApi.useNewSpellMutation()
+  // Get config from context
+  const config = useConfig();
+  
+  // State for handling error messages
+  const [error, setError] = useState('');
+  
+  // Mutation hooks for saving and creating spells
+  const [saveSpell, { isLoading }] = spellApi.useSaveSpellMutation();
+  const [newSpell] = spellApi.useNewSpellMutation();
+  
+  // Fetch the spell by ID
   const { data: spell } = spellApi.useGetSpellByIdQuery(
     {
       spellName: tab.name,
@@ -25,47 +41,58 @@ const EditSpellModal = ({ tab, closeModal }) => {
     {
       skip: !tab.name,
     }
-  )
-  const { enqueueSnackbar } = useSnackbar()
-  const navigate = useNavigate()
+  );
 
+  // Snackbar for showing notifications
+  const { enqueueSnackbar } = useSnackbar();
+
+  // Navigate hook for navigating between spells
+  const navigate = useNavigate();
+
+  // Initialize form handling
   const {
     register,
     handleSubmit,
-    // formState: { errors },
-  } = useForm()
+  } = useForm();
 
-  const onSubmit = handleSubmit(async data => {
+  // Function to handle form submission
+  const onSubmit = handleSubmit(async (data) => {
+    // Create a new spell
     const response = (await newSpell({
       graph: defaultGraph,
       name: data.name,
       projectId: config.projectId,
       hash: md5(JSON.stringify(defaultGraph.nodes)),
-    })) as any
+    })) as any;
+
+    // Save the spell
     const saveResponse: any = await saveSpell({
       spell: { ...spell.data[0], name: data.name, id: response.data.id },
       projectId: config.projectId,
-    })
+    });
+
+    // Show error if saving spell fails
     if (saveResponse.error) {
-      // show snackbar
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
-      })
-      setError(saveResponse.error.message)
-      return
+      });
+      setError(saveResponse.error.message);
+      return;
     }
 
-    enqueueSnackbar('Spell saved', { variant: 'success' })
+    // Show success message
+    enqueueSnackbar('Spell saved', { variant: 'success' });
 
-    // close current tab and navigate to the new spell
-    //dispatch(closeTab(tab.id))
+    // Navigate to the new spell
     navigate(
       `/magick/${response.data.id + '-' + encodeURIComponent(btoa(data.name))}`
-    )
+    );
 
-    closeModal()
-  })
+    // Close the modal
+    closeModal();
+  });
 
+  // Define modal options
   const options = [
     {
       className: `${css['loginButton']} primary`,
@@ -73,14 +100,13 @@ const EditSpellModal = ({ tab, closeModal }) => {
       onClick: onSubmit,
       disabled: isLoading,
     },
-  ]
+  ];
 
   return (
     <Modal title="Save A Copy" options={options} icon="info">
       <div className={css['login-container']}>
         {error && <span className={css['error-message']}>{error}</span>}
         <form>
-          {/* register your input into the hook by invoking the "register" function */}
           <div className={css['input-container']}>
             <label className={css['label']} htmlFor="">
               Spell name
@@ -93,12 +119,10 @@ const EditSpellModal = ({ tab, closeModal }) => {
               placeholder="Enter new spell name here"
             />
           </div>
-          {/* errors will return when field validation fails  */}
-          {/* {errors.password && <span>This field is required</span>} */}
         </form>
       </div>
     </Modal>
-  )
-}
+  );
+};
 
-export default EditSpellModal
+export default EditSpellModal;

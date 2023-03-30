@@ -1,3 +1,4 @@
+// GENERATED 
 import classnames from 'classnames'
 import { VscClose } from 'react-icons/vsc'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,6 +12,11 @@ import { changeActive } from '../../state/tabs'
 import { RootState } from '../../state/store'
 import { Icon } from '@magickml/client-core'
 
+/**
+ * Tab Component
+ * @param {Object} tab - tab object containing { id, name, URI }
+ * @param {Object} activeTab - currently active tab
+ */
 const Tab = ({ tab, activeTab }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -24,6 +30,9 @@ const Tab = ({ tab, activeTab }) => {
     [css['inactive']]: !active,
   })
 
+  /**
+   * onClick handler for activating the selected tab
+   */
   const onClick = () => {
     const updatedTabs = tabs.map(t =>
       t.id === tab.id
@@ -44,7 +53,10 @@ const Tab = ({ tab, activeTab }) => {
     navigate(`/magick/${tab.URI}`)
   }
 
-  // Handle selecting the next tab down is none are active.
+  /**
+   * onClose handler for closing the selected tab and navigating
+   * @param {Event} e - Event object from the click event
+   */
   const onClose = e => {
     e.stopPropagation()
     navigate('/magick')
@@ -69,6 +81,11 @@ const Tab = ({ tab, activeTab }) => {
   )
 }
 
+/**
+ * TabBar Component
+ * @param {Array} tabs - array of tab objects containing { id, name, URI }
+ * @param {Object} activeTab - currently active tab
+ */
 const TabBar = ({ tabs, activeTab }) => {
   return (
     <div className={css['th-tabbar']}>
