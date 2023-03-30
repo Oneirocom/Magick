@@ -88,10 +88,6 @@ const MenuBar = () => {
     navigate('/home/all-projects?import')
   }
 
-  const onProjectWindowCreate = () => {
-    publish($CREATE_PROJECT_WINDOW(activeTabRef.current?.id))
-  }
-
   const onPlaytestCreate = () => {
     if (!activeTabRef.current) return
     publish($CREATE_PLAYTEST(activeTabRef.current.id))
@@ -221,9 +217,6 @@ const MenuBar = () => {
         },
         inspector: {
           onClick: onInspectorCreate,
-        },
-        project: {
-          onClick: onProjectWindowCreate,
         },
         playtest: {
           onClick: onPlaytestCreate,

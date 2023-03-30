@@ -178,10 +178,6 @@ const EventHandler = ({ pubSub, tab }) => {
     onProcess()
   }
 
-  const createProjectWindow = () => {
-    createOrFocus(windowTypes.PROJECT, 'Project Window')
-  }
-
   const createMessageReactionEditor = () => {
     createOrFocus(
       windowTypes.MESSAGE_REACTION_EDITOR,
@@ -289,7 +285,6 @@ const EventHandler = ({ pubSub, tab }) => {
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,
-    [$CREATE_PROJECT_WINDOW(tab.id)]: createProjectWindow,
     [$CREATE_PLAYTEST(tab.id)]: createPlaytest,
     [$CREATE_INSPECTOR(tab.id)]: createInspector,
     [$CREATE_TEXT_EDITOR(tab.id)]: createTextEditor,
