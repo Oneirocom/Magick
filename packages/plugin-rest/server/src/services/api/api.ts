@@ -3,19 +3,16 @@
 import { hooks as schemaHooks } from '@feathersjs/schema'
 
 import {
+  apiDataResolver,
   apiDataValidator,
-  apiPatchValidator,
+  apiExternalResolver,
+  apiQueryResolver,
   apiQueryValidator,
   apiResolver,
-  apiExternalResolver,
-  apiDataResolver,
-  apiPatchResolver,
-  apiQueryResolver
 } from './api.schema'
 
 import type { Application } from '@magickml/server-core'
 import { ApiService, getOptions } from './api.class'
-
 
 // Add this service to the service type index
 declare module '@magickml/server-core' {
@@ -37,25 +34,37 @@ export const api = (app: Application) => {
     // A list of all methods this service exposes externally
     methods: apiMethods,
     // You can add additional custom events to be sent to clients here
-    events: []
+    events: [],
   })
   // Initialize hooks
   app.service(apiPath).hooks({
     around: {
-      all: [schemaHooks.resolveExternal(apiExternalResolver), schemaHooks.resolveResult(apiResolver)]
+      all: [
+        schemaHooks.resolveExternal(apiExternalResolver),
+        schemaHooks.resolveResult(apiResolver),
+      ],
     },
     before: {
-      all: [schemaHooks.validateQuery(apiQueryValidator), schemaHooks.resolveQuery(apiQueryResolver)],
+      all: [
+        schemaHooks.validateQuery(apiQueryValidator),
+        schemaHooks.resolveQuery(apiQueryResolver),
+      ],
       get: [],
-      update: [schemaHooks.validateData(apiDataValidator), schemaHooks.resolveData(apiDataResolver)],
-      create: [schemaHooks.validateData(apiDataValidator), schemaHooks.resolveData(apiDataResolver)],
-      remove: []
+      update: [
+        schemaHooks.validateData(apiDataValidator),
+        schemaHooks.resolveData(apiDataResolver),
+      ],
+      create: [
+        schemaHooks.validateData(apiDataValidator),
+        schemaHooks.resolveData(apiDataResolver),
+      ],
+      remove: [],
     },
     after: {
-      all: []
+      all: [],
     },
     error: {
-      all: []
-    }
+      all: [],
+    },
   } as any) // TODO: fix me
 }

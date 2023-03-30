@@ -1,41 +1,73 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
-import type { Params, ServiceInterface } from '@feathersjs/feathers'
+// GENERATED 
+/**
+ * This file contains a SolidityService class that implements the ServiceInterface.
+ * The class exposes a create() method that compiles Solidity code using the `solc` package.
+ * The file also exports a getOptions() function that returns option parameters for the SolidityService class.
+ * @packageDocumentation
+ */
 
-import solc from 'solc'
+import type { Params, ServiceInterface } from '@feathersjs/feathers';
+import solc from 'solc';
+import { Application } from '@magickml/server-core';
+import type { Solidity, SolidityData, SolidityQuery } from './solidity.schema';
 
-import { Application } from '@magickml/server-core'
-import type { Solidity, SolidityData, SolidityQuery } from './solidity.schema'
-
-export type { Solidity, SolidityData, SolidityQuery }
-
+/**
+ * An object representing options for the SolidityService class.
+ */
 export interface SolidityServiceOptions {
-  app: Application
+  app: Application;
 }
 
-type SolidityParams = Params<SolidityQuery>
+/**
+ * Alias for the Params type with SolidityQuery type parameters.
+ */
+type SolidityParams = Params<SolidityQuery>;
 
+/**
+ * The response object of SolidityService's get() method.
+ */
 export type SolidityGetResponse = {
   result: any
 }
 
-// This is a skeleton for a custom service class. Remove or add the methods you need here
+/**
+ * The SolidityService class that implements the ServiceInterface.
+ * The class compiles Solidity code using the `solc` package.
+ */
 export class SolidityService<ServiceParams extends SolidityParams = SolidityParams>
-  implements ServiceInterface<Solidity, SolidityData, ServiceParams>
-{
+implements ServiceInterface<Solidity, SolidityData, ServiceParams> {
+  /**
+   * Initializes a new instance of the SolidityService class.
+   * @param options An object representing the options for SolidityService.
+   */
   constructor(public options: SolidityServiceOptions) {}
 
-  async create(data: SolidityData, params?: ServiceParams): Promise<Solidity>
-  async create(data: SolidityData[], params?: ServiceParams): Promise<Solidity[]>
+  /**
+   * Compiles Solidity code using the `solc` package and returns the result.
+   * @param data An object representing Solidity code.
+   * @param params An object representing additional parameters.
+   * @returns An object representing the compiled Solidity code.
+   */
+  async create(data: SolidityData, params?: ServiceParams): Promise<Solidity>;
+  
+  /**
+   * Compiles an array of Solidity code objects using the `solc` package and returns the results.
+   * @param data An array of objects representing Solidity code.
+   * @param params An object representing additional parameters.
+   * @returns An array of objects representing the compiled Solidity code.
+   */
+  async create(data: SolidityData[], params?: ServiceParams): Promise<Solidity[]>;
+  
   async create(
     data: SolidityData | SolidityData[],
-  ): Promise<Solidity | any /* TODO: type me */> {
-    const { code } = data as any
-    
+    params?: ServiceParams
+  ): Promise<Solidity | Solidity[] | any> {
+    const { code } = data as any;
+
     if (!code) {
       return {
-        error:
-          'The `code` field is required.',
-      }
+        error: 'The `code` field is required.'
+      };
     }
 
     const input = {
@@ -55,14 +87,19 @@ export class SolidityService<ServiceParams extends SolidityParams = SolidityPara
     };
   
     const output = JSON.parse(solc.compile(JSON.stringify(input)));
-    console.log(output)
+    console.log(output);
 
     return {
-      result: output,
-    }
+      result: output
+    };
   }
 }
 
-export const getOptions = (app: Application) => {
-  return { app }
+/**
+ * Returns an object representing the options for SolidityService.
+ * @param app An Application instance.
+ * @returns An object representing the SolidityService options.
+ */
+export const getOptions = (app: Application): SolidityServiceOptions => {
+  return { app };
 }

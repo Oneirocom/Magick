@@ -1,47 +1,63 @@
-import React from 'react'
+// GENERATED 
+/**
+ * A functional React component to be used for inputting and displaying private keys.
+ * @param value - The private key string value.
+ * @param setValue - A function to set the state value of the private key.
+ * @param secret - A boolean value indicating whether or not to obfuscate the private key.
+ * @returns A JSX.Element of either the private key input field or a display of the private key value.
+ */
+import React from 'react';
 
-export const KeyInput = ({
-  value,
-  setValue,
-  secret,
-}: {
-  value: string
-  setValue: any
-  secret: boolean
-}) => {
-  const addKey = (str: string) => {
-    // discount random key presses, could def have better sense checking
-    // ethereum addresses are 42 chars
+export const KeyInput: React.FC<{ value: string, setValue: React.Dispatch<React.SetStateAction<string>>, secret: boolean }> = ({ value, setValue, secret }) => {
+  /**
+   * A function to update the component's state value with a new private key string value.
+   * @param str - The new private key string value.
+   * @returns void.
+   */
+  const addKey = (str: string): void => {
+    // Disregard inputs that are probably not valid keys (i.e. random key presses).
+    // Ethereum addresses are typically 42 characters.
     if (str.length > 31) {
-      setValue(str)
+      setValue(str);
     }
   }
 
-  const removeKey = () => {
-    setValue('')
+  /**
+   * A function to reset the component's state value to an empty string.
+   * @returns void.
+   */
+  const removeKey = (): void => {
+    setValue('');
   }
 
-  const obfuscateKey = (str: string) => {
-    const first = str.substring(0, 6)
-    const last = str.substring(str.length - 4, str.length)
-    return `${first}....${last}`
+  /**
+   * A function to obfuscate a private key string's middle characters with ellipsis.
+   * @param str - The private key string value.
+   * @returns The obfuscated private key string value.
+   */
+  const obfuscateKey = (str: string): string => {
+    const first = str.substring(0, 6);
+    const last = str.substring(str.length - 4, str.length);
+    return `${first}....${last}`;
   }
 
-  return value ? (
+  return (value ? (
     <>
+      {/* Conditionally display the private key, obfuscating if secret=true */}
       <p>{secret ? obfuscateKey(value) : value}</p>
-      <button onClick={removeKey} style={{ cursor: 'pointer' }}>
-        remove
-      </button>
+      {/* Render remove button */}
+      <button onClick={removeKey} style={{ cursor: 'pointer' }}>remove</button>
     </>
   ) : (
-    <input
-      type={secret ? 'password' : 'input'}
-      defaultValue={value}
-      placeholder="Insert your key here"
-      onChange={e => {
-        addKey(e.target.value)
-      }}
-    />
-  )
+      // Render input field
+      <input
+        type={secret ? 'password' : 'input'}
+        defaultValue={value}
+        placeholder="Insert your key here"
+        onChange={e => {
+          addKey(e.target.value);
+        }}
+      />
+    )
+  );
 }
