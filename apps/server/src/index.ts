@@ -1,13 +1,15 @@
-import 'regenerator-runtime/runtime'
+// GENERATED 
+/**
+ * Entry point of MagickML server. Initializes the necessary modules, middleware and routes to start up the server. 
+ **/
 
+import 'regenerator-runtime/runtime'
 import cors from '@koa/cors'
 import Router from '@koa/router'
-import Koa from 'koa'
+import Koa, { Context } from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
-
 import { pluginManager } from '@magickml/engine'
-
 import {
   app,
   initFileServer,
@@ -22,27 +24,26 @@ import {
   Route
  } from '@magickml/server-core'
 
- 
-// log node.js errors
-process.on('uncaughtException', (err) => {
+// log handle errors
+process.on('uncaughtException', (err: Error) => {
   console.error('uncaughtException', err)
 })
 
-// log node.js errors
-process.on('unhandledRejection', (err) => {
-  console.error('unhandledRejection', err)
-})
-
-process.on('unhandledRejection', (reason, p) =>
+process.on('unhandledRejection', (reason: {}, p: Promise<any>) =>
   logger.error('Unhandled Rejection at: Promise ', p, reason)
 )
 
-const serverRoutes = pluginManager.getServerRoutes();
+// initialize server routes from the plugin manager
+const serverRoutes: Route[] = pluginManager.getServerRoutes();
+const router: Router = new Router();
 
-const router: Router = new Router()
-
+// merge spells, apis and server routes
 const routes: Route[] = [...spells, ...apis, ...serverRoutes]
 
+/**
+ * Initializes the server, sets up error-handling middleware, cross-origin resource sharing, 
+ * form and multipart-json requests, and routes. 
+ */
 async function init() {
   // load plugins
   await (async () => {
@@ -54,25 +55,24 @@ async function init() {
   await initFileServer()
   await initTextToSpeech()
 
-  const serverInits = pluginManager.getServerInits();
+  const serverInits: Record<string, Function> = pluginManager.getServerInits();
+  
   for (const method of Object.keys(serverInits)) {
     await serverInits[method]();
   }
 
-  // generic error handling
-  app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
+  // generic error handling for any errors that may occur
+  app.use(async (ctx: Context, next: () => Promise<any>) => {
     try {
-      await next()
+      await next();
     } catch (error: any) {
       ctx.status = error.statusCode;
-      ctx.body = { error }
-      ctx.app.emit('error', error, ctx)
+      ctx.body = { error };
+      ctx.app.emit('error', error, ctx);
     }
   })
 
-  const options = {
-    origin: '*',
-  }
+  const options = { origin: '*' }
   app.use(cors(options))
 
   process.on('unhandledRejection', (err: Error) => {
@@ -82,6 +82,13 @@ async function init() {
   // Middleware used by every request. For route-specific middleware, add it to you route middleware specification
   app.use(koaBody({ multipart: true }))
 
+  /**
+   * Creates a Koa route from the Route object passed in.
+   * @param method The HTTP method used for the route
+   * @param path The path of the route 
+   * @param middleware Array of middleware functions to be passed to the route. 
+   * @param handler The function to handle the request for the route.
+   */
   const createRoute = (
     method: Method,
     path: string,
@@ -110,18 +117,19 @@ async function init() {
     }
   }
 
-  type MiddlewareParams = {
-    middleware: Middleware[] | undefined
-  }
-
-  const routeMiddleware = ({ middleware = [] }: MiddlewareParams) => {
+  /**
+   * Returns an array of middleware functions. If none are passed, it returns an empty array. 
+   * @param middleware An optional array of middleware functions to be included in the returned array. 
+   * return An array of middleware functions to be used with a route. 
+   */
+  const routeMiddleware = ({ middleware = [] }: {middleware?: Middleware[]} = {}) => {
     return [...middleware]
   }
 
   // Create Koa routes from the routes defined in each module
   routes.forEach(route => {
-    const { method, path, middleware, handler } = route
-    const _middleware = routeMiddleware({ middleware })
+    const { method, path, middleware, handler } = route;
+    const _middleware = routeMiddleware({ middleware });
     if (method && handler) {
       createRoute(method, path, _middleware, handler)
     }
@@ -145,6 +153,7 @@ async function init() {
     }
   })
 
+  // adding router middlewares to Koa app 
   app.use(router.routes()).use(router.allowedMethods())
 
   app.listen(app.get('port'), () => {
