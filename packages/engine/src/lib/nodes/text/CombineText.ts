@@ -19,18 +19,12 @@ type WorkerReturn = {
 
 export class CombineText extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Combine Text')
-
-    this.task = {
+    super('Combine Text', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
-
-    this.category = 'Text'
-    this.display = true
-    this.info = info
+    }, 'Text', info)
   }
 
   builder(node: MagickNode) {

@@ -9,13 +9,9 @@ const info = `The boolean gate takes a boolean input, and depending on whether t
 export class BooleanGate extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Boolean Gate')
-
-    this.task = {
+    super('Boolean Gate', {
       outputs: { true: 'option', false: 'option' },
-    }
-    this.category = 'Flow'
-    this.info = info
+    }, 'Flow', info)
   }
 
   // the builder is used to "assemble" the node component.

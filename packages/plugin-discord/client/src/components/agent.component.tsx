@@ -29,7 +29,7 @@ export const DiscordAgentWindow: FC<any> = props => {
       setChecked(selectedAgentData?.data?.discord_enabled)
       setDisable(false)
     }
-  }, [props.enable])
+  }, [props.enable, selectedAgentData])
   const testVoice = async () => {
     if (
       (selectedAgentData.data?.voice_provider &&

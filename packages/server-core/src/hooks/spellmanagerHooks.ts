@@ -1,5 +1,4 @@
-import { otJson0 } from 'ot-json0'
-import { Spell } from '../client'
+import { SpellInterface } from '@magickml/engine'
 import { HookContext } from '../declarations'
 import { getSpell } from '../helpers/getSpell'
 
@@ -12,7 +11,7 @@ export const checkForSpellInManager = async (context: HookContext) => {
   const id = dataId || contextId
   const projectId = data.projectId || params.query.projectId
 
-  if (!user) return
+  if (!user || !app.userSpellManagers) return
   // Here we get the users spellManagerApp
 
   const spellManager = app.userSpellManagers.get(user.id.toString())
@@ -23,7 +22,7 @@ export const checkForSpellInManager = async (context: HookContext) => {
 
   if (!spellManager.hasSpellRunner(decodedId)) {
     const spell = await getSpell({ app, id: decodedId, projectId })
-    await spellManager.load(spell as Spell)
+    await spellManager.load(spell as SpellInterface)
   }
 }
 
@@ -49,6 +48,5 @@ export const updateSpellInManager = async (context: HookContext) => {
 
   // We just store the result here of the update
   // This hook only run after save spell calls, so there should always be a spell to laod in.
-  console.log('UPDATING SPELL IN MANAGER')
   spellManager.load(context.result, true)
 }

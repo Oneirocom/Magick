@@ -7,7 +7,10 @@ import {
   CompletionInspectorControls,
   CompletionProvider,
   CompletionSocket,
-  MagickNode, MagickNodeData, MagickWorkerInputs, MagickWorkerOutputs
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 
 import { pluginManager } from '../../plugin'
@@ -17,24 +20,18 @@ const info = 'Event Store is used to store events for an event and user'
 type InputReturn = {
   success: boolean
   error?: string
-  result?: number[]
+  result?: any
 }
 
 export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Create Text Embedding')
-
-    this.task = {
+    super('Create Text Embedding', {
       outputs: {
         trigger: 'option',
         result: 'output',
         success: 'output',
       },
-    }
-
-    this.category = 'Embedding'
-    this.display = true
-    this.info = info
+    }, 'Embedding', info)
   }
 
   builder(node: MagickNode) {
@@ -128,7 +125,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: MagickNodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     context
@@ -159,6 +156,8 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
       outputs,
       context,
     })
+
+    console.log('completionHandler', success, result, error)
 
     if (!success) {
       return {

@@ -1,7 +1,16 @@
 import { LoadingScreen } from '@magickml/client-core'
-import { EditorContext, GraphData, MagickEditor, Spell } from '@magickml/engine'
+import {
+  EditorContext,
+  GraphData,
+  MagickEditor,
+  SpellInterface,
+} from '@magickml/engine'
 import React, {
-  createContext, useContext, useEffect, useRef, useState
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
 } from 'react'
 import { Component } from 'rete/types/engine'
 
@@ -33,14 +42,13 @@ type EditorContextType = {
   buildEditor: (
     el: HTMLDivElement,
     // todo update this to use proper spell type
-    spell: Spell | undefined,
+    spell: SpellInterface | undefined,
     tab: MagickTab,
     reteInterface: EditorContext
   ) => void
   setEditor: (editor: any) => void
   getNodeMap: () => Map<string, Component>
   getNodes: () => any
-  loadGraph: (graph: any) => void
   setContainer: (container: HTMLDivElement) => void
   undo: () => void
   redo: () => void
@@ -90,8 +98,8 @@ const EditorProvider = ({ children }) => {
     setEditor(newEditor)
     // copy spell in case it is read onl
     const spell = JSON.parse(JSON.stringify(_spell ?? '{}'))
-    const graph = spell.graph
-    newEditor?.loadGraph(graph)
+    // newEditor?.loadGraph(graph)
+    newEditor.loadSpell(spell)
   }
 
   const run = () => {
@@ -144,12 +152,6 @@ const EditorProvider = ({ children }) => {
     return editor && Object.fromEntries(editor.components)
   }
 
-  const loadGraph = graph => {
-    if (!editorRef.current) return
-
-    editorRef.current.loadGraph(graph)
-  }
-
   const setContainer = () => {
     //
   }
@@ -162,7 +164,6 @@ const EditorProvider = ({ children }) => {
     buildEditor,
     getNodeMap,
     getNodes,
-    loadGraph,
     setEditor,
     getEditor,
     undo,
@@ -202,7 +203,7 @@ const RawEditor = ({ tab, children }) => {
     <>
       <div
         style={{}}
-        id="editor-container"
+        id={`editor-container-${tab.id}`}
         className={styles['editor-container']}
         ref={el => {
           if (el && !loaded && spell) {

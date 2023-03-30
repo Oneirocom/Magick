@@ -15,17 +15,12 @@ type InputReturn = {
 
 export class BooleanVariable extends MagickComponent<InputReturn> {
   constructor() {
-    super('Boolean Variable')
-
-    this.task = {
+    super('Boolean Variable', {
       outputs: {
         output: 'output',
       },
-    }
+    }, 'Boolean', info)
 
-    this.category = 'Boolean'
-    this.info = info
-    this.display = true
   }
 
   builder(node: MagickNode) {

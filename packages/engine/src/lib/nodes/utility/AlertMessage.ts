@@ -3,7 +3,6 @@ import Rete from 'rete'
 import _ from 'lodash'
 import { TextInputControl } from '../../dataControls/TextInputControl'
 import { MagickComponent } from '../../engine'
-import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { triggerSocket } from '../../sockets'
 import { MagickNode, WorkerData } from '../../types'
 
@@ -12,13 +11,9 @@ const info = `When the alert component is triggered, it will fire an alert with 
 export class Alert extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Alert')
-
-    this.task = {
+    super('Alert', {
       outputs: {},
-    } as TaskOptions
-    this.category = 'Utility'
-    this.info = info
+    }, 'Utility', info)
   }
   // the builder is used to "assemble" the node component.
 
