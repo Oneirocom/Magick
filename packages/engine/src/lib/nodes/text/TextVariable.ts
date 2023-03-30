@@ -1,3 +1,9 @@
+// GENERATED 
+/**
+ * Module represents a Rete flow based on Google code standards.
+ * @module
+ */ 
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
@@ -7,22 +13,39 @@ import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { anySocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, MagickWorkerOutputs, WorkerData } from '../../types'
+
+/**
+ * The text representing the TextVariable class.
+ */
 const info = `Text Variable`
 
+/**
+ * The expected output of TextVariable class method builder.
+ */
 type InputReturn = {
   output: string
 }
 
+/**
+ * Class representing the TextVariable node, inheriting from MagickComponent class.
+ */
 export class TextVariable extends MagickComponent<InputReturn> {
+  /**
+   * Create a TextVariable.
+   */
   constructor() {
     super('Text Variable', {
       outputs: {
         output: 'output',
       },
     }, 'Text', info)
-
   }
 
+  /**
+   * Function to build a node of the TextVariable class.
+   * @param {MagickNode} node - The representation of the node.
+   * @returns {Rete.Output} - The output of the node.
+   */
   builder(node: MagickNode) {
     if (!node.data.fewshot) node.data.fewshot = ''
     const out = new Rete.Output('output', 'output', anySocket)
@@ -45,14 +68,26 @@ export class TextVariable extends MagickComponent<InputReturn> {
     return node.addOutput(out)
   }
 
-  worker(node: WorkerData, _inputs: MagickWorkerInputs, _outputs: MagickWorkerOutputs, context: { module: { publicVariables: string } }) {
+  /**
+   * Function to operate a node of the TextVariable class.
+   * @param {WorkerData} node - The current state of the node representing the operation to be 
+   * performed. 
+   * @param {MagickWorkerInputs} inputs - The inputs of the node. In this case, this object is 
+   * not used.
+   * @param {MagickWorkerOutputs} outputs - The possible outputs of the node.
+   * @param {Object} context - The data passed to the worker and the module.
+   * @returns {InputReturn} - The outputs of the node. In this case, an object with the output 
+   * string.
+   */
+  worker(node: WorkerData, inputs: MagickWorkerInputs, 
+    outputs: MagickWorkerOutputs, context: { module: { publicVariables: string } }) {
     let text = node.data.fewshot as string
     const publicVars = JSON.parse(context.module.publicVariables)
+
     if(node?.data?.isPublic && publicVars[node.id]) {
       console.log('publicVars[node.id is', publicVars[node.id])
       text = publicVars[node.id].value
     }
-
     return {
       output: text,
     }

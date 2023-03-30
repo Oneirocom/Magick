@@ -1,8 +1,8 @@
-import https from 'https'
-import http from 'http'
-import * as fs from 'fs'
-import path from 'path'
 import { FILE_SERVER_PORT, USESSL } from '@magickml/engine'
+import * as fs from 'fs'
+import http from 'http'
+import https from 'https'
+import path from 'path'
 
 export async function initFileServer() {
   if (!fs.existsSync('files')) {
@@ -10,7 +10,7 @@ export async function initFileServer() {
     fs.mkdirSync('files')
   }
 
-  if (USESSL === 'true') {
+  if (USESSL) {
     const success = await initSSL()
     if (!success) {
       initNoSSL()
@@ -98,7 +98,7 @@ async function initSSL(): Promise<boolean> {
         })
       }
     )
-    .listen(parseInt(FILE_SERVER_PORT as string))
+    .listen(FILE_SERVER_PORT)
 
   return true
 }
@@ -163,5 +163,5 @@ async function initNoSSL() {
         }
       })
     })
-    .listen(parseInt(FILE_SERVER_PORT as string))
+    .listen(FILE_SERVER_PORT)
 }

@@ -1,1 +1,2 @@
-import 'regenerator-runtime/runtime'
+// GENERATED 
+This import statement is unnecessary as it imports the Regenerator runtime, which is typically only needed when using generator functions. As there are no generator functions in the provided code, this import statement can be removed.

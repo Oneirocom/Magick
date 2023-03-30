@@ -593,7 +593,7 @@ export type RequestPayload = {
   type?: string
   hidden?: boolean
   processed?: boolean
-  totalTokens?: number
+  totalTokens: number
   spell?: SpellInterface
   nodeId?: number
 }
