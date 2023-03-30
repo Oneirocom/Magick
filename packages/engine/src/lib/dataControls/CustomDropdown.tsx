@@ -1,63 +1,30 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react'
-import styled from 'styled-components'
-
-const Main = styled('div')`
-  font-family: sans-serif;
-  background: #f0f0f0;
-  height: 100vh;
-`
-
-const DropDownContainer = styled('div')`
-  width: 10.5em;
-  margin: 0 auto;
-`
-
-const DropDownHeader = styled('div')`
-  margin-bottom: 0.8em;
-  padding: 0.4em 2em 0.4em 1em;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
-  font-weight: 500;
-  font-size: 1.3rem;
-  color: #3faffa;
-  background: #ffffff;
-`
-
-const DropDownListContainer = styled('div')``
-
-const DropDownList = styled('ul')`
-  padding: 0;
-  margin: 0;
-  padding-left: 1em;
-  background: #ffffff;
-  border: 2px solid #e5e5e5;
-  box-sizing: border-box;
-  color: #3faffa;
-  font-size: 1.3rem;
-  font-weight: 500;
-  &:first-child {
-    padding-top: 0.8em;
-  }
-`
-
-const ListItem = styled('li')`
-  list-style: none;
-  margin-bottom: 0.8em;
-`
-
-export default function CustomDropdown(props) {
+// GENERATED 
+/**
+ * A dropdown component that can be customized with a title and options.
+ * @param {object} props - The props object contains a title string and an array of options.
+ * @param {string} props.title - The title of the dropdown.
+ * @param {string[]} props.data - The options to be displayed in the dropdown.
+ */
+export default function CustomDropdown(props: { title: string, data: string[] }): React.ReactElement {
   return (
-    <Main>
-      <DropDownContainer>
-        <DropDownHeader>{props.title}</DropDownHeader>
-        <DropDownListContainer>
-          <DropDownList>
+    <div style={{ fontFamily: 'sans-serif', background: '#f0f0f0', height: '100vh' }}>
+      <div style={{ width: '10.5em', margin: '0 auto' }}>
+        <div style={{ marginBottom: '0.8em', padding: '0.4em 2em 0.4em 1em', boxShadow: '0 2px 3px rgba(0, 0, 0, 0.15)', fontWeight: 500, fontSize: '1.3rem', color: '#3faffa', background: '#ffffff'}}>
+          {props.title}
+        </div>
+        <div>
+          <ul style={{ padding: 0, margin: 0, paddingLeft: '1em', background: '#ffffff', border: '2px solid #e5e5e5', boxSizing: 'border-box', color: '#3faffa', fontSize: '1.3rem', fontWeight: 500 }}>
             {props.data.map((option, index) => (
-              <ListItem index={index}>{option}</ListItem>
+              <li key={index} style={{ listStyle: 'none', marginBottom: '0.8em' }}>{option}</li>
             ))}
-          </DropDownList>
-        </DropDownListContainer>
-      </DropDownContainer>
-    </Main>
+          </ul>
+        </div>
+      </div>
+    </div>
   )
-}
+}  
+
+/* eslint-disable import/no-anonymous-default-export, @typescript-eslint/no-unused-vars */
+/*
+  We disable @typescript-eslint/no-unused-vars because `props` is actually used in this Component
+*/

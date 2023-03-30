@@ -1,4 +1,4 @@
-import { calculateCompletionCost } from '@magickml/cost-calculator'
+import { calculateCompletionCost, ChatModel, TextModel } from '@magickml/cost-calculator'
 import { v4 } from 'uuid'
 import { globalsManager } from '../globals'
 import { RequestPayload } from '../types'
@@ -22,14 +22,14 @@ export function saveRequest({
 }: RequestPayload) {
   const cost = calculateCompletionCost({
     totalTokens,
-    model,
+    model: model as TextModel | ChatModel,
   })
 
   const end = Date.now()
 
   const duration = end - startTime
 
-  const app = globalsManager.get('feathers')
+  const app = globalsManager.get('feathers') as { service: any }
   return app.service('request').create({
     id: v4(),
     projectId,

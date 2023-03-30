@@ -1,53 +1,69 @@
-import otJson0 from 'ot-json0'
-import md5 from 'md5'
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
-import type { Params } from '@feathersjs/feathers'
-import { KnexService } from '@feathersjs/knex'
-import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
+// GENERATED 
+/**
+ * Imports
+ */
+import otJson0 from 'ot-json0';
+import md5 from 'md5';
+import { KnexService } from '@feathersjs/knex';
+import { BadRequest } from '@feathersjs/errors/lib';
+import type { Application } from '../../declarations';
+import type { Params } from '@feathersjs/feathers';
+import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex';
+import type { SpellData, SpellPatch, SpellQuery } from './spells.schema';
+import { SpellInterface } from '@magickml/engine';
+import { app } from '../../app';
 
-import type { Application } from '../../declarations'
-import type { SpellData, SpellPatch, SpellQuery } from './spells.schema'
-import { app } from '../../app'
-import { BadRequest } from '@feathersjs/errors/lib'
-import { SpellInterface } from '@magickml/engine'
-
-export type SpellParams = KnexAdapterParams<SpellQuery>
-
+/**
+ * Interface and Types
+ */
+export type SpellParams = KnexAdapterParams<SpellQuery>;
 export type SaveDiffData = {
-  name: string
-  diff: Record<string, any>
-  projectId: string
+  name: string;
+  diff: Record<string, any>;
+  projectId: string;
 }
 
-// By default calls the standard Knex adapter service methods but can be customized with your own functionality.
-export class SpellService<ServiceParams extends Params = SpellParams> extends KnexService<
-  SpellInterface,
-  SpellData,
-  ServiceParams,
-  SpellPatch
-> {
+/**
+ * Spell Service
+ * By default calls the standard Knex adapter service methods but can be customized with your own functionality.
+ */
+export class SpellService<ServiceParams extends Params = SpellParams> extends KnexService<SpellInterface, SpellData, ServiceParams, SpellPatch> {
+  
+  /**
+   * Saves the diff of a spell
+   */
   async saveDiff(data: SaveDiffData) {
-    const { name, diff, projectId } = data
+    const { name, diff, projectId } = data;
 
-    const spellData = await app.service('spells').find({ query: { projectId, name } })
-    const spell = spellData.data[0]
+    // Find spell data
+    const spellData = await app.service('spells').find({ query: { projectId, name } });
+    const spell = spellData.data[0];
 
-    if (!spell) throw new BadRequest(`No spell with ${name} name found.`)
-    if (!diff) throw new BadRequest('No diff provided in request body')
+    // Check if spell exists and that diff is available
+    if (!spell) throw new BadRequest(`No spell with ${name} name found.`);
+    if (!diff) throw new BadRequest('No diff provided in request body');
 
-    const spellUpdate = otJson0.type.apply(spell, diff)
+    // Apply diff to spell data
+    const spellUpdate = otJson0.type.apply(spell, diff);
 
-    if (Object.keys((spellUpdate as SpellInterface).graph.nodes).length === 0)
-      throw new BadRequest('Graph would be cleared.  Aborting.')
+    // Check if the graph would be cleared
+    if (Object.keys(spellUpdate.graph.nodes).length === 0) {
+      throw new BadRequest('Graph would be cleared. Aborting.');
+    }
 
-    const hash = md5(JSON.stringify(spellUpdate.graph.nodes))
+    // Calculate checksum of graph
+    const hash = md5(JSON.stringify(spellUpdate.graph.nodes));
 
-    const updatedSpell = await app.service('spells').update(spell.id, { ...spellUpdate, hash })
+    // Update spell data
+    const updatedSpell = await app.service('spells').update(spell.id, { ...spellUpdate, hash });
 
-    return updatedSpell
+    return updatedSpell;
   }
 }
 
+/**
+ * Returns options for KnexAdapter
+ */
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),

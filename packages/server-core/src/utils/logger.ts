@@ -1,10 +1,34 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/logging.html
-import { createLogger, format, transports } from 'winston'
+// GENERATED 
+/**
+ * This module exports a instantiated winston logger, configured
+ * for console output.
+ *
+ * @remarks
+ * For more information see the WinstonJS documentation:
+ * https://github.com/winstonjs/winston
+ *
+ * @packageDocumentation
+ */
 
-// Configure the Winston logger. For the complete documentation see https://github.com/winstonjs/winston
+import { createLogger, format, transports } from 'winston';
+
+/**
+ * The logger instance to be exported.
+ */
 export const logger = createLogger({
-  // To see more detailed errors, change this to 'debug'
+  /**
+   * The minimum level of logs to output.
+   */
   level: 'info',
-  format: format.combine(format.splat(), format.simple()),
+  /**
+   * The formats to apply to the log message.
+   */
+  format: format.combine(
+    format.splat(),
+    format.simple()
+  ),
+  /**
+   * The output transport to use for logging, in this case the console.
+   */
   transports: [new transports.Console()],
-})
+});

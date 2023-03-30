@@ -1,6 +1,20 @@
-import { DataControl } from '../plugins/inspectorPlugin'
+// GENERATED 
+/**
+ * A class that extends `DataControl` to create a custom control for fewshot data.
+ * @extends DataControl
+ */
+import { DataControl } from '../plugins/inspectorPlugin';
 
 export class FewshotControl extends DataControl {
+  /**
+   * Creates an instance of FewshotControl.
+   * @param {object} options - An object containing settings for the control.
+   * @param {string} options.language - The language of the data.
+   * @param {string} options.icon - The icon to display for the control.
+   * @param {string} options.dataKey - The key to access the data.
+   * @param {string} options.name - The name of the control.
+   * @param {string} options.defaultValue - The default value for the control.
+   */
   constructor({
     language = 'plaintext',
     icon = 'fewshot',
@@ -15,16 +29,21 @@ export class FewshotControl extends DataControl {
       icon,
       options: {
         editor: true,
-        language: language,
+        language,
         wordWrap: true
       },
       defaultValue
     }
 
-    super(options)
+    // Calls the constructor of parent class and passes the options object to it.
+    super(options);
   }
 
+  /**
+   * Returns data for the control.
+   * @returns {void}
+   */
   onData() {
-    return
+    return;
   }
 }

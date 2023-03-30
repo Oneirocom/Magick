@@ -1,5 +1,8 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
-
+// GENERATED 
+/**
+ * This file provides a configure function exporting a request that registers the service and its hooks via `app.configure`.
+ * @see https://dove.feathersjs.com/guides/cli/service.html
+ */
 import { hooks as schemaHooks } from '@feathersjs/schema'
 
 import {
@@ -16,11 +19,15 @@ import {
 import type { Application } from '../../declarations'
 import { RequestService, getOptions } from './requests.class'
 
+// Exporting all functions and classes to be used by other modules
 export * from './requests.class'
 export * from './requests.schema'
 
-// A configure function that registers the service and its hooks via `app.configure`
-export const request = (app: Application) => {
+/**
+ * Registers the request service, sets up configuration and initializes hooks.
+ * @param {Application} app - The initialized Feather app instance.
+ */
+export const request = (app: Application): void => {
   // Register our service on the Feathers application
   app.use('request', new RequestService(getOptions(app)), {
     // A list of all methods this service exposes externally
@@ -28,17 +35,34 @@ export const request = (app: Application) => {
     // You can add additional custom events to be sent to clients here
     events: []
   })
+
   // Initialize hooks
   app.service('request').hooks({
     around: {
-      all: [schemaHooks.resolveExternal(requestExternalResolver), schemaHooks.resolveResult(requestResolver)]
+      all: [
+        // Push `requestExternalResolver` and `requestResolver` hooks that resolves external resource and returns a response respectively
+        schemaHooks.resolveExternal(requestExternalResolver),
+        schemaHooks.resolveResult(requestResolver)
+      ]
     },
     before: {
-      all: [schemaHooks.validateQuery(requestQueryValidator), schemaHooks.resolveQuery(requestQueryResolver)],
+      all: [
+        // Push `requestQueryValidator` and `requestQueryResolver` hooks that validate and resolve QueryParams respectively
+        schemaHooks.validateQuery(requestQueryValidator),
+        schemaHooks.resolveQuery(requestQueryResolver)
+      ],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(requestDataValidator), schemaHooks.resolveData(requestDataResolver)],
-      patch: [schemaHooks.validateData(requestPatchValidator), schemaHooks.resolveData(requestPatchResolver)],
+      create: [
+        // Push `requestDataValidator` and `requestDataResolver` hooks that validate and resolve incoming data respectively
+        schemaHooks.validateData(requestDataValidator),
+        schemaHooks.resolveData(requestDataResolver)
+      ],
+      patch: [
+        // Push `requestPatchValidator` and `requestPatchResolver` hooks that validate and resolve incoming data respectively
+        schemaHooks.validateData(requestPatchValidator),
+        schemaHooks.resolveData(requestPatchResolver)
+      ],
       remove: []
     },
     after: {

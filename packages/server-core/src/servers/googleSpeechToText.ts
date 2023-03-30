@@ -34,17 +34,15 @@ const request = {
 }
 
 export async function initSpeechServer(ignoreDotEnv: boolean) {
-  if (ignoreDotEnv === false && ENABLE_SPEECH_SERVER === 'false') {
+  if (ignoreDotEnv === false && !ENABLE_SPEECH_SERVER) {
     
     return
   }
 
-  const useSSL = USSSL_SPEECH === 'true'
-
   const PORT: number = Number(SPEECH_SERVER_PORT) || 65532
   let io
 
-  if (useSSL) {
+  if (USSSL_SPEECH) {
     const server = https.createServer({
       key: fs.readFileSync(path.join(__dirname, './certs/key.pem')),
       cert: fs.readFileSync(path.join(__dirname, './certs/cert.pem')),
