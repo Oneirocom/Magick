@@ -1,16 +1,7 @@
-// GENERATED 
-/**
- * React component that displays a loading screen with an animated ankh gif and message.
- * @component
- */
-import * as React from 'react';
-import ankhGif from './ankh.gif';
+import * as React from 'react'
+import ankh from './ankh.gif'
 
-/**
- * LoadingScreen component
- * @returns {JSX.Element} Loading screen component
- */
-export const LoadingScreen = (): JSX.Element => (
+export const LoadingScreen = () => (
   <div
     style={{
       height: '100%',
@@ -33,10 +24,10 @@ export const LoadingScreen = (): JSX.Element => (
           width: 'var(--7)',
           display: 'inline-block',
         }}
-        src={ankhGif}
+        src={ankh}
         alt={'loading'}
       />
       <p>Please wait...</p>
     </div>
   </div>
-);
+)

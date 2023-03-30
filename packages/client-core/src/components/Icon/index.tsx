@@ -1,7 +1,3 @@
-// GENERATED 
-/**
- * Import React, CSS and icon components
- */
 import * as React from 'react'
 import css from './icon.module.css'
 
@@ -49,9 +45,6 @@ import dangerTrash from './icons/danger-trash.svg'
 import nodeLock from './icons/node-lock.svg'
 import lock from './icons/Lock.svg'
 
-/**
- * Map icon names to their respective components
- */
 const icons = {
   account,
   add,
@@ -98,9 +91,6 @@ const icons = {
   lock: lock,
 }
 
-/**
- * Object that contains categories related to specific components
- */
 export const componentCategories = {
   'AI/ML': 'play-print',
   'I/O': 'water',
@@ -110,9 +100,6 @@ export const componentCategories = {
   Core: 'ankh',
 }
 
-/**
- * Object that maps data control categories to their respective icon names
- */
 export const dataControlCategories = {
   'Data Inputs': 'properties',
   'Data Outputs': 'properties',
@@ -122,41 +109,23 @@ export const dataControlCategories = {
   'Max Tokens': 'moon',
 }
 
-/**
- * Interface for the Icon component's props
- */
-interface IconProps {
-  /**
-   * Name of the icon (matches the key in the `icons` object)
-   */
-  name?: string;
-  /**
-   * The size of the icon
-   */
-  size?: number | string;
-  /**
-   * Style object for the icon
-   */
-  style?: React.CSSProperties;
-  /**
-   * Function to be called on click
-   */
-  onClick?: (e: React.MouseEvent) => void;
+type IconProps = {
+  name?: string
+  size?: number | string
+  style?: React.CSSProperties
+  onClick?: Function
 }
 
-/**
- * Component that renders an SVG icon
- *
- * @param {IconProps} props - The props for the icon component
- */
-export const Icon = ({ name = 'warn', size, style = {}, onClick = () => {} }: IconProps) => {
-  /**
-   * Renders the Icon component
-   */
+export const Icon = ({
+  name = 'warn',
+  size,
+  style = {},
+  onClick = () => {},
+}: IconProps) => {
   return (
     <div
       onClick={e => onClick(e)}
-      className={css['icon']}
+      className={`${css['icon']}`}
       style={{ height: size ?? 16, width: size, ...style }}
     >
       <img src={icons[name]} alt={name} />

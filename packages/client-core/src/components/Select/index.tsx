@@ -1,27 +1,12 @@
-// GENERATED 
-import React, { useEffect, useRef } from 'react';
-import { useHotkeys } from 'react-hotkeys-hook';
-import Creatable from 'react-select/creatable';
-import ReactSelect, { SelectInstance, StylesConfig } from 'react-select';
+import React, { useEffect, useRef } from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
+import Creatable from 'react-select/creatable'
+import ReactSelect, { SelectInstance, StylesConfig } from 'react-select'
 
-import { Chip } from '../Chip';
-import { Icon, componentCategories } from '../Icon';
-import css from './select.module.css';
+import { Chip } from '../Chip'
+import { Icon, componentCategories } from '../Icon'
+import css from './select.module.css'
 
-/**
- * Custom select component with support for creatable options and hotkeys.
- * 
- * @param {object} options - Options for the select component.
- * @param {function} onChange - Change event handler for select value change.
- * @param {string} placeholder - Placeholder text for the select component.
- * @param {string} defaultValue - Default value for the select component.
- * @param {object} style - Custom CSS styles.
- * @param {string} focusKey - Hotkey for focusing the select component.
- * @param {boolean} creatable - Enable/disable creating new options.
- * @param {boolean} nested - Flag to represent nested options.
- * @param {function} isValidNewOption - Validation function for newly created option.
- * @param {object} props - Additional props for the select component.
- */
 export const Select = ({
   options,
   onChange,
@@ -36,25 +21,16 @@ export const Select = ({
     true,
   ...props
 }) => {
-  // Setup ref for select instance
-  const selectRef = useRef<SelectInstance | null>(defaultValue);
+  const selectRef = useRef<SelectInstance | null>(defaultValue)
 
-  /**
-   * Custom dropdown indicator.
-   */
   const DropdownIndicator = () => {
     return props.searchable ? (
       <Icon name="search" size={16} />
     ) : (
       <div className={css['dropdown-indicator']}>❯</div>
-    );
-  };
+    )
+  }
 
-  /**
-   * Function to format group label.
-   *
-   * @param {object} data - Group data to be formatted.
-   */
   const formatGroupLabel = data => (
     <span className={css['group-header']}>
       <Icon
@@ -63,31 +39,93 @@ export const Select = ({
       />
       {data.label}
     </span>
-  );
+  )
 
-  /**
-   * Function to blur the select.
-   */
   const blurSelect = () => {
-    if (!selectRef.current) return;
-    selectRef.current.blur();
-  };
+    if (!selectRef.current) return
+    selectRef.current.blur()
+  }
 
-  // Setup hotkeys for enter and esc keys
   useHotkeys(
     'enter, esc',
     event => {
-      event.preventDefault();
-      blurSelect();
+      event.preventDefault()
+      blurSelect()
     },
     { enableOnTags: 'INPUT' as any },
-    [blurSelect],
-  );
+    [blurSelect]
+  )
 
-  // Define styles for the select component
   const styles: StylesConfig<unknown, false, any> = {
-    // ... add the styles object from the original code ...
-  };
+    menu: () => ({
+      backgroundColor: 'var(--dark-2)',
+      borderRadius: 4,
+      boxShadow: '0px 5px 5px rgba(0,0,0,0.3)',
+      border: '1px solid var(--dark-3)',
+    }),
+    menuPortal: () => ({
+      height: 'var(--c2)',
+    }),
+    clearIndicator: () => ({
+      backgroundColor: 'var(--primary)',
+    }),
+    option: (provided, state) => ({
+      appearance: 'none',
+      padding: 'var(--extraSmall)',
+      paddingLeft: nested ? 'var(--large)' : 'var(--small)',
+      paddingRight: 'var(--small)',
+      backgroundColor: state.isFocused ? 'var(--primary)' : 'transparent',
+      fontFamily: 'IBM Plex Mono',
+    }),
+    input: () => ({
+      color: '#fff',
+      backgroundColor: 'transparent',
+      boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.1) !important',
+      flex: 1,
+      opacity: `${props.searchable ? 1 : 0}`,
+    }),
+
+    control: (provided, state) => ({
+      color: '#fff',
+      backgroundColor: state.isFocused ? 'var(--dark-2)' : 'var(--dark-3)',
+      borderRadius: 4,
+      border:
+        state.isFocused && focusKey
+          ? '2px solid var(--primary)'
+          : '1px solid var(--dark-4)',
+      boxSizing: 'border-box',
+      display: 'flex',
+      boxShadow: state.isFocused
+        ? 'inset 0px 5px 5px rgba(0, 0, 0, 0.1)'
+        : '0px 2px 0px rgba(0, 0, 0, 0.2);',
+      maxHeight: 'var(--c4)',
+      minHeight: 'var(--c4)',
+      paddingLeft: 'var(--small)',
+      paddingRight: 'var(--small)',
+    }),
+    placeholder: (provided, state) => ({
+      color: '#fff',
+      position: 'absolute',
+      fontFamily: '"IBM Plex Mono"',
+      textTransform: 'uppercase',
+      display: state.isFocused && focusKey ? 'none' : 'inline-block',
+    }),
+    indicatorSeparator: () => ({
+      display: 'none',
+    }),
+    valueContainer: () => ({
+      width: '100%',
+      display: props.searchable ? 'flex' : 'block',
+      marginTop: props.searchable ? '0' : '8px',
+      flex: '1',
+      alignItems: 'center',
+      fontFamily: 'IBM Plex Mono',
+    }),
+    singleValue: () => ({
+      color: 'rgba(255,255,255)',
+      flex: '1 0 50px',
+    }),
+  }
 
   return (
     <span style={style}>
@@ -127,5 +165,5 @@ export const Select = ({
         <Chip noEvents label={'No options available...'} />
       )}
     </span>
-  );
-};
+  )
+}
