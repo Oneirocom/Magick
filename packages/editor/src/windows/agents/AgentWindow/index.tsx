@@ -1,25 +1,44 @@
-import { Button, Grid, Typography } from '@mui/material'
-import AgentItem from './AgentItem'
-import styles from './index.module.scss'
-import AgentDetails from './AgentDetails'
-import FileInput from '../../../components/FileInput'
-import { useEffect, useState } from 'react'
-import { useConfig } from '../../../contexts/ConfigProvider'
+// GENERATED 
+import { Button, Grid, Typography } from '@mui/material';
+import AgentItem from './AgentItem';
+import styles from './index.module.scss';
+import AgentDetails from './AgentDetails';
+import FileInput from '../../../components/FileInput';
+import { useEffect } from 'react';
+import { useConfig } from '../../../contexts/ConfigProvider';
 
+/**
+ * Interface for agent window properties.
+ */
 interface Props {
-  data: Array<object>
-  selectedAgentData: object
-  rootSpell: object
-  onLoadEnables: object
-  setRootSpell: (spell: string) => void
-  setSelectedAgentData: (data: object) => void
-  onCreateAgent: (data: any) => void
-  updateCallBack: () => void
-  update: (id: string, data: object) => void
-  onDelete: (id: string) => void
-  onLoadFile: (selectedFile: any) => void
+  data: Array<object>;
+  selectedAgentData: object;
+  rootSpell: object;
+  onLoadEnables: object;
+  setRootSpell: (spell: string) => void;
+  setSelectedAgentData: (data: object) => void;
+  onCreateAgent: (data: any) => void;
+  updateCallBack: () => void;
+  update: (id: string, data: object) => void;
+  onDelete: (id: string) => void;
+  onLoadFile: (selectedFile: any) => void;
 }
 
+/**
+ * Agent window component.
+ *
+ * @param {Props} {
+ *   data,
+ *   selectedAgentData,
+ *   updateCallBack,
+ *   onCreateAgent,
+ *   setSelectedAgentData,
+ *   onDelete,
+ *   onLoadFile,
+ *   onLoadEnables,
+ * }
+ * @returns Component
+ */
 const AgentWindow = ({
   data,
   selectedAgentData,
@@ -30,17 +49,24 @@ const AgentWindow = ({
   onLoadFile,
   onLoadEnables,
 }: Props) => {
-  const config = useConfig()
+  // Config context
+  const config = useConfig();
 
-  const onClickHandler = agent => {
-    setSelectedAgentData(agent)
-  }
+  /**
+   * Agent click handler.
+   *
+   * @param {object} agent - The agent to set as selected.
+   */
+  const onClickHandler = (agent: object) => {
+    setSelectedAgentData(agent);
+  };
 
+  // Effect to set selected agent data
   useEffect(() => {
     if (!selectedAgentData) {
-      setSelectedAgentData(data[0] as any)
+      setSelectedAgentData(data[0] as any);
     }
-  }, [data, selectedAgentData, setSelectedAgentData])
+  }, [data, selectedAgentData, setSelectedAgentData]);
 
   return (
     <Grid container className={styles.container}>
@@ -83,7 +109,7 @@ const AgentWindow = ({
                   : {}
               }
             />
-          )
+          );
         })}
       </Grid>
       <Grid item xs={8} className={styles.item}>
@@ -99,7 +125,7 @@ const AgentWindow = ({
         )}
       </Grid>
     </Grid>
-  )
-}
+  );
+};
 
-export default AgentWindow
+export default AgentWindow;

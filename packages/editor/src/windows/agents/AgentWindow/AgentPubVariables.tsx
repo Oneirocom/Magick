@@ -1,25 +1,49 @@
-import { Grid } from '@mui/material'
-import styles from '../AgentWindowStyle.module.css'
-import { Input, Switch } from '@magickml/client-core'
+// GENERATED 
+import { Grid } from '@mui/material';
+import styles from '../AgentWindowStyle.module.css';
+import { Input, Switch } from '@magickml/client-core';
 
+/**
+ * Interface for AgentPubVariables Props
+ */
 interface Props {
-  publicVars: any
-  setPublicVars: (data: any) => void
+  publicVars: any;
+  setPublicVars: (data: any) => void;
 }
 
+/**
+ * A functional component that lists and allows updates to public variables
+ *
+ * @param publicVars - object containing public variables
+ * @param setPublicVars - a function for updating public variables
+ * @returns JSX.Element
+ */
 const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
+  /**
+   * Handle change events for the variables
+   *
+   * @param variable - the current variable
+   * @param event - the event triggered by the input
+   */
   const onChangeHandler = (variable, event) => {
+    /**
+     * Update the variable value with the event data
+     *
+     * @param inputValue - the current value of the variable
+     * @param nativeEventData - the native event data from the event
+     * @returns string - the updated variable value
+     */
     function applyNativeEventToValue(inputValue, nativeEventData) {
-      inputValue = inputValue || ''
+      inputValue = inputValue || '';
       // if the native event is a backspace
       if (nativeEventData.inputType === 'deleteContentBackward') {
         // remove the last character
         inputValue =
-          inputValue.length > 0 ? inputValue.slice(0, -1) : inputValue
+          inputValue.length > 0 ? inputValue.slice(0, -1) : inputValue;
       }
 
       // otherwise, add the native event to the current variable value
-      return inputValue + (nativeEventData.data ? nativeEventData.data : '')
+      return inputValue + (nativeEventData.data ? nativeEventData.data : '');
     }
 
     const newVar = {
@@ -29,13 +53,13 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
           ? // apply the native event to the current variable value
             applyNativeEventToValue(variable.value, event.nativeEvent)
           : event.target.checked,
-    }
+    };
 
     setPublicVars({
       ...publicVars,
       [newVar.id]: newVar,
-    })
-  }
+    });
+  };
 
   return (
     <div className={styles['agentPubVars']}>
@@ -81,11 +105,11 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
                 )}
               </Grid>
             </Grid>
-          )
+          );
         })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AgentPubVariables
+export default AgentPubVariables;
