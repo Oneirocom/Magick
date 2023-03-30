@@ -1,10 +1,13 @@
-import { ClientPlugin, ClientPluginManager, pluginManager } from '@magickml/engine'
+import {
+  ClientPlugin,
+  ClientPluginManager,
+  pluginManager,
+} from '@magickml/engine'
 import AppsIcon from '@mui/icons-material/Apps'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
 import DocumentIcon from '@mui/icons-material/Description'
 import SettingsIcon from '@mui/icons-material/Settings'
-import ProjectIcon from '@mui/icons-material/Home'
 import StorageIcon from '@mui/icons-material/Storage'
 import Divider from '@mui/material/Divider'
 import MuiDrawer from '@mui/material/Drawer'
@@ -19,6 +22,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { SetAPIKeys } from './SetAPIKeys'
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
+import ProjectWindow from './ProjectWindow'
 
 const drawerWidth = 150
 
@@ -112,7 +116,7 @@ const DrawerItem = ({
 const PluginDrawerItems = ({ onClick, open }) => {
   const location = useLocation()
   const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
-  let lastPlugin:string|null = null
+  let lastPlugin: string | null = null
   let divider = false
   return (
     <>
@@ -249,6 +253,7 @@ export function Drawer({ children }) {
           {!isAPIKeysSet && <SetAPIKeys />}
         </List>
       </StyledDrawer>
+      <ProjectWindow />
       {children}
     </div>
   )
