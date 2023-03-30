@@ -1,3 +1,3 @@
-# ArrayV ariable
+# Array Variable
 
 Array Variable
