@@ -3,7 +3,7 @@ const fs = require('fs');
 const dovenv = require('dotenv-flow');
 dovenv.config('../.env');
 
-const directive = `Rewrite the Typescript that the user provides so that it is optimized, easy to read and conforms to Google code standards. Add per-line comments and ts-doc documentation for every class and function. Be sure to keep any imports and exports intact.`
+const directive = `Rewrite the Typescript that the user provides so that it is optimized, easy to read and conforms to Google code standards. Add per-line comments and ts-doc documentation for every class and function. Keep imports and exports as-is since this module is imported by other modules.`
 
 const apiKey = process.env.OPENAI_API_KEY;
 
@@ -13,14 +13,6 @@ async function doStuff(file) {
     if(contents.startsWith('// GENERATED')) {
         console.log('skipping file because it is already generated')
         return;
-    }
-
-    // if the length of contents is over 4000 long, skip it and move on
-    if (contents.length < 2000) {
-        console.log('skipping file because it is too short')
-        return;
-    } else {
-        console.log('processing file, length is', contents.length)
     }
 
     const messages = [
@@ -38,6 +30,7 @@ async function doStuff(file) {
         body: JSON.stringify({
             messages: messages,
             model: 'gpt-4',
+            max_tokens: 4096,
         })
 
     })
@@ -48,10 +41,16 @@ async function doStuff(file) {
 
     const messageContent = choices[0].message.content;
 
-    console.log('messageContent', messageContent.replaceAll('```typsecript', '').replaceAll('```', ''))
+    
+    let message = messageContent.replaceAll('```typescript', '```').replace('typescript', '').split('```')
+    if(message.length > 2) {
+        message = message[1];
+    } else {
+        message = message[0];
+    }
 
     // write the file over the original
-    fs.writeFileSync(file, '// GENERATED \n' + messageContent.replaceAll('```typsecript', '').replaceAll('```', ''), 'utf8');
+    fs.writeFileSync(file, '// GENERATED \n' + message, 'utf8');
 }
 
 const manifest = require('./manifest.json');
@@ -59,8 +58,9 @@ const manifest = require('./manifest.json');
 // loop through each file in the manifest and run doStuff on it
 
 async function processFiles() {
-    for (let i = 0; i < manifest.files.length; i++) {
+    for (let i = manifest.files.length - 1; i >= 0; i--) {
         const file = manifest.files[i];
+        console.log('processing file: ' + file)
         await doStuff(file);
     }
 }

@@ -6,7 +6,6 @@
  * It extends the `MagickComponent` class and has one output type: 'text' of type 'String'.
  *
  * @example
- * typescript
  * const joinList = new JoinListComponent();
  * 
  */
