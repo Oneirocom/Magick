@@ -46,7 +46,7 @@ dev.db
 package-lock.json
 yarn.lock
 
-./files/
+/files/*
 
 *.sqlite
 
@@ -55,3 +55,7 @@ yarn.lock
 .cache-loader/
 
 scripts/.cache
+
+apps/docs/build
+data.json
+/logs

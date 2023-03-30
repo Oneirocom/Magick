@@ -1,15 +1,16 @@
 import Rete, { Input, Output } from 'rete'
 
-import { DataSocketType, IRunContextEditor, MagickNode } from '../../types'
+import { AsDataSocket, IRunContextEditor, MagickNode } from '../../types'
 import * as sockets from '../../sockets'
+import { MagickComponent } from '../../engine'
 
 function install(editor: IRunContextEditor) {
-  editor.on('componentregister', (component: any) => {
+  editor.on('componentregister', (component: MagickComponent<unknown>) => {
     const builder = component.builder
 
     // we are going to override the default builder with our own, and will invoke the original builder inside it.
     component.builder = (node: MagickNode) => {
-      const nodeOutputs = node.data.outputs as DataSocketType[]
+      const nodeOutputs = AsDataSocket(node.data.outputs)
 
       // Handle outputs in the nodes data to repopulate when loading from JSON
       if (nodeOutputs && nodeOutputs.length !== 0) {
@@ -40,7 +41,7 @@ function install(editor: IRunContextEditor) {
         )
       }
 
-      const nodeInputs = node.data.inputs as DataSocketType[]
+      const nodeInputs = AsDataSocket(node.data.inputs)
 
       if (nodeInputs && nodeInputs.length !== 0) {
         // get inputs from node.inputs

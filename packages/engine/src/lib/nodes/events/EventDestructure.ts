@@ -1,21 +1,19 @@
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  Event,
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../types'
+import { NodeData } from 'rete/types/core/data'
+import { MagickComponent } from '../../engine'
 import { Task } from '../../plugins/taskPlugin/task'
 import {
-  eventSocket,
-  arraySocket,
-  stringSocket,
-  triggerSocket,
+  arraySocket, eventSocket, stringSocket,
+  triggerSocket
 } from '../../sockets'
-import { MagickComponent, MagickTask } from '../../magick-component'
+import {
+  Event,
+  MagickNode, MagickTask, MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData
+} from '../../types'
 
 const info = `The input component allows you to pass a single value to your graph. You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
@@ -24,9 +22,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
 
   constructor() {
     // Name of the component
-    super('Event Destructure')
-
-    this.task = {
+    super('Event Destructure', {
       outputs: {
         trigger: 'option',
         agentId: 'output',
@@ -39,14 +35,11 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
         projectId: 'output',
         sender: 'output',
       },
-      init: (task = {} as Task, node: MagickNode) => {
+      init: (task = {} as Task, node: NodeData) => {
         this.nodeTaskMap[node.id] = task
       },
-    }
-
-    this.category = 'Events'
-    this.info = info
-    this.display = true
+    }, 'Event', info)
+    
   }
 
   builder(node: MagickNode) {
@@ -89,7 +82,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
 
   // eslint-disable-next-line require-await
   async worker(
-    node: NodeData,
+    _node: WorkerData,
     { event }: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
@@ -106,7 +99,6 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       entities,
       agentId,
     } = eventValue as Event
-
     return {
       content,
       sender,

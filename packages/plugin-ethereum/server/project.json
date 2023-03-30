@@ -5,21 +5,6 @@
   "projectType": "library",
   "implicitDependencies": ["@magickml/engine"],
   "targets": {
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "options": {
-        "outputPath": "dist/packages/plugin-ethereum/server",
-        "tsConfig": "packages/plugin-ethereum/server/tsconfig.lib.json",
-        "packageJson": "packages/plugin-ethereum/server/package.json",
-        "main": "packages/plugin-ethereum/server/src/index.ts",
-        "assets": [
-          "packages/plugin-ethereum/server/*.md"
-        ]
-      }
-    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

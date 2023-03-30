@@ -44,10 +44,11 @@ function install(editor: IRunContextEditor) {
   editor.on('multiselectpaste', async () => {
     if (!mouse.x || !mouse.y) return
 
-    let selectedNodes = await localStorage.getItem(storedNodesKey)
+    const selectedNodes = await localStorage.getItem(storedNodesKey)
     if (!selectedNodes) return
 
-    const parsedNodes = JSON.parse(selectedNodes)
+    // TODO: add schema check
+    const parsedNodes = JSON.parse(selectedNodes) as MagickNode[]
     if (!parsedNodes.length) return
 
     // get the last copied node's clientXY position
@@ -55,7 +56,7 @@ function install(editor: IRunContextEditor) {
 
     // get diffX/diffY correlated with the nodeX/nodeY above
     // used to create positions of copy nodes later
-    const posDiff: Array<Object> = []
+    const posDiff: Array<{diffX: number, diffY: number}> = []
     parsedNodes.forEach(node => {
       const [x, y] = node.position
       posDiff.push({ diffX: x - nodeX, diffY: y - nodeY })
@@ -67,7 +68,7 @@ function install(editor: IRunContextEditor) {
 }
 
 const createConnections = async(editor, nodeMapping) => {    
-  let pairs = await localStorage.getItem('connectedNodePairs')
+  const pairs = await localStorage.getItem('connectedNodePairs')
   if (!pairs) return
   const parsedPairs = JSON.parse(pairs)
 
@@ -78,7 +79,7 @@ const createConnections = async(editor, nodeMapping) => {
         t.input.key === value.input.key
         && t.output.key === value.output.key
         && t.input.node.id === value.input.node.id
-        && t.output.node.id == value.output.node.id
+        && t.output.node.id === value.output.node.id
       )
 
       return condition
@@ -107,7 +108,7 @@ const createConnections = async(editor, nodeMapping) => {
 
 const pasteNodesAndConnections = async (editor, jsonNodes, mouse, posDiff) => {
   // Create a map of the cloned nodes to store the mapping between the original and cloned nodes.
-  let cloneNodesMap: Object = {}
+  let cloneNodesMap = {}
 
   // Loop through each node in the list of copied nodes.
   let i = 0;
@@ -116,7 +117,7 @@ const pasteNodesAndConnections = async (editor, jsonNodes, mouse, posDiff) => {
     const {
       name,
       id,
-      position: [x, y],
+      position,
       ...params
     } = node
 
@@ -139,7 +140,7 @@ const pasteNodesAndConnections = async (editor, jsonNodes, mouse, posDiff) => {
     cloneNodesMap = {...cloneNodesMap, [id]: cloneItem}
 
     i++
-  };
+  }
 
   // Wait for the nodes to be fully created before proceeding
   // 1000 milis is a random number. Assume that user will copy a large amounts of nodes

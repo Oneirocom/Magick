@@ -1,4 +1,9 @@
-import { eventSocket, ServerPlugin, WorldManager } from '@magickml/engine'
+import {
+  eventSocket,
+  ServerPlugin,
+  triggerSocket,
+  WorldManager,
+} from '@magickml/engine'
 import { DiscordConnector } from './connectors/discord'
 type StartDiscordArgs = {
   agent: any
@@ -47,38 +52,58 @@ function getAgentMethods() {
 }
 
 async function handleResponse({ output, agent, event }) {
+  if (!output || output === '')
+    return console.warn('No output to send to discord')
   await agent.discord.sendMessageToChannel(event.channel, output)
 }
+
+// TODO: Change these to be full inputs
+const inputSockets = [
+  {
+    socket: 'output',
+    name: 'output',
+    type: eventSocket,
+  },
+  {
+    socket: 'trigger',
+    name: 'trigger',
+    type: triggerSocket,
+  },
+]
+
+const outputSockets = [
+  {
+    socket: 'output',
+    name: 'output',
+    type: eventSocket,
+  },
+]
 
 const DiscordPlugin = new ServerPlugin({
   name: 'DiscordPlugin',
   inputTypes: [
     {
       name: 'Discord (Voice)',
-      trigger: true,
-      socket: eventSocket,
+      sockets: inputSockets,
       defaultResponseOutput: 'Discord (Voice)',
     },
     {
       name: 'Discord (Text)',
-      trigger: true,
-      socket: eventSocket,
       defaultResponseOutput: 'Discord (Text)',
+      sockets: inputSockets,
     },
   ],
   outputTypes: [
     {
       name: 'Discord (Voice)',
-      trigger: true,
-      socket: eventSocket,
+      sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
         await handleResponse({ output, agent, event })
       },
     },
     {
       name: 'Discord (Text)',
-      trigger: true,
-      socket: eventSocket,
+      sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
         console.log('output is', output)
         await handleResponse({ output, agent, event })

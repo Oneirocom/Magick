@@ -1,4 +1,4 @@
-import { Spell } from '@magickml/engine'
+import { SpellInterface } from '@magickml/engine'
 import otJson0 from 'ot-json0'
 import { app } from '../../app'
 import { Params } from '@feathersjs/feathers'
@@ -24,16 +24,16 @@ export interface SpellRunnerParams extends Params {
 export class SpellRunnerService<
   ServiceParams extends Params = SpellRunnerParams
 > {
-  async get(id: string, params?: SpellRunnerParams): Promise<Spell | null> {
+  async get(id: string, params?: SpellRunnerParams): Promise<SpellInterface | void> {
     if (!app.userSpellManagers) return null
-    if (!params) throw new Error('No params present in service')
+    if (!params) return console.error('No params present in service')
     const { user, query } = params
 
-    if (!user) throw new Error('No user is present in service')
+    if (!user) return console.error('No user is present in service')
     // Here we get the users spellManagerApp
     const spellManager = app.userSpellManagers.get(user.id.toString())
 
-    if (!spellManager) throw new Error('No spell manager created for user!')
+    if (!spellManager) return console.error('No spell manager created for user!')
     const decodedId = id.length > 36 ? id.slice(0, 36) : id
     const spell = await getSpell({
       app,
@@ -42,7 +42,7 @@ export class SpellRunnerService<
     })
 
     // Load the spell into the spellManager. If there is no spell runner, we make one.
-    await spellManager.load(spell as Spell)
+    await spellManager.load(spell as SpellInterface)
 
     return spell
   }
@@ -51,23 +51,23 @@ export class SpellRunnerService<
   async create(
     data: CreateData,
     params?: ServiceParams
-  ): Promise<Record<string, unknown>> {
+  ): Promise<Record<string, unknown> | void> {
     if (!app.userSpellManagers) return {}
-    if (!params) throw new Error('No params present in service')
+    if (!params) return console.error('No params present in service')
 
     const { user } = params as any
 
-    if (!user) throw new Error('No user is present in service')
+    if (!user) return console.error('No user is present in service')
 
     const { inputs, projectId, secrets, publicVariables, id } = data
     const decodedId = id.length > 36 ? id.slice(0, 36) : id
     const spellManager = app.userSpellManagers.get(user.id)
 
-    if (!spellManager) throw new Error('No spell manager found for user!')
+    if (!spellManager) return console.error('No spell manager found for user!')
 
     if (!spellManager.hasSpellRunner(decodedId)) {
       const spell = await getSpell({ app, id: decodedId, projectId })
-      await spellManager.load(spell as Spell)
+      await spellManager.load(spell as SpellInterface)
     }
 
     const result = await spellManager.run(id, inputs, secrets, publicVariables)
@@ -77,24 +77,23 @@ export class SpellRunnerService<
 
   async update(
     id: string,
-    data: { diff?: Record<string, unknown>, spellUpdate?: Spell, projectId: string},
+    data: { diff?: Record<string, unknown>, spellUpdate?: SpellInterface, projectId: string},
     params?: SpellRunnerParams
-  ): Promise<Spell> {
-    console.log("ID**********************", id)
+  ): Promise<SpellInterface | void> {
     if (!app.userSpellManagers) return null
-    if (!params) throw new Error('No params present in service')
+    if (!params) return console.error('No params present in service')
 
     const { user } = params as any
-    if (!user) throw new Error('No user present in service')
+    if (!user) return console.error('No user present in service')
 
     const { diff, spellUpdate } = data
     const spellManager = app.userSpellManagers.get(user.id)
-    if (!spellManager) throw new Error('No spell manager found for user!')
+    if (!spellManager) return console.error('No spell manager found for user!')
 
     const decodedId = id.length > 36 ? id.slice(0, 36) : id
 
     const spellRunner = spellManager.getSpellRunner(decodedId)
-    if (!spellRunner) throw new Error('No spell runner found!')
+    if (!spellRunner) return console.error('No spell runner found!')
 
     if (diff) {
       const spell = spellRunner.currentSpell
@@ -117,7 +116,7 @@ export class SpellRunnerService<
       return spellUpdate
     }
 
-    throw new Error('No diff or spellUpdate present in update data')
+    return console.error('No diff or spellUpdate present in update data')
   }
 
   // async patch(id: NullableId, data: Data, params?: Params): Promise<Data> {

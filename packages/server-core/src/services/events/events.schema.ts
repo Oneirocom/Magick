@@ -8,7 +8,7 @@ import { dataValidator, queryValidator } from '../../config/validators'
 
 export const eventSchema = Type.Object(
   {
-    id: Type.Number(),
+    id: Type.String(),
     type: Type.Optional(Type.String()),
     observer: Type.Optional(Type.String()),
     sender: Type.Optional(Type.String()),

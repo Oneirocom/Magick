@@ -13,23 +13,6 @@
         "lintFilePatterns": ["packages/client-core/**/*.{ts,tsx,js,jsx}"]
       }
     },
-    "build": {
-      "executor": "@nrwl/vite:build",
-      "outputs": ["{options.outputPath}"],
-      "configFile": "packages/client-core/vite.config.ts",
-      "defaultConfiguration": "production",
-      "options": {
-        "outputPath": "dist/packages/client-core"
-      },
-      "configurations": {
-        "development": {
-          "mode": "development"
-        },
-        "production": {
-          "mode": "production"
-        }
-      }
-    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],

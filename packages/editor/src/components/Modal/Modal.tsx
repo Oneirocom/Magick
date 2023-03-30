@@ -6,8 +6,20 @@ import css from './modal.module.css'
 const Modal = ({ options = [], title, icon, onClose = () => {}, ...props }) => {
   const { closeModal } = useModal()
   return (
-    <div className={css['modal-bg']}>
-      <div className={css['modal-panel']}>
+    <div
+      className={css['modal-bg']}
+      onClick={e => {
+        e.stopPropagation()
+        closeModal()
+        onClose()
+      }}
+    >
+      <div
+        className={css['modal-panel']}
+        onClick={e => {
+          e.stopPropagation()
+        }}
+      >
         <div className={css['modal-panel-content']}>
           <div className={css['modal-title']}>
             {icon && (
@@ -30,7 +42,8 @@ const Modal = ({ options = [], title, icon, onClose = () => {}, ...props }) => {
         </div>
         <div className={`${css['modal-action-strip']}`}>
           <Button
-            onClick={() => {
+            onClick={e => {
+              e.stopPropagation()
               closeModal()
               onClose()
             }}

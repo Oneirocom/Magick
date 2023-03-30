@@ -1,13 +1,13 @@
-import { IRunContextEditor, MagickComponent } from '../../types'
+import { MagickComponent } from '../../engine'
+import { IRunContextEditor } from '../../types'
 
 function install(editor: IRunContextEditor) {
-  editor.on('componentregister', (component: any) => {
+  editor.on('componentregister', (component: MagickComponent<unknown>) => {
     component.worker = (node, _inputs, _outputs, { magick, socketOutput }) => {
       const { sendToPlaytest } = magick
 
       // Might be a bit hacky to do it this way, but it works for now
       if (node.data.sendToPlaytest && sendToPlaytest) {
-        console.log('socketOutput.output is', socketOutput.output)
         sendToPlaytest(socketOutput.output)
       }
 

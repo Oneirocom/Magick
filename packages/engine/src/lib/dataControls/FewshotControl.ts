@@ -6,6 +6,7 @@ export class FewshotControl extends DataControl {
     icon = 'fewshot',
     dataKey = 'fewshot',
     name = 'fewshot',
+    defaultValue = '',
   }) {
     const options = {
       dataKey,
@@ -15,7 +16,9 @@ export class FewshotControl extends DataControl {
       options: {
         editor: true,
         language: language,
+        wordWrap: true
       },
+      defaultValue
     }
 
     super(options)

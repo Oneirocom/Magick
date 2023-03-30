@@ -1,27 +1,10 @@
 {
   "name": "@magickml/plugin-openai-client",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/pluginopenai/client/src",
+  "sourceRoot": "packages/plugin-openai/client/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/engine"],
   "targets": {
-    "build": {
-      "executor": "@nrwl/vite:build",
-      "outputs": ["{options.outputPath}"],
-      "configFile": "packages/plugin-openai/client/vite.config.ts",
-      "defaultConfiguration": "production",
-      "options": {
-        "outputPath": "dist/packages/plugin-openai/client"
-      },
-      "configurations": {
-        "development": {
-          "mode": "development"
-        },
-        "production": {
-          "mode": "production"
-        }
-      }
-    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

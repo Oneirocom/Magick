@@ -6,14 +6,14 @@ import { SnapGrid } from './snap'
 import { zoomAt } from './zoom-at'
 
 function install(editor, params) {
-  console.log('installing', params)
   const background = params.background || false
   const snap = params.snap || false
   const scaleExtent = params.scaleExtent || false
   const translateExtent = params.translateExtent || false
+  const tab = params.tab
 
   if (background) {
-    this._background = new Background(editor, background)
+    this._background = new Background(editor, background, tab)
   }
   
   if (scaleExtent || translateExtent) {

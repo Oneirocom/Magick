@@ -1,14 +1,12 @@
 import Rete from 'rete'
 
-import {
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-} from '../../types'
+import { MagickComponent } from '../../engine'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { objectSocket, triggerSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import {
+  MagickNode,
+  MagickWorkerInputs, WorkerData
+} from '../../types'
 import { SocketGeneratorControl } from './../../dataControls/SocketGenerator'
 
 const info = `Destructure properties out of an object`
@@ -16,17 +14,11 @@ const info = `Destructure properties out of an object`
 export class Destructure extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Destructure')
-
-    this.task = {
+    super('Destructure', {
       outputs: {
         trigger: 'option',
       },
-      init: () => {},
-      onRun: () => {},
-    } as TaskOptions
-    this.category = 'Utility'
-    this.info = info
+    } as TaskOptions, 'Utility', info)
   }
   // the builder is used to "assemble" the node component.
 
@@ -54,13 +46,13 @@ export class Destructure extends MagickComponent<void> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  worker(node: NodeData, inputs: MagickWorkerInputs) {
-    const object = inputs.object[0] as Record<string, any>
+  worker(node: WorkerData, inputs: MagickWorkerInputs) {
+    const object = inputs.object[0] as Record<string, unknown>
 
     const output = Object.keys(node.outputs).reduce((acc, key) => {
       acc[key] = object[key]
       return acc
-    }, {} as Record<any, any>)
+    }, {} as Record<string, unknown>)
 
     console.log('Destructured output', output)
 

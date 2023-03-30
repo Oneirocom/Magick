@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Icon } from '@magickml/client-core'
+import { Icon } from '../Icon'
 import css from './chip.module.css'
 
 export const Chip = ({
@@ -8,7 +8,7 @@ export const Chip = ({
   noEvents,
 }: {
   label: string
-  onClick?: () => {}
+  onClick?: () => void
   noEvents?: boolean
 }) => {
   return (

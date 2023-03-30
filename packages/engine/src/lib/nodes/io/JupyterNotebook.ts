@@ -3,22 +3,22 @@
 import axios from 'axios'
 import Rete from 'rete'
 
+import { InputControl } from '../../dataControls/InputControl'
+import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
+import { MagickComponent } from '../../engine'
+import { stringSocket, triggerSocket } from '../../sockets'
 import {
-  NodeData,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { triggerSocket, stringSocket } from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 
 const info =
   'Call a Jupyter Notebook with the given name and inputs, and return the output.'
 
 type WorkerReturn = {
-  output: any
+  output: string
 }
 
 const removeProtocol = url => {
@@ -44,18 +44,12 @@ function getPromiseFromEvent(item, event) {
 
 export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Jupyter Notebook')
-
-    this.task = {
+    super('Jupyter Notebook', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
-
-    this.category = 'I/O'
-    this.display = true
-    this.info = info
+    }, 'I/O', info)
   }
 
   builder(node: MagickNode) {
@@ -109,7 +103,7 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     rawInputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs
   ) {
@@ -205,7 +199,7 @@ export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
     }
     await getPromiseFromEvent(ws, 'message')
     return {
-      output: code_output ? (code_output as any) : '',
+      output: code_output ? code_output : '',
     }
   }
 }

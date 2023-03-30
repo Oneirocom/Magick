@@ -2,9 +2,9 @@ import deepEqual from 'deep-equal'
 import Rete, { Input, Output } from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { DataSocketType, IRunContextEditor, MagickNode } from '../../types'
+import { MagickComponent } from '../../engine'
 import * as socketMap from '../../sockets'
-import { MagickComponent } from '../../magick-component'
+import { AsDataSocket, AsInputsAndOutputsData, DataSocketType, IRunContextEditor, MagickNode, PubSubData, WorkerData } from '../../types'
 import { DataControl } from './DataControl'
 
 type InspectorConstructor = {
@@ -14,20 +14,25 @@ type InspectorConstructor = {
 }
 
 // todo improve this typing
-type DataControlData = Record<string, any>
+export type DataControlData = Record<string, DataControl>
 
 export type InspectorData = {
   name: string
   nodeId: number
-  dataControls: Record<string, any>
-  data: Record<string, any>
+  dataControls: PubSubData
+  data: WorkerData
   category?: string
   info: string
 }
 
+export type HandleDataArgs = {
+  dataControls?: DataControlData
+  data: PubSubData
+}
+
 export class Inspector {
   // Stub of function.  Can be a nodes catch all onData
-  cache: Record<string, any> = {}
+  cache: PubSubData = {}
   node: MagickNode
   component: MagickComponent<unknown>
   editor: IRunContextEditor
@@ -46,12 +51,12 @@ export class Inspector {
   // addede DataControl[]
   _add(list: Map<string, DataControl>, control: DataControl) {
     if (list.has(control.dataKey))
-      throw new Error(
+      return console.error(
         `Item with dataKey '${control.dataKey}' already been added to the inspector`
       )
 
     if (control['inspector'] !== null)
-      throw new Error('Inspector has already been added to some control')
+    return console.error('Inspector has already been added to some control')
 
     // Attach the inspector to the incoming control instance
     control['inspector'] = this
@@ -73,6 +78,16 @@ export class Inspector {
     return this
   }
 
+  remove(dataKey) {
+    const control = this.dataControls.get(dataKey)
+    if(!control) {
+      return console.warn(`No control with dataKey '${dataKey}' found`)
+    }
+    control.onRemove()
+    this.dataControls.delete(dataKey)
+    return this
+  }
+
   add_html(html: string) {
     this.node.data['html'] = html
   }
@@ -81,19 +96,19 @@ export class Inspector {
     this.node.data['image'] = img_url
   }
 
-  add_func(func: () => {}) {
+  add_func(func: () => void) {
     this.node.data['func'] = func
   }
   handleSockets(
     sockets: DataSocketType[],
-    control: DataControlData,
+    control: DataControl,
     type: 'inputs' | 'outputs'
   ) {
     // we assume all sockets are of the same type here
     // and that the data key is set to 'inputs' or 'outputs'
     const isOutput = type === 'outputs'
 
-    this.node.data[type] = sockets
+    this.node.data[type] = AsInputsAndOutputsData(sockets)
 
     // get all sockets currently on the node
     const existingSockets: string[] = []
@@ -102,7 +117,7 @@ export class Inspector {
       existingSockets.push(out.key)
     })
 
-    const ignored: string[] = (control && control?.data?.ignored) || []
+    const ignored: string[] = (control && control?.data?.ignored) as string[] || []
 
     // outputs that are on the node but not in the incoming sockets is removed
     existingSockets
@@ -150,7 +165,7 @@ export class Inspector {
     // Here we are running over and ensuring that the outputs are in the tasks outputs
     // We only need to do this with outputs, as inputs don't need to be in the task
     if (isOutput) {
-      const dataOutputs = this.node.data.outputs as DataSocketType[]
+      const dataOutputs = AsDataSocket(this.node.data.outputs)
       this.component.task.outputs = dataOutputs.reduce(
         (acc, out) => {
           acc[out.socketKey] = out.taskType || 'output'
@@ -190,25 +205,26 @@ export class Inspector {
 
         return acc
       },
-      {} as Record<string, any>
+      {} as PubSubData
     )
 
     this.node.data.dataControls = cache
   }
 
-  handleDefaultTrigger(update: Record<string, any>) {
+  handleDefaultTrigger(update: { dataControls?: DataControlData; data: PubSubData}) {
     this.editor.nodes
       .filter(node => node.name === 'Input')
-      .map(node => {
+      .forEach(node => {
         if (node.data.isDefaultTriggerIn) {
           node.data.isDefaultTriggerIn = !node.data.isDefaultTriggerIn
         }
       })
 
-    this.node.data.isDefaultTriggerIn = update.data.isDefaultTriggerIn
+    if(typeof update.data === 'string') return
+    this.node.data.isDefaultTriggerIn = (update.data as Record<string, unknown>).isDefaultTriggerIn
   }
 
-  handleData(update: Record<string, any>) {
+  handleData(update: HandleDataArgs) {
     // store all data controls inside the nodes data
     // WATCH in case our graphs start getting quite large.
     if (update.dataControls) this.cacheControls(update.dataControls)
@@ -238,24 +254,31 @@ export class Inspector {
 
       // if there is inputs in the data, only handle the incoming sockets
       if (key === 'inputs' && data['inputs']) {
-        this.handleSockets(data['inputs'], control.control, 'inputs')
+        // TODO: check correctness
+        // this.handleSockets(data['inputs'], control.control, 'inputs')
+        this.handleSockets(data['inputs'], control, 'inputs')
+
         continue
       }
 
       // if there is outputs in the data, only handle the incoming sockets
       if (key === 'outputs' && data['outputs']) {
-        this.handleSockets(data['outputs'], control.control, 'outputs')
+        // TODO: check correctness
+        // this.handleSockets(data['outputs'], control.control, 'outputs')
+        this.handleSockets(data['outputs'], control, 'outputs')
         continue
       }
 
       if (data[key]) {
         // handle the situation where a control is setting inputs and outputs itself
         if (data[key].outputs) {
-          this.handleSockets(data[key].outputs, control.control, 'outputs')
+          // TODO: check correctness
+          this.handleSockets(data[key].outputs, control, 'outputs')
         }
 
         if (data[key].inputs) {
-          this.handleSockets(data[key].inputs, control.control, 'inputs')
+          // TODO: check correctness
+          this.handleSockets(data[key].inputs, control, 'inputs')
         }
       }
 
@@ -273,7 +296,9 @@ export class Inspector {
     this.editor.trigger('save')
   }
 
-  get() {}
+  get() {
+    return
+  }
 
   // returns all data prepared for the pubsub to send it.
   data(): InspectorData {
@@ -285,7 +310,7 @@ export class Inspector {
         acc[key] = { ...val.control, ...cachedControl }
         return acc
       },
-      {} as Record<string, any>
+      {} as PubSubData
     )
 
     return {
@@ -297,6 +322,4 @@ export class Inspector {
       info: this.node.info,
     }
   }
-
-  remove() {}
 }

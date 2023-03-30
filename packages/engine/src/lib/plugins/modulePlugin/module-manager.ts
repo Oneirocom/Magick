@@ -1,4 +1,4 @@
-import { Engine, Socket, Component } from 'rete'
+import { Engine, Socket } from 'rete'
 import { Socket as SocketType } from 'rete/types'
 import { NodeData } from 'rete/types/core/data'
 
@@ -10,16 +10,20 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleComponent,
+  AgentInterface,
 } from '../../types'
 import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'
 import { Module } from './module'
 
 export type ModuleContext = {
-  agent?: any
+  agent?: AgentInterface
   secrets?: Record<string, string>
   publicVariables?: Record<string, string>
-  socketInfo: { targetSocket: string }
+  socketInfo: {
+     targetSocket: string
+     targetNode: MagickNode
+   }
 }
 
 export type ModuleSocketType = {
@@ -72,16 +76,16 @@ export class ModuleManager {
   }
 
   getTriggerOuts(data: GraphData): ModuleSocketType[] {
-    return this.getSockets(data, this.triggerOuts, 'trigger')
+    return this.getSockets(data, this.outputs, 'trigger')
   }
 
   getTriggerIns(data: GraphData) {
-    return this.getSockets(data, this.triggerIns, 'trigger')
+    return this.getSockets(data, this.inputs, 'trigger')
   }
 
   socketFactory(
     node: NodeData,
-    socket: Socket | Function | undefined
+    socket: Socket | ((node:NodeData)=>Socket) | undefined
   ): SocketType {
     // eslint-disable-next-line no-param-reassign
     socket = typeof socket === 'function' ? socket(node) : socket
@@ -125,7 +129,7 @@ export class ModuleManager {
     if (!node.data.spell) return
     if (!this.modules[node.data.spell as number]) return
     const moduleName = node.data.spell as string
-    const data = this.modules[moduleName].data as any
+    const data = this.modules[moduleName].data
     const module = new Module()
     const engine = this.engine?.clone()
 
@@ -139,9 +143,9 @@ export class ModuleManager {
         acc[name] = value
         return acc
       }
-    }, {} as any)
+      return acc
+    }, {} as Record<string, unknown>)
 
-    console.log('reading module - module-manager.ts')
     module.read({
       agent: context.agent,
       inputs: parsedInputs,
@@ -154,8 +158,8 @@ export class ModuleManager {
       Object.assign({}, context, { module })
     )
 
-    if ((context?.socketInfo as any)?.targetNode) {
-      console.log('targetNode', (context?.socketInfo as any).targetNode)
+    if (context?.socketInfo?.targetNode) {
+      console.log('targetNode', context?.socketInfo.targetNode)
     }
 
     if (context?.socketInfo?.targetSocket) {
@@ -165,8 +169,12 @@ export class ModuleManager {
       )
       if (!triggeredNode) throw new Error('Triggered node not found')
       // todo need to remember to update this if/when componnet name changes
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
       const component = engine?.components.get('Input') as ModuleComponent
       console.log('component', component)
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
       await component?.run(triggeredNode)
     }
     // gather the outputs
@@ -200,10 +208,10 @@ export class ModuleManager {
   }
 
   workerTriggerIns(
-    node: NodeData,
-    _inputs: MagickWorkerInputs,
-    outputs: MagickWorkerOutputs,
-    { module, data }: { module: Module; data: Record<string, any> }
+    _node,
+    _inputs,
+    _outputs,
+    { module, data }: { module: Module; data: Record<string, unknown> }
   ) {
     if (!module) return
 

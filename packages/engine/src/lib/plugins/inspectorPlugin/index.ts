@@ -1,14 +1,15 @@
+import { MagickComponent } from '../../engine'
 import { IRunContextEditor, MagickNode } from '../../types'
-import { Inspector } from './Inspector'
+import { HandleDataArgs, Inspector } from './Inspector'
 
 function install(editor: IRunContextEditor) {
   const { onInspector, sendToInspector, clearTextEditor } = editor.magick
 
-  editor.on('componentregister', (component: any) => {
+  editor.on('componentregister', (component: MagickComponent<unknown>) => {
     const builder = component.builder
 
     if (!component.info)
-      throw new Error(
+      return console.error(
         'All components must contain an info property describing the component to the end user.'
       )
 
@@ -30,8 +31,8 @@ function install(editor: IRunContextEditor) {
 
       if (!onInspector) return
 
-      node.subscription = onInspector(node, (data: Record<string, any>) => {
-        node.inspector.handleData(data)
+      node.subscription = onInspector(node, (data) => {
+        node.inspector.handleData(data as HandleDataArgs)
         editor.trigger('nodecreated', node)
         // NOTE might still need this.  Keep an eye out.
         // sendToInspector(node.inspector.data());

@@ -1,10 +1,11 @@
-import { IRunContextEditor, MagickComponent, MagickNode } from '../../types'
+import { MagickComponent } from '../../engine'
+import { IRunContextEditor, MagickNode } from '../../types'
 
 function install(editor: IRunContextEditor) {
   // handle publishing and subscribing to inspector
   const nodeDataMap = {}
 
-  const detectDoubleClick = (node, callback: Function) => {
+  const detectDoubleClick = (node, callback: ()=>void) => {
     if (!nodeDataMap[node.id]) {
       nodeDataMap[node.id] = {
         clickCount: 0,

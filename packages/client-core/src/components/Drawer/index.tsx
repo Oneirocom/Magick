@@ -1,23 +1,22 @@
-import * as React from 'react'
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles'
-import { useNavigate } from 'react-router-dom'
-import MuiDrawer from '@mui/material/Drawer'
-import Divider from '@mui/material/Divider'
-import List from '@mui/material/List'
+import { ClientPlugin, ClientPluginManager, pluginManager } from '@magickml/engine'
+import AppsIcon from '@mui/icons-material/Apps'
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
+import DocumentIcon from '@mui/icons-material/Description'
+import SettingsIcon from '@mui/icons-material/Settings'
+import ProjectIcon from '@mui/icons-material/Home'
+import StorageIcon from '@mui/icons-material/Storage'
+import Divider from '@mui/material/Divider'
+import MuiDrawer from '@mui/material/Drawer'
+import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import { useState } from 'react'
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
-import { useLocation } from 'react-router-dom'
-import StorageIcon from '@mui/icons-material/Storage'
-import AutoStoriesIcon from '@mui/icons-material/AutoStories'
-import SettingsIcon from '@mui/icons-material/Settings'
-import { pluginManager } from '@magickml/engine'
-import HubIcon from '@mui/icons-material/Hub'
-
+import { CSSObject, styled, Theme } from '@mui/material/styles'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { SetAPIKeys } from './SetAPIKeys'
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
 
@@ -77,7 +76,15 @@ const StyledDrawer = styled(MuiDrawer, {
   }),
 }))
 
-const DrawerItem = ({ Icon, open, text, active, onClick = () => {} }) => (
+const DrawerItem = ({
+  Icon,
+  open,
+  text,
+  active,
+  onClick = () => {
+    /* null handler */
+  },
+}) => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
     <ListItemButton
       sx={{
@@ -102,9 +109,10 @@ const DrawerItem = ({ Icon, open, text, active, onClick = () => {} }) => (
   </ListItem>
 )
 
-const PluginDrawerItems = ({onClick, open}) => {
-  const drawerItems = pluginManager.getDrawerItems()
-  let lastPlugin = null
+const PluginDrawerItems = ({ onClick, open }) => {
+  const location = useLocation()
+  const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
+  let lastPlugin:string|null = null
   let divider = false
   return (
     <>
@@ -116,18 +124,16 @@ const PluginDrawerItems = ({onClick, open}) => {
           divider = false
         }
         return (
-          <div
-          key={item.path}
-          >
-          {divider && <Divider />}
-          <DrawerItem
-            key={item.path}
-            active={location.pathname.includes(item.path)}
-            Icon={item.icon}
-            open={open}
-            onClick={onClick(item.path)}
-            text={item.text}
-          />
+          <div key={item.path}>
+            {divider && <Divider />}
+            <DrawerItem
+              key={item.path}
+              active={location.pathname.includes(item.path)}
+              Icon={item.icon}
+              open={open}
+              onClick={onClick(item.path)}
+              text={item.text}
+            />
           </div>
         )
       })}
@@ -138,6 +144,7 @@ const PluginDrawerItems = ({onClick, open}) => {
 export function Drawer({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
+  const [isAPIKeysSet, setAPIKeysSet] = useState(false)
 
   const [open, setOpen] = useState<boolean>(false)
 
@@ -148,6 +155,21 @@ export function Drawer({ children }) {
   const onClick = location => () => {
     navigate(location)
   }
+
+  useEffect(() => {
+    const secrets = localStorage.getItem('secrets')
+    if (secrets) {
+      let secretHasBeenSet = false
+      const parsedSecrets = JSON.parse(secrets)
+      // check if any of the parsed secrets are not ''
+      Object.keys(parsedSecrets).forEach(key => {
+        if (parsedSecrets[key] !== '' && parsedSecrets[key]) {
+          secretHasBeenSet = true
+        }
+      })
+      setAPIKeysSet(secretHasBeenSet)
+    }
+  }, [])
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -178,29 +200,39 @@ export function Drawer({ children }) {
           }}
         >
           <DrawerItem
-            active={location.pathname.includes('/magick')}
+            active={
+              location.pathname.includes('/magick') ||
+              location.pathname.includes('/home')
+            }
             Icon={AutoFixHighIcon}
             open={open}
             onClick={onClick('/magick')}
             text="Spells"
           />
           <DrawerItem
-            active={location.pathname === '/events'}
-            Icon={StorageIcon}
-            open={open}
-            onClick={onClick('/events')}
-            text="Events"
-          />
-          <DrawerItem
             active={location.pathname === '/agents'}
-            Icon={HubIcon}
+            Icon={AppsIcon}
             open={open}
             onClick={onClick('/agents')}
             text="Agents"
           />
           <DrawerItem
-            active={location.pathname === '/requests'}
+            active={location.pathname === '/documents'}
+            Icon={DocumentIcon}
+            open={open}
+            onClick={onClick('/documents')}
+            text="Documents"
+          />
+          <DrawerItem
+            active={location.pathname === '/events'}
             Icon={BoltIcon}
+            open={open}
+            onClick={onClick('/events')}
+            text="Events"
+          />
+          <DrawerItem
+            active={location.pathname === '/requests'}
+            Icon={StorageIcon}
             open={open}
             onClick={onClick('/requests')}
             text="Requests"
@@ -214,6 +246,7 @@ export function Drawer({ children }) {
             onClick={onClick('/settings')}
             text="Settings"
           />
+          {!isAPIKeysSet && <SetAPIKeys />}
         </List>
       </StyledDrawer>
       {children}

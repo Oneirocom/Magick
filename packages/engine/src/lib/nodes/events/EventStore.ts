@@ -1,56 +1,51 @@
-import Rete from 'rete'
 import axios from 'axios'
+import Rete from 'rete'
 
+import { API_ROOT_URL } from '../../config'
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
 import {
-  Event,
-  NodeData,
-  MagickNode,
+  arraySocket, eventSocket, stringSocket, triggerSocket
+} from '../../sockets'
+import {
+  Event, MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import {
-  triggerSocket,
-  stringSocket,
-  eventSocket,
-  arraySocket,
-} from '../../sockets'
-import { MagickComponent } from '../../magick-component'
-import { API_ROOT_URL } from '../../config'
 
 const info = 'Event Store is used to store events for an event and user'
 
 export class EventStore extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Store Event')
-
-    this.task = {
+    super('Store Event', {
       outputs: {
         trigger: 'option',
       },
-    }
+    }, 'Event', info)
 
-    this.category = 'Events'
-    this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {
     const nameInput = new InputControl({
       dataKey: 'name',
       name: 'Input name',
-      placeholder: 'Conversation'
+      placeholder: 'Conversation',
     })
 
     const type = new InputControl({
       dataKey: 'type',
       name: 'Type',
       icon: 'moon',
-      placeholder: 'conversation'
+      placeholder: 'conversation',
     })
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
-    const senderInput = new Rete.Input('sender', 'Sender Override', stringSocket)
+    const senderInput = new Rete.Input(
+      'sender',
+      'Sender Override',
+      stringSocket
+    )
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
     const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
 
@@ -71,29 +66,49 @@ export class EventStore extends MagickComponent<Promise<void>> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context
   ) {
-    const {
-      projectId,
-    } = context
+    const { projectId } = context
 
     const event = inputs['event'][0] as Event
     const sender = (inputs['sender'] ? inputs['sender'][0] : null) as string
-    const content = (inputs['content'] ? inputs['content'][0] : null) as string
-    const embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[]
+    let content = (inputs['content'] ? inputs['content'][0] : null) as string
+    let embedding = (
+      inputs['embedding'] ? inputs['embedding'][0] : null
+    ) as number[]
+    if (typeof embedding == 'string')
+      embedding = (embedding as string).split(',').map(x => parseFloat(x))
+
     const typeData = node?.data?.type as string
+
     const type =
       typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
         : 'none'
 
-    if (!content) return console.log('Content is null, not storing event')
+    //content is none, event content is defined
+    if (!content) {
+      content = (event as Event).content || 'Error'
+      if (!content) console.log('Content is null, not storing the event !!')
+    }
 
-    console.log('sender is', sender ?? event.sender)
-    const data = { ...event, sender: sender ?? event.sender, projectId, content, type } as any
+    type Data = {
+      sender: string
+      projectId: string
+      content: string
+      type: string
+      embedding?: number[] | string[]
+    }
+    const data: Data = {
+      ...event,
+      sender: sender ?? event.sender,
+      projectId,
+      content,
+      type,
+    }
     if (embedding) data.embedding = embedding
 
     if (content && content !== '') {

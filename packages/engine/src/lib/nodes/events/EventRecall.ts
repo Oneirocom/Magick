@@ -1,44 +1,33 @@
 import Rete from 'rete'
-import {
-  Event,
-  EngineContext,
-  NodeData,
-  MagickNode,
-  MagickWorkerInputs,
-  MagickWorkerOutputs,
-  GetEventArgs,
-} from '../../types'
-import { InputControl } from '../../dataControls/InputControl'
-import {
-  triggerSocket,
-  anySocket,
-  eventSocket,
-  stringSocket,
-  arraySocket,
-} from '../../sockets'
-import { MagickComponent } from '../../magick-component'
 import { API_ROOT_URL } from '../../config'
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
+import { arraySocket, eventSocket, triggerSocket } from '../../sockets'
+import {
+  Event, GetEventArgs, MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs, WorkerData
+} from '../../types'
+
 const info = 'Event Recall is used to get conversation for an agent and user'
 
 //add option to get only events from max time difference (time diff, if set to 0 or -1, will get all events, otherwise will count in minutes)
 type InputReturn = {
-  events: any[]
+  events: unknown[]
 }
 
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Event Recall')
-
-    this.task = {
+    super('Event Recall',
+    {
       outputs: {
         events: 'output',
         trigger: 'option',
       },
-    }
+    },
+    'Event',
+    info)
 
-    this.category = 'Events'
-    this.display = true
-    this.info = info
     this.runFromCache = true
   }
 
@@ -80,24 +69,23 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   }
 
   async worker(
-    node: NodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
-    const getEventsbyEmbedding = async (params: any) => {
-      
+    const getEventsbyEmbedding = async (params: { embedding: string }) => {
+
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
-      
+
       url.searchParams.append('embedding', params['embedding'])
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
       const json = await response.json()
-      return json
+      return json.events
     }
     const getEvents = async (params: GetEventArgs) => {
       const urlString = `${API_ROOT_URL}/events`
-      
       const url = new URL(urlString)
       for (const p in params) {
         // append params to url, make sure to preserve arrays
@@ -107,27 +95,24 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
           url.searchParams.append(p, params[p])
         }
       }
-
       const response = await fetch(url.toString())
       if (response.status !== 200) return null
       const json = await response.json()
-      return json.data
+      return json.events
     }
-    const event = (inputs['event'] &&
-      (inputs['event'][0] ?? inputs['event'])) as Event
-    const embedding = (inputs['embedding'] &&
-      (inputs['embedding'][0] ?? inputs['embedding'])) as number[]
-    const { observer, client, channel, channelType, projectId, entities } =
-      event
-
-    const typeData = node?.data?.type as string
+    const event = (inputs['event'] && (inputs['event'][0] ?? inputs['event'])) as Event
+    let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[] | string | string []
+    if (typeof (embedding) == 'string') embedding = (embedding as string).replace('[', "").replace(']', ""); embedding = (embedding as string)?.split(',')
+    const { observer, client, channel, channelType, projectId, entities } = event
+    // TODO: check if defined instead of as {type:string}
+    const typeData = (node.data as { type: string })?.type
     const type =
       typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
         : 'none'
 
-    const maxCountData = node.data?.max_count as string
-    const maxCount = maxCountData ? parseInt(maxCountData) : 10
+    const maxCountData = node?.data?.max_count as string && (node?.data as { max_count: string })?.max_count
+    const limit = maxCountData ? parseInt(maxCountData) : 10
 
     const data = {
       type,
@@ -137,13 +122,14 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       channel,
       channelType,
       projectId,
-      maxCount,
+      limit,
     }
     let events
     if (embedding) data['embedding'] = embedding
     if (embedding) {
-      if (embedding.length == 1536) {
-        const enc_embed = new Float32Array(embedding)
+      if (embedding.length === 1536) {
+        //TODO: fix this bug instead of using as
+        const enc_embed = new Float32Array(embedding as Iterable<number>)
         const uint = new Uint8Array(enc_embed.buffer)
         const str = btoa(
           String.fromCharCode.apply(
@@ -156,7 +142,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     } else {
       events = await getEvents(data)
     }
-    
     return {
       events,
     }

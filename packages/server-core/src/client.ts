@@ -5,8 +5,8 @@ import type {
   SpellRunnerService
 } from './services/spell-runner/spell-runner'
 export const spellRunnerServiceMethods = ['get', 'create', 'update'] as const
-import type { Spell, SpellData, SpellQuery, SpellService } from './services/spells/spells'
-export type { Spell, SpellData, SpellQuery }
+import type { SpellData, SpellQuery, SpellService } from './services/spells/spells'
+export type { SpellData, SpellQuery }
 export const spellServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
 export type SpellClientService = Pick<SpellService<Params<SpellQuery>>, (typeof spellServiceMethods)[number]>
 
@@ -15,7 +15,7 @@ export type { Agent, AgentData, AgentQuery }
 export const agentServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
 export type AgentClientService = Pick<AgentService<Params<AgentQuery>>, (typeof agentServiceMethods)[number]>
 
-import type { Request, RequestData, RequestQuery, RequestService } from './services/request/request'
+import type { Request, RequestData, RequestQuery, RequestService } from './services/requests/requests'
 export type { Request, RequestData, RequestQuery }
 export const requestServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
 export type RequestClientService = Pick<

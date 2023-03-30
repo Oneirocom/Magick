@@ -1,6 +1,5 @@
 import { DataControl } from '../plugins/inspectorPlugin'
 
-const nonce = 0
 export class InputControl extends DataControl {
   constructor({
     dataKey = '',
@@ -23,9 +22,5 @@ export class InputControl extends DataControl {
       icon,
       placeholder
     })
-  }
-
-  onData = () => {
-    return
   }
 }

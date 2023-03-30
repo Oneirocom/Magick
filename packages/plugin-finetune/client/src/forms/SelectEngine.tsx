@@ -1,7 +1,7 @@
 import { useFormContext } from "react-hook-form";
 import Select from "react-select";
 
-export const BaseEngines = ["ada", "babbage", "curie", "davinci"];
+export const BaseEngines = ["ada", "babbage", "curie", "davinci", 'gpt-4'];
 export const InstructEngines = ["davinci-instruct-beta", "curie-instruct-beta"];
 
 export default function SelectEngine({

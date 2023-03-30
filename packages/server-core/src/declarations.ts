@@ -2,7 +2,7 @@
 import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
 import { Application as FeathersApplication } from '@feathersjs/koa'
 import { ApplicationConfiguration } from './config/configuration'
-import { SpellManager } from '@magickml/engine'
+import { SpellManager, UserSpellManager } from '@magickml/engine'
 
 export { NextFunction }
 
@@ -17,7 +17,7 @@ export interface ServiceTypes {}
 // The application instance type that will be used everywhere else
 export interface Application
    extends FeathersApplication<ServiceTypes, Configuration> {
-   userSpellManagers?: Map<string, SpellManager>
+   userSpellManagers?: UserSpellManager
  }
 // The context for hook functions - can be typed with a service class
 export type HookContext<S = any> = FeathersHookContext<Application, S>
