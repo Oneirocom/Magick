@@ -20,18 +20,23 @@ const info = 'Event Store is used to store events for an event and user'
 type InputReturn = {
   success: boolean
   error?: string
-  result?: any
+  result?: string
 }
 
 export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Create Text Embedding', {
-      outputs: {
-        trigger: 'option',
-        result: 'output',
-        success: 'output',
+    super(
+      'Create Text Embedding',
+      {
+        outputs: {
+          trigger: 'option',
+          result: 'output',
+          success: 'output',
+        },
       },
-    }, 'Embedding', info)
+      'Embedding',
+      info
+    )
   }
 
   builder(node: MagickNode) {
@@ -133,7 +138,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
     const completionProviders = pluginManager.getCompletionProviders('text', [
       'embedding',
     ]) as CompletionProvider[]
-    const model = (node.data as {model: string}).model as string
+    const model = (node.data as { model: string }).model as string
 
     // get the provider for the selected model
     const provider = completionProviders.find(provider =>

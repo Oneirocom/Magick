@@ -1,4 +1,5 @@
-import { Agent } from "@magickml/server-core"
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import type { Agent } from '@magickml/server-core'
 
 export class Module {
   secrets?: Record<string, string>
@@ -13,15 +14,10 @@ export class Module {
     this.publicVariables = {}
   }
 
-  read({
-    inputs,
-    secrets,
-    publicVariables,
-    agent
-  }) {
+  read({ inputs, secrets, publicVariables, agent }) {
     this.inputs = inputs
-    this.secrets = secrets || {} as Record<string, string>
-    this.publicVariables = publicVariables || {} as Record<string, string>
+    this.secrets = secrets || ({} as Record<string, string>)
+    this.publicVariables = publicVariables || ({} as Record<string, string>)
     this.agent = agent
   }
 
