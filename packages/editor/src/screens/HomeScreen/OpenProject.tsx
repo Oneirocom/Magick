@@ -1,19 +1,33 @@
-import { Button, Icon, Panel } from '@magickml/client-core'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+// GENERATED 
+import { Button, Icon, Panel } from '@magickml/client-core';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import packageJson from '../../../package.json'
-import FileInput from '../../components/FileInput'
-import { RootState } from '../../state/store'
-import { selectAllTabs } from '../../state/tabs'
-import ProjectRow from '../../components/ProjectRow'
-import css from './homeScreen.module.css'
-import banner from './banner.png'
+import packageJson from '../../../package.json';
+import FileInput from '../../components/FileInput';
+import { RootState } from '../../state/store';
+import { selectAllTabs } from '../../state/tabs';
+import ProjectRow from '../../components/ProjectRow';
+import css from './homeScreen.module.css';
+import banner from './banner.png';
 
-const version = packageJson.version
+const version = packageJson.version;
 
-const getMagickVersion = () => version
+/**
+ * Get the Magick version from package.json
+ * @returns {string} The version string
+ */
+const getMagickVersion = () => version;
 
+/**
+ * A component for opening a project
+ * @param {Object} props - The component properties
+ * @param {Array}  props.spells - The array of spells available
+ * @param {Function}   props.setSelectedSpell - Function to set the selected spell
+ * @param {Object} props.selectedSpell - The currently selected spell object
+ * @param {Function}   props.loadFile - Function to load a file
+ * @param {Function}   props.openSpell - Function to open a selected spell
+ */
 const OpenProject = ({
   spells,
   setSelectedSpell,
@@ -21,8 +35,8 @@ const OpenProject = ({
   loadFile,
   openSpell,
 }) => {
-  const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
-  const navigate = useNavigate()
+  const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs));
+  const navigate = useNavigate();
 
   return (
     <Panel shadow unpadded>
@@ -106,7 +120,7 @@ const OpenProject = ({
         </div>
       </div>
     </Panel>
-  )
-}
+  );
+};
 
-export default OpenProject
+export default OpenProject;

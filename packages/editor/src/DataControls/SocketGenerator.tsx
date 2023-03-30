@@ -1,83 +1,125 @@
-import { useState, useEffect } from 'react'
-import Form from './Form'
-import SingleElement from './SingleElement'
+// GENERATED 
+/**
+ * Represents a form to add a new socket element.
+ *
+ * @param {Object} props - The props object.
+ * @param {string} props.value - The value of the input element.
+ * @param {function} props.onChange - The function called whenever the input element changes.
+ * @param {function} props.onAdd - The function called whenever the form is submitted.
+ * @returns {JSX.Element} A JSX form element.
+ */
+const AddNewSocket = (props) => {
+  const { value, onChange, onAdd } = props;
 
-const AddNewSocket = props => {
-  const [value, setValue] = useState('')
-
-  const onChange = e => {
-    setValue(e.target.value)
-  }
-
-  const onAdd = e => {
-    if (!value) return
-    e.preventDefault()
-    props.addSocket(value)
-    setValue('')
-  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!value) {
+      return;
+    }
+    onAdd(event);
+  };
 
   return (
-    <Form
-      value={value}
-      placeHolder="Name your socket..."
-      onChange={onChange}
-      onAdd={onAdd}
-    />
-  )
-}
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={value}
+        placeholder="Name your socket..."
+        onChange={onChange}
+      />
+      <button type="submit">Add</button>
+    </form>
+  );
+};
 
+/**
+ * Represents a single socket element.
+ * 
+ * @param {Object} props - The props object.
+ * @param {string} props.name - The name of the socket element.
+ * @param {function} props.delete - The function called when the delete button is clicked.
+ * @param {string} props.type - The type of the socket element.
+ * @returns {JSX.Element} A JSX element rendering a single socket.
+ */
+const SingleElement = (props) => {
+  const { name, delete: deleteSocket, type } = props;
+
+  const handleDeleteSocket = () => {
+    deleteSocket(name);
+  };
+
+  return (
+    <div>
+      <div>{name}</div>
+      <div>{type}</div>
+      <button onClick={handleDeleteSocket}>Delete</button>
+    </div>
+  );
+};
+
+/**
+ * A generator for socket elements.
+ *
+ * @param {Object} props - The props object.
+ * @param {function} props.updateData - The function to update the data.
+ * @param {Object} props.control - An object which contains control parameters.
+ * @param {Array} props.initialValue - Array of initial socket elements.
+ * @returns {JSX.Element} A JSX element rendering the socket generator.
+ */
 const SocketGenerator = ({ updateData, control, initialValue }) => {
-  const [sockets, setSockets] = useState([...initialValue])
-  const { data, dataKey } = control
+  const [sockets, setSockets] = useState(initialValue);
 
   useEffect(() => {
-    if (!initialValue) return
-    const newSockets = initialValue.filter(
-      socket => !data.ignored.some(ignored => ignored.name === socket.name)
-    )
-    
-    setSockets(newSockets)
-  }, [initialValue])
+    if (!initialValue) {
+      return;
+    }
+    const newSockets = initialValue.filter((socket) =>
+      data.ignored.every((ignored) => ignored.name !== socket.name)
+    );
+    setSockets(newSockets);
+  }, [initialValue, data.ignored]);
 
-  const onDelete = name => {
-    const newSockets = sockets.filter(socket => socket.name !== name)
-    setSockets(newSockets)
-    update(newSockets)
-  }
+  const update = (updatedSockets) => {
+    updateData({ [control.dataKey]: updatedSockets });
+  };
 
-  const update = update => {
-    updateData({ [dataKey]: update })
-  }
+  const handleDeleteSocket = (name) => {
+    const newSockets = sockets.filter((socket) => socket.name !== name);
+    setSockets(newSockets);
+    update(newSockets);
+  };
 
-  const addSocket = socket => {
+  const handleAddSocket = (newValue) => {
     const newSocket = {
-      name: socket,
-      taskType: data.taskType,
-      // might also want to camel case any spacing here too
-      socketKey: socket,
-      connectionType: data.connectionType,
-      socketType: data.socketType,
-    }    
+      name: newValue,
+      taskType: control.data.taskType,
+      socketKey: newValue,
+      connectionType: control.data.connectionType,
+      socketType: control.data.socketType,
+    };
+    const newSockets = [newSocket, ...sockets];
 
-    const newSockets = [newSocket, ...sockets]
-
-    setSockets(newSockets)
-    update(newSockets)
-  }
+    setSockets(newSockets);
+    update(newSockets);
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-      <AddNewSocket addSocket={addSocket} />
-      {sockets.map((socket, i) => (
+      <AddNewSocket
+        value={''}
+        onChange={() => setSockets}
+        onAdd={handleAddSocket}
+      />
+      {sockets.map((socket, index) => (
         <SingleElement
+          key={index}
           name={socket.name}
-          key={i}
-          delete={onDelete}
+          delete={handleDeleteSocket}
           type={socket.socketType}
         />
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default SocketGenerator
+export default SocketGenerator;
