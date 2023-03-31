@@ -20,7 +20,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:45](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L45)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:45](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L45)
 
 ## Properties
 
@@ -30,7 +30,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:38](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L38)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:38](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L38)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:40](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L40)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:40](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L40)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:39](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L39)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:39](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L39)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:41](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L41)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:41](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L41)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:42](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L42)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:42](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L42)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:43](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L43)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:43](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L43)
 
 ## Methods
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:70](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L70)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:70](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L70)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:74](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L74)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:74](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L74)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:53](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L53)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:53](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L53)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:82](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L82)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:82](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L82)
 
 ___
 
@@ -182,7 +182,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:78](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L78)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:78](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L78)
 
 ___
 
@@ -203,7 +203,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:117](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L117)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:117](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L117)
 
 ___
 
@@ -224,7 +224,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:101](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L101)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:101](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L101)
 
 ___
 
@@ -245,7 +245,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:113](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L113)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:113](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L113)
 
 ___
 
@@ -266,7 +266,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:105](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L105)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:105](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L105)
 
 ___
 
@@ -287,7 +287,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:109](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L109)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:109](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L109)
 
 ___
 
@@ -307,7 +307,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:233](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L233)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:233](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L233)
 
 ___
 
@@ -328,7 +328,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:86](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L86)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:86](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L86)
 
 ___
 
@@ -352,7 +352,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:186](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L186)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:186](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L186)
 
 ___
 
@@ -375,7 +375,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:123](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L123)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:123](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L123)
 
 ___
 
@@ -399,7 +399,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:199](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L199)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:199](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L199)
 
 ___
 
@@ -424,7 +424,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:210](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L210)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:210](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L210)
 
 ___
 
@@ -448,4 +448,4 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:222](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L222)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:222](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L222)

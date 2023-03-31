@@ -14,7 +14,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:245](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L245)
+[packages/engine/src/lib/types.ts:245](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/types.ts#L245)
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:246](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L246)
+[packages/engine/src/lib/types.ts:246](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/types.ts#L246)
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:239](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L239)
+[packages/engine/src/lib/types.ts:239](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/types.ts#L239)
 
 ## Methods
 
@@ -76,4 +76,4 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:241](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L241)
+[packages/engine/src/lib/types.ts:241](https://github.com/Oneirocom/MagickML/blob/c2f9e060/packages/engine/src/lib/types.ts#L241)
