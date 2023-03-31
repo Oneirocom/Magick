@@ -1,3 +1,4 @@
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { calculateCompletionCost } from '@magickml/cost-calculator'
 import { v4 } from 'uuid'
 import { globalsManager } from '../globals'
@@ -47,6 +48,6 @@ export function saveRequest({
     cost,
     // if spell is json, stringify it
     spell: typeof spell === 'string' ? spell : JSON.stringify(spell),
-    nodeId
+    nodeId,
   })
 }

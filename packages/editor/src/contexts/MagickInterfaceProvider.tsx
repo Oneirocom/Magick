@@ -6,9 +6,11 @@ import {
   OnEditor,
   OnInspector,
   ProcessCode,
-  PublishEditorEvent, runPython, runSpellType,
+  PublishEditorEvent,
+  runPython,
+  runSpellType,
   SpellInterface,
-  SupportedLanguages
+  SupportedLanguages,
 } from '@magickml/engine'
 import { createContext, useContext, useEffect, useRef } from 'react'
 
@@ -62,12 +64,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     $PROCESS,
     $TRIGGER,
     $REFRESH_EVENT_TABLE,
-    $SEND_TO_AVATAR,
   } = events
-
-  const getCurrentSpell = () => {
-    return spellRef.current
-  }
 
   // TODO: tech debt.  Check if this is still needed
   /**
@@ -93,7 +90,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
       if (typeof data === 'string') {
         throw new Error('onInspector: data is a string')
       }
-      callback(data)
+      callback(data as Record<string, unknown>)
     })
   }
 
@@ -131,7 +128,7 @@ const MagickInterfaceProvider = ({ children, tab }) => {
   }
 
   const onDebug: OnDebug = (node, callback) => {
-    return subscribe($DEBUG_INPUT(tab.id, node.id), (event, data) => {
+    return subscribe($DEBUG_INPUT(tab.id), (event, data) => {
       callback(data)
     })
   }
@@ -230,7 +227,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     runSpell,
     refreshEventTable,
     getSpell,
-    getCurrentSpell,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>

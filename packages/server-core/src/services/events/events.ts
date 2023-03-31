@@ -76,7 +76,7 @@ export const event = (app: Application) => {
           if (SKIP_DB_EXTENSIONS) return context
           const { embedding } = context.data
           const { data, service } = context
-          let id = uuidv4()
+          const id = uuidv4()
           //Add UUID for events.
           context.data = {
             [service.id]: id,
