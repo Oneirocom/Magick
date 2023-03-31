@@ -1,22 +1,29 @@
-import Rete from 'rete'
+// GENERATED 
+import Rete from 'rete';
 
-import { DataControl } from '../plugins/inspectorPlugin'
-import { SocketType } from '../sockets'
-import * as sockets from '../sockets'
-import { DataSocketType, OutputComponentData, AsDataSocket } from '../types'
-import { OutputsData } from 'rete/types/core/data'
+import { DataControl } from '../plugins/inspectorPlugin';
+import { SocketType } from '../sockets';
+import * as sockets from '../sockets';
+import { DataSocketType, OutputComponentData, AsDataSocket } from '../types';
+import { OutputsData } from 'rete/types/core/data';
 
+/**
+ * OutputGeneratorControl class is used to generate data output controls
+ */
 export class OutputGeneratorControl extends DataControl {
-  // outputs: OutputsData & DataSocketType[]
-  socketType: SocketType
+  socketType: SocketType;
   declare options: {
-    dataKey: string
-    name: string
-    component: string
-    icon: string
-    data: OutputComponentData
-  }
+    dataKey: string;
+    name: string;
+    component: string;
+    icon: string;
+    data: OutputComponentData;
+  };
 
+  /**
+   * Constructor for OutputGeneratorControl class
+   * @param {OutputComponentData} options - OutputComponentData object
+   */
   constructor({
     socketType = 'anySocket',
     taskType = 'output',
@@ -33,72 +40,67 @@ export class OutputGeneratorControl extends DataControl {
         socketType,
         taskType,
       },
-    }
+    };
 
-    super(options)
-    this.socketType = socketType
+    super(options);
+    this.socketType = socketType;
   }
-  onData(outputs: OutputsData & DataSocketType[] = ([] as unknown as OutputsData & DataSocketType[])) {
-    if (this.node === null) return console.error('Node is null')
-    this.node.data.outputs = outputs
 
-    const existingOutputs: string[] = []
-    const ignored: string[] =
-      this?.control?.data?.ignored?.map(output => output.name) || []
+  /**
+   * onData function handles the outputs on Node data
+   * @param {OutputsData & DataSocketType[] | undefined} outputs
+   */
+  onData(outputs: OutputsData & DataSocketType[] = ([] as unknown as OutputsData & DataSocketType[])) {
+    if (this.node === null) return console.error('Node is null');
+    this.node.data.outputs = outputs;
+
+    const existingOutputs: string[] = [];
+    const ignored: string[] = this?.control?.data?.ignored?.map(output => output.name) || [];
 
     this.node.outputs.forEach(out => {
-      existingOutputs.push(out.key)
-    })
+      existingOutputs.push(out.key);
+    });
 
-    // Any outputs existing on the current node that arent incoming have been deleted
-    // and need to be removed.
+    // Remove disconnected outputs
     existingOutputs
       .filter(existing => !outputs.some(incoming => incoming.name === existing))
       .filter(existing => ignored.some(out => out !== existing))
       .forEach(key => {
-        if (this.node === null) return console.error('Node is null')
-        const output = this.node.outputs.get(key)
+        if (this.node === null) return console.error('Node is null');
+        const output = this.node.outputs.get(key);
 
         this.node
           .getConnections()
           .filter(con => con.output.key === key)
           .forEach(con => {
-            this.editor?.removeConnection(con)
-          })
+            this.editor?.removeConnection(con);
+          });
 
-        if (output === undefined) return console.error('Output is undefined')
-        this.node.removeOutput(output)
-        delete this.component?.task.outputs[key]
-      })
+        if (output === undefined) return console.error('Output is undefined');
+        this.node.removeOutput(output);
+        delete this.component?.task.outputs[key];
+      });
 
-    // any incoming outputs not already on the node are new and will be added.
-    const newOutputs = outputs.filter(
-      out => !existingOutputs.includes(out.name)
-    )
+    // Add new outputs
+    const newOutputs = outputs.filter(out => !existingOutputs.includes(out.name));
 
-    // Here we are running over and ensuring that the outputs are in the task
-    if (this.component === null)
-      return console.error('Component is null')
+    // Ensure outputs are in the task
+    if (this.component === null) return console.error('Component is null');
     this.component.task.outputs = AsDataSocket(this.node.data.outputs)?.reduce(
       (acc, out) => {
-        acc[out.name] = out.taskType || 'output'
-        return acc
+        acc[out.name] = out.taskType || 'output';
+        return acc;
       },
       { ...this.component.task.outputs }
-    )
+    );
 
-    // From these new outputs, we iterate and add an output socket to the node
+    // Add output sockets to the node
     newOutputs.forEach(output => {
-      const newOutput = new Rete.Output(
-        output.name,
-        output.name,
-        sockets[output.socketType]
-      )
-      if (this.node === null)
-        return console.error('Node is null')
-      this.node.addOutput(newOutput)
-    })
+      const newOutput = new Rete.Output(output.name, output.name, sockets[output.socketType]);
+      if (this.node === null) return console.error('Node is null');
+      this.node.addOutput(newOutput);
+    });
 
-    this.node.update()
+    this.node.update();
   }
 }
