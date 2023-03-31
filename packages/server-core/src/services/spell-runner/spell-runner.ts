@@ -1,21 +1,32 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
-import type { Application } from '../../declarations'
-import { checkForSpellInManager } from '../../hooks/spellmanagerHooks'
-import { SpellRunnerService } from './spell-runner.class'
+// DOCUMENTED 
+/**
+ * This module provides a configure function that registers the spell-runner service and its hooks on a Feathers application instance.
+ * @packageDocumentation
+ */
 
-export * from './spell-runner.class'
+import type { Application } from '../../declarations';
+import { checkForSpellInManager } from '../../hooks/spellmanagerHooks';
+import { SpellRunnerService } from './spell-runner.class';
 
-// A configure function that registers the service and its hooks via `app.configure`
-export const spellRunner = (app: Application) => {
-  // Register our service on the Feathers application
+/**
+ * Exports all members of the `SpellRunnerService` module.
+ */
+export * from './spell-runner.class';
+
+/**
+ * Configures a Feathers application instance by registering the `spell-runner` service and its hooks on it.
+ * @param app The Feathers application instance.
+ */
+export const spellRunner = (app: Application): void => {
+  // Register the `spell-runner` service
   app.use('spell-runner', new SpellRunnerService(), {
     // A list of all methods this service exposes externally
     methods: ['get', 'create', 'update'],
     // You can add additional custom events to be sent to clients here
     events: [],
-  })
+  });
 
-  // Initialize hooks
+  // Initialize hooks for the `spell-runner` service
   app.service('spell-runner').hooks({
     around: {
       all: [],
@@ -23,9 +34,7 @@ export const spellRunner = (app: Application) => {
     before: {
       all: [],
       get: [],
-      create: [
-        // checkForSpellInManager
-      ],
+      create: [checkForSpellInManager], // Only check for the spell in the manager before creating it.
       update: [],
     },
     after: {
@@ -34,12 +43,14 @@ export const spellRunner = (app: Application) => {
     error: {
       all: [],
     },
-  })
-}
+  });
+};
 
-// Add this service to the service type index
+/**
+ * Augments the `ServiceTypes` interface of the Feathers application so that it includes the `spell-runner` service.
+ */
 declare module '../../declarations' {
   interface ServiceTypes {
-    'spell-runner': SpellRunnerService
+    'spell-runner': SpellRunnerService;
   }
 }

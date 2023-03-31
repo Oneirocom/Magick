@@ -1,9 +1,19 @@
-// todo remove this and make a new event table component eventually.
-//@ts-nocheck
+// DOCUMENTED 
+// Import statements kept as-is
 import { Button } from '@magickml/client-core'
 import { API_ROOT_URL } from '@magickml/engine'
 import {
-  Grid, IconButton, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
+  Grid,
+  IconButton,
+  Pagination,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from '@mui/material'
 import axios from 'axios'
 import _ from 'lodash'
@@ -13,12 +23,20 @@ import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
 import { VscArrowDown, VscArrowUp, VscTrash } from 'react-icons/vsc'
 import {
-  useAsyncDebounce, useFilters, useGlobalFilter, usePagination,
+  useAsyncDebounce,
+  useFilters,
+  useGlobalFilter,
+  usePagination,
   useSortBy,
-  useTable
+  useTable,
 } from 'react-table'
 import { useConfig } from '../../contexts/ConfigProvider'
 
+/**
+ * GlobalFilter component for applying search filter on the whole table.
+ * @param {{ globalFilter: any, setGlobalFilter: Function }} param0
+ * @returns JSX.Element
+ */
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter)
   const onChange = useAsyncDebounce(value => {
@@ -38,9 +56,12 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   )
 }
 
-const DefaultColumnFilter = ({
-  column: { filterValue, setFilter, Header },
-}) => {
+/**
+ * DefaultColumnFilter component for applying filter on each column.
+ * @param {{ column: { filterValue: any, setFilter: Function, Header: string } }} param0
+ * @returns JSX.Element
+ */
+const DefaultColumnFilter = ({ column: { filterValue, setFilter, Header } }) => {
   return (
     <input
       type="text"
@@ -52,17 +73,22 @@ const DefaultColumnFilter = ({
       style={{
         width: '100%',
         border: 0,
-        // 0 radius
         borderRadius: 0,
       }}
     />
   )
 }
 
+/**
+ * EventTable component for displaying events in a table with sorting, filtering, and pagination.
+ * @param {{ events: any[], updateCallback: Function }} param0
+ * @returns JSX.Element
+ */
 function EventTable({ events, updateCallback }) {
   const { enqueueSnackbar } = useSnackbar()
   const config = useConfig()
 
+  // Define table columns
   const columns = useMemo(
     () => [
       {
@@ -122,6 +148,7 @@ function EventTable({ events, updateCallback }) {
     []
   )
 
+  // Update event function
   const updateEvent = async ({ id, ...rowData }, columnId, value) => {
     const reqBody = {
       ...rowData,
@@ -136,6 +163,7 @@ function EventTable({ events, updateCallback }) {
     }
   }
 
+  // Editable cell component
   const EditableCell = ({
     value = '',
     row: { original: row },
@@ -156,11 +184,13 @@ function EventTable({ events, updateCallback }) {
     )
   }
 
+  // Set default column properties
   const defaultColumn = {
     Cell: EditableCell,
     Filter: DefaultColumnFilter,
   }
 
+  // Initialize the table with hooks
   const {
     getTableProps,
     getTableBodyProps,
@@ -185,11 +215,13 @@ function EventTable({ events, updateCallback }) {
     usePagination
   )
 
+  // Handle pagination
   const handlePageChange = (page: number) => {
     const pageIndex = page - 1
     gotoPage(pageIndex)
   }
 
+  // Handle event deletion
   const handleEventDelete = async (event: any) => {
     const isDeleted = await fetch(`${API_ROOT_URL}/events/${event.id}`, {
       method: 'DELETE',
@@ -199,11 +231,13 @@ function EventTable({ events, updateCallback }) {
     updateCallback()
   }
 
+  // Get the original rows data
   const originalRows = useMemo(
     () => flatRows.map(row => row.original),
     [flatRows]
   )
 
+  // Render the table with useMemo
   return (
     <Stack spacing={2}>
       <Grid container justifyContent="left" style={{ padding: '1em' }}>

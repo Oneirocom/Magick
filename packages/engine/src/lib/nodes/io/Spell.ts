@@ -1,5 +1,3 @@
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { Agent } from '@magickml/server-core'
 import isEqual from 'lodash/isEqual'
 import Rete from 'rete'
 
@@ -295,6 +293,7 @@ export class SpellComponent extends MagickComponent<
     }, {} as Record<string, unknown>)
   }
 
+  // @ts-ignore
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
@@ -305,7 +304,7 @@ export class SpellComponent extends MagickComponent<
       secrets,
       publicVariables,
     }: {
-      module: { agent: Agent; outputs: ModuleWorkerOutput[] }
+      module: { agent: any; outputs: ModuleWorkerOutput[] }
       magick: EngineContext
       secrets: Record<string, string>
       publicVariables: Record<string, string>
@@ -314,19 +313,13 @@ export class SpellComponent extends MagickComponent<
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
 
-    console.log('running spell')
-
     if (module.agent) {
-      console.log('running on agent', module.agent.id)
       const spellManager = module.agent.spellManager as SpellManager
       if (spellManager) {
-        console.log('spellManager is real')
         const spellRunner = await spellManager.getSpellRunner(
           node.data.spellId as string
         )
         if (spellRunner) {
-          console.log('running spellRunner')
-          console.log('flattenedInputs', flattenedInputs)
           const obj = {
             inputs: flattenedInputs,
             runSubspell: false,
@@ -335,9 +328,8 @@ export class SpellComponent extends MagickComponent<
             publicVariables:
               (module.agent.publicVariables as any) ?? (publicVariables as any),
           }
-          console.log('obj', obj)
+
           const outputs = await spellRunner.runComponent(obj)
-          console.log('ran, outputs are', outputs)
           return this.formatOutputs(node, outputs as any)
         } else {
           console.warn('spell runner not found')

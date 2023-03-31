@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { defineConfig } from 'vite'
 
 import viteTsConfigPaths from 'vite-tsconfig-paths'
@@ -46,10 +45,14 @@ export default defineConfig({
       },
       // Enable esbuild polyfill plugins
       plugins: [
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         NodeGlobalsPolyfillPlugin({
           process: true,
           buffer: true,
         }),
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         NodeModulesPolyfillPlugin(),
       ],
     },
@@ -67,9 +70,11 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
       plugins: [rollupNodePolyFill()],
       // External packages that should not be bundled into your library.
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      external: ['react', 'react-dom', 'react/jsx-runtime', 'rete', 'rete/types/core/data'],
     },
   },
 })

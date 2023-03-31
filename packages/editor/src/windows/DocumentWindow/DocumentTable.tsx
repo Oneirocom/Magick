@@ -1,41 +1,56 @@
-import { Button, Modal } from '@magickml/client-core'
-import { API_ROOT_URL } from '@magickml/engine'
+// DOCUMENTED 
+import { Button, Modal } from '@magickml/client-core';
+import { API_ROOT_URL } from '@magickml/engine';
 import {
   Grid, IconButton, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField
-} from '@mui/material'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import _ from 'lodash'
-import { useSnackbar } from 'notistack'
-import { useEffect, useMemo, useState } from 'react'
-import { CSVLink } from 'react-csv'
-import { FaFileCsv } from 'react-icons/fa'
-import { VscArrowDown, VscArrowUp, VscTrash } from 'react-icons/vsc'
+} from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import _ from 'lodash';
+import { useSnackbar } from 'notistack';
+import { useEffect, useMemo, useState } from 'react';
+import { CSVLink } from 'react-csv';
+import { FaFileCsv } from 'react-icons/fa';
+import { VscArrowDown, VscArrowUp, VscTrash } from 'react-icons/vsc';
 import {
   Row, useAsyncDebounce, useFilters, useGlobalFilter, usePagination,
   useSortBy,
-  useTable
-} from 'react-table'
-import { useConfig } from '../../contexts/ConfigProvider'
+  useTable,
+} from 'react-table';
+import { useConfig } from '../../contexts/ConfigProvider';
 
+/**
+ * The global filter component for searching documents within the table.
+ * @param {object} props - The properties of the component.
+ * @returns {JSX.Element} The rendered component.
+ */
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
-  const [value, setValue] = useState(globalFilter)
+  // State
+  const [value, setValue] = useState(globalFilter);
+
+  // Debounced onChange
   const onChange = useAsyncDebounce(value => {
-    setGlobalFilter(value || undefined)
-  }, 500)
+    setGlobalFilter(value || undefined);
+  }, 500);
+
   return (
     <input
       type="text"
       value={value || ''}
       onChange={e => {
-        setValue(e.target.value)
-        onChange(e.target.value)
+        setValue(e.target.value);
+        onChange(e.target.value);
       }}
       placeholder="Search documents..."
       style={{ width: '40em', border: 0, margin: 0 }}
     />
-  )
-}
+  );
+};
 
+/**
+ * The default column filter component.
+ * @param {object} props - The properties of the component.
+ * @returns {JSX.Element} The rendered component.
+ */
 const DefaultColumnFilter = ({
   column: { filterValue, setFilter, Header },
 }) => {
@@ -44,7 +59,7 @@ const DefaultColumnFilter = ({
       type="text"
       value={filterValue || ''}
       onChange={e => {
-        setFilter(e.target.value || undefined)
+        setFilter(e.target.value || undefined);
       }}
       placeholder={Header}
       style={{
@@ -54,13 +69,20 @@ const DefaultColumnFilter = ({
         borderRadius: 0,
       }}
     />
-  )
-}
+  );
+};
 
+/**
+ * The document table component for displaying, editing and deleting documents.
+ * @param {object} props - The properties of the component.
+ * @returns {JSX.Element} The rendered component.
+ */
 function DocumentTable({ documents, updateCallback }) {
-  const { enqueueSnackbar } = useSnackbar()
-  const config = useConfig()
+  // Snackbar and configuration context
+  const { enqueueSnackbar } = useSnackbar();
+  const config = useConfig();
 
+  // Column definition
   const columns = useMemo(
     () => [
       {
@@ -101,14 +123,15 @@ function DocumentTable({ documents, updateCallback }) {
       },
     ],
     []
-  )
+  );
 
+  // Update document in API
   const updateDocument = async ({ id, ...rowData }, columnId, value) => {
     const reqBody = {
       ...rowData,
       [columnId]: value,
       projectId: config.projectId,
-    }
+    };
     if (!_.isEqual(reqBody, rowData)) {
       const resp = await fetch(`${API_ROOT_URL}/documents/${id}`, {
         method: 'PATCH',
@@ -116,41 +139,46 @@ function DocumentTable({ documents, updateCallback }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(reqBody),
-      })
+      });
 
-      const json = await resp.json()
+      const json = await resp.json();
 
-      if (json) enqueueSnackbar('Document updated', { variant: 'success' })
-      else enqueueSnackbar('Error updating event', { variant: 'error' })
-      updateCallback()
+      if (json) enqueueSnackbar('Document updated', { variant: 'success' });
+      else enqueueSnackbar('Error updating event', { variant: 'error' });
+      updateCallback();
     }
-  }
+  };
 
+  // Editable cell component
   const EditableCell = ({
     value = '',
     row: { original: row },
     column: { id },
     updateDocument,
   }) => {
-    const [val, setVal] = useState(value)
-    const onChange = e => typeof val !== 'object' && setVal(e.target.value)
-    const onBlur = e => updateDocument(row, id, val)
-    useEffect(() => setVal(value), [value])
+    const [val, setVal] = useState(value);
+    const onChange = e => typeof val !== 'object' && setVal(e.target.value);
+    const onBlur = e => updateDocument(row, id, val);
+    useEffect(() => setVal(value), [value]);
     return (
       <input
-        value={val && typeof val === 'object' ? JSON.stringify(val.data) : val}
+        value={
+          val && typeof val === 'object' ? JSON.stringify(val.data) : val
+        }
         onChange={onChange}
         onBlur={onBlur}
         className="bare-input"
       />
-    )
-  }
+    );
+  };
 
+  // Default column properties
   const defaultColumn = {
     Cell: EditableCell,
     Filter: DefaultColumnFilter,
-  }
+  };
 
+  // Table instance
   const {
     getTableProps,
     getTableBodyProps,
@@ -172,37 +200,44 @@ function DocumentTable({ documents, updateCallback }) {
     useFilters,
     useGlobalFilter,
     useSortBy,
-    usePagination
-  ) as any
+    usePagination,
+  ) as any;
 
+  // Pagination
   const handlePageChange = (page: number) => {
-    const pageIndex = page - 1
-    gotoPage(pageIndex)
-  }
+    const pageIndex = page - 1;
+    gotoPage(pageIndex);
+  };
 
+  // Handle deletion of document
   const handleDatabaseDelete = async (event: any) => {
     const isDeleted = await fetch(`${API_ROOT_URL}/documents/${event.id}`, {
       method: 'DELETE',
-    })
-    if (isDeleted) enqueueSnackbar('Document deleted', { variant: 'success' })
-    else enqueueSnackbar('Error deleting document', { variant: 'error' })
-    updateCallback()
-  }
+    });
+    if (isDeleted) {
+      enqueueSnackbar('Document deleted', { variant: 'success' });
+    } else {
+      enqueueSnackbar('Error deleting document', { variant: 'error' });
+    }
+    updateCallback();
+  };
 
   const originalRows = useMemo(
     () => flatRows.map(row => row.original),
-    [flatRows]
-  )
+    [flatRows],
+  );
 
-  const [createMode, setCreateMode] = useState(false)
+  // Create mode state
+  const [createMode, setCreateMode] = useState(false);
 
+  // Show create modal
   const showCreateModal = () => {
-    setCreateMode(true)
-  }
+    setCreateMode(true);
+  };
 
+  // Handle save action
   const handleSave = async () => {
-    console.log('saving', newDocument)
-    // call documents endpoint, post to fetch
+    // call documents endpoint
     const result = await fetch(`${API_ROOT_URL}/documents`, {
       method: 'POST',
       headers: {
@@ -212,7 +247,8 @@ function DocumentTable({ documents, updateCallback }) {
         ...newDocument,
         projectId: config.projectId,
       }),
-    })
+    });
+
     // reset newDocument
     setNewDocument({
       type: '',
@@ -221,12 +257,13 @@ function DocumentTable({ documents, updateCallback }) {
       projectId: '',
       date: '',
       embedding: '',
-    })
-    updateCallback()
-    console.log('result', result)
-    return result
-  }
+    });
+    updateCallback();
 
+    return result;
+  };
+
+  // State for new document
   const [newDocument, setNewDocument] = useState({
     type: '',
     owner: '',
@@ -234,7 +271,7 @@ function DocumentTable({ documents, updateCallback }) {
     projectId: '',
     date: new Date().toISOString(),
     embedding: '',
-  })
+  });
 
   return (
     <>
@@ -270,7 +307,8 @@ function DocumentTable({ documents, updateCallback }) {
           />
           <DatePicker
             label="Date"
-            onChange={date => setNewDocument({ ...newDocument, date: date.toISOString() })}
+            onChange={date =>
+              setNewDocument({ ...newDocument, date: date.toISOString() })}
           />
           <TextField
             label="Embedding"
@@ -285,7 +323,7 @@ function DocumentTable({ documents, updateCallback }) {
       <Stack spacing={2}>
         <Grid container justifyContent="left" style={{ padding: '1em' }}>
           <GlobalFilter
-            globalFilter={(state as any).globalFilter} // typing is wrong for this?
+            globalFilter={state.globalFilter}
             setGlobalFilter={setGlobalFilter}
           />
           <Button
@@ -398,7 +436,7 @@ function DocumentTable({ documents, updateCallback }) {
             </TableHead>
             <TableBody {...getTableBodyProps()}>
               {page.map((row: Row<object>, idx: number) => {
-                prepareRow(row)
+                prepareRow(row);
                 return (
                   <TableRow {...row.getRowProps()} key={idx}>
                     {row.cells.map((cell, idx) => (
@@ -407,7 +445,7 @@ function DocumentTable({ documents, updateCallback }) {
                       </TableCell>
                     ))}
                   </TableRow>
-                )
+                );
               })}
             </TableBody>
           </Table>
@@ -421,7 +459,7 @@ function DocumentTable({ documents, updateCallback }) {
         />
       </Stack>
     </>
-  )
+  );
 }
 
-export default DocumentTable
+export default DocumentTable;

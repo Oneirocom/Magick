@@ -33,7 +33,6 @@ import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
 import { Request } from './io/Request'
 import { SpellComponent } from './io/Spell'
-import { TriggerOut } from './io/TriggerOut'
 import { InRange } from './number/InRange'
 import { NumberVariable } from './number/NumberVariable'
 import { ComposeObject } from './object/ComposeObject'
@@ -95,7 +94,6 @@ export const components = {
   moduleComponent: () => new SpellComponent(),
   output: () => new Output(),
   switchGate: () => new SwitchGate(),
-  triggerOut: () => new TriggerOut(),
   waitForAll: () => new WaitForAll(),
   exclusiveGate: () => new ExclusiveGate(),
   merge: () => new Merge(),

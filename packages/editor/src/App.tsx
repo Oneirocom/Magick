@@ -1,12 +1,15 @@
-import * as React from 'react'
-import './App.css'
+// DOCUMENTED 
+/**
+ * A functional component that renders the 'Routes' component.
+ */
+import React from 'react';
+import Routes from './routes';
+import './App.css';
 
-import Routes from './routes'
-
-function App() {
+function App(): JSX.Element {
   return (
-      <Routes />
-  )
+    <Routes />
+  );
 }
 
-export default App
+export default App;

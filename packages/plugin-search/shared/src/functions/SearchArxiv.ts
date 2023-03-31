@@ -1,49 +1,61 @@
+// DOCUMENTED 
 // modified from https://www.npmjs.com/package/arxiv-api
-import axios from 'axios'
-import _ from 'lodash'
-import util from 'util'
-import { parseString } from 'xml2js'
+import axios from "axios";
+import _ from "lodash";
+import util from "util";
+import { parseString } from "xml2js";
 
+/** Allowed prefixes and their meanings */
 const PREFIXES = {
-  ALL: 'all',
-  TI: 'ti', // Title
-  AU: 'au', // Author
-  ABS: 'abs', // Abstract
-  CO: 'co', // Comment
-  JR: 'jr', // Journal Reference
-  CAT: 'cat', // Subject Category
-  RN: 'rn', // Report Number
-}
+  ALL: "all",
+  TI: "ti", // Title
+  AU: "au", // Autor
+  ABS: "abs", // Abstract
+  CO: "co", // Comment
+  JR: "jr", // Journal Reference
+  CAT: "cat", // Subject Category
+  RN: "rn", // Report Number
+};
 
+/** Query logic operators */
 const SEPARATORS = {
-  AND: '+AND+',
-  OR: '+OR+',
-  ANDNOT: '+ANDNOT+',
-}
+  AND: "+AND+",
+  OR: "+OR+",
+  ANDNOT: "+ANDNOT+",
+};
 
+/** Criteria to order the results */
 const SORT_BY = {
-  RELEVANCE: 'relevance',
-  LAST_UPDATED_DATE: 'lastUpdatedDate',
-  SUBMITTED_DATE: 'submittedDate',
-}
+  RELEVANCE: "relevance",
+  LAST_UPDATED_DATE: "lastUpdatedDate",
+  SUBMITTED_DATE: "submittedDate",
+};
 
+/** Order to sort the results */
 const SORT_ORDER = {
-  ASCENDING: 'ascending',
-  DESCENDING: 'descending',
-}
+  ASCENDING: "ascending",
+  DESCENDING: "descending",
+};
 
-module.exports = {
-  PREFIXES,
-  SEPARATORS,
-  SORT_BY,
-  SORT_ORDER,
-}
+export { PREFIXES, SEPARATORS, SORT_BY, SORT_ORDER };
 
-const parseStringPromisified = util.promisify(parseString)
+const parseStringPromisified = util.promisify(parseString);
 
-const getArxivUrl = ({ searchQuery, sortBy, sortOrder, start, maxResults }) =>
-  `http://export.arxiv.org/api/query?search_query=${searchQuery}&start=${start}&max_results=${maxResults}${sortBy ? `&sortBy=${sortBy}` : ''
-  }${sortOrder ? `&sortOrder=${sortOrder}` : ''}`
+/**
+ * Generate the arXiv URL for the search query
+ * @param {object} searchQuery,sortBy,sortOrder,start,maxResults
+ * @returns {string} Arxiv URL
+ */
+const getArxivUrl = ({
+  searchQuery,
+  sortBy,
+  sortOrder,
+  start,
+  maxResults,
+}) =>
+  `http://export.arxiv.org/api/query?search_query=${searchQuery}&start=${start}&max_results=${maxResults}${
+    sortBy ? `&sortBy=${sortBy}` : ""
+  }${sortOrder ? `&sortOrder=${sortOrder}` : ""}`;
 
 /**
  * Parse arXiv entry object.
@@ -52,19 +64,15 @@ const getArxivUrl = ({ searchQuery, sortBy, sortOrder, start, maxResults }) =>
  */
 function parseArxivObject(entry: unknown) {
   return {
-    id: _.get(entry, 'id[0]', ''),
-    title: _.get(entry, 'title[0]', ''),
-    summary: _.get(entry, 'summary[0]', '').trim(),
-    authors: _.get(entry, 'author', []).map(
-      (author: { name: string }) => author.name
-    ),
-    links: _.get(entry, 'link', []).map((link: { $: string }) => link.$),
-    published: _.get(entry, 'published[0]', ''),
-    updated: _.get(entry, 'updated[0]', ''),
-    categories: _.get(entry, 'category', []).map(
-      (category: { $: string }) => category.$
-    ),
-  }
+    id: _.get(entry, "id[0]", ""),
+    title: _.get(entry, "title[0]", ""),
+    summary: _.get(entry, "summary[0]", "").trim(),
+    authors: _.get(entry, "author", []).map((author: { name: string }) => author.name),
+    links: _.get(entry, "link", []).map((link: { $: string }) => link.$),
+    published: _.get(entry, "published[0]", ""),
+    updated: _.get(entry, "updated[0]", ""),
+    categories: _.get(entry, "category", []).map((category: { $: string }) => category.$),
+  };
 }
 
 /**
@@ -76,12 +84,12 @@ function parseArxivObject(entry: unknown) {
  */
 function parseTag({ name, prefix = PREFIXES.ALL }) {
   if (!_.isString(name) || _.isEmpty(name)) {
-    return console.error('you must specify tag name')
+    return console.error("you must specify tag name");
   }
   if (!Object.values(PREFIXES).includes(prefix)) {
-    return console.error(`unsupported prefix: ${prefix}`)
+    return console.error(`unsupported prefix: ${prefix}`);
   }
-  return `${prefix}:${name}`
+  return `${prefix}:${name}`;
 }
 
 /**
@@ -91,19 +99,21 @@ function parseTag({ name, prefix = PREFIXES.ALL }) {
  */
 function parseTags({ include, exclude = [] }) {
   if (!Array.isArray(include) || !Array.isArray(exclude)) {
-    return console.error('include and exclude must be arrays')
+    return console.error("include and exclude must be arrays");
   }
   if (include.length === 0) {
-    return console.error('include is a mandatory field')
+    return console.error("include is a mandatory field");
   }
-  return `${include.map(parseTag).join(SEPARATORS.AND)}${exclude.length > 0 ? SEPARATORS.ANDNOT : ''
-    }${exclude.map(parseTag).join(SEPARATORS.ANDNOT)}`
+  return `${include
+    .map(parseTag)
+    .join(SEPARATORS.AND)}${exclude.length > 0
+    ? SEPARATORS.ANDNOT
+    : ""}${exclude.map(parseTag).join(SEPARATORS.ANDNOT)}`;
 }
 
 /**
  * Fetch data from arXiv API
  * @async
- * @param {{searchQueryParams: Array.<{include: Array, exclude: Array}>, start: number, maxResults: number}} args
  * @param {Array} searchQueryParams - array of search query.
  * @param {string} sortBy - can be "relevance", "lastUpdatedDate", "submittedDate".
  * @param {string} sortOrder - can be either "ascending" or "descending".
@@ -119,61 +129,76 @@ async function search({
   maxResults = 10,
 }) {
   if (!Array.isArray(searchQueryParams)) {
-    return console.error('query param must be an array')
+    return console.error("query param must be an array");
   }
-  if (sortBy && !Object.values(SORT_BY).includes(sortBy)) {
+  if (
+    sortBy &&
+    !Object.values(SORT_BY).includes(sortBy)
+  ) {
     return console.error(
       `unsupported sort by option. should be one of: ${Object.values(
         SORT_BY
-      ).join(' ')}`
-    )
+      ).join(" ")}`
+    );
   }
-  if (sortOrder && !Object.values(SORT_ORDER).includes(sortOrder)) {
+  if (
+    sortOrder &&
+    !Object.values(SORT_ORDER).includes(sortOrder)
+  ) {
     return console.error(
       `unsupported sort order option. should be one of: ${Object.values(
         SORT_ORDER
-      ).join(' ')}`
-    )
+      ).join(" ")}`
+    );
   }
-  const searchQuery = searchQueryParams.map(parseTags).join(SEPARATORS.OR)
+  const searchQuery = searchQueryParams
+    .map(parseTags)
+    .join(SEPARATORS.OR);
   const response = await axios.get(
-    getArxivUrl({ searchQuery, sortBy, sortOrder, start, maxResults })
-  )
-  const parsedData = await parseStringPromisified(response.data)
-  return _.get(parsedData, 'feed.entry', []).map(parseArxivObject)
+    getArxivUrl({
+      searchQuery,
+      sortBy,
+      sortOrder,
+      start,
+      maxResults,
+    })
+  );
+  const parsedData = await parseStringPromisified(response.data);
+
+  return _.get(parsedData, "feed.entry", []).map(parseArxivObject);
 }
 
-
-(async (includeQueries, excludeQueries) => {
-// TODO: this function never receives any parameters
+(async () => {
   const papers = await search({
     searchQueryParams: [
       {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        include: (includeQueries as any).map((query: any) => {
-          return { name: query }
-        }),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        exclude: (excludeQueries as any).map((query: any) => {
-          return { name: query }
-        }),
+        include: [],
+        exclude: [],
       },
     ],
     start: 0,
     maxResults: 10,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as any)
-  if (papers)
+  });
+
+  if (papers) {
     for (const article in papers) {
-      console.log(papers[article].title)
+      console.log(papers[article].title);
     }
+  }
 
-  console.log(papers)
-})()
+  console.log(papers);
+})();
 
+/**
+ * Get an article using the semanticscholar API
+ * @async
+ * @param {string} id - the article's id
+ * @returns {Promise} The requested article
+ */
 export async function getArticle(id: string) {
-  // ID is expected to be in [S2PaperId | DOI | ArXivId]
-  const response = await fetch(`https://api.semanticscholar.org/v1/paper/${id}`)
-  const data = await response.text()
-  return JSON.parse(data)
+  const response = await fetch(
+    `https://api.semanticscholar.org/v1/paper/${id}`
+  );
+  const data = await response.text();
+  return JSON.parse(data);
 }

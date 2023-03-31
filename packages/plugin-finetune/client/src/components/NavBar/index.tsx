@@ -1,13 +1,29 @@
-import React from 'react'
-import MagickLogo from './Magick-purple-logo.png'
-import css from './tabBar.module.css'
-import Button from '@mui/material/Button'
-import useAuthentication from '../../account/useAuthentication'
-import { useNavigate } from 'react-router-dom'
+// DOCUMENTED 
+/**
+ * @module NavBar
+ **/
 
-const NavBar = () => {
-  const { isSignedIn, signOut } = useAuthentication()
-  const navigate = useNavigate()
+import React from 'react';
+import MagickLogo from './Magick-purple-logo.png';
+import css from './tabBar.module.css';
+import Button from '@mui/material/Button';
+import useAuthentication from '../../account/useAuthentication';
+import { useNavigate } from 'react-router-dom';
+
+/**
+ * Navigation bar component
+ *
+ * @returns Navigation bar
+ */
+const NavBar: React.FC = (): JSX.Element => {
+  const { isSignedIn, signOut } = useAuthentication();
+  const navigate = useNavigate();
+
+  /**
+   * Renders Navigation bar component
+   *
+   * @returns Navigation bar
+   */
   return (
     <div className={css['th-tabbar']}>
       {isSignedIn && (
@@ -19,7 +35,7 @@ const NavBar = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default NavBar
+export default NavBar;

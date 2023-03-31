@@ -1,17 +1,22 @@
+// DOCUMENTED 
 import { v4 as uuidv4 } from 'uuid'
 import {
   createSlice,
-  // PayloadAction,
   createDraftSafeSelector,
   createEntityAdapter,
 } from '@reduxjs/toolkit'
 
 import { RootState } from './store'
 import defaultJson from '../data/layouts/defaultLayout.json'
-// Used to set workspaces to tabs
+
+// Workspace map for initializing tabs with layout data
 const workspaceMap = {
   default: defaultJson,
 }
+
+/**
+ * Tab interface representing a tab object
+ */
 export interface Tab {
   id: string
   name: string
@@ -19,21 +24,21 @@ export interface Tab {
   active: boolean
   layoutJson: Record<string, unknown>
   type?: 'spell'
-  // probably going to need to insert a proper spell type in here
   spell?: string
-  spellName:string
-  // this will also be a ref to a property somewhere else
+  spellName: string
   module: string
 }
 
-// Entity adapter
+// Entity adapter for tabs
 const tabAdapater = createEntityAdapter<Tab>()
 const tabSelectors = tabAdapater.getSelectors()
 
-// Initial State
+// Initial State for tabs
 const initialState = tabAdapater.getInitialState()
 
-// Selectors
+/**
+ * Selects the active tab from the given tabs array.
+ */
 const _activeTabSelector = createDraftSafeSelector(
   tabSelectors.selectAll,
   tabs => {
@@ -41,26 +46,33 @@ const _activeTabSelector = createDraftSafeSelector(
   }
 )
 
-/* const selectTabBySpellId = createDraftSafeSelector(
-  [state => tabSelectors.selectAll(state), (_, spellName) => spellName],
-  (tabs, spellName) => Object.values(tabs).find(tab => tab.spellName === spellName)
-) */
+/**
+ * Selects the tab with the specified UUID from the given tabs array.
+ */
 const selectTabBySpellUUID = createDraftSafeSelector(
   [state => tabSelectors.selectAll(state), (_, id) => id],
   (tabs, id) => Object.values(tabs).find(tab => tab.id === id)
 )
 
+/**
+ * Decodes a URI-encoded string and returns the decoded name portion.
+ */
 const encodedToName = (uri: string) => {
   uri = decodeURIComponent(uri)
   return atob(uri.slice(37))
-} 
-
-const encodedToId = (uri: string) => {
-  uri = decodeURIComponent(uri)
-  return uri.slice(0,36)
 }
 
-// Used to build a tab with various defaults set, as well as workspace json and UUID
+/**
+ * Decodes a URI-encoded string and returns the decoded ID portion.
+ */
+const encodedToId = (uri: string) => {
+  uri = decodeURIComponent(uri)
+  return uri.slice(0, 36)
+}
+
+/**
+ * Constructs a new tab object with the specified properties and defaults.
+ */
 const buildTab = (tab, properties = {}) => ({
   ...tab,
   id: encodedToId(tab.name),
@@ -73,11 +85,14 @@ const buildTab = (tab, properties = {}) => ({
   ...properties,
 })
 
-// This is the primary composed of our "duck", and returns a number of helper functions and properties.
+/**
+ * Tab slice containing reducer and actions for managing tabs.
+ */
 export const tabSlice = createSlice({
   name: 'tabs',
   initialState,
   reducers: {
+    // Opens a tab, either creating a new one or switching to the existing tab
     openTab: (state, action) => {
       const switchActive =
         'switchActive' in action.payload ? action.payload.switchActive : true
@@ -89,10 +104,7 @@ export const tabSlice = createSlice({
           changes: { active: false },
         })
 
-      // Check if the tab is already open.
-      //const existingTab = selectTabBySpellId(state, action.payload.spellName)
-
-      const existingTab = selectTabBySpellUUID(state, encodedToId(action.payload.name) )
+      const existingTab = selectTabBySpellUUID(state, encodedToId(action.payload.name))
       if (existingTab && !switchActive) return
 
       if (existingTab && !action.payload.openNew) {
@@ -104,7 +116,6 @@ export const tabSlice = createSlice({
         })
         return
       }
-      //
 
       const tab = buildTab(action.payload, { active: true })
       tabAdapater.addOne(state, tab)
@@ -122,7 +133,7 @@ export const tabSlice = createSlice({
   },
 })
 
-// actions
+// Export actions
 export const {
   openTab,
   closeTab,
@@ -132,7 +143,7 @@ export const {
   changeActive,
 } = tabSlice.actions
 
-// selectors
+// Export selectors
 export const activeTabSelector = (state: RootState) =>
   _activeTabSelector(state.tabs)
 
