@@ -22,7 +22,7 @@ custom_edit_url: null
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | `PluginConstuctor` & { `agentComponents?`: `FC`<`any`\>[] ; `clientPageLayout?`: [`PageLayout`](../modules.md#pagelayout) ; `clientRoutes?`: [`PluginClientRoute`](../modules.md#pluginclientroute)[] ; `drawerItems?`: [`PluginDrawerItem`](../modules.md#plugindraweritem)[] ; `projectTemplates?`: `any`[] ; `spellTemplates?`: { `createdAt?`: `string` ; `graph`: { id: string; nodes: any; } ; `hash`: `string` ; `id`: `string` ; `name`: `string` ; `projectId`: `string` ; `updatedAt?`: `string`  }[]  } |
+| `«destructured»` | `PluginConstuctor` & { `agentComponents?`: `FC`<`any`\>[] ; `clientPageLayout?`: [`PageLayout`](../#pagelayout) ; `clientRoutes?`: [`PluginClientRoute`](../#pluginclientroute)[] ; `drawerItems?`: [`PluginDrawerItem`](../#plugindraweritem)[] ; `projectTemplates?`: `any`[] ; `spellTemplates?`: { `createdAt?`: `string` ; `graph`: { id: string; nodes: any; } ; `hash`: `string` ; `id`: `string` ; `name`: `string` ; `projectId`: `string` ; `updatedAt?`: `string`  }[]  } |
 
 #### Overrides
 
@@ -30,7 +30,7 @@ Plugin.constructor
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:90](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L90)
+[packages/engine/src/lib/plugin.ts:90](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L90)
 
 ## Properties
 
@@ -40,33 +40,33 @@ Plugin.constructor
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:83](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L83)
+[packages/engine/src/lib/plugin.ts:83](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L83)
 
 ___
 
 ### clientPageLayout
 
-• `Optional` **clientPageLayout**: [`PageLayout`](../modules.md#pagelayout)
+• `Optional` **clientPageLayout**: [`PageLayout`](../#pagelayout)
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:85](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L85)
+[packages/engine/src/lib/plugin.ts:85](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L85)
 
 ___
 
 ### clientRoutes
 
-• `Optional` **clientRoutes**: [`PluginClientRoute`](../modules.md#pluginclientroute)[]
+• `Optional` **clientRoutes**: [`PluginClientRoute`](../#pluginclientroute)[]
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:86](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L86)
+[packages/engine/src/lib/plugin.ts:86](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L86)
 
 ___
 
 ### completionProviders
 
-• **completionProviders**: [`CompletionProvider`](../modules.md#completionprovider)[]
+• **completionProviders**: [`CompletionProvider`](../#completionprovider)[]
 
 #### Inherited from
 
@@ -74,23 +74,23 @@ Plugin.completionProviders
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:63](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L63)
+[packages/engine/src/lib/plugin.ts:63](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L63)
 
 ___
 
 ### drawerItems
 
-• `Optional` **drawerItems**: [`PluginDrawerItem`](../modules.md#plugindraweritem)[]
+• `Optional` **drawerItems**: [`PluginDrawerItem`](../#plugindraweritem)[]
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:84](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L84)
+[packages/engine/src/lib/plugin.ts:84](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L84)
 
 ___
 
 ### inputTypes
 
-• **inputTypes**: [`PluginIOType`](../modules.md#pluginiotype)[]
+• **inputTypes**: [`PluginIOType`](../#pluginiotype)[]
 
 #### Inherited from
 
@@ -98,7 +98,7 @@ Plugin.inputTypes
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:60](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L60)
+[packages/engine/src/lib/plugin.ts:60](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L60)
 
 ___
 
@@ -112,13 +112,13 @@ Plugin.name
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:58](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L58)
+[packages/engine/src/lib/plugin.ts:58](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L58)
 
 ___
 
 ### nodes
 
-• **nodes**: [`MagickComponentArray`](../modules.md#magickcomponentarray)<`any`\>
+• **nodes**: [`MagickComponentArray`](../#magickcomponentarray)<`any`\>
 
 #### Inherited from
 
@@ -126,13 +126,13 @@ Plugin.nodes
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:59](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L59)
+[packages/engine/src/lib/plugin.ts:59](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L59)
 
 ___
 
 ### outputTypes
 
-• **outputTypes**: [`PluginIOType`](../modules.md#pluginiotype)[]
+• **outputTypes**: [`PluginIOType`](../#pluginiotype)[]
 
 #### Inherited from
 
@@ -140,7 +140,7 @@ Plugin.outputTypes
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:61](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L61)
+[packages/engine/src/lib/plugin.ts:61](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L61)
 
 ___
 
@@ -150,13 +150,13 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:89](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L89)
+[packages/engine/src/lib/plugin.ts:89](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L89)
 
 ___
 
 ### secrets
 
-• **secrets**: [`PluginSecret`](../modules.md#pluginsecret)[]
+• **secrets**: [`PluginSecret`](../#pluginsecret)[]
 
 #### Inherited from
 
@@ -164,7 +164,7 @@ Plugin.secrets
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:62](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L62)
+[packages/engine/src/lib/plugin.ts:62](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L62)
 
 ___
 
@@ -174,4 +174,4 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:87](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugin.ts#L87)
+[packages/engine/src/lib/plugin.ts:87](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugin.ts#L87)
