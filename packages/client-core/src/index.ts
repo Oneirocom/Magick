@@ -5,12 +5,9 @@
  */
 
 import { ClientPluginManager, pluginManager } from '@magickml/engine'
-import plugins from './plugins'
 import defaultTemplates from './templates'
 
 export * from './components'
-
-console.log('Loading plugins from client-core', Object.keys(plugins))
 
 /**
  * Gets spell templates from plugin manager.
