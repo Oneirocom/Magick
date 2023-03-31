@@ -8,7 +8,7 @@ custom_edit_url: null
 
 ## Hierarchy
 
-- [`EngineContext`](../modules.md#enginecontext)
+- [`EngineContext`](../#enginecontext)
 
   ↳ **`EditorContext`**
 
@@ -28,27 +28,27 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:280](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L280)
+[packages/engine/src/lib/types.ts:280](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L280)
 
 ___
 
 ### completion
 
-• `Optional` **completion**: (`body`: [`CompletionBody`](../modules.md#completionbody)) => `Promise`<[`CompletionResponse`](../modules.md#completionresponse)\>
+• `Optional` **completion**: (`body`: [`CompletionBody`](../#completionbody)) => `Promise`<[`CompletionResponse`](../#completionresponse)\>
 
 #### Type declaration
 
-▸ (`body`): `Promise`<[`CompletionResponse`](../modules.md#completionresponse)\>
+▸ (`body`): `Promise`<[`CompletionResponse`](../#completionresponse)\>
 
 ##### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `body` | [`CompletionBody`](../modules.md#completionbody) |
+| `body` | [`CompletionBody`](../#completionbody) |
 
 ##### Returns
 
-`Promise`<[`CompletionResponse`](../modules.md#completionresponse)\>
+`Promise`<[`CompletionResponse`](../#completionresponse)\>
 
 #### Inherited from
 
@@ -56,13 +56,13 @@ EngineContext.completion
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:197](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L197)
+[packages/engine/src/lib/types.ts:197](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L197)
 
 ___
 
 ### getSpell
 
-• **getSpell**: [`GetSpell`](../modules.md#getspell)
+• **getSpell**: [`GetSpell`](../#getspell)
 
 #### Inherited from
 
@@ -70,43 +70,43 @@ EngineContext.getSpell
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:198](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L198)
+[packages/engine/src/lib/types.ts:198](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L198)
 
 ___
 
 ### onDebug
 
-• **onDebug**: [`OnDebug`](../modules.md#ondebug)
+• **onDebug**: [`OnDebug`](../#ondebug)
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:279](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L279)
+[packages/engine/src/lib/types.ts:279](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L279)
 
 ___
 
 ### onInspector
 
-• **onInspector**: [`OnInspector`](../modules.md#oninspector)
+• **onInspector**: [`OnInspector`](../#oninspector)
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:277](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L277)
+[packages/engine/src/lib/types.ts:277](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L277)
 
 ___
 
 ### onPlaytest
 
-• **onPlaytest**: [`OnEditor`](../modules.md#oneditor)
+• **onPlaytest**: [`OnEditor`](../#oneditor)
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:278](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L278)
+[packages/engine/src/lib/types.ts:278](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L278)
 
 ___
 
 ### onTrigger
 
-• **onTrigger**: (`node`: `string` \| [`MagickNode`](../modules.md#magicknode), `callback`: (`data`: `unknown`) => `void`) => () => `void`
+• **onTrigger**: (`node`: `string` \| [`MagickNode`](../#magicknode), `callback`: (`data`: `unknown`) => `void`) => () => `void`
 
 #### Type declaration
 
@@ -120,7 +120,7 @@ The method should not be used
 
 | Name | Type |
 | :------ | :------ |
-| `node` | `string` \| [`MagickNode`](../modules.md#magicknode) |
+| `node` | `string` \| [`MagickNode`](../#magicknode) |
 | `callback` | (`data`: `unknown`) => `void` |
 
 ##### Returns
@@ -135,13 +135,13 @@ The method should not be used
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:270](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L270)
+[packages/engine/src/lib/types.ts:270](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L270)
 
 ___
 
 ### processCode
 
-• `Optional` **processCode**: [`ProcessCode`](../modules.md#processcode)
+• `Optional` **processCode**: [`ProcessCode`](../#processcode)
 
 #### Inherited from
 
@@ -149,7 +149,7 @@ EngineContext.processCode
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:199](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L199)
+[packages/engine/src/lib/types.ts:199](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L199)
 
 ___
 
@@ -167,13 +167,13 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:281](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L281)
+[packages/engine/src/lib/types.ts:281](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L281)
 
 ___
 
 ### runSpell
 
-• **runSpell**: [`RunSpell`](../modules.md#runspell)<`Record`<`string`, `unknown`\>\>
+• **runSpell**: [`RunSpell`](../#runspell)<`Record`<`string`, `unknown`\>\>
 
 #### Inherited from
 
@@ -181,7 +181,7 @@ EngineContext.runSpell
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:196](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L196)
+[packages/engine/src/lib/types.ts:196](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L196)
 
 ___
 
@@ -205,17 +205,17 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:276](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L276)
+[packages/engine/src/lib/types.ts:276](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L276)
 
 ___
 
 ### sendToInspector
 
-• **sendToInspector**: [`PublishEditorEvent`](../modules.md#publisheditorevent)
+• **sendToInspector**: [`PublishEditorEvent`](../#publisheditorevent)
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:275](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L275)
+[packages/engine/src/lib/types.ts:275](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L275)
 
 ___
 
@@ -239,4 +239,4 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:274](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L274)
+[packages/engine/src/lib/types.ts:274](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L274)

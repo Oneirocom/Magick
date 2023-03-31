@@ -32,7 +32,7 @@ DataControl.constructor
 
 #### Defined in
 
-[packages/engine/src/lib/dataControls/NumberControl.ts:15](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/dataControls/NumberControl.ts#L15)
+[packages/engine/src/lib/dataControls/NumberControl.ts:15](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/dataControls/NumberControl.ts#L15)
 
 ## Properties
 
@@ -46,13 +46,13 @@ DataControl.component
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:11](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L11)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:11](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L11)
 
 ___
 
 ### componentData
 
-• **componentData**: [`ComponentData`](../modules.md#componentdata)<[`TaskType`](../modules.md#tasktype)\>
+• **componentData**: [`ComponentData`](../#componentdata)<[`TaskType`](../#tasktype)\>
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ DataControl.componentData
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:16](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L16)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:16](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L16)
 
 ___
 
@@ -74,13 +74,13 @@ DataControl.componentKey
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:17](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L17)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:17](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L17)
 
 ___
 
 ### data
 
-• **data**: [`ComponentData`](../modules.md#componentdata)<[`TaskType`](../modules.md#tasktype)\>
+• **data**: [`ComponentData`](../#componentdata)<[`TaskType`](../#tasktype)\>
 
 #### Inherited from
 
@@ -88,7 +88,7 @@ DataControl.data
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:23](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L23)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:23](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L23)
 
 ___
 
@@ -102,7 +102,7 @@ DataControl.dataKey
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:13](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L13)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:13](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L13)
 
 ___
 
@@ -116,7 +116,7 @@ DataControl.defaultValue
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:15](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L15)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:15](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L15)
 
 ___
 
@@ -130,7 +130,7 @@ DataControl.editor
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:9](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L9)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:9](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L9)
 
 ___
 
@@ -144,7 +144,7 @@ DataControl.expanded
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:24](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L24)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:24](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L24)
 
 ___
 
@@ -158,7 +158,7 @@ DataControl.icon
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:19](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L19)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:19](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L19)
 
 ___
 
@@ -172,7 +172,7 @@ DataControl.id
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:12](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L12)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:12](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L12)
 
 ___
 
@@ -186,7 +186,7 @@ DataControl.inspector
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:8](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L8)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:8](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L8)
 
 ___
 
@@ -200,13 +200,13 @@ DataControl.name
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:14](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L14)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:14](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L14)
 
 ___
 
 ### node
 
-• **node**: ``null`` \| [`MagickNode`](../modules.md#magicknode) = `null`
+• **node**: ``null`` \| [`MagickNode`](../#magicknode) = `null`
 
 #### Inherited from
 
@@ -214,7 +214,7 @@ DataControl.node
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:10](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L10)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:10](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L10)
 
 ___
 
@@ -228,7 +228,7 @@ DataControl.options
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:18](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L18)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:18](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L18)
 
 ___
 
@@ -242,7 +242,7 @@ DataControl.placeholder
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:22](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L22)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:22](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L22)
 
 ___
 
@@ -256,7 +256,7 @@ DataControl.type
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:21](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L21)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:21](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L21)
 
 ___
 
@@ -270,7 +270,7 @@ DataControl.write
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:20](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L20)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:20](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L20)
 
 ## Accessors
 
@@ -285,7 +285,7 @@ DataControl.write
 | Name | Type |
 | :------ | :------ |
 | `component` | `string` |
-| `data` | [`ComponentData`](../modules.md#componentdata)<[`TaskType`](../modules.md#tasktype)\> |
+| `data` | [`ComponentData`](../#componentdata)<[`TaskType`](../#tasktype)\> |
 | `dataKey` | `string` |
 | `icon` | `string` |
 | `id` | ``null`` \| `string` |
@@ -300,7 +300,7 @@ DataControl.control
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:67](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L67)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:67](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L67)
 
 ## Methods
 
@@ -318,7 +318,7 @@ DataControl.onAdd
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:81](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L81)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:81](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L81)
 
 ___
 
@@ -338,7 +338,7 @@ DataControl.onData
 
 #### Defined in
 
-[packages/engine/src/lib/dataControls/NumberControl.ts:32](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/dataControls/NumberControl.ts#L32)
+[packages/engine/src/lib/dataControls/NumberControl.ts:32](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/dataControls/NumberControl.ts#L32)
 
 ___
 
@@ -356,4 +356,4 @@ DataControl.onRemove
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:85](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L85)
+[packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts:85](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/plugins/inspectorPlugin/DataControl.ts#L85)

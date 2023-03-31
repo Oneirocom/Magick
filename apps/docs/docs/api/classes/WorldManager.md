@@ -14,7 +14,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:6](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/world/worldManager.ts#L6)
+[packages/engine/src/lib/world/worldManager.ts:6](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/world/worldManager.ts#L6)
 
 ## Properties
 
@@ -24,7 +24,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:5](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/world/worldManager.ts#L5)
+[packages/engine/src/lib/world/worldManager.ts:5](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/world/worldManager.ts#L5)
 
 ## Methods
 
@@ -45,7 +45,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:10](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/world/worldManager.ts#L10)
+[packages/engine/src/lib/world/worldManager.ts:10](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/world/worldManager.ts#L10)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:94](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/world/worldManager.ts#L94)
+[packages/engine/src/lib/world/worldManager.ts:94](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/world/worldManager.ts#L94)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:42](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/world/worldManager.ts#L42)
+[packages/engine/src/lib/world/worldManager.ts:42](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/world/worldManager.ts#L42)
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:107](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/world/worldManager.ts#L107)
+[packages/engine/src/lib/world/worldManager.ts:107](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/world/worldManager.ts#L107)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:25](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/world/worldManager.ts#L25)
+[packages/engine/src/lib/world/worldManager.ts:25](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/world/worldManager.ts#L25)
 
 ___
 
@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:68](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/world/worldManager.ts#L68)
+[packages/engine/src/lib/world/worldManager.ts:68](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/world/worldManager.ts#L68)
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:81](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/world/worldManager.ts#L81)
+[packages/engine/src/lib/world/worldManager.ts:81](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/world/worldManager.ts#L81)
 
 ___
 
@@ -185,4 +185,4 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:55](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/world/worldManager.ts#L55)
+[packages/engine/src/lib/world/worldManager.ts:55](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/world/worldManager.ts#L55)

@@ -14,23 +14,23 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:245](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L245)
+[packages/engine/src/lib/types.ts:245](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L245)
 
 ___
 
 ### events
 
-• **events**: [`PubSubEvents`](../modules.md#pubsubevents)
+• **events**: [`PubSubEvents`](../#pubsubevents)
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:246](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L246)
+[packages/engine/src/lib/types.ts:246](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L246)
 
 ___
 
 ### publish
 
-• **publish**: (`event`: `string`, `data?`: [`PubSubData`](../modules.md#pubsubdata)) => `boolean`
+• **publish**: (`event`: `string`, `data?`: [`PubSubData`](../#pubsubdata)) => `boolean`
 
 #### Type declaration
 
@@ -41,7 +41,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `event` | `string` |
-| `data?` | [`PubSubData`](../modules.md#pubsubdata) |
+| `data?` | [`PubSubData`](../#pubsubdata) |
 
 ##### Returns
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:239](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L239)
+[packages/engine/src/lib/types.ts:239](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L239)
 
 ## Methods
 
@@ -62,7 +62,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `event` | `string` |
-| `func` | `SubscriptionListener`<[`PubSubData`](../modules.md#pubsubdata)\> |
+| `func` | `SubscriptionListener`<[`PubSubData`](../#pubsubdata)\> |
 
 #### Returns
 
@@ -76,4 +76,4 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:241](https://github.com/Oneirocom/MagickML/blob/f74165ec/packages/engine/src/lib/types.ts#L241)
+[packages/engine/src/lib/types.ts:241](https://github.com/Oneirocom/MagickML/blob/7e703a94/packages/engine/src/lib/types.ts#L241)
