@@ -42,9 +42,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     }
   )
 
-  const env = {
-    API_ROOT_URL: import.meta.env.API_ROOT_URL,
-  }
   useEffect(() => {
     if (!_spell) return
     spellRef.current = _spell.data[0]
@@ -210,7 +207,6 @@ const MagickInterfaceProvider = ({ children, tab }) => {
     publish($TEXT_EDITOR_CLEAR(tab.id))
   }
   const publicInterface = {
-    env,
     onTrigger,
     onInspector,
     onAddModule,

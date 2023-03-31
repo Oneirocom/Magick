@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-invalid-this */
 
+import { SPEECH_SERVER_URL } from '@magickml/engine';
 import socketIOClient from 'socket.io-client';
 
 /**
@@ -51,7 +52,7 @@ class SpeechUtils {
 
   constructor() {
     this.socket = socketIOClient(
-      import.meta.env.VITE_APP_SPEECH_SERVER_URL as string
+      SPEECH_SERVER_URL as string
     );
   }
 

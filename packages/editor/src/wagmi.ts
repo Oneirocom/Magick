@@ -20,7 +20,7 @@ const { chains, provider, webSocketProvider } = configureChains(
   [
     mainnet,
     polygonMumbai,
-    ...(import.meta.env?.MODE === 'development' ? [goerli] : []),
+    ...((import.meta as any).env?.MODE === 'development' ? [goerli] : []),
   ],
   [
     publicProvider(),

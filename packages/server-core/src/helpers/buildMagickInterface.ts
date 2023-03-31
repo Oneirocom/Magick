@@ -1,4 +1,8 @@
 // GENERATED 
+
+import { app } from '../app'
+import { runSpell } from '../utils/runSpell'
+
 /**
  * Builds a Magick Interface object with methods:
  * - runSpell: runs a spell and returns the outputs
@@ -7,17 +11,9 @@
  * @param {Record<string, any>} overrides Optional object to override environment variables
  * @returns {Object} Magick Interface object
  */
-export const buildMagickInterface = (overrides = {}) => {
-  // Set the environment object
-  const env = {
-    API_ROOT_URL,
-    ...overrides
-  }
-
+export const buildMagickInterface = () => {
   // Return Magick Interface object
-  return {
-    env,
-    
+  return {    
     /**
      * Runs a spell and returns the outputs
      * @param {string} spellId Spell ID
@@ -47,22 +43,6 @@ export const buildMagickInterface = (overrides = {}) => {
     getSpell: async ({spellName, projectId}) => {
       const spell = await app.service('spells').find({ query: { projectId, name: spellName } })
       return spell
-    },
-
-    /**
-     * Finds a spell by name, project ID and spell ID
-     * @param {string} spellName Spell name
-     * @param {string} projectId Project ID
-     * @param {string} id Spell ID
-     * @returns {Object} Spell object
-     */
-    getSpellbyId: async ({spellName, projectId, id}) => {
-      const spell = await app.service('spells').find({ query: { projectId, name: spellName, id } })
-      return spell
     }
   }
 }
-// Keep imports and exports intact
-import { runSpell } from '../utils/runSpell'
-import { API_ROOT_URL } from '@magickml/engine'
-import { app } from '../app'

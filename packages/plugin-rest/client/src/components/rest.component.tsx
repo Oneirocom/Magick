@@ -5,6 +5,7 @@ import md5 from 'md5'
 import { Button, Input } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { debounce } from 'lodash'
+import { API_ROOT_URL } from '@magickml/engine'
 
 const randomHash = () => {
   return md5(Math.random().toString())
@@ -141,7 +142,7 @@ export const RestAgentWindow: FC<any> = props => {
                   URL
                 </span>
                 <Input
-                  value={`${import.meta.env.VITE_APP_API_URL}/api/${
+                  value={`${API_ROOT_URL}/api/${
                     selectedAgentData.data?.rest_api_key
                   }`}
                   readOnly
@@ -189,7 +190,7 @@ export const RestAgentWindow: FC<any> = props => {
                       Fetch
                     </span>
                     <Input
-                      value={`fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+                      value={`fetch('${API_ROOT_URL}/api/${
                         selectedAgentData.id
                       }?apiKey=${
                         selectedAgentData.data?.rest_api_key
@@ -202,7 +203,7 @@ export const RestAgentWindow: FC<any> = props => {
                       }}
                       onClick={() => {
                         navigator.clipboard.writeText(
-                          `fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+                          `fetch('${API_ROOT_URL}/api/${
                             selectedAgentData.id
                           }?apiKey=${
                             selectedAgentData.data?.rest_api_key
@@ -242,7 +243,7 @@ export const RestAgentWindow: FC<any> = props => {
                       Fetch
                     </span>
                     <Input
-                      value={`fetch('${import.meta.env.VITE_APP_API_URL}/api', {
+                      value={`fetch('${API_ROOT_URL}/api', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -257,7 +258,7 @@ export const RestAgentWindow: FC<any> = props => {
                       onClick={() => {
                         // copy the value of the input
                         navigator.clipboard.writeText(
-                          `fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+                          `fetch('${API_ROOT_URL}/api/${
                             selectedAgentData.id
                           }', {
   method: 'POST',
@@ -308,7 +309,7 @@ export const RestAgentWindow: FC<any> = props => {
                       Fetch
                     </span>
                     <Input
-                      value={`fetch('${import.meta.env.VITE_APP_API_URL}/api', {
+                      value={`fetch('${API_ROOT_URL}/api', {
   method: 'PUT',
   headers: {
     'Content-Type': 'application/json',
@@ -323,7 +324,7 @@ export const RestAgentWindow: FC<any> = props => {
                       onClick={() => {
                         // copy the value of the input
                         navigator.clipboard.writeText(
-                          `fetch('${import.meta.env.VITE_APP_API_URL}/api', {
+                          `fetch('${API_ROOT_URL}/api', {
   method: 'PUT',
   headers: {
     'Content-Type': 'application/json',
@@ -374,7 +375,7 @@ export const RestAgentWindow: FC<any> = props => {
                       Fetch
                     </span>
                     <Input
-                      value={`fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+                      value={`fetch('${API_ROOT_URL}/api/${
                         selectedAgentData.id
                       }?apiKey=${
                         selectedAgentData.data?.rest_api_key
@@ -396,7 +397,7 @@ export const RestAgentWindow: FC<any> = props => {
                       }}
                       onClick={() => {
                         navigator.clipboard.writeText(
-                          `fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+                          `fetch('${API_ROOT_URL}/api/${
                             selectedAgentData.id
                           }?apiKey=${
                             selectedAgentData.data?.rest_api_key

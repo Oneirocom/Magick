@@ -1,23 +1,33 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import { LoadingScreen } from '@magickml/client-core'
+// GENERATED 
+/* eslint-disable @-eslint/ban-types */
+import { LoadingScreen } from '@magickml/client-core';
 import {
   Actions,
-  DockLocation, Layout as LayoutComponent,
-  Model, TabNode,
-  TabSetNode
-} from 'flexlayout-react'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { saveTabLayout } from '../state/tabs'
-// Component types are listed here which are used to load components from the data sent by rete
+  DockLocation,
+  Layout as LayoutComponent,
+  Model,
+  TabNode,
+  TabSetNode,
+} from 'flexlayout-react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { useDispatch } from 'react-redux';
+import { saveTabLayout } from '../state/tabs';
+
+// List of window types used to load components from data sent by rete
 const windowTypes: WindowTypes = {
   TEXT_EDITOR: 'textEditor',
   INSPECTOR: 'inspector',
   EDITOR: 'editor',
   PLAYTEST: 'playtest',
   CONSOLE: 'debugConsole',
-  PROJECT: 'project'
-}
+  PROJECT: 'project',
+};
 
 type WindowType =
   | 'textEditor'
@@ -26,110 +36,102 @@ type WindowType =
   | 'playtest'
   | 'debugConsole'
   | 'settings'
-  | 'project'
-type WindowTypes = Record<string, WindowType>
+  | 'project';
 
-// helpful resources
-// https://github.com/edemaine/comingle/blob/726d42e975307beb5281fddbf576591c36c1022d/client/Room.coffee#L365-L384
-// https://github.com/caplin/FlexLayout/blob/master/examples/demo/App.tsx
+type WindowTypes = Record<string, WindowType>;
 
 declare global {
   interface Window {
-    getLayout: any
+    getLayout: any;
   }
 }
 
+// LayoutContext type
 type LayoutContext = {
-  currentModel: Model | null
-  createModel: Function
-  createOrFocus: Function
-  windowTypes: WindowTypes
-  currentRef
-  setCurrentRef
-}
+  currentModel: Model | null;
+  createModel: Function;
+  createOrFocus: Function;
+  windowTypes: WindowTypes;
+  currentRef: any;
+  setCurrentRef: any;
+};
 
-const Context = createContext<LayoutContext>(undefined!)
+// Creating the context
+const Context = createContext<LayoutContext>(undefined!);
 
-export const useLayout = () => useContext(Context)
+// Helper hook to use Layout context
+export const useLayout = () => useContext(Context);
 
+// LayoutProvider component
 const LayoutProvider = ({ children, tab }) => {
-  const currentModelRef = useRef<Model | null>(null)
+  // State and ref for current model
+  const currentModelRef = useRef<Model | null>(null);
+  const [currentModel, setCurrentModel] = useState<Model | null>(null);
 
-  const [currentModel, setCurrentModel] = useState<Model | null>(null)
-  const [currentRef, setCurrentRef] = useState(null)
+  // State for current reference
+  const [currentRef, setCurrentRef] = useState(null);
 
+  // Update current model
   const updateCurrentModel = (model: Model) => {
-    currentModelRef.current = model
-    setCurrentModel(model)
-  }
+    currentModelRef.current = model;
+    setCurrentModel(model);
+  };
 
+  // Side effect for layout getter
   useEffect(() => {
     window.getLayout = () =>
-      currentModelRef?.current && currentModelRef?.current?.toJson()
-  }, [currentModel])
+      currentModelRef?.current && currentModelRef?.current?.toJson();
+  }, [currentModel]);
 
-  const createModel = json => {
-    const model = Model.fromJson(json)
-    updateCurrentModel(model)
+  // Create model from JSON
+  const createModel = (json) => {
+    const model = Model.fromJson(json);
+    updateCurrentModel(model);
 
-    return model
-  }
+    return model;
+  };
 
+  // Add window function
   const addWindow = (componentType, title) => {
-    // Solution partly taken from here.
-    // Programatic creation of a tabSet and a tab added to it.
-    // https://github.com/caplin/FlexLayout/issues/54
     const tabJson = {
       type: 'tab',
       component: componentType,
       weight: 12,
       name: title,
-    }
-    const currentModel = currentModelRef.current
+    };
+    const currentModel = currentModelRef.current;
 
-    if (!currentModel) return
+    if (!currentModel) return;
 
-    // TODO the types provided by react flex layout are wrong for these constructors. Fix with a PR or a fork of the library?
-    const rootNode = currentModel.getRoot()
-    // @ts-expect-error - The types provided by react flex layout are wrong for these constructors. Fix with a PR or a fork of the library?
-    const tabNode = new TabNode(currentModel, tabJson)
-    // @ts-expect-error - The types provided by react flex layout are wrong for these constructors. Fix with a PR or a fork of the library?
+    const rootNode = currentModel.getRoot();
+    const tabNode = new TabNode(currentModel, tabJson);
     const tabSetNode = new TabSetNode(currentModel, {
       type: 'tabset',
       weight: 12,
-    })
+    });
 
-    // We are here using a provate variable, so TS isnt picking it up
-    // @ts-expect-error - We are here using a provate variable, so TS isnt picking it up
-    rootNode._addChild(tabSetNode)
+    rootNode._addChild(tabSetNode);
 
     currentModel.doAction(
-      Actions.moveNode(
-        tabNode.getId(),
-        tabSetNode.getId(),
-        DockLocation.RIGHT,
-        0
-      )
-    )
-  }
+      Actions.moveNode(tabNode.getId(), tabSetNode.getId(), DockLocation.RIGHT, 0)
+    );
+  };
 
+  // Create or focus existing window
   const createOrFocus = (componentName, title) => {
-    if (!currentModelRef.current) return
-    // We are here using a provate variable, so TS isnt picking it up
-    // @ts-expect-error - We are here using a provate variable, so TS isnt picking it up
+    if (!currentModelRef.current) return;
+
     const component = Object.entries(currentModelRef.current._idMap).find(
       ([, value]) => {
-        // Since there is not type for _idMap, we don't know the type value is.
-        // @ts-expect-error - Since there is not type for _idMap, we don't know the type value is.
-        return value._attributes?.component === componentName
+        return value._attributes?.component === componentName;
       }
-    )
+    );
 
-    // the nodeId is stored in the zeroth index of the find
-    if (component) currentModel?.doAction(Actions.selectTab(component[0]))
-    if (!component) addWindow(componentName, title)
-  }
+    if (component) currentModel?.doAction(Actions.selectTab(component[0]));
+    if (!component) addWindow(componentName, title);
+  };
 
+  // Public interface for provider
   const publicInterface = {
     currentModel,
     createModel,
@@ -137,34 +139,40 @@ const LayoutProvider = ({ children, tab }) => {
     windowTypes,
     currentRef,
     setCurrentRef,
-  }
+  };
 
-  return <Context.Provider value={publicInterface}>{children}</Context.Provider>
-}
+  // Rendering Context Provider
+  return <Context.Provider value={publicInterface}>{children}</Context.Provider>;
+};
 
+// Layout component
 export const Layout = ({ json, factory, tab }) => {
-  const dispatch = useDispatch()
-  const { currentModel, createModel, setCurrentRef } = useLayout()
-  const layoutRef = useRef(null)
+  const dispatch = useDispatch();
+  const { currentModel, createModel, setCurrentRef } = useLayout();
+  const layoutRef = useRef(null);
 
+  // Side effect for creating model if there is JSON data
   useEffect(() => {
-    if (!json || currentModel) return
-    createModel(json)
-  }, [json, createModel, currentModel])
+    if (!json || currentModel) return;
+    createModel(json);
+  }, [json, createModel, currentModel]);
 
+  // Side effect for updating current reference
   useEffect(() => {
-    setCurrentRef(layoutRef)
-  }, [layoutRef, setCurrentRef])
+    setCurrentRef(layoutRef);
+  }, [layoutRef, setCurrentRef]);
 
-  const onModelChange = e => {
-    if (!currentModel) return
+  // Handle model change
+  const onModelChange = () => {
+    if (!currentModel) return;
     dispatch(
       saveTabLayout({ tabId: tab.id, layoutJson: currentModel.toJson() })
-    )
-  }
+    );
+  };
 
-  if (!currentModel) return <LoadingScreen />
+  if (!currentModel) return <LoadingScreen />;
 
+  // Rendering LayoutComponent
   return (
     <LayoutComponent
       onModelChange={onModelChange}
@@ -173,7 +181,8 @@ export const Layout = ({ json, factory, tab }) => {
       factory={factory}
       font={{ size: '12px' }}
     />
-  )
-}
+  );
+};
 
-export default LayoutProvider
+// Exporting LayoutProvider as default
+export default LayoutProvider;

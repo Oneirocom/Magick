@@ -1,6 +1,6 @@
 import { Modal, Switch } from '@magickml/client-core'
 import Grid from '@mui/material/Grid'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 const VariableModal = ({
   selectedAgentData,

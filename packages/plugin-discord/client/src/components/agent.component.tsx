@@ -7,7 +7,7 @@ type PluginProps = {
   selectedAgentData: any
   props
 }
-import { API_ROOT_URL } from '@magickml/engine'
+import { API_ROOT_URL, FILE_SERVER_URL } from '@magickml/engine'
 import { Switch } from '@magickml/client-core'
 import VariableModal from './VariableModal'
 
@@ -56,8 +56,7 @@ export const DiscordAgentWindow: FC<any> = props => {
       const url =
         selectedAgentData.data?.voice_provider === 'google' ||
         selectedAgentData.data?.voice_provider === 'tiktalknet'
-          ? (import.meta as any).env.VITE_APP_FILE_SERVER_URL + '/' + resp.data
-          : resp.data
+          ? FILE_SERVER_URL + '/' + resp.data : resp.data
       if (url && url.length > 0) {
         setPlayingAudio(true)
         console.log('url:', url)

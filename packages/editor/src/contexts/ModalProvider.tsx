@@ -1,42 +1,69 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-import React, { useState } from 'react'
+// GENERATED 
 
-import { getModals } from '../components/Modals'
+import React, { useState } from 'react';
 
+import { getModals } from '../components/Modals';
+
+/**
+ * Type for the context object used throughout the application regarding modals
+ */
 type MyContextType = {
-  activeModal: object
-  modalName: string
-  openModal: (options: object) => void
-  closeModal: () => void
-}
+  activeModal: object;
+  modalName: string;
+  openModal: (options: object) => void;
+  closeModal: () => void;
+};
 
-// todo this whole thing is really messy.  Fix. Maybe find a robust modal library
-const Context = React.createContext<MyContextType>({
+/**
+ * Default context values
+ */
+const defaultContext: MyContextType = {
   activeModal: {},
   modalName: '',
   openModal: (options: object) => {},
   closeModal: () => {},
-})
+};
 
-export const useModal = () => React.useContext(Context)
+/**
+ * Context object declaration
+ */
+const Context = React.createContext<MyContextType>(defaultContext);
 
-const ModalContext = ({ children }) => {
-  const modalList = getModals()
+/**
+ * Custom hook for using the Modal context
+ */
+export const useModal = () => React.useContext(Context);
+
+/**
+ * ModalContext component responsible for managing the application modals
+ * @param {React.PropsWithChildren<unknown>} { children } - Child components
+ * @returns {React.ReactNode} - The ModalContext provider with its children
+ */
+const ModalContext: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => {
+  // Initialize modal list
+  const modalList = getModals();
+
+  // Declare state for active modal and modal name
   const [activeModal, setActiveModal] = useState<Record<string, any> | null>(
     null
-  )
-  const [modalName, setModalName] = useState<string>('')
+  );
+  const [modalName, setModalName] = useState<string>('');
 
-  const openModal = modalOptions => {
-    setModalName(modalOptions.modal)
-    setActiveModal({ ...modalOptions, closeModal })
-  }
+  // Open the modal with the specified options and attach closeModal function
+  const openModal = (modalOptions: { modal: string }) => {
+    setModalName(modalOptions.modal);
+    setActiveModal({ ...modalOptions, closeModal });
+  };
 
+  // Close the currently active modal
   const closeModal = () => {
-    setActiveModal(null)
-  }
+    setActiveModal(null);
+  };
 
-  const Modal = modalList[modalName]
+  // Get the Modal component by its name
+  const Modal = modalList[modalName];
 
   return (
     <Context.Provider
@@ -50,7 +77,7 @@ const ModalContext = ({ children }) => {
       {activeModal && <Modal {...activeModal} />}
       {children}
     </Context.Provider>
-  )
-}
+  );
+};
 
-export default ModalContext
+export default ModalContext;

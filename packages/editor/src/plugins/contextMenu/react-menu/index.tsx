@@ -1,47 +1,76 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import ReactMenu from './Menu'
-import Menu from '../menu'
-import { injectItem } from '../utils'
+// GENERATED 
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactMenu from './Menu';
+import Menu from '../menu';
+import { injectItem } from '../utils';
 
-export default class extends Menu {
-  items: any[]
-  position: number[]
-  visible: boolean
-  el: HTMLDivElement
-  args: any
-  props: any
-  type: string
+/**
+ * Custom Menu class extending the base Menu class
+ * provides additional methods to add items, show and hide the menu, and render the menu
+ */
+export default class CustomMenu extends Menu {
+  items: any[];
+  position: number[];
+  visible: boolean;
+  el: HTMLDivElement;
+  args: any;
+  props: any;
+  type: string;
+
+  /**
+   * CustomMenu constructor
+   * @param {object} editor - The editor instance
+   * @param {object} props - The properties for CustomMenu
+   */
   constructor(editor, props) {
-    super(editor, props)
-    this.props = props
-    this.items = []
-    this.position = [0, 0]
-    this.visible = false
-    this.type = props.type
-    this.el = document.createElement('div')
-    editor.view.container.appendChild(this.el)
+    super(editor, props);
+    this.props = props;
+    this.items = [];
+    this.position = [0, 0];
+    this.visible = false;
+    this.type = props.type;
+    this.el = document.createElement('div');
+    editor.view.container.appendChild(this.el);
 
-    this.render()
+    this.render();
   }
 
+  /**
+   * Add an item to the CustomMenu
+   * @param {string} title - The title of the menu item
+   * @param {function} onClick - The onClick function for the menu item
+   * @param {Array} path - The path for the menu item, default is an empty array
+   */
   addItem(title, onClick, path = []) {
-    injectItem(this.items, title, onClick, path)
-    this.render()
+    injectItem(this.items, title, onClick, path);
+    this.render();
   }
 
+  /**
+   * Show the CustomMenu at given x and y coordinates
+   * @param {number} x - The x coordinate for the CustomMenu
+   * @param {number} y - The y coordinate for the CustomMenu
+   * @param {any} args - The arguments for the CustomMenu
+   */
   show(x, y, args) {
-    this.position = [x, y]
-    this.args = args
-    this.visible = true
-    this.render()
+    this.position = [x, y];
+    this.args = args;
+    this.visible = true;
+    this.render();
   }
 
+  /**
+   * Hide the CustomMenu 
+   */
   hide() {
-    this.visible = false
-    this.render()
+    this.visible = false;
+    this.render();
   }
 
+  /**
+   * Render the CustomMenu using ReactDOM and ReactMenu
+   */
   render() {
     ReactDOM.render(
       <ReactMenu
@@ -54,8 +83,8 @@ export default class extends Menu {
         type={this.type}
       />,
       this.el
-    )
+    );
   }
 }
 
-export { Menu }
+export { Menu };

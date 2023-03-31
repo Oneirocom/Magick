@@ -1,22 +1,18 @@
-// GENERATED 
-/**
- * Runs a test spell with given spell and inputs.
- * @param spell - The spell to be executed.
- * @param inputs - The inputs for the spell.
- * @returns The outputs from running the spell.
- */
-export async function runTestSpell(spell: SpellInterface, inputs: MagickSpellInput) {
-  // Import necessary interface builder and spell runner
-  import { buildMagickInterface } from './buildMagickInterface';
-  import { SpellRunner } from '../../src/lib/spellManager';
-  
-  // Create an instance for magickInterface and spellRunner
-  const magickInterface = buildMagickInterface();
-  const spellRunner = new SpellRunner({ magickInterface });
+import { SpellRunner } from '../../src/lib/spellManager'
+import { MagickSpellInput, SpellInterface } from '../../src/lib/types'
+import { buildMagickInterface } from './buildMagickInterface'
 
-  // Load the spell to the spell runner and get its outputs
-  await spellRunner.loadSpell(spell);
-  const outputs = await spellRunner.runComponent({ inputs });
-  
-  return outputs;
+
+export const runTestSpell = async (spell: SpellInterface, inputs: MagickSpellInput) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const magickInterface = buildMagickInterface() as any
+  const spellRunner = new SpellRunner({ magickInterface })
+  // Load the spell in to the spell runner
+  await spellRunner.loadSpell(spell as SpellInterface)
+
+  // Get the outputs from running the spell
+  const outputs = await spellRunner.runComponent({
+    inputs
+  })
+  return outputs
 }

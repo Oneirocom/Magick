@@ -22,7 +22,7 @@ export function saveRequest({
   nodeId,
 }: RequestPayload) {
   const cost = calculateCompletionCost({
-    totalTokens,
+    totalTokens: totalTokens as number,
     model: model as any,
   })
 

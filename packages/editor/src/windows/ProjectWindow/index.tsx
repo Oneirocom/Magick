@@ -17,7 +17,7 @@ const ProjectWindow = ({ tab }) => {
   const config = useConfig()
   const globalConfig = useSelector((state: any) => state.globalConfig)
 
-  const [data, setData] = useState({ agents: [], spells: [], documents: [] })
+  const [data, setData] = useState({ agents: [], documents: [] })
   const [loaded, setLoaded] = useState(false)
   const token = globalConfig?.token
   const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }

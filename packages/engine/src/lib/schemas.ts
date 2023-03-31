@@ -56,7 +56,6 @@ export const agentSchema = Type.Object({
   enabled: Type.Optional(Type.Boolean()),
   updatedAt: Type.String(),
   pingedAt: Type.Optional(Type.String()),
-  spells: Type.Optional(Type.String()),
   data: Type.Optional(Type.Any()),
   publicVariables: Type.Optional(Type.Any()),
   secrets: Type.Optional(Type.String()),

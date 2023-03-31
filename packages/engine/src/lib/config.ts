@@ -24,6 +24,10 @@ export const DEFAULT_PROJECT_ID =
   getVarForEnvironment('PROJECT_ID') || 'bb1b3d24-84e0-424e-b4f1-57603f307a89'
 export const DEFAULT_USER_ID = getVarForEnvironment('USER_ID') || '1234567890'
 export const SERVER_PORT = getVarForEnvironment('PORT') || 3030
+export const SPEECH_SERVER_URL =
+  getVarForEnvironment('SPEECH_SERVER_URL') || 'http://localhost:65532'
+export const TRUSTED_PARENT_URL = getVarForEnvironment('TRUSTED_PARENT_URL') || 'http://localhost:3000'
+export const UNTRUSTED_IFRAME = getVarForEnvironment('UNTRUSTED_IFRAME') || false
 export const API_ROOT_URL =
   getVarForEnvironment('APP_API_URL') || `http://localhost:${SERVER_PORT}`
 export const GOOGLE_APPLICATION_CREDENTIALS =
@@ -38,3 +42,4 @@ export const FILE_SERVER_PORT =
 export const FILE_SERVER_URL =
   getVarForEnvironment('FILE_SERVER_URL') || 'https://localhost:65530'
 export const USESSL = getVarForEnvironment('USESSL') || false
+export const NODE_ENV = getVarForEnvironment('NODE_ENV') || 'development'
