@@ -66,7 +66,7 @@ export class ParseJSON extends MagickComponent<Promise<WorkerReturn>> {
    */
   async worker(_node: WorkerData, rawInputs: MagickWorkerInputs): Promise<WorkerReturn> {
     const str = rawInputs.input[0] as string
-
+    console.log('str', str)
     return {
       output: JSON.parse(str),
     }

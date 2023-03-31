@@ -86,7 +86,6 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     node: WorkerData,
     rawInputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { magick }: { magick: EngineContext }
   ) {
     const name = node.data.name as string
     node.name = name
@@ -96,13 +95,17 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
       return acc
     }, {} as Record<string, unknown>)
 
-    const headers = node.data.headers as Record<string, string>
+    const headers = node.data.headers && node.data.headers !== '' ? JSON.parse(node.data.headers as string ?? '{}') : {}
+    console.log('headers are', headers)
+    console.log('inputs are', inputs)
 
     let url = node?.data?.url as string
     const method = (node?.data?.method as string)?.toLowerCase().trim()
     if (url.startsWith('server')) {
       url = url.replace('server', API_ROOT_URL as string)
     }
+
+
 
     let resp = undefined as AxiosResponse<unknown> | undefined
     if (method === 'post') {
@@ -118,6 +121,8 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     } else {
       console.log('Request Method (' + method + ') not supported!')
     }
+
+    console.log('resp', resp)
 
     return {
       output: resp ? resp.data : '',

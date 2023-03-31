@@ -1,3 +1,4 @@
+// GENERATED 
 import {
   EndBehaviorType,
   entersState,
@@ -10,8 +11,11 @@ import { SpeechOptions } from './speechOptions'
 import createVoiceMessage from './createVoiceMessage'
 
 /**
- * Starts listening on connection and emits `speech` event when someone stops speaking
- * @param connection Connection to listen
+ * Handles `speaking` events on a VoiceConnection and emits `speech` events when someone stops speaking.
+ * @param {Object} params - Params object
+ * @param {Client} params.client - Discord.js Client instance
+ * @param {VoiceConnection} params.connection - Voice connection to listen
+ * @param {SpeechOptions} params.speechOptions - Speech options
  */
 const handleSpeakingEvent = ({
   client,
@@ -25,6 +29,7 @@ const handleSpeakingEvent = ({
   connection.receiver.speaking.on(
     'start',
     function handleSpeechEventOnConnectionReceiver(userId) {
+      // Ignore bots if ignoreBots option is true
       if (speechOptions.ignoreBots && client.users.cache.get(userId)?.bot) {
         return
       }
@@ -45,6 +50,7 @@ const handleSpeakingEvent = ({
           bufferData.push(data)
         })
 
+      // When the stream ends, create a voice message and emit the `speech` event
       opusStream.on('end', async () => {
         const user = client.users.cache.get(userId)
         if (!user) return
@@ -63,11 +69,16 @@ const handleSpeakingEvent = ({
 }
 
 /**
- * Enables `speech` event on Client, which is called whenever someone stops speaking
+ * Enables `speech` event on a Discord.js Client instance, which is called whenever someone stops speaking
+ * @param {Client} client - The Discord.js Client instance
+ * @param {SpeechOptions} speechOptions - Speech options
  */
 export default (client: Client, speechOptions: SpeechOptions): void => {
   client.on('voiceJoin', async (connection: VoiceConnection) => {
+    // Wait for the voice connection to be ready
     await entersState(connection, VoiceConnectionStatus.Ready, 20e3)
+
+    // Handle speaking events
     handleSpeakingEvent({ client, speechOptions, connection })
   })
 }
