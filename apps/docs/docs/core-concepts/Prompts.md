@@ -25,11 +25,11 @@ Prompts are the interface between us and the models we use.
 
 ## Why Not Just Use Code?
 
-We use a lot of code, actually. However, code is not great at handling tasks that require complex decision making. In the past, we would create really complex rulesets about words (called grammars) and use these in complex algorithms to try and solve these decision making problems. This worked well sometimes, not not across the board, certainly not enough to replace human decision makers.
+We use a lot of code, actually. However, code is not great at handling tasks that require complex decision making. In the past, we would create really complex rulesets about words (called grammars) and use these in complex algorithms to try and solve these decision making problems. This worked well sometimes, but not across the board, and certainly not enough to replace human decision makers.
 
-We can write more and more code to solve a problem, but the more we do, the less it can flexible solve other problems.
+We can write more and more code to solve a problem, but the more we do, the less it can flexibly solve other problems.
 
-That's why this new era of AI models is so incredible. We can show the AI model the data, give it an instruction and usually get a result instantly. As long as you have the building blocks to move data around, you can use AI to not only solve problems you would other wise need to use code for, but solve classes of problems simply couldn't be solved with code outside of a very expensive, enterprise-grade system.
+That's why this new era of AI models is so incredible. We can show the AI model the data, give it an instruction, and usually get a result instantly. As long as you have the building blocks to move data around, you can use AI to not only solve problems you would otherwise need to use code for, but solve classes of problems that simply couldn't be solved with code outside of a very expensive, enterprise-grade system.
 
 Prompts let us describe what we need, hand it to the AI, and it gets done.
 
@@ -37,6 +37,6 @@ Prompts let us describe what we need, hand it to the AI, and it gets done.
 
 A lot of what we do in Magick is building prompts. There are a lot of ways to do this, but the easiest is using the "Prompt Template" or "Generator" nodes. The Generator uses the same interface as the Prompt Template but sends the template to a language model.
 
-What is unique about the Generator is that you can inject variables into it-- i.e. you can add inputs, send some other pieces of text into the Generator and combine them together.
+What is unique about the Generator is that you can inject variables into it--i.e. you can add inputs, send some other pieces of text into the Generator, and combine them together.
 
-You can use this to build short term conversational memory for a personal assistant, data retrieval and processing for an automation agent or a tool to visit websites and scrape data. Building prompts is one of the most important parts of using Magick's full power.
+You can use this to build short term conversational memory for a personal assistant, data retrieval and processing for an automation agent, or a tool to visit websites and scrape data. Building prompts is one of the most important parts of using Magick's full power.

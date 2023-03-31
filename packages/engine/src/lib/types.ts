@@ -134,13 +134,16 @@ export type OnSubspellUpdated = (spell: SpellInterface) => void
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
-  declare currentSpell: { id: string }
+  declare currentSpell: SpellInterface
   declare pubSub: PubSubContext
   declare magick: EditorContext
   declare tab: { type: string }
   declare abort: unknown
-  declare loadGraph: (graph: Data, relaoding?: boolean) => Promise<void>
-  declare loadSpell: (graph: Data, relaoding?: boolean) => Promise<void>
+  declare loadGraph: (graph: Data, reloading?: boolean) => Promise<void>
+  declare loadSpell: (
+    spell: SpellInterface,
+    reloading?: boolean
+  ) => Promise<void>
   declare moduleManager: ModuleManager
   declare runProcess: (callback?: () => void | undefined) => Promise<void>
   declare onSpellUpdated: (
@@ -194,7 +197,6 @@ export type EngineContext<DataType = Record<string, unknown>> = {
   runSpell: RunSpell<DataType>
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
-  getCurrentSpell: () => SpellInterface
   processCode?: ProcessCode
 }
 
@@ -204,7 +206,7 @@ export type PubSubEvents = {
   DELETE_SUBSPELL: string
   OPEN_TAB: string
   $SUBSPELL_UPDATED: (spellName: string) => string
-  $TRIGGER: (tabId: string, nodeId?: string) => string
+  $TRIGGER: (tabId: string, nodeId?: number) => string
   $PLAYTEST_INPUT: (tabId: string) => string
   $PLAYTEST_PRINT: (tabId: string) => string
   $DEBUG_PRINT: (tabId: string) => string
@@ -213,7 +215,7 @@ export type PubSubEvents = {
   $TEXT_EDITOR_SET: (tabId: string) => string
   $TEXT_EDITOR_CLEAR: (tabId: string) => string
   $CLOSE_EDITOR: (tabId: string) => string
-  $NODE_SET: (tabId: string, nodeId: string) => string
+  $NODE_SET: (tabId: string, nodeId: number) => string
   $SAVE_SPELL: (tabId: string) => string
   $SAVE_SPELL_DIFF: (tabId: string) => string
   $CREATE_MESSAGE_REACTION_EDITOR: (tabId: string) => string
@@ -256,7 +258,7 @@ export type OnInspector = (
 export type OnEditorCallback = (data: PubSubData) => void
 export type OnEditor = (callback: OnEditorCallback) => () => void
 export type OnDebug = (
-  node: MagickNode,
+  spellname: string,
   callback: OnEditorCallback
 ) => () => void
 
@@ -575,6 +577,7 @@ export type CompletionHandlerInputData = {
     secrets: Record<string, string>
     projectId: string
     magick: EngineContext
+    currentSpell: SpellInterface
   }
 }
 

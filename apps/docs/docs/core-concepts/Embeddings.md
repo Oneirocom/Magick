@@ -7,7 +7,7 @@ sidebar_position: 5
 
 # Embeddings
 
-Embeddings themselves are kind of a complex concept. Take the concept of a word, it's relation to other words, various other dimensions we don't even full understand (1536 of them exactly) and derive a complex vector from that.
+Embeddings themselves are kind of a complex concept. Take the concept of a word, its relation to other words, various other dimensions we don't even full understand (1536 of them exactly), and derive a complex vector from that.
 
 For the text "Your text string goes here", the embedding looks like 
 ```
@@ -28,4 +28,4 @@ In generative image AI, embeddings can be created and used to capture parts of a
 
 ## Using With Events and Documents
 
-You can process events and documents with embeddings to be retrieved later in a process known as "similarity search". See the Events section.
+You can process events and documents with embeddings to be retrieved later in a process known as "similarity search". See the Events section for more info.
