@@ -1,4 +1,9 @@
 // GENERATED 
+import { calculateCompletionCost } from '@magickml/cost-calculator'
+import { v4 } from 'uuid'
+import { globalsManager } from '../globals'
+import { RequestPayload } from '../types'
+
 /**
  * Calculate and save request details in the module.
  *

@@ -1,41 +1,58 @@
-import React, { FC, useEffect, useState } from 'react'
-import { KeyInput } from './utils'
-import { Modal, Switch } from '@magickml/client-core'
-import { debounce } from 'lodash'
+// GENERATED 
+import React, { FC, useEffect, useState } from 'react';
+import { KeyInput } from './utils';
+import { Modal, Switch } from '@magickml/client-core';
+import { debounce } from 'lodash';
 
+// Define the type for PluginProps
 type PluginProps = {
-  selectedAgentData: any
-  props
-}
+  selectedAgentData: any;
+  props: any;
+};
 
-export const EthereumAgentWindow: FC<any> = props => {
-  props = props.props
-  const { selectedAgentData, setSelectedAgentData, update } = props
-  const debouncedFunction = debounce((id, data) => update(id, data), 500)
-  const [editMode, setEditMode] = useState<boolean>(false)
+/**
+ * EthereumAgentWindow component.
+ * Displays an Ethereum agent settings section with an edit mode.
+ * @param props - PluginProps with selected agent data and additional props
+ */
+export const EthereumAgentWindow: FC<PluginProps> = ({ selectedAgentData, props }) => {
+  const { setSelectedAgentData, update } = props;
+  
+  // Initialize the states and debouncedFunction
+  const debouncedFunction = debounce((id, data) => update(id, data), 500);
+  const [editMode, setEditMode] = useState<boolean>(false);
   const [checked, setChecked] = useState(
     selectedAgentData.data?.ethereum_enabled || false
-  )
-  const [disable, setDisable] = useState(false)
+  );
+  const [disable, setDisable] = useState(false);
   const [state, setState] = useState({
     ethereum_private_key: selectedAgentData?.data?.ethereum_private_key,
     ethereum_custom_rpc: selectedAgentData?.data?.ethereum_custom_rpc,
-  })
-  useEffect(() => {
-    if (props.enable['EthereumPlugin'] == false) {
-      setChecked(false)
-      setDisable(true)
-    }
-    if (props.enable['EthereumPlugin'] == true) {
-      setChecked(selectedAgentData.data?.ethereum_enabled)
-      setDisable(false)
-    }
-  }, [props.enable, selectedAgentData])
-  const handleOnChange = e => {
-    const { name, value } = e.target
-    setState({ ...state, [name]: value })
-  }
+  });
 
+  // Update the enable state base on the selected agent data
+  useEffect(() => {
+    if (props.enable['EthereumPlugin'] === false) {
+      setChecked(false);
+      setDisable(true);
+    } else if (props.enable['EthereumPlugin'] === true) {
+      setChecked(selectedAgentData.data?.ethereum_enabled);
+      setDisable(false);
+    }
+  }, [props.enable, selectedAgentData]);
+
+  /**
+   * Handles the change event from input elements and updates the state.
+   * @param e - event from input elements
+   */
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setState({ ...state, [name]: value });
+  };
+
+  /**
+   * Handles the save action when the edit mode is closed.
+   */
   const handleSave = () => {
     const data = {
       ...selectedAgentData,
@@ -43,10 +60,10 @@ export const EthereumAgentWindow: FC<any> = props => {
         ...selectedAgentData.data,
         ...state,
       },
-    }
+    };
 
-    update(selectedAgentData.id, data)
-  }
+    update(selectedAgentData.id, data);
+  };
 
   return (
     <>
@@ -70,7 +87,7 @@ export const EthereumAgentWindow: FC<any> = props => {
         >
           <button
             onClick={() => {
-              setEditMode(true)
+              setEditMode(true);
             }}
             style={{ marginRight: '10px', cursor: 'pointer' }}
           >
@@ -78,15 +95,15 @@ export const EthereumAgentWindow: FC<any> = props => {
           </button>
           <Switch
             checked={checked}
-            onChange={e => {
-              setChecked(!checked)
+            onChange={(e) => {
+              setChecked(!checked);
               debouncedFunction(selectedAgentData.id, {
                 ...selectedAgentData,
                 data: {
                   ...selectedAgentData.data,
                   ethereum_enabled: e.target.checked,
                 },
-              })
+              });
 
               setSelectedAgentData({
                 ...selectedAgentData,
@@ -94,12 +111,13 @@ export const EthereumAgentWindow: FC<any> = props => {
                   ...selectedAgentData.data,
                   ethereum_enabled: e.target.checked,
                 },
-              })
+              });
             }}
             label={''}
           />
         </div>
       </div>
+
       {editMode && (
         <Modal open={editMode} setOpen={setEditMode} handleAction={handleSave}>
           <div>
@@ -107,7 +125,7 @@ export const EthereumAgentWindow: FC<any> = props => {
             <KeyInput
               value={state?.ethereum_private_key}
               style={{ width: '100%' }}
-              setValue={value =>
+              setValue={(value) =>
                 setState({
                   ...state,
                   ethereum_private_key: value,
@@ -132,5 +150,5 @@ export const EthereumAgentWindow: FC<any> = props => {
         </Modal>
       )}
     </>
-  )
-}
+  );
+};

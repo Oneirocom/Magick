@@ -1,3 +1,4 @@
+// GENERATED 
 import Rete from 'rete'
 
 import { CodeControl } from '../../dataControls/CodeControl'
@@ -13,7 +14,8 @@ import {
   WorkerData
 } from '../../types'
 
-const defaultCode =`
+// Default worker code for a new Javascript node
+const defaultCode = `
 // inputs: dictionary of inputs based on socket names
 // data: internal data of the node to read or write to nodes data state
 function worker({
@@ -25,9 +27,14 @@ function worker({
 }
 `
 
+// Information about the Javascript component
 const info = `The code component is your swiss army knife when other components won't cut it.  You can define any number of inputs and outputs on it, and then write a custom worker function.  You have access to the data plugged into the inputs you created on your component, and can send data out along your outputs.
 Please note that the return of your function must be an object whose keys are the same value as the names given to your output sockets.  The incoming inputs argument is an object whose keys are the names you defined, and each is an array.
 `
+
+/**
+ * Javascript component allows creating customizable worker with definable inputs and outputs.
+ */
 export class Javascript extends MagickComponent<unknown> {
   constructor() {
     // Name of the component
@@ -39,8 +46,14 @@ export class Javascript extends MagickComponent<unknown> {
     this.runFromCache = true
   }
 
+  /**
+   * Builds the entire node with its inputs and controls.
+   * 
+   * @param node - The MagickNode to build.
+   * @returns The built MagickNode.
+   */
   builder(node: MagickNode) {
-        const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     if (!node.data.code) node.data.code = defaultCode
@@ -81,8 +94,16 @@ export class Javascript extends MagickComponent<unknown> {
     return node
   }
 
-  // the worker contains the main business logic of the node.  It will pass those results
-  // to the outputs to be consumed by any connected components
+  /**
+   * The worker contains the main business logic of the node. It will pass those results
+   * to the outputs to be consumed by any connected components.
+   * 
+   * @param node - The WorkerData to process.
+   * @param inputs - MagickWorkerInputs to use in the worker.
+   * @param _outputs - MagickWorkerOutputs to send to connected components.
+   * @param context - Contains the code to process.
+   * @returns The result(s) of the execution.
+   */
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,

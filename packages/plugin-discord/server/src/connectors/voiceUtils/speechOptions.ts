@@ -1,7 +1,11 @@
+// GENERATED 
 /**
- * Speech recognition function, you can create your own and specify it in [[DiscordSROptions]], when creating [[DiscordSR]] object.
+ * Represents the speech recognition function that can be custom implemented and specified in the [[DiscordSROptions]].
+ * This function will be called when creating a [[DiscordSR]] object.
  *
- * All options that you pass to [[DiscordSR]] constructor, will be later passed to this function.
+ * @param audioBuffer - The audio buffer to be processed for speech recognition.
+ * @param options - Optional parameters including language and API key.
+ * @returns A Promise resolving to the recognized text string.
  */
 export interface SpeechRecognition {
   (
@@ -11,15 +15,20 @@ export interface SpeechRecognition {
 }
 
 /**
- * Options that will be passed to [[speechRecognition]] function
+ * Interface for specifying the options that will be passed to the [[speechRecognition]] function.
  */
 export interface SpeechOptions {
+  // Optional group identifier.
   group?: string
+  // Optional language for speech recognition.
   lang?: string
+  // Optional custom speech recognition function.
   speechRecognition?: SpeechRecognition
+  // Optional API key for speech recognition services.
   key?: string
   /**
-   * Defaults to true
+   * If true (default), bot messages will be ignored.
+   * Set to false to recognize bot messages as well.
    */
   ignoreBots?: boolean
 }
