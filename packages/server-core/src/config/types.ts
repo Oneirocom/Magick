@@ -1,14 +1,28 @@
-import { 
-  Route as _Route, 
-  Middleware as _Middleware, 
-  Method as _Method,
-  Handler as _Handler
- } from '@magickml/engine'
+// DOCUMENTED 
+// Import the required types from '@magickml/engine' and rename them to avoid naming conflicts.
+import {
+  Route as MagickRoute,
+  Middleware as MagickMiddleware,
+  Method as MagickMethod,
+  Handler as MagickHandler,
+} from "@magickml/engine";
 
-export type Middleware = _Middleware
+/**
+ * Type alias for Middleware imported from '@magickml/engine'.
+ */
+export type Middleware = MagickMiddleware;
 
-export type Method = _Method
+/**
+ * Type alias for Method imported from '@magickml/engine'.
+ */
+export type Method = MagickMethod;
 
-export type Handler = _Handler
+/**
+ * Type alias for Handler imported from '@magickml/engine'.
+ */
+export type Handler = MagickHandler;
 
-export type Route = _Route
+/**
+ * Type alias for Route imported from '@magickml/engine'.
+ */
+export type Route = MagickRoute;

@@ -1,17 +1,28 @@
-import Router from '@koa/router'
-import { AgentInterface, pluginManager, SpellInterface, SpellManager, SpellRunner, WorldManager } from '@magickml/engine'
-import { app } from '../app'
-import { Application } from '../declarations'
+// DOCUMENTED
 import { buildMagickInterface } from '../helpers/buildMagickInterface'
+import {
+  SpellManager,
+  WorldManager,
+  pluginManager,
+  SpellRunner,
+  AgentInterface,
+  SpellInterface,
+} from '@magickml/engine'
+import { app } from '../app'
 import { AgentManager } from './AgentManager'
+import Router from '@koa/router'
+import _ from 'lodash'
+import { Application } from '../declarations'
 
+/**
+ * The type for AgentData.
+ */
 type AgentData = {
   id: any
   data: any
   name: string
   secrets: string
   rootSpell: any
-  subSpells: any[]
   publicVariables: any[]
   projectId: string
   spellManager: SpellManager
@@ -19,9 +30,11 @@ type AgentData = {
   enabled: boolean
 }
 
+/**
+ * The Agent class that implements AgentInterface.
+ */
 export class Agent implements AgentInterface {
   name = ''
-  //Clients
   id: any
   secrets: any
   publicVariables: any[]
@@ -37,12 +50,14 @@ export class Agent implements AgentInterface {
   updatedAt: string
 
   outputTypes: any[] = []
-
   updateInterval: any
-  subSpells: any[]
 
+  /**
+   * Agent constructor initializes properties and sets intervals for updating agents
+   * @param agentData {AgentData} - The instance's data.
+   * @param agentManager {AgentManager} - The instance's manager.
+   */
   constructor(agentData: AgentData, agentManager: AgentManager) {
-    if(!agentData.secrets) throw new Error('No secrets found for agent')
     this.secrets = JSON.parse(agentData.secrets)
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
@@ -54,16 +69,15 @@ export class Agent implements AgentInterface {
     this.worldManager = new WorldManager()
 
     this.spellManager = new SpellManager({
-      magickInterface: buildMagickInterface({}) as any,
+      magickInterface: buildMagickInterface() as any,
       cache: false,
-    });
-
-    if(!this.rootSpell) {
-      console.warn("No root spell found for agent", this.id)
-      return
-    }
-    
-    (async () => {
+    })
+    ;(async () => {
+      if (!this.rootSpell) {
+        console.warn('No root spell found for agent', this.id)
+        return
+      }
+      console.log('this.rootSpell.projectId', this.projectId, this.rootSpell.id)
       const spell = (
         await app.service('spells').find({
           query: {
@@ -73,50 +87,9 @@ export class Agent implements AgentInterface {
         })
       ).data[0]
 
-      if (!spell) {
-        console.warn('No spell found for agent', this.id)
-        return
-      }
+      const override = _.isEqual(spell, this.rootSpell)
 
-      this.spellRunner = await this.spellManager.load(spell, true)
-
-    // handle subspells
-      const nodes = spell.graph.nodes;
-
-      const subspellNodes = Object.values(nodes || {}).filter(
-        node => {
-          console.log('node is', node);
-          return (node as { name: string }).name === 'Spell'
-      })
-
-      console.log('******************** LOADING SUBSPELLS')
-      console.log(subspellNodes)
-
-      const subspells = []
-      for (const subspellNode of subspellNodes as {data: {projectId: string, spellId: string}}[]) {
-        // fetch the spell from the spells service
-        const spell = (
-          await app.service('spells').find({
-            query: {
-              projectId: subspellNode.data.projectId,
-              id: subspellNode.data.spellId,
-            },
-          })
-        ).data[0]
-
-        if (!spell) {
-          console.warn('No subspell found for', subspellNode.data.projectId, this.id)
-          return
-        }
-        this.spellManager.load(spell, true)
-        subspells.push(spell)
-      }
-
-      this.subSpells = subspells;
-
-      // nodes is an object, with the node ID as the key
-      // iterate through the nodes 
-
+      this.spellRunner = await this.spellManager.load(spell, override)
       const agentStartMethods = pluginManager.getAgentStartMethods()
 
       for (const method of Object.keys(agentStartMethods)) {
@@ -140,6 +113,9 @@ export class Agent implements AgentInterface {
     })()
   }
 
+  /**
+   * Clean up resources when the instance is destroyed.
+   */
   async onDestroy() {
     if (this.updateInterval) {
       clearInterval(this.updateInterval)
@@ -158,4 +134,5 @@ export class Agent implements AgentInterface {
   }
 }
 
+// Exporting Agent class as default
 export default Agent

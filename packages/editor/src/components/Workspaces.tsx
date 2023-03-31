@@ -1,27 +1,36 @@
-import WorkspaceProvider from '../contexts/WorkspaceProvider'
-import Composer from './Workspace'
+// DOCUMENTED 
+import WorkspaceProvider from '../contexts/WorkspaceProvider';
+import Composer from './Workspace';
 
-// TODO create a proper workspace component that can take in everything we need it to
-// for a standalone workspace environment.  Factor, events, etc.
-// Workspace should register events with the events provider, etc.
+/**
+ * A mapping of workspace types to their respective components.
+ */
 const workspaceMap = {
   spell: Composer,
   module: Composer,
-}
+};
 
+/**
+ * The Workspaces component displays a collection of workspaces, only showing the active one.
+ *
+ * @param tabs - An array of tabs.
+ * @param pubSub - An instance of a publish-subscribe pattern.
+ * @param activeTab - An object representing the active tab.
+ * @returns A JSX element containing the active workspace.
+ */
 const Workspaces = ({ tabs, pubSub, activeTab }) => {
   return (
     <>
-      {tabs.map(tab => {
-        //TODO use a tab.fileType instead of tab.type
-        // this will allow us to begin to expand towards a file base approach to the application.
-        const Workspace = workspaceMap[tab.type]
+      {tabs.map((tab) => {
+        // TODO use a tab.fileType instead of tab.type
+        // This will allow us to begin to expand towards a file base approach to the application.
+        const Workspace = workspaceMap[tab.type];
 
         const props = {
           tabs,
           pubSub,
           tab,
-        }
+        };
 
         return (
           <div
@@ -35,10 +44,10 @@ const Workspaces = ({ tabs, pubSub, activeTab }) => {
               <Workspace {...props} />
             </WorkspaceProvider>
           </div>
-        )
+        );
       })}
     </>
-  )
-}
+  );
+};
 
-export default Workspaces
+export default Workspaces;

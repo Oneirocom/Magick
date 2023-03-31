@@ -1,14 +1,41 @@
-import { Button } from '@magickml/client-core'
-import { useLayout } from '../contexts/LayoutProvider'
+// DOCUMENTED 
+/**
+ * Imports
+ */
+import React from "react"
+import { Button } from "@magickml/client-core"
+import { useLayout } from "../contexts/LayoutProvider"
 
-const CodeControl = () => {
+/**
+ * CodeControl component.
+ * Renders a button that when clicked will open a code editor.
+ */
+const CodeControl: React.FC = (): JSX.Element => {
+  /**
+   * Hooks
+   */
   const { createOrFocus, windowTypes } = useLayout()
 
-  const onClick = () => {
-    createOrFocus(windowTypes.TEXT_EDITOR, 'Text Editor')
+  /**
+   * Event handlers
+   */
+
+  /**
+   * Triggers the creation of a new window or the focus on an existing one.
+   */
+  const onClick = (): void => {
+    createOrFocus(windowTypes.TEXT_EDITOR, "Text Editor")
   }
 
-  return <Button onClick={onClick}>Open in code editor</Button>
+  /**
+   * Renders the component.
+   */
+  return (
+    <Button onClick={onClick}>Open in code editor</Button>
+  )
 }
 
+/**
+ * Exports
+ */
 export default CodeControl

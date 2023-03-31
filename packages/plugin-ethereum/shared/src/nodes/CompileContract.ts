@@ -1,7 +1,8 @@
-import { isEmpty } from 'lodash'
-import Rete from 'rete'
-import { v4 as uuidv4 } from 'uuid'
-import { API_ROOT_URL } from '@magickml/engine'
+// DOCUMENTED 
+import { isEmpty } from 'lodash';
+import Rete from 'rete';
+import { v4 as uuidv4 } from 'uuid';
+import { API_ROOT_URL } from '@magickml/engine';
 
 import {
   anySocket,
@@ -15,8 +16,9 @@ import {
   CodeControl,
   triggerSocket,
   WorkerData,
-} from '@magickml/engine'
+} from '@magickml/engine';
 
+// Default solidity code
 const defaultCode = `
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.1;
@@ -35,14 +37,17 @@ contract SimpleContract {
     }
 
 }
-`
+`;
 
-const info = `This is Solidity block of code, when trigger the code will be compiled and returned as bytecode`
+const info = `This is Solidity block of code, when trigger the code will be compiled and returned as bytecode`;
 
 type InputReturn = {
-  output: string
-} | undefined
+  output: string;
+} | undefined;
 
+/**
+ * CompileContract class is responsible for compiling the solidity contract and returning bytecode & ABI
+ */
 export class CompileContract extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
@@ -53,75 +58,88 @@ export class CompileContract extends MagickComponent<Promise<InputReturn>> {
         abi: 'output',
         trigger: 'option',
       },
-    }, 'Ethereum', info)
+    }, 'Ethereum', info);
 
     this.module = {
       nodeType: 'triggerIn',
       socket: anySocket,
-    }
+    };
 
-    this.contextMenuName = 'Compile Contract'
-    this.displayName = 'Compile Contract'
+    this.contextMenuName = 'Compile Contract';
+    this.displayName = 'Compile Contract';
   }
 
+  /**
+   * Sets up the node with input controls and sockets
+   *
+   * @param node - The MagickNode being built
+   * @returns - The node with inputs and outputs
+   */
   builder(node: MagickNode) {
-    if (!node.data.code) node.data.code = defaultCode
+    if (!node.data.code) node.data.code = defaultCode;
 
+    // Inspector controls
     const optimizationControl = new BooleanControl({
       dataKey: 'optimization',
       name: 'Optimization',
-    })
+    });
 
     const optimizationNumControl = new NumberControl({
       dataKey: 'optimization_num',
       name: 'Oprimization Number',
-    })
+    });
 
     const codeControl = new CodeControl({
       dataKey: 'code',
       name: 'Code',
-      language: 'solidity'
-    })
+      language: 'solidity',
+    });
 
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Component Name',
-    })
+    });
 
+    // Add inspector controls
     node.inspector
       .add(optimizationControl)
       .add(optimizationNumControl)
       .add(nameControl)
-      .add(codeControl)
+      .add(codeControl);
 
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const bytecodeOutput = new Rete.Output('bytecode', 'Bytecode', anySocket)
-    const abiOutput = new Rete.Output('abi', 'ABI', anySocket)
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    // Node input/output sockets
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
+    const bytecodeOutput = new Rete.Output('bytecode', 'Bytecode', anySocket);
+    const abiOutput = new Rete.Output('abi', 'ABI', anySocket);
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
 
-    // module components need to have a socket key.
-    // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
-    node.data.socketKey = node?.data?.socketKey || uuidv4()
+    node.data.socketKey = node?.data?.socketKey || uuidv4();
 
     return node
       .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(bytecodeOutput)
-      .addOutput(abiOutput)
+      .addOutput(abiOutput);
   }
 
+  /**
+   * Worker function to compile the solidity contract
+   *
+   * @param node - WorkerData object with data for the node
+   * @param _inputs - Inputs to the worker
+   * @param outputs - Outputs to the worker
+   * @param data - Optional data to be returned in the output
+   * @returns - Resulting outputs including bytecode and ABI
+   */
   async worker(
     node: WorkerData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ) {
-    this._task.closed = ['trigger']
+    this._task.closed = ['trigger'];
 
-    const server = `${API_ROOT_URL}/solidity`
-
-    const form = new FormData();
-    form.append("code", defaultCode);
+    const server = `${API_ROOT_URL}/solidity`;
 
     const requestOptions = {
       method: 'POST',
@@ -131,24 +149,24 @@ export class CompileContract extends MagickComponent<Promise<InputReturn>> {
       body: {
         code: node.data.code,
       },
-    }
+    };
 
-    const r = await fetch(server, requestOptions as any).catch(error =>
+    const response = await fetch(server, requestOptions as any).catch(error =>
       console.log('error', error)
-    )
+    );
 
-    const result = await (r as Response).json()
+    const result = await (response as Response).json();
 
-    const contract = result.output.contracts['code.sol']['SimpleContract']
+    const contract = result.output.contracts['code.sol']['SimpleContract'];
 
     if (data && !isEmpty(data)) {
-      this._task.closed = []
+      this._task.closed = [];
 
       return {
         output: data,
         bytecode: contract.evm.bytecode.object,
         abi: contract.abi,
-      }
+      };
     }
   }
 }

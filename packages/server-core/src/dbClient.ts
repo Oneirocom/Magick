@@ -1,118 +1,78 @@
+// DOCUMENTED 
 // For more information about this file see https://dove.feathersjs.com/guides/cli/databases.html
-import knex from 'knex'
-import type { Knex } from 'knex'
-import type { Application } from './declarations'
-import { SKIP_DB_EXTENSIONS } from "@magickml/engine"
+import type { Knex } from 'knex';
+import knex from 'knex';
+import type { Application } from './declarations';
 
-import os from 'os'
-const cpuCore = os.cpus()
-const isM1 = cpuCore[0].model.includes("Apple M1") || cpuCore[0].model.includes("Apple M2")
-const isWindows = os.platform() === 'win32'
-
-
+// Extend Configuration interface to include dbClient
 declare module './declarations' {
   interface Configuration {
-    dbClient: Knex
+    dbClient: Knex;
   }
 }
+
+// Supported database types
 export enum SupportedDbs {
   pg = 'pg',
   sqlite = 'sqlite',
 }
 
-export const dbDialect: SupportedDbs = process.env.DATABASE_TYPE as SupportedDbs
+// Get database type from environment variable
+export const dbDialect: SupportedDbs = process.env.DATABASE_TYPE as SupportedDbs;
 
+/**
+ * Get database configuration based on environment variables
+ *
+ * @returns {object} Database configuration settings
+ */
 const getDatabaseConfig = () => {
-  const dbType = process.env.DATABASE_TYPE || ''
-  const dbURL = process.env.DATABASE_URL
+  const dbType = process.env.DATABASE_TYPE || '';
+  const dbURL = process.env.DATABASE_URL;
 
-  if (!dbURL) throw new Error('Missing DATABASE_URL in your .env file.')
+  if (!dbURL) throw new Error('Missing DATABASE_URL in your .env file.');
 
-  // postgres config
-  if (dbType === 'pg')
+  // PostgreSQL configuration
+  if (dbType === SupportedDbs.pg) {
     return {
       client: dbType,
       connection: dbURL,
-    }
-  // sqlite config
-  if (dbType === 'sqlite')
+    };
+  }
+
+  // SQLite configuration
+  if (dbType === SupportedDbs.sqlite) {
     return {
       client: dbType,
       connection: {
         filename: dbURL,
       },
-      // sqlite does not support inserting default values
-      useNullAsDefault: true,
-      /* 
-      pool: {
-        afterCreate: function (conn, done) {
-          if(SKIP_DB_EXTENSIONS) {
-            console.warn(
-              'Skipping loading of sqlite extensions as SKIP_DB_EXTENSIONS is set to true'
-            )
-            return done(null, conn)
-          }
-          if(isM1) {
-            console.warn(
-              'Could not load VSS extension, vectors currently not supported on ARM64/M1 (this is fine)'
-            )
-            return done(null, conn)
-          }
-          if(isWindows) {
-            console.warn(
-              'Could not load VSS extension, vectors currently not supported on Win32 (this is fine)'
-            )
-            return done(null, conn)
-          }
-          // NOTE: the extension files are relative to the repository root directory
-          try {
-            conn.loadExtension('./lib/vector0', err => {
-              if( err ) return
-              try {
-                conn.loadExtension('./lib/vss0', err => {
-                  if( err ) return
-                  conn.get('select vss_version();', (err, res) => {
-                    if( err ) return
-                    // create vss_events virtual table if not already exists.
-                    conn.get(
-                      'create virtual table if not exists vss_events using vss0(event_embedding(1536));',
-                      err => {
-                        if (err) return console.error(err)
-                        else
-                          console.log('sqlite extensions loaded successfully')
-                      }
-                    )
-                  })
-                  done(null, conn)
-                })
-              } catch (err) {
-                console.warn(
-                  'Could not load extensions, vectors currently not supported on Win32 or ARM64/M1 (this is fine)'
-                )
-              }
-              done(null, conn)
-            })
-          } catch (err) {
-            console.warn(
-              'Could not load extensions, vectors currently not supported on Win32 or ARM64/M1 (this is fine)'
-            )
-          }
-        },
-      },*/
-    }
+      useNullAsDefault: true, // SQLite does not support inserting default values
+    };
+  }
 
-  throw new Error('Unsupported database type, use `pg` or `sqlite`')
-}
+  throw new Error('Unsupported database type, use `pg` or `sqlite`');
+};
 
+/**
+ * Set up database client
+ *
+ * @param {Application} app - The application instance
+ */
 export const dbClient = (app: Application) => {
-  const config = getDatabaseConfig()
-  const db = knex(config)
-  app.set('dbClient', db)
-}
+  const config = getDatabaseConfig();
+  const db = knex(config);
+  app.set('dbClient', db);
+};
 
+// Map of supported databases to their JSON support status
 const dbSupportJson: Record<SupportedDbs, boolean> = {
   [SupportedDbs.pg]: true,
   [SupportedDbs.sqlite]: false,
-}
+};
 
-export const doesDbSupportJson = (): boolean => dbSupportJson[dbDialect]
+/**
+ * Check if the current database supports JSON data type
+ *
+ * @returns {boolean} True if the database supports JSON, false otherwise
+ */
+export const doesDbSupportJson = (): boolean => dbSupportJson[dbDialect];

@@ -1,9 +1,14 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
-import type { Application } from '../../declarations'
-import { ProjectsService } from './projects.class'
-export * from './projects.class'
+// DOCUMENTED 
+// For more information about this file, see https://dove.feathersjs.com/guides/cli/service.html
+import type { Application } from '../../declarations';
+import { ProjectsService } from './projects.class';
+export * from './projects.class';
 
-// A configure function that registers the service and its hooks via `app.configure`
+/**
+ * Configure function that registers the service and its hooks.
+ * Exports projects function for other modules to import.
+ * @param app {Application} - Feathers application
+ */
 export const projects = (app: Application) => {
   // Register our service on the Feathers application
   app.use('projects', new ProjectsService(), {
@@ -11,7 +16,7 @@ export const projects = (app: Application) => {
     methods: ['find', 'create'],
     // You can add additional custom events to be sent to clients here
     events: [],
-  })
+  });
 
   // Initialize hooks
   app.service('projects').hooks({
@@ -21,8 +26,7 @@ export const projects = (app: Application) => {
     before: {
       all: [],
       find: [],
-      create: [
-      ],
+      create: [],
     },
     after: {
       all: [],
@@ -30,12 +34,15 @@ export const projects = (app: Application) => {
     error: {
       all: [],
     },
-  })
-}
+  });
+};
 
 // Add this service to the service type index
 declare module '../../declarations' {
+  /**
+   * Interface for ServiceTypes
+   */
   interface ServiceTypes {
-    'projects': ProjectsService
+    'projects': ProjectsService;
   }
 }

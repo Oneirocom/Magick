@@ -1,14 +1,17 @@
+// DOCUMENTED 
 import { createRoot } from 'react-dom/client'
 import { MagickIDE, AppConfig } from '@magickml/editor'
-import { DEFAULT_PROJECT_ID, API_ROOT_URL } from '@magickml/engine'
+import { DEFAULT_PROJECT_ID, API_ROOT_URL, TRUSTED_PARENT_URL, UNTRUSTED_IFRAME } from '@magickml/engine'
 
-// The editor is in its own window running standalone
+/**
+ * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
+ */
 if (window === window.parent) {
   const container = document.getElementById('root')
   const root = createRoot(container) // createRoot(container!) if you use TypeScript
   ;(window as any).root = root
 
-  // check urlParams for projectId and apiUrl
+  // Check URL parameters for projectId and apiUrl
   const projectId =
     new URLSearchParams(window.location.search).get('projectId') ??
     DEFAULT_PROJECT_ID
@@ -28,19 +31,19 @@ if (window === window.parent) {
   root.render(<Root />)
 }
 
-// If the editor has been loaded in an iframe, we need to listen for messages from the parent
+/**
+ * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
+ */
 else {
   window.addEventListener(
     'message',
     event => {
-      const cloudUrlRaw =
-        import.meta.env.VITE_APP_TRUSTED_PARENT_URL || 'http://localhost:3000'
+      // Remove possible trailing slash on only the end
+      const cloudUrl = TRUSTED_PARENT_URL.replace(/\/+$/, '')
 
-      // remove possible trailing slash on only the end
-      const cloudUrl = cloudUrlRaw.replace(/\/+$/, '')
-
+      // Check for trusted origin
       if (
-        !import.meta.env.VITE_UNTRUSTED_IFRAME &&
+        !UNTRUSTED_IFRAME &&
         event.source !== window &&
         event.origin !== window.location.origin &&
         event.origin !== cloudUrl
@@ -53,9 +56,9 @@ else {
       const { data } = event
       const { type, payload } = data
 
-      // not sure when we would use different types, but good to be sure.
+      // Initialize and render the MagickIDE when message type is 'INIT'
       if (type === 'INIT') {
-        // to do - we shold store this stuiff in localstorage
+        // TODO: store configuration in localstorage
         const { config } = payload
 
         const Root = () => <MagickIDE config={config} />

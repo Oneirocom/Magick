@@ -1,3 +1,4 @@
+// DOCUMENTED 
 import DownloadIcon from '@mui/icons-material/Download'
 import { Box } from '@mui/material'
 import Button from '@mui/material/Button'
@@ -11,7 +12,8 @@ import useFineTuneResults from './useFineTuneResults'
 
 import { OPENAI_ENDPOINT } from '../constants'
 
-export type ResultFileRecord = {
+// Interface for ResultFileRecord
+export interface ResultFileRecord {
   elapsed_examples: number
   elapsed_tokens: number
   step: string
@@ -20,16 +22,27 @@ export type ResultFileRecord = {
   training_token_accuracy: number
 }
 
+/**
+ * FineTuneResultsCard component to display fine-tuning results.
+ *
+ * @param {OpenAI.FineTune} fineTune - FineTuning data
+ * @returns {JSX.Element} FineTuneResultsCard component
+ */
 export default function FineTuneResultsCard({
   fineTune,
 }: {
   fineTune: OpenAI.FineTune
-}) {
+}): JSX.Element {
   const resultFile = fineTune.result_files[0]
   const { headers } = useAuthentication()
   const { results, error } = useFineTuneResults(resultFile?.id)
 
-  async function download(file: OpenAI.File) {
+  /**
+   * Download the fine-tuning results file.
+   *
+   * @param {OpenAI.File} file - File to download
+   */
+  async function download(file: OpenAI.File): Promise<void> {
     const response = await fetch(
       `${OPENAI_ENDPOINT}/files/${file.id}/content`,
       { headers }
@@ -63,7 +76,7 @@ export default function FineTuneResultsCard({
         {results && resultFile ? (
           <Button
             size="small"
-            onClick={event => {
+            onClick={(event) => {
               event.preventDefault()
               download(resultFile)
             }}

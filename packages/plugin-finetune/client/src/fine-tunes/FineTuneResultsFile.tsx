@@ -1,13 +1,32 @@
-import ErrorMessage from '../components/ErrorMessage'
-import Loading from '../components/Loading'
-import React from 'react'
-import useFineTuneResults from './useFineTuneResults'
+// DOCUMENTED 
+/** This component represents FineTuneResultsFile. It displays the results of
+ * fine-tuning a model on a given dataset.
+ * @param {string} id - the id of the dataset the model was fine-tuned on
+ * @returns {JSX.Element} - a table displaying the results of fine-tuning
+*/
+import React, { FC } from 'react';
+import ErrorMessage from '../components/ErrorMessage';
+import Loading from '../components/Loading';
+import useFineTuneResults from './useFineTuneResults';
 
-export default function FineTuneResultsFile({ id }: { id: string }) {
-  const { results, error } = useFineTuneResults(id)
+interface FineTuneResultsFileProps {
+  id: string;
+}
 
-  if (error) return <ErrorMessage error={error} />
-  if (!results) return <Loading />
+const FineTuneResultsFile: FC<FineTuneResultsFileProps> = ({ id }) => {
+  /** Fetches the results of the fine-tuning process.
+   * @param {string} id - the id of the dataset the model was fine-tuned on
+   * @returns {Object} - an object containing the results of the fine-tuning process
+  */
+  const { results, error } = useFineTuneResults(id);
+
+  if (error) {
+    return <ErrorMessage error={error} />;
+  }
+
+  if (!results) {
+    return <Loading />;
+  }
 
   return (
     <table className="w-full text-left" cellPadding={4}>
@@ -17,12 +36,12 @@ export default function FineTuneResultsFile({ id }: { id: string }) {
           <th>Elapsed Tokens</th>
           <th>Examples</th>
           <th>Training Loss</th>
-          <th>Sequency Accuracy</th>
+          <th>Sequence Accuracy</th>
           <th>Token Accuracy</th>
         </tr>
       </thead>
       <tbody>
-        {results.map(row => (
+        {results.map((row) => (
           <tr key={row.step}>
             <td>{row.step}</td>
             <td>{row.elapsed_tokens}</td>
@@ -34,5 +53,7 @@ export default function FineTuneResultsFile({ id }: { id: string }) {
         ))}
       </tbody>
     </table>
-  )
-}
+  );
+};
+
+export default FineTuneResultsFile;

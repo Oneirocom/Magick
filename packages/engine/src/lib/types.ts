@@ -22,6 +22,8 @@ import { SpellManager } from './spellManager'
 
 import io from 'socket.io'
 
+export { MagickComponent } from './engine'
+
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 
 export * from './schemas'
@@ -193,7 +195,6 @@ export type RunSpell<DataType = Record<string, unknown>> = ({
 }: runSpellType<DataType>) => Promise<DataType>
 
 export type EngineContext<DataType = Record<string, unknown>> = {
-  env: Env
   runSpell: RunSpell<DataType>
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
