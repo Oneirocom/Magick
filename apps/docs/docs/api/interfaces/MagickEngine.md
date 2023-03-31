@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/engine.ts:32](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/engine.ts#L32)
+[packages/engine/src/lib/engine.ts:32](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/engine.ts#L32)
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/engine.ts:31](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/engine.ts#L31)
+[packages/engine/src/lib/engine.ts:31](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/engine.ts#L31)
 
 ## Methods
 

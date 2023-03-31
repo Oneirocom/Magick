@@ -30,7 +30,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:303](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L303)
+[packages/engine/src/lib/types.ts:302](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/types.ts#L302)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:302](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L302)
+[packages/engine/src/lib/types.ts:301](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/types.ts#L301)
 
 ___
 

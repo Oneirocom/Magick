@@ -24,7 +24,7 @@ PluginManager.constructor
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:400](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L400)
+[packages/engine/src/lib/plugin.ts:399](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L399)
 
 ## Properties
 
@@ -38,7 +38,7 @@ PluginManager.componentList
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:183](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L183)
+[packages/engine/src/lib/plugin.ts:182](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L182)
 
 ___
 
@@ -52,7 +52,7 @@ PluginManager.pluginList
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:399](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L399)
+[packages/engine/src/lib/plugin.ts:398](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L398)
 
 ___
 
@@ -66,7 +66,7 @@ PluginManager.plugins
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:184](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L184)
+[packages/engine/src/lib/plugin.ts:183](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L183)
 
 ## Methods
 
@@ -80,7 +80,7 @@ PluginManager.plugins
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:405](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L405)
+[packages/engine/src/lib/plugin.ts:404](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L404)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:419](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L419)
+[packages/engine/src/lib/plugin.ts:418](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L418)
 
 ___
 
@@ -119,7 +119,7 @@ PluginManager.getCompletionProviders
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:243](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L243)
+[packages/engine/src/lib/plugin.ts:242](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L242)
 
 ___
 
@@ -137,7 +137,7 @@ PluginManager.getInputTypes
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:194](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L194)
+[packages/engine/src/lib/plugin.ts:193](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L193)
 
 ___
 
@@ -155,7 +155,7 @@ PluginManager.getNodes
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:215](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L215)
+[packages/engine/src/lib/plugin.ts:214](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L214)
 
 ___
 
@@ -173,7 +173,7 @@ PluginManager.getOutputTypes
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:205](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L205)
+[packages/engine/src/lib/plugin.ts:204](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L204)
 
 ___
 
@@ -197,7 +197,7 @@ PluginManager.getSecrets
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:232](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L232)
+[packages/engine/src/lib/plugin.ts:231](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L231)
 
 ___
 
@@ -211,7 +211,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:443](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L443)
+[packages/engine/src/lib/plugin.ts:442](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L442)
 
 ___
 
@@ -225,21 +225,21 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:455](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L455)
+[packages/engine/src/lib/plugin.ts:454](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L454)
 
 ___
 
 ### getServices
 
-▸ **getServices**(): [`string`, (`app`: `Application`<`any`, `any`\>) => `void`][]
+▸ **getServices**(): [`string`, (`app`: `any`) => `void`][]
 
 #### Returns
 
-[`string`, (`app`: `Application`<`any`, `any`\>) => `void`][]
+[`string`, (`app`: `any`) => `void`][]
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:433](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L433)
+[packages/engine/src/lib/plugin.ts:432](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L432)
 
 ___
 
@@ -263,4 +263,4 @@ PluginManager.register
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:190](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L190)
+[packages/engine/src/lib/plugin.ts:189](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L189)

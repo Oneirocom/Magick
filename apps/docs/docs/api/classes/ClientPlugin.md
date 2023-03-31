@@ -30,7 +30,7 @@ Plugin.constructor
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:90](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L90)
+[packages/engine/src/lib/plugin.ts:89](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L89)
 
 ## Properties
 
@@ -40,7 +40,7 @@ Plugin.constructor
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:83](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L83)
+[packages/engine/src/lib/plugin.ts:82](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L82)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:85](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L85)
+[packages/engine/src/lib/plugin.ts:84](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L84)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:86](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L86)
+[packages/engine/src/lib/plugin.ts:85](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L85)
 
 ___
 
@@ -74,7 +74,7 @@ Plugin.completionProviders
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:63](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L63)
+[packages/engine/src/lib/plugin.ts:62](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L62)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:84](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L84)
+[packages/engine/src/lib/plugin.ts:83](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L83)
 
 ___
 
@@ -98,7 +98,7 @@ Plugin.inputTypes
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:60](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L60)
+[packages/engine/src/lib/plugin.ts:59](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L59)
 
 ___
 
@@ -112,7 +112,7 @@ Plugin.name
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:58](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L58)
+[packages/engine/src/lib/plugin.ts:57](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L57)
 
 ___
 
@@ -126,7 +126,7 @@ Plugin.nodes
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:59](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L59)
+[packages/engine/src/lib/plugin.ts:58](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L58)
 
 ___
 
@@ -140,7 +140,7 @@ Plugin.outputTypes
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:61](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L61)
+[packages/engine/src/lib/plugin.ts:60](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L60)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:89](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L89)
+[packages/engine/src/lib/plugin.ts:88](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L88)
 
 ___
 
@@ -164,7 +164,7 @@ Plugin.secrets
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:62](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L62)
+[packages/engine/src/lib/plugin.ts:61](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L61)
 
 ___
 
@@ -174,4 +174,4 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:87](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L87)
+[packages/engine/src/lib/plugin.ts:86](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/plugin.ts#L86)

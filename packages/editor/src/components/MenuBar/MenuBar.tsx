@@ -38,7 +38,6 @@ const MenuBar = () => {
   // Grab all events we need
   const {
     $SAVE_SPELL,
-    $CREATE_PROJECT_WINDOW,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
     $CREATE_TEXT_EDITOR,
@@ -121,16 +120,6 @@ const MenuBar = () => {
     navigate('/home/all-projects?import')
   }
 
-  /**
-   * Project window creation handler
-   */
-  const onProjectWindowCreate = () => {
-    publish($CREATE_PROJECT_WINDOW(activeTabRef.current?.id))
-  }
-
-  /**
-   * Playtest creation handler
-   */
   const onPlaytestCreate = () => {
     if (!activeTabRef.current) return
     publish($CREATE_PLAYTEST(activeTabRef.current.id))
@@ -290,9 +279,6 @@ const MenuBar = () => {
         inspector: {
           onClick: onInspectorCreate,
         },
-        project: {
-          onClick: onProjectWindowCreate,
-        },
         playtest: {
           onClick: onPlaytestCreate,
         },
@@ -353,15 +339,15 @@ const MenuBar = () => {
         <ul className={css['menu-panel']}>
           {Object.entries(item.items as [string, Record<string, any>][]).map(
             ([key, item]: [string, Record<string, any>]) => {
-              useHotkeys(
-                item.hotKey,
-                event => {
-                  event.preventDefault()
-                  item.onClick()
-                },
-                { enableOnTags: ['INPUT'] },
-                [item.onClick]
-              )
+              // useHotkeys(
+              //   item.hotKey,
+              //   event => {
+              //     event.preventDefault()
+              //     item.onClick()
+              //   },
+              //   { enableOnTags: ['INPUT'] },
+              //   [item.onClick]
+              // )
 
               return (
                 <ListItem

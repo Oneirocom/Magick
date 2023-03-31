@@ -1,5 +1,8 @@
-// DOCUMENTED 
-import { ClientPlugin, ClientPluginManager, pluginManager } from '@magickml/engine'
+import {
+  ClientPlugin,
+  ClientPluginManager,
+  pluginManager,
+} from '@magickml/engine'
 import AppsIcon from '@mui/icons-material/Apps'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
@@ -19,6 +22,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { SetAPIKeys } from './SetAPIKeys'
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
+import ProjectWindow from './ProjectWindow'
 
 // Constants
 const drawerWidth = 150
@@ -86,11 +90,11 @@ const StyledDrawer = styled(MuiDrawer, {
 
 // DrawerItem component properties
 type DrawerItemProps = {
-  Icon: any,
-  open: boolean,
-  text: string,
-  active: boolean,
-  onClick?: () => void,
+  Icon: any
+  open: boolean
+  text: string
+  active: boolean
+  onClick?: () => void
 }
 
 /**
@@ -129,17 +133,20 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
 
 // PluginDrawerItems component properties
 type PluginDrawerItemsProps = {
-  onClick: (path: string) => () => void,
-  open: boolean,
+  onClick: (path: string) => () => void
+  open: boolean
 }
 
 /**
  * The PluginDrawerItems component used to display plugin-related drawer items.
  */
-const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({ onClick, open }) => {
+const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
+  onClick,
+  open,
+}) => {
   const location = useLocation()
   const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
-  let lastPlugin:string|null = null
+  let lastPlugin: string | null = null
   let divider = false
   return (
     <>
@@ -279,6 +286,7 @@ export function Drawer({ children }) {
           {!isAPIKeysSet && <SetAPIKeys />}
         </List>
       </StyledDrawer>
+      <ProjectWindow />
       {children}
     </div>
   )
