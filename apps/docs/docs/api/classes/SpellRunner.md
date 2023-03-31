@@ -20,7 +20,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:35](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L35)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:35](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L35)
 
 ## Properties
 
@@ -42,7 +42,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:29](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L29)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:29](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L29)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:28](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L28)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:28](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L28)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:31](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L31)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:31](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L31)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:30](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L30)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:30](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L30)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:32](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L32)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:32](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L32)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:33](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L33)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:33](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L33)
 
 ## Accessors
 
@@ -122,7 +122,7 @@ Getter method which returns the run context for the current spell.
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:73](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L73)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:73](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L73)
 
 ___
 
@@ -136,7 +136,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:83](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L83)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:83](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L83)
 
 ___
 
@@ -152,7 +152,7 @@ Getter method for the inputs for the loaded spell
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:66](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L66)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:66](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L66)
 
 ___
 
@@ -168,7 +168,7 @@ Getter method to return a formatted set of outputs of the most recent spell run.
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:90](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L90)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:90](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L90)
 
 ___
 
@@ -184,7 +184,7 @@ Getter method for the triggers ins for the loaded spell
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:59](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L59)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:59](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L59)
 
 ## Methods
 
@@ -200,7 +200,7 @@ Clears the cache of spells which the runner has ran.
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:99](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L99)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:99](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L99)
 
 ___
 
@@ -225,7 +225,7 @@ since that is the shape that rete inputs take when processing the graph.
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:109](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L109)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:109](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L109)
 
 ___
 
@@ -248,7 +248,7 @@ and swaps the socket key for the socket name for human readable outputs.
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:127](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L127)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:127](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L127)
 
 ___
 
@@ -270,13 +270,13 @@ Gewts a single component from the engine by name.
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:119](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L119)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:119](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L119)
 
 ___
 
 ### \_getTriggeredNodeByName
 
-▸ `Private` **_getTriggeredNodeByName**(`componentName`): `undefined` \| `NodeData`
+▸ `Private` **_getTriggeredNodeByName**(`componentName`): `undefined` \| [`NodeData`](../interfaces/NodeData.md)
 
 Allows us to grab a specific triggered node by name
 
@@ -288,11 +288,11 @@ Allows us to grab a specific triggered node by name
 
 #### Returns
 
-`undefined` \| `NodeData`
+`undefined` \| [`NodeData`](../interfaces/NodeData.md)
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:148](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L148)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:148](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L148)
 
 ___
 
@@ -309,7 +309,7 @@ it for the next run.
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:165](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L165)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:165](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L165)
 
 ___
 
@@ -338,7 +338,7 @@ Loads a spell into the spell runner.
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:184](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L184)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:184](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L184)
 
 ___
 
@@ -363,4 +363,4 @@ method.
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellRunner.ts:203](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/spellManager/SpellRunner.ts#L203)
+[packages/engine/src/lib/spellManager/SpellRunner.ts:203](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellRunner.ts#L203)

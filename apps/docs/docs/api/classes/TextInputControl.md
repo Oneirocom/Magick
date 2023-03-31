@@ -6,6 +6,9 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
+A custom Rete control for a text input. It extends the Control class
+from Rete and provides a renderer for a React component.
+
 ## Hierarchy
 
 - `Control`
@@ -16,17 +19,35 @@ custom_edit_url: null
 
 ### constructor
 
-• **new TextInputControl**(`«destructured»`)
+• **new TextInputControl**(`param0`)
+
+Constructor for the custom TextInputControl control.
+
+**`Property`**
+
+The associated Rete editor
+
+**`Property`**
+
+The input key to identify this control
+
+**`Property`**
+
+The initial input value
+
+**`Property`**
+
+The label to display with the text input (optional)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `editor` | ``null`` \| [`MagickEditor`](MagickEditor.md) |
-| › `key` | `string` |
-| › `label?` | `string` |
-| › `value` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `param0` | `Object` | An object containing editor, key, value, and label properties |
+| `param0.editor` | ``null`` \| [`MagickEditor`](MagickEditor.md) | - |
+| `param0.key` | `string` | - |
+| `param0.label?` | `string` | - |
+| `param0.value` | `string` | - |
 
 #### Overrides
 
@@ -34,7 +55,7 @@ Control.constructor
 
 #### Defined in
 
-[packages/engine/src/lib/dataControls/TextInputControl.tsx:44](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/dataControls/TextInputControl.tsx#L44)
+[packages/engine/src/lib/dataControls/TextInputControl.tsx:68](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/dataControls/TextInputControl.tsx#L68)
 
 ## Properties
 
@@ -44,7 +65,7 @@ Control.constructor
 
 #### Defined in
 
-[packages/engine/src/lib/dataControls/TextInputControl.tsx:42](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/dataControls/TextInputControl.tsx#L42)
+[packages/engine/src/lib/dataControls/TextInputControl.tsx:57](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/dataControls/TextInputControl.tsx#L57)
 
 ___
 
@@ -96,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/dataControls/TextInputControl.tsx:43](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/dataControls/TextInputControl.tsx#L43)
+[packages/engine/src/lib/dataControls/TextInputControl.tsx:58](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/dataControls/TextInputControl.tsx#L58)
 
 ___
 
@@ -106,7 +127,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/dataControls/TextInputControl.tsx:41](https://github.com/Oneirocom/MagickML/blob/dcf6d21c/packages/engine/src/lib/dataControls/TextInputControl.tsx#L41)
+[packages/engine/src/lib/dataControls/TextInputControl.tsx:56](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/dataControls/TextInputControl.tsx#L56)
 
 ## Methods
 

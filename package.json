@@ -185,6 +185,7 @@
     "tslib": "^2.4.1",
     "twitter-api-v2": "^1.14.2",
     "typedoc": "^0.23.28",
+    "typedoc-plugin-markdown": "^3.14.0",
     "unique-names-generator": "^4.7.1",
     "unirest": "^0.6.0",
     "url": "^0.11.0",
