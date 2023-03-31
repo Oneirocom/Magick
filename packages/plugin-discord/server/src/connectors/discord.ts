@@ -1,3 +1,4 @@
+// DOCUMENTED
 import { AgentInterface, WorldManager } from '@magickml/engine'
 import Discord, {
   ChannelType,
@@ -25,7 +26,7 @@ interface UserObject {
 }
 export class DiscordConnector {
   client = Discord.Client as any
-  agent?: AgentInterface
+  agent: AgentInterface
   spellRunner: any = null
   discord_wake_words: string[] = []
   discord_userid = ''
@@ -386,7 +387,10 @@ export class DiscordConnector {
     const args = {}
     args['grpc_args'] = {}
 
-    let { author, channel, content, mentions, id } = message
+    let { content } = message
+
+
+    const { author, channel, mentions, id } = message
 
     //replaces the discord specific mentions (<!@id>) to the actual mention
     content = content.split(' ')
@@ -594,10 +598,10 @@ export class DiscordConnector {
       isBot: boolean
       info3d: string
     }[] = []
-    let now = new Date();
-    let pastHour = new Date(now.getTime() - 60 * 60 * 1000); // calculate the time one hour ago
+    const now = new Date();
+    const pastHour = new Date(now.getTime() - 60 * 60 * 1000); // calculate the time one hour ago
     const snowflake = SnowflakeUtil.generate();
-    let msgs = await this.getActiveUsers(channel, 12) as unknown as any[]
+    const msgs = await this.getActiveUsers(channel, 12) as unknown as any[]
     console.log(msgs)
     msgs.forEach(element => {
       entities.push({
@@ -694,7 +698,7 @@ export class DiscordConnector {
 
     const oldResponse = this.getResponse(channel.id, id)
     if (oldResponse === undefined) {
-      await channel.messages.fetch(id).then(async (msg: any) => { })
+      await channel.messages.fetch(id).then(async (msg: any) => {/* null */})
       log('message not found')
       return
     }
@@ -792,10 +796,11 @@ export class DiscordConnector {
       this.client.users
         .fetch(newMember.userId)
         .then((user: { username: string | boolean }) => {
+          const username = user.username
           if (newMember.status === 'online') {
-            this.worldManager.addUser(user.username, 'discord')
+            this.worldManager.addUser(username as string, 'discord')
           } else {
-            this.worldManager.removeUser(user.username, 'discord')
+            this.worldManager.removeUser(username as string, 'discord')
           }
           // TODO: Replace message with direct message handler
           log('Discord', newMember.status, user.username, utcStr)

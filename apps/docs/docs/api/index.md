@@ -8,6 +8,8 @@ custom_edit_url: null
 
 ## Classes
 
+- [Agent](classes/Agent.md)
+- [AgentManager](classes/AgentManager.md)
 - [BooleanControl](classes/BooleanControl.md)
 - [ClientPlugin](classes/ClientPlugin.md)
 - [ClientPluginManager](classes/ClientPluginManager.md)
@@ -22,6 +24,7 @@ custom_edit_url: null
 - [PlaytestControl](classes/PlaytestControl.md)
 - [ServerPlugin](classes/ServerPlugin.md)
 - [ServerPluginManager](classes/ServerPluginManager.md)
+- [SpellError](classes/SpellError.md)
 - [SpellManager](classes/SpellManager.md)
 - [SpellRunner](classes/SpellRunner.md)
 - [SwitchControl](classes/SwitchControl.md)
@@ -41,27 +44,27 @@ custom_edit_url: null
 
 ## Type Aliases
 
-### Agent
-
-Ƭ **Agent**: `Static`<typeof [`agentSchema`](#agentschema)\>
-
-The type for an agent object that's based on the `agentSchema`.
-
-#### Defined in
-
-[packages/engine/src/lib/schemas.ts:68](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/schemas.ts#L68)
-
-___
-
 ### AgentInterface
 
-Ƭ **AgentInterface**: [`Agent`](#agent)
+Ƭ **AgentInterface**: [`AgentSchema`](#agentschema)
 
 The interface for an agent object that's based on the `agentSchema`.
 
 #### Defined in
 
-[packages/engine/src/lib/schemas.ts:70](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/schemas.ts#L70)
+[packages/engine/src/lib/schemas.ts:70](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/schemas.ts#L70)
+
+___
+
+### AgentSchema
+
+Ƭ **AgentSchema**: `Static`<typeof [`agentSchema`](#agentschema-1)\>
+
+The type for an agent object that's based on the `agentSchema`.
+
+#### Defined in
+
+[packages/engine/src/lib/schemas.ts:68](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/schemas.ts#L68)
 
 ___
 
@@ -85,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:611](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L611)
+[packages/engine/src/lib/types.ts:611](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L611)
 
 ___
 
@@ -111,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:551](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L551)
+[packages/engine/src/lib/types.ts:551](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L551)
 
 ___
 
@@ -128,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:546](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L546)
+[packages/engine/src/lib/types.ts:546](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L546)
 
 ___
 
@@ -145,7 +148,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:482](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L482)
+[packages/engine/src/lib/types.ts:482](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L482)
 
 ___
 
@@ -169,7 +172,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:112](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L112)
+[packages/engine/src/lib/types.ts:112](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L112)
 
 ___
 
@@ -181,9 +184,9 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `context` | { `currentSpell`: [`SpellInterface`](#spellinterface) ; `magick`: [`EngineContext`](#enginecontext) ; `module`: `any` ; `projectId`: `string` ; `secrets`: `Record`<`string`, `string`\>  } |
+| `context` | { `context`: [`EngineContext`](#enginecontext) ; `currentSpell`: [`SpellInterface`](#spellinterface) ; `module`: `any` ; `projectId`: `string` ; `secrets`: `Record`<`string`, `string`\>  } |
+| `context.context` | [`EngineContext`](#enginecontext) |
 | `context.currentSpell` | [`SpellInterface`](#spellinterface) |
-| `context.magick` | [`EngineContext`](#enginecontext) |
 | `context.module` | `any` |
 | `context.projectId` | `string` |
 | `context.secrets` | `Record`<`string`, `string`\> |
@@ -193,7 +196,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:571](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L571)
+[packages/engine/src/lib/types.ts:571](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L571)
 
 ___
 
@@ -213,7 +216,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:511](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L511)
+[packages/engine/src/lib/types.ts:511](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L511)
 
 ___
 
@@ -235,7 +238,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:519](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L519)
+[packages/engine/src/lib/types.ts:519](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L519)
 
 ___
 
@@ -252,7 +255,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:126](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L126)
+[packages/engine/src/lib/types.ts:126](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L126)
 
 ___
 
@@ -270,7 +273,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:500](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L500)
+[packages/engine/src/lib/types.ts:500](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L500)
 
 ___
 
@@ -280,7 +283,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:494](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L494)
+[packages/engine/src/lib/types.ts:494](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L494)
 
 ___
 
@@ -296,7 +299,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:372](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L372)
+[packages/engine/src/lib/types.ts:372](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L372)
 
 ___
 
@@ -306,7 +309,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:307](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L307)
+[packages/engine/src/lib/types.ts:307](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L307)
 
 ___
 
@@ -316,7 +319,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:54](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L54)
+[packages/engine/src/lib/types.ts:54](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L54)
 
 ___
 
@@ -326,7 +329,19 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:89](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L89)
+[packages/engine/src/lib/types.ts:89](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L89)
+
+___
+
+### CustomErrorCodes
+
+Ƭ **CustomErrorCodes**: ``"input-failed"`` \| ``"server-error"`` \| ``"not-found"`` \| ``"already-exists"`` \| ``"authentication-error"``
+
+The possible custom error codes to be used in the application.
+
+#### Defined in
+
+packages/engine/src/lib/utils/SpellError.ts:5
 
 ___
 
@@ -347,7 +362,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:309](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L309)
+[packages/engine/src/lib/types.ts:309](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L309)
 
 ___
 
@@ -374,7 +389,7 @@ Function that throws an error
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/consolePlugin/index.ts:18](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/consolePlugin/index.ts#L18)
+[packages/engine/src/lib/plugins/consolePlugin/index.ts:18](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/consolePlugin/index.ts#L18)
 
 ___
 
@@ -396,7 +411,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:44](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L44)
+[packages/engine/src/lib/types.ts:44](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L44)
 
 ___
 
@@ -414,7 +429,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:565](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L565)
+[packages/engine/src/lib/types.ts:565](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L565)
 
 ___
 
@@ -439,7 +454,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:197](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L197)
+[packages/engine/src/lib/types.ts:197](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L197)
 
 ___
 
@@ -455,7 +470,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:158](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L158)
+[packages/engine/src/lib/types.ts:158](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L158)
 
 ___
 
@@ -482,7 +497,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:60](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L60)
+[packages/engine/src/lib/types.ts:60](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L60)
 
 ___
 
@@ -492,7 +507,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:110](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L110)
+[packages/engine/src/lib/types.ts:110](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L110)
 
 ___
 
@@ -520,7 +535,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:286](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L286)
+[packages/engine/src/lib/types.ts:286](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L286)
 
 ___
 
@@ -530,7 +545,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:475](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L475)
+[packages/engine/src/lib/types.ts:475](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L475)
 
 ___
 
@@ -540,7 +555,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:56](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L56)
+[packages/engine/src/lib/types.ts:56](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L56)
 
 ___
 
@@ -563,7 +578,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:91](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L91)
+[packages/engine/src/lib/types.ts:91](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L91)
 
 ___
 
@@ -604,7 +619,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:174](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L174)
+[packages/engine/src/lib/types.ts:174](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L174)
 
 ___
 
@@ -622,7 +637,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:104](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L104)
+[packages/engine/src/lib/types.ts:104](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L104)
 
 ___
 
@@ -632,7 +647,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:468](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L468)
+[packages/engine/src/lib/types.ts:468](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L468)
 
 ___
 
@@ -642,7 +657,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:364](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L364)
+[packages/engine/src/lib/types.ts:364](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L364)
 
 ___
 
@@ -666,7 +681,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:645](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L645)
+[packages/engine/src/lib/types.ts:645](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L645)
 
 ___
 
@@ -676,7 +691,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:366](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L366)
+[packages/engine/src/lib/types.ts:366](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L366)
 
 ___
 
@@ -692,7 +707,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:40](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L40)
+[packages/engine/src/lib/types.ts:40](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L40)
 
 ___
 
@@ -702,7 +717,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:496](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L496)
+[packages/engine/src/lib/types.ts:496](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L496)
 
 ___
 
@@ -723,7 +738,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:31](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L31)
+[packages/engine/src/lib/types.ts:31](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L31)
 
 ___
 
@@ -743,7 +758,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/engine.ts:55](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/engine.ts#L55)
+[packages/engine/src/lib/engine.ts:55](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/engine.ts#L55)
 
 ___
 
@@ -753,7 +768,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:379](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L379)
+[packages/engine/src/lib/types.ts:379](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L379)
 
 ___
 
@@ -774,7 +789,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/Inspector.ts:19](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/inspectorPlugin/Inspector.ts#L19)
+[packages/engine/src/lib/plugins/inspectorPlugin/Inspector.ts:19](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/inspectorPlugin/Inspector.ts#L19)
 
 ___
 
@@ -784,7 +799,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/engine.ts:123](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/engine.ts#L123)
+[packages/engine/src/lib/engine.ts:123](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/engine.ts#L123)
 
 ___
 
@@ -794,7 +809,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:318](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L318)
+[packages/engine/src/lib/types.ts:318](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L318)
 
 ___
 
@@ -804,7 +819,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:319](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L319)
+[packages/engine/src/lib/types.ts:319](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L319)
 
 ___
 
@@ -820,7 +835,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/engine.ts:214](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/engine.ts#L214)
+[packages/engine/src/lib/engine.ts:214](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/engine.ts#L214)
 
 ___
 
@@ -830,7 +845,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:324](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L324)
+[packages/engine/src/lib/types.ts:324](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L324)
 
 ___
 
@@ -855,7 +870,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:399](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L399)
+[packages/engine/src/lib/types.ts:399](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L399)
 
 ___
 
@@ -874,7 +889,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:446](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L446)
+[packages/engine/src/lib/types.ts:446](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L446)
 
 ___
 
@@ -884,7 +899,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:438](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L438)
+[packages/engine/src/lib/types.ts:438](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L438)
 
 ___
 
@@ -894,7 +909,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:439](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L439)
+[packages/engine/src/lib/types.ts:439](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L439)
 
 ___
 
@@ -904,7 +919,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:461](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L461)
+[packages/engine/src/lib/types.ts:461](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L461)
 
 ___
 
@@ -918,7 +933,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:462](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L462)
+[packages/engine/src/lib/types.ts:462](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L462)
 
 ___
 
@@ -928,7 +943,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:463](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L463)
+[packages/engine/src/lib/types.ts:463](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L463)
 
 ___
 
@@ -938,7 +953,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:585](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L585)
+[packages/engine/src/lib/types.ts:585](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L585)
 
 ___
 
@@ -957,7 +972,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:487](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L487)
+[packages/engine/src/lib/types.ts:487](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L487)
 
 ___
 
@@ -967,7 +982,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:633](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L633)
+[packages/engine/src/lib/types.ts:633](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L633)
 
 ___
 
@@ -992,7 +1007,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:631](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L631)
+[packages/engine/src/lib/types.ts:631](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L631)
 
 ___
 
@@ -1022,7 +1037,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:344](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L344)
+[packages/engine/src/lib/types.ts:344](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L344)
 
 ___
 
@@ -1040,7 +1055,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:436](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L436)
+[packages/engine/src/lib/types.ts:436](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L436)
 
 ___
 
@@ -1050,7 +1065,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:382](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L382)
+[packages/engine/src/lib/types.ts:382](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L382)
 
 ___
 
@@ -1071,7 +1086,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:19](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L19)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:19](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L19)
 
 ___
 
@@ -1087,7 +1102,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:36](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L36)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:36](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L36)
 
 ___
 
@@ -1104,7 +1119,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/index.ts:44](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/modulePlugin/index.ts#L44)
+[packages/engine/src/lib/plugins/modulePlugin/index.ts:44](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/modulePlugin/index.ts#L44)
 
 ___
 
@@ -1126,7 +1141,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:29](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L29)
+[packages/engine/src/lib/plugins/modulePlugin/module-manager.ts:29](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/modulePlugin/module-manager.ts#L29)
 
 ___
 
@@ -1146,7 +1161,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:336](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L336)
+[packages/engine/src/lib/types.ts:336](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L336)
 
 ___
 
@@ -1156,7 +1171,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:459](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L459)
+[packages/engine/src/lib/types.ts:459](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L459)
 
 ___
 
@@ -1173,7 +1188,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:441](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L441)
+[packages/engine/src/lib/types.ts:441](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L441)
 
 ___
 
@@ -1192,7 +1207,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:386](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L386)
+[packages/engine/src/lib/types.ts:386](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L386)
 
 ___
 
@@ -1206,7 +1221,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:393](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L393)
+[packages/engine/src/lib/types.ts:393](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L393)
 
 ___
 
@@ -1237,7 +1252,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:261](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L261)
+[packages/engine/src/lib/types.ts:261](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L261)
 
 ___
 
@@ -1267,7 +1282,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:260](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L260)
+[packages/engine/src/lib/types.ts:260](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L260)
 
 ___
 
@@ -1291,7 +1306,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:259](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L259)
+[packages/engine/src/lib/types.ts:259](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L259)
 
 ___
 
@@ -1322,7 +1337,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:255](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L255)
+[packages/engine/src/lib/types.ts:255](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L255)
 
 ___
 
@@ -1346,7 +1361,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:254](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L254)
+[packages/engine/src/lib/types.ts:254](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L254)
 
 ___
 
@@ -1370,7 +1385,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:135](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L135)
+[packages/engine/src/lib/types.ts:135](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L135)
 
 ___
 
@@ -1380,7 +1395,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:380](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L380)
+[packages/engine/src/lib/types.ts:380](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L380)
 
 ___
 
@@ -1390,7 +1405,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:81](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugin.ts#L81)
+[packages/engine/src/lib/plugin.ts:81](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L81)
 
 ___
 
@@ -1409,7 +1424,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:19](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugin.ts#L19)
+[packages/engine/src/lib/plugin.ts:19](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L19)
 
 ___
 
@@ -1427,7 +1442,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:13](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugin.ts#L13)
+[packages/engine/src/lib/plugin.ts:13](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L13)
 
 ___
 
@@ -1447,7 +1462,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:41](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugin.ts#L41)
+[packages/engine/src/lib/plugin.ts:41](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L41)
 
 ___
 
@@ -1466,7 +1481,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:6](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugin.ts#L6)
+[packages/engine/src/lib/plugin.ts:6](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L6)
 
 ___
 
@@ -1476,7 +1491,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:26](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugin.ts#L26)
+[packages/engine/src/lib/plugin.ts:26](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L26)
 
 ___
 
@@ -1503,7 +1518,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:182](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L182)
+[packages/engine/src/lib/types.ts:182](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L182)
 
 ___
 
@@ -1528,7 +1543,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:252](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L252)
+[packages/engine/src/lib/types.ts:252](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L252)
 
 ___
 
@@ -1538,7 +1553,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:251](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L251)
+[packages/engine/src/lib/types.ts:251](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L251)
 
 ___
 
@@ -1586,7 +1601,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:204](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L204)
+[packages/engine/src/lib/types.ts:204](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L204)
 
 ___
 
@@ -1610,7 +1625,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:266](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L266)
+[packages/engine/src/lib/types.ts:266](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L266)
 
 ___
 
@@ -1627,7 +1642,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:84](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L84)
+[packages/engine/src/lib/types.ts:84](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L84)
 
 ___
 
@@ -1645,7 +1660,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:605](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L605)
+[packages/engine/src/lib/types.ts:605](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L605)
 
 ___
 
@@ -1675,7 +1690,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:587](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L587)
+[packages/engine/src/lib/types.ts:587](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L587)
 
 ___
 
@@ -1701,7 +1716,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:647](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L647)
+[packages/engine/src/lib/types.ts:647](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L647)
 
 ___
 
@@ -1749,24 +1764,30 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:189](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L189)
+[packages/engine/src/lib/types.ts:189](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L189)
 
 ___
 
-### RunSpellConstructor
+### RunSpellArgs
 
-Ƭ **RunSpellConstructor**: `Object`
+Ƭ **RunSpellArgs**: `Object`
+
+Type definition for the arguments of the `runSpell` function.
 
 #### Type declaration
 
 | Name | Type |
 | :------ | :------ |
-| `magickInterface` | [`EngineContext`](#enginecontext) |
-| `socket?` | `io.Socket` |
+| `inputFormatter?` | (`graph`: [`GraphData`](#graphdata)) => `Record`<`string`, `unknown`\> |
+| `inputs?` | `Record`<`string`, `unknown`\> |
+| `projectId` | `string` |
+| `publicVariables?` | `Record`<`string`, `unknown`\> |
+| `secrets?` | `Record`<`string`, `string`\> |
+| `spellId` | `string` |
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:663](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L663)
+packages/engine/src/lib/utils/runSpell.ts:10
 
 ___
 
@@ -1783,7 +1804,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:477](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L477)
+[packages/engine/src/lib/types.ts:477](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L477)
 
 ___
 
@@ -1804,7 +1825,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:75](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L75)
+[packages/engine/src/lib/types.ts:75](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L75)
 
 ___
 
@@ -1822,7 +1843,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:130](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugin.ts#L130)
+[packages/engine/src/lib/plugin.ts:130](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L130)
 
 ___
 
@@ -1832,7 +1853,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:131](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugin.ts#L131)
+[packages/engine/src/lib/plugin.ts:131](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L131)
 
 ___
 
@@ -1851,7 +1872,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/socketPlugin/index.ts:15](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/socketPlugin/index.ts#L15)
+[packages/engine/src/lib/plugins/socketPlugin/index.ts:15](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/socketPlugin/index.ts#L15)
 
 ___
 
@@ -1861,7 +1882,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:8](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L8)
+[packages/engine/src/lib/sockets.ts:8](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L8)
 
 ___
 
@@ -1879,7 +1900,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/socketPlugin/index.ts:7](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/socketPlugin/index.ts#L7)
+[packages/engine/src/lib/plugins/socketPlugin/index.ts:7](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/socketPlugin/index.ts#L7)
 
 ___
 
@@ -1889,7 +1910,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:21](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L21)
+[packages/engine/src/lib/sockets.ts:21](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L21)
 
 ___
 
@@ -1901,7 +1922,7 @@ The interface for a spell object that's based on the `spellSchema`.
 
 #### Defined in
 
-[packages/engine/src/lib/schemas.ts:34](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/schemas.ts#L34)
+[packages/engine/src/lib/schemas.ts:34](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/schemas.ts#L34)
 
 ___
 
@@ -1919,7 +1940,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:362](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L362)
+[packages/engine/src/lib/types.ts:362](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L362)
 
 ___
 
@@ -1929,7 +1950,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:172](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L172)
+[packages/engine/src/lib/types.ts:172](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L172)
 
 ___
 
@@ -1948,7 +1969,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:18](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L18)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:18](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/taskPlugin/task.ts#L18)
 
 ___
 
@@ -1966,7 +1987,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:453](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L453)
+[packages/engine/src/lib/types.ts:453](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L453)
 
 ___
 
@@ -1976,7 +1997,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:34](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L34)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:34](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/taskPlugin/task.ts#L34)
 
 ___
 
@@ -1993,7 +2014,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:13](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L13)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:13](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/taskPlugin/task.ts#L13)
 
 ___
 
@@ -2003,7 +2024,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:306](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L306)
+[packages/engine/src/lib/types.ts:306](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L306)
 
 ___
 
@@ -2027,7 +2048,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:534](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L534)
+[packages/engine/src/lib/types.ts:534](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L534)
 
 ___
 
@@ -2037,7 +2058,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:498](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L498)
+[packages/engine/src/lib/types.ts:498](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L498)
 
 ___
 
@@ -2047,7 +2068,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:162](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L162)
+[packages/engine/src/lib/types.ts:162](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L162)
 
 ___
 
@@ -2057,7 +2078,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:163](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L163)
+[packages/engine/src/lib/types.ts:163](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L163)
 
 ___
 
@@ -2089,7 +2110,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/index.ts:33](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/modulePlugin/index.ts#L33)
+[packages/engine/src/lib/plugins/modulePlugin/index.ts:33](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/modulePlugin/index.ts#L33)
 
 ___
 
@@ -2099,7 +2120,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:661](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L661)
+[packages/engine/src/lib/types.ts:661](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L661)
 
 ___
 
@@ -2109,7 +2130,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:409](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L409)
+[packages/engine/src/lib/types.ts:409](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L409)
 
 ___
 
@@ -2135,7 +2156,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:165](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L165)
+[packages/engine/src/lib/types.ts:165](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L165)
 
 ## Variables
 
@@ -2145,7 +2166,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:37](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L37)
+[packages/engine/src/lib/config.ts:37](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L37)
 
 ___
 
@@ -2162,7 +2183,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/cachePlugin/index.ts:72](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/cachePlugin/index.ts#L72)
+[packages/engine/src/lib/plugins/cachePlugin/index.ts:72](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/cachePlugin/index.ts#L72)
 
 ___
 
@@ -2193,7 +2214,7 @@ module:consolePlugin
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/consolePlugin/index.ts:71](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/consolePlugin/index.ts#L71)
+[packages/engine/src/lib/plugins/consolePlugin/index.ts:71](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/consolePlugin/index.ts#L71)
 
 ___
 
@@ -2203,7 +2224,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:31](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L31)
+[packages/engine/src/lib/config.ts:31](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L31)
 
 ___
 
@@ -2213,7 +2234,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:32](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L32)
+[packages/engine/src/lib/config.ts:32](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L32)
 
 ___
 
@@ -2223,7 +2244,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:40](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L40)
+[packages/engine/src/lib/config.ts:40](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L40)
 
 ___
 
@@ -2240,7 +2261,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/errorPlugin/index.ts:36](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/errorPlugin/index.ts#L36)
+[packages/engine/src/lib/plugins/errorPlugin/index.ts:36](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/errorPlugin/index.ts#L36)
 
 ___
 
@@ -2250,7 +2271,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:42](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L42)
+[packages/engine/src/lib/config.ts:42](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L42)
 
 ___
 
@@ -2260,7 +2281,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:43](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L43)
+[packages/engine/src/lib/config.ts:43](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L43)
 
 ___
 
@@ -2270,7 +2291,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:38](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L38)
+[packages/engine/src/lib/config.ts:38](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L38)
 
 ___
 
@@ -2287,7 +2308,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/historyPlugin/index.ts:64](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/historyPlugin/index.ts#L64)
+[packages/engine/src/lib/plugins/historyPlugin/index.ts:64](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/historyPlugin/index.ts#L64)
 
 ___
 
@@ -2297,7 +2318,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:29](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L29)
+[packages/engine/src/lib/config.ts:29](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L29)
 
 ___
 
@@ -2314,7 +2335,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/inspectorPlugin/index.ts:59](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/inspectorPlugin/index.ts#L59)
+[packages/engine/src/lib/plugins/inspectorPlugin/index.ts:59](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/inspectorPlugin/index.ts#L59)
 
 ___
 
@@ -2331,7 +2352,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/keyCodePlugin/index.ts:41](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/keyCodePlugin/index.ts#L41)
+[packages/engine/src/lib/plugins/keyCodePlugin/index.ts:41](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/keyCodePlugin/index.ts#L41)
 
 ___
 
@@ -2350,7 +2371,7 @@ Lifecycle Plugin
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/lifecyclePlugin/index.ts:92](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/lifecyclePlugin/index.ts#L92)
+[packages/engine/src/lib/plugins/lifecyclePlugin/index.ts:92](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/lifecyclePlugin/index.ts#L92)
 
 ___
 
@@ -2367,7 +2388,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/index.ts:286](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/modulePlugin/index.ts#L286)
+[packages/engine/src/lib/plugins/modulePlugin/index.ts:286](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/modulePlugin/index.ts#L286)
 
 ___
 
@@ -2384,7 +2405,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/multiCopyPlugin/index.ts:164](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/multiCopyPlugin/index.ts#L164)
+[packages/engine/src/lib/plugins/multiCopyPlugin/index.ts:164](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/multiCopyPlugin/index.ts#L164)
 
 ___
 
@@ -2401,7 +2422,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/multiSocketGenerator/index.ts:70](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/multiSocketGenerator/index.ts#L70)
+[packages/engine/src/lib/plugins/multiSocketGenerator/index.ts:70](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/multiSocketGenerator/index.ts#L70)
 
 ___
 
@@ -2411,7 +2432,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:45](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L45)
+[packages/engine/src/lib/config.ts:45](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L45)
 
 ___
 
@@ -2428,7 +2449,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/nodeClickPlugin/index.ts:38](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/nodeClickPlugin/index.ts#L38)
+[packages/engine/src/lib/plugins/nodeClickPlugin/index.ts:38](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/nodeClickPlugin/index.ts#L38)
 
 ___
 
@@ -2438,7 +2459,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:33](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L33)
+[packages/engine/src/lib/config.ts:33](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L33)
 
 ___
 
@@ -2448,7 +2469,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:30](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L30)
+[packages/engine/src/lib/config.ts:30](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L30)
 
 ___
 
@@ -2458,7 +2479,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:39](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L39)
+[packages/engine/src/lib/config.ts:39](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L39)
 
 ___
 
@@ -2468,7 +2489,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:34](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L34)
+[packages/engine/src/lib/config.ts:34](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L34)
 
 ___
 
@@ -2485,7 +2506,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/selectionPlugin/index.ts:292](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/selectionPlugin/index.ts#L292)
+[packages/engine/src/lib/plugins/selectionPlugin/index.ts:292](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/selectionPlugin/index.ts#L292)
 
 ___
 
@@ -2502,7 +2523,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/socketGenerator/index.ts:71](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/socketGenerator/index.ts#L71)
+[packages/engine/src/lib/plugins/socketGenerator/index.ts:71](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/socketGenerator/index.ts#L71)
 
 ___
 
@@ -2519,7 +2540,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/socketOverridePlugin/index.ts:21](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/socketOverridePlugin/index.ts#L21)
+[packages/engine/src/lib/plugins/socketOverridePlugin/index.ts:21](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/socketOverridePlugin/index.ts#L21)
 
 ___
 
@@ -2536,7 +2557,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/socketPlugin/index.ts:143](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/socketPlugin/index.ts#L143)
+[packages/engine/src/lib/plugins/socketPlugin/index.ts:143](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/socketPlugin/index.ts#L143)
 
 ___
 
@@ -2546,7 +2567,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:35](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L35)
+[packages/engine/src/lib/config.ts:35](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L35)
 
 ___
 
@@ -2563,7 +2584,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/index.ts:104](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/index.ts#L104)
+[packages/engine/src/lib/plugins/taskPlugin/index.ts:104](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/taskPlugin/index.ts#L104)
 
 ___
 
@@ -2573,7 +2594,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:36](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L36)
+[packages/engine/src/lib/config.ts:36](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L36)
 
 ___
 
@@ -2583,7 +2604,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:44](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L44)
+[packages/engine/src/lib/config.ts:44](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L44)
 
 ___
 
@@ -2593,13 +2614,13 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/config.ts:41](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/config.ts#L41)
+[packages/engine/src/lib/config.ts:41](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/config.ts#L41)
 
 ___
 
 ### agentSchema
 
-• `Const` **agentSchema**: `TObject`<{ `data`: `TOptional`<`TAny`\> ; `enabled`: `TOptional`<`TBoolean`\> ; `id`: `TString`<`string`\> ; `name`: `TString`<`string`\> ; `pingedAt`: `TOptional`<`TString`<`string`\>\> ; `projectId`: `TString`<`string`\> ; `publicVariables`: `TOptional`<`TAny`\> ; `rootSpell`: `TOptional`<`TAny`\> ; `secrets`: `TOptional`<`TString`<`string`\>\> ; `updatedAt`: `TString`<`string`\>  }\>
+• `Const` **agentSchema**: `TObject`<{ `data`: `TOptional`<`TAny`\> ; `enabled`: `TOptional`<`TBoolean`\> ; `id`: `TString`<`string`\> ; `name`: `TString`<`string`\> ; `pingedAt`: `TOptional`<`TString`<`string`\>\> ; `projectId`: `TString`<`string`\> ; `publicVariables`: `TOptional`<`TAny`\> ; `rootSpell`: `TOptional`<`TAny`\> ; `secrets`: `TOptional`<`TString`<`string`\>\> ; `updatedAt`: `TOptional`<`TString`<`string`\>\>  }\>
 
 Full data model schema for an agent.
 
@@ -2649,7 +2670,7 @@ The secrets of the agent (optional).
 
 #### Defined in
 
-[packages/engine/src/lib/schemas.ts:51](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/schemas.ts#L51)
+[packages/engine/src/lib/schemas.ts:51](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/schemas.ts#L51)
 
 ___
 
@@ -2659,7 +2680,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:48](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L48)
+[packages/engine/src/lib/sockets.ts:48](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L48)
 
 ___
 
@@ -2669,7 +2690,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:51](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L51)
+[packages/engine/src/lib/sockets.ts:51](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L51)
 
 ___
 
@@ -2679,7 +2700,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:56](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L56)
+[packages/engine/src/lib/sockets.ts:56](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L56)
 
 ___
 
@@ -2689,7 +2710,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:50](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L50)
+[packages/engine/src/lib/sockets.ts:50](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L50)
 
 ___
 
@@ -2756,7 +2777,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/nodes/index.ts:57](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/nodes/index.ts#L57)
+[packages/engine/src/lib/nodes/index.ts:57](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/nodes/index.ts#L57)
 
 ___
 
@@ -2796,7 +2817,7 @@ The embedding data of the document (optional).
 
 #### Defined in
 
-[packages/engine/src/lib/schemas.ts:83](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/schemas.ts#L83)
+[packages/engine/src/lib/schemas.ts:83](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/schemas.ts#L83)
 
 ___
 
@@ -2806,7 +2827,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:58](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L58)
+[packages/engine/src/lib/sockets.ts:58](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L58)
 
 ___
 
@@ -2816,7 +2837,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:57](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L57)
+[packages/engine/src/lib/sockets.ts:57](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L57)
 
 ___
 
@@ -2826,7 +2847,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:55](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L55)
+[packages/engine/src/lib/sockets.ts:55](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L55)
 
 ___
 
@@ -2836,7 +2857,19 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/globals.ts:38](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/globals.ts#L38)
+[packages/engine/src/lib/globals.ts:38](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/globals.ts#L38)
+
+___
+
+### logger
+
+• `Const` **logger**: `Logger`
+
+The logger instance to be exported.
+
+#### Defined in
+
+packages/engine/src/lib/utils/logger.ts:18
 
 ___
 
@@ -2846,7 +2879,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:49](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L49)
+[packages/engine/src/lib/sockets.ts:49](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L49)
 
 ___
 
@@ -2856,7 +2889,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:53](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L53)
+[packages/engine/src/lib/sockets.ts:53](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L53)
 
 ___
 
@@ -2866,7 +2899,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugin.ts:468](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugin.ts#L468)
+[packages/engine/src/lib/plugin.ts:468](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugin.ts#L468)
 
 ___
 
@@ -2876,7 +2909,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:34](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L34)
+[packages/engine/src/lib/sockets.ts:34](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L34)
 
 ___
 
@@ -2924,7 +2957,7 @@ The date when the spell was last updated (optional).
 
 #### Defined in
 
-[packages/engine/src/lib/schemas.ts:17](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/schemas.ts#L17)
+[packages/engine/src/lib/schemas.ts:17](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/schemas.ts#L17)
 
 ___
 
@@ -2934,7 +2967,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:52](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L52)
+[packages/engine/src/lib/sockets.ts:52](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L52)
 
 ___
 
@@ -2944,7 +2977,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/sockets.ts:54](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/sockets.ts#L54)
+[packages/engine/src/lib/sockets.ts:54](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/sockets.ts#L54)
 
 ## Functions
 
@@ -2964,7 +2997,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:418](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L418)
+[packages/engine/src/lib/types.ts:418](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L418)
 
 ___
 
@@ -2984,7 +3017,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:430](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L430)
+[packages/engine/src/lib/types.ts:430](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L430)
 
 ___
 
@@ -3004,7 +3037,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:422](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L422)
+[packages/engine/src/lib/types.ts:422](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L422)
 
 ___
 
@@ -3024,7 +3057,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:426](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L426)
+[packages/engine/src/lib/types.ts:426](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L426)
 
 ___
 
@@ -3051,7 +3084,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/configureManager.ts:3](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/configureManager.ts#L3)
+[packages/engine/src/lib/spellManager/configureManager.ts:3](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/spellManager/configureManager.ts#L3)
 
 ___
 
@@ -3075,7 +3108,7 @@ An array containing string values of all input keys found in the GraphData.
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/graphHelpers.ts:9](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/graphHelpers.ts#L9)
+[packages/engine/src/lib/spellManager/graphHelpers.ts:9](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/spellManager/graphHelpers.ts#L9)
 
 ___
 
@@ -3096,7 +3129,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/engine.ts:100](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/engine.ts#L100)
+[packages/engine/src/lib/engine.ts:100](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/engine.ts#L100)
 
 ___
 
@@ -3110,7 +3143,31 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/nodes/index.ts:122](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/nodes/index.ts#L122)
+[packages/engine/src/lib/nodes/index.ts:122](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/nodes/index.ts#L122)
+
+___
+
+### getSpell
+
+▸ **getSpell**(`input`): `Promise`<`any`\>
+
+Fetch a specific spell from the project's spells based on its id.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `input` | `GetSpell` | Object containing the app, id of the spell and projectId |
+
+#### Returns
+
+`Promise`<`any`\>
+
+- Returns the fetched spell data
+
+#### Defined in
+
+packages/engine/src/lib/utils/getSpell.ts:18
 
 ___
 
@@ -3132,7 +3189,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/engine.ts:113](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/engine.ts#L113)
+[packages/engine/src/lib/engine.ts:113](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/engine.ts#L113)
 
 ___
 
@@ -3152,7 +3209,33 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/engine.ts:64](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/engine.ts#L64)
+[packages/engine/src/lib/engine.ts:64](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/engine.ts#L64)
+
+___
+
+### mapStatusCode
+
+▸ **mapStatusCode**(`customErrorCode`): ``400`` \| ``401`` \| ``239`` \| ``404`` \| ``500``
+
+Maps the custom error code to its corresponding HTTP status code.
+
+**`Function`**
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `customErrorCode` | [`CustomErrorCodes`](#customerrorcodes) | The code of the custom error |
+
+#### Returns
+
+``400`` \| ``401`` \| ``239`` \| ``404`` \| ``500``
+
+The corresponding HTTP status code
+
+#### Defined in
+
+packages/engine/src/lib/utils/SpellError.ts:51
 
 ___
 
@@ -3179,7 +3262,7 @@ The result of processing the code.
 
 #### Defined in
 
-[packages/engine/src/lib/functions/processCode.ts:23](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/functions/processCode.ts#L23)
+[packages/engine/src/lib/functions/processCode.ts:23](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/functions/processCode.ts#L23)
 
 ___
 
@@ -3205,7 +3288,35 @@ The result of the executed Python code.
 
 #### Defined in
 
-[packages/engine/src/lib/functions/ProcessPython.ts:17](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/functions/ProcessPython.ts#L17)
+[packages/engine/src/lib/functions/ProcessPython.ts:17](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/functions/ProcessPython.ts#L17)
+
+___
+
+### runSpell
+
+▸ **runSpell**(`params`): `Promise`<{ `name`: `string` ; `outputs`: `Record`<`string`, `unknown`\>  }\>
+
+Run a spell with the given parameters.
+
+**`Throws`**
+
+- If the spell is not found.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `params` | [`RunSpellArgs`](#runspellargs) | The parameters needed to run a spell. |
+
+#### Returns
+
+`Promise`<{ `name`: `string` ; `outputs`: `Record`<`string`, `unknown`\>  }\>
+
+- The outputs from the spell and its name.
+
+#### Defined in
+
+packages/engine/src/lib/utils/runSpell.ts:26
 
 ___
 
@@ -3229,4 +3340,4 @@ A promise that resolves the saved request object.
 
 #### Defined in
 
-[packages/engine/src/lib/functions/saveRequest.ts:27](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/functions/saveRequest.ts#L27)
+[packages/engine/src/lib/functions/saveRequest.ts:27](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/functions/saveRequest.ts#L27)

@@ -1,7 +1,6 @@
 // DOCUMENTED 
-import { SpellInterface } from '@magickml/engine';
+import { SpellInterface, getSpell } from '@magickml/engine';
 import { HookContext } from '../declarations';
-import { getSpell } from '../helpers/getSpell';
 
 /**
  * Checks for the existence of a Spell in the user's SpellManager

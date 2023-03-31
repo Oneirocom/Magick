@@ -6,6 +6,8 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
+A class to manage users and their actions in 3D world.
+
 ## Constructors
 
 ### constructor
@@ -14,17 +16,17 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:6](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/world/worldManager.ts#L6)
+[packages/engine/src/lib/world/worldManager.ts:10](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/world/worldManager.ts#L10)
 
 ## Properties
 
 ### rooms
 
-• **rooms**: `Object` = `{}`
+• `Private` **rooms**: `Record`<`string`, `World3D`[]\> = `{}`
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:5](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/world/worldManager.ts#L5)
+[packages/engine/src/lib/world/worldManager.ts:8](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/world/worldManager.ts#L8)
 
 ## Methods
 
@@ -32,12 +34,14 @@ custom_edit_url: null
 
 ▸ **addUser**(`user`, `client`): `void`
 
+Adds a user to a room associated with a client.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `user` | `any` |
-| `client` | `any` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `user` | `string` | User to add |
+| `client` | `string` | Client identifier |
 
 #### Returns
 
@@ -45,49 +49,57 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:10](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/world/worldManager.ts#L10)
+[packages/engine/src/lib/world/worldManager.ts:19](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/world/worldManager.ts#L19)
 
 ___
 
 ### agentCanResponse
 
-▸ **agentCanResponse**(`user`, `client`): `any`
+▸ **agentCanResponse**(`user`, `client`): `boolean`
+
+Checks if agent can respond in a room.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `user` | `any` |
-| `client` | `any` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `user` | `string` | User to check |
+| `client` | `string` | Client identifier |
 
 #### Returns
 
-`any`
+`boolean`
+
+True if agent can respond, false otherwise
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:94](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/world/worldManager.ts#L94)
+[packages/engine/src/lib/world/worldManager.ts:135](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/world/worldManager.ts#L135)
 
 ___
 
 ### getUsersDistance
 
-▸ **getUsersDistance**(`user`, `client`): `any`
+▸ **getUsersDistance**(`user`, `client`): `undefined` \| `number`
+
+Gets the distance between users in a room.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `user` | `any` |
-| `client` | `any` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `user` | `string` | User to check distance for |
+| `client` | `string` | Client identifier |
 
 #### Returns
 
-`any`
+`undefined` \| `number`
+
+Users distance or undefined
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:42](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/world/worldManager.ts#L42)
+[packages/engine/src/lib/world/worldManager.ts:70](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/world/worldManager.ts#L70)
 
 ___
 
@@ -95,13 +107,15 @@ ___
 
 ▸ **print**(): `void`
 
+Prints the rooms and their states.
+
 #### Returns
 
 `void`
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:107](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/world/worldManager.ts#L107)
+[packages/engine/src/lib/world/worldManager.ts:154](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/world/worldManager.ts#L154)
 
 ___
 
@@ -109,12 +123,14 @@ ___
 
 ▸ **removeUser**(`user`, `client`): `void`
 
+Removes a user from a room associated with a client.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `user` | `any` |
-| `client` | `any` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `user` | `string` | User to remove |
+| `client` | `string` | Client identifier |
 
 #### Returns
 
@@ -122,67 +138,67 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:25](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/world/worldManager.ts#L25)
+[packages/engine/src/lib/world/worldManager.ts:42](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/world/worldManager.ts#L42)
 
 ___
 
 ### userGotInConversationFromAgent
 
-▸ **userGotInConversationFromAgent**(`user`, `client`): `any`
+▸ **userGotInConversationFromAgent**(`user`, `client`): `undefined` \| `number`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `user` | `any` |
-| `client` | `any` |
+| `user` | `string` |
+| `client` | `string` |
 
 #### Returns
 
-`any`
+`undefined` \| `number`
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:68](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/world/worldManager.ts#L68)
+[packages/engine/src/lib/world/worldManager.ts:101](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/world/worldManager.ts#L101)
 
 ___
 
 ### userPingedSomeoneElse
 
-▸ **userPingedSomeoneElse**(`user`, `client`): `any`
+▸ **userPingedSomeoneElse**(`user`, `client`): `undefined` \| `number`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `user` | `any` |
-| `client` | `any` |
+| `user` | `string` |
+| `client` | `string` |
 
 #### Returns
 
-`any`
+`undefined` \| `number`
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:81](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/world/worldManager.ts#L81)
+[packages/engine/src/lib/world/worldManager.ts:115](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/world/worldManager.ts#L115)
 
 ___
 
 ### userTalkedSameTopic
 
-▸ **userTalkedSameTopic**(`user`, `client`): `any`
+▸ **userTalkedSameTopic**(`user`, `client`): `undefined` \| `number`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `user` | `any` |
-| `client` | `any` |
+| `user` | `string` |
+| `client` | `string` |
 
 #### Returns
 
-`any`
+`undefined` \| `number`
 
 #### Defined in
 
-[packages/engine/src/lib/world/worldManager.ts:55](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/world/worldManager.ts#L55)
+[packages/engine/src/lib/world/worldManager.ts:87](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/world/worldManager.ts#L87)

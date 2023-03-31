@@ -41,7 +41,7 @@ node_modules/rete/types/editor.d.ts:15
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:143](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L143)
+[packages/engine/src/lib/types.ts:143](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L143)
 
 ___
 
@@ -56,6 +56,16 @@ NodeEditor.components
 #### Defined in
 
 node_modules/rete/types/core/context.d.ts:8
+
+___
+
+### context
+
+• **context**: [`EditorContext`](../interfaces/EditorContext.md)
+
+#### Defined in
+
+[packages/engine/src/lib/types.ts:141](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L141)
 
 ___
 
@@ -77,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:139](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L139)
+[packages/engine/src/lib/types.ts:139](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L139)
 
 ___
 
@@ -134,7 +144,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:144](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L144)
+[packages/engine/src/lib/types.ts:144](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L144)
 
 ___
 
@@ -166,17 +176,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:145](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L145)
-
-___
-
-### magick
-
-• **magick**: [`EditorContext`](../interfaces/EditorContext.md)
-
-#### Defined in
-
-[packages/engine/src/lib/types.ts:141](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L141)
+[packages/engine/src/lib/types.ts:145](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L145)
 
 ___
 
@@ -186,7 +186,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:149](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L149)
+[packages/engine/src/lib/types.ts:149](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L149)
 
 ___
 
@@ -231,7 +231,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:151](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L151)
+[packages/engine/src/lib/types.ts:151](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L151)
 
 ___
 
@@ -255,7 +255,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:140](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L140)
+[packages/engine/src/lib/types.ts:140](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L140)
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:155](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L155)
+[packages/engine/src/lib/types.ts:155](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L155)
 
 ___
 
@@ -297,7 +297,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:150](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L150)
+[packages/engine/src/lib/types.ts:150](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L150)
 
 ___
 
@@ -341,7 +341,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:142](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L142)
+[packages/engine/src/lib/types.ts:142](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L142)
 
 ___
 
@@ -351,7 +351,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:138](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L138)
+[packages/engine/src/lib/types.ts:138](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L138)
 
 ___
 

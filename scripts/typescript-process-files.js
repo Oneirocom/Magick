@@ -3,14 +3,14 @@ const fs = require('fs');
 const dovenv = require('dotenv-flow');
 dovenv.config('../.env');
 
-const directive = `Rewrite the Typescript that the user provides so that it is optimized, easy to read and conforms to Google code standards. Add per-line comments and ts-doc documentation for every class and function. Keep imports and exports as-is since this module is imported by other modules.`
+const directive = `Rewrite the user's code so that it is optimized, easy to read and conforms to Google code standards. Preserve functionality and imports. Add per-line comments and tsdoc documentation for every class and function. Avoid using 'Function', 'Object' or 'any' for types.`
 
 const apiKey = process.env.OPENAI_API_KEY;
 
 async function doStuff(file) {
     const contents = fs.readFileSync(file, 'utf8');
 
-    if(contents.startsWith('// DOCUMENTED')) {
+    if (contents.startsWith('// DOCUMENTED')) {
         console.log('skipping file because it is already generated')
         return;
     }
@@ -39,19 +39,23 @@ async function doStuff(file) {
     console.log('json', json)
 
     const choices = json.choices;
+    try {
 
-    const messageContent = choices[0].message.content;
+        const messageContent = choices[0].message.content;
 
-    
-    let message = messageContent.replaceAll('```typescript', '```').replace('typescript', '').split('```')
-    if(message.length > 2) {
-        message = message[1];
-    } else {
-        message = message[0];
+
+        let message = messageContent.replaceAll('```typescript', '```').replace('typescript', '').split('```')
+        if (message.length > 2) {
+            message = message[1];
+        } else {
+            message = message[0];
+        }
+
+        // write the file over the original
+        fs.writeFileSync(file, '// DOCUMENTED \n' + message, 'utf8');
+    } catch (error) {
+        console.log('error', error)
     }
-
-    // write the file over the original
-    fs.writeFileSync(file, '// DOCUMENTED \n' + message, 'utf8');
 }
 
 const manifest = require('./manifest.json');

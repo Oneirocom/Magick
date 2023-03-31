@@ -122,8 +122,8 @@ export class MagickConsole {
   }
 
   sendToDebug(message: unknown) {
-    if (this.editor && this.editor.magick && this.editor.magick.sendToDebug)
-      this.editor.magick.sendToDebug(message)
+    if (this.editor && this.editor.context && this.editor.context.sendToDebug)
+      this.editor.context.sendToDebug(message)
   }
 
   throwServerError(message: unknown) {

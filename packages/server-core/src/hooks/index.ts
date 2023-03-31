@@ -6,18 +6,17 @@
  * @returns Promise<void>
  */
 import type { HookContext, NextFunction } from '../declarations'
-import { logger } from '../utils/logger'
 
 export const logError = async (context: HookContext, next: NextFunction): Promise<void> => {
   try {
     await next()
   } catch (error: any) {
     // Send stack trace to logger
-    logger.error(error.stack)
+    console.error(error.stack)
 
     // Log validation errors, if any
     if (error.data) {
-      logger.error('Data: %O', error.data)
+      console.error('Data: %O', error.data)
     }
 
     // Re-throw error to be handled by error handler

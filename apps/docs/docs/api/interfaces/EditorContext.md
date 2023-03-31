@@ -28,7 +28,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:282](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L282)
+[packages/engine/src/lib/types.ts:282](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L282)
 
 ___
 
@@ -56,7 +56,7 @@ EngineContext.completion
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:199](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L199)
+[packages/engine/src/lib/types.ts:199](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L199)
 
 ___
 
@@ -70,7 +70,7 @@ EngineContext.getSpell
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:200](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L200)
+[packages/engine/src/lib/types.ts:200](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L200)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:281](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L281)
+[packages/engine/src/lib/types.ts:281](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L281)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:279](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L279)
+[packages/engine/src/lib/types.ts:279](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L279)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:280](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L280)
+[packages/engine/src/lib/types.ts:280](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L280)
 
 ___
 
@@ -135,7 +135,7 @@ The method should not be used
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:272](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L272)
+[packages/engine/src/lib/types.ts:272](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L272)
 
 ___
 
@@ -149,7 +149,7 @@ EngineContext.processCode
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:201](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L201)
+[packages/engine/src/lib/types.ts:201](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L201)
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:283](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L283)
+[packages/engine/src/lib/types.ts:283](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L283)
 
 ___
 
@@ -181,7 +181,7 @@ EngineContext.runSpell
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:198](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L198)
+[packages/engine/src/lib/types.ts:198](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L198)
 
 ___
 
@@ -205,7 +205,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:278](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L278)
+[packages/engine/src/lib/types.ts:278](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L278)
 
 ___
 
@@ -215,7 +215,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:277](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L277)
+[packages/engine/src/lib/types.ts:277](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L277)
 
 ___
 
@@ -239,4 +239,4 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:276](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L276)
+[packages/engine/src/lib/types.ts:276](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L276)

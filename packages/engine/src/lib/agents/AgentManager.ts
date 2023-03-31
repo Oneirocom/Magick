@@ -1,6 +1,5 @@
 // DOCUMENTED 
 import Agent from './Agent'
-import { app } from '../app'
 import _ from 'lodash'
 
 /** 
@@ -12,7 +11,7 @@ export class AgentManager {
   newAgents: any
   addHandlers: any = []
   removeHandlers: any = []
-
+  app: any
   /**
    * Get the agent with the given agent data.
    * @param agent - The agent data.
@@ -26,7 +25,8 @@ export class AgentManager {
   /**
    * Create an agent manager.
    */
-  constructor() {
+  constructor(app) {
+    this.app = app
     // Update agents every second
     setInterval(async () => {
       await this.updateAgents()
@@ -79,7 +79,7 @@ export class AgentManager {
    * Update agent instances.
    */
   async updateAgents() {
-    this.newAgents = (await app.service('agents').find()).data
+    this.newAgents = (await this.app.service('agents').find()).data
     await this.deleteOldAgents()
 
     this.newAgents?.forEach(async (agent: any) => {
@@ -113,7 +113,7 @@ export class AgentManager {
         ...agent,
         pingedAt: new Date().toISOString(),
       }
-      this.agents[agent.id] = new Agent(data, this)
+      this.agents[agent.id] = new Agent(data, this, this.app)
       this.currentAgents.push(agent)
 
       this.addHandlers.forEach((handler) => handler({ agent: this.agents[agent.id], agentData: agent }))

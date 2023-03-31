@@ -133,7 +133,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       module: unknown
       secrets: Record<string, string>
       projectId: string
-      magick: EngineContext
+      context: EngineContext
     }
   ) {
     const completionProviders = pluginManager.getCompletionProviders('text', [

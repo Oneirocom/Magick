@@ -50,3 +50,6 @@ export * from './lib/functions/processCode';
 export * from './lib/plugin';
 export * from './lib/sockets';
 export * from './lib/globals';
+export * from './lib/agents/Agent';
+export * from './lib/agents/AgentManager';
+export * from './lib/utils';

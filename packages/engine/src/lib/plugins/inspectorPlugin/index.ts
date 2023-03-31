@@ -3,7 +3,7 @@ import { IRunContextEditor, MagickNode } from '../../types'
 import { HandleDataArgs, Inspector } from './Inspector'
 
 function install(editor: IRunContextEditor) {
-  const { onInspector, sendToInspector, clearTextEditor } = editor.magick
+  const { onInspector, sendToInspector, clearTextEditor } = editor.context
 
   editor.on('componentregister', (component: MagickComponent<unknown>) => {
     const builder = component.builder
