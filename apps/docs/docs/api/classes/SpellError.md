@@ -34,7 +34,7 @@ Error.constructor
 
 #### Defined in
 
-packages/engine/src/lib/utils/SpellError.ts:32
+[packages/engine/src/lib/utils/SpellError.ts:32](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/utils/SpellError.ts#L32)
 
 ## Properties
 
@@ -46,7 +46,7 @@ The code of the custom error
 
 #### Defined in
 
-packages/engine/src/lib/utils/SpellError.ts:18
+[packages/engine/src/lib/utils/SpellError.ts:18](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/utils/SpellError.ts#L18)
 
 ___
 
@@ -58,7 +58,7 @@ Additional details about the error
 
 #### Defined in
 
-packages/engine/src/lib/utils/SpellError.ts:24
+[packages/engine/src/lib/utils/SpellError.ts:24](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/utils/SpellError.ts#L24)
 
 ___
 
@@ -74,7 +74,7 @@ Error.message
 
 #### Defined in
 
-packages/engine/src/lib/utils/SpellError.ts:22
+[packages/engine/src/lib/utils/SpellError.ts:22](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/utils/SpellError.ts#L22)
 
 ___
 
@@ -114,7 +114,7 @@ The HTTP status code of the error
 
 #### Defined in
 
-packages/engine/src/lib/utils/SpellError.ts:20
+[packages/engine/src/lib/utils/SpellError.ts:20](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/utils/SpellError.ts#L20)
 
 ___
 

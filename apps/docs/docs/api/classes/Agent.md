@@ -30,7 +30,7 @@ Agent constructor initializes properties and sets intervals for updating agents
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:54](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L54)
+[packages/engine/src/lib/agents/Agent.ts:50](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L50)
 
 ## Properties
 
@@ -40,7 +40,7 @@ Agent constructor initializes properties and sets intervals for updating agents
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:42](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L42)
+[packages/engine/src/lib/agents/Agent.ts:38](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L38)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:38](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L38)
+[packages/engine/src/lib/agents/Agent.ts:34](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L34)
 
 ___
 
@@ -64,7 +64,7 @@ AgentInterface.data
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:37](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L37)
+[packages/engine/src/lib/agents/Agent.ts:33](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L33)
 
 ___
 
@@ -78,7 +78,7 @@ AgentInterface.id
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:34](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L34)
+[packages/engine/src/lib/agents/Agent.ts:30](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L30)
 
 ___
 
@@ -92,7 +92,7 @@ AgentInterface.name
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:33](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L33)
+[packages/engine/src/lib/agents/Agent.ts:29](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L29)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:46](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L46)
+[packages/engine/src/lib/agents/Agent.ts:42](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L42)
 
 ___
 
@@ -116,7 +116,7 @@ AgentInterface.projectId
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:40](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L40)
+[packages/engine/src/lib/agents/Agent.ts:36](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L36)
 
 ___
 
@@ -130,7 +130,7 @@ AgentInterface.publicVariables
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:36](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L36)
+[packages/engine/src/lib/agents/Agent.ts:32](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L32)
 
 ___
 
@@ -156,7 +156,7 @@ AgentInterface.rootSpell
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:44](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L44)
+[packages/engine/src/lib/agents/Agent.ts:40](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L40)
 
 ___
 
@@ -170,7 +170,7 @@ AgentInterface.secrets
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:35](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L35)
+[packages/engine/src/lib/agents/Agent.ts:31](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L31)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:39](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L39)
+[packages/engine/src/lib/agents/Agent.ts:35](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L35)
 
 ___
 
@@ -190,7 +190,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:43](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L43)
+[packages/engine/src/lib/agents/Agent.ts:39](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L39)
 
 ___
 
@@ -200,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:47](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L47)
+[packages/engine/src/lib/agents/Agent.ts:43](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L43)
 
 ___
 
@@ -210,7 +210,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:41](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L41)
+[packages/engine/src/lib/agents/Agent.ts:37](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L37)
 
 ## Methods
 
@@ -226,4 +226,4 @@ Clean up resources when the instance is destroyed.
 
 #### Defined in
 
-[packages/engine/src/lib/agents/Agent.ts:120](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/agents/Agent.ts#L120)
+[packages/engine/src/lib/agents/Agent.ts:116](https://github.com/Oneirocom/MagickML/blob/f4db6e49/packages/engine/src/lib/agents/Agent.ts#L116)
