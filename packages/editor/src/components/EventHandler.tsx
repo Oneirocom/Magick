@@ -1,3 +1,4 @@
+// DOCUMENTED
 import { useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
 import { GraphData, SpellInterface } from '@magickml/engine'
@@ -15,6 +16,12 @@ import { useFeathers } from '../contexts/FeathersProvider'
 
 import { useConfig } from '../contexts/ConfigProvider'
 
+/**
+ * Event Handler component for handling various events in the editor
+ * @param {object} pubSub - PubSub object
+ * @param {object} tab - The current editor's tab object
+ * @returns - null, this is a functional component used for managing side effects
+ */
 const EventHandler = ({ pubSub, tab }) => {
   const config = useConfig()
 
@@ -29,7 +36,7 @@ const EventHandler = ({ pubSub, tab }) => {
     id: tab.id,
     projectId: config.projectId,
   } as any)
-  // Spell ref because callbacks cant hold values from state without them
+  // Spell ref because callbacks can't hold values from state without them
   const spellRef = useRef<SpellInterface | null>(null)
 
   const FeathersContext = useFeathers()
@@ -48,7 +55,7 @@ const EventHandler = ({ pubSub, tab }) => {
     if (!client.io || !tab.id || !enqueueSnackbar) return
 
     const listener = data => {
-      //publish($DEBUG_PRINT(tab.id), (data.error.message))
+      // publish($DEBUG_PRINT(tab.id), (data.error.message))
       console.error('Error in spell execution')
       enqueueSnackbar('Error Running the spell. Please Check the Console', {
         variant: 'error',
@@ -95,6 +102,9 @@ const EventHandler = ({ pubSub, tab }) => {
     $RUN_SPELL,
   } = events
 
+  /**
+   * Save the current spell
+   */
   const saveSpell = async () => {
     const currentSpell = spellRef.current
     const graph = serialize() as GraphData
@@ -112,7 +122,7 @@ const EventHandler = ({ pubSub, tab }) => {
     })
 
     if ('error' in response) {
-      console.log('UPDATED SPELL', updatedSpell)
+      console.log(' UPDATED SPELL', updatedSpell)
       console.error(response.error)
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
@@ -127,6 +137,11 @@ const EventHandler = ({ pubSub, tab }) => {
     onProcess()
   }
 
+  /**
+   * Save an incremental diff of changes made in editor to the server
+   * @param {object} event - The onSaveDiff event object
+   * @param {object} update - The updated spell object
+   */
   const onSaveDiff = async (event, update) => {
     if (!spellRef.current) return
 
@@ -140,14 +155,14 @@ const EventHandler = ({ pubSub, tab }) => {
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) return
-    //While Importing spell, the graph is first created, then the imported graph is loaded
-    //This might be causing issue at the server end.
+    // While Importing spell, the graph is first created, then the imported graph is loaded
+    // This might be causing issue at the server end.
     if (updatedSpell.graph.nodes.length === 0) return
 
     updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
 
     try {
-      // We save the diff.  Doing this via feathers but may want to switch to rtk query
+      // We save the diff. Doing this via feathers but may want to switch to rtk query
       const diffResponse = await client.service('spells').saveDiff({
         projectId: config.projectId,
         diff: jsonDiff,
@@ -185,22 +200,37 @@ const EventHandler = ({ pubSub, tab }) => {
     )
   }
 
+  /**
+   * Create a new playtest window or focus on the existing one
+   */
   const createPlaytest = () => {
     createOrFocus(windowTypes.PLAYTEST, 'Playtest')
   }
 
+  /**
+   * Create a new inspector window or focus on the existing one
+   */
   const createInspector = () => {
     createOrFocus(windowTypes.INSPECTOR, 'Inspector')
   }
 
+  /**
+   * Create a new text editor window or focus on the existing one
+   */
   const createTextEditor = () => {
     createOrFocus(windowTypes.TEXT_EDITOR, 'Text Editor')
   }
 
+  /**
+   * Create a new console window or focus on the existing one
+   */
   const createConsole = () => {
     createOrFocus(windowTypes.CONSOLE, 'Console')
   }
 
+  /**
+   * Trigger the processing of the graph in the editor
+   */
   const onProcess = () => {
     const editor = getEditor()
     if (!editor) return
@@ -208,26 +238,44 @@ const EventHandler = ({ pubSub, tab }) => {
     editor.runProcess()
   }
 
+  /**
+   * Trigger the undo action in the editor
+   */
   const onUndo = () => {
     undo()
   }
 
+  /**
+   * Trigger the redo action in the editor
+   */
   const onRedo = () => {
     redo()
   }
 
+  /**
+   * Trigger the delete action in the editor
+   */
   const onDelete = () => {
     del()
   }
 
+  /**
+   * Trigger the multi-select copy action in the editor
+   */
   const onMultiSelectCopy = () => {
     multiSelectCopy()
   }
 
+  /**
+   * Trigger the multi-select paste action in the editor
+   */
   const onMultiSelectPaste = () => {
     multiSelectPaste()
   }
 
+  /**
+   * Export the current spell to a JSON file
+   */
   const onExport = async () => {
     // refetch spell from local DB to ensure it is the most up to date
     const spell = { ...spellRef.current }
@@ -276,6 +324,11 @@ const EventHandler = ({ pubSub, tab }) => {
     if (editor.moduleSubscription) editor.moduleSubscription.unsubscribe()
   }
 
+  /**
+   * Run the current spell
+   * @param {object} event - The run Spell event object
+   * @param {object} data - The data object for running the spell
+   */
   const runSpell = async (event, data) => {
     // run the spell in the spell runner service
     client.service('spell-runner').create(data)

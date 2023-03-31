@@ -1,11 +1,9 @@
-import { Agent } from "@magickml/server-core"
-
 export class Module {
   secrets?: Record<string, string>
   publicVariables?: Record<string, string>
   inputs: Record<string, unknown>
   outputs: Record<string, unknown>
-  agent?: Agent
+  agent?: any // set to Agent, but move Agent to engine first
   constructor() {
     this.inputs = {}
     this.outputs = {}
@@ -13,15 +11,10 @@ export class Module {
     this.publicVariables = {}
   }
 
-  read({
-    inputs,
-    secrets,
-    publicVariables,
-    agent
-  }) {
+  read({ inputs, secrets, publicVariables, agent }) {
     this.inputs = inputs
-    this.secrets = secrets || {} as Record<string, string>
-    this.publicVariables = publicVariables || {} as Record<string, string>
+    this.secrets = secrets || ({} as Record<string, string>)
+    this.publicVariables = publicVariables || ({} as Record<string, string>)
     this.agent = agent
   }
 

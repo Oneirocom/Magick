@@ -1,14 +1,21 @@
-import * as React from 'react'
+// DOCUMENTED 
+/**
+ * This module contains a React component called FineTuneManager that wraps several screens for fine-tuning pre-trained models.
+ * 
+ * @module FineTuneManager
+ */
 
-import Home from './screens/Home'
-import Completions from './completions/CompletionList'
-import NewFineTune from './screens/NewFineTune'
-import CompletionDetails from './completions/CompletionDetails'
-import AutoStoriesIcon from '@mui/icons-material/AutoStories'
-import { ClientPlugin } from '@magickml/engine'
+import * as React from 'react';
+import Home from './screens/Home';
+import Completions from './completions/CompletionList';
+import NewFineTune from './screens/NewFineTune';
+import CompletionDetails from './completions/CompletionDetails';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import { ClientPlugin } from '@magickml/engine';
 
-export * from './types/openai'
-
+/**
+ * A plugin for managing fine-tuning of pre-trained models. It contains routes and drawer items for various screens.
+ */
 const FineTuneManager = new ClientPlugin({
   name: 'FineTuneManagerPlugin',
   drawerItems: [
@@ -41,6 +48,8 @@ const FineTuneManager = new ClientPlugin({
       plugin: 'fineTuneManager/fine-tune/:fineTuneId',
     },
   ],
-})
+});
 
-export default FineTuneManager
+export * from './types/openai';
+
+export default FineTuneManager;

@@ -1,16 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+// DOCUMENTED
+/* eslint-disable @-eslint/no-unused-vars */
+
+// Import required modules
 import * as React from 'react'
-import { PubSubContext, PubSubData, PubSubEvents } from '@magickml/engine';
+import { PubSubContext, PubSubData, PubSubEvents } from '@magickml/engine'
 import PubSub from 'pubsub-js'
 import { useContext, createContext } from 'react'
 
+// Create new context for PubSub
 const Context = createContext<PubSubContext>(undefined)
 
+// Custom hook to access the PubSub context
 export const usePubSub = () => useContext<PubSubContext>(Context)
 
 export { PubSub }
 
-// Might want to namespace these
+// Define the PubSub events
 export const events: PubSubEvents = {
   ADD_SUBSPELL: 'addSubspell',
   UPDATE_SUBSPELL: 'updateSubspell',
@@ -47,12 +52,18 @@ export const events: PubSubEvents = {
   $REFRESH_EVENT_TABLE: tabId => `refreshEventTable:${tabId}`,
 }
 
-const PubSubProvider = ({ children }) => {
-  const publish = (event, data) => {
+// Create the PubSubProvider component
+const PubSubProvider: React.FC = ({ children }) => {
+  // Publish function
+  const publish = (event: string, data: PubSubData) => {
     return PubSub.publish(event, data)
   }
 
-  const subscribe = (event: string, callback: PubSubJS.SubscriptionListener<PubSubData>): () => void => {
+  // Subscribe function
+  const subscribe = (
+    event: string,
+    callback: PubSubJS.SubscriptionListener<PubSubData>
+  ): (() => void) => {
     const token = PubSub.subscribe(event, callback)
 
     return () => {
@@ -60,6 +71,7 @@ const PubSubProvider = ({ children }) => {
     }
   }
 
+  // Public interface for the provider
   const publicInterface = {
     publish,
     subscribe,
@@ -67,6 +79,7 @@ const PubSubProvider = ({ children }) => {
     PubSub,
   }
 
+  // Return the provider with public interface and pass children
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }
 

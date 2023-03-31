@@ -1,8 +1,51 @@
-import ReactMenu, * as ReactComponents from './react-menu'
-import getMainMenu from './main-menu'
-import getNodeMenu from './node-menu'
-import IMenu from './menu'
+// DOCUMENTED 
+/**
+ * React menu and components.
+ * 
+ * @remarks
+ * This is an import statement of ReactMenu and ReactComponents.
+ * @packageDocumentation
+ */
+import ReactMenu, * as ReactComponents from './react-menu';
+/**
+ * The main menu.
+ * 
+ * @remarks
+ * This is an import of the getMainMenu function.
+ * @packageDocumentation
+ */
+import getMainMenu from './main-menu';
+/**
+ * The node menu.
+ * 
+ * @remarks
+ * This is an import of the getNodeMenu function.
+ * @packageDocumentation
+ */
+import getNodeMenu from './node-menu';
+/**
+ * A menu.
+ * 
+ * @remarks
+ * This is an import of the IMenu interface.
+ * @packageDocumentation
+ */
+import IMenu from './menu';
 
+/**
+ * Installs the context menu.
+ * 
+ * @remarks
+ * This function is exported as `install`.
+ * @param editor - The editor.
+ * @param searchBar - Show the search bar.
+ * @param searchKeep - Keep the search.
+ * @param delay - The delay.
+ * @param items - The items.
+ * @param nodeItems - The node items.
+ * @param allocate - The allocation.
+ * @param rename - The rename.
+ */
 function install(
   editor,
   {
@@ -16,45 +59,96 @@ function install(
   }
 ) {
 
-  editor.bind('hidecontextmenu')
-  const mainMenu = new (getMainMenu())(
+  // Bind 'hidecontextmenu' to the editor.
+  editor.bind('hidecontextmenu');
+
+  // Create a mainMenu if getMainMenu is truthy.
+  const mainMenu = getMainMenu() && new (getMainMenu())(
     editor,
     { searchBar, searchKeep, delay },
     { items, allocate, rename }
-  )
+  );
 
-  const nodeMenu = new (getNodeMenu())(
+  // Create a nodeMenu if getNodeMenu is truthy.
+  const nodeMenu = getNodeMenu() && new (getNodeMenu())(
     editor,
     { searchBar: false, delay },
     nodeItems
-  )
+  );
 
+  // Hide the menus on 'hidecontextmenu'.
   editor.on('hidecontextmenu', () => {
-    mainMenu.hide()
-    nodeMenu.hide()
-  })
+    mainMenu && mainMenu.hide();
+    nodeMenu && nodeMenu.hide();
+  });
 
+  // Hide the menus on 'click' or 'contextmenu'.
   editor.on('click contextmenu', () => {
-    editor.trigger('hidecontextmenu')
-  })
+    editor.trigger('hidecontextmenu');
+  });
 
+  // Show the menu on 'contextmenu'.
   editor.on('contextmenu', ({ e, node }) => {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
 
-    mainMenu.items.sort((a, b) =>
+    // Sort items by title.
+    mainMenu && mainMenu.items.sort((a, b) =>
       a.title > b.title ? 1 : b.title > a.title ? -1 : 0
-    )
+    );
 
-    const [x, y] = [e.clientX, e.clientY]
+    // Get the x and y coordinates of the click.
+    const [x, y] = [e.clientX, e.clientY];
 
-    ;(node ? nodeMenu : mainMenu).show(x, y, { node })
-  })
+    // Show the nodeMenu if node is truthy, else show the mainMenu.
+    (node ? nodeMenu : mainMenu)?.show(x, y, { node });
+  });
 }
 
-export { ReactMenu, ReactComponents, IMenu }
+/**
+ * The React Menu.
+ * 
+ * @remarks
+ * This is the ReactMenu class.
+ * This class is exported as `ReactMenu`.
+ * @public
+ */
+export { ReactMenu };
 
+/**
+ * The React Components.
+ * 
+ * @remarks
+ * This is an object that contains React components used by the ReactMenu.
+ * This object is exported as `ReactComponents`.
+ * @public
+ */
+export { ReactComponents };
+
+/**
+ * An interface that defines a menu.
+ * 
+ * @remarks
+ * This interface is exported as `IMenu`.
+ * @public
+ */
+export { IMenu };
+
+/**
+ * The context menu.
+ * 
+ * @remarks
+ * This object represents the context menu.
+ * This object is exported as the default.
+ * @public
+ */
 export default {
+  /**
+   * The name of the context menu.
+   */
   name: 'context-menu',
+  /**
+   * Installs the context menu.
+   */
   install,
-}
+};

@@ -1,3 +1,4 @@
+// DOCUMENTED
 import { buildMagickInterface } from '../helpers/buildMagickInterface'
 import {
   SpellManager,
@@ -13,6 +14,9 @@ import Router from '@koa/router'
 import _ from 'lodash'
 import { Application } from '../declarations'
 
+/**
+ * The type for AgentData.
+ */
 type AgentData = {
   id: any
   data: any
@@ -26,9 +30,11 @@ type AgentData = {
   enabled: boolean
 }
 
+/**
+ * The Agent class that implements AgentInterface.
+ */
 export class Agent implements AgentInterface {
   name = ''
-  //Clients
   id: any
   secrets: any
   publicVariables: any[]
@@ -44,9 +50,13 @@ export class Agent implements AgentInterface {
   updatedAt: string
 
   outputTypes: any[] = []
-
   updateInterval: any
 
+  /**
+   * Agent constructor initializes properties and sets intervals for updating agents
+   * @param agentData {AgentData} - The instance's data.
+   * @param agentManager {AgentManager} - The instance's manager.
+   */
   constructor(agentData: AgentData, agentManager: AgentManager) {
     this.secrets = JSON.parse(agentData.secrets)
     this.publicVariables = agentData.publicVariables
@@ -59,7 +69,7 @@ export class Agent implements AgentInterface {
     this.worldManager = new WorldManager()
 
     this.spellManager = new SpellManager({
-      magickInterface: buildMagickInterface({}) as any,
+      magickInterface: buildMagickInterface() as any,
       cache: false,
     })
     ;(async () => {
@@ -103,6 +113,9 @@ export class Agent implements AgentInterface {
     })()
   }
 
+  /**
+   * Clean up resources when the instance is destroyed.
+   */
   async onDestroy() {
     if (this.updateInterval) {
       clearInterval(this.updateInterval)
@@ -121,4 +134,5 @@ export class Agent implements AgentInterface {
   }
 }
 
+// Exporting Agent class as default
 export default Agent

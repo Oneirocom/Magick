@@ -1,6 +1,5 @@
 import { Application } from '@feathersjs/koa'
 import { FC, LazyExoticComponent } from 'react'
-import { Socket } from 'rete'
 import { MagickComponentArray } from './engine'
 import { CompletionProvider, Route, SpellInterface } from './types'
 
@@ -218,7 +217,7 @@ class PluginManager {
 
     this.pluginList.forEach(plugin => {
       let plug_nodes = {}
-      plugin.nodes.forEach(node => {
+      plugin.nodes.forEach((node: any) => {
         const id = Math.random().toString(36).slice(2, 7)
         const obj = {}
         obj[id] = () => new node()

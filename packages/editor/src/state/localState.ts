@@ -1,16 +1,19 @@
+// DOCUMENTED 
 import {
   createSlice,
-  // PayloadAction,
   createDraftSafeSelector,
   createEntityAdapter,
 } from '@reduxjs/toolkit'
 
+/**
+ * Interface for local state.
+ */
 export interface LocalState {
   id: string
   playtestData: string
 }
 
-// Entity adapter
+// Entity adapter to handle local state operations
 const localAdapater = createEntityAdapter<LocalState>({
   selectId: localState => localState.id,
 })
@@ -19,7 +22,10 @@ const localSelectors = localAdapater.getSelectors()
 // Initial State
 const initialState = localAdapater.getInitialState()
 
-// This is the primary composed of our "duck", and returns a number of helper functions and properties.
+/**
+ * This is the primary slice of our "duck",
+ * which returns helper functions and properties.
+ */
 export const localStateSlice = createSlice({
   name: 'localState',
   initialState,
@@ -41,9 +47,14 @@ export const { addLocalState, deleteLocalState, upsertLocalState } =
     Object.values(states).find(state => state.spellName === spellName)
 ) */
 
+/**
+ * Selector to find a state by tabId.
+ */
 export const selectStateBytabId = createDraftSafeSelector(
   [state => localSelectors.selectAll(state), (_, id) => id],
   (states, id) => 
     Object.values(states).find(state => state.id === id)
 )
+
+// export the default reducer
 export default localStateSlice.reducer

@@ -1,12 +1,27 @@
-import * as React from 'react'
+// DOCUMENTED 
+import * as React from 'react';
 
-import css from './toolbar.module.css'
+// Importing the CSS styles for the toolbar
+import css from './toolbar.module.css';
 
-export const Toolbar = ({ ...props }) => {
+/**
+ * A functional component Toolbar that renders a toolbar
+ * with given sections for toolbar items and options.
+ *
+ * @param props - An object containing toolbar and options to be rendered in the toolbar sections
+ * @returns - A JSX element representing the toolbar
+ */
+export const Toolbar: React.FC<{ toolbar: React.ReactNode; options: React.ReactNode }> = ({
+  toolbar,
+  options,
+}) => {
   return (
+    // Render the toolbar with its sections
     <div className={css['th-toolbar']}>
-      <div className={css['toolbar-section']}>{props.toolbar}</div>
-      <div className={css['toolbar-section']}>{props.options}</div>
+      {/* Render the toolbar items section */}
+      <div className={css['toolbar-section']}>{toolbar}</div>
+      {/* Render the options section */}
+      <div className={css['toolbar-section']}>{options}</div>
     </div>
-  )
-}
+  );
+};

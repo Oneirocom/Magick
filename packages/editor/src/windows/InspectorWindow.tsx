@@ -1,3 +1,4 @@
+// DOCUMENTED 
 import { componentCategories, Icon, Tooltip, Window } from '@magickml/client-core'
 import { Help } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
@@ -7,21 +8,22 @@ import { useInspector } from '../contexts/InspectorProvider'
 import { useModal } from '../contexts/ModalProvider'
 import DataControls from '../DataControls'
 
-const Inspector = props => {
+/**
+ * The Inspector component displays the selected component's data in a window with controls for modifying the data.
+ */
+const Inspector = (props) => {
   const { inspectorData, saveInspector } = useInspector()
 
   const [width, setWidth] = useState()
   const { openModal } = useModal()
-  // const preferences = useSelector((state: RootState) => state.preferences)
-  // const dispatch = useDispatch()
 
   useEffect(() => {
     if (props?.node?._rect?.width) {
       setWidth(props.node._rect.width)
     }
 
-    // this is to dynamically set the appriopriate height so that Monaco editor doesnt break flexbox when resizing
-    props.node.setEventListener('resize', data => {
+    // Dynamically set the appropriate height so that Monaco editor doesn't break flexbox when resizing
+    props.node.setEventListener('resize', (data) => {
       setTimeout(() => {
         setWidth(data.rect.width)
       }, 0)
@@ -32,7 +34,11 @@ const Inspector = props => {
     }
   }, [props])
 
-  const updateControl = control => {
+  /**
+   * Update a control's properties.
+   * @param {Object} control - The control object to update.
+   */
+  const updateControl = (control) => {
     if (!inspectorData) return
     const newData = {
       ...inspectorData,
@@ -41,7 +47,11 @@ const Inspector = props => {
     saveInspector(newData)
   }
 
-  const updateData = update => {
+  /**
+   * Update inspector data.
+   * @param {Object} update - Object containing updated data.
+   */
+  const updateData = (update) => {
     if (!inspectorData) return
     const newData = {
       ...inspectorData,

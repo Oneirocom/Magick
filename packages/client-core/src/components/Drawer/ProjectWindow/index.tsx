@@ -31,6 +31,11 @@ const ProjectWindow = () => {
   const token = globalConfig?.token
   const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
 
+  /**
+   * Load file and upload its contents to the server.
+   *
+   * @param {File} selectedFile - Selected file object
+   */
   const loadFile = selectedFile => {
     if (!token && !IGNORE_AUTH) {
       enqueueSnackbar('You must be logged in to create a project', {
@@ -63,6 +68,9 @@ const ProjectWindow = () => {
     }
   }
 
+  /**
+   * Export the project data as a .project.json file.
+   */
   const exportProject = () => {
     console.log('export project')
     // write data to project.json
