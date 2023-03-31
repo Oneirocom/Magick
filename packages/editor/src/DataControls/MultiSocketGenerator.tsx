@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { useState, useEffect } from 'react';
 import Form from './Form';
 import SingleElement from './SingleElement';

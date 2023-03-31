@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * An empty importMetaEnv object.
  */

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Button, Panel } from '@magickml/client-core';
 import { GraphData } from '@magickml/engine';
 import { templates } from '@magickml/client-core';

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * @description Middleware function to catch and log errors
  * @param context - Feathers HookContext object

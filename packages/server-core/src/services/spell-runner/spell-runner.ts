@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This module provides a configure function that registers the spell-runner service and its hooks on a Feathers application instance.
  * @packageDocumentation

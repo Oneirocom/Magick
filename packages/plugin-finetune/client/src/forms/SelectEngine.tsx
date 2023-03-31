@@ -1,4 +1,4 @@
-// GENERATED
+// DOCUMENTED
 
 /**
  * Interface describing props for SelectEngine component.

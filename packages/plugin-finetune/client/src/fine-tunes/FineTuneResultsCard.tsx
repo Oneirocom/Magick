@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import DownloadIcon from '@mui/icons-material/Download'
 import { Box } from '@mui/material'
 import Button from '@mui/material/Button'

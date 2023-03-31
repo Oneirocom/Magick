@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Calculates the difference between two objects using an operational transformation approach.
  * 

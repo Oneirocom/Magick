@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Props for Form component
  * @typedef {Object} Props

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This module exports a instantiated winston logger, configured
  * for console output.

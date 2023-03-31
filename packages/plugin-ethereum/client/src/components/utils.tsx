@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * KeyInput component receives value, setValue, secret and style props to render a key input field or a key text with a remove button.  
  * @typedef {{

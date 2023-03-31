@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import DeleteOutlined from '@mui/icons-material/DeleteOutlined';
 import { IconButton, Table, TableCell, TableRow } from '@mui/material';
 import Button from '@mui/material/Button';

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Gets the value stored in local storage for a given key, parsing it from JSON if needed
  *

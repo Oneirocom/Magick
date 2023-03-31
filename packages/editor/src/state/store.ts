@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { configureStore, ThunkAction, Action, Dispatch } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
 

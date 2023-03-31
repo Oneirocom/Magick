@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A control component that renders a checkbox and updates data based on user input.
  * This component uses the MUI Checkbox and FormControlLabel components.

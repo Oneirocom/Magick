@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Generate a random UUID version 4.
  * @returns {string} A string representing the UUID.

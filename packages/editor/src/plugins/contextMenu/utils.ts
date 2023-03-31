@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Returns a deep copy of an object using the JSON method.
  * @param obj The object to be copied.

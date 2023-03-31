@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import React, { useState, useEffect } from 'react';
 import { Control } from 'rete';
 import { MagickEditor } from '../types';

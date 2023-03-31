@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Button } from '@magickml/client-core'
 import React from 'react'
 

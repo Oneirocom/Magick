@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // Import required components and hooks
 import { Button, Select } from '@magickml/client-core';
 import React, { useState } from 'react';

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A module which exports a functional component - MagickIDE
  * @module MagickIDE

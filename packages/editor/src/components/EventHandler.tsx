@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { useEffect, useRef } from 'react';
 import { useSnackbar } from 'notistack';
 import { GraphData, SpellInterface } from '@magickml/engine';

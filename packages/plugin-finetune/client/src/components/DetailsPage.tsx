@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Box, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
 

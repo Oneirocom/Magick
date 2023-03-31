@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * @description Functional component that renders a labeled input or group of inputs
  * @param {object} props Props to pass to the component

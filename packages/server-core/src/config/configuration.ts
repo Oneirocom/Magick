@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This module contains types and functions related to application configuration.
  * @packageDocumentation

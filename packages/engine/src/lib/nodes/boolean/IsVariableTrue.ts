@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /* eslint-disable no-console */
 /* eslint-disable require-await */
 /* eslint-disable @-eslint/no-unused-vars */

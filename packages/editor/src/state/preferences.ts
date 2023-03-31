@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * @fileoverview A module that manages user preferences using Redux Toolkit. 
  * @package

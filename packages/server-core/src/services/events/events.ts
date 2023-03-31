@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { hooks as schemaHooks } from '@feathersjs/schema';
 import type { Knex } from 'knex';
 import os from 'os';

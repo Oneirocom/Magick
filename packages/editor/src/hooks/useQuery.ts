@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * a utility function that extracts and returns query parameters from the URL of the current page
  * @returns {URLSearchParams} a URL search Params object containing the query parameters of the current URL

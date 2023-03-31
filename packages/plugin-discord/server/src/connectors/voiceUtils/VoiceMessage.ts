@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { VoiceConnection } from '@discordjs/voice';
 import {
   Client,

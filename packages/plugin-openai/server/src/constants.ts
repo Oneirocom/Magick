@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * The OpenAI endpoint URL.
  * Attempts to retrieve from various environment variables, falls back to default endpoint if not found.

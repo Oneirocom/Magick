@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Connection, Input, Node, Output } from 'rete';
 
 /**

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import Rete from 'rete';
 import { InputsData } from 'rete/types/core/data';
 import { DataControl } from '../plugins/inspectorPlugin';

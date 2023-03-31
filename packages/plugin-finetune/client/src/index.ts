@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This module contains a React component called FineTuneManager that wraps several screens for fine-tuning pre-trained models.
  * 

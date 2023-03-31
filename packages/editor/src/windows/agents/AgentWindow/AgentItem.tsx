@@ -1,4 +1,4 @@
-// GENERATED
+// DOCUMENTED
 import { Icon, IconBtn } from '@magickml/client-core'
 import { Avatar, Typography } from '@mui/material'
 import styles from './index.module.scss'

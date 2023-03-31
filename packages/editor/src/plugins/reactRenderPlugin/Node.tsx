@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /* eslint-disable sort-imports */
 /* eslint-disable react/prop-types */
 import React from 'react'

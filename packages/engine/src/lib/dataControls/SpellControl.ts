@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * An extension of DataControl class that manages spell data.
  * @extends DataControl

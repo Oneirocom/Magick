@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This module exports a functional component that gets a fine tune id from the URL params and then fetches the corresponding fine tune object.
  * After fetching the fine tuneObject, it renders a details page with fine tune metadata, completion form and fine tune result card.

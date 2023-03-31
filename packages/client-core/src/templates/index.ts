@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * An array of spell templates in JSON format.
  * 

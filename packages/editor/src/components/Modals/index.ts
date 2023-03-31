@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Represents a collection of modals for handling different interactions.
  */

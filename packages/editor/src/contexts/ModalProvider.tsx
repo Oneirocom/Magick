@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 
 import React, { useState } from 'react';
 

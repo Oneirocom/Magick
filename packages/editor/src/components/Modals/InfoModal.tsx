@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Represents the contents and behavior of an information modal that displays a title, some content and an optional checkbox.
  */

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A component that displays a circular progress indicator in the center of the screen to indicate that data is loading.
  * @returns JSX element

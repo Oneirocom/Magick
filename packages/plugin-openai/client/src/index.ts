@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A plugin for interacting with OpenAI's API.
  * @class

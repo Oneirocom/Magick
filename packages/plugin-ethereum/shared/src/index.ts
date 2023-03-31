@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Contains an array of node classes used in blockchain transactions.
  */

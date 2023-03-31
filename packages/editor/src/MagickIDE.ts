@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * The main entry point for the MagickIDE application.
  * 

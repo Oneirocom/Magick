@@ -1,4 +1,4 @@
-// GENERATED
+// DOCUMENTED
 import { buildMagickInterface } from '../helpers/buildMagickInterface'
 import {
   SpellManager,

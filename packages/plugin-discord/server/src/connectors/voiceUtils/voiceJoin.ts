@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { getVoiceConnection, VoiceConnection } from '@discordjs/voice';
 import { Client } from 'discord.js';
 import { SpeechOptions } from './speechOptions';

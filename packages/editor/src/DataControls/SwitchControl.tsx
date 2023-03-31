@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * SwitchControl component that returns a toggle switch.
  * 

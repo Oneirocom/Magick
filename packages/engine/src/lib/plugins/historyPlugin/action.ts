@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Represents an abstract Action with undo and redo functionalities.
  */

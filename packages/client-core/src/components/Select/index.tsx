@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import React, { useEffect, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import Creatable from 'react-select/creatable';

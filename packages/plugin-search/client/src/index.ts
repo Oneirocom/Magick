@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * The `ClientPlugin` interface represents a plugin used by the application.
  * @interface

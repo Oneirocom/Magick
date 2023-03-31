@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { SpellRunner, GraphData, SpellInterface } from '@magickml/engine';
 import { app } from '../app';
 import { buildMagickInterface } from '../helpers/buildMagickInterface';

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A plugin used for the Pinecone integration with MagickML engine.
  *

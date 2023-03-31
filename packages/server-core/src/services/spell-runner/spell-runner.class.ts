@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { SpellInterface } from '@magickml/engine';
 import otJson0 from 'ot-json0';
 import { app } from '../../app';

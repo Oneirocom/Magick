@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A SelectEngine component that renders a dropdown menu of engine options.
  * @param {Object} props - React props object

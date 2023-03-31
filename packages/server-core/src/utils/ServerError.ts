@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  *  The possible custom error codes to be used in the application.
  */

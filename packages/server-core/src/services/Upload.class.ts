@@ -1,4 +1,4 @@
-// GENERATED
+// DOCUMENTED
 /**
  * Service for handling image uploads
  * @class

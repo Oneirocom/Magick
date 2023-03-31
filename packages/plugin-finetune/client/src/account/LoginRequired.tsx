@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * LoginRequired component requires that the user is authenticated before accessing the children prop.
  * If the user is authenticated, the children will be rendered, otherwise the user will be redirected to HomePage.

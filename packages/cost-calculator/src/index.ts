@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This exports all the modules from Cost Calculator library
  * @module CostCalculator

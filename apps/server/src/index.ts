@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Entry point of MagickML server. Initializes the necessary modules, middleware and routes to start up the server. 
  **/

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // Import necessary dependencies
 import 'regenerator-runtime/runtime';
 

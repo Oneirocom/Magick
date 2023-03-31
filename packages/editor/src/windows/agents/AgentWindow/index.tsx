@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Button, Grid, Typography } from '@mui/material';
 import AgentItem from './AgentItem';
 import styles from './index.module.scss';

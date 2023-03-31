@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * The HomePage component displays the home page of the application.
  * 

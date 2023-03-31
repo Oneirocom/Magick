@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { spellApi } from '../../state/api/spells';

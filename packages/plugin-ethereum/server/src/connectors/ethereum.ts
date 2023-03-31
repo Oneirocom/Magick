@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Returns a boolean indicating whether a string starts with a capital letter.
  * @param word - The string to check.

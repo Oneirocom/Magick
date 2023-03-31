@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * React menu and components.
  * 

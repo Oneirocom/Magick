@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /** 
  * A Metadata card displaying fine-tune information.
  * @param fineTune - A fine-tuned model object

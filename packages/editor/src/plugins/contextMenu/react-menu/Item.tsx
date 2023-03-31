@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import Context from './context';
 import styles from './style.module.scss';
 import React, { Component } from 'react';

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import WorkspaceProvider from '../contexts/WorkspaceProvider';
 import Composer from './Workspace';
 

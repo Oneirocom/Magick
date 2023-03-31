@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * The `IRunContextEditor` interface specifies the shape of objects that represent a magick editor context.
  * @interface

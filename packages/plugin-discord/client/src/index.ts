@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Contains the implementation of the `DiscordPlugin` class which represents
  * a client plugin that is used by the MagickML engine. The plugin provides a

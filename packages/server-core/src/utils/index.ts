@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This file exports all the functions and classes from the runSpell file.
  */

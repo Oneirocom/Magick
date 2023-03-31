@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import axios, { AxiosRequestConfig } from 'axios';
 
 /**

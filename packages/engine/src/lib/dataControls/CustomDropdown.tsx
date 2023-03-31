@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A dropdown component that can be customized with a title and options.
  * @param {object} props - The props object contains a title string and an array of options.

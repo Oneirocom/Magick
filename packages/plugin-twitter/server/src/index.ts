@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { eventSocket, ServerPlugin, triggerSocket, WorldManager } from '@magickml/engine';
 
 // Declare variable for TwitterConnector with an initial value of 'null'

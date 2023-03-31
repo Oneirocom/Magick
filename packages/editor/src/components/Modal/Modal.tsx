@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A component for displaying modal windows.
  * @param {Object} options Array of option to display inside the modal window.

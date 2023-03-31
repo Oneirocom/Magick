@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Represents an action that can be added to a `History` instance.
  */

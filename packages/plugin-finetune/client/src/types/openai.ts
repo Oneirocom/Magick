@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * OpenAI module namespace.
  *

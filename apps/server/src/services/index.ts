@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This file serves as a stub to generate new services.
  * For more information about this file, visit https://dove.feathersjs.com/guides/cli/application.html#configure-functions.

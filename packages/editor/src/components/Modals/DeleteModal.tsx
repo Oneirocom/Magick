@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This module contains the DeleteModal component which displays a modal with
  * confirmation of deletion and handles user input using react-hook-form

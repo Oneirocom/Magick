@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import Agent from './Agent'
 import { app } from '../app'
 import _ from 'lodash'

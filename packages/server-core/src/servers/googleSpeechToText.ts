@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { SpeechClient } from '@google-cloud/speech';
 import { Server } from 'socket.io';
 import { config } from 'dotenv-flow';

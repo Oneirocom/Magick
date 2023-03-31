@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import * as React from 'react';
 import { TextField } from '@mui/material';
 import styles from './input.module.css';

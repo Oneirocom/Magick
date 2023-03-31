@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { MagickWorkerInputs, SupportedLanguages, UnknownData } from '../types';
 import runPython from '../functions/ProcessPython';
 let vm2;

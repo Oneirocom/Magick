@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // This file contains schemas and validators for the Request model.
 // For more information about this file, see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema';

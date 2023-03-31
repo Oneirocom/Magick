@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import React, { useEffect } from 'react';
 import { Button, Icon, Panel } from '@magickml/client-core';
 import { Scrollbars } from 'react-custom-scrollbars-2';

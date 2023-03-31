@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Generates the request headers object for a given API request, based on the provided apiKey
  * and organizationId values.

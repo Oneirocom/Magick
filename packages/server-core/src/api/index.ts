@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { SpellInterface } from '@magickml/engine';
 import { app } from '../app';
 import Koa from 'koa';

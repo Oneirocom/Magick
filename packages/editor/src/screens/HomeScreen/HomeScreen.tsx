@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { LoadingScreen } from '@magickml/client-core';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

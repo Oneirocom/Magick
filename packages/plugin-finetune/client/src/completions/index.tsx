@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * The CompletionsPage component renders the CompletionList component within a LoginRequired component.
  * This ensures that the user is authenticated before being able to view the completion list.

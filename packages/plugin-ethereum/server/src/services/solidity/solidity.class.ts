@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This file contains a SolidityService class that implements the ServiceInterface.
  * The class exposes a create() method that compiles Solidity code using the `solc` package.

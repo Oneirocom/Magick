@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // This module provides a document service for managing documents with embedding and pagination support
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
 import type { Params } from '@feathersjs/feathers';

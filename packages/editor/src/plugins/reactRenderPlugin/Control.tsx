@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // Required import
 import React from 'react';
 

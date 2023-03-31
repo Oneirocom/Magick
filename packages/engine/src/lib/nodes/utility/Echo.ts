@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A simple rete component that returns the same output as the input.
  * @category Utility

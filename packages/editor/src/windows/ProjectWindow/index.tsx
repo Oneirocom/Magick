@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/engine';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';

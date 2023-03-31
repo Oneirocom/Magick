@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import Rete from 'rete'
 
 import { CodeControl } from '../../dataControls/CodeControl'

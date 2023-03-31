@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { config } from 'dotenv-flow';
 import { importMetaEnv } from './import-meta-env';
 

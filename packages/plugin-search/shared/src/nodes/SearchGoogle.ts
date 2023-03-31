@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * @file Search Google Component
  * @module SearchGoogle

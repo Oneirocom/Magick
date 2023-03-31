@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A functional React component to be used for inputting and displaying private keys.
  * @param value - The private key string value.

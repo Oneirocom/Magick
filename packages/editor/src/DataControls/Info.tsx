@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A functional component that renders information in a div element.
  * @param {object} control - The control object that contains the information to be displayed.

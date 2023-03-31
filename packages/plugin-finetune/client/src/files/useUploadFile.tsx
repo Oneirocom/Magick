@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { parse } from 'csv-parse';
 import { filesize } from 'filesize';
 import { useCallback, useState } from 'react';

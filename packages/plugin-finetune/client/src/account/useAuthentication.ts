@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Returns the authentication context for the AccountContext
  * @returns {Object} AccountContext - Object containing the authentication context

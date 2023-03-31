@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 
 // Import necessary helper functions and types

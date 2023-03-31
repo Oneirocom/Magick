@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { eventSocket, ClientPlugin, triggerSocket } from '@magickml/engine';
 import { AgentLoopWindow } from './components/loop.component';
 

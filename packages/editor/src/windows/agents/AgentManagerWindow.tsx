@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { LoadingScreen } from '@magickml/client-core'
 import { IGNORE_AUTH, pluginManager } from '@magickml/engine'
 import axios from 'axios'

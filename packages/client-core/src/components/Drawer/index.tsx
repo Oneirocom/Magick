@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { ClientPlugin, ClientPluginManager, pluginManager } from '@magickml/engine'
 import AppsIcon from '@mui/icons-material/Apps'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This file exports several modules that provide functions and classes for various parts of the application.
  * Please see individual modules for detailed documentation on their usage.

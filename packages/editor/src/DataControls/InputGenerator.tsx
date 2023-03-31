@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A component that generates multiple inputs based on the `initialValue`.
  * @param {Object} props - Component props.

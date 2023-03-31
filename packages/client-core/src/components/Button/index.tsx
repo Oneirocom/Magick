@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import React, { MouseEventHandler, ButtonHTMLAttributes } from 'react';
 import styles from './button.module.css';
 

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Initializes the GoogleSearchService and its hooks via `app.configured`.
  * Registers the GoogleSearchService on the Feathers application.

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Params } from '@feathersjs/feathers';
 import { app } from '../../app';
 

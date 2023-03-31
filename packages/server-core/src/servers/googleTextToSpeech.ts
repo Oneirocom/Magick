@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Initializes a TextToSpeechClient client from the Google Cloud text-to-speech library.
  */

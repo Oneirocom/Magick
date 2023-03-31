@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { CompletionHandlerInputData, saveRequest } from '@magickml/engine';
 import axios from 'axios';
 import { OPENAI_ENDPOINT } from '../constants';

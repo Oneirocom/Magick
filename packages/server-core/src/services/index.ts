@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { request } from './requests/requests';
 import { spell } from './spells/spells';
 import { agent } from './agents/agents';

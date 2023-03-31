@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { loadPyodide } from "pyodide";
 const PYODIDE_URL = "https://cdn.jsdelivr.net/pyodide/v0.22.0/full/";
 

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Represents the speech recognition function that can be custom implemented and specified in the [[DiscordSROptions]].
  * This function will be called when creating a [[DiscordSR]] object.

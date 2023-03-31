@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import * as Rete from 'rete'; // Use `* as` for consistent import style
 import * as _ from 'lodash'; // Use `* as` for consistent import style
 import { TextInputControl } from '../../dataControls/TextInputControl';

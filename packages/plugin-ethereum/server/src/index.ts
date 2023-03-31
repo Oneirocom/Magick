@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * @fileoverview A module that exports an optimized version of the original Typescript module
  * that conforms to the Google code standards.

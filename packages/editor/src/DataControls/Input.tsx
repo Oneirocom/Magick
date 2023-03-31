@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * InputControl is a reusable React component that allows the user to create an input control with optional initial value,
  * and a callback function that gets called every time the value of the input is changed.
