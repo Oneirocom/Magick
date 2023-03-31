@@ -1,3 +1,3 @@
-# Numbe rVariable
+# Number Variable
 
 Number Variable
