@@ -31,16 +31,18 @@ export class SocketGeneratorControl extends DataControl {
     icon = 'properties',
     connectionType,
     name: nameInput,
+    dataKey
   }: {
     socketType?: SocketType,
     taskType?: TaskType,
     ignored?: IgnoredList,
     icon?: string,
     connectionType: 'input' | 'output',
-    name: string
+    name: string,
+    dataKey?: string,
   }) {
     super({
-      dataKey: connectionType + 's',
+      dataKey: dataKey ?? (connectionType + 's'),
       name: nameInput || `Socket ${connectionType}s`,
       component: 'socketGenerator',
       icon,

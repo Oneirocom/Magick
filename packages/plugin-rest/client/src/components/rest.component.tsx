@@ -1,3 +1,4 @@
+// GENERATED 
 import React, { FC, useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid'
 import { Modal, Switch } from '@magickml/client-core'
@@ -7,11 +8,20 @@ import { enqueueSnackbar } from 'notistack'
 import { debounce } from 'lodash'
 import { API_ROOT_URL } from '@magickml/engine'
 
-const randomHash = () => {
+/**
+ * Generate a random hash.
+ * @returns {string} - A random hash generated using the md5 function.
+ */
+const randomHash = (): string => {
   return md5(Math.random().toString())
 }
 
-export const RestAgentWindow: FC<any> = props => {
+/**
+ * RestAgentWindow component enables users to control the REST API settings.
+ * @param {object} props - Props for the RestAgentWindow component.
+ * @returns {JSX.Element} - RestAgentWindow component.
+ */
+export const RestAgentWindow: FC<any> = (props) => {
   props = props.props
   const { selectedAgentData, setSelectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
@@ -22,16 +32,19 @@ export const RestAgentWindow: FC<any> = props => {
   const [viewMode, setViewMode] = useState<boolean>(false)
   const [checked, setChecked] = useState(selectedAgentData.data?.rest_enabled)
   const [disable, setDisable] = useState(false)
-  useEffect(()=>{
-    if (props.enable["RestPlugin"] == false) {
+  
+  useEffect(() => {
+    if (props.enable["RestPlugin"] === false) {
       setChecked(false)
       setDisable(true)
     }
-    if (props.enable['RestPlugin'] == true){
+
+    if (props.enable['RestPlugin'] === true){
       setChecked(selectedAgentData.data?.rest_enabled)
       setDisable(false)
     }
   }, [props.enable, selectedAgentData])
+  
   useEffect(() => {
     if (!selectedAgentData.data?.rest_api_key) {
       setSelectedAgentData({
