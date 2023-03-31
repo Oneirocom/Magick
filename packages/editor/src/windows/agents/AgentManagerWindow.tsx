@@ -1,3 +1,4 @@
+// GENERATED 
 import { LoadingScreen } from '@magickml/client-core'
 import { IGNORE_AUTH, pluginManager } from '@magickml/engine'
 import axios from 'axios'
@@ -8,6 +9,9 @@ import { useConfig } from '../../contexts/ConfigProvider'
 import AgentWindow from './AgentWindow'
 import validateSpellData from './AgentWindow/spellValidator'
 
+/**
+ * @description Main window representing the agent manager.
+ */
 const AgentManagerWindow = () => {
   const config = useConfig()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -19,6 +23,9 @@ const AgentManagerWindow = () => {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 
+  /**
+   * @description Reset the data and fetch the latest info from the server.
+   */
   const resetData = async () => {
     setIsLoading(true)
     const res = await fetch(
@@ -40,6 +47,10 @@ const AgentManagerWindow = () => {
     setEnable(plugin_list)
   }
 
+  /**
+   * @description Create a new agent with provided data.
+   * @param {Object} data The data needed to create a new agent.
+   */
   const createNew = (data: {
     projectId: string
     rootSpell: string
@@ -81,6 +92,10 @@ const AgentManagerWindow = () => {
       })
   }
 
+  /**
+   * @description Load file and create an agent with its data.
+   * @param {File} selectedFile The file containing agent data.
+   */
   const loadFile = selectedFile => {
     const fileReader = new FileReader()
     fileReader.readAsText(selectedFile)
@@ -112,6 +127,11 @@ const AgentManagerWindow = () => {
     }
   }
 
+  /**
+   * @description Update an agent with provided data.
+   * @param {string} id The agent ID.
+   * @param {any} _data The new data to update the agent.
+   */
   const update = (id: string, _data: any) => {
     axios
       .patch(
@@ -142,6 +162,10 @@ const AgentManagerWindow = () => {
       })
   }
 
+  /**
+   * @description Handle agent delete request.
+   * @param {string} id The agent ID to delete.
+   */
   const handleDelete = (id: string) => {
     axios
       .delete(`${config.apiUrl}/agents/` + id, {
@@ -167,6 +191,7 @@ const AgentManagerWindow = () => {
       })
   }
 
+  // useEffect callbacks for handling initial render and fetching data.
   useEffect(() => {
     if (!config.apiUrl || isLoading) return
     setIsLoading(true)
@@ -205,6 +230,8 @@ const AgentManagerWindow = () => {
       setEnable(plugin_list)
     })()
   }, [])
+
+  // Render the component.
   return isLoading ? (
     <LoadingScreen />
   ) : (
