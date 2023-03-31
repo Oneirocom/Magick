@@ -2752,7 +2752,6 @@ ___
 | `switchGate` | () => `SwitchGate` |
 | `textCompletion` | () => `GenerateText` |
 | `textVariable` | () => `TextVariable` |
-| `triggerOut` | () => `TriggerOut` |
 | `waitForAll` | () => `WaitForAll` |
 
 #### Defined in

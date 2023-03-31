@@ -50,11 +50,11 @@ const AddNewSocket = (props: { addSocket: Function }) => {
 };
 
 /**
- * SocketGenerator component that generates sockets.
+ * MultiSocketGenerator component that generates sockets.
  * @param {object} props - Component properties.
  * @returns {JSX.Element} - Socket generator JSX element.
  */
-const SocketGenerator = ({
+const MultiSocketGenerator = ({
   updateData,
   control,
   initialValue,
@@ -165,4 +165,4 @@ const SocketGenerator = ({
   );
 };
 
-export default SocketGenerator;
+export default MultiSocketGenerator;
