@@ -1,3 +1,4 @@
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { Agent } from '@magickml/server-core'
 import isEqual from 'lodash/isEqual'
 import Rete from 'rete'
@@ -330,8 +331,9 @@ export class SpellComponent extends MagickComponent<
             inputs: flattenedInputs,
             runSubspell: false,
             agent: module.agent,
-            secrets: module.agent.secrets ?? secrets as any,
-            publicVariables: module.agent.publicVariables as any ?? publicVariables as any,
+            secrets: module.agent.secrets ?? (secrets as any),
+            publicVariables:
+              (module.agent.publicVariables as any) ?? (publicVariables as any),
           }
           console.log('obj', obj)
           const outputs = await spellRunner.runComponent(obj)
