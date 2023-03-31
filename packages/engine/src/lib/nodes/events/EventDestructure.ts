@@ -1,25 +1,40 @@
-import Rete from 'rete'
-import { v4 as uuidv4 } from 'uuid'
+// DOCUMENTED 
+import Rete from 'rete';
+import { v4 as uuidv4 } from 'uuid';
 
-import { NodeData } from 'rete/types/core/data'
-import { MagickComponent } from '../../engine'
-import { Task } from '../../plugins/taskPlugin/task'
+import { NodeData } from 'rete/types/core/data';
+import { MagickComponent } from '../../engine';
+import { Task } from '../../plugins/taskPlugin/task';
 import {
-  arraySocket, eventSocket, stringSocket,
-  triggerSocket
-} from '../../sockets'
+  arraySocket,
+  eventSocket,
+  stringSocket,
+  triggerSocket,
+} from '../../sockets';
 import {
   Event,
-  MagickNode, MagickTask, MagickWorkerInputs,
+  MagickNode,
+  MagickTask,
+  MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData
-} from '../../types'
+  WorkerData,
+} from '../../types';
 
-const info = `The input component allows you to pass a single value to your graph. You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
+/** 
+ * Info description for EventDestructureComponent
+ */
+const info = `The input component allows you to pass a single value to your graph. You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`;
 
+/**
+ * EventDestructureComponent
+ * Class to destructure an event object
+ */
 export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
-  nodeTaskMap: Record<number, MagickTask> = {}
+  nodeTaskMap: Record<number, MagickTask> = {};
 
+  /**
+   * EventDestructureComponent constructor
+   */
   constructor() {
     // Name of the component
     super('Event Destructure', {
@@ -36,34 +51,37 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
         sender: 'output',
       },
       init: (task = {} as Task, node: NodeData) => {
-        this.nodeTaskMap[node.id] = task
+        this.nodeTaskMap[node.id] = task;
       },
-    }, 'Event', info)
-    
+    }, 'Event', info);
   }
 
+  /**
+   * EventDestructureComponent builder
+   * @param node - MagickNode instance
+   * @returns modified MagickNode instance
+   */
   builder(node: MagickNode) {
-    // module components need to have a socket key.
-    // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
-    node.data.socketKey = node?.data?.socketKey || uuidv4()
+    // Set a socket key if not exists
+    node.data.socketKey = node?.data?.socketKey || uuidv4();
 
-    const out = new Rete.Output('content', 'content', stringSocket)
-    const sender = new Rete.Output('sender', 'sender', stringSocket)
-    const observer = new Rete.Output('observer', 'observer', stringSocket)
-    const client = new Rete.Output('client', 'client', stringSocket)
-    const channel = new Rete.Output('channel', 'channel', stringSocket)
+    const out = new Rete.Output('content', 'content', stringSocket);
+    const sender = new Rete.Output('sender', 'sender', stringSocket);
+    const observer = new Rete.Output('observer', 'observer', stringSocket);
+    const client = new Rete.Output('client', 'client', stringSocket);
+    const channel = new Rete.Output('channel', 'channel', stringSocket);
     const channelType = new Rete.Output(
       'channelType',
       'channelType',
       stringSocket
-    )
-    const projectId = new Rete.Output('projectId', 'projectId', stringSocket)
-    const agentId = new Rete.Output('agentId', 'agentId', stringSocket)
-    const entities = new Rete.Output('entities', 'entities', arraySocket)
+    );
+    const projectId = new Rete.Output('projectId', 'projectId', stringSocket);
+    const agentId = new Rete.Output('agentId', 'agentId', stringSocket);
+    const entities = new Rete.Output('entities', 'entities', arraySocket);
 
-    const eventInput = new Rete.Input('event', 'Event', eventSocket)
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const eventInput = new Rete.Input('event', 'Event', eventSocket);
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
 
     return node
       .addInput(dataInput)
@@ -77,16 +95,22 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       .addOutput(entities)
       .addOutput(projectId)
       .addOutput(observer)
-      .addOutput(sender)
+      .addOutput(sender);
   }
 
-  // eslint-disable-next-line require-await
+  /**
+   * EventDestructureComponent worker
+   * @param _node - WorkerData instance
+   * @param inputs - Object containing inputs as MagickWorkerInputs
+   * @param _outputs - Object containing output as MagickWorkerOutputs
+   * @returns Destructured event object
+   */
   async worker(
     _node: WorkerData,
     { event }: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
   ) {
-    const eventValue = event[0] ?? event
+    const eventValue = event[0] ?? event;
 
     const {
       content,
@@ -98,7 +122,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       projectId,
       entities,
       agentId,
-    } = eventValue as Event
+    } = eventValue as Event;
     return {
       content,
       sender,
@@ -110,6 +134,6 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       entities,
       agentId,
       trigger: 'option',
-    }
+    };
   }
 }

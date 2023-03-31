@@ -1,7 +1,6 @@
 // DOCUMENTED 
 /* eslint-disable no-console */
 /* eslint-disable require-await */
-/* eslint-disable @-eslint/no-unused-vars */
 import Rete from 'rete';
 
 import { MagickComponent } from '../../engine';

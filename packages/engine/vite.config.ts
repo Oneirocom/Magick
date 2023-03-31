@@ -74,7 +74,7 @@ export default defineConfig({
         // @ts-ignore
       plugins: [rollupNodePolyFill()],
       // External packages that should not be bundled into your library.
-      external: ['react', 'react-dom', 'react/jsx-runtime', 'rete', 'rete/types/core/data'],
+      external: ['react', 'react-dom', 'react/jsx-runtime'],
     },
   },
 })

@@ -1,14 +1,22 @@
-import { GridViewRounded } from '@mui/icons-material'
-import { Icon, IconBtn } from '@magickml/client-core'
-import styles from './datacontrols.module.css'
+// DOCUMENTED 
+import { GridViewRounded } from '@mui/icons-material';
+import { Icon, IconBtn } from '@magickml/client-core';
+import styles from './datacontrols.module.css';
 
-interface Props {
-  name: string
-  type: string
-  delete: (name: string) => void
-}
+/**
+ * @typedef Props
+ * @type {object}
+ * @property {string} name - The name of the element.
+ * @property {string} type - The type of the element.
+ * @property {(name: string) => void} delete - Function to handle deletion of the element.
+ */
 
-const SingleElement = (props: Props) => {
+/**
+ * `SingleElement` is a functional component that renders a single element with actions like delete.
+ * @param {Props} props - The props needed for the SingleElement component.
+ * @returns {JSX.Element} The rendered SingleElement component.
+ */
+const SingleElement = ({ name, type, delete: handleDelete }: Props): JSX.Element => {
   return (
     <div className={`${styles.flexCenterBtn} ${styles.inputContainer}`}>
       <div className={styles.flexCenterBtn}>
@@ -16,32 +24,20 @@ const SingleElement = (props: Props) => {
           <IconBtn
             Icon={<GridViewRounded color="inherit" />}
             style={{ cursor: 'auto' }}
-            label={props.name}
+            label={name}
           />
         </span>
-        <p style={{ display: 'inline' }}>{props.name}</p>
+        <p style={{ display: 'inline' }}>{name}</p>
       </div>
       <div className={styles.flexCenterBtn}>
-        {/* <div className={`${styles.flexCenterStart} ${styles.typeInfo}`}>
-          <IconBtn
-            label={props.name}
-            style={{ cursor: 'auto' }}
-            Icon={
-              <ArrowForwardIosTwoTone
-                style={{ fontSize: '8px', cursor: 'auto' }}
-              />
-            }
-          />
-          <p style={{ textTransform: 'capitalize' }}>{props.type}</p>
-        </div> */}
         <IconBtn
-          label={props.name}
+          label={name}
           Icon={<Icon name="trash" size={20} />}
-          onClick={() => props.delete(props.name)}
+          onClick={() => handleDelete(name)}
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SingleElement
+export default SingleElement;

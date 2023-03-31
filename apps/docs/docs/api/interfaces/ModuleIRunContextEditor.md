@@ -32,7 +32,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:303](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L303)
+[packages/engine/src/lib/types.ts:303](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L303)
 
 ___
 
@@ -47,6 +47,20 @@ ___
 #### Defined in
 
 node_modules/rete/types/core/context.d.ts:8
+
+___
+
+### context
+
+• **context**: [`EditorContext`](EditorContext.md)
+
+#### Inherited from
+
+[IRunContextEditor](IRunContextEditor.md).[context](IRunContextEditor.md#context)
+
+#### Defined in
+
+[packages/engine/src/lib/types.ts:302](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L302)
 
 ___
 
@@ -82,27 +96,13 @@ node_modules/rete/types/core/context.d.ts:6
 
 ___
 
-### magick
-
-• **magick**: [`EditorContext`](EditorContext.md)
-
-#### Inherited from
-
-[IRunContextEditor](IRunContextEditor.md).[magick](IRunContextEditor.md#magick)
-
-#### Defined in
-
-[packages/engine/src/lib/types.ts:302](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L302)
-
-___
-
 ### moduleManager
 
 • **moduleManager**: [`ModuleManager`](../classes/ModuleManager.md)
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/index.ts:24](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/modulePlugin/index.ts#L24)
+[packages/engine/src/lib/plugins/modulePlugin/index.ts:24](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/plugins/modulePlugin/index.ts#L24)
 
 ___
 

@@ -1,18 +1,10 @@
 // DOCUMENTED
-import { buildMagickInterface } from '../helpers/buildMagickInterface'
-import {
-  SpellManager,
-  WorldManager,
-  pluginManager,
-  SpellRunner,
-  AgentInterface,
-  SpellInterface,
-} from '@magickml/engine'
-import { app } from '../app'
+import { SpellManager, SpellRunner } from '../spellManager/index';
+import { WorldManager } from '../world/worldManager';
+import { pluginManager } from '../plugin';
+import { AgentInterface, SpellInterface } from '../schemas';
 import { AgentManager } from './AgentManager'
-import Router from '@koa/router'
 import _ from 'lodash'
-import { Application } from '../declarations'
 
 /**
  * The type for AgentData.
@@ -39,15 +31,13 @@ export class Agent implements AgentInterface {
   secrets: any
   publicVariables: any[]
   data: AgentData
-  router: Router
-  app: Application
+  app: any
   spellManager: SpellManager
   projectId: string
   worldManager: WorldManager
   agentManager: AgentManager
-  spellRunner: SpellRunner
+  spellRunner?: SpellRunner
   rootSpell: SpellInterface
-  updatedAt: string
 
   outputTypes: any[] = []
   updateInterval: any
@@ -57,7 +47,7 @@ export class Agent implements AgentInterface {
    * @param agentData {AgentData} - The instance's data.
    * @param agentManager {AgentManager} - The instance's manager.
    */
-  constructor(agentData: AgentData, agentManager: AgentManager) {
+  constructor(agentData: AgentData, agentManager: AgentManager, app: any) {
     this.secrets = JSON.parse(agentData.secrets)
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
@@ -66,30 +56,37 @@ export class Agent implements AgentInterface {
     this.agentManager = agentManager
     this.name = agentData.name ?? 'agent'
     this.projectId = agentData.projectId
-    this.worldManager = new WorldManager()
+    const worldManager = new WorldManager()
+    this.worldManager = worldManager
+    this.app = app
 
-    this.spellManager = new SpellManager({
-      magickInterface: buildMagickInterface() as any,
+    const spellManager = new SpellManager({
       cache: false,
     })
+
+    this.spellManager = spellManager
     ;(async () => {
-      if (!this.rootSpell) {
+      if (!agentData.rootSpell) {
         console.warn('No root spell found for agent', this.id)
         return
       }
-      console.log('this.rootSpell.projectId', this.projectId, this.rootSpell.id)
+      console.log(
+        'this.rootSpell.projectId',
+        agentData.projectId,
+        agentData.rootSpell.id
+      )
       const spell = (
-        await app.service('spells').find({
+        await this.app.service('spells').find({
           query: {
-            projectId: this.projectId,
-            id: this.rootSpell.id,
+            projectId: agentData.projectId,
+            id: agentData.rootSpell.id,
           },
         })
       ).data[0]
 
-      const override = _.isEqual(spell, this.rootSpell)
+      const override = _.isEqual(spell, agentData.rootSpell)
 
-      this.spellRunner = await this.spellManager.load(spell, override)
+      this.spellRunner = await spellManager.load(spell, override)
       const agentStartMethods = pluginManager.getAgentStartMethods()
 
       for (const method of Object.keys(agentStartMethods)) {
@@ -97,7 +94,7 @@ export class Agent implements AgentInterface {
           agentManager,
           agent: this,
           spellRunner: this.spellRunner,
-          worldManager: this.worldManager,
+          worldManager: worldManager,
         })
       }
 
@@ -106,7 +103,7 @@ export class Agent implements AgentInterface {
 
       this.updateInterval = setInterval(() => {
         // every second, update the agent, set pingedAt to now
-        app.service('agents').patch(this.id, {
+        this.app.service('agents').patch(this.id, {
           pingedAt: new Date().toISOString(),
         })
       }, 1000)

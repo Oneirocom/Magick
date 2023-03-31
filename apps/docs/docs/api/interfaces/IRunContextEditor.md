@@ -30,7 +30,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:303](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L303)
+[packages/engine/src/lib/types.ts:303](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L303)
 
 ___
 
@@ -45,6 +45,16 @@ NodeEditor.components
 #### Defined in
 
 node_modules/rete/types/core/context.d.ts:8
+
+___
+
+### context
+
+• **context**: [`EditorContext`](EditorContext.md)
+
+#### Defined in
+
+[packages/engine/src/lib/types.ts:302](https://github.com/Oneirocom/MagickML/blob/563ea9fe/packages/engine/src/lib/types.ts#L302)
 
 ___
 
@@ -77,16 +87,6 @@ NodeEditor.id
 #### Defined in
 
 node_modules/rete/types/core/context.d.ts:6
-
-___
-
-### magick
-
-• **magick**: [`EditorContext`](EditorContext.md)
-
-#### Defined in
-
-[packages/engine/src/lib/types.ts:302](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L302)
 
 ___
 

@@ -90,11 +90,11 @@ const EditorProvider = ({ children }) => {
     return editorRef.current;
   };
 
-  const buildEditor = async (container, _spell, tab, magick) => {
+  const buildEditor = async (container, _spell, tab, context) => {
     const newEditor = await initEditor({
       container,
       pubSub,
-      magick,
+      context,
       tab,
       node: MyNode,
       client,

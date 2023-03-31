@@ -4,7 +4,8 @@
  * https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
  */
 import type { Id, Params, ServiceInterface } from '@feathersjs/feathers';
-import { Application, runSpell } from '@magickml/server-core';
+import { runSpell } from '@magickml/engine';
+import { Application } from '@magickml/server-core';
 import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema';
 
 export type { Api, ApiData, ApiPatch, ApiQuery };
