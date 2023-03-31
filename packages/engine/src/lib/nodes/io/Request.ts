@@ -41,9 +41,17 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
       name: 'Component Name',
     })
 
+    const headerGenerator = new SocketGeneratorControl({
+      connectionType: 'input',
+      dataKey: 'header',
+      name: 'Header Inputs',
+      ignored: ['trigger'],
+    })
+
     const inputGenerator = new SocketGeneratorControl({
       connectionType: 'input',
-      name: 'Input Sockets',
+      dataKey: 'input',
+      name: 'Body Inputs',
       ignored: ['trigger'],
     })
 
@@ -66,6 +74,7 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
 
     node.inspector
       .add(nameControl)
+      .add(headerGenerator)
       .add(inputGenerator)
       .add(url)
       .add(method)

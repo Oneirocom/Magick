@@ -1,3 +1,4 @@
+// GENERATED 
 import {
   ChatMessage,
   CompletionHandlerInputData,
@@ -7,55 +8,66 @@ import {
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
 
+/**
+ * Generate a completion text based on prior chat conversation input.
+ * @param data - CompletionHandlerInputData object.
+ * @returns An object with success status and either a result or an error message.
+ */
 export async function makeChatCompletion(
   data: CompletionHandlerInputData
-): Promise<{success: boolean, result?: string | null, error?: string | null}> {
+): Promise<{ success: boolean, result?: string | null, error?: string | null }> {
   const { node, inputs, context } = data
 
-  // get the values of all keys (which are arrays) in context.module.inputs and filter out undefined
+  // Filter out undefined input keys from context.module.inputs
   const inputKeys = Object.values(context.module.inputs).filter((input: any) => {
     return Object.values(input).filter(Boolean).length > 0
   })[0]
 
+  // Get the first non-empty Event as inputData
   const inputData = (inputKeys as Event[]).filter(Boolean)[0] as Event
 
+  // Get the system message and conversation inputs
   const system = inputs['system']?.[0] as string
   const conversation = inputs['conversation']?.[0] as any
 
+  // Get or set default settings
   const settings = ((inputs.settings && inputs.settings[0]) ?? {
     model: node?.data?.model,
     temperature: node?.data?.temperature,
-    // max_tokens: node?.data?.max_tokens,
     top_p: node?.data?.top_p,
     frequency_penalty: node?.data?.frequency_penalty,
     presence_penalty: node?.data?.presence_penalty,
-    // stop: node?.data?.stop,
   }) as any
 
+  // Initialize conversationMessages array
   const conversationMessages: ChatMessage[] = []
 
+  // Add elements to conversationMessages
   conversation?.forEach(event => {
     const message = { role: event.observer === inputData.observer ? 'assistant' : 'user', content: event.content }
     conversationMessages.push(message)
   })
 
-
+  // Get the user input
   const input = inputs['input']?.[0] as string
 
+  // Create the system and user messages
   const systemMessage = { role: 'system', content: system }
-
   const userMessage = { role: 'user', content: input }
 
+  // Initialize messages array and add elements
   let messages: ChatMessage[] = []
 
-  if(system)  {
+  if (system) {
     messages.push(systemMessage)
   }
 
   messages = [...messages, ...conversationMessages, userMessage]
 
+  // Update the settings messages
   settings.messages = messages
 
+  // Create request headers
   const headers = {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + context.module.secrets['openai_api_key'],
@@ -63,20 +75,24 @@ export async function makeChatCompletion(
 
   try {
     const start = Date.now()
+    // Make the API call to OpenAI
     const completion = await axios.post(
       `${OPENAI_ENDPOINT}/chat/completions`,
       settings,
       { headers: headers }
     )
 
-    if(completion.data.error){
+    if (completion.data.error) {
       console.error('OpenAI Error', completion.data.error)
     }
 
+    // Extract the result from the response
     const result = completion.data?.choices[0]?.message?.content
 
+    // Log the usage of tokens
     const usage = completion.data.usage
 
+    // Save the API request details
     saveRequest({
       projectId: context.projectId,
       requestData: JSON.stringify(settings),
