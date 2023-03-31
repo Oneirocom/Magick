@@ -22,6 +22,10 @@ import { SpellManager } from './spellManager'
 
 import io from 'socket.io'
 
+export { NodeData } from 'rete/types/core/data'
+
+export { MagickComponent } from './engine'
+
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 
 export * from './schemas'

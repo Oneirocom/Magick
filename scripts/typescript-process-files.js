@@ -30,12 +30,13 @@ async function doStuff(file) {
         body: JSON.stringify({
             messages: messages,
             model: 'gpt-4',
-            max_tokens: 4096,
+            max_tokens: 3172,
         })
 
     })
 
     const json = await response.json();
+    console.log('json', json)
 
     const choices = json.choices;
 

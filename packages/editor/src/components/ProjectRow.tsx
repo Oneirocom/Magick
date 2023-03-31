@@ -1,18 +1,34 @@
-import { SpellInterface } from '@magickml/engine'
-import { CSSProperties } from 'react'
-import { Icon } from '@magickml/client-core'
-import css from '../screens/HomeScreen/homeScreen.module.css'
+// DOCUMENTED 
+import { SpellInterface } from '@magickml/engine';
+import { CSSProperties } from 'react';
+import { Icon } from '@magickml/client-core';
+import css from '../screens/HomeScreen/homeScreen.module.css';
 
+/**
+ * ProjectProps type defines the properties for the ProjectRow component.
+ */
 type ProjectProps = {
-  label: string
-  selectedSpell?: SpellInterface
-  icon?: string
-  onClick: Function
-  spell?: SpellInterface
-  style?: CSSProperties
-  onDelete?: Function
-}
+  label: string;
+  selectedSpell?: SpellInterface;
+  icon?: string;
+  onClick: Function;
+  spell?: SpellInterface;
+  style?: CSSProperties;
+  onDelete?: Function;
+};
 
+/**
+ * ProjectRow is a functional component that displays a row of project information.
+ *
+ * @param {string} label - The text to display in the row.
+ * @param {SpellInterface} [selectedSpell] - The currently selected spell.
+ * @param {Function} onClick - The function to call when the row is clicked.
+ * @param {string} [icon] - The name of the icon to display before the label.
+ * @param {SpellInterface} [spell] - The spell associated with this row.
+ * @param {CSSProperties} [style] - The CSS style to apply to the row.
+ * @param {Function} [onDelete] - The function to call when the delete icon is clicked.
+ * @returns {JSX.Element} The rendered row component.
+ */
 const ProjectRow = ({
   label,
   selectedSpell,
@@ -21,15 +37,15 @@ const ProjectRow = ({
   spell,
   style = {},
   onDelete,
-}: ProjectProps) => {
+}: ProjectProps): JSX.Element => {
   return (
     <div
       role="button"
       className={`${css['project-row']} ${
         css[selectedSpell?.name === label ? 'selected' : '']
       }`}
-      onClick={e => {
-        onClick(e)
+      onClick={(e) => {
+        onClick(e);
       }}
       style={style}
     >
@@ -41,7 +57,7 @@ const ProjectRow = ({
         <Icon
           name="trash"
           onClick={() => {
-            spell?.name && onDelete(spell.id)
+            spell?.name && onDelete(spell.id);
           }}
           style={{
             marginRight: 'var(--extraSmall)',
@@ -52,7 +68,7 @@ const ProjectRow = ({
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ProjectRow
+export default ProjectRow;
