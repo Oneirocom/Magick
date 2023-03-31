@@ -14,7 +14,7 @@ import {
   SpaceName,
 } from "hnswlib-node";
 import { Embeddings } from "langchain/dist/embeddings/base";
-import { result } from "lodash";
+import { extend, result } from "lodash";
 import import_ from '@brillout/import';
 
 
@@ -26,13 +26,80 @@ const DocumentPro = import_("langchain/document");
 const { Document } = await DocumentPro;
 const SaveableVectorStorePro = import_("langchain/vectorstores");
 const { SaveableVectorStore } = await SaveableVectorStorePro;
+const SupabaseVectorStorePro = import_("langchain/vectorstores");
+const { SupabaseVectorStore } = await SupabaseVectorStorePro;
 
+export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
+  constructor(embeddings, args) {
+    super(embeddings, args);
+    Object.defineProperty(this, "client", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: void 0
+    });
+    Object.defineProperty(this, "tableName", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: void 0
+    });
+    Object.defineProperty(this, "queryName", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: void 0
+    });
+    this.client = args.client;
+    this.tableName = args.tableName || "documents";
+    this.queryName = args.queryName || "match_documents";
+  }
+  async addDocuments(documents, vector: any='') {
+    const texts = documents.map(({ pageContent }) => pageContent);
+    if (vector != '') {
+      return this.addVectors(vector, documents)
+    }
+    return this.addVectors(await this.embeddings.embedDocuments(texts), documents);
+  }
+  async addVectors(vectors, documents) {
+          const res = await this.client.from(this.tableName).insert(documents);
+          if (res.error) {
+              throw new Error(`Error inserting: ${res.error.message} ${res.status} ${res.statusText}`);
+          }
+  }
+
+  async addEvents(events) {
+    events.array.forEach(async element => {
+      const res = await this.client.from(this.tableName).insert(element);
+      if (res.error) {
+          throw new Error(`Error inserting: ${res.error.message} ${res.status} ${res.statusText}`);
+      }
+    });
+  }
+
+  rpc(query, params) {
+    return this.client.rpc(query, params);
+  }
+
+  from(table) {
+    return this.client.from(table);
+  }
+
+  async getDocuments(ids) {
+    const res = await this.client.from(this.tableName).select("*").in("id", ids);
+    if (res.error) {
+        throw new Error(`Error getting documents: ${res.error.message} ${res.status} ${res.statusText}`);
+    }
+    return res.data;
+  }
+}
 export type Document = {
   id(id: any): number;
   metadata: Object,
   pageContent: any
 }
 export interface HNSWLibBase {
+  filename: string;
   space: SpaceName;
   numDimensions?: number;
 }
@@ -89,7 +156,7 @@ export class HNSWLib extends SaveableVectorStore {
 
 
     });
-    this.save(".")
+    this.save(this.args.filename)
     return docId as any || [];
   }
 
@@ -109,8 +176,8 @@ export class HNSWLib extends SaveableVectorStore {
     const docstoreSize = this.docstore.count;
     this.index.addPoint(embedding, HNSWLib.sha256ToDecimal(metadata.id));
     this.docstore.add({ [HNSWLib.sha256ToDecimal(metadata.id)]: metadata });
-    await this.save(".")
-    await this.saveIndex();
+    await this.save(this.args.filename)
+    await this.saveIndex(this.args.filename);
   }
 
 
@@ -200,8 +267,8 @@ export class HNSWLib extends SaveableVectorStore {
       this.index.addPoint(vectors[i], HNSWLib.sha256ToDecimal(id_str));
       this.docstore.add({ [HNSWLib.sha256ToDecimal(id_str)]: documents[i] });
     }
-    await this.save(".")
-    await this.saveIndex();
+    await this.save(this.args.filename)
+    await this.saveIndex(this.args.filename);
   }
 
   async similaritySearch(query: any, k = 4): Promise<Document[]> {
@@ -275,22 +342,22 @@ export class HNSWLib extends SaveableVectorStore {
     ]);
   }
 
-  async saveIndex() {
+  async saveIndex(filename:string=".") {
     if (!this.index) {
       return;
     }
-    await this.index.writeIndex(path.join(".", "hnswlib.index"));
+    await this.index.writeIndex(path.join(filename, "hnswlib.index"));
   }
   static async load(directory: string, embeddings: Embeddings): Promise<typeof SaveableVectorStore> {
-    let db = new HNSWLib(embeddings, { space: "cosine" });
+    let db = new HNSWLib(embeddings, { space: "cosine", filename: directory });
     db.docstore = new InMemoryDocstore();
     return db;
   }
-  static load_data(directory: string, embeddings: Embeddings, args: { space: any, numDimensions: any }) {
+  static load_data(directory: string, embeddings: Embeddings, args: { space: any, numDimensions: any, filename: any }) {
     const index = new HierarchicalNSW(args.space, args.numDimensions);
     try {
-      const docstoreFiles = JSON.parse(fs.readFileSync("docstore.json", "utf8"));
-      index.readIndex("hnswlib.index");
+      const docstoreFiles = JSON.parse(fs.readFileSync(args.filename + "/docstore.json", "utf8"));
+      index.readIndex(args.filename +"/hnswlib.index");
       let db = new HNSWLib(embeddings, args);
       db.index = index;
       docstoreFiles.map(([k, v]) => {
@@ -354,6 +421,7 @@ export class HNSWLib extends SaveableVectorStore {
     const args: HNSWLibArgs = {
       docstore: dbConfig?.docstore,
       space: "cosine",
+      filename: "documents"
     };
     const instance = new this(embeddings, args);
     await instance.addDocuments(docs);
@@ -364,21 +432,6 @@ export class HNSWLib extends SaveableVectorStore {
     const hash = crypto.createHash('sha256').update(str).digest('hex');
     const num = parseInt(hash, 16);
     return num % 1000000; // return a 6-digit integer
-  }
-  static async fromEmbeddingsWithData(
-    embeddings: EmbeddingWithData[],
-    embeddingsModel: Embeddings,
-    dbConfig?: {
-      docstore?: typeof InMemoryDocstore;
-    }
-  ): Promise<HNSWLib> {
-    const args: HNSWLibArgs = {
-      docstore: dbConfig?.docstore,
-      space: "cosine",
-    };
-    const instance = new this(embeddingsModel, args);
-    await instance.addEmbeddingsWithData(embeddings);
-    return instance;
   }
 }
 

@@ -18,9 +18,10 @@ import handleSockets from './sockets/sockets'
 
 
 //Vector DB Related Imports
-import { HNSWLib } from "./vectordb";
+import { HNSWLib, SupabaseVectorStoreCustom } from "./vectordb";
 import HNSWVectorDatabase from './vectordata'
 import { import_ } from '@brillout/import'
+import { createClient } from '@supabase/supabase-js'
 // Same as `import()`
 
 
@@ -41,8 +42,7 @@ if (!globalThis.Headers) globalThis.Headers = Headers
 if (!globalThis.Request) globalThis.Request = Request
 if (!globalThis.Response) globalThis.Response = Response
 
-const OPENAI_API_KEY = 'API_KEY_HERE'
-const model = new OpenAI({ openAIApiKey: "OPENAI_API_KEY", temperature: 0.9 })
+
 
 const app: Application = koa(feathers())
 
@@ -52,17 +52,29 @@ const app: Application = koa(feathers())
 declare module './declarations' {
   interface Configuration {
     vectordb: HNSWLib & any;
+    docdb: HNSWLib & any;
   }
 }
 if (process.env.DATABASE_TYPE == "sqlite") {
   console.log("Setting up vector store")
   const vectordb = HNSWLib.load_data(".",embeddings,{
     space: "cosine",
-    numDimensions: 1536
+    numDimensions: 1536,
+    filename:"database"
+  })
+  const docdb = HNSWLib.load_data(".",embeddings,{
+    space: "cosine",
+    numDimensions: 1536,
+    filename:"documents"
   })
   app.set('vectordb', vectordb)
+  app.set('docdb', docdb)
 } else {
-  app.set("vectordb", "postgres")
+  let cli = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)
+  const vectordb = new SupabaseVectorStoreCustom(embeddings, {client: cli, tableName:"events", queryName: "match_events"}) ;
+  const docdb = new SupabaseVectorStoreCustom(embeddings, {client: cli, tableName:"documents", queryName: "match_documents"}) ;
+  app.set("vectordb", vectordb)
+  app.set('docdb', docdb)
 }
 
 /* 

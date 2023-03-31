@@ -110,7 +110,6 @@ export class EventStore extends MagickComponent<Promise<void>> {
       type,
     }
     if (embedding) data.embedding = embedding
-
     if (content && content !== '') {
       const response = await axios.post(`${API_ROOT_URL}/events`, data)
       return {

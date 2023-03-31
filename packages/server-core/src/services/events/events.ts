@@ -8,7 +8,7 @@ const cpuCore = os.cpus()
 const isM1 =
   cpuCore[0].model.includes('Apple M1') || cpuCore[0].model.includes('Apple M2')
 const isWindows = os.platform() === 'win32'
-import { HNSWLib } from "./../../vectordb"
+
 // get
 
 // array 1536 values in length
@@ -69,11 +69,8 @@ export const event = (app: Application) => {
         },
       ],
       create: [
-        schemaHooks.validateData(eventDataValidator),
-        schemaHooks.resolveData(eventDataResolver),
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         async (context: HookContext) => {
-          
           if (SKIP_DB_EXTENSIONS) return context
           const { embedding } = context.data
           const { data, service } = context
@@ -83,29 +80,38 @@ export const event = (app: Application) => {
             [service.id]: id,
             ...data,
           }
-
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
-            //context.data.embedding = pgvector.toSql(embedding)  
-            let insert_data = [{
-              embedding: embedding,
-              data: {
-                metadata: {...context.data} || {"msg": "Empty Data"},
-                pageContent: context.data['content'] || "No Content in the Event",
-              },
-            }]
-            await vectordb.addEmbeddingsWithData(insert_data);
+            if (process.env.DATABASE_TYPE == "pg") {
+              console.log(embedding as Array<number>)
+              console.log(typeof(embedding as Array<number>))
+              context.data.embedding = pgvector.toSql(embedding as Array<number>)  
+              return context;
+            }else{
+              let insert_data = [{
+                embedding: embedding,
+                data: {
+                  metadata: {...context.data} || {"msg": "Empty Data"},
+                  pageContent: context.data['content'] || "No Content in the Event",
+                },
+              }]
+              await vectordb.addEmbeddingsWithData(insert_data);
+            }      
           } else {
-            //context.data.embedding = pgvector.toSql(nullArray)
-            let insert_data = [{
-              embedding: nullArray,
-              data: {
-                metadata: {...context.data} || {"msg": "Empty Data"},
-                pageContent: context.data['content'] || "No Content in the Event",
-              },
-            }]
-            await vectordb.addEmbeddingsWithData(insert_data);
-            //vectordb.add(id, nullArray, context.data)
+            if (process.env.DATABASE_TYPE == "pg") {
+              context.data.embedding = pgvector.toSql(nullArray)
+              context.app.service('events').create(context.data);
+              return context;
+            } else {
+              let insert_data = [{
+                embedding: nullArray,
+                data: {
+                  metadata: {...context.data} || {"msg": "Empty Data"},
+                  pageContent: context.data['content'] || "No Content in the Event",
+                },
+              }]
+              await vectordb.addEmbeddingsWithData(insert_data);
+            }
           }
           return;
         }

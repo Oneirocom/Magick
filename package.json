@@ -74,6 +74,7 @@
     "@react-three/drei": "^9.53.0",
     "@react-three/fiber": "^8.10.0",
     "@reduxjs/toolkit": "^1.9.3",
+    "@supabase/supabase-js": "^2.13.0",
     "@types/dotenv-flow": "^3.2.0",
     "@types/filesize": "^5.0.0",
     "@types/pubsub-js": "^1.8.3",
