@@ -1,27 +1,21 @@
+import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
+import { getNodes } from '../nodes'
+import { Module } from '../plugins/modulePlugin/module'
 import {
-  EngineContext,
   GraphData,
   MagickNode,
   ModuleComponent,
   SpellInterface,
-  WorkerData,
+  WorkerData
 } from '../types'
-import { getNodes } from '../nodes'
-import { initSharedEngine, extractNodes, MagickEngine } from '../engine'
-import { Module } from '../plugins/modulePlugin/module'
 import { RunComponentArgs } from './SpellRunner'
-
-type RunSpellConstructor = {
-  magickInterface: EngineContext
-}
 
 class RunSpell {
   engine: MagickEngine
   currentSpell!: SpellInterface
   module: Module
-  magickInterface: EngineContext
 
-  constructor({ magickInterface }: RunSpellConstructor) {
+  constructor() {
     // Initialize the engine
     this.engine = initSharedEngine({
       name: 'demo@0.1.0',
@@ -31,12 +25,6 @@ class RunSpell {
     console.log('Engine Created from spell runner')
     // Set up the module to interface with the runtime processes
     this.module = new Module()
-
-    // Set the interface that this runner will use when running workers
-    this.magickInterface = magickInterface
-
-    // We should probably load up here all the "modules" the spell needds to run
-    // This would basicallyt be an array of spells pulled from the DB
   }
 
   // getter method for all triggers ins of the loaded spell
@@ -47,7 +35,6 @@ class RunSpell {
   get context() {
     return {
       module: this.module,
-      magick: this.magickInterface,
       projectId: this.currentSpell.projectId,
     }
   }

@@ -43,7 +43,7 @@ import { initSharedEngine, MagickEngine } from '@magickml/engine';
  * Extend MagickEngine with additional properties
  */
 interface MagickEngineClient extends MagickEngine {
-  magick: EditorContext;
+  context: EditorContext;
 }
 
 // Map of tab IDs to editors
@@ -57,14 +57,14 @@ const editorTabMap: Record<string, MagickEditor> = {};
 export const initEditor = function ({
   container,
   pubSub,
-  magick,
+  context,
   tab,
   node,
   client,
 }: {
   container: any;
   pubSub: PubSubContext;
-  magick: any;
+  context: any;
   tab: any;
   node: any;
   client?: any;
@@ -81,7 +81,7 @@ export const initEditor = function ({
 
   // Set up the context for editor
   editor.pubSub = pubSub;
-  editor.magick = magick;
+  editor.context = context;
   editor.tab = tab;
 
   // Initialize plugins
@@ -156,7 +156,7 @@ export const initEditor = function ({
     components,
     server: false,
   }) as MagickEngineClient;
-  engine.magick = magick;
+  engine.context = context;
 
   // Initialize additional plugins
   if (client) {
@@ -187,7 +187,7 @@ export const initEditor = function ({
 
   // Define additional methods for editor
   editor.onSpellUpdated = (spellId: string, callback: OnSubspellUpdated) => {
-    return magick.onSubspellUpdated(spellId, callback);
+    return context.onSubspellUpdated(spellId, callback);
   };
 
   editor.abort = async () => {
@@ -197,7 +197,7 @@ export const initEditor = function ({
   editor.runProcess = async callback => {
     await engine.abort();
     await engine.process(editor.toJSON(), null, {
-      magick: magick,
+      context: context,
       currentSpell: editor.currentSpell,
     });
     if (callback) callback();

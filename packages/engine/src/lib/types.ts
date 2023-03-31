@@ -138,7 +138,7 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
   declare currentSpell: SpellInterface
   declare pubSub: PubSubContext
-  declare magick: EditorContext
+  declare context: EditorContext
   declare tab: { type: string }
   declare abort: unknown
   declare loadGraph: (graph: Data, reloading?: boolean) => Promise<void>
@@ -298,7 +298,7 @@ export type EventsTypes = {
 }
 
 export interface IRunContextEditor extends NodeEditor {
-  magick: EditorContext
+  context: EditorContext
   abort: () => void
 }
 
@@ -576,7 +576,7 @@ export type CompletionHandlerInputData = {
     module: any
     secrets: Record<string, string>
     projectId: string
-    magick: EngineContext
+    context: EngineContext
     currentSpell: SpellInterface
   }
 }
@@ -658,8 +658,3 @@ export type Route = {
 }
 
 export type UserSpellManager = Map<string, SpellManager>
-
-export type RunSpellConstructor = {
-  magickInterface: EngineContext
-  socket?: io.Socket
-}

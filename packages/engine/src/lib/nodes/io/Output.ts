@@ -78,7 +78,7 @@ export class Output extends MagickComponent<void> {
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    { module, magick }: { module: Module; magick: EditorContext }
+    { module, context }: { module: Module; context: EditorContext }
   ) {
     if (!inputs.input)
       return console.error('No input provided to output component')
@@ -87,8 +87,8 @@ export class Output extends MagickComponent<void> {
     const event =
       inputs.event?.[0] || (module.inputs && (Object.values(module.inputs)[0] as unknown[])?.[0])
 
-      if (magick) {
-        const { sendToPlaytest } = magick
+      if (context) {
+        const { sendToPlaytest } = context
         if (sendToPlaytest) {
           console.log('sending to playtest', output)
           sendToPlaytest(output)

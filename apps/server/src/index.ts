@@ -15,7 +15,6 @@ import {
   initFileServer,
   initTextToSpeech,
   initSpeechServer,
-  logger,
   apis,
   spells,
   Handler,
@@ -30,7 +29,7 @@ process.on('uncaughtException', (err: Error) => {
 })
 
 process.on('unhandledRejection', (reason: {/* null */}, p: Promise<any>) =>
-  logger.error('Unhandled Rejection at: Promise ', p, reason)
+  console.error('Unhandled Rejection at: Promise ', p, reason)
 )
 
 // initialize server routes from the plugin manager

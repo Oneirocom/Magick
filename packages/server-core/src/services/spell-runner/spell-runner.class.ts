@@ -1,10 +1,8 @@
 // DOCUMENTED 
-import { SpellInterface } from '@magickml/engine';
+import { SpellInterface, getSpell } from '@magickml/engine';
 import otJson0 from 'ot-json0';
 import { app } from '../../app';
 import { Params } from '@feathersjs/feathers';
-
-import { getSpell } from '../../helpers/getSpell';
 
 interface CreateData {
   inputs: Record<string, any>;
