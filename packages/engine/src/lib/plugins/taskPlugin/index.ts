@@ -72,7 +72,6 @@ function install(editor: MagickEditor) {
         return result as Record<string, unknown> | null
       }
 
-      // TODO: should this not be node.data?
       const task = new Task(inputs, component, node, taskCaller)
 
       component.nodeTaskMap[node.id] = task

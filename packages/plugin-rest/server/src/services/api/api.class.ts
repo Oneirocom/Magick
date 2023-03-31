@@ -54,7 +54,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     }
 
     // get the selectedAgentData's spells
-    const rootSpell = agent.rootSpell ?? {}
+    const rootSpell = agent.rootSpell ?? {id: `no rootspell present for agent ${agent.name}`}
     // run the spell
     const result = await runSpell({
       spellId: rootSpell.id,
@@ -118,7 +118,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    const rootSpell = agent.rootSpell ?? {}
+    const rootSpell = agent.rootSpell ?? {id: `no rootspell present for agent ${agent.name}`}
 
     const result = await runSpell({
       spellId: rootSpell.id,
@@ -180,7 +180,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    const rootSpell = agent.rootSpell ?? {}
+    const rootSpell = agent.rootSpell ?? {id: `no rootspell present for agent ${agent.name}`}
 
     const result = await runSpell({
       spellId: rootSpell.id,
@@ -232,7 +232,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    const rootSpell = agent.rootSpell ?? {}
+    const rootSpell = agent.rootSpell ?? {id: `no rootspell present for agent ${agent.name}`}
     // run the spell
     const result = await runSpell({
       spellId: rootSpell.id,

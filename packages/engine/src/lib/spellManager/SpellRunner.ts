@@ -1,35 +1,32 @@
 import io from 'socket.io'
 
+import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
+import { getNodes } from '../nodes'
+import { Module } from '../plugins/modulePlugin/module'
+import { AgentInterface } from '../schemas'
 import {
   EngineContext,
   GraphData,
   MagickNode,
+  MagickSpellInput,
   ModuleComponent,
-  MagickNodeData,
-  Spell as SpellType,
+  RunSpellConstructor,
+  SpellInterface,
 } from '../types'
-import { getNodes } from '../nodes'
-import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
-import { Module } from '../plugins/modulePlugin/module'
 import { extractModuleInputKeys } from './graphHelpers'
 
-export type RunSpellConstructor = {
-  magickInterface: EngineContext
-  socket?: io.Socket
-}
-
 export type RunComponentArgs = {
-  inputs: Record<string, any>
-  agent?: any
+  inputs: MagickSpellInput
+  agent?: AgentInterface
   componentName?: string
   runSubspell?: boolean
   secrets?: Record<string, string>
-  publicVariables?: Record<string, any>
+  publicVariables?: Record<string, unknown>
 }
 
 class SpellRunner {
   engine: MagickEngine
-  currentSpell!: SpellType
+  currentSpell!: SpellInterface
   module: Module
   magickInterface: EngineContext
   ranSpells: string[] = []
@@ -51,10 +48,6 @@ class SpellRunner {
 
     // Set the interface that this runner will use when running workers
     this.magickInterface = magickInterface
-
-    this.magickInterface.getCurrentSpell = () => {
-      return this.currentSpell
-    }
 
     // We should probably load up here all the "modules" the spell needds to run
     // This would basicallyt be an array of spells pulled from the DB
@@ -81,6 +74,7 @@ class SpellRunner {
     return {
       module: this.module,
       magick: this.magickInterface,
+      currentSpell: this.currentSpell,
       projectId: this.currentSpell.projectId,
       // TODO: add the secrets and publicVariables through the spellrunner for context
     }
@@ -131,18 +125,18 @@ class SpellRunner {
    * and swaps the socket key for the socket name for human readable outputs.
    */
   private _formatOutputs(
-    rawOutputs: Record<string, any>
+    rawOutputs: Record<string, unknown>
   ): Record<string, unknown> {
     const outputs = {} as Record<string, unknown>
     const graph = this.currentSpell.graph
 
-    Object.values(graph.nodes)
-      .filter((node: any) => {
+    Object.values(graph.nodes as MagickNode[])
+      .filter(node => {
         return node.name.includes('Output')
       })
-      .forEach((node: any) => {
-        outputs[(node as any).data.name as string] =
-          rawOutputs[(node as any).data.socketKey as string]
+      .forEach(node => {
+        outputs[node.data.name as string] =
+          rawOutputs[node.data.socketKey as string]
       })
 
     return outputs
@@ -187,12 +181,14 @@ class SpellRunner {
   /**
    * Loads a spell into the spell runner.
    */
-  async loadSpell(spell: SpellType) {
-    this.currentSpell = spell
-
+  async loadSpell(spell: SpellInterface) {
     // We need to parse the graph if it is a string
     const graph =
       typeof spell.graph === 'string' ? JSON.parse(spell.graph) : spell.graph
+
+    spell.graph = graph
+
+    this.currentSpell = spell
 
     // We process the graph for the new spell which will set up all the task workers
     await this.engine.process(graph as GraphData, null, this.context)
@@ -225,24 +221,30 @@ class SpellRunner {
     this._resetTasks()
 
     // load the inputs into module memory
-    this.module.read({ inputs: this._formatInputs(inputs), secrets, agent, publicVariables })
+    this.module.read({
+      inputs: this._formatInputs(inputs),
+      secrets,
+      agent,
+      publicVariables,
+    })
 
-    const component = this._getComponent(componentName) as unknown as ModuleComponent
+    const component = this._getComponent(
+      componentName
+    ) as unknown as ModuleComponent
 
     const firstInput = Object.keys(inputs)[0]
 
     const triggeredNode = this._getTriggeredNodeByName(firstInput)
 
-    if (!component.run) return console.error('Component does not have a run method')
+    if (!component.run)
+      return console.error('Component does not have a run method')
     if (!triggeredNode) return console.error('No triggered node found')
     // this running is where the main "work" happens.
     // I do wonder whether we could make this even more elegant by having the node
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
-    // 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    await component.run(triggeredNode as unknown as MagickNode, inputs as MagickNodeData)
+    //
+    await component.run(triggeredNode as unknown as MagickNode, inputs)
     return this.outputData
   }
 }

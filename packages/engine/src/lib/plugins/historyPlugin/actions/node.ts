@@ -1,7 +1,7 @@
 import { Node, NodeEditor } from 'rete'
 import Action from '../action'
 
-class NodeAction extends Action {
+abstract class NodeAction extends Action {
   protected editor: NodeEditor
   protected node: Node
   constructor(editor, node) {

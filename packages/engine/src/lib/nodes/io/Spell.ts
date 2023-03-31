@@ -1,15 +1,24 @@
+import { Agent } from '@magickml/server-core'
 import isEqual from 'lodash/isEqual'
 import Rete from 'rete'
 
 import { Data } from 'rete/types/core/data'
+import { BooleanControl } from '../../dataControls/BooleanControl'
+import { FewshotControl } from '../../dataControls/FewshotControl'
+import { InputControl } from '../../dataControls/InputControl'
+import { NumberControl } from '../../dataControls/NumberControl'
 import { SpellControl } from '../../dataControls/SpellControl'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
+import { SpellInterface } from '../../schemas'
 import { triggerSocket } from '../../sockets'
+import { SpellManager } from '../../spellManager'
 import {
-  EngineContext, MagickNode,
-  MagickWorkerInputs, ModuleWorkerOutput,
-  Spell, WorkerData
+  EngineContext,
+  MagickNode,
+  MagickWorkerInputs,
+  ModuleWorkerOutput,
+  WorkerData,
 } from '../../types'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
@@ -42,52 +51,54 @@ export class SpellComponent extends MagickComponent<
   Promise<ModuleWorkerOutput>
 > {
   declare updateModuleSockets: UpdateModuleSockets
-  subscriptionMap: Record<number, ()=>void> = {}
+  subscriptionMap: Record<number, () => void> = {}
   noBuildUpdate: boolean
 
   constructor() {
-    super('Spell')
+    super(
+      'Spell',
+      {
+        outputs: { trigger: 'option' },
+      },
+      'I/O',
+      info
+    )
+
     this.module = {
       nodeType: 'module',
       skip: true,
     }
-    this.task = {
-      outputs: { trigger: 'option' },
-    }
-    this.category = 'I/O'
-    this.info = info
     this.noBuildUpdate = true
-    this.display = true
-    this.onDoubleClick = (node: MagickNode) => {
-      if (!this.editor) return
-      console.log('double click', node)
-      const pubsub = this.editor.pubSub
-      // TODO: Check if events are defined instead of as
-      const event = pubsub.events.OPEN_TAB
-      const encodedToId = (uri: string) => {
-        uri = decodeURIComponent(uri)
-        return uri.slice(0,36)
-      }
-      pubsub.publish(event, {
-        type: 'spell',
-        id: encodedToId(node.data.spellName as string),
-        spellName: node.data.spellName,
-        name: encodedToId(node.data.spellName as string),
-        openNew: false,
-      })
-    }
+    // this.onDoubleClick = (node: MagickNode) => {
+    //   if (!this.editor) return
+    //   console.log('double click', node)
+    //   const pubsub = this.editor.pubSub
+    //   // TODO: Check if events are defined instead of as
+    //   const event = pubsub.events.OPEN_TAB
+    //   const encodedToId = (uri: string) => {
+    //     uri = decodeURIComponent(uri)
+    //     return uri.slice(0, 36)
+    //   }
+    //   pubsub.publish(event, {
+    //     type: 'spell',
+    //     id: encodedToId(node.data.name as string),
+    //     spellName: node.data.name,
+    //     name: encodedToId(node.data.name as string),
+    //     openNew: false,
+    //   })
+    // }
   }
 
   subscribe(node: MagickNode, spellName: string) {
     if (!this.editor) return
     if (this.subscriptionMap[node.id]) this.subscriptionMap[node.id]()
 
-    let cache: Spell
+    let cache: SpellInterface
 
     // Subscribe to any changes to that spell here
     this.subscriptionMap[node.id] = this.editor.onSpellUpdated(
       spellName,
-      (spell: Spell) => {
+      (spell: SpellInterface) => {
         if (!isEqual(spell, cache)) {
           // this can probably be better optimise this
           this.updateSockets(node, spell)
@@ -102,9 +113,7 @@ export class SpellComponent extends MagickComponent<
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
-    node
-      .addInput(triggerIn)
-      .addOutput(triggerOut)
+    node.addInput(triggerIn).addOutput(triggerOut)
 
     const spellControl = new SpellControl({
       name: 'Spell Select',
@@ -112,17 +121,112 @@ export class SpellComponent extends MagickComponent<
       defaultValue: (node.data.spell as string) || '',
     })
 
+    node.inspector.add(spellControl)
+
     // const stateSocket = new Rete.Input('state', 'State', objectSocket)
 
-    spellControl.onData = (spell: Spell) => {
+    const getPublicVariables = graph => {
+      console.log('getPublicVariables', graph)
+      return Object.values(graph.nodes || {}).filter(
+        node => (node as { data: { isPublic: boolean } }).data?.isPublic
+      )
+    }
+
+    const createInspectorForPublicVariables = publicVariables => {
+      if (!node.data.publicVariables) {
+        node.data.publicVariables = {} as { [key: string]: unknown }
+      }
+
+      publicVariables.forEach(pNode => {
+        const { data, name } = pNode as {
+          data: { name: string; value: any; fewshot: string }
+          name: string
+        }
+        if (name.includes('Text')) {
+          const publicVar = (
+            node.data.publicVariables as { [key: string]: unknown }
+          )[data.name]
+          const fewshotInputControl = new FewshotControl({
+            name: name,
+            dataKey: data.name,
+            language: 'plaintext',
+            defaultValue: publicVar || data.value || '',
+          })
+          if (!node.inspector.dataControls.has(fewshotInputControl.dataKey)) {
+            node.inspector.add(fewshotInputControl)
+          }
+          fewshotInputControl.onData = () => {
+            if (!node.data.publicVariables) {
+              node.data.publicVariables = {}
+            }
+            ;(node.data.publicVariables as { [key: string]: unknown })[
+              data.name
+            ] = node.data[data.name]
+          }
+        } else if (name.includes('String')) {
+          console.log('text variable', data.fewshot)
+          const textInputControl = new InputControl({
+            name: name,
+            dataKey: data.name,
+            defaultValue: (data as any).fewshot || data.value,
+          })
+          if (!node.inspector.dataControls.has(textInputControl.dataKey)) {
+            node.inspector.add(textInputControl)
+          }
+        } else if (name.includes('Number')) {
+          const numberInputControl = new NumberControl({
+            name: name,
+            dataKey: data.name,
+            defaultValue: data.value,
+          })
+          if (!node.inspector.dataControls.has(numberInputControl.dataKey)) {
+            node.inspector.add(numberInputControl)
+          }
+        } else if (name.includes('Boolean')) {
+          const booleanInputControl = new BooleanControl({
+            name: name,
+            dataKey: data.name,
+            defaultValue: data.value,
+          })
+          if (!node.inspector.dataControls.has(booleanInputControl.dataKey)) {
+            node.inspector.add(booleanInputControl)
+          }
+        } else {
+          console.warn('unknown variable type', name)
+        }
+      })
+    }
+
+    if (node.data.graph) {
+      console.log('node.data.graph', node.data.graph)
+      const publicVariables = getPublicVariables(node.data.graph)
+      createInspectorForPublicVariables(publicVariables)
+    }
+
+    spellControl.onData = async (spell: SpellInterface) => {
+      if (!spell.name) return console.warn('spell name not found', spell)
       // break out of it the nodes data already exists.
-      if (spell.name === node.data.spellName) return
-      node.data.spellName = spell.name
+      if (spell.name === node.data.name) return
+
+      node.data.name = spell.name
       node.data.spellId = spell.id
       node.data.projectId = spell.projectId
+      node.data.graph = spell.graph
 
+      // delete all the old controls
+      node.inspector.dataControls.forEach(control => {
+        if (control instanceof SpellControl) return
+        node.inspector.remove(control.dataKey)
+      })
+
+      console.log('getPublicVariables', spell)
       // TODO: Set the public variables from the public variables of the spell
-      //node.data.publicVariables = 
+      const publicVariables = getPublicVariables(
+        node.data.graph || spell.graph || {}
+      )
+
+      console.log('createInspectorForPublicVariables', publicVariables)
+      createInspectorForPublicVariables(publicVariables)
 
       // Update the sockets
       this.updateSockets(node, spell)
@@ -136,21 +240,36 @@ export class SpellComponent extends MagickComponent<
       // subscribe to changes form the spell to update the sockets if there are changes
       // Note: We could store all spells in a spell map here and rather than receive the whole spell, only receive the diff, make the changes, update the sockets, etc.  Mayb improve speed?
       this.subscribe(node, spell.name)
+
+      console.log('node.inspector.data()', node.inspector.data())
+
+      const context = this.editor && this.editor.magick
+      if (!context) return
+      const { sendToInspector } = context
+      if (sendToInspector) {
+        sendToInspector(node.inspector.data())
+      }
     }
 
     // node.addInput(stateSocket)
-    node.inspector.add(spellControl)
 
-    if (node.data.spellName) {
+    if (node.data.graph) {
+      const publicVariables = getPublicVariables(node.data.graph)
+      createInspectorForPublicVariables(publicVariables)
+    }
+
+    if (node.data.name) {
       setTimeout(() => {
-        this.subscribe(node, node.data.spellName as string)
-      }, 1000)
+        this.subscribe(node, node.data.name as string)
+      }, 100)
     }
 
     return node
   }
 
-  updateSockets(node: MagickNode, spell: Spell) {
+  updateSockets(node: MagickNode, spell: SpellInterface) {
+    if (!spell.graph) throw new Error('No spell.graph found')
+
     const graph = JSON.parse(JSON.stringify(spell.graph)) as Data
     this.updateModuleSockets(node, graph, true)
     node.update()
@@ -180,11 +299,12 @@ export class SpellComponent extends MagickComponent<
     inputs: MagickWorkerInputs,
     _outputs: { [key: string]: string },
     {
+      module,
       magick,
       secrets,
       publicVariables,
     }: {
-      module: { outputs: ModuleWorkerOutput[] }
+      module: { agent: Agent; outputs: ModuleWorkerOutput[] }
       magick: EngineContext
       secrets: Record<string, string>
       publicVariables: Record<string, string>
@@ -193,17 +313,47 @@ export class SpellComponent extends MagickComponent<
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
 
-    if (!magick.runSpell) throw new Error('Magick runSpell not found')
-    const outputs = await magick.runSpell(
-      {
+    console.log('running spell')
+
+    if (module.agent) {
+      console.log('running on agent', module.agent.id)
+      const spellManager = module.agent.spellManager as SpellManager
+      if (spellManager) {
+        console.log('spellManager is real')
+        const spellRunner = await spellManager.getSpellRunner(
+          node.data.spellId as string
+        )
+        if (spellRunner) {
+          console.log('running spellRunner')
+          console.log('flattenedInputs', flattenedInputs)
+          const obj = {
+            inputs: flattenedInputs,
+            runSubspell: false,
+            agent: module.agent,
+            secrets: module.agent.secrets ?? secrets as any,
+            publicVariables: module.agent.publicVariables as any ?? publicVariables as any,
+          }
+          console.log('obj', obj)
+          const outputs = await spellRunner.runComponent(obj)
+          console.log('ran, outputs are', outputs)
+          return this.formatOutputs(node, outputs as any)
+        } else {
+          console.warn('spell runner not found')
+        }
+      } else {
+        console.warn('spell manager not found')
+      }
+    } else {
+      if (!magick.runSpell) throw new Error('Magick runSpell not found')
+      const outputs = await magick.runSpell({
         inputs: flattenedInputs,
         spellId: node.data.spellId as string,
         projectId: node.data.projectId as string,
         secrets,
         publicVariables,
-      }
-    )
+      })
 
-    return this.formatOutputs(node, outputs)
+      return this.formatOutputs(node, outputs)
+    }
   }
 }

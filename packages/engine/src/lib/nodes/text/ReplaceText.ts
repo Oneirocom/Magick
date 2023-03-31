@@ -24,18 +24,13 @@ type WorkerReturn = {
 
 export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Replace Text')
-
-    this.task = {
+    super('Replace Text', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Text', info)
 
-    this.category = 'Text'
-    this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {

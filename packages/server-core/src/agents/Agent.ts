@@ -1,8 +1,9 @@
-import { buildMagickInterface } from '../helpers/buildMagickInterface'
-import { SpellManager, WorldManager, pluginManager } from '@magickml/engine'
+import Router from '@koa/router'
+import { AgentInterface, pluginManager, SpellInterface, SpellManager, SpellRunner, WorldManager } from '@magickml/engine'
 import { app } from '../app'
+import { Application } from '../declarations'
+import { buildMagickInterface } from '../helpers/buildMagickInterface'
 import { AgentManager } from './AgentManager'
-import _ from 'lodash'
 
 type AgentData = {
   id: any
@@ -10,6 +11,7 @@ type AgentData = {
   name: string
   secrets: string
   rootSpell: any
+  subSpells: any[]
   publicVariables: any[]
   projectId: string
   spellManager: SpellManager
@@ -17,31 +19,30 @@ type AgentData = {
   enabled: boolean
 }
 
-export class Agent {
+export class Agent implements AgentInterface {
   name = ''
   //Clients
   id: any
   secrets: any
   publicVariables: any[]
   data: AgentData
-  router: any
-  app: any
+  router: Router
+  app: Application
   spellManager: SpellManager
   projectId: string
   worldManager: WorldManager
   agentManager: AgentManager
-  spellRunner: any
-  rootSpell: any
+  spellRunner: SpellRunner
+  rootSpell: SpellInterface
+  updatedAt: string
 
-  outputTypes = {}
+  outputTypes: any[] = []
 
   updateInterval: any
+  subSpells: any[]
 
   constructor(agentData: AgentData, agentManager: AgentManager) {
-    console.log('constructing agent', agentData.id)
-    console.log('projectId', agentData.projectId)
-    console.log('agentData', agentData)
-    // if ,data,secrets is a string, JSON parse it
+    if(!agentData.secrets) throw new Error('No secrets found for agent')
     this.secrets = JSON.parse(agentData.secrets)
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
@@ -55,13 +56,14 @@ export class Agent {
     this.spellManager = new SpellManager({
       magickInterface: buildMagickInterface({}) as any,
       cache: false,
-    })
-    ;(async () => {
-      if(!this.rootSpell) {
-        console.warn("No root spell found for agent", this.id)
-        return
-      }
-      console.log('this.rootSpell.projectId', this.projectId, this.rootSpell.id)
+    });
+
+    if(!this.rootSpell) {
+      console.warn("No root spell found for agent", this.id)
+      return
+    }
+    
+    (async () => {
       const spell = (
         await app.service('spells').find({
           query: {
@@ -71,9 +73,50 @@ export class Agent {
         })
       ).data[0]
 
-      const override = _.isEqual(spell, this.rootSpell)
+      if (!spell) {
+        console.warn('No spell found for agent', this.id)
+        return
+      }
 
-      this.spellRunner = await this.spellManager.load(spell, override)
+      this.spellRunner = await this.spellManager.load(spell, true)
+
+    // handle subspells
+      const nodes = spell.graph.nodes;
+
+      const subspellNodes = Object.values(nodes || {}).filter(
+        node => {
+          console.log('node is', node);
+          return (node as { name: string }).name === 'Spell'
+      })
+
+      console.log('******************** LOADING SUBSPELLS')
+      console.log(subspellNodes)
+
+      const subspells = []
+      for (const subspellNode of subspellNodes as {data: {projectId: string, spellId: string}}[]) {
+        // fetch the spell from the spells service
+        const spell = (
+          await app.service('spells').find({
+            query: {
+              projectId: subspellNode.data.projectId,
+              id: subspellNode.data.spellId,
+            },
+          })
+        ).data[0]
+
+        if (!spell) {
+          console.warn('No subspell found for', subspellNode.data.projectId, this.id)
+          return
+        }
+        this.spellManager.load(spell, true)
+        subspells.push(spell)
+      }
+
+      this.subSpells = subspells;
+
+      // nodes is an object, with the node ID as the key
+      // iterate through the nodes 
+
       const agentStartMethods = pluginManager.getAgentStartMethods()
 
       for (const method of Object.keys(agentStartMethods)) {

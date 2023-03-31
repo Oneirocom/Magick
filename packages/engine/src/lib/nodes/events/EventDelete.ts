@@ -4,24 +4,20 @@ import axios from 'axios'
 import { API_ROOT_URL } from '../../config'
 import { MagickComponent } from '../../engine'
 import { arraySocket, triggerSocket } from '../../sockets'
-import { MagickNode, MagickNodeData, MagickWorkerInputs } from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
+import _ from 'lodash'
 const info = `Join an array of events into a conversation formatted for prompt injection.`
 
 
-export class EventDelete extends MagickComponent<Promise<any>> {
+export class EventDelete extends MagickComponent<Promise<void>> {
   constructor() {
     // Name of the component
-    super('Event Delete')
-
-    this.task = {
+    super('Event Delete', {
       outputs: {
         conversation: 'output',
         trigger: 'option',
       },
-    }
-
-    this.category = 'Event'
-    this.info = info
+    }, 'Event', info)
   }
 
   // the builder is used to "assemble" the node component.
@@ -37,29 +33,31 @@ export class EventDelete extends MagickComponent<Promise<any>> {
 
   // the worker contains the main business logic of the node.  It will pass those results
   // to the outputs to be consumed by any connected components
-  async worker(node: MagickNodeData, inputs: MagickWorkerInputs & { events: any[] }) {
+  async worker(node: WorkerData, inputs: MagickWorkerInputs & { events: unknown[] }) {
     try {
-        const events = inputs.events[0];
-    //Events.rows when the data is fetched using embedding
-    if (Array.isArray(events)){
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      if(events.rows) {
+      const events = inputs.events[0];
+      //Events.rows when the data is fetched using embedding
+      if (Array.isArray(events)) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        events.rows.forEach(async (event) => {
-            const isDeleted = await axios.delete(`${API_ROOT_URL}/events/${event.id}`)
+        if (events.rows) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          events.rows.forEach(async (event) => {
+            await axios.delete(`${API_ROOT_URL}/events/${event.id}`)
+          });
+        }
+        //Events when the data is fetched using query
+        if (events) events.forEach(async (event) => {
+          await axios.delete(`${API_ROOT_URL}/events/${event.id}`)
         });
+      } else {
+        const id:string|null = _.get(events, 'id', null)
+        if(id===null) throw new Error('Event ID not found')
+        await axios.delete(`${API_ROOT_URL}/events/${id}`)
       }
-      //Events when the data is fetched using query
-      if(events) events.forEach(async (event) => {
-        const isDeleted = await axios.delete(`${API_ROOT_URL}/events/${event.id}`)
-      });
-    } else {
-        const isDeleted = await axios.delete(`${API_ROOT_URL}/events/${events.id}`)
-    }
-    } catch(e){
-        console.log("Error: ",e)
+    } catch (e) {
+      console.log("Error: ", e)
     }
   }
 }

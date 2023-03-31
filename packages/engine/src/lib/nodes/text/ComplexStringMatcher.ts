@@ -19,15 +19,9 @@ const info =
 
 export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Text Rule Matcher')
-
-    this.task = {
+    super('Text Rule Matcher', {
       outputs: { true: 'option', false: 'option' },
-    }
-
-    this.category = 'Text'
-    this.display = true
-    this.info = info
+    }, 'Text', info)
   }
 
   builder(node: MagickNode) {

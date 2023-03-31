@@ -9,7 +9,10 @@ import {
   CompletionProvider,
   CompletionSocket,
   EngineContext,
-  MagickNode, MagickNodeData, MagickWorkerInputs, MagickWorkerOutputs
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 
 const info = 'Generate text using any of the providers available in Magick.'
@@ -22,19 +25,14 @@ type WorkerReturn = {
 
 export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Generate Text')
-
-    this.task = {
+    super('Generate Text', {
       outputs: {
         error: 'option',
         result: 'output',
         trigger: 'option',
       },
-    }
+    }, 'Text', info)
 
-    this.category = 'Text'
-    this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {
@@ -128,11 +126,11 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   async worker(
-    node: MagickNodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     context: {
-      module: any
+      module: unknown
       secrets: Record<string, string>
       projectId: string
       magick: EngineContext

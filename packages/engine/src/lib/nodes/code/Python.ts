@@ -35,16 +35,11 @@ Please note that the return of your function must be an object whose keys are th
 export class Python extends MagickComponent<unknown> {
   constructor() {
     // Name of the component
-    super('Python')
-
-    this.task = {
+    super('Python', {
       outputs: {
         trigger: 'option',
       },
-    }
-    this.category = 'Code'
-    this.info = info
-    this.display = false
+    }, 'Code', info)
     this.runFromCache = true
   }
 

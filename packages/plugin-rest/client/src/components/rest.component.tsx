@@ -30,7 +30,7 @@ export const RestAgentWindow: FC<any> = props => {
       setChecked(selectedAgentData.data?.rest_enabled)
       setDisable(false)
     }
-  }, [props.enable])
+  }, [props.enable, selectedAgentData])
   useEffect(() => {
     if (!selectedAgentData.data?.rest_api_key) {
       setSelectedAgentData({

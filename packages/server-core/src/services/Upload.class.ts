@@ -5,11 +5,11 @@ export class UploadService {
         this.image_store = new Array<any>();
     }
     async create(body, params){
-        let img_body = {
+        const img_body = {
             "id": body["id"],
             "uri":body["uri"]
         }
-        let idx = this.image_store.map(e => e.id).indexOf(body["id"]);
+        const idx = this.image_store.map(e => e.id).indexOf(body["id"]);
         console.log(body["id"])
         idx === -1 ? this.image_store.push(img_body) : this.image_store[idx] = img_body;
         this.image_store.push(img_body)

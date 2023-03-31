@@ -3,7 +3,7 @@ import { NodeEditor } from 'rete'
 import { MagickComponent } from '../../engine'
 import { ComponentData, MagickNode } from '../../types'
 import { Inspector } from './Inspector'
-export type RestProps = {}
+// export type RestProps = {}
 export abstract class DataControl {
   inspector: Inspector | null = null
   editor: NodeEditor | null = null
@@ -20,6 +20,8 @@ export abstract class DataControl {
   write: boolean
   type: string
   placeholder: string
+  data: ComponentData
+  expanded?: boolean
 
   constructor({
     dataKey,
@@ -58,6 +60,7 @@ export abstract class DataControl {
     this.defaultValue = defaultValue
     this.type = type
     this.placeholder = placeholder
+    this.data = data
   }
 
   //Serializer to easily extract the data controls information for publishing
@@ -83,5 +86,5 @@ export abstract class DataControl {
     return
   }
 
-  onData?(...args: any[]): Promise<void> | void
+  onData?(...args: unknown[]): Promise<void> | void
 }

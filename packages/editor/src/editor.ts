@@ -1,12 +1,16 @@
 import ConnectionPlugin from 'rete-connection-plugin'
-import { Data } from 'rete/types/core/data'
 import { Plugin } from 'rete/types/core/plugin'
 import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
 import ContextMenuPlugin from './plugins/contextMenu'
-import { OnSubspellUpdated, PubSubCallback, PubSubContext, SelectionPlugin } from '@magickml/engine'
+import {
+  OnSubspellUpdated,
+  PubSubContext,
+  SelectionPlugin,
+  SpellInterface,
+} from '@magickml/engine'
 import ReactRenderPlugin, {
-  ReactRenderPluginOptions
+  ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
 
 import {
@@ -28,7 +32,7 @@ import {
   SocketOverridePlugin,
   SocketPlugin,
   SocketPluginArgs,
-  TaskPlugin
+  TaskPlugin,
 } from '@magickml/engine'
 
 import AreaPlugin from './plugins/areaPlugin'
@@ -143,6 +147,7 @@ export const initEditor = function ({
   editor.use(AreaPlugin, {
     scaleExtent: { min: 0.1, max: 1.5 },
     background,
+    tab,
     // snap: true - TODO: add ability to enable and disable snapping to UI
   })
 
@@ -208,18 +213,23 @@ export const initEditor = function ({
 
   editor.runProcess = async callback => {
     await engine.abort()
-    await engine.process(editor.toJSON(), null, { magick: magick })
+    await engine.process(editor.toJSON(), null, {
+      magick: magick,
+      currentSpell: editor.currentSpell,
+    })
     if (callback) callback()
   }
 
-  editor.loadGraph = async (_graph: Data) => {
-    if(!_graph) return console.error('No graph to load')
+  editor.loadSpell = async (spell: SpellInterface) => {
+    if (!spell) return console.error('No spell to load')
+    const _graph = spell.graph
     const graph = JSON.parse(JSON.stringify(_graph))
     await engine.abort()
     editor.fromJSON(graph)
 
     editor.view.resize()
     editor.runProcess()
+    editor.currentSpell = spell
   }
 
   // Start the engine off on first load
