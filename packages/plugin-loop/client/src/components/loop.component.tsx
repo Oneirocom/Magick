@@ -6,7 +6,7 @@ type PluginProps = {
   props: {
     selectedAgentData: any
     setSelectedAgentData: any
-    enable: Object
+    enable: boolean
     update: (id: string, data: object) => void
   }
 }
@@ -30,7 +30,7 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
       setChecked(selectedAgentData.data?.loop_enabled)
       setDisable(false)
     }
-  }, [enable])
+  }, [enable, selectedAgentData])
   const handleOnChange = e => {
     const { name, value } = e.target
     setState({ ...state, [name]: value })

@@ -30,7 +30,6 @@ export class MovieTitleToID extends MagickComponent<Promise<WorkerReturn>> {
     }
 
     this.category = 'Esoterica'
-    this.display = true
     this.info = info
   }
 

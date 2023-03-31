@@ -8,25 +8,21 @@ import {
   arraySocket, stringSocket, triggerSocket
 } from '../../sockets'
 import {
-  Document, MagickNode, MagickNodeData, MagickWorkerInputs,
-  MagickWorkerOutputs
+  Document, MagickNode, MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData
 } from '../../types'
 
 const info = 'Store documents'
 
 export class StoreDocument extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Store Document')
-
-    this.task = {
+    super('Store Document', {
       outputs: {
         trigger: 'option',
       },
-    }
+    }, 'Document', info)
 
-    this.category = 'Document'
-    this.display = true
-    this.info = info
   }
 
   builder(node: MagickNode) {
@@ -65,7 +61,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async worker(
-    node: MagickNodeData,
+    node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context
@@ -75,10 +71,13 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
     const document = inputs['document'][0] as Document
     const owner = (inputs['owner'] ? inputs['owner'][0] : null) as string
     const content = (inputs['content'] ? inputs['content'][0] : null) as string
-    let embedding = (
+    const _embedding = (
       inputs['embedding'] ? inputs['embedding'][0] : null
-    ) as number[]
-    if (typeof embedding == 'string') embedding = (embedding as any).split(',')
+    ) as number[] | string[]
+    let embedding:number[]
+    // if (typeof embedding == 'string') embedding = (embedding as string).split(',')
+    if (typeof _embedding == 'string') embedding = (_embedding as string).split(',').map(parseFloat)
+    else embedding = _embedding as number[]
     const nodeData = node.data as {
       type: string
     }

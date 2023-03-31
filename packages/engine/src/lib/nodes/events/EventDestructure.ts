@@ -22,9 +22,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
 
   constructor() {
     // Name of the component
-    super('Event Destructure')
-
-    this.task = {
+    super('Event Destructure', {
       outputs: {
         trigger: 'option',
         agentId: 'output',
@@ -40,11 +38,8 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       init: (task = {} as Task, node: NodeData) => {
         this.nodeTaskMap[node.id] = task
       },
-    }
-
-    this.category = 'Event'
-    this.info = info
-    this.display = true
+    }, 'Event', info)
+    
   }
 
   builder(node: MagickNode) {

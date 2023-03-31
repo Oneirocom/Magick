@@ -55,8 +55,8 @@ const AgentDetails = ({
           enqueueSnackbar('Updated agent', {
             variant: 'success',
           })
-
           setSelectedAgentData(res.data)
+          updateCallback()
         }
       })
       .catch(e => {
@@ -66,6 +66,8 @@ const AgentDetails = ({
         })
       })
   }
+
+  console.log("***********************************", selectedAgentData.publicVariables)
 
   const exportAgent = () => {
     const fileName = 'agent'
@@ -131,6 +133,11 @@ const AgentDetails = ({
                 })
               }
               placeholder="Add new agent name here"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  update(selectedAgentData.id)
+                }
+              }}
             />
             <IconBtn
               label={'Done'}
@@ -259,7 +266,7 @@ const AgentDetails = ({
                     return {
                       id: node?.id,
                       name: node?.data?.name,
-                      value: node?.data?.value,
+                      value: node?.data?.value || node?.data?.text || node?.data?.fewshot || node?.data?._var,
                       type: node?.name,
                     }
                   })
@@ -276,11 +283,13 @@ const AgentDetails = ({
             Select Spell
           </option>
           {spellList?.length > 0 &&
-            spellList.map((spell, idx) => (
+            spellList.map((spell, idx) =>{
+              console.log(spell)
+              return(
               <option value={spell.name} key={idx}>
                 {spell.name}
               </option>
-            ))}
+            )})}
         </select>
       </div>
       <div>
@@ -298,7 +307,7 @@ const AgentDetails = ({
                 value={
                   selectedAgentData.secrets
                     ? JSON.parse(selectedAgentData.secrets)[value.key]
-                    : null
+                    : 'null'
                 }
                 onChange={event => {
                   setSelectedAgentData({

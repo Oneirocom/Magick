@@ -1,14 +1,14 @@
-import { Spell } from '@magickml/engine'
+import { SpellInterface } from '@magickml/engine'
 import { CSSProperties } from 'react'
 import { Icon } from '@magickml/client-core'
 import css from '../screens/HomeScreen/homeScreen.module.css'
 
 type ProjectProps = {
   label: string
-  selectedSpell?: Spell
+  selectedSpell?: SpellInterface
   icon?: string
   onClick: Function
-  spell?: Spell
+  spell?: SpellInterface
   style?: CSSProperties
   onDelete?: Function
 }

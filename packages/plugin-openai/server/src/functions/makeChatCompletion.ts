@@ -11,7 +11,6 @@ export async function makeChatCompletion(
   data: CompletionHandlerInputData
 ): Promise<{success: boolean, result?: string | null, error?: string | null}> {
   const { node, inputs, context } = data
-  console.log('context.module.inputs', context.module.inputs)
 
   // get the values of all keys (which are arrays) in context.module.inputs and filter out undefined
   const inputKeys = Object.values(context.module.inputs).filter((input: any) => {
