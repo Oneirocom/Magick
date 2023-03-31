@@ -1,58 +1,76 @@
-import Context from './context'
-import styles from './style.module.scss'
-import React, { Component } from 'react'
+// GENERATED 
+import Context from './context';
+import styles from './style.module.scss';
+import React, { Component } from 'react';
 
-type ItemProps = {
-  item: {
-    title: string
-    subitems?: any[]
-    onClick?: (args: any) => void
-  }
-  search?: string
-}
+/**
+ * Represents an item with optional subitems.
+ * @typedef {Object} ItemProps
+ * @property {Object} item - The item data.
+ * @property {string} item.title - The title of the item.
+ * @property {Array<any>} [item.subitems] - The subitems of the item, if any.
+ * @property {(args: any) => void} [item.onClick] - The callback function when the item is clicked.
+ * @property {string} [search] - A search term used to filter subitems.
+ */
 
-type ItemState = {
-  visibleSubitems: boolean
-}
+/**
+ * Represents the state of an Item component.
+ * @typedef {Object} ItemState
+ * @property {boolean} visibleSubitems - Whether the subitems are visible.
+ */
 
-// todo convert to functional component
-class Item extends Component<ItemProps, ItemState> {
-  static contextType = Context
+/**
+ * Class representing an item with optional subitems.
+ * @class Item
+ * @extends {Component<ItemProps, ItemState>}
+ */
+class Item extends Component {
+  static contextType = Context;
 
+  /**
+   * Creates a new Item instance.
+   * @param {ItemProps} props - The properties of the Item component.
+   */
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       visibleSubitems: false,
-    }
+    };
   }
 
-  onClick = e => {
+  /**
+   * Handles the click event of the item.
+   * @param {React.MouseEvent<HTMLDivElement>} e - The click event.
+   */
+  onClick = (e) => {
     const {
       item: { onClick },
-    } = this.props
+    } = this.props;
 
     // Doing this for now since we will be converting to functional components
     // @ts-ignore
-    const { args, onClose } = this.context
+    const { args, onClose } = this.context;
 
-    e.stopPropagation()
+    e.stopPropagation();
 
-    if (onClick) onClick(args)
-    onClose()
-  }
+    if (onClick) onClick(args);
+    onClose();
+  };
 
+  /**
+   * Renders the Item component.
+   * @returns {React.ReactNode}
+   */
   render() {
     const {
       item: { title, subitems },
-      search
-    } = this.props
-    const { visibleSubitems } = this.state
+      search = '',
+    } = this.props;
+    const { visibleSubitems } = this.state;
 
     return (
       <div
-        className={
-          styles['item'] + ' ' + (subitems ? styles['hasSubitems'] : '')
-        }
+        className={styles['item'] + ' ' + (subitems ? styles['hasSubitems'] : '')}
         onClick={this.onClick}
         onMouseOver={() => this.setState({ visibleSubitems: true })}
         onMouseLeave={() => this.setState({ visibleSubitems: false })}
@@ -60,21 +78,19 @@ class Item extends Component<ItemProps, ItemState> {
         {title}
         {subitems && visibleSubitems && (
           <div className={styles['subitems']}>
-            {subitems.map(subitem =>
-            (search !== '' &&
-              !subitem.title
-                .toLowerCase()
-                .includes(search.toLowerCase())) ? null : (
-                <Item item={subitem} key={subitem.title} />
+            {subitems.map((subitem) =>
+              search !== '' &&
+              !subitem.title.toLowerCase().includes(search.toLowerCase()) ? null : (
+                <Item key={subitem.title} item={subitem} />
               )
             )}
           </div>
         )}
       </div>
-    )
+    );
   }
 }
 
-Item.contextType = Context
+Item.contextType = Context;
 
-export default Item
+export default Item;

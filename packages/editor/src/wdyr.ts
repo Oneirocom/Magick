@@ -1,4 +1,8 @@
 // GENERATED 
+
+import { NODE_ENV } from "@magickml/engine";
+import whyDidYouRender from '@welldone-software/why-did-you-render'
+
 /**
  * Enables the 'why-did-you-render' package in a React development environment
  *
@@ -10,7 +14,7 @@
  */
 function enableWhyDidYouRender(React: any): void {
   // If in development
-  if (import.meta.env.NODE_ENV === 'development') {
+  if (NODE_ENV === 'development') {
     console.log('running WDYR!')
     whyDidYouRender(React, {
       trackAllPureComponents: false,

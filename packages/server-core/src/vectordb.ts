@@ -276,7 +276,7 @@ class HNSWVectorDatabase<T> implements VectorDatabase<T> {
     const k = this.index.nodes.get(id)
     this.index.nodes.delete(id)
     this.saveIndex()
-    return { events: k.data }
+    return { events: k?.data }
   }
 
   /**

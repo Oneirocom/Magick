@@ -2,6 +2,7 @@
 
 import axios, { AxiosResponse } from 'axios'
 import Rete from 'rete'
+import { API_ROOT_URL } from '../../config'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
@@ -78,7 +79,6 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     _outputs: MagickWorkerOutputs,
     { magick }: { magick: EngineContext }
   ) {
-    const { env } = magick
     const name = node.data.name as string
     node.name = name
 
@@ -90,7 +90,7 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     let url = node?.data?.url as string
     const method = (node?.data?.method as string)?.toLowerCase().trim()
     if (url.startsWith('server')) {
-      url = url.replace('server', env.API_ROOT_URL as string)
+      url = url.replace('server', API_ROOT_URL as string)
     }
 
     let resp = undefined as AxiosResponse<unknown> | undefined

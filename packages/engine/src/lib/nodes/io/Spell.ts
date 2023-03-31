@@ -293,6 +293,7 @@ export class SpellComponent extends MagickComponent<
     }, {} as Record<string, unknown>)
   }
 
+  // @ts-ignore
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,

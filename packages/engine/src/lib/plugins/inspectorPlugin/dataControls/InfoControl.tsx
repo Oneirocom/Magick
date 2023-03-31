@@ -1,5 +1,5 @@
 // GENERATED 
-import { DataControlOption } from '../DataControl'
+import { DataControl } from '../DataControl'
 
 /**
  * InfoControl class is a subclass of DataControl
@@ -14,7 +14,7 @@ export class InfoControl extends DataControl {
    * @param info - Additional information that will be displayed in the UI
    */
   constructor({ dataKey, name, info }: { dataKey: string, name: string, info: string }) {
-    const options: DataControlOption = {
+    const options = {
       dataKey: dataKey,
       name: name,
       component: 'info',

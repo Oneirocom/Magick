@@ -1,7 +1,7 @@
 // GENERATED 
 import { createRoot } from 'react-dom/client'
 import { MagickIDE, AppConfig } from '@magickml/editor'
-import { DEFAULT_PROJECT_ID, API_ROOT_URL } from '@magickml/engine'
+import { DEFAULT_PROJECT_ID, API_ROOT_URL, TRUSTED_PARENT_URL, UNTRUSTED_IFRAME } from '@magickml/engine'
 
 /**
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
@@ -38,15 +38,12 @@ else {
   window.addEventListener(
     'message',
     event => {
-      const cloudUrlRaw =
-        import.meta.env.VITE_APP_TRUSTED_PARENT_URL || 'http://localhost:3000'
-
       // Remove possible trailing slash on only the end
-      const cloudUrl = cloudUrlRaw.replace(/\/+$/, '')
+      const cloudUrl = TRUSTED_PARENT_URL.replace(/\/+$/, '')
 
       // Check for trusted origin
       if (
-        !import.meta.env.VITE_UNTRUSTED_IFRAME &&
+        !UNTRUSTED_IFRAME &&
         event.source !== window &&
         event.origin !== window.location.origin &&
         event.origin !== cloudUrl

@@ -9,7 +9,7 @@ import { BooleanControl } from '../../../dataControls/BooleanControl';
 import { InputControl } from '../../../dataControls/InputControl';
 import { MagickComponent } from '../../../engine';
 import { anySocket } from '../../../sockets';
-import { Image, MagickNode, WorkerData } from '../../../types';
+import { ImageType, MagickNode, WorkerData } from '../../../types';
 
 /**
  * The information about the class.
@@ -20,14 +20,14 @@ const info = `Image Variable`;
  * The variable and its definition.
  */
 type InputReturn = {
-  output: string | Image;
+  output: string | ImageType;
 }
 
 /**
  * Represents the Image class which extends the MagickComponent class.
  */
 export class Image extends MagickComponent<Promise<InputReturn>> {
-
+  id_image: string | null;
   /**
    * Constructor which sets the initial value of the variables.
    */
@@ -77,6 +77,8 @@ export class Image extends MagickComponent<Promise<InputReturn>> {
    * @param node Rete node.
    * @returns value of output.
    */
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   async worker(node: WorkerData) {
 
     const _var = node?.data?._var as string;

@@ -193,7 +193,6 @@ export type RunSpell<DataType = Record<string, unknown>> = ({
 }: runSpellType<DataType>) => Promise<DataType>
 
 export type EngineContext<DataType = Record<string, unknown>> = {
-  env: Env
   runSpell: RunSpell<DataType>
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
@@ -596,7 +595,7 @@ export type RequestPayload = {
   type?: string
   hidden?: boolean
   processed?: boolean
-  totalTokens: number
+  totalTokens?: number
   spell?: SpellInterface
   nodeId?: number
 }
