@@ -100,7 +100,7 @@ export const event = (app: Application) => {
           } else {
             if (process.env.DATABASE_TYPE == "pg") {
               context.data.embedding = pgvector.toSql(nullArray)
-              context.app.service('events').create(context.data);
+              //context.app.service('events').create(context.data);
               return context;
             } else {
               let insert_data = [{
