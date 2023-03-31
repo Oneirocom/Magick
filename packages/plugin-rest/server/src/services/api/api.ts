@@ -1,7 +1,12 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
+// GENERATED 
+/**
+ * For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
+ */
 
-import { hooks as schemaHooks } from '@feathersjs/schema'
+// Import hooks from '@feathersjs/schema'
+import { hooks as schemaHooks } from '@feathersjs/schema';
 
+// Import API resolvers and validators
 import {
   apiDataResolver,
   apiDataValidator,
@@ -9,25 +14,31 @@ import {
   apiQueryResolver,
   apiQueryValidator,
   apiResolver,
-} from './api.schema'
+} from './api.schema';
 
-import type { Application } from '@magickml/server-core'
-import { ApiService, getOptions } from './api.class'
+// Import types and classes
+import type { Application } from '@magickml/server-core';
+import { ApiService, getOptions } from './api.class';
 
 // Add this service to the service type index
 declare module '@magickml/server-core' {
   interface ServiceTypes {
-    [apiPath]: ApiService
+    [apiPath]: ApiService;
   }
 }
 
-export const apiPath = 'api'
-export const apiMethods = ['get', 'create', 'update', 'remove'] as const
+// Constants for API path and methods
+export const apiPath = 'api';
+export const apiMethods = ['get', 'create', 'update', 'remove'] as const;
 
-export * from './api.class'
-export * from './api.schema'
+// Export class and schema files
+export * from './api.class';
+export * from './api.schema';
 
-// A configure function that registers the service and its hooks via `app.configure`
+/**
+ * A configure function that registers the service and its hooks via `app.configure`
+ * @param app - The Feathers application
+ */
 export const api = (app: Application) => {
   // Register our service on the Feathers application
   app.use(apiPath, new ApiService(getOptions(app)), {
@@ -35,7 +46,8 @@ export const api = (app: Application) => {
     methods: apiMethods,
     // You can add additional custom events to be sent to clients here
     events: [],
-  })
+  });
+
   // Initialize hooks
   app.service(apiPath).hooks({
     around: {
@@ -66,5 +78,5 @@ export const api = (app: Application) => {
     error: {
       all: [],
     },
-  } as any) // TODO: fix me
-}
+  } as any); // TODO: fix me
+};
