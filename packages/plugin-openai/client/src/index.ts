@@ -1,8 +1,15 @@
+// DOCUMENTED 
+/**
+ * A plugin for interacting with OpenAI's API.
+ * @class
+ */
 import { ClientPlugin, InputControl } from '@magickml/engine'
 import shared from '@magickml/plugin-openai-shared'
 
+// Importing shared variables from plugin-openai-shared module
 const { secrets, completionProviders } = shared
 
+// Input controls for text completion
 const textCompletionControls = [
   {
     type: InputControl,
@@ -48,6 +55,7 @@ const textCompletionControls = [
   },
 ]
 
+// Input controls for chat completion
 const chatCompletionControls = [
   {
     type: InputControl,
@@ -79,16 +87,19 @@ const chatCompletionControls = [
   }
 ]
 
+// Object containing all input controls for different completion types
 const inspectorControls = {
   text: textCompletionControls,
   chat: chatCompletionControls,
   embedding: [],
 }
 
+// Creating a new OpenAIPlugin instance
 const OpenAIPlugin = new ClientPlugin({
   name: 'OpenAIPlugin',
-  secrets,
+  secrets, // API Key and Model ID secrets
   completionProviders: completionProviders.map(provider => {
+    // Adding custom input controls for each completion type 
     return {
       ...provider,
       inspectorControls: inspectorControls[provider.subtype],

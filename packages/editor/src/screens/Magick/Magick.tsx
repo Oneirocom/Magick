@@ -1,158 +1,120 @@
-import { LoadingScreen, TabLayout } from '@magickml/client-core'
-import { useEffect } from 'react'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
-import TabBar from '../../components/TabBar/TabBar'
-import { usePubSub } from '../../contexts/PubSubProvider'
-import { RootState } from '../../state/store'
+// DOCUMENTED 
+import { LoadingScreen, TabLayout } from '@magickml/client-core';
+import { useEffect } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import TabBar from '../../components/TabBar/TabBar';
+import { usePubSub } from '../../contexts/PubSubProvider';
+import { RootState } from '../../state/store';
 import {
-  activeTabSelector, closeTab, openTab, selectAllTabs
-} from '../../state/tabs'
-import Workspaces from '../../components/Workspaces'
+  activeTabSelector,
+  closeTab,
+  openTab,
+  selectAllTabs,
+} from '../../state/tabs';
+import Workspaces from '../../components/Workspaces';
 
-const Magick = ({ empty = false }) => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
-  const activeTab = useSelector(activeTabSelector)
-  const pubSub = usePubSub()
-  const { URI } = useParams()
-  const { events, publish, subscribe } = pubSub
+/**
+ * Magick component
+ * @param empty flag to control whether the workspaces should be rendered or not
+ * @returns JSX.Element
+ */
+const Magick = ({ empty = false }): JSX.Element => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs));
+  const activeTab = useSelector(activeTabSelector);
+  const pubSub = usePubSub();
+  const { URI } = useParams();
+  const { events, publish, subscribe } = pubSub;
 
-  // Handle open tab events
+  // Subscribe to open tab events
   useEffect(() => {
     return subscribe(events.OPEN_TAB, (_event, tabData) => {
-      dispatch(openTab(tabData))
-    }) as () => void
-  })
+      dispatch(openTab(tabData));
+    }) as () => void;
+  }, [subscribe, events.OPEN_TAB, dispatch]);
 
+  // Handle tabs and navigation
   useEffect(() => {
-    if (!tabs) return
-
-    //Check If exists
-    if (activeTab) {
-      // ;(async () => {
-      //   const reault = useLazyGetSpellQuery()
-      // })()
-      //If No spell Exist on Project id
-      // axios
-      //   .get(config.apiUrl + '/spells', {
-      //     params: {
-      //       projectId: config.projectId,
-      //     },
-      //   })
-      //   .then(function (response) {
-      //     if (response.data.total == 0) {
-      //       navigate('/home')
-      //     }
-      //   })
-      //Check on Page load if the spell exsists
-      //Redux Query gives undefined
-      // axios
-      //   .get(config.apiUrl + '/spells', {
-      //     params: {
-      //       id: activeTab.id,
-      //     },
-      //   })
-      //   .then(function (response) {
-      //     if (response.data.total == 0) {
-      //       dispatch(closeTab(activeTab.id))
-      //       let temp_tabs = tabs.filter(item => item.id !== activeTab.id)
-      //       console.log(temp_tabs)
-      //       if (temp_tabs.length === 0) navigate('/home')
-      //       let idx = Math.floor(Math.random() * temp_tabs.length)
-      //       if (temp_tabs.length > 0) navigate(`/magick/${temp_tabs[idx].URI}`)
-      //       dispatch(
-      //         openTab({
-      //           name: temp_tabs[idx].URI,
-      //           openNew: false,
-      //           type: 'spell',
-      //         })
-      //       )
-      //       enqueueSnackbar(
-      //         'You are trying to access spell, that no longer exists ',
-      //         {
-      //           variant: 'error',
-      //         }
-      //       )
-      //     }
-      //   })
-    }
     // If there are still tabs, grab one at random to open to for now.
     // We should do better at this.  Probably with some kind of tab ordering.
     // Could fit in well with drag and drop for tabs
     if (tabs.length > 0 && !activeTab) {
-      navigate(`/magick/${tabs[Math.floor(Math.random() * tabs.length)].URI}`)
+      navigate(`/magick/${tabs[Math.floor(Math.random() * tabs.length)].URI}`);
     }
 
-    if (tabs.length === 0 && !activeTab && !URI) navigate('/home')
-  }, [tabs])
+    if (tabs.length === 0 && !activeTab && !URI) navigate('/home');
+  }, [tabs, activeTab, URI, navigate]);
 
+  // Handle URI changes
   useEffect(() => {
-    if (!URI) return
+    if (!URI) return;
     // Return if navigating to the spell that is already active
-    if (activeTab && activeTab.URI === URI) return
-    // Close spell tab if it is exists
-    const spellNameTab = tabs.filter(tab => tab.URI === URI)
-    const isSpellNameTabPresent = spellNameTab.length
-    if (isSpellNameTabPresent) dispatch(closeTab(spellNameTab[0].id))
+    if (activeTab && activeTab.URI === URI) return;
+    // Close spell tab if it exists
+    const spellNameTab = tabs.filter(tab => tab.URI === URI);
+    const isSpellNameTabPresent = spellNameTab.length;
+    if (isSpellNameTabPresent) dispatch(closeTab(spellNameTab[0].id));
     dispatch(
       openTab({
         name: URI,
         openNew: false,
         type: 'spell',
-      })
-    )
-  }, [URI])
+      }),
+    );
+  }, [URI, activeTab, tabs, dispatch]);
 
+  // Set up hotkeys
   useHotkeys(
     'Control+z',
     () => {
-      if (!pubSub || !activeTab) return
+      if (!pubSub || !activeTab) return;
 
-      publish(events.$UNDO(activeTab.id))
+      publish(events.$UNDO(activeTab.id));
     },
-    [pubSub, activeTab]
-  )
+    [pubSub, activeTab],
+  );
 
   useHotkeys(
     'Control+Shift+z',
     () => {
-      if (!pubSub || !activeTab) return
-      publish(events.$REDO(activeTab.id))
+      if (!pubSub || !activeTab) return;
+      publish(events.$REDO(activeTab.id));
     },
-    [pubSub, activeTab]
-  )
+    [pubSub, activeTab],
+  );
 
   useHotkeys(
     'Control+Delete',
     () => {
-      if (!pubSub || !activeTab) return
-      publish(events.$DELETE(activeTab.id))
+      if (!pubSub || !activeTab) return;
+      publish(events.$DELETE(activeTab.id));
     },
-    [pubSub, activeTab]
-  )
+    [pubSub, activeTab],
+  );
 
   useHotkeys(
     'Control+c',
     () => {
-      if (!pubSub || !activeTab) return
-      publish(events.$MULTI_SELECT_COPY(activeTab.id))
+      if (!pubSub || !activeTab) return;
+      publish(events.$MULTI_SELECT_COPY(activeTab.id));
     },
-    [pubSub, activeTab]
-  )
+    [pubSub, activeTab],
+  );
 
   useHotkeys(
     'Control+v',
     () => {
-      if (!pubSub || !activeTab) return
-      publish(events.$MULTI_SELECT_PASTE(activeTab.id))
+      if (!pubSub || !activeTab) return;
+      publish(events.$MULTI_SELECT_PASTE(activeTab.id));
     },
-    [pubSub, activeTab]
-  )
+    [pubSub, activeTab],
+  );
 
-  if (!activeTab) return <LoadingScreen />
+  // Render loading screen if there's no active tab
+  if (!activeTab) return <LoadingScreen />;
 
   return (
     <>
@@ -163,9 +125,9 @@ const Magick = ({ empty = false }) => {
         )}
       </TabLayout>
     </>
-  )
-}
+  );
+};
 
-Magick.whyDidYouRender = true
+Magick.whyDidYouRender = true;
 
-export default Magick
+export default Magick;

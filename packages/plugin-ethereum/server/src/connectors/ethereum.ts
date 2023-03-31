@@ -1,38 +1,75 @@
-export function startsWithCapital(word) {
-  return word.charAt(0) === word.charAt(0).toUpperCase()
+// DOCUMENTED 
+/**
+ * Returns a boolean indicating whether a string starts with a capital letter.
+ * @param word - The string to check.
+ * @returns - A boolean indicating whether the string starts with a capital letter.
+ */
+export function startsWithCapital(word: string): boolean {
+  return word.charAt(0) === word.charAt(0).toUpperCase();
 }
-function log(...s: (string | boolean)[]) {
-  console.log(...s)
+
+/**
+ * Logs one or more strings to the console.
+ * @param s - One or more strings or booleans to log to the console.
+ */
+function log(...s: (string | boolean)[]): void {
+  console.log(...s);
 }
 
-export class ethereum_client {
-  async destroy() {
-    await this.client.destroy()
-    this.client = null
-  }
-  getMessage(
-    messageId: string
-  ) {
-    return messageId
+/**
+ * Ethereum client class for interacting with the Ethereum network.
+ */
+export class EthereumClient {
+  /**
+   * Destroys the Ethereum client instance.
+   */
+  async destroy(): Promise<void> {
+    await this.client.destroy();
+    this.client = null;
   }
 
-  client = {} as any
-  agent = undefined
-  spellRunner = null
+  /**
+   * Returns the message corresponding to the specified message ID.
+   * @param messageId - The ID of the requested message.
+   * @returns - The message corresponding to the specified ID.
+   */
+  getMessage(messageId: string): string {
+    return messageId;
+  }
 
+  /**
+   * The Ethereum client instance.
+   */
+  client = {} as any;
+
+  /**
+   * The agent using the Ethereum client.
+   */
+  agent: any = undefined;
+
+  /**
+   * The spell runner for executing spells on the Ethereum network.
+   */
+  spellRunner: any = null;
+
+  /**
+   * Creates a new instance of the Ethereum client.
+   * @param agent - The agent that will be using the Ethereum client.
+   * @param spellRunner - The spell runner for executing spells on the Ethereum network.
+   */
   createEthereumClient = async (
     agent: any,
     spellRunner: any,
-  ) => {
-    console.log('creating ethereum client')
-    this.agent = agent
-    this.spellRunner = spellRunner
+  ): Promise<void> => {
+    console.log('Creating Ethereum client');
+    this.agent = agent;
+    this.spellRunner = spellRunner;
 
     this.client = {
-      "TODO": "TODO"
-    }
-    log('created ethereum client')
-  }
+      "TODO": "TODO",
+    };
+    log('Ethereum client created');
+  };
 }
 
-export default ethereum_client
+export default EthereumClient;

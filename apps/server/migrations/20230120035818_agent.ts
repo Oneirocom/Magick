@@ -12,7 +12,6 @@ export async function up(knex: Knex): Promise<void> {
     table.string('updatedAt')
     table.string('pingedAt')
     table.string('projectId')
-    table.jsonb('spells')
     table.jsonb('data')
   })
 }

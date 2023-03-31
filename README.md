@@ -2,16 +2,16 @@
 
 <p align="center">
   <a href="https://discord.gg/magickml">
-    <img src="https://dcbadge.vercel.app/api/server/magickml?style=social" alt="Join Discord">
+    <img src="https://dcbadge.vercel.app/api/server/magickml?style=social" alt="Join Discord" />
   </a>
   <a href="https://twitter.com/magickml">
-    <img src="https://img.shields.io/twitter/follow/magickml?style=social" alt="Follow on Twitter">
+    <img src="https://img.shields.io/twitter/follow/magickml?style=social" alt="Follow on Twitter" />
   </a>
   <a href="https://www.linkedin.com/company/magickml/about/">
-    <img src="https://img.shields.io/badge/LinkedIn-Follow-blue?style=social&logo=linkedin" alt="Follow on LinkedIn">
+    <img src="https://img.shields.io/badge/LinkedIn-Follow-blue?style=social&logo=linkedin" alt="Follow on LinkedIn" />
   </a>
   <a href="https://www.youtube.com/@magickml">
-    <img src="https://img.shields.io/badge/YouTube-Subscribe-red?style=social&logo=youtube" alt="Subscribe on YouTube">
+    <img src="https://img.shields.io/badge/YouTube-Subscribe-red?style=social&logo=youtube" alt="Subscribe on YouTube" />
   </a>
 </p>
 
@@ -36,13 +36,13 @@ With Magick, you can unleash the power of AI without needing to know how to code
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=Xy7tMmKluvE" target="_blank">
-    <img src="https://img.youtube.com/vi/Xy7tMmKluvE/0.jpg" alt="Magick - AI for Mere Mortals" style="width:65%;max-width:640px;">
+    <img src="https://img.youtube.com/vi/Xy7tMmKluvE/0.jpg" alt="Magick - AI for Mere Mortals" style="width:65%;max-width:640px;" />
   </a>
-  <br>
+  <br />
   ▶️ <strong>Click the image above to watch the <a href="https://www.youtube.com/watch?v=Xy7tMmKluvE" target="_blank">video</a></strong>
 </p>
 
-<hr>
+<hr />
 
 # Installation
 

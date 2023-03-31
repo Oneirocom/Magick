@@ -1,36 +1,60 @@
-import { Grid } from '@mui/material'
-import styles from '../AgentWindowStyle.module.css'
-import { Input, Switch } from '@magickml/client-core'
+// DOCUMENTED 
+import { Grid } from '@mui/material';
+import styles from '../AgentWindowStyle.module.css';
+import { Input, Switch } from '@magickml/client-core';
 
+/**
+ * Interface for Props.
+ */
 interface Props {
-  publicVars: any
-  setPublicVars: (data: any) => void
+  publicVars: any;
+  setPublicVars: (data: any) => void;
 }
 
+/**
+ * Agent public variables component.
+ * @param publicVars - public variables data
+ * @param setPublicVars - function to set public variables
+ */
 const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
-  console.log("....................", publicVars)
+  // Log public variables
+  console.log('....................', publicVars);
+
+  /**
+   * Handle changes to public variables.
+   * @param variable - variable object
+   * @param event - DOM event
+   */
   const onChangeHandler = (variable, event) => {
-    const input = event.target
+    const input = event.target;
+
+    /**
+     * Apply changes from native DOM event to the input value.
+     * @param inputValue - original input value
+     * @param nativeEventData - native DOM event data
+     * @returns updated input value
+     */
     function applyNativeEventToValue(inputValue, nativeEventData) {
-      inputValue = inputValue || ''
+      inputValue = inputValue || '';
 
       // if input is selected to delete all
       if (input.selectionStart === 0 && input.selectionEnd === input.value.length) {
         // All text is selected, delete it
-        inputValue = "";
+        inputValue = '';
       }
 
       // if the native event is a backspace
       if (nativeEventData.inputType === 'deleteContentBackward') {
         // remove the last character
         inputValue =
-          inputValue.length > 0 ? inputValue.slice(0, -1) : inputValue
+          inputValue.length > 0 ? inputValue.slice(0, -1) : inputValue;
       }
 
       // otherwise, add the native event to the current variable value
-      return inputValue + (nativeEventData.data ? nativeEventData.data : '')
+      return inputValue + (nativeEventData.data ? nativeEventData.data : '');
     }
 
+    // Create a new variable object with the updated value
     const newVar = {
       ...variable,
       value:
@@ -38,17 +62,18 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
           ? // apply the native event to the current variable value
             applyNativeEventToValue(variable.value, event.nativeEvent)
           : event.target.checked,
-    }
+    };
 
+    // Update the public variables data
     setPublicVars({
       ...publicVars,
       [newVar.id]: newVar,
-    })
-  }
+    });
+  };
 
   return (
-    <div className={styles['agentPubVars']}>
-      <div className={styles['header']}>
+    <div className={styles.agentPubVars}>
+      <div className={styles.header}>
         <h3>Public Variables</h3>
       </div>
       <div
@@ -76,14 +101,14 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
                   <Switch
                     label={''}
                     checked={variable.value}
-                    onChange={e => onChangeHandler(variable, e)}
+                    onChange={(e) => onChangeHandler(variable, e)}
                   />
                 ) : (
                   <Input
                     style={{ width: '100%', padding: '13px !important' }}
                     value={variable.value}
                     type="text"
-                    onChange={e => onChangeHandler(variable, e)}
+                    onChange={(e) => onChangeHandler(variable, e)}
                     name={variable.name}
                     placeHolder={'Add new value here'}
                     multiline={true}
@@ -91,11 +116,11 @@ const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
                 )}
               </Grid>
             </Grid>
-          )
+          );
         })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AgentPubVariables
+export default AgentPubVariables;

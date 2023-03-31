@@ -165,7 +165,7 @@
 
 //     pause()
 
-//     const url = `${import.meta.env.VITE_APP_FILE_SERVER_URL}/${speechUrl}`
+//     const url = `${FILE_SERVER_URL}/${speechUrl}`
 //     let interval
 
 //     // @ts-ignore

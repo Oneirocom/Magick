@@ -1,6 +1,12 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
-import { hooks as schemaHooks } from '@feathersjs/schema'
-import { v4 as uuidv4 } from 'uuid'
+// DOCUMENTED 
+/**
+ * For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
+ */
+
+// Imports
+import { hooks as schemaHooks } from '@feathersjs/schema';
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   spellDataValidator,
   spellPatchValidator,
@@ -11,28 +17,31 @@ import {
   spellPatchResolver,
   spellQueryResolver,
   spellJsonFields,
-} from './spells.schema'
+} from './spells.schema';
 
-import type { Application, HookContext } from '../../declarations'
-import { SpellService, getOptions } from './spells.class'
-import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
+import type { Application, HookContext } from '../../declarations';
+import { SpellService, getOptions } from './spells.class';
+import { handleJSONFieldsUpdate, jsonResolver } from '../utils';
 import {
   checkForSpellInManager,
   updateSpellInManager,
-} from '../../hooks/spellmanagerHooks'
+} from '../../hooks/spellmanagerHooks';
 
-export * from './spells.class'
-export * from './spells.schema'
+// Exports
+export * from './spells.class';
+export * from './spells.schema';
 
-// A configure function that registers the service and its hooks via `app.configure`
+/**
+ * A configure function that registers the service and its hooks via `app.configure`.
+ *
+ * @param app - Application
+ */
 export const spell = (app: Application) => {
   // Register our service on the Feathers application
   app.use('spells', new SpellService(getOptions(app)), {
-    // A list of all methods this service exposes externally
     methods: ['find', 'get', 'create', 'patch', 'remove', 'saveDiff'],
-    // You can add additional custom events to be sent to clients here
     events: [],
-  })
+  });
 
   // Initialize hooks
   app.service('spells').hooks({
@@ -54,11 +63,11 @@ export const spell = (app: Application) => {
         schemaHooks.validateData(spellDataValidator),
         schemaHooks.resolveData(spellDataResolver),
         async (context: HookContext) => {
-          const { data, service } = context
+          const { data, service } = context;
           context.data = {
             [service.id]: uuidv4(),
             ...data,
-          }
+          };
           await context.service
             .find({
               query: {
@@ -67,7 +76,7 @@ export const spell = (app: Application) => {
             })
             .then(async param => {
               if (param.data.length >= 1) {
-                console.log(data.name + '(%)')
+                console.log(data.name + '(%)');
 
                 await context.service
                   .find({
@@ -85,10 +94,10 @@ export const spell = (app: Application) => {
                   })
                   .then(val => {
                     context.data.name =
-                      data.name + ' (' + (1 + val.data.length) + ')'
-                  })
+                      data.name + ' (' + (1 + val.data.length) + ')';
+                  });
               }
-            })
+            });
         },
       ],
       patch: [
@@ -108,12 +117,12 @@ export const spell = (app: Application) => {
     error: {
       all: [],
     },
-  })
-}
+  });
+};
 
 // Add this service to the service type index
 declare module '../../declarations' {
   interface ServiceTypes {
-    spells: SpellService
+    spells: SpellService;
   }
 }

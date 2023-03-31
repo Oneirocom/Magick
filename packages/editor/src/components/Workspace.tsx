@@ -1,3 +1,4 @@
+// DOCUMENTED
 import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
@@ -20,9 +21,14 @@ import { useFeathers } from '../contexts/FeathersProvider'
 import { usePubSub } from '../contexts/PubSubProvider'
 import { RootState } from '../state/store'
 
+/**
+ * Workspace component that handles different tabs and their layouts.
+ * Each workspace corresponds to a different tab.
+ * @param {{tab: object, tabs: object[], pubSub: object}} props
+ * @returns {JSX.Element}
+ */
 const Workspace = ({ tab, tabs, pubSub }) => {
   const config = useConfig()
-
   const spellRef = useRef<SpellInterface>()
   const { events, publish } = usePubSub()
   const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
@@ -35,7 +41,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
   useEffect(() => {
     if (!editor?.on) return
     const unsubscribe = editor.on(
-      // Comment events:  commentremoved commentcreated addcomment removecomment editcomment connectionpath
       'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
       debounce(async data => {
         if (tab.type === 'spell' && spellRef.current) {
@@ -55,8 +60,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     const unsubscribe = editor.on('nodecreated noderemoved', (node: any) => {
       if (!spellRef.current) return
       if (node.category !== 'I/O') return
-      // TODO we can probably send this update to a spell namespace for this spell.
-      // then spells can subscribe to only their dependency updates.
       const spell = {
         ...spellRef.current,
         graph: editor.toJSON(),
@@ -89,7 +92,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     ;(async () => {
       if (!client || !tab || !tab.name) return
 
-      // make sure to pass the projectId to the service call
       await client.service('spell-runner').get(tab.id, {
         query: {
           projectId: config.projectId,

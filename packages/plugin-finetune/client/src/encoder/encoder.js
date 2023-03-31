@@ -1,6 +1,5 @@
 /* See https://github.com/latitudegames/GPT-3-Encoder */
 
-/* eslint-disable sonarjs/cognitive-complexity */
 import bpe_ranks from "./bpe_ranks.json";
 import encoder from "./encoder.json";
 

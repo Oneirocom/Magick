@@ -1,3 +1,4 @@
+// DOCUMENTED 
 import React, { FC, useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid'
 import { Modal, Switch } from '@magickml/client-core'
@@ -5,12 +6,22 @@ import md5 from 'md5'
 import { Button, Input } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { debounce } from 'lodash'
+import { API_ROOT_URL } from '@magickml/engine'
 
-const randomHash = () => {
+/**
+ * Generate a random hash.
+ * @returns {string} - A random hash generated using the md5 function.
+ */
+const randomHash = (): string => {
   return md5(Math.random().toString())
 }
 
-export const RestAgentWindow: FC<any> = props => {
+/**
+ * RestAgentWindow component enables users to control the REST API settings.
+ * @param {object} props - Props for the RestAgentWindow component.
+ * @returns {JSX.Element} - RestAgentWindow component.
+ */
+export const RestAgentWindow: FC<any> = (props) => {
   props = props.props
   const { selectedAgentData, setSelectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
@@ -21,16 +32,19 @@ export const RestAgentWindow: FC<any> = props => {
   const [viewMode, setViewMode] = useState<boolean>(false)
   const [checked, setChecked] = useState(selectedAgentData.data?.rest_enabled)
   const [disable, setDisable] = useState(false)
-  useEffect(()=>{
-    if (props.enable["RestPlugin"] == false) {
+  
+  useEffect(() => {
+    if (props.enable["RestPlugin"] === false) {
       setChecked(false)
       setDisable(true)
     }
-    if (props.enable['RestPlugin'] == true){
+
+    if (props.enable['RestPlugin'] === true){
       setChecked(selectedAgentData.data?.rest_enabled)
       setDisable(false)
     }
   }, [props.enable, selectedAgentData])
+  
   useEffect(() => {
     if (!selectedAgentData.data?.rest_api_key) {
       setSelectedAgentData({
@@ -141,7 +155,7 @@ export const RestAgentWindow: FC<any> = props => {
                   URL
                 </span>
                 <Input
-                  value={`${import.meta.env.VITE_APP_API_URL}/api/${
+                  value={`${API_ROOT_URL}/api/${
                     selectedAgentData.data?.rest_api_key
                   }`}
                   readOnly
@@ -189,7 +203,7 @@ export const RestAgentWindow: FC<any> = props => {
                       Fetch
                     </span>
                     <Input
-                      value={`fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+                      value={`fetch('${API_ROOT_URL}/api/${
                         selectedAgentData.id
                       }?apiKey=${
                         selectedAgentData.data?.rest_api_key
@@ -202,7 +216,7 @@ export const RestAgentWindow: FC<any> = props => {
                       }}
                       onClick={() => {
                         navigator.clipboard.writeText(
-                          `fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+                          `fetch('${API_ROOT_URL}/api/${
                             selectedAgentData.id
                           }?apiKey=${
                             selectedAgentData.data?.rest_api_key
@@ -242,7 +256,7 @@ export const RestAgentWindow: FC<any> = props => {
                       Fetch
                     </span>
                     <Input
-                      value={`fetch('${import.meta.env.VITE_APP_API_URL}/api', {
+                      value={`fetch('${API_ROOT_URL}/api', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -257,7 +271,7 @@ export const RestAgentWindow: FC<any> = props => {
                       onClick={() => {
                         // copy the value of the input
                         navigator.clipboard.writeText(
-                          `fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+                          `fetch('${API_ROOT_URL}/api/${
                             selectedAgentData.id
                           }', {
   method: 'POST',
@@ -308,7 +322,7 @@ export const RestAgentWindow: FC<any> = props => {
                       Fetch
                     </span>
                     <Input
-                      value={`fetch('${import.meta.env.VITE_APP_API_URL}/api', {
+                      value={`fetch('${API_ROOT_URL}/api', {
   method: 'PUT',
   headers: {
     'Content-Type': 'application/json',
@@ -323,7 +337,7 @@ export const RestAgentWindow: FC<any> = props => {
                       onClick={() => {
                         // copy the value of the input
                         navigator.clipboard.writeText(
-                          `fetch('${import.meta.env.VITE_APP_API_URL}/api', {
+                          `fetch('${API_ROOT_URL}/api', {
   method: 'PUT',
   headers: {
     'Content-Type': 'application/json',
@@ -374,7 +388,7 @@ export const RestAgentWindow: FC<any> = props => {
                       Fetch
                     </span>
                     <Input
-                      value={`fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+                      value={`fetch('${API_ROOT_URL}/api/${
                         selectedAgentData.id
                       }?apiKey=${
                         selectedAgentData.data?.rest_api_key
@@ -396,7 +410,7 @@ export const RestAgentWindow: FC<any> = props => {
                       }}
                       onClick={() => {
                         navigator.clipboard.writeText(
-                          `fetch('${import.meta.env.VITE_APP_API_URL}/api/${
+                          `fetch('${API_ROOT_URL}/api/${
                             selectedAgentData.id
                           }?apiKey=${
                             selectedAgentData.data?.rest_api_key

@@ -1,1 +1,0 @@
-These connectors have been temporarily disconnected why we refactor how entities work

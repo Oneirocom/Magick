@@ -1,3 +1,4 @@
+// DOCUMENTED 
 /* eslint-disable sort-imports */
 /* eslint-disable react/prop-types */
 import React from 'react'
@@ -7,6 +8,9 @@ import { Socket } from './Socket'
 import { kebab } from './utils'
 import './styles.css'
 
+/**
+ * Types for Node component props
+ */
 type NodeProps = {
   node: any
   editor: any
@@ -14,6 +18,9 @@ type NodeProps = {
   bindControl: any
 }
 
+/**
+ * Types for Node component state
+ */
 type NodeState = {
   outputs: any[]
   controls: any[]
@@ -21,7 +28,16 @@ type NodeState = {
   selected: string
 }
 
+/**
+ * Node component class
+ */
 export class Node extends React.Component<NodeProps, NodeState> {
+  /**
+   * Get derived state from props
+   * @param node - The node object
+   * @param editor - The editor object
+   * @returns The new state based on the node and editor provided
+   */
   static getDerivedStateFromProps({ node, editor }) {
     return {
       outputs: Array.from(node.outputs.values()),
@@ -31,6 +47,9 @@ export class Node extends React.Component<NodeProps, NodeState> {
     }
   }
 
+  /**
+   * Render the Node component
+   */
   render() {
     const { node, bindSocket, bindControl } = this.props
     const { outputs, controls, inputs, selected } = this.state
