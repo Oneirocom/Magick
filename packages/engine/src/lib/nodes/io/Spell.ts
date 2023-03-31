@@ -324,8 +324,9 @@ export class SpellComponent extends MagickComponent<
             inputs: flattenedInputs,
             runSubspell: false,
             agent: module.agent,
-            secrets: module.agent.secrets ?? secrets as any,
-            publicVariables: module.agent.publicVariables as any ?? publicVariables as any,
+            secrets: module.agent.secrets ?? (secrets as any),
+            publicVariables:
+              (module.agent.publicVariables as any) ?? (publicVariables as any),
           }
 
           const outputs = await spellRunner.runComponent(obj)
