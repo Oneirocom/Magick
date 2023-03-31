@@ -97,6 +97,12 @@ const config = {
             position: 'right',
             label: 'Developer Guides',
           },
+          {
+            type: 'doc',
+            docId: 'api/index',
+            position: 'right',
+            label: 'API Documentation',
+          },
         ],
       },
       footer: {
