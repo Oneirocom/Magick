@@ -32,7 +32,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:305](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/types.ts#L305)
+[packages/engine/src/lib/types.ts:303](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L303)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:304](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/types.ts#L304)
+[packages/engine/src/lib/types.ts:302](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L302)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/modulePlugin/index.ts:24](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/modulePlugin/index.ts#L24)
+[packages/engine/src/lib/plugins/modulePlugin/index.ts:24](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/modulePlugin/index.ts#L24)
 
 ___
 

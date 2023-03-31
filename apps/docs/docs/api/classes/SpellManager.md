@@ -20,7 +20,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellManager.ts:18](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellManager.ts#L18)
+[packages/engine/src/lib/spellManager/SpellManager.ts:18](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/SpellManager.ts#L18)
 
 ## Properties
 
@@ -30,7 +30,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellManager.ts:15](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellManager.ts#L15)
+[packages/engine/src/lib/spellManager/SpellManager.ts:15](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/SpellManager.ts#L15)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellManager.ts:16](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellManager.ts#L16)
+[packages/engine/src/lib/spellManager/SpellManager.ts:16](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/SpellManager.ts#L16)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellManager.ts:14](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellManager.ts#L14)
+[packages/engine/src/lib/spellManager/SpellManager.ts:14](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/SpellManager.ts#L14)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellManager.ts:13](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellManager.ts#L13)
+[packages/engine/src/lib/spellManager/SpellManager.ts:13](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/SpellManager.ts#L13)
 
 ## Methods
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellManager.ts:75](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellManager.ts#L75)
+[packages/engine/src/lib/spellManager/SpellManager.ts:75](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/SpellManager.ts#L75)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellManager.ts:67](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellManager.ts#L67)
+[packages/engine/src/lib/spellManager/SpellManager.ts:67](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/SpellManager.ts#L67)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellManager.ts:71](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellManager.ts#L71)
+[packages/engine/src/lib/spellManager/SpellManager.ts:71](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/SpellManager.ts#L71)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellManager.ts:79](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellManager.ts#L79)
+[packages/engine/src/lib/spellManager/SpellManager.ts:79](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/SpellManager.ts#L79)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellManager.ts:31](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellManager.ts#L31)
+[packages/engine/src/lib/spellManager/SpellManager.ts:31](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/SpellManager.ts#L31)
 
 ___
 
@@ -185,4 +185,4 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/spellManager/SpellManager.ts:100](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/spellManager/SpellManager.ts#L100)
+[packages/engine/src/lib/spellManager/SpellManager.ts:100](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/spellManager/SpellManager.ts#L100)

@@ -24,7 +24,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:44](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L44)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:44](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L44)
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:40](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L40)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:40](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L40)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:616](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/types.ts#L616)
+[packages/engine/src/lib/types.ts:614](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L614)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:39](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L39)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:39](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L39)
 
 ___
 
@@ -91,13 +91,13 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:42](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L42)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:42](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L42)
 
 ___
 
 ### node
 
-• **node**: [`NodeData`](NodeData.md)
+• **node**: `NodeData`
 
 #### Inherited from
 
@@ -105,13 +105,13 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:38](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L38)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:38](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L38)
 
 ___
 
 ### onRun
 
-• `Optional` **onRun**: (`node`: [`NodeData`](NodeData.md), `task`: [`Task`](../classes/Task.md), `data`: `unknown`, `socketInfo`: [`TaskSocketInfo`](../#tasksocketinfo)) => `void`
+• `Optional` **onRun**: (`node`: `NodeData`, `task`: [`Task`](../classes/Task.md), `data`: `unknown`, `socketInfo`: [`TaskSocketInfo`](../#tasksocketinfo)) => `void`
 
 #### Type declaration
 
@@ -121,7 +121,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `node` | [`NodeData`](NodeData.md) |
+| `node` | `NodeData` |
 | `task` | [`Task`](../classes/Task.md) |
 | `data` | `unknown` |
 | `socketInfo` | [`TaskSocketInfo`](../#tasksocketinfo) |
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:617](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/types.ts#L617)
+[packages/engine/src/lib/types.ts:615](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L615)
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:43](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L43)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:43](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L43)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/types.ts:615](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/types.ts#L615)
+[packages/engine/src/lib/types.ts:613](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/types.ts#L613)
 
 ___
 
@@ -174,7 +174,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:41](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L41)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:41](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L41)
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:68](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L68)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:68](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L68)
 
 ## Methods
 
@@ -214,7 +214,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:250](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L250)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:250](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L250)
 
 ___
 
@@ -239,7 +239,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:93](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L93)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:93](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L93)
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:78](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L78)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:78](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L78)
 
 ___
 
@@ -287,7 +287,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:69](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L69)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:69](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L69)
 
 ___
 
@@ -305,7 +305,7 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:127](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L127)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:127](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L127)
 
 ___
 
@@ -317,7 +317,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`NodeData`](NodeData.md) |
+| `data` | `NodeData` |
 | `options` | `RunOptions` |
 
 #### Returns
@@ -330,4 +330,4 @@ ___
 
 #### Defined in
 
-[packages/engine/src/lib/plugins/taskPlugin/task.ts:132](https://github.com/Oneirocom/MagickML/blob/5ec1961d/packages/engine/src/lib/plugins/taskPlugin/task.ts#L132)
+[packages/engine/src/lib/plugins/taskPlugin/task.ts:132](https://github.com/Oneirocom/MagickML/blob/1bc5ce20/packages/engine/src/lib/plugins/taskPlugin/task.ts#L132)
