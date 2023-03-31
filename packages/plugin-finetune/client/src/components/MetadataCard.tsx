@@ -1,19 +1,27 @@
-import Tooltip from '@mui/material/Tooltip'
-import React, { useState } from 'react'
-import { useCopyToClipboard } from 'usehooks-ts'
-import InfoCard from './InfoCard'
-import Button from '@mui/material/Button'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import { Table, TableCell, TableContainer, TableRow } from '@mui/material'
+// GENERATED 
+import Tooltip from '@mui/material/Tooltip';
+import React, { useState } from 'react';
+import { useCopyToClipboard } from 'usehooks-ts';
+import InfoCard from './InfoCard';
+import Button from '@mui/material/Button';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { Table, TableCell, TableContainer, TableRow } from '@mui/material';
+
+/**
+ * MetadataCard functional component displays a table of metadata fields,
+ * with optional click-to-copy functionality.
+ * @param fields - An array of field objects containing label, value and clickToCopy properties.
+ * @returns JSX.Element
+ */
 export function MetadataCard({
   fields,
 }: {
   fields: Array<{
-    label: string
-    value?: string | number | Date | null
-    clickToCopy?: boolean
-  }>
-}) {
+    label: string;
+    value?: string | number | Date | null;
+    clickToCopy?: boolean;
+  }>;
+}): JSX.Element {
   return (
     <InfoCard>
       <TableContainer>
@@ -47,20 +55,28 @@ export function MetadataCard({
         </Table>
       </TableContainer>
     </InfoCard>
-  )
+  );
 }
 
+/**
+ * ClickToCopy functional component wraps a child component
+ * and allows a string value to be copied to the clipboard when clicked.
+ * @param children - ReactElement to render.
+ * @param className - Optional CSS class string.
+ * @param value - String value to copy when the component is clicked.
+ * @returns JSX.Element
+ */
 function ClickToCopy({
   children,
   className,
   value,
 }: {
-  children: React.ReactElement
-  className?: string
-  value: string
-}) {
-  const [, copy] = useCopyToClipboard()
-  const [copied, setCopied] = useState(false)
+  children: React.ReactElement;
+  className?: string;
+  value: string;
+}): JSX.Element {
+  const [, copy] = useCopyToClipboard();
+  const [copied, setCopied] = useState(false);
 
   return (
     <Tooltip
@@ -71,13 +87,13 @@ function ClickToCopy({
     >
       <Button
         onClick={async () => {
-          await copy(value)
-          setCopied(true)
+          await copy(value);
+          setCopied(true);
         }}
         startIcon={<ContentCopyIcon />}
       >
         {children}
       </Button>
     </Tooltip>
-  )
+  );
 }

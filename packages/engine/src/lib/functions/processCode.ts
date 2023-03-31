@@ -1,25 +1,35 @@
+// GENERATED 
 import { MagickWorkerInputs, SupportedLanguages, UnknownData } from '../types';
 import runPython from '../functions/ProcessPython';
 let vm2;
-// if process is not undefined, dynamically import vm2
+
+/**
+ * Dynamically import vm2 if process is not undefined.
+ */
 if (typeof process !== 'undefined') {
   (async () => {
     vm2 = await import('vm2');
   })()
 }
 
+/**
+ * Process the code based on the given inputs.
+ * @param code - The code to process.
+ * @param inputs - The input values for the code.
+ * @param data - The data values required for processing the code.
+ * @param language - The supported language for processing the code. Default is `javascript`.
+ * @returns The result of processing the code.
+ */
 export async function processCode(
   code: unknown,
   inputs: MagickWorkerInputs,
   data: UnknownData,
   language: SupportedLanguages = 'javascript'
 ) {
-  // Inputs are flattened before we inject them for a better code experience
+  // Flatten inputs before injecting them for a better code experience
   const flattenInputs = Object.entries(inputs).reduce(
     (acc, [key, value]: [string, unknown]) => {
-      // TODO: check if if(!value) is correct and if
       if (!value)
-        // TODO: handle more gracefully?
         throw new TypeError('Input value is undefined or null: ' + key)
       acc[key] = value[0];
       return acc;
@@ -31,11 +41,11 @@ export async function processCode(
     const { VM } = vm2;
     const vm = new VM();
 
-    // Freeze the variables we are injecting into the VM
+    // Freeze the variables being injected into the VM
     vm.freeze(data, 'data');
     vm.freeze(flattenInputs, 'input');
 
-    // run the code
+    // Run the code
     const codeToRun = `"use strict"; function runFn(input,data){ return (${code})(input,data)}; runFn(input,data);`;
 
     try {
@@ -54,5 +64,4 @@ export async function processCode(
       console.log({ err });
     }
   }
-
 }

@@ -1,15 +1,8 @@
-// GENERATED 
-/**
- * Represents the props for the ProjectRow component.
- * 
- * @property {string} label - The label to display for the project row.
- * @property {SpellInterface} selectedSpell - The selected spell for the project row.
- * @property {string} icon - The icon to display for the project row.
- * @property {Function} onClick - The function to be called when the ProjectRow is clicked.
- * @property {SpellInterface} spell - The spell for the project row.
- * @property {CSSProperties} style - The style of the project row.
- * @property {Function} onDelete - The function to be called when a project row is deleted.
- */
+import { SpellInterface } from '@magickml/engine'
+import { CSSProperties } from 'react'
+import { Icon } from '@magickml/client-core'
+import css from '../screens/HomeScreen/homeScreen.module.css'
+
 type ProjectProps = {
   label: string
   selectedSpell?: SpellInterface
@@ -20,12 +13,6 @@ type ProjectProps = {
   onDelete?: Function
 }
 
-/**
- * Renders a single project row.
- * 
- * @param {ProjectProps} props - The props for the ProjectRow component.
- * @returns {JSX.Element} The JSX for the ProjectRow component.
- */
 const ProjectRow = ({
   label,
   selectedSpell,
@@ -34,28 +21,16 @@ const ProjectRow = ({
   spell,
   style = {},
   onDelete,
-}: ProjectProps): JSX.Element => {
-  /**
-   * Handle the click event for the ProjectRow component and call the `onClick` prop.
-   * 
-   * @param {React.MouseEvent<HTMLDivElement, MouseEvent>} e - The click event.
-   */
-  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-    onClick(e)
-  }
-
-  /**
-   * Handle the click event for the delete icon and call the `onDelete` function with the spell id.
-   */
-  const handleDeleteClick = (): void => {
-    spell?.name && onDelete && onDelete(spell.id)
-  }
-
+}: ProjectProps) => {
   return (
     <div
       role="button"
-      className={`${css['project-row']} ${css[selectedSpell?.name === label ? 'selected' : '']}`}
-      onClick={handleClick}
+      className={`${css['project-row']} ${
+        css[selectedSpell?.name === label ? 'selected' : '']
+      }`}
+      onClick={e => {
+        onClick(e)
+      }}
       style={style}
     >
       {icon.length > 0 && (
@@ -65,7 +40,9 @@ const ProjectRow = ({
       {onDelete && (
         <Icon
           name="trash"
-          onClick={handleDeleteClick}
+          onClick={() => {
+            spell?.name && onDelete(spell.id)
+          }}
           style={{
             marginRight: 'var(--extraSmall)',
             position: 'absolute',
@@ -78,4 +55,4 @@ const ProjectRow = ({
   )
 }
 
-export default ProjectRow;
+export default ProjectRow

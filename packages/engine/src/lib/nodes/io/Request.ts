@@ -9,9 +9,11 @@ import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
 import {
-  EngineContext, MagickNode,
+  EngineContext,
+  MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs, WorkerData
+  MagickWorkerOutputs,
+  WorkerData,
 } from '../../types'
 
 const info = 'Request is used to make a web request to a server.'
@@ -22,13 +24,17 @@ type WorkerReturn = {
 
 export class Request extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Request', {
-      outputs: {
-        output: 'output',
-        trigger: 'option',
+    super(
+      'Request',
+      {
+        outputs: {
+          output: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'I/O', info)
-
+      'I/O',
+      info
+    )
   }
 
   builder(node: MagickNode) {
@@ -41,16 +47,13 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
       name: 'Component Name',
     })
 
-    const headerGenerator = new SocketGeneratorControl({
-      connectionType: 'input',
-      dataKey: 'header',
-      name: 'Header Inputs',
-      ignored: ['trigger'],
+    const headers = new InputControl({
+      dataKey: 'headers',
+      name: 'Headers',
     })
 
     const inputGenerator = new SocketGeneratorControl({
       connectionType: 'input',
-      dataKey: 'input',
       name: 'Body Inputs',
       ignored: ['trigger'],
     })
@@ -67,14 +70,11 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
       icon: 'moon',
     })
 
-    node
-      .addInput(dataInput)
-      .addOutput(dataOutput)
-      .addOutput(outp)
+    node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)
 
     node.inspector
       .add(nameControl)
-      .add(headerGenerator)
+      .add(headers)
       .add(inputGenerator)
       .add(url)
       .add(method)
@@ -96,6 +96,8 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
       return acc
     }, {} as Record<string, unknown>)
 
+    const headers = node.data.headers as Record<string, string>
+
     let url = node?.data?.url as string
     const method = (node?.data?.method as string)?.toLowerCase().trim()
     if (url.startsWith('server')) {
@@ -104,15 +106,15 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
 
     let resp = undefined as AxiosResponse<unknown> | undefined
     if (method === 'post') {
-      resp = await axios.post(url, inputs)
+      resp = await axios.post(url, inputs, { headers })
     } else if (method === 'get') {
-      resp = await axios.get(url, { params: inputs })
+      resp = await axios.get(url, { params: inputs, headers })
     } else if (method === 'delete') {
-      resp = await axios.delete(url, { params: inputs })
+      resp = await axios.delete(url, { params: inputs, headers })
     } else if (method === 'put') {
-      resp = await axios.put(url, inputs)
+      resp = await axios.put(url, inputs, { headers })
     } else if (method === 'head') {
-      resp = await axios.head(url, { params: inputs })
+      resp = await axios.head(url, { params: inputs, headers })
     } else {
       console.log('Request Method (' + method + ') not supported!')
     }

@@ -1,35 +1,43 @@
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import { Box } from '@mui/material'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
-import { FormProvider, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
-import Select from 'react-select'
-import { toast } from 'react-toastify'
-import useSWR, { mutate } from 'swr'
-import useAuthentication from '../account/useAuthentication'
-import ErrorMessage from '../components/ErrorMessage'
-import SelectEngine from '../components/forms/SelectEngine'
-import InfoCard from '../components/InfoCard'
-import Label from '../forms/Label'
-import { OpenAI } from '../types/openai'
+// GENERATED 
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Box } from '@mui/material';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import Select from 'react-select';
+import { toast } from 'react-toastify';
+import useSWR, { mutate } from 'swr';
+import useAuthentication from '../account/useAuthentication';
+import ErrorMessage from '../components/ErrorMessage';
+import SelectEngine from '../components/forms/SelectEngine';
+import InfoCard from '../components/InfoCard';
+import Label from '../forms/Label';
+import { OpenAI } from '../types/openai';
 
-import { OPENAI_ENDPOINT } from '../constants'
+import { OPENAI_ENDPOINT } from '../constants';
 
+/**
+ * Type for form fields.
+ */
 type Fields = {
-  model: string
-  training: string
-  validation?: string
-}
+  model: string;
+  training: string;
+  validation?: string;
+};
 
+/**
+ * New fine-tune form component.
+ * @returns The new fine-tune form.
+ */
 export default function NewFineTuneForm() {
-  const { headers } = useAuthentication()
-  const navigate = useNavigate()
-  const { data, error } = useSWR<OpenAI.List<OpenAI.File>>('files')
+  const { headers } = useAuthentication();
+  const navigate = useNavigate();
+  const { data, error } = useSWR<OpenAI.List<OpenAI.File>>('files');
 
   const form = useForm<Fields>({
     defaultValues: { model: 'ada' },
-  })
+  });
 
   const files = data?.data
     .filter(file => file.purpose === 'fine-tune')
@@ -38,14 +46,18 @@ export default function NewFineTuneForm() {
         file.createdAt * 1000
       ).toDateString()})`,
       value: file.id,
-    }))
+    }));
 
+  /**
+   * Handles form submission.
+   * @param {Fields} param0 Form fields.
+   */
   async function onSubmit({ model, training, validation }: Fields) {
     try {
       if (training === validation) {
         throw new Error(
           'You cannot use the same file for training and validation'
-        )
+        );
       }
 
       const response = await fetch(`${OPENAI_ENDPOINT}/fine-tunes`, {
@@ -56,17 +68,17 @@ export default function NewFineTuneForm() {
           training_file: training,
           validation_file: validation,
         }),
-      })
+      });
       if (response.ok) {
-        await mutate('fine-tune')
-        navigate('/fineTuneManager/completions')
-        toast.success('Model created!')
+        await mutate('fine-tune');
+        navigate('/fineTuneManager/completions');
+        toast.success('Model created!');
       } else {
-        const { error } = (await response.json()) as OpenAI.ErrorResponse
-        throw new Error(error.message)
+        const { error } = (await response.json()) as OpenAI.ErrorResponse;
+        throw new Error(error.message);
       }
     } catch (error) {
-      toast.error(String(error))
+      toast.error(String(error));
     }
   }
 
@@ -93,7 +105,7 @@ export default function NewFineTuneForm() {
                       return {
                         ...styles,
                         color: 'black',
-                      }
+                      };
                     },
                   }}
                   options={files}
@@ -110,7 +122,7 @@ export default function NewFineTuneForm() {
                       return {
                         ...styles,
                         color: 'black',
-                      }
+                      };
                     },
                   }}
                   isClearable
@@ -140,5 +152,5 @@ export default function NewFineTuneForm() {
         </InfoCard>
       )}
     </main>
-  )
+  );
 }
