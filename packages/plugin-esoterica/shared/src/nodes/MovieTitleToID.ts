@@ -1,6 +1,7 @@
 // DOCUMENTED 
 import Rete from 'rete';
 import nameToImdb from 'name-to-imdb';
+import { NodeData } from 'rete/types/core/data'
 
 import {
   anySocket,
@@ -9,7 +10,6 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData,
   stringSocket,
 } from '@magickml/engine';
 

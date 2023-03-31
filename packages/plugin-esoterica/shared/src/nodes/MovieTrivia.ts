@@ -5,6 +5,7 @@
  */
 import Rete from 'rete'
 import imdbTrivia from 'imdb-trivia'
+import { NodeData } from 'rete/types/core/data'
 
 import {
   anySocket,
@@ -12,7 +13,6 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  NodeData,
   stringSocket,
   triggerSocket,
 } from '@magickml/engine'
