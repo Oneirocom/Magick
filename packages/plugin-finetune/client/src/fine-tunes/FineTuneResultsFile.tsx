@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /** This component represents FineTuneResultsFile. It displays the results of
  * fine-tuning a model on a given dataset.
  * @param {string} id - the id of the dataset the model was fine-tuned on

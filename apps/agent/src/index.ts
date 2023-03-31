@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Initializes the application and starts the agent.
  * This file initializes the application and starts the agent, then loads the app's plugins and logs them.

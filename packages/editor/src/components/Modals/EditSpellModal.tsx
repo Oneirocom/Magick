@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';

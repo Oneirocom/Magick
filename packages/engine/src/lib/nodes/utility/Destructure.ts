@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * @fileoverview The Destructure component allows you to destructure properties out of an object. 
  */

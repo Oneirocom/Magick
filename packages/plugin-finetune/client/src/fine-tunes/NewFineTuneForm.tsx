@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';

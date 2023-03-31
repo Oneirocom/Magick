@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Module that exports a Redux slice for the global config that carries the authentication, project id and API url information.
  * @module globalConfigSlice

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A component for rendering a temperature input field with a label.
  * @returns JSX.Element

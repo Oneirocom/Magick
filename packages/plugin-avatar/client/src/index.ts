@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This module provides an AvatarPlugin to be used 
  * with the @magickml/engine client-side library.

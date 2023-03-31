@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A subclass of DataControl that represents a control for editing code.
  */

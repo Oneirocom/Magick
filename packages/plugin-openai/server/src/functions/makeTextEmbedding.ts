@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { EmbeddingModel } from '@magickml/cost-calculator';
 import { CompletionHandlerInputData, saveRequest } from '@magickml/engine';
 import axios from 'axios';

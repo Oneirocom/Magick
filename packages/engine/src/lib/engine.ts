@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import Rete, { Node, Engine } from 'rete';
 import { NodeData } from 'rete/types/core/data';
 import { Plugin } from 'rete/types/core/plugin';

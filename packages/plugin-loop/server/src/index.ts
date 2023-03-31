@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/engine';
 
 type StartLoopArgs = {

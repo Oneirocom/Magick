@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // Import the required types from '@magickml/engine' and rename them to avoid naming conflicts.
 import {
   Route as MagickRoute,

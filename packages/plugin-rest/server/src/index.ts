@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * An object representing input sockets.
  * @typedef {Object} InputSocket

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // modified from https://www.npmjs.com/package/arxiv-api
 import axios from "axios";
 import _ from "lodash";

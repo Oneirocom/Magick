@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /** 
  * Represents a dropdown control that extends from DataControl.
  * 

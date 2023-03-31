@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A component that checks whether the input is null, undefined or empty.
  * @class

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // Import required packages and components
 import * as React from 'react';
 import { styled } from '@mui/material/styles';

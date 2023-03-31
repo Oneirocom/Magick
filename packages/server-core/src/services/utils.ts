@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { resolve } from '@feathersjs/schema';
 import { doesDbSupportJson } from '../dbClient';
 import type { HookContext } from '../declarations';

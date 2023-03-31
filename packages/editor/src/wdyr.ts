@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 
 import { NODE_ENV } from "@magickml/engine";
 import whyDidYouRender from '@welldone-software/why-did-you-render'

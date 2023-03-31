@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import Rete from "rete";
 import { API_ROOT_URL } from "../../../config";
 import { stringSocket, triggerSocket } from "../../../sockets";

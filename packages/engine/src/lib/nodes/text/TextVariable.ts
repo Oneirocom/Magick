@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Module represents a Rete flow based on Google code standards.
  * @module

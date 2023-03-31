@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Panel } from '@magickml/client-core'
 import css from '../screens/HomeScreen/homeScreen.module.css'
 

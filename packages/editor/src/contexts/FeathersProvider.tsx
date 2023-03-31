@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import {
   Application,
   feathers,

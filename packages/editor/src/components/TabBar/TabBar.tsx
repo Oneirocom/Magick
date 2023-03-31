@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import classnames from 'classnames'
 import { VscClose } from 'react-icons/vsc'
 import { useDispatch, useSelector } from 'react-redux'

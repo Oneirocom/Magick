@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import {
   configureManager,
   DEFAULT_PROJECT_ID,

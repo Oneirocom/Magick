@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Button, Icon, Panel } from '@magickml/client-core';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

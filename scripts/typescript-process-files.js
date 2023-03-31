@@ -10,7 +10,7 @@ const apiKey = process.env.OPENAI_API_KEY;
 async function doStuff(file) {
     const contents = fs.readFileSync(file, 'utf8');
 
-    if(contents.startsWith('// GENERATED')) {
+    if(contents.startsWith('// DOCUMENTED')) {
         console.log('skipping file because it is already generated')
         return;
     }
@@ -50,7 +50,7 @@ async function doStuff(file) {
     }
 
     // write the file over the original
-    fs.writeFileSync(file, '// GENERATED \n' + message, 'utf8');
+    fs.writeFileSync(file, '// DOCUMENTED \n' + message, 'utf8');
 }
 
 const manifest = require('./manifest.json');

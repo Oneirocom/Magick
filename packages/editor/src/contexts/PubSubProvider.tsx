@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /* eslint-disable @-eslint/no-unused-vars */
 
 // Import required modules

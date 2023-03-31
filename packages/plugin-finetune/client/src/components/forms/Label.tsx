@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A label component that adds semantic meaning to an HTML form control.
  * @param children The children components that will appear inside the label

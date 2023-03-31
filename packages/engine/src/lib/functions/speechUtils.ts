@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import io, { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import { API_ROOT_URL, SPEECH_SERVER_PORT } from '../config';

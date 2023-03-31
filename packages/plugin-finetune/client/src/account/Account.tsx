@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import React, { useCallback, useMemo, FC, ReactNode } from 'react';
 import { toast } from 'react-toastify';
 import { SWRConfig } from 'swr';

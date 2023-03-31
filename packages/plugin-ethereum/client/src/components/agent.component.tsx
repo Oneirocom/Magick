@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import React, { FC, useEffect, useState } from 'react';
 import { KeyInput } from './utils';
 import { Modal, Switch } from '@magickml/client-core';

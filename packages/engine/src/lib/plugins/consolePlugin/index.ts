@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Typescript Module "consolePlugin"
  * @module consolePlugin

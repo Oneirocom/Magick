@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import Rete from 'rete';
 import { BooleanControl } from '../../dataControls/BooleanControl';
 import { InputControl } from '../../dataControls/InputControl';

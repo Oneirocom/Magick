@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 

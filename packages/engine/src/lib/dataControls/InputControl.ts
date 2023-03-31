@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A class that extends DataControl and represents an input control.
  * 

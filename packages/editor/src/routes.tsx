@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { pluginManager } from '@magickml/engine';
 import 'flexlayout-react/style/dark.css';
 import { Suspense } from 'react';

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Imports React and the Outlet component from react-router-dom.
  * Imports the NavBar component and the CSS module for the page wrapper.

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This exports the AppConfig interface from the './contexts/ConfigProvider' file.
  */

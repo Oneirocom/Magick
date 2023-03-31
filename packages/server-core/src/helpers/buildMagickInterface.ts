@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 
 import { app } from '../app'
 import { runSpell } from '../utils/runSpell'

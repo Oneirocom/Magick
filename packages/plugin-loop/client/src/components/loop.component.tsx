@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import React, { FC, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
 import { Modal, Switch } from '@magickml/client-core'

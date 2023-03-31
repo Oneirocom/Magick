@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Node } from '../../plugins/reactRenderPlugin/Node';
 import { Socket } from '../../plugins/reactRenderPlugin/Socket';
 import { Control } from '../../plugins/reactRenderPlugin/Control';

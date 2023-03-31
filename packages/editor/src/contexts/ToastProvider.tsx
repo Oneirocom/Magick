@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { SnackbarProvider } from 'notistack';
 
 /**

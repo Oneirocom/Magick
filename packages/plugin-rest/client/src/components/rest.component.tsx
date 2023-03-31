@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import React, { FC, useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid'
 import { Modal, Switch } from '@magickml/client-core'

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Returns the value if it is within the range of min and max values.
  * Otherwise, returns the respective boundary value.

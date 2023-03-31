@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This is a Typescript module that exports a ClientPlugin instance named EthereumPlugin
  *

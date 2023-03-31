@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * EmptyControl represents a DataControl that does not present any value.
  * It inherits from DataControl.

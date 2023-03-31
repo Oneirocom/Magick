@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // For more information about this file, see https://dove.feathersjs.com/guides/cli/.html
 import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers';
 import { Application as FeathersApplication } from '@feathersjs/koa';

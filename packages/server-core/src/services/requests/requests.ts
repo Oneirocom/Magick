@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This file provides a configure function exporting a request that registers the service and its hooks via `app.configure`.
  * @see https://dove.feathersjs.com/guides/cli/service.html

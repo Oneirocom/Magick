@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Computes the cosine similarity between two embeddings.
  */

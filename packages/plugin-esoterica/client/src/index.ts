@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A Typescript module that exports an instance of a ClientPlugin class named EsotericaPlugin.
  * @packageDocumentation

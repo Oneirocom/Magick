@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A module that handles authentication for a FeatherJS application by utilizing the CloudJwtService.
  * @packageDocumentation

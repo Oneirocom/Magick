@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import css from './windowMessage.module.css';
 
 /**

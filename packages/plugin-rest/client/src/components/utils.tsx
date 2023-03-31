@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A React component that allows the user to input a secret value, such as a private key
  * If a value is inputted, it can be revealed or removed.

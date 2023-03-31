@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import EventTable from './EventTable'

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * @file This file contains a Typescript module for the Twitter plugin.
  * @module TwitterPlugin

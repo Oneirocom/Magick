@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // Import required dependencies
 import { DEFAULT_PROJECT_ID } from '@magickml/engine';
 import { useContext, createContext, useState } from 'react';

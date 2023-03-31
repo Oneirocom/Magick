@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This module exports the DataControls class from './DataControls'.
  * @module DataControls

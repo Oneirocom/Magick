@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Module for the MagickPageWrapper component.
  * @module MagickPageWrapper

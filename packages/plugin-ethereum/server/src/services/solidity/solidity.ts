@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This file contains code related to SolidityService, a Feathers service for compiling Solidity contracts.
  *

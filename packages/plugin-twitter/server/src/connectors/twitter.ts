@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { TwitterApi, ETwitterStreamEvent } from 'twitter-api-v2'
 
 /**

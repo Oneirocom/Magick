@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A custom control class for number inputs that extends the DataControl class
  * from the inspectorPlugin module.

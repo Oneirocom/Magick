@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // Import required libraries and components
 import Button from '@mui/material/Button';
 import React from 'react';

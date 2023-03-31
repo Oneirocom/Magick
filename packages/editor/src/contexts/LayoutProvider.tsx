@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /* eslint-disable @-eslint/ban-types */
 import { LoadingScreen } from '@magickml/client-core';
 import {

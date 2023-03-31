@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { parse } from 'csv-parse';
 import useSWRImmutable from 'swr/immutable';
 import useAuthentication from '../account/useAuthentication';

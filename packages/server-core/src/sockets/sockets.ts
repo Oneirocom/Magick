@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { DEFAULT_USER_ID, IGNORE_AUTH, SpellManager } from '@magickml/engine';
 import { buildMagickInterface } from '../helpers/buildMagickInterface';
 

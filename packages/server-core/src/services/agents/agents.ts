@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This file configures the agent service with its hooks and utility functions.
  * For more information about this file see https://dove.feathersjs.com/guides/cli/service.html

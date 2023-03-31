@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Represents a subclass of DataControl that is specific to controlling playtest functionality.
  * @extends DataControl

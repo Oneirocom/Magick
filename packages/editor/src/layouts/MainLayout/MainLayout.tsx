@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Main layout component.
  * Renders a Drawer component with the Outlet component inside, wrapped in ModalProvider.

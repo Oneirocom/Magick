@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A class representing a Typescript Server Plugin for MagickML.
  * @public

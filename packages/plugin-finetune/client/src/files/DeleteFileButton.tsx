@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /** 
  * An icon button component that deletes a file when clicked.
  * @param {string} id - The id of the file to be deleted.

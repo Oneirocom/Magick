@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import EditorProvider from './EditorProvider';
 import LayoutProvider from './LayoutProvider';
 import MagickInterfaceProvider from './MagickInterfaceProvider';

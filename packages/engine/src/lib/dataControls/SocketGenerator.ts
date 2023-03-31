@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This class represents a SocketGeneratorControl, which extends DataControl
  * and generates a socket based on the input of the user.

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A class that represents a component that retrieves trivia information about a movie using its ID from the IMDb database.
  * @extends MagickComponent

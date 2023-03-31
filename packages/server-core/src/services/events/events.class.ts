@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This file contains the implementation of the EventService class.
  * For more information, see https://dove.feathersjs.com/guides/cli/service.class.html#database-services.

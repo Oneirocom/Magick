@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Represents a control used for selecting a model and its corresponding data.
  * Inherits from the DataControl class.

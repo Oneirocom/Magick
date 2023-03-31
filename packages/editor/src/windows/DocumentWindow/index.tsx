@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * DatabaseWindow is a React component that displays documents in a database table.
  * It relies on the useConfig hook to retrieve the database configuration from a context.

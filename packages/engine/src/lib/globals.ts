@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Globals Manager is a singleton class that allows registration of global variables that can be accessed from anywhere in the codebase.
  * 

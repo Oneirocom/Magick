@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Represents a single feature item, with a title, SVG icon and description.
  */

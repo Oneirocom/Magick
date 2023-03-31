@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * The Menu class provides an abstract base class for menus in the editor.
  */

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Static, Type } from '@feathersjs/typebox';
 
 /**

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import Ajv from 'ajv';
 
 /**

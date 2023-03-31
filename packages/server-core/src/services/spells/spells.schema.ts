@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { resolve } from '@feathersjs/schema';
 import type { Static } from '@feathersjs/typebox';
 import { getDataValidator, getValidator, querySyntax, Type } from '@feathersjs/typebox';

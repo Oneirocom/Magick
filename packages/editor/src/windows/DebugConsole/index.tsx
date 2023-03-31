@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Window } from '@magickml/client-core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Terminal from 'react-console-emulator';

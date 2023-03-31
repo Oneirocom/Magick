@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * @description Creates a main menu class as a subclass of ReactMenu
  * @returns {MainMenu} A class representing the main menu

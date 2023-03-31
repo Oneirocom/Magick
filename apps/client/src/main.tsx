@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { createRoot } from 'react-dom/client'
 import { MagickIDE, AppConfig } from '@magickml/editor'
 import { DEFAULT_PROJECT_ID, API_ROOT_URL, TRUSTED_PARENT_URL, UNTRUSTED_IFRAME } from '@magickml/engine'

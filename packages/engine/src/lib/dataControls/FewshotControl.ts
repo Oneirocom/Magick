@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A class that extends `DataControl` to create a custom control for fewshot data.
  * @extends DataControl

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This class represents a boolean control for data manipulation.
  * It extends the DataControl class from the inspectorPlugin module.

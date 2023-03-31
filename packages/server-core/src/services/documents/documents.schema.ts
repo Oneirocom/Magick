@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // Imports core TypeBox, Feathers, and other necessary modules
 import { resolve } from '@feathersjs/schema';
 import {

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import fs from 'fs';
 import Heap from 'heap-js';
 

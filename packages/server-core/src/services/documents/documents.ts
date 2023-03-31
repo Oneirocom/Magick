@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { hooks as schemaHooks } from '@feathersjs/schema';
 import { SKIP_DB_EXTENSIONS } from '@magickml/engine';
 import pgvector from 'pgvector/pg';

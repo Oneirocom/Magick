@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Button, Select, Window } from '@magickml/client-core';
 import Editor from '@monaco-editor/react';
 import { useSnackbar } from 'notistack';

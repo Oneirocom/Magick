@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * The exported function takes in a props object that includes an array of items, the position
  * of the context menu to be rendered, a boolean visibility flag, any arguments to be passed along,

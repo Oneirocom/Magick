@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Typescript optimized and conforming to Google code standards.
  */

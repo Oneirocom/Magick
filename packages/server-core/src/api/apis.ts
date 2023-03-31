@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This module provides REST APIs for Text to Speech and Image Generation.
  * @module controller/api

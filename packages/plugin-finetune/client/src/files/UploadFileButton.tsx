@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * UploadFileButton component provides a button to upload a file and calls the uploadFile function from the 
  * useUploadFile hook on file selection 

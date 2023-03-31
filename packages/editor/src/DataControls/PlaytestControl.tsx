@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A control component for a switch UI element that updates data in the parent component.
  * @param control - The control object containing dataKey and data properties.

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * The Solidity interface represents the main data model schema.
  * @interface

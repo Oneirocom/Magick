@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import Tooltip from '@mui/material/Tooltip';
 import React, { useState } from 'react';
 import { useCopyToClipboard } from 'usehooks-ts';

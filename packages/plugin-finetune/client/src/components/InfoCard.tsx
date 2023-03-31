@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This component represents an information card that displays content with a styled background color.
  * @param children The content to be displayed inside the card.

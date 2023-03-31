@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { LoadingScreen, TabLayout } from '@magickml/client-core';
 import { useEffect } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';

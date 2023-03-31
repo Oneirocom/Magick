@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Class that represents a node that parses a JSON string into an Object 
  */

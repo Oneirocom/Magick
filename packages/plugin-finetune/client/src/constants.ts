@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This constant defines the endpoint URL for OpenAI's API.
  * It looks for environment variables in the following order:

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This module exports optimized and refactored code of the original implementation.
  * @module optimizedClientCore

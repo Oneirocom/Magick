@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This module contains a Typescript script for a RestPlugin ClientPlugin.
  * The plugin allows access to REST API through GET, POST, PUT, and DELETE requests.

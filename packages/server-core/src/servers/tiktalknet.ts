@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import axios from 'axios';
 import * as fs from 'fs';
 

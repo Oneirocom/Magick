@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { ReactMenu } from '.'
 import { createNode, traverse } from './utils'
 

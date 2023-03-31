@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // Import hooks and libraries
 import { useEffect, useState } from 'react';
 import InfoDialog from '../InfoDialog';

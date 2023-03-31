@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { randomBytes } from 'crypto';
 import { ipcRenderer, contextBridge } from 'electron';
 import { EventEmitter } from 'events';

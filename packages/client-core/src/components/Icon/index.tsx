@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import * as React from 'react';
 import css from './icon.module.css';
 

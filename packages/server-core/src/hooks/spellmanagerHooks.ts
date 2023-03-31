@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { SpellInterface } from '@magickml/engine';
 import { HookContext } from '../declarations';
 import { getSpell } from '../helpers/getSpell';

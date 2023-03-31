@@ -1,4 +1,4 @@
-// GENERATED
+// DOCUMENTED
 /**
  * A plugin for the @magickml/engine that adds OpenAI completion functionality
  *

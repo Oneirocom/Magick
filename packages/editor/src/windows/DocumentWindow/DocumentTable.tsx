@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { Button, Modal } from '@magickml/client-core';
 import { API_ROOT_URL } from '@magickml/engine';
 import {

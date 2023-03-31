@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { calculateCompletionCost } from '@magickml/cost-calculator'
 import { v4 } from 'uuid'
 import { globalsManager } from '../globals'

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // Import necessary modules
 import Rete from 'rete'
 import {

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This file provides a validation library for FeathersJS.
  * For more information about this file, visit the link https://dove.feathersjs.com/guides/cli/validators.html

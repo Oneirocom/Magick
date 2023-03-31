@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactMenu from './Menu';

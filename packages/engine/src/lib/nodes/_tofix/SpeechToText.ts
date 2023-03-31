@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Typescript code for Speech to Text Node that uses Whisper on Banana-ML to convert speech to text.
  * Optimized and refactored according to Google code standards.

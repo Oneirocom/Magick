@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import React, { FC, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { debounce } from 'lodash';

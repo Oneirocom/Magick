@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import { GraphData } from '../types'
 
 /**

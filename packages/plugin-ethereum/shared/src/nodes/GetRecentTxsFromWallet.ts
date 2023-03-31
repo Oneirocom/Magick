@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * The lodash isEmpty function checks if the input variable is an empty object, collection, map, or set.
  * More information: https://lodash.com/docs/4.17.15#isEmpty

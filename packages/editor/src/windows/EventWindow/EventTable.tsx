@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // Import statements kept as-is
 import { Button } from '@magickml/client-core'
 import { API_ROOT_URL } from '@magickml/engine'

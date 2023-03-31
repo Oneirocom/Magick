@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A ServerPlugin that adds the BananaPlugin with a single secret - API key.
  */

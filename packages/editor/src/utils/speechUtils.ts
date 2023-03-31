@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /* eslint-disable prefer-const */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */

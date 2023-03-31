@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 
 /**
  * Represents a switch control.

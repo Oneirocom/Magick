@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import ConnectionPlugin from 'rete-connection-plugin';
 import { Plugin } from 'rete/types/core/plugin';
 import gridimg from './grid.png';

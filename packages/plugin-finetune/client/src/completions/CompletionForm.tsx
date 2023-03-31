@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 import useAuthentication from '../account/useAuthentication';
 import InfoCard from '../components/InfoCard';
 import ShowRequestExample from '../components/ShowRequestExample';

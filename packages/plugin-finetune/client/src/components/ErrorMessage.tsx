@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A React component that displays an error message.
  * @param error - The error object or message to display.

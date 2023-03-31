@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * This module exports a `RequestWindow` functional component
  * @module RequestWindow

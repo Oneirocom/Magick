@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Returns the `import.meta.env` object if it exists, otherwise an empty object.
  * @returns {Record<string, any>} The `import.meta.env` object if it exists, otherwise an empty object.

@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * A component that displays a dropdown select menu based on some control object
  * @param control - The control object that contains the dataKey, data, etc.

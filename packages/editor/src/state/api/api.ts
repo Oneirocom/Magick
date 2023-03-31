@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 // Import necessary libraries and types from toolkit
 import {
   BaseQueryFn,

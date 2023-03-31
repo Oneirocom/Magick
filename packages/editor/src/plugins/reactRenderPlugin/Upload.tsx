@@ -1,4 +1,4 @@
-// GENERATED 
+// DOCUMENTED 
 /**
  * Converts a file object to a base64-encoded data URI
  * @param file - The file to be converted
