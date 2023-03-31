@@ -3,8 +3,8 @@ import { IRunContextEditor } from '../../types'
 
 function install(editor: IRunContextEditor) {
   editor.on('componentregister', (component: MagickComponent<unknown>) => {
-    component.worker = (node, _inputs, _outputs, { magick, socketOutput }) => {
-      const { sendToPlaytest } = magick
+    component.worker = (node, _inputs, _outputs, { context, socketOutput }) => {
+      const { sendToPlaytest } = context
 
       // Might be a bit hacky to do it this way, but it works for now
       if (node.data.sendToPlaytest && sendToPlaytest) {

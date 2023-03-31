@@ -13,7 +13,7 @@ export type CustomErrorCodes =
  * A class used to represent a server error. Extends the built-in Error object
  * @class
  */
-export class ServerError extends Error {
+export class SpellError extends Error {
   /** The code of the custom error */
   public code: CustomErrorCodes
   /** The HTTP status code of the error */

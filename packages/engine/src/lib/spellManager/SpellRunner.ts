@@ -5,12 +5,10 @@ import { getNodes } from '../nodes'
 import { Module } from '../plugins/modulePlugin/module'
 import { AgentInterface } from '../schemas'
 import {
-  EngineContext,
   GraphData,
   MagickNode,
   MagickSpellInput,
   ModuleComponent,
-  RunSpellConstructor,
   SpellInterface,
 } from '../types'
 import { extractModuleInputKeys } from './graphHelpers'
@@ -28,11 +26,10 @@ class SpellRunner {
   engine: MagickEngine
   currentSpell!: SpellInterface
   module: Module
-  magickInterface: EngineContext
   ranSpells: string[] = []
   socket?: io.Socket | null = null
 
-  constructor({ magickInterface, socket }: RunSpellConstructor) {
+  constructor(socket?: io.Socket) {
     // Initialize the engine
     this.engine = initSharedEngine({
       name: 'demo@0.1.0',
@@ -45,9 +42,6 @@ class SpellRunner {
     this.module = new Module()
 
     if (socket) this.socket = socket
-
-    // Set the interface that this runner will use when running workers
-    this.magickInterface = magickInterface
 
     // We should probably load up here all the "modules" the spell needds to run
     // This would basicallyt be an array of spells pulled from the DB
@@ -73,7 +67,6 @@ class SpellRunner {
   get context() {
     return {
       module: this.module,
-      magick: this.magickInterface,
       currentSpell: this.currentSpell,
       projectId: this.currentSpell.projectId,
       // TODO: add the secrets and publicVariables through the spellrunner for context

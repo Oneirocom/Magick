@@ -1,11 +1,10 @@
 // DOCUMENTED 
-import { SpellInterface } from '@magickml/engine';
+import { SpellInterface, SpellError } from '@magickml/engine';
 import { app } from '../app';
 import Koa from 'koa';
 import otJson0 from 'ot-json0';
 
 import { Route } from '../config/types';
-import { ServerError } from '../utils/ServerError';
 
 import md5 from 'md5';
 
@@ -17,19 +16,19 @@ const saveDiffHandler = async (ctx: Koa.Context): Promise<void> => {
   const { body } = ctx.request;
   const { name, diff, projectId } = body as any;
 
-  if (!body) throw new ServerError('input-failed', 'No parameters provided');
+  if (!body) throw new SpellError('input-failed', 'No parameters provided');
 
   const spell = await app.service('spells').find({ query: { projectId, name } });
 
   if (!spell)
-    throw new ServerError('input-failed', `No spell with ${name} name found.`);
+    throw new SpellError('input-failed', `No spell with ${name} name found.`);
   if (!diff)
-    throw new ServerError('input-failed', 'No diff provided in request body');
+    throw new SpellError('input-failed', 'No diff provided in request body');
 
   const spellUpdate = otJson0.type.apply(spell, diff);
 
   if (Object.keys((spellUpdate as SpellInterface).graph.nodes).length === 0)
-    throw new ServerError(
+    throw new SpellError(
       'input-failed',
       'Graph would be cleared.  Aborting.'
     );

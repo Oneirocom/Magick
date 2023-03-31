@@ -54,7 +54,7 @@ export const agentSchema = Type.Object({
   rootSpell: Type.Optional(Type.Any()), // TODO: type me!
   name: Type.String(),
   enabled: Type.Optional(Type.Boolean()),
-  updatedAt: Type.String(),
+  updatedAt: Type.Optional(Type.String()),
   pingedAt: Type.Optional(Type.String()),
   data: Type.Optional(Type.Any()),
   publicVariables: Type.Optional(Type.Any()),
@@ -65,9 +65,9 @@ export const agentSchema = Type.Object({
 });
 
 /** The type for an agent object that's based on the `agentSchema`. */
-export type Agent = Static<typeof agentSchema>;
+export type AgentSchema = Static<typeof agentSchema>;
 /** The interface for an agent object that's based on the `agentSchema`. */
-export type AgentInterface = Agent;
+export type AgentInterface = AgentSchema;
 
 /**
  * Full data model schema for a document.

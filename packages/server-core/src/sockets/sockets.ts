@@ -1,6 +1,5 @@
 // DOCUMENTED 
 import { DEFAULT_USER_ID, IGNORE_AUTH, SpellManager } from '@magickml/engine';
-import { buildMagickInterface } from '../helpers/buildMagickInterface';
 
 /**
  * Handle socket connections for the application.
@@ -45,10 +44,8 @@ const handleSockets = (app: any) => {
       // Attach the user info to the params for use in services
       socket.feathers.user = user;
 
-      const magickInterface = buildMagickInterface() as any;
-
       // Instantiate the interface within the runner rather than the spell manager to avoid shared state issues.
-      const spellManager = new SpellManager({ socket, magickInterface });
+      const spellManager = new SpellManager({ socket });
 
       app.userSpellManagers.set(user.id, spellManager);
 

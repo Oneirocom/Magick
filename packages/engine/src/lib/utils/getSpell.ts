@@ -1,12 +1,11 @@
 // DOCUMENTED 
-import { Application } from '../declarations';
 
 /**
  * The type for the function's input parameter which contains the
  * app object, the projectId, and the id of a specific spell.
  */
 type GetSpell = {
-  app: Application;
+  app: any;
   id: string;
   projectId: string;
 };
@@ -16,14 +15,10 @@ type GetSpell = {
  * @param {GetSpell} input - Object containing the app, id of the spell and projectId
  * @returns {Promise<any>} - Returns the fetched spell data
  */
-export const getSpell = async ({ app, id, projectId }: GetSpell): Promise<any> => {
-  // Find the spell with the matching id and projectId
-  const spell = await app.service('spells').find({
-    query: {
-      projectId,
-      id: id,
-    },
-  });
+export const getSpell = async ({ id, projectId }: GetSpell): Promise<any> => {
+  // rewrite the feathers service call as a fetch
+  const spell = await fetch(`http://localhost:3030/spells?projectId=${projectId}&id=${id}`)
+    .then(res => res.json());
 
   // Return the first element of the found spells' data
   return spell.data[0];

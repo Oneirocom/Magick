@@ -17,7 +17,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   ModuleWorkerOutput,
-  WorkerData,
+  WorkerData
 } from '../../types'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
@@ -242,7 +242,7 @@ export class SpellComponent extends MagickComponent<
 
       console.log('node.inspector.data()', node.inspector.data())
 
-      const context = this.editor && this.editor.magick
+      const context = this.editor && this.editor.context
       if (!context) return
       const { sendToInspector } = context
       if (sendToInspector) {
@@ -300,12 +300,12 @@ export class SpellComponent extends MagickComponent<
     _outputs: { [key: string]: string },
     {
       module,
-      magick,
+      context,
       secrets,
       publicVariables,
     }: {
       module: { agent: any; outputs: ModuleWorkerOutput[] }
-      magick: EngineContext
+      context: EngineContext
       secrets: Record<string, string>
       publicVariables: Record<string, string>
     }
@@ -338,16 +338,17 @@ export class SpellComponent extends MagickComponent<
         console.warn('spell manager not found')
       }
     } else {
-      if (!magick.runSpell) throw new Error('Magick runSpell not found')
-      const outputs = await magick.runSpell({
-        inputs: flattenedInputs,
-        spellId: node.data.spellId as string,
-        projectId: node.data.projectId as string,
-        secrets,
-        publicVariables,
-      })
+      console.error('handle me')
+      // if (!runSpell) throw new Error('Magick runSpell not found')
+      // const outputs = await runSpell({
+      //   inputs: flattenedInputs,
+      //   spellId: node.data.spellId as string,
+      //   projectId: node.data.projectId as string,
+      //   secrets,
+      //   publicVariables,
+      // })
 
-      return this.formatOutputs(node, outputs)
+      // return this.formatOutputs(node, outputs)
     }
   }
 }

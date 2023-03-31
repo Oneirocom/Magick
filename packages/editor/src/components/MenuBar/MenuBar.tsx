@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
+// DOCUMENTED 
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -10,6 +11,11 @@ import { activeTabSelector, Tab } from '../../state/tabs'
 import { toggleAutoSave } from '../../state/preferences'
 import { RootState } from '../../state/store'
 
+/**
+ * MenuBar component
+ *
+ * @returns {JSX.Element}
+ */
 const MenuBar = () => {
   const navigate = useNavigate()
   const { publish, events } = usePubSub()
@@ -29,10 +35,9 @@ const MenuBar = () => {
     activeTabRef.current = activeTab
   }, [activeTab])
 
-  // grab all events we need
+  // Grab all events we need
   const {
     $SAVE_SPELL,
-    $CREATE_PROJECT_WINDOW,
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
     $CREATE_TEXT_EDITOR,
@@ -44,15 +49,25 @@ const MenuBar = () => {
     $MULTI_SELECT_PASTE
   } = events
 
+  /**
+   * Custom hook for toggling state value between true and false
+   *
+   * @param {boolean} initialValue
+   * @returns {[boolean, () => void]}
+   */
   const useToggle = (initialValue = false) => {
     const [value, setValue] = useState(initialValue)
-    const toggle = React.useCallback(() => {
+    const toggle = useCallback(() => {
       setValue(v => !v)
     }, [])
     return [value, toggle as () => void]
   }
-  const [menuVisibility, togglemenuVisibility] = useToggle()
 
+  const [menuVisibility, toggleMenuVisibility] = useToggle()
+
+  /**
+   * Save handler
+   */
   const onSave = () => {
     console.log(activeTabRef.current?.id)
     console.log('SAVING')
@@ -60,6 +75,9 @@ const MenuBar = () => {
     publish($SAVE_SPELL(activeTabRef.current?.id))
   }
 
+  /**
+   * Save as handler
+   */
   const onSaveAs = () => {
     openModal({
       modal: 'saveAsModal',
@@ -67,6 +85,9 @@ const MenuBar = () => {
     })
   }
 
+  /**
+   * Edit handler
+   */
   const onEdit = () => {
     if (!activeTabRef.current) return
     openModal({
@@ -78,12 +99,23 @@ const MenuBar = () => {
     })
   }
 
+  /**
+   * New handler
+   */
   const onNew = () => {
     navigate('/home/create-new')
   }
+
+  /**
+   * Open handler
+   */
   const onOpen = () => {
     navigate('/home/all-projects')
   }
+
+  /**
+   * Import handler
+   */
   const onImport = () => {
     navigate('/home/all-projects?import')
   }
@@ -93,27 +125,39 @@ const MenuBar = () => {
     publish($CREATE_PLAYTEST(activeTabRef.current.id))
   }
 
+  /**
+   * Inspector creation handler
+   */
   const onInspectorCreate = () => {
     if (!activeTabRef.current) return
     publish($CREATE_INSPECTOR(activeTabRef.current.id))
   }
 
+  /**
+   * Text editor creation handler
+   */
   const onTextEditorCreate = () => {
     if (!activeTabRef.current) return
     publish($CREATE_TEXT_EDITOR(activeTabRef.current.id))
   }
 
+  /**
+   * Export handler
+   */
   const onExport = () => {
     if (!activeTabRef.current) return
     publish($EXPORT(activeTabRef.current.id))
   }
 
+  /**
+   * Console handler
+   */
   const onConsole = () => {
     if (!activeTabRef.current) return
     publish($CREATE_CONSOLE(activeTabRef.current.id))
   }
 
-  //Menu bar hotkeys
+  // Menu bar hotkey hooks
   useHotkeys(
     'cmd+s, crtl+s',
     event => {
@@ -133,30 +177,47 @@ const MenuBar = () => {
     { enableOnTags: ['INPUT'] },
     [onNew]
   )
+
+  /**
+   * Undo handler
+   */
   const onUndo = () => {
     if (!activeTabRef.current) return
     publish($UNDO(activeTabRef.current.id))
   }
 
+  /**
+   * Redo handler
+   */
   const onRedo = () => {
     if (!activeTabRef.current) return
     publish($REDO(activeTabRef.current.id))
   }
 
+  /**
+   * Multi-select copy handler
+   */
   const onMultiSelectCopy = () => {
     if (!activeTabRef.current) return
     publish($MULTI_SELECT_COPY(activeTabRef.current.id))
   }
 
+  /**
+   * Multi-select paste handler
+   */
   const onMultiSelectPaste = () => {
     if (!activeTabRef.current) return
     publish($MULTI_SELECT_PASTE(activeTabRef.current.id))
   }
 
+  /**
+   * Toggle save handler
+   */
   const toggleSave = () => {
     dispatch(toggleAutoSave())
   }
-  //Menu bar entries
+
+  // Menu bar entries
   const menuBarItems = {
     file: {
       items: {
@@ -237,7 +298,13 @@ const MenuBar = () => {
     },
   }
 
-  const parseStringToUnicode = commandString => {
+  /**
+   * Parse command string to Unicode equivalents for better readability
+   *
+   * @param {string} commandString
+   * @returns {string}
+   */
+  const parseStringToUnicode = (commandString: string) => {
     let formattedCommand = commandString
     formattedCommand = formattedCommand.replace('option', '\u2325')
     formattedCommand = formattedCommand.replace('shift', '\u21E7')
@@ -246,8 +313,25 @@ const MenuBar = () => {
     return formattedCommand
   }
 
-  //Menu bar rendering
-  const ListItem = ({ item, label, topLevel, onClick, hotKeyLabel }) => {
+  /**
+   * ListItem component
+   *
+   * @param {any} props
+   * @returns {JSX.Element}
+   */
+  const ListItem = ({
+    item,
+    label,
+    topLevel,
+    onClick,
+    hotKeyLabel
+  }: {
+    item: any,
+    label: string,
+    topLevel: boolean,
+    onClick: () => void,
+    hotKeyLabel: string
+  }) => {
     label = label ? label.replace(/_/g, ' ') : label
     let children
     if (item.items && Object.keys(item.items)) {
@@ -255,15 +339,15 @@ const MenuBar = () => {
         <ul className={css['menu-panel']}>
           {Object.entries(item.items as [string, Record<string, any>][]).map(
             ([key, item]: [string, Record<string, any>]) => {
-              useHotkeys(
-                item.hotKey,
-                event => {
-                  event.preventDefault()
-                  item.onClick()
-                },
-                { enableOnTags: ['INPUT'] },
-                [item.onClick]
-              )
+              // useHotkeys(
+              //   item.hotKey,
+              //   event => {
+              //     event.preventDefault()
+              //     item.onClick()
+              //   },
+              //   { enableOnTags: ['INPUT'] },
+              //   [item.onClick]
+              // )
 
               return (
                 <ListItem
@@ -308,18 +392,21 @@ const MenuBar = () => {
         </span>
         {hotKeyLabel && <span>{parseStringToUnicode(hotKeyLabel)}</span>}
         {children && <div className={css['folder-arrow']}> ❯ </div>}
-        {/* {!topLevel && <br />} */}
         {children}
       </li>
     )
   }
 
-  const handleClick = func => {
-    //Initially intended to control the visibility with a state, but this triggers a re-render and hides the menu anyway! :D
-    //Keeping this intact just in case.
-    ;(togglemenuVisibility as Function)(menuVisibility)
-    // eslint-disable-next-line no-eval
-    eval(func)
+  /**
+   * Click handler
+   *
+   * @param {() => void} func
+   */
+  const handleClick = (func: () => void) => {
+    // Initially intended to control the visibility with a state, but this triggers a re-render and hides the menu anyway! :D
+    // Keeping this intact just in case.
+    toggleMenuVisibility(menuVisibility)
+    func()
   }
 
   return (

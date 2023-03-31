@@ -1,8 +1,8 @@
 // DOCUMENTED 
-import { SpellRunner, GraphData, SpellInterface } from '@magickml/engine';
-import { app } from '../app';
-import { buildMagickInterface } from '../helpers/buildMagickInterface';
-import { ServerError } from './ServerError';
+import { SpellRunner } from '../spellManager/index';
+import { GraphData } from '../types';
+import { SpellInterface } from '../schemas';
+import { SpellError } from './SpellError';
 
 /**
  * Type definition for the arguments of the `runSpell` function.
@@ -21,7 +21,7 @@ export type RunSpellArgs = {
  *
  * @param {RunSpellArgs} params - The parameters needed to run a spell.
  * @returns {Promise<{outputs: Record<string, unknown>; name: string}>} - The outputs from the spell and its name.
- * @throws {ServerError} - If the spell is not found.
+ * @throws {SpellError} - If the spell is not found.
  */
 export const runSpell = async ({
   spellId,
@@ -34,20 +34,19 @@ export const runSpell = async ({
   // Log the input params
   console.log('runSpell', { spellId, inputs, inputFormatter, projectId, secrets, publicVariables });
 
-  // Find the spells matching the projectId and spellId
-  const spells = (await app.service('spells').find({ query: { projectId, id: spellId } })).data;
+  // rewrite using fetch
+  const spells = await fetch(`http://localhost:3030/spells?projectId=${projectId}&id=${spellId}`)
+    .then(res => res.json());
+  
   const spell = spells[0] as any;
 
   // If the spell is not found, throw an error
   if (!spell?.graph) {
-    throw new ServerError('not-found', `Spell with id ${spellId} not found`);
+    throw new SpellError('not-found', `Spell with id ${spellId} not found`);
   }
 
   // Convert the graph of the spell
   const graph = spell.graph as unknown as GraphData;
-
-  // Build the Magick Interface
-  const magickInterface = buildMagickInterface() as any;
 
   // Format the inputs if an input formatter is provided, otherwise use the inputs directly
   const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs;
@@ -56,7 +55,7 @@ export const runSpell = async ({
   const spellToRun = { ...spell };
 
   // Initialize the spell runner
-  const spellRunner = new SpellRunner({ magickInterface });
+  const spellRunner = new SpellRunner();
 
   // Load the spell into the spell runner
   await spellRunner.loadSpell(spellToRun as unknown as SpellInterface);
