@@ -116,22 +116,12 @@ const DiscordPlugin = new ServerPlugin({
     },
     {
       name: 'Discord (Image)',
-      trigger: true,
-      socket: eventSocket,
+      sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
         console.log('output is', output)
         await handleResponse({ output, agent, event })
       },
-    },
-    {
-      name: 'Discord (Image)',
-      trigger: true,
-      socket: eventSocket,
-      handler: async ({ output, agent, event }) => {
-        console.log('output is', output)
-        await handleResponse({ output, agent, event })
-      },
-    },
+    }
   ],
   agentMethods: getAgentMethods(),
   secrets: [

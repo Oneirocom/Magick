@@ -85,7 +85,7 @@ export class FindTextEmbedding extends MagickComponent<
     const json = await response.json()
     
     const responseData = json.events[0]
-    let embedding = responseData?.embedding?.toString()
+    if(responseData) var embedding = responseData?.embedding?.toString()
     // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
       embedding = JSON.parse(JSON.stringify(embedding))
