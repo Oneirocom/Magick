@@ -23,5 +23,7 @@ export const saveConversation = (conversation: Conversation) => {
 };
 
 export const saveConversations = (conversations: Conversation[]) => {
+  console.log("🚀 ~ file: conversation.ts:26 ~ saveConversations ~ conversations:", conversations)
+  // TODO: Create spell to save conversation history and "consume" it on chat window
   localStorage.setItem("conversationHistory", JSON.stringify(conversations));
 };

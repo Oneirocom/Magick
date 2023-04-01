@@ -13,7 +13,7 @@ interface Props {
   conversation: Conversation;
   spells: Spell[];
   messageIsStreaming: boolean;
-  modelError: boolean;
+  chatError: boolean;
   messageError: boolean;
   loading: boolean;
   onSend: (message: Message, isResend: boolean) => void;
@@ -21,7 +21,7 @@ interface Props {
   stopConversationRef: MutableRefObject<boolean>;
 }
 
-export const Chat: FC<Props> = ({ conversation, spells, messageIsStreaming, modelError, messageError, loading, onSend, onUpdateConversation, stopConversationRef }) => {
+export const SingleChat: FC<Props> = ({ conversation, spells, messageIsStreaming, chatError, messageError, loading, onSend, onUpdateConversation, stopConversationRef }) => {
   const [currentMessage, setCurrentMessage] = useState<Message>();
   const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
 
@@ -63,9 +63,6 @@ export const Chat: FC<Props> = ({ conversation, spells, messageIsStreaming, mode
     }
   }, []);
 
-  console.log("🚀 ~ file: Chat.tsx:124 ~ spells?.total:", spells?.length)
-
-
   return (
     <div className={chatStyles.container}>
       {spells?.length === 0 ? (
@@ -73,7 +70,7 @@ export const Chat: FC<Props> = ({ conversation, spells, messageIsStreaming, mode
           <div className={chatStyles.textTitle}>Spell Required</div>
           <div className={chatStyles.textSubTitle}>Please create a spell.</div>
         </div>
-      ) : modelError ? (
+      ) : chatError ? (
         <div className={chatStyles.flexCenter}>
           <div className={chatStyles.textError}>Error fetching models.</div>
           <div className={chatStyles.textError}>Make sure your OpenAI API key is set in the bottom left of the sidebar or in a .env.local file and refresh.</div>
@@ -106,7 +103,7 @@ export const Chat: FC<Props> = ({ conversation, spells, messageIsStreaming, mode
               </div>
             ) : (
               <>
-                <div className={chatStyles.spellName}>Spell: {conversation.spell.name}</div>
+                <div className={chatStyles.spellName}>Spell: {conversation?.spell?.name ?? "Chat"}</div>
 
                 {conversation.messages.map((message, index) => (
                   <ChatMessage

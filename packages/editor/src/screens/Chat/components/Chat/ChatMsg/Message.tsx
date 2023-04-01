@@ -10,7 +10,7 @@ import ThumbDownAlt from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpAlt from '@mui/icons-material/ThumbUpAlt';
 
 import styles from './styles.module.scss';
-import { USER, AGENT } from '../../../../../lib/constants';
+import { USER, AGENT } from '../../../../../../../../lib/constants';
 
 const user = `${USER}:`
 const agent = `${AGENT}:`
@@ -107,7 +107,7 @@ const MessageItem = ({ messages, side }) => {
 };
 
 
-const ChatMsg = ((props: ChatTypes) => {
+const Message = ((props: ChatTypes) => {
     const {
         avatar,
         messages,
@@ -119,7 +119,8 @@ const ChatMsg = ((props: ChatTypes) => {
             <Grid
                 container
                 spacing={2}
-                justify={side === 'right' ? 'flex-end' : 'flex-start'}
+                // FIXME: Add justify prop to Grid
+                // justify={side === 'right' ? 'flex-end' : 'flex-start'}
                 className={cx(styles.row, styles[`${side}Row`])}
             >
                 {side === 'left' ?
@@ -139,4 +140,4 @@ const ChatMsg = ((props: ChatTypes) => {
     );
 });
 
-export default ChatMsg;
+export default Message;

@@ -27,10 +27,10 @@ function ComposeProviders({ providers, children, ...parentProps }) {
 }
 
 // Centralize all our providers to avoid nesting hell.
-const WorkspaceProviders = ({ children, ...props }) => (
+const WorkspaceProvider = ({ children, ...props }) => (
   <ComposeProviders providers={providers} {...props}>
     {children}
   </ComposeProviders>
 )
 
-export default WorkspaceProviders
+export default WorkspaceProvider
