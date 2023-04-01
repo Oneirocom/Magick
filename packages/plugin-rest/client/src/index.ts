@@ -1,8 +1,22 @@
-import { ClientPlugin, eventSocket, anySocket, triggerSocket } from '@magickml/engine'
-import { RestAgentWindow } from './components/rest.component'
+// DOCUMENTED 
+/**
+ * This module contains a Typescript script for a RestPlugin ClientPlugin.
+ * The plugin allows access to REST API through GET, POST, PUT, and DELETE requests.
+ */
 
+import {
+  ClientPlugin,
+  eventSocket,
+  anySocket,
+  triggerSocket
+} from '@magickml/engine'
+
+import { RestAgentWindow } from './components/rest.component'
 import RestSpellTemplate from './templates/spells/REST API.spell.json'
 
+/**
+ * Input sockets that are common to all REST API request types.
+ */
 const inputSockets = [
   {
     socket: 'output',
@@ -16,6 +30,9 @@ const inputSockets = [
   },
 ]
 
+/**
+ * Output sockets that are common to all REST API response types.
+ */
 const outputSockets = [
   {
     socket: 'output',
@@ -24,6 +41,9 @@ const outputSockets = [
   }
 ]
 
+/**
+ * The RestPlugin client plugin.
+ */
 const RestPlugin = new ClientPlugin({
   name: 'RestPlugin',
   agentComponents: [RestAgentWindow],

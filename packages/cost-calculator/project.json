@@ -11,6 +11,23 @@
         "lintFilePatterns": ["packages/cost-calculator/**/*.ts"]
       }
     },
+    "build": {
+      "executor": "@nrwl/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "configFile": "packages/cost-calculator/vite.config.ts",
+      "options": {
+        "outputPath": "dist/packages/cost-calculator"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],

@@ -1,0 +1,37 @@
+.header {
+  padding: 0.7rem 1rem;
+  display: flex;
+  background: #272727;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn {
+  box-shadow: none;
+}
+
+.listContainer {
+  background: #424242;
+  height: 100%;
+}
+
+.accordion {
+  background-color: transparent !important;
+}
+
+.summary {
+  padding: 0 !important;
+  height: 20px;
+  min-height: auto !important;
+}
+
+.details {
+  padding: 0 25px !important;
+}
+
+.box {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  align-items: center;
+}

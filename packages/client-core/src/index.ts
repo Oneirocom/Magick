@@ -1,23 +1,40 @@
-import { ClientPluginManager, pluginManager } from '@magickml/engine'
-import plugins from './plugins'
+// DOCUMENTED 
+/**
+ * This module exports optimized and refactored code of the original implementation.
+ * @module optimizedClientCore
+ */
 
+import { ClientPluginManager, pluginManager } from '@magickml/engine'
 import defaultTemplates from './templates'
+
 export * from './components'
 
+/**
+ * Gets spell templates from plugin manager.
+ * @returns {Array} spell templates
+ */
+const getSpellTemplates = () => (pluginManager as ClientPluginManager).getSpellTemplates();
 
-console.log('Loading plugins from client-core', Object.keys(plugins))
+/**
+ * Gets project templates from plugin manager.
+ * @returns {Array} project templates
+ */
+const getProjectTemplates = () => (pluginManager as ClientPluginManager).getProjectTemplates();
 
-// TODO: Check if cast is correct
-const spellTemplates = (pluginManager as ClientPluginManager).getSpellTemplates()
-const projectTemplates = (pluginManager as ClientPluginManager).getProjectTemplates()
-
-export const templates = {
+/**
+ * Gets project and spell templates and returns default templates and
+ * templates of previously loaded plugins.
+ * @returns {Object} templates object containing the projects and spells
+ */
+const getTemplates = () => ({
     projects: [
         ...defaultTemplates.projects,
-        ...projectTemplates,
+        ...getProjectTemplates(),
     ],
     spells: [
         ...defaultTemplates.spells,
-        ...spellTemplates,
+        ...getSpellTemplates(),
     ],
-}
+});
+
+export const templates = getTemplates();

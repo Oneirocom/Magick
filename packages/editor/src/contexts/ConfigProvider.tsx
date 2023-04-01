@@ -1,49 +1,68 @@
-import { DEFAULT_PROJECT_ID } from '@magickml/engine'
-import { useContext, createContext, useState } from 'react'
+// DOCUMENTED 
+// Import required dependencies
+import { DEFAULT_PROJECT_ID } from '@magickml/engine';
+import { useContext, createContext, useState } from 'react';
 
+// Define AppConfig type
 export type AppConfig = {
-  apiUrl: string
-  projectId: string
-  token: string
-}
+  apiUrl: string;
+  projectId: string;
+  token: string;
+};
 
+// Define ConfigContext interface
 export interface ConfigContext {
-  apiUrl: string
-  setApiUrl: (url: string) => void
-  projectId: string
-  setProjectId: (id: string) => void
+  apiUrl: string;
+  setApiUrl: (url: string) => void;
+  projectId: string;
+  setProjectId: (id: string) => void;
 }
 
-const Context = createContext<ConfigContext>(undefined!)
+// Create context for ConfigContext
+const Context = createContext<ConfigContext>(undefined!);
 
-export const useConfig = () => useContext(Context)
+/**
+ * Custom hook to use the config context
+ */
+export const useConfig = () => useContext(Context);
 
+/**
+ * Default AppConfig
+ */
 export const defaultConfig: AppConfig = {
-  // add props here
   apiUrl: 'http://localhost:3030',
   projectId: DEFAULT_PROJECT_ID,
-  token: ''
-}
+  token: '',
+};
 
-// Might want to namespace these
+/**
+ * ConfigProvider component that handles global configuration
+ */
 const ConfigProvider = ({ config = defaultConfig, children }) => {
-  const [apiUrl, setApiUrl] = useState<ConfigContext['apiUrl']>(config.apiUrl)
+  const [apiUrl, setApiUrl] = useState<ConfigContext['apiUrl']>(config.apiUrl);
   const [projectId, setProjectId] = useState<ConfigContext['projectId']>(
-    config.projectId
-  )
+    config.projectId,
+  );
 
   const publicInterface: ConfigContext = {
     apiUrl,
     setApiUrl,
     projectId,
     setProjectId,
-  }
+  };
 
-  return <Context.Provider value={publicInterface}>{children}</Context.Provider>
-}
+  return (
+    <Context.Provider value={publicInterface}>
+      {children}
+    </Context.Provider>
+  );
+};
 
-const ConditionalProvider = props => {
-  return <ConfigProvider {...props} />
-}
+/**
+ * ConditionalProvider component that wraps around ConfigProvider
+ */
+const ConditionalProvider = (props) => {
+  return <ConfigProvider {...props} />;
+};
 
-export default ConditionalProvider
+export default ConditionalProvider;

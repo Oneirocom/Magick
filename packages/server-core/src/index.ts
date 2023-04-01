@@ -1,22 +1,42 @@
-export * from './agents/Agent'
-export * from './agents/AgentManager'
-export * from './api/apis'
-export * from './app'
-export * from './helpers/buildMagickInterface'
-export * from './config/configuration'
-export * from './declarations'
-export * from './servers/fileServer'
-export * from './servers/googleSpeechToText'
-export * from './servers/googleTextToSpeech'
-export * from './hooks'
-export * from './utils/logger'
-export * from './dbClient'
-export * from './utils/ServerError'
-export * from './services'
-export * from './sockets/sockets'
-export * from './api'
-export * from './servers/tiktalknet'
-export * from './config/types'
-export * from './utils'
-export * from './config/validators'
-export * from './helpers/getSpell'
+// DOCUMENTED 
+/**
+ * This file exports several modules that provide functions and classes for various parts of the application.
+ * Please see individual modules for detailed documentation on their usage.
+ */
+
+// Export all API related modules
+export * from './api/apis';
+export * from './api';
+
+// Export the main app module
+export * from './app';
+
+// Configuration-related exports
+export * from './config/configuration';
+export * from './config/types';
+export * from './config/validators';
+
+// Declaration of types
+export * from './declarations';
+
+// Export file server
+export * from './servers/fileServer';
+
+// Export google text-to-speech and speech-to-text servers
+export * from './servers/googleSpeechToText';
+export * from './servers/googleTextToSpeech';
+
+// Export hooks
+export * from './hooks';
+
+// Export the database client
+export * from './dbClient';
+
+// Export service modules
+export * from './services';
+
+// Export socket related modules
+export * from './sockets/sockets';
+
+//Export the tiktalknet server
+export * from './servers/tiktalknet';

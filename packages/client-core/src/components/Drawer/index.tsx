@@ -1,10 +1,13 @@
-import { ClientPlugin, ClientPluginManager, pluginManager } from '@magickml/engine'
+import {
+  ClientPlugin,
+  ClientPluginManager,
+  pluginManager,
+} from '@magickml/engine'
 import AppsIcon from '@mui/icons-material/Apps'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
 import DocumentIcon from '@mui/icons-material/Description'
 import SettingsIcon from '@mui/icons-material/Settings'
-import ProjectIcon from '@mui/icons-material/Home'
 import StorageIcon from '@mui/icons-material/Storage'
 import Divider from '@mui/material/Divider'
 import MuiDrawer from '@mui/material/Drawer'
@@ -19,9 +22,12 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { SetAPIKeys } from './SetAPIKeys'
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
+import ProjectWindow from './ProjectWindow'
 
+// Constants
 const drawerWidth = 150
 
+// CSS mixins for open and close states
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -43,10 +49,14 @@ const closedMixin = (theme: Theme): CSSObject => ({
   },
 })
 
+// DrawerHeader component properties
 type HeaderProps = {
   open: boolean
 }
 
+/**
+ * The DrawerHeader component style definition based on its open state property.
+ */
 const DrawerHeader = styled('div', {
   shouldForwardProp: prop => prop !== 'open',
 })<HeaderProps>(({ theme, open }) => ({
@@ -55,10 +65,12 @@ const DrawerHeader = styled('div', {
   position: 'relative',
   left: 3,
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }))
 
+/**
+ * The StyledDrawer component style definition based on its open state property.
+ */
 const StyledDrawer = styled(MuiDrawer, {
   shouldForwardProp: prop => prop !== 'open',
 })(({ theme, open }) => ({
@@ -76,14 +88,24 @@ const StyledDrawer = styled(MuiDrawer, {
   }),
 }))
 
-const DrawerItem = ({
+// DrawerItem component properties
+type DrawerItemProps = {
+  Icon: any
+  open: boolean
+  text: string
+  active: boolean
+  onClick?: () => void
+}
+
+/**
+ * The DrawerItem component used to display individual items in the main drawer.
+ */
+const DrawerItem: React.FC<DrawerItemProps> = ({
   Icon,
   open,
   text,
   active,
-  onClick = () => {
-    /* null handler */
-  },
+  onClick,
 }) => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
     <ListItemButton
@@ -109,10 +131,22 @@ const DrawerItem = ({
   </ListItem>
 )
 
-const PluginDrawerItems = ({ onClick, open }) => {
+// PluginDrawerItems component properties
+type PluginDrawerItemsProps = {
+  onClick: (path: string) => () => void
+  open: boolean
+}
+
+/**
+ * The PluginDrawerItems component used to display plugin-related drawer items.
+ */
+const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
+  onClick,
+  open,
+}) => {
   const location = useLocation()
   const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
-  let lastPlugin:string|null = null
+  let lastPlugin: string | null = null
   let divider = false
   return (
     <>
@@ -141,6 +175,9 @@ const PluginDrawerItems = ({ onClick, open }) => {
   )
 }
 
+/**
+ * The main Drawer component that wraps around the application content.
+ */
 export function Drawer({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
@@ -148,10 +185,12 @@ export function Drawer({ children }) {
 
   const [open, setOpen] = useState<boolean>(false)
 
+  // Function to toggle drawer state
   const toggleDrawer = () => {
     setOpen(!open)
   }
 
+  // Function to handle navigation based on location path
   const onClick = location => () => {
     navigate(location)
   }
@@ -161,7 +200,6 @@ export function Drawer({ children }) {
     if (secrets) {
       let secretHasBeenSet = false
       const parsedSecrets = JSON.parse(secrets)
-      // check if any of the parsed secrets are not ''
       Object.keys(parsedSecrets).forEach(key => {
         if (parsedSecrets[key] !== '' && parsedSecrets[key]) {
           secretHasBeenSet = true
@@ -185,7 +223,6 @@ export function Drawer({ children }) {
                 marginLeft: open ? '.5em' : '.0em',
                 marginTop: '2em',
                 height: 16,
-                // on hover, show the finger cursor
                 cursor: 'pointer',
               }}
               src={open ? MagickLogo : MagickLogoSmall}
@@ -249,6 +286,7 @@ export function Drawer({ children }) {
           {!isAPIKeysSet && <SetAPIKeys />}
         </List>
       </StyledDrawer>
+      <ProjectWindow />
       {children}
     </div>
   )

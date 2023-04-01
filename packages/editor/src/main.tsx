@@ -1,3 +1,8 @@
+// DOCUMENTED 
+/**
+ * A module which exports a functional component - MagickIDE
+ * @module MagickIDE
+ */
 import React from 'react'
 
 import './wdyr'
@@ -16,9 +21,18 @@ import { AppConfig } from './contexts/ConfigProvider'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
-export type MagickIDEProps = AppConfig
+/**
+ * Type definition for the props that can be passed to MagickIDE
+ * @typedef {Object} MagickIDEProps
+ * @property {AppConfig} config - configuration object for the app
+ */
 
-export const MagickIDE = ({ config }: { config: MagickIDEProps }) => {
+/**
+ * A functional component that renders the main body of the MagickIDE application
+ * @param {MagickIDEProps} props - A plain object representing the props passed to the component.
+ * @returns {React.ReactElement} - A React component
+ */
+export const MagickIDE = ({ config }: { config: AppConfig }): React.ReactElement => {
   return (
     <Router>
       <Provider store={createStore(config)}>

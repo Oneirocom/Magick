@@ -1,5 +1,3 @@
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { Agent } from '@magickml/server-core'
 import isEqual from 'lodash/isEqual'
 import Rete from 'rete'
 
@@ -19,7 +17,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   ModuleWorkerOutput,
-  WorkerData,
+  WorkerData
 } from '../../types'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
@@ -244,7 +242,7 @@ export class SpellComponent extends MagickComponent<
 
       console.log('node.inspector.data()', node.inspector.data())
 
-      const context = this.editor && this.editor.magick
+      const context = this.editor && this.editor.context
       if (!context) return
       const { sendToInspector } = context
       if (sendToInspector) {
@@ -295,18 +293,19 @@ export class SpellComponent extends MagickComponent<
     }, {} as Record<string, unknown>)
   }
 
+  // @ts-ignore
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: { [key: string]: string },
     {
       module,
-      magick,
+      context,
       secrets,
       publicVariables,
     }: {
-      module: { agent: Agent; outputs: ModuleWorkerOutput[] }
-      magick: EngineContext
+      module: { agent: any; outputs: ModuleWorkerOutput[] }
+      context: EngineContext
       secrets: Record<string, string>
       publicVariables: Record<string, string>
     }
@@ -314,19 +313,13 @@ export class SpellComponent extends MagickComponent<
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
 
-    console.log('running spell')
-
     if (module.agent) {
-      console.log('running on agent', module.agent.id)
       const spellManager = module.agent.spellManager as SpellManager
       if (spellManager) {
-        console.log('spellManager is real')
         const spellRunner = await spellManager.getSpellRunner(
           node.data.spellId as string
         )
         if (spellRunner) {
-          console.log('running spellRunner')
-          console.log('flattenedInputs', flattenedInputs)
           const obj = {
             inputs: flattenedInputs,
             runSubspell: false,
@@ -335,9 +328,8 @@ export class SpellComponent extends MagickComponent<
             publicVariables:
               (module.agent.publicVariables as any) ?? (publicVariables as any),
           }
-          console.log('obj', obj)
+
           const outputs = await spellRunner.runComponent(obj)
-          console.log('ran, outputs are', outputs)
           return this.formatOutputs(node, outputs as any)
         } else {
           console.warn('spell runner not found')
@@ -346,16 +338,17 @@ export class SpellComponent extends MagickComponent<
         console.warn('spell manager not found')
       }
     } else {
-      if (!magick.runSpell) throw new Error('Magick runSpell not found')
-      const outputs = await magick.runSpell({
-        inputs: flattenedInputs,
-        spellId: node.data.spellId as string,
-        projectId: node.data.projectId as string,
-        secrets,
-        publicVariables,
-      })
+      console.error('handle me')
+      // if (!runSpell) throw new Error('Magick runSpell not found')
+      // const outputs = await runSpell({
+      //   inputs: flattenedInputs,
+      //   spellId: node.data.spellId as string,
+      //   projectId: node.data.projectId as string,
+      //   secrets,
+      //   publicVariables,
+      // })
 
-      return this.formatOutputs(node, outputs)
+      // return this.formatOutputs(node, outputs)
     }
   }
 }

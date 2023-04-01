@@ -1,12 +1,9 @@
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import type { Agent } from '@magickml/server-core'
-
 export class Module {
   secrets?: Record<string, string>
   publicVariables?: Record<string, string>
   inputs: Record<string, unknown>
   outputs: Record<string, unknown>
-  agent?: Agent
+  agent?: any // set to Agent, but move Agent to engine first
   constructor() {
     this.inputs = {}
     this.outputs = {}

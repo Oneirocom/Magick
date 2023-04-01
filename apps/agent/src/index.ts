@@ -1,17 +1,39 @@
-import 'regenerator-runtime/runtime'
+// DOCUMENTED 
+/**
+ * Initializes the application and starts the agent.
+ * This file initializes the application and starts the agent, then loads the app's plugins and logs them.
+ * @packageDocumentation
+ */
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { WorldManager, pluginManager } from '@magickml/engine'
-import { AgentManager } from '@magickml/server-core'
-async function init() {
-  // load plugins
-  await (async () => {
-    const plugins = (await import('./plugins')).default
-    console.log('loaded plugins on agent', Object.values(plugins).map((p: any) => p.name).join(', '));
-  })()
-  const agentManager = new AgentManager()
-  const worldManager = new WorldManager()
-  console.log('AGENT: Starting...')
+import 'regenerator-runtime/runtime';
+import { pluginManager, AgentManager, WorldManager } from '@magickml/engine';
+import { app } from '@magickml/server-core';
+
+/**
+ * Asynchronously loads the application's plugins and logs their names.
+ * @returns A `Promise` that resolves when the plugins have been loaded.
+ */
+async function loadPlugins(): Promise<void> {
+  // Import the plugins and get the default exports.
+  const pluginExports = (await import('./plugins')).default;
+
+  // Log the loaded plugin names.
+  const pluginNames = Object.values(pluginExports).map((p: any) => p.name).join(', ');
+  console.log('Loaded plugins on agent:', pluginNames);
 }
 
-init()
+/**
+ * Initializes the application and starts the agent.
+ * @returns A `Promise` that resolves when the application is initialized.
+ */
+async function initializeAgent(): Promise<void> {
+  await loadPlugins();
+
+  const agentManager = new AgentManager(app);
+  const worldManager = new WorldManager();
+
+  console.log('AGENT: Starting...');
+}
+
+// Initialize the application and start the agent.
+initializeAgent();

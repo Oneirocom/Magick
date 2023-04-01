@@ -60,14 +60,13 @@ async function handleResponse(
   console.log('********* SENT MESSAGE TO TWITTER', agent.id, output, event)
   console.log('event is', event)
   console.log('event.channel is', event.channel)
-  return;
 
   const resp = output
   if (resp && resp !== undefined && resp?.length > 0) {
     if (resp === 'like' || resp === 'heart') {
       await agent.twitter.twitterv2.v2.like(agent.twitter.localUser.data.id, event.channel)
     } else if (resp !== 'ignore') {
-      await agent.twitter.handleMessage(resp, event.channel, 'feed')
+      await agent.twitter.handleMessage(resp, event.channel, 'feed', event)
     } else if (resp === 'retweet') {
       await agent.twitter.twitterv2.v2.retweet(agent.twitter.localUser.data.id, event.channel)
     }

@@ -1,19 +1,26 @@
-import useAuthentication from '../account/useAuthentication'
-import InfoCard from '../components/InfoCard'
-import ShowRequestExample from '../components/ShowRequestExample'
-import React, { useState } from 'react'
-import { FormProvider, useForm, useFormContext } from 'react-hook-form'
-import { toast } from 'react-toastify'
-import { OpenAI } from '../types/openai'
-import { Box, Button, TextField } from '@mui/material'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+// DOCUMENTED 
+import useAuthentication from '../account/useAuthentication';
+import InfoCard from '../components/InfoCard';
+import ShowRequestExample from '../components/ShowRequestExample';
+import React, { useState } from 'react';
+import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { OpenAI } from '../types/openai';
+import { Box, Button, TextField } from '@mui/material';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-import { OPENAI_ENDPOINT } from '../constants'
+import { OPENAI_ENDPOINT } from '../constants';
 
+/**
+ * CompletionForm component.
+ * @param {object} props - Component props.
+ * @param {OpenAI.FineTune | undefined} props.fineTune - Fine-tuning object.
+ * @returns {JSX.Element}
+ */
 export default function CompletionForm({
   fineTune,
 }: {
-  fineTune?: OpenAI.FineTune
+  fineTune?: OpenAI.FineTune;
 }) {
   const form = useForm({
     defaultValues: {
@@ -26,13 +33,14 @@ export default function CompletionForm({
       frequency_penalty: 0,
       stop: [] as string[],
     },
-  })
-  const { headers } = useAuthentication()
-  const [results, setResults] = useState<OpenAI.Completions.Response[]>([])
+  });
 
-  form.watch()
+  const { headers } = useAuthentication();
+  const [results, setResults] = useState<OpenAI.Completions.Response[]>([]);
 
-  const values = form.getValues()
+  form.watch();
+
+  const values = form.getValues();
   const request = {
     url: fineTune
       ? `${OPENAI_ENDPOINT}/completions`
@@ -49,19 +57,22 @@ export default function CompletionForm({
       frequency_penalty: +values.frequency_penalty,
       stop: values.stop.length ? values.stop : undefined,
     },
-  }
+  };
 
+  /**
+   * Handles form submission.
+   */
   const onSubmit = form.handleSubmit(async () => {
-    const { url, body, ...init } = request
-    const response = await fetch(url, { ...init, body: JSON.stringify(body) })
+    const { url, body, ...init } = request;
+    const response = await fetch(url, { ...init, body: JSON.stringify(body) });
     if (response.ok) {
-      const json = await response.json()
-      setResults([json, ...results])
+      const json = await response.json();
+      setResults([json, ...results]);
     } else {
-      const { error } = (await response.json()) as OpenAI.ErrorResponse
-      toast.error(error.message)
+      const { error } = (await response.json()) as OpenAI.ErrorResponse;
+      toast.error(error.message);
     }
-  })
+  });
 
   return (
     <>
@@ -105,11 +116,15 @@ export default function CompletionForm({
         />
       </InfoCard>
     </>
-  )
+  );
 }
 
+/**
+ * CommonOptions component.
+ * @returns {JSX.Element}
+ */
 function CommonOptions() {
-  const form = useFormContext()
+  const form = useFormContext();
 
   return (
     <Box
@@ -163,13 +178,19 @@ function CommonOptions() {
         {...form.register('frequency_penalty', { min: -2, max: 2 })}
       />
     </Box>
-  )
+  );
 }
 
+/**
+ * CompletionResults component.
+ * @param {object} props - Component props.
+ * @param {OpenAI.Completions.Response} props.results - Completion results.
+ * @returns {JSX.Element}
+ */
 function CompletionResults({
   results,
 }: {
-  results: OpenAI.Completions.Response
+  results: OpenAI.Completions.Response;
 }) {
   return (
     <InfoCard>
@@ -190,5 +211,5 @@ function CompletionResults({
         <b>Model:</b> {results.model}
       </p>
     </InfoCard>
-  )
+  );
 }

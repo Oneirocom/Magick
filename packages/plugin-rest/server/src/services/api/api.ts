@@ -1,61 +1,82 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
+// DOCUMENTED 
+/**
+ * For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
+ */
 
-import { hooks as schemaHooks } from '@feathersjs/schema'
+// Import hooks from '@feathersjs/schema'
+import { hooks as schemaHooks } from '@feathersjs/schema';
 
+// Import API resolvers and validators
 import {
+  apiDataResolver,
   apiDataValidator,
-  apiPatchValidator,
+  apiExternalResolver,
+  apiQueryResolver,
   apiQueryValidator,
   apiResolver,
-  apiExternalResolver,
-  apiDataResolver,
-  apiPatchResolver,
-  apiQueryResolver
-} from './api.schema'
+} from './api.schema';
 
-import type { Application } from '@magickml/server-core'
-import { ApiService, getOptions } from './api.class'
-
+// Import types and classes
+import type { Application } from '@magickml/server-core';
+import { ApiService, getOptions } from './api.class';
 
 // Add this service to the service type index
 declare module '@magickml/server-core' {
   interface ServiceTypes {
-    [apiPath]: ApiService
+    [apiPath]: ApiService;
   }
 }
 
-export const apiPath = 'api'
-export const apiMethods = ['get', 'create', 'update', 'remove'] as const
+// Constants for API path and methods
+export const apiPath = 'api';
+export const apiMethods = ['get', 'create', 'update', 'remove'] as const;
 
-export * from './api.class'
-export * from './api.schema'
+// Export class and schema files
+export * from './api.class';
+export * from './api.schema';
 
-// A configure function that registers the service and its hooks via `app.configure`
+/**
+ * A configure function that registers the service and its hooks via `app.configure`
+ * @param app - The Feathers application
+ */
 export const api = (app: Application) => {
   // Register our service on the Feathers application
   app.use(apiPath, new ApiService(getOptions(app)), {
     // A list of all methods this service exposes externally
     methods: apiMethods,
     // You can add additional custom events to be sent to clients here
-    events: []
-  })
+    events: [],
+  });
+
   // Initialize hooks
   app.service(apiPath).hooks({
     around: {
-      all: [schemaHooks.resolveExternal(apiExternalResolver), schemaHooks.resolveResult(apiResolver)]
+      all: [
+        schemaHooks.resolveExternal(apiExternalResolver),
+        schemaHooks.resolveResult(apiResolver),
+      ],
     },
     before: {
-      all: [schemaHooks.validateQuery(apiQueryValidator), schemaHooks.resolveQuery(apiQueryResolver)],
+      all: [
+        schemaHooks.validateQuery(apiQueryValidator),
+        schemaHooks.resolveQuery(apiQueryResolver),
+      ],
       get: [],
-      update: [schemaHooks.validateData(apiDataValidator), schemaHooks.resolveData(apiDataResolver)],
-      create: [schemaHooks.validateData(apiDataValidator), schemaHooks.resolveData(apiDataResolver)],
-      remove: []
+      update: [
+        schemaHooks.validateData(apiDataValidator),
+        schemaHooks.resolveData(apiDataResolver),
+      ],
+      create: [
+        schemaHooks.validateData(apiDataValidator),
+        schemaHooks.resolveData(apiDataResolver),
+      ],
+      remove: [],
     },
     after: {
-      all: []
+      all: [],
     },
     error: {
-      all: []
-    }
-  } as any) // TODO: fix me
-}
+      all: [],
+    },
+  } as any); // TODO: fix me
+};

@@ -22,6 +22,8 @@ import { SpellManager } from './spellManager'
 
 import io from 'socket.io'
 
+export { MagickComponent } from './engine'
+
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 
 export * from './schemas'
@@ -136,7 +138,7 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
   declare currentSpell: SpellInterface
   declare pubSub: PubSubContext
-  declare magick: EditorContext
+  declare context: EditorContext
   declare tab: { type: string }
   declare abort: unknown
   declare loadGraph: (graph: Data, reloading?: boolean) => Promise<void>
@@ -193,7 +195,6 @@ export type RunSpell<DataType = Record<string, unknown>> = ({
 }: runSpellType<DataType>) => Promise<DataType>
 
 export type EngineContext<DataType = Record<string, unknown>> = {
-  env: Env
   runSpell: RunSpell<DataType>
   completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
@@ -222,7 +223,6 @@ export type PubSubEvents = {
   $CREATE_PLAYTEST: (tabId: string) => string
   $CREATE_INSPECTOR: (tabId: string) => string
   $CREATE_TEXT_EDITOR: (tabId: string) => string
-  $CREATE_PROJECT_WINDOW: (tabId: string) => string
   $CREATE_DEBUG_CONSOLE: (tabId: string) => string
   $CREATE_CONSOLE: (tabId: string) => string
   $RUN_SPELL: (tabId: string) => string
@@ -298,7 +298,7 @@ export type EventsTypes = {
 }
 
 export interface IRunContextEditor extends NodeEditor {
-  magick: EditorContext
+  context: EditorContext
   abort: () => void
 }
 
@@ -576,7 +576,7 @@ export type CompletionHandlerInputData = {
     module: any
     secrets: Record<string, string>
     projectId: string
-    magick: EngineContext
+    context: EngineContext
     currentSpell: SpellInterface
   }
 }
@@ -658,8 +658,3 @@ export type Route = {
 }
 
 export type UserSpellManager = Map<string, SpellManager>
-
-export type RunSpellConstructor = {
-  magickInterface: EngineContext
-  socket?: io.Socket
-}

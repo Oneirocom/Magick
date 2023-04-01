@@ -1,23 +1,36 @@
-// // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
-import { resolve } from '@feathersjs/schema'
+// DOCUMENTED 
+// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+import { resolve } from '@feathersjs/schema';
 import {
   Type,
   getDataValidator,
   getValidator,
   querySyntax,
-} from '@feathersjs/typebox'
-import type { Static } from '@feathersjs/typebox'
+} from '@feathersjs/typebox';
+import type { Static } from '@feathersjs/typebox';
 
-import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../config/validators'
-import { agentSchema } from '@magickml/engine'
+import type { HookContext } from '../../declarations';
+import { dataValidator, queryValidator } from '../../config/validators';
+import { agentSchema } from '@magickml/engine';
 
-export type Agent = Static<typeof agentSchema>
-export const agentResolver = resolve<Agent, HookContext>({})
+/**
+ * Agent type
+ */
+export type Agent = Static<typeof agentSchema>;
 
-export const agentExternalResolver = resolve<Agent, HookContext>({})
+/**
+ * Agent resolver
+ */
+export const agentResolver = resolve<Agent, HookContext>({});
 
-// Schema for creating new entries
+/**
+ * External agent resolver
+ */
+export const agentExternalResolver = resolve<Agent, HookContext>({});
+
+/**
+ * Agent data schema for creating new entries
+ */
 export const agentDataSchema = Type.Pick(
   agentSchema,
   [
@@ -32,9 +45,11 @@ export const agentDataSchema = Type.Pick(
     'secrets',
   ],
   { $id: 'AgentData' }
-)
+);
 
-// Schema for creating new entries
+/**
+ * Agent patch data schema for creating new entries
+ */
 export const agentPatchDataSchema = Type.Pick(
   agentSchema,
   [
@@ -50,26 +65,54 @@ export const agentPatchDataSchema = Type.Pick(
     'secrets',
   ],
   { $id: 'AgentData', additionalProperties: true }
-)
-export type AgentData = Static<typeof agentDataSchema>
+);
+
+/**
+ * Agent data type
+ */
+export type AgentData = Static<typeof agentDataSchema>;
+
+/**
+ * Agent data validator
+ */
 export const agentDataValidator = getDataValidator(
   agentDataSchema,
   dataValidator
-)
-export const agentDataResolver = resolve<Agent, HookContext>({})
+);
 
-// Schema for updating existing entries
+/**
+ * Agent data resolver
+ */
+export const agentDataResolver = resolve<Agent, HookContext>({});
+
+/**
+ * Agent patch schema for updating existing entries
+ */
 export const agentPatchSchema = Type.Partial(agentPatchDataSchema, {
   $id: 'AgentPatch',
-})
-export type AgentPatch = Static<typeof agentPatchSchema>
+});
+
+/**
+ * Agent patch type
+ */
+export type AgentPatch = Static<typeof agentPatchSchema>;
+
+/**
+ * Agent patch validator
+ */
 export const agentPatchValidator = getDataValidator(
   agentPatchSchema,
   dataValidator
-)
-export const agentPatchResolver = resolve<Agent, HookContext>({})
+);
 
-// Schema for allowed query properties
+/**
+ * Agent patch resolver
+ */
+export const agentPatchResolver = resolve<Agent, HookContext>({});
+
+/**
+ * Agent allowed query properties
+ */
 export const agentQueryProperties = Type.Pick(agentSchema, [
   'id',
   'projectId',
@@ -81,15 +124,35 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'data',
   'publicVariables',
   'secrets',
-])
+]);
+
+/**
+ * Agent query schema
+ */
 export const agentQuerySchema = Type.Intersect(
   [querySyntax(agentQueryProperties)],
   { additionalProperties: false }
-)
-export type AgentQuery = Static<typeof agentQuerySchema>
+);
+
+/**
+ * Agent query type
+ */
+export type AgentQuery = Static<typeof agentQuerySchema>;
+
+/**
+ * Agent query validator
+ */
 export const agentQueryValidator = getValidator(
   agentQuerySchema,
   queryValidator
-)
-export const agentQueryResolver = resolve<AgentQuery, HookContext>({})
-export const agentJsonFields = ['rootSpell', 'data']
+);
+
+/**
+ * Agent query resolver
+ */
+export const agentQueryResolver = resolve<AgentQuery, HookContext>({});
+
+/**
+ * JSON fields for agents
+ */
+export const agentJsonFields = ['rootSpell', 'data'];

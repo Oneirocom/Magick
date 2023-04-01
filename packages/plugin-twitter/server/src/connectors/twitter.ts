@@ -1,5 +1,6 @@
 import { TwitterApi, ETwitterStreamEvent } from 'twitter-api-v2'
-
+import fs from 'fs'
+import https from 'https'
 export class TwitterConnector {
   twitterv1: TwitterApi | undefined
   twitterv2: TwitterApi | undefined
@@ -19,10 +20,11 @@ export class TwitterConnector {
     this.agent = agent
     this.worldManager = worldManager // we can track entities in different conversations here later
     console.log(data)
-    if(!data.twitter_enabled) {
+    if (!data.twitter_enabled) {
       console.warn('Twitter is not enabled, skipping')
       return
     }
+    console.log('Twitter enabled, initializing...')
     this.twitter_stream_rules = data.twitter_stream_rules
 
     const bearerToken = getSetting(
@@ -43,6 +45,16 @@ export class TwitterConnector {
       data.twitter_access_token_secret,
       'Access Token Secret'
     )
+
+    console.log('twitterUser', twitterUser)
+    console.log('twitterApiKey', twitterApiKey)
+    console.log('twitterApiKeySecret', twitterApiKeySecret)
+    console.log('twitterAccessToken', twitterAccessToken)
+    console.log('twitterAccessTokenSecret', twitterAccessTokenSecret)
+    console.log('bearerToken', bearerToken)
+    console.log('streamRules', data.twitter_stream_rules)
+
+    //
 
     const streamRules = getSetting(data.twitter_stream_rules, 'Stream Rules')
 
@@ -69,13 +81,12 @@ export class TwitterConnector {
     })
 
     this.twitterv2 = new TwitterApi(bearerToken)
-    this.twitterv2_replies = new TwitterApi(bearerToken)
     console.log('Initializing Twitter...')
     this.initialize({ data })
   }
 
   async initialize({ data }) {
-    if (!this.twitterv2 || !this.twitterv2_replies) {
+    if (!this.twitterv2) {
       return console.log('Twitter not initialized properly')
     }
 
@@ -125,7 +136,7 @@ export class TwitterConnector {
     //       inputs: {
     //         'Input - Twitter': {
     //           content: input,
-    //           sender: author.data.name,
+    //           sender: author.data.username,
     //           observer: twitterUser,
     //           client: 'twitter',
     //           channel: ev.data.id,
@@ -141,8 +152,6 @@ export class TwitterConnector {
     //     })
     //   }
     // })
-
-    
 
     try {
       const client = this.twitterv2
@@ -163,9 +172,9 @@ export class TwitterConnector {
         add: _rules,
       })
       const stream = await client.v2.searchStream({
-      'tweet.fields': ['referenced_tweets', 'author_id'],
-      expansions: ['referenced_tweets.id'],
-    })
+        'tweet.fields': ['referenced_tweets', 'author_id'],
+        expansions: ['referenced_tweets.id'],
+      })
       stream.autoReconnect = true
       stream.on(ETwitterStreamEvent.Data, async (tw: any) => {
         console.log('TWEET:', tw)
@@ -173,7 +182,7 @@ export class TwitterConnector {
           tw.data.referenced_tweets?.some(
             tweet => tweet.type === 'retweeted'
           ) ?? false
-          console.log('isRt', isARt)
+        console.log('isRt', isARt)
         const isReply =
           tw.data.referenced_tweets &&
           tw.includes &&
@@ -182,7 +191,7 @@ export class TwitterConnector {
           tw.includes.tweets.length > 0 &&
           tw.includes.tweets[0].author_id === this.localUser.data.id
 
-          console.log('isReply', isReply)
+        console.log('isReply', isReply)
         if (
           isARt ||
           isReply ||
@@ -204,7 +213,7 @@ export class TwitterConnector {
               inputs: {
                 'Input - Twitter (Feed)': {
                   content: tw.data.text,
-                  sender: author.data.name,
+                  sender: author.data.username,
                   observer: twitterUser,
                   client: 'twitter',
                   channel: tw.data.id,
@@ -234,7 +243,41 @@ export class TwitterConnector {
         text: response,
       })
     } else if (args === 'feed') {
-      await this.twitterv1?.v1.reply(response, chat_id)
+      // if the reponse contains a .mpeg file, remove it from the response and send it as a media file
+      // extract the url from the response
+      // example url: https://vkzhmwivieetdcbhmszr.supabase.co/storage/v1/object/public/avatars/b01edaa9-fe38-49ff-9967-19ff7054e884.mpeg
+      const url = 'https://' + response.split('https://')[1].split(' ')[0]
+      // remove the url from the response
+      response = response.replace(url, '')
+
+      const myHeaders = new Headers()
+      myHeaders.append(
+        'Authorization',
+        'OAuth oauth_consumer_key="CupzSclhst4JHNiAVNCjG4ELl",oauth_token="1353431250942345216-YFex3qwZcFpVROuddZT3QwZCzsXiRo",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1680360543",oauth_nonce="6MInAlduEhc",oauth_version="1.0",oauth_signature="rzwI%2BS6udm51%2FG50rFmaTpD7Dcw%3D"'
+      )
+      myHeaders.append('Content-Type', 'application/json')
+      myHeaders.append(
+        'Cookie',
+        'guest_id=v1%3A168036046706659992; guest_id_ads=v1%3A168036046706659992; guest_id_marketing=v1%3A168036046706659992; personalization_id="v1_Nob/3R0lxyldHjTRRDV7pw=="'
+      )
+
+      const raw = JSON.stringify({
+        text: response + '\n' + url,
+        reply: {
+          in_reply_to_tweet_id: chat_id,
+        },
+      })
+
+      const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+      }
+
+      fetch('https://api.twitter.com/2/tweets', requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error))
     }
   }
 
