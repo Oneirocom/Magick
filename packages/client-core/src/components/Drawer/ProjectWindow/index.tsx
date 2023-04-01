@@ -115,7 +115,7 @@ const ProjectWindow = () => {
           justifyContent: 'space-between',
         }}
       >
-        <Typography>Project Name</Typography>
+        <Typography>Project</Typography>
         <IconButton style={{ boxShadow: 'none' }} onClick={handleClick}>
           <MoreHoriz />
         </IconButton>
