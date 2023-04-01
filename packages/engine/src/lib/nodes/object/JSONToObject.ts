@@ -66,6 +66,15 @@ export class ParseJSON extends MagickComponent<Promise<WorkerReturn>> {
    */
   async worker(_node: WorkerData, rawInputs: MagickWorkerInputs): Promise<WorkerReturn> {
     const str = rawInputs.input[0] as string
+
+    // if str is already an object, return it
+    // otherwise, if its a string, parse it
+    if (typeof str === 'object') {
+      return {
+        output: str,
+      }
+    }
+
     console.log('str', str)
     return {
       output: JSON.parse(str),
