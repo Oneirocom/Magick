@@ -82,7 +82,6 @@ const AgentWindow = ({
               name: 'New Agent',
               projectId: config.projectId,
               enabled: false,
-              spells: '[]',
               rootSpell: {},
               publicVariables: '{}',
               secrets: '{}',
