@@ -106,7 +106,8 @@ const Playtest = ({ tab }) => {
   const printToConsole = useCallback(
     (_, _text) => {
       const text = `Agent: ` + _text.split('\n');
-      const newHistory = [...history, ...text];
+      const newHistory = [...history, text];
+      console.log('setting new history to ', newHistory)
       setHistory(newHistory as []);
     },
     [history],
