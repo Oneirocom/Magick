@@ -1,120 +1,169 @@
-import world3d from './world3d'
+// DOCUMENTED 
+import World3D from './world3d';
 
+/**
+ * A class to manage users and their actions in 3D world.
+ */
 export class WorldManager {
+  private rooms: Record<string, World3D[]> = {};
 
-  rooms = {}
   constructor() {
-    this.rooms = {}
+    this.rooms = {};
   }
 
-  addUser(user, client) {
-    if (this.rooms[client] !== undefined) {
-      for (let i = 0; i < this.rooms[client].length; i++) {
-        if (this.rooms[client][i].isFull()) {
-          continue
+  /**
+   * Adds a user to a room associated with a client.
+   * @param user User to add
+   * @param client Client identifier
+   */
+  addUser(user: string, client: string): void {
+    // If client's rooms exist
+    if (this.rooms[client]) {
+      // Iterate through rooms and add user to a non-full room
+      for (const room of this.rooms[client]) {
+        if (!room.isFull()) {
+          room.addUser(user);
+          return;
         }
-        this.rooms[client][i].addUser(user)
-        return
       }
-      this.rooms[client].push(new world3d([user]))
+      // Or create a new room if no suitable room found
+      this.rooms[client].push(new World3D([user]));
     } else {
-      this.rooms[client] = []
-      this.rooms[client].push(new world3d([user]))
+      // If client's rooms don't exist, create rooms array and add user
+      this.rooms[client] = [new World3D([user])];
     }
   }
-  removeUser(user, client) {
-    if (this.rooms[client] !== undefined) {
+
+  /**
+   * Removes a user from a room associated with a client.
+   * @param user User to remove
+   * @param client Client identifier
+   */
+  removeUser(user: string, client: string): void {
+    // If client's rooms exist
+    if (this.rooms[client]) {
+      // Iterate through rooms
       for (let i = 0; i < this.rooms[client].length; i++) {
+        // If user exists in a room
         if (this.rooms[client][i].userExists(user)) {
-          this.rooms[client][i].removeUser(user)
+          // Remove user and remove the room if empty
+          this.rooms[client][i].removeUser(user);
           if (this.rooms[client][i].isEmpty()) {
-            this.rooms[client].splice(i, 1)
+            this.rooms[client].splice(i, 1);
+            // Remove client key if no rooms left
             if (this.rooms[client].length === 0) {
-              delete this.rooms[client]
+              delete this.rooms[client];
             }
           }
-          return
+          return;
         }
       }
     }
   }
 
-  getUsersDistance(user, client) {
-    if (this.rooms[client] !== undefined) {
-      for (let i = 0; i < this.rooms[client].length; i++) {
-        if (this.rooms[client][i].userExists(user)) {
-          return this.rooms[client][i].getUsersDistance(user)
+  /**
+   * Gets the distance between users in a room.
+   * @param user User to check distance for
+   * @param client Client identifier
+   * @returns Users distance or undefined
+   */
+  getUsersDistance(user: string, client: string): number | undefined {
+    // If client's rooms exist
+    if (this.rooms[client]) {
+      // Iterate through rooms and get users distance if user exists
+      for (const room of this.rooms[client]) {
+        if (room.userExists(user)) {
+          return room.getUsersDistance(user);
         }
       }
     }
 
-    this.addUser(user, client)
-    return this.getUsersDistance(user, client)
+    // If not found, add user and call the function again
+    this.addUser(user, client);
+    return this.getUsersDistance(user, client);
   }
 
-  userTalkedSameTopic(user, client) {
-    if (this.rooms[client] !== undefined) {
-      for (let i = 0; i < this.rooms[client].length; i++) {
-        if (this.rooms[client][i].userExists(user)) {
-          this.rooms[client][i].userTalkedSameTopic(user)
-          return this.rooms[client][i].getUsersDistance(user)
+  // Similar pattern for following functions
+  userTalkedSameTopic(user: string, client: string): number | undefined {
+    if (this.rooms[client]) {
+      for (const room of this.rooms[client]) {
+        if (room.userExists(user)) {
+          room.userTalkedSameTopic(user);
+          return room.getUsersDistance(user);
         }
       }
     }
 
-    this.addUser(user, client)
-    return this.userTalkedSameTopic(user, client)
+    this.addUser(user, client);
+    return this.userTalkedSameTopic(user, client);
   }
-  userGotInConversationFromAgent(user, client) {
-    if (this.rooms[client] !== undefined) {
-      for (let i = 0; i < this.rooms[client].length; i++) {
-        if (this.rooms[client][i].userExists(user)) {
-          this.rooms[client][i].userGotInConversationFromAgent(user)
-          return this.rooms[client][i].getUsersDistance(user)
+
+  userGotInConversationFromAgent(user: string, client: string): number | undefined {
+    if (this.rooms[client]) {
+      for (const room of this.rooms[client]) {
+        if (room.userExists(user)) {
+          room.userGotInConversationFromAgent(user);
+          return room.getUsersDistance(user);
         }
       }
     }
 
-    this.addUser(user, client)
-    return this.userGotInConversationFromAgent(user, client)
+    this.addUser(user, client);
+    return this.userGotInConversationFromAgent(user, client);
   }
-  userPingedSomeoneElse(user, client) {
-    if (this.rooms[client] !== undefined) {
-      for (let i = 0; i < this.rooms[client].length; i++) {
-        if (this.rooms[client][i].userExists(user)) {
-          this.rooms[client][i].userPingedSomeoneElse(user)
-          return this.rooms[client][i].getUsersDistance(user)
+
+  userPingedSomeoneElse(user: string, client: string): number | undefined {
+    if (this.rooms[client]) {
+      for (const room of this.rooms[client]) {
+        if (room.userExists(user)) {
+          room.userPingedSomeoneElse(user);
+          return room.getUsersDistance(user);
         }
       }
     }
 
-    this.addUser(user, client)
-    return this.userPingedSomeoneElse(user, client)
+    this.addUser(user, client);
+    return this.userPingedSomeoneElse(user, client);
   }
-  agentCanResponse(user, client) {
-    if (this.rooms[client] !== undefined) {
-      for (let i = 0; i < this.rooms[client].length; i++) {
-        if (this.rooms[client][i].userExists(user)) {
-          return this.rooms[client][i].agentCanResponse(user)
+
+  /**
+   * Checks if agent can respond in a room.
+   * @param user User to check
+   * @param client Client identifier
+   * @returns True if agent can respond, false otherwise
+   */
+  agentCanResponse(user: string, client: string): boolean {
+    // If client's rooms exist
+    if (this.rooms[client]) {
+      // Iterate through rooms and return agent response status if user exists
+      for (const room of this.rooms[client]) {
+        if (room.userExists(user)) {
+          return room.agentCanResponse(user);
         }
       }
     }
 
-    this.addUser(user, client)
-    return false
+    // If not found, add user and return false
+    this.addUser(user, client);
+    return false;
   }
 
-  print() {
+  /**
+   * Prints the rooms and their states.
+   */
+  print(): void {
     for (const client in this.rooms) {
-      console.log(client + ' rooms:')
-      if (this.rooms[client] && this.rooms[client] !== undefined) {
-        for (let i = 0; i < this.rooms[client].length; i++) {
-          this.rooms[client][i].print()
+      console.log(`${client} rooms:`);
+
+      if (this.rooms[client]) {
+        for (const room of this.rooms[client]) {
+          room.print();
         }
       } else {
-        console.log('no rooms')
+        console.log('no rooms');
       }
-      console.log('----------------')
+
+      console.log('----------------');
     }
   }
 }

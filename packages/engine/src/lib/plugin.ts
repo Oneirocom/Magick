@@ -1,4 +1,3 @@
-import { Application } from '@feathersjs/koa'
 import { FC, LazyExoticComponent } from 'react'
 import { MagickComponentArray } from './engine'
 import { CompletionProvider, Route, SpellInterface } from './types'
@@ -130,7 +129,7 @@ export class ClientPlugin extends Plugin {
 export type ServerInit = () => Promise<void> | null | void
 export type ServerInits = Record<string, ServerInit>
 export class ServerPlugin extends Plugin {
-  services: ((app: Application) => void)[]
+  services: ((app: any) => void)[]
   serverInit?: ServerInit
   agentMethods?: {
     start: (args) => Promise<void> | void
@@ -154,7 +153,7 @@ export class ServerPlugin extends Plugin {
     secrets = [],
     completionProviders = [],
   }: PluginConstuctor & {
-    services?: ((app: Application) => void)[]
+    services?: ((app: any) => void)[]
     serverInit?: ServerInit
     agentMethods?: {
       start: (args) => Promise<void> | void
@@ -217,7 +216,7 @@ class PluginManager {
 
     this.pluginList.forEach(plugin => {
       let plug_nodes = {}
-      plugin.nodes.forEach(node => {
+      plugin.nodes.forEach((node: any) => {
         const id = Math.random().toString(36).slice(2, 7)
         const obj = {}
         obj[id] = () => new node()
@@ -381,7 +380,7 @@ export class ClientPluginManager extends PluginManager {
     return {}
   }
   getServices() {
-    const serviceList = [] as [string, (app: Application) => void][]
+    const serviceList = [] as [string, (app: any) => void][]
     return serviceList
   }
   getServerInits() {
@@ -431,7 +430,7 @@ export class ServerPluginManager extends PluginManager {
   }
 
   getServices() {
-    const serviceList = [] as [string, (app: Application) => void][]
+    const serviceList = [] as [string, (app: any) => void][]
     this.pluginList.forEach((plugin: ServerPlugin) => {
       Object.keys(plugin.services).forEach(key => {
         serviceList.push([key, plugin.services[key]])

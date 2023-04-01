@@ -21,7 +21,7 @@ export type SocketData = {
 }
 
 type Context = {
-  magick: EngineContext
+  context: EngineContext
   currentSpell: {
     id: string
   }

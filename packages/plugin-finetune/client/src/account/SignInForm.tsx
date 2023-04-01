@@ -1,26 +1,30 @@
-import { Box, Typography } from '@mui/material'
-import Button from '@mui/material/Button'
-import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
-import InfoCard from '../components/InfoCard'
-import useAuthentication from './useAuthentication'
+// DOCUMENTED 
+import { Box, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import InfoCard from '../components/InfoCard';
+import useAuthentication from './useAuthentication';
 
+/**
+ * SigninForm component, provides the user with information about configuring the
+ * API key and handling navigation to settings or other pages.
+ */
 export default function SigninForm() {
-  const navigate = useNavigate()
-  const { signIn } = useAuthentication()
-  const initialValue = { apiKey: '', organizationId: '' }
+  const navigate = useNavigate();
+  const { signIn } = useAuthentication();
 
   useEffect(() => {
-    const secrets = JSON.parse(window.localStorage.getItem('secrets') || '{}')
-    const openai = secrets['openai_api_key']
+    const secrets = JSON.parse(window.localStorage.getItem('secrets') || '{}');
+    const openai = secrets['openai_api_key'];
     if (openai) {
-      signIn(openai, '')
-      navigate('/fineTuneManager/completions')
+      signIn(openai, '');
+      navigate('/fineTuneManager/completions');
     } else {
-      console.log('no api key found')
+      console.log('no api key found');
     }
-  }, [])
+  }, []);
 
   return (
     <section className="space-y-4">
@@ -46,31 +50,36 @@ export default function SigninForm() {
             <div></div>
           </form>
         </Box>
-
         <Box component={'span'} sx={{ textAlign: 'center' }}>
           <Promo />
           <Footer />
         </Box>
       </InfoCard>
     </section>
-  )
+  );
 }
 
+/**
+ * Promo component, lists the features of the fine tune manager.
+ */
 function Promo() {
   return (
     <section>
       <ul className="mt-8 text-xl list-disc">
         <li>
-          <b>Fine tune</b>completion models by uploading training and validation
+          <b>Fine tune</b> completion models by uploading training and validation
           files
         </li>
         <li>CSV, Excel spreadsheets, and of course JSONL</li>
         <li>Play around and see the API requests</li>
       </ul>
     </section>
-  )
+  );
 }
 
+/**
+ * Footer component, informs the user about usage limits, terms, conditions and API usage responsibilities.
+ */
 function Footer() {
   return (
     <footer>
@@ -79,5 +88,5 @@ function Footer() {
         your OpenAI account. Use responsibly.
       </p>
     </footer>
-  )
+  );
 }

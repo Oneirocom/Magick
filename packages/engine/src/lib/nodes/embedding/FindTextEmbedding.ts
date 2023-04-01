@@ -1,24 +1,26 @@
-import Rete from 'rete'
+// DOCUMENTED 
+import Rete, { Node } from 'rete';
 
-import { API_ROOT_URL } from '../../config'
-import { MagickComponent } from '../../engine'
-import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
+import { API_ROOT_URL } from '../../config';
+import { MagickComponent } from '../../engine';
+import { arraySocket, stringSocket, triggerSocket } from '../../sockets';
 import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   WorkerData
-} from '../../types'
+} from '../../types';
 
-const info = 'Get a cached embedding for this exact string'
+const info = 'Get a cached embedding for this exact string';
 
 type InputReturn = {
-  embedding: number[] | null
-}
+  embedding: number[] | null;
+};
 
-export class FindTextEmbedding extends MagickComponent<
-  Promise<InputReturn | null>
-> {
+/**
+ * FindTextEmbedding class extends MagickComponent and processes the given text to find cached embeddings.
+ */
+export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | null>> {
   constructor() {
     super('Find Text Embedding', {
       outputs: {
@@ -26,71 +28,88 @@ export class FindTextEmbedding extends MagickComponent<
         failure: 'option',
         success: 'option',
       },
-    }, 'Embedding', info)
-
+    }, 'Embedding', info);
   }
 
-  builder(node: MagickNode) {
-    const contentInput = new Rete.Input('content', 'Content', stringSocket)
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const success = new Rete.Output('success', 'Success', triggerSocket)
-    const fail = new Rete.Output('failure', 'Failure', triggerSocket)
-    const out = new Rete.Output('embedding', 'Events', arraySocket)
+  /**
+   * Configure the input and output sockets for the Rete node.
+   *
+   * @param node - The MagickNode node to configure.
+   * @returns The configured node.
+   */
+  builder(node: MagickNode): MagickNode {
+    const contentInput = new Rete.Input('content', 'Content', stringSocket);
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
+    const success = new Rete.Output('success', 'Success', triggerSocket);
+    const fail = new Rete.Output('failure', 'Failure', triggerSocket);
+    const out = new Rete.Output('embedding', 'Events', arraySocket);
 
     return node
       .addInput(dataInput)
       .addInput(contentInput)
       .addOutput(success)
       .addOutput(fail)
-      .addOutput(out)
+      .addOutput(out);
   }
 
-  async worker(
-    node: WorkerData,
-    inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs
-  ) {
-    const content = (inputs['content'] && inputs['content'][0]) as string
+  /**
+   * Worker function to process the inputs and generate the output.
+   *
+   * @param node - Node data.
+   * @param inputs - Node inputs.
+   * @param _outputs - Node outputs.
+   * @returns The result of the worker process.
+   */
+  async worker(node: WorkerData, inputs: MagickWorkerInputs, _outputs: MagickWorkerOutputs): Promise<InputReturn | null> {
+    // Get the content from the inputs
+    const content = (inputs['content'] && inputs['content'][0]) as string;
 
     if (!content) {
-      console.log('Content is null, not storing event')
-      return null
+      console.log('Content is null, not storing event');
+      return null;
     }
-    // feathers 5 query params
+
     const params = {
       content: content,
       $limit: 1,
       getEmbedding: true,
-    }
+    };
 
-    const urlString = `${API_ROOT_URL}/events`
+    const urlString = `${API_ROOT_URL}/events`;
 
-    const url = new URL(urlString)
+    // Construct URL with query parameters
+    const url = new URL(urlString);
     for (const p in params) {
-      // append params to url, make sure to preserve arrays
       if (Array.isArray(params[p])) {
-        params[p].forEach(v => url.searchParams.append(p, v))
+        params[p].forEach(v => url.searchParams.append(p, v));
       } else {
-        url.searchParams.append(p, params[p])
+        url.searchParams.append(p, params[p]);
       }
     }
-    const response = await fetch(url.toString())
-    if (response.status !== 200) return null
-    const json = await response.json()
-    
-    const responseData = json.events[0]
-    let embedding = responseData?.embedding?.toString()
-    // if embedding is a string, parse it to an array
+
+    // Fetch the result from the API
+    const response = await fetch(url.toString());
+    if (response.status !== 200) return null;
+
+    const json = await response.json();
+
+    const responseData = json.events[0];
+    let embedding = responseData?.embedding?.toString();
+
+    // Parse the embedding string into an array
     if (typeof embedding === 'string') {
-      embedding = JSON.parse(JSON.stringify(embedding))
+      embedding = JSON.parse(JSON.stringify(embedding));
     }
+
+    // Set the task closed state based on the presence of the embedding
     if (embedding) {
-      this._task.closed = ['failure']
+      this._task.closed = ['failure'];
     } else {
-      this._task.closed = ['success']
+      this._task.closed = ['success'];
     }
+
     return {
       embedding,
-    }
+    };
   }
 }

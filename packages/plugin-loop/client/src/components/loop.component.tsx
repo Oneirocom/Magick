@@ -1,6 +1,11 @@
+// DOCUMENTED 
 import React, { FC, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
+import { Modal, Switch } from '@magickml/client-core'
 
+/**
+ * PluginProps type
+ */
 type PluginProps = {
   selectedAgentData: any
   props: {
@@ -10,10 +15,15 @@ type PluginProps = {
     update: (id: string, data: object) => void
   }
 }
-import { Modal, Switch } from '@magickml/client-core'
 
+/**
+ * AgentLoopWindow component
+ * @param props - PluginProps
+ */
 export const AgentLoopWindow: FC<PluginProps> = props => {
   const { selectedAgentData, setSelectedAgentData, update, enable } = props.props
+
+  // Initialize the state variables
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [checked, setChecked] = useState(selectedAgentData.data?.loop_enabled)
@@ -21,21 +31,31 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
   const [state, setState] = useState({
     loop_interval: selectedAgentData?.data?.loop_interval,
   })
-  useEffect(()=>{
-    if (enable["LoopPlugin"] == false) {
+
+  // Handle enable/disable of the loop plugin
+  useEffect(() => {
+    if (enable["LoopPlugin"] === false) {
       setChecked(false)
       setDisable(true)
     }
-    if (enable['LoopPlugin'] == true){
+    if (enable['LoopPlugin'] === true) {
       setChecked(selectedAgentData.data?.loop_enabled)
       setDisable(false)
     }
   }, [enable, selectedAgentData])
+
+  /**
+   * Handle input changes
+   * @param e - input change event
+   */
   const handleOnChange = e => {
     const { name, value } = e.target
     setState({ ...state, [name]: value })
   }
 
+  /**
+   * Save the updated data
+   */
   const handleSave = () => {
     const data = {
       ...selectedAgentData,
@@ -48,6 +68,7 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
     update(selectedAgentData.id, data)
   }
 
+  // Render the component
   return (
     <>
       <div

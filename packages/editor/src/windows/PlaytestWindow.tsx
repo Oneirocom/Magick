@@ -1,35 +1,40 @@
-import { Button, Select, Window } from '@magickml/client-core'
-import Editor from '@monaco-editor/react'
-import { useSnackbar } from 'notistack'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Scrollbars } from 'react-custom-scrollbars-2'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { useDispatch } from 'react-redux'
-import { useConfig } from '../contexts/ConfigProvider'
-import { useEditor } from '../contexts/EditorProvider'
-import { useInspector } from '../contexts/InspectorProvider'
-import { usePubSub } from '../contexts/PubSubProvider'
-import css from '../screens/Magick/magick.module.css'
-import { spellApi } from '../state/api/spells'
-import { useAppSelector } from '../state/hooks'
+// DOCUMENTED 
+import { Button, Select, Window } from '@magickml/client-core';
+import Editor from '@monaco-editor/react';
+import { useSnackbar } from 'notistack';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Scrollbars } from 'react-custom-scrollbars-2';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { useDispatch } from 'react-redux';
+import { useConfig } from '../contexts/ConfigProvider';
+import { useEditor } from '../contexts/EditorProvider';
+import { useInspector } from '../contexts/InspectorProvider';
+import { usePubSub } from '../contexts/PubSubProvider';
+import css from '../screens/Magick/magick.module.css';
+import { spellApi } from '../state/api/spells';
+import { useAppSelector } from '../state/hooks';
 import {
   addLocalState,
   selectStateBytabId,
-  upsertLocalState
-} from '../state/localState'
+  upsertLocalState,
+} from '../state/localState';
 
-const Input = props => {
-  const ref = useRef() as React.MutableRefObject<HTMLInputElement>
+/**
+ * Input component - Receives and sends playtest input.
+ */
+const Input = (props) => {
+  const ref = useRef() as React.MutableRefObject<HTMLInputElement>;
+
+  // Trigger 'onSend' when 'return' key is pressed on the input.
   useHotkeys(
     'return',
     () => {
-      if (ref.current !== document.activeElement) return
-      props.onSend()
+      if (ref.current !== document.activeElement) return;
+      props.onSend();
     },
-    // Not sure why it says INPUT is not a valid AvailableTag when it clearly is
-    { enableOnTags: 'INPUT' as any },
-    [props, ref]
-  )
+    { enableOnTags: ('INPUT' as any) },
+    [props, ref],
+  );
 
   return (
     <div className={css['playtest-input']}>
@@ -48,9 +53,10 @@ const Input = props => {
         Send
       </Button>
     </div>
-  )
-}
+  );
+};
 
+// Default playtest data.
 const defaultPlaytestData = {
   sender: 'user',
   observer: 'assistant',
@@ -60,21 +66,24 @@ const defaultPlaytestData = {
   channelType: 'playtest',
   agentId: 'preview',
   entities: ['user', 'assistant'],
-}
+};
 
+/**
+ * Playtest component - The main component for handling playtesting functionality.
+ */
 const Playtest = ({ tab }) => {
-  const config = useConfig()
-  const { inspectorData } = useInspector()
+  const config = useConfig();
+  const { inspectorData } = useInspector();
 
-  const scrollbars = useRef<any>()
-  const [history, setHistory] = useState([])
-  const [value, setValue] = useState('')
-  const [openData, setOpenData] = useState<boolean>(false)
+  const scrollbars = useRef<any>();
+  const [history, setHistory] = useState([]);
+  const [value, setValue] = useState('');
+  const [openData, setOpenData] = useState<boolean>(false);
 
-  const { publish, subscribe, events } = usePubSub()
-  const dispatch = useDispatch()
-  const { serialize } = useEditor()
-  const { enqueueSnackbar } = useSnackbar()
+  const { publish, subscribe, events } = usePubSub();
+  const dispatch = useDispatch();
+  const { serialize } = useEditor();
+  const { enqueueSnackbar } = useSnackbar();
   const { data: spellData } = spellApi.useGetSpellByIdQuery(
     {
       spellName: tab.name.split('--')[0],
@@ -84,71 +93,69 @@ const Playtest = ({ tab }) => {
     {
       refetchOnMountOrArgChange: true,
       skip: !tab.name.split('--')[0],
-    }
-  )
+    },
+  );
 
-  const localState = useAppSelector(state => {
-    return selectStateBytabId(state.localState, tab.id)
-  })
-  const { $PLAYTEST_PRINT, $RUN_SPELL } = events
+  const localState = useAppSelector((state) => {
+    return selectStateBytabId(state.localState, tab.id);
+  });
 
+  const { $PLAYTEST_PRINT, $RUN_SPELL } = events;
+
+  // Print to console callback function.
   const printToConsole = useCallback(
     (_, _text) => {
-      const text = (`Agent: ` + _text).split('\n')
-      const newHistory = [...history, ...text]
-      setHistory(newHistory as [])
+      const text = `Agent: ` + _text.split('\n');
+      const newHistory = [...history, text];
+      console.log('setting new history to ', newHistory)
+      setHistory(newHistory as []);
     },
-    [history]
-  )
+    [history],
+  );
 
-  // we want to set the options for the dropdown by parsing the spell graph
-  // and looking for nodes with the playtestToggle set to true
-  const [playtestOptions, setPlaytestOptions] = useState<Record<
-    string,
-    any
-  > | null>([])
-  const [playtestOption, setPlaytestOption] = useState(null)
+  // Set playtest options based on spell graph nodes with the playtestToggle set to true.
+  const [playtestOptions, setPlaytestOptions] = useState<Record<string, any> | null>([]);
+  const [playtestOption, setPlaytestOption] = useState(null);
 
   useEffect(() => {
-    if (!inspectorData || inspectorData.name !== 'Input')
-      return
-    console.log('effected', inspectorData.data.inputName)
-    setPlaytestOption('Input - ' + (inspectorData.data.inputType !== 'Default' ? inspectorData.data.inputType : inspectorData.data.inputName))
-  }, [inspectorData])
+    if (!inspectorData || inspectorData.name !== 'Input') return;
+    console.log('effected', inspectorData.data.inputName);
+    setPlaytestOption(`Input - ` + (inspectorData.data.inputType !== 'Default' ? inspectorData.data.inputType : inspectorData.data.inputName));
+  }, [inspectorData]);
 
   useEffect(() => {
-    if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
-      return
+    if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph) return;
 
-    const graph = spellData.data[0].graph
+    const graph = spellData.data[0].graph;
     const options = Object.values(graph.nodes)
       .filter((node: any) => {
-        return node.data.isInput
+        return node.data.isInput;
       })
       .map((node: any) => ({
         value: node.data.name ?? node.name,
         label: node.data.name ?? node.name,
-      }))
+      }));
 
-    setPlaytestOptions(options)
-    if (!playtestOption) setPlaytestOption(options[0].value)
-  }, [spellData])
+    setPlaytestOptions(options);
+    if (!playtestOption) setPlaytestOption(options[0].value);
+  }, [spellData]);
 
-  // Keep scrollbar at bottom of its window
+  // Keep scrollbar at the bottom of its window.
   useEffect(() => {
-    if (!scrollbars.current) return
-    scrollbars.current.scrollToBottom()
-  }, [history])
-  useEffect(() => {
-    const unsubscribe = subscribe($PLAYTEST_PRINT(tab.id), printToConsole)
+    if (!scrollbars.current) return;
+    scrollbars.current.scrollToBottom();
+  }, [history]);
 
-    // return a clean up function
-    return unsubscribe as () => void
-  }, [subscribe, printToConsole, $PLAYTEST_PRINT, tab.id])
-
-  // Sync up localState into data field for persistence
   useEffect(() => {
-    // Set up a default for the local state here
+    const unsubscribe = subscribe($PLAYTEST_PRINT(tab.id), printToConsole);
+
+    // Return a cleanup function.
+    return unsubscribe as () => void;
+  }, [subscribe, printToConsole, $PLAYTEST_PRINT, tab.id]);
+
+  // Sync up localState into data field for persistence.
+  useEffect(() => {
+    // Set up a default for the local state here.
     if (!localState) {
       dispatch(
         addLocalState({
@@ -157,21 +164,22 @@ const Playtest = ({ tab }) => {
             ...defaultPlaytestData,
             projectId: config.projectId,
           }),
-        })
-      )
-      return
+        }),
+      );
+      return;
     }
-  }, [config.projectId, dispatch, localState, tab.id])
+  }, [config.projectId, dispatch, localState, tab.id]);
 
+  // Available editor options.
   const options = {
     minimap: {
       enabled: false,
     },
-    wordWrap: 'bounded' as const,
+    wordWrap: ('bounded' as const),
     fontSize: 14,
-  }
+  };
 
-  const handleEditorWillMount = monaco => {
+  const handleEditorWillMount = (monaco) => {
     monaco.editor.defineTheme('sds-dark', {
       base: 'vs-dark',
       inherit: true,
@@ -179,37 +187,34 @@ const Playtest = ({ tab }) => {
       colors: {
         'editor.background': '#272727',
       },
-    })
-  }
+    });
+  };
 
+  // Send playtest input to the system.
   const onSend = async () => {
-    const newHistory = [...history, `You: ${value}`]
-    setHistory(newHistory as [])
+    const newHistory = [...history, `You: ${value}`];
+    setHistory(newHistory as []);
 
-    let toSend = value
-    setValue('')
+    let toSend = value;
+    setValue('');
 
-    const json = localState?.playtestData
-    // .replace(
-    //   /(['"])?([a-z0-9A-Z_]+)(['"])?:/g,
-    //   '"$2": '
-    // )
+    const json = localState?.playtestData;
 
     if (!json) {
       enqueueSnackbar('No data provided', {
         variant: 'error',
-      })
-      return
+      });
+      return;
     }
 
-    // validate the json
+    // Validate the JSON data.
     try {
-      JSON.parse(json)
+      JSON.parse(json);
     } catch (e) {
       enqueueSnackbar('Invalid data - JSON is poorly formatted', {
         variant: 'error',
-      })
-      return
+      });
+      return;
     }
 
     toSend = {
@@ -223,34 +228,34 @@ const Playtest = ({ tab }) => {
       channelType: 'previewChannelType',
       entities: ['user', 'assistant'],
       ...JSON.parse(json),
-    }
+    };
 
-    // get spell from editor
-    const graph = serialize()
+    // Get spell from the editor.
+    const graph = serialize();
     if (!graph) {
       enqueueSnackbar('No graph found', {
         variant: 'error',
-      })
+      });
     }
 
-    const playtestNode = Object.values(graph.nodes).find(node => {
-      return node.data.name === playtestOption
-    })
+    const playtestNode = Object.values(graph.nodes).find((node) => {
+      return node.data.name === playtestOption;
+    });
 
     if (!playtestNode) {
       enqueueSnackbar('No input node found for this input type', {
         variant: 'error',
-      })
-      return
+      });
+      return;
     }
 
-    const playtestInputName = playtestNode?.data.name
+    const playtestInputName = playtestNode?.data.name;
 
     if (!playtestInputName) {
       enqueueSnackbar('No input node found for this input type', {
         variant: 'error',
-      })
-      return
+      });
+      return;
     }
 
     const data = {
@@ -260,45 +265,44 @@ const Playtest = ({ tab }) => {
       inputs: {
         [playtestInputName as string]: toSend,
       },
-      // retrun an array of all nodes where node.data.isPublic is true
-      // todo we should move functions like this into a single spell helper
       publicVariables: JSON.stringify(
         Object.values(graph.nodes || {}).filter(
-          (node: { data }) => node?.data?.isPublic
-        )
+          (node: { data }) => node?.data?.isPublic,
+        ),
       ),
       secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
-    }
+    };
 
-    publish($RUN_SPELL(tab.id), data)
+    publish($RUN_SPELL(tab.id), data);
 
-    setValue('')
-  }
+    setValue('');
+  };
 
-  const onDataChange = dataText => {
+  // Update state when playtest data is changed.
+  const onDataChange = (dataText) => {
     dispatch(
       upsertLocalState({
         id: tab.id,
         playtestData: dataText ?? defaultPlaytestData,
-      })
-    )
-  }
+      }),
+    );
+  };
 
-  const onChange = e => {
-    setValue(e.target.value)
-  }
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
 
   const onClear = () => {
-    setHistory([])
-  }
+    setHistory([]);
+  };
 
   const toggleData = () => {
-    setOpenData(!openData)
-  }
+    setOpenData(!openData);
+  };
 
   const onSelectChange = async ({ value }) => {
-    setPlaytestOption(value)
-  }
+    setPlaytestOption(value);
+  };
 
   const toolbar = (
     <React.Fragment>
@@ -313,7 +317,6 @@ const Playtest = ({ tab }) => {
         placeholder="Select Input"
         creatable={false}
       />
-
       <Button className="small" style={{ cursor: 'pointer' }} onClick={onClear}>
         Clear
       </Button>
@@ -325,26 +328,26 @@ const Playtest = ({ tab }) => {
         Data
       </Button>
     </React.Fragment>
-  )
+  );
+
   if (document.getElementById('api-key')) {
     document
       .getElementById('api-key')
       ?.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
-          event.preventDefault()
+          event.preventDefault();
         }
-      })
+      });
   }
 
   return (
     <Window toolbar={toolbar}>
-      {/*  This will slide down here and show another text area where you can input a json object for injection into the playtest.  Good for things that dont change often.  Ideal for Agents. */}
       <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
         <div
           className={css['playtest-output']}
           style={{ display: openData ? '' : 'none' }}
         >
-          <Scrollbars ref={ref => (scrollbars.current = ref)}>
+          <Scrollbars ref={(ref) => (scrollbars.current = ref)}>
             <Editor
               theme="sds-dark"
               language="json"
@@ -366,10 +369,10 @@ const Playtest = ({ tab }) => {
           }}
         ></div>
         <div className={css['playtest-output']}>
-          <Scrollbars ref={ref => (scrollbars.current = ref)}>
+          <Scrollbars ref={(ref) => (scrollbars.current = ref)}>
             <ul>
               {history.map((printItem: string, key: any) => {
-                return <li key={key}>{printItem}</li>
+                return <li key={key}>{printItem}</li>;
               })}
             </ul>
           </Scrollbars>
@@ -380,7 +383,7 @@ const Playtest = ({ tab }) => {
         <Input onChange={onChange} value={value} onSend={onSend} />
       </div>
     </Window>
-  )
-}
+  );
+};
 
-export default Playtest
+export default Playtest;

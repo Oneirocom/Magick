@@ -1,60 +1,57 @@
-import { DEFAULT_USER_ID } from '@magickml/engine'
-// import io from 'socket.io'
-import { SpellManager, IGNORE_AUTH } from '@magickml/engine'
-import { buildMagickInterface } from '../helpers/buildMagickInterface'
-import { v4 } from 'uuid'
+// DOCUMENTED 
+import { DEFAULT_USER_ID, IGNORE_AUTH, SpellManager } from '@magickml/engine';
 
+/**
+ * Handle socket connections for the application.
+ * @param {any} app - The application instance.
+ * @returns {(io: any) => void} - A function that takes an `io` instance and sets up socket connections.
+ */
 const handleSockets = (app: any) => {
   return (io: any) => {
-    // Another gross 'any' here
+    /**
+     * Set up a connection event listener for incoming sockets.
+     */
     io.on('connection', async function (socket: any) {
-      console.log('CONNECTION ESTABLISHED')
+      console.log('CONNECTION ESTABLISHED');
 
       // user will be set to the payload if we are not in single user mode
-      let user
+      let user;
 
-      // Single user mode is for local usage of magick.  If we are in the cloud, we want auth here.
+      // Single user mode is for local usage. In the cloud, we want auth here.
       if (IGNORE_AUTH) {
         user = {
           id: DEFAULT_USER_ID,
-        }
+        };
       } else {
-        // todo wound up using a custom header here for the handshake.
-        // Using the standard authorization header was causing issues with feathers auth
-        const auth = socket.handshake?.headers?.authorization
+        // Use a custom header for the handshake.
+        const auth = socket.handshake?.headers?.authorization;
         if (!auth) {
-          return console.error(
-            'No Authorization header was provided in handshake'
-          )
+          return console.error('No Authorization header was provided in handshake');
         }
 
-        const sessionId = auth.split(' ')[1]
+        const sessionId = auth.split(' ')[1];
         if (!sessionId) {
-          return console.error('No session id provided for handshake')
+          return console.error('No session id provided for handshake');
         }
 
-        // auth services will verify the token
+        // Auth services will verify the token
         const payload = await app
           .service('authentication')
-          .verifyAccessToken(sessionId)
+          .verifyAccessToken(sessionId);
 
-        user = payload.user
+        user = payload.user;
       }
-      // Attach the user info to the params or use in services
-      socket.feathers.user = user
+      // Attach the user info to the params for use in services
+      socket.feathers.user = user;
 
-      const magickInterface = buildMagickInterface({}) as any
+      // Instantiate the interface within the runner rather than the spell manager to avoid shared state issues.
+      const spellManager = new SpellManager({ socket });
 
-      // probably need to move interface instantiation into the runner rather than the spell manager.
-      // Doing it this way makes the interface shared across all spells
-      // Which messes up state stuff.
-      const spellManager = new SpellManager({ socket, magickInterface })
+      app.userSpellManagers.set(user.id, spellManager);
 
-      app.userSpellManagers.set(user.id, spellManager)
+      socket.emit('connected');
+    });
+  };
+};
 
-      socket.emit('connected')
-    })
-  }
-}
-
-export default handleSockets
+export default handleSockets;

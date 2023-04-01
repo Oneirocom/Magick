@@ -136,7 +136,7 @@ function install(
           node: WorkerData,
           inputs: WorkerInputs,
           outputs: MagickWorkerOutputs,
-          context
+          context: any
         ) => {
           moduleManager.workerTriggerIns.call(
             moduleManager,

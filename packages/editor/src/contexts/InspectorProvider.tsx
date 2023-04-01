@@ -1,7 +1,11 @@
+// DOCUMENTED 
 import { InspectorData, SupportedLanguages } from '@magickml/engine'
 import { usePubSub } from '../contexts/PubSubProvider'
 import { createContext, useContext, useEffect, useState } from 'react'
 
+/**
+ * TextEditorData represents the state and options for the text editor.
+ */
 export type TextEditorData = {
   options?: Record<string, any> | undefined & {
     language?: SupportedLanguages
@@ -11,6 +15,9 @@ export type TextEditorData = {
   name?: string
 }
 
+/**
+ * InspectorContext represents the state/actions for the Inspector.
+ */
 type InspectorContext = {
   inspectorData: InspectorData | null
   textEditorData: TextEditorData | null
@@ -18,10 +25,15 @@ type InspectorContext = {
   saveInspector: Function
 }
 
+// Create a context for Inspector state
 const Context = createContext<InspectorContext>(undefined!)
 
+// Expose the Context through the useInspector hook
 export const useInspector = () => useContext(Context)
 
+/**
+ * InspectorProvider is a context provider for inspector state and actions.
+ */
 const InspectorProvider = ({ children, tab }) => {
   const { subscribe, publish, events } = usePubSub()
 
@@ -30,21 +42,21 @@ const InspectorProvider = ({ children, tab }) => {
 
   const SET_INSPECTOR = events.$INSPECTOR_SET(tab.id)
 
+  // Subscribe to inspector changes 
   useEffect(() => {
-    return subscribe(SET_INSPECTOR, (_, data: InspectorData) => {
-      // If the incoming data and existing data are at odds, clear inspector data
+    const unsubscribe = subscribe(SET_INSPECTOR, (_, data: InspectorData) => {
+      // Clear inspector data if conflicting
       if (data?.nodeId !== inspectorData?.nodeId) setInspectorData(null)
 
-      // Set the inspector
+      // Update the inspector data
       setInspectorData(data)
 
       if (!data.dataControls) return
 
-      // Handle components in a special way here.  Could probaby abstract this better
-
+      // Handle components
       Object.entries(data.dataControls).forEach(([, control]) => {
         if (control?.options?.editor) {
-          // we relay data to the text editor component for display here as well.
+          // Relay data to the text editor
           const textData = {
             data: data.data[control.dataKey],
             nodeId: data.nodeId,
@@ -56,25 +68,31 @@ const InspectorProvider = ({ children, tab }) => {
           setTextEditorData(textData)
         }
       })
-    }) as () => void
+    })
+
+    return unsubscribe as () => void
   }, [events, subscribe, publish])
 
-  // text editor subscription
+  // Subscribe to text editor changes
   useEffect(() => {
-    return subscribe(events.$TEXT_EDITOR_SET(tab.id), (event, data) => {
+    const unsubscribe = subscribe(events.$TEXT_EDITOR_SET(tab.id), (event, data) => {
       setTextEditorData(data)
-    }) as () => void
+    })
+
+    return unsubscribe as () => void
   }, [events, subscribe, publish])
 
-  // clear text editor subscription
+  // Subscribe to text editor clearing
   useEffect(() => {
-    return subscribe(events.$TEXT_EDITOR_CLEAR(tab.id), () => {
+    const unsubscribe = subscribe(events.$TEXT_EDITOR_CLEAR(tab.id), () => {
       setTextEditorData({})
-    }) as () => void
+    })
+
+    return unsubscribe as () => void
   }, [events, subscribe, publish])
 
+  // Save text editor changes
   const saveTextEditor = textData => {
-    console.log('save text editor', textData)
     const textUpdate = {
       [textData.control.dataKey]: textData.data,
     }
@@ -95,6 +113,7 @@ const InspectorProvider = ({ children, tab }) => {
     }
   }
 
+  // Save inspector changes
   const saveInspector = inspectorData => {
     setInspectorData(inspectorData)
     publish(events.$NODE_SET(tab.id, inspectorData.nodeId), inspectorData)
@@ -107,6 +126,7 @@ const InspectorProvider = ({ children, tab }) => {
     saveInspector,
   }
 
+  // Provide the public interface to the Context
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }
 

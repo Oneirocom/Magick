@@ -7,15 +7,33 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Magick',
-  tagline: 'Documentation for .',
-  url: 'https://magick.ml',
+  tagline: 'Documentation for Magick.',
+  url: 'https://magickml.com',
   baseUrl: '/',
   onBrokenLinks: 'ignore',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'Oneirocom, Inc.', // Usually your GitHub org/user name.
   projectName: 'magick', // Usually your repo name.
+  plugins: [
+    [
+      'docusaurus-plugin-typedoc',
 
+      // Plugin / TypeDoc options
+      {
+        id: 'engine',
+        entryPoints: ['./packages/engine/src/index.ts'],
+        tsconfig: './packages/engine/tsconfig.lib.json',
+        readme: 'none',
+        sidebar: {
+          categoryLabel: 'API Documentation',
+          collapsed: false,
+          position: 100,
+          fullNames: true,
+        },
+      }
+    ]
+  ],
   presets: [
     [
       'classic',
@@ -78,6 +96,12 @@ const config = {
             docId: 'developer-guides/Setup',
             position: 'right',
             label: 'Developer Guides',
+          },
+          {
+            type: 'doc',
+            docId: 'api/index',
+            position: 'right',
+            label: 'API Documentation',
           },
         ],
       },

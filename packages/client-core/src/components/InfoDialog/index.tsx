@@ -1,22 +1,32 @@
-import React, { useRef, useEffect } from 'react'
+// DOCUMENTED 
+import React, { useRef, useEffect } from 'react';
 import {
   DialogTitle,
   IconButton,
   Typography,
   DialogContent,
   Menu,
-} from '@mui/material'
-import { Close } from '@mui/icons-material'
-import styles from './index.module.scss'
+} from '@mui/material';
+import { Close } from '@mui/icons-material';
+import styles from './index.module.scss';
 
+/**
+ * The props for the DialogTitle component.
+ */
 export interface DialogTitleProps {
-  id: string
-  children?: React.ReactNode
-  onClose: () => void
+  id: string;
+  children?: React.ReactNode;
+  onClose: () => void;
 }
 
+/**
+ * A custom dialog title with a close button.
+ *
+ * @param props - The properties for the dialog title.
+ * @returns The dialog title component.
+ */
 function BootstrapDialogTitle(props: DialogTitleProps) {
-  const { children, onClose, ...other } = props
+  const { children, onClose, ...other } = props;
 
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
@@ -29,7 +39,7 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
             position: 'absolute',
             right: 8,
             top: 8,
-            color: theme => theme.palette.grey[500],
+            color: (theme) => theme.palette.grey[500],
             background: 'var(--dark-2)',
           }}
         >
@@ -37,31 +47,38 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
         </IconButton>
       ) : null}
     </DialogTitle>
-  )
+  );
 }
 
-const InfoDialog = ({ title, body, style }) => {
-  const anchorRef = useRef(null)
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
+/**
+ * The InfoDialog component is used to display additional information on top of the currently
+ * displayed content.
+ *
+ * @param {string} title - The title text of the info dialog.
+ * @param {string} body - The body text of the info dialog.
+ * @param {React.CSSProperties} [style] - Custom styles to apply to the info dialog.
+ * @returns {JSX.Element} The info dialog component.
+ */
+const InfoDialog = ({ title, body, style }): JSX.Element => {
+  const anchorRef = useRef(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
-  const handleClick = event => {
-    setAnchorEl(event.currentTarget)
-  }
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
-    anchorRef.current.click()
-  }, [])
+    anchorRef.current.click();
+  }, []);
 
   return (
     <>
-      <div style={style} ref={anchorRef} onClick={handleClick}>
-        {' '}
-      </div>
+      <div style={style} ref={anchorRef} onClick={handleClick}></div>
 
       {open && (
         <Menu
@@ -87,7 +104,7 @@ const InfoDialog = ({ title, body, style }) => {
         </Menu>
       )}
     </>
-  )
-}
+  );
+};
 
-export default InfoDialog
+export default InfoDialog;
