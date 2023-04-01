@@ -55,7 +55,7 @@ const Context = createContext<EditorContextType>(undefined!)
 
 export const useEditor = () => useContext(Context)
 
-const EditorProvider = ({ children }) => {
+const ChatProvider = ({ children }) => {
   const [editor, setEditorState] = useState<MagickEditor | null>(null)
   const editorRef = useRef<MagickEditor | null>(null)
   const FeathersContext = useFeathers()
@@ -220,4 +220,4 @@ export const Editor: any = React.memo(RawEditor)
 
 Editor.whyDidYouRender = false
 
-export default EditorProvider
+export default ChatProvider

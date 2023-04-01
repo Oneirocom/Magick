@@ -13,7 +13,6 @@ export interface Conversation {
   name: string;
   spell: Spell;
   messages: Message[];
-  prompt: string;
 }
 
 export interface OpenAIModel {
@@ -45,10 +44,8 @@ export interface Message {
 export type Role = "assistant" | "user";
 
 export interface ChatBody {
-  model: OpenAIModel;
+  spell: Spell;
   messages: Message[];
-  key: string;
-  prompt: string;
 }
 
 export interface KeyValuePair {
@@ -58,7 +55,6 @@ export interface KeyValuePair {
 
 // keep track of local storage schema
 export interface LocalStorage {
-  apiKey: string;
   conversationHistory: Conversation[];
   selectedConversation: Conversation;
   theme: "light" | "dark";

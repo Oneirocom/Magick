@@ -1,5 +1,4 @@
 import { Conversation } from "../../../../types";
-import { DEFAULT_SYSTEM_PROMPT } from "../../../../utils/app/const";
 import { FC, useEffect, useRef, useState } from "react";
 import styles from './styles.module.css';
 
@@ -35,14 +34,6 @@ export const SystemPrompt: FC<Props> = ({ conversation, onChangePrompt }) => {
       textareaRef.current.style.height = `${textareaRef.current?.scrollHeight}px`;
     }
   }, [value]);
-
-  useEffect(() => {
-    if (conversation.prompt) {
-      setValue(conversation.prompt);
-    } else {
-      setValue(DEFAULT_SYSTEM_PROMPT);
-    }
-  }, [conversation]);
 
   return (
     <div className={styles.flexColumn}>

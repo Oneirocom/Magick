@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
-import { Spell } from '@magickml/engine'
+import { GraphData, Spell } from '@magickml/engine'
+
+import md5 from 'md5'
 
 import {
   useLazyGetSpellByIdQuery
@@ -9,15 +11,15 @@ import { useFeathers } from '../../../contexts/FeathersProvider'
 
 import { useConfig } from '../../../contexts/ConfigProvider'
 
-const EventHandler = ({ pubSub, tab }) => {
+const EventHandler = ({ pubSub, conversation }) => {
   const config = useConfig()
 
   // only using this to handle events, so not rendering anything with it.
   const { enqueueSnackbar } = useSnackbar()
 
   const [getSpell, { data: spell }] = useLazyGetSpellByIdQuery({
-    spellName: tab.name.split('--')[0],
-    id: tab.id,
+    spellName: conversation.name.split('--')[0],
+    id: conversation.id,
     projectId: config.projectId,
   })
   // Spell ref because callbacks cant hold values from state without them
@@ -28,54 +30,50 @@ const EventHandler = ({ pubSub, tab }) => {
 
   useEffect(() => {
     getSpell({
-      spellName: tab.name,
-      id: tab.id,
+      spellName: conversation.name,
+      id: conversation.id,
       projectId: config.projectId,
     })
     spellRef.current = spell?.data[0]
-  }, [config.projectId, getSpell, spell, tab.id, tab.name])
+  }, [config.projectId, getSpell, spell, conversation.id, conversation.name])
 
   useEffect(() => {
-    if (!client.io || !tab.id || !enqueueSnackbar) return
+    if (!client.io || !conversation.id || !enqueueSnackbar) return
 
     const listener = data => {
-      //publish($DEBUG_PRINT(tab.id), (data.error.message))
+      //publish($DEBUG_PRINT(conversation.id), (data.error.message))
       console.error('Error in spell execution')
       enqueueSnackbar('Error Running the spell. Please Check the Console', {
         variant: 'error',
       })
     }
 
-    client.io.on(`${tab.id}-error`, listener)
+    client.io.on(`${conversation.id}-error`, listener)
 
     // Handle cleaning up the subscription
     return () => {
-      client.io.off(`${tab.id}-error`, listener)
+      client.io.off(`${conversation.id}-error`, listener)
     }
-  }, [client.io, tab.id, enqueueSnackbar])
-
+  }, [client.io, conversation.id, enqueueSnackbar])
   const { events, subscribe } = pubSub
 
   const {
     $RUN_SPELL,
   } = events
 
-  // clean up anything inside the editor which we need to shut down.
-  // mainly subscriptions, etc.
   const runSpell = async (event, data) => {
-    console.log('DATA IN EVENT HANDLER', data)
-
+    console.log("🚀 ~ file: EventHandler.tsx:65 ~ runSpell ~ data:", data)
     // run the spell in the spell runner service
     client.service('spell-runner').create(data)
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handlerMap = {
-    [$RUN_SPELL(tab.id)]: runSpell,
+    [$RUN_SPELL(conversation.id)]: runSpell,
   }
 
   useEffect(() => {
-    if (!tab && !spell && !client) return
+    if (!conversation && !spell && !client) return
 
     const subscriptions = Object.entries(handlerMap).map(([event, handler]) => {
       return subscribe(event, handler)
@@ -87,7 +85,7 @@ const EventHandler = ({ pubSub, tab }) => {
         unsubscribe()
       })
     }
-  }, [tab, client, spell, handlerMap, subscribe])
+  }, [conversation, client, spell, handlerMap, subscribe])
 
   return null
 }

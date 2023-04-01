@@ -82,19 +82,24 @@ export const ChatInput: FC<Props> = ({ onSend, messageIsStreaming, spell, stopCo
 
   return (
     <div className={styles.container}>
+
+      {/* FIXME: Stop spell and reset to last message state */}
+      {/* {messageIsStreaming && (
+        <Button
+          className="small"
+          style={{ cursor: 'pointer' }}
+          onClick={handleStopConversation}
+        >
+          <StopCircle
+            className={styles.stopCircleIcon}
+          />
+          {" "}
+          Stop Generating
+
+        </Button>
+      )} */}
+
       <div className={styles.innerContainer}>
-        {messageIsStreaming && (
-          <button
-            className={styles.stopButton}
-            onClick={handleStopConversation}
-          >
-            <StopCircle
-              className={styles.stopCircleIcon}
-            />
-            {" "}
-            Stop Generating
-          </button>
-        )}
 
         <div className={magickCSS['playtest-input']}>
           <textarea
