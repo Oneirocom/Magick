@@ -7,7 +7,7 @@ import { API_ROOT_URL } from '../../config'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
-import { stringSocket, triggerSocket } from '../../sockets'
+import { objectSocket, triggerSocket } from '../../sockets'
 import {
   EngineContext,
   MagickNode,
@@ -40,7 +40,7 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const outp = new Rete.Output('output', 'output', stringSocket)
+    const outp = new Rete.Output('output', 'output', objectSocket)
 
     const nameControl = new InputControl({
       dataKey: 'name',
@@ -123,6 +123,8 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     }
 
     console.log('resp', resp)
+
+    console.log('resp.data is string or object?', typeof resp?.data === 'string' ? 'string' : 'object')
 
     return {
       output: resp ? resp.data : '',

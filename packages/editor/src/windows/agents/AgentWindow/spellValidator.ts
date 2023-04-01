@@ -126,7 +126,7 @@ const validateNodes = (nodes: { [key: string]: Node | null }, data: Data = {}): 
     .filter(([, value]) => value)
     .map(([key]) => inputTypeMapping[key])
     .reduce((acc, inputSet) => {
-      inputSet.forEach((input) => acc.add(input));
+      inputSet?.forEach((input) => acc.add(input));
       return acc;
     }, new Set());
 
