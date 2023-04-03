@@ -1,5 +1,5 @@
 import React from "react"
-import { useDropzone } from "React-dropzone"
+import { useDropzone } from "react-dropzone"
 import styles from "./DragDrop.module.css"
 
 function DragDrop({ onDrop, accept }) {
