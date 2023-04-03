@@ -133,7 +133,7 @@ export class CallContractFunctionWrite extends MagickComponent<Promise<InputRetu
     const functionName = (inputs['function_name'] && inputs['function_name'][0]) as string;
 
     return {
-      output: `http://localhost:4200/ethereum/contract/${chainId}/${contractAddress}/${functionName}`,
+      output: `/ethereum/contract/${chainId}/${contractAddress}/${functionName}`,
     };
   }
 }

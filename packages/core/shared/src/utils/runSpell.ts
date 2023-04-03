@@ -3,6 +3,7 @@ import { SpellRunner } from '../spellManager/index';
 import { GraphData } from '../types';
 import { SpellInterface } from '../schemas';
 import { SpellError } from './SpellError';
+import { API_ROOT_URL } from '../config';
 
 /**
  * Type definition for the arguments of the `runSpell` function.
@@ -35,7 +36,7 @@ export const runSpell = async ({
   console.log('runSpell', { spellId, inputs, inputFormatter, projectId, secrets, publicVariables });
 
   // rewrite using fetch
-  const spells = await fetch(`http://localhost:3030/spells?projectId=${projectId}&id=${spellId}`)
+  const spells = await fetch(`${API_ROOT_URL}/spells?projectId=${projectId}&id=${spellId}`)
     .then(res => res.json());
   
   const spell = spells[0] as any;
