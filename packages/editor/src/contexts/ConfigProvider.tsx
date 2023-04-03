@@ -1,6 +1,6 @@
 // DOCUMENTED 
 // Import required dependencies
-import { DEFAULT_PROJECT_ID } from '@magickml/engine';
+import { DEFAULT_PROJECT_ID } from '@magickml/core';
 import { useContext, createContext, useState } from 'react';
 
 // Define AppConfig type

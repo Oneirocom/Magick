@@ -15,7 +15,7 @@ import Playtest from '../windows/PlaytestWindow'
 import DebugConsole from '../windows/DebugConsole'
 import TextEditor from '../windows/TextEditorWindow'
 
-import { SpellInterface } from '@magickml/engine'
+import { SpellInterface } from '@magickml/core'
 import React from 'react'
 import { useFeathers } from '../contexts/FeathersProvider'
 import { usePubSub } from '../contexts/PubSubProvider'

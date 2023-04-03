@@ -1,6 +1,6 @@
 // DOCUMENTED 
 import { LoadingScreen } from '@magickml/client-core'
-import { IGNORE_AUTH, pluginManager } from '@magickml/engine'
+import { IGNORE_AUTH, pluginManager } from '@magickml/core'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'

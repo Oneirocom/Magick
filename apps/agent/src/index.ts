@@ -6,7 +6,7 @@
  */
 
 import 'regenerator-runtime/runtime';
-import { pluginManager, AgentManager, WorldManager } from '@magickml/engine';
+import { pluginManager, AgentManager, WorldManager } from '@magickml/core';
 import { app } from '@magickml/server-core';
 
 /**
