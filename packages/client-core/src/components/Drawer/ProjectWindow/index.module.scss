@@ -15,23 +15,21 @@
   height: 100%;
 }
 
-.accordion {
-  background-color: transparent !important;
+.container {
+  background: var(--dark-0);
 }
 
-.summary {
-  padding: 0 !important;
-  height: 20px;
-  min-height: auto !important;
+.drawer {
+  width: 200px;
+  z-index: 0 !important;
+  height: 100%;
 }
 
-.details {
-  padding: 0 25px !important;
-}
-
-.box {
-  display: flex;
+.drawerPaper {
+  width: 80%;
+  margin-left: 20%;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
   overflow: hidden;
-  width: 100%;
-  align-items: center;
 }
