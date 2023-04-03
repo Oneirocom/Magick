@@ -284,13 +284,6 @@ export function Drawer({ children }) {
             onClick={onClick('/chat')}
             text="Chat"
           />
-          <DrawerItem
-            active={location.pathname.includes('/avatar')}
-            Icon={AvatarIcon}
-            open={open}
-            onClick={onClick('/avatar')}
-            text="Avatar"
-          />
           <Divider />
           <PluginDrawerItems onClick={onClick} open={open} />
           <Divider />
