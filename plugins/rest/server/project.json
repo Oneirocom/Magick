@@ -1,6 +1,6 @@
 {
   "name": "@magickml/plugin-rest-server",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugins/rest/server/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],

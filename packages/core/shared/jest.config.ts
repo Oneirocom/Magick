@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'engine',
+  displayName: 'shared-core',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   silent: true, // lots of console.log calls

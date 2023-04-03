@@ -1,6 +1,6 @@
 {
   "name": "@magickml/plugin-pinecone-shared",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugins/pinecone/shared/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],
