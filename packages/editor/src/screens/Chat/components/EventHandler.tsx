@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
-import { GraphData, Spell } from '@magickml/engine'
+import { GraphData, Spell } from '@magickml/core'
 
 import md5 from 'md5'
 

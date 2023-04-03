@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* 
 
 This code is adapted from the langchainjs library under the MIT license.
@@ -5,17 +6,16 @@ The original library can be found at https://github.com/hwchase17/langchainjs.
 
 */
 
+import import_ from '@brillout/import';
+import * as crypto from "crypto";
 import fs from 'fs';
-import * as crypto from "crypto"
-import path from "node:path";
 import {
   HierarchicalNSW,
   HierarchicalNSW as HierarchicalNSWT,
-  SpaceName,
+  SpaceName
 } from "hnswlib-node";
 import { Embeddings } from "langchain/dist/embeddings/base";
-import { extend, result } from "lodash";
-import import_ from '@brillout/import';
+import path from "node:path";
 
 
 //Using dynamic Imports, Resolving the imports into Promise and then waiting for them to resolve
@@ -95,7 +95,7 @@ export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
 }
 export type Document = {
   id(id: any): number;
-  metadata: Object,
+  metadata: any,
   pageContent: any
 }
 export interface HNSWLibBase {
@@ -262,8 +262,7 @@ export class HNSWLib extends SaveableVectorStore {
 
     const docstoreSize = this.docstore.count;
     for (let i = 0; i < vectors.length; i += 1) {
-      //@ts-ignore
-      let id_str = documents[i].metadata?.id;
+      const id_str = documents[i].metadata?.id;
       this.index.addPoint(vectors[i], HNSWLib.sha256ToDecimal(id_str));
       this.docstore.add({ [HNSWLib.sha256ToDecimal(id_str)]: documents[i] });
     }
@@ -291,17 +290,17 @@ export class HNSWLib extends SaveableVectorStore {
 
 
   async similaritySearchVectorWithScore(query: number[],k = 10, quer_data: Record<string, unknown> = {}): Promise<[Document, number][]> {
-    var filterByLabel = (label: any) => {return true}
+    let filterByLabel = (label: any) => {return true}
     if (Object.keys(quer_data).length == 0) {
       filterByLabel = (label) => {return true}
     } else {
-      var matchingDocs = await this.getDataWithMetadata(quer_data);
+      const matchingDocs = await this.getDataWithMetadata(quer_data);
       filterByLabel = (label) => {
         let result = false;
         try {
           for (let i = 0; i < matchingDocs.length; i++) {
 
-            const idHash = HNSWLib.sha256ToDecimal((matchingDocs[i] as {id: String}).id);
+            const idHash = HNSWLib.sha256ToDecimal((matchingDocs[i] as {id: string}).id);
             if (idHash === label) {
               result = true;
               break;
@@ -342,32 +341,32 @@ export class HNSWLib extends SaveableVectorStore {
     ]);
   }
 
-  async saveIndex(filename:string=".") {
+  async saveIndex(filename=".") {
     if (!this.index) {
       return;
     }
     await this.index.writeIndex(path.join(filename, "hnswlib.index"));
   }
   static async load(directory: string, embeddings: Embeddings): Promise<typeof SaveableVectorStore> {
-    let db = new HNSWLib(embeddings, { space: "cosine", filename: directory });
+    const db = new HNSWLib(embeddings, { space: "cosine", filename: directory });
     db.docstore = new InMemoryDocstore();
     return db;
   }
   static load_data(directory: string, embeddings: Embeddings, args: { space: any, numDimensions: any, filename: any }) {
-    fs.mkdirSync(directory, { recursive: true });
+    fs.mkdirSync(directory + '/' + args.filename, { recursive: true });
     const index = new HierarchicalNSW(args.space, args.numDimensions);
     try {
       // if docstore.json does not exist, create it with {}
-      if(fs.readFileSync(directory + "/docstore.json", "utf8") == undefined) {
+      if(fs.existsSync(directory + '/' + args.filename + "/docstore.json")) {
         // console.log("docstore.json does not exist, creating it")
         const docstore = {}
         
-        fs.writeFileSync(directory + "/docstore.json", JSON.stringify(docstore))
+        fs.writeFileSync(directory + '/' + args.filename + "/docstore.json", JSON.stringify(docstore))
       }
       
-      const docstoreFiles = JSON.parse(fs.readFileSync(args.filename + "/docstore.json", "utf8"));
-      index.readIndex(args.filename +"/hnswlib.index");
-      let db = new HNSWLib(embeddings, args);
+      const docstoreFiles = JSON.parse(fs.readFileSync(directory + '/' + args.filename + "/docstore.json", "utf8"));
+      index.readIndex(directory + '/' + args.filename +"/hnswlib.index");
+      const db = new HNSWLib(embeddings, args);
       db.index = index;
       docstoreFiles.map(([k, v]) => {
         db.docstore.add({ [HNSWLib.sha256ToDecimal(v.metadata.id)]: v });
@@ -375,12 +374,12 @@ export class HNSWLib extends SaveableVectorStore {
       return db;
     } catch (e) {
       console.log("Error Caught: ", e)
-      let db = new HNSWLib(embeddings, args);
+      const db = new HNSWLib(embeddings, args);
       db.docstore = new InMemoryDocstore();
       return db;
     }
   }
-  async getDataWithMetadata(query: Record<string, unknown>, k: number = 1): Promise<Record<string, unknown>[]> {
+  async getDataWithMetadata(query: Record<string, unknown>, k = 1): Promise<Record<string, unknown>[]> {
     const queryKeys = Object.keys(query);
     const matchingDocs: Record<string, unknown>[] = [];
     //console.log(this.docstore._docs.entries())
@@ -403,7 +402,7 @@ export class HNSWLib extends SaveableVectorStore {
 
   static async fromTexts(
     texts: string[],
-    metadatas: object[],
+    metadatas: any[],
     embeddings: Embeddings,
     dbConfig?: {
       docstore?: typeof InMemoryDocstore;

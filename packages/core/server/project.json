@@ -1,6 +1,6 @@
 {
   "name": "@magickml/server-core",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/core/server/src",
   "projectType": "library",
   "targets": {

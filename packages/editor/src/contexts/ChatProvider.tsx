@@ -1,5 +1,5 @@
 import { LoadingScreen } from '@magickml/client-core'
-import { EditorContext, GraphData, MagickEditor, Spell } from '@magickml/engine'
+import { EditorContext, GraphData, MagickEditor, Spell } from '@magickml/core'
 import React, {
   createContext, useContext, useEffect, useRef, useState
 } from 'react'

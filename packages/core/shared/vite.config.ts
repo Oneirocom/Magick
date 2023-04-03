@@ -28,7 +28,7 @@ export default defineConfig({
     }),
     react(),
     viteTsConfigPaths({
-      root: '../../',
+      root: '../../../',
     }),
   ],
   // Uncomment this if you are using workers.
@@ -63,7 +63,7 @@ export default defineConfig({
     lib: {
       // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
-      name: 'engine',
+      name: 'shared-core',
       fileName: 'index',
       // Change this to the formats you want to support.
       // Don't forgot to update your package.json as well.

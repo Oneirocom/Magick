@@ -1,4 +1,4 @@
-import { Spell } from '@magickml/engine'
+import { Spell } from '@magickml/core'
 
 export interface Spells {
   data: Spell[];

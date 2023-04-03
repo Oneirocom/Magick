@@ -4,7 +4,7 @@ import { Button } from '@magickml/client-core'
 import styles from './styles.module.css';
 import magickCSS from '../../../Magick/magick.module.css'
 
-import { Spell } from '@magickml/engine'
+import { Spell } from '@magickml/core'
 import { Message } from "../../../../types";
 interface Props {
   messageIsStreaming: boolean;
