@@ -1,67 +1,112 @@
 // DOCUMENTED 
 import {
-  configureManager,
-  DEFAULT_PROJECT_ID,
-  DEFAULT_USER_ID,
-  globalsManager,
-  IGNORE_AUTH,
-} from "@magickml/engine";
-import { authenticate } from "@feathersjs/authentication/lib/hooks";
-import { feathers } from "@feathersjs/feathers";
-import {
-  bodyParser,
-  cors,
-  errorHandler,
-  koa,
-  parseAuthentication,
-  rest,
-} from "@feathersjs/koa";
-import socketio from "@feathersjs/socketio";
-import { dbClient } from "./dbClient";
-import type { Application, HookContext } from "./declarations";
-import { logError } from "./hooks";
-import channels from "./sockets/channels";
-import { NotAuthenticated } from "@feathersjs/errors/lib";
-import { authentication } from "./auth/authentication";
-import { services } from "./services";
-import handleSockets from "./sockets/sockets";
-import HNSWVectorDatabase from "./vectordb";
+  authenticate,
+  bodyParser, cors, errorHandler, koa, parseAuthentication, rest
+} from '@feathersjs/koa'
+import socketio from '@feathersjs/socketio'
+import { dbClient } from './dbClient'
+import type { Application, HookContext } from './declarations'
+import { logError } from './hooks'
+import channels from './sockets/channels'
+// import swagger from 'feathers-swagger'
+import { NotAuthenticated } from '@feathersjs/errors/lib'
+import { authentication } from './auth/authentication'
+import { services } from './services'
+import handleSockets from './sockets/sockets'
+
+
+//Vector DB Related Imports
+import { import_ } from '@brillout/import'
+import { feathers } from '@feathersjs/feathers/lib'
+import { configureManager, DEFAULT_PROJECT_ID, DEFAULT_USER_ID, globalsManager, IGNORE_AUTH } from '@magickml/engine'
+import { createClient } from '@supabase/supabase-js'
+import { HNSWLib, SupabaseVectorStoreCustom } from "./vectordb"
+// Same as `import()`
+
+
+//Dynamic Import using top lvl await
+const modules = import_('langchain/embeddings')
+const {FakeEmbeddings} = await modules;
+const agentpro = import_('langchain/agents')
+const {VectorStoreToolkit,createVectorStoreAgent,VectorStoreInfo} = await agentpro;
+const openaipro = import_('langchain')
+const {OpenAI} = await openaipro;
+const embeddings = new FakeEmbeddings();
+
+const  { Headers, Request, Response } = await import_('node-fetch')
+const fetch = await import_('node-fetch').then((mod) => mod.default)
+
+if (!globalThis.fetch) globalThis.fetch = fetch
+if (!globalThis.Headers) globalThis.Headers = Headers
+if (!globalThis.Request) globalThis.Request = Request
+if (!globalThis.Response) globalThis.Response = Response
+
+
 
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers());
 
-/**
- * Euclidean distance function for the vectors
- * @param a - first vector
- * @param b - second vector
- * @returns distance between the two vectors
- */
-function euclideanDistance(a: number[], b: number[]): number {
-  let distance = 0;
-  for (let i = 0; i < a.length; i++) {
-    distance += (a[i] - b[i]) ** 2;
+
+
+
+declare module './declarations' {
+  interface Configuration {
+    vectordb: HNSWLib & any;
+    docdb: HNSWLib & any;
   }
-  return Math.sqrt(distance);
+}
+if (process.env.DATABASE_TYPE == "sqlite") {
+  console.log("Setting up vector store")
+  const vectordb = HNSWLib.load_data(".",embeddings,{
+    space: "cosine",
+    numDimensions: 1536,
+    filename:"database"
+  })
+  const docdb = HNSWLib.load_data(".",embeddings,{
+    space: "cosine",
+    numDimensions: 1536,
+    filename:"documents"
+  })
+  app.set('vectordb', vectordb)
+  app.set('docdb', docdb)
+} else {
+  const cli = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)
+  const vectordb = new SupabaseVectorStoreCustom(embeddings, {client: cli, tableName:"events", queryName: "match_events"}) ;
+  const docdb = new SupabaseVectorStoreCustom(embeddings, {client: cli, tableName:"documents", queryName: "match_documents"}) ;
+  app.set("vectordb", vectordb)
+  app.set('docdb', docdb)
 }
 
-// Vector database instance
-const vectordb = new HNSWVectorDatabase<number[]>(
-  "data.json",
-  euclideanDistance
-);
+/* 
+const vectorStoreInfo: typeof VectorStoreInfo = {
+  name: "DB for Magick Events",
+  description: "Stores all the event along with their metadata",
+  vectorStore: vectordb,
+};
+const toolkit = new VectorStoreToolkit(vectorStoreInfo, model);
+const agent = createVectorStoreAgent(model, toolkit);
+const input =
+    "What is this data about?";
+  console.log(`Executing: ${input}`);
+  const result = await agent.call({ input });
+  console.log(`Got output ${result.output}`);
+  console.log(
+    `Got intermediate steps ${JSON.stringify(
+      result.intermediateSteps,
+      null,
+      2
+    )}`
+  );
+ */
+// Expose feathers app to other apps that might want to access feathers services directly
+globalsManager.register('feathers', app)
 
-// Register globals
-globalsManager.register("feathers", app);
-
-// Application configuration settings
-const port = parseInt(process.env.PORT || "3030", 10);
-app.set("port", port);
-
-const host = process.env.HOST || "localhost";
-app.set("host", host);
-
-const paginateDefault = parseInt(process.env.PAGINATE_DEFAULT || "10", 10);
-const paginateMax = parseInt(process.env.PAGINATE_MAX || "50", 10);
+const port = parseInt(process.env.PORT || '3030', 10)
+app.set('port', port)
+const host = process.env.HOST || 'localhost'
+app.set('host', host)
+const paginateDefault = parseInt(process.env.PAGINATE_DEFAULT || '10', 10)
+const paginateMax = parseInt(process.env.PAGINATE_MAX || '50', 10)
 const paginate = {
   default: paginateDefault,
   max: paginateMax,
@@ -111,19 +156,11 @@ app.configure(
     },
     handleSockets(app)
   )
-);
+)
 
-// Configure the vector database
-declare module "./declarations" {
-  interface Configuration {
-    vectordb: HNSWVectorDatabase<number[]>;
-  }
-}
-
-app.set("vectordb", vectordb);
-app.configure(dbClient);
-app.configure(services);
-app.configure(channels);
+app.configure(dbClient)
+app.configure(services)
+app.configure(channels)
 
 // Register hooks
 app.hooks({
@@ -133,7 +170,7 @@ app.hooks({
       async (context, next) => {
         if (IGNORE_AUTH) return await next();
         if (context.path !== "authentication") {
-          return authenticate("jwt")(context, next);
+          return authenticate("jwt")(context as any, next);
         }
 
         await next();
@@ -183,4 +220,4 @@ app.hooks({
 });
 
 // Export the app
-export { app };
+export { app }
