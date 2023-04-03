@@ -169,6 +169,14 @@ export default function Scene({ characterModel }) {
 
     prevCharacterModel = characterModel
     isFirstRender = false
+
+    return () => {
+      // if there is a div with id "editor-scene", remove it
+      const canvasRef = document.getElementById("editor-scene")
+      if (canvasRef) {
+        canvasRef.remove()
+      }
+    }
   }, [characterModel])
 
   return <></>

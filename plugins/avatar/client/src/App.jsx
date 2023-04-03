@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
-import React, { Fragment, useCallback, useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import * as THREE from 'three'
 import styles from "./App.module.css"
 import Background from "./components/Background"
 import Chat from "./components/Chat"
 import DragDrop from "./components/drag-drop/DragDrop"
 import Scene from "./components/Scene"
+import { SceneProvider } from "./components/SceneContext"
 import { BlinkManager } from "./library/blinkManager"
 import { LipSync } from "./library/lipsync"
-import { SceneProvider } from "./components/SceneContext"
 
 import { initAnimationMixer, loadVRM } from "./library/animationManager"
 
