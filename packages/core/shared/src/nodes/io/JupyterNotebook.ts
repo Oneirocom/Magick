@@ -1,205 +1,218 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+// DOCUMENTED 
+import axios from 'axios';
+import Rete from 'rete';
 
-import axios from 'axios'
-import Rete from 'rete'
-
-import { InputControl } from '../../dataControls/InputControl'
-import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { MagickComponent } from '../../engine'
-import { stringSocket, triggerSocket } from '../../sockets'
+import { InputControl } from '../../dataControls/InputControl';
+import { SocketGeneratorControl } from '../../dataControls/SocketGenerator';
+import { MagickComponent } from '../../engine';
+import { stringSocket, triggerSocket } from '../../sockets';
 import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData
-} from '../../types'
+  WorkerData,
+} from '../../types';
 
-const info =
-  'Call a Jupyter Notebook with the given name and inputs, and return the output.'
+const info = 'Call a Jupyter Notebook with the given name and inputs, and return the output.';
 
-type WorkerReturn = {
-  output: string
-}
-
-const removeProtocol = url => {
+/**
+ * Remove protocol from a given URL.
+ * @param url - The URL to process.
+ * @returns The URL without protocol.
+ */
+const removeProtocol = (url: string): string => {
   if (!url) {
-    return ''
+    return '';
   }
 
-  return url.replace(/(^\w+:|^)\/\//, '')
-}
+  return url.replace(/(^\w+:|^)\/\//, '');
+};
 
-function getPromiseFromEvent(item, event) {
-  return new Promise<void>(resolve => {
-    const listener = e => {
-      e = JSON.parse(e.data)
-      if (e['msg_type'] === 'stream') {
-        item.removeEventListener(event, listener)
-        resolve()
+/**
+ * Wrap an event in a promise.
+ * @param item - Event listener.
+ * @param event - Event name.
+ * @returns A promise that resolves when the specified event occurs.
+ */
+function getPromiseFromEvent(item: WebSocket, event: string): Promise<void> {
+  return new Promise<void>((resolve) => {
+    const listener = (e: MessageEvent<string>) => {
+      const data = JSON.parse(e.data);
+      if (data['msg_type'] === 'stream') {
+        item.removeEventListener(event, listener);
+        resolve();
       }
-    }
-    item.addEventListener(event, listener)
-  })
+    };
+    item.addEventListener(event, listener);
+  });
 }
 
-export class JupyterNotebook extends MagickComponent<Promise<WorkerReturn>> {
+/**
+ * Main class for JupyterNotebook.
+ */
+export class JupyterNotebook extends MagickComponent<Promise<{ output: string }>> {
   constructor() {
     super('Jupyter Notebook', {
       outputs: {
         output: 'output',
         trigger: 'option',
       },
-    }, 'I/O', info)
+    }, 'I/O', info);
   }
 
-  builder(node: MagickNode) {
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const outp = new Rete.Output('output', 'output', stringSocket)
+  /**
+   * Build the Rete input and output sockets.
+   * @param node - The MagickNode for this component.
+   * @returns The node with input and output sockets.
+   */
+  builder(node: MagickNode): MagickNode {
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
+    const outp = new Rete.Output('output', 'output', stringSocket);
 
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Component Name',
-    })
+    });
 
     const inputGenerator = new SocketGeneratorControl({
       connectionType: 'input',
       name: 'Input Sockets',
       ignored: ['trigger'],
-    })
+    });
 
-    //The URL of the Jupyter Server
+    // The URL of the Jupyter Server
     const url = new InputControl({
       dataKey: 'url',
       name: 'Base URL',
       icon: 'moon',
-    })
-    //To be Supplied if Authorization is Turned on the server
+    });
+
+    // To be supplied if Authorization is turned on on the server
     const authorization_key = new InputControl({
       dataKey: 'Authorization',
       name: 'Authorization Header',
       icon: 'moon',
-    })
-    //Exact File name including the extension
+    });
+
+    // Exact file name including the extension
     const file_name = new InputControl({
       dataKey: 'file_name',
       name: 'File Name',
       icon: 'moon',
-    })
+    });
 
     node
       .addInput(dataInput)
       .addOutput(dataOutput)
-      .addOutput(outp)
+      .addOutput(outp);
 
     node.inspector
       .add(nameControl)
       .add(inputGenerator)
       .add(url)
       .add(file_name)
-      .add(authorization_key)
+      .add(authorization_key);
 
-    return node
+    return node;
   }
 
+  /**
+   * Worker function for the Jupyter Notebook component.
+   * @param node - The WorkerData for this component.
+   * @param rawInputs - The inputs received from the Rete.js engine.
+   * @param _outputs - The outputs generated by the Rete.js engine.
+   * @returns An object containing the output.
+   */
   async worker(
     node: WorkerData,
     rawInputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs
-  ) {
-    const name = node.data.name as string
-    node.name = name
+  ): Promise<{ output: string }> {
+    const name = node.data.name as string;
+    node.name = name;
 
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
-      acc[key] = value[0]
-      return acc
-    }, {} as Record<string, unknown>)
+      acc[key] = value[0];
+      return acc;
+    }, {} as Record<string, unknown>);
 
-    //URL of the Jupyter Server Eg: http://localhost:8888 (No Slash at the end)
-    const url = node?.data?.url as string
-    let authorization_key = node?.data?.url as string
-    authorization_key = 'Token ' + authorization_key
+    // URL of the Jupyter Server, e.g. http://localhost:8888 (no trailing slash)
+    const url = node?.data?.url as string;
+    let authorization_key = node?.data?.url as string;
+    authorization_key = 'Token ' + authorization_key;
     const config = {
       headers: {
         Authorization: authorization_key,
       },
-    }
-    //Gets the Active Kernel from the Jupyter Tornado Server (REST/POST)
+    };
+
+    // Get the active kernel from the Jupyter Tornado server (REST/POST)
     const kernel = await axios.post(
-      url + '/api/kernels?timestamp=' + Math.random().toString(36),
+      `${url}/api/kernels?timestamp=${Math.random().toString(36)}`,
       config
-    )
-    const notebook_path = ('/' + node?.data?.file_name) as string
+    );
 
-    //Gets the Cell Contents of the notebook of which the filename is specified (REST/GET)
+    const notebook_path = ('/' + node?.data?.file_name) as string;
+
+    // Get the cell contents of the notebook with the specified filename (REST/GET)
     const file = await axios.get(
-      url +
-        '/api/contents' +
-        notebook_path +
-        '?timestamp=' +
-        Math.random().toString(36),
+      `${url}/api/contents${notebook_path}?timestamp=${Math.random().toString(36)}`,
       config
-    )
+    );
 
-    //Selects the last cell
-    let code = file['data']['content']['cells']
-    if (code.slice(-1)[0]['source'] === '') {
-      code = code.slice(-2)
+    // Select the last cell
+    let code = file.data.content.cells;
+    if (code.slice(-1)[0].source === '') {
+      code = code.slice(-2);
     } else {
-      code = code.slice(-1)
+      code = code.slice(-1);
     }
 
-    //Create a UUID for exectuion
-    const uniqueId =
-      Date.now().toString(36) + Math.random().toString(36).substring(2)
+    // Create a UUID for execution
+    const uniqueId = `${Date.now().toString(36)}${Math.random().toString(36).substring(2)}`;
 
-    //Initializing the WebSocket link with the Jupyter Server
+    // Initialize WebSocket connection with the Jupyter server
     const ws = new WebSocket(
-      'ws://' +
-        removeProtocol(url) +
-        '/api/kernels/' +
-        kernel['data']['id'] +
-        '/channels' +
-        '?timestamp=' +
-        Math.random().toString(36)
-    )
+      `ws://${removeProtocol(url)}/api/kernels/${kernel.data.id}/channels?timestamp=${Math.random().toString(36)}`
+    );
 
-    //Specifc Headers Required for Code Execution
-    const msg_type = 'execute_request'
-    const content = { code: code['0']['source'], silent: false }
+    // Specific headers required for code execution
+    const msg_type = 'execute_request';
+    const content = { code: code['0'].source, silent: false };
     const hdr = {
       msg_id: parseInt(uniqueId, 10).toString(16),
       username: 'test',
       session: parseInt(uniqueId, 10).toString(16),
       data: Date.now(),
-      msg_type: msg_type,
+      msg_type,
       version: '5.0',
-    }
+    };
     const msg = {
       header: hdr,
       parent_header: hdr,
       metadata: {},
-      content: content,
-    }
+      content,
+    };
 
-    //Event Listner for Socket Connection open event
-    ws.onopen = function (e) {
-      this.send(JSON.stringify(msg))
-    }
+    // Event listener for WebSocket 'open' event
+    ws.onopen = function () {
+      this.send(JSON.stringify(msg));
+    };
 
-    let code_output = 'Nothing'
-    //Event Listener when the server responds back with the code
-    ws.onmessage = async function (e) {
-      e = JSON.parse(e.data)
-      code_output = 'Hello This is text'
-      if (e['msg_type'] === 'stream') {
-        //Wait till the message with 'stream' status is obtained then the promise is resolved
-        code_output = await e['content']['text']
+    let code_output = 'Nothing';
+    // Event listener when the server responds back with the code
+    ws.onmessage = async function (e: MessageEvent<string>) {
+      const data = JSON.parse(e.data);
+      code_output = 'Hello This is text';
+      if (data['msg_type'] === 'stream') {
+        // Wait till the message with 'stream' status is obtained, then the promise is resolved
+        code_output = await data['content']['text'];
       }
-    }
-    await getPromiseFromEvent(ws, 'message')
+    };
+    await getPromiseFromEvent(ws, 'message');
     return {
       output: code_output ? code_output : '',
-    }
+    };
   }
 }

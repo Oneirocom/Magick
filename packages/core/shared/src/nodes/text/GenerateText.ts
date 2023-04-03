@@ -1,5 +1,5 @@
+// DOCUMENTED 
 import Rete from 'rete'
-
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
@@ -15,14 +15,20 @@ import {
   WorkerData,
 } from '../../types'
 
+/** Information related to the GenerateText */
 const info = 'Generate text using any of the providers available in Magick.'
 
+/** Type definition for the worker return */
 type WorkerReturn = {
   success: boolean
   result?: string
   error?: string
 }
 
+/**
+ * GenerateText component responsible for generating text using any providers
+ * available in Magick.
+ */
 export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super('Generate Text', {
@@ -32,14 +38,19 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
         trigger: 'option',
       },
     }, 'Text', info)
-
   }
 
+  /** 
+   * Builder for generating text.
+   * @param node - the MagickNode instance.
+   * @returns a configured node with data generated from providers.
+   */
   builder(node: MagickNode) {
     const settings = new Rete.Input('settings', 'Settings', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
+    // get completion providers for text and chat categories
     const completionProviders = pluginManager.getCompletionProviders('text', [
       'text',
       'chat',
@@ -63,17 +74,20 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     let lastOutputSockets: CompletionSocket[] | undefined = []
     let lastInspectorControls: CompletionInspectorControls[] | undefined = []
 
+    /**
+     * Configure the provided node according to the selected model and provider.
+     */
     const configureNode = () => {
       const model = node.data.model as string
       const provider = completionProviders.find(provider =>
         provider.models.includes(model)
       ) as CompletionProvider
-      // node.data.provider = provider
       const inspectorControls = provider.inspectorControls
       const inputSockets = provider.inputs
       const outputSockets = provider.outputs
       const connections = node.getConnections()
 
+      // update inspector controls
       if (inspectorControls !== lastInspectorControls) {
         lastInspectorControls?.forEach(control => {
           node.inspector.dataControls.delete(control.dataKey)
@@ -84,10 +98,8 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
         })
         lastInspectorControls = inspectorControls
       }
+      // update input sockets
       if (inputSockets !== lastInputSockets) {
-        // remove connections to deleted sockets
-
-
         lastInputSockets?.forEach(socket => {
           if (node.inputs.has(socket.socket)) {
             connections.forEach(c => {
@@ -103,6 +115,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
         })
         lastInputSockets = inputSockets
       }
+      // update output sockets
       if (outputSockets !== lastOutputSockets) {
         lastOutputSockets?.forEach(socket => {
           if (node.outputs.has(socket.socket)) node.outputs.delete(socket.socket)
@@ -125,6 +138,14 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     return node
   }
 
+  /**
+   * Worker for processing the generated text.
+   * @param node - the worker data.
+   * @param inputs - worker inputs.
+   * @param outputs - worker outputs.
+   * @param context - engine context.
+   * @returns an object with the success status and result or error message.
+   */
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
@@ -136,6 +157,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       context: EngineContext
     }
   ) {
+    // get completion providers for text and chat categories
     const completionProviders = pluginManager.getCompletionProviders('text', [
       'text',
       'chat',

@@ -1,77 +1,95 @@
-import { Component, Control } from 'rete'
+// DOCUMENTED 
+import { Component, Control } from 'rete';
 
-import { MagickComponent } from '../../engine'
+import { MagickComponent } from '../../engine';
 import {
   MagickEditor,
   MagickNode,
-  WorkerData
-} from '../../types'
+  WorkerData,
+} from '../../types';
 
-import { Task } from '../taskPlugin'
-import { RunButtonControl } from './RunLastArguments'
+import { Task } from '../taskPlugin';
+import { RunButtonControl } from './RunLastArguments';
 
-function install(editor: MagickEditor) {
+/**
+ * Installs the cache plugin to the provided editor.
+ *
+ * @param {MagickEditor} editor - The editor instance to install the plugin to.
+ */
+function install(editor: MagickEditor): void {
   editor.on('componentregister', (_component: Component) => {
-    const component = _component as unknown as MagickComponent<unknown>
-    const worker = component.worker
-    const builder = component.builder
+    const component = _component as MagickComponent<unknown>;
+    const originalWorker = component.worker;
+    const originalBuilder = component.builder;
 
-    component.cache = {}
+    component.cache = {};
 
     /**
-     * Here we create a worker wrapper that will cache all the arguments being sent in to worker for later use
+     * Worker wrapper function. Caches the arguments passed to the worker for later use.
      */
-    component.worker = (node: WorkerData, inputs, outputs, context, ...args) => {
+    component.worker = (
+      node: WorkerData,
+      inputs,
+      outputs,
+      context,
+      ...args
+    ) => {
       component.cache[node.id] = {
         node,
         inputs,
         outputs,
         context,
         ...args,
-      }
+      };
 
-      return worker.apply(component, [node, inputs, outputs, context, ...args])
-    }
+      return originalWorker.apply(component, [node, inputs, outputs, context, ...args]);
+    };
 
     /**
-     * Create a builder wrapper which will add on the run button if a compoonent has the proper   boolean defined on it.
+     * Builder wrapper function. Adds a run button to the component if the 'runFromCache' property is true.
      */
     component.builder = (_node: MagickNode) => {
       if (component.runFromCache) {
-        // Run function runs the worker with old args and returns the result.
+        /**
+         * The run function that runs the worker with cached arguments and returns the result.
+         *
+         * @param {WorkerData} node - The worker data to run.
+         * @returns {Promise<unknown> | null} The result of the worker or null if the data is not cached.
+         */
         const run = async (node: WorkerData) => {
-          const cache = component.cache[node.id] as { inputs; outputs; context}
+          const cache = component.cache[node.id] as { inputs; outputs; context };
 
-          if (!cache) return null
+          if (!cache) return null;
 
-          const { inputs, outputs, context } = cache
+          const { inputs, outputs, context } = cache;
 
-          // Since running thos worker invokes the next plugin, task,
-          // We have to grab that task, and run the original worker.
-          const task = (await component.worker.apply(component, [
+          // Run the original worker and get the task.
+          const task = (await originalWorker.apply(component, [
             node,
             inputs,
             outputs,
             context,
-          ])) as Task
+          ])) as Task;
 
-          const value = await task.worker(node, inputs, outputs, context)
-          return value
-        }
+          // Run the task's worker and return the result.
+          const value = await task.worker(node, inputs, outputs, context);
+          return value;
+        };
 
-        const runControl = new RunButtonControl({ key: 'runControl', run })
+        const runControl = new RunButtonControl({ key: 'runControl', run });
 
-        _node.addControl(runControl as Control)
+        // Add the run control to the node.
+        _node.addControl(runControl as Control);
       }
 
-      return builder.call(component, _node)
-    }
-  })
+      return originalBuilder.call(component, _node);
+    };
+  });
 }
 
 const defaultExport = {
   name: 'cachePlugin',
   install,
-}
+};
 
-export default defaultExport
+export default defaultExport;
