@@ -72,6 +72,7 @@
     "@mui/lab": "^5.0.0-alpha.124",
     "@mui/material": "^5.11.5",
     "@mui/x-date-pickers": "^6.0.2",
+    "@nrwl/nx": "^7.8.7",
     "@nrwl/nx-plugin": "15.8.7",
     "@panva/hkdf": "^1.0.4",
     "@pinecone-database/pinecone": "^0.0.10",
@@ -157,6 +158,7 @@
     "react-csv": "^2.2.2",
     "react-custom-scrollbars-2": "^4.5.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.42.1",
     "react-hotkeys-hook": "^3.4.7",
     "react-icons": "^4.7.1",
@@ -177,6 +179,7 @@
     "rete-connection-plugin": "^0.9.0",
     "rollup-plugin-ignore": "^1.0.10",
     "rollup-plugin-node-polyfills": "^0.2.1",
+    "sepia-speechrecognition-polyfill": "^1.0.0",
     "serp": "^1.0.12",
     "serve-favicon": "^2.5.0",
     "similarity": "^1.2.1",
@@ -207,9 +210,7 @@
     "winston": "^3.8.2",
     "xlsx": "^0.18.5",
     "xmldoc": "^1.2.0",
-    "xvfb": "0.4.0",
-    "react-dropzone": "^14.2.3",
-    "sepia-speechrecognition-polyfill": "^1.0.0"
+    "xvfb": "0.4.0"
   },
   "peerDependencies": {
     "@discordjs/opus": "^0.9.0",
