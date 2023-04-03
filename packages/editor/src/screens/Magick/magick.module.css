@@ -12,10 +12,12 @@
   display: flex;
   flex-direction: column;
 }
+
 .tabs {
   display: flex;
   flex-direction: row;
 }
+
 .tab {
   background-color: rgba(40, 40, 40, 0.95);
   cursor: default;
@@ -24,6 +26,7 @@
   flex: 1;
   border-bottom: 1px solid var(--dark-2);
 }
+
 .tab-page {
   display: flex;
   flex-direction: column;
@@ -31,13 +34,16 @@
   flex: 1;
   margin: var(--extraSmall);
 }
+
 .tab:hover {
   background-color: rgba(60, 60, 60, 0.95);
 }
+
 .tab.active {
   border-bottom: 1px solid transparent;
   background-color: rgba(50, 50, 50, 0.95);
 }
+
 .playtest-output {
   border: 1px solid var(--dark-2);
   padding: var(--c1);
@@ -68,13 +74,14 @@
   border: 1px solid var(--dark-2);
   height: 100%;
 }
+
 .playtest-input {
   display: flex;
   justify-content: flex-end;
   margin-top: var(--extraSmall);
 }
 
-.playtest-input input {
+.playtest-input input textarea {
   color: #fff;
   width: 100%;
   border-radius: 4px;
@@ -87,11 +94,13 @@
   margin-right: var(--extraSmall);
   padding: var(--c2);
 }
+
 .node-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-column-gap: var(--extraSmall);
 }
+
 .node-grid-item {
   cursor: grab;
   transition: background-color 0.05s ease;
@@ -103,9 +112,11 @@
   resize: both;
   margin-bottom: var(--extraSmall);
 }
+
 .node-grid-item:hover {
   border: 1px solid var(--dark-3);
 }
+
 .node-title {
   letter-spacing: 0.1em;
   font-weight: 900;
@@ -117,6 +128,7 @@
   background: none;
   border-radius: var(--extraSmall) var(--extraSmall) 0px 0px;
 }
+
 .node-bottom-container {
   font-family: 'IBM Plex Mono', monospace !important;
   padding: var(--extraSmall);
@@ -124,6 +136,7 @@
   flex-direction: row;
   gap: var(--extraSmall);
 }
+
 .form-text-area {
   color: #fff;
   border-radius: 4px;

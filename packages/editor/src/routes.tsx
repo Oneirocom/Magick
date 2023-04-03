@@ -1,21 +1,27 @@
-// DOCUMENTED 
-import { pluginManager } from '@magickml/core';
-import 'flexlayout-react/style/dark.css';
-import { Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+// DOCUMENTED
+import { pluginManager } from '@magickml/core'
+import 'flexlayout-react/style/dark.css'
+import { Suspense } from 'react'
+import { Route, Routes } from 'react-router-dom'
 
-import './App.css';
-import MagickPageLayout from './layouts/MagickPageLayout/MagickPageLayout';
-import MainLayout from './layouts/MainLayout/MainLayout';
-import './design-globals/design-globals.css';
-import HomeScreen from './screens/HomeScreen/HomeScreen';
-import Magick from './screens/Magick/Magick';
-import AgentManagerWindow from './windows/agents/AgentManagerWindow';
-import DocumentWindow from './windows/DocumentWindow';
-import EventWindow from './windows/EventWindow';
-import RequestWindow from './windows/RequestWindow';
-import SettingsWindow from './windows/settings/SettingsWindow';
+import './App.css'
+import './design-globals/design-globals.css'
+import MagickPageLayout from './layouts/MagickPageLayout/MagickPageLayout'
+import MainLayout from './layouts/MainLayout/MainLayout'
+import HomeScreen from './screens/HomeScreen/HomeScreen'
+import Magick from './screens/Magick/Magick'
+import AgentManagerWindow from './windows/agents/AgentManagerWindow'
+import DocumentWindow from './windows/DocumentWindow'
+import EventWindow from './windows/EventWindow'
+import RequestWindow from './windows/RequestWindow'
+import SettingsWindow from './windows/settings/SettingsWindow'
 // import ProjectWindow from './windows/ProjectWindow';
+import './App.css'
+import './design-globals/design-globals.css'
+
+import 'flexlayout-react/style/dark.css'
+import './design-globals/design-globals.css'
+import Chat from './screens/Chat'
 
 /**
  * A component that renders the given component element with the given props.
@@ -23,9 +29,9 @@ import SettingsWindow from './windows/settings/SettingsWindow';
  * @param {object} props - The properties to pass to the rendered element.
  * @returns {React.Element} - The rendered React element.
  */
-const RenderComp = (props: { element: React.ElementType; }) => {
-  return <props.element props={props} />;
-};
+const RenderComp = (props: { element: React.ElementType }) => {
+  return <props.element props={props} />
+}
 
 /**
  * MyRoutes component handles the routing for the application.
@@ -35,8 +41,8 @@ const RenderComp = (props: { element: React.ElementType; }) => {
 const MyRoutes = () => (
   <Routes>
     <Route element={<MainLayout />}>
-      {pluginManager.getGroupedClientRoutes().map((pluginRouteGroup) => {
-        const ClientPageLayout = pluginRouteGroup.layout ?? MagickPageLayout;
+      {pluginManager.getGroupedClientRoutes().map(pluginRouteGroup => {
+        const ClientPageLayout = pluginRouteGroup.layout ?? MagickPageLayout
         return (
           <Route
             key={pluginRouteGroup.routes[0].path}
@@ -46,17 +52,17 @@ const MyRoutes = () => (
               </Suspense>
             }
           >
-            {pluginRouteGroup.routes.map((route) => {
+            {pluginRouteGroup.routes.map(route => {
               return (
                 <Route
                   key={route.path}
                   path={route.path}
                   element={<RenderComp element={route.component} />}
                 />
-              );
+              )
             })}
           </Route>
-        );
+        )
       })}
       <Route path="/documents" element={<DocumentWindow />} />
       <Route path="/events" element={<EventWindow />} />
@@ -69,9 +75,10 @@ const MyRoutes = () => (
         <Route path="/" element={<Magick />} />
         <Route path="/magick/*" element={<Magick />} />
         <Route path="/magick/:URI" element={<Magick />} />
+        <Route path="/chat/*" element={<Chat />} />
       </Route>
     </Route>
   </Routes>
-);
+)
 
-export default MyRoutes;
+export default MyRoutes
