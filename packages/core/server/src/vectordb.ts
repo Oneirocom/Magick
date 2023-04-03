@@ -354,8 +354,17 @@ export class HNSWLib extends SaveableVectorStore {
     return db;
   }
   static load_data(directory: string, embeddings: Embeddings, args: { space: any, numDimensions: any, filename: any }) {
+    fs.mkdirSync(directory, { recursive: true });
     const index = new HierarchicalNSW(args.space, args.numDimensions);
     try {
+      // if docstore.json does not exist, create it with {}
+      if(fs.readFileSync(directory + "/docstore.json", "utf8") == undefined) {
+        // console.log("docstore.json does not exist, creating it")
+        const docstore = {}
+        
+        fs.writeFileSync(directory + "/docstore.json", JSON.stringify(docstore))
+      }
+      
       const docstoreFiles = JSON.parse(fs.readFileSync(args.filename + "/docstore.json", "utf8"));
       index.readIndex(args.filename +"/hnswlib.index");
       let db = new HNSWLib(embeddings, args);

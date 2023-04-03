@@ -81,7 +81,7 @@
   margin-top: var(--extraSmall);
 }
 
-.playtest-input input textarea {
+.playtest-input input, .playtest-input input textarea {
   color: #fff;
   width: 100%;
   border-radius: 4px;
