@@ -165,7 +165,7 @@ export default function ChatBox({
         //   voices[voice]
 
         // fetch the audio file from ttsEndpoint
-        const ttsEndpoint = "https://voice.webaverse.com/tts?s=hello"
+        const ttsEndpoint = "https://ai-voice.webaverse.ai/tts"
 
         fetch(ttsEndpoint).then(async (response) => {
           const blob = await response.blob()

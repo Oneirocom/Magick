@@ -63,10 +63,8 @@ export class Cast extends MagickComponent<void> {
       defaultValue: 'any Type',
     });
 
-    const that = this;
-
-    socketDropdown.onData = function (data: SocketNameType) {
-      that.addSocket.apply(that, [node, data]);
+    socketDropdown.onData = (data: SocketNameType) => {
+      this.addSocket.apply(this, [node, data]);
     };
 
     node.inspector.add(socketDropdown);

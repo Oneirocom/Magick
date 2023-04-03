@@ -5,6 +5,7 @@ import { MagickComponent } from '../../engine';
 import { triggerSocket } from '../../sockets';
 import { MagickNode } from '../../types';
 
+const info = 'If either trigger is triggered, the output trigger is triggered';
 /**
  * @description
  * The or gate will be triggered when either of two triggers are triggered off.
@@ -12,7 +13,7 @@ import { MagickNode } from '../../types';
 export class OrGate extends MagickComponent<void> {
   constructor() {
     // Name of the component
-    super('Or Gate', { outputs: { trigger: 'option' } }, 'Flow');
+    super('Or Gate', { outputs: { trigger: 'option' } }, 'Flow', info);
   }
 
   /**

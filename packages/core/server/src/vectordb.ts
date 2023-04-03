@@ -71,10 +71,10 @@ export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
 
   /**
    * Add events to the tableName in the Supabase client
-   * @param {any[]} events - Array of events
+   * @param { array: any[]} events - Array of events
    * @returns {Promise<void>}
    */
-  async addEvents(events: any[]): Promise<void> {
+  async addEvents(events: { array: any[]}): Promise<void> {
     events.array.forEach(async element => {
       const res = await this.client.from(this.tableName).insert(element);
       if (res.error) {
@@ -182,11 +182,11 @@ export class HNSWLib extends SaveableVectorStore {
   }
 
   // Add other helper methods for HNSWLib here
-  async add(id: any, embedding: any, a: any = "sss") { }
+  async add(id: any, embedding: any, a: any = "sss") { /* null */}
 
-  async search(a: any, b: any) { }
+  async search(a: any, b: any) { /* null */ }
 
-  async searchData(a: any, b: any) { }
+  async searchData(a: any, b: any) { /* null */ }
 
   /**
    * Delete a document by its ID
@@ -291,7 +291,7 @@ export class HNSWLib extends SaveableVectorStore {
     }
   }
 
-  public get index(): HierarchicalNSWT {
+  public get index(): HierarchicalNSW {
     if (!this._index) {
       throw new Error(
         "Vector store not initialised yet. Try calling addTexts first."
@@ -300,7 +300,7 @@ export class HNSWLib extends SaveableVectorStore {
     return this._index;
   }
 
-  private set index(index: HierarchicalNSWT) {
+  private set index(index: HierarchicalNSW) {
     this._index = index;
   }
 
