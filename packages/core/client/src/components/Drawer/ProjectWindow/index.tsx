@@ -113,10 +113,12 @@ const ProjectWindow = ({ openDrawer }) => {
     }
 
     const rightSide = document.getElementById('wrapper')
+    const resizer = document.getElementById('resizer')
     const minWidth = 140
 
     if (e.clientX > minWidth && e.clientX < drawerMaxSize) {
       sidebarPanel.current.style.width = e.clientX + 'px'
+      resizer.style.left = e.clientX + 'px'
       rightSide.style.width = 100 + (drawerMaxSize - e.clientX) + '%'
     }
   }
@@ -149,7 +151,7 @@ const ProjectWindow = ({ openDrawer }) => {
           display: 'flex',
           overflow: 'hidden',
           flexDirection: 'column',
-          width: '187px',
+          width: '190px',
           color: '#d8d6d6',
         }}
         className={styles.container}
@@ -161,7 +163,6 @@ const ProjectWindow = ({ openDrawer }) => {
           open={openDrawer}
           hideBackdrop
           ref={sidebarPanel}
-          onMouseDown={handleMousedown}
         >
           <Box className={styles.header}>
             <Typography>Project Name</Typography>
@@ -275,6 +276,11 @@ const ProjectWindow = ({ openDrawer }) => {
             )}
           </Box>
         </Drawer>
+        <div
+          id="resizer"
+          className={styles.resizer}
+          onMouseDown={handleMousedown}
+        />
       </Box>
     )
   )
