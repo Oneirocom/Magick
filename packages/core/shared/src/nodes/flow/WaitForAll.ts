@@ -57,8 +57,7 @@ export class WaitForAll extends MagickComponent<void> {
   worker(_node: WorkerData, inputs: MagickWorkerInputs): void {
     const nodeInputs = Object.values(inputs).filter(
       (input) => !!input
-    ) as Array<{ name: string }>
-
+    ) as Array<any>
     // Close all outputs
     this._task.closed = [...nodeInputs.map(out => out.name)]
   }

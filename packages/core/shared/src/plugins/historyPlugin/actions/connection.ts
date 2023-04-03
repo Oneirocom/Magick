@@ -1,58 +1,108 @@
-import { Connection, NodeEditor } from 'rete'
-import Action from '../action'
+// DOCUMENTED 
+import { Connection, NodeEditor } from 'rete';
+import Action from '../action';
 
-// The saved connection may have been removed and recreated, so make sure we are working with the correct reference
-function findNewConnection(oldConnection) {
-  const { input, output } = oldConnection
+/**
+ * Finds the new connection by matching the input and output of the old connection.
+ * @param {Connection} oldConnection - The old connection to find the new one.
+ * @returns {Connection} The new connection found.
+ */
+function findNewConnection(oldConnection: Connection): Connection {
+  const { input, output } = oldConnection;
 
-  return output.connections.find(c => c.input === input)
+  return output.connections.find((c) => c.input === input) as Connection;
 }
 
+/**
+ * ConnectionActionHelper class to handle adding and removing connections.
+ */
 class ConnectionActionHelper {
-  editor:NodeEditor<unknown>
-  connection:Connection
-  constructor(editor:NodeEditor<unknown>, connection:Connection) {
-    this.editor = editor
-    this.connection = connection
+  editor: NodeEditor;
+  connection: Connection;
+
+  /**
+   * Constructs a ConnectionActionHelper instance.
+   * @param {NodeEditor} editor - The editor instance.
+   * @param {Connection} connection - The connection to work with.
+   */
+  constructor(editor: NodeEditor, connection: Connection) {
+    this.editor = editor;
+    this.connection = connection;
   }
 
-  add() {
-    this.editor.connect(this.connection.output, this.connection.input)
+  /**
+   * Adds the connection to the editor.
+   */
+  add(): void {
+    this.editor.connect(this.connection.output, this.connection.input);
   }
 
-  remove() {
-    this.editor.removeConnection(findNewConnection(this.connection))
+  /**
+   * Removes the connection from the editor.
+   */
+  remove(): void {
+    this.editor.removeConnection(findNewConnection(this.connection));
   }
 }
 
+/**
+ * AddConnectionAction class for undoing and redoing adding a connection.
+ */
 export class AddConnectionAction extends Action {
-  helper:ConnectionActionHelper
-  constructor(editor, connection) {
-    super()
-    this.helper = new ConnectionActionHelper(editor, connection)
+  helper: ConnectionActionHelper;
+
+  /**
+   * Constructs an AddConnectionAction instance.
+   * @param {NodeEditor} editor - The editor instance.
+   * @param {Connection} connection - The connection to work with.
+   */
+  constructor(editor: NodeEditor, connection: Connection) {
+    super();
+    this.helper = new ConnectionActionHelper(editor, connection);
   }
 
-  undo() {
-    this.helper.remove()
+  /**
+   * Undoes the connection addition.
+   */
+  undo(): void {
+    this.helper.remove();
   }
 
-  redo() {
-    this.helper.add()
+  /**
+   * Redoes the connection addition.
+   */
+  redo(): void {
+    this.helper.add();
   }
 }
 
+/**
+ * RemoveConnectionAction class for undoing and redoing removing a connection.
+ */
 export class RemoveConnectionAction extends Action {
-  helper:ConnectionActionHelper
-  constructor(editor, connection) {
-    super()
-    this.helper = new ConnectionActionHelper(editor, connection)
+  helper: ConnectionActionHelper;
+
+  /**
+   * Constructs a RemoveConnectionAction instance.
+   * @param {NodeEditor} editor - The editor instance.
+   * @param {Connection} connection - The connection to work with.
+   */
+  constructor(editor: NodeEditor, connection: Connection) {
+    super();
+    this.helper = new ConnectionActionHelper(editor, connection);
   }
 
-  undo() {
-    this.helper.add()
+  /**
+   * Undoes the connection removal.
+   */
+  undo(): void {
+    this.helper.add();
   }
 
-  redo() {
-    this.helper.remove()
+  /**
+   * Redoes the connection removal.
+   */
+  redo(): void {
+    this.helper.remove();
   }
 }
