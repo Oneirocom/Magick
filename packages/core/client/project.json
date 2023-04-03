@@ -1,7 +1,7 @@
 {
   "name": "@magickml/client-core",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/client-core/src",
+  "sourceRoot": "packages/core/client/src",
   "projectType": "library",
   "implicitDependencies": [],
   "tags": [],
@@ -10,16 +10,16 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/client-core/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["packages/core/client/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "build": {
       "executor": "@nrwl/vite:build",
       "outputs": ["{options.outputPath}"],
-      "configFile": "packages/client-core/vite.config.ts",
+      "configFile": "packages/core/client/vite.config.ts",
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/packages/client-core"
+        "outputPath": "dist/packages/core/client"
       },
       "configurations": {
         "development": {
@@ -34,7 +34,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/client-core/jest.config.ts",
+        "jestConfig": "packages/core/client/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {

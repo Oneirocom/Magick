@@ -1,14 +1,15 @@
+// DOCUMENTED 
 import _ from 'lodash';
 import Heap from 'heap-js';
 import fs from 'fs';
 
 interface Node<T> {
-    id: string;
-    vector: T;
-    data: any;
-    neighbors: Array<string | null>;
-    level: number;
-  }
+  id: string;
+  vector: T;
+  data: any;
+  neighbors: Array<string | null>;
+  level: number;
+}
 
 interface Config {
   maxLevel: number;
@@ -18,6 +19,9 @@ interface Config {
 
 type DistanceFunction<T> = (a: T, b: T) => number;
 
+/**
+ * HNSW class for constructing hierarchical small world graphs.
+ */
 class HNSW<T> {
   public nodes: Map<string, Node<T>>;
   public config: Config;
@@ -29,7 +33,9 @@ class HNSW<T> {
     this.nodes = new Map<string, Node<T>>();
   }
 
-
+  /**
+   * Adds a new node to the graph.
+   */
   public addNode(id: string, vector: T, data: any = {}): void {
     const level = this.getRandomLevel();
     const node: Node<T> = {
@@ -39,10 +45,13 @@ class HNSW<T> {
       neighbors: new Array(this.config.maxLevel).fill(null),
       level,
     };
-    this.nodes.set(id,node);
+    this.nodes.set(id, node);
     this.addToGraph(node, level);
   }
 
+  /**
+   * Adds a node to the graph at the specified level.
+   */
   private addToGraph(node: Node<T>, level: number): void {
     if (level === 0) {
       return;
@@ -71,6 +80,9 @@ class HNSW<T> {
     }
   }
 
+  /**
+   * Returns a random level within the maxLevel limits.
+   */
   private getRandomLevel(): number {
     let level = 0;
     while (Math.random() < 0.5 && level < this.config.maxLevel - 1) {
@@ -79,11 +91,14 @@ class HNSW<T> {
     return level;
   }
 
+  /**
+   * Gets the neighbors of the given node at the specified level.
+   */
   private getNeighbors(node: Node<T>, level: number): string[] {
     if (level === 0) {
       return [];
     }
-  
+
     const neighbors = [];
     let neighborId = node.neighbors[level - 1];
     while (neighborId !== null) {
@@ -94,12 +109,13 @@ class HNSW<T> {
     return neighbors;
   }
 
+  /**
+   * Calculates the distance between two vectors using the instance's provided distance function.
+   */
   public getDistance(a: T, b: T): number {
     return this.distanceFunction(a, b);
   }
 }
-
-
 
 interface VectorDatabase<T> {
   add(id: string, vector: T): void;
@@ -111,6 +127,9 @@ interface HNSWIndex<T> {
   config: Config;
 }
 
+/**
+ * Class for persistent vector database using HNSW as the underlying index.
+ */
 class HNSWVectorDatabase<T> implements VectorDatabase<T> {
   private readonly index: HNSW<T>;
   private readonly indexPath: string;
@@ -131,27 +150,42 @@ class HNSWVectorDatabase<T> implements VectorDatabase<T> {
     }
   }
 
+  /**
+   * Adds a vector to the database.
+   */
   public add(id: string, vector: T, data: any = {content: 'random'}): void {
     this.index.addNode(id, vector, data);
     this.saveIndex();
   }
+
+  /**
+   * Compares the first two elements of two arrays and returns whether they match.
+   */
   private compareArrays(arr1: any[], arr2: any[]): boolean {
     if (arr1.length < 2 || arr2.length < 2) {
-      return false; // Arrays must have at least two elements to compare the first two
+      return false;
     }
     const firstTwo1 = arr1.slice(0, 2);
     const firstTwo2 = arr2.slice(0, 2);
     return firstTwo1.every((val, index) => val === firstTwo2[index]);
   }
+
+  /**
+   * Searches the database using given query.
+   */
   public searchData(query: Partial<{ [key in keyof T]: T[key] }>, k: number): any[] {
     const result: Node<T>[] = [];
-    this.index.nodes.forEach((node,id) => {
+    this.index.nodes.forEach((node, id) => {
       if (this.isMatch(node.data, query)) {
         result.push(node.data);
       }
     })
     return result.slice(0, k);
   }
+
+  /**
+   * Checks if data matches the provided query.
+   */
   private isMatch(data: any, query: Partial<{ [key in keyof T]: T[key] }>): boolean {
     for (const key in query) {
       if (Array.isArray(query[key])) return this.compareArrays(query[key] as any[], data[key])
@@ -162,6 +196,9 @@ class HNSWVectorDatabase<T> implements VectorDatabase<T> {
     return true;
   }
 
+  /**
+   * Searches the index using the provided query and returns k results.
+   */
   public search(query: T, k: number): string[] {
     const distances = new Heap<{ id: string; distance: number; data: any }>((a, b) =>
       b.distance - a.distance
@@ -178,12 +215,20 @@ class HNSWVectorDatabase<T> implements VectorDatabase<T> {
       .reverse()
       .map((item) => item.data);
   }
+
+  /**
+   * Deletes a vector from the database.
+   */
   public delete(id: string) {
     let k = this.index.nodes.get(id)
     this.index.nodes.delete(id)
     this.saveIndex()
-    return {events: k.data}
+    return { events: k.data }
   }
+
+  /**
+   * Saves the current index state to disk.
+   */
   private saveIndex(): void {
     const index: HNSWIndex<T> = {
       nodes: Object.fromEntries(this.index.nodes),
@@ -193,6 +238,9 @@ class HNSWVectorDatabase<T> implements VectorDatabase<T> {
   }
 }
 
+/**
+ * Calculates Euclidean distance between two vectors of same size.
+ */
 function euclideanDistance(a: number[], b: number[]): number {
   let sum = 0;
   for (let i = 0; i < a.length; i++) {
@@ -201,5 +249,4 @@ function euclideanDistance(a: number[], b: number[]): number {
   return Math.sqrt(sum);
 }
 
-
-export default HNSWVectorDatabase
+export default HNSWVectorDatabase;
