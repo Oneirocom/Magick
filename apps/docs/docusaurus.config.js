@@ -21,7 +21,7 @@ const config = {
 
       // Plugin / TypeDoc options
       {
-        id: 'engine',
+        id: 'shared-core',
         entryPoints: ['./packages/core/shared/src/index.ts'],
         tsconfig: './packages/core/shared/tsconfig.lib.json',
         readme: 'none',

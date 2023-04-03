@@ -6,7 +6,6 @@ import { API_ROOT_URL } from '../../config';
 import { InputControl } from '../../dataControls/InputControl';
 import { MagickComponent } from '../../engine';
 import {
-  arraySocket,
   embeddingSocket,
   eventSocket,
   stringSocket,
@@ -132,10 +131,9 @@ export class EventStore extends MagickComponent<Promise<void>> {
     if (embedding) data.embedding = embedding;
 
     if (content && content !== '') {
-      const response = await axios.post(`${API_ROOT_URL}/events`, data);
-      return {
-        output: response.data,
-      };
+      await axios.post(`${API_ROOT_URL}/events`, data);
+    } else {
+      throw new Error('Content is empty, not storing the event !!');
     }
   }
 }

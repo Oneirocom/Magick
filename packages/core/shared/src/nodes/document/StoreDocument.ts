@@ -71,14 +71,14 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
    * @param {MagickWorkerInputs} inputs - The worker inputs.
    * @param {MagickWorkerOutputs} _outputs - The worker outputs.
    * @param {any} context - The context.
-   * @returns {Promise<{output: any}> | void} The output of the worker.
+   * @returns {Promise<void>} The output of the worker.
    */
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context: Record<string, unknown>
-  ): Promise<{ output: any } | void> {
+  ): Promise<void> {
     const { projectId } = context;
 
     const document = inputs['document'][0] as Document;
@@ -125,11 +125,9 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
     }
 
     if (content && content !== '') {
-      const response = await axios.post(`${API_ROOT_URL}/documents`, data);
-
-      return {
-        output: response.data,
-      };
+      await axios.post(`${API_ROOT_URL}/documents`, data);
+    } else {
+      throw new Error('Content is empty');
     }
   }
 }

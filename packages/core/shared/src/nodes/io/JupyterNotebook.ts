@@ -34,9 +34,9 @@ const removeProtocol = (url: string): string => {
  * @param event - Event name.
  * @returns A promise that resolves when the specified event occurs.
  */
-function getPromiseFromEvent(item: WebSocket, event: string): Promise<void> {
+function getPromiseFromEvent(item: EventTarget, event: string): Promise<void> {
   return new Promise<void>((resolve) => {
-    const listener = (e: MessageEvent<string>) => {
+    const listener = e => {
       const data = JSON.parse(e.data);
       if (data['msg_type'] === 'stream') {
         item.removeEventListener(event, listener);

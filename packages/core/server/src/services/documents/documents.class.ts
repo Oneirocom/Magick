@@ -1,5 +1,4 @@
 // DOCUMENTED 
-/* eslint-disable @-eslint/ban-ts-comment */
 // This module provides a document service for managing documents with embedding and pagination support
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
 import type { Params } from '@feathersjs/feathers';
@@ -31,14 +30,13 @@ export class DocumentService<
    * @param data {DocumentData} The document data to create
    * @return {Promise<any>} The created document
    */
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   async create(data: DocumentData): Promise<any> {
     if (process.env.DATABASE_TYPE == 'pg'){
-      const db = app.get('dbClient')
-      //@ts-ignore
-      const {id, ...rest} = data;
       const cli = app.get('docdb')
       await cli.from('document').insert(data);
-      //let _ = await db('events').insert(data);
     }
     return data
   }
@@ -55,10 +53,8 @@ export class DocumentService<
       return r
     } else{
       const db = app.get('dbClient');
-      const _ = await db('document').where('id', id).del();
-      return _
+      return await db('document').where('id', id).del();
     }
-    
   }
 
   /**
@@ -66,7 +62,7 @@ export class DocumentService<
    * @param params {ServiceParams} Optional parameters for the find operation
    * @return {Promise<any>} The found documents
    */
-  async find(params?: ServiceParams) {
+  async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
     const cli = app.get('docdb')
     if (process.env.DATABASE_TYPE == 'sqlite'){

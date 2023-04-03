@@ -51,7 +51,6 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
     let conversation = '';
 
     if (Array.isArray(events)) {
-      // eslint-disable-next-line @-eslint/ban-ts-comment
       // @ts-ignore
       if (events.rows) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
