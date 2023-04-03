@@ -210,7 +210,7 @@ export function Drawer({ children }) {
 
   useEffect(() => {
     const handleKeyDown = event => {
-      if (event.key.toLowerCase() === 'h' && event.ctrlKey) {
+      if (event.key.toLowerCase() === 'b' && event.ctrlKey) {
         setOpenProjectDrawer(prevState => !prevState)
         setOpen(false)
       }
@@ -309,7 +309,7 @@ export function Drawer({ children }) {
           {!isAPIKeysSet && <SetAPIKeys />}
         </List>
       </StyledDrawer>
-      <ProjectWindow openDrawer={openDrawer} />
+      {openDrawer && <ProjectWindow openDrawer={openDrawer} />}
       {children}
     </div>
   )

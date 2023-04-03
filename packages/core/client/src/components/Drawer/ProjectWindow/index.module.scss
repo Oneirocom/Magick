@@ -21,8 +21,13 @@
 
 .drawer {
   width: 200px;
-  z-index: 0 !important;
+  z-index: 9 !important;
   height: 100%;
+
+  &:hover {
+    border-right: 1px solid red;
+    cursor: ew-resize;
+  }
 }
 
 .drawerPaper {

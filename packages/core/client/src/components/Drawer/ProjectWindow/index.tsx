@@ -1,10 +1,10 @@
-import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/engine'
+import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
 import TreeItem from '@mui/lab/TreeItem'
 import TreeView from '@mui/lab/TreeView'
 import { Button, Menu, MenuItem, Typography, Drawer } from '@mui/material'
 import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import FileInput from '../../FileInput/FileInput'
 import Box from '@mui/material/Box'
@@ -21,6 +21,9 @@ import {
 import { IconButton } from '@mui/material'
 
 import styles from './index.module.scss'
+
+let isResizing = false
+const drawerMaxSize = 200
 
 const ProjectWindow = ({ openDrawer }) => {
   const globalConfig = useSelector((state: any) => state.globalConfig)
@@ -91,6 +94,41 @@ const ProjectWindow = ({ openDrawer }) => {
     element.click()
   }
 
+  const sidebarPanel = useRef('sidebarPanel')
+  const cbHandleMouseMove = useCallback(handleMousemove, [])
+  const cbHandleMouseUp = useCallback(handleMouseup, [])
+
+  function handleMousedown(e) {
+    e.stopPropagation()
+    e.preventDefault()
+
+    document.addEventListener('mousemove', cbHandleMouseMove)
+    document.addEventListener('mouseup', cbHandleMouseUp)
+    isResizing = true
+  }
+
+  function handleMousemove(e) {
+    if (!isResizing) {
+      return
+    }
+
+    const rightSide = document.getElementById('wrapper')
+    const minWidth = 140
+
+    if (e.clientX > minWidth && e.clientX < drawerMaxSize) {
+      sidebarPanel.current.style.width = e.clientX + 'px'
+      rightSide.style.width = 100 + (drawerMaxSize - e.clientX) + '%'
+    }
+  }
+
+  function handleMouseup(e) {
+    if (!isResizing) {
+      return
+    }
+    isResizing = false
+    document.removeEventListener('mousemove', cbHandleMouseMove)
+    document.removeEventListener('mouseup', cbHandleMouseUp)
+  }
   useEffect(() => {
     if (loaded) return
     setLoaded(true)
@@ -122,6 +160,8 @@ const ProjectWindow = ({ openDrawer }) => {
           anchor="left"
           open={openDrawer}
           hideBackdrop
+          ref={sidebarPanel}
+          onMouseDown={handleMousedown}
         >
           <Box className={styles.header}>
             <Typography>Project Name</Typography>
