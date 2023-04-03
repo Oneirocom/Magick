@@ -103,7 +103,7 @@ class HNSW<T> {
     let neighborId = node.neighbors[level - 1];
     while (neighborId !== null) {
       neighbors.push(neighborId);
-      let neighbor = this.nodes.get(neighborId);
+      const neighbor = this.nodes.get(neighborId);
       neighborId = neighbor ? neighbor.neighbors[level - 1] : null;
     }
     return neighbors;
@@ -220,7 +220,7 @@ class HNSWVectorDatabase<T> implements VectorDatabase<T> {
    * Deletes a vector from the database.
    */
   public delete(id: string) {
-    let k = this.index.nodes.get(id)
+    const k = this.index.nodes.get(id)
     this.index.nodes.delete(id)
     this.saveIndex()
     return { events: k.data }
