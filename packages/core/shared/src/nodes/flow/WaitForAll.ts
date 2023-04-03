@@ -1,3 +1,4 @@
+// DOCUMENTED 
 import Rete from 'rete'
 
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
@@ -9,19 +10,29 @@ import {
   WorkerData
 } from '../../types'
 
+/** Info for the WaitForAll Component */
 const info = `Fires once all connected triggers have fired.`
 
+/**
+ * WaitForAll is a component to ensure all connected triggers have fired.
+ */
 export class WaitForAll extends MagickComponent<void> {
   constructor() {
-    // Name of the component
+    // Name of the Component
     super('Wait For All', {
       outputs: { default: 'option' },
     }, 'Flow', info)
   }
 
+  // Add documentation for node
   node = {}
 
-  builder(node: MagickNode) {
+  /**
+   * Sets up the node with input sockets and output connection.
+   * @param node - The MagickNode to be built.
+   * @returns MagickNode
+   */
+  builder(node: MagickNode): MagickNode {
     const inputGenerator = new SocketGeneratorControl({
       connectionType: 'input',
       socketType: 'triggerSocket',
@@ -37,15 +48,18 @@ export class WaitForAll extends MagickComponent<void> {
     return node
   }
 
-  // the worker contains the main business logic of the node.  It will pass those results
-  // to the outputs to be consumed by any connected components
-  worker(_node: WorkerData, inputs: MagickWorkerInputs) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const nodeInputs = Object.values(inputs as any).filter(
+  /**
+   * The worker contains the main business logic of the node.
+   * It will pass those results to the outputs to be consumed by any connected components.
+   * @param _node - The worker data.
+   * @param inputs - Inputs of the worker.
+   */
+  worker(_node: WorkerData, inputs: MagickWorkerInputs): void {
+    const nodeInputs = Object.values(inputs).filter(
       (input) => !!input
     ) as Array<{ name: string }>
 
-    // close all outputs
+    // Close all outputs
     this._task.closed = [...nodeInputs.map(out => out.name)]
   }
 }

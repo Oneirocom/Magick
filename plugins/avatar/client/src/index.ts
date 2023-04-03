@@ -20,14 +20,14 @@ const AvatarPlugin = new ClientPlugin({
   secrets: [], // List of secret keys for the plugin,
   drawerItems: [
     {
-      path: '/chat',
+      path: '/avatar',
       icon: AvatarIcon,
-      text: 'Chat',
+      text: 'Avatar',
     },
   ],
   clientRoutes: [
     {
-      path: '/chat',
+      path: '/avatar',
       component: App,
     }
   ],

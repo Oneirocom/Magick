@@ -8,6 +8,7 @@ import DragDrop from "./components/drag-drop/DragDrop"
 import Scene from "./components/Scene"
 import { BlinkManager } from "./library/blinkManager"
 import { LipSync } from "./library/lipsync"
+import { SceneProvider } from "./components/SceneContext"
 
 import { initAnimationMixer, loadVRM } from "./library/animationManager"
 
@@ -109,7 +110,7 @@ export default function App() {
 
 
   return (
-    <Fragment>
+    <SceneProvider>
       <DragDrop onDrop={onDrop} className={styles.dragdrop} noClick={false} />
       <Background />
       {characterModel && <Scene
@@ -128,6 +129,6 @@ export default function App() {
           </div>
         </div>
       </div>
-    </Fragment>
+    </SceneProvider>
   )
 }

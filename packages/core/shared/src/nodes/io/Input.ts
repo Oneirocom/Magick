@@ -1,30 +1,36 @@
-import { isEmpty } from 'lodash'
-import Rete from 'rete'
-import { v4 as uuidv4 } from 'uuid'
+// DOCUMENTED 
+import { isEmpty } from 'lodash';
+import Rete from 'rete';
+import { v4 as uuidv4 } from 'uuid';
 
-import { DropdownControl } from '../../dataControls/DropdownControl'
-import { InputControl } from '../../dataControls/InputControl'
-import { SwitchControl } from '../../dataControls/SwitchControl'
-import { MagickComponent } from '../../engine'
-import { PluginIOType, pluginManager } from '../../plugin'
-import { DataControl } from '../../plugins/inspectorPlugin'
-import { anySocket, triggerSocket } from '../../sockets'
+import { DropdownControl } from '../../dataControls/DropdownControl';
+import { InputControl } from '../../dataControls/InputControl';
+import { SwitchControl } from '../../dataControls/SwitchControl';
+import { MagickComponent } from '../../engine';
+import { PluginIOType, pluginManager } from '../../plugin';
+import { DataControl } from '../../plugins/inspectorPlugin';
+import { anySocket, triggerSocket } from '../../sockets';
 import {
   CompletionSocket,
   MagickNode,
   MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData,
-} from '../../types'
-const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
+  WorkerData
+} from '../../types';
+
+/** Information about the InputComponent functionality */
+const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`;
 
 type InputReturn = {
-  output: unknown
-}
+  output: unknown;
+};
 
+/**
+ * InputComponent is a MagickComponent that handles user input
+ */
 export class InputComponent extends MagickComponent<InputReturn> {
-  nodeTaskMap: Record<number, MagickTask> = {}
+  nodeTaskMap: Record<number, MagickTask> = {};
 
   constructor() {
     // Name of the component
@@ -37,18 +43,24 @@ export class InputComponent extends MagickComponent<InputReturn> {
         },
       },
       'I/O',
-      info
-    )
+      info,
+    );
 
     this.module = {
       nodeType: 'input',
       socket: anySocket,
-    }
+    };
 
-    this.contextMenuName = 'Input'
-    this.displayName = 'Input'
+    this.contextMenuName = 'Input';
+    this.displayName = 'Input';
   }
 
+  /**
+   * Builder function for configuring the input component and adding controls to the node
+   * 
+   * @param {MagickNode} node - The node being built
+   * @returns {MagickNode} - The configured node
+   */
   builder(node: MagickNode) {
     if(node.data.useTrigger === undefined) {
       node.data.useTrigger = true

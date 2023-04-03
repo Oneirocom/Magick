@@ -10,6 +10,7 @@ let isFirstRender = true
 let prevCharacterModel = null
 
 export default function Scene({ characterModel }) {
+  console.log('SceneContext', SceneContext)
   const { scene, setCamera } = useContext(SceneContext)
 
   useEffect(() => {
@@ -27,7 +28,14 @@ export default function Scene({ characterModel }) {
       setCamera(camera)
 
       // find editor-scene canvas
-      const canvasRef = document.getElementById("editor-scene")
+      const canvasRef = document.createElement("canvas")
+      canvasRef.id = "editor-scene"
+      canvasRef.style.position = "absolute"
+      canvasRef.style.top = "0"
+      canvasRef.style.left = "0"
+      canvasRef.style.width = "100%"
+      canvasRef.style.height = "100%"
+      document.body.appendChild(canvasRef)
 
       // create a new renderer
       const renderer = new THREE.WebGLRenderer({
