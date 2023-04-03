@@ -31,7 +31,7 @@ Core runtime code for Magick. Contains all of the spell and spell running code, 
 
 ## Front End Packages
 ### Client Core
-@magickml/client-core (./packages/client-core)
+@magickml/client-core (./packages/core/client)
 Frontend UI components and common code.
 
 ### Editor

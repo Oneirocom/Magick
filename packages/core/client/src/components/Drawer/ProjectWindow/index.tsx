@@ -1,148 +1,144 @@
-import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
-import TreeItem from '@mui/lab/TreeItem'
-import TreeView from '@mui/lab/TreeView'
-import { Button, Menu, MenuItem, Typography, Drawer } from '@mui/material'
-import axios from 'axios'
-import { enqueueSnackbar } from 'notistack'
-import { useEffect, useState, useRef, useCallback } from 'react'
-import { useSelector } from 'react-redux'
-import FileInput from '../../FileInput/FileInput'
-import Box from '@mui/material/Box'
-import {
-  Apps,
-  TextSnippet,
-  MoreHoriz,
-  MenuBook,
-  FileDownload,
-  FileUpload,
-  ExpandMore,
-  ChevronRight,
-} from '@mui/icons-material/'
-import { IconButton } from '@mui/material'
+// DOCUMENTED 
+/** @module ProjectWindow */
 
-import styles from './index.module.scss'
+import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core';
+import TreeItem from '@mui/lab/TreeItem';
+import TreeView from '@mui/lab/TreeView';
+import { Button, Menu, MenuItem, Typography, Drawer, IconButton, Box } from '@mui/material';
+import axios from 'axios';
+import { enqueueSnackbar } from 'notistack';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { Apps, TextSnippet, MoreHoriz, MenuBook, FileDownload, FileUpload, ExpandMore, ChevronRight } from '@mui/icons-material';
+import FileInput from '../../FileInput/FileInput';
+import styles from './index.module.scss';
 
-let isResizing = false
-const drawerMaxSize = 200
+let isResizing = false;
+const drawerMaxSize = 200;
 
+/**
+ * ProjectWindow is a collapsible sidebar that shows a tree view of the project content.
+ * It also provides import and export functionality for projects.
+ *
+ * @param {Object} props - The component's properties
+ * @param {boolean} props.openDrawer - Whether the drawer is open or not
+ */
 const ProjectWindow = ({ openDrawer }) => {
-  const globalConfig = useSelector((state: any) => state.globalConfig)
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
+  const globalConfig = useSelector((state) => state.globalConfig);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
-  const [data, setData] = useState({ agents: [], spells: [], documents: [] })
-  const [loaded, setLoaded] = useState(false)
-  const token = globalConfig?.token
-  const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
+  const [data, setData] = useState({ agents: [], spells: [], documents: [] });
+  const [loaded, setLoaded] = useState(false);
+  const token = globalConfig?.token;
+  const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` };
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
   /**
    * Load file and upload its contents to the server.
    *
    * @param {File} selectedFile - Selected file object
    */
-  const loadFile = selectedFile => {
+  const loadFile = (selectedFile) => {
     if (!token && !IGNORE_AUTH) {
       enqueueSnackbar('You must be logged in to create a project', {
         variant: 'error',
-      })
-      return
+      });
+      return;
     }
-    const fileReader = new FileReader()
-    fileReader.readAsText(selectedFile)
-    fileReader.onload = event => {
-      const data = JSON.parse(event?.target?.result as string)
-      delete data['id']
+    const fileReader = new FileReader();
+    fileReader.readAsText(selectedFile);
+    fileReader.onload = (event) => {
+      const data = JSON.parse(event?.target?.result);
+      delete data['id'];
       axios({
         url: `${globalConfig.apiUrl}/projects`,
         method: 'POST',
         data: { ...data, projectId: globalConfig.projectId },
         headers,
       })
-        .then(async res => {
+        .then(async (res) => {
           const res2 = await fetch(
             `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
             { headers }
-          )
-          const json = await res2.json()
-          setData(json)
+          );
+          const json = await res2.json();
+          setData(json);
         })
-        .catch(err => {
-          console.error('error is', err)
-        })
-    }
-  }
+        .catch((err) => {
+          console.error('error is', err);
+        });
+    };
+  };
 
   /**
    * Export the project data as a .project.json file.
    */
   const exportProject = () => {
-    console.log('export project')
-    // write data to project.json
-    // download project.json
-    const element = document.createElement('a')
-    const file = new Blob([JSON.stringify(data)], { type: 'text/plain' })
-    element.href = URL.createObjectURL(file)
-    element.download = globalConfig.projectId + '.project.json'
-    document.body.appendChild(element)
-    element.click()
-  }
+    const element = document.createElement('a');
+    const file = new Blob([JSON.stringify(data)], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = globalConfig.projectId + '.project.json';
+    document.body.appendChild(element);
+    element.click();
+  };
 
-  const sidebarPanel = useRef('sidebarPanel')
-  const cbHandleMouseMove = useCallback(handleMousemove, [])
-  const cbHandleMouseUp = useCallback(handleMouseup, [])
+  const sidebarPanel = useRef('sidebarPanel');
+  const cbHandleMouseMove = useCallback(handleMousemove, []);
+  const cbHandleMouseUp = useCallback(handleMouseup, []);
 
   function handleMousedown(e) {
-    e.stopPropagation()
-    e.preventDefault()
+    e.stopPropagation();
+    e.preventDefault();
 
-    document.addEventListener('mousemove', cbHandleMouseMove)
-    document.addEventListener('mouseup', cbHandleMouseUp)
-    isResizing = true
+    document.addEventListener('mousemove', cbHandleMouseMove);
+    document.addEventListener('mouseup', cbHandleMouseUp);
+    isResizing = true;
   }
 
   function handleMousemove(e) {
     if (!isResizing) {
-      return
+      return;
     }
 
-    const rightSide = document.getElementById('wrapper')
-    const resizer = document.getElementById('resizer')
-    const minWidth = 140
+    const rightSide = document.getElementById('wrapper');
+    const resizer = document.getElementById('resizer');
+    const minWidth = 140;
 
     if (e.clientX > minWidth && e.clientX < drawerMaxSize) {
-      sidebarPanel.current.style.width = e.clientX + 'px'
-      resizer.style.left = e.clientX + 'px'
-      rightSide.style.width = 100 + (drawerMaxSize - e.clientX) + '%'
+      sidebarPanel.current.style.width = e.clientX + 'px';
+      resizer.style.left = e.clientX + 'px';
+      rightSide.style.width = 100 + (drawerMaxSize - e.clientX) + '%';
     }
   }
 
   function handleMouseup(e) {
     if (!isResizing) {
-      return
+      return;
     }
-    isResizing = false
-    document.removeEventListener('mousemove', cbHandleMouseMove)
-    document.removeEventListener('mouseup', cbHandleMouseUp)
+    isResizing = false;
+    document.removeEventListener('mousemove', cbHandleMouseMove);
+    document.removeEventListener('mouseup', cbHandleMouseUp);
   }
+
   useEffect(() => {
-    if (loaded) return
-    setLoaded(true)
+    if (loaded) return;
+    setLoaded(true);
     const fetchData = async () => {
       const { data } = await axios.get(
         `${API_ROOT_URL}/projects?projectId=${globalConfig.projectId}`,
         { headers }
-      )
-      setData(data)
-    }
-    fetchData()
-  }, [])
+      );
+      setData(data);
+    };
+    fetchData();
+  }, []);
 
   return (
     openDrawer && (
@@ -218,13 +214,11 @@ const ProjectWindow = ({ openDrawer }) => {
               </MenuItem>
             </Menu>
           </Box>
-          {/* Show Project ID */}
           <Box
             className={styles.listContainer}
             component="nav"
             aria-label="mailbox folders"
           >
-            {/* show tree view of project - Agents, Spells, Documents */}
             {data && (
               <TreeView
                 defaultCollapseIcon={<ExpandMore />}
@@ -259,17 +253,15 @@ const ProjectWindow = ({ openDrawer }) => {
                 )}
                 {data?.documents.length !== 0 && (
                   <TreeItem nodeId="20" label="Documents">
-                    {data.documents.map((document, index) => {
-                      return (
-                        <TreeItem
-                          key={index}
-                          style={{ width: '100%' }}
-                          nodeId={30 + index.toString()}
-                          label={document.content.slice(0, 12)}
-                          icon={<TextSnippet />}
-                        />
-                      )
-                    })}
+                    {data.documents.map((document, index) => (
+                      <TreeItem
+                        key={index}
+                        style={{ width: '100%' }}
+                        nodeId={30 + index.toString()}
+                        label={document.content.slice(0, 12)}
+                        icon={<TextSnippet />}
+                      />
+                    ))}
                   </TreeItem>
                 )}
               </TreeView>
@@ -283,7 +275,7 @@ const ProjectWindow = ({ openDrawer }) => {
         />
       </Box>
     )
-  )
-}
+  );
+};
 
-export default ProjectWindow
+export default ProjectWindow;

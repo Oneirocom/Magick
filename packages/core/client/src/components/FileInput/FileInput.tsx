@@ -1,19 +1,61 @@
-import { Button } from '@magickml/client-core'
-import React from 'react'
+// DOCUMENTED 
+import React, { useRef, ChangeEvent } from 'react';
+import { Button } from '@magickml/client-core';
 
-const FileInput = ({ loadFile, sx, innerText = 'Import', Icon = <> </> }) => {
-  const hiddenFileInput = React.useRef(null)
+interface FileInputProps {
+  /**
+   * Function to process loaded files.
+   */
+  loadFile: (file: File) => void;
 
-  const handleClick = () => {
-    hiddenFileInput.current.click()
-  }
+  /**
+   * Optional custom styles.
+   */
+  sx?: React.CSSProperties;
 
-  const handleChange = event => {
-    Object.values(event.target.files).forEach(loadFile)
-  }
+  /**
+   * Button text. Defaults to 'Import'.
+   */
+  innerText?: string;
+
+  /**
+   * Optional custom icon for the button.
+   */
+  Icon?: React.ReactNode;
+}
+
+/**
+ * FileInput component.
+ * Handles importing files from the user's device.
+ */
+const FileInput: React.FC<FileInputProps> = ({
+  loadFile,
+  sx,
+  innerText = 'Import',
+  Icon = <></>,
+}) => {
+  const hiddenFileInput = useRef<HTMLInputElement>(null);
+
+  /**
+   * Handle button click by trigerring the hidden file input.
+   */
+  const handleClick = (): void => {
+    hiddenFileInput.current?.click();
+  };
+
+  /**
+   * Handle file input change by processing selected files.
+   * @param event - Change event containing selected files.
+   */
+  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    if (event.target.files) {
+      Array.from(event.target.files).forEach(loadFile);
+    }
+  };
+
   return (
     <>
-      <Button onClick={handleClick} style={{...sx}}>
+      <Button onClick={handleClick} style={{ ...sx }}>
         {Icon}
         {innerText}
       </Button>
@@ -26,7 +68,7 @@ const FileInput = ({ loadFile, sx, innerText = 'Import', Icon = <> </> }) => {
         style={{ display: 'none' }}
       />
     </>
-  )
-}
+  );
+};
 
-export default FileInput
+export default FileInput;

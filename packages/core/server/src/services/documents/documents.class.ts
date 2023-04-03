@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 // DOCUMENTED 
+/* eslint-disable @-eslint/ban-ts-comment */
 // This module provides a document service for managing documents with embedding and pagination support
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
 import type { Params } from '@feathersjs/feathers';
@@ -26,8 +26,11 @@ export type DocumentParams = KnexAdapterParams<DocumentQuery>;
 export class DocumentService<
   ServiceParams extends Params = DocumentParams
 > extends KnexService<Document, DocumentData, ServiceParams, DocumentPatch> {
-  
-  //@ts-ignore
+  /**
+   * Creates a new document
+   * @param data {DocumentData} The document data to create
+   * @return {Promise<any>} The created document
+   */
   async create(data: DocumentData): Promise<any> {
     if (process.env.DATABASE_TYPE == 'pg'){
       const db = app.get('dbClient')
@@ -40,6 +43,11 @@ export class DocumentService<
     return data
   }
 
+  /**
+   * Removes a document by ID
+   * @param id {string} The document ID to remove
+   * @return {Promise<any>} The removed document
+   */
   async remove(id: string): Promise<any> {
     if (process.env.DATABASE_TYPE == 'sqlite'){
       const docdb = app.get('docdb')
@@ -52,8 +60,12 @@ export class DocumentService<
     }
     
   }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+
+  /**
+   * Finds documents with optional filters
+   * @param params {ServiceParams} Optional parameters for the find operation
+   * @return {Promise<any>} The found documents
+   */
   async find(params?: ServiceParams) {
     const db = app.get('dbClient')
     const cli = app.get('docdb')
