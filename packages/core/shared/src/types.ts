@@ -364,8 +364,8 @@ export type GraphData = Data
 
 export type IgnoredList =
   | {
-      name: string
-    }[]
+    name: string
+  }[]
   | string[]
 
 export type ComponentData<T = TaskType> = Record<string, unknown> & {

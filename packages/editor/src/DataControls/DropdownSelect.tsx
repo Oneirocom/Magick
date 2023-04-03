@@ -25,7 +25,7 @@ const DropdownSelect = ({ control, updateData, initialValue }) => {
     useSWR<OpenAI.List<OpenAI.FineTune>>('fine-tunes')
 
   useEffect(() => {
-    if (fineTuneData && dataKey === 'modelName') {
+    if (fineTuneData && dataKey === 'spellName') {
       setCompositeValues([
         ...values,
         ...fineTuneData.data.map(fineTune => fineTune.fine_tuned_model),
