@@ -1,6 +1,6 @@
 {
   "name": "@magickml/plugin-loop-server",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugins/loop/server/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],

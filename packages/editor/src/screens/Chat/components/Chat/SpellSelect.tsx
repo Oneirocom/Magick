@@ -1,7 +1,7 @@
 import { FC } from "react";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import styles from './styles.module.css';
-import { Spell } from '@magickml/engine'
+import { Spell } from '@magickml/core'
 
 interface Props {
   spell: Spell;

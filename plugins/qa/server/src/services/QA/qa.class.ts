@@ -1,6 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
 import type { PaginationParams, Params, ServiceInterface } from '@feathersjs/feathers';
-import { API_ROOT_URL } from '@magickml/engine';
+import { API_ROOT_URL } from '@magickml/core';
 import { app, Application } from '@magickml/server-core'
 import { QA, QAData, QAQuery } from './qa.schema';
 import import_ from '@brillout/import';

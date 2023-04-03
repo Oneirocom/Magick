@@ -1,11 +1,12 @@
 import {
-  ClientPlugin,
   ClientPluginManager,
-  pluginManager,
+  pluginManager
 } from '@magickml/core'
+import AvatarIcon from '@mui/icons-material/AccountCircle'
 import AppsIcon from '@mui/icons-material/Apps'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
+import ChatIcon from '@mui/icons-material/Chat'
 import DocumentIcon from '@mui/icons-material/Description'
 import SettingsIcon from '@mui/icons-material/Settings'
 import StorageIcon from '@mui/icons-material/Storage'
@@ -20,11 +21,10 @@ import { CSSObject, styled, Theme } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { SetAPIKeys } from './SetAPIKeys'
-import ChatIcon from '@mui/icons-material/Chat'
 
+import ProjectWindow from './ProjectWindow'
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
-import ProjectWindow from './ProjectWindow'
 
 // Constants
 const drawerWidth = 150
@@ -283,6 +283,13 @@ export function Drawer({ children }) {
             open={open}
             onClick={onClick('/chat')}
             text="Chat"
+          />
+          <DrawerItem
+            active={location.pathname.includes('/avatar')}
+            Icon={AvatarIcon}
+            open={open}
+            onClick={onClick('/avatar')}
+            text="Avatar"
           />
           <Divider />
           <PluginDrawerItems onClick={onClick} open={open} />

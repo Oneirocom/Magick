@@ -7,7 +7,7 @@ import { SpellSelect } from "./SpellSelect";
 import { Regenerate } from "./Regenerate";
 import { SystemPrompt } from "./SystemPrompt";
 import chatStyles from './styles.module.css';
-import { Spell } from '@magickml/engine'
+import { Spell } from '@magickml/core'
 
 interface Props {
   conversation: Conversation;
