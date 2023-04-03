@@ -1,6 +1,6 @@
 // DOCUMENTED 
 import { LoadingScreen } from '@magickml/client-core'
-import { IGNORE_AUTH, pluginManager } from '@magickml/engine'
+import { IGNORE_AUTH, pluginManager } from '@magickml/core'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
@@ -54,7 +54,6 @@ const AgentManagerWindow = () => {
   const createNew = (data: {
     projectId: string
     rootSpell: string
-    spells: string
     enabled: true
     name: string
     updatedAt: string
@@ -105,7 +104,6 @@ const AgentManagerWindow = () => {
       data.enabled = data?.enabled ? true : false
       data.updatedAt = new Date().toISOString()
       data.rootSpell = data?.rootSpell || {}
-      data.spells = Array.isArray(data?.spells) ? data.spells : []
       data.secrets = JSON.stringify(
         Array.isArray(data?.secrets) ? data.secrets : []
       )

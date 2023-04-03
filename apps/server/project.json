@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/server/src",
   "projectType": "application",
-  "implicitDependencies": ["@magickml/cost-calculator", "@magickml/server-core", "@magickml/engine"],
+  "implicitDependencies": ["@magickml/server-core", "@magickml/core"],
   "targets": {
     "build": {
       "executor": "@nrwl/webpack:webpack",

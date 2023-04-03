@@ -1,5 +1,5 @@
 // DOCUMENTED 
-import { SpellInterface } from '@magickml/engine';
+import { SpellInterface } from '@magickml/core';
 import { CSSProperties } from 'react';
 import { Icon } from '@magickml/client-core';
 import css from '../screens/HomeScreen/homeScreen.module.css';
