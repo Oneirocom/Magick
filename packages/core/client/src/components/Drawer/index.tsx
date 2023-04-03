@@ -1,8 +1,4 @@
-import {
-  ClientPluginManager,
-  pluginManager
-} from '@magickml/core'
-import AvatarIcon from '@mui/icons-material/AccountCircle'
+import { ClientPluginManager, pluginManager } from '@magickml/core'
 import AppsIcon from '@mui/icons-material/Apps'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
@@ -184,11 +180,12 @@ export function Drawer({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
-
+  const [openDrawer, setOpenProjectDrawer] = useState(false)
   const [open, setOpen] = useState<boolean>(false)
 
   // Function to toggle drawer state
   const toggleDrawer = () => {
+    if (!open) setOpenProjectDrawer(false)
     setOpen(!open)
   }
 
@@ -208,6 +205,21 @@ export function Drawer({ children }) {
         }
       })
       setAPIKeysSet(secretHasBeenSet)
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleKeyDown = event => {
+      if (event.key.toLowerCase() === 'b' && event.ctrlKey) {
+        setOpenProjectDrawer(prevState => !prevState)
+        setOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
 
@@ -297,7 +309,7 @@ export function Drawer({ children }) {
           {!isAPIKeysSet && <SetAPIKeys />}
         </List>
       </StyledDrawer>
-      <ProjectWindow />
+      {openDrawer && <ProjectWindow openDrawer={openDrawer} />}
       {children}
     </div>
   )
