@@ -1,4 +1,4 @@
-import { eventSocket, ServerPlugin, WorldManager } from '@magickml/engine'
+import { ServerPlugin } from '@magickml/core'
 import { qa } from './services/QA/qa'
 
 

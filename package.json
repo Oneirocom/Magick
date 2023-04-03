@@ -207,7 +207,9 @@
     "winston": "^3.8.2",
     "xlsx": "^0.18.5",
     "xmldoc": "^1.2.0",
-    "xvfb": "0.4.0"
+    "xvfb": "0.4.0",
+    "react-dropzone": "^14.2.3",
+    "sepia-speechrecognition-polyfill": "^1.0.0"
   },
   "peerDependencies": {
     "@discordjs/opus": "^0.9.0",

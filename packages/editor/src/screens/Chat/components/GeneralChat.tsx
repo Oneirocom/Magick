@@ -10,7 +10,7 @@ import { saveConversation, saveConversations, updateConversation } from "../../.
 import { exportConversations, importConversations } from "../../../utils/app/data";
 import { ArrowBack, ArrowForward } from '@mui/icons-material/'
 import styles from './chat.module.css';
-import { Spell } from '@magickml/engine'
+import { Spell } from '@magickml/core'
 
 import {
     useDeleteSpellMutation,

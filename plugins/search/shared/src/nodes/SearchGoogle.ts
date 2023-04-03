@@ -1,10 +1,10 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * @file Search Google Component
  * @module SearchGoogle
  */
 
-import Rete from 'rete';
+import Rete from 'rete'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -13,9 +13,14 @@ import {
   MagickComponent,
   API_ROOT_URL,
   WorkerData,
-} from '@magickml/core';
+} from '@magickml/core'
 
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
+
+type WorkerReturn = {
+  summary: string
+  links: string
+}
 
 /**
  * Search Google component.
@@ -26,13 +31,18 @@ export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
    * Constructor for SearchGoogle component.
    */
   constructor() {
-    super('Search Google', {
-      outputs: {
-        summary: 'output',
-        links: 'output',
-        trigger: 'option',
+    super(
+      'Search Google',
+      {
+        outputs: {
+          summary: 'output',
+          links: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'Search', info)
+      'Search',
+      info
+    )
   }
 
   /**
@@ -41,18 +51,18 @@ export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
    * @returns {MagickNode} - A MagickNode with configured inputs and outputs.
    */
   builder(node: MagickNode): MagickNode {
-    const query = new Rete.Input('query', 'Query', stringSocket);
-    const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket);
-    const summary = new Rete.Output('summary', 'Summary', stringSocket);
-    const links = new Rete.Output('links', 'Links', stringSocket);
+    const query = new Rete.Input('query', 'Query', stringSocket)
+    const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const summary = new Rete.Output('summary', 'Summary', stringSocket)
+    const links = new Rete.Output('links', 'Links', stringSocket)
 
     return node
       .addInput(triggerIn)
       .addInput(query)
       .addOutput(triggerOut)
       .addOutput(summary)
-      .addOutput(links);
+      .addOutput(links)
   }
 
   /**
@@ -63,21 +73,21 @@ export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
    */
   async worker(
     _node: WorkerData,
-    inputs: MagickWorkerInputs,
+    inputs: MagickWorkerInputs
   ): Promise<WorkerReturn> {
-    const url = `${API_ROOT_URL}/google-search?query=${inputs.query[0]}`;
+    const url = `${API_ROOT_URL}/google-search?query=${inputs.query[0]}`
 
-    const response = await fetch(url);
+    const response = await fetch(url)
 
-    const json = await response.json();
+    const json = await response.json()
 
-    console.log('json', json);
+    console.log('json', json)
 
-    const { summary, links } = json;
+    const { summary, links } = json
 
     return {
       summary,
       links,
-    };
+    }
   }
 }

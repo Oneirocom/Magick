@@ -106,7 +106,10 @@
         "plugins/twitter/server/src/index.ts"
       ],
       "@magickml/plugin-qa-server": [
-        "plugins/QA/server/src/index.ts"
+        "plugins/qa/server/src/index.ts"
+      ],
+      "@magickml/plugin-avatar-client": [
+        "plugins/avatar/client/src/index.ts"
       ],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-core": ["packages/core/server/src/index.ts"],

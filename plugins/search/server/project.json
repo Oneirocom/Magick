@@ -1,6 +1,6 @@
 {
   "name": "@magickml/plugin-search-server",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugins/search/server/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],

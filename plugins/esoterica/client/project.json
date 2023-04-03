@@ -1,6 +1,6 @@
 {
   "name": "@magickml/plugin-esoterica-client",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugins/esoterica/client/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],
