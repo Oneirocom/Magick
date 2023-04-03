@@ -90,7 +90,7 @@ export type CreateEventArgs = Event
 
 export type GetEventArgs = {
   type?: string
-  embedding?: number[]
+  embedding?: string
   observer?: string
   client?: string
   //TODO: entities not used anywhere

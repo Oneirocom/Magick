@@ -1,17 +1,16 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * This file contains the implementation of the EventService class.
  * For more information, see https://dove.feathersjs.com/guides/cli/service.class.html#database-services.
  */
 
-import type { Params } from '@feathersjs/feathers';
-import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex';
-import { KnexService } from '@feathersjs/knex';
-import { app } from '../../app';
-import type { Application } from '../../declarations';
-import type { Event, EventData, EventPatch, EventQuery } from './events.schema';
-
-export type EventParams = KnexAdapterParams<EventQuery>;
+import type { Params } from '@feathersjs/feathers'
+import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
+import { KnexService } from '@feathersjs/knex'
+import { app } from '../../app'
+import type { Application } from '../../declarations'
+import type { Event, EventData, EventPatch, EventQuery } from './events.schema'
+export type EventParams = KnexAdapterParams<EventQuery>
 
 /**
  * The EventService class extends KnexService and provides tailored
@@ -19,7 +18,9 @@ export type EventParams = KnexAdapterParams<EventQuery>;
  *
  * ServiceParams specifies the Params type for the service.
  */
-export class EventService<ServiceParams extends Params = EventParams> extends KnexService<Event, EventData, ServiceParams, EventPatch> {
+export class EventService<
+  ServiceParams extends Params = EventParams
+> extends KnexService<Event, EventData, ServiceParams, EventPatch> {
   /**
    * Create a new event.
    * Currently, this function simply returns the provided event data immediately.
@@ -29,7 +30,15 @@ export class EventService<ServiceParams extends Params = EventParams> extends Kn
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: EventData): Promise<any> {
-    return data;
+    if (process.env.DATABASE_TYPE == 'pg') {
+      const db = app.get('dbClient')
+      //@ts-ignore
+      const { id, ...rest } = data
+      const cli = app.get('vectordb')
+      await cli.from('events').insert(data)
+      //let _ = await db('events').insert(data);
+    }
+    return data
   }
 
   /**
@@ -39,9 +48,15 @@ export class EventService<ServiceParams extends Params = EventParams> extends Kn
    * @returns {Promise<any>} - The result of the delete operation.
    */
   async remove(id: string): Promise<any> {
-    const vectordb = app.get('vectordb');
-    const r = vectordb.delete(id);
-    return r;
+    if (process.env.DATABASE_TYPE == 'sqlite') {
+      const vectordb = app.get('vectordb')
+      const r = vectordb.delete(id)
+      return r
+    } else {
+      const db = app.get('dbClient')
+      const _ = await db('events').where('id', id).del()
+      return _
+    }
   }
 
   /**
@@ -53,27 +68,69 @@ export class EventService<ServiceParams extends Params = EventParams> extends Kn
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async find(params?: ServiceParams) {
-    if (params.query.embedding) {
-      const blob = atob(params.query.embedding);
-      const ary_buf = new ArrayBuffer(blob.length);
-      const dv = new DataView(ary_buf);
-      for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i));
-      const f32_ary = new Float32Array(ary_buf);
-      const vectordb = app.get('vectordb');
-      const query = f32_ary as unknown as number[];
-      const results = vectordb.search(query, params?.query?.$limit);
-      if (results) {
-        return { events: results };
-      }
-    }
+    const db = app.get('dbClient')
+    const cli = app.get('vectordb')
+    if (process.env.DATABASE_TYPE == 'sqlite') {
+      const vectordb = app.get('vectordb')
+      if (params.query.embedding) {
+        const blob = atob(params.query.embedding)
+        const ary_buf = new ArrayBuffer(blob.length)
+        const dv = new DataView(ary_buf)
+        for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
+        const f32_ary = new Float32Array(ary_buf)
+        const query = f32_ary as unknown as number[]
+        const { $limit: _, ...param } = params.query
 
-    const vectordb = app.get('vectordb');
-    const { $limit: _, ...param } = params.query;
-    const r = vectordb.searchData(
-      param as unknown as number[],
-      params?.query?.$limit
-    );
-    return { events: r };
+        const search_result = await vectordb.extractMetadataFromResults(
+          query,
+          2,
+          param
+        )
+        if (search_result) {
+          return { events: search_result }
+        }
+      }
+      const { $limit: _, ...param } = params.query
+      const tr = await vectordb.getDataWithMetadata(param, 10)
+      return { events: tr }
+    } else {
+      if (params.query.embedding) {
+        const blob = atob(params.query.embedding)
+        const ary_buf = new ArrayBuffer(blob.length)
+        const dv = new DataView(ary_buf)
+        for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
+        const f32_ary = new Float32Array(ary_buf)
+        const query = f32_ary as unknown as number[]
+        const { $limit: _, ...param } = params.query
+        const querys = await db('events')
+          .select('*')
+          .where({
+            ...(param.type && { type: param.type }),
+            ...(param.id && { id: param.id }),
+            ...(param.sender && { sender: param.sender }),
+            ...(param.client && { client: param.client }),
+            ...(param.channel && { channel: param.channel }),
+            ...(param.projectId && { projectId: param.projectId }),
+            ...(param.content && { content: param.content }),
+          })
+          .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
+        const result = await db.raw(
+          `select * from events order by embedding <-> ${
+            "'[" + f32_ary.toString() + "]'"
+          } limit 1;`
+        )
+        const bod = {
+          query_embedding: '[' + f32_ary.toString() + ']',
+          match_count: 2,
+          content_to_match: 'hi',
+        }
+        const rr = await cli.rpc('match_events', bod)
+        console.log(rr)
+        return { events: querys }
+      }
+      const res = await super.find(params)
+      return { events: (res as unknown as { data: Array<any> }).data }
+    }
   }
 }
 
@@ -88,5 +145,5 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     paginate: app.get('paginate'),
     Model: app.get('dbClient'),
     name: 'events',
-  };
-};
+  }
+}

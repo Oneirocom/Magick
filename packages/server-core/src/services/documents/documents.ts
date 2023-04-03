@@ -62,27 +62,53 @@ export const document = (app: Application) => {
       ],
       // Optimize the create operation
       create: [
-        schemaHooks.validateData(documentDataValidator),
-        schemaHooks.resolveData(documentDataResolver),
-        (context: HookContext) => {
-          if (SKIP_DB_EXTENSIONS) return context;
-
-          const { embedding } = context.data;
-          const { data, service } = context;
-          const id = uuidv4();
+        // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
+        async (context: HookContext) => {
+          if (SKIP_DB_EXTENSIONS) return context
+          const { embedding } = context.data
+          const { data, service } = context
+          const id = uuidv4()
+          //Add UUID for events.
           context.data = {
             [service.id]: id,
             ...data,
-          };
-          // Cast to pgvector if the embedding is a valid non-null array
-          if (embedding && embedding.length > 0 && embedding[0] !== 0) {
-            context.data.embedding = pgvector.toSql(embedding);
-            const vectordb = app.get('vectordb');
-            vectordb.add(id, embedding);
-          } else {
-            context.data.embedding = pgvector.toSql(nullArray);
           }
-          return context;
+          // if embedding is not null and not null array, then cast to pgvector
+          if (embedding && embedding.length > 0 && embedding[0] !== 0) {
+            if (process.env.DATABASE_TYPE == "pg") {
+              console.log(embedding as Array<number>)
+              console.log(typeof(embedding as Array<number>))
+              context.data.embedding = pgvector.toSql(embedding as Array<number>)  
+              return context;
+            }else{
+              const docdb = app.get('vectordb')
+              const insert_data = [{
+                embedding: embedding,
+                data: {
+                  metadata: {...context.data} || {"msg": "Empty Data"},
+                  pageContent: context.data['content'] || "No Content in the Event",
+                },
+              }]
+              await docdb.addEmbeddingsWithData(insert_data);
+            }      
+          } else {
+            if (process.env.DATABASE_TYPE == "pg") {
+              context.data.embedding = pgvector.toSql(nullArray)
+              context.app.service('events').create(context.data);
+              return context;
+            } else {
+              const docdb = app.get('docdb')
+              const insert_data = [{
+                embedding: nullArray,
+                data: {
+                  metadata: {...context.data} || {"msg": "Empty Data"},
+                  pageContent: context.data['content'] || "No Content in the Event",
+                },
+              }]
+              await docdb.addEmbeddingsWithData(insert_data);
+            }
+          }
+          return;
         },
       ],
       patch: [

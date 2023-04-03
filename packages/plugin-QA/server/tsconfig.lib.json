@@ -1,13 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "ES2022",
-    "target": "ES2017",
-
+    "jsx": "react-jsx",
     "outDir": "../../dist/out-tsc",
     "declaration": true,
-    "types": ["node"]
+    "module": "esnext",
+    "types": ["node"],
+    "esModuleInterop": true, 
+
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
-  "include": ["src/**/*.ts", "../engine/src/lib/utils/getSpell.ts"]
+  "include": ["src/**/*.ts"]
 }

@@ -68,24 +68,19 @@ export class SpellComponent extends MagickComponent<
       skip: true,
     }
     this.noBuildUpdate = true
-    // this.onDoubleClick = (node: MagickNode) => {
-    //   if (!this.editor) return
-    //   console.log('double click', node)
-    //   const pubsub = this.editor.pubSub
-    //   // TODO: Check if events are defined instead of as
-    //   const event = pubsub.events.OPEN_TAB
-    //   const encodedToId = (uri: string) => {
-    //     uri = decodeURIComponent(uri)
-    //     return uri.slice(0, 36)
-    //   }
-    //   pubsub.publish(event, {
-    //     type: 'spell',
-    //     id: encodedToId(node.data.name as string),
-    //     spellName: node.data.name,
-    //     name: encodedToId(node.data.name as string),
-    //     openNew: false,
-    //   })
-    // }
+    this.display = true
+    this.onDoubleClick = (node: MagickNode) => {
+      if (!this.editor) return
+      console.log('double click', node)
+      const pubsub = this.editor.pubSub
+      // TODO: Check if events are defined instead of as
+      const event = pubsub.events.OPEN_TAB
+      pubsub.publish(event, {
+        type: 'spell',
+        name: node.data.spellId + "-" + encodeURIComponent(btoa(node.data.name)),
+        openNew: false,
+      })
+    }
   }
 
   subscribe(node: MagickNode, spellName: string) {

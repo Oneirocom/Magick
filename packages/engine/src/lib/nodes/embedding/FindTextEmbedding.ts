@@ -1,5 +1,5 @@
 // DOCUMENTED 
-import Rete, { Node } from 'rete';
+import Rete from 'rete'
 
 import { API_ROOT_URL } from '../../config';
 import { MagickComponent } from '../../engine';
@@ -52,7 +52,7 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
       .addOutput(out);
   }
 
-  /**
+    /**
    * Worker function to process the inputs and generate the output.
    *
    * @param node - Node data.
@@ -60,9 +60,16 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
    * @param _outputs - Node outputs.
    * @returns The result of the worker process.
    */
-  async worker(node: WorkerData, inputs: MagickWorkerInputs, _outputs: MagickWorkerOutputs): Promise<InputReturn | null> {
-    // Get the content from the inputs
-    const content = (inputs['content'] && inputs['content'][0]) as string;
+  async worker(
+    node: WorkerData,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+    context
+  ) {
+
+    const { projectId } = context
+
+    const content = (inputs['content'] && inputs['content'][0]) as string
 
     if (!content) {
       console.log('Content is null, not storing event');
@@ -73,7 +80,8 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
       content: content,
       $limit: 1,
       getEmbedding: true,
-    };
+      projectId: projectId
+    }
 
     const urlString = `${API_ROOT_URL}/events`;
 
@@ -86,17 +94,13 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
         url.searchParams.append(p, params[p]);
       }
     }
-
-    // Fetch the result from the API
-    const response = await fetch(url.toString());
-    if (response.status !== 200) return null;
-
-    const json = await response.json();
-
-    const responseData = json.events[0];
-    let embedding = responseData?.embedding?.toString();
-
-    // Parse the embedding string into an array
+    const response = await fetch(url.toString())
+    if (response.status !== 200) return null
+    const json = await response.json()
+    
+    const responseData = json.events[0]
+    let embedding = responseData ? responseData?.embedding?.toString() : null
+    // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
       embedding = JSON.parse(JSON.stringify(embedding));
     }
