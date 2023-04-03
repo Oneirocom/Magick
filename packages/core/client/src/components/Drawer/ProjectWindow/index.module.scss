@@ -4,6 +4,7 @@
   background: #272727;
   align-items: center;
   justify-content: space-between;
+  cursor: default;
 }
 
 .btn {
@@ -13,6 +14,7 @@
 .listContainer {
   background: #424242;
   height: 100%;
+  cursor: default;
 }
 
 .container {
@@ -23,11 +25,6 @@
   width: 200px;
   z-index: 9 !important;
   height: 100%;
-
-  &:hover {
-    border-right: 1px solid red;
-    cursor: ew-resize;
-  }
 }
 
 .drawerPaper {
@@ -37,4 +34,19 @@
   top: 0 !important;
   left: 0 !important;
   overflow: hidden;
+}
+
+.resizer {
+  height: 100%;
+  background: transparent;
+  position: absolute;
+  left: 200px;
+  z-index: 10;
+  width: 3px;
+  transition: all 0.3s;
+
+  &:hover {
+    background: #3794ff;
+    cursor: ew-resize;
+  }
 }
