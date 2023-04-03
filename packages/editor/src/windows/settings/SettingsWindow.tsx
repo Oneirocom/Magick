@@ -1,6 +1,6 @@
 // DOCUMENTED 
 import { Tooltip } from '@magickml/client-core';
-import { pluginManager } from '@magickml/engine';
+import { pluginManager } from '@magickml/core';
 import { Clear, FileCopy } from '@mui/icons-material/';
 import { IconButton, Input } from '@mui/material';
 import { useState } from 'react';

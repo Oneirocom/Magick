@@ -10,7 +10,7 @@ import axios from 'axios'
 import RequestTable from './RequestTable'
 
 import { useConfig } from '../../contexts/ConfigProvider'
-import { API_ROOT_URL } from '@magickml/engine'
+import { API_ROOT_URL } from '@magickml/core'
 
 /**
  * The RequestWindow functional component fetches and renders a table containing

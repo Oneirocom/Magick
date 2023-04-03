@@ -1,6 +1,6 @@
 // DOCUMENTED 
 import { Button, Panel } from '@magickml/client-core';
-import { GraphData } from '@magickml/engine';
+import { GraphData } from '@magickml/core';
 import { templates } from '@magickml/client-core';
 import md5 from 'md5';
 import { useSnackbar } from 'notistack';

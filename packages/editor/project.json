@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/editor/src",
   "projectType": "library",
-  "implicitDependencies": ["@magickml/engine"],
+  "implicitDependencies": ["@magickml/core"],
   "tags": [],
   "targets": {
     "lint": {

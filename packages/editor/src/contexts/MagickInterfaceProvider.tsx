@@ -12,7 +12,7 @@ import {
   runSpellType,
   SpellInterface,
   SupportedLanguages,
-} from '@magickml/engine';
+} from '@magickml/core';
 import { createContext, useContext, useEffect, useRef } from 'react';
 import { useConfig } from '../contexts/ConfigProvider';
 import { usePubSub } from '../contexts/PubSubProvider';

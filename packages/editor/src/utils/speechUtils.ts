@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-invalid-this */
 
-import { SPEECH_SERVER_URL } from '@magickml/engine';
+import { SPEECH_SERVER_URL } from '@magickml/core';
 import socketIOClient from 'socket.io-client';
 
 /**

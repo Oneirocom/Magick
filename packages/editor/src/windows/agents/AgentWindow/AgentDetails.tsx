@@ -1,6 +1,6 @@
 // DOCUMENTED 
 import { IconBtn, Switch } from '@magickml/client-core';
-import { IGNORE_AUTH, pluginManager } from '@magickml/engine';
+import { IGNORE_AUTH, pluginManager } from '@magickml/core';
 import { Close, Done, Edit } from '@mui/icons-material';
 import { Avatar, Button, Input, Typography } from '@mui/material';
 import axios from 'axios';

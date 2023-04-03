@@ -9,7 +9,7 @@
 import { useEffect, useState } from 'react'
 import DatabaseTable from './DocumentTable'
 import { useConfig } from '../../contexts/ConfigProvider'
-import { API_ROOT_URL } from '@magickml/engine'
+import { API_ROOT_URL } from '@magickml/core'
 
 const DatabaseWindow = () => {
   const config = useConfig()
