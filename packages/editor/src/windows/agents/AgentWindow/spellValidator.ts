@@ -123,18 +123,19 @@ const validateNodes = (nodes: { [key: string]: Node | null }, data: Data = {}): 
 
   // Get enabledInputs from data object
   const enabledInputs = Object.entries(data)
-    .filter(([, value]) => value)
-    .map(([key]) => inputTypeMapping[key])
-    .reduce((acc, inputSet) => {
-      inputSet.forEach((input) => acc.add(input));
-      return acc;
-    }, new Set());
+  // TODO: Reenable spell validation, right now its not working for Twitter
+    // .filter(([, value]) => value)
+    // .map(([key]) => inputTypeMapping[key])
+    // .reduce((acc, inputSet) => {
+    //   inputSet?.forEach((input) => acc.add(input));
+    //   return acc;
+    // }, new Set());
 
   // Check if each node with isInput true has a valid input type
   for (const node of nodesArray) {
     if (node.data?.isInput === true && node.data?.name) {
       const inputMatch = /Input - (.*)/.exec(node.data.name);
-      if (!inputMatch || !enabledInputs.has(inputMatch[1])) {
+      if (!inputMatch /* || !enabledInputs.has(inputMatch[1])*/ ) {
         return false;
       }
     }

@@ -43,10 +43,10 @@ function ComposeProviders({ providers, children, ...parentProps }) {
  * @param {Object} params.props - Additional properties
  * @returns {JSX.Element} Composed providers and their children
  */
-const WorkspaceProviders = ({ children, ...props }) => (
+const WorkspaceProvider = ({ children, ...props }) => (
   <ComposeProviders providers={providers} {...props}>
     {children}
   </ComposeProviders>
 );
 
-export default WorkspaceProviders;
+export default WorkspaceProvider

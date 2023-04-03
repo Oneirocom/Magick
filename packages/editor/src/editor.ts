@@ -9,7 +9,7 @@ import {
   PubSubContext,
   SelectionPlugin,
   SpellInterface,
-} from '@magickml/engine'
+} from '@magickml/core'
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
@@ -34,10 +34,10 @@ import {
   SocketPlugin,
   SocketPluginArgs,
   TaskPlugin,
-} from '@magickml/engine'
+} from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
-import { initSharedEngine, MagickEngine } from '@magickml/engine'
+import { initSharedEngine, MagickEngine } from '@magickml/core'
 
 /**
  * Extend MagickEngine with additional properties
