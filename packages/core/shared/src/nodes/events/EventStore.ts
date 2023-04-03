@@ -1,58 +1,70 @@
-import axios from 'axios'
-import Rete from 'rete'
+// DOCUMENTED 
+import axios from 'axios';
+import Rete from 'rete';
 
-import { API_ROOT_URL } from '../../config'
-import { InputControl } from '../../dataControls/InputControl'
-import { MagickComponent } from '../../engine'
+import { API_ROOT_URL } from '../../config';
+import { InputControl } from '../../dataControls/InputControl';
+import { MagickComponent } from '../../engine';
 import {
-  arraySocket, embeddingSocket, eventSocket, stringSocket, triggerSocket
-} from '../../sockets'
+  arraySocket,
+  embeddingSocket,
+  eventSocket,
+  stringSocket,
+  triggerSocket,
+} from '../../sockets';
 import {
-  Event, MagickNode,
+  Event,
+  MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData
-} from '../../types'
+  WorkerData,
+} from '../../types';
 
-const info = 'Event Store is used to store events for an event and user'
+/**
+ * Information about the EventStore class
+ */
+const info =
+  'Event Store is used to store events for an event and user';
 
+/**
+ * EventStore class that extends MagickComponent
+ */
 export class EventStore extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Store Event', {
-      outputs: {
-        trigger: 'option',
-      },
-    }, 'Event', info)
-
+    super('Store Event', { outputs: { trigger: 'option' } }, 'Event', info);
   }
 
+  /**
+   * Builder function to configure the node for event storage
+   * @param node
+   */
   builder(node: MagickNode) {
     const nameInput = new InputControl({
       dataKey: 'name',
       name: 'Input name',
       placeholder: 'Conversation',
-    })
+    });
 
     const type = new InputControl({
       dataKey: 'type',
       name: 'Type',
       icon: 'moon',
       placeholder: 'conversation',
-    })
+    });
 
-    const contentInput = new Rete.Input('content', 'Content', stringSocket)
+    const contentInput = new Rete.Input('content', 'Content', stringSocket);
     const senderInput = new Rete.Input(
       'sender',
       'Sender Override',
-      stringSocket
-    )
-    const eventInput = new Rete.Input('event', 'Event', eventSocket)
-    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
+      stringSocket,
+    );
+    const eventInput = new Rete.Input('event', 'Event', eventSocket);
+    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket);
 
-    node.inspector.add(nameInput).add(type)
+    node.inspector.add(nameInput).add(type);
 
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
 
     return node
       .addInput(dataInput)
@@ -60,61 +72,70 @@ export class EventStore extends MagickComponent<Promise<void>> {
       .addInput(senderInput)
       .addInput(eventInput)
       .addInput(embedding)
-      .addOutput(dataOutput)
+      .addOutput(dataOutput);
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  /**
+   * Worker function to process and store the event
+   * @param node
+   * @param inputs
+   * @param _outputs
+   * @param context
+   */
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context
+    context: any,
   ) {
-    const { projectId } = context
+    const { projectId } = context;
 
-    const event = inputs['event'][0] as Event
-    const sender = (inputs['sender'] ? inputs['sender'][0] : null) as string
-    let content = (inputs['content'] ? inputs['content'][0] : null) as string
+    const event = inputs['event'][0] as Event;
+    const sender = (inputs['sender'] ? inputs['sender'][0] : null) as string;
+    let content = (inputs['content'] ? inputs['content'][0] : null) as string;
     let embedding = (
       inputs['embedding'] ? inputs['embedding'][0] : null
-    ) as number[]
-    if (typeof embedding == 'string')
-      embedding = (embedding as string).split(',').map(x => parseFloat(x))
+    ) as number[];
 
-    const typeData = node?.data?.type as string
+    if (typeof embedding == 'string') {
+      embedding = (embedding as string).split(',').map(x => parseFloat(x));
+    }
+
+    const typeData = node?.data?.type as string;
 
     const type =
       typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
-        : 'none'
+        : 'none';
 
-    //content is none, event content is defined
     if (!content) {
-      content = (event as Event).content || 'Error'
-      if (!content) console.log('Content is null, not storing the event !!')
+      content = (event as Event).content || 'Error';
+      if (!content) console.log('Content is null, not storing the event !!');
     }
 
     type Data = {
-      sender: string
-      projectId: string
-      content: string
-      type: string
-      embedding?: number[] | string[]
-    }
+      sender: string;
+      projectId: string;
+      content: string;
+      type: string;
+      embedding?: number[] | string[];
+    };
+
     const data: Data = {
       ...event,
       sender: sender ?? event.sender,
       projectId,
       content,
       type,
-    }
-    if (embedding) data.embedding = embedding
+    };
+
+    if (embedding) data.embedding = embedding;
+
     if (content && content !== '') {
-      const response = await axios.post(`${API_ROOT_URL}/events`, data)
+      const response = await axios.post(`${API_ROOT_URL}/events`, data);
       return {
         output: response.data,
-      }
+      };
     }
   }
 }

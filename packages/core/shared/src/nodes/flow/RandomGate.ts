@@ -1,69 +1,81 @@
-import Rete from 'rete'
-
-import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
-import { MagickComponent } from '../../engine'
-import { triggerSocket } from '../../sockets'
+// DOCUMENTED 
+import Rete from 'rete';
+import { SocketGeneratorControl } from '../../dataControls/SocketGenerator';
+import { MagickComponent } from '../../engine';
+import { triggerSocket } from '../../sockets';
 import {
   MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs, WorkerData
-} from '../../types'
+  MagickWorkerOutputs,
+  WorkerData,
+} from '../../types';
 
-const info = `The random gate takes a trigger input, and randomly fires one of the connected outputs.`
-
+/**
+ * Random Gate takes a trigger input, and randomly fires one of the connected outputs.
+ * @extends MagickComponent<void>
+ */
 export class RandomGate extends MagickComponent<void> {
+  /**
+   * Creates a new Random Gate component
+   */
   constructor() {
     // Name of the component
     super('Random Gate', {
       outputs: {},
-    }, 'Flow', info)
+    }, 'Flow', `The random gate takes a trigger input, and randomly fires one of the connected outputs.`);
   }
 
-  // the builder is used to "assemble" the node component.
-
-  builder(node: MagickNode) {
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+  /**
+   * builds the node by assembling its inputs and controls
+   * @param node - The MagickNode to build
+   * @returns - Modified MagickNode
+   */
+  builder(node: MagickNode): MagickNode {
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
     const outputToggles = new SocketGeneratorControl({
       connectionType: 'output',
       taskType: 'option',
       socketType: 'triggerSocket',
       name: 'Toggle Sockets',
-    })
+    });
 
-    node
-      .addInput(dataInput)
+    node.addInput(dataInput);
 
-    node.inspector.add(outputToggles)
+    node.inspector.add(outputToggles);
     
-    return node
+    return node;
   }
 
-  // the worker contains the main business logic of the node.  It will pass those results
-  // to the outputs to be consumed by any connected components
+  /**
+   * Contains the main business logic of the node, passing results to the outputs.
+   * @param node - The worker data object
+   * @param _inputs - The worker inputs object
+   * @param outputs - The worker outputs object
+   */
   worker(
     node: WorkerData,
     _inputs: MagickWorkerInputs,
-    outputs: MagickWorkerOutputs
-  ) {
+    outputs: MagickWorkerOutputs,
+  ): void {
     // pick a random object from outputs objects
     const randomOutput =
       outputs[
         Object.keys(outputs)[
           Math.floor(Math.random() * Object.keys(outputs).length)
         ]
-      ]
-    const randomName = randomOutput.key as string
+      ];
+    const randomName = randomOutput.key as string;
     // TODO: make sure you don't want node.outputs
-    const nodeOutputs = node.data.outputs as Array<{name:string}>
+    const nodeOutputs = node.data.outputs as Array<{name:string}>;
 
     // close all outputs
-    this._task.closed = [...nodeOutputs.map(out => out.name)]
+    this._task.closed = [...nodeOutputs.map(out => out.name)];
     if (this._task.closed.includes(randomName)) {
-      // If the ouputs closed has the incoming trigger, filter closed outputs to not include it
+      // If the outputs closed has the incoming trigger, filter closed outputs to not include it
       this._task.closed = this._task.closed.filter(
         output => output !== randomName
-      )
-      console.log('this._task.closed', this._task.closed)
+      );
+      console.log('this._task.closed', this._task.closed);
     }
   }
 }

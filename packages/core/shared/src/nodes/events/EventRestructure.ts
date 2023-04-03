@@ -1,23 +1,32 @@
-/* eslint-disable no-console */
-import Rete from 'rete'
-import { v4 as uuidv4 } from 'uuid'
+// DOCUMENTED 
+/**
+ * @file Event Restructure Component - Restructure Event Data
+ * @module EventRestructureComponent
+ * @version 1.0.0
+ */
 
-import { NodeData } from 'rete/types/core/data'
-import { MagickComponent } from '../../engine'
-import { Task } from '../../plugins/taskPlugin/task'
-import {
-  arraySocket, eventSocket, stringSocket,
-  triggerSocket
-} from '../../sockets'
-import { Event, MagickNode, MagickTask, MagickWorkerInputs, WorkerData } from '../../types'
+import Rete from 'rete';
+import { v4 as uuidv4 } from 'uuid';
+import { NodeData } from 'rete/types/core/data';
+import { MagickComponent } from '../../engine';
+import { Task } from '../../plugins/taskPlugin/task';
+import { arraySocket, eventSocket, stringSocket, triggerSocket } from '../../sockets';
+import { Event, MagickNode, MagickTask, MagickWorkerInputs, WorkerData } from '../../types';
 
-const info = `Restructure Event Data`
+/** Component information */
+const info = 'Restructure Event Data';
 
-export class EventRestructureComponent extends MagickComponent<
-  Promise<{ output: Event }>
-> {
-  nodeTaskMap: Record<number, MagickTask> = {}
+/**
+ * Event Restructure Component.
+ * @extends {MagickComponent<Promise<{ output: Event }>>}
+ */
+export class EventRestructureComponent extends MagickComponent<Promise<{ output: Event }>> {
+  // Node task map
+  nodeTaskMap: Record<number, MagickTask> = {};
 
+  /**
+   * Initializes a new EventRestructureComponent.
+   */
   constructor() {
     // Name of the component
     super('Event Restructure', {
@@ -26,36 +35,36 @@ export class EventRestructureComponent extends MagickComponent<
         trigger: 'option',
       },
       init: (task = {} as Task, node: NodeData) => {
-        this.nodeTaskMap[node.id] = task
+        this.nodeTaskMap[node.id] = task;
       },
-    }, 'Event', info)
-    
+    }, 'Event', info);
   }
 
-  builder(node: MagickNode) {
-    // module components need to have a socket key.
-    // todo add this somewhere automated? Maybe wrap the modules builder in the plugin
-    node.data.socketKey = node?.data?.socketKey || uuidv4()
+  /**
+   * Configuration for rete node component.
+   * @param {MagickNode} node - The node being configured.
+   * @returns {MagickNode} The configured node.
+   */
+  builder(node: MagickNode): MagickNode {
+    // Generate a socket key if it does not exist.
+    node.data.socketKey = node?.data?.socketKey || uuidv4();
 
-    const content = new Rete.Input('content', 'content', stringSocket)
-    const sender = new Rete.Input('sender', 'sender', stringSocket)
-    const observer = new Rete.Input('observer', 'observer', stringSocket)
-    const client = new Rete.Input('client', 'client', stringSocket)
-    const channelType = new Rete.Input(
-      'channelType',
-      'channelType',
-      stringSocket
-    )
-    const projectId = new Rete.Input('projectId', 'projectId', stringSocket)
-    const channel = new Rete.Input('channel', 'channel', stringSocket)
-    const entities = new Rete.Input('entities', 'entities', arraySocket)
-    const agentId = new Rete.Input('agentId', 'agentId', stringSocket)
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const event = new Rete.Output('output', 'output', eventSocket)
+    // Create inputs and outputs.
+    const content = new Rete.Input('content', 'content', stringSocket);
+    const sender = new Rete.Input('sender', 'sender', stringSocket);
+    const observer = new Rete.Input('observer', 'observer', stringSocket);
+    const client = new Rete.Input('client', 'client', stringSocket);
+    const channelType = new Rete.Input('channelType', 'channelType', stringSocket);
+    const projectId = new Rete.Input('projectId', 'projectId', stringSocket);
+    const channel = new Rete.Input('channel', 'channel', stringSocket);
+    const entities = new Rete.Input('entities', 'entities', arraySocket);
+    const agentId = new Rete.Input('agentId', 'agentId', stringSocket);
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
+    const event = new Rete.Output('output', 'output', eventSocket);
 
+    // Add inputs and outputs to the node.
     return node
-
       .addInput(dataInput)
       .addInput(content)
       .addInput(agentId)
@@ -67,22 +76,34 @@ export class EventRestructureComponent extends MagickComponent<
       .addInput(projectId)
       .addInput(sender)
       .addOutput(dataOutput)
-      .addOutput(event)
+      .addOutput(event);
   }
 
-  async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
-    const output: Record<string, unknown> = {}
+  /**
+   * Node execution logic.
+   * @param {WorkerData} _node - The node being executed.
+   * @param {MagickWorkerInputs} inputs - Input values of the node.
+   * @returns {Promise<{ output: Event }>} Output event object.
+   */
+  async worker(_node: WorkerData, inputs: MagickWorkerInputs): Promise<{ output: Event }> {
+    // Initialize an empty output object.
+    const output: Record<string, unknown> = {};
+
+    // Populate the output object with input values.
     Object.entries(inputs).forEach(([k, v]) => {
       if (k === 'agentId') {
-        output[k] = parseInt(v[0] as string)
+        output[k] = parseInt(v[0] as string);
       } else {
-        output[k] = v[0]
+        output[k] = v[0];
       }
-    })
-    console.log('event ::: ', output)
+    });
 
+    // Debug log the output event.
+    console.log('event ::: ', output);
+
+    // Return the output event object.
     return {
       output,
-    }
+    };
   }
 }

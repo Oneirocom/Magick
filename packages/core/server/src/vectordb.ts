@@ -1,6 +1,11 @@
 // DOCUMENTED 
-// Import required libraries with dynamic import as awaited import
-// This prevents stalling the Featherjs app creation
+/* eslint-disable @typescript-eslint/ban-types */
+/* 
+
+This code is adapted from the langchainjs library under the MIT license.
+The original library can be found at https://github.com/hwchase17/langchainjs.
+
+*/
 import import_ from '@brillout/import';
 import * as crypto from "crypto";
 import fs from 'fs';
@@ -242,12 +247,267 @@ export class HNSWLib extends SaveableVectorStore {
     await this.saveIndex(this.args.filename);
   }
 
-  /**
-   * Add array of embeddings with their data
-   * @param {EmbeddingWithData[]} embeddings - Array of EmbeddingWithData objects
-   * @returns {Promise<void>}
-   */
+
   async addEmbeddingsWithData(embeddings: EmbeddingWithData[]): Promise<void> {
     const vectors: number[][] = [];
     const documents: Document[] = [];
     for (const { embedding, data } of embeddings) {
+      if (embedding) {
+        if (embedding.length !== this.args.numDimensions) {
+          throw new Error(
+            `Embedding must have the same length as the number of dimensions (${this.args.numDimensions})`
+          );
+        }
+        vectors.push(embedding);
+      }
+      documents.push(new Document(data));
+    }
+
+    await this.addVectors(vectors, documents);
+  }
+
+
+
+  private static async getHierarchicalNSW(args: HNSWLibBase) {
+    //const { HierarchicalNSW } = await HNSWLib.imports();
+    if (!args.space) {
+      throw new Error("hnswlib-node requires a space argument");
+    }
+    if (args.numDimensions === undefined) {
+      throw new Error("hnswlib-node requires a numDimensions argument");
+    }
+    return new HierarchicalNSW(args.space, args.numDimensions);
+  }
+
+  private async initIndex(vectors: number[][]) {
+    if (!this._index) {
+      if (this.args.numDimensions === undefined) {
+        this.args.numDimensions = vectors[0].length;
+      }
+      this.index = await HNSWLib.getHierarchicalNSW(this.args);
+    }
+    if (!this.index.getCurrentCount()) {
+      this.index.initIndex(vectors.length);
+    }
+  }
+
+  public get index(): HierarchicalNSWT {
+    if (!this._index) {
+      throw new Error(
+        "Vector store not initialised yet. Try calling addTexts first."
+      );
+    }
+    return this._index;
+  }
+
+  private set index(index: HierarchicalNSWT) {
+    this._index = index;
+  }
+
+  async addVectors(vectors: number[][], documents: Document[]) {
+    if (vectors.length === 0) {
+      return;
+    }
+    await this.initIndex(vectors);
+    // TODO here we could optionally normalise the vectors to unit length
+    // so that dot product is equivalent to cosine similarity, like this
+    // https://github.com/nmslib/hnswlib/issues/384#issuecomment-1155737730
+    // While we only support OpenAI embeddings this isn't necessary
+    if (vectors.length !== documents.length) {
+      throw new Error(`Vectors and metadatas must have the same length`);
+    }
+    if (vectors[0].length !== this.args.numDimensions) {
+      throw new Error(
+        `Vectors must have the same length as the number of dimensions (${this.args.numDimensions})`
+      );
+    }
+    const capacity = this.index.getMaxElements();
+    const needed = this.index.getCurrentCount() + vectors.length;
+    if (needed > capacity) {
+      this.index.resizeIndex(needed);
+    }
+
+    const docstoreSize = this.docstore.count;
+    for (let i = 0; i < vectors.length; i += 1) {
+      const id_str = documents[i].metadata?.id;
+      this.index.addPoint(vectors[i], HNSWLib.sha256ToDecimal(id_str));
+      this.docstore.add({ [HNSWLib.sha256ToDecimal(id_str)]: documents[i] });
+    }
+    await this.save(this.args.filename)
+    await this.saveIndex(this.args.filename);
+  }
+
+  async similaritySearch(query: any, k = 4): Promise<Document[]> {
+    const arrayLength = this.args.numDimensions;
+    query = new Array(arrayLength).fill(null).map(() => Math.random());
+    /* if (query.length !== this.args.numDimensions) {
+      throw new Error(`Query vector must have the same length as the number of dimensions (${this.args.numDimensions})`);
+    } */
+    if (k > this.index.getCurrentCount()) {
+      const total = this.index.getCurrentCount();
+      console.warn(`k (${k}) is greater than the number of elements in the index (${total}), setting k to ${total}`);
+      k = total;
+    }
+    const result = this.index.searchKnn(Array.from(query), k);
+    return result.neighbors.map(
+      (docIndex, resultIndex) =>
+        this.docstore.search(String(docIndex)) as Document
+    );
+  }
+
+
+  async similaritySearchVectorWithScore(query: number[],k = 10, quer_data: Record<string, unknown> = {}): Promise<[Document, number][]> {
+    let filterByLabel = (label: any) => {return true}
+    if (Object.keys(quer_data).length == 0) {
+      filterByLabel = (label) => {return true}
+    } else {
+      const matchingDocs = await this.getDataWithMetadata(quer_data);
+      filterByLabel = (label) => {
+        let result = false;
+        try {
+          for (let i = 0; i < matchingDocs.length; i++) {
+
+            const idHash = HNSWLib.sha256ToDecimal((matchingDocs[i] as {id: string}).id);
+            if (idHash === label) {
+              result = true;
+              break;
+            }
+          }
+        } catch(e) {
+            console.log(e)
+        }
+        return result;
+      };
+    }
+    
+    if (query.length !== this.args.numDimensions) {
+      throw new Error(`Query vector must have the same length as the number of dimensions (${this.args.numDimensions})`);
+    }
+    if (k > this.index.getCurrentCount()) {
+      const total = this.index.getCurrentCount();
+      console.warn(`k (${k}) is greater than the number of elements in the index (${total}), setting k to ${total}`);
+      k = total;
+    }
+    
+    const result = this.index.searchKnn(Array.from(query), k, filterByLabel);
+    return result.neighbors.map(
+      (docIndex, resultIndex) =>
+        [this.docstore.search(String(docIndex)), result.distances[resultIndex]] as [Document, number]
+    );
+  }
+
+
+  async save(directory: string) {
+    await fs.promises.mkdir(directory, { recursive: true });
+    await Promise.all([
+      this.index.writeIndex(path.join(directory, "hnswlib.index")),
+      await fs.promises.writeFile(
+        path.join(directory, "docstore.json"),
+        JSON.stringify(Array.from(this.docstore._docs.entries()))
+      ),
+    ]);
+  }
+
+  async saveIndex(filename=".") {
+    if (!this.index) {
+      return;
+    }
+    await this.index.writeIndex(path.join(filename, "hnswlib.index"));
+  }
+  static async load(directory: string, embeddings: Embeddings): Promise<typeof SaveableVectorStore> {
+    const db = new HNSWLib(embeddings, { space: "cosine", filename: directory });
+    db.docstore = new InMemoryDocstore();
+    return db;
+  }
+  static load_data(directory: string, embeddings: Embeddings, args: { space: any, numDimensions: any, filename: any }) {
+    fs.mkdirSync(directory + '/' + args.filename, { recursive: true });
+    const index = new HierarchicalNSW(args.space, args.numDimensions);
+    try {
+      // if docstore.json does not exist, create it with {}
+      if(fs.existsSync(directory + '/' + args.filename + "/docstore.json")) {
+        // console.log("docstore.json does not exist, creating it")
+        const docstore = {}
+        
+        fs.writeFileSync(directory + '/' + args.filename + "/docstore.json", JSON.stringify(docstore))
+      }
+      
+      const docstoreFiles = JSON.parse(fs.readFileSync(directory + '/' + args.filename + "/docstore.json", "utf8"));
+      index.readIndex(directory + '/' + args.filename +"/hnswlib.index");
+      const db = new HNSWLib(embeddings, args);
+      db.index = index;
+      docstoreFiles.map(([k, v]) => {
+        db.docstore.add({ [HNSWLib.sha256ToDecimal(v.metadata.id)]: v });
+      })
+      return db;
+    } catch (e) {
+      console.log("Error Caught: ", e)
+      const db = new HNSWLib(embeddings, args);
+      db.docstore = new InMemoryDocstore();
+      return db;
+    }
+  }
+  async getDataWithMetadata(query: Record<string, unknown>, k = 1): Promise<Record<string, unknown>[]> {
+    const queryKeys = Object.keys(query);
+    const matchingDocs: Record<string, unknown>[] = [];
+    //console.log(this.docstore._docs.entries())
+    for (const doc of this.docstore._docs.values()) {
+      for (const key of queryKeys) {
+        
+        if ((query["content"] == undefined) && (doc.metadata["projectId"] == query["projectId"])) {
+          //console.log(doc.metadata[key], query[key])
+          matchingDocs.push(doc.metadata);
+          break;
+        }
+        if ((doc.metadata[key] === query[key])) {
+          if ((doc.metadata["content"] == query["content"]) && (doc.metadata["projectId"] == query["projectId"])) matchingDocs.push(doc.metadata);
+          break;
+        }
+      }
+    }
+    return matchingDocs;
+  }
+
+  static async fromTexts(
+    texts: string[],
+    metadatas: any[],
+    embeddings: Embeddings,
+    dbConfig?: {
+      docstore?: typeof InMemoryDocstore;
+    }
+  ): Promise<HNSWLib> {
+    const docs: Document[] = [];
+    for (let i = 0; i < texts.length; i += 1) {
+      const newDoc = new Document({
+        pageContent: texts[i],
+        metadata: metadatas[i],
+      });
+      docs.push(newDoc);
+    }
+    return HNSWLib.fromDocuments(docs, embeddings, dbConfig);
+  }
+
+  static async fromDocuments(
+    docs: Document[],
+    embeddings: Embeddings,
+    dbConfig?: {
+      docstore?: typeof InMemoryDocstore;
+    }
+  ): Promise<HNSWLib> {
+    const args: HNSWLibArgs = {
+      docstore: dbConfig?.docstore,
+      space: "cosine",
+      filename: "documents"
+    };
+    const instance = new this(embeddings, args);
+    await instance.addDocuments(docs);
+    return instance;
+  }
+
+  static sha256ToDecimal(str) {
+    const hash = crypto.createHash('sha256').update(str).digest('hex');
+    const num = parseInt(hash, 16);
+    return num % 1000000; // return a 6-digit integer
+  }
+}
+
+export default HNSWLib;
