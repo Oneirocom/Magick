@@ -9,7 +9,7 @@ import Router from '@koa/router'
 import Koa, { Context } from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
-import { pluginManager } from '@magickml/engine'
+import { pluginManager } from '@magickml/core'
 import {
   app,
   initFileServer,

@@ -11,7 +11,7 @@ import io from 'socket.io-client';
 
 import { LoadingScreen } from '@magickml/client-core';
 import { useConfig } from './ConfigProvider';
-import { SpellInterface } from '@magickml/engine';
+import { SpellInterface } from '@magickml/core';
 
 /**
  * SaveDiffData type definition.

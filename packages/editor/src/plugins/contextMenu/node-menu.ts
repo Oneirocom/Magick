@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import { ReactMenu } from '.'
 import { createNode, traverse } from './utils'
 
@@ -22,7 +22,9 @@ export default function (): typeof NodeMenu {
       super(editor, { ...props, type: 'node' })
 
       // Add 'Delete' menu item
-      this.addItem('Delete', ({ node }: { node: any }) => editor.removeNode(node))
+      this.addItem('Delete', ({ node }: { node: any }) =>
+        editor.removeNode(node)
+      )
 
       // Add 'Clone' menu item
       this.addItem('Clone', async (args: any) => {
@@ -57,8 +59,17 @@ export default function (): typeof NodeMenu {
         pubSub.publish(event)
       })
 
+      // Add 'Comment' menu item
+      this.addItem('Wrap in comment \u21E7 f', (args: any) => {
+        const ids = editor.selected.list.map(node => node.id)
+        const nodes = ids.map(id => editor.nodes.find(n => n.id === id))
+        editor.trigger('addcomment', { type: 'frame', nodes })
+      })
+
       // Add additional nodeItems, if any
-      traverse(nodeItems, (name: string, func: any, path: string) => this.addItem(name, func, path))
+      traverse(nodeItems, (name: string, func: any, path: string[]) =>
+        this.addItem(name, func, path)
+      )
     }
   }
 

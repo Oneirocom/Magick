@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import EventTable from './EventTable'
 import { useConfig } from '../../contexts/ConfigProvider'
-import { API_ROOT_URL } from '@magickml/engine'
+import { API_ROOT_URL } from '@magickml/core'
 
 /**
  * Defines the properties of an event.
