@@ -132,6 +132,23 @@ app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
 
+// Configure WebSocket for the app
+app.configure(
+  socketio(
+    {
+      cors: {
+        origin: (origin, callback) => {
+          callback(null, true)
+        },
+        methods: ['GET', 'POST', 'OPTIONS'],
+        allowedHeaders: ['Authorization'],
+        credentials: true,
+      },
+    },
+    handleSockets(app)
+  )
+)
+
 // Configure app management settings
 app.configure(configureManager())
 
@@ -155,24 +172,6 @@ if (!IGNORE_AUTH) {
 
 // Configure services and transports
 app.configure(rest())
-
-// Configure WebSocket for the app
-app.configure(
-  socketio(
-    {
-      cors: {
-        origin: (origin, callback) => {
-          // For simplicity, allow any origin. You can also use a function or an array of origins.
-          callback(null, true)
-        },
-        methods: ['GET', 'POST', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization'],
-        credentials: true,
-      },
-    },
-    handleSockets(app)
-  )
-)
 
 app.configure(dbClient)
 app.configure(services)
