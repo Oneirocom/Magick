@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A module which exports a functional component - MagickIDE
  * @module MagickIDE
@@ -26,13 +26,16 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
  * @typedef {Object} MagickIDEProps
  * @property {AppConfig} config - configuration object for the app
  */
+export type MagickIDEProps = {
+  config: AppConfig
+}
 
 /**
  * A functional component that renders the main body of the MagickIDE application
  * @param {MagickIDEProps} props - A plain object representing the props passed to the component.
  * @returns {React.ReactElement} - A React component
  */
-export const MagickIDE = ({ config }: { config: AppConfig }): React.ReactElement => {
+export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
   return (
     <Router>
       <Provider store={createStore(config)}>
