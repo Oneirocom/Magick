@@ -92,9 +92,10 @@ const DebugConsole = ({ tab }): JSX.Element => {
           : formatLogMessage(message)}
       </p>
       <ReactJson
-        src={JSON.parse(message.content)}
-        name={message.id}
-        theme="monokai"
+        src={JSON.parse(JSON.parse(JSON.stringify(message)))}
+        name={message.nodeId}
+        enableClipboard={false}
+        theme="shapeshifter"
         collapsed={true}
       />
       <br />
@@ -164,7 +165,6 @@ const DebugConsole = ({ tab }): JSX.Element => {
       <Terminal
         ref={terminalRef}
         commands={commands}
-        noAutoScroll={true}
         dangerMode={true}
         commandCallback={commandCallback}
         noNewlineParsing={true}
