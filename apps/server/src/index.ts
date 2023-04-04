@@ -1,6 +1,6 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
- * Entry point of MagickML server. Initializes the necessary modules, middleware and routes to start up the server. 
+ * Entry point of MagickML server. Initializes the necessary modules, middleware and routes to start up the server.
  **/
 
 import 'regenerator-runtime/runtime'
@@ -21,58 +21,68 @@ import {
   Method,
   Middleware,
   Route
- } from '@magickml/server-core'
+} from '@magickml/server-core'
 
 // log handle errors
 process.on('uncaughtException', (err: Error) => {
   console.error('uncaughtException', err)
 })
 
-process.on('unhandledRejection', (reason: {/* null */}, p: Promise<any>) =>
-  console.error('Unhandled Rejection at: Promise ', p, reason)
+process.on(
+  'unhandledRejection',
+  (
+    reason: {
+      /* null */
+    },
+    p: Promise<any>
+  ) => console.error('Unhandled Rejection at: Promise ', p, reason)
 )
 
 // initialize server routes from the plugin manager
-const serverRoutes: Route[] = pluginManager.getServerRoutes();
-const router: Router = new Router();
+const serverRoutes: Route[] = pluginManager.getServerRoutes()
+const router: Router = new Router()
 
 // merge spells, apis and server routes
 const routes: Route[] = [...spells, ...apis, ...serverRoutes]
 
 /**
- * Initializes the server, sets up error-handling middleware, cross-origin resource sharing, 
- * form and multipart-json requests, and routes. 
+ * Initializes the server, sets up error-handling middleware, cross-origin resource sharing,
+ * form and multipart-json requests, and routes.
  */
 async function init() {
   // load plugins
   await (async () => {
     const plugins = (await import('./plugins')).default
-    console.log('loaded plugins on server', Object.values(plugins).map((p: any) => p.name).join(', '));
+    console.log(
+      'loaded plugins on server',
+      Object.values(plugins)
+        .map((p: any) => p.name)
+        .join(', ')
+    )
   })()
-  
+
   initSpeechServer(false)
   await initFileServer()
   await initTextToSpeech()
 
-  const serverInits: Record<string, any> = pluginManager.getServerInits();
-  
+  const serverInits: Record<string, any> = pluginManager.getServerInits()
+
   for (const method of Object.keys(serverInits)) {
-    await serverInits[method]();
+    await serverInits[method]()
   }
 
   // generic error handling for any errors that may occur
   app.use(async (ctx: Context, next: () => Promise<any>) => {
     try {
-      await next();
+      await next()
     } catch (error: any) {
-      ctx.status = error.statusCode;
-      ctx.body = { error };
-      ctx.app.emit('error', error, ctx);
+      ctx.status = error.statusCode
+      ctx.body = { error }
+      ctx.app.emit('error', error, ctx)
     }
   })
 
-  const options = { origin: '*' }
-  app.use(cors(options))
+  app.use(cors())
 
   process.on('unhandledRejection', (err: Error) => {
     console.error('Unhandled Rejection:' + err + ' - ' + err.stack)
@@ -84,16 +94,11 @@ async function init() {
   /**
    * Creates a Koa route from the Route object passed in.
    * @param method The HTTP method used for the route
-   * @param path The path of the route 
-   * @param middleware Array of middleware functions to be passed to the route. 
+   * @param path The path of the route
+   * @param middleware Array of middleware functions to be passed to the route.
    * @param handler The function to handle the request for the route.
    */
-  const createRoute = (
-    method: Method,
-    path: string,
-    middleware: Middleware[],
-    handler: Handler
-  ) => {
+  const createRoute = (method: Method, path: string, middleware: Middleware[], handler: Handler) => {
     switch (method) {
       case 'get':
         router.get(path, compose(middleware), handler)
@@ -117,18 +122,18 @@ async function init() {
   }
 
   /**
-   * Returns an array of middleware functions. If none are passed, it returns an empty array. 
-   * @param middleware An optional array of middleware functions to be included in the returned array. 
-   * return An array of middleware functions to be used with a route. 
+   * Returns an array of middleware functions. If none are passed, it returns an empty array.
+   * @param middleware An optional array of middleware functions to be included in the returned array.
+   * return An array of middleware functions to be used with a route.
    */
-  const routeMiddleware = ({ middleware = [] }: {middleware?: Middleware[]} = {}) => {
+  const routeMiddleware = ({ middleware = [] }: { middleware?: Middleware[] } = {}) => {
     return [...middleware]
   }
 
   // Create Koa routes from the routes defined in each module
-  routes.forEach(route => {
-    const { method, path, middleware, handler } = route;
-    const _middleware = routeMiddleware({ middleware });
+  routes.forEach((route) => {
+    const { method, path, middleware, handler } = route
+    const _middleware = routeMiddleware({ middleware })
     if (method && handler) {
       createRoute(method, path, _middleware, handler)
     }
@@ -152,7 +157,7 @@ async function init() {
     }
   })
 
-  // adding router middlewares to Koa app 
+  // adding router middlewares to Koa app
   app.use(router.routes()).use(router.allowedMethods())
 
   app.listen(app.get('port'), () => {

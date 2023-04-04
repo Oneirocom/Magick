@@ -1,7 +1,12 @@
-// DOCUMENTED 
+// DOCUMENTED
 import {
   authenticate,
-  bodyParser, cors, errorHandler, koa, parseAuthentication, rest
+  bodyParser,
+  cors,
+  errorHandler,
+  koa,
+  parseAuthentication,
+  rest,
 } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
 import { dbClient } from './dbClient'
@@ -14,70 +19,78 @@ import { authentication } from './auth/authentication'
 import { services } from './services'
 import handleSockets from './sockets/sockets'
 
-
 //Vector DB Related Imports
 import { import_ } from '@brillout/import'
 import { feathers } from '@feathersjs/feathers/lib'
-import { configureManager, DEFAULT_PROJECT_ID, DEFAULT_USER_ID, globalsManager, IGNORE_AUTH } from '@magickml/core'
+import {
+  configureManager,
+  DEFAULT_PROJECT_ID,
+  DEFAULT_USER_ID,
+  globalsManager,
+  IGNORE_AUTH,
+} from '@magickml/core'
 import { createClient } from '@supabase/supabase-js'
-import { HNSWLib, SupabaseVectorStoreCustom } from "./vectordb"
+import { HNSWLib, SupabaseVectorStoreCustom } from './vectordb'
 // Same as `import()`
-
 
 //Dynamic Import using top lvl await
 const modules = import_('langchain/embeddings')
-const {FakeEmbeddings} = await modules;
+const { FakeEmbeddings } = await modules
 const agentpro = import_('langchain/agents')
-const {VectorStoreToolkit,createVectorStoreAgent,VectorStoreInfo} = await agentpro;
+const { VectorStoreToolkit, createVectorStoreAgent, VectorStoreInfo } =
+  await agentpro
 const openaipro = import_('langchain')
-const {OpenAI} = await openaipro;
-const embeddings = new FakeEmbeddings();
+const { OpenAI } = await openaipro
+const embeddings = new FakeEmbeddings()
 
-const  { Headers, Request, Response } = await import_('node-fetch')
-const fetch = await import_('node-fetch').then((mod) => mod.default)
+const { Headers, Request, Response } = await import_('node-fetch')
+const fetch = await import_('node-fetch').then(mod => mod.default)
 
 if (!globalThis.fetch) globalThis.fetch = fetch
 if (!globalThis.Headers) globalThis.Headers = Headers
 if (!globalThis.Request) globalThis.Request = Request
 if (!globalThis.Response) globalThis.Response = Response
 
-
-
 // Initialize the Feathers Koa app
-const app: Application = koa(feathers());
-
-
-
+const app: Application = koa(feathers())
 
 declare module './declarations' {
   interface Configuration {
-    vectordb: HNSWLib & any;
-    docdb: HNSWLib & any;
+    vectordb: HNSWLib & any
+    docdb: HNSWLib & any
   }
 }
-if (process.env.DATABASE_TYPE == "sqlite") {
-  console.log("Setting up vector store")
-  const vectordb = HNSWLib.load_data(".",embeddings,{
-    space: "cosine",
+if (process.env.DATABASE_TYPE == 'sqlite') {
+  console.log('Setting up vector store')
+  const vectordb = HNSWLib.load_data('.', embeddings, {
+    space: 'cosine',
     numDimensions: 1536,
-    filename:"database"
+    filename: 'database',
   })
-  const docdb = HNSWLib.load_data(".",embeddings,{
-    space: "cosine",
+  const docdb = HNSWLib.load_data('.', embeddings, {
+    space: 'cosine',
     numDimensions: 1536,
-    filename:"documents"
+    filename: 'documents',
   })
   app.set('vectordb', vectordb)
   app.set('docdb', docdb)
 } else {
   const cli = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)
-  const vectordb = new SupabaseVectorStoreCustom(embeddings, {client: cli, tableName:"events", queryName: "match_events"}) ;
-  const docdb = new SupabaseVectorStoreCustom(embeddings, {client: cli, tableName:"documents", queryName: "match_documents"}) ;
-  app.set("vectordb", vectordb)
+  const vectordb = new SupabaseVectorStoreCustom(embeddings, {
+    client: cli,
+    tableName: 'events',
+    queryName: 'match_events',
+  })
+  const docdb = new SupabaseVectorStoreCustom(embeddings, {
+    client: cli,
+    tableName: 'documents',
+    queryName: 'match_documents',
+  })
+  app.set('vectordb', vectordb)
   app.set('docdb', docdb)
 }
 
-/* 
+/*
 const vectorStoreInfo: typeof VectorStoreInfo = {
   name: "DB for Magick Events",
   description: "Stores all the event along with their metadata",
@@ -110,53 +123,57 @@ const paginateMax = parseInt(process.env.PAGINATE_MAX || '50', 10)
 const paginate = {
   default: paginateDefault,
   max: paginateMax,
-};
-app.set("paginate", paginate);
+}
+app.set('paginate', paginate)
 
 // Koa middleware
-app.use(cors());
-app.use(errorHandler());
-app.use(parseAuthentication());
-app.use(bodyParser());
+app.use(errorHandler())
+app.use(parseAuthentication())
+app.use(bodyParser())
 
 // Configure app management settings
-app.configure(configureManager());
+app.configure(configureManager())
 
 // Configure authentication
 if (!IGNORE_AUTH) {
-  app.set("authentication", {
-    secret: process.env.JWT_SECRET || "secret",
+  app.set('authentication', {
+    secret: process.env.JWT_SECRET || 'secret',
     entity: null,
-    authStrategies: ["jwt"],
+    authStrategies: ['jwt'],
     jwtOptions: {
-      header: { type: "access" },
-      audience: "https://yourdomain.com",
-      issuer: "feathers",
-      algorithm: "A256GCM",
-      expiresIn: "1d",
+      header: { type: 'access' },
+      audience: 'https://yourdomain.com',
+      issuer: 'feathers',
+      algorithm: 'A256GCM',
+      expiresIn: '1d',
     },
-  });
+  })
 
-  app.configure(authentication);
+  app.configure(authentication)
 }
 
 // Configure services and transports
-app.configure(rest());
+app.configure(rest())
 
 // Configure WebSocket for the app
 app.configure(
   socketio(
     {
       cors: {
-        origin: "*",
-        methods: ["GET", "POST", "OPTIONS"],
-        allowedHeaders: ["Authorization"],
+        origin: (origin, callback) => {
+          // For simplicity, allow any origin. You can also use a function or an array of origins.
+          callback(null, true)
+        },
+        methods: ['GET', 'POST', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,
       },
     },
     handleSockets(app)
   )
 )
+
+app.use(cors())
 
 app.configure(dbClient)
 app.configure(services)
@@ -168,41 +185,43 @@ app.hooks({
     all: [
       logError,
       async (context, next) => {
-        if (IGNORE_AUTH) return await next();
-        if (context.path !== "authentication") {
-          return authenticate("jwt")(context as any, next);
+        if (IGNORE_AUTH) return await next()
+        if (context.path !== 'authentication') {
+          return authenticate('jwt')(context as any, next)
         }
 
-        await next();
+        await next()
       },
       async (context: HookContext, next) => {
-        const { params } = context;
+        const { params } = context
 
         if (IGNORE_AUTH) {
           context.params.user = {
             id: DEFAULT_USER_ID,
-          };
-          context.params.projectId = DEFAULT_PROJECT_ID;
-          return await next();
+          }
+          context.params.projectId = DEFAULT_PROJECT_ID
+          return await next()
         }
 
-        const { authentication, authenticated } = params;
+        const { authentication, authenticated } = params
 
         if (authenticated) {
-          context.params.user = authentication.payload.user;
-          context.params.projectId = authentication.payload.projectId;
+          context.params.user = authentication.payload.user
+          context.params.projectId = authentication.payload.projectId
 
           if (context?.params?.query?.projectId) {
-            const projectId = context.params.query.projectId;
+            const projectId = context.params.query.projectId
 
             if (authentication.payload.project !== projectId) {
-              console.log("User not authorized to access project");
-              throw new NotAuthenticated("User not authorized to access project");
+              console.log('User not authorized to access project')
+              throw new NotAuthenticated(
+                'User not authorized to access project'
+              )
             }
           }
         }
 
-        await next();
+        await next()
       },
     ],
   },
@@ -211,13 +230,13 @@ app.hooks({
   },
   after: {},
   error: {},
-});
+})
 
 // Register setup and teardown hooks
 app.hooks({
   setup: [],
   teardown: [],
-});
+})
 
 // Export the app
 export { app }
