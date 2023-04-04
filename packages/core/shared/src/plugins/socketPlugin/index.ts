@@ -46,8 +46,6 @@ function install(
         context: Context,
         ...args
       ) => {
-        console.log('Running worker for node', node.id, node.name)
-        console.log('currentSpell', context.currentSpell.id)
         const currentSpell = context.currentSpell
         const event = `${currentSpell.id}-${node.id}`
 
@@ -61,10 +59,10 @@ function install(
               ...args,
             ])
 
-            console.log('*******************Emitting event', event)
+            console.log('OUTPUTTING RESULT', result)
 
             socket?.emit(event, {
-              output: result?.output,
+              output: result,
             })
             return result
           } catch (err: unknown) {
@@ -112,7 +110,7 @@ function install(
             async (socketData: SocketData) => {
               const newContext = {
                 ...context,
-                socketOutput: socketData,
+                socketOutput: socketData.output,
               }
 
               // make sure errors are handled in the flow.
