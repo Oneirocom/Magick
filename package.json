@@ -162,6 +162,7 @@
     "react-hook-form": "^7.42.1",
     "react-hotkeys-hook": "^3.4.7",
     "react-icons": "^4.7.1",
+    "react-json-view": "^1.21.3",
     "react-markdown": "^8.0.6",
     "react-redux": "^7.2.9",
     "react-router": "^6.9.0",
@@ -322,6 +323,12 @@
   "overrides": {
     "vite-plugin-markdown": {
       "vite": "$vite"
+    },
+    "overrides": {
+      "react-json-view": {
+        "react": "$react",
+        "react-dom": "$react-dom"
+      }
     },
     "@docusaurus/core": {
       "react": "$react",
