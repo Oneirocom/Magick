@@ -1,18 +1,18 @@
-// DOCUMENTED 
-import Rete from 'rete';
+// DOCUMENTED
+import Rete from 'rete'
 
-import { CodeControl } from '../../dataControls/CodeControl';
-import { InputControl } from '../../dataControls/InputControl';
-import { SocketGeneratorControl } from '../../dataControls/SocketGenerator';
-import { MagickComponent } from '../../engine';
-import { processCode } from '../../functions/processCode';
-import { triggerSocket } from '../../sockets';
+import { CodeControl } from '../../dataControls/CodeControl'
+import { InputControl } from '../../dataControls/InputControl'
+import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
+import { MagickComponent } from '../../engine'
+import { processCode } from '../../functions/processCode'
+import { triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   WorkerData,
-} from '../../types';
+} from '../../types'
 
 // Default code string for the Python component
 const defaultCode = `
@@ -28,13 +28,13 @@ def worker(inputs, data):
   outputs = dict(output1=input1)
   return outputs, data
 worker(inputs, data)
-`;
+`
 
 // Information about the Python component
 const info = `
 The code component is your swiss army knife when other components won't cut it.  You can define any number of inputs and outputs on it, and then write a custom worker function.  You have access to the data plugged into the inputs you created on your component, and can send data out along your outputs.
 Please note that the return of your function must be an object whose keys are the same value as the names given to your output sockets.  The incoming inputs argument is an object whose keys are the names you defined, and each is an array.
-`;
+`
 
 /**
  * A class that represents the Python component for Rete.
@@ -42,12 +42,17 @@ Please note that the return of your function must be an object whose keys are th
 export class Python extends MagickComponent<unknown> {
   constructor() {
     // Name of the component
-    super('Python', {
-      outputs: {
-        trigger: 'option',
+    super(
+      'Python',
+      {
+        outputs: {
+          trigger: 'option',
+        },
       },
-    }, 'Code', info);
-    this.runFromCache = true;
+      'Code',
+      info
+    )
+    // this.runFromCache = true;
   }
 
   /**
@@ -56,45 +61,43 @@ export class Python extends MagickComponent<unknown> {
    * @returns The built MagickNode instance.
    */
   builder(node: MagickNode) {
-    if (!node.data.code) node.data.code = defaultCode;
+    if (!node.data.code) node.data.code = defaultCode
 
     const outputGenerator = new SocketGeneratorControl({
       connectionType: 'output',
       ignored: ['trigger'],
       name: 'Output Sockets',
-    });
+    })
 
     const inputGenerator = new SocketGeneratorControl({
       connectionType: 'input',
       ignored: ['trigger'],
       name: 'Input Sockets',
-    });
+    })
 
     const codeControl = new CodeControl({
       dataKey: 'code',
       name: 'Code',
       language: 'python',
-    });
+    })
 
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Component Name',
-    });
+    })
 
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     node.inspector
       .add(nameControl)
       .add(inputGenerator)
       .add(outputGenerator)
-      .add(codeControl);
+      .add(codeControl)
 
-    node
-      .addOutput(dataOutput)
-      .addInput(dataInput);
+    node.addOutput(dataOutput).addInput(dataInput)
 
-    return node;
+    return node
   }
 
   /**
@@ -111,17 +114,17 @@ export class Python extends MagickComponent<unknown> {
     _outputs: MagickWorkerOutputs,
     context: { data: { code: unknown } }
   ) {
-    const { data } = context;
+    const { data } = context
 
     try {
       // const value = runCodeWithArguments(node.data.code);
-      const value = processCode(node.data.code, inputs, data, 'python');
+      const value = processCode(node.data.code, inputs, data, 'python')
 
-      return value;
+      return value
     } catch (err) {
       // close the data socket so it doesn't error out
-      this._task.closed = ['data'];
-      return console.error(err);
+      this._task.closed = ['data']
+      return console.error(err)
     }
   }
 }

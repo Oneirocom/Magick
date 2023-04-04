@@ -1,30 +1,34 @@
-// DOCUMENTED 
-import Rete, { Node } from 'rete';
-import { API_ROOT_URL } from '../../config';
-import { InputControl } from '../../dataControls/InputControl';
-import { MagickComponent } from '../../engine';
-import { arraySocket, eventSocket, triggerSocket } from '../../sockets';
+// DOCUMENTED
+import Rete, { Node } from 'rete'
+import { API_ROOT_URL } from '../../config'
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
+import { arraySocket, eventSocket, triggerSocket } from '../../sockets'
 import {
-  Event, GetEventArgs, MagickNode,
+  Event,
+  GetEventArgs,
+  MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs, WorkerData,
-} from '../../types';
+  MagickWorkerOutputs,
+  WorkerData,
+} from '../../types'
 
-const info = 'Event Recall is used to get conversation for an agent and user';
+const info = 'Event Recall is used to get conversation for an agent and user'
 
 /**
  * Type definition for the input events.
  */
 type InputReturn = {
-  events: unknown[];
-};
+  events: unknown[]
+}
 
 /**
  * EventRecall class, retrieves conversation events.
  */
 export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Event Recall',
+    super(
+      'Event Recall',
       {
         outputs: {
           events: 'output',
@@ -32,9 +36,10 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
         },
       },
       'Event',
-      info);
+      info
+    )
 
-    this.runFromCache = true;
+    // this.runFromCache = true;
   }
 
   /**
@@ -43,40 +48,40 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
    * @returns MagickNode - The built node, which is a Rete node wrapped with additional Magick data.
    */
   builder(node: MagickNode): MagickNode {
-    const eventInput = new Rete.Input('event', 'Event', eventSocket);
-    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket);
-    const out = new Rete.Output('events', 'Events', arraySocket);
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
+    const eventInput = new Rete.Input('event', 'Event', eventSocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
+    const out = new Rete.Output('events', 'Events', arraySocket)
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     const nameInput = new InputControl({
       dataKey: 'name',
       name: 'Input name',
       placeholder: 'Conversation',
-    });
+    })
 
     const type = new InputControl({
       dataKey: 'type',
       name: 'Type',
       icon: 'moon',
       placeholder: 'conversation',
-    });
+    })
 
     const max_count = new InputControl({
       dataKey: 'max_count',
       name: 'Max Count',
       icon: 'moon',
       defaultValue: '6',
-    });
+    })
 
-    node.inspector.add(nameInput).add(type).add(max_count);
+    node.inspector.add(nameInput).add(type).add(max_count)
 
     return node
       .addInput(dataInput)
       .addInput(eventInput)
       .addInput(embedding)
       .addOutput(dataOutput)
-      .addOutput(out);
+      .addOutput(out)
   }
 
   /**
@@ -89,10 +94,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
+    _outputs: MagickWorkerOutputs
   ) {
-    const getEventsbyEmbedding = async (params: GetEventArgs & {embedding: string }) => {
-
+    const getEventsbyEmbedding = async (
+      params: GetEventArgs & { embedding: string }
+    ) => {
       const urlString = `${API_ROOT_URL}/events`
       const url = new URL(urlString)
       for (const p in params) {
@@ -113,31 +119,41 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       const url = new URL(urlString)
       for (const p in params) {
         if (Array.isArray(params[p])) {
-          params[p].forEach(v => url.searchParams.append(p, v));
+          params[p].forEach(v => url.searchParams.append(p, v))
         } else {
-          url.searchParams.append(p, params[p]);
+          url.searchParams.append(p, params[p])
         }
       }
 
-      const response = await fetch(url.toString());
-      if (response.status !== 200) return null;
-      const json = await response.json();
-      return json.events;
-    };
-
-    const event = (inputs['event'] && (inputs['event'][0] || inputs['event'])) as Event;
-    let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[] | string | string[];
-
-    if (typeof (embedding) == 'string') {
-      embedding = (embedding as string).replace('[', '').replace(']', '');
-      embedding = (embedding as string)?.split(',');
+      const response = await fetch(url.toString())
+      if (response.status !== 200) return null
+      const json = await response.json()
+      return json.events
     }
 
-    const { observer, client, channel, channelType, projectId, entities } = event;
-    const typeData = (node.data as { type: string })?.type;
-    const type = typeData !== undefined && typeData.length > 0 ? typeData.toLowerCase().trim() : 'none';
-    const maxCountData = node?.data?.max_count as string && (node?.data as { max_count: string })?.max_count;
-    const limit = maxCountData ? parseInt(maxCountData) : 10;
+    const event = (inputs['event'] &&
+      (inputs['event'][0] || inputs['event'])) as Event
+    let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as
+      | number[]
+      | string
+      | string[]
+
+    if (typeof embedding == 'string') {
+      embedding = (embedding as string).replace('[', '').replace(']', '')
+      embedding = (embedding as string)?.split(',')
+    }
+
+    const { observer, client, channel, channelType, projectId, entities } =
+      event
+    const typeData = (node.data as { type: string })?.type
+    const type =
+      typeData !== undefined && typeData.length > 0
+        ? typeData.toLowerCase().trim()
+        : 'none'
+    const maxCountData =
+      (node?.data?.max_count as string) &&
+      (node?.data as { max_count: string })?.max_count
+    const limit = maxCountData ? parseInt(maxCountData) : 10
     const data = {
       type,
       observer,
@@ -147,18 +163,18 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       channelType,
       projectId,
       limit,
-    };
+    }
 
-    let events;
+    let events
 
     if (embedding) {
-      data['embedding'] = embedding;
+      data['embedding'] = embedding
     }
 
     if (embedding) {
       if (embedding.length === 1536) {
-        const enc_embed = new Float32Array(embedding as Iterable<number>);
-        const uint = new Uint8Array(enc_embed.buffer);
+        const enc_embed = new Float32Array(embedding as Iterable<number>)
+        const uint = new Uint8Array(enc_embed.buffer)
         const str = btoa(
           String.fromCharCode.apply(
             null,
@@ -168,11 +184,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
         events = await getEventsbyEmbedding({ ...data, embedding: str })
       }
     } else {
-      events = await getEvents(data);
+      events = await getEvents(data)
     }
 
     return {
       events,
-    };
+    }
   }
 }

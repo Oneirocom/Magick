@@ -1,12 +1,12 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Typescript Module "consolePlugin"
  * @module consolePlugin
  */
 
-import { MagickComponent } from '../../engine';
-import { IRunContextEditor, MagickNode } from '../../types';
-import { MagickConsole } from './MagickConsole';
+import { MagickComponent } from '../../engine'
+import { IRunContextEditor, MagickNode } from '../../types'
+import { MagickConsole } from './MagickConsole'
 
 /**
  * Arguments passed to the `install` function
@@ -16,8 +16,8 @@ import { MagickConsole } from './MagickConsole';
  */
 
 export type DebuggerArgs = {
-  server?: boolean;
-  throwError?: (message:unknown)=>void;
+  server?: boolean
+  throwError?: (message: unknown) => void
 }
 
 /**
@@ -26,12 +26,15 @@ export type DebuggerArgs = {
  * @param {DebuggerArgs} [{ server = false, throwError }] - DebuggerArgs object
  * @memberof module:consolePlugin
  */
-function install(editor: IRunContextEditor, { server = false, throwError }: DebuggerArgs) {
+function install(
+  editor: IRunContextEditor,
+  { server = false, throwError }: DebuggerArgs
+) {
   editor.on('componentregister', (component: MagickComponent<unknown>) => {
-    const worker = component.worker;
+    const worker = component.worker
 
     component.worker = async (node, inputs, outputs, data, ...args) => {
-      const _node = node as unknown as MagickNode;
+      const _node = node as unknown as MagickNode
 
       /**
        * Represents an instance of the debug console
@@ -44,21 +47,28 @@ function install(editor: IRunContextEditor, { server = false, throwError }: Debu
         editor,
         server,
         throwError,
-      });
+      })
 
       try {
-        const result = await worker.apply(component, [node, inputs, outputs, data, ...args]);
+        const result = await worker.apply(component, [
+          node,
+          inputs,
+          outputs,
+          data,
+          ...args,
+        ])
 
-        _node.console.log(result);
+        console.log('CONSOLING RESULT', result)
+        _node.console.log(result)
 
-        return result;
+        return result
       } catch (error) {
-        _node.console.error(error as Error);
+        _node.console.error(error as Error)
 
-        return console.error(error);
+        return console.error(error)
       }
     }
-  });
+  })
 }
 
 /**
@@ -73,4 +83,4 @@ const defaultExport = {
   install,
 }
 
-export default defaultExport;
+export default defaultExport
