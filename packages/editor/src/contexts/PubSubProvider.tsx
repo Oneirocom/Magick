@@ -3,7 +3,7 @@
 
 // Import required modules
 import * as React from 'react'
-import { PubSubContext, PubSubData, PubSubEvents } from '@magickml/engine'
+import { PubSubContext, PubSubData, PubSubEvents } from '@magickml/core'
 import PubSub from 'pubsub-js'
 import { useContext, createContext } from 'react'
 

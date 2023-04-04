@@ -1,0 +1,82 @@
+// DOCUMENTED 
+import Rete from 'rete';
+
+import { BooleanControl } from '../../dataControls/BooleanControl';
+import { InputControl } from '../../dataControls/InputControl';
+import { NumberControl } from '../../dataControls/NumberControl';
+import { MagickComponent } from '../../engine';
+import { numberSocket } from '../../sockets';
+import { MagickNode, WorkerData } from '../../types';
+
+/** Component information */
+const info = 'Number Variable';
+
+/** Output data type */
+type InputReturn = {
+  output: number;
+};
+
+/**
+ * Represents a Number Variable Component
+ */
+export class NumberVariable extends MagickComponent<InputReturn> {
+  /**
+   * Constructs a new NumberVariable instance
+   */
+  constructor() {
+    super('Number Variable', {
+      outputs: {
+        output: 'output',
+      },
+    }, 'Number', info);
+  }
+
+  /**
+   * Builds the component node
+   * @param node - The MagickNode instance
+   * @returns The updated node with output
+   */
+  builder(node: MagickNode): MagickNode {
+    const out = new Rete.Output('output', 'output', numberSocket);
+    const _var = new NumberControl({
+      dataKey: '_var',
+      name: 'Value',
+      icon: 'moon',
+    });
+    const name = new InputControl({
+      dataKey: 'name',
+      name: 'Name',
+      icon: 'moon',
+    });
+
+    const _public = new BooleanControl({
+      dataKey: 'isPublic',
+      name: 'isPublic',
+    });
+
+    node.inspector.add(name).add(_var).add(_public);
+
+    return node.addOutput(out);
+  }
+
+  /**
+   * Component worker implementation
+   * @param node - The WorkerData instance
+   * @param _inputs - The component inputs
+   * @param _outputs - The component outputs
+   * @param context - The working context
+   * @returns The output variables
+   */
+  worker(node: WorkerData, _inputs: unknown, _outputs: unknown, context: { module: { publicVariables: string } }): InputReturn {
+    let _var = node?.data?._var as number;
+    const publicVars = JSON.parse(context.module.publicVariables);
+    
+    if(node?.data?.isPublic && publicVars[node.id]) {
+      _var = publicVars[node.id].value;
+    }
+
+    return {
+      output: _var,
+    };
+  }
+}

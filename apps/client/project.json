@@ -4,9 +4,8 @@
   "sourceRoot": "apps/client/src",
   "projectType": "application",
   "implicitDependencies": [
-    "@magickml/cost-calculator",
     "@magickml/editor",
-    "@magickml/engine"
+    "@magickml/core"
   ],
   "targets": {
     "build": {

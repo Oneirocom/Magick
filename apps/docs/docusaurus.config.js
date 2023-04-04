@@ -21,9 +21,9 @@ const config = {
 
       // Plugin / TypeDoc options
       {
-        id: 'engine',
-        entryPoints: ['./packages/engine/src/index.ts'],
-        tsconfig: './packages/engine/tsconfig.lib.json',
+        id: 'shared-core',
+        entryPoints: ['./packages/core/shared/src/index.ts'],
+        tsconfig: './packages/core/shared/tsconfig.lib.json',
         readme: 'none',
         sidebar: {
           categoryLabel: 'API Documentation',

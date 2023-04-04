@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
@@ -46,7 +46,7 @@ const MenuBar = () => {
     $UNDO,
     $REDO,
     $MULTI_SELECT_COPY,
-    $MULTI_SELECT_PASTE
+    $MULTI_SELECT_PASTE,
   } = events
 
   /**
@@ -263,11 +263,11 @@ const MenuBar = () => {
         },
         copy: {
           onClick: onMultiSelectCopy,
-          hotKey: 'option+c'
+          hotKey: 'option+c',
         },
         paste: {
           onClick: onMultiSelectPaste,
-          hotKey: 'option+v'
+          hotKey: 'option+v',
         },
       },
     },
@@ -324,12 +324,12 @@ const MenuBar = () => {
     label,
     topLevel,
     onClick,
-    hotKeyLabel
+    hotKeyLabel,
   }: {
-    item: any,
-    label: string,
-    topLevel: boolean,
-    onClick: () => void,
+    item: any
+    label: string
+    topLevel: boolean
+    onClick: () => void
     hotKeyLabel: string
   }) => {
     label = label ? label.replace(/_/g, ' ') : label

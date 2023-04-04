@@ -26,16 +26,12 @@ Documentation server build on Docusaurus.
 
 ## Shared Packages
 ### Engine
-@magickml/engine (./packages/engine)
-Core runtime code for Magick. Contains all of the spell and spell running code, common interfaces and nodes. Available for install via [npm](https://www.npmjs.com/package/@magickml/engine)
-
-### Cost Calculator
-@magickml/cost-calculator (./packages/cost-calculator)
-Basic functions for calculating the cost of ML and other types of requests in Magick.
+@magickml/core (./packages/core/shared)
+Core runtime code for Magick. Contains all of the spell and spell running code, common interfaces and nodes. Available for install via [npm](https://www.npmjs.com/package/@magickml/core)
 
 ## Front End Packages
 ### Client Core
-@magickml/client-core (./packages/client-core)
+@magickml/client-core (./packages/core/client)
 Frontend UI components and common code.
 
 ### Editor
@@ -44,5 +40,5 @@ Application code for the IDE, including windows, providers and state. Used in th
 
 ## Server Packages
 ### Server Core
-@magickml/server-core (./packages/server-core)
+@magickml/server-core (./packages/core/server)
 Contains all of the server code, imported by the server and agent apps.

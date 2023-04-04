@@ -20,94 +20,99 @@
     "paths": {
       "@magickml/agent": ["apps/agent/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
-      "@magickml/client-core": ["packages/client-core/src/index.ts"],
-      "@magickml/cost-calculator": ["packages/cost-calculator/src/index.ts"],
+      "@magickml/client-core": ["packages/core/client/src/index.ts"],
       "@magickml/docs": ["apps/docs/src/index.ts"],
       "@magickml/editor": ["packages/editor/src/index.ts"],
-      "@magickml/engine": ["packages/engine/src/index.ts"],
+      "@magickml/core": ["packages/core/shared/src/index.ts"],
       "@magickml/plugin-banana-client": [
-        "packages/plugin-banana/client/src/index.ts"
+        "plugins/banana/client/src/index.ts"
       ],
       "@magickml/plugin-banana-server": [
-        "packages/plugin-banana/server/src/index.ts"
+        "plugins/banana/server/src/index.ts"
       ],
       "@magickml/plugin-discord-client": [
-        "packages/plugin-discord/client/src/index.ts"
+        "plugins/discord/client/src/index.ts"
       ],
       "@magickml/plugin-discord-server": [
-        "packages/plugin-discord/server/src/index.ts"
+        "plugins/discord/server/src/index.ts"
       ],
       "@magickml/plugin-esoterica-client": [
-        "packages/plugin-esoterica/client/src/index.ts"
+        "plugins/esoterica/client/src/index.ts"
       ],
       "@magickml/plugin-esoterica-server": [
-        "packages/plugin-esoterica/server/src/index.ts"
+        "plugins/esoterica/server/src/index.ts"
       ],
       "@magickml/plugin-esoterica-shared": [
-        "packages/plugin-esoterica/shared/src/index.ts"
+        "plugins/esoterica/shared/src/index.ts"
       ],
       "@magickml/plugin-ethereum-client": [
-        "packages/plugin-ethereum/client/src/index.ts"
+        "plugins/ethereum/client/src/index.ts"
       ],
       "@magickml/plugin-ethereum-server": [
-        "packages/plugin-ethereum/server/src/index.ts"
+        "plugins/ethereum/server/src/index.ts"
       ],
       "@magickml/plugin-ethereum-shared": [
-        "packages/plugin-ethereum/shared/src/index.ts"
+        "plugins/ethereum/shared/src/index.ts"
       ],
       "@magickml/plugin-finetune-client": [
-        "packages/plugin-finetune/client/src/index.ts"
+        "plugins/finetune/client/src/index.ts"
       ],
       "@magickml/plugin-finetune-server": [
-        "packages/plugin-finetune/server/src/index.ts"
+        "plugins/finetune/server/src/index.ts"
       ],
       "@magickml/plugin-loop-client": [
-        "packages/plugin-loop/client/src/index.ts"
+        "plugins/loop/client/src/index.ts"
       ],
       "@magickml/plugin-loop-server": [
-        "packages/plugin-loop/server/src/index.ts"
+        "plugins/loop/server/src/index.ts"
       ],
       "@magickml/plugin-openai-client": [
-        "packages/plugin-openai/client/src/index.ts"
+        "plugins/openai/client/src/index.ts"
       ],
       "@magickml/plugin-openai-server": [
-        "packages/plugin-openai/server/src/index.ts"
+        "plugins/openai/server/src/index.ts"
       ],
       "@magickml/plugin-openai-shared": [
-        "packages/plugin-openai/shared/src/index.ts"
+        "plugins/openai/shared/src/index.ts"
       ],
       "@magickml/plugin-pinecone-client": [
-        "packages/plugin-pinecone/client/src/index.ts"
+        "plugins/pinecone/client/src/index.ts"
       ],
       "@magickml/plugin-pinecone-server": [
-        "packages/plugin-pinecone/server/src/index.ts"
+        "plugins/pinecone/server/src/index.ts"
       ],
       "@magickml/plugin-pinecone-shared": [
-        "packages/plugin-pinecone/shared/src/index.ts"
+        "plugins/pinecone/shared/src/index.ts"
       ],
       "@magickml/plugin-rest-client": [
-        "packages/plugin-rest/client/src/index.ts"
+        "plugins/rest/client/src/index.ts"
       ],
       "@magickml/plugin-rest-server": [
-        "packages/plugin-rest/server/src/index.ts"
+        "plugins/rest/server/src/index.ts"
       ],
       "@magickml/plugin-search-client": [
-        "packages/plugin-search/client/src/index.ts"
+        "plugins/search/client/src/index.ts"
       ],
       "@magickml/plugin-search-server": [
-        "packages/plugin-search/server/src/index.ts"
+        "plugins/search/server/src/index.ts"
       ],
       "@magickml/plugin-search-shared": [
-        "packages/plugin-search/shared/src/index.ts"
+        "plugins/search/shared/src/index.ts"
       ],
       "@magickml/plugin-twitter-client": [
-        "packages/plugin-twitter/client/src/index.ts"
+        "plugins/twitter/client/src/index.ts"
       ],
       "@magickml/plugin-twitter-server": [
-        "packages/plugin-twitter/server/src/index.ts"
+        "plugins/twitter/server/src/index.ts"
+      ],
+      "@magickml/plugin-qa-server": [
+        "plugins/qa/server/src/index.ts"
+      ],
+      "@magickml/plugin-avatar-client": [
+        "plugins/avatar/client/src/index.ts"
       ],
       "@magickml/server": ["apps/server/src/index.ts"],
-      "@magickml/server-core": ["packages/server-core/src/index.ts"],
+      "@magickml/server-core": ["packages/core/server/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"]
     }
   },

@@ -4,14 +4,14 @@ import {
   EditorContext,
   GraphData,
   MagickEditor,
-  SpellInterface,
-} from '@magickml/engine';
+  SpellInterface
+} from '@magickml/core';
 import React, {
   createContext,
   useContext,
   useEffect,
   useRef,
-  useState,
+  useState
 } from 'react';
 import { Component } from 'rete/types/engine';
 

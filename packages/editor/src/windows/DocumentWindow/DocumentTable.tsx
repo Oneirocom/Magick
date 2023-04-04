@@ -1,6 +1,6 @@
 // DOCUMENTED 
 import { Button, Modal } from '@magickml/client-core';
-import { API_ROOT_URL } from '@magickml/engine';
+import { API_ROOT_URL } from '@magickml/core';
 import {
   Grid, IconButton, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField
 } from '@mui/material';
