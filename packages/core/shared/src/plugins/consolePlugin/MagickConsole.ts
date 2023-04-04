@@ -16,7 +16,6 @@ export type Message = {
   nodeId: number
   name: string | null
   content?: string
-  component?: MagickComponent<unknown>
   type: 'error' | 'log'
 }
 
@@ -78,7 +77,6 @@ export class MagickConsole {
       nodeId: this.node.id,
       name: (this.node?.data?.name as string) ?? null,
       content: _message,
-      component: this.component,
       type,
     }
   }
