@@ -58,7 +58,6 @@ function install(
           ...args,
         ])
 
-        console.log('CONSOLING RESULT', result)
         _node.console.log(result)
 
         return result

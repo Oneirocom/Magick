@@ -93,6 +93,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
       </p>
       <ReactJson
         src={JSON.parse(message.content)}
+        name={message.id}
         theme="monokai"
         collapsed={true}
       />
@@ -108,12 +109,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
    */
   const getMessage = message => {
     console.log('MESSAGE', message)
-    if (message.type === 'error') {
-      return Message(message, message.type)
-    }
-    if (message.type === 'log') {
-      return Message(message, message.type)
-    }
+    return Message(message, message.type)
   }
 
   // Callback function to print messages to the debugger.
@@ -168,6 +164,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
       <Terminal
         ref={terminalRef}
         commands={commands}
+        noAutoScroll={true}
         dangerMode={true}
         commandCallback={commandCallback}
         noNewlineParsing={true}
