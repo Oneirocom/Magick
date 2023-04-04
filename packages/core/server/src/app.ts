@@ -127,6 +127,7 @@ const paginate = {
 app.set('paginate', paginate)
 
 // Koa middleware
+app.use(cors({ origin: '*' }))
 app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
@@ -172,8 +173,6 @@ app.configure(
     handleSockets(app)
   )
 )
-
-app.use(cors())
 
 app.configure(dbClient)
 app.configure(services)

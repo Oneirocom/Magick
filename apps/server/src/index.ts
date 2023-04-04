@@ -82,7 +82,8 @@ async function init() {
     }
   })
 
-  app.use(cors())
+  const options = { origin: '*' }
+  app.use(cors(options))
 
   process.on('unhandledRejection', (err: Error) => {
     console.error('Unhandled Rejection:' + err + ' - ' + err.stack)
