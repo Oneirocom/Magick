@@ -19,7 +19,7 @@
   "scripts": {
     "dev": "nodemon -x ts-node src/index.ts",
     "compile": "shx rm -rf lib/ && tsc",
-    "start": "node lib/",
+    "start": "pm2 start lib/",
     "prettier": "npx prettier \"**/*.ts\" --write",
     "mocha": "cross-env NODE_ENV=test mocha test/ --require ts-node/register --recursive --extension .ts --exit",
     "test": "cross-env NODE_ENV=test npm run migrate && npm run mocha",
@@ -30,7 +30,7 @@
   "dependencies": {
     "feathers-swagger": "^2.0.0",
     "knex": "^2.4.2",
-    "@magickml/core": "file:../../dist/packages/core/shared",
-    "@magickml/server-core": "file:../../dist/packages/core/server"
+    "@magickml/engine": "file:../../dist/packages/engine",
+    "@magickml/server-core": "file:../../dist/packages/server-core"
   }
 }
