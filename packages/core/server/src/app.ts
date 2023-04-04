@@ -26,20 +26,21 @@ import { HNSWLib, SupabaseVectorStoreCustom } from "./vectordb"
 
 //Dynamic Import using top lvl await
 const modules = import_('langchain/embeddings')
-const {FakeEmbeddings} = await modules;
+const { FakeEmbeddings } = await modules;
 const agentpro = import_('langchain/agents')
-const {VectorStoreToolkit,createVectorStoreAgent,VectorStoreInfo} = await agentpro;
+const { VectorStoreToolkit, createVectorStoreAgent, VectorStoreInfo } = await agentpro;
 const openaipro = import_('langchain')
-const {OpenAI} = await openaipro;
+const { OpenAI } = await openaipro;
 const embeddings = new FakeEmbeddings();
 
-const  { Headers, Request, Response } = await import_('node-fetch')
-const fetch = await import_('node-fetch').then((mod) => mod.default)
 
+//The Following headers have to added, when using Langchain with OpenAI
+/* const  { Headers, Request, Response } = await import_('node-fetch')
+const fetch = await import_('node-fetch').then((mod) => mod.default)
 if (!globalThis.fetch) globalThis.fetch = fetch
 if (!globalThis.Headers) globalThis.Headers = Headers
 if (!globalThis.Request) globalThis.Request = Request
-if (!globalThis.Response) globalThis.Response = Response
+if (!globalThis.Response) globalThis.Response = Response */
 
 
 
@@ -57,22 +58,22 @@ declare module './declarations' {
 }
 if (process.env.DATABASE_TYPE == "sqlite") {
   console.log("Setting up vector store")
-  const vectordb = HNSWLib.load_data(".",embeddings,{
+  const vectordb = HNSWLib.load_data(".", embeddings, {
     space: "cosine",
     numDimensions: 1536,
-    filename:"database"
+    filename: "database"
   })
-  const docdb = HNSWLib.load_data(".",embeddings,{
+  const docdb = HNSWLib.load_data(".", embeddings, {
     space: "cosine",
     numDimensions: 1536,
-    filename:"documents"
+    filename: "documents"
   })
   app.set('vectordb', vectordb)
   app.set('docdb', docdb)
 } else {
   const cli = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)
-  const vectordb = new SupabaseVectorStoreCustom(embeddings, {client: cli, tableName:"events", queryName: "match_events"}) ;
-  const docdb = new SupabaseVectorStoreCustom(embeddings, {client: cli, tableName:"documents", queryName: "match_documents"}) ;
+  const vectordb = new SupabaseVectorStoreCustom(embeddings, { client: cli, tableName: "events", queryName: "match_events" });
+  const docdb = new SupabaseVectorStoreCustom(embeddings, { client: cli, tableName: "documents", queryName: "match_documents" });
   app.set("vectordb", vectordb)
   app.set('docdb', docdb)
 }
