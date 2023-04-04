@@ -17,7 +17,7 @@ type GetSpell = {
  */
 export const getSpell = async ({ id, projectId }: GetSpell): Promise<any> => {
   // rewrite the feathers service call as a fetch
-  const spell = await fetch(`http://${API_ROOT_URL}/spells?projectId=${projectId}&id=${id}`)
+  const spell = await fetch(`${API_ROOT_URL}/spells?projectId=${projectId}&id=${id}`)
     .then(res => res.json());
 
   // Return the first element of the found spells' data

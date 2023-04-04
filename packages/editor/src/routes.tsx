@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { pluginManager } from '@magickml/core'
+import { ClientPluginManager, pluginManager } from '@magickml/core'
 import 'flexlayout-react/style/dark.css'
 import { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
@@ -41,29 +41,31 @@ const RenderComp = (props: { element: React.ElementType }) => {
 const MyRoutes = () => (
   <Routes>
     <Route element={<MainLayout />}>
-      {pluginManager.getGroupedClientRoutes().map(pluginRouteGroup => {
-        const ClientPageLayout = pluginRouteGroup.layout ?? MagickPageLayout
-        return (
-          <Route
-            key={pluginRouteGroup.routes[0].path}
-            element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <ClientPageLayout />
-              </Suspense>
-            }
-          >
-            {pluginRouteGroup.routes.map(route => {
-              return (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  element={<RenderComp element={route.component} />}
-                />
-              )
-            })}
-          </Route>
-        )
-      })}
+      {(pluginManager as ClientPluginManager)
+        .getGroupedClientRoutes()
+        .map(pluginRouteGroup => {
+          const ClientPageLayout = pluginRouteGroup.layout ?? MagickPageLayout
+          return (
+            <Route
+              key={pluginRouteGroup.routes[0].path}
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <ClientPageLayout />
+                </Suspense>
+              }
+            >
+              {pluginRouteGroup.routes.map(route => {
+                return (
+                  <Route
+                    key={route.path}
+                    path={route.path}
+                    element={<RenderComp element={route.component} />}
+                  />
+                )
+              })}
+            </Route>
+          )
+        })}
       <Route path="/documents" element={<DocumentWindow />} />
       <Route path="/events" element={<EventWindow />} />
       <Route path="/requests" element={<RequestWindow />} />
