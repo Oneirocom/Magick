@@ -1,46 +1,46 @@
-// DOCUMENTED 
-import { LoadingScreen } from '@magickml/client-core';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+// DOCUMENTED
+import { LoadingScreen } from '@magickml/client-core'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 
-import { useConfig } from '../../contexts/ConfigProvider';
+import { useConfig } from '../../contexts/ConfigProvider'
 import {
   useDeleteSpellMutation,
   useGetSpellsQuery,
   useNewSpellMutation,
-} from '../../state/api/spells';
-import { RootState } from '../../state/store';
-import { closeTab, openTab, selectAllTabs } from '../../state/tabs';
-import AllProjects from './AllProjects';
-import CreateNew from './CreateNew';
-import css from './homeScreen.module.css';
-import OpenProject from './OpenProject';
+} from '../../state/api/spells'
+import { RootState } from '../../state/store'
+import { closeTab, openTab, selectAllTabs } from '../../state/tabs'
+import AllProjects from './AllProjects'
+import CreateNew from './CreateNew'
+import css from './homeScreen.module.css'
+import OpenProject from './OpenProject'
 
 /**
  * StartScreen component. Displays an overlay with options to open or create new spells.
  * @returns JSX.Element - StartScreen component
  */
 const StartScreen = (): JSX.Element => {
-  const config = useConfig();
+  const config = useConfig()
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const navigate = useNavigate();
-  const [deleteSpell] = useDeleteSpellMutation();
+  const navigate = useNavigate()
+  const [deleteSpell] = useDeleteSpellMutation()
   const { data: spells } = useGetSpellsQuery({
     projectId: config.projectId,
-  });
-  const [newSpell] = useNewSpellMutation();
+  })
+  const [newSpell] = useNewSpellMutation()
 
-  const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs));
+  const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
 
   /**
    * Handles loading a selected file for opening a spell.
    * @param event - FileReader onload event
    */
   const onReaderLoad = async (event): Promise<void> => {
-    const spellData = JSON.parse(event.target.result);
+    const spellData = JSON.parse(event.target.result)
 
     // Create new spell
     const response = (await newSpell({
@@ -48,11 +48,11 @@ const StartScreen = (): JSX.Element => {
       name: spellData.name,
       projectId: config.projectId,
       hash: spellData.hash,
-    })) as any;
+    })) as any
 
     if (response.error) {
-      console.error('Error creating spell', response.error);
-      return;
+      console.error('Error creating spell', response.error)
+      return
     }
 
     dispatch(
@@ -61,20 +61,20 @@ const StartScreen = (): JSX.Element => {
           response.data.id + '-' + encodeURIComponent(btoa(response.data.name)),
         type: 'spell',
       })
-    );
+    )
 
-    navigate('/magick');
-  };
+    navigate('/magick')
+  }
 
   /**
    * Load a selected file
    * @param selectedFile - File to load
    */
   const loadFile = (selectedFile): void => {
-    const reader = new FileReader();
-    reader.onload = onReaderLoad;
-    reader.readAsText(selectedFile);
-  };
+    const reader = new FileReader()
+    reader.onload = onReaderLoad
+    reader.readAsText(selectedFile)
+  }
 
   /**
    * Handles spell deletion.
@@ -82,27 +82,27 @@ const StartScreen = (): JSX.Element => {
    */
   const onDelete = async (spellName): Promise<void> => {
     try {
-      await deleteSpell({ spellName, projectId: config.projectId });
-      const [tab] = tabs.filter((tab) => tab.URI === spellName);
+      await deleteSpell({ spellName, projectId: config.projectId })
+      const [tab] = tabs.filter(tab => tab.URI === spellName)
       if (tab) {
-        dispatch(closeTab(tab.id));
+        dispatch(closeTab(tab.id))
       }
     } catch (err) {
-      console.error('Error deleting spell', err);
+      console.error('Error deleting spell', err)
     }
-  };
+  }
 
   /**
    * Opens a spell
    * @param spell - The spell to be opened
    */
   const openSpell = async (spell): Promise<void> => {
-    navigate(`/magick/${spell.id}-${encodeURIComponent(btoa(spell.name))}`);
-  };
+    navigate(`/magick/${spell.id}-${encodeURIComponent(btoa(spell.name))}`)
+  }
 
-  const [selectedSpell, setSelectedSpell] = useState(null);
+  const [selectedSpell, setSelectedSpell] = useState(null)
 
-  if (!spells) return <LoadingScreen />;
+  if (!spells) return <LoadingScreen />
 
   return (
     <div className={css['overlay']}>
@@ -137,7 +137,7 @@ const StartScreen = (): JSX.Element => {
         </Routes>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default StartScreen;
+export default StartScreen
