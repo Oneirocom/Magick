@@ -54,14 +54,29 @@ if (!globalThis.Response) globalThis.Response = Response
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())
 
+app.use(
+  cors({
+    origin: '*',
+    allowHeaders: ['Content-Type', 'Authorization'],
+    exposeHeaders: ['Content-Security-Policy'],
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true,
+  })
+)
+
 app.use(async (ctx, next) => {
   ctx.set('Content-Security-Policy', "frame-ancestors 'self' *")
-  ctx.set('Access-Control-Allow-Origin', '*')
-  ctx.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  ctx.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-  ctx.set('Access-Control-Allow-Credentials', 'true')
   await next()
 })
+
+// app.use(async (ctx, next) => {
+//   ctx.set('Content-Security-Policy', "frame-ancestors 'self' *")
+//   ctx.set('Access-Control-Allow-Origin', '*')
+//   ctx.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+//   ctx.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+//   ctx.set('Access-Control-Allow-Credentials', 'true')
+//   await next()
+// })
 
 declare module './declarations' {
   interface Configuration {
@@ -136,7 +151,7 @@ const paginate = {
 app.set('paginate', paginate)
 
 // Koa middleware
-app.use(cors({ origin: '*' }))
+// app.use(cors({ origin: '*' }))
 app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
