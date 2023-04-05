@@ -1,13 +1,13 @@
-// DOCUMENTED 
+// DOCUMENTED
 import {
   AuthenticationParams,
   AuthenticationRequest,
   AuthenticationResult,
-  AuthenticationService
-} from '@feathersjs/authentication';
-import { jwtDecrypt } from 'jose';
-import hkdf from '@panva/hkdf';
-import { NotAuthenticated } from '@feathersjs/errors/lib';
+  AuthenticationService,
+} from '@feathersjs/authentication'
+import { jwtDecrypt } from 'jose'
+import hkdf from '@panva/hkdf'
+import { NotAuthenticated } from '@feathersjs/errors/lib'
 
 /**
  * Generates an encryption key using hkdf
@@ -21,14 +21,13 @@ async function getDerivedEncryptionKey(secret: string | Buffer) {
     '',
     'NextAuth.js Generated Encryption Key',
     32
-  );
+  )
 }
 
 /**
  * Cloud JWT Service class
  */
 export class CloudJwtService extends AuthenticationService {
-
   /**
    * Extend the default getPayload method with permissions
    * @param authResult - The result of the authentication
@@ -37,15 +36,15 @@ export class CloudJwtService extends AuthenticationService {
    */
   async getPayload(authResult, params) {
     // Call original `getPayload` first
-    const payload = await super.getPayload(authResult, params);
-    const { user } = authResult;
+    const payload = await super.getPayload(authResult, params)
+    const { user } = authResult
 
     // Add user permissions to payload if available
     if (user && user.permissions) {
-      payload.permissions = user.permissions;
+      payload.permissions = user.permissions
     }
 
-    return payload;
+    return payload
   }
 
   /**
@@ -61,23 +60,20 @@ export class CloudJwtService extends AuthenticationService {
     secretOverride?: string
   ) {
     // Get secret from the configuration or use the override
-    const { secret } = this.configuration;
+    const { secret } = this.configuration
     const encryptionSecret = await getDerivedEncryptionKey(
       secretOverride || secret
-    );
+    )
 
     // Decrypt and verify the token
     try {
       const { payload } = await jwtDecrypt(token, encryptionSecret, {
         clockTolerance: 15,
-      });
-
-      console.log('payload', payload);
-
-      return payload as any;
+      })
+      return payload as any
     } catch (error: any) {
       // Throw a NotAuthenticated error if token verification fails
-      throw new NotAuthenticated(error.message, error);
+      throw new NotAuthenticated(error.message, error)
     }
   }
 
@@ -94,7 +90,7 @@ export class CloudJwtService extends AuthenticationService {
     ...allowed: string[]
   ): Promise<AuthenticationResult> {
     // Call the default authenticate method
-    const result = await super.authenticate(authentication, params, ...allowed);
-    return result;
+    const result = await super.authenticate(authentication, params, ...allowed)
+    return result
   }
 }
