@@ -120,7 +120,7 @@ const Playtest = ({ tab }) => {
   useEffect(() => {
     if (!inspectorData || inspectorData.name !== 'Input') return;
     console.log('effected', inspectorData.data.inputName);
-    setPlaytestOption(`Input - ` + (inspectorData.data.inputType !== 'Default' ? inspectorData.data.inputType : inspectorData.data.inputName));
+    setPlaytestOption(`Input - ` + (inspectorData.data.inputType && inspectorData.data.inputType !== 'Default' ? inspectorData.data.inputType : inspectorData.data.inputName));
   }, [inspectorData]);
 
   useEffect(() => {
