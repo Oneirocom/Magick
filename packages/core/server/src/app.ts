@@ -161,10 +161,7 @@ app.configure(
   socketio(
     {
       cors: {
-        origin: (origin, callback) => {
-          // For simplicity, allow any origin. You can also use a function or an array of origins.
-          callback(null, true)
-        },
+        origin: false,
         methods: ['GET', 'POST', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,
