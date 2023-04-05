@@ -182,7 +182,7 @@ app.hooks({
     all: [
       logError,
       async (context: HookContext, next) => {
-        if (IGNORE_AUTH) await next()
+        if (IGNORE_AUTH) return await next()
         if (context.path !== 'authentication') {
           return authenticate('jwt')(context, next)
         }
