@@ -43,18 +43,16 @@ const openaipro = import_('langchain')
 const { OpenAI } = await openaipro
 const embeddings = new FakeEmbeddings()
 
-// const { Headers, Request, Response } = await import_('node-fetch')
-// const fetch = await import_('node-fetch').then(mod => mod.default)
+const { Headers, Request, Response } = await import_('node-fetch')
+const fetch = await import_('node-fetch').then(mod => mod.default)
 
-// if (!globalThis.fetch) globalThis.fetch = fetch
-// if (!globalThis.Headers) globalThis.Headers = Headers
-// if (!globalThis.Request) globalThis.Request = Request
-// if (!globalThis.Response) globalThis.Response = Response
+if (!globalThis.fetch) globalThis.fetch = fetch
+if (!globalThis.Headers) globalThis.Headers = Headers
+if (!globalThis.Request) globalThis.Request = Request
+if (!globalThis.Response) globalThis.Response = Response
 
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())
-app.use(cors({ origin: '*' }))
-
 declare module './declarations' {
   interface Configuration {
     vectordb: HNSWLib & any
@@ -128,29 +126,19 @@ const paginate = {
 app.set('paginate', paginate)
 
 // Koa middleware
+app.use(cors({ origin: '*' }))
 app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
-
-// Configure WebSocket for the app
-app.configure(
-  socketio(
-    {
-      cors: {
-        origin: false,
-        methods: ['GET', 'POST', 'OPTIONS'],
-        allowedHeaders: ['Authorization'],
-        credentials: true,
-      },
-    },
-    handleSockets(app)
-  )
-)
 
 // Configure app management settings
 app.configure(configureManager())
 
 // Configure authentication
+console.log('********************************************')
+console.log('*****************IGNORE_AUTH****************')
+console.log('ignore auth:', IGNORE_AUTH)
+console.log('********************************************')
 if (!IGNORE_AUTH) {
   app.set('authentication', {
     secret: process.env.JWT_SECRET || 'secret',
@@ -167,6 +155,21 @@ if (!IGNORE_AUTH) {
 
   app.configure(authentication)
 }
+
+// Configure WebSocket for the app
+app.configure(
+  socketio(
+    {
+      cors: {
+        origin: '*',
+        methods: ['GET', 'POST', 'OPTIONS'],
+        allowedHeaders: ['Authorization'],
+        credentials: true,
+      },
+    },
+    handleSockets(app)
+  )
+)
 
 // Configure services and transports
 app.configure(rest())
