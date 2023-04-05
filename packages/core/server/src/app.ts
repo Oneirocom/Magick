@@ -1,6 +1,5 @@
 // DOCUMENTED
 import {
-  authenticate,
   bodyParser,
   cors,
   errorHandler,
@@ -8,18 +7,10 @@ import {
   parseAuthentication,
   rest,
 } from '@feathersjs/koa'
-import socketio from '@feathersjs/socketio'
-import { dbClient } from './dbClient'
-import type { Application, HookContext } from './declarations'
-import { logError } from './hooks'
-import channels from './sockets/channels'
-// import swagger from 'feathers-swagger'
+import { authenticate } from '@feathersjs/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
-import { authentication } from './auth/authentication'
-import { services } from './services'
-import handleSockets from './sockets/sockets'
-
-//Vector DB Related Imports
+import { HookContext } from '@feathersjs/feathers'
+import socketio from '@feathersjs/socketio'
 import { import_ } from '@brillout/import'
 import { feathers } from '@feathersjs/feathers/lib'
 import {
@@ -30,6 +21,17 @@ import {
   IGNORE_AUTH,
 } from '@magickml/core'
 import { createClient } from '@supabase/supabase-js'
+
+import { dbClient } from './dbClient'
+import type { Application } from './declarations'
+import { logError } from './hooks'
+import channels from './sockets/channels'
+// import swagger from 'feathers-swagger'
+import { authentication } from './auth/authentication'
+import { services } from './services'
+import handleSockets from './sockets/sockets'
+
+//Vector DB Related Imports
 import { HNSWLib, SupabaseVectorStoreCustom } from './vectordb'
 // Same as `import()`
 
@@ -135,10 +137,6 @@ app.use(bodyParser())
 app.configure(configureManager())
 
 // Configure authentication
-console.log('********************************************')
-console.log('*****************IGNORE_AUTH****************')
-console.log('ignore auth:', IGNORE_AUTH)
-console.log('********************************************')
 if (!IGNORE_AUTH) {
   app.set('authentication', {
     secret: process.env.JWT_SECRET || 'secret',
@@ -183,13 +181,11 @@ app.hooks({
   around: {
     all: [
       logError,
-      async (context, next) => {
-        if (IGNORE_AUTH) return await next()
+      async (context: HookContext, next) => {
+        if (IGNORE_AUTH) await next()
         if (context.path !== 'authentication') {
-          return authenticate('jwt')(context as any, next)
+          return authenticate('jwt')(context, next)
         }
-
-        await next()
       },
       async (context: HookContext, next) => {
         const { params } = context
@@ -199,7 +195,7 @@ app.hooks({
             id: DEFAULT_USER_ID,
           }
           context.params.projectId = DEFAULT_PROJECT_ID
-          return await next()
+          return next()
         }
 
         const { authentication, authenticated } = params
@@ -220,7 +216,7 @@ app.hooks({
           }
         }
 
-        await next()
+        return next()
       },
     ],
   },
