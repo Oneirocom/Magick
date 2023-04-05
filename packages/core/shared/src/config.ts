@@ -40,7 +40,7 @@ export const TRUSTED_PARENT_URL =
 export const UNTRUSTED_IFRAME =
   getVarForEnvironment('UNTRUSTED_IFRAME') || false
 export const API_ROOT_URL =
-  getVarForEnvironment('APP_API_URL') || `http://localhost:${SERVER_PORT}`
+  getVarForEnvironment('API_URL') || `http://localhost:${SERVER_PORT}`
 export const GOOGLE_APPLICATION_CREDENTIALS =
   processEnv.GOOGLE_APPLICATION_CREDENTIALS || ''
 export const SPEECH_SERVER_PORT =
