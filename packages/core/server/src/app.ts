@@ -54,6 +54,15 @@ if (!globalThis.Response) globalThis.Response = Response
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())
 
+app.use(async (ctx, next) => {
+  ctx.set('Content-Security-Policy', "frame-ancestors 'self' *")
+  ctx.set('Access-Control-Allow-Origin', '*')
+  ctx.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  ctx.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  ctx.set('Access-Control-Allow-Credentials', 'true')
+  await next()
+})
+
 declare module './declarations' {
   interface Configuration {
     vectordb: HNSWLib & any
