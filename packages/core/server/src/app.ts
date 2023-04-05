@@ -43,16 +43,17 @@ const openaipro = import_('langchain')
 const { OpenAI } = await openaipro
 const embeddings = new FakeEmbeddings()
 
-const { Headers, Request, Response } = await import_('node-fetch')
-const fetch = await import_('node-fetch').then(mod => mod.default)
+// const { Headers, Request, Response } = await import_('node-fetch')
+// const fetch = await import_('node-fetch').then(mod => mod.default)
 
-if (!globalThis.fetch) globalThis.fetch = fetch
-if (!globalThis.Headers) globalThis.Headers = Headers
-if (!globalThis.Request) globalThis.Request = Request
-if (!globalThis.Response) globalThis.Response = Response
+// if (!globalThis.fetch) globalThis.fetch = fetch
+// if (!globalThis.Headers) globalThis.Headers = Headers
+// if (!globalThis.Request) globalThis.Request = Request
+// if (!globalThis.Response) globalThis.Response = Response
 
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())
+app.use(cors({ origin: '*' }))
 
 declare module './declarations' {
   interface Configuration {
@@ -127,7 +128,6 @@ const paginate = {
 app.set('paginate', paginate)
 
 // Koa middleware
-app.use(cors({ origin: '*' }))
 app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
@@ -137,9 +137,7 @@ app.configure(
   socketio(
     {
       cors: {
-        origin: (origin, callback) => {
-          callback(null, true)
-        },
+        origin: false,
         methods: ['GET', 'POST', 'OPTIONS'],
         allowedHeaders: ['Authorization'],
         credentials: true,
