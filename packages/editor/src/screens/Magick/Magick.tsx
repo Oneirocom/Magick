@@ -29,6 +29,8 @@ const Magick = ({ empty = false }): JSX.Element => {
   const { URI } = useParams()
   const { events, publish, subscribe } = pubSub
 
+  // console.log('****************************', URI)
+
   // Subscribe to open tab events
   useEffect(() => {
     return subscribe(events.OPEN_TAB, (_event, tabData) => {
@@ -52,7 +54,8 @@ const Magick = ({ empty = false }): JSX.Element => {
   useEffect(() => {
     if (!URI) return
     // Return if navigating to the spell that is already active
-    if (activeTab && activeTab.URI === URI) return
+    if (activeTab && URI.includes(activeTab.URI.split('%')[0])) return
+
     // Close spell tab if it exists
     const spellNameTab = tabs.filter(tab => tab.URI === URI)
     const isSpellNameTabPresent = spellNameTab.length
