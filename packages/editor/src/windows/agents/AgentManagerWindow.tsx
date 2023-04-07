@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import { LoadingScreen } from '@magickml/client-core'
 import { IGNORE_AUTH, pluginManager } from '@magickml/core'
 import axios from 'axios'
@@ -18,8 +18,7 @@ const AgentManagerWindow = () => {
   const [data, setData] = useState<Array<object>>([])
   const { enqueueSnackbar } = useSnackbar()
   const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
-  const [root_spell, setRootSpell] = useState('default')
-  const [enable, setEnable] = useState('')
+  const [enable, setEnable] = useState({})
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 
@@ -45,6 +44,19 @@ const AgentManagerWindow = () => {
       plugin_list[key] = validateSpellData(spellAgent, inputs[key])
     }
     setEnable(plugin_list)
+  }
+
+  const updateData = async newData => {
+    const index = data.findIndex(agent => agent.id === newData.id)
+    // Create a new array with the updated object
+    const updatedArray = [
+      ...data.slice(0, index),
+      newData,
+      ...data.slice(index + 1),
+    ]
+
+    // Set the state with the updated array
+    setData(updatedArray)
   }
 
   /**
@@ -238,12 +250,10 @@ const AgentManagerWindow = () => {
       onDelete={handleDelete}
       onCreateAgent={createNew}
       update={update}
-      updateCallBack={resetData}
+      updateData={updateData}
       onLoadFile={loadFile}
       setSelectedAgentData={setSelectedAgentData}
       selectedAgentData={selectedAgentData}
-      rootSpell={root_spell}
-      setRootSpell={setRootSpell}
       onLoadEnables={enable}
     />
   )
