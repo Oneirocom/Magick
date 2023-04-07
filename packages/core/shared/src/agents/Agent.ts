@@ -15,7 +15,7 @@ type AgentData = {
   name: string
   secrets: string
   rootSpell: any
-  publicVariables: any[]
+  publicVariables: Record<string, string>
   projectId: string
   spellManager: SpellManager
   agent?: any
@@ -29,7 +29,7 @@ export class Agent implements AgentInterface {
   name = ''
   id: any
   secrets: any
-  publicVariables: any[]
+  publicVariables: Record<string, string>
   data: AgentData
   app: any
   spellManager: SpellManager

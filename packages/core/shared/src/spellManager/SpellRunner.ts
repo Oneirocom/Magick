@@ -1,9 +1,9 @@
 import io from 'socket.io'
+import Agent from '../agents/Agent'
 
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
 import { getNodes } from '../nodes'
 import { Module } from '../plugins/modulePlugin/module'
-import { AgentInterface } from '../schemas'
 import {
   GraphData,
   MagickNode,
@@ -15,11 +15,12 @@ import { extractModuleInputKeys } from './graphHelpers'
 
 export type RunComponentArgs = {
   inputs: MagickSpellInput
-  agent?: AgentInterface
+  agent?: Agent
   componentName?: string
   runSubspell?: boolean
   secrets?: Record<string, string>
   publicVariables?: Record<string, unknown>
+  app?: any
 }
 
 class SpellRunner {
@@ -200,6 +201,7 @@ class SpellRunner {
     agent,
     secrets,
     publicVariables,
+    app
   }: RunComponentArgs) {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
@@ -219,6 +221,7 @@ class SpellRunner {
       secrets,
       agent,
       publicVariables,
+      app
     })
 
     const component = this._getComponent(

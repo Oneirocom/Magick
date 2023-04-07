@@ -3,8 +3,11 @@ import { IRunContextEditor } from '../../types'
 
 function install(editor: IRunContextEditor) {
   editor.on('componentregister', (component: MagickComponent<unknown>) => {
-    component.worker = (node, _inputs, _outputs, { context, socketOutput }) => {
-      const { sendToPlaytest } = context
+    component.worker = (node, _inputs, _outputs, context) => {
+      console.log('socket override, context is ', context)
+      const { context: innerContext, socketOutput } = context as any
+      
+      const { sendToPlaytest } = innerContext
 
       // Might be a bit hacky to do it this way, but it works for now
       if (node.data.sendToPlaytest && sendToPlaytest) {

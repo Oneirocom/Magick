@@ -89,6 +89,9 @@ export class EventStore extends MagickComponent<Promise<void>> {
   ) {
     const { projectId } = context;
 
+    console.log('********** store event, context is **********')
+    console.log(context)
+
     const event = inputs['event'][0] as Event;
     const sender = (inputs['sender'] ? inputs['sender'][0] : null) as string;
     let content = (inputs['content'] ? inputs['content'][0] : null) as string;
