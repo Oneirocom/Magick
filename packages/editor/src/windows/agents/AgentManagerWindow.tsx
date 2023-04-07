@@ -120,13 +120,11 @@ const AgentManagerWindow = () => {
         Array.isArray(data?.secrets) ? data.secrets : []
       )
       // if the agent's public variable keys don't match the spell's public variable keys, update the agent
-      data.publicVariables =
-        data?.publicVariables ||
-        JSON.stringify(
-          Object.values(
-            (data.rootSpell && data.rootSpell.graph.nodes) || {}
-          ).filter((node: { data }) => node?.data?.isPublic)
+      if (!data.publicVariables && data?.rootSpell?.graph?.nodes) {
+        data.publicVariables = data?.rootSpell?.graph?.nodes.filter(
+          (node: { data }) => node?.data?.isPublic
         )
+      }
 
       // Check if the "id" property exists in the object
       // eslint-disable-next-line no-prototype-builtins

@@ -276,7 +276,7 @@ const AgentDetails = ({
               ...selectedAgentData,
               rootSpell: newRootSpell,
               publicVariables: JSON.stringify(
-                Object.values(newRootSpell.graph.nodes as any)
+                newRootSpell.graph.nodes
                   // get the public nodes
                   .filter((node: { data }) => node?.data?.isPublic)
                   // map to an array of objects

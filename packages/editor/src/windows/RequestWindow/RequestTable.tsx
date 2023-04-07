@@ -98,7 +98,7 @@ function RequestTable({ requests, updateCallback }) {
       { Header: 'Req Data', accessor: 'requestData' },
       { Header: 'Res Data', accessor: 'responseData' },
       { Header: 'Parameters', accessor: 'parameters' },
-      { Header: 'Spell', accessor: 'spell' },
+      { Header: 'Spell', accessor: 'currentSpell' },
       {
         Header: ' ',
         Cell: (row) => (

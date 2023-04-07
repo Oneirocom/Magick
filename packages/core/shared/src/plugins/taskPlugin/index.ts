@@ -4,8 +4,7 @@ import { NodeData, WorkerOutputs } from 'rete/types/core/data'
 import {
   MagickEditor,
   MagickWorkerInputs,
-  UnknownData,
-  WorkerData,
+  ModuleContext, WorkerData
 } from '../../types'
 
 import { MagickComponent } from '../../engine'
@@ -44,13 +43,11 @@ function install(editor: MagickEditor) {
 
     const taskWorker = component.worker
     const taskOptions = component.task
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     component.worker = (
       node: WorkerData,
       inputs: MagickWorkerInputs,
       outputs: WorkerOutputs,
-      args: UnknownData | { module: { publicVariables: string } },
+      context: ModuleContext,
       ...rest
     ) => {
       // Task caller is what actually gets run once the task runs itself.  It is called inside the run function.
@@ -70,7 +67,7 @@ function install(editor: MagickEditor) {
           node,
           inputs,
           outputs,
-          { ...args, data, socketInfo },
+          { ...context, data, socketInfo },
           ...rest
         )
 
