@@ -31,13 +31,13 @@ export async function makeChatCompletion(
   const conversation = inputs['conversation']?.[0] as any
 
   // Get or set default settings
-  const settings = ((inputs.settings && inputs.settings[0]) ?? {
+  const settings = {
     model: node?.data?.model,
-    temperature: node?.data?.temperature,
-    top_p: node?.data?.top_p,
-    frequency_penalty: node?.data?.frequency_penalty,
-    presence_penalty: node?.data?.presence_penalty,
-  }) as any
+    temperature: parseFloat(node?.data?.temperature ?? "0.0"),
+    top_p: parseFloat(node?.data?.top_p ?? "1.0"),
+    frequency_penalty: parseFloat(node?.data?.frequency_penalty ?? "0.0"),
+    presence_penalty: parseFloat(node?.data?.presence_penalty ?? "0.0"),
+  } as any
 
   // Initialize conversationMessages array
   const conversationMessages: ChatMessage[] = []
