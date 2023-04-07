@@ -3,7 +3,7 @@ import Rete from 'rete'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
-import { anySocket, triggerSocket } from '../../sockets'
+import { triggerSocket } from '../../sockets'
 import {
   CompletionInspectorControls,
   CompletionProvider,
@@ -48,7 +48,6 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
    * @returns a configured node with data generated from providers.
    */
   builder(node: MagickNode) {
-    const settings = new Rete.Input('settings', 'Settings', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
@@ -139,7 +138,6 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
 
     if (!node.data.model) node.data.model = models[0]
     configureNode()
-    node.addInput(settings)
     return node
   }
 
@@ -181,15 +179,15 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       throw new Error('ERROR: Completion handler undefined')
     }
 
-    const { success, result } = await completionHandler({
+    const { success, result, error } = await completionHandler({
       node,
       inputs,
       outputs,
       context,
     })
 
-    if (!success) {
-      throw new Error('ERROR: ' + result)
+    if(error || !success) {
+      throw new Error('ERROR: ' + error)
     }
 
     return {
