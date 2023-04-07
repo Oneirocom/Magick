@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import classnames from 'classnames'
 import { VscClose } from 'react-icons/vsc'
 import { useDispatch, useSelector } from 'react-redux'
@@ -34,6 +34,8 @@ const Tab = ({ tab, activeTab }) => {
    * onClick handler for activating the selected tab
    */
   const onClick = () => {
+    // This avoid unnecessary rendering and loading of spell when the same tab is clicked
+    if (tab.id === activeTab.id) return
     const updatedTabs = tabs.map(t =>
       t.id === tab.id
         ? {

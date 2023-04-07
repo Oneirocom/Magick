@@ -1,7 +1,12 @@
 import { Component } from 'rete'
 import { NodeData, WorkerOutputs } from 'rete/types/core/data'
 
-import { MagickEditor, MagickWorkerInputs, UnknownData, WorkerData } from '../../types'
+import {
+  MagickEditor,
+  MagickWorkerInputs,
+  UnknownData,
+  WorkerData,
+} from '../../types'
 
 import { MagickComponent } from '../../engine'
 import { Task, TaskSocketInfo } from './task'
@@ -59,6 +64,7 @@ function install(editor: MagickEditor) {
         // TODO: might change this interface, since we swap out data for outputs here, which just feels wrong.
         // TODO: Also improve typing of TaskWorker when done
 
+        // todo we need to handle errors properly at the task module level so they are passed out and to the agent properly.
         const result = await taskWorker.call(
           component,
           node,

@@ -78,8 +78,13 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     spellRef.current = spellData.data[0]
   }, [spellData])
 
+  /**
+   * This was the issue of getting spell on every click of the editor
+   */
+
   useEffect(() => {
-    if (!tab || !tab.name) return
+    // If there is no tab, or we already have a spell, return early
+    if (!tab || !tab.name || spellRef.current) return
 
     loadSpell({
       spellName: tab.name,
@@ -90,16 +95,16 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
   useEffect(() => {
     if (!client) return
-      ; (async () => {
-        if (!client || !tab || !tab.name) return
+    ;(async () => {
+      if (!client || !tab || !tab.name) return
 
-        // make sure to pass the projectId to the service call
-        await client.service('spell-runner').get(tab.id, {
-          query: {
-            projectId: config.projectId,
-          },
-        })
-      })()
+      // make sure to pass the projectId to the service call
+      await client.service('spell-runner').get(tab.id, {
+        query: {
+          projectId: config.projectId,
+        },
+      })
+    })()
   }, [client])
 
   const factory = tab => {

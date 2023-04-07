@@ -225,20 +225,42 @@ class SpellRunner {
       componentName
     ) as unknown as ModuleComponent
 
-    const firstInput = Object.keys(inputs)[0]
-
-    const triggeredNode = this._getTriggeredNodeByName(firstInput)
-
     if (!component.run)
       return console.error('Component does not have a run method')
+
+    const firstInput = Object.keys(inputs)[0]
+
+    // Checking for the triggered node for the connection type
+    let triggeredNode = this._getTriggeredNodeByName(firstInput)
+
+    // If there isn't one, we should
+    if (!triggeredNode) {
+      console.warn(
+        `No trigger found for ${firstInput}.  Using default trigger.`
+      )
+      triggeredNode = this._getTriggeredNodeByName('Input - Default')
+    }
+
+    // If we still don't have a triggered node, we should throw an error.
     if (!triggeredNode) return console.error('No triggered node found')
+
     // this running is where the main "work" happens.
     // I do wonder whether we could make this even more elegant by having the node
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
     //
-    await component.run(triggeredNode as unknown as MagickNode, inputs)
-    return this.outputData
+
+    try {
+      await component.run(triggeredNode as unknown as MagickNode, inputs)
+
+      return this.outputData
+    } catch (err) {
+      console.warn('ERROR RUNNING SPELL', err)
+      console.log('Output data', this.outputData)
+      return {
+        Output: `Error running spell- ${err}`,
+      }
+    }
   }
 }
 
