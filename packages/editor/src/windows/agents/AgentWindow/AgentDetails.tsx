@@ -234,7 +234,7 @@ const AgentDetails = ({
           onChange={() => {
             setSelectedAgentData({
               ...selectedAgentData,
-              enabled: selectedAgentData.enabled ? false : true,
+              enabled: selectedAgentData.enabled ? false : true
             })
           }}
           style={{ alignSelf: 'self-start' }}

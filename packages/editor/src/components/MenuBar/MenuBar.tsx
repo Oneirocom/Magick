@@ -406,7 +406,8 @@ const MenuBar = () => {
     // Initially intended to control the visibility with a state, but this triggers a re-render and hides the menu anyway! :D
     // Keeping this intact just in case.
     toggleMenuVisibility(menuVisibility)
-    func()
+    // No need for this
+    // func()
   }
 
   return (
