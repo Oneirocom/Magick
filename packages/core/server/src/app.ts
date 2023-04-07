@@ -33,9 +33,10 @@ import handleSockets from './sockets/sockets'
 
 //Vector DB Related Imports
 import { HNSWLib, SupabaseVectorStoreCustom } from './vectordb'
-// Same as `import()`
 
 //Dynamic Import using top lvl await
+const { Headers, Request, Response } = await import_('node-fetch')
+const fetch = await import_('node-fetch').then(mod => mod.default)
 const modules = import_('langchain/embeddings')
 const { FakeEmbeddings } = await modules
 const agentpro = import_('langchain/agents')
@@ -44,14 +45,6 @@ const { VectorStoreToolkit, createVectorStoreAgent, VectorStoreInfo } =
 const openaipro = import_('langchain')
 const { OpenAI } = await openaipro
 const embeddings = new FakeEmbeddings()
-
-const { Headers, Request, Response } = await import_('node-fetch')
-const fetch = await import_('node-fetch').then(mod => mod.default)
-
-if (!globalThis.fetch) globalThis.fetch = fetch
-if (!globalThis.Headers) globalThis.Headers = Headers
-if (!globalThis.Request) globalThis.Request = Request
-if (!globalThis.Response) globalThis.Response = Response
 
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())
