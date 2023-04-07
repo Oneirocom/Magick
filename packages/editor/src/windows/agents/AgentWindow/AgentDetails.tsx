@@ -232,23 +232,10 @@ const AgentDetails = ({
           label={null}
           checked={selectedAgentData.enabled ? true : false}
           onChange={() => {
-            if (selectedAgentData.enabled) {
-              setSelectedAgentData({
-                ...selectedAgentData,
-                enabled: selectedAgentData.enabled ? false : true,
-                data: {
-                  ...selectedAgentData.data,
-                  discord_enabled: false,
-                  twitter_enabled: false,
-                  rest_enabled: false,
-                },
-              })
-            } else {
-              setSelectedAgentData({
-                ...selectedAgentData,
-                enabled: selectedAgentData.enabled ? false : true,
-              })
-            }
+            setSelectedAgentData({
+              ...selectedAgentData,
+              enabled: selectedAgentData.enabled ? false : true
+            })
           }}
           style={{ alignSelf: 'self-start' }}
         />
