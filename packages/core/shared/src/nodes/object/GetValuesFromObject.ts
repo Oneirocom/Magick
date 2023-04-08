@@ -15,17 +15,17 @@ import { SocketGeneratorControl } from '../../dataControls/SocketGenerator';
  * This component is used to destructure properties out of an object.
  */
 
-export class Destructure extends MagickComponent<void> {
+export class GetValuesFromObject extends MagickComponent<void> {
 
   constructor() {
     super(
-      'Destructure', 
+      'Get Values From Object', 
       {
         outputs: {
           trigger: 'option',
         },
       } as TaskOptions, 
-      'Utility', 
+      'Object', 
       'Destructure properties out of an object.'
     );
   }

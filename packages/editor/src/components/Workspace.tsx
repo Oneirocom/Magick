@@ -82,16 +82,16 @@ const Workspace = ({ tab, tabs, pubSub }) => {
    * This was the issue of getting spell on every click of the editor
    */
 
-  // useEffect(() => {
-  //   console.log('..............................', tab)
-  //   if (!tab || !tab.name) return
+  useEffect(() => {
+    // If there is no tab, or we already have a spell, return early
+    if (!tab || !tab.name || spellRef.current) return
 
-  //   loadSpell({
-  //     spellName: tab.name,
-  //     projectId: config.projectId,
-  //     id: tab.id,
-  //   })
-  // }, [tab])
+    loadSpell({
+      spellName: tab.name,
+      projectId: config.projectId,
+      id: tab.id,
+    })
+  }, [tab])
 
   useEffect(() => {
     if (!client) return

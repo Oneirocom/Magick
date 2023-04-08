@@ -92,7 +92,7 @@ export class AgentManager {
     await this.deleteOldAgents()
 
     this.newAgents?.forEach(async (agent: any) => {
-      if (!agent.enabled) return
+      if (!agent.enabled && !agent.data.enabled) return
       if (!agent.rootSpell) return
 
       const pingedAt = new Date(agent.pingedAt)

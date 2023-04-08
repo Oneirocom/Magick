@@ -1,7 +1,8 @@
-// DOCUMENTED 
+// DOCUMENTED
 import {
   createDraftSafeSelector,
-  createEntityAdapter, createSlice
+  createEntityAdapter,
+  createSlice,
 } from '@reduxjs/toolkit'
 
 import defaultJson from '../data/layouts/defaultLayout.json'
@@ -101,7 +102,10 @@ export const tabSlice = createSlice({
           changes: { active: false },
         })
 
-      const existingTab = selectTabBySpellUUID(state, encodedToId(action.payload.name))
+      const existingTab = selectTabBySpellUUID(
+        state,
+        encodedToId(action.payload.name)
+      )
       if (existingTab && !switchActive) return
 
       if (existingTab && !action.payload.openNew) {
