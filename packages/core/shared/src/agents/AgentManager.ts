@@ -92,6 +92,8 @@ export class AgentManager {
     await this.deleteOldAgents()
 
     this.newAgents?.forEach(async (agent: any) => {
+      if (!agent) return
+      if (!agent.data) return
       if (!agent.enabled && !agent.data.enabled) return
       if (!agent.rootSpell) return
 
