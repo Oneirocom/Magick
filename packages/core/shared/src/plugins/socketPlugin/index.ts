@@ -1,7 +1,13 @@
+import { WorkerOutputs } from 'rete/types/core/data'
 import io from 'socket.io'
 import { MagickComponent } from '../../engine'
 
-import { EngineContext, IRunContextEditor, MagickNode } from '../../types'
+import {
+  EngineContext,
+  IRunContextEditor,
+  MagickNode,
+  MagickWorkerInputs,
+} from '../../types'
 import { MagickConsole } from '../consolePlugin/MagickConsole'
 
 export type SocketPluginArgs = {
@@ -13,7 +19,8 @@ export type SocketPluginArgs = {
 }
 
 export type SocketData = {
-  output?: unknown
+  output?: WorkerOutputs
+  input?: MagickWorkerInputs
   error?: {
     message: string
     stack: string
@@ -63,11 +70,10 @@ function install(
 
             socket?.emit(event, {
               output: result,
+              input: inputs,
             })
             return result
           } catch (err: unknown) {
-            console.log('CAUGHT ERROR')
-            console.log(err)
             if (err instanceof Error) {
               // handle errors here so they dont crash the process, and are communicated to the client
               socket?.emit(`${currentSpell.id}-${node.id}-error`, {
@@ -111,6 +117,7 @@ function install(
               const newContext = {
                 ...context,
                 socketOutput: socketData.output,
+                socketInput: socketData.input,
               }
 
               // make sure errors are handled in the flow.
@@ -123,8 +130,8 @@ function install(
 
               await worker.apply(component, [
                 node,
-                inputs,
-                outputs,
+                socketData.input as MagickWorkerInputs,
+                socketData.output as WorkerOutputs,
                 newContext,
                 ...args,
               ])
