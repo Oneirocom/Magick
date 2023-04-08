@@ -6,7 +6,7 @@ import Discord, {
   GatewayIntentBits,
   Partials,
   SnowflakeUtil,
-  AttachmentBuilder
+  AttachmentBuilder,
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
 import emojiRegex from 'emoji-regex'
@@ -20,10 +20,10 @@ const log = (...s: (string | boolean)[]) => {
   console.log(...s)
 }
 interface UserObject {
-  user: string;
-  inConversation: boolean;
-  isBot: boolean;
-  info3d: string;
+  user: string
+  inConversation: boolean
+  isBot: boolean
+  info3d: string
 }
 export class DiscordConnector {
   client = Discord.Client as any
@@ -117,23 +117,23 @@ export class DiscordConnector {
           voice_language_code,
           tiktalknet_url,
         } = this
-          ; (async () => {
-            if (typeof window === 'undefined') {
-              const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
-                await import('./discord-voice')
-              recognizeSpeech = _recognizeSpeech
-              this.client = initSpeechClient({
-                client,
-                discord_bot_name,
-                agent,
-                spellRunner,
-                voiceProvider: voice_provider,
-                voiceCharacter: voice_character,
-                languageCode: voice_language_code,
-                tiktalknet_url,
-              })
-            }
-          })()
+        ;(async () => {
+          if (typeof window === 'undefined') {
+            const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
+              await import('./discord-voice')
+            recognizeSpeech = _recognizeSpeech
+            this.client = initSpeechClient({
+              client,
+              discord_bot_name,
+              agent,
+              spellRunner,
+              voiceProvider: voice_provider,
+              voiceCharacter: voice_character,
+              languageCode: voice_language_code,
+              tiktalknet_url,
+            })
+          }
+        })()
       }
 
       this.client.on(
@@ -155,6 +155,8 @@ export class DiscordConnector {
       })
 
       this.client.login(token)
+
+      this.client.on('error', console.error)
     }
   }
 
@@ -195,41 +197,45 @@ export class DiscordConnector {
     log('Discord', 'join', username, utcStr)
     // MessageClient.instance.sendUserUpdateEvent('Discord', 'join', username, utcStr)
   }
-  
+
   async getActiveUsers(channel: any, k: number) {
     try {
       // Fetch the last 200 messages
-      const messages = await channel.messages.fetch({ limit: 100 });
-      console.log(`Fetched ${messages.size} messages.`);
-  
+      const messages = await channel.messages.fetch({ limit: 100 })
+      console.log(`Fetched ${messages.size} messages.`)
+
       // Get the timestamp of the last message
-      const lastTimestamp = messages.last().createdTimestamp;
-  
+      const lastTimestamp = messages.last().createdTimestamp
+
       // Calculate the time one hour ago
-      const now = new Date();
-      const pastHour = new Date(now.getTime() - 60 * 60 * 1000);
-  
+      const now = new Date()
+      const pastHour = new Date(now.getTime() - 60 * 60 * 1000)
+
       // Filter messages sent within the past hour
-      const messagesWithinPastHour = messages.filter(message => message.createdTimestamp >= pastHour);
-  
-      const activeUsers: UserObject[] = [];
-  
+      const messagesWithinPastHour = messages.filter(
+        message => message.createdTimestamp >= pastHour
+      )
+
+      const activeUsers: UserObject[] = []
+
       if (messagesWithinPastHour.size > 100) {
         // Count the number of messages sent by each user
-        const userCounts = {};
+        const userCounts = {}
         messagesWithinPastHour.forEach(message => {
-          const userId = message.author.id;
-          userCounts[userId] = (userCounts[userId] || 0) + 1;
-        });
-  
+          const userId = message.author.id
+          userCounts[userId] = (userCounts[userId] || 0) + 1
+        })
+
         // Get the list of top active users
         const topActiveUserIds = Object.keys(userCounts)
           .sort((a, b) => userCounts[b] - userCounts[a])
-          .slice(0, k);
-  
+          .slice(0, k)
+
         // Get the member objects for the top active users
-        const topActiveMembers = await Promise.all(topActiveUserIds.map(userId => channel.guild.members.fetch(userId)));
-  
+        const topActiveMembers = await Promise.all(
+          topActiveUserIds.map(userId => channel.guild.members.fetch(userId))
+        )
+
         // Add each top active member to the activeUsers array
         topActiveMembers.forEach(member => {
           activeUsers.push({
@@ -237,18 +243,23 @@ export class DiscordConnector {
             inConversation: this.isInConversation(member.user.id), // replace this with your own method to check if the user is in conversation
             isBot: member.user.bot,
             info3d: '',
-          });
-        });
-  
-        console.log(`Found ${activeUsers.length} active users with more than 100 messages sent within the past hour.`);
-      }
-      else {
+          })
+        })
+
+        console.log(
+          `Found ${activeUsers.length} active users with more than 100 messages sent within the past hour.`
+        )
+      } else {
         // Get the list of all users who sent messages within the past hour
-        const allUserIds = Array.from(new Set(messagesWithinPastHour.map(message => message.author.id)));
-  
+        const allUserIds = Array.from(
+          new Set(messagesWithinPastHour.map(message => message.author.id))
+        )
+
         // Get the member objects for all users
-        const allMembers = await Promise.all(allUserIds.map(userId => channel.guild.members.fetch(userId)));
-  
+        const allMembers = await Promise.all(
+          allUserIds.map(userId => channel.guild.members.fetch(userId))
+        )
+
         // Add each member to the activeUsers array
         allMembers.forEach(member => {
           activeUsers.push({
@@ -256,24 +267,23 @@ export class DiscordConnector {
             inConversation: this.isInConversation(member.user.id), // replace this with your own method to check if the user is in conversation
             isBot: member.user.bot,
             info3d: '',
-          });
-        });
-  
-        console.log(`Found ${activeUsers.length} active users with less than 100 messages sent within the past hour.`);
+          })
+        })
+
+        console.log(
+          `Found ${activeUsers.length} active users with less than 100 messages sent within the past hour.`
+        )
       }
-  
+
       // do something with the activeUsers array
-      console.log(activeUsers);
+      console.log(activeUsers)
       return activeUsers
-    }
-    catch (error) {
-      console.error(error);
+    } catch (error) {
+      console.error(error)
     }
     return []
   }
-  
-  
-  
+
   //Event that is triggered when a user is removed from the server
   async handleGuildMemberRemove(user: { user: { id: any; username: any } }) {
     const username = user.user.username
@@ -389,7 +399,6 @@ export class DiscordConnector {
     args['grpc_args'] = {}
 
     let { content } = message
-
 
     const { author, channel, mentions, id } = message
 
@@ -599,10 +608,10 @@ export class DiscordConnector {
       isBot: boolean
       info3d: string
     }[] = []
-    const now = new Date();
-    const pastHour = new Date(now.getTime() - 60 * 60 * 1000); // calculate the time one hour ago
-    const snowflake = SnowflakeUtil.generate();
-    const msgs = await this.getActiveUsers(channel, 12) as unknown as any[]
+    const now = new Date()
+    const pastHour = new Date(now.getTime() - 60 * 60 * 1000) // calculate the time one hour ago
+    const snowflake = SnowflakeUtil.generate()
+    const msgs = (await this.getActiveUsers(channel, 12)) as unknown as any[]
     console.log(msgs)
     msgs.forEach(element => {
       entities.push({
@@ -611,7 +620,7 @@ export class DiscordConnector {
         isBot: element.isBot,
         info3d: '',
       })
-    });
+    })
     if (content.startsWith('!ping ')) {
       content = content.replace('!ping ', '')
     }
@@ -637,14 +646,14 @@ export class DiscordConnector {
       runSubspell: true,
     })
 
-    if(!response) {
+    if (!response) {
       console.warn('Discord: No response outputs')
       return
     }
 
     const { Output /*Image*/ } = response
 
-    if(!Output) {
+    if (!Output) {
       console.warn('Discord: No Output')
       return
     }
@@ -653,8 +662,8 @@ export class DiscordConnector {
     const firstValue = Output || Object.values(response)[0]
 
     console.log('handled response', firstValue)
-    if (!firstValue || firstValue === "") {
-      message.channel.send("Error: Empty Resonse")
+    if (!firstValue || firstValue === '') {
+      message.channel.send('Error: Empty Resonse')
     } else message.channel.send(firstValue)
   }
 
@@ -699,7 +708,9 @@ export class DiscordConnector {
 
     const oldResponse = this.getResponse(channel.id, id)
     if (oldResponse === undefined) {
-      await channel.messages.fetch(id).then(async (msg: any) => {/* null */})
+      await channel.messages.fetch(id).then(async (msg: any) => {
+        /* null */
+      })
       log('message not found')
       return
     }
@@ -875,8 +886,8 @@ export class DiscordConnector {
               deleted: boolean
               permissionsFor: (arg0: any) => {
                 (): any
-                new(): any
-                has: { (arg0: string[]): any; new(): any }
+                new (): any
+                has: { (arg0: string[]): any; new (): any }
               }
               name: string | boolean
               id: string | boolean
@@ -934,7 +945,7 @@ export class DiscordConnector {
 
     log('client is ready')
   }
-  
+
   prevMessage = {}
   prevMessageTimers = {}
   messageResponses = {}
@@ -1017,21 +1028,24 @@ export class DiscordConnector {
   async sendImageToChannel(channelId: any, imageUri: any) {
     try {
       const channel = await this.client.channels.fetch(channelId)
-      const buffer = Buffer.from(imageUri, 'base64');
-      const attachment = new AttachmentBuilder(buffer, { name: 'image.png' });
-      await channel.send(attachment);
+      const buffer = Buffer.from(imageUri, 'base64')
+      const attachment = new AttachmentBuilder(buffer, { name: 'image.png' })
+      await channel.send(attachment)
     } catch (error) {
-      console.error(`Error sending image to channel: ${error}`);
+      console.error(`Error sending image to channel: ${error}`)
     }
   }
-  
 
   async sendMessageToChannel(channelId: any, msg: any) {
     const channel = await this.client.channels.fetch(channelId)
     if (msg && msg !== '' && channel && channel !== undefined) {
       channel.send(msg)
     } else {
-      console.error('could not send message to channel: ' + channelId, 'msg = ' + msg, 'channel = ' + channel)
+      console.error(
+        'could not send message to channel: ' + channelId,
+        'msg = ' + msg,
+        'channel = ' + channel
+      )
     }
   }
 }
