@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import { Button } from '@magickml/client-core'
 import React from 'react'
 
@@ -10,7 +10,12 @@ import React from 'react'
  * @param {string} props.innerText - Text for the button
  * @param {React.ReactNode} props.Icon - A React Node for an icon
  */
-const FileInput = ({ loadFile, sx, innerText = 'Import', Icon = <> </> }) => {
+const FileInput = ({
+  loadFile,
+  sx = {},
+  innerText = 'Import',
+  Icon = <> </>,
+}) => {
   const hiddenFileInput = React.useRef(null)
 
   const handleClick = () => {
@@ -22,7 +27,7 @@ const FileInput = ({ loadFile, sx, innerText = 'Import', Icon = <> </> }) => {
   }
   return (
     <>
-      <Button onClick={handleClick} style={{...sx}}>
+      <Button onClick={handleClick} style={{ ...sx }}>
         {Icon}
         {innerText}
       </Button>

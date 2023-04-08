@@ -306,7 +306,12 @@ const MenuBar = () => {
    */
   const parseStringToUnicode = (commandString: string) => {
     let formattedCommand = commandString
-    formattedCommand = formattedCommand.replace('option', '\u2325')
+    if (navigator.userAgent.indexOf('Win') !== -1) {
+      formattedCommand = formattedCommand.replace('option', 'alt')
+    } else {
+      formattedCommand = formattedCommand.replace('option', '\u2325')
+    }
+    // formattedCommand = formattedCommand.replace('option', '\u2325')
     formattedCommand = formattedCommand.replace('shift', '\u21E7')
     formattedCommand = formattedCommand.replace('cmd', '\u2318')
     formattedCommand = formattedCommand.replace(/[`+`]/g, ' ')

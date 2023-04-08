@@ -9,5 +9,5 @@
     "types": ["node"]
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
-  "include": ["src/**/*.ts", "../engine/src/lib/utils/getSpell.ts"]
+  "include": ["src/**/*.ts"]
 }
