@@ -78,85 +78,100 @@ export class DiscordConnector {
     if (!token) {
       console.warn('No API token for Discord bot, skipping')
     } else {
-      this.client = new Discord.Client({
-        partials: [Partials.Message, Partials.User, Partials.Reaction],
-        intents: [
-          GatewayIntentBits.Guilds,
-          GatewayIntentBits.GuildVoiceStates,
-          GatewayIntentBits.MessageContent,
-          GatewayIntentBits.GuildPresences,
-          GatewayIntentBits.GuildMembers,
-          GatewayIntentBits.GuildMessages,
-          GatewayIntentBits.GuildVoiceStates,
-        ],
-      })
-      this.client.prefix = '!'
-      this.client.prefixOptionalWhenMentionOrDM = true
+      try {
+        console.log('creatong discord client for agent', agent.id)
+        this.client = new Discord.Client({
+          partials: [Partials.Message, Partials.User, Partials.Reaction],
+          intents: [
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildVoiceStates,
+            GatewayIntentBits.MessageContent,
+            GatewayIntentBits.GuildPresences,
+            GatewayIntentBits.GuildMembers,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.GuildVoiceStates,
+          ],
+        })
 
-      this.client.on('debug', message => {
-        console.log('debug', message)
-      })
+        this.client.prefix = '!'
+        this.client.prefixOptionalWhenMentionOrDM = true
 
-      this.client.name_regex = new RegExp(discord_bot_name, 'ig')
+        this.client.on('debug', message => {
+          console.log('debug', message)
+        })
 
-      this.client.username_regex = new RegExp(this.discord_userid, 'ig') //'((?:digital|being)(?: |$))'
-      this.client.edit_messages_max_count = 5
+        this.client.name_regex = new RegExp(discord_bot_name, 'ig')
 
-      const embed = new EmbedBuilder().setColor(0x00ae86)
+        this.client.username_regex = new RegExp(this.discord_userid, 'ig') //'((?:digital|being)(?: |$))'
+        this.client.edit_messages_max_count = 5
 
-      this.client.embed = embed
+        const embed = new EmbedBuilder().setColor(0x00ae86)
 
-      if (this.use_voice) {
-        const {
-          client,
-          discord_bot_name,
-          agent,
-          spellRunner,
-          voice_provider,
-          voice_character,
-          voice_language_code,
-          tiktalknet_url,
-        } = this
-        ;(async () => {
-          if (typeof window === 'undefined') {
-            const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
-              await import('./discord-voice')
-            recognizeSpeech = _recognizeSpeech
-            this.client = initSpeechClient({
-              client,
-              discord_bot_name,
-              agent,
-              spellRunner,
-              voiceProvider: voice_provider,
-              voiceCharacter: voice_character,
-              languageCode: voice_language_code,
-              tiktalknet_url,
-            })
-          }
-        })()
-      }
+        this.client.embed = embed
 
-      this.client.on(
-        'messageCreate',
-        this.messageCreate.bind(null, this.client)
-      )
-
-      this.client.on(
-        'guildMemberAdd',
-        async (user: { user: { id: any; username: any } }) => {
-          this.handleGuildMemberAdd(user)
+        if (this.use_voice) {
+          const {
+            client,
+            discord_bot_name,
+            agent,
+            spellRunner,
+            voice_provider,
+            voice_character,
+            voice_language_code,
+            tiktalknet_url,
+          } = this
+          ;(async () => {
+            if (typeof window === 'undefined') {
+              const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
+                await import('./discord-voice')
+              recognizeSpeech = _recognizeSpeech
+              this.client = initSpeechClient({
+                client,
+                discord_bot_name,
+                agent,
+                spellRunner,
+                voiceProvider: voice_provider,
+                voiceCharacter: voice_character,
+                languageCode: voice_language_code,
+                tiktalknet_url,
+              })
+            }
+          })()
         }
-      )
-      this.client.on('guildMemberRemove', async (user: any) => {
-        this.handleGuildMemberRemove(user)
-      })
-      this.client.on('messageReactionAdd', async (reaction: any, user: any) => {
-        this.handleMessageReactionAdd(reaction, user)
-      })
 
-      this.client.login(token)
+        this.client.on(
+          'messageCreate',
+          this.messageCreate.bind(null, this.client)
+        )
 
-      this.client.on('error', console.error)
+        this.client.on(
+          'guildMemberAdd',
+          async (user: { user: { id: any; username: any } }) => {
+            this.handleGuildMemberAdd(user)
+          }
+        )
+        this.client.on('guildMemberRemove', async (user: any) => {
+          this.handleGuildMemberRemove(user)
+        })
+        this.client.on(
+          'messageReactionAdd',
+          async (reaction: any, user: any) => {
+            this.handleMessageReactionAdd(reaction, user)
+          }
+        )
+
+        this.client.ws
+
+        this.client.login(token).then(() => {
+          console.log('Discord bot logged in')
+        }, console.error)
+
+        this.client.on('error', err => {
+          console.error('Discord client error', err)
+        })
+      } catch (e) {
+        console.error('Error creating discord client', e)
+      }
     }
   }
 
