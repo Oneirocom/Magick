@@ -92,10 +92,10 @@ const DebugConsole = ({ tab }): JSX.Element => {
           : formatLogMessage(message)}
       </p>
       <ReactJson
-        src={JSON.parse(JSON.parse(JSON.stringify(message)))}
+        src={message}
         name={message.nodeId}
         enableClipboard={false}
-        theme="shapeshifter"
+        theme="twilight"
         collapsed={true}
       />
       <br />
@@ -108,8 +108,14 @@ const DebugConsole = ({ tab }): JSX.Element => {
    * @param {Object} message - Message object.
    * @returns {string} Formatted message for the terminal.
    */
-  const getMessage = message => {
-    console.log('MESSAGE', message)
+  const getMessage = _message => {
+    const message = {
+      ..._message,
+      ...JSON.parse(_message.content),
+    }
+
+    delete message.content
+
     return Message(message, message.type)
   }
 
