@@ -45,7 +45,7 @@ export const event = (app: Application) => {
   });
 
   // Initialize hooks
-  const vectordb = app.get('vectordb');
+  
   app.service('events').hooks({
     around: {
       all: [
@@ -73,6 +73,7 @@ export const event = (app: Application) => {
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         async (context: HookContext) => {
+          const vectordb = app.get('vectordb');
           if (SKIP_DB_EXTENSIONS) return context
           const { embedding } = context.data
           const { data, service } = context
@@ -85,8 +86,6 @@ export const event = (app: Application) => {
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
             if (process.env.DATABASE_TYPE == "pg") {
-              console.log(embedding as Array<number>)
-              console.log(typeof(embedding as Array<number>))
               context.data.embedding = pgvector.toSql(embedding as Array<number>)  
               return context;
             }else{
@@ -97,6 +96,7 @@ export const event = (app: Application) => {
                   pageContent: context.data['content'] || "No Content in the Event",
                 },
               }]
+              console.log(vectordb)
               await vectordb.addEmbeddingsWithData(insert_data);
             }      
           } else {

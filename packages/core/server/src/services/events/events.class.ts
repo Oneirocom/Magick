@@ -70,6 +70,7 @@ export class EventService<
   async find(params?: ServiceParams) {
     const db = app.get('dbClient')
     const cli = app.get('vectordb')
+    console.log(cli)
     if (process.env.DATABASE_TYPE == 'sqlite') {
       const vectordb = app.get('vectordb')
       if (params.query.embedding) {
