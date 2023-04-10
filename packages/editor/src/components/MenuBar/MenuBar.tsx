@@ -9,6 +9,7 @@ import { usePubSub } from '../../contexts/PubSubProvider'
 import css from './menuBar.module.css'
 import { activeTabSelector, Tab } from '../../state/tabs'
 import { toggleAutoSave } from '../../state/preferences'
+import { changeEditorLayout } from '../../state/tabs'
 import { RootState } from '../../state/store'
 
 /**
@@ -217,6 +218,25 @@ const MenuBar = () => {
     dispatch(toggleAutoSave())
   }
 
+  /**
+   * Toggle save handler
+   */
+  const changeLayout = event => {
+    const layout: string = event.target.innerText
+    const formattedKey = layout
+      .replace(/[-_](.)/g, (_, c) => c.toUpperCase())
+      .replace(/\s(.)/g, (_, c) => c.toUpperCase())
+      .replace(/\s/g, '')
+      .replace(/^(.)/, (_, c) => c.toLowerCase())
+
+    dispatch(
+      changeEditorLayout({
+        tabId: activeTab.id,
+        layout: formattedKey,
+      })
+    )
+  }
+
   // Menu bar entries
   const menuBarItems = {
     file: {
@@ -293,6 +313,22 @@ const MenuBar = () => {
             hotKey: 'option+shift+a',
             isActive: preferences.autoSave,
           },
+        },
+      },
+    },
+    layout: {
+      items: {
+        default: {
+          onClick: changeLayout,
+        },
+        full_screen: {
+          onClick: changeLayout,
+        },
+        prompt_engineering: {
+          onClick: changeLayout,
+        },
+        trouble_shooting: {
+          onClick: changeLayout,
         },
       },
     },
