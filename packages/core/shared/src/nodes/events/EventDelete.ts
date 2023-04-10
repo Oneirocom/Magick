@@ -3,7 +3,7 @@ import Rete from 'rete';
 import axios from 'axios';
 import { API_ROOT_URL } from '../../config';
 import { MagickComponent } from '../../engine';
-import { arraySocket, triggerSocket } from '../../sockets';
+import { arraySocket, objectSocket, triggerSocket } from '../../sockets';
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types';
 import _ from 'lodash';
 
@@ -30,7 +30,7 @@ export class EventDelete extends MagickComponent<Promise<void>> {
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
-    const inputList = new Rete.Input('events', 'Events', arraySocket);
+    const inputList = new Rete.Input('event', 'Event', objectSocket);
 
     return node.addInput(inputList).addInput(dataInput).addOutput(dataOutput);
   }
@@ -41,31 +41,15 @@ export class EventDelete extends MagickComponent<Promise<void>> {
    * @param node - Node data from the visual programming editor.
    * @param inputs - Node input values from connected inputs in the editor.
    */
-  async worker(node: WorkerData, inputs: MagickWorkerInputs & { events: unknown[] }) {
+  async worker(node: WorkerData, inputs: MagickWorkerInputs, outputs: any, context: any) {
     try {
-      const events = inputs.events[0];
-      
-      if (Array.isArray(events)) {
-        // Events.rows when the data is fetched using embedding.
-        // @ts-ignore
-        if (events.rows) {
-          // @ts-ignore
-          events.rows.forEach(async (event) => {
-            await axios.delete(`${API_ROOT_URL}/events/${event.id}`);
-          });
-        }
+      const event = inputs.event[0] as { id: number }
 
-        // Events when the data is fetched using query.
-        if (events) events.forEach(async (event) => {
-          await axios.delete(`${API_ROOT_URL}/events/${event.id}`);
-        });
-      } else {
-        const id: string | null = _.get(events, 'id', null);
-        if (id === null) throw new Error('Event ID not found');
-        await axios.delete(`${API_ROOT_URL}/events/${id}`);
-      }
+      const { app } = context.module;
+      if(!app) throw new Error('App is not defined, cannot delete event');
+      app.service('events').remove(event.id);
     } catch (e) {
-      console.log('Error: ', e);
+      throw new Error(`Error deleting event: ${e}`);
     }
   }
 }
