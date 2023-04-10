@@ -1,9 +1,9 @@
-// DOCUMENTED 
+// DOCUMENTED
 import Rete from 'rete'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
-import { anySocket, triggerSocket } from '../../sockets'
+import { triggerSocket } from '../../sockets'
 import {
   CompletionInspectorControls,
   CompletionProvider,
@@ -20,9 +20,7 @@ const info = 'Generate text using any of the providers available in Magick.'
 
 /** Type definition for the worker return */
 type WorkerReturn = {
-  success: boolean
   result?: string
-  error?: string
 }
 
 /**
@@ -31,22 +29,25 @@ type WorkerReturn = {
  */
 export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
-    super('Generate Text', {
-      outputs: {
-        error: 'option',
-        result: 'output',
-        trigger: 'option',
+    super(
+      'Generate Text',
+      {
+        outputs: {
+          result: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'Text', info)
+      'Text',
+      info
+    )
   }
 
-  /** 
+  /**
    * Builder for generating text.
    * @param node - the MagickNode instance.
    * @returns a configured node with data generated from providers.
    */
   builder(node: MagickNode) {
-    const settings = new Rete.Input('settings', 'Settings', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
@@ -118,10 +119,13 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       // update output sockets
       if (outputSockets !== lastOutputSockets) {
         lastOutputSockets?.forEach(socket => {
-          if (node.outputs.has(socket.socket)) node.outputs.delete(socket.socket)
+          if (node.outputs.has(socket.socket))
+            node.outputs.delete(socket.socket)
         })
         outputSockets.forEach(socket => {
-          node.addOutput(new Rete.Output(socket.socket, socket.name, socket.type))
+          node.addOutput(
+            new Rete.Output(socket.socket, socket.name, socket.type)
+          )
         })
         lastOutputSockets = outputSockets
       }
@@ -134,7 +138,6 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
 
     if (!node.data.model) node.data.model = models[0]
     configureNode()
-    node.addInput(settings)
     return node
   }
 
@@ -163,7 +166,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       'chat',
     ]) as CompletionProvider[]
 
-    const model = (node.data as {model: string}).model as string
+    const model = (node.data as { model: string }).model as string
     // get the provider for the selected model
     const provider = completionProviders.find(provider =>
       provider.models.includes(model)
@@ -173,27 +176,21 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
 
     if (!completionHandler) {
       console.error('No completion handler found for provider', provider)
-      return {
-        success: false,
-      }
+      throw new Error('ERROR: Completion handler undefined')
     }
 
-    const { success, result } = await completionHandler({
+    const { success, result, error } = await completionHandler({
       node,
       inputs,
       outputs,
       context,
     })
 
-    if (!success) {
-      return {
-        success: false,
-        result,
-      }
+    if(error || !success) {
+      throw new Error('ERROR: ' + error)
     }
 
     return {
-      success: true,
       result,
     }
   }

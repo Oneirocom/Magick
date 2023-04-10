@@ -1,26 +1,25 @@
-// DOCUMENTED 
-import { Button, Grid, Typography } from '@mui/material';
-import AgentItem from './AgentItem';
-import styles from './index.module.scss';
-import AgentDetails from './AgentDetails';
-import FileInput from '../../../components/FileInput';
-import { useEffect, useState } from 'react';
-import { useConfig } from '../../../contexts/ConfigProvider';
+// DOCUMENTED
+import { Button, Grid, Typography } from '@mui/material'
+import AgentItem from './AgentItem'
+import styles from './index.module.scss'
+import AgentDetails from './AgentDetails'
+import FileInput from '../../../components/FileInput'
+import { useEffect } from 'react'
+import { useConfig } from '../../../contexts/ConfigProvider'
 
 /**
  * Props for AgentWindow component
  */
 interface Props {
-  data: Array<object>;
-  selectedAgentData: object;
-  onLoadEnables: object;
-  setRootSpell: (spell: string) => void;
-  setSelectedAgentData: (data: object) => void;
-  onCreateAgent: (data: any) => void;
-  updateCallBack: () => void;
-  update: (id: string, data: object) => void;
-  onDelete: (id: string) => void;
-  onLoadFile: (selectedFile: any) => void;
+  data: Array<object>
+  selectedAgentData: object
+  onLoadEnables: object
+  setSelectedAgentData: (data: object) => void
+  onCreateAgent: (data: any) => void
+  updateData: (data: object) => void
+  update: (id: string, data: object) => void
+  onDelete: (id: string) => void
+  onLoadFile: (selectedFile: any) => void
 }
 
 /**
@@ -28,7 +27,6 @@ interface Props {
  * @param data - array of agents data
  * @param selectedAgentData - currently selected agent data
  * @param onLoadEnables - callback for enabling agents load
- * @param setRootSpell - callback for setting root spell
  * @param setSelectedAgentData - callback for setting selected agent data
  * @param onCreateAgent - callback for creating an agent
  * @param updateCallBack - callback after updating an agent
@@ -40,29 +38,28 @@ interface Props {
 const AgentWindow = ({
   data,
   selectedAgentData,
-  updateCallBack,
   onCreateAgent,
   setSelectedAgentData,
   onDelete,
   onLoadFile,
+  updateData,
   onLoadEnables,
 }: Props) => {
-  const config = useConfig();
-
+  const config = useConfig()
   /**
    * Handler for agent click
    * @param agent - clicked agent
    */
-  const onClickHandler = (agent) => {
-    setSelectedAgentData(agent);
-  };
+  const onClickHandler = agent => {
+    setSelectedAgentData(agent)
+  }
 
   // Set selected agent data to first item if not yet set
   useEffect(() => {
     if (!selectedAgentData) {
-      setSelectedAgentData(data[0] as any);
+      setSelectedAgentData(data[0] as any)
     }
-  }, [data, selectedAgentData, setSelectedAgentData]);
+  }, [data, selectedAgentData, setSelectedAgentData])
 
   return (
     <Grid container className={styles.container}>
@@ -104,7 +101,7 @@ const AgentWindow = ({
                   : {}
               }
             />
-          );
+          )
         })}
       </Grid>
       <Grid item xs={8} className={styles.item}>
@@ -112,7 +109,7 @@ const AgentWindow = ({
           <AgentDetails
             selectedAgentData={selectedAgentData}
             setSelectedAgentData={setSelectedAgentData}
-            updateCallback={updateCallBack}
+            updateData={updateData}
             onLoadEnables={onLoadEnables}
           />
         ) : (
@@ -120,7 +117,7 @@ const AgentWindow = ({
         )}
       </Grid>
     </Grid>
-  );
-};
+  )
+}
 
-export default AgentWindow;
+export default AgentWindow

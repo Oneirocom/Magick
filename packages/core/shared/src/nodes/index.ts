@@ -50,7 +50,7 @@ import { StringVariable } from './text/StringVariable';
 import { TextTemplate } from './text/TextTemplate';
 import { TextVariable } from './text/TextVariable';
 import { Cast } from './utility/Cast';
-import { Destructure } from './utility/Destructure';
+import { GetValuesFromObject } from './object/GetValuesFromObject';
 import { Echo } from './utility/Echo';
 import { Log } from './utility/Log';
 
@@ -62,7 +62,7 @@ export const components: Record<string, ()=>MagickComponent<unknown>> = {
   inRange: () => new InRange(),
   javascript: () => new Javascript(),
   python: () => new Python(),
-  destructure: () => new Destructure(),
+  GetValuesFromObject: () => new GetValuesFromObject(),
   complexStringMatcher: () => new ComplexStringMatcher(),
   echo: () => new Echo(),
   getCachedEmbedding: () => new FindTextEmbedding(),

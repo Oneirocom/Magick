@@ -24,22 +24,22 @@ const RenderComp = (props: any) => {
 interface AgentDetailsProps {
   selectedAgentData: any
   setSelectedAgentData: any
-  updateCallback: () => void
-  onLoadEnables: boolean
+  updateData: (data: object) => void
+  onLoadEnables: object
 }
 
 /**
  * AgentDetails component displays agent details and provides functionalities to interact with agents.
  *
  * @param selectedAgentData - The data of the selected agent.
- * @param setSelectedAgentData - Function to update the selected agent data.
+ * @param setSelectedA gentData - Function to update the selected agent data.
  * @param updateCallback - Callback function to update data.
  * @param onLoadEnables - The boolean value to show enabled components on load.
  */
 const AgentDetails = ({
   selectedAgentData,
   setSelectedAgentData,
-  updateCallback,
+  updateData,
   onLoadEnables,
 }: AgentDetailsProps) => {
   const [spellList, setSpellList] = useState<any[]>([])
@@ -83,7 +83,9 @@ const AgentDetails = ({
             variant: 'success',
           })
           setSelectedAgentData(res.data)
-          updateCallback()
+
+          // update data instead of refetching data to avoid agent window flashes
+          updateData(res.data)
         }
       })
       .catch(e => {
