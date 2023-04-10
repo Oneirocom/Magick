@@ -33,7 +33,7 @@ export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
   client: any;
   tableName: string;
   queryName: string;
-  
+
   constructor(embeddings: Embeddings, args: Record<string, any>) {
     super(embeddings, args);
 
@@ -74,11 +74,11 @@ export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
    * @param { array: any[]} events - Array of events
    * @returns {Promise<void>}
    */
-  async addEvents(events: { array: any[]}): Promise<void> {
+  async addEvents(events: { array: any[] }): Promise<void> {
     events.array.forEach(async element => {
       const res = await this.client.from(this.tableName).insert(element);
       if (res.error) {
-          throw new Error(`Error inserting: ${res.error.message} ${res.status} ${res.statusText}`);
+        throw new Error(`Error inserting: ${res.error.message} ${res.status} ${res.statusText}`);
       }
     });
   }
@@ -110,7 +110,7 @@ export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
   async getDocuments(ids: string[]): Promise<Document[]> {
     const res = await this.client.from(this.tableName).select("*").in("id", ids);
     if (res.error) {
-        throw new Error(`Error getting documents: ${res.error.message} ${res.status} ${res.statusText}`);
+      throw new Error(`Error getting documents: ${res.error.message} ${res.status} ${res.statusText}`);
     }
     return res.data;
   }
@@ -180,9 +180,9 @@ export class HNSWLib extends SaveableVectorStore {
       documents
     );
   }
-
+  //Tech debt: add, search, searchData
   // Add other helper methods for HNSWLib here
-  async add(id: any, embedding: any, a: any = "sss") { /* null */}
+  async add(id: any, embedding: any, a: any = "sss") { /* null */ }
 
   async search(a: any, b: any) { /* null */ }
 
@@ -247,7 +247,11 @@ export class HNSWLib extends SaveableVectorStore {
     await this.saveIndex(this.args.filename);
   }
 
-
+  /**
+   * Add embedding
+   * @param {number[]} embedding - Embedding vector
+   * @returns {Promise<void>}
+   */
   async addEmbeddingsWithData(embeddings: EmbeddingWithData[]): Promise<void> {
     const vectors: number[][] = [];
     const documents: Document[] = [];
@@ -267,7 +271,12 @@ export class HNSWLib extends SaveableVectorStore {
   }
 
 
-
+  /**
+   * Create a New HNSWLib instance
+   * @param {HNSWLibArgs} args - Constructor arguments
+   * @returns {Promise<HNSWLib>}
+   * @static  
+  */
   private static async getHierarchicalNSW(args: HNSWLibBase) {
     //const { HierarchicalNSW } = await HNSWLib.imports();
     if (!args.space) {
@@ -279,6 +288,11 @@ export class HNSWLib extends SaveableVectorStore {
     return new HierarchicalNSW(args.space, args.numDimensions);
   }
 
+  /**
+   * Creates a new index and adds the vectors to it
+   * @param {number[][]} vectors - Array of vectors
+   * @returns {Promise<void>}
+   */
   private async initIndex(vectors: number[][]) {
     if (!this._index) {
       if (this.args.numDimensions === undefined) {
@@ -304,6 +318,19 @@ export class HNSWLib extends SaveableVectorStore {
     this._index = index;
   }
 
+  /**
+   * Add vectors to the index
+   * @param {number[][]} vectors - Array of vectors
+   * @param {Document[]} documents - Array of documents
+   * @returns {Promise<void>}
+   * @private
+   * @async
+   * @throws {Error} - If vectors and documents have different lengths
+   * @throws {Error} - If vectors have different length than the number of dimensions
+   * @throws {Error} - If vectors are empty
+   * @throws {Error} - If index is not initialised
+   * @throws {Error} - If index is full
+  */  
   async addVectors(vectors: number[][], documents: Document[]) {
     if (vectors.length === 0) {
       return;
@@ -337,6 +364,16 @@ export class HNSWLib extends SaveableVectorStore {
     await this.saveIndex(this.args.filename);
   }
 
+  //TODO: Interface with PluginManager to get the Embedding from the plugin
+  //Right Now using Dummy embeddings
+  //IMPORTANT: This function is an extension from the base class and is required for QA
+  /**
+   * Search for the k nearest neighbours of a query vector
+   * @param {number[] or String} query - Query vector
+   * @param {number} k - Number of neighbours to return
+   * @returns {Promise<Document[]>} - Array of documents
+   * @async
+  */
   async similaritySearch(query: any, k = 4): Promise<Document[]> {
     const arrayLength = this.args.numDimensions;
     query = new Array(arrayLength).fill(null).map(() => Math.random());
@@ -355,11 +392,19 @@ export class HNSWLib extends SaveableVectorStore {
     );
   }
 
-
-  async similaritySearchVectorWithScore(query: number[],k = 10, quer_data: Record<string, unknown> = {}): Promise<[Document, number][]> {
-    let filterByLabel = (label: any) => {return true}
+  //Prefiltering based on query data if defined else does semantic search on all documents
+  /**
+   * Search for the k nearest neighbours of a query vector
+   * @param {number[]} query - Query vector
+   * @param {number} k - Number of neighbours to return
+   * @param {Record<string, unknown>} quer_data - Query data
+   * @returns {Promise<[Document, number][]>} - Array of documents and scores
+   * @async
+    */
+  async similaritySearchVectorWithScore(query: number[], k = 10, quer_data: Record<string, unknown> = {}): Promise<[Document, number][]> {
+    let filterByLabel = (label: any) => { return true }
     if (Object.keys(quer_data).length == 0) {
-      filterByLabel = (label) => {return true}
+      filterByLabel = (label) => { return true }
     } else {
       const matchingDocs = await this.getDataWithMetadata(quer_data);
       filterByLabel = (label) => {
@@ -367,19 +412,19 @@ export class HNSWLib extends SaveableVectorStore {
         try {
           for (let i = 0; i < matchingDocs.length; i++) {
 
-            const idHash = HNSWLib.sha256ToDecimal((matchingDocs[i] as {id: string}).id);
+            const idHash = HNSWLib.sha256ToDecimal((matchingDocs[i] as { id: string }).id);
             if (idHash === label) {
               result = true;
               break;
             }
           }
-        } catch(e) {
-            console.log(e)
+        } catch (e) {
+          console.log(e)
         }
         return result;
       };
     }
-    
+
     if (query.length !== this.args.numDimensions) {
       throw new Error(`Query vector must have the same length as the number of dimensions (${this.args.numDimensions})`);
     }
@@ -388,7 +433,7 @@ export class HNSWLib extends SaveableVectorStore {
       console.warn(`k (${k}) is greater than the number of elements in the index (${total}), setting k to ${total}`);
       k = total;
     }
-    
+
     const result = this.index.searchKnn(Array.from(query), k, filterByLabel);
     return result.neighbors.map(
       (docIndex, resultIndex) =>
@@ -396,7 +441,10 @@ export class HNSWLib extends SaveableVectorStore {
     );
   }
 
-
+  /**
+   * Save the index and docstore to disk
+   * @param directory 
+   */
   async save(directory: string) {
     await fs.promises.mkdir(directory, { recursive: true });
     await Promise.all([
@@ -408,31 +456,51 @@ export class HNSWLib extends SaveableVectorStore {
     ]);
   }
 
-  async saveIndex(filename=".") {
+  /**
+   * Saves the index to disk
+   * @param filename
+   * @returns {Promise<void>}
+   */
+  async saveIndex(filename = ".") {
     if (!this.index) {
       return;
     }
     await this.index.writeIndex(path.join(filename, "hnswlib.index"));
   }
+
+  /**
+   * Loads the index and Docstore from disk
+   * @param filename
+   * @returns {Promise<void>}
+   */
   static async load(directory: string, embeddings: Embeddings): Promise<typeof SaveableVectorStore> {
     const db = new HNSWLib(embeddings, { space: "cosine", filename: directory });
     db.docstore = new InMemoryDocstore();
     return db;
   }
+
+  /**
+   * Loads the index and Docstore from disk
+   * @param directory - Directory to load from
+   * @param embeddings - Embeddings to use
+   * @param args: { space: any, numDimensions: any, filename: any }
+   * @returns {Promise<void>}
+   * @async
+   * @static
+   */
   static load_data(directory: string, embeddings: Embeddings, args: { space: any, numDimensions: any, filename: any }) {
     fs.mkdirSync(directory + '/' + args.filename, { recursive: true });
     const index = new HierarchicalNSW(args.space, args.numDimensions);
     try {
       // if docstore.json does not exist, create it with {}
-      if(fs.existsSync(directory + '/' + args.filename + "/docstore.json")) {
+      if (fs.existsSync(directory + '/' + args.filename + "/docstore.json")) {
         // console.log("docstore.json does not exist, creating it")
         const docstore = {}
-        
+
         fs.writeFileSync(directory + '/' + args.filename + "/docstore.json", JSON.stringify(docstore))
       }
-      
       const docstoreFiles = JSON.parse(fs.readFileSync(directory + '/' + args.filename + "/docstore.json", "utf8"));
-      index.readIndex(directory + '/' + args.filename +"/hnswlib.index");
+      index.readIndex(directory + '/' + args.filename + "/hnswlib.index");
       const db = new HNSWLib(embeddings, args);
       db.index = index;
       docstoreFiles.map(([k, v]) => {
@@ -440,19 +508,25 @@ export class HNSWLib extends SaveableVectorStore {
       })
       return db;
     } catch (e) {
-      console.log("Error Caught: ", e)
       const db = new HNSWLib(embeddings, args);
       db.docstore = new InMemoryDocstore();
       return db;
     }
   }
+
+  /**
+   * Filters the documents based on the query data
+   * @param query - Query data
+   * @param k - Number of Events to return
+   * @returns {Promise<Record<string, unknown>[]>}
+   */
   async getDataWithMetadata(query: Record<string, unknown>, k = 1): Promise<Record<string, unknown>[]> {
     const queryKeys = Object.keys(query);
     const matchingDocs: Record<string, unknown>[] = [];
     //console.log(this.docstore._docs.entries())
     for (const doc of this.docstore._docs.values()) {
       for (const key of queryKeys) {
-        
+
         if ((query["content"] == undefined) && (doc.metadata["projectId"] == query["projectId"])) {
           //console.log(doc.metadata[key], query[key])
           matchingDocs.push(doc.metadata);
@@ -467,6 +541,16 @@ export class HNSWLib extends SaveableVectorStore {
     return matchingDocs;
   }
 
+  //TODO: This function is redundant and should be removed, base class requires it
+  //This is handled in Documents DB.
+  /**
+   * Creates documents from the text and metadata
+   * @param texts - Texts to create documents from
+   * @param metadatas - Metadata to create documents from
+   * @param embeddings - Embeddings to use
+   * @param dbConfig - Database configuration
+   * @returns {Promise<HNSWLib>}
+   */
   static async fromTexts(
     texts: string[],
     metadatas: any[],
@@ -486,6 +570,12 @@ export class HNSWLib extends SaveableVectorStore {
     return HNSWLib.fromDocuments(docs, embeddings, dbConfig);
   }
 
+  /**
+   * Creates documents from the text and embeddings
+   * @param docs - Documents to create documents from
+   * @param embeddings - Embeddings to use
+   * @param dbConfig - Database configuration
+   **/
   static async fromDocuments(
     docs: Document[],
     embeddings: Embeddings,
@@ -503,6 +593,13 @@ export class HNSWLib extends SaveableVectorStore {
     return instance;
   }
 
+  //Docstore ID and HNSWLib Label Number are same;
+  //The Label Number and Docstore ID are the last 6 digits of the SHA256 hash of the Event UUID
+  /**
+   * SHA246 to decimal
+   * @param str - String to convert
+   * @returns {number}
+  */
   static sha256ToDecimal(str) {
     const hash = crypto.createHash('sha256').update(str).digest('hex');
     const num = parseInt(hash, 16);

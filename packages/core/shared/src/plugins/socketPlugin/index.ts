@@ -47,7 +47,6 @@ function install(
         ...args
       ) => {
         console.log('Running worker for node', node.id, node.name)
-        console.log('currentSpell', context.currentSpell.id)
         const currentSpell = context.currentSpell
         const event = `${currentSpell.id}-${node.id}`
 
