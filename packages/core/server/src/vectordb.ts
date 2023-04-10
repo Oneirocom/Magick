@@ -235,6 +235,7 @@ export class HNSWLib extends SaveableVectorStore {
     embedding: number[],
     metadata: Document
   ): Promise<void> {
+
     if (embedding.length !== this.args.numDimensions) {
       throw new Error(
         `Embedding must have the same length as the number of dimensions (${this.args.numDimensions})`
@@ -256,6 +257,7 @@ export class HNSWLib extends SaveableVectorStore {
     const vectors: number[][] = [];
     const documents: Document[] = [];
     for (const { embedding, data } of embeddings) {
+      console.log(embedding)
       if (embedding) {
         if (embedding.length !== this.args.numDimensions) {
           throw new Error(
@@ -537,7 +539,18 @@ export class HNSWLib extends SaveableVectorStore {
     }
     return matchingDocs;
   }
-
+  async fromString(text: string, metadata: any[]): Promise<any>{
+    const vector = await this.embeddings.embedQuery(text);
+    const insert_data = [{
+      embedding: vector,
+      data: {
+        metadata: {...metadata, embedding: vector} || {"msg": "Empty Data"},
+        pageContent: text || "No Content in the Event",
+      },
+    }]
+    this.addEmbeddingsWithData(insert_data);
+    return insert_data
+  }
   //TODO: This function is redundant and should be removed, base class requires it
   //This is handled in Documents DB.
   /**
