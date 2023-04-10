@@ -8,7 +8,7 @@ import { useModal } from '../../contexts/ModalProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import css from './menuBar.module.css'
 import { activeTabSelector, Tab } from '../../state/tabs'
-import { toggleAutoSave } from '../../state/preferences'
+import { toggleAutoSave, toggleSnap } from '../../state/preferences'
 import { RootState } from '../../state/store'
 
 /**
@@ -217,6 +217,13 @@ const MenuBar = () => {
     dispatch(toggleAutoSave())
   }
 
+  /**
+   * Toggle snap handler
+   */
+  const toggleSnapFunction = () => {
+    dispatch(toggleSnap())
+  }
+
   // Menu bar entries
   const menuBarItems = {
     file: {
@@ -284,6 +291,11 @@ const MenuBar = () => {
         },
         console: {
           onClick: onConsole,
+        },
+        snap: {
+          onClick: toggleSnapFunction,
+          // hotKey: 'option+shift+g',
+          isActive: preferences.snap,
         },
       },
       settings: {
