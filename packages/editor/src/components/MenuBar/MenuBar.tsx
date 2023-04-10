@@ -8,7 +8,7 @@ import { useModal } from '../../contexts/ModalProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import css from './menuBar.module.css'
 import { activeTabSelector, Tab } from '../../state/tabs'
-import { toggleAutoSave } from '../../state/preferences'
+import { toggleAutoSave, toggleSnap } from '../../state/preferences'
 import { changeEditorLayout } from '../../state/tabs'
 import { RootState } from '../../state/store'
 import { useProjectWindow } from '@magickml/client-core'
@@ -246,6 +246,11 @@ const MenuBar = () => {
         layout: formattedKey,
       })
     )
+  /**
+   * Toggle snap handler
+   */
+  const toggleSnapFunction = () => {
+    dispatch(toggleSnap())
   }
 
   // Menu bar entries
@@ -319,6 +324,11 @@ const MenuBar = () => {
         project_window: {
           onClick: onProjectWindowCreate,
           hotKey: 'control+b',
+        },
+        snap: {
+          onClick: toggleSnapFunction,
+          // hotKey: 'option+shift+g',
+          isActive: preferences.snap,
         },
       },
       settings: {
