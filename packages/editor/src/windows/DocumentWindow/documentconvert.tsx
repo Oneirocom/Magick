@@ -12,7 +12,7 @@ interface OCRConfig {
     other: any;
 }
 
-export async function convertFileToText(file: File, ocrConfig?: OCRConfig): Promise<string> {
+export async function convertFileToText(file: File, ocrConfig?: OCRConfig): Promise<any> {
     const fileExt = file.name.split('.').pop()!.toLowerCase() as SupportedFileTypes;
 
     switch (fileExt) {
@@ -22,8 +22,8 @@ export async function convertFileToText(file: File, ocrConfig?: OCRConfig): Prom
         case 'docx':
             return await convertWordToText(file);
         case 'xls':
-       /*  case 'xlsx':
-            return await convertExcelToText(file); */
+        /*  case 'xlsx':
+             return await convertExcelToText(file); */
         /* case 'ppt':
         case 'pptx':
             return await convertPowerpointToText(file); */
@@ -57,26 +57,23 @@ async function pdfNumberOfPages(file: File) {
     const pdfBuffer = await readFileAsBuffer(file);
 
     // Define the PDF.js worker source path (needed for loading PDF.js)
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.5.141/pdf.worker.min.js';
     //Load the PDF document
     const pdfDocument = await pdfjsLib.getDocument({ data: pdfBuffer }).promise;
     return pdfDocument.numPages
 }
 
-async function convertPdfToText(file: File, ocrEngine: string = 'tesseract', ocrConfig?: any): Promise<string> {
+async function convertPdfToText(file: File, ocrEngine: string = 'tesseract', ocrConfig?: any): Promise<any[]> {
     // Read the PDF file
     const pdfBuffer = await readFileAsBuffer(file);
 
     // Define the PDF.js worker source path (needed for loading PDF.js)
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-
-    // Initialize PDF.js with the worker source path
-    //pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.5.141/pdf.worker.min.js';
 
     // Load the PDF document
     const pdfDocument = await pdfjsLib.getDocument({ data: pdfBuffer }).promise;
 
-    let text = '';
+    let text = [];
 
     if (ocrEngine === 'tesseract') {
         // Initialize Tesseract.js with the English language
@@ -86,19 +83,46 @@ async function convertPdfToText(file: File, ocrEngine: string = 'tesseract', ocr
 
         await worker.loadLanguage('eng');
         await worker.initialize('eng');
+
         // Loop through each page of the PDF document
         for (let i = 1; i <= pdfDocument.numPages; i++) {
             // Get the page object
             const page = await pdfDocument.getPage(i);
 
-            // Convert the page to a PNG image buffer
-            const pngBuffer = await pdfPageToPngBuffer(page)
+            // Get the text content of the page
+            const content = await page.getTextContent();
+            const items = content.items;
+            
+            if (items.length === 1 && !items[0].str) {
+                console.log('image')
+                // If the page has only one item and it's an image, use OCR to extract the text
+                const pngBuffer = await pdfPageToPngBuffer(page);
+                //@ts-ignore
+                const ocrResult = await worker.recognize(pngBuffer, { lang: 'eng' });
+                //text += ocrResult.data.text;
+                text.push(ocrResult.data.text);
+            } else {
+                // If the page has multiple items, loop through each item
+                for (let j = 0; j < items.length; j++) {
+                    const item = items[j];
 
-            // Convert the PNG image buffer to text using OCR
-            //@ts-ignore
-            const ocrResult = await worker.recognize(pngBuffer, { lang: 'eng' });
-            // Append the OCR result text to the output file
-            text += ocrResult.data.text;
+                    if (item.str === '') {
+                        console.log('table')
+                        //TODO: Only Extract the part of the table that is visible on the page
+                        // If the item is an image, extract its text content
+                        /* const imagePngBuffer = await pdfPageToPngBuffer(page);
+                        //@ts-ignore
+                        const imageOcrResult = await worker.recognize(imagePngBuffer, { lang: 'eng' });
+                        //text += imageOcrResult.data.text;
+                        text.push(imageOcrResult.data.text); */
+                    } else {
+                        console.log('text')
+                        // If the item is a text element or table, append its raw text content to the output file
+                        //text += item.str;
+                        text.push(item.str);
+                    }
+                }
+            }
         }
     } else {
         // TODO: Implement alternative OCR engine
@@ -107,6 +131,10 @@ async function convertPdfToText(file: File, ocrEngine: string = 'tesseract', ocr
 
     return text;
 }
+         
+
+
+
 
 async function convertWordToText(file: File): Promise<string> {
     const arrayBuffer = await readFileAsBuffer(file);
