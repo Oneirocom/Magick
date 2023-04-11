@@ -97,7 +97,7 @@ class SpellRunner {
   /**
    * Used to format inputs into the format the moduel runner expects.
    * Takes a normal object of type { key: value } and returns an object
-   * of shape { key: [value]}.  This shape isa required when running the spell
+   * of shape { key: [value] }.  This shape isa required when running the spell
    * since that is the shape that rete inputs take when processing the graph.
    */
   private _formatInputs(inputs) {
@@ -201,7 +201,7 @@ class SpellRunner {
     agent,
     secrets,
     publicVariables,
-    app
+    app,
   }: RunComponentArgs) {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
@@ -221,7 +221,7 @@ class SpellRunner {
       secrets,
       agent,
       publicVariables,
-      app
+      app,
     })
 
     const component = this._getComponent(
