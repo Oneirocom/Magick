@@ -80,20 +80,15 @@ const AgentDetails = ({
       body: JSON.stringify(_data),
     })
       .then(res => res.json())
-      .then(res => {
-        if (typeof res.data === 'string' && res.data === 'internal error') {
-          enqueueSnackbar('Internal error updating agent', {
-            variant: 'error',
-          })
-        } else {
+      .then(data => {
+
           enqueueSnackbar('Updated agent', {
             variant: 'success',
           })
-          setSelectedAgentData(res.data)
+          setSelectedAgentData(data)
 
           // update data instead of refetching data to avoid agent window flashes
-          updateData(res.data)
-        }
+          updateData(data)
       })
       .catch(e => {
         console.error('ERROR', e)
@@ -197,7 +192,7 @@ const AgentDetails = ({
         ) : (
           <div className={styles.agentDescription}>
             <Avatar className={styles.avatar}>
-              {selectedAgentData.name.slice(0, 1)[0]}{' '}
+              {selectedAgentData?.name?.slice(0, 1)[0]}{' '}
             </Avatar>
             <div>
               <Typography variant="h5">{selectedAgentData.name}</Typography>
