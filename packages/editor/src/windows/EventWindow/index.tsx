@@ -1,17 +1,17 @@
-// DOCUMENTED 
+// DOCUMENTED
+import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
-import EventTable from './EventTable'
+import { useSelector } from 'react-redux'
 import { useConfig } from '../../contexts/ConfigProvider'
-import { API_ROOT_URL } from '@magickml/core'
+import EventTable from './EventTable'
 
 /**
  * Defines the properties of an event.
  */
 interface Event {
   // Add properties of the event
-  name: string;
-  location: string;
+  name: string
+  location: string
 }
 
 /**
@@ -19,18 +19,20 @@ interface Event {
  * @returns JSX Element
  */
 const EventWindow = (): JSX.Element => {
-  const config = useConfig();
-  const [events, setEvents] = useState<Event[] | null>(null);
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
+  const config = useConfig()
+  const [events, setEvents] = useState<Event[] | null>(null)
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    fetchEvents()
+  }, [])
 
   /**
    * Resets the events and fetches the updated events.
    */
   const resetEvents = async (): Promise<void> => {
-    await fetchEvents();
+    await fetchEvents()
   }
 
   /**
@@ -38,12 +40,19 @@ const EventWindow = (): JSX.Element => {
    */
   const fetchEvents = async (): Promise<void> => {
     try {
-      const { data } = await axios.get(
-        `${API_ROOT_URL}/events?projectId=${config.projectId}`
-      );
-      setEvents(data.events);
+      const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
+
+      const response = await fetch(
+        `${API_ROOT_URL}/events?projectId=${config.projectId}`,
+        {
+          headers,
+        }
+      )
+
+      const data = await response.json()
+      setEvents(data.events)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
@@ -59,7 +68,7 @@ const EventWindow = (): JSX.Element => {
     >
       {events && <EventTable events={events} updateCallback={resetEvents} />}
     </div>
-  );
-};
+  )
+}
 
-export default EventWindow;
+export default EventWindow
