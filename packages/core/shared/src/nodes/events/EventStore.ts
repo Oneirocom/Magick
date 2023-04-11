@@ -1,23 +1,21 @@
-// DOCUMENTED
-import axios from 'axios'
-import Rete from 'rete'
-
-import { API_ROOT_URL } from '../../config'
-import { InputControl } from '../../dataControls/InputControl'
-import { MagickComponent } from '../../engine'
+// DOCUMENTED 
+import Rete from 'rete';
+import { InputControl } from '../../dataControls/InputControl';
+import { MagickComponent } from '../../engine';
 import {
   embeddingSocket,
   eventSocket,
   stringSocket,
-  triggerSocket,
-} from '../../sockets'
+  triggerSocket
+} from '../../sockets';
 import {
   Event,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData,
-} from '../../types'
+  ModuleContext,
+  WorkerData
+} from '../../types';
 
 /**
  * Information about the EventStore class
@@ -84,7 +82,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: any
+    context: ModuleContext,
   ) {
     const { projectId } = context
 
@@ -130,7 +128,9 @@ export class EventStore extends MagickComponent<Promise<void>> {
     if (embedding) data.embedding = embedding
 
     if (content && content !== '') {
-      await axios.post(`${API_ROOT_URL}/events`, data)
+      const { app } = context.module;
+      if(!app) throw new Error('App is not defined, cannot create event');
+      const result = await app.service('events').create(data);
     } else {
       throw new Error('Content is empty, not storing the event !!')
     }
