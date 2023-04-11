@@ -162,13 +162,21 @@ export class DiscordConnector {
 
         this.client.ws
 
-        this.client.login(token).then(() => {
-          console.log('Discord bot logged in')
-        }, console.error)
+        ;(async () => {
+
+        try {
+        const login = await this.client.login(token)
+        console.log('Discord client logged in', login)
+        
+        } catch (e) {
+          return console.error('Error logging in discord client', e)
+        }
 
         this.client.on('error', err => {
           console.error('Discord client error', err)
         })
+      })()
+
       } catch (e) {
         console.error('Error creating discord client', e)
       }

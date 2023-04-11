@@ -6,11 +6,17 @@ import {
 } from '@reduxjs/toolkit'
 
 import defaultJson from '../data/layouts/defaultLayout.json'
+import fullScreen from '../data/layouts/fullScreenLayout.json'
+import promptEngineering from '../data/layouts/promptEngineeringLayout.json'
+import troubleShooting from '../data/layouts/troubleshootingLayout.json'
 import { RootState } from './store'
 
 // Workspace map for initializing tabs with layout data
-const workspaceMap = {
+export const workspaceMap = {
   default: defaultJson,
+  fullScreen,
+  promptEngineering,
+  troubleShooting,
 }
 
 /**
@@ -131,6 +137,12 @@ export const tabSlice = createSlice({
         changes: { layoutJson: action.payload.layoutJson },
       })
     },
+    changeEditorLayout: (state, action) => {
+      tabAdapater.updateOne(state, {
+        id: action.payload.tabId,
+        changes: { layoutJson: workspaceMap[action.payload.layout] },
+      })
+    },
   },
 })
 
@@ -142,6 +154,7 @@ export const {
   clearTabs,
   saveTabLayout,
   changeActive,
+  changeEditorLayout,
 } = tabSlice.actions
 
 // Export selectors

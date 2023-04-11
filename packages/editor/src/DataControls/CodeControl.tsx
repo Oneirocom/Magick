@@ -1,10 +1,10 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Imports
  */
-import React from "react"
-import { Button } from "@magickml/client-core"
-import { useLayout } from "../contexts/LayoutProvider"
+import React from 'react'
+import { Button } from '@magickml/client-core'
+import { useLayout } from '../contexts/LayoutProvider'
 
 /**
  * CodeControl component.
@@ -24,15 +24,13 @@ const CodeControl: React.FC = (): JSX.Element => {
    * Triggers the creation of a new window or the focus on an existing one.
    */
   const onClick = (): void => {
-    createOrFocus(windowTypes.TEXT_EDITOR, "Text Editor")
+    createOrFocus(windowTypes.TEXT_EDITOR, 'Text Editor')
   }
 
   /**
    * Renders the component.
    */
-  return (
-    <Button onClick={onClick}>Open in code editor</Button>
-  )
+  return <Button onClick={onClick}>Open in code editor</Button>
 }
 
 /**

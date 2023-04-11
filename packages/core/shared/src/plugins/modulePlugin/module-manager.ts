@@ -11,20 +11,11 @@ import {
   MagickWorkerOutputs,
   ModuleComponent,
   AgentInterface,
+  ModuleContext,
 } from '../../types'
 import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'
 import { Module } from './module'
-
-export type ModuleContext = {
-  agent?: AgentInterface
-  secrets?: Record<string, string>
-  publicVariables?: Record<string, string>
-  socketInfo: {
-     targetSocket: string
-     targetNode: MagickNode
-   }
-}
 
 export type ModuleSocketType = {
   name: SocketNameType
@@ -146,11 +137,14 @@ export class ModuleManager {
       return acc
     }, {} as Record<string, unknown>)
 
+    console.log('context is', context)
+
     module.read({
-      agent: context.agent,
+      agent: context.module.agent,
       inputs: parsedInputs,
-      secrets: context?.secrets,
-      publicVariables: context?.publicVariables,
+      secrets: context.module.secrets,
+      publicVariables: context.module.publicVariables,
+      app: context.module.app,
     })
     await engine?.process(
       data,

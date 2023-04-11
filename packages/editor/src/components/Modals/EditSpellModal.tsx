@@ -1,13 +1,13 @@
-// DOCUMENTED 
-import { useSnackbar } from 'notistack';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+// DOCUMENTED
+import { useSnackbar } from 'notistack'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 
-import { closeTab, openTab } from '../../state/tabs';
-import Modal from '../Modal/Modal';
-import css from './modalForms.module.css';
-import { spellApi } from '../../state/api/spells';
+import { closeTab, openTab } from '../../state/tabs'
+import Modal from '../Modal/Modal'
+import css from './modalForms.module.css'
+import { spellApi } from '../../state/api/spells'
 
 /**
  * Represents a modal to edit spells.
@@ -18,47 +18,47 @@ import { spellApi } from '../../state/api/spells';
  * @returns {JSX.Element} The EditSpellModal component
  */
 const EditSpellModal = ({ closeModal, name, tab }) => {
-  const [error, setError] = useState('');
-  const [patchSpell, { isLoading }] = spellApi.usePatchSpellMutation();
+  const [error, setError] = useState('')
+  const [patchSpell, { isLoading }] = spellApi.usePatchSpellMutation()
 
-  const { enqueueSnackbar } = useSnackbar();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar()
+  const dispatch = useDispatch()
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm()
 
   // Handle form submit
-  const onSubmit = handleSubmit(async (data) => {
-    const name = data.name;
-    data.name = tab.id + '-' + encodeURIComponent(btoa(data.name));
+  const onSubmit = handleSubmit(async data => {
+    const name = data.name
+    data.name = tab.id + '-' + encodeURIComponent(btoa(data.name))
 
     const response: any = await patchSpell({
       id: tab.id,
       update: {
         name: name,
       },
-    });
+    })
 
     if (response.error) {
-      setError(response.error.data.error.message);
+      setError(response.error.data.error.message)
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
-      });
-      return;
+      })
+      return
     }
 
-    enqueueSnackbar('Spell saved', { variant: 'success' });
+    enqueueSnackbar('Spell saved', { variant: 'success' })
 
-    dispatch(closeTab(tab.id));
+    dispatch(closeTab(tab.id))
     dispatch(
       openTab({
         name: data.name,
         spellName: data.name,
         type: 'spell',
       })
-    );
+    )
 
-    closeModal();
-  });
+    closeModal()
+  })
 
   const options = [
     {
@@ -67,7 +67,7 @@ const EditSpellModal = ({ closeModal, name, tab }) => {
       onClick: onSubmit,
       disabled: isLoading,
     },
-  ];
+  ]
 
   return (
     <Modal title="Rename Spell" options={options} icon="info">
@@ -89,7 +89,7 @@ const EditSpellModal = ({ closeModal, name, tab }) => {
         </form>
       </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default EditSpellModal;
+export default EditSpellModal
