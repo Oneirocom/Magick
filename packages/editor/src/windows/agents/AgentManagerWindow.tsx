@@ -1,7 +1,6 @@
-// DOCUMENTED 
+// DOCUMENTED
 import { LoadingScreen } from '@magickml/client-core'
 import { IGNORE_AUTH, pluginManager } from '@magickml/core'
-import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -18,8 +17,7 @@ const AgentManagerWindow = () => {
   const [data, setData] = useState<Array<object>>([])
   const { enqueueSnackbar } = useSnackbar()
   const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
-  const [root_spell, setRootSpell] = useState('default')
-  const [enable, setEnable] = useState('')
+  const [enable, setEnable] = useState({})
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 
@@ -47,6 +45,19 @@ const AgentManagerWindow = () => {
     setEnable(plugin_list)
   }
 
+  const updateData = async newData => {
+    const index = data.findIndex(agent => agent.id === newData.id)
+    // Create a new array with the updated object
+    const updatedArray = [
+      ...data.slice(0, index),
+      newData,
+      ...data.slice(index + 1),
+    ]
+
+    // Set the state with the updated array
+    setData(updatedArray)
+  }
+
   /**
    * @description Create a new agent with provided data.
    * @param {Object} data The data needed to create a new agent.
@@ -66,15 +77,17 @@ const AgentManagerWindow = () => {
       return
     }
 
-    axios({
-      url: `${config.apiUrl}/agents`,
+    fetch(`${config.apiUrl}/agents`, {
       method: 'POST',
-      data: {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
         ...data,
         updatedAt: new Date().toISOString(),
         pingedAt: new Date().toISOString(),
-      },
-      headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+      }),
     })
       .then(async res => {
         const res2 = await fetch(
@@ -108,13 +121,11 @@ const AgentManagerWindow = () => {
         Array.isArray(data?.secrets) ? data.secrets : []
       )
       // if the agent's public variable keys don't match the spell's public variable keys, update the agent
-      data.publicVariables =
-        data?.publicVariables ||
-        JSON.stringify(
-          Object.values(
-            (data.rootSpell && data.rootSpell.graph.nodes) || {}
-          ).filter((node: { data }) => node?.data?.isPublic)
+      if (!data.publicVariables && data?.rootSpell?.graph?.nodes) {
+        data.publicVariables = data?.rootSpell?.graph?.nodes.filter(
+          (node: { data }) => node?.data?.isPublic
         )
+      }
 
       // Check if the "id" property exists in the object
       // eslint-disable-next-line no-prototype-builtins
@@ -131,17 +142,21 @@ const AgentManagerWindow = () => {
    * @param {any} _data The new data to update the agent.
    */
   const update = (id: string, _data: any) => {
-    axios
-      .patch(
-        `${config.apiUrl}/agents/${id}`,
-        {
-          ..._data,
-          updatedAt: new Date().toISOString(),
-        },
-        { headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` } }
-      )
-      .then(res => {
-        if (typeof res.data === 'string' && res.data === 'internal error') {
+        fetch(`${config.apiUrl}/agents/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            ..._data,
+            updatedAt: new Date().toISOString(),
+          }),
+        })
+
+      .then(async res => {
+        res = await res.json()
+        if (typeof res === 'string' && res === 'internal error') {
           enqueueSnackbar('internal error updating agent', {
             variant: 'error',
           })
@@ -165,20 +180,23 @@ const AgentManagerWindow = () => {
    * @param {string} id The agent ID to delete.
    */
   const handleDelete = (id: string) => {
-    axios
-      .delete(`${config.apiUrl}/agents/` + id, {
-        headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
-      })
-      .then(res => {
-        if (res.data === 'internal error') {
-          enqueueSnackbar('Server Error deleting agent with id: ' + id, {
-            variant: 'error',
-          })
-        } else {
+    fetch(`${config.apiUrl}/agents/` + id, {
+      method: 'DELETE',
+      headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+    })
+      .then(async res => {
+        res = await res.json()
+        console.log('res is', res)
+        // TODO: Handle internal error
+        // if (res === 'internal error') {
+        //   enqueueSnackbar('Server Error deleting agent with id: ' + id, {
+        //     variant: 'error',
+        //   })
+        // } else {
           enqueueSnackbar('Agent with id: ' + id + ' deleted successfully', {
             variant: 'success',
           })
-        }
+        // }
         if (selectedAgentData.id === id) setSelectedAgentData(undefined)
         resetData()
       })
@@ -238,12 +256,10 @@ const AgentManagerWindow = () => {
       onDelete={handleDelete}
       onCreateAgent={createNew}
       update={update}
-      updateCallBack={resetData}
+      updateData={updateData}
       onLoadFile={loadFile}
       setSelectedAgentData={setSelectedAgentData}
       selectedAgentData={selectedAgentData}
-      rootSpell={root_spell}
-      setRootSpell={setRootSpell}
       onLoadEnables={enable}
     />
   )

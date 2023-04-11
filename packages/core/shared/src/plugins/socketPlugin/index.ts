@@ -2,12 +2,7 @@ import { WorkerOutputs } from 'rete/types/core/data'
 import io from 'socket.io'
 import { MagickComponent } from '../../engine'
 
-import {
-  EngineContext,
-  IRunContextEditor,
-  MagickNode,
-  MagickWorkerInputs,
-} from '../../types'
+import { IRunContextEditor, MagickNode, MagickWorkerInputs } from '../../types'
 import { MagickConsole } from '../consolePlugin/MagickConsole'
 
 export type SocketPluginArgs = {
@@ -27,13 +22,6 @@ export type SocketData = {
   }
 }
 
-type Context = {
-  context: EngineContext
-  currentSpell: {
-    id: string
-  }
-}
-
 function install(
   editor: IRunContextEditor,
   // Need to better type the feathers client here
@@ -50,7 +38,7 @@ function install(
         node,
         inputs,
         outputs,
-        context: Context,
+        context: ModuleContext,
         ...args
       ) => {
         const currentSpell = context.currentSpell

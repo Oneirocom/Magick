@@ -86,7 +86,7 @@ export class SpellRunnerService<
       await spellManager.load(spell as SpellInterface)
     }
 
-    const result = await spellManager.run(id, inputs, secrets, publicVariables)
+    const result = await spellManager.run(id, inputs, secrets, publicVariables, app)
 
     return result || {}
   }

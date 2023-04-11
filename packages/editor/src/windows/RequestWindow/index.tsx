@@ -1,16 +1,16 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * This module exports a `RequestWindow` functional component
  * @module RequestWindow
  */
 
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 
 import RequestTable from './RequestTable'
 
+import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
 import { useConfig } from '../../contexts/ConfigProvider'
-import { API_ROOT_URL } from '@magickml/core'
+import globalConfig from '../../state/globalConfig'
 
 /**
  * The RequestWindow functional component fetches and renders a table containing
@@ -36,15 +36,22 @@ const RequestWindow = () => {
     await fetchRequests()
   }
 
+  const token = globalConfig?.token
+
   /**
    * A function that fetches requests from the API.
    * @async
    */
   const fetchRequests = async () => {
     try {
-      const { data } = await axios.get(
-        `${API_ROOT_URL}/request?hidden=false&projectId=${config.projectId}`
+      const response = await fetch(
+        `${API_ROOT_URL}/request?hidden=false&projectId=${config.projectId}`,
+        {
+          headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+        }
       )
+      const data = await response.json()
+
       setRequests(data.data)
     } catch (error) {
       console.error('Error fetching requests:', error)
@@ -52,8 +59,18 @@ const RequestWindow = () => {
   }
 
   return (
-    <div className="event-container" style={{ paddingBottom: '1em', width: '100%', height: '100vh', overflow: 'scroll' }}>
-      {requests && <RequestTable requests={requests} updateCallback={resetEvents} />}
+    <div
+      className="event-container"
+      style={{
+        paddingBottom: '1em',
+        width: '100%',
+        height: '100vh',
+        overflow: 'scroll',
+      }}
+    >
+      {requests && (
+        <RequestTable requests={requests} updateCallback={resetEvents} />
+      )}
     </div>
   )
 }

@@ -1,36 +1,33 @@
 // DOCUMENTED 
-import axios from 'axios';
 import Rete from 'rete';
-
-import { API_ROOT_URL } from '../../config';
 import { InputControl } from '../../dataControls/InputControl';
 import { MagickComponent } from '../../engine';
 import {
   embeddingSocket,
   eventSocket,
   stringSocket,
-  triggerSocket,
+  triggerSocket
 } from '../../sockets';
 import {
   Event,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData,
+  ModuleContext,
+  WorkerData
 } from '../../types';
 
 /**
  * Information about the EventStore class
  */
-const info =
-  'Event Store is used to store events for an event and user';
+const info = 'Event Store is used to store events for an event and user'
 
 /**
  * EventStore class that extends MagickComponent
  */
 export class EventStore extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Store Event', { outputs: { trigger: 'option' } }, 'Event', info);
+    super('Store Event', { outputs: { trigger: 'option' } }, 'Event', info)
   }
 
   /**
@@ -42,28 +39,28 @@ export class EventStore extends MagickComponent<Promise<void>> {
       dataKey: 'name',
       name: 'Input name',
       placeholder: 'Conversation',
-    });
+    })
 
     const type = new InputControl({
       dataKey: 'type',
       name: 'Type',
       icon: 'moon',
       placeholder: 'conversation',
-    });
+    })
 
-    const contentInput = new Rete.Input('content', 'Content', stringSocket);
+    const contentInput = new Rete.Input('content', 'Content', stringSocket)
     const senderInput = new Rete.Input(
       'sender',
       'Sender Override',
-      stringSocket,
-    );
-    const eventInput = new Rete.Input('event', 'Event', eventSocket);
-    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket);
+      stringSocket
+    )
+    const eventInput = new Rete.Input('event', 'Event', eventSocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
 
-    node.inspector.add(nameInput).add(type);
+    node.inspector.add(nameInput).add(type)
 
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     return node
       .addInput(dataInput)
@@ -71,7 +68,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       .addInput(senderInput)
       .addInput(eventInput)
       .addInput(embedding)
-      .addOutput(dataOutput);
+      .addOutput(dataOutput)
   }
 
   /**
@@ -85,40 +82,40 @@ export class EventStore extends MagickComponent<Promise<void>> {
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: any,
+    context: ModuleContext,
   ) {
-    const { projectId } = context;
+    const { projectId } = context
 
-    const event = inputs['event'][0] as Event;
-    const sender = (inputs['sender'] ? inputs['sender'][0] : null) as string;
-    let content = (inputs['content'] ? inputs['content'][0] : null) as string;
+    const event = inputs['event'][0] as Event
+    const sender = (inputs['sender'] ? inputs['sender'][0] : null) as string
+    let content = (inputs['content'] ? inputs['content'][0] : null) as string
     let embedding = (
       inputs['embedding'] ? inputs['embedding'][0] : null
-    ) as number[];
+    ) as number[]
 
     if (typeof embedding == 'string') {
-      embedding = (embedding as string).split(',').map(x => parseFloat(x));
+      embedding = (embedding as string).split(',').map(x => parseFloat(x))
     }
 
-    const typeData = node?.data?.type as string;
+    const typeData = node?.data?.type as string
 
     const type =
       typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
-        : 'none';
+        : 'none'
 
     if (!content) {
-      content = (event as Event).content || 'Error';
-      if (!content) console.log('Content is null, not storing the event !!');
+      content = (event as Event).content || 'Error'
+      if (!content) console.log('Content is null, not storing the event !!')
     }
 
     type Data = {
-      sender: string;
-      projectId: string;
-      content: string;
-      type: string;
-      embedding?: number[] | string[];
-    };
+      sender: string
+      projectId: string
+      content: string
+      type: string
+      embedding?: number[] | string[]
+    }
 
     const data: Data = {
       ...event,
@@ -126,14 +123,16 @@ export class EventStore extends MagickComponent<Promise<void>> {
       projectId,
       content,
       type,
-    };
+    }
 
-    if (embedding) data.embedding = embedding;
+    if (embedding) data.embedding = embedding
 
     if (content && content !== '') {
-      await axios.post(`${API_ROOT_URL}/events`, data);
+      const { app } = context.module;
+      if(!app) throw new Error('App is not defined, cannot create event');
+      const result = await app.service('events').create(data);
     } else {
-      throw new Error('Content is empty, not storing the event !!');
+      throw new Error('Content is empty, not storing the event !!')
     }
   }
 }
