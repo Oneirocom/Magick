@@ -2,7 +2,12 @@ import { WorkerOutputs } from 'rete/types/core/data'
 import io from 'socket.io'
 import { MagickComponent } from '../../engine'
 
-import { IRunContextEditor, MagickNode, MagickWorkerInputs } from '../../types'
+import {
+  IRunContextEditor,
+  MagickNode,
+  MagickWorkerInputs,
+  ModuleContext,
+} from '../../types'
 import { MagickConsole } from '../consolePlugin/MagickConsole'
 
 export type SocketPluginArgs = {
