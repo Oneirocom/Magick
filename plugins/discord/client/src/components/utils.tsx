@@ -44,7 +44,7 @@ export const KeyInput: React.FC<{ value: string, setValue: React.Dispatch<React.
   return (value ? (
     <>
       {/* Conditionally display the private key, obfuscating if secret=true */}
-      <p>{secret ? obfuscateKey(value) : value}</p>
+      <span>{secret ? obfuscateKey(value) : value}</span>
       {/* Render remove button */}
       <button onClick={removeKey} style={{ cursor: 'pointer' }}>remove</button>
     </>
