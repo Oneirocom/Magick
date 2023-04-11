@@ -9,7 +9,7 @@ import styles from './button.module.css';
  * @param {function} [onClick] - The click event handler function. Optional.
  */
 export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
-  onClick = (e?: React.MouseEvent<HTMLButtonElement>) => {},
+  onClick = (e?: React.MouseEvent<HTMLButtonElement>) => { /* null */},
   ...props
 }) => {
   return (
