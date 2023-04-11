@@ -18,8 +18,8 @@ export async function makeChatCompletion(
 ): Promise<{ success: boolean, result?: string | null, error?: string | null }> {
   const { node, inputs, context } = data
 
-  // Filter out undefined input keys from context.module.inputs
-  const inputKeys = Object.values(context.module.inputs).filter((input: any) => {
+  // Filter out undefined input keys from inputs
+  const inputKeys = Object.values(inputs).filter((input: any) => {
     return Object.values(input).filter(Boolean).length > 0
   })[0]
 
@@ -33,10 +33,10 @@ export async function makeChatCompletion(
   // Get or set default settings
   const settings = {
     model: node?.data?.model,
-    temperature: parseFloat(node?.data?.temperature ?? "0.0"),
-    top_p: parseFloat(node?.data?.top_p ?? "1.0"),
-    frequency_penalty: parseFloat(node?.data?.frequency_penalty ?? "0.0"),
-    presence_penalty: parseFloat(node?.data?.presence_penalty ?? "0.0"),
+    temperature: parseFloat(node?.data?.temperature as string ?? "0.0"),
+    top_p: parseFloat(node?.data?.top_p as string ?? "1.0"),
+    frequency_penalty: parseFloat(node?.data?.frequency_penalty as string ?? "0.0"),
+    presence_penalty: parseFloat(node?.data?.presence_penalty as string ?? "0.0"),
   } as any
 
   // Initialize conversationMessages array
@@ -107,7 +107,7 @@ export async function makeChatCompletion(
       totalTokens: usage.total_tokens,
       hidden: false,
       processed: false,
-      spell: context.module.spell,
+      spell: context.currentSpell,
       nodeId: node.id,
     })
 

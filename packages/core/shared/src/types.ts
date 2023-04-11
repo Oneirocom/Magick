@@ -1,3 +1,4 @@
+import { Application, Application as FeathersApplication, Koa } from '@feathersjs/koa'
 import PubSub from 'pubsub-js'
 import { Connection, Input, Node, NodeEditor, Output, Socket } from 'rete'
 import {
@@ -5,7 +6,7 @@ import {
   InputsData,
   NodeData,
   OutputsData,
-  WorkerOutputs,
+  WorkerOutputs
 } from 'rete/types/core/data'
 import { MagickComponent } from './engine'
 import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
@@ -13,20 +14,19 @@ import { Inspector } from './plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
-import { Application as FeathersApplication, Koa } from '@feathersjs/koa'
 
+import { DataControl } from './plugins/inspectorPlugin'
 import { TaskSocketInfo } from './plugins/taskPlugin/task'
 import { SpellInterface } from './schemas'
-import { DataControl } from './plugins/inspectorPlugin'
 import { SpellManager } from './spellManager'
 
-import io from 'socket.io'
+import Agent from './agents/Agent'
 
 export { MagickComponent } from './engine'
-
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
-
 export * from './schemas'
+
+
 
 export type ImageType = {
   id: string
@@ -265,9 +265,6 @@ export type OnDebug = (
 export type PublishEditorEvent = (data: PubSubData) => void
 
 export interface EditorContext extends EngineContext {
-  /**
-   * @deprecated The method should not be used
-   */
   onTrigger: (
     node: MagickNode | string,
     callback: (data: unknown) => void
@@ -567,18 +564,45 @@ export type EmbeddingData = {
   apiKey: string
 }
 
+
+type Spell = {
+  id: string
+  name: string
+  projectId: string
+  hash: string
+  createdAt: string
+  updatedAt: string
+  graph: {
+    id: string
+    nodes: Record<string, NodeData>
+    comments?: []
+  }
+}
+
+export type ModuleContext = {
+  context: EngineContext
+  module: {
+    secrets?: Record<string, string>
+    publicVariables?: Record<string, string>
+    agent?: Agent
+    app?: Application
+  }
+  projectId: string
+  currentSpell: Spell
+  data: {
+    [key: string]: unknown
+  }
+  socketInfo: {
+     targetSocket: string
+     targetNode: MagickNode
+   }
+}
+
 export type CompletionHandlerInputData = {
   node: NodeData
   inputs: MagickWorkerInputs
   outputs: MagickWorkerOutputs
-  context: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    module: any
-    secrets: Record<string, string>
-    projectId: string
-    context: EngineContext
-    currentSpell: SpellInterface
-  }
+  context: ModuleContext
 }
 
 export type MessagingRequest = unknown

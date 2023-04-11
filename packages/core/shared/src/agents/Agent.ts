@@ -1,8 +1,8 @@
 // DOCUMENTED
-import { SpellManager, SpellRunner } from '../spellManager/index';
-import { WorldManager } from '../world/worldManager';
-import { pluginManager } from '../plugin';
-import { AgentInterface, SpellInterface } from '../schemas';
+import { SpellManager, SpellRunner } from '../spellManager/index'
+import { WorldManager } from '../world/worldManager'
+import { pluginManager } from '../plugin'
+import { AgentInterface, SpellInterface } from '../schemas'
 import { AgentManager } from './AgentManager'
 import _ from 'lodash'
 
@@ -15,7 +15,7 @@ type AgentData = {
   name: string
   secrets: string
   rootSpell: any
-  publicVariables: any[]
+  publicVariables: Record<string, string>
   projectId: string
   spellManager: SpellManager
   agent?: any
@@ -29,7 +29,7 @@ export class Agent implements AgentInterface {
   name = ''
   id: any
   secrets: any
-  publicVariables: any[]
+  publicVariables: Record<string, string>
   data: AgentData
   app: any
   spellManager: SpellManager
@@ -90,12 +90,16 @@ export class Agent implements AgentInterface {
       const agentStartMethods = pluginManager.getAgentStartMethods()
 
       for (const method of Object.keys(agentStartMethods)) {
-        await agentStartMethods[method]({
-          agentManager,
-          agent: this,
-          spellRunner: this.spellRunner,
-          worldManager: worldManager,
-        })
+        try {
+          await agentStartMethods[method]({
+            agentManager,
+            agent: this,
+            spellRunner: this.spellRunner,
+            worldManager: worldManager,
+          })
+        } catch (err) {
+          console.error('Error in agent start method', method, err)
+        }
       }
 
       const outputTypes = pluginManager.getOutputTypes()

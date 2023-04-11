@@ -1,6 +1,5 @@
 // DOCUMENTED
-import Rete, { Node } from 'rete'
-import { API_ROOT_URL } from '../../config'
+import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { arraySocket, eventSocket, triggerSocket } from '../../sockets'
@@ -10,6 +9,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  ModuleContext,
   WorkerData,
 } from '../../types'
 
@@ -39,7 +39,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       info
     )
 
-    // this.runFromCache = true;
+    this.runFromCache = true
   }
 
   /**
@@ -94,41 +94,18 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs
+    _outputs: MagickWorkerOutputs,
+    context: ModuleContext
   ) {
-    const getEventsbyEmbedding = async (
-      params: GetEventArgs & { embedding: string }
-    ) => {
-      const urlString = `${API_ROOT_URL}/events`
-      const url = new URL(urlString)
-      for (const p in params) {
-        // append params to url, make sure to preserve arrays
-        if (Array.isArray(params[p])) {
-          params[p].forEach(v => url.searchParams.append(p, v))
-        } else {
-          url.searchParams.append(p, params[p])
-        }
-      }
-      const response = await fetch(url.toString())
-      if (response.status !== 200) return null
-      const json = await response.json()
-      return json.events
-    }
-    const getEvents = async (params: GetEventArgs) => {
-      const urlString = `${API_ROOT_URL}/events`
-      const url = new URL(urlString)
-      for (const p in params) {
-        if (Array.isArray(params[p])) {
-          params[p].forEach(v => url.searchParams.append(p, v))
-        } else {
-          url.searchParams.append(p, params[p])
-        }
-      }
+    const { app } = context.module
+    if (!app) throw new Error('App is not defined, cannot create event')
 
-      const response = await fetch(url.toString())
-      if (response.status !== 200) return null
-      const json = await response.json()
-      return json.events
+    const getEvents = async (params: GetEventArgs) => {
+      const result = await app.service('events').find({ query: params })
+      // app is a feathers-koa app
+      const { events } = result
+
+      return events
     }
 
     const event = (inputs['event'] &&
@@ -165,8 +142,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       limit,
     }
 
-    let events
-
     if (embedding) {
       data['embedding'] = embedding
     }
@@ -181,12 +156,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
             Array.from<number>(new Uint8Array(uint))
           )
         )
-        events = await getEventsbyEmbedding({ ...data, embedding: str })
+        data['embedding'] = str
       }
-    } else {
-      events = await getEvents(data)
     }
 
+    const events = await getEvents(data)
     return {
       events,
     }

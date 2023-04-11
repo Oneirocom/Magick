@@ -3,7 +3,6 @@ import { IconBtn, Switch } from '@magickml/client-core'
 import { IGNORE_AUTH, pluginManager } from '@magickml/core'
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography } from '@mui/material'
-import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -24,22 +23,22 @@ const RenderComp = (props: any) => {
 interface AgentDetailsProps {
   selectedAgentData: any
   setSelectedAgentData: any
-  updateCallback: () => void
-  onLoadEnables: boolean
+  updateData: (data: object) => void
+  onLoadEnables: object
 }
 
 /**
  * AgentDetails component displays agent details and provides functionalities to interact with agents.
  *
  * @param selectedAgentData - The data of the selected agent.
- * @param setSelectedAgentData - Function to update the selected agent data.
+ * @param setSelectedA gentData - Function to update the selected agent data.
  * @param updateCallback - Callback function to update data.
  * @param onLoadEnables - The boolean value to show enabled components on load.
  */
 const AgentDetails = ({
   selectedAgentData,
   setSelectedAgentData,
-  updateCallback,
+  updateData,
   onLoadEnables,
 }: AgentDetailsProps) => {
   const [spellList, setSpellList] = useState<any[]>([])
@@ -71,8 +70,16 @@ const AgentDetails = ({
       : '[]'
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
-    axios
-      .patch(`${config.apiUrl}/agents/${id}`, _data, { headers })
+
+    fetch(`${config.apiUrl}/agents/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(_data),
+    })
+      .then(res => res.json())
       .then(res => {
         if (typeof res.data === 'string' && res.data === 'internal error') {
           enqueueSnackbar('Internal error updating agent', {
@@ -83,7 +90,9 @@ const AgentDetails = ({
             variant: 'success',
           })
           setSelectedAgentData(res.data)
-          updateCallback()
+
+          // update data instead of refetching data to avoid agent window flashes
+          updateData(res.data)
         }
       })
       .catch(e => {
@@ -234,7 +243,7 @@ const AgentDetails = ({
           onChange={() => {
             setSelectedAgentData({
               ...selectedAgentData,
-              enabled: selectedAgentData.enabled ? false : true
+              enabled: selectedAgentData.enabled ? false : true,
             })
           }}
           style={{ alignSelf: 'self-start' }}
@@ -274,7 +283,7 @@ const AgentDetails = ({
               ...selectedAgentData,
               rootSpell: newRootSpell,
               publicVariables: JSON.stringify(
-                Object.values(newRootSpell.graph.nodes as any)
+                newRootSpell.graph.nodes
                   // get the public nodes
                   .filter((node: { data }) => node?.data?.isPublic)
                   // map to an array of objects

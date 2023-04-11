@@ -9,6 +9,7 @@ import { usePubSub } from '../../contexts/PubSubProvider'
 import css from './menuBar.module.css'
 import { activeTabSelector, Tab } from '../../state/tabs'
 import { toggleAutoSave } from '../../state/preferences'
+import { changeEditorLayout } from '../../state/tabs'
 import { RootState } from '../../state/store'
 
 /**
@@ -217,6 +218,25 @@ const MenuBar = () => {
     dispatch(toggleAutoSave())
   }
 
+  /**
+   * Toggle save handler
+   */
+  const changeLayout = event => {
+    const layout: string = event.target.innerText
+    const formattedKey = layout
+      .replace(/[-_](.)/g, (_, c) => c.toUpperCase())
+      .replace(/\s(.)/g, (_, c) => c.toUpperCase())
+      .replace(/\s/g, '')
+      .replace(/^(.)/, (_, c) => c.toLowerCase())
+
+    dispatch(
+      changeEditorLayout({
+        tabId: activeTab.id,
+        layout: formattedKey,
+      })
+    )
+  }
+
   // Menu bar entries
   const menuBarItems = {
     file: {
@@ -296,6 +316,22 @@ const MenuBar = () => {
         },
       },
     },
+    layout: {
+      items: {
+        default: {
+          onClick: changeLayout,
+        },
+        full_screen: {
+          onClick: changeLayout,
+        },
+        prompt_engineering: {
+          onClick: changeLayout,
+        },
+        trouble_shooting: {
+          onClick: changeLayout,
+        },
+      },
+    },
   }
 
   /**
@@ -306,7 +342,12 @@ const MenuBar = () => {
    */
   const parseStringToUnicode = (commandString: string) => {
     let formattedCommand = commandString
-    formattedCommand = formattedCommand.replace('option', '\u2325')
+    if (navigator.userAgent.indexOf('Win') !== -1) {
+      formattedCommand = formattedCommand.replace('option', 'alt')
+    } else {
+      formattedCommand = formattedCommand.replace('option', '\u2325')
+    }
+    // formattedCommand = formattedCommand.replace('option', '\u2325')
     formattedCommand = formattedCommand.replace('shift', '\u21E7')
     formattedCommand = formattedCommand.replace('cmd', '\u2318')
     formattedCommand = formattedCommand.replace(/[`+`]/g, ' ')
