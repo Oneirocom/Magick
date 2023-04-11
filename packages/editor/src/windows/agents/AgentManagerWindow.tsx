@@ -1,7 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen } from '@magickml/client-core'
 import { IGNORE_AUTH, pluginManager } from '@magickml/core'
-import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -78,15 +77,17 @@ const AgentManagerWindow = () => {
       return
     }
 
-    axios({
-      url: `${config.apiUrl}/agents`,
+    fetch(`${config.apiUrl}/agents`, {
       method: 'POST',
-      data: {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
         ...data,
         updatedAt: new Date().toISOString(),
         pingedAt: new Date().toISOString(),
-      },
-      headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+      }),
     })
       .then(async res => {
         const res2 = await fetch(
@@ -141,17 +142,21 @@ const AgentManagerWindow = () => {
    * @param {any} _data The new data to update the agent.
    */
   const update = (id: string, _data: any) => {
-    axios
-      .patch(
-        `${config.apiUrl}/agents/${id}`,
-        {
-          ..._data,
-          updatedAt: new Date().toISOString(),
-        },
-        { headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` } }
-      )
-      .then(res => {
-        if (typeof res.data === 'string' && res.data === 'internal error') {
+        fetch(`${config.apiUrl}/agents/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            ..._data,
+            updatedAt: new Date().toISOString(),
+          }),
+        })
+
+      .then(async res => {
+        res = await res.json()
+        if (typeof res === 'string' && res === 'internal error') {
           enqueueSnackbar('internal error updating agent', {
             variant: 'error',
           })
@@ -175,20 +180,23 @@ const AgentManagerWindow = () => {
    * @param {string} id The agent ID to delete.
    */
   const handleDelete = (id: string) => {
-    axios
-      .delete(`${config.apiUrl}/agents/` + id, {
-        headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
-      })
-      .then(res => {
-        if (res.data === 'internal error') {
-          enqueueSnackbar('Server Error deleting agent with id: ' + id, {
-            variant: 'error',
-          })
-        } else {
+    fetch(`${config.apiUrl}/agents/` + id, {
+      method: 'DELETE',
+      headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+    })
+      .then(async res => {
+        res = await res.json()
+        console.log('res is', res)
+        // TODO: Handle internal error
+        // if (res === 'internal error') {
+        //   enqueueSnackbar('Server Error deleting agent with id: ' + id, {
+        //     variant: 'error',
+        //   })
+        // } else {
           enqueueSnackbar('Agent with id: ' + id + ' deleted successfully', {
             variant: 'success',
           })
-        }
+        // }
         if (selectedAgentData.id === id) setSelectedAgentData(undefined)
         resetData()
       })

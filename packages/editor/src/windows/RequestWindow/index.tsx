@@ -1,10 +1,9 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * This module exports a `RequestWindow` functional component
  * @module RequestWindow
  */
 
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 import RequestTable from './RequestTable'
@@ -38,19 +37,21 @@ const RequestWindow = () => {
   }
 
   const token = globalConfig?.token
-  
+
   /**
    * A function that fetches requests from the API.
    * @async
    */
   const fetchRequests = async () => {
     try {
-      const { data } = await axios.get(
+      const response = await fetch(
         `${API_ROOT_URL}/request?hidden=false&projectId=${config.projectId}`,
         {
           headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
         }
       )
+      const data = await response.json()
+
       setRequests(data.data)
     } catch (error) {
       console.error('Error fetching requests:', error)
@@ -58,8 +59,18 @@ const RequestWindow = () => {
   }
 
   return (
-    <div className="event-container" style={{ paddingBottom: '1em', width: '100%', height: '100vh', overflow: 'scroll' }}>
-      {requests && <RequestTable requests={requests} updateCallback={resetEvents} />}
+    <div
+      className="event-container"
+      style={{
+        paddingBottom: '1em',
+        width: '100%',
+        height: '100vh',
+        overflow: 'scroll',
+      }}
+    >
+      {requests && (
+        <RequestTable requests={requests} updateCallback={resetEvents} />
+      )}
     </div>
   )
 }

@@ -119,7 +119,7 @@ function RequestTable({ requests, updateCallback }) {
       projectId: config.projectId
     };
     if (!_.isEqual(reqBody, rowData)) {
-      const resp = await fetch(`${API_ROOT_URL}/requests/${id}`, {
+      const resp = await fetch(`${API_ROOT_URL}/request/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reqBody)
@@ -186,9 +186,9 @@ function RequestTable({ requests, updateCallback }) {
 
   // Handle request deletion
   const handleRequestDelete = async (event: any) => {
-    const resp = await fetch(`${API_ROOT_URL}/requests/${event.id}`, {
+    const resp = await fetch(`${API_ROOT_URL}/request/${event.id}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${config.token}` },
       body: JSON.stringify({ hidden: true })
     });
 
