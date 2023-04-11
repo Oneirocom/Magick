@@ -1,7 +1,7 @@
 import io from 'socket.io'
 import { MagickComponent } from '../../engine'
 
-import { EngineContext, IRunContextEditor, MagickNode } from '../../types'
+import { IRunContextEditor, MagickNode, ModuleContext } from '../../types'
 import { MagickConsole } from '../consolePlugin/MagickConsole'
 
 export type SocketPluginArgs = {
@@ -17,13 +17,6 @@ export type SocketData = {
   error?: {
     message: string
     stack: string
-  }
-}
-
-type Context = {
-  context: EngineContext
-  currentSpell: {
-    id: string
   }
 }
 
@@ -43,10 +36,9 @@ function install(
         node,
         inputs,
         outputs,
-        context: Context,
+        context: ModuleContext,
         ...args
       ) => {
-        console.log('Running worker for node', node.id, node.name)
         const currentSpell = context.currentSpell
         const event = `${currentSpell.id}-${node.id}`
 

@@ -85,8 +85,6 @@ export const event = (app: Application) => {
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
             if (process.env.DATABASE_TYPE == "pg") {
-              console.log(embedding as Array<number>)
-              console.log(typeof(embedding as Array<number>))
               context.data.embedding = pgvector.toSql(embedding as Array<number>)  
               return context;
             }else{

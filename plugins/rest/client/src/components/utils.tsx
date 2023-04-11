@@ -56,7 +56,7 @@ export const KeyInput: React.FC<KeyInputProps> = ({ value, setValue, secret }) =
     <>
       {value ? (
         <>
-          <p>{secret ? obfuscateKey(value) : value}</p>
+          <span>{secret ? obfuscateKey(value) : value}</span>
           <button
             onClick={removeKey}
             style={{ cursor: 'pointer' }}
