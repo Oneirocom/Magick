@@ -3,7 +3,6 @@ import { IconBtn, Switch } from '@magickml/client-core'
 import { IGNORE_AUTH, pluginManager } from '@magickml/core'
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography } from '@mui/material'
-import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -71,8 +70,16 @@ const AgentDetails = ({
       : '[]'
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
-    axios
-      .patch(`${config.apiUrl}/agents/${id}`, _data, { headers })
+
+    fetch(`${config.apiUrl}/agents/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(_data),
+    })
+      .then(res => res.json())
       .then(res => {
         if (typeof res.data === 'string' && res.data === 'internal error') {
           enqueueSnackbar('Internal error updating agent', {

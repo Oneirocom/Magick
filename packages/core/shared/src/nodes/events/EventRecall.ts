@@ -1,6 +1,5 @@
 // DOCUMENTED 
 import Rete from 'rete';
-import { API_ROOT_URL } from '../../config';
 import { InputControl } from '../../dataControls/InputControl';
 import { MagickComponent } from '../../engine';
 import { arraySocket, eventSocket, triggerSocket } from '../../sockets';
