@@ -145,9 +145,9 @@ export class ServerPlugin extends Plugin {
     serverInit = () => null,
     agentMethods = {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      start: () => {},
+      start: () => { /* null */},
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      stop: () => {},
+      stop: () => { /* null */},
     },
     serverRoutes = [],
     secrets = [],
