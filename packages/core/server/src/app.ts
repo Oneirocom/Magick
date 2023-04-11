@@ -18,7 +18,6 @@ import {
   DEFAULT_PROJECT_ID,
   DEFAULT_USER_ID,
   globalsManager,
-  IGNORE_AUTH,
 } from '@magickml/core'
 import { createClient } from '@supabase/supabase-js'
 
@@ -130,14 +129,13 @@ app.use(bodyParser())
 app.configure(configureManager())
 
 // Configure authentication
-if (!IGNORE_AUTH) {
   app.set('authentication', {
     secret: process.env.JWT_SECRET || 'secret',
     entity: null,
     authStrategies: ['jwt'],
     jwtOptions: {
       header: { type: 'access' },
-      audience: 'https://yourdomain.com',
+      audience: 'https://magickml.com',
       issuer: 'feathers',
       algorithm: 'A256GCM',
       expiresIn: '1d',
@@ -145,7 +143,6 @@ if (!IGNORE_AUTH) {
   })
 
   app.configure(authentication)
-}
 
 // Configure WebSocket for the app
 app.configure(
@@ -175,21 +172,12 @@ app.hooks({
     all: [
       logError,
       async (context: HookContext, next) => {
-        if (IGNORE_AUTH) return await next()
         if (context.path !== 'authentication') {
           return authenticate('jwt')(context, next)
         }
       },
       async (context: HookContext, next) => {
         const { params } = context
-
-        if (IGNORE_AUTH) {
-          context.params.user = {
-            id: DEFAULT_USER_ID,
-          }
-          context.params.projectId = DEFAULT_PROJECT_ID
-          return next()
-        }
 
         const { authentication, authenticated } = params
 

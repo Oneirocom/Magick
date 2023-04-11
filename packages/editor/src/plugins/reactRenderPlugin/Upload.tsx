@@ -1,9 +1,8 @@
 // DOCUMENTED 
 
-import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/core'
 import { useState } from "react"
 import { useSelector } from "react-redux"
-import { useConfig } from "../../contexts/ConfigProvider"
 
 /**
  * Converts a file object to a base64-encoded data URI
@@ -59,7 +58,7 @@ export const Upload = ({ id_image, output }: UploadProps) => {
       
       await fetch(`${API_ROOT_URL}/upload`, {
         method: 'POST',
-        headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
         body: JSON.stringify({ id: id_image, uri: dataUri }),
       })
     } catch (error) {

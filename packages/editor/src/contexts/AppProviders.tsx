@@ -25,7 +25,7 @@ function ComposeProviders({ config, children }) {
   const _providers = [
     [ConfigProvider, { config }],
     [ThemeProvider, { theme: darkTheme }],
-    [FeathersProvider, { token: config.token }],
+    [FeathersProvider, { token: config.token || 'DEFAULT_TOKEN' }],
     PubSubProvider,
     ToastProvider,
   ].reverse();

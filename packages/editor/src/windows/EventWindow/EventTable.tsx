@@ -2,7 +2,6 @@
 // Import statements kept as-is
 import { Button } from '@magickml/client-core'
 import { API_ROOT_URL } from '@magickml/core'
-import { IGNORE_AUTH } from '@magickml/core'
 import {
   Grid,
   IconButton,
@@ -159,7 +158,7 @@ function EventTable({ events, updateCallback }) {
       projectId: config.projectId,
     }
     if (!_.isEqual(reqBody, rowData)) {
-      const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
+      const headers = { Authorization: `Bearer ${token}` }
 
       const isUpdated = await fetch(`${API_ROOT_URL}/events/${id}`, {
         method: 'PUT',

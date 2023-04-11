@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen } from '@magickml/client-core'
-import { IGNORE_AUTH, pluginManager } from '@magickml/core'
+import { pluginManager } from '@magickml/core'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -29,7 +29,7 @@ const AgentManagerWindow = () => {
     const res = await fetch(
       `${config.apiUrl}/agents?projectId=${config.projectId}`,
       {
-        headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       }
     )
     const json = await res.json()
@@ -70,7 +70,7 @@ const AgentManagerWindow = () => {
     updatedAt: string
     secrets: string
   }) => {
-    if (!token && !IGNORE_AUTH) {
+    if (!token) {
       enqueueSnackbar('You must be logged in to create an agent', {
         variant: 'error',
       })
@@ -93,7 +93,7 @@ const AgentManagerWindow = () => {
         const res2 = await fetch(
           `${config.apiUrl}/agents?projectId=${config.projectId}`,
           {
-            headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${token}` },
           }
         )
         const json = await res2.json()
@@ -182,7 +182,7 @@ const AgentManagerWindow = () => {
   const handleDelete = (id: string) => {
     fetch(`${config.apiUrl}/agents/` + id, {
       method: 'DELETE',
-      headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then(async res => {
         res = await res.json()
@@ -215,7 +215,7 @@ const AgentManagerWindow = () => {
       const res = await fetch(
         `${config.apiUrl}/agents?projectId=${config.projectId}`,
         {
-          headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         }
       )
       const json = await res.json()
@@ -230,7 +230,7 @@ const AgentManagerWindow = () => {
       const res = await fetch(
         `${config.apiUrl}/agents?projectId=${config.projectId}`,
         {
-          headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         }
       )
       const json = await res.json()
