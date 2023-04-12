@@ -274,11 +274,12 @@ const AgentDetails = ({
               enabled: true,
               ...selectedAgentData,
             })
+            console.log('newRootSpell', newRootSpell)
             setSelectedAgentData({
               ...selectedAgentData,
               rootSpell: newRootSpell,
               publicVariables: JSON.stringify(
-                newRootSpell.graph.nodes
+                Object.values(newRootSpell.graph.nodes)
                   // get the public nodes
                   .filter((node: { data }) => node?.data?.isPublic)
                   // map to an array of objects
