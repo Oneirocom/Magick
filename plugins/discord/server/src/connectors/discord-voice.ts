@@ -7,7 +7,7 @@ import {
   StreamType,
   NoSubscriberBehavior,
 } from '@discordjs/voice';
-import { tts, tts_tiktalknet } from '@magickml/server-core';
+import { tts, tts_tiktalknet, app } from '@magickml/server-core';
 import { addSpeechEvent } from './voiceUtils/addSpeechEvent';
 
 /**
@@ -101,6 +101,7 @@ export function initSpeechClient(options: {
         },
         secrets: agent.secrets ?? {},
         publicVariables: agent.publicVariables ?? {},
+        app,
         runSubspell: true,
       });
 

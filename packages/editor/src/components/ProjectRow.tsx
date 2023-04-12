@@ -32,7 +32,7 @@ type ProjectProps = {
 const ProjectRow = ({
   label,
   selectedSpell,
-  onClick = () => {},
+  onClick = () => { /* null */},
   icon = '',
   spell,
   style = {},

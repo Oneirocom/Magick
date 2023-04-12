@@ -134,7 +134,7 @@ export const Icon = ({
   name = 'warn',
   size,
   style = {},
-  onClick = () => {},
+  onClick = () => { /* null */},
 }: IconProps) => {
   return (
     <div

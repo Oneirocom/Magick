@@ -1,4 +1,10 @@
 // DOCUMENTED 
+
+import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
+import { useState } from "react"
+import { useSelector } from "react-redux"
+import { useConfig } from "../../contexts/ConfigProvider"
+
 /**
  * Converts a file object to a base64-encoded data URI
  * @param file - The file to be converted
@@ -29,7 +35,10 @@ interface UploadState {
  * Upload component that allows users to select, preview, and upload an image file
  */
 export const Upload = ({ id_image, output }: UploadProps) => {
-  const [state, setState] = React.useState<UploadState>({
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
+
+  const [state, setState] = useState<UploadState>({
     file: null,
     output,
     dataURI: null,
@@ -47,7 +56,12 @@ export const Upload = ({ id_image, output }: UploadProps) => {
     // Convert file to data URI and upload to server
     try {
       const dataUri = await fileToDataUri(file)
-      await axios.post(`${API_ROOT_URL}/upload`, { id: id_image, uri: dataUri })
+      
+      await fetch(`${API_ROOT_URL}/upload`, {
+        method: 'POST',
+        headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ id: id_image, uri: dataUri }),
+      })
     } catch (error) {
       console.log(`Error uploading file: ${error}`)
     }

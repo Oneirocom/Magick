@@ -1,5 +1,5 @@
 // DOCUMENTED
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -9,7 +9,9 @@ import { usePubSub } from '../../contexts/PubSubProvider'
 import css from './menuBar.module.css'
 import { activeTabSelector, Tab } from '../../state/tabs'
 import { toggleAutoSave } from '../../state/preferences'
+import { changeEditorLayout } from '../../state/tabs'
 import { RootState } from '../../state/store'
+import { useProjectWindow } from '@magickml/client-core'
 
 /**
  * MenuBar component
@@ -21,6 +23,8 @@ const MenuBar = () => {
   const { publish, events } = usePubSub()
   const dispatch = useDispatch()
   const activeTab = useSelector(activeTabSelector)
+  const { openProjectWindow, setOpenProjectWindow, setOpenDrawer } =
+    useProjectWindow()
 
   const preferences = useSelector(
     (state: RootState) => state.preferences
@@ -142,6 +146,14 @@ const MenuBar = () => {
   }
 
   /**
+   * Project window creation handler
+   */
+  const onProjectWindowCreate = () => {
+    if (!openProjectWindow) setOpenDrawer(false)
+    setOpenProjectWindow(prevState => !prevState)
+  }
+
+  /**
    * Export handler
    */
   const onExport = () => {
@@ -217,6 +229,25 @@ const MenuBar = () => {
     dispatch(toggleAutoSave())
   }
 
+  /**
+   * Toggle save handler
+   */
+  const changeLayout = event => {
+    const layout: string = event.target.innerText
+    const formattedKey = layout
+      .replace(/[-_](.)/g, (_, c) => c.toUpperCase())
+      .replace(/\s(.)/g, (_, c) => c.toUpperCase())
+      .replace(/\s/g, '')
+      .replace(/^(.)/, (_, c) => c.toLowerCase())
+
+    dispatch(
+      changeEditorLayout({
+        tabId: activeTab.id,
+        layout: formattedKey,
+      })
+    )
+  }
+
   // Menu bar entries
   const menuBarItems = {
     file: {
@@ -285,6 +316,10 @@ const MenuBar = () => {
         console: {
           onClick: onConsole,
         },
+        project_window: {
+          onClick: onProjectWindowCreate,
+          hotKey: 'control+b',
+        },
       },
       settings: {
         items: {
@@ -293,6 +328,22 @@ const MenuBar = () => {
             hotKey: 'option+shift+a',
             isActive: preferences.autoSave,
           },
+        },
+      },
+    },
+    layout: {
+      items: {
+        default: {
+          onClick: changeLayout,
+        },
+        full_screen: {
+          onClick: changeLayout,
+        },
+        prompt_engineering: {
+          onClick: changeLayout,
+        },
+        trouble_shooting: {
+          onClick: changeLayout,
         },
       },
     },
@@ -314,6 +365,7 @@ const MenuBar = () => {
     // formattedCommand = formattedCommand.replace('option', '\u2325')
     formattedCommand = formattedCommand.replace('shift', '\u21E7')
     formattedCommand = formattedCommand.replace('cmd', '\u2318')
+    formattedCommand = formattedCommand.replace('control', '\u2303')
     formattedCommand = formattedCommand.replace(/[`+`]/g, ' ')
     return formattedCommand
   }
