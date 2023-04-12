@@ -55,7 +55,6 @@ export default class SpellManager {
   async run(spellId: string, inputs: MagickSpellInput, secrets: Record<string, string>, publicVariables, app) {
     const runner = this.getSpellRunner(spellId)
     
-    console.log('Calling runComponent from spell manager')
     const result = await runner?.runComponent({
       inputs,
       secrets,

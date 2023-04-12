@@ -1,4 +1,8 @@
-import { Application, Application as FeathersApplication, Koa } from '@feathersjs/koa'
+import {
+  Application,
+  Application as FeathersApplication,
+  Koa,
+} from '@feathersjs/koa'
 import PubSub from 'pubsub-js'
 import { Connection, Input, Node, NodeEditor, Output, Socket } from 'rete'
 import {
@@ -6,7 +10,7 @@ import {
   InputsData,
   NodeData,
   OutputsData,
-  WorkerOutputs
+  WorkerOutputs,
 } from 'rete/types/core/data'
 import { MagickComponent } from './engine'
 import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
@@ -25,8 +29,6 @@ import Agent from './agents/Agent'
 export { MagickComponent } from './engine'
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 export * from './schemas'
-
-
 
 export type ImageType = {
   id: string
@@ -223,6 +225,7 @@ export type PubSubEvents = {
   $CREATE_PLAYTEST: (tabId: string) => string
   $CREATE_INSPECTOR: (tabId: string) => string
   $CREATE_TEXT_EDITOR: (tabId: string) => string
+  $CREATE_PROJECT_WINDOW: (tabId: string) => string
   $CREATE_DEBUG_CONSOLE: (tabId: string) => string
   $CREATE_CONSOLE: (tabId: string) => string
   $RUN_SPELL: (tabId: string) => string
@@ -361,8 +364,8 @@ export type GraphData = Data
 
 export type IgnoredList =
   | {
-    name: string
-  }[]
+      name: string
+    }[]
   | string[]
 
 export type ComponentData<T = TaskType> = Record<string, unknown> & {
@@ -564,7 +567,6 @@ export type EmbeddingData = {
   apiKey: string
 }
 
-
 type Spell = {
   id: string
   name: string
@@ -593,9 +595,9 @@ export type ModuleContext = {
     [key: string]: unknown
   }
   socketInfo: {
-     targetSocket: string
-     targetNode: MagickNode
-   }
+    targetSocket: string
+    targetNode: MagickNode
+  }
 }
 
 export type CompletionHandlerInputData = {

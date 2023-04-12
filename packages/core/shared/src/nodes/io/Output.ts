@@ -111,9 +111,6 @@ export class Output extends MagickComponent<void> {
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<{ output: string }> {
-    console.log('inputs are', inputs)
-    console.log('node data', node.data)
-
     if (!inputs.input) {
       console.error('No input provided to output component')
       return { output: '' }
@@ -125,30 +122,19 @@ export class Output extends MagickComponent<void> {
       inputs.event?.[0] ||
       (inputs && (Object.values(inputs)[0] as unknown[])?.[0])
 
-    console.log('handling output, context is', context)
-
     const { module } = context
 
     if (module.agent) {
       if (outputType && (outputType as string).includes('Default')) {
-
-        console.log('inputs are', inputs)
-
         const outputType = pluginManager.getOutputTypes().find(type => {
-          return (
-            type.name ===
-            Object.keys(inputs)[0].replace('Output - ', '')
-          )
+          return type.name === Object.keys(inputs)[0].replace('Output - ', '')
         })
-
-        console.log('outputType', outputType)
 
         const responseOutputType = outputType?.defaultResponseOutput
         const t = module.agent.outputTypes.find(
           t => t.name === responseOutputType
         )
 
-        console.log('handling! 1 ', responseOutputType, t)
         t.handler({
           output,
           agent: module.agent,
