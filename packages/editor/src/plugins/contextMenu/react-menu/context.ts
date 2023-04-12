@@ -21,7 +21,7 @@ export interface CloseArgsContextType {
  * The actual implementation of onClose and args should be provided by the consumer of this context.
  */
 const CloseArgsContext = createContext<CloseArgsContextType>({
-  onClose: () => {}, // Default implementation of onClose - does nothing
+  onClose: () => { /* null */}, // Default implementation of onClose - does nothing
   args: null, // Default value for args - can be overridden by consumer
 });
 

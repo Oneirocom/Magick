@@ -20,8 +20,8 @@ type MyContextType = {
 const defaultContext: MyContextType = {
   activeModal: {},
   modalName: '',
-  openModal: (options: object) => {},
-  closeModal: () => {},
+  openModal: (options: object) => { /* null */},
+  closeModal: () => { /* null */},
 };
 
 /**
