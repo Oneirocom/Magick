@@ -1,8 +1,8 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Class representing a server plugin for search functionality
  */
-import { ServerPlugin } from "@magickml/core"
+import { ServerPlugin } from '@magickml/core'
 
 /**
  * Nodes that are shared between search plugins
@@ -19,8 +19,8 @@ import { googleSearch } from './services/google-search/google-search'
  */
 const SearchPlugin = new ServerPlugin({
   name: 'SearchPlugin',
-  nodes: Nodes,
-  services: [googleSearch]
+  nodes: Nodes(),
+  services: [googleSearch],
 })
 
-export default SearchPlugin;
+export default SearchPlugin
