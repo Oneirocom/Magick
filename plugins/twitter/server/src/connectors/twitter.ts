@@ -1,6 +1,5 @@
-import { TwitterApi, ETwitterStreamEvent } from 'twitter-api-v2'
-import fs from 'fs'
-import https from 'https'
+import { ETwitterStreamEvent, TwitterApi } from 'twitter-api-v2'
+import { app } from '@magickml/server-core'
 export class TwitterConnector {
   twitterv1: TwitterApi | undefined
   twitterv2: TwitterApi | undefined
@@ -225,6 +224,7 @@ export class TwitterConnector {
               agent: this.agent,
               secrets: this.agent.secrets,
               publicVariables: this.agent.publicVariables,
+              app,
               runSubspell: true,
             })
           }
