@@ -10,6 +10,6 @@ import { SearchGoogle } from './nodes/SearchGoogle'
  * Export an array of all nodes used in the app.
  * @returns MagickComponent[]
  */
-export function getNodes(): MagickComponent<Promise<any>>[] {
-  return [SearchGoogle]
+export function getNodes(): MagickComponent<any>[] {
+  return [SearchGoogle as any]
 }
