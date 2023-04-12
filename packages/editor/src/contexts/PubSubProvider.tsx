@@ -1,5 +1,4 @@
 // DOCUMENTED
-/* eslint-disable @-eslint/no-unused-vars */
 
 // Import required modules
 import * as React from 'react'

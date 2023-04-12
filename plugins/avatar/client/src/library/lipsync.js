@@ -68,7 +68,7 @@ export class LipSync {
     this.meter?.shutdown()
     this.meter = null
     this.mediaStreamSource?.disconnect()
-    return this.audioContext?.close().catch(() => {}) || Promise.resolve()
+    return this.audioContext?.close().catch(() => { /* null */}) || Promise.resolve()
   }
 
   update(deltaTime) {
