@@ -59,8 +59,6 @@ function install(
               ...args,
             ])
 
-            console.log('OUTPUTTING RESULT', result)
-
             socket?.emit(event, {
               output: result,
               input: inputs,
@@ -85,7 +83,6 @@ function install(
               throw err
             }
 
-            console.log('*******************Emitting event', event)
             socket?.emit(event, {
               output: { error: true },
             })
