@@ -27,7 +27,7 @@ if (window === window.parent) {
   const config: AppConfig = {
     apiUrl,
     projectId,
-    token: '',
+    token: import.meta.env.VITE_DUMMY_TOKEN
   }
 
   const Root = () => <MagickIDE config={config} />
