@@ -1,14 +1,15 @@
-// DOCUMENTED 
+// DOCUMENTED
 import Rete from 'rete'
 import { API_ROOT_URL } from '../../config'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { arraySocket, triggerSocket } from '../../sockets'
 import {
-  GetDocumentArgs, MagickNode,
+  GetDocumentArgs,
+  MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData
+  WorkerData,
 } from '../../types'
 
 const info = 'Get documents from a store'
@@ -30,7 +31,7 @@ const getDocumentsbyEmbedding = async (params: Record<string, string>) => {
   const url = new URL(urlString)
 
   // Add GET request parameters
-  Object.entries(params).forEach((p) => {
+  Object.entries(params).forEach(p => {
     url.searchParams.append(p[0], p[1])
   })
 
@@ -72,13 +73,18 @@ const getDocuments = async (params: GetDocumentArgs) => {
  */
 export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   constructor() {
-    super('Get Documents', {
-      outputs: {
-        documents: 'output',
-        trigger: 'option',
+    super(
+      'Get Documents',
+      {
+        outputs: {
+          documents: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'Document', info)
-    this.runFromCache = true
+      'Document',
+      info
+    )
+    // this.runFromCache = true
   }
 
   /**
@@ -98,7 +104,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       dataKey: 'type',
       name: 'Type',
       icon: 'moon',
-      placeholder: 'document'
+      placeholder: 'document',
     })
 
     const max_count = new InputControl({
@@ -112,7 +118,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       dataKey: 'owner',
       name: 'Owner',
       icon: 'moon',
-      placeholder: 'owner'
+      placeholder: 'owner',
     })
 
     // Save controls as inspector data for easy reference
@@ -136,14 +142,16 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
+    _outputs: MagickWorkerOutputs
   ) {
     // Get the worker node's input data
-    let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as number[]
-    if (typeof (embedding) == 'string')
+    let embedding = (
+      inputs['embedding'] ? inputs['embedding'][0] : null
+    ) as number[]
+    if (typeof embedding == 'string')
       embedding = (embedding as string)
-        .replace('[', "")
-        .replace(']', "")
+        .replace('[', '')
+        .replace(']', '')
         .split(',')
         .map(parseFloat)
 
@@ -185,7 +193,11 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
             Array.from<number>(new Uint8Array(uint))
           )
         )
-        documents = await getDocumentsbyEmbedding({ ...data, maxCount: data.maxCount.toString(), embedding: str })
+        documents = await getDocumentsbyEmbedding({
+          ...data,
+          maxCount: data.maxCount.toString(),
+          embedding: str,
+        })
       }
     } else {
       documents = await getDocuments(data)

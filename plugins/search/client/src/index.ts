@@ -9,14 +9,14 @@ import { ClientPlugin } from '@magickml/core';
  * This is the `Nodes` object from the search shared plugin.
  * @typedef {object} Nodes
  */
-import Nodes from '@magickml/plugin-search-shared';
+import { getNodes } from '@magickml/plugin-search-shared';
 
 /**
  * Represents a search plugin usable by clients.
  */
 const SearchPlugin = new ClientPlugin({
   name: 'SearchPlugin',
-  nodes: Nodes
+  nodes: getNodes()
 });
 
 export default SearchPlugin;
