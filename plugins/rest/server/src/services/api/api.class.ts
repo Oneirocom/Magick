@@ -5,7 +5,7 @@
  */
 import type { Id, Params, ServiceInterface } from '@feathersjs/feathers';
 import { runSpell } from '@magickml/core';
-import { Application } from '@magickml/server-core';
+import { Application, app } from '@magickml/server-core';
 import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema';
 
 export type { Api, ApiData, ApiPatch, ApiQuery };
@@ -100,6 +100,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
+      app
     });
 
     return {
@@ -179,6 +180,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
+      app
     });
 
     return {
@@ -258,6 +260,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
+      app
     });
 
     return {
@@ -325,6 +328,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
+      app
     });
 
     return {
