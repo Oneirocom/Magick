@@ -631,9 +631,8 @@ export class DiscordConnector {
       isBot: boolean
       info3d: string
     }[] = []
-    const now = new Date()
-    const pastHour = new Date(now.getTime() - 60 * 60 * 1000) // calculate the time one hour ago
-    const snowflake = SnowflakeUtil.generate()
+    // const now = new Date()
+    // const pastHour = new Date(now.getTime() - 60 * 60 * 1000) // calculate the time one hour ago
     const msgs = (await this.getActiveUsers(channel, 12)) as unknown as any[]
     console.log(msgs)
     msgs.forEach(element => {
@@ -674,20 +673,23 @@ export class DiscordConnector {
       return
     }
 
-    const { Output /*Image*/ } = response
+    console.log('response', response)
+
+    const outputKey = Object.keys(response).find(
+      key => key.toLowerCase().includes('output')
+    ) as string
+
+    const Output = response[outputKey]
 
     if (!Output) {
       console.warn('Discord: No Output')
       return
     }
 
-    // get the value of the first entry in the object
-    const firstValue = Output || Object.values(response)[0]
-
-    console.log('handled response', firstValue)
-    if (!firstValue || firstValue === '') {
+    console.log('handled response', Output)
+    if (!Output || Output === '') {
       message.channel.send('Error: Empty Resonse')
-    } else message.channel.send(firstValue)
+    } else message.channel.send(Output)
   }
 
   //Event that is triggered when a message is deleted
@@ -1060,6 +1062,7 @@ export class DiscordConnector {
   }
 
   async sendMessageToChannel(channelId: any, msg: any) {
+    console.log('sending message to channel: ' + channelId, msg)
     const channel = await this.client.channels.fetch(channelId)
     if (msg && msg !== '' && channel && channel !== undefined) {
       channel.send(msg)
