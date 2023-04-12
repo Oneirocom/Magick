@@ -1,11 +1,11 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Main layout component.
  * Renders a Drawer component with the Outlet component inside, wrapped in ModalProvider.
  */
-import { Outlet } from 'react-router-dom';
-import ModalProvider from '../../contexts/ModalProvider';
-import { Drawer } from '@magickml/client-core';
+import { Outlet } from 'react-router-dom'
+import ModalProvider from '../../contexts/ModalProvider'
+import { DrawerProvider } from '@magickml/client-core'
 
 /**
  * Main layout component.
@@ -15,11 +15,11 @@ import { Drawer } from '@magickml/client-core';
 const MainLayout = (): JSX.Element => {
   return (
     <ModalProvider>
-      <Drawer>
+      <DrawerProvider>
         <Outlet />
-      </Drawer>
+      </DrawerProvider>
     </ModalProvider>
-  );
-};
+  )
+}
 
-export default MainLayout;
+export default MainLayout
