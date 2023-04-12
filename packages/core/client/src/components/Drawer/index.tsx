@@ -258,7 +258,8 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
           <DrawerItem
             active={
               location.pathname.includes('/magick') ||
-              location.pathname.includes('/home')
+              location.pathname.includes('/home') ||
+              location.pathname === '/'
             }
             Icon={AutoFixHighIcon}
             open={open}
@@ -272,15 +273,15 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             onClick={onClick('/agents')}
             text="Agents"
           />
-          <DrawerItem
+          {/* <DrawerItem
             active={location.pathname === '/documents'}
             Icon={DocumentIcon}
             open={open}
             onClick={onClick('/documents')}
             text="Documents"
-          />
+          /> */}
           <DrawerItem
-            active={location.pathname === '/requests'}
+            active={location.pathname === '/events'}
             Icon={BoltIcon}
             open={open}
             onClick={onClick('/events')}
@@ -293,14 +294,14 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             onClick={onClick('/requests')}
             text="Requests"
           />
-          <Divider />
+          {/* <Divider />
           <DrawerItem
             active={location.pathname.includes('/chat')}
             Icon={ChatIcon}
             open={open}
             onClick={onClick('/chat')}
             text="Chat"
-          />
+          /> */}
           <Divider />
           <PluginDrawerItems onClick={onClick} open={open} />
           <Divider />

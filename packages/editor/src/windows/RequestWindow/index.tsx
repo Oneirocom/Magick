@@ -10,7 +10,7 @@ import RequestTable from './RequestTable'
 
 import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
 import { useConfig } from '../../contexts/ConfigProvider'
-import globalConfig from '../../state/globalConfig'
+import { useSelector } from 'react-redux'
 
 /**
  * The RequestWindow functional component fetches and renders a table containing
@@ -19,6 +19,7 @@ import globalConfig from '../../state/globalConfig'
  */
 const RequestWindow = () => {
   const config = useConfig()
+  const globalConfig = useSelector((state: any) => state.globalConfig)
   const [requests, setRequests] = useState(null)
 
   /**

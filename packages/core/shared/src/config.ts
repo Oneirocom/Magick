@@ -27,8 +27,6 @@ function getVarForEnvironment(env: string): string | undefined {
 
 // Define and export constants from environment variables
 export const IGNORE_AUTH = getVarForEnvironment('IGNORE_AUTH') === 'true'
-export const SKIP_DB_EXTENSIONS =
-  getVarForEnvironment('SKIP_DB_EXTENSIONS') === 'true'
 export const DEFAULT_PROJECT_ID =
   getVarForEnvironment('PROJECT_ID') || 'bb1b3d24-84e0-424e-b4f1-57603f307a89'
 export const DEFAULT_USER_ID = getVarForEnvironment('USER_ID') || '1234567890'
