@@ -1,20 +1,21 @@
-// DOCUMENTED 
-import { Window } from '@magickml/client-core';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Terminal from 'react-console-emulator';
-import { renderToString } from 'react-dom/server';
-import { useEditor } from '../../contexts/EditorProvider';
-import { usePubSub } from '../../contexts/PubSubProvider';
+// DOCUMENTED
+import ReactJson from 'react-json-view'
+import { Window } from '@magickml/client-core'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import Terminal from 'react-console-emulator'
+import { renderToString } from 'react-dom/server'
+import { useEditor } from '../../contexts/EditorProvider'
+import { usePubSub } from '../../contexts/PubSubProvider'
 
 /**
  * The type for debug messages.
  */
 export type DebugMessage = {
-  message: string;
-};
+  message: string
+}
 
 interface Terminal {
-  pushToStdout: any;
+  pushToStdout: any
 }
 
 /**
@@ -25,20 +26,20 @@ interface Terminal {
  * @returns {JSX.Element} Debug console component.
  */
 const DebugConsole = ({ tab }): JSX.Element => {
-  const [scrollToBottom, setScrollToBottom] = useState<boolean>(false);
-  const { centerNode } = useEditor();
-  const { publish, subscribe, events } = usePubSub();
-  const { $TRIGGER, $DEBUG_PRINT } = events;
+  const [scrollToBottom, setScrollToBottom] = useState<boolean>(false)
+  const { centerNode } = useEditor()
+  const { publish, subscribe, events } = usePubSub()
+  const { $TRIGGER, $DEBUG_PRINT } = events
 
-  const terminalRef = useRef<Terminal>();
+  const terminalRef = useRef<Terminal>()
 
   /**
    * Scroll to the bottom of the terminal.
    */
   const scroll = (): void => {
-    setScrollToBottom(false);
-    setScrollToBottom(true);
-  };
+    setScrollToBottom(false)
+    setScrollToBottom(true)
+  }
 
   /**
    * Trigger a node.
@@ -46,8 +47,8 @@ const DebugConsole = ({ tab }): JSX.Element => {
    * @param {number} nodeId - Node ID.
    */
   const trigger = (nodeId: number): void => {
-    publish($TRIGGER(tab.id, nodeId));
-  };
+    publish($TRIGGER(tab.id, nodeId))
+  }
 
   /**
    * Format an error message.
@@ -58,7 +59,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
   const formatErrorMessage = (message): string =>
     `> Node ${message.nodeId}: Error in ${message.from} component${
       message.name ? ' ' + message.name : ''
-    }.`;
+    }.`
 
   /**
    * Format a log message.
@@ -69,7 +70,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
   const formatLogMessage = (message): string =>
     `> Node ${message.nodeId}: Message from ${message.from} component ${
       message.name ?? 'unnamed'
-    }.`;
+    }.`
 
   /**
    * Render a message in the terminal.
@@ -90,10 +91,16 @@ const DebugConsole = ({ tab }): JSX.Element => {
           ? formatErrorMessage(message)
           : formatLogMessage(message)}
       </p>
-      <p style={{ margin: 0 }}>{message.content}</p>
+      <ReactJson
+        src={message}
+        name={message.nodeId}
+        enableClipboard={false}
+        theme="twilight"
+        collapsed={true}
+      />
       <br />
     </div>
-  );
+  )
 
   /**
    * Get a formatted message for the terminal.
@@ -101,36 +108,38 @@ const DebugConsole = ({ tab }): JSX.Element => {
    * @param {Object} message - Message object.
    * @returns {string} Formatted message for the terminal.
    */
-  const getMessage = (message): string => {
-    if (message.type === 'error') {
-      return renderToString(Message(message, message.type));
+  const getMessage = _message => {
+    const message = {
+      ..._message,
+      ...JSON.parse(_message.content),
     }
-    if (message.type === 'log') {
-      return renderToString(Message(message, message.type));
-    }
-  };
+
+    delete message.content
+
+    return Message(message, message.type)
+  }
 
   // Callback function to print messages to the debugger.
   const printToDebugger = useCallback((_, message): void => {
-    const terminal = terminalRef.current;
-    if (!terminal) return;
+    const terminal = terminalRef.current
+    if (!terminal) return
 
-    const msg = getMessage(message);
-    terminal.pushToStdout(msg);
+    const msg = getMessage(message)
+    terminal.pushToStdout(msg)
 
-    scroll();
-  }, []);
+    scroll()
+  }, [])
 
   // Callback function for terminal commands.
   const commandCallback = (): void => {
-    scroll();
-  };
+    scroll()
+  }
 
   useEffect(() => {
-    const unsubscribe = subscribe($DEBUG_PRINT(tab.id), printToDebugger);
+    const unsubscribe = subscribe($DEBUG_PRINT(tab.id), printToDebugger)
 
-    return unsubscribe as () => void;
-  }, [subscribe, printToDebugger, $DEBUG_PRINT]);
+    return unsubscribe as () => void
+  }, [subscribe, printToDebugger, $DEBUG_PRINT])
 
   // Terminal commands.
   const commands = {
@@ -139,15 +148,15 @@ const DebugConsole = ({ tab }): JSX.Element => {
       usage: 'echo <string>',
       fn: function () {
         // eslint-disable-next-line prefer-rest-params
-        return `${Array.from(arguments).join(' ')}`;
+        return `${Array.from(arguments).join(' ')}`
       },
     },
     node: {
       description: 'Center a node on the editor',
       usage: 'node <nodeId>',
       fn: function (nodeId: number) {
-        centerNode(nodeId);
-        return '';
+        centerNode(nodeId)
+        return ''
       },
     },
     trigger: {
@@ -155,7 +164,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
       usage: 'trigger <nodeId>',
       fn: trigger,
     },
-  };
+  }
 
   return (
     <Window scrollToBottom={scrollToBottom}>
@@ -174,7 +183,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
         messageStyle={{ color: 'red' }}
       />
     </Window>
-  );
-};
+  )
+}
 
-export default DebugConsole;
+export default DebugConsole
