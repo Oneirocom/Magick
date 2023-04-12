@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import Rete from 'rete'
 
 import { CodeControl } from '../../dataControls/CodeControl'
@@ -11,7 +11,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData
+  WorkerData,
 } from '../../types'
 
 // Default worker code for a new Javascript node
@@ -38,17 +38,22 @@ Please note that the return of your function must be an object whose keys are th
 export class Javascript extends MagickComponent<unknown> {
   constructor() {
     // Name of the component
-    super('Javascript', {
-      outputs: {
-        trigger: 'option',
+    super(
+      'Javascript',
+      {
+        outputs: {
+          trigger: 'option',
+        },
       },
-    }, 'Code', info)
-    this.runFromCache = true
+      'Code',
+      info
+    )
+    // this.runFromCache = true
   }
 
   /**
    * Builds the entire node with its inputs and controls.
-   * 
+   *
    * @param node - The MagickNode to build.
    * @returns The built MagickNode.
    */
@@ -81,9 +86,7 @@ export class Javascript extends MagickComponent<unknown> {
       name: 'Component Name',
     })
 
-    node
-      .addOutput(dataOutput)
-      .addInput(dataInput)
+    node.addOutput(dataOutput).addInput(dataInput)
 
     node.inspector
       .add(nameControl)
@@ -97,7 +100,7 @@ export class Javascript extends MagickComponent<unknown> {
   /**
    * The worker contains the main business logic of the node. It will pass those results
    * to the outputs to be consumed by any connected components.
-   * 
+   *
    * @param node - The WorkerData to process.
    * @param inputs - MagickWorkerInputs to use in the worker.
    * @param _outputs - MagickWorkerOutputs to send to connected components.
@@ -114,7 +117,12 @@ export class Javascript extends MagickComponent<unknown> {
 
     try {
       // const value = runCodeWithArguments(node.data.code)
-      const value = await processCode(node.data.code, inputs, data, 'javascript')
+      const value = await processCode(
+        node.data.code,
+        inputs,
+        data,
+        'javascript'
+      )
       console.log('value', value)
 
       return value

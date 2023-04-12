@@ -11,6 +11,7 @@ function install(editor: IRunContextEditor) {
 
       // Might be a bit hacky to do it this way, but it works for now
       if (node.data.sendToPlaytest && sendToPlaytest) {
+        // note for later. output is a proety from the output node and that is where it is defined
         sendToPlaytest(socketOutput.output)
       }
 
