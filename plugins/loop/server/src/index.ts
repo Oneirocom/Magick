@@ -1,6 +1,6 @@
 // DOCUMENTED 
 import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core';
-
+import { app } from '@magickml/server-core';
 type StartLoopArgs = {
   spellRunner: any;
   agent: any;
@@ -63,6 +63,7 @@ class LoopManager {
         agent,
         secrets: agent.secrets,
         publicVariables: agent.publicVariables,
+        app
       });
       console.log('output is', resp);
     }, loopInterval);
