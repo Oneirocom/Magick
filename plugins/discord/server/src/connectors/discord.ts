@@ -1,15 +1,14 @@
 // DOCUMENTED
 import { AgentInterface, WorldManager } from '@magickml/core'
 import Discord, {
-  ChannelType,
+  AttachmentBuilder, ChannelType,
   EmbedBuilder,
   GatewayIntentBits,
-  Partials,
-  SnowflakeUtil,
-  AttachmentBuilder,
+  Partials
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
 import emojiRegex from 'emoji-regex'
+import { app } from '@magickml/server-core'
 
 let recognizeSpeech
 
@@ -666,6 +665,7 @@ export class DiscordConnector {
       secrets: this.agent.secrets,
       publicVariables: this.agent.publicVariables,
       runSubspell: true,
+      app,
     })
 
     if (!response) {
