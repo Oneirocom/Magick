@@ -18,8 +18,8 @@ export async function makeChatCompletion(
 ): Promise<{ success: boolean, result?: string | null, error?: string | null }> {
   const { node, inputs, context } = data
 
-  // Filter out undefined input keys from context.module.inputs
-  const inputKeys = Object.values(context.module.inputs).filter((input: any) => {
+  // Filter out undefined input keys from inputs
+  const inputKeys = Object.values(inputs).filter((input: any) => {
     return Object.values(input).filter(Boolean).length > 0
   })[0]
 
@@ -107,7 +107,7 @@ export async function makeChatCompletion(
       totalTokens: usage.total_tokens,
       hidden: false,
       processed: false,
-      spell: context.module.spell,
+      spell: context.currentSpell,
       nodeId: node.id,
     })
 

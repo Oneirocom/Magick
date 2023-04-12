@@ -1,6 +1,5 @@
 // DOCUMENTED 
 import { hooks as schemaHooks } from '@feathersjs/schema';
-import { SKIP_DB_EXTENSIONS } from '@magickml/core';
 import pgvector from 'pgvector/pg';
 import { v4 as uuidv4 } from 'uuid';
 // Array with 1536 elements containing 0
@@ -50,7 +49,6 @@ export const document = (app: Application) => {
       find: [],
       get: [
         (context: HookContext) => {
-          if (SKIP_DB_EXTENSIONS) return context;
           const { getEmbedding } = context.params.query;
           if (getEmbedding) {
             context.params.query.$limit = 1;
@@ -63,7 +61,11 @@ export const document = (app: Application) => {
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         async (context: HookContext) => {
+<<<<<<< HEAD
           if (SKIP_DB_EXTENSIONS) return context
+=======
+          const { embedding } = context.data
+>>>>>>> 949a5ad78375a220d1787b8a7bf33dabe62c44e8
           const { data, service } = context
           const docdb = app.get('docdb');
           const id = uuidv4()
@@ -86,7 +88,6 @@ export const document = (app: Application) => {
       create: [
         // Commented out because it is not being used currently
         // async (context: HookContext) => {
-        //   if (SKIP_DB_EXTENSIONS) return context;
         //   if (!context.data.embedding || context.data.embedding.length === 0)
         //     return context;
         //   const { id } = context.result;

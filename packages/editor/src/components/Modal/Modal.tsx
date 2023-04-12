@@ -13,7 +13,7 @@ import { Button } from '@magickml/client-core';
 import { Icon } from '@magickml/client-core';
 import css from './modal.module.css';
 
-const Modal = ({ options = [], title, icon, onClose = () => {}, ...props }) => {
+const Modal = ({ options = [], title, icon, onClose = () => { /* null */}, ...props }) => {
   const { closeModal } = useModal();
 
   /**

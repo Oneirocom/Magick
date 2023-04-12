@@ -3,7 +3,6 @@ import { IconBtn, Switch } from '@magickml/client-core'
 import { IGNORE_AUTH, pluginManager } from '@magickml/core'
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography } from '@mui/material'
-import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -71,22 +70,25 @@ const AgentDetails = ({
       : '[]'
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
-    axios
-      .patch(`${config.apiUrl}/agents/${id}`, _data, { headers })
-      .then(res => {
-        if (typeof res.data === 'string' && res.data === 'internal error') {
-          enqueueSnackbar('Internal error updating agent', {
-            variant: 'error',
-          })
-        } else {
+
+    fetch(`${config.apiUrl}/agents/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(_data),
+    })
+      .then(res => res.json())
+      .then(data => {
+
           enqueueSnackbar('Updated agent', {
             variant: 'success',
           })
-          setSelectedAgentData(res.data)
+          setSelectedAgentData(data)
 
           // update data instead of refetching data to avoid agent window flashes
-          updateData(res.data)
-        }
+          updateData(data)
       })
       .catch(e => {
         console.error('ERROR', e)
@@ -190,7 +192,7 @@ const AgentDetails = ({
         ) : (
           <div className={styles.agentDescription}>
             <Avatar className={styles.avatar}>
-              {selectedAgentData.name.slice(0, 1)[0]}{' '}
+              {selectedAgentData?.name?.slice(0, 1)[0]}{' '}
             </Avatar>
             <div>
               <Typography variant="h5">{selectedAgentData.name}</Typography>
@@ -272,11 +274,12 @@ const AgentDetails = ({
               enabled: true,
               ...selectedAgentData,
             })
+            console.log('newRootSpell', newRootSpell)
             setSelectedAgentData({
               ...selectedAgentData,
               rootSpell: newRootSpell,
               publicVariables: JSON.stringify(
-                Object.values(newRootSpell.graph.nodes as any)
+                Object.values(newRootSpell.graph.nodes)
                   // get the public nodes
                   .filter((node: { data }) => node?.data?.isPublic)
                   // map to an array of objects

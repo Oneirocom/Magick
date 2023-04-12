@@ -21,8 +21,8 @@ interface IAccountProps {
 
 export const AccountContext = React.createContext<IAccountProvider>({
   isSignedIn: false,
-  signIn: () => {},
-  signOut: () => {},
+  signIn: () => { /* null */},
+  signOut: () => { /* null */},
 });
 
 /**
