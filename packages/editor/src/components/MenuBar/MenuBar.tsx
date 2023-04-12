@@ -1,5 +1,5 @@
 // DOCUMENTED
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -11,6 +11,7 @@ import { activeTabSelector, Tab } from '../../state/tabs'
 import { toggleAutoSave } from '../../state/preferences'
 import { changeEditorLayout } from '../../state/tabs'
 import { RootState } from '../../state/store'
+import { useProjectWindow } from '@magickml/client-core'
 
 /**
  * MenuBar component
@@ -22,6 +23,8 @@ const MenuBar = () => {
   const { publish, events } = usePubSub()
   const dispatch = useDispatch()
   const activeTab = useSelector(activeTabSelector)
+  const { openProjectWindow, setOpenProjectWindow, setOpenDrawer } =
+    useProjectWindow()
 
   const preferences = useSelector(
     (state: RootState) => state.preferences
@@ -140,6 +143,14 @@ const MenuBar = () => {
   const onTextEditorCreate = () => {
     if (!activeTabRef.current) return
     publish($CREATE_TEXT_EDITOR(activeTabRef.current.id))
+  }
+
+  /**
+   * Project window creation handler
+   */
+  const onProjectWindowCreate = () => {
+    if (!openProjectWindow) setOpenDrawer(false)
+    setOpenProjectWindow(prevState => !prevState)
   }
 
   /**
@@ -305,6 +316,10 @@ const MenuBar = () => {
         console: {
           onClick: onConsole,
         },
+        project_window: {
+          onClick: onProjectWindowCreate,
+          hotKey: 'control+b',
+        },
       },
       settings: {
         items: {
@@ -350,6 +365,7 @@ const MenuBar = () => {
     // formattedCommand = formattedCommand.replace('option', '\u2325')
     formattedCommand = formattedCommand.replace('shift', '\u21E7')
     formattedCommand = formattedCommand.replace('cmd', '\u2318')
+    formattedCommand = formattedCommand.replace('control', '\u2303')
     formattedCommand = formattedCommand.replace(/[`+`]/g, ' ')
     return formattedCommand
   }
