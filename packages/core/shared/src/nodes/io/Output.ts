@@ -134,16 +134,16 @@ export class Output extends MagickComponent<void> {
 
         console.log('inputs are', inputs)
 
-        const inputType = pluginManager.getInputTypes().find(inputType => {
+        const outputType = pluginManager.getOutputTypes().find(type => {
           return (
-            inputType.name ===
-            Object.keys(inputs)[0].replace('Input - ', '')
+            type.name ===
+            Object.keys(inputs)[0].replace('Output - ', '')
           )
         })
 
-        console.log('inputType', inputType)
+        console.log('outputType', outputType)
 
-        const responseOutputType = inputType?.defaultResponseOutput
+        const responseOutputType = outputType?.defaultResponseOutput
         const t = module.agent.outputTypes.find(
           t => t.name === responseOutputType
         )

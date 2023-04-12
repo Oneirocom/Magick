@@ -77,6 +77,7 @@ async function handleResponse({ output, agent, event }) {
   if (!output || output === '')
     return console.warn('No output to send to discord')
   await agent.discord.sendMessageToChannel(event.channel, output)
+  console.log('RESPONSE HANDLED')
 }
 
 // Input socket configurations
