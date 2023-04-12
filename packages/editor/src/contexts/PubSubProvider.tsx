@@ -39,6 +39,7 @@ export const events: PubSubEvents = {
   $CREATE_PLAYTEST: tabId => `createPlaytest:${tabId}`,
   $CREATE_INSPECTOR: tabId => `createInspector:${tabId}`,
   $CREATE_TEXT_EDITOR: tabId => `createTextEditor:${tabId}`,
+  // $CREATE_PROJECT_WINDOW: tabId => `createProjectWindow:${tabId}`,
   $CREATE_DEBUG_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $CREATE_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $RUN_SPELL: tabId => `runSpell:${tabId}`,
