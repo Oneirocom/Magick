@@ -24,12 +24,8 @@
       "@magickml/docs": ["apps/docs/src/index.ts"],
       "@magickml/editor": ["packages/editor/src/index.ts"],
       "@magickml/core": ["packages/core/shared/src/index.ts"],
-      "@magickml/plugin-banana-client": [
-        "plugins/banana/client/src/index.ts"
-      ],
-      "@magickml/plugin-banana-server": [
-        "plugins/banana/server/src/index.ts"
-      ],
+      "@magickml/plugin-banana-client": ["plugins/banana/client/src/index.ts"],
+      "@magickml/plugin-banana-server": ["plugins/banana/server/src/index.ts"],
       "@magickml/plugin-discord-client": [
         "plugins/discord/client/src/index.ts"
       ],
@@ -60,21 +56,22 @@
       "@magickml/plugin-finetune-server": [
         "plugins/finetune/server/src/index.ts"
       ],
-      "@magickml/plugin-loop-client": [
-        "plugins/loop/client/src/index.ts"
+      "@magickml/plugin-loop-client": ["plugins/loop/client/src/index.ts"],
+      "@magickml/plugin-loop-server": ["plugins/loop/server/src/index.ts"],
+      "@magickml/plugin-openai-client": ["plugins/openai/client/src/index.ts"],
+      "@magickml/plugin-openai-server": ["plugins/openai/server/src/index.ts"],
+      "@magickml/plugin-openai-shared": ["plugins/openai/shared/src/index.ts"],
+
+      "@magickml/plugin-docker-diffusers-client": [
+        "plugins/docker-diffusers/client/src/index.ts"
       ],
-      "@magickml/plugin-loop-server": [
-        "plugins/loop/server/src/index.ts"
+      "@magickml/plugin-docker-diffusers-server": [
+        "plugins/docker-diffusers/server/src/index.ts"
       ],
-      "@magickml/plugin-openai-client": [
-        "plugins/openai/client/src/index.ts"
+      "@magickml/plugin-docker-diffusers-shared": [
+        "plugins/docker-diffusers/shared/src/index.ts"
       ],
-      "@magickml/plugin-openai-server": [
-        "plugins/openai/server/src/index.ts"
-      ],
-      "@magickml/plugin-openai-shared": [
-        "plugins/openai/shared/src/index.ts"
-      ],
+
       "@magickml/plugin-pinecone-client": [
         "plugins/pinecone/client/src/index.ts"
       ],
@@ -84,33 +81,19 @@
       "@magickml/plugin-pinecone-shared": [
         "plugins/pinecone/shared/src/index.ts"
       ],
-      "@magickml/plugin-rest-client": [
-        "plugins/rest/client/src/index.ts"
-      ],
-      "@magickml/plugin-rest-server": [
-        "plugins/rest/server/src/index.ts"
-      ],
-      "@magickml/plugin-search-client": [
-        "plugins/search/client/src/index.ts"
-      ],
-      "@magickml/plugin-search-server": [
-        "plugins/search/server/src/index.ts"
-      ],
-      "@magickml/plugin-search-shared": [
-        "plugins/search/shared/src/index.ts"
-      ],
+      "@magickml/plugin-rest-client": ["plugins/rest/client/src/index.ts"],
+      "@magickml/plugin-rest-server": ["plugins/rest/server/src/index.ts"],
+      "@magickml/plugin-search-client": ["plugins/search/client/src/index.ts"],
+      "@magickml/plugin-search-server": ["plugins/search/server/src/index.ts"],
+      "@magickml/plugin-search-shared": ["plugins/search/shared/src/index.ts"],
       "@magickml/plugin-twitter-client": [
         "plugins/twitter/client/src/index.ts"
       ],
       "@magickml/plugin-twitter-server": [
         "plugins/twitter/server/src/index.ts"
       ],
-      "@magickml/plugin-qa-server": [
-        "plugins/qa/server/src/index.ts"
-      ],
-      "@magickml/plugin-avatar-client": [
-        "plugins/avatar/client/src/index.ts"
-      ],
+      "@magickml/plugin-qa-server": ["plugins/qa/server/src/index.ts"],
+      "@magickml/plugin-avatar-client": ["plugins/avatar/client/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-core": ["packages/core/server/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"]
