@@ -1,6 +1,5 @@
 // DOCUMENTED 
 import { hooks as schemaHooks } from '@feathersjs/schema';
-import { SKIP_DB_EXTENSIONS } from '@magickml/core';
 import os from 'os';
 import pgvector from 'pgvector/pg';
 import { v4 as uuidv4 } from 'uuid';
@@ -61,7 +60,6 @@ export const event = (app: Application) => {
       find: [],
       get: [
         (context: HookContext) => {
-          if (SKIP_DB_EXTENSIONS) return context;
           const { getEmbedding } = context.params.query;
           if (getEmbedding) {
             context.params.query.$limit = 1;
@@ -73,7 +71,6 @@ export const event = (app: Application) => {
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         async (context: HookContext) => {
-          if (SKIP_DB_EXTENSIONS) return context
           const { embedding } = context.data
           const { data, service } = context
           const id = uuidv4()
@@ -85,8 +82,6 @@ export const event = (app: Application) => {
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
             if (process.env.DATABASE_TYPE == "pg") {
-              console.log(embedding as Array<number>)
-              console.log(typeof(embedding as Array<number>))
               context.data.embedding = pgvector.toSql(embedding as Array<number>)  
               return context;
             }else{

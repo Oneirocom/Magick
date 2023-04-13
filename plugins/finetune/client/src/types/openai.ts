@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 // DOCUMENTED 
 /**
  * OpenAI module namespace.

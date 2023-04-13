@@ -1,17 +1,17 @@
-// DOCUMENTED 
+// DOCUMENTED
 import {
   eventSocket,
   ServerPlugin,
   triggerSocket,
   WorldManager,
-} from '@magickml/core';
-import { DiscordConnector } from './connectors/discord';
+} from '@magickml/core'
+import { DiscordConnector } from './connectors/discord'
 
 type StartDiscordArgs = {
-  agent: any;
-  spellRunner: any;
-  worldManager: WorldManager;
-};
+  agent: any
+  spellRunner: any
+  worldManager: WorldManager
+}
 
 /**
  * Get startDiscord and stopDiscord methods to manage Discord connections.
@@ -27,20 +27,24 @@ function getAgentMethods() {
     spellRunner,
     worldManager,
   }: StartDiscordArgs) {
-    const { data } = agent.data;
-    if (!data) return console.log('No data for this agent');
+    const { data } = agent.data
+    if (!data) return console.log('No data for this agent')
     if (!data.discord_enabled)
-      return console.log('Discord is not enabled for this agent');
+      return console.log('Discord is not enabled for this agent')
     if (!data.discord_api_key)
-      return console.log('Discord API key is not set for this agent');
+      return console.log('Discord API key is not set for this agent')
 
-    const discord = new DiscordConnector({
-      ...data,
-      agent,
-      spellRunner,
-      worldManager,
-    });
-    agent.discord = discord;
+    try {
+      const discord = new DiscordConnector({
+        ...data,
+        agent,
+        spellRunner,
+        worldManager,
+      })
+      agent.discord = discord
+    } catch (err) {
+      console.error('Error starting discord client for agent ' + agent.name)
+    }
   }
 
   /**
@@ -49,20 +53,20 @@ function getAgentMethods() {
    */
   async function stopDiscord({ agent }) {
     if (!agent.discord)
-      return console.warn("Discord isn't running, can't stop it");
+      return console.warn("Discord isn't running, can't stop it")
     try {
-      await agent.discord.destroy();
-      agent.discord = null;
+      await agent.discord.destroy()
+      agent.discord = null
     } catch {
-      console.warn('Agent does not exist!');
+      console.warn('Agent does not exist!')
     }
-    console.log('Stopped discord client for agent ' + agent.name);
+    console.log('Stopped discord client for agent ' + agent.name)
   }
 
   return {
     start: startDiscord,
     stop: stopDiscord,
-  };
+  }
 }
 
 /**
@@ -71,8 +75,9 @@ function getAgentMethods() {
  */
 async function handleResponse({ output, agent, event }) {
   if (!output || output === '')
-    return console.warn('No output to send to discord');
-  await agent.discord.sendMessageToChannel(event.channel, output);
+    return console.warn('No output to send to discord')
+  await agent.discord.sendMessageToChannel(event.channel, output)
+  console.log('RESPONSE HANDLED')
 }
 
 // Input socket configurations
@@ -87,7 +92,7 @@ const inputSockets = [
     name: 'trigger',
     type: triggerSocket,
   },
-];
+]
 
 // Output socket configurations
 const outputSockets = [
@@ -96,7 +101,7 @@ const outputSockets = [
     name: 'output',
     type: eventSocket,
   },
-];
+]
 
 /**
  * DiscordPlugin: Handles the integration with Discord,
@@ -121,15 +126,15 @@ const DiscordPlugin = new ServerPlugin({
       name: 'Discord (Voice)',
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
-        await handleResponse({ output, agent, event });
+        await handleResponse({ output, agent, event })
       },
     },
     {
       name: 'Discord (Text)',
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
-        console.log('output is', output);
-        await handleResponse({ output, agent, event });
+        console.log('output is', output)
+        await handleResponse({ output, agent, event })
       },
     },
     {
@@ -139,7 +144,7 @@ const DiscordPlugin = new ServerPlugin({
         console.log('output is', output)
         await handleResponse({ output, agent, event })
       },
-    }
+    },
   ],
   agentMethods: getAgentMethods(),
   secrets: [
@@ -149,6 +154,6 @@ const DiscordPlugin = new ServerPlugin({
       global: false,
     },
   ],
-});
+})
 
-export default DiscordPlugin;
+export default DiscordPlugin

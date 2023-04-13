@@ -158,6 +158,8 @@ async function init() {
     }
   })
 
+  process.on('uncaughtException in Editor Server', console.error)
+
   // adding router middlewares to Koa app
   app.use(router.routes()).use(router.allowedMethods())
 
