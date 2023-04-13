@@ -7,7 +7,7 @@ type ConsoleConstructor = {
   editor: IRunContextEditor
   node: MagickNode
   server: boolean
-  throwError?: (error: unknown)=>void
+  throwError?: (error: unknown) => void
   isEngine?: boolean
 }
 
@@ -25,7 +25,11 @@ interface OutputError {
   }
 }
 function isOutputError(value: unknown): value is OutputError {
-  return !!value && !!(value as OutputError).output && !!(value as OutputError).output.error;
+  return (
+    !!value &&
+    !!(value as OutputError).output &&
+    !!(value as OutputError).output.error
+  )
 }
 export class MagickConsole {
   node: MagickNode
@@ -33,7 +37,7 @@ export class MagickConsole {
   component: MagickComponent<unknown>
   nodeView?: NodeView
   isServer: boolean
-  throwError?: (error:unknown)=>void
+  throwError?: (error: unknown) => void
   isEngine: boolean
 
   constructor({
@@ -105,7 +109,6 @@ export class MagickConsole {
     } else {
       this.renderLog()
     }
-    
   }
 
   error(error: Error) {

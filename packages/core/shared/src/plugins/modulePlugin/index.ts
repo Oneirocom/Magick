@@ -13,9 +13,10 @@ import {
   AsInputsData,
   AsOutputsData,
   WorkerData,
+  ModuleContext,
 } from '../../types'
 import { Module } from './module'
-import { ModuleContext, ModuleManager } from './module-manager'
+import { ModuleManager } from './module-manager'
 import { addIO, removeIO } from './utils'
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 

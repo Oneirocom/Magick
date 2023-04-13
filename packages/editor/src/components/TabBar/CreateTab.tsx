@@ -1,10 +1,10 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Import necessary dependencies and modules
  */
-import css from './tabBar.module.css';
-import { VscAdd } from 'react-icons/vsc';
-import { useNavigate } from 'react-router-dom';
+import css from './tabBar.module.css'
+import { VscAdd } from 'react-icons/vsc'
+import { useNavigate } from 'react-router-dom'
 
 /**
  * CreateTab Function
@@ -14,17 +14,17 @@ const CreateTab = (): JSX.Element => {
   /**
    * Define a constant variable navigate that will be used to call the useNavigate hook
    */
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   /**
    * Define a function that navigates or redirects the user to the '/home/create-new' url path
    */
   const onCreate = (): void => {
-    navigate('/home/create-new');
-  };
-  
+    navigate('/home/create-new')
+  }
+
   /**
-   * Render the CreateTab component containing a div element with className of 'tabbar-tab' and 'create-spell-tab' 
+   * Render the CreateTab component containing a div element with className of 'tabbar-tab' and 'create-spell-tab'
    * along with a VscAdd icon element
    */
   return (
@@ -42,4 +42,4 @@ const CreateTab = (): JSX.Element => {
 /**
  * Export the CreateTab component as default
  */
-export default CreateTab;
+export default CreateTab

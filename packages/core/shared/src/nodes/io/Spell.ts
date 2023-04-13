@@ -16,6 +16,7 @@ import {
   EngineContext,
   MagickNode,
   MagickWorkerInputs,
+  ModuleContext,
   ModuleWorkerOutput,
   WorkerData
 } from '../../types'
@@ -120,10 +121,9 @@ export class SpellComponent extends MagickComponent<
     // const stateSocket = new Rete.Input('state', 'State', objectSocket)
 
     const getPublicVariables = graph => {
-      console.log('getPublicVariables', graph)
-      return Object.values(graph.nodes || {}).filter(
-        node => (node as { data: { isPublic: boolean } }).data?.isPublic
-      )
+      return (graph.nodes || {}).filter(node => {
+        return node.data?.isPublic
+      })
     }
 
     const createInspectorForPublicVariables = publicVariables => {
@@ -293,20 +293,21 @@ export class SpellComponent extends MagickComponent<
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: { [key: string]: string },
-    {
-      module,
-      context,
-      secrets,
-      publicVariables,
-    }: {
-      module: { agent: any; outputs: ModuleWorkerOutput[] }
-      context: EngineContext
-      secrets: Record<string, string>
-      publicVariables: Record<string, string>
-    }
+   _context: ModuleContext
   ) {
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
+
+    const {
+      module,
+    } = _context
+
+    const {
+      publicVariables,
+      agent,
+      app,
+      secrets
+    } = module
 
     if (module.agent) {
       const spellManager = module.agent.spellManager as SpellManager
@@ -315,16 +316,15 @@ export class SpellComponent extends MagickComponent<
           node.data.spellId as string
         )
         if (spellRunner) {
-          const obj = {
+          const runComponentArgs = {
             inputs: flattenedInputs,
             runSubspell: false,
-            agent: module.agent,
-            secrets: module.agent.secrets ?? (secrets as any),
-            publicVariables:
-              (module.agent.publicVariables as any) ?? (publicVariables as any),
+            agent: agent,
+            secrets: agent?.secrets ?? secrets,
+            app: module.app,
+            publicVariables: agent?.publicVariables ?? publicVariables,
           }
-
-          const outputs = await spellRunner.runComponent(obj)
+          const outputs = await spellRunner.runComponent(runComponentArgs)
           return this.formatOutputs(node, outputs as any)
         } else {
           console.warn('spell runner not found')

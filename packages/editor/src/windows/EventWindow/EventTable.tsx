@@ -2,6 +2,7 @@
 // Import statements kept as-is
 import { Button } from '@magickml/client-core'
 import { API_ROOT_URL } from '@magickml/core'
+import { IGNORE_AUTH } from '@magickml/core'
 import {
   Grid,
   IconButton,
@@ -15,13 +16,13 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
-import axios from 'axios'
 import _ from 'lodash'
 import { useSnackbar } from 'notistack'
 import { useEffect, useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
 import { VscArrowDown, VscArrowUp, VscTrash } from 'react-icons/vsc'
+import { useSelector } from 'react-redux'
 import {
   useAsyncDebounce,
   useFilters,
@@ -87,6 +88,8 @@ const DefaultColumnFilter = ({ column: { filterValue, setFilter, Header } }) => 
 function EventTable({ events, updateCallback }) {
   const { enqueueSnackbar } = useSnackbar()
   const config = useConfig()
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
 
   // Define table columns
   const columns = useMemo(
@@ -156,7 +159,17 @@ function EventTable({ events, updateCallback }) {
       projectId: config.projectId,
     }
     if (!_.isEqual(reqBody, rowData)) {
-      const isUpdated = await axios.put(`${API_ROOT_URL}/events/${id}`, reqBody)
+      const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
+
+      const isUpdated = await fetch(`${API_ROOT_URL}/events/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...headers,
+        },
+        body: JSON.stringify(reqBody),
+      }).then(res => res.json())
+
       if (isUpdated) enqueueSnackbar('Event updated', { variant: 'success' })
       else enqueueSnackbar('Error updating event', { variant: 'error' })
       updateCallback()

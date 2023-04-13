@@ -101,12 +101,13 @@ class RunSpell {
     secrets,
     agent,
     publicVariables,
+    app,
   }: RunComponentArgs) {
     // ensaure we run from a clean sloate
     this._resetTasks()
 
     // laod the inputs into module memory
-    this.module.read({ inputs, secrets, agent, publicVariables })
+    this.module.read({ inputs, secrets, agent, publicVariables, app })
 
     const component = this._getComponent(componentName as string) as
       | ModuleComponent

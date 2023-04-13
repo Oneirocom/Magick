@@ -15,6 +15,7 @@ export type RunSpellArgs = {
   projectId: string;
   secrets?: Record<string, string>;
   publicVariables?: Record<string, unknown>;
+  app?: any;
 };
 
 /**
@@ -31,6 +32,7 @@ export const runSpell = async ({
   projectId,
   secrets,
   publicVariables,
+  app
 }: RunSpellArgs): Promise<{ outputs: Record<string, unknown>; name: string }> => {
   // Log the input params
   console.log('runSpell', { spellId, inputs, inputFormatter, projectId, secrets, publicVariables });
@@ -66,6 +68,7 @@ export const runSpell = async ({
     inputs: formattedInputs as Record<string, any>,
     secrets,
     publicVariables,
+    app
   }) as Record<string, unknown>;
 
   // Return the outputs and the spell name
