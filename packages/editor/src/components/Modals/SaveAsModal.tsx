@@ -6,12 +6,12 @@ import { useForm } from 'react-hook-form';
 import Modal from '../Modal/Modal';
 import css from './modalForms.module.css';
 import { useNavigate } from 'react-router';
-import { templates } from '@magickml/client-core';
+import { getTemplates } from '@magickml/client-core';
 import { useConfig } from '../../contexts/ConfigProvider';
 import md5 from 'md5';
 
 // Initial graph for the spell
-const defaultGraph = templates.spells[0].graph;
+const defaultGraph = getTemplates().spells[0].graph;
 
 /**
  * EditSpellModal component for saving a copy of an existing spell.
