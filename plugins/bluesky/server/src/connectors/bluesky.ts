@@ -1,5 +1,4 @@
-import bsky from '@atproto/api'
-const { BskyAgent } = bsky
+import { BskyAgent } from '@atproto/api'
 
 export class BlueskyConnector {
   bskyAgent: typeof BskyAgent
@@ -13,11 +12,11 @@ export class BlueskyConnector {
   loop: any
 
   constructor({ spellRunner, agent, worldManager }) {
-    this.bskyAgent.bluesky = this
-    this.spellRunner = spellRunner
-    const data = this.bskyAgent.data.data
-    this.data = data
     this.agent = agent
+    this.agent.bluesky = this
+    this.spellRunner = spellRunner
+    const data = this.agent.data.data
+    this.data = data
     this.worldManager = worldManager // we can track entities in different conversations here later
 
     if (!data.bluesky_enabled) {
@@ -30,14 +29,14 @@ export class BlueskyConnector {
   }
 
   async initialize({ data }) {
-    const bskyAgent = new BskyAgent({
+    this.bskyAgent = new BskyAgent({
       service: 'https://bsky.social',
       persistSession: (evt, sess) => {
         // store the session-data for reuse
         // [how to do this??]
       },
     })
-    await bskyAgent.login({
+    await this.bskyAgent.login({
       identifier: data.bluesky_identifier,
       password: data.bluesky_password,
     })
