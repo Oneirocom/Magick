@@ -169,27 +169,6 @@ const MenuBar = () => {
     publish($CREATE_CONSOLE(activeTabRef.current.id))
   }
 
-  // Menu bar hotkey hooks
-  useHotkeys(
-    'cmd+s, crtl+s',
-    event => {
-      event.preventDefault()
-      onSave()
-    },
-    { enableOnTags: ['INPUT'] },
-    [onSave]
-  )
-
-  useHotkeys(
-    'option+n, crtl+n',
-    event => {
-      event.preventDefault()
-      onNew()
-    },
-    { enableOnTags: ['INPUT'] },
-    [onNew]
-  )
-
   /**
    * Undo handler
    */
@@ -318,7 +297,7 @@ const MenuBar = () => {
         },
         project_window: {
           onClick: onProjectWindowCreate,
-          hotKey: 'control+b',
+          hotKey: 'option+b',
         },
       },
       settings: {
@@ -362,7 +341,6 @@ const MenuBar = () => {
     } else {
       formattedCommand = formattedCommand.replace('option', '\u2325')
     }
-    // formattedCommand = formattedCommand.replace('option', '\u2325')
     formattedCommand = formattedCommand.replace('shift', '\u21E7')
     formattedCommand = formattedCommand.replace('cmd', '\u2318')
     formattedCommand = formattedCommand.replace('control', '\u2303')
@@ -422,19 +400,6 @@ const MenuBar = () => {
             }
           )}
         </ul>
-      )
-    }
-
-    // Add hotkeys for top-level menu items
-    if (hotKeyLabel) {
-      useHotkeys(
-        hotKeyLabel,
-        event => {
-          event.preventDefault()
-          onClick()
-        },
-        { enableOnTags: ['INPUT'] },
-        [onClick]
       )
     }
 
