@@ -159,11 +159,13 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
 
     const handleSockets = (sockets) => {
+      console.log('handleSockets', sockets)
       const connections = node.getConnections()
       if (sockets !== lastSockets) {
         lastSockets?.forEach(socket => {
           console.log('deleting socket', socket)
           if (node.outputs.has(socket.socket)){
+            if(socket.socket === 'trigger' && node.data.useTrigger === true) return;
             connections.forEach(c => {
               console.log('checking connection', c)
               if (c.output.key === socket.socket){
