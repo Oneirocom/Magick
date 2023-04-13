@@ -16,16 +16,22 @@ export const DiscordAgentWindow: FC<any> = props => {
   const { selectedAgentData, update, setSelectedAgentData } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
-  const [checked, setChecked] = useState(selectedAgentData.data?.discord_enabled || false)
+  const [checked, setChecked] = useState(
+    selectedAgentData.data?.discord_enabled || false
+  )
   const [disable, setDisable] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const [playingAudio, setPlayingAudio] = useState(false)
-  useEffect(()=>{
-    if (props.enable["DiscordPlugin"] == false) {
+
+  const handleClose = () => {
+    setEditMode(false)
+  }
+  useEffect(() => {
+    if (props.enable['DiscordPlugin'] == false) {
       setChecked(false)
       setDisable(true)
     }
-    if (props.enable['DiscordPlugin'] == true){
+    if (props.enable['DiscordPlugin'] == true) {
       setChecked(selectedAgentData?.data?.discord_enabled)
       setDisable(false)
     }
@@ -56,7 +62,8 @@ export const DiscordAgentWindow: FC<any> = props => {
       const url =
         selectedAgentData.data?.voice_provider === 'google' ||
         selectedAgentData.data?.voice_provider === 'tiktalknet'
-          ? FILE_SERVER_URL + '/' + resp.data : resp.data
+          ? FILE_SERVER_URL + '/' + resp.data
+          : resp.data
       if (url && url.length > 0) {
         setPlayingAudio(true)
         console.log('url:', url)
@@ -133,7 +140,7 @@ export const DiscordAgentWindow: FC<any> = props => {
           selectedAgentData={selectedAgentData}
           testVoice={testVoice}
           editMode={editMode}
-          setEditMode={setEditMode}
+          setEditMode={handleClose}
           update={update}
         />
       )}
