@@ -61,11 +61,7 @@ export const document = (app: Application) => {
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         async (context: HookContext) => {
-<<<<<<< HEAD
-          if (SKIP_DB_EXTENSIONS) return context
-=======
           const { embedding } = context.data
->>>>>>> 949a5ad78375a220d1787b8a7bf33dabe62c44e8
           const { data, service } = context
           const docdb = app.get('docdb');
           const id = uuidv4()

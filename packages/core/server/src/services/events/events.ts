@@ -71,11 +71,7 @@ export const event = (app: Application) => {
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         async (context: HookContext) => {
-<<<<<<< HEAD
           const vectordb = app.get('vectordb');
-          if (SKIP_DB_EXTENSIONS) return context
-=======
->>>>>>> 949a5ad78375a220d1787b8a7bf33dabe62c44e8
           const { embedding } = context.data
           const { data, service } = context
           const id = uuidv4()
