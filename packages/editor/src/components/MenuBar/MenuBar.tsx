@@ -396,15 +396,18 @@ const MenuBar = () => {
         <ul className={css['menu-panel']}>
           {Object.entries(item.items as [string, Record<string, any>][]).map(
             ([key, item]: [string, Record<string, any>]) => {
-              // useHotkeys(
-              //   item.hotKey,
-              //   event => {
-              //     event.preventDefault()
-              //     item.onClick()
-              //   },
-              //   { enableOnTags: ['INPUT'] },
-              //   [item.onClick]
-              // )
+              // Add hotkeys for each sub-menu item
+              if (item.hotKey) {
+                useHotkeys(
+                  item.hotKey,
+                  event => {
+                    event.preventDefault()
+                    item.onClick()
+                  },
+                  { enableOnTags: ['INPUT'] },
+                  [item.onClick]
+                )
+              }
 
               return (
                 <ListItem
@@ -419,6 +422,19 @@ const MenuBar = () => {
             }
           )}
         </ul>
+      )
+    }
+
+    // Add hotkeys for top-level menu items
+    if (hotKeyLabel) {
+      useHotkeys(
+        hotKeyLabel,
+        event => {
+          event.preventDefault()
+          onClick()
+        },
+        { enableOnTags: ['INPUT'] },
+        [onClick]
       )
     }
 
