@@ -29,9 +29,7 @@ const getProjectTemplates = () =>
  * templates of previously loaded plugins.
  * @returns {Object} templates object containing the projects and spells
  */
-const getTemplates = () => ({
+export const getTemplates = () => ({
   projects: [...defaultTemplates.projects, ...getProjectTemplates()],
   spells: [...defaultTemplates.spells, ...getSpellTemplates()],
 })
-
-export const templates = getTemplates()
