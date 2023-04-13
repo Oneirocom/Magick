@@ -70,8 +70,9 @@ export const document = (app: Application) => {
             [service.id]: id,
             ...data,
           }
+          context.projectId = context.data.projectId
           let result = docdb.fromString(context.data.content, context.data)
-          return result;
+          return context;
         },
       ],
       patch: [
