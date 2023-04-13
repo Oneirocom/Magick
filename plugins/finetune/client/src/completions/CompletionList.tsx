@@ -10,6 +10,7 @@ import FineTuneList from '../fine-tunes/FineTuneList';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Box, Typography } from '@mui/material';
 import InfoCard from '../components/InfoCard';
+import GetRecordsButton from '../files/GetRecordsButton';
 
 /**
  * Component for displaying the classification list.
@@ -64,6 +65,32 @@ export default function ClassificationList() {
               Training Files
             </Typography>
             <UploadFileButton
+              purpose="fine-tune"
+              enforce={{
+                required: ['prompt', 'completion'],
+                count: ['prompt', 'completion'],
+                maxTokens: 2048,
+              }}
+            />
+          </Box>
+        </Box>
+        <FileListTable purpose="fine-tune" />
+      </InfoCard>
+      <InfoCard>
+        <Box component={'div'} style={{ width: '100%' }}>
+          <Box
+            component={'div'}
+            display={'flex'}
+            justifyContent={'space-between'}
+            flexWrap={'nowrap'}
+            flexDirection={'row'}
+            padding={1}
+          >
+            {/* TODO: Remove hardcoded color when global MUI themes are supported */}
+            <Typography variant="h4" component="h2" color="white">
+              From Documents
+            </Typography>
+            <GetRecordsButton
               purpose="fine-tune"
               enforce={{
                 required: ['prompt', 'completion'],
