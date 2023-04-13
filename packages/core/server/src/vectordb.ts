@@ -69,13 +69,27 @@ export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
     }
   }
 
+  async fromString(text: string, metadata: any[]): Promise<any>{
+    const vector = await this.embeddings.embedQuery(text);
+    const insert_data = [{
+      embedding: vector,
+      data: {
+        metadata: {...metadata, embedding: vector} || {"msg": "Empty Data"},
+        pageContent: text || "No Content in the Event",
+      },
+    }]
+    this.addEvents({array: [{...metadata, embedding: vector}]})
+    return insert_data
+  }
+
   /**
    * Add events to the tableName in the Supabase client
    * @param { array: any[]} events - Array of events
    * @returns {Promise<void>}
    */
-  async addEvents(events: { array: any[] }): Promise<void> {
-    events.array.forEach(async element => {
+  async addEvents(documents: { array: any[] }): Promise<void> {
+    documents.array.forEach(async element => {
+      console.log(element)
       const res = await this.client.from(this.tableName).insert(element);
       if (res.error) {
         throw new Error(`Error inserting: ${res.error.message} ${res.status} ${res.statusText}`);
