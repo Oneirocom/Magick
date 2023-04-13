@@ -11,6 +11,8 @@ export * from './api';
 // Export the main app module
 export * from './app';
 
+//  Export the DB setup function
+export * from './dbSetup';
 // Configuration-related exports
 export * from './config/configuration';
 export * from './config/types';
