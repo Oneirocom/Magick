@@ -235,6 +235,7 @@ export class HNSWLib extends SaveableVectorStore {
     embedding: number[],
     metadata: Document
   ): Promise<void> {
+
     if (embedding.length !== this.args.numDimensions) {
       throw new Error(
         `Embedding must have the same length as the number of dimensions (${this.args.numDimensions})`
@@ -256,6 +257,7 @@ export class HNSWLib extends SaveableVectorStore {
     const vectors: number[][] = [];
     const documents: Document[] = [];
     for (const { embedding, data } of embeddings) {
+      console.log(embedding)
       if (embedding) {
         if (embedding.length !== this.args.numDimensions) {
           throw new Error(
@@ -364,8 +366,6 @@ export class HNSWLib extends SaveableVectorStore {
     await this.saveIndex(this.args.filename);
   }
 
-  //TODO: Interface with PluginManager to get the Embedding from the plugin
-  //Right Now using Dummy embeddings
   //IMPORTANT: This function is an extension from the base class and is required for QA
   /**
    * Search for the k nearest neighbours of a query vector
@@ -375,17 +375,16 @@ export class HNSWLib extends SaveableVectorStore {
    * @async
   */
   async similaritySearch(query: any, k = 4): Promise<Document[]> {
-    const arrayLength = this.args.numDimensions;
-    query = new Array(arrayLength).fill(null).map(() => Math.random());
-    /* if (query.length !== this.args.numDimensions) {
+    const queryEmbedding = await this.getEmbedding(query);
+    if (queryEmbedding.length !== this.args.numDimensions) {
       throw new Error(`Query vector must have the same length as the number of dimensions (${this.args.numDimensions})`);
-    } */
+    }
     if (k > this.index.getCurrentCount()) {
       const total = this.index.getCurrentCount();
       console.warn(`k (${k}) is greater than the number of elements in the index (${total}), setting k to ${total}`);
       k = total;
     }
-    const result = this.index.searchKnn(Array.from(query), k);
+    const result = this.index.searchKnn(Array.from(queryEmbedding), k);
     return result.neighbors.map(
       (docIndex, resultIndex) =>
         this.docstore.search(String(docIndex)) as Document
@@ -541,7 +540,18 @@ export class HNSWLib extends SaveableVectorStore {
     }
     return matchingDocs;
   }
-
+  async fromString(text: string, metadata: any[]): Promise<any>{
+    const vector = await this.embeddings.embedQuery(text);
+    const insert_data = [{
+      embedding: vector,
+      data: {
+        metadata: {...metadata, embedding: vector} || {"msg": "Empty Data"},
+        pageContent: text || "No Content in the Event",
+      },
+    }]
+    this.addEmbeddingsWithData(insert_data);
+    return insert_data
+  }
   //TODO: This function is redundant and should be removed, base class requires it
   //This is handled in Documents DB.
   /**

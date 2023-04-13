@@ -5,7 +5,7 @@ import {
   Grid, IconButton, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import _ from 'lodash';
+import _, { create } from 'lodash';
 import { useSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
 import { CSVLink } from 'react-csv';
@@ -17,6 +17,7 @@ import {
   useTable,
 } from 'react-table';
 import { useConfig } from '../../contexts/ConfigProvider';
+import DocumentModal from './DocumentModal';
 
 /**
  * The global filter component for searching documents within the table.
@@ -276,49 +277,7 @@ function DocumentTable({ documents, updateCallback }) {
   return (
     <>
       {createMode && (
-        <Modal
-          open={createMode}
-          setOpen={setCreateMode}
-          handleAction={handleSave}
-        >
-          <TextField
-            label="Type"
-            name="type"
-            style={{ width: '100%', margin: '.5em' }}
-            onChange={e =>
-              setNewDocument({ ...newDocument, type: e.target.value })
-            }
-          />
-          <TextField
-            label="Owner"
-            name="owner"
-            style={{ width: '100%', margin: '.5em' }}
-            onChange={e =>
-              setNewDocument({ ...newDocument, owner: e.target.value })
-            }
-          />
-          <TextField
-            label="Content"
-            name="content"
-            style={{ width: '100%', margin: '.5em' }}
-            onChange={e =>
-              setNewDocument({ ...newDocument, content: e.target.value })
-            }
-          />
-          <DatePicker
-            label="Date"
-            onChange={date =>
-              setNewDocument({ ...newDocument, date: date.toISOString() })}
-          />
-          <TextField
-            label="Embedding"
-            name="embedding"
-            style={{ width: '100%', margin: '.5em' }}
-            onChange={e =>
-              setNewDocument({ ...newDocument, embedding: e.target.value })
-            }
-          />
-        </Modal>
+        <DocumentModal createMode={createMode} setCreateMode={setCreateMode} handleSave={handleSave} setNewDocument={setNewDocument} />
       )}
       <Stack spacing={2}>
         <Grid container justifyContent="left" style={{ padding: '1em' }}>
