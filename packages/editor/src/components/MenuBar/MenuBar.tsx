@@ -279,6 +279,10 @@ const MenuBar = () => {
           onClick: onMultiSelectPaste,
           hotKey: 'option+v',
         },
+        snap: {
+          onClick: toggleSnapFunction,
+          isActive: snapEnabled,
+        },
       },
     },
     window: {
@@ -294,10 +298,6 @@ const MenuBar = () => {
         },
         console: {
           onClick: onConsole,
-        },
-        snap: {
-          onClick: toggleSnapFunction,
-          isActive: snapEnabled,
         },
       },
       settings: {
