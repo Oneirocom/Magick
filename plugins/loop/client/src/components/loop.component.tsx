@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import React, { FC, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
 import { Modal, Switch } from '@magickml/client-core'
@@ -21,7 +21,8 @@ type PluginProps = {
  * @param props - PluginProps
  */
 export const AgentLoopWindow: FC<PluginProps> = props => {
-  const { selectedAgentData, setSelectedAgentData, update, enable } = props.props
+  const { selectedAgentData, setSelectedAgentData, update, enable } =
+    props.props
 
   // Initialize the state variables
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
@@ -32,9 +33,13 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
     loop_interval: selectedAgentData?.data?.loop_interval,
   })
 
+  const handleClose = () => {
+    setEditMode(false)
+  }
+
   // Handle enable/disable of the loop plugin
   useEffect(() => {
-    if (enable["LoopPlugin"] === false) {
+    if (enable['LoopPlugin'] === false) {
       setChecked(false)
       setDisable(true)
     }
@@ -122,7 +127,7 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
         </div>
       </div>
       {editMode && (
-        <Modal open={editMode} setOpen={setEditMode} handleAction={handleSave}>
+        <Modal open={editMode} onClose={handleClose} onSubmit={handleSave}>
           <div>
             <div>
               <span className="form-item-label">Loop Interval</span>
