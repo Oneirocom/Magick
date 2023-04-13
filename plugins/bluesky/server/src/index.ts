@@ -23,8 +23,6 @@ function getAgentMethods() {
     const { data } = agent.data
     if(!data) return console.log("No data for this agent")
     if(!data.bluesky_enabled) return console.log("Bluesky is not enabled for this agent")
-    if(!data.bluesky_api_key) return console.log("Bluesky API key is not set for this agent")
-    console.log('starting bluesky connect')
     const bluesky = new BlueskyConnector({
       agent,
       spellRunner,
