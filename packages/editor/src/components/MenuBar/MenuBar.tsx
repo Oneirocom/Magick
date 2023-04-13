@@ -3,12 +3,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-
 import { useModal } from '../../contexts/ModalProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import css from './menuBar.module.css'
 import { activeTabSelector, Tab } from '../../state/tabs'
-import { toggleAutoSave, toggleSnap } from '../../state/preferences'
+import { toggleAutoSave } from '../../state/preferences'
 import { RootState } from '../../state/store'
 
 /**
@@ -21,6 +20,7 @@ const MenuBar = () => {
   const { publish, events } = usePubSub()
   const dispatch = useDispatch()
   const activeTab = useSelector(activeTabSelector)
+  const [snapEnabled, setSnapEnabled] = useState(true)
 
   const preferences = useSelector(
     (state: RootState) => state.preferences
@@ -47,6 +47,7 @@ const MenuBar = () => {
     $REDO,
     $MULTI_SELECT_COPY,
     $MULTI_SELECT_PASTE,
+    TOGGLE_SNAP,
   } = events
 
   /**
@@ -221,7 +222,9 @@ const MenuBar = () => {
    * Toggle snap handler
    */
   const toggleSnapFunction = () => {
-    dispatch(toggleSnap())
+    if (!activeTabRef.current) return
+    publish(TOGGLE_SNAP)
+    setSnapEnabled(!snapEnabled)
   }
 
   // Menu bar entries
@@ -294,8 +297,7 @@ const MenuBar = () => {
         },
         snap: {
           onClick: toggleSnapFunction,
-          // hotKey: 'option+shift+g',
-          isActive: preferences.snap,
+          isActive: snapEnabled,
         },
       },
       settings: {
