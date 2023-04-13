@@ -49,6 +49,3 @@ export { Window, WindowToolbar } from './Window'
 
 // Export Modal component
 export { Modal } from './Modal'
-
-// Export Modal component
-export { ConfirmDialog } from './ConfirmDialog'
