@@ -1,7 +1,10 @@
+import { PubSub, events } from '../../contexts/PubSubProvider'
+
 export class SnapGrid {
   constructor(editor, { size = 16, dynamic = true }) {
     this.editor = editor
     this.size = size
+    this.active = dynamic
 
     if (dynamic) this.editor.on('nodetranslate', this.onTranslate.bind(this))
     else
@@ -12,7 +15,21 @@ export class SnapGrid {
       })
   }
 
+  subscribeToToggleSnap() {
+    // Subscribe to TOGGLE_SNAP event
+    PubSub.subscribe(events.TOGGLE_SNAP, () => {
+      console.log('TOGGLE_SNAP event received in snap.js')
+      this.toggleSnap()
+    })
+  }
+
+  toggleSnap() {
+    this.active = !this.active
+  }
+
   onTranslate(data) {
+    if (!this.active) return
+
     const { x, y } = data
 
     data.x = this.snap(x)
@@ -20,6 +37,8 @@ export class SnapGrid {
   }
 
   onDrag(node) {
+    if (!this.active) return
+
     const [x, y] = node.position
 
     node.position[0] = this.snap(x)
