@@ -1,7 +1,7 @@
 // DOCUMENTED 
 import { Button, Panel } from '@magickml/client-core';
 import { GraphData } from '@magickml/core';
-import { templates } from '@magickml/client-core';
+import { getTemplates } from '@magickml/client-core';
 import md5 from 'md5';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -31,8 +31,6 @@ export type Template = {
   graph: GraphData;
 };
 
-export const magickTemplates = templates.spells;
-
 /**
  * CreateNew component for creating a new spell.
  */
@@ -40,7 +38,7 @@ const CreateNew = () => {
   const config = useConfig();
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
-    magickTemplates[0]
+    getTemplates().spells[0]
   );
   const [error, setError] = useState<string | null>(null);
 
@@ -133,7 +131,7 @@ const CreateNew = () => {
           gap: 'var(--extraSmall)',
         }}
       >
-        {magickTemplates.map((template, i) => (
+        {getTemplates().spells.map((template, i) => (
           <TemplatePanel
             setSelectedTemplate={setSelectedTemplate}
             selectedTemplate={selectedTemplate}
