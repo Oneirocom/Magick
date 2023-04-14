@@ -97,7 +97,7 @@ export class BlueskyConnector {
               sender: author,
               observer: this.data.bluesky_identifier,
               client: 'bluesky',
-              channel: post_thread.data.thread.post.record.channel,
+              channel: post_thread.data.thread.post.uri,
               agentId: this.agent.id,
               entities,
               channelType: 'reply',
@@ -120,9 +120,18 @@ export class BlueskyConnector {
   }
 
   async handleMessage(resp, event) {
-    await this.bskyAgent.post({
-      text: resp,
-    })
+    const notif = JSON.parse(event.rawData)
+    console.log('handling bluesky message', notif);
+    if ('reply' in notif.record) {
+      const root = notif.record.reply.root
+      const content = resp
+      await this.sendReply(content, root, notif)
+    } else {
+      await this.bskyAgent.post({
+        text: resp,
+      })
+    }
+
   }
 
   async sendReply(content, root, notif) {
