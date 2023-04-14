@@ -233,31 +233,31 @@ const MenuBar = () => {
       items: {
         new_spell: {
           onClick: onNew,
-          hotKey: 'option+n, control+n',
+          hotKey: 'option+n',
         },
         open_spell: {
           onClick: onOpen,
-          hotKey: 'option+o, control+o',
+          hotKey: 'option+o, ctrl+o',
         },
         import_spell: {
           onClick: onImport,
-          hotKey: 'option+i, control+i',
+          hotKey: 'option+i, ctrl+i',
         },
         rename_spell: {
           onClick: onEdit,
-          hotKey: 'option+e, control+e',
+          hotKey: 'option+e, ctrl+e',
         },
         save_spell: {
           onClick: onSave,
-          hotKey: 'option+s, control+s',
+          hotKey: 'option+s, ctrl+s',
         },
         save_a_copy: {
           onClick: onSaveAs,
-          hotKey: 'option+shift+s, control+shift+s',
+          hotKey: 'option+shift+s, ctrl+shift+s',
         },
         export_spell: {
           onClick: onExport,
-          hotKey: 'option+shift+e, control+shift+e',
+          hotKey: 'option+shift+e, ctrl+shift+e',
         },
       },
     },
@@ -265,19 +265,19 @@ const MenuBar = () => {
       items: {
         undo: {
           onClick: onUndo,
-          hotKey: 'option+z, control+z',
+          hotKey: 'option+z, ctrl+z',
         },
         redo: {
           onClick: onRedo,
-          hotKey: 'option+y, control+y',
+          hotKey: 'option+y, ctrl+y',
         },
         copy: {
           onClick: onMultiSelectCopy,
-          hotKey: 'option+c, control+c',
+          hotKey: 'option+c, ctrl+c',
         },
         paste: {
           onClick: onMultiSelectPaste,
-          hotKey: 'option+v, control+v',
+          hotKey: 'option+v, ctrl+v',
         },
       },
     },
@@ -383,8 +383,10 @@ const MenuBar = () => {
                 useHotkeys(
                   item.hotKey,
                   event => {
-                    event.preventDefault()
+                    
+                    console.log('Hotkey triggered:', item.hotKey);
                     item.onClick()
+                    event.preventDefault()
                   },
                   { enableOnTags: ['INPUT'] },
                   [item.onClick]
