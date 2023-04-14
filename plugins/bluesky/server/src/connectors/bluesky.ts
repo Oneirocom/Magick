@@ -74,16 +74,16 @@ export class BlueskyConnector {
       console.log('notif', notif)
 
       const type = 'reply' in notif.record ? 'reply' : 'mention'
-
-      const text = notif.record.text
+      const record = notif.record as any
+      const text = record.text
       const post_uri =
-        type === 'reply' ? notif.record.reply.parent.uri : notif.uri
+        type === 'reply' ? record.reply.parent.uri : notif.uri
       const post_thread = await this.bskyAgent.getPostThread({
         uri: post_uri,
         depth: 1,
       })
-      const root = type === 'reply' ? notif.record.reply.root : notif.uri
-      const post_text = post_thread.data.thread.post.record.text
+      const root = type === 'reply' ? record.reply?.root : notif.uri
+      const post_text = (post_thread.data?.thread?.post as any)?.record.text
       console.log('reply root is', root)
       console.log('handle reply, post_text is', post_text)
 
@@ -100,7 +100,7 @@ export class BlueskyConnector {
             sender: author,
             observer: this.data.bluesky_identifier,
             client: 'bluesky',
-            channel: post_thread.data.thread.post.uri,
+            channel: (post_thread.data.thread?.post as any)?.uri,
             agentId: this.agent.id,
             entities,
             channelType: type,
