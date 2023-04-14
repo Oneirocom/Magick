@@ -21,6 +21,7 @@ const MenuBar = () => {
   const { publish, events } = usePubSub()
   const dispatch = useDispatch()
   const activeTab = useSelector(activeTabSelector)
+  const [snapEnabled, setSnapEnabled] = useState(true)
   const { openProjectWindow, setOpenProjectWindow, setOpenDrawer } =
     useProjectWindow()
   const [snapEnabled, setSnapEnabled] = useState(true)
@@ -229,6 +230,14 @@ const MenuBar = () => {
     dispatch(toggleAutoSave())
   }
 
+  /**
+   * Toggle snap handler
+   */
+  const toggleSnapFunction = () => {
+    if (!activeTabRef.current) return
+    publish(TOGGLE_SNAP)
+    setSnapEnabled(!snapEnabled)
+  }
   /**
    * Toggle save handler
    */
