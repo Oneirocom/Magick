@@ -233,31 +233,31 @@ const MenuBar = () => {
       items: {
         new_spell: {
           onClick: onNew,
-          hotKey: 'option+n',
+          hotKey: 'option+n, control+n',
         },
         open_spell: {
           onClick: onOpen,
-          hotKey: 'option+o',
+          hotKey: 'option+o, control+o',
         },
         import_spell: {
           onClick: onImport,
-          hotKey: 'option+i',
+          hotKey: 'option+i, control+i',
         },
         rename_spell: {
           onClick: onEdit,
-          hotKey: 'option+e',
+          hotKey: 'option+e, control+e',
         },
         save_spell: {
           onClick: onSave,
-          hotKey: 'option+s',
+          hotKey: 'option+s, control+s',
         },
         save_a_copy: {
           onClick: onSaveAs,
-          hotKey: 'option+shift+s',
+          hotKey: 'option+shift+s, control+shift+s',
         },
         export_spell: {
           onClick: onExport,
-          hotKey: 'option+shift+e',
+          hotKey: 'option+shift+e, control+shift+e',
         },
       },
     },
@@ -265,19 +265,19 @@ const MenuBar = () => {
       items: {
         undo: {
           onClick: onUndo,
-          hotKey: 'option+z',
+          hotKey: 'option+z, control+z',
         },
         redo: {
           onClick: onRedo,
-          hotKey: 'option+shift+z',
+          hotKey: 'option+y, control+y',
         },
         copy: {
           onClick: onMultiSelectCopy,
-          hotKey: 'option+c',
+          hotKey: 'option+c, control+c',
         },
         paste: {
           onClick: onMultiSelectPaste,
-          hotKey: 'option+v',
+          hotKey: 'option+v, control+v',
         },
       },
     },
@@ -285,19 +285,23 @@ const MenuBar = () => {
       items: {
         text_editor: {
           onClick: onTextEditorCreate,
+          hotKey: 'option+1, control+1',
         },
         inspector: {
           onClick: onInspectorCreate,
+          hotKey: 'option+2, control+2',
         },
         playtest: {
           onClick: onPlaytestCreate,
+          hotKey: 'option+3, control+3',
         },
         console: {
           onClick: onConsole,
+          hotKey: 'option+4, control+4',
         },
         project_window: {
           onClick: onProjectWindowCreate,
-          hotKey: 'option+b',
+          hotKey: 'option+5, control+5',
         },
       },
       settings: {
@@ -394,7 +398,7 @@ const MenuBar = () => {
                   topLevel={false}
                   key={key}
                   onClick={item.onClick}
-                  hotKeyLabel={item.hotKey}
+                  hotKeyLabel={item.hotKey ? item.hotKey.split(',')[0] : ''}
                 />
               )
             }
