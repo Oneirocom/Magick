@@ -1,5 +1,5 @@
 
-import { CompletionProvider, pluginManager, WorkerData } from "@magickml/core";
+import { CompletionProvider, DEFAULT_PROJECT_ID, pluginManager, WorkerData } from "@magickml/core";
 
 import import_ from '@brillout/import';
 import { toUpper } from "lodash";
@@ -48,30 +48,28 @@ export class PluginEmbeddings extends Embeddings {
         
     }
 
-    async embedQuery(document: string): Promise<number[]> {
+    async embedQuery(document: string, projectId=DEFAULT_PROJECT_ID): Promise<number[]> {
         const data = await this.embeddingWithRetry({
             model: this.modelName,
             input: [document],
-        });
-        console.log("Reutrn data")
-        console.log(data)
+        }, projectId);
         return data.result;
     }
-    async embedDocuments(document: string[]): Promise<number[][]> {
+    async embedDocuments(document: string[], projectId = DEFAULT_PROJECT_ID): Promise<number[][]> {
         const subPrompts = chunkArray(this.stripNewLines ? document.map((t) => t.replaceAll("\n", " ")) : document, this.batchSize);
         const embeddings = [];
         for (let i = 0; i < subPrompts.length; i += 1) {
             const input = subPrompts[i];
             const { data } = await this.embeddingWithRetry({
                 input: input as String,
-            });
+            }, projectId);
             for (let j = 0; j < input.length; j += 1) {
                 embeddings.push(data.data[j].embedding);
             }
         }
         return embeddings;
     }
-    async embeddingWithRetry(embeddingObject) {
+    async embeddingWithRetry(embeddingObject, projectId) {
         let response;
         let retry = 0;
         while (retry < 3) {
@@ -82,12 +80,10 @@ export class PluginEmbeddings extends Embeddings {
                     inputs: {input: [{content: embeddingObject['input']}]},
                     node: { data: { model: this.modelName } } as unknown as WorkerData,
                     outputs: undefined,
-                    context: {module: {secrets: this.key}},
+                    context: {module: {secrets: this.key}, projectId: projectId },
                 });
-                console.log(response)
                 break;
             } catch (e) {
-                console.log("ERRRORR")
                 console.log(e)
                 retry += 1;
             }

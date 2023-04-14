@@ -46,7 +46,7 @@ export default function GetRecordsButton({ enforce, purpose }: Props) {
             text += record.content
         })
         console.log(text)
-        let data = await extractPromptsAndCompletions(text.slice(0,20))
+        let data = await extractPromptsAndCompletions(text)
         let r = await documentLoad(data)
         console.log(r)
     }
