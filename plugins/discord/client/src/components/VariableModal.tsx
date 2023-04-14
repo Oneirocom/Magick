@@ -41,7 +41,7 @@ const VariableModal = ({
 
   return (
     editMode && (
-      <Modal open={editMode} setOpen={setEditMode} handleAction={handleSave}>
+      <Modal open={editMode} onClose={setEditMode} onSubmit={handleSave}>
         <div style={{ marginBottom: '1em' }}>
           <div>
             <span className="form-item-label">API Key</span>

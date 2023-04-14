@@ -3,7 +3,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-
 import { useModal } from '../../contexts/ModalProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
 import css from './menuBar.module.css'
@@ -23,6 +22,7 @@ const MenuBar = () => {
   const { publish, events } = usePubSub()
   const dispatch = useDispatch()
   const activeTab = useSelector(activeTabSelector)
+  const [snapEnabled, setSnapEnabled] = useState(true)
   const { openProjectWindow, setOpenProjectWindow, setOpenDrawer } =
     useProjectWindow()
 
@@ -51,6 +51,7 @@ const MenuBar = () => {
     $REDO,
     $MULTI_SELECT_COPY,
     $MULTI_SELECT_PASTE,
+    TOGGLE_SNAP,
   } = events
 
   /**
@@ -230,6 +231,14 @@ const MenuBar = () => {
   }
 
   /**
+   * Toggle snap handler
+   */
+  const toggleSnapFunction = () => {
+    if (!activeTabRef.current) return
+    publish(TOGGLE_SNAP)
+    setSnapEnabled(!snapEnabled)
+  }
+  /**
    * Toggle save handler
    */
   const changeLayout = event => {
@@ -299,6 +308,10 @@ const MenuBar = () => {
         paste: {
           onClick: onMultiSelectPaste,
           hotKey: 'option+v',
+        },
+        snap: {
+          onClick: toggleSnapFunction,
+          isActive: snapEnabled,
         },
       },
     },

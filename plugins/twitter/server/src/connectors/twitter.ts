@@ -219,6 +219,7 @@ export class TwitterConnector {
                   agentId: this.agent.id,
                   entities,
                   channelType: 'feed',
+                  rawData: tw
                 },
               },
               agent: this.agent,
