@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import React, { FC, useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid'
 import { Modal, Switch } from '@magickml/client-core'
@@ -21,7 +21,7 @@ const randomHash = (): string => {
  * @param {object} props - Props for the RestAgentWindow component.
  * @returns {JSX.Element} - RestAgentWindow component.
  */
-export const RestAgentWindow: FC<any> = (props) => {
+export const RestAgentWindow: FC<any> = props => {
   props = props.props
   const { selectedAgentData, setSelectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
@@ -32,19 +32,23 @@ export const RestAgentWindow: FC<any> = (props) => {
   const [viewMode, setViewMode] = useState<boolean>(false)
   const [checked, setChecked] = useState(selectedAgentData.data?.rest_enabled)
   const [disable, setDisable] = useState(false)
-  
+
+  const handleClose = () => {
+    setViewMode(false)
+  }
+
   useEffect(() => {
-    if (props.enable["RestPlugin"] === false) {
+    if (props.enable['RestPlugin'] === false) {
       setChecked(false)
       setDisable(true)
     }
 
-    if (props.enable['RestPlugin'] === true){
+    if (props.enable['RestPlugin'] === true) {
       setChecked(selectedAgentData.data?.rest_enabled)
       setDisable(false)
     }
   }, [props.enable, selectedAgentData])
-  
+
   useEffect(() => {
     if (!selectedAgentData.data?.rest_api_key) {
       setSelectedAgentData({
@@ -109,7 +113,7 @@ export const RestAgentWindow: FC<any> = (props) => {
         </div>
       </div>
       {viewMode && (
-        <Modal open={viewMode} setOpen={setViewMode} handleAction={undefined}>
+        <Modal open={viewMode} onClose={handleClose}>
           <div className="form-item">
             <Grid container>
               <Grid item xs={12}>
@@ -155,9 +159,7 @@ export const RestAgentWindow: FC<any> = (props) => {
                   URL
                 </span>
                 <Input
-                  value={`${API_ROOT_URL}/api/${
-                    selectedAgentData.data?.rest_api_key
-                  }`}
+                  value={`${API_ROOT_URL}/api/${selectedAgentData.data?.rest_api_key}`}
                   readOnly
                   className="modal-element"
                   style={{
@@ -203,11 +205,7 @@ export const RestAgentWindow: FC<any> = (props) => {
                       Fetch
                     </span>
                     <Input
-                      value={`fetch('${API_ROOT_URL}/api/${
-                        selectedAgentData.id
-                      }?apiKey=${
-                        selectedAgentData.data?.rest_api_key
-                      }&content=Hello+World')`}
+                      value={`fetch('${API_ROOT_URL}/api/${selectedAgentData.id}?apiKey=${selectedAgentData.data?.rest_api_key}&content=Hello+World')`}
                       readOnly
                       className="modal-element"
                       style={{
@@ -216,11 +214,7 @@ export const RestAgentWindow: FC<any> = (props) => {
                       }}
                       onClick={() => {
                         navigator.clipboard.writeText(
-                          `fetch('${API_ROOT_URL}/api/${
-                            selectedAgentData.id
-                          }?apiKey=${
-                            selectedAgentData.data?.rest_api_key
-                          }&content=Hello+World')`
+                          `fetch('${API_ROOT_URL}/api/${selectedAgentData.id}?apiKey=${selectedAgentData.data?.rest_api_key}&content=Hello+World')`
                         )
                       }}
                     />
@@ -271,16 +265,12 @@ export const RestAgentWindow: FC<any> = (props) => {
                       onClick={() => {
                         // copy the value of the input
                         navigator.clipboard.writeText(
-                          `fetch('${API_ROOT_URL}/api/${
-                            selectedAgentData.id
-                          }', {
+                          `fetch('${API_ROOT_URL}/api/${selectedAgentData.id}', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
   },
-  body: JSON.stringify({ apiKey: '${
-    selectedAgentData.data?.rest_api_key
-  }', content: 'Hello World' }),
+  body: JSON.stringify({ apiKey: '${selectedAgentData.data?.rest_api_key}', content: 'Hello World' }),
 })`
                         )
                       }}
@@ -388,11 +378,7 @@ export const RestAgentWindow: FC<any> = (props) => {
                       Fetch
                     </span>
                     <Input
-                      value={`fetch('${API_ROOT_URL}/api/${
-                        selectedAgentData.id
-                      }?apiKey=${
-                        selectedAgentData.data?.rest_api_key
-                      }&content=Hello+World', {
+                      value={`fetch('${API_ROOT_URL}/api/${selectedAgentData.id}?apiKey=${selectedAgentData.data?.rest_api_key}&content=Hello+World', {
   method: 'DELETE',
   headers: {
     'Content-Type': 'application/json',
@@ -410,11 +396,7 @@ export const RestAgentWindow: FC<any> = (props) => {
                       }}
                       onClick={() => {
                         navigator.clipboard.writeText(
-                          `fetch('${API_ROOT_URL}/api/${
-                            selectedAgentData.id
-                          }?apiKey=${
-                            selectedAgentData.data?.rest_api_key
-                          }&content=Hello+World', {
+                          `fetch('${API_ROOT_URL}/api/${selectedAgentData.id}?apiKey=${selectedAgentData.data?.rest_api_key}&content=Hello+World', {
 method: 'DELETE',
 headers: {
   'Content-Type': 'application/json',

@@ -15,12 +15,13 @@ function install(editor, params) {
   if (background) {
     this._background = new Background(editor, background, tab)
   }
-  
+
   if (scaleExtent || translateExtent) {
     this._restrictor = new Restrictor(editor, scaleExtent, translateExtent)
   }
   if (snap) {
-    this._snap = new SnapGrid(editor, snap)
+    this._snap = new SnapGrid(editor, snap);
+    this._snap.subscribeToToggleSnap();
   }
 }
 
