@@ -24,7 +24,6 @@ const MenuBar = () => {
   const [snapEnabled, setSnapEnabled] = useState(true)
   const { openProjectWindow, setOpenProjectWindow, setOpenDrawer } =
     useProjectWindow()
-  const [snapEnabled, setSnapEnabled] = useState(true)
 
   const preferences = useSelector(
     (state: RootState) => state.preferences
@@ -255,14 +254,6 @@ const MenuBar = () => {
         layout: formattedKey,
       })
     )
-  }
-  /**
-   * Toggle snap handler
-   */
-  const toggleSnapFunction = () => {
-    if (!activeTabRef.current) return
-    publish(TOGGLE_SNAP)
-    setSnapEnabled(!snapEnabled)
   }
 
   // Menu bar entries
