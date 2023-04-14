@@ -1,7 +1,9 @@
 // DOCUMENTED
 import { Icon, IconBtn } from '@magickml/client-core'
 import { Avatar, Typography } from '@mui/material'
+import { Modal } from '@magickml/client-core'
 import styles from './index.module.scss'
+import { useState } from 'react'
 
 /**
  * Represents an agent item component.
@@ -13,7 +15,22 @@ import styles from './index.module.scss'
  * @param {Object} [props.style] - Inline CSS styles if needed.
  * @returns {React.Element} The rendered agent item component.
  */
+
 const AgentItem = ({ keyId, agent, onDelete, onClick, style }) => {
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false)
+  const [agentId, setAgentID] = useState<string>('')
+
+  const handleClose = () => {
+    setOpenConfirm(false)
+    setAgentID('')
+  }
+
+  const onSubmit = () => {
+    onDelete(agentId)
+    setAgentID('')
+    setOpenConfirm(false)
+  }
+
   return (
     <div
       key={keyId}
@@ -33,10 +50,19 @@ const AgentItem = ({ keyId, agent, onDelete, onClick, style }) => {
           Icon={<Icon name="trash" size={20} />}
           onClick={e => {
             e.stopPropagation()
-            onDelete(agent?.id)
+            setAgentID(agent.id)
+            setOpenConfirm(true)
           }}
         />
       </div>
+      <Modal
+        open={openConfirm}
+        onClose={handleClose}
+        onSubmit={onSubmit}
+        title={`Delete ${agent?.name} agent`}
+        submitText="Confirm"
+        children="Do you want to delete this agent?"
+      />
     </div>
   )
 }
