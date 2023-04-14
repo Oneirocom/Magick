@@ -97,6 +97,7 @@ export function initSpeechClient(options: {
             agentId: agent.id,
             entities: entities.map((e) => e.user),
             channelType: 'voice',
+            rawData: JSON.stringify(msg),
           },
         },
         secrets: agent.secrets ?? {},
