@@ -246,6 +246,7 @@ const MenuBar = () => {
         layout: formattedKey,
       })
     )
+  }
   /**
    * Toggle snap handler
    */
