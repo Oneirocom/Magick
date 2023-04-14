@@ -61,7 +61,24 @@ async function handleResponse(
 
   const resp = output
   if (resp && resp !== undefined && resp?.length > 0) {
-    await agent.bluesky.handleMessage(resp, event)
+    await agent.bluesky.handleResponse(resp, event)
+  }
+}
+
+async function handlePost(
+  {
+    output,
+    agent,
+    event
+  }
+) {
+  console.log('********* SENT MESSAGE TO BLUESKY', agent.id, output, event)
+  console.log('event is', event)
+  console.log('event.channel is', event.channel)
+
+  const resp = output
+  if (resp && resp !== undefined && resp?.length > 0) {
+    await agent.bluesky.handlePost(resp)
   }
 }
 
@@ -89,9 +106,8 @@ const outputSockets = [
 const BlueskyPlugin = new ServerPlugin({
   name: 'BlueskyPlugin',
   inputTypes: [
-    { name: 'Bluesky (Reply)', sockets: inputSockets, defaultResponseOutput: 'Bluesky (Feed)' },
-    // { name: 'Bluesky (DM)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Bluesky (DM)' },
-    // { name: 'Bluesky (Mention', trigger: true, socket: eventSocket, defaultResponseOutput: 'Bluesky (Mention'}
+    { name: 'Bluesky (Reply)', sockets: inputSockets, defaultResponseOutput: 'Bluesky (Reply)' },
+    { name: 'Bluesky (Mention)', sockets: inputSockets, defaultResponseOutput: 'Bluesky (Mention)' }
   ],
   outputTypes: [
     { name: 'Bluesky (Reply)', sockets: outputSockets, handler: async ({
@@ -99,11 +115,16 @@ const BlueskyPlugin = new ServerPlugin({
     }) => {
       await handleResponse({output, agent, event})
     }},
-    // { name: 'Bluesky (DM)', trigger: true, socket: eventSocket, handler: async ({
-    //   output, agent, event
-    // }) => {
-    //   await handleResponse({output, agent, event})
-    // }},
+    { name: 'Bluesky (Mention)', sockets: outputSockets, handler: async ({
+      output, agent, event
+    }) => {
+      await handleResponse({output, agent, event})
+    }},
+    { name: 'Bluesky (Post)', sockets: outputSockets, handler: async ({
+      output, agent, event
+    }) => {
+      await handlePost({output, agent, event})
+    }},
   ],
   agentMethods: getAgentMethods(),
   secrets: [
