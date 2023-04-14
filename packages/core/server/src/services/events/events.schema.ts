@@ -25,6 +25,7 @@ export const eventSchema = Type.Object(
     projectId: Type.String(),
     date: Type.Optional(Type.String()),
     embedding: Type.Optional(Type.Any()),
+    rawData: Type.Optional(Type.String()),
   },
   { $id: 'Event', additionalProperties: false }
 );
@@ -45,7 +46,8 @@ export const eventDataSchema = Type.Pick(eventSchema, [
   'content',
   'agentId',
   'date',
-  'embedding'
+  'embedding',
+  'rawData'
 ], {
   $id: 'EventData'
 });
@@ -79,7 +81,8 @@ export const eventQueryProperties = Type.Pick(eventSchema, [
   'content',
   'agentId',
   'date',
-  'embedding'
+  'embedding',
+  'rawData'
 ]);
 export const eventQuerySchema = Type.Intersect(
   [
