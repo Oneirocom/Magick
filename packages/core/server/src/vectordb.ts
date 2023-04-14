@@ -14,6 +14,7 @@ import {
   SpaceName
 } from "hnswlib-node";
 import { Embeddings } from "langchain/dist/embeddings/base";
+import {PluginEmbeddings} from "./customEmbedding"
 import path from "node:path";
 
 const InMemoryDocstorePro = import_("langchain/docstore");
@@ -70,7 +71,7 @@ export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
   }
 
   async fromString(text: string, metadata: any[]): Promise<any>{
-    const vector = await this.embeddings.embedQuery(text);
+    const vector = await this.embeddings.embedQuery(text, metadata["projectId"]);
     const insert_data = [{
       embedding: vector,
       data: {
@@ -167,7 +168,7 @@ export class HNSWLib extends SaveableVectorStore {
 
   args: HNSWLibBase;
 
-  declare embeddings: Embeddings;
+  declare embeddings: any;
 
   /**
    * Constructs an instance of HNSWLib
@@ -555,7 +556,8 @@ export class HNSWLib extends SaveableVectorStore {
     return matchingDocs;
   }
   async fromString(text: string, metadata: any[]): Promise<any>{
-    const vector = await this.embeddings.embedQuery(text);
+    console.log("metadata", metadata)
+    const vector = await this.embeddings.embedQuery(text, (metadata as unknown as {projectId: string}).projectId);
     const insert_data = [{
       embedding: vector,
       data: {

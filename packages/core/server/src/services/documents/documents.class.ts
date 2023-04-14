@@ -53,7 +53,7 @@ export class DocumentService<
       return r
     } else{
       const db = app.get('dbClient');
-      return await db('document').where('id', id).del();
+      return await db('documents').where('id', id).del();
     }
   }
 
