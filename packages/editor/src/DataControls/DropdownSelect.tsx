@@ -21,6 +21,7 @@ const DropdownSelect = ({ control, updateData, initialValue }) => {
   /**
    * wait for the fine-tune data before updating the composite values with the model name
    */
+  // TODO: Move to plugin
   const { data: fineTuneData } =
     useSWR<OpenAI.List<OpenAI.FineTune>>('fine-tunes')
 
