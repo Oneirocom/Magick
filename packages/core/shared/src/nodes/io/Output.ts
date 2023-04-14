@@ -112,6 +112,9 @@ export class Output extends MagickComponent<void> {
     context: ModuleContext
   ): Promise<{ output: string }> {
     console.log('output, context', context)
+
+    const inputName = Object.keys(context.data)[0]
+
     if (!inputs.input) {
       console.error('No input provided to output component')
       return { output: '' }
@@ -129,11 +132,16 @@ export class Output extends MagickComponent<void> {
 
     if (module.agent) {
       if (outputType && (outputType as string).includes('Default')) {
-        const outputType = pluginManager.getOutputTypes().find(type => {
-          return type.name === Object.keys(inputs)[0].replace('Output - ', '')
+        console.log('handling default response type', outputType)
+        console.log('pluginManager.getOutputTypes()', pluginManager.getInputTypes())
+        const type = pluginManager.getInputTypes().find(type => {
+          return type.name === inputName.replace('Input - ', '')
         })
 
-        const responseOutputType = outputType?.defaultResponseOutput
+        console.log('outputType', type)
+        console.log('outputType?.defaultResponseOutput', type?.defaultResponseOutput)
+
+        const responseOutputType = type?.defaultResponseOutput
         const t = module.agent.outputTypes.find(
           t => t.name === responseOutputType
         )
