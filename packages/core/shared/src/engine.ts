@@ -126,6 +126,7 @@ export type MagicComponentCategory =
   | 'Number'
   | 'I/O'
   | 'Flow'
+  | 'Langchain'
   | 'Embedding'
   | 'Document'
   | 'Code'
