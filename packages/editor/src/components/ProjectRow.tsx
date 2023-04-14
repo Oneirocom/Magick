@@ -1,21 +1,21 @@
-// DOCUMENTED 
-import { SpellInterface } from '@magickml/core';
-import { CSSProperties } from 'react';
-import { Icon } from '@magickml/client-core';
-import css from '../screens/HomeScreen/homeScreen.module.css';
+// DOCUMENTED
+import { SpellInterface } from '@magickml/core'
+import { CSSProperties, useState } from 'react'
+import { Icon, Modal } from '@magickml/client-core'
+import css from '../screens/HomeScreen/homeScreen.module.css'
 
 /**
  * ProjectProps type defines the properties for the ProjectRow component.
  */
 type ProjectProps = {
-  label: string;
-  selectedSpell?: SpellInterface;
-  icon?: string;
-  onClick: Function;
-  spell?: SpellInterface;
-  style?: CSSProperties;
-  onDelete?: Function;
-};
+  label: string
+  selectedSpell?: SpellInterface
+  icon?: string
+  onClick: Function
+  spell?: SpellInterface
+  style?: CSSProperties
+  onDelete?: Function
+}
 
 /**
  * ProjectRow is a functional component that displays a row of project information.
@@ -32,43 +32,72 @@ type ProjectProps = {
 const ProjectRow = ({
   label,
   selectedSpell,
-  onClick = () => { /* null */},
+  onClick = () => {
+    /* null */
+  },
   icon = '',
   spell,
   style = {},
   onDelete,
 }: ProjectProps): JSX.Element => {
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false)
+  const [spellId, setSpellID] = useState<string>('')
+
+  const handleClose = () => {
+    setOpenConfirm(false)
+    setSpellID('')
+  }
+
+  const onSubmit = () => {
+    onDelete(spellId)
+    setSpellID('')
+    setOpenConfirm(false)
+  }
+
   return (
     <div
       role="button"
       className={`${css['project-row']} ${
         css[selectedSpell?.name === label ? 'selected' : '']
       }`}
-      onClick={(e) => {
-        onClick(e);
+      onClick={e => {
+        onClick(e)
       }}
       style={style}
     >
       {icon.length > 0 && (
-        <Icon name={icon} style={{ marginRight: 'var(--extraSmall)' }} />
+        <Icon
+          name={icon}
+          style={{ marginRight: 'var(--extraSmall)', cursor: 'pointer' }}
+        />
       )}
       {label}
       {onDelete && (
         <Icon
           name="trash"
           onClick={() => {
-            spell?.name && onDelete(spell.id);
+            setOpenConfirm(true)
+            setSpellID(spell.id)
           }}
           style={{
             marginRight: 'var(--extraSmall)',
             position: 'absolute',
             right: 'var(--extraSmall)',
+            cursor: 'pointer',
             zIndex: 10,
           }}
         />
       )}
+      <Modal
+        open={openConfirm}
+        onClose={handleClose}
+        onSubmit={onSubmit}
+        title={`Delete ${spell?.name} spell`}
+        submitText="Confirm"
+        children="Do you want to delete this spell?"
+      />
     </div>
-  );
-};
+  )
+}
 
-export default ProjectRow;
+export default ProjectRow

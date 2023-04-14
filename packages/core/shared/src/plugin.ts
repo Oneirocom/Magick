@@ -366,7 +366,7 @@ export class ClientPluginManager extends PluginManager {
   getPlugins() {
     const pluginList = {}
     this.pluginList.forEach(plugin => {
-      pluginList[plugin.name] = 'NONE'
+      pluginList[plugin.name] = plugin
     })
     return pluginList
   }
