@@ -1,7 +1,6 @@
 import { BskyAgent } from '@atproto/api'
-
 export class BlueskyConnector {
-  bskyAgent: typeof BskyAgent
+  bskyAgent: BskyAgent
   spellRunner
   data
   agent
@@ -30,44 +29,41 @@ export class BlueskyConnector {
 
   async initialize({ data }) {
     this.bskyAgent = new BskyAgent({
-      service: 'https://bsky.social',
-      persistSession: (evt, sess) => {
-        // store the session-data for reuse
-        // [how to do this??]
-      },
+      service: 'https://bsky.social'
     })
     await this.bskyAgent.login({
       identifier: data.bluesky_identifier,
       password: data.bluesky_password,
     })
-    console.log('logged in to bluesky')
+    console.log('logged in to bluesky with', data.bluesky_identifier)
     this.loop = setInterval(() => {
-      console.log('running loop for bsky')
-
       this.handler()
     }, 1000)
   }
 
   async handler() {
+    const count = await this.bskyAgent.countUnreadNotifications()
+    if( count > 0 ){
+      console.log(`Found ${count} new mentions.`)
+    }
     // Get a list of bsky notifs
     const response_notifs = await this.bskyAgent.listNotifications()
     const notifs = response_notifs.data.notifications
 
     // Mark all these notifs as read
-    this.bskyAgent.updateSeenNotifications()
 
     // Count the number of notifications which are unread
     // and which are also mentions
     const unread_mentions = notifs.filter(notif => {
-      return notif.reason === 'mention' && notif.isRead === false
+      return (notif.reason === 'mention' || notif.reason === 'reply') && notif.isRead === false
     })
-    console.log(`Found ${unread_mentions.length} new mentions.`)
-
-    // If no mentions, quit.
-    if (unread_mentions.length === 0) {
-      console.log('No mentions to respond to. Goodbye.')
-      return
+    if(notifs.length > 0){
+      // console.log('notifs', notifs)
     }
+    if(unread_mentions.length > 0){
+    console.log(`Found ${unread_mentions.length} new mentions.`)
+    }
+    this.bskyAgent.updateSeenNotifications()
 
     unread_mentions.map(async notif => {
       console.log(`Responding to ${notif.uri}`)
@@ -80,7 +76,7 @@ export class BlueskyConnector {
         })
         const root = notif.record.reply.root
         const post_text = post_thread.data.thread.post.record.text
-
+        console.log('root is', root);
         console.log('handle reply, post_text is', post_text)
       } else {
         const post_text = notif.record.text
@@ -109,5 +105,8 @@ export class BlueskyConnector {
         },
       },
     })
+  }
+  destroy() {
+    clearInterval(this.loop)
   }
 }
