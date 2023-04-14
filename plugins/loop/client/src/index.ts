@@ -30,8 +30,9 @@ class LoopPlugin extends ClientPlugin {
       name: 'LoopPlugin',
       agentComponents: [AgentLoopWindow],
       inputTypes: [{ name: 'Loop In', sockets: inputSockets }],
+      spellTemplates: [],
     });
   }
 }
 
-export default LoopPlugin;
+export default new LoopPlugin();

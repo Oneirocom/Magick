@@ -1,7 +1,7 @@
 // DOCUMENTED
 import { Select } from '@magickml/client-core'
 import { GraphData } from '@magickml/core'
-import { templates } from '@magickml/client-core'
+import { getTemplates } from '@magickml/client-core'
 import md5 from 'md5'
 import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
@@ -12,7 +12,7 @@ import { useAppDispatch } from '../state/hooks'
 import { openTab } from '../state/tabs'
 
 // Default graph for spells
-const defaultGraph = templates.spells[0].graph
+const defaultGraph = getTemplates().spells[0].graph
 
 /**
  * Component that renders the Select element for selecting and creating modules.
