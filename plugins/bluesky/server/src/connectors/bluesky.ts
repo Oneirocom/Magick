@@ -1,4 +1,5 @@
 import { BskyAgent } from '@atproto/api'
+import { app } from '@magickml/server-core'
 export class BlueskyConnector {
   bskyAgent: BskyAgent
   spellRunner
@@ -67,17 +68,49 @@ export class BlueskyConnector {
 
     unread_mentions.map(async notif => {
       console.log(`Responding to ${notif.uri}`)
+      console.log('notif', notif)
 
       if ('reply' in notif.record) {
+        const text = notif.record.text
         const post_uri = notif.record.reply.parent.uri
         const post_thread = await this.bskyAgent.getPostThread({
           uri: post_uri,
           depth: 1,
         })
         const root = notif.record.reply.root
+        const reply = notif.record.reply.parent
         const post_text = post_thread.data.thread.post.record.text
-        console.log('root is', root);
+        console.log('reply root is', root);
+        console.log('reply', reply)
         console.log('handle reply, post_text is', post_text)
+
+        // get the author of the post
+        const author = notif.author.handle
+
+        console.log('author is', author)
+        const entities = [author, this.data.bluesky_identifier]
+        console.log('sending bsky input to spellrunner', entities)
+        const resp = await this.spellRunner.runComponent({
+          inputs: {
+            'Input - Bluesky (Reply)': {
+              content: text,
+              sender: author,
+              observer: this.data.bluesky_identifier,
+              client: 'bluesky',
+              channel: post_thread.data.thread.post.record.channel,
+              agentId: this.agent.id,
+              entities,
+              channelType: 'reply',
+            },
+          },
+          agent: this.agent,
+          secrets: this.agent.secrets,
+          publicVariables: this.agent.publicVariables,
+          app,
+          runSubspell: true,
+        })
+        console.log('resp is', resp)
+
       } else {
         const post_text = notif.record.text
         console.log('handling non-reply, post_text is', post_text)
