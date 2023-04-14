@@ -23,6 +23,7 @@ import { EventRestructureComponent } from './events/EventRestructure';
 import { EventsToConversation } from './events/EventsToConversation';
 import { EventStore } from './events/EventStore';
 import { BooleanGate } from './flow/BooleanGate';
+import { AgentExecutor } from './langchain/AgentExecutor';
 import { ExclusiveGate } from './flow/ExclusiveGate';
 import { IsNullOrUndefined } from './flow/IsNullOrUndefined';
 import { OrGate } from './flow/OrGate';
@@ -65,6 +66,7 @@ export const components: Record<string, ()=>MagickComponent<unknown>> = {
   GetValuesFromObject: () => new GetValuesFromObject(),
   complexStringMatcher: () => new ComplexStringMatcher(),
   echo: () => new Echo(),
+  agentexecutor: () => new AgentExecutor(),
   getCachedEmbedding: () => new FindTextEmbedding(),
   replaceText: () => new ReplaceText(),
   textCompletion: () => new GenerateText(),
