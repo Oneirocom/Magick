@@ -1,16 +1,15 @@
 // DOCUMENTED
+import { useProjectWindow } from '@magickml/client-core'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useModal } from '../../contexts/ModalProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
-import css from './menuBar.module.css'
-import { activeTabSelector, Tab } from '../../state/tabs'
 import { toggleAutoSave } from '../../state/preferences'
-import { changeEditorLayout } from '../../state/tabs'
 import { RootState } from '../../state/store'
-import { useProjectWindow } from '@magickml/client-core'
+import { activeTabSelector, changeEditorLayout, Tab } from '../../state/tabs'
+import css from './menuBar.module.css'
 
 /**
  * MenuBar component
@@ -25,6 +24,7 @@ const MenuBar = () => {
   const [snapEnabled, setSnapEnabled] = useState(true)
   const { openProjectWindow, setOpenProjectWindow, setOpenDrawer } =
     useProjectWindow()
+  const [snapEnabled, setSnapEnabled] = useState(true)
 
   const preferences = useSelector(
     (state: RootState) => state.preferences
@@ -256,6 +256,14 @@ const MenuBar = () => {
       })
     )
   }
+  /**
+   * Toggle snap handler
+   */
+  const toggleSnapFunction = () => {
+    if (!activeTabRef.current) return
+    publish(TOGGLE_SNAP)
+    setSnapEnabled(!snapEnabled)
+  }
 
   // Menu bar entries
   const menuBarItems = {
@@ -332,6 +340,10 @@ const MenuBar = () => {
         project_window: {
           onClick: onProjectWindowCreate,
           hotKey: 'control+b',
+        },
+        snap: {
+          onClick: toggleSnapFunction,
+          isActive: snapEnabled,
         },
       },
       settings: {
