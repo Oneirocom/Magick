@@ -101,6 +101,7 @@ export class BlueskyConnector {
               agentId: this.agent.id,
               entities,
               channelType: 'reply',
+              rawData: JSON.stringify(notif),
             },
           },
           agent: this.agent,
@@ -118,9 +119,9 @@ export class BlueskyConnector {
     })
   }
 
-  async postMessage(content) {
+  async handleMessage(resp, event) {
     await this.bskyAgent.post({
-      text: content,
+      text: resp,
     })
   }
 

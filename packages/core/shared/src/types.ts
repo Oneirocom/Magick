@@ -72,6 +72,7 @@ export type Event = {
   projectId?: string
   agentId?: number | string
   date?: string
+  rawData?: string
 }
 
 export type SemanticSearch = {
@@ -99,6 +100,7 @@ export type GetEventArgs = {
   // entities?: any[]
   channel?: string
   channelType?: string
+  rawData?: string
   projectId?: string
   maxCount?: number
 }

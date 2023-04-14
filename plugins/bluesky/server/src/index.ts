@@ -55,20 +55,14 @@ async function handleResponse(
     event
   }
 ) {
-  console.log('********* SENT MESSAGE TO TWITTER', agent.id, output, event)
+  console.log('********* SENT MESSAGE TO BLUESKY', agent.id, output, event)
   console.log('event is', event)
   console.log('event.channel is', event.channel)
 
-  // const resp = output
-  // if (resp && resp !== undefined && resp?.length > 0) {
-  //   if (resp === 'like' || resp === 'heart') {
-  //     await agent.bluesky.blueskyv2.v2.like(agent.bluesky.localUser.data.id, event.channel)
-  //   } else if (resp !== 'ignore') {
-  //     await agent.bluesky.handleMessage(resp, event.channel, 'feed', event)
-  //   } else if (resp === 'retweet') {
-  //     await agent.bluesky.blueskyv2.v2.retweet(agent.bluesky.localUser.data.id, event.channel)
-  //   }
-  // }
+  const resp = output
+  if (resp && resp !== undefined && resp?.length > 0) {
+    await agent.bluesky.handleMessage(resp, event)
+  }
 }
 
 const inputSockets = [
