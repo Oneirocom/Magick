@@ -25,8 +25,15 @@ const outputSockets = [
 const BlueskyPlugin = new ClientPlugin({
   name: 'BlueskyPlugin',
   agentComponents: [BlueskyAgentWindow],
-  inputTypes: [{ name: 'Bluesky (Reply)', sockets: inputSockets }],
-  outputTypes: [{ name: 'Bluesky (Reply)', sockets: outputSockets }],
+  inputTypes: [
+    { name: 'Bluesky (Reply)', sockets: inputSockets },
+    { name: 'Bluesky (Mention)', sockets: inputSockets }
+  ],
+  outputTypes: [
+    { name: 'Bluesky (Reply)', sockets: outputSockets },
+    { name: 'Bluesky (Mention)', sockets: outputSockets },
+    { name: 'Bluesky (Post)', sockets: outputSockets }
+  ],
   secrets: [
     {
       name: 'User ID',

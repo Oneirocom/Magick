@@ -30,7 +30,7 @@ export class BlueskyConnector {
 
   async initialize({ data }) {
     this.bskyAgent = new BskyAgent({
-      service: 'https://bsky.social'
+      service: 'https://bsky.social',
     })
     await this.bskyAgent.login({
       identifier: data.bluesky_identifier,
@@ -44,7 +44,7 @@ export class BlueskyConnector {
 
   async handler() {
     const count = await this.bskyAgent.countUnreadNotifications()
-    if( count > 0 ){
+    if (count > 0) {
       console.log(`Found ${count} new mentions.`)
     }
     // Get a list of bsky notifs
@@ -56,13 +56,16 @@ export class BlueskyConnector {
     // Count the number of notifications which are unread
     // and which are also mentions
     const unread_mentions = notifs.filter(notif => {
-      return (notif.reason === 'mention' || notif.reason === 'reply') && notif.isRead === false
+      return (
+        (notif.reason === 'mention' || notif.reason === 'reply') &&
+        notif.isRead === false
+      )
     })
-    if(notifs.length > 0){
+    if (notifs.length > 0) {
       // console.log('notifs', notifs)
     }
-    if(unread_mentions.length > 0){
-    console.log(`Found ${unread_mentions.length} new mentions.`)
+    if (unread_mentions.length > 0) {
+      console.log(`Found ${unread_mentions.length} new mentions.`)
     }
     this.bskyAgent.updateSeenNotifications()
 
@@ -70,68 +73,62 @@ export class BlueskyConnector {
       console.log(`Responding to ${notif.uri}`)
       console.log('notif', notif)
 
-      if ('reply' in notif.record) {
-        const text = notif.record.text
-        const post_uri = notif.record.reply.parent.uri
-        const post_thread = await this.bskyAgent.getPostThread({
-          uri: post_uri,
-          depth: 1,
-        })
-        const root = notif.record.reply.root
-        const reply = notif.record.reply.parent
-        const post_text = post_thread.data.thread.post.record.text
-        console.log('reply root is', root);
-        console.log('reply', reply)
-        console.log('handle reply, post_text is', post_text)
+      const type = 'reply' in notif.record ? 'reply' : 'mention'
 
-        // get the author of the post
-        const author = notif.author.handle
+      const text = notif.record.text
+      const post_uri =
+        type === 'reply' ? notif.record.reply.parent.uri : notif.uri
+      const post_thread = await this.bskyAgent.getPostThread({
+        uri: post_uri,
+        depth: 1,
+      })
+      const root = type === 'reply' ? notif.record.reply.root : notif.uri
+      const post_text = post_thread.data.thread.post.record.text
+      console.log('reply root is', root)
+      console.log('handle reply, post_text is', post_text)
 
-        console.log('author is', author)
-        const entities = [author, this.data.bluesky_identifier]
-        console.log('sending bsky input to spellrunner', entities)
-        const resp = await this.spellRunner.runComponent({
-          inputs: {
-            'Input - Bluesky (Reply)': {
-              content: text,
-              sender: author,
-              observer: this.data.bluesky_identifier,
-              client: 'bluesky',
-              channel: post_thread.data.thread.post.uri,
-              agentId: this.agent.id,
-              entities,
-              channelType: 'reply',
-              rawData: JSON.stringify(notif),
-            },
+      // get the author of the post
+      const author = notif.author.handle
+
+      console.log('author is', author)
+      const entities = [author, this.data.bluesky_identifier]
+      console.log('sending bsky input to spellrunner', entities)
+      const resp = await this.spellRunner.runComponent({
+        inputs: {
+          [`Input - Bluesky (${type === 'reply' ? 'Reply' : 'Mention'})`]: {
+            content: text,
+            sender: author,
+            observer: this.data.bluesky_identifier,
+            client: 'bluesky',
+            channel: post_thread.data.thread.post.uri,
+            agentId: this.agent.id,
+            entities,
+            channelType: type,
+            rawData: JSON.stringify(notif),
           },
-          agent: this.agent,
-          secrets: this.agent.secrets,
-          publicVariables: this.agent.publicVariables,
-          app,
-          runSubspell: true,
-        })
-        console.log('resp is', resp)
-
-      } else {
-        const post_text = notif.record.text
-        console.log('handling non-reply, post_text is', post_text)
-      }
+        },
+        agent: this.agent,
+        secrets: this.agent.secrets,
+        publicVariables: this.agent.publicVariables,
+        app,
+        runSubspell: true,
+      })
+      console.log('resp is', resp)
     })
   }
 
-  async handleMessage(resp, event) {
+  async handleResponse(resp, event) {
     const notif = JSON.parse(event.rawData)
-    console.log('handling bluesky message', notif);
-    if ('reply' in notif.record) {
-      const root = notif.record.reply.root
-      const content = resp
-      await this.sendReply(content, root, notif)
-    } else {
-      await this.bskyAgent.post({
-        text: resp,
-      })
-    }
+    console.log('handling bluesky message', notif)
+    const root = notif.record.reply?.root || notif
+    const content = resp
+    await this.sendReply(content, root, notif)
+  }
 
+  async handlePost(resp) {
+    await this.bskyAgent.post({
+      text: resp,
+    })
   }
 
   async sendReply(content, root, notif) {
