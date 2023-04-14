@@ -111,18 +111,21 @@ export class Output extends MagickComponent<void> {
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<{ output: string }> {
+    console.log('output, context', context)
     if (!inputs.input) {
       console.error('No input provided to output component')
       return { output: '' }
     }
+    const { module, data } = context
 
     const outputType = node.data.outputType
     const output = (inputs.input.filter(Boolean)[0] ?? '') as string
     const event =
       inputs.event?.[0] ||
-      (inputs && (Object.values(inputs)[0] as unknown[])?.[0])
+      (data && (Object.values(data)[0] as unknown[]))
 
-    const { module } = context
+      console.log('event', event)
+
 
     if (module.agent) {
       if (outputType && (outputType as string).includes('Default')) {
