@@ -50,7 +50,6 @@ export default function App() {
   }
   
   useEffect(() => {
-    if (!isFirstRender) return
     isFirstRender = false;
     (async () => {
       const vrm = await loadVRM(characterUrl)
@@ -65,7 +64,7 @@ export default function App() {
   // Update character model third-party library integrations
   useEffect(() => {
     if (!characterIsChanged || !characterModel) return
-    console.log('character is changed')
+     
     characterIsChanged = false;
     (async () => {
       const blinkManager = new BlinkManager(0.1, 0.1, 0.5, 5)
@@ -87,27 +86,6 @@ export default function App() {
       setCharacterModel(characterModel);
     })()
   }, []);
-
-  let lastTap = 0
-
-  useEffect(() => {
-    const handleTap = (e) => {
-      const now = new Date().getTime()
-      const timesince = now - lastTap
-      if (timesince < 300 && timesince > 10) {
-        const tgt = e.target
-        if (tgt.id == "editor-scene") setHideUi(!hideUi)
-      }
-      lastTap = now
-    }
-    window.addEventListener("touchend", handleTap)
-    window.addEventListener("click", handleTap)
-    return () => {
-      window.removeEventListener("touchend", handleTap)
-      window.removeEventListener("click", handleTap)
-    }
-  }, [hideUi])
-
 
   return (
     <SceneProvider>
