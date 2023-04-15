@@ -5,12 +5,12 @@ import { BANANA_ENDPOINT } from '../constants'
 import { run, start, check } from '@banana-dev/banana-dev'
 
 /**
- * Makes an API request to an AI image completion service.
+ * Makes an API request to an AI speech completion service.
  *
  * @param {CompletionHandlerInputData} data - The input data for the completion API.
  * @returns {Promise<{success: boolean, result?: string | null, error?: string | null}>} - A Promise resolving to the result of the completion API call.
  */
-export async function textToImageCompletion(
+export async function dollyTextCompletion(
   data: CompletionHandlerInputData
 ): Promise<{
   success: boolean
@@ -23,30 +23,17 @@ export async function textToImageCompletion(
 
   // Set the current spell for record keeping.
   const spell = currentSpell
-
   // Get the input text prompt.
+  console.log('inputs are', inputs)
   const prompt = inputs['input'][0]
 
   const requestData = {
     model: node?.data?.model,
-    // model_inputs = {
-    //   "prompt": "table full of muffins",
-    //   "num_inference_steps":50,
-    //   "guidance_scale":9,
-    //   "height":512,
-    //   "width":512,
-    //   "seed":3242
-    // }
-    num_inference_steps: parseFloat(
-      (node?.data?.num_inference_steps as string) ?? '30'
-    ),
-    guidance_scale: parseFloat((node?.data?.guidance_scale as string) ?? '7.5'),
-    height: parseFloat((node?.data?.height as string) ?? '512'),
-    width: parseFloat((node?.data?.width as string) ?? '512'),
-    seed: parseFloat((node?.data?.width as string) ?? '-1'),
+    do_sample: (node?.data?.do_sample as string) === 'true' ? true : false,
+    max_new_tokens: parseFloat((node?.data?.max_new_tokens as string) ?? '256'),
+    top_p: parseFloat((node?.data?.top_p as string) ?? '0.92'),
+    top_k: parseFloat((node?.data?.top_k as string) ?? '0'),
   }
-
-  console.log('data is', requestData)
 
   // Get the settings object, setting default values if necessary.
   // const settings = requestData as any
@@ -57,39 +44,44 @@ export async function textToImageCompletion(
   // Make the API request and handle the response.
   try {
     const start = Date.now()
-    // const resp = await axios.post(
-    //   `${BANANA_ENDPOINT}/`,
-    //   {
-    //     apiKey: context.module.secrets['docker-diffusers-api-key'],
-    //     modelKey: context.module.secrets['docker-diffusers-model-key'],
-    //     modelInputs: {
-    //       prompt: 'puppy swimming in the ocean',
-    //     },
-    //   },
-    //   {
-    //     headers: headers,
-    //   }
-    // )
 
-    type Outputs = {
-      output: {
-        id: string
-        message: string
-        created: number
-        apiVersion: string
-        modelOutputs: {
-          image_base64: string
-        }[]
-      }
+    const modelInputs = {
+      prompt,
+      do_sample: requestData.do_sample,
+      max_new_tokens: requestData.max_new_tokens,
+      top_p: requestData.top_p,
+      top_k: requestData.top_k,
+    }
+
+    // {
+    //   id: 'd4a945c6-aca2-49ca-ab8a-3ae83327e571',
+    //   message: '',
+    //   created: 1681570588,
+    //   apiVersion: 'January 11, 2023',
+    //   modelOutputs: [
+    //     {
+    //       outputs: 'I am pleased to inform you that your application for visa on business has been approved. The visa fee is 499$.'
+    //     }
+    //   ]
+    // }
+
+    type ModelOutput = {
+      id: string
+      message: string
+      created: number
+      apiVersion: string
+      modelOutputs: {
+        outputs: string
+      }[]
     }
 
     const outputs = (await run(
       context.module.secrets['banana_api_key'],
-      context.module.secrets['banana_ddiffusers_key'],
-      {
-        prompt,
-      }
-    )) as Outputs
+      context.module.secrets['banana_dolly_key'],
+      modelInputs
+    )) as ModelOutput
+
+    console.log(outputs)
 
     // const usage = resp.data.usage
 
@@ -123,10 +115,7 @@ export async function textToImageCompletion(
     // If no choices were returned, return an error.
     // return { success: false, error: 'No choices returned' }
 
-    return {
-      success: true,
-      result: outputs.output.modelOutputs[0].image_base64,
-    }
+    return { success: true, result: outputs.modelOutputs[0].outputs }
   } catch (err: any) {
     console.error(err)
     return { success: false, error: err.message }

@@ -14,6 +14,8 @@ import {
   textToImageCompletion,
   speechToTextCompletion,
   imageToTextCompletion,
+  dollyTextCompletion,
+  pix2pixCompletion,
 } from './functions'
 
 /**
@@ -28,11 +30,16 @@ const completionHandlers = {
   image: {
     text2image: textToImageCompletion,
     image2text: imageToTextCompletion,
+    image2image: pix2pixCompletion,
   },
   speech: {
     speech2text: speechToTextCompletion,
   },
+  text: {
+    text: dollyTextCompletion,
+  },
 }
+
 const BananaPlugin = new ServerPlugin({
   name: 'BananaPlugin',
   secrets,

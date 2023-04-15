@@ -56,6 +56,7 @@ import { Log } from './utility/Log'
 import { TextToImage } from './image/TextToImage'
 import { SpeechToText } from './speech/SpeechToText'
 import { ImageToText } from './image/ImageToText'
+import { ImageToImage } from './image/ImageToImage'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -113,6 +114,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   text2image: () => new TextToImage(),
   speech2text: () => new SpeechToText(),
   image2text: () => new ImageToText(),
+  image2image: () => new ImageToImage(),
 }
 
 /**
