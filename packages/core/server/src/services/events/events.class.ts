@@ -10,6 +10,8 @@ import { KnexService } from '@feathersjs/knex'
 import { app } from '../../app'
 import type { Application } from '../../declarations'
 import type { Event, EventData, EventPatch, EventQuery } from './events.schema'
+import { DATABASE_TYPE } from '@magickml/core'
+
 export type EventParams = KnexAdapterParams<EventQuery>
 
 /**
@@ -30,7 +32,7 @@ export class EventService<
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: EventData): Promise<any> {
-    if (process.env.DATABASE_TYPE == 'pg') {
+    if (DATABASE_TYPE == 'pg') {
       const db = app.get('dbClient')
       // const { id, ...rest } = data
       // const cli = app.get('vectordb')
@@ -47,7 +49,7 @@ export class EventService<
    * @returns {Promise<any>} - The result of the delete operation.
    */
   async remove(id: string): Promise<any> {
-    if (process.env.DATABASE_TYPE == 'sqlite') {
+    if (DATABASE_TYPE == 'sqlite') {
       const vectordb = app.get('vectordb')
       const r = vectordb.delete(id)
       return r
@@ -69,7 +71,7 @@ export class EventService<
   async find(params?: ServiceParams) {
     const db = app.get('dbClient')
     const cli = app.get('vectordb')
-    if (process.env.DATABASE_TYPE == 'sqlite') {
+    if (DATABASE_TYPE == 'sqlite') {
       const vectordb = app.get('vectordb')
       if (params.query.embedding) {
         const blob = atob(params.query.embedding)
