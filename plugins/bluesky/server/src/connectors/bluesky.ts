@@ -1,4 +1,4 @@
-import { BskyAgent } from '@atproto/api'
+import { BskyAgent, AppBskyNotificationGetUnreadCount } from '@atproto/api'
 import { app } from '@magickml/server-core'
 export class BlueskyConnector {
   bskyAgent: BskyAgent
@@ -43,8 +43,8 @@ export class BlueskyConnector {
   }
 
   async handler() {
-    const count = await this.bskyAgent.countUnreadNotifications()
-    if (count > 0) {
+    const count: AppBskyNotificationGetUnreadCount.Response = await this.bskyAgent.countUnreadNotifications()
+    if (count.data.count > 0) {
       console.log(`Found ${count} new mentions.`)
     }
     // Get a list of bsky notifs
