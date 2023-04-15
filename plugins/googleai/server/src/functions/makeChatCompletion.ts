@@ -32,11 +32,11 @@ export async function makeChatCompletion(
 
   // Get or set default settings
   const settings = {
-    model: node?.data?.model,
+    context: system || "",
+    candidate_count: 1,
     temperature: parseFloat(node?.data?.temperature as string ?? "0.0"),
-    top_p: parseFloat(node?.data?.top_p as string ?? "1.0"),
-    frequency_penalty: parseFloat(node?.data?.frequency_penalty as string ?? "0.0"),
-    presence_penalty: parseFloat(node?.data?.presence_penalty as string ?? "0.0"),
+    top_p: parseFloat(node?.data?.top_p as string ?? "0.95"),
+    top_k: parseFloat(node?.data?.top_k as string ?? "40")
   } as any
 
   // Initialize conversationMessages array
@@ -52,17 +52,14 @@ export async function makeChatCompletion(
   const input = inputs['input']?.[0] as string
 
   // Create the system and user messages
-  const systemMessage = { role: 'system', content: system }
   const userMessage = { role: 'user', content: input }
 
   // Initialize messages array and add elements
   let messages: ChatMessage[] = []
 
-  if (system) {
-    messages.push(systemMessage)
-  }
-
-  messages = [...messages, ...conversationMessages, userMessage]
+  messages = [...messages, ...conversationMessages, userMessage].map((message) => {
+    return message.content
+  })
 
   // Update the settings messages
   settings.messages = messages
@@ -70,14 +67,13 @@ export async function makeChatCompletion(
   // Create request headers
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + context.module.secrets['googleai_api_key'],
   }
 
   try {
     const start = Date.now()
     // Make the API call to GoogleAI
     const completion = await axios.post(
-      `${GOOGLEAI_ENDPOINT}/chat/completions`,
+      `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateMessage?key=${context.module.secrets['googleai_api_key']}}`,
       settings,
       { headers: headers }
     )
