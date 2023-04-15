@@ -62,3 +62,4 @@ apps/docs/build
 data.json
 /logs
 docstore.json
+.vercel
