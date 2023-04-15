@@ -1,4 +1,4 @@
-// DOCUMENTED
+// UNDOCUMENTED
 import Rete from 'rete'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
@@ -15,8 +15,9 @@ import {
   WorkerData,
 } from '../../types'
 
-/** Information related to the GenerateText */
-const info = 'Generate images using any of the providers available in Magick.'
+/** Information related to the Speech2Text */
+const info =
+  'Generate text from speech using any of the providers available in Magick.'
 
 /** Type definition for the worker return */
 type WorkerReturn = {
@@ -24,26 +25,26 @@ type WorkerReturn = {
 }
 
 /**
- * GenerateImages component responsible for generating text using any providers
+ * Speech2Text component responsible for generating text using any providers
  * available in Magick.
  */
-export class GenerateImages extends MagickComponent<Promise<WorkerReturn>> {
+export class Speech2Text extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super(
-      'Generate Images',
+      'Speech2Text',
       {
         outputs: {
-          result: 'output',
           trigger: 'option',
+          result: 'output',
         },
       },
-      'Image',
+      'Speech',
       info
     )
   }
 
   /**
-   * Builder for generating text.
+   * Builder for generating text from speech.
    * @param node - the MagickNode instance.
    * @returns a configured node with data generated from providers.
    */
@@ -52,8 +53,8 @@ export class GenerateImages extends MagickComponent<Promise<WorkerReturn>> {
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     // get completion providers for text and chat categories
-    const completionProviders = pluginManager.getCompletionProviders('image', [
-      'text2image',
+    const completionProviders = pluginManager.getCompletionProviders('speech', [
+      'speech2text',
     ]) as CompletionProvider[]
 
     console.log(completionProviders)
@@ -161,15 +162,15 @@ export class GenerateImages extends MagickComponent<Promise<WorkerReturn>> {
       context: EngineContext
     }
   ) {
-    // get completion providers for text and chat categories
-    const completionProviders = pluginManager.getCompletionProviders('image', [
-      'text2image',
+    // get completion providers for speech category
+    const completionProviders = pluginManager.getCompletionProviders('speech', [
+      'speech2text',
     ]) as CompletionProvider[]
 
     const model = (node.data as { model: string }).model as string
     // get the provider for the selected model
     const provider = completionProviders.find(provider =>
-      provider.models.includes('stable-diffusion-1-5')
+      provider.models.includes('whisper-large-v2')
     ) as CompletionProvider
 
     const completionHandler = provider.handler

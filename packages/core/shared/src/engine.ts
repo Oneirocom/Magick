@@ -139,7 +139,8 @@ export type MagicComponentCategory =
   | ' Esoterica'
   | 'Ethereum'
   | 'Pinecone'
-  | 'Search';
+  | 'Search'
+  | 'Speech';
 
 // MagickComponent abstract class
 export abstract class MagickComponent<WorkerReturnType> extends MagickEngineComponent<WorkerReturnType> {

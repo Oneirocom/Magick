@@ -53,7 +53,8 @@ import { Cast } from './utility/Cast'
 import { GetValuesFromObject } from './object/GetValuesFromObject'
 import { Echo } from './utility/Echo'
 import { Log } from './utility/Log'
-import { GenerateImages } from './image/GenerateImages'
+import { Text2Image } from './image/Text2Image'
+import { Speech2Text } from './speech/Speech2Text'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -108,7 +109,8 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   storeDocument: () => new StoreDocument(),
   getValueFromArray: () => new GetValueFromArray(),
   cosineSimilarity: () => new CosineSimilarity(),
-  text2image: () => new GenerateImages(),
+  text2image: () => new Text2Image(),
+  speech2text: () => new Speech2Text(),
 }
 
 /**
