@@ -1,5 +1,7 @@
 import React, { useEffect } from "react"
 import styles from "./Chat.module.css"
+import Mic from '@mui/icons-material/Mic'
+import MicOff from '@mui/icons-material/MicOff'
 
 import {
   SepiaSpeechRecognitionConfig,
@@ -239,7 +241,7 @@ export default function ChatBox({
           size={32}
           onClick={() => (!micEnabled ? startSpeech() : stopSpeech())}
         >
-          {!micEnabled ? "Mic On" : "Mic Off"}
+          {!micEnabled ? <Mic /> : <MicOff />}
         </button>
         <input
           autoComplete="off"

@@ -14,6 +14,7 @@ import {
 
 import { Application, HookContext } from '../../declarations';
 import { EventService, getOptions } from './events.class';
+import { DATABASE_TYPE } from '@magickml/core'
 
 /**
  * Export the Event class and event schema
@@ -81,7 +82,7 @@ export const event = (app: Application) => {
           }
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
-            if (process.env.DATABASE_TYPE == "pg") {
+            if (DATABASE_TYPE == "pg") {
               context.data.embedding = pgvector.toSql(embedding as Array<number>)  
               return context;
             }else{
@@ -95,7 +96,7 @@ export const event = (app: Application) => {
               await vectordb.addEmbeddingsWithData(insert_data);
             }      
           } else {
-            if (process.env.DATABASE_TYPE == "pg") {
+            if (DATABASE_TYPE == "pg") {
               context.data.embedding = pgvector.toSql(nullArray)
               //context.app.service('events').create(context.data);
               return context;
