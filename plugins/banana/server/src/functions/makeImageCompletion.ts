@@ -72,10 +72,7 @@ export async function makeImageCompletion(
       context.module.secrets['banana_api_key'],
       context.module.secrets['banana_ddiffusers_key'],
       {
-        modelInputs: {
-          prompt: 'puppy swimming in the ocean',
-        },
-        callInputs: {},
+        prompt: 'puppy swimming in the ocean',
       }
     )
 
