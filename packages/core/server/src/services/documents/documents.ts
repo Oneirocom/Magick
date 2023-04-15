@@ -2,6 +2,7 @@
 import { hooks as schemaHooks } from '@feathersjs/schema';
 import pgvector from 'pgvector/pg';
 import { v4 as uuidv4 } from 'uuid';
+import { DATABASE_TYPE } from '@magickml/core'
 
 // Array with 1536 elements containing 0
 const nullArray = new Array(1536).fill(0);
@@ -72,7 +73,7 @@ export const document = (app: Application) => {
           }
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
-            if (process.env.DATABASE_TYPE == "pg") {
+            if (DATABASE_TYPE == "pg") {
               console.log(embedding as Array<number>)
               console.log(typeof(embedding as Array<number>))
               context.data.embedding = pgvector.toSql(embedding as Array<number>)  
@@ -89,7 +90,7 @@ export const document = (app: Application) => {
               await docdb.addEmbeddingsWithData(insert_data);
             }      
           } else {
-            if (process.env.DATABASE_TYPE == "pg") {
+            if (DATABASE_TYPE == "pg") {
               context.data.embedding = pgvector.toSql(nullArray)
               context.app.service('events').create(context.data);
               return context;
