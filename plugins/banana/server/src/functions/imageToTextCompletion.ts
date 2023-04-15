@@ -1,4 +1,4 @@
-// DOCUMENTED
+// UNDOCUMENTED
 import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import axios from 'axios'
 import { BANANA_ENDPOINT } from '../constants'
@@ -10,7 +10,7 @@ import { run, start, check } from '@banana-dev/banana-dev'
  * @param {CompletionHandlerInputData} data - The input data for the completion API.
  * @returns {Promise<{success: boolean, result?: string | null, error?: string | null}>} - A Promise resolving to the result of the completion API call.
  */
-export async function makeImageCompletion(
+export async function imageToTextCompletion(
   data: CompletionHandlerInputData
 ): Promise<{
   success: boolean
@@ -68,13 +68,22 @@ export async function makeImageCompletion(
     //   }
     // )
 
+    const modelInputs = {
+      text: 'Is this a wizard?',
+      imageURL:
+        'https://framerusercontent.com/images/db7Ov2StIfwvBuvoK5FMFhD6zg.png',
+      similarity: false,
+      maxLength: 100,
+      minLength: 30,
+    }
+
     const outputs = await run(
       context.module.secrets['banana_api_key'],
-      context.module.secrets['banana_ddiffusers_key'],
-      {
-        prompt: 'puppy swimming in the ocean',
-      }
+      context.module.secrets['banana_carrot_key'],
+      modelInputs
     )
+
+    console.log('image2text outputs', outputs)
 
     // const usage = resp.data.usage
 

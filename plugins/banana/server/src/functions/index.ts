@@ -1,6 +1,7 @@
-// DOCUMENTED 
+// UNDOCUMENTED 
 /** 
  * Exporting necessary modules for external use.
  */
-export * from './makeImageCompletion';
-export * from './makeSpeechCompletion';
+export * from './textToImageCompletion';
+export * from './speechToTextCompletion';
+export * from './imageToTextCompletion';

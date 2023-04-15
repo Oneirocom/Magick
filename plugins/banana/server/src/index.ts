@@ -1,4 +1,4 @@
-// DOCUMENTED
+// UNDOCUMENTED
 /**
  * A plugin for the @magickml/core that adds banana.dev completion functionality
  *
@@ -10,7 +10,11 @@
 
 import { ServerPlugin } from '@magickml/core'
 import shared from '@magickml/plugin-banana-shared'
-import { makeImageCompletion, makeSpeechCompletion } from './functions'
+import {
+  textToImageCompletion,
+  speechToTextCompletion,
+  imageToTextCompletion,
+} from './functions'
 
 /**
  * The secrets used by the banana.dev API
@@ -22,10 +26,11 @@ const { secrets } = shared
  */
 const completionHandlers = {
   image: {
-    text2image: makeImageCompletion,
+    text2image: textToImageCompletion,
+    image2text: imageToTextCompletion,
   },
   speech: {
-    speech2text: makeSpeechCompletion,
+    speech2text: speechToTextCompletion,
   },
 }
 const BananaPlugin = new ServerPlugin({

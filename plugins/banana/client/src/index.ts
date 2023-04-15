@@ -41,6 +41,46 @@ const text2ImageCompletionControls = [
   },
 ]
 
+// Input controls for image2text completion
+const image2TextCompletionControls = [
+  {
+    type: InputControl,
+    dataKey: 'text',
+    name: 'QA/Similarity Text',
+    icon: 'moon',
+    defaultValue: 'Is this a wizard?',
+  },
+  {
+    type: InputControl,
+    dataKey: 'imageURL',
+    name: 'Image URL',
+    icon: 'moon',
+    defaultValue:
+      'https://framerusercontent.com/images/db7Ov2StIfwvBuvoK5FMFhD6zg.png',
+  },
+  {
+    type: InputControl,
+    dataKey: 'similarity',
+    name: 'Similarity',
+    icon: 'moon',
+    defaultValue: false,
+  },
+  {
+    type: InputControl,
+    dataKey: 'maxLength',
+    name: 'Max Length',
+    icon: 'moon',
+    defaultValue: 100,
+  },
+  {
+    type: InputControl,
+    dataKey: 'minLength',
+    name: 'Min Length',
+    icon: 'moon',
+    defaultValue: 30,
+  },
+]
+
 // Input controls for speech2text completion
 const speech2TextCompletionControls = [
   {
@@ -56,6 +96,7 @@ const speech2TextCompletionControls = [
 // Object containing all input controls for different completion types
 const inspectorControls = {
   text2image: text2ImageCompletionControls,
+  image2text: image2TextCompletionControls,
   speech2text: speech2TextCompletionControls,
 }
 

@@ -15,9 +15,8 @@ import {
   WorkerData,
 } from '../../types'
 
-/** Information related to the Speech2Text */
-const info =
-  'Generate text from speech using any of the providers available in Magick.'
+/** Information related to the TextToImage */
+const info = 'Generate images using any of the providers available in Magick.'
 
 /** Type definition for the worker return */
 type WorkerReturn = {
@@ -25,26 +24,26 @@ type WorkerReturn = {
 }
 
 /**
- * Speech2Text component responsible for generating text using any providers
+ * TextToImage component responsible for generating text using any providers
  * available in Magick.
  */
-export class Speech2Text extends MagickComponent<Promise<WorkerReturn>> {
+export class TextToImage extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super(
-      'Speech2Text',
+      'TextToImage',
       {
         outputs: {
           trigger: 'option',
           result: 'output',
         },
       },
-      'Speech',
+      'Image',
       info
     )
   }
 
   /**
-   * Builder for generating text from speech.
+   * Builder for generating images from text.
    * @param node - the MagickNode instance.
    * @returns a configured node with data generated from providers.
    */
@@ -53,8 +52,8 @@ export class Speech2Text extends MagickComponent<Promise<WorkerReturn>> {
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     // get completion providers for text and chat categories
-    const completionProviders = pluginManager.getCompletionProviders('speech', [
-      'speech2text',
+    const completionProviders = pluginManager.getCompletionProviders('image', [
+      'text2image',
     ]) as CompletionProvider[]
 
     console.log(completionProviders)
@@ -144,7 +143,7 @@ export class Speech2Text extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   /**
-   * Worker for processing the generated text.
+   * Worker for processing the generated images.
    * @param node - the worker data.
    * @param inputs - worker inputs.
    * @param outputs - worker outputs.
@@ -162,15 +161,15 @@ export class Speech2Text extends MagickComponent<Promise<WorkerReturn>> {
       context: EngineContext
     }
   ) {
-    // get completion providers for speech category
-    const completionProviders = pluginManager.getCompletionProviders('speech', [
-      'speech2text',
+    // get completion providers for image category
+    const completionProviders = pluginManager.getCompletionProviders('image', [
+      'text2image',
     ]) as CompletionProvider[]
 
     const model = (node.data as { model: string }).model as string
     // get the provider for the selected model
     const provider = completionProviders.find(provider =>
-      provider.models.includes('whisper-large-v2')
+      provider.models.includes('stable-diffusion-1-5')
     ) as CompletionProvider
 
     const completionHandler = provider.handler
