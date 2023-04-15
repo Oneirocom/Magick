@@ -62,7 +62,9 @@ export async function makeChatCompletion(
   })
 
   // Update the settings messages
-  settings.messages = messages
+  settings.messages = messages.map((message) => {
+    return message.content
+  })
 
   // Create request headers
   const headers = {
