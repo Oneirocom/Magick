@@ -54,6 +54,8 @@ import { Cast } from './utility/Cast';
 import { GetValuesFromObject } from './object/GetValuesFromObject';
 import { Echo } from './utility/Echo';
 import { Log } from './utility/Log';
+import { AgentRecommender } from './langchain/AgentRecommender';
+import { DiscordListChannels } from './langchain/DiscordListChannels';
 
 export const components: Record<string, ()=>MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -61,6 +63,7 @@ export const components: Record<string, ()=>MagickComponent<unknown>> = {
   cast: () => new Cast(),
   createEmbedding: () => new CreateTextEmbedding(),
   inRange: () => new InRange(),
+  discordlist: () => new DiscordListChannels(),
   javascript: () => new Javascript(),
   python: () => new Python(),
   GetValuesFromObject: () => new GetValuesFromObject(),
@@ -71,6 +74,7 @@ export const components: Record<string, ()=>MagickComponent<unknown>> = {
   replaceText: () => new ReplaceText(),
   textCompletion: () => new GenerateText(),
   eventdelete: () => new EventDelete(),
+  agentreco: () => new AgentRecommender(),
   isNullOrUndefined: () => new IsNullOrUndefined(),
   isVariableTrue: () => new IsVariableTrue(),
   request: () => new Request(),
