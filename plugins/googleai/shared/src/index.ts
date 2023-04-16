@@ -28,12 +28,17 @@ const completionProviders: CompletionProvider[] = [
     inputs: [
       {
         socket: "system",
-        name: "System Directive",
+        name: "Context",
         type: stringSocket,
       },
       {
+        socket: "examples",
+        name: "Examples",
+        type: arraySocket,
+      },
+      {
         socket: "conversation",
-        name: "Conversation ",
+        name: "Conversation",
         type: arraySocket,
       },
       {

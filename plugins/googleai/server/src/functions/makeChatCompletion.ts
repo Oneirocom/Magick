@@ -1,12 +1,16 @@
 // DOCUMENTED 
 import {
-  ChatMessage,
   CompletionHandlerInputData,
   Event,
   saveRequest
 } from '@magickml/core'
 import axios from 'axios'
 import { GOOGLEAI_ENDPOINT } from '../constants'
+
+type ChatMessage = {
+  author?: string
+  content: string
+}
 
 /**
  * Generate a completion text based on prior chat conversation input.
@@ -18,53 +22,40 @@ export async function makeChatCompletion(
 ): Promise<{ success: boolean, result?: string | null, error?: string | null }> {
   const { node, inputs, context } = data
 
-  // Filter out undefined input keys from inputs
-  const inputKeys = Object.values(inputs).filter((input: any) => {
-    return Object.values(input).filter(Boolean).length > 0
-  })[0]
-
-  // Get the first non-empty Event as inputData
-  const inputData = (inputKeys as Event[]).filter(Boolean)[0] as Event
-
   // Get the system message and conversation inputs
-  const system = inputs['system']?.[0] as string
+  const system = inputs['system']?.[0] as ChatMessage
   const conversation = inputs['conversation']?.[0] as any
-
-  // Get or set default settings
-  const settings = {
-    context: system || "",
-    candidate_count: 1,
-    temperature: parseFloat(node?.data?.temperature as string ?? "0.0"),
-    top_p: parseFloat(node?.data?.top_p as string ?? "0.95"),
-    top_k: parseFloat(node?.data?.top_k as string ?? "40")
-  } as any
 
   // Initialize conversationMessages array
   const conversationMessages: ChatMessage[] = []
 
   // Add elements to conversationMessages
   conversation?.forEach(event => {
-    const message = { role: event.observer === inputData.observer ? 'assistant' : 'user', content: event.content }
-    conversationMessages.push(message)
+    conversationMessages.push({ content: event.content })
   })
 
   // Get the user input
   const input = inputs['input']?.[0] as string
 
-  // Create the system and user messages
-  const userMessage = { role: 'user', content: input }
+  conversationMessages.push({ content: input })
 
-  // Initialize messages array and add elements
-  let messages: ChatMessage[] = []
+  const examples = inputs['examples']?.[0] as string[] || []
 
-  messages = [...messages, ...conversationMessages, userMessage].map((message) => {
-    return message.content
-  })
+  // Get or set default settings
+  const settings = {
+    prompt: {
+      context: system || null,
+      messages: [...conversationMessages, input],
+      examples: examples || [],
+    },
+    candidate_count: 1,
+    temperature: parseFloat(node?.data?.temperature as string ?? "0.0"),
+    top_p: parseFloat(node?.data?.top_p as string ?? "0.95"),
+    top_k: parseFloat(node?.data?.top_k as string ?? "40")
+  } as any
 
-  // Update the settings messages
-  settings.messages = messages.map((message) => {
-    return message.content
-  })
+  console.log('settings')
+  console.log(settings)
 
   // Create request headers
   const headers = {
