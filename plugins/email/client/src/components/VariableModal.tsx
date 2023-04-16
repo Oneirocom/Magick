@@ -9,13 +9,13 @@ const VariableModal = ({
   update,
 }) => {
   const [state, setState] = useState({
-    bluesky_identifier: selectedAgentData?.data?.bluesky_identifier,
-    bluesky_password: selectedAgentData?.data?.bluesky_password,
+    email_identifier: selectedAgentData?.data?.email_identifier,
+    email_password: selectedAgentData?.data?.email_password,
   })
 
   const handleOnChange = e => {
     const { name, value } = e.target
-    if (name === 'bluesky_feed_enable')
+    if (name === 'email_feed_enable')
       setState({ ...state, [name]: e.target.checked ? 'on' : 'off' })
     else setState({ ...state, [name]: value })
   }
@@ -37,7 +37,7 @@ const VariableModal = ({
       <Grid container>
         <Grid item xs={12}>
           <p style={{ marginTop: '1em' }} className="modal-element">
-            To set up a Bluesky bot, you will need to set up a Bluesky{' '}
+            To set up a Email bot, you will need to set up a Email{' '}
             <a href="https://developer.email.com/">Developer account</a>.
           </p>
           <p style={{ marginBottom: '2em' }} className="modal-element">
@@ -55,8 +55,8 @@ const VariableModal = ({
           <input
             className="modal-element"
             type="text"
-            name="bluesky_identifier"
-            defaultValue={state.bluesky_identifier}
+            name="email_identifier"
+            defaultValue={state.email_identifier}
             placeholder={''}
             onChange={handleOnChange}
           />
@@ -68,8 +68,8 @@ const VariableModal = ({
           <input
             className="modal-element"
             type="password"
-            name="bluesky_password"
-            value={state.bluesky_password}
+            name="email_password"
+            value={state.email_password}
             onChange={handleOnChange}
           />
         </div>

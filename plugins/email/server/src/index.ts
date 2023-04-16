@@ -1,29 +1,49 @@
 import { eventSocket, ServerPlugin, triggerSocket, WorldManager } from '@magickml/core'
 
-let BlueskyConnector = null as any;
-// dynamically import { BlueskyConnector } from './connectors/email' if we are in node.js using esm syntax
+// Example serverInfo object
+// {
+//   "smtp" : {
+//     "host" : "smtp.gmail.com",
+//     "port" : 465,
+//     "auth" : {
+//       "user" : "email@gmail.com",
+//       "pass" : ""
+//     }
+//   },
+//   "imap" : {
+//     "host" : "imap.gmail.com",
+//     "port" : 993,
+//     "auth" : {
+//       "user" : "email@gmail.com",
+//       "pass" : ""
+//     }
+//   }
+// }
+
+let EmailConnector = null as any;
+// dynamically import { EmailConnector } from './connectors/email' if we are in node.js using esm syntax
 if(typeof window === 'undefined') {
   import('./connectors/email').then((module) => {
-    BlueskyConnector = module.BlueskyConnector
+    EmailConnector = module.EmailConnector
   })
 }
 
-type StartBlueskyArgs = {
+type StartEmailArgs = {
   agent: any
   spellRunner: any
   worldManager: WorldManager
 }
 
 function getAgentMethods() {
-  async function startBluesky({
+  async function startEmail({
     agent,
     spellRunner,
     worldManager,
-  }: StartBlueskyArgs) {
+  }: StartEmailArgs) {
     const { data } = agent.data
     if(!data) return console.log("No data for this agent")
     if(!data.email_enabled) return console.log("Email is not enabled for this agent")
-    const email = new BlueskyConnector({
+    const email = new EmailConnector({
       agent,
       spellRunner,
       worldManager,
@@ -31,7 +51,7 @@ function getAgentMethods() {
     agent.email = email
   }
 
-  async function stopBluesky({agent}) {
+  async function stopEmail({agent}) {
     if (!agent.email) return console.warn("Email isn't running, can't stop it")
     try {
       await agent.email.destroy()
@@ -43,8 +63,8 @@ function getAgentMethods() {
   }
 
   return {
-    start: startBluesky,
-    stop: stopBluesky,
+    start: startEmail,
+    stop: stopEmail,
   }
 }
 
@@ -55,7 +75,7 @@ async function handleResponse(
     event
   }
 ) {
-  console.log('********* SENT MESSAGE TO BLUESKY', agent.id, output, event)
+  console.log('********* SENT MESSAGE TO EMAIL', agent.id, output, event)
   console.log('event is', event)
   console.log('event.channel is', event.channel)
 
@@ -72,7 +92,7 @@ async function handlePost(
     event
   }
 ) {
-  console.log('********* SENT MESSAGE TO BLUESKY', agent.id, output, event)
+  console.log('********* SENT MESSAGE TO EMAIL', agent.id, output, event)
   console.log('event is', event)
   console.log('event.channel is', event.channel)
 
@@ -103,8 +123,8 @@ const outputSockets = [
   }
 ]
 
-const BlueskyPlugin = new ServerPlugin({
-  name: 'BlueskyPlugin',
+const EmailPlugin = new ServerPlugin({
+  name: 'EmailPlugin',
   inputTypes: [
     { name: 'Email (Reply)', sockets: inputSockets, defaultResponseOutput: 'Email (Reply)' },
     { name: 'Email (Mention)', sockets: inputSockets, defaultResponseOutput: 'Email (Mention)' }
@@ -141,4 +161,4 @@ const BlueskyPlugin = new ServerPlugin({
   ],
 })
 
-export default BlueskyPlugin
+export default EmailPlugin

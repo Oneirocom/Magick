@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-email-client",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/pluginbluesky/client/src",
+  "sourceRoot": "packages/pluginemail/client/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],
   "targets": {
