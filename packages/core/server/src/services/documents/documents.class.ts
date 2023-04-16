@@ -36,8 +36,8 @@ export class DocumentService<
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
     if (DATABASE_TYPE == 'pg'){
-      const cli = app.get('docdb')
-      await cli.from('document').insert(data);
+      const docdb = app.get('docdb')
+      await docdb.fromString(data.content, data);
     }
     return data
   }
