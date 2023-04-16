@@ -1,6 +1,6 @@
 
 import HNSWLib, { PostgressVectorStoreCustom } from "./vectordb"
-import { PluginEmbeddings } from './customEmbedding';
+import { PluginEmbeddings } from './customEmbeddings';
 import { Embeddings } from "langchain/dist/embeddings/base";
 //Dynamic Import using top lvl await
 

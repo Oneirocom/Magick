@@ -1,24 +1,23 @@
 // DOCUMENTED
+import { authenticate } from '@feathersjs/authentication'
+import { NotAuthenticated } from '@feathersjs/errors/lib'
+import { HookContext } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers/lib'
 import {
   bodyParser,
   cors,
   errorHandler,
   koa,
   parseAuthentication,
-  rest,
+  rest
 } from '@feathersjs/koa'
-import { authenticate } from '@feathersjs/authentication'
-import { NotAuthenticated } from '@feathersjs/errors/lib'
-import { HookContext } from '@feathersjs/feathers'
 import socketio from '@feathersjs/socketio'
-import { import_ } from '@brillout/import'
-import { feathers } from '@feathersjs/feathers/lib'
 import {
   configureManager,
   DEFAULT_PROJECT_ID,
   DEFAULT_USER_ID,
   globalsManager,
-  IGNORE_AUTH,
+  IGNORE_AUTH
 } from '@magickml/core'
 
 import { dbClient } from './dbClient'
@@ -31,7 +30,7 @@ import { services } from './services'
 import handleSockets from './sockets/sockets'
 
 //Vector DB Related Imports
-import { HNSWLib, PostgressVectorStoreCustom } from './vectordb'
+import { HNSWLib } from './vectordb'
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())
 declare module './declarations' {
