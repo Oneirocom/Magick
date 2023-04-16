@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-bluesky-client",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/pluginbluesky/client/src",
+  "sourceRoot": "plugins/bluesky/client/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],
   "targets": {
