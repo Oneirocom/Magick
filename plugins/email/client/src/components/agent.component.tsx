@@ -4,20 +4,20 @@ import { debounce } from 'lodash'
 import { Switch } from '@magickml/client-core'
 import Button from '@mui/material/Button'
 import VariableModal from './VariableModal'
-export const BlueskyAgentWindow: FC<any> = props => {
+export const EmailAgentWindow: FC<any> = props => {
   props = props.props
   const { selectedAgentData, setSelectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
-  const [checked, setChecked] = useState(selectedAgentData.data?.bluesky_enabled)
+  const [checked, setChecked] = useState(selectedAgentData.data?.email_enabled)
   const [disable, setDisable] = useState(false)
   useEffect(()=>{
-    if (props.enable["BlueskyPlugin"] == false) {
+    if (props.enable["EmailPlugin"] == false) {
       setChecked(false)
       setDisable(true)
     }
-    if (props.enable['BlueskyPlugin'] == true){
-      setChecked(selectedAgentData.data?.bluesky_enabled)
+    if (props.enable['EmailPlugin'] == true){
+      setChecked(selectedAgentData.data?.email_enabled)
       setDisable(false)
     }
   }, [props.enable, selectedAgentData])
@@ -34,7 +34,7 @@ export const BlueskyAgentWindow: FC<any> = props => {
           opacity: disable ? 0.2 : 1,
         }}
       >
-        <h3>Bluesky</h3>
+        <h3>Email</h3>
         <div
           style={{
             display: 'flex',
@@ -58,7 +58,7 @@ export const BlueskyAgentWindow: FC<any> = props => {
                 ...selectedAgentData,
                 data: {
                   ...selectedAgentData.data,
-                  bluesky_enabled: e.target.checked,
+                  email_enabled: e.target.checked,
                 },
               })
 
@@ -66,7 +66,7 @@ export const BlueskyAgentWindow: FC<any> = props => {
                 ...selectedAgentData,
                 data: {
                   ...selectedAgentData.data,
-                  bluesky_enabled: e.target.checked,
+                  email_enabled: e.target.checked,
                 },
               })
             }}

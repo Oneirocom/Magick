@@ -1,5 +1,5 @@
 import { ClientPlugin, eventSocket, triggerSocket } from '@magickml/core'
-import { BlueskyAgentWindow } from './components/agent.component'
+import { EmailAgentWindow } from './components/agent.component'
 
 const inputSockets = [
   {
@@ -22,30 +22,30 @@ const outputSockets = [
   },
 ]
 
-const BlueskyPlugin = new ClientPlugin({
-  name: 'BlueskyPlugin',
-  agentComponents: [BlueskyAgentWindow],
+const EmailPlugin = new ClientPlugin({
+  name: 'EmailPlugin',
+  agentComponents: [EmailAgentWindow],
   inputTypes: [
-    { name: 'Bluesky (Reply)', sockets: inputSockets },
-    { name: 'Bluesky (Mention)', sockets: inputSockets }
+    { name: 'Email (Reply)', sockets: inputSockets },
+    { name: 'Email (Mention)', sockets: inputSockets }
   ],
   outputTypes: [
-    { name: 'Bluesky (Reply)', sockets: outputSockets },
-    { name: 'Bluesky (Mention)', sockets: outputSockets },
-    { name: 'Bluesky (Post)', sockets: outputSockets }
+    { name: 'Email (Reply)', sockets: outputSockets },
+    { name: 'Email (Mention)', sockets: outputSockets },
+    { name: 'Email (Post)', sockets: outputSockets }
   ],
   secrets: [
     {
       name: 'User ID',
-      key: 'bluesky_identifier',
+      key: 'email_identifier',
       global: false,
     },
     {
       name: 'Password',
-      key: 'bluesky_password',
+      key: 'email_password',
       global: false,
     },
   ],
 })
 
-export default BlueskyPlugin
+export default EmailPlugin

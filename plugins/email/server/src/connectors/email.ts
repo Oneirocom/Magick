@@ -1,11 +1,11 @@
 import { BskyAgent, AppBskyNotificationGetUnreadCount } from '@atproto/api'
 import { app } from '@magickml/server-core'
-export class BlueskyConnector {
+export class EmailConnector {
   bskyAgent: BskyAgent
   spellRunner
   data
   agent
-  bluesky_stream_rules = ''
+  email_stream_rules = ''
   localUser: any
   worldManager: any
 
@@ -19,11 +19,11 @@ export class BlueskyConnector {
     this.data = data
     this.worldManager = worldManager // we can track entities in different conversations here later
 
-    if (!data.bluesky_enabled) {
-      console.warn('Bluesky is not enabled, skipping')
+    if (!data.email_enabled) {
+      console.warn('Email is not enabled, skipping')
       return
     }
-    console.log('Bluesky enabled, initializing...')
+    console.log('Email enabled, initializing...')
 
     this.initialize({ data })
   }
@@ -33,10 +33,10 @@ export class BlueskyConnector {
       service: 'https://bsky.social',
     })
     await this.bskyAgent.login({
-      identifier: data.bluesky_identifier,
-      password: data.bluesky_password,
+      identifier: data.email_identifier,
+      password: data.email_password,
     })
-    console.log('logged in to email with', data.bluesky_identifier)
+    console.log('logged in to email with', data.email_identifier)
     this.loop = setInterval(() => {
       this.handler()
     }, 1000)
@@ -91,14 +91,14 @@ export class BlueskyConnector {
       const author = notif.author.handle
 
       console.log('author is', author)
-      const entities = [author, this.data.bluesky_identifier]
+      const entities = [author, this.data.email_identifier]
       console.log('sending bsky input to spellrunner', entities)
       const resp = await this.spellRunner.runComponent({
         inputs: {
-          [`Input - Bluesky (${type === 'reply' ? 'Reply' : 'Mention'})`]: {
+          [`Input - Email (${type === 'reply' ? 'Reply' : 'Mention'})`]: {
             content: text,
             sender: author,
-            observer: this.data.bluesky_identifier,
+            observer: this.data.email_identifier,
             client: 'email',
             channel: (post_thread.data.thread?.post as any)?.uri,
             agentId: this.agent.id,
