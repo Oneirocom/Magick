@@ -1,70 +1,50 @@
 import { eventSocket, ServerPlugin, triggerSocket, WorldManager } from '@magickml/core'
 
-// Example serverInfo object
-// {
-//   "smtp" : {
-//     "host" : "smtp.gmail.com",
-//     "port" : 465,
-//     "auth" : {
-//       "user" : "email@gmail.com",
-//       "pass" : ""
-//     }
-//   },
-//   "imap" : {
-//     "host" : "imap.gmail.com",
-//     "port" : 993,
-//     "auth" : {
-//       "user" : "email@gmail.com",
-//       "pass" : ""
-//     }
-//   }
-// }
-
-let EmailConnector = null as any;
-// dynamically import { EmailConnector } from './connectors/email' if we are in node.js using esm syntax
+let GmailConnector = null as any;
+// dynamically import { GmailConnector } from './connectors/gmail' if we are in node.js using esm syntax
 if(typeof window === 'undefined') {
-  import('./connectors/email').then((module) => {
-    EmailConnector = module.EmailConnector
+  import('./connectors/gmail').then((module) => {
+    GmailConnector = module.GmailConnector
   })
 }
 
-type StartEmailArgs = {
+type StartGmailArgs = {
   agent: any
   spellRunner: any
   worldManager: WorldManager
 }
 
 function getAgentMethods() {
-  async function startEmail({
+  async function startGmail({
     agent,
     spellRunner,
     worldManager,
-  }: StartEmailArgs) {
+  }: StartGmailArgs) {
     const { data } = agent.data
     if(!data) return console.log("No data for this agent")
-    if(!data.email_enabled) return console.log("Email is not enabled for this agent")
-    const email = new EmailConnector({
+    if(!data.gmail_enabled) return console.log("Gmail is not enabled for this agent")
+    const gmail = new GmailConnector({
       agent,
       spellRunner,
       worldManager,
     })
-    agent.email = email
+    agent.gmail = gmail
   }
 
-  async function stopEmail({agent}) {
-    if (!agent.email) return console.warn("Email isn't running, can't stop it")
+  async function stopGmail({agent}) {
+    if (!agent.gmail) return console.warn("Gmail isn't running, can't stop it")
     try {
-      await agent.email.destroy()
-      agent.email = null
+      await agent.gmail.destroy()
+      agent.gmail = null
     } catch {
       console.log('Agent does not exist !')
     }
-    console.log('Stopped email client for agent ' + agent.name)
+    console.log('Stopped gmail client for agent ' + agent.name)
   }
 
   return {
-    start: startEmail,
-    stop: stopEmail,
+    start: startGmail,
+    stop: stopGmail,
   }
 }
 
@@ -81,24 +61,7 @@ async function handleResponse(
 
   const resp = output
   if (resp && resp !== undefined && resp?.length > 0) {
-    await agent.email.handleResponse(resp, event)
-  }
-}
-
-async function handlePost(
-  {
-    output,
-    agent,
-    event
-  }
-) {
-  console.log('********* SENT MESSAGE TO EMAIL', agent.id, output, event)
-  console.log('event is', event)
-  console.log('event.channel is', event.channel)
-
-  const resp = output
-  if (resp && resp !== undefined && resp?.length > 0) {
-    await agent.email.handlePost(resp)
+    await agent.gmail.handleResponse(resp, event)
   }
 }
 
@@ -123,42 +86,31 @@ const outputSockets = [
   }
 ]
 
-const EmailPlugin = new ServerPlugin({
-  name: 'EmailPlugin',
+const GmailPlugin = new ServerPlugin({
+  name: 'GmailPlugin',
   inputTypes: [
-    { name: 'Email (Reply)', sockets: inputSockets, defaultResponseOutput: 'Email (Reply)' },
-    { name: 'Email (Mention)', sockets: inputSockets, defaultResponseOutput: 'Email (Mention)' }
+    { name: 'Gmail', sockets: inputSockets, defaultResponseOutput: 'Gmail' }
   ],
   outputTypes: [
-    { name: 'Email (Reply)', sockets: outputSockets, handler: async ({
+    { name: 'Gmail', sockets: outputSockets, handler: async ({
       output, agent, event
     }) => {
       await handleResponse({output, agent, event})
-    }},
-    { name: 'Email (Mention)', sockets: outputSockets, handler: async ({
-      output, agent, event
-    }) => {
-      await handleResponse({output, agent, event})
-    }},
-    { name: 'Email (Post)', sockets: outputSockets, handler: async ({
-      output, agent, event
-    }) => {
-      await handlePost({output, agent, event})
-    }},
+    }}
   ],
   agentMethods: getAgentMethods(),
   secrets: [
     {
-      name: 'User ID',
-      key: 'email_identifier',
+      name: 'Gmail Address',
+      key: 'gmail_address',
       global: false,
     },
     {
       name: 'Password',
-      key: 'email_password',
+      key: 'gmail_password',
       global: false,
     },
   ],
 })
 
-export default EmailPlugin
+export default GmailPlugin

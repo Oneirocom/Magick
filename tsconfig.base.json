@@ -152,6 +152,12 @@
       ],
       "@magickml/plugin-bluesky-server": [
         "plugins/bluesky/server/src/index.ts"
+      ],
+      "@magickml/plugin-email-client": [
+        "plugins/email/client/src/index.ts"
+      ],
+      "@magickml/plugin-email-server": [
+        "plugins/email/server/src/index.ts"
       ]
     }
   },

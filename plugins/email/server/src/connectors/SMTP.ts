@@ -1,10 +1,10 @@
 // Library imports.
-import Mail from "nodemailer/lib/mailer";
-import * as nodemailer from "nodemailer";
-import { SendMailOptions, SentMessageInfo } from "nodemailer";
+import Mail from 'nodemailer/lib/mailer';
+import * as nodemailer from 'nodemailer';
+import { SendMailOptions, SentMessageInfo } from 'nodemailer';
 
 // App imports.
-import { IServerInfo } from "./ServerInfo";
+import { IServerInfo } from './IServerInfo'
 
 
 // The worker that will perform SMTP operations.
@@ -47,7 +47,7 @@ export class Worker {
             inReject(inError);
           } else {
             console.log("SMTP.Worker.sendMessage(): Ok", inInfo);
-            inResolve();
+            inResolve(inInfo);
           }
         }
       );

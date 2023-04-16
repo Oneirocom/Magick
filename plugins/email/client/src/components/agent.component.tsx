@@ -2,20 +2,20 @@ import { Switch } from '@magickml/client-core'
 import { debounce } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import VariableModal from './VariableModal'
-export const EmailAgentWindow: FC<any> = props => {
+export const GmailAgentWindow: FC<any> = props => {
   props = props.props
   const { selectedAgentData, setSelectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
-  const [checked, setChecked] = useState(selectedAgentData.data?.email_enabled)
+  const [checked, setChecked] = useState(selectedAgentData.data?.gmail_enabled)
   const [disable, setDisable] = useState(false)
   useEffect(()=>{
-    if (props.enable["EmailPlugin"] == false) {
+    if (props.enable["GmailPlugin"] == false) {
       setChecked(false)
       setDisable(true)
     }
-    if (props.enable['EmailPlugin'] == true){
-      setChecked(selectedAgentData.data?.email_enabled)
+    if (props.enable['GmailPlugin'] == true){
+      setChecked(selectedAgentData.data?.gmail_enabled)
       setDisable(false)
     }
   }, [props.enable, selectedAgentData])
@@ -32,7 +32,7 @@ export const EmailAgentWindow: FC<any> = props => {
           opacity: disable ? 0.2 : 1,
         }}
       >
-        <h3>Email</h3>
+        <h3>Gmail</h3>
         <div
           style={{
             display: 'flex',
@@ -56,7 +56,7 @@ export const EmailAgentWindow: FC<any> = props => {
                 ...selectedAgentData,
                 data: {
                   ...selectedAgentData.data,
-                  email_enabled: e.target.checked,
+                  gmail_enabled: e.target.checked,
                 },
               })
 
@@ -64,7 +64,7 @@ export const EmailAgentWindow: FC<any> = props => {
                 ...selectedAgentData,
                 data: {
                   ...selectedAgentData.data,
-                  email_enabled: e.target.checked,
+                  gmail_enabled: e.target.checked,
                 },
               })
             }}
