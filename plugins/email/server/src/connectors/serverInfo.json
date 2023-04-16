@@ -1,0 +1,18 @@
+{
+  "smtp" : {
+    "host" : "smtp.gmail.com",
+    "port" : 465,
+    "auth" : {
+      "user" : "zhengjianxiong0@gmail.com",
+      "pass" : ""
+    }
+  },
+  "imap" : {
+    "host" : "imap.gmail.com",
+    "port" : 993,
+    "auth" : {
+      "user" : "zhengjianxiong0@gmail.com",
+      "pass" : ""
+    }
+  }
+}
