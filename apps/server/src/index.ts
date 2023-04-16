@@ -20,7 +20,8 @@ import {
   Handler,
   Method,
   Middleware,
-  Route
+  Route,
+  setupDB
 } from '@magickml/server-core'
 
 // log handle errors
@@ -70,7 +71,11 @@ async function init() {
   for (const method of Object.keys(serverInits)) {
     await serverInits[method]()
   }
-
+  //Wait Till the plugins are setup
+  let db = app.get('dbClient')
+  let dbs = await setupDB(db)
+  app.set('vectordb', dbs.vectordb)
+  app.set('docdb', dbs.docdb)
   // generic error handling for any errors that may occur
   app.use(async (ctx: Context, next: () => Promise<any>) => {
     try {
