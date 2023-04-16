@@ -9,11 +9,8 @@ import { IServerInfo } from './IServerInfo'
 
 // The worker that will perform SMTP operations.
 export class Worker {
-
-
   // Server information.
   private static serverInfo: IServerInfo;
-
 
   /**
    * Constructor.
