@@ -14,7 +14,7 @@ import {
   SpaceName
 } from "hnswlib-node";
 import { Embeddings } from "langchain/dist/embeddings/base";
-import {PluginEmbeddings} from "./customEmbedding"
+import { PluginEmbeddings } from "./customEmbedding"
 import path from "node:path";
 
 const InMemoryDocstorePro = import_("langchain/docstore");
@@ -565,13 +565,13 @@ export class HNSWLib extends SaveableVectorStore {
     }
     return matchingDocs;
   }
-  async fromString(text: string, metadata: any[]): Promise<any>{
+  async fromString(text: string, metadata: any[]): Promise<any> {
     console.log("metadata", metadata)
-    const vector = await this.embeddings.embedQuery(text, (metadata as unknown as {projectId: string}).projectId);
+    const vector = await this.embeddings.embedQuery(text, (metadata as unknown as { projectId: string }).projectId);
     const insert_data = [{
       embedding: vector,
       data: {
-        metadata: {...metadata, embedding: vector} || {"msg": "Empty Data"},
+        metadata: { ...metadata, embedding: vector } || { "msg": "Empty Data" },
         pageContent: text || "No Content in the Event",
       },
     }]
