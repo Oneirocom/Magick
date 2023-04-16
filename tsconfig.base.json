@@ -135,6 +135,15 @@
       "@magickml/plugin-search-shared": [
         "plugins/search/shared/src/index.ts"
       ],
+      "@magickml/plugin-gcal-client": [
+        "plugins/gcal/client/src/index.ts"
+      ],
+      "@magickml/plugin-gcal-server": [
+        "plugins/gcal/server/src/index.ts"
+      ],
+      "@magickml/plugin-gcal-shared": [
+        "plugins/gcal/shared/src/index.ts"
+      ],
       "@magickml/plugin-twitter-client": [
         "plugins/twitter/client/src/index.ts"
       ],
