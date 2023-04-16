@@ -14,7 +14,6 @@ import {
   SpaceName
 } from "hnswlib-node";
 import { Embeddings } from "langchain/dist/embeddings/base";
-import { PluginEmbeddings } from "./customEmbedding"
 import path from "node:path";
 
 const InMemoryDocstorePro = import_("langchain/docstore");
@@ -111,6 +110,7 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
    */
   async rpc(query: string, params: Record<string, unknown>): Promise<any> {
     const columns = Object.keys(params);
+    // eslint-disable-next-line no-prototype-builtins
     const placeholders = columns.map((name) => (params.hasOwnProperty(name) ? `:${name}` : "NULL"));
     const sql = `SELECT * FROM ${query}(${placeholders.join(", ")})`;
     console.log(sql)
