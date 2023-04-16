@@ -39,6 +39,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
   const handleSaveDocument = () => {
     if (newDocument.type && newDocument.owner) {
       handleSave(newDocument);
+      setCreateMode(!createMode)
     } else {
       alert('Please fill in all required fields.');
     }
@@ -48,8 +49,8 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
     <>
       <Modal
         open={createMode}
-        setOpen={setCreateMode}
-        handleAction={handleSaveDocument}
+        onClose={()=>{setCreateMode(!createMode)}}
+        onSubmit={handleSaveDocument}
       >
          {loading && <Backdrop open={loading} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}><CircularProgress color="secondary" /></Backdrop>}
         <TextField

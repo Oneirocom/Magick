@@ -9,6 +9,7 @@ The original library can be found at https://github.com/hwchase17/langchainjs.
 import import_ from '@brillout/import';
 import * as crypto from "crypto";
 import fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 import {
   HierarchicalNSW,
   SpaceName
@@ -25,10 +26,6 @@ const SaveableVectorStorePro = import_("langchain/vectorstores");
 const { SaveableVectorStore } = await SaveableVectorStorePro;
 const SupabaseVectorStorePro = import_("langchain/vectorstores");
 const { SupabaseVectorStore } = await SupabaseVectorStorePro;
-
-
-
-
 
 
 /**
@@ -75,8 +72,35 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
     }
   }
 
+  /**
+   * Creates Documents using String and Metadata
+   * @param {string} text - String to be embedded
+   * @param {any[]} metadata - Metadata to be added to the document
+   * @returns {Promise<any>} - Array of documents
+   * @async
+  */
   async fromString(text: string, metadata: any[]): Promise<any> {
+    if (text.length > 8000){
+      const [vectors, split_docs] = await this.embeddings.embedDocuments(text);
+      console.log(vectors.length, split_docs.length)
+      vectors.forEach(async (vector, index) => {
+        console.log(split_docs[index])
+        console.log(index, vector)
+        const insert_data = [{
+          embedding: vector,
+          data: {
+            metadata: { ...metadata, embedding: vector } || { "msg": "Empty Data" },
+            pageContent: split_docs[index] || "No Content in the Event",
+          },
+        }]
+        metadata['id'] = uuidv4()
+        metadata['content'] = split_docs[index];
+        this.addEvents({ array: [{ ...metadata, embedding: JSON.stringify(vector) }] })
+      })
+      return;
+    }
     const vector = await this.embeddings.embedQuery(text, metadata["projectId"]);
+    console.log(vector)
     const insert_data = [{
       embedding: vector,
       data: {
@@ -84,7 +108,7 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
         pageContent: text || "No Content in the Event",
       },
     }]
-    this.addEvents({ array: [{ ...metadata, embedding: vector }] })
+    this.addEvents({ array: [{ ...metadata, embedding: JSON.stringify(vector) }] })
     return insert_data
   }
 
@@ -116,7 +140,7 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
     console.log(sql)
     return this.client.raw(sql, params);
   }
-  
+
 
   /**
    * Select a table in the Postgres client
@@ -565,8 +589,27 @@ export class HNSWLib extends SaveableVectorStore {
     }
     return matchingDocs;
   }
+
+  /**
+   * Creates documents from the text and metadata
+   * @param text - Texts to create documents from
+   * @param metadata - Metadata to create documents from
+  */
   async fromString(text: string, metadata: any[]): Promise<any> {
-    console.log("metadata", metadata)
+    if(typeof text != 'string') return "Text is not a string"
+    if (text.length > 8000){
+      const [vector, blob] = await this.embeddings.embedDocuments(text, (metadata as unknown as { projectId: string }).projectId);
+      vector.forEach((v, i) => {
+        const insert_data = [{
+          embedding: v,
+          data: {
+            metadata: { ...metadata, embedding: v } || { "msg": "Empty Data" },
+            pageContent: blob[i] || "No Content in the Event",
+          },
+        }]
+        this.addEmbeddingsWithData(insert_data);
+      })
+    }
     const vector = await this.embeddings.embedQuery(text, (metadata as unknown as { projectId: string }).projectId);
     const insert_data = [{
       embedding: vector,
