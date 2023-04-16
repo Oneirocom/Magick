@@ -238,20 +238,7 @@ class PluginManager {
     })
     return secrets
   }
-  getCompletionProviders(
-    type: string | null = null,
-    subtypes: null | string[] = null
-  ): CompletionProvider[] {
-    const completionProviders: CompletionProvider[] = []
-    this.pluginList.forEach(plugin => {
-      plugin.completionProviders.forEach(provider => {
-        if (type && provider.type !== type) return
-        if (subtypes && !subtypes.includes(provider.subtype)) return
-        completionProviders.push(provider)
-      })
-    })
-    return completionProviders
-  }
+
   getCompletionProviders(
     type: string | null = null,
     subtypes: null | string[] = null
