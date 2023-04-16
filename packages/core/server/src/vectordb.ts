@@ -25,11 +25,16 @@ const { SaveableVectorStore } = await SaveableVectorStorePro;
 const SupabaseVectorStorePro = import_("langchain/vectorstores");
 const { SupabaseVectorStore } = await SupabaseVectorStorePro;
 
+
+
+
+
+
 /**
  * Custom implementation of SupabaseVectorStore
- * @extends {SupabaseVectorStore}
+ * @extends {PostgressVectorStore}
  */
-export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
+export class PostgressVectorStoreCustom extends SupabaseVectorStore {
   client: any;
   tableName: string;
   queryName: string;
@@ -63,20 +68,34 @@ export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
    * @returns {Promise<void>}
    */
   async addVectors(vectors: number[][], documents: Document[]): Promise<void> {
-    const res = await this.client.from(this.tableName).insert(documents);
+    const res = await this.client(this.tableName).insert(documents);
     if (res.error) {
       throw new Error(`Error inserting: ${res.error.message} ${res.status} ${res.statusText}`);
     }
   }
 
+  async fromString(text: string, metadata: any[]): Promise<any> {
+    const vector = await this.embeddings.embedQuery(text, metadata["projectId"]);
+    const insert_data = [{
+      embedding: vector,
+      data: {
+        metadata: { ...metadata, embedding: vector } || { "msg": "Empty Data" },
+        pageContent: text || "No Content in the Event",
+      },
+    }]
+    this.addEvents({ array: [{ ...metadata, embedding: vector }] })
+    return insert_data
+  }
+
   /**
-   * Add events to the tableName in the Supabase client
+   * Add events to the tableName in the Postgres database
    * @param { array: any[]} events - Array of events
    * @returns {Promise<void>}
    */
-  async addEvents(events: { array: any[] }): Promise<void> {
-    events.array.forEach(async element => {
-      const res = await this.client.from(this.tableName).insert(element);
+  async addEvents(documents: { array: any[] }): Promise<void> {
+    documents.array.forEach(async element => {
+      console.log(element)
+      const res = await this.client(this.tableName).insert(element);
       if (res.error) {
         throw new Error(`Error inserting: ${res.error.message} ${res.status} ${res.statusText}`);
       }
@@ -84,22 +103,28 @@ export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
   }
 
   /**
-   * Perform rpc on the Supabase client
-   * @param {string} query - Query to be executed
+   * Perform postgres function call
+   * @param {string} query - Query to be executed or the function name
    * @param {Record<string, unknown>} params - Query parameters
    * @returns {Promise<any>}
    */
-  rpc(query: string, params: Record<string, unknown>): Promise<any> {
-    return this.client.rpc(query, params);
+  async rpc(query: string, params: Record<string, unknown>): Promise<any> {
+    const columns = Object.keys(params);
+    // eslint-disable-next-line no-prototype-builtins
+    const placeholders = columns.map((name) => (params.hasOwnProperty(name) ? `:${name}` : "NULL"));
+    const sql = `SELECT * FROM ${query}(${placeholders.join(", ")})`;
+    console.log(sql)
+    return this.client.raw(sql, params);
   }
+  
 
   /**
-   * Select a table in the Supabase client
+   * Select a table in the Postgres client
    * @param {string} table - Table name
    * @returns {any}
    */
   from(table: string): any {
-    return this.client.from(table);
+    return this.client(table);
   }
 
   /**
@@ -153,7 +178,7 @@ export class HNSWLib extends SaveableVectorStore {
 
   args: HNSWLibBase;
 
-  declare embeddings: Embeddings;
+  declare embeddings: any;
 
   /**
    * Constructs an instance of HNSWLib
@@ -235,6 +260,7 @@ export class HNSWLib extends SaveableVectorStore {
     embedding: number[],
     metadata: Document
   ): Promise<void> {
+
     if (embedding.length !== this.args.numDimensions) {
       throw new Error(
         `Embedding must have the same length as the number of dimensions (${this.args.numDimensions})`
@@ -256,6 +282,7 @@ export class HNSWLib extends SaveableVectorStore {
     const vectors: number[][] = [];
     const documents: Document[] = [];
     for (const { embedding, data } of embeddings) {
+      console.log(embedding)
       if (embedding) {
         if (embedding.length !== this.args.numDimensions) {
           throw new Error(
@@ -330,7 +357,7 @@ export class HNSWLib extends SaveableVectorStore {
    * @throws {Error} - If vectors are empty
    * @throws {Error} - If index is not initialised
    * @throws {Error} - If index is full
-  */  
+  */
   async addVectors(vectors: number[][], documents: Document[]) {
     if (vectors.length === 0) {
       return;
@@ -364,8 +391,6 @@ export class HNSWLib extends SaveableVectorStore {
     await this.saveIndex(this.args.filename);
   }
 
-  //TODO: Interface with PluginManager to get the Embedding from the plugin
-  //Right Now using Dummy embeddings
   //IMPORTANT: This function is an extension from the base class and is required for QA
   /**
    * Search for the k nearest neighbours of a query vector
@@ -375,17 +400,16 @@ export class HNSWLib extends SaveableVectorStore {
    * @async
   */
   async similaritySearch(query: any, k = 4): Promise<Document[]> {
-    const arrayLength = this.args.numDimensions;
-    query = new Array(arrayLength).fill(null).map(() => Math.random());
-    /* if (query.length !== this.args.numDimensions) {
+    const queryEmbedding = await this.getEmbedding(query);
+    if (queryEmbedding.length !== this.args.numDimensions) {
       throw new Error(`Query vector must have the same length as the number of dimensions (${this.args.numDimensions})`);
-    } */
+    }
     if (k > this.index.getCurrentCount()) {
       const total = this.index.getCurrentCount();
       console.warn(`k (${k}) is greater than the number of elements in the index (${total}), setting k to ${total}`);
       k = total;
     }
-    const result = this.index.searchKnn(Array.from(query), k);
+    const result = this.index.searchKnn(Array.from(queryEmbedding), k);
     return result.neighbors.map(
       (docIndex, resultIndex) =>
         this.docstore.search(String(docIndex)) as Document
@@ -541,7 +565,19 @@ export class HNSWLib extends SaveableVectorStore {
     }
     return matchingDocs;
   }
-
+  async fromString(text: string, metadata: any[]): Promise<any> {
+    console.log("metadata", metadata)
+    const vector = await this.embeddings.embedQuery(text, (metadata as unknown as { projectId: string }).projectId);
+    const insert_data = [{
+      embedding: vector,
+      data: {
+        metadata: { ...metadata, embedding: vector } || { "msg": "Empty Data" },
+        pageContent: text || "No Content in the Event",
+      },
+    }]
+    this.addEmbeddingsWithData(insert_data);
+    return insert_data
+  }
   //TODO: This function is redundant and should be removed, base class requires it
   //This is handled in Documents DB.
   /**
