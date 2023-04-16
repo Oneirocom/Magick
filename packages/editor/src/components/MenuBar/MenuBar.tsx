@@ -1,17 +1,15 @@
 // DOCUMENTED
+import { useProjectWindow } from '@magickml/client-core'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-
 import { useModal } from '../../contexts/ModalProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
-import css from './menuBar.module.css'
-import { activeTabSelector, Tab } from '../../state/tabs'
 import { toggleAutoSave } from '../../state/preferences'
-import { changeEditorLayout } from '../../state/tabs'
 import { RootState } from '../../state/store'
-import { useProjectWindow } from '@magickml/client-core'
+import { activeTabSelector, changeEditorLayout, Tab } from '../../state/tabs'
+import css from './menuBar.module.css'
 
 /**
  * MenuBar component
@@ -23,6 +21,7 @@ const MenuBar = () => {
   const { publish, events } = usePubSub()
   const dispatch = useDispatch()
   const activeTab = useSelector(activeTabSelector)
+  const [snapEnabled, setSnapEnabled] = useState(true)
   const { openProjectWindow, setOpenProjectWindow, setOpenDrawer } =
     useProjectWindow()
 
@@ -51,6 +50,7 @@ const MenuBar = () => {
     $REDO,
     $MULTI_SELECT_COPY,
     $MULTI_SELECT_PASTE,
+    TOGGLE_SNAP,
   } = events
 
   /**
@@ -230,6 +230,14 @@ const MenuBar = () => {
   }
 
   /**
+   * Toggle snap handler
+   */
+  const toggleSnapFunction = () => {
+    if (!activeTabRef.current) return
+    publish(TOGGLE_SNAP)
+    setSnapEnabled(!snapEnabled)
+  }
+  /**
    * Toggle save handler
    */
   const changeLayout = event => {
@@ -300,6 +308,10 @@ const MenuBar = () => {
           onClick: onMultiSelectPaste,
           hotKey: 'option+v',
         },
+        snap: {
+          onClick: toggleSnapFunction,
+          isActive: snapEnabled,
+        },
       },
     },
     window: {
@@ -319,6 +331,10 @@ const MenuBar = () => {
         project_window: {
           onClick: onProjectWindowCreate,
           hotKey: 'control+b',
+        },
+        snap: {
+          onClick: toggleSnapFunction,
+          isActive: snapEnabled,
         },
       },
       settings: {

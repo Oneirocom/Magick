@@ -1,12 +1,12 @@
-import { createClient } from "@supabase/supabase-js"
-import HNSWLib, { SupabaseVectorStoreCustom } from "./vectordb"
+
+import HNSWLib, { PostgressVectorStoreCustom } from "./vectordb"
 import { PluginEmbeddings } from './customEmbedding';
 import { Embeddings } from "langchain/dist/embeddings/base";
 //Dynamic Import using top lvl await
 
 
 
-export async function setupDB() {
+export async function setupDB(db) {
     const embeddings = new PluginEmbeddings({}) as unknown as Embeddings
     if (process.env.DATABASE_TYPE == 'sqlite') {
         console.log('Setting up vector store')
@@ -22,14 +22,13 @@ export async function setupDB() {
         })
         return {vectordb, docdb}
     } else {
-        const cli = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)
-        const vectordb = new SupabaseVectorStoreCustom(embeddings, {
-            client: cli,
+        const vectordb = new PostgressVectorStoreCustom(embeddings, {
+            client: db,
             tableName: 'events',
             queryName: 'match_events',
         })
-        const docdb = new SupabaseVectorStoreCustom(embeddings, {
-            client: cli,
+        const docdb = new PostgressVectorStoreCustom(embeddings, {
+            client: db,
             tableName: 'documents',
             queryName: 'match_documents',
         })

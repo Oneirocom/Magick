@@ -142,18 +142,17 @@ const AgentManagerWindow = () => {
    * @param {any} _data The new data to update the agent.
    */
   const update = (id: string, _data: any) => {
-        fetch(`${config.apiUrl}/agents/${id}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            ..._data,
-            updatedAt: new Date().toISOString(),
-          }),
-        })
-
+    fetch(`${config.apiUrl}/agents/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        ..._data,
+        updatedAt: new Date().toISOString(),
+      }),
+    })
       .then(async res => {
         res = await res.json()
         if (typeof res === 'string' && res === 'internal error') {
@@ -193,9 +192,9 @@ const AgentManagerWindow = () => {
         //     variant: 'error',
         //   })
         // } else {
-          enqueueSnackbar('Agent with id: ' + id + ' deleted successfully', {
-            variant: 'success',
-          })
+        enqueueSnackbar('Agent with id: ' + id + ' deleted successfully', {
+          variant: 'success',
+        })
         // }
         if (selectedAgentData.id === id) setSelectedAgentData(undefined)
         resetData()

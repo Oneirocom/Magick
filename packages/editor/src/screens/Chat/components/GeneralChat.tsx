@@ -138,6 +138,7 @@ export default function GeneralChat() {
                 channel: 'previewChannel',
                 projectId: config.projectId,
                 channelType: 'previewChannelType', // 'playtest', ???
+                rawData: JSON.stringify(message),
                 entities: ['user', 'assistant'],
             }
 

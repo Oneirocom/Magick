@@ -33,6 +33,7 @@ export * from './hooks';
 
 // Export the database client
 export * from './dbClient';
+export * from "./dbSetup";
 
 // Export service modules
 export * from './services';
