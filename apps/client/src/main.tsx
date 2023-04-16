@@ -52,8 +52,8 @@ else {
         event.origin !== window.location.origin &&
         event.origin !== cloudUrl
       ) {
-        console.warn('untrusted origin', event.origin)
-        console.warn('EXITING')
+        console.error('untrusted origin', event.origin)
+        console.error('cloudUrl is ', cloudUrl, 'TRUSTED_PARENT_URL', TRUSTED_PARENT_URL)
         return
       }
 
