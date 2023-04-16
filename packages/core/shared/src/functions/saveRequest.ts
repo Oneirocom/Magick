@@ -42,10 +42,10 @@ export function saveRequest({
   nodeId,
 }: RequestPayload) {
   // Calculate the request cost based on total tokens and model.
-  const cost = calculateCompletionCost({
+  const cost = totalTokens !== undefined && totalTokens > 0 ? calculateCompletionCost({
     totalTokens: totalTokens as number,
     model: model as any,
-  });
+  }) : 0;
 
   // Calculate the request duration.
   const end = Date.now();
