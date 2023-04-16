@@ -102,6 +102,15 @@
       "@magickml/plugin-openai-shared": [
         "plugins/openai/shared/src/index.ts"
       ],
+      "@magickml/plugin-googleai-client": [
+        "plugins/googleai/client/src/index.ts"
+      ],
+      "@magickml/plugin-googleai-server": [
+        "plugins/googleai/server/src/index.ts"
+      ],
+      "@magickml/plugin-googleai-shared": [
+        "plugins/googleai/shared/src/index.ts"
+      ],
       "@magickml/plugin-pinecone-client": [
         "plugins/pinecone/client/src/index.ts"
       ],
