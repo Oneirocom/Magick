@@ -6,22 +6,22 @@ import * as SMTP from './SMTP'
 // Example serverInfo object
 export const makeServerInfo = (address, password) => {
   return {
-    smtp : {
-      host : "smtp.gmail.com",
-      port : 465,
-      auth : {
-        user : address,
-        pass : password
-      }
+    smtp: {
+      host: 'smtp.gmail.com',
+      port: 465,
+      auth: {
+        user: address,
+        pass: password,
+      },
     },
-    imap : {
-      host : "imap.gmail.com",
-      port : 993,
-      auth : {
-        user : address,
-        pass : password
-      }
-    }
+    imap: {
+      host: 'imap.gmail.com',
+      port: 993,
+      auth: {
+        user: address,
+        pass: password,
+      },
+    },
   }
 }
 
@@ -38,8 +38,12 @@ export const getMailboxes = async (address, password) => {
 }
 
 // Get list of messages in a mailbox (does NOT include bodies).
-export const getMessagesFromMailbox = async ({ mailbox, address, password }: {
-  mailbox: string
+export const getMessagesFromMailbox = async ({
+  mailbox,
+  address,
+  password,
+}: {
+  mailbox: IMAP.IMailbox
   address: string
   password: string
 }) => {
@@ -56,9 +60,14 @@ export const getMessagesFromMailbox = async ({ mailbox, address, password }: {
 }
 
 // Get a message's plain text body.
-export const getMessageBody = async ({ id, mailbox, address, password }: {
+export const getMessageBody = async ({
+  id,
+  mailbox,
+  address,
+  password,
+}: {
   id: string
-  mailbox: string
+  mailbox: IMAP.IMailbox
   address: string
   password: string
 }) => {
@@ -76,8 +85,13 @@ export const getMessageBody = async ({ id, mailbox, address, password }: {
 }
 
 // Delete a message.
-export const deleteMessage = async ({ mailbox, id, address, password }: {
-  mailbox: string
+export const deleteMessage = async ({
+  mailbox,
+  id,
+  address,
+  password,
+}: {
+  mailbox: IMAP.IMailbox
   id: string
   address: string
   password: string
@@ -96,21 +110,36 @@ export const deleteMessage = async ({ mailbox, id, address, password }: {
 }
 
 // Send a message.
-export const sendMessage = async ({ body, address, password }: {
-  body: string
+export const sendMessage = async ({
+  to,
+  from,
+  subject,
+  text,
+  address,
+  password,
+}: {
+  to: string[],
+  from: string,
+  subject: string,
+  text: string,
   address: string
   password: string
 }) => {
+  console.log('sending message')
   const serverInfo = makeServerInfo(address, password)
   try {
     const smtpWorker: SMTP.Worker = new SMTP.Worker(serverInfo)
-    await smtpWorker.sendMessage(body)
+    await smtpWorker.sendMessage({
+      to,
+      from,
+      subject,
+      text
+    })
     return true
   } catch (inError) {
     return 'error'
   }
 }
-
 
 export class GmailConnector {
   spellRunner
@@ -142,48 +171,70 @@ export class GmailConnector {
   }
 
   async handler() {
-    const mailboxes = await getMailboxes(this.data.gmail_address, this.data.gmail_password)
-    const messages = mailboxes.map(async mailbox => {
-      const _messages = await getMessagesFromMailbox({
+    const mailboxes = await getMailboxes(
+      this.data.gmail_address,
+      this.data.gmail_password
+    )
+
+    // if mailboxes is not an array, return
+    if (!Array.isArray(mailboxes)) {
+      return
+    }
+
+    mailboxes.map(async mailbox => {
+      const messages = await getMessagesFromMailbox({
         mailbox,
         address: this.data.gmail_address,
         password: this.data.gmail_password,
       })
-      return _messages
-    })
+      // if messages is not an array, return
+      if (!Array.isArray(messages)) {
+        return
+      }
+      messages.map(async message => {
+        const messageBody = await getMessageBody({
+          id: message.id,
+          mailbox: mailbox,
+          address: this.data.gmail_address,
+          password: this.data.gmail_password,
+        })
 
-    messages.map(async message => {
-
-      const resp = await this.spellRunner.runComponent({
-        inputs: {
-          [`Input - Gmail (${type === 'reply' ? 'Reply' : 'Mention'})`]: {
-            content: text,
-            sender: author,
-            observer: this.data.gmail_address,
-            client: 'gmail',
-            channel: (post_thread.data.thread?.post as any)?.uri,
-            agentId: this.agent.id,
-            entities,
-            channelType: type,
-            rawData: JSON.stringify(notif),
+        const resp = await this.spellRunner.runComponent({
+          inputs: {
+            [`Input - Gmail`]: {
+              content: messageBody,
+              sender: message.from,
+              observer: this.data.gmail_address,
+              client: 'gmail',
+              channel: mailbox.name,
+              agentId: this.agent.id,
+              entities: [message.from, this.data.gmail_address], // TODO: Need to get all CC and senders
+              channelType: 'email', // TODO: Determine if sent to us or we are CC'd
+              rawData: JSON.stringify({message, mailbox, messageBody}),
+            },
           },
-        },
-        agent: this.agent,
-        secrets: this.agent.secrets,
-        publicVariables: this.agent.publicVariables,
-        app,
-        runSubspell: true,
+          agent: this.agent,
+          secrets: this.agent.secrets,
+          publicVariables: this.agent.publicVariables,
+          app,
+          runSubspell: true,
+        })
+        console.log('resp is', resp)
       })
-      console.log('resp is', resp)
     })
   }
 
   async handleResponse(resp, event) {
-    const notif = JSON.parse(event.rawData)
-    console.log('handling gmail message', notif)
-    const root = notif.record.reply?.root || notif
-    const content = resp
-    await this.sendReply(content, root, notif)
+    const rawData = JSON.parse(event.rawData)
+
+    await sendMessage({
+      to: [rawData.message.from],
+      from: this.data.gmail_address,
+      subject: 'Re: ' + rawData.message.subject,
+      text: resp,
+      address: this.data.gmail_address,
+      password: this.data.gmail_password,
+    })
   }
 
   destroy() {
