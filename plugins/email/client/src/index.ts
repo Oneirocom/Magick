@@ -1,5 +1,5 @@
 import { ClientPlugin, eventSocket, triggerSocket } from '@magickml/core'
-import { EmailAgentWindow } from './components/agent.component'
+import { GmailAgentWindow } from './components/agent.component'
 
 const inputSockets = [
   {
@@ -22,30 +22,30 @@ const outputSockets = [
   },
 ]
 
-const EmailPlugin = new ClientPlugin({
-  name: 'EmailPlugin',
-  agentComponents: [EmailAgentWindow],
+const GmailPlugin = new ClientPlugin({
+  name: 'GmailPlugin',
+  agentComponents: [GmailAgentWindow],
   inputTypes: [
-    { name: 'Email (Reply)', sockets: inputSockets },
-    { name: 'Email (Mention)', sockets: inputSockets }
+    { name: 'Gmail (Reply)', sockets: inputSockets },
+    { name: 'Gmail (Mention)', sockets: inputSockets }
   ],
   outputTypes: [
-    { name: 'Email (Reply)', sockets: outputSockets },
-    { name: 'Email (Mention)', sockets: outputSockets },
-    { name: 'Email (Post)', sockets: outputSockets }
+    { name: 'Gmail (Reply)', sockets: outputSockets },
+    { name: 'Gmail (Mention)', sockets: outputSockets },
+    { name: 'Gmail (Post)', sockets: outputSockets }
   ],
   secrets: [
     {
       name: 'User ID',
-      key: 'email_identifier',
+      key: 'gmail_address',
       global: false,
     },
     {
       name: 'Password',
-      key: 'email_password',
+      key: 'gmail_password',
       global: false,
     },
   ],
 })
 
-export default EmailPlugin
+export default GmailPlugin

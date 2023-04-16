@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'email',
+  displayName: 'gmail',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -12,5 +12,5 @@ export default {
     '^.+\\.[tj]sx?$': 'ts-jest'
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/plugin-email/server'
+  coverageDirectory: '../../coverage/plugin-gmail/server'
 };
