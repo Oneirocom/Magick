@@ -20,7 +20,6 @@ import {
   globalsManager,
   IGNORE_AUTH,
 } from '@magickml/core'
-import { createClient } from '@supabase/supabase-js'
 
 import { dbClient } from './dbClient'
 import type { Application } from './declarations'
@@ -32,7 +31,7 @@ import { services } from './services'
 import handleSockets from './sockets/sockets'
 
 //Vector DB Related Imports
-import { HNSWLib, SupabaseVectorStoreCustom } from './vectordb'
+import { HNSWLib, PostgressVectorStoreCustom } from './vectordb'
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())
 declare module './declarations' {

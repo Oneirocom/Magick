@@ -1,7 +1,7 @@
 // DOCUMENTED 
 import { createRoot } from 'react-dom/client'
 import { MagickIDE, AppConfig } from '@magickml/editor'
-import { DEFAULT_PROJECT_ID, API_ROOT_URL, TRUSTED_PARENT_URL, UNTRUSTED_IFRAME } from '@magickml/core'
+import { DEFAULT_PROJECT_ID, API_ROOT_URL, TRUSTED_PARENT_URL } from '@magickml/core'
 
 import plugins from './plugins'
 
@@ -46,7 +46,8 @@ else {
 
       // Check for trusted origin
       if (
-        !UNTRUSTED_IFRAME &&
+        TRUSTED_PARENT_URL &&
+        TRUSTED_PARENT_URL !== '' &&
         event.source !== window &&
         event.origin !== window.location.origin &&
         event.origin !== cloudUrl

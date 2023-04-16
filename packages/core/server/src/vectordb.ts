@@ -14,7 +14,11 @@ import {
   SpaceName
 } from "hnswlib-node";
 import { Embeddings } from "langchain/dist/embeddings/base";
+<<<<<<< HEAD
 import {PluginEmbeddings} from "./customEmbedding"
+=======
+import { PluginEmbeddings } from "./customEmbedding"
+>>>>>>> e3c3038e8733bfe39b58f12bdfb0eb07f71685fc
 import path from "node:path";
 
 const InMemoryDocstorePro = import_("langchain/docstore");
@@ -26,11 +30,16 @@ const { SaveableVectorStore } = await SaveableVectorStorePro;
 const SupabaseVectorStorePro = import_("langchain/vectorstores");
 const { SupabaseVectorStore } = await SupabaseVectorStorePro;
 
+
+
+
+
+
 /**
  * Custom implementation of SupabaseVectorStore
- * @extends {SupabaseVectorStore}
+ * @extends {PostgressVectorStore}
  */
-export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
+export class PostgressVectorStoreCustom extends SupabaseVectorStore {
   client: any;
   tableName: string;
   queryName: string;
@@ -64,34 +73,34 @@ export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
    * @returns {Promise<void>}
    */
   async addVectors(vectors: number[][], documents: Document[]): Promise<void> {
-    const res = await this.client.from(this.tableName).insert(documents);
+    const res = await this.client(this.tableName).insert(documents);
     if (res.error) {
       throw new Error(`Error inserting: ${res.error.message} ${res.status} ${res.statusText}`);
     }
   }
 
-  async fromString(text: string, metadata: any[]): Promise<any>{
+  async fromString(text: string, metadata: any[]): Promise<any> {
     const vector = await this.embeddings.embedQuery(text, metadata["projectId"]);
     const insert_data = [{
       embedding: vector,
       data: {
-        metadata: {...metadata, embedding: vector} || {"msg": "Empty Data"},
+        metadata: { ...metadata, embedding: vector } || { "msg": "Empty Data" },
         pageContent: text || "No Content in the Event",
       },
     }]
-    this.addEvents({array: [{...metadata, embedding: vector}]})
+    this.addEvents({ array: [{ ...metadata, embedding: vector }] })
     return insert_data
   }
 
   /**
-   * Add events to the tableName in the Supabase client
+   * Add events to the tableName in the Postgres database
    * @param { array: any[]} events - Array of events
    * @returns {Promise<void>}
    */
   async addEvents(documents: { array: any[] }): Promise<void> {
     documents.array.forEach(async element => {
       console.log(element)
-      const res = await this.client.from(this.tableName).insert(element);
+      const res = await this.client(this.tableName).insert(element);
       if (res.error) {
         throw new Error(`Error inserting: ${res.error.message} ${res.status} ${res.statusText}`);
       }
@@ -99,22 +108,27 @@ export class SupabaseVectorStoreCustom extends SupabaseVectorStore {
   }
 
   /**
-   * Perform rpc on the Supabase client
-   * @param {string} query - Query to be executed
+   * Perform postgres function call
+   * @param {string} query - Query to be executed or the function name
    * @param {Record<string, unknown>} params - Query parameters
    * @returns {Promise<any>}
    */
-  rpc(query: string, params: Record<string, unknown>): Promise<any> {
-    return this.client.rpc(query, params);
+  async rpc(query: string, params: Record<string, unknown>): Promise<any> {
+    const columns = Object.keys(params);
+    const placeholders = columns.map((name) => (params.hasOwnProperty(name) ? `:${name}` : "NULL"));
+    const sql = `SELECT * FROM ${query}(${placeholders.join(", ")})`;
+    console.log(sql)
+    return this.client.raw(sql, params);
   }
+  
 
   /**
-   * Select a table in the Supabase client
+   * Select a table in the Postgres client
    * @param {string} table - Table name
    * @returns {any}
    */
   from(table: string): any {
-    return this.client.from(table);
+    return this.client(table);
   }
 
   /**
@@ -347,7 +361,7 @@ export class HNSWLib extends SaveableVectorStore {
    * @throws {Error} - If vectors are empty
    * @throws {Error} - If index is not initialised
    * @throws {Error} - If index is full
-  */  
+  */
   async addVectors(vectors: number[][], documents: Document[]) {
     if (vectors.length === 0) {
       return;
@@ -555,6 +569,7 @@ export class HNSWLib extends SaveableVectorStore {
     }
     return matchingDocs;
   }
+<<<<<<< HEAD
   async fromString(text: string, metadata: any[]): Promise<any>{
     console.log("metadata", metadata)
     const vector = await this.embeddings.embedQuery(text, (metadata as unknown as {projectId: string}).projectId);
@@ -562,6 +577,15 @@ export class HNSWLib extends SaveableVectorStore {
       embedding: vector,
       data: {
         metadata: {...metadata, embedding: vector} || {"msg": "Empty Data"},
+=======
+  async fromString(text: string, metadata: any[]): Promise<any> {
+    console.log("metadata", metadata)
+    const vector = await this.embeddings.embedQuery(text, (metadata as unknown as { projectId: string }).projectId);
+    const insert_data = [{
+      embedding: vector,
+      data: {
+        metadata: { ...metadata, embedding: vector } || { "msg": "Empty Data" },
+>>>>>>> e3c3038e8733bfe39b58f12bdfb0eb07f71685fc
         pageContent: text || "No Content in the Event",
       },
     }]

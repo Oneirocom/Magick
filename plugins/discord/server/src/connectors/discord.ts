@@ -661,6 +661,7 @@ export class DiscordConnector {
           agentId: this.agent.id,
           entities: entities.map(e => e.user),
           channelType: 'msg',
+          rawData: JSON.stringify(message),
         },
       },
       agent: this.agent,

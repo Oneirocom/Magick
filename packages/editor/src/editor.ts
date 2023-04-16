@@ -39,6 +39,8 @@ import {
 
 import AreaPlugin from './plugins/areaPlugin'
 import { initSharedEngine, MagickEngine } from '@magickml/core'
+import { useSelector } from 'react-redux'
+import { RootState } from './state/store'
 
 /**
  * Extend MagickEngine with additional properties
@@ -144,6 +146,7 @@ export const initEditor = function ({
     scaleExtent: { min: 0.1, max: 1.5 },
     background,
     tab,
+    snap: true,
   })
 
   // Use CommentPlugin
