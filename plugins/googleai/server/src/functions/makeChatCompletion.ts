@@ -45,7 +45,7 @@ export async function makeChatCompletion(
   const settings = {
     prompt: {
       context: system || null,
-      messages: [...conversationMessages, input],
+      messages: [...conversationMessages],
       examples: examples || [],
     },
     candidate_count: 1,
@@ -57,35 +57,45 @@ export async function makeChatCompletion(
   console.log('settings')
   console.log(settings)
 
-  // Create request headers
-  const headers = {
-    'Content-Type': 'application/json',
-  }
+  console.log('GOOGLE API KEY')
+  console.log(context.module.secrets['googleai_api_key'])
 
   try {
     const start = Date.now()
+    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateMessage?key=${context.module.secrets['googleai_api_key']}`
+    console.log('endpoint')
+    console.log(endpoint)
     // Make the API call to GoogleAI
-    const completion = await axios.post(
-      `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateMessage?key=${context.module.secrets['googleai_api_key']}}`,
-      settings,
-      { headers: headers }
+    const completion = await fetch(
+      endpoint,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(settings),
+      }
     )
 
-    if (completion.data.error) {
-      console.error('GoogleAI Error', completion.data.error)
+    const completionData = await completion.json()
+
+    if (completionData.error) {
+      console.error('GoogleAI Error', completionData.error)
     }
 
+    console.log('completionData', completionData)
+
     // Extract the result from the response
-    const result = completion.data?.choices[0]?.message?.content
+    const result = completionData.candidates[0].content
 
     // Log the usage of tokens
-    const usage = completion.data.usage
+    // const usage = completionData.usage
 
     // Save the API request details
     saveRequest({
       projectId: context.projectId,
       requestData: JSON.stringify(settings),
-      responseData: JSON.stringify(completion.data),
+      responseData: JSON.stringify(completionData),
       startTime: start,
       statusCode: completion.status,
       status: completion.statusText,
@@ -93,20 +103,17 @@ export async function makeChatCompletion(
       parameters: JSON.stringify(settings),
       type: 'completion',
       provider: 'googleai',
-      totalTokens: usage.total_tokens,
+      totalTokens: 0, // usage.total_tokens,
       hidden: false,
       processed: false,
       spell: context.currentSpell,
       nodeId: node.id,
     })
 
-    if (
-      result &&
-      completion.data.choices &&
-      completion.data.choices.length > 0
-    ) {
+    if(result) {
       return { success: true, result }
     }
+
     return { success: false, error: 'No result' }
   } catch (err: any) {
     console.error(err)
