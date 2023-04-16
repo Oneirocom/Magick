@@ -1,4 +1,9 @@
 // DOCUMENTED
+import { import_ } from '@brillout/import'
+import { authenticate } from '@feathersjs/authentication'
+import { NotAuthenticated } from '@feathersjs/errors/lib'
+import { HookContext } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers/lib'
 import {
   bodyParser,
   cors,
@@ -7,19 +12,23 @@ import {
   parseAuthentication,
   rest,
 } from '@feathersjs/koa'
-import { authenticate } from '@feathersjs/authentication'
-import { NotAuthenticated } from '@feathersjs/errors/lib'
-import { HookContext } from '@feathersjs/feathers'
 import socketio from '@feathersjs/socketio'
-import { import_ } from '@brillout/import'
-import { feathers } from '@feathersjs/feathers/lib'
 import {
   configureManager,
+  DATABASE_TYPE,
   DEFAULT_PROJECT_ID,
   DEFAULT_USER_ID,
   globalsManager,
   IGNORE_AUTH,
+  PAGINATE_DEFAULT,
+  PAGINATE_MAX,
+  SERVER_HOST,
+  SERVER_PORT,
+  SUPABASE_KEY,
+  SUPABASE_URL,
+  JWT_SECRET,
 } from '@magickml/core'
+import { createClient } from '@supabase/supabase-js'
 
 import { dbClient } from './dbClient'
 import type { Application } from './declarations'
@@ -31,7 +40,16 @@ import { services } from './services'
 import handleSockets from './sockets/sockets'
 
 //Vector DB Related Imports
-import { HNSWLib, PostgressVectorStoreCustom } from './vectordb'
+import { HNSWLib, SupabaseVectorStoreCustom } from './vectordb'
+
+const modules = import_('langchain/embeddings')
+const { FakeEmbeddings } = await modules
+const agentpro = import_('langchain/agents')
+// const { VectorStoreToolkit, createVectorStoreAgent, VectorStoreInfo } =
+//   await agentpro
+// const openaipro = import_('langchain')
+const embeddings = new FakeEmbeddings()
+
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())
 declare module './declarations' {
@@ -40,7 +58,35 @@ declare module './declarations' {
     docdb: HNSWLib & any
   }
 }
-
+if (DATABASE_TYPE == 'sqlite') {
+  console.log('Setting up vector store')
+  const vectordb = HNSWLib.load_data('.', embeddings, {
+    space: 'cosine',
+    numDimensions: 1536,
+    filename: 'database',
+  })
+  const docdb = HNSWLib.load_data('.', embeddings, {
+    space: 'cosine',
+    numDimensions: 1536,
+    filename: 'documents',
+  })
+  app.set('vectordb', vectordb)
+  app.set('docdb', docdb)
+} else {
+  const cli = createClient(SUPABASE_URL, SUPABASE_KEY)
+  const vectordb = new SupabaseVectorStoreCustom(embeddings, {
+    client: cli,
+    tableName: 'events',
+    queryName: 'match_events',
+  })
+  const docdb = new SupabaseVectorStoreCustom(embeddings, {
+    client: cli,
+    tableName: 'documents',
+    queryName: 'match_documents',
+  })
+  app.set('vectordb', vectordb)
+  app.set('docdb', docdb)
+}
 
 /*
 const vectorStoreInfo: typeof VectorStoreInfo = {
@@ -66,12 +112,13 @@ const input =
 // Expose feathers app to other apps that might want to access feathers services directly
 globalsManager.register('feathers', app)
 
-const port = parseInt(process.env.PORT || '3030', 10)
+const port = parseInt(SERVER_PORT || '3030', 10)
 app.set('port', port)
-const host = process.env.HOST || 'localhost'
+const host = SERVER_HOST || 'localhost'
 app.set('host', host)
-const paginateDefault = parseInt(process.env.PAGINATE_DEFAULT || '10', 10)
-const paginateMax = parseInt(process.env.PAGINATE_MAX || '50', 10)
+
+const paginateDefault = parseInt(PAGINATE_DEFAULT || '10', 10)
+const paginateMax = parseInt(PAGINATE_MAX || '50', 10)
 const paginate = {
   default: paginateDefault,
   max: paginateMax,
@@ -90,7 +137,7 @@ app.configure(configureManager())
 // Configure authentication
 if (!IGNORE_AUTH) {
   app.set('authentication', {
-    secret: process.env.JWT_SECRET || 'secret',
+    secret: JWT_SECRET || 'secret',
     entity: null,
     authStrategies: ['jwt'],
     jwtOptions: {
