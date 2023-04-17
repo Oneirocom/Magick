@@ -17,6 +17,7 @@ let characterIsChanged = false
 
 const animationUrl = '/3d/magic idle.fbx';
 const characterUrl = '/3d/avatar.vrm'
+let dropfile;
 
 export default function App() {
   const [micEnabled, setMicEnabled] = React.useState(false)
@@ -52,14 +53,19 @@ export default function App() {
   useEffect(() => {
     isFirstRender = false;
     (async () => {
-      const vrm = await loadVRM(characterUrl)
+      let vrm;
+
+      if(dropfile) {
+        vrm = await loadVRM(dropfile)
+      }
+      else  vrm = await loadVRM(characterUrl)
+      
       characterIsChanged = true
       
       await applyAnimation(animationUrl, vrm)
       setCharacterModel(vrm)
     })()
   }, [])
-
 
   // Update character model third-party library integrations
   useEffect(() => {
@@ -80,6 +86,7 @@ export default function App() {
     (async () => {
       const reader = new FileReader();
       const obj = URL.createObjectURL(file)
+      dropfile = obj;
       const characterModel = await loadVRM(obj)
       characterIsChanged = true
       await applyAnimation(animationUrl, characterModel)
