@@ -1,33 +1,33 @@
-// DOCUMENTED 
-import DeleteOutlined from '@mui/icons-material/DeleteOutlined';
-import { IconButton, Table, TableCell, TableRow } from '@mui/material';
-import Button from '@mui/material/Button';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import useSWR, { mutate } from 'swr';
-import useAuthentication from '../account/useAuthentication';
-import ErrorMessage from '../components/ErrorMessage';
-import Loading from '../components/Loading';
-import { OpenAI } from '../types/openai';
+// DOCUMENTED
+import DeleteOutlined from '@mui/icons-material/DeleteOutlined'
+import { IconButton, Table, TableCell, TableRow } from '@mui/material'
+import Button from '@mui/material/Button'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+import useSWR, { mutate } from 'swr'
+import useAuthentication from '../account/useAuthentication'
+import ErrorMessage from '../components/ErrorMessage'
+import Loading from '../components/Loading'
+import { OpenAI } from '../types/openai'
 
-import { OPENAI_ENDPOINT } from '../constants';
+import { OPENAI_ENDPOINT } from '../constants'
 
 /**
  * FineTuneList component displays a list of fine-tuned models.
  */
 export default function FineTuneList() {
-  const { data, error } = useSWR<OpenAI.List<OpenAI.FineTune>>('fine-tunes');
+  const { data, error } = useSWR<OpenAI.List<OpenAI.FineTune>>('fine-tunes')
 
-  if (error) return <ErrorMessage error={error} />;
-  if (!data) return <Loading />;
-  const fineTunes = data.data;
+  if (error) return <ErrorMessage error={error} />
+  if (!data) return <Loading />
+  const fineTunes = data.data
 
   if (fineTunes.length === 0) {
     return (
       <div className="my-4">
         <b>No fine-tuned models</b>
       </div>
-    );
+    )
   }
 
   return (
@@ -35,7 +35,7 @@ export default function FineTuneList() {
       <Processing fineTunes={fineTunes} />
       <FineTunesTable fineTunes={fineTunes} />
     </>
-  );
+  )
 }
 
 /**
@@ -46,20 +46,20 @@ export default function FineTuneList() {
 function Processing({ fineTunes }: { fineTunes: OpenAI.FineTune[] }) {
   const processing = fineTunes.filter(
     fineTune => fineTune.status !== 'succeeded'
-  );
+  )
 
   // Update the list of fine-tunes periodically to refresh processing statuses
   useEffect(
     function () {
-      if (processing.length === 0) return;
+      if (processing.length === 0) return
 
       const interval = setInterval(() => {
-        mutate('fine-tunes');
-      }, 1000);
-      return () => clearInterval(interval);
+        mutate('fine-tunes')
+      }, 1000)
+      return () => clearInterval(interval)
     },
     [processing]
-  );
+  )
 
   return (
     <ol className="m-0 list-none">
@@ -69,7 +69,7 @@ function Processing({ fineTunes }: { fineTunes: OpenAI.FineTune[] }) {
         </li>
       ))}
     </ol>
-  );
+  )
 }
 
 /**
@@ -78,7 +78,7 @@ function Processing({ fineTunes }: { fineTunes: OpenAI.FineTune[] }) {
  * @param {OpenAI.FineTune[]} props.fineTunes - An array of fine-tune objects
  */
 function FineTunesTable({ fineTunes }: { fineTunes: OpenAI.FineTune[] }) {
-  const ready = fineTunes.filter(fineTune => fineTune.status === 'succeeded');
+  const ready = fineTunes.filter(fineTune => fineTune.status === 'succeeded')
   return (
     <Table>
       {ready
@@ -100,9 +100,9 @@ function FineTunesTable({ fineTunes }: { fineTunes: OpenAI.FineTune[] }) {
             </TableCell>
             <TableCell
               className="p-2 max-w-0 truncate"
-              title={new Date(fineTune.updatedAt * 1000).toISOString()}
+              title={new Date(fineTune.updatedAt).toLocaleString()}
             >
-              {new Date(fineTune.updatedAt * 1000).toLocaleString()}
+              {new Date(fineTune.updatedAt).toLocaleString()}
             </TableCell>
             <TableCell className="p-2 w-8">
               <DeleteFineTune id={fineTune.id} />
@@ -110,7 +110,7 @@ function FineTunesTable({ fineTunes }: { fineTunes: OpenAI.FineTune[] }) {
           </TableRow>
         ))}
     </Table>
-  );
+  )
 }
 
 /**
@@ -119,21 +119,21 @@ function FineTunesTable({ fineTunes }: { fineTunes: OpenAI.FineTune[] }) {
  * @param {string} props.id - Fine-tune ID
  */
 function CancelFineTune({ id }: { id: string }) {
-  const { headers } = useAuthentication();
-  const [isLoading, setIsLoading] = useState(false);
+  const { headers } = useAuthentication()
+  const [isLoading, setIsLoading] = useState(false)
 
   async function onClick() {
     try {
-      setIsLoading(true);
+      setIsLoading(true)
       await fetch(`${OPENAI_ENDPOINT}/fine-tunes/${id}/cancel`, {
         method: 'PSOT',
         headers,
-      });
-      await mutate('tune-tunes');
+      })
+      await mutate('tune-tunes')
     } catch (error) {
-      toast.error(String(error));
+      toast.error(String(error))
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
   }
 
@@ -141,7 +141,7 @@ function CancelFineTune({ id }: { id: string }) {
     <Button disabled={isLoading} onClick={onClick}>
       Cancel
     </Button>
-  );
+  )
 }
 
 /**
@@ -150,22 +150,25 @@ function CancelFineTune({ id }: { id: string }) {
  * @param {string} props.id - Fine-tune ID
  */
 function DeleteFineTune({ id }: { id: string }) {
-  const { headers } = useAuthentication();
-  const [isDeleting, setIsDeleting] = useState(false);
+  const { headers } = useAuthentication()
+  const [isDeleting, setIsDeleting] = useState(false)
 
   async function onClick() {
     try {
-      setIsDeleting(true);
-      if (typeof window !== 'undefined' && window.confirm('Are you sure you want to delete this model?')) {
+      setIsDeleting(true)
+      if (
+        typeof window !== 'undefined' &&
+        window.confirm('Are you sure you want to delete this model?')
+      ) {
         await fetch(`${OPENAI_ENDPOINT}/models/${id}`, {
           method: 'DELETE',
           headers,
-        });
-        await mutate('files');
+        })
+        await mutate('files')
       }
     } catch (error) {
-      toast.error(String(error));
-      setIsDeleting(false);
+      toast.error(String(error))
+      setIsDeleting(false)
     }
   }
 
@@ -173,5 +176,5 @@ function DeleteFineTune({ id }: { id: string }) {
     <IconButton onClick={onClick} disabled={isDeleting}>
       <DeleteOutlined fontSize="medium" />
     </IconButton>
-  );
+  )
 }
