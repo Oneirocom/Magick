@@ -81,25 +81,27 @@ export const document = (app: Application) => {
               return context;
             }else{
               const docdb = app.get('vectordb')
+              console.log(context.data)
               const insert_data = [{
                 embedding: embedding,
-                data: {
-                  metadata: {...context.data} || {"msg": "Empty Data"},
+                metadata: {
+                  ...context.data,
+                  id: uuidv4(),
                   pageContent: context.data['content'] || "No Content in the Event",
                 },
               }]
-              await docdb.addEmbeddingsWithData(insert_data);
+              await docdb.fromString(context.data['content'], insert_data);
             }      
           } else {
             if (DATABASE_TYPE == "pg") {
               context.data.embedding = pgvector.toSql(nullArray)
               return context;
             } else {
-              const docdb = app.get('docdb')
               const insert_data = [{
-                embedding: nullArray,
-                data: {
-                  metadata: {...context.data} || {"msg": "Empty Data"},
+                embedding: embedding,
+                metadata: {
+                  ...context.data,
+                  id: uuidv4(),
                   pageContent: context.data['content'] || "No Content in the Event",
                 },
               }]
