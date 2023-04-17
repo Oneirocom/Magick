@@ -52,6 +52,7 @@ Local development is straightforward. You will need git and node.js 18+ installe
 ```
 git clone https://github.com/Oneirocom/Magick
 cd Magick
+npm install
 npm run dev
 ```
 ## Setup
@@ -59,6 +60,7 @@ First, clone and set up Magick
 ```
 git clone https://github.com/Oneirocom/Magick
 cd Magick
+npm install
 ```
 ## Run Magick!
 ```
