@@ -14,7 +14,8 @@ You will need git and node.js 18+ installed.
 ```
 git clone https://github.com/Oneirocom/Magick
 cd Magick
+npm install
 npm run dev
 ```
 
-You can run `npm install` as needed, but `npm run dev` will also run install if anything has changed.
+You can run `npm install` as needed, but `npm run dev` will also run install if anything has changed. However, you will need to run `npm install` the first time you download Magick.
