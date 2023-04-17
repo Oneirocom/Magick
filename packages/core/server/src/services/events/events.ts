@@ -106,7 +106,7 @@ export const event = (app: Application) => {
               const insert_data = [{
                 embedding: nullArray,
                 data: {
-                  metadata: {...context.data} || {"msg": "Empty Data"},
+                  metadata: {...context.data, id: uuidv4()} || {"msg": "Empty Data"},
                   pageContent: context.data['content'] || "No Content in the Event",
                 },
               }]

@@ -82,7 +82,6 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
   async fromString(text: string, metadata: any[]): Promise<any> {
     if (text.length > 8000){
       const [vectors, split_docs] = await this.embeddings.embedDocuments(text);
-      console.log(vectors.length, split_docs.length)
       vectors.forEach(async (vector, index) => {
         console.log(split_docs[index])
         console.log(index, vector)
@@ -306,7 +305,6 @@ export class HNSWLib extends SaveableVectorStore {
     const vectors: number[][] = [];
     const documents: Document[] = [];
     for (const { embedding, data } of embeddings) {
-      console.log(embedding)
       if (embedding) {
         if (embedding.length !== this.args.numDimensions) {
           throw new Error(
@@ -317,7 +315,6 @@ export class HNSWLib extends SaveableVectorStore {
       }
       documents.push(new Document(data));
     }
-
     await this.addVectors(vectors, documents);
   }
 
@@ -404,7 +401,6 @@ export class HNSWLib extends SaveableVectorStore {
     if (needed > capacity) {
       this.index.resizeIndex(needed);
     }
-
     const docstoreSize = this.docstore.count;
     for (let i = 0; i < vectors.length; i += 1) {
       const id_str = documents[i].metadata?.id;
@@ -572,12 +568,10 @@ export class HNSWLib extends SaveableVectorStore {
   async getDataWithMetadata(query: Record<string, unknown>, k = 1): Promise<Record<string, unknown>[]> {
     const queryKeys = Object.keys(query);
     const matchingDocs: Record<string, unknown>[] = [];
-    //console.log(this.docstore._docs.entries())
     for (const doc of this.docstore._docs.values()) {
       for (const key of queryKeys) {
 
         if ((query["content"] == undefined) && (doc.metadata["projectId"] == query["projectId"])) {
-          //console.log(doc.metadata[key], query[key])
           matchingDocs.push(doc.metadata);
           break;
         }
@@ -596,21 +590,22 @@ export class HNSWLib extends SaveableVectorStore {
    * @param metadata - Metadata to create documents from
   */
   async fromString(text: string, metadata: any[]): Promise<any> {
-    if(typeof text != 'string') return "Text is not a string"
     if (text.length > 8000){
-      const [vector, blob] = await this.embeddings.embedDocuments(text, (metadata as unknown as { projectId: string }).projectId);
-      vector.forEach((v, i) => {
+      const [vectors, split_docs] = await this.embeddings.embedDocuments(text);
+      vectors.forEach(async (vector, index) => {
         const insert_data = [{
-          embedding: v,
+          embedding: vector,
+          pageContent: split_docs[index] || "No Content in the Event",
           data: {
-            metadata: { ...metadata, embedding: v } || { "msg": "Empty Data" },
-            pageContent: blob[i] || "No Content in the Event",
+            metadata: { ...metadata[0].metadata, id: uuidv4(), embedding: vector , content: split_docs[index]} || { "msg": "Empty Data" },
+            pageContent: split_docs[index] || "No Content in the Event",
           },
         }]
         this.addEmbeddingsWithData(insert_data);
       })
+      return;
     }
-    const vector = await this.embeddings.embedQuery(text, (metadata as unknown as { projectId: string }).projectId);
+    const vector = await this.embeddings.embedQuery(text, metadata["projectId"]);
     const insert_data = [{
       embedding: vector,
       data: {
@@ -618,7 +613,7 @@ export class HNSWLib extends SaveableVectorStore {
         pageContent: text || "No Content in the Event",
       },
     }]
-    this.addEmbeddingsWithData(insert_data);
+    this.addVectors([vector], metadata)
     return insert_data
   }
   //TODO: This function is redundant and should be removed, base class requires it
