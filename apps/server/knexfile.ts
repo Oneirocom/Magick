@@ -1,7 +1,5 @@
-import { DATABASE_TYPE, DATABASE_URL } from '@magickml/core'
-
-const dbType = DATABASE_TYPE
-const dbURL = DATABASE_URL
+const dbType = process.env.DATABASE_TYPE
+const dbURL = process.env.DATABASE_URL
 const configs = {
   pg: {
     client: dbType,
