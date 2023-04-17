@@ -61,7 +61,6 @@ const FileListTable: React.FC<Props> = ({ linkTo, purpose }) => {
       </div>
     )
   }
-  console.log(files)
   /**
    * Render table of files
    */
