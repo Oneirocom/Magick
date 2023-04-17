@@ -1,25 +1,25 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Imports
  */
-import React from 'react';
+import React from 'react'
 
-import ErrorMessage from '../components/ErrorMessage';
-import Loading from '../components/Loading';
-import DeleteFileButton from './DeleteFileButton';
+import ErrorMessage from '../components/ErrorMessage'
+import Loading from '../components/Loading'
+import DeleteFileButton from './DeleteFileButton'
 
-import useSWR from 'swr';
+import useSWR from 'swr'
 
-import { OpenAI } from '../types/openai';
+import { OpenAI } from '../types/openai'
 
-import { Table, TableCell } from '@mui/material';
+import { Table, TableCell } from '@mui/material'
 
 /**
  * Props interface
  */
 interface Props {
-  linkTo?: (file: OpenAI.File) => string;
-  purpose: OpenAI.Purpose;
+  linkTo?: (file: OpenAI.File) => string
+  purpose: OpenAI.Purpose
 }
 
 /**
@@ -32,22 +32,24 @@ const FileListTable: React.FC<Props> = ({ linkTo, purpose }) => {
   /**
    * Fetch the list of files from SWR
    */
-  const { data, error } = useSWR<OpenAI.List<OpenAI.File>>('files');
+  const { data, error } = useSWR<OpenAI.List<OpenAI.File>>('files')
 
   /**
    * Display error
    */
-  if (error) return <ErrorMessage error={error} />;
+  if (error) return <ErrorMessage error={error} />
 
   /**
    * Display loading icon
    */
-  if (!data) return <Loading />;
+  if (!data) return <Loading />
 
   /**
    * Filter files by purpose
    */
-  const files = data.data.filter((file: OpenAI.File) => file.purpose === purpose);
+  const files = data.data.filter(
+    (file: OpenAI.File) => file.purpose === purpose
+  )
 
   /**
    * Display 'No Files Uploaded' message
@@ -57,9 +59,9 @@ const FileListTable: React.FC<Props> = ({ linkTo, purpose }) => {
       <div className="my-4">
         <b>No files uploaded</b>
       </div>
-    );
+    )
   }
-
+  console.log(files)
   /**
    * Render table of files
    */
@@ -70,23 +72,22 @@ const FileListTable: React.FC<Props> = ({ linkTo, purpose }) => {
         .map((file: OpenAI.File, index: number) => (
           <tr className={index % 2 === 0 ? 'bg-gray-100' : ''} key={file.id}>
             <TableCell className="p-2 max-w-0 truncate" title={file.id}>
-              {
-                linkTo
-                  ? (
-                    <a href={linkTo(file)}>
-                      <span>{file.id}</span>
-                    </a>
-                    )
-                  : (
-                    <span>{file.id}</span>
-                    )
-              }
+              {linkTo ? (
+                <a href={linkTo(file)}>
+                  <span>{file.id}</span>
+                </a>
+              ) : (
+                <span>{file.id}</span>
+              )}
             </TableCell>
             <TableCell className="p-2 max-w-0 truncate" title={file.filename}>
               <span>{file.filename}</span>
             </TableCell>
-            <TableCell className="p-2 max-w-0 truncate" title={new Date(file.createdAt * 1000).toISOString()}>
-              {new Date(file.createdAt * 1000).toLocaleString()}
+            <TableCell
+              className="p-2 max-w-0 truncate"
+              title={new Date(file.createdAt).toLocaleString()}
+            >
+              {new Date(file.createdAt).toLocaleString()}
             </TableCell>
             <TableCell className="p-2 w-8">
               <DeleteFileButton id={file.id} />
@@ -94,10 +95,10 @@ const FileListTable: React.FC<Props> = ({ linkTo, purpose }) => {
           </tr>
         ))}
     </Table>
-  );
-};
+  )
+}
 
 /**
  * Exports
  */
-export default FileListTable;
+export default FileListTable
