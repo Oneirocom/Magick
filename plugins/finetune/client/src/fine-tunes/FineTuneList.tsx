@@ -82,7 +82,7 @@ function FineTunesTable({ fineTunes }: { fineTunes: OpenAI.FineTune[] }) {
   return (
     <Table>
       {ready
-        .sort((a, b) => b.updatedAt - a.updatedAt)
+        .sort((a, b) => b.updated_at - a.updated_at)
         .map((fineTune, index) => (
           <TableRow
             // className={index % 2 === 0 ? 'bg-gray-100' : ''}
@@ -100,9 +100,9 @@ function FineTunesTable({ fineTunes }: { fineTunes: OpenAI.FineTune[] }) {
             </TableCell>
             <TableCell
               className="p-2 max-w-0 truncate"
-              title={new Date(fineTune.updatedAt).toLocaleString()}
+              title={new Date(fineTune.updated_at).toLocaleString()}
             >
-              {new Date(fineTune.updatedAt).toLocaleString()}
+              {new Date(fineTune.updated_at).toLocaleString()}
             </TableCell>
             <TableCell className="p-2 w-8">
               <DeleteFineTune id={fineTune.id} />

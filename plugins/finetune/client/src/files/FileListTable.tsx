@@ -67,7 +67,7 @@ const FileListTable: React.FC<Props> = ({ linkTo, purpose }) => {
   return (
     <Table>
       {files
-        .sort((a, b) => b.createdAt - a.createdAt)
+        .sort((a, b) => b.created_at - a.created_at)
         .map((file: OpenAI.File, index: number) => (
           <tr className={index % 2 === 0 ? 'bg-gray-100' : ''} key={file.id}>
             <TableCell className="p-2 max-w-0 truncate" title={file.id}>
@@ -84,9 +84,9 @@ const FileListTable: React.FC<Props> = ({ linkTo, purpose }) => {
             </TableCell>
             <TableCell
               className="p-2 max-w-0 truncate"
-              title={new Date(file.createdAt).toLocaleString()}
+              title={new Date(file.created_at).toISOString()}
             >
-              {new Date(file.createdAt).toLocaleString()}
+              {new Date(file.created_at).toLocaleString()}
             </TableCell>
             <TableCell className="p-2 w-8">
               <DeleteFileButton id={file.id} />
