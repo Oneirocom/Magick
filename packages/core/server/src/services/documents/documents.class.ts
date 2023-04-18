@@ -37,7 +37,7 @@ export class DocumentService<
   async create(data: DocumentData): Promise<any> {
     if (DATABASE_TYPE == 'pg'){
       const docdb = app.get('docdb')
-      await docdb.fromString(data.content, data);
+      //await docdb.fromString(data.content, data);
     }
     return data
   }
