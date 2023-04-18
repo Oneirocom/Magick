@@ -20,15 +20,13 @@ import {
   Handler,
   Method,
   Middleware,
-  Route,
-  setupDB
+  Route
 } from '@magickml/server-core'
 
 // log handle errors
 process.on('uncaughtException', (err: Error) => {
   console.error('uncaughtException', err)
 })
-
 
 process.on(
   'unhandledRejection',
