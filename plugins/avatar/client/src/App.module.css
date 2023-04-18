@@ -70,13 +70,18 @@
     z-index: 99999;
   }
 
-  span.spellListTitle {
+  .spellSelectorContainer{
+    padding: 24px;
     text-align: left;
-    margin-left: 26px;
+    padding-bottom: 0;
+  }
+
+  .spellListTitle {
   }
   
   select.spellSelector {
-    width: 90%;
+    padding: 0.3em;
+    margin-top: 8px;
   }
 
   .sxpContainer {
