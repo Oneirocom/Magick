@@ -1,11 +1,28 @@
-import bm25 from "wink-bm25-text-search"
+
+import Rete from 'rete';
+
+import {
+    InputControl,
+    MagickComponent,
+    MagickNode,
+    MagickWorkerInputs,
+    MagickWorkerOutputs,
+    ModuleContext,
+    SocketGeneratorControl,
+    stringSocket,
+    triggerSocket,
+    WorkerData
+} from "@magickml/core";
+
+import bm25 from "wink-bm25-text-search";
+import model from "wink-eng-lite-web-model";
 import winkNLP from "wink-nlp";
-import model from "wink-eng-lite-web-model"
-import soundex from "wink-nlp-utils/src/string-soundex.js"
+import soundex from "wink-nlp-utils/src/string-soundex.js";
+
 const nlp = winkNLP(model);
 const its = nlp.its;
 const prepTask = function (text) {
-    const tokens = [];
+    const tokens: any[] = [];
     nlp
       .readDoc(text)
       .tokens()
@@ -18,7 +35,6 @@ const prepTask = function (text) {
         const tokenWithNegation = t.out(its.negationFlag)
           ? "!" + tokenSoundex
           : tokenSoundex;
-        //@ts-ignore
         tokens.push(tokenWithNegation);
       });
   
@@ -58,22 +74,6 @@ function recommendTools(tools, inputText) {
         return {...tool, score: result.score};
       });
 }
-
-// DOCUMENTED 
-import Rete from 'rete'
-
-import { API_ROOT_URL } from '../../config';
-import { MagickComponent } from '../../engine';
-import { arraySocket, stringSocket, triggerSocket } from '../../sockets';
-import {
-    MagickNode,
-    MagickWorkerInputs,
-    MagickWorkerOutputs,
-    ModuleContext,
-    WorkerData
-} from '../../types';
-import { InputControl } from "../../dataControls/InputControl";
-import { SocketGeneratorControl } from "../../dataControls/SocketGenerator";
 
 const info = 'Select an agent based on the input prompt.';
 
