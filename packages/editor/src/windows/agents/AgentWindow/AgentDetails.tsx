@@ -166,6 +166,8 @@ const AgentDetails = ({
               onKeyDown={e => {
                 if (e.key === 'Enter') {
                   update(selectedAgentData.id)
+                  setEditMode(false)
+                  setOldName('')
                 }
               }}
             />

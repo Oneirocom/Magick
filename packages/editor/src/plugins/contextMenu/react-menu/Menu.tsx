@@ -15,7 +15,7 @@
 import styles from './style.module.scss'
 import Item from './Item'
 import Context from './context'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function ContextMenu({
   items,
@@ -33,13 +33,16 @@ export default function ContextMenu({
   type?: string
 }): JSX.Element {
   const [search, setSearch] = useState<string>('')
+  const searchbarRef = useRef(null)
   /**
    * This effect sets the focus on the search bar when the context menu is rendering.
    */
+
   useEffect(() => {
-    const searchbar = document?.querySelector('.context-menu-search-bar')
-    if (searchbar) searchbar.focus()
-  }, [])
+    if (searchbarRef.current) {
+      searchbarRef.current.focus()
+    }
+  }, [visible])
 
   if (!visible) return null
 
@@ -51,6 +54,7 @@ export default function ContextMenu({
       >
         {type === 'list' && (
           <input
+            ref={searchbarRef}
             type="text"
             placeholder="Search"
             className={`${styles['search-bar']} context-menu-search-bar`}
