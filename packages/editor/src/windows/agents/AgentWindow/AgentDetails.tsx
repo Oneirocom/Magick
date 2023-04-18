@@ -64,6 +64,14 @@ const AgentDetails = ({
       delete _data?.dirty
     }
 
+    // If there is no root spell selected, cancel and show error
+    if (!_data?.rootSpell?.id) {
+      enqueueSnackbar('Please select a root spell', {
+        variant: 'error',
+      })
+      return
+    }
+
     // Avoid server-side validation error
     _data.spells = Array.isArray(_data?.spells)
       ? JSON.stringify(_data.spells)
@@ -81,14 +89,13 @@ const AgentDetails = ({
     })
       .then(res => res.json())
       .then(data => {
+        enqueueSnackbar('Updated agent', {
+          variant: 'success',
+        })
+        setSelectedAgentData(data)
 
-          enqueueSnackbar('Updated agent', {
-            variant: 'success',
-          })
-          setSelectedAgentData(data)
-
-          // update data instead of refetching data to avoid agent window flashes
-          updateData(data)
+        // update data instead of refetching data to avoid agent window flashes
+        updateData(data)
       })
       .catch(e => {
         console.error('ERROR', e)
