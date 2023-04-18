@@ -19,7 +19,13 @@ import {
   SaveableVectorStore,
   SupabaseVectorStore,
 } from 'langchain/vectorstores'
+import { EmbeddingArgs } from './customEmbeddings'
 
+
+export type ExtendedEmbeddings = Embeddings & {
+  embedQueryWithMeta: (query: string, args: EmbeddingArgs) => Promise<any>
+  embedDocumentsWithMeta: (documents: string, args: EmbeddingArgs) => Promise<any>
+}
 /**
  * Custom implementation of SupabaseVectorStore
  * @extends {PostgressVectorStore}
@@ -29,7 +35,7 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
   tableName: string
   queryName: string
 
-  constructor(embeddings: Embeddings, args: Record<string, any>) {
+  constructor(embeddings: ExtendedEmbeddings, args: Record<string, any>) {
     super(embeddings, args as any)
 
     this.client = args.client
@@ -76,23 +82,10 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
    * @returns {Promise<any>} - Array of documents
    * @async
    */
-  async fromString(text: string, metadata: any[]): Promise<any> {
+  async fromString(text: string, metadata: any[], args: EmbeddingArgs): Promise<any> {
     if (text.length > 8000) {
-      const [vectors, split_docs] = await this.embeddings.embedDocuments([text])
+      const [vectors, split_docs] = await (this.embeddings as ExtendedEmbeddings).embedDocumentsWithMeta(text, args)
       vectors.forEach(async (vector, index) => {
-        console.log(split_docs[index])
-        console.log(index, vector)
-        const insert_data = [
-          {
-            embedding: vector,
-            data: {
-              metadata: { ...metadata, embedding: vector } || {
-                msg: 'Empty Data',
-              },
-              pageContent: split_docs[index] || 'No Content in the Event',
-            },
-          },
-        ]
         metadata['id'] = uuidv4()
         metadata['content'] = split_docs[index]
         this.addEvents({
@@ -101,8 +94,7 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
       })
       return
     }
-    const vector = await this.embeddings.embedQuery(text)
-    console.log(vector)
+    const vector = await (this.embeddings as ExtendedEmbeddings).embedQueryWithMeta(text, args)
     const insert_data = [
       {
         embedding: vector,
@@ -125,7 +117,6 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
    */
   async addEvents(documents: { array: any[] }): Promise<void> {
     documents.array.forEach(async element => {
-      console.log(element)
       const res = await this.client(this.tableName).insert(element)
       if (res.error) {
         throw new Error(
@@ -147,7 +138,6 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
       params[name] ? `:${name}` : 'NULL'
     )
     const sql = `SELECT * FROM ${query}(${placeholders.join(', ')})`
-    console.log(sql)
     return this.client.raw(sql, params)
   }
 
@@ -320,7 +310,6 @@ export class HNSWLib extends SaveableVectorStore {
     const vectors: number[][] = []
     const documents: Document[] = []
     for (const { embedding, data } of embeddings) {
-      console.log(embedding)
       if (embedding) {
         if (embedding.length !== this.args.numDimensions) {
           throw new Error(
@@ -329,6 +318,7 @@ export class HNSWLib extends SaveableVectorStore {
         }
         vectors.push(embedding)
       }
+      //@ts-ignore
       documents.push(new Document(data))
     }
     await this.addVectors(vectors, documents)
@@ -647,10 +637,11 @@ export class HNSWLib extends SaveableVectorStore {
    * Creates documents from the text and metadata
    * @param text - Texts to create documents from
    * @param metadata - Metadata to create documents from
+   * @param {EmbeddingArgs} args - Embedding Args
    */
-  async fromString(text: string, metadata: any[]): Promise<any> {
+  async fromString(text: string, metadata: any[], args: EmbeddingArgs): Promise<any> {
     if (text.length > 8000) {
-      const [vectors, split_docs] = await this.embeddings.embedDocuments(text)
+      const [vectors, split_docs] = await (this.embeddings as ExtendedEmbeddings).embedDocumentsWithMeta(text, args)
       vectors.forEach(async (vector, index) => {
         const insert_data = [
           {
@@ -671,7 +662,7 @@ export class HNSWLib extends SaveableVectorStore {
       })
       return
     }
-    const vector = await this.embeddings.embedQuery(text, metadata['projectId'])
+    const vector = await (this.embeddings as ExtendedEmbeddings).embedQueryWithMeta(text, args)
     const insert_data = [
       {
         embedding: vector,
