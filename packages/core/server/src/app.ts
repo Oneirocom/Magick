@@ -9,7 +9,7 @@ import {
   errorHandler,
   koa,
   parseAuthentication,
-  rest
+  rest,
 } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
 import {
@@ -17,7 +17,7 @@ import {
   DEFAULT_PROJECT_ID,
   DEFAULT_USER_ID,
   globalsManager,
-  IGNORE_AUTH
+  IGNORE_AUTH,
 } from '@magickml/core'
 
 import { dbClient } from './dbClient'
@@ -30,17 +30,22 @@ import { services } from './services'
 import handleSockets from './sockets/sockets'
 
 //Vector DB Related Imports
-import { HNSWLib, PostgressVectorStoreCustom, ExtendedEmbeddings } from './vectordb'
+import {
+  HNSWLib,
+  PostgressVectorStoreCustom,
+  ExtendedEmbeddings,
+} from './vectordb'
 import { PluginEmbeddings } from './customEmbeddings'
 import type { Knex } from 'knex'
+
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())
 
 declare module './declarations' {
   interface Configuration {
-    dbClient: Knex,
-    vectordb: HNSWLib | PostgressVectorStoreCustom| any
-    docdb: HNSWLib | PostgressVectorStoreCustom| any
+    dbClient: Knex
+    vectordb: HNSWLib | PostgressVectorStoreCustom | any
+    docdb: HNSWLib | PostgressVectorStoreCustom | any
   }
 }
 
@@ -67,37 +72,35 @@ app.use(bodyParser())
 // Configure app management settings
 app.configure(configureManager())
 
-
 const embeddings = new PluginEmbeddings({}) as unknown as ExtendedEmbeddings
 if (process.env.DATABASE_TYPE == 'sqlite') {
-    console.log('Setting up vector store')
-    const vectordb = HNSWLib.load_data('.', embeddings, {
-        space: 'cosine',
-        numDimensions: 1536,
-        filename: 'database',
-    })
-    const docdb = HNSWLib.load_data('.', embeddings, {
-        space: 'cosine',
-        numDimensions: 1536,
-        filename: 'documents',
-    })
-    app.set('vectordb', vectordb)
-    app.set('docdb', docdb)
+  console.log('Setting up vector store')
+  const vectordb = HNSWLib.load_data('.', embeddings, {
+    space: 'cosine',
+    numDimensions: 1536,
+    filename: 'database',
+  })
+  const docdb = HNSWLib.load_data('.', embeddings, {
+    space: 'cosine',
+    numDimensions: 1536,
+    filename: 'documents',
+  })
+  app.set('vectordb', vectordb)
+  app.set('docdb', docdb)
 } else {
-    const vectordb = new PostgressVectorStoreCustom(embeddings, {
-        client: app.get('dbClient'),
-        tableName: 'events',
-        queryName: 'match_events',
-    })
-    const docdb = new PostgressVectorStoreCustom(embeddings, {
-        client: app.get('dbClient'),
-        tableName: 'documents',
-        queryName: 'match_documents',
-    })
-    app.set('vectordb', vectordb)
-    app.set('docdb', docdb)
+  const vectordb = new PostgressVectorStoreCustom(embeddings, {
+    client: app.get('dbClient'),
+    tableName: 'events',
+    queryName: 'match_events',
+  })
+  const docdb = new PostgressVectorStoreCustom(embeddings, {
+    client: app.get('dbClient'),
+    tableName: 'documents',
+    queryName: 'match_documents',
+  })
+  app.set('vectordb', vectordb)
+  app.set('docdb', docdb)
 }
-
 
 // Configure authentication
 if (!IGNORE_AUTH) {

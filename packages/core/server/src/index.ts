@@ -11,7 +11,6 @@ export * from './api';
 // Export the main app module
 export * from './app';
 
-
 // Configuration-related exports
 export * from './config/configuration';
 export * from './config/types';
