@@ -1,6 +1,6 @@
 // Library imports.
 import { ParsedMail, simpleParser } from 'mailparser';
-import ImapClient from 'gmailjs-imap-client';
+import ImapClient from 'emailjs-imap-client';
 
 // App imports.
 import { IServerInfo } from './IServerInfo'
@@ -95,7 +95,7 @@ export class Worker {
 
     await client.close();
 
-    // Translate from gmailjs-imap-client mailbox objects to app-specific objects.  At the same time, flatten the list
+    // Translate from emailjs-imap-client mailbox objects to app-specific objects.  At the same time, flatten the list
     // of mailboxes via recursion.
     const finalMailboxes: IMailbox[] = [];
     const iterateChildren = (inArray: any[]): void => {
@@ -146,7 +146,7 @@ export class Worker {
 
     await client.close();
 
-    // Translate from gmailjs-imap-client message objects to app-specific objects.
+    // Translate from emailjs-imap-client message objects to app-specific objects.
     const finalMessages: IMessage[] = [];
     messages.forEach((inValue: any) => {
       finalMessages.push({
