@@ -127,7 +127,7 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
         </div>
       </div>
       {editMode && (
-        <Modal open={editMode} onClose={handleClose} onSubmit={handleSave}>
+        <Modal open={editMode} onClose={handleClose} handleAction={handleSave}>
           <div>
             <div>
               <span className="form-item-label">Loop Interval</span>
