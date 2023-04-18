@@ -13,7 +13,7 @@ import {
   HierarchicalNSW,
   SpaceName
 } from "hnswlib-node";
-import { Embeddings } from "langchain/dist/embeddings/base";
+import { Embeddings } from "langchain/embeddings";
 import path from "node:path";
 import { v4 as uuidv4 } from 'uuid';
 
