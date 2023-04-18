@@ -1,16 +1,15 @@
 // DOCUMENTED
+import { useProjectWindow } from '@magickml/client-core'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useModal } from '../../contexts/ModalProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
-import css from './menuBar.module.css'
-import { activeTabSelector, Tab } from '../../state/tabs'
 import { toggleAutoSave } from '../../state/preferences'
-import { changeEditorLayout } from '../../state/tabs'
 import { RootState } from '../../state/store'
-import { useProjectWindow } from '@magickml/client-core'
+import { activeTabSelector, changeEditorLayout, Tab } from '../../state/tabs'
+import css from './menuBar.module.css'
 
 /**
  * MenuBar component
@@ -332,6 +331,10 @@ const MenuBar = () => {
         project_window: {
           onClick: onProjectWindowCreate,
           hotKey: 'control+b',
+        },
+        snap: {
+          onClick: toggleSnapFunction,
+          isActive: snapEnabled,
         },
       },
       settings: {

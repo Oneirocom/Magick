@@ -1,6 +1,6 @@
 // DOCUMENTED 
 import React, { useRef, ChangeEvent } from 'react';
-import { Button } from '@magickml/client-core';
+import { Button } from '../Button';
 
 interface FileInputProps {
   /**
