@@ -145,8 +145,8 @@ export default function App() {
       <div className={styles.container}>
         <div className={styles.chatContainer}>
           <div className={styles.scrollContainer}>
-            <div className="form-item agent-select">
-              <span className={styles.spellListTitle}>Root Spell</span>
+            <div className={styles.spellSelectorContainer}>
+              <label className={styles.spellListTitle}>Root Spell</label>
               <select
                 className={styles.spellSelector}
                 name="spellList"
