@@ -81,14 +81,13 @@ const AgentDetails = ({
     })
       .then(res => res.json())
       .then(data => {
+        enqueueSnackbar('Updated agent', {
+          variant: 'success',
+        })
+        setSelectedAgentData(data)
 
-          enqueueSnackbar('Updated agent', {
-            variant: 'success',
-          })
-          setSelectedAgentData(data)
-
-          // update data instead of refetching data to avoid agent window flashes
-          updateData(data)
+        // update data instead of refetching data to avoid agent window flashes
+        updateData(data)
       })
       .catch(e => {
         console.error('ERROR', e)
@@ -167,6 +166,8 @@ const AgentDetails = ({
               onKeyDown={e => {
                 if (e.key === 'Enter') {
                   update(selectedAgentData.id)
+                  setEditMode(false)
+                  setOldName('')
                 }
               }}
             />
