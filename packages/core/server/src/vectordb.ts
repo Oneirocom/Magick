@@ -78,7 +78,7 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
    */
   async fromString(text: string, metadata: any[]): Promise<any> {
     if (text.length > 8000) {
-      const [vectors, split_docs] = await this.embeddings.embedDocuments(text)
+      const [vectors, split_docs] = await this.embeddings.embedDocuments([text])
       vectors.forEach(async (vector, index) => {
         console.log(split_docs[index])
         console.log(index, vector)
@@ -101,7 +101,7 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
       })
       return
     }
-    const vector = await this.embeddings.embedQuery(text, metadata['projectId'])
+    const vector = await this.embeddings.embedQuery(text)
     console.log(vector)
     const insert_data = [
       {
@@ -298,16 +298,15 @@ export class HNSWLib extends SaveableVectorStore {
    */
   async addEmbeddingWithMetadata(
     embedding: number[],
-    metadata: Document
+    document: Document
   ): Promise<void> {
     if (embedding.length !== this.args.numDimensions) {
       throw new Error(
         `Embedding must have the same length as the number of dimensions (${this.args.numDimensions})`
       )
     }
-    const docstoreSize = this.docstore.count
-    this.index.addPoint(embedding, HNSWLib.sha256ToDecimal(metadata.id))
-    this.docstore.add({ [HNSWLib.sha256ToDecimal(metadata.id)]: metadata })
+    this.index.addPoint(embedding, HNSWLib.sha256ToDecimal(document.metadata.id))
+    this.docstore.add({ [HNSWLib.sha256ToString(document.metadata.id)]: document })
     await this.save(this.args.filename)
     await this.saveIndex(this.args.filename)
   }
@@ -435,26 +434,26 @@ export class HNSWLib extends SaveableVectorStore {
    * @returns {Promise<Document[]>} - Array of documents
    * @async
    */
-  async similaritySearch(query: any, k = 4): Promise<Document[]> {
-    const queryEmbedding = await this.getEmbedding(query)
-    if (queryEmbedding.length !== this.args.numDimensions) {
-      throw new Error(
-        `Query vector must have the same length as the number of dimensions (${this.args.numDimensions})`
-      )
-    }
-    if (k > this.index.getCurrentCount()) {
-      const total = this.index.getCurrentCount()
-      console.warn(
-        `k (${k}) is greater than the number of elements in the index (${total}), setting k to ${total}`
-      )
-      k = total
-    }
-    const result = this.index.searchKnn(Array.from(queryEmbedding), k)
-    return result.neighbors.map(
-      (docIndex, resultIndex) =>
-        this.docstore.search(String(docIndex)) as Document
-    )
-  }
+  // async similaritySearch(query: any, k = 4): Promise<Document[]> {
+  //   const queryEmbedding = await this.getEmbedding(query)
+  //   if (queryEmbedding.length !== this.args.numDimensions) {
+  //     throw new Error(
+  //       `Query vector must have the same length as the number of dimensions (${this.args.numDimensions})`
+  //     )
+  //   }
+  //   if (k > this.index.getCurrentCount()) {
+  //     const total = this.index.getCurrentCount()
+  //     console.warn(
+  //       `k (${k}) is greater than the number of elements in the index (${total}), setting k to ${total}`
+  //     )
+  //     k = total
+  //   }
+  //   const result = this.index.searchKnn(Array.from(queryEmbedding), k)
+  //   return result.neighbors.map(
+  //     (docIndex, resultIndex) =>
+  //       this.docstore.search(String(docIndex)) as Document
+  //   )
+  // }
 
   //Prefiltering based on query data if defined else does semantic search on all documents
   /**
