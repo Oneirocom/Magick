@@ -69,7 +69,7 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
 
     const { projectId } = context
 
-    const content = (inputs['content'] && inputs['content'][0]) as string
+    const content = (inputs && inputs[0]) as unknown as string
 
     if (!content) {
       console.log('Content is null, not storing event');
