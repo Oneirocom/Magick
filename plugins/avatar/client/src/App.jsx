@@ -84,6 +84,7 @@ export default function App() {
       blinkManager.addBlinker(characterModel)
       const newLipSync = new LipSync(characterModel)
       setLipSync(newLipSync)
+      console.log('characterModel = ', characterModel);
     })()
   }, [characterModel])
 
@@ -120,6 +121,27 @@ export default function App() {
       {characterModel && <Scene
         characterModel={characterModel}
       />}
+      <div className={styles.sxpContainer}>
+        <div className={styles.sxpContainerTitle}>
+          Personality:
+        </div>
+
+        <div className={styles.sxpItems}>
+          <span className={styles.sxpItemTitle}>Name: </span>{characterModel?'Eliza':''}
+        </div>
+        <div className={styles.sxpItems}>
+          <span className={styles.sxpItemTitle}>Agent: </span>{characterModel?"b00583bc-23c3-4a10-b284-9cb525f1dc37":''}
+        </div>
+        <div className={styles.sxpItems}>
+          <span className={styles.sxpItemTitle}>SpellName: </span>{characterModel?'Project':''}
+        </div>
+        <div className={styles.sxpItems}>
+          <span className={styles.sxpItemTitle}>EndPoint: </span>{characterModel?'MagickML V1':''}
+        </div>
+        <div className={styles.sxpItems}>
+          <span className={styles.sxpItemTitle}>DefaultMessage: </span>{characterModel?'Hello':''}
+        </div>
+      </div>
       <div className={styles.container}>
         <div className={styles.chatContainer}>
           <div className={styles.scrollContainer}>
