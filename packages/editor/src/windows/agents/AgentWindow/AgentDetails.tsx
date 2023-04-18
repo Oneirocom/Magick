@@ -2,7 +2,7 @@
 import { IconBtn, Switch } from '@magickml/client-core'
 import { IGNORE_AUTH, pluginManager } from '@magickml/core'
 import { Close, Done, Edit } from '@mui/icons-material'
-import { Avatar, Button, Input, Typography } from '@mui/material'
+import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -81,14 +81,13 @@ const AgentDetails = ({
     })
       .then(res => res.json())
       .then(data => {
+        enqueueSnackbar('Updated agent', {
+          variant: 'success',
+        })
+        setSelectedAgentData(data)
 
-          enqueueSnackbar('Updated agent', {
-            variant: 'success',
-          })
-          setSelectedAgentData(data)
-
-          // update data instead of refetching data to avoid agent window flashes
-          updateData(data)
+        // update data instead of refetching data to avoid agent window flashes
+        updateData(data)
       })
       .catch(e => {
         console.error('ERROR', e)
@@ -232,17 +231,30 @@ const AgentDetails = ({
             Export
           </Button>
         </div>
-        <Switch
-          label={null}
-          checked={selectedAgentData.enabled ? true : false}
-          onChange={() => {
-            setSelectedAgentData({
-              ...selectedAgentData,
-              enabled: selectedAgentData.enabled ? false : true,
-            })
-          }}
-          style={{ alignSelf: 'self-start' }}
-        />
+        <Tooltip
+          title={
+            !selectedAgentData.rootSpell || !selectedAgentData.rootSpell.id
+              ? 'Root Spell must be set before enabling the agent'
+              : ''
+          }
+        >
+          <span>
+            <Switch
+              label={null}
+              checked={selectedAgentData.enabled ? true : false}
+              onChange={() => {
+                setSelectedAgentData({
+                  ...selectedAgentData,
+                  enabled: selectedAgentData.enabled ? false : true,
+                })
+              }}
+              disabled={
+                !selectedAgentData.rootSpell || !selectedAgentData.rootSpell.id
+              }
+              style={{ alignSelf: 'self-start' }}
+            />
+          </span>
+        </Tooltip>
       </div>
       <div className="form-item agent-select">
         <span className="form-item-label">Root Spell</span>
