@@ -52,7 +52,13 @@ export const Modal = ({
           Cancel
         </Button>
         {onSubmit !== undefined && (
-          <Button onClick={onSubmit} className={styles.btnAction}>
+          <Button
+            onClick={() => {
+              onSubmit()
+              onClose()
+            }}
+            className={styles.btnAction}
+          >
             {submitText || 'Save'}
           </Button>
         )}
