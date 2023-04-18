@@ -37,6 +37,7 @@ import { SpellComponent } from './io/Spell';
 import { InRange } from './number/InRange';
 import { NumberVariable } from './number/NumberVariable';
 import { ComposeObject } from './object/ComposeObject';
+import { GetValuesFromObject } from './object/GetValuesFromObject';
 import { ParseJSON } from './object/JSONToObject';
 import { Merge } from './object/MergeObjects';
 import { ObjectToJSON } from './object/ObjectToJSON';
@@ -50,7 +51,6 @@ import { StringVariable } from './text/StringVariable';
 import { TextTemplate } from './text/TextTemplate';
 import { TextVariable } from './text/TextVariable';
 import { Cast } from './utility/Cast';
-import { GetValuesFromObject } from './object/GetValuesFromObject';
 import { Echo } from './utility/Echo';
 import { Log } from './utility/Log';
 

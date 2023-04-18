@@ -30,7 +30,7 @@ function install(editor: IRunContextEditor) {
   // Set an event listener for the 'delete' event.
   editor.on('delete', () => {
     // If no node is currently selected, do nothing.
-    if (!currentNode) return
+    if (!currentNode || editor.selected.list.length === 0) return
 
     // Otherwise, remove the selected node from the editor.
     editor.removeNode(currentNode)
