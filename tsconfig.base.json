@@ -161,6 +161,12 @@
       ],
       "@magickml/plugin-bluesky-server": [
         "plugins/bluesky/server/src/index.ts"
+      ],
+      "@magickml/plugin-gmail-client": [
+        "plugins/gmail/client/src/index.ts"
+      ],
+      "@magickml/plugin-gmail-server": [
+        "plugins/gmail/server/src/index.ts"
       ]
     }
   },
