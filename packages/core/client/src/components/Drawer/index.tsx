@@ -3,8 +3,6 @@ import { ClientPluginManager, pluginManager } from '@magickml/core'
 import AppsIcon from '@mui/icons-material/Apps'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
-import ChatIcon from '@mui/icons-material/Chat'
-import DocumentIcon from '@mui/icons-material/Description'
 import SettingsIcon from '@mui/icons-material/Settings'
 import StorageIcon from '@mui/icons-material/Storage'
 import Divider from '@mui/material/Divider'
@@ -17,14 +15,14 @@ import ListItemText from '@mui/material/ListItemText'
 import { CSSObject, styled, Theme } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { SetAPIKeys } from './SetAPIKeys'
 import {
   ProjectWindowProvider,
-  useProjectWindow,
+  useProjectWindow
 } from '../../contexts/ProjectWindowContext'
 import ProjectWindow from './ProjectWindow'
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
+import { SetAPIKeys } from './SetAPIKeys'
 
 // Constants
 const drawerWidth = 150
