@@ -6,6 +6,7 @@
 // Imports
 import { hooks as schemaHooks } from '@feathersjs/schema';
 import { v4 as uuidv4 } from 'uuid';
+import { DATABASE_TYPE } from '@magickml/core'
 
 import {
   spellDataValidator,
@@ -82,7 +83,7 @@ export const spell = (app: Application) => {
                   .find({
                     query: {
                       name:
-                        process.env.DATABASE_TYPE === 'pg'
+                        DATABASE_TYPE === 'pg'
                           ? {
                               $ilike: data.name + ' (%)',
                             }
