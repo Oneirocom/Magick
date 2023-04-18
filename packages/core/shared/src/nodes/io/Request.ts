@@ -8,11 +8,10 @@ import { SocketGeneratorControl } from '../../dataControls/SocketGenerator';
 import { MagickComponent } from '../../engine';
 import { objectSocket, triggerSocket } from '../../sockets';
 import {
-  EngineContext,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData,
+  WorkerData
 } from '../../types';
 
 // Request component info

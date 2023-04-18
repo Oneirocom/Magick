@@ -38,7 +38,7 @@ export class EventService<
       const { id, ...rest } = data
       const cli = app.get('vectordb')
       await cli.from('events').insert(data)
-      //let _ = await db('events').insert(data);
+      let _ = await db('events').insert(data);
     }
     return data
   }
