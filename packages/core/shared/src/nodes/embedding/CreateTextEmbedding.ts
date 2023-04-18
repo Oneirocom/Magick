@@ -20,9 +20,7 @@ import { pluginManager } from '../../plugin';
 const info = 'Event Store is used to store events for an event and user';
 
 type InputReturn = {
-  success: boolean;
-  error?: string;
-  result?: string;
+  embedding: number[];
 };
 
 /**
@@ -35,8 +33,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
       {
         outputs: {
           trigger: 'option',
-          result: 'output',
-          success: 'output',
+          embedding: 'output',
         },
       },
       'Embedding',
@@ -164,10 +161,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
 
     if (!completionHandler) {
       console.error('No completion handler found');
-      return {
-        success: false,
-        error: 'No completion handler found',
-      };
+      throw new Error('No completion handler found')
     }
 
     const { success, result, error } = await completionHandler({
@@ -177,18 +171,14 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
       context,
     });
 
-    console.log('completionHandler', success, result, error);
-
     if (!success) {
-      return {
-        success: false,
-        error,
-      };
+      throw new Error(error);
     }
 
+    console.log('result', result)
+
     return {
-      success: true,
-      result: result,
+      embedding: result as number[],
     };
   }
 }

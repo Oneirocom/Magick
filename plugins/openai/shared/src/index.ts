@@ -37,12 +37,7 @@ const completionProviders: CompletionProvider[] = [
         socket: "result",
         name: "Result",
         type: stringSocket,
-      },
-      {
-        socket: "error",
-        name: "Error",
-        type: stringSocket,
-      },
+      }
     ],
     models: [
       "text-davinci-003",
@@ -65,15 +60,10 @@ const completionProviders: CompletionProvider[] = [
     ],
     outputs: [
       {
-        socket: "result",
-        name: "Result",
+        socket: "embedding",
+        name: "Embedding",
         type: arraySocket,
-      },
-      {
-        socket: "error",
-        name: "Error",
-        type: stringSocket,
-      },
+      }
     ],
     models: ["text-embedding-ada-002", "text-embedding-ada-001"],
   },

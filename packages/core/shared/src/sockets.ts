@@ -15,7 +15,6 @@ export type SocketNameType =
   | 'Trigger'
   | 'Event'
   | 'Audio'
-  | 'Embedding'
   | 'Document'
 
 export type SocketType =

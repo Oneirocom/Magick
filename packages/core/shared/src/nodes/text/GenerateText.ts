@@ -191,7 +191,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     }
 
     return {
-      result,
+      result: result as string,
     }
   }
 }
