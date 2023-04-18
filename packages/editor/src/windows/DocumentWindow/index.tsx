@@ -1,6 +1,6 @@
 // DOCUMENTED 
 /**
- * DatabaseWindow is a React component that displays documents in a database table.
+ * DocumentWindow is a React component that displays documents in a database table.
  * It relies on the useConfig hook to retrieve the database configuration from a context.
  * It uses the DatabaseTable component to display documents in the table.
  * @returns a React component
@@ -11,7 +11,7 @@ import DatabaseTable from './DocumentTable'
 import { useConfig } from '../../contexts/ConfigProvider'
 import { API_ROOT_URL } from '@magickml/core'
 
-const DatabaseWindow = () => {
+const DocumentWindow = () => {
   const config = useConfig()
 
   // Initialize the documents state to null using the useState hook
@@ -49,4 +49,4 @@ const DatabaseWindow = () => {
   )
 }
 
-export default DatabaseWindow
+export default DocumentWindow

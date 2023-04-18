@@ -1,10 +1,7 @@
 
 import HNSWLib, { PostgressVectorStoreCustom } from "./vectordb"
 import { PluginEmbeddings } from './customEmbeddings';
-import { Embeddings } from "langchain/dist/embeddings/base";
-//Dynamic Import using top lvl await
-
-
+import { Embeddings } from "langchain/embeddings";
 
 export async function setupDB(db) {
     const embeddings = new PluginEmbeddings({}) as unknown as Embeddings

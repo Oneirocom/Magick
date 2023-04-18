@@ -13,8 +13,9 @@ import {
   HierarchicalNSW,
   SpaceName
 } from "hnswlib-node";
-import { Embeddings } from "langchain/dist/embeddings/base";
+import { Embeddings } from "langchain/embeddings";
 import path from "node:path";
+import { v4 as uuidv4 } from 'uuid';
 
 const InMemoryDocstorePro = import_("langchain/docstore");
 const { InMemoryDocstore } = await InMemoryDocstorePro;
@@ -24,11 +25,6 @@ const SaveableVectorStorePro = import_("langchain/vectorstores");
 const { SaveableVectorStore } = await SaveableVectorStorePro;
 const SupabaseVectorStorePro = import_("langchain/vectorstores");
 const { SupabaseVectorStore } = await SupabaseVectorStorePro;
-
-
-
-
-
 
 /**
  * Custom implementation of SupabaseVectorStore
@@ -74,8 +70,34 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
     }
   }
 
+  /**
+   * Creates Documents using String and Metadata
+   * @param {string} text - String to be embedded
+   * @param {any[]} metadata - Metadata to be added to the document
+   * @returns {Promise<any>} - Array of documents
+   * @async
+  */
   async fromString(text: string, metadata: any[]): Promise<any> {
+    if (text.length > 8000){
+      const [vectors, split_docs] = await this.embeddings.embedDocuments(text);
+      vectors.forEach(async (vector, index) => {
+        console.log(split_docs[index])
+        console.log(index, vector)
+        const insert_data = [{
+          embedding: vector,
+          data: {
+            metadata: { ...metadata, embedding: vector } || { "msg": "Empty Data" },
+            pageContent: split_docs[index] || "No Content in the Event",
+          },
+        }]
+        metadata['id'] = uuidv4()
+        metadata['content'] = split_docs[index];
+        this.addEvents({ array: [{ ...metadata, embedding: JSON.stringify(vector) }] })
+      })
+      return;
+    }
     const vector = await this.embeddings.embedQuery(text, metadata["projectId"]);
+    console.log(vector)
     const insert_data = [{
       embedding: vector,
       data: {
@@ -83,7 +105,7 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
         pageContent: text || "No Content in the Event",
       },
     }]
-    this.addEvents({ array: [{ ...metadata, embedding: vector }] })
+    this.addEvents({ array: [{ ...metadata, embedding: JSON.stringify(vector) }] })
     return insert_data
   }
 
@@ -110,13 +132,13 @@ export class PostgressVectorStoreCustom extends SupabaseVectorStore {
    */
   async rpc(query: string, params: Record<string, unknown>): Promise<any> {
     const columns = Object.keys(params);
-    // eslint-disable-next-line no-prototype-builtins
     const placeholders = columns.map((name) => (params.hasOwnProperty(name) ? `:${name}` : "NULL"));
     const sql = `SELECT * FROM ${query}(${placeholders.join(", ")})`;
     console.log(sql)
     return this.client.raw(sql, params);
   }
   
+
 
   /**
    * Select a table in the Postgres client
@@ -293,7 +315,6 @@ export class HNSWLib extends SaveableVectorStore {
       }
       documents.push(new Document(data));
     }
-
     await this.addVectors(vectors, documents);
   }
 
@@ -380,7 +401,6 @@ export class HNSWLib extends SaveableVectorStore {
     if (needed > capacity) {
       this.index.resizeIndex(needed);
     }
-
     const docstoreSize = this.docstore.count;
     for (let i = 0; i < vectors.length; i += 1) {
       const id_str = documents[i].metadata?.id;
@@ -548,12 +568,10 @@ export class HNSWLib extends SaveableVectorStore {
   async getDataWithMetadata(query: Record<string, unknown>, k = 1): Promise<Record<string, unknown>[]> {
     const queryKeys = Object.keys(query);
     const matchingDocs: Record<string, unknown>[] = [];
-    //console.log(this.docstore._docs.entries())
     for (const doc of this.docstore._docs.values()) {
       for (const key of queryKeys) {
 
         if ((query["content"] == undefined) && (doc.metadata["projectId"] == query["projectId"])) {
-          //console.log(doc.metadata[key], query[key])
           matchingDocs.push(doc.metadata);
           break;
         }
@@ -565,9 +583,29 @@ export class HNSWLib extends SaveableVectorStore {
     }
     return matchingDocs;
   }
+
+  /**
+   * Creates documents from the text and metadata
+   * @param text - Texts to create documents from
+   * @param metadata - Metadata to create documents from
+  */
   async fromString(text: string, metadata: any[]): Promise<any> {
-    console.log("metadata", metadata)
-    const vector = await this.embeddings.embedQuery(text, (metadata as unknown as { projectId: string }).projectId);
+    if (text.length > 8000){
+      const [vectors, split_docs] = await this.embeddings.embedDocuments(text);
+      vectors.forEach(async (vector, index) => {
+        const insert_data = [{
+          embedding: vector,
+          pageContent: split_docs[index] || "No Content in the Event",
+          data: {
+            metadata: { ...metadata[0].metadata, id: uuidv4(), embedding: vector , content: split_docs[index]} || { "msg": "Empty Data" },
+            pageContent: split_docs[index] || "No Content in the Event",
+          },
+        }]
+        this.addEmbeddingsWithData(insert_data);
+      })
+      return;
+    }
+    const vector = await this.embeddings.embedQuery(text, metadata["projectId"]);
     const insert_data = [{
       embedding: vector,
       data: {
@@ -575,7 +613,7 @@ export class HNSWLib extends SaveableVectorStore {
         pageContent: text || "No Content in the Event",
       },
     }]
-    this.addEmbeddingsWithData(insert_data);
+    this.addVectors([vector], metadata)
     return insert_data
   }
   //TODO: This function is redundant and should be removed, base class requires it

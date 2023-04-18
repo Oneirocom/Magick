@@ -26,8 +26,6 @@ function getVarForEnvironment(env: string): string | undefined {
 }
 
 // Define and export constants from environment variables
-export const SUPABASE_URL = getVarForEnvironment('SUPABASE_URL')
-export const SUPABASE_KEY = getVarForEnvironment('SUPABASE_KEY')
 export const IGNORE_AUTH = getVarForEnvironment('IGNORE_AUTH') === 'true'
 export const DATABASE_TYPE = getVarForEnvironment('DATABASE_TYPE')
 export const DATABASE_URL = getVarForEnvironment('DATABASE_URL')
