@@ -69,3 +69,12 @@
     height: 100%;
     z-index: 99999;
   }
+
+  span.spellListTitle {
+    text-align: left;
+    margin-left: 26px;
+  }
+  
+  select.spellSelector {
+    width: 90%;
+  }
