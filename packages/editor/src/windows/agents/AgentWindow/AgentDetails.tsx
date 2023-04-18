@@ -2,7 +2,7 @@
 import { IconBtn, Switch } from '@magickml/client-core'
 import { IGNORE_AUTH, pluginManager } from '@magickml/core'
 import { Close, Done, Edit } from '@mui/icons-material'
-import { Avatar, Button, Input, Typography } from '@mui/material'
+import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -62,14 +62,6 @@ const AgentDetails = ({
     if (_data['id']) {
       delete _data.id
       delete _data?.dirty
-    }
-
-    // If there is no root spell selected, cancel and show error
-    if (!_data?.rootSpell?.id) {
-      enqueueSnackbar('Please select a root spell', {
-        variant: 'error',
-      })
-      return
     }
 
     // Avoid server-side validation error
@@ -239,17 +231,30 @@ const AgentDetails = ({
             Export
           </Button>
         </div>
-        <Switch
-          label={null}
-          checked={selectedAgentData.enabled ? true : false}
-          onChange={() => {
-            setSelectedAgentData({
-              ...selectedAgentData,
-              enabled: selectedAgentData.enabled ? false : true,
-            })
-          }}
-          style={{ alignSelf: 'self-start' }}
-        />
+        <Tooltip
+          title={
+            !selectedAgentData.rootSpell || !selectedAgentData.rootSpell.id
+              ? 'Root Spell must be set before enabling the agent'
+              : ''
+          }
+        >
+          <span>
+            <Switch
+              label={null}
+              checked={selectedAgentData.enabled ? true : false}
+              onChange={() => {
+                setSelectedAgentData({
+                  ...selectedAgentData,
+                  enabled: selectedAgentData.enabled ? false : true,
+                })
+              }}
+              disabled={
+                !selectedAgentData.rootSpell || !selectedAgentData.rootSpell.id
+              }
+              style={{ alignSelf: 'self-start' }}
+            />
+          </span>
+        </Tooltip>
       </div>
       <div className="form-item agent-select">
         <span className="form-item-label">Root Spell</span>
