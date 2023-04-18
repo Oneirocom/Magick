@@ -34,24 +34,9 @@ const VariableModal = ({
 
   return (
     <Modal open={editMode} setOpen={setEditMode} handleAction={handleSave}>
-      <Grid container>
-        <Grid item xs={12}>
-          <p style={{ marginTop: '1em' }} className="modal-element">
-            To set up a Gmail bot, you will need to set up a Gmail{' '}
-            <a href="https://developer.gmail.com/">Developer account</a>.
-          </p>
-          <p style={{ marginBottom: '2em' }} className="modal-element">
-            For <b>API keys and credentials</b> you will need to create a{' '}
-            <a href="https://developer.gmail.com/en/docs/apps/app-management">
-              new app
-            </a>{' '}
-            and then get your app credentials and paste them above.
-          </p>
-        </Grid>
-      </Grid>
       <div style={{ marginBottom: '1em' }}>
         <div>
-          <span className="form-item-label">User Identifier</span>
+          <span className="form-item-label">Email Address</span>
           <input
             className="modal-element"
             type="text"
@@ -74,6 +59,14 @@ const VariableModal = ({
           />
         </div>
       </div>
+      <Grid container>
+        <Grid item xs={12}>
+          <p style={{ marginTop: '1em' }} className="modal-element">
+            To set up a Gmail bot, you will need a Gmail{' '}
+            <a href="https://gmail.com/">account</a>.
+          </p>
+        </Grid>
+      </Grid>
     </Modal>
   )
 }
