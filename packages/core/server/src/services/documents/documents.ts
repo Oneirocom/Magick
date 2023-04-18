@@ -72,6 +72,11 @@ export const document = (app: Application) => {
             [service.id]: id,
             ...data,
           }
+          let EmbeddingArgs = {
+            modelName: "text-embedding-ada-002",
+            secrets: context.data.secrets,
+            projectId: context.data.projectId,
+          }
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
             if (DATABASE_TYPE == "pg") {
@@ -80,7 +85,7 @@ export const document = (app: Application) => {
               context.data.embedding = pgvector.toSql(embedding)  
               return context;
             }else{
-              const docdb = app.get('vectordb')
+              const docdb = app.get('docdb')
               console.log(context.data)
               const insert_data = [{
                 embedding: embedding,
@@ -90,7 +95,7 @@ export const document = (app: Application) => {
                   pageContent: context.data['content'] || "No Content in the Event",
                 },
               }]
-              await docdb.fromString(context.data['content'], insert_data);
+              await docdb.fromString(context.data['content'], insert_data, EmbeddingArgs);
             }      
           } else {
             if (DATABASE_TYPE == "pg") {
@@ -105,7 +110,7 @@ export const document = (app: Application) => {
                   pageContent: context.data['content'] || "No Content in the Event",
                 },
               }]
-              await docdb.fromString(context.data['content'], insert_data);
+              await docdb.fromString(context.data['content'], insert_data, EmbeddingArgs);
             }
           }
           return;
