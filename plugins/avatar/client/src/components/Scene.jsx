@@ -64,8 +64,8 @@ export default function Scene({ characterModel }) {
       // To test easily
       const orbitControls = new OrbitControls(camera, renderer.domElement)
       // TODO(Demon): Set plane position and rotation dynamically when enabling the following options
-      camera.position.set(.4, 1.2, 2)
-      orbitControls.target.set(.4, 1.2, 2)
+      camera.position.set(0.6, 0.8, 3.5)
+      orbitControls.target.set(0.6, 0.8, 3.5)
       // orbitControls.enableZoom = false
       // orbitControls.enableRotate = false
       // orbitControls.enablePan = false
