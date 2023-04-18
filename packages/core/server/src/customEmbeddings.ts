@@ -5,10 +5,9 @@ import {
   WorkerData,
 } from '@magickml/core'
 
-import import_ from '@brillout/import'
 import { toUpper } from 'lodash'
-const EmbeddingsPro = import_('langchain/embeddings')
-const { Embeddings } = await EmbeddingsPro
+import { Embeddings } from 'langchain/embeddings'
+
 export const chunkArray = (arr, chunkSize) =>
   arr.reduce((chunks, elem, index) => {
     const chunkIndex = Math.floor(index / chunkSize)
