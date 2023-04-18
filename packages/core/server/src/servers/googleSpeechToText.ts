@@ -1,7 +1,6 @@
 // DOCUMENTED 
 import { SpeechClient } from '@google-cloud/speech';
 import { Server } from 'socket.io';
-import { config } from 'dotenv-flow';
 import https from 'https';
 import * as fs from 'fs';
 import path from 'path';
@@ -11,9 +10,6 @@ import {
   SPEECH_SERVER_PORT,
   USSSL_SPEECH,
 } from '@magickml/core';
-
-// Load environment variables
-config({ path: '.env' });
 
 let speechClient: SpeechClient;
 const encoding = 'LINEAR16';
