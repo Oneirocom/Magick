@@ -3,7 +3,7 @@
 import Rete from 'rete';
 
 import {
-  embeddingSocket,
+  arraySocket,
   InputControl,
   MagickComponent,
   MagickNode,
@@ -12,7 +12,6 @@ import {
   MagickNodeData,
   stringSocket,
   triggerSocket,
-  arraySocket,
 } from '@magickml/core';
 
 import { PineconeClient } from '@pinecone-database/pinecone';
@@ -52,7 +51,7 @@ export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
    * @returns The assembled MagickNode instance.
    */
   builder(node: MagickNode): MagickNode {
-    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket);
+    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket);
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket);
     const result = new Rete.Output('result', 'Result', arraySocket);
