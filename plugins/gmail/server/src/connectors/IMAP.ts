@@ -48,8 +48,6 @@ export class Worker {
    * Constructor.
    */
   constructor(inServerInfo: IServerInfo) {
-
-    console.log("IMAP.Worker.constructor", inServerInfo);
     Worker.serverInfo = inServerInfo;
 
   } /* End constructor. */
@@ -60,21 +58,27 @@ export class Worker {
    *
    * @return An ImapClient instance.
    */
-  private async connectToServer(): Promise<any> {
-
+  private async connectToServer(): Promise<ImapClient> {
+    console.log('Worker.serverInfo', Worker.serverInfo)
     // noinspection TypeScriptValidateJSTypes
-    const client: any = new ImapClient.default(
+    const client: any = new ImapClient(
       Worker.serverInfo.imap.host,
       Worker.serverInfo.imap.port,
       { auth : Worker.serverInfo.imap.auth }
     );
-    client.logLevel = client.LOG_LEVEL_NONE;
+    client.logLevel = client.LOG_LEVEL_DEBUG;
     client.onerror = (inError: Error) => {
       console.log("IMAP.Worker.listMailboxes(): Connection error", inError);
     };
-    await client.connect();
+    console.log('connecting')
+    try {
+      await client.connect();
+    } catch (e) {
+      console.log('error', e)
+    }
+    console.log('connected')
     console.log("IMAP.Worker.listMailboxes(): Connected");
-
+    
     return client;
 
   } /* End connectToServer(). */
@@ -91,7 +95,10 @@ export class Worker {
 
     const client: any = await this.connectToServer();
 
+    console.log('client', client)
+
     const mailboxes: any = await client.listMailboxes();
+    console.log('mailboxes', mailboxes)
 
     await client.close();
 
