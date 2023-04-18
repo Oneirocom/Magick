@@ -5,17 +5,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { CAMERA_TO_PLANE_DISTANCE, PLANE_COLOR, PLANE_HEIGHT, raycaster, tempColor, tempVec2 } from "../library/constants"
 import { getBone, getCameraFovToFitScreen } from "../library/common"
 
-
 let isFirstRender = true
 let prevCharacterModel = null
 
 export default function Scene({ characterModel }) {
-  console.log('SceneContext', SceneContext)
   const { scene, setCamera } = useContext(SceneContext)
 
   useEffect(() => {
-    console.log('Scene: isFirstRender: ', isFirstRender)
-    console.log('Scene: characterModel: ', characterModel)
 
     if (isFirstRender) {
       // add a camera to the scene
@@ -30,6 +26,7 @@ export default function Scene({ characterModel }) {
       // find editor-scene canvas
       const canvasRef = document.createElement("canvas")
       canvasRef.id = "editor-scene"
+      canvasRef.style.visibility = 'visible'
       canvasRef.style.position = "absolute"
       canvasRef.style.top = "0"
       canvasRef.style.left = "0"
@@ -67,8 +64,8 @@ export default function Scene({ characterModel }) {
       // To test easily
       const orbitControls = new OrbitControls(camera, renderer.domElement)
       // TODO(Demon): Set plane position and rotation dynamically when enabling the following options
-      camera.position.set(.4, 1.2, 2)
-      orbitControls.target.set(.4, 1.2, 2)
+      camera.position.set(0.6, 0.8, 3.5)
+      orbitControls.target.set(0.6, 0.8, 3.5)
       // orbitControls.enableZoom = false
       // orbitControls.enableRotate = false
       // orbitControls.enablePan = false
@@ -149,7 +146,6 @@ export default function Scene({ characterModel }) {
 
     {
       if (prevCharacterModel && prevCharacterModel !== characterModel) {
-        console.log('character is different')
         scene.remove(prevCharacterModel.scene)
       }
 
@@ -173,8 +169,12 @@ export default function Scene({ characterModel }) {
     return () => {
       // if there is a div with id "editor-scene", remove it
       const canvasRef = document.getElementById("editor-scene")
+
+      //initial component when component unmount
+      isFirstRender = true;
       if (canvasRef) {
-        canvasRef.remove()
+        canvasRef.style.display = 'none'
+        scene.remove(prevCharacterModel.scene)
       }
     }
   }, [characterModel])

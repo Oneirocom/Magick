@@ -6,6 +6,7 @@
     text-align: left;
     box-sizing: border-box;
     padding: 24px;
+    padding-top: 0;
     z-index: 2000;
 }
 

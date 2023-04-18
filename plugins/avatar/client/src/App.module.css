@@ -69,3 +69,50 @@
     height: 100%;
     z-index: 99999;
   }
+
+  .spellSelectorContainer{
+    padding: 24px;
+    text-align: left;
+    padding-bottom: 0;
+  }
+
+  .spellListTitle {
+  }
+  
+  select.spellSelector {
+    padding: 0.3em;
+    margin-top: 8px;
+  }
+
+  .sxpContainer {
+    position: absolute;
+    width: 20%;
+    max-width: 20%;
+    min-width: 18%;
+    left: 80px;
+    transform: translateY(90%);
+    -webkit-transform: translateY(90%);
+    text-align: left;
+    height: -webkit-calc(100vh - 400px);
+    height: calc(100vh - 400px);
+    background: rgba(5, 11, 14, 0.8);
+    color: aliceblue;
+    z-index: 2000;
+    padding: 24px;
+  }
+
+  .sxpContainerTitle {
+    font-size: 20px;
+    font-weight: 900;
+  }
+
+  .sxpItems {
+    margin: 20px 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .sxpItems .sxpItemTitle {
+    font-size: 18px;
+    margin-right: 20px;
+  }
