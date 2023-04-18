@@ -23,7 +23,6 @@ import { EventRestructureComponent } from './events/EventRestructure';
 import { EventsToConversation } from './events/EventsToConversation';
 import { EventStore } from './events/EventStore';
 import { BooleanGate } from './flow/BooleanGate';
-import { AgentExecutor } from './langchain/AgentExecutor';
 import { ExclusiveGate } from './flow/ExclusiveGate';
 import { IsNullOrUndefined } from './flow/IsNullOrUndefined';
 import { OrGate } from './flow/OrGate';
@@ -38,6 +37,7 @@ import { SpellComponent } from './io/Spell';
 import { InRange } from './number/InRange';
 import { NumberVariable } from './number/NumberVariable';
 import { ComposeObject } from './object/ComposeObject';
+import { GetValuesFromObject } from './object/GetValuesFromObject';
 import { ParseJSON } from './object/JSONToObject';
 import { Merge } from './object/MergeObjects';
 import { ObjectToJSON } from './object/ObjectToJSON';
@@ -51,11 +51,8 @@ import { StringVariable } from './text/StringVariable';
 import { TextTemplate } from './text/TextTemplate';
 import { TextVariable } from './text/TextVariable';
 import { Cast } from './utility/Cast';
-import { GetValuesFromObject } from './object/GetValuesFromObject';
 import { Echo } from './utility/Echo';
 import { Log } from './utility/Log';
-import { AgentRecommender } from './langchain/AgentRecommender';
-import { DiscordListChannels } from './langchain/DiscordListChannels';
 
 export const components: Record<string, ()=>MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -63,18 +60,15 @@ export const components: Record<string, ()=>MagickComponent<unknown>> = {
   cast: () => new Cast(),
   createEmbedding: () => new CreateTextEmbedding(),
   inRange: () => new InRange(),
-  discordlist: () => new DiscordListChannels(),
   javascript: () => new Javascript(),
   python: () => new Python(),
   GetValuesFromObject: () => new GetValuesFromObject(),
   complexStringMatcher: () => new ComplexStringMatcher(),
   echo: () => new Echo(),
-  agentexecutor: () => new AgentExecutor(),
   getCachedEmbedding: () => new FindTextEmbedding(),
   replaceText: () => new ReplaceText(),
   textCompletion: () => new GenerateText(),
   eventdelete: () => new EventDelete(),
-  agentreco: () => new AgentRecommender(),
   isNullOrUndefined: () => new IsNullOrUndefined(),
   isVariableTrue: () => new IsVariableTrue(),
   request: () => new Request(),
