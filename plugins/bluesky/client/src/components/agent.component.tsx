@@ -9,14 +9,21 @@ export const BlueskyAgentWindow: FC<any> = props => {
   const { selectedAgentData, setSelectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
-  const [checked, setChecked] = useState(selectedAgentData.data?.bluesky_enabled)
+  const [checked, setChecked] = useState(
+    selectedAgentData.data?.bluesky_enabled
+  )
   const [disable, setDisable] = useState(false)
-  useEffect(()=>{
-    if (props.enable["BlueskyPlugin"] == false) {
+
+  const handleClose = () => {
+    setEditMode(false)
+  }
+
+  useEffect(() => {
+    if (props.enable['BlueskyPlugin'] == false) {
       setChecked(false)
       setDisable(true)
     }
-    if (props.enable['BlueskyPlugin'] == true){
+    if (props.enable['BlueskyPlugin'] == true) {
       setChecked(selectedAgentData.data?.bluesky_enabled)
       setDisable(false)
     }
@@ -77,7 +84,7 @@ export const BlueskyAgentWindow: FC<any> = props => {
       {editMode && (
         <VariableModal
           editMode={editMode}
-          setEditMode={setEditMode}
+          handleClose={handleClose}
           selectedAgentData={selectedAgentData}
           update={update}
         />

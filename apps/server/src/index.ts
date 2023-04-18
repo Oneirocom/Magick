@@ -3,26 +3,25 @@
  * Entry point of MagickML server. Initializes the necessary modules, middleware and routes to start up the server.
  **/
 
-import 'regenerator-runtime/runtime'
 import cors from '@koa/cors'
 import Router from '@koa/router'
-import Koa, { Context } from 'koa'
-import koaBody from 'koa-body'
-import compose from 'koa-compose'
 import { pluginManager } from '@magickml/core'
 import {
-  app,
-  initFileServer,
-  initTextToSpeech,
-  initSpeechServer,
   apis,
-  spells,
+  app,
   Handler,
+  initFileServer,
+  initSpeechServer,
+  initTextToSpeech,
   Method,
   Middleware,
   Route,
-  setupDB
+  spells
 } from '@magickml/server-core'
+import { Context } from 'koa'
+import koaBody from 'koa-body'
+import compose from 'koa-compose'
+import 'regenerator-runtime/runtime'
 
 // log handle errors
 process.on('uncaughtException', (err: Error) => {
@@ -71,11 +70,6 @@ async function init() {
   for (const method of Object.keys(serverInits)) {
     await serverInits[method]()
   }
-
-  //Wait Till the plugins are setup
-  const dbs = await setupDB(app.get('dbClient'))
-  app.set('vectordb', dbs.vectordb)
-  app.set('docdb', dbs.docdb)
 
   // generic error handling for any errors that may occur
   app.use(async (ctx: Context, next: () => Promise<any>) => {

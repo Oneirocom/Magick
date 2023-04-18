@@ -5,7 +5,7 @@ import { useState } from 'react'
 const VariableModal = ({
   selectedAgentData,
   editMode,
-  setEditMode,
+  handleClose,
   update,
 }) => {
   const [state, setState] = useState({
@@ -33,7 +33,7 @@ const VariableModal = ({
   }
 
   return (
-    <Modal open={editMode} setOpen={setEditMode} handleAction={handleSave}>
+    <Modal open={editMode} onClose={handleClose} onSubmit={handleSave}>
       <Grid container>
         <Grid item xs={12}>
           <p style={{ marginTop: '1em' }} className="modal-element">
@@ -45,7 +45,7 @@ const VariableModal = ({
             <a href="https://developer.bluesky.com/en/docs/apps/app-management">
               new app
             </a>{' '}
-            and then get your app credentials and paste them above.
+            and then get your app credentials and paste them below.
           </p>
         </Grid>
       </Grid>

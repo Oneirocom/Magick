@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Button, Modal } from '@magickml/client-core'
+import { Button } from '@magickml/client-core'
 import { API_ROOT_URL } from '@magickml/core'
 import {
   Grid,
@@ -12,10 +12,8 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
-  TextField,
+  TableRow
 } from '@mui/material'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import _ from 'lodash'
 import { useSnackbar } from 'notistack'
 import { useEffect, useMemo, useState } from 'react'
@@ -29,9 +27,10 @@ import {
   useGlobalFilter,
   usePagination,
   useSortBy,
-  useTable,
+  useTable
 } from 'react-table'
 import { useConfig } from '../../contexts/ConfigProvider'
+import DocumentModal from './DocumentModal'
 
 /**
  * The global filter component for searching documents within the table.
@@ -177,7 +176,7 @@ function DocumentTable({ documents, updateCallback }) {
     useEffect(() => setVal(value), [value])
     return (
       <input
-        value={val && typeof val === 'object' ? JSON.stringify(val.data) : val}
+        value={val && typeof val === 'object' ? JSON.stringify((val as {data: unknown}).data) : val}
         onChange={onChange}
         onBlur={onBlur}
         className="bare-input"
@@ -256,6 +255,7 @@ function DocumentTable({ documents, updateCallback }) {
   // Handle save action
   const handleSave = async () => {
     // call documents endpoint
+    const secrets = localStorage.getItem('secrets')
     const result = await fetch(`${API_ROOT_URL}/documents`, {
       method: 'POST',
       headers: {
@@ -264,6 +264,7 @@ function DocumentTable({ documents, updateCallback }) {
       body: JSON.stringify({
         ...newDocument,
         projectId: config.projectId,
+        secrets: secrets
       }),
     })
 
@@ -294,50 +295,7 @@ function DocumentTable({ documents, updateCallback }) {
   return (
     <>
       {createMode && (
-        <Modal
-          open={createMode}
-          onClose={closeCreateModal}
-          onSubmit={handleSave}
-        >
-          <TextField
-            label="Type"
-            name="type"
-            style={{ width: '100%', margin: '.5em' }}
-            onChange={e =>
-              setNewDocument({ ...newDocument, type: e.target.value })
-            }
-          />
-          <TextField
-            label="Owner"
-            name="owner"
-            style={{ width: '100%', margin: '.5em' }}
-            onChange={e =>
-              setNewDocument({ ...newDocument, owner: e.target.value })
-            }
-          />
-          <TextField
-            label="Content"
-            name="content"
-            style={{ width: '100%', margin: '.5em' }}
-            onChange={e =>
-              setNewDocument({ ...newDocument, content: e.target.value })
-            }
-          />
-          <DatePicker
-            label="Date"
-            onChange={date =>
-              setNewDocument({ ...newDocument, date: date.toISOString() })
-            }
-          />
-          <TextField
-            label="Embedding"
-            name="embedding"
-            style={{ width: '100%', margin: '.5em' }}
-            onChange={e =>
-              setNewDocument({ ...newDocument, embedding: e.target.value })
-            }
-          />
-        </Modal>
+        <DocumentModal createMode={createMode} setCreateMode={setCreateMode} handleSave={handleSave} setNewDocument={setNewDocument} />
       )}
       <Stack spacing={2}>
         <Grid container justifyContent="left" style={{ padding: '1em' }}>

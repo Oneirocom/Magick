@@ -13,5 +13,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/plugins/googleai/client',
+  coverageDirectory: '../../coverage/plugins/googleai/shared',
 }
