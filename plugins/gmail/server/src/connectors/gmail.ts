@@ -27,10 +27,12 @@ export const makeServerInfo = (address, password) => {
 
 // Get list of mailboxes.
 export const getMailboxes = async (address, password) => {
+  console.log('trying to get mailbox')
   const serverInfo = makeServerInfo(address, password)
   try {
     const imapWorker: IMAP.Worker = new IMAP.Worker(serverInfo)
     const mailboxes: IMAP.IMailbox[] = await imapWorker.listMailboxes()
+    console.log('mailboxes', mailboxes)
     return mailboxes
   } catch (inError) {
     return 'error, could not retrieve mailboxes'
@@ -182,6 +184,7 @@ export class GmailConnector {
     }
 
     mailboxes.map(async mailbox => {
+      console.log('mailbox', mailbox)
       const messages = await getMessagesFromMailbox({
         mailbox,
         address: this.data.gmail_address,
@@ -189,9 +192,10 @@ export class GmailConnector {
       })
       // if messages is not an array, return
       if (!Array.isArray(messages)) {
-        return
+        return console.log('no messages')
       }
       messages.map(async message => {
+        console.log('message', message)
         const messageBody = await getMessageBody({
           id: message.id,
           mailbox: mailbox,
