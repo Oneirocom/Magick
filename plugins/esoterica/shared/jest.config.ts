@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'esoterica-client',
+  displayName: 'esoterica',
   preset: '../../jest.preset.js',
   globals: {},
   testEnvironment: 'node',
@@ -13,5 +13,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../coverage/plugins/esoterica/client',
+  coverageDirectory: '../../../coverage/plugins/esoterica/shared',
 }

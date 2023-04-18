@@ -519,6 +519,7 @@ export type CompletionInspectorControls = {
 }
 
 export type CompletionProvider = {
+  [x: string]: any
   type: CompletionType
   subtype: ImageCompletionSubtype | TextCompletionSubtype
   handler?: (attrs: {

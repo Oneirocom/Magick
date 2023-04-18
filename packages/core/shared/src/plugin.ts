@@ -238,7 +238,6 @@ class PluginManager {
     })
     return secrets
   }
-
   getCompletionProviders(
     type: string | null = null,
     subtypes: null | string[] = null
@@ -253,6 +252,7 @@ class PluginManager {
     })
     return completionProviders
   }
+
   getCompletionProvidersWithSecrets(
     type: string | null = null,
     subtypes: null | string[] = null
