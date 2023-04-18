@@ -33,12 +33,7 @@ const request = {
  * Initialize the speech server.
  * @param ignoreDotEnv - Whether to ignore dotenv settings.
  */
-export async function initSpeechServer(ignoreDotEnv: boolean) {
-  // Return early if the speech server is disabled
-  if (ignoreDotEnv === false && !ENABLE_SPEECH_SERVER) {
-    return;
-  }
-
+export async function initSpeechServer() {
   const PORT: number = Number(SPEECH_SERVER_PORT) || 65532;
   let io;
 
