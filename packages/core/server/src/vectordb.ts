@@ -9,7 +9,7 @@ The original library can be found at https://github.com/hwchase17/langchainjs.
 import * as crypto from 'crypto'
 import fs from 'fs'
 import { HierarchicalNSW, SpaceName } from 'hnswlib-node'
-import { Embeddings } from 'langchain/embeddings'
+import { Embeddings } from 'langchain/embeddings/base'
 import path from 'node:path'
 import { v4 as uuidv4 } from 'uuid'
 
