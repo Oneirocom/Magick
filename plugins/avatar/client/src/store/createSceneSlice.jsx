@@ -10,6 +10,8 @@ export const createSceneSlice = (set, get) => {
 
     /* Avatar */
 
+    avatarVrm: null,
+    setAvatarVrm: (newAvatarVrm) => set(() => ({avatarVrm: newAvatarVrm})),
     avatarInitPos: AVATAR_INIT_POS,
     avatarDesPos: AVATAR_DES_POS,
   }
