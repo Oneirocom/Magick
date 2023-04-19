@@ -226,6 +226,7 @@ const Playtest = ({ tab }) => {
       channel: 'previewChannel',
       projectId: config.projectId,
       channelType: 'previewChannelType',
+      rawData: value,
       entities: ['user', 'assistant'],
       ...JSON.parse(json),
     };
