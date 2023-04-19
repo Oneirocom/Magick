@@ -34,11 +34,9 @@ export class EventService<
   async create(data: EventData): Promise<any> {
     if (DATABASE_TYPE == 'pg') {
       const db = app.get('dbClient')
-      //@ts-ignore
-      const { id, ...rest } = data
       const cli = app.get('vectordb')
       await cli.from('events').insert(data)
-      let _ = await db('events').insert(data);
+      await db('events').insert(data);
     }
     return data
   }
