@@ -11,6 +11,7 @@ import { BlinkManager } from '../../utils/blink.manager'
 export const Avatar = () => {
   const {
     avatarInitPos,
+    setAvatarVrm,
   } = useZustand()
   const avatarVrm = useVrm('/models/avatar2.vrm')
   customDebug().log('Avatar: avatarVrm: ', avatarVrm)
@@ -30,6 +31,7 @@ export const Avatar = () => {
     customDebug().log('Avatar#useEffect')
     const newBlinkManager = new BlinkManager()
     newBlinkManager.addBlinker(avatarVrm)
+    setAvatarVrm(avatarVrm)
   }, [avatarVrm])
 
 

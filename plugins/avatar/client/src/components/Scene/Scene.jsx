@@ -6,6 +6,7 @@ import { Perf } from 'r3f-perf'
 import { Camera } from './Camera'
 import { Avatar } from './Avatar'
 import { AXIS_LEN } from '../../utils/constants'
+import { Watch } from './Watch'
 
 
 export const Scene = () => {
@@ -30,6 +31,7 @@ export const Scene = () => {
       <Suspense>
         <Physics colliders="hull">
           <Avatar />
+          <Watch />
           {/* <Debug/> */}
         </Physics>
       </Suspense>
