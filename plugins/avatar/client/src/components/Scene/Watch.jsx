@@ -37,7 +37,7 @@ export const Watch = () => {
     >
       <meshStandardMaterial
         transparent={true}
-        opacity={0.3}
+        opacity={0}
       />
     </Plane>
   )
