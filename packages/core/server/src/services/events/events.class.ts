@@ -33,10 +33,8 @@ export class EventService<
   // @ts-ignore
   async create(data: EventData): Promise<any> {
     if (DATABASE_TYPE == 'pg') {
-      const db = app.get('dbClient')
       const cli = app.get('vectordb')
       await cli.from('events').insert(data)
-      await db('events').insert(data);
     }
     return data
   }
@@ -90,7 +88,8 @@ export class EventService<
           return { events: search_result }
         }
       }
-      const { $limit: _, ...param } = params.query
+      //@ts-ignore
+      const { $limit: _, ...param } = params
       const tr = await vectordb.getDataWithMetadata(param, 10)
       return { events: tr }
     } else {
@@ -122,14 +121,27 @@ export class EventService<
         const bod = {
           query_embedding: '[' + f32_ary.toString() + ']',
           match_count: 2,
-          content_to_match: 'hi',
+          content_to_match: param.content,
         }
         const rr = await cli.rpc('match_events', bod)
-        console.log(rr)
+        console.log("result", rr)
         return { events: querys }
       }
-      const res = await super.find(params)
-      return { events: (res as unknown as { data: Array<any> }).data }
+      console.log("RES:", params)
+      const res = await cli.from('events').select()
+                                          .where((builder) => {
+                                            if (params["content"]) {
+                                              builder.where('content', params["content"]);
+                                            }
+                                            if ('$limit' in params) {
+                                              builder.limit(params['$limit']);
+                                            }
+                                            if (params["projectId"]) {
+                                              builder.where('projectId', params["projectId"]);
+                                            }
+                                          });
+      console.log("RES:", res)
+      return { events: (res as unknown as { data: Array<any> }) }
     }
   }
 }

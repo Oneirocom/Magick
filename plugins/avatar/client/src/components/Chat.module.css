@@ -115,6 +115,7 @@
 .speaker > label {
     display: block;
     margin: 8px 0;
+    color: #99ABB2;
 }
 
 .speaker input {

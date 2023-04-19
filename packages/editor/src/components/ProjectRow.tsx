@@ -91,7 +91,7 @@ const ProjectRow = ({
       <Modal
         open={openConfirm}
         onClose={handleClose}
-        onSubmit={onSubmit}
+        handleAction={onSubmit}
         title={`Delete ${spell?.name} spell`}
         submitText="Confirm"
         children="Do you want to delete this spell?"

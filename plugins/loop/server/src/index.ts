@@ -36,8 +36,6 @@ class LoopManager {
    * @param {any} agentData - Data for the agent.
    */
   addAgent({ spellRunner, agent, agentData }) {
-    console.log('addAgent', agent.id);
-    console.log('agentData', agentData)
     if (!agentData) return console.log('No data for this agent', agent.id);
     if (!agentData.data.loop_enabled)
       return console.log('Loop is not enabled for this agent');

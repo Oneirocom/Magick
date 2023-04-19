@@ -77,11 +77,13 @@
   }
 
   .spellListTitle {
+    color: #99ABB2;
   }
   
   select.spellSelector {
     padding: 0.3em;
     margin-top: 8px;
+    width: 100%;
   }
 
   .sxpContainer {
