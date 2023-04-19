@@ -19,9 +19,9 @@ export const Watch = () => {
         return
       }
       const point = state?.event?.point
-      customDebug().log('Watch#onPointerMove: point: ', point)
+      // customDebug().log('Watch#onPointerMove: point: ', point)
       const watchBoneNode = avatarVrm.humanoid?.getBoneNode(WATCH_BONE_NAME)
-      customDebug().log('Watch#onPointerMove: watchBoneNode: ', watchBoneNode)
+      // customDebug().log('Watch#onPointerMove: watchBoneNode: ', watchBoneNode)
       // watchBoneNode.add(new AxesHelper(AXIS_LEN))
       watchBoneNode.lookAt(point)
     },
