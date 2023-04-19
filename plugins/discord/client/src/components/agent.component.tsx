@@ -1,15 +1,15 @@
-import { Switch } from '@magickml/client-core'
-import { API_ROOT_URL, FILE_SERVER_URL } from '@magickml/core'
 import axios from 'axios'
-import { debounce } from 'lodash'
 import { useSnackbar } from 'notistack'
-import { FC, useEffect, useState } from 'react'
-import VariableModal from './VariableModal'
+import React, { FC, useEffect, useRef, useState } from 'react'
+import { debounce } from 'lodash'
 
 type PluginProps = {
   selectedAgentData: any
   props
 }
+import { API_ROOT_URL, FILE_SERVER_URL } from '@magickml/core'
+import { Switch } from '@magickml/client-core'
+import VariableModal from './VariableModal'
 
 export const DiscordAgentWindow: FC<any> = props => {
   props = props.props

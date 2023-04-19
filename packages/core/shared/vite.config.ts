@@ -1,17 +1,24 @@
 import { defineConfig } from 'vite'
 
+import viteTsConfigPaths from 'vite-tsconfig-paths'
+import dts from 'vite-plugin-dts'
+import { join } from 'path'
+import react from '@vitejs/plugin-react'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
-import react from '@vitejs/plugin-react'
-import { join } from 'path'
-import rollupNodePolyFill from 'rollup-plugin-polyfill-node'
-import dts from 'vite-plugin-dts'
+import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 import mdPlugin, { Mode } from 'vite-plugin-markdown'
-import viteTsConfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/editor',
   assetsInclude: ['**/*.vrm', '**/*.svg'],
+  resolve: {
+    alias: {
+      stream: 'rollup-plugin-node-polyfills/polyfills/stream',
+      url: 'rollup-plugin-node-polyfills/polyfills/url',
+      querystring: 'rollup-plugin-node-polyfills/polyfills/qs',
+    },
+  },
   plugins: [
     mdPlugin({ mode: [Mode.HTML, Mode.TOC, Mode.REACT] }),
     dts({
