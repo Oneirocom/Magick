@@ -76,10 +76,6 @@ export class DiscordConnector {
     this.discord_userid = discord_userid
     this.discord_bot_name = discord_bot_name
 
-    console.log(
-      '.......................................>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
-    )
-
     const token = discord_api_key
     if (!token) {
       console.warn('No API token for Discord bot, skipping')
