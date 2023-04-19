@@ -318,8 +318,8 @@ export class HNSWLib extends SaveableVectorStore {
         }
         vectors.push(embedding)
       }
-      //@ts-ignore
-      documents.push(new Document(data))
+      console.log('data', data)
+      documents.push(new Document(data as any))
     }
     await this.addVectors(vectors, documents)
   }
