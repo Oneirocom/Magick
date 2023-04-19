@@ -17,7 +17,7 @@ import {
 import { pluginManager } from '../../plugin';
 
 /** Brief description of the component that this file exports. */
-const info = 'Event Store is used to store events for an event and user';
+const info = 'Create Text Embedding generates a vector embedding from the input text';
 
 type InputReturn = {
   embedding: number[];
