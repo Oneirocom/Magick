@@ -1,7 +1,6 @@
 // DOCUMENTED 
-import Rete from 'rete'
+import Rete from 'rete';
 
-import { API_ROOT_URL } from '../../config';
 import { MagickComponent } from '../../engine';
 import { arraySocket, stringSocket, triggerSocket } from '../../sockets';
 import {
@@ -84,6 +83,9 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
       projectId: projectId
     }
     const events = await app.service('events').find(params)
+
+    console.log('found text embedding events', events)
+
     let responseData = null
     if (Array.isArray(events.events) && (events.events).length > 0) {
       responseData = events.events[0]
