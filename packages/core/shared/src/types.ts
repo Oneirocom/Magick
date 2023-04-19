@@ -519,6 +519,7 @@ export type CompletionInspectorControls = {
 }
 
 export type CompletionProvider = {
+  [x: string]: any
   type: CompletionType
   subtype: ImageCompletionSubtype | TextCompletionSubtype
   handler?: (attrs: {
@@ -526,7 +527,7 @@ export type CompletionProvider = {
     inputs: MagickWorkerInputs
     outputs: MagickWorkerOutputs
     context: unknown
-  }) => { success: boolean; result: string; error: string } // server only
+  }) => { success: boolean; result: string | number[]; error: string } // server only
   inspectorControls?: CompletionInspectorControls[] // client only
   inputs: CompletionSocket[]
   outputs: CompletionSocket[]

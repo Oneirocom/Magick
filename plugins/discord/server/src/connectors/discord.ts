@@ -38,6 +38,7 @@ export class DiscordConnector {
   tiktalknet_url!: string
   worldManager: WorldManager
   guildId!: any
+  message!: any
   constructor(options) {
     const {
       agent,
@@ -407,6 +408,7 @@ export class DiscordConnector {
   messageCreate = async (client: any, message: any) => {
     console.log('new message from discord:', message.content)
     this.guildId = message.guild
+    this.message = message;
     //gets the emojis from the text and replaces to unix specific type
     const reg = emojiRegex()
     let match
