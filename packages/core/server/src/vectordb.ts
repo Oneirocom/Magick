@@ -9,16 +9,18 @@ The original library can be found at https://github.com/hwchase17/langchainjs.
 import * as crypto from 'crypto'
 import fs from 'fs'
 import { HierarchicalNSW, SpaceName } from 'hnswlib-node'
-import { Embeddings } from 'langchain/embeddings'
+import { Embeddings } from 'langchain/embeddings/base'
 import path from 'node:path'
 import { v4 as uuidv4 } from 'uuid'
 
 import { InMemoryDocstore } from 'langchain/docstore'
 import { Document } from 'langchain/document'
 import {
-  SaveableVectorStore,
   SupabaseVectorStore,
-} from 'langchain/vectorstores'
+} from 'langchain/vectorstores/supabase'
+import {
+  SaveableVectorStore,
+} from 'langchain/vectorstores/base'
 import { EmbeddingArgs } from './customEmbeddings'
 
 

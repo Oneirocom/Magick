@@ -131,6 +131,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       const { app } = context.module;
       if(!app) throw new Error('App is not defined, cannot create event');
       const result = await app.service('events').create(data);
+      console.log("Result of event creation", result)
     } else {
       throw new Error('Content is empty, not storing the event !!')
     }

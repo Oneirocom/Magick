@@ -1,7 +1,6 @@
 // DOCUMENTED 
-import Rete from 'rete'
+import Rete from 'rete';
 
-import { API_ROOT_URL } from '../../config';
 import { MagickComponent } from '../../engine';
 import { arraySocket, stringSocket, triggerSocket } from '../../sockets';
 import {
@@ -83,19 +82,24 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
       getEmbedding: true,
       projectId: projectId
     }
-    
     const events = await app.service('events').find(params)
 
-    const responseData = events.data
-    
+    console.log('found text embedding events', events)
+
+    let responseData = null
+    if (Array.isArray(events.events) && (events.events).length > 0) {
+      responseData = events.events[0]
+    }
+
     let embedding = responseData ? responseData?.embedding?.toString() : null
     // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
-      embedding = JSON.parse(JSON.stringify(embedding));
-      // parse the string of comma separated numbers into a numeric array
-      embedding = embedding.split(',').map(Number);
+      if (embedding[0] === '[') {
+        embedding = JSON.parse(JSON.stringify(embedding));
+      } else {
+        embedding = JSON.parse(JSON.stringify("[" + embedding + "]"));
+      }
     }
-
     // Set the task closed state based on the presence of the embedding
     if (embedding) {
       this._task.closed = ['failure'];
