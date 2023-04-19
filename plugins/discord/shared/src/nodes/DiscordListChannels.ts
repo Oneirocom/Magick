@@ -13,7 +13,7 @@ import {
   ModuleContext,
   stringSocket,
   triggerSocket,
-  WorkerData,
+  WorkerData
 } from '@magickml/core'
 
 /**

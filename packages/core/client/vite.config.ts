@@ -3,9 +3,7 @@ import { defineConfig } from 'vite'
 
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
-import react from '@vitejs/plugin-react'
-import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
-import mdPlugin, { Mode } from 'vite-plugin-markdown'
+import rollupNodePolyFill from 'rollup-plugin-polyfill-node'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 
 import { join } from 'path'
@@ -51,13 +49,6 @@ export default defineConfig({
       plugins: [rollupNodePolyFill()],
       // External packages that should not be bundled into your library.
       external: [],
-    },
-  },
-  resolve: {
-    alias: {
-      stream: 'rollup-plugin-node-polyfills/polyfills/stream',
-      url: 'rollup-plugin-node-polyfills/polyfills/url',
-      querystring: 'rollup-plugin-node-polyfills/polyfills/qs',
     },
   },
   optimizeDeps: {

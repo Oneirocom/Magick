@@ -6,19 +6,12 @@ import { join } from 'path'
 import react from '@vitejs/plugin-react'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
-import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
+import rollupNodePolyFill from 'rollup-plugin-polyfill-node'
 import mdPlugin, { Mode } from 'vite-plugin-markdown'
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/finetune',
   assetsInclude: ['**/*.vrm', '**/*.svg'],
-  resolve: {
-    alias: {
-      stream: 'rollup-plugin-node-polyfills/polyfills/stream',
-      url: 'rollup-plugin-node-polyfills/polyfills/url',
-      querystring: 'rollup-plugin-node-polyfills/polyfills/qs',
-    },
-  },
   plugins: [
     mdPlugin({ mode: [Mode.HTML, Mode.TOC, Mode.REACT] }),
     dts({
