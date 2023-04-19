@@ -130,14 +130,14 @@ export class EventService<
       console.log("RES:", params)
       const res = await cli.from('events').select()
                                           .where((builder) => {
-                                            if (params["content"]) {
-                                              builder.where('content', params["content"]);
+                                            if (params.query.content) {
+                                              builder.where('content', params.query.content);
                                             }
-                                            if ('$limit' in params) {
-                                              builder.limit(params['$limit']);
+                                            if ('$limit' in params.query) {
+                                              builder.limit(params.query['$limit']);
                                             }
-                                            if (params["projectId"]) {
-                                              builder.where('projectId', params["projectId"]);
+                                            if (params.query.projectId) {
+                                              builder.where('projectId', params.query.projectId);
                                             }
                                           });
       console.log("RES:", res)
