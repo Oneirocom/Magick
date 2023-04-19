@@ -20,7 +20,7 @@ import {
 } from 'langchain/vectorstores/supabase'
 import {
   SaveableVectorStore,
-} from 'langchain/vectorstores'
+} from 'langchain/vectorstores/base'
 import { EmbeddingArgs } from './customEmbeddings'
 
 
