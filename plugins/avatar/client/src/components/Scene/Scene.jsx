@@ -1,13 +1,11 @@
-import React, {Suspense} from 'react'
-import {OrbitControls, OrthographicCamera} from '@react-three/drei'
-import {Canvas} from '@react-three/fiber'
-// eslint-disable-next-line no-unused-vars
-import {Debug, Physics} from '@react-three/rapier'
-// eslint-disable-next-line no-unused-vars
-import {Perf} from 'r3f-perf'
-import {Ground} from './Ground'
-import {Camera} from './Camera'
-import {useZustand} from '../../store/useZustand'
+import React, { Suspense } from 'react'
+import { OrbitControls, OrthographicCamera } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import { Debug, Physics } from '@react-three/rapier'
+import { Perf } from 'r3f-perf'
+import { Camera } from './Camera'
+import { Avatar } from './Avatar'
+import { AXIS_LEN } from '../../utils/constants'
 
 
 export const Scene = () => {
@@ -15,7 +13,7 @@ export const Scene = () => {
     <Canvas>
       {/* <Perf position="top-left"/> */}
 
-      <OrbitControls makeDefault/>
+      {/* <OrbitControls makeDefault /> */}
 
       <directionalLight
         castShadow
@@ -23,25 +21,20 @@ export const Scene = () => {
         intensity={1.5}
         shadow-normalBias={0.04}
       >
-        <OrthographicCamera/>
+        <OrthographicCamera />
       </directionalLight>
-      <ambientLight
-        intensity={0.5}
-      />
+      <ambientLight intensity={0.5} />
 
-      {/* <axesHelper
-        // eslint-disable-next-line react/no-unknown-property
-        args={[GROUND_SIZE]}
-      /> */}
+      <axesHelper args={[AXIS_LEN]} />
 
       <Suspense>
         <Physics colliders="hull">
-          <Ground/>
+          <Avatar />
           {/* <Debug/> */}
         </Physics>
       </Suspense>
 
-      <Camera/>
+      <Camera />
     </Canvas>
   )
 }
