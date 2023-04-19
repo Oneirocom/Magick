@@ -13,7 +13,7 @@ export const Scene = () => {
     <Canvas>
       {/* <Perf position="top-left"/> */}
 
-      {/* <OrbitControls makeDefault /> */}
+      <OrbitControls makeDefault />
 
       <directionalLight
         castShadow
