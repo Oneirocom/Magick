@@ -5,7 +5,7 @@
 import similarity from 'compute-cosine-similarity';
 import Rete from 'rete';
 import { MagickComponent } from '../../engine';
-import { embeddingSocket, numberSocket, triggerSocket } from '../../sockets';
+import { arraySocket, numberSocket, triggerSocket } from '../../sockets';
 import { MagickNode, MagickWorkerInputs, MagickWorkerOutputs, WorkerData } from '../../types';
 
 /**
@@ -32,8 +32,8 @@ export class CosineSimilarity extends MagickComponent<Promise<{ similarity: numb
    * @returns The node with the inputs and outputs added.
    */
   builder(node: MagickNode): MagickNode {
-    const embeddingInputA = new Rete.Input('embeddingA', 'Embedding A', embeddingSocket);
-    const embeddingInputB = new Rete.Input('embeddingB', 'Embedding B', embeddingSocket);
+    const embeddingInputA = new Rete.Input('embeddingA', 'Embedding A', arraySocket);
+    const embeddingInputB = new Rete.Input('embeddingB', 'Embedding B', arraySocket);
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
     const out = new Rete.Output('similarity', 'Similarity', numberSocket);

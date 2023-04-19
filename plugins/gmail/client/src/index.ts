@@ -26,17 +26,14 @@ const GmailPlugin = new ClientPlugin({
   name: 'GmailPlugin',
   agentComponents: [GmailAgentWindow],
   inputTypes: [
-    { name: 'Gmail (Reply)', sockets: inputSockets },
-    { name: 'Gmail (Mention)', sockets: inputSockets }
+    { name: 'Gmail', sockets: inputSockets }
   ],
   outputTypes: [
-    { name: 'Gmail (Reply)', sockets: outputSockets },
-    { name: 'Gmail (Mention)', sockets: outputSockets },
-    { name: 'Gmail (Post)', sockets: outputSockets }
+    { name: 'Gmail', sockets: outputSockets }
   ],
   secrets: [
     {
-      name: 'User ID',
+      name: 'Gmail Address',
       key: 'gmail_address',
       global: false,
     },

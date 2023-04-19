@@ -255,6 +255,7 @@ function DocumentTable({ documents, updateCallback }) {
   // Handle save action
   const handleSave = async () => {
     // call documents endpoint
+    const secrets = localStorage.getItem('secrets')
     const result = await fetch(`${API_ROOT_URL}/documents`, {
       method: 'POST',
       headers: {
@@ -263,6 +264,7 @@ function DocumentTable({ documents, updateCallback }) {
       body: JSON.stringify({
         ...newDocument,
         projectId: config.projectId,
+        secrets: secrets
       }),
     })
 

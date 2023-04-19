@@ -42,7 +42,7 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
     const success = new Rete.Output('success', 'Success', triggerSocket);
     const fail = new Rete.Output('failure', 'Failure', triggerSocket);
-    const out = new Rete.Output('embedding', 'Events', arraySocket);
+    const out = new Rete.Output('embedding', 'Embedding', arraySocket);
 
     return node
       .addInput(dataInput)
@@ -68,8 +68,7 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
   ) {
 
     const { projectId } = context
-
-    const content = (inputs && inputs[0]) as unknown as string
+    const content = (inputs['content'] && inputs['content'][0]) as unknown as string
 
     if (!content) {
       console.log('Content is null, not storing event');
@@ -97,12 +96,13 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
     const response = await fetch(url.toString())
     if (response.status !== 200) return null
     const json = await response.json()
-    
     const responseData = json.events[0]
     let embedding = responseData ? responseData?.embedding?.toString() : null
     // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
       embedding = JSON.parse(JSON.stringify(embedding));
+      // parse the string of comma separated numbers into a numeric array
+      embedding = embedding.split(',').map(Number);
     }
 
     // Set the task closed state based on the presence of the embedding
