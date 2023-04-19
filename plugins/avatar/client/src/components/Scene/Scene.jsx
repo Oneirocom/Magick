@@ -12,7 +12,7 @@ import { Watch } from './Watch'
 export const Scene = () => {
   return (
     <Canvas>
-      <Perf position="top-right"/>
+      {/* <Perf position="top-right"/> */}
 
       <OrbitControls makeDefault />
 
@@ -26,7 +26,7 @@ export const Scene = () => {
       </directionalLight>
       <ambientLight intensity={0.5} />
 
-      <axesHelper args={[AXIS_LEN]} />
+      {/* <axesHelper args={[AXIS_LEN]} /> */}
 
       <Suspense>
         <Physics colliders="hull">
