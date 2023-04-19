@@ -109,10 +109,10 @@ export const Avatar = () => {
     customDebug().log('Avatar: call at once')
 
     // Play idle animation at first
-    mixer.timeScale = 1
+    // mixer.timeScale = 1
     // activateAllActions()
     // setAllWeight(0)
-    playIdleAnimOnly()
+    // playIdleAnimOnly()
   }, [])
 
   return (
