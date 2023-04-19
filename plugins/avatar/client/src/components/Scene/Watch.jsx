@@ -1,15 +1,29 @@
 import React from 'react'
 import { Plane } from '@react-three/drei'
 import { useGesture } from '@use-gesture/react'
-import { WATCH_INIT_POS } from '../../utils/constants'
+import { AXIS_LEN, WATCH_BONE_NAME, WATCH_INIT_POS } from '../../utils/constants'
 import { customDebug } from '../../utils/custom.debug'
+import { useZustand } from '../../store/useZustand'
+import { AxesHelper } from 'three'
 
 
 export const Watch = () => {
+  const {
+    avatarVrm,
+  } = useZustand()
+
+
   const bind = useGesture({
     onPointerMove: (state) => {
+      if (!avatarVrm) {
+        return
+      }
       const point = state?.event?.point
       customDebug().log('Watch#onPointerMove: point: ', point)
+      const watchBoneNode = avatarVrm.humanoid?.getBoneNode(WATCH_BONE_NAME)
+      customDebug().log('Watch#onPointerMove: watchBoneNode: ', watchBoneNode)
+      // watchBoneNode.add(new AxesHelper(AXIS_LEN))
+      watchBoneNode.lookAt(point)
     },
   })
 
@@ -18,7 +32,7 @@ export const Watch = () => {
     <Plane
       position={WATCH_INIT_POS}
       receiveShadow
-      scale={0.3}
+      scale={4}
       {...bind()}
     >
       <meshStandardMaterial

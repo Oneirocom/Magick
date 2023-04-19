@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { VectorKeyframeTrack, AnimationClip, AnimationMixer, QuaternionKeyframeTrack } from 'three'
 import { mixamoVRMRigMap } from '../utils/constants'
+import { customDebug } from '../utils/custom.debug'
 
 
-export const useVrmMixamoAnimations = (vrm, mixamoAnimations) => {
+export const useVrmMixamoAnimations = (vrm, mixamoAnimations, exceptionBoneNames = []) => {
   const [mixer, setMixer] = useState(null)
   const [mixamoClip, setMixamoClip] = useState(null)
 
@@ -23,7 +24,13 @@ export const useVrmMixamoAnimations = (vrm, mixamoAnimations) => {
       const trackSplitted = track.name.split('.');
       const mixamoRigName = trackSplitted[0];
       const vrmBoneName = mixamoVRMRigMap[mixamoRigName];
-      const vrmNodeName = vrm.humanoid?.getBoneNode(vrmBoneName)?.name;
+      if (exceptionBoneNames.indexOf(vrmBoneName) > -1) {
+        return
+      }
+      customDebug().log('useVrmMixamoAnimations#useEffect: vrmBoneName: ', vrmBoneName)
+      const vrmBoneNode = vrm.humanoid?.getBoneNode(vrmBoneName)
+      customDebug().log('useVrmMixamoAnimations#useEffect: vrmBoneNode: ', vrmBoneNode)
+      const vrmNodeName = vrmBoneNode?.name;
 
       if (vrmNodeName != null) {
         const propertyName = trackSplitted[1];
