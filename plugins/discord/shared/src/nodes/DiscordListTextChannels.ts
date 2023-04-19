@@ -4,16 +4,23 @@
  * @category Utility
  */
 
+import Rete from 'rete';
 import {
-    MagickComponent, MagickNode,
+    Agent,
+    AgentManager,
+    MagickComponent,
+    pluginManager,
+    stringSocket,
+    triggerSocket,
+    MagickNode,
     MagickWorkerInputs,
     MagickWorkerOutputs,
-    ModuleContext, stringSocket,
-    triggerSocket, WorkerData
+    ModuleContext,
+    WorkerData
 } from '@magickml/core';
-import Rete from 'rete';
 
 async function discordTextChannels (context: ModuleContext): Promise<any> {
+    const { projectId } = context
     const { agent } = context.module;
     if (!agent) {
         return "Agent not found"
@@ -21,7 +28,7 @@ async function discordTextChannels (context: ModuleContext): Promise<any> {
     let result = ''
     //@ts-ignore
     //Get the Guild ID
-    const id = agent?.discord.guildId.id
+    let id = agent?.discord.guildId.id
     //@ts-ignore
     //Using the Guild ID
     const guild = await agent?.discord.client.guilds.fetch(id);
@@ -57,6 +64,7 @@ type WorkerReturn = {
  * @remarks This component is useful for testing purposes.
  */
 export class DiscordListTextChannels extends MagickComponent<Promise<WorkerReturn>> {
+
     constructor() {
         super('Discord Text Channels', {
             outputs: {
@@ -96,7 +104,7 @@ export class DiscordListTextChannels extends MagickComponent<Promise<WorkerRetur
         context: ModuleContext,
     ): Promise<WorkerReturn> {
 
-        const tool_desc = {
+        let tool_desc = {
             title: 'Discord Text Channels',
             body: 'Gets the List of text channels in a server',
             id: node.id,
