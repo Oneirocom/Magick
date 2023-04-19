@@ -1,10 +1,10 @@
 import { VectorKeyframeTrack, AnimationClip, QuaternionKeyframeTrack } from 'three'
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
-import { mixamoVRMRigMap } from './constants'
 import { VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm"
 import * as THREE from 'three'
 import { AnimationMixer } from 'three'
+import { mixamoVRMRigMap } from './constants'
 
 
 export function loadMixamoAnimation(url, vrm) {
