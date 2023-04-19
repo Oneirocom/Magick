@@ -669,28 +669,28 @@ export class DiscordConnector {
       app,
     })
 
-    if (!response) {
-      console.warn('Discord: No response outputs')
-      return
-    }
+    // if (!response) {
+    //   console.warn('Discord: No response outputs')
+    //   return
+    // }
 
-    console.log('response', response)
+    // console.log('response', response)
 
-    const outputKey = Object.keys(response).find(key =>
-      key.toLowerCase().includes('output')
-    ) as string
+    // const outputKey = Object.keys(response).find(key =>
+    //   key.toLowerCase().includes('output')
+    // ) as string
 
-    const Output = response[outputKey]
+    // const Output = response[outputKey]
 
-    if (!Output) {
-      console.warn('Discord: No Output')
-      return
-    }
+    // if (!Output) {
+    //   console.warn('Discord: No Output')
+    //   return
+    // }
 
-    console.log('handled response', Output)
-    if (!Output || Output === '') {
-      message.channel.send('Error: Empty Resonse')
-    } else message.channel.send(Output)
+    // console.log('handled response', Output)
+    // if (!Output || Output === '') {
+    //   message.channel.send('Error: Empty Resonse')
+    // } else message.channel.send(Output)
   }
 
   //Event that is triggered when a message is deleted
