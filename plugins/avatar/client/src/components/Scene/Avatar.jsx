@@ -5,6 +5,7 @@ import { customDebug } from '../../utils/custom.debug'
 import { useVrm } from '../../hooks/useVrm'
 import { useVrmMixamoAnimations } from '../../hooks/useVrmMixamoAnimations'
 import { useFrame } from '@react-three/fiber'
+import { BlinkManager } from '../../utils/blink.manager'
 
 
 export const Avatar = () => {
@@ -22,7 +23,15 @@ export const Avatar = () => {
   customDebug().log('Avatar: mixamoClip: ', mixamoClip)
 
 
-  // Call at once
+  // useEffect(() => {
+  //   if (!avatarVrm) {
+  //     return
+  //   }
+  //   const newBlinkManager = BlinkManager()
+  //   newBlinkManager.addBlinker(avatarVrm)
+  // }, [avatarVrm])
+
+
   useEffect(() => {
     if (!mixer || !mixamoClip) {
       return
