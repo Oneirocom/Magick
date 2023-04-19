@@ -66,6 +66,8 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
     _outputs: MagickWorkerOutputs,
     context
   ) {
+    const { app } = context.module;
+    if(!app) throw new Error('App is not defined, cannot delete event');
 
     const { projectId } = context
     const content = (inputs['content'] && inputs['content'][0]) as unknown as string
@@ -81,22 +83,11 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
       getEmbedding: true,
       projectId: projectId
     }
+    
+    const events = await app.service('events').find(params)
 
-    const urlString = `${API_ROOT_URL}/events`;
-
-    // Construct URL with query parameters
-    const url = new URL(urlString);
-    for (const p in params) {
-      if (Array.isArray(params[p])) {
-        params[p].forEach(v => url.searchParams.append(p, v));
-      } else {
-        url.searchParams.append(p, params[p]);
-      }
-    }
-    const response = await fetch(url.toString())
-    if (response.status !== 200) return null
-    const json = await response.json()
-    const responseData = json.events[0]
+    const responseData = events.data
+    
     let embedding = responseData ? responseData?.embedding?.toString() : null
     // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
