@@ -23,13 +23,14 @@ export const Avatar = () => {
   customDebug().log('Avatar: mixamoClip: ', mixamoClip)
 
 
-  // useEffect(() => {
-  //   if (!avatarVrm) {
-  //     return
-  //   }
-  //   const newBlinkManager = BlinkManager()
-  //   newBlinkManager.addBlinker(avatarVrm)
-  // }, [avatarVrm])
+  useEffect(() => {
+    if (!avatarVrm) {
+      return
+    }
+    customDebug().log('Avatar#useEffect')
+    const newBlinkManager = new BlinkManager()
+    newBlinkManager.addBlinker(avatarVrm)
+  }, [avatarVrm])
 
 
   useEffect(() => {
