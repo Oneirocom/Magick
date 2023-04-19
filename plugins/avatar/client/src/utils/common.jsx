@@ -84,20 +84,3 @@ export const mergeModelMeshes = (model, customMaterial) => {
   const mergedMesh = new THREE.Mesh(mergedBufferGeometry, material)
   return mergedMesh
 }
-
-
-export const domainToUrl = (domain) => {
-  assertDefined(domain)
-  const domainUrl = `https://${domain}`
-  return domainUrl
-}
-
-
-export const urlToDomain = (url) => {
-  assertDefined(url)
-  if (url.indexOf('www.') > -1) {
-    return
-  }
-  const domain = url.replace(/https:\/\//g, '').split('/').shift()
-  return domain
-}
