@@ -63,6 +63,9 @@
       "@magickml/plugin-discord-server": [
         "plugins/discord/server/src/index.ts"
       ],
+      "@magickml/plugin-discord-shared": [
+        "plugins/discord/shared/src/index.ts"
+      ],
       "@magickml/plugin-esoterica-client": [
         "plugins/esoterica/client/src/index.ts"
       ],
