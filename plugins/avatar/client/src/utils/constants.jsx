@@ -8,9 +8,11 @@ export const AVATAR_INIT_POS = [-0.4, -0.8, 0]
 
 export const AVATAR_DES_POS = CAMERA_INIT_POS
 
-export const WATCH_INIT_POS = [CAMERA_INIT_POS[0], CAMERA_INIT_POS[1], CAMERA_INIT_POS[2] - 0.1]
+export const WATCH_INIT_POS = [CAMERA_INIT_POS[0], CAMERA_INIT_POS[1], CAMERA_INIT_POS[2] - 1]
 
 export const WATCH_DES_POS = [CAMERA_INIT_POS[0], CAMERA_INIT_POS[1], CAMERA_INIT_POS[2] - 0.1]
+
+export const WATCH_BONE_NAME = 'head'
 
 export const mixamoVRMRigMap = {
   'mixamorigHips': 'hips',

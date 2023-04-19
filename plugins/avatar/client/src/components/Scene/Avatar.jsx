@@ -6,6 +6,7 @@ import { useVrm } from '../../hooks/useVrm'
 import { useVrmMixamoAnimations } from '../../hooks/useVrmMixamoAnimations'
 import { useFrame } from '@react-three/fiber'
 import { BlinkManager } from '../../utils/blink.manager'
+import { WATCH_BONE_NAME } from '../../utils/constants'
 
 
 export const Avatar = () => {
@@ -19,7 +20,7 @@ export const Avatar = () => {
   const fbx = useFBX('/models/magic idle.fbx')
   customDebug().log('Avatar: fbx: ', fbx)
 
-  const { mixer, mixamoClip } = useVrmMixamoAnimations(avatarVrm, fbx.animations)
+  const { mixer, mixamoClip } = useVrmMixamoAnimations(avatarVrm, fbx.animations, [WATCH_BONE_NAME])
   customDebug().log('Avatar: mixer: ', mixer)
   customDebug().log('Avatar: mixamoClip: ', mixamoClip)
 

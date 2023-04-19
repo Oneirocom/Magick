@@ -12,7 +12,7 @@ import { Watch } from './Watch'
 export const Scene = () => {
   return (
     <Canvas>
-      {/* <Perf position="top-left"/> */}
+      <Perf position="top-right"/>
 
       <OrbitControls makeDefault />
 
