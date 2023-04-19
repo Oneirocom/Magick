@@ -16,8 +16,10 @@ import { v4 as uuidv4 } from 'uuid'
 import { InMemoryDocstore } from 'langchain/docstore'
 import { Document } from 'langchain/document'
 import {
-  SaveableVectorStore,
   SupabaseVectorStore,
+} from 'langchain/vectorstores/supabase'
+import {
+  SaveableVectorStore,
 } from 'langchain/vectorstores'
 import { EmbeddingArgs } from './customEmbeddings'
 
