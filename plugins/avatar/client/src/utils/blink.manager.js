@@ -1,9 +1,10 @@
 import { VRMExpressionPresetName } from "@pixiv/three-vrm";
 import { Clock } from "three";
+import { customDebug } from "./custom.debug";
 
 
 export class BlinkManager {
-  constructor(closeTime = 0.5, openTime = 0.5, continuity = 1, randomness = 5) {
+  constructor(closeTime = 0.1, openTime = 0.1, continuity = 0.3, randomness = 5) {
     this.vrmBlinkers = [];
     this.mode = 'ready';
     this.clock = new Clock();
@@ -28,32 +29,43 @@ export class BlinkManager {
 
       switch (this.mode) {
         case 'closing':
-          if (this._eyeOpen > 0)
+          // customDebug().log('blink.manager#closing: this._eyeOpen: ', this._eyeOpen)
+
+          if (this._eyeOpen > 0) {
             this._eyeOpen -= deltaTime / this.closeTime;
-          else {
+
+          } else {
             this._eyeOpen = 0
             this.mode = 'open'
           }
+
           this._updateBlinkers();
           break;
 
         case 'open':
-          if (this._eyeOpen < 1)
+          // customDebug().log('blink.manager#open: this._eyeOpen: ', this._eyeOpen)
+
+          if (this._eyeOpen < 1) {
             this._eyeOpen += deltaTime / this.openTime;
-          else {
+          } else {
             this._eyeOpen = 1
             this.mode = 'ready'
           }
+
           this._updateBlinkers();
           break;
 
         case 'ready':
           this._blinkCounter += deltaTime;
+
           if (this._blinkCounter >= this.continuity) {
-            if (Math.floor(Math.random() * this.randomness) === 0)
+            // customDebug().log('blink.manager#ready: this._blinkCounter: ', this._blinkCounter)
+            if (Math.floor(Math.random() * this.randomness) === 0) {
               this.mode = 'closing'
+            }
             this._blinkCounter = 0;
           }
+
           break;
       }
     }, 1000 / 30);
@@ -62,7 +74,9 @@ export class BlinkManager {
 
   _updateBlinkers() {
     this.vrmBlinkers.forEach(vrm => {
-      vrm.expressionManager.setValue(VRMExpressionPresetName.Blink, 1 - this._eyeOpen)
+      const blendShapeValue = 1 - this._eyeOpen
+      // customDebug().log('blink.manager#_updateBlinkers: blendShapeValue: ', blendShapeValue)
+      vrm.expressionManager.setValue(VRMExpressionPresetName.Blink, blendShapeValue)
       vrm.expressionManager.update()
     });
   }
