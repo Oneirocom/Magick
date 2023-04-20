@@ -6,8 +6,10 @@ import {
   AudioPlayerStatus,
   StreamType,
   NoSubscriberBehavior,
+  getVoiceConnection,
 } from '@discordjs/voice';
 import { tts, tts_tiktalknet, app } from '@magickml/server-core';
+import { Guild, VoiceChannel } from 'discord.js';
 import { addSpeechEvent } from './voiceUtils/addSpeechEvent';
 
 /**
@@ -140,15 +142,10 @@ export function initSpeechClient(options: {
   return client;
 }
 
-/**
- * Join the voice channel and start listening to voice transcriptions.
- * @param {Discord.TextChannel} textChannel - Text channel to join.
- * @param {string} clientId - Client ID of the application.
- */
-export async function recognizeSpeech(textChannel: any, clientId: string) {
-  console.log('recognizeStream');
+export async function stopSpeechClient(textChannel, clientId) {
+  let connection
   if (textChannel) {
-    joinVoiceChannel({
+    connection = joinVoiceChannel({
       channelId: textChannel.id,
       guildId: textChannel.guild.id,
       adapterCreator: textChannel.guild.voiceAdapterCreator,
@@ -157,4 +154,25 @@ export async function recognizeSpeech(textChannel: any, clientId: string) {
       selfMute: false, // this may also be needed
     });
   }
+  connection.destroy()
+}
+/**
+ * Join the voice channel and start listening to voice transcriptions.
+ * @param {Discord.TextChannel} textChannel - Text channel to join.
+ * @param {string} clientId - Client ID of the application.
+ */
+export async function recognizeSpeech(textChannel: any, clientId: string) {
+  console.log('recognizeStream');
+  let connection
+  if (textChannel) {
+    connection = joinVoiceChannel({
+      channelId: textChannel.id,
+      guildId: textChannel.guild.id,
+      adapterCreator: textChannel.guild.voiceAdapterCreator,
+      selfDeaf: false,
+      group: 'default_' + clientId,
+      selfMute: false, // this may also be needed
+    });
+  }
+  return connection
 }

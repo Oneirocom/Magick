@@ -4,12 +4,11 @@
  * @class
  */
 import { ClientPlugin } from '@magickml/core'
-import Nodes from '@magickml/plugin-langchain-shared'
-
+import Nodes, { getNodes } from '@magickml/plugin-langchain-shared'
 
 const LangchainPlugin = new ClientPlugin({
   name: 'LangchainPlugin',
-  nodes: Nodes,
+  nodes: getNodes(),
   secrets: [],
 })
 
