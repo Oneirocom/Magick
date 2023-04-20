@@ -139,10 +139,11 @@ export const getNodes = (): MagickComponent<unknown>[] => {
     for (const key of sortedComponentKeys) {
       sortedComponents[key] = allComponents[key];
     }
-
     return Object.values(sortedComponents)
       .map(component => component())
       .sort(compare);
+
+
   } catch (e) {
     console.error(e)
     return []
