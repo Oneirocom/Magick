@@ -31,66 +31,17 @@ const { secrets, completionProviders } = shared
 const text2audioCompletionControls = [
   {
     type: InputControl,
-    dataKey: 'alpha',
-    name: 'Alpha',
+    dataKey: 'bucket_name',
+    name: 'Bucket name',
     icon: 'moon',
-    defaultValue: 0.75,
+    defaultValue: ''
   },
   {
     type: InputControl,
-    dataKey: 'num_inference_steps',
-    name: 'Number of Inference Steps',
+    dataKey: 'supabase_url',
+    name: 'Supabase URL',
     icon: 'moon',
-    defaultValue: 50,
-  },
-  {
-    type: InputControl,
-    dataKey: 'seed_image_id',
-    name: 'Seed Image ID',
-    icon: 'moon',
-    defaultValue: 'og_beat',
-  },
-  {
-    type: InputControl,
-    dataKey: 'start_seed',
-    name: 'Start Seed',
-    icon: 'moon',
-    defaultValue: 42,
-  },
-  {
-    type: InputControl,
-    dataKey: 'start_denoising',
-    name: 'Start Denoising',
-    icon: 'moon',
-    defaultValue: 0.75,
-  },
-  {
-    type: InputControl,
-    dataKey: 'start_guidance',
-    name: 'Start Guidance',
-    icon: 'moon',
-    defaultValue: 7,
-  },
-  {
-    type: InputControl,
-    dataKey: 'end_seed',
-    name: 'End Seed',
-    icon: 'moon',
-    defaultValue: 123,
-  },
-  {
-    type: InputControl,
-    dataKey: 'end_denoising',
-    name: 'End Denoising',
-    icon: 'moon',
-    defaultValue: 0.75,
-  },
-  {
-    type: InputControl,
-    dataKey: 'end_guidance',
-    name: 'End Guidance',
-    icon: 'moon',
-    defaultValue: 7,
+    defaultValue: '',
   },
 ]
 

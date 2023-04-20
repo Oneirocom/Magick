@@ -23,6 +23,13 @@ const secrets: PluginSecret[] = [
     global: true,
     getUrl: 'https://app.banana.dev/',
   },
+  {
+    name: 'Riffusion Supabase Bucket Secret',
+    key: 'riffusion_supabase_key',
+    global: true,
+    getUrl: 'https://app.banana.dev/',
+  }
+  
 ]
 
 /**
@@ -35,15 +42,10 @@ const completionProviders: CompletionProvider[] = [
     subtype: 'text2audio',
     inputs: [
       {
-        socket: 'start_prompt',
-        name: 'Start Prompt',
+        socket: 'prompt',
+        name: 'Prompt',
         type: stringSocket,
       },
-      {
-        socket: 'end_prompt',
-        name: 'End Prompt',
-        type: stringSocket,
-      }
     ],
     outputs: [
       {

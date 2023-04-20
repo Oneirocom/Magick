@@ -2,7 +2,8 @@
 import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import axios from 'axios'
 import { BANANA_ENDPOINT } from '../constants'
-import { run, start, check } from '@banana-dev/banana-dev'
+import { run } from '@banana-dev/banana-dev'
+import { createClient } from '@supabase/supabase-js'
 
 /**
  * Makes an request to a riffusion completion service.
@@ -25,29 +26,20 @@ export async function textToAudioCompletion(
   const spell = currentSpell
   // Get the input text prompts.
   console.log('inputs are', inputs)
-  const start_prompt = inputs['start_prompt'][0]
-  const end_prompt = inputs['end_prompt'][0]
+  const prompt = inputs['prompt'][0]
+  const bucket_name = node?.data?.bucket_name as string
+  const supabase_url = node?.data?.supabase_url as string
 
   const modelInputs = {
-    // model: node?.data?.model,
-    alpha: parseFloat((node?.data?.alpha as string) ?? '0.75'),
-    num_inference_steps: parseFloat(
-      (node?.data?.num_inference_steps as string) ?? '50'
-    ),
-    seed_image_id: node?.data?.seed_image_id,
-    start: {
-      prompt: start_prompt,
-      seed: parseFloat((node?.data?.start_seed as string) ?? '42'),
-      denoising: parseFloat((node?.data?.start_denoising as string) ?? '0.75'),
-      guidance: parseFloat((node?.data?.start_guidance as string) ?? '7'),
-    },
-    end: {
-      prompt: end_prompt,
-      seed: parseFloat((node?.data?.end_seed as string) ?? '123'),
-      denoising: parseFloat((node?.data?.end_denoising as string) ?? '0.75'),
-      guidance: parseFloat((node?.data?.end_guidance as string) ?? '7'),
-    },
+    prompt,
   }
+
+  // create supabase new client
+  const supabase = createClient(
+    supabase_url,
+    // @ts-ignore
+    context.module.secrets['riffusion_supabase_key']
+  )
 
   // Make the API request and handle the response.
   try {
@@ -58,8 +50,8 @@ export async function textToAudioCompletion(
       created: number
       apiVersion: string
       modelOutputs: {
-        image: string
-        audio: string
+        image_base64: string
+        audio_base64: string
       }[]
     }
 
@@ -76,7 +68,6 @@ export async function textToAudioCompletion(
     // Save the request data for future reference.
     saveRequest({
       projectId: projectId,
-      // requestData: JSON.stringify(settings),
       requestData: JSON.stringify(modelInputs),
       responseData: JSON.stringify(outputs),
       startTime: start,
@@ -93,16 +84,23 @@ export async function textToAudioCompletion(
       nodeId: node.id as number,
     })
 
-    // // Check if choices array is not empty, then return the result.
-    // if (resp.data.choices && resp.data.choices.length > 0) {
-    //   const choice = resp.data.choices[0]
-    //   console.log('choice', choice)
-    //   return { success: true, result: choice.text }
-    // }
-    // // If no choices were returned, return an error.
-    // return { success: false, error: 'No choices returned' }
+    // Upload the audio to Supabase bucket
+    const audio_base64 = outputs.modelOutputs[0].audio_base64
+    const buffer = Buffer.from(audio_base64, 'base64')
+    const fileName = `audio-${Date.now()}.mp3`
+    const { error: uploadError, data } = await supabase.storage
+      .from(bucket_name)
+      .upload(fileName, buffer, { contentType: 'audio/wav' })
 
-    return { success: true, result: outputs.modelOutputs[0].audio as string }
+    if (uploadError) {
+      console.error(uploadError)
+      return { success: false, error: uploadError.message }
+    }
+
+    return {
+      success: true,
+      result: `${supabase_url}/storage/v1/object/public/${bucket_name}/${data.path}`,
+    }
   } catch (err: any) {
     console.error(err)
     return { success: false, error: err.message }
