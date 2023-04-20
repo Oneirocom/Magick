@@ -100,12 +100,10 @@ export class DiscordJoinVoice extends MagickComponent<Promise<WorkerReturn>> {
      * @returns The node with its inputs and outputs.
      */
     builder(node: MagickNode) {
-        const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
         const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
         const outp = new Rete.Output('output', 'String', stringSocket);
 
         return node
-            .addInput(dataInput)
             .addOutput(dataOutput)
             .addOutput(outp);
     }
@@ -130,7 +128,7 @@ export class DiscordJoinVoice extends MagickComponent<Promise<WorkerReturn>> {
             id: node.id,
             action: discordJoinVC.toString(),
             function_name: 'discordJoinVC',
-            keyword: 'discord voice call, vc join',
+            keyword: 'discord voice call, vc join, Join/connect/enter/hop on/participate in the voice channel/call/chat and speak/engage in the audio chat',
 
         }
 
