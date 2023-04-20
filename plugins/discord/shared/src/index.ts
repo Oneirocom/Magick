@@ -21,7 +21,7 @@ export function getNodes(): MagickComponent<any>[] {
  * Export an array of nodes
  */
 export default [
-  DiscordJoinVoice,
+  // DiscordJoinVoice,
   DiscordListTextChannels,
   DiscordListVoiceChannels,
 ];

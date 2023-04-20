@@ -4,7 +4,7 @@ import {
   WorkerData,
 } from '@magickml/core'
 
-import { Embeddings } from 'langchain/embeddings'
+import { Embeddings } from 'langchain/embeddings/base'
 
 export type EmbeddingArgs ={
   modelName: string
