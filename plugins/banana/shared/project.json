@@ -1,7 +1,7 @@
 {
-  "name": "@magickml/plugin-banana-client",
+  "name": "@magickml/plugin-banana-shared",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/pluginbanana/client/src",
+  "sourceRoot": "plugins/banana/shared/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],
   "targets": {
@@ -9,14 +9,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["plugins/banana/client/**/*.ts"]
+        "lintFilePatterns": ["plugins/banana/shared/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "plugins/banana/client/jest.config.ts",
+        "jestConfig": "plugins/banana/shared/jest.config.ts",
         "passWithNoTests": true
       }
     }
