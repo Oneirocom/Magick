@@ -109,6 +109,7 @@ export class Output extends MagickComponent<void> {
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<{ output: string }> {
+    console.log('***** CALLING OUTPUT WORKER')
     const inputName = Object.keys(context.data)[0]
 
     if (!inputs.input) {
@@ -134,6 +135,7 @@ export class Output extends MagickComponent<void> {
           t => t.name === responseOutputType
         )
 
+        console.log('******** CALLING HANDLER')
         t.handler({
           output,
           agent: module.agent,

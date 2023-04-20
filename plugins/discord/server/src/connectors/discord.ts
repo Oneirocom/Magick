@@ -1,10 +1,11 @@
 // DOCUMENTED
 import { AgentInterface, WorldManager } from '@magickml/core'
 import Discord, {
-  AttachmentBuilder, ChannelType,
+  AttachmentBuilder,
+  ChannelType,
   EmbedBuilder,
   GatewayIntentBits,
-  Partials
+  Partials,
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
 import emojiRegex from 'emoji-regex'
@@ -122,23 +123,23 @@ export class DiscordConnector {
             voice_language_code,
             tiktalknet_url,
           } = this
-            ; (async () => {
-              if (typeof window === 'undefined') {
-                const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
-                  await import('./discord-voice')
-                recognizeSpeech = _recognizeSpeech
-                this.client = initSpeechClient({
-                  client,
-                  discord_bot_name,
-                  agent,
-                  spellRunner,
-                  voiceProvider: voice_provider,
-                  voiceCharacter: voice_character,
-                  languageCode: voice_language_code,
-                  tiktalknet_url,
-                })
-              }
-            })()
+          ;(async () => {
+            if (typeof window === 'undefined') {
+              const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
+                await import('./discord-voice')
+              recognizeSpeech = _recognizeSpeech
+              this.client = initSpeechClient({
+                client,
+                discord_bot_name,
+                agent,
+                spellRunner,
+                voiceProvider: voice_provider,
+                voiceCharacter: voice_character,
+                languageCode: voice_language_code,
+                tiktalknet_url,
+              })
+            }
+          })()
         }
         this.client.on(
           'joinvc',
@@ -191,22 +192,18 @@ export class DiscordConnector {
         )
 
         this.client.ws
+        ;(async () => {
+          try {
+            const login = await this.client.login(token)
+            console.log('Discord client logged in', login)
+          } catch (e) {
+            return console.error('Error logging in discord client', e)
+          }
 
-          ; (async () => {
-
-            try {
-              const login = await this.client.login(token)
-              console.log('Discord client logged in', login)
-
-            } catch (e) {
-              return console.error('Error logging in discord client', e)
-            }
-
-            this.client.on('error', err => {
-              console.error('Discord client error', err)
-            })
-          })()
-
+          this.client.on('error', err => {
+            console.error('Discord client error', err)
+          })
+        })()
       } catch (e) {
         console.error('Error creating discord client', e)
       }
@@ -432,12 +429,11 @@ export class DiscordConnector {
     return mention
   }
 
-
   //Event that is trigger when a new message is created (sent)
   messageCreate = async (client: any, message: any) => {
     console.log('new message from discord:', message.content)
     this.guildId = message.guild
-    this.message = message;
+    this.message = message
     //gets the emojis from the text and replaces to unix specific type
     const reg = emojiRegex()
     let match
@@ -702,28 +698,28 @@ export class DiscordConnector {
       app,
     })
 
-    if (!response) {
-      console.warn('Discord: No response outputs')
-      return
-    }
+    // if (!response) {
+    //   console.warn('Discord: No response outputs')
+    //   return
+    // }
 
-    console.log('response', response)
+    // console.log('response', response)
 
-    const outputKey = Object.keys(response).find(
-      key => key.toLowerCase().includes('output')
-    ) as string
+    // const outputKey = Object.keys(response).find(key =>
+    //   key.toLowerCase().includes('output')
+    // ) as string
 
-    const Output = response[outputKey]
+    // const Output = response[outputKey]
 
-    if (!Output) {
-      console.warn('Discord: No Output')
-      return
-    }
+    // if (!Output) {
+    //   console.warn('Discord: No Output')
+    //   return
+    // }
 
-    console.log('handled response', Output)
-    if (!Output || Output === '') {
-      message.channel.send('Error: Empty Resonse')
-    } else message.channel.send(Output)
+    // console.log('handled response', Output)
+    // if (!Output || Output === '') {
+    //   message.channel.send('Error: Empty Resonse')
+    // } else message.channel.send(Output)
   }
 
   //Event that is triggered when a message is deleted
@@ -945,8 +941,8 @@ export class DiscordConnector {
               deleted: boolean
               permissionsFor: (arg0: any) => {
                 (): any
-                new(): any
-                has: { (arg0: string[]): any; new(): any }
+                new (): any
+                has: { (arg0: string[]): any; new (): any }
               }
               name: string | boolean
               id: string | boolean
