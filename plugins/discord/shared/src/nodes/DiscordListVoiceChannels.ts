@@ -76,12 +76,10 @@ export class DiscordListVoiceChannels extends MagickComponent<Promise<WorkerRetu
      * @returns The node with its inputs and outputs.
      */
     builder(node: MagickNode) {
-        const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
         const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
         const outp = new Rete.Output('output', 'String', stringSocket);
 
         return node
-            .addInput(dataInput)
             .addOutput(dataOutput)
             .addOutput(outp);
     }
@@ -106,7 +104,7 @@ export class DiscordListVoiceChannels extends MagickComponent<Promise<WorkerRetu
             id: node.id,
             action: discord_list_channels.toString(),
             function_name: 'discord_list_channels',
-            keyword: 'Discord voice channels',
+            keyword: 'Discord voice channels, get audio channels, server audio channels, voice channels, server voice channels, fetch audio channels, get audio channels from server.',
 
         }
 

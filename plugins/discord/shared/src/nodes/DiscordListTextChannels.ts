@@ -86,12 +86,10 @@ export class DiscordListTextChannels extends MagickComponent<Promise<WorkerRetur
      * @returns The node with its inputs and outputs.
      */
     builder(node: MagickNode) {
-        const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
         const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
         const outp = new Rete.Output('output', 'String', stringSocket);
 
         return node
-            .addInput(dataInput)
             .addOutput(dataOutput)
             .addOutput(outp);
     }
