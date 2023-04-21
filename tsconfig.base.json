@@ -51,12 +51,9 @@
       "@magickml/types": [
         "packages/@types/src/index.ts"
       ],
-      "@magickml/plugin-banana-client": [
-        "plugins/banana/client/src/index.ts"
-      ],
-      "@magickml/plugin-banana-server": [
-        "plugins/banana/server/src/index.ts"
-      ],
+      "@magickml/plugin-banana-client": ["plugins/banana/client/src/index.ts"],
+      "@magickml/plugin-banana-server": ["plugins/banana/server/src/index.ts"],
+      "@magickml/plugin-banana-shared": ["plugins/banana/shared/src/index.ts"],
       "@magickml/plugin-discord-client": [
         "plugins/discord/client/src/index.ts"
       ],
