@@ -1,5 +1,4 @@
 import { Modal } from '@magickml/client-core'
-import Grid from '@mui/material/Grid'
 import { useState } from 'react'
 
 const VariableModal = ({
@@ -19,6 +18,9 @@ const VariableModal = ({
       setState({ ...state, [name]: e.target.checked ? 'on' : 'off' })
     else setState({ ...state, [name]: value })
   }
+  const handleClose = () => {
+    setEditMode(false)
+  }
 
   const handleSave = () => {
     const data = {
@@ -33,7 +35,7 @@ const VariableModal = ({
   }
 
   return (
-    <Modal open={editMode} setOpen={setEditMode} handleAction={handleSave}>
+    <Modal open={editMode} onClose={handleClose} handleAction={handleSave}>
       <div style={{ marginBottom: '1em' }}>
         <div>
           <span className="form-item-label">Email Address</span>
@@ -59,14 +61,6 @@ const VariableModal = ({
           />
         </div>
       </div>
-      <Grid container>
-        <Grid item xs={12}>
-          <p style={{ marginTop: '1em' }} className="modal-element">
-            To set up a Gmail bot, you will need a Gmail{' '}
-            <a href="https://gmail.com/">account</a>.
-          </p>
-        </Grid>
-      </Grid>
     </Modal>
   )
 }

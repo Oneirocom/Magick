@@ -14,9 +14,6 @@ export const TwitterAgentWindow: FC<any> = props => {
   )
   const [disable, setDisable] = useState(false)
 
-  const handleClose = () => {
-    setEditMode(false)
-  }
 
   useEffect(() => {
     if (props.enable['TwitterPlugin'] == false) {
@@ -84,7 +81,7 @@ export const TwitterAgentWindow: FC<any> = props => {
       {editMode && (
         <VariableModal
           editMode={editMode}
-          setEditMode={handleClose}
+          setEditMode={setEditMode}
           selectedAgentData={selectedAgentData}
           update={update}
         />

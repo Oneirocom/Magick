@@ -102,6 +102,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     const getEvents = async (params: GetEventArgs) => {
       const result = await app.service('events').find({ query: params })
+      console.log(result)
       // app is a feathers-koa app
       const { events } = result
 
@@ -120,8 +121,9 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       embedding = (embedding as string)?.split(',')
     }
 
-    const { observer, client, channel, channelType, rawData, projectId, entities } =
+    const { observer, client, channel, channelType, projectId, entities } =
       event
+
     const typeData = (node.data as { type: string })?.type
     const type =
       typeData !== undefined && typeData.length > 0
@@ -138,7 +140,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       entities,
       channel,
       channelType,
-      rawData,
       projectId,
       limit,
     }

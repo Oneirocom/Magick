@@ -5,15 +5,13 @@ import { v4 as uuidv4 } from 'uuid'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
-import { Module } from '../../plugins/modulePlugin/module'
 import { anySocket, eventSocket, triggerSocket } from '../../sockets'
 import {
-  EditorContext,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleContext,
-  WorkerData,
+  WorkerData
 } from '../../types'
 
 /** Component info text */
@@ -111,8 +109,7 @@ export class Output extends MagickComponent<void> {
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<{ output: string }> {
-    console.log('output, context', context)
-
+    console.log('***** CALLING OUTPUT WORKER')
     const inputName = Object.keys(context.data)[0]
 
     if (!inputs.input) {
@@ -127,25 +124,18 @@ export class Output extends MagickComponent<void> {
       inputs.event?.[0] ||
       (data && (Object.values(data)[0] as unknown[]))
 
-      console.log('event', event)
-
-
     if (module.agent) {
       if (outputType && (outputType as string).includes('Default')) {
-        console.log('handling default response type', outputType)
-        console.log('pluginManager.getOutputTypes()', pluginManager.getInputTypes())
         const type = pluginManager.getInputTypes().find(type => {
           return type.name === inputName.replace('Input - ', '')
         })
-
-        console.log('outputType', type)
-        console.log('outputType?.defaultResponseOutput', type?.defaultResponseOutput)
 
         const responseOutputType = type?.defaultResponseOutput
         const t = module.agent.outputTypes.find(
           t => t.name === responseOutputType
         )
 
+        console.log('******** CALLING HANDLER')
         t.handler({
           output,
           agent: module.agent,
@@ -161,7 +151,6 @@ export class Output extends MagickComponent<void> {
         } else if (!t.handler) {
           console.error('output type handler is not defined', t)
         } else {
-          console.log('handling! 2 ', outputType, t)
           t.handler({
             output,
             agent: module.agent,

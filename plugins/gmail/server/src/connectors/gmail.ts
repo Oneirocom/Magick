@@ -3,144 +3,6 @@ import { app } from '@magickml/server-core'
 import * as IMAP from './IMAP'
 import * as SMTP from './SMTP'
 
-// Example serverInfo object
-export const makeServerInfo = (address, password) => {
-  return {
-    smtp: {
-      host: 'smtp.gmail.com',
-      port: 465,
-      auth: {
-        user: address,
-        pass: password,
-      },
-    },
-    imap: {
-      host: 'imap.gmail.com',
-      port: 993,
-      auth: {
-        user: address,
-        pass: password,
-      },
-    },
-  }
-}
-
-// Get list of mailboxes.
-export const getMailboxes = async (address, password) => {
-  const serverInfo = makeServerInfo(address, password)
-  try {
-    const imapWorker: IMAP.Worker = new IMAP.Worker(serverInfo)
-    const mailboxes: IMAP.IMailbox[] = await imapWorker.listMailboxes()
-    return mailboxes
-  } catch (inError) {
-    return 'error, could not retrieve mailboxes'
-  }
-}
-
-// Get list of messages in a mailbox (does NOT include bodies).
-export const getMessagesFromMailbox = async ({
-  mailbox,
-  address,
-  password,
-}: {
-  mailbox: IMAP.IMailbox
-  address: string
-  password: string
-}) => {
-  const serverInfo = makeServerInfo(address, password)
-  try {
-    const imapWorker: IMAP.Worker = new IMAP.Worker(serverInfo)
-    const messages: IMAP.IMessage[] = await imapWorker.listMessages({
-      mailbox,
-    })
-    return messages
-  } catch (inError) {
-    return 'error'
-  }
-}
-
-// Get a message's plain text body.
-export const getMessageBody = async ({
-  id,
-  mailbox,
-  address,
-  password,
-}: {
-  id: string
-  mailbox: IMAP.IMailbox
-  address: string
-  password: string
-}) => {
-  const serverInfo = makeServerInfo(address, password)
-  try {
-    const imapWorker: IMAP.Worker = new IMAP.Worker(serverInfo)
-    const messageBody: string | boolean = await imapWorker.getMessageBody({
-      mailbox: mailbox,
-      id: parseInt(id),
-    })
-    return messageBody
-  } catch (inError) {
-    return 'error'
-  }
-}
-
-// Delete a message.
-export const deleteMessage = async ({
-  mailbox,
-  id,
-  address,
-  password,
-}: {
-  mailbox: IMAP.IMailbox
-  id: string
-  address: string
-  password: string
-}) => {
-  const serverInfo = makeServerInfo(address, password)
-  try {
-    const imapWorker: IMAP.Worker = new IMAP.Worker(serverInfo)
-    await imapWorker.deleteMessage({
-      mailbox: mailbox,
-      id: parseInt(id, 10),
-    })
-    return true
-  } catch (inError) {
-    return 'error'
-  }
-}
-
-// Send a message.
-export const sendMessage = async ({
-  to,
-  from,
-  subject,
-  text,
-  address,
-  password,
-}: {
-  to: string[],
-  from: string,
-  subject: string,
-  text: string,
-  address: string
-  password: string
-}) => {
-  console.log('sending message')
-  const serverInfo = makeServerInfo(address, password)
-  try {
-    const smtpWorker: SMTP.Worker = new SMTP.Worker(serverInfo)
-    await smtpWorker.sendMessage({
-      to,
-      from,
-      subject,
-      text
-    })
-    return true
-  } catch (inError) {
-    return 'error'
-  }
-}
-
 export class GmailConnector {
   spellRunner
   data
@@ -148,7 +10,8 @@ export class GmailConnector {
   gmail_stream_rules = ''
   localUser: any
   worldManager: any
-
+  mailboxes: IMAP.IMailbox[] | undefined
+  imapWorker: IMAP.Worker | undefined
   loop: any
 
   constructor({ spellRunner, agent, worldManager }) {
@@ -163,36 +26,41 @@ export class GmailConnector {
       console.warn('Gmail is not enabled, skipping')
       return
     }
-    console.log('Gmail enabled, initializing...')
 
-    this.loop = setInterval(() => {
-      this.handler()
-    }, 1000)
+    ;(async () => {
+      const serverInfo = this.makeServerInfo(
+        this.data.gmail_address,
+        this.data.gmail_password
+      )
+
+      this.imapWorker = new IMAP.Worker(serverInfo)
+
+      this.mailboxes = (await this.getMailboxes()) as IMAP.IMailbox[]
+
+      console.log('mailboxes', this.mailboxes)
+
+      // if mailboxes is not an array, return
+      if (!Array.isArray(this.mailboxes)) {
+        return console.error('no mailboxes')
+      }
+
+      this.loop = setInterval(() => {
+        this.handler()
+      }, 1000)
+    })()
   }
 
   async handler() {
-    const mailboxes = await getMailboxes(
-      this.data.gmail_address,
-      this.data.gmail_password
-    )
-
-    // if mailboxes is not an array, return
-    if (!Array.isArray(mailboxes)) {
-      return
-    }
-
-    mailboxes.map(async mailbox => {
-      const messages = await getMessagesFromMailbox({
-        mailbox,
-        address: this.data.gmail_address,
-        password: this.data.gmail_password,
-      })
+    this.mailboxes?.map(async mailbox => {
+      console.log('mailbox', mailbox)
+      const messages = await this.getMessagesFromMailbox(mailbox)
       // if messages is not an array, return
       if (!Array.isArray(messages)) {
-        return
+        return console.log('no messages')
       }
       messages.map(async message => {
-        const messageBody = await getMessageBody({
+        console.log('message', message)
+        const messageBody = await this.getMessageBody({
           id: message.id,
           mailbox: mailbox,
           address: this.data.gmail_address,
@@ -210,7 +78,7 @@ export class GmailConnector {
               agentId: this.agent.id,
               entities: [message.from, this.data.gmail_address], // TODO: Need to get all CC and senders
               channelType: 'email', // TODO: Determine if sent to us or we are CC'd
-              rawData: JSON.stringify({message, mailbox, messageBody}),
+              rawData: JSON.stringify({ message, mailbox, messageBody }),
             },
           },
           agent: this.agent,
@@ -227,7 +95,7 @@ export class GmailConnector {
   async handleResponse(resp, event) {
     const rawData = JSON.parse(event.rawData)
 
-    await sendMessage({
+    await this.sendMessage({
       to: [rawData.message.from],
       from: this.data.gmail_address,
       subject: 'Re: ' + rawData.message.subject,
@@ -238,6 +106,140 @@ export class GmailConnector {
   }
 
   destroy() {
+    this.imapWorker?.client?.close()
     clearInterval(this.loop)
+  }
+
+  // Example serverInfo object
+  makeServerInfo(address, password) {
+    return {
+      smtp: {
+        host: 'smtp.gmail.com',
+        port: 465,
+        auth: {
+          user: address,
+          pass: password,
+        },
+      },
+      imap: {
+        host: 'imap.gmail.com',
+        port: 993,
+        auth: {
+          user: address,
+          pass: password,
+        },
+      },
+    }
+  }
+
+  // Get list of mailboxes.
+  async getMailboxes() {
+    if (!this.imapWorker) {
+      return console.log('no imapWorker')
+    }
+    try {
+      const mailboxes: IMAP.IMailbox[] = await this.imapWorker.listMailboxes()
+      console.log('mailboxes', mailboxes)
+      return mailboxes
+    } catch (inError) {
+      return 'error, could not retrieve mailboxes' + inError
+    }
+  }
+
+  // Get list of messages in a mailbox (does NOT include bodies).
+  async getMessagesFromMailbox(mailbox: IMAP.IMailbox) {
+    if (!this.imapWorker) {
+      return console.log('no imapWorker')
+    }
+    try {
+      const messages: IMAP.IMessage[] = await this.imapWorker.listMessages({
+        mailbox,
+      })
+      return messages
+    } catch (inError) {
+      return 'error'
+    }
+  }
+
+  // Get a message's plain text body.
+  async getMessageBody({
+    id,
+    mailbox,
+    address,
+    password,
+  }: {
+    id: string
+    mailbox: IMAP.IMailbox
+    address: string
+    password: string
+  }) {
+    const serverInfo = this.makeServerInfo(address, password)
+    try {
+      const imapWorker: IMAP.Worker = new IMAP.Worker(serverInfo)
+      const messageBody: string | boolean = await imapWorker.getMessageBody({
+        mailbox: mailbox,
+        id: parseInt(id),
+      })
+      return messageBody
+    } catch (inError) {
+      return 'error'
+    }
+  }
+
+  // Delete a message.
+  async deleteMessage({
+    mailbox,
+    id,
+    address,
+    password,
+  }: {
+    mailbox: IMAP.IMailbox
+    id: string
+    address: string
+    password: string
+  }) {
+    const serverInfo = this.makeServerInfo(address, password)
+    try {
+      const imapWorker: IMAP.Worker = new IMAP.Worker(serverInfo)
+      await imapWorker.deleteMessage({
+        mailbox: mailbox,
+        id: parseInt(id, 10),
+      })
+      return true
+    } catch (inError) {
+      return 'error'
+    }
+  }
+
+  // Send a message.
+  async sendMessage({
+    to,
+    from,
+    subject,
+    text,
+    address,
+    password,
+  }: {
+    to: string[]
+    from: string
+    subject: string
+    text: string
+    address: string
+    password: string
+  }) {
+    console.log('sending message')
+    const serverInfo = this.makeServerInfo(address, password)
+    try {
+      const smtpWorker: SMTP.Worker = new SMTP.Worker(serverInfo)
+      await smtpWorker.sendMessage({
+        to,
+        from,
+        subject,
+        text,
+      })
+      return true
+    } catch (inError) {
+      return 'error'
+    }
   }
 }

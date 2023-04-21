@@ -1,45 +1,29 @@
-
-import Rete from 'rete';
-
-import {
-    InputControl,
-    MagickComponent,
-    MagickNode,
-    MagickWorkerInputs,
-    MagickWorkerOutputs,
-    ModuleContext,
-    SocketGeneratorControl,
-    stringSocket,
-    triggerSocket,
-    WorkerData
-} from "@magickml/core";
-
-import bm25 from "wink-bm25-text-search";
-import model from "wink-eng-lite-web-model";
+import bm25 from "wink-bm25-text-search"
 import winkNLP from "wink-nlp";
-import soundex from "wink-nlp-utils/src/string-soundex.js";
-
+import model from "wink-eng-lite-web-model"
+import soundex from "wink-nlp-utils/src/string-soundex.js"
 const nlp = winkNLP(model);
 const its = nlp.its;
 const prepTask = function (text) {
-    const tokens: any[] = [];
+    const tokens = [];
     nlp
-      .readDoc(text)
-      .tokens()
-      // Use only words ignoring punctuations etc and from them remove stop words
-      .filter((t) => t.out(its.type) === "word" && !t.out(its.stopWordFlag))
-      // Handle negation and extract stem of the word
-      .each((t) => {
-        const tokenStem = t.out(its.stem);
-        const tokenSoundex = soundex(tokenStem);
-        const tokenWithNegation = t.out(its.negationFlag)
-          ? "!" + tokenSoundex
-          : tokenSoundex;
-        tokens.push(tokenWithNegation);
-      });
-  
+        .readDoc(text)
+        .tokens()
+        // Use only words ignoring punctuations etc and from them remove stop words
+        .filter((t) => t.out(its.type) === "word" && !t.out(its.stopWordFlag))
+        // Handle negation and extract stem of the word
+        .each((t) => {
+            const tokenStem = t.out(its.stem);
+            const tokenSoundex = soundex(tokenStem);
+            const tokenWithNegation = t.out(its.negationFlag)
+                ? "!" + tokenSoundex
+                : tokenSoundex;
+            //@ts-ignore
+            tokens.push(tokenWithNegation);
+        });
+
     return tokens;
-  };
+};
 
 function recommendTools(tools, inputText) {
     // Create the BM25 index
@@ -51,6 +35,7 @@ function recommendTools(tools, inputText) {
             title: tool.title,
             body: tool.body,
             id: tool.id,
+            action: tool.action,
             keyword: tool.keyword,
         }));
 
@@ -63,17 +48,30 @@ function recommendTools(tools, inputText) {
     const bm25Index = createBM25Index(tools);
     bm25Index.consolidate();
     const results = bm25Index.search(inputText);
-    console.log("Query:" + inputText );
+    console.log("Query:" + inputText);
     console.log("Result: " + results)
-    if (results.length === 0) {
-        return [{"title": "Default", "body": "No results found"}]
-    }
     return results.map((result) => {
-        result = {id: result[0], score: result[1]}
+        result = { id: result[0], score: result[1] }
         const tool = tools.find((tool) => tool.id == result.id);
-        return {...tool, score: result.score};
-      });
+        return { ...tool, score: result.score };
+    });
 }
+
+// DOCUMENTED 
+import Rete from 'rete'
+import {
+    MagickNode,
+    MagickWorkerInputs,
+    MagickWorkerOutputs,
+    ModuleContext,
+    WorkerData,
+    InputControl,
+    SocketGeneratorControl,
+    anySocket,
+    stringSocket,
+    triggerSocket,
+    MagickComponent
+} from '@magickml/core'
 
 const info = 'Select an agent based on the input prompt.';
 
@@ -86,24 +84,19 @@ export class AgentRecommender extends MagickComponent<Promise<any>> {
         super('Agent Recommender', {
             outputs: {
                 trigger: 'option',
-                default: 'string',
+                output: 'output'
             },
         }, 'Langchain', info);
     }
     builder(node: MagickNode): MagickNode {
         const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
         const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-        const defaultOutput = new Rete.Output('default', 'Default', stringSocket)
+        const defaultOutput = new Rete.Output('output', 'output', anySocket)
         const prompt = new Rete.Input('prompt', 'Prompt', stringSocket, true)
-        const outputGenerator = new SocketGeneratorControl({
-            connectionType: 'output',
-            ignored: ['trigger', 'prompt', 'default'],
-            name: 'Output Sockets',
-        })
 
         const inputGenerator = new SocketGeneratorControl({
             connectionType: 'input',
-            ignored: ['trigger', 'prompt', 'default'],
+            ignored: ['trigger', 'prompt', 'output'],
             name: 'Input Sockets',
         })
 
@@ -114,7 +107,6 @@ export class AgentRecommender extends MagickComponent<Promise<any>> {
         node.inspector
             .add(nameControl)
             .add(inputGenerator)
-            .add(outputGenerator)
 
         return node
             .addInput(dataInput)
@@ -136,32 +128,45 @@ export class AgentRecommender extends MagickComponent<Promise<any>> {
         _outputs: MagickWorkerOutputs,
         context: ModuleContext,
     ) {
-        console.log(_outputs)
-        const prompt = (inputs["prompt"] || ["NO PROMPT"])[0]
-        delete inputs["prompt"]
-        let tool = Object.values((inputs || {key: "NO TOOL FOUND"})).map((input) => {
-            return JSON.parse(input.join())
-        })
-        //Minimum 3 Tools required
-        tool.push({
-            title: "Default",
-            body: "No Relevant Tools Found",
-            id: "101",
-            keyword: "NONE"
-        })
-        const recommendedTools = recommendTools(tool, prompt);
-        console.log("RECOMMENDED TOOLS", recommendedTools)
-        let output = {}
-        if (recommendedTools) {
-            if (recommendedTools[0].title == "Default") {
-                output[recommendedTools[0].title] = ["No Relevant Tool Found"]
-                console.log("OUTPUT", output)
-                return output;
+        try {
+            console.log("INPUTS", inputs)
+            const prompt = (inputs["prompt"] || ["NO PROMPT"])[0]
+            delete inputs["prompt"]
+            let tool = Object.values((inputs || { key: "NO TOOL FOUND" })).map((input) => {
+                return input[0]
+            })
+            console.log(tool)
+            //Minimum 3 Tools required
+            //@ts-ignore
+            tool.push({
+                //@ts-ignore
+                title: "Default",
+                body: "No Relevant Tools Found",
+                id: "101",
+                keyword: "NONE",
+                function_name: "action",
+                action: "const action = () => {return 'NO RELEVANT TOOL FOUND'}"
+            })
+            const recommendedTools = recommendTools(tool, prompt);
+            console.log("RECOMMENDED TOOLS", recommendedTools)
+
+            if (Array.isArray(recommendedTools) && recommendedTools.length > 0) {
+                const strFn = recommendedTools[0].action
+                const myFunction = new Function(`${strFn}; return ${recommendedTools[0].function_name}`)();
+                const return_value = await myFunction(context)
+                return {
+                    output: return_value
+                };
             }
-            output[recommendedTools[0].title] = prompt
-            console.log("OUTPUT", output)
+            return {
+                output: "NO OUTPUT"
+            };
+        } catch (error) {
+            console.log("ERROR", error)
+            return {
+                output: "NO OUTPUT"
+            };
         }
-        return output;
 
     }
 }

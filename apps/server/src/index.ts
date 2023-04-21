@@ -61,9 +61,9 @@ async function init() {
     )
   })()
 
-  initSpeechServer(false)
+  // initSpeechServer()
   await initFileServer()
-  await initTextToSpeech()
+  // await initTextToSpeech()
 
   const serverInits: Record<string, any> = pluginManager.getServerInits()
 
