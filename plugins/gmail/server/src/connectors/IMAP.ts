@@ -31,14 +31,12 @@ export interface IMailbox {
   path: string
 }
 
-
 // Disable certificate validation (less secure, but needed for some servers).
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-
 // The worker that will perform IMAP operations.
 export class Worker {
-
+  client: ImapClient;
 
   // Server information.
   private static serverInfo: IServerInfo;
@@ -48,8 +46,6 @@ export class Worker {
    * Constructor.
    */
   constructor(inServerInfo: IServerInfo) {
-
-    console.log("IMAP.Worker.constructor", inServerInfo);
     Worker.serverInfo = inServerInfo;
 
   } /* End constructor. */
@@ -60,22 +56,29 @@ export class Worker {
    *
    * @return An ImapClient instance.
    */
-  private async connectToServer(): Promise<any> {
-
+  async connectToServer(): Promise<ImapClient> {
+    console.log('Worker.serverInfo', Worker.serverInfo)
     // noinspection TypeScriptValidateJSTypes
-    const client: any = new ImapClient.default(
+    this.client = new ImapClient(
       Worker.serverInfo.imap.host,
       Worker.serverInfo.imap.port,
       { auth : Worker.serverInfo.imap.auth }
     );
-    client.logLevel = client.LOG_LEVEL_NONE;
-    client.onerror = (inError: Error) => {
+
+    this.client.logLevel = this.client.LOG_LEVEL_DEBUG;
+    this.client.onerror = (inError: Error) => {
       console.log("IMAP.Worker.listMailboxes(): Connection error", inError);
     };
-    await client.connect();
+    console.log('connecting')
+    try {
+      await this.client.connect();
+    } catch (e) {
+      console.log('error', e)
+    }
+    console.log('connected')
     console.log("IMAP.Worker.listMailboxes(): Connected");
-
-    return client;
+    
+    return this.client;
 
   } /* End connectToServer(). */
 
@@ -86,14 +89,12 @@ export class Worker {
    * @return An array of objects, on per mailbox, that describes the nmilbox.
    */
   public async listMailboxes(): Promise<IMailbox[]> {
+    if(!this.client) {
+      await this.connectToServer()
+    }
 
-    console.log("IMAP.Worker.listMailboxes()");
-
-    const client: any = await this.connectToServer();
-
-    const mailboxes: any = await client.listMailboxes();
-
-    await client.close();
+    const mailboxes: any = await this.client.listMailboxes();
+    console.log('mailboxes', mailboxes)
 
     // Translate from emailjs-imap-client mailbox objects to app-specific objects.  At the same time, flatten the list
     // of mailboxes via recursion.
@@ -124,27 +125,22 @@ export class Worker {
 
     console.log("IMAP.Worker.listMessages()", inCallOptions);
 
-    const client: any = await this.connectToServer();
-
     // We have to select the mailbox first.  This gives us the message count.
-    const mailbox: any = await client.selectMailbox(inCallOptions.mailbox);
+    const mailbox: any = await this.client.selectMailbox(inCallOptions.mailbox);
     console.log(`IMAP.Worker.listMessages(): Message count = ${mailbox.exists}`);
 
     // If there are no messages then just return an empty array.
     if (mailbox.exists === 0) {
-      await client.close();
       return [ ];
     }
 
     // Okay, there are messages, let's get 'em!  Note that they are returned in order by uid, so it's FIFO.
     // noinspection TypeScriptValidateJSTypes
-    const messages: any[] = await client.listMessages(
+    const messages: any[] = await this.client.listMessages(
       inCallOptions.mailbox,
       "1:*",
       [ "uid", "envelope" ]
     );
-
-    await client.close();
 
     // Translate from emailjs-imap-client message objects to app-specific objects.
     const finalMessages: IMessage[] = [];
@@ -172,10 +168,8 @@ export class Worker {
 
     console.log("IMAP.Worker.getMessageBody()", inCallOptions);
 
-    const client: any = await this.connectToServer();
-
     // noinspection TypeScriptValidateJSTypes
-    const messages: any[] = await client.listMessages(
+    const messages: any[] = await this.client.listMessages(
       inCallOptions.mailbox,
       inCallOptions.id,
       [ "body[]" ],
@@ -183,8 +177,6 @@ export class Worker {
     );
     //console.log(messages[0]["body[]"]);
     const parsed: ParsedMail = await simpleParser(messages[0]["body[]"]);
-
-    await client.close();
 
     //return parsed.text;
     return parsed.text+"\n\n"+parsed.html;
@@ -201,15 +193,11 @@ export class Worker {
 
     console.log("IMAP.Worker.deleteMessage()", inCallOptions);
 
-    const client: any = await this.connectToServer();
-
-    await client.deleteMessages(
+    await this.client.deleteMessages(
       inCallOptions.mailbox,
       inCallOptions.id,
       { byUid : true }
     );
-
-    await client.close();
 
   } /* End deleteMessage(). */
 

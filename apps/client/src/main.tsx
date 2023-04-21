@@ -48,14 +48,14 @@ if (window === window.parent) {
   const Root = () => <MagickIDE config={config} />
   root.render(<Root />)
 } else {
-  /**
-   * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
-   */
+/**
+ * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
+ */
   window.addEventListener(
     'message',
     event => {
       // Remove possible trailing slash on only the end
-      const cloudUrl = TRUSTED_PARENT_URL.replace(/\/+$/, '')
+      const cloudUrl = TRUSTED_PARENT_URL?.replace(/\/+$/, '')
 
       // Check for trusted origin
       if (
