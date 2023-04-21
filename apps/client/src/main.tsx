@@ -1,7 +1,14 @@
-// DOCUMENTED 
+// DOCUMENTED
 import { createRoot } from 'react-dom/client'
 import { MagickIDE, AppConfig } from '@magickml/editor'
-import { DEFAULT_PROJECT_ID, API_ROOT_URL, TRUSTED_PARENT_URL } from '@magickml/core'
+import {
+  DEFAULT_PROJECT_ID,
+  API_ROOT_URL,
+  TRUSTED_PARENT_URL,
+  POSTHOG_API_KEY,
+  POSTHOG_ENABLED,
+} from '@magickml/core'
+import posthog from 'posthog-js'
 
 import plugins from './plugins'
 
@@ -30,14 +37,20 @@ if (window === window.parent) {
     token: '',
   }
 
+  // Initialize posthog
+  if (POSTHOG_ENABLED === 'true') {
+    console.log('Posthog enabled')
+    posthog.init(POSTHOG_API_KEY, {
+      api_host: 'https://app.posthog.com',
+    })
+  }
+
   const Root = () => <MagickIDE config={config} />
   root.render(<Root />)
-}
-
-/**
- * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
- */
-else {
+} else {
+  /**
+   * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
+   */
   window.addEventListener(
     'message',
     event => {
@@ -53,7 +66,12 @@ else {
         event.origin !== cloudUrl
       ) {
         console.error('untrusted origin', event.origin)
-        console.error('cloudUrl is ', cloudUrl, 'TRUSTED_PARENT_URL', TRUSTED_PARENT_URL)
+        console.error(
+          'cloudUrl is ',
+          cloudUrl,
+          'TRUSTED_PARENT_URL',
+          TRUSTED_PARENT_URL
+        )
         return
       }
 
@@ -64,6 +82,14 @@ else {
       if (type === 'INIT') {
         // TODO: store configuration in localstorage
         const { config } = payload
+
+        // Initialize posthog
+        if (POSTHOG_ENABLED) {
+          console.log('Posthog enabled')
+          posthog.init(POSTHOG_API_KEY, {
+            api_host: 'https://app.posthog.com',
+          })
+        }
 
         const Root = () => <MagickIDE config={config} />
         const container = document.getElementById('root')
