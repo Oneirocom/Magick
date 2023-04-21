@@ -91,7 +91,7 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
       responseData = events.events[0]
     }
 
-    let embedding = responseData ? responseData?.embedding?.toString() : null
+    let embedding = responseData ? (responseData as any).embedding?.toString() : null
     // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
       if (embedding[0] === '[') {

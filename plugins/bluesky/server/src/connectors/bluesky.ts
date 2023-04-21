@@ -1,4 +1,4 @@
-import { BskyAgent, AppBskyNotificationGetUnreadCount } from '@atproto/api'
+import { BskyAgent, AppBskyNotificationGetUnreadCount, RichText } from '@atproto/api'
 import { app } from '@magickml/server-core'
 export class BlueskyConnector {
   bskyAgent: BskyAgent
@@ -18,6 +18,9 @@ export class BlueskyConnector {
     const data = this.agent.data.data
     this.data = data
     this.worldManager = worldManager // we can track entities in different conversations here later
+    this.bskyAgent = new BskyAgent({
+      service: 'https://bsky.social',
+    })
 
     if (!data.bluesky_enabled) {
       console.warn('Bluesky is not enabled, skipping')
@@ -29,9 +32,7 @@ export class BlueskyConnector {
   }
 
   async initialize({ data }) {
-    this.bskyAgent = new BskyAgent({
-      service: 'https://bsky.social',
-    })
+
     await this.bskyAgent.login({
       identifier: data.bluesky_identifier,
       password: data.bluesky_password,
@@ -126,14 +127,20 @@ export class BlueskyConnector {
   }
 
   async handlePost(resp) {
+    const rt = new RichText({text: resp})
+    await rt.detectFacets(this.bskyAgent) // automatically detects mentions and links
     await this.bskyAgent.post({
-      text: resp,
+      text: rt.text,
+      facets: rt.facets,
     })
   }
 
   async sendReply(content, root, notif) {
+    const rt = new RichText({text: content})
+    await rt.detectFacets(this.bskyAgent) // automatically detects mentions and links
     await this.bskyAgent.post({
-      text: content,
+      text: rt.text,
+      facets: rt.facets,
       reply: {
         parent: {
           uri: notif.uri,

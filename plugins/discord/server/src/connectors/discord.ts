@@ -648,7 +648,7 @@ export class DiscordConnector {
     console.log(content)
     console.log('calling runComponent from discord.ts')
     console.log('publicVariables', this.agent.publicVariables)
-    const response = await this.spellRunner.runComponent({
+    await this.spellRunner.runComponent({
       inputs: {
         'Input - Discord (Text)': {
           content: content,
