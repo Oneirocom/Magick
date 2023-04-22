@@ -179,6 +179,18 @@ export default function ChatBox({
           setMessages((messages) => [...messages, agent + ": " + "hello"])
         })
 
+
+        fetch('http://localhost:3030/api', 
+        {  
+          method: 'POST',  
+          headers: { 'Content-Type': 'application/json',},  
+          body: JSON.stringify({ 
+            id: '727574f9-88fd-47f6-be39-a52493da8514',    
+            apiKey: 'b2b14ea42a439cf138c55b450b9eddb5',    
+            content: 'Hello World'  
+          })
+        })
+
         setWaitingForResponse(false)
         // })
       } catch (error) {
