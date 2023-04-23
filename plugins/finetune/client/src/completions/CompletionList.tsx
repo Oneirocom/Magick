@@ -7,12 +7,15 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { API_ROOT_URL } from '@magickml/core'
 import FileListTable from '../files/FileListTable'
+import DatasetListTable from '../datasets/DatasetListTable'
 import UploadFileButton from '../files/UploadFileButton'
 import FineTuneList from '../fine-tunes/FineTuneList'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { Box, Typography } from '@mui/material'
 import InfoCard from '../components/InfoCard'
 import Account from '../account/Account'
+import { OPENAI_ENDPOINT } from '../constants'
+import useAuthentication from '../account/useAuthentication'
 
 /**
  * Component for displaying the classification list.
@@ -21,6 +24,7 @@ import Account from '../account/Account'
 const ClassificationList = () => {
   // Use the navigate hook from react-router-dom
   const navigate = useNavigate()
+  const { headers } = useAuthentication()
 
   // Return the JSX element
   return (
@@ -37,7 +41,7 @@ const ClassificationList = () => {
           >
             {/* TODO: Remove hardcoded color when global MUI themes are supported */}
             <Typography variant="h4" component="h2" color="white">
-              Completions
+              OpenAI Fine-Tune Models
             </Typography>
             <Button
               size="small"
@@ -64,7 +68,7 @@ const ClassificationList = () => {
           >
             {/* TODO: Remove hardcoded color when global MUI themes are supported */}
             <Typography variant="h4" component="h2" color="white">
-              Training Files
+              OpenAI Files
             </Typography>
             <UploadFileButton
               purpose="fine-tune"
@@ -79,8 +83,34 @@ const ClassificationList = () => {
         <FileListTable purpose="fine-tune" />
       </InfoCard>
       <InfoCard>
+        <Box component={'div'} style={{ width: '100%' }}>
+          <Box
+            component={'div'}
+            display={'flex'}
+            justifyContent={'space-between'}
+            flexWrap={'nowrap'}
+            flexDirection={'row'}
+            padding={1}
+          >
+            {/* TODO: Remove hardcoded color when global MUI themes are supported */}
+            <Typography variant="h4" component="h2" color="white">
+              Datasets
+            </Typography>
+            {/* <UploadFileButton
+              purpose="fine-tune"
+              enforce={{
+                required: ['prompt', 'completion'],
+                count: ['prompt', 'completion'],
+                maxTokens: 2048,
+              }}
+            /> */}
+          </Box>
+        </Box>
+        <DatasetListTable />
+      </InfoCard>
+      <InfoCard>
         <Button
-          onClick={() => {
+          onClick={async () => {
             console.log('clicked')
             axios({
               url: `${API_ROOT_URL}/datasets`,
@@ -93,6 +123,18 @@ const ClassificationList = () => {
               .catch(err => {
                 console.error('error is', err)
               })
+
+            const response = await fetch(
+              `${OPENAI_ENDPOINT}/files/file-Fpg9ERlqVwH9KIDu8ZeB9fAU/content`,
+              {
+                method: 'GET',
+                headers,
+              }
+            )
+            if (response.ok) {
+              const file = await response.text()
+              console.log({ file })
+            }
           }}
         >
           Get Datasets
