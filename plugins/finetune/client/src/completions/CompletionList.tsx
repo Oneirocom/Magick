@@ -3,7 +3,9 @@
 import Button from '@mui/material/Button'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import ExpansionDetails from '../components/ExpansionDetails'
+// import ExpansionDetails from '../components/ExpansionDetails'
+// import axios from 'axios'
+// import { API_ROOT_URL } from '@magickml/engine'
 import FileListTable from '../files/FileListTable'
 import UploadFileButton from '../files/UploadFileButton'
 import FineTuneList from '../fine-tunes/FineTuneList'
@@ -77,6 +79,84 @@ const ClassificationList = () => {
         <FileListTable purpose="fine-tune" />
       </InfoCard>
       <InfoCard>
+        {/* <Button
+          onClick={() => {
+            console.log('clicked')
+            axios({
+              url: `${API_ROOT_URL}/datasets`,
+              method: 'GET',
+              headers: {},
+            })
+              .then(async res => {
+                console.log(res.data)
+              })
+              .catch(err => {
+                console.error('error is', err)
+              })
+          }}
+        >
+          Get Datasets
+        </Button>
+        <Button
+          onClick={() => {
+            console.log('clicked')
+            axios({
+              url: `${API_ROOT_URL}/datasets`,
+              method: 'POST',
+              headers: {},
+              data: {
+                dataset: {
+                  data: `TEST_DATASET_FILE_CONTENTS_HERE
+                  `,
+                },
+              },
+            })
+              .then(async res => {
+                console.log(res.data)
+              })
+              .catch(err => {
+                console.error('error is', err)
+              })
+          }}
+        >
+          Post Dataset
+        </Button>
+        <Button
+          onClick={() => {
+            console.log('clicked')
+            axios({
+              url: `${API_ROOT_URL}/datasets`,
+              method: 'PUT',
+              headers: {},
+            })
+              .then(async res => {
+                console.log(res.data)
+              })
+              .catch(err => {
+                console.error('error is', err)
+              })
+          }}
+        >
+          Update Dataset
+        </Button>
+        <Button
+          onClick={() => {
+            console.log('clicked')
+            axios({
+              url: `${API_ROOT_URL}/datasets/1`,
+              method: 'DELETE',
+              headers: {},
+            })
+              .then(async res => {
+                console.log(res.data)
+              })
+              .catch(err => {
+                console.error('error is', err)
+              })
+          }}
+        >
+          Remove Dataset
+        </Button> */}
         <h1>Instructions</h1>
         <p>
           To fine-tune the model, first upload a file containing prompts and
