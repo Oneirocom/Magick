@@ -7,6 +7,7 @@ import requestHeaders from './requestHeaders'
 import { OPENAI_ENDPOINT } from '../constants'
 import { useLocalStorage } from 'usehooks-ts'
 import { OpenAI } from '../types/openai'
+import { API_ROOT_URL } from '@magickml/core'
 
 interface IAccountProvider {
   headers?: { [key: string]: string }
@@ -56,6 +57,17 @@ const Account: FC<IAccountProps> = ({ children }): JSX.Element => {
    */
   const fetcher = useCallback(
     async (path: string): Promise<void> => {
+      if (['datasets'].includes(path)) {
+        const response = await fetch(`${API_ROOT_URL}/${path}`, {
+          headers,
+        })
+        if (response.ok) {
+          return await response.json()
+        } else {
+          const { error } = (await response.json()) as OpenAI.ErrorResponse
+          throw new Error(error.message)
+        }
+      }
       if (!headers) {
         return null
       }
