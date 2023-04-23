@@ -4,8 +4,8 @@ import Button from '@mui/material/Button'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 // import ExpansionDetails from '../components/ExpansionDetails'
-// import axios from 'axios'
-// import { API_ROOT_URL } from '@magickml/engine'
+import axios from 'axios'
+import { API_ROOT_URL } from '@magickml/core'
 import FileListTable from '../files/FileListTable'
 import UploadFileButton from '../files/UploadFileButton'
 import FineTuneList from '../fine-tunes/FineTuneList'
@@ -79,7 +79,7 @@ const ClassificationList = () => {
         <FileListTable purpose="fine-tune" />
       </InfoCard>
       <InfoCard>
-        {/* <Button
+        <Button
           onClick={() => {
             console.log('clicked')
             axios({
@@ -156,7 +156,7 @@ const ClassificationList = () => {
           }}
         >
           Remove Dataset
-        </Button> */}
+        </Button>
         <h1>Instructions</h1>
         <p>
           To fine-tune the model, first upload a file containing prompts and
