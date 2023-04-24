@@ -3,6 +3,7 @@ import { request } from './requests/requests';
 import { spell } from './spells/spells';
 import { agent } from './agents/agents';
 import { event } from './events/events';
+import { task } from './tasks/tasks';
 import { document } from './documents/documents';
 import { projects } from './projects/projects';
 import { spellRunner } from './spell-runner/spell-runner';
@@ -24,6 +25,7 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(spell);
   app.configure(agent);
   app.configure(event);
+  app.configure(task);
   app.configure(document);
   app.configure(spellRunner);
   app.configure(projects);
