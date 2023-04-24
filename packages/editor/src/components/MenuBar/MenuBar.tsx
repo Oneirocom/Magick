@@ -169,27 +169,6 @@ const MenuBar = () => {
     publish($CREATE_CONSOLE(activeTabRef.current.id))
   }
 
-  // Menu bar hotkey hooks
-  useHotkeys(
-    'cmd+s, crtl+s',
-    event => {
-      event.preventDefault()
-      onSave()
-    },
-    { enableOnTags: ['INPUT'] },
-    [onSave]
-  )
-
-  useHotkeys(
-    'option+n, crtl+n',
-    event => {
-      event.preventDefault()
-      onNew()
-    },
-    { enableOnTags: ['INPUT'] },
-    [onNew]
-  )
-
   /**
    * Undo handler
    */
@@ -266,27 +245,27 @@ const MenuBar = () => {
         },
         open_spell: {
           onClick: onOpen,
-          hotKey: 'option+o',
+          hotKey: 'option+o, ctrl+o',
         },
         import_spell: {
           onClick: onImport,
-          hotKey: 'option+i',
+          hotKey: 'option+i, ctrl+i',
         },
         rename_spell: {
           onClick: onEdit,
-          hotKey: 'option+e',
+          hotKey: 'option+e, ctrl+e',
         },
         save_spell: {
           onClick: onSave,
-          hotKey: 'option+s',
+          hotKey: 'option+s, ctrl+s',
         },
         save_a_copy: {
           onClick: onSaveAs,
-          hotKey: 'option+shift+s',
+          hotKey: 'option+shift+s, ctrl+shift+s',
         },
         export_spell: {
           onClick: onExport,
-          hotKey: 'option+shift+e',
+          hotKey: 'option+shift+e, ctrl+shift+e',
         },
       },
     },
@@ -294,19 +273,19 @@ const MenuBar = () => {
       items: {
         undo: {
           onClick: onUndo,
-          hotKey: 'option+z',
+          hotKey: 'option+z, ctrl+z',
         },
         redo: {
           onClick: onRedo,
-          hotKey: 'option+shift+z',
+          hotKey: 'option+y, ctrl+y',
         },
         copy: {
           onClick: onMultiSelectCopy,
-          hotKey: 'option+c',
+          hotKey: 'option+c, ctrl+c',
         },
         paste: {
           onClick: onMultiSelectPaste,
-          hotKey: 'option+v',
+          hotKey: 'option+v, ctrl+v',
         },
         snap: {
           onClick: toggleSnapFunction,
@@ -318,19 +297,23 @@ const MenuBar = () => {
       items: {
         text_editor: {
           onClick: onTextEditorCreate,
+          hotKey: 'option+1, control+1',
         },
         inspector: {
           onClick: onInspectorCreate,
+          hotKey: 'option+2, control+2',
         },
         playtest: {
           onClick: onPlaytestCreate,
+          hotKey: 'option+3, control+3',
         },
         console: {
           onClick: onConsole,
+          hotKey: 'option+4, control+4',
         },
         project_window: {
           onClick: onProjectWindowCreate,
-          hotKey: 'control+b',
+          hotKey: 'option+5, control+5',
         },
         snap: {
           onClick: toggleSnapFunction,
@@ -378,7 +361,6 @@ const MenuBar = () => {
     } else {
       formattedCommand = formattedCommand.replace('option', '\u2325')
     }
-    // formattedCommand = formattedCommand.replace('option', '\u2325')
     formattedCommand = formattedCommand.replace('shift', '\u21E7')
     formattedCommand = formattedCommand.replace('cmd', '\u2318')
     formattedCommand = formattedCommand.replace('control', '\u2303')
@@ -412,15 +394,20 @@ const MenuBar = () => {
         <ul className={css['menu-panel']}>
           {Object.entries(item.items as [string, Record<string, any>][]).map(
             ([key, item]: [string, Record<string, any>]) => {
-              // useHotkeys(
-              //   item.hotKey,
-              //   event => {
-              //     event.preventDefault()
-              //     item.onClick()
-              //   },
-              //   { enableOnTags: ['INPUT'] },
-              //   [item.onClick]
-              // )
+              // Add hotkeys for each sub-menu item
+              if (item.hotKey) {
+                useHotkeys(
+                  item.hotKey,
+                  event => {
+                    
+                    console.log('Hotkey triggered:', item.hotKey);
+                    item.onClick()
+                    event.preventDefault()
+                  },
+                  { enableOnTags: ['INPUT'] },
+                  [item.onClick]
+                )
+              }
 
               return (
                 <ListItem
@@ -429,7 +416,7 @@ const MenuBar = () => {
                   topLevel={false}
                   key={key}
                   onClick={item.onClick}
-                  hotKeyLabel={item.hotKey}
+                  hotKeyLabel={item.hotKey ? item.hotKey.split(',')[0] : ''}
                 />
               )
             }
