@@ -9,7 +9,7 @@ import {
   errorHandler,
   koa,
   parseAuthentication,
-  rest
+  rest,
 } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
 import {
@@ -17,7 +17,7 @@ import {
   DEFAULT_PROJECT_ID,
   DEFAULT_USER_ID,
   globalsManager,
-  IGNORE_AUTH
+  IGNORE_AUTH,
 } from '@magickml/core'
 
 import { dbClient } from './dbClient'
@@ -30,39 +30,24 @@ import { services } from './services'
 import handleSockets from './sockets/sockets'
 
 //Vector DB Related Imports
-import { HNSWLib } from './vectordb'
+import {
+  HNSWLib,
+  PostgressVectorStoreCustom,
+  ExtendedEmbeddings,
+} from './vectordb'
+import { PluginEmbeddings } from './customEmbeddings'
+import type { Knex } from 'knex'
+
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())
+
 declare module './declarations' {
   interface Configuration {
-    vectordb: HNSWLib & any
-    docdb: HNSWLib & any
+    vectordb: HNSWLib | PostgressVectorStoreCustom | any
+    docdb: HNSWLib | PostgressVectorStoreCustom | any
   }
 }
 
-
-/*
-const vectorStoreInfo: typeof VectorStoreInfo = {
-  name: "DB for Magick Events",
-  description: "Stores all the event along with their metadata",
-  vectorStore: vectordb,
-};
-const toolkit = new VectorStoreToolkit(vectorStoreInfo, model);
-const agent = createVectorStoreAgent(model, toolkit);
-const input =
-    "What is this data about?";
-  console.log(`Executing: ${input}`);
-  const result = await agent.call({ input });
-  console.log(`Got output ${result.output}`);
-  console.log(
-    `Got intermediate steps ${JSON.stringify(
-      result.intermediateSteps,
-      null,
-      2
-    )}`
-  );
- */
-// Expose feathers app to other apps that might want to access feathers services directly
 globalsManager.register('feathers', app)
 
 const port = parseInt(process.env.PORT || '3030', 10)
@@ -85,6 +70,8 @@ app.use(bodyParser())
 
 // Configure app management settings
 app.configure(configureManager())
+
+
 
 // Configure authentication
 if (!IGNORE_AUTH) {
@@ -123,6 +110,35 @@ app.configure(
 app.configure(rest())
 
 app.configure(dbClient)
+const embeddings = new PluginEmbeddings({}) as unknown as ExtendedEmbeddings
+if (process.env.DATABASE_TYPE == 'sqlite') {
+  console.log('Setting up vector store')
+  const vectordb = HNSWLib.load_data('.', embeddings, {
+    space: 'cosine',
+    numDimensions: 1536,
+    filename: 'database',
+  })
+  const docdb = HNSWLib.load_data('.', embeddings, {
+    space: 'cosine',
+    numDimensions: 1536,
+    filename: 'documents',
+  })
+  app.set('vectordb', vectordb)
+  app.set('docdb', docdb)
+} else {
+  const vectordb = new PostgressVectorStoreCustom(embeddings, {
+    client: app.get('dbClient'),
+    tableName: 'events',
+    queryName: 'match_events',
+  })
+  const docdb = new PostgressVectorStoreCustom(embeddings, {
+    client: app.get('dbClient'),
+    tableName: 'documents',
+    queryName: 'match_documents',
+  })
+  app.set('vectordb', vectordb)
+  app.set('docdb', docdb)
+}
 app.configure(services)
 app.configure(channels)
 

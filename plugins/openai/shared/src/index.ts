@@ -2,7 +2,6 @@
 import {
   arraySocket,
   CompletionProvider,
-  embeddingSocket,
   PluginSecret,
   stringSocket,
 } from "@magickml/core";
@@ -38,12 +37,7 @@ const completionProviders: CompletionProvider[] = [
         socket: "result",
         name: "Result",
         type: stringSocket,
-      },
-      {
-        socket: "error",
-        name: "Error",
-        type: stringSocket,
-      },
+      }
     ],
     models: [
       "text-davinci-003",
@@ -66,15 +60,10 @@ const completionProviders: CompletionProvider[] = [
     ],
     outputs: [
       {
-        socket: "result",
-        name: "Result",
-        type: embeddingSocket,
-      },
-      {
-        socket: "error",
-        name: "Error",
-        type: stringSocket,
-      },
+        socket: "embedding",
+        name: "Embedding",
+        type: arraySocket,
+      }
     ],
     models: ["text-embedding-ada-002", "text-embedding-ada-001"],
   },

@@ -1,10 +1,10 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * The exported function takes in a props object that includes an array of items, the position
  * of the context menu to be rendered, a boolean visibility flag, any arguments to be passed along,
  * a function to be called when the menu is closed, and a type string.
  * @param items - Array of objects that represent the items in the context menu.
- * @param position - A tuple representing the x and y coordinates where the context menu will be 
+ * @param position - A tuple representing the x and y coordinates where the context menu will be
  * rendered.
  * @param visible - A boolean flag indicating whether the context menu should be visible.
  * @param args - Any arguments to be passed to the context menu.
@@ -15,7 +15,7 @@
 import styles from './style.module.scss'
 import Item from './Item'
 import Context from './context'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function ContextMenu({
   items,
@@ -23,24 +23,27 @@ export default function ContextMenu({
   visible,
   args,
   onClose,
-  type = 'list'
+  type = 'list',
 }: {
-  items: any[];
-  position: [number, number];
-  visible: boolean;
-  args: any;
-  onClose: () => void;
-  type?: string;
+  items: any[]
+  position: [number, number]
+  visible: boolean
+  args: any
+  onClose: () => void
+  type?: string
 }): JSX.Element {
   const [search, setSearch] = useState<string>('')
+  const searchbarRef = useRef(null)
   /**
    * This effect sets the focus on the search bar when the context menu is rendering.
    */
+
   useEffect(() => {
-    const searchbar = document?.querySelector('.context-menu-search-bar')
-    if(searchbar) searchbar.focus()
-  }, [])
-  
+    if (searchbarRef.current) {
+      searchbarRef.current.focus()
+    }
+  }, [visible])
+
   if (!visible) return null
 
   return (
@@ -51,6 +54,7 @@ export default function ContextMenu({
       >
         {type === 'list' && (
           <input
+            ref={searchbarRef}
             type="text"
             placeholder="Search"
             className={`${styles['search-bar']} context-menu-search-bar`}
@@ -60,18 +64,22 @@ export default function ContextMenu({
         )}
         <div className={styles['context-menu-inner']}>
           {items?.map(item => {
-            if(search === '') return <Item item={item} key={item.title} search={search} />
-            
-              const subitems = item.subitems.map(subItem => {
-                return subItem.title
-              })
+            if (search === '')
+              return <Item item={item} key={item.title} search={search} />
 
-              if(
-                item.title.toLowerCase().includes(search.toLowerCase()) ||
-                subitems.some(subItem => subItem.toLowerCase().includes(search.toLowerCase()))
-              ) return <Item item={item} key={item.title} search={search} />
+            const subitems = item.subitems.map(subItem => {
+              return subItem.title
+            })
 
-              return null
+            if (
+              item.title.toLowerCase().includes(search.toLowerCase()) ||
+              subitems.some(subItem =>
+                subItem.toLowerCase().includes(search.toLowerCase())
+              )
+            )
+              return <Item item={item} key={item.title} search={search} />
+
+            return null
           })}
         </div>
       </div>

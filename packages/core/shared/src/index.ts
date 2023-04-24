@@ -13,6 +13,7 @@ export { DropdownControl } from './dataControls/DropdownControl';
 export * from './dataControls/InputControl';
 export { NumberControl } from './dataControls/NumberControl';
 export { PlaytestControl } from './dataControls/PlaytestControl';
+export { SocketGeneratorControl } from './dataControls/SocketGenerator';
 // Export all data controls
 export { SwitchControl } from './dataControls/SwitchControl';
 export { TextInputControl } from './dataControls/TextInputControl';

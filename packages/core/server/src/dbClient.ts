@@ -6,12 +6,12 @@ import type { Application } from './declarations'
 import { DATABASE_TYPE, DATABASE_URL } from '@magickml/core'
 
 // Extend Configuration interface to include dbClient
+
 declare module './declarations' {
   interface Configuration {
-    dbClient: Knex
+    dbClient: Knex;
   }
 }
-
 // Supported database types
 export enum SupportedDbs {
   pg = 'pg',

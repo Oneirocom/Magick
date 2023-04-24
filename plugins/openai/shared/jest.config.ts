@@ -13,5 +13,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/plugins/openai/client',
+  coverageDirectory: '../../coverage/plugins/openai/shared',
 }

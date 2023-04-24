@@ -6,6 +6,7 @@
     text-align: left;
     box-sizing: border-box;
     padding: 24px;
+    padding-top: 0;
     z-index: 2000;
 }
 
@@ -114,6 +115,7 @@
 .speaker > label {
     display: block;
     margin: 8px 0;
+    color: #99ABB2;
 }
 
 .speaker input {

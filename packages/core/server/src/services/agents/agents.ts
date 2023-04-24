@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * This file configures the agent service with its hooks and utility functions.
  * For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
@@ -6,6 +6,7 @@
 
 // Import necessary modules and functions
 import { hooks as schemaHooks } from '@feathersjs/schema'
+import { BadRequest } from '@feathersjs/errors'
 import {
   agentDataValidator,
   agentPatchValidator,
@@ -15,7 +16,7 @@ import {
   agentDataResolver,
   agentPatchResolver,
   agentQueryResolver,
-  agentJsonFields
+  agentJsonFields,
 } from './agents.schema'
 import type { Application, HookContext } from '../../declarations'
 import { AgentService, getOptions } from './agents.class'
@@ -25,6 +26,20 @@ import { v4 as uuidv4 } from 'uuid'
 // Re-export agents.class and agents.schema
 export * from './agents.class'
 export * from './agents.schema'
+
+/**
+ * Validate that the rootSpell.id field is present.
+ * @param context - The hook context
+ */
+const validateRootSpell = async (context: HookContext) => {
+  if (
+    context.data.enabled &&
+    (!context.data.rootSpell || !context.data.rootSpell.id)
+  ) {
+    throw new BadRequest('Rootspell is required when agent is enabled')
+  }
+  return context
+}
 
 /**
  * Configure the agent service by registering it, its hooks, and its options.
@@ -44,7 +59,7 @@ export const agent = (app: Application) => {
         schemaHooks.resolveExternal(agentExternalResolver),
         schemaHooks.resolveResult(agentResolver),
         schemaHooks.resolveResult(jsonResolver(agentJsonFields)),
-      ]
+      ],
     },
     before: {
       all: [
@@ -56,18 +71,20 @@ export const agent = (app: Application) => {
       create: [
         schemaHooks.validateData(agentDataValidator),
         schemaHooks.resolveData(agentDataResolver),
+        validateRootSpell,
         async (context: HookContext) => {
           context.data.id = uuidv4()
           return context
-        }
+        },
       ],
       patch: [
         schemaHooks.validateData(agentPatchValidator),
         schemaHooks.resolveData(agentPatchResolver),
-        handleJSONFieldsUpdate(agentJsonFields)
+        validateRootSpell,
+        handleJSONFieldsUpdate(agentJsonFields),
       ],
       update: [handleJSONFieldsUpdate(agentJsonFields)],
-      remove: []
+      remove: [],
     },
     after: {
       all: [],

@@ -27,8 +27,6 @@
   },
   "dependencies": {
     "feathers-swagger": "^2.0.0",
-    "knex": "^2.4.2",
-    "@magickml/core": "file:../../dist/packages/core/shared",
-    "@magickml/server-core": "file:../../dist/packages/core/server"
+    "knex": "^2.4.2"
   }
 }

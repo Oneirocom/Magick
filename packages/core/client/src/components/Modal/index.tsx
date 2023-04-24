@@ -6,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import styles from './index.module.scss'
 import { DialogTitle } from '@mui/material'
+import React from 'react'
 
 /**
  * Modal component to display a dialog with action buttons.
@@ -21,14 +22,14 @@ interface Props {
   submitText?: string
   title?: string
   onClose: () => void
-  onSubmit?: () => void
-  children: React.ReactNode
+  handleAction?: () => void
+  children?: React.ReactNode
 }
 
 export const Modal = ({
   open,
   onClose,
-  onSubmit,
+  handleAction,
   submitText,
   title,
   children,
@@ -51,8 +52,14 @@ export const Modal = ({
         <Button onClick={onClose} className={styles.btnCancel}>
           Cancel
         </Button>
-        {onSubmit !== undefined && (
-          <Button onClick={onSubmit} className={styles.btnAction}>
+        {handleAction !== undefined && (
+          <Button
+            onClick={() => {
+              handleAction()
+              onClose()
+            }}
+            className={styles.btnAction}
+          >
             {submitText || 'Save'}
           </Button>
         )}
