@@ -54,7 +54,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     // get completion providers for text and chat categories
     const completionProviders = pluginManager.getCompletionProviders('text', [
       'text',
-      'chat',
+      // 'chat', // TODO: Remove chat for now until we can get it working. fire - 2023-04-24
     ]) as CompletionProvider[]
 
     // get the models from the completion providers and flatten into a single array
@@ -163,7 +163,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     // get completion providers for text and chat categories
     const completionProviders = pluginManager.getCompletionProviders('text', [
       'text',
-      'chat',
+      // 'chat', // TODO: Remove chat for now until we can get it working. fire - 2023-04-24
     ]) as CompletionProvider[]
 
     const model = (node.data as { model: string }).model as string
