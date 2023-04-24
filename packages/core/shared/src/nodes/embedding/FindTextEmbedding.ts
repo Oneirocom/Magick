@@ -1,7 +1,6 @@
 // DOCUMENTED 
-import Rete from 'rete'
+import Rete from 'rete';
 
-import { API_ROOT_URL } from '../../config';
 import { MagickComponent } from '../../engine';
 import { arraySocket, stringSocket, triggerSocket } from '../../sockets';
 import {
@@ -42,7 +41,7 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
     const success = new Rete.Output('success', 'Success', triggerSocket);
     const fail = new Rete.Output('failure', 'Failure', triggerSocket);
-    const out = new Rete.Output('embedding', 'Events', arraySocket);
+    const out = new Rete.Output('embedding', 'Embedding', arraySocket);
 
     return node
       .addInput(dataInput)
@@ -66,10 +65,11 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
     _outputs: MagickWorkerOutputs,
     context
   ) {
+    const { app } = context.module;
+    if(!app) throw new Error('App is not defined, cannot delete event');
 
     const { projectId } = context
-
-    const content = (inputs['content'] && inputs['content'][0]) as string
+    const content = (inputs['content'] && inputs['content'][0]) as unknown as string
 
     if (!content) {
       console.log('Content is null, not storing event');
@@ -82,29 +82,24 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
       getEmbedding: true,
       projectId: projectId
     }
+    const events = await app.service('events').find(params)
 
-    const urlString = `${API_ROOT_URL}/events`;
+    console.log('found text embedding events', events)
 
-    // Construct URL with query parameters
-    const url = new URL(urlString);
-    for (const p in params) {
-      if (Array.isArray(params[p])) {
-        params[p].forEach(v => url.searchParams.append(p, v));
-      } else {
-        url.searchParams.append(p, params[p]);
-      }
+    let responseData = null
+    if (Array.isArray(events.events) && (events.events).length > 0) {
+      responseData = events.events[0]
     }
-    const response = await fetch(url.toString())
-    if (response.status !== 200) return null
-    const json = await response.json()
-    
-    const responseData = json.events[0]
+
     let embedding = responseData ? responseData?.embedding?.toString() : null
     // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
-      embedding = JSON.parse(JSON.stringify(embedding));
+      if (embedding[0] === '[') {
+        embedding = JSON.parse(JSON.stringify(embedding));
+      } else {
+        embedding = JSON.parse(JSON.stringify("[" + embedding + "]"));
+      }
     }
-
     // Set the task closed state based on the presence of the embedding
     if (embedding) {
       this._task.closed = ['failure'];

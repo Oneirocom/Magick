@@ -1,7 +1,11 @@
-// DOCUMENTED 
+// DOCUMENTED
 import { createRoot } from 'react-dom/client'
 import { MagickIDE, AppConfig } from '@magickml/editor'
-import { DEFAULT_PROJECT_ID, API_ROOT_URL, TRUSTED_PARENT_URL, UNTRUSTED_IFRAME } from '@magickml/core'
+import {
+  DEFAULT_PROJECT_ID,
+  API_ROOT_URL,
+  TRUSTED_PARENT_URL,
+} from '@magickml/core'
 
 import plugins from './plugins'
 
@@ -32,27 +36,32 @@ if (window === window.parent) {
 
   const Root = () => <MagickIDE config={config} />
   root.render(<Root />)
-}
+} else {
 
 /**
  * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
  */
-else {
   window.addEventListener(
     'message',
     event => {
       // Remove possible trailing slash on only the end
-      const cloudUrl = TRUSTED_PARENT_URL.replace(/\/+$/, '')
+      const cloudUrl = TRUSTED_PARENT_URL?.replace(/\/+$/, '')
 
       // Check for trusted origin
       if (
-        !UNTRUSTED_IFRAME &&
+        TRUSTED_PARENT_URL &&
+        TRUSTED_PARENT_URL !== '' &&
         event.source !== window &&
         event.origin !== window.location.origin &&
         event.origin !== cloudUrl
       ) {
-        console.warn('untrusted origin', event.origin)
-        console.warn('EXITING')
+        console.error('untrusted origin', event.origin)
+        console.error(
+          'cloudUrl is ',
+          cloudUrl,
+          'TRUSTED_PARENT_URL',
+          TRUSTED_PARENT_URL
+        )
         return
       }
 

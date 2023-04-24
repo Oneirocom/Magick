@@ -1,22 +1,36 @@
-// DOCUMENTED 
-import { Button, Modal } from '@magickml/client-core';
-import { API_ROOT_URL } from '@magickml/core';
+// DOCUMENTED
+import { Button } from '@magickml/client-core'
+import { API_ROOT_URL } from '@magickml/core'
 import {
-  Grid, IconButton, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField
-} from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import _ from 'lodash';
-import { useSnackbar } from 'notistack';
-import { useEffect, useMemo, useState } from 'react';
-import { CSVLink } from 'react-csv';
-import { FaFileCsv } from 'react-icons/fa';
-import { VscArrowDown, VscArrowUp, VscTrash } from 'react-icons/vsc';
+  Grid,
+  IconButton,
+  Pagination,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from '@mui/material'
+import _ from 'lodash'
+import { useSnackbar } from 'notistack'
+import { useEffect, useMemo, useState } from 'react'
+import { CSVLink } from 'react-csv'
+import { FaFileCsv } from 'react-icons/fa'
+import { VscArrowDown, VscArrowUp, VscTrash } from 'react-icons/vsc'
 import {
-  Row, useAsyncDebounce, useFilters, useGlobalFilter, usePagination,
+  Row,
+  useAsyncDebounce,
+  useFilters,
+  useGlobalFilter,
+  usePagination,
   useSortBy,
-  useTable,
-} from 'react-table';
-import { useConfig } from '../../contexts/ConfigProvider';
+  useTable
+} from 'react-table'
+import { useConfig } from '../../contexts/ConfigProvider'
+import DocumentModal from './DocumentModal'
 
 /**
  * The global filter component for searching documents within the table.
@@ -25,26 +39,26 @@ import { useConfig } from '../../contexts/ConfigProvider';
  */
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   // State
-  const [value, setValue] = useState(globalFilter);
+  const [value, setValue] = useState(globalFilter)
 
   // Debounced onChange
   const onChange = useAsyncDebounce(value => {
-    setGlobalFilter(value || undefined);
-  }, 500);
+    setGlobalFilter(value || undefined)
+  }, 500)
 
   return (
     <input
       type="text"
       value={value || ''}
       onChange={e => {
-        setValue(e.target.value);
-        onChange(e.target.value);
+        setValue(e.target.value)
+        onChange(e.target.value)
       }}
       placeholder="Search documents..."
       style={{ width: '40em', border: 0, margin: 0 }}
     />
-  );
-};
+  )
+}
 
 /**
  * The default column filter component.
@@ -59,7 +73,7 @@ const DefaultColumnFilter = ({
       type="text"
       value={filterValue || ''}
       onChange={e => {
-        setFilter(e.target.value || undefined);
+        setFilter(e.target.value || undefined)
       }}
       placeholder={Header}
       style={{
@@ -69,8 +83,8 @@ const DefaultColumnFilter = ({
         borderRadius: 0,
       }}
     />
-  );
-};
+  )
+}
 
 /**
  * The document table component for displaying, editing and deleting documents.
@@ -79,8 +93,8 @@ const DefaultColumnFilter = ({
  */
 function DocumentTable({ documents, updateCallback }) {
   // Snackbar and configuration context
-  const { enqueueSnackbar } = useSnackbar();
-  const config = useConfig();
+  const { enqueueSnackbar } = useSnackbar()
+  const config = useConfig()
 
   // Column definition
   const columns = useMemo(
@@ -123,7 +137,7 @@ function DocumentTable({ documents, updateCallback }) {
       },
     ],
     []
-  );
+  )
 
   // Update document in API
   const updateDocument = async ({ id, ...rowData }, columnId, value) => {
@@ -131,7 +145,7 @@ function DocumentTable({ documents, updateCallback }) {
       ...rowData,
       [columnId]: value,
       projectId: config.projectId,
-    };
+    }
     if (!_.isEqual(reqBody, rowData)) {
       const resp = await fetch(`${API_ROOT_URL}/documents/${id}`, {
         method: 'PATCH',
@@ -139,15 +153,15 @@ function DocumentTable({ documents, updateCallback }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(reqBody),
-      });
+      })
 
-      const json = await resp.json();
+      const json = await resp.json()
 
-      if (json) enqueueSnackbar('Document updated', { variant: 'success' });
-      else enqueueSnackbar('Error updating event', { variant: 'error' });
-      updateCallback();
+      if (json) enqueueSnackbar('Document updated', { variant: 'success' })
+      else enqueueSnackbar('Error updating event', { variant: 'error' })
+      updateCallback()
     }
-  };
+  }
 
   // Editable cell component
   const EditableCell = ({
@@ -156,27 +170,25 @@ function DocumentTable({ documents, updateCallback }) {
     column: { id },
     updateDocument,
   }) => {
-    const [val, setVal] = useState(value);
-    const onChange = e => typeof val !== 'object' && setVal(e.target.value);
-    const onBlur = e => updateDocument(row, id, val);
-    useEffect(() => setVal(value), [value]);
+    const [val, setVal] = useState(value)
+    const onChange = e => typeof val !== 'object' && setVal(e.target.value)
+    const onBlur = e => updateDocument(row, id, val)
+    useEffect(() => setVal(value), [value])
     return (
       <input
-        value={
-          val && typeof val === 'object' ? JSON.stringify(val.data) : val
-        }
+        value={val && typeof val === 'object' ? JSON.stringify((val as {data: unknown}).data) : val}
         onChange={onChange}
         onBlur={onBlur}
         className="bare-input"
       />
-    );
-  };
+    )
+  }
 
   // Default column properties
   const defaultColumn = {
     Cell: EditableCell,
     Filter: DefaultColumnFilter,
-  };
+  }
 
   // Table instance
   const {
@@ -200,44 +212,50 @@ function DocumentTable({ documents, updateCallback }) {
     useFilters,
     useGlobalFilter,
     useSortBy,
-    usePagination,
-  ) as any;
+    usePagination
+  ) as any
 
   // Pagination
   const handlePageChange = (page: number) => {
-    const pageIndex = page - 1;
-    gotoPage(pageIndex);
-  };
+    const pageIndex = page - 1
+    gotoPage(pageIndex)
+  }
 
   // Handle deletion of document
   const handleDatabaseDelete = async (event: any) => {
     const isDeleted = await fetch(`${API_ROOT_URL}/documents/${event.id}`, {
       method: 'DELETE',
-    });
+    })
     if (isDeleted) {
-      enqueueSnackbar('Document deleted', { variant: 'success' });
+      enqueueSnackbar('Document deleted', { variant: 'success' })
     } else {
-      enqueueSnackbar('Error deleting document', { variant: 'error' });
+      enqueueSnackbar('Error deleting document', { variant: 'error' })
     }
-    updateCallback();
-  };
+    updateCallback()
+  }
 
   const originalRows = useMemo(
     () => flatRows.map(row => row.original),
-    [flatRows],
-  );
+    [flatRows]
+  )
 
   // Create mode state
-  const [createMode, setCreateMode] = useState(false);
+  const [createMode, setCreateMode] = useState(false)
 
   // Show create modal
   const showCreateModal = () => {
-    setCreateMode(true);
-  };
+    setCreateMode(true)
+  }
+
+  // Close create modal
+  const closeCreateModal = () => {
+    setCreateMode(false)
+  }
 
   // Handle save action
   const handleSave = async () => {
     // call documents endpoint
+    const secrets = localStorage.getItem('secrets')
     const result = await fetch(`${API_ROOT_URL}/documents`, {
       method: 'POST',
       headers: {
@@ -246,8 +264,9 @@ function DocumentTable({ documents, updateCallback }) {
       body: JSON.stringify({
         ...newDocument,
         projectId: config.projectId,
+        secrets: secrets
       }),
-    });
+    })
 
     // reset newDocument
     setNewDocument({
@@ -257,11 +276,11 @@ function DocumentTable({ documents, updateCallback }) {
       projectId: '',
       date: '',
       embedding: '',
-    });
-    updateCallback();
+    })
+    updateCallback()
 
-    return result;
-  };
+    return result
+  }
 
   // State for new document
   const [newDocument, setNewDocument] = useState({
@@ -271,54 +290,12 @@ function DocumentTable({ documents, updateCallback }) {
     projectId: '',
     date: new Date().toISOString(),
     embedding: '',
-  });
+  })
 
   return (
     <>
       {createMode && (
-        <Modal
-          open={createMode}
-          setOpen={setCreateMode}
-          handleAction={handleSave}
-        >
-          <TextField
-            label="Type"
-            name="type"
-            style={{ width: '100%', margin: '.5em' }}
-            onChange={e =>
-              setNewDocument({ ...newDocument, type: e.target.value })
-            }
-          />
-          <TextField
-            label="Owner"
-            name="owner"
-            style={{ width: '100%', margin: '.5em' }}
-            onChange={e =>
-              setNewDocument({ ...newDocument, owner: e.target.value })
-            }
-          />
-          <TextField
-            label="Content"
-            name="content"
-            style={{ width: '100%', margin: '.5em' }}
-            onChange={e =>
-              setNewDocument({ ...newDocument, content: e.target.value })
-            }
-          />
-          <DatePicker
-            label="Date"
-            onChange={date =>
-              setNewDocument({ ...newDocument, date: date.toISOString() })}
-          />
-          <TextField
-            label="Embedding"
-            name="embedding"
-            style={{ width: '100%', margin: '.5em' }}
-            onChange={e =>
-              setNewDocument({ ...newDocument, embedding: e.target.value })
-            }
-          />
-        </Modal>
+        <DocumentModal createMode={createMode} setCreateMode={setCreateMode} handleSave={handleSave} setNewDocument={setNewDocument} />
       )}
       <Stack spacing={2}>
         <Grid container justifyContent="left" style={{ padding: '1em' }}>
@@ -436,7 +413,7 @@ function DocumentTable({ documents, updateCallback }) {
             </TableHead>
             <TableBody {...getTableBodyProps()}>
               {page.map((row: Row<object>, idx: number) => {
-                prepareRow(row);
+                prepareRow(row)
                 return (
                   <TableRow {...row.getRowProps()} key={idx}>
                     {row.cells.map((cell, idx) => (
@@ -445,7 +422,7 @@ function DocumentTable({ documents, updateCallback }) {
                       </TableCell>
                     ))}
                   </TableRow>
-                );
+                )
               })}
             </TableBody>
           </Table>
@@ -459,7 +436,7 @@ function DocumentTable({ documents, updateCallback }) {
         />
       </Stack>
     </>
-  );
+  )
 }
 
-export default DocumentTable;
+export default DocumentTable

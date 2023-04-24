@@ -131,6 +131,8 @@ export const spellApi = rootApi.injectEndpoints({
         spellCopy.projectId = spell.projectId ?? projectId;
         spellCopy.hash = md5(JSON.stringify(spellCopy.graph.nodes));
 
+        delete spellCopy.creatorId
+
         const baseQueryOptions = {
           url: 'spells/' + spell.id,
           body: spellCopy,

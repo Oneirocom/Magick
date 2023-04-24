@@ -9,14 +9,18 @@ export const TwitterAgentWindow: FC<any> = props => {
   const { selectedAgentData, setSelectedAgentData, update } = props
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
-  const [checked, setChecked] = useState(selectedAgentData.data?.twitter_enabled)
+  const [checked, setChecked] = useState(
+    selectedAgentData.data?.twitter_enabled
+  )
   const [disable, setDisable] = useState(false)
-  useEffect(()=>{
-    if (props.enable["TwitterPlugin"] == false) {
+
+
+  useEffect(() => {
+    if (props.enable['TwitterPlugin'] == false) {
       setChecked(false)
       setDisable(true)
     }
-    if (props.enable['TwitterPlugin'] == true){
+    if (props.enable['TwitterPlugin'] == true) {
       setChecked(selectedAgentData.data?.twitter_enabled)
       setDisable(false)
     }

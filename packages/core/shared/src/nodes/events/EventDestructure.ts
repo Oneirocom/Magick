@@ -1,16 +1,16 @@
-// DOCUMENTED 
-import Rete from 'rete';
-import { v4 as uuidv4 } from 'uuid';
+// DOCUMENTED
+import Rete from 'rete'
+import { v4 as uuidv4 } from 'uuid'
 
-import { NodeData } from 'rete/types/core/data';
-import { MagickComponent } from '../../engine';
-import { Task } from '../../plugins/taskPlugin/task';
+import { NodeData } from 'rete/types/core/data'
+import { MagickComponent } from '../../engine'
+import { Task } from '../../plugins/taskPlugin/task'
 import {
   arraySocket,
   eventSocket,
   stringSocket,
   triggerSocket,
-} from '../../sockets';
+} from '../../sockets'
 import {
   Event,
   MagickNode,
@@ -18,42 +18,47 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   WorkerData,
-} from '../../types';
+} from '../../types'
 
-/** 
+/**
  * Info description for EventDestructureComponent
  */
-const info = `The input component allows you to pass a single value to your graph. You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`;
+const info = `The input component allows you to pass a single value to your graph. You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
 
 /**
  * EventDestructureComponent
  * Class to destructure an event object
  */
 export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
-  nodeTaskMap: Record<number, MagickTask> = {};
+  nodeTaskMap: Record<number, MagickTask> = {}
 
   /**
    * EventDestructureComponent constructor
    */
   constructor() {
     // Name of the component
-    super('Event Destructure', {
-      outputs: {
-        trigger: 'option',
-        agentId: 'output',
-        content: 'output',
-        channel: 'output',
-        channelType: 'output',
-        client: 'output',
-        entities: 'output',
-        observer: 'output',
-        projectId: 'output',
-        sender: 'output',
+    super(
+      'Event Destructure',
+      {
+        outputs: {
+          trigger: 'option',
+          agentId: 'output',
+          content: 'output',
+          channel: 'output',
+          channelType: 'output',
+          client: 'output',
+          entities: 'output',
+          observer: 'output',
+          projectId: 'output',
+          sender: 'output',
+        },
+        init: (task = {} as Task, node: NodeData) => {
+          this.nodeTaskMap[node.id] = task
+        },
       },
-      init: (task = {} as Task, node: NodeData) => {
-        this.nodeTaskMap[node.id] = task;
-      },
-    }, 'Event', info);
+      'Event',
+      info
+    )
   }
 
   /**
@@ -63,25 +68,26 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
    */
   builder(node: MagickNode) {
     // Set a socket key if not exists
-    node.data.socketKey = node?.data?.socketKey || uuidv4();
+    node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    const out = new Rete.Output('content', 'content', stringSocket);
-    const sender = new Rete.Output('sender', 'sender', stringSocket);
-    const observer = new Rete.Output('observer', 'observer', stringSocket);
-    const client = new Rete.Output('client', 'client', stringSocket);
-    const channel = new Rete.Output('channel', 'channel', stringSocket);
+    const out = new Rete.Output('content', 'content', stringSocket)
+    const sender = new Rete.Output('sender', 'sender', stringSocket)
+    const observer = new Rete.Output('observer', 'observer', stringSocket)
+    const client = new Rete.Output('client', 'client', stringSocket)
+    const channel = new Rete.Output('channel', 'channel', stringSocket)
     const channelType = new Rete.Output(
       'channelType',
       'channelType',
       stringSocket
-    );
-    const projectId = new Rete.Output('projectId', 'projectId', stringSocket);
-    const agentId = new Rete.Output('agentId', 'agentId', stringSocket);
-    const entities = new Rete.Output('entities', 'entities', arraySocket);
+    )
+    const rawData = new Rete.Output('rawData', 'rawData', stringSocket)
+    const projectId = new Rete.Output('projectId', 'projectId', stringSocket)
+    const agentId = new Rete.Output('agentId', 'agentId', stringSocket)
+    const entities = new Rete.Output('entities', 'entities', arraySocket)
 
-    const eventInput = new Rete.Input('event', 'Event', eventSocket);
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
+    const eventInput = new Rete.Input('event', 'Event', eventSocket)
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     return node
       .addInput(dataInput)
@@ -95,7 +101,8 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       .addOutput(entities)
       .addOutput(projectId)
       .addOutput(observer)
-      .addOutput(sender);
+      .addOutput(sender)
+      .addOutput(rawData)
   }
 
   /**
@@ -108,9 +115,9 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
   async worker(
     _node: WorkerData,
     { event }: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
+    _outputs: MagickWorkerOutputs
   ) {
-    const eventValue = event[0] ?? event;
+    const eventValue = event[0] ?? event
 
     const {
       content,
@@ -119,10 +126,11 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       client,
       channel,
       channelType,
+      rawData,
       projectId,
       entities,
       agentId,
-    } = eventValue as Event;
+    } = eventValue as Event
     return {
       content,
       sender,
@@ -130,10 +138,11 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       client,
       channel,
       channelType,
+      rawData,
       projectId,
       entities,
       agentId,
       trigger: 'option',
-    };
+    }
   }
 }

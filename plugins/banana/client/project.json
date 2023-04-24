@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-banana-client",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/pluginbanana/client/src",
+  "sourceRoot": "plugins/banana/client/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],
   "targets": {

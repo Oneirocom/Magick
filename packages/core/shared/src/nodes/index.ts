@@ -37,6 +37,7 @@ import { SpellComponent } from './io/Spell';
 import { InRange } from './number/InRange';
 import { NumberVariable } from './number/NumberVariable';
 import { ComposeObject } from './object/ComposeObject';
+import { GetValuesFromObject } from './object/GetValuesFromObject';
 import { ParseJSON } from './object/JSONToObject';
 import { Merge } from './object/MergeObjects';
 import { ObjectToJSON } from './object/ObjectToJSON';
@@ -50,11 +51,10 @@ import { StringVariable } from './text/StringVariable';
 import { TextTemplate } from './text/TextTemplate';
 import { TextVariable } from './text/TextVariable';
 import { Cast } from './utility/Cast';
-import { GetValuesFromObject } from './object/GetValuesFromObject';
 import { Echo } from './utility/Echo';
 import { Log } from './utility/Log';
 
-export const components: Record<string, ()=>MagickComponent<unknown>> = {
+export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
   randomGate: () => new RandomGate(),
   cast: () => new Cast(),
@@ -130,16 +130,21 @@ function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>): numb
  * @returns An array of sorted MagickComponents.
  */
 export const getNodes = (): MagickComponent<unknown>[] => {
-  const pluginNodes = pluginManager.getNodes();
-  const allComponents = { ...components, ...pluginNodes };
-  const sortedComponentKeys = Object.keys(allComponents).sort();
-  const sortedComponents: Record<string, ()=>MagickComponent<unknown>> = {};
+  try {
+    const pluginNodes = pluginManager.getNodes();
+    const allComponents = { ...components, ...pluginNodes };
+    const sortedComponentKeys = Object.keys(allComponents).sort();
+    const sortedComponents: Record<string, () => MagickComponent<unknown>> = {};
 
-  for (const key of sortedComponentKeys) {
-    sortedComponents[key] = allComponents[key];
+    for (const key of sortedComponentKeys) {
+      sortedComponents[key] = allComponents[key];
+    }
+
+    return Object.values(sortedComponents)
+      .map(component => component())
+      .sort(compare);
+  } catch (e) {
+    console.error(e)
+    return []
   }
-
-  return Object.values(sortedComponents)
-    .map(component => component())
-    .sort(compare);
 };

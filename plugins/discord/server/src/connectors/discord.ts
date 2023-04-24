@@ -1,10 +1,11 @@
 // DOCUMENTED
 import { AgentInterface, WorldManager } from '@magickml/core'
 import Discord, {
-  AttachmentBuilder, ChannelType,
+  AttachmentBuilder,
+  ChannelType,
   EmbedBuilder,
   GatewayIntentBits,
-  Partials
+  Partials,
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
 import emojiRegex from 'emoji-regex'
@@ -37,6 +38,8 @@ export class DiscordConnector {
   voice_language_code!: string
   tiktalknet_url!: string
   worldManager: WorldManager
+  guildId!: any
+  message!: any
   constructor(options) {
     const {
       agent,
@@ -160,22 +163,18 @@ export class DiscordConnector {
         )
 
         this.client.ws
-
         ;(async () => {
+          try {
+            const login = await this.client.login(token)
+            console.log('Discord client logged in', login)
+          } catch (e) {
+            return console.error('Error logging in discord client', e)
+          }
 
-        try {
-        const login = await this.client.login(token)
-        console.log('Discord client logged in', login)
-        
-        } catch (e) {
-          return console.error('Error logging in discord client', e)
-        }
-
-        this.client.on('error', err => {
-          console.error('Discord client error', err)
-        })
-      })()
-
+          this.client.on('error', err => {
+            console.error('Discord client error', err)
+          })
+        })()
       } catch (e) {
         console.error('Error creating discord client', e)
       }
@@ -404,7 +403,8 @@ export class DiscordConnector {
   //Event that is trigger when a new message is created (sent)
   messageCreate = async (client: any, message: any) => {
     console.log('new message from discord:', message.content)
-
+    this.guildId = message.guild
+    this.message = message
     //gets the emojis from the text and replaces to unix specific type
     const reg = emojiRegex()
     let match
@@ -659,6 +659,7 @@ export class DiscordConnector {
           agentId: this.agent.id,
           entities: entities.map(e => e.user),
           channelType: 'msg',
+          rawData: JSON.stringify(message),
         },
       },
       agent: this.agent,
@@ -668,28 +669,28 @@ export class DiscordConnector {
       app,
     })
 
-    if (!response) {
-      console.warn('Discord: No response outputs')
-      return
-    }
+    // if (!response) {
+    //   console.warn('Discord: No response outputs')
+    //   return
+    // }
 
-    console.log('response', response)
+    // console.log('response', response)
 
-    const outputKey = Object.keys(response).find(
-      key => key.toLowerCase().includes('output')
-    ) as string
+    // const outputKey = Object.keys(response).find(key =>
+    //   key.toLowerCase().includes('output')
+    // ) as string
 
-    const Output = response[outputKey]
+    // const Output = response[outputKey]
 
-    if (!Output) {
-      console.warn('Discord: No Output')
-      return
-    }
+    // if (!Output) {
+    //   console.warn('Discord: No Output')
+    //   return
+    // }
 
-    console.log('handled response', Output)
-    if (!Output || Output === '') {
-      message.channel.send('Error: Empty Resonse')
-    } else message.channel.send(Output)
+    // console.log('handled response', Output)
+    // if (!Output || Output === '') {
+    //   message.channel.send('Error: Empty Resonse')
+    // } else message.channel.send(Output)
   }
 
   //Event that is triggered when a message is deleted
@@ -1063,15 +1064,19 @@ export class DiscordConnector {
 
   async sendMessageToChannel(channelId: any, msg: any) {
     console.log('sending message to channel: ' + channelId, msg)
-    const channel = await this.client.channels.fetch(channelId)
-    if (msg && msg !== '' && channel && channel !== undefined) {
-      channel.send(msg)
-    } else {
-      console.error(
-        'could not send message to channel: ' + channelId,
-        'msg = ' + msg,
-        'channel = ' + channel
-      )
+    try {
+      const channel = await this.client.channels.fetch(channelId)
+      if (msg && msg !== '' && channel && channel !== undefined) {
+        channel.send(msg)
+      } else {
+        console.error(
+          'could not send message to channel: ' + channelId,
+          'msg = ' + msg,
+          'channel = ' + channel
+        )
+      }
+    } catch (e) {
+      console.error(e)
     }
   }
 }

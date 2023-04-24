@@ -5,15 +5,13 @@ import { v4 as uuidv4 } from 'uuid'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
-import { Module } from '../../plugins/modulePlugin/module'
 import { anySocket, eventSocket, triggerSocket } from '../../sockets'
 import {
-  EditorContext,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleContext,
-  WorkerData,
+  WorkerData
 } from '../../types'
 
 /** Component info text */
@@ -111,30 +109,33 @@ export class Output extends MagickComponent<void> {
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<{ output: string }> {
+    console.log('***** CALLING OUTPUT WORKER')
+    const inputName = Object.keys(context.data)[0]
+
     if (!inputs.input) {
       console.error('No input provided to output component')
       return { output: '' }
     }
+    const { module, data } = context
 
     const outputType = node.data.outputType
     const output = (inputs.input.filter(Boolean)[0] ?? '') as string
     const event =
       inputs.event?.[0] ||
-      (inputs && (Object.values(inputs)[0] as unknown[])?.[0])
-
-    const { module } = context
+      (data && (Object.values(data)[0] as unknown[]))
 
     if (module.agent) {
       if (outputType && (outputType as string).includes('Default')) {
-        const outputType = pluginManager.getOutputTypes().find(type => {
-          return type.name === Object.keys(inputs)[0].replace('Output - ', '')
+        const type = pluginManager.getInputTypes().find(type => {
+          return type.name === inputName.replace('Input - ', '')
         })
 
-        const responseOutputType = outputType?.defaultResponseOutput
+        const responseOutputType = type?.defaultResponseOutput
         const t = module.agent.outputTypes.find(
           t => t.name === responseOutputType
         )
 
+        console.log('******** CALLING HANDLER')
         t.handler({
           output,
           agent: module.agent,
@@ -150,7 +151,6 @@ export class Output extends MagickComponent<void> {
         } else if (!t.handler) {
           console.error('output type handler is not defined', t)
         } else {
-          console.log('handling! 2 ', outputType, t)
           t.handler({
             output,
             agent: module.agent,
