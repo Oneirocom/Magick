@@ -16,6 +16,11 @@ type InputReturn = {
   embedding: number[] | null;
 };
 
+interface ResponseData {
+  embedding: number[] | string;
+}
+
+
 /**
  * FindTextEmbedding class extends MagickComponent and processes the given text to find cached embeddings.
  */
@@ -59,56 +64,56 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
    * @param _outputs - Node outputs.
    * @returns The result of the worker process.
    */
-  async worker(
-    node: WorkerData,
-    inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
-    context
-  ) {
-    const { app } = context.module;
-    if(!app) throw new Error('App is not defined, cannot delete event');
-
-    const { projectId } = context
-    const content = (inputs['content'] && inputs['content'][0]) as unknown as string
-
-    if (!content) {
-      console.log('Content is null, not storing event');
-      return null;
-    }
-
-    const params = {
-      content: content,
-      $limit: 1,
-      getEmbedding: true,
-      projectId: projectId
-    }
-    const events = await app.service('events').find(params)
-
-    console.log('found text embedding events', events)
-
-    let responseData = null
-    if (Array.isArray(events.events) && (events.events).length > 0) {
-      responseData = events.events[0]
-    }
-
-    let embedding = responseData ? responseData?.embedding?.toString() : null
-    // if embedding is a string, parse it to an array
-    if (typeof embedding === 'string') {
-      if (embedding[0] === '[') {
-        embedding = JSON.parse(JSON.stringify(embedding));
-      } else {
-        embedding = JSON.parse(JSON.stringify("[" + embedding + "]"));
+    async worker(
+      node: WorkerData,
+      inputs: MagickWorkerInputs,
+      _outputs: MagickWorkerOutputs,
+      context
+    ) {
+      const { app } = context.module;
+      if (!app) throw new Error('App is not defined, cannot delete event');
+    
+      const { projectId } = context;
+      const content = (inputs['content'] && inputs['content'][0]) as unknown as string;
+    
+      if (!content) {
+        console.log('Content is null, not storing event');
+        return null;
       }
+    
+      const params = {
+        content: content,
+        $limit: 1,
+        getEmbedding: true,
+        projectId: projectId,
+      };
+      const events = await app.service('events').find(params);
+    
+      console.log('found text embedding events', events);
+    
+      let responseData: ResponseData | null = null;
+      if (Array.isArray(events.events) && events.events.length > 0) {
+        responseData = events.events[0];
+      }
+    
+      let embedding = responseData ? responseData.embedding : null;
+      // if embedding is a string, parse it to an array
+      if (typeof embedding === 'string') {
+        if (embedding[0] === '[') {
+          embedding = JSON.parse(embedding) as number[];
+        } else {
+          embedding = JSON.parse("[" + embedding + "]") as number[];
+        }
+      }
+      // Set the task closed state based on the presence of the embedding
+      if (embedding) {
+        this._task.closed = ['failure'];
+      } else {
+        this._task.closed = ['success'];
+      }
+    
+      return {
+        embedding,
+      };
     }
-    // Set the task closed state based on the presence of the embedding
-    if (embedding) {
-      this._task.closed = ['failure'];
-    } else {
-      this._task.closed = ['success'];
-    }
-
-    return {
-      embedding,
-    };
-  }
 }
