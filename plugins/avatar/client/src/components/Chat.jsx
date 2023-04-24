@@ -167,7 +167,7 @@ export default function ChatBox({
         //   voices[voice]
 
         // fetch the audio file from ttsEndpoint
-        const ttsEndpoint = "https://ai-voice.webaverse.ai/tts?s=hello"
+        const ttsEndpoint = "https://ai-voice.webaverse.ai/tts?s="+value
 
         fetch(ttsEndpoint).then(async (response) => {
           const blob = await response.blob()
@@ -176,20 +176,20 @@ export default function ChatBox({
           const arrayBuffer = await blob.arrayBuffer()
 
           self.startFromAudioFile(arrayBuffer)
-          setMessages((messages) => [...messages, agent + ": " + "hello"])
+          setMessages((messages) => [...messages, agent + ": " + value])
         })
 
 
-        fetch('http://localhost:3030/api', 
-        {  
-          method: 'POST',  
-          headers: { 'Content-Type': 'application/json',},  
-          body: JSON.stringify({ 
-            id: '727574f9-88fd-47f6-be39-a52493da8514',    
-            apiKey: 'b2b14ea42a439cf138c55b450b9eddb5',    
-            content: 'Hello World'  
-          })
-        })
+        // fetch('http://localhost:3030/api', 
+        // {  
+        //   method: 'POST',  
+        //   headers: { 'Content-Type': 'application/json',},  
+        //   body: JSON.stringify({ 
+        //     id: '727574f9-88fd-47f6-be39-a52493da8514',    
+        //     apiKey: 'b2b14ea42a439cf138c55b450b9eddb5',    
+        //     content: 'Hello World'  
+        //   })
+        // })
 
         setWaitingForResponse(false)
         // })
