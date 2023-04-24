@@ -1,0 +1,27 @@
+name: Bug report
+description: Report a bug in Magick
+
+body:
+- type: textarea
+  attributes:
+    label: What Changed
+    description: >
+      Please include a description of the changes made in this pull request.
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: How to test
+    description: |
+      How can the reviewer test your changes and validate that they work as described?
+  validations:
+    required: true
+    
+- type: textarea
+  attributes:
+    label: Additional information
+    description: |
+      Any other information that might be useful while reviewing.
+  validations:
+    required: false
