@@ -59,6 +59,24 @@ export type GetDocumentArgs = Document & {
   maxCount?: number
 }
 
+export type AgentTask = {
+  id?: number
+  complete: boolean
+  type?: string
+  objective: string
+  eventData: Event
+  projectId?: string
+  agentId?: number | string
+  date?: string
+  data: AgentTaskData[]
+}
+
+export type AgentTaskData = {
+  input: any
+  output: any
+  state: any
+}
+
 export type Event = {
   id?: number
   type?: string
