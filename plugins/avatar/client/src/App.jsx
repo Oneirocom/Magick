@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useCallback, useEffect, useRef, useState } from "react"
+import { useSelector } from 'react-redux'
 import * as THREE from 'three'
 import styles from "./App.module.css"
 import Background from "./components/Background"
@@ -9,14 +10,16 @@ import Scene from "./components/Scene"
 import { SceneProvider } from "./components/SceneContext"
 import { BlinkManager } from "./library/blinkManager"
 import { LipSync } from "./library/lipsync"
-
+import { useConfig } from '../../../../packages/editor/src/contexts/ConfigProvider'
 import { initAnimationMixer, loadVRM } from "./library/animationManager"
+import { IGNORE_AUTH, pluginManager } from '../../../../packages/core/shared/src'
 
 let isFirstRender = true
 let characterIsChanged = false
 
 const animationUrl = '/3d/magic idle.fbx';
 const characterUrl = '/3d/avatar.vrm'
+let dropfile;
 
 export default function App() {
   const [micEnabled, setMicEnabled] = React.useState(false)
@@ -24,8 +27,13 @@ export default function App() {
   const [hideUi, setHideUi] = useState(false)
   const [characterModel, setCharacterModel] = React.useState(null)
   const [lipSync, setLipSync] = React.useState(null)
+  const [spellList, setSpellList] = React.useState([])
 
   const timer = useRef(null)
+  const config = useConfig()
+  const globalConfig = useSelector((state) => state.globalConfig)
+  const token = globalConfig?.token
+  const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
 
   const  applyAnimation = async (animationUrl, vrm) => {
     const mixer = await initAnimationMixer(animationUrl, vrm)
@@ -50,10 +58,15 @@ export default function App() {
   }
   
   useEffect(() => {
-    if (!isFirstRender) return
     isFirstRender = false;
     (async () => {
-      const vrm = await loadVRM(characterUrl)
+      let vrm;
+
+      if(dropfile) {
+        vrm = await loadVRM(dropfile)
+      }
+      else  vrm = await loadVRM(characterUrl)
+      
       characterIsChanged = true
       
       await applyAnimation(animationUrl, vrm)
@@ -61,17 +74,17 @@ export default function App() {
     })()
   }, [])
 
-
   // Update character model third-party library integrations
   useEffect(() => {
     if (!characterIsChanged || !characterModel) return
-    console.log('character is changed')
+     
     characterIsChanged = false;
     (async () => {
       const blinkManager = new BlinkManager(0.1, 0.1, 0.5, 5)
       blinkManager.addBlinker(characterModel)
       const newLipSync = new LipSync(characterModel)
       setLipSync(newLipSync)
+      console.log('characterModel = ', characterModel);
     })()
   }, [characterModel])
 
@@ -81,6 +94,7 @@ export default function App() {
     (async () => {
       const reader = new FileReader();
       const obj = URL.createObjectURL(file)
+      dropfile = obj;
       const characterModel = await loadVRM(obj)
       characterIsChanged = true
       await applyAnimation(animationUrl, characterModel)
@@ -88,26 +102,17 @@ export default function App() {
     })()
   }, []);
 
-  let lastTap = 0
-
   useEffect(() => {
-    const handleTap = (e) => {
-      const now = new Date().getTime()
-      const timesince = now - lastTap
-      if (timesince < 300 && timesince > 10) {
-        const tgt = e.target
-        if (tgt.id == "editor-scene") setHideUi(!hideUi)
-      }
-      lastTap = now
-    }
-    window.addEventListener("touchend", handleTap)
-    window.addEventListener("click", handleTap)
-    return () => {
-      window.removeEventListener("touchend", handleTap)
-      window.removeEventListener("click", handleTap)
-    }
-  }, [hideUi])
+    (async () => {
+      const res = await fetch(
+        `${config.apiUrl}/spells?projectId=${config.projectId}`,
+        { headers }
+      )
+      const json = await res.json()
 
+      setSpellList(json.data)
+    })()
+  }, [])
 
   return (
     <SceneProvider>
@@ -116,9 +121,50 @@ export default function App() {
       {characterModel && <Scene
         characterModel={characterModel}
       />}
+      <div className={styles.sxpContainer}>
+        <div className={styles.sxpContainerTitle}>
+          Personality:
+        </div>
+
+        <div className={styles.sxpItems}>
+          <span className={styles.sxpItemTitle}>Name: </span>{characterModel?'Eliza':''}
+        </div>
+        <div className={styles.sxpItems}>
+          <span className={styles.sxpItemTitle}>Agent: </span>{characterModel?"b00583bc-23c3-4a10-b284-9cb525f1dc37":''}
+        </div>
+        <div className={styles.sxpItems}>
+          <span className={styles.sxpItemTitle}>SpellName: </span>{characterModel?'Project':''}
+        </div>
+        <div className={styles.sxpItems}>
+          <span className={styles.sxpItemTitle}>EndPoint: </span>{characterModel?'MagickML V1':''}
+        </div>
+        <div className={styles.sxpItems}>
+          <span className={styles.sxpItemTitle}>DefaultMessage: </span>{characterModel?'Hello':''}
+        </div>
+      </div>
       <div className={styles.container}>
         <div className={styles.chatContainer}>
           <div className={styles.scrollContainer}>
+            <div className={styles.spellSelectorContainer}>
+              <label className={styles.spellListTitle}>Root Spell</label>
+              <select
+                className={styles.spellSelector}
+                name="spellList"
+                id="spellList"
+              >
+                <option disabled value={'default'}>
+                  Select Spell
+                </option>
+                {spellList?.length > 0 &&
+                  spellList.map((spell, idx) => {
+                    return (
+                      <option value={spell.name} key={idx}>
+                        {spell.name}
+                      </option>
+                    )
+                  })}
+              </select>
+            </div>
             <Chat
               micEnabled={micEnabled}
               setMicEnabled={setMicEnabled}

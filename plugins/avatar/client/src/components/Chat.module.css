@@ -4,7 +4,9 @@
     font-size: .875rem;
     color: #fff;
     text-align: left;
+    box-sizing: border-box;
     padding: 24px;
+    padding-top: 0;
     z-index: 2000;
 }
 
@@ -76,26 +78,33 @@
 }
 
 /* set the input0 text color to white */
+.send {
+    display: flex !important;
+}
+
 .send input {
     background-color: #301934;
     color: #fff;
     border: none;
     padding: .5em;
-    width: calc(100% - 180px);
+    width: calc(100% - 108px);
     margin-left: 10px;
     margin-right: 8px;
-    height: 18px;
+    /* height: 18px; */
     display: inline-block;
 }
 
 .mic {
     vertical-align: middle;
+    cursor: pointer;
+    padding: 5px;
 }
 
 .sendButton {
+    cursor: pointer;
     vertical-align: bottom;
     border: none;
-    background-color: transparent;
+    /* background-color: transparent; */
     color: white;
 }
 
@@ -105,12 +114,13 @@
 
 .speaker > label {
     display: block;
-    margin: 8px;
+    margin: 8px 0;
+    color: #99ABB2;
 }
 
 .speaker input {
     background-color: #301934;
-    color: #fff;
+    /* color: #fff; */
     border: none;
     padding: .5em;
     width: 100%;

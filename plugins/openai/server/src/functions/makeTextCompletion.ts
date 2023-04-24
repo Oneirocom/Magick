@@ -36,18 +36,20 @@ export async function makeTextCompletion(
     stop: node?.data?.stop,
   }
 
-  console.log('data is', requestData)
-
   // Get the settings object, setting default values if necessary.
   const settings = (requestData) as any;
 
   // Add the prompt to the settings object.
   settings.prompt = prompt;
 
+  if(!context.module.secrets){
+    throw new Error('ERROR: No secrets found')
+  }
+
   // Set up headers for the API request.
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + context.module.secrets['openai_api_key'],
+    Authorization: 'Bearer ' + (context.module.secrets['openai_api_key'] || null),
   };
 
   // Make the API request and handle the response.

@@ -19,20 +19,27 @@ export async function makeTextEmbedding(
   data: CompletionHandlerInputData
 ): Promise<{
   success: boolean
-  result?: string | null
+  result?: number[] | null
   error?: string | null
 }> {
   const { node, inputs, context } = data
 
-  let input = (inputs['input'] && inputs['input'][0]) as Object
-  input = (input as { content: string })?.content
+  const input = (inputs['input'] && inputs['input'][0])
   if (!input) {
     return {
       success: false,
-      error: 'Content is null, not storing event',
+      error: 'Input text is required to create a text embedding',
     }
   }
-  const apiKey = context.module.secrets['openai_api_key']
+
+  const apiKey = context?.module?.secrets && context?.module?.secrets['openai_api_key'] || null
+
+  if (!apiKey) {
+    return {
+      success: false,
+      error: 'OpenAI API key is required to create a text embedding',
+    }
+  }
 
   const headers = {
     'Content-Type': 'application/json',

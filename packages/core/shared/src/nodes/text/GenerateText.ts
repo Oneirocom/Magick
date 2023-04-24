@@ -186,12 +186,12 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       context,
     })
 
-    if(error || !success) {
+    if(!success) {
       throw new Error('ERROR: ' + error)
     }
 
     return {
-      result,
+      result: result as string,
     }
   }
 }

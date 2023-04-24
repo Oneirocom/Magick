@@ -6,6 +6,7 @@ import { getDataValidator, getValidator, querySyntax, Type } from '@feathersjs/t
 import { SpellInterface, spellSchema } from '@magickml/core';
 import { dataValidator, queryValidator } from '../../config/validators';
 import type { HookContext } from '../../declarations';
+import { DATABASE_TYPE } from '@magickml/core'
 
 // Resolvers for SpellInterface
 export const spellResolver = resolve<SpellInterface, HookContext>({});
@@ -51,7 +52,7 @@ export const spellQueryProperties = Type.Pick(spellSchema, [
 export const spellQuerySchema = Type.Intersect(
   [
     querySyntax(spellQueryProperties, {
-      name: process.env.DATABASE_TYPE === 'pg' ? {
+      name: DATABASE_TYPE === 'pg' ? {
         $ilike: Type.String()
       } : {
         $like: Type.String()

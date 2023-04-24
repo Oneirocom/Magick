@@ -1,5 +1,7 @@
 import React, { useEffect } from "react"
 import styles from "./Chat.module.css"
+import Mic from '@mui/icons-material/Mic'
+import MicOff from '@mui/icons-material/MicOff'
 
 import {
   SepiaSpeechRecognitionConfig,
@@ -165,7 +167,7 @@ export default function ChatBox({
         //   voices[voice]
 
         // fetch the audio file from ttsEndpoint
-        const ttsEndpoint = "https://ai-voice.webaverse.ai/tts"
+        const ttsEndpoint = "https://ai-voice.webaverse.ai/tts?s=hello"
 
         fetch(ttsEndpoint).then(async (response) => {
           const blob = await response.blob()
@@ -239,7 +241,7 @@ export default function ChatBox({
           size={32}
           onClick={() => (!micEnabled ? startSpeech() : stopSpeech())}
         >
-          {!micEnabled ? "Mic On" : "Mic Off"}
+          {!micEnabled ? <Mic /> : <MicOff />}
         </button>
         <input
           autoComplete="off"

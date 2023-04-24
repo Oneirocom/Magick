@@ -39,8 +39,12 @@ const VariableModal = ({
     update(selectedAgentData.id, data)
   }
 
+  const handleClose = () => {
+    setEditMode(false)
+  }
+
   return (
-    <Modal open={editMode} setOpen={setEditMode} handleAction={handleSave}>
+    <Modal open={editMode} onClose={handleClose} handleAction={handleSave}>
       <Grid container>
         <Grid item xs={12}>
           <p style={{ marginTop: '1em' }} className="modal-element">

@@ -72,6 +72,7 @@ export type Event = {
   projectId?: string
   agentId?: number | string
   date?: string
+  rawData?: string
 }
 
 export type SemanticSearch = {
@@ -99,6 +100,7 @@ export type GetEventArgs = {
   // entities?: any[]
   channel?: string
   channelType?: string
+  rawData?: string
   projectId?: string
   maxCount?: number
 }
@@ -208,6 +210,7 @@ export type PubSubEvents = {
   UPDATE_SUBSPELL: string
   DELETE_SUBSPELL: string
   OPEN_TAB: string
+  TOGGLE_SNAP: string
   $SUBSPELL_UPDATED: (spellName: string) => string
   $TRIGGER: (tabId: string, nodeId?: number) => string
   $PLAYTEST_INPUT: (tabId: string) => string
@@ -516,6 +519,7 @@ export type CompletionInspectorControls = {
 }
 
 export type CompletionProvider = {
+  [x: string]: any
   type: CompletionType
   subtype: ImageCompletionSubtype | TextCompletionSubtype
   handler?: (attrs: {
@@ -523,7 +527,7 @@ export type CompletionProvider = {
     inputs: MagickWorkerInputs
     outputs: MagickWorkerOutputs
     context: unknown
-  }) => { success: boolean; result: string; error: string } // server only
+  }) => { success: boolean; result: string | number[]; error: string } // server only
   inspectorControls?: CompletionInspectorControls[] // client only
   inputs: CompletionSocket[]
   outputs: CompletionSocket[]

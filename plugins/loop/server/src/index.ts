@@ -12,7 +12,6 @@ type StartLoopArgs = {
  */
 class LoopManager {
   agentManager: any;
-  loopHandlers = new Map<string, any>();
 
   /**
    * Constructs a new LoopManager.
@@ -37,7 +36,6 @@ class LoopManager {
    * @param {any} agentData - Data for the agent.
    */
   addAgent({ spellRunner, agent, agentData }) {
-    console.log('addAgent', agent.id);
     if (!agentData) return console.log('No data for this agent', agent.id);
     if (!agentData.data.loop_enabled)
       return console.log('Loop is not enabled for this agent');
@@ -67,7 +65,7 @@ class LoopManager {
       });
       console.log('output is', resp);
     }, loopInterval);
-    this.loopHandlers[agent.id] = loopHandler;
+    agent.loopHandler = loopHandler;
     console.log('Added agent to loop', agent.id);
   }
 
@@ -77,9 +75,9 @@ class LoopManager {
    */
   removeAgent({ agent }) {
     const _agent = this.agentManager.getAgent({ agent });
-    if (!_agent || !this.loopHandlers.get(agent.id)) return;
-    clearInterval(this.loopHandlers.get(agent.id));
-    this.loopHandlers.delete(agent.id);
+    if (!_agent || !agent.loopHandler) return;
+    clearInterval(agent.loopHandler);
+    delete agent.loopHandler;
   }
 }
 
@@ -94,8 +92,9 @@ function getAgentMethods() {
       if (!loopManager) loopManager = new LoopManager(agentManager, spellRunner);
       loopManager.addAgent({ spellRunner, agent, agentData: agent.data });
     },
-    stop: async () => {
+    stop: async ({agent}) => {
       if (!loopManager) return console.error('Loop Manager not initialized');
+      loopManager.removeAgent({ agent });
       return console.log('Stopping loop manager');
     },
   };

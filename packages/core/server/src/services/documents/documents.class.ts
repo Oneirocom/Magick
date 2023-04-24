@@ -4,6 +4,7 @@
 import type { Params } from '@feathersjs/feathers';
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex';
 import { KnexService } from '@feathersjs/knex';
+import { DATABASE_TYPE } from '@magickml/core'
 
 import { app } from '../../app';
 import type { Application } from '../../declarations';
@@ -34,9 +35,9 @@ export class DocumentService<
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
-    if (process.env.DATABASE_TYPE == 'pg'){
-      const cli = app.get('docdb')
-      await cli.from('document').insert(data);
+    if (DATABASE_TYPE == 'pg'){
+      const docdb = app.get('docdb')
+      //await docdb.fromString(data.content, data);
     }
     return data
   }
@@ -47,13 +48,13 @@ export class DocumentService<
    * @return {Promise<any>} The removed document
    */
   async remove(id: string): Promise<any> {
-    if (process.env.DATABASE_TYPE == 'sqlite'){
+    if (DATABASE_TYPE == 'sqlite'){
       const docdb = app.get('docdb')
       const r = docdb.delete(id)
       return r
     } else{
       const db = app.get('dbClient');
-      return await db('document').where('id', id).del();
+      return await db('documents').where('id', id).del();
     }
   }
 
@@ -65,7 +66,7 @@ export class DocumentService<
   async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
     const cli = app.get('docdb')
-    if (process.env.DATABASE_TYPE == 'sqlite'){
+    if (DATABASE_TYPE == 'sqlite'){
       const docdb = app.get('docdb')
       if (params.query.embedding) {
         const blob = atob(params.query.embedding)
