@@ -226,6 +226,7 @@ export type PubSubEvents = {
   $SAVE_SPELL_DIFF: (tabId: string) => string
   $CREATE_MESSAGE_REACTION_EDITOR: (tabId: string) => string
   $CREATE_PLAYTEST: (tabId: string) => string
+  $CREATE_MEDIAWINDOW: (tabId: string) => string
   $CREATE_INSPECTOR: (tabId: string) => string
   $CREATE_TEXT_EDITOR: (tabId: string) => string
   $CREATE_PROJECT_WINDOW: (tabId: string) => string
@@ -493,11 +494,13 @@ export type MessagingWebhookBody = {
   To: string
 }
 
-export type CompletionType = 'image' | 'text'
+export type CompletionType = 'image' | 'text' | 'audio'
 
 export type ImageCompletionSubtype = 'text2image' | 'image2image' | 'image2text'
 
 export type TextCompletionSubtype = 'text' | 'embedding' | 'chat'
+
+export type AudioCompletionSubtype = 'text2speech' | 'text2audio'
 
 export type CompletionSocket = {
   socket: string
@@ -521,7 +524,7 @@ export type CompletionInspectorControls = {
 export type CompletionProvider = {
   [x: string]: any
   type: CompletionType
-  subtype: ImageCompletionSubtype | TextCompletionSubtype
+  subtype: ImageCompletionSubtype | TextCompletionSubtype | AudioCompletionSubtype
   handler?: (attrs: {
     node: WorkerData
     inputs: MagickWorkerInputs
