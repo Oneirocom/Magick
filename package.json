@@ -28,7 +28,7 @@
     "package-electron-ubuntu-latest": "npx electron-packager ./apps/client/electron --overwrite --platform=linux --arch=x64 --icon=apps/client/src/favicon.png --out=dist/apps/client/electron",
     "package-electron-windows-latest": "npx electron-packager ./apps/client/electron --overwrite --platform=win32 --arch=x64 --icon=apps/client/src/favicon.png --out=dist/apps/client/electron",
     "test": "npx nx test",
-    "test:engine": "npx nx test @magickml/core",
+    "test:core": "npx nx test @magickml/core",
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
