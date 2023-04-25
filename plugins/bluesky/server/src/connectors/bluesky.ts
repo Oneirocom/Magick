@@ -44,9 +44,9 @@ export class BlueskyConnector {
 
   async handler() {
     const count = await this.bskyAgent.countUnreadNotifications()
-    if (count > 0) {
-      console.log(`Found ${count} new mentions.`)
-    }
+    // if (count > 0) {
+    //   console.log(`Found ${count} new mentions.`)
+    // }
     // Get a list of bsky notifs
     const response_notifs = await this.bskyAgent.listNotifications()
     const notifs = response_notifs.data.notifications
