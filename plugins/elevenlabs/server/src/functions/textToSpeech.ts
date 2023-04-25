@@ -21,7 +21,7 @@ async function callTextToSpeechApi(text: string, voice_id: string, stability: nu
     headers: {
       'xi-api-key': apiKey
     },
-    responseType: 'arraybuffer'
+    responseType: 'blob'
   });
 
   return response.data;
@@ -39,17 +39,19 @@ export async function textToSpeech(
   const { node, inputs, context } = data
 
   const settings = {
-    stability: parseFloat(inputs['stability']?.[0] as string ?? "0.0"),
-    similarity_boost: parseFloat(inputs['similarity_boost']?.[0] as string ?? "0.0"),
-    voice_id: inputs['voice_id']?.[0] as string
+    stability: parseFloat(node?.data?.stability as string ?? "0.5"),
+    similarity_boost: parseFloat(node?.data?.stability as string ?? "0.5"),
+    voice_id: node?.data.voice_id as string ?? 'MF3mGyEYCl7XYWbV9V6O'
   }
-
+  
   const text = inputs['input']?.[0] as string
 
   // @ts-ignore
   const key = context.module.secrets['elevenlabs_api_key'] as string
   try {
-    const audioBuffer = await callTextToSpeechApi(text, 'MF3mGyEYCl7XYWbV9V6O', settings.stability, settings.similarity_boost, key);
+    const audioBuffer = await callTextToSpeechApi(text, settings.voice_id, settings.stability, settings.similarity_boost, key);
+
+    // TODO: handle event storage
 
     if (audioBuffer) {
       return { success: true, result: audioBuffer }
