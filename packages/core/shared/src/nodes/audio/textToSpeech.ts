@@ -162,40 +162,35 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
     const completionProviders = pluginManager.getCompletionProviders('audio', [
       'text2speech',
     ]) as CompletionProvider[]
-
+  
     const model = (node.data as { model: string }).model as string
     const provider = completionProviders.find(provider =>
       provider.models.includes(model)
     ) as CompletionProvider
-
+  
     const completionHandler = provider.handler
-
+  
     if (!completionHandler) {
       console.error('No completion handler found for provider', provider)
       throw new Error('ERROR: Completion handler undefined')
     }
-
+  
     const { success, result, error } = await completionHandler({
       node,
       inputs,
       outputs,
       context,
     })
-
+  
     if (!success) {
       throw new Error('ERROR: ' + error)
     }
 
-    // Convert ArrayBuffer to Blob
-    // @ts-ignore
-    const audioBuffer = result as ArrayBuffer;
-    const audioBlob = new Blob([audioBuffer], { type: 'audio/wav' });
-
-    // Create a Blob URL
-    const audioUrl = URL.createObjectURL(audioBlob);
-
+    const audio = result as string
+  
+  
     return {
-      result: audioUrl,
+      result: audio,
     }
   }
 }
