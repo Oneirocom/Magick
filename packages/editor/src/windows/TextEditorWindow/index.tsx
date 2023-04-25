@@ -2,9 +2,7 @@
 import { Button, Window } from '@magickml/client-core'
 import Editor from '@monaco-editor/react'
 import { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
 import '../../screens/Magick/magick.module.css'
-import { activeTabSelector } from '../../state/tabs'
 import WindowMessage from '../../components/WindowMessage'
 import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
 import { complete, generate } from './utils'
@@ -22,7 +20,6 @@ const TextEditor = props => {
   )
 
   const { textEditorData, saveTextEditor, inspectorData } = useInspector()
-  const activeTab = useSelector(activeTabSelector)
 
   const [lastInputs, setLastInputs] = useState<string>('')
 
@@ -48,9 +45,12 @@ const TextEditor = props => {
   }
 
   useEffect(() => {
-    if (!inspectorData?.data.inputs) return
-    const { language } = textEditorData.options || "javascript" as any
-    console.log('language', language)
+    if (!inspectorData?.data.inputs) {
+      if (Object.keys(textEditorData).length !== 0) setCode(textEditorData.data)
+      return
+    }
+    const { language } = textEditorData.options || ('javascript' as any)
+
     const stringifiedInputs = JSON.stringify(inspectorData?.data.inputs)
 
     // if inspectorData?.data.inputs is the same as lastInputs, then return
@@ -58,14 +58,9 @@ const TextEditor = props => {
     setLastInputs(JSON.stringify(inspectorData?.data.inputs))
 
     const inputs: string[] = []
-    const textLines = code?.split('\n') ?? []
+    const textLines = textEditorData.data?.split('\n') ?? []
     ;(inspectorData?.data.inputs as any).forEach((input: any) => {
-      // if the textLines includes the input.socketKey, then return
-      if (
-        !textLines.includes('  ' + input.socketKey + ',') &&
-        (language === 'python' || language === 'javascript')
-      )
-        inputs.push('  ' + input.socketKey + ',')
+      inputs.push('  ' + input.socketKey + ',')
     })
 
     // get the index of the first line that starts with function
@@ -90,60 +85,16 @@ const TextEditor = props => {
 
     setData(newTextEditorData)
     setCode(updatedText)
-  }, [activeTab])
+  }, [inspectorData, textEditorData])
 
-  useEffect(() => {
-    if (code === textEditorData?.data && !code) return
-    const delayDebounce = setTimeout(() => {
-      save(code)
-    }, 3000)
+  // useEffect(() => {
+  //   if (code === textEditorData?.data && !code) return
+  //   const delayDebounce = setTimeout(() => {
+  //     save(code)
+  //   }, 3000)
 
-    return () => clearTimeout(delayDebounce)
-  }, [code])
-
-  useEffect(() => {
-    if (
-      !textEditorData ||
-      Object.keys(textEditorData).length === 0
-      //|| !textEditorData.data
-    )
-      return
-    //Removed !textEditorData.data causing state issues between text editor instances.
-
-    const inputs = []
-    const { language } = textEditorData.options
-    const textLines = textEditorData.data?.split('\n') ?? []
-    ;(inspectorData?.data.inputs as any)?.forEach((input: any) => {
-      // if the textLines includes the input.socketKey, then return
-      if (
-        !textLines.includes('  ' + input.socketKey + ',') &&
-        (language === 'python' || language === 'javascript')
-      )
-        inputs.push('  ' + input.socketKey + ',')
-    })
-
-    // get the index of the first line that starts with function
-    const startIndex =
-      textLines.findIndex(line => line.startsWith('function')) + 1
-    // get the first line that starts with }
-    const endIndex = textLines.findIndex(line => line.startsWith('}')) - 1
-
-    // remove the lines in textLines starting at StartIndex and ending at EndIndex
-    // replace with the inputs
-    textLines.splice(startIndex, endIndex - startIndex, ...inputs)
-
-    // join the textLines array back into a string
-    const updatedText = textLines.join('\n')
-    const newTextEditorData = {
-      ...textEditorData,
-    }
-    if (language === 'javascript' || language === 'python') {
-      newTextEditorData.data = updatedText
-    }
-
-    setData(newTextEditorData)
-    setCode(updatedText)
-  }, [textEditorData])
+  //   return () => clearTimeout(delayDebounce)
+  // }, [code])
 
   const save = code => {
     const update = {
@@ -197,16 +148,18 @@ const TextEditor = props => {
 
   return (
     <Window key={inspectorData?.nodeId} toolbar={toolbar}>
-      <Editor
-        theme="sds-dark"
-        // height={height} // This seemed to have been causing issues.
-        language={textEditorData?.options?.language}
-        value={code}
-        options={editorOptions}
-        defaultValue={code}
-        onChange={updateCode}
-        beforeMount={handleEditorWillMount}
-      />
+      {code && (
+        <Editor
+          theme="sds-dark"
+          // height={height} // This seemed to have been causing issues.
+          language={textEditorData?.options?.language}
+          value={code}
+          options={editorOptions}
+          defaultValue={code}
+          onChange={updateCode}
+          beforeMount={handleEditorWillMount}
+        />
+      )}
     </Window>
   )
 }
