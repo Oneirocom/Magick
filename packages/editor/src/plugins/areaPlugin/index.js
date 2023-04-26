@@ -20,8 +20,8 @@ function install(editor, params) {
     this._restrictor = new Restrictor(editor, scaleExtent, translateExtent)
   }
   if (snap) {
-    this._snap = new SnapGrid(editor, snap);
-    this._snap.subscribeToToggleSnap();
+    this._snap = new SnapGrid(editor, snap)
+    this._snap.subscribeToToggleSnap()
   }
 }
 
