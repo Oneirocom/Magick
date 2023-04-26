@@ -5,7 +5,10 @@ import {
   DEFAULT_PROJECT_ID,
   API_ROOT_URL,
   TRUSTED_PARENT_URL,
+  POSTHOG_API_KEY,
+  POSTHOG_ENABLED,
 } from '@magickml/core'
+import posthog from 'posthog-js'
 
 import plugins from './plugins'
 
@@ -34,10 +37,17 @@ if (window === window.parent) {
     token: '',
   }
 
+  // Initialize posthog
+  if (POSTHOG_ENABLED === 'true') {
+    console.log('Posthog enabled')
+    posthog.init(POSTHOG_API_KEY, {
+      api_host: 'https://app.posthog.com',
+    })
+  }
+
   const Root = () => <MagickIDE config={config} />
   root.render(<Root />)
 } else {
-
 /**
  * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
  */
@@ -72,6 +82,14 @@ if (window === window.parent) {
       if (type === 'INIT') {
         // TODO: store configuration in localstorage
         const { config } = payload
+
+        // Initialize posthog
+        if (POSTHOG_ENABLED) {
+          console.log('Posthog enabled')
+          posthog.init(POSTHOG_API_KEY, {
+            api_host: 'https://app.posthog.com',
+          })
+        }
 
         const Root = () => <MagickIDE config={config} />
         const container = document.getElementById('root')
