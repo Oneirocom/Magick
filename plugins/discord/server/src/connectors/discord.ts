@@ -164,7 +164,7 @@ export class DiscordConnector {
                   await import('./discord-voice')
             if (this.use_voice) {
               stopSpeechClient(voiceChannel, this.client)
-              textChannel.send("Leaving  " + textChannel.name)
+              textChannel.send("Leaving  " + voiceChannel.name)
             } else {
               textChannel.send("Voice is disabled")
             }
