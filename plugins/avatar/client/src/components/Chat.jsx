@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import styles from "./Chat.module.css"
 import Mic from '@mui/icons-material/Mic'
 import MicOff from '@mui/icons-material/MicOff'
+import axios from 'axios';
 
 import {
   SepiaSpeechRecognitionConfig,
@@ -21,6 +22,8 @@ const voices = {
 // Constants
 
 const messagesMaxCharacters = 20000
+const API_KEY = 'ce69df07b50e7179cbbfc5c2bef9d752';
+const VOICE_ID = '21m00Tcm4TlvDq8ikWAM';
 
 // Prune Messages Function
 
@@ -143,36 +146,46 @@ export default function ChatBox({
       const spell_handler = "eliza3d"
       const projectId = "ok"
 
-      //const newMessages = await pruneMessages(messages);
-
-      // newMessages.push(`${speaker}: ${value}`)
-
       setInput("")
       setMessages((messages) => [...messages, `${speaker}: ${value}`])
 
       const promptMessages = await pruneMessages(messages)
       promptMessages.push(`${speaker}: ${value}`)
       const self = lipSync
+      
+      let data = await textToSpeech(value)
+      
+      const blob = new Blob([data], { type: 'audio/mpeg' });
+      
+      const arrayBuffer = await blob.arrayBuffer()
 
-      try {
-        // fetch the audio file from ttsEndpoint
-        const ttsEndpoint = "https://ai-voice.webaverse.ai/tts?s="+value
+      self.startFromAudioFile(arrayBuffer)
+      
+      setMessages((messages) => [...messages, agent + ": " + value])
 
-        fetch(ttsEndpoint).then(async (response) => {
-          const blob = await response.blob()
-
-          // convert the blob to an array buffer
-          const arrayBuffer = await blob.arrayBuffer()
-
-          self.startFromAudioFile(arrayBuffer)
-          setMessages((messages) => [...messages, agent + ": " + value])
-        })
-        setWaitingForResponse(false)
-      } catch (error) {
-        console.error(error)
-      }
+      setWaitingForResponse(false)
     }
   }
+
+  const textToSpeech = async (inputText) => {
+    const options = {
+      method: 'POST',
+      url: `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
+      headers: {
+        accept: 'audio/mpeg',
+        'content-type': 'application/json',
+        'xi-api-key': `${API_KEY}`,
+      },
+      data: {
+        text: inputText, 
+      },
+      responseType: 'arraybuffer',
+    };
+  
+    const speechDetails = await axios.request(options);
+    return speechDetails.data;
+  };
+  
 
   let hasSet = false
   useEffect(() => {
