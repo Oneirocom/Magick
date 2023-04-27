@@ -69,53 +69,6 @@ const Magick = ({ empty = false }): JSX.Element => {
     )
   }, [URI, activeTab, tabs, dispatch])
 
-  // Set up hotkeys
-  useHotkeys(
-    'Control+z',
-    () => {
-      if (!pubSub || !activeTab) return
-
-      publish(events.$UNDO(activeTab.id))
-    },
-    [pubSub, activeTab]
-  )
-
-  useHotkeys(
-    'Control+Shift+z',
-    () => {
-      if (!pubSub || !activeTab) return
-      publish(events.$REDO(activeTab.id))
-    },
-    [pubSub, activeTab]
-  )
-
-  useHotkeys(
-    'Control+Delete',
-    () => {
-      if (!pubSub || !activeTab) return
-      publish(events.$DELETE(activeTab.id))
-    },
-    [pubSub, activeTab]
-  )
-
-  useHotkeys(
-    'Control+c',
-    () => {
-      if (!pubSub || !activeTab) return
-      publish(events.$MULTI_SELECT_COPY(activeTab.id))
-    },
-    [pubSub, activeTab]
-  )
-
-  useHotkeys(
-    'Control+v',
-    () => {
-      if (!pubSub || !activeTab) return
-      publish(events.$MULTI_SELECT_PASTE(activeTab.id))
-    },
-    [pubSub, activeTab]
-  )
-
   // Render loading screen if there's no active tab
   if (!activeTab) return <LoadingScreen />
 
