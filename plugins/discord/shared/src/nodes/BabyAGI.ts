@@ -1,0 +1,95 @@
+import Rete from 'rete';
+import {
+    Agent,
+    AgentManager,
+    MagickComponent,
+    pluginManager,
+    stringSocket,
+    triggerSocket,
+    MagickNode,
+    MagickWorkerInputs,
+    MagickWorkerOutputs,
+    ModuleContext,
+    WorkerData
+} from '@magickml/core';
+import { addResults, addTask, createTasks, findSimilarSentences, getLoadSpell, listTasks, parseTasks, parseTasksToArray, popTask, runSpell, taskCompletion, taskReprioritization } from './utils';
+import { Application } from '@feathersjs/koa/lib';
+
+
+
+/**
+ * The return type of the worker function.
+ */
+type WorkerReturn = {
+    output: Record<string, any>;
+}
+
+/**
+ * Baby AGI.
+ * @category Discord
+ * @remarks This node must be paired with the Agent Executor node.
+ */
+export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
+    constructor() {
+        super('Baby AGI', {
+            outputs: {
+                output: 'output',
+                trigger: 'option',
+            },
+        }, 'Discord', 'baby agi');
+    }
+    /**
+     * The builder function for the Discore Leave Voice Node node.
+     * @param node - The node being built.
+     * @returns The node with its inputs and outputs.
+     */
+    builder(node: MagickNode) {
+        const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
+        const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket);
+        const outp = new Rete.Output('output', 'String', stringSocket);
+
+
+        return node
+            .addInput(dataInput)
+            .addOutput(dataOutput)
+            .addOutput(outp);
+    }
+    /**
+     * The worker function for the Discord Leave Voice node.
+     * @param node - The node being worked on.
+     * @param inputs - The inputs of the node.
+     * @param _outputs - The unused outputs of the node.
+     * @returns An object containing the tool.
+     */
+    async worker(
+        node: WorkerData,
+        inputs: MagickWorkerInputs,
+        _outputs: MagickWorkerOutputs,
+        context: ModuleContext,
+    ): Promise<WorkerReturn> {
+        const { agent, app } = context.module;
+        let task_list = [{task_id: 1 , task: "Make a todo list"}]
+        let result_list = []
+        const objective = "Write a report on othello"
+        for (let index = 0; index < 3; index++) {
+            //Step 1: Pop the Task from task queue
+            let task = popTask(task_list)
+            //Step 2: Run the task with Addtional Context from previous results
+            let result = await taskCompletion(task.task, findSimilarSentences(result_list, task.task, 5).join(), objective, agent as any, app as any)
+            addResults(result,task,result_list)
+            //Step 3: Create new Tasks
+            let new_tasks = createTasks(objective,task.task,parseTasksToArray(result as unknown as string).join(), listTasks(task_list).join(), agent as any, app as any)
+            ;(await new_tasks).forEach((task) => {
+                addTask(task, task_list)
+            })
+            //Step 4: Reprioritize Tasks
+            let updated_tasks = await taskReprioritization(task.task_id, objective, listTasks(task_list), agent as any, app as any)
+            //Step 5: Update the task queue
+            task_list = updated_tasks
+        }
+        console.log("RESULT")
+        console.log(result_list)
+        //@ts-ignore
+        return { output: 'results' }
+    }
+}
