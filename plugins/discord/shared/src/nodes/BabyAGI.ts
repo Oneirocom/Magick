@@ -27,7 +27,7 @@ type WorkerReturn = {
 /**
  * Baby AGI.
  * @category Discord
- * @remarks This node must be paired with the Agent Executor node.
+ * @remarks This will work only with text-davinci-003
  */
 export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
     constructor() {
@@ -39,7 +39,7 @@ export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
         }, 'Discord', 'baby agi');
     }
     /**
-     * The builder function for the Discore Leave Voice Node node.
+     * The builder function for the BabyAGI.
      * @param node - The node being built.
      * @returns The node with its inputs and outputs.
      */
@@ -57,7 +57,7 @@ export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
             .addOutput(outp);
     }
     /**
-     * The worker function for the Discord Leave Voice node.
+     * The worker function for the BabyAGI
      * @param node - The node being worked on.
      * @param inputs - The inputs of the node.
      * @param _outputs - The unused outputs of the node.
