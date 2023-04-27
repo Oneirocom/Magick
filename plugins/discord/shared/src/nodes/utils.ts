@@ -2,29 +2,25 @@ import { Application } from "@feathersjs/koa/lib";
 import { Agent, SpellRunner } from "@magickml/core";
 
 
-export async function getChannelFromMessage(message: any, client: any): Promise<any> {
-    let channelID = null;
+export async function getChannelFromMessage(message: any, discord: any): Promise<any> {
+    let messageOBJ;
     let latestTimestamp = 0;
-    for (const [, channel] of client.channels.cache) {
+    for (const [, channel] of discord.client.channels.cache) {
         // Check if the channel is a text channel
-        console.log("CHANNEL", channel)
-        if (channel.type === 'text') {
+        if (channel.type == 0) {
             // Fetch the messages in the channel
-            console.log("Channel name", channel.name)
             const messages = await channel.messages.fetch()
-            console.log("MESSAGES", messages)
             // Sort the messages in descending order based on their timestamps
             const sortedMessages = messages.sort((a, b) => b.createdTimestamp - a.createdTimestamp);
             // Find the most recent message that matches the message content
-            const recentMessage = sortedMessages.find(msg => msg.content === message.content);
+            const recentMessage = sortedMessages.find(msg => msg.content === message);
             if (recentMessage && recentMessage.createdTimestamp > latestTimestamp) {
-                console.log(`Message found in channel ${channel.name}: ${recentMessage.id}`);
-                channelID = channel.id;
+                messageOBJ = recentMessage;
                 latestTimestamp = recentMessage.createdTimestamp;
             }
         }
     }
-    return channelID;
+    return messageOBJ;
 }
 
 
