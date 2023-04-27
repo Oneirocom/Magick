@@ -14,14 +14,13 @@ const TextEditor = props => {
     wordWrap: 'on',
     minimap: { enabled: false },
   })
+  const [unSavedChanges, setUnSavedChanged] = useState<boolean>(false)
   const codeRef = useRef<string>()
   const [openaiApiKey, setOpenaiApiKey] = useState<string | undefined>(
     undefined
   )
 
   const { textEditorData, saveTextEditor, inspectorData } = useInspector()
-
-  const [lastInputs, setLastInputs] = useState<string>('')
 
   useEffect(() => {
     const secrets = localStorage.getItem('secrets')
@@ -45,20 +44,20 @@ const TextEditor = props => {
   }
 
   useEffect(() => {
-    if (!inspectorData?.data.inputs) {
-      if (Object.keys(textEditorData).length !== 0) setCode(textEditorData.data)
+    setData(textEditorData)
+    setCode(textEditorData.data)
+  }, [textEditorData])
+
+  useEffect(() => {
+    if (!inspectorData?.data.inputs || !inspectorData?.data.inputs.length) {
+      if (Object.keys(textEditorData).length !== 0)
+        setCode(inspectorData.data.code)
       return
     }
     const { language } = textEditorData.options || ('javascript' as any)
 
-    const stringifiedInputs = JSON.stringify(inspectorData?.data.inputs)
-
-    // if inspectorData?.data.inputs is the same as lastInputs, then return
-    if (stringifiedInputs === lastInputs) return
-    setLastInputs(JSON.stringify(inspectorData?.data.inputs))
-
     const inputs: string[] = []
-    const textLines = textEditorData.data?.split('\n') ?? []
+    const textLines = inspectorData?.data?.code.split('\n') ?? []
     ;(inspectorData?.data.inputs as any).forEach((input: any) => {
       inputs.push('  ' + input.socketKey + ',')
     })
@@ -90,8 +89,8 @@ const TextEditor = props => {
   // useEffect(() => {
   //   if (code === textEditorData?.data && !code) return
   //   const delayDebounce = setTimeout(() => {
-  //     save(code)
-  //   }, 3000)
+  //     save(codeRef.current)
+  //   }, 1000)
 
   //   return () => clearTimeout(delayDebounce)
   // }, [code])
@@ -106,6 +105,7 @@ const TextEditor = props => {
   }
 
   const onSave = () => {
+    setUnSavedChanged(false)
     save(codeRef.current)
   }
 
@@ -118,6 +118,7 @@ const TextEditor = props => {
   }
 
   const updateCode = rawCode => {
+    if (!unSavedChanges) setUnSavedChanged(true)
     const code = rawCode.replace('\r\n', '\n')
     setCode(code)
     const update = {
@@ -139,7 +140,20 @@ const TextEditor = props => {
       </div>
       <Button onClick={onComplete}>COMPLETE</Button>
       <Button onClick={onGenerate}>GENERATE</Button>
-      <Button onClick={onSave}>SAVE</Button>
+      <Button onClick={onSave}>
+        SAVE
+        {unSavedChanges && (
+          <span
+            style={{
+              width: '6px',
+              height: '6px',
+              background: '#fff',
+              borderRadius: '50%',
+              marginLeft: '2px',
+            }}
+          />
+        )}
+      </Button>
     </>
   )
 
