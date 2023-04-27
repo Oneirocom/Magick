@@ -1,6 +1,6 @@
 // DOCUMENTED 
 /**
- * A simple rete component that is paired with AgentExectuor to Join the voice channel when triggered
+ * A simple rete component that is paired with AgentExectuor to leaves the voice channel when triggered
  * @category Discord
  */
 import Rete from 'rete';
@@ -17,18 +17,18 @@ import {
     ModuleContext,
     WorkerData
 } from '@magickml/core';
-import { getChannelFromMessage } from './utils';
 
-/**
- * When triggered, the Discord agent will join the voice channel of the user who triggered the node.
- * @param context 
- * @returns 
- */
-async function discordJoinVC(context: ModuleContext & {prompt: string}): Promise<string> {
+
+async function discordLeaveVC(context: ModuleContext & {prompt: string}): Promise<string> {
     const { agent } = context.module;
     if (!agent) {
         return "Agent not found";
     }
+    //@ts-ignore
+    let id = agent?.discord.guildId.id
+    //@ts-ignore
+    //Using the Guild ID
+    const guild = await agent?.discord.client.guilds.fetch(id);
     // @ts-ignore
     if (!agent?.discord) {
         return "Discord agent not found";
@@ -38,11 +38,12 @@ async function discordJoinVC(context: ModuleContext & {prompt: string}): Promise
     if (!discord.client) {
         return "Discord client not found";
     }
-    //console.log("DISCORD", discord.client.channels.cache)
+    const { message } = discord;
     const messageContent = context.prompt;
 
     // Search through all the channels that the bot has access to
     let messageOBJ;
+    let channelOBJ;
     let latestTimestamp = 0;
     for (const [, channel] of discord.client.channels.cache) {
         // Check if the channel is a text channel
@@ -56,19 +57,18 @@ async function discordJoinVC(context: ModuleContext & {prompt: string}): Promise
             const recentMessage = sortedMessages.find(msg => msg.content === messageContent);
             if (recentMessage && recentMessage.createdTimestamp > latestTimestamp) {
                 messageOBJ = recentMessage;
+                channelOBJ = channel;
                 latestTimestamp = recentMessage.createdTimestamp;
             }
         }
-    }
-    if (!messageOBJ) {
-        return "Message not found";
     }
     const voiceChannel = messageOBJ.member?.voice?.channel;
     if (!voiceChannel) {
         return "You need to be in a voice channel to talk to the bot!";
     }
-    discord.client.emit('joinvc', voiceChannel);
-    return "Joined Voice Channel";
+    // Check if the bot is already in the voice channel
+    discord.client.emit('leavevc', voiceChannel, channelOBJ)
+    return "Left Voice Channel";
 }
 
 /**
@@ -79,23 +79,23 @@ type WorkerReturn = {
 }
 
 /**
- * Joins the Voice Channel when triggered by the User.
+ * Leaves the Voice channel when triggered.
  * @category Discord
  * @remarks This node must be paired with the Agent Executor node.
  */
-export class DiscordJoinVoice extends MagickComponent<Promise<WorkerReturn>> {
+export class DiscordLeaveVoice extends MagickComponent<Promise<WorkerReturn>> {
 
     constructor() {
-        super('Discord join voice', {
+        super('Discord Leave voice', {
             outputs: {
                 output: 'output',
                 trigger: 'option',
             },
-        }, 'Discord', 'Joins the vc of the user who triggered the command');
+        }, 'Discord', 'Leaves the Voice Channel of the user who triggered the command');
     }
 
     /**
-     * The builder function for the Echo node.
+     * The builder function for the Discore Leave Voice Node node.
      * @param node - The node being built.
      * @returns The node with its inputs and outputs.
      */
@@ -109,11 +109,11 @@ export class DiscordJoinVoice extends MagickComponent<Promise<WorkerReturn>> {
     }
 
     /**
-     * The worker function for the Discord Join Voice node.
+     * The worker function for the Discord Leave Voice node.
      * @param node - The node being worked on.
      * @param inputs - The inputs of the node.
      * @param _outputs - The unused outputs of the node.
-     * @returns An object containing the tool object.
+     * @returns An object containing the tool.
      */
     async worker(
         node: WorkerData,
@@ -123,12 +123,12 @@ export class DiscordJoinVoice extends MagickComponent<Promise<WorkerReturn>> {
     ): Promise<WorkerReturn> {
 
         let tool_desc = {
-            title: 'Join Voice Channel',
-            body: 'Joins voice channel of the user who triggered the command, also know as vc join',
+            title: 'leave Voice Channel',
+            body: 'Leaves voice channel of the user who triggered the command, also know as vc nuke, or remove disconnect',
             id: node.id,
-            action: discordJoinVC.toString(),
-            function_name: 'discordJoinVC',
-            keyword: 'discord voice call, vc join, Join/connect/enter/hop on/participate in the voice channel/call/chat and speak/engage in the audio chat',
+            action: discordLeaveVC.toString(),
+            function_name: 'discordLeaveVC',
+            keyword: 'discord voice call, vc delete, vc nuke, vc remove, vc disconnect, vc leave',
 
         }
 

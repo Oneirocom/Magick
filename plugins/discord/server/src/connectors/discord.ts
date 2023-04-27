@@ -10,6 +10,7 @@ import Discord, {
 import emoji from 'emoji-dictionary'
 import emojiRegex from 'emoji-regex'
 import { app } from '@magickml/server-core'
+import { stopSpeechClient } from './discord-voice'
 
 let recognizeSpeech
 
@@ -140,7 +141,35 @@ export class DiscordConnector {
             }
           })()
         }
-
+        this.client.on(
+          'joinvc',
+          async (textChannel) =>{
+            let connection
+            const { recognizeSpeech: _recognizeSpeech } =
+                  await import('./discord-voice')
+                recognizeSpeech = _recognizeSpeech
+            if (this.use_voice) {
+              connection =recognizeSpeech(textChannel, this.client)
+              textChannel.send("Joined " + textChannel.name)
+            } else {
+              textChannel.send("Voice is disabled")
+            }
+            return connection
+          }
+        )
+        this.client.on(
+          'leavevc',
+          async (voiceChannel, textChannel) =>{
+            const {stopSpeechClient : stopSpeechClient } =
+                  await import('./discord-voice')
+            if (this.use_voice) {
+              stopSpeechClient(voiceChannel, this.client)
+              textChannel.send("Leaving  " + voiceChannel.name)
+            } else {
+              textChannel.send("Voice is disabled")
+            }
+          }
+        )
         this.client.on(
           'messageCreate',
           this.messageCreate.bind(null, this.client)
