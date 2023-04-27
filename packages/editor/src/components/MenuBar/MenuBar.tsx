@@ -50,6 +50,7 @@ const MenuBar = () => {
     $REDO,
     $MULTI_SELECT_COPY,
     $MULTI_SELECT_PASTE,
+    $DELETE,
     TOGGLE_SNAP,
   } = events
 
@@ -202,6 +203,14 @@ const MenuBar = () => {
   }
 
   /**
+   * Delete handler
+   */
+  const onDelete = () => {
+    if (!activeTabRef.current) return
+    publish($DELETE(activeTabRef.current.id))
+  }
+
+  /**
    * Toggle save handler
    */
   const toggleSave = () => {
@@ -277,7 +286,7 @@ const MenuBar = () => {
         },
         redo: {
           onClick: onRedo,
-          hotKey: 'option+y, ctrl+y, ctrl+shift+z, option+shift+z',
+          hotKey: 'option+y, ctrl+y, option+shift+z, ctrl+shift+z',
         },
         copy: {
           onClick: onMultiSelectCopy,
@@ -286,6 +295,10 @@ const MenuBar = () => {
         paste: {
           onClick: onMultiSelectPaste,
           hotKey: 'option+v, ctrl+v',
+        },
+        delete: {
+          onClick: onDelete,
+          hotKey: 'delete',
         },
         snap: {
           onClick: toggleSnapFunction,
