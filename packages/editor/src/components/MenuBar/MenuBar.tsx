@@ -277,7 +277,7 @@ const MenuBar = () => {
         },
         redo: {
           onClick: onRedo,
-          hotKey: 'option+y, ctrl+y',
+          hotKey: 'option+y, ctrl+y, ctrl+shift+z, option+shift+z',
         },
         copy: {
           onClick: onMultiSelectCopy,
