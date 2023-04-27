@@ -356,15 +356,22 @@ const MenuBar = () => {
    */
   const parseStringToUnicode = (commandString: string) => {
     let formattedCommand = commandString
-    if (navigator.userAgent.indexOf('Win') !== -1) {
+
+    const userAgent = navigator.userAgent
+
+    if (userAgent.indexOf('Win') !== -1) {
+      formattedCommand = formattedCommand.replace('option', 'alt')
+    } else if (userAgent.indexOf('Linux') !== -1) {
       formattedCommand = formattedCommand.replace('option', 'alt')
     } else {
       formattedCommand = formattedCommand.replace('option', '\u2325')
     }
+
     formattedCommand = formattedCommand.replace('shift', '\u21E7')
     formattedCommand = formattedCommand.replace('cmd', '\u2318')
     formattedCommand = formattedCommand.replace('control', '\u2303')
     formattedCommand = formattedCommand.replace(/[`+`]/g, ' ')
+
     return formattedCommand
   }
 
@@ -399,8 +406,7 @@ const MenuBar = () => {
                 useHotkeys(
                   item.hotKey,
                   event => {
-                    
-                    console.log('Hotkey triggered:', item.hotKey);
+                    console.log('Hotkey triggered:', item.hotKey)
                     item.onClick()
                     event.preventDefault()
                   },
