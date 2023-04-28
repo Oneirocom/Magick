@@ -50,8 +50,12 @@ const TextEditor = props => {
 
   useEffect(() => {
     if (!inspectorData?.data.inputs || !inspectorData?.data.inputs.length) {
+      if (inspectorData?.category !== 'Code') {
+        setCode(inspectorData?.data?.fewshot)
+        return
+      }
       if (Object.keys(textEditorData).length !== 0)
-        setCode(inspectorData.data.code)
+        setCode(inspectorData?.data?.code)
       return
     }
     const { language } = textEditorData.options || ('javascript' as any)
@@ -162,18 +166,16 @@ const TextEditor = props => {
 
   return (
     <Window key={inspectorData?.nodeId} toolbar={toolbar}>
-      {code && (
-        <Editor
-          theme="sds-dark"
-          // height={height} // This seemed to have been causing issues.
-          language={textEditorData?.options?.language}
-          value={code}
-          options={editorOptions}
-          defaultValue={code}
-          onChange={updateCode}
-          beforeMount={handleEditorWillMount}
-        />
-      )}
+      <Editor
+        theme="sds-dark"
+        // height={height} // This seemed to have been causing issues.
+        language={textEditorData?.options?.language}
+        value={code}
+        options={editorOptions}
+        defaultValue={code}
+        onChange={updateCode}
+        beforeMount={handleEditorWillMount}
+      />
     </Window>
   )
 }
