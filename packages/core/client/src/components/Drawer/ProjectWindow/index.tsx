@@ -92,6 +92,7 @@ const ProjectWindow = ({ openDrawer }) => {
           console.error('error is', err)
         })
     }
+    handleClose()
   }
 
   /**
@@ -104,6 +105,7 @@ const ProjectWindow = ({ openDrawer }) => {
     element.download = globalConfig.projectId + '.project.json'
     document.body.appendChild(element)
     element.click()
+    handleClose()
   }
 
   const sidebarPanel = useRef('sidebarPanel')

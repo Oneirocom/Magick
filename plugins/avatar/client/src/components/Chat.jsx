@@ -155,19 +155,8 @@ export default function ChatBox({
       const self = lipSync
 
       try {
-        // const url = encodeURI(`https://magick.herokuapp.com/spells/${spell_handler}?projectId=${projectId}`)
-
-        // axios.post(url).then((response) => {
-        //   const output = response.data.choices[0].text
-        // const ttsEndpoint =
-        //   "https://voice.webaverse.com/tts?" +
-        //   "s=" +
-        //   output +
-        //   "&voice=" +
-        //   voices[voice]
-
         // fetch the audio file from ttsEndpoint
-        const ttsEndpoint = "https://ai-voice.webaverse.ai/tts?s=hello"
+        const ttsEndpoint = "https://ai-voice.webaverse.ai/tts?s="+value
 
         fetch(ttsEndpoint).then(async (response) => {
           const blob = await response.blob()
@@ -176,11 +165,9 @@ export default function ChatBox({
           const arrayBuffer = await blob.arrayBuffer()
 
           self.startFromAudioFile(arrayBuffer)
-          setMessages((messages) => [...messages, agent + ": " + "hello"])
+          setMessages((messages) => [...messages, agent + ": " + value])
         })
-
         setWaitingForResponse(false)
-        // })
       } catch (error) {
         console.error(error)
       }

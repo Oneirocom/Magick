@@ -6,6 +6,7 @@ import { ArrayVariable } from './array/ArrayVariable';
 import { GetValueFromArray } from './array/GetValueFromArray';
 import { JoinListComponent } from './array/JoinList';
 import { RemapArray } from './array/RemapArray';
+import { TextToSpeech } from './audio/textToSpeech';
 import { BooleanVariable } from './boolean/BooleanVariable';
 import { IsVariableTrue } from './boolean/IsVariableTrue';
 import { LogicalOperator } from './boolean/LogicalOperator';
@@ -107,6 +108,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   storeDocument: () => new StoreDocument(),
   getValueFromArray: () => new GetValueFromArray(),
   cosineSimilarity: () => new CosineSimilarity(),
+  textToSpeech: () => new TextToSpeech(),
 };
 
 /**
@@ -139,10 +141,11 @@ export const getNodes = (): MagickComponent<unknown>[] => {
     for (const key of sortedComponentKeys) {
       sortedComponents[key] = allComponents[key];
     }
-
     return Object.values(sortedComponents)
       .map(component => component())
       .sort(compare);
+
+
   } catch (e) {
     console.error(e)
     return []
