@@ -170,6 +170,7 @@ export class ServerPlugin extends Plugin {
       completionProviders,
     })
     this.services = services
+    this.nodes = nodes
     this.agentMethods = agentMethods
     this.serverInit = serverInit
     this.serverRoutes = serverRoutes
@@ -213,7 +214,6 @@ class PluginManager {
 
   getNodes() {
     let nodes = {}
-
     this.pluginList.forEach(plugin => {
       let plug_nodes = {}
       plugin.nodes.forEach((node: any) => {
@@ -224,7 +224,6 @@ class PluginManager {
       })
       nodes = { ...nodes, ...plug_nodes }
     })
-
     return nodes
   }
 

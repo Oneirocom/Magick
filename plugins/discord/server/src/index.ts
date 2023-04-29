@@ -7,11 +7,13 @@ import {
 } from '@magickml/core'
 import { DiscordConnector } from './connectors/discord'
 
+import {getNodes} from '@magickml/plugin-discord-shared'
 type StartDiscordArgs = {
   agent: any
   spellRunner: any
   worldManager: WorldManager
 }
+
 
 /**
  * Get startDiscord and stopDiscord methods to manage Discord connections.
@@ -109,6 +111,7 @@ const outputSockets = [
  */
 const DiscordPlugin = new ServerPlugin({
   name: 'DiscordPlugin',
+  nodes: getNodes(),
   inputTypes: [
     {
       name: 'Discord (Voice)',
