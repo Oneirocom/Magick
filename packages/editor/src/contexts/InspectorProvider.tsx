@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import { InspectorData, SupportedLanguages } from '@magickml/core'
 import { usePubSub } from '../contexts/PubSubProvider'
 import { createContext, useContext, useEffect, useState } from 'react'
@@ -7,9 +7,11 @@ import { createContext, useContext, useEffect, useState } from 'react'
  * TextEditorData represents the state and options for the text editor.
  */
 export type TextEditorData = {
-  options?: Record<string, any> | undefined & {
-    language?: SupportedLanguages
-  }
+  options?:
+    | Record<string, any>
+    | (undefined & {
+        language?: SupportedLanguages
+      })
   data?: string
   control?: Record<string, any> | undefined
   name?: string
@@ -42,7 +44,7 @@ const InspectorProvider = ({ children, tab }) => {
 
   const SET_INSPECTOR = events.$INSPECTOR_SET(tab.id)
 
-  // Subscribe to inspector changes 
+  // Subscribe to inspector changes
   useEffect(() => {
     const unsubscribe = subscribe(SET_INSPECTOR, (_, data: InspectorData) => {
       // Clear inspector data if conflicting
@@ -75,9 +77,12 @@ const InspectorProvider = ({ children, tab }) => {
 
   // Subscribe to text editor changes
   useEffect(() => {
-    const unsubscribe = subscribe(events.$TEXT_EDITOR_SET(tab.id), (event, data) => {
-      setTextEditorData(data)
-    })
+    const unsubscribe = subscribe(
+      events.$TEXT_EDITOR_SET(tab.id),
+      (event, data) => {
+        setTextEditorData(data)
+      }
+    )
 
     return unsubscribe as () => void
   }, [events, subscribe, publish])

@@ -82,7 +82,6 @@ const DebugConsole = ({ tab }): JSX.Element => {
   const Message = (message, type): JSX.Element => {
     return (
       <div
-        id="fabrizo"
         style={{
           lineHeight: '21px',
           color: type === 'error' ? 'var(--red)' : 'var(--green)',
