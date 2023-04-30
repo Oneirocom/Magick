@@ -1,40 +1,18 @@
-import * as THREE from 'three'
+export const AXIS_LEN = 3
 
-export const TRANSITION_TIME_OF_SWITCH_ITEM = 100;
-export const TRANSITION_TIME_OF_LOADING_AVATAR = 100;
+export const CAMERA_INIT_POS = [0, 0, 2]
 
-export const SWITCH_ITEM_EFFECT_INITIAL_TIME = 0.0;
-export const SWITCH_ITEM_EFFECT_DURATION = 1.5;
-export const SWITCH_ITEM_EFFECT_SPEED = 0.1;
+export const CAMERA_DES_POS = CAMERA_INIT_POS
 
-export const FADE_OUT_AVATAR_INITIAL_TIME = 0.0;
-export const FADE_OUT_AVATAR_DURATION = 1;
-export const FADE_OUT_AVATAR_SPEED = 0.05;
+export const AVATAR_INIT_POS = [-0.4, -0.8, 0]
 
-export const FADE_IN_AVATAR_INITIAL_TIME = 0.0;
-export const FADE_IN_AVATAR_DURATION = 1;
-export const FADE_IN_AVATAR_SPEED = 0.015;
+export const AVATAR_DES_POS = CAMERA_INIT_POS
 
-export const transitionEffectTypeNumber = {
-  normal: 0,
-  switchItem: 1,
-  fadeOutAvatar: 2,
-  loadingAvatar: 3,
-  fadeInAvatar: 4,
-}
+export const WATCH_INIT_POS = [CAMERA_INIT_POS[0], CAMERA_INIT_POS[1], CAMERA_INIT_POS[2] - 1]
 
-export const tempVec2 = new THREE.Vector2()
-export const tempVec3 = new THREE.Vector3()
-export const tempQuat = new THREE.Quaternion()
-export const tempEuler = new THREE.Euler()
+export const WATCH_DES_POS = [CAMERA_INIT_POS[0], CAMERA_INIT_POS[1], CAMERA_INIT_POS[2] - 0.1]
 
-export const tempColor = new THREE.Color()
-
-export const CAMERA_TO_PLANE_DISTANCE = 1
-export const PLANE_HEIGHT = CAMERA_TO_PLANE_DISTANCE / 2
-export const PLANE_COLOR = '#ffff00'
-
-export const raycaster = new THREE.Raycaster()
+export const WATCH_BONE_NAME = 'head'
 
 export const mixamoVRMRigMap = {
   'mixamorigHips': 'hips',
@@ -89,4 +67,4 @@ export const mixamoVRMRigMap = {
   'mixamorigRightLeg': 'rightLowerLeg',
   'mixamorigRightFoot': 'rightFoot',
   'mixamorigRightToeBase': 'rightToes',
-};
+}
