@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'shared-core',
-  preset: '../../jest.preset.js',
+  preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   silent: true, // lots of console.log calls
   globals: {},
