@@ -198,7 +198,7 @@ async function extractPromptsAndCompletions(text, windowSize = 2, task = 'questi
   const dist = await import('natural/lib/natural/distance')
   const tokenizer = new natural.SentenceTokenizer();
   const TFTDF = await import('natural/lib/natural/tfidf');
-  var tfidf = new TFTDF.TfIdf();
+  const tfidf = new TFTDF.TfIdf();
   let data = [];
   switch (task) {
     case 'completion':

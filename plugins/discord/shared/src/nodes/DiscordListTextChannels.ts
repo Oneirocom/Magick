@@ -108,7 +108,7 @@ export class DiscordListTextChannels extends MagickComponent<Promise<WorkerRetur
         context: ModuleContext,
     ): Promise<WorkerReturn> {
 
-        let tool_desc = {
+        const tool_desc = {
             title: 'Discord List Text Channels',
             body: 'Gets the List of text channels in a server',
             id: node.id,

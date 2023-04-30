@@ -143,7 +143,7 @@ export class AgentExecutor extends MagickComponent<Promise<any>> {
         try {
             const prompt = (inputs["prompt"] || ["NO PROMPT"])[0]
             delete inputs["prompt"]
-            let tool = Object.values((inputs || { key: "NO TOOL FOUND" })).map((input) => {
+            const tool = Object.values((inputs || { key: "NO TOOL FOUND" })).map((input) => {
                 return input[0]
             })
             //Minimum 3 Tools required

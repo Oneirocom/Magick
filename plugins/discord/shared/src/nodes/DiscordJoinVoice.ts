@@ -121,7 +121,7 @@ export class DiscordJoinVoice extends MagickComponent<Promise<WorkerReturn>> {
         context: ModuleContext,
     ): Promise<WorkerReturn> {
 
-        let tool_desc = {
+        const tool_desc = {
             title: 'Join Voice Channel',
             body: 'Joins voice channel of the user who triggered the command, also know as vc join',
             id: node.id,

@@ -11,6 +11,7 @@
     "migrate:make": "nx run @magickml/server:migrate:make",
     "migrate": "nx run @magickml/server:migrate",
     "lint": "npx nx run-many --all --target=lint",
+    "lint-fix": "npx nx run-many --all --target=lint --fix",
     "lint:engine": "npx nx lint @magickml/core --fix",
     "lint:editor": "npx nx lint @magickml/editor --fix",
     "lint:server-core": "npx nx lint @magickml/server-core",

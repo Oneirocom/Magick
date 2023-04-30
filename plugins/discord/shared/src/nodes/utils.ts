@@ -35,7 +35,7 @@ export async function getLoadSpell(name: string, agent: Agent, app: Application)
             },
         })
     ).data[0]
-    let runner = await agent?.spellManager.load(spell, true) as unknown as SpellRunner;
+    const runner = await agent?.spellManager.load(spell, true) as unknown as SpellRunner;
     return runner
 }
 
@@ -127,9 +127,9 @@ export async function createTasks(objective: string, task_description: string, r
         "task_description": "${task_description}",
         "incomplete_tasks": "${incomplete_tasks}"
       }`
-    let taskspell = await getLoadSpell("TaskCreation", agent as unknown as Agent, app as unknown as Application);
+    const taskspell = await getLoadSpell("TaskCreation", agent as unknown as Agent, app as unknown as Application);
 
-    let results = await runSpell(taskspell, content, agent as unknown as Agent, app as unknown as Application);
+    const results = await runSpell(taskspell, content, agent as unknown as Agent, app as unknown as Application);
     return parseTasksToArray(results.Output)
 }
 
@@ -139,8 +139,8 @@ export async function taskReprioritization(next_task_id: string, objective: stri
         "objective": "${objective}",
         "task_names": "${task_array.join()}"
       }`
-    let taskspell = await getLoadSpell("TaskReprioritization", agent as unknown as Agent, app as unknown as Application);
-    let results = await runSpell(taskspell, content, agent as unknown as Agent, app as unknown as Application);
+    const taskspell = await getLoadSpell("TaskReprioritization", agent as unknown as Agent, app as unknown as Application);
+    const results = await runSpell(taskspell, content, agent as unknown as Agent, app as unknown as Application);
     return parseTasks(results.Output)
 
 }
@@ -153,8 +153,8 @@ export async function taskCompletion(task: string, context: string, objective:st
       }`
 
     console.log("CONTENT", content)
-    let taskspell = await getLoadSpell("TaskExecution", agent as unknown as Agent, app as unknown as Application);
-    let results = await runSpell(taskspell, content, agent as unknown as Agent, app as unknown as Application);
+    const taskspell = await getLoadSpell("TaskExecution", agent as unknown as Agent, app as unknown as Application);
+    const results = await runSpell(taskspell, content, agent as unknown as Agent, app as unknown as Application);
     return results.Output
  }
 

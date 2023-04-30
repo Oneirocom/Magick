@@ -98,7 +98,7 @@ export class DiscordListVoiceChannels extends MagickComponent<Promise<WorkerRetu
         context: ModuleContext,
     ): Promise<WorkerReturn> {
 
-        let tool_desc = {
+        const tool_desc = {
             title: 'Discord List Voice Channels',
             body: 'Gets the list of all the voice channels also known as vc in the server and only the voice channels',
             id: node.id,
