@@ -2,18 +2,18 @@ import { VRMExpressionPresetName } from "@pixiv/three-vrm";
 
 const BoundingFrequencyMasc = [0, 400, 560, 2400, 4800]
 const BoundingFrequencyFem = [0, 500, 700, 3000, 6000]
-const IndicesFrequencyFemale= []
+const IndicesFrequencyFemale = []
 const IndicesFrequencyMale = []
 const FFT_SIZE = 1024
 const samplingFrequency = 44100
 
 for (let m = 0; m < BoundingFrequencyMasc.length; m++) {
-    IndicesFrequencyMale[m] = Math.round(((2 * FFT_SIZE) / samplingFrequency) * BoundingFrequencyMasc[m])
-  }
+  IndicesFrequencyMale[m] = Math.round(((2 * FFT_SIZE) / samplingFrequency) * BoundingFrequencyMasc[m])
+}
 
-  for (let m = 0; m < BoundingFrequencyFem.length; m++) {
-    IndicesFrequencyFemale[m] = Math.round(((2 * FFT_SIZE) / samplingFrequency) * BoundingFrequencyFem[m])
-  }
+for (let m = 0; m < BoundingFrequencyFem.length; m++) {
+  IndicesFrequencyFemale[m] = Math.round(((2 * FFT_SIZE) / samplingFrequency) * BoundingFrequencyFem[m])
+}
 
 export class LipSync {
   constructor(vrm) {
@@ -25,8 +25,8 @@ export class LipSync {
     }
 
     update()
-
   }
+
 
   start(stream) {
     this.audioContext = new AudioContext()
@@ -35,12 +35,12 @@ export class LipSync {
     this.mediaStreamSource.connect(this.meter)
   }
 
+
   startFromAudioFile(file) {
-    if(!this.audioContext) this.audioContext = new AudioContext()
+    if (!this.audioContext) this.audioContext = new AudioContext()
 
-
-    if(!this.userSpeechAnalyzer)
-        this.userSpeechAnalyzer = this.audioContext.createAnalyser()
+    if (!this.userSpeechAnalyzer)
+      this.userSpeechAnalyzer = this.audioContext.createAnalyser()
     this.userSpeechAnalyzer.smoothingTimeConstant = 0.5
     this.userSpeechAnalyzer.fftSize = FFT_SIZE
 
@@ -48,68 +48,63 @@ export class LipSync {
       this.mediaStreamSource.stop()
 
     this.audioContext.decodeAudioData(file).then((buffer) => {
-        this.mediaStreamSource = this.audioContext.createBufferSource()
-        this.mediaStreamSource.buffer = buffer
-        this.meter = LipSync.createAudioMeter(this.audioContext)
-        this.mediaStreamSource.connect(this.meter)
-        this.mediaStreamSource.connect(this.audioContext.destination)
-        this.mediaStreamSource.start()
+      this.mediaStreamSource = this.audioContext.createBufferSource()
+      this.mediaStreamSource.buffer = buffer
+      this.meter = LipSync.createAudioMeter(this.audioContext)
+      this.mediaStreamSource.connect(this.meter)
+      this.mediaStreamSource.connect(this.audioContext.destination)
+      this.mediaStreamSource.start()
 
-        // connect the output of mediaStreamSource to the input of userSpeechAnalyzer
-        this.mediaStreamSource.connect(this.userSpeechAnalyzer)
+      // connect the output of mediaStreamSource to the input of userSpeechAnalyzer
+      this.mediaStreamSource.connect(this.userSpeechAnalyzer)
     })
-
-    }
-
-
-
+  }
 
   destroy() {
     this.meter?.shutdown()
     this.meter = null
     this.mediaStreamSource?.disconnect()
-    return this.audioContext?.close().catch(() => { /* null */}) || Promise.resolve()
+    return this.audioContext?.close().catch(() => { /* null */ }) || Promise.resolve()
   }
 
   update(deltaTime) {
     if (this.meter) {
-        
       const { volume } = this.meter
+
       if (volume < 0.01) {
-    
         // get the shape keys from the VRM avatar
         this.vrm.expressionManager.setValue(VRMExpressionPresetName.Oh, 0)
         this.vrm.expressionManager.setValue(VRMExpressionPresetName.Ah, 0)
         this.vrm.expressionManager.setValue(VRMExpressionPresetName.Ee, 0)
       } else {
-
-        const {ah, oh, ee} = this.update2();
-
+        // update the shape keys
+        const { ah, oh, ee } = this.update2();
         this.vrm.expressionManager.setValue(VRMExpressionPresetName.Oh, oh)
         this.vrm.expressionManager.setValue(VRMExpressionPresetName.Ah, ah)
         this.vrm.expressionManager.setValue(VRMExpressionPresetName.Ee, ee)
-        
-        // update the shape keys
         this.vrm.expressionManager.update(deltaTime)
       }
     }
   }
 
-  update2() {      
-      function getSensitivityMap(spectrum) {
-        const sensitivity_threshold = 0.5
-        const stPSD = new Float32Array(spectrum.length)
-        for (let i = 0; i < spectrum.length; i++) {
-          stPSD[i] = sensitivity_threshold + (spectrum[i] + 20) / 140
-        }
-        return stPSD
+  update2() {
+    function getSensitivityMap(spectrum) {
+      const sensitivity_threshold = 0.5
+      const stPSD = new Float32Array(spectrum.length)
+      for (let i = 0; i < spectrum.length; i++) {
+        stPSD[i] = sensitivity_threshold + (spectrum[i] + 20) / 140
       }
+      return stPSD
+    }
 
     const spectrum = new Float32Array(this.userSpeechAnalyzer.frequencyBinCount)
+
     // Populate frequency data for computing frequency intensities
     this.userSpeechAnalyzer.getFloatFrequencyData(spectrum) // getByteTimeDomainData gets volumes over the sample time
+
     // Populate time domain for calculating RMS
     // userSpeechAnalyzer.getFloatTimeDomainData(spectrum);
+
     // RMS (root mean square) is a better approximation of current input level than peak (just sampling this frame)
     // spectrumRMS = getRMS(spectrum);
 
@@ -133,6 +128,7 @@ export class LipSync {
       EnergyBinMasc[m] /= IndicesFrequencyMale[m + 1] - IndicesFrequencyMale[m]
       EnergyBinFem[m] = EnergyBinFem[m] / (IndicesFrequencyFemale[m + 1] - IndicesFrequencyFemale[m])
     }
+
     const oh =
       Math.max(EnergyBinFem[1], EnergyBinMasc[1]) > 0.2
         ? 1 - 2 * Math.max(EnergyBinMasc[2], EnergyBinFem[2])
@@ -146,6 +142,7 @@ export class LipSync {
 
   static createAudioMeter(audioContext) {
     const processor = audioContext.createScriptProcessor(512)
+
     processor.onaudioprocess = (event) => {
       const buf = event.inputBuffer.getChannelData(0)
       const bufLength = buf.length
@@ -164,6 +161,7 @@ export class LipSync {
       const rms = Math.sqrt(sum / bufLength)
       processor.volume = Math.max(rms, processor.volume * processor.averaging)
     }
+
     processor.clipping = false
     processor.lastClip = 0
     processor.volume = 0

@@ -63,3 +63,4 @@ data.json
 /logs
 docstore.json
 .vercel
+mydb.sqlite-journal
