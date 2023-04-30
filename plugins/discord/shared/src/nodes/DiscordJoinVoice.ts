@@ -17,7 +17,6 @@ import {
     ModuleContext,
     WorkerData
 } from '@magickml/core';
-import { getChannelFromMessage } from './utils';
 
 /**
  * When triggered, the Discord agent will join the voice channel of the user who triggered the node.
