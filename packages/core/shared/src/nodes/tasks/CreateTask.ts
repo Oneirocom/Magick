@@ -76,6 +76,7 @@ export class CreateTask extends MagickComponent<Promise<{ task: AgentTask }>> {
 
     const data = {
       objective,
+      type: node.data.type,
       status: 'started',
       eventData: event,
       projectId,
