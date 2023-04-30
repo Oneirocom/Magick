@@ -10,7 +10,8 @@ import {
     MagickWorkerInputs,
     MagickWorkerOutputs,
     ModuleContext,
-    WorkerData
+    WorkerData,
+    InputControl
 } from '@magickml/core';
 import { addResults, addTask, createTasks, findSimilarSentences, getChannelFromMessage, getLoadSpell, listTasks, parseTasks, parseTasksToArray, popTask, runSpell, taskCompletion, taskReprioritization } from './utils';
 import { Application } from '@feathersjs/koa/lib';
@@ -48,8 +49,12 @@ export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
         const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket);
         const promptInput = new Rete.Input('prompt', 'Prompt', stringSocket);
         const outp = new Rete.Output('output', 'String', stringSocket);
-
-
+        const noOfIterations = new InputControl({
+            dataKey: 'iterations',
+            name: 'Number of Iterations',
+            icon: 'moon',
+          });
+        node.inspector.add(noOfIterations);
         return node
             .addInput(promptInput)
             .addInput(dataInput)
@@ -70,6 +75,8 @@ export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
         context: ModuleContext,
     ): Promise<WorkerReturn> {
         const { agent, app } = context.module;
+        let n = node?.data?.noOfIterations || 3;
+        if (n < 0) n = 1;
         let task_list = [{ task_id: 1, task: "Make a todo list" }]
         let result_list = []
         const objective = inputs["prompt"][0] as unknown as string
@@ -78,7 +85,7 @@ export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
         //@ts-ignore
         let result
         // 3 Iterations roughly makes 9 calls to the API
-        for (let index = 0; index < 3; index++) {
+        for (let index = 0; index < n; index++) {
             //Step 1: Pop the Task from task queue
             let task = popTask(task_list)
             //Step 2: Run the task with Addtional Context from previous results
