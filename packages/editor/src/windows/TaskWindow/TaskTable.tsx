@@ -94,51 +94,19 @@ function TaskTable({ tasks, updateCallback }) {
   // Define table columns
   const columns = useMemo(
     () => [
-      // {
-      //   Header: 'Agent',
-      //   accessor: 'agentId',
-      //   disableSortBy: true,
-      // },
-      // {
-      //   Header: 'Client',
-      //   accessor: 'client',
-      //   disableSortBy: true,
-      // },
-      // {
-      //   Header: 'Sender',
-      //   accessor: 'sender',
-      //   disableSortBy: true,
-      // },
-      // {
-      //   Header: 'Content',
-      //   accessor: 'content',
-      //   disableSortBy: true,
-      // },
-      // {
-      //   Header: 'Type',
-      //   accessor: 'type',
-      //   disableSortBy: true,
-      // },
-      // {
-      //   Header: 'Channel',
-      //   accessor: 'channel',
-      //   disableSortBy: true,
-      // },
-      // {
-      //   Header: 'Entities',
-      //   accessor: 'entities',
-      //   disableFilters: true,
-      // },
-      // {
-      //   Header: 'Observer',
-      //   accessor: 'observer',
-      //   disableFilters: false,
-      // },
-      // {
-      //   Header: 'Date',
-      //   accessor: 'date',
-      //   disableFilters: false,
-      // },
+      {
+        Header: 'Type',
+        accessor: 'type',
+        disableSortBy: false,
+      },
+      {
+        Header: 'Event Data',
+        accessor: 'eventData',
+      },
+      {
+        Header: 'Steps',
+        accessor: 'steps',
+      },
       {
         Header: 'Actions',
         Cell: row => (
