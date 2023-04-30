@@ -23,6 +23,8 @@ import ProjectWindow from './ProjectWindow'
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
 import { SetAPIKeys } from './SetAPIKeys'
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import ArticleIcon from '@mui/icons-material/Article';
 
 // Constants
 const drawerWidth = 150
@@ -274,13 +276,13 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             onClick={onClick('/agents')}
             text="Agents"
           />
-          {/* <DrawerItem
+          <DrawerItem
             active={location.pathname === '/documents'}
-            Icon={DocumentIcon}
+            Icon={ArticleIcon}
             open={openDrawer}
             onClick={onClick('/documents')}
             text="Documents"
-          /> */}
+          />
           <DrawerItem
             active={location.pathname === '/events'}
             Icon={BoltIcon}
@@ -289,21 +291,27 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             text="Events"
           />
           <DrawerItem
+            active={location.pathname === '/tasks'}
+            Icon={AssignmentTurnedInIcon}
+            open={openDrawer}
+            onClick={onClick('/tasks')}
+            text="Tasks"
+          />
+          <DrawerItem
             active={location.pathname === '/requests'}
             Icon={StorageIcon}
             open={openDrawer}
             onClick={onClick('/requests')}
             text="Requests"
           />
-          {/* <Divider />
-          <DrawerItem
+          <Divider />
+          {/* <DrawerItem
             active={location.pathname.includes('/chat')}
             Icon={ChatIcon}
             open={openDrawer}
             onClick={onClick('/chat')}
             text="Chat"
           /> */}
-          <Divider />
           <PluginDrawerItems onClick={onClick} open={openDrawer} />
           <Divider />
           <DrawerItem
