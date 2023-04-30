@@ -59,22 +59,24 @@ export type GetDocumentArgs = Document & {
   maxCount?: number
 }
 
+type AgentTaskStatus = 'started' | 'running' | 'completed' | 'canceled'
+
 export type AgentTask = {
-  id?: number
-  complete: boolean
+  id: number
+  status: AgentTaskStatus
   type?: string
   objective: string
   eventData: Event
   projectId?: string
-  agentId?: number | string
-  date?: string
-  data: AgentTaskData[]
+  steps: AgentTaskData[]
 }
 
 export type AgentTaskData = {
-  input: any
-  output: any
-  state: any
+  timestamp: number
+  thought: string
+  skill: string
+  action: string
+  result: string
 }
 
 export type Event = {
@@ -130,29 +132,6 @@ export type GetVectorEventArgs = {
 }
 
 export type EventResponse = Event[]
-
-export type CompletionBody = {
-  prompt: string
-  modelName: string
-  maxTokens: number
-  temperature: number
-  topP: number
-  presencePenalty: number
-  frequencyPenalty: number
-  // TODO: Type not used anywhere
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  stop: any
-  apiKey?: string
-}
-
-export type CompletionResponse = {
-  // TODO: Type not used anywhere
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  success: any
-  // TODO: Type not used anywhere
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  choice: any
-}
 
 export type OnSubspellUpdated = (spell: SpellInterface) => void
 
@@ -218,7 +197,6 @@ export type RunSpell<DataType = Record<string, unknown>> = ({
 
 export type EngineContext<DataType = Record<string, unknown>> = {
   runSpell: RunSpell<DataType>
-  completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
   processCode?: ProcessCode
 }
