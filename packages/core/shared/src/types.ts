@@ -59,7 +59,7 @@ export type GetDocumentArgs = Document & {
   maxCount?: number
 }
 
-type AgentTaskStatus = 'started' | 'running' | 'completed' | 'canceled'
+type AgentTaskStatus = 'active' | 'completed' | 'canceled'
 
 export type AgentTask = {
   id: number
