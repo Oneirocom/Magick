@@ -2,7 +2,6 @@ import React, { useEffect } from "react"
 import styles from "./Chat.module.css"
 import Mic from '@mui/icons-material/Mic'
 import MicOff from '@mui/icons-material/MicOff'
-import axios from 'axios';
 
 import {
   SepiaSpeechRecognitionConfig,
@@ -22,35 +21,33 @@ const voices = {
 // Constants
 
 const messagesMaxCharacters = 20000
-const API_KEY = 'ce69df07b50e7179cbbfc5c2bef9d752';
-const VOICE_ID = '21m00Tcm4TlvDq8ikWAM';
 
 // Prune Messages Function
 
 export async function pruneMessages(messages) {
-  let currentSize = 0
-  const newMessages = []
+    let currentSize = 0
+    const newMessages = []
 
-  for (let i = messages.length - 1; i >= 0; i--) {
-    const message = messages[i]
+    for (let i = messages.length - 1; i >= 0; i--) {
+        const message = messages[i]
 
-    currentSize += message.length
+        currentSize += message.length
 
-    // Add up to N characters.
-    if (currentSize < messagesMaxCharacters) newMessages.push(message)
-    else break
-  }
+        // Add up to N characters.
+        if (currentSize < messagesMaxCharacters) newMessages.push(message)
+        else break
+    }
 
-  // Reverse the array so that the newest messages are first.
-  newMessages.reverse()
+    // Reverse the array so that the newest messages are first.
+    newMessages.reverse()
 
-  return newMessages
+    return newMessages
 }
 
 const sessionId =
-  localStorage.getItem("sessionId") ??
-  Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15)
+    localStorage.getItem("sessionId") ?? Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15)
+    
 localStorage.setItem("sessionId", sessionId)
 
 const config = new SepiaSpeechRecognitionConfig()
@@ -60,7 +57,7 @@ const defaultSpeaker = "Speaker"
 const SpeechRecognition =
   window.webkitSpeechRecognition || sepiaSpeechRecognitionInit(config)
 
-export default function ChatBox({
+export default function Chat({
   micEnabled,
   setMicEnabled,
   speechRecognition,
@@ -146,46 +143,39 @@ export default function ChatBox({
       const spell_handler = "eliza3d"
       const projectId = "ok"
 
+      //const newMessages = await pruneMessages(messages);
+
+      // newMessages.push(`${speaker}: ${value}`)
+
       setInput("")
       setMessages((messages) => [...messages, `${speaker}: ${value}`])
 
       const promptMessages = await pruneMessages(messages)
       promptMessages.push(`${speaker}: ${value}`)
       const self = lipSync
-      
-      let data = await textToSpeech(value)
-      
-      const blob = new Blob([data], { type: 'audio/mpeg' });
-      
-      const arrayBuffer = await blob.arrayBuffer()
 
-      self.startFromAudioFile(arrayBuffer)
-      
-      setMessages((messages) => [...messages, agent + ": " + value])
+      try {
 
-      setWaitingForResponse(false)
+        // fetch the audio file from ttsEndpoint
+        const ttsEndpoint = "https://ai-voice.webaverse.ai/tts?s="+value
+
+        fetch(ttsEndpoint).then(async (response) => {
+          const blob = await response.blob()
+
+          // convert the blob to an array buffer
+          const arrayBuffer = await blob.arrayBuffer()
+
+          self.startFromAudioFile(arrayBuffer)
+          setMessages((messages) => [...messages, agent + ": " + value])
+        })
+
+        setWaitingForResponse(false)
+        // })
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
-
-  const textToSpeech = async (inputText) => {
-    const options = {
-      method: 'POST',
-      url: `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
-      headers: {
-        accept: 'audio/mpeg',
-        'content-type': 'application/json',
-        'xi-api-key': `${API_KEY}`,
-      },
-      data: {
-        text: inputText, 
-      },
-      responseType: 'arraybuffer',
-    };
-  
-    const speechDetails = await axios.request(options);
-    return speechDetails.data;
-  };
-  
 
   let hasSet = false
   useEffect(() => {

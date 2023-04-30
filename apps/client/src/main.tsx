@@ -8,7 +8,7 @@ import {
   POSTHOG_API_KEY,
   POSTHOG_ENABLED,
 } from '@magickml/core'
-import posthog from 'posthog-js'
+import { PostHogProvider } from 'posthog-js/react'
 
 import plugins from './plugins'
 
@@ -37,20 +37,13 @@ if (window === window.parent) {
     token: '',
   }
 
-  // Initialize posthog
-  if (POSTHOG_ENABLED === 'true') {
-    console.log('Posthog enabled')
-    posthog.init(POSTHOG_API_KEY, {
-      api_host: 'https://app.posthog.com',
-    })
-  }
-
   const Root = () => <MagickIDE config={config} />
+
   root.render(<Root />)
 } else {
-/**
- * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
- */
+  /**
+   * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
+   */
   window.addEventListener(
     'message',
     event => {
@@ -82,16 +75,23 @@ if (window === window.parent) {
       if (type === 'INIT') {
         // TODO: store configuration in localstorage
         const { config } = payload
-
-        // Initialize posthog
-        if (POSTHOG_ENABLED) {
-          console.log('Posthog enabled')
-          posthog.init(POSTHOG_API_KEY, {
-            api_host: 'https://app.posthog.com',
-          })
+        const Root = () => {
+          if (POSTHOG_ENABLED === 'true') {
+            console.log('Posthog enabled')
+            return (
+              <PostHogProvider
+                apiKey={POSTHOG_API_KEY}
+                options={{
+                  api_host: 'https://app.posthog.com',
+                }}
+              >
+                <MagickIDE config={config} />
+              </PostHogProvider>
+            )
+          } else {
+            return <MagickIDE config={config} />
+          }
         }
-
-        const Root = () => <MagickIDE config={config} />
         const container = document.getElementById('root')
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
         ;(window as any).root = root

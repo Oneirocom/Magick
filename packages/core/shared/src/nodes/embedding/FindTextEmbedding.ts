@@ -16,11 +16,6 @@ type InputReturn = {
   embedding: number[] | null;
 };
 
-interface ResponseData {
-  embedding: number[] | string;
-}
-
-
 /**
  * FindTextEmbedding class extends MagickComponent and processes the given text to find cached embeddings.
  */
@@ -102,13 +97,19 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
     if (typeof embedding === 'string') {
       if (embedding[0] === '[') {
         embedding = JSON.parse(JSON.stringify(embedding));
-
       } else {
-        this._task.closed = ['success'];
+        embedding = JSON.parse(JSON.stringify("[" + embedding + "]"));
       }
-    
-      return {
-        embedding,
-      };
     }
+    // Set the task closed state based on the presence of the embedding
+    if (embedding) {
+      this._task.closed = ['failure'];
+    } else {
+      this._task.closed = ['success'];
+    }
+
+    return {
+      embedding,
+    };
+  }
 }
