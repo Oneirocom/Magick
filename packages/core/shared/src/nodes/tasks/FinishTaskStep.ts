@@ -23,9 +23,9 @@ const info = 'Finish the current step of the task'
 /**
  * CreateTask class that extends MagickComponent
  */
-export class FinishTaskStep extends MagickComponent<Promise<void>> {
+export class FinishTaskStep extends MagickComponent<Promise<{ task: AgentTask }>> {
   constructor() {
-    super('Finish Task Step', { outputs: { trigger: 'option' } }, 'Task', info)
+    super('Finish Task Step', { outputs: { trigger: 'option', task: 'output' } }, 'Task', info)
   }
 
   /**
@@ -49,13 +49,13 @@ export class FinishTaskStep extends MagickComponent<Promise<void>> {
     const taskOutput = new Rete.Output('task', 'Task', taskSocket)
     return node
       .addInput(dataInput)
-      .addOutput(dataOutput)
-      .addOutput(taskOutput)
       .addInput(task)
       .addInput(thought)
       .addInput(skill)
       .addInput(action)
       .addInput(result)
+      .addOutput(dataOutput)
+      .addOutput(taskOutput)
   }
 
   /**
@@ -77,6 +77,8 @@ export class FinishTaskStep extends MagickComponent<Promise<void>> {
     const action = inputs['action'][0] as string
     const result = inputs['result'][0] as string
 
+    console.log('task.steps', task.steps)
+
     const step = {
       timestamp: Date.now(),
       input: task,
@@ -91,9 +93,11 @@ export class FinishTaskStep extends MagickComponent<Promise<void>> {
 
     const { app } = context.module
     // call feathers task service to update the task
-    await app?.service('tasks').patch(task.id, {
-      result,
+    const taskResult = await app?.service('tasks').patch(task.id, {
       step,
     })
+    return {
+      task: taskResult,
+    }
   }
 }
