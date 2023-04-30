@@ -63,7 +63,7 @@ async function pdfNumberOfPages(file: File) {
     return pdfDocument.numPages
 }
 
-async function convertPdfToText(file: File, ocrEngine: string = 'tesseract', ocrConfig?: any): Promise<any[]> {
+async function convertPdfToText(file: File, ocrEngine = 'tesseract', ocrConfig?: any): Promise<any[]> {
     // Read the PDF file
     const pdfBuffer = await readFileAsBuffer(file);
 
@@ -73,7 +73,7 @@ async function convertPdfToText(file: File, ocrEngine: string = 'tesseract', ocr
     // Load the PDF document
     const pdfDocument = await pdfjsLib.getDocument({ data: pdfBuffer }).promise;
 
-    let text = [];
+    const text = [];
 
     if (ocrEngine === 'tesseract') {
         // Initialize Tesseract.js with the English language

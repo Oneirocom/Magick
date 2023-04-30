@@ -72,7 +72,7 @@ export const document = (app: Application) => {
             [service.id]: id,
             ...data,
           }
-          let EmbeddingArgs = {
+          const EmbeddingArgs = {
             modelName: "text-embedding-ada-002",
             secrets: context.data.secrets,
             projectId: context.data.projectId,

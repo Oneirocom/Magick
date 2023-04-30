@@ -20,9 +20,9 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
   }, [newDocument]);
 
   const handleFileChange = async (e) => {
-   let files = [...e.target.files!][0]
+   const files = [...e.target.files!][0]
     setLoading(true);
-    let text = await convertFileToText(files)
+    const text = await convertFileToText(files)
     setLoading(false)
     setDocument({ ...newDocument, content: text.join('') });
   };
@@ -46,8 +46,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
   };
 
   return (
-    <>
-      <Modal
+    <Modal
         open={createMode}
         onClose={()=>{setCreateMode(!createMode)}}
         onSubmit={handleSaveDocument}
@@ -92,7 +91,6 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
           Drop file here
         </div>
       </Modal>
-    </>
   );
 };
 

@@ -37,17 +37,17 @@ export default function GetRecordsButton({ enforce, purpose }: Props) {
 
     async function get_record(): Promise<void> {
 
-        let projectId = DEFAULT_PROJECT_ID;
-        let url = `${API_ROOT_URL}/documents/`;
+        const projectId = DEFAULT_PROJECT_ID;
+        const url = `${API_ROOT_URL}/documents/`;
         const params = new URLSearchParams([['projectId', projectId]]);
-        let result = await (await axios.get(url, { params: params })).data.data;
+        const result = await (await axios.get(url, { params: params })).data.data;
         let text = ''
         result.slice(0,1).forEach(async (record) => {
             text += record.content
         })
         console.log(text)
-        let data = await extractPromptsAndCompletions(text)
-        let r = await documentLoad(data)
+        const data = await extractPromptsAndCompletions(text)
+        const r = await documentLoad(data)
         console.log(r)
     }
 

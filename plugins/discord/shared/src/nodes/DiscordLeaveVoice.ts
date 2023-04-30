@@ -25,7 +25,7 @@ async function discordLeaveVC(context: ModuleContext & {prompt: string}): Promis
         return "Agent not found";
     }
     //@ts-ignore
-    let id = agent?.discord.guildId.id
+    const id = agent?.discord.guildId.id
     //@ts-ignore
     //Using the Guild ID
     const guild = await agent?.discord.client.guilds.fetch(id);
@@ -122,7 +122,7 @@ export class DiscordLeaveVoice extends MagickComponent<Promise<WorkerReturn>> {
         context: ModuleContext,
     ): Promise<WorkerReturn> {
 
-        let tool_desc = {
+        const tool_desc = {
             title: 'leave Voice Channel',
             body: 'Leaves voice channel of the user who triggered the command, also know as vc nuke, or remove disconnect',
             id: node.id,
