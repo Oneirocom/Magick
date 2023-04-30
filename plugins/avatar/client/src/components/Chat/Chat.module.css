@@ -65,6 +65,7 @@
     width: 100%;
     height: calc(100% - 132px);
     height: -webkit-calc(100% - 132px);
+    font-size: 18px;
 }
 
 /* make the scrollbar transparent with a white thumb */
