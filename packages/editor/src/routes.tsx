@@ -13,6 +13,7 @@ import Magick from './screens/Magick/Magick'
 import AgentManagerWindow from './windows/agents/AgentManagerWindow'
 import DocumentWindow from './windows/DocumentWindow'
 import EventWindow from './windows/EventWindow'
+import TaskWindow from './windows/TaskWindow'
 import RequestWindow from './windows/RequestWindow'
 import SettingsWindow from './windows/settings/SettingsWindow'
 // import ProjectWindow from './windows/ProjectWindow';
@@ -70,6 +71,7 @@ const MyRoutes = () => (
       <Route path="/events" element={<EventWindow />} />
       <Route path="/requests" element={<RequestWindow />} />
       <Route path="/agents" element={<AgentManagerWindow />} />
+      <Route path="/tasks" element={<TaskWindow />} />
       <Route path="/settings" element={<SettingsWindow />} />
 
       <Route element={<MagickPageLayout />}>
