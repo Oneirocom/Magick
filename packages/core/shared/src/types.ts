@@ -61,13 +61,22 @@ export type GetDocumentArgs = Document & {
 
 type AgentTaskStatus = 'active' | 'completed' | 'canceled'
 
+export type CreateAgentTaskArgs = {
+  status: AgentTaskStatus
+  type: string
+  objective: string
+  eventData: Event
+  projectId: string
+  steps: string
+}
+
 export type AgentTask = {
   id: number
   status: AgentTaskStatus
   type?: string
   objective: string
   eventData: Event
-  projectId?: string
+  projectId: string
   steps: AgentTaskData[]
 }
 

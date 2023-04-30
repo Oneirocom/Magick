@@ -5,6 +5,7 @@ import { MagickComponent } from '../../engine'
 import { eventSocket, stringSocket, taskSocket, triggerSocket } from '../../sockets'
 import {
   AgentTask,
+  CreateAgentTaskArgs,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
@@ -72,7 +73,7 @@ export class CreateTask extends MagickComponent<Promise<{ task: AgentTask }>> {
   ) {
     const { projectId } = context
 
-    const objective = inputs['objective'][0] as AgentTask
+    const objective = inputs['objective'][0] as string
     const event = inputs['event'][0] as Event
 
     const data = {
@@ -81,8 +82,9 @@ export class CreateTask extends MagickComponent<Promise<{ task: AgentTask }>> {
       status: 'active',
       eventData: event,
       projectId,
-      steps: [],
-    }
+      date: new Date(),
+      steps: JSON.stringify([]),
+    } as CreateAgentTaskArgs
 
     const { app } = context.module
     const taskResponse = await app?.service('tasks').create(data)
