@@ -6,7 +6,6 @@ import { ArrayVariable } from './array/ArrayVariable';
 import { GetValueFromArray } from './array/GetValueFromArray';
 import { JoinListComponent } from './array/JoinList';
 import { RemapArray } from './array/RemapArray';
-import { TextToSpeech } from './audio/textToSpeech';
 import { BooleanVariable } from './boolean/BooleanVariable';
 import { IsVariableTrue } from './boolean/IsVariableTrue';
 import { LogicalOperator } from './boolean/LogicalOperator';
@@ -21,8 +20,10 @@ import { EventDelete } from './events/EventDelete';
 import { EventDestructureComponent } from './events/EventDestructure';
 import { EventRecall } from './events/EventRecall';
 import { EventRestructureComponent } from './events/EventRestructure';
-import { EventsToConversation } from './events/EventsToConversation';
 import { EventStore } from './events/EventStore';
+import { EventsToConversation } from './events/EventsToConversation';
+import { JupyterNotebook } from './experimental/JupyterNotebook';
+import { TextToSpeech } from './experimental/textToSpeech';
 import { BooleanGate } from './flow/BooleanGate';
 import { ExclusiveGate } from './flow/ExclusiveGate';
 import { IsNullOrUndefined } from './flow/IsNullOrUndefined';
@@ -31,7 +32,6 @@ import { RandomGate } from './flow/RandomGate';
 import { SwitchGate } from './flow/SwitchGate';
 import { WaitForAll } from './flow/WaitForAll';
 import { InputComponent } from './io/Input';
-import { JupyterNotebook } from './io/JupyterNotebook';
 import { Output } from './io/Output';
 import { Request } from './io/Request';
 import { SpellComponent } from './io/Spell';
@@ -42,6 +42,10 @@ import { GetValuesFromObject } from './object/GetValuesFromObject';
 import { ParseJSON } from './object/JSONToObject';
 import { Merge } from './object/MergeObjects';
 import { ObjectToJSON } from './object/ObjectToJSON';
+import { CancelTask } from './tasks/CancelTask';
+import { CompleteTask } from './tasks/CompleteTask';
+import { CreateTask } from './tasks/CreateTask';
+import { FinishTaskStep } from './tasks/FinishTaskStep';
 import { CombineText } from './text/CombineText';
 import { ComplexStringMatcher } from './text/ComplexStringMatcher';
 import { EvaluateText } from './text/EvaluateText';
@@ -109,6 +113,9 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   getValueFromArray: () => new GetValueFromArray(),
   cosineSimilarity: () => new CosineSimilarity(),
   textToSpeech: () => new TextToSpeech(),
+  createTask: () => new CreateTask(),
+  completeTask: () => new CompleteTask(),
+  finishTaskStep: () => new FinishTaskStep(),
 };
 
 /**
