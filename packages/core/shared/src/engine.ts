@@ -138,10 +138,11 @@ export type MagicComponentCategory =
   | 'Event'
   | 'Text'
   | 'Utility'
-  | ' Esoterica'
   | 'Ethereum'
   | 'Pinecone'
-  | 'Search';
+  | 'Search'
+  | 'Audio'
+  | 'Task'
 
 // MagickComponent abstract class
 export abstract class MagickComponent<WorkerReturnType> extends MagickEngineComponent<WorkerReturnType> {

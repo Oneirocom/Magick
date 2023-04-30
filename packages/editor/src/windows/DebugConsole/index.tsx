@@ -79,28 +79,33 @@ const DebugConsole = ({ tab }): JSX.Element => {
    * @param {string} type - Message type (error or log).
    * @returns {JSX.Element} Rendered message.
    */
-  const Message = (message, type): JSX.Element => (
-    <div
-      style={{
-        lineHeight: '21px',
-        color: type === 'error' ? 'var(--red)' : 'var(--green)',
-      }}
-    >
-      <p style={{ margin: 0 }}>
-        {type === 'error'
-          ? formatErrorMessage(message)
-          : formatLogMessage(message)}
-      </p>
-      <ReactJson
-        src={message}
-        name={message.nodeId}
-        enableClipboard={false}
-        theme="twilight"
-        collapsed={true}
-      />
-      <br />
-    </div>
-  )
+  const Message = (message, type): JSX.Element => {
+    return (
+      <div
+        style={{
+          lineHeight: '21px',
+          color: type === 'error' ? 'var(--red)' : 'var(--green)',
+        }}
+        onClick={e => {
+          e.stopPropagation()
+        }}
+      >
+        <p style={{ margin: 0 }}>
+          {type === 'error'
+            ? formatErrorMessage(message)
+            : formatLogMessage(message)}
+        </p>
+        <ReactJson
+          src={message}
+          name={message.nodeId}
+          enableClipboard={false}
+          theme="twilight"
+          collapsed={true}
+        />
+        <br />
+      </div>
+    )
+  }
 
   /**
    * Get a formatted message for the terminal.

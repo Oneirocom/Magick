@@ -57,3 +57,6 @@ export const NODE_ENV = getVarForEnvironment('NODE_ENV') || 'development'
 export const PAGINATE_DEFAULT = getVarForEnvironment('PAGINATE_DEFAULT') || "10"
 export const PAGINATE_MAX = getVarForEnvironment('PAGINATE_MAX') || "100"
 export const JWT_SECRET = getVarForEnvironment('JWT_SECRET') || 'secret'
+
+export const POSTHOG_ENABLED = getVarForEnvironment('POSTHOG_ENABLED') || false
+export const POSTHOG_API_KEY = getVarForEnvironment('POSTHOG_API_KEY') || ''
