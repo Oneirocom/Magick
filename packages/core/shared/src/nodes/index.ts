@@ -115,6 +115,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   textToSpeech: () => new TextToSpeech(),
   createTask: () => new CreateTask(),
   completeTask: () => new CompleteTask(),
+  cancelTask: () => new CancelTask(),
   finishTaskStep: () => new FinishTaskStep(),
 };
 

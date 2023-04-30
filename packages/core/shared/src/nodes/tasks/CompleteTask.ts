@@ -4,14 +4,14 @@ import { MagickComponent } from '../../engine';
 import { taskSocket, triggerSocket } from '../../sockets';
 import { AgentTask, MagickNode, MagickWorkerInputs, WorkerData } from '../../types';
 
-const info = 'Cancel a task.';
+const info = 'Complete a task.';
 
 /**
  * A Rete component representing an task deletion node in the visual programming editor.
  */
 export class CompleteTask extends MagickComponent<Promise<{ task: AgentTask }>> {
   constructor() {
-    super('Cancel Task', {
+    super('Complete Task', {
       outputs: {
         task: 'output',
         trigger: 'option',
@@ -27,9 +27,9 @@ export class CompleteTask extends MagickComponent<Promise<{ task: AgentTask }>> 
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
-    const inputList = new Rete.Input('task', 'Task', taskSocket);
+    const task = new Rete.Input('task', 'Task', taskSocket);
 
-    return node.addInput(inputList).addInput(dataInput).addOutput(dataOutput);
+    return node.addInput(dataInput).addOutput(dataOutput).addInput(task);
   }
 
   /**

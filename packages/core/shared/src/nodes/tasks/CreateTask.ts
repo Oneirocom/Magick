@@ -2,7 +2,7 @@
 import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
-import { eventSocket, stringSocket, triggerSocket } from '../../sockets'
+import { eventSocket, stringSocket, taskSocket, triggerSocket } from '../../sockets'
 import {
   AgentTask,
   MagickNode,
@@ -24,7 +24,7 @@ export class CreateTask extends MagickComponent<Promise<{ task: AgentTask }>> {
   constructor() {
     super(
       'Create Task',
-      { outputs: { trigger: 'option', task: 'output' } },
+      { outputs: { task: 'output', trigger: 'option' } },
       'Task',
       info
     )
@@ -48,12 +48,13 @@ export class CreateTask extends MagickComponent<Promise<{ task: AgentTask }>> {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const event = new Rete.Input('event', 'Event', eventSocket)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-
+    const taskOutput = new Rete.Output('task', 'Task', taskSocket)
     return node
       .addInput(dataInput)
       .addInput(objective)
       .addInput(event)
       .addOutput(dataOutput)
+      .addOutput(taskOutput)
   }
 
   /**
@@ -77,7 +78,7 @@ export class CreateTask extends MagickComponent<Promise<{ task: AgentTask }>> {
     const data = {
       objective,
       type: node.data.type,
-      status: 'started',
+      status: 'active',
       eventData: event,
       projectId,
       steps: [],
@@ -85,8 +86,9 @@ export class CreateTask extends MagickComponent<Promise<{ task: AgentTask }>> {
 
     const { app } = context.module
     const taskResponse = await app?.service('tasks').create(data)
+    console.log('taskResponse', taskResponse)
     // get the task data from the response
-    const task = taskResponse?.data as AgentTask
+    const task = taskResponse as AgentTask
     // return the task
     return { task }
   }

@@ -1,12 +1,10 @@
 // DOCUMENTED
 import Rete from 'rete'
-import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import {
-  eventSocket,
   stringSocket,
   taskSocket,
-  triggerSocket,
+  triggerSocket
 } from '../../sockets'
 import {
   AgentTask,
@@ -36,20 +34,28 @@ export class FinishTaskStep extends MagickComponent<Promise<void>> {
    */
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    // Each task step starts with a thought in response to "what do I want to do next?"
     const thought = new Rete.Input('thought', 'Thought', stringSocket)
+    // The skill used to complete the task step (UUID of graph is ideal here)
     const skill = new Rete.Input('skill', 'Skill', stringSocket)
+    // Data from the running task
     const task = new Rete.Input('task', 'Task', taskSocket)
+    // A description of how the agent will use the skill to complete the task step
     const action = new Rete.Input('action', 'Action', stringSocket)
+    // Resulting output of the skill
     const result = new Rete.Input('result', 'Result', stringSocket)
+    // TODO: We can add a reflection step here to evaluate the result and determine if the task step was successful
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-
+    const taskOutput = new Rete.Output('task', 'Task', taskSocket)
     return node
       .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(taskOutput)
+      .addInput(task)
       .addInput(thought)
       .addInput(skill)
-      .addInput(task)
+      .addInput(action)
       .addInput(result)
-      .addOutput(dataOutput)
   }
 
   /**

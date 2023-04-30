@@ -108,6 +108,10 @@ function TaskTable({ tasks, updateCallback }) {
         accessor: 'steps',
       },
       {
+        Header: 'Status',
+        accessor: 'status',
+      },
+      {
         Header: 'Actions',
         Cell: row => (
           <IconButton onClick={() => handleTaskDelete(row.row.original)}>

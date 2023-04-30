@@ -13,8 +13,8 @@ export class CancelTask extends MagickComponent<Promise<{ task: AgentTask }>> {
   constructor() {
     super('Cancel Task', {
       outputs: {
-        task: 'output',
         trigger: 'option',
+        task: 'output',
       },
     }, 'Task', info);
   }
@@ -27,9 +27,12 @@ export class CancelTask extends MagickComponent<Promise<{ task: AgentTask }>> {
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
-    const inputList = new Rete.Input('task', 'Task', taskSocket);
+    const task = new Rete.Input('task', 'Task', taskSocket);
 
-    return node.addInput(inputList).addInput(dataInput).addOutput(dataOutput);
+    return node
+      .addOutput(dataOutput)
+      .addInput(dataInput)
+      .addInput(task);
   }
 
   /**
@@ -40,7 +43,9 @@ export class CancelTask extends MagickComponent<Promise<{ task: AgentTask }>> {
    */
   async worker(node: WorkerData, inputs: MagickWorkerInputs, outputs: any, context: any) {
     try {
+      console.log('inputs', inputs)
       const task = inputs.task[0] as { id: number }
+      console.log('inputs.task[0]', inputs.task[0])
 
       const { app } = context.module;
 
