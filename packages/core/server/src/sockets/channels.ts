@@ -1,16 +1,17 @@
-// DOCUMENTED 
-import '@feathersjs/transport-commons';
-import { HookContext } from '@feathersjs/feathers';
-import { Application } from '../declarations';
+// DOCUMENTED
+import '@feathersjs/transport-commons'
+import { HookContext } from '@feathersjs/feathers'
+import { Application } from '../declarations'
+import { CollectionsOutlined } from '@mui/icons-material'
 
 /**
  * Configure channels for real-time functionality.
  * @param app - The Feathers application instance.
  */
-export default function(app: Application): void {
+export default function (app: Application): void {
   // Return early if no real-time functionality has been configured
   if (typeof app.channel !== 'function') {
-    return;
+    return
   }
 
   /**
@@ -19,8 +20,9 @@ export default function(app: Application): void {
    */
   app.on('connection', (connection: any): void => {
     // Add the new connection to the anonymous channel
-    app.channel('anonymous').join(connection);
-  });
+    // we assume authenticated user here because they handshook to start
+    app.channel('authenticated').join(connection)
+  })
 
   /**
    * Handle user login events.
@@ -30,17 +32,17 @@ export default function(app: Application): void {
   app.on('login', (authResult: any, { connection }: any): void => {
     // Return early if there's no real-time connection (e.g. during REST login)
     if (!connection) {
-      return;
+      return
     }
 
     // Remove the connection from the anonymous channel
-    app.channel('anonymous').leave(connection);
+    app.channel('anonymous').leave(connection)
 
     // Add the connection to the authenticated user channel
-    app.channel('authenticated').join(connection);
+    app.channel('authenticated').join(connection)
 
     // Additional custom channels can be set up and joined here
-  });
+  })
 
   /**
    * Configure event publishers for channels.
@@ -49,8 +51,8 @@ export default function(app: Application): void {
    */
   app.publish((data: any, hook: HookContext) => {
     // Publish all events to the authenticated user channel
-    return app.channel('authenticated');
-  });
+    return app.channel('authenticated')
+  })
 
   // Service-specific event publishers can be added here
 }
