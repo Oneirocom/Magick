@@ -81,7 +81,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
   ): Promise<void> {
     const { projectId } = context;
 
-    const document = inputs['document'][0] as Document;
+    // const document = inputs['document'] ? inputs['document'][0] as Document : null;
     const owner = (inputs['owner'] ? inputs['owner'][0] : null) as string;
     const content = (inputs['content'] ? inputs['content'][0] : null) as string;
     const _embedding = (
@@ -109,11 +109,11 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
       return console.log('Content is null, not storing document');
     }
 
-    console.log('owner is', owner ?? document.owner);
+    console.log('owner is', owner /* ?? document?.owner */ );
 
     const data = {
-      ...document,
-      owner: owner ?? document.owner,
+      // ...document,
+      owner: owner, // ?? document?.owner,
       projectId,
       content,
       type,
