@@ -11,14 +11,12 @@ import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 import { SpellInterface } from '../../schemas'
 import { triggerSocket } from '../../sockets'
-import { SpellManager } from '../../spellManager'
 import {
-  EngineContext,
   MagickNode,
   MagickWorkerInputs,
   ModuleContext,
   ModuleWorkerOutput,
-  WorkerData
+  WorkerData,
 } from '../../types'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
@@ -78,7 +76,8 @@ export class SpellComponent extends MagickComponent<
       const event = pubsub.events.OPEN_TAB
       pubsub.publish(event, {
         type: 'spell',
-        name: node.data.spellId + "-" + encodeURIComponent(btoa(node.data.name)),
+        name:
+          node.data.spellId + '-' + encodeURIComponent(btoa(node.data.name)),
         openNew: false,
       })
     }
@@ -122,7 +121,7 @@ export class SpellComponent extends MagickComponent<
 
     const getPublicVariables = graph => {
       console.log('graph public variables', graph)
-      return (Object.values(graph.nodes || {})).filter(node => {
+      return Object.values(graph.nodes || {}).filter(node => {
         return (node as any).data?.isPublic
       })
     }
@@ -289,52 +288,40 @@ export class SpellComponent extends MagickComponent<
     }, {} as Record<string, unknown>)
   }
 
-  // @ts-ignore
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: { [key: string]: string },
-   _context: ModuleContext
+    _context: ModuleContext
   ) {
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
 
-    const {
-      module,
-    } = _context
+    const { module, spellManager, app } = _context
+    const { publicVariables, agent, secrets } = module
 
-    const {
-      publicVariables,
-      agent,
-      app,
-      secrets
-    } = module
-
-    if (module.agent) {
-      const spellManager = module.agent.spellManager as SpellManager
-      if (spellManager) {
-        const spellRunner = await spellManager.getSpellRunner(
-          node.data.spellId as string
-        )
-        if (spellRunner) {
-          const runComponentArgs = {
-            inputs: flattenedInputs,
-            runSubspell: false,
-            agent: agent,
-            secrets: agent?.secrets ?? secrets,
-            app: module.app,
-            publicVariables: agent?.publicVariables ?? publicVariables,
-          }
-          const outputs = await spellRunner.runComponent(runComponentArgs)
-          return this.formatOutputs(node, outputs as any)
-        } else {
-          console.warn('spell runner not found')
+    if (spellManager) {
+      const spellRunner = await spellManager.getSpellRunner(
+        node.data.spellId as string
+      )
+      if (spellRunner) {
+        const runComponentArgs = {
+          spellId: node.data.spellId as string,
+          inputs: flattenedInputs,
+          runSubspell: false,
+          // we can probably remove agent here since it is in the injected spellManager
+          agent: agent,
+          secrets: agent?.secrets ?? secrets,
+          app,
+          publicVariables: agent?.publicVariables ?? publicVariables,
         }
+        const outputs = await spellManager.run(runComponentArgs)
+        return this.formatOutputs(node, outputs as any)
       } else {
-        console.warn('spell manager not found')
+        throw new Error('spell runner not found')
       }
     } else {
-      console.error('handle me')
+      throw new Error('spell manager not found')
       // if (!runSpell) throw new Error('Magick runSpell not found')
       // const outputs = await runSpell({
       //   inputs: flattenedInputs,
