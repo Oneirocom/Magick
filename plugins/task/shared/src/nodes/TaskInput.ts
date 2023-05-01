@@ -3,6 +3,7 @@ import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
+  AgentTask,
   InputControl,
   MagickComponent,
   MagickNode,
@@ -21,6 +22,8 @@ const info = `The TaskInput component allows you to receive data from the task r
 
 type InputReturn = {
   output: unknown
+  objective: string
+  agentTask: AgentTask
 }
 
 /**
@@ -37,6 +40,7 @@ export class TaskInput extends MagickComponent<InputReturn> {
         outputs: {
           output: 'output',
           agentTask: 'output',
+          objective: 'output',
           trigger: 'option',
         },
       },
@@ -89,6 +93,7 @@ export class TaskInput extends MagickComponent<InputReturn> {
     node.addOutput(new Rete.Output('output', 'Event', eventSocket))
     node.addOutput(new Rete.Output('trigger', 'Trigger', triggerSocket))
     node.addOutput(new Rete.Output('agentTask', 'Task', taskSocket))
+    node.addOutput(new Rete.Output('objective', 'Objective', anySocket))
 
     return node
   }
@@ -128,6 +133,7 @@ export class TaskInput extends MagickComponent<InputReturn> {
     return {
       output,
       agentTask,
+      objective: agentTask.objective,
     }
   }
 }

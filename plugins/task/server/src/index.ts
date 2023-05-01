@@ -1,19 +1,19 @@
-// DOCUMENTED 
-import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core';
-import { app } from '@magickml/server-core';
+// DOCUMENTED
+import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
+import { app } from '@magickml/server-core'
 import { getNodes } from '@magickml/plugin-task-shared'
 
 type StartTaskArgs = {
-  spellRunner: any;
-  agent: any;
-  agentManager: any;
-};
+  spellRunner: any
+  agent: any
+  agentManager: any
+}
 
 /**
  * Class to manage agent tasks.
  */
 class TaskManager {
-  agentManager: any;
+  agentManager: any
 
   /**
    * Constructs a new TaskManager.
@@ -21,14 +21,14 @@ class TaskManager {
    * @param {any} spellRunner - The spell runner used for executing agent tasks.
    */
   constructor(agentManager, spellRunner) {
-    console.log('new task manager created');
-    this.agentManager = agentManager;
+    console.log('new task manager created')
+    this.agentManager = agentManager
     this.agentManager.registerAddAgentHandler(({ agent, agentData }) =>
       this.addAgent({ spellRunner, agent, agentData })
-    );
+    )
     this.agentManager.registerRemoveAgentHandler(({ agent }) =>
       this.removeAgent({ agent })
-    );
+    )
   }
 
   /**
@@ -38,37 +38,48 @@ class TaskManager {
    * @param {any} agentData - Data for the agent.
    */
   addAgent({ spellRunner, agent, agentData }) {
-    if (!agentData) return console.log('No data for this agent', agent.id);
+    if (!agentData) return console.log('No data for this agent', agent.id)
     if (!agentData.data.task_enabled)
-      return console.log('Task is not enabled for this agent');
-    const taskInterval = parseInt(agentData.data.task_interval) * 1000;
-    if (!taskInterval) {
-      return console.error('Task Interval must be a number greater than 0');
-    }
-    const taskHandler = setInterval(async () => {
-      console.log('running task handler');
-      const resp = await spellRunner.runComponent({
-        inputs: {
-          'Input - Task In': {
-            content: 'task',
-            sender: 'task',
-            observer: agent.name,
-            client: 'task',
-            channel: 'auto',
-            channelType: 'task',
-            projectId: agent.projectId,
-            entities: [],
-          },
+      return console.log('Task is not enabled for this agent')
+    const taskHandler = async () => {
+      // Don't run this function if it has been deleted
+      if (!agent.taskHandler)
+        return console.log('No task handler')
+
+      // get all tasks for this agent
+      const tasks = await app.service('tasks').find({
+        query: {
+          agentId: agent.id,
+          projectId: agent.projectId,
+          status: 'active',
         },
-        agent,
-        secrets: agent.secrets,
-        publicVariables: agent.publicVariables,
-        app
-      });
-      console.log('output is', resp);
-    }, taskInterval);
-    agent.taskHandler = taskHandler;
-    console.log('Added agent to task', agent.id);
+      })
+
+      console.log('tasks are', tasks)
+      const taskArray = tasks.data || []
+      // iterate over all tasks
+      for (const task of taskArray) {
+        const resp = await spellRunner.runComponent({
+          inputs: {
+            [`Input - Task (${task.type})`]: {
+              event: task.eventData,
+              task,
+            },
+          },
+          agent,
+          secrets: agent.secrets,
+          publicVariables: agent.publicVariables,
+          app,
+        })
+        console.log('output is', resp)
+      }
+      console.log('Finished task handler, calling next frame')
+
+      setTimeout(() => agent.taskHandler, 1)
+    }
+    agent.taskHandler = taskHandler
+    // start the taskHandler
+    setTimeout(() => agent.taskHandler, 1)
   }
 
   /**
@@ -76,10 +87,10 @@ class TaskManager {
    * @param {any} agent - Agent to remove.
    */
   removeAgent({ agent }) {
-    const _agent = this.agentManager.getAgent({ agent });
-    if (!_agent || !agent.taskHandler) return;
-    clearInterval(agent.taskHandler);
-    delete agent.taskHandler;
+    const _agent = this.agentManager.getAgent({ agent })
+    if (!_agent || !agent.taskHandler) return
+    clearInterval(agent.taskHandler)
+    delete agent.taskHandler
   }
 }
 
@@ -88,18 +99,18 @@ class TaskManager {
  * @return {object} - The agent methods object.
  */
 function getAgentMethods() {
-  let taskManager: TaskManager | null = null;
+  let taskManager: TaskManager | null = null
   return {
     start: async ({ spellRunner, agent, agentManager }: StartTaskArgs) => {
-      if (!taskManager) taskManager = new TaskManager(agentManager, spellRunner);
-      taskManager.addAgent({ spellRunner, agent, agentData: agent.data });
+      if (!taskManager) taskManager = new TaskManager(agentManager, spellRunner)
+      taskManager.addAgent({ spellRunner, agent, agentData: agent.data })
     },
-    stop: async ({agent}) => {
-      if (!taskManager) return console.error('Task Manager not initialized');
-      taskManager.removeAgent({ agent });
-      return console.log('Stopping task manager');
+    stop: async ({ agent }) => {
+      if (!taskManager) return console.error('Task Manager not initialized')
+      taskManager.removeAgent({ agent })
+      return console.log('Stopping task manager')
     },
-  };
+  }
 }
 
 const inputSockets = [
@@ -113,13 +124,13 @@ const inputSockets = [
     name: 'trigger',
     type: triggerSocket,
   },
-];
+]
 
 const TaskPlugin = new ServerPlugin({
   name: 'TaskPlugin',
   agentMethods: getAgentMethods(),
   inputTypes: [{ name: 'Task In', sockets: inputSockets }],
-  nodes: getNodes()
-});
+  nodes: getNodes(),
+})
 
-export default TaskPlugin;
+export default TaskPlugin

@@ -21,25 +21,17 @@ const taskEventSchema = Type.Object(
   eventSchemaPrototype
 )
 
-const taskStepSchema = Type.Object(
-  {
-    timestamp: Type.Optional(Type.String()),
-    thought: Type.Optional(Type.String()),
-    skill: Type.Optional(Type.String()),
-    action: Type.Optional(Type.String()),
-    result: Type.Optional(Type.String()),
-  })
-
 // Define the taskSchema
 export const taskSchema = Type.Object(
   {
     id: Type.String(),
     type: Type.String(),
+    agentId: Type.String(),
     projectId: Type.String(),
     status: Type.String(),
     objective: Type.Optional(Type.String()),
     eventData: Type.Optional(taskEventSchema),
-    steps: Type.String(),
+    steps: Type.String(), // TODO: type this as json, for now its stringified
   },
   { $id: 'Task', additionalProperties: false }
 )
@@ -50,7 +42,7 @@ export const taskExternalResolver = resolve<Task, HookContext>({})
 // Define the taskDataSchema to create new entries
 export const taskDataSchema = Type.Pick(
   taskSchema,
-  ['type', 'projectId', 'status', 'objective', 'eventData', 'steps'],
+  ['type', 'agentId', 'projectId', 'status', 'objective', 'eventData', 'steps'],
   {
     $id: 'TaskData',
   }
@@ -78,6 +70,7 @@ export const taskPatchResolver = resolve<Task, HookContext>({})
 export const taskQueryProperties = Type.Pick(taskSchema, [
   'id',
   'type',
+  'agentId',
   'projectId',
   'status',
   'objective',
