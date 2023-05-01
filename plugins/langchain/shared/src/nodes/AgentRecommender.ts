@@ -21,9 +21,9 @@ import soundex from "wink-nlp-utils/src/string-soundex.js"
 
 const info = 'Select an agent based on the input prompt.';
 
-type InputReturn = {
-    embedding: any;
-};
+// type InputReturn = {
+//     embedding: any;
+// };
 
 // Create the nlp model for tokenizer and soundbox
 const nlp = winkNLP(model);

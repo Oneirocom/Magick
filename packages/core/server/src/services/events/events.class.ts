@@ -75,7 +75,7 @@ export class EventService<
         for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
         const f32_ary = new Float32Array(ary_buf)
         const query = f32_ary as unknown as number[]
-        const { $limit: _, ...param } = params.query
+        const { ...param } = params.query
 
         const search_result = await vectordb.extractMetadataFromResults(
           query,
@@ -87,7 +87,7 @@ export class EventService<
         }
       }
       //@ts-ignore
-      const { $limit: _, ...param } = params
+      const { ...param } = params
       const tr = await vectordb.getDataWithMetadata(param, 10)
       return { events: tr }
     } else {
@@ -97,8 +97,8 @@ export class EventService<
         const dv = new DataView(ary_buf)
         for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
         const f32_ary = new Float32Array(ary_buf)
-        const query = f32_ary as unknown as number[]
-        const { $limit: _, ...param } = params.query
+        // const query = f32_ary as unknown as number[]
+        const { ...param } = params.query
         const querys = await db('events')
           .select('*')
           .where({
@@ -111,11 +111,11 @@ export class EventService<
             ...(param.content && { content: param.content }),
           })
           .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
-        const result = await db.raw(
-          `select * from events order by embedding <-> ${
-            "'[" + f32_ary.toString() + "]'"
-          } limit 1;`
-        )
+        // const result = await db.raw(
+        //   `select * from events order by embedding <-> ${
+        //     "'[" + f32_ary.toString() + "]'"
+        //   } limit 1;`
+        // )
         const bod = {
           query_embedding: '[' + f32_ary.toString() + ']',
           match_count: 2,

@@ -1,6 +1,5 @@
 // DOCUMENTED 
 import { hooks as schemaHooks } from '@feathersjs/schema';
-import os from 'os';
 import pgvector from 'pgvector/pg';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -22,11 +21,11 @@ import { DATABASE_TYPE } from '@magickml/core'
 export * from './events.class';
 export * from './events.schema';
 
-const cpuCore = os.cpus();
+// const cpuCore = os.cpus();
 
-const isM1 =
-  cpuCore[0].model.includes('Apple M1') || cpuCore[0].model.includes('Apple M2');
-const isWindows = os.platform() === 'win32';
+// const isM1 =
+//   cpuCore[0].model.includes('Apple M1') || cpuCore[0].model.includes('Apple M2');
+// const isWindows = os.platform() === 'win32';
 
 // Null array with 1536 values
 const nullArray = new Array(1536).fill(0);
@@ -36,7 +35,7 @@ const nullArray = new Array(1536).fill(0);
  * @param app {Application}
  */
 export const event = (app: Application) => {
-  const db = app.get('dbClient');
+  // const db = app.get('dbClient');
 
   // Register our service on the Feathers application
   app.use('events', new EventService(getOptions(app)), {

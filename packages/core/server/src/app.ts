@@ -36,7 +36,6 @@ import {
   ExtendedEmbeddings,
 } from './vectordb'
 import { PluginEmbeddings } from './customEmbeddings'
-import type { Knex } from 'knex'
 
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())

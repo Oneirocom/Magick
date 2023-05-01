@@ -8,14 +8,10 @@ import { DATABASE_TYPE } from '@magickml/core'
 const nullArray = new Array(1536).fill(0);
 
 import {
-  documentDataResolver,
-  documentDataValidator,
-  documentExternalResolver,
   documentPatchResolver,
   documentPatchValidator,
   documentQueryResolver,
   documentQueryValidator,
-  documentResolver
 } from './documents.schema';
 
 import { Application, HookContext } from '../../declarations';
