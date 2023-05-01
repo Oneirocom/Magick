@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 jobs:
   eslint:
+    name: ESLint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
