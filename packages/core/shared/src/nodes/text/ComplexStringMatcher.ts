@@ -67,11 +67,13 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     const stringMinLength = new NumberControl({
       dataKey: 'stringMinLength',
       name: 'Minimum String Length (0 to ignore)',
+      defaultValue: 0,
     })
 
     const stringMaxLength = new NumberControl({
       dataKey: 'stringMaxLength',
       name: 'Maximum String Length (0 to ignore)',
+      defaultValue: 0,
     })
 
     node.inspector
