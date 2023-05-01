@@ -51,11 +51,7 @@ export class RunSpell extends MagickComponent<Promise<WorkerReturn>> {
    */
   builder(node: MagickNode) {
     const spellInput = new Rete.Input('spell', 'Spell', objectSocket)
-    const argumentsInput = new Rete.Input(
-      'arguments',
-      'Arguments',
-      objectSocket
-    )
+    const inputsInput = new Rete.Input('inputs', 'Inputs', objectSocket)
 
     const triggerInput = new Rete.Input(
       'trigger',
@@ -69,7 +65,7 @@ export class RunSpell extends MagickComponent<Promise<WorkerReturn>> {
     return node
       .addInput(triggerInput)
       .addInput(spellInput)
-      .addInput(argumentsInput)
+      .addInput(inputsInput)
       .addOutput(dataOutput)
       .addOutput(outp)
   }
@@ -83,19 +79,19 @@ export class RunSpell extends MagickComponent<Promise<WorkerReturn>> {
    */
   async worker(
     node: WorkerData,
-    inputs: MagickWorkerInputs,
+    _inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<WorkerReturn> {
-    const spell = inputs.spell[0] as SpellInterface
-    const args = inputs.arguments[0] as object
+    const spell = _inputs.spell[0] as SpellInterface
+    const inputs = _inputs.inputs[0] as object
 
     const { module, spellManager, app } = context
     const { publicVariables, agent, secrets } = module
 
     const runComponentArgs = {
       spellId: spell.id,
-      inputs: args as MagickSpellInput,
+      inputs: inputs as MagickSpellInput,
       runSubspell: false,
       // we can probably remove agent here since it is in the injected spellManager
       agent: agent,
