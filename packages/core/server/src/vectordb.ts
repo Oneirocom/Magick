@@ -664,12 +664,13 @@ export class HNSWLib extends SaveableVectorStore {
       })
       return
     }
+    console.log("TEXT", text)
     const vector = await (this.embeddings as ExtendedEmbeddings).embedQueryWithMeta(text, args)
     const insert_data = [
       {
         embedding: vector,
         data: {
-          metadata: { ...metadata, embedding: vector } || { msg: 'Empty Data' },
+          metadata: { ...metadata, embedding: vector, content: text  } || { msg: 'Empty Data' },
           pageContent: text || 'No Content in the Event',
         },
       },

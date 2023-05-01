@@ -564,7 +564,7 @@ export class DiscordConnector {
       }
 
       if (!content.startsWith('!ping')) {
-        // let values = ''
+        // const values = ''
         const msgs = await channel.messages.fetch({ limit: 10 })
         if (msgs && msgs.size > 0) {
           for (const [value] of msgs.entries()) {
@@ -680,7 +680,7 @@ export class DiscordConnector {
     //     'Input - Discord (Text)': {
     //       content: content,
     //       sender: message.author.username,
-    //       observer: this.discord_bot_name,
+    //       observer: this.discord_bot_name || "Eliza",
     //       client: 'discord',
     //       channel: message.channel.id,
     //       agentId: this.agent.id,
