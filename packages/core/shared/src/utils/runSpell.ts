@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { SpellRunner } from '../spellManager/index'
+import { SpellManager, SpellRunner } from '../spellManager/index'
 import { GraphData } from '../types'
 import { SpellInterface } from '../schemas'
 import { SpellError } from './SpellError'
@@ -13,7 +13,7 @@ export type RunSpellArgs = {
   inputs?: Record<string, unknown>
   inputFormatter?: (graph: GraphData) => Record<string, unknown>
   projectId: string
-  secrets?: Record<string, string>
+  secrets: Record<string, string>
   publicVariables?: Record<string, unknown>
   app?: any
 }
@@ -66,16 +66,15 @@ export const runSpell = async ({
   const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs
 
   // Clone the spell to run
-  const spellToRun = { ...spell }
+  const spellToRun = { ...spell } as SpellInterface
 
-  // Initialize the spell runner
-  const spellRunner = new SpellRunner({ app })
+  const spellManager = new SpellManager({ app })
 
-  // Load the spell into the spell runner
-  await spellRunner.loadSpell(spellToRun as unknown as SpellInterface)
+  spellManager.load(spellToRun)
 
   // Get the outputs from running the spell
-  const outputs = (await spellRunner.runComponent({
+  const outputs = (await spellManager.run({
+    spellId: spellToRun.id,
     inputs: formattedInputs as Record<string, any>,
     secrets,
     publicVariables,
