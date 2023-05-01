@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Button, Modal } from '@magickml/client-core';
+import { Modal } from '@magickml/client-core';
 import TextField from '@mui/material/TextField';
 import DatePicker from '@mui/lab/DatePicker';
 import { Backdrop, CircularProgress } from '@mui/material';
-import {convertFileToText, numberOfPages} from './documentconvert'
+import { convertFileToText } from './documentconvert'
 
 const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }) => {
   const [loading, setLoading] = useState(false);

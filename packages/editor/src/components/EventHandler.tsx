@@ -333,7 +333,6 @@ const EventHandler = ({ pubSub, tab }) => {
     client.service('spell-runner').create(data)
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,

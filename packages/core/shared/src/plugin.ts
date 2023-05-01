@@ -84,7 +84,6 @@ export class ClientPlugin extends Plugin {
   clientPageLayout?: PageLayout
   clientRoutes?: Array<PluginClientRoute>
   spellTemplates?: SpellInterface[]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   projectTemplates?: any[]
   constructor({
     name,
@@ -105,7 +104,6 @@ export class ClientPlugin extends Plugin {
     clientRoutes?: Array<PluginClientRoute>
     drawerItems?: Array<PluginDrawerItem>
     spellTemplates?: SpellInterface[]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     projectTemplates?: any[]
   }) {
     super({
@@ -144,9 +142,7 @@ export class ServerPlugin extends Plugin {
     outputTypes = [],
     serverInit = () => null,
     agentMethods = {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       start: () => { /* null */},
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       stop: () => { /* null */},
     },
     serverRoutes = [],
@@ -298,7 +294,6 @@ export class ClientPluginManager extends PluginManager {
   }
 
   getProjectTemplates() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const projectTemplates = [] as any[]
     ;(this.pluginList as ClientPlugin[]).forEach((plugin: ClientPlugin) => {
       plugin.projectTemplates?.forEach(projectTemplate => {
@@ -386,11 +381,9 @@ export class ClientPluginManager extends PluginManager {
     return pluginList
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getAgentStartMethods(): Record<string, (args: any) => void | Promise<void>> {
     return {}
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getAgentStopMethods(): Record<string, (args: any) => void | Promise<void>> {
     return {}
   }
@@ -417,7 +410,6 @@ export class ServerPluginManager extends PluginManager {
   }
 
   getAgentStartMethods() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let agentStartMethods: Record<string, (args: any) => void | Promise<void>> =
       {}
     this.pluginList.forEach((plugin: ServerPlugin) => {
@@ -431,7 +423,6 @@ export class ServerPluginManager extends PluginManager {
   }
 
   getAgentStopMethods() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let agentStopMethods: Record<string, (args: any) => void | Promise<void>> =
       {}
     this.pluginList.forEach((plugin: ServerPlugin) => {

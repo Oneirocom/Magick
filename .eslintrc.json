@@ -1,6 +1,10 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*"],
+  "ignorePatterns": [
+    "**/*",
+    "**/node_modules/**",
+    "**/*.d.ts"
+  ],
   "plugins": ["@nrwl/nx"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off"
@@ -24,16 +28,29 @@
               }
             ]
           }
-        ]
+        ],
+        "@typescript-eslint/ban-types": "off"
       }
     },
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript"],
       "rules": {
-        "no-extra-semi": "off",
         "@typescript-eslint/no-extra-semi": "off",
-        "@typescript-eslint/no-explicit-any": "off"
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/no-unused-expressions": "off",
+        "no-extra-semi": "off",
+        "react-hooks/exhaustive-deps": "off",
+        "react/jsx-no-useless-fragment": "off",
+        "no-param-reassign": "off",
+        "no-case-declarations": "off",
+        "no-prototype-builtins": "off",
+        "prefer-rest-params": "off"
       }
     },
     {

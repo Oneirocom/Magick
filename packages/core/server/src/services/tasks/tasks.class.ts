@@ -29,7 +29,6 @@ export class TaskService<
    * @param {TaskData} data - The task data object.
    * @returns {Promise<any>} - The created task data.
    */
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: TaskData): Promise<any> {
     if (DATABASE_TYPE == 'pg') {
@@ -63,7 +62,6 @@ export class TaskService<
    * @param {ServiceParams} [params] - The query parameters for the search.
    * @returns {Promise<any>} - The search results.
    */
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async find(params?: ServiceParams) {
     const db = app.get('dbClient')

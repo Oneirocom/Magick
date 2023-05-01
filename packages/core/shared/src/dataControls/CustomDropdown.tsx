@@ -24,7 +24,6 @@ export default function CustomDropdown(props: { title: string, data: string[] })
   )
 }  
 
-/* eslint-disable import/no-anonymous-default-export, @typescript-eslint/no-unused-vars */
 /*
   We disable @typescript-eslint/no-unused-vars because `props` is actually used in this Component
 */

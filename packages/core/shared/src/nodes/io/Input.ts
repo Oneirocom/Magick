@@ -138,8 +138,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
      // Set the default name if there is none
      if(!node.data.name) {
-      
-       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
        node.data.name ?? `Input - ${inputTypes[0].name}`
      }
 

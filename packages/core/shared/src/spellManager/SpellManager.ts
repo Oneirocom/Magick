@@ -1,6 +1,6 @@
 import io from 'socket.io'
 
-import { EngineContext, MagickSpellInput, SpellInterface } from '../types'
+import { MagickSpellInput, SpellInterface } from '../types'
 import SpellRunner from './SpellRunner'
 
 type SpellManagerArgs = {

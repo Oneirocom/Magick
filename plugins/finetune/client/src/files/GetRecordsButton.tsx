@@ -6,11 +6,11 @@
  * @param purpose - purpose of the OpenAI request
  * @returns React Component
  */
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { OpenAI } from "../types/openai";
-import useUploadFile, { Enforce, MimeTypes } from "./useUploadFile";
+import { Enforce, MimeTypes } from "./useUploadFile";
 import Button from "@mui/material/Button";
-import { DEFAULT_PROJECT_ID, API_ROOT_URL, TRUSTED_PARENT_URL, UNTRUSTED_IFRAME } from '@magickml/core'
+import { DEFAULT_PROJECT_ID, API_ROOT_URL } from '@magickml/core'
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import axios from "axios";
 import { extractPromptsAndCompletions } from "../documents/documentLoader";
@@ -27,7 +27,7 @@ export default function GetRecordsButton({ enforce, purpose }: Props) {
     console.log(headers)
     const inputRef = useRef<HTMLInputElement>(null);
     //const { isLoading, uploadFile } = useUploadFile(purpose, enforce);
-    const { isLoading, documentLoad} = useDocument(purpose, enforce);
+    const { documentLoad} = useDocument(purpose, enforce);
     /**
      * Calls the upload function when the user selects a file
      */

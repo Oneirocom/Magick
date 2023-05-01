@@ -140,17 +140,14 @@ export type CompletionBody = {
   presencePenalty: number
   frequencyPenalty: number
   // TODO: Type not used anywhere
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   stop: any
   apiKey?: string
 }
 
 export type CompletionResponse = {
   // TODO: Type not used anywhere
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   success: any
   // TODO: Type not used anywhere
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   choice: any
 }
 
@@ -263,7 +260,6 @@ export type PubSubEvents = {
 
 export interface PubSubContext {
   publish: (event: string, data?: PubSubData) => boolean
-  // eslint-disable-next-line @typescript-eslint/ban-types
   subscribe(
     event: string,
     func: PubSubJS.SubscriptionListener<PubSubData>
@@ -526,7 +522,6 @@ export type CompletionSocket = {
   type: Socket
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface DataControlImplementation extends DataControl {
   new (control: CompletionInspectorControls): DataControl
 }
@@ -592,7 +587,7 @@ export type EmbeddingData = {
   apiKey: string
 }
 
-type Spell = {
+export type Spell = {
   id: string
   name: string
   projectId: string
@@ -677,7 +672,6 @@ export interface ModuleOptions {
   hide?: boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Middleware = (ctx: Koa.Context, next: any) => any
 
 export type Method =
@@ -691,7 +685,6 @@ export type Method =
   | 'trace'
   | 'patch'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Handler = (ctx: Koa.Context) => any
 
 export type Route = {

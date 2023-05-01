@@ -20,7 +20,6 @@ export type ApiParams = Params<ApiQuery>;
 
 /** Type for API GET Response */
 export type ApiGetResponse = {
-  // eslint-disable-next-line @typescript-eslint/ban-types
   result: Object;
 };
 

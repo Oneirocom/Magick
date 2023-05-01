@@ -9,7 +9,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["plugin/qa-server/**/*.ts"]
+        "lintFilePatterns": ["plugins/qa/server/**/*.ts"]
       }
     },
     "test": {

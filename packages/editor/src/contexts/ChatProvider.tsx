@@ -77,8 +77,6 @@ const ChatProvider = ({ children }) => {
   }
 
   const buildEditor = async (container, _spell, tab, magick) => {
-    // eslint-disable-next-line no-console
-
     const newEditor = await initEditor({
       container,
       pubSub,

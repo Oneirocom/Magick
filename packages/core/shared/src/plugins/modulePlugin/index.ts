@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations */
 import { Socket } from 'rete/types'
 import { WorkerInputs, WorkerOutputs } from 'rete/types/core/data'
 
@@ -18,8 +17,6 @@ import {
 import { Module } from './module'
 import { ModuleManager } from './module-manager'
 import { addIO, removeIO } from './utils'
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-
 
 export interface ModuleIRunContextEditor extends IRunContextEditor {
   moduleManager: ModuleManager
@@ -211,8 +208,7 @@ function install(
           }
 
           component.builder = async node => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+            // @ts-ignore
             if (!component.noBuildUpdate) component.updateModuleSockets(node)
             await builder.call(component, node)
           }

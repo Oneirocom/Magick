@@ -32,7 +32,6 @@ export class DocumentService<
    * @return {Promise<any>} The created document
    */
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
     if (DATABASE_TYPE == 'pg'){

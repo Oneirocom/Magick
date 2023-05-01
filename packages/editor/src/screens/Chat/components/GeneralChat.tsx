@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack'
 import { SingleChat } from "./Chat/SingleChat";
 import { Navbar } from "./Mobile/Navbar";
 import { Sidebar } from "./Sidebar/Sidebar";
-import { ChatBody, Conversation, KeyValuePair, Message } from "../../../types";
+import { Conversation, KeyValuePair, Message } from "../../../types";
 import { cleanConversationHistory, cleanSelectedConversation } from "../../../utils/app/clean";
 import { saveConversation, saveConversations, updateConversation } from "../../../utils/app/conversation";
 import { exportConversations, importConversations } from "../../../utils/app/data";
@@ -13,9 +13,7 @@ import styles from './chat.module.css';
 import { Spell } from '@magickml/core'
 
 import {
-    useDeleteSpellMutation,
-    useGetSpellsQuery,
-    useNewSpellMutation,
+    useGetSpellsQuery
 } from '../../../state/api/spells'
 import { useConfig } from '../../../contexts/ConfigProvider'
 import EventHandler from './EventHandler'
@@ -30,11 +28,11 @@ export default function GeneralChat() {
     const [messageIsStreaming, setMessageIsStreaming] = useState<boolean>(false);
     const [showSidebar, setShowSidebar] = useState<boolean>(true);
     const [messageError, setMessageError] = useState<boolean>(false);
-    const [chatError, setChatError] = useState<boolean>(false);
+    const [chatError] = useState<boolean>(false);
     const [chatwindowGraph, setChatwindowGraph] = useState(null)
     const stopConversationRef = useRef<boolean>(false);
     const pubSub = usePubSub()
-    const { publish, subscribe, events } = pubSub;
+    const { subscribe, events } = pubSub;
 
     const { enqueueSnackbar } = useSnackbar()
     const config = useConfig()
@@ -65,7 +63,7 @@ export default function GeneralChat() {
     const FeathersContext = useFeathers()
     const client = FeathersContext.client
 
-    const { $PLAYTEST_PRINT, $RUN_SPELL } = events
+    const { $PLAYTEST_PRINT } = events
 
     const printToConsole = useCallback(
         (_, _text) => {
