@@ -11,7 +11,7 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleContext,
-  WorkerData
+  WorkerData,
 } from '../../types'
 
 /** Component info text */
@@ -109,7 +109,6 @@ export class Output extends MagickComponent<void> {
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<{ output: string }> {
-    console.log('***** CALLING OUTPUT WORKER')
     const inputName = Object.keys(context.data)[0]
 
     if (!inputs.input) {
@@ -121,8 +120,7 @@ export class Output extends MagickComponent<void> {
     const outputType = node.data.outputType
     const output = (inputs.input.filter(Boolean)[0] ?? '') as string
     const event =
-      inputs.event?.[0] ||
-      (data && (Object.values(data)[0] as unknown[]))
+      inputs.event?.[0] || (data && (Object.values(data)[0] as unknown[]))
 
     if (module.agent) {
       if (outputType && (outputType as string).includes('Default')) {
@@ -135,7 +133,6 @@ export class Output extends MagickComponent<void> {
           t => t.name === responseOutputType
         )
 
-        console.log('******** CALLING HANDLER')
         t.handler({
           output,
           agent: module.agent,
