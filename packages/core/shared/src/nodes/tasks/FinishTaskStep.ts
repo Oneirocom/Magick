@@ -23,9 +23,9 @@ const info = 'Finish the current step of the task'
 /**
  * CreateTask class that extends MagickComponent
  */
-export class FinishTaskStep extends MagickComponent<Promise<{ task: AgentTask }>> {
+export class FinishTaskStep extends MagickComponent<Promise<{ agentTask: AgentTask }>> {
   constructor() {
-    super('Finish Task Step', { outputs: { trigger: 'option', task: 'output' } }, 'Task', info)
+    super('Finish Task Step', { outputs: { trigger: 'option', agentTask: 'output' } }, 'Task', info)
   }
 
   /**
@@ -39,14 +39,14 @@ export class FinishTaskStep extends MagickComponent<Promise<{ task: AgentTask }>
     // The skill used to complete the task step (UUID of graph is ideal here)
     const skill = new Rete.Input('skill', 'Skill', stringSocket)
     // Data from the running task
-    const task = new Rete.Input('task', 'Task', taskSocket)
+    const task = new Rete.Input('agentTask', 'Task', taskSocket)
     // A description of how the agent will use the skill to complete the task step
     const action = new Rete.Input('action', 'Action', stringSocket)
     // Resulting output of the skill
     const result = new Rete.Input('result', 'Result', stringSocket)
     // TODO: We can add a reflection step here to evaluate the result and determine if the task step was successful
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const taskOutput = new Rete.Output('task', 'Task', taskSocket)
+    const taskOutput = new Rete.Output('agentTask', 'Task', taskSocket)
     return node
       .addInput(dataInput)
       .addInput(task)
@@ -71,7 +71,7 @@ export class FinishTaskStep extends MagickComponent<Promise<{ task: AgentTask }>
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ) {
-    const task = inputs['task'][0] as AgentTask
+    const task = inputs['agentTask'][0] as AgentTask
     const thought = inputs['thought'][0] as string
     const skill = inputs['skill'][0] as string
     const action = inputs['action'][0] as string
@@ -80,24 +80,22 @@ export class FinishTaskStep extends MagickComponent<Promise<{ task: AgentTask }>
     console.log('task.steps', task.steps)
 
     const step = {
-      timestamp: Date.now(),
-      input: task,
       thought,
       action,
       skill,
       result,
     }
 
+    const steps = JSON.parse(task.steps || '[]')
+
     // push the step to the task
-    task.steps.push(step)
+    steps.push(step)
 
     const { app } = context.module
     // call feathers task service to update the task
-    const taskResult = await app?.service('tasks').patch(task.id, {
-      step,
-    })
+    const taskResult = await app?.service('tasks').patch(task.id, {steps: JSON.stringify(steps)})
     return {
-      task: taskResult,
+      agentTask: taskResult,
     }
   }
 }
