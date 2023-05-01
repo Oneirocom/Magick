@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { AgentInterface, WorldManager } from '@magickml/core'
+import { Agent, WorldManager } from '@magickml/core'
 import Discord, {
   AttachmentBuilder,
   ChannelType,
@@ -28,7 +28,7 @@ interface UserObject {
 }
 export class DiscordConnector {
   client = Discord.Client as any
-  agent: AgentInterface
+  agent: Agent
   spellRunner: any = null
   discord_wake_words: string[] = []
   discord_userid = ''
@@ -141,35 +141,31 @@ export class DiscordConnector {
             }
           })()
         }
-        this.client.on(
-          'joinvc',
-          async (textChannel) =>{
-            let connection
-            const { recognizeSpeech: _recognizeSpeech } =
-                  await import('./discord-voice')
-                recognizeSpeech = _recognizeSpeech
-            if (this.use_voice) {
-              connection =recognizeSpeech(textChannel, this.client)
-              textChannel.send("Joined " + textChannel.name)
-            } else {
-              textChannel.send("Voice is disabled")
-            }
-            return connection
+        this.client.on('joinvc', async textChannel => {
+          let connection
+          const { recognizeSpeech: _recognizeSpeech } = await import(
+            './discord-voice'
+          )
+          recognizeSpeech = _recognizeSpeech
+          if (this.use_voice) {
+            connection = recognizeSpeech(textChannel, this.client)
+            textChannel.send('Joined ' + textChannel.name)
+          } else {
+            textChannel.send('Voice is disabled')
           }
-        )
-        this.client.on(
-          'leavevc',
-          async (voiceChannel, textChannel) =>{
-            const {stopSpeechClient : stopSpeechClient } =
-                  await import('./discord-voice')
-            if (this.use_voice) {
-              stopSpeechClient(voiceChannel, this.client)
-              textChannel.send("Leaving  " + voiceChannel.name)
-            } else {
-              textChannel.send("Voice is disabled")
-            }
+          return connection
+        })
+        this.client.on('leavevc', async (voiceChannel, textChannel) => {
+          const { stopSpeechClient: stopSpeechClient } = await import(
+            './discord-voice'
+          )
+          if (this.use_voice) {
+            stopSpeechClient(voiceChannel, this.client)
+            textChannel.send('Leaving  ' + voiceChannel.name)
+          } else {
+            textChannel.send('Voice is disabled')
           }
-        )
+        })
         this.client.on(
           'messageCreate',
           this.messageCreate.bind(null, this.client)
@@ -195,17 +191,18 @@ export class DiscordConnector {
         ;(async () => {
           try {
             const login = await this.client.login(token)
-            console.log('Discord client logged in', login)
+            // console.log('Discord client logged in', login)
+            agent.log('Discord client logged in', { login })
           } catch (e) {
-            return console.error('Error logging in discord client', e)
+            return agent.error('Error logging in discord client', e)
           }
 
           this.client.on('error', err => {
-            console.error('Discord client error', err)
+            agent.error('Discord client error', err)
           })
         })()
       } catch (e) {
-        console.error('Error creating discord client', e)
+        agent.error('Error creating discord client', e)
       }
     }
   }
