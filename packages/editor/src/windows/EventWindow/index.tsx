@@ -2,7 +2,7 @@
 import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useConfig } from '../../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 import EventTable from './EventTable'
 
 /**

@@ -1,8 +1,14 @@
 // DOCUMENTED 
+import {
+  AgentTask,
+  MagickComponent, 
+  MagickNode,
+  MagickWorkerInputs,
+  WorkerData,
+  taskSocket,
+  triggerSocket
+} from '@magickml/core';
 import Rete from 'rete';
-import { MagickComponent } from '../../engine';
-import { taskSocket, triggerSocket } from '../../sockets';
-import { AgentTask, MagickNode, MagickWorkerInputs, WorkerData } from '../../types';
 
 const info = 'Complete a task.';
 

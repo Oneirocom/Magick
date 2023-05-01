@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import Chat from "./Chat"
 import { useSelector } from 'react-redux'
-import { useConfig } from '../../../../../../packages/editor/src/contexts/ConfigProvider'
+import { useConfig } from '../../../../../../packages/core/client/src/providers/ConfigProvider'
 import { IGNORE_AUTH } from '../../../../../../packages/core/shared/src'
 import styles from "../../App.module.css"
 

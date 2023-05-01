@@ -17,7 +17,7 @@ import {
     useGetSpellsQuery,
     useNewSpellMutation,
 } from '../../../state/api/spells'
-import { useConfig } from '../../../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 import EventHandler from './EventHandler'
 import { usePubSub } from '../../../contexts/PubSubProvider'
 import { useFeathers } from '../../../contexts/FeathersProvider'

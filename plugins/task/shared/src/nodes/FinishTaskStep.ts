@@ -1,19 +1,17 @@
 // DOCUMENTED
 import Rete from 'rete'
-import { MagickComponent } from '../../engine'
 import {
+  MagickComponent,
   stringSocket,
   taskSocket,
-  triggerSocket
-} from '../../sockets'
-import {
+  triggerSocket,
   AgentTask,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleContext,
   WorkerData,
-} from '../../types'
+} from '@magickml/core'
 
 /**
  * Information about the CreateTask class
@@ -23,9 +21,16 @@ const info = 'Finish the current step of the task'
 /**
  * CreateTask class that extends MagickComponent
  */
-export class FinishTaskStep extends MagickComponent<Promise<{ agentTask: AgentTask }>> {
+export class FinishTaskStep extends MagickComponent<
+  Promise<{ agentTask: AgentTask }>
+> {
   constructor() {
-    super('Finish Task Step', { outputs: { trigger: 'option', agentTask: 'output' } }, 'Task', info)
+    super(
+      'Finish Task Step',
+      { outputs: { trigger: 'option', agentTask: 'output' } },
+      'Task',
+      info
+    )
   }
 
   /**
@@ -93,7 +98,9 @@ export class FinishTaskStep extends MagickComponent<Promise<{ agentTask: AgentTa
 
     const { app } = context.module
     // call feathers task service to update the task
-    const taskResult = await app?.service('tasks').patch(task.id, {steps: JSON.stringify(steps)})
+    const taskResult = await app
+      ?.service('tasks')
+      .patch(task.id, { steps: JSON.stringify(steps) })
     return {
       agentTask: taskResult,
     }
