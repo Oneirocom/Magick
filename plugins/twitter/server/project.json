@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugin/twitter-server/**/*.ts"
+          "plugins/twitter/server/**/*.ts"
         ]
       }
     },

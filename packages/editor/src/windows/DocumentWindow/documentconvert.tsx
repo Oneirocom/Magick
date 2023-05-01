@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf.min.js'
 import * as Tesseract from 'tesseract.js';
 import * as mammoth from 'mammoth';
@@ -21,7 +19,7 @@ export async function convertFileToText(file: File, ocrConfig?: OCRConfig): Prom
         case 'doc':
         case 'docx':
             return await convertWordToText(file);
-        case 'xls':
+        // case 'xls':
         /*  case 'xlsx':
              return await convertExcelToText(file); */
         /* case 'ppt':

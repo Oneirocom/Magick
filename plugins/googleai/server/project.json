@@ -9,7 +9,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["plugin/googleai-server/**/*.ts"]
+        "lintFilePatterns": ["plugins/googleai/server/**/*.ts"]
       }
     },
     "test": {

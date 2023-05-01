@@ -13,7 +13,6 @@ import { SpellInterface } from '../../schemas'
 import { triggerSocket } from '../../sockets'
 import { SpellManager } from '../../spellManager'
 import {
-  EngineContext,
   MagickNode,
   MagickWorkerInputs,
   ModuleContext,
@@ -306,7 +305,6 @@ export class SpellComponent extends MagickComponent<
     const {
       publicVariables,
       agent,
-      app,
       secrets
     } = module
 

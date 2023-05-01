@@ -26,7 +26,6 @@ function stringToColor(string: string) {
     let hash = 0;
     let i;
 
-    /* eslint-disable no-bitwise */
     for (i = 0; i < string.length; i += 1) {
         hash = string.charCodeAt(i) + ((hash << 5) - hash);
     }
@@ -90,7 +89,6 @@ const MessageItem = ({ messages, side }) => {
             {messages.map((msg, i) => {
                 const message = msg.replace(user, '').replace(agent, '');
                 return (
-                    // eslint-disable-next-line react/no-array-index-key
                     <div key={msg?.id || i}
                     >
                         <Typography

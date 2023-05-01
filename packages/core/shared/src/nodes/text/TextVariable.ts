@@ -3,10 +3,7 @@
  * Module represents a Rete flow based on Google code standards.
  * @module
  */ 
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
-
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'

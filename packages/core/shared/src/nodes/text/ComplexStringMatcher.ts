@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
 import { InputControl } from '../../dataControls/InputControl'

@@ -3,7 +3,6 @@ import ReactJson from 'react-json-view'
 import { Window } from '@magickml/client-core'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Terminal from 'react-console-emulator'
-import { renderToString } from 'react-dom/server'
 import { useEditor } from '../../contexts/EditorProvider'
 import { usePubSub } from '../../contexts/PubSubProvider'
 
@@ -152,7 +151,6 @@ const DebugConsole = ({ tab }): JSX.Element => {
       description: 'Echo a passed string.',
       usage: 'echo <string>',
       fn: function () {
-        // eslint-disable-next-line prefer-rest-params
         return `${Array.from(arguments).join(' ')}`
       },
     },

@@ -1,6 +1,3 @@
-/* eslint-disable no-prototype-builtins */
-/* eslint-disable @typescript-eslint/no-loss-of-precision */
-
 // index.js
 /**
  * Ephemeris namespace
@@ -86,7 +83,6 @@ $ns.update = function () {
 			ids = textAreas [i].getAttribute ('id');
 			try {
 				eval ('' + ids + ' = "' + textAreas [i].value + '"');
-			// eslint-disable-next-line no-empty
 			} catch (exception) {
 			}
 		}
@@ -122,7 +118,6 @@ $ns.update = function () {
 					if (!selects [i].innerHTML) {
 						var selections = [];
 						for (key in selector) {
-							// eslint-disable-next-line no-prototype-builtins
 							if (selector.hasOwnProperty (key) && selector [key].key == key && key != 'earth') {
 								selections.push ('<option label=' + key + '>' + key + '</option>');
 							}
@@ -2655,14 +2650,14 @@ $ns.altaz = {
 $ns.altaz.calc = function (pol, date, result) {
 	var dec, cosdec, sindec, lha, coslha, sinlha; // double
 	var ra, dist, last, alt, az, coslat, sinlat; // double
-	var N, D, x, y, z, TPI; // double
+	// var N, D, x, y, z, TPI; // double
 
 	result = result || {};
 
 	ra = pol[0];
 	dec = pol[1];
 	dist = pol[2];
-	TPI = 2.0*Math.PI;
+	// TPI = 2.0*Math.PI;
 
 	/* local apparent sidereal time, seconds converted to radians
 	 */

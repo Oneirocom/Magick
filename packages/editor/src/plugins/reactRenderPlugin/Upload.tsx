@@ -3,7 +3,6 @@
 import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
 import { useState } from "react"
 import { useSelector } from "react-redux"
-import { useConfig } from "../../contexts/ConfigProvider"
 
 /**
  * Converts a file object to a base64-encoded data URI
@@ -70,7 +69,7 @@ export const Upload = ({ id_image, output }: UploadProps) => {
   return (
     <div style={{ height: '200px' }}>
       <input type="file" onChange={handleChange} />
-      <img src={state.file} style={{ width: '100%', maxHeight: '100%' }} />
+      <img src={state.file} style={{ width: '100%', maxHeight: '100%' }} alt="Preview" />
     </div>
   )
 }

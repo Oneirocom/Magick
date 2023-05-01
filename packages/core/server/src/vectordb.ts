@@ -1,5 +1,4 @@
 // DOCUMENTED
-/* eslint-disable @typescript-eslint/ban-types */
 /* 
 
 This code is adapted from the langchainjs library under the MIT license.

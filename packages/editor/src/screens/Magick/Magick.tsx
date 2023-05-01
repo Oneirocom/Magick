@@ -1,7 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen, TabLayout } from '@magickml/client-core'
 import { useEffect } from 'react'
-import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import TabBar from '../../components/TabBar/TabBar'
@@ -27,7 +26,7 @@ const Magick = ({ empty = false }): JSX.Element => {
   const activeTab = useSelector(activeTabSelector)
   const pubSub = usePubSub()
   const { URI } = useParams()
-  const { events, publish, subscribe } = pubSub
+  const { events, subscribe } = pubSub
 
   // console.log('****************************', URI)
 
