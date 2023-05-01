@@ -60,7 +60,7 @@ const TextEditor = props => {
     const { language } = textEditorData.options || ('javascript' as any)
 
     const inputs: string[] = []
-    const textLines = inspectorData?.data?.code.split('\n') ?? []
+    const textLines = (inspectorData?.data?.code as string)?.split('\n') ?? []
     ;(inspectorData?.data.inputs as any).forEach((input: any) => {
       inputs.push('  ' + input.socketKey + ',')
     })

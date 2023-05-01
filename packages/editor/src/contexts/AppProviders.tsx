@@ -2,7 +2,7 @@
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material';
 
-import ConfigProvider from './ConfigProvider';
+import ConfigProvider from '../../../core/client/src/providers/ConfigProvider';
 import FeathersProvider from './FeathersProvider';
 import PubSubProvider from './PubSubProvider';
 import ToastProvider from './ToastProvider';

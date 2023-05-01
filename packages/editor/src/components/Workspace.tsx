@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { SpellInterface } from '@magickml/core'
 
-import { useConfig } from '../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 import { useEditor } from '../contexts/EditorProvider'
 import { Layout } from '../contexts/LayoutProvider'
 import { spellApi } from '../state/api/spells'

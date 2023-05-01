@@ -4,7 +4,7 @@ import { IGNORE_AUTH, pluginManager } from '@magickml/core'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useConfig } from '../../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 import AgentWindow from './AgentWindow'
 import validateSpellData from './AgentWindow/spellValidator'
 

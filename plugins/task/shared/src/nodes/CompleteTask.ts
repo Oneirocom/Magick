@@ -1,19 +1,25 @@
 // DOCUMENTED 
+import {
+  AgentTask,
+  MagickComponent, 
+  MagickNode,
+  MagickWorkerInputs,
+  WorkerData,
+  taskSocket,
+  triggerSocket
+} from '@magickml/core';
 import Rete from 'rete';
-import { MagickComponent } from '../../engine';
-import { objectSocket, triggerSocket } from '../../sockets';
-import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types';
 
-const info = 'Join an array of tasks into a conversation formatted for prompt injection.';
+const info = 'Complete a task.';
 
 /**
  * A Rete component representing an task deletion node in the visual programming editor.
  */
-export class Task extends MagickComponent<Promise<void>> {
+export class CompleteTask extends MagickComponent<Promise<{ task: AgentTask }>> {
   constructor() {
-    super('Delete Task', {
+    super('Complete Task', {
       outputs: {
-        conversation: 'output',
+        task: 'output',
         trigger: 'option',
       },
     }, 'Task', info);
@@ -27,9 +33,9 @@ export class Task extends MagickComponent<Promise<void>> {
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
-    const inputList = new Rete.Input('task', 'Task', objectSocket);
+    const task = new Rete.Input('task', 'Task', taskSocket);
 
-    return node.addInput(inputList).addInput(dataInput).addOutput(dataOutput);
+    return node.addInput(dataInput).addOutput(dataOutput).addInput(task);
   }
 
   /**
@@ -43,10 +49,16 @@ export class Task extends MagickComponent<Promise<void>> {
       const task = inputs.task[0] as { id: number }
 
       const { app } = context.module;
-      if(!app) throw new Error('App is not defined, cannot delete task');
-      app.service('tasks').remove(task.id);
+
+      // update the task status to cancelled
+      const updatedTask = await app.service('tasks').patch(task.id, {
+        status: 'completed',
+      });
+      return {
+        task: updatedTask,
+      }
     } catch (e) {
-      throw new Error(`Error deleting task: ${e}`);
+      throw new Error(`Error completing task: ${e}`);
     }
   }
 }

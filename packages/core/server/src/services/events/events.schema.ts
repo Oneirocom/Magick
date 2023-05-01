@@ -9,24 +9,26 @@ import type { Static } from '@feathersjs/typebox';
 import type { HookContext } from '../../declarations';
 import { dataValidator, queryValidator } from '../../config/validators';
 
+export const eventSchemaPrototype = {
+  id: Type.String(),
+  type: Type.Optional(Type.String()),
+  observer: Type.Optional(Type.String()),
+  sender: Type.Optional(Type.String()),
+  entities: Type.Optional(Type.Array(Type.String())),
+  client: Type.Optional(Type.String()),
+  channel: Type.Optional(Type.String()),
+  channelType: Type.Optional(Type.String()),
+  content: Type.Optional(Type.String()),
+  agentId: Type.String(),
+  projectId: Type.String(),
+  date: Type.Optional(Type.String()),
+  embedding: Type.Optional(Type.Any()),
+  rawData: Type.Optional(Type.String()),
+}
+
 // Define the eventSchema
 export const eventSchema = Type.Object(
-  {
-    id: Type.String(),
-    type: Type.Optional(Type.String()),
-    observer: Type.Optional(Type.String()),
-    sender: Type.Optional(Type.String()),
-    entities: Type.Optional(Type.Array(Type.String())),
-    client: Type.Optional(Type.String()),
-    channel: Type.Optional(Type.String()),
-    channelType: Type.Optional(Type.String()),
-    content: Type.Optional(Type.String()),
-    agentId: Type.String(),
-    projectId: Type.String(),
-    date: Type.Optional(Type.String()),
-    embedding: Type.Optional(Type.Any()),
-    rawData: Type.Optional(Type.String()),
-  },
+  eventSchemaPrototype,
   { $id: 'Event', additionalProperties: false }
 );
 export type Event = Static<typeof eventSchema>;

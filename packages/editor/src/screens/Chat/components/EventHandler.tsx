@@ -7,7 +7,7 @@ import {
 } from '../../../state/api/spells'
 import { useFeathers } from '../../../contexts/FeathersProvider'
 
-import { useConfig } from '../../../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 
 const EventHandler = ({ pubSub, conversation }) => {
   const config = useConfig()

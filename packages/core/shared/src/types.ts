@@ -59,22 +59,35 @@ export type GetDocumentArgs = Document & {
   maxCount?: number
 }
 
-export type AgentTask = {
-  id?: number
-  complete: boolean
-  type?: string
+type AgentTaskStatus = 'active' | 'completed' | 'canceled'
+
+export type CreateAgentTaskArgs = {
+  status: AgentTaskStatus
+  agentId?: string
+  type: string
   objective: string
   eventData: Event
-  projectId?: string
-  agentId?: number | string
-  date?: string
-  data: AgentTaskData[]
+  projectId: string
+  steps: string
+}
+
+export type AgentTask = {
+  id: number
+  agentId?: string
+  status: AgentTaskStatus
+  type: string
+  objective: string
+  eventData: Event
+  projectId: string
+  steps: string
 }
 
 export type AgentTaskData = {
-  input: any
-  output: any
-  state: any
+  timestamp: number
+  thought: string
+  skill: string
+  action: string
+  result: string
 }
 
 export type Event = {
@@ -130,26 +143,6 @@ export type GetVectorEventArgs = {
 }
 
 export type EventResponse = Event[]
-
-export type CompletionBody = {
-  prompt: string
-  modelName: string
-  maxTokens: number
-  temperature: number
-  topP: number
-  presencePenalty: number
-  frequencyPenalty: number
-  // TODO: Type not used anywhere
-  stop: any
-  apiKey?: string
-}
-
-export type CompletionResponse = {
-  // TODO: Type not used anywhere
-  success: any
-  // TODO: Type not used anywhere
-  choice: any
-}
 
 export type OnSubspellUpdated = (spell: SpellInterface) => void
 
@@ -215,7 +208,6 @@ export type RunSpell<DataType = Record<string, unknown>> = ({
 
 export type EngineContext<DataType = Record<string, unknown>> = {
   runSpell: RunSpell<DataType>
-  completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
   processCode?: ProcessCode
 }
@@ -260,6 +252,7 @@ export type PubSubEvents = {
 
 export interface PubSubContext {
   publish: (event: string, data?: PubSubData) => boolean
+  // eslint-disable-next-line @typescript-eslint/ban-types
   subscribe(
     event: string,
     func: PubSubJS.SubscriptionListener<PubSubData>
@@ -522,6 +515,7 @@ export type CompletionSocket = {
   type: Socket
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface DataControlImplementation extends DataControl {
   new (control: CompletionInspectorControls): DataControl
 }
@@ -587,7 +581,7 @@ export type EmbeddingData = {
   apiKey: string
 }
 
-export type Spell = {
+type Spell = {
   id: string
   name: string
   projectId: string
@@ -672,6 +666,7 @@ export interface ModuleOptions {
   hide?: boolean
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Middleware = (ctx: Koa.Context, next: any) => any
 
 export type Method =
@@ -685,6 +680,7 @@ export type Method =
   | 'trace'
   | 'patch'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Handler = (ctx: Koa.Context) => any
 
 export type Route = {
