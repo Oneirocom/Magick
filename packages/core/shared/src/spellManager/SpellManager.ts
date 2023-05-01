@@ -14,6 +14,14 @@ type SpellManagerArgs = {
   agent?: Agent
 }
 
+type RunArgs = {
+  spellId: string
+  inputs: MagickSpellInput
+  secrets: Record<string, string>
+  publicVariables
+  app: Application
+}
+
 export default class SpellManager {
   spellRunnerMap: Map<string, SpellRunner> = new Map()
   socket?: io.Socket
@@ -80,13 +88,7 @@ export default class SpellManager {
     return spellRunner
   }
 
-  async run(
-    spellId: string,
-    inputs: MagickSpellInput,
-    secrets: Record<string, string>,
-    publicVariables,
-    app
-  ) {
+  async run({ spellId, inputs, secrets, publicVariables, app }: RunArgs) {
     const runner = this.getSpellRunner(spellId)
 
     const result = await runner?.runComponent({
