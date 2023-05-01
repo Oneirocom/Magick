@@ -77,7 +77,7 @@ export class PluginEmbeddings extends Embeddings {
   ): Promise<number[]> {
     const data = await this.embeddingWithRetryWithMeta(
       {
-        input: [document],
+        input: document,
       },
       param
     )
@@ -142,10 +142,11 @@ export class PluginEmbeddings extends Embeddings {
     const handler = provider?.handler
     let response
     let retry = 0
+    console.log(param["secrets"])
     while (retry < 3) {
       try {
         response = await handler({
-          inputs: { input: [{ content: embeddingObject['input'] }] },
+          inputs: { input: embeddingObject['input'] },
           node: { data: { model: param.modelName } } as unknown as WorkerData,
           outputs: undefined,
           context: { module: { secrets:JSON.parse(param["secrets"]) }, projectId: param.projectId },
