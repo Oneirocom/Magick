@@ -39,7 +39,7 @@ export const taskSchema = Type.Object(
     status: Type.String(),
     objective: Type.Optional(Type.String()),
     eventData: Type.Optional(taskEventSchema),
-    steps: Type.Optional(Type.Array(taskStepSchema)),
+    steps: Type.String(),
   },
   { $id: 'Task', additionalProperties: false }
 )

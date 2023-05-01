@@ -73,11 +73,11 @@ export type CreateAgentTaskArgs = {
 export type AgentTask = {
   id: number
   status: AgentTaskStatus
-  type?: string
+  type: string
   objective: string
   eventData: Event
   projectId: string
-  steps: AgentTaskData[]
+  steps: string
 }
 
 export type AgentTaskData = {
