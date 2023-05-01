@@ -11,7 +11,7 @@
     "url": ""
   },
   "license": "MIT",
-  "main": "build/src/index.ts",
+  "main": "./src/index.ts",
   "scripts": {
     "build": "tsc && electron-rebuild",
     "electron:start-live": "node ./live-runner.js",
