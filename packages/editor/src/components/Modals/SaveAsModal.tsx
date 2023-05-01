@@ -7,7 +7,7 @@ import Modal from '../Modal/Modal';
 import css from './modalForms.module.css';
 import { useNavigate } from 'react-router';
 import { getTemplates } from '@magickml/client-core';
-import { useConfig } from '../../contexts/ConfigProvider';
+import { useConfig } from '@magickml/client-core';
 import md5 from 'md5';
 
 // Initial graph for the spell

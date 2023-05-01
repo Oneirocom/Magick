@@ -4,7 +4,7 @@
  */
 export type {
   AppConfig
-} from './contexts/ConfigProvider';
+} from '../../core/client/src/providers/ConfigProvider';
 
 /**
  * This exports the MagickIDE class from './main' file.

@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import RequestTable from './RequestTable'
 
 import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
-import { useConfig } from '../../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
 
 /**

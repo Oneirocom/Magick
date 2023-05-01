@@ -16,7 +16,7 @@ import React, {
 import { Component } from 'rete/types/engine';
 
 import { MyNode } from '../components/Node/Node';
-import { useConfig } from '../contexts/ConfigProvider';
+import { useConfig } from '@magickml/client-core';
 import { useFeathers } from '../contexts/FeathersProvider';
 import { usePubSub } from '../contexts/PubSubProvider';
 import { initEditor } from '../editor';
