@@ -83,9 +83,10 @@ const StartScreen = (): JSX.Element => {
   const onDelete = async (spellName): Promise<void> => {
     try {
       await deleteSpell({ spellName, projectId: config.projectId })
-      const [tab] = tabs.filter(tab => tab.URI === spellName)
+      const [tab] = tabs.filter(tab => tab.id === spellName)
       if (tab) {
         dispatch(closeTab(tab.id))
+        window.localStorage.removeItem(`zoomValues-${tab.id}`)
       }
     } catch (err) {
       console.error('Error deleting spell', err)
