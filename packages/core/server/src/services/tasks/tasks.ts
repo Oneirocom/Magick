@@ -1,8 +1,5 @@
 // DOCUMENTED 
 import { hooks as schemaHooks } from '@feathersjs/schema';
-import os from 'os';
-import pgvector from 'pgvector/pg';
-import { v4 as uuidv4 } from 'uuid';
 import {
   taskExternalResolver,
   taskPatchResolver,
@@ -12,9 +9,8 @@ import {
   taskResolver
 } from './tasks.schema';
 
-import { Application, HookContext } from '../../declarations';
+import { Application } from '../../declarations';
 import { TaskService, getOptions } from './tasks.class';
-import { DATABASE_TYPE } from '@magickml/core'
 
 /**
  * Export the Task class and task schema
@@ -22,26 +18,14 @@ import { DATABASE_TYPE } from '@magickml/core'
 export * from './tasks.class';
 export * from './tasks.schema';
 
-const cpuCore = os.cpus();
-
-const isM1 =
-  cpuCore[0].model.includes('Apple M1') || cpuCore[0].model.includes('Apple M2');
-const isWindows = os.platform() === 'win32';
-
-// Null array with 1536 values
-const nullArray = new Array(1536).fill(0);
-
 /**
  * A configure function that registers the service and its hooks via `app.configure`
  * @param app {Application}
  */
 export const task = (app: Application) => {
-  const db = app.get('dbClient');
-
   // Register our service on the Feathers application
   app.use('tasks', new TaskService(getOptions(app)), {
-    methods: ['find', 'get', 'create', 'patch', 'remove'],
-    tasks: [],
+    methods: ['find', 'get', 'create', 'patch', 'remove']
   });
 
   // Initialize hooks
@@ -59,63 +43,8 @@ export const task = (app: Application) => {
         schemaHooks.resolveQuery(taskQueryResolver),
       ],
       find: [],
-      get: [
-        (context: HookContext) => {
-          const { getEmbedding } = context.params.query;
-          if (getEmbedding) {
-            context.params.query.$limit = 1;
-            context.params.query.embedding = { $ne: pgvector.toSql(nullArray) };
-          }
-          return context;
-        },
-      ],
-      create: [
-        // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
-        async (context: HookContext) => {
-          const vectordb = app.get('vectordb');
-          const { embedding } = context.data
-          const { data, service } = context
-          const id = uuidv4()
-          //Add UUID for tasks.
-          context.data = {
-            [service.id]: id,
-            ...data,
-          }
-          // if embedding is not null and not null array, then cast to pgvector
-          if (embedding && embedding.length > 0 && embedding[0] !== 0) {
-            if (DATABASE_TYPE == "pg") {
-              context.data.embedding = pgvector.toSql(embedding as Array<number>)  
-              return context;
-            }else{
-              const insert_data = [{
-                embedding: embedding,
-                data: {
-                  metadata: {...context.data} || {"msg": "Empty Data"},
-                  pageContent: context.data['content'] || "No Content in the Task",
-                },
-              }]
-              console.log(vectordb)
-              await vectordb.addEmbeddingsWithData(insert_data);
-            }      
-          } else {
-            if (DATABASE_TYPE == "pg") {
-              context.data.embedding = pgvector.toSql(nullArray)
-              //context.app.service('tasks').create(context.data);
-              return context;
-            } else {
-              const insert_data = [{
-                embedding: nullArray,
-                data: {
-                  metadata: {...context.data, id: uuidv4()} || {"msg": "Empty Data"},
-                  pageContent: context.data['content'] || "No Content in the Task",
-                },
-              }]
-              await vectordb.addEmbeddingsWithData(insert_data);
-            }
-          }
-          return;
-        },
-      ],
+      get: [],
+      create: [],
       patch: [
         schemaHooks.validateData(taskPatchValidator),
         schemaHooks.resolveData(taskPatchResolver),

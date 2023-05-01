@@ -12,7 +12,7 @@ import tabReducer from './tabs'
 import localStateReducer from './localState'
 import preferencesReducer from './preferences'
 import globalConfigReducer from './globalConfig'
-import { AppConfig } from '../contexts/ConfigProvider'
+import { AppConfig } from '../../../core/client/src/providers/ConfigProvider'
 
 /**
  * Combine all reducers into the root reducer.
