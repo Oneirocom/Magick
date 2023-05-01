@@ -145,12 +145,12 @@ export class Agent implements AgentInterface {
   }
 
   error(message, data = {}) {
-    console.error(message, data)
+    console.error(message, { error: data })
     this.app.service('agents').log({
       agentId: this.id,
       type: 'error',
       message,
-      data,
+      data: { error: data },
     })
   }
 }
