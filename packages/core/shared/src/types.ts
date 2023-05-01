@@ -524,7 +524,10 @@ export type CompletionInspectorControls = {
 export type CompletionProvider = {
   [x: string]: any
   type: CompletionType
-  subtype: ImageCompletionSubtype | TextCompletionSubtype | AudioCompletionSubtype
+  subtype:
+    | ImageCompletionSubtype
+    | TextCompletionSubtype
+    | AudioCompletionSubtype
   handler?: (attrs: {
     node: WorkerData
     inputs: MagickWorkerInputs
@@ -590,6 +593,8 @@ type Spell = {
 
 export type ModuleContext = {
   context: EngineContext
+  spellManager: SpellManager
+  app: Application
   module: {
     secrets?: Record<string, string>
     publicVariables?: Record<string, string>
