@@ -226,15 +226,15 @@ export class HNSWLib extends SaveableVectorStore {
   }
   //Tech debt: add, search, searchData
   // Add other helper methods for HNSWLib here
-  async add(id: any, embedding: any, a: any = 'sss') {
+  async add() {
     /* null */
   }
 
-  async search(a: any, b: any) {
+  async search() {
     /* null */
   }
 
-  async searchData(a: any, b: any) {
+  async searchData() {
     /* null */
   }
 
@@ -278,7 +278,7 @@ export class HNSWLib extends SaveableVectorStore {
       k,
       query_data
     )
-    return results.map(([doc, _]) => doc.metadata)
+    return results.map(([doc]) => doc.metadata)
   }
 
   /**
@@ -407,7 +407,7 @@ export class HNSWLib extends SaveableVectorStore {
     if (needed > capacity) {
       this.index.resizeIndex(needed)
     }
-    const docstoreSize = this.docstore.count
+    // const docstoreSize = this.docstore.count
     for (let i = 0; i < vectors.length; i += 1) {
       const id_str = documents[i].metadata?.id
       this.index.addPoint(vectors[i], HNSWLib.sha256ToDecimal(id_str))
@@ -460,11 +460,12 @@ export class HNSWLib extends SaveableVectorStore {
     k = 10,
     quer_data: Record<string, unknown> = {}
   ): Promise<[Document, number][]> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let filterByLabel = (label: any) => {
       return true
     }
     if (Object.keys(quer_data).length == 0) {
-      filterByLabel = label => {
+      filterByLabel = () => {
         return true
       }
     } else {
@@ -589,7 +590,7 @@ export class HNSWLib extends SaveableVectorStore {
       index.readIndexSync(directory + '/' + args.filename + '/hnswlib.index')
       const db = new HNSWLib(embeddings, args)
       db.index = index
-      docstoreFiles.map(([k, v]) => {
+      docstoreFiles.map(([v]) => {
         db.docstore.add({ [HNSWLib.sha256ToDecimal(v.metadata.id)]: v })
       })
       return db
@@ -608,7 +609,7 @@ export class HNSWLib extends SaveableVectorStore {
    */
   async getDataWithMetadata(
     query: Record<string, unknown>,
-    k = 1
+    // k = 1
   ): Promise<Record<string, unknown>[]> {
     const queryKeys = Object.keys(query)
     const matchingDocs: Record<string, unknown>[] = []

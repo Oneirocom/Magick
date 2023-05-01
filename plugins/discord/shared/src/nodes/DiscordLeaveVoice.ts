@@ -5,15 +5,10 @@
  */
 import Rete from 'rete';
 import {
-    Agent,
-    AgentManager,
     MagickComponent,
-    pluginManager,
     stringSocket,
     triggerSocket,
     MagickNode,
-    MagickWorkerInputs,
-    MagickWorkerOutputs,
     ModuleContext,
     WorkerData
 } from '@magickml/core';
@@ -25,10 +20,10 @@ async function discordLeaveVC(context: ModuleContext & {prompt: string}): Promis
         return "Agent not found";
     }
     //@ts-ignore
-    const id = agent?.discord.guildId.id
+    // const id = agent?.discord.guildId.id
     //@ts-ignore
     //Using the Guild ID
-    const guild = await agent?.discord.client.guilds.fetch(id);
+    // const guild = await agent?.discord.client.guilds.fetch(id);
     // @ts-ignore
     if (!agent?.discord) {
         return "Discord agent not found";
@@ -38,7 +33,6 @@ async function discordLeaveVC(context: ModuleContext & {prompt: string}): Promis
     if (!discord.client) {
         return "Discord client not found";
     }
-    const { message } = discord;
     const messageContent = context.prompt;
 
     // Search through all the channels that the bot has access to
@@ -117,9 +111,6 @@ export class DiscordLeaveVoice extends MagickComponent<Promise<WorkerReturn>> {
      */
     async worker(
         node: WorkerData,
-        inputs: MagickWorkerInputs,
-        _outputs: MagickWorkerOutputs,
-        context: ModuleContext,
     ): Promise<WorkerReturn> {
 
         const tool_desc = {

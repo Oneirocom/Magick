@@ -1,9 +1,6 @@
 import Rete from 'rete';
 import {
-    Agent,
-    AgentManager,
     MagickComponent,
-    pluginManager,
     stringSocket,
     triggerSocket,
     MagickNode,
@@ -12,8 +9,7 @@ import {
     ModuleContext,
     WorkerData
 } from '@magickml/core';
-import { addResults, addTask, createTasks, findSimilarSentences, getChannelFromMessage, getLoadSpell, listTasks, parseTasks, parseTasksToArray, popTask, runSpell, taskCompletion, taskReprioritization } from './utils';
-import { Application } from '@feathersjs/koa/lib';
+import { addResults, addTask, createTasks, findSimilarSentences, listTasks, parseTasksToArray, popTask, taskCompletion, taskReprioritization } from './utils';
 
 
 
@@ -74,7 +70,6 @@ export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
         const result_list = []
         const objective = inputs["prompt"][0] as unknown as string
         console.log("INPUT PROMPT", objective)
-        const msg = objective;
         //@ts-ignore
         let result
         // 3 Iterations roughly makes 9 calls to the API

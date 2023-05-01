@@ -105,12 +105,12 @@ export class PluginEmbeddings extends Embeddings {
       }
       document = output
     }
-    const subPrompts = chunkArray(
-      this.stripNewLines
-        ? document.map(t => t.replaceAll('\n', ' '))
-        : document,
-      this.batchSize
-    )
+    // const subPrompts = chunkArray(
+    //   this.stripNewLines
+    //     ? document.map(t => t.replaceAll('\n', ' '))
+    //     : document,
+    //   this.batchSize
+    // )
     const embeddings = []
     for (let i = 0; i < document.length; i += 1) {
       const input = document[i]

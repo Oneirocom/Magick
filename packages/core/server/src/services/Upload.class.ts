@@ -28,7 +28,7 @@ export class UploadService {
    * @param params - The request parameters
    * @returns The metadata of the newly created or updated image
    */
-  async create(body: any, params: any): Promise<any> {
+  async create(body: any): Promise<any> {
     const img_body = {
       id: body['id'],
       uri: body['uri'],
@@ -48,7 +48,7 @@ export class UploadService {
    * @param params - The request parameters
    * @returns The metadata of the image if found, otherwise a string "Image Not Found"
    */
-  async find(id: any, params: any): Promise<any> {
+  async find(id: any): Promise<any> {
     let img_found = this.image_store.find(element => {
       return element.id === id.query.id
     })

@@ -35,7 +35,7 @@ export class DocumentService<
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
     if (DATABASE_TYPE == 'pg'){
-      const docdb = app.get('docdb')
+      // const docdb = app.get('docdb')
       //await docdb.fromString(data.content, data);
     }
     return data
@@ -74,24 +74,24 @@ export class DocumentService<
         for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
         const f32_ary = new Float32Array(ary_buf)
         const query = f32_ary as unknown as number[]
-        const { $limit: _, ...param } = params.query
+        const { ...param } = params.query
         const search_result = await docdb.extractMetadataFromResults(query, 2, param)
         if (search_result) {
           return { data: search_result }
         }
       }
-      const { $limit: _, ...param } = params.query
+      const { ...param } = params.query
       const tr = await docdb.getDataWithMetadata(param, 10);
       return { data: tr }
     } else {
-       if (params.query.embedding) {
+      if (params.query.embedding) {
           const blob = atob(params.query.embedding)
           const ary_buf = new ArrayBuffer(blob.length)
           const dv = new DataView(ary_buf)
           for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
           const f32_ary = new Float32Array(ary_buf)
-          const query = f32_ary as unknown as number[]
-          const { $limit: _, ...param } = params.query
+          // const query = f32_ary as unknown as number[]
+          const { ...param } = params.query
           const querys = await db('events').select('*')
           .where(
             {
@@ -104,14 +104,14 @@ export class DocumentService<
               ...(param.content && {'content': param.content})
           })
           .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
-          const result = await db.raw(`select * from events order by embedding <-> ${"'[" + f32_ary.toString() + "]'"} limit 1;`)
+          // const result = await db.raw(`select * from events order by embedding <-> ${"'[" + f32_ary.toString() + "]'"} limit 1;`)
           const bod = {query_embedding: "[" + f32_ary.toString() + "]", match_count: 2, content_to_match: "hi"}
           const rr = await cli.rpc("match_events",bod)
           console.log(rr)
           return {data: querys}
-       }
-       const res = await super.find(params);
-       return {data: (res as unknown as {data: Array<any>}).data};
+      }
+      const res = await super.find(params);
+      return {data: (res as unknown as {data: Array<any>}).data};
     }
   }
 }

@@ -16,7 +16,7 @@ import { DiscordAgentWindow } from './components/agent.component'
 
 import _DiscordSpellTemplate from './templates/spells/Discord Bot.spell.json'
 
-import Nodes, { getNodes } from '@magickml/plugin-discord-shared'
+import { getNodes } from '@magickml/plugin-discord-shared'
 // TODO: add schema validation with e.g. zod
 // Typecast `DiscordSpellTemplate` to `SpellInterface`
 const DiscordSpellTemplate = _DiscordSpellTemplate as unknown as SpellInterface

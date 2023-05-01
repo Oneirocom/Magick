@@ -1,6 +1,5 @@
 // DOCUMENTED 
 import '@feathersjs/transport-commons';
-import { HookContext } from '@feathersjs/feathers';
 import { Application } from '../declarations';
 
 /**
@@ -47,7 +46,7 @@ export default function(app: Application): void {
    * @param data - The event data.
    * @param hook - The hook context.
    */
-  app.publish((data: any, hook: HookContext) => {
+  app.publish(() => {
     // Publish all events to the authenticated user channel
     return app.channel('authenticated');
   });
