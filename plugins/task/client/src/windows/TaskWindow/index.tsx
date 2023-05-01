@@ -45,7 +45,7 @@ const TaskWindow = (): JSX.Element => {
       const response = await fetch(
         `${API_ROOT_URL}/tasks?projectId=${config.projectId}`,
         {
-          headers,
+          headers: headers as any, // TODO: look at this
         }
       )
 

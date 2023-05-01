@@ -13,6 +13,7 @@ import {
   MagickWorkerOutputs,
   ModuleContext,
   WorkerData,
+  Event
 } from '@magickml/core'
 import Rete from 'rete'
 
@@ -81,6 +82,7 @@ export class CreateTask extends MagickComponent<Promise<{ task: AgentTask }>> {
 
     const data = {
       objective,
+      agentId: event.agentId,
       type: (node.data.type as string) ?? 'task',
       status: 'active',
       eventData: event,

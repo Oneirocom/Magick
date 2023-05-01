@@ -63,6 +63,7 @@ type AgentTaskStatus = 'active' | 'completed' | 'canceled'
 
 export type CreateAgentTaskArgs = {
   status: AgentTaskStatus
+  agentId?: string
   type: string
   objective: string
   eventData: Event
@@ -72,6 +73,7 @@ export type CreateAgentTaskArgs = {
 
 export type AgentTask = {
   id: number
+  agentId?: string
   status: AgentTaskStatus
   type: string
   objective: string
