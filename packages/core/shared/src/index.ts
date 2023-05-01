@@ -51,5 +51,6 @@ export * from './spellManager';
 export * from './types';
 export * from './utils';
 export { WorldManager } from './world/worldManager';
+export * from './plugins/inspectorPlugin';
 
 export * from './cost-calculator';

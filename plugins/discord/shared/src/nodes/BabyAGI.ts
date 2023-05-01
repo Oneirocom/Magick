@@ -37,7 +37,7 @@ export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
                 output: 'output',
                 trigger: 'option',
             },
-        }, 'Discord', 'baby agi');
+        }, 'Experimental', 'baby agi');
     }
     /**
      * The builder function for the BabyAGI.

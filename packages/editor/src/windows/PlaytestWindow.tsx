@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useDispatch } from 'react-redux';
-import { useConfig } from '../contexts/ConfigProvider';
+import { useConfig } from '@magickml/client-core';
 import { useEditor } from '../contexts/EditorProvider';
 import { useInspector } from '../contexts/InspectorProvider';
 import { usePubSub } from '../contexts/PubSubProvider';

@@ -10,7 +10,7 @@ import React, {
 import { Component } from 'rete/types/engine'
 
 import { MyNode } from '../components/Node/Node'
-import { useConfig } from './ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 import { useFeathers } from './FeathersProvider'
 import { usePubSub } from './PubSubProvider'
 import { initEditor } from '../editor'

@@ -14,7 +14,7 @@ import {
   SupportedLanguages,
 } from '@magickml/core';
 import { createContext, useContext, useEffect, useRef } from 'react';
-import { useConfig } from '../contexts/ConfigProvider';
+import { useConfig } from '@magickml/client-core';
 import { usePubSub } from '../contexts/PubSubProvider';
 import { spellApi } from '../state/api/spells';
 
