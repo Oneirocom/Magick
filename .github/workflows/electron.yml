@@ -1,9 +1,14 @@
 name: Electron Build and Release
 
 on:
+  pull_request:
+    branches:
+      - release
+      - development
   push:
     branches:
       - release
+      - development
 
 jobs:
   build:
@@ -50,6 +55,7 @@ jobs:
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.1
+        if: github.ref == 'refs/heads/release'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
@@ -59,6 +65,7 @@ jobs:
           prerelease: false
       - name: Attach Artifact
         uses: actions/upload-release-asset@v1.0.2
+        if: github.ref == 'refs/heads/release'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
@@ -68,6 +75,7 @@ jobs:
           asset_content_type: application/zip
       - name: Upload Source Maps
         uses: honeybadger-io/github-upload-sourcemap-action@master
+        if: github.ref == 'refs/heads/release'
         with:
           working_directory: ./apps/client/electron/output
           upload_url: ${{ steps.create_release.outputs.upload_url }}
