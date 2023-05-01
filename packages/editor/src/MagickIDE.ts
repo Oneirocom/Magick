@@ -16,7 +16,6 @@ import Magick from './screens/Magick/Magick';
 
 import MainLayout from './layouts/MainLayout/MainLayout';
 import EventWindow from './windows/EventWindow';
-import TaskWindow from './windows/TaskWindow';
 import RequestWindow from './windows/RequestWindow';
 import AgentManagerWindow from './windows/agents/AgentManagerWindow';
 
@@ -30,7 +29,6 @@ export {
   Magick,
   MainLayout,
   EventWindow,
-  TaskWindow,
   RequestWindow,
   AgentManagerWindow,
 };

@@ -2,58 +2,55 @@
 import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useConfig } from '../../contexts/ConfigProvider'
-import TaskTable from './TaskTable'
+import { useConfig } from '@magickml/client-core'
+import EventTable from './EventTable'
 
 /**
- * Defines the properties of an task.
+ * Defines the properties of an event.
  */
-interface Task {
-  // Add properties of the task
+interface Event {
+  // Add properties of the event
   name: string
   location: string
 }
 
 /**
- * TaskWindow component displays the tasks of a project.
+ * EventWindow component displays the events of a project.
  * @returns JSX Element
  */
-const TaskWindow = (): JSX.Element => {
+const EventWindow = (): JSX.Element => {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const config = useConfig()
-  const [tasks, setTasks] = useState<Task[] | null>(null)
+  const [events, setEvents] = useState<Event[] | null>(null)
 
   useEffect(() => {
-    fetchTasks()
+    fetchEvents()
   }, [])
 
   /**
-   * Resets the tasks and fetches the updated tasks.
+   * Resets the events and fetches the updated events.
    */
-  const resetTasks = async (): Promise<void> => {
-    await fetchTasks()
+  const resetEvents = async (): Promise<void> => {
+    await fetchEvents()
   }
 
   /**
-   * Fetches the tasks of the current project.
+   * Fetches the events of the current project.
    */
-  const fetchTasks = async (): Promise<void> => {
+  const fetchEvents = async (): Promise<void> => {
     try {
       const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
 
       const response = await fetch(
-        `${API_ROOT_URL}/tasks?projectId=${config.projectId}`,
+        `${API_ROOT_URL}/events?projectId=${config.projectId}`,
         {
           headers,
         }
       )
 
-      console.log('tasks', response)
-
       const data = await response.json()
-      console.log('data', data)
-      setTasks(data.data)
+      setEvents(data.events)
     } catch (error) {
       console.log(error)
     }
@@ -61,7 +58,7 @@ const TaskWindow = (): JSX.Element => {
 
   return (
     <div
-      className="task-container"
+      className="event-container"
       style={{
         paddingBottom: '1em',
         width: '100%',
@@ -69,9 +66,9 @@ const TaskWindow = (): JSX.Element => {
         overflow: 'scroll',
       }}
     >
-      {tasks && <TaskTable tasks={tasks} updateCallback={resetTasks} />}
+      {events && <EventTable events={events} updateCallback={resetEvents} />}
     </div>
   )
 }
 
-export default TaskWindow
+export default EventWindow

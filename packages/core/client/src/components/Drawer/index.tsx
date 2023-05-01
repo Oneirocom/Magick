@@ -23,7 +23,6 @@ import ProjectWindow from './ProjectWindow'
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
 import { SetAPIKeys } from './SetAPIKeys'
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import ArticleIcon from '@mui/icons-material/Article';
 
 // Constants
@@ -289,13 +288,6 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/events')}
             text="Events"
-          />
-          <DrawerItem
-            active={location.pathname === '/tasks'}
-            Icon={AssignmentTurnedInIcon}
-            open={openDrawer}
-            onClick={onClick('/tasks')}
-            text="Tasks"
           />
           <DrawerItem
             active={location.pathname === '/requests'}

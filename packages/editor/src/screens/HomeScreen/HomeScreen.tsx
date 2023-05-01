@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 
-import { useConfig } from '../../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 import {
   useDeleteSpellMutation,
   useGetSpellsQuery,

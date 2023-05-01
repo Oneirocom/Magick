@@ -1,9 +1,11 @@
 // DOCUMENTED
-import Rete from 'rete'
-import { InputControl } from '../../dataControls/InputControl'
-import { MagickComponent } from '../../engine'
-import { eventSocket, stringSocket, taskSocket, triggerSocket } from '../../sockets'
 import {
+  InputControl,
+  MagickComponent,
+  eventSocket,
+  stringSocket,
+  taskSocket,
+  triggerSocket,
   AgentTask,
   CreateAgentTaskArgs,
   MagickNode,
@@ -11,7 +13,8 @@ import {
   MagickWorkerOutputs,
   ModuleContext,
   WorkerData,
-} from '../../types'
+} from '@magickml/core'
+import Rete from 'rete'
 
 /**
  * Information about the CreateTask class

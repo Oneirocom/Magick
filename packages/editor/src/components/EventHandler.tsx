@@ -14,7 +14,7 @@ import { useEditor } from '../contexts/EditorProvider'
 import { diff } from '../utils/json0'
 import { useFeathers } from '../contexts/FeathersProvider'
 
-import { useConfig } from '../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 
 /**
  * Event Handler component for handling various events in the editor

@@ -42,10 +42,6 @@ import { GetValuesFromObject } from './object/GetValuesFromObject';
 import { ParseJSON } from './object/JSONToObject';
 import { Merge } from './object/MergeObjects';
 import { ObjectToJSON } from './object/ObjectToJSON';
-import { CancelTask } from './tasks/CancelTask';
-import { CompleteTask } from './tasks/CompleteTask';
-import { CreateTask } from './tasks/CreateTask';
-import { FinishTaskStep } from './tasks/FinishTaskStep';
 import { CombineText } from './text/CombineText';
 import { ComplexStringMatcher } from './text/ComplexStringMatcher';
 import { EvaluateText } from './text/EvaluateText';
@@ -113,10 +109,6 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   getValueFromArray: () => new GetValueFromArray(),
   cosineSimilarity: () => new CosineSimilarity(),
   textToSpeech: () => new TextToSpeech(),
-  createTask: () => new CreateTask(),
-  completeTask: () => new CompleteTask(),
-  cancelTask: () => new CancelTask(),
-  finishTaskStep: () => new FinishTaskStep(),
 };
 
 /**
