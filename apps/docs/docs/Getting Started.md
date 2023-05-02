@@ -23,7 +23,7 @@ The standalone app is available at https://github.com/Oneirocom/Magick/releases
 
 ## Source
 
-You can also build from source. Refer to the Magick (README)[https://github.com/Oneirocom/Magick/blob/development/README.md] for the latest steps on installing and how to clone the repo and run from source.
+You can also build from source. Refer to the Magick [README](https://github.com/Oneirocom/Magick/blob/development/README.md) for the latest steps on installing and how to clone the repo and run from source.
 
 Development is straightforward. You will need git and node.js 18+ installed.
 
