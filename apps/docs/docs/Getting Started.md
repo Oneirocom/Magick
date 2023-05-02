@@ -13,7 +13,7 @@ There are three ways to use Magick: on the cloud, as a standalone app or by runn
 
 ## Cloud
 
-You can use Magick through the hosted web app at https://app.magickml.com/
+You can use Magick through the hosted web app at https://cloud.magickml.com/
 
 For the alpha phase, joining is free. However, you will need your OpenAI API keys.
 
