@@ -7,6 +7,7 @@ import DragDrop from './components/DragDrop/DragDrop'
 import ChatBox from './components/Chat/ChatBox'
 import { useZustand } from "./store/useZustand"
 import styles from './App.module.css'
+import { Sxp } from "./components/Sxp/Sxp"
 
 const App = () => {
 
@@ -35,8 +36,10 @@ const App = () => {
 
   return (
     <div className={styles.container}>
-      <Scene onDrop={onDrop} className={styles.dragdrop} noClick={false}/>
+      <DragDrop onDrop={onDrop} className={styles.dragdrop} noClick={false}/>
+      <Scene />
       <ChatBox />
+      <Sxp />
     </div>
   )
 }
