@@ -682,7 +682,7 @@ export class DiscordConnector {
         'Input - Discord (Text)': {
           content: content,
           sender: message.author.username,
-          observer: this.discord_bot_name,
+          observer: this.discord_bot_name || "Eliza",
           client: 'discord',
           channel: message.channel.id,
           agentId: this.agent.id,
