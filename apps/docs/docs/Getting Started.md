@@ -30,6 +30,7 @@ Development is straightforward. You will need git and node.js 18+ installed.
 ```
 git clone https://github.com/Oneirocom/Magick
 cd Magick
+npm install
 npm run dev
 ```
 
