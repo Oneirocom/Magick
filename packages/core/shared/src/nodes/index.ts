@@ -54,6 +54,7 @@ import { TextVariable } from './text/TextVariable';
 import { Cast } from './utility/Cast';
 import { Echo } from './utility/Echo';
 import { Log } from './utility/Log';
+import { CurrentTime } from './utility/CurrentTime';
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -100,6 +101,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   merge: () => new Merge(),
   orGate: () => new OrGate(),
   log: () => new Log(),
+  currentTime: () => new CurrentTime(),
   promptTemplate: () => new TextTemplate(),
   parseJSON: () => new ParseJSON(),
   objectToJSON: () => new ObjectToJSON(),

@@ -1,6 +1,7 @@
 // DOCUMENTED 
 // This module provides a document service for managing documents with embedding and pagination support
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
+
 import type { Params } from '@feathersjs/feathers';
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex';
 import { KnexService } from '@feathersjs/knex';
@@ -37,6 +38,7 @@ export class DocumentService<
   async create(data: DocumentData): Promise<any> {
     if (DATABASE_TYPE == 'pg'){
       const docdb = app.get('docdb')
+      await docdb.from('documents').insert(data)
       //await docdb.fromString(data.content, data);
     }
     return data
