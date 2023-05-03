@@ -1,4 +1,4 @@
-import { PubSub, events } from '../../contexts/PubSubProvider'
+import { PubSub, events } from '@magickml/client-core'
 
 export class SnapGrid {
   constructor(editor, { size = 16, dynamic = true }) {

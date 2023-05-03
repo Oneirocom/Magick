@@ -1,15 +1,14 @@
 // DOCUMENTED 
-import { Button, Select, Window } from '@magickml/client-core';
+import { Button, Select, Window, useConfig } from '@magickml/client-core';
 import Editor from '@monaco-editor/react';
 import { useSnackbar } from 'notistack';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useDispatch } from 'react-redux';
-import { useConfig } from '@magickml/client-core';
 import { useEditor } from '../contexts/EditorProvider';
 import { useInspector } from '../contexts/InspectorProvider';
-import { usePubSub } from '../contexts/PubSubProvider';
+import { usePubSub } from '@magickml/client-core';
 import css from '../screens/Magick/magick.module.css';
 import { spellApi } from '../state/api/spells';
 import { useAppSelector } from '../state/hooks';
@@ -241,7 +240,7 @@ const Playtest = ({ tab }) => {
 
     const playtestNode = Object.values(graph.nodes).find((node) => {
       return node.data.name === playtestOption;
-    });
+    }) as any;
 
     if (!playtestNode) {
       enqueueSnackbar('No input node found for this input type', {

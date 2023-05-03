@@ -1,7 +1,7 @@
 // DOCUMENTED
-import { InspectorData, SupportedLanguages } from '@magickml/core'
-import { usePubSub } from '../contexts/PubSubProvider'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { usePubSub } from '@magickml/client-core';
+import { InspectorData, SupportedLanguages } from '@magickml/core';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 /**
  * TextEditorData represents the state and options for the text editor.
