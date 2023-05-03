@@ -6,7 +6,7 @@ import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 // Component information that will display in the editor
-const info = 'Convert an object into a JSON string.'
+const info = 'Takes an input array and outputs a JSON array string.'
 
 type WorkerReturn = {
   output: string
@@ -60,6 +60,7 @@ export class ArrayToJSON extends MagickComponent<Promise<WorkerReturn>> {
    * @returns A Promise that resolves to an object containing the converted JSON string.
    */
   async worker(_node: WorkerData, rawInputs: MagickWorkerInputs) {
+    console.log('input', rawInputs.input)
     const obj = rawInputs.input[0] as string
 
     return {
