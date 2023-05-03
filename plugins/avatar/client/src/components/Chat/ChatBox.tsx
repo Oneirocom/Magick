@@ -22,10 +22,8 @@ export default function ChatBox() {
                         className={styles.spellSelector}
                         name="spellList"
                         id="spellList"
+                        defaultValue={'Select Spell'}
                     >
-                        <option disabled value={'default'}>
-                            Select Spell
-                        </option>
                         {
                             spellList?.length > 0 &&
                             spellList.map((spell, idx) => {

@@ -51,8 +51,7 @@
 .messages { 
     display: flex;
     flex-direction: column;
-    height: 100%;
-    height: 180px;
+    height: 600px;
     overflow: auto;
     margin-bottom: 20px;
     overflow-y: scroll;
@@ -63,8 +62,6 @@
     padding: .5em;
     box-sizing: border-box;
     width: 100%;
-    height: calc(100% - 132px);
-    height: -webkit-calc(100% - 132px);
     font-size: 18px;
 }
 
