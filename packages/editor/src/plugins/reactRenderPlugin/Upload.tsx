@@ -3,7 +3,6 @@
 import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
 import { useState } from "react"
 import { useSelector } from "react-redux"
-import { useConfig } from "../../contexts/ConfigProvider"
 
 /**
  * Converts a file object to a base64-encoded data URI

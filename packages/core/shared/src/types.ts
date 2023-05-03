@@ -59,6 +59,37 @@ export type GetDocumentArgs = Document & {
   maxCount?: number
 }
 
+type AgentTaskStatus = 'active' | 'completed' | 'canceled'
+
+export type CreateAgentTaskArgs = {
+  status: AgentTaskStatus
+  agentId?: string
+  type: string
+  objective: string
+  eventData: Event
+  projectId: string
+  steps: string
+}
+
+export type AgentTask = {
+  id: number
+  agentId?: string
+  status: AgentTaskStatus
+  type: string
+  objective: string
+  eventData: Event
+  projectId: string
+  steps: string
+}
+
+export type AgentTaskData = {
+  timestamp: number
+  thought: string
+  skill: string
+  action: string
+  result: string
+}
+
 export type Event = {
   id?: number
   type?: string
@@ -112,29 +143,6 @@ export type GetVectorEventArgs = {
 }
 
 export type EventResponse = Event[]
-
-export type CompletionBody = {
-  prompt: string
-  modelName: string
-  maxTokens: number
-  temperature: number
-  topP: number
-  presencePenalty: number
-  frequencyPenalty: number
-  // TODO: Type not used anywhere
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  stop: any
-  apiKey?: string
-}
-
-export type CompletionResponse = {
-  // TODO: Type not used anywhere
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  success: any
-  // TODO: Type not used anywhere
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  choice: any
-}
 
 export type OnSubspellUpdated = (spell: SpellInterface) => void
 
@@ -200,7 +208,6 @@ export type RunSpell<DataType = Record<string, unknown>> = ({
 
 export type EngineContext<DataType = Record<string, unknown>> = {
   runSpell: RunSpell<DataType>
-  completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
   processCode?: ProcessCode
 }
@@ -232,7 +239,7 @@ export type PubSubEvents = {
   $CREATE_PROJECT_WINDOW: (tabId: string) => string
   $CREATE_DEBUG_CONSOLE: (tabId: string) => string
   $CREATE_CONSOLE: (tabId: string) => string
-  $RUN_SPELL: (tabId: string) => string
+  $RUN_SPELL: (tabId?: string) => string
   $PROCESS: (tabId: string) => string
   $EXPORT: (tabId: string) => string
   $UNDO: (tabId: string) => string

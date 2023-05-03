@@ -26,5 +26,5 @@
   "files": [],
   "include": [
     "src"
-  ]
+, "../core/client/src/providers/ConfigProvider.tsx", "../core/client/src/providers/PubSubProvider.tsx", "../core/client/src/providers/FeathersProvider.tsx"  ]
 }

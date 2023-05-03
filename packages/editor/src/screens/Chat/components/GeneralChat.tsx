@@ -1,26 +1,23 @@
-import { useEffect, useRef, useState, useCallback } from "react";
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from 'notistack';
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { SingleChat } from "./Chat/SingleChat";
-import { Navbar } from "./Mobile/Navbar";
-import { Sidebar } from "./Sidebar/Sidebar";
-import { ChatBody, Conversation, KeyValuePair, Message } from "../../../types";
+import { Spell } from '@magickml/core';
+import { ArrowBack, ArrowForward } from '@mui/icons-material/';
+import { Conversation, KeyValuePair, Message } from "../../../types";
 import { cleanConversationHistory, cleanSelectedConversation } from "../../../utils/app/clean";
 import { saveConversation, saveConversations, updateConversation } from "../../../utils/app/conversation";
 import { exportConversations, importConversations } from "../../../utils/app/data";
-import { ArrowBack, ArrowForward } from '@mui/icons-material/'
+import { SingleChat } from "./Chat/SingleChat";
+import { Navbar } from "./Mobile/Navbar";
+import { Sidebar } from "./Sidebar/Sidebar";
 import styles from './chat.module.css';
-import { Spell } from '@magickml/core'
 
+import { useConfig, usePubSub } from '@magickml/client-core';
+import { useFeathers } from '../../../../../core/client/src/providers/FeathersProvider';
 import {
-    useDeleteSpellMutation,
-    useGetSpellsQuery,
-    useNewSpellMutation,
-} from '../../../state/api/spells'
-import { useConfig } from '../../../contexts/ConfigProvider'
-import EventHandler from './EventHandler'
-import { usePubSub } from '../../../contexts/PubSubProvider'
-import { useFeathers } from '../../../contexts/FeathersProvider'
+    useGetSpellsQuery
+} from '../../../state/api/spells';
+import EventHandler from './EventHandler';
 
 export default function GeneralChat() {
     const [conversations, setConversations] = useState<Conversation[]>([]);

@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from 'react'
 import DatabaseTable from './DocumentTable'
-import { useConfig } from '../../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 import { API_ROOT_URL } from '@magickml/core'
 
 const DocumentWindow = () => {

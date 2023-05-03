@@ -34,6 +34,9 @@ export default function (): typeof NodeMenu {
           ...params
         } = args.node
         const component = editor.components.get(name)
+
+        // New socketKey will be created at build since each node should have its unique socketKey
+        params.data.socketKey = null
         const node = await createNode(component, {
           ...params,
           x: x + 10,

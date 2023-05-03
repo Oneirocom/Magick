@@ -126,7 +126,7 @@ export type MagicComponentCategory =
   | 'Number'
   | 'I/O'
   | 'Flow'
-  | 'Langchain'
+  | 'Experimental'
   | 'Discord'
   | 'Embedding'
   | 'Document'
@@ -144,6 +144,7 @@ export type MagicComponentCategory =
   | 'Search'
   | 'Magick'
   | 'Audio'
+  | 'Task'
 
 // MagickComponent abstract class
 export abstract class MagickComponent<
