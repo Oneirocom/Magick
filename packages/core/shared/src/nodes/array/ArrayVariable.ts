@@ -1,21 +1,21 @@
-// DOCUMENTED 
-import Rete from 'rete';
-import { BooleanControl } from '../../dataControls/BooleanControl';
-import { InputControl } from '../../dataControls/InputControl';
-import { MagickComponent } from '../../engine';
-import { arraySocket } from '../../sockets';
-import { MagickNode, WorkerData } from '../../types';
+// DOCUMENTED
+import Rete from 'rete'
+import { BooleanControl } from '../../dataControls/BooleanControl'
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
+import { arraySocket } from '../../sockets'
+import { MagickNode, WorkerData } from '../../types'
 
 /**
  * The info for the Array Variable node
  */
-const info = `Array Variable`;
+const info = `Outputs an array with the values in the Value property. Values can be separated by a character or string specified in the Splitter property.`
 
 /**
  * Returns an object containing an output array of strings
  */
 type InputReturn = {
-  output: string[];
+  output: string[]
 }
 
 /**
@@ -34,8 +34,8 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
         },
       },
       'Array',
-      info,
-    );
+      info
+    )
   }
 
   /**
@@ -44,29 +44,29 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
    * @returns The node with inputs and outputs configured
    */
   builder(node: MagickNode) {
-    const out = new Rete.Output('output', 'output', arraySocket);
+    const out = new Rete.Output('output', 'output', arraySocket)
     const name = new InputControl({
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
-    });
+    })
     const _var = new InputControl({
       dataKey: '_var',
       name: 'Value',
       icon: 'moon',
-    });
+    })
     const splitter = new InputControl({
       dataKey: 'splitter',
       name: 'Splitter',
       icon: 'moon',
-    });
+    })
     const keepEmpty = new BooleanControl({
       dataKey: 'keepEmpty',
       name: 'Keep Empty Values',
       icon: 'moon',
-    });
-    node.inspector.add(name).add(_var).add(splitter).add(keepEmpty);
-    return node.addOutput(out);
+    })
+    node.inspector.add(name).add(_var).add(splitter).add(keepEmpty)
+    return node.addOutput(out)
   }
 
   /**
@@ -75,12 +75,14 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
    * @returns An object containing the output array
    */
   worker(node: WorkerData) {
-    const _var = node?.data?._var as string;
-    const splitter = node?.data?.splitter as string;
-    const keepEmpty = node?.data?.keepEmpty === 'true';
-    const res = !keepEmpty ? _var.split(splitter).filter(el => el.length > 0) : _var.split(splitter);
+    const _var = node?.data?._var as string
+    const splitter = node?.data?.splitter as string
+    const keepEmpty = node?.data?.keepEmpty === 'true'
+    const res = !keepEmpty
+      ? _var.split(splitter).filter(el => el.length > 0)
+      : _var.split(splitter)
     return {
       output: res,
-    };
+    }
   }
 }
