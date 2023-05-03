@@ -100,6 +100,7 @@ export class RunSpell extends MagickComponent<Promise<WorkerReturn>> {
       publicVariables: agent?.publicVariables ?? publicVariables,
     }
 
+    // todo handle error cases etc.
     const output = await spellManager.run(runComponentArgs)
 
     return {
