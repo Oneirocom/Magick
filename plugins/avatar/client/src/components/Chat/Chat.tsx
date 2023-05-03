@@ -2,6 +2,8 @@ import React, { useEffect } from "react"
 import styles from "./Chat.module.css"
 import Mic from '@mui/icons-material/Mic'
 import MicOff from '@mui/icons-material/MicOff'
+import { useConfig } from '@magickml/client-core'
+
 
 import {
   SepiaSpeechRecognitionConfig,
@@ -65,6 +67,9 @@ export default function Chat({
   lipSync,
 }) {
   const [waitingForResponse, setWaitingForResponse] = React.useState(false)
+  const config = useConfig()
+
+  const { projectId } = config
 
   const name = "Eliza"
   const voice = voices["Female 1"]
@@ -140,8 +145,7 @@ export default function Chat({
     if (value && !waitingForResponse) {
       // Send the message to the localhost endpoint
       const agent = name
-      const spell_handler = "eliza3d"
-      const projectId = "ok"
+
 
       //const newMessages = await pruneMessages(messages);
 

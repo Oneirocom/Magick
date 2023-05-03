@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useConfig } from '../../../../../packages/core/client/src/providers/ConfigProvider'
-import { IGNORE_AUTH } from '../../../../../packages/core/shared/src'
+import { IGNORE_AUTH } from '@magickml/core'
+import { useConfig } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
 
 export const useSpellList = () => {
