@@ -71,14 +71,8 @@ export class DocumentService<
     if (DATABASE_TYPE == 'sqlite'){
       const docdb = app.get('docdb')
       if (params.query.embedding) {
-        const blob = atob(params.query.embedding)
-        const ary_buf = new ArrayBuffer(blob.length)
-        const dv = new DataView(ary_buf)
-        for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
-        const f32_ary = new Float32Array(ary_buf)
-        const query = f32_ary as unknown as number[]
         const { $limit: _, ...param } = params.query
-        const search_result = await docdb.extractMetadataFromResults(query, 2, param)
+        const search_result = await docdb.extractMetadataFromResults(params.query.embedding, 2, param)
         if (search_result) {
           return { data: search_result }
         }
