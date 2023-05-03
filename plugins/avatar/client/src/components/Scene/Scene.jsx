@@ -14,7 +14,8 @@ export const Scene = () => {
     <Canvas>
       {/* <Perf position="top-right"/> */}
 
-      <OrbitControls makeDefault />
+      {/* character move with mouse right & left button click */}
+      {/* <OrbitControls makeDefault /> */}
 
       <directionalLight
         castShadow
