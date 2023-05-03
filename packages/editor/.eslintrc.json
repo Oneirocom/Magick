@@ -17,9 +17,7 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "rules": {
-        "@nrwl/nx/enforce-module-boundaries": "off"
-      }
+      "rules": {}
     },
     {
       "files": ["*.js", "*.jsx"],
