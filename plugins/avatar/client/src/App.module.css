@@ -95,8 +95,7 @@
     transform: translateY(90%);
     -webkit-transform: translateY(90%);
     text-align: left;
-    height: -webkit-calc(100vh - 400px);
-    height: calc(100vh - 400px);
+    top: 36%;
     background: rgba(5, 11, 14, 0.8);
     color: aliceblue;
     z-index: 2000;
@@ -119,7 +118,6 @@
     margin-right: 20px;
   }
 .container {
-  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
