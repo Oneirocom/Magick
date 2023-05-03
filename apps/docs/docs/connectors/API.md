@@ -19,7 +19,7 @@ https://www.youtube.com/watch?v=ByGJQzlzxQg
 
 ## Usage
 
-The API can be enabled on any running agent. Each agent will have a different API and different token. For example, payloads see the REST API properties panel in the agent window.
+The API can be enabled on any running agent. Each agent will have a different API and different token. For example payloads see the REST API properties panel in the agent window.
 
 ## Postman Collection
 
