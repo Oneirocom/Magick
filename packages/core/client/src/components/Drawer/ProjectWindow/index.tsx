@@ -168,14 +168,20 @@ const ProjectWindow = ({ openDrawer }) => {
           flexDirection: 'column',
           width: '190px',
           color: '#d8d6d6',
+          position: 'relative',
         }}
         className={styles.container}
       >
         <Drawer
           className={styles.drawer}
+          PaperProps={{
+            tabIndex: 0,
+          }}
+          disableEnforceFocus
           classes={{ paper: styles.drawerPaper }}
           anchor="left"
           open={openDrawer}
+          tabIndex={0}
           hideBackdrop
           ref={sidebarPanel}
         >
