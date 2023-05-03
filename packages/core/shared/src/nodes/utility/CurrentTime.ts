@@ -6,7 +6,7 @@
 import Rete from 'rete';
 
 import { MagickComponent } from '../../engine';
-import { stringSocket, triggerSocket } from '../../sockets';
+import { numberSocket, stringSocket, triggerSocket } from '../../sockets';
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -46,8 +46,8 @@ export class CurrentTime extends MagickComponent<Promise<WorkerReturn>> {
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
-    const outp = new Rete.Output('string', 'String', stringSocket);
-    const timestamp = new Rete.Output('timestamp', 'Timestamp', stringSocket);
+    const outp = new Rete.Output('string', 'Text', stringSocket);
+    const timestamp = new Rete.Output('timestamp', 'Timestamp', numberSocket);
 
 
     return node
