@@ -4,14 +4,12 @@ import {
   feathers,
   TransportConnection,
 } from '@feathersjs/feathers';
-import socketio from '@feathersjs/socketio-client';
 import type { SocketService } from '@feathersjs/socketio-client';
+import socketio from '@feathersjs/socketio-client';
+import { LoadingScreen, useConfig } from '@magickml/client-core';
+import { SpellInterface } from '@magickml/core';
 import { createContext, useContext, useEffect, useState } from 'react';
 import io from 'socket.io-client';
-
-import { LoadingScreen } from '@magickml/client-core';
-import { useConfig } from '@magickml/client-core';
-import { SpellInterface } from '@magickml/core';
 
 /**
  * SaveDiffData type definition.
@@ -99,7 +97,7 @@ export const useFeathers = ():FeathersContext => useContext(Context);
  * FeathersProvider component
  * @props children, token
  */
-const FeathersProvider = ({ children, token }): JSX.Element => {
+export const FeathersProvider = ({ children, token }): Element => {
   const config = useConfig();
   const [client, setClient] = useState<FeathersContext['client']>(null);
 
@@ -144,9 +142,3 @@ const FeathersProvider = ({ children, token }): JSX.Element => {
     <Context.Provider value={publicInterface}>{children}</Context.Provider>
   );
 };
-
-const ConditionalProvider = (props): JSX.Element => {
-  return <FeathersProvider {...props} />;
-};
-
-export default ConditionalProvider;

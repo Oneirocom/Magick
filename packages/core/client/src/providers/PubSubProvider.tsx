@@ -1,10 +1,10 @@
 // DOCUMENTED
 
 // Import required modules
-import * as React from 'react'
 import { PubSubContext, PubSubData, PubSubEvents } from '@magickml/core'
 import PubSub from 'pubsub-js'
-import { useContext, createContext } from 'react'
+import * as React from 'react'
+import { createContext, useContext } from 'react'
 
 // Create new context for PubSub
 const Context = createContext<PubSubContext>(undefined)
@@ -54,7 +54,7 @@ export const events: PubSubEvents = {
 }
 
 // Create the PubSubProvider component
-const PubSubProvider: React.FC = ({ children }) => {
+export const PubSubProvider: React.FC = ({ children }) => {
   // Publish function
   const publish = (event: string, data: PubSubData) => {
     return PubSub.publish(event, data)
@@ -83,5 +83,3 @@ const PubSubProvider: React.FC = ({ children }) => {
   // Return the provider with public interface and pass children
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }
-
-export default PubSubProvider

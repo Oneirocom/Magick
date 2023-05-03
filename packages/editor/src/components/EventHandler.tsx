@@ -12,7 +12,7 @@ import {
 import { useLayout } from '../contexts/LayoutProvider'
 import { useEditor } from '../contexts/EditorProvider'
 import { diff } from '../utils/json0'
-import { useFeathers } from '../contexts/FeathersProvider'
+import { useFeathers } from '../../../core/client/src/providers/FeathersProvider'
 
 import { useConfig } from '@magickml/client-core'
 

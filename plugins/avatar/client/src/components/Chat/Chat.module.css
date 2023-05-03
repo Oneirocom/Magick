@@ -1,6 +1,28 @@
+.chatContainer {
+    position: absolute;
+    width: 100%;
+    max-width: 50%;
+    right: 32px;
+    text-align: center;
+    height: calc(100vh);
+    background: rgba(5, 11, 14, 0.8);
+    color: aliceblue;
+    z-index: 2000;
+  }
+  
+  .scrollContainer {
+    height: 98%;
+    width: 99%;
+    position: absolute;
+    left: 0;
+    top: 2px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+  
 .chatBox {
     width: 100%;
-    height: 100%;
+    height: 20%;
     font-size: .875rem;
     color: #fff;
     text-align: left;

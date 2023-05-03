@@ -1,11 +1,10 @@
 // DOCUMENTED
-import { LoadingScreen, TabLayout } from '@magickml/client-core'
+import { LoadingScreen, TabLayout, usePubSub } from '@magickml/client-core'
 import { useEffect } from 'react'
-import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import TabBar from '../../components/TabBar/TabBar'
-import { usePubSub } from '../../contexts/PubSubProvider'
+import Workspaces from '../../components/Workspaces'
 import { RootState } from '../../state/store'
 import {
   activeTabSelector,
@@ -13,7 +12,6 @@ import {
   openTab,
   selectAllTabs,
 } from '../../state/tabs'
-import Workspaces from '../../components/Workspaces'
 
 /**
  * Magick component
