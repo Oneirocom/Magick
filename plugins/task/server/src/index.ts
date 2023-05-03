@@ -57,6 +57,13 @@ class TaskManager {
 
       console.log('tasks are', tasks)
       const taskArray = tasks.data || []
+
+      // we dont want to blast the database, so run on a 1 second loop when tasks are empty
+      if(taskArray.length === 0) {
+        setTimeout(() => agent.taskHandler, 1000)
+        return
+      }
+
       // iterate over all tasks
       for (const task of taskArray) {
         const resp = await spellRunner.runComponent({

@@ -3,6 +3,9 @@ import styles from "./Chat.module.css"
 import Mic from '@mui/icons-material/Mic'
 import MicOff from '@mui/icons-material/MicOff'
 import axios from 'axios';
+import {
+  ELEVENLABS_API_KEY
+} from '@magickml/core'
 
 import {
   SepiaSpeechRecognitionConfig,
@@ -20,13 +23,10 @@ const voices = {
 }
 
 // Constants
-
 const messagesMaxCharacters = 20000
-const API_KEY = 'ce69df07b50e7179cbbfc5c2bef9d752';
 const VOICE_ID = '21m00Tcm4TlvDq8ikWAM';
 
 // Prune Messages Function
-
 export async function pruneMessages(messages) {
   let currentSize = 0
   const newMessages = []
@@ -174,7 +174,7 @@ export default function ChatBox({
       headers: {
         accept: 'audio/mpeg',
         'content-type': 'application/json',
-        'xi-api-key': `${API_KEY}`,
+        'xi-api-key': `${ELEVENLABS_API_KEY}`,
       },
       data: {
         text: inputText, 
