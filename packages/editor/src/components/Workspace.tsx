@@ -18,8 +18,8 @@ import Playtest from '../windows/PlaytestWindow'
 import DebugConsole from '../windows/DebugConsole'
 import TextEditor from '../windows/TextEditorWindow'
 
-import { useFeathers } from '../contexts/FeathersProvider'
-import { usePubSub } from '../contexts/PubSubProvider'
+import { useFeathers } from '../../../core/client/src/providers/FeathersProvider'
+import { usePubSub } from '../../../core/client/src/providers/PubSubProvider'
 import { RootState } from '../state/store'
 
 /**

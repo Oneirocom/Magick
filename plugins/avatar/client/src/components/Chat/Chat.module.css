@@ -1,6 +1,28 @@
+.chatContainer {
+    position: absolute;
+    width: 100%;
+    max-width: 50%;
+    right: 32px;
+    text-align: center;
+    height: calc(100vh);
+    background: rgba(5, 11, 14, 0.8);
+    color: aliceblue;
+    z-index: 2000;
+  }
+  
+  .scrollContainer {
+    height: 98%;
+    width: 99%;
+    position: absolute;
+    left: 0;
+    top: 2px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+  
 .chatBox {
     width: 100%;
-    height: 100%;
+    height: 20%;
     font-size: .875rem;
     color: #fff;
     text-align: left;
@@ -51,8 +73,7 @@
 .messages { 
     display: flex;
     flex-direction: column;
-    height: 100%;
-    height: 180px;
+    height: 600px;
     overflow: auto;
     margin-bottom: 20px;
     overflow-y: scroll;
@@ -63,8 +84,6 @@
     padding: .5em;
     box-sizing: border-box;
     width: 100%;
-    height: calc(100% - 132px);
-    height: -webkit-calc(100% - 132px);
     font-size: 18px;
 }
 

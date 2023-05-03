@@ -5,7 +5,7 @@ import { Spell } from '@magickml/core'
 import {
   useLazyGetSpellByIdQuery
 } from '../../../state/api/spells'
-import { useFeathers } from '../../../contexts/FeathersProvider'
+import { useFeathers } from '../../../../../core/client/src/providers/FeathersProvider'
 
 import { useConfig } from '@magickml/client-core'
 

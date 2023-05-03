@@ -15,10 +15,9 @@ import React, {
 } from 'react';
 import { Component } from 'rete/types/engine';
 
+import { useConfig, usePubSub } from '@magickml/client-core';
 import { MyNode } from '../components/Node/Node';
-import { useConfig } from '@magickml/client-core';
-import { useFeathers } from '../contexts/FeathersProvider';
-import { usePubSub } from '../contexts/PubSubProvider';
+import { useFeathers } from '../../../core/client/src/providers/FeathersProvider';
 import { initEditor } from '../editor';
 import { zoomAt } from '../plugins/areaPlugin/zoom-at';
 import { spellApi } from '../state/api/spells';

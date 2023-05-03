@@ -1,10 +1,9 @@
 // DOCUMENTED
-import ReactJson from 'react-json-view'
-import { Window } from '@magickml/client-core'
+import { Window, usePubSub } from '@magickml/client-core'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Terminal from 'react-console-emulator'
+import ReactJson from 'react-json-view'
 import { useEditor } from '../../contexts/EditorProvider'
-import { usePubSub } from '../../contexts/PubSubProvider'
 
 /**
  * The type for debug messages.
@@ -24,7 +23,7 @@ interface Terminal {
  * @param {Object} props.tab - Tab object.
  * @returns {JSX.Element} Debug console component.
  */
-const DebugConsole = ({ tab }): JSX.Element => {
+const DebugConsole = ({ tab }): Element => {
   const [scrollToBottom, setScrollToBottom] = useState<boolean>(false)
   const { centerNode } = useEditor()
   const { publish, subscribe, events } = usePubSub()
@@ -78,7 +77,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
    * @param {string} type - Message type (error or log).
    * @returns {JSX.Element} Rendered message.
    */
-  const Message = (message, type): JSX.Element => {
+  const Message = (message, type): Element => {
     return (
       <div
         style={{
@@ -151,6 +150,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
       description: 'Echo a passed string.',
       usage: 'echo <string>',
       fn: function () {
+        // eslint-disable-next-line prefer-rest-params
         return `${Array.from(arguments).join(' ')}`
       },
     },
