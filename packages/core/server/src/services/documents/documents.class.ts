@@ -71,7 +71,7 @@ export class DocumentService<
     if (DATABASE_TYPE == 'sqlite') {
       const docdb = app.get('docdb')
       if (params.query.embedding) {
-        const { $limit: _, ...param } = params.query
+        const { ...param } = params.query
         const search_result = await docdb.extractMetadataFromResults(
           params.query.embedding,
           2,
@@ -81,12 +81,12 @@ export class DocumentService<
           return { data: search_result }
         }
       }
-      const { $limit: _, ...param } = params.query
+      const { ...param } = params.query
       const tr = await docdb.getDataWithMetadata(param, 10)
       return { data: tr }
     } else {
       if (params.query.embedding) {
-        const { $limit: _, ...param } = params.query
+        const { ...param } = params.query
         const querys = await db('events')
           .select('*')
           .where({
