@@ -62,3 +62,9 @@ export const POSTHOG_ENABLED =
   getVarForEnvironment('POSTHOG_ENABLED') === 'true'
 export const POSTHOG_API_KEY = getVarForEnvironment('POSTHOG_API_KEY') || ''
 export const REDIS_URL = getVarForEnvironment('REDIS_URL') || ''
+
+export const ELEVENLABS_API_KEY =
+  getVarForEnvironment('ELEVENLABS_API_KEY') ||
+  'ce69df07b50e7179cbbfc5c2bef9d752'
+export const VITE_APP_TRUSTED_PARENT_URL =
+  getVarForEnvironment('VITE_APP_TRUSTED_PARENT_URL') || ''

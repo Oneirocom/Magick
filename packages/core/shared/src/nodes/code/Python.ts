@@ -21,11 +21,11 @@ const defaultCode = `
 # data: internal data of the node to read or write to nodes data state
 # Make sure to call function with inputs and data as arguments
 
-inputs = {input1}
+inputs = {input1} # REPLACE WITH SOCKET NAMES
 def worker(inputs, data):
   # Keys of the object returned must match the names
   # of your outputs you defined.
-  outputs = dict(output1=input1)
+  outputs = dict(output1=input1) # REPLACE WITH OUTPUT SOCKET NAMES
   return outputs, data
 worker(inputs, data)
 `

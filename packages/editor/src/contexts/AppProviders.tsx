@@ -1,10 +1,7 @@
 // DOCUMENTED 
-import React from 'react';
+import { ConfigProvider, FeathersProvider, PubSubProvider } from '@magickml/client-core';
 import { createTheme, ThemeProvider } from '@mui/material';
-
-import ConfigProvider from './ConfigProvider';
-import FeathersProvider from './FeathersProvider';
-import PubSubProvider from './PubSubProvider';
+import React from 'react';
 import ToastProvider from './ToastProvider';
 
 // Create a dark theme for the application

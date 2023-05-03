@@ -1,8 +1,6 @@
 // DOCUMENTED 
-import axios from 'axios';
 import Rete from 'rete';
 
-import { API_ROOT_URL } from '../../config';
 import { InputControl } from '../../dataControls/InputControl';
 import { MagickComponent } from '../../engine';
 import { arraySocket, stringSocket, triggerSocket } from '../../sockets';
@@ -11,6 +9,7 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  ModuleContext,
   WorkerData
 } from '../../types';
 
@@ -77,13 +76,14 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: Record<string, unknown>
+    context: ModuleContext
   ): Promise<void> {
     const { projectId } = context;
 
-    const document = inputs['document'][0] as Document;
+    // const document = inputs['document'] ? inputs['document'][0] as Document : null;
     const owner = (inputs['owner'] ? inputs['owner'][0] : null) as string;
     const content = (inputs['content'] ? inputs['content'][0] : null) as string;
+    console.log('content is', content)
     const _embedding = (
       inputs['embedding'] ? inputs['embedding'][0] : null
     ) as number[] | string[];
@@ -109,23 +109,27 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
       return console.log('Content is null, not storing document');
     }
 
-    console.log('owner is', owner ?? document.owner);
+    console.log('owner is', owner /* ?? document?.owner */);
 
     const data = {
-      ...document,
-      owner: owner ?? document.owner,
+      // ...document,
+      owner: owner, // ?? document?.owner,
       projectId,
       content,
       type,
       date,
-    } as Document;
+    } as Document & { secrets?: any };
 
     if (embedding) {
       data.embedding = embedding;
     }
-
+    data["secrets"] = {};
+    if (context.module.secrets) data["secrets"] = JSON.stringify(context.module.secrets);
     if (content && content !== '') {
-      await axios.post(`${API_ROOT_URL}/documents`, data);
+      const { app } = context.module;
+      if (!app) throw new Error('App is not defined, cannot create event');
+      const result = await app.service('documents').create(data);
+      console.log("Result of document creation", result)
     } else {
       throw new Error('Content is empty');
     }

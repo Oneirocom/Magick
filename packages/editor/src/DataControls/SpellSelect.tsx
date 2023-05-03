@@ -6,7 +6,7 @@ import md5 from 'md5'
 import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
 
-import { useConfig } from '../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 import { spellApi } from '../state/api/spells'
 import { useAppDispatch } from '../state/hooks'
 import { openTab } from '../state/tabs'

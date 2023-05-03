@@ -98,7 +98,7 @@ export class AgentExecutor extends MagickComponent<Promise<any>> {
                 trigger: 'option',
                 output: 'output'
             },
-        }, 'Langchain', info);
+        }, 'Experimental', info);
     }
     builder(node: MagickNode): MagickNode {
         const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)

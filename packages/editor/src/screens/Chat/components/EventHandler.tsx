@@ -7,9 +7,9 @@ import md5 from 'md5'
 import {
   useLazyGetSpellByIdQuery
 } from '../../../state/api/spells'
-import { useFeathers } from '../../../contexts/FeathersProvider'
+import { useFeathers } from '../../../../../core/client/src/providers/FeathersProvider'
 
-import { useConfig } from '../../../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 
 const EventHandler = ({ pubSub, conversation }) => {
   const config = useConfig()

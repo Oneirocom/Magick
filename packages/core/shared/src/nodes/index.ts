@@ -6,7 +6,6 @@ import { ArrayVariable } from './array/ArrayVariable'
 import { GetValueFromArray } from './array/GetValueFromArray'
 import { JoinListComponent } from './array/JoinList'
 import { RemapArray } from './array/RemapArray'
-import { TextToSpeech } from './audio/textToSpeech'
 import { BooleanVariable } from './boolean/BooleanVariable'
 import { IsVariableTrue } from './boolean/IsVariableTrue'
 import { LogicalOperator } from './boolean/LogicalOperator'
@@ -21,8 +20,10 @@ import { EventDelete } from './events/EventDelete'
 import { EventDestructureComponent } from './events/EventDestructure'
 import { EventRecall } from './events/EventRecall'
 import { EventRestructureComponent } from './events/EventRestructure'
-import { EventsToConversation } from './events/EventsToConversation'
 import { EventStore } from './events/EventStore'
+import { EventsToConversation } from './events/EventsToConversation'
+import { JupyterNotebook } from './experimental/JupyterNotebook'
+import { TextToSpeech } from './experimental/textToSpeech'
 import { BooleanGate } from './flow/BooleanGate'
 import { ExclusiveGate } from './flow/ExclusiveGate'
 import { IsNullOrUndefined } from './flow/IsNullOrUndefined'
@@ -31,7 +32,6 @@ import { RandomGate } from './flow/RandomGate'
 import { SwitchGate } from './flow/SwitchGate'
 import { WaitForAll } from './flow/WaitForAll'
 import { InputComponent } from './io/Input'
-import { JupyterNotebook } from './io/JupyterNotebook'
 import { Output } from './io/Output'
 import { Request } from './io/Request'
 import { SpellComponent } from './io/Spell'
@@ -55,6 +55,7 @@ import { TextVariable } from './text/TextVariable'
 import { Cast } from './utility/Cast'
 import { Echo } from './utility/Echo'
 import { Log } from './utility/Log'
+import { CurrentTime } from './utility/CurrentTime'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -101,6 +102,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   merge: () => new Merge(),
   orGate: () => new OrGate(),
   log: () => new Log(),
+  currentTime: () => new CurrentTime(),
   promptTemplate: () => new TextTemplate(),
   parseJSON: () => new ParseJSON(),
   objectToJSON: () => new ObjectToJSON(),
