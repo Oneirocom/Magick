@@ -108,10 +108,6 @@ function DocumentTable({ documents, updateCallback }) {
         accessor: 'type',
       },
       {
-        Header: 'Owner',
-        accessor: 'owner',
-      },
-      {
         Header: 'Content',
         accessor: 'content',
       },
@@ -271,7 +267,6 @@ function DocumentTable({ documents, updateCallback }) {
     // reset newDocument
     setNewDocument({
       type: '',
-      owner: '',
       content: '',
       projectId: '',
       date: '',
@@ -285,7 +280,6 @@ function DocumentTable({ documents, updateCallback }) {
   // State for new document
   const [newDocument, setNewDocument] = useState({
     type: '',
-    owner: '',
     content: '',
     projectId: '',
     date: new Date().toISOString(),

@@ -2,7 +2,7 @@
 import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
-import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
+import { arraySocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -46,7 +46,6 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   builder(node: MagickNode) {
     // Create input and output sockets
     const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
-    const ownerSocket = new Rete.Input('owner', 'Owner', stringSocket)
     const out = new Rete.Output('documents', 'Documents', arraySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -66,21 +65,13 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       defaultValue: '6',
     })
 
-    const owner = new InputControl({
-      dataKey: 'owner',
-      name: 'Owner',
-      icon: 'moon',
-      placeholder: 'owner',
-    })
-
     // Save controls as inspector data for easy reference
-    node.inspector.add(type).add(max_count).add(owner)
+    node.inspector.add(type).add(max_count)
 
     // Build the node's input and output interface
     return node
       .addInput(dataInput)
       .addInput(embedding)
-      .addInput(ownerSocket)
       .addOutput(dataOutput)
       .addOutput(out)
   }
@@ -108,8 +99,6 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       inputs['embedding'] ? inputs['embedding'][0] : null
     ) as number[]
 
-    let owner = inputs['owner'] ? inputs['owner'][0] : null
-
     if (typeof embedding == 'string')
       embedding = (embedding as string)
         .replace('[', '')
@@ -121,7 +110,6 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
     const nodeData = node.data as {
       type: string
       max_count: string
-      owner: string
     }
 
     const typeData = nodeData.type as string
@@ -132,8 +120,6 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
 
     const maxCountData = nodeData.max_count as string
     const maxCount = maxCountData ? parseInt(maxCountData) : 10
-
-    owner = owner ?? nodeData.owner
 
     // replace with feathers service call
     const response = await app.service('documents').find({
