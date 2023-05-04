@@ -528,6 +528,12 @@ export type CompletionInspectorControls = {
   defaultValue: string
 }
 
+type HandlerResponse = {
+  success: boolean
+  result: string | number[]
+  error: string
+}
+
 export type CompletionProvider = {
   [x: string]: any
   type: CompletionType
@@ -537,7 +543,7 @@ export type CompletionProvider = {
     inputs: MagickWorkerInputs
     outputs: MagickWorkerOutputs
     context: unknown
-  }) => { success: boolean; result: string | number[]; error: string } // server only
+  }) => Promise<HandlerResponse> | HandlerResponse // server only
   inspectorControls?: CompletionInspectorControls[] // client only
   inputs: CompletionSocket[]
   outputs: CompletionSocket[]
