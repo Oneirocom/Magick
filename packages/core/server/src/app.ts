@@ -20,7 +20,7 @@ import {
   DEFAULT_USER_ID,
   globalsManager,
   IGNORE_AUTH,
-  REDIS_URL,
+  REDISCLOUD_URL,
 } from '@magickml/core'
 
 import { dbClient } from './dbClient'
@@ -73,10 +73,10 @@ app.use(bodyParser())
 app.configure(configureManager())
 
 // sync up messages between the app and the runner
-if (REDIS_URL) {
+if (REDISCLOUD_URL) {
   app.configure(
     sync({
-      uri: REDIS_URL,
+      uri: REDISCLOUD_URL,
       serialize: stringify,
       deserialize: parse,
     })
