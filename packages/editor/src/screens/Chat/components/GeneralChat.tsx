@@ -3,7 +3,7 @@ import { Window, usePubSub } from '@magickml/client-core'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Terminal from 'react-console-emulator'
 import ReactJson from 'react-json-view'
-import { useEditor } from '../../contexts/EditorProvider'
+import { useEditor } from '../../../contexts/EditorProvider'
 
 /**
  * The type for debug messages.
