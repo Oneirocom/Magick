@@ -7,7 +7,6 @@
       "rules": {
         "@typescript-eslint/no-namespace": "off",
         "react-hooks/exhaustive-deps": "off",
-        "@typescript-eslint/no-non-null-assertion": "off",
         "no-new-func": "off",
         "react-hooks/rules-of-hooks": "off",
         "array-callback-return": "off",
