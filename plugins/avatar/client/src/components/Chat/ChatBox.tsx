@@ -1,7 +1,7 @@
 import { useConfig, useFeathers } from '@magickml/client-core'
 import Mic from '@mui/icons-material/Mic'
 import MicOff from '@mui/icons-material/MicOff'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   SepiaSpeechRecognitionConfig,
   sepiaSpeechRecognitionInit,
@@ -68,7 +68,7 @@ export default function ChatBox() {
   const { avatarVrm } = useZustand()
   const lipSync = useLipSync(avatarVrm)
   const spellList = useSpellList()
-  const { publish, subscribe, events } = usePubSub();
+  const { publish, subscribe, events } = usePubSub()
 
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
@@ -76,9 +76,9 @@ export default function ChatBox() {
   const [currentSpell, setCurrentSpell] = useState(null)
 
   useEffect(() => {
-    if(currentSpell) return
-    if(spellList.length > 0) {
-        setCurrentSpell(spellList[0].name)
+    if (currentSpell) return
+    if (spellList.length > 0) {
+      setCurrentSpell(spellList[0].name)
     }
   }, [spellList])
 
@@ -156,74 +156,77 @@ export default function ChatBox() {
       handleUserChatInput(value)
     }
   }
+  const printToConsole = useCallback((_, _text) => {
+    setWaitingForResponse(false)
+    setMessages(messages => [...messages, name + ': ' + _text])
+    try {
+      // fetch the audio file from ttsEndpoint
+      const ttsEndpoint = 'https://ai-voice.webaverse.ai/tts?s=' + _text
+
+      fetch(ttsEndpoint).then(async response => {
+        const blob = await response.blob()
+
+        // convert the blob to an array buffer
+        const arrayBuffer = await blob.arrayBuffer()
+
+        lipSync.startFromAudioFile(arrayBuffer)
+      })
+
+      // })
+    } catch (error) {
+      console.error(error)
+    }
+  })
+
+  const { $PLAYTEST_PRINT, $RUN_SPELL } = events
 
   const handleUserChatInput = async value => {
-    if (value && !waitingForResponse) {
-      // Send the message to the localhost endpoint
-      const agent = name
+    if (!value || waitingForResponse) return
+    // clear chat input
+    setInput('')
 
-      // clear chat input
-      setInput('')
+    // add the message to the window
+    setMessages(messages => [...messages, `${speaker}: ${value}`])
 
-      // add the message to the window
-      setMessages(messages => [...messages, `${speaker}: ${value}`])
+    const promptMessages = await pruneMessages(messages)
+    promptMessages.push(`${speaker}: ${value}`)
 
-      const promptMessages = await pruneMessages(messages)
-      promptMessages.push(`${speaker}: ${value}`)
-      const self = lipSync
-
-      const toSend = {
-        content: value,
-        sender: 'user',
-        observer: 'assistant',
-        agentId: 'preview',
-        client: 'playtest',
-        channel: 'previewChannel',
-        projectId: config.projectId,
-        channelType: 'previewChannelType',
-        rawData: value,
-        entities: ['user', 'assistant'],
-      };
-
-      console.log('currentSpell', currentSpell)
-
-      const data = {
-        spellName: currentSpell,
-        projectId: config.projectId,
-        inputs: {
-          'Input - Default': toSend,
-        },
-        secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
-      };
-      const { $PLAYTEST_PRINT, $RUN_SPELL } = events;
-
-      client.service('spell-runner').create(data)
-
-      publish($RUN_SPELL(null), data);
-
-      // fetch 
-
-      try {
-        // fetch the audio file from ttsEndpoint
-        const ttsEndpoint = 'https://ai-voice.webaverse.ai/tts?s=' + value
-
-        fetch(ttsEndpoint).then(async response => {
-          const blob = await response.blob()
-
-          // convert the blob to an array buffer
-          const arrayBuffer = await blob.arrayBuffer()
-
-          self.startFromAudioFile(arrayBuffer)
-          setMessages(messages => [...messages, agent + ': ' + value])
-        })
-
-        setWaitingForResponse(false)
-        // })
-      } catch (error) {
-        console.error(error)
-      }
+    const toSend = {
+      content: value,
+      sender: 'user',
+      observer: 'assistant',
+      agentId: 'preview',
+      client: 'playtest',
+      channel: 'previewChannel',
+      projectId: config.projectId,
+      channelType: 'previewChannelType',
+      rawData: value,
+      entities: ['user', 'assistant'],
     }
+
+    console.log('currentSpell', currentSpell)
+
+    const data = {
+      id: 'avatar',
+      spellName: currentSpell,
+      projectId: config.projectId,
+      inputs: {
+        'Input - Default': toSend,
+      },
+      secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
+    }
+
+    publish($RUN_SPELL('avatar'), data)
+    console.log('ran spell', data)
   }
+
+  useEffect(() => {
+    const unsubscribe = subscribe($PLAYTEST_PRINT('avatar'), printToConsole)
+
+    // Return a cleanup function.
+    return unsubscribe as () => void;
+  }, [subscribe, printToConsole, $PLAYTEST_PRINT]);
+
 
   let hasSet = false
   useEffect(() => {
@@ -259,15 +262,12 @@ export default function ChatBox() {
             id="spellList"
             defaultValue={currentSpell}
             onChange={e => {
-                setCurrentSpell(e.target.value)
-                }}
+              setCurrentSpell(e.target.value)
+            }}
           >
             {spellList?.map((spell, idx) => {
               return (
-                <option
-                  value={spell.name}
-                  key={idx}
-                >
+                <option value={spell.name} key={idx}>
                   {spell.name}
                 </option>
               )
