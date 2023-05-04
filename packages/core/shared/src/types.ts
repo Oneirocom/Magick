@@ -47,7 +47,6 @@ export type Document = {
   id?: number
   type?: string
   content?: string
-  owner?: string
   embedding?: number[]
   projectId?: string
   date?: string
