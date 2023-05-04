@@ -70,7 +70,6 @@ export class SpellComponent extends MagickComponent<
     this.display = true
     this.onDoubleClick = (node: MagickNode) => {
       if (!this.editor) return
-      console.log('double click', node)
       const pubsub = this.editor.pubSub
       // TODO: Check if events are defined instead of as
       const event = pubsub.events.OPEN_TAB
@@ -158,7 +157,6 @@ export class SpellComponent extends MagickComponent<
             ] = node.data[data.name]
           }
         } else if (name.includes('String')) {
-          console.log('text variable', data.fewshot)
           const textInputControl = new InputControl({
             name: name,
             dataKey: data.name,
@@ -192,7 +190,6 @@ export class SpellComponent extends MagickComponent<
     }
 
     if (node.data.graph) {
-      console.log('node.data.graph', node.data.graph)
       const publicVariables = getPublicVariables(node.data.graph)
       createInspectorForPublicVariables(publicVariables)
     }
@@ -213,13 +210,11 @@ export class SpellComponent extends MagickComponent<
         node.inspector.remove(control.dataKey)
       })
 
-      console.log('getPublicVariables', spell)
       // TODO: Set the public variables from the public variables of the spell
       const publicVariables = getPublicVariables(
         node.data.graph || spell.graph || {}
       )
 
-      console.log('createInspectorForPublicVariables', publicVariables)
       createInspectorForPublicVariables(publicVariables)
 
       // Update the sockets
@@ -234,8 +229,6 @@ export class SpellComponent extends MagickComponent<
       // subscribe to changes form the spell to update the sockets if there are changes
       // Note: We could store all spells in a spell map here and rather than receive the whole spell, only receive the diff, make the changes, update the sockets, etc.  Mayb improve speed?
       this.subscribe(node, spell.name)
-
-      console.log('node.inspector.data()', node.inspector.data())
 
       const context = this.editor && this.editor.context
       if (!context) return
@@ -301,9 +294,10 @@ export class SpellComponent extends MagickComponent<
     const { publicVariables, agent, secrets } = module
 
     if (spellManager) {
-      const spellRunner = await spellManager.getSpellRunner(
+      const spellRunner = await spellManager.loadById(
         node.data.spellId as string
       )
+
       if (spellRunner) {
         const runComponentArgs = {
           spellId: node.data.spellId as string,
@@ -322,16 +316,6 @@ export class SpellComponent extends MagickComponent<
       }
     } else {
       throw new Error('spell manager not found')
-      // if (!runSpell) throw new Error('Magick runSpell not found')
-      // const outputs = await runSpell({
-      //   inputs: flattenedInputs,
-      //   spellId: node.data.spellId as string,
-      //   projectId: node.data.projectId as string,
-      //   secrets,
-      //   publicVariables,
-      // })
-
-      // return this.formatOutputs(node, outputs)
     }
   }
 }
