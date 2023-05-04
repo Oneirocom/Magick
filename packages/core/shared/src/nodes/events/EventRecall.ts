@@ -102,7 +102,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     const getEvents = async (params: GetEventArgs) => {
       const result = await app.service('events').find({ query: params })
-
       const { events } = result
 
       return events

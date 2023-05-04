@@ -1,5 +1,5 @@
-// DOCUMENTED 
-import { DEFAULT_USER_ID, IGNORE_AUTH, SpellManager } from '@magickml/core';
+// DOCUMENTED
+import { DEFAULT_USER_ID, IGNORE_AUTH, SpellManager } from '@magickml/core'
 
 /**
  * Handle socket connections for the application.
@@ -13,43 +13,45 @@ const handleSockets = (app: any) => {
      */
     io.on('connection', async function (socket: any) {
       // user will be set to the payload if we are not in single user mode
-      let user;
+      let user
 
       // Single user mode is for local usage. In the cloud, we want auth here.
       if (IGNORE_AUTH) {
         user = {
           id: DEFAULT_USER_ID,
-        };
+        }
       } else {
         // Use a custom header for the handshake.
-        const auth = socket.handshake?.headers?.authorization;
+        const auth = socket.handshake?.headers?.authorization
         if (!auth) {
-          return console.error('No Authorization header was provided in handshake');
+          return console.error(
+            'No Authorization header was provided in handshake'
+          )
         }
 
-        const sessionId = auth.split(' ')[1];
+        const sessionId = auth.split(' ')[1]
         if (!sessionId) {
-          return console.error('No session id provided for handshake');
+          return console.error('No session id provided for handshake')
         }
 
         // Auth services will verify the token
         const payload = await app
           .service('authentication')
-          .verifyAccessToken(sessionId);
+          .verifyAccessToken(sessionId)
 
-        user = payload.user;
+        user = payload.user
       }
       // Attach the user info to the params for use in services
-      socket.feathers.user = user;
+      socket.feathers.user = user
 
       // Instantiate the interface within the runner rather than the spell manager to avoid shared state issues.
-      const spellManager = new SpellManager({ socket });
+      const spellManager = new SpellManager({ socket, app })
 
-      app.userSpellManagers.set(user.id, spellManager);
+      app.userSpellManagers.set(user.id, spellManager)
 
-      socket.emit('connected');
-    });
-  };
-};
+      socket.emit('connected')
+    })
+  }
+}
 
-export default handleSockets;
+export default handleSockets

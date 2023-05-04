@@ -1,4 +1,5 @@
 // DOCUMENTED
+import { parse, stringify } from 'flatted'
 import { authenticate } from '@feathersjs/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
 import { HookContext } from '@feathersjs/feathers'
@@ -12,12 +13,14 @@ import {
   rest,
 } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
+import sync from 'feathers-sync'
 import {
   configureManager,
   DEFAULT_PROJECT_ID,
   DEFAULT_USER_ID,
   globalsManager,
   IGNORE_AUTH,
+  REDIS_URL,
 } from '@magickml/core'
 
 import { dbClient } from './dbClient'
@@ -35,7 +38,6 @@ import {
   ExtendedEmbeddings,
 } from './vectordb'
 import { PluginEmbeddings } from './customEmbeddings'
-import type { Knex } from 'knex'
 
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())
@@ -67,8 +69,19 @@ app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
 
-// Configure app management settings
+// Configure app spell management settings
 app.configure(configureManager())
+
+// sync up messages between the app and the runner
+if (REDIS_URL) {
+  app.configure(
+    sync({
+      uri: REDIS_URL,
+      serialize: stringify,
+      deserialize: parse,
+    })
+  )
+}
 
 // Configure authentication
 if (!IGNORE_AUTH) {
