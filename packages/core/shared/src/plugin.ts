@@ -145,9 +145,13 @@ export class ServerPlugin extends Plugin {
     serverInit = () => null,
     agentMethods = {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      start: () => { /* null */},
+      start: () => {
+        /* null */
+      },
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      stop: () => { /* null */},
+      stop: () => {
+        /* null */
+      },
     },
     serverRoutes = [],
     secrets = [],
@@ -256,7 +260,7 @@ class PluginManager {
     subtypes: null | string[] = null
   ): any {
     const completionProviders: CompletionProvider[] = []
-    const secrets: any = [];
+    const secrets: any = []
     this.pluginList.forEach(plugin => {
       plugin.completionProviders.forEach(provider => {
         if (type && provider.type !== type) return

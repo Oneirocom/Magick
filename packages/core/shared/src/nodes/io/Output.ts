@@ -129,11 +129,11 @@ export class Output extends MagickComponent<void> {
         })
 
         const responseOutputType = type?.defaultResponseOutput
-        const t = module.agent.outputTypes.find(
+        const out = module.agent.outputTypes.find(
           t => t.name === responseOutputType
         )
 
-        t.handler({
+        out.handler({
           output,
           agent: module.agent,
           event,

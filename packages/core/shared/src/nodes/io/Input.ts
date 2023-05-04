@@ -197,7 +197,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
             // if socket is output and useData is false, don't add
             if (socket.socket === 'output' && node.data.useData !== true) return
           }
-
           node.addOutput(
             new Rete.Output(socket.socket, socket.name, socket.type)
           )
@@ -246,7 +245,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
         ) {
           node.addOutput(new Rete.Output('trigger', 'trigger', triggerSocket))
         }
-
         if (!node.data.useData && node.outputs.has('output')) {
           connections.forEach(c => {
             if (c.output.key === 'output') {
