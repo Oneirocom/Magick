@@ -60,27 +60,20 @@ export class DocumentService<
     const cli = app.get('docdb')
     if (params.query.embedding) {
       const { $limit: _, ...param } = params.query
-      const querys = await db('events')
-        .select('*')
-        .where({
-          ...(param.type && { type: param.type }),
-          ...(param.id && { id: param.id }),
-          ...(param.sender && { sender: param.sender }),
-          ...(param.client && { client: param.client }),
-          ...(param.channel && { channel: param.channel }),
-          ...(param.projectId && { projectId: param.projectId }),
-          ...(param.content && { content: param.content }),
-        })
-        .orderByRaw(
-          `embedding <-> ${"'[" + params.query.embedding.toString() + "]'"}`
-        )
-      // const result = await db.raw(`select * from events order by embedding <-> ${"'[" + params.query.embedding.toString() + "]'"} limit 1;`)
-      const bod = {
-        query_embedding: '[' + params.query.embedding.toString() + ']',
-        match_count: 2,
-        content_to_match: 'hi',
-      }
-      const rr = await cli.rpc('match_events', bod)
+      const querys = await db('documents')
+                          .select('*')
+                          .where({
+                            ...(param.type && { type: param.type }),
+                            ...(param.id && { id: param.id }),
+                            ...(param.sender && { sender: param.sender }),
+                            ...(param.client && { client: param.client }),
+                            ...(param.channel && { channel: param.channel }),
+                            ...(param.projectId && { projectId: param.projectId }),
+                            ...(param.content && { content: param.content }),
+                          })
+                          .select(db.raw(`embedding <-> '${JSON.stringify(params.query.embedding)}' AS distance`))
+                          .orderBy('distance', 'desc')
+                          .limit(10);
       return { data: querys }
     }
     const res = await super.find(params)
