@@ -106,7 +106,7 @@ const Playtest = ({ tab }) => {
     (_, _text) => {
       // check if _text is a string
       if (typeof _text !== 'string') return console.warn('could not split text, not a string', _text);
-      const text = `Agent: ` + _text.split('\n');
+      const text = `Agent: ` + _text?.split('\n');
       const newHistory = [...history, text];
       setHistory(newHistory as []);
     },
