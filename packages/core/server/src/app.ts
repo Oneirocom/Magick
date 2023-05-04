@@ -31,7 +31,6 @@ import handleSockets from './sockets/sockets'
 
 //Vector DB Related Imports
 import {
-  HNSWLib,
   PostgresVectorStoreCustom,
   ExtendedEmbeddings,
 } from './vectordb'
@@ -43,8 +42,8 @@ const app: Application = koa(feathers())
 
 declare module './declarations' {
   interface Configuration {
-    vectordb: HNSWLib | PostgresVectorStoreCustom | any
-    docdb: HNSWLib | PostgresVectorStoreCustom | any
+    vectordb: PostgresVectorStoreCustom | any
+    docdb: PostgresVectorStoreCustom | any
   }
 }
 
