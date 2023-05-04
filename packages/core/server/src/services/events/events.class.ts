@@ -28,7 +28,6 @@ export class EventService<
    * @param {EventData} data - The event data object.
    * @returns {Promise<any>} - The created event data.
    */
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: EventData): Promise<any> {
     const cli = app.get('vectordb')
@@ -53,7 +52,6 @@ export class EventService<
    * @param {ServiceParams} [params] - The query parameters for the search.
    * @returns {Promise<any>} - The search results.
    */
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async find(params?: ServiceParams) {
     const cli = app.get('vectordb')
@@ -65,36 +63,38 @@ export class EventService<
       const f32_ary = new Float32Array(ary_buf)
       const query = f32_ary as unknown as number[]
       const { $limit: _, ...param } = params.query
-      const querys = await cli.from('events')
-                          .select('*')
-                          .where({
-                            ...(param.type && { type: param.type }),
-                            ...(param.id && { id: param.id }),
-                            ...(param.sender && { sender: param.sender }),
-                            ...(param.client && { client: param.client }),
-                            ...(param.channel && { channel: param.channel }),
-                            ...(param.projectId && { projectId: param.projectId }),
-                            ...(param.content && { content: param.content }),
-                          })
-                          .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
+      const querys = await cli
+        .from('events')
+        .select('*')
+        .where({
+          ...(param.type && { type: param.type }),
+          ...(param.id && { id: param.id }),
+          ...(param.sender && { sender: param.sender }),
+          ...(param.client && { client: param.client }),
+          ...(param.channel && { channel: param.channel }),
+          ...(param.projectId && { projectId: param.projectId }),
+          ...(param.content && { content: param.content }),
+        })
+        .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
       return { events: querys }
     }
 
-    const res =  await cli.from('events')
-                          .select()
-                          .where(builder => {
-                            if (params.query.content) {
-                              builder.where('content', params.query.content)
-                            }
-                            if ('$limit' in params.query) {
-                              builder.limit(params.query['$limit'])
-                            }
-                            if (params.query.projectId) {
-                              builder.where('projectId', params.query.projectId)
-                            }
-                          })
+    const res = await cli
+      .from('events')
+      .select()
+      .where(builder => {
+        if (params.query.content) {
+          builder.where('content', params.query.content)
+        }
+        if ('$limit' in params.query) {
+          builder.limit(params.query['$limit'])
+        }
+        if (params.query.projectId) {
+          builder.where('projectId', params.query.projectId)
+        }
+      })
 
-      return { events: res as unknown as { data: Array<any> } }
+    return { events: res as unknown as { data: Array<any> } }
   }
 }
 

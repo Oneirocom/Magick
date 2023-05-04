@@ -128,7 +128,6 @@ const AgentManagerWindow = () => {
       }
 
       // Check if the "id" property exists in the object
-      // eslint-disable-next-line no-prototype-builtins
       if (data.hasOwnProperty('id')) {
         delete data.id
       }

@@ -24,7 +24,6 @@ export async function getChannelFromMessage(message: any, discord: any): Promise
     return messageOBJ;
 }
 
-
 export async function getLoadSpell(name: string, agent: Agent, app: Application): Promise<SpellRunner | undefined> {
     let spell;
     switch (name) {
@@ -42,7 +41,7 @@ export async function getLoadSpell(name: string, agent: Agent, app: Application)
             break;
     }
     if (!spell) return;
-    let runner = await agent?.spellManager.load(spell, true) as unknown as SpellRunner;
+    const runner = await agent?.spellManager.load(spell, true) as unknown as SpellRunner;
     return runner
 }
 
@@ -136,8 +135,8 @@ export async function createTasks(objective: string, task_description: string, r
       }`
 
     try {
-        let taskspell = await getLoadSpell("TaskCreation", agent as unknown as Agent, app as unknown as Application);
-        let results = await runSpell(taskspell as SpellRunner, content, agent as unknown as Agent, app as unknown as Application);
+        const taskspell = await getLoadSpell("TaskCreation", agent as unknown as Agent, app as unknown as Application);
+        const results = await runSpell(taskspell as SpellRunner, content, agent as unknown as Agent, app as unknown as Application);
         return parseTasksToArray(results.Output)
     } catch (error) {
         console.log(error)
@@ -154,8 +153,8 @@ export async function taskReprioritization(next_task_id: string, objective: stri
       }`
 
     try {
-        let taskspell = await getLoadSpell("TaskReprioritization", agent as unknown as Agent, app as unknown as Application);
-        let results = await runSpell(taskspell as SpellRunner, content, agent as unknown as Agent, app as unknown as Application);
+        const taskspell = await getLoadSpell("TaskReprioritization", agent as unknown as Agent, app as unknown as Application);
+        const results = await runSpell(taskspell as SpellRunner, content, agent as unknown as Agent, app as unknown as Application);
         return parseTasks(results.Output)
     } catch (error) {
         console.log(error)
@@ -174,8 +173,8 @@ export async function taskCompletion(task: string, context: string, objective: s
 
     console.log("CONTENT", content)
     try {
-        let taskspell = await getLoadSpell("TaskExecution", agent as unknown as Agent, app as unknown as Application);
-        let results = await runSpell(taskspell as SpellRunner, content, agent as unknown as Agent, app as unknown as Application);
+        const taskspell = await getLoadSpell("TaskExecution", agent as unknown as Agent, app as unknown as Application);
+        const results = await runSpell(taskspell as SpellRunner, content, agent as unknown as Agent, app as unknown as Application);
         return results.Output
     } catch (error) {
         console.log(error)

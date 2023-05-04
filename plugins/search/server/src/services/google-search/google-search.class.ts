@@ -79,7 +79,7 @@ export const queryGoogleSearch = async (searchTerm: string) => {
 /**
  * Google Search service for Feathers.
  */
-export class GoogleSearchService<ServiceParams extends Params = GoogleSearchParams> {
+export class GoogleSearchService {
   /**
    * Returns a Google Search result summary and links.
    *

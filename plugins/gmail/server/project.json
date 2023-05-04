@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugin/gmail-server/**/*.ts"
+          "plugins/gmail/server/**/*.ts"
         ]
       }
     },

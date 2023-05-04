@@ -9,7 +9,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["plugin/banana-server/**/*.ts"]
+        "lintFilePatterns": ["plugins/banana/server/**/*.ts"]
       }
     },
     "test": {

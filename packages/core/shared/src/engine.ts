@@ -218,5 +218,4 @@ export abstract class MagickComponent<
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MagickComponentArray<T extends MagickComponent<unknown> = any> = T[]

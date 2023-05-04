@@ -1,7 +1,7 @@
 // DOCUMENTED
-import { hooks as schemaHooks } from '@feathersjs/schema'
-import pgvector from 'pgvector/pg'
-import { v4 as uuidv4 } from 'uuid'
+import { hooks as schemaHooks } from '@feathersjs/schema';
+import pgvector from 'pgvector/pg';
+import { v4 as uuidv4 } from 'uuid';
 import {
   eventExternalResolver,
   eventPatchResolver,
@@ -9,10 +9,10 @@ import {
   eventQueryResolver,
   eventQueryValidator,
   eventResolver,
-} from './events.schema'
+} from './events.schema';
 
-import { Application, HookContext } from '../../declarations'
-import { EventService, getOptions } from './events.class'
+import { Application, HookContext } from '../../declarations';
+import { EventService, getOptions } from './events.class';
 
 /**
  * Export the Event class and event schema
@@ -62,7 +62,6 @@ export const event = (app: Application) => {
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         async (context: HookContext) => {
-          const vectordb = app.get('vectordb')
           const { embedding } = context.data
           const { data, service } = context
           const id = uuidv4()

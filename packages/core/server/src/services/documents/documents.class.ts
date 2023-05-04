@@ -61,19 +61,25 @@ export class DocumentService<
     if (params.query.embedding) {
       const { $limit: _, ...param } = params.query
       const querys = await db('documents')
-                          .select('*')
-                          .where({
-                            ...(param.type && { type: param.type }),
-                            ...(param.id && { id: param.id }),
-                            ...(param.sender && { sender: param.sender }),
-                            ...(param.client && { client: param.client }),
-                            ...(param.channel && { channel: param.channel }),
-                            ...(param.projectId && { projectId: param.projectId }),
-                            ...(param.content && { content: param.content }),
-                          })
-                          .select(db.raw(`embedding <-> '${JSON.stringify(params.query.embedding)}' AS distance`))
-                          .orderBy('distance', 'desc')
-                          .limit(10);
+        .select('*')
+        .where({
+          ...(param.type && { type: param.type }),
+          ...(param.id && { id: param.id }),
+          ...(param.sender && { sender: param.sender }),
+          ...(param.client && { client: param.client }),
+          ...(param.channel && { channel: param.channel }),
+          ...(param.projectId && { projectId: param.projectId }),
+          ...(param.content && { content: param.content }),
+        })
+        .select(
+          db.raw(
+            `embedding <-> '${JSON.stringify(
+              params.query.embedding
+            )}' AS distance`
+          )
+        )
+        .orderBy('distance', 'desc')
+        .limit(10)
       return { data: querys }
     }
     const res = await super.find(params)

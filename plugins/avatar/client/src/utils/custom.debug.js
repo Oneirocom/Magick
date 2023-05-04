@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-empty-function */
 const OFF = 4
 const ERROR = 3
 const WARN = 2

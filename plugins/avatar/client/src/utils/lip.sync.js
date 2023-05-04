@@ -149,7 +149,6 @@ export class LipSync {
       let sum = 0
       let x
 
-      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < bufLength; i++) {
         x = buf[i]
         if (Math.abs(x) >= processor.clipLevel) {
