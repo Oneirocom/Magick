@@ -1,7 +1,3 @@
-// require dotenv
-const dotenv = require('dotenv-flow');
-dotenv.config('../');
-
 const path = require('path');
 // check if node_modules exists
 const fs = require('fs');
