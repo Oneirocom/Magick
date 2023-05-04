@@ -32,7 +32,7 @@ import handleSockets from './sockets/sockets'
 //Vector DB Related Imports
 import {
   HNSWLib,
-  PostgressVectorStoreCustom,
+  PostgresVectorStoreCustom,
   ExtendedEmbeddings,
 } from './vectordb'
 import { PluginEmbeddings } from './customEmbeddings'
@@ -43,8 +43,8 @@ const app: Application = koa(feathers())
 
 declare module './declarations' {
   interface Configuration {
-    vectordb: HNSWLib | PostgressVectorStoreCustom | any
-    docdb: HNSWLib | PostgressVectorStoreCustom | any
+    vectordb: HNSWLib | PostgresVectorStoreCustom | any
+    docdb: HNSWLib | PostgresVectorStoreCustom | any
   }
 }
 
@@ -70,8 +70,6 @@ app.use(bodyParser())
 
 // Configure app management settings
 app.configure(configureManager())
-
-
 
 // Configure authentication
 if (!IGNORE_AUTH) {
@@ -111,34 +109,18 @@ app.configure(rest())
 
 app.configure(dbClient)
 const embeddings = new PluginEmbeddings({}) as unknown as ExtendedEmbeddings
-if (process.env.DATABASE_TYPE == 'sqlite') {
-  console.log('Setting up vector store')
-  const vectordb = HNSWLib.load_data('.', embeddings, {
-    space: 'cosine',
-    numDimensions: 1536,
-    filename: 'database',
-  })
-  const docdb = HNSWLib.load_data('.', embeddings, {
-    space: 'cosine',
-    numDimensions: 1536,
-    filename: 'documents',
-  })
-  app.set('vectordb', vectordb)
-  app.set('docdb', docdb)
-} else {
-  const vectordb = new PostgressVectorStoreCustom(embeddings, {
-    client: app.get('dbClient'),
-    tableName: 'events',
-    queryName: 'match_events',
-  })
-  const docdb = new PostgressVectorStoreCustom(embeddings, {
-    client: app.get('dbClient'),
-    tableName: 'documents',
-    queryName: 'match_documents',
-  })
-  app.set('vectordb', vectordb)
-  app.set('docdb', docdb)
-}
+const vectordb = new PostgresVectorStoreCustom(embeddings, {
+  client: app.get('dbClient'),
+  tableName: 'events',
+  queryName: 'match_events',
+})
+const docdb = new PostgresVectorStoreCustom(embeddings, {
+  client: app.get('dbClient'),
+  tableName: 'documents',
+  queryName: 'match_documents',
+})
+app.set('vectordb', vectordb)
+app.set('docdb', docdb)
 app.configure(services)
 app.configure(channels)
 

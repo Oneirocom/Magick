@@ -141,7 +141,6 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
         projectId,
         type,
         maxCount,
-        owner: owner as string,
         embedding,
       },
     })
