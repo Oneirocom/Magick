@@ -204,6 +204,7 @@ export abstract class MagickComponent<
     if (!data || Object.keys(data).length === 0) {
       return console.error('data is undefined')
     }
+
     if (task) await task.run(data as NodeData)
   }
 
