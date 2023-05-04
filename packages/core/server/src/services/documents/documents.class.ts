@@ -68,6 +68,7 @@ export class DocumentService<
   async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
     const cli = app.get('docdb')
+    cli.refresh()
     if (DATABASE_TYPE == 'sqlite'){
       const docdb = app.get('docdb')
       if (params.query.embedding) {
@@ -78,12 +79,16 @@ export class DocumentService<
         const f32_ary = new Float32Array(ary_buf)
         const query = f32_ary as unknown as number[]
         const { $limit: _, ...param } = params.query
-        const search_result = await docdb.extractMetadataFromResults(query, 2, param)
+        const limit = params.query.limit ? params.query.limit : 10
+        param['isDocument'] = true
+
+        const search_result = await docdb.extractMetadataFromResults(query, limit, param)
         if (search_result) {
           return { data: search_result }
         }
       }
       const { $limit: _, ...param } = params.query
+      param['isDocument'] = true
       const tr = await docdb.getDataWithMetadata(param, 10);
       return { data: tr }
     } else {

@@ -9,9 +9,10 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
   const [loading, setLoading] = useState(false);
   const [newDocument, setDocument] = useState({
     type: '',
-    owner: '',
+    name: '',
     date: '',
-    content: ''
+    content: '',
+    description: ""
   });
 
   useEffect(() => {
@@ -50,7 +51,8 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
       <Modal
         open={createMode}
         onClose={()=>{setCreateMode(!createMode)}}
-        onSubmit={handleSaveDocument}
+        submitText = "Generate Embeddings and Save"
+        handleAction={handleSaveDocument}
       >
          {loading && <Backdrop open={loading} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}><CircularProgress color="secondary" /></Backdrop>}
         <TextField
@@ -61,10 +63,24 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
           required
         />
         <TextField
-          label="Owner"
-          name="owner"
+          label="Name"
+          name="name"
           style={{ width: '100%', margin: '.5em' }}
-          onChange={(e) => setDocument({ ...newDocument, owner: e.target.value })}
+          onChange={(e) => setDocument({ ...newDocument, name: e.target.value })}
+          required
+        />
+        <TextField
+          label="Description"
+          name="Description"
+          style={{ width: '100%', margin: '.5em' }}
+          onChange={(e) => setDocument({ ...newDocument, description: e.target.value })}
+          required
+        />
+        <TextField
+          label="Content"
+          name="content"
+          style={{ width: '100%', margin: '.5em' }}
+          onChange={(e) => setDocument({ ...newDocument, content: e.target.value })}
           required
         />
         {/* <TextField

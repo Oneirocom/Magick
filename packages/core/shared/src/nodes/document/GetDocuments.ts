@@ -3,12 +3,14 @@ import Rete from 'rete'
 import { API_ROOT_URL } from '../../config'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
-import { arraySocket, triggerSocket } from '../../sockets'
+import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
 import {
   GetDocumentArgs,
+  GetEventArgs,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
+  ModuleContext,
   WorkerData,
 } from '../../types'
 
@@ -21,52 +23,6 @@ type InputReturn = {
   documents: Document[]
 }
 
-/**
- * Fetches documents by embedding and returns the result
- * @param params - The parameters for the GET request
- * @returns The fetched JSON data
- */
-const getDocumentsbyEmbedding = async (params: Record<string, string>) => {
-  const urlString = `${API_ROOT_URL}/documents`
-  const url = new URL(urlString)
-
-  // Add GET request parameters
-  Object.entries(params).forEach(p => {
-    url.searchParams.append(p[0], p[1])
-  })
-
-  const response = await fetch(url.toString())
-  if (response.status !== 200) return null
-  const json = await response.json()
-  return json
-}
-
-/**
- * Fetches documents and returns the result
- * @param params - The parameters for the GET request
- * @returns The fetched JSON data
- */
-const getDocuments = async (params: GetDocumentArgs) => {
-  const urlString = `${API_ROOT_URL}/documents`
-  const url = new URL(urlString)
-
-  // Add GET request parameters
-  for (const p in params) {
-    // Append arrays correctly for URL search query
-    if (Array.isArray(params[p])) {
-      // Add array elements as separate parameters
-      params[p].forEach(v => url.searchParams.append(p, v))
-    } else {
-      // Add non-array values as is
-      url.searchParams.append(p, params[p])
-    }
-  }
-
-  const response = await fetch(url.toString())
-  if (response.status !== 200) return null
-  const json = await response.json()
-  return json.data as Document // TODO: Validate
-}
 
 /**
  * Class for fetching documents and providing them as output
@@ -95,6 +51,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   builder(node: MagickNode) {
     // Create input and output sockets
     const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
+    const pageContent = new Rete.Input('pageContent', 'Page Content', stringSocket)
     const out = new Rete.Output('documents', 'Documents', arraySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -127,6 +84,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
     // Build the node's input and output interface
     return node
       .addInput(dataInput)
+      .addInput(pageContent)
       .addInput(embedding)
       .addOutput(dataOutput)
       .addOutput(out)
@@ -142,8 +100,20 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs
+    _outputs: MagickWorkerOutputs,
+    context: ModuleContext
   ) {
+
+    const { app } = context.module
+    if (!app) throw new Error('App is not defined, cannot create event')
+
+    const getEvents = async (params: any) => {
+      const result = await app.service('documents').find({ query: params })
+      // app is a feathers-koa app
+      const { events } = result
+
+      return events
+    }
     // Get the worker node's input data
     let embedding = (
       inputs['embedding'] ? inputs['embedding'][0] : null
@@ -161,7 +131,8 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       max_count: string
       owner: string
     }
-
+    console.log("NODE DATA:", nodeData)
+    const projectId = context.projectId
     const typeData = nodeData.type as string
     const type =
       typeData !== undefined && typeData.length > 0
@@ -173,19 +144,25 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
 
     const owner = nodeData.owner as string
 
+    const content = inputs['pageContent'] ? inputs['pageContent'][0] : null
+    
+    let documents
+    const limit = maxCountData ? parseInt(maxCountData) : 10
     // Create an object with the processed data
     const data = {
       type,
       maxCount,
       owner,
+      content,
+      limit
     }
-    let documents
-
-    // Get document results
     if (embedding) {
       data['embedding'] = embedding
+    }
+
+    if (embedding) {
       if (embedding.length === 1536) {
-        const enc_embed = new Float32Array(embedding)
+        const enc_embed = new Float32Array(embedding as Iterable<number>)
         const uint = new Uint8Array(enc_embed.buffer)
         const str = btoa(
           String.fromCharCode.apply(
@@ -193,16 +170,11 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
             Array.from<number>(new Uint8Array(uint))
           )
         )
-        documents = await getDocumentsbyEmbedding({
-          ...data,
-          maxCount: data.maxCount.toString(),
-          embedding: str,
-        })
+        data['embedding'] = str
       }
-    } else {
-      documents = await getDocuments(data)
     }
 
+    documents = getEvents({...data, projectId})
     // Return the result for output
     return {
       documents,

@@ -66,6 +66,8 @@ export const documentQueryProperties = Type.Pick(documentSchema, [
   'content',
   'date',
   'embedding',
+  'limit',
+  'secrets'
 ]);
 export const documentQuerySchema = Type.Intersect(
   [

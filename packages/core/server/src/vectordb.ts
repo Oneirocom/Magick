@@ -408,14 +408,19 @@ export class HNSWLib extends SaveableVectorStore {
     if (needed > capacity) {
       this.index.resizeIndex(needed)
     }
+    console.log("Documents: ", documents)
     const docstoreSize = this.docstore.count
     for (let i = 0; i < vectors.length; i += 1) {
       const id_str = documents[i].metadata?.id
       this.index.addPoint(vectors[i], HNSWLib.sha256ToDecimal(id_str))
       this.docstore.add({ [HNSWLib.sha256ToDecimal(id_str)]: documents[i] })
     }
+    console.log("this", this)
+    console.log("ID", HNSWLib.sha256ToDecimal(documents[0].metadata?.id))
+    console.log("Docstore:", this.docstore)
     await this.save(this.args.filename)
     await this.saveIndex(this.args.filename)
+    console.log("Docstore:", this.docstore)
   }
 
   //IMPORTANT: This function is an extension from the base class and is required for QA
@@ -458,9 +463,10 @@ export class HNSWLib extends SaveableVectorStore {
    */
   async similaritySearchVectorWithScore(
     query: number[],
-    k = 10,
+    k: number,
     quer_data: Record<string, unknown> = {}
   ): Promise<[Document, number][]> {
+    console.log("DOCSTORE", this.docstore)
     let filterByLabel = (label: any) => {
       return true
     }
@@ -469,7 +475,9 @@ export class HNSWLib extends SaveableVectorStore {
         return true
       }
     } else {
+      console.log("quer_data", quer_data)
       const matchingDocs = await this.getDataWithMetadata(quer_data)
+      console.log("matchingDocs", matchingDocs)
       filterByLabel = label => {
         let result = false
         try {
@@ -488,7 +496,6 @@ export class HNSWLib extends SaveableVectorStore {
         return result
       }
     }
-
     if (query.length !== this.args.numDimensions) {
       throw new Error(
         `Query vector must have the same length as the number of dimensions (${this.args.numDimensions})`
@@ -503,6 +510,7 @@ export class HNSWLib extends SaveableVectorStore {
     }
 
     const result = this.index.searchKnn(Array.from(query), k, filterByLabel)
+    console.log("result", result)
     return result.neighbors.map(
       (docIndex, resultIndex) =>
         [
@@ -601,6 +609,23 @@ export class HNSWLib extends SaveableVectorStore {
     }
   }
 
+  refresh() {
+    try {
+      const docstoreFiles = JSON.parse(
+        fs.readFileSync(
+          this.args.filename + '/docstore.json',
+          'utf8'
+        )
+      )
+      const newDocstore = new InMemoryDocstore()
+      docstoreFiles.map(([k, v]) => {
+        newDocstore.add({ [HNSWLib.sha256ToDecimal(v.metadata.id)]: v })
+      })
+      this.docstore = newDocstore
+    } catch (e) {
+      console.error('Error refreshing database:', e)
+    }
+  }
   /**
    * Filters the documents based on the query data
    * @param query - Query data
@@ -611,14 +636,28 @@ export class HNSWLib extends SaveableVectorStore {
     query: Record<string, unknown>,
     k = 1
   ): Promise<Record<string, unknown>[]> {
+    console.log("this", this)
+    console.log("DOCSTORE", this.docstore)
     const queryKeys = Object.keys(query)
     const matchingDocs: Record<string, unknown>[] = []
     for (const doc of this.docstore._docs.values()) {
       for (const key of queryKeys) {
         if (
-          query['content'] == undefined &&
+          (query['content'] == '' || query["content"] == undefined) &&
           doc.metadata['projectId'] == query['projectId']
-        ) {
+        ) { 
+          if (query["isDocument"]) {
+            if (doc.metadata["type"]) {
+              if (doc.metadata["type"] == query["type"]) {
+                matchingDocs.push(doc.metadata)
+                break
+              } else if(query["type"] == "any") {
+                matchingDocs.push(doc.metadata)
+                break
+              }
+              break
+            }
+          }
           matchingDocs.push(doc.metadata)
           break
         }
@@ -675,6 +714,7 @@ export class HNSWLib extends SaveableVectorStore {
         },
       },
     ]
+    console.log("INSERT DATA", insert_data)
     this.addVectors([vector], metadata)
     return insert_data
   }

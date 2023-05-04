@@ -22,7 +22,7 @@ const DocumentWindow = () => {
    * @returns void
    */
   const fetchDocuments = async () => {
-    const response = await fetch(`${API_ROOT_URL}/documents?hidden=false&projectId=${config.projectId}`)
+    const response = await fetch(`${API_ROOT_URL}/documents?hidden=false&projectId=${config.projectId}&type=any`)
     const data = await response.json()
     setDocuments(data.data)
   }

@@ -88,6 +88,7 @@ export const documentSchema = Type.Object({
   projectId: Type.String(),
   date: Type.Optional(Type.String()),
   embedding: Type.Optional(Type.Any()),
+  limit: Type.Optional(Type.Number()),
 }, {
   $id: 'Document',
   additionalProperties: false,
