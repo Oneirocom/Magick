@@ -54,17 +54,9 @@ export async function makeChatCompletion(
     top_k: parseFloat(node?.data?.top_k as string ?? "40")
   } as any
 
-  console.log('settings')
-  console.log(settings)
-
-  console.log('GOOGLE API KEY')
-  console.log(context.module.secrets['googleai_api_key'])
-
   try {
     const start = Date.now()
     const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateMessage?key=${context.module.secrets['googleai_api_key']}`
-    console.log('endpoint')
-    console.log(endpoint)
     // Make the API call to GoogleAI
     const completion = await fetch(
       endpoint,

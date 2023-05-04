@@ -70,11 +70,6 @@ export class Agent implements AgentInterface {
         console.warn('No root spell found for agent', this.id)
         return
       }
-      console.log(
-        'this.rootSpell.projectId',
-        agentData.projectId,
-        agentData.rootSpell.id
-      )
       const spell = (
         await this.app.service('spells').find({
           query: {

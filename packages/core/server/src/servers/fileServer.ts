@@ -11,7 +11,7 @@ import path from 'path';
 export async function initFileServer() {
   // Ensure the 'files' folder exists
   if (!fs.existsSync('files')) {
-    console.log('FOLDER DIDNT EXIST AND CREATED');
+    console.warn('FOLDER DIDNT EXIST AND CREATED');
     fs.mkdirSync('files');
   }
 
@@ -50,7 +50,6 @@ async function initSSL(): Promise<boolean> {
       },
       function (req, res) {
         let filePath = '.' + req.url; // Get the file path from the request URL
-        console.log('file requested:', filePath);
         if (filePath == './') {
           filePath = './index.html';
         }
@@ -84,7 +83,6 @@ async function initSSL(): Promise<boolean> {
 
         // Read the requested file
         fs.readFile(filePath, function (error, content) {
-          console.log('file read');
           if (error) {
             if (error.code == 'ENOENT') { // Handle missing file
               res.writeHead(404);

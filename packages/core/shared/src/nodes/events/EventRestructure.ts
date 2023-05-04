@@ -100,9 +100,6 @@ export class EventRestructureComponent extends MagickComponent<Promise<{ output:
       }
     });
 
-    // Debug log the output event.
-    console.log('event ::: ', output);
-
     // Return the output event object.
     return {
       output,

@@ -115,7 +115,6 @@ const AgentDetails = ({
         key.includes('secret')
       ) {
         delete exportAgentData.data[key]
-        console.log('deleted key', key)
       }
     })
 
@@ -288,7 +287,7 @@ const AgentDetails = ({
               enabled: true,
               ...selectedAgentData,
             })
-            console.log('newRootSpell', newRootSpell)
+
             setSelectedAgentData({
               ...selectedAgentData,
               rootSpell: newRootSpell,

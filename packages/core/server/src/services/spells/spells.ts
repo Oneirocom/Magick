@@ -74,8 +74,6 @@ export const spell = (app: Application) => {
             })
             .then(async param => {
               if (param.data.length >= 1) {
-                console.log(data.name + '(%)')
-
                 await context.service
                   .find({
                     query: {

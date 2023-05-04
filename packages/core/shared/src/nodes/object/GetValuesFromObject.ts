@@ -73,8 +73,6 @@ export class GetValuesFromObject extends MagickComponent<void> {
       return acc;
     }, {} as Record<string, unknown>);
 
-    console.log('Destructured output', output);
-
     return output;
   }
 }

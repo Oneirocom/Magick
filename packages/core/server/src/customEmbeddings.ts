@@ -121,7 +121,7 @@ export class PluginEmbeddings extends Embeddings {
         },
         params
       )
-      console.log('response', response)
+
       embeddings.push(response.result)
     }
     return [embeddings, document]
@@ -142,7 +142,6 @@ export class PluginEmbeddings extends Embeddings {
     const handler = provider?.handler
     let response
     let retry = 0
-    console.log(param["secrets"])
     while (retry < 3) {
       try {
         response = await handler({
@@ -153,7 +152,7 @@ export class PluginEmbeddings extends Embeddings {
         })
         break
       } catch (e) {
-        console.log(e)
+        console.error(e)
         retry += 1
       }
     }

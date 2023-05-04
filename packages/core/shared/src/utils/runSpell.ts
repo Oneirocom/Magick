@@ -34,18 +34,20 @@ export const runSpell = async ({
   publicVariables,
   app
 }: RunSpellArgs): Promise<{ outputs: Record<string, unknown>; name: string }> => {
-  // Log the input params
-  console.log('runSpell', { spellId, inputs, inputFormatter, projectId, secrets, publicVariables });
-
   // rewrite using fetch
-  const spells = await fetch(`${API_ROOT_URL}/spells?projectId=${projectId}&id=${spellId}`)
-    .then(res => res.json());
-  
-  const spell = spells[0] as any;
+  const spells = await app.service('spells').find({
+    query: {
+      id: spellId,
+      projectId,
+    },
+  });
+
+  // Get the first spell
+  const spell = spells.data[0];
 
   // If the spell is not found, throw an error
   if (!spell?.graph) {
-    throw new SpellError('not-found', `Spell with id ${spellId} not found`);
+    throw new SpellError('not-found', `Spell with id ${spellId} not found: ${spell}`);
   }
 
   // Convert the graph of the spell

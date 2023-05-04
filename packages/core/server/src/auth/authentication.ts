@@ -26,9 +26,6 @@ declare module '../declarations' {
  */
 export const authentication = (app: Application): void => {
   const authentication = new CloudJwtService(app)
-
-  console.log('Registering JWT Strategy')
-
   authentication.register('jwt', new JWTStrategy())
 
   app.use('authentication', authentication)

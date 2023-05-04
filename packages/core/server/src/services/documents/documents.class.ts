@@ -81,7 +81,6 @@ export class DocumentService<
         content_to_match: 'hi',
       }
       const rr = await cli.rpc('match_events', bod)
-      console.log(rr)
       return { data: querys }
     }
     const res = await super.find(params)

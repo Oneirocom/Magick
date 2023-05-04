@@ -34,7 +34,7 @@ export class UploadService {
       uri: body['uri'],
     }
     const idx = this.image_store.map(e => e.id).indexOf(body['id'])
-    console.log(body['id'])
+
     idx === -1
       ? this.image_store.push(img_body)
       : (this.image_store[idx] = img_body)
@@ -52,7 +52,7 @@ export class UploadService {
     let img_found = this.image_store.find(element => {
       return element.id === id.query.id
     })
-    console.log(id.query.id)
+
     typeof img_found == 'undefined'
       ? (img_found = 'Image Not Found')
       : console.log('Image Found !!')

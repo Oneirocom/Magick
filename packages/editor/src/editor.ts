@@ -202,7 +202,6 @@ export const initEditor = function ({
 
   editor.runProcess = async callback => {
     await engine.abort()
-    console.log('run process:', context)
     await engine.process(editor.toJSON(), null, {
       context: context,
       currentSpell: editor.currentSpell,

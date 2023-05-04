@@ -258,8 +258,7 @@ class SpellRunner {
 
       return this.outputData
     } catch (err) {
-      console.warn('ERROR RUNNING SPELL', err)
-      console.log('Output data', this.outputData)
+      console.error('ERROR RUNNING SPELL', err)
       return {
         Output: `Error running spell- ${err}`,
       }

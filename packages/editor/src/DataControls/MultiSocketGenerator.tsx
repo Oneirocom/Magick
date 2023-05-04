@@ -72,7 +72,6 @@ const MultiSocketGenerator = ({
       (socket) =>
         !data.ignored.some((ignored) => ignored.name === socket.name)
     );
-    console.log('SOCKETS', newSockets);
     setSockets(newSockets);
   }, [initialValue]);
 
@@ -130,8 +129,6 @@ const MultiSocketGenerator = ({
       };
 
       newSockets.push(newSocket);
-
-      console.log('Adding socket', newSocket);
     });
 
     setSockets(newSockets);

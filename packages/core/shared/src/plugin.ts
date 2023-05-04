@@ -198,7 +198,6 @@ class PluginManager {
         inputTypes.push(inputType)
       })
     })
-    console.log('inputTypes', inputTypes)
     return inputTypes
   }
 

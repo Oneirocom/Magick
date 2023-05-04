@@ -12,8 +12,6 @@ const handleSockets = (app: any) => {
      * Set up a connection event listener for incoming sockets.
      */
     io.on('connection', async function (socket: any) {
-      console.log('CONNECTION ESTABLISHED');
-
       // user will be set to the payload if we are not in single user mode
       let user;
 

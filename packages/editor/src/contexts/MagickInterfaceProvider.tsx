@@ -139,7 +139,6 @@ const MagickInterfaceProvider: React.FC<{ children: React.ReactNode; tab: any }>
   };
 
   const sendToPlaytest: (data: string) => void = data => {
-    console.log('sending to playtest', data);
     publish($PLAYTEST_PRINT(tab.id), data);
   };
 

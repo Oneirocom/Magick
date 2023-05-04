@@ -156,7 +156,6 @@ app.hooks({
             const projectId = context.params.query.projectId
 
             if (authentication.payload.project !== projectId) {
-              console.log('User not authorized to access project')
               throw new NotAuthenticated(
                 'User not authorized to access project'
               )
