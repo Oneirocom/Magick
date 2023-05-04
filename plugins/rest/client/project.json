@@ -9,7 +9,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["plugins/rest/**/*.ts"]
+        "lintFilePatterns": ["plugins/rest/client/**/*.ts"]
       }
     },
     "test": {

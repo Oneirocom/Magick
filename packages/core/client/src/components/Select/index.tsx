@@ -1,5 +1,5 @@
 // DOCUMENTED
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import Creatable from 'react-select/creatable';
 import ReactSelect, { SelectInstance, StylesConfig } from 'react-select';

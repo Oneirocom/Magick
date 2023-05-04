@@ -4,7 +4,7 @@
  * @package
  */
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 /** Interface for the preference state. */
 export interface PreferenceState {

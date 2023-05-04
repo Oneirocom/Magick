@@ -10,11 +10,9 @@ import type { Application } from '@magickml/server-core'
 import { SolidityService, getOptions } from './solidity.class'
 
 import {
-  solidityDataValidator,
   solidityQueryValidator,
   solidityResolver,
   solidityExternalResolver,
-  solidityDataResolver,
   solidityQueryResolver,
 } from './solidity.schema'
 

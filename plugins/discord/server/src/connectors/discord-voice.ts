@@ -6,10 +6,8 @@ import {
   AudioPlayerStatus,
   StreamType,
   NoSubscriberBehavior,
-  getVoiceConnection,
 } from '@discordjs/voice';
 import { tts, tts_tiktalknet, app } from '@magickml/server-core';
-import { Guild, VoiceChannel } from 'discord.js';
 import { addSpeechEvent } from './voiceUtils/addSpeechEvent';
 
 /**
@@ -68,7 +66,7 @@ export function initSpeechClient(options: {
     const { content, connection, author, channel } = msg;
 
     // Lazily import createReadStream.
-    let createReadStream = await import('fs').then((fs) => fs.createReadStream);
+    const createReadStream = await import('fs').then((fs) => fs.createReadStream);
 
     connection.subscribe(audioPlayer);
 

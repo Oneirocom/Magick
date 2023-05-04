@@ -5,15 +5,10 @@
  */
 import Rete from 'rete';
 import {
-    Agent,
-    AgentManager,
     MagickComponent,
-    pluginManager,
     stringSocket,
     triggerSocket,
     MagickNode,
-    MagickWorkerInputs,
-    MagickWorkerOutputs,
     ModuleContext,
     WorkerData
 } from '@magickml/core';
@@ -116,12 +111,9 @@ export class DiscordJoinVoice extends MagickComponent<Promise<WorkerReturn>> {
      */
     async worker(
         node: WorkerData,
-        inputs: MagickWorkerInputs,
-        _outputs: MagickWorkerOutputs,
-        context: ModuleContext,
     ): Promise<WorkerReturn> {
 
-        let tool_desc = {
+        const tool_desc = {
             title: 'Join Voice Channel',
             body: 'Joins voice channel of the user who triggered the command, also know as vc join',
             id: node.id,

@@ -12,6 +12,7 @@ const SingleSocket = (props: {
   name: string;
   delete: Function | null;
   type: string;
+  last: boolean;
 }) => {
   return props.delete ? (
     <SingleElement name={props.name} delete={props.delete} type={props.type} />
@@ -73,7 +74,7 @@ const MultiSocketGenerator = ({
         !data.ignored.some((ignored) => ignored.name === socket.name)
     );
     setSockets(newSockets);
-  }, [initialValue]);
+  }, [initialValue, data.ignored]);
 
   const onDelete = (name: string) => {
     const shortName = name.split(' ')[0];

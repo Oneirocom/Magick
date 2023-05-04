@@ -1,8 +1,6 @@
 // DOCUMENTED
-import '@feathersjs/transport-commons'
-import { HookContext } from '@feathersjs/feathers'
-import { Application } from '../declarations'
-import { CollectionsOutlined } from '@mui/icons-material'
+import '@feathersjs/transport-commons';
+import { Application } from '../declarations';
 
 /**
  * Configure channels for real-time functionality.
@@ -49,7 +47,7 @@ export default function (app: Application): void {
    * @param data - The event data.
    * @param hook - The hook context.
    */
-  app.publish((data: any, hook: HookContext) => {
+  app.publish(() => {
     // Publish all events to the authenticated user channel
     return app.channel('authenticated')
   })

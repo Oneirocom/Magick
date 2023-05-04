@@ -244,9 +244,9 @@ function DocumentTable({ documents, updateCallback }) {
   }
 
   // Close create modal
-  const closeCreateModal = () => {
-    setCreateMode(false)
-  }
+  // const closeCreateModal = () => {
+  //   setCreateMode(false)
+  // }
 
   // Handle save action
   const handleSave = async () => {

@@ -1,8 +1,6 @@
 // UNDOCUMENTED 
 import {
   CompletionHandlerInputData,
-  Event,
-  saveRequest
 } from '@magickml/core'
 import axios from 'axios'
 
