@@ -64,6 +64,17 @@ export default class SpellManager {
     this.spellRunnerMap = new Map()
   }
 
+  async loadById(spellId: string) {
+    try {
+      const spell = await this.app.service('spells').get(spellId)
+
+      return this.load(spell)
+    } catch (error) {
+      console.error(`Error loading spell ${spellId}`, error)
+      return null
+    }
+  }
+
   async load(spell: SpellInterface, overload = false) {
     if (!spell) {
       this.agent?.error('No spell provided')
