@@ -1,12 +1,11 @@
-// DOCUMENTED 
-import Rete from 'rete';
+// DOCUMENTED
+/* eslint-disable no-console */
+/* eslint-disable require-await */
+import Rete from 'rete'
 
-import { MagickComponent } from '../../engine';
-import { anySocket, triggerSocket } from '../../sockets';
-import {
-  MagickNode,
-  MagickWorkerInputs, WorkerData
-} from '../../types';
+import { MagickComponent } from '../../engine'
+import { anySocket, triggerSocket } from '../../sockets'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 /**
  * Describes the IsVariableTrue component which checks if the input is true.
@@ -19,9 +18,14 @@ export class IsVariableTrue extends MagickComponent<void> {
    * Initializes a new instance of the IsVariableTrue component.
    */
   constructor() {
-    super('Is Variable True', {
-      outputs: { true: 'option', false: 'option' },
-    }, 'Boolean', 'Is Variable true checks if input is true - string or boolean are checked as true or false, numbers are checked as 0 or 1, undifined or null are checked as false');
+    super(
+      'Is Variable True',
+      {
+        outputs: { true: 'option', false: 'option' },
+      },
+      'Boolean',
+      'Takes an input and triggers one of two output triggers based on the truthiness of the input. Boolean is checked as true or false, strings are checked as "true", numbers are checked as 0 or 1, undefined or null are checked as false'
+    )
   }
 
   /**
@@ -30,16 +34,16 @@ export class IsVariableTrue extends MagickComponent<void> {
    * @returns The built node.
    */
   builder(node: MagickNode) {
-    const inp = new Rete.Input('input', 'Input', anySocket);
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const isTrue = new Rete.Output('true', 'True', triggerSocket);
-    const isFalse = new Rete.Output('false', 'False', triggerSocket);
+    const inp = new Rete.Input('input', 'Input', anySocket)
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const isTrue = new Rete.Output('true', 'True', triggerSocket)
+    const isFalse = new Rete.Output('false', 'False', triggerSocket)
 
     return node
       .addInput(inp)
       .addInput(dataInput)
       .addOutput(isTrue)
-      .addOutput(isFalse);
+      .addOutput(isFalse)
   }
 
   /**
@@ -48,18 +52,18 @@ export class IsVariableTrue extends MagickComponent<void> {
    * @param inputs - The inputs of the worker node.
    */
   async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
-    const action = inputs['input'][0];
-    const type = typeof action;
-    let is = false;
+    const action = inputs['input'][0]
+    const type = typeof action
+    let is = false
 
     if (type === 'string') {
-      is = action === 'true';
+      is = action === 'true'
     } else if (type === 'boolean') {
-      is = action === true;
+      is = action === true
     } else if (type === 'number') {
-      is = action === 1;
+      is = action === 1
     }
 
-    this._task.closed = is ? ['false'] : ['true'];
+    this._task.closed = is ? ['false'] : ['true']
   }
 }
