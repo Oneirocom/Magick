@@ -58,8 +58,6 @@ function install(
           ...args,
         ])
 
-        console.log(inputs, outputs)
-
         const message = {
           outputs: result,
           inputs: inputs,
