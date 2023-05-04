@@ -123,8 +123,6 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
     if (embedding) {
       data.embedding = embedding;
     }
-    data["secrets"] = {};
-    if (context.module.secrets) data["secrets"] = JSON.stringify(context.module.secrets);
     if (content && content !== '') {
       const { app } = context.module;
       if (!app) throw new Error('App is not defined, cannot create event');

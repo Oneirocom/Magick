@@ -20,7 +20,7 @@ import {
 } from './agents.schema'
 import type { Application, HookContext } from '../../declarations'
 import { AgentService, getOptions } from './agents.class'
-import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
+import { jsonResolver } from '../utils'
 import { v4 as uuidv4 } from 'uuid'
 
 // Re-export agents.class and agents.schema
@@ -81,9 +81,8 @@ export const agent = (app: Application) => {
         schemaHooks.validateData(agentPatchValidator),
         schemaHooks.resolveData(agentPatchResolver),
         validateRootSpell,
-        handleJSONFieldsUpdate(agentJsonFields),
       ],
-      update: [handleJSONFieldsUpdate(agentJsonFields)],
+      update: [],
       remove: [],
     },
     after: {

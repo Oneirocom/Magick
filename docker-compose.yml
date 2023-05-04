@@ -3,7 +3,7 @@ version: '3.4'
 services:
   db:
     restart: always
-    image: postgres
+    image: postgresai/extended-postgres:15-0.2.0
     hostname: magick_db
     environment:
       POSTGRES_DB: magick

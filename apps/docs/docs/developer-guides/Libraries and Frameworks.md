@@ -54,17 +54,9 @@ All of our client apps and packages are bundled with Vite.
 
 ## Database
 
-### SQLite
-Lightweight SQL database. https://www.sqlite.org/index.html
-SQLite is a lightweight SQL database. We use SQLite for local development.
-
 ### Postgres
 Full SQL database. https://www.postgresql.org/
 Postgres is a full SQL database that can be used for storing user data and project data. In production we use Postgres with Supabase.
-
-### SQLite VSS
-Vector similarity search for SQLite. https://github.com/asg017/sqlite-vss
-In development we use vss for similarity search on events and documents on the local SQLite database. Currently only works on Linux.
 
 ### PGVector
 Similarity search for Postgres. https://github.com/pgvector/pgvector

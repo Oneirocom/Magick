@@ -30,9 +30,9 @@ export type ExtendedEmbeddings = Embeddings & {
 }
 /**
  * Custom implementation of SupabaseVectorStore
- * @extends {PostgressVectorStore}
+ * @extends {PostgresVectorStore}
  */
-export class PostgressVectorStoreCustom extends SupabaseVectorStore {
+export class PostgresVectorStoreCustom extends SupabaseVectorStore {
   client: any
   tableName: string
   queryName: string
