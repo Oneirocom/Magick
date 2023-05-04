@@ -1,5 +1,4 @@
 import { Modal } from '@magickml/client-core';
-import DatePicker from '@mui/lab/DatePicker';
 import { Backdrop, CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
@@ -63,10 +62,10 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
           style={{ width: '100%', margin: '.5em' }}
           onChange={(e) => setDocument({ ...newDocument, content: e.target.value })}
         /> */}
-        <DatePicker
+        {/* <DatePicker
           label="Date"
           onChange={(date) => setDocument({ ...newDocument, date: date.toISOString() })}
-        />
+        /> */}
         {/* <TextField
           label="Embedding"
           name="embedding"
