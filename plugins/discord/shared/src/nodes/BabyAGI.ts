@@ -10,7 +10,8 @@ import {
     MagickWorkerInputs,
     MagickWorkerOutputs,
     ModuleContext,
-    WorkerData
+    WorkerData,
+    InputControl
 } from '@magickml/core';
 import { addResults, addTask, createTasks, findSimilarSentences, getChannelFromMessage, getLoadSpell, listTasks, parseTasks, parseTasksToArray, popTask, runSpell, taskCompletion, taskReprioritization } from './utils';
 import { Application } from '@feathersjs/koa/lib';
@@ -27,7 +28,7 @@ type WorkerReturn = {
 /**
  * Baby AGI.
  * @category Discord
- * @remarks This node must be paired with the Agent Executor node.
+ * @remarks This will work only with text-davinci-003
  */
 export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
     constructor() {
@@ -39,7 +40,7 @@ export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
         }, 'Experimental', 'baby agi');
     }
     /**
-     * The builder function for the Discore Leave Voice Node node.
+     * The builder function for the BabyAGI.
      * @param node - The node being built.
      * @returns The node with its inputs and outputs.
      */
@@ -48,8 +49,12 @@ export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
         const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket);
         const promptInput = new Rete.Input('prompt', 'Prompt', stringSocket);
         const outp = new Rete.Output('output', 'String', stringSocket);
-
-
+        const noOfIterations = new InputControl({
+            dataKey: 'iterations',
+            name: 'Number of Iterations',
+            icon: 'moon',
+          });
+        node.inspector.add(noOfIterations);
         return node
             .addInput(promptInput)
             .addInput(dataInput)
@@ -57,7 +62,7 @@ export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
             .addOutput(outp);
     }
     /**
-     * The worker function for the Discord Leave Voice node.
+     * The worker function for the BabyAGI
      * @param node - The node being worked on.
      * @param inputs - The inputs of the node.
      * @param _outputs - The unused outputs of the node.
@@ -70,6 +75,8 @@ export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
         context: ModuleContext,
     ): Promise<WorkerReturn> {
         const { agent, app } = context.module;
+        let n = node?.data?.noOfIterations || 3;
+        if (n < 0) n = 1;
         let task_list = [{ task_id: 1, task: "Make a todo list" }]
         let result_list = []
         const objective = inputs["prompt"][0] as unknown as string
@@ -78,7 +85,7 @@ export class BabyAGI extends MagickComponent<Promise<WorkerReturn>> {
         //@ts-ignore
         let result
         // 3 Iterations roughly makes 9 calls to the API
-        for (let index = 0; index < 3; index++) {
+        for (let index = 0; index < n; index++) {
             //Step 1: Pop the Task from task queue
             let task = popTask(task_list)
             //Step 2: Run the task with Addtional Context from previous results
