@@ -56,7 +56,6 @@ export class EventService<
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async find(params?: ServiceParams) {
-    const db = app.get('dbClient')
     const cli = app.get('vectordb')
     if (params.query.embedding) {
       const blob = atob(params.query.embedding)
@@ -66,46 +65,34 @@ export class EventService<
       const f32_ary = new Float32Array(ary_buf)
       const query = f32_ary as unknown as number[]
       const { $limit: _, ...param } = params.query
-      const querys = await db('events')
-        .select('*')
-        .where({
-          ...(param.type && { type: param.type }),
-          ...(param.id && { id: param.id }),
-          ...(param.sender && { sender: param.sender }),
-          ...(param.client && { client: param.client }),
-          ...(param.channel && { channel: param.channel }),
-          ...(param.projectId && { projectId: param.projectId }),
-          ...(param.content && { content: param.content }),
-        })
-        .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
-      const result = await db.raw(
-        `select * from events order by embedding <-> ${
-          "'[" + f32_ary.toString() + "]'"
-        } limit 1;`
-      )
-      const bod = {
-        query_embedding: '[' + f32_ary.toString() + ']',
-        match_count: 2,
-        content_to_match: param.content,
-      }
-      const rr = await cli.rpc('match_events', bod)
+      const querys = await cli.from('events')
+                          .select('*')
+                          .where({
+                            ...(param.type && { type: param.type }),
+                            ...(param.id && { id: param.id }),
+                            ...(param.sender && { sender: param.sender }),
+                            ...(param.client && { client: param.client }),
+                            ...(param.channel && { channel: param.channel }),
+                            ...(param.projectId && { projectId: param.projectId }),
+                            ...(param.content && { content: param.content }),
+                          })
+                          .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
       return { events: querys }
     }
 
-    const res = await cli
-      .from('events')
-      .select()
-      .where(builder => {
-        if (params.query.content) {
-          builder.where('content', params.query.content)
-        }
-        if ('$limit' in params.query) {
-          builder.limit(params.query['$limit'])
-        }
-        if (params.query.projectId) {
-          builder.where('projectId', params.query.projectId)
-        }
-      })
+    const res =  await cli.from('events')
+                          .select()
+                          .where(builder => {
+                            if (params.query.content) {
+                              builder.where('content', params.query.content)
+                            }
+                            if ('$limit' in params.query) {
+                              builder.limit(params.query['$limit'])
+                            }
+                            if (params.query.projectId) {
+                              builder.where('projectId', params.query.projectId)
+                            }
+                          })
 
       return { events: res as unknown as { data: Array<any> } }
   }

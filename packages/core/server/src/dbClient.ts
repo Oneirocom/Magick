@@ -13,8 +13,8 @@ declare module './declarations' {
   }
 }
 
-//Postgres function for getting the most similar documents after applying prefilter.
-const pf_function = `
+//Postgres function for getting the most similar events after applying prefilter.
+const pf_events = `
 CREATE OR REPLACE FUNCTION match_events(
   query_embedding vector(1536), 
   match_count int DEFAULT 10, 
@@ -61,10 +61,7 @@ BEGIN
           match_count;
 END;
 $$ LANGUAGE plpgsql;
-
-
 `
-
 /**
  * Get database configuration based on environment variables
  *
@@ -88,7 +85,7 @@ export const dbClient = (app: Application) => {
   const config = getDatabaseConfig()
   const db = knex(config)
   app.set('dbClient', db)
-  db.raw(pf_function).then(() => {
+  db.raw(pf_events).then(() => {
     console.log('Postgres function created')
   })
 }
