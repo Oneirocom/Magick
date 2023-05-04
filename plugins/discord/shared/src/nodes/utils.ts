@@ -1,7 +1,8 @@
 import { Application } from "@feathersjs/koa/lib";
-import { Agent, SpellRunner } from "@magickml/core";
-
-
+import { Agent, SpellRunner, Task } from "@magickml/core";
+import TaskCreation from "./spells/TaskCreation.spell";
+import TaskExecution from "./spells/TaskExecution.spell";
+import TaskReprioritization from "./spells/TaskReprioritization.spell";
 export async function getChannelFromMessage(message: any, discord: any): Promise<any> {
     let messageOBJ;
     let latestTimestamp = 0;
@@ -24,17 +25,23 @@ export async function getChannelFromMessage(message: any, discord: any): Promise
 }
 
 
-export async function getLoadSpell(name: string, agent: Agent, app: Application): Promise<SpellRunner> {
-    const spell = (
-        //@ts-ignore
-        await app.service('spells').find({
-            query: {
-                //@ts-ignore
-                projectId: agent.projectId,
-                name: name,
-            },
-        })
-    ).data[0]
+export async function getLoadSpell(name: string, agent: Agent, app: Application): Promise<SpellRunner | undefined> {
+    let spell;
+    switch (name) {
+        case "TaskCreation":
+            spell = TaskCreation;
+            break;
+        case "TaskReprioritization":
+            spell = TaskReprioritization;
+            break;
+        case "TaskExecution":
+            spell = TaskExecution;
+            break;
+        default:
+
+            break;
+    }
+    if (!spell) return;
     let runner = await agent?.spellManager.load(spell, true) as unknown as SpellRunner;
     return runner
 }
@@ -83,29 +90,29 @@ export function popTask(tasks) {
 
 export function parseTasksToArray(output: string): string[] {
     const taskList = output.split("\n").slice(3); // Split the output by newline and remove the first three elements
-  
+
     // Remove the task numbers and return the remaining strings
     return taskList.map((task) => task.replace(/^\d+\.\s/, ""));
-  }
+}
 
 export function addTask(task, tasksList) {
     // Extract the task ID of the last task in the list
     const lastTaskId = tasksList.length > 0 ? tasksList[tasksList.length - 1].task_id : 0;
-    
+
     // Create a new task object with a unique task ID
     const newTask = {
-      task_id: lastTaskId + 1,
-      task: task.trim()
+        task_id: lastTaskId + 1,
+        task: task.trim()
     };
-    
+
     // Add the new task to the tasks list
     tasksList.push(newTask);
-    
+
     // Return the updated tasks list
     return tasksList;
-  }
+}
 
-export function addResults(result, task, resultList){
+export function addResults(result, task, resultList) {
     const lastResultId = resultList.length > 0 ? resultList[resultList.length - 1].result_id : 0;
     const newResult = {
         result_id: lastResultId + 1,
@@ -127,10 +134,16 @@ export async function createTasks(objective: string, task_description: string, r
         "task_description": "${task_description}",
         "incomplete_tasks": "${incomplete_tasks}"
       }`
-    let taskspell = await getLoadSpell("TaskCreation", agent as unknown as Agent, app as unknown as Application);
 
-    let results = await runSpell(taskspell, content, agent as unknown as Agent, app as unknown as Application);
-    return parseTasksToArray(results.Output)
+    try {
+        let taskspell = await getLoadSpell("TaskCreation", agent as unknown as Agent, app as unknown as Application);
+        let results = await runSpell(taskspell as SpellRunner, content, agent as unknown as Agent, app as unknown as Application);
+        return parseTasksToArray(results.Output)
+    } catch (error) {
+        console.log(error)
+        return [];
+    }
+
 }
 
 export async function taskReprioritization(next_task_id: string, objective: string, task_array: Array<string>, agent: Agent, app: Application) {
@@ -139,13 +152,20 @@ export async function taskReprioritization(next_task_id: string, objective: stri
         "objective": "${objective}",
         "task_names": "${task_array.join()}"
       }`
-    let taskspell = await getLoadSpell("TaskReprioritization", agent as unknown as Agent, app as unknown as Application);
-    let results = await runSpell(taskspell, content, agent as unknown as Agent, app as unknown as Application);
-    return parseTasks(results.Output)
+
+    try {
+        let taskspell = await getLoadSpell("TaskReprioritization", agent as unknown as Agent, app as unknown as Application);
+        let results = await runSpell(taskspell as SpellRunner, content, agent as unknown as Agent, app as unknown as Application);
+        return parseTasks(results.Output)
+    } catch (error) {
+        console.log(error)
+        return [];
+    }
+
 
 }
 
-export async function taskCompletion(task: string, context: string, objective:string, agent: Agent, app: Application) {
+export async function taskCompletion(task: string, context: string, objective: string, agent: Agent, app: Application) {
     const content = `{
         "task": "${task}",
         "context": "${context}",
@@ -153,10 +173,16 @@ export async function taskCompletion(task: string, context: string, objective:st
       }`
 
     console.log("CONTENT", content)
-    let taskspell = await getLoadSpell("TaskExecution", agent as unknown as Agent, app as unknown as Application);
-    let results = await runSpell(taskspell, content, agent as unknown as Agent, app as unknown as Application);
-    return results.Output
- }
+    try {
+        let taskspell = await getLoadSpell("TaskExecution", agent as unknown as Agent, app as unknown as Application);
+        let results = await runSpell(taskspell as SpellRunner, content, agent as unknown as Agent, app as unknown as Application);
+        return results.Output
+    } catch (error) {
+        console.log(error)
+        return;
+    }
+
+}
 
 
 interface Data {
