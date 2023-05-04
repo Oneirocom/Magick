@@ -45,6 +45,7 @@
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-unused-expressions": "off",
         "@nrwl/nx/enforce-module-boundaries": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
         "no-extra-semi": "off",
         "react-hooks/exhaustive-deps": "off",
         "react/jsx-no-useless-fragment": "off",
