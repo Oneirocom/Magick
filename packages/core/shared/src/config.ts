@@ -61,7 +61,7 @@ export const JWT_SECRET = getVarForEnvironment('JWT_SECRET') || 'secret'
 export const POSTHOG_ENABLED =
   getVarForEnvironment('POSTHOG_ENABLED') === 'true'
 export const POSTHOG_API_KEY = getVarForEnvironment('POSTHOG_API_KEY') || ''
-export const REDIS_URL = getVarForEnvironment('REDIS_URL') || ''
+export const REDISCLOUD_URL = getVarForEnvironment('REDISCLOUD_URL') || ''
 
 export const ELEVENLABS_API_KEY =
   getVarForEnvironment('ELEVENLABS_API_KEY') ||
