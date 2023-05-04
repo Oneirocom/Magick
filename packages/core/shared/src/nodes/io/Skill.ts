@@ -10,6 +10,7 @@ import {
   ModuleContext,
   ModuleWorkerOutput,
   WorkerData,
+  Event,
 } from '../../types'
 import { runSpell } from '../../utils'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
@@ -67,6 +68,7 @@ export class Skill extends MagickComponent<
   builder(node: MagickNode) {
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const spellName = new Rete.Input('spellName', 'Spell Name', stringSocket)
+    const contentInput = new Rete.Input('content', 'Content', stringSocket)
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
     const taskInput = new Rete.Input('task', 'Task', taskSocket)
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -74,6 +76,7 @@ export class Skill extends MagickComponent<
     node
       .addInput(triggerIn)
       .addOutput(triggerOut)
+      .addInput(contentInput)
       .addInput(spellName)
       .addInput(eventInput)
       .addInput(taskInput)
@@ -91,6 +94,7 @@ export class Skill extends MagickComponent<
     }, {} as Record<string, unknown>)
   }
 
+  // @ts-ignore
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
@@ -100,8 +104,13 @@ export class Skill extends MagickComponent<
     const spellName = inputs['spellName'] && (inputs['spellName'][0] as string)
     const event = inputs['event'] && (inputs['event'][0] as Event)
     const task = inputs['task'] && (inputs['task'][0] as AgentTask)
+    const content = inputs['content'] && (inputs['content'][0] as string)
 
-    const { module, projectId } = _context
+    if(content){
+      event.content = content
+    }
+
+    const { module } = _context
 
     const { agent, app, secrets } = module
 
@@ -125,6 +134,7 @@ export class Skill extends MagickComponent<
 
     const spellId = firstSpell.id || firstSpell._id
 
+    const { projectId } = _context
     if (module.agent) {
       const spellManager = module.agent.spellManager as SpellManager
       if (spellManager) {
@@ -141,7 +151,6 @@ export class Skill extends MagickComponent<
             publicVariables: {},
           }
           if (task) {
-            console.log('**** Adding task to inputs')
             runComponentArgs.inputs[`Input - Task(${task.id})`] = task
           }
           const outputs = await spellRunner.runComponent(runComponentArgs)
@@ -158,23 +167,28 @@ export class Skill extends MagickComponent<
       }
     } else {
       const runComponentArgs = {
-        inputs: {},
+        inputs: {
+          'Input - Default': event,
+        },
         spellId: spellId as string,
-        projectId: projectId as string,
+        projectId,
         secrets,
         publicVariables: {},
+        app: module.app,
       }
 
       if (task) {
-        console.log('**** Adding task to inputs')
         runComponentArgs.inputs[`Input - Task(${task.id})`] = task
       }
       const outputs = await runSpell(runComponentArgs)
+      console.log('spell outputs')
+      console.log(outputs)
 
-      console.log('ran, outputs are', outputs)
+      // get the first value from outputs
+      const output = Object.values(outputs.outputs)[0]
 
       return {
-        output: outputs,
+        output,
       }
     }
   }

@@ -74,8 +74,6 @@ const MenuBar = () => {
    * Save handler
    */
   const onSave = () => {
-    console.log(activeTabRef.current?.id)
-    console.log('SAVING')
     // if (!activeTabRef.current) return
     publish($SAVE_SPELL(activeTabRef.current?.id))
   }
@@ -419,9 +417,8 @@ const MenuBar = () => {
                 useHotkeys(
                   item.hotKey,
                   event => {
-                    console.log('Hotkey triggered:', item.hotKey)
-                    item.onClick()
                     event.preventDefault()
+                    item.onClick()
                   },
                   { enableOnTags: ['INPUT'] },
                   [item.onClick]

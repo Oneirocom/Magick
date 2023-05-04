@@ -137,8 +137,6 @@ export class ModuleManager {
       return acc
     }, {} as Record<string, unknown>)
 
-    console.log('context is', context)
-
     module.read({
       agent: context.module.agent,
       inputs: parsedInputs,
@@ -152,10 +150,6 @@ export class ModuleManager {
       Object.assign({}, context, { module })
     )
 
-    if (context?.socketInfo?.targetNode) {
-      console.log('targetNode', context?.socketInfo.targetNode)
-    }
-
     if (context?.socketInfo?.targetSocket) {
       const triggeredNode = this.getTriggeredNode(
         data,
@@ -166,7 +160,6 @@ export class ModuleManager {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
       const component = engine?.components.get('Input') as ModuleComponent
-      console.log('component', component)
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
       await component?.run(triggeredNode)

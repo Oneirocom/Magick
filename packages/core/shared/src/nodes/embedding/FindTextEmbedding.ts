@@ -84,8 +84,6 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
     }
     const events = await app.service('events').find(params)
 
-    console.log('found text embedding events', events)
-
     let responseData = null
     if (Array.isArray(events.events) && (events.events).length > 0) {
       responseData = events.events[0]

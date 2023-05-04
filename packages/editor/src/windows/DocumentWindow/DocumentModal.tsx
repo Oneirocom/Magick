@@ -14,7 +14,6 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
   });
 
   useEffect(() => {
-    console.log(newDocument);
     setNewDocument(newDocument);
   }, [newDocument]);
 

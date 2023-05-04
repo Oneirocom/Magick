@@ -79,7 +79,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
     const { projectId } = context;
 
     const content = (inputs['content'] ? inputs['content'][0] : null) as string;
-    console.log('content is', content)
+
     const _embedding = (
       inputs['embedding'] ? inputs['embedding'][0] : null
     ) as number[] | string[];

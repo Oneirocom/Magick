@@ -320,7 +320,7 @@ export class HNSWLib extends SaveableVectorStore {
         }
         vectors.push(embedding)
       }
-      console.log('data', data)
+
       documents.push(new Document(data as any))
     }
     await this.addVectors(vectors, documents)
@@ -483,7 +483,7 @@ export class HNSWLib extends SaveableVectorStore {
             }
           }
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
         return result
       }
@@ -572,7 +572,7 @@ export class HNSWLib extends SaveableVectorStore {
     try {
       // if docstore.json does not exist, create it with {}
       if (!fs.existsSync(directory + '/' + args.filename + '/docstore.json')) {
-        console.log('docstore.json does not exist, creating it')
+        console.warn('docstore.json does not exist, creating it')
         const docstore = {}
 
         fs.writeFileSync(
@@ -664,7 +664,7 @@ export class HNSWLib extends SaveableVectorStore {
       })
       return
     }
-    console.log("TEXT", text)
+
     const vector = await (this.embeddings as ExtendedEmbeddings).embedQueryWithMeta(text, args)
     const insert_data = [
       {

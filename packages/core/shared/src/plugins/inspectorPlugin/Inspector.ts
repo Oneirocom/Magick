@@ -135,7 +135,6 @@ export class Inspector {
       )
       // filter out any sockets which we have set to be ignored
       .filter(existing => {
-        console.log('filtering out existing')
         return (
           ignored.length === 0 || !ignored.some(socket => socket === existing)
         )

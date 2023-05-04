@@ -175,8 +175,6 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
       throw new Error(error);
     }
 
-    console.log('result', result)
-
     return {
       embedding: result as number[],
     };

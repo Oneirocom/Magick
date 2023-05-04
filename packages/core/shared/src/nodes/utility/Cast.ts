@@ -87,8 +87,6 @@ export class Cast extends MagickComponent<void> {
     const value = inputs.input[0];
     const key = sockets.socketNameMap[node.data.socketType as SocketNameType];
 
-    console.log('returning cast', { [key as string]: value });
-
     return {
       output: value,
     };

@@ -89,10 +89,9 @@ export class EventService<
         content_to_match: param.content,
       }
       const rr = await cli.rpc('match_events', bod)
-      console.log('result', rr)
       return { events: querys }
     }
-    console.log('RES:', params)
+
     const res = await cli
       .from('events')
       .select()
@@ -107,8 +106,8 @@ export class EventService<
           builder.where('projectId', params.query.projectId)
         }
       })
-    console.log('RES:', res)
-    return { events: res as unknown as { data: Array<any> } }
+
+      return { events: res as unknown as { data: Array<any> } }
   }
 }
 

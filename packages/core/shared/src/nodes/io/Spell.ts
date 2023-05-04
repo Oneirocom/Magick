@@ -20,6 +20,7 @@ import {
   ModuleWorkerOutput,
   WorkerData
 } from '../../types'
+import { runSpell } from '../../utils'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
 type Socket = {
@@ -72,7 +73,6 @@ export class SpellComponent extends MagickComponent<
     this.display = true
     this.onDoubleClick = (node: MagickNode) => {
       if (!this.editor) return
-      console.log('double click', node)
       const pubsub = this.editor.pubSub
       // TODO: Check if events are defined instead of as
       const event = pubsub.events.OPEN_TAB
@@ -335,16 +335,16 @@ export class SpellComponent extends MagickComponent<
       }
     } else {
       console.error('handle me')
-      // if (!runSpell) throw new Error('Magick runSpell not found')
-      // const outputs = await runSpell({
-      //   inputs: flattenedInputs,
-      //   spellId: node.data.spellId as string,
-      //   projectId: node.data.projectId as string,
-      //   secrets,
-      //   publicVariables,
-      // })
+      const outputs = await runSpell({
+        inputs: flattenedInputs,
+        spellId: node.data.spellId as string,
+        projectId: node.data.projectId as string,
+        secrets,
+        publicVariables,
+        app,
+      })
 
-      // return this.formatOutputs(node, outputs)
+      return this.formatOutputs(node, outputs)
     }
   }
 }

@@ -98,7 +98,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
       dataKey: 'useTrigger',
       defaultValue: node.data.useTrigger,
       onData: data => {
-        console.log('trigger switch')
         configureNode()
       },
     }
@@ -110,7 +109,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
       dataKey: 'useData',
       defaultValue: node.data.useData,
       onData: data => {
-        console.log('data switch', data)
         configureNode()
       },
     }
@@ -155,8 +153,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
     // Each node should have a unique socket key
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    console.log('inputTypes[0].name', inputTypes[0].name)
-
     // Set the default name if there is none
     if (!node.data.name) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -178,21 +174,15 @@ export class InputComponent extends MagickComponent<InputReturn> {
     let lastSockets: CompletionSocket[] | undefined = []
 
     const handleSockets = sockets => {
-      console.log('handleSockets', sockets)
       const connections = node.getConnections()
       if (sockets !== lastSockets) {
         lastSockets?.forEach(socket => {
-          console.log('deleting socket', socket)
           if (node.outputs.has(socket.socket)) {
             if (socket.socket === 'trigger' && node.data.useTrigger === true)
               return
             connections.forEach(c => {
-              console.log('checking connection', c)
               if (c.output.key === socket.socket) {
-                console.log('removing connection', c)
                 this.editor?.removeConnection(c)
-              } else {
-                console.log('not removing connection', c)
               }
             })
             node.outputs.delete(socket.socket)
@@ -200,7 +190,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
         })
         sockets.forEach(socket => {
           if (node.outputs.has(socket.socket)) return
-          console.log('adding socket', socket)
           if (node.data.inputType === 'Default') {
             // if socket is trigger and useTrigger is false, don't add
             if (socket.socket === 'trigger' && node.data.useTrigger !== true)
@@ -208,7 +197,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
             // if socket is output and useData is false, don't add
             if (socket.socket === 'output' && node.data.useData !== true) return
           }
-          console.log('adding socket', socket)
+
           node.addOutput(
             new Rete.Output(socket.socket, socket.name, socket.type)
           )
@@ -219,19 +208,14 @@ export class InputComponent extends MagickComponent<InputReturn> {
     }
 
     const configureNode = () => {
-      console.log('configuring node', node.data.inputType ?? 'Default')
       const inputType = node.data.inputType ?? ('Default' as string)
-      console.log('node.outputs', node.outputs)
 
       const connections = node.getConnections()
-
-      console.log('reading input type', inputType)
 
       const inputTypeData = inputTypes.find(v => v.name === inputType) ?? {
         inspectorControls: [],
         sockets: [],
       }
-      console.log(inputTypeData)
 
       const inspectorControls = inputTypeData.inspectorControls ?? []
       const sockets = inputTypeData.sockets ?? []
@@ -241,13 +225,9 @@ export class InputComponent extends MagickComponent<InputReturn> {
         sockets.push(triggerOutput)
       }
 
-      console.log('node.data.useData', node.data.useData)
-
       if (inputType === 'Default' && node.data.useData === true) {
         sockets.push(dataOutput)
       }
-
-      console.log('*** sockets is', sockets)
 
       if (inputType !== 'Default') {
         node.data.name = `Input - ${inputType}`
@@ -264,21 +244,17 @@ export class InputComponent extends MagickComponent<InputReturn> {
           node.data.useTrigger === true &&
           !node.outputs.has('trigger')
         ) {
-          console.log('adding socket trigger')
-
           node.addOutput(new Rete.Output('trigger', 'trigger', triggerSocket))
         }
-        console.log('node.data.useData', node.data.useData)
+
         if (!node.data.useData && node.outputs.has('output')) {
           connections.forEach(c => {
-            console.log('checking connection', c)
             if (c.output.key === 'output') {
               this.editor?.removeConnection(c)
             }
           })
           node.outputs.delete('output')
         } else if (node.data.useData === true && !node.outputs.has('output')) {
-          console.log('adding socket output')
           node.addOutput(new Rete.Output('output', 'output', anySocket))
         }
       }
