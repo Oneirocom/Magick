@@ -34,6 +34,7 @@ import { WaitForAll } from './flow/WaitForAll';
 import { InputComponent } from './io/Input';
 import { Output } from './io/Output';
 import { Request } from './io/Request';
+import { Skill } from './io/Skill';
 import { SpellComponent } from './io/Spell';
 import { InRange } from './number/InRange';
 import { NumberVariable } from './number/NumberVariable';
@@ -52,9 +53,9 @@ import { StringVariable } from './text/StringVariable';
 import { TextTemplate } from './text/TextTemplate';
 import { TextVariable } from './text/TextVariable';
 import { Cast } from './utility/Cast';
+import { CurrentTime } from './utility/CurrentTime';
 import { Echo } from './utility/Echo';
 import { Log } from './utility/Log';
-import { CurrentTime } from './utility/CurrentTime';
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -111,6 +112,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   getValueFromArray: () => new GetValueFromArray(),
   cosineSimilarity: () => new CosineSimilarity(),
   textToSpeech: () => new TextToSpeech(),
+  skill: () => new Skill(),
 };
 
 /**
