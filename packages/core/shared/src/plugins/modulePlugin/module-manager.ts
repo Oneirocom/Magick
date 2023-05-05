@@ -2,19 +2,18 @@ import { Engine, Socket } from 'rete'
 import { Socket as SocketType } from 'rete/types'
 import { NodeData } from 'rete/types/core/data'
 
+import { extractNodes } from '../../engine'
+import { SocketNameType } from '../../sockets'
 import {
   GraphData,
-  ModuleType,
-  ModuleWorkerOutput,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleComponent,
-  AgentInterface,
   ModuleContext,
+  ModuleType,
+  ModuleWorkerOutput
 } from '../../types'
-import { extractNodes } from '../../engine'
-import { SocketNameType } from '../../sockets'
 import { Module } from './module'
 
 export type ModuleSocketType = {
@@ -76,9 +75,8 @@ export class ModuleManager {
 
   socketFactory(
     node: NodeData,
-    socket: Socket | ((node:NodeData)=>Socket) | undefined
+    socket: Socket | ((node: NodeData) => Socket) | undefined
   ): SocketType {
-    // eslint-disable-next-line no-param-reassign
     socket = typeof socket === 'function' ? socket(node) : socket
 
     if (!socket)
@@ -144,11 +142,7 @@ export class ModuleManager {
       publicVariables: context.module.publicVariables,
       app: context.module.app,
     })
-    await engine?.process(
-      data,
-      null,
-      Object.assign({}, context, { module })
-    )
+    await engine?.process(data, null, Object.assign({}, context, { module }))
 
     if (context?.socketInfo?.targetSocket) {
       const triggeredNode = this.getTriggeredNode(
@@ -157,11 +151,7 @@ export class ModuleManager {
       )
       if (!triggeredNode) throw new Error('Triggered node not found')
       // todo need to remember to update this if/when componnet name changes
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
       const component = engine?.components.get('Input') as ModuleComponent
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
       await component?.run(triggeredNode)
     }
     // gather the outputs

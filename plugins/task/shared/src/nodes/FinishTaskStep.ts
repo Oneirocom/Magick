@@ -46,7 +46,10 @@ export class FinishTaskStep extends MagickComponent<
     // Data from the running task
     const task = new Rete.Input('agentTask', 'Task', taskSocket)
     // A description of how the agent will use the skill to complete the task step
-    const action = new Rete.Input('action', 'Action', stringSocket)
+    const result = new Rete.Input('result', 'Result', stringSocket)
+    const success = new Rete.Input('success', 'Success', stringSocket)
+
+
     // Resulting output of the skill
     const reflection = new Rete.Input('reflection', 'Reflection', stringSocket)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -56,8 +59,9 @@ export class FinishTaskStep extends MagickComponent<
       .addInput(task)
       .addInput(reasoning)
       .addInput(skill)
-      .addInput(action)
+      .addInput(result)
       .addInput(reflection)
+      .addInput(success)
       .addOutput(dataOutput)
       .addOutput(taskOutput)
   }
@@ -78,16 +82,18 @@ export class FinishTaskStep extends MagickComponent<
     const task = inputs['agentTask'][0] as AgentTask
     const reasoning = inputs['reasoning'][0] as string
     const skill = inputs['skill'][0] as string
-    const action = inputs['action'][0] as string
+    const result = inputs['result'][0] as string
     const reflection = inputs['reflection'][0] as string
+    const success = inputs['success'][0] as string
 
     console.log('task.steps', task.steps)
 
     const step = {
       reasoning,
-      action,
       skill,
+      result,
       reflection,
+      success,
     }
 
     const steps = JSON.parse(task.steps || '[]')

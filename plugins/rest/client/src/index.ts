@@ -7,7 +7,6 @@
 import {
   ClientPlugin,
   eventSocket,
-  anySocket,
   triggerSocket
 } from '@magickml/core'
 

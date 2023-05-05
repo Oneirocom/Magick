@@ -13,7 +13,7 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "port": 7778,
+        "port": 7779,
         "inspect": true,
         "outputPath": "dist/apps/agent",
         "main": "apps/agent/src/index.ts",
@@ -40,7 +40,7 @@
       "options": {
         "buildTarget": "@magickml/agent:build",
         "inspect": true,
-        "port": 7778
+        "port": 7779
       },
       "configurations": {
         "production": {

@@ -1,22 +1,21 @@
-// DOCUMENTED 
-import { SpellRunner } from '../spellManager/index';
-import { GraphData } from '../types';
-import { SpellInterface } from '../schemas';
-import { SpellError } from './SpellError';
-import { API_ROOT_URL } from '../config';
+// DOCUMENTED
+import { SpellInterface } from '../schemas'
+import { SpellManager } from '../spellManager/index'
+import { GraphData } from '../types'
+import { SpellError } from './SpellError'
 
 /**
  * Type definition for the arguments of the `runSpell` function.
  */
 export type RunSpellArgs = {
-  spellId: string;
-  inputs?: Record<string, unknown>;
-  inputFormatter?: (graph: GraphData) => Record<string, unknown>;
-  projectId: string;
-  secrets?: Record<string, string>;
-  publicVariables?: Record<string, unknown>;
-  app?: any;
-};
+  spellId: string
+  inputs?: Record<string, unknown>
+  inputFormatter?: (graph: GraphData) => Record<string, unknown>
+  projectId: string
+  secrets: Record<string, string>
+  publicVariables?: Record<string, unknown>
+  app?: any
+}
 
 /**
  * Run a spell with the given parameters.
@@ -51,28 +50,27 @@ export const runSpell = async ({
   }
 
   // Convert the graph of the spell
-  const graph = spell.graph as unknown as GraphData;
+  const graph = spell.graph as unknown as GraphData
 
   // Format the inputs if an input formatter is provided, otherwise use the inputs directly
-  const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs;
+  const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs
 
   // Clone the spell to run
-  const spellToRun = { ...spell };
+  const spellToRun = { ...spell } as SpellInterface
 
-  // Initialize the spell runner
-  const spellRunner = new SpellRunner();
+  const spellManager = new SpellManager({ app })
 
-  // Load the spell into the spell runner
-  await spellRunner.loadSpell(spellToRun as unknown as SpellInterface);
+  spellManager.load(spellToRun)
 
   // Get the outputs from running the spell
-  const outputs = await spellRunner.runComponent({
+  const outputs = (await spellManager.run({
+    spellId: spellToRun.id,
     inputs: formattedInputs as Record<string, any>,
     secrets,
     publicVariables,
-    app
-  }) as Record<string, unknown>;
+    app,
+  })) as Record<string, unknown>
 
   // Return the outputs and the spell name
-  return { outputs, name: spell.name };
-};
+  return { outputs, name: spell.name }
+}

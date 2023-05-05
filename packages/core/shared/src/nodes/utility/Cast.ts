@@ -85,7 +85,6 @@ export class Cast extends MagickComponent<void> {
    */
   worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const value = inputs.input[0];
-    const key = sockets.socketNameMap[node.data.socketType as SocketNameType];
 
     return {
       output: value,

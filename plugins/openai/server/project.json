@@ -9,7 +9,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["plugin/openai-server/**/*.ts"]
+        "lintFilePatterns": ["plugins/openai/server/**/*.ts"]
       }
     },
     "test": {

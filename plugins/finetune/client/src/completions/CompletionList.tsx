@@ -3,7 +3,6 @@
 import Button from '@mui/material/Button';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ExpansionDetails from '../components/ExpansionDetails';
 import FileListTable from '../files/FileListTable';
 import UploadFileButton from '../files/UploadFileButton';
 import FineTuneList from '../fine-tunes/FineTuneList';

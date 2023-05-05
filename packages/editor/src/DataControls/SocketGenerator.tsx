@@ -65,7 +65,7 @@ const SocketGenerator = ({ updateData, control, initialValue }) => {
     )
 
     setSockets(newSockets)
-  }, [initialValue])
+  }, [initialValue, data.ignored])
 
   /**
    * Remove a socket with the given name.

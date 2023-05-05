@@ -2,15 +2,14 @@
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import pgvector from 'pgvector/pg'
 import { v4 as uuidv4 } from 'uuid'
+import { Application, HookContext } from '../../declarations'
+import { DocumentService, getOptions } from './documents.class'
 import {
   documentPatchResolver,
   documentPatchValidator,
   documentQueryResolver,
   documentQueryValidator,
 } from './documents.schema'
-
-import { Application, HookContext } from '../../declarations'
-import { DocumentService, getOptions } from './documents.class'
 
 // Array with 1536 elements containing 0
 const nullArray = new Array(1536).fill(0)
