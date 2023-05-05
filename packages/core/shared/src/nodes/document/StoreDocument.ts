@@ -52,7 +52,6 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
     const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
-    const owner = new Rete.Input('owner', 'Owner', stringSocket)
     const date = new Rete.Input('date', 'Date', stringSocket)
 
     node.inspector.add(nameInput).add(type)
@@ -124,7 +123,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
     if (content && content !== '') {
       const { app } = context.module
       if (!app) throw new Error('App is not defined, cannot create event')
-      const result = await app.service('documents').create(data)
+      await app.service('documents').create(data)
     } else {
       throw new Error('Content is empty')
     }

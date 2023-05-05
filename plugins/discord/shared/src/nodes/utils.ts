@@ -1,5 +1,5 @@
 import { Application } from "@feathersjs/koa/lib";
-import { Agent, SpellRunner, Task } from "@magickml/core";
+import { Agent, SpellRunner } from "@magickml/core";
 import TaskCreation from "./spells/TaskCreation.spell";
 import TaskExecution from "./spells/TaskExecution.spell";
 import TaskReprioritization from "./spells/TaskReprioritization.spell";
@@ -26,6 +26,7 @@ export async function getChannelFromMessage(message: any, discord: any): Promise
 
 export async function getLoadSpell(name: string, agent: Agent, app: Application): Promise<SpellRunner | undefined> {
     let spell;
+    console.log('app is', app)
     switch (name) {
         case "TaskCreation":
             spell = TaskCreation;
