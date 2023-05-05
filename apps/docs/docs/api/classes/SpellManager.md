@@ -20,9 +20,29 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:16](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/spellManager/SpellManager.ts#L16)
+[packages/core/shared/src/spellManager/SpellManager.ts:32](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L32)
 
 ## Properties
+
+### agent
+
+• `Optional` **agent**: [`Agent`](Agent.md)
+
+#### Defined in
+
+[packages/core/shared/src/spellManager/SpellManager.ts:30](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L30)
+
+___
+
+### app
+
+• **app**: `Application`<`any`, `any`\>
+
+#### Defined in
+
+[packages/core/shared/src/spellManager/SpellManager.ts:29](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L29)
+
+___
 
 ### cache
 
@@ -30,7 +50,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:14](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/spellManager/SpellManager.ts#L14)
+[packages/core/shared/src/spellManager/SpellManager.ts:28](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L28)
 
 ___
 
@@ -40,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:13](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/spellManager/SpellManager.ts#L13)
+[packages/core/shared/src/spellManager/SpellManager.ts:27](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L27)
 
 ___
 
@@ -50,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:12](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/spellManager/SpellManager.ts#L12)
+[packages/core/shared/src/spellManager/SpellManager.ts:26](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L26)
 
 ## Methods
 
@@ -64,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:33](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/spellManager/SpellManager.ts#L33)
+[packages/core/shared/src/spellManager/SpellManager.ts:63](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L63)
 
 ___
 
@@ -84,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:25](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/spellManager/SpellManager.ts#L25)
+[packages/core/shared/src/spellManager/SpellManager.ts:55](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L55)
 
 ___
 
@@ -104,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:29](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/spellManager/SpellManager.ts#L29)
+[packages/core/shared/src/spellManager/SpellManager.ts:59](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L59)
 
 ___
 
@@ -132,23 +152,39 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:37](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/spellManager/SpellManager.ts#L37)
+[packages/core/shared/src/spellManager/SpellManager.ts:78](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L78)
 
 ___
 
-### run
+### loadById
 
-▸ **run**(`spellId`, `inputs`, `secrets`, `publicVariables`, `app`): `Promise`<`Record`<`string`, `unknown`\>\>
+▸ **loadById**(`spellId`): `Promise`<`undefined` \| ``null`` \| [`SpellRunner`](SpellRunner.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `spellId` | `string` |
-| `inputs` | [`MagickSpellInput`](../#magickspellinput) |
-| `secrets` | `Record`<`string`, `string`\> |
-| `publicVariables` | `any` |
-| `app` | `any` |
+
+#### Returns
+
+`Promise`<`undefined` \| ``null`` \| [`SpellRunner`](SpellRunner.md)\>
+
+#### Defined in
+
+[packages/core/shared/src/spellManager/SpellManager.ts:67](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L67)
+
+___
+
+### run
+
+▸ **run**(`«destructured»`): `Promise`<`Record`<`string`, `unknown`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `«destructured»` | `RunArgs` |
 
 #### Returns
 
@@ -156,4 +192,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:55](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/spellManager/SpellManager.ts#L55)
+[packages/core/shared/src/spellManager/SpellManager.ts:102](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L102)

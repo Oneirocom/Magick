@@ -1,7 +1,6 @@
 const path = require('path');
 // check if node_modules exists
 const fs = require('fs');
-const e = require('express');
 const nodeModulesPath = path.resolve(__dirname, '../node_modules');
 const nodeModulesExist = fs.existsSync(nodeModulesPath);
 
@@ -38,4 +37,12 @@ if (!nodeModulesExist || (!packageLockExists && !yarnLockExists) || revisionChan
     console.log("New revision detected, installing dependencies...");
     const npmInstall = require('child_process').execSync('npm install --force');
     console.log(npmInstall.toString());
+}
+
+// check if docker is running
+const docker = require('child_process').execSync('docker ps');
+if (!docker.toString().includes('CONTAINER ID')) {
+    console.log("Docker is not running, starting docker...");
+    const dockerStart = require('child_process').execSync('docker-compose up -d');
+    console.log(dockerStart.toString());
 }

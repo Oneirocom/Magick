@@ -45,7 +45,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:169](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L169)
+[packages/core/shared/src/engine.ts:173](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L173)
 
 ## Properties
 
@@ -55,7 +55,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:150](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L150)
+[packages/core/shared/src/engine.ts:154](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L154)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:151](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L151)
+[packages/core/shared/src/engine.ts:155](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L155)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:154](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L154)
+[packages/core/shared/src/engine.ts:158](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L158)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:163](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L163)
+[packages/core/shared/src/engine.ts:167](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L167)
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:153](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L153)
+[packages/core/shared/src/engine.ts:157](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L157)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:160](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L160)
+[packages/core/shared/src/engine.ts:164](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L164)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:157](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L157)
+[packages/core/shared/src/engine.ts:161](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L161)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:156](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L156)
+[packages/core/shared/src/engine.ts:160](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L160)
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:165](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L165)
+[packages/core/shared/src/engine.ts:169](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L169)
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:152](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L152)
+[packages/core/shared/src/engine.ts:156](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L156)
 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:39](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L39)
+[packages/core/shared/src/engine.ts:39](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L39)
 
 ___
 
@@ -173,7 +173,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:158](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L158)
+[packages/core/shared/src/engine.ts:162](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L162)
 
 ___
 
@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:155](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L155)
+[packages/core/shared/src/engine.ts:159](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L159)
 
 ___
 
@@ -193,7 +193,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:162](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L162)
+[packages/core/shared/src/engine.ts:166](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L166)
 
 ___
 
@@ -207,7 +207,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:37](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L37)
+[packages/core/shared/src/engine.ts:37](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L37)
 
 ___
 
@@ -217,7 +217,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:167](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L167)
+[packages/core/shared/src/engine.ts:171](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L171)
 
 ___
 
@@ -241,7 +241,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:161](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L161)
+[packages/core/shared/src/engine.ts:165](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L165)
 
 ___
 
@@ -251,7 +251,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:159](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L159)
+[packages/core/shared/src/engine.ts:163](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L163)
 
 ___
 
@@ -261,7 +261,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:149](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L149)
+[packages/core/shared/src/engine.ts:153](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L153)
 
 ___
 
@@ -271,7 +271,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:164](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L164)
+[packages/core/shared/src/engine.ts:168](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L168)
 
 ## Methods
 
@@ -291,7 +291,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:188](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L188)
+[packages/core/shared/src/engine.ts:192](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L192)
 
 ___
 
@@ -311,7 +311,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:184](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L184)
+[packages/core/shared/src/engine.ts:188](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L188)
 
 ___
 
@@ -331,7 +331,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:206](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L206)
+[packages/core/shared/src/engine.ts:211](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L211)
 
 ___
 
@@ -352,7 +352,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:193](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L193)
+[packages/core/shared/src/engine.ts:197](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L197)
 
 ___
 
@@ -380,4 +380,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:45](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/engine.ts#L45)
+[packages/core/shared/src/engine.ts:45](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L45)
