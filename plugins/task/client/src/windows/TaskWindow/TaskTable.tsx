@@ -100,8 +100,15 @@ function TaskTable({ tasks, updateCallback }) {
         disableSortBy: false,
       },
       {
+        Header: 'Objective',
+        accessor: 'objective',
+        disableSortBy: false,
+      },
+      {
         Header: 'Event Data',
         accessor: 'eventData',
+        // stringify the cell value for display
+        Cell: row => JSON.stringify(row.value),
       },
       {
         Header: 'Steps',

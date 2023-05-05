@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Button, Window } from '@magickml/client-core'
 import Editor from '@monaco-editor/react'
 import { useEffect, useRef, useState } from 'react'
@@ -10,7 +9,7 @@ import { complete, generate } from './utils'
 const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)
   const [data, setData] = useState<TextEditorData | null>(null)
-  const [editorOptions, setEditorOptions] = useState<Record<string, any>>({
+  const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
     minimap: { enabled: false },
   })

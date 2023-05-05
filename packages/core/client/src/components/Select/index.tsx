@@ -1,5 +1,5 @@
-// DOCUMENTED 
-import React, { useEffect, useRef } from 'react';
+// DOCUMENTED
+import React, { useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import Creatable from 'react-select/creatable';
 import ReactSelect, { SelectInstance, StylesConfig } from 'react-select';
@@ -129,6 +129,7 @@ export const Select = ({
       flex: '1',
       alignItems: 'center',
       fontFamily: 'IBM Plex Mono',
+      overflow: 'clip',
     }),
     singleValue: () => ({
       color: 'rgba(255,255,255)',

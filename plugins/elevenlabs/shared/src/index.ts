@@ -1,6 +1,5 @@
 // DOCUMENTED 
 import {
-  arraySocket,
   CompletionProvider,
   PluginSecret,
   stringSocket,

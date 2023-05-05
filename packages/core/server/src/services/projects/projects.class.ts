@@ -101,7 +101,6 @@ export class ProjectsService {
     const agentResponse: any[] = [];
     if (mappedAgents.length > 0) {
       mappedAgents.forEach(async agent => {
-        console.log('setting agent', agent);
         const r = await app.service('agents').create(agent);
         agentResponse.push(r);
       });
@@ -110,7 +109,6 @@ export class ProjectsService {
     const documentResponse: any[] = [];
     if (mappedDocuments.length > 0) {
       mappedDocuments.forEach(async doc => {
-        console.log('setting doc', doc);
         const r = await app.service('documents').create(doc);
         documentResponse.push(r);
       });
@@ -119,7 +117,6 @@ export class ProjectsService {
     const spellResponse: any[] = [];
     if (mappedSpells.length > 0) {
       mappedSpells.forEach(async spell => {
-        console.log('setting spell', spell);
         const r = await app.service('spells').create(spell);
         spellResponse.push(r);
       });

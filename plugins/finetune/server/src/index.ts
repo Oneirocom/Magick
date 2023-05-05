@@ -3,7 +3,6 @@
  * Imports
  */
 import { ServerPlugin } from '@magickml/core'
-import * as React from 'react'
 
 /**
  * @class FineTuneManager

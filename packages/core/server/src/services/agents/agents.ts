@@ -20,7 +20,7 @@ import {
 } from './agents.schema'
 import type { Application, HookContext } from '../../declarations'
 import { AgentService, getOptions } from './agents.class'
-import { handleJSONFieldsUpdate, jsonResolver } from '../utils'
+import { jsonResolver } from '../utils'
 import { v4 as uuidv4 } from 'uuid'
 
 // Re-export agents.class and agents.schema
@@ -48,9 +48,14 @@ const validateRootSpell = async (context: HookContext) => {
 export const agent = (app: Application) => {
   // Register the agent service on the Feathers application
   app.use('agents', new AgentService(getOptions(app)), {
-    methods: ['find', 'get', 'create', 'patch', 'remove'],
+    methods: ['find', 'get', 'create', 'patch', 'remove', 'log'],
     events: [],
   })
+
+  // app.service('agents').publish('log', (data, context) => {
+  //   // @ts-ignore
+  //   return app.channel(data.agentId)
+  // })
 
   // Initialize hooks for the agent service
   app.service('agents').hooks({
@@ -81,9 +86,8 @@ export const agent = (app: Application) => {
         schemaHooks.validateData(agentPatchValidator),
         schemaHooks.resolveData(agentPatchResolver),
         validateRootSpell,
-        handleJSONFieldsUpdate(agentJsonFields),
       ],
-      update: [handleJSONFieldsUpdate(agentJsonFields)],
+      update: [],
       remove: [],
     },
     after: {

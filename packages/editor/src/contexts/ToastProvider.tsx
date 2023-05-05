@@ -1,29 +1,29 @@
 // DOCUMENTED 
 import { SnackbarProvider } from 'notistack';
 
-/**
- * Styles for snackbars with success, error, warning, and info variant
- *
- * @returns {Object} The style object for snackbars
- */
-const styles = () => ({
-  success: {
-    border: '1px solid var(--green)',
-    backgroundColor: 'var(--dark-2) !important',
-  },
-  error: {
-    border: '1px solid var(--red)',
-    backgroundColor: 'var(--dark-2) !important',
-  },
-  warning: {
-    border: '1px solid var(--yellow)',
-    backgroundColor: 'var(--dark-2) !important',
-  },
-  info: {
-    border: '1px solid var(--blue)',
-    backgroundColor: 'var(--dark-2) !important',
-  },
-});
+// /**
+//  * Styles for snackbars with success, error, warning, and info variant
+//  *
+//  * @returns {Object} The style object for snackbars
+//  */
+// const styles = () => ({
+//   success: {
+//     border: '1px solid var(--green)',
+//     backgroundColor: 'var(--dark-2) !important',
+//   },
+//   error: {
+//     border: '1px solid var(--red)',
+//     backgroundColor: 'var(--dark-2) !important',
+//   },
+//   warning: {
+//     border: '1px solid var(--yellow)',
+//     backgroundColor: 'var(--dark-2) !important',
+//   },
+//   info: {
+//     border: '1px solid var(--blue)',
+//     backgroundColor: 'var(--dark-2) !important',
+//   },
+// });
 
 /* 
 Map of style variants for SnackbarProvider component is commented

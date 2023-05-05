@@ -102,8 +102,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     const getEvents = async (params: GetEventArgs) => {
       const result = await app.service('events').find({ query: params })
-      console.log(result)
-      // app is a feathers-koa app
       const { events } = result
 
       return events

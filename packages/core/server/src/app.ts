@@ -1,4 +1,5 @@
 // DOCUMENTED
+import { parse, stringify } from 'flatted'
 import { authenticate } from '@feathersjs/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
 import { HookContext } from '@feathersjs/feathers'
@@ -12,12 +13,14 @@ import {
   rest,
 } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
+import sync from 'feathers-sync'
 import {
   configureManager,
   DEFAULT_PROJECT_ID,
   DEFAULT_USER_ID,
   globalsManager,
   IGNORE_AUTH,
+  REDISCLOUD_URL,
 } from '@magickml/core'
 
 import { dbClient } from './dbClient'
@@ -31,20 +34,18 @@ import handleSockets from './sockets/sockets'
 
 //Vector DB Related Imports
 import {
-  HNSWLib,
-  PostgressVectorStoreCustom,
+  PostgresVectorStoreCustom,
   ExtendedEmbeddings,
 } from './vectordb'
 import { PluginEmbeddings } from './customEmbeddings'
-import type { Knex } from 'knex'
 
 // Initialize the Feathers Koa app
 const app: Application = koa(feathers())
 
 declare module './declarations' {
   interface Configuration {
-    vectordb: HNSWLib | PostgressVectorStoreCustom | any
-    docdb: HNSWLib | PostgressVectorStoreCustom | any
+    vectordb: PostgresVectorStoreCustom | any
+    docdb: PostgresVectorStoreCustom | any
   }
 }
 
@@ -68,10 +69,19 @@ app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
 
-// Configure app management settings
+// Configure app spell management settings
 app.configure(configureManager())
 
-
+// sync up messages between the app and the runner
+if (REDISCLOUD_URL) {
+  app.configure(
+    sync({
+      uri: REDISCLOUD_URL,
+      serialize: stringify,
+      deserialize: parse,
+    })
+  )
+}
 
 // Configure authentication
 if (!IGNORE_AUTH) {
@@ -111,34 +121,18 @@ app.configure(rest())
 
 app.configure(dbClient)
 const embeddings = new PluginEmbeddings({}) as unknown as ExtendedEmbeddings
-if (process.env.DATABASE_TYPE == 'sqlite') {
-  console.log('Setting up vector store')
-  const vectordb = HNSWLib.load_data('.', embeddings, {
-    space: 'cosine',
-    numDimensions: 1536,
-    filename: 'database',
-  })
-  const docdb = HNSWLib.load_data('.', embeddings, {
-    space: 'cosine',
-    numDimensions: 1536,
-    filename: 'documents',
-  })
-  app.set('vectordb', vectordb)
-  app.set('docdb', docdb)
-} else {
-  const vectordb = new PostgressVectorStoreCustom(embeddings, {
-    client: app.get('dbClient'),
-    tableName: 'events',
-    queryName: 'match_events',
-  })
-  const docdb = new PostgressVectorStoreCustom(embeddings, {
-    client: app.get('dbClient'),
-    tableName: 'documents',
-    queryName: 'match_documents',
-  })
-  app.set('vectordb', vectordb)
-  app.set('docdb', docdb)
-}
+const vectordb = new PostgresVectorStoreCustom(embeddings, {
+  client: app.get('dbClient'),
+  tableName: 'events',
+  queryName: 'match_events',
+})
+const docdb = new PostgresVectorStoreCustom(embeddings, {
+  client: app.get('dbClient'),
+  tableName: 'documents',
+  queryName: 'match_documents',
+})
+app.set('vectordb', vectordb)
+app.set('docdb', docdb)
 app.configure(services)
 app.configure(channels)
 
@@ -174,7 +168,6 @@ app.hooks({
             const projectId = context.params.query.projectId
 
             if (authentication.payload.project !== projectId) {
-              console.log('User not authorized to access project')
               throw new NotAuthenticated(
                 'User not authorized to access project'
               )

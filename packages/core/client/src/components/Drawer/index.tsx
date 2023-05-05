@@ -1,6 +1,8 @@
 // DOCUMENTED
 import { ClientPluginManager, pluginManager } from '@magickml/core'
 import AppsIcon from '@mui/icons-material/Apps'
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+import ArticleIcon from '@mui/icons-material/Article'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
 import SettingsIcon from '@mui/icons-material/Settings'
@@ -8,25 +10,21 @@ import StorageIcon from '@mui/icons-material/Storage'
 import Divider from '@mui/material/Divider'
 import MuiDrawer from '@mui/material/Drawer'
 import List from '@mui/material/List'
-import { IGNORE_AUTH, VITE_APP_TRUSTED_PARENT_URL } from '@magickml/core'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import { CSSObject, styled, Theme } from '@mui/material/styles'
+import { CSSObject, Theme, styled } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   ProjectWindowProvider,
   useProjectWindow,
 } from '../../contexts/ProjectWindowContext'
 import ProjectWindow from './ProjectWindow'
+import { SetAPIKeys } from './SetAPIKeys'
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
-import { SetAPIKeys } from './SetAPIKeys'
-import ArticleIcon from '@mui/icons-material/Article'
-import DvrIcon from '@mui/icons-material/Dvr'
 
 // Constants
 const drawerWidth = 150
@@ -231,14 +229,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [])
-
-  const handleClick = () => {
-    const URL = IGNORE_AUTH
-      ? 'http://localhost:3000/projects'
-      : `${VITE_APP_TRUSTED_PARENT_URL}/projects`
-    if (URL) window.open(URL)
-  }
+  }, []);
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -290,13 +281,6 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/agents')}
             text="Agents"
-          />
-          <DrawerItem
-            active={location.pathname.includes('/settings')}
-            Icon={DvrIcon}
-            open={openDrawer}
-            onClick={handleClick}
-            text="Projects"
           />
           <DrawerItem
             active={location.pathname === '/documents'}

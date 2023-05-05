@@ -55,7 +55,7 @@ const EventWindow = (): JSX.Element => {
       setLoading(false)
       setEvents(data.events)
     } catch (error) {
-      console.log(error)
+      console.error('ERROR', error)
     }
   }
 

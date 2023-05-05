@@ -25,7 +25,6 @@ export const documentDataSchema = Type.Pick(
   documentSchema,
   [
     'type',
-    'owner',
     'projectId',
     'content',
     'date',
@@ -61,7 +60,6 @@ export const documentPatchResolver = resolve<Document, HookContext>({});
 export const documentQueryProperties = Type.Pick(documentSchema, [
   'id',
   'type',
-  'owner',
   'projectId',
   'content',
   'date',

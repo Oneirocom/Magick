@@ -1,13 +1,11 @@
 import { useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
-import { GraphData, Spell } from '@magickml/core'
-
-import md5 from 'md5'
+import { Spell } from '@magickml/core'
 
 import {
   useLazyGetSpellByIdQuery
 } from '../../../state/api/spells'
-import { useFeathers } from '../../../contexts/FeathersProvider'
+import { useFeathers } from '../../../../../core/client/src/providers/FeathersProvider'
 
 import { useConfig } from '@magickml/client-core'
 
@@ -67,7 +65,6 @@ const EventHandler = ({ pubSub, conversation }) => {
     client.service('spell-runner').create(data)
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handlerMap = {
     [$RUN_SPELL(conversation.id)]: runSpell,
   }

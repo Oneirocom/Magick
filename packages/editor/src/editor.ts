@@ -39,8 +39,6 @@ import {
 
 import AreaPlugin from './plugins/areaPlugin'
 import { initSharedEngine, MagickEngine } from '@magickml/core'
-import { useSelector } from 'react-redux'
-import { RootState } from './state/store'
 
 /**
  * Extend MagickEngine with additional properties
@@ -202,7 +200,6 @@ export const initEditor = function ({
 
   editor.runProcess = async callback => {
     await engine.abort()
-    console.log('run process:', context)
     await engine.process(editor.toJSON(), null, {
       context: context,
       currentSpell: editor.currentSpell,

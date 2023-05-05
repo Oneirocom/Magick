@@ -1,6 +1,5 @@
 // DOCUMENTED
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import os from 'os'
 import pgvector from 'pgvector/pg'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -14,19 +13,12 @@ import {
 
 import { Application, HookContext } from '../../declarations'
 import { EventService, getOptions } from './events.class'
-import { DATABASE_TYPE } from '@magickml/core'
 
 /**
  * Export the Event class and event schema
  */
 export * from './events.class'
 export * from './events.schema'
-
-const cpuCore = os.cpus()
-
-const isM1 =
-  cpuCore[0].model.includes('Apple M1') || cpuCore[0].model.includes('Apple M2')
-const isWindows = os.platform() === 'win32'
 
 // Null array with 1536 values
 const nullArray = new Array(1536).fill(0)
@@ -36,8 +28,6 @@ const nullArray = new Array(1536).fill(0)
  * @param app {Application}
  */
 export const event = (app: Application) => {
-  const db = app.get('dbClient')
-
   // Register our service on the Feathers application
   app.use('events', new EventService(getOptions(app)), {
     methods: ['find', 'get', 'create', 'patch', 'remove'],
@@ -72,7 +62,6 @@ export const event = (app: Application) => {
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         async (context: HookContext) => {
-          const vectordb = app.get('vectordb')
           const { embedding } = context.data
           const { data, service } = context
           const id = uuidv4()
@@ -83,45 +72,12 @@ export const event = (app: Application) => {
           }
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
-            if (DATABASE_TYPE == 'pg') {
-              context.data.embedding = pgvector.toSql(
-                embedding as Array<number>
-              )
-              return context
-            } else {
-              const insert_data = [
-                {
-                  embedding: embedding,
-                  data: {
-                    metadata: { ...context.data } || { msg: 'Empty Data' },
-                    pageContent:
-                      context.data['content'] || 'No Content in the Event',
-                  },
-                },
-              ]
-              console.log(vectordb)
-              await vectordb.addEmbeddingsWithData(insert_data)
-            }
+            context.data.embedding = pgvector.toSql(embedding as Array<number>)
+            return context
           } else {
-            if (DATABASE_TYPE == 'pg') {
-              context.data.embedding = pgvector.toSql(nullArray)
-              //context.app.service('events').create(context.data);
-              return context
-            } else {
-              const insert_data = [
-                {
-                  embedding: nullArray,
-                  data: {
-                    metadata: { ...context.data, id: uuidv4() } || {
-                      msg: 'Empty Data',
-                    },
-                    pageContent:
-                      context.data['content'] || 'No Content in the Event',
-                  },
-                },
-              ]
-              await vectordb.addEmbeddingsWithData(insert_data)
-            }
+            context.data.embedding = pgvector.toSql(nullArray)
+            //context.app.service('events').create(context.data);
+            return context
           }
           return
         },

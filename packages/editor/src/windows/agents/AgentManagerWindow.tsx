@@ -128,7 +128,6 @@ const AgentManagerWindow = () => {
       }
 
       // Check if the "id" property exists in the object
-      // eslint-disable-next-line no-prototype-builtins
       if (data.hasOwnProperty('id')) {
         delete data.id
       }
@@ -185,7 +184,6 @@ const AgentManagerWindow = () => {
     })
       .then(async res => {
         res = await res.json()
-        console.log('res is', res)
         // TODO: Handle internal error
         // if (res === 'internal error') {
         //   enqueueSnackbar('Server Error deleting agent with id: ' + id, {
@@ -218,7 +216,6 @@ const AgentManagerWindow = () => {
         }
       )
       const json = await res.json()
-      console.log('res data', json.data)
       setData(json.data)
       setIsLoading(false)
     })()
@@ -233,7 +230,6 @@ const AgentManagerWindow = () => {
         }
       )
       const json = await res.json()
-      console.log('res data', json.data)
       if (!json.data || !json.data[0]) return
       const spellAgent = json.data[0]?.rootSpell ?? {}
       const inputs = pluginManager.getInputByName()
@@ -241,7 +237,6 @@ const AgentManagerWindow = () => {
       for (const key of Object.keys(plugin_list)) {
         plugin_list[key] = validateSpellData(spellAgent, inputs[key])
       }
-      console.log(plugin_list)
       setEnable(plugin_list)
     })()
   }, [])

@@ -132,10 +132,10 @@ export class JupyterNotebook extends MagickComponent<Promise<{ output: string }>
     const name = node.data.name as string;
     node.name = name;
 
-    const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
-      acc[key] = value[0];
-      return acc;
-    }, {} as Record<string, unknown>);
+    // const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
+    //   acc[key] = value[0];
+    //   return acc;
+    // }, {} as Record<string, unknown>);
 
     // URL of the Jupyter Server, e.g. http://localhost:8888 (no trailing slash)
     const url = node?.data?.url as string;

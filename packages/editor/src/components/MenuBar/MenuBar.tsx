@@ -5,7 +5,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useModal } from '../../contexts/ModalProvider'
-import { usePubSub } from '../../contexts/PubSubProvider'
+import { usePubSub } from '../../../../core/client/src/providers/PubSubProvider'
 import { toggleAutoSave } from '../../state/preferences'
 import { RootState } from '../../state/store'
 import { activeTabSelector, changeEditorLayout, Tab } from '../../state/tabs'
@@ -74,8 +74,6 @@ const MenuBar = () => {
    * Save handler
    */
   const onSave = () => {
-    console.log(activeTabRef.current?.id)
-    console.log('SAVING')
     // if (!activeTabRef.current) return
     publish($SAVE_SPELL(activeTabRef.current?.id))
   }
@@ -419,9 +417,8 @@ const MenuBar = () => {
                 useHotkeys(
                   item.hotKey,
                   event => {
-                    console.log('Hotkey triggered:', item.hotKey)
-                    item.onClick()
                     event.preventDefault()
+                    item.onClick()
                   },
                   { enableOnTags: ['INPUT'] },
                   [item.onClick]
