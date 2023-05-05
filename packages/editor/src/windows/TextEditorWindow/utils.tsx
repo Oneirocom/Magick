@@ -59,13 +59,11 @@ export const generate = async (textEditorData, openaiApiKey) => {
   const _inputs = []
   const _outputs = []
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   inspectorData?.data?.inputs?.forEach((input: any) => {
     _inputs.push(input.socketKey)
   })
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   inspectorData?.data?.outputs?.forEach((output: any) => {
     _outputs.push(output.socketKey)

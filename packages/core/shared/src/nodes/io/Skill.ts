@@ -172,7 +172,7 @@ export class Skill extends MagickComponent<
         },
         spellId: spellId as string,
         projectId,
-        secrets,
+        secrets: secrets as Record<string, string>,
         publicVariables: {},
         app: module.app,
       }

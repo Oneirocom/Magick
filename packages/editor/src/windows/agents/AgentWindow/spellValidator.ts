@@ -93,12 +93,12 @@ type Data = {
 };
 
 // Mapping from input types to corresponding inputs
-const inputTypeMapping: { [key: string]: Set<string> } = {
-  discord_enabled: new Set(['Discord (Voice)', 'Discord (Text)']),
-  rest_enabled: new Set(['REST API (GET)', 'REST API (POST)', 'REST API (PUT)', 'REST API (DELETE)']),
-  twitter_enabled: new Set(['Twitter (Feed)']),
-  loop_enabled: new Set(['Loop In']),
-};
+// const inputTypeMapping: { [key: string]: Set<string> } = {
+//   discord_enabled: new Set(['Discord (Voice)', 'Discord (Text)']),
+//   rest_enabled: new Set(['REST API (GET)', 'REST API (POST)', 'REST API (PUT)', 'REST API (DELETE)']),
+//   twitter_enabled: new Set(['Twitter (Feed)']),
+//   loop_enabled: new Set(['Loop In']),
+// };
 
 /**
  * Checks if given nodes are valid.
@@ -122,7 +122,7 @@ const validateNodes = (nodes: { [key: string]: Node | null }, data: Data = {}): 
   }
 
   // Get enabledInputs from data object
-  const enabledInputs = Object.entries(data)
+  // const enabledInputs = Object.entries(data)
   // TODO: Reenable spell validation, right now its not working for Twitter
     // .filter(([, value]) => value)
     // .map(([key]) => inputTypeMapping[key])

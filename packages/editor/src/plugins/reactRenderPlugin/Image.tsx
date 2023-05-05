@@ -14,5 +14,5 @@ type ImageProps = {
  */
 export default function Image(props: ImageProps): JSX.Element {
   const { imgSRC } = props;
-  return <img src={imgSRC} alt="An image" />;
+  return <img src={imgSRC} alt="Preview" />;
 } 

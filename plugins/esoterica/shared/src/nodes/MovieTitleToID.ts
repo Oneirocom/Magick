@@ -9,7 +9,6 @@ import {
   MagickComponent,
   MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs,
   stringSocket,
 } from '@magickml/core';
 
@@ -67,7 +66,6 @@ export class MovieTitleToID extends MagickComponent<Promise<WorkerReturn>> {
   async worker(
     node: NodeData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
   ): Promise<WorkerReturn> {
     const movie = inputs.movie && inputs.movie[0]; //Get the movie input
     const returned = await nameToImdb(movie); //Use nameToImdb package to find the IMDB ID of the movie

@@ -9,7 +9,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["plugin/discord-server/**/*.ts"]
+        "lintFilePatterns": ["plugins/discord/server/**/*.ts"]
       }
     },
     "test": {

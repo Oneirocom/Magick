@@ -57,9 +57,13 @@ export const PAGINATE_DEFAULT = getVarForEnvironment('PAGINATE_DEFAULT') || '10'
 export const PAGINATE_MAX = getVarForEnvironment('PAGINATE_MAX') || '100'
 export const JWT_SECRET = getVarForEnvironment('JWT_SECRET') || 'secret'
 
-export const POSTHOG_ENABLED = getVarForEnvironment('POSTHOG_ENABLED') || false
+export const POSTHOG_ENABLED =
+  getVarForEnvironment('POSTHOG_ENABLED') === 'true'
 export const POSTHOG_API_KEY = getVarForEnvironment('POSTHOG_API_KEY') || ''
+export const REDISCLOUD_URL = getVarForEnvironment('REDISCLOUD_URL') || ''
 
-export const ELEVENLABS_API_KEY = getVarForEnvironment('ELEVENLABS_API_KEY') || 'ce69df07b50e7179cbbfc5c2bef9d752'
+export const ELEVENLABS_API_KEY =
+  getVarForEnvironment('ELEVENLABS_API_KEY') ||
+  'ce69df07b50e7179cbbfc5c2bef9d752'
 export const VITE_APP_TRUSTED_PARENT_URL =
   getVarForEnvironment('VITE_APP_TRUSTED_PARENT_URL') || ''
