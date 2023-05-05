@@ -1,9 +1,8 @@
 // DOCUMENTED
-import { SpellManager, SpellRunner } from '../spellManager/index'
-import { GraphData } from '../types'
 import { SpellInterface } from '../schemas'
+import { SpellManager } from '../spellManager/index'
+import { GraphData } from '../types'
 import { SpellError } from './SpellError'
-import { API_ROOT_URL } from '../config'
 
 /**
  * Type definition for the arguments of the `runSpell` function.

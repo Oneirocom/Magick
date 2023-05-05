@@ -57,9 +57,8 @@ export class DocumentService<
    */
   async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
-    const cli = app.get('docdb')
     if (params.query.embedding) {
-      const { $limit: _, ...param } = params.query
+      const param = params.query
       const querys = await db('documents')
         .select('*')
         .where({
