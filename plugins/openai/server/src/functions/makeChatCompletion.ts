@@ -28,7 +28,7 @@ export async function makeChatCompletion(
   })[0]
 
   // Get the first non-empty Event as inputData
-  const inputData = (inputKeys as Event[]).filter(Boolean)[0] as Event
+  //const inputData = (inputKeys as Event[]).filter(Boolean)[0] as Event
 
   // Get the system message and conversation inputs
   const system = inputs['system']?.[0] as string
