@@ -141,7 +141,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       channel,
       channelType,
       projectId,
-      limit,
+      $limit: limit,
     }
 
     if (embedding) {
