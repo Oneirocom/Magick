@@ -20,7 +20,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:32](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L32)
+[packages/core/shared/src/spellManager/SpellManager.ts:32](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/spellManager/SpellManager.ts#L32)
 
 ## Properties
 
@@ -30,7 +30,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:30](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L30)
+[packages/core/shared/src/spellManager/SpellManager.ts:30](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/spellManager/SpellManager.ts#L30)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:29](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L29)
+[packages/core/shared/src/spellManager/SpellManager.ts:29](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/spellManager/SpellManager.ts#L29)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:28](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L28)
+[packages/core/shared/src/spellManager/SpellManager.ts:28](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/spellManager/SpellManager.ts#L28)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:27](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L27)
+[packages/core/shared/src/spellManager/SpellManager.ts:27](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/spellManager/SpellManager.ts#L27)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:26](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L26)
+[packages/core/shared/src/spellManager/SpellManager.ts:26](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/spellManager/SpellManager.ts#L26)
 
 ## Methods
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:63](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L63)
+[packages/core/shared/src/spellManager/SpellManager.ts:63](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/spellManager/SpellManager.ts#L63)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:55](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L55)
+[packages/core/shared/src/spellManager/SpellManager.ts:55](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/spellManager/SpellManager.ts#L55)
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:59](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L59)
+[packages/core/shared/src/spellManager/SpellManager.ts:59](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/spellManager/SpellManager.ts#L59)
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:78](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L78)
+[packages/core/shared/src/spellManager/SpellManager.ts:78](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/spellManager/SpellManager.ts#L78)
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:67](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L67)
+[packages/core/shared/src/spellManager/SpellManager.ts:67](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/spellManager/SpellManager.ts#L67)
 
 ___
 
@@ -192,4 +192,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/SpellManager.ts:102](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/spellManager/SpellManager.ts#L102)
+[packages/core/shared/src/spellManager/SpellManager.ts:102](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/spellManager/SpellManager.ts#L102)

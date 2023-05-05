@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:32](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L32)
+[packages/core/shared/src/engine.ts:32](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/engine.ts#L32)
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:31](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L31)
+[packages/core/shared/src/engine.ts:31](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/engine.ts#L31)
 
 ## Methods
 

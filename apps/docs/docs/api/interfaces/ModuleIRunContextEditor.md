@@ -32,7 +32,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:312](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L312)
+[packages/core/shared/src/types.ts:312](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L312)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:311](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L311)
+[packages/core/shared/src/types.ts:311](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L311)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/index.ts:22](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/index.ts#L22)
+[packages/core/shared/src/plugins/modulePlugin/index.ts:22](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/modulePlugin/index.ts#L22)
 
 ___
 

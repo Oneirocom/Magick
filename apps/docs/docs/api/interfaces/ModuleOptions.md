@@ -14,7 +14,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:676](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L676)
+[packages/core/shared/src/types.ts:676](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L676)
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:673](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L673)
+[packages/core/shared/src/types.ts:673](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L673)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:675](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L675)
+[packages/core/shared/src/types.ts:675](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L675)
 
 ___
 
@@ -44,4 +44,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:674](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L674)
+[packages/core/shared/src/types.ts:674](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L674)

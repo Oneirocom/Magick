@@ -16,7 +16,7 @@ Represents the possible embedding models
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:27](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/cost-calculator.ts#L27)
+[packages/core/shared/src/cost-calculator.ts:27](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/cost-calculator.ts#L27)
 
 ___
 
@@ -26,4 +26,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:26](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/cost-calculator.ts#L26)
+[packages/core/shared/src/cost-calculator.ts:26](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/cost-calculator.ts#L26)
