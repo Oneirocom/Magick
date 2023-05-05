@@ -31,8 +31,9 @@ async function loadPlugins(): Promise<void> {
 async function initializeAgent(): Promise<void> {
   await loadPlugins()
 
-  const agentManager = new AgentManager(app)
-  const world = new WorldManager()
+  new AgentManager(app)
+
+  new WorldManager()
 
   console.log('AGENT: Starting...')
 }
