@@ -62,15 +62,16 @@ export class TaskInput extends MagickComponent<InputReturn> {
    * @returns {MagickNode} - The configured node
    */
   builder(node: MagickNode) {
+    node.data.name = node.data.name || 'Input - Task'
     const taskType = new InputControl({
       dataKey: 'taskType',
       name: 'Task Type',
       icon: 'moon',
-      defaultValue: 'agi',
+      defaultValue: 'task',
     })
 
     taskType.onData = data => {
-      node.data.name = `Input - Task(${data})`
+      node.data.name = `Input - Task`
     }
 
     // Set isInput to true so we can identify this node as an input node
@@ -82,7 +83,7 @@ export class TaskInput extends MagickComponent<InputReturn> {
     // Set the default name if there is none
     if (!node.data.name) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      node.data.name ?? `Input - Task (${node.data.taskType})`
+      node.data.name ?? `Input - Task`
     }
 
     node.inspector.add(taskType)

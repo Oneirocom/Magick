@@ -44,6 +44,8 @@ export const runSpell = async ({
   // Get the first spell
   const spell = spells.data[0];
 
+  console.log('spell', spell)
+
   // If the spell is not found, throw an error
   if (!spell?.graph) {
     throw new SpellError('not-found', `Spell with id ${spellId} not found: ${spell}`);

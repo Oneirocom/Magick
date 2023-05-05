@@ -68,7 +68,7 @@ class TaskManager {
       for (const task of taskArray) {
         const resp = await spellRunner.runComponent({
           inputs: {
-            [`Input - Task (${task.type})`]: {
+            [`Input - Task`]: {
               event: task.eventData,
               task,
             },
