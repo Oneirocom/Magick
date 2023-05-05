@@ -124,24 +124,29 @@ export class EventService<
           content_to_match: param.content,
         }
         const rr = await cli.rpc('match_events', bod)
-        console.log("result", rr)
+        console.log('result', rr)
         return { events: querys }
       }
-      console.log("RES:", params)
-      const res = await cli.from('events').select()
-                                          .where((builder) => {
-                                            if (params.query.content) {
-                                              builder.where('content', params.query.content);
-                                            }
-                                            if ('$limit' in params.query) {
-                                              builder.limit(params.query['$limit']);
-                                            }
-                                            if (params.query.projectId) {
-                                              builder.where('projectId', params.query.projectId);
-                                            }
-                                          });
-      console.log("RES:", res)
-      return { events: (res as unknown as { data: Array<any> }) }
+      const query = cli.from('events').select()
+
+      if (params.query.content) {
+        query.where('content', params.query.content)
+      }
+
+      if (params.query.projectId) {
+        query.where('projectId', params.query.projectId)
+      }
+
+      if (params.query.type) {
+        query.where('type', params.query.type)
+      }
+
+      if ('$limit' in params.query) {
+        query.limit(params.query['$limit'])
+      }
+
+      const res = await query
+      return { events: res as unknown as { data: Array<any> } }
     }
   }
 }
