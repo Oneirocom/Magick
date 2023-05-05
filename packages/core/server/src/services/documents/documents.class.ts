@@ -72,7 +72,7 @@ export class DocumentService<
                             ...(param.content && { content: param.content }),
                           })
                           .select(db.raw(`embedding <-> '${JSON.stringify(params.query.embedding)}' AS distance`))
-                          .orderBy('distance', 'desc')
+                          .orderBy('distance', 'asc')
                           .limit(10);
       return { data: querys }
     }
