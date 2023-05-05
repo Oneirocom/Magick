@@ -16,7 +16,7 @@ export const runTestSpell = async (
 
   // Create a new spell runner, which caches and runs the spells
   // todo find elegant way to inject App into spellrunner, as components workers depend on it
-  const spellRunner = new SpellRunner()
+  const spellRunner = new SpellRunner({} as any)
 
   // Load the spell into the spell runner
   await spellRunner.loadSpell(spell)

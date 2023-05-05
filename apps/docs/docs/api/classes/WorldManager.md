@@ -16,7 +16,7 @@ A class to manage users and their actions in 3D world.
 
 #### Defined in
 
-[packages/core/shared/src/world/worldManager.ts:10](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/world/worldManager.ts#L10)
+[packages/core/shared/src/world/worldManager.ts:10](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/world/worldManager.ts#L10)
 
 ## Properties
 
@@ -26,7 +26,7 @@ A class to manage users and their actions in 3D world.
 
 #### Defined in
 
-[packages/core/shared/src/world/worldManager.ts:8](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/world/worldManager.ts#L8)
+[packages/core/shared/src/world/worldManager.ts:8](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/world/worldManager.ts#L8)
 
 ## Methods
 
@@ -49,7 +49,7 @@ Adds a user to a room associated with a client.
 
 #### Defined in
 
-[packages/core/shared/src/world/worldManager.ts:19](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/world/worldManager.ts#L19)
+[packages/core/shared/src/world/worldManager.ts:19](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/world/worldManager.ts#L19)
 
 ___
 
@@ -74,7 +74,7 @@ True if agent can respond, false otherwise
 
 #### Defined in
 
-[packages/core/shared/src/world/worldManager.ts:135](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/world/worldManager.ts#L135)
+[packages/core/shared/src/world/worldManager.ts:135](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/world/worldManager.ts#L135)
 
 ___
 
@@ -99,7 +99,7 @@ Users distance or undefined
 
 #### Defined in
 
-[packages/core/shared/src/world/worldManager.ts:70](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/world/worldManager.ts#L70)
+[packages/core/shared/src/world/worldManager.ts:70](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/world/worldManager.ts#L70)
 
 ___
 
@@ -115,7 +115,7 @@ Prints the rooms and their states.
 
 #### Defined in
 
-[packages/core/shared/src/world/worldManager.ts:154](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/world/worldManager.ts#L154)
+[packages/core/shared/src/world/worldManager.ts:154](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/world/worldManager.ts#L154)
 
 ___
 
@@ -138,7 +138,7 @@ Removes a user from a room associated with a client.
 
 #### Defined in
 
-[packages/core/shared/src/world/worldManager.ts:42](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/world/worldManager.ts#L42)
+[packages/core/shared/src/world/worldManager.ts:42](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/world/worldManager.ts#L42)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/world/worldManager.ts:101](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/world/worldManager.ts#L101)
+[packages/core/shared/src/world/worldManager.ts:101](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/world/worldManager.ts#L101)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/world/worldManager.ts:115](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/world/worldManager.ts#L115)
+[packages/core/shared/src/world/worldManager.ts:115](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/world/worldManager.ts#L115)
 
 ___
 
@@ -201,4 +201,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/world/worldManager.ts:87](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/world/worldManager.ts#L87)
+[packages/core/shared/src/world/worldManager.ts:87](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/world/worldManager.ts#L87)

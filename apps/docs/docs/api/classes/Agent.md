@@ -24,13 +24,23 @@ Agent constructor initializes properties and sets intervals for updating agents
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `agentData` | `AgentData` | {AgentData} - The instance's data. |
+| `agentData` | `Object` | {AgentData} - The instance's data. |
+| `agentData.data?` | `any` | - |
+| `agentData.enabled?` | `boolean` | - |
+| `agentData.id` | `string` | - |
+| `agentData.name` | `string` | - |
+| `agentData.pingedAt?` | `string` | - |
+| `agentData.projectId` | `string` | - |
+| `agentData.publicVariables?` | `any` | - |
+| `agentData.rootSpell?` | `any` | - |
+| `agentData.secrets?` | `string` | - |
+| `agentData.updatedAt?` | `string` | - |
 | `agentManager` | [`AgentManager`](AgentManager.md) | {AgentManager} - The instance's manager. |
-| `app` | `any` | - |
+| `app` | `Application`<`any`, `any`\> | - |
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:50](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L50)
+[packages/core/shared/src/agents/Agent.ts:35](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L35)
 
 ## Properties
 
@@ -40,7 +50,7 @@ Agent constructor initializes properties and sets intervals for updating agents
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:38](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L38)
+[packages/core/shared/src/agents/Agent.ts:23](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L23)
 
 ___
 
@@ -50,13 +60,28 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:34](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L34)
+[packages/core/shared/src/agents/Agent.ts:19](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L19)
 
 ___
 
 ### data
 
-• **data**: `AgentData`
+• **data**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `data?` | `any` |
+| `enabled?` | `boolean` |
+| `id` | `string` |
+| `name` | `string` |
+| `pingedAt?` | `string` |
+| `projectId` | `string` |
+| `publicVariables?` | `any` |
+| `rootSpell?` | `any` |
+| `secrets?` | `string` |
+| `updatedAt?` | `string` |
 
 #### Implementation of
 
@@ -64,7 +89,7 @@ AgentInterface.data
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:33](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L33)
+[packages/core/shared/src/agents/Agent.ts:18](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L18)
 
 ___
 
@@ -78,7 +103,7 @@ AgentInterface.id
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:30](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L30)
+[packages/core/shared/src/agents/Agent.ts:15](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L15)
 
 ___
 
@@ -92,7 +117,7 @@ AgentInterface.name
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:29](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L29)
+[packages/core/shared/src/agents/Agent.ts:14](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L14)
 
 ___
 
@@ -102,7 +127,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:42](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L42)
+[packages/core/shared/src/agents/Agent.ts:27](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L27)
 
 ___
 
@@ -116,7 +141,7 @@ AgentInterface.projectId
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:36](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L36)
+[packages/core/shared/src/agents/Agent.ts:21](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L21)
 
 ___
 
@@ -130,7 +155,7 @@ AgentInterface.publicVariables
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:32](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L32)
+[packages/core/shared/src/agents/Agent.ts:17](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L17)
 
 ___
 
@@ -156,7 +181,7 @@ AgentInterface.rootSpell
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:40](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L40)
+[packages/core/shared/src/agents/Agent.ts:25](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L25)
 
 ___
 
@@ -170,7 +195,7 @@ AgentInterface.secrets
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:31](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L31)
+[packages/core/shared/src/agents/Agent.ts:16](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L16)
 
 ___
 
@@ -180,7 +205,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:35](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L35)
+[packages/core/shared/src/agents/Agent.ts:20](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L20)
 
 ___
 
@@ -190,7 +215,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:39](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L39)
+[packages/core/shared/src/agents/Agent.ts:24](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L24)
 
 ___
 
@@ -200,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:43](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L43)
+[packages/core/shared/src/agents/Agent.ts:28](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L28)
 
 ___
 
@@ -210,9 +235,51 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:37](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L37)
+[packages/core/shared/src/agents/Agent.ts:22](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L22)
 
 ## Methods
+
+### error
+
+▸ **error**(`message`, `data?`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message` | `any` |
+| `data` | `Object` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/core/shared/src/agents/Agent.ts:143](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L143)
+
+___
+
+### log
+
+▸ **log**(`message`, `data`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message` | `any` |
+| `data` | `any` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/core/shared/src/agents/Agent.ts:123](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L123)
+
+___
 
 ### onDestroy
 
@@ -226,4 +293,25 @@ Clean up resources when the instance is destroyed.
 
 #### Defined in
 
-[packages/core/shared/src/agents/Agent.ts:115](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/Agent.ts#L115)
+[packages/core/shared/src/agents/Agent.ts:106](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L106)
+
+___
+
+### warn
+
+▸ **warn**(`message`, `data`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message` | `any` |
+| `data` | `any` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/core/shared/src/agents/Agent.ts:133](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/Agent.ts#L133)

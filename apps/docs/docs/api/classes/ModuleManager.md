@@ -20,7 +20,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:36](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L36)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:35](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L35)
 
 ## Properties
 
@@ -30,7 +30,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:29](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L29)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:28](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L28)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:31](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L31)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:30](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L30)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:30](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L30)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:29](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L29)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:32](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L32)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:31](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L31)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:33](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L33)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:32](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L32)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:34](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L34)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:33](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L33)
 
 ## Methods
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:61](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L61)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:60](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L60)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:65](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L65)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:64](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L64)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:44](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L44)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:43](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L43)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:73](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L73)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:72](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L72)
 
 ___
 
@@ -182,7 +182,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:69](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L69)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:68](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L68)
 
 ___
 
@@ -203,7 +203,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:108](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L108)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:106](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L106)
 
 ___
 
@@ -224,7 +224,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:92](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L92)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:90](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L90)
 
 ___
 
@@ -245,7 +245,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:104](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L104)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:102](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L102)
 
 ___
 
@@ -266,7 +266,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:96](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L96)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:94](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L94)
 
 ___
 
@@ -287,7 +287,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:100](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L100)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:98](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L98)
 
 ___
 
@@ -307,7 +307,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:220](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L220)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:210](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L210)
 
 ___
 
@@ -328,7 +328,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:77](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L77)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:76](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L76)
 
 ___
 
@@ -352,7 +352,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:173](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L173)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:163](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L163)
 
 ___
 
@@ -375,7 +375,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:114](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L114)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:112](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L112)
 
 ___
 
@@ -399,7 +399,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:186](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L186)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:176](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L176)
 
 ___
 
@@ -424,7 +424,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:197](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L197)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:187](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L187)
 
 ___
 
@@ -448,4 +448,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:209](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L209)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:199](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L199)

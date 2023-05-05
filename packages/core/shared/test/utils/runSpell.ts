@@ -32,7 +32,7 @@ export const runSpell = async ({
 
   // Initialize the spell runner
   // todo find elegant way to inject App into spellrunner, as components workers depend on it
-  const spellRunner = new SpellRunner()
+  const spellRunner = new SpellRunner({} as any)
 
   // Load the spell in to the spell runner
   await spellRunner.loadSpell(spell)

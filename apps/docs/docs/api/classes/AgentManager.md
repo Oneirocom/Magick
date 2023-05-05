@@ -24,7 +24,7 @@ Create an agent manager.
 
 #### Defined in
 
-[packages/core/shared/src/agents/AgentManager.ts:28](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/AgentManager.ts#L28)
+[packages/core/shared/src/agents/AgentManager.ts:28](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/AgentManager.ts#L28)
 
 ## Properties
 
@@ -34,7 +34,7 @@ Create an agent manager.
 
 #### Defined in
 
-[packages/core/shared/src/agents/AgentManager.ts:12](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/AgentManager.ts#L12)
+[packages/core/shared/src/agents/AgentManager.ts:12](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/AgentManager.ts#L12)
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/agents/AgentManager.ts:9](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/AgentManager.ts#L9)
+[packages/core/shared/src/agents/AgentManager.ts:9](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/AgentManager.ts#L9)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/agents/AgentManager.ts:14](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/AgentManager.ts#L14)
+[packages/core/shared/src/agents/AgentManager.ts:14](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/AgentManager.ts#L14)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/agents/AgentManager.ts:10](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/AgentManager.ts#L10)
+[packages/core/shared/src/agents/AgentManager.ts:10](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/AgentManager.ts#L10)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/agents/AgentManager.ts:11](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/AgentManager.ts#L11)
+[packages/core/shared/src/agents/AgentManager.ts:11](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/AgentManager.ts#L11)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/agents/AgentManager.ts:13](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/AgentManager.ts#L13)
+[packages/core/shared/src/agents/AgentManager.ts:13](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/AgentManager.ts#L13)
 
 ## Methods
 
@@ -104,7 +104,7 @@ Delete old agent instances.
 
 #### Defined in
 
-[packages/core/shared/src/agents/AgentManager.ts:55](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/AgentManager.ts#L55)
+[packages/core/shared/src/agents/AgentManager.ts:55](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/AgentManager.ts#L55)
 
 ___
 
@@ -128,7 +128,7 @@ The agent if found.
 
 #### Defined in
 
-[packages/core/shared/src/agents/AgentManager.ts:20](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/AgentManager.ts#L20)
+[packages/core/shared/src/agents/AgentManager.ts:20](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/AgentManager.ts#L20)
 
 ___
 
@@ -150,7 +150,7 @@ Register a handler to be called when an agent is added.
 
 #### Defined in
 
-[packages/core/shared/src/agents/AgentManager.ts:40](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/AgentManager.ts#L40)
+[packages/core/shared/src/agents/AgentManager.ts:40](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/AgentManager.ts#L40)
 
 ___
 
@@ -172,7 +172,7 @@ Register a handler to be called when an agent is removed.
 
 #### Defined in
 
-[packages/core/shared/src/agents/AgentManager.ts:48](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/AgentManager.ts#L48)
+[packages/core/shared/src/agents/AgentManager.ts:48](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/AgentManager.ts#L48)
 
 ___
 
@@ -188,4 +188,4 @@ Update agent instances.
 
 #### Defined in
 
-[packages/core/shared/src/agents/AgentManager.ts:88](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/agents/AgentManager.ts#L88)
+[packages/core/shared/src/agents/AgentManager.ts:88](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/agents/AgentManager.ts#L88)

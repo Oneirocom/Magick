@@ -30,7 +30,7 @@ Plugin.constructor
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:89](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L89)
+[packages/core/shared/src/plugin.ts:88](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L88)
 
 ## Properties
 
@@ -40,7 +40,7 @@ Plugin.constructor
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:82](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L82)
+[packages/core/shared/src/plugin.ts:82](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L82)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:84](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L84)
+[packages/core/shared/src/plugin.ts:84](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L84)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:85](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L85)
+[packages/core/shared/src/plugin.ts:85](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L85)
 
 ___
 
@@ -74,7 +74,7 @@ Plugin.completionProviders
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:62](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L62)
+[packages/core/shared/src/plugin.ts:62](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L62)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:83](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L83)
+[packages/core/shared/src/plugin.ts:83](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L83)
 
 ___
 
@@ -98,7 +98,7 @@ Plugin.inputTypes
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:59](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L59)
+[packages/core/shared/src/plugin.ts:59](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L59)
 
 ___
 
@@ -112,7 +112,7 @@ Plugin.name
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:57](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L57)
+[packages/core/shared/src/plugin.ts:57](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L57)
 
 ___
 
@@ -126,7 +126,7 @@ Plugin.nodes
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:58](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L58)
+[packages/core/shared/src/plugin.ts:58](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L58)
 
 ___
 
@@ -140,7 +140,7 @@ Plugin.outputTypes
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:60](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L60)
+[packages/core/shared/src/plugin.ts:60](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L60)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:88](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L88)
+[packages/core/shared/src/plugin.ts:87](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L87)
 
 ___
 
@@ -164,7 +164,7 @@ Plugin.secrets
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:61](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L61)
+[packages/core/shared/src/plugin.ts:61](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L61)
 
 ___
 
@@ -174,4 +174,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:86](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/plugin.ts#L86)
+[packages/core/shared/src/plugin.ts:86](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugin.ts#L86)

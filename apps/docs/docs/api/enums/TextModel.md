@@ -16,7 +16,7 @@ Represents the possible text models
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:19](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/cost-calculator.ts#L19)
+[packages/core/shared/src/cost-calculator.ts:19](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/cost-calculator.ts#L19)
 
 ___
 
@@ -26,7 +26,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:18](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/cost-calculator.ts#L18)
+[packages/core/shared/src/cost-calculator.ts:18](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/cost-calculator.ts#L18)
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:17](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/cost-calculator.ts#L17)
+[packages/core/shared/src/cost-calculator.ts:17](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/cost-calculator.ts#L17)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:16](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/cost-calculator.ts#L16)
+[packages/core/shared/src/cost-calculator.ts:16](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/cost-calculator.ts#L16)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:15](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/cost-calculator.ts#L15)
+[packages/core/shared/src/cost-calculator.ts:15](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/cost-calculator.ts#L15)
 
 ___
 
@@ -66,4 +66,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:14](https://github.com/Oneirocom/Magick/blob/c560ff45/packages/core/shared/src/cost-calculator.ts#L14)
+[packages/core/shared/src/cost-calculator.ts:14](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/cost-calculator.ts#L14)
