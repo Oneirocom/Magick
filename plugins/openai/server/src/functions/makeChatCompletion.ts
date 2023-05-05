@@ -69,11 +69,13 @@ export async function makeChatCompletion(
   // Initialize messages array and add elements
   let messages: ChatMessage[] = []
 
+  messages = [...messages, ...conversationMessages]
+
   if (system) {
     messages.push(systemMessage)
   }
 
-  messages = [...messages, ...conversationMessages, userMessage]
+  messages.push(userMessage)
 
   // Update the settings messages
   settings.messages = messages
@@ -81,7 +83,7 @@ export async function makeChatCompletion(
   // Create request headers
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + context.module.secrets['openai_api_key'],
+    Authorization: 'Bearer ' + context.module.secrets!['openai_api_key'],
   }
 
   try {

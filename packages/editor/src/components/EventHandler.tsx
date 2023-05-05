@@ -12,7 +12,7 @@ import {
 import { useLayout } from '../contexts/LayoutProvider'
 import { useEditor } from '../contexts/EditorProvider'
 import { diff } from '../utils/json0'
-import { useFeathers } from '../contexts/FeathersProvider'
+import { useFeathers } from '../../../core/client/src/providers/FeathersProvider'
 
 import { useConfig } from '@magickml/client-core'
 
@@ -121,7 +121,6 @@ const EventHandler = ({ pubSub, tab }) => {
     })
 
     if ('error' in response) {
-      console.log(' UPDATED SPELL', updatedSpell)
       console.error(response.error)
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
@@ -285,7 +284,6 @@ const EventHandler = ({ pubSub, tab }) => {
       for (const key in obj) {
         if (key === 'secrets') {
           obj[key] = {}
-          console.log('removed secrets')
         }
         if (typeof obj[key] === 'object') {
           recurse(obj[key])
@@ -333,7 +331,6 @@ const EventHandler = ({ pubSub, tab }) => {
     client.service('spell-runner').create(data)
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,

@@ -47,7 +47,6 @@ export type Document = {
   id?: number
   type?: string
   content?: string
-  owner?: string
   embedding?: number[]
   projectId?: string
   date?: string
@@ -239,7 +238,7 @@ export type PubSubEvents = {
   $CREATE_PROJECT_WINDOW: (tabId: string) => string
   $CREATE_DEBUG_CONSOLE: (tabId: string) => string
   $CREATE_CONSOLE: (tabId: string) => string
-  $RUN_SPELL: (tabId: string) => string
+  $RUN_SPELL: (tabId?: string) => string
   $PROCESS: (tabId: string) => string
   $EXPORT: (tabId: string) => string
   $UNDO: (tabId: string) => string
@@ -528,16 +527,25 @@ export type CompletionInspectorControls = {
   defaultValue: string
 }
 
+type HandlerResponse = {
+  success: boolean
+  result: string | number[]
+  error: string
+}
+
 export type CompletionProvider = {
   [x: string]: any
   type: CompletionType
-  subtype: ImageCompletionSubtype | TextCompletionSubtype | AudioCompletionSubtype
+  subtype:
+    | ImageCompletionSubtype
+    | TextCompletionSubtype
+    | AudioCompletionSubtype
   handler?: (attrs: {
     node: WorkerData
     inputs: MagickWorkerInputs
     outputs: MagickWorkerOutputs
     context: unknown
-  }) => { success: boolean; result: string | number[]; error: string } // server only
+  }) => Promise<HandlerResponse> | HandlerResponse // server only
   inspectorControls?: CompletionInspectorControls[] // client only
   inputs: CompletionSocket[]
   outputs: CompletionSocket[]
@@ -597,6 +605,8 @@ type Spell = {
 
 export type ModuleContext = {
   context: EngineContext
+  spellManager: SpellManager
+  app: Application
   module: {
     secrets?: Record<string, string>
     publicVariables?: Record<string, string>

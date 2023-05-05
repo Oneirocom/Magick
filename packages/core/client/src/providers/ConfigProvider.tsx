@@ -1,7 +1,7 @@
 // DOCUMENTED 
 // Import required dependencies
 import { DEFAULT_PROJECT_ID } from '@magickml/core';
-import { useContext, createContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 // Define AppConfig type
 export type AppConfig = {
@@ -38,7 +38,7 @@ export const defaultConfig: AppConfig = {
 /**
  * ConfigProvider component that handles global configuration
  */
-const ConfigProvider = ({ config = defaultConfig, children }) => {
+export const ConfigProvider = ({ config = defaultConfig, children }) => {
   const [apiUrl, setApiUrl] = useState<ConfigContext['apiUrl']>(config.apiUrl);
   const [projectId, setProjectId] = useState<ConfigContext['projectId']>(
     config.projectId,
@@ -57,12 +57,3 @@ const ConfigProvider = ({ config = defaultConfig, children }) => {
     </Context.Provider>
   );
 };
-
-/**
- * ConditionalProvider component that wraps around ConfigProvider
- */
-const ConditionalProvider = (props) => {
-  return <ConfigProvider {...props} />;
-};
-
-export default ConditionalProvider;

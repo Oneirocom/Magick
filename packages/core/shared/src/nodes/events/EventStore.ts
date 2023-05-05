@@ -106,7 +106,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     if (!content) {
       content = (event as Event).content || 'Error'
-      if (!content) console.log('Content is null, not storing the event !!')
+      if (!content) throw new Error('Content is null, not storing the event !!')
     }
 
     type Data = {
@@ -132,8 +132,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     if (content && content !== '') {
       const { app } = context.module
       if (!app) throw new Error('App is not defined, cannot create event')
-      const result = await app.service('events').create(data)
-      console.log('Result of event creation', result)
+      await app.service('events').create(data)
     } else {
       throw new Error('Content is empty, not storing the event !!')
     }

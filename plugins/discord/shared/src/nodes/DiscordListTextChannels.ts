@@ -6,21 +6,16 @@
 
 import Rete from 'rete';
 import {
-    Agent,
-    AgentManager,
     MagickComponent,
-    pluginManager,
     stringSocket,
     triggerSocket,
     MagickNode,
-    MagickWorkerInputs,
-    MagickWorkerOutputs,
     ModuleContext,
     WorkerData
 } from '@magickml/core';
 
 async function discordTextChannels (context: ModuleContext): Promise<any> {
-    const { projectId } = context
+    // const { projectId } = context
     const { agent } = context.module;
     if (!agent) {
         return "Agent not found";
@@ -103,12 +98,9 @@ export class DiscordListTextChannels extends MagickComponent<Promise<WorkerRetur
      */
     async worker(
         node: WorkerData,
-        inputs: MagickWorkerInputs,
-        _outputs: MagickWorkerOutputs,
-        context: ModuleContext,
     ): Promise<WorkerReturn> {
 
-        let tool_desc = {
+        const tool_desc = {
             title: 'Discord List Text Channels',
             body: 'Gets the List of text channels in a server',
             id: node.id,

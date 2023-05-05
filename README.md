@@ -74,14 +74,7 @@ Build will take some time initially. When everything is ready, the client will b
 _Please be aware Magick is under heavy development which may cause breaking changes._ 
 
 ## Database
-Magick installs [mydb.sqlite](apps/server/mydb.sqlite) by default. This is a local sqlite database. It is not recommended for production use, but is fine for development. _Database can be wiped by breaking changes, back up your spells via export regularly._
-
-### Local Sqlite Installation:
-If you want to set up a custom sqlite database, add a relative or absolute path to your sqlite file in the [`.env` file](.env)
-Next migrate to the new database by running:
-```
-npm run migrate
-```
+Magick installs postgres by default. If you want to use a different database, you can change the database connection in the [`.env` file](.env)
 
 ### Deploy your own Postgres database
 

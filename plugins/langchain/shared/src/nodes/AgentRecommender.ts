@@ -21,9 +21,9 @@ import soundex from "wink-nlp-utils/src/string-soundex.js"
 
 const info = 'Select an agent based on the input prompt.';
 
-type InputReturn = {
-    embedding: any;
-};
+// type InputReturn = {
+//     embedding: any;
+// };
 
 // Create the nlp model for tokenizer and soundbox
 const nlp = winkNLP(model);
@@ -143,7 +143,7 @@ export class AgentExecutor extends MagickComponent<Promise<any>> {
         try {
             const prompt = (inputs["prompt"] || ["NO PROMPT"])[0]
             delete inputs["prompt"]
-            let tool = Object.values((inputs || { key: "NO TOOL FOUND" })).map((input) => {
+            const tool = Object.values((inputs || { key: "NO TOOL FOUND" })).map((input) => {
                 return input[0]
             })
             //Minimum 3 Tools required

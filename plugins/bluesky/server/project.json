@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugin/bluesky-server/**/*.ts"
+          "plugins/bluesky/server/**/*.ts"
         ]
       }
     },

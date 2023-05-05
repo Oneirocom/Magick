@@ -86,7 +86,13 @@ export class SpellRunnerService<
       await spellManager.load(spell as SpellInterface)
     }
 
-    const result = await spellManager.run(id, inputs, secrets, publicVariables, app)
+    const result = await spellManager.run({
+      spellId: id,
+      inputs,
+      secrets,
+      publicVariables,
+      app,
+    })
 
     return result || {}
   }
@@ -107,7 +113,7 @@ export class SpellRunnerService<
     },
     params?: SpellRunnerParams
   ): Promise<SpellInterface | void> {
-    if (!app.userSpellManagers) return null
+    if (!app.userSpellManagers) return undefined
     if (!params) return console.error('No params present in service')
 
     const { user } = params as any
@@ -132,7 +138,7 @@ export class SpellRunnerService<
       } catch (e) {
         console.error(e)
         console.error('Error diffing spell. Recaching spell')
-        app.services.spells.get(id, params)
+        app.service('spells').get(id, params)
         spellManager.load(spell, true)
         return spell
       }
