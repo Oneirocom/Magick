@@ -1,35 +1,17 @@
-<<<<<<< HEAD
 // DOCUMENTED
-import { Button, Select, Window } from '@magickml/client-core'
+import { Button, Select, Window, useConfig } from '@magickml/client-core'
 import Editor from '@monaco-editor/react'
 import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch } from 'react-redux'
-import { useConfig } from '@magickml/client-core'
 import { useEditor } from '../contexts/EditorProvider'
 import { useInspector } from '../contexts/InspectorProvider'
-import { usePubSub } from '../contexts/PubSubProvider'
+import { usePubSub } from '@magickml/client-core'
 import css from '../screens/Magick/magick.module.css'
 import { spellApi } from '../state/api/spells'
 import { useAppSelector } from '../state/hooks'
-=======
-// DOCUMENTED 
-import { Button, Select, Window, useConfig } from '@magickml/client-core';
-import Editor from '@monaco-editor/react';
-import { useSnackbar } from 'notistack';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Scrollbars } from 'react-custom-scrollbars-2';
-import { useHotkeys } from 'react-hotkeys-hook';
-import { useDispatch } from 'react-redux';
-import { useEditor } from '../contexts/EditorProvider';
-import { useInspector } from '../contexts/InspectorProvider';
-import { usePubSub } from '@magickml/client-core';
-import css from '../screens/Magick/magick.module.css';
-import { spellApi } from '../state/api/spells';
-import { useAppSelector } from '../state/hooks';
->>>>>>> 23a20de0c7d45a0d945589b649d033b2eed09c32
 import {
   addLocalState,
   selectStateBytabId,
@@ -122,18 +104,12 @@ const Playtest = ({ tab }) => {
   // Print to console callback function.
   const printToConsole = useCallback(
     (_, _text) => {
-<<<<<<< HEAD
-      const text = `Agent: ` + _text.split('\n')
-      const newHistory = [...history, text]
-      console.log('setting new history to ', newHistory)
-      setHistory(newHistory as [])
-=======
       // check if _text is a string
-      if (typeof _text !== 'string') return console.warn('could not split text, not a string', _text);
-      const text = `Agent: ` + _text?.split('\n');
-      const newHistory = [...history, text];
-      setHistory(newHistory as []);
->>>>>>> 23a20de0c7d45a0d945589b649d033b2eed09c32
+      if (typeof _text !== 'string')
+        return console.warn('could not split text, not a string', _text)
+      const text = `Agent: ` + _text?.split('\n')
+      const newHistory = [...history, text]
+      setHistory(newHistory as [])
     },
     [history]
   )
@@ -146,9 +122,7 @@ const Playtest = ({ tab }) => {
   const [playtestOption, setPlaytestOption] = useState(null)
 
   useEffect(() => {
-<<<<<<< HEAD
     if (!inspectorData || inspectorData.name !== 'Input') return
-    console.log('effected', inspectorData.data.inputName)
     setPlaytestOption(
       `Input - ` +
         (inspectorData.data.inputType &&
@@ -157,11 +131,6 @@ const Playtest = ({ tab }) => {
           : inspectorData.data.inputName)
     )
   }, [inspectorData])
-=======
-    if (!inspectorData || inspectorData.name !== 'Input') return;
-    setPlaytestOption(`Input - ` + (inspectorData.data.inputType && inspectorData.data.inputType !== 'Default' ? inspectorData.data.inputType : inspectorData.data.inputName));
-  }, [inspectorData]);
->>>>>>> 23a20de0c7d45a0d945589b649d033b2eed09c32
 
   useEffect(() => {
     if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
@@ -280,9 +249,9 @@ const Playtest = ({ tab }) => {
       })
     }
 
-    const playtestNode = Object.values(graph.nodes).find((node) => {
-      return node.data.name === playtestOption;
-    }) as any;
+    const playtestNode = Object.values(graph.nodes).find(node => {
+      return node.data.name === playtestOption
+    }) as any
 
     if (!playtestNode) {
       enqueueSnackbar('No input node found for this input type', {
