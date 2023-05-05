@@ -70,10 +70,6 @@ export class TaskInput extends MagickComponent<InputReturn> {
       defaultValue: 'task',
     })
 
-    taskType.onData = data => {
-      node.data.name = `Input - Task`
-    }
-
     // Set isInput to true so we can identify this node as an input node
     node.data.isInput = true
 

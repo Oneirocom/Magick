@@ -2,8 +2,7 @@
 import {
   ChatMessage,
   CompletionHandlerInputData,
-  Event,
-  saveRequest,
+  saveRequest
 } from '@magickml/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
@@ -21,14 +20,6 @@ export async function makeChatCompletion(
   error?: string | null
 }> {
   const { node, inputs, context } = data
-
-  // Filter out undefined input keys from inputs
-  const inputKeys = Object.values(inputs).filter((input: any) => {
-    return Object.values(input).filter(Boolean).length > 0
-  })[0]
-
-  // Get the first non-empty Event as inputData
-  //const inputData = (inputKeys as Event[]).filter(Boolean)[0] as Event
 
   // Get the system message and conversation inputs
   const system = inputs['system']?.[0] as string
