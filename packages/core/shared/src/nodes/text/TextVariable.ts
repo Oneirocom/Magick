@@ -85,7 +85,6 @@ export class TextVariable extends MagickComponent<InputReturn> {
     const publicVars = JSON.parse(context.module.publicVariables)
 
     if(node?.data?.isPublic && publicVars[node.id]) {
-      console.log('publicVars[node.id is', publicVars[node.id])
       text = publicVars[node.id].value
     }
     return {

@@ -25,9 +25,7 @@ const Magick = ({ empty = false }): JSX.Element => {
   const activeTab = useSelector(activeTabSelector)
   const pubSub = usePubSub()
   const { URI } = useParams()
-  const { events, publish, subscribe } = pubSub
-
-  // console.log('****************************', URI)
+  const { events, subscribe } = pubSub
 
   // Subscribe to open tab events
   useEffect(() => {

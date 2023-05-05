@@ -10,7 +10,8 @@
     "start-docs": "npx nx serve @magickml/docs",
     "migrate:make": "nx run @magickml/server:migrate:make",
     "migrate": "nx run @magickml/server:migrate",
-    "lint": "npx nx run-many --all --target=lint",
+    "lint": "npx nx run-many --all --target=lint --max-warnings=0",
+    "lint-fix": "npx nx run-many --all --target=lint --fix --max-warnings=0",
     "lint:engine": "npx nx lint @magickml/core --fix",
     "lint:editor": "npx nx lint @magickml/editor --fix",
     "lint:server-core": "npx nx lint @magickml/server-core",
@@ -33,7 +34,7 @@
     "remove": "npx nx generate @nrwl/workspace:remove",
     "sortPackage": "npx sort-package-json",
     "find unused deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
-    "postinstall": "node scripts/config-plugins.js && node scripts/config-db.js"
+    "postinstall": "node scripts/config-plugins.js"
   },
   "resolutions": {
     "@types/react": "18.0.2"
@@ -119,7 +120,9 @@
     "express": "^4.18.2",
     "feathers-blob": "^2.6.0",
     "feathers-swagger": "^3.0.0-pre.1",
+    "feathers-sync": "^3.0.3",
     "filesize": "^10.0.6",
+    "flatted": "^3.2.7",
     "flexlayout-react": "^0.7.5",
     "fs-blob-store": "^6.0.0",
     "glob": "^7.2.3",

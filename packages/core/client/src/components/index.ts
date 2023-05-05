@@ -1,7 +1,4 @@
 // DOCUMENTED
-// Import React
-import * as React from 'react'
-
 // Export Accordion component
 export { Accordion } from './Accordion'
 

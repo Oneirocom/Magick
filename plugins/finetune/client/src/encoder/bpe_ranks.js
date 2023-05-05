@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const { readFileSync, writeFileSync } = require("fs");
 
 function range(x, y) {

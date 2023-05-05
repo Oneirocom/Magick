@@ -4,7 +4,6 @@ import { Connection, Input, Node, Output } from 'rete';
 /**
  * Namespace for interfaces related to Rete Editor events.
  */
-// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ReteEventInterfaces {
 
   /**

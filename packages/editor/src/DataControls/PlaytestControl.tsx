@@ -1,4 +1,8 @@
 // DOCUMENTED 
+
+import { useState } from "react"
+import { Switch } from '@magickml/client-core'
+
 /**
  * A control component for a switch UI element that updates data in the parent component.
  * @param control - The control object containing dataKey and data properties.

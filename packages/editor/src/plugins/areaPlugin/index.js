@@ -1,4 +1,3 @@
-/* eslint-disable no-invalid-this */
 import './style.css'
 import { Background } from './background'
 import { Restrictor } from './restrictor'

@@ -17,9 +17,6 @@ interface Props {
  * @param setPublicVars - function to set public variables
  */
 const AgentPubVariables = ({ publicVars, setPublicVars }: Props) => {
-  // Log public variables
-  console.log('....................', publicVars);
-
   /**
    * Handle changes to public variables.
    * @param variable - variable object

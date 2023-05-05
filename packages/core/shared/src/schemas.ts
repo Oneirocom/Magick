@@ -74,7 +74,6 @@ export type AgentInterface = AgentSchema;
  * 
  * @property {string} id - The document's ID.
  * @property {string} [type] - The type of the document (optional).
- * @property {string} [owner] - The ID of the document's owner (optional).
  * @property {string} [content] - The content of the document (optional).
  * @property {string} projectId - The ID of the project that the document belongs to.
  * @property {string} [date] - The date when the document was created (optional).
@@ -83,7 +82,6 @@ export type AgentInterface = AgentSchema;
 export const documentSchema = Type.Object({
   id: Type.String(),
   type: Type.Optional(Type.String()),
-  owner: Type.Optional(Type.String()),
   content: Type.Optional(Type.String()),
   projectId: Type.String(),
   date: Type.Optional(Type.String()),
