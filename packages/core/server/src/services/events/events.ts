@@ -1,7 +1,7 @@
 // DOCUMENTED
-import { hooks as schemaHooks } from '@feathersjs/schema';
-import pgvector from 'pgvector/pg';
-import { v4 as uuidv4 } from 'uuid';
+import { hooks as schemaHooks } from '@feathersjs/schema'
+import pgvector from 'pgvector/pg'
+import { v4 as uuidv4 } from 'uuid'
 import {
   eventExternalResolver,
   eventPatchResolver,
@@ -9,10 +9,10 @@ import {
   eventQueryResolver,
   eventQueryValidator,
   eventResolver,
-} from './events.schema';
+} from './events.schema'
 
-import { Application, HookContext } from '../../declarations';
-import { EventService, getOptions } from './events.class';
+import { Application, HookContext } from '../../declarations'
+import { EventService, getOptions } from './events.class'
 
 /**
  * Export the Event class and event schema

@@ -78,20 +78,28 @@ export class EventService<
       return { events: querys }
     }
 
-    const res = await cli
-      .from('events')
-      .select()
-      .where(builder => {
-        if (params.query.content) {
-          builder.where('content', params.query.content)
-        }
-        if ('$limit' in params.query) {
-          builder.limit(params.query['$limit'])
-        }
-        if (params.query.projectId) {
-          builder.where('projectId', params.query.projectId)
-        }
-      })
+    const query = cli.from('events').select()
+
+    query.orderBy('date', 'desc')
+
+    if (params.query.content) {
+      query.where('content', params.query.content)
+    }
+
+    if (params.query.projectId) {
+      query.where('projectId', params.query.projectId)
+    }
+
+    if (params.query.type) {
+      query.where('type', params.query.type)
+    }
+
+    if ('$limit' in params.query) {
+      query.limit(params.query['$limit'])
+    }
+
+    const res = await query
+    return { events: res?.reverse() as unknown as { data: Array<any> } }
 
     return { events: res as unknown as { data: Array<any> } }
   }
