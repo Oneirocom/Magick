@@ -16,7 +16,7 @@ Represents the possible chat models
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:7](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/cost-calculator.ts#L7)
+[packages/core/shared/src/cost-calculator.ts:7](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/cost-calculator.ts#L7)
 
 ___
 
@@ -26,4 +26,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:6](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/cost-calculator.ts#L6)
+[packages/core/shared/src/cost-calculator.ts:6](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/cost-calculator.ts#L6)

@@ -34,7 +34,7 @@ Creates an instance of BooleanControl.
 
 #### Defined in
 
-[packages/core/shared/src/dataControls/BooleanControl.ts:20](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/dataControls/BooleanControl.ts#L20)
+[packages/core/shared/src/dataControls/BooleanControl.ts:20](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/dataControls/BooleanControl.ts#L20)
 
 ## Properties
 
@@ -48,7 +48,7 @@ Creates an instance of BooleanControl.
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:16](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L16)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:16](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L16)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:21](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L21)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:21](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L21)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:22](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L22)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:22](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L22)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:28](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L28)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:28](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L28)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:18](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L18)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:18](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L18)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:20](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L20)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:20](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L20)
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:14](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L14)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:14](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L14)
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:29](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L29)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:29](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L29)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:24](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L24)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:24](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L24)
 
 ___
 
@@ -174,7 +174,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:17](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L17)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:17](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L17)
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:13](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L13)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:13](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L13)
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:19](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L19)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:19](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L19)
 
 ___
 
@@ -216,7 +216,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:15](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L15)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:15](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L15)
 
 ___
 
@@ -230,7 +230,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:23](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L23)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:23](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L23)
 
 ___
 
@@ -244,7 +244,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:27](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L27)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:27](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L27)
 
 ___
 
@@ -258,7 +258,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:26](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L26)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:26](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L26)
 
 ___
 
@@ -272,7 +272,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:25](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L25)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:25](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L25)
 
 ## Accessors
 
@@ -304,7 +304,7 @@ DataControl.control
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:89](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L89)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:89](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L89)
 
 ## Methods
 
@@ -324,7 +324,7 @@ Abstract method to execute when a control is added.
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:107](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L107)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:107](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L107)
 
 ___
 
@@ -345,7 +345,7 @@ except returning control to the parent component.
 
 #### Defined in
 
-[packages/core/shared/src/dataControls/BooleanControl.ts:37](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/dataControls/BooleanControl.ts#L37)
+[packages/core/shared/src/dataControls/BooleanControl.ts:37](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/dataControls/BooleanControl.ts#L37)
 
 ___
 
@@ -365,4 +365,4 @@ Abstract method to execute when a control is removed.
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:115](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L115)
+[packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts:115](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/inspectorPlugin/DataControl.ts#L115)

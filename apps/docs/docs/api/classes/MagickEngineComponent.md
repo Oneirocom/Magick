@@ -38,7 +38,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:41](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L41)
+[packages/core/shared/src/engine.ts:41](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/engine.ts#L41)
 
 ## Properties
 
@@ -48,7 +48,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:38](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L38)
+[packages/core/shared/src/engine.ts:38](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/engine.ts#L38)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:39](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L39)
+[packages/core/shared/src/engine.ts:39](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/engine.ts#L39)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:37](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L37)
+[packages/core/shared/src/engine.ts:37](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/engine.ts#L37)
 
 ## Methods
 
@@ -92,4 +92,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:45](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/engine.ts#L45)
+[packages/core/shared/src/engine.ts:45](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/engine.ts#L45)

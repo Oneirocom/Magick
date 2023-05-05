@@ -24,7 +24,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:44](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L44)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:44](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L44)
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:40](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L40)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:40](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L40)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:663](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L663)
+[packages/core/shared/src/types.ts:663](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L663)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:39](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L39)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:39](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L39)
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:42](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L42)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:42](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L42)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:38](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L38)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:38](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L38)
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:664](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L664)
+[packages/core/shared/src/types.ts:664](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L664)
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:43](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L43)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:43](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L43)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:662](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L662)
+[packages/core/shared/src/types.ts:662](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L662)
 
 ___
 
@@ -174,7 +174,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:41](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L41)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:41](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L41)
 
 ## Methods
 
@@ -200,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:250](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L250)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:250](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L250)
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:93](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L93)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:93](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L93)
 
 ___
 
@@ -249,7 +249,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:78](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L78)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:78](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L78)
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:69](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L69)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:69](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L69)
 
 ___
 
@@ -291,7 +291,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:127](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L127)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:127](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L127)
 
 ___
 
@@ -316,4 +316,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:132](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/plugins/taskPlugin/task.ts#L132)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:132](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/plugins/taskPlugin/task.ts#L132)

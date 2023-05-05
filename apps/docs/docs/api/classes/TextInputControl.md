@@ -39,7 +39,7 @@ Control.constructor
 
 #### Defined in
 
-[packages/core/shared/src/dataControls/TextInputControl.tsx:68](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/dataControls/TextInputControl.tsx#L68)
+[packages/core/shared/src/dataControls/TextInputControl.tsx:68](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/dataControls/TextInputControl.tsx#L68)
 
 ## Properties
 
@@ -49,7 +49,7 @@ Control.constructor
 
 #### Defined in
 
-[packages/core/shared/src/dataControls/TextInputControl.tsx:57](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/dataControls/TextInputControl.tsx#L57)
+[packages/core/shared/src/dataControls/TextInputControl.tsx:57](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/dataControls/TextInputControl.tsx#L57)
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/dataControls/TextInputControl.tsx:58](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/dataControls/TextInputControl.tsx#L58)
+[packages/core/shared/src/dataControls/TextInputControl.tsx:58](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/dataControls/TextInputControl.tsx#L58)
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/dataControls/TextInputControl.tsx:56](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/dataControls/TextInputControl.tsx#L56)
+[packages/core/shared/src/dataControls/TextInputControl.tsx:56](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/dataControls/TextInputControl.tsx#L56)
 
 ## Methods
 

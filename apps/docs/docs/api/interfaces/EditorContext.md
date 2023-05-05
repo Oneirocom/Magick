@@ -28,7 +28,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:291](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L291)
+[packages/core/shared/src/types.ts:291](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L291)
 
 ___
 
@@ -42,7 +42,7 @@ EngineContext.getSpell
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:210](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L210)
+[packages/core/shared/src/types.ts:210](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L210)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:290](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L290)
+[packages/core/shared/src/types.ts:290](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L290)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:288](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L288)
+[packages/core/shared/src/types.ts:288](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L288)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:289](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L289)
+[packages/core/shared/src/types.ts:289](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L289)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:281](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L281)
+[packages/core/shared/src/types.ts:281](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L281)
 
 ___
 
@@ -117,7 +117,7 @@ EngineContext.processCode
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:211](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L211)
+[packages/core/shared/src/types.ts:211](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L211)
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:292](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L292)
+[packages/core/shared/src/types.ts:292](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L292)
 
 ___
 
@@ -149,7 +149,7 @@ EngineContext.runSpell
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:209](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L209)
+[packages/core/shared/src/types.ts:209](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L209)
 
 ___
 
@@ -173,7 +173,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:287](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L287)
+[packages/core/shared/src/types.ts:287](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L287)
 
 ___
 
@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:286](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L286)
+[packages/core/shared/src/types.ts:286](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L286)
 
 ___
 
@@ -207,4 +207,4 @@ ___
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:285](https://github.com/Oneirocom/Magick/blob/0b84928f/packages/core/shared/src/types.ts#L285)
+[packages/core/shared/src/types.ts:285](https://github.com/Oneirocom/Magick/blob/eb9f05ef/packages/core/shared/src/types.ts#L285)
