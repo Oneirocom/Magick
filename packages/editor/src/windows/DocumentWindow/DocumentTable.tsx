@@ -108,10 +108,6 @@ function DocumentTable({ documents, updateCallback }) {
         accessor: 'type',
       },
       {
-        Header: 'Owner',
-        accessor: 'owner',
-      },
-      {
         Header: 'Content',
         accessor: 'content',
       },
@@ -248,14 +244,14 @@ function DocumentTable({ documents, updateCallback }) {
   }
 
   // Close create modal
-  const closeCreateModal = () => {
-    setCreateMode(false)
-  }
+  // const closeCreateModal = () => {
+  //   setCreateMode(false)
+  // }
 
   // Handle save action
   const handleSave = async () => {
     // call documents endpoint
-    const secrets = localStorage.getItem('secrets')
+    // const secrets = localStorage.getItem('secrets')
     const result = await fetch(`${API_ROOT_URL}/documents`, {
       method: 'POST',
       headers: {
@@ -264,14 +260,13 @@ function DocumentTable({ documents, updateCallback }) {
       body: JSON.stringify({
         ...newDocument,
         projectId: config.projectId,
-        secrets: secrets
+        // secrets: secrets
       }),
     })
 
     // reset newDocument
     setNewDocument({
       type: '',
-      owner: '',
       content: '',
       projectId: '',
       date: '',
@@ -285,7 +280,6 @@ function DocumentTable({ documents, updateCallback }) {
   // State for new document
   const [newDocument, setNewDocument] = useState({
     type: '',
-    owner: '',
     content: '',
     projectId: '',
     date: new Date().toISOString(),

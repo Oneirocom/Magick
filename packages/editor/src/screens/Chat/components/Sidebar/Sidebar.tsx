@@ -1,5 +1,5 @@
 import { Conversation, KeyValuePair } from "../../../../types";
-import { ArrowBack, Add } from '@mui/icons-material'
+import { Add } from '@mui/icons-material'
 import { FC, useEffect, useState } from "react";
 import { Conversations } from "./Conversations";
 import { Search } from "./Search";

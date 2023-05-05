@@ -1,9 +1,14 @@
 # local postgres database if you need it
 version: '3.4'
 services:
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
   db:
     restart: always
-    image: postgres
+    image: postgresai/extended-postgres:15-0.2.0
     hostname: magick_db
     environment:
       POSTGRES_DB: magick

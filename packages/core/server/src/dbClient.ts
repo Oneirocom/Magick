@@ -3,23 +3,18 @@
 import type { Knex } from 'knex'
 import knex from 'knex'
 import type { Application } from './declarations'
-import { DATABASE_TYPE, DATABASE_URL } from '@magickml/core'
+import { DATABASE_URL } from '@magickml/core'
 
 // Extend Configuration interface to include dbClient
 
 declare module './declarations' {
   interface Configuration {
-    dbClient: Knex;
+    dbClient: Knex
   }
 }
-// Supported database types
-export enum SupportedDbs {
-  pg = 'pg',
-  sqlite = 'sqlite',
-}
 
-//Post gres function for getting the most similar documents after applying prefilter.
-const pf_function = `
+//Postgres function for getting the most similar events after applying prefilter.
+const pf_events = `
 CREATE OR REPLACE FUNCTION match_events(
   query_embedding vector(1536), 
   match_count int DEFAULT 10, 
@@ -66,42 +61,19 @@ BEGIN
           match_count;
 END;
 $$ LANGUAGE plpgsql;
-
-
 `
-export const dbDialect: SupportedDbs = DATABASE_TYPE as SupportedDbs
-
 /**
  * Get database configuration based on environment variables
  *
  * @returns {object} Database configuration settings
  */
 const getDatabaseConfig = () => {
-  const dbType = DATABASE_TYPE || ''
   const dbURL = DATABASE_URL
-
   if (!dbURL) throw new Error('Missing DATABASE_URL in your .env file.')
-
-  // PostgreSQL configuration
-  if (dbType === SupportedDbs.pg) {
-    return {
-      client: dbType,
-      connection: dbURL,
-    }
+  return {
+    client: 'pg',
+    connection: dbURL,
   }
-
-  // SQLite configuration
-  if (dbType === SupportedDbs.sqlite) {
-    return {
-      client: dbType,
-      connection: {
-        filename: dbURL,
-      },
-      useNullAsDefault: true, // SQLite does not support inserting default values
-    }
-  }
-
-  throw new Error('Unsupported database type, use `pg` or `sqlite`')
 }
 
 /**
@@ -113,22 +85,7 @@ export const dbClient = (app: Application) => {
   const config = getDatabaseConfig()
   const db = knex(config)
   app.set('dbClient', db)
-  if (DATABASE_TYPE == 'pg') {
-    db.raw(pf_function).then(() => {
-      console.log('Postgres function created')
-    })
-  }
+  db.raw(pf_events).then(() => {
+    console.log('Postgres function created')
+  })
 }
-
-// Map of supported databases to their JSON support status
-const dbSupportJson: Record<SupportedDbs, boolean> = {
-  [SupportedDbs.pg]: true,
-  [SupportedDbs.sqlite]: false,
-}
-
-/**
- * Check if the current database supports JSON data type
- *
- * @returns {boolean} True if the database supports JSON, false otherwise
- */
-export const doesDbSupportJson = (): boolean => dbSupportJson[dbDialect]

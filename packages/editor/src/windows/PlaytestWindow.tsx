@@ -104,9 +104,10 @@ const Playtest = ({ tab }) => {
   // Print to console callback function.
   const printToConsole = useCallback(
     (_, _text) => {
-      const text = `Agent: ` + _text.split('\n');
+      // check if _text is a string
+      if (typeof _text !== 'string') return console.warn('could not split text, not a string', _text);
+      const text = `Agent: ` + _text?.split('\n');
       const newHistory = [...history, text];
-      console.log('setting new history to ', newHistory)
       setHistory(newHistory as []);
     },
     [history],
@@ -118,7 +119,6 @@ const Playtest = ({ tab }) => {
 
   useEffect(() => {
     if (!inspectorData || inspectorData.name !== 'Input') return;
-    console.log('effected', inspectorData.data.inputName);
     setPlaytestOption(`Input - ` + (inspectorData.data.inputType && inspectorData.data.inputType !== 'Default' ? inspectorData.data.inputType : inspectorData.data.inputName));
   }, [inspectorData]);
 

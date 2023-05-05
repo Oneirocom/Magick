@@ -52,7 +52,7 @@ const EventWindow = (): JSX.Element => {
       const data = await response.json()
       setEvents(data.events)
     } catch (error) {
-      console.log(error)
+      console.error('ERROR', error)
     }
   }
 

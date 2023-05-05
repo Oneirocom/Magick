@@ -6,22 +6,17 @@
 
 import Rete from 'rete';
 import {
-    Agent,
-    AgentManager,
     MagickComponent,
-    pluginManager,
     stringSocket,
     triggerSocket,
     MagickNode,
-    MagickWorkerInputs,
-    MagickWorkerOutputs,
     ModuleContext,
     WorkerData
 } from '@magickml/core';
 
 
 async function discord_list_channels(context: ModuleContext): Promise<any> {
-    const { projectId } = context
+    // const { projectId } = context
     const { agent } = context.module;
     if (!agent) {
         return "Agent not found"
@@ -93,12 +88,9 @@ export class DiscordListVoiceChannels extends MagickComponent<Promise<WorkerRetu
      */
     async worker(
         node: WorkerData,
-        inputs: MagickWorkerInputs,
-        _outputs: MagickWorkerOutputs,
-        context: ModuleContext,
     ): Promise<WorkerReturn> {
 
-        let tool_desc = {
+        const tool_desc = {
             title: 'Discord List Voice Channels',
             body: 'Gets the list of all the voice channels also known as vc in the server and only the voice channels',
             id: node.id,

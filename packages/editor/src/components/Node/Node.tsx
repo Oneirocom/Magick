@@ -64,10 +64,10 @@ export class MyNode extends Node {
           {fullName}
         </div>
         <div className={css['connections-container']}>
-          {html != undefined && (
+          {html !== undefined && (
             <div dangerouslySetInnerHTML={{ __html: html }} />
           )}
-          {img_url != undefined && (
+          {img_url !== undefined && (
             <Upload output={outputs} id_image={img_url} />
           )}
           {inputs.length > 0 && (

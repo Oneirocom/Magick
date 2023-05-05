@@ -34,7 +34,9 @@ import { WaitForAll } from './flow/WaitForAll';
 import { InputComponent } from './io/Input';
 import { Output } from './io/Output';
 import { Request } from './io/Request';
+import { Skill } from './io/Skill';
 import { SpellComponent } from './io/Spell';
+import { RunSpell } from './magick/runSpell';
 import { InRange } from './number/InRange';
 import { NumberVariable } from './number/NumberVariable';
 import { ComposeObject } from './object/ComposeObject';
@@ -52,9 +54,9 @@ import { StringVariable } from './text/StringVariable';
 import { TextTemplate } from './text/TextTemplate';
 import { TextVariable } from './text/TextVariable';
 import { Cast } from './utility/Cast';
+import { CurrentTime } from './utility/CurrentTime';
 import { Echo } from './utility/Echo';
 import { Log } from './utility/Log';
-import { CurrentTime } from './utility/CurrentTime';
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -111,7 +113,9 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   getValueFromArray: () => new GetValueFromArray(),
   cosineSimilarity: () => new CosineSimilarity(),
   textToSpeech: () => new TextToSpeech(),
-};
+  skill: () => new Skill(),
+  runSpell: () => new RunSpell(),
+}
 
 /**
  * Compare two MagickComponents based on their display name or name.
@@ -119,14 +123,17 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
  * @param b - MagickComponent to compare.
  * @returns -1 if a comes before b, 1 if a comes after b, 0 if they are equal.
  */
-function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>): number {
+function compare(
+  a: MagickComponent<unknown>,
+  b: MagickComponent<unknown>
+): number {
   if ((a.displayName || a.name) < (b.displayName || b.name)) {
-    return -1;
+    return -1
   }
   if ((a.displayName || a.name) > (b.displayName || b.name)) {
-    return 1;
+    return 1
   }
-  return 0;
+  return 0
 }
 
 /**
@@ -135,21 +142,19 @@ function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>): numb
  */
 export const getNodes = (): MagickComponent<unknown>[] => {
   try {
-    const pluginNodes = pluginManager.getNodes();
-    const allComponents = { ...components, ...pluginNodes };
-    const sortedComponentKeys = Object.keys(allComponents).sort();
-    const sortedComponents: Record<string, () => MagickComponent<unknown>> = {};
+    const pluginNodes = pluginManager.getNodes()
+    const allComponents = { ...components, ...pluginNodes }
+    const sortedComponentKeys = Object.keys(allComponents).sort()
+    const sortedComponents: Record<string, () => MagickComponent<unknown>> = {}
 
     for (const key of sortedComponentKeys) {
-      sortedComponents[key] = allComponents[key];
+      sortedComponents[key] = allComponents[key]
     }
     return Object.values(sortedComponents)
       .map(component => component())
-      .sort(compare);
-
-
+      .sort(compare)
   } catch (e) {
     console.error(e)
     return []
   }
-};
+}

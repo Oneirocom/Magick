@@ -5,7 +5,6 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('documents', (table) => {
     table.uuid('id').primary()
     table.string('type')
-    table.string('owner')
     table.string('projectId')
     table.text('content')
     table.specificType('embedding', 'vector(1536)')

@@ -1,13 +1,9 @@
-import axios from "axios";
 import nlp from "compromise";
 import nlpNouns from "compromise";
 import nlpNgrams from "compromise"
 import nlpNer from "compromise";
 import nlpSentence from "compromise";
-import TfIdf from "natural/lib/natural/tfidf";
-import Tokenizer from "natural/lib/natural/tokenizers";
 import * as stringSimilarity from "string-similarity";
-import * as synonyms from "synonyms";
 nlp.extend(nlpNer as any);
 nlp.extend(nlpNouns as any);
 nlp.extend(nlpNgrams as any);
@@ -119,7 +115,7 @@ function generateQuestionsAndAnswers(corpus) {
 
   ];
 
-  const commonWords = ['a', 'an', 'the', 'this', 'that', 'these', 'those', 'it', 'they', 'he', 'she', 'we', 'you', 'i', 'am', 'is', 'are', 'was', 'were', 'has', 'have', 'had', 'will', 'would', 'shall', 'should', 'can', 'could', 'may', 'might', 'must', 'be', 'been', 'being', 'get', 'got', 'gotten', 'gets', 'do', 'does', 'did', 'done', 'doing', 'of', 'in', 'to', 'for', 'with', 'on', 'at', 'by', 'from', 'about', 'as', 'into', 'like', 'through', 'after', 'over', 'under', 'between', 'out', 'up', 'down', 'off', 'back', 'away', 'throughout', 'before', 'above', 'below', 'near', 'next', 'since', 'until', 'via', 'upon', 'without', 'within', 'according', 'along', 'aside', 'away', 'back', 'besides', 'between', 'beyond', 'but', 'concerning', 'considering', 'despite', 'during', 'except', 'excluding', 'following', 'for', 'including', 'inside', 'into', 'like', 'minus', 'near', 'next', 'notwithstanding', 'of', 'off', 'on', 'onto', 'opposite', 'outside', 'over', 'past', 'per', 'plus', 'regarding', 'round', 'save', 'since', 'than', 'through', 'throughout', 'to', 'toward', 'towards', 'under', 'underneath', 'unlike', 'until', 'up', 'upon', 'versus', 'via', 'with', 'within', 'without'];
+  // const commonWords = ['a', 'an', 'the', 'this', 'that', 'these', 'those', 'it', 'they', 'he', 'she', 'we', 'you', 'i', 'am', 'is', 'are', 'was', 'were', 'has', 'have', 'had', 'will', 'would', 'shall', 'should', 'can', 'could', 'may', 'might', 'must', 'be', 'been', 'being', 'get', 'got', 'gotten', 'gets', 'do', 'does', 'did', 'done', 'doing', 'of', 'in', 'to', 'for', 'with', 'on', 'at', 'by', 'from', 'about', 'as', 'into', 'like', 'through', 'after', 'over', 'under', 'between', 'out', 'up', 'down', 'off', 'back', 'away', 'throughout', 'before', 'above', 'below', 'near', 'next', 'since', 'until', 'via', 'upon', 'without', 'within', 'according', 'along', 'aside', 'away', 'back', 'besides', 'between', 'beyond', 'but', 'concerning', 'considering', 'despite', 'during', 'except', 'excluding', 'following', 'for', 'including', 'inside', 'into', 'like', 'minus', 'near', 'next', 'notwithstanding', 'of', 'off', 'on', 'onto', 'opposite', 'outside', 'over', 'past', 'per', 'plus', 'regarding', 'round', 'save', 'since', 'than', 'through', 'throughout', 'to', 'toward', 'towards', 'under', 'underneath', 'unlike', 'until', 'up', 'upon', 'versus', 'via', 'with', 'within', 'without'];
   // Regular expression for matching words and numbers joined by non-letter characters
   const splitRegex = /([\d\w]+)([^\d\w]+)/;
 
@@ -133,7 +129,7 @@ function generateQuestionsAndAnswers(corpus) {
     const predicates = filterIrrelevantNounPhrases(doc.match('#Verb+').out('array')).map(token => token.replace(/[^\d\w]+/g, '').toLowerCase());
     console.log(predicates)
     // Create a list of sentence tokens
-    const sentenceTokens = doc.terms().out('array');
+    // const sentenceTokens = doc.terms().out('array');
 
     // Iterate through each subject and predicate
     zip([subjects, predicates]).forEach((subject, predicate) => {
@@ -195,10 +191,10 @@ async function extractPromptsAndCompletions(text, windowSize = 2, task = 'questi
   // Tokenize the text into sentences
   //@ts-ignore
   const natural = await import('natural/lib/natural/tokenizers');
-  const dist = await import('natural/lib/natural/distance')
+  // const dist = await import('natural/lib/natural/distance')
   const tokenizer = new natural.SentenceTokenizer();
   const TFTDF = await import('natural/lib/natural/tfidf');
-  var tfidf = new TFTDF.TfIdf();
+  const tfidf = new TFTDF.TfIdf();
   let data = [];
   switch (task) {
     case 'completion':

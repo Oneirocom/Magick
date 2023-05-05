@@ -58,11 +58,13 @@ export async function makeChatCompletion(
   // Initialize messages array and add elements
   let messages: ChatMessage[] = []
 
-  messages = [...messages, ...conversationMessages, userMessage]
+  messages = [...messages, ...conversationMessages]
 
   if (system) {
     messages.push(systemMessage)
   }
+
+  messages.push(userMessage)
 
   // Update the settings messages
   settings.messages = messages

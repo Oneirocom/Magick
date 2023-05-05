@@ -22,7 +22,6 @@ export const chunkArray = (arr, chunkSize) =>
   arr.reduce((chunks, elem, index) => {
     const chunkIndex = Math.floor(index / chunkSize)
     const chunk = chunks[chunkIndex] || []
-    // eslint-disable-next-line no-param-reassign
     chunks[chunkIndex] = chunk.concat([elem])
     return chunks
   }, [])
@@ -34,10 +33,10 @@ export const chunkArray = (arr, chunkSize) =>
  * @extends Embeddings
   */
 export class PluginEmbeddings extends Embeddings {
-  embedDocuments(documents: string[]): Promise<number[][]> {
+  embedDocuments(): Promise<number[][]> {
     throw new Error('Please use embedDocumentsWithMeta instead.')
   }
-  embedQuery(document: string): Promise<number[]> {
+  embedQuery(): Promise<number[]> {
     throw new Error('Please use embedQueryWithMeta instead.')
   }
   completionProviders: CompletionProvider[]
@@ -106,12 +105,12 @@ export class PluginEmbeddings extends Embeddings {
       }
       document = output
     }
-    const subPrompts = chunkArray(
-      this.stripNewLines
-        ? document.map(t => t.replaceAll('\n', ' '))
-        : document,
-      this.batchSize
-    )
+    // const subPrompts = chunkArray(
+    //   this.stripNewLines
+    //     ? document.map(t => t.replaceAll('\n', ' '))
+    //     : document,
+    //   this.batchSize
+    // )
     const embeddings = []
     for (let i = 0; i < document.length; i += 1) {
       const input = document[i]
@@ -121,7 +120,7 @@ export class PluginEmbeddings extends Embeddings {
         },
         params
       )
-      console.log('response', response)
+
       embeddings.push(response.result)
     }
     return [embeddings, document]
@@ -142,7 +141,6 @@ export class PluginEmbeddings extends Embeddings {
     const handler = provider?.handler
     let response
     let retry = 0
-    console.log(param["secrets"])
     while (retry < 3) {
       try {
         response = await handler({
@@ -153,7 +151,7 @@ export class PluginEmbeddings extends Embeddings {
         })
         break
       } catch (e) {
-        console.log(e)
+        console.error(e)
         retry += 1
       }
     }

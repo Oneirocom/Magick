@@ -77,7 +77,6 @@ if (window === window.parent) {
         const { config } = payload
         const Root = () => {
           if (POSTHOG_ENABLED === 'true') {
-            console.log('Posthog enabled')
             return (
               <PostHogProvider
                 apiKey={POSTHOG_API_KEY}
