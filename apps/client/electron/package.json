@@ -20,7 +20,7 @@
     "electron:make": "npm run build && electron-builder build -c ./electron-builder.config.json -p always"
   },
   "dependencies": {
-    "@capacitor-community/electron": "^4.1.1",
+    "@capacitor-community/electron": "^4.1.2",
     "chokidar": "~3.5.3",
     "electron-is-dev": "~2.0.0",
     "electron-serve": "~1.1.0",
