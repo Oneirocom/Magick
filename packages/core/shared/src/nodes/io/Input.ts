@@ -85,9 +85,9 @@ export class InputComponent extends MagickComponent<InputReturn> {
       dataKey: 'taskType',
       name: 'Task Type',
       icon: 'moon',
-      defaultValue: 'agi',
+      defaultValue: 'task',
       onData: data => {
-        node.data.name = `Input - Task(${data})`
+        node.data.name = `Input - Task`
       },
     }
 

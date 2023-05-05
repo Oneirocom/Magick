@@ -5,14 +5,13 @@ import { eventSocket, stringSocket, taskSocket, triggerSocket } from '../../sock
 import { SpellManager } from '../../spellManager'
 import {
   AgentTask,
+  Event,
   MagickNode,
   MagickWorkerInputs,
   ModuleContext,
   ModuleWorkerOutput,
   WorkerData,
-  Event,
 } from '../../types'
-import { runSpell } from '../../utils'
 const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
 type Socket = {
@@ -110,7 +109,7 @@ export class Skill extends MagickComponent<
       event.content = content
     }
 
-    const { module } = _context
+    const { module, spellManager } = _context
 
     const { agent, app, secrets } = module
 
@@ -142,16 +141,13 @@ export class Skill extends MagickComponent<
         if (spellRunner) {
           const runComponentArgs = {
             inputs: {
-              'Input - Default': event,
+              'Input - Default': task,
             },
             runSubspell: false,
             agent: agent,
             secrets: agent?.secrets ?? secrets,
             app: module.app,
             publicVariables: {},
-          }
-          if (task) {
-            runComponentArgs.inputs[`Input - Task(${task.id})`] = task
           }
           const outputs = await spellRunner.runComponent(runComponentArgs)
           
@@ -168,8 +164,9 @@ export class Skill extends MagickComponent<
     } else {
       const runComponentArgs = {
         inputs: {
-          'Input - Default': event,
+          'Input - Default': task,
         },
+        runSubspell: false,
         spellId: spellId as string,
         projectId,
         secrets: secrets as Record<string, string>,
@@ -177,15 +174,13 @@ export class Skill extends MagickComponent<
         app: module.app,
       }
 
-      if (task) {
-        runComponentArgs.inputs[`Input - Task(${task.id})`] = task
-      }
-      const outputs = await runSpell(runComponentArgs)
+      console.log('running with ', runComponentArgs)
+      const outputs = await spellManager.run(runComponentArgs as any)
       console.log('spell outputs')
       console.log(outputs)
 
       // get the first value from outputs
-      const output = Object.values(outputs.outputs)[0]
+      const output = Object.values(outputs)[0]
 
       return {
         output,

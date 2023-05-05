@@ -273,6 +273,8 @@ class SpellRunner {
 
     const firstInput = Object.keys(inputs)[0]
 
+    console.log('firstInput', firstInput)
+
     // Checking for the triggered node for the connection type
     let triggeredNode = this._getTriggeredNodeByName(firstInput)
 
@@ -294,8 +296,11 @@ class SpellRunner {
     //
 
     try {
+      console.log('inputs', inputs)
+      console.log('triggeredNode', triggeredNode)
       await component.run(triggeredNode as unknown as MagickNode, inputs)
-
+      console.log('ran component')
+      console.log('outputData', this.outputData)
       return this.outputData
     } catch (err) {
       console.error('ERROR RUNNING SPELL', err)
