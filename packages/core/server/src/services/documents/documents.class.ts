@@ -77,7 +77,7 @@ export class DocumentService<
             )}' AS distance`
           )
         )
-        .orderBy('distance', 'desc')
+        .orderBy('distance', 'asc')
         .limit(10)
       return { data: querys }
     }
