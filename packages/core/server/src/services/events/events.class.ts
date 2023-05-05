@@ -61,8 +61,7 @@ export class EventService<
       const dv = new DataView(ary_buf)
       for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
       const f32_ary = new Float32Array(ary_buf)
-      const query = f32_ary as unknown as number[]
-      const { $limit: _, ...param } = params.query
+      const param = params.query
       const querys = await cli
         .from('events')
         .select('*')
