@@ -80,6 +80,8 @@ export class EventService<
 
     const query = cli.from('events').select()
 
+    query.orderBy('date', 'desc')
+
     if (params.query.content) {
       query.where('content', params.query.content)
     }
@@ -97,7 +99,7 @@ export class EventService<
     }
 
     const res = await query
-    return { events: res as unknown as { data: Array<any> } }
+    return { events: res?.reverse() as unknown as { data: Array<any> } }
 
     return { events: res as unknown as { data: Array<any> } }
   }
