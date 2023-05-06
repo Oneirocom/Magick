@@ -29,6 +29,7 @@ export class AgentManager {
     this.app = app
     // Update agents every second
     setInterval(async () => {
+      console.log('Updating agents')
       await this.updateAgents()
     }, 1000)
   }
@@ -102,7 +103,7 @@ export class AgentManager {
       if (!agent.data) return
       if (!agent.enabled && !agent.data.enabled) return
       if (!agent.rootSpell) return
-
+      
       const pingedAt = new Date(agent.pingedAt)
 
       if (new Date().getTime() - pingedAt.getTime() < 5000) return
