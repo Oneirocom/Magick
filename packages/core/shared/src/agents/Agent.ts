@@ -74,6 +74,7 @@ export class Agent implements AgentInterface {
       const override = _.isEqual(spell, agentData.rootSpell)
 
       this.spellRunner = await spellManager.load(spell, override)
+      console.log('loaded spell runner', this.spellRunner)
       const agentStartMethods = pluginManager.getAgentStartMethods()
 
       for (const method of Object.keys(agentStartMethods)) {

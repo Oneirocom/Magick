@@ -658,7 +658,6 @@ export class DiscordConnector {
     // const now = new Date()
     // const pastHour = new Date(now.getTime() - 60 * 60 * 1000) // calculate the time one hour ago
     const msgs = (await this.getActiveUsers(channel, 12)) as unknown as any[]
-    console.log(msgs)
     msgs.forEach(element => {
       entities.push({
         user: element.user,
@@ -670,10 +669,13 @@ export class DiscordConnector {
     if (content.startsWith('!ping ')) {
       content = content.replace('!ping ', '')
     }
-    console.log(content)
-    console.log('calling runComponent from discord.ts')
-    console.log('publicVariables', this.agent.publicVariables)
-    const response = await this.spellRunner.runComponent({
+
+    console.log(
+      this.discord_bot_name,
+      ' - sending message on discord - ',
+      content
+    )
+    await this.spellRunner.runComponent({
       inputs: {
         'Input - Discord (Text)': {
           content: content,
@@ -693,29 +695,6 @@ export class DiscordConnector {
       runSubspell: true,
       app,
     })
-
-    if (!response) {
-      console.warn('Discord: No response outputs')
-      return
-    }
-
-    console.log('response', response)
-
-    const outputKey = Object.keys(response).find(key =>
-      key.toLowerCase().includes('output')
-    ) as string
-
-    const Output = response[outputKey]
-
-    if (!Output) {
-      console.warn('Discord: No Output')
-      return
-    }
-
-    console.log('handled response', Output)
-    if (!Output || Output === '') {
-      message.channel.send('Error: Empty Resonse')
-    } else message.channel.send(Output)
   }
 
   //Event that is triggered when a message is deleted
