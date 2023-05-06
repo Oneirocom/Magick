@@ -49,7 +49,6 @@ export class FinishTaskStep extends MagickComponent<
     const result = new Rete.Input('result', 'Result', stringSocket)
     const success = new Rete.Input('success', 'Success', stringSocket)
 
-
     // Resulting output of the skill
     const reflection = new Rete.Input('reflection', 'Reflection', stringSocket)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -79,12 +78,15 @@ export class FinishTaskStep extends MagickComponent<
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ) {
-    const task = inputs['agentTask'][0] as AgentTask
-    const reasoning = inputs['reasoning'][0] as string
-    const skill = inputs['skill'][0] as string
-    const result = inputs['result'][0] as string
-    const reflection = inputs['reflection'][0] as string
-    const success = inputs['success'][0] as string
+    console.log('inputs', inputs)
+    const task = inputs['agentTask']?.[0] as AgentTask
+    const reasoning = inputs['reasoning']?.[0] as string
+    const skill = inputs['skill']?.[0] as string
+    const result = inputs['result']?.[0] as string
+    const reflection = inputs['reflection']?.[0] as string
+    const success = inputs['success']?.[0] as string
+
+    console.log('******* FINISH TASK STEP *******')
 
     console.log('task.steps', task.steps)
 

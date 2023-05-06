@@ -85,7 +85,7 @@ export const dbClient = (app: Application) => {
   const config = getDatabaseConfig()
   const db = knex(config)
   app.set('dbClient', db)
-  db.raw(pf_events).then(() => {
-    console.log('Postgres function created')
-  })
+  // db.raw(pf_events).then(() => {
+  //   console.log('Postgres function created')
+  // })
 }
