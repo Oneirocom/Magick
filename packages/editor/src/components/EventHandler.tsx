@@ -294,7 +294,7 @@ const EventHandler = ({ pubSub, tab }) => {
     recurse(spell)
 
     // traverse the json. replace any
-    const json = JSON.stringify(spell)
+    const json = JSON.stringify(spell, null, 4)
 
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))
