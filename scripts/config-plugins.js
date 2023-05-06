@@ -1,6 +1,6 @@
 try {
   const dotenv = require('dotenv-flow')
-} catch (e) {
+} catch {
   console.log(
     '`npm install` is likely running with `--dry-run` or `---package-lock-only` flags. Exiting.'
   )
