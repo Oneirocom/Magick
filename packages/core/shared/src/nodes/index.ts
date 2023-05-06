@@ -1,62 +1,63 @@
-// DOCUMENTED 
-import { MagickComponent } from '../engine';
-import { pluginManager } from '../plugin';
-import { ArrayToJSON } from './array/ArrayToJSON';
-import { ArrayVariable } from './array/ArrayVariable';
-import { GetValueFromArray } from './array/GetValueFromArray';
-import { JoinListComponent } from './array/JoinList';
-import { RemapArray } from './array/RemapArray';
-import { BooleanVariable } from './boolean/BooleanVariable';
-import { IsVariableTrue } from './boolean/IsVariableTrue';
-import { LogicalOperator } from './boolean/LogicalOperator';
-import { Javascript } from './code/Javascript';
-import { Python } from './code/Python';
-import { GetDocuments } from './document/GetDocuments';
-import { StoreDocument } from './document/StoreDocument';
-import { CosineSimilarity } from './embedding/CosineSimilarity';
-import { CreateTextEmbedding } from './embedding/CreateTextEmbedding';
-import { FindTextEmbedding } from './embedding/FindTextEmbedding';
-import { EventDelete } from './events/EventDelete';
-import { EventDestructureComponent } from './events/EventDestructure';
-import { EventRecall } from './events/EventRecall';
-import { EventRestructureComponent } from './events/EventRestructure';
-import { EventStore } from './events/EventStore';
-import { EventsToConversation } from './events/EventsToConversation';
-import { JupyterNotebook } from './experimental/JupyterNotebook';
-import { TextToSpeech } from './experimental/textToSpeech';
-import { BooleanGate } from './flow/BooleanGate';
-import { ExclusiveGate } from './flow/ExclusiveGate';
-import { IsNullOrUndefined } from './flow/IsNullOrUndefined';
-import { OrGate } from './flow/OrGate';
-import { RandomGate } from './flow/RandomGate';
-import { SwitchGate } from './flow/SwitchGate';
-import { WaitForAll } from './flow/WaitForAll';
-import { InputComponent } from './io/Input';
-import { Output } from './io/Output';
-import { Request } from './io/Request';
-import { Skill } from './io/Skill';
-import { SpellComponent } from './io/Spell';
-import { RunSpell } from './magick/runSpell';
-import { InRange } from './number/InRange';
-import { NumberVariable } from './number/NumberVariable';
-import { ComposeObject } from './object/ComposeObject';
-import { GetValuesFromObject } from './object/GetValuesFromObject';
-import { ParseJSON } from './object/JSONToObject';
-import { Merge } from './object/MergeObjects';
-import { ObjectToJSON } from './object/ObjectToJSON';
-import { CombineText } from './text/CombineText';
-import { ComplexStringMatcher } from './text/ComplexStringMatcher';
-import { EvaluateText } from './text/EvaluateText';
-import { GenerateText } from './text/GenerateText';
-import { ProfanityFilter } from './text/ProfanityFilter';
-import { ReplaceText } from './text/ReplaceText';
-import { StringVariable } from './text/StringVariable';
-import { TextTemplate } from './text/TextTemplate';
-import { TextVariable } from './text/TextVariable';
-import { Cast } from './utility/Cast';
-import { CurrentTime } from './utility/CurrentTime';
-import { Echo } from './utility/Echo';
-import { Log } from './utility/Log';
+// DOCUMENTED
+import { MagickComponent } from '../engine'
+import { pluginManager } from '../plugin'
+import { ArrayToJSON } from './array/ArrayToJSON'
+import { ArrayVariable } from './array/ArrayVariable'
+import { GetValueFromArray } from './array/GetValueFromArray'
+import { JoinListComponent } from './array/JoinList'
+import { RemapArray } from './array/RemapArray'
+import { BooleanVariable } from './boolean/BooleanVariable'
+import { IsVariableTrue } from './boolean/IsVariableTrue'
+import { LogicalOperator } from './boolean/LogicalOperator'
+import { Javascript } from './code/Javascript'
+import { Python } from './code/Python'
+import { GetDocuments } from './document/GetDocuments'
+import { StoreDocument } from './document/StoreDocument'
+import { CosineSimilarity } from './embedding/CosineSimilarity'
+import { CreateTextEmbedding } from './embedding/CreateTextEmbedding'
+import { FindTextEmbedding } from './embedding/FindTextEmbedding'
+import { EventDelete } from './events/EventDelete'
+import { EventDestructureComponent } from './events/EventDestructure'
+import { EventRecall } from './events/EventRecall'
+import { EventRestructureComponent } from './events/EventRestructure'
+import { EventStore } from './events/EventStore'
+import { EventsToConversation } from './events/EventsToConversation'
+import { JupyterNotebook } from './experimental/JupyterNotebook'
+import { TextToSpeech } from './experimental/textToSpeech'
+import { BooleanGate } from './flow/BooleanGate'
+import { ExclusiveGate } from './flow/ExclusiveGate'
+import { IsNullOrUndefined } from './flow/IsNullOrUndefined'
+import { OrGate } from './flow/OrGate'
+import { RandomGate } from './flow/RandomGate'
+import { SwitchGate } from './flow/SwitchGate'
+import { WaitForAll } from './flow/WaitForAll'
+import { InputComponent } from './io/Input'
+import { Output } from './io/Output'
+import { Request } from './io/Request'
+import { Skill } from './io/Skill'
+import { SpellComponent } from './io/Spell'
+import { RunSpell } from './magick/runSpell'
+import { InRange } from './number/InRange'
+import { NumberVariable } from './number/NumberVariable'
+import { ComposeObject } from './object/ComposeObject'
+import { GetValuesFromObject } from './object/GetValuesFromObject'
+import { ParseJSON } from './object/JSONToObject'
+import { Merge } from './object/MergeObjects'
+import { ObjectToJSON } from './object/ObjectToJSON'
+import { CombineText } from './text/CombineText'
+import { ComplexStringMatcher } from './text/ComplexStringMatcher'
+import { EvaluateText } from './text/EvaluateText'
+import { GenerateText } from './text/GenerateText'
+import { ProfanityFilter } from './text/ProfanityFilter'
+import { ReplaceText } from './text/ReplaceText'
+import { StringVariable } from './text/StringVariable'
+import { TextTemplate } from './text/TextTemplate'
+import { TextVariable } from './text/TextVariable'
+import { Cast } from './utility/Cast'
+import { CurrentTime } from './utility/CurrentTime'
+import { Echo } from './utility/Echo'
+import { Log } from './utility/Log'
+import { ErrorNode } from './utility/Error'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -115,6 +116,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   textToSpeech: () => new TextToSpeech(),
   skill: () => new Skill(),
   runSpell: () => new RunSpell(),
+  error: () => new ErrorNode(),
 }
 
 /**
