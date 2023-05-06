@@ -63,30 +63,27 @@ function install(
               input: inputs,
             })
             return result
-          } catch (err: unknown) {
-            if (err instanceof Error) {
-              // handle errors here so they dont crash the process, and are communicated to the client
-              socket?.emit(`${currentSpell.id}-${node.id}-error`, {
-                error: {
-                  message: err.message,
-                  stack: err.stack,
-                },
-              })
-              socket?.emit(`${currentSpell.id}-error`, {
-                error: {
-                  message: err.message,
-                  stack: err.stack,
-                },
-              })
-            } else {
-              throw err
-            }
-
+          } catch (err: any) {
+            // this emits the error to be handled by the client plugin
             socket?.emit(event, {
-              output: { error: true },
+              error: {
+                message: err.message,
+                stack: err.stack,
+              },
             })
-            // note: we may still want to throw the error here
-            return console.error(err)
+
+            // this emits the error to the event handler to show a snackbar
+            socket?.emit(`${currentSpell.id}-error`, {
+              error: {
+                message: err.message,
+                stack: err.stack,
+              },
+            })
+
+            // socket?.emit(event, {
+            //   output: { error: true },
+            // })
+            throw err
           }
         }
 
@@ -111,9 +108,7 @@ function install(
 
               // make sure errors are handled in the flow.
               if (socketData?.error) {
-                const error = new Error(socketData.error.message)
-                error.stack = socketData.error.stack
-                node.console?.error(error)
+                node.console?.error(socketData)
                 return
               }
 
