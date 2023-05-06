@@ -111,11 +111,15 @@ export class MagickConsole {
     }
   }
 
-  error(error: Error) {
-    const message = this.formatErrorMessage(error)
-    this.throwServerError(message)
+  error(_message: unknown) {
+    this.throwServerError(_message)
+
+    const message =
+      typeof _message !== 'string' ? JSON.stringify(_message) : _message
+
     if (!this.isServer) {
-      this.sendToDebug(message)
+      console.log('Error', _message)
+      this.sendToDebug(this.formatMessage(message, 'error'))
       this.renderError()
     }
   }
