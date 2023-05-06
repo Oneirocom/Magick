@@ -8,6 +8,7 @@ import Discord, {
   Partials,
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
+import { app } from '@magickml/server-core'
 import emojiRegex from 'emoji-regex'
 
 let recognizeSpeech
@@ -672,49 +673,49 @@ export class DiscordConnector {
     console.log(content)
     console.log('calling runComponent from discord.ts')
     console.log('publicVariables', this.agent.publicVariables)
-    // const response = await this.spellRunner.runComponent({
-    //   inputs: {
-    //     'Input - Discord (Text)': {
-    //       content: content,
-    //       sender: message.author.username,
-    //       observer: this.discord_bot_name || "Eliza",
-    //       client: 'discord',
-    //       channel: message.channel.id,
-    //       agentId: this.agent.id,
-    //       entities: entities.map(e => e.user),
-    //       channelType: 'msg',
-    //       rawData: JSON.stringify(message),
-    //     },
-    //   },
-    //   agent: this.agent,
-    //   secrets: this.agent.secrets,
-    //   publicVariables: this.agent.publicVariables,
-    //   runSubspell: true,
-    //   app,
-    // })
+    const response = await this.spellRunner.runComponent({
+      inputs: {
+        'Input - Discord (Text)': {
+          content: content,
+          sender: message.author.username,
+          observer: this.discord_bot_name || 'Eliza',
+          client: 'discord',
+          channel: message.channel.id,
+          agentId: this.agent.id,
+          entities: entities.map(e => e.user),
+          channelType: 'msg',
+          rawData: JSON.stringify(message),
+        },
+      },
+      agent: this.agent,
+      secrets: this.agent.secrets,
+      publicVariables: this.agent.publicVariables,
+      runSubspell: true,
+      app,
+    })
 
-    // if (!response) {
-    //   console.warn('Discord: No response outputs')
-    //   return
-    // }
+    if (!response) {
+      console.warn('Discord: No response outputs')
+      return
+    }
 
-    // console.log('response', response)
+    console.log('response', response)
 
-    // const outputKey = Object.keys(response).find(key =>
-    //   key.toLowerCase().includes('output')
-    // ) as string
+    const outputKey = Object.keys(response).find(key =>
+      key.toLowerCase().includes('output')
+    ) as string
 
-    // const Output = response[outputKey]
+    const Output = response[outputKey]
 
-    // if (!Output) {
-    //   console.warn('Discord: No Output')
-    //   return
-    // }
+    if (!Output) {
+      console.warn('Discord: No Output')
+      return
+    }
 
-    // console.log('handled response', Output)
-    // if (!Output || Output === '') {
-    //   message.channel.send('Error: Empty Resonse')
-    // } else message.channel.send(Output)
+    console.log('handled response', Output)
+    if (!Output || Output === '') {
+      message.channel.send('Error: Empty Resonse')
+    } else message.channel.send(Output)
   }
 
   //Event that is triggered when a message is deleted
@@ -977,12 +978,12 @@ export class DiscordConnector {
                             .toLowerCase()
                             .includes('digital being')
                         )
-                          // _author = this.discord_bot_name
+                          if (msg.deleted === true) {
+                            // _author = this.discord_bot_name
 
-                        if (msg.deleted === true) {
-                          // await deleteMessageFromHistory(channel.id, msg.id)
-                          log('deleted message: ' + msg.content)
-                        }
+                            // await deleteMessageFromHistory(channel.id, msg.id)
+                            log('deleted message: ' + msg.content)
+                          }
                       }
                     )
                   })
