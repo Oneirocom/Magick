@@ -65,9 +65,6 @@ const AgentDetails = ({
     }
 
     // Avoid server-side validation error
-    _data.spells = Array.isArray(_data?.spells)
-      ? JSON.stringify(_data.spells)
-      : '[]'
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
 
@@ -118,7 +115,7 @@ const AgentDetails = ({
       }
     })
 
-    const json = JSON.stringify(exportAgentData)
+    const json = JSON.stringify(exportAgentData, null, 4)
 
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))

@@ -73,6 +73,9 @@ const ProjectWindow = ({ openDrawer }) => {
     fileReader.readAsText(selectedFile)
     fileReader.onload = event => {
       const data = JSON.parse(event?.target?.result)
+
+      console.log('data', data)
+
       delete data['id']
       axios({
         url: `${globalConfig.apiUrl}/projects`,
@@ -100,7 +103,9 @@ const ProjectWindow = ({ openDrawer }) => {
    */
   const exportProject = () => {
     const element = document.createElement('a')
-    const file = new Blob([JSON.stringify(data)], { type: 'text/plain' })
+    const file = new Blob([JSON.stringify(data, null, 4)], {
+      type: 'text/plain',
+    })
     element.href = URL.createObjectURL(file)
     element.download = globalConfig.projectId + '.project.json'
     document.body.appendChild(element)
@@ -186,7 +191,7 @@ const ProjectWindow = ({ openDrawer }) => {
           ref={sidebarPanel}
         >
           <Box className={styles.header}>
-            <Typography>Project Name</Typography>
+            <Typography>Project View</Typography>
             <IconButton className={styles.btn} onClick={handleClick}>
               <MoreHoriz />
             </IconButton>
