@@ -29,7 +29,6 @@ export class AgentManager {
     this.app = app
     // Update agents every second
     setInterval(async () => {
-      console.log('Updating agents')
       await this.updateAgents()
     }, 1000)
   }
@@ -87,11 +86,13 @@ export class AgentManager {
    * Update agent instances.
    */
   async updateAgents() {
-    this.newAgents = (await this.app.service('agents').find({
-      query: {
-        enabled: true,
-      },
-    }))?.data
+    this.newAgents = (
+      await this.app.service('agents').find({
+        query: {
+          enabled: true,
+        },
+      })
+    )?.data
     if (!this.newAgents) return
 
     await this.deleteOldAgents()
@@ -103,7 +104,7 @@ export class AgentManager {
       if (!agent.data) return
       if (!agent.enabled && !agent.data.enabled) return
       if (!agent.rootSpell) return
-      
+
       const pingedAt = new Date(agent.pingedAt)
 
       if (new Date().getTime() - pingedAt.getTime() < 5000) return
