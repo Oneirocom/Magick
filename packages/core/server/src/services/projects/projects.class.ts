@@ -1,22 +1,22 @@
-// DOCUMENTED 
-import { Params } from '@feathersjs/feathers';
-import { app } from '../../app';
+// DOCUMENTED
+import { Params } from '@feathersjs/feathers'
+import { app } from '../../app'
 
 /**
  * Interface for CreateData objects
  */
 interface CreateData {
-  agents: any; // Add specific type if possible
-  documents: any; // Add specific type if possible
-  spells: any; // Add specific type if possible
-  projectId: string;
+  agents: any // Add specific type if possible
+  documents: any // Add specific type if possible
+  spells: any // Add specific type if possible
+  projectId: string
 }
 
 /**
  * Interface for custom params including user information
  */
 export interface ProjectParams extends Params {
-  user: any; // Add specific type if possible
+  user: any // Add specific type if possible
 }
 
 /**
@@ -31,10 +31,10 @@ export class ProjectsService {
    * @returns - An object containing the agents, spells and documents of the project
    */
   async find(
-    params?: ProjectParams,
+    params?: ProjectParams
   ): Promise<{ agents: any; spells: any; documents: any }> {
-    const { query } = params;
-    const projectId = query.projectId;
+    const { query } = params
+    const projectId = query.projectId
 
     // Get all agents, spells, and documents for this projectId
     const [agents, spells, documents] = await Promise.all([
@@ -53,13 +53,13 @@ export class ProjectsService {
           projectId,
         },
       }),
-    ]);
+    ])
 
     return {
       agents: agents.data,
       spells: spells.data,
       documents: documents.data,
-    };
+    }
   }
 
   /**
@@ -68,64 +68,64 @@ export class ProjectsService {
    * @returns - An object containing the created agents, spells and documents
    */
   async create(data: CreateData): Promise<{
-    agents: any;
-    spells: any;
-    documents: any;
+    agents: any
+    spells: any
+    documents: any
   }> {
-    const { agents, documents, spells, projectId } = data;
+    const { agents, documents, spells, projectId } = data
 
     // Map agents, documents, and spells with updated information for the new project
     const mappedAgents = agents.map(agent => {
-      delete agent.id;
-      agent.spells = '[]';
-      if (!agent.data) agent.data = '{}';
-      agent.enabled = false;
-      agent.projectId = projectId;
-      return agent;
-    });
+      delete agent.id
+      if (!agent.data) agent.data = '{}'
+      agent.enabled = false
+      agent.projectId = projectId
+      return agent
+    })
 
     const mappedDocuments = documents.map(doc => {
-      delete doc.id;
-      doc.projectId = projectId;
-      return doc;
-    });
+      delete doc.id
+      doc.projectId = projectId
+      return doc
+    })
 
     const mappedSpells = spells.map(spell => {
-      delete spell.id;
-      delete spell.updatedAt;
-      spell.projectId = projectId;
-      return spell;
-    });
+      delete spell.id
+      delete spell.updatedAt
+      delete spell.creatorId
+      spell.projectId = projectId
+      return spell
+    })
 
     // Create and store new agents, documents, and spells
-    const agentResponse: any[] = [];
+    const agentResponse: any[] = []
     if (mappedAgents.length > 0) {
       mappedAgents.forEach(async agent => {
-        const r = await app.service('agents').create(agent);
-        agentResponse.push(r);
-      });
+        console.log('creating agent', agent)
+        const r = await app.service('agents').create(agent)
+        agentResponse.push(r)
+      })
     }
 
-    const documentResponse: any[] = [];
+    const documentResponse: any[] = []
     if (mappedDocuments.length > 0) {
       mappedDocuments.forEach(async doc => {
-        const r = await app.service('documents').create(doc);
-        documentResponse.push(r);
-      });
+        const r = await app.service('documents').create(doc)
+        documentResponse.push(r)
+      })
     }
 
-    const spellResponse: any[] = [];
-    if (mappedSpells.length > 0) {
-      mappedSpells.forEach(async spell => {
-        const r = await app.service('spells').create(spell);
-        spellResponse.push(r);
-      });
-    }
+    const spellResponse: any[] = []
+    mappedSpells?.forEach(async spell => {
+      delete spell.creatorId
+      const r = await app.service('spells').create(spell)
+      spellResponse.push(r)
+    })
 
     return {
       agents: agentResponse,
-      spells: documentResponse,
-      documents: spellResponse,
-    };
+      spells: spellResponse,
+      documents: documentResponse,
+    }
   }
 }
