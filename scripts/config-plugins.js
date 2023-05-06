@@ -1,4 +1,11 @@
-const dotenv = require('dotenv-flow');
+try {
+  const dotenv = require('dotenv-flow')
+} catch (e) {
+  console.log(
+    '`npm install` is likely running with `--dry-run` or `---package-lock-only` flags. Exiting.'
+  )
+  process.exit(0)
+}
 dotenv.config('../');
 
 console.log('Server plugins', process.env.SERVER_PLUGINS)
