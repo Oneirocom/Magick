@@ -24,19 +24,6 @@ export type PluginClientRoute = {
 
 export type PluginServerRoute = Route
 
-// inputTypes: [
-//   { name: 'Discord (Voice)', trigger: true, socket: eventSocket},
-//   { name: 'Discord (Text)', trigger: true, socket: eventSocket },
-// ],
-// outputTypes: [
-//   { name: 'Discord (Voice)', trigger: false, socket: eventSocket },
-//   { name: 'Discord (Text)', trigger: false, socket: eventSocket },
-// ],
-// secrets: [{
-//   name: 'Discord API Key',
-//   key: 'discord_api_key',
-//   global: false
-// }]
 export type PluginIOType = {
   name: string
   inspectorControls?: any[]
@@ -142,8 +129,12 @@ export class ServerPlugin extends Plugin {
     outputTypes = [],
     serverInit = () => null,
     agentMethods = {
-      start: () => { /* null */},
-      stop: () => { /* null */},
+      start: () => {
+        /* null */
+      },
+      stop: () => {
+        /* null */
+      },
     },
     serverRoutes = [],
     secrets = [],
