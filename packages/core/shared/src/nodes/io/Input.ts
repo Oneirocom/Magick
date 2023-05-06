@@ -62,9 +62,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
    * @returns {MagickNode} - The configured node
    */
   builder(node: MagickNode) {
-    if (node.data.useTrigger === undefined) {
-      node.data.useTrigger = true
-    }
     if (node.data.useData === undefined) {
       node.data.useData = true
     }
@@ -77,28 +74,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
       defaultValue: 'Default',
       onData: data => {
         node.data.name = `Input - ${data}`
-      },
-    }
-
-    const taskType = {
-      type: InputControl,
-      dataKey: 'taskType',
-      name: 'Task Type',
-      icon: 'moon',
-      defaultValue: 'task',
-      onData: data => {
-        node.data.name = `Input - Task`
-      },
-    }
-
-    const useTrigger = {
-      type: SwitchControl,
-      name: 'Use Trigger',
-      label: 'Use Trigger',
-      dataKey: 'useTrigger',
-      defaultValue: node.data.useTrigger,
-      onData: data => {
-        configureNode()
       },
     }
 
@@ -119,12 +94,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
       type: anySocket,
     }
 
-    const taskOutput = {
-      socket: 'task',
-      name: 'task',
-      type: anySocket,
-    }
-
     const triggerOutput = {
       socket: 'trigger',
       name: 'trigger',
@@ -134,13 +103,13 @@ export class InputComponent extends MagickComponent<InputReturn> {
     const defaultInputTypes = [
       {
         name: 'Default',
-        inspectorControls: [inputName, useTrigger, useData],
+        inspectorControls: [inputName, useData],
         sockets: [],
       },
       {
         name: 'Task',
-        inspectorControls: [taskType],
-        sockets: [triggerOutput, taskOutput],
+        inspectorControls: [],
+        sockets: [triggerOutput, dataOutput],
       },
     ] as PluginIOType[]
 
@@ -178,8 +147,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
       if (sockets !== lastSockets) {
         lastSockets?.forEach(socket => {
           if (node.outputs.has(socket.socket)) {
-            if (socket.socket === 'trigger' && node.data.useTrigger === true)
-              return
+            if (socket.socket === 'trigger') return
             connections.forEach(c => {
               if (c.output.key === socket.socket) {
                 this.editor?.removeConnection(c)
@@ -191,9 +159,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
         sockets.forEach(socket => {
           if (node.outputs.has(socket.socket)) return
           if (node.data.inputType === 'Default') {
-            // if socket is trigger and useTrigger is false, don't add
-            if (socket.socket === 'trigger' && node.data.useTrigger !== true)
-              return
+            if (socket.socket === 'trigger') return
             // if socket is output and useData is false, don't add
             if (socket.socket === 'output' && node.data.useData !== true) return
           }
@@ -220,7 +186,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
       const sockets = inputTypeData.sockets ?? []
 
       // configure default
-      if (inputType === 'Default' && node.data.useTrigger === true) {
+      if (inputType === 'Default') {
         sockets.push(triggerOutput)
       }
 
@@ -232,17 +198,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
         node.data.name = `Input - ${inputType}`
       } else {
         node.data.name = `Input - ${node.data.inputName}`
-        if (node.data.useTrigger !== true && node.outputs.has('trigger')) {
-          connections.forEach(c => {
-            if (c.output.key === 'trigger') {
-              this.editor?.removeConnection(c)
-            }
-          })
-          node.outputs.delete('trigger')
-        } else if (
-          node.data.useTrigger === true &&
-          !node.outputs.has('trigger')
-        ) {
+        if (!node.outputs.has('trigger')) {
           node.addOutput(new Rete.Output('trigger', 'trigger', triggerSocket))
         }
         if (!node.data.useData && node.outputs.has('output')) {

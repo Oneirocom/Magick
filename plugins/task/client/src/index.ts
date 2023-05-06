@@ -1,8 +1,8 @@
-// DOCUMENTED 
-import { ClientPlugin, eventSocket, triggerSocket } from '@magickml/core';
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import { AgentTaskWindow } from './components/task.component';
-import TaskWindow from './windows/TaskWindow';
+// DOCUMENTED
+import { ClientPlugin, eventSocket, triggerSocket } from '@magickml/core'
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
+import { AgentTaskWindow } from './components/task.component'
+import TaskWindow from './windows/TaskWindow'
 import { getNodes } from '@magickml/plugin-task-shared'
 /**
  * The sockets that the `TaskPlugin` accepts as input.
@@ -18,7 +18,7 @@ const inputSockets = [
     name: 'trigger',
     type: triggerSocket,
   },
-];
+]
 
 /**
  * The `TaskPlugin` class provides task functionality to the engine.
@@ -31,7 +31,7 @@ class TaskPlugin extends ClientPlugin {
     super({
       name: 'TaskPlugin',
       agentComponents: [AgentTaskWindow],
-      inputTypes: [{ name: 'Task In', sockets: inputSockets }],
+      inputTypes: [{ name: 'Task', sockets: inputSockets }],
       spellTemplates: [],
       nodes: getNodes(),
       drawerItems: [
@@ -46,10 +46,10 @@ class TaskPlugin extends ClientPlugin {
           path: '/tasks',
           component: TaskWindow,
           plugin: 'TaskPlugin',
-        }
+        },
       ],
-    });
+    })
   }
 }
 
-export default new TaskPlugin();
+export default new TaskPlugin()

@@ -43,8 +43,7 @@ class TaskManager {
       return console.log('Task is not enabled for this agent')
     const taskHandler = async () => {
       // Don't run this function if it has been deleted
-      if (!agent.taskHandler)
-        return console.log('No task handler')
+      if (!agent?.taskHandler) return console.log('No task handler')
 
       // get all tasks for this agent
       const tasks = await app.service('tasks').find({
@@ -55,23 +54,20 @@ class TaskManager {
         },
       })
 
-      console.log('tasks are', tasks)
       const taskArray = tasks.data || []
 
       // we dont want to blast the database, so run on a 1 second loop when tasks are empty
-      if(taskArray.length === 0) {
-        setTimeout(() => agent.taskHandler, 1000)
+      if (taskArray.length === 0) {
+        setTimeout(async () => agent?.taskHandler && agent.taskHandler(), 1000)
         return
       }
 
       // iterate over all tasks
       for (const task of taskArray) {
+        console.log('Running task', task.id, task)
         const resp = await spellRunner.runComponent({
           inputs: {
-            [`Input - Task`]: {
-              event: task.eventData,
-              task,
-            },
+            'Input - Task': task,
           },
           agent,
           secrets: agent.secrets,
@@ -82,11 +78,11 @@ class TaskManager {
       }
       console.log('Finished task handler, calling next frame')
 
-      setTimeout(() => agent.taskHandler, 1)
+      setTimeout(async () => agent?.taskHandler && agent?.taskHandler(), 1000)
     }
     agent.taskHandler = taskHandler
     // start the taskHandler
-    setTimeout(() => agent.taskHandler, 1)
+    agent.taskHandler()
   }
 
   /**
@@ -95,7 +91,7 @@ class TaskManager {
    */
   removeAgent({ agent }) {
     const _agent = this.agentManager.getAgent({ agent })
-    if (!_agent || !agent.taskHandler) return
+    if (!_agent || !agent?.taskHandler) return
     clearInterval(agent.taskHandler)
     delete agent.taskHandler
   }
@@ -136,7 +132,7 @@ const inputSockets = [
 const TaskPlugin = new ServerPlugin({
   name: 'TaskPlugin',
   agentMethods: getAgentMethods(),
-  inputTypes: [{ name: 'Task In', sockets: inputSockets }],
+  inputTypes: [{ name: 'Task', sockets: inputSockets }],
   nodes: getNodes(),
 })
 

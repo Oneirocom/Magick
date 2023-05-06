@@ -117,7 +117,7 @@ export class Output extends MagickComponent<void> {
     }
     const { module, data } = context
 
-    const outputType = node.data.outputType
+    const outputType = inputName.replace('Input - ', '')
     const output = (inputs.input.filter(Boolean)[0] ?? '') as string
     const event =
       inputs.event?.[0] || (data && (Object.values(data)[0] as unknown[]))
@@ -141,6 +141,8 @@ export class Output extends MagickComponent<void> {
       } else {
         // Find the outputType in the outputTypes array
         const t = module.agent.outputTypes.find(t => t.name === outputType)
+        console.log('module.agent.outputTypes', module.agent.outputTypes)
+        console.log('outputType', outputType)
 
         // Find outputType in outputTypes where name is outputType
         if (!t) {
