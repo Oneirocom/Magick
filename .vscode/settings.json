@@ -2,5 +2,8 @@
   "typescript.tsserver.experimental.enableProjectDiagnostics": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
-  },
+},
+"editor.formatOnSave": true,
+"editor.formatOnType": false,
+"editor.defaultFormatter": "esbenp.prettier-vscode",
 }

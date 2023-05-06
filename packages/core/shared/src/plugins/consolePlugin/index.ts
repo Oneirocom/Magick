@@ -58,11 +58,13 @@ function install(
           ...args,
         ])
 
+        _node.console.log(result)
+
         return result
       } catch (error) {
         _node.console.error(error as Error)
 
-        return console.error(error)
+        throw error
       }
     }
   })

@@ -65,10 +65,10 @@ const MenuBar = () => {
     const toggle = useCallback(() => {
       setValue(v => !v)
     }, [])
-    return [value, toggle as () => void]
+    return [value, toggle]
   }
 
-  const [menuVisibility, toggleMenuVisibility] = useToggle()
+  const [menuVisibility, setMenuVisibility] = useState<boolean>(false)
 
   /**
    * Save handler
@@ -481,7 +481,7 @@ const MenuBar = () => {
   const handleClick = (func: () => void) => {
     // Initially intended to control the visibility with a state, but this triggers a re-render and hides the menu anyway! :D
     // Keeping this intact just in case.
-    toggleMenuVisibility(menuVisibility)
+    setMenuVisibility(!menuVisibility)
     // No need for this
     // func()
   }
