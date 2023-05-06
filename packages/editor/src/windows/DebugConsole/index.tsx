@@ -23,7 +23,7 @@ interface Terminal {
  * @param {Object} props.tab - Tab object.
  * @returns {JSX.Element} Debug console component.
  */
-const DebugConsole = ({ tab }): Element => {
+const DebugConsole = ({ tab }): JSX.Element => {
   const [scrollToBottom, setScrollToBottom] = useState<boolean>(false)
   const { centerNode } = useEditor()
   const { publish, subscribe, events } = usePubSub()
@@ -67,7 +67,7 @@ const DebugConsole = ({ tab }): Element => {
    */
   const formatLogMessage = (message): string =>
     `> Node ${message.nodeId}: Message from ${message.from} component ${
-      message.name ?? 'unnamed'
+      message.name ? ' ' + message.name : ''
     }.`
 
   /**
@@ -77,7 +77,7 @@ const DebugConsole = ({ tab }): Element => {
    * @param {string} type - Message type (error or log).
    * @returns {JSX.Element} Rendered message.
    */
-  const Message = (message, type): Element => {
+  const Message = (message, type): JSX.Element => {
     return (
       <div
         style={{
@@ -112,10 +112,12 @@ const DebugConsole = ({ tab }): Element => {
    * @returns {string} Formatted message for the terminal.
    */
   const getMessage = _message => {
-    const message = {
-      ..._message,
-      ...JSON.parse(_message.content),
-    }
+    const message = _message.content
+      ? {
+          ..._message,
+          ...JSON.parse(_message.content),
+        }
+      : _message
 
     delete message.content
 
@@ -124,6 +126,7 @@ const DebugConsole = ({ tab }): Element => {
 
   // Callback function to print messages to the debugger.
   const printToDebugger = useCallback((_, message): void => {
+    console.log('MESSAGE', message)
     const terminal = terminalRef.current
     if (!terminal) return
 
