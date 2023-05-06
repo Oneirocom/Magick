@@ -37,6 +37,7 @@ export class Agent implements AgentInterface {
     agentManager: AgentManager,
     app: Application
   ) {
+    console.log('creating new agent')
     this.secrets = agentData?.secrets ? JSON.parse(agentData?.secrets) : {}
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
@@ -73,6 +74,7 @@ export class Agent implements AgentInterface {
       const override = _.isEqual(spell, agentData.rootSpell)
 
       this.spellRunner = await spellManager.load(spell, override)
+
       const agentStartMethods = pluginManager.getAgentStartMethods()
 
       for (const method of Object.keys(agentStartMethods)) {
@@ -97,6 +99,7 @@ export class Agent implements AgentInterface {
           pingedAt: new Date().toISOString(),
         })
       }, 1000)
+      console.log('new agent created')
     })()
   }
 
