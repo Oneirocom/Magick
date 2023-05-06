@@ -75,6 +75,7 @@
     "@mui/material": "^5.11.5",
     "@mui/x-date-pickers": "^6.0.2",
     "@nrwl/nx": "^7.8.7",
+    "@nrwl/nx-darwin-x64": "^15.9.3",
     "@nrwl/nx-plugin": "15.9.2",
     "@panva/hkdf": "^1.0.4",
     "@pinecone-database/pinecone": "^0.0.10",
