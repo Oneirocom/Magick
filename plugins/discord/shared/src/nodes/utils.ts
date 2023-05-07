@@ -66,6 +66,7 @@ export async function runSpell(
   const response = await spellrun.runComponent({
     inputs: {
       'Input - Discord (Text)': {
+        connector: 'Discord (Text)',
         content: content,
         sender: ' message.author.username',
         observer: ' message.author.username',

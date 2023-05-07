@@ -1,11 +1,10 @@
 import Rete from 'rete'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
-import { eventSocket, stringSocket, taskSocket, triggerSocket } from '../../sockets'
+import { stringSocket, taskSocket, triggerSocket } from '../../sockets'
 import { SpellManager } from '../../spellManager'
 import {
   AgentTask,
-  Event,
   MagickNode,
   MagickWorkerInputs,
   ModuleContext,
@@ -39,9 +38,7 @@ export const outputNameFromSocketKey = createNameFromSocket('outputs')
 export const socketKeyFromInputName = createSocketFromName('inputs')
 export const socketKeyFromOutputName = createSocketFromName('outputs')
 
-export class Skill extends MagickComponent<
-  Promise<ModuleWorkerOutput>
-> {
+export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
   declare updateModuleSockets: UpdateModuleSockets
   subscriptionMap: Record<number, () => void> = {}
   noBuildUpdate: boolean
@@ -68,7 +65,6 @@ export class Skill extends MagickComponent<
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const spellName = new Rete.Input('spellName', 'Spell Name', stringSocket)
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
-    const eventInput = new Rete.Input('event', 'Event', eventSocket)
     const taskInput = new Rete.Input('task', 'Task', taskSocket)
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const output = new Rete.Output('output', 'Output', stringSocket)
@@ -77,7 +73,6 @@ export class Skill extends MagickComponent<
       .addOutput(triggerOut)
       .addInput(contentInput)
       .addInput(spellName)
-      .addInput(eventInput)
       .addInput(taskInput)
       .addOutput(output)
 
@@ -101,12 +96,11 @@ export class Skill extends MagickComponent<
     _context: ModuleContext
   ) {
     const spellName = inputs['spellName'] && (inputs['spellName'][0] as string)
-    const event = inputs['event'] && (inputs['event'][0] as Event)
     const task = inputs['task'] && (inputs['task'][0] as AgentTask)
     const content = inputs['content'] && (inputs['content'][0] as string)
 
-    if(content){
-      event.content = content
+    if (task) {
+      task.eventData.content = content || task.eventData.content
     }
 
     const { module, spellManager } = _context
@@ -133,33 +127,27 @@ export class Skill extends MagickComponent<
 
     const spellId = firstSpell.id || firstSpell._id
 
+    console.log('spellId', spellId)
+    console.log('******* RAN SKILL *******')
+
     const { projectId } = _context
     if (module.agent) {
       const spellManager = module.agent.spellManager as SpellManager
-      if (spellManager) {
-        const spellRunner = await spellManager.getSpellRunner(spellId)
-        if (spellRunner) {
-          const runComponentArgs = {
-            inputs: {
-              'Input - Default': task,
-            },
-            runSubspell: false,
-            agent: agent,
-            secrets: agent?.secrets ?? secrets,
-            app: module.app,
-            publicVariables: {},
-          }
-          const outputs = await spellRunner.runComponent(runComponentArgs)
-          
-          return {
-            output: outputs
-          }
-          
-        } else {
-          throw new Error('spell runner not found')
-        }
-      } else {
-        console.warn('spell manager not found')
+      const spellRunner = await spellManager.loadById(spellId)
+      const runComponentArgs = {
+        inputs: {
+          'Input - Default': task,
+        },
+        runSubspell: false,
+        agent: agent,
+        secrets: agent?.secrets ?? secrets,
+        app: module.app,
+        publicVariables: {},
+      }
+      const outputs = await spellRunner?.runComponent(runComponentArgs)
+
+      return {
+        output: outputs,
       }
     } else {
       const runComponentArgs = {
@@ -174,10 +162,7 @@ export class Skill extends MagickComponent<
         app: module.app,
       }
 
-      console.log('running with ', runComponentArgs)
       const outputs = await spellManager.run(runComponentArgs as any)
-      console.log('spell outputs')
-      console.log(outputs)
 
       // get the first value from outputs
       const output = Object.values(outputs)[0]

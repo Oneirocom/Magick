@@ -7,6 +7,7 @@ import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
 import { anySocket, eventSocket, triggerSocket } from '../../sockets'
 import {
+  Event,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
@@ -117,31 +118,37 @@ export class Output extends MagickComponent<void> {
     }
     const { module, data } = context
 
-    const outputType = node.data.outputType || 'Default˜'
-    const output = (inputs.input.filter(Boolean)[0] ?? '') as string
-    const event =
-      inputs.event?.[0] || (data && (Object.values(data)[0] as unknown[]))
+    const event = // event data is inside a task
+      ((inputs.event?.[0] as any)?.eventData ||
+        // event data is coming from the event socket
+        inputs.event?.[0] ||
+        // get the input data from context
+        (Object.values(data)[0] as any)?.eventData ||
+        Object.values(data)[0]) as Event
+
+    const output =
+      ((inputs.input.filter(Boolean)[0] ?? '') as string) ?? event.connector
+    const outputType =
+      node.data.outputType || inputName.replace('Input - ', '') || 'Default'
 
     if (module.agent) {
       if (outputType && (outputType as string).includes('Default')) {
-        const type = pluginManager.getInputTypes().find(type => {
-          return type.name === inputName.replace('Input - ', '')
-        })
-
-        const responseOutputType = type?.defaultResponseOutput
-        const out = module.agent.outputTypes.find(
-          t => t.name === responseOutputType
-        )
-
-        out.handler({
-          output,
-          agent: module.agent,
-          event,
-        })
+        // If default handler, don't call the output type handler
+        // const type = pluginManager.getInputTypes().find(type => {
+        //   return type.name === event.connector?.replace('Input - ', '')
+        // })
+        // const responseOutputType = type?.defaultResponseOutput
+        // const out = module.agent.outputTypes.find(
+        //   t => t.name === responseOutputType
+        // )
+        // out.handler({
+        //   output,
+        //   agent: module.agent,
+        //   event,
+        // })
       } else {
         // Find the outputType in the outputTypes array
         const t = module.agent.outputTypes.find(t => t.name === outputType)
-
         // Find outputType in outputTypes where name is outputType
         if (!t) {
           console.error('output type is not defined', t)

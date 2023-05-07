@@ -21,7 +21,6 @@ export class AgentService<
   ServiceParams extends Params = AgentParams
 > extends KnexService<Agent, AgentData, ServiceParams, AgentPatch> {
   log(data) {
-    console.log('DATA', data)
     return data ? data : { message: 'No data' }
   }
 }
