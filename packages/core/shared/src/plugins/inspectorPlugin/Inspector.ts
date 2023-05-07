@@ -204,21 +204,6 @@ export class Inspector {
     })
   }
 
-  cacheControls(dataControls: DataControlData) {
-    const cache = Object.entries(dataControls).reduce(
-      (acc, [key, { expanded = true }]) => {
-        acc[key] = {
-          expanded,
-        }
-
-        return acc
-      },
-      {} as PubSubData
-    )
-
-    this.node.data.dataControls = cache
-  }
-
   handleDefaultTrigger(update: {
     dataControls?: DataControlData
     data: PubSubData
@@ -240,7 +225,6 @@ export class Inspector {
   handleData(update: HandleDataArgs) {
     // store all data controls inside the nodes data
     // WATCH in case our graphs start getting quite large.
-    if (update.dataControls) this.cacheControls(update.dataControls)
 
     const { data } = update
 

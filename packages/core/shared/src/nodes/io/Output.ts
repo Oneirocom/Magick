@@ -77,7 +77,7 @@ export class Output extends MagickComponent<void> {
       name: 'Output Type',
       dataKey: 'outputType',
       values: values.map(v => v.name),
-      defaultValue: values[0].name,
+      defaultValue: values[0].name || 'Default',
     })
 
     outputType.onData = data => {
@@ -117,7 +117,7 @@ export class Output extends MagickComponent<void> {
     }
     const { module, data } = context
 
-    const outputType = inputName.replace('Input - ', '')
+    const outputType = node.data.outputType || inputName.replace('Input - ', '') || 'Default'
     const output = (inputs.input.filter(Boolean)[0] ?? '') as string
     const event =
       inputs.event?.[0] || (data && (Object.values(data)[0] as unknown[]))
