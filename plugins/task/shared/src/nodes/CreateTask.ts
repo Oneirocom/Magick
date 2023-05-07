@@ -13,7 +13,7 @@ import {
   MagickWorkerOutputs,
   ModuleContext,
   WorkerData,
-  Event
+  Event,
 } from '@magickml/core'
 import Rete from 'rete'
 

@@ -1,28 +1,35 @@
-// DOCUMENTED 
+// DOCUMENTED
 import {
   AgentTask,
-  MagickComponent, 
+  MagickComponent,
   MagickNode,
   MagickWorkerInputs,
   WorkerData,
   taskSocket,
-  triggerSocket
-} from '@magickml/core';
-import Rete from 'rete';
+  triggerSocket,
+} from '@magickml/core'
+import Rete from 'rete'
 
-const info = 'Complete a task.';
+const info = 'Complete a task.'
 
 /**
  * A Rete component representing an task deletion node in the visual programming editor.
  */
-export class CompleteTask extends MagickComponent<Promise<{ task: AgentTask }>> {
+export class CompleteTask extends MagickComponent<
+  Promise<{ task: AgentTask }>
+> {
   constructor() {
-    super('Complete Task', {
-      outputs: {
-        task: 'output',
-        trigger: 'option',
+    super(
+      'Complete Task',
+      {
+        outputs: {
+          task: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'Task', info);
+      'Task',
+      info
+    )
   }
 
   /**
@@ -31,11 +38,16 @@ export class CompleteTask extends MagickComponent<Promise<{ task: AgentTask }>> 
    * @returns The assembled node with inputs and outputs.
    */
   builder(node: MagickNode) {
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
-    const task = new Rete.Input('task', 'Task', taskSocket);
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const taskOutput = new Rete.Output('task', 'Task', taskSocket)
+    const task = new Rete.Input('task', 'Task', taskSocket)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addInput(task);
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addInput(task)
+      .addOutput(taskOutput)
   }
 
   /**
@@ -44,21 +56,26 @@ export class CompleteTask extends MagickComponent<Promise<{ task: AgentTask }>> 
    * @param node - Node data from the visual programming editor.
    * @param inputs - Node input values from connected inputs in the editor.
    */
-  async worker(node: WorkerData, inputs: MagickWorkerInputs, outputs: any, context: any) {
+  async worker(
+    node: WorkerData,
+    inputs: MagickWorkerInputs,
+    outputs: any,
+    context: any
+  ) {
     try {
       const task = inputs.task[0] as { id: number }
-
-      const { app } = context.module;
+      console.log('****** COMPLETING TASK ******', task)
+      const { app } = context.module
 
       // update the task status to cancelled
       const updatedTask = await app.service('tasks').patch(task.id, {
         status: 'completed',
-      });
+      })
       return {
         task: updatedTask,
       }
     } catch (e) {
-      throw new Error(`Error completing task: ${e}`);
+      throw new Error(`Error completing task: ${e}`)
     }
   }
 }

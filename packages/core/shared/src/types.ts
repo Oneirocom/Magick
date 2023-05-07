@@ -99,8 +99,10 @@ export type Event = {
   client?: string
   channel?: string
   channelType?: string
+  connector?: string
   projectId?: string
   agentId?: number | string
+  embedding?: number[]
   date?: string
   rawData?: string
 }
@@ -130,6 +132,7 @@ export type GetEventArgs = {
   // entities?: any[]
   channel?: string
   channelType?: string
+  connector?: string
   rawData?: string
   projectId?: string
   maxCount?: number
@@ -612,6 +615,8 @@ export type ModuleContext = {
     publicVariables?: Record<string, string>
     agent?: Agent
     app?: Application
+    inputs: Record<string, unknown>
+    outputs: Record<string, unknown>
   }
   projectId: string
   currentSpell: Spell

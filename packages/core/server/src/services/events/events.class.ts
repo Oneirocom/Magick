@@ -54,7 +54,7 @@ export class EventService<
    */
   // @ts-ignore
   async find(params?: ServiceParams) {
-    const cli = app.get('vectordb')
+    const cli = app.get('dbClient')
     if (params.query.embedding) {
       const blob = atob(params.query.embedding)
       const ary_buf = new ArrayBuffer(blob.length)
@@ -74,12 +74,24 @@ export class EventService<
           ...(param.projectId && { projectId: param.projectId }),
           ...(param.content && { content: param.content }),
         })
+        .select(
+          cli.raw(
+            `1 - (embedding <=> ${"'[" + f32_ary.toString() + "]'"}) AS similarity`
+          )
+        )
+        .select(
+          cli.raw(
+            `embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`
+          )
+        )
         .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
+
+      console.log("querys", querys)
       return { events: querys }
     }
 
     const query = cli.from('events').select()
-
+    
     query.orderBy('date', 'desc')
 
     if (params.query.content) {
@@ -97,11 +109,8 @@ export class EventService<
     if ('$limit' in params.query) {
       query.limit(params.query['$limit'])
     }
-
     const res = await query
     return { events: res?.reverse() as unknown as { data: Array<any> } }
-
-    return { events: res as unknown as { data: Array<any> } }
   }
 }
 

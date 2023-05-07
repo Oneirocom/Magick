@@ -34,6 +34,7 @@ import { WaitForAll } from './flow/WaitForAll'
 import { InputComponent } from './io/Input'
 import { Output } from './io/Output'
 import { Request } from './io/Request'
+import { Respond } from './io/Respond'
 import { Skill } from './io/Skill'
 import { SpellComponent } from './io/Spell'
 import { RunSpell } from './magick/runSpell'
@@ -56,8 +57,8 @@ import { TextVariable } from './text/TextVariable'
 import { Cast } from './utility/Cast'
 import { CurrentTime } from './utility/CurrentTime'
 import { Echo } from './utility/Echo'
-import { Log } from './utility/Log'
 import { ErrorNode } from './utility/Error'
+import { Log } from './utility/Log'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -117,6 +118,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   skill: () => new Skill(),
   runSpell: () => new RunSpell(),
   error: () => new ErrorNode(),
+  respond: () => new Respond(),
 }
 
 /**

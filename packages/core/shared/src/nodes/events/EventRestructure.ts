@@ -80,6 +80,7 @@ export class EventRestructureComponent extends MagickComponent<
     const rawData = new Rete.Input('rawData', 'rawData', stringSocket)
     const projectId = new Rete.Input('projectId', 'projectId', stringSocket)
     const channel = new Rete.Input('channel', 'channel', stringSocket)
+    const connector = new Rete.Input('connector', 'connector', stringSocket)
     const entities = new Rete.Input('entities', 'entities', arraySocket)
     const agentId = new Rete.Input('agentId', 'agentId', stringSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
@@ -88,6 +89,7 @@ export class EventRestructureComponent extends MagickComponent<
 
     // Add inputs and outputs to the node.
     return node
+      .addInput(connector)
       .addInput(dataInput)
       .addInput(content)
       .addInput(agentId)

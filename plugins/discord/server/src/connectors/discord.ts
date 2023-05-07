@@ -31,7 +31,6 @@ export class DiscordConnector {
   spellRunner: any = null
   discord_wake_words: string[] = []
   discord_userid = ''
-  discord_bot_name = 'Bot'
   use_voice = false
   voice_provider!: string
   voice_character!: string
@@ -46,7 +45,6 @@ export class DiscordConnector {
       discord_api_key,
       discord_wake_words,
       discord_userid,
-      discord_bot_name,
       spellRunner,
       use_voice,
       voice_provider,
@@ -74,7 +72,6 @@ export class DiscordConnector {
       }
     }
     this.discord_userid = discord_userid
-    this.discord_bot_name = discord_bot_name
 
     const token = discord_api_key
     if (!token) {
@@ -102,7 +99,7 @@ export class DiscordConnector {
           console.log('debug', message)
         })
 
-        this.client.name_regex = new RegExp(discord_bot_name, 'ig')
+        this.client.name_regex = new RegExp(agent.name, 'ig')
 
         this.client.username_regex = new RegExp(this.discord_userid, 'ig') //'((?:digital|being)(?: |$))'
         this.client.edit_messages_max_count = 5
@@ -114,7 +111,6 @@ export class DiscordConnector {
         if (this.use_voice) {
           const {
             client,
-            discord_bot_name,
             agent,
             spellRunner,
             voice_provider,
@@ -129,7 +125,6 @@ export class DiscordConnector {
               recognizeSpeech = _recognizeSpeech
               this.client = initSpeechClient({
                 client,
-                discord_bot_name,
                 agent,
                 spellRunner,
                 voiceProvider: voice_provider,
@@ -527,7 +522,7 @@ export class DiscordConnector {
     //checks if the user is in discussion with the but, or includes !ping or started the conversation, if so it adds (if not exists) !ping in the start to handle the message the ping command
     const isDirectMention =
       !content.startsWith('!') &&
-      content.toLowerCase().includes(this.discord_bot_name?.toLowerCase())
+      content.toLowerCase().includes(this.agent.name?.toLowerCase())
     const isUserNameMention =
       (channel.type === ChannelType.GuildText || isDM) &&
       content &&
@@ -590,12 +585,7 @@ export class DiscordConnector {
         const d = content.split(' ')
         const index = d.indexOf('join') + 1
         console.log('d:', d)
-        console.log(
-          'joining channel:',
-          d[index],
-          'bot name:',
-          this.discord_bot_name
-        )
+        console.log('joining channel:', d[index], 'bot name:', this.agent.name)
         if (d.length > index) {
           const channelName = d[index]
           await message.guild.channels.cache.forEach(
@@ -670,17 +660,14 @@ export class DiscordConnector {
       content = content.replace('!ping ', '')
     }
 
-    console.log(
-      this.discord_bot_name,
-      ' - sending message on discord - ',
-      content
-    )
+    console.log(this.agent.name, ' - sending message on discord - ', content)
     await this.spellRunner.runComponent({
       inputs: {
         'Input - Discord (Text)': {
+          connector: 'Discord (Text)',
           content: content,
           sender: message.author.username,
-          observer: this.discord_bot_name || 'Eliza',
+          observer: this.agent.name,
           client: 'discord',
           channel: message.channel.id,
           agentId: this.agent.id,
@@ -958,7 +945,7 @@ export class DiscordConnector {
                             .includes('digital being')
                         )
                           if (msg.deleted === true) {
-                            // _author = this.discord_bot_name
+                            // _author = this.agent.name
 
                             // await deleteMessageFromHistory(channel.id, msg.id)
                             log('deleted message: ' + msg.content)
