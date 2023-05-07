@@ -128,33 +128,26 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
     const spellId = firstSpell.id || firstSpell._id
 
     console.log('spellId', spellId)
+    console.log('******* RAN SKILL *******')
 
     const { projectId } = _context
     if (module.agent) {
       const spellManager = module.agent.spellManager as SpellManager
-      if (spellManager) {
-        const spellRunner = await spellManager.loadById(spellId)
-        if (spellRunner) {
-          const runComponentArgs = {
-            inputs: {
-              'Input - Default': task,
-            },
-            runSubspell: false,
-            agent: agent,
-            secrets: agent?.secrets ?? secrets,
-            app: module.app,
-            publicVariables: {},
-          }
-          const outputs = await spellRunner.runComponent(runComponentArgs)
+      const spellRunner = await spellManager.loadById(spellId)
+      const runComponentArgs = {
+        inputs: {
+          'Input - Default': task,
+        },
+        runSubspell: false,
+        agent: agent,
+        secrets: agent?.secrets ?? secrets,
+        app: module.app,
+        publicVariables: {},
+      }
+      const outputs = await spellRunner?.runComponent(runComponentArgs)
 
-          return {
-            output: outputs,
-          }
-        } else {
-          throw new Error('spell runner not found')
-        }
-      } else {
-        console.warn('spell manager not found')
+      return {
+        output: outputs,
       }
     } else {
       const runComponentArgs = {
@@ -169,10 +162,7 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
         app: module.app,
       }
 
-      console.log('running with ', runComponentArgs)
       const outputs = await spellManager.run(runComponentArgs as any)
-      console.log('spell outputs')
-      console.log(outputs)
 
       // get the first value from outputs
       const output = Object.values(outputs)[0]
