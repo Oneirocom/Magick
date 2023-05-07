@@ -14,54 +14,54 @@ declare module './declarations' {
 }
 
 //Postgres function for getting the most similar events after applying prefilter.
-const pf_events = `
-CREATE OR REPLACE FUNCTION match_events(
-  query_embedding vector(1536), 
-  match_count int DEFAULT 10, 
-  content_to_match text DEFAULT NULL, 
-  event_type text DEFAULT NULL, 
-  event_sender text DEFAULT NULL, 
-  event_client text DEFAULT NULL,
-  event_projectId text DEFAULT NULL
-)
-RETURNS TABLE (
-  id text, 
-  content text, 
-  matched_values json, 
-  similarity numeric
-)
-AS $$
-DECLARE
-  query_vector float8[];
-BEGIN
-  -- Find the most similar events to the query vector
-  RETURN QUERY
-      SELECT 
-          e.id::text, 
-          e.content, 
-          json_build_object(
-              'projectId', e."projectId",
-              'type', e.type, 
-              'sender', e.sender, 
-              'client', e.client
-          ) AS matched_values, 
-          (1 - (e.embedding <=> query_embedding))::numeric as similarity
-      FROM 
-          public.events e
-      WHERE 
-          e.embedding IS NOT NULL
-          AND (event_projectId IS NULL OR e."projectId" = event_projectId)
-          AND (event_type IS NULL OR e.type = event_type)
-          AND (event_sender IS NULL OR e.sender = event_sender)
-          AND (event_client IS NULL OR e.client = event_client)
-          AND (content_to_match IS NULL OR to_tsvector('english', e.content) @@ plainto_tsquery('english', content_to_match))
-      ORDER BY 
-          e.embedding <=> query_embedding
-      LIMIT 
-          match_count;
-END;
-$$ LANGUAGE plpgsql;
-`
+// const pf_events = `
+// CREATE OR REPLACE FUNCTION match_events(
+//   query_embedding vector(1536),
+//   match_count int DEFAULT 10,
+//   content_to_match text DEFAULT NULL,
+//   event_type text DEFAULT NULL,
+//   event_sender text DEFAULT NULL,
+//   event_client text DEFAULT NULL,
+//   event_projectId text DEFAULT NULL
+// )
+// RETURNS TABLE (
+//   id text,
+//   content text,
+//   matched_values json,
+//   similarity numeric
+// )
+// AS $$
+// DECLARE
+//   query_vector float8[];
+// BEGIN
+//   -- Find the most similar events to the query vector
+//   RETURN QUERY
+//       SELECT
+//           e.id::text,
+//           e.content,
+//           json_build_object(
+//               'projectId', e."projectId",
+//               'type', e.type,
+//               'sender', e.sender,
+//               'client', e.client
+//           ) AS matched_values,
+//           (1 - (e.embedding <=> query_embedding))::numeric as similarity
+//       FROM
+//           public.events e
+//       WHERE
+//           e.embedding IS NOT NULL
+//           AND (event_projectId IS NULL OR e."projectId" = event_projectId)
+//           AND (event_type IS NULL OR e.type = event_type)
+//           AND (event_sender IS NULL OR e.sender = event_sender)
+//           AND (event_client IS NULL OR e.client = event_client)
+//           AND (content_to_match IS NULL OR to_tsvector('english', e.content) @@ plainto_tsquery('english', content_to_match))
+//       ORDER BY
+//           e.embedding <=> query_embedding
+//       LIMIT
+//           match_count;
+// END;
+// $$ LANGUAGE plpgsql;
+// `
 /**
  * Get database configuration based on environment variables
  *
