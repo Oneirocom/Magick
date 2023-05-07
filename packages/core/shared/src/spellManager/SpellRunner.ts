@@ -296,11 +296,7 @@ class SpellRunner {
     //
 
     try {
-      console.log('inputs', inputs)
-      console.log('triggeredNode', triggeredNode)
       await component.run(triggeredNode as unknown as MagickNode, inputs)
-      console.log('ran component')
-      console.log('outputData', this.outputData)
       return this.outputData
     } catch (err) {
       console.error('ERROR RUNNING SPELL', err)
