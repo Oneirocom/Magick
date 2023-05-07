@@ -46,6 +46,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
           content: 'output',
           channel: 'output',
           channelType: 'output',
+          connector: 'output',
           client: 'output',
           entities: 'output',
           observer: 'output',
@@ -75,6 +76,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
     const observer = new Rete.Output('observer', 'observer', stringSocket)
     const client = new Rete.Output('client', 'client', stringSocket)
     const channel = new Rete.Output('channel', 'channel', stringSocket)
+    const connector = new Rete.Output('connector', 'connector', stringSocket)
     const channelType = new Rete.Output(
       'channelType',
       'channelType',
@@ -98,6 +100,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       .addOutput(client)
       .addOutput(channel)
       .addOutput(channelType)
+      .addOutput(connector)
       .addOutput(entities)
       .addOutput(projectId)
       .addOutput(observer)

@@ -664,6 +664,7 @@ export class DiscordConnector {
     await this.spellRunner.runComponent({
       inputs: {
         'Input - Discord (Text)': {
+          connector: 'Discord (Text)',
           content: content,
           sender: message.author.username,
           observer: this.agent.name,

@@ -192,6 +192,7 @@ export default function ChatBox() {
     promptMessages.push(`${speaker}: ${value}`)
 
     const toSend = {
+      connector: 'Input - Default',
       content: value,
       sender: 'user',
       observer: 'assistant',
@@ -224,9 +225,8 @@ export default function ChatBox() {
     const unsubscribe = subscribe($PLAYTEST_PRINT('avatar'), printToConsole)
 
     // Return a cleanup function.
-    return unsubscribe as () => void;
-  }, [subscribe, printToConsole, $PLAYTEST_PRINT]);
-
+    return unsubscribe as () => void
+  }, [subscribe, printToConsole, $PLAYTEST_PRINT])
 
   let hasSet = false
   useEffect(() => {

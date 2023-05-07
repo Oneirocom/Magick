@@ -227,20 +227,6 @@ const Playtest = ({ tab }) => {
       return
     }
 
-    toSend = {
-      content: value,
-      sender: 'user',
-      observer: 'assistant',
-      agentId: 'preview',
-      client: 'playtest',
-      channel: 'previewChannel',
-      projectId: config.projectId,
-      channelType: 'previewChannelType',
-      rawData: value,
-      entities: ['user', 'assistant'],
-      ...JSON.parse(json),
-    }
-
     // Get spell from the editor.
     const graph = serialize()
     if (!graph) {
@@ -261,6 +247,21 @@ const Playtest = ({ tab }) => {
     }
 
     const playtestInputName = playtestNode?.data.name
+
+    toSend = {
+      connector: playtestInputName,
+      content: value,
+      sender: 'user',
+      observer: 'assistant',
+      agentId: 'preview',
+      client: 'playtest',
+      channel: 'previewChannel',
+      projectId: config.projectId,
+      channelType: 'previewChannelType',
+      rawData: value,
+      entities: ['user', 'assistant'],
+      ...JSON.parse(json),
+    }
 
     if (!playtestInputName) {
       enqueueSnackbar('No input node found for this input type', {

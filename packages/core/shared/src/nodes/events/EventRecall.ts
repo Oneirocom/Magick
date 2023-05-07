@@ -119,8 +119,15 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       embedding = (embedding as string)?.split(',')
     }
 
-    const { observer, client, channel, channelType, projectId, entities } =
-      event
+    const {
+      observer,
+      client,
+      channel,
+      connector,
+      channelType,
+      projectId,
+      entities,
+    } = event
 
     const typeData = (node.data as { type: string })?.type
     const type =
@@ -137,6 +144,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       client,
       entities,
       channel,
+      connector,
       channelType,
       projectId,
       $limit: limit,
