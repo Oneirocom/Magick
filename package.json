@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "Apache 2.0",
   "scripts": {
-    "dev": "NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent,@magickml/docs --parallel --maxParallel=100",
+    "dev": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent,@magickml/docs --parallel --maxParallel=100",
     "start": "node scripts/start-server.js",
     "start-server": "node dist/apps/server/main.js",
     "start-agent": "node dist/apps/agent/main.js",
@@ -269,6 +269,7 @@
     "@nrwl/linter": "15.9.2",
     "@nrwl/node": "15.9.2",
     "@nrwl/nx-cloud": "15.3.5",
+    "@nrwl/nx-win32-x64-msvc": "^15.9.3",
     "@nrwl/react": "15.9.2",
     "@nrwl/vite": "15.9.2",
     "@nrwl/web": "15.9.2",
