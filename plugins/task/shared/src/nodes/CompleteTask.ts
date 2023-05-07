@@ -40,9 +40,14 @@ export class CompleteTask extends MagickComponent<
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const taskOutput = new Rete.Output('task', 'Task', taskSocket)
     const task = new Rete.Input('task', 'Task', taskSocket)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addInput(task)
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addInput(task)
+      .addOutput(taskOutput)
   }
 
   /**
