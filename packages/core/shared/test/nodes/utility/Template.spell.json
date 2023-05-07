@@ -1,299 +1,280 @@
 {
-    "id": "bf734943-f491-466e-b1be-e25cc877a281",
-    "name": "Template",
-    "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-    "hash": "f39599e56830440b78cdbd2b8b1eb96a",
-    "createdAt": "1679456293377",
-    "updatedAt": "1679456620671",
-    "graph": {
-        "id": "demo@0.1.0",
-        "nodes": {
-            "232": {
-                "id": 232,
-                "data": {
-                    "name": "Input - Default",
-                    "text": {
-                        "id": "2eb64348-adee-4118-bcca-19697ca3a16a",
-                        "inputs": {
-                            "Input - Default": {
-                                "type": "playtest",
-                                "client": "playtest",
-                                "sender": "playtestSender",
-                                "agentId": "preview",
-                                "channel": "playtest",
-                                "content": "testing",
-                                "entities": [
-                                    "playtestSender",
-                                    "Agent"
-                                ],
-                                "observer": "Agent",
-                                "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-                                "channelType": "playtest",
-                                "rawData": "testing"
-                            }
-                        },
-                        "secrets": {},
-                        "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-                        "spellName": "Starter",
-                        "publicVariables": "{}"
-                    },
-                    "isInput": true,
-                    "outputs": [],
-                    "success": false,
-                    "socketKey": "9d61118c-3c5a-4379-9dae-41965e56207f",
-                    "useDefault": false,
-                    "dataControls": {
-                        "inputType": {
-                            "expanded": true
-                        },
-                        "useDefault": {
-                            "expanded": true
-                        },
-                        "defaultValue": {
-                            "expanded": true
-                        }
-                    },
-                    "defaultValue": "Hello world",
-                    "playtestToggle": {
-                        "outputs": [],
-                        "receivePlaytest": false
-                    },
-                    "inputType": "Default"
-                },
-                "inputs": {},
-                "outputs": {
-                    "trigger": {
-                        "connections": [
-                            {
-                                "node": 507,
-                                "input": "trigger",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "output": {
-                        "connections": [
-                            {
-                                "node": 507,
-                                "input": "object",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    }
-                },
-                "position": [
-                    -619.70703125,
-                    -3.83203125
-                ],
-                "name": "Input"
+  "id": "bf734943-f491-466e-b1be-e25cc877a281",
+  "name": "Template",
+  "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+  "hash": "f39599e56830440b78cdbd2b8b1eb96a",
+  "createdAt": "1679456293377",
+  "updatedAt": "1679456620671",
+  "graph": {
+    "id": "demo@0.1.0",
+    "nodes": {
+      "232": {
+        "id": 232,
+        "data": {
+          "name": "Input - Default",
+          "text": {
+            "id": "2eb64348-adee-4118-bcca-19697ca3a16a",
+            "inputs": {
+              "Input - Default": {
+                "type": "playtest",
+                "client": "playtest",
+                "sender": "playtestSender",
+                "agentId": "preview",
+                "channel": "playtest",
+                "content": "testing",
+                "entities": ["playtestSender", "Agent"],
+                "observer": "Agent",
+                "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+                "channelType": "playtest",
+                "rawData": "testing"
+              }
             },
-            "233": {
-                "id": 233,
-                "data": {
-                    "name": "Output",
-                    "success": false,
-                    "socketKey": "0f17a35e-1380-428b-bc87-4a38d207fefc",
-                    "dataControls": {
-                        "name": {
-                            "expanded": true
-                        }
-                    },
-                    "isOutput": true
-                },
-                "inputs": {
-                    "trigger": {
-                        "connections": [
-                            {
-                                "node": 506,
-                                "output": "trigger",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "input": {
-                        "connections": [
-                            {
-                                "node": 506,
-                                "output": "prompt",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "event": {
-                        "connections": []
-                    }
-                },
-                "outputs": {
-                    "trigger": {
-                        "connections": []
-                    },
-                    "output": {
-                        "connections": []
-                    }
-                },
-                "position": [
-                    286.26171875,
-                    -5.94140625
-                ],
-                "name": "Output"
+            "secrets": {},
+            "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+            "spellName": "Starter",
+            "publicVariables": "{}"
+          },
+          "isInput": true,
+          "outputs": [],
+          "success": false,
+          "socketKey": "9d61118c-3c5a-4379-9dae-41965e56207f",
+          "useDefault": false,
+          "dataControls": {
+            "inputType": {
+              "expanded": true
             },
-            "506": {
-                "id": 506,
-                "data": {
-                    "dataControls": {
-                        "inputs": {
-                            "expanded": true
-                        },
-                        "fewshot": {
-                            "expanded": true
-                        }
-                    },
-                    "fewshot": "{{content}}",
-                    "inputs": [
-                        {
-                            "name": "content",
-                            "taskType": "output",
-                            "socketKey": "content",
-                            "connectionType": "input",
-                            "socketType": "anySocket"
-                        }
-                    ]
-                },
-                "inputs": {
-                    "trigger": {
-                        "connections": [
-                            {
-                                "node": 507,
-                                "output": "trigger",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "content": {
-                        "connections": [
-                            {
-                                "node": 507,
-                                "output": "content",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    }
-                },
-                "outputs": {
-                    "trigger": {
-                        "connections": [
-                            {
-                                "node": 233,
-                                "input": "trigger",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "prompt": {
-                        "connections": [
-                            {
-                                "node": 233,
-                                "input": "input",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    }
-                },
-                "position": [
-                    -37.63671875,
-                    -5.7265625
-                ],
-                "name": "Text Template"
+            "useDefault": {
+              "expanded": true
             },
-            "507": {
-                "id": 507,
-                "data": {
-                    "dataControls": {
-                        "outputs": {
-                            "expanded": true
-                        }
-                    },
-                    "outputs": [
-                        {
-                            "name": "content",
-                            "taskType": "output",
-                            "socketKey": "content",
-                            "connectionType": "output",
-                            "socketType": "anySocket"
-                        }
-                    ]
-                },
-                "inputs": {
-                    "trigger": {
-                        "connections": [
-                            {
-                                "node": 232,
-                                "output": "trigger",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "object": {
-                        "connections": [
-                            {
-                                "node": 232,
-                                "output": "output",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    }
-                },
-                "outputs": {
-                    "trigger": {
-                        "connections": [
-                            {
-                                "node": 506,
-                                "input": "trigger",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "content": {
-                        "connections": [
-                            {
-                                "node": 506,
-                                "input": "content",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    }
-                },
-                "position": [
-                    -330.90234375,
-                    -6.67578125
-                ],
-                "name": "Destructure"
+            "defaultValue": {
+              "expanded": true
             }
+          },
+          "defaultValue": "Hello world",
+          "playtestToggle": {
+            "outputs": [],
+            "receivePlaytest": false
+          },
+          "inputType": "Default"
         },
-        "comments": []
-    }
+        "inputs": {},
+        "outputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 507,
+                "input": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "output": {
+            "connections": [
+              {
+                "node": 507,
+                "input": "object",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "position": [-619.70703125, -3.83203125],
+        "name": "Input"
+      },
+      "233": {
+        "id": 233,
+        "data": {
+          "name": "Output - Default",
+          "success": false,
+          "socketKey": "0f17a35e-1380-428b-bc87-4a38d207fefc",
+          "isOutput": true,
+          "outputType": "Default"
+        },
+        "inputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 506,
+                "output": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "input": {
+            "connections": [
+              {
+                "node": 506,
+                "output": "prompt",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "event": {
+            "connections": []
+          }
+        },
+        "outputs": {
+          "trigger": {
+            "connections": []
+          },
+          "output": {
+            "connections": []
+          }
+        },
+        "position": [286.26171875, -5.94140625],
+        "name": "Output"
+      },
+      "506": {
+        "id": 506,
+        "data": {
+          "dataControls": {
+            "inputs": {
+              "expanded": true
+            },
+            "fewshot": {
+              "expanded": true
+            }
+          },
+          "fewshot": "{{content}}",
+          "inputs": [
+            {
+              "name": "content",
+              "taskType": "output",
+              "socketKey": "content",
+              "connectionType": "input",
+              "socketType": "anySocket"
+            }
+          ]
+        },
+        "inputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 507,
+                "output": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "content": {
+            "connections": [
+              {
+                "node": 507,
+                "output": "content",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "outputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 233,
+                "input": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "prompt": {
+            "connections": [
+              {
+                "node": 233,
+                "input": "input",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "position": [-37.63671875, -5.7265625],
+        "name": "Text Template"
+      },
+      "507": {
+        "id": 507,
+        "data": {
+          "dataControls": {
+            "outputs": {
+              "expanded": true
+            }
+          },
+          "outputs": [
+            {
+              "name": "content",
+              "taskType": "output",
+              "socketKey": "content",
+              "connectionType": "output",
+              "socketType": "anySocket"
+            }
+          ]
+        },
+        "inputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 232,
+                "output": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "object": {
+            "connections": [
+              {
+                "node": 232,
+                "output": "output",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "outputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 506,
+                "input": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "content": {
+            "connections": [
+              {
+                "node": 506,
+                "input": "content",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "position": [-330.90234375, -6.67578125],
+        "name": "Destructure"
+      }
+    },
+    "comments": []
+  }
 }

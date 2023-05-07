@@ -99,7 +99,7 @@ Developing locally, it can be very helpful to have google chrome accept all self
 
 ## Core Concepts
 ### Spells
-A spell is a pipeline that describes data moivng from one place to another, running through different processes we call "nodes", via wires we call "connections". In Magick, the collection of data, nodes, variables, and presets for each graph is known as a "spell". Spell is not a machine learning term. We just like it. Spells can be imported and exported at any time. Spells in their raw form are JSON, a standard format that is easy to share.
+A spell is a pipeline that describes data moving from one place to another, running through different processes we call "nodes", via wires we call "connections". In Magick, the collection of data, nodes, variables, and presets for each graph is known as a "spell". Spell is not a machine learning term. We just like it. Spells can be imported and exported at any time. Spells in their raw form are JSON, a standard format that is easy to share.
 ### Nodes
 At the core, Magick is a system for taking in data, doing stuff to it, and then sending the final data out. This "stuff" is called a "transformation", the data transforms from one thing into the next. The "stuff" that is happening to the data is a black box that takes something in, anything, and returns something out. We call the black box where the transformstion takes place a "node". Nodes are the building blocks of Magick.
 ### Creating Nodes
