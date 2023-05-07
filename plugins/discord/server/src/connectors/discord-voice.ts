@@ -84,6 +84,7 @@ export function initSpeechClient(options: {
       const fullResponse = await spellRunner.runComponent({
         inputs: {
           'Input - Discord (Voice)': {
+            connector: 'Discord (Voice)',
             content,
             sender: author?.username ?? 'VoiceSpeaker',
             observer: agent.name,

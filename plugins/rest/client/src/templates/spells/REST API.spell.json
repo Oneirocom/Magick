@@ -14,23 +14,7 @@
                     "name": "Input - REST API (GET)",
                     "text": {
                         "id": "368b5a50-310c-4060-8771-9d2b3e1fc3aa",
-                        "inputs": {
-                            "Input - REST API (GET)": {
-                                "type": "playtest",
-                                "client": "playtest",
-                                "sender": "moon",
-                                "agentId": "preview",
-                                "channel": "playtest",
-                                "content": "testing",
-                                "entities": [
-                                    "playtestSender",
-                                    "DAN"
-                                ],
-                                "observer": "DAN",
-                                "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-                                "channelType": "playtest"
-                            }
-                        },
+                        "inputs": {},
                         "secrets": {},
                         "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
                         "spellName": "Rest API Example",
@@ -96,23 +80,7 @@
                     "name": "Input - REST API (POST)",
                     "text": {
                         "id": "368b5a50-310c-4060-8771-9d2b3e1fc3aa",
-                        "inputs": {
-                            "Input - REST API (GET)": {
-                                "type": "playtest",
-                                "client": "playtest",
-                                "sender": "moon",
-                                "agentId": "preview",
-                                "channel": "playtest",
-                                "content": "testing",
-                                "entities": [
-                                    "playtestSender",
-                                    "DAN"
-                                ],
-                                "observer": "DAN",
-                                "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-                                "channelType": "playtest"
-                            }
-                        },
+                        "inputs": {},
                         "secrets": {},
                         "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
                         "spellName": "Rest API Example",
@@ -178,23 +146,7 @@
                     "name": "Input - REST API (PUT)",
                     "text": {
                         "id": "368b5a50-310c-4060-8771-9d2b3e1fc3aa",
-                        "inputs": {
-                            "Input - REST API (GET)": {
-                                "type": "playtest",
-                                "client": "playtest",
-                                "sender": "moon",
-                                "agentId": "preview",
-                                "channel": "playtest",
-                                "content": "testing",
-                                "entities": [
-                                    "playtestSender",
-                                    "DAN"
-                                ],
-                                "observer": "DAN",
-                                "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-                                "channelType": "playtest"
-                            }
-                        },
+                        "inputs": {},
                         "secrets": {},
                         "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
                         "spellName": "Rest API Example",
@@ -260,23 +212,7 @@
                     "name": "Input - REST API (DELETE)",
                     "text": {
                         "id": "368b5a50-310c-4060-8771-9d2b3e1fc3aa",
-                        "inputs": {
-                            "Input - REST API (GET)": {
-                                "type": "playtest",
-                                "client": "playtest",
-                                "sender": "moon",
-                                "agentId": "preview",
-                                "channel": "playtest",
-                                "content": "testing",
-                                "entities": [
-                                    "playtestSender",
-                                    "DAN"
-                                ],
-                                "observer": "DAN",
-                                "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-                                "channelType": "playtest"
-                            }
-                        },
+                        "inputs": {},
                         "secrets": {},
                         "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
                         "spellName": "Rest API Example",

@@ -1,1 +1,102 @@
-{"id":"18b2a361-976d-4bbe-96d3-1b16f7e339bc","name":"Blank","projectId":"bb1b3d24-84e0-424e-b4f1-57603f307a89","hash":"92b878d95596c95c23f85aadaf2b2972","createdAt":"1679555834490","updatedAt":"1679555877912","graph":{"id":"demo@0.1.0","nodes":{"232":{"id":232,"data":{"name":"Input - Default","text":{"id":"2eb64348-adee-4118-bcca-19697ca3a16a","inputs":{"Input - Default":{"type":"playtest","client":"playtest","sender":"playtestSender","agentId":"preview","channel":"playtest","content":"testing","entities":["playtestSender","Agent"],"observer":"Agent","projectId":"bb1b3d24-84e0-424e-b4f1-57603f307a89","channelType":"playtest"}},"secrets":{},"projectId":"bb1b3d24-84e0-424e-b4f1-57603f307a89","spellName":"Starter","publicVariables":"[]"},"isInput":true,"outputs":[],"success":false,"socketKey":"9d61118c-3c5a-4379-9dae-41965e56207f","useDefault":false,"dataControls":{"inputType":{"expanded":true},"useDefault":{"expanded":true},"defaultValue":{"expanded":true}},"defaultValue":"Hello world","playtestToggle":{"outputs":[],"receivePlaytest":false},"inputType":"Default"},"inputs":{},"outputs":{"trigger":{"connections":[]},"output":{"connections":[]}},"position":[null,null],"name":"Input"},"233":{"id":233,"data":{"name":"Output","success":false,"socketKey":"0f17a35e-1380-428b-bc87-4a38d207fefc","dataControls":{"name":{"expanded":true}},"isOutput":true},"inputs":{"trigger":{"connections":[]},"input":{"connections":[]},"event":{"connections":[]}},"outputs":{"trigger":{"connections":[]},"output":{"connections":[]}},"position":[362.62010216732943,-4.0314502120781155],"name":"Output"}},"comments":[]}}
+{
+    "id": "18b2a361-976d-4bbe-96d3-1b16f7e339bc",
+    "name": "Blank",
+    "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+    "hash": "92b878d95596c95c23f85aadaf2b2972",
+    "createdAt": "1679555834490",
+    "updatedAt": "1679555877912",
+    "graph": {
+        "id": "demo@0.1.0",
+        "nodes": {
+            "232": {
+                "id": 232,
+                "data": {
+                    "name": "Input - Default",
+                    "text": {
+                        "id": "2eb64348-adee-4118-bcca-19697ca3a16a",
+                        "inputs": {},
+                        "secrets": {},
+                        "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+                        "spellName": "Starter",
+                        "publicVariables": "[]"
+                    },
+                    "isInput": true,
+                    "outputs": [],
+                    "success": false,
+                    "socketKey": "9d61118c-3c5a-4379-9dae-41965e56207f",
+                    "useDefault": false,
+                    "dataControls": {
+                        "inputType": {
+                            "expanded": true
+                        },
+                        "useDefault": {
+                            "expanded": true
+                        },
+                        "defaultValue": {
+                            "expanded": true
+                        }
+                    },
+                    "defaultValue": "Hello world",
+                    "playtestToggle": {
+                        "outputs": [],
+                        "receivePlaytest": false
+                    },
+                    "inputType": "Default"
+                },
+                "inputs": {},
+                "outputs": {
+                    "trigger": {
+                        "connections": []
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    null,
+                    null
+                ],
+                "name": "Input"
+            },
+            "233": {
+                "id": 233,
+                "data": {
+                    "name": "Output",
+                    "success": false,
+                    "socketKey": "0f17a35e-1380-428b-bc87-4a38d207fefc",
+                    "dataControls": {
+                        "name": {
+                            "expanded": true
+                        }
+                    },
+                    "isOutput": true
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": []
+                    },
+                    "input": {
+                        "connections": []
+                    },
+                    "event": {
+                        "connections": []
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": []
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    362.62010216732943,
+                    -4.0314502120781155
+                ],
+                "name": "Output"
+            }
+        },
+        "comments": []
+    }
+}
