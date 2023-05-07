@@ -72,6 +72,13 @@ export class DocumentService<
         })
         .select(
           db.raw(
+            `1 - (embedding <=> '${JSON.stringify(
+              params.query.embedding
+            )}') AS similarity`
+          )
+        )
+        .select(
+          db.raw(
             `embedding <-> '${JSON.stringify(
               params.query.embedding
             )}' AS distance`

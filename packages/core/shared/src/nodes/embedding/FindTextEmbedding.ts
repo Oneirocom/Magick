@@ -85,10 +85,12 @@ export class FindTextEmbedding extends MagickComponent<
     }
 
     const params = {
-      content: content,
-      $limit: 1,
-      getEmbedding: true,
-      projectId: projectId,
+      query: {
+        content: content,
+        $limit: 1,
+        getEmbedding: true,
+        projectId: projectId,
+      }
     }
     const events = await app.service('events').find(params)
 
