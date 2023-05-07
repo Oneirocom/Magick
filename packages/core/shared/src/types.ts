@@ -102,6 +102,7 @@ export type Event = {
   connector?: string
   projectId?: string
   agentId?: number | string
+  embedding?: number[]
   date?: string
   rawData?: string
 }
