@@ -1,6 +1,6 @@
 // DOCUMENTED
-import '@feathersjs/transport-commons';
-import { Application } from '../declarations';
+import '@feathersjs/transport-commons'
+import { Application } from '../declarations'
 
 /**
  * Configure channels for real-time functionality.
@@ -19,7 +19,7 @@ export default function (app: Application): void {
   app.on('connection', (connection: any): void => {
     // Add the new connection to the anonymous channel
     // we assume authenticated user here because they handshook to start
-    app.channel('authenticated').join(connection)
+    app.channel('anonymous').join(connection)
   })
 
   /**
@@ -38,6 +38,8 @@ export default function (app: Application): void {
 
     // Add the connection to the authenticated user channel
     app.channel('authenticated').join(connection)
+
+    app.channel(authResult.projectId).join(connection)
 
     // Additional custom channels can be set up and joined here
   })
