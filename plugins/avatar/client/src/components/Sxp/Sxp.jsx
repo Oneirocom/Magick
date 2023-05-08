@@ -1,34 +1,58 @@
-import React from 'react'
-import styles from '../../App.module.css'
+import { useEffect, useState } from 'react'
 import { useZustand } from '../../store/useZustand'
+import { useSpellList } from '../../hooks/useSpellList'
+import { useOMIPersonality } from '../../hooks/useOMIPersonality'
+import styles from '../../App.module.css'
 
 export const Sxp = () => {
 
-    const {
-        avatarVrm,
-      } = useZustand()
+  const [name, setName] = useState('Eliza')
+  const [spellName, setSpellName] = useState('')
+  const [properties, setProperties] = useState(null)
 
-    return(
-        <div className={styles.sxpContainer}>
-            <div className={styles.sxpContainerTitle}>
-                Personality:
-            </div>
+  const { avatarVrm } = useZustand()
+  const spellList = useSpellList()
+  const newVRM = useOMIPersonality(avatarVrm)
 
-            <div className={styles.sxpItems}>
-                <span className={styles.sxpItemTitle}>Name: </span>{avatarVrm ? 'Eliza' : ''}
-            </div>
-            <div className={styles.sxpItems}>
-                <span className={styles.sxpItemTitle}>Agent: </span>{avatarVrm ? "b00583bc-23c3-4a10-b284-9cb525f1dc37" : ''}
-            </div>
-            <div className={styles.sxpItems}>
-                <span className={styles.sxpItemTitle}>SpellName: </span>{avatarVrm ? 'Project' : ''}
-            </div>
-            <div className={styles.sxpItems}>
-                <span className={styles.sxpItemTitle}>EndPoint: </span>{avatarVrm ? 'MagickML V1' : ''}
-            </div>
-            <div className={styles.sxpItems}>
-                <span className={styles.sxpItemTitle}>DefaultMessage: </span>{avatarVrm ? 'Hello' : ''}
-            </div>
-        </div>
-    )
+  const traverseNodes = (object, callback) => {
+    if (!object) return;
+    object.traverse((child) => {
+      if (child.isMesh) {
+        callback(child);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (newVRM) {
+      try {
+        const gltf = newVRM;
+        traverseNodes(gltf.scene, (node) => {
+          if (gltf.scene.userData) {
+            setProperties(gltf.scene.userData.properties)
+          }
+        });
+      } catch (error) {
+        console.error('Error loading the model:', error);
+      }
+    }
+  }, [newVRM])
+
+  useEffect(() => {
+    if (spellName) return
+    if (spellList.length > 0) {
+      setSpellName(spellList[0].name)
+    }
+  }, [spellList])
+
+  return (
+    <div className={styles.sxpContainer}>
+      <div className={styles.sxpItems}>
+        <span className={styles.sxpItemTitle}>Agent: </span>{properties ? properties.agent.description : ''}
+      </div>
+      <div className={styles.sxpItems}>
+        <span className={styles.sxpItemTitle}>Personality: </span>{properties ? properties.personality.description : ''}
+      </div>
+    </div>
+  )
 }
