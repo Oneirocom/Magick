@@ -16,10 +16,7 @@ import socketio from '@feathersjs/socketio'
 import sync from 'feathers-sync'
 import {
   configureManager,
-  DEFAULT_PROJECT_ID,
-  DEFAULT_USER_ID,
   globalsManager,
-  // IGNORE_AUTH,
   REDISCLOUD_URL,
 } from '@magickml/core'
 
@@ -27,7 +24,6 @@ import { dbClient } from './dbClient'
 import type { Application } from './declarations'
 import { logError } from './hooks'
 import channels from './sockets/channels'
-// import swagger from 'feathers-swagger'
 import { authentication } from './auth/authentication'
 import { services } from './services'
 import handleSockets from './sockets/sockets'
@@ -138,21 +134,12 @@ app.hooks({
     all: [
       logError,
       async (context: HookContext, next) => {
-        // if (IGNORE_AUTH) return await next()
         if (context.path !== 'authentication') {
           return authenticate('jwt')(context, next)
         }
       },
       async (context: HookContext, next) => {
         const { params } = context
-
-        // if (IGNORE_AUTH) {
-        //   context.params.user = {
-        //     id: DEFAULT_USER_ID,
-        //   }
-        //   context.params.projectId = DEFAULT_PROJECT_ID
-        //   return next()
-        // }
 
         const { authentication, authenticated } = params
 

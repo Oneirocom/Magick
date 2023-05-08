@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { DEFAULT_USER_ID, SpellManager } from '@magickml/core'
+import { SpellManager } from '@magickml/core'
 
 /**
  * Handle socket connections for the application.
@@ -13,7 +13,6 @@ const handleSockets = (app: any) => {
      */
     io.on('connection', async function (socket: any) {
       // user will be set to the payload if we are not in single user mode
-      let user
 
       // Use a custom header for the handshake.
       const auth = socket.handshake?.headers?.authorization
@@ -32,7 +31,7 @@ const handleSockets = (app: any) => {
         .service('authentication')
         .verifyAccessToken(sessionId)
 
-      user = payload.user
+      const user = payload.user
 
       // Attach the user info to the params for use in services
       socket.feathers.user = user
