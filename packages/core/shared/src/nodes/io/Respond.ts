@@ -107,11 +107,13 @@ export class Respond extends MagickComponent<void> {
         t => t.name === responseOutputType
       )
 
-      out.handler({
-        output,
-        agent: module.agent,
-        event,
-      })
+      if (out && out.handler) {
+        out.handler({
+          output,
+          agent: module.agent,
+          event,
+        })
+      }
     }
 
     return {
