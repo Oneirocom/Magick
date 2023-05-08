@@ -2,7 +2,7 @@
 import {
   ChatMessage,
   CompletionHandlerInputData,
-  saveRequest
+  saveRequest,
 } from '@magickml/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
