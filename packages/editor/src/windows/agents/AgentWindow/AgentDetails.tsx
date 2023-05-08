@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { IconBtn, Switch } from '@magickml/client-core'
+import { IconBtn, CustomizedSwitch } from '@magickml/client-core'
 import { IGNORE_AUTH, pluginManager } from '@magickml/core'
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
@@ -45,6 +45,7 @@ const AgentDetails = ({
   const config = useConfig()
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
+  const [updateNeeded, setUpdateNeeded] = useState<boolean>(false)
   const [enable, setEnable] = useState(onLoadEnables)
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
@@ -85,6 +86,7 @@ const AgentDetails = ({
 
         // update data instead of refetching data to avoid agent window flashes
         updateData(data)
+        setUpdateNeeded(false)
       })
       .catch(e => {
         console.error('ERROR', e)
@@ -213,7 +215,7 @@ const AgentDetails = ({
             style={{
               margin: '1em',
               color: 'white',
-              backgroundColor: 'purple',
+              backgroundColor: updateNeeded ? 'purple' : '#424242',
             }}
           >
             Update
@@ -237,11 +239,11 @@ const AgentDetails = ({
           }
         >
           <span>
-            <Switch
-              label={null}
+            <CustomizedSwitch
+              label={selectedAgentData.enabled ? 'On' : 'Off'}
               checked={selectedAgentData.enabled ? true : false}
               onChange={() => {
-                setSelectedAgentData({
+                update(selectedAgentData.id, {
                   ...selectedAgentData,
                   enabled: selectedAgentData.enabled ? false : true,
                 })
@@ -249,7 +251,9 @@ const AgentDetails = ({
               disabled={
                 !selectedAgentData.rootSpell || !selectedAgentData.rootSpell.id
               }
-              style={{ alignSelf: 'self-start' }}
+              style={{
+                alignSelf: 'self-start',
+              }}
             />
           </span>
         </Tooltip>
@@ -312,6 +316,7 @@ const AgentDetails = ({
                   }, {})
               ),
             })
+            setUpdateNeeded(true)
           }}
         >
           <option disabled value={'default'}>
@@ -340,9 +345,10 @@ const AgentDetails = ({
                 id={value.key}
                 style={{ width: '100%' }}
                 value={
-                  selectedAgentData.secrets
+                  Object.keys(JSON.parse(selectedAgentData.secrets)).length !==
+                  0
                     ? JSON.parse(selectedAgentData.secrets)[value.key]
-                    : 'null'
+                    : ''
                 }
                 onChange={event => {
                   setSelectedAgentData({
@@ -352,6 +358,7 @@ const AgentDetails = ({
                       [value.key]: event.target.value,
                     }),
                   })
+                  setUpdateNeeded(true)
                 }}
               />
             </div>
@@ -360,6 +367,7 @@ const AgentDetails = ({
       </div>
       {selectedAgentData.publicVariables !== '{}' && (
         <AgentPubVariables
+          setUpdateNeeded={setUpdateNeeded}
           setPublicVars={data => {
             setSelectedAgentData({
               ...selectedAgentData,
