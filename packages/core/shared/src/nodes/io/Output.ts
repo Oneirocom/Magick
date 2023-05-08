@@ -72,7 +72,6 @@ export class Output extends MagickComponent<void> {
     const values = [...defaultOutputTypes, ...pluginManager.getOutputTypes()]
     node.data.isOutput = true
     node.data.name = node.data.name ?? `Output - ${values[0].name}`
-    node.data.sendToPlaytest = true
 
     const outputType = new DropdownControl({
       name: 'Output Type',
@@ -112,6 +111,9 @@ export class Output extends MagickComponent<void> {
   ): Promise<{ output: string }> {
     const inputName = Object.keys(context.data)[0]
 
+    console.log('******** INPUT NAME ********')
+    console.log(inputName)
+
     if (!inputs.input) {
       console.error('No input provided to output component')
       return { output: '' }
@@ -129,7 +131,8 @@ export class Output extends MagickComponent<void> {
     const output =
       ((inputs.input.filter(Boolean)[0] ?? '') as string) ?? event.connector
     const outputType =
-      node.data.outputType || inputName.replace('Input - ', '') || 'Default'
+      inputName?.replace('Input - ', '') || node.data.outputType || 'Default'
+    console.log('outputType', outputType)
 
     if (module.agent) {
       if (outputType && (outputType as string).includes('Default')) {
