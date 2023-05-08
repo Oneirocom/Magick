@@ -111,9 +111,6 @@ export class Output extends MagickComponent<void> {
   ): Promise<{ output: string }> {
     const inputName = Object.keys(context.data)[0]
 
-    console.log('******** INPUT NAME ********')
-    console.log(inputName)
-
     if (!inputs.input) {
       console.error('No input provided to output component')
       return { output: '' }
@@ -132,7 +129,6 @@ export class Output extends MagickComponent<void> {
       ((inputs.input.filter(Boolean)[0] ?? '') as string) ?? event.connector
     const outputType =
       inputName?.replace('Input - ', '') || node.data.outputType || 'Default'
-    console.log('outputType', outputType)
 
     if (module.agent) {
       if (outputType && (outputType as string).includes('Default')) {
