@@ -68,7 +68,7 @@ export class CloudJwtService extends AuthenticationService {
     // Decrypt and verify the token
     try {
       const { payload } = await jwtDecrypt(token, encryptionSecret, {
-        // clockTolerance: 15,
+        clockTolerance: 15,
       })
       return payload as any
     } catch (error: any) {
