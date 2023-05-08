@@ -31,6 +31,10 @@ export const DATABASE_URL = getVarForEnvironment('DATABASE_URL')
 export const DEFAULT_PROJECT_ID =
   getVarForEnvironment('PROJECT_ID') || 'bb1b3d24-84e0-424e-b4f1-57603f307a89'
 export const DEFAULT_USER_ID = getVarForEnvironment('USER_ID') || '1234567890'
+export const DEFAULT_USER_TOKEN =
+  getVarForEnvironment('DUMMY_TOKEN') ||
+  'eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..rJhmRC7mavFfGntn.kziPBkhPayhfeHdDeFqragytCy8y34VP6QYjupQ5oxwCkierT9us9sBbWUoymezz-KqV8hnp1Fgh_EolLrnP2hprHd2gpFAHlXUfSjToZ4RdtsUdykZ_CG42ThinlWHwM_RdCBs6_GSjd45yM-87UVlouNpijhVN81UfgJr_02OM5AXMbAaVosBQXb-6-U6aPWbfDmMkSW04jJB3z082qXsVIgDLlAcuckMGl7NNXGXYQ4YPuzT5D7H5-z9nZKES7tAnqOvji-AZJkcE8weEe4a9I9dOSR1x0sGPBWNdK5ChcKj46kXiNbGezg7PCAVBjbYneJdJkDeSGSq_gQo-M5Fazo9SoB1l5oo4MlIlGws7Lqv0Zj-re64JarI0HtLv5CBeIww.jYckIGFA16JQMAPRHn2SNQ'
+export const PRODUCTION = getVarForEnvironment('PRODUCTION') === 'true'
 export const SERVER_PORT = getVarForEnvironment('PORT') || '3030'
 export const SERVER_HOST = getVarForEnvironment('HOST') || 'localhost'
 export const SPEECH_SERVER_URL =

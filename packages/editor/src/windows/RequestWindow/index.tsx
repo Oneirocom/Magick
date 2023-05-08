@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 
 import RequestTable from './RequestTable'
 
-import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
+import { API_ROOT_URL, DEFAULT_USER_TOKEN, PRODUCTION } from '@magickml/core'
 import { useConfig } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
 
@@ -48,7 +48,9 @@ const RequestWindow = () => {
       const response = await fetch(
         `${API_ROOT_URL}/request?hidden=false&projectId=${config.projectId}`,
         {
-          headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+          headers: PRODUCTION
+            ? { Authorization: `Bearer ${token}` }
+            : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` },
         }
       )
       const data = await response.json()
