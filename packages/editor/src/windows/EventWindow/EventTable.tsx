@@ -1,8 +1,7 @@
-// DOCUMENTED 
+// DOCUMENTED
 // Import statements kept as-is
 import { Button } from '@magickml/client-core'
-import { API_ROOT_URL } from '@magickml/core'
-import { IGNORE_AUTH } from '@magickml/core'
+import { API_ROOT_URL, DEFAULT_USER_TOKEN, PRODUCTION } from '@magickml/core'
 import {
   Grid,
   IconButton,
@@ -62,7 +61,9 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
  * @param {{ column: { filterValue: any, setFilter: Function, Header: string } }} param0
  * @returns JSX.Element
  */
-const DefaultColumnFilter = ({ column: { filterValue, setFilter, Header } }) => {
+const DefaultColumnFilter = ({
+  column: { filterValue, setFilter, Header },
+}) => {
   return (
     <input
       type="text"
@@ -159,7 +160,9 @@ function EventTable({ events, updateCallback }) {
       projectId: config.projectId,
     }
     if (!_.isEqual(reqBody, rowData)) {
-      const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
+      const headers = PRODUCTION
+        ? { Authorization: `Bearer ${token}` }
+        : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
 
       const isUpdated = await fetch(`${API_ROOT_URL}/events/${id}`, {
         method: 'PUT',
