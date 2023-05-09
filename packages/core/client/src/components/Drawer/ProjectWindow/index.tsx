@@ -1,7 +1,7 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
+import { API_ROOT_URL, DEFAULT_USER_TOKEN, PRODUCTION } from '@magickml/core'
 import TreeItem from '@mui/lab/TreeItem'
 import TreeView from '@mui/lab/TreeView'
 import {
@@ -48,7 +48,9 @@ const ProjectWindow = ({ openDrawer }) => {
   const [data, setData] = useState({ agents: [], spells: [], documents: [] })
   const [loaded, setLoaded] = useState(false)
   const token = globalConfig?.token
-  const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
+  const headers = PRODUCTION
+    ? { Authorization: `Bearer ${token}` }
+    : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
@@ -63,7 +65,7 @@ const ProjectWindow = ({ openDrawer }) => {
    * @param {File} selectedFile - Selected file object
    */
   const loadFile = selectedFile => {
-    if (!token && !IGNORE_AUTH) {
+    if (!token && PRODUCTION) {
       enqueueSnackbar('You must be logged in to create a project', {
         variant: 'error',
       })
