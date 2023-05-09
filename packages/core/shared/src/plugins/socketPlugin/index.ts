@@ -66,6 +66,8 @@ function install(
           } catch (err: any) {
             // this emits the error to be handled by the client plugin
             socket?.emit(event, {
+              output: null,
+              input: inputs,
               error: {
                 message: err.message,
                 stack: err.stack,
