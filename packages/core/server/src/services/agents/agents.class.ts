@@ -20,7 +20,15 @@ export type AgentParams = KnexAdapterParams<AgentQuery>
 export class AgentService<
   ServiceParams extends Params = AgentParams
 > extends KnexService<Agent, AgentData, ServiceParams, AgentPatch> {
-  log(data) {
+  app: Application
+
+  constructor(options: KnexAdapterOptions, app: Application) {
+    super(options)
+    this.app = app
+  }
+
+  async log(data, context) {
+    this.app.service('agents').emit('log', data)
     return data ? data : { message: 'No data' }
   }
 }
