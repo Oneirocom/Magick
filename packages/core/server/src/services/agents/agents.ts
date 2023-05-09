@@ -47,32 +47,32 @@ const validateRootSpell = async (context: HookContext) => {
  */
 export const agent = (app: Application) => {
   // Register the agent service on the Feathers application
-  app.use('agents', new AgentService(getOptions(app)), {
+  app.use('agents', new AgentService(getOptions(app), app), {
     methods: ['find', 'get', 'create', 'patch', 'remove', 'log'],
-    events: [],
+    events: ['log'],
   })
 
-  app.service('agents').publish((data: any, context) => {
-    const projectIds = new Set<string>()
-    // Loop through each object in the data array and add its projectId to the set
-    if (Array.isArray(data)) {
-      for (const item of data) {
-        if (item && item.projectId) {
-          projectIds.add(item.projectId)
-        }
-      }
-    } else if (data && data?.projectId) {
-      // If data is a single object with a projectId property, add the projectId to the set
-      projectIds.add(data?.projectId)
-    }
+  // app.service('agents').publish((data: any, context) => {
+  //   const projectIds = new Set<string>()
+  //   // Loop through each object in the data array and add its projectId to the set
+  //   if (Array.isArray(data)) {
+  //     for (const item of data) {
+  //       if (item && item.projectId) {
+  //         projectIds.add(item.projectId)
+  //       }
+  //     }
+  //   } else if (data && data?.projectId) {
+  //     // If data is a single object with a projectId property, add the projectId to the set
+  //     projectIds.add(data?.projectId)
+  //   }
 
-    // Return the channels for each projectId in the set
-    const channels = Array.from(projectIds).map(projectId =>
-      app.channel(projectId)
-    )
+  //   // Return the channels for each projectId in the set
+  //   const channels = Array.from(projectIds).map(projectId =>
+  //     app.channel(projectId)
+  //   )
 
-    return channels.length > 0 ? channels : null
-  })
+  //   return channels.length > 0 ? channels : null
+  // })
 
   // Initialize hooks for the agent service
   app.service('agents').hooks({
