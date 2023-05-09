@@ -76,7 +76,7 @@ if (window === window.parent) {
         // TODO: store configuration in localstorage
         const { config } = payload
         const Root = () => {
-          if (POSTHOG_ENABLED === 'true') {
+          if (POSTHOG_ENABLED) {
             return (
               <PostHogProvider
                 apiKey={POSTHOG_API_KEY}
