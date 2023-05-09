@@ -131,6 +131,7 @@ export class Agent implements AgentInterface {
 
     this.app.service('agents').log({
       agentId: this.id,
+      projectId: this.projectId,
       type: 'log',
       message,
       data,
@@ -141,6 +142,7 @@ export class Agent implements AgentInterface {
     this.logger.warn(`${message} ${JSON.stringify(data)}`)
     this.app.service('agents').log({
       agentId: this.id,
+      projectId: this.projectId,
       type: 'warn',
       message,
       data,
@@ -151,6 +153,7 @@ export class Agent implements AgentInterface {
     this.logger.error(`${message} %o`, { error: data })
     this.app.service('agents').log({
       agentId: this.id,
+      projectId: this.projectId,
       type: 'error',
       message,
       data: { error: data },
