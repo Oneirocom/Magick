@@ -6,8 +6,6 @@ import { useDropzone } from "react-dropzone"
 import { useVrm } from './hooks/useVrm'
 import { useCallback, useEffect, useState } from 'react'
 import { useZustand } from './store/useZustand'
-import { Sxp } from "./components/Sxp/Sxp"
-import { XrTest } from './components/Scene/XrTest'
 
 const App = () => {
 

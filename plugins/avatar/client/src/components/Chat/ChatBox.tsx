@@ -63,7 +63,7 @@ const SpeechRecognition =
   (window as any).webkitSpeechRecognition || sepiaSpeechRecognitionInit(config)
 
 export default function ChatBox() {
-  const [micEnabled, setMicEnabled] = useState(true)
+  const [micEnabled, setMicEnabled] = useState(false)
   const [speechRecognition, setSpeechRecognition] = useState(false)
   const { avatarVrm } = useZustand()
   const lipSync = useLipSync(avatarVrm)
@@ -176,15 +176,6 @@ export default function ChatBox() {
 
   const { $PLAYTEST_PRINT, $RUN_SPELL } = events
 
-      const data = {
-        spellName: currentSpell,
-        projectId: config.projectId,
-        inputs: {
-          'Input - Default': toSend,
-        },
-        secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
-      };
-      const { $PLAYTEST_PRINT, $RUN_SPELL } = events;
   const handleUserChatInput = async value => {
     if (!value || waitingForResponse) return
     // clear chat input
@@ -229,7 +220,6 @@ export default function ChatBox() {
     // Return a cleanup function.
     return unsubscribe as () => void
   }, [subscribe, printToConsole, $PLAYTEST_PRINT])
-
 
   let hasSet = false
   useEffect(() => {
@@ -304,10 +294,9 @@ export default function ChatBox() {
               type="icon"
               className={styles.mic}
               size={32}
-              style={{ opacity: !micEnabled ? '0.4' : '1' }}
               onClick={() => (!micEnabled ? startSpeech() : stopSpeech())}
             >
-              { !micEnabled ? <MicOff /> : <Mic /> }
+              {!micEnabled ? <Mic /> : <MicOff />}
             </button>
             <input
               autoComplete="off"
