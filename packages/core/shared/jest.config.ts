@@ -16,7 +16,7 @@ export default {
         },
       },
     ],
-    '^.+\\.jsx?$': ['babel-jest', { presets: ['@nrwl/react/babel'] }],
+    '^.+\\.jsx?$': ['babel-jest', { presets: ['@nx/react/babel'] }],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   collectCoverage: true,
