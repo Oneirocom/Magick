@@ -21,6 +21,7 @@
       "@magickml/agent": ["apps/agent/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
       "@magickml/client-core": ["packages/core/client/src/index.ts"],
+      "@magickml/cloud-agent": ["packages/cloud/agent/src/index.ts"],
       "@magickml/core": ["packages/core/shared/src/index.ts"],
       "@magickml/docs": ["apps/docs/src/index.ts"],
       "@magickml/editor": ["packages/editor/src/index.ts"],
@@ -41,6 +42,15 @@
       ],
       "@magickml/plugin-discord-shared": [
         "plugins/discord/shared/src/index.ts"
+      ],
+      "@magickml/plugin-elevenlabs-client": [
+        "plugins/elevenlabs/client/src/index.ts"
+      ],
+      "@magickml/plugin-elevenlabs-server": [
+        "plugins/elevenlabs/server/src/index.ts"
+      ],
+      "@magickml/plugin-elevenlabs-shared": [
+        "plugins/elevenlabs/shared/src/index.ts"
       ],
       "@magickml/plugin-esoterica-client": [
         "plugins/esoterica/client/src/index.ts"
@@ -88,15 +98,9 @@
       ],
       "@magickml/plugin-loop-client": ["plugins/loop/client/src/index.ts"],
       "@magickml/plugin-loop-server": ["plugins/loop/server/src/index.ts"],
-      "@magickml/plugin-task-client": ["plugins/task/client/src/index.ts"],
-      "@magickml/plugin-task-server": ["plugins/task/server/src/index.ts"],
-      "@magickml/plugin-task-shared": ["plugins/task/shared/src/index.ts"],
       "@magickml/plugin-openai-client": ["plugins/openai/client/src/index.ts"],
       "@magickml/plugin-openai-server": ["plugins/openai/server/src/index.ts"],
       "@magickml/plugin-openai-shared": ["plugins/openai/shared/src/index.ts"],
-      "@magickml/plugin-elevenlabs-client": ["plugins/elevenlabs/client/src/index.ts"],
-      "@magickml/plugin-elevenlabs-server": ["plugins/elevenlabs/server/src/index.ts"],
-      "@magickml/plugin-elevenlabs-shared": ["plugins/elevenlabs/shared/src/index.ts"],
       "@magickml/plugin-pinecone-client": [
         "plugins/pinecone/client/src/index.ts"
       ],
@@ -112,6 +116,9 @@
       "@magickml/plugin-search-client": ["plugins/search/client/src/index.ts"],
       "@magickml/plugin-search-server": ["plugins/search/server/src/index.ts"],
       "@magickml/plugin-search-shared": ["plugins/search/shared/src/index.ts"],
+      "@magickml/plugin-task-client": ["plugins/task/client/src/index.ts"],
+      "@magickml/plugin-task-server": ["plugins/task/server/src/index.ts"],
+      "@magickml/plugin-task-shared": ["plugins/task/shared/src/index.ts"],
       "@magickml/plugin-twitter-client": [
         "plugins/twitter/client/src/index.ts"
       ],

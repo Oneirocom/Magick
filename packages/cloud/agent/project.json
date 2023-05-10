@@ -1,0 +1,26 @@
+{
+  "name": "@magickml/cloud-agent",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/cloud/agent/src",
+  "projectType": "library",
+  "targets": {
+    // "build": {
+    //   "executor": "@nrwl/js:tsc",
+    //   "outputs": ["{options.outputPath}"],
+    //   "options": {
+    //     "outputPath": "dist/packages/cloud/agent",
+    //     "main": "packages/cloud/agent/src/index.ts",
+    //     "tsConfig": "packages/cloud/agent/tsconfig.lib.json",
+    //     "assets": ["packages/cloud/agent/*.md"]
+    //   }
+    // },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/cloud/agent/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

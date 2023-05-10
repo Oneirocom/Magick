@@ -1,0 +1,6 @@
+{
+  "name": "@magickml/cloud-agent",
+  "main": "src/index.ts",
+  "version": "0.0.1",
+  "type": "commonjs"
+}
