@@ -43,7 +43,6 @@ export class PluginEmbeddings extends Embeddings {
   stripNewLines: any
   modelName: string
   batchSize: number
-  caller: any
   key: any
   secrets: any
   constructor(params) {

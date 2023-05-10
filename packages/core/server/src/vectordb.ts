@@ -23,9 +23,11 @@ export type ExtendedEmbeddings = Embeddings & {
  * @extends {PostgresVectorStore}
  */
 export class PostgresVectorStoreCustom extends SupabaseVectorStore {
-  client: any
-  tableName: string
-  queryName: string
+  // Not sure why we're overwriting these types.
+  // probably should look into to straightening out these types
+  declare client: any
+  declare tableName: string
+  declare queryName: string
 
   constructor(embeddings: ExtendedEmbeddings, args: Record<string, any>) {
     super(embeddings, args as any)
