@@ -13,7 +13,7 @@
       "version": "15.8.0-beta.0",
       "description": "Rename .lib.swcrc to .swcrc for better SWC support throughout the workspace",
       "factory": "./src/migrations/update-15-8-0/rename-swcrc-config",
-      "package": "@nrwl/js",
+      "package": "@nx/js",
       "name": "rename-swcrc-config"
     },
     {
@@ -21,7 +21,7 @@
       "cli": "nx",
       "description": "Update jest configs to support jest 29 changes (https://jestjs.io/docs/upgrading-to-jest29)",
       "factory": "./src/migrations/update-15-8-0/update-configs-jest-29",
-      "package": "@nrwl/jest",
+      "package": "@nx/jest",
       "name": "update-configs-jest-29"
     },
     {
@@ -29,7 +29,7 @@
       "cli": "nx",
       "description": "Update jest test files to support jest 29 changes (https://jestjs.io/docs/upgrading-to-jest29)",
       "factory": "./src/migrations/update-15-8-0/update-tests-jest-29",
-      "package": "@nrwl/jest",
+      "package": "@nx/jest",
       "name": "update-tests-jest-29"
     }
   ]
