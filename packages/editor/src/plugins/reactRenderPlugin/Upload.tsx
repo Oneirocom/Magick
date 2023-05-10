@@ -1,8 +1,8 @@
-// DOCUMENTED 
+// DOCUMENTED
 
-import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
-import { useState } from "react"
-import { useSelector } from "react-redux"
+import { API_ROOT_URL, DEFAULT_USER_TOKEN, PRODUCTION } from '@magickml/core'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 /**
  * Converts a file object to a base64-encoded data URI
@@ -50,15 +50,20 @@ export const Upload = ({ id_image, output }: UploadProps) => {
     }
 
     // Set preview image
-    setState(prevState => ({ ...prevState, file: URL.createObjectURL(event.target.files[0]) }))
+    setState(prevState => ({
+      ...prevState,
+      file: URL.createObjectURL(event.target.files[0]),
+    }))
 
     // Convert file to data URI and upload to server
     try {
       const dataUri = await fileToDataUri(file)
-      
+
       await fetch(`${API_ROOT_URL}/upload`, {
         method: 'POST',
-        headers: IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` },
+        headers: PRODUCTION
+          ? { Authorization: `Bearer ${token}` }
+          : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` },
         body: JSON.stringify({ id: id_image, uri: dataUri }),
       })
     } catch (error) {
@@ -69,7 +74,11 @@ export const Upload = ({ id_image, output }: UploadProps) => {
   return (
     <div style={{ height: '200px' }}>
       <input type="file" onChange={handleChange} />
-      <img src={state.file} style={{ width: '100%', maxHeight: '100%' }} alt="Preview" />
+      <img
+        src={state.file}
+        style={{ width: '100%', maxHeight: '100%' }}
+        alt="Preview"
+      />
     </div>
   )
 }

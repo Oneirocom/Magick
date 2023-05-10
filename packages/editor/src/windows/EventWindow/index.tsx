@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
+import { API_ROOT_URL, DEFAULT_USER_TOKEN, PRODUCTION } from '@magickml/core'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { LoadingScreen, useConfig } from '@magickml/client-core'
@@ -42,7 +42,9 @@ const EventWindow = (): JSX.Element => {
    */
   const fetchEvents = async (): Promise<void> => {
     try {
-      const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
+      const headers = PRODUCTION
+        ? { Authorization: `Bearer ${token}` }
+        : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
 
       const response = await fetch(
         `${API_ROOT_URL}/events?projectId=${config.projectId}`,
