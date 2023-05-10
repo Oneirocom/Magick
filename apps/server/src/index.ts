@@ -19,7 +19,7 @@ import {
 import { Context } from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
-import 'regenerator-runtime/runtime'
+import 'regenerator-runtime/runtime.js'
 
 // log handle errors
 process.on('uncaughtException', (err: Error) => {

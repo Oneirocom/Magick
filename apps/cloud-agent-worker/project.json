@@ -18,7 +18,10 @@
         "assets": ["apps/cloud-agent-worker/src/assets"],
         "generatePackageJson": true,
         "esbuildOptions": {
+          "bundle": true,
           "sourcemap": true,
+          "mainFields": ["module", "main"],
+          "resolveExtensions": [".ts", ".js"],
           "outExtension": {
             ".js": ".js"
           }
@@ -27,12 +30,12 @@
       "configurations": {
         "development": {},
         "production": {
-          "esbuildOptions": {
-            "sourcemap": false,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
+          // "esbuildOptions": {
+          //   "sourcemap": false,
+          //   "outExtension": {
+          //     ".js": ".js"
+          //   }
+          // }
         }
       }
     },

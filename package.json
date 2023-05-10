@@ -258,6 +258,7 @@
     "@capacitor/core": "^4.6.2",
     "@capacitor/ios": "^4.7.0",
     "@docusaurus/module-type-aliases": "2.4.0",
+    "@esbuild-plugins/node-resolve": "^0.2.2",
     "@feathersjs/cli": "^5.0.0",
     "@feathersjs/rest-client": "^5.0.0",
     "@nrwl/nx-cloud": "16.0.5",
@@ -371,5 +372,8 @@
       "react": "$react",
       "react-dom": "$react-dom"
     }
-  }
+  },
+  "workspaces": [
+    "packages/cloud/agent"
+  ]
 }

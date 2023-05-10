@@ -3,7 +3,7 @@
 hnswlib.index
 database
 # compiled output
-/dist
+dist
 /tmp
 /out-tsc
 

@@ -4,17 +4,22 @@
   "sourceRoot": "packages/cloud/agent/src",
   "projectType": "library",
   "targets": {
-    // "build": {
-    //   "executor": "@nx/esbuild:esbuild",
-    //   "outputs": ["{options.outputPath}"],
-    //   "options": {
-    //     "outputPath": "dist/packages/cloud/agent",
-    //     "main": "packages/cloud/agent/src/index.ts",
-    //     "tsConfig": "packages/cloud/agent/tsconfig.lib.json",
-    //     "assets": ["packages/cloud/agent/*.md"],
-    //     "generatePackageJson": true
-    //   }
-    // },
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/cloud/agent/dist",
+        "main": "packages/cloud/agent/src/index.ts",
+        "tsConfig": "packages/cloud/agent/tsconfig.lib.json",
+        "assets": ["packages/cloud/agent/*.md"],
+        "generatePackageJson": true,
+        "target": "node20",
+        "esBuildOptions": {
+          "mainFields": ["module", "main"],
+          "resolveExtensions": [".ts", ".js"]
+        }
+      }
+    },
     "lint": {
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
