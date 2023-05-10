@@ -1,0 +1,6 @@
+{
+  "main": "src/main.ts",
+  "dependencies": {
+    "@magickml/cloud-agent": "*"
+  }
+}

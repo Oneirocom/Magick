@@ -5,17 +5,18 @@
   "projectType": "library",
   "targets": {
     // "build": {
-    //   "executor": "@nrwl/js:tsc",
+    //   "executor": "@nx/esbuild:esbuild",
     //   "outputs": ["{options.outputPath}"],
     //   "options": {
     //     "outputPath": "dist/packages/cloud/agent",
     //     "main": "packages/cloud/agent/src/index.ts",
     //     "tsConfig": "packages/cloud/agent/tsconfig.lib.json",
-    //     "assets": ["packages/cloud/agent/*.md"]
+    //     "assets": ["packages/cloud/agent/*.md"],
+    //     "generatePackageJson": true
     //   }
     // },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["packages/cloud/agent/**/*.ts"]

@@ -1,4 +1,3 @@
-import {thing} from "@magickml/cloud-agent"
+import { app } from "@magickml/cloud-agent"
 
-console.log(thing)
-console.log('Hello World')
+console.log(app)

@@ -1,1 +1,1 @@
-export * from "./lib/cloud-agent"
+export * from './lib/cloud-agent'
