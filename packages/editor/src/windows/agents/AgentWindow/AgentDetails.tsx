@@ -104,7 +104,6 @@ const AgentDetails = ({
 
     exportAgentData.secrets = {}
 
-    // HACK: iterate through _data and remove any keys that include api, token, or secret
     Object.keys(exportAgentData.data).forEach(key => {
       if (
         key.includes('api') ||

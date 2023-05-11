@@ -1,7 +1,7 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
+import { API_ROOT_URL, Agent, IGNORE_AUTH } from '@magickml/core'
 import TreeItem from '@mui/lab/TreeItem'
 import TreeView from '@mui/lab/TreeView'
 import {
@@ -103,6 +103,22 @@ const ProjectWindow = ({ openDrawer }) => {
    */
   const exportProject = () => {
     const element = document.createElement('a')
+
+    const exportData = data
+    exportData.agents.forEach((agent: Agent) => {
+      agent.secrets = {}
+
+      Object.keys(agent.data).forEach(key => {
+        if (
+          key.includes('api') ||
+          key.includes('token') ||
+          key.includes('secret')
+        ) {
+          delete agent.data[key]
+        }
+      })
+    })
+
     const file = new Blob([JSON.stringify(data, null, 4)], {
       type: 'text/plain',
     })

@@ -125,10 +125,16 @@ export class Output extends MagickComponent<void> {
         (Object.values(data)[0] as any)?.eventData ||
         Object.values(data)[0]) as Event
 
-    const output =
-      ((inputs.input.filter(Boolean)[0] ?? '') as string) ?? event.connector
+    console.log('inputs', inputs)
+
+    const output = inputs.input.filter(Boolean)[0] as string
     const outputType =
-      inputName?.replace('Input - ', '') || node.data.outputType || 'Default'
+      inputName?.replace('Input - ', '') ||
+      node.data.outputType ||
+      event.connector
+
+    console.log('****** OUTPUT ******')
+    console.log(output)
 
     if (module.agent) {
       if (outputType && (outputType as string).includes('Default')) {
