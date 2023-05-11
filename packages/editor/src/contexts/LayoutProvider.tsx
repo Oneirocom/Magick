@@ -9,8 +9,8 @@ import {
   TabSetNode,
 } from 'flexlayout-react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { saveTabLayout } from '../state/tabs'
+import { useDispatch, useSelector } from 'react-redux'
+import { activeTabSelector, saveTabLayout } from '../state/tabs'
 
 // List of window types used to load components from data sent by rete
 const windowTypes: WindowTypes = {
@@ -147,6 +147,7 @@ export const Layout = ({ json, factory, tab }) => {
   const dispatch = useDispatch()
   const { currentModel, createModel, setCurrentRef } = useLayout()
   const layoutRef = useRef(null)
+  const activeTab = useSelector(activeTabSelector)
 
   // Side effect for creating model if there is JSON data
   useEffect(() => {
@@ -176,13 +177,15 @@ export const Layout = ({ json, factory, tab }) => {
 
   // Rendering LayoutComponent
   return (
-    <LayoutComponent
-      onModelChange={onModelChange}
-      ref={layoutRef}
-      model={currentModel}
-      factory={factory}
-      font={{ size: '12px' }}
-    />
+    tab.id === activeTab.id && (
+      <LayoutComponent
+        onModelChange={onModelChange}
+        ref={layoutRef}
+        model={currentModel}
+        factory={factory}
+        font={{ size: '12px' }}
+      />
+    )
   )
 }
 
