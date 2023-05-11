@@ -353,24 +353,6 @@ export type ModuleType = {
   updatedAt: string
 }
 
-export type ModelCompletionOpts = {
-  model?: string
-  prompt?: string
-  maxTokens?: number
-  temperature?: number
-  topP?: number
-  n?: number
-  stream?: boolean
-  logprobs?: number
-  echo?: boolean
-  stop?: string | string[]
-  presencePenalty?: number
-  frequencyPenalty?: number
-  bestOf?: number
-  user?: string
-  logitBias?: { [token: string]: number }
-}
-
 export type Subspell = { name: string; id: string; data: GraphData }
 
 export type GraphData = Data

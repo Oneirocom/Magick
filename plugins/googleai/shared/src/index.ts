@@ -61,6 +61,54 @@ const completionProviders: CompletionProvider[] = [
     ],
     models: ['chat-bison-001'],
   },
+  {
+    type: 'text',
+    subtype: 'text',
+    inputs: [
+      {
+        socket: 'input',
+        name: 'Input',
+        type: stringSocket,
+      },
+    ],
+    outputs: [
+      {
+        socket: 'result',
+        name: 'Result',
+        type: stringSocket,
+      },
+      {
+        socket: 'error',
+        name: 'Error',
+        type: stringSocket,
+      },
+    ],
+    models: ['text-bison-001'],
+  },
+  {
+    type: 'text',
+    subtype: 'embedding',
+    inputs: [
+      {
+        socket: 'input',
+        name: 'Input',
+        type: stringSocket,
+      },
+    ],
+    outputs: [
+      {
+        socket: 'result',
+        name: 'Result',
+        type: stringSocket,
+      },
+      {
+        socket: 'error',
+        name: 'Error',
+        type: stringSocket,
+      },
+    ],
+    models: ['text-bison-001'],
+  },
 ]
 
 export default {

@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A plugin for interacting with GoogleAI's API.
  * @class
@@ -32,6 +32,14 @@ const textCompletionControls = [
     icon: 'moon',
     defaultValue: 1,
   },
+  ,
+  {
+    type: InputControl,
+    dataKey: 'stopSequences',
+    name: 'Stop Sequences (comma separated)',
+    icon: 'moon',
+    defaultValue: '',
+  },
 ]
 
 // Object containing all input controls for different completion types
@@ -46,7 +54,7 @@ const GoogleAIPlugin = new ClientPlugin({
   name: 'GoogleAIPlugin',
   secrets, // API Key and Model ID secrets
   completionProviders: completionProviders.map(provider => {
-    // Adding custom input controls for each completion type 
+    // Adding custom input controls for each completion type
     return {
       ...provider,
       inspectorControls: inspectorControls[provider.subtype],
