@@ -1,8 +1,7 @@
 import React from 'react'
-import { Plane } from '@react-three/drei'
+import { Plane, Html } from '@react-three/drei'
 import { useGesture } from '@use-gesture/react'
 import { AXIS_LEN, WATCH_BONE_NAME, WATCH_INIT_POS } from '../../utils/constants'
-import { customDebug } from '../../utils/custom.debug'
 import { useZustand } from '../../store/useZustand'
 import { AxesHelper } from 'three'
 
@@ -11,7 +10,6 @@ export const Watch = () => {
   const {
     avatarVrm,
   } = useZustand()
-
 
   const bind = useGesture({
     onPointerMove: (state) => {
@@ -26,8 +24,6 @@ export const Watch = () => {
       watchBoneNode.lookAt(point)
     },
   })
-
-
   return (
     <Plane
       position={WATCH_INIT_POS}
