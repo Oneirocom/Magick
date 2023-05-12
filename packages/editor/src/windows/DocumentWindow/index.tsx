@@ -9,10 +9,13 @@
 import { useEffect, useState } from 'react'
 import DatabaseTable from './DocumentTable'
 import { LoadingScreen, useConfig } from '@magickml/client-core'
-import { API_ROOT_URL } from '@magickml/core'
+import { useSelector } from 'react-redux'
+import { API_ROOT_URL, PRODUCTION, DEFAULT_USER_TOKEN } from '@magickml/core'
 
 const DocumentWindow = () => {
   const config = useConfig()
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
 
   // Initialize the documents state to null using the useState hook
   const [documents, setDocuments] = useState(null)
@@ -25,7 +28,12 @@ const DocumentWindow = () => {
   const fetchDocuments = async () => {
     setLoading(true)
     const response = await fetch(
-      `${API_ROOT_URL}/documents?hidden=false&projectId=${config.projectId}`
+      `${API_ROOT_URL}/documents?hidden=false&projectId=${config.projectId}`,
+      {
+        headers: PRODUCTION
+          ? { Authorization: `Bearer ${token}` }
+          : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` },
+      }
     )
     const data = await response.json()
     setLoading(false)
