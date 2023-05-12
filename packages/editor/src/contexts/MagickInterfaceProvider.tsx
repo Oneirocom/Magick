@@ -63,7 +63,7 @@ const MagickInterfaceProvider: React.FC<{
     $NODE_SET,
     ADD_SUBSPELL,
     UPDATE_SUBSPELL,
-    $SUBSPELL_UPDATED,
+    // $SUBSPELL_UPDATED,
     $PROCESS,
     $TRIGGER,
     $REFRESH_EVENT_TABLE,
