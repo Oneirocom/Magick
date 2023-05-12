@@ -1,3 +1,5 @@
+import { EventEmitter } from 'events'
+
 export interface Reporter {
-    on(event: string, callback: (event: any) => Promise<void>): void
+    on(event: string, callback: (state: string) => any): void
 }

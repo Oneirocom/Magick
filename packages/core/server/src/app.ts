@@ -67,6 +67,7 @@ app.use(bodyParser())
 
 // sync up messages between the app and the runner
 if (REDISCLOUD_URL) {
+  console.log("SETTING UP REDIS")
   app.configure(
     sync({
       uri: REDISCLOUD_URL,
