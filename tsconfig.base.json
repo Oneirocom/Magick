@@ -57,6 +57,12 @@
       "@magickml/plugin-banana-server": [
         "plugins/banana/server/src/index.ts"
       ],
+      "@magickml/plugin-github-client": [
+        "plugins/github/client/src/index.ts"
+      ],
+      "@magickml/plugin-github-server": [
+        "plugins/github/server/src/index.ts"
+      ],
       "@magickml/plugin-discord-client": [
         "plugins/discord/client/src/index.ts"
       ],
