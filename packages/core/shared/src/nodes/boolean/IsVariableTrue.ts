@@ -22,7 +22,7 @@ export class IsVariableTrue extends MagickComponent<void> {
         outputs: { true: 'option', false: 'option' },
       },
       'Boolean',
-      'Takes an input and triggers one of two output triggers based on the truthiness of the input. Boolean is checked as true or false, strings are checked as "true", numbers are checked as 0 or 1, undefined or null are checked as false'
+      'Takes an input and triggers one of two output triggers based on the truthiness of the input. Boolean is checked as true or false, strings are checked as "true", numbers are checked as 0 or 1+, and undefined or null are checked as false'
     )
   }
 
@@ -50,6 +50,7 @@ export class IsVariableTrue extends MagickComponent<void> {
    * @param inputs - The inputs of the worker node.
    */
   async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
+    debugger
     const action = inputs['input'][0]
     const type = typeof action
     let is = false

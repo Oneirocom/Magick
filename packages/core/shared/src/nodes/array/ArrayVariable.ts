@@ -9,7 +9,7 @@ import { MagickNode, WorkerData } from '../../types'
 /**
  * The info for the Array Variable node
  */
-const info = `Outputs an array with the values in the Value property. Values can be separated by a character or string specified in the Splitter property.`
+const info = `Outputs an array populated with the values in the Value property. Values can be separated by a character or string specified in the Splitter property.`
 
 /**
  * Returns an object containing an output array of strings
