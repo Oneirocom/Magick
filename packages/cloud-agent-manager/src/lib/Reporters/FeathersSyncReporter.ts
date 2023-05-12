@@ -1,17 +1,17 @@
-import { feathers, Application } from '@feathersjs/feathers'
-import sync from 'feathers-sync'
-import { parse, stringify } from 'flatted'
-import { Reporter } from '../Reporter'
 import { app } from '@magickml/server-core'
+import { Reporter } from '../Reporter'
+import { EventEmitter } from 'events'
 
 export class FeathersSyncReporter implements Reporter {
+    emitter: EventEmitter = new EventEmitter()
+
     constructor() {
         app.service('agents').on('created', (agent: any) => {
-            console.log('Agent created', agent)
+            this.emitter.emit('new-agent', agent)
         })
     }
 
-    async on(agentId: string, callback: (state: string) => Promise<void>) {
-        console.log(`Agent ${agentId} changed state`)
+    on(event: string, callback: (...args: any) => any): void {
+        this.emitter.on(event, callback)
     }
 }
