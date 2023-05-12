@@ -1,32 +1,37 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { API_ROOT_URL, DEFAULT_USER_TOKEN, PRODUCTION } from '@magickml/core'
+import {
+  API_ROOT_URL,
+  Agent,
+  DEFAULT_USER_TOKEN,
+  PRODUCTION,
+} from '@magickml/core'
+import {
+  Apps,
+  ChevronRight,
+  ExpandMore,
+  FileDownload,
+  FileUpload,
+  MenuBook,
+  MoreHoriz,
+  TextSnippet,
+} from '@mui/icons-material'
 import TreeItem from '@mui/lab/TreeItem'
 import TreeView from '@mui/lab/TreeView'
 import {
+  Box,
   Button,
+  Drawer,
+  IconButton,
   Menu,
   MenuItem,
   Typography,
-  Drawer,
-  IconButton,
-  Box,
 } from '@mui/material'
 import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import {
-  Apps,
-  TextSnippet,
-  MoreHoriz,
-  MenuBook,
-  FileDownload,
-  FileUpload,
-  ExpandMore,
-  ChevronRight,
-} from '@mui/icons-material'
 import FileInput from '../../FileInput/FileInput'
 import styles from './index.module.scss'
 
@@ -105,6 +110,22 @@ const ProjectWindow = ({ openDrawer }) => {
    */
   const exportProject = () => {
     const element = document.createElement('a')
+
+    const exportData = data
+    exportData.agents.forEach((agent: Agent) => {
+      agent.secrets = {}
+
+      Object.keys(agent.data).forEach(key => {
+        if (
+          key.includes('api') ||
+          key.includes('token') ||
+          key.includes('secret')
+        ) {
+          delete agent.data[key]
+        }
+      })
+    })
+
     const file = new Blob([JSON.stringify(data, null, 4)], {
       type: 'text/plain',
     })
