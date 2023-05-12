@@ -4,7 +4,6 @@ import {
   EmbeddingModel,
   saveRequest,
 } from '@magickml/core'
-import axios from 'axios'
 import { GOOGLEAI_ENDPOINT } from '../constants'
 
 /**
@@ -48,46 +47,53 @@ export async function makeTextEmbedding(
     }
   }
 
-  const headers = {
-    'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + apiKey,
-  }
-
-  const requestData = { input: input, model: node.data.model }
-
   // Start a timer
   const start = Date.now()
   try {
-    // Make a POST request to the GoogleAI endpoint
-    const resp = await axios.post(
-      `${OPENAI_ENDPOINT}/embeddings`,
-      requestData,
-      { headers: headers }
-    )
+    const settings = {
+      model: node?.data?.model,
+      prompt,
+    }
 
-    const spell = context.currentSpell
-    const model = node.data.model as EmbeddingModel
-    const projectId = context.projectId
+    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateText?key=${context.module?.secrets?.['googleai_api_key']}`
+    // Make the API call to GoogleAI
+    const completion = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(settings),
+    })
 
-    // Save request information
+    const completionData = await completion.json()
+
+    // TODO: Not the right shape
+    // Extract the result from the response
+    const result = completionData.candidates[0].content
+
     saveRequest({
-      projectId: projectId,
-      requestData: JSON.stringify(requestData),
-      responseData: JSON.stringify(resp.data).slice(0, 10),
+      projectId: context.projectId,
+      requestData: JSON.stringify(settings),
+      responseData: JSON.stringify(completionData),
       startTime: start,
-      statusCode: resp.status,
-      status: resp.statusText,
-      model: model,
-      parameters: '{}',
-      type: 'embedding',
+      statusCode: completion.status,
+      status: completion.statusText,
+      model: node.data.model as EmbeddingModel,
+      parameters: JSON.stringify(settings),
+      type: 'completion',
       provider: 'googleai',
+      totalTokens: 0, // usage.total_tokens,
       hidden: false,
       processed: false,
-      totalTokens: resp.data.usage.total_tokens,
-      spell,
+      spell: context.currentSpell,
       nodeId: node.id,
     })
-    return { success: true, result: resp.data.data[0].embedding }
+
+    if (result) {
+      return { success: true, result }
+    }
+
+    return { success: false, error: 'No result' }
   } catch (err: any) {
     console.error('makeTextEmbedding error:', err)
     return { success: false, error: err.message }

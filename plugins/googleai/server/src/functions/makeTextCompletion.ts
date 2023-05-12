@@ -40,6 +40,9 @@ export async function makeTextCompletion(
     throw new Error('ERROR: No secrets found')
   }
 
+  // Make the API request and handle the response.
+  const start = Date.now()
+
   try {
     const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateText?key=${context.module?.secrets?.['googleai_api_key']}`
     // Make the API call to GoogleAI
@@ -61,9 +64,6 @@ export async function makeTextCompletion(
 
     // Extract the result from the response
     const result = completionData.candidates[0].content
-
-    // Make the API request and handle the response.
-    const start = Date.now()
 
     saveRequest({
       projectId: context.projectId,
