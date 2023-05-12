@@ -97,9 +97,9 @@ const completionProviders: CompletionProvider[] = [
     ],
     outputs: [
       {
-        socket: 'result',
-        name: 'Result',
-        type: stringSocket,
+        socket: 'embedding',
+        name: 'Embedding',
+        type: arraySocket,
       },
       {
         socket: 'error',
@@ -107,7 +107,7 @@ const completionProviders: CompletionProvider[] = [
         type: stringSocket,
       },
     ],
-    models: ['text-bison-001'],
+    models: ['embedding-gecko-001'],
   },
 ]
 

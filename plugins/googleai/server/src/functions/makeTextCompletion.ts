@@ -18,9 +18,6 @@ export async function makeTextCompletion(
   // Destructure necessary properties from the data object.
   const { node, inputs, context } = data
 
-  console.log('****** INPUTS ******')
-  console.log(inputs['input'][0])
-
   // Get the input text prompt.
   const prompt = { text: inputs['input'][0] }
 
@@ -62,13 +59,7 @@ export async function makeTextCompletion(
       body: JSON.stringify(settings),
     })
 
-    console.log('completion', completion)
-
     const completionData = await completion.json()
-
-    console.log('settings', settings)
-
-    console.log('completionData', completionData)
 
     if (completionData.error) {
       console.error('GoogleAI Error', completionData.error)
