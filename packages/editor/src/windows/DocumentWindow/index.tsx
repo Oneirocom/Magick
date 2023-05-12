@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 import DatabaseTable from './DocumentTable'
 import { LoadingScreen, useConfig } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
-import { API_ROOT_URL, PRODUCTION, DEFAULT_USER_TOKEN } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/core'
 
 const DocumentWindow = () => {
   const config = useConfig()
@@ -30,9 +30,7 @@ const DocumentWindow = () => {
     const response = await fetch(
       `${API_ROOT_URL}/documents?hidden=false&projectId=${config.projectId}`,
       {
-        headers: PRODUCTION
-          ? { Authorization: `Bearer ${token}` }
-          : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` },
+        headers: { Authorization: `Bearer ${token}` },
       }
     )
     const data = await response.json()

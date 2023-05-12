@@ -1,6 +1,6 @@
-// DOCUMENTED 
-import { Button } from '@magickml/client-core';
-import { API_ROOT_URL } from '@magickml/core';
+// DOCUMENTED
+import { Button } from '@magickml/client-core'
+import { API_ROOT_URL } from '@magickml/core'
 import {
   Grid,
   IconButton,
@@ -12,14 +12,14 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
-} from '@mui/material';
-import _ from 'lodash';
-import { useSnackbar } from 'notistack';
-import { useEffect, useMemo, useState } from 'react';
-import { CSVLink } from 'react-csv';
-import { FaFileCsv } from 'react-icons/fa';
-import { VscArrowDown, VscArrowUp, VscTrash } from 'react-icons/vsc';
+  TableRow,
+} from '@mui/material'
+import _ from 'lodash'
+import { useSnackbar } from 'notistack'
+import { useEffect, useMemo, useState } from 'react'
+import { CSVLink } from 'react-csv'
+import { FaFileCsv } from 'react-icons/fa'
+import { VscArrowDown, VscArrowUp, VscTrash } from 'react-icons/vsc'
 import {
   Row,
   useAsyncDebounce,
@@ -27,58 +27,63 @@ import {
   useGlobalFilter,
   usePagination,
   useSortBy,
-  useTable
-} from 'react-table';
-import { useConfig } from '@magickml/client-core';
+  useTable,
+} from 'react-table'
+import { useConfig } from '@magickml/client-core'
+import { useSelector } from 'react-redux'
 
 /**
  * GlobalFilter component.
  * Filter the table data using a global search input.
  */
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
-  const [value, setValue] = useState(globalFilter);
-  const onChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || undefined);
-  }, 500);
+  const [value, setValue] = useState(globalFilter)
+  const onChange = useAsyncDebounce(value => {
+    setGlobalFilter(value || undefined)
+  }, 500)
   return (
     <input
       type="text"
       value={value || ''}
-      onChange={(e) => {
-        setValue(e.target.value);
-        onChange(e.target.value);
+      onChange={e => {
+        setValue(e.target.value)
+        onChange(e.target.value)
       }}
       placeholder="Search requests..."
       style={{ width: '40em', border: 0, margin: 0 }}
     />
-  );
-};
+  )
+}
 
 /**
  * DefaultColumnFilter component.
  * Filter the table data using a column search input.
  */
-const DefaultColumnFilter = ({ column: { filterValue, setFilter, Header } }) => {
+const DefaultColumnFilter = ({
+  column: { filterValue, setFilter, Header },
+}) => {
   return (
     <input
       type="text"
       value={filterValue || ''}
-      onChange={(e) => {
-        setFilter(e.target.value || undefined);
+      onChange={e => {
+        setFilter(e.target.value || undefined)
       }}
       placeholder={Header}
       style={{ width: '100%', border: 0, margin: 0, borderRadius: 0 }}
     />
-  );
-};
+  )
+}
 
 /**
  * RequestTable component.
  * Displays a table of requests with sorting, filtering, and pagination.
  */
 function RequestTable({ requests, updateCallback }) {
-  const { enqueueSnackbar } = useSnackbar();
-  const config = useConfig();
+  const { enqueueSnackbar } = useSnackbar()
+  const config = useConfig()
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
 
   // Columns configuration for the table
   const columns = useMemo(
@@ -89,7 +94,7 @@ function RequestTable({ requests, updateCallback }) {
       {
         Header: 'Cost',
         accessor: 'cost',
-        Cell: (obj) => '$' + obj.value.toFixed(7)
+        Cell: obj => '$' + obj.value.toFixed(7),
       },
       { Header: 'Req Time', accessor: 'duration' },
       { Header: 'Status', accessor: 'status' },
@@ -101,44 +106,52 @@ function RequestTable({ requests, updateCallback }) {
       { Header: 'Spell', accessor: 'currentSpell' },
       {
         Header: ' ',
-        Cell: (row) => (
+        Cell: row => (
           <IconButton onClick={() => handleRequestDelete(row.row.original)}>
             <VscTrash size={16} color="#ffffff" />
           </IconButton>
-        )
-      }
+        ),
+      },
     ],
     []
-  );
+  )
 
   // Update request with the new data
   const updateRequest = async ({ id, ...rowData }, columnId, value) => {
     const reqBody = {
       ...rowData,
       [columnId]: value,
-      projectId: config.projectId
-    };
+      projectId: config.projectId,
+    }
     if (!_.isEqual(reqBody, rowData)) {
       const resp = await fetch(`${API_ROOT_URL}/request/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reqBody)
-      });
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(reqBody),
+      })
 
-      const json = await resp.json();
+      const json = await resp.json()
 
-      if (json) enqueueSnackbar('Request updated', { variant: 'success' });
-      else enqueueSnackbar('Error updating event', { variant: 'error' });
-      updateCallback();
+      if (json) enqueueSnackbar('Request updated', { variant: 'success' })
+      else enqueueSnackbar('Error updating event', { variant: 'error' })
+      updateCallback()
     }
-  };
+  }
 
   // EditableCell component for inline editing of table cells
-  const EditableCell = ({ value = '', row: { original: row }, column: { id }, updateRequest }) => {
-    const [val, setVal] = useState(value);
-    const onChange = (e) => typeof val !== 'object' && setVal(e.target.value);
-    const onBlur = (e) => updateRequest(row, id, val);
-    useEffect(() => setVal(value), [value]);
+  const EditableCell = ({
+    value = '',
+    row: { original: row },
+    column: { id },
+    updateRequest,
+  }) => {
+    const [val, setVal] = useState(value)
+    const onChange = e => typeof val !== 'object' && setVal(e.target.value)
+    const onBlur = e => updateRequest(row, id, val)
+    useEffect(() => setVal(value), [value])
     return (
       <input
         value={val && typeof val === 'object' ? JSON.stringify(val.data) : val}
@@ -146,13 +159,13 @@ function RequestTable({ requests, updateCallback }) {
         onBlur={onBlur}
         className="bare-input"
       />
-    );
-  };
+    )
+  }
 
   const defaultColumn = {
     Cell: EditableCell,
-    Filter: DefaultColumnFilter
-  };
+    Filter: DefaultColumnFilter,
+  }
 
   const {
     getTableProps,
@@ -164,48 +177,57 @@ function RequestTable({ requests, updateCallback }) {
     pageOptions,
     gotoPage,
     setGlobalFilter,
-    state
+    state,
   } = useTable(
     {
       columns,
       data: requests,
       defaultColumn,
-      updateRequest
+      updateRequest,
     },
     useFilters,
     useGlobalFilter,
     useSortBy,
     usePagination
-  ) as any;
+  ) as any
 
   // Handle page change
   const handlePageChange = (page: number) => {
-    const pageIndex = page - 1;
-    gotoPage(pageIndex);
-  };
+    const pageIndex = page - 1
+    gotoPage(pageIndex)
+  }
 
   // Handle request deletion
   const handleRequestDelete = async (event: any) => {
     const resp = await fetch(`${API_ROOT_URL}/request/${event.id}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${config.token}` },
-      body: JSON.stringify({ hidden: true })
-    });
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ hidden: true }),
+    })
 
-    const json = await resp.json();
+    const json = await resp.json()
 
-    if (json) enqueueSnackbar('Request deleted', { variant: 'success' });
-    else enqueueSnackbar('Error deleting Request', { variant: 'error' });
-    updateCallback();
-  };
+    if (json) enqueueSnackbar('Request deleted', { variant: 'success' })
+    else enqueueSnackbar('Error deleting Request', { variant: 'error' })
+    updateCallback()
+  }
 
   // Generate original rows data for CSV export
-  const originalRows = useMemo(() => flatRows.map((row) => row.original), [flatRows]);
+  const originalRows = useMemo(
+    () => flatRows.map(row => row.original),
+    [flatRows]
+  )
 
   return (
     <Stack spacing={2}>
       <Grid container justifyContent="left" style={{ padding: '1em' }}>
-        <GlobalFilter globalFilter={state.globalFilter} setGlobalFilter={setGlobalFilter} />
+        <GlobalFilter
+          globalFilter={state.globalFilter}
+          setGlobalFilter={setGlobalFilter}
+        />
         <Button
           style={{
             display: 'inline',
@@ -213,7 +235,7 @@ function RequestTable({ requests, updateCallback }) {
             border: 'none',
             color: 'white',
             marginRight: '.5em',
-            marginLeft: 'auto'
+            marginLeft: 'auto',
           }}
           name="refresh"
           onClick={updateCallback}
@@ -224,35 +246,72 @@ function RequestTable({ requests, updateCallback }) {
           data={originalRows}
           filename="requests.csv"
           target="_blank"
-          style={{ textDecoration: 'none', display: 'inline', marginLeft: '.5em', marginRight: '.5em' }}
+          style={{
+            textDecoration: 'none',
+            display: 'inline',
+            marginLeft: '.5em',
+            marginRight: '.5em',
+          }}
         >
           <Button
-            style={{ textDecoration: 'none', display: 'inline', backgroundColor: 'purple', color: 'white', border: 'none' }}
+            style={{
+              textDecoration: 'none',
+              display: 'inline',
+              backgroundColor: 'purple',
+              color: 'white',
+              border: 'none',
+            }}
           >
             <FaFileCsv size={14} />
           </Button>
         </CSVLink>
       </Grid>
-      <TableContainer component={Paper} style={{ width: '100%', padding: 0, margin: 0 }}>
-        <Table style={{ width: '100%', padding: 0, margin: 0 }} {...getTableProps()}>
+      <TableContainer
+        component={Paper}
+        style={{ width: '100%', padding: 0, margin: 0 }}
+      >
+        <Table
+          style={{ width: '100%', padding: 0, margin: 0 }}
+          {...getTableProps()}
+        >
           <TableHead style={{ backgroundImage: 'none', padding: 0, margin: 0 }}>
             {headerGroups.map((headerGroup, idx) => (
-              <TableRow {...headerGroup.getHeaderGroupProps()} key={idx} style={{ backgroundImage: 'none', padding: 0, margin: 0 }}>
+              <TableRow
+                {...headerGroup.getHeaderGroupProps()}
+                key={idx}
+                style={{ backgroundImage: 'none', padding: 0, margin: 0 }}
+              >
                 {headerGroup.headers.map((column, idx) => (
                   <TableCell
                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                    style={{ fontSize: '0.985rem', padding: '0em', margin: '0em', border: 0 }}
+                    style={{
+                      fontSize: '0.985rem',
+                      padding: '0em',
+                      margin: '0em',
+                      border: 0,
+                    }}
                     key={idx}
                   >
                     <Stack spacing={1}>
                       <div style={{ position: 'relative' }}>
                         {column.canFilter ? column.render('Filter') : null}
-                        <span style={{ position: 'absolute', top: '.75em', right: '.75em', zIndex: '10' }}>
-                          {column.isSorted
-                            ? column.isSortedDesc
-                              ? <VscArrowDown size={14} />
-                              : <VscArrowUp size={14} />
-                            : ''}
+                        <span
+                          style={{
+                            position: 'absolute',
+                            top: '.75em',
+                            right: '.75em',
+                            zIndex: '10',
+                          }}
+                        >
+                          {column.isSorted ? (
+                            column.isSortedDesc ? (
+                              <VscArrowDown size={14} />
+                            ) : (
+                              <VscArrowUp size={14} />
+                            )
+                          ) : (
+                            ''
+                          )}
                         </span>
                       </div>
                     </Stack>
@@ -263,7 +322,7 @@ function RequestTable({ requests, updateCallback }) {
           </TableHead>
           <TableBody {...getTableBodyProps()}>
             {page.map((row: Row<object>, idx: number) => {
-              prepareRow(row);
+              prepareRow(row)
               return (
                 <TableRow {...row.getRowProps()} key={idx}>
                   {row.cells.map((cell, idx) => (
@@ -272,7 +331,7 @@ function RequestTable({ requests, updateCallback }) {
                     </TableCell>
                   ))}
                 </TableRow>
-              );
+              )
             })}
           </TableBody>
         </Table>
@@ -285,7 +344,7 @@ function RequestTable({ requests, updateCallback }) {
         showLastButton
       />
     </Stack>
-  );
+  )
 }
 
-export default RequestTable;
+export default RequestTable
