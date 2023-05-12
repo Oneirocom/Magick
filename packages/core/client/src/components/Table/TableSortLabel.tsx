@@ -1,5 +1,3 @@
-import React, { ReactNode } from 'react'
-
 import {
   TableSortLabel as MuiTableSortLabel,
   TableSortLabelProps,

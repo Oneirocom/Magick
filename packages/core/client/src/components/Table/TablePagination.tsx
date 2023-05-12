@@ -1,5 +1,3 @@
-import React, { ReactNode } from 'react'
-
 import {
   TablePagination as MuiTablePagination,
   TablePaginationProps,
