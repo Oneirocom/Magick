@@ -18,13 +18,18 @@ export async function makeTextCompletion(
   // Destructure necessary properties from the data object.
   const { node, inputs, context } = data
 
+  console.log('****** INPUTS ******')
+  console.log(inputs['input'][0])
+
   // Get the input text prompt.
-  const prompt = inputs['input'][0]
+  const prompt = { text: inputs['input'][0] }
 
   // node?.data?.stopSequences is a comma separated text, convert to an array
-  const stopSequences = (node?.data?.stopSequences as string)
-    .split(',')
-    .map((sequence: string) => sequence.trim())
+  const stopSequences =
+    node?.data?.stopSequences !== '' &&
+    (node?.data?.stopSequences as string)
+      .split(',')
+      .map((sequence: string) => sequence.trim())
 
   const settings = {
     model: node?.data?.model,
@@ -32,7 +37,11 @@ export async function makeTextCompletion(
     top_p: parseFloat((node?.data?.top_p as string) ?? '0.95'),
     top_k: parseFloat((node?.data?.top_k as string) ?? '40'),
     prompt: prompt,
-    stopSequences,
+    candidateCount: 1,
+  }
+
+  if (stopSequences) {
+    settings['stopSequences'] = stopSequences
   }
 
   if (!context.module.secrets) {
@@ -53,16 +62,20 @@ export async function makeTextCompletion(
       body: JSON.stringify(settings),
     })
 
+    console.log('completion', completion)
+
     const completionData = await completion.json()
+
+    console.log('settings', settings)
+
+    console.log('completionData', completionData)
 
     if (completionData.error) {
       console.error('GoogleAI Error', completionData.error)
     }
 
-    console.log('completionData', completionData)
-
     // Extract the result from the response
-    const result = completionData.candidates[0].content
+    const result = completionData.candidates?.[0]?.output
 
     saveRequest({
       projectId: context.projectId,
