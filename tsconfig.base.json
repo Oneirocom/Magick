@@ -28,6 +28,12 @@
       "@magickml/plugin-avatar-client": ["plugins/avatar/client/src/index.ts"],
       "@magickml/plugin-banana-client": ["plugins/banana/client/src/index.ts"],
       "@magickml/plugin-banana-server": ["plugins/banana/server/src/index.ts"],
+      "@magickml/cloud-agent-manager": [
+        "packages/cloud-agent-manager/src/index.ts"
+      ],
+      "@magickml/cloud-agent-worker": [
+        "packages/cloud-agent-worker/src/index.ts"
+      ],
       "@magickml/plugin-bluesky-client": [
         "plugins/bluesky/client/src/index.ts"
       ],
