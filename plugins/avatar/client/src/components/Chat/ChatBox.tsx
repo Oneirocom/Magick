@@ -99,7 +99,6 @@ export default function ChatBox() {
     localStorage.setItem('speaker', speaker)
   }, [speaker])
 
-  // const { lipSync } = React.useContext(SceneContext)
   const [input, setInput] = React.useState('')
 
   const [messages, setMessages] = React.useState([])
@@ -146,16 +145,13 @@ export default function ChatBox() {
 
   const handleSubmit = async event => {
     if (event.preventDefault) event.preventDefault()
-    // Stop speech to text when a message is sent through the input
-    stopSpeech()
-    if (!waitingForResponse) {
-      setWaitingForResponse(true)
-      // Get the value of the input element
-      const input = event.target.elements.message
-      const value = input.value
-      handleUserChatInput(value)
-    }
+
+    // Get the value of the input element
+    const input = event.target.elements.message
+    const value = input.value
+    handleUserChatInput(value)
   }
+
   const printToConsole = useCallback((_, _text) => {
     setWaitingForResponse(false)
     setMessages(messages => [...messages, name + ': ' + _text])
@@ -205,8 +201,6 @@ export default function ChatBox() {
       entities: ['user', 'assistant'],
     }
 
-    console.log('currentSpell', currentSpell)
-
     const data = {
       id: 'avatar',
       spellName: currentSpell,
@@ -218,7 +212,6 @@ export default function ChatBox() {
     }
 
     publish($RUN_SPELL('avatar'), data)
-    console.log('ran spell', data)
   }
 
   useEffect(() => {
@@ -294,7 +287,6 @@ export default function ChatBox() {
 
           <form
             className={styles['send']}
-            style={{ opacity: waitingForResponse ? '0.4' : '1' }}
             onSubmit={handleSubmit}
           >
             {/* Disabled until state error is fixed */}
@@ -314,7 +306,7 @@ export default function ChatBox() {
               value={input}
               onInput={handleChange}
               onChange={handleChange}
-              disabled={waitingForResponse}
+              // disabled={waitingForResponse}
             />
             <button
               size={14}

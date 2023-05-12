@@ -3,7 +3,6 @@ import { useFrame } from '@react-three/fiber'
 import { useFBX } from '@react-three/drei'
 import { useZustand } from '../../store/useZustand'
 import { useVrmMixamoAnimations } from '../../hooks/useVrmMixamoAnimations'
-import { customDebug } from '../../utils/custom.debug'
 import { BlinkManager } from '../../utils/blink.manager'
 import { WATCH_BONE_NAME } from '../../utils/constants'
 
@@ -21,7 +20,6 @@ export const Avatar = () => {
     if (!mixer || !mixamoClip) {
       return
     }
-    customDebug().log('Avatar: call at once');
     mixer.timeScale = 1;
     mixer.clipAction(mixamoClip).play();
   }, [mixer, mixamoClip])
@@ -30,7 +28,6 @@ export const Avatar = () => {
     if (!avatarVrm) {
       return
     }
-    customDebug().log('Avatar: blink manager');
     const newBlinkManager = new BlinkManager()
     newBlinkManager.addBlinker(avatarVrm)
   }, [avatarVrm])
