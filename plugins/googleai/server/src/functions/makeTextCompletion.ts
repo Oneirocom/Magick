@@ -1,6 +1,5 @@
 // DOCUMENTED
 import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
-import axios from 'axios'
 import { GOOGLEAI_ENDPOINT } from '../constants'
 
 /**

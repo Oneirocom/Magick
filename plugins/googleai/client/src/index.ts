@@ -32,7 +32,6 @@ const textCompletionControls = [
     icon: 'moon',
     defaultValue: 1,
   },
-  ,
   {
     type: InputControl,
     dataKey: 'stopSequences',
