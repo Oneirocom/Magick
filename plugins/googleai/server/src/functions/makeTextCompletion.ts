@@ -2,60 +2,54 @@
 import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import { GOOGLEAI_ENDPOINT } from '../constants'
 
-type ChatMessage = {
-  author?: string
-  content: string
-}
-
 /**
- * Generate a completion text based on prior chat conversation input.
- * @param data - CompletionHandlerInputData object.
- * @returns An object with success status and either a result or an error message.
+ * Makes an API request to an AI text completion service.
+ *
+ * @param {CompletionHandlerInputData} data - The input data for the completion API.
+ * @returns {Promise<{success: boolean, result?: string | null, error?: string | null}>} - A Promise resolving to the result of the completion API call.
  */
-export async function makeChatCompletion(
+export async function makeTextCompletion(
   data: CompletionHandlerInputData
 ): Promise<{
   success: boolean
   result?: string | null
   error?: string | null
 }> {
+  // Destructure necessary properties from the data object.
   const { node, inputs, context } = data
 
-  // Get the system message and conversation inputs
-  const system = inputs['system']?.[0] as ChatMessage
-  const conversation = inputs['conversation']?.[0] as any
+  // Get the input text prompt.
+  const prompt = { text: inputs['input'][0] }
 
-  // Initialize conversationMessages array
-  const conversationMessages: ChatMessage[] = []
+  // node?.data?.stopSequences is a comma separated text, convert to an array
+  const stopSequences =
+    node?.data?.stopSequences !== '' &&
+    (node?.data?.stopSequences as string)
+      .split(',')
+      .map((sequence: string) => sequence.trim())
 
-  // Add elements to conversationMessages
-  conversation?.forEach(event => {
-    conversationMessages.push({ content: event.content })
-  })
-
-  // Get the user input
-  const input = inputs['input']?.[0] as string
-
-  conversationMessages.push({ content: input })
-
-  const examples = (inputs['examples']?.[0] as string[]) || []
-
-  // Get or set default settings
   const settings = {
-    prompt: {
-      context: system || null,
-      messages: [...conversationMessages],
-      examples: examples || [],
-    },
-    candidate_count: 1,
+    model: node?.data?.model,
     temperature: parseFloat((node?.data?.temperature as string) ?? '0.0'),
     top_p: parseFloat((node?.data?.top_p as string) ?? '0.95'),
     top_k: parseFloat((node?.data?.top_k as string) ?? '40'),
-  } as any
+    prompt: prompt,
+    candidateCount: 1,
+  }
+
+  if (stopSequences) {
+    settings['stopSequences'] = stopSequences
+  }
+
+  if (!context.module.secrets) {
+    throw new Error('ERROR: No secrets found')
+  }
+
+  // Make the API request and handle the response.
+  const start = Date.now()
 
   try {
-    const start = Date.now()
-    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateMessage?key=${context.module?.secrets?.['googleai_api_key']}`
+    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateText?key=${context.module?.secrets?.['googleai_api_key']}`
     // Make the API call to GoogleAI
     const completion = await fetch(endpoint, {
       method: 'POST',
@@ -71,15 +65,9 @@ export async function makeChatCompletion(
       console.error('GoogleAI Error', completionData.error)
     }
 
-    console.log('completionData', completionData)
-
     // Extract the result from the response
-    const result = completionData.candidates[0].content
+    const result = completionData.candidates?.[0]?.output
 
-    // Log the usage of tokens
-    // const usage = completionData.usage
-
-    // Save the API request details
     saveRequest({
       projectId: context.projectId,
       requestData: JSON.stringify(settings),
