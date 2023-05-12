@@ -1,31 +1,20 @@
 // DOCUMENTED
 // Import statements kept as-is
-import { API_ROOT_URL, DEFAULT_USER_TOKEN, PRODUCTION } from '@magickml/core'
+import { TableComponent } from '@magickml/client-core'
+import { Delete, MoreHoriz, Refresh } from '@mui/icons-material'
 import {
-  Container,
-  Grid,
-  IconButton,
   Button,
+  Container,
+  IconButton,
   Menu,
   MenuItem,
   Pagination,
-  Paper,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
 } from '@mui/material'
-import { MoreHoriz, Delete, Refresh } from '@mui/icons-material'
-import _ from 'lodash'
-import { useSnackbar } from 'notistack'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
-import { useSelector } from 'react-redux'
 import {
   useAsyncDebounce,
   useFilters,
@@ -34,7 +23,6 @@ import {
   useSortBy,
   useTable,
 } from 'react-table'
-import { useConfig, TableComponent } from '@magickml/client-core'
 import { EventData, columns } from './event'
 import styles from './index.module.scss'
 
@@ -62,31 +50,6 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   )
 }
 
-/**
- * DefaultColumnFilter component for applying filter on each column.
- * @param {{ column: { filterValue: any, setFilter: Function, Header: string } }} param0
- * @returns JSX.Element
- */
-const DefaultColumnFilter = ({
-  column: { filterValue, setFilter, Header },
-}) => {
-  return (
-    <input
-      type="text"
-      value={filterValue || ''}
-      onChange={e => {
-        setFilter(e.target.value || undefined)
-      }}
-      placeholder={Header}
-      style={{
-        width: '100%',
-        border: 0,
-        borderRadius: 0,
-      }}
-    />
-  )
-}
-
 function ActionMenu({ anchorEl, handleClose, handleDelete }) {
   return (
     <Menu
@@ -106,10 +69,6 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
  * @returns JSX.Element
  */
 function EventTable({ events, updateCallback }) {
-  const { enqueueSnackbar } = useSnackbar()
-  const config = useConfig()
-  const globalConfig = useSelector((state: any) => state.globalConfig)
-  const token = globalConfig?.token
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
 
@@ -152,27 +111,17 @@ function EventTable({ events, updateCallback }) {
   }
 
   // Initialize the table with hooks
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    page,
-    flatRows,
-    prepareRow,
-    pageOptions,
-    gotoPage,
-    setGlobalFilter,
-    state,
-  } = useTable(
-    {
-      columns,
-      data: events,
-    },
-    useFilters,
-    useGlobalFilter,
-    useSortBy,
-    usePagination
-  )
+  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state } =
+    useTable(
+      {
+        columns,
+        data: events,
+      },
+      useFilters,
+      useGlobalFilter,
+      useSortBy,
+      usePagination
+    )
 
   const rows = page.map(el => {
     return createData(
@@ -202,16 +151,6 @@ function EventTable({ events, updateCallback }) {
     // TODO: Implement delete logic here
     console.log(`Deleting row with id ${selectedRow.id}`)
     handleActionClose()
-  }
-
-  // Handle event deletion
-  const handleEventDelete = async (event: any) => {
-    const isDeleted = await fetch(`${API_ROOT_URL}/events/${event.id}`, {
-      method: 'DELETE',
-    })
-    if (isDeleted) enqueueSnackbar('Event deleted', { variant: 'success' })
-    else enqueueSnackbar('Error deleting Event', { variant: 'error' })
-    updateCallback()
   }
 
   // Get the original rows data
