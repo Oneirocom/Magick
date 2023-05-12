@@ -103,6 +103,8 @@ export class FinishTaskStep extends MagickComponent<
     // push the step to the task
     steps.push(step)
 
+    console.log('*** FINISH TASK STEP: steps', steps)
+
     const { app } = context.module
     // call feathers task service to update the task
     const taskResult = await app
