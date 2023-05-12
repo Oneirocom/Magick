@@ -55,7 +55,7 @@ export async function makeTextEmbedding(
       prompt,
     }
 
-    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateText?key=${context.module?.secrets?.['googleai_api_key']}`
+    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:embedText?key=${context.module?.secrets?.['googleai_api_key']}`
     // Make the API call to GoogleAI
     const completion = await fetch(endpoint, {
       method: 'POST',
@@ -69,7 +69,7 @@ export async function makeTextEmbedding(
 
     // TODO: Not the right shape
     // Extract the result from the response
-    const result = completionData.candidates[0].content
+    const result = completionData.embedding?.value
 
     saveRequest({
       projectId: context.projectId,
