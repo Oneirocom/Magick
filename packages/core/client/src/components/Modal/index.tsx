@@ -24,6 +24,7 @@ interface Props {
   onClose: () => void
   handleAction?: () => void
   children?: React.ReactNode
+  showSaveBtn: boolean
 }
 
 export const Modal = ({
@@ -33,6 +34,7 @@ export const Modal = ({
   submitText,
   title,
   children,
+  showSaveBtn=true,
 }: Props) => {
   return (
     <Dialog
@@ -52,7 +54,7 @@ export const Modal = ({
         <Button onClick={onClose} className={styles.btnCancel}>
           Cancel
         </Button>
-        {handleAction !== undefined && (
+        {handleAction !== undefined && showSaveBtn === true && (
           <Button
             onClick={() => {
               handleAction()
