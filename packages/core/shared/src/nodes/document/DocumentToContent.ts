@@ -83,7 +83,7 @@ export class DocumentToContent extends MagickComponent<WorkerReturn> {
     } else {
       type Document = { content: string }
       content +=
-         (documents as any).content + '\n'
+         (documents as Document).content + '\n'
     }
 
     return {
