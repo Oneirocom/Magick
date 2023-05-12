@@ -1,7 +1,7 @@
 // DOCUMENTED
 // Import statements kept as-is
 import { Button } from '@magickml/client-core'
-import { API_ROOT_URL, DEFAULT_USER_TOKEN, PRODUCTION } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/core'
 import {
   Grid,
   IconButton,
@@ -160,15 +160,11 @@ function EventTable({ events, updateCallback }) {
       projectId: config.projectId,
     }
     if (!_.isEqual(reqBody, rowData)) {
-      const headers = PRODUCTION
-        ? { Authorization: `Bearer ${token}` }
-        : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-
       const isUpdated = await fetch(`${API_ROOT_URL}/events/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          ...headers,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(reqBody),
       }).then(res => res.json())
@@ -241,6 +237,9 @@ function EventTable({ events, updateCallback }) {
   const handleEventDelete = async (event: any) => {
     const isDeleted = await fetch(`${API_ROOT_URL}/events/${event.id}`, {
       method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
     if (isDeleted) enqueueSnackbar('Event deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting Event', { variant: 'error' })
