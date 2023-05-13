@@ -31,6 +31,7 @@ import {
 } from 'react-table'
 import { useConfig } from '@magickml/client-core'
 import DocumentModal from './DocumentModal'
+import { useSelector } from 'react-redux'
 
 /**
  * The global filter component for searching documents within the table.
@@ -95,6 +96,8 @@ function DocumentTable({ documents, updateCallback }) {
   // Snackbar and configuration context
   const { enqueueSnackbar } = useSnackbar()
   const config = useConfig()
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
 
   // Column definition
   const columns = useMemo(
@@ -147,6 +150,7 @@ function DocumentTable({ documents, updateCallback }) {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(reqBody),
       })
@@ -225,6 +229,9 @@ function DocumentTable({ documents, updateCallback }) {
   const handleDatabaseDelete = async (event: any) => {
     const isDeleted = await fetch(`${API_ROOT_URL}/documents/${event.id}`, {
       method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
     if (isDeleted) {
       enqueueSnackbar('Document deleted', { variant: 'success' })
@@ -260,6 +267,7 @@ function DocumentTable({ documents, updateCallback }) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         ...newDocument,

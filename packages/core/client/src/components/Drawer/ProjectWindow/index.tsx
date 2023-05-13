@@ -1,12 +1,7 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import {
-  API_ROOT_URL,
-  Agent,
-  DEFAULT_USER_TOKEN,
-  PRODUCTION,
-} from '@magickml/core'
+import { API_ROOT_URL, Agent, PRODUCTION } from '@magickml/core'
 import {
   Apps,
   ChevronRight,
@@ -53,9 +48,6 @@ const ProjectWindow = ({ openDrawer }) => {
   const [data, setData] = useState({ agents: [], spells: [], documents: [] })
   const [loaded, setLoaded] = useState(false)
   const token = globalConfig?.token
-  const headers = PRODUCTION
-    ? { Authorization: `Bearer ${token}` }
-    : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
@@ -88,12 +80,14 @@ const ProjectWindow = ({ openDrawer }) => {
         url: `${globalConfig.apiUrl}/projects`,
         method: 'POST',
         data: { ...data, projectId: globalConfig.projectId },
-        headers,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
         .then(async res => {
           const res2 = await fetch(
             `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
-            { headers }
+            { headers: { Authorization: `Bearer ${token}` } }
           )
           const json = await res2.json()
           setData(json)
@@ -180,7 +174,7 @@ const ProjectWindow = ({ openDrawer }) => {
     const fetchData = async () => {
       const { data } = await axios.get(
         `${API_ROOT_URL}/projects?projectId=${globalConfig.projectId}`,
-        { headers }
+        { headers: { Authorization: `Bearer ${token}` } }
       )
       setData(data)
     }
