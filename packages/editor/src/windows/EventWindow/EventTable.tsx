@@ -1,9 +1,9 @@
 // DOCUMENTED
 // Import statements kept as-is
-import { TableComponent } from '@magickml/client-core'
+import { Button, TableComponent } from '@magickml/client-core'
+import { API_ROOT_URL } from '@magickml/core'
 import { Delete, MoreHoriz, Refresh } from '@mui/icons-material'
 import {
-  Button,
   Container,
   IconButton,
   Menu,
@@ -12,7 +12,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
 import {
@@ -25,6 +25,11 @@ import {
 } from 'react-table'
 import { EventData, columns } from './event'
 import styles from './index.module.scss'
+import { id } from 'ethers/lib/utils.js'
+import _ from 'lodash'
+import { useConfig } from '@magickml/client-core'
+import { useSnackbar } from 'notistack'
+import { useSelector } from 'react-redux'
 
 /**
  * GlobalFilter component for applying search filter on the whole table.
@@ -50,6 +55,31 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   )
 }
 
+/**
+ * DefaultColumnFilter component for applying filter on each column.
+ * @param {{ column: { filterValue: any, setFilter: Function, Header: string } }} param0
+ * @returns JSX.Element
+ */
+const DefaultColumnFilter = ({
+  column: { filterValue, setFilter, Header },
+}) => {
+  return (
+    <input
+      type="text"
+      value={filterValue || ''}
+      onChange={e => {
+        setFilter(e.target.value || undefined)
+      }}
+      placeholder={Header}
+      style={{
+        width: '100%',
+        border: 0,
+        borderRadius: 0,
+      }}
+    />
+  )
+}
+
 function ActionMenu({ anchorEl, handleClose, handleDelete }) {
   return (
     <Menu
@@ -69,6 +99,11 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
  * @returns JSX.Element
  */
 function EventTable({ events, updateCallback }) {
+  const { enqueueSnackbar } = useSnackbar()
+  const config = useConfig()
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
+
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
 
@@ -110,6 +145,33 @@ function EventTable({ events, updateCallback }) {
     }
   }
 
+  // Editable cell component
+  const EditableCell = ({
+    value = '',
+    row: { original: row },
+    column: { id },
+    updateEvent,
+  }) => {
+    const [val, setVal] = useState(value)
+    const onChange = e => typeof val !== 'object' && setVal(e.target.value)
+    const onBlur = e => updateEvent(row, id, val)
+    useEffect(() => setVal(value), [value])
+    return (
+      <input
+        value={val && typeof val === 'object' ? JSON.stringify(val.data) : val}
+        onChange={onChange}
+        onBlur={onBlur}
+        className="bare-input"
+      />
+    )
+  }
+
+  // Set default column properties
+  const defaultColumn = {
+    Cell: EditableCell,
+    Filter: DefaultColumnFilter,
+  }
+
   // Initialize the table with hooks
   const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state } =
     useTable(
@@ -147,10 +209,18 @@ function EventTable({ events, updateCallback }) {
     setSelectedRow(null)
   }
 
-  const handleDelete = () => {
-    // TODO: Implement delete logic here
-    console.log(`Deleting row with id ${selectedRow.id}`)
-    handleActionClose()
+  // Handle event deletion
+  const handleEventDelete = async (event: any) => {
+    console.log('deleting event', event)
+    const isDeleted = await fetch(`${API_ROOT_URL}/events/${event.id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    if (isDeleted) enqueueSnackbar('Event deleted', { variant: 'success' })
+    else enqueueSnackbar('Error deleting Event', { variant: 'error' })
+    updateCallback()
   }
 
   // Get the original rows data
@@ -190,13 +260,6 @@ function EventTable({ events, updateCallback }) {
           </div>
         </div>
         <div className={styles.flex}>
-          <Button
-            className={styles.btn}
-            variant="outlined"
-            startIcon={<Delete />}
-          >
-            Delete Selected
-          </Button>
           <div className={styles.flex}>
             <GlobalFilter
               globalFilter={state.globalFilter}
@@ -212,7 +275,7 @@ function EventTable({ events, updateCallback }) {
         <ActionMenu
           anchorEl={anchorEl}
           handleClose={handleActionClose}
-          handleDelete={handleDelete}
+          handleDelete={handleEventDelete}
         />
         <div>
           <Pagination
