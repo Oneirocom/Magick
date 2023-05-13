@@ -59,6 +59,7 @@ import { CurrentTime } from './utility/CurrentTime'
 import { Echo } from './utility/Echo'
 import { ErrorNode } from './utility/Error'
 import { Log } from './utility/Log'
+import { DocumentToContent } from './document/DocumentToContent'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -82,6 +83,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   stringEvaluator: () => new EvaluateText(),
   combineText: () => new CombineText(),
   textVariable: () => new TextVariable(),
+  documenttocontent: () => new DocumentToContent(),
   stringVariable: () => new StringVariable(),
   profanityFilter: () => new ProfanityFilter(),
   numberVariable: () => new NumberVariable(),
