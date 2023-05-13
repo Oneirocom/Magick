@@ -53,6 +53,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
 // DrawerHeader component properties
 type HeaderProps = {
   open: boolean
+  theme?: Theme
 }
 
 /**
@@ -80,12 +81,12 @@ const StyledDrawer = styled(MuiDrawer, {
   whiteSpace: 'nowrap',
   boxSizing: 'border-box',
   ...(open && {
-    ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme),
+    ...openedMixin(theme as Theme),
+    '& .MuiDrawer-paper': openedMixin(theme as Theme),
   }),
   ...(!open && {
-    ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
+    ...closedMixin(theme as Theme),
+    '& .MuiDrawer-paper': closedMixin(theme as Theme),
   }),
 }))
 
