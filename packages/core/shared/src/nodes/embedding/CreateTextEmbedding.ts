@@ -179,7 +179,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
 
     let embedding = result as number[]
 
-    if (embedding.length !== 1536) {
+    if (embedding.length > 0 && embedding.length !== 1536) {
       embedding = expandVector(embedding as number[], 1536)
     }
 

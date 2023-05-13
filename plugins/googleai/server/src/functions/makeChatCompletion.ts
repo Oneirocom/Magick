@@ -74,7 +74,13 @@ export async function makeChatCompletion(
     console.log('completionData', completionData)
 
     // Extract the result from the response
-    const result = completionData.candidates[0].content
+    const result = (
+      completionData.messages
+        ? completionData.messages[0]
+        : completionData.candidates[0]
+    ).content
+
+    console.log('***** RESULT IS', result)
 
     // Log the usage of tokens
     // const usage = completionData.usage
