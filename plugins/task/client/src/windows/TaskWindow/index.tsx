@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useConfig } from '@magickml/client-core'
 import TaskTable from './TaskTable'
+import { method } from 'lodash'
 
 /**
  * Defines the properties of an task.
@@ -40,14 +41,13 @@ const TaskWindow = (): JSX.Element => {
    */
   const fetchTasks = async (): Promise<void> => {
     try {
-      const headers = PRODUCTION
-        ? { Authorization: `Bearer ${token}` }
-        : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-
       const response = await fetch(
         `${API_ROOT_URL}/tasks?projectId=${config.projectId}`,
         {
-          headers: headers as any, // TODO: look at this
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       )
 
