@@ -1,7 +1,6 @@
 // DOCUMENTED
 import { ClientPluginManager, pluginManager } from '@magickml/core'
 import AppsIcon from '@mui/icons-material/Apps'
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import ArticleIcon from '@mui/icons-material/Article'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
@@ -229,7 +228,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, []);
+  }, [])
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -239,25 +238,17 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
           onClick={toggleDrawer}
           sx={{ justifyContent: openDrawer ? 'space-between' : 'flex-end' }}
         >
-          {
-            <img
-              style={{
-                marginLeft: openDrawer ? '.5em' : '.0em',
-                marginTop: '2em',
-                height: 16,
-                cursor: 'pointer',
-              }}
-              src={openDrawer ? MagickLogo : MagickLogoSmall}
-              onClick={toggleDrawer}
-              alt=""
-            />
-          }
-          {openDrawer && (
-            <ArrowBackIosIcon
-              fontSize="small"
-              style={{ marginLeft: '1rem', color: '#ccc', cursor: 'pointer' }}
-            />
-          )}
+          <img
+            style={{
+              marginLeft: openDrawer ? '.5em' : '.0em',
+              marginTop: '2em',
+              height: 16,
+              cursor: 'pointer',
+            }}
+            src={openDrawer ? MagickLogo : MagickLogoSmall}
+            onClick={toggleDrawer}
+            alt=""
+          />
         </DrawerHeader>
         <List
           sx={{
