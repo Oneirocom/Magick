@@ -77,11 +77,11 @@ function EventTable({ events, updateCallback }) {
   const token = globalConfig?.token
 
   const [anchorEl, setAnchorEl] = useState(null)
-  // const [selectedRow, setSelectedRow] = useState(null)
+  const [selectedRow, setSelectedRow] = useState(null)
 
   const handleActionClick = (event, row) => {
     setAnchorEl(event.currentTarget)
-    // setSelectedRow(row)
+    setSelectedRow(row)
   }
 
   const createData = (
@@ -151,13 +151,13 @@ function EventTable({ events, updateCallback }) {
 
   const handleActionClose = () => {
     setAnchorEl(null)
-    // setSelectedRow(null)
+    setSelectedRow(null)
   }
 
   // Handle event deletion
   const handleEventDelete = async (event: any) => {
     console.log('deleting event', event)
-    const isDeleted = await fetch(`${API_ROOT_URL}/events/${event.id}`, {
+    const isDeleted = await fetch(`${API_ROOT_URL}/events/${selectedRow.id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -165,6 +165,8 @@ function EventTable({ events, updateCallback }) {
     })
     if (isDeleted) enqueueSnackbar('Event deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting Event', { variant: 'error' })
+    // close the action menu
+    handleActionClose()
     updateCallback()
   }
 
