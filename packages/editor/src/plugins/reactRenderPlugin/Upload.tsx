@@ -1,6 +1,6 @@
 // DOCUMENTED
 
-import { API_ROOT_URL, DEFAULT_USER_TOKEN, PRODUCTION } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/core'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
@@ -61,9 +61,7 @@ export const Upload = ({ id_image, output }: UploadProps) => {
 
       await fetch(`${API_ROOT_URL}/upload`, {
         method: 'POST',
-        headers: PRODUCTION
-          ? { Authorization: `Bearer ${token}` }
-          : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` },
+        headers: { Authorization: `Bearer ${token}` },
         body: JSON.stringify({ id: id_image, uri: dataUri }),
       })
     } catch (error) {
