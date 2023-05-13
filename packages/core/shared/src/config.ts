@@ -62,7 +62,7 @@ export const PAGINATE_MAX = getVarForEnvironment('PAGINATE_MAX') || '100'
 export const JWT_SECRET = getVarForEnvironment('JWT_SECRET') || 'secret'
 
 export const POSTHOG_ENABLED =
-  getVarForEnvironment('POSTHOG_ENABLED') === 'true' || false
+  getVarForEnvironment('POSTHOG_ENABLED') === 'true'
 export const POSTHOG_API_KEY = getVarForEnvironment('POSTHOG_API_KEY') || ''
 export const REDISCLOUD_URL = getVarForEnvironment('REDISCLOUD_URL') || ''
 
