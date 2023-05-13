@@ -36,17 +36,6 @@ export class EventService<
   }
 
   /**
-   * Remove an event.
-   * This function deletes an event from the vector database given an event ID.
-   * @param {string} id - The event ID.
-   * @returns {Promise<any>} - The result of the delete operation.
-   */
-  async remove(id: string): Promise<any> {
-    const db = app.get('dbClient')
-    return await db('events').where('id', id).del()
-  }
-
-  /**
    * Find events.
    * This function searches for events in the database given an embedding and other query parameters.
    * @param {ServiceParams} [params] - The query parameters for the search.
@@ -76,7 +65,9 @@ export class EventService<
         })
         .select(
           cli.raw(
-            `1 - (embedding <=> ${"'[" + f32_ary.toString() + "]'"}) AS similarity`
+            `1 - (embedding <=> ${
+              "'[" + f32_ary.toString() + "]'"
+            }) AS similarity`
           )
         )
         .select(
@@ -86,12 +77,12 @@ export class EventService<
         )
         .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
 
-      console.log("querys", querys)
+      console.log('querys', querys)
       return { events: querys }
     }
 
     const query = cli.from('events').select()
-    
+
     query.orderBy('date', 'desc')
 
     if (params.query.content) {

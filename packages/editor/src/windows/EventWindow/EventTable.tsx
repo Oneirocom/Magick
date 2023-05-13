@@ -2,7 +2,7 @@
 // Import statements kept as-is
 import { Button, TableComponent } from '@magickml/client-core'
 import { API_ROOT_URL } from '@magickml/core'
-import { Delete, MoreHoriz, Refresh } from '@mui/icons-material'
+import { MoreHoriz, Refresh } from '@mui/icons-material'
 import {
   Container,
   IconButton,
@@ -12,9 +12,11 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import { useEffect, useMemo, useState } from 'react'
+import { useSnackbar } from 'notistack'
+import { useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
+import { useSelector } from 'react-redux'
 import {
   useAsyncDebounce,
   useFilters,
@@ -25,11 +27,6 @@ import {
 } from 'react-table'
 import { EventData, columns } from './event'
 import styles from './index.module.scss'
-import { id } from 'ethers/lib/utils.js'
-import _ from 'lodash'
-import { useConfig } from '@magickml/client-core'
-import { useSnackbar } from 'notistack'
-import { useSelector } from 'react-redux'
 
 /**
  * GlobalFilter component for applying search filter on the whole table.
@@ -55,31 +52,6 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   )
 }
 
-/**
- * DefaultColumnFilter component for applying filter on each column.
- * @param {{ column: { filterValue: any, setFilter: Function, Header: string } }} param0
- * @returns JSX.Element
- */
-const DefaultColumnFilter = ({
-  column: { filterValue, setFilter, Header },
-}) => {
-  return (
-    <input
-      type="text"
-      value={filterValue || ''}
-      onChange={e => {
-        setFilter(e.target.value || undefined)
-      }}
-      placeholder={Header}
-      style={{
-        width: '100%',
-        border: 0,
-        borderRadius: 0,
-      }}
-    />
-  )
-}
-
 function ActionMenu({ anchorEl, handleClose, handleDelete }) {
   return (
     <Menu
@@ -100,16 +72,16 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
  */
 function EventTable({ events, updateCallback }) {
   const { enqueueSnackbar } = useSnackbar()
-  const config = useConfig()
+  // const config = useConfig()
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 
   const [anchorEl, setAnchorEl] = useState(null)
-  const [selectedRow, setSelectedRow] = useState(null)
+  // const [selectedRow, setSelectedRow] = useState(null)
 
   const handleActionClick = (event, row) => {
     setAnchorEl(event.currentTarget)
-    setSelectedRow(row)
+    // setSelectedRow(row)
   }
 
   const createData = (
@@ -143,33 +115,6 @@ function EventTable({ events, updateCallback }) {
         </>
       ),
     }
-  }
-
-  // Editable cell component
-  const EditableCell = ({
-    value = '',
-    row: { original: row },
-    column: { id },
-    updateEvent,
-  }) => {
-    const [val, setVal] = useState(value)
-    const onChange = e => typeof val !== 'object' && setVal(e.target.value)
-    const onBlur = e => updateEvent(row, id, val)
-    useEffect(() => setVal(value), [value])
-    return (
-      <input
-        value={val && typeof val === 'object' ? JSON.stringify(val.data) : val}
-        onChange={onChange}
-        onBlur={onBlur}
-        className="bare-input"
-      />
-    )
-  }
-
-  // Set default column properties
-  const defaultColumn = {
-    Cell: EditableCell,
-    Filter: DefaultColumnFilter,
   }
 
   // Initialize the table with hooks
@@ -206,7 +151,7 @@ function EventTable({ events, updateCallback }) {
 
   const handleActionClose = () => {
     setAnchorEl(null)
-    setSelectedRow(null)
+    // setSelectedRow(null)
   }
 
   // Handle event deletion
