@@ -1054,11 +1054,16 @@ export class DiscordConnector {
   }
 
   async sendMessageToChannel(channelId: any, msg: any) {
-    console.log('sending message to channel: ' + channelId, msg)
     try {
       const channel = await this.client.channels.fetch(channelId)
       if (msg && msg !== '' && channel && channel !== undefined) {
-        channel.send(msg)
+        console.log('**** SENDING DISCORD MESSAGE', msg)
+        // split msg into an array of messages that are less than 2000 characters
+        const msgArray = msg?.match(/.{1,2000}/g)
+        // send each message individually
+        msgArray.forEach(msg => {
+          channel.send(msg)
+        })
       } else {
         console.error(
           'could not send message to channel: ' + channelId,

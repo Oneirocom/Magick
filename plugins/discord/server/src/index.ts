@@ -75,6 +75,7 @@ function getAgentMethods() {
  * @param args - An object containing the output, agent, and event.
  */
 async function handleResponse({ output, agent, event }) {
+  console.log('handleResponse', output, event)
   if (!output || output === '')
     return agent.warn('No output to send to discord')
   await agent?.discord?.sendMessageToChannel(event.channel, output)
