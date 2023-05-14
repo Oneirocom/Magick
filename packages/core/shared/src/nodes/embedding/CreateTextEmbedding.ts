@@ -14,8 +14,8 @@ import {
   WorkerData,
 } from '../../types'
 
-import { pluginManager } from '../../plugin'
 import expandVector from '../../functions/expandVector'
+import { pluginManager } from '../../plugin'
 
 /** Brief description of the component that this file exports. */
 const info =
@@ -179,7 +179,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
 
     let embedding = result as number[]
 
-    if (embedding.length > 0 && embedding.length !== 1536) {
+    if (embedding.length !== 1536) {
       embedding = expandVector(embedding as number[], 1536)
     }
 
