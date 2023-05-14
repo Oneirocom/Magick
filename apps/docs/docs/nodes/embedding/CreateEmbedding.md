@@ -1,3 +1,3 @@
 # Create Embedding
 
-Event Store is used to store events for an event and user
+Takes a string input and outputs the vector embedding for that string

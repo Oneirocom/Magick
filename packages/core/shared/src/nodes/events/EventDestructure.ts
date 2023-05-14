@@ -23,7 +23,7 @@ import {
 /**
  * Info description for EventDestructureComponent
  */
-const info = `Takes an input event and splits it up into its individual components that you can access through the outputs.
+const info = `Takes an event input and splits it up into its individual components that you can access through the outputs.
 `
 
 /**

@@ -1,3 +1,3 @@
 # Event Delete
 
-Deletes an event.
+Takes an event input and deletes the corresponding event from the Events store.

@@ -10,7 +10,8 @@ import { MagickComponent } from '../../engine'
 import { anySocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
-const INFO = 'Is Null Or Undefined checks if the input is null or undefined'
+const INFO =
+  'Checks if the input is null or undefined and triggers the appropriate output.'
 
 export class IsNullOrUndefined extends MagickComponent<Promise<void>> {
   /**

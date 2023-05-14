@@ -7,7 +7,7 @@ import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 // Information about the component
 const info =
-  'Join an array of document into a content formatted for prompt injection.'
+  'Join an array of document content into a string formatted for prompt injection.'
 
 type WorkerReturn = {
   content: string
@@ -67,8 +67,8 @@ export class DocumentToContent extends MagickComponent<WorkerReturn> {
       // @ts-ignore
       if (documents.rows) {
         // @ts-ignore
-        documents.rows.forEach((document: {content: string }) => {
-          content += '\n' + document.content +  '\n'
+        documents.rows.forEach((document: { content: string }) => {
+          content += '\n' + document.content + '\n'
         })
         return {
           content,
@@ -82,8 +82,7 @@ export class DocumentToContent extends MagickComponent<WorkerReturn> {
       }
     } else {
       type Document = { content: string }
-      content +=
-         (documents as Document).content + '\n'
+      content += (documents as Document).content + '\n'
     }
 
     return {

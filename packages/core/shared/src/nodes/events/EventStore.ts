@@ -20,7 +20,8 @@ import {
 /**
  * Information about the EventStore class
  */
-const info = 'Event Store is used to store events for an event and user'
+const info =
+  'Takes an input event and stores it in the Events store with the type specified in the Type property. The content, sender override, and embedding inputs allow you to store/override additional information about the event.'
 
 /**
  * EventStore class that extends MagickComponent

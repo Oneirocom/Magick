@@ -4,7 +4,8 @@ import { MagickComponent } from '../../engine'
 import { objectSocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
-const info = 'Deletes an event.'
+const info =
+  'Takes an event input and deletes the corresponding event from the Events store.'
 
 /**
  * A Rete component representing an event deletion node in the visual programming editor.
