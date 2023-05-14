@@ -36,6 +36,7 @@ import { Output } from './io/Output'
 import { Request } from './io/Request'
 import { Respond } from './io/Respond'
 import { Skill } from './io/Skill'
+import { SpellByName } from './io/SpellByName'
 import { SpellComponent } from './io/Spell'
 import { RunSpell } from './magick/runSpell'
 import { InRange } from './number/InRange'
@@ -121,6 +122,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   runSpell: () => new RunSpell(),
   error: () => new ErrorNode(),
   respond: () => new Respond(),
+  spellByName: () => new SpellByName(),
 }
 
 /**
