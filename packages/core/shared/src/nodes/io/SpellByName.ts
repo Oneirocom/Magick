@@ -124,7 +124,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     const spellId = firstSpell.id || firstSpell._id
 
     console.log('spellId', spellId)
-    console.log('******* RAN SKILL *******', spellName)
+    console.log('******* RAN SPELLBYNAME *******', spellName)
 
     const { projectId } = _context
     if (module.agent) {
@@ -135,7 +135,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
           'Input - Default': event,
         },
         runSubspell: false,
-        agent: agent,
+        agent: module.agent,
         secrets: agent?.secrets ?? secrets,
         app: module.app,
         publicVariables: {},
