@@ -1,53 +1,61 @@
-// DOCUMENTED 
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
-import { rootApi } from './api';
-import { SpellInterface } from '@magickml/core';
-import md5 from 'md5';
+// DOCUMENTED
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
+import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
+import { rootApi } from './api'
+import { SpellInterface } from '@magickml/core'
+import md5 from 'md5'
 
 /**
  * @interface Diff represents a spell diff.
  */
 export interface Diff {
-  name: string;
-  diff: Record<string, unknown>;
+  name: string
+  diff: Record<string, unknown>
 }
 
 /**
  * @interface PatchArgs represents arguments for patching a spell.
  */
 export interface PatchArgs {
-  spellName: string;
-  update: Partial<SpellInterface>;
+  spellName: string
+  update: Partial<SpellInterface>
 }
 
 /**
  * @interface UserSpellArgs represents arguments for user spell.
  */
 export interface UserSpellArgs {
-  spellName: string;
+  spellName: string
 }
 
 /**
  * @interface SpellData represents spell data pagination.
  */
 export interface SpellData {
-  limit: number;
-  skip: number;
-  total: number;
-  data: SpellInterface[];
+  limit: number
+  skip: number
+  total: number
+  data: SpellInterface[]
 }
 
 /**
  * @name spellApi Injects API endpoints used for spell management.
  */
 export const spellApi = rootApi.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     // Api endpoint for getting spells
     getSpells: builder.query({
       providesTags: ['Spells'],
       query: ({ projectId }) => ({
         url: `spells?projectId=${projectId}`,
+        // sort alphabetically
+        transformResponse: (response: QueryReturnValue) => {
+          ;(response.data as any[]).sort(
+            (a: SpellInterface, b: SpellInterface) =>
+              a.name.localeCompare(b.name)
+          )
+          return response
+        },
       }),
     }),
     // Api endpoint for getting a spell by name
@@ -57,7 +65,7 @@ export const spellApi = rootApi.injectEndpoints({
         return {
           url: `spells?name=${spellName}&projectId=${projectId}`,
           params: {},
-        };
+        }
       },
     }),
     // Api endpoint for getting a spell by name and ID
@@ -67,7 +75,7 @@ export const spellApi = rootApi.injectEndpoints({
         return {
           url: `spells?name=${spellName}&projectId=${projectId}&id=${id}`,
           params: {},
-        };
+        }
       },
     }),
     // Api endpoint for getting a spell by ID only
@@ -77,7 +85,7 @@ export const spellApi = rootApi.injectEndpoints({
         return {
           url: `spells?projectId=${projectId}&id=${id}`,
           params: {},
-        };
+        }
       },
     }),
     // Api endpoint for running a spell
@@ -95,7 +103,7 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for saving a spell diff
     saveDiff: builder.mutation({
       invalidatesTags: ['Spell'],
-      query: (diffData) => ({
+      query: diffData => ({
         url: 'spells/saveDiff',
         method: 'POST',
         body: diffData,
@@ -121,15 +129,13 @@ export const spellApi = rootApi.injectEndpoints({
         extraOptions,
         baseQuery
       ) {
-        const spellCopy = { ...spell } as any;
-        if (spellCopy.id) delete spellCopy.id;
-        if (Object.keys(spellCopy).includes('modules'))
-          delete spellCopy.modules;
-        if (!spellCopy.createdAt)
-          spellCopy.createdAt = new Date().toISOString();
-        spellCopy.updatedAt = new Date().toISOString();
-        spellCopy.projectId = spell.projectId ?? projectId;
-        spellCopy.hash = md5(JSON.stringify(spellCopy.graph.nodes));
+        const spellCopy = { ...spell } as any
+        if (spellCopy.id) delete spellCopy.id
+        if (Object.keys(spellCopy).includes('modules')) delete spellCopy.modules
+        if (!spellCopy.createdAt) spellCopy.createdAt = new Date().toISOString()
+        spellCopy.updatedAt = new Date().toISOString()
+        spellCopy.projectId = spell.projectId ?? projectId
+        spellCopy.hash = md5(JSON.stringify(spellCopy.graph.nodes))
 
         delete spellCopy.creatorId
 
@@ -137,19 +143,19 @@ export const spellApi = rootApi.injectEndpoints({
           url: 'spells/' + spell.id,
           body: spellCopy,
           method: 'PATCH',
-        };
+        }
 
         return baseQuery(baseQueryOptions) as QueryReturnValue<
           Partial<SpellInterface>,
           FetchBaseQueryError,
           unknown
-        >;
+        >
       },
     }),
     // Api endpoint for creating a new spell
     newSpell: builder.mutation({
       invalidatesTags: ['Spells'],
-      query: (spellData) => ({
+      query: spellData => ({
         url: 'spells',
         method: 'POST',
         body: spellData,
@@ -165,7 +171,7 @@ export const spellApi = rootApi.injectEndpoints({
             ...update,
           },
           method: 'PATCH',
-        };
+        }
       },
     }),
     // Api endpoint for deleting a spell
@@ -177,7 +183,7 @@ export const spellApi = rootApi.injectEndpoints({
       }),
     }),
   }),
-});
+})
 
 // Export the generated hooks for each API endpoint
 export const {
@@ -195,4 +201,4 @@ export const {
   useNewSpellMutation,
   usePatchSpellMutation,
   useDeleteSpellMutation,
-} = spellApi;
+} = spellApi
