@@ -12,7 +12,7 @@ import {
   ModuleComponent,
   ModuleContext,
   ModuleType,
-  ModuleWorkerOutput
+  ModuleWorkerOutput,
 } from '../../types'
 import { Module } from './module'
 
@@ -134,6 +134,9 @@ export class ModuleManager {
       }
       return acc
     }, {} as Record<string, unknown>)
+
+    console.log('******* MODULE IS')
+    console.log(module)
 
     module.read({
       agent: context.module.agent,
