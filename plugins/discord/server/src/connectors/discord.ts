@@ -23,7 +23,6 @@ export class DiscordConnector {
   client = Discord.Client as any
   agent: Agent
   spellRunner: any = null
-  discord_userid = ''
   use_voice = false
   voice_provider!: string
   voice_character!: string
@@ -35,7 +34,6 @@ export class DiscordConnector {
     const {
       agent,
       discord_api_key,
-      discord_userid,
       spellRunner,
       use_voice,
       voice_provider,
@@ -282,7 +280,7 @@ export class DiscordConnector {
 
     const { content } = message
 
-    const { author, channel, mentions } = message
+    const { author, mentions } = message
 
     //if the message is empty it is ignored
     if (content === '') {
@@ -344,7 +342,7 @@ export class DiscordConnector {
     client: { user: any },
     message: { author: any; channel: any; id: any }
   ) => {
-    const { author, channel, id } = message
+    const { author, channel } = message
     if (!author) return
     if (!client || !client.user) return
     if (author.id === this.client.user.id) return
