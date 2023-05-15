@@ -11,13 +11,12 @@ const VariableModal = ({
   const [state, setState] = useState({
     discord_api_key: selectedAgentData?.data?.discord_api_key,
     discord_starting_words: selectedAgentData?.data?.discord_starting_words,
-    discord_bot_name_regex: selectedAgentData?.data?.discord_bot_name_regex,
     discord_bot_name: selectedAgentData?.data?.discord_bot_name,
     use_voice: selectedAgentData?.data?.use_voice,
     voice_provider: selectedAgentData?.data?.voice_provider,
     voice_character: selectedAgentData?.data?.voice_character,
     voice_language_code: selectedAgentData?.data?.voice_language_code,
-    tiktalknet_url: selectedAgentData?.data?.tiktalknet_url,
+    voice_endpoint: selectedAgentData?.data?.voice_endpoint,
   })
 
   const handleOnChange = e => {
@@ -54,46 +53,6 @@ const VariableModal = ({
             />
           </div>
         </div>
-        {/* <div>
-          <span className="form-item-label">Starting Words (,)</span>
-          <div style={{ marginBottom: '1em' }}>
-            <input
-              type="text"
-              className="modal-element"
-              defaultValue={state.discord_starting_words}
-              name="discord_starting_words"
-              placeholder={'Starting Words (,)'}
-              onChange={handleOnChange}
-            />
-          </div>
-        </div>
-        <div style={{ marginBottom: '1em' }}>
-          <span className="form-item-label">Bot Name Regex</span>
-          <div>
-            <input
-              className="modal-element"
-              type="text"
-              defaultValue={state.discord_bot_name_regex}
-              name="discord_bot_name_regex"
-              placeholder={'Bot Name Regex'}
-              onChange={handleOnChange}
-            />
-          </div>
-        </div>
-        <div style={{ marginBottom: '1em' }}>
-          <span className="form-item-label">Bot Name</span>
-          <div>
-            <input
-              type="text"
-              name="discord_bot_name"
-              className="modal-element"
-              defaultValue={state.discord_bot_name}
-              placeholder={'Bot Name'}
-              onChange={handleOnChange}
-            />
-          </div>
-        </div> */}
-
         <div style={{ position: 'relative' }}>
           <Switch
             label={'Voice Enabled'}
@@ -220,8 +179,8 @@ const VariableModal = ({
                     <input
                       type="text"
                       className="modal-element"
-                      name="tiktalknet_url"
-                      defaultValue={state.tiktalknet_url}
+                      name="voice_endpoint"
+                      defaultValue={state.voice_endpoint}
                       placeholder={'http://voice.metaverse.com/tts'}
                       onChange={handleOnChange}
                     />
