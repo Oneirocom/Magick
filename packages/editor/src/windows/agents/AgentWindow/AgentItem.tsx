@@ -58,7 +58,7 @@ const AgentItem = ({ keyId, agent, onDelete, onClick, style }) => {
       <Modal
         open={openConfirm}
         onClose={handleClose}
-        onSubmit={onSubmit}
+        handleAction={onSubmit}
         title={`Delete ${agent?.name} agent`}
         submitText="Confirm"
         children="Do you want to delete this agent?"

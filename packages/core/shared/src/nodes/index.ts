@@ -1,58 +1,64 @@
-// DOCUMENTED 
-import { MagickComponent } from '../engine';
-import { pluginManager } from '../plugin';
-import { ArrayToJSON } from './array/ArrayToJSON';
-import { ArrayVariable } from './array/ArrayVariable';
-import { GetValueFromArray } from './array/GetValueFromArray';
-import { JoinListComponent } from './array/JoinList';
-import { RemapArray } from './array/RemapArray';
-import { BooleanVariable } from './boolean/BooleanVariable';
-import { IsVariableTrue } from './boolean/IsVariableTrue';
-import { LogicalOperator } from './boolean/LogicalOperator';
-import { Javascript } from './code/Javascript';
-import { Python } from './code/Python';
-import { GetDocuments } from './document/GetDocuments';
-import { StoreDocument } from './document/StoreDocument';
-import { CosineSimilarity } from './embedding/CosineSimilarity';
-import { CreateTextEmbedding } from './embedding/CreateTextEmbedding';
-import { FindTextEmbedding } from './embedding/FindTextEmbedding';
-import { EventDelete } from './events/EventDelete';
-import { EventDestructureComponent } from './events/EventDestructure';
-import { EventRecall } from './events/EventRecall';
-import { EventRestructureComponent } from './events/EventRestructure';
-import { EventsToConversation } from './events/EventsToConversation';
-import { EventStore } from './events/EventStore';
-import { BooleanGate } from './flow/BooleanGate';
-import { ExclusiveGate } from './flow/ExclusiveGate';
-import { IsNullOrUndefined } from './flow/IsNullOrUndefined';
-import { OrGate } from './flow/OrGate';
-import { RandomGate } from './flow/RandomGate';
-import { SwitchGate } from './flow/SwitchGate';
-import { WaitForAll } from './flow/WaitForAll';
-import { InputComponent } from './io/Input';
-import { JupyterNotebook } from './io/JupyterNotebook';
-import { Output } from './io/Output';
-import { Request } from './io/Request';
-import { SpellComponent } from './io/Spell';
-import { InRange } from './number/InRange';
-import { NumberVariable } from './number/NumberVariable';
-import { ComposeObject } from './object/ComposeObject';
-import { GetValuesFromObject } from './object/GetValuesFromObject';
-import { ParseJSON } from './object/JSONToObject';
-import { Merge } from './object/MergeObjects';
-import { ObjectToJSON } from './object/ObjectToJSON';
-import { CombineText } from './text/CombineText';
-import { ComplexStringMatcher } from './text/ComplexStringMatcher';
-import { EvaluateText } from './text/EvaluateText';
-import { GenerateText } from './text/GenerateText';
-import { ProfanityFilter } from './text/ProfanityFilter';
-import { ReplaceText } from './text/ReplaceText';
-import { StringVariable } from './text/StringVariable';
-import { TextTemplate } from './text/TextTemplate';
-import { TextVariable } from './text/TextVariable';
-import { Cast } from './utility/Cast';
-import { Echo } from './utility/Echo';
-import { Log } from './utility/Log';
+// DOCUMENTED
+import { MagickComponent } from '../engine'
+import { pluginManager } from '../plugin'
+import { ArrayToJSON } from './array/ArrayToJSON'
+import { ArrayVariable } from './array/ArrayVariable'
+import { GetValueFromArray } from './array/GetValueFromArray'
+import { JoinListComponent } from './array/JoinList'
+import { RemapArray } from './array/RemapArray'
+import { BooleanVariable } from './boolean/BooleanVariable'
+import { IsVariableTrue } from './boolean/IsVariableTrue'
+import { LogicalOperator } from './boolean/LogicalOperator'
+import { Javascript } from './code/Javascript'
+import { Python } from './code/Python'
+import { GetDocuments } from './document/GetDocuments'
+import { StoreDocument } from './document/StoreDocument'
+import { CosineSimilarity } from './embedding/CosineSimilarity'
+import { CreateTextEmbedding } from './embedding/CreateTextEmbedding'
+import { FindTextEmbedding } from './embedding/FindTextEmbedding'
+import { EventDelete } from './events/EventDelete'
+import { EventDestructureComponent } from './events/EventDestructure'
+import { EventRecall } from './events/EventRecall'
+import { EventRestructureComponent } from './events/EventRestructure'
+import { EventStore } from './events/EventStore'
+import { EventsToConversation } from './events/EventsToConversation'
+import { JupyterNotebook } from './experimental/JupyterNotebook'
+import { TextToSpeech } from './experimental/textToSpeech'
+import { BooleanGate } from './flow/BooleanGate'
+import { ExclusiveGate } from './flow/ExclusiveGate'
+import { IsNullOrUndefined } from './flow/IsNullOrUndefined'
+import { OrGate } from './flow/OrGate'
+import { RandomGate } from './flow/RandomGate'
+import { SwitchGate } from './flow/SwitchGate'
+import { WaitForAll } from './flow/WaitForAll'
+import { InputComponent } from './io/Input'
+import { Output } from './io/Output'
+import { Request } from './io/Request'
+import { Respond } from './io/Respond'
+import { Skill } from './io/Skill'
+import { SpellComponent } from './io/Spell'
+import { RunSpell } from './magick/runSpell'
+import { InRange } from './number/InRange'
+import { NumberVariable } from './number/NumberVariable'
+import { ComposeObject } from './object/ComposeObject'
+import { GetValuesFromObject } from './object/GetValuesFromObject'
+import { ParseJSON } from './object/JSONToObject'
+import { Merge } from './object/MergeObjects'
+import { ObjectToJSON } from './object/ObjectToJSON'
+import { CombineText } from './text/CombineText'
+import { ComplexStringMatcher } from './text/ComplexStringMatcher'
+import { EvaluateText } from './text/EvaluateText'
+import { GenerateText } from './text/GenerateText'
+import { ProfanityFilter } from './text/ProfanityFilter'
+import { ReplaceText } from './text/ReplaceText'
+import { StringVariable } from './text/StringVariable'
+import { TextTemplate } from './text/TextTemplate'
+import { TextVariable } from './text/TextVariable'
+import { Cast } from './utility/Cast'
+import { CurrentTime } from './utility/CurrentTime'
+import { Echo } from './utility/Echo'
+import { ErrorNode } from './utility/Error'
+import { Log } from './utility/Log'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -99,6 +105,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   merge: () => new Merge(),
   orGate: () => new OrGate(),
   log: () => new Log(),
+  currentTime: () => new CurrentTime(),
   promptTemplate: () => new TextTemplate(),
   parseJSON: () => new ParseJSON(),
   objectToJSON: () => new ObjectToJSON(),
@@ -107,7 +114,12 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   storeDocument: () => new StoreDocument(),
   getValueFromArray: () => new GetValueFromArray(),
   cosineSimilarity: () => new CosineSimilarity(),
-};
+  textToSpeech: () => new TextToSpeech(),
+  skill: () => new Skill(),
+  runSpell: () => new RunSpell(),
+  error: () => new ErrorNode(),
+  respond: () => new Respond(),
+}
 
 /**
  * Compare two MagickComponents based on their display name or name.
@@ -115,14 +127,17 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
  * @param b - MagickComponent to compare.
  * @returns -1 if a comes before b, 1 if a comes after b, 0 if they are equal.
  */
-function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>): number {
+function compare(
+  a: MagickComponent<unknown>,
+  b: MagickComponent<unknown>
+): number {
   if ((a.displayName || a.name) < (b.displayName || b.name)) {
-    return -1;
+    return -1
   }
   if ((a.displayName || a.name) > (b.displayName || b.name)) {
-    return 1;
+    return 1
   }
-  return 0;
+  return 0
 }
 
 /**
@@ -131,20 +146,19 @@ function compare(a: MagickComponent<unknown>, b: MagickComponent<unknown>): numb
  */
 export const getNodes = (): MagickComponent<unknown>[] => {
   try {
-    const pluginNodes = pluginManager.getNodes();
-    const allComponents = { ...components, ...pluginNodes };
-    const sortedComponentKeys = Object.keys(allComponents).sort();
-    const sortedComponents: Record<string, () => MagickComponent<unknown>> = {};
+    const pluginNodes = pluginManager.getNodes()
+    const allComponents = { ...components, ...pluginNodes }
+    const sortedComponentKeys = Object.keys(allComponents).sort()
+    const sortedComponents: Record<string, () => MagickComponent<unknown>> = {}
 
     for (const key of sortedComponentKeys) {
-      sortedComponents[key] = allComponents[key];
+      sortedComponents[key] = allComponents[key]
     }
-
     return Object.values(sortedComponents)
       .map(component => component())
-      .sort(compare);
+      .sort(compare)
   } catch (e) {
     console.error(e)
     return []
   }
-};
+}

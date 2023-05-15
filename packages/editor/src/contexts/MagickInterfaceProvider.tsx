@@ -1,4 +1,5 @@
 // DOCUMENTED 
+import { useConfig, usePubSub } from '@magickml/client-core';
 import {
   EditorContext,
   GetSpell,
@@ -14,8 +15,6 @@ import {
   SupportedLanguages,
 } from '@magickml/core';
 import { createContext, useContext, useEffect, useRef } from 'react';
-import { useConfig } from '../contexts/ConfigProvider';
-import { usePubSub } from '../contexts/PubSubProvider';
 import { spellApi } from '../state/api/spells';
 
 // Create context for EditorContext type
@@ -140,7 +139,6 @@ const MagickInterfaceProvider: React.FC<{ children: React.ReactNode; tab: any }>
   };
 
   const sendToPlaytest: (data: string) => void = data => {
-    console.log('sending to playtest', data);
     publish($PLAYTEST_PRINT(tab.id), data);
   };
 

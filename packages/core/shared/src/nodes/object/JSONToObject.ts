@@ -75,7 +75,6 @@ export class ParseJSON extends MagickComponent<Promise<WorkerReturn>> {
       }
     }
 
-    console.log('str', str)
     return {
       output: JSON.parse(str),
     }

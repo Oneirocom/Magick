@@ -2,6 +2,10 @@
 import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
+  const vectorExtension = await knex.raw('SELECT * FROM pg_extension WHERE extname = \'vector\'')
+  if (vectorExtension.rows.length === 0) {
+    await knex.raw('CREATE EXTENSION vector')
+  }
   await knex.schema.createTable('events', (table) => {
     table.uuid('id').primary()
     table.string('type')

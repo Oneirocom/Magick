@@ -6,11 +6,11 @@
  * @param purpose - purpose of the OpenAI request
  * @returns React Component
  */
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { OpenAI } from "../types/openai";
-import useUploadFile, { Enforce, MimeTypes } from "./useUploadFile";
+import { Enforce, MimeTypes } from "./useUploadFile";
 import Button from "@mui/material/Button";
-import { DEFAULT_PROJECT_ID, API_ROOT_URL, TRUSTED_PARENT_URL, UNTRUSTED_IFRAME } from '@magickml/core'
+import { DEFAULT_PROJECT_ID, API_ROOT_URL } from '@magickml/core'
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import axios from "axios";
 import { extractPromptsAndCompletions } from "../documents/documentLoader";
@@ -27,7 +27,7 @@ export default function GetRecordsButton({ enforce, purpose }: Props) {
     console.log(headers)
     const inputRef = useRef<HTMLInputElement>(null);
     //const { isLoading, uploadFile } = useUploadFile(purpose, enforce);
-    const { isLoading, documentLoad} = useDocument(purpose, enforce);
+    const { documentLoad} = useDocument(purpose, enforce);
     /**
      * Calls the upload function when the user selects a file
      */
@@ -37,17 +37,17 @@ export default function GetRecordsButton({ enforce, purpose }: Props) {
 
     async function get_record(): Promise<void> {
 
-        let projectId = DEFAULT_PROJECT_ID;
-        let url = `${API_ROOT_URL}/documents/`;
+        const projectId = DEFAULT_PROJECT_ID;
+        const url = `${API_ROOT_URL}/documents/`;
         const params = new URLSearchParams([['projectId', projectId]]);
-        let result = await (await axios.get(url, { params: params })).data.data;
+        const result = await (await axios.get(url, { params: params })).data.data;
         let text = ''
         result.slice(0,1).forEach(async (record) => {
             text += record.content
         })
         console.log(text)
-        let data = await extractPromptsAndCompletions(text)
-        let r = await documentLoad(data)
+        const data = await extractPromptsAndCompletions(text)
+        const r = await documentLoad(data)
         console.log(r)
     }
 

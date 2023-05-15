@@ -1,17 +1,14 @@
 // DOCUMENTED 
 import Rete from 'rete';
 import { v4 as uuidv4 } from 'uuid';
-import * as ethers from 'ethers';
 import {
   anySocket,
   InputControl,
   MagickComponent,
   MagickNode,
-  MagickWorkerInputs,
   MagickWorkerOutputs,
   stringSocket,
   triggerSocket,
-  WorkerData,
 } from '@magickml/core';
 
 const info = `Call an arbitrary function from a contract`;
@@ -104,14 +101,11 @@ export class CallContractFunctionRead extends MagickComponent<Promise<InputRetur
    * @param inputs MagickWorkerInputs object
    * @returns Promise resolving to MagickWorkerOutputs object containing the result
    */
-  async worker(
-    node: WorkerData,
-    inputs: MagickWorkerInputs,
-  ): Promise<MagickWorkerOutputs> {
-    const rpcHttp = node.data?.rpc_http as string;
+  async worker(): Promise<MagickWorkerOutputs> {
+    // const rpcHttp = node.data?.rpc_http as string;
 
-    const contractAddress = (inputs['tx'] && inputs['tx'][0]) as string;
-    const contractAbi = (inputs['abi'] && inputs['abi'][0]) as string;
+    // const contractAddress = (inputs['tx'] && inputs['tx'][0]) as string;
+    // const contractAbi = (inputs['abi'] && inputs['abi'][0]) as string;
 
     const res = null;
 

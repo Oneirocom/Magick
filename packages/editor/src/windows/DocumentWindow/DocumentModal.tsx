@@ -1,28 +1,25 @@
-import { useEffect, useState } from 'react';
-import { Button, Modal } from '@magickml/client-core';
-import TextField from '@mui/material/TextField';
-import DatePicker from '@mui/lab/DatePicker';
+import { Modal } from '@magickml/client-core';
 import { Backdrop, CircularProgress } from '@mui/material';
-import {convertFileToText, numberOfPages} from './documentconvert'
+import TextField from '@mui/material/TextField';
+import { useEffect, useState } from 'react';
+import { convertFileToText } from './documentconvert';
 
 const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }) => {
   const [loading, setLoading] = useState(false);
   const [newDocument, setDocument] = useState({
     type: '',
-    owner: '',
     date: '',
     content: ''
   });
 
   useEffect(() => {
-    console.log(newDocument);
     setNewDocument(newDocument);
   }, [newDocument]);
 
   const handleFileChange = async (e) => {
-   let files = [...e.target.files!][0]
+   const files = [...e.target.files!][0]
     setLoading(true);
-    let text = await convertFileToText(files)
+    const text = await convertFileToText(files)
     setLoading(false)
     setDocument({ ...newDocument, content: text.join('') });
   };
@@ -37,7 +34,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
   };
 
   const handleSaveDocument = () => {
-    if (newDocument.type && newDocument.owner) {
+    if (newDocument.type) {
       handleSave(newDocument);
       setCreateMode(!createMode)
     } else {
@@ -46,8 +43,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
   };
 
   return (
-    <>
-      <Modal
+    <Modal
         open={createMode}
         onClose={()=>{setCreateMode(!createMode)}}
         onSubmit={handleSaveDocument}
@@ -60,23 +56,16 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
           onChange={(e) => setDocument({ ...newDocument, type: e.target.value })}
           required
         />
-        <TextField
-          label="Owner"
-          name="owner"
-          style={{ width: '100%', margin: '.5em' }}
-          onChange={(e) => setDocument({ ...newDocument, owner: e.target.value })}
-          required
-        />
         {/* <TextField
           label="Content"
           name="content"
           style={{ width: '100%', margin: '.5em' }}
           onChange={(e) => setDocument({ ...newDocument, content: e.target.value })}
         /> */}
-        <DatePicker
+        {/* <DatePicker
           label="Date"
           onChange={(date) => setDocument({ ...newDocument, date: date.toISOString() })}
-        />
+        /> */}
         {/* <TextField
           label="Embedding"
           name="embedding"
@@ -92,7 +81,6 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument }
           Drop file here
         </div>
       </Modal>
-    </>
   );
 };
 

@@ -6,7 +6,7 @@ import md5 from 'md5'
 import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
 
-import { useConfig } from '../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 import { spellApi } from '../state/api/spells'
 import { useAppDispatch } from '../state/hooks'
 import { openTab } from '../state/tabs'
@@ -36,8 +36,6 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   // Handle what happens when a new spell is selected and fetched
   useEffect(() => {
     if (!spell) return
-
-    console.log('new spell', spell)
 
     const _spell = spell.data[0]
     update(_spell)

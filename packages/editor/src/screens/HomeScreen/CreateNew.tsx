@@ -13,7 +13,7 @@ import {
   uniqueNamesGenerator,
 } from 'unique-names-generator';
 import TemplatePanel from '../../components/TemplatePanel';
-import { useConfig } from '../../contexts/ConfigProvider';
+import { useConfig } from '@magickml/client-core';
 import { spellApi } from '../../state/api/spells';
 import emptyImg from './empty.png';
 import css from './homeScreen.module.css';

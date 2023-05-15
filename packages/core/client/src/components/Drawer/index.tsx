@@ -1,6 +1,8 @@
 // DOCUMENTED
 import { ClientPluginManager, pluginManager } from '@magickml/core'
 import AppsIcon from '@mui/icons-material/Apps'
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+import ArticleIcon from '@mui/icons-material/Article'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
 import SettingsIcon from '@mui/icons-material/Settings'
@@ -12,17 +14,17 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import { CSSObject, styled, Theme } from '@mui/material/styles'
+import { CSSObject, Theme, styled } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   ProjectWindowProvider,
-  useProjectWindow
+  useProjectWindow,
 } from '../../contexts/ProjectWindowContext'
 import ProjectWindow from './ProjectWindow'
+import { SetAPIKeys } from './SetAPIKeys'
 import MagickLogo from './purple-logo-full.png'
 import MagickLogoSmall from './purple-logo-small.png'
-import { SetAPIKeys } from './SetAPIKeys'
 
 // Constants
 const drawerWidth = 150
@@ -227,7 +229,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [])
+  }, []);
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -250,6 +252,12 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
               alt=""
             />
           }
+          {openDrawer && (
+            <ArrowBackIosIcon
+              fontSize="small"
+              style={{ marginLeft: '1rem', color: '#ccc', cursor: 'pointer' }}
+            />
+          )}
         </DrawerHeader>
         <List
           sx={{
@@ -274,13 +282,13 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             onClick={onClick('/agents')}
             text="Agents"
           />
-          {/* <DrawerItem
+          <DrawerItem
             active={location.pathname === '/documents'}
-            Icon={DocumentIcon}
+            Icon={ArticleIcon}
             open={openDrawer}
             onClick={onClick('/documents')}
             text="Documents"
-          /> */}
+          />
           <DrawerItem
             active={location.pathname === '/events'}
             Icon={BoltIcon}
@@ -295,15 +303,14 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             onClick={onClick('/requests')}
             text="Requests"
           />
-          {/* <Divider />
-          <DrawerItem
+          <Divider />
+          {/* <DrawerItem
             active={location.pathname.includes('/chat')}
             Icon={ChatIcon}
             open={openDrawer}
             onClick={onClick('/chat')}
             text="Chat"
           /> */}
-          <Divider />
           <PluginDrawerItems onClick={onClick} open={openDrawer} />
           <Divider />
           <DrawerItem

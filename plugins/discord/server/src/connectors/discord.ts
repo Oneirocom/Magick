@@ -1,14 +1,15 @@
 // DOCUMENTED
-import { AgentInterface, WorldManager } from '@magickml/core'
+import { Agent, WorldManager } from '@magickml/core'
 import Discord, {
-  AttachmentBuilder, ChannelType,
+  AttachmentBuilder,
+  ChannelType,
   EmbedBuilder,
   GatewayIntentBits,
-  Partials
+  Partials,
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
-import emojiRegex from 'emoji-regex'
 import { app } from '@magickml/server-core'
+import emojiRegex from 'emoji-regex'
 
 let recognizeSpeech
 
@@ -26,11 +27,10 @@ interface UserObject {
 }
 export class DiscordConnector {
   client = Discord.Client as any
-  agent: AgentInterface
+  agent: Agent
   spellRunner: any = null
   discord_wake_words: string[] = []
   discord_userid = ''
-  discord_bot_name = 'Bot'
   use_voice = false
   voice_provider!: string
   voice_character!: string
@@ -45,7 +45,6 @@ export class DiscordConnector {
       discord_api_key,
       discord_wake_words,
       discord_userid,
-      discord_bot_name,
       spellRunner,
       use_voice,
       voice_provider,
@@ -73,7 +72,6 @@ export class DiscordConnector {
       }
     }
     this.discord_userid = discord_userid
-    this.discord_bot_name = discord_bot_name
 
     const token = discord_api_key
     if (!token) {
@@ -101,7 +99,7 @@ export class DiscordConnector {
           console.log('debug', message)
         })
 
-        this.client.name_regex = new RegExp(discord_bot_name, 'ig')
+        this.client.name_regex = new RegExp(agent.name, 'ig')
 
         this.client.username_regex = new RegExp(this.discord_userid, 'ig') //'((?:digital|being)(?: |$))'
         this.client.edit_messages_max_count = 5
@@ -113,7 +111,6 @@ export class DiscordConnector {
         if (this.use_voice) {
           const {
             client,
-            discord_bot_name,
             agent,
             spellRunner,
             voice_provider,
@@ -121,25 +118,48 @@ export class DiscordConnector {
             voice_language_code,
             tiktalknet_url,
           } = this
-            ; (async () => {
-              if (typeof window === 'undefined') {
-                const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
-                  await import('./discord-voice')
-                recognizeSpeech = _recognizeSpeech
-                this.client = initSpeechClient({
-                  client,
-                  discord_bot_name,
-                  agent,
-                  spellRunner,
-                  voiceProvider: voice_provider,
-                  voiceCharacter: voice_character,
-                  languageCode: voice_language_code,
-                  tiktalknet_url,
-                })
-              }
-            })()
+          ;(async () => {
+            if (typeof window === 'undefined') {
+              const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
+                await import('./discord-voice')
+              recognizeSpeech = _recognizeSpeech
+              this.client = initSpeechClient({
+                client,
+                agent,
+                spellRunner,
+                voiceProvider: voice_provider,
+                voiceCharacter: voice_character,
+                languageCode: voice_language_code,
+                tiktalknet_url,
+              })
+            }
+          })()
         }
-
+        this.client.on('joinvc', async textChannel => {
+          let connection
+          const { recognizeSpeech: _recognizeSpeech } = await import(
+            './discord-voice'
+          )
+          recognizeSpeech = _recognizeSpeech
+          if (this.use_voice) {
+            connection = recognizeSpeech(textChannel, this.client)
+            textChannel.send('Joined ' + textChannel.name)
+          } else {
+            textChannel.send('Voice is disabled')
+          }
+          return connection
+        })
+        this.client.on('leavevc', async (voiceChannel, textChannel) => {
+          const { stopSpeechClient: stopSpeechClient } = await import(
+            './discord-voice'
+          )
+          if (this.use_voice) {
+            stopSpeechClient(voiceChannel, this.client)
+            textChannel.send('Leaving  ' + voiceChannel.name)
+          } else {
+            textChannel.send('Voice is disabled')
+          }
+        })
         this.client.on(
           'messageCreate',
           this.messageCreate.bind(null, this.client)
@@ -162,24 +182,21 @@ export class DiscordConnector {
         )
 
         this.client.ws
+        ;(async () => {
+          try {
+            const login = await this.client.login(token)
+            // console.log('Discord client logged in', login)
+            agent.log('Discord client logged in', { login })
+          } catch (e) {
+            return agent.error('Error logging in discord client', e)
+          }
 
-          ; (async () => {
-
-            try {
-              const login = await this.client.login(token)
-              console.log('Discord client logged in', login)
-
-            } catch (e) {
-              return console.error('Error logging in discord client', e)
-            }
-
-            this.client.on('error', err => {
-              console.error('Discord client error', err)
-            })
-          })()
-
+          this.client.on('error', err => {
+            agent.error('Discord client error', err)
+          })
+        })()
       } catch (e) {
-        console.error('Error creating discord client', e)
+        agent.error('Error creating discord client', e)
       }
     }
   }
@@ -229,7 +246,7 @@ export class DiscordConnector {
       console.log(`Fetched ${messages.size} messages.`)
 
       // Get the timestamp of the last message
-      const lastTimestamp = messages.last().createdTimestamp
+      // const lastTimestamp = messages.last().createdTimestamp
 
       // Calculate the time one hour ago
       const now = new Date()
@@ -403,12 +420,11 @@ export class DiscordConnector {
     return mention
   }
 
-
   //Event that is trigger when a new message is created (sent)
   messageCreate = async (client: any, message: any) => {
     console.log('new message from discord:', message.content)
     this.guildId = message.guild
-    this.message = message;
+    this.message = message
     //gets the emojis from the text and replaces to unix specific type
     const reg = emojiRegex()
     let match
@@ -426,7 +442,7 @@ export class DiscordConnector {
 
     let { content } = message
 
-    const { author, channel, mentions, id } = message
+    const { author, channel, mentions } = message
 
     //replaces the discord specific mentions (<!@id>) to the actual mention
     content = content.split(' ')
@@ -440,11 +456,11 @@ export class DiscordConnector {
       console.log('empty content')
       return
     }
-    let _prev = undefined
+    // let _prev = undefined
 
     //if the author is not a bot, it adds the message to the conversation simulation
     if (!author.bot) {
-      _prev = this.prevMessage[channel.id]
+      // _prev = this.prevMessage[channel.id]
       this.prevMessage[channel.id] = author
       if (this.prevMessageTimers[channel.id] !== undefined)
         clearTimeout(this.prevMessageTimers[channel.id])
@@ -506,7 +522,7 @@ export class DiscordConnector {
     //checks if the user is in discussion with the but, or includes !ping or started the conversation, if so it adds (if not exists) !ping in the start to handle the message the ping command
     const isDirectMention =
       !content.startsWith('!') &&
-      content.toLowerCase().includes(this.discord_bot_name?.toLowerCase())
+      content.toLowerCase().includes(this.agent.name?.toLowerCase())
     const isUserNameMention =
       (channel.type === ChannelType.GuildText || isDM) &&
       content &&
@@ -541,12 +557,12 @@ export class DiscordConnector {
       }
 
       if (!content.startsWith('!ping')) {
-        let values = ''
+        // const values = ''
         const msgs = await channel.messages.fetch({ limit: 10 })
         if (msgs && msgs.size > 0) {
-          for (const [key, value] of msgs.entries()) {
+          for (const [value] of msgs.entries()) {
             if (value && value !== undefined) {
-              values += value.content
+              // values += value.content
               // if (value.author.bot) {
               //   agentTalked = true
               // }
@@ -569,12 +585,7 @@ export class DiscordConnector {
         const d = content.split(' ')
         const index = d.indexOf('join') + 1
         console.log('d:', d)
-        console.log(
-          'joining channel:',
-          d[index],
-          'bot name:',
-          this.discord_bot_name
-        )
+        console.log('joining channel:', d[index], 'bot name:', this.agent.name)
         if (d.length > index) {
           const channelName = d[index]
           await message.guild.channels.cache.forEach(
@@ -637,7 +648,6 @@ export class DiscordConnector {
     // const now = new Date()
     // const pastHour = new Date(now.getTime() - 60 * 60 * 1000) // calculate the time one hour ago
     const msgs = (await this.getActiveUsers(channel, 12)) as unknown as any[]
-    console.log(msgs)
     msgs.forEach(element => {
       entities.push({
         user: element.user,
@@ -649,15 +659,15 @@ export class DiscordConnector {
     if (content.startsWith('!ping ')) {
       content = content.replace('!ping ', '')
     }
-    console.log(content)
-    console.log('calling runComponent from discord.ts')
-    console.log('publicVariables', this.agent.publicVariables)
-    const response = await this.spellRunner.runComponent({
+
+    console.log(this.agent.name, ' - sending message on discord - ', content)
+    await this.spellRunner.runComponent({
       inputs: {
         'Input - Discord (Text)': {
+          connector: 'Discord (Text)',
           content: content,
           sender: message.author.username,
-          observer: this.discord_bot_name,
+          observer: this.agent.name,
           client: 'discord',
           channel: message.channel.id,
           agentId: this.agent.id,
@@ -672,29 +682,6 @@ export class DiscordConnector {
       runSubspell: true,
       app,
     })
-
-    if (!response) {
-      console.warn('Discord: No response outputs')
-      return
-    }
-
-    console.log('response', response)
-
-    const outputKey = Object.keys(response).find(
-      key => key.toLowerCase().includes('output')
-    ) as string
-
-    const Output = response[outputKey]
-
-    if (!Output) {
-      console.warn('Discord: No Output')
-      return
-    }
-
-    console.log('handled response', Output)
-    if (!Output || Output === '') {
-      message.channel.send('Error: Empty Resonse')
-    } else message.channel.send(Output)
   }
 
   //Event that is triggered when a message is deleted
@@ -738,7 +725,7 @@ export class DiscordConnector {
 
     const oldResponse = this.getResponse(channel.id, id)
     if (oldResponse === undefined) {
-      await channel.messages.fetch(id).then(async (msg: any) => {
+      await channel.messages.fetch(id).then(async () => {
         /* null */
       })
       log('message not found')
@@ -747,7 +734,7 @@ export class DiscordConnector {
 
     channel.messages
       .fetch(oldResponse)
-      .then(async (msg: any) => {
+      .then(async () => {
         channel.messages
           .fetch({ limit: this.client.edit_messages_max_count })
           .then(async (messages: any[]) => {
@@ -916,8 +903,8 @@ export class DiscordConnector {
               deleted: boolean
               permissionsFor: (arg0: any) => {
                 (): any
-                new(): any
-                has: { (arg0: string[]): any; new(): any }
+                new (): any
+                has: { (arg0: string[]): any; new (): any }
               }
               name: string | boolean
               id: string | boolean
@@ -950,19 +937,19 @@ export class DiscordConnector {
                         id: any
                         createdTimestamp: any
                       }) => {
-                        let _author = msg.author.username
+                        // let _author = msg.author.username
                         if (
                           msg.author.isBot ||
                           msg.author.username
                             .toLowerCase()
                             .includes('digital being')
                         )
-                          _author = this.discord_bot_name
+                          if (msg.deleted === true) {
+                            // _author = this.agent.name
 
-                        if (msg.deleted === true) {
-                          // await deleteMessageFromHistory(channel.id, msg.id)
-                          log('deleted message: ' + msg.content)
-                        }
+                            // await deleteMessageFromHistory(channel.id, msg.id)
+                            log('deleted message: ' + msg.content)
+                          }
                       }
                     )
                   })

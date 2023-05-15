@@ -1,5 +1,9 @@
 // DOCUMENTED
-import { CompletionHandlerInputData, EmbeddingModel, saveRequest } from '@magickml/core'
+import {
+  CompletionHandlerInputData,
+  EmbeddingModel,
+  saveRequest,
+} from '@magickml/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
 
@@ -24,7 +28,7 @@ export async function makeTextEmbedding(
 }> {
   const { node, inputs, context } = data
 
-  const input = (inputs['input'] && inputs['input'][0])
+  const input = inputs['input'] && inputs['input'][0]
   if (!input) {
     return {
       success: false,
@@ -32,7 +36,9 @@ export async function makeTextEmbedding(
     }
   }
 
-  const apiKey = context?.module?.secrets && context?.module?.secrets['openai_api_key'] || null
+  const apiKey =
+    (context?.module?.secrets && context?.module?.secrets['openai_api_key']) ||
+    null
 
   if (!apiKey) {
     return {
@@ -82,7 +88,6 @@ export async function makeTextEmbedding(
     })
     return { success: true, result: resp.data.data[0].embedding }
   } catch (err: any) {
-    console.log(err.response.data.error)
     console.error('makeTextEmbedding error:', err)
     return { success: false, error: err.message }
   }

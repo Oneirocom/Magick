@@ -70,6 +70,7 @@ export class GmailConnector {
         const resp = await this.spellRunner.runComponent({
           inputs: {
             [`Input - Gmail`]: {
+              connector: 'Gmail',
               content: messageBody,
               sender: message.from,
               observer: this.data.gmail_address,

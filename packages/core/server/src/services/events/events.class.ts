@@ -10,7 +10,6 @@ import { KnexService } from '@feathersjs/knex'
 import { app } from '../../app'
 import type { Application } from '../../declarations'
 import type { Event, EventData, EventPatch, EventQuery } from './events.schema'
-import { DATABASE_TYPE } from '@magickml/core'
 
 export type EventParams = KnexAdapterParams<EventQuery>
 
@@ -29,13 +28,10 @@ export class EventService<
    * @param {EventData} data - The event data object.
    * @returns {Promise<any>} - The created event data.
    */
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: EventData): Promise<any> {
-    if (DATABASE_TYPE == 'pg') {
-      const cli = app.get('vectordb')
-      await cli.from('events').insert(data)
-    }
+    const cli = app.get('vectordb')
+    await cli.from('events').insert(data)
     return data
   }
 
@@ -46,15 +42,8 @@ export class EventService<
    * @returns {Promise<any>} - The result of the delete operation.
    */
   async remove(id: string): Promise<any> {
-    if (DATABASE_TYPE == 'sqlite') {
-      const vectordb = app.get('vectordb')
-      const r = vectordb.delete(id)
-      return r
-    } else {
-      const db = app.get('dbClient')
-      const _ = await db('events').where('id', id).del()
-      return _
-    }
+    const db = app.get('dbClient')
+    return await db('events').where('id', id).del()
   }
 
   /**
@@ -63,86 +52,65 @@ export class EventService<
    * @param {ServiceParams} [params] - The query parameters for the search.
    * @returns {Promise<any>} - The search results.
    */
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async find(params?: ServiceParams) {
-    const db = app.get('dbClient')
-    const cli = app.get('vectordb')
-    if (DATABASE_TYPE == 'sqlite') {
-      const vectordb = app.get('vectordb')
-      if (params.query.embedding) {
-        const blob = atob(params.query.embedding)
-        const ary_buf = new ArrayBuffer(blob.length)
-        const dv = new DataView(ary_buf)
-        for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
-        const f32_ary = new Float32Array(ary_buf)
-        const query = f32_ary as unknown as number[]
-        const { $limit: _, ...param } = params.query
+    const cli = app.get('dbClient')
+    if (params.query.embedding) {
+      const blob = atob(params.query.embedding)
+      const ary_buf = new ArrayBuffer(blob.length)
+      const dv = new DataView(ary_buf)
+      for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
+      const f32_ary = new Float32Array(ary_buf)
+      const param = params.query
+      const querys = await cli
+        .from('events')
+        .select('*')
+        .where({
+          ...(param.type && { type: param.type }),
+          ...(param.id && { id: param.id }),
+          ...(param.sender && { sender: param.sender }),
+          ...(param.client && { client: param.client }),
+          ...(param.channel && { channel: param.channel }),
+          ...(param.projectId && { projectId: param.projectId }),
+          ...(param.content && { content: param.content }),
+        })
+        .select(
+          cli.raw(
+            `1 - (embedding <=> ${"'[" + f32_ary.toString() + "]'"}) AS similarity`
+          )
+        )
+        .select(
+          cli.raw(
+            `embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`
+          )
+        )
+        .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
 
-        const search_result = await vectordb.extractMetadataFromResults(
-          query,
-          2,
-          param
-        )
-        if (search_result) {
-          return { events: search_result }
-        }
-      }
-      //@ts-ignore
-      const { $limit: _, ...param } = params
-      const tr = await vectordb.getDataWithMetadata(param, 10)
-      return { events: tr }
-    } else {
-      if (params.query.embedding) {
-        const blob = atob(params.query.embedding)
-        const ary_buf = new ArrayBuffer(blob.length)
-        const dv = new DataView(ary_buf)
-        for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
-        const f32_ary = new Float32Array(ary_buf)
-        const query = f32_ary as unknown as number[]
-        const { $limit: _, ...param } = params.query
-        const querys = await db('events')
-          .select('*')
-          .where({
-            ...(param.type && { type: param.type }),
-            ...(param.id && { id: param.id }),
-            ...(param.sender && { sender: param.sender }),
-            ...(param.client && { client: param.client }),
-            ...(param.channel && { channel: param.channel }),
-            ...(param.projectId && { projectId: param.projectId }),
-            ...(param.content && { content: param.content }),
-          })
-          .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
-        const result = await db.raw(
-          `select * from events order by embedding <-> ${
-            "'[" + f32_ary.toString() + "]'"
-          } limit 1;`
-        )
-        const bod = {
-          query_embedding: '[' + f32_ary.toString() + ']',
-          match_count: 2,
-          content_to_match: param.content,
-        }
-        const rr = await cli.rpc('match_events', bod)
-        console.log("result", rr)
-        return { events: querys }
-      }
-      console.log("RES:", params)
-      const res = await cli.from('events').select()
-                                          .where((builder) => {
-                                            if (params["content"]) {
-                                              builder.where('content', params["content"]);
-                                            }
-                                            if ('$limit' in params) {
-                                              builder.limit(params['$limit']);
-                                            }
-                                            if (params["projectId"]) {
-                                              builder.where('projectId', params["projectId"]);
-                                            }
-                                          });
-      console.log("RES:", res)
-      return { events: (res as unknown as { data: Array<any> }) }
+      console.log("querys", querys)
+      return { events: querys }
     }
+
+    const query = cli.from('events').select()
+    
+    query.orderBy('date', 'desc')
+
+    if (params.query.content) {
+      query.where('content', params.query.content)
+    }
+
+    if (params.query.projectId) {
+      query.where('projectId', params.query.projectId)
+    }
+
+    if (params.query.type) {
+      query.where('type', params.query.type)
+    }
+
+    if ('$limit' in params.query) {
+      query.limit(params.query['$limit'])
+    }
+    const res = await query
+    return { events: res?.reverse() as unknown as { data: Array<any> } }
   }
 }
 

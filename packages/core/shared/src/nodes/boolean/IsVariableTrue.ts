@@ -1,6 +1,4 @@
 // DOCUMENTED 
-/* eslint-disable no-console */
-/* eslint-disable require-await */
 import Rete from 'rete';
 
 import { MagickComponent } from '../../engine';

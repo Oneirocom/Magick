@@ -1,5 +1,4 @@
 import { FC, KeyboardEvent, MutableRefObject, useEffect, useRef, useState } from "react";
-import { StopCircle } from '@mui/icons-material'
 import { Button } from '@magickml/client-core'
 import styles from './styles.module.css';
 import magickCSS from '../../../Magick/magick.module.css'
@@ -73,12 +72,12 @@ export const ChatInput: FC<Props> = ({ onSend, messageIsStreaming, spell, stopCo
     }
   }, [content]);
 
-  function handleStopConversation() {
-    stopConversationRef.current = true;
-    setTimeout(() => {
-      stopConversationRef.current = false;
-    }, 1000);
-  }
+  // function handleStopConversation() {
+  //   stopConversationRef.current = true;
+  //   setTimeout(() => {
+  //     stopConversationRef.current = false;
+  //   }, 1000);
+  // }
 
   return (
     <div className={styles.container}>

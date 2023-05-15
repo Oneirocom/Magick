@@ -1,10 +1,10 @@
-// DOCUMENTED 
-import { loadPyodide } from "pyodide";
-const PYODIDE_URL = "https://cdn.jsdelivr.net/pyodide/v0.22.0/full/";
+// DOCUMENTED
+import { loadPyodide } from 'pyodide'
+const PYODIDE_URL = 'https://cdn.jsdelivr.net/pyodide/v0.22.0/full/'
 
-const isBrowser = typeof window !== "undefined";
+const isBrowser = typeof window !== 'undefined'
 
-let pyodide;
+let pyodide
 
 /**
  * Run Python code using Pyodide and return the result.
@@ -19,28 +19,32 @@ export default async function runPython(code, entry, data) {
   if (!pyodide) {
     pyodide = await loadPyodide({
       indexURL: isBrowser ? PYODIDE_URL : undefined,
-    });
+    })
   }
 
   // Set Python globals from the entry input values
   for (const [key, value] of Object.entries(entry)) {
-    pyodide.globals.set(key, value);
+    pyodide.globals.set(key, value)
   }
-  pyodide.globals.set("data", data);
+  pyodide.globals.set('data', data)
 
   // Run the Python code and convert the result to JavaScript
-  const codeResult = await pyodide.runPython(code);
-  console.log("CODE RESULT", codeResult);
-  const toJsResult = codeResult.toJs();
+  const codeResult = await pyodide.runPython(code)
+
+  const toJsResult = codeResult.toJs()
   const codeResultJS =
-    toJsResult[0] instanceof Map ? convertMapToObject(toJsResult[0]) : toJsResult[0];
+    toJsResult[0] instanceof Map
+      ? convertMapToObject(toJsResult[0])
+      : toJsResult[0]
   const dataResult =
-    toJsResult[1] instanceof Map ? convertMapToObject(toJsResult[1]) : toJsResult[1];
+    toJsResult[1] instanceof Map
+      ? convertMapToObject(toJsResult[1])
+      : toJsResult[1]
 
   // Return the results in a single JavaScript object
-  const result = { ...codeResultJS, data: dataResult };
+  const result = { ...codeResultJS, data: dataResult }
 
-  return result;
+  return result
 }
 
 /**
@@ -50,13 +54,13 @@ export default async function runPython(code, entry, data) {
  * @returns {Record<string, any>} The plain JavaScript object.
  */
 function convertMapToObject(inputMap) {
-  const outputObject = {};
+  const outputObject = {}
   for (const [key, value] of inputMap) {
     if (value instanceof Map) {
-      outputObject[key] = convertMapToObject(value);
+      outputObject[key] = convertMapToObject(value)
     } else {
-      outputObject[key] = value;
+      outputObject[key] = value
     }
   }
-  return outputObject;
+  return outputObject
 }

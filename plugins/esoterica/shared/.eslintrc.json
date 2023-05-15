@@ -27,7 +27,11 @@
         "*.js",
         "*.jsx"
       ],
-      "rules": {}
+      "rules": {
+        "no-prototype-builtins": "off",
+        "@typescript-eslint/no-loss-of-precision": "off",
+        "no-empty": "off"
+      }
     }
   ]
 }

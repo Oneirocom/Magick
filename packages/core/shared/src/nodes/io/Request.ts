@@ -109,7 +109,7 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     } else if (method === 'head') {
       resp = await axios.head(url, { params: inputs, headers });
     } else {
-      console.log(`Request Method (${method}) not supported!`);
+      throw new Error(`Request Method (${method}) not supported!`);
     }
 
     // Return processed response data

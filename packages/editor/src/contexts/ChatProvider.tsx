@@ -9,13 +9,12 @@ import React, {
 } from 'react'
 import { Component } from 'rete/types/engine'
 
+import { useConfig, usePubSub } from '@magickml/client-core'
 import { MyNode } from '../components/Node/Node'
-import { useConfig } from './ConfigProvider'
-import { useFeathers } from './FeathersProvider'
-import { usePubSub } from './PubSubProvider'
 import { initEditor } from '../editor'
 import { zoomAt } from '../plugins/areaPlugin/zoom-at'
 import { spellApi } from '../state/api/spells'
+import { useFeathers } from '../../../core/client/src/providers/FeathersProvider'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import styles from './styles.module.scss'
 
@@ -77,8 +76,6 @@ const ChatProvider = ({ children }) => {
   }
 
   const buildEditor = async (container, _spell, tab, magick) => {
-    // eslint-disable-next-line no-console
-
     const newEditor = await initEditor({
       container,
       pubSub,

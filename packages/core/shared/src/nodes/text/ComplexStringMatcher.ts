@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
 import { InputControl } from '../../dataControls/InputControl'
@@ -67,11 +64,13 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     const stringMinLength = new NumberControl({
       dataKey: 'stringMinLength',
       name: 'Minimum String Length (0 to ignore)',
+      defaultValue: 0,
     })
 
     const stringMaxLength = new NumberControl({
       dataKey: 'stringMaxLength',
       name: 'Maximum String Length (0 to ignore)',
+      defaultValue: 0,
     })
 
     node.inspector

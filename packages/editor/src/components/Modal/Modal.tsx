@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A component for displaying modal windows.
  * @param {Object} options Array of option to display inside the modal window.
@@ -7,24 +7,33 @@
  * @param {function} onClose Function to call when the close button is clicked.
  * @returns {JSX.Element} Modal component.
  */
-import React from 'react';
-import { useModal } from '../../contexts/ModalProvider';
-import { Button } from '@magickml/client-core';
-import { Icon } from '@magickml/client-core';
-import css from './modal.module.css';
+import React from 'react'
+import { useModal } from '../../contexts/ModalProvider'
+import { Button } from '@magickml/client-core'
+import { Icon } from '@magickml/client-core'
+import css from './modal.module.css'
+import { useHotkeys } from 'react-hotkeys-hook'
 
-const Modal = ({ options = [], title, icon, onClose = () => { /* null */}, ...props }) => {
-  const { closeModal } = useModal();
+const Modal = ({
+  options = [],
+  title,
+  icon,
+  onClose = () => {
+    /* null */
+  },
+  ...props
+}) => {
+  const { closeModal } = useModal()
 
   /**
    * Function to handle clicks on the modal background.
    * It stops propagation, closes the modal window and calls the onClose function.
    * @param {Object} e The event object.
    */
-  const handleModalBackgroundClick = (e) => {
-    e.stopPropagation();
-    closeModal();
-    onClose();
+  const handleModalBackgroundClick = e => {
+    e.stopPropagation()
+    closeModal()
+    onClose()
   }
 
   /**
@@ -32,8 +41,8 @@ const Modal = ({ options = [], title, icon, onClose = () => { /* null */}, ...pr
    * It stops propagation to avoid closing the modal window and only interact with the panel elements.
    * @param {Object} e The event object.
    */
-  const handleModalPanelClick = (e) => {
-    e.stopPropagation();
+  const handleModalPanelClick = e => {
+    e.stopPropagation()
   }
 
   /**
@@ -42,7 +51,8 @@ const Modal = ({ options = [], title, icon, onClose = () => { /* null */}, ...pr
    * @returns {JSX.Element[]} Array of option buttons JSX elements.
    */
   const renderOptions = () => {
-    return options &&
+    return (
+      options &&
       options.map(item => {
         return (
           <Button
@@ -54,18 +64,31 @@ const Modal = ({ options = [], title, icon, onClose = () => { /* null */}, ...pr
             {item.label}
           </Button>
         )
-      });
-  };
+      })
+    )
+  }
+
+  /**
+   * Function to find and call the first enabled option's onClick function.
+   */
+  const handleEnterPress = () => {
+    const firstEnabledOption = options.find(option => !option.disabled)
+    if (firstEnabledOption) {
+      firstEnabledOption.onClick()
+    }
+  }
+
+  // Close the modal when Escape key is pressed
+  useHotkeys('escape', () => {
+    closeModal()
+    onClose()
+  })
+
+  useHotkeys('enter', handleEnterPress)
 
   return (
-    <div
-      className={css['modal-bg']}
-      onClick={handleModalBackgroundClick}
-    >
-      <div
-        className={css['modal-panel']}
-        onClick={handleModalPanelClick}
-      >
+    <div className={css['modal-bg']} onClick={handleModalBackgroundClick}>
+      <div className={css['modal-panel']} onClick={handleModalPanelClick}>
         <div className={css['modal-panel-content']}>
           <div className={css['modal-title']}>
             {icon && (
@@ -87,16 +110,12 @@ const Modal = ({ options = [], title, icon, onClose = () => { /* null */}, ...pr
           </div>
         </div>
         <div className={`${css['modal-action-strip']}`}>
-          <Button
-            onClick={handleModalBackgroundClick}
-          >
-            Close
-          </Button>
+          <Button onClick={handleModalBackgroundClick}>Close</Button>
           {renderOptions()}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Modal;
+export default Modal

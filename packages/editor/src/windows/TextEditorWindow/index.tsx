@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Button, Window } from '@magickml/client-core'
 import Editor from '@monaco-editor/react'
 import { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
 import '../../screens/Magick/magick.module.css'
-import { activeTabSelector } from '../../state/tabs'
 import WindowMessage from '../../components/WindowMessage'
 import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
 import { complete, generate } from './utils'
@@ -12,19 +9,17 @@ import { complete, generate } from './utils'
 const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)
   const [data, setData] = useState<TextEditorData | null>(null)
-  const [editorOptions, setEditorOptions] = useState<Record<string, any>>({
+  const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
     minimap: { enabled: false },
   })
+  const [unSavedChanges, setUnSavedChanged] = useState<boolean>(false)
   const codeRef = useRef<string>()
   const [openaiApiKey, setOpenaiApiKey] = useState<string | undefined>(
     undefined
   )
 
   const { textEditorData, saveTextEditor, inspectorData } = useInspector()
-  const activeTab = useSelector(activeTabSelector)
-
-  const [lastInputs, setLastInputs] = useState<string>('')
 
   useEffect(() => {
     const secrets = localStorage.getItem('secrets')
@@ -48,24 +43,26 @@ const TextEditor = props => {
   }
 
   useEffect(() => {
-    if (!inspectorData?.data.inputs) return
-    const { language } = textEditorData.options || "javascript" as any
-    console.log('language', language)
-    const stringifiedInputs = JSON.stringify(inspectorData?.data.inputs)
+    setData(textEditorData)
+    setCode(textEditorData.data)
+  }, [textEditorData])
 
-    // if inspectorData?.data.inputs is the same as lastInputs, then return
-    if (stringifiedInputs === lastInputs) return
-    setLastInputs(JSON.stringify(inspectorData?.data.inputs))
+  useEffect(() => {
+    if (!inspectorData?.data.inputs || !inspectorData?.data.inputs.length) {
+      if (inspectorData?.category !== 'Code') {
+        setCode(inspectorData?.data?.fewshot)
+        return
+      }
+      if (Object.keys(textEditorData).length !== 0)
+        setCode(inspectorData?.data?.code)
+      return
+    }
+    const { language } = textEditorData.options || ('javascript' as any)
 
     const inputs: string[] = []
-    const textLines = code?.split('\n') ?? []
+    const textLines = (inspectorData?.data?.code as string)?.split('\n') ?? []
     ;(inspectorData?.data.inputs as any).forEach((input: any) => {
-      // if the textLines includes the input.socketKey, then return
-      if (
-        !textLines.includes('  ' + input.socketKey + ',') &&
-        (language === 'python' || language === 'javascript')
-      )
-        inputs.push('  ' + input.socketKey + ',')
+      inputs.push('  ' + input.socketKey + ',')
     })
 
     // get the index of the first line that starts with function
@@ -90,60 +87,16 @@ const TextEditor = props => {
 
     setData(newTextEditorData)
     setCode(updatedText)
-  }, [activeTab])
+  }, [inspectorData, textEditorData])
 
-  useEffect(() => {
-    if (code === textEditorData?.data && !code) return
-    const delayDebounce = setTimeout(() => {
-      save(code)
-    }, 3000)
+  // useEffect(() => {
+  //   if (code === textEditorData?.data && !code) return
+  //   const delayDebounce = setTimeout(() => {
+  //     save(codeRef.current)
+  //   }, 1000)
 
-    return () => clearTimeout(delayDebounce)
-  }, [code])
-
-  useEffect(() => {
-    if (
-      !textEditorData ||
-      Object.keys(textEditorData).length === 0
-      //|| !textEditorData.data
-    )
-      return
-    //Removed !textEditorData.data causing state issues between text editor instances.
-
-    const inputs = []
-    const { language } = textEditorData.options
-    const textLines = textEditorData.data?.split('\n') ?? []
-    ;(inspectorData?.data.inputs as any)?.forEach((input: any) => {
-      // if the textLines includes the input.socketKey, then return
-      if (
-        !textLines.includes('  ' + input.socketKey + ',') &&
-        (language === 'python' || language === 'javascript')
-      )
-        inputs.push('  ' + input.socketKey + ',')
-    })
-
-    // get the index of the first line that starts with function
-    const startIndex =
-      textLines.findIndex(line => line.startsWith('function')) + 1
-    // get the first line that starts with }
-    const endIndex = textLines.findIndex(line => line.startsWith('}')) - 1
-
-    // remove the lines in textLines starting at StartIndex and ending at EndIndex
-    // replace with the inputs
-    textLines.splice(startIndex, endIndex - startIndex, ...inputs)
-
-    // join the textLines array back into a string
-    const updatedText = textLines.join('\n')
-    const newTextEditorData = {
-      ...textEditorData,
-    }
-    if (language === 'javascript' || language === 'python') {
-      newTextEditorData.data = updatedText
-    }
-
-    setData(newTextEditorData)
-    setCode(updatedText)
-  }, [textEditorData])
+  //   return () => clearTimeout(delayDebounce)
+  // }, [code])
 
   const save = code => {
     const update = {
@@ -155,6 +108,7 @@ const TextEditor = props => {
   }
 
   const onSave = () => {
+    setUnSavedChanged(false)
     save(codeRef.current)
   }
 
@@ -167,6 +121,7 @@ const TextEditor = props => {
   }
 
   const updateCode = rawCode => {
+    if (!unSavedChanges) setUnSavedChanged(true)
     const code = rawCode.replace('\r\n', '\n')
     setCode(code)
     const update = {
@@ -188,7 +143,20 @@ const TextEditor = props => {
       </div>
       <Button onClick={onComplete}>COMPLETE</Button>
       <Button onClick={onGenerate}>GENERATE</Button>
-      <Button onClick={onSave}>SAVE</Button>
+      <Button onClick={onSave}>
+        SAVE
+        {unSavedChanges && (
+          <span
+            style={{
+              width: '6px',
+              height: '6px',
+              background: '#fff',
+              borderRadius: '50%',
+              marginLeft: '2px',
+            }}
+          />
+        )}
+      </Button>
     </>
   )
 

@@ -4,7 +4,6 @@ import { IRunContextEditor } from '../../types'
 function install(editor: IRunContextEditor) {
   editor.on('componentregister', (component: MagickComponent<unknown>) => {
     component.worker = (node, _inputs, _outputs, context) => {
-      console.log('socket override, context is ', context)
       const { context: innerContext, socketOutput } = context as any
       
       const { sendToPlaytest } = innerContext

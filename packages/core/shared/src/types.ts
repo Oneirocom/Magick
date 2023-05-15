@@ -47,7 +47,6 @@ export type Document = {
   id?: number
   type?: string
   content?: string
-  owner?: string
   embedding?: number[]
   projectId?: string
   date?: string
@@ -57,6 +56,37 @@ export type CreateDocumentArgs = Document
 
 export type GetDocumentArgs = Document & {
   maxCount?: number
+}
+
+type AgentTaskStatus = 'active' | 'completed' | 'canceled'
+
+export type CreateAgentTaskArgs = {
+  status: AgentTaskStatus
+  agentId?: string
+  type: string
+  objective: string
+  eventData: Event
+  projectId: string
+  steps: string
+}
+
+export type AgentTask = {
+  id: number
+  agentId?: string
+  status: AgentTaskStatus
+  type: string
+  objective: string
+  eventData: Event
+  projectId: string
+  steps: string
+}
+
+export type AgentTaskData = {
+  timestamp: number
+  thought: string
+  skill: string
+  action: string
+  result: string
 }
 
 export type Event = {
@@ -69,8 +99,10 @@ export type Event = {
   client?: string
   channel?: string
   channelType?: string
+  connector?: string
   projectId?: string
   agentId?: number | string
+  embedding?: number[]
   date?: string
   rawData?: string
 }
@@ -100,6 +132,7 @@ export type GetEventArgs = {
   // entities?: any[]
   channel?: string
   channelType?: string
+  connector?: string
   rawData?: string
   projectId?: string
   maxCount?: number
@@ -112,29 +145,6 @@ export type GetVectorEventArgs = {
 }
 
 export type EventResponse = Event[]
-
-export type CompletionBody = {
-  prompt: string
-  modelName: string
-  maxTokens: number
-  temperature: number
-  topP: number
-  presencePenalty: number
-  frequencyPenalty: number
-  // TODO: Type not used anywhere
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  stop: any
-  apiKey?: string
-}
-
-export type CompletionResponse = {
-  // TODO: Type not used anywhere
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  success: any
-  // TODO: Type not used anywhere
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  choice: any
-}
 
 export type OnSubspellUpdated = (spell: SpellInterface) => void
 
@@ -200,7 +210,6 @@ export type RunSpell<DataType = Record<string, unknown>> = ({
 
 export type EngineContext<DataType = Record<string, unknown>> = {
   runSpell: RunSpell<DataType>
-  completion?: (body: CompletionBody) => Promise<CompletionResponse>
   getSpell: GetSpell
   processCode?: ProcessCode
 }
@@ -226,12 +235,13 @@ export type PubSubEvents = {
   $SAVE_SPELL_DIFF: (tabId: string) => string
   $CREATE_MESSAGE_REACTION_EDITOR: (tabId: string) => string
   $CREATE_PLAYTEST: (tabId: string) => string
+  $CREATE_MEDIAWINDOW: (tabId: string) => string
   $CREATE_INSPECTOR: (tabId: string) => string
   $CREATE_TEXT_EDITOR: (tabId: string) => string
   $CREATE_PROJECT_WINDOW: (tabId: string) => string
   $CREATE_DEBUG_CONSOLE: (tabId: string) => string
   $CREATE_CONSOLE: (tabId: string) => string
-  $RUN_SPELL: (tabId: string) => string
+  $RUN_SPELL: (tabId?: string) => string
   $PROCESS: (tabId: string) => string
   $EXPORT: (tabId: string) => string
   $UNDO: (tabId: string) => string
@@ -493,11 +503,13 @@ export type MessagingWebhookBody = {
   To: string
 }
 
-export type CompletionType = 'image' | 'text'
+export type CompletionType = 'image' | 'text' | 'audio'
 
 export type ImageCompletionSubtype = 'text2image' | 'image2image' | 'image2text'
 
 export type TextCompletionSubtype = 'text' | 'embedding' | 'chat'
+
+export type AudioCompletionSubtype = 'text2speech' | 'text2audio'
 
 export type CompletionSocket = {
   socket: string
@@ -518,16 +530,25 @@ export type CompletionInspectorControls = {
   defaultValue: string
 }
 
+type HandlerResponse = {
+  success: boolean
+  result: string | number[]
+  error: string
+}
+
 export type CompletionProvider = {
   [x: string]: any
   type: CompletionType
-  subtype: ImageCompletionSubtype | TextCompletionSubtype
+  subtype:
+    | ImageCompletionSubtype
+    | TextCompletionSubtype
+    | AudioCompletionSubtype
   handler?: (attrs: {
     node: WorkerData
     inputs: MagickWorkerInputs
     outputs: MagickWorkerOutputs
     context: unknown
-  }) => { success: boolean; result: string | number[]; error: string } // server only
+  }) => Promise<HandlerResponse> | HandlerResponse // server only
   inspectorControls?: CompletionInspectorControls[] // client only
   inputs: CompletionSocket[]
   outputs: CompletionSocket[]
@@ -587,11 +608,15 @@ type Spell = {
 
 export type ModuleContext = {
   context: EngineContext
+  spellManager: SpellManager
+  app: Application
   module: {
     secrets?: Record<string, string>
     publicVariables?: Record<string, string>
     agent?: Agent
     app?: Application
+    inputs: Record<string, unknown>
+    outputs: Record<string, unknown>
   }
   projectId: string
   currentSpell: Spell

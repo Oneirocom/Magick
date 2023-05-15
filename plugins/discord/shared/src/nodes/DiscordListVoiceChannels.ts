@@ -1,43 +1,33 @@
 // DOCUMENTED 
 /**
- * A simple rete component that returns the same output as the input.
- * @category Utility
+ * A simple rete component that is paired with AgentExectuor to list the voice channels in the guild
+ * @category Discord
  */
 
 import Rete from 'rete';
 import {
-    Agent,
-    AgentManager,
     MagickComponent,
-    pluginManager,
     stringSocket,
     triggerSocket,
     MagickNode,
-    MagickWorkerInputs,
-    MagickWorkerOutputs,
     ModuleContext,
     WorkerData
 } from '@magickml/core';
 
 
 async function discord_list_channels(context: ModuleContext): Promise<any> {
-    const { projectId } = context
+    // const { projectId } = context
     const { agent } = context.module;
     if (!agent) {
         return "Agent not found"
     }
     let result = ''
-    //@ts-ignore
-    //Get the Guild ID
-    let id = agent?.discord.guildId.id
-    //@ts-ignore
-    //Using the Guild ID
-    const guild = await agent?.discord.client.guilds.fetch(id);
     // Fetch all channels in the guild and handle any errors
-    const channels = await guild.channels.fetch().catch(console.error);
+    //@ts-ignore
+    const channels = agent.discord.client.channels.cache
     // Check if channels is empty or not
     if (channels.size === 0) {
-        console.log("No channels found!");
+        return "No channels found!";
     } else {
         // Loop through the channels and do something with them
         const textChannels = channels.filter(channel => channel.type === 2);
@@ -60,9 +50,9 @@ type WorkerReturn = {
 }
 
 /**
- * Returns the same output as the input.
- * @category Utility
- * @remarks This component is useful for testing purposes.
+ * Outputs the List of all the voice channels in the server
+ * @category Discord
+ * @remarks Must be paired with AgentExecutor
  */
 export class DiscordListVoiceChannels extends MagickComponent<Promise<WorkerReturn>> {
 
@@ -76,42 +66,37 @@ export class DiscordListVoiceChannels extends MagickComponent<Promise<WorkerRetu
     }
 
     /**
-     * The builder function for the Echo node.
+     * The builder function for the Discord List Voice Channel nodes.
      * @param node - The node being built.
      * @returns The node with its inputs and outputs.
      */
     builder(node: MagickNode) {
-        const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
         const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
         const outp = new Rete.Output('output', 'String', stringSocket);
 
         return node
-            .addInput(dataInput)
             .addOutput(dataOutput)
             .addOutput(outp);
     }
 
     /**
-     * The worker function for the Echo node.
+     * The worker function for the Discord List Voice Channel node.
      * @param node - The node being worked on.
      * @param inputs - The inputs of the node.
      * @param _outputs - The unused outputs of the node.
-     * @returns An object containing the same string as the input.
+     * @returns An object containing the tool properties.
      */
     async worker(
         node: WorkerData,
-        inputs: MagickWorkerInputs,
-        _outputs: MagickWorkerOutputs,
-        context: ModuleContext,
     ): Promise<WorkerReturn> {
 
-        let tool_desc = {
-            title: 'Discord List Channels',
+        const tool_desc = {
+            title: 'Discord List Voice Channels',
             body: 'Gets the list of all the voice channels also known as vc in the server and only the voice channels',
             id: node.id,
             action: discord_list_channels.toString(),
             function_name: 'discord_list_channels',
-            keyword: 'Discord voice channels',
+            keyword: 'Discord voice channels, get audio channels, server audio channels, voice channels, server voice channels, fetch audio channels, get audio channels from server.',
 
         }
 

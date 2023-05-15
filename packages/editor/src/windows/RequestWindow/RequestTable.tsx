@@ -29,7 +29,7 @@ import {
   useSortBy,
   useTable
 } from 'react-table';
-import { useConfig } from '../../contexts/ConfigProvider';
+import { useConfig } from '@magickml/client-core';
 
 /**
  * GlobalFilter component.

@@ -1,7 +1,7 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
+import { API_ROOT_URL, DEFAULT_USER_TOKEN, PRODUCTION } from '@magickml/core'
 import TreeItem from '@mui/lab/TreeItem'
 import TreeView from '@mui/lab/TreeView'
 import {
@@ -48,7 +48,9 @@ const ProjectWindow = ({ openDrawer }) => {
   const [data, setData] = useState({ agents: [], spells: [], documents: [] })
   const [loaded, setLoaded] = useState(false)
   const token = globalConfig?.token
-  const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
+  const headers = PRODUCTION
+    ? { Authorization: `Bearer ${token}` }
+    : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
@@ -63,7 +65,7 @@ const ProjectWindow = ({ openDrawer }) => {
    * @param {File} selectedFile - Selected file object
    */
   const loadFile = selectedFile => {
-    if (!token && !IGNORE_AUTH) {
+    if (!token && PRODUCTION) {
       enqueueSnackbar('You must be logged in to create a project', {
         variant: 'error',
       })
@@ -73,6 +75,9 @@ const ProjectWindow = ({ openDrawer }) => {
     fileReader.readAsText(selectedFile)
     fileReader.onload = event => {
       const data = JSON.parse(event?.target?.result)
+
+      console.log('data', data)
+
       delete data['id']
       axios({
         url: `${globalConfig.apiUrl}/projects`,
@@ -92,6 +97,7 @@ const ProjectWindow = ({ openDrawer }) => {
           console.error('error is', err)
         })
     }
+    handleClose()
   }
 
   /**
@@ -99,11 +105,14 @@ const ProjectWindow = ({ openDrawer }) => {
    */
   const exportProject = () => {
     const element = document.createElement('a')
-    const file = new Blob([JSON.stringify(data)], { type: 'text/plain' })
+    const file = new Blob([JSON.stringify(data, null, 4)], {
+      type: 'text/plain',
+    })
     element.href = URL.createObjectURL(file)
     element.download = globalConfig.projectId + '.project.json'
     document.body.appendChild(element)
     element.click()
+    handleClose()
   }
 
   const sidebarPanel = useRef('sidebarPanel')
@@ -166,19 +175,25 @@ const ProjectWindow = ({ openDrawer }) => {
           flexDirection: 'column',
           width: '190px',
           color: '#d8d6d6',
+          position: 'relative',
         }}
         className={styles.container}
       >
         <Drawer
           className={styles.drawer}
+          PaperProps={{
+            tabIndex: 0,
+          }}
+          disableEnforceFocus
           classes={{ paper: styles.drawerPaper }}
           anchor="left"
           open={openDrawer}
+          tabIndex={0}
           hideBackdrop
           ref={sidebarPanel}
         >
           <Box className={styles.header}>
-            <Typography>Project Name</Typography>
+            <Typography>Project View</Typography>
             <IconButton className={styles.btn} onClick={handleClick}>
               <MoreHoriz />
             </IconButton>

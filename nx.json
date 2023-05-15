@@ -9,7 +9,7 @@
     "libsDir": "packages"
   },
   "pluginsConfig": {
-    "@nrwl/js": {
+    "@nx/js": {
       "analyzeSourceFiles": true
     }
   },
@@ -37,7 +37,7 @@
     }
   },
   "generators": {
-    "@nrwl/react": {
+    "@nx/react": {
       "application": {
         "style": "css",
         "linter": "eslint",
@@ -54,7 +54,7 @@
     }
   },
   "cli": {
-    "defaultCollection": "@nrwl/node"
+    "defaultCollection": "@nx/node"
   },
   "defaultProject": "@magickml/server"
 }

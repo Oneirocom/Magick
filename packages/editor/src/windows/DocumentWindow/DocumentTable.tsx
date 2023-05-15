@@ -12,7 +12,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from '@mui/material'
 import _ from 'lodash'
 import { useSnackbar } from 'notistack'
@@ -27,9 +27,9 @@ import {
   useGlobalFilter,
   usePagination,
   useSortBy,
-  useTable
+  useTable,
 } from 'react-table'
-import { useConfig } from '../../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 import DocumentModal from './DocumentModal'
 
 /**
@@ -108,10 +108,6 @@ function DocumentTable({ documents, updateCallback }) {
         accessor: 'type',
       },
       {
-        Header: 'Owner',
-        accessor: 'owner',
-      },
-      {
         Header: 'Content',
         accessor: 'content',
       },
@@ -176,7 +172,11 @@ function DocumentTable({ documents, updateCallback }) {
     useEffect(() => setVal(value), [value])
     return (
       <input
-        value={val && typeof val === 'object' ? JSON.stringify((val as {data: unknown}).data) : val}
+        value={
+          val && typeof val === 'object'
+            ? JSON.stringify((val as { data: unknown }).data)
+            : val
+        }
         onChange={onChange}
         onBlur={onBlur}
         className="bare-input"
@@ -248,14 +248,14 @@ function DocumentTable({ documents, updateCallback }) {
   }
 
   // Close create modal
-  const closeCreateModal = () => {
-    setCreateMode(false)
-  }
+  // const closeCreateModal = () => {
+  //   setCreateMode(false)
+  // }
 
   // Handle save action
   const handleSave = async () => {
     // call documents endpoint
-    const secrets = localStorage.getItem('secrets')
+    // const secrets = localStorage.getItem('secrets')
     const result = await fetch(`${API_ROOT_URL}/documents`, {
       method: 'POST',
       headers: {
@@ -264,14 +264,13 @@ function DocumentTable({ documents, updateCallback }) {
       body: JSON.stringify({
         ...newDocument,
         projectId: config.projectId,
-        secrets: secrets
+        // secrets: secrets
       }),
     })
 
     // reset newDocument
     setNewDocument({
       type: '',
-      owner: '',
       content: '',
       projectId: '',
       date: '',
@@ -285,7 +284,6 @@ function DocumentTable({ documents, updateCallback }) {
   // State for new document
   const [newDocument, setNewDocument] = useState({
     type: '',
-    owner: '',
     content: '',
     projectId: '',
     date: new Date().toISOString(),
@@ -295,7 +293,12 @@ function DocumentTable({ documents, updateCallback }) {
   return (
     <>
       {createMode && (
-        <DocumentModal createMode={createMode} setCreateMode={setCreateMode} handleSave={handleSave} setNewDocument={setNewDocument} />
+        <DocumentModal
+          createMode={createMode}
+          setCreateMode={setCreateMode}
+          handleSave={handleSave}
+          setNewDocument={setNewDocument}
+        />
       )}
       <Stack spacing={2}>
         <Grid container justifyContent="left" style={{ padding: '1em' }}>
