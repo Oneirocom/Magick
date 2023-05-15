@@ -48,14 +48,6 @@ export const spellApi = rootApi.injectEndpoints({
       providesTags: ['Spells'],
       query: ({ projectId }) => ({
         url: `spells?projectId=${projectId}`,
-        // sort alphabetically
-        transformResponse: (response: QueryReturnValue) => {
-          ;(response.data as any[]).sort(
-            (a: SpellInterface, b: SpellInterface) =>
-              a.name.localeCompare(b.name)
-          )
-          return response
-        },
       }),
     }),
     // Api endpoint for getting a spell by name
