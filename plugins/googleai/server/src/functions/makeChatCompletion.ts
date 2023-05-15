@@ -75,7 +75,7 @@ export async function makeChatCompletion(
 
     // Extract the result from the response
     const result = (
-      completionData.messages
+      !completionData.candidates
         ? completionData.messages[0]
         : completionData.candidates[0]
     ).content

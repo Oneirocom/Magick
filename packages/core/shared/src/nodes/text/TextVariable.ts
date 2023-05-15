@@ -12,7 +12,12 @@ import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { anySocket } from '../../sockets'
-import { MagickNode, MagickWorkerInputs, MagickWorkerOutputs, WorkerData } from '../../types'
+import {
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData,
+} from '../../types'
 
 /**
  * The text representing the TextVariable class.
@@ -34,11 +39,16 @@ export class TextVariable extends MagickComponent<InputReturn> {
    * Create a TextVariable.
    */
   constructor() {
-    super('Text Variable', {
-      outputs: {
-        output: 'output',
+    super(
+      'Text Variable',
+      {
+        outputs: {
+          output: 'output',
+        },
       },
-    }, 'Text', info)
+      'Text',
+      info
+    )
   }
 
   /**
@@ -79,12 +89,17 @@ export class TextVariable extends MagickComponent<InputReturn> {
    * @returns {InputReturn} - The outputs of the node. In this case, an object with the output
    * string.
    */
-  worker(node: WorkerData, _inputs: MagickWorkerInputs,
-    outputs: MagickWorkerOutputs, context: { module: { publicVariables: string } }) {
+  worker(
+    node: WorkerData,
+    _inputs: MagickWorkerInputs,
+    outputs: MagickWorkerOutputs,
+    context: { module: { publicVariables: string } }
+  ) {
     let text = node.data.fewshot as string
-    const publicVars = JSON.parse(context.module.publicVariables)
+    console.log('context', context)
+    const publicVars = context?.module?.publicVariables || {}
 
-    if(node?.data?.isPublic && publicVars[node.id]) {
+    if (node?.data?.isPublic && publicVars[node.id]) {
       text = publicVars[node.id].value
     }
     return {

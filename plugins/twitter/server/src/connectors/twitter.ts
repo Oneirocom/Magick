@@ -8,16 +8,13 @@ export class TwitterConnector {
   agent
   twitter_stream_rules = ''
   localUser: any
-  worldManager: any
 
-  constructor({ spellRunner, agent, worldManager }) {
+  constructor({ spellRunner, agent }) {
     agent.twitter = this
     this.spellRunner = spellRunner
     const data = agent.data.data
     this.data = data
     this.agent = agent
-    this.worldManager = worldManager // we can track entities in different conversations here later
-    console.log(data)
     if (!data.twitter_enabled) {
       console.warn('Twitter is not enabled, skipping')
       return

@@ -96,6 +96,14 @@ function TaskTable({ tasks, updateCallback }) {
   const columns = useMemo(
     () => [
       {
+        Header: 'Actions',
+        Cell: row => (
+          <IconButton onClick={() => handleTaskDelete(row.row.original)}>
+            <VscTrash size={16} color="#ffffff" />
+          </IconButton>
+        ),
+      },
+      {
         Header: 'Type',
         accessor: 'type',
         disableSortBy: false,
@@ -106,26 +114,12 @@ function TaskTable({ tasks, updateCallback }) {
         disableSortBy: false,
       },
       {
-        Header: 'Event Data',
-        accessor: 'eventData',
-        // stringify the cell value for display
-        Cell: row => JSON.stringify(row.value),
-      },
-      {
         Header: 'Steps',
         accessor: 'steps',
       },
       {
         Header: 'Status',
         accessor: 'status',
-      },
-      {
-        Header: 'Actions',
-        Cell: row => (
-          <IconButton onClick={() => handleTaskDelete(row.row.original)}>
-            <VscTrash size={16} color="#ffffff" />
-          </IconButton>
-        ),
       },
     ],
     []

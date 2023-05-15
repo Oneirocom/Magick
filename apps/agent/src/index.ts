@@ -5,7 +5,7 @@
  * @packageDocumentation
  */
 
-import { AgentManager, WorldManager } from '@magickml/core'
+import { AgentManager } from '@magickml/core'
 import { app } from '@magickml/server-core'
 import 'regenerator-runtime/runtime'
 
@@ -32,8 +32,6 @@ async function initializeAgent(): Promise<void> {
   await loadPlugins()
 
   new AgentManager(app)
-
-  new WorldManager()
 
   console.log('AGENT: Starting...')
 }
