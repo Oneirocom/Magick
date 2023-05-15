@@ -29,6 +29,7 @@ export const LoadingScreen = (): JSX.Element => {
           top: '50%',
           transform: 'translate(-50%, -50%)',
           textAlign: 'center',
+          width: '150px',
         }}
       >
         {/* Loading animation */}
