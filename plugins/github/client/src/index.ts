@@ -4,6 +4,7 @@ import {
   triggerSocket,
 } from '@magickml/core'
 import { GithubAgentWindow } from './components/agent.component'
+import Nodes from '@magickml/plugin-github-shared' 
 
 
 const inputSockets = [
@@ -29,6 +30,7 @@ const outputSockets = [
 
 const GithubPlugin = new ClientPlugin({
   name: 'GithubPlugin',
+  nodes: Nodes,
   agentComponents: [GithubAgentWindow],
   inputTypes: [
     { name: 'Github (Feed)', sockets: inputSockets},
