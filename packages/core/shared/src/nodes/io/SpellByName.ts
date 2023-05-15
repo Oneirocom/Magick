@@ -100,9 +100,6 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const { agent, app, secrets } = module
 
-    console.log('***** SPELL BY NAME ******')
-    console.log('AGENT', agent)
-
     // call the spells service and find a spell where name is spellName and projectId is projectId
     const spell = await app?.service('spells').find({
       query: {
@@ -141,9 +138,10 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
         publicVariables: {},
       }
       const outputs = await spellRunner?.runComponent(runComponentArgs)
+      const output = Object.values(outputs as any)[0]
 
       return {
-        output: outputs,
+        output,
       }
     } else {
       const runComponentArgs = {
@@ -159,7 +157,6 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
       }
 
       const outputs = await spellManager.run(runComponentArgs as any)
-      console.log('outputs', outputs)
       // get the first value from outputs
       const output = Object.values(outputs)[0]
 

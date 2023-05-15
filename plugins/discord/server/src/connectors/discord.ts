@@ -1059,7 +1059,11 @@ export class DiscordConnector {
       if (msg && msg !== '' && channel && channel !== undefined) {
         console.log('**** SENDING DISCORD MESSAGE', msg)
         // split msg into an array of messages that are less than 2000 characters
-        const msgArray = msg?.match(/.{1,2000}/g)
+        // if msg is an object, get the valuke of the first key
+        if (typeof msg === 'object') {
+          msg = Object.values(msg)[0]
+        }
+        const msgArray = msg.match(/.{1,2000}/g)
         // send each message individually
         msgArray.forEach(msg => {
           channel.send(msg)
