@@ -135,9 +135,6 @@ export class ModuleManager {
       return acc
     }, {} as Record<string, unknown>)
 
-    console.log('******* MODULE IS')
-    console.log(module)
-
     module.read({
       agent: context.module.agent,
       inputs: parsedInputs,

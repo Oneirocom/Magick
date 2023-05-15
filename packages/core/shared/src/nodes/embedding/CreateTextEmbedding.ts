@@ -173,8 +173,6 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
       context,
     })
 
-    console.log('result', result)
-
     if (!success) {
       throw new Error(error)
     }
