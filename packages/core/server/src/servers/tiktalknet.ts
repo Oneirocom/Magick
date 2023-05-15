@@ -1,24 +1,24 @@
-// DOCUMENTED 
-import axios from 'axios';
-import * as fs from 'fs';
+// DOCUMENTED
+import axios from 'axios'
+import * as fs from 'fs'
 
 /**
  * Fetches synthesized speech from tiktalk.net website and stores it in a file.
  * @param text - The text to be converted to speech.
  * @param voice - The voice to use.
- * @param tiktalknet_url - The URL of the tiktalk.net API endpoint.
+ * @param voice_endpoint - The URL of the tiktalk.net API endpoint.
  * @returns The path of the output file containing the synthesized speech.
  */
 export async function tts_tiktalknet(
   text: string,
   voice: string,
-  tiktalknet_url: string
+  voice_endpoint: string
 ): Promise<string> {
   // Check if the provided URL is valid
-  if (!tiktalknet_url || tiktalknet_url.length <= 0) return '';
+  if (!voice_endpoint || voice_endpoint.length <= 0) return ''
 
   // Fetch the speech synthesis stream
-  const resp = await axios.get(tiktalknet_url, {
+  const resp = await axios.get(voice_endpoint, {
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
     },
@@ -27,33 +27,33 @@ export async function tts_tiktalknet(
       voice: voice,
       s: text,
     },
-  });
+  })
 
   // Generate an output file name and path
-  const fileName = makeid(8) + '.wav';
-  const outputFile = 'files/' + fileName;
-  
+  const fileName = makeid(8) + '.wav'
+  const outputFile = 'files/' + fileName
+
   // Create a stream writer and pipe the response data to it
-  const writer = fs.createWriteStream(outputFile);
-  resp.data.pipe(writer);
+  const writer = fs.createWriteStream(outputFile)
+  resp.data.pipe(writer)
 
   // Error handling and file writing completion
-  let error: any = null;
+  let error: any = null
   await new Promise((resolve, reject) => {
     writer.on('error', err => {
-      error = err;
-      writer.close();
-      reject(err);
-    });
+      error = err
+      writer.close()
+      reject(err)
+    })
     writer.on('close', () => {
       if (!error) {
-        resolve(true);
+        resolve(true)
       }
-      reject(error);
-    });
-  });
+      reject(error)
+    })
+  })
 
-  return outputFile;
+  return outputFile
 }
 
 /**
@@ -62,14 +62,15 @@ export async function tts_tiktalknet(
  * @returns A random alphanumeric string.
  */
 function makeid(length: number): string {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
+  let result = ''
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const charactersLength = characters.length
 
   // Generate the random string
   for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
 
-  return result;
+  return result
 }

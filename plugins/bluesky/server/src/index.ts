@@ -1,9 +1,4 @@
-import {
-  eventSocket,
-  ServerPlugin,
-  triggerSocket,
-  WorldManager,
-} from '@magickml/core'
+import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
 
 let BlueskyConnector = null as any
 // dynamically import { BlueskyConnector } from './connectors/bluesky' if we are in node.js using esm syntax
@@ -16,15 +11,10 @@ if (typeof window === 'undefined') {
 type StartBlueskyArgs = {
   agent: any
   spellRunner: any
-  worldManager: WorldManager
 }
 
 function getAgentMethods() {
-  async function startBluesky({
-    agent,
-    spellRunner,
-    worldManager,
-  }: StartBlueskyArgs) {
+  async function startBluesky({ agent, spellRunner }: StartBlueskyArgs) {
     const { data } = agent.data
     if (!data) return console.log('No data for this agent')
     if (!data.bluesky_enabled)
@@ -32,7 +22,6 @@ function getAgentMethods() {
     const bluesky = new BlueskyConnector({
       agent,
       spellRunner,
-      worldManager,
     })
     agent.bluesky = bluesky
   }

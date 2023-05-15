@@ -35,7 +35,7 @@ export function initSpeechClient(options: {
   voiceProvider: string
   voiceCharacter: string
   languageCode: string
-  tiktalknet_url: string
+  voice_endpoint: string
 }) {
   const {
     client,
@@ -44,7 +44,7 @@ export function initSpeechClient(options: {
     voiceProvider,
     voiceCharacter,
     languageCode,
-    tiktalknet_url,
+    voice_endpoint,
   } = options
 
   // Add speech event to the client.
@@ -71,9 +71,6 @@ export function initSpeechClient(options: {
         for (const [, member] of channel.members) {
           entities.push({
             user: member.user.username,
-            inConversation: client.isInConversation(member.user.id),
-            isBot: member.user.bot,
-            info3d: '',
           })
         }
       } catch (e) {
@@ -114,7 +111,7 @@ export function initSpeechClient(options: {
           // Google TTS.
           url = await tts(response, voiceCharacter, languageCode)
         } else {
-          url = await tts_tiktalknet(response, voiceCharacter, tiktalknet_url)
+          url = await tts_tiktalknet(response, voiceCharacter, voice_endpoint)
         }
         if (url) {
           const audioResource = createAudioResource(createReadStream(url), {

@@ -7,17 +7,15 @@ export class BlueskyConnector {
   agent
   bluesky_stream_rules = ''
   localUser: any
-  worldManager: any
 
   loop: any
 
-  constructor({ spellRunner, agent, worldManager }) {
+  constructor({ spellRunner, agent }) {
     this.agent = agent
     this.agent.bluesky = this
     this.spellRunner = spellRunner
     const data = this.agent.data.data
     this.data = data
-    this.worldManager = worldManager // we can track entities in different conversations here later
 
     if (!data.bluesky_enabled) {
       console.warn('Bluesky is not enabled, skipping')
