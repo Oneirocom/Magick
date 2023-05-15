@@ -33,23 +33,17 @@
       "@magickml/client-core": [
         "packages/core/client/src/index.ts"
       ],
+      "@magickml/core": [
+        "packages/core/shared/src/index.ts"
+      ],
       "@magickml/docs": [
         "apps/docs/src/index.ts"
       ],
       "@magickml/editor": [
         "packages/editor/src/index.ts"
       ],
-      "@magickml/core": [
-        "packages/core/shared/src/index.ts"
-      ],
-      "@magickml/server": [
-        "apps/server/src/index.ts"
-      ],
-      "@magickml/server-core": [
-        "packages/core/server/src/index.ts"
-      ],
-      "@magickml/types": [
-        "packages/@types/src/index.ts"
+      "@magickml/plugin-avatar-client": [
+        "plugins/avatar/client/src/index.ts"
       ],
       "@magickml/plugin-banana-client": [
         "plugins/banana/client/src/index.ts"
@@ -65,6 +59,11 @@
       ],
       "@magickml/plugin-github-shared": [
         "plugins/github/shared/src/index.ts"
+      "@magickml/plugin-bluesky-client": [
+        "plugins/bluesky/client/src/index.ts"
+      ],
+      "@magickml/plugin-bluesky-server": [
+        "plugins/bluesky/server/src/index.ts"
       ],
       "@magickml/plugin-discord-client": [
         "plugins/discord/client/src/index.ts"
@@ -99,20 +98,11 @@
       "@magickml/plugin-finetune-server": [
         "plugins/finetune/server/src/index.ts"
       ],
-      "@magickml/plugin-loop-client": [
-        "plugins/loop/client/src/index.ts"
+      "@magickml/plugin-gmail-client": [
+        "plugins/gmail/client/src/index.ts"
       ],
-      "@magickml/plugin-loop-server": [
-        "plugins/loop/server/src/index.ts"
-      ],
-      "@magickml/plugin-openai-client": [
-        "plugins/openai/client/src/index.ts"
-      ],
-      "@magickml/plugin-openai-server": [
-        "plugins/openai/server/src/index.ts"
-      ],
-      "@magickml/plugin-openai-shared": [
-        "plugins/openai/shared/src/index.ts"
+      "@magickml/plugin-gmail-server": [
+        "plugins/gmail/server/src/index.ts"
       ],
       "@magickml/plugin-googleai-client": [
         "plugins/googleai/client/src/index.ts"
@@ -123,6 +113,48 @@
       "@magickml/plugin-googleai-shared": [
         "plugins/googleai/shared/src/index.ts"
       ],
+      "@magickml/plugin-langchain-client": [
+        "plugins/langchain/client/src/index.ts"
+      ],
+      "@magickml/plugin-langchain-server": [
+        "plugins/langchain/server/src/index.ts"
+      ],
+      "@magickml/plugin-langchain-shared": [
+        "plugins/langchain/shared/src/index.ts"
+      ],
+      "@magickml/plugin-loop-client": [
+        "plugins/loop/client/src/index.ts"
+      ],
+      "@magickml/plugin-loop-server": [
+        "plugins/loop/server/src/index.ts"
+      ],
+      "@magickml/plugin-task-client": [
+        "plugins/task/client/src/index.ts"
+      ],
+      "@magickml/plugin-task-server": [
+        "plugins/task/server/src/index.ts"
+      ],
+      "@magickml/plugin-task-shared": [
+        "plugins/task/shared/src/index.ts"
+      ],
+      "@magickml/plugin-openai-client": [
+        "plugins/openai/client/src/index.ts"
+      ],
+      "@magickml/plugin-openai-server": [
+        "plugins/openai/server/src/index.ts"
+      ],
+      "@magickml/plugin-openai-shared": [
+        "plugins/openai/shared/src/index.ts"
+      ],
+      "@magickml/plugin-elevenlabs-client": [
+        "plugins/elevenlabs/client/src/index.ts"
+      ],
+      "@magickml/plugin-elevenlabs-server": [
+        "plugins/elevenlabs/server/src/index.ts"
+      ],
+      "@magickml/plugin-elevenlabs-shared": [
+        "plugins/elevenlabs/shared/src/index.ts"
+      ],
       "@magickml/plugin-pinecone-client": [
         "plugins/pinecone/client/src/index.ts"
       ],
@@ -132,14 +164,8 @@
       "@magickml/plugin-pinecone-shared": [
         "plugins/pinecone/shared/src/index.ts"
       ],
-      "@magickml/plugin-langchain-client": [
-        "plugins/langchain/client/src/index.ts"
-      ],
-      "@magickml/plugin-langchain-server": [
-        "plugins/langchain/server/src/index.ts"
-      ],
-      "@magickml/plugin-langchain-shared": [
-        "plugins/langchain/shared/src/index.ts"
+      "@magickml/plugin-qa-server": [
+        "plugins/qa/server/src/index.ts"
       ],
       "@magickml/plugin-rest-client": [
         "plugins/rest/client/src/index.ts"
@@ -162,23 +188,14 @@
       "@magickml/plugin-twitter-server": [
         "plugins/twitter/server/src/index.ts"
       ],
-      "@magickml/plugin-qa-server": [
-        "plugins/qa/server/src/index.ts"
+      "@magickml/server": [
+        "apps/server/src/index.ts"
       ],
-      "@magickml/plugin-avatar-client": [
-        "plugins/avatar/client/src/index.ts"
+      "@magickml/server-core": [
+        "packages/core/server/src/index.ts"
       ],
-      "@magickml/plugin-bluesky-client": [
-        "plugins/bluesky/client/src/index.ts"
-      ],
-      "@magickml/plugin-bluesky-server": [
-        "plugins/bluesky/server/src/index.ts"
-      ],
-      "@magickml/plugin-gmail-client": [
-        "plugins/gmail/client/src/index.ts"
-      ],
-      "@magickml/plugin-gmail-server": [
-        "plugins/gmail/server/src/index.ts"
+      "@magickml/types": [
+        "packages/@types/src/index.ts"
       ]
     }
   },

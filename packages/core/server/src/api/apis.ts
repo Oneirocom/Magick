@@ -46,10 +46,6 @@ const getTextToSpeech = async (ctx: Koa.Context): Promise<void> => {
 const image_generation = async (ctx: Koa.Context): Promise<void> => {
   const url = 'http://localhost:7860/sdapi/v1/txt2img'; // Endpoint to send the image data
 
-  // Log the request
-  console.log(url);
-  console.log(ctx);
-
   // Proxy the request to the endpoint and return the response
   const response = await fetch(url, {
     method: 'POST',

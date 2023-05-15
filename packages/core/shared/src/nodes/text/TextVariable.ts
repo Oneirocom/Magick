@@ -1,8 +1,8 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Module represents a Rete flow based on Google code standards.
  * @module
- */ 
+ */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
@@ -70,22 +70,21 @@ export class TextVariable extends MagickComponent<InputReturn> {
 
   /**
    * Function to operate a node of the TextVariable class.
-   * @param {WorkerData} node - The current state of the node representing the operation to be 
-   * performed. 
-   * @param {MagickWorkerInputs} inputs - The inputs of the node. In this case, this object is 
+   * @param {WorkerData} node - The current state of the node representing the operation to be
+   * performed.
+   * @param {MagickWorkerInputs} _inputs - The inputs of the node. In this case, this object is
    * not used.
    * @param {MagickWorkerOutputs} outputs - The possible outputs of the node.
    * @param {Object} context - The data passed to the worker and the module.
-   * @returns {InputReturn} - The outputs of the node. In this case, an object with the output 
+   * @returns {InputReturn} - The outputs of the node. In this case, an object with the output
    * string.
    */
-  worker(node: WorkerData, inputs: MagickWorkerInputs, 
+  worker(node: WorkerData, _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs, context: { module: { publicVariables: string } }) {
     let text = node.data.fewshot as string
     const publicVars = JSON.parse(context.module.publicVariables)
 
     if(node?.data?.isPublic && publicVars[node.id]) {
-      console.log('publicVars[node.id is', publicVars[node.id])
       text = publicVars[node.id].value
     }
     return {

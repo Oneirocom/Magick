@@ -74,14 +74,7 @@ Build will take some time initially. When everything is ready, the client will b
 _Please be aware Magick is under heavy development which may cause breaking changes._ 
 
 ## Database
-Magick installs [mydb.sqlite](apps/server/mydb.sqlite) by default. This is a local sqlite database. It is not recommended for production use, but is fine for development. _Database can be wiped by breaking changes, back up your spells via export regularly._
-
-### Local Sqlite Installation:
-If you want to set up a custom sqlite database, add a relative or absolute path to your sqlite file in the [`.env` file](.env)
-Next migrate to the new database by running:
-```
-npm run migrate
-```
+Magick installs postgres by default. If you want to use a different database, you can change the database connection in the [`.env` file](.env)
 
 ### Deploy your own Postgres database
 
@@ -106,7 +99,7 @@ Developing locally, it can be very helpful to have google chrome accept all self
 
 ## Core Concepts
 ### Spells
-A spell is a pipeline that describes data moivng from one place to another, running through different processes we call "nodes", via wires we call "connections". In Magick, the collection of data, nodes, variables, and presets for each graph is known as a "spell". Spell is not a machine learning term. We just like it. Spells can be imported and exported at any time. Spells in their raw form are JSON, a standard format that is easy to share.
+A spell is a pipeline that describes data moving from one place to another, running through different processes we call "nodes", via wires we call "connections". In Magick, the collection of data, nodes, variables, and presets for each graph is known as a "spell". Spell is not a machine learning term. We just like it. Spells can be imported and exported at any time. Spells in their raw form are JSON, a standard format that is easy to share.
 ### Nodes
 At the core, Magick is a system for taking in data, doing stuff to it, and then sending the final data out. This "stuff" is called a "transformation", the data transforms from one thing into the next. The "stuff" that is happening to the data is a black box that takes something in, anything, and returns something out. We call the black box where the transformstion takes place a "node". Nodes are the building blocks of Magick.
 ### Creating Nodes

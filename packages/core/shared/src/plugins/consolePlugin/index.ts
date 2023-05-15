@@ -58,21 +58,13 @@ function install(
           ...args,
         ])
 
-        console.log(inputs, outputs)
-
-        const message = {
-          outputs: result,
-          inputs: inputs,
-          data,
-        }
-
-        _node.console.log(message)
+        _node.console.log(result)
 
         return result
       } catch (error) {
         _node.console.error(error as Error)
 
-        return console.error(error)
+        throw error
       }
     }
   })

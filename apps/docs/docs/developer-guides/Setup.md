@@ -7,7 +7,7 @@ sidebar_position: 0
 
 # Setup
 
-Refer to the Magick (README)[https://github.com/Oneirocom/Magick/blob/development/README.md] for the latest steps on installing and how to clone the repo and run from source.
+Refer to the Magick [README](https://github.com/Oneirocom/Magick/blob/development/README.md) for the latest steps on installing and how to clone the repo and run from source.
 
 You will need git and node.js 18+ installed.
 

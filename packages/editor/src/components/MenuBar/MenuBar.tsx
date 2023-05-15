@@ -1,14 +1,14 @@
 // DOCUMENTED
 import { useProjectWindow } from '@magickml/client-core'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { usePubSub } from '../../../../core/client/src/providers/PubSubProvider'
 import { useModal } from '../../contexts/ModalProvider'
-import { usePubSub } from '../../contexts/PubSubProvider'
 import { toggleAutoSave } from '../../state/preferences'
 import { RootState } from '../../state/store'
-import { activeTabSelector, changeEditorLayout, Tab } from '../../state/tabs'
+import { Tab, activeTabSelector, changeEditorLayout } from '../../state/tabs'
 import css from './menuBar.module.css'
 
 /**
@@ -50,31 +50,16 @@ const MenuBar = () => {
     $REDO,
     $MULTI_SELECT_COPY,
     $MULTI_SELECT_PASTE,
+    $DELETE,
     TOGGLE_SNAP,
   } = events
 
-  /**
-   * Custom hook for toggling state value between true and false
-   *
-   * @param {boolean} initialValue
-   * @returns {[boolean, () => void]}
-   */
-  const useToggle = (initialValue = false) => {
-    const [value, setValue] = useState(initialValue)
-    const toggle = useCallback(() => {
-      setValue(v => !v)
-    }, [])
-    return [value, toggle as () => void]
-  }
-
-  const [menuVisibility, toggleMenuVisibility] = useToggle()
+  const [menuVisibility, setMenuVisibility] = useState<boolean>(false)
 
   /**
    * Save handler
    */
   const onSave = () => {
-    console.log(activeTabRef.current?.id)
-    console.log('SAVING')
     // if (!activeTabRef.current) return
     publish($SAVE_SPELL(activeTabRef.current?.id))
   }
@@ -169,27 +154,6 @@ const MenuBar = () => {
     publish($CREATE_CONSOLE(activeTabRef.current.id))
   }
 
-  // Menu bar hotkey hooks
-  useHotkeys(
-    'cmd+s, crtl+s',
-    event => {
-      event.preventDefault()
-      onSave()
-    },
-    { enableOnTags: ['INPUT'] },
-    [onSave]
-  )
-
-  useHotkeys(
-    'option+n, crtl+n',
-    event => {
-      event.preventDefault()
-      onNew()
-    },
-    { enableOnTags: ['INPUT'] },
-    [onNew]
-  )
-
   /**
    * Undo handler
    */
@@ -220,6 +184,14 @@ const MenuBar = () => {
   const onMultiSelectPaste = () => {
     if (!activeTabRef.current) return
     publish($MULTI_SELECT_PASTE(activeTabRef.current.id))
+  }
+
+  /**
+   * Delete handler
+   */
+  const onDelete = () => {
+    if (!activeTabRef.current) return
+    publish($DELETE(activeTabRef.current.id))
   }
 
   /**
@@ -266,27 +238,27 @@ const MenuBar = () => {
         },
         open_spell: {
           onClick: onOpen,
-          hotKey: 'option+o',
+          hotKey: 'option+o, ctrl+o',
         },
         import_spell: {
           onClick: onImport,
-          hotKey: 'option+i',
+          hotKey: 'option+i, ctrl+i',
         },
         rename_spell: {
           onClick: onEdit,
-          hotKey: 'option+e',
+          hotKey: 'option+e, ctrl+e',
         },
         save_spell: {
           onClick: onSave,
-          hotKey: 'option+s',
+          hotKey: 'option+s, ctrl+s',
         },
         save_a_copy: {
           onClick: onSaveAs,
-          hotKey: 'option+shift+s',
+          hotKey: 'option+shift+s, ctrl+shift+s',
         },
         export_spell: {
           onClick: onExport,
-          hotKey: 'option+shift+e',
+          hotKey: 'option+shift+e, ctrl+shift+e',
         },
       },
     },
@@ -294,19 +266,23 @@ const MenuBar = () => {
       items: {
         undo: {
           onClick: onUndo,
-          hotKey: 'option+z',
+          hotKey: 'option+z, ctrl+z',
         },
         redo: {
           onClick: onRedo,
-          hotKey: 'option+shift+z',
+          hotKey: 'option+y, ctrl+y, option+shift+z, ctrl+shift+z',
         },
         copy: {
           onClick: onMultiSelectCopy,
-          hotKey: 'option+c',
+          hotKey: 'option+c, ctrl+c',
         },
         paste: {
           onClick: onMultiSelectPaste,
-          hotKey: 'option+v',
+          hotKey: 'option+v, ctrl+v',
+        },
+        delete: {
+          onClick: onDelete,
+          hotKey: 'delete',
         },
         snap: {
           onClick: toggleSnapFunction,
@@ -318,19 +294,23 @@ const MenuBar = () => {
       items: {
         text_editor: {
           onClick: onTextEditorCreate,
+          hotKey: 'option+1, control+1',
         },
         inspector: {
           onClick: onInspectorCreate,
+          hotKey: 'option+2, control+2',
         },
         playtest: {
           onClick: onPlaytestCreate,
+          hotKey: 'option+3, control+3',
         },
         console: {
           onClick: onConsole,
+          hotKey: 'option+4, control+4',
         },
         project_window: {
           onClick: onProjectWindowCreate,
-          hotKey: 'control+b',
+          hotKey: 'option+5, control+5',
         },
         snap: {
           onClick: toggleSnapFunction,
@@ -373,16 +353,22 @@ const MenuBar = () => {
    */
   const parseStringToUnicode = (commandString: string) => {
     let formattedCommand = commandString
-    if (navigator.userAgent.indexOf('Win') !== -1) {
+
+    const userAgent = navigator.userAgent
+
+    if (userAgent.indexOf('Win') !== -1) {
+      formattedCommand = formattedCommand.replace('option', 'alt')
+    } else if (userAgent.indexOf('Linux') !== -1) {
       formattedCommand = formattedCommand.replace('option', 'alt')
     } else {
       formattedCommand = formattedCommand.replace('option', '\u2325')
     }
-    // formattedCommand = formattedCommand.replace('option', '\u2325')
+
     formattedCommand = formattedCommand.replace('shift', '\u21E7')
     formattedCommand = formattedCommand.replace('cmd', '\u2318')
     formattedCommand = formattedCommand.replace('control', '\u2303')
     formattedCommand = formattedCommand.replace(/[`+`]/g, ' ')
+
     return formattedCommand
   }
 
@@ -412,15 +398,18 @@ const MenuBar = () => {
         <ul className={css['menu-panel']}>
           {Object.entries(item.items as [string, Record<string, any>][]).map(
             ([key, item]: [string, Record<string, any>]) => {
-              // useHotkeys(
-              //   item.hotKey,
-              //   event => {
-              //     event.preventDefault()
-              //     item.onClick()
-              //   },
-              //   { enableOnTags: ['INPUT'] },
-              //   [item.onClick]
-              // )
+              // Add hotkeys for each sub-menu item
+              if (item.hotKey) {
+                useHotkeys(
+                  item.hotKey,
+                  event => {
+                    event.preventDefault()
+                    item.onClick()
+                  },
+                  { enableOnTags: ['INPUT'] },
+                  [item.onClick]
+                )
+              }
 
               return (
                 <ListItem
@@ -429,7 +418,7 @@ const MenuBar = () => {
                   topLevel={false}
                   key={key}
                   onClick={item.onClick}
-                  hotKeyLabel={item.hotKey}
+                  hotKeyLabel={item.hotKey ? item.hotKey.split(',')[0] : ''}
                 />
               )
             }
@@ -478,7 +467,7 @@ const MenuBar = () => {
   const handleClick = (func: () => void) => {
     // Initially intended to control the visibility with a state, but this triggers a re-render and hides the menu anyway! :D
     // Keeping this intact just in case.
-    toggleMenuVisibility(menuVisibility)
+    setMenuVisibility(!menuVisibility)
     // No need for this
     // func()
   }

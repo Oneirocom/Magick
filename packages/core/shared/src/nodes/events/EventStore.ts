@@ -1,21 +1,21 @@
-// DOCUMENTED 
-import Rete from 'rete';
-import { InputControl } from '../../dataControls/InputControl';
-import { MagickComponent } from '../../engine';
+// DOCUMENTED
+import Rete from 'rete'
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
 import {
   arraySocket,
   eventSocket,
   stringSocket,
-  triggerSocket
-} from '../../sockets';
+  triggerSocket,
+} from '../../sockets'
 import {
   Event,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleContext,
-  WorkerData
-} from '../../types';
+  WorkerData,
+} from '../../types'
 
 /**
  * Information about the EventStore class
@@ -82,7 +82,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: ModuleContext,
+    context: ModuleContext
   ) {
     const { projectId } = context
 
@@ -106,7 +106,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     if (!content) {
       content = (event as Event).content || 'Error'
-      if (!content) console.log('Content is null, not storing the event !!')
+      if (!content) throw new Error('Content is null, not storing the event !!')
     }
 
     type Data = {
@@ -114,6 +114,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       projectId: string
       content: string
       type: string
+      date: string
       embedding?: number[] | string[]
     }
 
@@ -123,15 +124,15 @@ export class EventStore extends MagickComponent<Promise<void>> {
       projectId,
       content,
       type,
+      date: new Date().toISOString(),
     }
 
     if (embedding) data.embedding = embedding
 
     if (content && content !== '') {
-      const { app } = context.module;
-      if(!app) throw new Error('App is not defined, cannot create event');
-      const result = await app.service('events').create(data);
-      console.log("Result of event creation", result)
+      const { app } = context.module
+      if (!app) throw new Error('App is not defined, cannot create event')
+      await app.service('events').create(data)
     } else {
       throw new Error('Content is empty, not storing the event !!')
     }

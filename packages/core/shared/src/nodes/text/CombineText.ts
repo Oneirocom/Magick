@@ -81,7 +81,7 @@ export class CombineText extends MagickComponent<Promise<WorkerReturn>> {
     }, {} as Record<string, unknown>);
 
     let input = '';
-    console.log('combining input:', input);
+
     for (const x in inputs) {
       if (x !== 'trigger') {
         input += inputs[x];
@@ -91,8 +91,6 @@ export class CombineText extends MagickComponent<Promise<WorkerReturn>> {
         input += _node.data.delimiter;
       }
     }
-
-    console.log('new string combined:', input);
 
     return {
       output: input,

@@ -123,7 +123,6 @@ export class Javascript extends MagickComponent<unknown> {
         data,
         'javascript'
       )
-      console.log('value', value)
 
       return value
     } catch (err) {

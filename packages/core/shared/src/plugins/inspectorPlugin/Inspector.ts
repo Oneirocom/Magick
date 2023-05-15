@@ -4,7 +4,15 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { MagickComponent } from '../../engine'
 import * as socketMap from '../../sockets'
-import { AsDataSocket, AsInputsAndOutputsData, DataSocketType, IRunContextEditor, MagickNode, PubSubData, WorkerData } from '../../types'
+import {
+  AsDataSocket,
+  AsInputsAndOutputsData,
+  DataSocketType,
+  IRunContextEditor,
+  MagickNode,
+  PubSubData,
+  WorkerData,
+} from '../../types'
 import { DataControl } from './DataControl'
 
 type InspectorConstructor = {
@@ -56,7 +64,7 @@ export class Inspector {
       )
 
     if (control['inspector'] !== null)
-    return console.error('Inspector has already been added to some control')
+      return console.error('Inspector has already been added to some control')
 
     // Attach the inspector to the incoming control instance
     control['inspector'] = this
@@ -80,7 +88,7 @@ export class Inspector {
 
   remove(dataKey) {
     const control = this.dataControls.get(dataKey)
-    if(!control) {
+    if (!control) {
       return console.warn(`No control with dataKey '${dataKey}' found`)
     }
     control.onRemove()
@@ -117,7 +125,8 @@ export class Inspector {
       existingSockets.push(out.key)
     })
 
-    const ignored: string[] = (control && control?.data?.ignored) as string[] || []
+    const ignored: string[] =
+      ((control && control?.data?.ignored) as string[]) || []
 
     // outputs that are on the node but not in the incoming sockets is removed
     existingSockets
@@ -126,7 +135,6 @@ export class Inspector {
       )
       // filter out any sockets which we have set to be ignored
       .filter(existing => {
-        console.log('filtering out existing')
         return (
           ignored.length === 0 || !ignored.some(socket => socket === existing)
         )
@@ -196,22 +204,10 @@ export class Inspector {
     })
   }
 
-  cacheControls(dataControls: DataControlData) {
-    const cache = Object.entries(dataControls).reduce(
-      (acc, [key, { expanded = true }]) => {
-        acc[key] = {
-          expanded,
-        }
-
-        return acc
-      },
-      {} as PubSubData
-    )
-
-    this.node.data.dataControls = cache
-  }
-
-  handleDefaultTrigger(update: { dataControls?: DataControlData; data: PubSubData}) {
+  handleDefaultTrigger(update: {
+    dataControls?: DataControlData
+    data: PubSubData
+  }) {
     this.editor.nodes
       .filter(node => node.name === 'Input')
       .forEach(node => {
@@ -220,14 +216,15 @@ export class Inspector {
         }
       })
 
-    if(typeof update.data === 'string') return
-    this.node.data.isDefaultTriggerIn = (update.data as Record<string, unknown>).isDefaultTriggerIn
+    if (typeof update.data === 'string') return
+    this.node.data.isDefaultTriggerIn = (
+      update.data as Record<string, unknown>
+    ).isDefaultTriggerIn
   }
 
   handleData(update: HandleDataArgs) {
     // store all data controls inside the nodes data
     // WATCH in case our graphs start getting quite large.
-    if (update.dataControls) this.cacheControls(update.dataControls)
 
     const { data } = update
 

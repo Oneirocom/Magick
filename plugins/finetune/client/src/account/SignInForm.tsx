@@ -1,8 +1,7 @@
 // DOCUMENTED 
 import { Box, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InfoCard from '../components/InfoCard';
 import useAuthentication from './useAuthentication';

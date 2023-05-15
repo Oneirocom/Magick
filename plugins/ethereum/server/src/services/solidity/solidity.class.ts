@@ -60,7 +60,6 @@ implements ServiceInterface<Solidity, SolidityData, ServiceParams> {
   
   async create(
     data: SolidityData | SolidityData[],
-    params?: ServiceParams
   ): Promise<Solidity | Solidity[] | any> {
     const { code } = data as any;
 

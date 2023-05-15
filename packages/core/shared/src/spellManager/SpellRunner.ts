@@ -1,3 +1,4 @@
+import { Application } from '@feathersjs/koa'
 import io from 'socket.io'
 import Agent from '../agents/Agent'
 
@@ -12,6 +13,7 @@ import {
   SpellInterface,
 } from '../types'
 import { extractModuleInputKeys } from './graphHelpers'
+import SpellManager from './SpellManager'
 
 export type RunComponentArgs = {
   inputs: MagickSpellInput
@@ -23,21 +25,57 @@ export type RunComponentArgs = {
   app?: any
 }
 
+type SpellRunnerConstructor = {
+  app: Application
+  socket?: io.Socket
+  agent?: Agent
+  spellManager: SpellManager
+}
+
 class SpellRunner {
   engine: MagickEngine
   currentSpell!: SpellInterface
   module: Module
   ranSpells: string[] = []
   socket?: io.Socket | null = null
+  app: Application
+  agent?: Agent
+  spellManager: SpellManager
 
-  constructor(socket?: io.Socket) {
+  log(message, data) {
+    console.log(message, data)
+    if (!this.agent) return
+
+    this.agent.log(message, {
+      spellId: this.currentSpell.id,
+      projectId: this.currentSpell.projectId,
+      ...data,
+    })
+  }
+
+  warn(message, data) {
+    console.warn(message, data)
+    if (!this.agent) return
+
+    this.agent.warn(message, {
+      spellId: this.currentSpell.id,
+      projectId: this.currentSpell.projectId,
+      ...data,
+    })
+  }
+
+  constructor({ app, socket, agent, spellManager }: SpellRunnerConstructor) {
+    this.agent = agent
+    this.spellManager = spellManager
     // Initialize the engine
+
     this.engine = initSharedEngine({
       name: 'demo@0.1.0',
       components: getNodes(),
       server: true,
       socket: socket || undefined,
     }) as MagickEngine
+    this.app = app
 
     // Set up the module to interface with the runtime processes
     this.module = new Module()
@@ -70,6 +108,8 @@ class SpellRunner {
       module: this.module,
       currentSpell: this.currentSpell,
       projectId: this.currentSpell.projectId,
+      app: this.app,
+      spellManager: this.spellManager,
       // TODO: add the secrets and publicVariables through the spellrunner for context
     }
   }
@@ -233,6 +273,8 @@ class SpellRunner {
 
     const firstInput = Object.keys(inputs)[0]
 
+    console.log('firstInput', firstInput)
+
     // Checking for the triggered node for the connection type
     let triggeredNode = this._getTriggeredNodeByName(firstInput)
 
@@ -255,11 +297,9 @@ class SpellRunner {
 
     try {
       await component.run(triggeredNode as unknown as MagickNode, inputs)
-
       return this.outputData
     } catch (err) {
-      console.warn('ERROR RUNNING SPELL', err)
-      console.log('Output data', this.outputData)
+      console.error('ERROR RUNNING SPELL', err)
       return {
         Output: `Error running spell- ${err}`,
       }

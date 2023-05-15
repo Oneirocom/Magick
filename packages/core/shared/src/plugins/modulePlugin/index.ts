@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations */
 import { Socket } from 'rete/types'
 import { WorkerInputs, WorkerOutputs } from 'rete/types/core/data'
 
@@ -18,8 +17,6 @@ import {
 import { Module } from './module'
 import { ModuleManager } from './module-manager'
 import { addIO, removeIO } from './utils'
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-
 
 export interface ModuleIRunContextEditor extends IRunContextEditor {
   moduleManager: ModuleManager
@@ -179,13 +176,9 @@ function install(
 
             if (!data) return
             const inputs = moduleManager.getInputs(data)
-            console.log('inputs are', inputs)
             const outputs = moduleManager.getOutputs(data)
             const triggerOuts = moduleManager.getTriggerOuts(data)
-            console.log('triggerOuts', triggerOuts)
             const triggerIns = moduleManager.getTriggerIns(data)
-            console.log('triggerIns', triggerIns)
-
 
             // TODO OPTIMIZATION should find a way to cache these so we dont run over the whole add/remove IO sequence if we don't need to.
             removeIO(
@@ -211,8 +204,7 @@ function install(
           }
 
           component.builder = async node => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+            // @ts-ignore
             if (!component.noBuildUpdate) component.updateModuleSockets(node)
             await builder.call(component, node)
           }

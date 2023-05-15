@@ -5,7 +5,6 @@ import { ChatLoader } from "./ChatLoader";
 import { ChatMessage } from "./ChatMessage";
 import { SpellSelect } from "./SpellSelect";
 import { Regenerate } from "./Regenerate";
-import { SystemPrompt } from "./SystemPrompt";
 import chatStyles from './styles.module.css';
 import { Spell } from '@magickml/core'
 

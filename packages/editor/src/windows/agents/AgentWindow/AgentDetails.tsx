@@ -1,12 +1,13 @@
 // DOCUMENTED
-import { IconBtn, Switch } from '@magickml/client-core'
-import { IGNORE_AUTH, pluginManager } from '@magickml/core'
+import { IconBtn, CustomizedSwitch } from '@magickml/client-core'
+import { DEFAULT_USER_TOKEN, PRODUCTION, pluginManager } from '@magickml/core'
+
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useConfig } from '../../../contexts/ConfigProvider'
+import { useConfig } from '@magickml/client-core'
 import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
 import validateSpellData from './spellValidator'
@@ -45,10 +46,13 @@ const AgentDetails = ({
   const config = useConfig()
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
+  const [updateNeeded, setUpdateNeeded] = useState<boolean>(false)
   const [enable, setEnable] = useState(onLoadEnables)
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
-  const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
+  const headers = PRODUCTION
+    ? { Authorization: `Bearer ${token}` }
+    : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
 
   /**
    * update agent data by agent id.
@@ -65,9 +69,6 @@ const AgentDetails = ({
     }
 
     // Avoid server-side validation error
-    _data.spells = Array.isArray(_data?.spells)
-      ? JSON.stringify(_data.spells)
-      : '[]'
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
 
@@ -88,6 +89,7 @@ const AgentDetails = ({
 
         // update data instead of refetching data to avoid agent window flashes
         updateData(data)
+        setUpdateNeeded(false)
       })
       .catch(e => {
         console.error('ERROR', e)
@@ -107,7 +109,6 @@ const AgentDetails = ({
 
     exportAgentData.secrets = {}
 
-    // HACK: iterate through _data and remove any keys that include api, token, or secret
     Object.keys(exportAgentData.data).forEach(key => {
       if (
         key.includes('api') ||
@@ -115,11 +116,10 @@ const AgentDetails = ({
         key.includes('secret')
       ) {
         delete exportAgentData.data[key]
-        console.log('deleted key', key)
       }
     })
 
-    const json = JSON.stringify(exportAgentData)
+    const json = JSON.stringify(exportAgentData, null, 4)
 
     const blob = new Blob([json], { type: 'application/json' })
     const url = window.URL.createObjectURL(new Blob([blob]))
@@ -217,7 +217,7 @@ const AgentDetails = ({
             style={{
               margin: '1em',
               color: 'white',
-              backgroundColor: 'purple',
+              backgroundColor: updateNeeded ? 'purple' : '#424242',
             }}
           >
             Update
@@ -241,11 +241,11 @@ const AgentDetails = ({
           }
         >
           <span>
-            <Switch
-              label={null}
+            <CustomizedSwitch
+              label={selectedAgentData.enabled ? 'On' : 'Off'}
               checked={selectedAgentData.enabled ? true : false}
               onChange={() => {
-                setSelectedAgentData({
+                update(selectedAgentData.id, {
                   ...selectedAgentData,
                   enabled: selectedAgentData.enabled ? false : true,
                 })
@@ -253,7 +253,9 @@ const AgentDetails = ({
               disabled={
                 !selectedAgentData.rootSpell || !selectedAgentData.rootSpell.id
               }
-              style={{ alignSelf: 'self-start' }}
+              style={{
+                alignSelf: 'self-start',
+              }}
             />
           </span>
         </Tooltip>
@@ -288,7 +290,7 @@ const AgentDetails = ({
               enabled: true,
               ...selectedAgentData,
             })
-            console.log('newRootSpell', newRootSpell)
+
             setSelectedAgentData({
               ...selectedAgentData,
               rootSpell: newRootSpell,
@@ -316,6 +318,7 @@ const AgentDetails = ({
                   }, {})
               ),
             })
+            setUpdateNeeded(true)
           }}
         >
           <option disabled value={'default'}>
@@ -344,9 +347,10 @@ const AgentDetails = ({
                 id={value.key}
                 style={{ width: '100%' }}
                 value={
-                  selectedAgentData.secrets
+                  Object.keys(JSON.parse(selectedAgentData.secrets)).length !==
+                  0
                     ? JSON.parse(selectedAgentData.secrets)[value.key]
-                    : 'null'
+                    : ''
                 }
                 onChange={event => {
                   setSelectedAgentData({
@@ -356,6 +360,7 @@ const AgentDetails = ({
                       [value.key]: event.target.value,
                     }),
                   })
+                  setUpdateNeeded(true)
                 }}
               />
             </div>
@@ -364,6 +369,7 @@ const AgentDetails = ({
       </div>
       {selectedAgentData.publicVariables !== '{}' && (
         <AgentPubVariables
+          setUpdateNeeded={setUpdateNeeded}
           setPublicVars={data => {
             setSelectedAgentData({
               ...selectedAgentData,

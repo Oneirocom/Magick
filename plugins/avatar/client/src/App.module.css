@@ -2,13 +2,9 @@
     position: absolute;
     width: 100%;
     max-width: 50%;
-    top: 50%;
     right: 32px;
-    transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
     text-align: center;
-    height: -webkit-calc(100vh - 266px);
-    height: calc(100vh - 266px);
+    height: calc(100vh);
     background: rgba(5, 11, 14, 0.8);
     color: aliceblue;
     z-index: 2000;
@@ -36,8 +32,6 @@
     position: absolute;
     bottom: 20px;
     left: 32px;
-    width: calc(100% - 64px);
-    width: -webkit-calc(100% - 64px);
     text-align: center;
   }
   
@@ -67,7 +61,6 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    z-index: 99999;
   }
 
   .spellSelectorContainer{
@@ -77,11 +70,13 @@
   }
 
   .spellListTitle {
+    color: #99ABB2;
   }
   
   select.spellSelector {
     padding: 0.3em;
     margin-top: 8px;
+    width: 100%;
   }
 
   .sxpContainer {
@@ -93,8 +88,7 @@
     transform: translateY(90%);
     -webkit-transform: translateY(90%);
     text-align: left;
-    height: -webkit-calc(100vh - 400px);
-    height: calc(100vh - 400px);
+    top: 36%;
     background: rgba(5, 11, 14, 0.8);
     color: aliceblue;
     z-index: 2000;
@@ -116,3 +110,22 @@
     font-size: 18px;
     margin-right: 20px;
   }
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+.DragDropzone {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* z-index: 1000; */
+  background-color: transparent;
+}
+
+.dropzone-content {
+  color: #fff;
+}

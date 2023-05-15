@@ -1,7 +1,7 @@
 import Rete from 'rete'
 
-// TODO fix this very unmaintainable mapping
-// this is a horrible hack and only temprorary tunil we have a rete schema migration system set up
+// TODO: fix this very unmaintainable mapping
+// this is a hack and only temporary until we have a rete schema migration system set up
 // with the goal of changing the name of every socket to match the name of the variable.
 // Used in the module manager utils addIO function
 
@@ -14,8 +14,11 @@ export type SocketNameType =
   | 'Object'
   | 'Trigger'
   | 'Event'
+  | 'Task'
   | 'Audio'
+  | 'Image'
   | 'Document'
+  | 'Embedding'
 
 export type SocketType =
   | 'anySocket'
@@ -26,7 +29,11 @@ export type SocketType =
   | 'objectSocket'
   | 'triggerSocket'
   | 'eventSocket'
+  | 'taskSocket'
   | 'audioSocket'
+  | 'imageSocket'
+  | 'embeddingSocket'
+  | 'taskSocket'
   | 'documentSocket'
 
 export const socketNameMap: Record<SocketNameType, SocketType> = {
@@ -40,6 +47,9 @@ export const socketNameMap: Record<SocketNameType, SocketType> = {
   Event: 'eventSocket',
   Audio: 'audioSocket',
   Document: 'documentSocket',
+  Embedding: 'embeddingSocket',
+  Task: 'taskSocket',
+  Image: 'imageSocket',
 }
 
 export const anySocket = new Rete.Socket('Any')
@@ -52,6 +62,9 @@ export const triggerSocket = new Rete.Socket('Trigger')
 export const eventSocket = new Rete.Socket('Event')
 export const audioSocket = new Rete.Socket('Audio')
 export const documentSocket = new Rete.Socket('Document')
+export const embeddingSocket = new Rete.Socket('Embedding')
+export const taskSocket = new Rete.Socket('Task')
+export const imageSocket = new Rete.Socket('Image')
 
 const sockets = [
   numberSocket,
@@ -62,6 +75,9 @@ const sockets = [
   eventSocket,
   audioSocket,
   documentSocket,
+  embeddingSocket,
+  taskSocket,
+  imageSocket,
 ]
 
 sockets.forEach(socket => {

@@ -13,21 +13,27 @@
         "*.js",
         "*.jsx"
       ],
-      "rules": {}
+      "rules": {
+        "@typescript-eslint/no-empty-function": "off"
+      }
     },
     {
       "files": [
         "*.ts",
         "*.tsx"
       ],
-      "rules": {}
+      "rules": {
+        "@typescript-eslint/no-empty-function": "off"
+      }
     },
     {
       "files": [
         "*.js",
         "*.jsx"
       ],
-      "rules": {}
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "off"
+      }
     }
   ]
 }

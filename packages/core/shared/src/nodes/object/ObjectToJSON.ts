@@ -60,7 +60,7 @@ export class ObjectToJSON extends MagickComponent<Promise<WorkerReturn>> {
    * @returns An object containing the resulting JSON string converted from the input object.
    */
   async worker(_node: WorkerData, rawInputs: MagickWorkerInputs): Promise<WorkerReturn> {
-    const obj = rawInputs.input[0] as string
+    const obj = rawInputs.input && rawInputs.input[0] as string
 
     return {
       output: JSON.stringify(obj),

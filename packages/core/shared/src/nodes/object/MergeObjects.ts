@@ -94,8 +94,6 @@ export class Merge extends MagickComponent<void> {
       ...combinedInputs,
     };
 
-    console.log('COMBINED OBJECT', combined);
-
     return {
       object: combined,
     };

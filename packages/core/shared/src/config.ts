@@ -27,12 +27,15 @@ function getVarForEnvironment(env: string): string | undefined {
 
 // Define and export constants from environment variables
 export const IGNORE_AUTH = getVarForEnvironment('IGNORE_AUTH') === 'true'
-export const DATABASE_TYPE = getVarForEnvironment('DATABASE_TYPE')
 export const DATABASE_URL = getVarForEnvironment('DATABASE_URL')
 export const DEFAULT_PROJECT_ID =
   getVarForEnvironment('PROJECT_ID') || 'bb1b3d24-84e0-424e-b4f1-57603f307a89'
 export const DEFAULT_USER_ID = getVarForEnvironment('USER_ID') || '1234567890'
-export const SERVER_PORT = getVarForEnvironment('PORT') || "3030"
+export const DEFAULT_USER_TOKEN =
+  getVarForEnvironment('DUMMY_TOKEN') ||
+  'eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..SUWUnYMxRTxIgGD1.lCzhMnTVeWOBFBzDs4_ft6UCZIVhfk9VSw18-SNzSJjXB4yqwi7z3XJEO9FwbSybFkAjSoFHwYnizYhDsrouDn1xLS7Dqzwnn4I-V1-L0mXcmKXRAS8D1PQzR88CDsk-LIqkcZkkxQ8aoGmyVcKwAmlnAdYpPUEbJ7E3DEBCvA4UbY1iqdYmCWdD7NWeR_IDsWFMKP3jEqp3HPMJbbTitCb1_W-G0gnZ6cokK_JH9tpgbjAoWe0KRQB2Dr3B22-1qa9cPV8W13she2q_RR6SeTAM9iqwzufvuIu2b3Lu0fypQpcV4JyrwCawkZcjsdGQqateftfAQNYzUeSXVzZdWSZJOwHtDHpIMKh_SugqS3ASNrN2gqUEwvY2SOe60h__2ljLsSc.9qWEv3VNEKFpc6zmJv4n0A'
+export const PRODUCTION = getVarForEnvironment('PRODUCTION') === 'true'
+export const SERVER_PORT = getVarForEnvironment('PORT') || '3030'
 export const SERVER_HOST = getVarForEnvironment('HOST') || 'localhost'
 export const SPEECH_SERVER_URL =
   getVarForEnvironment('SPEECH_SERVER_URL') || 'http://localhost:65532'
@@ -54,6 +57,17 @@ export const FILE_SERVER_URL =
 export const USESSL = getVarForEnvironment('USESSL') || false
 export const NODE_ENV = getVarForEnvironment('NODE_ENV') || 'development'
 
-export const PAGINATE_DEFAULT = getVarForEnvironment('PAGINATE_DEFAULT') || "10"
-export const PAGINATE_MAX = getVarForEnvironment('PAGINATE_MAX') || "100"
+export const PAGINATE_DEFAULT = getVarForEnvironment('PAGINATE_DEFAULT') || '10'
+export const PAGINATE_MAX = getVarForEnvironment('PAGINATE_MAX') || '100'
 export const JWT_SECRET = getVarForEnvironment('JWT_SECRET') || 'secret'
+
+export const POSTHOG_ENABLED =
+  getVarForEnvironment('POSTHOG_ENABLED') === 'true'
+export const POSTHOG_API_KEY = getVarForEnvironment('POSTHOG_API_KEY') || ''
+export const REDISCLOUD_URL = getVarForEnvironment('REDISCLOUD_URL') || ''
+
+export const ELEVENLABS_API_KEY =
+  getVarForEnvironment('ELEVENLABS_API_KEY') ||
+  'ce69df07b50e7179cbbfc5c2bef9d752'
+export const VITE_APP_TRUSTED_PARENT_URL =
+  getVarForEnvironment('VITE_APP_TRUSTED_PARENT_URL') || ''

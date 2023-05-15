@@ -6,7 +6,6 @@ import * as fs from 'fs';
 import path from 'path';
 
 import {
-  ENABLE_SPEECH_SERVER,
   SPEECH_SERVER_PORT,
   USSSL_SPEECH,
 } from '@magickml/core';
@@ -60,7 +59,7 @@ export async function initSpeechServer() {
   io.on('connection', function (client: any) {
     let recognizeStream: any = null;
 
-    client.on('join', function (data: any) {
+    client.on('join', function () {
       client.emit('messages', 'Client connected');
     });
 
@@ -68,11 +67,11 @@ export async function initSpeechServer() {
       client.emit('broad', data);
     });
 
-    client.on('startGoogleCloudStream', function (data: any) {
+    client.on('startGoogleCloudStream', function () {
       startRecognitionStream(client);
     });
 
-    client.on('endGoogleCloudStream', function (data: any) {
+    client.on('endGoogleCloudStream', function () {
       stopRecognitionStream();
     });
 
