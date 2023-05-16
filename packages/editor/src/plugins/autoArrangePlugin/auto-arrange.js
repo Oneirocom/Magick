@@ -111,4 +111,18 @@ export class AutoArrange {
       x += columnWidth + currentMargin.x
     }
   }
+
+  markVisitedNodes(node, visited) {
+    if (visited.has(node)) return
+
+    visited.add(node)
+    const connectedNodes = [
+      ...this.getNodes(node, 'output'),
+      ...this.getNodes(node, 'input'),
+    ]
+
+    connectedNodes.forEach(connectedNode =>
+      this.markVisitedNodes(connectedNode, visited)
+    )
+  }
 }
