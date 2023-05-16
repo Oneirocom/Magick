@@ -38,6 +38,7 @@ import {
 } from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
+import AutoArrangePlugin from './plugins/autoArrangePlugin'
 import { initSharedEngine, MagickEngine } from '@magickml/core'
 
 /**
@@ -132,6 +133,11 @@ export const initEditor = function ({
   editor.use(MultiSocketGenerator)
   editor.use(InspectorPlugin)
   editor.use(NodeClickPlugin)
+  editor.use(AutoArrangePlugin, {
+    margin: { x: 50, y: 50 },
+    depth: 0,
+    hotkey: { key: '/', ctrl: true },
+  })
 
   // Set up background
   const background = document.createElement('div') as HTMLElement
