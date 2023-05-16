@@ -1,3 +1,4 @@
+// index.js
 import { AutoArrange } from './auto-arrange'
 
 function install(
@@ -26,8 +27,32 @@ function install(
 
     window.addEventListener('keydown', event => {
       if (ctrl && event.ctrlKey && event.key === key) {
-        const firstNode = editor.nodes[0]
-        editor.trigger('arrange', { node: firstNode })
+        // Find all unvisited nodes and arrange them separately
+        const visited = new Set()
+        let currentOffset = { ...offset } // Initialize currentOffset with the provided offset
+
+        for (const node of editor.nodes) {
+          if (!visited.has(node)) {
+            const options = {
+              depth,
+              margin,
+              vertical,
+              skip: undefined,
+              substitution: undefined,
+              offset: currentOffset,
+            }
+            ar.arrange(node, options) // Pass the currentOffset
+            ar.markVisitedNodes(node, visited)
+
+            // Update currentOffset with the maxY value from the last arranged group
+            const maxY = Math.max(
+              ...Array.from(visited).map(
+                n => n.position[1] + ar.getNodeSize(n).height + 400
+              )
+            )
+            currentOffset = { x: offset.x, y: maxY + margin.y }
+          }
+        }
       }
     })
   }
