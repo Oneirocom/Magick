@@ -59,6 +59,7 @@
       ],
       "@magickml/plugin-github-shared": [
         "plugins/github/shared/src/index.ts"
+      ],
       "@magickml/plugin-bluesky-client": [
         "plugins/bluesky/client/src/index.ts"
       ],

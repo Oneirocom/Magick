@@ -38,7 +38,6 @@ custom_edit_url: null
 - [SwitchControl](classes/SwitchControl.md)
 - [Task](classes/Task.md)
 - [TextInputControl](classes/TextInputControl.md)
-- [WorldManager](classes/WorldManager.md)
 
 ## Interfaces
 
