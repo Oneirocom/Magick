@@ -10,6 +10,7 @@ function install(
     offset = { x: 0, y: 0 },
     arrangeHotkey = { key: '/', ctrl: true },
     centerHotkey = { key: '.', ctrl: true },
+    commentManger = null,
   }
 ) {
   editor.bind('arrange')
