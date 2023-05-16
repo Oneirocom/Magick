@@ -2,12 +2,13 @@ import { Board } from './board'
 import { Cache } from './cache'
 
 export class AutoArrange {
-  constructor(editor, margin, depth, vertical, offset) {
+  constructor(editor, margin, depth, vertical, offset, commentManager) {
     this.editor = editor
     this.margin = margin
     this.depth = depth
     this.vertical = vertical
     this.offset = offset
+    this.commentManager = commentManager
   }
 
   getNodes(node, type = 'output') {
@@ -138,10 +139,23 @@ export class AutoArrange {
     const adjustmentX = -offsetX
     const adjustmentY = -offsetY
 
+    // Translate nodes
     for (const node of this.editor.nodes) {
       const [x, y] = node.position
       const newPosition = [x + adjustmentX, y + adjustmentY]
       this.translateNode(node, { x: newPosition[0], y: newPosition[1] })
+    }
+
+    // Translate comments
+    const commentManager = this.editor.plugins.get('comment').commentManager
+    if (commentManager) {
+      for (const comment of commentManager.comments) {
+        const [x, y] = [comment.x, comment.y]
+        const newPosition = [x + adjustmentX, y + adjustmentY]
+        comment.x = newPosition[0]
+        comment.y = newPosition[1]
+        comment.update()
+      }
     }
   }
 }
