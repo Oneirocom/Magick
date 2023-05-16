@@ -90,6 +90,9 @@ export class AutoArrange {
 
     let x = currentOffset.x
 
+    // Access the commentManager
+    const commentManager = this.editor.plugins.get('comment').commentManager
+
     for (let column of board) {
       const sizes = column.map(node => this.getNodeSize(node, vertical))
       const columnWidth = Math.max(...sizes.map(size => size.width))
@@ -105,6 +108,19 @@ export class AutoArrange {
         const { height } = this.getNodeSize(node, vertical)
 
         this.translateNode(node, position, vertical)
+
+        // Update the position of the comment related to the current node
+        const relatedComments = commentManager.comments.filter(comment =>
+          comment.linkedTo(node)
+        )
+        relatedComments.forEach(comment => {
+          const newPosition = vertical
+            ? { x: y - fullHeight / 2, y: x }
+            : { x, y: y - fullHeight / 2 }
+          comment.x = newPosition.x
+          comment.y = newPosition.y
+          comment.update()
+        })
 
         y += height + currentMargin.y
       }
