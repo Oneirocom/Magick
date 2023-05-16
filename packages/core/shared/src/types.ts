@@ -107,20 +107,6 @@ export type Event = {
   rawData?: string
 }
 
-export type SemanticSearch = {
-  concept?: string
-  positive?: string
-  negative?: string
-  distance?: number
-  positive_distance?: number
-  negative_distance?: number
-}
-
-export type QAArgs = {
-  question: string
-  agentId: string
-}
-
 export type CreateEventArgs = Event
 
 export type GetEventArgs = {

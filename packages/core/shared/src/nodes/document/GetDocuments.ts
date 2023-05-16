@@ -130,8 +130,6 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       },
     })
 
-    console.log('*** DOCUMENT response', response)
-
     // get the data from the response
     let documents = response.data as Document[]
     documents = documents.slice(0, maxCount)
