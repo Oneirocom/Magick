@@ -136,7 +136,8 @@ export const initEditor = function ({
   editor.use(AutoArrangePlugin, {
     margin: { x: 50, y: 50 },
     depth: 0,
-    hotkey: { key: '/', ctrl: true },
+    arrangeHotkey: { key: '/', ctrl: true },
+    centerHotkey: { key: '.', ctrl: true },
   })
 
   // Set up background
