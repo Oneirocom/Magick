@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react'
 import { VectorKeyframeTrack, AnimationClip, AnimationMixer, QuaternionKeyframeTrack } from 'three'
 import { mixamoVRMRigMap } from '../utils/constants'
-import { customDebug } from '../utils/custom.debug'
 
 
 export const useVrmMixamoAnimations = (vrm, mixamoAnimations, exceptionBoneNames = []) => {
   const [mixer, setMixer] = useState(null)
   const [mixamoClip, setMixamoClip] = useState(null)
-
 
   useEffect(() => {
     if (!vrm || !vrm.scene || !mixamoAnimations) {
@@ -27,9 +25,7 @@ export const useVrmMixamoAnimations = (vrm, mixamoAnimations, exceptionBoneNames
       if (exceptionBoneNames.indexOf(vrmBoneName) > -1) {
         return
       }
-      customDebug().log('useVrmMixamoAnimations#useEffect: vrmBoneName: ', vrmBoneName)
       const vrmBoneNode = vrm.humanoid?.getBoneNode(vrmBoneName)
-      customDebug().log('useVrmMixamoAnimations#useEffect: vrmBoneNode: ', vrmBoneNode)
       const vrmNodeName = vrmBoneNode?.name;
 
       if (vrmNodeName != null) {

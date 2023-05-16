@@ -49,3 +49,6 @@ export { Window, WindowToolbar } from './Window'
 
 // Export Modal component
 export { Modal } from './Modal'
+
+// Export Table component
+export { TableComponent } from './Table'

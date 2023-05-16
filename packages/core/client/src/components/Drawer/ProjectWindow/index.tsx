@@ -1,32 +1,32 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { API_ROOT_URL, DEFAULT_USER_TOKEN, PRODUCTION } from '@magickml/core'
+import { API_ROOT_URL, Agent, PRODUCTION } from '@magickml/core'
+import {
+  Apps,
+  ChevronRight,
+  ExpandMore,
+  FileDownload,
+  FileUpload,
+  MenuBook,
+  MoreHoriz,
+  TextSnippet,
+} from '@mui/icons-material'
 import TreeItem from '@mui/lab/TreeItem'
 import TreeView from '@mui/lab/TreeView'
 import {
+  Box,
   Button,
+  Drawer,
+  IconButton,
   Menu,
   MenuItem,
   Typography,
-  Drawer,
-  IconButton,
-  Box,
 } from '@mui/material'
 import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import {
-  Apps,
-  TextSnippet,
-  MoreHoriz,
-  MenuBook,
-  FileDownload,
-  FileUpload,
-  ExpandMore,
-  ChevronRight,
-} from '@mui/icons-material'
 import FileInput from '../../FileInput/FileInput'
 import styles from './index.module.scss'
 
@@ -48,9 +48,6 @@ const ProjectWindow = ({ openDrawer }) => {
   const [data, setData] = useState({ agents: [], spells: [], documents: [] })
   const [loaded, setLoaded] = useState(false)
   const token = globalConfig?.token
-  const headers = PRODUCTION
-    ? { Authorization: `Bearer ${token}` }
-    : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
@@ -83,12 +80,14 @@ const ProjectWindow = ({ openDrawer }) => {
         url: `${globalConfig.apiUrl}/projects`,
         method: 'POST',
         data: { ...data, projectId: globalConfig.projectId },
-        headers,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
         .then(async res => {
           const res2 = await fetch(
             `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
-            { headers }
+            { headers: { Authorization: `Bearer ${token}` } }
           )
           const json = await res2.json()
           setData(json)
@@ -105,6 +104,32 @@ const ProjectWindow = ({ openDrawer }) => {
    */
   const exportProject = () => {
     const element = document.createElement('a')
+
+    const exportData = data
+    exportData.agents.forEach((agent: Agent) => {
+      agent.secrets = {}
+
+      Object.keys(agent.data).forEach(key => {})
+    })
+
+    // traverse the entire exportData object and set all 'data' properties to {}
+    const traverse = obj => {
+      for (const prop in obj) {
+        if (
+          prop.includes('api') ||
+          prop.includes('token') ||
+          prop.includes('secret')
+        ) {
+          delete obj[prop]
+        } else if (prop === 'data') {
+          obj[prop] = {}
+        } else if (typeof obj[prop] === 'object') {
+          traverse(obj[prop])
+        }
+      }
+    }
+    traverse(exportData)
+
     const file = new Blob([JSON.stringify(data, null, 4)], {
       type: 'text/plain',
     })
@@ -159,7 +184,7 @@ const ProjectWindow = ({ openDrawer }) => {
     const fetchData = async () => {
       const { data } = await axios.get(
         `${API_ROOT_URL}/projects?projectId=${globalConfig.projectId}`,
-        { headers }
+        { headers: { Authorization: `Bearer ${token}` } }
       )
       setData(data)
     }

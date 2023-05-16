@@ -36,6 +36,7 @@ import { Output } from './io/Output'
 import { Request } from './io/Request'
 import { Respond } from './io/Respond'
 import { Skill } from './io/Skill'
+import { SpellByName } from './io/SpellByName'
 import { SpellComponent } from './io/Spell'
 import { RunSpell } from './magick/runSpell'
 import { InRange } from './number/InRange'
@@ -59,6 +60,7 @@ import { CurrentTime } from './utility/CurrentTime'
 import { Echo } from './utility/Echo'
 import { ErrorNode } from './utility/Error'
 import { Log } from './utility/Log'
+import { DocumentToContent } from './document/DocumentToContent'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -82,6 +84,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   stringEvaluator: () => new EvaluateText(),
   combineText: () => new CombineText(),
   textVariable: () => new TextVariable(),
+  documenttocontent: () => new DocumentToContent(),
   stringVariable: () => new StringVariable(),
   profanityFilter: () => new ProfanityFilter(),
   numberVariable: () => new NumberVariable(),
@@ -119,6 +122,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   runSpell: () => new RunSpell(),
   error: () => new ErrorNode(),
   respond: () => new Respond(),
+  spellByName: () => new SpellByName(),
 }
 
 /**

@@ -1,17 +1,17 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * This module provides REST APIs for Text to Speech and Image Generation.
  * @module controller/api
  */
 
-import Koa from 'koa';
-import fetch from 'node-fetch';
-import { Route } from '../config/types';
-import { tts } from '../servers/googleTextToSpeech';
-import { tts_tiktalknet } from '../servers/tiktalknet';
-import qs from 'querystring';
-import https from 'https';
-import { resolve } from 'path';
+import Koa from 'koa'
+import fetch from 'node-fetch'
+import { Route } from '../config/types'
+import { tts } from '../servers/googleTextToSpeech'
+import { tts_tiktalknet } from '../servers/tiktalknet'
+import qs from 'querystring'
+import https from 'https'
+import { resolve } from 'path'
 
 /**
  * Retrieves a URL of the audio pronunciation of the given text input, using either Google or TikTalkNet.
@@ -21,20 +21,20 @@ import { resolve } from 'path';
  * @returns {Promise<void>} Nothing
  */
 const getTextToSpeech = async (ctx: Koa.Context): Promise<void> => {
-  const text = ctx.request.query.text as string;
-  const voice_provider = ctx.request.query.voice_provider as string;
-  const voice_character = ctx.request.query.voice_character as string;
-  const tiktalknet_url = ctx.request.query.tiktalknet_url as string;
-  let url = '';
+  const text = ctx.request.query.text as string
+  const voice_provider = ctx.request.query.voice_provider as string
+  const voice_character = ctx.request.query.voice_character as string
+  const voice_endpoint = ctx.request.query.voice_endpoint as string
+  let url = ''
 
   if (voice_provider === 'google') {
-    url = await tts(text, voice_character as string);
+    url = await tts(text, voice_character as string)
   } else {
-    url = await tts_tiktalknet(text, voice_character, tiktalknet_url);
+    url = await tts_tiktalknet(text, voice_character, voice_endpoint)
   }
 
-  ctx.body = url;
-};
+  ctx.body = url
+}
 
 /**
  * Generates an image from the supplied image data.
@@ -44,7 +44,7 @@ const getTextToSpeech = async (ctx: Koa.Context): Promise<void> => {
  * @returns {Promise<void>} Nothing
  */
 const image_generation = async (ctx: Koa.Context): Promise<void> => {
-  const url = 'http://localhost:7860/sdapi/v1/txt2img'; // Endpoint to send the image data
+  const url = 'http://localhost:7860/sdapi/v1/txt2img' // Endpoint to send the image data
 
   // Proxy the request to the endpoint and return the response
   const response = await fetch(url, {
@@ -53,11 +53,11 @@ const image_generation = async (ctx: Koa.Context): Promise<void> => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(ctx.request.body),
-  });
+  })
 
-  const data = await response.json();
-  ctx.body = data;
-};
+  const data = await response.json()
+  ctx.body = data
+}
 
 
 const getTokenUser = async (ctx: Koa.Context): Promise<void> => {

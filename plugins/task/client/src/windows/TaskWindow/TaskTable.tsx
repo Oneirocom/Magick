@@ -1,7 +1,7 @@
 // DOCUMENTED
 // Import statements kept as-is
 import { Button } from '@magickml/client-core'
-import { API_ROOT_URL, DEFAULT_USER_TOKEN, PRODUCTION } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/core'
 import {
   Grid,
   IconButton,
@@ -96,6 +96,14 @@ function TaskTable({ tasks, updateCallback }) {
   const columns = useMemo(
     () => [
       {
+        Header: 'Actions',
+        Cell: row => (
+          <IconButton onClick={() => handleTaskDelete(row.row.original)}>
+            <VscTrash size={16} color="#ffffff" />
+          </IconButton>
+        ),
+      },
+      {
         Header: 'Type',
         accessor: 'type',
         disableSortBy: false,
@@ -106,26 +114,12 @@ function TaskTable({ tasks, updateCallback }) {
         disableSortBy: false,
       },
       {
-        Header: 'Event Data',
-        accessor: 'eventData',
-        // stringify the cell value for display
-        Cell: row => JSON.stringify(row.value),
-      },
-      {
         Header: 'Steps',
         accessor: 'steps',
       },
       {
         Header: 'Status',
         accessor: 'status',
-      },
-      {
-        Header: 'Actions',
-        Cell: row => (
-          <IconButton onClick={() => handleTaskDelete(row.row.original)}>
-            <VscTrash size={16} color="#ffffff" />
-          </IconButton>
-        ),
       },
     ],
     []
@@ -139,15 +133,10 @@ function TaskTable({ tasks, updateCallback }) {
       projectId: config.projectId,
     }
     if (!_.isEqual(reqBody, rowData)) {
-      const headers = PRODUCTION
-        ? { Authorization: `Bearer ${token}` }
-        : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-
       const isUpdated = await fetch(`${API_ROOT_URL}/tasks/${id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          ...headers,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(reqBody),
       }).then(res => res.json())
@@ -220,6 +209,9 @@ function TaskTable({ tasks, updateCallback }) {
   const handleTaskDelete = async (task: any) => {
     const isDeleted = await fetch(`${API_ROOT_URL}/tasks/${task.id}`, {
       method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
     if (isDeleted) enqueueSnackbar('Task deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting Task', { variant: 'error' })

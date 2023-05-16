@@ -1,9 +1,9 @@
-import { eventSocket, ServerPlugin, triggerSocket, WorldManager } from '@magickml/core'
+import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
 
-let TwitterConnector = null as any;
+let TwitterConnector = null as any
 // dynamically import { TwitterConnector } from './connectors/twitter' if we are in node.js using esm syntax
-if(typeof window === 'undefined') {
-  import('./connectors/twitter').then((module) => {
+if (typeof window === 'undefined') {
+  import('./connectors/twitter').then(module => {
     TwitterConnector = module.TwitterConnector
   })
 }
@@ -11,30 +11,27 @@ if(typeof window === 'undefined') {
 type StartTwitterArgs = {
   agent: any
   spellRunner: any
-  worldManager: WorldManager
 }
 
 function getAgentMethods() {
-  async function startTwitter({
-    agent,
-    spellRunner,
-    worldManager,
-  }: StartTwitterArgs) {
+  async function startTwitter({ agent, spellRunner }: StartTwitterArgs) {
     const { data } = agent.data
-    if(!data) return console.log("No data for this agent")
-    if(!data.twitter_enabled) return console.log("Twitter is not enabled for this agent")
-    if(!data.twitter_api_key) return console.log("Twitter API key is not set for this agent")
+    if (!data) return console.log('No data for this agent')
+    if (!data.twitter_enabled)
+      return console.log('Twitter is not enabled for this agent')
+    if (!data.twitter_api_key)
+      return console.log('Twitter API key is not set for this agent')
     console.log('starting twitter connect')
     const twitter = new TwitterConnector({
       agent,
       spellRunner,
-      worldManager,
     })
     agent.twitter = twitter
   }
 
-  async function stopTwitter({agent}) {
-    if (!agent.twitter) return console.warn("Twitter isn't running, can't stop it")
+  async function stopTwitter({ agent }) {
+    if (!agent.twitter)
+      return console.warn("Twitter isn't running, can't stop it")
     try {
       await agent.twitter.destroy()
       agent.twitter = null
@@ -50,13 +47,7 @@ function getAgentMethods() {
   }
 }
 
-async function handleResponse(
-  {
-    output,
-    agent,
-    event
-  }
-) {
+async function handleResponse({ output, agent, event }) {
   console.log('********* SENT MESSAGE TO TWITTER', agent.id, output, event)
   console.log('event is', event)
   console.log('event.channel is', event.channel)
@@ -64,11 +55,17 @@ async function handleResponse(
   const resp = output
   if (resp && resp !== undefined && resp?.length > 0) {
     if (resp === 'like' || resp === 'heart') {
-      await agent.twitter.twitterv2.v2.like(agent.twitter.localUser.data.id, event.channel)
+      await agent.twitter.twitterv2.v2.like(
+        agent.twitter.localUser.data.id,
+        event.channel
+      )
     } else if (resp !== 'ignore') {
       await agent.twitter.handleMessage(resp, event.channel, 'feed', event)
     } else if (resp === 'retweet') {
-      await agent.twitter.twitterv2.v2.retweet(agent.twitter.localUser.data.id, event.channel)
+      await agent.twitter.twitterv2.v2.retweet(
+        agent.twitter.localUser.data.id,
+        event.channel
+      )
     }
   }
 }
@@ -83,7 +80,7 @@ const inputSockets = [
     socket: 'trigger',
     name: 'trigger',
     type: triggerSocket,
-  }
+  },
 ]
 
 const outputSockets = [
@@ -91,22 +88,28 @@ const outputSockets = [
     socket: 'output',
     name: 'output',
     type: eventSocket,
-  }
+  },
 ]
 
 const TwitterPlugin = new ServerPlugin({
   name: 'TwitterPlugin',
   inputTypes: [
-    { name: 'Twitter (Feed)', sockets: inputSockets, defaultResponseOutput: 'Twitter (Feed)' },
+    {
+      name: 'Twitter (Feed)',
+      sockets: inputSockets,
+      defaultResponseOutput: 'Twitter (Feed)',
+    },
     // { name: 'Twitter (DM)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (DM)' },
     // { name: 'Twitter (Mention', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (Mention'}
   ],
   outputTypes: [
-    { name: 'Twitter (Feed)', sockets: outputSockets, handler: async ({
-      output, agent, event
-    }) => {
-      await handleResponse({output, agent, event})
-    }},
+    {
+      name: 'Twitter (Feed)',
+      sockets: outputSockets,
+      handler: async ({ output, agent, event }) => {
+        await handleResponse({ output, agent, event })
+      },
+    },
     // { name: 'Twitter (DM)', trigger: true, socket: eventSocket, handler: async ({
     //   output, agent, event
     // }) => {
@@ -115,32 +118,32 @@ const TwitterPlugin = new ServerPlugin({
   ],
   agentMethods: getAgentMethods(),
   secrets: [
-  {
-    name: 'Bearer Token (API v2)',
-    key: 'twitter_bearer_token',
-    global: false
-  },
-  {
-    name: 'API Key (API v1)',
-    key: 'twitter_api_key',
-    global: false
-  },
-  {
-    name: 'API Key Secret (API v1)',
-    key: 'twitter_api_key_secret',
-    global: false
-  },
-  {
-    name: 'Access Token (API v1)',
-    key: 'twitter_access_token',
-    global: false
-  },
-  {
-    name: 'Access Token Secret (API v1)',
-    key: 'twitter_access_token_secret',
-    global: false
-  },
-]
+    {
+      name: 'Bearer Token (API v2)',
+      key: 'twitter_bearer_token',
+      global: false,
+    },
+    {
+      name: 'API Key (API v1)',
+      key: 'twitter_api_key',
+      global: false,
+    },
+    {
+      name: 'API Key Secret (API v1)',
+      key: 'twitter_api_key_secret',
+      global: false,
+    },
+    {
+      name: 'Access Token (API v1)',
+      key: 'twitter_access_token',
+      global: false,
+    },
+    {
+      name: 'Access Token Secret (API v1)',
+      key: 'twitter_access_token_secret',
+      global: false,
+    },
+  ],
 })
 
 export default TwitterPlugin

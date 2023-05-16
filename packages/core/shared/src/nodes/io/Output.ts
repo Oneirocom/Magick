@@ -72,7 +72,6 @@ export class Output extends MagickComponent<void> {
     const values = [...defaultOutputTypes, ...pluginManager.getOutputTypes()]
     node.data.isOutput = true
     node.data.name = node.data.name ?? `Output - ${values[0].name}`
-    node.data.sendToPlaytest = true
 
     const outputType = new DropdownControl({
       name: 'Output Type',
@@ -126,10 +125,11 @@ export class Output extends MagickComponent<void> {
         (Object.values(data)[0] as any)?.eventData ||
         Object.values(data)[0]) as Event
 
-    const output =
-      ((inputs.input.filter(Boolean)[0] ?? '') as string) ?? event.connector
+    const output = inputs.input.filter(Boolean)[0] as string
     const outputType =
-      node.data.outputType || inputName.replace('Input - ', '') || 'Default'
+      inputName?.replace('Input - ', '') ||
+      node.data.outputType ||
+      event.connector
 
     if (module.agent) {
       if (outputType && (outputType as string).includes('Default')) {

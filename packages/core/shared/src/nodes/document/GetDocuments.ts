@@ -120,7 +120,6 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
 
     const maxCountData = nodeData.max_count as string
     const maxCount = maxCountData ? parseInt(maxCountData) : 10
-
     // replace with feathers service call
     const response = await app.service('documents').find({
       query: {
@@ -132,8 +131,8 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
     })
 
     // get the data from the response
-    const documents = response.data as Document[]
-
+    let documents = response.data as Document[]
+    documents = documents.slice(0, maxCount)
     // Return the result for output
     return {
       documents,

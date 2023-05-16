@@ -13,6 +13,8 @@ import { ServerPlugin } from '@magickml/core'
 import shared from '@magickml/plugin-googleai-shared'
 import {
   makeChatCompletion,
+  makeTextCompletion,
+  makeTextEmbedding,
 } from './functions'
 
 /**
@@ -25,7 +27,9 @@ const { secrets } = shared
  */
 const completionHandlers = {
   text: {
+    text: makeTextCompletion,
     chat: makeChatCompletion,
+    embedding: makeTextEmbedding,
   },
 }
 
