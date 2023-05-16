@@ -8,7 +8,8 @@ function install(
     depth = null,
     vertical = false,
     offset = { x: 0, y: 0 },
-    hotkey = { key: '/', ctrl: true },
+    arrangeHotkey = { key: '/', ctrl: true },
+    centerHotkey = { key: '.', ctrl: true },
   }
 ) {
   editor.bind('arrange')
@@ -22,8 +23,8 @@ function install(
     ar.arrange(node, options)
   }
 
-  if (hotkey) {
-    const { key, ctrl } = hotkey
+  if (arrangeHotkey) {
+    const { key, ctrl } = arrangeHotkey
 
     window.addEventListener('keydown', event => {
       if (ctrl && event.ctrlKey && event.key === key) {
@@ -53,6 +54,16 @@ function install(
             currentOffset = { x: offset.x, y: maxY + margin.y }
           }
         }
+      }
+    })
+  }
+
+  if (centerHotkey) {
+    const { key, ctrl } = centerHotkey
+
+    window.addEventListener('keydown', event => {
+      if (ctrl && event.ctrlKey && event.key === key) {
+        ar.centerProject()
       }
     })
   }
