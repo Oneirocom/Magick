@@ -4,15 +4,13 @@ export class GithubConnector {
   spellRunner
   data
   agent
-  worldManager: any
 
-  constructor({ spellRunner, agent, worldManager }) {
+  constructor({ spellRunner, agent }) {
     agent.github = this
     this.spellRunner = spellRunner
     const data = agent.data.data
     this.data = data
     this.agent = agent
-    this.worldManager = worldManager
     console.log(data)
     console.log('Github enabled, initializing...')
     this.initialize({ spellRunner, agent, data })
@@ -24,7 +22,7 @@ export class GithubConnector {
       console.warn('Github is not enabled, skipping')
     }
 
-    if(!data.github_access_token) {
+    if (!data.github_access_token) {
       console.warn('Github is not enabled for this agent')
     }
 
@@ -43,14 +41,14 @@ export class GithubConnector {
             entities: [],
           },
         },
-        agent : this.agent,
+        agent: this.agent,
         secrets: this.agent.secrets,
         publicVariables: this.agent.publicVariables,
         app,
         runSubspell: true
       });
       console.log('output is', resp);
-    }, );
+    },);
     agent.githubHandler = githubHandler;
     console.log('Added agent to github', agent.id);
   }
