@@ -77,15 +77,8 @@ export class DocumentService<
             )}') AS similarity`
           )
         )
-        .select(
-          db.raw(
-            `embedding <-> '${JSON.stringify(
-              params.query.embedding
-            )}' AS distance`
-          )
-        )
-        .orderBy('distance', 'asc')
-        .limit(10)
+        .orderBy('similarity', 'asc')
+        .limit(param.maxCount)
       return { data: querys }
     }
     const res = await super.find(params)
