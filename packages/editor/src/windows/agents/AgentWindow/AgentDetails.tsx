@@ -347,7 +347,7 @@ const AgentDetails = ({
                 id={value.key}
                 style={{ width: '100%' }}
                 value={
-                  Object.keys(JSON.parse(selectedAgentData.secrets)).length !==
+                  selectedAgentData.secrets && Object.keys(JSON.parse(selectedAgentData.secrets)).length !==
                   0
                     ? JSON.parse(selectedAgentData.secrets)[value.key]
                     : ''
