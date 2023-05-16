@@ -113,7 +113,7 @@ const ProjectWindow = ({ openDrawer }) => {
     })
 
     // traverse the entire exportData object and set all 'data' properties to {}
-    const traverse = obj => {
+    const traverse = (obj, parent) => {
       for (const prop in obj) {
         if (
           prop.includes('api') ||
@@ -122,13 +122,15 @@ const ProjectWindow = ({ openDrawer }) => {
         ) {
           delete obj[prop]
         } else if (prop === 'data') {
-          obj[prop] = {}
+          if (!parent || !parent.hasOwnProperty('id')) {
+            obj[prop] = {}
+          }
         } else if (typeof obj[prop] === 'object') {
-          traverse(obj[prop])
+          traverse(obj[prop], obj)
         }
       }
     }
-    traverse(exportData)
+    traverse(exportData, null)
 
     const file = new Blob([JSON.stringify(data, null, 4)], {
       type: 'text/plain',
