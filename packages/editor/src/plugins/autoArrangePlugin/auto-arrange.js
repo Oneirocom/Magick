@@ -125,4 +125,23 @@ export class AutoArrange {
       this.markVisitedNodes(connectedNode, visited)
     )
   }
+
+  centerProject() {
+    const maxX = Math.max(...this.editor.nodes.map(node => node.position[0]))
+    const maxY = Math.max(...this.editor.nodes.map(node => node.position[1]))
+    const minX = Math.min(...this.editor.nodes.map(node => node.position[0]))
+    const minY = Math.min(...this.editor.nodes.map(node => node.position[1]))
+
+    const offsetX = (maxX + minX) / 2
+    const offsetY = (maxY + minY) / 2
+
+    const adjustmentX = -offsetX
+    const adjustmentY = -offsetY
+
+    for (const node of this.editor.nodes) {
+      const [x, y] = node.position
+      const newPosition = [x + adjustmentX, y + adjustmentY]
+      this.translateNode(node, { x: newPosition[0], y: newPosition[1] })
+    }
+  }
 }
