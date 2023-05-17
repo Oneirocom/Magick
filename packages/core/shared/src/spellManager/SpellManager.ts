@@ -53,6 +53,7 @@ export default class SpellManager {
   }
 
   getSpellRunner(spellId: string) {
+    // we want to track which spells are currently busy here.
     return this.spellRunnerMap.get(spellId)
   }
 
@@ -94,6 +95,7 @@ export default class SpellManager {
 
     await spellRunner.loadSpell(spell)
 
+    // maybe we make a map of maps here to keep track of the multiple instances of spells?
     this.spellRunnerMap.set(spell.id, spellRunner)
 
     return spellRunner
@@ -108,6 +110,12 @@ export default class SpellManager {
       publicVariables,
       app,
       agent: this.agent,
+    })
+
+    this.agent?.publish(`${spellId}:run`, {
+      inputs,
+      publicVariables,
+      result,
     })
 
     return result || {}
