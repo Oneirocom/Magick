@@ -592,10 +592,10 @@ export type ModuleContext = {
   context: EngineContext
   spellManager: SpellManager
   app: Application
+  agent: Agent
   module: {
     secrets?: Record<string, string>
     publicVariables?: Record<string, string>
-    agent?: Agent
     app?: Application
     inputs: Record<string, unknown>
     outputs: Record<string, unknown>

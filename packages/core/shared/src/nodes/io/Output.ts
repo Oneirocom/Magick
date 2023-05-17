@@ -115,7 +115,7 @@ export class Output extends MagickComponent<void> {
       console.error('No input provided to output component')
       return { output: '' }
     }
-    const { module, data } = context
+    const { module, data, agent } = context
 
     const event = // event data is inside a task
       ((inputs.event?.[0] as any)?.eventData ||
@@ -131,7 +131,7 @@ export class Output extends MagickComponent<void> {
       node.data.outputType ||
       event.connector
 
-    if (module.agent) {
+    if (agent) {
       if (outputType && (outputType as string).includes('Default')) {
         // If default handler, don't call the output type handler
         // const type = pluginManager.getInputTypes().find(type => {
@@ -148,7 +148,7 @@ export class Output extends MagickComponent<void> {
         // })
       } else {
         // Find the outputType in the outputTypes array
-        const t = module.agent.outputTypes.find(t => t.name === outputType)
+        const t = agent.outputTypes.find(t => t.name === outputType)
         // Find outputType in outputTypes where name is outputType
         if (!t) {
           console.error('output type is not defined', t)
@@ -157,7 +157,7 @@ export class Output extends MagickComponent<void> {
         } else {
           t.handler({
             output,
-            agent: module.agent,
+            agent: agent,
             event,
           })
         }
