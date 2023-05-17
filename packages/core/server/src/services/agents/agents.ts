@@ -48,31 +48,30 @@ const validateRootSpell = async (context: HookContext) => {
 export const agent = (app: Application) => {
   // Register the agent service on the Feathers application
   app.use('agents', new AgentService(getOptions(app), app), {
-    methods: ['find', 'get', 'create', 'patch', 'remove', 'log'],
+    methods: ['find', 'get', 'create', 'patch', 'remove'],
     events: ['log'],
   })
 
-  // app.service('agents').publish((data: any, context) => {
-  //   const projectIds = new Set<string>()
-  //   // Loop through each object in the data array and add its projectId to the set
-  //   if (Array.isArray(data)) {
-  //     for (const item of data) {
-  //       if (item && item.projectId) {
-  //         projectIds.add(item.projectId)
-  //       }
-  //     }
-  //   } else if (data && data?.projectId) {
-  //     // If data is a single object with a projectId property, add the projectId to the set
-  //     projectIds.add(data?.projectId)
-  //   }
+  const pubSub = app.get<'pubsub'>('pubsub')
 
-  //   // Return the channels for each projectId in the set
-  //   const channels = Array.from(projectIds).map(projectId =>
-  //     app.channel(projectId)
-  //   )
+  pubSub.patternSubscribe('agent*', (message, channel) => {
+    // no point in subscribing to agent messages if we are an agent
+    if (app.get('isAgent')) return
+    console.log('**************RECEIVED AGENT MESSAGE', channel, message)
 
-  //   return channels.length > 0 ? channels : null
-  // })
+    const regex = /agent:([a-z0-9\-]+)/
+    const match = channel.match(regex)
+    const agentId = match ? match[1] : null
+    console.log('AGENTID', agentId)
+    // emit custom events via the agent service
+    app.service('agents').emit('log', {
+      channel,
+      projectId: message?.projectId,
+      data: message,
+    })
+
+    // console.log('Channel', app.channel(message?.projectId).connections)
+  })
 
   // Initialize hooks for the agent service
   app.service('agents').hooks({
