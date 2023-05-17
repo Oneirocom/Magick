@@ -1,17 +1,11 @@
 // DOCUMENTED
-import {
-  eventSocket,
-  ServerPlugin,
-  triggerSocket,
-  WorldManager,
-} from '@magickml/core'
+import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
 import { DiscordConnector } from './connectors/discord'
 
 import { getNodes } from '@magickml/plugin-discord-shared'
 type StartDiscordArgs = {
   agent: any
   spellRunner: any
-  worldManager: WorldManager
 }
 
 /**
@@ -21,13 +15,9 @@ type StartDiscordArgs = {
 function getAgentMethods() {
   /**
    * Start a new Discord connection for this agent.
-   * @param args - An object containing the agent, spellRunner, and worldManager.
+   * @param args - An object containing the agent and spellRunner.
    */
-  async function startDiscord({
-    agent,
-    spellRunner,
-    worldManager,
-  }: StartDiscordArgs) {
+  async function startDiscord({ agent, spellRunner }: StartDiscordArgs) {
     const { data } = agent.data
     if (!data) return agent.log('No data for this agent')
     if (!data.discord_enabled)
@@ -40,7 +30,6 @@ function getAgentMethods() {
         ...data,
         agent,
         spellRunner,
-        worldManager,
       })
       agent.discord = discord
     } catch (err) {
@@ -75,6 +64,7 @@ function getAgentMethods() {
  * @param args - An object containing the output, agent, and event.
  */
 async function handleResponse({ output, agent, event }) {
+  console.log('handleResponse', output, event)
   if (!output || output === '')
     return agent.warn('No output to send to discord')
   await agent?.discord?.sendMessageToChannel(event.channel, output)

@@ -78,7 +78,7 @@ export class ProjectsService {
     const mappedAgents = agents.map(agent => {
       delete agent.id
       if (!agent.data) agent.data = '{}'
-      if (agent.spells) delete agent.spells
+      if ('spells' in agent) delete agent.spells // <-- Updated to fix eliza import
       agent.enabled = false
       agent.projectId = projectId
       return agent

@@ -1,7 +1,6 @@
 // DOCUMENTED
 import { Application } from '@feathersjs/koa'
 import { SpellManager, SpellRunner } from '../spellManager/index'
-import { WorldManager } from '../world/worldManager'
 import { pluginManager } from '../plugin'
 import { AgentInterface, SpellInterface } from '../schemas'
 import { AgentManager } from './AgentManager'
@@ -19,7 +18,6 @@ export class Agent implements AgentInterface {
   app: any
   spellManager: SpellManager
   projectId: string
-  worldManager: WorldManager
   agentManager: AgentManager
   spellRunner?: SpellRunner
   rootSpell: SpellInterface
@@ -46,8 +44,6 @@ export class Agent implements AgentInterface {
     this.agentManager = agentManager
     this.name = agentData.name ?? 'agent'
     this.projectId = agentData.projectId
-    const worldManager = new WorldManager()
-    this.worldManager = worldManager
     this.app = app
 
     const spellManager = new SpellManager({
@@ -83,7 +79,6 @@ export class Agent implements AgentInterface {
             agentManager,
             agent: this,
             spellRunner: this.spellRunner,
-            worldManager: worldManager,
           })
         } catch (err) {
           this.error('Error in agent start method', { method, err })
@@ -117,7 +112,6 @@ export class Agent implements AgentInterface {
           agentManager: this.agentManager,
           agent: this,
           spellRunner: this.spellRunner,
-          worldManager: this.worldManager,
         })
       }
     this.log('destroyed agent', { id: this.id })
