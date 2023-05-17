@@ -73,7 +73,7 @@ export class SpellComponent extends MagickComponent<
       nodeType: 'module',
       skip: true,
     }
-    this.noBuildUpdate = true
+    this.noBuildUpdate = false
     this.display = true
     this.onDoubleClick = (node: MagickNode) => {
       if (!this.editor) return
@@ -316,21 +316,18 @@ export class SpellComponent extends MagickComponent<
 
     const publicVariables = getPublicVariables(node.data.graph)
 
-    console.log('node.data.publicVariables', node.data.publicVariables)
-
-    console.log('publicVariables', JSON.stringify(publicVariables))
-
     // for each public variable...
-    const output = {}
+    // todo switch to map
+    const variables = {}
 
     publicVariables.forEach((data: any) => {
       const key = data.id
       const nodeDataKey = data.data.name
       const value = node.data?.publicVariables?.[`${nodeDataKey}`]
-      output[key] = { value }
+      variables[key] = { value }
     })
 
-    const { agent, module, spellManager, app } = _context
+    const { module, spellManager, app, agent } = _context
     const { secrets } = module
 
     if (spellManager) {
@@ -347,10 +344,13 @@ export class SpellComponent extends MagickComponent<
           agent: agent,
           secrets: agent?.secrets ?? secrets,
           app,
-          publicVariables: output,
+          publicVariables: variables,
         }
+
         const outputs = await spellManager.run(runComponentArgs)
-        return this.formatOutputs(node, outputs as any)
+        const output = this.formatOutputs(node, outputs as any)
+
+        return output
       } else {
         throw new Error('spell runner not found')
       }
