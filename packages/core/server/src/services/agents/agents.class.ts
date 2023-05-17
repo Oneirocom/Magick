@@ -26,11 +26,6 @@ export class AgentService<
     super(options)
     this.app = app
   }
-
-  async log(data, context) {
-    this.app.service('agents').emit('log', data)
-    return data ? data : { message: 'No data' }
-  }
 }
 
 /**
