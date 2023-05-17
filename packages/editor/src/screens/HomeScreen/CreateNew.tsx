@@ -1,111 +1,111 @@
-// DOCUMENTED 
-import { Button, Panel } from '@magickml/client-core';
-import { GraphData } from '@magickml/core';
-import { getTemplates } from '@magickml/client-core';
-import md5 from 'md5';
-import { useSnackbar } from 'notistack';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+// DOCUMENTED
+import { Button, Panel } from '@magickml/client-core'
+import { GraphData } from '@magickml/core'
+import { getTemplates } from '@magickml/client-core'
+import md5 from 'md5'
+import { useSnackbar } from 'notistack'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import {
   adjectives,
   colors,
   uniqueNamesGenerator,
-} from 'unique-names-generator';
-import TemplatePanel from '../../components/TemplatePanel';
-import { useConfig } from '@magickml/client-core';
-import { spellApi } from '../../state/api/spells';
-import emptyImg from './empty.png';
-import css from './homeScreen.module.css';
+} from 'unique-names-generator'
+import TemplatePanel from '../../components/TemplatePanel'
+import { useConfig } from '@magickml/client-core'
+import { spellApi } from '../../state/api/spells'
+import LoadingButton from '@mui/lab/LoadingButton'
+import emptyImg from './empty.png'
+import css from './homeScreen.module.css'
 
 // Custom configuration for unique name generator
 const customConfig = {
   dictionaries: [adjectives, colors],
   separator: ' ',
   length: 2,
-};
+}
 
 export type Template = {
-  label: string;
-  bg: string;
-  graph: GraphData;
-};
+  label: string
+  bg: string
+  graph: GraphData
+}
 
 /**
  * CreateNew component for creating a new spell.
  */
 const CreateNew = () => {
-  const config = useConfig();
+  const config = useConfig()
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
     getTemplates().spells[0]
-  );
-  const [error, setError] = useState<string | null>(null);
-
-  const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
-  const [newSpell] = spellApi.useNewSpellMutation();
-  const [spellExists] = spellApi.useLazyGetSpellQuery();
-  const { register, handleSubmit } = useForm();
+  )
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
+  const { enqueueSnackbar } = useSnackbar()
+  const navigate = useNavigate()
+  const [newSpell] = spellApi.useNewSpellMutation()
+  const [spellExists] = spellApi.useLazyGetSpellQuery()
+  const { register, handleSubmit } = useForm()
 
   /**
    * Handle creation process of a new spell.
    */
-  const onCreate = handleSubmit(async (data) => {
+  const onCreate = handleSubmit(async data => {
     try {
-      if (!selectedTemplate) return;
-      const placeholderName = uniqueNamesGenerator(customConfig);
-      const name = data.name || placeholderName;
+      if (!selectedTemplate) return
+      const placeholderName = uniqueNamesGenerator(customConfig)
+      const name = data.name || placeholderName
+      setLoading(true)
       const spellCheck = await spellExists({
         spellName: name,
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
-      });
+      })
       if (spellCheck.data.total > 0) {
         enqueueSnackbar('A spell with that name already exists', {
           variant: 'error',
-        });
-        return;
+        })
+        return
       }
       const response = await newSpell({
         graph: selectedTemplate.graph,
         name,
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
-      });
+      })
 
       if ('error' in response) {
         if ('status' in response.error) {
-          const err = response.error;
-          const errMsg = err.data.error.message;
-          setError(errMsg as string);
+          const err = response.error
+          const errMsg = err.data.error.message
+          setError(errMsg as string)
           enqueueSnackbar(`Error saving spell. ${errMsg}.`, {
             variant: 'error',
-          });
-          return;
+          })
+          return
         }
       }
-
+      setLoading(false)
       navigate(
         `/magick/${
-          response.data.id +
-          '-' +
-          encodeURIComponent(btoa(response.data.name))
+          response.data.id + '-' + encodeURIComponent(btoa(response.data.name))
         }`
-      );
+      )
     } catch (err) {
-      console.error('ERROR!', err);
+      console.error('ERROR!', err)
     }
-  });
+  })
 
   return (
     <Panel shadow flexColumn>
       <h1>Create New</h1>
       <div className={css['spell-details']}>
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onCreate();
+          onSubmit={e => {
+            e.preventDefault()
+            onCreate()
           }}
         >
           <label className={css['label']} htmlFor="">
@@ -143,20 +143,24 @@ const CreateNew = () => {
       <div className={css['button-row']}>
         <Button
           onClick={() => {
-            window.history.back();
+            window.history.back()
           }}
         >
           cancel
         </Button>
-        <Button
-          className={!selectedTemplate ? 'disabled' : 'primary'}
+        <LoadingButton
+          className={`${!selectedTemplate ? 'disabled' : 'primary'} ${
+            css.button
+          }`}
+          loading={loading}
           onClick={onCreate}
+          variant="outlined"
         >
           CREATE
-        </Button>
+        </LoadingButton>
       </div>
     </Panel>
-  );
-};
+  )
+}
 
-export default CreateNew;
+export default CreateNew
