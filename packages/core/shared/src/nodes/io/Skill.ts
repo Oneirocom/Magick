@@ -106,7 +106,7 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
       task.eventData.content = content || task.eventData.content
     }
 
-    const { agent, module, spellManager } = _context
+    const { module, spellManager, agent } = _context
 
     const { app, secrets } = module
 
