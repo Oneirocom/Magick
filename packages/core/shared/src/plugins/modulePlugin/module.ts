@@ -3,7 +3,6 @@ export class Module {
   publicVariables?: Record<string, string>
   inputs: Record<string, unknown>
   outputs: Record<string, unknown>
-  agent?: any // set to Agent, but move Agent to engine first
   app?: any // set to App, but move App to engine first
   constructor() {
     this.inputs = {}
@@ -13,11 +12,10 @@ export class Module {
     this.app = null
   }
 
-  read({ inputs, secrets, publicVariables, agent, app }) {
+  read({ inputs, secrets, publicVariables, app }) {
     this.inputs = inputs
     this.secrets = secrets || ({} as Record<string, string>)
     this.publicVariables = publicVariables || ({} as Record<string, string>)
-    this.agent = agent
     this.app = app
   }
 
@@ -43,7 +41,7 @@ export class Module {
     return this.publicVariables
   }
 
-  getApp(){
+  getApp() {
     return this.app
   }
 }
