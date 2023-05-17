@@ -21,7 +21,6 @@ export default function (app: Application): void {
   app.on(
     'connection',
     async (connection: RealTimeConnection): Promise<void> => {
-      console.log('!!!!!connection in connection', connection)
       // Add the new connection to the anonymous channel
       // we assume authenticated user here because they handshook to start
       app.channel('anonymous').join(connection)
@@ -35,7 +34,6 @@ export default function (app: Application): void {
    * @param connectionData - Contains the connection object.
    */
   app.on('login', (authResult: any, { connection }: any): void => {
-    debugger
     // console.log('connection in login', connection)
     // Return early if there's no real-time connection (e.g. during REST login)
     if (!connection) {
@@ -46,12 +44,7 @@ export default function (app: Application): void {
     app.channel('anonymous').leave(connection)
     app.channel('authenticated').join(connection)
 
-    console.log(
-      '!!!!!!!!!!!!!!!!!!!!adding uses to channel',
-      authResult.project
-    )
     app.channel(authResult.project).join(connection)
-
     // Additional custom channels can be set up and joined here
   })
 
@@ -60,16 +53,22 @@ export default function (app: Application): void {
    * @param data - The event data.
    * @param hook - The hook context.
    */
-  app.publish((data, context) => {
+  app.publish((data: any, context) => {
     const projectId =
       context.params?.projectId ||
       context.result.projectId ||
-      context.data?.projectId
+      context.data?.projectId ||
+      data.projectId
+
+    // don't publish if we are an agent
+    if (app.get('isAgent')) return
+    // if (context.method !== 'patch') console.log('PUBLISHING DATA', data)
 
     // console.log('DATA', data)
     // console.log('PUBLISHING project id', projectId)
     // Publish all events to the authenticated user channel
     const channel = app.channel(projectId)
+
     // debugger
     return channel
   })
