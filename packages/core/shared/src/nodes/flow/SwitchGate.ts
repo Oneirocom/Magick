@@ -15,9 +15,7 @@ import {
 /**
  * Info message for the SwitchGate component.
  */
-const info = `The Switch Gate component takes a single input, and allows you to define any number of outputs. \
-It works the same as the JavaScript switch. The component will try to match the value of the input to one \
-of the output socket names you have created. It will route the trigger signal through that socket, or the default trigger socket if no cases match.`
+const info = `The Switch Gate component takes a single input, and allows you to define any number of outputs. It works the same as the javascript switch. The component will try to match the value of the input to one of the output socket names you have created. It will route the trigger signal through that socket, or the default trigger socket if no cases match.`
 
 /**
  * The SwitchGate class extends the MagickComponent and manages a single input and multiple output logic.

@@ -1,17 +1,13 @@
-// DOCUMENTED 
+// DOCUMENTED
 import Rete from 'rete'
 
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
 import { triggerSocket } from '../../sockets'
-import {
-  MagickNode,
-  MagickWorkerInputs,
-  WorkerData
-} from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 /** Info for the WaitForAll Component */
-const info = `Fires once all connected triggers have fired.`
+const info = `Triggers the output once all connected inputs have been triggered.`
 
 /**
  * WaitForAll is a component to ensure all connected triggers have fired.
@@ -19,9 +15,14 @@ const info = `Fires once all connected triggers have fired.`
 export class WaitForAll extends MagickComponent<void> {
   constructor() {
     // Name of the Component
-    super('Wait For All', {
-      outputs: { default: 'option' },
-    }, 'Flow', info)
+    super(
+      'Wait For All',
+      {
+        outputs: { default: 'option' },
+      },
+      'Flow',
+      info
+    )
   }
 
   // Add documentation for node
@@ -56,7 +57,7 @@ export class WaitForAll extends MagickComponent<void> {
    */
   worker(_node: WorkerData, inputs: MagickWorkerInputs): void {
     const nodeInputs = Object.values(inputs).filter(
-      (input) => !!input
+      input => !!input
     ) as Array<any>
     // Close all outputs
     this._task.closed = [...nodeInputs.map(out => out.name)]
