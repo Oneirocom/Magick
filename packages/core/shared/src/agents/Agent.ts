@@ -46,6 +46,8 @@ export class Agent implements AgentInterface {
     this.projectId = agentData.projectId
     this.app = app
 
+    console.log('AGENT agent', this)
+
     const spellManager = new SpellManager({
       cache: false,
       agent: this,
