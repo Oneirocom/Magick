@@ -126,7 +126,6 @@ const DebugConsole = ({ tab }): JSX.Element => {
 
   // Callback function to print messages to the debugger.
   const printToDebugger = useCallback((_, message): void => {
-    console.log('MESSAGE', message)
     const terminal = terminalRef.current
     if (!terminal) return
 
