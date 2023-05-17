@@ -33,6 +33,8 @@ export class AgentManager {
    */
   constructor(app) {
     this.app = app
+
+    app.set('isAgent', true)
     // Update agents every second
     setInterval(async () => {
       await this.updateAgents()
@@ -163,7 +165,11 @@ export class AgentManager {
         ...agent,
         pingedAt: new Date().toISOString(),
       }
-      this.agents[agent.id] = new Agent(data, this, this.app)
+      const agentInstance = new Agent(data, this, this.app)
+
+      // we need to wait for the agent to initialize before we can use its
+      await agentInstance.initialize({})
+      this.agents[agent.id] = agentInstance
       this.currentAgents.push(agent)
 
       this.addHandlers.forEach(handler =>
