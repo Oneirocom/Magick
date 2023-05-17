@@ -7,11 +7,12 @@ import { pluginManager } from '../plugin'
 import { AgentInterface, SpellInterface } from '../schemas'
 import { AgentManager } from './AgentManager'
 import _ from 'lodash'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 
 /**
  * The Agent class that implements AgentInterface.
  */
-export class Agent implements AgentInterface {
+export class Agent extends RedisPubSub implements AgentInterface {
   name = ''
   id: any
   secrets: any
@@ -38,6 +39,7 @@ export class Agent implements AgentInterface {
     agentManager: AgentManager,
     app: Application
   ) {
+    super()
     this.secrets = agentData?.secrets ? JSON.parse(agentData?.secrets) : {}
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
@@ -59,7 +61,10 @@ export class Agent implements AgentInterface {
     ;(async () => {
       console.log('agentData', agentData)
       if (!agentData.rootSpell) {
-        this.logger.warn('No root spell found for agent: %o', { id: this.id, name: this.name })
+        this.logger.warn('No root spell found for agent: %o', {
+          id: this.id,
+          name: this.name,
+        })
         return
       }
       const spell = (
@@ -126,10 +131,24 @@ export class Agent implements AgentInterface {
     this.log('destroyed agent', { id: this.id })
   }
 
+  // returns the channel for the agent
+  get channel() {
+    return `agent:${this.id}`
+  }
+
+  // published an event to the agents event stream
+  publishEvent(event, message) {
+    this.publish(`${this.channel}:${event}`, {
+      ...message,
+      agent: this.id,
+      projectId: this.projectId,
+    })
+  }
+
+  // sends a log event along the event stream
   log(message, data) {
     this.logger.info(`${message} ${JSON.stringify(data)}`)
-
-    this.app.service('agents').log({
+    this.publish(this.channel, {
       agentId: this.id,
       projectId: this.projectId,
       type: 'log',
@@ -140,7 +159,7 @@ export class Agent implements AgentInterface {
 
   warn(message, data) {
     this.logger.warn(`${message} ${JSON.stringify(data)}`)
-    this.app.service('agents').log({
+    this.publish(this.channel, {
       agentId: this.id,
       projectId: this.projectId,
       type: 'warn',
@@ -151,7 +170,7 @@ export class Agent implements AgentInterface {
 
   error(message, data = {}) {
     this.logger.error(`${message} %o`, { error: data })
-    this.app.service('agents').log({
+    this.publish(this.channel, {
       agentId: this.id,
       projectId: this.projectId,
       type: 'error',
