@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import '../../screens/Magick/magick.module.css'
 import WindowMessage from '../../components/WindowMessage'
 import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
-import { complete, generate } from './utils'
+// import { complete, generate } from './utils'
 
 const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)
@@ -15,19 +15,19 @@ const TextEditor = props => {
   })
   const [unSavedChanges, setUnSavedChanged] = useState<boolean>(false)
   const codeRef = useRef<string>()
-  const [openaiApiKey, setOpenaiApiKey] = useState<string | undefined>(
-    undefined
-  )
+  // const [openaiApiKey, setOpenaiApiKey] = useState<string | undefined>(
+  //   undefined
+  // )
 
   const { textEditorData, saveTextEditor, inspectorData } = useInspector()
 
-  useEffect(() => {
-    const secrets = localStorage.getItem('secrets')
-    if (secrets) {
-      const parsedSecrets = JSON.parse(secrets)
-      setOpenaiApiKey(parsedSecrets['openai_api_key'])
-    }
-  }, [])
+  // useEffect(() => {
+  //   const secrets = localStorage.getItem('secrets')
+  //   if (secrets) {
+  //     const parsedSecrets = JSON.parse(secrets)
+  //     setOpenaiApiKey(parsedSecrets['openai_api_key'])
+  //   }
+  // }, [])
 
   // const bottomHeight = 50
   const handleEditorWillMount = monaco => {
@@ -112,13 +112,13 @@ const TextEditor = props => {
     save(codeRef.current)
   }
 
-  const onComplete = () => {
-    updateCode(complete(codeRef.current, openaiApiKey))
-  }
+  // const onComplete = () => {
+  //   updateCode(complete(codeRef.current, openaiApiKey))
+  // }
 
-  const onGenerate = () => {
-    setCode(generate(textEditorData, openaiApiKey))
-  }
+  // const onGenerate = () => {
+  //   setCode(generate(textEditorData, openaiApiKey))
+  // }
 
   const updateCode = rawCode => {
     if (!unSavedChanges) setUnSavedChanged(true)
