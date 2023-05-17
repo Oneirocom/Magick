@@ -319,6 +319,7 @@ export class DiscordConnector {
           entities: entities,
           channelType: 'msg',
           rawData: JSON.stringify(message),
+          a,
         },
       },
       agent: this.agent,
