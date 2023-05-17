@@ -122,7 +122,6 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const { projectId } = _context
     if (module.agent) {
-      const spellManager = module.agent.spellManager as SpellManager
       const spellRunner = await spellManager.loadById(spellId)
       const runComponentArgs = {
         inputs: {
