@@ -102,6 +102,9 @@ export class Agent extends RedisPubSub implements AgentInterface {
       const outputTypes = pluginManager.getOutputTypes()
       this.outputTypes = outputTypes
 
+      // we will need this to probably be a queue rather than a pubsub so we don't have multiple agent copies running the same request
+      this.subscribe(`agent:${this.id}:run`, this.onRun.bind(this))
+
       this.updateInterval = setInterval(() => {
         // every second, update the agent, set pingedAt to now
         this.app.service('agents').patch(this.id, {
@@ -178,6 +181,8 @@ export class Agent extends RedisPubSub implements AgentInterface {
       data: { error: data },
     })
   }
+
+  onRun(data) {}
 }
 
 // Exporting Agent class as default
