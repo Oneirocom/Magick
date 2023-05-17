@@ -13,19 +13,28 @@ const VariableModal = ({
   setEditMode,
   update,
 }) => {
-  const [ token, setToken ] = useState('')
-  const [ repos, setrepos ] = useState(Array<any>)
-  const [ repoInfo, setrepoInfo ] = useState(Boolean<false>)
-  const [ loginState, setloginState ] = useState(Boolean<false>)
-  const [ buttonState, setbuttonState ] = useState(Boolean<false>)
+  const [state, setState] = useState({
+    github_access_token: selectedAgentData?.data?.github_access_token,
+    github_token: selectedAgentData?.data?.github_token,
+    github_repos: selectedAgentData?.data?.github_repos,
+    github_repo_flag: selectedAgentData?.data?.github_repo_flag,
+    github_login: selectedAgentData?.data?.github_login,
+  })
+  const [ buttonState, setButtonState ] = useState(Boolean<false>)
 
+  const updateState = (name, value) => {
+    setState({ ...state, [name]: value })
+  }
+  
   const handleSave = async () => {
     const data = {
       ...selectedAgentData,
       data: {
-        ...selectedAgentData.data
+        ...selectedAgentData.data,
+        ...state,
       },
     }
+    console.log(JSON.stringify(selectedAgentData))
     update(selectedAgentData.id, data)
   }
 
@@ -40,43 +49,50 @@ const VariableModal = ({
       for(let i = 0 ; i< response.data.length-7 ; i++){
         suffix += '*'
       }
-      setloginState(true)
-      setbuttonState(true)
-      setrepoInfo(true)
-      const ctoken = response.data.substring(7, 0) + suffix
-      setToken(ctoken)
 
-      setrepos(await new GithubConnector().getGitHubRepos(response.data))
+      setButtonState(true)
       
+      const token = response.data.substring(7, 0) + suffix
+      
+      const repos = await new GithubConnector().getGitHubRepos(response.data)
+
+      setState({
+        github_login: true,
+        github_repo_flag: true,
+        github_access_token: response.data,
+        github_token: token,
+        github_repos: repos
+      })
+      
+      console.log(JSON.stringify(state))
     })
     .catch( err=> {
       console.log(err)
-    } )
-    
+    })    
   }
 
   return (
     editMode && (
       <Modal open={editMode} onClose={setEditMode} handleAction={handleSave} showSaveBtn={buttonState}>
         {
-          !loginState &&
+          !state.github_login &&
           (
             <LoginGithub clientId={CLIENT_ID} scope="user:email,repo" onSuccess={onSuccess} buttonText="Login Github"></LoginGithub>
           )
         }
         {
-          repoInfo &&
+          state.github_repo_flag &&
           (
             <>
               <div style={{ marginBottom: '1em' }}>
                 <div>
-                  <span className="form-item-label">Access Token:{token}</span>
+                  <span className="form-item-label">Access Token: {state.github_token}</span>
                 </div>
               </div>
               <div style={{ marginBottom: '1em' }}>
                 <span className="form-item-label">Repositories:</span>
                 <select className="select modal-element" name="github_repository" id="github_repository">
-                  {repos?.map(item => <option value={item.owner.login + ' ' + item.name} key={item.id}>{item?.name}</option>)}
+                  {state.github_repos?.map(item => <option value={item.owner.login + ' ' + item.name} key={item.id}>{item?.name}</option>)}
                 </select>
               </div>
             </>
