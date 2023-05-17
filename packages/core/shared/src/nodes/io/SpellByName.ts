@@ -120,9 +120,6 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const spellId = firstSpell.id || firstSpell._id
 
-    console.log('spellId', spellId)
-    console.log('******* RAN SPELLBYNAME *******', spellName)
-
     const { projectId } = _context
     if (module.agent) {
       const spellManager = module.agent.spellManager as SpellManager
@@ -139,6 +136,8 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
       }
       const outputs = await spellRunner?.runComponent(runComponentArgs)
       const output = Object.values(outputs as any)[0]
+      console.log('***** SPELL BY NAME outputs', outputs)
+      console.log('***** SPELL BY NAME output', output)
 
       return {
         output,

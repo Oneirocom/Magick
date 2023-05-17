@@ -138,11 +138,11 @@ const TextEditor = props => {
 
   const toolbar = (
     <>
-      <div style={{ flex: 1, marginTop: 'var(--c1)' }}>
+      <div style={{ marginTop: 'var(--c1)' }}>
         {textEditorData?.name && textEditorData?.name}
       </div>
-      <Button onClick={onComplete}>COMPLETE</Button>
-      <Button onClick={onGenerate}>GENERATE</Button>
+      {/*<Button onClick={onComplete}>COMPLETE</Button>
+      <Button onClick={onGenerate}>GENERATE</Button>*/}
       <Button onClick={onSave}>
         SAVE
         {unSavedChanges && (
