@@ -86,8 +86,8 @@ export class RunSpell extends MagickComponent<Promise<WorkerReturn>> {
     const spell = _inputs.spell[0] as SpellInterface
     const inputs = _inputs.inputs[0] as object
 
-    const { module, spellManager, app } = context
-    const { publicVariables, agent, secrets } = module
+    const { agent, module, spellManager, app } = context
+    const { publicVariables, secrets } = module
 
     const runComponentArgs = {
       spellId: spell.id,

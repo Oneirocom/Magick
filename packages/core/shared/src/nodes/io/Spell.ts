@@ -291,8 +291,8 @@ export class SpellComponent extends MagickComponent<
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
 
-    const { module, spellManager, app } = _context
-    const { publicVariables, agent, secrets } = module
+    const { agent, module, spellManager, app } = _context
+    const { publicVariables, secrets } = module
 
     if (spellManager) {
       const spellRunner = await spellManager.loadById(
