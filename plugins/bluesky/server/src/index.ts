@@ -1,9 +1,9 @@
-import { eventSocket, ServerPlugin, triggerSocket, WorldManager } from '@magickml/core'
+import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
 
-let BlueskyConnector = null as any;
+let BlueskyConnector = null as any
 // dynamically import { BlueskyConnector } from './connectors/bluesky' if we are in node.js using esm syntax
-if(typeof window === 'undefined') {
-  import('./connectors/bluesky').then((module) => {
+if (typeof window === 'undefined') {
+  import('./connectors/bluesky').then(module => {
     BlueskyConnector = module.BlueskyConnector
   })
 }
@@ -11,28 +11,24 @@ if(typeof window === 'undefined') {
 type StartBlueskyArgs = {
   agent: any
   spellRunner: any
-  worldManager: WorldManager
 }
 
 function getAgentMethods() {
-  async function startBluesky({
-    agent,
-    spellRunner,
-    worldManager,
-  }: StartBlueskyArgs) {
+  async function startBluesky({ agent, spellRunner }: StartBlueskyArgs) {
     const { data } = agent.data
-    if(!data) return console.log("No data for this agent")
-    if(!data.bluesky_enabled) return console.log("Bluesky is not enabled for this agent")
+    if (!data) return console.log('No data for this agent')
+    if (!data.bluesky_enabled)
+      return console.log('Bluesky is not enabled for this agent')
     const bluesky = new BlueskyConnector({
       agent,
       spellRunner,
-      worldManager,
     })
     agent.bluesky = bluesky
   }
 
-  async function stopBluesky({agent}) {
-    if (!agent.bluesky) return console.warn("Bluesky isn't running, can't stop it")
+  async function stopBluesky({ agent }) {
+    if (!agent.bluesky)
+      return console.warn("Bluesky isn't running, can't stop it")
     try {
       await agent.bluesky.destroy()
       agent.bluesky = null
@@ -48,13 +44,7 @@ function getAgentMethods() {
   }
 }
 
-async function handleResponse(
-  {
-    output,
-    agent,
-    event
-  }
-) {
+async function handleResponse({ output, agent, event }) {
   console.log('********* SENT MESSAGE TO BLUESKY', agent.id, output, event)
   console.log('event is', event)
   console.log('event.channel is', event.channel)
@@ -65,13 +55,7 @@ async function handleResponse(
   }
 }
 
-async function handlePost(
-  {
-    output,
-    agent,
-    event
-  }
-) {
+async function handlePost({ output, agent, event }) {
   console.log('********* SENT MESSAGE TO BLUESKY', agent.id, output, event)
   console.log('event is', event)
   console.log('event.channel is', event.channel)
@@ -92,7 +76,7 @@ const inputSockets = [
     socket: 'trigger',
     name: 'trigger',
     type: triggerSocket,
-  }
+  },
 ]
 
 const outputSockets = [
@@ -100,31 +84,45 @@ const outputSockets = [
     socket: 'output',
     name: 'output',
     type: eventSocket,
-  }
+  },
 ]
 
 const BlueskyPlugin = new ServerPlugin({
   name: 'BlueskyPlugin',
   inputTypes: [
-    { name: 'Bluesky (Reply)', sockets: inputSockets, defaultResponseOutput: 'Bluesky (Reply)' },
-    { name: 'Bluesky (Mention)', sockets: inputSockets, defaultResponseOutput: 'Bluesky (Mention)' }
+    {
+      name: 'Bluesky (Reply)',
+      sockets: inputSockets,
+      defaultResponseOutput: 'Bluesky (Reply)',
+    },
+    {
+      name: 'Bluesky (Mention)',
+      sockets: inputSockets,
+      defaultResponseOutput: 'Bluesky (Mention)',
+    },
   ],
   outputTypes: [
-    { name: 'Bluesky (Reply)', sockets: outputSockets, handler: async ({
-      output, agent, event
-    }) => {
-      await handleResponse({output, agent, event})
-    }},
-    { name: 'Bluesky (Mention)', sockets: outputSockets, handler: async ({
-      output, agent, event
-    }) => {
-      await handleResponse({output, agent, event})
-    }},
-    { name: 'Bluesky (Post)', sockets: outputSockets, handler: async ({
-      output, agent, event
-    }) => {
-      await handlePost({output, agent, event})
-    }},
+    {
+      name: 'Bluesky (Reply)',
+      sockets: outputSockets,
+      handler: async ({ output, agent, event }) => {
+        await handleResponse({ output, agent, event })
+      },
+    },
+    {
+      name: 'Bluesky (Mention)',
+      sockets: outputSockets,
+      handler: async ({ output, agent, event }) => {
+        await handleResponse({ output, agent, event })
+      },
+    },
+    {
+      name: 'Bluesky (Post)',
+      sockets: outputSockets,
+      handler: async ({ output, agent, event }) => {
+        await handlePost({ output, agent, event })
+      },
+    },
   ],
   agentMethods: getAgentMethods(),
   secrets: [

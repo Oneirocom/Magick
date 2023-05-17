@@ -12,7 +12,7 @@ import {
   ModuleComponent,
   ModuleContext,
   ModuleType,
-  ModuleWorkerOutput
+  ModuleWorkerOutput,
 } from '../../types'
 import { Module } from './module'
 

@@ -84,6 +84,7 @@ export class Respond extends MagickComponent<void> {
       console.error('No input provided to output component')
       return { output: '' }
     }
+
     const { module, data } = context
 
     const event = // event data is inside a task
@@ -115,6 +116,8 @@ export class Respond extends MagickComponent<void> {
           event,
         })
       }
+    } else {
+      console.warn('*** WARNING: No agent found')
     }
 
     return {

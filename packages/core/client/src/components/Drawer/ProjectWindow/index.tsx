@@ -109,16 +109,26 @@ const ProjectWindow = ({ openDrawer }) => {
     exportData.agents.forEach((agent: Agent) => {
       agent.secrets = {}
 
-      Object.keys(agent.data).forEach(key => {
-        if (
-          key.includes('api') ||
-          key.includes('token') ||
-          key.includes('secret')
-        ) {
-          delete agent.data[key]
-        }
-      })
+      Object.keys(agent.data).forEach(key => {})
     })
+
+    // traverse the entire exportData object and set all 'data' properties to {}
+    const traverse = obj => {
+      for (const prop in obj) {
+        if (
+          prop.includes('api') ||
+          prop.includes('token') ||
+          prop.includes('secret')
+        ) {
+          delete obj[prop]
+        } else if (prop === 'data') {
+          obj[prop] = {}
+        } else if (typeof obj[prop] === 'object') {
+          traverse(obj[prop])
+        }
+      }
+    }
+    traverse(exportData)
 
     const file = new Blob([JSON.stringify(data, null, 4)], {
       type: 'text/plain',
