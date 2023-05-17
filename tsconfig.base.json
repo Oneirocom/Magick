@@ -66,6 +66,15 @@
       "@magickml/plugin-discord-shared": [
         "plugins/discord/shared/src/index.ts"
       ],
+      "@magickml/plugin-elevenlabs-client": [
+        "plugins/elevenlabs/client/src/index.ts"
+      ],
+      "@magickml/plugin-elevenlabs-server": [
+        "plugins/elevenlabs/server/src/index.ts"
+      ],
+      "@magickml/plugin-elevenlabs-shared": [
+        "plugins/elevenlabs/shared/src/index.ts"
+      ],
       "@magickml/plugin-esoterica-client": [
         "plugins/esoterica/client/src/index.ts"
       ],
@@ -138,15 +147,6 @@
       "@magickml/plugin-openai-shared": [
         "plugins/openai/shared/src/index.ts"
       ],
-      "@magickml/plugin-elevenlabs-client": [
-        "plugins/elevenlabs/client/src/index.ts"
-      ],
-      "@magickml/plugin-elevenlabs-server": [
-        "plugins/elevenlabs/server/src/index.ts"
-      ],
-      "@magickml/plugin-elevenlabs-shared": [
-        "plugins/elevenlabs/shared/src/index.ts"
-      ],
       "@magickml/plugin-pinecone-client": [
         "plugins/pinecone/client/src/index.ts"
       ],
@@ -180,15 +180,10 @@
       "@magickml/plugin-twitter-server": [
         "plugins/twitter/server/src/index.ts"
       ],
-      "@magickml/server": [
-        "apps/server/src/index.ts"
-      ],
-      "@magickml/server-core": [
-        "packages/core/server/src/index.ts"
-      ],
-      "@magickml/types": [
-        "packages/@types/src/index.ts"
-      ]
+      "@magickml/redis-pubsub": ["packages/redis-pubsub/src/index.ts"],
+      "@magickml/server": ["apps/server/src/index.ts"],
+      "@magickml/server-core": ["packages/core/server/src/index.ts"],
+      "@magickml/types": ["packages/@types/src/index.ts"]
     }
   },
   "exclude": [
