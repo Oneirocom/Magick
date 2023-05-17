@@ -3,7 +3,6 @@ import Rete from 'rete'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 import { eventSocket, stringSocket, triggerSocket } from '../../sockets'
-import { SpellManager } from '../../spellManager'
 import {
   MagickNode,
   MagickWorkerInputs,
