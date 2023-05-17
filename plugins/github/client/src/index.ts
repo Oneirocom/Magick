@@ -44,11 +44,11 @@ const GithubPlugin = new ClientPlugin({
   ],
   secrets: [
     {
-    name: 'Access Token',
-    key: 'github_access_token',
-    global: false
-  }
-]
+      name: 'Access Token',
+      key: 'github_access_token',
+      global: false
+    }
+  ]
 })
 
 export default GithubPlugin
