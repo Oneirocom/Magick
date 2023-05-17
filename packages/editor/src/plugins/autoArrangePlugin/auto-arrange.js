@@ -55,13 +55,13 @@ export class AutoArrange {
 
     return vertical
       ? {
-          height: el.clientWidth,
-          width: el.clientHeight,
-        }
+        height: el.clientWidth,
+        width: el.clientHeight,
+      }
       : {
-          width: el.clientWidth,
-          height: el.clientHeight,
-        }
+        width: el.clientWidth,
+        height: el.clientHeight,
+      }
   }
 
   translateNode(node, { x, y, vertical = this.vertical }) {
@@ -113,6 +113,7 @@ export class AutoArrange {
         const relatedComments = commentManager.comments.filter(comment =>
           comment.linkedTo(node)
         )
+        // eslint-disable-next-line no-loop-func
         relatedComments.forEach(comment => {
           const newPosition = vertical
             ? { x: y - fullHeight / 2, y: x }
