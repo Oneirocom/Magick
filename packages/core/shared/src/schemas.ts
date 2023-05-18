@@ -16,7 +16,7 @@ import { Static, Type } from '@feathersjs/typebox'
  */
 export const spellSchema = Type.Object(
   {
-    id: Type.Optional(Type.String()),
+    id: Type.String(),
     projectId: Type.String(),
     name: Type.String(),
     hash: Type.String(),
