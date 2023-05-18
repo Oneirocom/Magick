@@ -182,7 +182,16 @@ export class Agent extends RedisPubSub implements AgentInterface {
     })
   }
 
-  onRun(data) {}
+  onRun(data) {
+    //   const output = await this.spellRunner.runComponent({
+    //     inputs: data,
+    //     agent: this.agent,
+    //     secrets: this.agent.secrets,
+    //     publicVariables: this.agent.publicVariables,
+    //     runSubspell: true,
+    //     app,
+    //   })
+  }
 }
 
 // Exporting Agent class as default
