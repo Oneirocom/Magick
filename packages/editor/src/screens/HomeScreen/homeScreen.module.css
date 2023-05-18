@@ -11,7 +11,8 @@
   justify-content: center;
 }
 .spell-details {
-  margin-bottom: var(--c4);
+  margin-right: var(--extraSmall);
+  margin-left: var(--extraSmall);
 }
 
 .label {
@@ -29,6 +30,7 @@
   justify-content: space-between;
   align-items: center;
   position: relative;
+  padding-bottom: var(--small);
 }
 
 .search {
@@ -56,30 +58,20 @@
   /* background-color: var(--dark-3); */
   border: 1px solid var(--primary);
 }
-.center-container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--small);
-}
-.center-container div {
-  margin-top: var(--extraSmall);
-  margin-bottom: var(--small);
-}
 .template-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: var(--extraSmall);
 }
 .template-container .template-panel {
   border: 1px solid transparent;
 }
 .template-container p {
   display: inline-block;
-  padding: 4px;
-  padding-left: var(--small);
-  padding-right: var(--small);
   border-radius: 4px;
+  padding: var(--extraSmall);
 }
 .template-container:hover p {
   background-color: var(--dark-3);
@@ -105,7 +97,6 @@
 }
 
 .button-row {
-  margin-top: var(--small);
   border-top: 1px solid var(--dark-3);
   padding-top: var(--small);
   display: flex;
@@ -114,6 +105,19 @@
   align-items: center;
   gap: var(--extraSmall);
 }
+
+/* add padding to the button-row right inside the open-project container inside the div.panel.shadow */
+.button-row-open {
+  border-top: 1px solid var(--dark-3);
+  padding-top: var(--small);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--extraSmall);
+  padding-right: var(--small);
+}
+
 .project-row {
   display: flex;
   padding: var(--extraSmall);
@@ -121,6 +125,7 @@
   border-bottom: 1px solid var(--dark-2);
   align-items: center;
   font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
+  gap: var(--extraSmall);
 }
 .project-row:hover {
   background-color: var(--dark-3);
@@ -141,6 +146,7 @@
   justify-content: flex-end;
   padding: var(--small);
 }
-.open-project-container {
-  padding: var(--small);
+.open-project-container h1 {
+  padding-top: var(--extraSmall);
+  padding-bottom: var(--extraSmall);
 }
