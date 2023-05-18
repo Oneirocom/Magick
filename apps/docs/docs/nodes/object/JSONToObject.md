@@ -1,3 +1,3 @@
 # Parse JSON
 
-Parse a string of JSON data and and returns an object
+Takes a JSON formatted string input and outputs an object created by parsing the string.
