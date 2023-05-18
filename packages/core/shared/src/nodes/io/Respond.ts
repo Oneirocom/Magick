@@ -86,10 +86,6 @@ export class Respond extends MagickComponent<void> {
     }
 
     const { agent, data } = context
-
-    console.log('context', context)
-    console.log('agent', agent)
-
     const event = // event data is inside a task
       ((inputs.event?.[0] as any)?.eventData ||
         // event data is coming from the event socket
