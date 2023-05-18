@@ -11,6 +11,7 @@ import { IsVariableTrue } from './boolean/IsVariableTrue'
 import { LogicalOperator } from './boolean/LogicalOperator'
 import { Javascript } from './code/Javascript'
 import { Python } from './code/Python'
+import { DocumentToContent } from './document/DocumentToContent'
 import { GetDocuments } from './document/GetDocuments'
 import { StoreDocument } from './document/StoreDocument'
 import { CosineSimilarity } from './embedding/CosineSimilarity'
@@ -36,10 +37,15 @@ import { Output } from './io/Output'
 import { Request } from './io/Request'
 import { Respond } from './io/Respond'
 import { Skill } from './io/Skill'
-import { SpellByName } from './io/SpellByName'
 import { SpellComponent } from './io/Spell'
+import { SpellByName } from './io/SpellByName'
 import { RunSpell } from './magick/runSpell'
+import { Equal } from './number/Equal'
+import { GreaterThan } from './number/GreaterThan'
+import { GreaterThanOrEqual } from './number/GreaterThanOrEqual'
 import { InRange } from './number/InRange'
+import { LessThan } from './number/LessThan'
+import { LessThanOrEqual } from './number/LessThanOrEqual'
 import { NumberVariable } from './number/NumberVariable'
 import { ComposeObject } from './object/ComposeObject'
 import { GetValuesFromObject } from './object/GetValuesFromObject'
@@ -60,7 +66,6 @@ import { CurrentTime } from './utility/CurrentTime'
 import { Echo } from './utility/Echo'
 import { ErrorNode } from './utility/Error'
 import { Log } from './utility/Log'
-import { DocumentToContent } from './document/DocumentToContent'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -123,6 +128,11 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   error: () => new ErrorNode(),
   respond: () => new Respond(),
   spellByName: () => new SpellByName(),
+  equal: () => new Equal(),
+  greaterThan: () => new GreaterThan(),
+  greaterThanOrEqual: () => new GreaterThanOrEqual(),
+  lessThan: () => new LessThan(),
+  lessThanOrEqual: () => new LessThanOrEqual(),
 }
 
 /**
