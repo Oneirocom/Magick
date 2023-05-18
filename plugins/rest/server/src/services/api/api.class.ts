@@ -105,6 +105,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
       app,
+      agent,
     })
 
     return {
@@ -189,6 +190,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
       app,
+      agent,
     })
 
     return {
@@ -273,6 +275,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
       app,
+      agent,
     })
 
     return {

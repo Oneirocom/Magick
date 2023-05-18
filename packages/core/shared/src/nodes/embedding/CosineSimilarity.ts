@@ -1,29 +1,39 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Computes the cosine similarity between two embeddings.
  */
-import similarity from 'compute-cosine-similarity';
-import Rete from 'rete';
-import { MagickComponent } from '../../engine';
-import { arraySocket, numberSocket, triggerSocket } from '../../sockets';
-import { MagickNode, MagickWorkerInputs, MagickWorkerOutputs, WorkerData } from '../../types';
+import similarity from 'compute-cosine-similarity'
+import Rete from 'rete'
+import { MagickComponent } from '../../engine'
+import { arraySocket, numberSocket, triggerSocket } from '../../sockets'
+import {
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData,
+} from '../../types'
 
 /**
  * Class for computing the cosine similarity between two embeddings.
  */
-export class CosineSimilarity extends MagickComponent<Promise<{ similarity: number } | void>> {
+export class CosineSimilarity extends MagickComponent<
+  Promise<{ similarity: number } | void>
+> {
   /**
    * Constructs an instance of the CosineSimilarity class.
    */
   constructor() {
-    super('Cosine Similarity', {
-      outputs: {
-        similarity: 'output',
-        trigger: 'option'
+    super(
+      'Cosine Similarity',
+      {
+        outputs: {
+          similarity: 'output',
+          trigger: 'option',
+        },
       },
-    },
-    'Embedding',
-    'Computes the cosine similarity between two embeddings.');
+      'Embedding',
+      'Computes the cosine similarity between two embeddings.'
+    )
   }
 
   /**
@@ -32,18 +42,26 @@ export class CosineSimilarity extends MagickComponent<Promise<{ similarity: numb
    * @returns The node with the inputs and outputs added.
    */
   builder(node: MagickNode): MagickNode {
-    const embeddingInputA = new Rete.Input('embeddingA', 'Embedding A', arraySocket);
-    const embeddingInputB = new Rete.Input('embeddingB', 'Embedding B', arraySocket);
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
-    const out = new Rete.Output('similarity', 'Similarity', numberSocket);
+    const embeddingInputA = new Rete.Input(
+      'embeddingA',
+      'Embedding A',
+      arraySocket
+    )
+    const embeddingInputB = new Rete.Input(
+      'embeddingB',
+      'Embedding B',
+      arraySocket
+    )
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const out = new Rete.Output('similarity', 'Similarity', numberSocket)
 
     return node
       .addInput(dataInput)
       .addInput(embeddingInputA)
       .addInput(embeddingInputB)
       .addOutput(dataOutput)
-      .addOutput(out);
+      .addOutput(out)
   }
 
   /**
@@ -57,14 +75,14 @@ export class CosineSimilarity extends MagickComponent<Promise<{ similarity: numb
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
+    _outputs: MagickWorkerOutputs
     // { projectId, module }: { projectId: string; module: any }
   ): Promise<{ similarity: number } | void> {
-    const x = inputs.embeddingA[0] as string;
-    const y = inputs.embeddingB[0] as string;
+    const x = inputs.embeddingA[0] as string
+    const y = inputs.embeddingB[0] as string
 
-    const s = similarity(x, y);
+    const s = similarity(x, y)
 
-    return { similarity: s };
+    return { similarity: s }
   }
 }
