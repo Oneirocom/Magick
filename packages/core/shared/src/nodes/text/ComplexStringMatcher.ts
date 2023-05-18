@@ -8,17 +8,22 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData
+  WorkerData,
 } from '../../types'
 
 const info =
-  'Text Rule Matcher uses basic string matches to determine if the input matches some selected properties'
+  'Takes a string input and applies a series of text rule checks specified (match/invalidate beginning, match/invalidate end, match/invalidate any, minimum/maximum length) then triggers one of two outputs if all the rules are satisfied. Empty rule properties are ignored.'
 
 export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Text Rule Matcher', {
-      outputs: { true: 'option', false: 'option' },
-    }, 'Text', info)
+    super(
+      'Text Rule Matcher',
+      {
+        outputs: { true: 'option', false: 'option' },
+      },
+      'Text',
+      info
+    )
   }
 
   builder(node: MagickNode) {
@@ -90,7 +95,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     const isFalse = new Rete.Output('false', 'False', triggerSocket)
 
     return node
-    .addInput(dataInput)
+      .addInput(dataInput)
       .addInput(inp)
       .addOutput(isTrue)
       .addOutput(isFalse)
@@ -99,7 +104,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
+    _outputs: MagickWorkerOutputs
   ) {
     // implement a function that replaces all instances of a string with another string
     const replaceAll = (str: string, find: string, replace: string) => {
@@ -107,18 +112,15 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     }
 
     let input = inputs['input'][0] as string
-    
+
     const str = input + ''
     const i1 = str.toString().replace(/<.*>/, '')
-
-    
 
     input = replaceAll(
       replaceAll(i1.replace(/ /, ''), '"', ''),
       "'",
       ''
     ).toLowerCase()
-    
 
     const stringMinLength = (node.data.stringMinLength ?? 0) as number
     const stringMaxLength = (node.data.stringMaxLength ?? 0) as number
@@ -225,7 +227,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     if (matchBeginningStringArray.length > 0) {
       const matched = matchStart(input, matchBeginningStringArray)
       if (matched) {
-        // 
+        //
         isMatched = true
       }
     }
@@ -233,7 +235,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     if (matchEndStringArray.length > 0) {
       const matched = matchEnd(input, matchEndStringArray)
       if (matched) {
-        // 
+        //
         isMatched = true
       } else {
         isMatched = false
@@ -242,7 +244,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     if (matchAnyStringArray.length > 0) {
       const matched = match(input, matchAnyStringArray)
       if (matched) {
-        // 
+        //
         isMatched = true
       } else {
         isMatched = false
