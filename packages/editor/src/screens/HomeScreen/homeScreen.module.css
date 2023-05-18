@@ -116,6 +116,7 @@
   align-items: center;
   gap: var(--extraSmall);
   padding-right: var(--small);
+  padding-bottom: var(--small);
 }
 
 .project-row {
