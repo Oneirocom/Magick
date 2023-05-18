@@ -108,9 +108,6 @@ const CreateNew = () => {
             onCreate()
           }}
         >
-          <label className={css['label']} htmlFor="">
-            Spell name
-          </label>
           <input
             type="text"
             className={css['input']}

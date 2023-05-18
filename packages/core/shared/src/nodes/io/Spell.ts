@@ -120,7 +120,6 @@ export class SpellComponent extends MagickComponent<
     // const stateSocket = new Rete.Input('state', 'State', objectSocket)
 
     const getPublicVariables = graph => {
-      console.log('graph public variables', graph)
       return Object.values(graph.nodes || {}).filter(node => {
         return (node as any).data?.isPublic
       })

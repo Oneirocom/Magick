@@ -190,8 +190,6 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       throw new Error('ERROR: ' + error)
     }
 
-    console.log('Generate Text result:', result)
-
     return {
       result: result as string,
     }
