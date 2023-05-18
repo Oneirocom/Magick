@@ -91,7 +91,6 @@ export class ProjectsService {
     })
 
     const mappedSpells = spells.map(spell => {
-      delete spell.id
       delete spell.updatedAt
       delete spell.creatorId
       spell.projectId = projectId
