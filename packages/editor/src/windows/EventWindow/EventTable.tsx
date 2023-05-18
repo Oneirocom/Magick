@@ -1,9 +1,10 @@
 // DOCUMENTED
 // Import statements kept as-is
-import { Button, TableComponent } from '@magickml/client-core'
+import { TableComponent } from '@magickml/client-core'
 import { API_ROOT_URL } from '@magickml/core'
 import { MoreHoriz, Refresh } from '@mui/icons-material'
 import {
+  Button,
   Container,
   IconButton,
   Menu,
@@ -72,7 +73,6 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
  */
 function EventTable({ events, updateCallback }) {
   const { enqueueSnackbar } = useSnackbar()
-  // const config = useConfig()
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 
@@ -117,11 +117,63 @@ function EventTable({ events, updateCallback }) {
     }
   }
 
+  const defaultColumns = useMemo(
+    () => [
+      {
+        Header: 'Agent',
+        accessor: 'agentId',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Client',
+        accessor: 'client',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Sender',
+        accessor: 'sender',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Content',
+        accessor: 'content',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Type',
+        accessor: 'type',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Channel',
+        accessor: 'channel',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Entities',
+        accessor: 'entities',
+        disableFilters: true,
+      },
+      {
+        Header: 'Observer',
+        accessor: 'observer',
+        disableFilters: false,
+      },
+      {
+        Header: 'Date',
+        accessor: 'date',
+        disableFilters: false,
+      },
+    ],
+    []
+  )
+
+  // Initialize the table with hooks
   // Initialize the table with hooks
   const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state } =
     useTable(
       {
-        columns,
+        columns: defaultColumns,
         data: events,
       },
       useFilters,
@@ -156,7 +208,6 @@ function EventTable({ events, updateCallback }) {
 
   // Handle event deletion
   const handleEventDelete = async (event: any) => {
-    console.log('deleting event', event)
     const isDeleted = await fetch(`${API_ROOT_URL}/events/${selectedRow.id}`, {
       method: 'DELETE',
       headers: {
@@ -190,7 +241,7 @@ function EventTable({ events, updateCallback }) {
               className={styles.btn}
               startIcon={<Refresh />}
               name="refresh"
-              onClick={updateCallback}
+              onClick={() => updateCallback()}
             >
               Refresh
             </Button>
@@ -217,6 +268,7 @@ function EventTable({ events, updateCallback }) {
         <TableComponent
           rows={rows}
           column={columns}
+          allowSort={true}
           handlePageChange={handlePageChange}
         />
         <ActionMenu
