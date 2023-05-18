@@ -7,8 +7,9 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import TablePagination from './TablePagination'
 import TableSortLabel from './TableSortLabel'
-
+import { visuallyHidden } from '@mui/utils'
 import styles from './index.module.scss'
+import { Box } from '@mui/material'
 
 interface Props {
   rows: any
@@ -104,35 +105,39 @@ const EnhancedTableHead = ({
   return (
     <TableHead>
       <TableRow>
-        {columns.map(headCell => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.align}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-            className={styles.tableCellHeader}
-            style={{ minWidth: headCell.minWidth }}
-          >
-            {(headCell.id as any) === 'action' ||
-            (headCell.id as any) === 'select' ? (
-              <span>{headCell.label} </span>
-            ) : (
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
-                onClick={createSortHandler(headCell.id)}
-                classes={{ icon: styles.spanWhite, active: styles.spanWhite }}
-              >
-                {headCell.label}
-                {/* {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                  </Box>
-                ) : null} */}
-              </TableSortLabel>
-            )}
-          </TableCell>
-        ))}
+        {columns.map(headCell => {
+          return (
+            <TableCell
+              key={headCell.id}
+              align={headCell.align}
+              padding={headCell.disablePadding ? 'none' : 'normal'}
+              sortDirection={orderBy === headCell.id ? order : false}
+              className={styles.tableCellHeader}
+              style={{ minWidth: headCell.minWidth }}
+            >
+              {(headCell.id as any) === 'action' ||
+              (headCell.id as any) === 'select' ? (
+                <span>{headCell.label} </span>
+              ) : (
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : 'asc'}
+                  onClick={createSortHandler(headCell.id)}
+                  classes={{ icon: styles.spanWhite, active: styles.spanWhite }}
+                >
+                  {headCell.label}
+                  {orderBy === headCell.id ? (
+                    <Box component="span" sx={visuallyHidden}>
+                      {order === 'desc'
+                        ? 'sorted descending'
+                        : 'sorted ascending'}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              )}
+            </TableCell>
+          )
+        })}
       </TableRow>
     </TableHead>
   )
