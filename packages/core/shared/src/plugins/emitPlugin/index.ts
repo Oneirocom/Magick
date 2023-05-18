@@ -58,6 +58,7 @@ function install(
             ])
 
             emit(event, {
+              nodeId: node.id,
               output: result,
               input: inputs,
             })
