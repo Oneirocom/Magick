@@ -112,7 +112,7 @@ export default class SpellManager {
       agent: this.agent,
     })
 
-    this.agent?.publish(`${spellId}:run`, {
+    this.agent?.publishEvent(`${spellId}:run`, {
       inputs,
       publicVariables,
       result,
