@@ -64,12 +64,6 @@ export class SpellService<
 
     return updatedSpell
   }
-
-  async find(params?: SpellParams) {
-    const { query = {} } = params || {}
-    query.$limit = Math.min(query.$limit || 1000, 1000)
-    return super.find({ ...params, query })
-  }
 }
 
 /**
@@ -77,7 +71,10 @@ export class SpellService<
  */
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
-    paginate: app.get('paginate'),
+    paginate: {
+      default: 1000,
+      max: 1000,
+    },
     Model: app.get('dbClient'),
     name: 'spells',
   }
