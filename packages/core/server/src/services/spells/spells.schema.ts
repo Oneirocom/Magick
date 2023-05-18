@@ -18,7 +18,7 @@ export const spellExternalResolver = resolve<SpellInterface, HookContext>({})
 // Schema for creating new entries, removing additional fields
 export const spellDataSchema = Type.Pick(
   spellSchema,
-  ['name', 'id', 'projectId', 'graph', 'createdAt', 'updatedAt', 'hash'],
+  ['name', 'projectId', 'graph', 'createdAt', 'updatedAt', 'hash'],
   {
     $id: 'SpellData',
   }
