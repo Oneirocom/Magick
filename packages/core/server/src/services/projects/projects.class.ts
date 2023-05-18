@@ -41,6 +41,7 @@ export class ProjectsService {
       app.service('agents').find({
         query: {
           projectId,
+          $limit: 1000,
         },
       }),
       app.service('spells').find({
@@ -51,6 +52,7 @@ export class ProjectsService {
       app.service('documents').find({
         query: {
           projectId,
+          $limit: 1000,
         },
       }),
     ])
