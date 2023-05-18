@@ -41,12 +41,12 @@ export class ProjectsService {
       app.service('agents').find({
         query: {
           projectId,
-          $limit: 1000,
         },
       }),
       app.service('spells').find({
         query: {
           projectId,
+          $limit: 1000,
         },
       }),
       app.service('documents').find({
