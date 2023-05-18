@@ -77,10 +77,7 @@ class SpellRunner {
 
   emit(event, message) {
     if (!this.agent) return
-    this.agent.publishEvent(`spell:${this.currentSpell.id}:${event}`, {
-      ...message,
-      event,
-    })
+    this.agent.publishEvent(`spell:${this.currentSpell.id}:${event}`, message)
   }
 
   constructor({ app, socket, agent, spellManager }: SpellRunnerConstructor) {
