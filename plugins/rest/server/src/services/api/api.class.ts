@@ -4,7 +4,7 @@
  * https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
  */
 import type { Id, Params, ServiceInterface } from '@feathersjs/feathers'
-import { runSpell } from '@magickml/core'
+import { Agent, AgentManager, runSpell } from '@magickml/core'
 import { Application, app } from '@magickml/server-core'
 import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema'
 
@@ -47,8 +47,10 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     id: Id,
     _params?: ServiceParams
   ): Promise<ApiGetResponse | any /* TODO: remove */> {
+    console.log('***** GET', id, _params)
     const { apiKey, content } = _params?.query as any // TODO: why is this error
-
+    const app = this.options.app
+    console.log('app', app)
     // Return error if apiKey is not specified.
     if (!apiKey) {
       return {
@@ -70,6 +72,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     // Get the agent by id.
     const agent = await agentService.get(id)
 
+    console.log('***** agent', agent)
+
     const agentRestApiKey = agent?.data?.rest_api_key
 
     // Return error if the provided apiKey doesn't match the expected apiKey.
@@ -84,10 +88,27 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       id: `no rootspell present for agent ${agent.name}`,
     }
 
+    const agentManager = new AgentManager(app)
+
+    // create a new Agent
+    const newAgent = new Agent(
+      {
+        id: agent.id,
+        name: agent.name,
+        projectId: agent.projectId,
+        secrets: agent.secrets,
+        publicVariables: agent.publicVariables,
+      },
+      agentManager,
+      app
+    )
+
+    const spell = await newAgent.spellManager.loadById(rootSpell.id)
+    console.log('spell loaded', spell)
+
     // Run the root spell.
-    const result = await runSpell({
+    const result = await newAgent.spellManager.run({
       spellId: rootSpell.id,
-      projectId: agent.projectId,
       inputs: {
         'Input - REST API (GET)': {
           connector: 'REST API (GET)',
@@ -99,14 +120,15 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
           agentId: agent.id,
           entities: ['api', agent.name],
           channel: id,
-          rawData: JSON.stringify({ id: id, params: _params }),
+          rawData: JSON.stringify({ id: id }),
         },
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
       app,
-      agent,
     })
+
+    console.log('***** result', result)
 
     return {
       result,
