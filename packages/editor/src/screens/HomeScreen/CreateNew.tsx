@@ -128,7 +128,6 @@ const CreateNew = () => {
           display: 'flex',
           flexDirection: 'row',
           flexWrap: 'wrap',
-          gap: 'var(--extraSmall)',
         }}
       >
         {getTemplates().spells.map((template, i) => (
