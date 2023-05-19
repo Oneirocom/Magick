@@ -247,6 +247,7 @@ function DocumentTable({ documents, updateCallback }) {
                 variant="outlined"
                 className={styles.btn}
                 startIcon={<NewReleases />}
+                style={{ marginLeft: '1rem' }}
                 name="refresh"
                 onClick={showCreateModal}
               >
@@ -256,7 +257,7 @@ function DocumentTable({ documents, updateCallback }) {
                 <Button
                   className={styles.btn}
                   variant="outlined"
-                  startIcon={<FaFileCsv size={14} />}
+                  starticon={<FaFileCsv size={14} />}
                   style={{ marginLeft: '1rem' }}
                 >
                   export
