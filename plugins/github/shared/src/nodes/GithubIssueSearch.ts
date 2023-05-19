@@ -22,14 +22,14 @@ async function githubSearchIssue(
   token: string,
   query: string
 ): Promise<any> {
-  
+
   if (token == undefined || token == '' || token[0] != 'g') {
     return []
   }
   if (query == '') {
     return []
   }
-  
+
   const url = `https://api.github.com/search/issues?q=${query}`
   const headers = {
     Authorization: `Bearer ${token}`,
@@ -39,7 +39,7 @@ async function githubSearchIssue(
   return axios.get(url, { headers }).then(response => {
     if (response.data.items) {
       console.log('count: ' + response.data.items.length)
-      
+
       let res = response.data.items.map(item => ({
         title: item.title,
         body: item.body,
@@ -89,8 +89,8 @@ export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
    * @returns The node with its inputs and outputs.
    */
   builder(node: MagickNode) {
-    const triggerInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)        
-    const queryInput = new Rete.Input('query', 'Query', stringSocket, true)        
+    const triggerInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const queryInput = new Rete.Input('query', 'Query', stringSocket, true)
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const issueOutput = new Rete.Output('object', 'Object', objectSocket)
     const textOutput = new Rete.Output('output', 'String', stringSocket)
@@ -127,12 +127,12 @@ export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
       token = context.module.secrets['github_access_token']
     }
     console.log(token)
-    
+
     const result = await githubSearchIssue(token, query)
 
     return {
       object: result,
-      output: query
+      output: JSON.stringify(result)
     }
   }
 }
