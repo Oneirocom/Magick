@@ -1,4 +1,5 @@
 import { app } from '@magickml/server-core'
+import { Octokit } from '@octokit/rest'
 
 export class GithubConnector {
   spellRunner
@@ -52,8 +53,10 @@ export class GithubConnector {
     agent.githubHandler = githubHandler;
     console.log('Added agent to github', agent.id);
   }
+
+  async handleMessage(response, info, args) {
+    console.log('handleMessage', response)
+    return null
+  }
 }
-
-
-
 
