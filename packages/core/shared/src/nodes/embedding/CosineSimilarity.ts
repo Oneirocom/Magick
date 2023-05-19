@@ -32,7 +32,7 @@ export class CosineSimilarity extends MagickComponent<
         },
       },
       'Embedding',
-      'Computes the cosine similarity between two embeddings.'
+      'Takes two embedding inputs and returns the cosine similarity between them.'
     )
   }
 
