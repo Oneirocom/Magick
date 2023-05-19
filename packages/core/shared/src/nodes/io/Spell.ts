@@ -19,7 +19,7 @@ import {
   WorkerData,
 } from '../../types'
 
-const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
+const info = `The Spell component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
 type Socket = {
   socketKey: string
