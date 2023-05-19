@@ -20,7 +20,7 @@ import {
 } from '../../types'
 
 /** Information about the InputComponent functionality */
-const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
+const info = `The input component allows you to pass a single value to your graph and outputs an Event. The playtest window will pass values into your Input for easy testing.`
 
 type InputReturn = {
   output: unknown

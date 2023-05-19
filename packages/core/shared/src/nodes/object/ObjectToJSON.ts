@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Represents a Rete object-to-JSON conversion component.
  */
@@ -6,12 +6,10 @@ import Rete from 'rete'
 
 import { MagickComponent } from '../../engine'
 import { objectSocket, stringSocket, triggerSocket } from '../../sockets'
-import {
-  MagickNode, MagickWorkerInputs, WorkerData
-} from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 // A description of the component's functionality
-const info = 'Convert an object into a JSON string.'
+const info = 'Takes an Object input and converts into a JSON string output.'
 
 // The return type of the worker function
 type WorkerReturn = {
@@ -24,17 +22,22 @@ type WorkerReturn = {
 export class ObjectToJSON extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     // Call the superclass constructor with the component's name, output, and info.
-    super('Object To JSON', {
-      outputs: {
-        output: 'output',
-        trigger: 'option',
+    super(
+      'Object To JSON',
+      {
+        outputs: {
+          output: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'Object', info)
+      'Object',
+      info
+    )
   }
 
   /**
    * Build the component by adding its inputs and outputs to the provided node.
-   * 
+   *
    * @param node - The Rete node representing the component.
    * @returns The provided node after adding inputs and outputs.
    */
@@ -54,13 +57,16 @@ export class ObjectToJSON extends MagickComponent<Promise<WorkerReturn>> {
 
   /**
    * Convert the provided input object into a JSON string.
-   * 
+   *
    * @param _node - The Rete node representing the component.
    * @param rawInputs - An object containing the inputs to the component.
    * @returns An object containing the resulting JSON string converted from the input object.
    */
-  async worker(_node: WorkerData, rawInputs: MagickWorkerInputs): Promise<WorkerReturn> {
-    const obj = rawInputs.input && rawInputs.input[0] as string
+  async worker(
+    _node: WorkerData,
+    rawInputs: MagickWorkerInputs
+  ): Promise<WorkerReturn> {
+    const obj = rawInputs.input && (rawInputs.input[0] as string)
 
     return {
       output: JSON.stringify(obj),
