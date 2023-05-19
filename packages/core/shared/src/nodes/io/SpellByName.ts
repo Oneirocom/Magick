@@ -134,8 +134,6 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
       }
       const outputs = await spellRunner?.runComponent(runComponentArgs)
       const output = Object.values(outputs as any)[0]
-      console.log('***** SPELL BY NAME outputs', outputs)
-      console.log('***** SPELL BY NAME output', output)
 
       return {
         output,
