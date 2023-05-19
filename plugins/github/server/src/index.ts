@@ -1,6 +1,7 @@
 import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
 
 import { GithubConnector } from './connectors/github'
+import { getNodes } from '@magickml/plugin-github-shared' 
 
 type StartGithubArgs = {
   agent: any
@@ -19,7 +20,6 @@ function getAgentMethods() {
     console.log('starting github connect')
     try {
       const github = new GithubConnector({
-        ...data,
         agent,
         spellRunner,
       })
@@ -53,9 +53,10 @@ async function handleResponse(
     event
   }
 ) {
+  console.log(agent)
   if (!output || output === '')
     return console.warn('No output to send to github')
-  await agent.github.sendMessageToChannel(event.channel, output)
+  //await agent.github.getGitHubRepos(agent)
   console.log('RESPONSE HANDLED')
 }
 
@@ -83,10 +84,9 @@ const outputSockets = [
 
 const GithubPlugin = new ServerPlugin({
   name: 'GithubPlugin',
+  nodes: getNodes(),
   inputTypes: [
-    { name: 'Github (Feed)', sockets: inputSockets, defaultResponseOutput: 'Github (Feed)' },
-    // { name: 'Github (DM)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Github (DM)' },
-    // { name: 'Github (Mention', trigger: true, socket: eventSocket, defaultResponseOutput: 'Github (Mention'}
+    // { name: 'Github (Input)', sockets: inputSockets, defaultResponseOutput: 'Github (Feed)' },
   ],
   outputTypes: [
     {
@@ -107,7 +107,7 @@ const GithubPlugin = new ServerPlugin({
     {
       name: 'Access Token',
       key: 'github_access_token',
-      global: false
+      global: true
     }
   ]
 })
