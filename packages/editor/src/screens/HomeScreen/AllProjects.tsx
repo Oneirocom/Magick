@@ -1,10 +1,12 @@
 // DOCUMENTED
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Icon, Panel } from '@magickml/client-core'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import FileInput from '../../components/FileInput'
 import ProjectRow from '../../components/ProjectRow'
 import css from './homeScreen.module.css'
+import SearchIcon from '@mui/icons-material/Search'
+import { IconButton } from '@mui/material'
 
 /**
  * @description AllProjects component props
@@ -40,6 +42,8 @@ const AllProjects: React.FC<AllProjectsProps> = ({
   selectedSpell,
   loadFile,
 }: AllProjectsProps): JSX.Element => {
+  const [searchInput, setSearchInput] = useState<string>('')
+
   /**
    * @description Click handler for import button
    */
@@ -52,14 +56,33 @@ const AllProjects: React.FC<AllProjectsProps> = ({
 
   return (
     <Panel shadow>
-      <h1>
-        <Icon
-          name={'properties'}
-          size={'var(--medium)'}
-          style={{ marginRight: 'var(--extraSmall)', top: '3px' }}
+      <div className={css.searchContainer}>
+        <h1>
+          <Icon
+            name={'properties'}
+            size={'var(--medium)'}
+            style={{ marginRight: 'var(--extraSmall)', top: '3px' }}
+          />
+          Spellbook
+        </h1>
+        <input
+          type="text"
+          value={searchInput}
+          onChange={e => {
+            setSearchInput(e.target.value)
+          }}
+          placeholder="Search spell..."
+          className={css.search}
         />
-        Spellbook
-      </h1>
+        <IconButton
+          className={css.searchIcon}
+          type="button"
+          sx={{ p: '10px' }}
+          aria-label="search"
+        >
+          <SearchIcon />
+        </IconButton>
+      </div>
       <Panel
         style={{
           width: 'var(--c62)',
@@ -86,6 +109,7 @@ const AllProjects: React.FC<AllProjectsProps> = ({
                 }
                 return 0
               })
+              .filter(el => el.name.includes(searchInput))
               .map((spell, i) => (
                 <ProjectRow
                   key={i}

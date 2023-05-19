@@ -10,7 +10,8 @@ import {
   WorkerData,
 } from '../../types'
 
-const info = 'Get documents from a store'
+const info =
+  'Gets Documents from the Documents store. The optional Type property will return only documents with the matching type, and the Max Count property will limit the number of documents returned. Documents are returned in order of similarity.'
 
 /**
  * Defines the expected return type for the input data

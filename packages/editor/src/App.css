@@ -114,6 +114,7 @@ button.option {
 
 button.primary {
   background-color: var(--primary);
+  color: var(--dark-5);
 }
 
 button.list {
@@ -489,6 +490,7 @@ div.item {
   font-family: 'IBM Plex Mono';
 }
 
-.MuiInputBase-root input,  .MuiInputBase-multiline{
+.MuiInputBase-root input,
+.MuiInputBase-multiline {
   padding: 13px !important;
 }

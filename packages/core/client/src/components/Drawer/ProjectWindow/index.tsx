@@ -115,14 +115,8 @@ const ProjectWindow = ({ openDrawer }) => {
     // traverse the entire exportData object and set all 'data' properties to {}
     const traverse = obj => {
       for (const prop in obj) {
-        if (
-          prop.includes('api') ||
-          prop.includes('token') ||
-          prop.includes('secret')
-        ) {
+        if (prop.includes('token') || prop.includes('secret')) {
           delete obj[prop]
-        } else if (prop === 'data') {
-          obj[prop] = {}
         } else if (typeof obj[prop] === 'object') {
           traverse(obj[prop])
         }

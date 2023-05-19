@@ -19,7 +19,7 @@ import {
   WorkerData,
 } from '../../types'
 
-const info = `The Module component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
+const info = `The Spell component allows you to add modules into your graph.  A module is a bundled self contained graph that defines inputs, outputs, and triggers using components.`
 
 type Socket = {
   socketKey: string
@@ -120,7 +120,6 @@ export class SpellComponent extends MagickComponent<
     // const stateSocket = new Rete.Input('state', 'State', objectSocket)
 
     const getPublicVariables = graph => {
-      console.log('graph public variables', graph)
       return Object.values(graph.nodes || {}).filter(node => {
         return (node as any).data?.isPublic
       })
@@ -291,8 +290,8 @@ export class SpellComponent extends MagickComponent<
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
 
-    const { module, spellManager, app } = _context
-    const { publicVariables, agent, secrets } = module
+    const { agent, module, spellManager, app } = _context
+    const { publicVariables, secrets } = module
 
     if (spellManager) {
       const spellRunner = await spellManager.loadById(

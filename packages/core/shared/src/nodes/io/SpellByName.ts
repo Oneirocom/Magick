@@ -3,7 +3,6 @@ import Rete from 'rete'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 import { eventSocket, stringSocket, triggerSocket } from '../../sockets'
-import { SpellManager } from '../../spellManager'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -96,9 +95,9 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     const spellName = inputs['spellName'] && (inputs['spellName'][0] as string)
     const event = inputs['event'] && (inputs['event'][0] as EventData)
 
-    const { module, spellManager } = _context
+    const { agent, module, spellManager } = _context
 
-    const { agent, app, secrets } = module
+    const { app, secrets } = module
 
     // call the spells service and find a spell where name is spellName and projectId is projectId
     const spell = await app?.service('spells').find({
@@ -120,19 +119,15 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const spellId = firstSpell.id || firstSpell._id
 
-    console.log('spellId', spellId)
-    console.log('******* RAN SPELLBYNAME *******', spellName)
-
     const { projectId } = _context
-    if (module.agent) {
-      const spellManager = module.agent.spellManager as SpellManager
+    if (agent) {
       const spellRunner = await spellManager.loadById(spellId)
       const runComponentArgs = {
         inputs: {
           'Input - Default': event,
         },
         runSubspell: false,
-        agent: module.agent,
+        agent: agent,
         secrets: agent?.secrets ?? secrets,
         app: module.app,
         publicVariables: {},

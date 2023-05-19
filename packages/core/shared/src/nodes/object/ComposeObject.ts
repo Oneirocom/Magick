@@ -7,7 +7,7 @@ import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 /** The information text for the ComposeObject component */
 const info =
-  'ComposeObject runs JSON.stringify on the inputs and returns the result'
+  'Takes any number of variable inputs and composes a single output object using the input names as the property keys and the values passed into them.'
 
 /** The data type for the worker function return value */
 type WorkerReturn = {

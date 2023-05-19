@@ -3,7 +3,6 @@ import { Agent } from '@magickml/core'
 import { app } from '@magickml/server-core'
 import Discord, {
   AttachmentBuilder,
-  ChannelType,
   EmbedBuilder,
   GatewayIntentBits,
   Partials,
@@ -11,13 +10,6 @@ import Discord, {
 import emoji from 'emoji-dictionary'
 
 let recognizeSpeech
-
-export const startsWithCapital = word => {
-  return word.charAt(0) === word.charAt(0).toUpperCase()
-}
-const log = (...s: (string | boolean)[]) => {
-  console.log(...s)
-}
 
 export class DiscordConnector {
   client = Discord.Client as any
@@ -196,7 +188,7 @@ export class DiscordConnector {
       utc.getSeconds()
 
     // TODO: Replace me with direct event handler
-    log('Discord', 'join', username, utcStr)
+    console.log('Discord', 'join', username, utcStr)
     // MessageClient.instance.sendUserUpdateEvent('Discord', 'join', username, utcStr)
   }
 
@@ -225,7 +217,7 @@ export class DiscordConnector {
       ':' +
       utc.getSeconds()
     // TODO: Replace me with direct message handler
-    log('Discord', 'leave', username, utcStr)
+    console.log('Discord', 'leave', username, utcStr)
     // MessageClient.instance.sendUserUpdateEvent('Discord', 'leave', username, utcStr)
   }
 
@@ -260,7 +252,7 @@ export class DiscordConnector {
       utc.getSeconds()
 
     // TODO: Replace me with direct message handler
-    log(
+    console.log(
       'Discord',
       message.channel.id,
       message.id,
@@ -350,127 +342,8 @@ export class DiscordConnector {
   }
 
   //Event that is triggered when the discord client fully loaded
-  ready = async (client: { user: { id: any } }) => {
-    const logDMUserID = false
-    await this.client.users
-      .fetch(logDMUserID)
-      .then((user: any) => {
-        this.client.log_user = user
-      })
-      .catch((error: string | boolean) => {
-        log(error)
-      })
-
-    //rgisters the slash commands to each server
-    await this.client.guilds.cache.forEach(
-      (server: {
-        deleted: any
-        name: string
-        id: any
-        channels: { cache: any[] }
-      }) => {
-        if (!server.deleted) {
-          log('fetching messages from server: ' + server.name)
-          this.client.api
-            .applications(client.user.id)
-            .guilds(server.id)
-            .commands.post({
-              data: {
-                name: 'continue',
-                description: 'makes the agent continue',
-              },
-            })
-          this.client.api
-            .applications(client.user.id)
-            .guilds(server.id)
-            .commands.post({
-              data: {
-                name: 'single_continue',
-                description: 'test',
-              },
-            })
-          this.client.api
-            .applications(client.user.id)
-            .guilds(server.id)
-            .commands.post({
-              data: {
-                name: 'say',
-                description: 'makes the agent say something',
-                options: [
-                  {
-                    name: 'text',
-                    description: 'text',
-                    type: 3,
-                    required: true,
-                  },
-                ],
-              },
-            })
-
-          //adds unread message to the chat history from each channel
-          server.channels.cache.forEach(
-            async (channel: {
-              type: ChannelType
-              deleted: boolean
-              permissionsFor: (arg0: any) => {
-                (): any
-                new (): any
-                has: { (arg0: string[]): any; new (): any }
-              }
-              name: string | boolean
-              id: string | boolean
-              topic: any
-              messages: { fetch: (arg0: { limit: number }) => Promise<any> }
-            }) => {
-              if (
-                channel.type === ChannelType.GuildText &&
-                channel.deleted === false &&
-                channel
-                  .permissionsFor(client.user.id)
-                  .has(['SEND_MESSAGES', 'VIEW_CHANNEL'])
-              ) {
-                // TODO: Replace message with direct message handler
-                log(
-                  channel.name,
-                  'Discord',
-                  channel.id,
-                  channel.topic || 'none'
-                )
-                // MessageClient.instance.sendMetadata(channel.name, 'Discord', channel.id, channel.topic || 'none')
-                channel.messages
-                  .fetch({ limit: 100 })
-                  .then(async (messages: any[]) => {
-                    messages.forEach(
-                      async (msg: {
-                        author: { username: string; isBot: any }
-                        deleted: boolean
-                        content: string
-                        id: any
-                        createdTimestamp: any
-                      }) => {
-                        // let _author = msg.author.username
-                        if (
-                          msg.author.isBot ||
-                          msg.author.username
-                            .toLowerCase()
-                            .includes('digital being')
-                        )
-                          if (msg.deleted === true) {
-                            // _author = this.agent.name
-
-                            // await deleteMessageFromHistory(channel.id, msg.id)
-                            log('deleted message: ' + msg.content)
-                          }
-                      }
-                    )
-                  })
-              }
-            }
-          )
-        }
-      }
-    )
-    log('client is ready')
+  ready = async () => {
+    console.log('client is ready')
   }
 
   async sendImageToChannel(channelId: any, imageUri: any) {

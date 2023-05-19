@@ -110,6 +110,7 @@ class SpellRunner {
       projectId: this.currentSpell.projectId,
       app: this.app,
       spellManager: this.spellManager,
+      agent: this.agent,
       // TODO: add the secrets and publicVariables through the spellrunner for context
     }
   }

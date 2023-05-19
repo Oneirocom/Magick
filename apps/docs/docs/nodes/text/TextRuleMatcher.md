@@ -1,3 +1,3 @@
 # Text Rule Matcher
 
-Text Rule Matcher uses basic string matches to determine if the input matches some selected properties
+Takes a string input and applies a series of text rule checks specified (match/invalidate beginning, match/invalidate end, match/invalidate any, minimum/maximum length) then triggers one of two outputs if all the rules are satisfied. Empty rule properties are ignored.

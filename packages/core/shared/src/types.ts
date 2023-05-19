@@ -107,20 +107,6 @@ export type Event = {
   rawData?: string
 }
 
-export type SemanticSearch = {
-  concept?: string
-  positive?: string
-  negative?: string
-  distance?: number
-  positive_distance?: number
-  negative_distance?: number
-}
-
-export type QAArgs = {
-  question: string
-  agentId: string
-}
-
 export type CreateEventArgs = Event
 
 export type GetEventArgs = {
@@ -592,10 +578,10 @@ export type ModuleContext = {
   context: EngineContext
   spellManager: SpellManager
   app: Application
+  agent: Agent
   module: {
     secrets?: Record<string, string>
     publicVariables?: Record<string, string>
-    agent?: Agent
     app?: Application
     inputs: Record<string, unknown>
     outputs: Record<string, unknown>
