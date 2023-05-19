@@ -50,7 +50,6 @@ export class IsVariableTrue extends MagickComponent<void> {
    * @param inputs - The inputs of the worker node.
    */
   async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
-    debugger
     const action = inputs['input'][0]
     const type = typeof action
     let is = false
