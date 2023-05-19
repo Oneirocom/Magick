@@ -54,9 +54,65 @@ export class GithubConnector {
     console.log('Added agent to github', agent.id);
   }
 
+  createIssue = async (accessToken: string, owner: string, repo: string, title: string, body: string) => {
+    try {
+      if (accessToken == undefined || accessToken == '' || accessToken[0] != 'g') {
+        console.log('github access token is invalid')
+        return null
+      }
+      if (!owner || owner == '' || !repo || repo == '') {
+        console.log('owner/repo are invalid')
+        return null
+      }
+      if (!title || title == '' || !body) {
+        console.log('title/body are invalid')
+        return null
+      }
+
+      //@octokit/rest
+      const octokit = new Octokit({
+        auth: accessToken
+      })
+
+      console.log(accessToken, owner, repo, title, body)
+      const issue = await octokit.rest.issues.create({
+        owner: owner,
+        repo: repo,
+        title: title,
+        body: body
+      })
+      console.log('issue', issue)
+
+      return issue
+    } catch (error) {
+      console.error(error)
+      return null
+    }
+  }
+
   async handleMessage(response, info, args) {
     console.log('handleMessage', response)
-    return null
+    let token = this.data.github_access_token
+    let owner = this.data.github_repo_owner
+    let repo = this.data.github_repo_name
+
+    if (info == '') {
+      return []
+    }
+
+    let json = {}
+    try {
+      json = JSON.parse(info)
+    } catch (err) {
+    }
+
+    let res = await this.createIssue(token, owner, repo, json['title'], json['content'])
+
+    if (!res) {
+      return null
+    }
+
+    return res
   }
 }
 
