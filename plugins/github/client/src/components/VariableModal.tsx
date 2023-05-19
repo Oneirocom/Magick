@@ -34,6 +34,15 @@ const VariableModal = ({
         ...state,
       },
     }
+    let json = {}
+    const secrets = localStorage.getItem('secrets')
+    if (secrets) {
+      let parsedSecrets = JSON.parse(secrets)
+      json = {...parsedSecrets}
+    }
+    json['github_access_token'] = state.github_access_token
+    localStorage.setItem('secrets', JSON.stringify(json))
+
     console.log(JSON.stringify(selectedAgentData))
     update(selectedAgentData.id, data)
   }
@@ -49,8 +58,6 @@ const VariableModal = ({
       for(let i = 0 ; i< response.data.length-7 ; i++){
         suffix += '*'
       }
-
-      setButtonState(true)
       
       const token = response.data.substring(7, 0) + suffix
       
@@ -63,7 +70,8 @@ const VariableModal = ({
         github_token: token,
         github_repos: repos
       })
-      
+      setButtonState(true)
+
       console.log(JSON.stringify(state))
     })
     .catch( err=> {
