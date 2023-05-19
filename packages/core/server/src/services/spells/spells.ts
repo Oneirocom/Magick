@@ -35,6 +35,12 @@ export * from './spells.schema'
  * @param app - Application
  */
 export const spell = (app: Application) => {
+  // Configure pagination
+  app.set('paginate', {
+    default: 1000,
+    max: 1000,
+  })
+
   // Register our service on the Feathers application
   app.use('spells', new SpellService(getOptions(app)), {
     methods: ['find', 'get', 'create', 'patch', 'remove', 'saveDiff'],
