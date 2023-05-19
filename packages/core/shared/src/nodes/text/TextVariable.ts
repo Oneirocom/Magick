@@ -22,7 +22,7 @@ import {
 /**
  * The text representing the TextVariable class.
  */
-const info = `Text Variable`
+const info = `Outputs a string specified in the text editor. Allows multi-line text (in contrast to the string variable which only allows a single line).`
 
 /**
  * The expected output of TextVariable class method builder.
@@ -96,7 +96,6 @@ export class TextVariable extends MagickComponent<InputReturn> {
     context: { module: { publicVariables: string } }
   ) {
     let text = node.data.fewshot as string
-    console.log('context', context)
     const publicVars = context?.module?.publicVariables || {}
 
     if (node?.data?.isPublic && publicVars[node.id]) {

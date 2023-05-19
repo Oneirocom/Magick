@@ -136,7 +136,7 @@ export class ModuleManager {
     }, {} as Record<string, unknown>)
 
     module.read({
-      agent: context.module.agent,
+      agent: context.agent,
       inputs: parsedInputs,
       secrets: context.module.secrets,
       publicVariables: context.module.publicVariables,

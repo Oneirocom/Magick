@@ -106,9 +106,9 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
       task.eventData.content = content || task.eventData.content
     }
 
-    const { module, spellManager } = _context
+    const { agent, module, spellManager } = _context
 
-    const { agent, app, secrets } = module
+    const { app, secrets } = module
 
     // call the spells service and find a spell where name is spellName and projectId is projectId
     const spell = await app?.service('spells').find({
@@ -134,8 +134,8 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
     console.log('******* RAN SKILL *******')
 
     const { projectId } = _context
-    if (module.agent) {
-      const spellManager = module.agent.spellManager as SpellManager
+    if (agent) {
+      const spellManager = agent.spellManager as SpellManager
       const spellRunner = await spellManager.loadById(spellId)
       const runComponentArgs = {
         inputs: {

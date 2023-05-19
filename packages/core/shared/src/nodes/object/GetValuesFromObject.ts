@@ -25,7 +25,7 @@ export class GetValuesFromObject extends MagickComponent<void> {
         },
       } as TaskOptions,
       'Object',
-      'Destructure properties out of an object.'
+      'Takes an object input and outputs any number of named properties that are found in the object.'
     )
   }
 

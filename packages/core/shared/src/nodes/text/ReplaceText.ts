@@ -1,31 +1,28 @@
-// DOCUMENTED 
+// DOCUMENTED
 /*
  * Rete Replace Text Component
  * This component replaces a string with another in the input.
  */
 
-import Rete from 'rete';
+import Rete from 'rete'
 
-import { InputControl } from '../../dataControls/InputControl';
-import { MagickComponent } from '../../engine';
-import { stringSocket, triggerSocket } from '../../sockets';
-import {
-  MagickNode,
-  MagickWorkerInputs,
-  WorkerData,
-} from '../../types';
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
+import { stringSocket, triggerSocket } from '../../sockets'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 /**
  * Information about the Replace Text component.
  */
-const info = 'Replace Text is used to replace one string with another. Useful for variable injection.';
+const info =
+  'Takes an input string, searches it for the value specified in the Match property and replaces it with the value specified in the Replace property, then outputs the new string. The Match and Replace values can alternatively be passed in via the corresponding string inputs.'
 
 /**
  * Type for worker return data.
  */
 type WorkerReturn = {
-  output: string;
-};
+  output: string
+}
 
 /**
  * Replace Text class.
@@ -38,12 +35,17 @@ export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
    * Initializes the component with its name and sockets.
    */
   constructor() {
-    super('Replace Text', {
-      outputs: {
-        output: 'output',
-        trigger: 'option',
+    super(
+      'Replace Text',
+      {
+        outputs: {
+          output: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'Text', info);
+      'Text',
+      info
+    )
   }
 
   /**
@@ -57,27 +59,27 @@ export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
-    });
+    })
     const match = new InputControl({
       dataKey: 'match',
       name: 'Match',
       icon: 'moon',
-    });
+    })
     const replace = new InputControl({
       dataKey: 'replace',
       name: 'Replace',
       icon: 'moon',
-    });
+    })
 
-    node.inspector.add(name).add(match).add(replace);
+    node.inspector.add(name).add(match).add(replace)
 
     // Add sockets
-    const strInput = new Rete.Input('input', 'Input', stringSocket);
-    const agentInput = new Rete.Input('match', 'Match', stringSocket);
-    const speakerInput = new Rete.Input('replace', 'Replace', stringSocket);
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
-    const outp = new Rete.Output('output', 'output', stringSocket);
+    const strInput = new Rete.Input('input', 'Input', stringSocket)
+    const agentInput = new Rete.Input('match', 'Match', stringSocket)
+    const speakerInput = new Rete.Input('replace', 'Replace', stringSocket)
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const outp = new Rete.Output('output', 'output', stringSocket)
 
     // Add input and output sockets to the node
     return node
@@ -86,7 +88,7 @@ export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
       .addInput(agentInput)
       .addInput(speakerInput)
       .addOutput(dataOutput)
-      .addOutput(outp);
+      .addOutput(outp)
   }
 
   /**
@@ -96,21 +98,21 @@ export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
    * @param rawInputs {MagickWorkerInputs} The raw inputs to the component.
    */
   async worker(node: WorkerData, rawInputs: MagickWorkerInputs) {
-    let input = rawInputs['input'][0] as string;
+    let input = rawInputs['input'][0] as string
 
     const match = ((rawInputs['match'] && rawInputs['match'][0]) ||
-      node?.data?.match) as string;
+      node?.data?.match) as string
     const replace = ((rawInputs['replace'] && rawInputs['replace'][0]) ||
-      node?.data?.replace) as string;
+      node?.data?.replace) as string
 
     try {
-      input = input.replaceAll(match, replace ?? '');
+      input = input.replaceAll(match, replace ?? '')
     } catch {
-      console.error('Replace Text Error');
+      console.error('Replace Text Error')
     }
 
     return {
       output: input,
-    };
+    }
   }
 }

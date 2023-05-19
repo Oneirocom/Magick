@@ -1,11 +1,11 @@
-// DOCUMENTED 
-import Rete from 'rete';
-import { InputControl } from '../../dataControls/InputControl';
-import { MagickComponent } from '../../engine';
-import { arraySocket, stringSocket } from '../../sockets';
-import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types';
+// DOCUMENTED
+import Rete from 'rete'
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
+import { arraySocket, stringSocket } from '../../sockets'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
-const info = `The Join List component takes in an array, and will join each item in the array together with a seperator, defined in the components input field.`
+const info = `Takes an input array and will join each item in the array into a single output string. The optional Separator property will separate each item in the array by the specified character or string.`
 
 type WorkerReturn = {
   text: string
@@ -27,7 +27,7 @@ export class JoinListComponent extends MagickComponent<WorkerReturn> {
       },
       'Array',
       info
-    );
+    )
   }
 
   /**
@@ -37,24 +37,24 @@ export class JoinListComponent extends MagickComponent<WorkerReturn> {
    */
   builder(node: MagickNode) {
     // Create inputs
-    const inputList = new Rete.Input('list', 'List', arraySocket);
+    const inputList = new Rete.Input('list', 'List', arraySocket)
 
-    const out = new Rete.Output('text', 'String', stringSocket);
+    const out = new Rete.Output('text', 'String', stringSocket)
 
     // Handle default value if data is present
     const separator = node.data.separator
       ? (node.data.separator as string)
-      : ' ';
+      : ' '
 
     // Controls are the internals of the node itself
     const input = new InputControl({
       name: 'Separator',
       dataKey: 'separator',
       defaultValue: separator,
-    });
-    node.inspector.add(input);
+    })
+    node.inspector.add(input)
 
-    return node.addOutput(out).addInput(inputList);
+    return node.addOutput(out).addInput(inputList)
   }
 
   /**
@@ -70,6 +70,6 @@ export class JoinListComponent extends MagickComponent<WorkerReturn> {
   ): WorkerReturn {
     return {
       text: inputs.list[0].join(node.data.separator as string),
-    };
+    }
   }
 }

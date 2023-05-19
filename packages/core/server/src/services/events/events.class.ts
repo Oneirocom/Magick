@@ -77,7 +77,6 @@ export class EventService<
         )
         .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
 
-      console.log('querys', querys)
       return { events: querys }
     }
 
@@ -113,7 +112,10 @@ export class EventService<
  */
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
-    paginate: app.get('paginate'),
+    paginate: {
+      default: 1000,
+      max: 1000,
+    },
     Model: app.get('dbClient'),
     name: 'events',
   }

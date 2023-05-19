@@ -16,9 +16,7 @@ import {
 } from '../../types'
 
 /** Component info text */
-const info = `The output component will pass values out from your spell.
-You can have multiple outputs in a spell and all output values will be collected.
-It also has an option to send the output to the playtest area for easy testing.`
+const info = `The output component will pass values out from your spell. Your output will be sent to the playtest area for easy testing.`
 
 /** Default output types */
 const defaultOutputTypes = [{ name: 'Default', socket: anySocket }]
@@ -115,7 +113,7 @@ export class Output extends MagickComponent<void> {
       console.error('No input provided to output component')
       return { output: '' }
     }
-    const { module, data } = context
+    const { data, agent } = context
 
     const event = // event data is inside a task
       ((inputs.event?.[0] as any)?.eventData ||
@@ -131,7 +129,7 @@ export class Output extends MagickComponent<void> {
       node.data.outputType ||
       event.connector
 
-    if (module.agent) {
+    if (agent) {
       if (outputType && (outputType as string).includes('Default')) {
         // If default handler, don't call the output type handler
         // const type = pluginManager.getInputTypes().find(type => {
@@ -148,7 +146,7 @@ export class Output extends MagickComponent<void> {
         // })
       } else {
         // Find the outputType in the outputTypes array
-        const t = module.agent.outputTypes.find(t => t.name === outputType)
+        const t = agent.outputTypes.find(t => t.name === outputType)
         // Find outputType in outputTypes where name is outputType
         if (!t) {
           console.error('output type is not defined', t)
@@ -157,7 +155,7 @@ export class Output extends MagickComponent<void> {
         } else {
           t.handler({
             output,
-            agent: module.agent,
+            agent: agent,
             event,
           })
         }

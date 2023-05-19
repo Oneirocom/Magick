@@ -17,7 +17,7 @@
     "lint:server-core": "npx nx lint @magickml/server-core",
     "build": "npx nx lint @magickml/core && npx nx run-many --target=build --projects=@magickml/server,@magickml/agent",
     "build-client": "npx nx build @magickml/client",
-    "heroku-prebuild": "npm i -g @nx/cli",
+    "heroku-prebuild": "npm i -g @nrwl/cli",
     "build-server": "npx nx build @magickml/server",
     "build-agent": "npx nx build @magickml/agent",
     "build-docs": "npx nx build @magickml/docs",

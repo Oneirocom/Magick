@@ -1,3 +1,0 @@
-# Fewshot Variable
-
-Fewshot Variable

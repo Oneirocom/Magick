@@ -7,6 +7,7 @@ import { nodesBBox, listenWindow } from './utils'
 function install(
   editor,
   {
+    commentManager = null,
     margin = 30,
     disableBuiltInEdit = false,
     frameCommentKeys = {
@@ -37,7 +38,8 @@ function install(
   editor.bind('removecomment')
   editor.bind('editcomment')
 
-  const manager = new CommentManager(editor)
+  // const manager = new CommentManager(editor)
+  const manager = commentManager || new CommentManager(editor)
 
   if (!disableBuiltInEdit) {
     editor.on('editcomment', comment => {
