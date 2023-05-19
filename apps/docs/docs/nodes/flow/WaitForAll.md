@@ -1,3 +1,3 @@
 # Wait For All
 
-Fires once all connected triggers have fired.
+Triggers the output once all connected inputs have been triggered.
