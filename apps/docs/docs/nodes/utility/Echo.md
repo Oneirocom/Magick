@@ -1,3 +1,3 @@
 # Echo
 
-Returns the same output as the input
+Returns the same output as the input.

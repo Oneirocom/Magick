@@ -1,3 +1,3 @@
 # Get Values From Object
 
-Destructure properties out of an object to use them.
+Takes an object input and outputs any number of named properties that are found in the object.
