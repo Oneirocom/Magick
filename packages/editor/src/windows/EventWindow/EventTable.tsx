@@ -2,7 +2,7 @@
 // Import statements kept as-is
 import { TableComponent } from '@magickml/client-core'
 import { API_ROOT_URL } from '@magickml/core'
-import { MoreHoriz, Refresh } from '@mui/icons-material'
+import { Delete, MoreHoriz, Refresh } from '@mui/icons-material'
 import {
   Button,
   Container,
@@ -78,6 +78,7 @@ function EventTable({ events, updateCallback }) {
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   const handleActionClick = (event, row) => {
     setAnchorEl(event.currentTarget)
@@ -107,7 +108,10 @@ function EventTable({ events, updateCallback }) {
         <>
           <IconButton
             aria-label="more"
-            onClick={event => handleActionClick(event, row)}
+            onClick={event => {
+              event.stopPropagation()
+              handleActionClick(event, row)
+            }}
             style={{ boxShadow: 'none' }}
           >
             <MoreHoriz />
@@ -206,6 +210,22 @@ function EventTable({ events, updateCallback }) {
     setSelectedRow(null)
   }
 
+  // Handle events deletion
+  const handleDeleteMany = async (event: any) => {
+    const ids = selectedRows.join('&')
+    const isDeleted = await fetch(`${API_ROOT_URL}/events/${ids}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    setSelectedRows([])
+    if (isDeleted) enqueueSnackbar('Events deleted', { variant: 'success' })
+    else enqueueSnackbar('Error deleting Event', { variant: 'error' })
+    // close the action menu
+    updateCallback()
+  }
+
   // Handle event deletion
   const handleEventDelete = async (event: any) => {
     const isDeleted = await fetch(`${API_ROOT_URL}/events/${selectedRow.id}`, {
@@ -241,7 +261,7 @@ function EventTable({ events, updateCallback }) {
               className={styles.btn}
               startIcon={<Refresh />}
               name="refresh"
-              onClick={() => updateCallback()}
+              onClick={updateCallback}
             >
               Refresh
             </Button>
@@ -258,6 +278,17 @@ function EventTable({ events, updateCallback }) {
           </div>
         </div>
         <div className={styles.flex}>
+          <Button
+            className={`${styles.btn} ${
+              selectedRows.length > 0 ? styles.selectedBtn : ''
+            }`}
+            onClick={handleDeleteMany}
+            variant="outlined"
+            startIcon={<Delete />}
+            disabled={selectedRows.length === 0}
+          >
+            Delete Selected({selectedRows.length})
+          </Button>
           <div className={styles.flex}>
             <GlobalFilter
               globalFilter={state.globalFilter}
@@ -266,9 +297,11 @@ function EventTable({ events, updateCallback }) {
           </div>
         </div>
         <TableComponent
+          allowSort={true}
+          selectedRows={selectedRows}
+          setSelected={setSelectedRows}
           rows={rows}
           column={columns}
-          allowSort={true}
           handlePageChange={handlePageChange}
         />
         <ActionMenu
@@ -276,7 +309,7 @@ function EventTable({ events, updateCallback }) {
           handleClose={handleActionClose}
           handleDelete={handleEventDelete}
         />
-        <div>
+        <div className={styles.paginationContainer}>
           <Pagination
             count={pageOptions.length}
             onChange={(e, page) => handlePageChange(page)}
