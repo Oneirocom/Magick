@@ -11,7 +11,7 @@ export class GithubConnector {
       })
       const repo = await octokit.repos.listForAuthenticatedUser({
         visibility: 'all',
-        per_page: 10
+        per_page: 100
       })
       console.log("repo", repo.data)
       return repo.data
