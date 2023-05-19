@@ -6,8 +6,15 @@
   min-height: 0;
 }
 
+.checkbox {
+  color: #ad3ab3 !important;
+}
+.selectedRow {
+  background: #690a6d !important;
+}
+
 .tableCellHeader {
-  background: var(--primary) !important;
+  background: #39103f !important;
   color: var(--dark-5) !important;
   span {
     font-weight: bold;
@@ -17,7 +24,7 @@
 
 .tableCellBody {
   border-bottom: 1px solid var(--dark-3) !important;
-  color: var(--dark-4) !important;
+  color: var(--dark-5) !important;
   background: var(--tableCellBackground) !important;
 }
 
