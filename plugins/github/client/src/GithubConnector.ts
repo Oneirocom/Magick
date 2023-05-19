@@ -3,7 +3,7 @@ import { Event } from '@magickml/core';
 let commentUser: Event
 
 export class GithubConnector {
-  getGitHubRepos = async ( accessToken ) => {
+  getGitHubRepos = async (accessToken) => {
     try {
       //@octokit/rest
       const octokit = new Octokit({
@@ -13,7 +13,7 @@ export class GithubConnector {
         visibility: 'all',
         per_page: 10
       })
-      console.log("repo",repo.data)
+      console.log("repo", repo.data)
       return repo.data
     } catch (error) {
       console.error(error)
@@ -21,7 +21,7 @@ export class GithubConnector {
     }
   }
 
-  createIssue = async ( accessToken, owner, repo, title, body ) => {
+  createIssue = async (accessToken, owner, repo, title, body) => {
     try {
       //@octokit/rest
       const octokit = new Octokit({
@@ -35,7 +35,7 @@ export class GithubConnector {
         title: title,
         body: body
       })
-      console.log("issue",issue)
+      console.log("issue", issue)
 
       return issue
     } catch (error) {
@@ -44,13 +44,7 @@ export class GithubConnector {
     }
   }
 
-  outputIssue =async ( accessToken, owner, repo, title, body ) => {
-    const issue = await this.createIssue( accessToken, owner, repo, title, body )
-    console.log("output issue", issue)
-    return issue
-  }
-
-  createPullrequest = async ( accessToken, owner, repo, title, head, base, body ) => {
+  createPullrequest = async (accessToken, owner, repo, title, head, base, body) => {
     try {
       //@octokit/rest
       const octokit = new Octokit({
@@ -75,7 +69,7 @@ export class GithubConnector {
     }
   }
 
-  createIssueComment =async ( accessToken, owner, repo, issue_number, body ) => {
+  createIssueComment = async (accessToken, owner, repo, issue_number, body) => {
     try {
       //@octokit/rest
       const octokit = new Octokit({
@@ -101,7 +95,7 @@ export class GithubConnector {
     }
   }
 
-  searchIssuePullRequest =async ( accessToken, query ) => {
+  searchIssuePullRequest = async (accessToken, query) => {
     try {
       //@octokit/rest
       const octokit = new Octokit({
@@ -128,5 +122,4 @@ export class GithubConnector {
     return commentUser
   }
 
-  
 }
