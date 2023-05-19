@@ -27,7 +27,7 @@ export const GithubAgentWindow: FC<any> = props => {
       setDisable(false)
     }
   }, [props.enable, selectedAgentData])
-  
+
   return (
     <>
       <div
@@ -50,7 +50,7 @@ export const GithubAgentWindow: FC<any> = props => {
         >
           <button
             onClick={async () => {
-              if(checked==true){
+              if (checked == true) {
                 setEditMode(true)
               }
             }}
