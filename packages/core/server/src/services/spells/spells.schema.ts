@@ -7,7 +7,6 @@ import {
   querySyntax,
   Type,
 } from '@feathersjs/typebox'
-import { SpellInterface, spellSchema } from '@magickml/core'
 import { dataValidator, queryValidator } from '../../config/validators'
 import type { HookContext } from '../../declarations'
 
@@ -15,14 +14,26 @@ import type { HookContext } from '../../declarations'
 export const spellResolver = resolve<SpellInterface, HookContext>({})
 export const spellExternalResolver = resolve<SpellInterface, HookContext>({})
 
+import { SpellInterface, spellSchema } from '@magickml/core'
 // Schema for creating new entries, removing additional fields
-export const spellDataSchema = Type.Pick(
-  spellSchema,
-  ['name', 'id', 'projectId', 'graph', 'createdAt', 'updatedAt', 'hash'],
+// Define the properties for the new schema
+const spellDataSchemaProperties = {
+  name: spellSchema.properties.name,
+  projectId: spellSchema.properties.projectId,
+  graph: spellSchema.properties.graph,
+  createdAt: spellSchema.properties.createdAt,
+  updatedAt: spellSchema.properties.updatedAt,
+  hash: spellSchema.properties.hash,
+  id: Type.Optional(spellSchema.properties.id),
+};
+
+export const spellDataSchema = Type.Object(
+  spellDataSchemaProperties,
   {
     $id: 'SpellData',
   }
 )
+
 export type SpellData = Static<typeof spellDataSchema>
 export const spellDataValidator = getDataValidator(
   spellDataSchema,

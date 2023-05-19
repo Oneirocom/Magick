@@ -8,15 +8,11 @@ import { Avatar } from './Avatar'
 import { Watch } from './Watch'
 
 export const Scene = () => {
-
   return (
     <>
       <VRButton />
       <Canvas>
-        <XR
-          frameRate={72 | 90 | 120}
-          referenceSpace="local-floor"
-        >
+        <XR frameRate={72 | 90 | 120} referenceSpace="local-floor">
           {/* character move with mouse right & left button click */}
           {/* <OrbitControls makeDefault /> */}
           <directionalLight

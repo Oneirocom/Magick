@@ -26,7 +26,6 @@ const EventWindow = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    setLoading(true)
     fetchEvents()
   }, [])
 
@@ -41,6 +40,7 @@ const EventWindow = (): JSX.Element => {
    * Fetches the events of the current project.
    */
   const fetchEvents = async (): Promise<void> => {
+    setLoading(true)
     try {
       const response = await fetch(
         `${API_ROOT_URL}/events?projectId=${config.projectId}`,
