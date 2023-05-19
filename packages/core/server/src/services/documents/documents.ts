@@ -1,5 +1,6 @@
 // DOCUMENTED
 import { hooks as schemaHooks } from '@feathersjs/schema'
+import { CompletionProvider, pluginManager, WorkerData } from '@magickml/core'
 import pgvector from 'pgvector/pg'
 import { v4 as uuidv4 } from 'uuid'
 import { Application, HookContext } from '../../declarations'
@@ -64,6 +65,7 @@ export const document = (app: Application) => {
             [service.id]: id,
             ...data,
           }
+
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
             if (typeof embedding == 'string') embedding = JSON.parse(embedding)
