@@ -5,14 +5,6 @@ import { useSelector } from 'react-redux'
 import { LoadingScreen, useConfig } from '@magickml/client-core'
 import DocumentTable from './DocumentTable'
 
-/**
- * Defines the properties of an event.
- */
-interface Event {
-  // Add properties of the event
-  name: string
-  location: string
-}
 
 /**
  * DocumentWindow component displays the documents of a project.

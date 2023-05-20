@@ -137,14 +137,14 @@ async function convertWordToText(file: File): Promise<string> {
     const result = await mammoth.convertToHtml({ arrayBuffer });
     return result.value.replace(/(<([^>]+)>)/gi, '');
 }
-async function convertPowerpointToText(file: File): Promise<string> {
+/* async function convertPowerpointToText(file: File): Promise<string> {
     console.log('convertPowerpointToText')
     const arrayBuffer = await readFileAsBuffer(file);
     console.log(arrayBuffer)
     const result = await mammoth.extractRawText({ arrayBuffer });
     console.log(result)
     return result.value.replace(/(<([^>]+)>)/gi, '');
-}
+} */
 async function convertExcelToText(file: File): Promise<string> {
     const arrayBuffer = await readFileAsBuffer(file);
     // Read the Excel file

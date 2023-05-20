@@ -1,5 +1,5 @@
 import { Modal } from '@magickml/client-core';
-import { Backdrop, Button, CircularProgress, Grid, MenuItem, NativeSelect, Select, Typography } from '@mui/material';
+import { Backdrop, Button, CircularProgress, Grid, MenuItem, Select, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { convertFileToText } from './documentconvert';
