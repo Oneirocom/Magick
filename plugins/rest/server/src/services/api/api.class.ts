@@ -72,6 +72,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     // Get the agent by id.
     const agent = await agentService.get(id)
 
+    console.log('***** agent', agent)
+
     const agentRestApiKey = agent?.data?.rest_api_key
 
     // Return error if the provided apiKey doesn't match the expected apiKey.

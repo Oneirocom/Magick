@@ -25,14 +25,11 @@ const spellDataSchemaProperties = {
   updatedAt: spellSchema.properties.updatedAt,
   hash: spellSchema.properties.hash,
   id: Type.Optional(spellSchema.properties.id),
-};
+}
 
-export const spellDataSchema = Type.Object(
-  spellDataSchemaProperties,
-  {
-    $id: 'SpellData',
-  }
-)
+export const spellDataSchema = Type.Object(spellDataSchemaProperties, {
+  $id: 'SpellData',
+})
 
 export type SpellData = Static<typeof spellDataSchema>
 export const spellDataValidator = getDataValidator(

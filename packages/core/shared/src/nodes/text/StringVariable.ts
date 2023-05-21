@@ -1,18 +1,18 @@
-// DOCUMENTED 
-import Rete from 'rete';
+// DOCUMENTED
+import Rete from 'rete'
 
-import { BooleanControl } from '../../dataControls/BooleanControl';
-import { InputControl } from '../../dataControls/InputControl';
-import { MagickComponent } from '../../engine';
-import { stringSocket } from '../../sockets';
-import { MagickNode, WorkerData } from '../../types';
+import { BooleanControl } from '../../dataControls/BooleanControl'
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
+import { stringSocket } from '../../sockets'
+import { MagickNode, WorkerData } from '../../types'
 
 /** Information about the string variable */
-const info = 'String Variable';
+const info = 'Outputs the string specified in the Value property.'
 
 /** Typed interface for worker function return data */
 interface InputReturn {
-  output: string;
+  output: string
 }
 
 /**
@@ -24,11 +24,16 @@ export class StringVariable extends MagickComponent<InputReturn> {
    * Constructs the StringVariable object
    */
   constructor() {
-    super('String Variable', {
-      outputs: {
-        output: 'output',
+    super(
+      'String Variable',
+      {
+        outputs: {
+          output: 'output',
+        },
       },
-    }, 'Text', info);
+      'Text',
+      info
+    )
   }
 
   /**
@@ -37,26 +42,26 @@ export class StringVariable extends MagickComponent<InputReturn> {
    * @returns {MagickNode} - The same node, returned for chaining
    */
   builder(node: MagickNode): MagickNode {
-    const out = new Rete.Output('output', 'output', stringSocket);
+    const out = new Rete.Output('output', 'output', stringSocket)
     const _var = new InputControl({
       dataKey: '_var',
       name: 'Value',
       icon: 'moon',
-    });
+    })
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
-    });
+    })
 
     const _public = new BooleanControl({
       dataKey: 'isPublic',
       name: 'isPublic',
-    });
+    })
 
-    node.inspector.add(nameControl).add(_var).add(_public);
+    node.inspector.add(nameControl).add(_var).add(_public)
 
-    return node.addOutput(out);
+    return node.addOutput(out)
   }
 
   /**
@@ -67,15 +72,26 @@ export class StringVariable extends MagickComponent<InputReturn> {
    * @param {object} context - The context object containing module's public variables
    * @returns {InputReturn} - The output of the node
    */
-  worker(node: WorkerData, _inputs: unknown, _outputs: unknown, context: { module: { publicVariables: string } }): InputReturn {
-    let _var = node?.data?._var as string;
-    const publicVars = JSON.parse(context.module.publicVariables);
-    if(node?.data?.isPublic && publicVars[node.id]) {
-      _var = publicVars[node.id].value;
+  worker(
+    node: WorkerData,
+    _inputs: unknown,
+    _outputs: unknown,
+    context: { module: { publicVariables: string } }
+  ): InputReturn {
+    let _var = node?.data?._var as string
+    let publicVars = context.module.publicVariables as {}
+
+    // if publicVars is a string, parse it into json
+    if (typeof publicVars === 'string') {
+      publicVars = JSON.parse(publicVars)
+    }
+
+    if (node?.data?.isPublic && publicVars[node.id]) {
+      _var = publicVars[node.id].value
     }
 
     return {
       output: _var,
-    };
+    }
   }
 }

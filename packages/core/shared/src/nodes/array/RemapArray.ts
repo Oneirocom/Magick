@@ -10,7 +10,8 @@ import {
   WorkerData,
 } from '../../types'
 
-const info = 'Returns the same output as the input'
+const info =
+  'Takes an input array and iterates through each object in the the array, creates a new object with only the matching keys from the Values property, and outputs an array of the new objects.'
 
 type WorkerReturn = {
   output: unknown[]
