@@ -104,7 +104,6 @@ class RunSpell {
   }: RunComponentArgs) {
     // ensaure we run from a clean sloate
     this._resetTasks()
-    console.log('*** RUN SPELL: publicVariables are', publicVariables)
 
     // laod the inputs into module memory
     this.module.read({ inputs, secrets, agent, publicVariables, app })

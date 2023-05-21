@@ -255,7 +255,6 @@ class SpellRunner {
     this._clearRanSpellCache()
     // ensure we run from a clean slate
     this._resetTasks()
-    console.log('*** SPELLRUNNER: publicVariables are', publicVariables)
 
     // load the inputs into module memory
     this.module.read({
