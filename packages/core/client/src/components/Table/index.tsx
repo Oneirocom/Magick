@@ -21,8 +21,8 @@ interface Props {
   fieldOrder?: string
   fieldOrderBy?: string
   allowSort?: boolean
-  selectedRows: readonly string[]
-  setSelected: (row: string[]) => void
+  selectedRows?: readonly string[]
+  setSelected?: (row: string[]) => void
   setSortField?: (fueld: string) => void
   setFieldOrder?: (order: string) => void
   handlePageChange?: (e: unknown, newPage: number) => void
@@ -207,7 +207,7 @@ export const TableComponent = ({
   }
 
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selectedRows.indexOf(name)
+    const selectedIndex = selectedRows?.indexOf(name) || -1
     let newSelected: string[] = []
 
     if (selectedIndex === -1) {
@@ -237,14 +237,14 @@ export const TableComponent = ({
   //   setPage(0)
   // }
 
-  const isSelected = (name: string) => selectedRows.indexOf(name) !== -1
+  const isSelected = (name: string) => selectedRows && selectedRows.indexOf(name) !== -1
 
   return (
     <React.Fragment>
       <TableContainer>
         <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
           <EnhancedTableHead
-            numSelected={selectedRows.length}
+            numSelected={selectedRows?.length ?? 0}
             order={order}
             orderBy={orderBy}
             onSelectAllClick={handleSelectAllClick}
