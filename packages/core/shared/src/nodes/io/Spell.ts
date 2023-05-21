@@ -323,15 +323,6 @@ export class SpellComponent extends MagickComponent<
     // for each public variable...
     const output = {}
 
-    function isJsonString(str: string) {
-      try {
-        JSON.parse(str)
-      } catch (e) {
-        return false
-      }
-      return true
-    }
-
     publicVariables.forEach((data: any) => {
       const key = data.id
       const nodeDataKey = data.data.name
