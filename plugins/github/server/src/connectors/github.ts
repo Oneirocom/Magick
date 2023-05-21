@@ -18,7 +18,6 @@ export class GithubConnector {
   }
 
   async initialize({ spellRunner, agent, data }) {
-
     if (!data.github_enabled) {
       console.warn('Github is not enabled, skipping')
     }
@@ -28,7 +27,7 @@ export class GithubConnector {
     }
 
     const githubHandler = setInterval(async () => {
-      console.log('running loop handler');
+      console.log('running loop handler')
       const resp = await spellRunner.runComponent({
         inputs: {
           'Input - Github In': {
@@ -46,17 +45,27 @@ export class GithubConnector {
         secrets: this.agent.secrets,
         publicVariables: this.agent.publicVariables,
         app,
-        runSubspell: true
-      });
-      console.log('output is', resp);
-    },);
-    agent.githubHandler = githubHandler;
-    console.log('Added agent to github', agent.id);
+        runSubspell: true,
+      })
+      console.log('output is', resp)
+    })
+    agent.githubHandler = githubHandler
+    console.log('Added agent to github', agent.id)
   }
 
-  createIssue = async (accessToken: string, owner: string, repo: string, title: string, body: string) => {
+  createIssue = async (
+    accessToken: string,
+    owner: string,
+    repo: string,
+    title: string,
+    body: string
+  ) => {
     try {
-      if (accessToken == undefined || accessToken == '' || accessToken[0] != 'g') {
+      if (
+        accessToken == undefined ||
+        accessToken == '' ||
+        accessToken[0] != 'g'
+      ) {
         console.log('github access token is invalid')
         return null
       }
@@ -71,7 +80,7 @@ export class GithubConnector {
 
       //@octokit/rest
       const octokit = new Octokit({
-        auth: accessToken
+        auth: accessToken,
       })
 
       console.log(accessToken, owner, repo, title, body)
@@ -79,7 +88,7 @@ export class GithubConnector {
         owner: owner,
         repo: repo,
         title: title,
-        body: body
+        body: body,
       })
       console.log('issue', issue)
 
@@ -90,23 +99,31 @@ export class GithubConnector {
     }
   }
 
-  async handleMessage(response, info, args) {
+  async handleMessage(response, info) {
     console.log('handleMessage', response)
-    let token = this.data.github_access_token
-    let owner = this.data.github_repo_owner
-    let repo = this.data.github_repo_name
+    const token = this.data.github_access_token
+    const owner = this.data.github_repo_owner
+    const repo = this.data.github_repo_name
 
     if (info == '') {
+      console.error('info is empty')
       return []
     }
 
     let json = {}
     try {
       json = JSON.parse(info)
-    } catch (err) {
+    } catch (error) {
+      json = info
     }
 
-    let res = await this.createIssue(token, owner, repo, json['title'], json['content'])
+    const res = await this.createIssue(
+      token,
+      owner,
+      repo,
+      json['title'],
+      json['content']
+    )
 
     if (!res) {
       return null
@@ -115,4 +132,3 @@ export class GithubConnector {
     return res
   }
 }
-

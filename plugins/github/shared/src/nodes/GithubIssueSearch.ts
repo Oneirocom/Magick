@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A component to process Github Issue.
  * @category Github
@@ -18,11 +18,7 @@ import {
 
 import axios from 'axios'
 
-async function githubSearchIssue(
-  token: string,
-  query: string
-): Promise<any> {
-
+async function githubSearchIssue(token: string, query: string): Promise<any> {
   if (token == undefined || token == '' || token[0] != 'g') {
     return []
   }
@@ -40,7 +36,7 @@ async function githubSearchIssue(
     if (response.data.items) {
       console.log('count: ' + response.data.items.length)
 
-      let res = response.data.items.map(item => ({
+      const res = response.data.items.map(item => ({
         title: item.title,
         body: item.body,
         url: item.html_url,
@@ -58,7 +54,7 @@ async function githubSearchIssue(
  * The return type of the worker function.
  */
 type WorkerReturn = {
-  object: [],
+  object: []
   output: string
 }
 
@@ -89,7 +85,12 @@ export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
    * @returns The node with its inputs and outputs.
    */
   builder(node: MagickNode) {
-    const triggerInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const triggerInput = new Rete.Input(
+      'trigger',
+      'Trigger',
+      triggerSocket,
+      true
+    )
     const queryInput = new Rete.Input('query', 'Query', stringSocket, true)
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const issueOutput = new Rete.Output('object', 'Object', objectSocket)
@@ -114,7 +115,7 @@ export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: ModuleContext,
+    context: ModuleContext
   ): Promise<WorkerReturn> {
     let query = ''
     if (inputs && inputs.query) {
@@ -132,7 +133,7 @@ export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
 
     return {
       object: result,
-      output: JSON.stringify(result)
+      output: JSON.stringify(result),
     }
   }
 }

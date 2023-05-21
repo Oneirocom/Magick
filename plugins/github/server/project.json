@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugin/github-server/**/*.ts"
+          "plugins/github/server/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugin/github-server/jest.config.ts",
+        "jestConfig": "plugins/github/server/jest.config.ts",
         "passWithNoTests": true
       }
     }
