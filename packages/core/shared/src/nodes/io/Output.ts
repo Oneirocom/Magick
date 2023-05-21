@@ -129,6 +129,8 @@ export class Output extends MagickComponent<void> {
       node.data.outputType ||
       event.connector
 
+    console.log('**** output', output)
+
     if (agent) {
       if (outputType && (outputType as string).includes('Default')) {
         // If default handler, don't call the output type handler

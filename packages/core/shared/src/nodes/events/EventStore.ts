@@ -63,12 +63,15 @@ export class EventStore extends MagickComponent<Promise<void>> {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
+    const typeSocket = new Rete.Input('type', 'Type', stringSocket)
+
     return node
       .addInput(dataInput)
       .addInput(contentInput)
       .addInput(senderInput)
       .addInput(eventInput)
       .addInput(embedding)
+      .addInput(typeSocket)
       .addOutput(dataOutput)
   }
 
@@ -88,6 +91,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     const { projectId } = context
 
     const event = inputs['event'][0] as Event
+    const typeSocket = inputs['type'] && inputs['type'][0]
     const sender = (inputs['sender'] ? inputs['sender'][0] : null) as string
     let content = (inputs['content'] ? inputs['content'][0] : null) as string
     let embedding = (
@@ -101,7 +105,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     const typeData = node?.data?.type as string
     console.log('storing data for', typeData)
     const type =
-      typeData !== undefined && typeData.length > 0
+      typeSocket ?? (typeData !== undefined && typeData.length > 0)
         ? typeData.toLowerCase().trim()
         : 'none'
 
