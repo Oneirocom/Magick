@@ -21,8 +21,8 @@ interface Props {
   fieldOrder?: string
   fieldOrderBy?: string
   allowSort?: boolean
-  selectedRows?: readonly string[]
-  setSelected?: (row: string[]) => void
+  selectedRows: readonly string[]
+  setSelected: (row: string[]) => void
   setSortField?: (fueld: string) => void
   setFieldOrder?: (order: string) => void
   handlePageChange?: (e: unknown, newPage: number) => void
