@@ -52,10 +52,12 @@ export class IsNullOrUndefined extends MagickComponent<Promise<void>> {
    * @param {MagickWorkerInputs} inputs - Inputs to check.
    */
   async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
-    const action = inputs['string'][0] ?? inputs['string']
-    const is =
-      action === null || action === undefined || (action as string).length <= 0
+    const action = inputs['input'] && (inputs['input'][0] as string)
+    const isNull =
+      action === null || action === undefined || action.length <= 0
+        ? true
+        : false
 
-    this._task.closed = is ? ['false'] : ['true']
+    this._task.closed = isNull ? ['false'] : ['true']
   }
 }
