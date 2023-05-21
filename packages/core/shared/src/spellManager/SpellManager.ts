@@ -100,7 +100,6 @@ export default class SpellManager {
   }
 
   async run({ spellId, inputs, secrets, publicVariables, app }: RunArgs) {
-    console.log('running with', publicVariables)
     const runner = this.getSpellRunner(spellId)
 
     const result = await runner?.runComponent({
