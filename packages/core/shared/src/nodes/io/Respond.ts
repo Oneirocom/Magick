@@ -95,7 +95,6 @@ export class Respond extends MagickComponent<void> {
         Object.values(data)[0]) as Event
 
     const output = inputs.input.filter(Boolean)[0] as string
-    console.log('**** RESPONSE output', output)
 
     if (agent) {
       const type = pluginManager.getInputTypes().find(type => {
