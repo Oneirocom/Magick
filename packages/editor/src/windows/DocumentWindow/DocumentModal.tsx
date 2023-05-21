@@ -1,5 +1,5 @@
 import { Modal } from '@magickml/client-core';
-import { Backdrop, Button, CircularProgress, Grid, MenuItem, Select, Typography } from '@mui/material';
+import { Backdrop, Button, CircularProgress, Grid, Input, MenuItem, Select, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { convertFileToText } from './documentconvert';
@@ -111,18 +111,12 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
           </Grid>
           <Grid item xs={6}>
             <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Type</Typography>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={newDocument.type}
-              label="Document"
+            <TextField
+              name="type"
+              style={{ width: '100%', margin: '.5em' }}
               onChange={(e) => setDocument({ ...newDocument, type: e.target.value })}
-              fullWidth
-            >
-              <MenuItem value={"Document"}>Document</MenuItem>
-              <MenuItem value={"Skill"}>Skill</MenuItem>
-              <MenuItem value={"Intent"}>Intent</MenuItem>
-            </Select>
+              required
+            />
           </Grid>
         </Grid>
         <Grid item xs={12}>
