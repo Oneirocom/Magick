@@ -1,21 +1,18 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
- * Class that represents a node that parses a JSON string into an Object 
+ * Class that represents a node that parses a JSON string into an Object
  */
 import Rete from 'rete'
 
 import { MagickComponent } from '../../engine'
 import { objectSocket, stringSocket, triggerSocket } from '../../sockets'
-import {
-  MagickNode,
-  MagickWorkerInputs, WorkerData
-} from '../../types'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 /**
  * Information about the class
  */
 const info =
-  'InputsToJSON runs JSON.stringify on the inputs and returns the result'
+  'Takes a JSON formatted string input and outputs an object created by parsing the string.'
 
 /**
  * Object returned by the worker function
@@ -25,17 +22,21 @@ type WorkerReturn = {
 }
 
 export class ParseJSON extends MagickComponent<Promise<WorkerReturn>> {
-
   /**
    * Constructor for ParseJSON
    */
   constructor() {
-    super('JSON To Object', {
-      outputs: {
-        output: 'output',
-        trigger: 'option',
+    super(
+      'JSON To Object',
+      {
+        outputs: {
+          output: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'Object', info)
+      'Object',
+      info
+    )
   }
 
   /**
@@ -64,7 +65,10 @@ export class ParseJSON extends MagickComponent<Promise<WorkerReturn>> {
    * @param rawInputs - an array of MagickWorkerInputs
    * @returns the output object containing the parsed string
    */
-  async worker(_node: WorkerData, rawInputs: MagickWorkerInputs): Promise<WorkerReturn> {
+  async worker(
+    _node: WorkerData,
+    rawInputs: MagickWorkerInputs
+  ): Promise<WorkerReturn> {
     const str = rawInputs.input[0] as string
 
     // if str is already an object, return it

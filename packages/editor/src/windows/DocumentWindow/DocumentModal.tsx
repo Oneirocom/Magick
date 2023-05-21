@@ -3,7 +3,7 @@ import { Backdrop, Button, CircularProgress, Grid, MenuItem, Select, Typography 
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { convertFileToText } from './documentconvert';
-import styles from './index.module.scss'
+import styles from './index.module.scss';
 
 const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, providerList }) => {
   const [loading, setLoading] = useState(false);
@@ -111,18 +111,12 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
           </Grid>
           <Grid item xs={6}>
             <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Type</Typography>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={newDocument.type}
-              label="Document"
+            <TextField
+              name="type"
+              style={{ width: '100%', margin: '.5em' }}
               onChange={(e) => setDocument({ ...newDocument, type: e.target.value })}
-              fullWidth
-            >
-              <MenuItem value={"Document"}>Document</MenuItem>
-              <MenuItem value={"Skill"}>Skill</MenuItem>
-              <MenuItem value={"Intent"}>Intent</MenuItem>
-            </Select>
+              required
+            />
           </Grid>
         </Grid>
         <Grid item xs={12}>

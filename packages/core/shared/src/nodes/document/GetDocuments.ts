@@ -2,7 +2,7 @@
 import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
-import { arraySocket, triggerSocket } from '../../sockets'
+import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -10,7 +10,8 @@ import {
   WorkerData,
 } from '../../types'
 
-const info = 'Get documents from a store'
+const info =
+  'Gets Documents from the Documents store. The optional Type property will return only documents with the matching type, and the Max Count property will limit the number of documents returned. Documents are returned in order of similarity.'
 
 /**
  * Defines the expected return type for the input data
@@ -50,6 +51,8 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
+    const typeSocket = new Rete.Input('type', 'Type', stringSocket)
+
     // Set up controls for input fields
     const type = new InputControl({
       dataKey: 'type',
@@ -74,6 +77,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       .addInput(embedding)
       .addOutput(dataOutput)
       .addOutput(out)
+      .addInput(typeSocket)
   }
 
   /**
@@ -93,6 +97,8 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
     const { projectId } = context
 
     if (!app) throw new Error('App not found in context')
+
+    const typeSocket = inputs['type'] ? inputs['type'][0] : null
 
     // Get the worker node's input data
     let embedding = (
@@ -114,9 +120,10 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
 
     const typeData = nodeData.type as string
     const type =
-      typeData !== undefined && typeData.length > 0
+      typeSocket ??
+      (typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
-        : 'none'
+        : 'none')
 
     const maxCountData = nodeData.max_count as string
     const maxCount = maxCountData ? parseInt(maxCountData) : 10
