@@ -316,10 +316,6 @@ export class SpellComponent extends MagickComponent<
 
     const publicVariables = getPublicVariables(node.data.graph)
 
-    console.log('node.data.publicVariables', node.data.publicVariables)
-
-    console.log('publicVariables', JSON.stringify(publicVariables))
-
     // for each public variable...
     const output = {}
 
