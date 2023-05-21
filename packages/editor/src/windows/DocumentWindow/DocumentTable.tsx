@@ -275,6 +275,10 @@ function DocumentTable({ documents, updateCallback }) {
           </div>
           <TableComponent
             rows={rows}
+            selectedRows={[]}
+            setSelected={() => {
+              console.log('set selected not implemented for this table')
+            }}
             column={columns}
             handlePageChange={handlePageChange}
           />
