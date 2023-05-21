@@ -6,7 +6,7 @@ import {
   MagickNode,
   ModuleComponent,
   SpellInterface,
-  WorkerData
+  WorkerData,
 } from '../types'
 import { RunComponentArgs } from './SpellRunner'
 
@@ -47,12 +47,12 @@ class RunSpell {
     const graph = this.currentSpell.graph
 
     Object.values(graph.nodes as MagickNode)
-      .filter((node) => {
+      .filter(node => {
         return node.name.includes('Output')
       })
-      .forEach((node) => {
-        outputs[(node).data.name as string] =
-          rawOutputs[(node).data.socketKey as string]
+      .forEach(node => {
+        outputs[node.data.name as string] =
+          rawOutputs[node.data.socketKey as string]
       })
 
     return outputs
@@ -104,6 +104,7 @@ class RunSpell {
   }: RunComponentArgs) {
     // ensaure we run from a clean sloate
     this._resetTasks()
+    console.log('*** RUN SPELL: publicVariables are', publicVariables)
 
     // laod the inputs into module memory
     this.module.read({ inputs, secrets, agent, publicVariables, app })

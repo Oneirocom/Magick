@@ -135,6 +135,11 @@ export class ModuleManager {
       return acc
     }, {} as Record<string, unknown>)
 
+    console.log(
+      '*** MODULE MANAGER: publicVariables are',
+      context.module.publicVariables
+    )
+
     module.read({
       agent: context.agent,
       inputs: parsedInputs,
