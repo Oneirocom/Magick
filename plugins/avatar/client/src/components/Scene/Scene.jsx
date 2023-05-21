@@ -29,7 +29,6 @@ export const Scene = () => {
             <Physics colliders="hull">
               <Avatar />
               <Watch />
-              <Button position={[0, 0.1, -0.2]} />
             </Physics>
           </Suspense>
           <Controllers />

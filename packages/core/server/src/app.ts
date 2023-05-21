@@ -134,6 +134,11 @@ app.hooks({
     all: [
       logError,
       async (context: HookContext, next) => {
+        // if the route is to the api service, skip auth
+        if (context.path === 'api') {
+          return next()
+        }
+
         if (context.path !== 'authentication') {
           return authenticate('jwt')(context, next)
         }

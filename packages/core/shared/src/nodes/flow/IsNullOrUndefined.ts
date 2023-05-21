@@ -10,7 +10,8 @@ import { MagickComponent } from '../../engine'
 import { anySocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
-const INFO = 'Is Null Or Undefined checks if the input is null or undefined'
+const INFO =
+  'Checks if the input is null or undefined and triggers the appropriate output.'
 
 export class IsNullOrUndefined extends MagickComponent<Promise<void>> {
   /**
@@ -51,10 +52,12 @@ export class IsNullOrUndefined extends MagickComponent<Promise<void>> {
    * @param {MagickWorkerInputs} inputs - Inputs to check.
    */
   async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
-    const action = inputs['input'] && inputs['input'][0]
-    const is =
-      action === null || action === undefined || (action as string).length <= 0
+    const action = inputs['input'] && (inputs['input'][0] as string)
+    const isNull =
+      action === null || action === undefined || action.length <= 0
+        ? true
+        : false
 
-    this._task.closed = is ? ['false'] : ['true']
+    this._task.closed = isNull ? ['false'] : ['true']
   }
 }

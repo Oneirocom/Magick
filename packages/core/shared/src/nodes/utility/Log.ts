@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Logs a value to the console.
  */
@@ -9,28 +9,33 @@ import { MagickComponent } from '../../engine'
 import { anySocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
-const info = 'Logs a value to the console'
+const info =
+  'Takes an input string message and logs the message to the console.'
 
 /**
  * Log component class.
  * @class
  */
 export class Log extends MagickComponent<void> {
-  
   /**
    * Create a new Log component.
    * @constructor
    */
   constructor() {
-    super('Log', {
-      outputs: {},
-    }, 'Utility', info)
+    super(
+      'Log',
+      {
+        outputs: {},
+      },
+      'Utility',
+      info
+    )
   }
 
   /**
    * Build the Log component.
    * @param node - The node to add inputs to.
-   * @returns The node with inputs added. 
+   * @returns The node with inputs added.
    */
   builder(node: MagickNode) {
     const inp = new Rete.Input('string', 'Value', anySocket)
