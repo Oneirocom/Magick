@@ -1,9 +1,9 @@
 import { Modal } from '@magickml/client-core';
-import { Backdrop, Button, CircularProgress, Grid, Input, MenuItem, Select, Typography } from '@mui/material';
+import { Backdrop, Button, CircularProgress, Grid, MenuItem, Select, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { convertFileToText } from './documentconvert';
-import styles from './index.module.scss'
+import styles from './index.module.scss';
 
 const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, providerList }) => {
   const [loading, setLoading] = useState(false);
