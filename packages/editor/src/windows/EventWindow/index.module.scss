@@ -20,6 +20,10 @@
   border: 1px solid var(--dark-4) !important;
 }
 
+.selectedBtn {
+  background: var(--glow) !important;
+}
+
 .header {
   color: var(--dark-5);
   font-weight: bold;
@@ -29,4 +33,10 @@
   border: 1px solid var(--dark-4) !important;
   width: 40rem;
   padding: 1.6rem;
+  background: #1c1c1c;
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: flex-end;
 }

@@ -66,12 +66,14 @@ import { CurrentTime } from './utility/CurrentTime'
 import { Echo } from './utility/Echo'
 import { ErrorNode } from './utility/Error'
 import { Log } from './utility/Log'
+import { ExtractRelationship } from './embedding/ExtractRelationship'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
   randomGate: () => new RandomGate(),
   cast: () => new Cast(),
   createEmbedding: () => new CreateTextEmbedding(),
+  extractRelationship: () => new ExtractRelationship(),
   inRange: () => new InRange(),
   javascript: () => new Javascript(),
   python: () => new Python(),

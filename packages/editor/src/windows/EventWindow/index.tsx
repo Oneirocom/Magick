@@ -2,7 +2,7 @@
 import { API_ROOT_URL } from '@magickml/core'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { LoadingScreen, useConfig } from '@magickml/client-core'
+import { useConfig } from '@magickml/client-core'
 import EventTable from './EventTable'
 
 /**
@@ -23,10 +23,8 @@ const EventWindow = (): JSX.Element => {
   const token = globalConfig?.token
   const config = useConfig()
   const [events, setEvents] = useState<Event[] | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    setLoading(true)
     fetchEvents()
   }, [])
 
@@ -52,7 +50,6 @@ const EventWindow = (): JSX.Element => {
       )
 
       const data = await response.json()
-      setLoading(false)
       setEvents(data.events)
     } catch (error) {
       console.error('ERROR', error)
@@ -69,7 +66,6 @@ const EventWindow = (): JSX.Element => {
         overflow: 'scroll',
       }}
     >
-      {loading && <LoadingScreen />}
       {events && <EventTable events={events} updateCallback={resetEvents} />}
     </div>
   )

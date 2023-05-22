@@ -36,6 +36,27 @@ export class DocumentService<
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
     const docdb = app.get('docdb')
+    if (data.hasOwnProperty('secrets')) {
+      const {secrets, modelName, ...rest} = data as DocumentData & {secrets: string, modelName: string}
+      data = rest
+      /* const completionProviders = pluginManager.getCompletionProviders('text', ['embedding'])
+      const provider = completionProviders.find(provider =>
+        provider.models.includes(modelName)
+      ) as CompletionProvider
+      const handler = provider?.handler
+      
+      const {success, result, error} = await handler({
+        inputs: { input: context?.data?.content || "" },
+        node: { data: { model: modelName } } as unknown as WorkerData,
+        outputs: undefined,
+        context: { module: { secrets:JSON.parse(secrets) }, projectId: context.data.projectId },
+      })
+      embedding = result
+      console.log("embedding", embedding) */
+      
+      app.get("docdb").fromString(data.content,data,{modelName, projectId: data?.projectId, secrets})
+      return data;
+    }
     await docdb.from('documents').insert(data)
     return data
   }
@@ -95,7 +116,10 @@ export class DocumentService<
  */
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
-    paginate: app.get('paginate'),
+    paginate: {
+      default: 1000,
+      max: 1000,
+    },
     Model: app.get('dbClient'),
     name: 'documents',
   }

@@ -11,6 +11,7 @@ import { Embeddings } from 'langchain/embeddings/base'
 import {
   SupabaseVectorStore,
 } from 'langchain/vectorstores/supabase'
+import expandVector from "packages/core/shared/src/functions/expandVector"
 import { v4 as uuidv4 } from 'uuid'
 import { EmbeddingArgs } from './customEmbeddings'
 
@@ -75,9 +76,12 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
    * @async
    */
   async fromString(text: string, metadata: any[], args: EmbeddingArgs): Promise<any> {
-    if (text.length > 8000) {
+    if (text.length > 8000 || text.includes('<<BREAK>>')) {
       const [vectors, split_docs] = await (this.embeddings as ExtendedEmbeddings).embedDocumentsWithMeta(text, args)
       vectors.forEach(async (vector, index) => {
+        if (vector.length !== 1536) {
+          vector = expandVector(vector as number[], 1536)
+        }
         metadata['id'] = uuidv4()
         metadata['content'] = split_docs[index]
         this.addEvents({
@@ -86,7 +90,11 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
       })
       return
     }
-    const vector = await (this.embeddings as ExtendedEmbeddings).embedQueryWithMeta(text, args)
+    let vector = await (this.embeddings as ExtendedEmbeddings).embedQueryWithMeta(text, args)
+    if (vector.length !== 1536) {
+      vector = expandVector(vector as number[], 1536)
+    }
+    metadata['id'] = uuidv4()
     const insert_data = [
       {
         embedding: vector,
