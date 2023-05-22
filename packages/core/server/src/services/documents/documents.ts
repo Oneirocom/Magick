@@ -64,6 +64,7 @@ export const document = (app: Application) => {
             [service.id]: id,
             ...data,
           }
+
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
             if (typeof embedding == 'string') embedding = JSON.parse(embedding)

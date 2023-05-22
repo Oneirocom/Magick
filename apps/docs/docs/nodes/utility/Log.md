@@ -1,3 +1,3 @@
 # Log
 
-Logs a value to the console
+Takes an input string message and logs the message to the console.

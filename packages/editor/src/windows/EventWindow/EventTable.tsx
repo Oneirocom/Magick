@@ -1,9 +1,10 @@
 // DOCUMENTED
 // Import statements kept as-is
-import { Button, TableComponent } from '@magickml/client-core'
+import { TableComponent } from '@magickml/client-core'
 import { API_ROOT_URL } from '@magickml/core'
-import { MoreHoriz, Refresh } from '@mui/icons-material'
+import { Delete, MoreHoriz, Refresh } from '@mui/icons-material'
 import {
+  Button,
   Container,
   IconButton,
   Menu,
@@ -72,12 +73,12 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
  */
 function EventTable({ events, updateCallback }) {
   const { enqueueSnackbar } = useSnackbar()
-  // const config = useConfig()
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   const handleActionClick = (event, row) => {
     setAnchorEl(event.currentTarget)
@@ -107,7 +108,10 @@ function EventTable({ events, updateCallback }) {
         <>
           <IconButton
             aria-label="more"
-            onClick={event => handleActionClick(event, row)}
+            onClick={event => {
+              event.stopPropagation()
+              handleActionClick(event, row)
+            }}
             style={{ boxShadow: 'none' }}
           >
             <MoreHoriz />
@@ -117,11 +121,63 @@ function EventTable({ events, updateCallback }) {
     }
   }
 
+  const defaultColumns = useMemo(
+    () => [
+      {
+        Header: 'Agent',
+        accessor: 'agentId',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Client',
+        accessor: 'client',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Sender',
+        accessor: 'sender',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Content',
+        accessor: 'content',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Type',
+        accessor: 'type',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Channel',
+        accessor: 'channel',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Entities',
+        accessor: 'entities',
+        disableFilters: true,
+      },
+      {
+        Header: 'Observer',
+        accessor: 'observer',
+        disableFilters: false,
+      },
+      {
+        Header: 'Date',
+        accessor: 'date',
+        disableFilters: false,
+      },
+    ],
+    []
+  )
+
+  // Initialize the table with hooks
   // Initialize the table with hooks
   const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state } =
     useTable(
       {
-        columns,
+        columns: defaultColumns,
         data: events,
       },
       useFilters,
@@ -154,9 +210,24 @@ function EventTable({ events, updateCallback }) {
     setSelectedRow(null)
   }
 
+  // Handle events deletion
+  const handleDeleteMany = async (event: any) => {
+    const ids = selectedRows.join('&')
+    const isDeleted = await fetch(`${API_ROOT_URL}/events/${ids}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    setSelectedRows([])
+    if (isDeleted) enqueueSnackbar('Events deleted', { variant: 'success' })
+    else enqueueSnackbar('Error deleting Event', { variant: 'error' })
+    // close the action menu
+    updateCallback()
+  }
+
   // Handle event deletion
   const handleEventDelete = async (event: any) => {
-    console.log('deleting event', event)
     const isDeleted = await fetch(`${API_ROOT_URL}/events/${selectedRow.id}`, {
       method: 'DELETE',
       headers: {
@@ -207,6 +278,17 @@ function EventTable({ events, updateCallback }) {
           </div>
         </div>
         <div className={styles.flex}>
+          <Button
+            className={`${styles.btn} ${
+              selectedRows.length > 0 ? styles.selectedBtn : ''
+            }`}
+            onClick={handleDeleteMany}
+            variant="outlined"
+            startIcon={<Delete />}
+            disabled={selectedRows.length === 0}
+          >
+            Delete Selected({selectedRows.length})
+          </Button>
           <div className={styles.flex}>
             <GlobalFilter
               globalFilter={state.globalFilter}
@@ -215,6 +297,9 @@ function EventTable({ events, updateCallback }) {
           </div>
         </div>
         <TableComponent
+          allowSort={true}
+          selectedRows={selectedRows}
+          setSelected={setSelectedRows}
           rows={rows}
           column={columns}
           handlePageChange={handlePageChange}
@@ -224,7 +309,7 @@ function EventTable({ events, updateCallback }) {
           handleClose={handleActionClose}
           handleDelete={handleEventDelete}
         />
-        <div>
+        <div className={styles.paginationContainer}>
           <Pagination
             count={pageOptions.length}
             onChange={(e, page) => handlePageChange(page)}

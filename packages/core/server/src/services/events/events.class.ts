@@ -77,7 +77,6 @@ export class EventService<
         )
         .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
 
-      console.log('querys', querys)
       return { events: querys }
     }
 
@@ -103,6 +102,20 @@ export class EventService<
     const res = await query
     return { events: res?.reverse() as unknown as { data: Array<any> } }
   }
+
+  /**
+   * Remove events.
+   * This function removes events from the database.
+   * @param {string[]} id - The ID of the event to remove.
+   * @returns {Promise<any>} - The removed event data.
+   */
+  // @ts-ignore
+  async remove(id: string): Promise<any> {
+    const ids = id.split('&')
+    const cli = app.get('vectordb')
+    const res = await cli.from('events').whereIn('id', ids).del()
+    return res
+  }
 }
 
 /**
@@ -113,7 +126,10 @@ export class EventService<
  */
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
-    paginate: app.get('paginate'),
+    paginate: {
+      default: 1000,
+      max: 1000,
+    },
     Model: app.get('dbClient'),
     name: 'events',
   }
