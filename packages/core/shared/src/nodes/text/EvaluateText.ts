@@ -1,7 +1,6 @@
 // DOCUMENTED
 import Rete from 'rete'
 import { FewshotControl } from '../../dataControls/FewshotControl'
-import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
