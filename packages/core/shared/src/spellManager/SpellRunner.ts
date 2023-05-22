@@ -1,6 +1,6 @@
 import { Application } from '@feathersjs/koa'
 import io from 'socket.io'
-import Agent from '../agents/Agent'
+import { Agent } from '@magickml/agents'
 
 import pino from 'pino'
 import { getLogger } from '@magickml/core'

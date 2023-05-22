@@ -1,7 +1,7 @@
 // import { Application } from '@magickml/server-core';
 import { Application } from '@feathersjs/koa'
 import io from 'socket.io'
-import Agent from '../agents/Agent'
+import { Agent } from '@magickml/agents'
 
 import { MagickSpellInput, SpellInterface } from '../types'
 import SpellRunner from './SpellRunner'
