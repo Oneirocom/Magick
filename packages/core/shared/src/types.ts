@@ -24,7 +24,7 @@ import { TaskSocketInfo } from './plugins/taskPlugin/task'
 import { SpellInterface } from './schemas'
 import { SpellManager } from './spellManager'
 
-import Agent from './agents/Agent'
+import { Agent } from '@magickml/agents'
 
 export { MagickComponent } from './engine'
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
@@ -206,6 +206,7 @@ export type PubSubEvents = {
   DELETE_SUBSPELL: string
   OPEN_TAB: string
   TOGGLE_SNAP: string
+  RUN_AGENT: string
   $SUBSPELL_UPDATED: (spellName: string) => string
   $TRIGGER: (tabId: string, nodeId?: number) => string
   $PLAYTEST_INPUT: (tabId: string) => string
@@ -221,10 +222,8 @@ export type PubSubEvents = {
   $SAVE_SPELL_DIFF: (tabId: string) => string
   $CREATE_MESSAGE_REACTION_EDITOR: (tabId: string) => string
   $CREATE_PLAYTEST: (tabId: string) => string
-  $CREATE_MEDIAWINDOW: (tabId: string) => string
   $CREATE_INSPECTOR: (tabId: string) => string
   $CREATE_TEXT_EDITOR: (tabId: string) => string
-  $CREATE_PROJECT_WINDOW: (tabId: string) => string
   $CREATE_DEBUG_CONSOLE: (tabId: string) => string
   $CREATE_CONSOLE: (tabId: string) => string
   $RUN_SPELL: (tabId?: string) => string
@@ -236,6 +235,7 @@ export type PubSubEvents = {
   $MULTI_SELECT_COPY: (tabId: string) => string
   $MULTI_SELECT_PASTE: (tabId: string) => string
   $REFRESH_EVENT_TABLE: (tabId: string) => string
+  $RUN_AGENT: (tabId: string) => string
 }
 
 export interface PubSubContext {

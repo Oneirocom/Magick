@@ -21,7 +21,6 @@ import {
   UnknownData,
   WorkerData,
 } from './types'
-import Agent from './agents/Agent'
 
 // WorkerOutputs interface
 interface WorkerOutputs {
