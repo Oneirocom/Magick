@@ -51,7 +51,7 @@ export async function pruneMessages(messages) {
 const sessionId =
   localStorage.getItem('sessionId') ??
   Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15)
+  Math.random().toString(36).substring(2, 15)
 
 localStorage.setItem('sessionId', sessionId)
 
@@ -174,7 +174,7 @@ export default function ChatBox() {
     }
   })
 
-  const { $PLAYTEST_PRINT, $RUN_SPELL } = events
+  const { $PLAYTEST_PRINT, $RUN_SPELL, RUN_AGENT } = events
 
   const handleUserChatInput = async value => {
     if (!value || waitingForResponse) return
@@ -205,13 +205,15 @@ export default function ChatBox() {
       id: 'avatar',
       spellName: currentSpell,
       projectId: config.projectId,
+      agentId: 'e3390b6d-1b1f-435d-81bc-04b116762ba5',
       inputs: {
         'Input - Default': toSend,
       },
       secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
     }
 
-    publish($RUN_SPELL('avatar'), data)
+    publish(RUN_AGENT, data)
+    console.log('ran spell', data)
   }
 
   useEffect(() => {
@@ -306,7 +308,7 @@ export default function ChatBox() {
               value={input}
               onInput={handleChange}
               onChange={handleChange}
-              // disabled={waitingForResponse}
+            // disabled={waitingForResponse}
             />
             <button
               size={14}
