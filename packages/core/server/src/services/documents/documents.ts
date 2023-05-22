@@ -1,28 +1,21 @@
-// DOCUMENTED 
-import { hooks as schemaHooks } from '@feathersjs/schema';
-import pgvector from 'pgvector/pg';
-import { v4 as uuidv4 } from 'uuid';
-import { DATABASE_TYPE } from '@magickml/core'
-
-// Array with 1536 elements containing 0
-const nullArray = new Array(1536).fill(0);
-
+// DOCUMENTED
+import { hooks as schemaHooks } from '@feathersjs/schema'
+import pgvector from 'pgvector/pg'
+import { v4 as uuidv4 } from 'uuid'
+import { Application, HookContext } from '../../declarations'
+import { DocumentService, getOptions } from './documents.class'
 import {
-  documentDataResolver,
-  documentDataValidator,
-  documentExternalResolver,
   documentPatchResolver,
   documentPatchValidator,
   documentQueryResolver,
   documentQueryValidator,
-  documentResolver
-} from './documents.schema';
+} from './documents.schema'
 
-import { Application, HookContext } from '../../declarations';
-import { DocumentService, getOptions } from './documents.class';
+// Array with 1536 elements containing 0
+const nullArray = new Array(1536).fill(0)
 
-export * from './documents.class';
-export * from './documents.schema';
+export * from './documents.class'
+export * from './documents.schema'
 
 /**
  * A configure function that registers the service and its hooks via `app.configure`.
@@ -33,7 +26,7 @@ export const document = (app: Application) => {
   app.use('documents', new DocumentService(getOptions(app)), {
     methods: ['find', 'get', 'create', 'patch', 'remove'],
     events: [],
-  });
+  })
 
   // Initialize hooks
   app.service('documents').hooks({
@@ -51,12 +44,12 @@ export const document = (app: Application) => {
       find: [],
       get: [
         (context: HookContext) => {
-          const { getEmbedding } = context.params.query;
+          const { getEmbedding } = context.params.query
           if (getEmbedding) {
-            context.params.query.$limit = 1;
-            context.params.query.embedding = { $ne: pgvector.toSql(nullArray) };
+            context.params.query.$limit = 1
+            context.params.query.embedding = { $ne: pgvector.toSql(nullArray) }
           }
-          return context;
+          return context
         },
       ],
       // Optimize the create operation
@@ -65,55 +58,23 @@ export const document = (app: Application) => {
         async (context: HookContext) => {
           let { embedding } = context.data
           const { data, service } = context
-          const docdb = app.get('docdb');
           const id = uuidv4()
           //Add UUID for events.
           context.data = {
             [service.id]: id,
             ...data,
           }
-          let EmbeddingArgs = {
-            modelName: "text-embedding-ada-002",
-            secrets: context.data.secrets,
-            projectId: context.data.projectId,
-          }
+
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
-            if (DATABASE_TYPE == "pg") {
-              console.log(embedding as Array<number>)
-              if (typeof(embedding) == 'string') embedding = JSON.parse(embedding) 
-              context.data.embedding = pgvector.toSql(embedding)  
-              return context;
-            }else{
-              const docdb = app.get('docdb')
-              console.log(context.data)
-              const insert_data = [{
-                embedding: embedding,
-                metadata: {
-                  ...context.data,
-                  id: uuidv4(),
-                  pageContent: context.data['content'] || "No Content in the Event",
-                },
-              }]
-              await docdb.fromString(context.data['content'], insert_data, EmbeddingArgs);
-            }      
+            if (typeof embedding == 'string') embedding = JSON.parse(embedding)
+            context.data.embedding = pgvector.toSql(embedding)
+            return context
           } else {
-            if (DATABASE_TYPE == "pg") {
-              context.data.embedding = pgvector.toSql(nullArray)
-              return context;
-            } else {
-              const insert_data = [{
-                embedding: embedding,
-                metadata: {
-                  ...context.data,
-                  id: uuidv4(),
-                  pageContent: context.data['content'] || "No Content in the Event",
-                },
-              }]
-              await docdb.fromString(context.data['content'], insert_data, EmbeddingArgs);
-            }
+            context.data.embedding = pgvector.toSql(nullArray)
+            return context
           }
-          return;
+          return
         },
       ],
       patch: [
@@ -137,12 +98,12 @@ export const document = (app: Application) => {
     error: {
       all: [],
     },
-  });
-};
+  })
+}
 
 // Add this service to the service type index
 declare module '../../declarations' {
   interface ServiceTypes {
-    documents: DocumentService;
+    documents: DocumentService
   }
 }

@@ -1,11 +1,10 @@
 // DOCUMENTED
-import { LoadingScreen, TabLayout } from '@magickml/client-core'
+import { LoadingScreen, TabLayout, usePubSub } from '@magickml/client-core'
 import { useEffect } from 'react'
-import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import TabBar from '../../components/TabBar/TabBar'
-import { usePubSub } from '../../contexts/PubSubProvider'
+import Workspaces from '../../components/Workspaces'
 import { RootState } from '../../state/store'
 import {
   activeTabSelector,
@@ -13,7 +12,6 @@ import {
   openTab,
   selectAllTabs,
 } from '../../state/tabs'
-import Workspaces from '../../components/Workspaces'
 
 /**
  * Magick component
@@ -27,9 +25,7 @@ const Magick = ({ empty = false }): JSX.Element => {
   const activeTab = useSelector(activeTabSelector)
   const pubSub = usePubSub()
   const { URI } = useParams()
-  const { events, publish, subscribe } = pubSub
-
-  // console.log('****************************', URI)
+  const { events, subscribe } = pubSub
 
   // Subscribe to open tab events
   useEffect(() => {
@@ -68,53 +64,6 @@ const Magick = ({ empty = false }): JSX.Element => {
       })
     )
   }, [URI, activeTab, tabs, dispatch])
-
-  // Set up hotkeys
-  useHotkeys(
-    'Control+z',
-    () => {
-      if (!pubSub || !activeTab) return
-
-      publish(events.$UNDO(activeTab.id))
-    },
-    [pubSub, activeTab]
-  )
-
-  useHotkeys(
-    'Control+Shift+z',
-    () => {
-      if (!pubSub || !activeTab) return
-      publish(events.$REDO(activeTab.id))
-    },
-    [pubSub, activeTab]
-  )
-
-  useHotkeys(
-    'Control+Delete',
-    () => {
-      if (!pubSub || !activeTab) return
-      publish(events.$DELETE(activeTab.id))
-    },
-    [pubSub, activeTab]
-  )
-
-  useHotkeys(
-    'Control+c',
-    () => {
-      if (!pubSub || !activeTab) return
-      publish(events.$MULTI_SELECT_COPY(activeTab.id))
-    },
-    [pubSub, activeTab]
-  )
-
-  useHotkeys(
-    'Control+v',
-    () => {
-      if (!pubSub || !activeTab) return
-      publish(events.$MULTI_SELECT_PASTE(activeTab.id))
-    },
-    [pubSub, activeTab]
-  )
 
   // Render loading screen if there's no active tab
   if (!activeTab) return <LoadingScreen />

@@ -1,7 +1,4 @@
 // DOCUMENTED
-// Import React
-import * as React from 'react'
-
 // Export Accordion component
 export { Accordion } from './Accordion'
 
@@ -35,6 +32,9 @@ export { Select } from './Select'
 // Export Switch component
 export { Switch } from './Switch'
 
+// Export Switch component
+export { CustomizedSwitch } from './CustomizedSwitch'
+
 // Export TabLayout component
 export { TabLayout } from './TabLayout'
 
@@ -49,3 +49,6 @@ export { Window, WindowToolbar } from './Window'
 
 // Export Modal component
 export { Modal } from './Modal'
+
+// Export Table component
+export { TableComponent } from './Table'

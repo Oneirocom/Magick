@@ -9,18 +9,16 @@ export class GmailConnector {
   agent
   gmail_stream_rules = ''
   localUser: any
-  worldManager: any
   mailboxes: IMAP.IMailbox[] | undefined
   imapWorker: IMAP.Worker | undefined
   loop: any
 
-  constructor({ spellRunner, agent, worldManager }) {
+  constructor({ spellRunner, agent }) {
     this.agent = agent
     this.agent.gmail = this
     this.spellRunner = spellRunner
     const data = this.agent.data.data
     this.data = data
-    this.worldManager = worldManager // we can track entities in different conversations here later
 
     if (!data.gmail_enabled) {
       console.warn('Gmail is not enabled, skipping')
@@ -70,6 +68,7 @@ export class GmailConnector {
         const resp = await this.spellRunner.runComponent({
           inputs: {
             [`Input - Gmail`]: {
+              connector: 'Gmail',
               content: messageBody,
               sender: message.from,
               observer: this.data.gmail_address,

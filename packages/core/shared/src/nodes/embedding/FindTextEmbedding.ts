@@ -1,33 +1,41 @@
-// DOCUMENTED 
-import Rete from 'rete';
+// DOCUMENTED
+import Rete from 'rete'
 
-import { MagickComponent } from '../../engine';
-import { arraySocket, stringSocket, triggerSocket } from '../../sockets';
+import { MagickComponent } from '../../engine'
+import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData
-} from '../../types';
+  WorkerData,
+} from '../../types'
 
-const info = 'Get a cached embedding for this exact string';
+const info =
+  'Takes a string input and searches the Events store for an event with matching content. Returns the embedding for the event if a match is found.'
 
 type InputReturn = {
-  embedding: number[] | null;
-};
+  embedding: number[] | null
+}
 
 /**
  * FindTextEmbedding class extends MagickComponent and processes the given text to find cached embeddings.
  */
-export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | null>> {
+export class FindTextEmbedding extends MagickComponent<
+  Promise<InputReturn | null>
+> {
   constructor() {
-    super('Find Text Embedding', {
-      outputs: {
-        embedding: 'output',
-        failure: 'option',
-        success: 'option',
+    super(
+      'Find Text Embedding',
+      {
+        outputs: {
+          embedding: 'output',
+          failure: 'option',
+          success: 'option',
+        },
       },
-    }, 'Embedding', info);
+      'Embedding',
+      info
+    )
   }
 
   /**
@@ -37,21 +45,21 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
    * @returns The configured node.
    */
   builder(node: MagickNode): MagickNode {
-    const contentInput = new Rete.Input('content', 'Content', stringSocket);
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const success = new Rete.Output('success', 'Success', triggerSocket);
-    const fail = new Rete.Output('failure', 'Failure', triggerSocket);
-    const out = new Rete.Output('embedding', 'Embedding', arraySocket);
+    const contentInput = new Rete.Input('content', 'Content', stringSocket)
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const success = new Rete.Output('success', 'Success', triggerSocket)
+    const fail = new Rete.Output('failure', 'Failure', triggerSocket)
+    const out = new Rete.Output('embedding', 'Embedding', arraySocket)
 
     return node
       .addInput(dataInput)
       .addInput(contentInput)
       .addOutput(success)
       .addOutput(fail)
-      .addOutput(out);
+      .addOutput(out)
   }
 
-    /**
+  /**
    * Worker function to process the inputs and generate the output.
    *
    * @param node - Node data.
@@ -65,50 +73,60 @@ export class FindTextEmbedding extends MagickComponent<Promise<InputReturn | nul
     _outputs: MagickWorkerOutputs,
     context
   ) {
-    const { app } = context.module;
-    if(!app) throw new Error('App is not defined, cannot delete event');
+    const { app } = context.module
+    if (!app) throw new Error('App is not defined, cannot delete event')
 
     const { projectId } = context
-    const content = (inputs['content'] && inputs['content'][0]) as unknown as string
+    const content = (inputs['content'] &&
+      inputs['content'][0]) as unknown as string
 
     if (!content) {
-      console.log('Content is null, not storing event');
-      return null;
+      console.log('Content is null, not storing event')
+      return null
     }
 
     const params = {
-      content: content,
-      $limit: 1,
-      getEmbedding: true,
-      projectId: projectId
+      query: {
+        content: content,
+        $limit: 1,
+        getEmbedding: true,
+        projectId: projectId,
+      },
     }
     const events = await app.service('events').find(params)
 
-    console.log('found text embedding events', events)
-
     let responseData = null
-    if (Array.isArray(events.events) && (events.events).length > 0) {
+    if (Array.isArray(events.events) && events.events.length > 0) {
       responseData = events.events[0]
     }
 
+    //@ts-ignore //This is breaking event recall
     let embedding = responseData ? responseData?.embedding?.toString() : null
     // if embedding is a string, parse it to an array
     if (typeof embedding === 'string') {
       if (embedding[0] === '[') {
-        embedding = JSON.parse(JSON.stringify(embedding));
+        embedding = JSON.parse(JSON.stringify(embedding))
       } else {
-        embedding = JSON.parse(JSON.stringify("[" + embedding + "]"));
+        embedding = JSON.parse(JSON.stringify('[' + embedding + ']'))
       }
     }
+
+    console.log('Find Text Embedding: embedding', embedding)
+
+    // if embedding is a string and not an array, parse it
+    if (typeof embedding === 'string') {
+      embedding = JSON.parse(JSON.stringify(embedding))
+    }
+
     // Set the task closed state based on the presence of the embedding
-    if (embedding) {
-      this._task.closed = ['failure'];
+    if (embedding && embedding !== 'null') {
+      this._task.closed = ['failure']
     } else {
-      this._task.closed = ['success'];
+      this._task.closed = ['success']
     }
 
     return {
       embedding,
-    };
+    }
   }
 }

@@ -85,7 +85,6 @@ function bpe(token) {
     return token;
   }
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     const minPairs = {};
     Array.from(pairs).map((pair) => {

@@ -6,7 +6,6 @@
  * @param initialValue - The initial selected value
  */
 
-
 import { Select } from '@magickml/client-core'
 import useSWR from 'swr'
 import { OpenAI } from '../types/openai'
@@ -32,7 +31,7 @@ const DropdownSelect = ({ control, updateData, initialValue }) => {
         ...fineTuneData.data.map(fineTune => fineTune.fine_tuned_model),
       ])
     }
-  }, [fineTuneData])
+  }, [dataKey, fineTuneData, values])
 
   const options = compositeValues.map(value => ({
     value: value,

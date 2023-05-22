@@ -1,10 +1,5 @@
-// DOCUMENTED 
-import {
-  CompletionHandlerInputData,
-  Event,
-  saveRequest
-} from '@magickml/core'
-import axios from 'axios'
+// DOCUMENTED
+import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import { GOOGLEAI_ENDPOINT } from '../constants'
 
 type ChatMessage = {
@@ -19,7 +14,11 @@ type ChatMessage = {
  */
 export async function makeChatCompletion(
   data: CompletionHandlerInputData
-): Promise<{ success: boolean, result?: string | null, error?: string | null }> {
+): Promise<{
+  success: boolean
+  result?: string | null
+  error?: string | null
+}> {
   const { node, inputs, context } = data
 
   // Get the system message and conversation inputs
@@ -39,7 +38,7 @@ export async function makeChatCompletion(
 
   conversationMessages.push({ content: input })
 
-  const examples = inputs['examples']?.[0] as string[] || []
+  const examples = (inputs['examples']?.[0] as string[]) || []
 
   // Get or set default settings
   const settings = {
@@ -49,33 +48,22 @@ export async function makeChatCompletion(
       examples: examples || [],
     },
     candidate_count: 1,
-    temperature: parseFloat(node?.data?.temperature as string ?? "0.0"),
-    top_p: parseFloat(node?.data?.top_p as string ?? "0.95"),
-    top_k: parseFloat(node?.data?.top_k as string ?? "40")
+    temperature: parseFloat((node?.data?.temperature as string) ?? '0.0'),
+    top_p: parseFloat((node?.data?.top_p as string) ?? '0.95'),
+    top_k: parseFloat((node?.data?.top_k as string) ?? '40'),
   } as any
-
-  console.log('settings')
-  console.log(settings)
-
-  console.log('GOOGLE API KEY')
-  console.log(context.module.secrets['googleai_api_key'])
 
   try {
     const start = Date.now()
-    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateMessage?key=${context.module.secrets['googleai_api_key']}`
-    console.log('endpoint')
-    console.log(endpoint)
+    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateMessage?key=${context.module?.secrets?.['googleai_api_key']}`
     // Make the API call to GoogleAI
-    const completion = await fetch(
-      endpoint,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(settings),
-      }
-    )
+    const completion = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(settings),
+    })
 
     const completionData = await completion.json()
 
@@ -86,7 +74,13 @@ export async function makeChatCompletion(
     console.log('completionData', completionData)
 
     // Extract the result from the response
-    const result = completionData.candidates[0].content
+    const result = (
+      !completionData.candidates
+        ? completionData.messages[0]
+        : completionData.candidates[0]
+    ).content
+
+    console.log('***** RESULT IS', result)
 
     // Log the usage of tokens
     // const usage = completionData.usage
@@ -99,7 +93,7 @@ export async function makeChatCompletion(
       startTime: start,
       statusCode: completion.status,
       status: completion.statusText,
-      model: settings.model,
+      model: node?.data?.model as string,
       parameters: JSON.stringify(settings),
       type: 'completion',
       provider: 'googleai',
@@ -110,7 +104,7 @@ export async function makeChatCompletion(
       nodeId: node.id,
     })
 
-    if(result) {
+    if (result) {
       return { success: true, result }
     }
 

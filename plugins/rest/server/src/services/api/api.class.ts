@@ -1,28 +1,27 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * For more information about this file see
  * https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
  */
-import type { Id, Params, ServiceInterface } from '@feathersjs/feathers';
-import { runSpell } from '@magickml/core';
-import { Application, app } from '@magickml/server-core';
-import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema';
+import type { Id, Params, ServiceInterface } from '@feathersjs/feathers'
+import { Agent, AgentManager, runSpell } from '@magickml/core'
+import { Application, app } from '@magickml/server-core'
+import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema'
 
-export type { Api, ApiData, ApiPatch, ApiQuery };
+export type { Api, ApiData, ApiPatch, ApiQuery }
 
 /** Interface for API Service Options */
 export interface ApiServiceOptions {
-  app: Application;
+  app: Application
 }
 
 /** Type for API Params */
-export type ApiParams = Params<ApiQuery>;
+export type ApiParams = Params<ApiQuery>
 
 /** Type for API GET Response */
 export type ApiGetResponse = {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  result: Object;
-};
+  result: Object
+}
 
 /**
  * This is a skeleton for a custom service class. Remove or add the methods you need here.
@@ -30,7 +29,8 @@ export type ApiGetResponse = {
  * Implements ServiceInterface to integrate with FeathersJS.
  */
 export class ApiService<ServiceParams extends ApiParams = ApiParams>
-  implements ServiceInterface<Api, ApiData, ServiceParams, ApiPatch> {
+  implements ServiceInterface<Api, ApiData, ServiceParams, ApiPatch>
+{
   /**
    * Constructs an instance of ApiService.
    * @param options - The options for the ApiService.
@@ -47,13 +47,15 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     id: Id,
     _params?: ServiceParams
   ): Promise<ApiGetResponse | any /* TODO: remove */> {
-    const { apiKey, content } = _params?.query as any; // TODO: why is this error
-    
+    console.log('***** GET', id, _params)
+    const { apiKey, content } = _params?.query as any // TODO: why is this error
+    const app = this.options.app
+    console.log('app', app)
     // Return error if apiKey is not specified.
     if (!apiKey) {
       return {
         error: 'The `apiKey` field is required',
-      };
+      }
     }
 
     // Return error if content is not specified.
@@ -61,33 +63,55 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       return {
         error:
           'The `content` field is required. if you want to pass an object, stringify it first',
-      };
+      }
     }
 
     // Get the agent service.
-    const agentService = this.options.app.service('agents');
-    
-    // Get the agent by id.
-    const agent = await agentService.get(id);
+    const agentService = this.options.app.service('agents')
 
-    const agentRestApiKey = agent?.data?.rest_api_key;
+    // Get the agent by id.
+    const agent = await agentService.get(id)
+
+    console.log('***** agent', agent)
+
+    const agentRestApiKey = agent?.data?.rest_api_key
 
     // Return error if the provided apiKey doesn't match the expected apiKey.
     if (agentRestApiKey !== apiKey) {
       return {
         error: 'The `apiKey` is invalid',
-      };
+      }
     }
 
     // Get the root spell of the selected agent.
-    const rootSpell = agent.rootSpell ?? {id: `no rootspell present for agent ${agent.name}`};
+    const rootSpell = agent.rootSpell ?? {
+      id: `no rootspell present for agent ${agent.name}`,
+    }
+
+    const agentManager = new AgentManager(app)
+
+    // create a new Agent
+    const newAgent = new Agent(
+      {
+        id: agent.id,
+        name: agent.name,
+        projectId: agent.projectId,
+        secrets: agent.secrets,
+        publicVariables: agent.publicVariables,
+      },
+      agentManager,
+      app
+    )
+
+    const spell = await newAgent.spellManager.loadById(rootSpell.id)
+    console.log('spell loaded', spell)
 
     // Run the root spell.
-    const result = await runSpell({
+    const result = await newAgent.spellManager.run({
       spellId: rootSpell.id,
-      projectId: agent.projectId,
       inputs: {
         'Input - REST API (GET)': {
+          connector: 'REST API (GET)',
           content,
           sender: 'api',
           observer: agent.name,
@@ -96,17 +120,19 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
           agentId: agent.id,
           entities: ['api', agent.name],
           channel: id,
-          rawData: JSON.stringify({ id: id, params: _params}),
+          rawData: JSON.stringify({ id: id }),
         },
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
-      app
-    });
+      app,
+    })
+
+    console.log('***** result', result)
 
     return {
       result,
-    };
+    }
   }
 
   /**
@@ -115,26 +141,26 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
    * @param params - Optional service parameters.
    * @returns a Promise resolving to the created Api resources or error message.
    */
-  async create(data: ApiData, params?: ServiceParams): Promise<Api>;
-  async create(data: ApiData[], params?: ServiceParams): Promise<Api[]>;
+  async create(data: ApiData, params?: ServiceParams): Promise<Api>
+  async create(data: ApiData[], params?: ServiceParams): Promise<Api[]>
   async create(
     data: ApiData | ApiData[],
     params: ServiceParams
   ): Promise<Api | any /* TODO: type me */> {
-    const { id, content, apiKey } = data as any;
+    const { id, content, apiKey } = data as any
 
     // Return error if id is not specified.
     if (!id) {
       return {
         error: 'The `id` field is required',
-      };
+      }
     }
 
     // Return error if apiKey is not specified.
     if (!apiKey) {
       return {
         error: 'The `apiKey` field is required',
-      };
+      }
     }
 
     // Return error if content is not specified.
@@ -142,26 +168,28 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       return {
         error:
           'The `content` field is required. if you want to pass an object, stringify it first',
-      };
+      }
     }
 
     // Get the agent service.
-    const agentService = this.options.app.service('agents');
-    
-    // Get the agent by id.
-    const agent = await agentService.get(id);
+    const agentService = this.options.app.service('agents')
 
-    const agentRestApiKey = agent?.data?.rest_api_key;
+    // Get the agent by id.
+    const agent = await agentService.get(id)
+
+    const agentRestApiKey = agent?.data?.rest_api_key
 
     // Return error if the provided apiKey doesn't match the expected apiKey.
     if (agentRestApiKey !== apiKey) {
       return {
         error: 'The `apiKey` is invalid',
-      };
+      }
     }
 
     // Get the root spell of the selected agent.
-    const rootSpell = agent.rootSpell ?? {id: `no rootspell present for agent ${agent.name}`};
+    const rootSpell = agent.rootSpell ?? {
+      id: `no rootspell present for agent ${agent.name}`,
+    }
 
     // Run the root spell.
     const result = await runSpell({
@@ -169,6 +197,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (POST)': {
+          connector: 'REST API (POST)',
           content,
           sender: 'api',
           observer: agent.name,
@@ -177,17 +206,18 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
           agentId: agent.id,
           entities: ['api', agent.name],
           channelType: 'POST',
-          rawData: JSON.stringify({data, params}),
+          rawData: JSON.stringify({ data, params }),
         },
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
-      app
-    });
+      app,
+      agent,
+    })
 
     return {
       result,
-    };
+    }
   }
 
   /**
@@ -202,20 +232,20 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     data: ApiData,
     _params?: ServiceParams
   ): Promise<Api | any> {
-    const { content, apiKey } = data as any;
+    const { content, apiKey } = data as any
 
     // Return error if id is not specified.
     if (!id) {
       return {
         error: 'The `id` parameter is required',
-      };
+      }
     }
 
     // Return error if apiKey is not specified.
     if (!apiKey) {
       return {
         error: 'The `apiKey` field is required',
-      };
+      }
     }
 
     // Return error if content is not specified.
@@ -223,26 +253,28 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       return {
         error:
           'The `content` field is required. if you want to pass an object, stringify it first',
-      };
+      }
     }
 
     // Get the agent service.
-    const agentService = this.options.app.service('agents');
-    
-    // Get the agent by id.
-    const agent = await agentService.get(id);
+    const agentService = this.options.app.service('agents')
 
-    const agentRestApiKey = agent?.data?.rest_api_key;
+    // Get the agent by id.
+    const agent = await agentService.get(id)
+
+    const agentRestApiKey = agent?.data?.rest_api_key
 
     // Return error if the provided apiKey doesn't match the expected apiKey.
     if (agentRestApiKey !== apiKey) {
       return {
         error: 'The `apiKey` is invalid',
-      };
+      }
     }
 
     // Get the root spell of the selected agent.
-    const rootSpell = agent.rootSpell ?? {id: `no rootspell present for agent ${agent.name}`};
+    const rootSpell = agent.rootSpell ?? {
+      id: `no rootspell present for agent ${agent.name}`,
+    }
 
     // Run the root spell.
     const result = await runSpell({
@@ -250,6 +282,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (PUT)': {
+          connector: 'REST API (PUT)',
           content,
           sender: 'api',
           observer: agent.name,
@@ -258,17 +291,18 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
           agentId: agent.id,
           entities: ['api', agent.name],
           channelType: 'PUT',
-          rawData: JSON.stringify({data, params: _params}),
+          rawData: JSON.stringify({ data, params: _params }),
         },
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
-      app
-    });
+      app,
+      agent,
+    })
 
     return {
       result,
-    };
+    }
   }
 
   /**
@@ -278,40 +312,42 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
    * @returns a Promise resolving to the deleted Api or error message.
    */
   async remove(id: Id, _params?: ServiceParams): Promise<Api | any> {
-    const { content, apiKey } = _params?.query as any;
-    
+    const { content, apiKey } = _params?.query as any
+
     // Return error if id is not specified.
     if (!id) {
       return {
         error:
           'The `id` parameter is required. It should be formatted like /api/<id>',
-      };
+      }
     }
 
     // Return error if apiKey is not specified.
     if (!apiKey) {
       return {
         error: 'The `apiKey` field is required',
-      };
+      }
     }
 
     // Get the agent service.
-    const agentService = this.options.app.service('agents');
-    
-    // Get the agent by id.
-    const agent = await agentService.get(id);
+    const agentService = this.options.app.service('agents')
 
-    const agentRestApiKey = agent?.data?.rest_api_key;
+    // Get the agent by id.
+    const agent = await agentService.get(id)
+
+    const agentRestApiKey = agent?.data?.rest_api_key
 
     // Return error if the provided apiKey doesn't match the expected apiKey.
     if (agentRestApiKey !== apiKey) {
       return {
         error: 'The `apiKey` is invalid',
-      };
+      }
     }
 
     // Get the root spell of the selected agent.
-    const rootSpell = agent.rootSpell ?? {id: `no rootspell present for agent ${agent.name}`};
+    const rootSpell = agent.rootSpell ?? {
+      id: `no rootspell present for agent ${agent.name}`,
+    }
 
     // Run the root spell.
     const result = await runSpell({
@@ -319,6 +355,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       projectId: agent.projectId,
       inputs: {
         'Input - REST API (DELETE)': {
+          connector: 'REST API (DELETE)',
           content,
           sender: 'api',
           observer: agent.name,
@@ -327,21 +364,21 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
           agentId: agent.id,
           entities: ['api', agent.name],
           channelType: 'DELETE',
-          rawData: JSON.stringify({id, params: _params}),
+          rawData: JSON.stringify({ id, params: _params }),
         },
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
-      app
-    });
+      app,
+    })
 
     return {
       result,
-    };
+    }
   }
 }
 
 /** Helper function to get options for the ApiService. */
 export const getOptions = (app: Application) => {
-  return { app };
-};
+  return { app }
+}

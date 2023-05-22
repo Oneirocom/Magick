@@ -28,13 +28,13 @@ export class UploadService {
    * @param params - The request parameters
    * @returns The metadata of the newly created or updated image
    */
-  async create(body: any, params: any): Promise<any> {
+  async create(body: any): Promise<any> {
     const img_body = {
       id: body['id'],
       uri: body['uri'],
     }
     const idx = this.image_store.map(e => e.id).indexOf(body['id'])
-    console.log(body['id'])
+
     idx === -1
       ? this.image_store.push(img_body)
       : (this.image_store[idx] = img_body)
@@ -48,11 +48,11 @@ export class UploadService {
    * @param params - The request parameters
    * @returns The metadata of the image if found, otherwise a string "Image Not Found"
    */
-  async find(id: any, params: any): Promise<any> {
+  async find(id: any): Promise<any> {
     let img_found = this.image_store.find(element => {
       return element.id === id.query.id
     })
-    console.log(id.query.id)
+
     typeof img_found == 'undefined'
       ? (img_found = 'Image Not Found')
       : console.log('Image Found !!')

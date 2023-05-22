@@ -1,5 +1,4 @@
 import { ETwitterStreamEvent, TwitterApi } from 'twitter-api-v2'
-import { app } from '@magickml/server-core'
 export class TwitterConnector {
   twitterv1: TwitterApi | undefined
   twitterv2: TwitterApi | undefined
@@ -9,16 +8,13 @@ export class TwitterConnector {
   agent
   twitter_stream_rules = ''
   localUser: any
-  worldManager: any
 
-  constructor({ spellRunner, agent, worldManager }) {
+  constructor({ spellRunner, agent }) {
     agent.twitter = this
     this.spellRunner = spellRunner
     const data = agent.data.data
     this.data = data
     this.agent = agent
-    this.worldManager = worldManager // we can track entities in different conversations here later
-    console.log(data)
     if (!data.twitter_enabled) {
       console.warn('Twitter is not enabled, skipping')
       return
@@ -206,28 +202,28 @@ export class TwitterConnector {
               return console.log('Twitter not initialized properly')
             }
 
-            const author = await this.twitterv2.v2.user(tw.data.author_id)
-            const entities = [author.data.name, twitterUser]
-            const resp = await this.spellRunner.runComponent({
-              inputs: {
-                'Input - Twitter (Feed)': {
-                  content: tw.data.text,
-                  sender: author.data.username,
-                  observer: twitterUser,
-                  client: 'twitter',
-                  channel: tw.data.id,
-                  agentId: this.agent.id,
-                  entities,
-                  channelType: 'feed',
-                  rawData: tw
-                },
-              },
-              agent: this.agent,
-              secrets: this.agent.secrets,
-              publicVariables: this.agent.publicVariables,
-              app,
-              runSubspell: true,
-            })
+            // const author = await this.twitterv2.v2.user(tw.data.author_id)
+            // const entities = [author.data.name, twitterUser]
+            // const resp = await this.spellRunner.runComponent({
+            //   inputs: {
+            //     'Input - Twitter (Feed)': {
+            //       content: tw.data.text,
+            //       sender: author.data.username,
+            //       observer: twitterUser,
+            //       client: 'twitter',
+            //       channel: tw.data.id,
+            //       agentId: this.agent.id,
+            //       entities,
+            //       channelType: 'feed',
+            //       rawData: tw
+            //     },
+            //   },
+            //   agent: this.agent,
+            //   secrets: this.agent.secrets,
+            //   publicVariables: this.agent.publicVariables,
+            //   app,
+            //   runSubspell: true,
+            // })
           }
         }
       })

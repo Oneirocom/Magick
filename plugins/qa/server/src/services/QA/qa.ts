@@ -1,14 +1,4 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
-
-import { hooks as schemaHooks } from '@feathersjs/schema'
-
-import {
-  QADataValidator,
-  QAExternalResolver,
-  QAQueryResolver,
-  QAQueryValidator,
-} from './qa.schema'
-
 import type { Application } from '@magickml/server-core'
 import { QAService, getOptions } from './qa.class'
 

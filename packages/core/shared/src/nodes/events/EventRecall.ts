@@ -2,7 +2,12 @@
 import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
-import { arraySocket, eventSocket, triggerSocket } from '../../sockets'
+import {
+  arraySocket,
+  eventSocket,
+  stringSocket,
+  triggerSocket,
+} from '../../sockets'
 import {
   Event,
   GetEventArgs,
@@ -13,7 +18,8 @@ import {
   WorkerData,
 } from '../../types'
 
-const info = 'Event Recall is used to get conversation for an agent and user'
+const info =
+  'Searches for events in the Events store based on the Type property and returns an array of events limited by the Max Count property. The optional Embedding input will search for events based on the similarity of their stored embeddings. '
 
 /**
  * Type definition for the input events.
@@ -53,6 +59,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     const out = new Rete.Output('events', 'Events', arraySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const typeSocket = new Rete.Input('type', 'Type', stringSocket)
 
     const nameInput = new InputControl({
       dataKey: 'name',
@@ -82,6 +89,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       .addInput(embedding)
       .addOutput(dataOutput)
       .addOutput(out)
+      .addInput(typeSocket)
   }
 
   /**
@@ -102,12 +110,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     const getEvents = async (params: GetEventArgs) => {
       const result = await app.service('events').find({ query: params })
-      console.log(result)
-      // app is a feathers-koa app
       const { events } = result
 
       return events
     }
+    const typeSocket = inputs['type'] && inputs['type'][0]
 
     const event = (inputs['event'] &&
       (inputs['event'][0] || inputs['event'])) as Event
@@ -121,14 +128,23 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       embedding = (embedding as string)?.split(',')
     }
 
-    const { observer, client, channel, channelType, projectId, entities } =
-      event
+    const {
+      observer,
+      client,
+      channel,
+      connector,
+      channelType,
+      projectId,
+      entities,
+    } = event
 
     const typeData = (node.data as { type: string })?.type
     const type =
-      typeData !== undefined && typeData.length > 0
+      (typeSocket as string) ??
+      (typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
-        : 'none'
+        : 'none')
+
     const maxCountData =
       (node?.data?.max_count as string) &&
       (node?.data as { max_count: string })?.max_count
@@ -139,9 +155,10 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       client,
       entities,
       channel,
+      connector,
       channelType,
       projectId,
-      limit,
+      $limit: limit ?? 1,
     }
 
     if (embedding) {

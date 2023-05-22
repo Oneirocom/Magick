@@ -12,7 +12,6 @@ import {
   MagickComponent,
   MagickNode,
   MagickWorkerInputs,
-  MagickWorkerOutputs,
   stringSocket,
   triggerSocket,
 } from '@magickml/core'
@@ -70,7 +69,6 @@ export class MovieTrivia extends MagickComponent<Promise<WorkerReturn>> {
   async worker(
     node: NodeData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs
   ): Promise<WorkerReturn> {
     const movie = inputs.movie && inputs.movie[0]
 

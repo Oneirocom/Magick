@@ -1,5 +1,4 @@
 // DOCUMENTED 
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import Rete from 'rete';
 
 import {

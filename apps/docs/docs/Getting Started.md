@@ -13,7 +13,7 @@ There are three ways to use Magick: on the cloud, as a standalone app or by runn
 
 ## Cloud
 
-You can use Magick through the hosted web app at https://app.magickml.com/
+You can use Magick through the hosted web app at https://cloud.magickml.com/
 
 For the alpha phase, joining is free. However, you will need your OpenAI API keys.
 
@@ -23,13 +23,14 @@ The standalone app is available at https://github.com/Oneirocom/Magick/releases
 
 ## Source
 
-You can also build from source. Refer to the Magick (README)[https://github.com/Oneirocom/Magick/blob/development/README.md] for the latest steps on installing and how to clone the repo and run from source.
+You can also build from source. Refer to the Magick [README](https://github.com/Oneirocom/Magick/blob/development/README.md) for the latest steps on installing and how to clone the repo and run from source.
 
 Development is straightforward. You will need git and node.js 18+ installed.
 
 ```
 git clone https://github.com/Oneirocom/Magick
 cd Magick
+npm install
 npm run dev
 ```
 

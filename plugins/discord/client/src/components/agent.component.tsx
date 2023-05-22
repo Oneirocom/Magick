@@ -10,6 +10,7 @@ type PluginProps = {
 import { API_ROOT_URL, FILE_SERVER_URL } from '@magickml/core'
 import { Switch } from '@magickml/client-core'
 import VariableModal from './VariableModal'
+import { useSelector } from 'react-redux'
 
 export const DiscordAgentWindow: FC<any> = props => {
   props = props.props
@@ -22,6 +23,9 @@ export const DiscordAgentWindow: FC<any> = props => {
   const [disable, setDisable] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const [playingAudio, setPlayingAudio] = useState(false)
+
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
 
   const handleClose = () => {
     setEditMode(false)
@@ -44,7 +48,7 @@ export const DiscordAgentWindow: FC<any> = props => {
     ) {
       if (
         selectedAgentData.data?.voice_provider === 'tiktalknet' &&
-        selectedAgentData.data?.tiktalknet_url?.length <= 0
+        selectedAgentData.data?.voice_endpoint?.length <= 0
       ) {
         return
       }
@@ -55,7 +59,10 @@ export const DiscordAgentWindow: FC<any> = props => {
           voice_provider: selectedAgentData.data?.voice_provider,
           voice_character: selectedAgentData.data?.voice_character,
           voice_language_code: selectedAgentData.data?.voice_language_code,
-          tiktalknet_url: selectedAgentData.data?.tiktalknet_url,
+          voice_endpoint: selectedAgentData.data?.voice_endpoint,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
 

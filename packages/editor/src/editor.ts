@@ -3,6 +3,7 @@ import ConnectionPlugin from 'rete-connection-plugin'
 import { Plugin } from 'rete/types/core/plugin'
 import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
+import CommentManager from './plugins/commentPlugin/manager'
 import ContextMenuPlugin from './plugins/contextMenu'
 import {
   CachePlugin,
@@ -38,9 +39,8 @@ import {
 } from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
+import AutoArrangePlugin from './plugins/autoArrangePlugin'
 import { initSharedEngine, MagickEngine } from '@magickml/core'
-import { useSelector } from 'react-redux'
-import { RootState } from './state/store'
 
 /**
  * Extend MagickEngine with additional properties
@@ -149,9 +149,21 @@ export const initEditor = function ({
     snap: true,
   })
 
+  // Set up the CommentManager
+  const commentManager = new CommentManager(editor)
+
   // Use CommentPlugin
   editor.use(CommentPlugin, {
     margin: 30,
+    commentManager,
+  })
+
+  editor.use(AutoArrangePlugin, {
+    margin: { x: 50, y: 50 },
+    depth: 0,
+    arrangeHotkey: { key: '/', ctrl: true },
+    centerHotkey: { key: '.', ctrl: true },
+    commentManager,
   })
 
   editor.use(KeyCodePlugin)
@@ -202,7 +214,6 @@ export const initEditor = function ({
 
   editor.runProcess = async callback => {
     await engine.abort()
-    console.log('run process:', context)
     await engine.process(editor.toJSON(), null, {
       context: context,
       currentSpell: editor.currentSpell,

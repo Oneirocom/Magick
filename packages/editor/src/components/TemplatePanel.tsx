@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import { Panel } from '@magickml/client-core'
 import css from '../screens/HomeScreen/homeScreen.module.css'
 
@@ -32,15 +32,17 @@ const TemplatePanel = ({
   return (
     // Create a wrapper div and set isSelected and onClick
     <div
-      className={`${css['template-container']} ${css[isSelected && 'selected']}`}
+      className={`${css['template-container']} ${
+        css[isSelected && 'selected']
+      }`}
       onClick={handleClick}
     >
       {/* Create the panel with styling and the background image */}
       <Panel
         shadow
         style={{
-          width: 'var(--c20)',
-          height: 'var(--c12)',
+          width: 'var(--c18)',
+          height: 'var(--c18)',
           backgroundColor: 'var(--dark-3)',
           backgroundImage: `url(${template.bg})`,
         }}

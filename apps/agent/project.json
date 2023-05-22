@@ -6,14 +6,14 @@
   "implicitDependencies": ["@magickml/server-core", "@magickml/core"],
   "targets": {
     "build": {
-      "executor": "@nrwl/webpack:webpack",
+      "executor": "@nx/webpack:webpack",
       "outputs": [
         "{options.outputPath}"
       ],
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "port": 7778,
+        "port": 7779,
         "inspect": true,
         "outputPath": "dist/apps/agent",
         "main": "apps/agent/src/index.ts",
@@ -36,11 +36,11 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/js:node",
+      "executor": "@nx/js:node",
       "options": {
         "buildTarget": "@magickml/agent:build",
         "inspect": true,
-        "port": 7778
+        "port": 7779
       },
       "configurations": {
         "production": {
@@ -49,7 +49,7 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": [
         "{options.outputFile}"
       ],
@@ -60,7 +60,7 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": [
         "{workspaceRoot}/coverage/{projectRoot}"
       ],

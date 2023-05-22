@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Rete from 'rete'
 
 import { InputControl } from '../../dataControls/InputControl'
@@ -11,17 +8,22 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  WorkerData
+  WorkerData,
 } from '../../types'
 
 const info =
-  'Text Rule Matcher uses basic string matches to determine if the input matches some selected properties'
+  'Takes a string input and applies a series of text rule checks specified (match/invalidate beginning, match/invalidate end, match/invalidate any, minimum/maximum length) then triggers one of two outputs if all the rules are satisfied. Empty rule properties are ignored.'
 
 export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Text Rule Matcher', {
-      outputs: { true: 'option', false: 'option' },
-    }, 'Text', info)
+    super(
+      'Text Rule Matcher',
+      {
+        outputs: { true: 'option', false: 'option' },
+      },
+      'Text',
+      info
+    )
   }
 
   builder(node: MagickNode) {
@@ -67,11 +69,13 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     const stringMinLength = new NumberControl({
       dataKey: 'stringMinLength',
       name: 'Minimum String Length (0 to ignore)',
+      defaultValue: 0,
     })
 
     const stringMaxLength = new NumberControl({
       dataKey: 'stringMaxLength',
       name: 'Maximum String Length (0 to ignore)',
+      defaultValue: 0,
     })
 
     node.inspector
@@ -90,17 +94,53 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     const isTrue = new Rete.Output('true', 'True', triggerSocket)
     const isFalse = new Rete.Output('false', 'False', triggerSocket)
 
+    // add an input for each of the inspector properties
+
+    const matchBeginningInput = new Rete.Input(
+      'matchBeginning',
+      'Match Beginning',
+      stringSocket
+    )
+
+    const invalidateBeginning = new Rete.Input(
+      'invalidateBeginning',
+      'Invalidate Beginning',
+      stringSocket
+    )
+
+    const matchEnd = new Rete.Input('matchEnd', 'Match End', stringSocket)
+
+    const invalidateEnd = new Rete.Input(
+      'invalidateEnd',
+      'Invalidate End',
+      stringSocket
+    )
+
+    const matchAny = new Rete.Input('matchAny', 'Match Any', stringSocket)
+    const invalidateAny = new Rete.Input(
+      'invalidateAny',
+      'Invalidate Any',
+      stringSocket
+    )
+
     return node
-    .addInput(dataInput)
+      .addInput(dataInput)
       .addInput(inp)
       .addOutput(isTrue)
       .addOutput(isFalse)
+
+      .addInput(matchBeginningInput)
+      .addInput(invalidateBeginning)
+      .addInput(matchEnd)
+      .addInput(invalidateEnd)
+      .addInput(matchAny)
+      .addInput(invalidateAny)
   }
 
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
+    _outputs: MagickWorkerOutputs
   ) {
     // implement a function that replaces all instances of a string with another string
     const replaceAll = (str: string, find: string, replace: string) => {
@@ -108,24 +148,37 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     }
 
     let input = inputs['input'][0] as string
-    
+    const matchBeginning =
+      (inputs['matchBeginning'] as string[]) &&
+      (inputs['matchBeginning'][0] as string)
+    const invalidateBeginning =
+      (inputs['invalidateBeginning'] as string[]) &&
+      (inputs['invalidateBeginning'][0] as string)
+    const matchEnd =
+      (inputs['matchEnd'] as string[]) && (inputs['matchEnd'][0] as string)
+    const invalidateEnd =
+      (inputs['invalidateEnd'] as string[]) &&
+      (inputs['invalidateEnd'][0] as string)
+    const matchAny =
+      (inputs['matchAny'] as string[]) && (inputs['matchAny'][0] as string)
+    const invalidateAny =
+      (inputs['invalidateAny'] as string[]) &&
+      (inputs['invalidateAny'][0] as string)
+
     const str = input + ''
     const i1 = str.toString().replace(/<.*>/, '')
-
-    
 
     input = replaceAll(
       replaceAll(i1.replace(/ /, ''), '"', ''),
       "'",
       ''
     ).toLowerCase()
-    
 
     const stringMinLength = (node.data.stringMinLength ?? 0) as number
     const stringMaxLength = (node.data.stringMaxLength ?? 0) as number
 
     const matchBeginningStringArray = (
-      (node.data.matchBeginningString ?? '') as string
+      (matchBeginning ?? node.data.matchBeginningString ?? '') as string
     )
       .toLowerCase()
       .split(', ')
@@ -136,7 +189,9 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       matchBeginningStringArray.pop()
     }
 
-    const matchEndStringArray = ((node.data.matchEndString ?? '') as string)
+    const matchEndStringArray = (
+      matchEnd ?? ((node.data.matchEndString ?? '') as string)
+    )
       .toLowerCase()
       .split(', ')
 
@@ -144,7 +199,9 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       matchEndStringArray.pop()
     }
 
-    const matchAnyStringArray = ((node.data.matchAnyString ?? '') as string)
+    const matchAnyStringArray = (
+      matchAny ?? ((node.data.matchAnyString ?? '') as string)
+    )
       .toLowerCase()
       .split(', ')
 
@@ -153,7 +210,8 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     }
 
     const notMatchBeginningStringArray = (
-      (node.data.notMatchBeginningString ?? '') as string
+      invalidateBeginning ??
+      ((node.data.notMatchBeginningString ?? '') as string)
     )
       .toLowerCase()
       .split(', ')
@@ -165,7 +223,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     }
 
     const notMatchEndStringArray = (
-      (node.data.notMatchEndString ?? '') as string
+      invalidateEnd ?? ((node.data.notMatchEndString ?? '') as string)
     )
       .toLowerCase()
       .split(', ')
@@ -175,7 +233,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     }
 
     const notMatchAnyStringArray = (
-      (node.data.notMatchAnyString ?? '') as string
+      invalidateAny ?? ((node.data.notMatchAnyString ?? '') as string)
     )
       .toLowerCase()
       .split(', ')
@@ -205,7 +263,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       return false
     }
 
-    function matchEnd(inp: string, matchArray: string[]) {
+    function matchEndString(inp: string, matchArray: string[]) {
       for (const matchString of matchArray) {
         if (inp.endsWith(matchString)) {
           return true
@@ -226,15 +284,15 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     if (matchBeginningStringArray.length > 0) {
       const matched = matchStart(input, matchBeginningStringArray)
       if (matched) {
-        // 
+        //
         isMatched = true
       }
     }
 
     if (matchEndStringArray.length > 0) {
-      const matched = matchEnd(input, matchEndStringArray)
+      const matched = matchEndString(input, matchEndStringArray)
       if (matched) {
-        // 
+        //
         isMatched = true
       } else {
         isMatched = false
@@ -243,7 +301,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     if (matchAnyStringArray.length > 0) {
       const matched = match(input, matchAnyStringArray)
       if (matched) {
-        // 
+        //
         isMatched = true
       } else {
         isMatched = false
@@ -258,7 +316,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     }
 
     if (!invalidated && notMatchEndStringArray.length > 0) {
-      const matched = matchEnd(input, notMatchEndStringArray)
+      const matched = matchEndString(input, notMatchEndStringArray)
       if (matched) {
         invalidated = true
       }

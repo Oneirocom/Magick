@@ -1,16 +1,11 @@
 // DOCUMENTED
-import {
-  eventSocket,
-  ServerPlugin,
-  triggerSocket,
-  WorldManager,
-} from '@magickml/core'
+import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
 import { DiscordConnector } from './connectors/discord'
 
+import { getNodes } from '@magickml/plugin-discord-shared'
 type StartDiscordArgs = {
   agent: any
   spellRunner: any
-  worldManager: WorldManager
 }
 
 /**
@@ -20,30 +15,25 @@ type StartDiscordArgs = {
 function getAgentMethods() {
   /**
    * Start a new Discord connection for this agent.
-   * @param args - An object containing the agent, spellRunner, and worldManager.
+   * @param args - An object containing the agent and spellRunner.
    */
-  async function startDiscord({
-    agent,
-    spellRunner,
-    worldManager,
-  }: StartDiscordArgs) {
+  async function startDiscord({ agent, spellRunner }: StartDiscordArgs) {
     const { data } = agent.data
-    if (!data) return console.log('No data for this agent')
+    if (!data) return agent.log('No data for this agent')
     if (!data.discord_enabled)
-      return console.log('Discord is not enabled for this agent')
+      return agent.log('Discord is not enabled for this agent')
     if (!data.discord_api_key)
-      return console.log('Discord API key is not set for this agent')
+      return agent.log('Discord API key is not set for this agent')
 
     try {
       const discord = new DiscordConnector({
         ...data,
         agent,
         spellRunner,
-        worldManager,
       })
       agent.discord = discord
     } catch (err) {
-      console.error('Error starting discord client for agent ' + agent.name)
+      agent.error('Error starting discord client for agent ' + agent.name)
     }
   }
 
@@ -53,14 +43,14 @@ function getAgentMethods() {
    */
   async function stopDiscord({ agent }) {
     if (!agent.discord)
-      return console.warn("Discord isn't running, can't stop it")
+      return agent.warn("Discord isn't running, can't stop it")
     try {
       await agent.discord.destroy()
       agent.discord = null
     } catch {
-      console.warn('Agent does not exist!')
+      agent.warn('Agent does not exist!')
     }
-    console.log('Stopped discord client for agent ' + agent.name)
+    agent.log('Stopped discord client for agent ' + agent.name)
   }
 
   return {
@@ -74,10 +64,10 @@ function getAgentMethods() {
  * @param args - An object containing the output, agent, and event.
  */
 async function handleResponse({ output, agent, event }) {
+  console.log('handleResponse', output, event)
   if (!output || output === '')
-    return console.warn('No output to send to discord')
-  await agent.discord.sendMessageToChannel(event.channel, output)
-  console.log('RESPONSE HANDLED')
+    return agent.warn('No output to send to discord')
+  await agent?.discord?.sendMessageToChannel(event.channel, output)
 }
 
 // Input socket configurations
@@ -109,6 +99,7 @@ const outputSockets = [
  */
 const DiscordPlugin = new ServerPlugin({
   name: 'DiscordPlugin',
+  nodes: getNodes(),
   inputTypes: [
     {
       name: 'Discord (Voice)',
@@ -133,7 +124,7 @@ const DiscordPlugin = new ServerPlugin({
       name: 'Discord (Text)',
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
-        console.log('output is', output)
+        // console.log('output is', output)
         await handleResponse({ output, agent, event })
       },
     },
@@ -141,7 +132,7 @@ const DiscordPlugin = new ServerPlugin({
       name: 'Discord (Image)',
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
-        console.log('output is', output)
+        // console.log('output is', output)
         await handleResponse({ output, agent, event })
       },
     },

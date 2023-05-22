@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'shared-core',
-  preset: '../../jest.preset.js',
+  preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   silent: true, // lots of console.log calls
   globals: {},
@@ -16,7 +16,7 @@ export default {
         },
       },
     ],
-    '^.+\\.jsx?$': ['babel-jest', { presets: ['@nrwl/react/babel'] }],
+    '^.+\\.jsx?$': ['babel-jest', { presets: ['@nx/react/babel'] }],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   collectCoverage: true,

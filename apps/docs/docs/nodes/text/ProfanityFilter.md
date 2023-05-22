@@ -1,3 +1,3 @@
 # Profanity Filter
 
-Does some basic checks
+Takes a string input and checks it against a set of profanity rules, then triggers the appropriate output.

@@ -1,3 +1,3 @@
 # Combine Text
 
-Add two strings twogether - Add a new socket with the string and the value like this - Agent Replacer (will replace all the $agent from the input with the input assigned)
+Takes any number of string inputs and combines them together into a single output string. The input strings are separated by the character or string specified in the Delimiter property.

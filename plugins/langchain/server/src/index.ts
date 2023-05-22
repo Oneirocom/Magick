@@ -6,11 +6,12 @@
  * @param nodes - the nodes used by the plugin.
  */
 import { ServerPlugin } from "@magickml/core"
-import Nodes from '@magickml/plugin-langchain-shared'
+import { getNodes } from '@magickml/plugin-langchain-shared'
+
 
 const LangchainPlugin = new ServerPlugin({
   name: 'LangchainPlugin',
-  nodes: Nodes,
+  nodes: getNodes(),
   secrets: [],
 });
 

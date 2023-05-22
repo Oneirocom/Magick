@@ -1,11 +1,9 @@
 // DOCUMENTED
-import ReactJson from 'react-json-view'
-import { Window } from '@magickml/client-core'
+import { Window, usePubSub } from '@magickml/client-core'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Terminal from 'react-console-emulator'
-import { renderToString } from 'react-dom/server'
+import ReactJson from 'react-json-view'
 import { useEditor } from '../../contexts/EditorProvider'
-import { usePubSub } from '../../contexts/PubSubProvider'
 
 /**
  * The type for debug messages.
@@ -69,7 +67,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
    */
   const formatLogMessage = (message): string =>
     `> Node ${message.nodeId}: Message from ${message.from} component ${
-      message.name ?? 'unnamed'
+      message.name ? ' ' + message.name : ''
     }.`
 
   /**
@@ -79,28 +77,33 @@ const DebugConsole = ({ tab }): JSX.Element => {
    * @param {string} type - Message type (error or log).
    * @returns {JSX.Element} Rendered message.
    */
-  const Message = (message, type): JSX.Element => (
-    <div
-      style={{
-        lineHeight: '21px',
-        color: type === 'error' ? 'var(--red)' : 'var(--green)',
-      }}
-    >
-      <p style={{ margin: 0 }}>
-        {type === 'error'
-          ? formatErrorMessage(message)
-          : formatLogMessage(message)}
-      </p>
-      <ReactJson
-        src={message}
-        name={message.nodeId}
-        enableClipboard={false}
-        theme="twilight"
-        collapsed={true}
-      />
-      <br />
-    </div>
-  )
+  const Message = (message, type): JSX.Element => {
+    return (
+      <div
+        style={{
+          lineHeight: '21px',
+          color: type === 'error' ? 'var(--red)' : 'var(--green)',
+        }}
+        onClick={e => {
+          e.stopPropagation()
+        }}
+      >
+        <p style={{ margin: 0 }}>
+          {type === 'error'
+            ? formatErrorMessage(message)
+            : formatLogMessage(message)}
+        </p>
+        <ReactJson
+          src={message}
+          name={message.nodeId}
+          enableClipboard={false}
+          theme="twilight"
+          collapsed={true}
+        />
+        <br />
+      </div>
+    )
+  }
 
   /**
    * Get a formatted message for the terminal.
@@ -109,10 +112,12 @@ const DebugConsole = ({ tab }): JSX.Element => {
    * @returns {string} Formatted message for the terminal.
    */
   const getMessage = _message => {
-    const message = {
-      ..._message,
-      ...JSON.parse(_message.content),
-    }
+    const message = _message.content
+      ? {
+          ..._message,
+          ...JSON.parse(_message.content),
+        }
+      : _message
 
     delete message.content
 
@@ -121,6 +126,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
 
   // Callback function to print messages to the debugger.
   const printToDebugger = useCallback((_, message): void => {
+    console.log('MESSAGE', message)
     const terminal = terminalRef.current
     if (!terminal) return
 

@@ -28,7 +28,7 @@ type Props = {
 
 export const ProjectWindowProvider = ({ children }: Props): JSX.Element => {
   const [openProjectWindow, setOpenProjectWindow] = useState(false)
-  const [openDrawer, setOpenDrawer] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState(true)
 
   return (
     <ProjectWindowContext.Provider

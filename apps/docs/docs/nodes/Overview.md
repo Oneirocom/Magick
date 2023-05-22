@@ -7,4 +7,4 @@ sidebar_position: 5
 
 # Nodes Overview
 
-This section has not been written yet.
+This section is an overview of Nodes in Magick.

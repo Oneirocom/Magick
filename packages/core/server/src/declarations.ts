@@ -3,7 +3,7 @@
 import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers';
 import { Application as FeathersApplication } from '@feathersjs/koa';
 import { ApplicationConfiguration } from './config/configuration';
-import { SpellManager, UserSpellManager } from '@magickml/core';
+import { UserSpellManager } from '@magickml/core';
 
 export { NextFunction };
 
@@ -11,13 +11,11 @@ export { NextFunction };
  * The types for app.get(name) and app.set(name).
  * @extends ApplicationConfiguration
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Configuration extends ApplicationConfiguration {}
 
 /**
  * A mapping of service names to types. Will be extended in service files.
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ServiceTypes {}
 
 /**

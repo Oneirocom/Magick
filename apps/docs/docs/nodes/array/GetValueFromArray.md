@@ -1,3 +1,3 @@
 # Get Value From Array
 
-Returns the same output as the input
+Takes an input array and outputs the value in that array whose key matches the key specified in the Element property.

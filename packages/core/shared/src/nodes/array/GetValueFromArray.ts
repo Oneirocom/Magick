@@ -1,9 +1,14 @@
-// DOCUMENTED 
+// DOCUMENTED
 import Rete from 'rete'
-import { InputControl } from "../../dataControls/InputControl"
-import { MagickComponent } from "../../engine"
-import { arraySocket, triggerSocket, anySocket } from "../../sockets"
-import { MagickNode, WorkerData, MagickWorkerInputs, MagickWorkerOutputs } from "../../types"
+import { InputControl } from '../../dataControls/InputControl'
+import { MagickComponent } from '../../engine'
+import { arraySocket, triggerSocket, anySocket } from '../../sockets'
+import {
+  MagickNode,
+  WorkerData,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+} from '../../types'
 
 /**
  * Returns the same output as the input
@@ -16,14 +21,18 @@ type WorkerReturn = {
  * Gets a value from an array
  */
 export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
-
   constructor() {
-    super('Get Value From Array', {
-      outputs: {
-        output: 'output',
-        trigger: 'option',
-      }
-    }, 'Array', 'Returns the same output as the input')
+    super(
+      'Get Value From Array',
+      {
+        outputs: {
+          output: 'output',
+          trigger: 'option',
+        },
+      },
+      'Array',
+      'Takes an input array and outputs the value in that array whose key matches the key specified in the Element property.'
+    )
   }
 
   /**
@@ -39,7 +48,7 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
     const element = new InputControl({
       dataKey: 'element',
       name: 'Element',
-      defaultValue: 0
+      defaultValue: 0,
     })
 
     node.inspector.add(element)
@@ -61,7 +70,7 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
-    _outputs: MagickWorkerOutputs,
+    _outputs: MagickWorkerOutputs
   ): Promise<WorkerReturn> {
     const input = inputs.array[0] as string
     const element = node.data.element as number

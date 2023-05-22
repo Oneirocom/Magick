@@ -1,22 +1,22 @@
-// DOCUMENTED 
-import { SpellRunner } from '../spellManager/index';
-import { GraphData } from '../types';
-import { SpellInterface } from '../schemas';
-import { SpellError } from './SpellError';
-import { API_ROOT_URL } from '../config';
+// DOCUMENTED
+import { SpellInterface } from '../schemas'
+import { SpellManager } from '../spellManager/index'
+import { GraphData } from '../types'
+import { SpellError } from './SpellError'
 
 /**
  * Type definition for the arguments of the `runSpell` function.
  */
 export type RunSpellArgs = {
-  spellId: string;
-  inputs?: Record<string, unknown>;
-  inputFormatter?: (graph: GraphData) => Record<string, unknown>;
-  projectId: string;
-  secrets?: Record<string, string>;
-  publicVariables?: Record<string, unknown>;
-  app?: any;
-};
+  spellId: string
+  inputs?: Record<string, unknown>
+  inputFormatter?: (graph: GraphData) => Record<string, unknown>
+  projectId: string
+  secrets: Record<string, string>
+  publicVariables?: Record<string, unknown>
+  app?: any
+  agent?: any
+}
 
 /**
  * Run a spell with the given parameters.
@@ -32,45 +32,57 @@ export const runSpell = async ({
   projectId,
   secrets,
   publicVariables,
-  app
-}: RunSpellArgs): Promise<{ outputs: Record<string, unknown>; name: string }> => {
-  // Log the input params
-  console.log('runSpell', { spellId, inputs, inputFormatter, projectId, secrets, publicVariables });
-
+  app,
+  agent,
+}: RunSpellArgs): Promise<{
+  outputs: Record<string, unknown>
+  name: string
+}> => {
   // rewrite using fetch
-  const spells = await fetch(`${API_ROOT_URL}/spells?projectId=${projectId}&id=${spellId}`)
-    .then(res => res.json());
-  
-  const spell = spells[0] as any;
+  const spells = await app.service('spells').find({
+    query: {
+      id: spellId,
+      projectId,
+    },
+  })
+
+  // Get the first spell
+  const spell = spells.data[0]
+
+  console.log('spell', spell)
 
   // If the spell is not found, throw an error
   if (!spell?.graph) {
-    throw new SpellError('not-found', `Spell with id ${spellId} not found`);
+    throw new SpellError(
+      'not-found',
+      `Spell with id ${spellId} not found: ${spell}`
+    )
   }
 
   // Convert the graph of the spell
-  const graph = spell.graph as unknown as GraphData;
+  const graph = spell.graph as unknown as GraphData
 
   // Format the inputs if an input formatter is provided, otherwise use the inputs directly
-  const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs;
+  const formattedInputs = inputFormatter ? inputFormatter(graph) : inputs
 
   // Clone the spell to run
-  const spellToRun = { ...spell };
+  const spellToRun = { ...spell } as SpellInterface
 
-  // Initialize the spell runner
-  const spellRunner = new SpellRunner();
+  console.log('RUNSPEL AGENT', agent)
 
-  // Load the spell into the spell runner
-  await spellRunner.loadSpell(spellToRun as unknown as SpellInterface);
+  const spellManager = new SpellManager({ app, agent })
+
+  spellManager.load(spellToRun)
 
   // Get the outputs from running the spell
-  const outputs = await spellRunner.runComponent({
+  const outputs = (await spellManager.run({
+    spellId: spellToRun.id,
     inputs: formattedInputs as Record<string, any>,
     secrets,
     publicVariables,
-    app
-  }) as Record<string, unknown>;
+    app,
+  })) as Record<string, unknown>
 
   // Return the outputs and the spell name
-  return { outputs, name: spell.name };
-};
+  return { outputs, name: spell.name }
+}
