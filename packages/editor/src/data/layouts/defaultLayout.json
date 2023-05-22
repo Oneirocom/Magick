@@ -95,7 +95,8 @@
                     "type": "tab",
                     "id": "#22",
                     "name": "Playtest",
-                    "component": "playtest"
+                    "component": "playtest",
+                    "enableFloat": true
                   }
                 ],
                 "active": true
@@ -110,7 +111,8 @@
                     "id": "44",
                     "name": "Console",
                     "component": "debugConsole",
-                    "className": "debug-console"
+                    "className": "debug-console",
+                    "enableFloat": true
                   }
                 ]
               }
