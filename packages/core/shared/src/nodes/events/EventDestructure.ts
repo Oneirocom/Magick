@@ -23,7 +23,8 @@ import {
 /**
  * Info description for EventDestructureComponent
  */
-const info = `The input component allows you to pass a single value to your graph. You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
+const info = `Takes an event input and splits it up into its individual components that you can access through the outputs.
+`
 
 /**
  * EventDestructureComponent
@@ -46,6 +47,8 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
           content: 'output',
           channel: 'output',
           channelType: 'output',
+          connector: 'output',
+          embedding: 'output',
           client: 'output',
           entities: 'output',
           observer: 'output',
@@ -75,6 +78,8 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
     const observer = new Rete.Output('observer', 'observer', stringSocket)
     const client = new Rete.Output('client', 'client', stringSocket)
     const channel = new Rete.Output('channel', 'channel', stringSocket)
+    const connector = new Rete.Output('connector', 'connector', stringSocket)
+    const embedding = new Rete.Output('embedding', 'embedding', arraySocket)
     const channelType = new Rete.Output(
       'channelType',
       'channelType',
@@ -98,10 +103,12 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       .addOutput(client)
       .addOutput(channel)
       .addOutput(channelType)
+      .addOutput(connector)
       .addOutput(entities)
       .addOutput(projectId)
       .addOutput(observer)
       .addOutput(sender)
+      .addOutput(embedding)
       .addOutput(rawData)
   }
 
@@ -129,6 +136,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       rawData,
       projectId,
       entities,
+      embedding,
       agentId,
     } = eventValue as Event
     return {
@@ -141,6 +149,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       rawData,
       projectId,
       entities,
+      embedding,
       agentId,
       trigger: 'option',
     }

@@ -65,7 +65,7 @@ export class Task {
       )
     })
   }
-  x
+
   getInputs(type: TaskOutputTypes): string[] {
     return Object.keys(this.inputs)
       .filter(key => this.inputs[key][0])

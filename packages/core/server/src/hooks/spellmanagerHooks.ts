@@ -15,8 +15,8 @@ export const checkForSpellInManager = async (context: HookContext) => {
   const { id: dataId } = data
 
   // We do this because the id comes from different places in sockets vs rest
-  const id = dataId || contextId
   const projectId = data.projectId || params.query.projectId
+  const id = dataId || contextId || projectId
 
   if (!user || !app.userSpellManagers) return
 

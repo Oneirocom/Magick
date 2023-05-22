@@ -4,7 +4,8 @@ import { NodeData, WorkerOutputs } from 'rete/types/core/data'
 import {
   MagickEditor,
   MagickWorkerInputs,
-  ModuleContext, WorkerData
+  ModuleContext,
+  WorkerData,
 } from '../../types'
 
 import { MagickComponent } from '../../engine'

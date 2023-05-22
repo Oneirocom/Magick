@@ -1,26 +1,10 @@
 // DOCUMENTED
+import { Application } from '@feathersjs/koa'
 import { SpellManager, SpellRunner } from '../spellManager/index'
-import { WorldManager } from '../world/worldManager'
 import { pluginManager } from '../plugin'
 import { AgentInterface, SpellInterface } from '../schemas'
 import { AgentManager } from './AgentManager'
 import _ from 'lodash'
-
-/**
- * The type for AgentData.
- */
-type AgentData = {
-  id: any
-  data: any
-  name: string
-  secrets: string
-  rootSpell: any
-  publicVariables: Record<string, string>
-  projectId: string
-  spellManager: SpellManager
-  agent?: any
-  enabled: boolean
-}
 
 /**
  * The Agent class that implements AgentInterface.
@@ -30,11 +14,10 @@ export class Agent implements AgentInterface {
   id: any
   secrets: any
   publicVariables: Record<string, string>
-  data: AgentData
+  data: AgentInterface
   app: any
   spellManager: SpellManager
   projectId: string
-  worldManager: WorldManager
   agentManager: AgentManager
   spellRunner?: SpellRunner
   rootSpell: SpellInterface
@@ -47,8 +30,13 @@ export class Agent implements AgentInterface {
    * @param agentData {AgentData} - The instance's data.
    * @param agentManager {AgentManager} - The instance's manager.
    */
-  constructor(agentData: AgentData, agentManager: AgentManager, app: any) {
-    this.secrets = JSON.parse(agentData.secrets)
+  constructor(
+    agentData: AgentInterface,
+    agentManager: AgentManager,
+    app: Application
+  ) {
+    console.log('creating new agent')
+    this.secrets = agentData?.secrets ? JSON.parse(agentData?.secrets) : {}
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
     this.data = agentData
@@ -56,25 +44,22 @@ export class Agent implements AgentInterface {
     this.agentManager = agentManager
     this.name = agentData.name ?? 'agent'
     this.projectId = agentData.projectId
-    const worldManager = new WorldManager()
-    this.worldManager = worldManager
     this.app = app
+
+    console.log('AGENT agent', this)
 
     const spellManager = new SpellManager({
       cache: false,
+      agent: this,
+      app,
     })
 
     this.spellManager = spellManager
     ;(async () => {
       if (!agentData.rootSpell) {
-        console.warn('No root spell found for agent', this.id)
+        this.warn('No root spell found for agent', { id: this.id })
         return
       }
-      console.log(
-        'this.rootSpell.projectId',
-        agentData.projectId,
-        agentData.rootSpell.id
-      )
       const spell = (
         await this.app.service('spells').find({
           query: {
@@ -87,6 +72,7 @@ export class Agent implements AgentInterface {
       const override = _.isEqual(spell, agentData.rootSpell)
 
       this.spellRunner = await spellManager.load(spell, override)
+
       const agentStartMethods = pluginManager.getAgentStartMethods()
 
       for (const method of Object.keys(agentStartMethods)) {
@@ -95,10 +81,9 @@ export class Agent implements AgentInterface {
             agentManager,
             agent: this,
             spellRunner: this.spellRunner,
-            worldManager: worldManager,
           })
         } catch (err) {
-          console.error('Error in agent start method', method, err)
+          this.error('Error in agent start method', { method, err })
         }
       }
 
@@ -111,6 +96,7 @@ export class Agent implements AgentInterface {
           pingedAt: new Date().toISOString(),
         })
       }, 1000)
+      console.log('new agent created')
     })()
   }
 
@@ -128,10 +114,39 @@ export class Agent implements AgentInterface {
           agentManager: this.agentManager,
           agent: this,
           spellRunner: this.spellRunner,
-          worldManager: this.worldManager,
         })
       }
-    console.log('destroyed agent', this.id)
+    this.log('destroyed agent', { id: this.id })
+  }
+
+  log(message, data) {
+    console.log(message, data)
+    this.app.service('agents').log({
+      agentId: this.id,
+      type: 'log',
+      message,
+      data,
+    })
+  }
+
+  warn(message, data) {
+    console.warn(message, data)
+    this.app.service('agents').log({
+      agentId: this.id,
+      type: 'warn',
+      message,
+      data,
+    })
+  }
+
+  error(message, data = {}) {
+    console.error(message, { error: data })
+    this.app.service('agents').log({
+      agentId: this.id,
+      type: 'error',
+      message,
+      data: { error: data },
+    })
   }
 }
 

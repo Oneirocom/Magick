@@ -1,6 +1,6 @@
 {
   "extends": [
-    "plugin:@nrwl/nx/react",
+    "plugin:@nx/react",
   "../../../.eslintrc.json"
 ],
   "ignorePatterns": ["!**/*"],
@@ -11,11 +11,19 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "rules": {}
+      "rules": {
+        "no-template-curly-in-string": "off",
+        "no-case-declarations": "off",
+        "array-callback-return": "off",
+        "no-restricted-globals": "off"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],
-      "rules": {}
+      "rules": {
+        "array-callback-return": "off",
+        "no-constant-condition": "off"
+      }
     }
   ]
 }

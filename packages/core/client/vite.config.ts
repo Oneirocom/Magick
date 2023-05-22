@@ -3,9 +3,7 @@ import { defineConfig } from 'vite'
 
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
-import react from '@vitejs/plugin-react'
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
-import mdPlugin, { Mode } from 'vite-plugin-markdown'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 
 import { join } from 'path'

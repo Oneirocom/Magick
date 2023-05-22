@@ -4,7 +4,7 @@
  * @param error - The error object or message to display.
  * @returns A JSX Element that displays the error message.
  */
-import React, { ReactNode } from 'react';
+import React from 'react';
 
 interface Props {
   error: Error | string;

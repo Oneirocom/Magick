@@ -11,7 +11,7 @@ At the core, Magick is a system for taking in data, doing stuff to it, then doin
 
 This "stuff" is called a "transformation". The data transforms from one thing into the next.
 
-The "stuff" that is happening to the data is a black box that takes something in, anything, and returns something out. Data has different types, with a different color for each data shape. Red goes with red, blue goes with blue. Some data is simple -- a string (short for string of characters, like "blaskdjasl" or "123456"), a number (like 0, 7843.05) -- some data is complex, like an array.
+The "stuff" that is happening to the data is a black box that takes something in, anything, and returns something out. Data has different types, with a different color for each data shape. Red goes with red, blue goes with blue. Some data is simple: a string (short for string of characters, like "blaskdjasl" or "123456"), a number (like 0, 7843.05). Some data is complex, like an array (a collection of simple data like [1, 2, 3, 4]).
 
 ## Socket Inputs and Outputs
 
@@ -23,7 +23,7 @@ Data passed into sockets is available to the node. The node can process that dat
 
 ## Triggers
 
-Triggers tell nodes to start asynchronous tasks. Some nodes can procide data without needing a trigger, but most nodes need triggers. Triggers can be emitted from one socket out to more then one input, however the order of execution is not guaranteed. You can use the "Wait For All" node to wait for different execution branches to complete before joining back into a single branch -- this is a good way to do several slow tasks at once.
+Triggers tell nodes to start asynchronous tasks. Some nodes can provide data without needing a trigger, but most nodes need triggers. Triggers can be emitted from one socket out to more then one input, however the order of execution is not guaranteed. You can use the "Wait For All" node to wait for different execution branches to complete before joining back into a single branch -- this is a good way to do several slow tasks at once.
 
 ## Creating Nodes
 

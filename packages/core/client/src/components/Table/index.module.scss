@@ -1,0 +1,43 @@
+.tableContainer {
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.checkbox {
+  color: #ad3ab3 !important;
+}
+.selectedRow {
+  background: #690a6d !important;
+}
+
+.tableCellHeader {
+  background: #39103f !important;
+  color: var(--dark-5) !important;
+  span {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+}
+
+.tableCellBody {
+  border-bottom: 1px solid var(--dark-3) !important;
+  color: var(--dark-5) !important;
+  background: var(--tableCellBackground) !important;
+}
+
+.tableFooter {
+  background: var(--tableFooterBackground) !important;
+  color: var(--textColor) !important;
+  overflow: unset;
+}
+
+.spanWhite {
+  color: var(--textColor) !important;
+}
+
+.spanWhite:hover {
+  opacity: 0.8;
+}

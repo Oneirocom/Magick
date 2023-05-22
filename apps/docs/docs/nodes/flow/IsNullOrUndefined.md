@@ -1,3 +1,3 @@
 # Is Null Or Undefined
 
-Is Null Or Undefined checks if the input is null or undefined
+Checks if the input is null or undefined and triggers the appropriate output.

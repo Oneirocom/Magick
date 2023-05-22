@@ -5,7 +5,6 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
 /**
  * Extend the IconButtonProps and add a boolean `expand` property

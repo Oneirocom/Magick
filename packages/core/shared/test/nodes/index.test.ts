@@ -1,4 +1,4 @@
-import { getNodes } from '../../src/lib/nodes'
+import { getNodes } from '../../src/nodes'
 
 describe('Nodes', () => {
   it('should get all nodes', () => {

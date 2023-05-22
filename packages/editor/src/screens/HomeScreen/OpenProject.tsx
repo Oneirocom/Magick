@@ -1,23 +1,23 @@
-// DOCUMENTED 
-import { Button, Icon, Panel } from '@magickml/client-core';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+// DOCUMENTED
+import { Button, Icon, Panel } from '@magickml/client-core'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-import packageJson from '../../../package.json';
-import FileInput from '../../components/FileInput';
-import { RootState } from '../../state/store';
-import { selectAllTabs } from '../../state/tabs';
-import ProjectRow from '../../components/ProjectRow';
-import css from './homeScreen.module.css';
-import banner from './banner.png';
+import packageJson from '../../../package.json'
+import FileInput from '../../components/FileInput'
+import { RootState } from '../../state/store'
+import { selectAllTabs } from '../../state/tabs'
+import ProjectRow from '../../components/ProjectRow'
+import css from './homeScreen.module.css'
+import banner from './banner.png'
 
-const version = packageJson.version;
+const version = packageJson.version
 
 /**
  * Get the Magick version from package.json
  * @returns {string} The version string
  */
-const getMagickVersion = () => version;
+const getMagickVersion = () => version
 
 /**
  * A component for opening a project
@@ -35,8 +35,8 @@ const OpenProject = ({
   loadFile,
   openSpell,
 }) => {
-  const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs));
-  const navigate = useNavigate();
+  const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
+  const navigate = useNavigate()
 
   return (
     <Panel shadow unpadded>
@@ -76,7 +76,6 @@ const OpenProject = ({
           <ProjectRow
             key="more"
             label={'More...'}
-            icon={'properties'}
             style={{ fontFamily: 'IBM Plex Mono', textTransform: 'uppercase' }}
             onClick={() => {
               navigate('/home/all-projects')
@@ -84,7 +83,7 @@ const OpenProject = ({
           />
         </Panel>
 
-        <div className={css['button-row']}>
+        <div className={css['button-row-open']}>
           {tabs?.length > 0 && (
             <Button
               onClick={() => {
@@ -120,7 +119,7 @@ const OpenProject = ({
         </div>
       </div>
     </Panel>
-  );
-};
+  )
+}
 
-export default OpenProject;
+export default OpenProject

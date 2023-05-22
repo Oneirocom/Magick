@@ -22,7 +22,6 @@ export const chunkArray = (arr, chunkSize) =>
   arr.reduce((chunks, elem, index) => {
     const chunkIndex = Math.floor(index / chunkSize)
     const chunk = chunks[chunkIndex] || []
-    // eslint-disable-next-line no-param-reassign
     chunks[chunkIndex] = chunk.concat([elem])
     return chunks
   }, [])
@@ -34,10 +33,10 @@ export const chunkArray = (arr, chunkSize) =>
  * @extends Embeddings
   */
 export class PluginEmbeddings extends Embeddings {
-  embedDocuments(documents: string[]): Promise<number[][]> {
+  embedDocuments(): Promise<number[][]> {
     throw new Error('Please use embedDocumentsWithMeta instead.')
   }
-  embedQuery(document: string): Promise<number[]> {
+  embedQuery(): Promise<number[]> {
     throw new Error('Please use embedQueryWithMeta instead.')
   }
   completionProviders: CompletionProvider[]
@@ -77,7 +76,7 @@ export class PluginEmbeddings extends Embeddings {
   ): Promise<number[]> {
     const data = await this.embeddingWithRetryWithMeta(
       {
-        input: [document],
+        input: document,
       },
       param
     )
@@ -92,40 +91,35 @@ export class PluginEmbeddings extends Embeddings {
    * @returns {Promise<number[][]>}
    * @memberof PluginEmbeddings
    */
-  async embedDocumentsWithMeta(
-    document: string[],
-    params: EmbeddingArgs
-  ): Promise<number[][]> {
+  async embedDocumentsWithMeta(document, params) {
     if (!Array.isArray(document)) {
-      const wordsPerChunk = 8000
-      const strLength = (document as string).length
-      const output = []
-      for (let i = 0; i < strLength; i += wordsPerChunk) {
-        const chunk = (document as string).substring(i, i + wordsPerChunk)
-        output.push(chunk)
+      const wordsPerChunk = 8000;
+      const str = document as string;
+      const chunks = str.split('<<BREAK>>');
+      const output = [];
+      for (let i = 0; i < chunks.length; i++) {
+        const chunk = chunks[i];
+        const chunkLength = this.countWords(chunk);
+        const subChunks = [];
+        for (let j = 0; j < chunkLength; j += wordsPerChunk) {
+          const subChunk = chunk.substring(j, j + wordsPerChunk);
+          subChunks.push(subChunk);
+        }
+        output.push(subChunks);
       }
-      document = output
+      document = output.flat();
     }
-    const subPrompts = chunkArray(
-      this.stripNewLines
-        ? document.map(t => t.replaceAll('\n', ' '))
-        : document,
-      this.batchSize
-    )
-    const embeddings = []
-    for (let i = 0; i < document.length; i += 1) {
-      const input = document[i]
-      const response = await this.embeddingWithRetryWithMeta(
-        {
-          input: input as string,
-        },
-        params
-      )
-      console.log('response', response)
-      embeddings.push(response.result)
+    
+    const embeddings = [];
+    for (let i = 0; i < document.length; i++) {
+      const input = document[i];
+      const response = await this.embeddingWithRetryWithMeta({ input: input as string }, params);
+      embeddings.push(response.result);
     }
-    return [embeddings, document]
+    
+    return [embeddings, document];
   }
+  
 
 
   /**
@@ -135,6 +129,7 @@ export class PluginEmbeddings extends Embeddings {
    * @returns {Promise<number[][]>}
    */
   async embeddingWithRetryWithMeta(embeddingObject, param: EmbeddingArgs) {
+    console.log(param)
     const completionProviders = pluginManager.getCompletionProviders('text', ['embedding'])
     const provider = completionProviders.find(provider =>
       provider.models.includes(param.modelName)
@@ -145,20 +140,24 @@ export class PluginEmbeddings extends Embeddings {
     while (retry < 3) {
       try {
         response = await handler({
-          inputs: { input: [{ content: embeddingObject['input'] }] },
+          inputs: { input: embeddingObject['input'] },
           node: { data: { model: param.modelName } } as unknown as WorkerData,
           outputs: undefined,
           context: { module: { secrets:JSON.parse(param["secrets"]) }, projectId: param.projectId },
         })
+        console.log(response.error)
         break
       } catch (e) {
-        console.log(e)
+        console.error(e)
         retry += 1
       }
     }
     return response
   }
 
+  countWords(str) {
+    return str.trim().split(/\s+/).length;
+  }
   /**
    * Gets the embeddings for the given text.(Dummy Embeddings)
    * @param {string} words

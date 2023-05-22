@@ -1,28 +1,29 @@
-// DOCUMENTED 
+// DOCUMENTED
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
-import type { Params } from '@feathersjs/feathers';
-import { KnexService } from '@feathersjs/knex';
-import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex';
+import type { Params } from '@feathersjs/feathers'
+import { KnexService } from '@feathersjs/knex'
+import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 
-import type { Application } from '../../declarations';
-import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema';
+import type { Application } from '../../declarations'
+import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
-export type AgentParams = KnexAdapterParams<AgentQuery>;
+export type AgentParams = KnexAdapterParams<AgentQuery>
 
 /**
  * Default AgentService class.
  * Calls the standard Knex adapter service methods but can be customized with your own functionality.
- * 
+ *
  * @template ServiceParams - The input params for the service
  * @extends KnexService
  */
-export class AgentService<ServiceParams extends Params = AgentParams> extends KnexService<
-  Agent,
-  AgentData,
-  ServiceParams,
-  AgentPatch
-> {}
+export class AgentService<
+  ServiceParams extends Params = AgentParams
+> extends KnexService<Agent, AgentData, ServiceParams, AgentPatch> {
+  log(data) {
+    return data ? data : { message: 'No data' }
+  }
+}
 
 /**
  * Returns options needed to initialize the AgentService.
@@ -34,6 +35,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),
     Model: app.get('dbClient'),
-    name: 'agents'
-  };
-};
+    name: 'agents',
+  }
+}

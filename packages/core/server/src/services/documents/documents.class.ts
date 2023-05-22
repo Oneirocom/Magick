@@ -1,21 +1,21 @@
-// DOCUMENTED 
+// DOCUMENTED
 // This module provides a document service for managing documents with embedding and pagination support
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
-import type { Params } from '@feathersjs/feathers';
-import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex';
-import { KnexService } from '@feathersjs/knex';
-import { DATABASE_TYPE } from '@magickml/core'
 
-import { app } from '../../app';
-import type { Application } from '../../declarations';
+import type { Params } from '@feathersjs/feathers'
+import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
+import { KnexService } from '@feathersjs/knex'
+
+import { app } from '../../app'
+import type { Application } from '../../declarations'
 import type {
   DocumentData,
   DocumentPatch,
-  DocumentQuery
-} from './documents.schema';
+  DocumentQuery,
+} from './documents.schema'
 
 // Extended parameter type for DocumentService support
-export type DocumentParams = KnexAdapterParams<DocumentQuery>;
+export type DocumentParams = KnexAdapterParams<DocumentQuery>
 
 /**
  * DocumentService class
@@ -35,10 +35,29 @@ export class DocumentService<
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
-    if (DATABASE_TYPE == 'pg'){
-      const docdb = app.get('docdb')
-      //await docdb.fromString(data.content, data);
+    const docdb = app.get('docdb')
+    if (data.hasOwnProperty('secrets')) {
+      const {secrets, modelName, ...rest} = data as DocumentData & {secrets: string, modelName: string}
+      data = rest
+      /* const completionProviders = pluginManager.getCompletionProviders('text', ['embedding'])
+      const provider = completionProviders.find(provider =>
+        provider.models.includes(modelName)
+      ) as CompletionProvider
+      const handler = provider?.handler
+      
+      const {success, result, error} = await handler({
+        inputs: { input: context?.data?.content || "" },
+        node: { data: { model: modelName } } as unknown as WorkerData,
+        outputs: undefined,
+        context: { module: { secrets:JSON.parse(secrets) }, projectId: context.data.projectId },
+      })
+      embedding = result
+      console.log("embedding", embedding) */
+      
+      app.get("docdb").fromString(data.content,data,{modelName, projectId: data?.projectId, secrets})
+      return data;
     }
+    await docdb.from('documents').insert(data)
     return data
   }
 
@@ -48,14 +67,8 @@ export class DocumentService<
    * @return {Promise<any>} The removed document
    */
   async remove(id: string): Promise<any> {
-    if (DATABASE_TYPE == 'sqlite'){
-      const docdb = app.get('docdb')
-      const r = docdb.delete(id)
-      return r
-    } else{
-      const db = app.get('dbClient');
-      return await db('documents').where('id', id).del();
-    }
+    const db = app.get('dbClient')
+    return await db('documents').where('id', id).del()
   }
 
   /**
@@ -65,55 +78,32 @@ export class DocumentService<
    */
   async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
-    const cli = app.get('docdb')
-    if (DATABASE_TYPE == 'sqlite'){
-      const docdb = app.get('docdb')
-      if (params.query.embedding) {
-        const blob = atob(params.query.embedding)
-        const ary_buf = new ArrayBuffer(blob.length)
-        const dv = new DataView(ary_buf)
-        for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
-        const f32_ary = new Float32Array(ary_buf)
-        const query = f32_ary as unknown as number[]
-        const { $limit: _, ...param } = params.query
-        const search_result = await docdb.extractMetadataFromResults(query, 2, param)
-        if (search_result) {
-          return { data: search_result }
-        }
-      }
-      const { $limit: _, ...param } = params.query
-      const tr = await docdb.getDataWithMetadata(param, 10);
-      return { data: tr }
-    } else {
-       if (params.query.embedding) {
-          const blob = atob(params.query.embedding)
-          const ary_buf = new ArrayBuffer(blob.length)
-          const dv = new DataView(ary_buf)
-          for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
-          const f32_ary = new Float32Array(ary_buf)
-          const query = f32_ary as unknown as number[]
-          const { $limit: _, ...param } = params.query
-          const querys = await db('events').select('*')
-          .where(
-            {
-              ...(param.type && {'type': param.type}),
-              ...(param.id && {'id': param.id}),
-              ...(param.sender && {'sender': param.sender}),
-              ...(param.client && {'client': param.client}),
-              ...(param.channel && {'channel': param.channel}),
-              ...(param.projectId && {'projectId': param.projectId}),
-              ...(param.content && {'content': param.content})
-          })
-          .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
-          const result = await db.raw(`select * from events order by embedding <-> ${"'[" + f32_ary.toString() + "]'"} limit 1;`)
-          const bod = {query_embedding: "[" + f32_ary.toString() + "]", match_count: 2, content_to_match: "hi"}
-          const rr = await cli.rpc("match_events",bod)
-          console.log(rr)
-          return {data: querys}
-       }
-       const res = await super.find(params);
-       return {data: (res as unknown as {data: Array<any>}).data};
+    if (params.query.embedding) {
+      const param = params.query
+      const querys = await db('documents')
+        .select('*')
+        .where({
+          ...(param.type && { type: param.type }),
+          ...(param.id && { id: param.id }),
+          ...(param.sender && { sender: param.sender }),
+          ...(param.client && { client: param.client }),
+          ...(param.channel && { channel: param.channel }),
+          ...(param.projectId && { projectId: param.projectId }),
+          ...(param.content && { content: param.content }),
+        })
+        .select(
+          db.raw(
+            `1 - (embedding <=> '${JSON.stringify(
+              params.query.embedding
+            )}') AS similarity`
+          )
+        )
+        .orderBy('similarity', 'asc')
+        .limit(param.maxCount)
+      return { data: querys }
     }
+    const res = await super.find(params)
+    return { data: (res as unknown as { data: Array<any> }).data }
   }
 }
 
@@ -126,8 +116,11 @@ export class DocumentService<
  */
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
-    paginate: app.get('paginate'),
+    paginate: {
+      default: 1000,
+      max: 1000,
+    },
     Model: app.get('dbClient'),
     name: 'documents',
-  };
-};
+  }
+}

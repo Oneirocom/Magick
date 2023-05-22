@@ -130,6 +130,7 @@ const SettingsWindow = () => {
         {globalSecrets.map((value, index) => {
           return (
             <SettingsWindowChild
+              key={value.key}
               displayName={value.name}
               keyName={value.key}
               getUrl={value.getUrl}

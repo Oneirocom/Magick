@@ -1,50 +1,68 @@
-// DOCUMENTED 
-/**
- * DocumentWindow is a React component that displays documents in a database table.
- * It relies on the useConfig hook to retrieve the database configuration from a context.
- * It uses the DatabaseTable component to display documents in the table.
- * @returns a React component
- */
-
-import { useEffect, useState } from 'react'
-import DatabaseTable from './DocumentTable'
-import { useConfig } from '../../contexts/ConfigProvider'
+// DOCUMENTED
 import { API_ROOT_URL } from '@magickml/core'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { LoadingScreen, useConfig } from '@magickml/client-core'
+import DocumentTable from './DocumentTable'
 
-const DocumentWindow = () => {
+
+/**
+ * DocumentWindow component displays the documents of a project.
+ * @returns JSX Element
+ */
+const DocumentWindow = (): JSX.Element => {
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
   const config = useConfig()
+  const [documents, setDocuments] = useState<Document[] | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
 
-  // Initialize the documents state to null using the useState hook
-  const [documents, setDocuments] = useState(null)
-
-  /**
-   * Fetches Documents from the server and updates the state.
-   * @returns void
-   */
-  const fetchDocuments = async () => {
-    const response = await fetch(`${API_ROOT_URL}/documents?hidden=false&projectId=${config.projectId}`)
-    const data = await response.json()
-    setDocuments(data.data)
-  }
-
-  /**
-   * Resets the document state by fetching all documents from the server.
-   * @returns void
-   */
-  const resetDocuments = async () => {
-    await fetchDocuments()
-  }
-
-  // Call fetchDocuments when the component mounts
   useEffect(() => {
+    setLoading(true)
     fetchDocuments()
   }, [])
 
+  /**
+   * Resets the events and fetches the updated events.
+   */
+  const resetDocuments = async (): Promise<void> => {
+    await fetchDocuments()
+  }
+
+  /**
+   * Fetches the events of the current project.
+   */
+  const fetchDocuments = async (): Promise<void> => {
+    try {
+      const response = await fetch(
+        `${API_ROOT_URL}/documents?projectId=${config.projectId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      const data = await response.json()
+      setLoading(false)
+      setDocuments(data.data)
+    } catch (error) {
+      console.error('ERROR', error)
+    }
+  }
+
   return (
-    // Use div container to display the DatabaseTable
-    <div className="event-container" style={{paddingBottom: "1em", width: "100%", height: "100vh", "overflow": "scroll"}}>
-      {/* Only render the DatabaseTable component if documents is not null */}
-      {documents && <DatabaseTable documents={documents} updateCallback={resetDocuments} />}
+    <div
+      className="event-container"
+      style={{
+        paddingBottom: '1em',
+        width: '100%',
+        height: '100vh',
+        overflow: 'scroll',
+      }}
+    >
+      {loading && <LoadingScreen />}
+      {documents && <DocumentTable documents={documents} updateCallback={resetDocuments} />}
     </div>
   )
 }

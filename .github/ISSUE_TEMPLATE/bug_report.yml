@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a bug in Magick
+labels: ["bug"]
+
+body:
+
+- type: input
+  attributes:
+    label: Magick version
+    description: >
+      Specify the Git commit hash if using a development build.
+  validations:
+    required: true
+    
+- type: input
+  attributes:
+    label: System information
+    description: |
+      Specify the OS version, and your browser version.
+    placeholder: Windows 10, Edge
+  validations:
+    required: true
+    
+- type: textarea
+  attributes:
+    label: Issue description
+    description: >
+      Describe your issue briefly. What doesn't work, and how do you expect it to work instead?
+      You can include images or videos with drag and drop, and format code blocks or logs with <code>```</code> tags.
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Steps to reproduce
+    description: |
+      List the steps to recreate the issue.
+  validations:
+    required: true
+    
+- type: textarea
+  attributes:
+    label: Minimal reproduction project
+    description: |
+      Anything that might be useful while reviewing.
+  validations:
+    required: false
+    

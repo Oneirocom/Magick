@@ -1,32 +1,32 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { API_ROOT_URL, IGNORE_AUTH } from '@magickml/core'
+import { API_ROOT_URL, Agent, PRODUCTION } from '@magickml/core'
+import {
+  Apps,
+  ChevronRight,
+  ExpandMore,
+  FileDownload,
+  FileUpload,
+  MenuBook,
+  MoreHoriz,
+  TextSnippet,
+} from '@mui/icons-material'
 import TreeItem from '@mui/lab/TreeItem'
 import TreeView from '@mui/lab/TreeView'
 import {
+  Box,
   Button,
+  Drawer,
+  IconButton,
   Menu,
   MenuItem,
   Typography,
-  Drawer,
-  IconButton,
-  Box,
 } from '@mui/material'
 import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import {
-  Apps,
-  TextSnippet,
-  MoreHoriz,
-  MenuBook,
-  FileDownload,
-  FileUpload,
-  ExpandMore,
-  ChevronRight,
-} from '@mui/icons-material'
 import FileInput from '../../FileInput/FileInput'
 import styles from './index.module.scss'
 
@@ -48,7 +48,6 @@ const ProjectWindow = ({ openDrawer }) => {
   const [data, setData] = useState({ agents: [], spells: [], documents: [] })
   const [loaded, setLoaded] = useState(false)
   const token = globalConfig?.token
-  const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
@@ -63,7 +62,7 @@ const ProjectWindow = ({ openDrawer }) => {
    * @param {File} selectedFile - Selected file object
    */
   const loadFile = selectedFile => {
-    if (!token && !IGNORE_AUTH) {
+    if (!token && PRODUCTION) {
       enqueueSnackbar('You must be logged in to create a project', {
         variant: 'error',
       })
@@ -73,17 +72,22 @@ const ProjectWindow = ({ openDrawer }) => {
     fileReader.readAsText(selectedFile)
     fileReader.onload = event => {
       const data = JSON.parse(event?.target?.result)
+
+      console.log('data', data)
+
       delete data['id']
       axios({
         url: `${globalConfig.apiUrl}/projects`,
         method: 'POST',
         data: { ...data, projectId: globalConfig.projectId },
-        headers,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
         .then(async res => {
           const res2 = await fetch(
             `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
-            { headers }
+            { headers: { Authorization: `Bearer ${token}` } }
           )
           const json = await res2.json()
           setData(json)
@@ -92,6 +96,7 @@ const ProjectWindow = ({ openDrawer }) => {
           console.error('error is', err)
         })
     }
+    handleClose()
   }
 
   /**
@@ -99,11 +104,34 @@ const ProjectWindow = ({ openDrawer }) => {
    */
   const exportProject = () => {
     const element = document.createElement('a')
-    const file = new Blob([JSON.stringify(data)], { type: 'text/plain' })
+
+    const exportData = data
+    exportData.agents.forEach((agent: Agent) => {
+      agent.secrets = {}
+
+      Object.keys(agent.data).forEach(key => {})
+    })
+
+    // traverse the entire exportData object and set all 'data' properties to {}
+    const traverse = obj => {
+      for (const prop in obj) {
+        if (prop.includes('token') || prop.includes('secret')) {
+          delete obj[prop]
+        } else if (typeof obj[prop] === 'object') {
+          traverse(obj[prop])
+        }
+      }
+    }
+    traverse(exportData)
+
+    const file = new Blob([JSON.stringify(data, null, 4)], {
+      type: 'text/plain',
+    })
     element.href = URL.createObjectURL(file)
     element.download = globalConfig.projectId + '.project.json'
     document.body.appendChild(element)
     element.click()
+    handleClose()
   }
 
   const sidebarPanel = useRef('sidebarPanel')
@@ -150,7 +178,7 @@ const ProjectWindow = ({ openDrawer }) => {
     const fetchData = async () => {
       const { data } = await axios.get(
         `${API_ROOT_URL}/projects?projectId=${globalConfig.projectId}`,
-        { headers }
+        { headers: { Authorization: `Bearer ${token}` } }
       )
       setData(data)
     }
@@ -166,19 +194,25 @@ const ProjectWindow = ({ openDrawer }) => {
           flexDirection: 'column',
           width: '190px',
           color: '#d8d6d6',
+          position: 'relative',
         }}
         className={styles.container}
       >
         <Drawer
           className={styles.drawer}
+          PaperProps={{
+            tabIndex: 0,
+          }}
+          disableEnforceFocus
           classes={{ paper: styles.drawerPaper }}
           anchor="left"
           open={openDrawer}
+          tabIndex={0}
           hideBackdrop
           ref={sidebarPanel}
         >
           <Box className={styles.header}>
-            <Typography>Project Name</Typography>
+            <Typography>Project View</Typography>
             <IconButton className={styles.btn} onClick={handleClick}>
               <MoreHoriz />
             </IconButton>

@@ -3,18 +3,26 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugin-googleai/server/src",
   "projectType": "library",
-  "implicitDependencies": ["@magickml/core"],
+  "implicitDependencies": [
+    "@magickml/core"
+  ],
   "targets": {
     "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "executor": "@nx/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["plugin/googleai-server/**/*.ts"]
+        "lintFilePatterns": [
+          "plugins/googleai/server/**/*.ts"
+        ]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "plugin/googleai-server/jest.config.ts",
         "passWithNoTests": true

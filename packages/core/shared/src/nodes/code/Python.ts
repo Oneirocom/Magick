@@ -21,19 +21,20 @@ const defaultCode = `
 # data: internal data of the node to read or write to nodes data state
 # Make sure to call function with inputs and data as arguments
 
-inputs = {input1}
+inputs = {input1} # REPLACE WITH SOCKET NAMES
 def worker(inputs, data):
   # Keys of the object returned must match the names
   # of your outputs you defined.
-  outputs = dict(output1=input1)
+  outputs = dict(output1=input1) # REPLACE WITH OUTPUT SOCKET NAMES
   return outputs, data
 worker(inputs, data)
 `
 
 // Information about the Python component
 const info = `
-The code component is your swiss army knife when other components won't cut it.  You can define any number of inputs and outputs on it, and then write a custom worker function.  You have access to the data plugged into the inputs you created on your component, and can send data out along your outputs.
-Please note that the return of your function must be an object whose keys are the same value as the names given to your output sockets.  The incoming inputs argument is an object whose keys are the names you defined, and each is an array.
+The Python code component is your swiss army knife when other components won't cut it.  You can define any number of inputs and outputs on it, and then write a custom worker function.  You have access to the data plugged into the inputs you created on your component, and can send data out along your outputs.
+
+Please note that the return of your function must be an object whose keys are the same value as the names given to your output sockets.  The incoming inputs argument is an object whose keys are the names you defined.
 `
 
 /**

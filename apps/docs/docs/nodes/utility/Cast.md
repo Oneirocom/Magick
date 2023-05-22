@@ -1,3 +1,3 @@
 # Cast
 
-Used to cast any socket into another socket type.  Be sure you know the type of input to your any to cast it into your socket type, as it might break things otherwise.
+Takes an input of any type and casts it into the selected output type. Be sure to know the type of your input as it might throw an error if the object cannot be cast to your selected type.

@@ -1,9 +1,8 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf.min.js'
 import * as Tesseract from 'tesseract.js';
 import * as mammoth from 'mammoth';
 import { PDFPageProxy } from 'pdfjs-dist/types/web/interfaces';
+import * as XLSX from 'xlsx/xlsx.mjs';
 
 type SupportedFileTypes = 'pdf' | 'doc' | 'docx' | 'xls' | 'xlsx' | 'ppt' | 'pptx';
 
@@ -22,8 +21,8 @@ export async function convertFileToText(file: File, ocrConfig?: OCRConfig): Prom
         case 'docx':
             return await convertWordToText(file);
         case 'xls':
-        /*  case 'xlsx':
-             return await convertExcelToText(file); */
+        case 'xlsx':
+            return await convertExcelToText(file);
         /* case 'ppt':
         case 'pptx':
             return await convertPowerpointToText(file); */
@@ -63,7 +62,7 @@ async function pdfNumberOfPages(file: File) {
     return pdfDocument.numPages
 }
 
-async function convertPdfToText(file: File, ocrEngine: string = 'tesseract', ocrConfig?: any): Promise<any[]> {
+async function convertPdfToText(file: File, ocrEngine = 'tesseract', ocrConfig?: any): Promise<any[]> {
     // Read the PDF file
     const pdfBuffer = await readFileAsBuffer(file);
 
@@ -73,7 +72,7 @@ async function convertPdfToText(file: File, ocrEngine: string = 'tesseract', ocr
     // Load the PDF document
     const pdfDocument = await pdfjsLib.getDocument({ data: pdfBuffer }).promise;
 
-    let text = [];
+    const text = [];
 
     if (ocrEngine === 'tesseract') {
         // Initialize Tesseract.js with the English language
@@ -92,9 +91,8 @@ async function convertPdfToText(file: File, ocrEngine: string = 'tesseract', ocr
             // Get the text content of the page
             const content = await page.getTextContent();
             const items = content.items;
-            
+
             if (items.length === 1 && !items[0].str) {
-                console.log('image')
                 // If the page has only one item and it's an image, use OCR to extract the text
                 const pngBuffer = await pdfPageToPngBuffer(page);
                 //@ts-ignore
@@ -107,7 +105,6 @@ async function convertPdfToText(file: File, ocrEngine: string = 'tesseract', ocr
                     const item = items[j];
 
                     if (item.str === '') {
-                        console.log('table')
                         //TODO: Only Extract the part of the table that is visible on the page
                         // If the item is an image, extract its text content
                         /* const imagePngBuffer = await pdfPageToPngBuffer(page);
@@ -116,7 +113,6 @@ async function convertPdfToText(file: File, ocrEngine: string = 'tesseract', ocr
                         //text += imageOcrResult.data.text;
                         text.push(imageOcrResult.data.text); */
                     } else {
-                        console.log('text')
                         // If the item is a text element or table, append its raw text content to the output file
                         //text += item.str;
                         text.push(item.str);
@@ -131,7 +127,7 @@ async function convertPdfToText(file: File, ocrEngine: string = 'tesseract', ocr
 
     return text;
 }
-         
+
 
 
 
@@ -141,28 +137,60 @@ async function convertWordToText(file: File): Promise<string> {
     const result = await mammoth.convertToHtml({ arrayBuffer });
     return result.value.replace(/(<([^>]+)>)/gi, '');
 }
-
-/* async function convertExcelToText(file: File): Promise<string> {
+/* async function convertPowerpointToText(file: File): Promise<string> {
+    console.log('convertPowerpointToText')
+    const arrayBuffer = await readFileAsBuffer(file);
+    console.log(arrayBuffer)
+    const result = await mammoth.extractRawText({ arrayBuffer });
+    console.log(result)
+    return result.value.replace(/(<([^>]+)>)/gi, '');
+} */
+async function convertExcelToText(file: File): Promise<string> {
     const arrayBuffer = await readFileAsBuffer(file);
     // Read the Excel file
-    const workbook = xlsx.read(arrayBuffer, { type: 'array' });
+    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
 
     let text = '';
+    let wordCount = 0;
 
     // Loop through each worksheet in the workbook
     for (const sheetName of workbook.SheetNames) {
         const worksheet = workbook.Sheets[sheetName];
         // Convert the worksheet to an array of rows
-        const rows = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
+        const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-        // Append the rows to the output file
+        // Get the table column headings
+        const columnHeadings = rows.shift() as [];
+
+        // Append the column headings to the output text
+        text += columnHeadings.join('\t') + '\n';
+
+        // Append the rows to the output text
         for (const row of rows) {
-            text += row.join('\t') + '\n';
+            text += (row as []).join('\t') + '\n';
+
+            // Count the number of words added
+            const words = (row as []).join(' ').split(' ');
+            wordCount += words.length;
+
+            // Check if 7000 words have been added
+            if (wordCount >= 7000) {
+                // Add "<<BREAK>>" marker
+                text += '<<BREAK>>\n';
+
+                // Reset the word count
+                wordCount = 0;
+
+                // Append the column headings again
+                text += columnHeadings.join('\t') + '\n';
+            }
         }
     }
 
     return text;
-} */
+}
+
+
 
 async function pdfPageToPngBuffer(pdfPage: PDFPageProxy): Promise<Uint8Array> {
     const canvas = document.createElement('canvas');

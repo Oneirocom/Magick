@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Props for Form component
  * @typedef {Object} Props
@@ -9,7 +9,7 @@
  * @property {(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void} onAdd - function to be called when the add button is clicked
  */
 
-import { Button } from '@magickml/client-core';
+import { Button } from '@magickml/client-core'
 
 /**
  * Form component that renders a form with an input field and a button to add input value
@@ -22,7 +22,7 @@ const Form = ({
   type = 'text',
   onChange,
   onAdd,
-}: Props): JSX.Element => {
+}): JSX.Element => {
   return (
     <form>
       {/* Flexbox container for input field and add button */}
@@ -35,6 +35,11 @@ const Form = ({
           onChange={onChange}
           required
           placeholder={placeHolder}
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
+              onAdd(e)
+            }
+          }}
         />
         {/* Add button */}
         <Button style={{ flex: 1 }} onClick={onAdd} type="submit">
@@ -42,7 +47,7 @@ const Form = ({
         </Button>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default Form;
+export default Form

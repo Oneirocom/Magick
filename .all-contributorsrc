@@ -208,6 +208,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "benbot",
+      "name": "Ben Botwin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1340967?v=4",
+      "profile": "https://github.com/benbot",
+      "contributions": [
+        "code",
+        "platform"
+      ]
     }
   ],
   "contributorsPerLine": 7,

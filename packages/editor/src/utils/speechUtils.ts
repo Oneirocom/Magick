@@ -1,8 +1,4 @@
 // DOCUMENTED 
-/* eslint-disable prefer-const */
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-invalid-this */
 
 import { SPEECH_SERVER_URL } from '@magickml/core';
 import socketIOClient from 'socket.io-client';
@@ -60,7 +56,6 @@ class SpeechUtils {
    * Initialize and start recording.
    * @param {Function} newMessageCallback - The callback function to handle received transcript.
    */
-  // eslint-disable-next-line @typescript-eslint/ban-types
   initRecording = (newMessageCallback: Function) => {
     this.socket.emit('startGoogleCloudStream', '');
     this.streamStreaming = true;

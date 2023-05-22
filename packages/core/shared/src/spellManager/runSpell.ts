@@ -6,7 +6,7 @@ import {
   MagickNode,
   ModuleComponent,
   SpellInterface,
-  WorkerData
+  WorkerData,
 } from '../types'
 import { RunComponentArgs } from './SpellRunner'
 
@@ -22,7 +22,6 @@ class RunSpell {
       components: getNodes(),
       server: true,
     }) as MagickEngine
-    console.log('Engine Created from spell runner')
     // Set up the module to interface with the runtime processes
     this.module = new Module()
   }
@@ -48,12 +47,12 @@ class RunSpell {
     const graph = this.currentSpell.graph
 
     Object.values(graph.nodes as MagickNode)
-      .filter((node) => {
+      .filter(node => {
         return node.name.includes('Output')
       })
-      .forEach((node) => {
-        outputs[(node).data.name as string] =
-          rawOutputs[(node).data.socketKey as string]
+      .forEach(node => {
+        outputs[node.data.name as string] =
+          rawOutputs[node.data.socketKey as string]
       })
 
     return outputs

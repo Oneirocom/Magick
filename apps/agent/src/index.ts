@@ -5,9 +5,9 @@
  * @packageDocumentation
  */
 
-import 'regenerator-runtime/runtime'
-import { pluginManager, AgentManager, WorldManager } from '@magickml/core'
+import { AgentManager } from '@magickml/core'
 import { app } from '@magickml/server-core'
+import 'regenerator-runtime/runtime'
 
 /**
  * Asynchronously loads the application's plugins and logs their names.
@@ -31,8 +31,7 @@ async function loadPlugins(): Promise<void> {
 async function initializeAgent(): Promise<void> {
   await loadPlugins()
 
-  const agentManager = new AgentManager(app)
-  const worldManager = new WorldManager()
+  new AgentManager(app)
 
   console.log('AGENT: Starting...')
 }

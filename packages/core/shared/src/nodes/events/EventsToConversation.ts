@@ -1,16 +1,17 @@
-// DOCUMENTED 
-import Rete from 'rete';
+// DOCUMENTED
+import Rete from 'rete'
 
-import { MagickComponent } from '../../engine';
-import { arraySocket, stringSocket, triggerSocket } from '../../sockets';
-import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types';
+import { MagickComponent } from '../../engine'
+import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 // Information about the component
-const info = 'Join an array of events into a conversation formatted for prompt injection.';
+const info =
+  'Join an array of events input into an output string conversation formatted for prompt injection.'
 
 type WorkerReturn = {
-  conversation: string;
-};
+  conversation: string
+}
 
 /**
  * EventsToConversation component, responsible for converting an array of events into a conversation string.
@@ -18,12 +19,17 @@ type WorkerReturn = {
 export class EventsToConversation extends MagickComponent<WorkerReturn> {
   constructor() {
     // Name of the component and its output sockets definition
-    super('Events to Conversation', {
-      outputs: {
-        conversation: 'output',
-        trigger: 'option',
+    super(
+      'Events to Conversation',
+      {
+        outputs: {
+          conversation: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'Event', info);
+      'Event',
+      info
+    )
   }
 
   /**
@@ -32,12 +38,16 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
    * @returns The built node with the appropriate inputs and outputs.
    */
   builder(node: MagickNode): MagickNode {
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
-    const out = new Rete.Output('conversation', 'Conversation', stringSocket);
-    const inputList = new Rete.Input('events', 'Events', arraySocket);
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const out = new Rete.Output('conversation', 'Conversation', stringSocket)
+    const inputList = new Rete.Input('events', 'Events', arraySocket)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addOutput(out).addInput(inputList);
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(out)
+      .addInput(inputList)
   }
 
   /**
@@ -46,35 +56,38 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
    * @param inputs - The current inputs of the node.
    * @returns An object containing the resulting conversation string.
    */
-  worker(node: WorkerData, inputs: MagickWorkerInputs & { events: unknown[] }): WorkerReturn {
-    const events = inputs.events[0];
-    let conversation = '';
+  worker(
+    node: WorkerData,
+    inputs: MagickWorkerInputs & { events: unknown[] }
+  ): WorkerReturn {
+    const events = inputs.events[0]
+    let conversation = ''
 
     if (Array.isArray(events)) {
       // @ts-ignore
       if (events.rows) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         events.rows.forEach((event: { sender: string; content: string }) => {
-          conversation += event.sender + ': ' + event.content + '\n';
-        });
+          conversation += event.sender + ': ' + event.content + '\n'
+        })
         return {
           conversation,
-        };
+        }
       }
 
       if (events) {
         events.forEach((event: { sender: string; content: string }) => {
-          conversation += event.sender + ': ' + event.content + '\n';
-        });
+          conversation += event.sender + ': ' + event.content + '\n'
+        })
       }
     } else {
-      type Events = { sender: string; content: string };
-      conversation += (events as Events).sender + ': ' + (events as Events).content + '\n';
+      type Events = { sender: string; content: string }
+      conversation +=
+        (events as Events).sender + ': ' + (events as Events).content + '\n'
     }
 
     return {
       conversation,
-    };
+    }
   }
 }

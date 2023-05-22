@@ -7,17 +7,15 @@ export class BlueskyConnector {
   agent
   bluesky_stream_rules = ''
   localUser: any
-  worldManager: any
 
   loop: any
 
-  constructor({ spellRunner, agent, worldManager }) {
+  constructor({ spellRunner, agent }) {
     this.agent = agent
     this.agent.bluesky = this
     this.spellRunner = spellRunner
     const data = this.agent.data.data
     this.data = data
-    this.worldManager = worldManager // we can track entities in different conversations here later
 
     if (!data.bluesky_enabled) {
       console.warn('Bluesky is not enabled, skipping')
@@ -43,7 +41,8 @@ export class BlueskyConnector {
   }
 
   async handler() {
-    const count: AppBskyNotificationGetUnreadCount.Response = await this.bskyAgent.countUnreadNotifications()
+    const count: AppBskyNotificationGetUnreadCount.Response =
+      await this.bskyAgent.countUnreadNotifications()
     if (count.data.count > 0) {
       console.log(`Found ${count} new mentions.`)
     }
@@ -76,8 +75,7 @@ export class BlueskyConnector {
       const type = 'reply' in notif.record ? 'reply' : 'mention'
       const record = notif.record as any
       const text = record.text
-      const post_uri =
-        type === 'reply' ? record.reply.parent.uri : notif.uri
+      const post_uri = type === 'reply' ? record.reply.parent.uri : notif.uri
       const post_thread = await this.bskyAgent.getPostThread({
         uri: post_uri,
         depth: 1,
@@ -96,6 +94,7 @@ export class BlueskyConnector {
       const resp = await this.spellRunner.runComponent({
         inputs: {
           [`Input - Bluesky (${type === 'reply' ? 'Reply' : 'Mention'})`]: {
+            connector: `Bluesky (${type === 'reply' ? 'Reply' : 'Mention'})`,
             content: text,
             sender: author,
             observer: this.data.bluesky_identifier,
