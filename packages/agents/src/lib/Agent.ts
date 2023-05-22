@@ -1,13 +1,20 @@
 // DOCUMENTED
-import { Application } from '@feathersjs/koa'
+import * as BullMQ from 'bullmq'
 import pino from 'pino'
-import { getLogger, PING_AGENT_TIME_MSEC } from '@magickml/core'
-import { SpellManager, SpellRunner } from '../spellManager/index'
-import { pluginManager } from '../plugin'
-import { AgentInterface, SpellInterface } from '../schemas'
-import { AgentManager } from './AgentManager'
 import _ from 'lodash'
+import { Application } from '@feathersjs/koa'
+import {
+  SpellManager,
+  SpellRunner,
+  pluginManager,
+  AgentInterface,
+  SpellInterface,
+  getLogger,
+  PING_AGENT_TIME_MSEC,
+} from '@magickml/core'
 import { RedisPubSub } from '@magickml/redis-pubsub'
+
+import { AgentManager } from './AgentManager'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -25,6 +32,8 @@ export class Agent extends RedisPubSub implements AgentInterface {
   spellRunner?: SpellRunner
   rootSpell: SpellInterface
   logger: pino.Logger = getLogger()
+  worker: BullMQ.Worker
+  queue: BullMQ.Queue
 
   outputTypes: any[] = []
   updateInterval: any
@@ -51,6 +60,10 @@ export class Agent extends RedisPubSub implements AgentInterface {
     this.app = app
 
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
+    // Set up the agent worker to handle incoming messages
+    this.worker = new BullMQ.Worker(`agent:run`, this.runWorker.bind(this))
+    this.queue = new BullMQ.Queue(`agent:run:result`)
+
     const spellManager = new SpellManager({
       cache: false,
       agent: this,
@@ -101,9 +114,6 @@ export class Agent extends RedisPubSub implements AgentInterface {
 
       const outputTypes = pluginManager.getOutputTypes()
       this.outputTypes = outputTypes
-
-      // we will need this to probably be a queue rather than a pubsub so we don't have multiple agent copies running the same request
-      this.subscribe(`agent:${this.id}:run`, this.onRun.bind(this))
 
       this.updateInterval = setInterval(() => {
         // every second, update the agent, set pingedAt to now
@@ -182,15 +192,30 @@ export class Agent extends RedisPubSub implements AgentInterface {
     })
   }
 
-  onRun(data) {
-    //   const output = await this.spellRunner.runComponent({
-    //     inputs: data,
-    //     agent: this.agent,
-    //     secrets: this.agent.secrets,
-    //     publicVariables: this.agent.publicVariables,
-    //     runSubspell: true,
-    //     app,
-    //   })
+  async runWorker(job) {
+    console.log('WORK ON AGENT!!!', job.name, this.id)
+    console.log('AGENT DATA', this.data)
+    // the job name is the agent id.  Only run if the agent id matches.
+    // if (this.id !== job.name) return
+
+    const { data } = job
+    console.log('DATA RECEIVED', data)
+
+    const output = await this?.spellRunner.runComponent({
+      ...data,
+      agent: this,
+      secrets: this.secrets,
+      publicVariables: this.publicVariables,
+      runSubspell: true,
+      app: this.app,
+    })
+
+    this.queue.add('agent:run:result', {
+      agentId: this.id,
+      projectId: this.projectId,
+      originalData: data,
+      result: output,
+    })
   }
 }
 
