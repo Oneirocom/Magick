@@ -1,15 +1,11 @@
 import { WorkerOutputs } from 'rete/types/core/data'
-import io from 'socket.io'
 import { MagickComponent } from '../../engine'
 
 import {
   IRunContextEditor,
-  MagickNode,
   MagickWorkerInputs,
   ModuleContext,
 } from '../../types'
-import { MagickConsole } from '../consolePlugin/MagickConsole'
-import Agent from '../../agents/Agent'
 
 export type EmitPluginArgs = {
   server?: boolean
@@ -30,8 +26,6 @@ function install(
   // Need to better type the feathers client here
   { server = false, emit }: EmitPluginArgs
 ) {
-  const subscriptionMap = new Map()
-
   editor.on(
     'componentregister',
     (component: MagickComponent<Promise<{ output: unknown } | void>>) => {
