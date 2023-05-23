@@ -4,7 +4,7 @@
  * https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
  */
 import type { Id, Params, ServiceInterface } from '@feathersjs/feathers'
-import { Agent, AgentManager, runSpell } from '@magickml/core'
+import { Agent, AgentManager } from '@magickml/core'
 import { Application, app } from '@magickml/server-core'
 import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema'
 
@@ -94,6 +94,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     const newAgent = new Agent(
       {
         id: agent.id,
+        rootSpell,
         name: agent.name,
         projectId: agent.projectId,
         secrets: agent.secrets,
@@ -144,8 +145,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
   async create(data: ApiData, params?: ServiceParams): Promise<Api>
   async create(data: ApiData[], params?: ServiceParams): Promise<Api[]>
   async create(
-    data: ApiData | ApiData[],
-    params: ServiceParams
+    data: ApiData | ApiData[]
+    // params: ServiceParams
   ): Promise<Api | any /* TODO: type me */> {
     const { id, content, apiKey } = data as any
 
@@ -171,6 +172,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
+    console.log('data is', data)
+
     // Get the agent service.
     const agentService = this.options.app.service('agents')
 
@@ -191,10 +194,28 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       id: `no rootspell present for agent ${agent.name}`,
     }
 
+    const agentManager = new AgentManager(app)
+
+    // create a new Agent
+    const newAgent = new Agent(
+      {
+        id: agent.id,
+        rootSpell,
+        name: agent.name,
+        projectId: agent.projectId,
+        secrets: agent.secrets,
+        publicVariables: agent.publicVariables,
+      },
+      agentManager,
+      app
+    )
+
+    const spell = await newAgent.spellManager.loadById(rootSpell.id)
+    console.log('spell loaded', spell)
+
     // Run the root spell.
-    const result = await runSpell({
+    const result = await newAgent.spellManager.run({
       spellId: rootSpell.id,
-      projectId: agent.projectId,
       inputs: {
         'Input - REST API (POST)': {
           connector: 'REST API (POST)',
@@ -206,13 +227,12 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
           agentId: agent.id,
           entities: ['api', agent.name],
           channelType: 'POST',
-          rawData: JSON.stringify({ data, params }),
+          rawData: JSON.stringify({ data }),
         },
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
       app,
-      agent,
     })
 
     return {
@@ -224,13 +244,12 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
    * Handles the UPDATE operation for the ApiService.
    * @param id - The unique identifier for the resource to update.
    * @param data - The data for the update.
-   * @param _params - Optional service parameters.
    * @returns a Promise resolving to the updated Api or error message.
    */
   async update(
     id: Id,
-    data: ApiData,
-    _params?: ServiceParams
+    data: ApiData
+    // _params?: ServiceParams
   ): Promise<Api | any> {
     const { content, apiKey } = data as any
 
@@ -276,10 +295,28 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       id: `no rootspell present for agent ${agent.name}`,
     }
 
+    const agentManager = new AgentManager(app)
+
+    // create a new Agent
+    const newAgent = new Agent(
+      {
+        id: agent.id,
+        rootSpell,
+        name: agent.name,
+        projectId: agent.projectId,
+        secrets: agent.secrets,
+        publicVariables: agent.publicVariables,
+      },
+      agentManager,
+      app
+    )
+
+    const spell = await newAgent.spellManager.loadById(rootSpell.id)
+    console.log('spell loaded', spell)
+
     // Run the root spell.
-    const result = await runSpell({
+    const result = await newAgent.spellManager.run({
       spellId: rootSpell.id,
-      projectId: agent.projectId,
       inputs: {
         'Input - REST API (PUT)': {
           connector: 'REST API (PUT)',
@@ -291,13 +328,12 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
           agentId: agent.id,
           entities: ['api', agent.name],
           channelType: 'PUT',
-          rawData: JSON.stringify({ data, params: _params }),
+          rawData: JSON.stringify({}),
         },
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
       publicVariables: agent.publicVariables,
       app,
-      agent,
     })
 
     return {
@@ -349,10 +385,28 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       id: `no rootspell present for agent ${agent.name}`,
     }
 
+    const agentManager = new AgentManager(app)
+
+    // create a new Agent
+    const newAgent = new Agent(
+      {
+        id: agent.id,
+        rootSpell,
+        name: agent.name,
+        projectId: agent.projectId,
+        secrets: agent.secrets,
+        publicVariables: agent.publicVariables,
+      },
+      agentManager,
+      app
+    )
+
+    const spell = await newAgent.spellManager.loadById(rootSpell.id)
+    console.log('spell loaded', spell)
+
     // Run the root spell.
-    const result = await runSpell({
+    const result = await newAgent.spellManager.run({
       spellId: rootSpell.id,
-      projectId: agent.projectId,
       inputs: {
         'Input - REST API (DELETE)': {
           connector: 'REST API (DELETE)',
@@ -364,7 +418,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
           agentId: agent.id,
           entities: ['api', agent.name],
           channelType: 'DELETE',
-          rawData: JSON.stringify({ id, params: _params }),
+          rawData: JSON.stringify({}),
         },
       },
       secrets: JSON.parse(agent.secrets ?? '{}'),
