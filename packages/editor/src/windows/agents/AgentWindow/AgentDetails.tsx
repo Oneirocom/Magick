@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { IconBtn, CustomizedSwitch } from '@magickml/client-core'
-import { DEFAULT_USER_TOKEN, PRODUCTION, pluginManager } from '@magickml/core'
+import { pluginManager } from '@magickml/core'
 
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
@@ -50,9 +50,8 @@ const AgentDetails = ({
   const [enable, setEnable] = useState(onLoadEnables)
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
-  const headers = PRODUCTION
-    ? { Authorization: `Bearer ${token}` }
-    : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+  const headers = { Authorization: `Bearer ${token}` }
+
 
   /**
    * update agent data by agent id.
@@ -136,7 +135,7 @@ const AgentDetails = ({
   }
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const res = await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`,
         { headers }
@@ -380,11 +379,10 @@ const AgentDetails = ({
         />
       )}
       <div
-        className={`${
-          selectedAgentData.publicVariables !== '{}'
+        className={`${selectedAgentData.publicVariables !== '{}'
             ? styles.connectorsLong
             : styles.connectors
-        }`}
+          }`}
       >
         {pluginManager.getAgentComponents().map((value, index, array) => {
           return (
