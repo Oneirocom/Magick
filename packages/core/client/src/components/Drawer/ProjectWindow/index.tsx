@@ -1,7 +1,8 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { API_ROOT_URL, Agent, PRODUCTION } from '@magickml/core'
+import { API_ROOT_URL, PRODUCTION } from '@magickml/core'
+import { Agent } from '@magickml/agents'
 import {
   Apps,
   ChevronRight,
@@ -109,7 +110,7 @@ const ProjectWindow = ({ openDrawer }) => {
     exportData.agents.forEach((agent: Agent) => {
       agent.secrets = {}
 
-      Object.keys(agent.data).forEach(key => {})
+      Object.keys(agent.data).forEach(key => { })
     })
 
     // traverse the entire exportData object and set all 'data' properties to {}
