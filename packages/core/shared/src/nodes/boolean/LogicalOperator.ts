@@ -1,7 +1,6 @@
 // DOCUMENTED
 import Rete from 'rete'
 
-import { InputControl } from '../../dataControls/InputControl'
 import { NumberControl } from '../../dataControls/NumberControl'
 import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
