@@ -214,23 +214,23 @@ const AgentManagerWindow = () => {
   useEffect(() => {
     if (!config.apiUrl || isLoading) return
     setIsLoading(true)
-    ;(async () => {
-      const res = await fetch(
-        `${config.apiUrl}/agents?projectId=${config.projectId}`,
-        {
-          headers: PRODUCTION
-            ? { Authorization: `Bearer ${token}` }
-            : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` },
-        }
-      )
-      const json = await res.json()
-      setData(json.data)
-      setIsLoading(false)
-    })()
+      ; (async () => {
+        const res = await fetch(
+          `${config.apiUrl}/agents?projectId=${config.projectId}`,
+          {
+            headers: PRODUCTION
+              ? { Authorization: `Bearer ${token}` }
+              : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` },
+          }
+        )
+        const json = await res.json()
+        setData(json.data)
+        setIsLoading(false)
+      })()
   }, [config.apiUrl])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const res = await fetch(
         `${config.apiUrl}/agents?projectId=${config.projectId}`,
         {

@@ -9,7 +9,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Pagination,
   Stack,
   Typography,
 } from '@mui/material'
@@ -173,8 +172,8 @@ function EventTable({ events, updateCallback }) {
   )
 
   // Initialize the table with hooks
-  // Initialize the table with hooks
-  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state } =
+  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
+    setSortBy } =
     useTable(
       {
         columns: defaultColumns,
@@ -185,6 +184,12 @@ function EventTable({ events, updateCallback }) {
       useSortBy,
       usePagination
     )
+
+  // Function to handle sorting when a column header is clicked
+  const handleSort = (column) => {
+    const isAsc = sortBy && sortBy[0] && sortBy[0].id === column && !sortBy[0].desc;
+    setSortBy([{ id: column, desc: isAsc ? isAsc : false }]);
+  };
 
   const rows = page.map(el => {
     return createData(
@@ -279,9 +284,8 @@ function EventTable({ events, updateCallback }) {
         </div>
         <div className={styles.flex}>
           <Button
-            className={`${styles.btn} ${
-              selectedRows.length > 0 ? styles.selectedBtn : ''
-            }`}
+            className={`${styles.btn} ${selectedRows.length > 0 ? styles.selectedBtn : ''
+              }`}
             onClick={handleDeleteMany}
             variant="outlined"
             startIcon={<Delete />}
@@ -291,7 +295,7 @@ function EventTable({ events, updateCallback }) {
           </Button>
           <div className={styles.flex}>
             <GlobalFilter
-              globalFilter={state.globalFilter}
+              globalFilter={globalFilter}
               setGlobalFilter={setGlobalFilter}
             />
           </div>
@@ -301,23 +305,17 @@ function EventTable({ events, updateCallback }) {
           selectedRows={selectedRows}
           setSelected={setSelectedRows}
           rows={rows}
+          count={pageOptions.length}
+          page={page}
           column={columns}
           handlePageChange={handlePageChange}
+          handleSorting={handleSort}
         />
         <ActionMenu
           anchorEl={anchorEl}
           handleClose={handleActionClose}
           handleDelete={handleEventDelete}
         />
-        <div className={styles.paginationContainer}>
-          <Pagination
-            count={pageOptions.length}
-            onChange={(e, page) => handlePageChange(page)}
-            shape="rounded"
-            showFirstButton
-            showLastButton
-          />
-        </div>
       </Stack>
     </Container>
   )
