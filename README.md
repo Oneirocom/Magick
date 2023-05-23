@@ -186,6 +186,7 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="http://palmesi.com"><img src="https://avatars.githubusercontent.com/u/3073099?v=4?s=100" width="100px;" alt="Pietro"/><br /><sub><b>Pietro</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=pizzooid" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/coffeeorgreentea"><img src="https://avatars.githubusercontent.com/u/90069434?v=4?s=100" width="100px;" alt="Coffeeorgreentea"/><br /><sub><b>Coffeeorgreentea</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=coffeeorgreentea" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/fire"><img src="https://avatars.githubusercontent.com/u/90069434?v=4?s=100" width="100px;" alt="Fire"/><br /><sub><b>Coffeeorgreentea</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=fire" title="Code">💻</a></td>
    </tr>
   </tbody>
 </table>
