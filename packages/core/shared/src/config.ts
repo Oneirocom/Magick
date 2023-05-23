@@ -34,6 +34,7 @@ export const DEFAULT_USER_ID = getVarForEnvironment('USER_ID') || '1234567890'
 export const DEFAULT_USER_TOKEN =
   getVarForEnvironment('DUMMY_TOKEN') ||
   'eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..SUWUnYMxRTxIgGD1.lCzhMnTVeWOBFBzDs4_ft6UCZIVhfk9VSw18-SNzSJjXB4yqwi7z3XJEO9FwbSybFkAjSoFHwYnizYhDsrouDn1xLS7Dqzwnn4I-V1-L0mXcmKXRAS8D1PQzR88CDsk-LIqkcZkkxQ8aoGmyVcKwAmlnAdYpPUEbJ7E3DEBCvA4UbY1iqdYmCWdD7NWeR_IDsWFMKP3jEqp3HPMJbbTitCb1_W-G0gnZ6cokK_JH9tpgbjAoWe0KRQB2Dr3B22-1qa9cPV8W13she2q_RR6SeTAM9iqwzufvuIu2b3Lu0fypQpcV4JyrwCawkZcjsdGQqateftfAQNYzUeSXVzZdWSZJOwHtDHpIMKh_SugqS3ASNrN2gqUEwvY2SOe60h__2ljLsSc.9qWEv3VNEKFpc6zmJv4n0A'
+export const LOCAL_DEV = getVarForEnvironment('LOCAL_DEV') === 'true' || false
 export const PRODUCTION = getVarForEnvironment('PRODUCTION') === 'true'
 export const SERVER_PORT = getVarForEnvironment('PORT') || '3030'
 export const SERVER_HOST = getVarForEnvironment('HOST') || 'localhost'

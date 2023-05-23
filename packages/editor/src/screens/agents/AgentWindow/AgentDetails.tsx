@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { IconBtn, CustomizedSwitch } from '@magickml/client-core'
-import { pluginManager } from '@magickml/core'
+import { DEFAULT_USER_TOKEN, LOCAL_DEV, pluginManager } from '@magickml/core'
 
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
@@ -50,8 +50,9 @@ const AgentDetails = ({
   const [enable, setEnable] = useState(onLoadEnables)
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
-  const headers = { Authorization: `Bearer ${token}` }
-
+  const headers = LOCAL_DEV
+    ? { Authorization: `Bearer ${token}` }
+    : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
 
   /**
    * update agent data by agent id.
