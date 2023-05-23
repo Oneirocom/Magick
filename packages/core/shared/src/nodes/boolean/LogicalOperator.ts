@@ -6,10 +6,11 @@ import { NumberControl } from '../../dataControls/NumberControl'
 import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
+import { DropdownControl } from '../../dataControls/DropdownControl'
 
 // Info message for LogicalOperator component
 const info =
-  'Takes two input variables and compares them based on the Operation Type property, then triggers the appropriate trigger node based on the result. Valid values for the Operation Type are equal, not equal, greater than, less greater than.'
+  'Takes two input variables and compares them based on the Operation Type property, then triggers the appropriate trigger node based on the result. Valid values for the Operation Type are equal, not equal, greater than, less than.'
 
 // Type definition for worker return values
 type WorkerReturn = {
@@ -48,10 +49,13 @@ export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
     const isFalse = new Rete.Output('false', 'False', triggerSocket)
     const outp = new Rete.Output('error', 'Error', stringSocket)
 
-    const operationType = new InputControl({
-      dataKey: 'operationType',
+    const operationTypes = ['equal', 'not equal', 'greater than', 'less than']
+
+    const operationType = new DropdownControl({
       name: 'Operation Type',
-      icon: 'moon',
+      dataKey: 'operationType',
+      values: operationTypes,
+      defaultValue: operationTypes[0],
     })
 
     const testt = new NumberControl({
