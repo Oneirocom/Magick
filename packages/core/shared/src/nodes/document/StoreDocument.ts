@@ -53,6 +53,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
     const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
     const date = new Rete.Input('date', 'Date', stringSocket)
+    const typeInput = new Rete.Input('type', 'Type', stringSocket)
 
     node.inspector.add(nameInput).add(type)
 
@@ -63,6 +64,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
       .addInput(dataInput)
       .addInput(contentInput)
       .addInput(date)
+      .addInput(typeInput)
       .addInput(embedding)
       .addOutput(dataOutput)
   }
@@ -84,6 +86,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
     const { projectId } = context
 
     const content = (inputs['content'] ? inputs['content'][0] : null) as string
+    const typeInput = (inputs['type'] ? inputs['type'][0] : null) as string
 
     const _embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as
       | number[]
@@ -100,9 +103,10 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
     const nodeData = node.data as { type: string }
     const typeData = nodeData.type as string
     const type =
-      typeData !== undefined && typeData.length > 0
+      typeInput ??
+      (typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
-        : 'none'
+        : 'none')
 
     const date = (inputs['date'] ? inputs['date'][0] : new Date()) as string
 

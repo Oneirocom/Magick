@@ -96,7 +96,13 @@ export class TextVariable extends MagickComponent<InputReturn> {
     context: { module: { publicVariables: string } }
   ) {
     let text = node.data.fewshot as string
-    const publicVars = context?.module?.publicVariables || {}
+
+    let publicVars = context.module.publicVariables as {}
+
+    // if publicVars is a string, parse it into json
+    if (typeof publicVars === 'string') {
+      publicVars = JSON.parse(publicVars)
+    }
 
     if (node?.data?.isPublic && publicVars[node.id]) {
       text = publicVars[node.id].value
