@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen } from '@magickml/client-core'
-import { DEFAULT_USER_TOKEN, PRODUCTION, pluginManager } from '@magickml/core'
+import { PRODUCTION, pluginManager } from '@magickml/core'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -29,9 +29,7 @@ const AgentManagerWindow = () => {
     const res = await fetch(
       `${config.apiUrl}/agents?projectId=${config.projectId}`,
       {
-        headers: PRODUCTION
-          ? { Authorization: `Bearer ${token}` }
-          : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` },
+        headers: { Authorization: `Bearer ${token}` },
       }
     )
     const json = await res.json()
@@ -95,9 +93,7 @@ const AgentManagerWindow = () => {
         const res2 = await fetch(
           `${config.apiUrl}/agents?projectId=${config.projectId}`,
           {
-            headers: PRODUCTION
-              ? { Authorization: `Bearer ${token}` }
-              : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` },
+            headers: { Authorization: `Bearer ${token}` },
           }
         )
         const json = await res2.json()
@@ -184,9 +180,7 @@ const AgentManagerWindow = () => {
   const handleDelete = (id: string) => {
     fetch(`${config.apiUrl}/agents/` + id, {
       method: 'DELETE',
-      headers: PRODUCTION
-        ? { Authorization: `Bearer ${token}` }
-        : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` },
+      headers: { Authorization: `Bearer ${token}` }
     })
       .then(async res => {
         res = await res.json()
@@ -214,29 +208,25 @@ const AgentManagerWindow = () => {
   useEffect(() => {
     if (!config.apiUrl || isLoading) return
     setIsLoading(true)
-    ;(async () => {
-      const res = await fetch(
-        `${config.apiUrl}/agents?projectId=${config.projectId}`,
-        {
-          headers: PRODUCTION
-            ? { Authorization: `Bearer ${token}` }
-            : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` },
-        }
-      )
-      const json = await res.json()
-      setData(json.data)
-      setIsLoading(false)
-    })()
+      ; (async () => {
+        const res = await fetch(
+          `${config.apiUrl}/agents?projectId=${config.projectId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        const json = await res.json()
+        setData(json.data)
+        setIsLoading(false)
+      })()
   }, [config.apiUrl])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const res = await fetch(
         `${config.apiUrl}/agents?projectId=${config.projectId}`,
         {
-          headers: PRODUCTION
-            ? { Authorization: `Bearer ${token}` }
-            : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` },
+          headers: { Authorization: `Bearer ${token}` },
         }
       )
       const json = await res.json()
