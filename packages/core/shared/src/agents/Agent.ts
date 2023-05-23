@@ -46,8 +46,6 @@ export class Agent implements AgentInterface {
     this.projectId = agentData.projectId
     this.app = app
 
-    console.log('AGENT agent', this)
-
     const spellManager = new SpellManager({
       cache: false,
       agent: this,
@@ -56,6 +54,7 @@ export class Agent implements AgentInterface {
 
     this.spellManager = spellManager
     ;(async () => {
+      console.log('agentData', agentData)
       if (!agentData.rootSpell) {
         this.warn('No root spell found for agent', { id: this.id })
         return
@@ -77,6 +76,11 @@ export class Agent implements AgentInterface {
 
       for (const method of Object.keys(agentStartMethods)) {
         try {
+          console.log(
+            'starting ',
+            agentManager !== null,
+            this.spellRunner !== null
+          )
           await agentStartMethods[method]({
             agentManager,
             agent: this,
