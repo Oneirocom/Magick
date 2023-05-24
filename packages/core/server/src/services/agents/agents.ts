@@ -50,21 +50,12 @@ export const agent = (app: Application) => {
   // Register the agent service on the Feathers application
   app.use('agents', new AgentService(getOptions(app), app), {
     methods: ['find', 'get', 'create', 'patch', 'remove', 'run'],
-    events: ['log'],
+    events: ['log', 'result'],
   })
 
   const pubSub = app.get<'pubsub'>('pubsub')
 
   pubSub.patternSubscribe('agent*', (message, channel) => {
-    // no point in subscribing to agent messages if we are an agent
-    if (app.get('isAgent')) return
-    console.log('**************RECEIVED AGENT MESSAGE', channel, message)
-
-    // const regex = /agent:([a-z0-9\-]+)/
-    // const match = channel.match(regex)
-    // const agentId = match ? match[1] : null
-    // console.log('AGENTID', agentId)
-    // emit custom events via the agent service
     app.service('agents').emit('log', {
       channel,
       projectId: message?.projectId,
@@ -73,16 +64,14 @@ export const agent = (app: Application) => {
   })
 
   const agentResultWorker = new BullMQ.Worker('agent:run:result', async job => {
-    // no point in subscribing to agent messages if we are an agent
-    if (app.get('isAgent')) return
-    console.log('RESULT JOB RECEIVED!!!', job.id, job.data)
     // we wil shuttle this message from here back up a socket to the client
-    const { agentId, projectId, result } = job.data
+    const { agentId, projectId, originalData } = job.data
     // emit custom events via the agent service
     app.service('agents').emit('result', {
       channel: `agent:${agentId}`,
+      sessionId: originalData.sessionId,
       projectId,
-      data: result,
+      data: job.data,
     })
   })
 
