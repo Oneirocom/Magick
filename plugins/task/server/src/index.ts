@@ -39,7 +39,7 @@ class TaskManager {
    */
   addAgent({ spellRunner, agent, agentData }) {
     if (!agentData) return console.log('No data for this agent', agent.id)
-    if (!agentData.data.task_enabled)
+    if (!agentData.data?.task_enabled)
       return console.log('Task is not enabled for this agent')
     const taskHandler = async () => {
       // Don't run this function if it has been deleted
