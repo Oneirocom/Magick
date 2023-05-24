@@ -5,7 +5,9 @@ import { useState } from 'react'
 import LoginGithub from 'react-github-custom-login'
 
 import { API_ROOT_URL } from '@magickml/core'
-const CLIENT_ID = "d79801d2614ccec5a2ab"
+
+const CLINET_ID = "d79801d2614ccec5a2ab"
+const CLIENT_SECRET = "85997c29d5dd48be614abff4097be4ee9a734404"
 
 const VariableModal = ({
   selectedAgentData,
@@ -25,6 +27,13 @@ const VariableModal = ({
     selectedAgentData?.data?.github_repo_owner + ' ' + selectedAgentData?.data?.github_repo_name
   )
 
+  const [localClientId, setLocalClientId] = useState(
+    selectedAgentData?.data?.github_client_id ?? CLINET_ID
+  )
+  const [localClientSecret, setLocalClientSecret] = useState(
+    selectedAgentData?.data?.github_client_secret ?? CLIENT_SECRET
+  )
+
   const handleSave = async () => {
     const data = {
       ...selectedAgentData,
@@ -40,6 +49,8 @@ const VariableModal = ({
       json = { ...parsedSecrets }
     }
     json['github_access_token'] = state.github_access_token
+    json['github_repo_owner'] = state.github_repo_owner
+    json['github_repo_name'] = state.github_repo_name
     localStorage.setItem('secrets', JSON.stringify(json))
 
     console.log(JSON.stringify(selectedAgentData))
@@ -63,9 +74,26 @@ const VariableModal = ({
 
     await axios.get(`${API_ROOT_URL}/gettokenuser`, {
       params: {
-        code: response.code
+        code: response.code,
+        github_client_id: localClientId,
+        github_client_secret: localClientSecret
       },
     }).then(async response => {
+
+      const data = {
+        ...selectedAgentData,
+        data: {
+          ...selectedAgentData.data,
+          ...{
+            github_client_id: localClientId,
+            github_client_secret: localClientSecret
+          },
+        },
+      }
+
+      console.log(JSON.stringify(selectedAgentData))
+      update(selectedAgentData.id, data)
+
       let suffix = ''
       for (let i = 0; i < response.data.length - 7; i++) {
         suffix += '*'
@@ -94,7 +122,36 @@ const VariableModal = ({
       <Modal open={editMode} onClose={setEditMode} handleAction={handleSave} showSaveBtn={state.github_login}>
         {
           !state.github_login ? (
-            <LoginGithub clientId={CLIENT_ID} scope="user:email,repo" onSuccess={onSuccess} buttonText="Login Github" />
+            <>
+              <div style={{ marginBottom: '1em' }}>
+                <span className="form-item-label">Github Client Id</span>
+                <input
+                  className="modal-element"
+                  type="text"
+                  name="github_client_id"
+                  value={localClientId}
+                  onChange={e => setLocalClientId(e.target.value)}
+                />
+              </div>
+
+              <div style={{ marginBottom: '1em' }}>
+                <span className="form-item-label">Github Client Secret</span>
+                <input
+                  className="modal-element"
+                  type="text"
+                  name="github_client_secret"
+                  value={localClientSecret}
+                  onChange={e => setLocalClientSecret(e.target.value)}
+                />
+              </div>
+
+              <LoginGithub
+                clientId={localClientId}
+                scope="user:email,repo"
+                onSuccess={onSuccess}
+                buttonText="Login Github"
+              />
+            </>
           ) : (
             <>
               <div style={{ marginBottom: '1em' }}>
