@@ -1,6 +1,8 @@
 // DOCUMENTED
 import Agent from './Agent'
 import _ from 'lodash'
+import pino from 'pino'
+import { getLogger } from '@magickml/core'
 
 /**
  * Class for managing agents.
@@ -12,13 +14,17 @@ export class AgentManager {
   addHandlers: any = []
   removeHandlers: any = []
   app: any
+  logger: pino.Logger = getLogger()
+
   /**
    * Get the agent with the given agent data.
    * @param agent - The agent data.
    * @returns The agent if found.
    */
   getAgent({ agent }) {
-    if (!agent) return
+    if (!agent) {
+      this.logger.trace("AgentManager can't find agent %o", agent)
+    }
     return this.agents[agent.id]
   }
 
@@ -29,7 +35,9 @@ export class AgentManager {
     this.app = app
     // Update agents every second
     setInterval(async () => {
+      this.logger.debug('Updating agents...')
       await this.updateAgents()
+      this.logger.debug('Agents updated.')
     }, 1000)
   }
 
@@ -38,6 +46,7 @@ export class AgentManager {
    * @param handler - The handler function to be called.
    */
   registerAddAgentHandler(handler) {
+    this.logger.debug('Registering add agent handler')
     this.addHandlers.push(handler)
   }
 
@@ -46,6 +55,7 @@ export class AgentManager {
    * @param handler - The handler function to be called.
    */
   registerRemoveAgentHandler(handler) {
+    this.logger.debug('Registering remove agent handler')
     this.removeHandlers.push(handler)
   }
 
@@ -53,6 +63,7 @@ export class AgentManager {
    * Delete old agent instances.
    */
   async deleteOldAgents() {
+    this.logger.debug('Deleting old agents...')
     for (const i in this.currentAgents) {
       const newAgent = this.newAgents.find(
         agent => agent.id === this.currentAgents[i].id
@@ -80,12 +91,15 @@ export class AgentManager {
       this.agents[id] = null
       delete this.currentAgents[i]
     }
+    this.logger.debug('Old agents deleted.')
   }
 
   /**
    * Update agent instances.
    */
   async updateAgents() {
+    this.logger.debug('Updating agents...')
+
     this.newAgents = (
       await this.app.service('agents').find({
         query: {
@@ -93,17 +107,32 @@ export class AgentManager {
         },
       })
     )?.data
-    if (!this.newAgents) return
+
+    if (!this.newAgents || this.newAgents.length === 0) {
+      this.logger.debug('No new agents found.')
+      this.logger.debug('Done updating agents.')
+      return
+    }
 
     await this.deleteOldAgents()
 
-    if (!this.newAgents || this.newAgents.length === 0) return
-
     this.newAgents?.forEach(async (agent: any) => {
-      if (!agent) return
-      if (!agent.data) return
-      if (!agent.enabled && !agent.data.enabled) return
-      if (!agent.rootSpell) return
+      if (!agent) {
+        this.logger.fatal('Agent is null in updateAgents loop')
+        return
+      }
+      if (!agent.data) {
+        this.logger.fatal('Agent data is null in updateAgents loop')
+        return
+      }
+      if (!agent.enabled && !agent.data.enabled) {
+        this.logger.debug('Agent is disabled, skipping %s', agent.id)
+        return
+      }
+      if (!agent.rootSpell) {
+        this.logger.debug('Agent has no root spell, skipping %s', agent.id)
+        return
+      }
 
       const pingedAt = new Date(agent.pingedAt)
 
@@ -120,8 +149,8 @@ export class AgentManager {
 
       const oldAgent = this.agents[agent.id]
 
-      console.log(
-        'Agent is enabled and has not been pinged, starting',
+      this.logger.info(
+        'Agent %s is enabled and has not been pinged, starting',
         agent.id
       )
 

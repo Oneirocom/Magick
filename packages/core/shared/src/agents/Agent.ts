@@ -1,5 +1,7 @@
 // DOCUMENTED
 import { Application } from '@feathersjs/koa'
+import pino from 'pino'
+import { getLogger } from '@magickml/core'
 import { SpellManager, SpellRunner } from '../spellManager/index'
 import { pluginManager } from '../plugin'
 import { AgentInterface, SpellInterface } from '../schemas'
@@ -21,6 +23,7 @@ export class Agent implements AgentInterface {
   agentManager: AgentManager
   spellRunner?: SpellRunner
   rootSpell: SpellInterface
+  logger: pino.Logger = getLogger()
 
   outputTypes: any[] = []
   updateInterval: any
@@ -35,7 +38,6 @@ export class Agent implements AgentInterface {
     agentManager: AgentManager,
     app: Application
   ) {
-    console.log('creating new agent')
     this.secrets = agentData?.secrets ? JSON.parse(agentData?.secrets) : {}
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
@@ -46,6 +48,7 @@ export class Agent implements AgentInterface {
     this.projectId = agentData.projectId
     this.app = app
 
+    this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
     const spellManager = new SpellManager({
       cache: false,
       agent: this,
@@ -56,7 +59,7 @@ export class Agent implements AgentInterface {
     ;(async () => {
       console.log('agentData', agentData)
       if (!agentData.rootSpell) {
-        this.warn('No root spell found for agent', { id: this.id })
+        this.logger.warn('No root spell found for agent: %o', { id: this.id, name: this.name })
         return
       }
       const spell = (
@@ -100,7 +103,7 @@ export class Agent implements AgentInterface {
           pingedAt: new Date().toISOString(),
         })
       }, 1000)
-      console.log('new agent created')
+      this.logger.info('New agent created: %s | %s', this.name, this.id)
     })()
   }
 
@@ -124,7 +127,8 @@ export class Agent implements AgentInterface {
   }
 
   log(message, data) {
-    console.log(message, data)
+    this.logger.info(`${message} ${JSON.stringify(data)}`)
+
     this.app.service('agents').log({
       agentId: this.id,
       type: 'log',
@@ -134,7 +138,7 @@ export class Agent implements AgentInterface {
   }
 
   warn(message, data) {
-    console.warn(message, data)
+    this.logger.warn(`${message} ${JSON.stringify(data)}`)
     this.app.service('agents').log({
       agentId: this.id,
       type: 'warn',
@@ -144,7 +148,7 @@ export class Agent implements AgentInterface {
   }
 
   error(message, data = {}) {
-    console.error(message, { error: data })
+    this.logger.error(`${message} %o`, { error: data })
     this.app.service('agents').log({
       agentId: this.id,
       type: 'error',
