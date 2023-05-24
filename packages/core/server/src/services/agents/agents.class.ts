@@ -41,7 +41,6 @@ export class AgentService<
   async run(data: AgentRunData, params?: ServiceParams) {
     if (!data.agentId) throw new Error('agentId is required')
     // probably need to authenticate the request here against project id
-    console.log('running agent', 'DATA', data)
     // add the job to the queueD
     const job = await this.runQueue.add(data.agentId, {
       ...data,
