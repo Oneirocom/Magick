@@ -62,13 +62,13 @@ const image_generation = async (ctx: Koa.Context): Promise<void> => {
 
 const getTokenUser = async (ctx: Koa.Context): Promise<void> => {
   const code = ctx.request.query.code
-  console.log("id", process.env.CLIENT_ID)
-  console.log("secret", process.env.CLIENT_SECRET)
+  console.log("id", ctx.request.query.github_client_id)
+  console.log("secret", ctx.request.query.github_client_secret)
   const data = qs.stringify({
-    client_id: process.env.CLIENT_ID,
-    client_secret : process.env.CLIENT_SECRET,
+    client_id: ctx.request.query.github_client_id,
+    client_secret : ctx.request.query.github_client_secret,
     code: code
-  });
+  })
 
   const reqOptions = {
     host: "github.com",
