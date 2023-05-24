@@ -193,14 +193,12 @@ export class Agent extends RedisPubSub implements AgentInterface {
   }
 
   async runWorker(job) {
-    console.log('WORK ON AGENT!!!', job.name, this.id)
-    console.log('AGENT DATA', this.data)
     // the job name is the agent id.  Only run if the agent id matches.
-    // if (this.id !== job.name) return
+    if (this.id !== job.data.agentId) return
 
     const { data } = job
-    console.log('DATA RECEIVED', data)
 
+    // Do we want a debug logger here?
     const output = await this?.spellRunner.runComponent({
       ...data,
       agent: this,
@@ -210,7 +208,7 @@ export class Agent extends RedisPubSub implements AgentInterface {
       app: this.app,
     })
 
-    this.queue.add('agent:run:result', {
+    await this.queue.add('agent:run:result', {
       agentId: this.id,
       projectId: this.projectId,
       originalData: data,
