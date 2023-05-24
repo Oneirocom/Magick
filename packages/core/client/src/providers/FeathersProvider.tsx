@@ -110,7 +110,7 @@ export const FeathersProvider = ({ children, token }): JSX.Element => {
   const [client, setClient] = useState<FeathersContext['client']>(null)
 
   useEffect(() => {
-    ;(async (): Promise<void> => {
+    ; (async (): Promise<void> => {
       const client = await buildFeathersClient(config, token)
 
       client.io.on('connect', async (): Promise<void> => {
@@ -139,14 +139,6 @@ export const FeathersProvider = ({ children, token }): JSX.Element => {
       })
 
       client.service('agents').on('log', (data): void => {
-        console.log('agents log', data)
-      })
-
-      client.on('agents log', (data): void => {
-        console.log('agents log', data)
-      })
-
-      client.io.on('agents log', (data): void => {
         console.log('agents log', data)
       })
     })()
