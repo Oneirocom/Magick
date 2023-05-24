@@ -1,0 +1,11 @@
+name: Magick OSSF Checks
+
+on: [push, pull_request]
+
+jobs:
+  eslint:
+    name: OSSF
+    runs-on: ubuntu-latest
+    steps:
+      - name: OSSF Scorecard action
+        uses: ossf/scorecard-action@v2.1.3
