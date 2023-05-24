@@ -1,0 +1,33 @@
+{
+  "name": "@magickml/plugin-github-server",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "plugin-github/server/src",
+  "projectType": "library",
+  "implicitDependencies": [
+    "@magickml/core"
+  ],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "plugin/github-server/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "plugin/github-server/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
