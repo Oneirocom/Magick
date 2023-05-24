@@ -127,6 +127,7 @@ export type MagicComponentCategory =
   | 'I/O'
   | 'Flow'
   | 'Experimental'
+  | 'Github'
   | 'Discord'
   | 'Embedding'
   | 'Document'
