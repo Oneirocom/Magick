@@ -119,7 +119,7 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-24-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -152,10 +152,12 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/BMO-tech"><img src="https://avatars.githubusercontent.com/u/7051219?v=4?s=100" width="100px;" alt="Ben Moore"/><br /><sub><b>Ben Moore</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=BMO-tech" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/stackedq"><img src="https://avatars.githubusercontent.com/u/20498757?v=4?s=100" width="100px;" alt="Q"/><br /><sub><b>Q</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=stackedq" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/thomageanderson"><img src="https://avatars.githubusercontent.com/u/122855509?v=4?s=100" width="100px;" alt="thomageanderson"/><br /><sub><b>thomageanderson</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=thomageanderson" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://twitter.com/codingsh"><img src="https://avatars.githubusercontent.com/u/57037080?v=4?s=100" width="100px;" alt="codingsh"/><br /><sub><b>codingsh</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=developerfred" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://palmesi.com"><img src="https://avatars.githubusercontent.com/u/3073099?v=4?s=100" width="100px;" alt="Pietro"/><br /><sub><b>Pietro</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=pizzooid" title="Code">💻</a></td>
     </tr>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="http://palmesi.com"><img src="https://avatars.githubusercontent.com/u/3073099?v=4?s=100" width="100px;" alt="Pietro"/><br /><sub><b>Pietro</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=pizzooid" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://twitter.com/codingsh"><img src="https://avatars.githubusercontent.com/u/57037080?v=4?s=100" width="100px;" alt="codingsh"/><br /><sub><b>codingsh</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=developerfred" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/benbot"><img src="https://avatars.githubusercontent.com/u/1340967?v=4?s=100" width="100px;" alt="Ben Botwin"/><br /><sub><b>Ben Botwin</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=benbot" title="Code">💻</a> <a href="#platform-benbot" title="Packaging/porting to new platform">📦</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/coffeeorgreentea"><img src="https://avatars.githubusercontent.com/u/90069434?v=4?s=100" width="100px;" alt="coffeeorgreentea"/><br /><sub><b>coffeeorgreentea</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=coffeeorgreentea" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
