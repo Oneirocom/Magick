@@ -51,8 +51,8 @@ const AgentDetails = ({
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const headers = LOCAL_DEV
-    ? { Authorization: `Bearer ${token}` }
-    : { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+    ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+    : { Authorization: `Bearer ${token}` }
 
   /**
    * update agent data by agent id.
