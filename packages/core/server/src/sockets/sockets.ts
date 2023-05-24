@@ -34,7 +34,6 @@ const handleSockets = (app: any) => {
       // Attach the user info to the params for use in services
       socket.feathers.user = user
 
-      app.emit('login', payload, { connection: socket.feathers })
       // Instantiate the interface within the runner rather than the spell manager to avoid shared state issues.
       const spellManager = new SpellManager({ socket, app })
 
