@@ -46,6 +46,12 @@ export const outputNameFromSocketKey = createNameFromSocket('outputs')
 export const socketKeyFromInputName = createSocketFromName('inputs')
 export const socketKeyFromOutputName = createSocketFromName('outputs')
 
+const getPublicVariables = graph => {
+  return Object.values(graph.nodes || {}).filter(node => {
+    return (node as any).data?.isPublic
+  })
+}
+
 export class SpellComponent extends MagickComponent<
   Promise<ModuleWorkerOutput>
 > {
@@ -119,12 +125,6 @@ export class SpellComponent extends MagickComponent<
 
     // const stateSocket = new Rete.Input('state', 'State', objectSocket)
 
-    const getPublicVariables = graph => {
-      return Object.values(graph.nodes || {}).filter(node => {
-        return (node as any).data?.isPublic
-      })
-    }
-
     const createInspectorForPublicVariables = publicVariables => {
       if (!node.data.publicVariables) {
         node.data.publicVariables = {} as { [key: string]: unknown }
@@ -140,7 +140,7 @@ export class SpellComponent extends MagickComponent<
             node.data.publicVariables as { [key: string]: unknown }
           )[data.name]
           const fewshotInputControl = new FewshotControl({
-            name: name,
+            name: data.name,
             dataKey: data.name,
             language: 'plaintext',
             defaultValue: publicVar || data.value || '',
@@ -158,30 +158,54 @@ export class SpellComponent extends MagickComponent<
           }
         } else if (name.includes('String')) {
           const textInputControl = new InputControl({
-            name: name,
+            name: data.name,
             dataKey: data.name,
             defaultValue: (data as any).fewshot || data.value,
           })
           if (!node.inspector.dataControls.has(textInputControl.dataKey)) {
             node.inspector.add(textInputControl)
           }
+          textInputControl.onData = () => {
+            if (!node.data.publicVariables) {
+              node.data.publicVariables = {}
+            }
+            ;(node.data.publicVariables as { [key: string]: unknown })[
+              data.name
+            ] = node.data[data.name]
+          }
         } else if (name.includes('Number')) {
           const numberInputControl = new NumberControl({
-            name: name,
+            name: data.name,
             dataKey: data.name,
             defaultValue: data.value,
           })
           if (!node.inspector.dataControls.has(numberInputControl.dataKey)) {
             node.inspector.add(numberInputControl)
           }
+          numberInputControl.onData = () => {
+            if (!node.data.publicVariables) {
+              node.data.publicVariables = {}
+            }
+            ;(node.data.publicVariables as { [key: string]: unknown })[
+              data.name
+            ] = node.data[data.name]
+          }
         } else if (name.includes('Boolean')) {
           const booleanInputControl = new BooleanControl({
-            name: name,
+            name: data.name,
             dataKey: data.name,
             defaultValue: data.value,
           })
           if (!node.inspector.dataControls.has(booleanInputControl.dataKey)) {
             node.inspector.add(booleanInputControl)
+          }
+          booleanInputControl.onData = () => {
+            if (!node.data.publicVariables) {
+              node.data.publicVariables = {}
+            }
+            ;(node.data.publicVariables as { [key: string]: unknown })[
+              data.name
+            ] = node.data[data.name]
           }
         } else {
           console.warn('unknown variable type', name)
@@ -290,8 +314,24 @@ export class SpellComponent extends MagickComponent<
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
 
+    const publicVariables = getPublicVariables(node.data.graph)
+
+    console.log('node.data.publicVariables', node.data.publicVariables)
+
+    console.log('publicVariables', JSON.stringify(publicVariables))
+
+    // for each public variable...
+    const output = {}
+
+    publicVariables.forEach((data: any) => {
+      const key = data.id
+      const nodeDataKey = data.data.name
+      const value = node.data?.publicVariables?.[`${nodeDataKey}`]
+      output[key] = { value }
+    })
+
     const { agent, module, spellManager, app } = _context
-    const { publicVariables, secrets } = module
+    const { secrets } = module
 
     if (spellManager) {
       const spellRunner = await spellManager.loadById(
@@ -307,7 +347,7 @@ export class SpellComponent extends MagickComponent<
           agent: agent,
           secrets: agent?.secrets ?? secrets,
           app,
-          publicVariables: agent?.publicVariables ?? publicVariables,
+          publicVariables: output,
         }
         const outputs = await spellManager.run(runComponentArgs)
         return this.formatOutputs(node, outputs as any)

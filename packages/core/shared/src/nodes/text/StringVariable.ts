@@ -79,7 +79,13 @@ export class StringVariable extends MagickComponent<InputReturn> {
     context: { module: { publicVariables: string } }
   ): InputReturn {
     let _var = node?.data?._var as string
-    const publicVars = JSON.parse(context.module.publicVariables)
+    let publicVars = context.module.publicVariables as {}
+
+    // if publicVars is a string, parse it into json
+    if (typeof publicVars === 'string') {
+      publicVars = JSON.parse(publicVars)
+    }
+
     if (node?.data?.isPublic && publicVars[node.id]) {
       _var = publicVars[node.id].value
     }
