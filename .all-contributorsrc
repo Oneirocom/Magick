@@ -218,6 +218,15 @@
         "code",
         "platform"
       ]
+    },
+    {
+      "login": "coffeeorgreentea",
+      "name": "coffeeorgreentea",
+      "avatar_url": "https://avatars.githubusercontent.com/u/90069434?v=4",
+      "profile": "https://github.com/coffeeorgreentea",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -225,5 +234,6 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "projectName": "Magick",
-  "projectOwner": "Oneirocom"
+  "projectOwner": "Oneirocom",
+  "commitType": "docs"
 }
