@@ -62,7 +62,9 @@ export default function (app: Application): void {
 
     // don't publish if we are an agent
     if (app.get('isAgent')) return
-    // if (context.method !== 'patch') console.log('PUBLISHING DATA', data)
+
+    // Lets not relay up all the patch events
+    if (context.method !== 'patch') return
 
     // console.log('DATA', data)
     // console.log('PUBLISHING project id', projectId)
