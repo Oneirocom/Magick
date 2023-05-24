@@ -76,6 +76,7 @@
     "@mui/lab": "^5.0.0-alpha.124",
     "@mui/material": "^5.11.5",
     "@mui/x-date-pickers": "^6.0.2",
+    "@nrwl/nx": "^7.8.7",
     "@nx/plugin": "16.1.4",
     "@nrwl/nx-plugin": "15.9.2",
     "@octokit/auth-token": "^3.0.3",
