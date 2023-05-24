@@ -71,3 +71,6 @@ export const ELEVENLABS_API_KEY =
   'ce69df07b50e7179cbbfc5c2bef9d752'
 export const VITE_APP_TRUSTED_PARENT_URL =
   getVarForEnvironment('VITE_APP_TRUSTED_PARENT_URL') || ''
+
+export const AGENT_UPDATE_TIME_MSEC = Number(getVarForEnvironment('AGENT_UPDATE_TIME_SEC') || 30)
+export const PING_AGENT_TIME_MSEC = Number(getVarForEnvironment('PING_AGENT_TIME_SEC') || 60)
