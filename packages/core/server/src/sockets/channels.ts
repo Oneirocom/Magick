@@ -34,7 +34,6 @@ export default function (app: Application): void {
    * @param connectionData - Contains the connection object.
    */
   app.on('login', (authResult: any, { connection }: any): void => {
-    // console.log('connection in login', connection)
     // Return early if there's no real-time connection (e.g. during REST login)
     if (!connection) {
       return
@@ -66,12 +65,9 @@ export default function (app: Application): void {
     // Lets not relay up all the patch events
     if (context.method !== 'patch') return
 
-    // console.log('DATA', data)
-    // console.log('PUBLISHING project id', projectId)
     // Publish all events to the authenticated user channel
     const channel = app.channel(projectId)
-
-    // debugger
+    //
     return channel
   })
 }
