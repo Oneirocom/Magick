@@ -1,7 +1,6 @@
 // DOCUMENTED
 import '@feathersjs/transport-commons'
 import { Application } from '../declarations'
-import { DEFAULT_USER_ID, IGNORE_AUTH, SpellManager } from '@magickml/core'
 import { RealTimeConnection } from '@feathersjs/transport-commons'
 
 /**
