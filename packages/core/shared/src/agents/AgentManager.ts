@@ -136,7 +136,7 @@ export class AgentManager {
 
       const pingedAt = new Date(agent.pingedAt)
 
-      if (new Date().getTime() - pingedAt.getTime() < PING_AGENT_TIME_MSEC * 1000 * 5) return
+      if (new Date().getTime() - pingedAt.getTime() < PING_AGENT_TIME_MSEC * 5) return
 
       const old = this.currentAgents?.find(a => a && a.id === agent.id)
 
