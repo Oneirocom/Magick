@@ -7,7 +7,7 @@ import {
 import type { SocketService } from '@feathersjs/socketio-client'
 import socketio from '@feathersjs/socketio-client'
 import { LoadingScreen, useConfig } from '@magickml/client-core'
-import { SpellInterface } from '@magickml/core'
+import { getLogger, SpellInterface } from '@magickml/core'
 import { createContext, useContext, useEffect, useState } from 'react'
 import io from 'socket.io-client'
 
@@ -108,6 +108,7 @@ export const useFeathers = (): FeathersContext => useContext(Context)
 export const FeathersProvider = ({ children, token }): JSX.Element => {
   const config = useConfig()
   const [client, setClient] = useState<FeathersContext['client']>(null)
+  const logger = getLogger()
 
   useEffect(() => {
     ; (async (): Promise<void> => {
@@ -118,28 +119,28 @@ export const FeathersProvider = ({ children, token }): JSX.Element => {
       })
 
       client.io.on('reconnect', (): void => {
-        console.log('Reconnected to the server')
+        logger.info('Reconnected to the server')
         setClient(client)
       })
 
       client.io.on('disconnect', (): void => {
-        console.log("We've been disconnected from the server")
+        logger.info("We've been disconnected from the server")
         setTimeout((): void => {
-          console.log('Reconnecting...')
+          logger.info('Reconnecting...')
           client.io.connect()
         }, 1000)
       })
 
       client.io.on('error', (error): void => {
-        console.log(`Connection error: ${error} \n trying to reconnect...`)
+        logger.info(`Connection error: ${error} \n trying to reconnect...`)
         setTimeout((): void => {
-          console.log('Reconnecting...')
+          logger.info('Reconnecting...')
           client.io.connect()
         }, 1000)
       })
 
       client.service('agents').on('log', (data): void => {
-        console.log('agents log', data)
+        logger.info('agents log', data)
       })
     })()
   }, [])
