@@ -40,7 +40,7 @@ async function githubSearchIssue(
     if (response.data.items) {
       console.log('count: ' + response.data.items.length)
 
-      let res = response.data.items.map(item => ({
+      const res = response.data.items.map(item => ({
         title: item.title,
         body: item.body,
         url: item.html_url,
