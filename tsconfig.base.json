@@ -34,6 +34,16 @@
       "@magickml/cloud-agent-worker": [
         "packages/cloud-agent-worker/src/index.ts"
       ],
+      "@magickml/plugin-supabase-client": [
+        "plugins/supabase/client/src/index.ts"
+      ],
+      "@magickml/plugin-supabase-server": [
+        "plugins/supabase/server/src/index.ts"
+      ],
+      "@magickml/plugin-supabase-shared": [
+        "plugins/supabase/shared/src/index.ts"
+      ],
+
       "@magickml/plugin-bluesky-client": [
         "plugins/bluesky/client/src/index.ts"
       ],
