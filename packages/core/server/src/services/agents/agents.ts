@@ -63,7 +63,7 @@ export const agent = (app: Application) => {
     })
   })
 
-  const agentResultWorker = new BullMQ.Worker('agent:run:result', async job => {
+  new BullMQ.Worker('agent:run:result', async job => {
     // we wil shuttle this message from here back up a socket to the client
     const { agentId, projectId, originalData } = job.data
     // emit custom events via the agent service

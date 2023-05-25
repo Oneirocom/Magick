@@ -13,7 +13,7 @@ import {
   rest,
 } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
-import { koaPubSub, RedisPubSub } from '@magickml/redis-pubsub'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 import sync from 'feathers-sync'
 import {
   configureManager,

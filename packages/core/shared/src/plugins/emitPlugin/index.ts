@@ -38,7 +38,6 @@ function install(
         context: ModuleContext,
         ...args
       ) => {
-        const currentSpell = context.currentSpell
         const event = `${node.id}`
 
         if (server) {
