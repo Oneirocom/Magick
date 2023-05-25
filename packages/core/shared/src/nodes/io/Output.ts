@@ -114,7 +114,6 @@ export class Output extends MagickComponent<void> {
     context: ModuleContext
   ): Promise<{ output: string }> {
     const inputName = Object.keys(context.data)[0]
-    debugger
     if (!inputs.input) {
       console.error('No input provided to output component')
       return { output: '' }
