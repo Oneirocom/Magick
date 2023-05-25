@@ -70,6 +70,7 @@ const AgentDetails = ({
     // Avoid server-side validation error
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
+    _data.secrets = _data.secrets ? _data.secrets : '{}'
 
     fetch(`${config.apiUrl}/agents/${id}`, {
       method: 'PATCH',
@@ -79,7 +80,12 @@ const AgentDetails = ({
       },
       body: JSON.stringify(_data),
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(res.statusText);
+        }
+        return res.json();
+      })
       .then(data => {
         enqueueSnackbar('Updated agent', {
           variant: 'success',
@@ -92,7 +98,7 @@ const AgentDetails = ({
       })
       .catch(e => {
         console.error('ERROR', e)
-        enqueueSnackbar('internal error updating entity', {
+        enqueueSnackbar(e, {
           variant: 'error',
         })
       })
@@ -213,6 +219,7 @@ const AgentDetails = ({
             onClick={() => {
               update(selectedAgentData?.id)
             }}
+            disabled={!updateNeeded}
             style={{
               margin: '1em',
               color: 'white',
@@ -366,7 +373,7 @@ const AgentDetails = ({
           )
         })}
       </div>
-      {selectedAgentData.publicVariables !== '{}' && (
+      {selectedAgentData.publicVariables && selectedAgentData.publicVariables !== '{}' && (
         <AgentPubVariables
           setUpdateNeeded={setUpdateNeeded}
           setPublicVars={data => {
@@ -380,8 +387,8 @@ const AgentDetails = ({
       )}
       <div
         className={`${selectedAgentData.publicVariables !== '{}'
-            ? styles.connectorsLong
-            : styles.connectors
+          ? styles.connectorsLong
+          : styles.connectors
           }`}
       >
         {pluginManager.getAgentComponents().map((value, index, array) => {
