@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen } from '@magickml/client-core'
-import { DEFAULT_USER_TOKEN, PRODUCTION, LOCAL_DEV, pluginManager } from '@magickml/core'
+import { DEFAULT_USER_TOKEN, PRODUCTION, STANDALONE, pluginManager } from '@magickml/core'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -29,7 +29,7 @@ const AgentManagerWindow = () => {
     const res = await fetch(
       `${config.apiUrl}/agents?projectId=${config.projectId}`,
       {
-        headers: LOCAL_DEV
+        headers: STANDALONE
           ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
           : { Authorization: `Bearer ${token}` }
       }
@@ -95,7 +95,7 @@ const AgentManagerWindow = () => {
         const res2 = await fetch(
           `${config.apiUrl}/agents?projectId=${config.projectId}`,
           {
-            headers: LOCAL_DEV
+            headers: STANDALONE
               ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
               : { Authorization: `Bearer ${token}` },
           }
@@ -184,7 +184,7 @@ const AgentManagerWindow = () => {
   const handleDelete = (id: string) => {
     fetch(`${config.apiUrl}/agents/` + id, {
       method: 'DELETE',
-      headers: LOCAL_DEV
+      headers: STANDALONE
         ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
         : { Authorization: `Bearer ${token}` }
     })
@@ -218,7 +218,7 @@ const AgentManagerWindow = () => {
         const res = await fetch(
           `${config.apiUrl}/agents?projectId=${config.projectId}`,
           {
-            headers: LOCAL_DEV
+            headers: STANDALONE
               ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
               : { Authorization: `Bearer ${token}` }
           }
@@ -234,7 +234,7 @@ const AgentManagerWindow = () => {
       const res = await fetch(
         `${config.apiUrl}/agents?projectId=${config.projectId}`,
         {
-          headers: LOCAL_DEV
+          headers: STANDALONE
             ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
             : { Authorization: `Bearer ${token}` }
         }
