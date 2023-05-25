@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import { DEFAULT_USER_TOKEN, LOCAL_DEV } from '@magickml/core'
+import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/core'
 import { useConfig } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
 
 export const useSpellList = () => {
   const globalConfig = useSelector(state => state.globalConfig)
   const token = globalConfig?.token
-  const headers = LOCAL_DEV
+  const headers = STANDALONE
     ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
     : { Authorization: `Bearer ${token}` }
   const config = useConfig()

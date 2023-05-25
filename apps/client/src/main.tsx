@@ -8,7 +8,7 @@ import {
   POSTHOG_API_KEY,
   POSTHOG_ENABLED,
   DEFAULT_USER_TOKEN,
-  LOCAL_DEV,
+  STANDALONE,
 } from '@magickml/core'
 import { PostHogProvider } from 'posthog-js/react'
 import { initLogger, getLogger } from '@magickml/core'
@@ -24,7 +24,7 @@ logger.info('loaded with plugins %o', plugins)
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
  */
 if (window === window.parent) {
-  if (LOCAL_DEV) {
+  if (STANDALONE) {
     const container = document.getElementById('root')
     const root = createRoot(container) // createRoot(container!) if you use TypeScript
       ; (window as any).root = root
