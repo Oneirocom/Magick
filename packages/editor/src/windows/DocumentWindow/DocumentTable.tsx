@@ -1,14 +1,14 @@
 // DOCUMENTED
 // Import statements kept as-is
-import { Button, TableComponent } from '@magickml/client-core'
+import { TableComponent } from '@magickml/client-core'
 import { API_ROOT_URL, CompletionProvider, pluginManager } from '@magickml/core'
 import { MoreHoriz, NewReleases, Refresh } from '@mui/icons-material'
 import {
+  Button,
   Container,
   IconButton,
   Menu,
   MenuItem,
-  Pagination,
   Stack,
   Typography,
 } from '@mui/material'
@@ -116,11 +116,38 @@ function DocumentTable({ documents, updateCallback }) {
     }
   }
 
+  const defaultColumns = useMemo(
+    () => [
+      {
+        Header: 'Content',
+        accessor: 'content',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Type',
+        accessor: 'type',
+        disableSortBy: true,
+      },
+      {
+        Header: 'ProjectID',
+        accessor: 'projectId',
+        disableSortBy: true,
+      },
+      {
+        Header: 'Date',
+        accessor: 'date',
+        disableFilters: false,
+      },
+    ],
+    []
+  )
+
   // Initialize the table with hooks
-  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state } =
+  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
+    setSortBy } =
     useTable(
       {
-        columns,
+        columns: defaultColumns,
         data: documents,
       },
       useFilters,
@@ -128,6 +155,12 @@ function DocumentTable({ documents, updateCallback }) {
       useSortBy,
       usePagination
     ) as TableInstance & any //TODO: FIX Type
+
+  // Function to handle sorting when a column header is clicked
+  const handleSort = (column) => {
+    const isAsc = sortBy && sortBy[0] && sortBy[0].id === column && !sortBy[0].desc;
+    setSortBy([{ id: column, desc: isAsc ? isAsc : false }]);
+  };
 
   const rows = page.map(el => {
     return createData(
@@ -257,7 +290,7 @@ function DocumentTable({ documents, updateCallback }) {
                 <Button
                   className={styles.btn}
                   variant="outlined"
-                  starticon={<FaFileCsv size={14} />}
+                  startIcon={<FaFileCsv size={14} />}
                   style={{ marginLeft: '1rem' }}
                 >
                   export
@@ -265,17 +298,20 @@ function DocumentTable({ documents, updateCallback }) {
               </CSVLink>
             </div>
           </div>
-          <div className={styles.flex}>
+          <div className={`${styles.flex} ${styles.flexEnd}`}>
             <div className={styles.flex}>
               <GlobalFilter
-                globalFilter={state.globalFilter}
+                globalFilter={globalFilter}
                 setGlobalFilter={setGlobalFilter}
               />
             </div>
           </div>
           <TableComponent
             rows={rows}
+            page={page}
+            count={pageOptions.length}
             selectedRows={[]}
+            handleSorting={handleSort}
             setSelected={() => {
               console.log('set selected not implemented for this table')
             }}
@@ -287,15 +323,6 @@ function DocumentTable({ documents, updateCallback }) {
             handleClose={handleActionClose}
             handleDelete={handleDocumentDelete}
           />
-          <div>
-            <Pagination
-              count={pageOptions.length}
-              onChange={(e, page) => handlePageChange(page)}
-              shape="rounded"
-              showFirstButton
-              showLastButton
-            />
-          </div>
         </Stack>
       </Container>
     </>
