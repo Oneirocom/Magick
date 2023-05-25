@@ -1,15 +1,10 @@
 import { createClient, RedisClientOptions } from 'redis'
 import { EventEmitter } from 'events'
-import { RedisCommandArgument } from '@redis/client/dist/lib/commands'
 import { REDISCLOUD_URL } from '@magickml/core'
 
 export class RedisPubSub extends EventEmitter {
   private client!: ReturnType<typeof createClient>
   private subscriber!: ReturnType<typeof createClient>
-
-  constructor(_options?: RedisClientOptions) {
-    super()
-  }
 
   async initialize(_options: RedisClientOptions): Promise<void> {
     const options: RedisClientOptions = {
@@ -65,7 +60,7 @@ export class RedisPubSub extends EventEmitter {
   }
 
   async subscribe(channel, callback) {
-    const messageListener = (message, channel) => {
+    const messageListener = message => {
       let deserializedMessage
       try {
         deserializedMessage = JSON.parse(message)
