@@ -55,7 +55,6 @@ export const FILE_SERVER_PORT =
 export const FILE_SERVER_URL =
   getVarForEnvironment('FILE_SERVER_URL') || 'https://localhost:65530'
 export const USESSL = getVarForEnvironment('USESSL') || false
-export const NODE_ENV = getVarForEnvironment('NODE_ENV') || 'development'
 
 export const PAGINATE_DEFAULT = getVarForEnvironment('PAGINATE_DEFAULT') || '10'
 export const PAGINATE_MAX = getVarForEnvironment('PAGINATE_MAX') || '100'
@@ -71,3 +70,6 @@ export const ELEVENLABS_API_KEY =
   'ce69df07b50e7179cbbfc5c2bef9d752'
 export const VITE_APP_TRUSTED_PARENT_URL =
   getVarForEnvironment('VITE_APP_TRUSTED_PARENT_URL') || ''
+
+export const LOGGING_ENABLED =
+  getVarForEnvironment('LOGGING_ENABLED') === 'true'
