@@ -1,6 +1,5 @@
-// DOCUMENTED 
-
-import { NODE_ENV } from "@magickml/core";
+// DOCUMENTED
+import { LOGGING_ENABLED } from '@magickml/core'
 import whyDidYouRender from '@welldone-software/why-did-you-render'
 
 /**
@@ -14,7 +13,7 @@ import whyDidYouRender from '@welldone-software/why-did-you-render'
  */
 function enableWhyDidYouRender(React: any): void {
   // If in development
-  if (NODE_ENV === 'development') {
+  if (LOGGING_ENABLED) {
     console.log('running WDYR!')
     whyDidYouRender(React, {
       trackAllPureComponents: false,
@@ -22,4 +21,4 @@ function enableWhyDidYouRender(React: any): void {
   }
 }
 
-export default enableWhyDidYouRender;  // Export the function for usage in other files.
+export default enableWhyDidYouRender // Export the function for usage in other files.
