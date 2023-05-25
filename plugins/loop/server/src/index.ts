@@ -37,7 +37,7 @@ class LoopManager {
    */
   addAgent({ spellRunner, agent, agentData }) {
     if (!agentData) return console.log('No data for this agent', agent.id)
-    if (!agentData.data.loop_enabled)
+    if (!agentData.data?.loop_enabled)
       return console.log('Loop is not enabled for this agent')
     const loopInterval = parseInt(agentData.data.loop_interval) * 1000
     if (!loopInterval) {
