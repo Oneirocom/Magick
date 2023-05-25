@@ -4,14 +4,13 @@
  * @module controller/api
  */
 
-import Koa from 'koa';
-import fetch from 'node-fetch';
-import { Route } from '../config/types';
-import { tts } from '../servers/googleTextToSpeech';
-import { tts_tiktalknet } from '../servers/tiktalknet';
-import qs from 'querystring';
-import https from 'https';
-import { resolve } from 'path';
+import Koa from 'koa'
+import fetch from 'node-fetch'
+import { Route } from '../config/types'
+import { tts } from '../servers/googleTextToSpeech'
+import { tts_tiktalknet } from '../servers/tiktalknet'
+import qs from 'querystring'
+import https from 'https'
 
 /**
  * Retrieves a URL of the audio pronunciation of the given text input, using either Google or TikTalkNet.
@@ -103,7 +102,7 @@ const getTokenUser = async (ctx: Koa.Context): Promise<void> => {
   const token = await sendReq(reqOptions, data)
 
   ctx.body=token
-};
+}
 
 // Export a list of REST APIs
 export const apis: Route[] = [
@@ -119,4 +118,4 @@ export const apis: Route[] = [
     path: '/gettokenuser',
     get: getTokenUser,
   }
-];
+]
