@@ -1,7 +1,7 @@
 // DOCUMENTED
 import { Application } from '@feathersjs/koa'
 import pino from 'pino'
-import { getLogger } from '@magickml/core'
+import { getLogger, PING_AGENT_TIME_MSEC } from '@magickml/core'
 import { SpellManager, SpellRunner } from '../spellManager/index'
 import { pluginManager } from '../plugin'
 import { AgentInterface, SpellInterface } from '../schemas'
@@ -102,7 +102,7 @@ export class Agent implements AgentInterface {
         this.app.service('agents').patch(this.id, {
           pingedAt: new Date().toISOString(),
         })
-      }, 1000)
+      }, PING_AGENT_TIME_MSEC)
       this.logger.info('New agent created: %s | %s', this.name, this.id)
     })()
   }
