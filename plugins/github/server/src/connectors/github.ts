@@ -90,11 +90,11 @@ export class GithubConnector {
     }
   }
 
-  async handleMessage(response, info, args) {
+  async handleMessage(response, info) {
     console.log('handleMessage', response)
-    let token = this.data.github_access_token
-    let owner = this.data.github_repo_owner
-    let repo = this.data.github_repo_name
+    const token = this.data.github_access_token
+    const owner = this.data.github_repo_owner
+    const repo = this.data.github_repo_name
 
     if (info == '') {
       return []
@@ -104,9 +104,10 @@ export class GithubConnector {
     try {
       json = JSON.parse(info)
     } catch (err) {
+      console.error(err)
     }
 
-    let res = await this.createIssue(token, owner, repo, json['title'], json['content'])
+    const res = await this.createIssue(token, owner, repo, json['title'], json['content'])
 
     if (!res) {
       return null

@@ -8,18 +8,18 @@
   ],
   "targets": {
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": [
         "{options.outputFile}"
       ],
       "options": {
         "lintFilePatterns": [
-          "plugin/github-server/**/*.ts"
+          "plugins/github/server/**/*.ts"
         ]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": [
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
