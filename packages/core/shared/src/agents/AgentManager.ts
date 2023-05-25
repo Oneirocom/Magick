@@ -23,7 +23,7 @@ export class AgentManager {
    */
   getAgent({ agent }) {
     if (!agent) {
-      this.logger.trace("AgentManager can't find agent %o", agent)
+      this.logger.error("AgentManager can't find agent %o", agent)
     }
     return this.agents[agent.id]
   }
@@ -35,9 +35,7 @@ export class AgentManager {
     this.app = app
     // Update agents every second
     setInterval(async () => {
-      this.logger.debug('Updating agents...')
       await this.updateAgents()
-      this.logger.debug('Agents updated.')
     }, AGENT_UPDATE_TIME_MSEC)
   }
 
@@ -98,7 +96,7 @@ export class AgentManager {
    * Update agent instances.
    */
   async updateAgents() {
-    this.logger.debug('Updating agents...')
+    this.logger.trace('Updating agents...')
 
     this.newAgents = (
       await this.app.service('agents').find({
@@ -109,8 +107,7 @@ export class AgentManager {
     )?.data
 
     if (!this.newAgents || this.newAgents.length === 0) {
-      this.logger.debug('No new agents found.')
-      this.logger.debug('Done updating agents.')
+      this.logger.trace('No new agents found.')
       return
     }
 
@@ -173,5 +170,6 @@ export class AgentManager {
         handler({ agent: this.agents[agent.id], agentData: agent })
       )
     })
+    this.logger.trace('Agents updated.')
   }
 }
