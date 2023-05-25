@@ -2,6 +2,8 @@ import { Application } from '@feathersjs/koa'
 import io from 'socket.io'
 import Agent from '../agents/Agent'
 
+import pino from 'pino'
+import { getLogger } from '@magickml/core'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
 import { getNodes } from '../nodes'
 import { Module } from '../plugins/modulePlugin/module'
@@ -33,6 +35,7 @@ type SpellRunnerConstructor = {
 }
 
 class SpellRunner {
+  logger: pino.Logger = getLogger()
   engine: MagickEngine
   currentSpell!: SpellInterface
   module: Module
@@ -43,7 +46,7 @@ class SpellRunner {
   spellManager: SpellManager
 
   log(message, data) {
-    console.log(message, data)
+    this.logger.info(`${message} %o`, data)
     if (!this.agent) return
 
     this.agent.log(message, {
@@ -54,7 +57,7 @@ class SpellRunner {
   }
 
   warn(message, data) {
-    console.warn(message, data)
+    this.logger.warn(`${message} %o`, data)
     if (!this.agent) return
 
     this.agent.warn(message, {
@@ -247,7 +250,7 @@ class SpellRunner {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
-      return console.error('Infinite loop detected.  Exiting.')
+      return this.logger.error('Infinite loop detected in SpellRunner. Exiting.')
     }
     // Set the current spell into the cache of spells that have run now.
     if (runSubspell) this.ranSpells.push(this.currentSpell.name)
@@ -270,25 +273,25 @@ class SpellRunner {
     ) as unknown as ModuleComponent
 
     if (!component.run)
-      return console.error('Component does not have a run method')
+      return this.logger.error('Component does not have a run method')
 
     const firstInput = Object.keys(inputs)[0]
 
-    console.log('firstInput', firstInput)
+    this.logger.info('firstInput: %o', firstInput)
 
     // Checking for the triggered node for the connection type
     let triggeredNode = this._getTriggeredNodeByName(firstInput)
 
     // If there isn't one, we should
     if (!triggeredNode) {
-      console.warn(
+      this.logger.warn(
         `No trigger found for ${firstInput}.  Using default trigger.`
       )
       triggeredNode = this._getTriggeredNodeByName('Input - Default')
     }
 
     // If we still don't have a triggered node, we should throw an error.
-    if (!triggeredNode) return console.error('No triggered node found')
+    if (!triggeredNode) return this.logger.error('No triggered node found')
 
     // this running is where the main "work" happens.
     // I do wonder whether we could make this even more elegant by having the node
@@ -300,7 +303,7 @@ class SpellRunner {
       await component.run(triggeredNode as unknown as MagickNode, inputs)
       return this.outputData
     } catch (err) {
-      console.error('ERROR RUNNING SPELL', err)
+      this.logger.error('ERROR RUNNING SPELL, %o', err)
       return {
         Output: `Error running spell- ${err}`,
       }
