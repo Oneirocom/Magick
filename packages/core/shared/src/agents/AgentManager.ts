@@ -2,7 +2,7 @@
 import Agent from './Agent'
 import _ from 'lodash'
 import pino from 'pino'
-import { getLogger } from '@magickml/core'
+import { AGENT_UPDATE_TIME_MSEC, PING_AGENT_TIME_MSEC, getLogger } from '@magickml/core'
 
 /**
  * Class for managing agents.
@@ -38,7 +38,7 @@ export class AgentManager {
       this.logger.debug('Updating agents...')
       await this.updateAgents()
       this.logger.debug('Agents updated.')
-    }, 1000)
+    }, AGENT_UPDATE_TIME_MSEC)
   }
 
   /**
@@ -136,7 +136,7 @@ export class AgentManager {
 
       const pingedAt = new Date(agent.pingedAt)
 
-      if (new Date().getTime() - pingedAt.getTime() < 5000) return
+      if (new Date().getTime() - pingedAt.getTime() < PING_AGENT_TIME_MSEC * 5) return
 
       const old = this.currentAgents?.find(a => a && a.id === agent.id)
 
