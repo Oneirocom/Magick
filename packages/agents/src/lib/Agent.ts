@@ -97,11 +97,6 @@ export class Agent extends RedisPubSub implements AgentInterface {
 
       for (const method of Object.keys(agentStartMethods)) {
         try {
-          console.log(
-            'starting ',
-            agentManager !== null,
-            this.spellRunner !== null
-          )
           await agentStartMethods[method]({
             agentManager,
             agent: this,
