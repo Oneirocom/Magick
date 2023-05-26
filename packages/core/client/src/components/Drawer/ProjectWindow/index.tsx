@@ -72,9 +72,7 @@ const ProjectWindow = ({ openDrawer }) => {
     const fileReader = new FileReader()
     fileReader.readAsText(selectedFile)
     fileReader.onload = event => {
-      const data = JSON.parse(event?.target?.result)
-
-      console.log('data', data)
+      const data = JSON.parse(event?.target?.result as string)
 
       delete data['id']
       axios({
