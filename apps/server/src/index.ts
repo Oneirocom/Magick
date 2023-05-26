@@ -8,6 +8,7 @@ import Router from '@koa/router'
 import { pluginManager } from '@magickml/core'
 import {
   apis,
+  initApp,
   app,
   Handler,
   initFileServer,
@@ -52,6 +53,7 @@ const routes: Route[] = [...spells, ...apis, ...serverRoutes]
  * form and multipart-json requests, and routes.
  */
 async function init() {
+  initApp()
   // load plugins
   await (async () => {
     const plugins = (await import('./plugins')).default

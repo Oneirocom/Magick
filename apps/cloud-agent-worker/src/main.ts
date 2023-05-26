@@ -1,7 +1,12 @@
-import { work } from '@magickml/cloud-agent-worker'
-import { AgentManager } from '@magickml/core'
+import { CloudAgentWorker } from '@magickml/cloud-agent-worker'
+import { initLogger, getLogger } from '@magickml/core'
+import { initApp } from '@magickml/server-core'
 
+initLogger({ name: 'cloud-agent-worker' })
+const logger = getLogger()
 
+initApp()
 
-console.log("Starting worker")
-work()
+logger.info('Starting worker')
+const worker = new CloudAgentWorker()
+worker.work()
