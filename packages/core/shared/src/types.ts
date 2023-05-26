@@ -134,6 +134,18 @@ export type EventResponse = Event[]
 
 export type OnSubspellUpdated = (spell: SpellInterface) => void
 
+export type ControlData = {
+  dataKey: string
+  name: string
+  component: string
+  data: ComponentData
+  options: Record<string, unknown>
+  id: string | null
+  icon: string
+  type: string
+  placeholder: string
+}
+
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
   declare currentSpell: SpellInterface
