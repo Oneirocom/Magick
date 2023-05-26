@@ -220,7 +220,7 @@
     "swr": "2.1.5",
     "synonyms": "1.0.1",
     "tesseract.js": "4.0.6",
-    "three": "0.152.2",
+    "three": "^0.149.0",
     "ts-node": "10.9.1",
     "tslib": "2.5.2",
     "twitter-api-v2": "1.14.3",
