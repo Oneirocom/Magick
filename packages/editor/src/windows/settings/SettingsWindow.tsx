@@ -1,7 +1,7 @@
 // DOCUMENTED
 import { Tooltip } from '@magickml/client-core'
 import { pluginManager } from '@magickml/core'
-import { Clear, FileCopy } from '@mui/icons-material/'
+import { Clear } from '@mui/icons-material/'
 import { IconButton, Input } from '@mui/material'
 import { useState } from 'react'
 import { useSnackbar } from 'notistack'
@@ -26,7 +26,7 @@ const SettingsWindowChild = ({
   getKey,
 }) => {
   // State for copy and clear button labels
-  const [copy, setCopy] = useState('Copy')
+  // const [copy, setCopy] = useState('Copy')
   const [clear, setClear] = useState('Clear')
   // Snackbar for showing notifications
   const { enqueueSnackbar } = useSnackbar()
@@ -52,7 +52,8 @@ const SettingsWindowChild = ({
       />
       {getKey(keyName) && getKey(keyName) !== '' && (
         <>
-          <Tooltip title={copy}>
+          {/* CANNOT COPY SECRET KEYS  */}
+          {/* <Tooltip title={copy}>
             <IconButton
               className={styles['icon']}
               onClick={() => {
@@ -65,7 +66,7 @@ const SettingsWindowChild = ({
             >
               <FileCopy />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
           <Tooltip title={clear}>
             <IconButton
               className={styles['icon']}
