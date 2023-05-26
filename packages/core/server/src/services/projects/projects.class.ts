@@ -81,6 +81,7 @@ export class ProjectsService {
       if ('spells' in agent) delete agent.spells // <-- Updated to fix eliza import
       agent.enabled = false
       agent.projectId = projectId
+      agent.secrets = JSON.stringify(agent.secrets || {})
       return agent
     })
 
@@ -92,6 +93,7 @@ export class ProjectsService {
 
     const mappedSpells = spells.map(spell => {
       delete spell.updatedAt
+      delete spell.id
       delete spell.creatorId
       spell.projectId = projectId
       return spell
@@ -102,6 +104,7 @@ export class ProjectsService {
     if (mappedAgents.length > 0) {
       mappedAgents.forEach(async agent => {
         console.log('creating agent', agent)
+
         const r = await app.service('agents').create(agent)
         agentResponse.push(r)
       })
