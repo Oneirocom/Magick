@@ -73,6 +73,7 @@ export class SpellComponent extends MagickComponent<
       nodeType: 'module',
       skip: true,
     }
+    this.noBuildUpdate = true
     this.display = true
     this.onDoubleClick = (node: MagickNode) => {
       if (!this.editor) return
