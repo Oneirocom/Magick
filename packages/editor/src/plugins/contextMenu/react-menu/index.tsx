@@ -42,7 +42,7 @@ export default class CustomMenu extends Menu {
    * @param {function} onClick - The onClick function for the menu item
    * @param {Array} path - The path for the menu item, default is an empty array
    */
-  addItem(title, onClick, path = []) {
+  addItem(title: string, onClick: (args) => void, path: string[] = []) {
     injectItem(this.items, title, onClick, path);
     this.render();
   }
