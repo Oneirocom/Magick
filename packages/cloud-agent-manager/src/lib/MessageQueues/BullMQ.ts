@@ -1,9 +1,11 @@
 import { Queue } from "bullmq"
+import pino from "pino"
+import { getLogger } from "@magickml/core"
 
 import { MessageQueue, Job, JobType } from "../MessageQueue"
-import { logger } from "../Logger"
 
 export class BullQueue implements MessageQueue {
+    logger: pino.Logger = getLogger()
     queue: Queue
 
     constructor(queue_name: string) {
@@ -15,9 +17,9 @@ export class BullQueue implements MessageQueue {
         })
     }
 
-    async addJob(jobType: JobType, job: Job) {
-        logger.info(`Adding job ${jobType} to queue ${this.queue.name}`)
-        await this.queue.add(jobType, job)
-        logger.info(`Added job ${jobType} to queue ${this.queue.name}`)
+    async addJob(jobType: JobType, job: Job, jobId?: string) {
+        this.logger.info(`Adding job ${jobType} to queue ${this.queue.name}...`)
+        await this.queue.add(jobType, job, { jobId })
+        this.logger.info(`Added job ${jobType} to queue ${this.queue.name}`)
     }
 }
