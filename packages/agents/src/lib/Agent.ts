@@ -194,7 +194,7 @@ export class Agent extends RedisPubSub implements AgentInterface {
     const { data } = job
 
     // Do we want a debug logger here?
-    const output = await this?.spellRunner.runComponent({
+    const output = await this.spellRunner?.runComponent({
       ...data,
       agent: this,
       secrets: this.secrets,
