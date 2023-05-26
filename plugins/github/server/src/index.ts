@@ -47,10 +47,9 @@ function getAgentMethods() {
 }
 
 async function handleResponse({ output, agent, event }) {
-  console.log(agent)
   if (!output || output === '')
     return console.warn('No output to send to github')
-  console.log(output)
+
   await agent.github.handleMessage(event, output.content)
   console.log('RESPONSE HANDLED')
 }
