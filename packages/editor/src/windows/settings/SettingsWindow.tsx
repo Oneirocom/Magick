@@ -52,7 +52,8 @@ const SettingsWindowChild = ({
       />
       {getKey(keyName) && getKey(keyName) !== '' && (
         <>
-          <Tooltip title={copy}>
+          {/* CANNOT COPY SECRET KEYS  */}
+          {/* <Tooltip title={copy}>
             <IconButton
               className={styles['icon']}
               onClick={() => {
@@ -65,7 +66,7 @@ const SettingsWindowChild = ({
             >
               <FileCopy />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
           <Tooltip title={clear}>
             <IconButton
               className={styles['icon']}
