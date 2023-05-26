@@ -15,9 +15,9 @@ jobs:
         node-version: [19.x]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install npx
@@ -43,13 +43,13 @@ jobs:
       - name: Package electron
         run: npm run package-electron-${{ matrix.os }}
       - name: Archive Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # v2.3.1
         with:
           name: release-${{ matrix.os }}
           path: ./apps/client/electron/output
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1.0.1
+        uses: actions/create-release@fca5fb59dbfa2749e2850463e8c5af9e3ee0e270 # v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
@@ -58,7 +58,7 @@ jobs:
           draft: false
           prerelease: false
       - name: Attach Artifact
-        uses: actions/upload-release-asset@v1.0.2
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
@@ -67,7 +67,7 @@ jobs:
           asset_name: magick-${{ matrix.os }}-${{ github.ref }}
           asset_content_type: application/zip
       - name: Upload Source Maps
-        uses: honeybadger-io/github-upload-sourcemap-action@master
+        uses: honeybadger-io/github-upload-sourcemap-action@b29c7bd4fd222360a25a1522563ca99cdb7633fc # master
         with:
           working_directory: ./apps/client/electron/output
           upload_url: ${{ steps.create_release.outputs.upload_url }}
