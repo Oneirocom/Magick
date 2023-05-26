@@ -28,10 +28,11 @@ const Input = props => {
   useHotkeys(
     'return',
     () => {
+      console.log("HITTING ENTER!")
       if (ref.current !== document.activeElement) return
       props.onSend()
     },
-    { enableOnTags: 'INPUT' as any },
+    { enableOnFormTags: 'INPUT' as any },
     [props, ref]
   )
 
@@ -125,10 +126,10 @@ const Playtest = ({ tab }) => {
     if (!inspectorData || inspectorData.name !== 'Input') return
     setPlaytestOption(
       `Input - ` +
-        (inspectorData.data.inputType &&
+      (inspectorData.data.inputType &&
         inspectorData.data.inputType !== 'Default'
-          ? inspectorData.data.inputType
-          : inspectorData.data.inputName)
+        ? inspectorData.data.inputType
+        : inspectorData.data.inputName)
     )
   }, [inspectorData])
 
