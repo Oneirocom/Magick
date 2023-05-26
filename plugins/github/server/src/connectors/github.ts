@@ -5,6 +5,7 @@ export class GithubConnector {
   spellRunner
   data
   agent
+  lastTime
 
   constructor({ spellRunner, agent }) {
     agent.github = this
@@ -30,25 +31,32 @@ export class GithubConnector {
     const githubHandler = setInterval(async () => {
       console.log('running github handler')
 
+      this.lastTime = Date.now() - 30000
+
       const newIssues = await this.getNewIssues(data.github_access_token, data.github_repo_owner, data.github_repo_name)
 
-      await this.newSpellInput('New Issues', 'new_issues', newIssues)
+      if (newIssues.length > 0) {
+        await this.newSpellInput('New Issues', 'new_issues', newIssues)
+      }
 
       const newPRs = await this.getNewPRs(data.github_access_token, data.github_repo_owner, data.github_repo_name)
 
-      await this.newSpellInput('New PRs', 'new_prs', newPRs)
+      if (newPRs.length > 0) {
+        await this.newSpellInput('New PRs', 'new_prs', newPRs)
+      }
 
       const issueComments = await this.getIssueComments(data.github_access_token, data.github_repo_owner, data.github_repo_name)
+      if (issueComments.length > 0) {
+        await this.newSpellInput('Issue Response', 'issue_response', issueComments)
+      }
+    }, 30000)
 
-      await this.newSpellInput('Issue Response', 'issue_response', issueComments)
-
-    }, 30000);
     agent.githubHandler = githubHandler
     console.log('Added agent to github', agent.id)
   }
 
   newSpellInput = async (name: string, type: string, content: any) => {
-    const entities = [this.data.github_repo_owner, this.data.github_access_token]
+    const entities = [this.data.github_repo_owner, this.data.github_repo_name]
     return this.spellRunner.runComponent({
       inputs: {
         [`Input - Github (${name})`]: {
@@ -124,10 +132,15 @@ export class GithubConnector {
         auth: accessToken
       })
 
+      const since = new Date(this.lastTime).toISOString()
+      console.log(since)
+
       const newIssues = await octokit.rest.issues.listForRepo({
         owner: owner,
         repo: repo,
-        sort: 'created'
+        sort: 'created',
+        direction: 'desc',
+        since: since
       })
 
       console.log("new issues ", newIssues.data.length)
@@ -158,12 +171,18 @@ export class GithubConnector {
       const newPRs = await octokit.rest.pulls.list({
         owner: owner,
         repo: repo,
-        sort: 'created'
+        sort: 'created',
+        direction: 'desc',
       })
 
-      console.log("new PRs ", newPRs.data.length)
+      const filters = newPRs.data.filter((item) => {
+        const created = new Date(item.created_at).getTime()
+        return (created > this.lastTime)
+      })
 
-      return newPRs.data
+      console.log("new PRs ", filters)
+
+      return filters
     } catch (error) {
       console.error(error)
       return []
@@ -181,6 +200,8 @@ export class GithubConnector {
         return []
       }
 
+      const since = new Date(this.lastTime).toISOString()
+
       //@octokit/rest
       const octokit = new Octokit({
         auth: accessToken
@@ -188,7 +209,10 @@ export class GithubConnector {
 
       const issueComments = await octokit.rest.issues.listCommentsForRepo({
         owner: owner,
-        repo: repo
+        repo: repo,
+        sort: 'created',
+        direction: 'desc',
+        since: since
       })
 
       console.log("issue comments ", issueComments.data.length)
@@ -200,12 +224,13 @@ export class GithubConnector {
     }
   }
 
-  async handleMessage(response, info) {
-    console.log('handleMessage', response)
+  async handleMessage(event/*, content*/) {
+    console.log('handleMessage', event)
+    /*
     const token = this.data.github_access_token
     const owner = this.data.github_repo_owner
     const repo = this.data.github_repo_name
-
+    
     if (info == '') {
       return []
     }
@@ -224,6 +249,7 @@ export class GithubConnector {
     }
 
     return res
+    */
   }
 }
 
