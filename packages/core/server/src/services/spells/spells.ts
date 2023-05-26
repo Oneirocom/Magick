@@ -75,6 +75,7 @@ export const spell = (app: Application) => {
           await context.service
             .find({
               query: {
+                projectId: data.projectId,
                 name: data.name,
               },
             })
@@ -83,6 +84,7 @@ export const spell = (app: Application) => {
                 await context.service
                   .find({
                     query: {
+                      projectId: data.projectId,
                       name: {
                         $ilike: data.name + ' (%)',
                       },
