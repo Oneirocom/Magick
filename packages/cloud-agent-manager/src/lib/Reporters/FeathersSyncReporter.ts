@@ -1,4 +1,4 @@
-import { app } from '@magickml/server-core'
+import { app, initApp } from '@magickml/server-core'
 import { Reporter } from '../Reporter'
 import { EventEmitter } from 'events'
 
@@ -6,8 +6,9 @@ export class FeathersSyncReporter implements Reporter {
     emitter: EventEmitter = new EventEmitter()
 
     constructor() {
+        initApp()
         app.service('agents').on('created', (agent: any) => {
-            this.emitter.emit('new-agent', agent)
+            this.emitter.emit('agent:updated', agent)
         })
     }
 

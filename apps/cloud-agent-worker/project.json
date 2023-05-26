@@ -1,5 +1,5 @@
 {
-  "name": "cloud-agent-worker",
+  "name": "@magickml/cloud-agent-worker",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/cloud-agent-worker/src",
   "projectType": "application",
@@ -27,14 +27,14 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "cloud-agent-worker:build"
+        "buildTarget": "@magickml/cloud-agent-worker:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "cloud-agent-worker:build:development"
+          "buildTarget": "@magickml/cloud-agent-worker:build:development"
         },
         "production": {
-          "buildTarget": "cloud-agent-worker:build:production"
+          "buildTarget": "@magickml/cloud-agent-worker:build:production"
         }
       }
     },

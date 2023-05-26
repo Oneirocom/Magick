@@ -1,5 +1,5 @@
 {
-  "name": "cloud-agent-manager",
+  "name": "@magickml/cloud-agent-manager",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/cloud-agent-manager/src",
   "projectType": "application",
@@ -31,10 +31,10 @@
       },
       "configurations": {
         "development": {
-          "buildTarget": "cloud-agent-manager:build:development"
+          "buildTarget": "@magickml/cloud-agent-manager:build:development"
         },
         "production": {
-          "buildTarget": "cloud-agent-manager:build:production"
+          "buildTarget": "@magickml/cloud-agent-manager:build:production"
         }
       }
     },

@@ -1,6 +1,10 @@
-export type JobType = "create-agent"
-export type Job = any
+export type JobType = "agent:updated"
+export type Job = CreateAgentJob
+export interface CreateAgentJob {
+    agentId: string
+}
+
 
 export interface MessageQueue {
-    addJob(jobType: JobType, job: Job): Promise<void>
+    addJob(jobType: JobType, job: Job, jobId?: string): Promise<void>
 }
