@@ -1,6 +1,11 @@
 import { PubSub, events } from '@magickml/client-core'
+import { MagickEditor } from '@magickml/core'
 
 export class SnapGrid {
+  editor: MagickEditor
+  size: number
+  active: boolean
+
   constructor(editor, { size = 16, dynamic = true }) {
     this.editor = editor
     this.size = size
