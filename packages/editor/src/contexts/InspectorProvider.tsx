@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { usePubSub } from '@magickml/client-core';
-import { InspectorData, SupportedLanguages } from '@magickml/core';
+import { ControlData, InspectorData, SupportedLanguages } from '@magickml/core';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 /**
@@ -8,10 +8,10 @@ import { createContext, useContext, useEffect, useState } from 'react';
  */
 export type TextEditorData = {
   options?:
-    | Record<string, any>
-    | (undefined & {
-        language?: SupportedLanguages
-      })
+  | Record<string, any>
+  | (undefined & {
+    language?: SupportedLanguages
+  })
   data?: string
   control?: Record<string, any> | undefined
   name?: string
@@ -56,7 +56,7 @@ const InspectorProvider = ({ children, tab }) => {
       if (!data.dataControls) return
 
       // Handle components
-      Object.entries(data.dataControls).forEach(([, control]) => {
+      Object.entries(data.dataControls as ControlData[]).forEach(([, control]) => {
         if (control?.options?.editor) {
           // Relay data to the text editor
           const textData = {

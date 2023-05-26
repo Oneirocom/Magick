@@ -40,7 +40,7 @@ const DeleteModal = ({ closeModal, handledelete, id }) => {
 
   const options = [
     {
-      className: css.deleteBtn,
+      className: css['delete-btn'],
       label: 'Delete',
       onClick: onSubmit
     }
@@ -51,7 +51,7 @@ const DeleteModal = ({ closeModal, handledelete, id }) => {
       title="Confirm Delete"
       options={options}
       icon="info"
-      className={css.deleteModal}
+      className={css['delete-modal']}
     />
   );
 }
