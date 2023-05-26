@@ -95,8 +95,7 @@
                     "type": "tab",
                     "id": "#22",
                     "name": "Playtest",
-                    "component": "playtest",
-                    "enableFloat": true
+                    "component": "playtest"
                   }
                 ],
                 "active": true
