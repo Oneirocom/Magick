@@ -77,7 +77,7 @@ export default function ChatBox() {
 
   useEffect(() => {
     if (currentAgent) return
-    if (agentList.length > 0) {
+    if (agentList?.length > 0) {
       setCurrentAgent(agentList[0].name)
     }
   }, [agentList])
