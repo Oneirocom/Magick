@@ -12,8 +12,6 @@ const handleSockets = (app: any) => {
      * Set up a connection event listener for incoming sockets.
      */
     io.on('connection', async function (socket: any) {
-      // user will be set to the payload if we are not in single user mode
-
       // Use a custom header for the handshake.
       const auth = socket.handshake?.headers?.authorization
       if (!auth) {
@@ -41,6 +39,8 @@ const handleSockets = (app: any) => {
 
       app.userSpellManagers.set(user.id, spellManager)
 
+      // emit login event to be handled by global app login methods for channels
+      app.emit('login', payload, { connection: socket.feathers })
       socket.emit('connected')
     })
   }

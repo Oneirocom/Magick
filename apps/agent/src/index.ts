@@ -5,7 +5,7 @@
  * @packageDocumentation
  */
 
-import { AgentManager } from '@magickml/core'
+import { AgentManager } from '@magickml/agents'
 import { app } from '@magickml/server-core'
 import { initLogger, getLogger } from '@magickml/core'
 import 'regenerator-runtime/runtime'
