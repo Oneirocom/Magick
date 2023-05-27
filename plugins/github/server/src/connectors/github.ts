@@ -13,12 +13,12 @@ export class GithubConnector {
     const { data } = agent.data
     this.data = data
     this.agent = agent
-
-    console.log('Github enabled, initializing...', data.github_access_token, data.github_repo_owner, data.github_repo_name)
+    
     this.initialize({ agent, data })
   }
 
   async initialize({ agent, data }) {
+    console.log('Github enabled, initializing...', data.github_access_token, data.github_repo_owner, data.github_repo_name)
 
     if (!data.github_enabled) {
       console.warn('Github is not enabled, skipping')
@@ -33,21 +33,25 @@ export class GithubConnector {
 
       this.lastTime = Date.now() - 30000
 
-      const newIssues = await this.getNewIssues(data.github_access_token, data.github_repo_owner, data.github_repo_name)
-
+      const newIssues = await this.getNewIssues(data)
       if (newIssues.length > 0) {
-        await this.newSpellInput('New Issues', 'new_issues', newIssues)
+        newIssues.forEach(async (item) => {
+          await this.newSpellInput('New Issues', 'new_issues', item)
+        })        
       }
 
-      const newPRs = await this.getNewPRs(data.github_access_token, data.github_repo_owner, data.github_repo_name)
-
+      const newPRs = await this.getNewPRs(data)
       if (newPRs.length > 0) {
-        await this.newSpellInput('New PRs', 'new_prs', newPRs)
+        newPRs.forEach(async (item) => {
+          await this.newSpellInput('New PRs', 'new_prs', item)
+        })
       }
 
-      const issueComments = await this.getIssueComments(data.github_access_token, data.github_repo_owner, data.github_repo_name)
+      const issueComments = await this.getIssueComments(data)
       if (issueComments.length > 0) {
-        await this.newSpellInput('Issue Response', 'issue_response', issueComments)
+        issueComments.forEach(async (item) => {
+          await this.newSpellInput('Issue Response', 'issue_response', item)
+        })
       }
     }, 30000)
 
@@ -56,20 +60,21 @@ export class GithubConnector {
   }
 
   newSpellInput = async (name: string, type: string, content: any) => {
-    const entities = [this.data.github_repo_owner, this.data.github_repo_name]
+    const {number, title, body} = content
+    const entities = [this.data.github_repo_owner, this.data.github_repo_name, title, body]
     return this.spellRunner.runComponent({
       inputs: {
         [`Input - Github (${name})`]: {
           connector: `Github (${name})`,
-          content: JSON.stringify(content),
+          content: body,
           sender: this.data.github_repo_owner,
-          observer: this.data.github_access_token,
+          observer: number,
           client: 'github',
           channel: 'github',
           agentId: this.agent.id,
           entities,
           channelType: type,
-          rawData: JSON.stringify(content),
+          rawData: JSON.stringify({number, title, body}),
         },
       },
       agent: this.agent,
@@ -80,97 +85,115 @@ export class GithubConnector {
     })
   }
 
-  createIssue = async (accessToken: string, owner: string, repo: string, title: string, body: string) => {
+  createComment = async (data: any, number: number, body: string) => {
+    const {github_access_token, github_repo_owner, github_repo_name} = data
     try {
-      if (accessToken == undefined || accessToken == '' || accessToken[0] != 'g') {
+      if (!github_access_token || github_access_token[0] != 'g') {
         console.log('github access token is invalid')
-        return null
+        return []
       }
-      if (!owner || owner == '' || !repo || repo == '') {
+      if (!github_repo_owner || github_repo_owner == '') {
         console.log('owner/repo are invalid')
-        return null
+        return []
       }
-      if (!title || title == '' || !body) {
-        console.log('title/body are invalid')
+      if (!github_repo_name || github_repo_name == '') {
+        console.log('owner/repo are invalid')
+        return []
+      }
+      if (!number || !body) {
+        console.log('number/body are invalid')
         return null
       }
 
       //@octokit/rest
       const octokit = new Octokit({
-        auth: accessToken
+        auth: github_access_token
       })
-
-      console.log(accessToken, owner, repo, title, body)
-      const issue = await octokit.rest.issues.create({
-        owner: owner,
-        repo: repo,
-        title: title,
-        body: body
+      
+      const comment = await octokit.rest.issues.createComment({
+        owner: github_repo_owner,
+        repo: github_repo_name,
+        issue_number: number,
+        body
       })
-      console.log('issue', issue)
+      console.log('new comment', comment.data.id, comment.data.body)
 
-      return issue
+      return comment.data
     } catch (error) {
       console.error(error)
       return null
     }
   }
 
-  getNewIssues = async (accessToken: string, owner: string, repo: string) => {
+  getNewIssues = async (data: any) => {
+    const {github_access_token, github_repo_owner, github_repo_name} = data
     try {
-      if (accessToken == undefined || accessToken == '' || accessToken[0] != 'g') {
+      if (!github_access_token || github_access_token[0] != 'g') {
         console.log('github access token is invalid')
         return []
       }
-      if (!owner || owner == '' || !repo || repo == '') {
+      if (!github_repo_owner || github_repo_owner == '') {
+        console.log('owner/repo are invalid')
+        return []
+      }
+      if (!github_repo_name || github_repo_name == '') {
         console.log('owner/repo are invalid')
         return []
       }
 
       //@octokit/rest
       const octokit = new Octokit({
-        auth: accessToken
+        auth: github_access_token
       })
 
       const since = new Date(this.lastTime).toISOString()
       console.log(since)
 
       const newIssues = await octokit.rest.issues.listForRepo({
-        owner: owner,
-        repo: repo,
+        owner: github_repo_owner,
+        repo: github_repo_name,
         sort: 'created',
         direction: 'desc',
         since: since
       })
 
-      console.log("new issues ", newIssues.data.length)
+      const filters = newIssues.data.filter((item) => {
+        const created = new Date(item.created_at).getTime()
+        return (created > this.lastTime)
+      })
+      console.log("new issues ", filters)
 
-      return newIssues.data
+      return filters
     } catch (error) {
       console.error(error)
       return []
     }
   }
 
-  getNewPRs = async (accessToken: string, owner: string, repo: string) => {
+  getNewPRs = async (data: any) => {
+    const {github_access_token, github_repo_owner, github_repo_name} = data
     try {
-      if (accessToken == undefined || accessToken == '' || accessToken[0] != 'g') {
+      if (!github_access_token || github_access_token[0] != 'g') {
         console.log('github access token is invalid')
         return []
       }
-      if (!owner || owner == '' || !repo || repo == '') {
+      if (!github_repo_owner || github_repo_owner == '') {
+        console.log('owner/repo are invalid')
+        return []
+      }
+      if (!github_repo_name || github_repo_name == '') {
         console.log('owner/repo are invalid')
         return []
       }
 
       //@octokit/rest
       const octokit = new Octokit({
-        auth: accessToken
+        auth: github_access_token
       })
 
       const newPRs = await octokit.rest.pulls.list({
-        owner: owner,
-        repo: repo,
+        owner: github_repo_owner,
+        repo: github_repo_name,
         sort: 'created',
         direction: 'desc',
       })
@@ -189,27 +212,32 @@ export class GithubConnector {
     }
   }
 
-  getIssueComments = async (accessToken: string, owner: string, repo: string) => {
+  getIssueComments = async (data: any) => {
+    const {github_access_token, github_repo_owner, github_repo_name} = data
     try {
-      if (accessToken == undefined || accessToken == '' || accessToken[0] != 'g') {
+      if (!github_access_token || github_access_token[0] != 'g') {
         console.log('github access token is invalid')
         return []
       }
-      if (!owner || owner == '' || !repo || repo == '') {
+      if (!github_repo_owner || github_repo_owner == '') {
+        console.log('owner/repo are invalid')
+        return []
+      }
+      if (!github_repo_name || github_repo_name == '') {
         console.log('owner/repo are invalid')
         return []
       }
 
-      const since = new Date(this.lastTime).toISOString()
-
       //@octokit/rest
       const octokit = new Octokit({
-        auth: accessToken
+        auth: github_access_token
       })
 
+      const since = new Date(this.lastTime).toISOString()
+
       const issueComments = await octokit.rest.issues.listCommentsForRepo({
-        owner: owner,
-        repo: repo,
+        owner: github_repo_owner,
+        repo: github_repo_name,
         sort: 'created',
         direction: 'desc',
         since: since
@@ -224,32 +252,19 @@ export class GithubConnector {
     }
   }
 
-  async handleMessage(event/*, content*/) {
+  async handleMessage(event: any, content: string) {
     console.log('handleMessage', event)
-    /*
-    const token = this.data.github_access_token
-    const owner = this.data.github_repo_owner
-    const repo = this.data.github_repo_name
-    
-    if (info == '') {
-      return []
+    console.log('content', content)
+    if (!content) {
+      console.error('output is undefined')
+      return
+    }
+    if (!event.observer) {
+      console.error('number is undefined')
+      return
     }
 
-    let json = {}
-    try {
-      json = JSON.parse(info)
-    } catch (err) {
-      console.error(err)
-    }
-
-    const res = await this.createIssue(token, owner, repo, json['title'], json['content'])
-
-    if (!res) {
-      return null
-    }
-
-    return res
-    */
+    await this.createComment(this.data, event.observer, content)
   }
 }
 
