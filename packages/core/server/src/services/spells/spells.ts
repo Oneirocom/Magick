@@ -5,8 +5,7 @@
 
 // Imports
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import { v4 as uuidv4 } from 'uuid'
-import type { Application, HookContext } from '../../declarations'
+import type { Application } from '../../declarations'
 import {
   checkForSpellInManager,
   updateSpellInManager,
