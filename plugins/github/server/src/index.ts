@@ -50,7 +50,7 @@ async function handleResponse({ output, agent, event }) {
   if (!output || output === '')
     return console.warn('No output to send to github')
 
-  await agent.github.handleMessage(event, output.content)
+  await agent.github.handleMessage(event, output)
   console.log('RESPONSE HANDLED')
 }
 
