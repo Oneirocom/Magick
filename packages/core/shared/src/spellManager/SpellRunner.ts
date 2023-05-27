@@ -1,6 +1,6 @@
 import { Application } from '@feathersjs/koa'
 import io from 'socket.io'
-import Agent from '../agents/Agent'
+import { Agent } from '@magickml/agents'
 
 import pino from 'pino'
 import { getLogger } from '@magickml/core'
@@ -67,6 +67,19 @@ class SpellRunner {
     })
   }
 
+  publish(event, message) {
+    if (!this.agent) return
+    this.agent.publishEvent(`spell:${this.currentSpell.id}`, {
+      ...message,
+      event,
+    })
+  }
+
+  emit(event, message) {
+    if (!this.agent) return
+    this.agent.publishEvent(`spell:${this.currentSpell.id}:${event}`, message)
+  }
+
   constructor({ app, socket, agent, spellManager }: SpellRunnerConstructor) {
     this.agent = agent
     this.spellManager = spellManager
@@ -77,6 +90,7 @@ class SpellRunner {
       components: getNodes(),
       server: true,
       socket: socket || undefined,
+      emit: this.emit.bind(this),
     }) as MagickEngine
     this.app = app
 
@@ -242,7 +256,6 @@ class SpellRunner {
     inputs,
     componentName = 'Input',
     runSubspell = false,
-    agent,
     secrets,
     publicVariables,
     app,
@@ -250,7 +263,9 @@ class SpellRunner {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
-      return this.logger.error('Infinite loop detected in SpellRunner. Exiting.')
+      return this.logger.error(
+        'Infinite loop detected in SpellRunner. Exiting.'
+      )
     }
     // Set the current spell into the cache of spells that have run now.
     if (runSubspell) this.ranSpells.push(this.currentSpell.name)
@@ -263,7 +278,6 @@ class SpellRunner {
     this.module.read({
       inputs: this._formatInputs(inputs),
       secrets,
-      agent,
       publicVariables,
       app,
     })

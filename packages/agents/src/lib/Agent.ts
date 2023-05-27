@@ -1,17 +1,25 @@
 // DOCUMENTED
-import { Application } from '@feathersjs/koa'
+import * as BullMQ from 'bullmq'
 import pino from 'pino'
-import { getLogger, PING_AGENT_TIME_MSEC } from '@magickml/core'
-import { SpellManager, SpellRunner } from '../spellManager/index'
-import { pluginManager } from '../plugin'
-import { AgentInterface, SpellInterface } from '../schemas'
-import { AgentManager } from './AgentManager'
 import _ from 'lodash'
+import { Application } from '@feathersjs/koa'
+import {
+  SpellManager,
+  SpellRunner,
+  pluginManager,
+  AgentInterface,
+  SpellInterface,
+  getLogger,
+  PING_AGENT_TIME_MSEC,
+} from '@magickml/core'
+import { RedisPubSub } from '@magickml/redis-pubsub'
+
+import { AgentManager } from './AgentManager'
 
 /**
  * The Agent class that implements AgentInterface.
  */
-export class Agent implements AgentInterface {
+export class Agent extends RedisPubSub implements AgentInterface {
   name = ''
   id: any
   secrets: any
@@ -24,6 +32,8 @@ export class Agent implements AgentInterface {
   spellRunner?: SpellRunner
   rootSpell: SpellInterface
   logger: pino.Logger = getLogger()
+  worker: BullMQ.Worker
+  queue: BullMQ.Queue
 
   outputTypes: any[] = []
   updateInterval: any
@@ -38,6 +48,7 @@ export class Agent implements AgentInterface {
     agentManager: AgentManager,
     app: Application
   ) {
+    super()
     this.secrets = agentData?.secrets ? JSON.parse(agentData?.secrets) : {}
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
@@ -49,6 +60,10 @@ export class Agent implements AgentInterface {
     this.app = app
 
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
+    // Set up the agent worker to handle incoming messages
+    this.worker = new BullMQ.Worker(`agent:run`, this.runWorker.bind(this))
+    this.queue = new BullMQ.Queue(`agent:run:result`)
+
     const spellManager = new SpellManager({
       cache: false,
       agent: this,
@@ -59,7 +74,10 @@ export class Agent implements AgentInterface {
     ;(async () => {
       console.log('agentData', agentData)
       if (!agentData.rootSpell) {
-        this.logger.warn('No root spell found for agent: %o', { id: this.id, name: this.name })
+        this.logger.warn('No root spell found for agent: %o', {
+          id: this.id,
+          name: this.name,
+        })
         return
       }
       const spell = (
@@ -79,11 +97,6 @@ export class Agent implements AgentInterface {
 
       for (const method of Object.keys(agentStartMethods)) {
         try {
-          console.log(
-            'starting ',
-            agentManager !== null,
-            this.spellRunner !== null
-          )
           await agentStartMethods[method]({
             agentManager,
             agent: this,
@@ -126,11 +139,26 @@ export class Agent implements AgentInterface {
     this.log('destroyed agent', { id: this.id })
   }
 
+  // returns the channel for the agent
+  get channel() {
+    return `agent:${this.id}`
+  }
+
+  // published an event to the agents event stream
+  publishEvent(event, message) {
+    this.publish(`${this.channel}:${event}`, {
+      ...message,
+      agent: this.id,
+      projectId: this.projectId,
+    })
+  }
+
+  // sends a log event along the event stream
   log(message, data) {
     this.logger.info(`${message} ${JSON.stringify(data)}`)
-
-    this.app.service('agents').log({
+    this.publish(this.channel, {
       agentId: this.id,
+      projectId: this.projectId,
       type: 'log',
       message,
       data,
@@ -139,8 +167,9 @@ export class Agent implements AgentInterface {
 
   warn(message, data) {
     this.logger.warn(`${message} ${JSON.stringify(data)}`)
-    this.app.service('agents').log({
+    this.publish(this.channel, {
       agentId: this.id,
+      projectId: this.projectId,
       type: 'warn',
       message,
       data,
@@ -149,11 +178,36 @@ export class Agent implements AgentInterface {
 
   error(message, data = {}) {
     this.logger.error(`${message} %o`, { error: data })
-    this.app.service('agents').log({
+    this.publish(this.channel, {
       agentId: this.id,
+      projectId: this.projectId,
       type: 'error',
       message,
       data: { error: data },
+    })
+  }
+
+  async runWorker(job) {
+    // the job name is the agent id.  Only run if the agent id matches.
+    if (this.id !== job.data.agentId) return
+
+    const { data } = job
+
+    // Do we want a debug logger here?
+    const output = await this.spellRunner?.runComponent({
+      ...data,
+      agent: this,
+      secrets: this.secrets,
+      publicVariables: this.publicVariables,
+      runSubspell: true,
+      app: this.app,
+    })
+
+    await this.queue.add('agent:run:result', {
+      agentId: this.id,
+      projectId: this.projectId,
+      originalData: data,
+      result: output,
     })
   }
 }
