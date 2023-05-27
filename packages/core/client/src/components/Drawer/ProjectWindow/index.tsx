@@ -107,8 +107,6 @@ const ProjectWindow = ({ openDrawer }) => {
     const exportData = data
     exportData.agents.forEach((agent: Agent) => {
       agent.secrets = {}
-
-      Object.keys(agent.data).forEach(key => { })
     })
 
     // traverse the entire exportData object and set all 'data' properties to {}
