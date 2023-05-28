@@ -2,7 +2,6 @@
 /** @module ProjectWindow */
 
 import { API_ROOT_URL, PRODUCTION } from '@magickml/core'
-import { Agent } from '@magickml/agents'
 import {
   Apps,
   ChevronRight,
@@ -105,7 +104,7 @@ const ProjectWindow = ({ openDrawer }) => {
     const element = document.createElement('a')
 
     const exportData = data
-    exportData.agents.forEach((agent: Agent) => {
+    exportData.agents.forEach((agent: any) => {
       agent.secrets = {}
     })
 

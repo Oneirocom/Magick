@@ -9,8 +9,7 @@ import { AgentManager } from '@magickml/agents'
 import { app } from '@magickml/server-core'
 import { initLogger, getLogger } from '@magickml/core'
 import 'regenerator-runtime/runtime'
-
-
+import pluginExports from './plugins'
 
 /**
  * Asynchronously loads the application's plugins and logs their names.
@@ -19,8 +18,6 @@ import 'regenerator-runtime/runtime'
 async function loadPlugins(): Promise<void> {
   logger.info('Loading plugins...')
   // Import the plugins and get the default exports.
-  const pluginExports = (await import('./plugins')).default
-
   // Log the loaded plugin names.
   const pluginNames = Object.values(pluginExports)
     .map((p: any) => p.name)
@@ -38,9 +35,8 @@ async function initializeAgent(): Promise<void> {
 
   new AgentManager(app)
 
-  logger.info("Agent initialized.")
+  logger.info('Agent initialized.')
 }
-
 
 // Initialize the application and start the agent.
 
