@@ -111,10 +111,22 @@ const DiscordPlugin = new ServerPlugin({
       defaultResponseOutput: 'Discord (Text)',
       sockets: inputSockets,
     },
+    {
+      name: 'Discord (DM)',
+      defaultResponseOutput: 'Discord (DM)',
+      sockets: inputSockets,
+    },
   ],
   outputTypes: [
     {
       name: 'Discord (Voice)',
+      sockets: outputSockets,
+      handler: async ({ output, agent, event }) => {
+        await handleResponse({ output, agent, event })
+      },
+    },
+    {
+      name: 'Discord (DM)',
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
         await handleResponse({ output, agent, event })
