@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-langchain-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/langchain/client/src",
+  "sourceRoot": "packages/plugins/langchain/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/langchain/client/**/*.ts"
+          "packages/plugins/langchain/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/langchain/client/jest.config.ts",
+        "jestConfig": "packages/plugins/langchain/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

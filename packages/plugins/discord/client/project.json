@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-discord-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/discord/client/src",
+  "sourceRoot": "packages/plugins/discord/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/discord/client/**/*.ts"
+          "packages/plugins/discord/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/discord/client/jest.config.ts",
+        "jestConfig": "packages/plugins/discord/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

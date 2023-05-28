@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-googleai-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/googleai/client/src",
+  "sourceRoot": "packages/plugins/googleai/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/googleai/client/**/*.ts"
+          "packages/plugins/googleai/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/googleai/client/jest.config.ts",
+        "jestConfig": "packages/plugins/googleai/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

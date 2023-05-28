@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-rest",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/rest/src",
+  "sourceRoot": "packages/plugins/rest/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/rest/client/**/*.ts"
+          "packages/plugins/rest/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/rest/jest.config.ts",
+        "jestConfig": "packages/plugins/rest/jest.config.ts",
         "passWithNoTests": true
       }
     }

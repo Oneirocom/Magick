@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/bluesky/server/**/*.ts"
+          "packages/plugins/bluesky/server/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/bluesky/server/jest.config.ts",
+        "jestConfig": "packages/plugins/bluesky/server/jest.config.ts",
         "passWithNoTests": true
       }
     }

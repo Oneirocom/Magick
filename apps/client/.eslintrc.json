@@ -5,7 +5,8 @@
   ],
   "ignorePatterns": [
     "!**/*",
-    "**/node_modules/**"
+    "**/node_modules/**",
+    "src/plugins.ts"
   ],
   "overrides": [
     {

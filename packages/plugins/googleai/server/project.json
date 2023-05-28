@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/googleai/server/**/*.ts"
+          "packages/plugins/googleai/server/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/googleai/server/jest.config.ts",
+        "jestConfig": "packages/plugins/googleai/server/jest.config.ts",
         "passWithNoTests": true
       }
     }

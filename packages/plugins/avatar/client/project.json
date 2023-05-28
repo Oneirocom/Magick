@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-avatar-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/avatar/client/src",
+  "sourceRoot": "packages/plugins/avatar/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core",
@@ -15,7 +15,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/avatar/client/**/*.ts"
+          "packages/plugins/avatar/client/**/*.ts"
         ]
       }
     },
@@ -25,7 +25,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/avatar/client/jest.config.ts",
+        "jestConfig": "packages/plugins/avatar/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-gmail-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/gmail/client/src",
+  "sourceRoot": "packages/plugins/gmail/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/gmail/client/**/*.ts"
+          "packages/plugins/gmail/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/gmail/client/jest.config.ts",
+        "jestConfig": "packages/plugins/gmail/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

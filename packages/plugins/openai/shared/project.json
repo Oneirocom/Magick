@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-openai-shared",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/openai/shared/src",
+  "sourceRoot": "packages/plugins/openai/shared/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/openai/shared/**/*.ts"
+          "packages/plugins/openai/shared/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/openai/shared/jest.config.ts",
+        "jestConfig": "packages/plugins/openai/shared/jest.config.ts",
         "passWithNoTests": true
       }
     }

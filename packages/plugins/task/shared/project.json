@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-task-shared",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/task/shared/src",
+  "sourceRoot": "packages/plugins/task/shared/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/task/shared/**/*.ts"
+          "packages/plugins/task/shared/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/task/shared/jest.config.ts",
+        "jestConfig": "packages/plugins/task/shared/jest.config.ts",
         "passWithNoTests": true
       }
     }

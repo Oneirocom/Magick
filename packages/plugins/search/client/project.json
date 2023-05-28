@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-search-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/search/client/src",
+  "sourceRoot": "packages/plugins/search/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/search/client/**/*.ts"
+          "packages/plugins/search/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/search/client/jest.config.ts",
+        "jestConfig": "packages/plugins/search/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

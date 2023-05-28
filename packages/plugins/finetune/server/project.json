@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-finetune-server",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/finetune/server/src",
+  "sourceRoot": "packages/plugins/finetune/server/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -15,7 +15,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/finetune/server/**/*.{ts,tsx,js,jsx}"
+          "packages/plugins/finetune/server/**/*.{ts,tsx,js,jsx}"
         ]
       }
     },
@@ -25,7 +25,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/finetune/server/jest.config.ts",
+        "jestConfig": "packages/plugins/finetune/server/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {

@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-twitter-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/twitter/client/src",
+  "sourceRoot": "packages/plugins/twitter/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/twitter/client/**/*.ts"
+          "packages/plugins/twitter/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/twitter/client/jest.config.ts",
+        "jestConfig": "packages/plugins/twitter/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

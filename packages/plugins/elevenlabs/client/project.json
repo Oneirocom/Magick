@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-elevenlabs-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/elevenlabs/client/src",
+  "sourceRoot": "packages/plugins/elevenlabs/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/elevenlabs/client/**/*.ts"
+          "packages/plugins/elevenlabs/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/elevenlabs/client/jest.config.ts",
+        "jestConfig": "packages/plugins/elevenlabs/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

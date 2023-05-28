@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/twitter/server/**/*.ts"
+          "packages/plugins/twitter/server/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/twitter/server/jest.config.ts",
+        "jestConfig": "packages/plugins/twitter/server/jest.config.ts",
         "passWithNoTests": true
       }
     }

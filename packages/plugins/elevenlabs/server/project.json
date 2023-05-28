@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/elevenlabs/server/src/**/*.ts"
+          "packages/plugins/elevenlabs/server/src/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/elevenlabs/server/jest.config.ts",
+        "jestConfig": "packages/plugins/elevenlabs/server/jest.config.ts",
         "passWithNoTests": true
       }
     }
