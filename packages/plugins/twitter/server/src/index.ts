@@ -99,7 +99,7 @@ const TwitterPlugin = new ServerPlugin({
       sockets: inputSockets,
       defaultResponseOutput: 'Twitter (Feed)',
     },
-    // { name: 'Twitter (DM)', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (DM)' },
+    { name: 'Twitter (DM)', defaultResponseOutput: 'Twitter (DM)' },
     // { name: 'Twitter (Mention', trigger: true, socket: eventSocket, defaultResponseOutput: 'Twitter (Mention'}
   ],
   outputTypes: [
@@ -110,11 +110,13 @@ const TwitterPlugin = new ServerPlugin({
         await handleResponse({ output, agent, event })
       },
     },
-    // { name: 'Twitter (DM)', trigger: true, socket: eventSocket, handler: async ({
-    //   output, agent, event
-    // }) => {
-    //   await handleResponse({output, agent, event})
-    // }},
+    {
+      name: 'Twitter (DM)',
+      sockets: outputSockets,
+      handler: async ({ output, agent, event }) => {
+        await handleResponse({ output, agent, event })
+      },
+    },
   ],
   agentMethods: getAgentMethods(),
   secrets: [

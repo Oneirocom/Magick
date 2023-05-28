@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Contains the implementation of the `DiscordPlugin` class which represents
  * a client plugin that is used by the MagickML engine. The plugin provides a
@@ -37,7 +37,7 @@ const inputSockets = [
     socket: 'trigger',
     name: 'trigger',
     type: triggerSocket,
-  }
+  },
 ]
 
 /**
@@ -51,9 +51,8 @@ const outputSockets = [
     socket: 'output',
     name: 'output',
     type: eventSocket,
-  }
+  },
 ]
-
 
 /**
  * The Discord plugin implementation.
@@ -66,16 +65,20 @@ const DiscordPlugin = new ClientPlugin({
   inputTypes: [
     { name: 'Discord (Voice)', sockets: inputSockets },
     { name: 'Discord (Text)', sockets: inputSockets },
+    { name: 'Discord (DM)', sockets: inputSockets },
   ],
   outputTypes: [
     { name: 'Discord (Voice)', sockets: outputSockets },
     { name: 'Discord (Text)', sockets: outputSockets },
+    { name: 'Discord (DM)', sockets: outputSockets },
   ],
-  secrets: [{
-    name: 'Discord API Key',
-    key: 'discord_api_key',
-    global: false
-  }]
+  secrets: [
+    {
+      name: 'Discord API Key',
+      key: 'discord_api_key',
+      global: false,
+    },
+  ],
 })
 
 export default DiscordPlugin
