@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-pinecone-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/pinecone/client/src",
+  "sourceRoot": "packages/plugins/pinecone/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/pinecone/client/**/*.ts"
+          "packages/plugins/pinecone/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/pinecone/client/jest.config.ts",
+        "jestConfig": "packages/plugins/pinecone/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

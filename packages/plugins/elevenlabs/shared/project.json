@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-elevenlabs-shared",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/elevenlabs/shared/src",
+  "sourceRoot": "packages/plugins/elevenlabs/shared/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/elevenlabs/shared/**/*.ts"
+          "packages/plugins/elevenlabs/shared/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/elevenlabs/shared/jest.config.ts",
+        "jestConfig": "packages/plugins/elevenlabs/shared/jest.config.ts",
         "passWithNoTests": true
       }
     }

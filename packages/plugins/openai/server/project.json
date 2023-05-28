@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/openai/server/**/*.ts"
+          "packages/plugins/openai/server/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/openai/server/jest.config.ts",
+        "jestConfig": "packages/plugins/openai/server/jest.config.ts",
         "passWithNoTests": true
       }
     }

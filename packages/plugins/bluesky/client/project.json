@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-bluesky-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/bluesky/client/src",
+  "sourceRoot": "packages/plugins/bluesky/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/bluesky/client/**/*.ts"
+          "packages/plugins/bluesky/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/bluesky/client/jest.config.ts",
+        "jestConfig": "packages/plugins/bluesky/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

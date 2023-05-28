@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/qa/server/**/*.ts"
+          "packages/plugins/qa/server/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/qa/server/jest.config.ts",
+        "jestConfig": "packages/plugins/qa/server/jest.config.ts",
         "passWithNoTests": true
       }
     }

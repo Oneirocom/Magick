@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-ethereum-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/ethereum/client/src",
+  "sourceRoot": "packages/plugins/ethereum/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/ethereum/client/**/*.ts"
+          "packages/plugins/ethereum/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/ethereum/client/jest.config.ts",
+        "jestConfig": "packages/plugins/ethereum/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

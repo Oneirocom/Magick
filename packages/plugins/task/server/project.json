@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-task-server",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/task/server/src",
+  "sourceRoot": "packages/plugins/task/server/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/task/server/**/*.ts"
+          "packages/plugins/task/server/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/task/server/jest.config.ts",
+        "jestConfig": "packages/plugins/task/server/jest.config.ts",
         "passWithNoTests": true
       }
     }

@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/banana/server/**/*.ts"
+          "packages/plugins/banana/server/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/banana/server/jest.config.ts",
+        "jestConfig": "packages/plugins/banana/server/jest.config.ts",
         "passWithNoTests": true
       }
     }

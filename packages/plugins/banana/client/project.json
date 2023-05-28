@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-banana-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/banana/client/src",
+  "sourceRoot": "packages/plugins/banana/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/banana/client/**/*.ts"
+          "packages/plugins/banana/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/banana/client/jest.config.ts",
+        "jestConfig": "packages/plugins/banana/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

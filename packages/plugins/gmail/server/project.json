@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/gmail/server/**/*.ts"
+          "packages/plugins/gmail/server/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/gmail/server/jest.config.ts",
+        "jestConfig": "packages/plugins/gmail/server/jest.config.ts",
         "passWithNoTests": true
       }
     }

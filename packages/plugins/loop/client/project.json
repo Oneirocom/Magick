@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-loop-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/loop/client/src",
+  "sourceRoot": "packages/plugins/loop/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/loop/client/**/*.ts"
+          "packages/plugins/loop/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/loop/client/jest.config.ts",
+        "jestConfig": "packages/plugins/loop/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

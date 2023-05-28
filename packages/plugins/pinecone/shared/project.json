@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-pinecone-shared",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/pinecone/shared/src",
+  "sourceRoot": "packages/plugins/pinecone/shared/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/pinecone/shared/**/*.ts"
+          "packages/plugins/pinecone/shared/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/pinecone/shared/jest.config.ts",
+        "jestConfig": "packages/plugins/pinecone/shared/jest.config.ts",
         "passWithNoTests": true
       }
     }

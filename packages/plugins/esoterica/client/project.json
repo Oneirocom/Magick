@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-esoterica-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/esoterica/client/src",
+  "sourceRoot": "packages/plugins/esoterica/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/esoterica/client/**/*.ts"
+          "packages/plugins/esoterica/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/esoterica/client/jest.config.ts",
+        "jestConfig": "packages/plugins/esoterica/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

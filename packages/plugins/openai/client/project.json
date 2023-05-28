@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-openai-client",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/openai/client/src",
+  "sourceRoot": "packages/plugins/openai/client/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/openai/client/**/*.ts"
+          "packages/plugins/openai/client/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/openai/client/jest.config.ts",
+        "jestConfig": "packages/plugins/openai/client/jest.config.ts",
         "passWithNoTests": true
       }
     }

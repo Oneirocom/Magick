@@ -14,7 +14,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "plugins/discord/server/**/*.ts"
+          "packages/plugins/discord/server/**/*.ts"
         ]
       }
     },
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugins/discord/server/jest.config.ts",
+        "jestConfig": "packages/plugins/discord/server/jest.config.ts",
         "passWithNoTests": true
       }
     }
