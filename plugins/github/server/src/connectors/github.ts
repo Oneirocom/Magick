@@ -1,11 +1,14 @@
 import { app } from '@magickml/server-core'
 import { Octokit } from '@octokit/rest'
+import http from 'http'
+import { Webhooks, createNodeMiddleware } from '@octokit/webhooks'
 
 export class GithubConnector {
   spellRunner
   data
   agent
   lastTime
+  webhooks
 
   constructor({ spellRunner, agent }) {
     agent.github = this
@@ -28,35 +31,67 @@ export class GithubConnector {
       console.warn('Github is not enabled for this agent')
     }
 
-    const githubHandler = setInterval(async () => {
-      console.log('running github handler')
+    const webhookSecret = "df4e4c6ec7cde2d11f2d130938cd6f7dbf00a38b"
+    console.log(webhookSecret)
+    if (!webhookSecret) { // || webhookSecret == '') {
 
-      this.lastTime = Date.now() - 30000
+      const githubHandler = setInterval(async () => {
+        console.log('running github handler')
 
-      const newIssues = await this.getNewIssues(data)
-      if (newIssues.length > 0) {
-        newIssues.forEach(async (item) => {
-          await this.newSpellInput('New Issues', 'new_issues', item)
-        })        
-      }
+        this.lastTime = Date.now() - 30000
 
-      const newPRs = await this.getNewPRs(data)
-      if (newPRs.length > 0) {
-        newPRs.forEach(async (item) => {
-          await this.newSpellInput('New PRs', 'new_prs', item)
-        })
-      }
+        const newIssues = await this.getNewIssues(data)
+        if (newIssues.length > 0) {
+          newIssues.forEach(async (item) => {
+            await this.newSpellInput('New Issues', 'new_issues', item)
+          })        
+        }
 
-      const issueComments = await this.getIssueComments(data)
-      if (issueComments.length > 0) {
-        issueComments.forEach(async (item) => {
-          await this.newSpellInput('Issue Response', 'issue_response', item)
-        })
-      }
-    }, 30000)
+        const newPRs = await this.getNewPRs(data)
+        if (newPRs.length > 0) {
+          newPRs.forEach(async (item) => {
+            await this.newSpellInput('New PRs', 'new_prs', item)
+          })
+        }
 
-    agent.githubHandler = githubHandler
-    console.log('Added agent to github', agent.id)
+        const issueComments = await this.getIssueComments(data)
+        if (issueComments.length > 0) {
+          issueComments.forEach(async (item) => {
+            await this.newSpellInput('Issue Response', 'issue_response', item)
+          })
+        }
+      }, 30000)
+
+      agent.githubHandler = githubHandler
+      console.log('Added agent to github', agent.id)
+    } else {
+      console.log('webhook start')
+      this.webhooks = new Webhooks({
+        secret: webhookSecret,
+      })
+      
+      this.webhooks.on('pull_request.opened',({ payload }) => {
+        console.log("payload pull_request", payload.pull_request)
+        this.newSpellInput('New PRs', 'new_prs', payload.pull_request)
+      })
+
+      this.webhooks.on('issues.opened',({ payload }) => {
+        console.log("payload issue", payload.issue)
+        this.newSpellInput('New Issues', 'new_issues', payload.issue)
+      })
+
+      this.webhooks.on('issue_comment.created',({ payload }) => {
+        console.log("payload comment", payload.comment)
+        this.newSpellInput('Issue Response', 'issue_response', payload.comment)
+      })
+      
+      const middleware = createNodeMiddleware(this.webhooks, { path: "/payload" })
+      http.createServer(async (req, res) => {
+        if (await middleware(req, res)) return
+        res.writeHead(404)
+        res.end()
+      }).listen(4567)
+    }
   }
 
   newSpellInput = async (name: string, type: string, content: any) => {
