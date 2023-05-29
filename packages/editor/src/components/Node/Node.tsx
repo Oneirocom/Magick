@@ -111,9 +111,7 @@ export class MyNode extends Node {
               ))}
             </div>
           )}
-        </div>
-        <div className={css['bottom-container']}>
-          {/* Controls */}
+
           {controls.map(control => (
             <Control
               className={css['control']}

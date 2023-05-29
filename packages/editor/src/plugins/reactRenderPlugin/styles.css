@@ -8,54 +8,60 @@
   padding-bottom: 6px;
   box-sizing: content-box;
   position: relative;
-  user-select: none; }
-  .node:hover {
-    background: rgba(130, 153, 255, 0.8); }
-  .node.selected {
-    background: #ffd92c;
-    border-color: #e3c000; }
-  .node .title {
-    color: white;
-    font-family: sans-serif;
-    font-size: 18px;
-    padding: 8px; }
-  .node .output {
-    text-align: right; }
-  .node .input {
-    text-align: left; }
-  .node .input-title, .node .output-title {
-    vertical-align: middle;
-    color: white;
-    display: inline-block;
-    font-family: sans-serif;
-    font-size: 14px;
-    margin: 6px;
-    line-height: 24px; }
-  .node .input-control {
-    z-index: 1;
-    width: calc(100% - 36px);
-    vertical-align: middle;
-    display: inline-block; }
-  .node .control {
-    padding: 6px 18px; }
+  user-select: none;
+}
+.node:hover {
+  background: rgba(130, 153, 255, 0.8);
+}
+.node.selected {
+  background: #ffd92c;
+  border-color: #e3c000;
+}
+.node .title {
+  color: white;
+  font-family: 'BerkeleyMono-Regular', sans-serif;
+  font-size: 18px;
+  padding: 8px;
+}
+.node .output {
+  text-align: right;
+}
+.node .input {
+  text-align: left;
+}
+.node .input-title,
+.node .output-title {
+  vertical-align: middle;
+  color: white;
+  display: inline-block;
+  font-family: 'BerkeleyMono-Regular', sans-serif;
+  font-size: 14px;
+  margin: 6px;
+  line-height: 24px;
+}
+.node .input-control {
+  z-index: 1;
+  width: calc(100% - 36px);
+  vertical-align: middle;
+  display: inline-block;
+}
+.node .control {
+  padding: 6px 18px;
+}
 
 .socket {
   display: inline-block;
   cursor: pointer;
-  border: 1px solid #ffffffaa;
   border-radius: 12px;
-  width: 24px;
-  height: 24px;
   margin: 6px;
   vertical-align: middle;
   background: #969696;
   z-index: 2;
-  box-sizing: border-box; }
-  .socket:hover {
-    border-width: 4px; }
-  .socket.multiple {
-    border-color: yellow; }
-  .socket.output {
-    margin-right: -12px; }
-  .socket.input {
-    margin-left: -12px; }
+  box-sizing: border-box;
+}
+.socket:hover {
+  border-width: 4px;
+}
+.socket.multiple {
+  border-color: yellow;
+}

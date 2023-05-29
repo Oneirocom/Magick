@@ -14,79 +14,6 @@ body,
   height: 100%;
 }
 
-.socket.output.any-type,
-.socket.input.any-type {
-  background: #838383;
-}
-
-.socket.output.boolean,
-.socket.input.boolean {
-  background: #f54703;
-}
-
-.socket.output.string,
-.socket.input.string {
-  background: #f59403;
-}
-
-.socket.output.array,
-.socket.input.array {
-  background: #1290ce;
-}
-
-.socket.output.object,
-.socket.input.object {
-  background: #21b534;
-}
-
-.socket.output.number,
-.socket.input.number {
-  background: #fcbd03;
-}
-
-.socket.output.trigger,
-.socket.input.trigger {
-  background: var(--primary);
-}
-
-.socket.output.event,
-.socket.input.event {
-  background: #0e10a4;
-}
-
-.socket {
-  height: var(--small);
-  width: var(--small);
-  border: 1px solid var(--primary);
-}
-
-.socket.output {
-  position: relative;
-  right: -5px;
-}
-
-.socket.input {
-  position: relative;
-  left: -5px;
-}
-
-.socket:hover {
-  background-color: var(--dark-1);
-}
-
-.node.selected {
-  background-color: #05c807 !important;
-}
-
-.connection .main-path {
-  stroke-width: 2px;
-  stroke: #9d12a4;
-  /* filter: drop-shadow(0px 1px 0px var(--dark-0))
-    drop-shadow(0px -1px 0px var(--dark-0))
-    drop-shadow(-1px 0px 0px var(--dark-0))
-    drop-shadow(1px 0px 0px var(--dark-0)); */
-}
-
 button {
   box-sizing: border-box;
   color: #fff;
@@ -153,6 +80,68 @@ button.disabled {
   pointer-events: none;
   opacity: 0.5;
   background-color: var(--dark-2);
+}
+
+.socket.output.any-type,
+.socket.input.any-type {
+  background: #838383;
+}
+
+.socket.output.boolean,
+.socket.input.boolean {
+  background: #f54703;
+}
+
+.socket.output.string,
+.socket.input.string {
+  background: #f59403;
+}
+
+.socket.output.array,
+.socket.input.array {
+  background: #1290ce;
+}
+
+.socket.output.object,
+.socket.input.object {
+  background: #21b534;
+}
+
+.socket.output.number,
+.socket.input.number {
+  background: #fcbd03;
+}
+
+.socket.output.trigger,
+.socket.input.trigger {
+  background: var(--primary);
+}
+
+.socket.output.event,
+.socket.input.event {
+  background: #0e10a4;
+}
+
+.socket {
+  height: var(--small);
+  width: var(--small);
+}
+
+.socket:hover {
+  background-color: var(--dark-1);
+}
+
+.node.selected {
+  background-color: #05c807 !important;
+}
+
+.connection .main-path {
+  stroke-width: 2px;
+  stroke: #9d12a4;
+  /* filter: drop-shadow(0px 1px 0px var(--dark-0))
+    drop-shadow(0px -1px 0px var(--dark-0))
+    drop-shadow(-1px 0px 0px var(--dark-0))
+    drop-shadow(1px 0px 0px var(--dark-0)); */
 }
 
 .node.selected button {
@@ -467,21 +456,6 @@ input:focus-visible {
   height: 1.5rem;
   border-radius: 0.4rem;
   margin: 0 0.5rem;
-}
-
-.bare-input {
-  padding: 0;
-  margin: 0;
-  border: 0;
-  background: transparent;
-  outline: none;
-  font-size: 0.975rem;
-}
-
-.input-title,
-.output-title,
-div.item {
-  font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
 }
 
 .flexlayout__layout {
