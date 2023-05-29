@@ -67,7 +67,12 @@ async function handleResponse({ output, agent, event }) {
   console.log('handleResponse', output, event)
   if (!output || output === '')
     return agent.warn('No output to send to discord')
-  await agent?.discord?.sendMessageToChannel(event.channel, output)
+
+  if (event.channelType !== 'dm') {
+    await agent?.discord?.sendMessageToChannel(event.channel, output)
+  } else {
+    await agent?.discord?.sendDMToUser(event.channel, output)
+  }
 }
 
 // Input socket configurations
