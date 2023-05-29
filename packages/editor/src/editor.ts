@@ -5,6 +5,7 @@ import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
 import CommentManager from './plugins/commentPlugin/manager'
 import ContextMenuPlugin from './plugins/contextMenu'
+import HighlightPlugin from './plugins/highlightPlugin'
 import {
   CachePlugin,
   OnSubspellUpdated,
@@ -93,6 +94,8 @@ export const initEditor = function ({
   }
 
   editor.use(CachePlugin)
+
+  editor.use(HighlightPlugin)
 
   // History plugin for undo/redo
   editor.use(HistoryPlugin, { keyboard: false })
