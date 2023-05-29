@@ -48,7 +48,12 @@ export class DiscordConnector {
       try {
         console.log('creatong discord client for agent', agent.id)
         this.client = new Discord.Client({
-          partials: [Partials.Message, Partials.User, Partials.Reaction],
+          partials: [
+            Partials.Message,
+            Partials.User,
+            Partials.Reaction,
+            Partials.Channel,
+          ],
           intents: [
             GatewayIntentBits.Guilds,
             GatewayIntentBits.GuildVoiceStates,
@@ -57,6 +62,10 @@ export class DiscordConnector {
             GatewayIntentBits.GuildMembers,
             GatewayIntentBits.GuildMessages,
             GatewayIntentBits.GuildVoiceStates,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.DirectMessages,
+            GatewayIntentBits.DirectMessageReactions,
+            GatewayIntentBits.DirectMessageTyping,
           ],
         })
         const embed = new EmbedBuilder().setColor(0x00ae86)
@@ -115,10 +124,27 @@ export class DiscordConnector {
             textChannel.send('Voice is disabled')
           }
         })
-        this.client.on(
-          'messageCreate',
-          this.messageCreate.bind(null, this.client)
-        )
+
+        this.client.on('messageCreate', async message => {
+          console.log('messageCreate', message)
+          this.messageCreate(message)
+        })
+
+        this.client.on('dmCreate', async message => {
+          console.log('dmCreate', message)
+          this.messageCreate(message)
+        })
+
+        // handle direct messages
+        this.client.on('message', async message => {
+          console.log('message')
+          if (message.channel.type === 'dm') {
+            console.log('direct message', message)
+            this.messageCreate(message)
+          } else {
+            this.messageCreate(message)
+          }
+        })
 
         this.client.on(
           'guildMemberAdd',
@@ -265,7 +291,7 @@ export class DiscordConnector {
   }
 
   //Event that is trigger when a new message is created (sent)
-  messageCreate = async (client: any, message: any) => {
+  messageCreate = async (message: any) => {
     console.log('new message from discord:', message.content)
     this.guildId = message.guild
     this.message = message
@@ -305,11 +331,13 @@ export class DiscordConnector {
       entities.push(this.client.user.username)
     }
 
+    const inputType = message.channel.type === 'dm' ? 'DM' : 'Text'
+
     console.log(this.agent.name, ' - sending message on discord - ', content)
     await this.spellRunner.runComponent({
       inputs: {
-        'Input - Discord (Text)': {
-          connector: 'Discord (Text)',
+        [`Input - Discord (${inputType})`]: {
+          connector: `Discord (${inputType})`,
           content: content,
           sender: author.username,
           observer: this.client.user.username,
@@ -317,7 +345,7 @@ export class DiscordConnector {
           channel: message.channel.id,
           agentId: this.agent.id,
           entities: entities,
-          channelType: 'msg',
+          channelType: message.channel.type,
           rawData: JSON.stringify(message),
         },
       },
@@ -354,6 +382,33 @@ export class DiscordConnector {
       await channel.send(attachment)
     } catch (error) {
       console.error(`Error sending image to channel: ${error}`)
+    }
+  }
+
+  async sendDMToUser(userId: any, msg: any) {
+    try {
+      const user = await this.client.users.fetch(userId)
+      if (msg && msg !== '' && user && user !== undefined) {
+        console.log('**** SENDING DISCORD MESSAGE', msg)
+        // split msg into an array of messages that are less than 2000 characters
+        // if msg is an object, get the valuke of the first key
+        if (typeof msg === 'object') {
+          msg = Object.values(msg)[0]
+        }
+        const msgArray = msg.match(/.{1,2000}/g)
+        // send each message individually
+        msgArray.forEach(msg => {
+          user.send(msg)
+        })
+      } else {
+        console.error(
+          'could not send message to user: ' + userId,
+          'msg = ' + msg,
+          'user = ' + user
+        )
+      }
+    } catch (e) {
+      console.error(e)
     }
   }
 
