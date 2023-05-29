@@ -12,7 +12,7 @@
 .frame-comment:focus,
 .inline-comment:focus {
   outline: none;
-  border-color: #ffd92c;
+  border-color: var(--glow);
 }
 
 .inline-comment {
