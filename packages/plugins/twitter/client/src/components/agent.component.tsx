@@ -1,8 +1,6 @@
-import React, { FC, useEffect, useState } from 'react'
-import Grid from '@mui/material/Grid'
-import { debounce } from 'lodash'
 import { Switch } from '@magickml/client-core'
-import Button from '@mui/material/Button'
+import { debounce } from 'lodash'
+import { FC, useEffect, useState } from 'react'
 import VariableModal from './VariableModal'
 export const TwitterAgentWindow: FC<any> = props => {
   props = props.props
