@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router'
 import { getTemplates } from '@magickml/client-core'
 import { useConfig } from '@magickml/client-core'
 import md5 from 'md5'
+import { uuidv4 } from '../../utils/uuid'
 
 // Initial graph for the spell
 const defaultGraph = getTemplates().spells[0].graph
@@ -56,6 +57,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const onSubmit = handleSubmit(async data => {
     // Create a new spell
     const response = (await newSpell({
+      id: uuidv4(),
       graph: defaultGraph,
       name: data.name,
       projectId: config.projectId,
