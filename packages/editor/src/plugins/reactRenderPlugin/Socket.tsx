@@ -42,7 +42,9 @@ export class Socket extends React.Component<SocketProps> {
         className={`socket ${type} ${kebab(socket.name)}`}
         title={socket.name}
         ref={this.createRef} // force update for new IO with a same key
-      />
+      >
+        <div className={`expanding ${kebab(socket.name)}`}></div>
+      </div>
     );
   }
 }

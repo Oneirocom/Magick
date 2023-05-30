@@ -14,8 +14,25 @@ body,
   height: 100%;
 }
 
+.expanding {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--extra-small);
+  width: var(--extra-small);
+  border-radius: 100%;
+  transition: transform 0.2s ease;
+}
+
+.expanding:hover {
+  transform: scale(1.5);
+}
+
 .socket.output.any-type,
-.socket.input.any-type {
+.socket.input.any-type,
+.expanding.any {
   background: #838383;
 }
 
@@ -24,7 +41,8 @@ body,
 }
 
 .socket.output.boolean,
-.socket.input.boolean {
+.socket.input.boolean,
+.expanding.boolean {
   background: var(--red);
 }
 
@@ -33,7 +51,8 @@ body,
 }
 
 .socket.output.string,
-.socket.input.string {
+.socket.input.string,
+.expanding.string {
   background: var(--orange);
 }
 
@@ -42,7 +61,8 @@ body,
 }
 
 .socket.output.array,
-.socket.input.array {
+.socket.input.array,
+.expanding.array {
   background: var(--blue);
 }
 
@@ -51,7 +71,8 @@ body,
 }
 
 .socket.output.object,
-.socket.input.object {
+.socket.input.object,
+.expanding.object {
   background: var(--green);
 }
 
@@ -60,7 +81,8 @@ body,
 }
 
 .socket.output.number,
-.socket.input.number {
+.socket.input.number,
+.expanding.number {
   background: var(--yellow);
 }
 
@@ -69,7 +91,8 @@ body,
 }
 
 .socket.output.trigger,
-.socket.input.trigger {
+.socket.input.trigger,
+.expanding.trigger {
   background: var(--purple);
 }
 
@@ -78,7 +101,8 @@ body,
 }
 
 .socket.output.event,
-.socket.input.event {
+.socket.input.event,
+.expanding.event {
   background: var(--deep-blue);
 }
 
@@ -92,6 +116,7 @@ body,
 
 .connection .main-path:hover {
   stroke-width: 5px !important;
+  opacity: 1 !important;
   /* stroke: var(--glow) !important; */
 }
 
@@ -118,9 +143,9 @@ body,
   left: -5px;
 }
 
-.socket:hover {
+/* .socket:hover {
   background-color: var(--dark-0);
-}
+} */
 
 .node.selected {
   background-color: #05c807 !important;
@@ -136,7 +161,7 @@ button {
   padding: 9px 16px;
   padding-left: var(--small);
   padding-right: var(--small);
-  font-family: 'IBM Plex Mono', 'sans-serif' !important;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'sans-serif' !important;
   font-size: 11px;
   text-transform: uppercase;
   box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.2);
@@ -204,7 +229,7 @@ button.disabled {
   border-radius: 0px 0px 4px 4px;
   border: 1px solid #333;
   border-top: 0;
-  font-family: 'IBM Plex Mono';
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
 }
 
 .flexlayout__tabset {
@@ -233,7 +258,7 @@ button.disabled {
 
 .flexlayout__tabset {
   font-size: 14px;
-  font-family: 'IBM Plex Mono', 'sans-serif' !important;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'sans-serif' !important;
 }
 
 .flexlayout__tab {
@@ -271,7 +296,7 @@ button.disabled {
 }
 
 /* .view-line span {
-  font-family: 'IBM Plex Mono', sans-serif;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', sans-serif;
 } */
 
 input {
@@ -286,7 +311,7 @@ input {
   cursor: default;
   border: 1px solid var(--dark-4);
   box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
-  font-family: 'IBM Plex Mono', monospace !important;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
   font-size: 11px;
   height: var(--c4);
 }
@@ -355,7 +380,7 @@ input:focus-visible {
 .form-item-label {
   display: block;
   margin-bottom: 0.5em;
-  font-family: 'IBM Plex Mono', monospace !important;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
 
   color: var(--dark-4);
 }
@@ -379,7 +404,7 @@ input:focus-visible {
   cursor: default;
   border: 1px solid var(--dark-3);
   box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
-  font-family: 'IBM Plex Mono', monospace !important;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
   font-size: 11px;
   height: var(--c4);
 }
@@ -520,13 +545,14 @@ input:focus-visible {
 .input-title,
 .output-title,
 div.item {
-  font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
+    sans-serif;
 }
 
 .flexlayout__layout {
   background-color: var(--dark-1) !important;
   color: var(--dark-4);
-  font-family: 'IBM Plex Mono';
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
 }
 
 .MuiInputBase-root input,
