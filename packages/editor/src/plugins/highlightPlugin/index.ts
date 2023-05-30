@@ -1,6 +1,70 @@
+import { Connection } from 'rete'
+import {
+  makeAllConnectionsOpaque,
+  makeAllConnectionsTransparent,
+  makeNodeConnectionsOpaque,
+  selectNodeConnections,
+  unselectAllConnections,
+} from './utils'
+
+type DataType = {
+  connection: Connection
+  el: HTMLElement
+}
+
 function install(editor, params) {
-  editor.on('renderconnection', data => {
-    console.log('RENDER CONNECTION', data)
+  editor.on('renderconnection', ({ connection, el }: DataType) => {
+    const inputName = connection.input.socket.name
+    const outputName = connection.output.socket.name
+
+    if (inputName === 'Any' && outputName === 'Any') {
+      el.className += ' any'
+    }
+
+    if (inputName === 'String' || outputName === 'String') {
+      el.className += ' string'
+    }
+
+    if (inputName === 'Number' || outputName === 'Number') {
+      el.className += ' number'
+    }
+
+    if (inputName === 'Boolean' || outputName === 'Boolean') {
+      el.className += ' boolean'
+    }
+
+    if (inputName === 'Object' || outputName === 'Object') {
+      el.className += ' object'
+    }
+
+    if (inputName === 'Array' || outputName === 'Array') {
+      el.className += ' array'
+    }
+
+    if (inputName === 'Trigger' || outputName === 'Trigger') {
+      el.className += ' trigger'
+    }
+
+    if (inputName === 'Event' || outputName === 'Event') {
+      el.className += ' event'
+    }
+  })
+
+  editor.on('nodeselect', node => {
+    // unselect all connections first from connection Map
+    unselectAllConnections(editor)
+    makeAllConnectionsOpaque(editor)
+
+    // select all connections from node
+    selectNodeConnections(editor, node)
+    makeAllConnectionsTransparent(editor)
+    makeNodeConnectionsOpaque(editor, node)
+  })
+
+  // Make sure to unselect all connections when clicking on the editor
+  editor.on('click', () => {
+    unselectAllConnections(editor)
+    makeAllConnectionsOpaque(editor)
   })
 }
 
