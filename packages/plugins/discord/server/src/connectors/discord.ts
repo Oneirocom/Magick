@@ -43,146 +43,142 @@ export class DiscordConnector {
 
     const token = discord_api_key
     if (!token) {
-      console.warn('No API token for Discord bot, skipping')
-    } else {
-      try {
-        console.log('creatong discord client for agent', agent.id)
-        this.client = new Discord.Client({
-          partials: [
-            Partials.Message,
-            Partials.User,
-            Partials.Reaction,
-            Partials.Channel,
-          ],
-          intents: [
-            GatewayIntentBits.Guilds,
-            GatewayIntentBits.GuildVoiceStates,
-            GatewayIntentBits.MessageContent,
-            GatewayIntentBits.GuildPresences,
-            GatewayIntentBits.GuildMembers,
-            GatewayIntentBits.GuildMessages,
-            GatewayIntentBits.GuildVoiceStates,
-            GatewayIntentBits.GuildMessages,
-            GatewayIntentBits.DirectMessages,
-            GatewayIntentBits.DirectMessageReactions,
-            GatewayIntentBits.DirectMessageTyping,
-          ],
-        })
-        const embed = new EmbedBuilder().setColor(0x00ae86)
+      agent.warn('No API token for Discord bot, skipping')
+      return
+    }
+    try {
+      this.client = new Discord.Client({
+        partials: [
+          Partials.Message,
+          Partials.User,
+          Partials.Reaction,
+          Partials.Channel,
+        ],
+        intents: [
+          GatewayIntentBits.Guilds,
+          GatewayIntentBits.GuildVoiceStates,
+          GatewayIntentBits.MessageContent,
+          GatewayIntentBits.GuildPresences,
+          GatewayIntentBits.GuildMembers,
+          GatewayIntentBits.GuildMessages,
+          GatewayIntentBits.GuildVoiceStates,
+          GatewayIntentBits.GuildMessages,
+          GatewayIntentBits.DirectMessages,
+          GatewayIntentBits.DirectMessageReactions,
+          GatewayIntentBits.DirectMessageTyping,
+        ],
+      })
+      const embed = new EmbedBuilder().setColor(0x00ae86)
 
-        this.client.embed = embed
+      this.client.embed = embed
 
-        if (this.use_voice) {
-          const {
-            client,
-            agent,
-            spellRunner,
-            voice_provider,
-            voice_character,
-            voice_language_code,
-            voice_endpoint,
-          } = this
-          ;(async () => {
-            if (typeof window === 'undefined') {
-              const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
-                await import('./discord-voice')
-              recognizeSpeech = _recognizeSpeech
-              this.client = initSpeechClient({
-                client,
-                agent,
-                spellRunner,
-                voiceProvider: voice_provider,
-                voiceCharacter: voice_character,
-                languageCode: voice_language_code,
-                voice_endpoint,
-              })
-            }
-          })()
-        }
-        this.client.on('joinvc', async textChannel => {
-          let connection
-          const { recognizeSpeech: _recognizeSpeech } = await import(
-            './discord-voice'
-          )
-          recognizeSpeech = _recognizeSpeech
-          if (this.use_voice) {
-            connection = recognizeSpeech(textChannel, this.client)
-            textChannel.send('Joined ' + textChannel.name)
-          } else {
-            textChannel.send('Voice is disabled')
-          }
-          return connection
-        })
-        this.client.on('leavevc', async (voiceChannel, textChannel) => {
-          const { stopSpeechClient: stopSpeechClient } = await import(
-            './discord-voice'
-          )
-          if (this.use_voice) {
-            stopSpeechClient(voiceChannel, this.client)
-            textChannel.send('Leaving  ' + voiceChannel.name)
-          } else {
-            textChannel.send('Voice is disabled')
-          }
-        })
-
-        this.client.on('messageCreate', async message => {
-          console.log('messageCreate', message)
-          this.messageCreate(message)
-        })
-
-        this.client.on('dmCreate', async message => {
-          console.log('dmCreate', message)
-          this.messageCreate(message)
-        })
-
-        // handle direct messages
-        this.client.on('message', async message => {
-          console.log('message')
-          if (message.channel.type === 'dm') {
-            console.log('direct message', message)
-            this.messageCreate(message)
-          } else {
-            this.messageCreate(message)
-          }
-        })
-
-        this.client.on(
-          'guildMemberAdd',
-          async (user: { user: { id: any; username: any } }) => {
-            this.handleGuildMemberAdd(user)
-          }
-        )
-        this.client.on('guildMemberRemove', async (user: any) => {
-          this.handleGuildMemberRemove(user)
-        })
-        this.client.on(
-          'messageReactionAdd',
-          async (reaction: any, user: any) => {
-            this.handleMessageReactionAdd(reaction, user)
-          }
-        )
-
-        this.client.ws
+      if (this.use_voice) {
+        const {
+          client,
+          agent,
+          spellRunner,
+          voice_provider,
+          voice_character,
+          voice_language_code,
+          voice_endpoint,
+        } = this
         ;(async () => {
-          try {
-            const login = await this.client.login(token)
-            // console.log('Discord client logged in', login)
-            agent.log('Discord client logged in', { login })
-          } catch (e) {
-            return agent.error('Error logging in discord client', e)
+          if (typeof window === 'undefined') {
+            const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
+              await import('./discord-voice')
+            recognizeSpeech = _recognizeSpeech
+            this.client = initSpeechClient({
+              client,
+              agent,
+              spellRunner,
+              voiceProvider: voice_provider,
+              voiceCharacter: voice_character,
+              languageCode: voice_language_code,
+              voice_endpoint,
+            })
           }
-
-          this.client.on('error', err => {
-            agent.error('Discord client error', err)
-          })
         })()
-      } catch (e) {
-        agent.error('Error creating discord client', e)
       }
+      this.client.on('joinvc', async textChannel => {
+        let connection
+        const { recognizeSpeech: _recognizeSpeech } = await import(
+          './discord-voice'
+        )
+        recognizeSpeech = _recognizeSpeech
+        if (this.use_voice) {
+          connection = recognizeSpeech(textChannel, this.client)
+          textChannel.send('Joined ' + textChannel.name)
+        } else {
+          textChannel.send('Voice is disabled')
+        }
+        return connection
+      })
+      this.client.on('leavevc', async (voiceChannel, textChannel) => {
+        const { stopSpeechClient: stopSpeechClient } = await import(
+          './discord-voice'
+        )
+        if (this.use_voice) {
+          stopSpeechClient(voiceChannel, this.client)
+          textChannel.send('Leaving  ' + voiceChannel.name)
+        } else {
+          textChannel.send('Voice is disabled')
+        }
+      })
+
+      this.client.on('messageCreate', async message => {
+        console.log('messageCreate', message)
+        this.messageCreate(message)
+      })
+
+      this.client.on('dmCreate', async message => {
+        console.log('dmCreate', message)
+        this.messageCreate(message)
+      })
+
+      // handle direct messages
+      this.client.on('message', async message => {
+        console.log('message')
+        if (message.channel.type === 'dm') {
+          console.log('direct message', message)
+          this.messageCreate(message)
+        } else {
+          this.messageCreate(message)
+        }
+      })
+
+      this.client.on(
+        'guildMemberAdd',
+        async (user: { user: { id: any; username: any } }) => {
+          this.handleGuildMemberAdd(user)
+        }
+      )
+      this.client.on('guildMemberRemove', async (user: any) => {
+        this.handleGuildMemberRemove(user)
+      })
+      this.client.on('messageReactionAdd', async (reaction: any, user: any) => {
+        this.handleMessageReactionAdd(reaction, user)
+      })
+
+      this.client.ws
+      ;(async () => {
+        try {
+          const login = await this.client.login(token)
+          agent.log('Discord client logged in', { login })
+        } catch (e) {
+          return agent.error('Error logging in discord client', e)
+        }
+
+        this.client.on('error', err => {
+          agent.error('Discord client error', err)
+        })
+      })()
+    } catch (e) {
+      agent.error('Error creating discord client', e)
     }
   }
 
   async destroy() {
+    console.log('destroying discord client')
     await this.client.destroy()
     this.client = null
   }
