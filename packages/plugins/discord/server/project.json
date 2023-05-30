@@ -4,7 +4,8 @@
   "sourceRoot": "plugin-discord/server/src",
   "projectType": "library",
   "implicitDependencies": [
-    "@magickml/core"
+    "@magickml/core",
+    "@magickml/server-core"
   ],
   "targets": {
     "lint": {

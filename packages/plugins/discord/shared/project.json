@@ -4,7 +4,8 @@
   "sourceRoot": "packages/plugins/discord/shared/src",
   "projectType": "library",
   "implicitDependencies": [
-    "@magickml/core"
+    "@magickml/core",
+    "@magickml/agents"
   ],
   "targets": {
     "lint": {

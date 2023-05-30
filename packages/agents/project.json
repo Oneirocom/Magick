@@ -1,5 +1,5 @@
 {
-  "name": "agents",
+  "name": "@magickml/agents",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "implicitDependencies": [],
   "sourceRoot": "packages/agents/src",
