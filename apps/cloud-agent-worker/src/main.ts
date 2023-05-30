@@ -5,7 +5,7 @@ import { initApp } from '@magickml/server-core'
 initLogger({ name: 'cloud-agent-worker' })
 const logger = getLogger()
 
-initApp()
+await initApp()
 
 logger.info('Starting worker')
 const worker = new CloudAgentWorker()

@@ -36,7 +36,7 @@ import { PluginEmbeddings } from './customEmbeddings'
 import { getLogger } from '@magickml/core'
 
 // Initialize the Feathers Koa app
-const app: Application = koa(feathers())
+export const app: Application = koa(feathers())
 
 declare module './declarations' {
   interface Configuration {
@@ -47,7 +47,7 @@ declare module './declarations' {
   }
 }
 
-function initApp() {
+export async function initApp() {
   const logger = getLogger()
   logger.info('Initializing feathers app...')
   globalsManager.register('feathers', app)
@@ -70,17 +70,6 @@ function initApp() {
   app.use(parseAuthentication())
   app.use(bodyParser())
 
-// sync up messages between the app and the runner
-if (REDISCLOUD_URL) {
-  console.log("SETTING UP REDIS")
-  app.configure(
-    sync({
-      uri: REDISCLOUD_URL,
-      serialize: stringify,
-      deserialize: parse,
-    })
-  )
-
   // Initialize pubsub redis client
   const pubsub = new RedisPubSub()
   // sync up messages between the app and the runner
@@ -94,20 +83,18 @@ if (REDISCLOUD_URL) {
         deserialize: parse,
       })
     )
+
+    await pubsub.initialize({
+      url: REDISCLOUD_URL,
+    })
+
+    app.set('pubsub', pubsub)
   }
 
-  await pubsub.initialize({
-    url: REDISCLOUD_URL,
-  })
+  // Configure app spell management settings
+  app.configure(configureManager())
 
-  app.set('pubsub', pubsub)
-}
-
-// Configure app spell management settings
-app.configure(configureManager())
-
-// Configure authentication
-
+  // Configure authentication
   app.set('authentication', {
     secret: process.env.JWT_SECRET || 'secret',
     entity: null,
@@ -211,6 +198,3 @@ app.configure(configureManager())
   })
   logger.info('Feathers app initialized')
 }
-
-// Export the app
-export { app, initApp }
