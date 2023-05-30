@@ -7,6 +7,7 @@ import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 import { Queue } from 'bullmq'
+import { REDISCLOUD_HOST, REDISCLOUD_PORT } from '@magickml/core'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -35,7 +36,12 @@ export class AgentService<
   constructor(options: KnexAdapterOptions, app: Application) {
     super(options)
     this.app = app
-    this.runQueue = new Queue(`agent:run`)
+    this.runQueue = new Queue(`agent:run`, {
+      connection: {
+        host: REDISCLOUD_HOST,
+        port: REDISCLOUD_PORT
+      }
+    })
   }
 
   async run(data: AgentRunData) {
