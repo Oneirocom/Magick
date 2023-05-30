@@ -114,8 +114,6 @@ export class EventStore extends MagickComponent<Promise<void>> {
       if (!content) throw new Error('Content is null, not storing the event !!')
     }
 
-    console.log('embedding', embedding)
-
     type Data = {
       sender: string
       projectId: string

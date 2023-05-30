@@ -46,7 +46,6 @@ function getAgentMethods() {
 
 async function handleResponse({ output, agent, event }) {
   console.log('********* SENT MESSAGE TO BLUESKY', agent.id, output, event)
-  console.log('event is', event)
   console.log('event.channel is', event.channel)
 
   const resp = output
