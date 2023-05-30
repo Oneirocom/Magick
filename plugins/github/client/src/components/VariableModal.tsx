@@ -6,8 +6,8 @@ import LoginGithub from 'react-github-custom-login'
 
 import { API_ROOT_URL } from '@magickml/core'
 
-const CLINET_ID = "d79801d2614ccec5a2ab"
-const CLIENT_SECRET = "85997c29d5dd48be614abff4097be4ee9a734404"
+const CLINET_ID = ""
+const CLIENT_SECRET = ""
 
 const VariableModal = ({
   selectedAgentData,
@@ -33,13 +33,19 @@ const VariableModal = ({
   const [localClientSecret, setLocalClientSecret] = useState(
     selectedAgentData?.data?.github_client_secret ?? CLIENT_SECRET
   )
+  const [localWebhooksSecret, setLocalWebhooksSecret] = useState(
+    selectedAgentData?.data?.github_webhooks_secret ?? ""
+  )
 
   const handleSave = async () => {
     const data = {
       ...selectedAgentData,
       data: {
         ...selectedAgentData.data,
-        ...state,
+        ...{
+          ...state,
+          github_webhooks_secret: localWebhooksSecret
+        },
       },
     }
     let json = {}
@@ -123,6 +129,10 @@ const VariableModal = ({
         {
           !state.github_login ? (
             <>
+              <p style={{ marginTop: '1em' }} className="modal-element">
+                To get repositories, you will need to set up an
+                <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app">OauthApp</a>.
+              </p>
               <div style={{ marginBottom: '1em' }}>
                 <span className="form-item-label">Github Client Id</span>
                 <input
@@ -176,6 +186,20 @@ const VariableModal = ({
                     )
                   })}
                 </select>
+              </div>
+              <p style={{ marginTop: '1em' }} className="modal-element">
+                To listen events, you will need to set up
+                <a href="https://docs.github.com/en/webhooks-and-events/webhooks/creating-webhooks">Webhook Secret</a>.
+              </p>
+              <div style={{ marginBottom: '1em' }}>
+                <span className="form-item-label">Webhook Secret</span>
+                <input
+                  className="modal-element"
+                  type="text"
+                  name="github_webhooks_secret"
+                  value={localWebhooksSecret}
+                  onChange={e => setLocalWebhooksSecret(e.target.value)}
+                />
               </div>
             </>
           )
