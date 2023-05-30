@@ -18,11 +18,12 @@ const VariableModal = ({
       selectedAgentData?.data?.twitter_access_token_secret,
     twitter_stream_rules: selectedAgentData?.data?.twitter_stream_rules,
     twitter_feed_enable: selectedAgentData?.data?.twitter_feed_enable,
+    twitter_dms_enable: selectedAgentData?.data?.twitter_dms_enable,
   })
 
   const handleOnChange = e => {
     const { name, value } = e.target
-    if (name === 'twitter_feed_enable')
+    if (name === 'twitter_feed_enable' || name === 'twitter_dms_enable')
       setState({ ...state, [name]: e.target.checked ? 'on' : 'off' })
     else setState({ ...state, [name]: value })
   }
@@ -139,6 +140,12 @@ const VariableModal = ({
           label={'Enable Feed'}
           checked={state.twitter_feed_enable === 'on'}
           name="twitter_feed_enable"
+          onChange={handleOnChange}
+        />
+        <Switch
+          label={'Enable DMs'}
+          checked={state.twitter_dms_enable === 'on'}
+          name="twitter_dms_enable"
           onChange={handleOnChange}
         />
       </div>

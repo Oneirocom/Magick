@@ -71,16 +71,11 @@ export async function makeChatCompletion(
       console.error('GoogleAI Error', completionData.error)
     }
 
-    console.log('completionData', completionData)
-
     // Extract the result from the response
-    const result = (
-      !completionData.candidates
-        ? completionData.messages[0]
-        : completionData.candidates[0]
-    ).content
-
-    console.log('***** RESULT IS', result)
+    const result =
+      completionData.candidates && completionData.candidates[0]
+        ? completionData.candidates[0].content
+        : null
 
     // Log the usage of tokens
     // const usage = completionData.usage

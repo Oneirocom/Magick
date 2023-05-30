@@ -1,8 +1,8 @@
 import { ETwitterStreamEvent, TwitterApi } from 'twitter-api-v2'
+import { DMEventV2 } from 'twitter-api-v2/dist/esm/types/v2/dm.v2.types'
 export class TwitterConnector {
   twitterv1: TwitterApi | undefined
   twitterv2: TwitterApi | undefined
-  twitterv2_replies: TwitterApi | undefined
   spellRunner
   data
   agent
@@ -10,6 +10,7 @@ export class TwitterConnector {
   localUser: any
   dmHandler: any
   stream: any
+  senderIds = {}
 
   constructor({ spellRunner, agent }) {
     agent.twitter = this
@@ -78,6 +79,7 @@ export class TwitterConnector {
       })
 
       this.twitterv2 = new TwitterApi(bearerToken)
+
       console.log('Initializing Twitter...')
       this.initialize({ data })
     } catch (error) {
@@ -96,11 +98,11 @@ export class TwitterConnector {
 
     console.log('twitterUser', data.twitter_userid)
 
-    // if (!this.twitterv2_replies) {
+    // if (!this.twitterv1) {
     //   return console.log('Twitter not initialized properly')
     // }
 
-    // const stream = await this.twitterv2_replies.v2.searchStream({
+    // const stream = await this.twitterv1.v2.searchStream({
     //   'tweet.fields': ['referenced_tweets', 'author_id'],
     //   expansions: ['referenced_tweets.id'],
     // })
@@ -160,195 +162,207 @@ export class TwitterConnector {
 
     try {
       const client = this.twitterv2
-      const rules = await client.v2.streamRules()
-      if (rules.data?.length) {
+      if (this.data.twitter_feed_enable) {
+        const rules = await client.v2.streamRules()
+        if (rules.data?.length) {
+          await client.v2.updateStreamRules({
+            delete: { ids: rules.data.map(rule => rule.id) },
+          })
+        }
+        const tweetRules = this.twitter_stream_rules.split(',') as any[]
+        const _rules = [] as any[]
+        const regex = [] as any[]
+        for (const x in tweetRules) {
+          _rules.push({ value: tweetRules[x] })
+          regex.push(tweetRules[x])
+        }
         await client.v2.updateStreamRules({
-          delete: { ids: rules.data.map(rule => rule.id) },
+          add: _rules,
         })
-      }
-      const tweetRules = this.twitter_stream_rules.split(',') as any[]
-      const _rules = [] as any[]
-      const regex = [] as any[]
-      for (const x in tweetRules) {
-        _rules.push({ value: tweetRules[x] })
-        regex.push(tweetRules[x])
-      }
-      await client.v2.updateStreamRules({
-        add: _rules,
-      })
-      this.stream = await client.v2.searchStream({
-        'tweet.fields': ['referenced_tweets', 'author_id'],
-        expansions: ['referenced_tweets.id'],
-      })
-      this.stream.autoReconnect = true
-      this.stream.on(ETwitterStreamEvent.Data, async (tw: any) => {
-        console.log('new code')
-        console.log('TWEET:', tw)
-        // if the author_id is the same as the local user, skip
-        if (tw.data.author_id === this.localUser.data.id) {
-          return console.log('Skipping tweet from self')
-        }
-        const isARt =
-          tw.data.referenced_tweets?.some(
-            tweet => tweet.type === 'retweeted'
-          ) ?? false
-        console.log('isRt', isARt)
-        // const isReply =
-        //   tw.data.referenced_tweets &&
-        //   tw.includes &&
-        //   tw.data.referenced_tweets !== undefined &&
-        //   tw.includes !== undefined &&
-        //   tw.includes.tweets.length > 0 &&
-        //   tw.includes.tweets[0].author_id === this.localUser.data.id
-
-        // console.log('isReply', isReply)
-        // if (
-        //   isARt ||
-        //   isReply ||
-        //   (this.localUser !== undefined &&
-        //     tw.data.author_id == this.localUser.data.id)
-        // ) {
-        //   return console.log('Skipping retweet')
-        // } else {
-
-        console.log('running spellrunner')
-        const author = await this.twitterv2?.v2.user(tw.data.author_id)
-        if (!author) {
-          return console.log('author not found')
-        }
-        console.log('author is', author)
-        console.log('twitterUser is', twitterUser)
-        const entities = [author.data.username, twitterUser]
-
-        if (author === twitterUser || author.data.username === twitterUser) {
-          return console.warn(
-            'Bot was going to reply to self, ignoring tweet:',
-            tw.data.text
-          )
-        }
-
-        await this.spellRunner.runComponent({
-          inputs: {
-            'Input - Twitter (Feed)': {
-              connector: 'Twitter (Feed)',
-              content: tw.data.text,
-              sender: author.data.username,
-              observer: twitterUser,
-              client: 'twitter',
-              channel: tw.data.id,
-              agentId: this.agent.id,
-              entities,
-              channelType: 'feed',
-              rawData: tw,
-            },
-          },
-          agent: this.agent,
-          secrets: this.agent.secrets,
-          publicVariables: this.agent.publicVariables,
-          app: this.agent.app,
-          runSubspell: true,
+        this.stream = await client.v2.searchStream({
+          'tweet.fields': ['referenced_tweets', 'author_id'],
+          expansions: ['referenced_tweets.id'],
         })
-        // }
-      })
-
-      let lastDmId = null
-
-      const getDirectMessages = async () => {
-        console.log('getting dms')
-        const response = await this.twitterv1?.v1.get(
-          'direct_messages/events/list.json'
-        )
-
-        const dmEvents = response?.events
-
-        console.log('dmEvents', dmEvents)
-
-        // if the lastDmIdBigInt is null, get the last DM ID and set it
-        if (lastDmId === null) {
-          lastDmId = dmEvents[0].id
-          return
-        }
-
-        await dmEvents?.forEach(async event => {
-          const message = event.message_create.message_data.text
-          const senderId = event.message_create.sender_id
-          const dmId = event.id
-
-          // Convert IDs to BigInt because Twitter IDs are larger than what JavaScript can handle with normal numbers
-          const dmIdBigInt = BigInt(dmId)
-          const lastDmIdBigInt = lastDmId ? BigInt(lastDmId) : null
-
-          if (lastDmIdBigInt === null || dmIdBigInt > lastDmIdBigInt) {
-            console.log(`Received a message from ${senderId}: ${message}`)
-            lastDmId = dmId
-
-            // if the dm was sent by the local user, skip
-            if (senderId === this.localUser.data.id) {
-              return console.log('Skipping DM from self')
-            }
-
-            // {
-            //   type: 'message_create',
-            //   id: '1663353651874635783',
-            //   created_timestamp: '1685409388880',
-            //   message_create: { target: [Object], sender_id: '66541460', message_data: [Object] }
-            // }
-            // the above is the message create object
-            // we need to parse to fill out some variables
-
-            // get the id of the conversation to respond to
-            const conversationId = event.message_create.sender_id
-
-            const entities = [] as any[]
-
-            // get the username of the sender
-            const sender = await this.twitterv2?.v2.user(senderId)
-            if (!sender) {
-              return console.log('sender not found')
-            }
-
-            entities.push(sender.data.username)
-
-            entities.push(twitterUser)
-
-            await this.spellRunner.runComponent({
-              inputs: {
-                'Input - Twitter (DM)': {
-                  connector: 'Twitter (DM)',
-                  content: message,
-                  sender: sender.data.username,
-                  observer: twitterUser,
-                  client: 'twitter',
-                  channel: conversationId,
-                  agentId: this.agent.id,
-                  entities,
-                  channelType: 'dm',
-                  rawData: JSON.stringify(event),
-                },
-              },
-              agent: this.agent,
-              secrets: this.agent.secrets,
-              publicVariables: this.agent.publicVariables,
-              app: this.agent.app,
-              runSubspell: true,
-            })
+        this.stream.autoReconnect = true
+        this.stream.on(ETwitterStreamEvent.Data, async (tw: any) => {
+          console.log('new code')
+          console.log('TWEET:', tw)
+          // if the author_id is the same as the local user, skip
+          if (tw.data.author_id === this.localUser.data.id) {
+            return console.log('Skipping tweet from self')
           }
+          const isARt =
+            tw.data.referenced_tweets?.some(
+              tweet => tweet.type === 'retweeted'
+            ) ?? false
+          console.log('isRt', isARt)
+          // const isReply =
+          //   tw.data.referenced_tweets &&
+          //   tw.includes &&
+          //   tw.data.referenced_tweets !== undefined &&
+          //   tw.includes !== undefined &&
+          //   tw.includes.tweets.length > 0 &&
+          //   tw.includes.tweets[0].author_id === this.localUser.data.id
+
+          // console.log('isReply', isReply)
+          // if (
+          //   isARt ||
+          //   isReply ||
+          //   (this.localUser !== undefined &&
+          //     tw.data.author_id == this.localUser.data.id)
+          // ) {
+          //   return console.log('Skipping retweet')
+          // } else {
+
+          console.log('running spellrunner')
+          const author = await this.twitterv2?.v2.user(tw.data.author_id)
+          if (!author) {
+            return console.log('author not found')
+          }
+          console.log('author is', author)
+          console.log('twitterUser is', twitterUser)
+          const entities = [author.data.username, twitterUser]
+
+          if (author === twitterUser || author.data.username === twitterUser) {
+            return console.warn(
+              'Bot was going to reply to self, ignoring tweet:',
+              tw.data.text
+            )
+          }
+
+          await this.spellRunner.runComponent({
+            inputs: {
+              'Input - Twitter (Feed)': {
+                connector: 'Twitter (Feed)',
+                content: tw.data.text,
+                sender: author.data.username,
+                observer: twitterUser,
+                client: 'twitter',
+                channel: tw.data.id,
+                agentId: this.agent.id,
+                entities,
+                channelType: 'feed',
+                rawData: tw,
+              },
+            },
+            agent: this.agent,
+            secrets: this.agent.secrets,
+            publicVariables: this.agent.publicVariables,
+            app: this.agent.app,
+            runSubspell: true,
+          })
+          // }
         })
       }
 
-      this.dmHandler = setInterval(async () => {
-        getDirectMessages()
-      }, 65000) //  seconds
+      if (this.data.twitter_dms_enable) {
+        let lastDmId = null as null | string
 
-      console.log('getDirectMessages()')
-      getDirectMessages()
+        const getDirectMessages = async () => {
+          console.log('getting dms')
+          // get the dm conversaiton id
+          const response = await this.twitterv1?.v2.listDmEvents({
+            'user.fields': ['created_at'],
+            // @ts-ignore
+            'dm_event.fields': ['dm_conversation_id'],
+            expansions: ['sender_id'],
+          })
+          // paginate reponses
+          const dmEvents = response?.events as any[]
+
+          // type DMEventV2
+
+          // if the lastDmIdBigInt is null, get the last DM ID and set it
+          if (lastDmId === null) {
+            console.log('lastDmId is null')
+            lastDmId = dmEvents[0].id
+            return
+          }
+
+          await dmEvents?.forEach(async (event: DMEventV2) => {
+            const dmId = event.id
+            // Convert IDs to BigInt because Twitter IDs are larger than what JavaScript can handle with normal numbers
+            const dmIdBigInt = BigInt(dmId)
+            const lastDmIdBigInt = lastDmId ? BigInt(lastDmId) : null
+
+            if (lastDmIdBigInt === null || dmIdBigInt > lastDmIdBigInt) {
+              console.log('event', event)
+              const message = (event as any).text
+              const senderId = event.sender_id as string
+
+              const conversation_id = event.dm_conversation_id
+              if (!conversation_id) {
+                console.log(event)
+                return console.log('no conversation id')
+              }
+
+              let senderUsername = this.senderIds[senderId]
+              if (!senderUsername) {
+                // get the userid of the senderId
+                const sender = await this.twitterv1?.v2.user(senderId as string)
+
+                console.log('sender', sender)
+
+                senderUsername = sender?.data.username
+                this.senderIds[senderId] = senderUsername
+              }
+
+              console.log(
+                `Received a message from ${senderUsername}: ${message}`
+              )
+              lastDmId = dmId
+
+              // if the dm was sent by the local user, skip
+              if (senderId === this.localUser.data.id) {
+                return console.log('Skipping DM from self')
+              }
+
+              const entities = [] as any[]
+
+              entities.push(senderUsername)
+
+              entities.push(twitterUser)
+
+              await this.spellRunner.runComponent({
+                inputs: {
+                  'Input - Twitter (DM)': {
+                    connector: 'Twitter (DM)',
+                    content: message,
+                    sender: senderUsername,
+                    observer: twitterUser,
+                    client: 'twitter',
+                    channel: conversation_id,
+                    agentId: this.agent.id,
+                    entities,
+                    channelType: 'dm',
+                    rawData: JSON.stringify(event),
+                  },
+                },
+                agent: this.agent,
+                secrets: this.agent.secrets,
+                publicVariables: this.agent.publicVariables,
+                app: this.agent.app,
+                runSubspell: true,
+              })
+            }
+          })
+        }
+
+        this.dmHandler = setInterval(
+          async () => {
+            getDirectMessages()
+          }, // interval is 20 requests per minute plus buffer
+          1000 * 15
+        ) //  seconds
+
+        getDirectMessages()
+      }
     } catch (e) {
       console.log(e)
     }
   }
 
   destroy() {
-    console.log('calling destroy on twitter')
     if (this.stream) {
       this.stream.close()
     }
@@ -357,19 +371,12 @@ export class TwitterConnector {
     }
   }
 
-  async handleMessage(message, chat_id, event) {
-    console.log('handleMessage', message)
+  async handleMessage(message, event) {
     if (event.channelType === 'dm') {
-      const response = await this.twitterv1?.v1.post(
-        'direct_messages/events/new.json',
+      const response = await this.twitterv1?.v2.sendDmInConversation(
+        event.channel,
         {
-          event: {
-            type: 'message_create',
-            message_create: {
-              target: { recipient_id: chat_id },
-              message_data: { text: message },
-            },
-          },
+          text: message,
         }
       )
       console.log('DM MESSAGE: response', response)
@@ -392,14 +399,11 @@ export class TwitterConnector {
         responses.push(message.slice(i, i + chunkSize))
       }
 
-      console.log('responses', responses)
-
       for (const chunk of responses) {
-        console.log('chunk', chunk)
-
-        const res = await this.twitterv1?.v1.reply(chunk, chat_id)
-        console.log('res is', res)
+        await this.twitterv1?.v1.reply(chunk, event.channel)
       }
+    } else {
+      console.log('Unknown channel type', event.channelType)
     }
   }
 }
