@@ -112,12 +112,12 @@ export class AgentManager {
       })
     )?.data
 
+    await this.deleteOldAgents()
+
     if (!this.newAgents || this.newAgents.length === 0) {
       this.logger.trace('No new agents found.')
       return
     }
-
-    await this.deleteOldAgents()
 
     this.newAgents?.forEach(async (agent: any) => {
       if (!agent) {
