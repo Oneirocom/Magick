@@ -53,7 +53,7 @@ const routes: Route[] = [...spells, ...apis, ...serverRoutes]
  * form and multipart-json requests, and routes.
  */
 async function init() {
-  initApp()
+  await initApp()
   // load plugins
   await (async () => {
     const plugins = (await import('./plugins')).default
