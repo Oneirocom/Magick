@@ -201,6 +201,14 @@ export const initEditor = function ({
     return source !== 'dblclick'
   })
 
+  // Unselect all nodes when clicking off nodes
+  editor.on('click', () => {
+    const list = [...editor.selected.list]
+
+    editor.selected.clear()
+    list.map(node => (node.update ? node.update() : null))
+  })
+
   editor.on(
     'multiselectnode',
     args => (args.accumulate = args.e.ctrlKey || args.e.metaKey)
