@@ -65,7 +65,7 @@ async function handleResponse({ output, agent, event }) {
         event.channel
       )
     } else if (resp !== 'ignore') {
-      await agent.twitter.handleMessage(resp, event.channel, 'feed')
+      await agent.twitter.handleMessage(resp, event.channel, event)
     }
   }
 }
