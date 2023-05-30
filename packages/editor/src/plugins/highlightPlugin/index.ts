@@ -13,6 +13,12 @@ type DataType = {
 }
 
 function install(editor, params) {
+  // editor.on('rendersocket', ({ el, input, output, socket }) => {
+  //   console.log('Editor', editor)
+  //   console.log('SOCKET', socket)
+  //   console.log('INPUT', input?.connections)
+  // })
+
   editor.on('renderconnection', ({ connection, el }: DataType) => {
     const inputName = connection.input.socket.name
     const outputName = connection.output.socket.name

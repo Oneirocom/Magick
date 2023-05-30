@@ -13,7 +13,7 @@
   transition: background-color 0.05s ease;
   min-width: var(--c30);
   width: var(--c30);
-  border-radius: var(--small);
+  border-radius: var(--extraSmall);
   outline: 1px solid var(--glow-dark);
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
   background-color: #0011168f;
@@ -32,11 +32,11 @@
   /* backdrop-filter: blur(15px); */
 }
 .node.error {
-  border-color: var(--red) !important;
+  outline-color: var(--red) !important;
   /* backdrop-filter: blur(15px); */
 }
 .node.success {
-  border-color: var(--green) !important;
+  outline-color: var(--green) !important;
   border: 2px solid var(--green);
 }
 .node-depricated {
@@ -163,4 +163,8 @@
 div.item {
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
     sans-serif;
+}
+
+.socket-wrapper {
+  display: inherit;
 }
