@@ -13,6 +13,9 @@ import {
   PING_AGENT_TIME_MSEC,
   REDISCLOUD_HOST,
   REDISCLOUD_PORT,
+  REDISCLOUD_USERNAME,
+  REDISCLOUD_PASSWORD,
+  REDISCLOUD_DB
 } from '@magickml/core'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 
@@ -66,13 +69,19 @@ export class Agent extends RedisPubSub implements AgentInterface {
     this.worker = new BullMQ.Worker(`agent:run`, this.runWorker.bind(this), {
       connection: {
         host: REDISCLOUD_HOST,
-        port: REDISCLOUD_PORT
+        port: REDISCLOUD_PORT,
+        username: REDISCLOUD_USERNAME,
+        password: REDISCLOUD_PASSWORD,
+        db: REDISCLOUD_DB,
       }
     })
     this.queue = new BullMQ.Queue(`agent:run:result`, {
       connection: {
         host: REDISCLOUD_HOST,
-        port: REDISCLOUD_PORT
+        port: REDISCLOUD_PORT,
+        username: REDISCLOUD_USERNAME,
+        password: REDISCLOUD_PASSWORD,
+        db: REDISCLOUD_DB,
       }
     })
 
