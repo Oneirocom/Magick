@@ -31,9 +31,9 @@ export class GithubConnector {
       console.warn('Github is not enabled for this agent')
     }
 
-    const webhookSecret = "df4e4c6ec7cde2d11f2d130938cd6f7dbf00a38b"
-    console.log(webhookSecret)
-    if (!webhookSecret) { // || webhookSecret == '') {
+    const webhookSecret = data.github_webhooks_secret
+
+    if (!webhookSecret || webhookSecret == '') {
 
       const githubHandler = setInterval(async () => {
         console.log('running github handler')
