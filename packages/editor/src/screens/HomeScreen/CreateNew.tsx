@@ -90,10 +90,7 @@ const CreateNew = () => {
         }
       }
       setLoading(false)
-      navigate(
-        `/magick/${response.data.id + '-' + encodeURIComponent(btoa(response.data.name))
-        }`
-      )
+      navigate(`/magick/${response.data.id + '-' + encodeURIComponent(btoa(response.data.name))}`)
     } catch (err) {
       console.error('ERROR!', err)
     }
@@ -146,8 +143,9 @@ const CreateNew = () => {
           cancel
         </Button>
         <LoadingButton
-          className={`${!selectedTemplate ? 'disabled' : 'primary'} ${css.button
-            }`}
+          className={`${!selectedTemplate ? 'disabled' : 'primary'} ${
+            css.button
+          }`}
           loading={loading}
           onClick={onCreate}
           variant="outlined"
