@@ -8,6 +8,8 @@ export class TwitterConnector {
   agent
   twitter_stream_rules = ''
   localUser: any
+  dmHandler: any
+  stream: any
 
   constructor({ spellRunner, agent }) {
     agent.twitter = this
@@ -174,12 +176,12 @@ export class TwitterConnector {
       await client.v2.updateStreamRules({
         add: _rules,
       })
-      const stream = await client.v2.searchStream({
+      this.stream = await client.v2.searchStream({
         'tweet.fields': ['referenced_tweets', 'author_id'],
         expansions: ['referenced_tweets.id'],
       })
-      stream.autoReconnect = true
-      stream.on(ETwitterStreamEvent.Data, async (tw: any) => {
+      this.stream.autoReconnect = true
+      this.stream.on(ETwitterStreamEvent.Data, async (tw: any) => {
         console.log('new code')
         console.log('TWEET:', tw)
         // if the author_id is the same as the local user, skip
@@ -210,7 +212,10 @@ export class TwitterConnector {
         // } else {
 
         console.log('running spellrunner')
-        const author = await this.twitterv2.v2.user(tw.data.author_id)
+        const author = await this.twitterv2?.v2.user(tw.data.author_id)
+        if (!author) {
+          return console.log('author not found')
+        }
         console.log('author is', author)
         console.log('twitterUser is', twitterUser)
         const entities = [author.data.username, twitterUser]
@@ -245,35 +250,146 @@ export class TwitterConnector {
         })
         // }
       })
+
+      let lastDmId = null
+
+      const getDirectMessages = async () => {
+        console.log('getting dms')
+        const response = await this.twitterv1?.v1.get(
+          'direct_messages/events/list.json'
+        )
+
+        const dmEvents = response?.events
+
+        console.log('dmEvents', dmEvents)
+
+        // if the lastDmIdBigInt is null, get the last DM ID and set it
+        if (lastDmId === null) {
+          lastDmId = dmEvents[0].id
+          return
+        }
+
+        await dmEvents?.forEach(async event => {
+          const message = event.message_create.message_data.text
+          const senderId = event.message_create.sender_id
+          const dmId = event.id
+
+          // Convert IDs to BigInt because Twitter IDs are larger than what JavaScript can handle with normal numbers
+          const dmIdBigInt = BigInt(dmId)
+          const lastDmIdBigInt = lastDmId ? BigInt(lastDmId) : null
+
+          if (lastDmIdBigInt === null || dmIdBigInt > lastDmIdBigInt) {
+            console.log(`Received a message from ${senderId}: ${message}`)
+            lastDmId = dmId
+
+            // if the dm was sent by the local user, skip
+            if (senderId === this.localUser.data.id) {
+              return console.log('Skipping DM from self')
+            }
+
+            // {
+            //   type: 'message_create',
+            //   id: '1663353651874635783',
+            //   created_timestamp: '1685409388880',
+            //   message_create: { target: [Object], sender_id: '66541460', message_data: [Object] }
+            // }
+            // the above is the message create object
+            // we need to parse to fill out some variables
+
+            // get the id of the conversation to respond to
+            const conversationId = event.message_create.sender_id
+
+            const entities = [] as any[]
+
+            // get the username of the sender
+            const sender = await this.twitterv2?.v2.user(senderId)
+            if (!sender) {
+              return console.log('sender not found')
+            }
+
+            entities.push(sender.data.username)
+
+            entities.push(twitterUser)
+
+            await this.spellRunner.runComponent({
+              inputs: {
+                'Input - Twitter (DM)': {
+                  connector: 'Twitter (DM)',
+                  content: message,
+                  sender: sender.data.username,
+                  observer: twitterUser,
+                  client: 'twitter',
+                  channel: conversationId,
+                  agentId: this.agent.id,
+                  entities,
+                  channelType: 'dm',
+                  rawData: JSON.stringify(event),
+                },
+              },
+              agent: this.agent,
+              secrets: this.agent.secrets,
+              publicVariables: this.agent.publicVariables,
+              app: this.agent.app,
+              runSubspell: true,
+            })
+          }
+        })
+      }
+
+      this.dmHandler = setInterval(async () => {
+        getDirectMessages()
+      }, 65000) //  seconds
+
+      console.log('getDirectMessages()')
+      getDirectMessages()
     } catch (e) {
       console.log(e)
     }
   }
 
-  async handleMessage(response, chat_id, args) {
-    console.log('handleMessage', response)
-    if (args === 'DM') {
-      await this.twitterv1?.v1.sendDm({
-        recipient_id: chat_id,
-        text: response,
-      })
-    } else if (args === 'feed') {
+  destroy() {
+    console.log('calling destroy on twitter')
+    if (this.stream) {
+      this.stream.close()
+    }
+    if (this.dmHandler) {
+      clearInterval(this.dmHandler)
+    }
+  }
+
+  async handleMessage(message, chat_id, event) {
+    console.log('handleMessage', message)
+    if (event.channelType === 'dm') {
+      const response = await this.twitterv1?.v1.post(
+        'direct_messages/events/new.json',
+        {
+          event: {
+            type: 'message_create',
+            message_create: {
+              target: { recipient_id: chat_id },
+              message_data: { text: message },
+            },
+          },
+        }
+      )
+      console.log('DM MESSAGE: response', response)
+    } else if (event.channelType === 'feed') {
       // if the reponse contains a .mpeg file, remove it from the response and send it as a media file
       // extract the url from the response
       // example url: https://vkzhmwivieetdcbhmszr.supabase.co/storage/v1/object/public/avatars/b01edaa9-fe38-49ff-9967-19ff7054e884.mpeg
       let url = null as null | string
-      if (response.includes('https://')) {
-        url = 'https://' + response.split('https://')[1].split(' ')[0]
+      if (message.includes('https://')) {
+        url = 'https://' + message.split('https://')[1].split(' ')[0]
         // remove the url from the response
-        response = response.replace(url, '')
+        message = message.replace(url, '')
       }
 
       // split the response into chunks of 250 characters or less
       const responses = [] as string[]
       const chunkSize = 250
 
-      for (let i = 0; i < response.length; i += chunkSize) {
-        responses.push(response.slice(i, i + chunkSize))
+      for (let i = 0; i < message.length; i += chunkSize) {
+        responses.push(message.slice(i, i + chunkSize))
       }
 
       console.log('responses', responses)
