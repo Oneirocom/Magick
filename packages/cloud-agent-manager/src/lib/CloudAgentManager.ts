@@ -20,7 +20,7 @@ export class CloudAgentManager {
 
     async run() {
         this.agentStateReporter.on('agent:updated', async (agent: any) => {
-            Date.now()
+            console.log(agent)
             this.logger.info(`Agent Updated: ${agent.id}`)
             const agentUpdatedAt = new Date(agent.updatedAt)
             await this.mq.addJob('agent:updated', {agentId: agent.id}, `agent-updated-${agent.id}-${agentUpdatedAt.getTime()}`)

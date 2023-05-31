@@ -1,29 +1,37 @@
 import { Reporter } from "../Reporter"
-import createSubscriber from "pg-listen"
+import createSubscriber, { Subscriber } from "pg-listen"
+import { getLogger } from "@magickml/core"
 
 export class PgNotifyReporter implements Reporter {
-    emitter: any
+    logger = getLogger()
+    subscriber: Subscriber
+    queueName: string
 
-    constructor(dbUrl: string) {
-        this.initReporter(dbUrl)
-    }
-
-    async initReporter(dbUrl: string): Promise<void> {
-        const subscriber = createSubscriber({
+    constructor(queueName: string, dbUrl: string) {
+        this.subscriber = createSubscriber({
             connectionString: dbUrl,
         })
+        this.queueName = queueName
+        this.initReporter()
+    }
 
-        subscriber.events.on("error", (error: any) => {
+    async initReporter(): Promise<void> {
+        this.logger.info("Initializing PgNotifyReporter...")
+        this.subscriber.events.on("error", (error: any) => {
             console.error("Fatal database connection error:", error)
             process.exit(1)
         })
 
-        await subscriber.connect()
-        await subscriber.listenTo("agents")
-        this.emitter = subscriber
+        await this.subscriber.connect()
+        await this.subscriber.listenTo(this.queueName)
+        this.logger.info("PgNotifyReporter initialized")
     }
 
     on(event: string, callback: (...args: any) => any): void {
-        this.emitter.events.on(event, callback)
+        this.subscriber.notifications.on(this.queueName, (payload) => {
+            if (payload?.eventName === event) {
+                return callback(payload)
+            }
+        })
     }
 }
