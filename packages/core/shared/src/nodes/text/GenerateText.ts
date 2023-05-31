@@ -169,10 +169,10 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
 
     const model = (node.data as { model: string }).model as string
     // get the provider for the selected model
+    console.log("model", model)
     const provider = completionProviders.find(provider =>
       provider.models.includes(model)
     ) as CompletionProvider
-
     const completionHandler = provider.handler
 
     if (!completionHandler) {
@@ -186,7 +186,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       outputs,
       context,
     })
-
+    console.log("result", result)
     if (!success) {
       throw new Error('ERROR: ' + error)
     }
