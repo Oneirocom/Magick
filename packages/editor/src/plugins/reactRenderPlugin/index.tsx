@@ -10,15 +10,11 @@ const consoleError = console.error;
  * Filter warnings to suppress specific warnings while keeping others
  */
 console.error = function filterWarnings(msg, ...args) {
-  if (
-    typeof msg === 'string' &&
-    SUPPRESSED_WARNINGS.some((entry) => msg.includes(entry))
-  ) {
-    return;
+  if (!SUPPRESSED_WARNINGS.some((entry) => typeof msg === 'string' ?  msg.includes(entry) : false)) {
+    consoleError(msg, ...args);
   }
-
-  consoleError(msg, ...args);
 };
+
 /**
  * Types of options for ReactRenderPlugin
  */
@@ -34,11 +30,11 @@ function install(editor, { component: NodeComponent = Node, createRoot }) {
   const roots = new Map();
   const render = createRoot
     ? (element, container) => {
-      if (!roots.has(container)) roots.set(container, createRoot(container));
-      const root = roots.get(container);
+        if (!roots.has(container)) roots.set(container, createRoot(container));
+        const root = roots.get(container);
 
-      root.render(element);
-    }
+        root.render(element);
+      }
     : ReactDOM.render;
 
   // Handle rendering nodes

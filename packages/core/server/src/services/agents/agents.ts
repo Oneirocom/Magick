@@ -5,8 +5,6 @@
  */
 
 // Import necessary modules and functions
-import * as BullMQ from 'bullmq'
-import { bullMQConnection } from '@magickml/core'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { BadRequest } from '@feathersjs/errors'
 import {
@@ -49,34 +47,15 @@ const validateRootSpell = async (context: HookContext) => {
  */
 export const agent = (app: Application) => {
   // Register the agent service on the Feathers application
-  app.use('agents', new AgentService(getOptions(app), app), {
-    methods: ['find', 'get', 'create', 'patch', 'remove', 'run'],
-    events: ['log', 'result'],
+  app.use('agents', new AgentService(getOptions(app)), {
+    methods: ['find', 'get', 'create', 'patch', 'remove', 'log'],
+    events: [],
   })
 
-  const pubSub = app.get<'pubsub'>('pubsub')
-
-  pubSub.patternSubscribe('agent*', (message, channel) => {
-    app.service('agents').emit('log', {
-      channel,
-      projectId: message?.projectId,
-      data: message,
-    })
-  })
-
-  new BullMQ.Worker('agent:run:result', async job => {
-    // we wil shuttle this message from here back up a socket to the client
-    const { agentId, projectId, originalData } = job.data
-    // emit custom events via the agent service
-    app.service('agents').emit('result', {
-      channel: `agent:${agentId}`,
-      sessionId: originalData.sessionId,
-      projectId,
-      data: job.data,
-    })
-  }, {
-    connection: bullMQConnection
-  })
+  // app.service('agents').publish('log', (data, context) => {
+  //   // @ts-ignore
+  //   return app.channel(data.agentId)
+  // })
 
   // Initialize hooks for the agent service
   app.service('agents').hooks({

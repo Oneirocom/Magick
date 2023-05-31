@@ -1,5 +1,9 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
+
+const lightCodeTheme = require('prism-react-renderer/themes/github')
+const darkCodeTheme = require('prism-react-renderer/themes/dracula')
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Magick',
@@ -133,7 +137,11 @@ const config = {
           },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Oneirocom Systems Inc.`,
-      }
+      },
+      prism: {
+        theme: lightCodeTheme,
+        darkTheme: darkCodeTheme,
+      },
     }),
   customFields: {
     magickLogo: 'img/magick-banner-short.png',

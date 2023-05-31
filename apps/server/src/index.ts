@@ -16,18 +16,14 @@ import {
   Route,
   spells
 } from '@magickml/server-core'
-import { initLogger, getLogger } from '@magickml/core'
 import { Context } from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
 import 'regenerator-runtime/runtime'
 
-initLogger({ name: 'server' })
-const logger = getLogger()
-
 // log handle errors
 process.on('uncaughtException', (err: Error) => {
-  logger.error('uncaughtException %s', err)
+  console.error('uncaughtException', err)
 })
 
 process.on(
@@ -37,7 +33,7 @@ process.on(
       /* null */
     },
     p: Promise<any>
-  ) => logger.error('Unhandled Rejection at: Promise %o with reason %s', p, reason)
+  ) => console.error('Unhandled Rejection at: Promise ', p, reason)
 )
 
 // initialize server routes from the plugin manager
@@ -55,8 +51,8 @@ async function init() {
   // load plugins
   await (async () => {
     const plugins = (await import('./plugins')).default
-    logger.info(
-      'loaded plugins on server %o',
+    console.log(
+      'loaded plugins on server',
       Object.values(plugins)
         .map((p: any) => p.name)
         .join(', ')
@@ -88,7 +84,7 @@ async function init() {
   app.use(cors(options))
 
   process.on('unhandledRejection', (err: Error) => {
-    logger.error('Unhandled Rejection:' + err + ' - ' + err.stack)
+    console.error('Unhandled Rejection:' + err + ' - ' + err.stack)
   })
 
   // Middleware used by every request. For route-specific middleware, add it to you route middleware specification
@@ -160,13 +156,13 @@ async function init() {
     }
   })
 
-  process.on('uncaughtException in Editor Server', logger.error)
+  process.on('uncaughtException in Editor Server', console.error)
 
   // adding router middlewares to Koa app
   app.use(router.routes()).use(router.allowedMethods())
 
   app.listen(app.get('port'), () => {
-    logger.info('Server started on port %s', app.get('port'))
+    console.log('Server started on port ', app.get('port'))
   })
 }
 
