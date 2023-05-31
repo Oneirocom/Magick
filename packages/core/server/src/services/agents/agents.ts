@@ -6,7 +6,7 @@
 
 // Import necessary modules and functions
 import * as BullMQ from 'bullmq'
-import { REDISCLOUD_HOST } from '@magickml/core'
+import { bullMQConnection } from '@magickml/core'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { BadRequest } from '@feathersjs/errors'
 import {
@@ -75,10 +75,7 @@ export const agent = (app: Application) => {
       data: job.data,
     })
   }, {
-    connection: {
-      host: REDISCLOUD_HOST,
-      port: 6379
-    }
+    connection: bullMQConnection
   })
 
   // Initialize hooks for the agent service
