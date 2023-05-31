@@ -1,5 +1,6 @@
 export * from './lib/CloudAgentManager'
 export * from './lib/Reporter'
 export * from './lib/Reporters/FeathersSyncReporter'
+export * from './lib/Reporters/PgNotifyReporter'
 export * from './lib/MessageQueue'
 export * from './lib/MessageQueues/BullMQ'

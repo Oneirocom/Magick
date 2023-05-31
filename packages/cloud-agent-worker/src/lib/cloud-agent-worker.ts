@@ -13,7 +13,7 @@ export class CloudAgentWorker {
   constructor() {}
 
   async agentUpdated(agentId: string) {
-              this.logger.info(`Creating agent ${agentId}`)
+    this.logger.info(`Creating agent ${agentId}`)
     const agentDBResult = (
       await app.service('agents').find({
         query: {
@@ -21,6 +21,8 @@ export class CloudAgentWorker {
         }
       })
     )?.data
+
+    console.log(agentDBResult)
 
     if (agentDBResult.length == 0 || !agentDBResult) {
       this.logger.error(`Agent ${agentId} not found when creating agent`)
@@ -33,6 +35,7 @@ export class CloudAgentWorker {
       switch (agent.runState) {
         case 'stopped':
         case 'failed':
+          this.logger.info(`Starting agent ${agentId}`)
           await app.service('agents').patch(agentId, {
             runState: 'starting'
           })
@@ -43,7 +46,7 @@ export class CloudAgentWorker {
 
   async work() {
     this.logger.info('waiting for jobs')
-    const worker = new Worker("agent:changed", async (job: Job) => {
+    const worker = new Worker("agent:updates", async (job: Job) => {
       switch(job.name) {
           case 'agent:updated':
               this.agentUpdated(job.data.agentId)

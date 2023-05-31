@@ -11,7 +11,10 @@ export async function up(knex: Knex): Promise<void> {
         BEGIN
             payload = json_build_object(
                 'id', NEW.id,
-                'enabled', NEW.enabled
+                'eventName', 'agent:updated',
+                'enabled', NEW.enabled,
+                'runState', NEW."runState",
+                'updatedAt', NEW."updatedAt"
             );
             PERFORM pg_notify('agents', payload::text);
             RETURN NEW;
