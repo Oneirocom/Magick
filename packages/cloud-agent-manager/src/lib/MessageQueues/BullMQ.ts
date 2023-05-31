@@ -1,6 +1,6 @@
 import { Queue } from "bullmq"
 import pino from "pino"
-import { getLogger } from "@magickml/core"
+import { bullMQConnection, getLogger } from "@magickml/core"
 
 import { MessageQueue, Job, JobType } from "../MessageQueue"
 
@@ -10,10 +10,7 @@ export class BullQueue implements MessageQueue {
 
     constructor(queue_name: string) {
         this.queue = new Queue(queue_name, {
-            connection: {
-                host: "localhost",
-                port: 6379,
-            }
+            connection: bullMQConnection
         })
     }
 
