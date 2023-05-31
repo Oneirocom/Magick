@@ -1,13 +1,6 @@
 import { Input, NodeEditor, Output } from 'rete'
 
-import {
-  DataSocketType,
-  MagickNode,
-  IRunContextEditor,
-  AsDataSocket,
-  AsInputsData,
-  AsOutputsData,
-} from '../../types'
+import { DataSocketType, MagickNode, IRunContextEditor, AsDataSocket, AsInputsData, AsOutputsData } from '../../types'
 import { socketNameMap, SocketNameType } from '../../sockets'
 import { ModuleSocketType } from './module-manager'
 export type ThroughPutType = 'outputs' | 'inputs'
@@ -65,30 +58,26 @@ const updateSockets = (node: MagickNode, sockets: ModuleSocketType[]) => {
       node.inputs.set(socketKey, input)
       // Update the nodes data sockets as well
       const nodeInputs = AsDataSocket(node.data.inputs)
-      node.data.inputs = AsInputsData(
-        nodeInputs.map((n: DataSocketType) => {
-          if (n.socketKey === socketKey) {
-            n.name = name
-          }
+      node.data.inputs = AsInputsData(nodeInputs.map((n: DataSocketType) => {
+        if (n.socketKey === socketKey) {
+          n.name = name
+        }
 
-          return n
-        })
-      )
+        return n
+      }))
     }
     if (node.outputs.has(socketKey)) {
       const output = node.outputs.get(socketKey) as Output
       output.name = name
       node.outputs.set(socketKey, output)
       const nodeOutputs = node.data.outputs as unknown as DataSocketType[]
-      node.data.outputs = AsOutputsData(
-        nodeOutputs.map(n => {
-          if (n.socketKey === socketKey) {
-            n.name = name
-          }
+      node.data.outputs = AsOutputsData(nodeOutputs.map(n => {
+        if (n.socketKey === socketKey) {
+          n.name = name
+        }
 
-          return n
-        })
-      )
+        return n
+      }))
     }
   })
 }
@@ -109,9 +98,9 @@ const addSockets = ({
   useSocketName = false,
 }: AddSockets) => {
   const uniqueCount = new Set(sockets.map(i => i.name)).size
-  const currentConnection = AsDataSocket(
-    node.data[(connectionType + 's') as ThroughPutType]
-  )
+  const currentConnection = AsDataSocket(node.data[
+    (connectionType + 's') as ThroughPutType
+  ])
   const existingSockets = currentConnection.map(
     (soc: DataSocketType) => soc.socketKey
   )
@@ -137,9 +126,9 @@ const addSockets = ({
 
       const Socket = connectionType === 'output' ? Output : Input
       const addMethod = connectionType === 'output' ? 'addOutput' : 'addInput'
-      const currentConnection = AsDataSocket(
-        node.data[(connectionType + 's') as ThroughPutType]
-      )
+      const currentConnection = AsDataSocket(node.data[
+        (connectionType + 's') as ThroughPutType
+      ])
 
       currentConnection.push({
         name: name as SocketNameType,
@@ -154,12 +143,10 @@ const addSockets = ({
         new Socket(socketKey, name, socket, taskType === 'option') as Input &
           Output
       )
-      if (connectionType === 'output') {
+      if (connectionType === 'output')
         node.inspector.component.task.outputs[socketKey] = taskType
-
-        // support both key and name task outputs
-        node.inspector.component.task.outputs[name] = taskType
-      }
+      // support both key and name task outputs
+      node.inspector.component.task.outputs[name] = taskType
     })
 }
 

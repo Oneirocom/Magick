@@ -106,7 +106,7 @@ class RunSpell {
     this._resetTasks()
 
     // laod the inputs into module memory
-    this.module.read({ inputs, secrets, publicVariables, app })
+    this.module.read({ inputs, secrets, agent, publicVariables, app })
 
     const component = this._getComponent(componentName as string) as
       | ModuleComponent

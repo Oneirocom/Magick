@@ -234,31 +234,31 @@ const MenuBar = () => {
       items: {
         new_spell: {
           onClick: onNew,
-          hotKey: 'alt+n, ctrl+n',
+          hotKey: 'option+n',
         },
         open_spell: {
           onClick: onOpen,
-          hotKey: 'alt+o, ctrl+o',
+          hotKey: 'option+o, ctrl+o',
         },
         import_spell: {
           onClick: onImport,
-          hotKey: 'alt+i, ctrl+i',
+          hotKey: 'option+i, ctrl+i',
         },
         rename_spell: {
           onClick: onEdit,
-          hotKey: 'alt+e, ctrl+e',
+          hotKey: 'option+e, ctrl+e',
         },
         save_spell: {
           onClick: onSave,
-          hotKey: 'alt+s, ctrl+s',
+          hotKey: 'option+s, ctrl+s',
         },
         save_a_copy: {
           onClick: onSaveAs,
-          hotKey: 'alt+shift+s, ctrl+shift+s',
+          hotKey: 'option+shift+s, ctrl+shift+s',
         },
         export_spell: {
           onClick: onExport,
-          hotKey: 'alt+shift+e, ctrl+shift+e',
+          hotKey: 'option+shift+e, ctrl+shift+e',
         },
       },
     },
@@ -266,19 +266,19 @@ const MenuBar = () => {
       items: {
         undo: {
           onClick: onUndo,
-          hotKey: 'alt+z, ctrl+z',
+          hotKey: 'option+z, ctrl+z',
         },
         redo: {
           onClick: onRedo,
-          hotKey: 'alt+y, ctrl+y, alt+shift+z, ctrl+shift+z',
+          hotKey: 'option+y, ctrl+y, option+shift+z, ctrl+shift+z',
         },
         copy: {
           onClick: onMultiSelectCopy,
-          hotKey: 'alt+c, ctrl+c',
+          hotKey: 'option+c, ctrl+c',
         },
         paste: {
           onClick: onMultiSelectPaste,
-          hotKey: 'alt+v, ctrl+v',
+          hotKey: 'option+v, ctrl+v',
         },
         delete: {
           onClick: onDelete,
@@ -294,23 +294,23 @@ const MenuBar = () => {
       items: {
         text_editor: {
           onClick: onTextEditorCreate,
-          hotKey: 'alt+1, control+1',
+          hotKey: 'option+1, control+1',
         },
         inspector: {
           onClick: onInspectorCreate,
-          hotKey: 'alt+2, control+2',
+          hotKey: 'option+2, control+2',
         },
         playtest: {
           onClick: onPlaytestCreate,
-          hotKey: 'alt+3, control+3',
+          hotKey: 'option+3, control+3',
         },
         console: {
           onClick: onConsole,
-          hotKey: 'alt+4, control+4',
+          hotKey: 'option+4, control+4',
         },
         project_window: {
           onClick: onProjectWindowCreate,
-          hotKey: 'alt+5, control+5',
+          hotKey: 'option+5, control+5',
         },
         snap: {
           onClick: toggleSnapFunction,
@@ -321,7 +321,7 @@ const MenuBar = () => {
         items: {
           'Auto Save': {
             onClick: toggleSave,
-            hotKey: 'alt+shift+a',
+            hotKey: 'option+shift+a',
             isActive: preferences.autoSave,
           },
         },
@@ -361,7 +361,7 @@ const MenuBar = () => {
     } else if (userAgent.indexOf('Linux') !== -1) {
       formattedCommand = formattedCommand.replace('option', 'alt')
     } else {
-      formattedCommand = formattedCommand.replace('alt', '\u2325')
+      formattedCommand = formattedCommand.replace('option', '\u2325')
     }
 
     formattedCommand = formattedCommand.replace('shift', '\u21E7')
@@ -406,7 +406,7 @@ const MenuBar = () => {
                     event.preventDefault()
                     item.onClick()
                   },
-                  { enableOnFormTags: ['INPUT'] },
+                  { enableOnTags: ['INPUT'] },
                   [item.onClick]
                 )
               }

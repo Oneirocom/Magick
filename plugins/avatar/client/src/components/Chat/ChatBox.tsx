@@ -1,5 +1,4 @@
 import { useConfig, useFeathers } from '@magickml/client-core'
-import { v4 } from 'uuid'
 import Mic from '@mui/icons-material/Mic'
 import MicOff from '@mui/icons-material/MicOff'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -9,7 +8,7 @@ import {
 } from 'sepia-speechrecognition-polyfill'
 import styles from './Chat.module.css'
 import { useLipSync } from '../../hooks/useLipSync'
-import { useAgentList } from '../../hooks/useAgentList'
+import { useSpellList } from '../../hooks/useSpellList'
 import { useZustand } from '../../store/useZustand'
 import { usePubSub } from '@magickml/client-core'
 
@@ -52,7 +51,7 @@ export async function pruneMessages(messages) {
 const sessionId =
   localStorage.getItem('sessionId') ??
   Math.random().toString(36).substring(2, 15) +
-  Math.random().toString(36).substring(2, 15)
+    Math.random().toString(36).substring(2, 15)
 
 localStorage.setItem('sessionId', sessionId)
 
@@ -68,19 +67,20 @@ export default function ChatBox() {
   const [speechRecognition, setSpeechRecognition] = useState(false)
   const { avatarVrm } = useZustand()
   const lipSync = useLipSync(avatarVrm)
-  const agentList = useAgentList()
+  const spellList = useSpellList()
   const { publish, subscribe, events } = usePubSub()
 
-  const { client } = useFeathers()
+  const FeathersContext = useFeathers()
+  const client = FeathersContext.client
 
-  const [currentAgent, setCurrentAgent] = useState(null)
+  const [currentSpell, setCurrentSpell] = useState(null)
 
   useEffect(() => {
-    if (currentAgent) return
-    if (agentList?.length > 0) {
-      setCurrentAgent(agentList[0].name)
+    if (currentSpell) return
+    if (spellList.length > 0) {
+      setCurrentSpell(spellList[0].name)
     }
-  }, [agentList])
+  }, [spellList])
 
   const [waitingForResponse, setWaitingForResponse] = React.useState(false)
   const config = useConfig()
@@ -152,7 +152,7 @@ export default function ChatBox() {
     handleUserChatInput(value)
   }
 
-  const printToConsole = useCallback((_text) => {
+  const printToConsole = useCallback((_, _text) => {
     setWaitingForResponse(false)
     setMessages(messages => [...messages, name + ': ' + _text])
     try {
@@ -172,9 +172,9 @@ export default function ChatBox() {
     } catch (error) {
       console.error(error)
     }
-  }, [])
+  })
 
-  const { $PLAYTEST_PRINT, $RUN_SPELL, RUN_AGENT } = events
+  const { $PLAYTEST_PRINT, $RUN_SPELL } = events
 
   const handleUserChatInput = async value => {
     if (!value || waitingForResponse) return
@@ -203,42 +203,23 @@ export default function ChatBox() {
 
     const data = {
       id: 'avatar',
-      agentName: currentAgent,
+      spellName: currentSpell,
       projectId: config.projectId,
-      sessionId,
-      agentId: 'e3390b6d-1b1f-435d-81bc-04b116762ba5',
       inputs: {
         'Input - Default': toSend,
       },
       secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
     }
 
-    publish(RUN_AGENT, data)
-    console.log('ran agent', data)
+    publish($RUN_SPELL('avatar'), data)
   }
 
   useEffect(() => {
-    if (!client) return
+    const unsubscribe = subscribe($PLAYTEST_PRINT('avatar'), printToConsole)
 
-    client.service('agents').on('result', result => {
-      // right now this is a decent check to ensure the data is the right data. 
-      // May be able to do something better.
-      if (result.sessionId !== sessionId) return
-      // Would be good to use a different outpute here eventually.
-      // Feels dirty to use the default output hard coded.
-      const output = result.data.result['Output - Default']
-
-      printToConsole(output)
-    })
-
-  }, [client])
-
-  // useEffect(() => {
-  //   const unsubscribe = subscribe($PLAYTEST_PRINT('avatar'), printToConsole)
-
-  //   // Return a cleanup function.
-  //   return unsubscribe as () => void
-  // }, [subscribe, printToConsole, $PLAYTEST_PRINT])
+    // Return a cleanup function.
+    return unsubscribe as () => void
+  }, [subscribe, printToConsole, $PLAYTEST_PRINT])
 
   let hasSet = false
   useEffect(() => {
@@ -266,21 +247,21 @@ export default function ChatBox() {
   return (
     <div className={styles.chatContainer}>
       <div className={styles.scrollContainer}>
-        <div className={styles.agentSelectorContainer}>
-          <label className={styles.agentListTitle}>Agent</label>
+        <div className={styles.spellSelectorContainer}>
+          <label className={styles.spellListTitle}>Root Spell</label>
           <select
-            className={styles.agentSelector}
-            name="agentList"
-            id="agentList"
-            defaultValue={currentAgent}
+            className={styles.spellSelector}
+            name="spellList"
+            id="spellList"
+            defaultValue={currentSpell}
             onChange={e => {
-              setCurrentAgent(e.target.value)
+              setCurrentSpell(e.target.value)
             }}
           >
-            {agentList?.map((agent, idx) => {
+            {spellList?.map((spell, idx) => {
               return (
-                <option value={agent.name} key={idx}>
-                  {agent.name}
+                <option value={spell.name} key={idx}>
+                  {spell.name}
                 </option>
               )
             })}
@@ -325,7 +306,7 @@ export default function ChatBox() {
               value={input}
               onInput={handleChange}
               onChange={handleChange}
-            // disabled={waitingForResponse}
+              // disabled={waitingForResponse}
             />
             <button
               size={14}
