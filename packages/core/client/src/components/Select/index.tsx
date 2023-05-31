@@ -60,7 +60,7 @@ export const Select = ({
       event.preventDefault();
       blurSelect();
     },
-    { enableOnFormTags: ['INPUT'] },
+    { enableOnTags: 'INPUT' as any },
     [blurSelect]
   );
 

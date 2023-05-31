@@ -9,20 +9,21 @@ sidebar_position: 2
 
 ## Setup and Installation
 
-There are currently two ways to use Magick: on the cloud through our waitlist (https://magickml.com), and by running the code locally on your own computer.
+There are three ways to use Magick: on the cloud, as a standalone app or by running the code from source.
 
-## Cloud - (currently in invite-only alpha testing) 
+## Cloud
 
-📜 At this current stage of development, our Cloud experience is limited to those who have received an invitation to explore and build in Magick. You can join our waitlist [here](https://www.magickml.com). 
+You can use Magick through the hosted web app at https://cloud.magickml.com/
 
-When it is your turn to build in Magick, you'll receive a special message from our team...so keep an eye open for that...
+For the alpha phase, joining is free. However, you will need your OpenAI API keys.
 
-💬 You are also welcome and encouraged to connect with other Magick Makers in our [Discord server](https://discord.gg/magickml)!
+## Standalone App (.exe, .app, etc)
 
+The standalone app is available at https://github.com/Oneirocom/Magick/releases
 
-## Open Source repo
+## Source
 
-You can also build in Magick with our open source repo. Refer to the Magick [README](https://github.com/Oneirocom/Magick/blob/development/README.md) for the latest steps on installing and how to clone the repo and run from source.
+You can also build from source. Refer to the Magick [README](https://github.com/Oneirocom/Magick/blob/development/README.md) for the latest steps on installing and how to clone the repo and run from source.
 
 Development is straightforward. You will need git and node.js 18+ installed.
 

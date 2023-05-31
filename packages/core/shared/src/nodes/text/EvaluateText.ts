@@ -1,10 +1,10 @@
 // DOCUMENTED
 import Rete from 'rete'
 import { FewshotControl } from '../../dataControls/FewshotControl'
+import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
-import { DropdownControl } from '../../dataControls/DropdownControl'
 
 /** Pre-defined fewshot template */
 const fewshot = ''
@@ -44,22 +44,11 @@ export class EvaluateText extends MagickComponent<Promise<void>> {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const isTrue = new Rete.Output('true', 'True', triggerSocket)
     const isFalse = new Rete.Output('false', 'False', triggerSocket)
-    const operationTypes = [
-      'includes',
-      'not includes',
-      'equals',
-      'not equals',
-      'starts with',
-      'not starts with',
-      'ends with',
-      'not ends with',
-    ]
 
-    const operationType = new DropdownControl({
-      name: 'Operation Type',
+    const operationType = new InputControl({
       dataKey: 'operationType',
-      values: operationTypes,
-      defaultValue: operationTypes[0],
+      name: 'Operation Type',
+      icon: 'moon',
     })
 
     const fewshotControl = new FewshotControl({})

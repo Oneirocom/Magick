@@ -4,11 +4,10 @@
 import { PubSubContext, PubSubData, PubSubEvents } from '@magickml/core'
 import PubSub from 'pubsub-js'
 import * as React from 'react'
-import { createContext, useContext, useEffect } from 'react'
-import { useFeathers } from './FeathersProvider'
+import { createContext, useContext } from 'react'
 
 // Create new context for PubSub
-const Context = createContext<PubSubContext>(undefined!)
+const Context = createContext<PubSubContext>(undefined)
 
 // Custom hook to access the PubSub context
 export const usePubSub = () => useContext<PubSubContext>(Context)
@@ -22,7 +21,6 @@ export const events: PubSubEvents = {
   DELETE_SUBSPELL: 'deleteSubspell',
   OPEN_TAB: 'openTab',
   TOGGLE_SNAP: 'toggleSnap',
-  RUN_AGENT: 'runAgent',
   $SUBSPELL_UPDATED: spellId => `subspellUpdated:${spellId}`,
   $TRIGGER: (tabId, nodeId) => `triggerNode:${tabId}:${nodeId ?? 'default'}`,
   $PLAYTEST_INPUT: tabId => `playtestInput:${tabId}`,
@@ -45,7 +43,6 @@ export const events: PubSubEvents = {
   $CREATE_DEBUG_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $CREATE_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $RUN_SPELL: tabId => `runSpell:${tabId}`,
-  $RUN_AGENT: tabId => `runAgent:${tabId}`,
   $PROCESS: tabId => `process:${tabId}`,
   $EXPORT: tabId => `export:${tabId}`,
   $UNDO: tabId => `undo:${tabId}`,
@@ -58,8 +55,6 @@ export const events: PubSubEvents = {
 
 // Create the PubSubProvider component
 export const PubSubProvider: React.FC = ({ children }) => {
-  const { client } = useFeathers()
-
   // Publish function
   const publish = (event: string, data: PubSubData) => {
     return PubSub.publish(event, data)
@@ -76,19 +71,6 @@ export const PubSubProvider: React.FC = ({ children }) => {
       PubSub.unsubscribe(token)
     }
   }
-
-  useEffect(() => {
-    if (!client) return
-
-    // temporary subscription to run the agent
-    PubSub.subscribe(events.RUN_AGENT, (event, data) => {
-      client.service('agents').run(data)
-    })
-
-    return () => {
-      PubSub.clearAllSubscriptions()
-    }
-  }, [client])
 
   // Public interface for the provider
   const publicInterface = {

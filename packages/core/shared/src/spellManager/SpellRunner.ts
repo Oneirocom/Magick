@@ -1,9 +1,7 @@
 import { Application } from '@feathersjs/koa'
 import io from 'socket.io'
-import { Agent } from '@magickml/agents'
+import Agent from '../agents/Agent'
 
-import pino from 'pino'
-import { getLogger } from '@magickml/core'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
 import { getNodes } from '../nodes'
 import { Module } from '../plugins/modulePlugin/module'
@@ -35,7 +33,6 @@ type SpellRunnerConstructor = {
 }
 
 class SpellRunner {
-  logger: pino.Logger = getLogger()
   engine: MagickEngine
   currentSpell!: SpellInterface
   module: Module
@@ -46,7 +43,7 @@ class SpellRunner {
   spellManager: SpellManager
 
   log(message, data) {
-    this.logger.info(`${message} %o`, data)
+    console.log(message, data)
     if (!this.agent) return
 
     this.agent.log(message, {
@@ -57,7 +54,7 @@ class SpellRunner {
   }
 
   warn(message, data) {
-    this.logger.warn(`${message} %o`, data)
+    console.warn(message, data)
     if (!this.agent) return
 
     this.agent.warn(message, {
@@ -65,19 +62,6 @@ class SpellRunner {
       projectId: this.currentSpell.projectId,
       ...data,
     })
-  }
-
-  publish(event, message) {
-    if (!this.agent) return
-    this.agent.publishEvent(`spell:${this.currentSpell.id}`, {
-      ...message,
-      event,
-    })
-  }
-
-  emit(event, message) {
-    if (!this.agent) return
-    this.agent.publishEvent(`spell:${this.currentSpell.id}:${event}`, message)
   }
 
   constructor({ app, socket, agent, spellManager }: SpellRunnerConstructor) {
@@ -90,7 +74,6 @@ class SpellRunner {
       components: getNodes(),
       server: true,
       socket: socket || undefined,
-      emit: this.emit.bind(this),
     }) as MagickEngine
     this.app = app
 
@@ -256,6 +239,7 @@ class SpellRunner {
     inputs,
     componentName = 'Input',
     runSubspell = false,
+    agent,
     secrets,
     publicVariables,
     app,
@@ -263,9 +247,7 @@ class SpellRunner {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
-      return this.logger.error(
-        'Infinite loop detected in SpellRunner. Exiting.'
-      )
+      return console.error('Infinite loop detected.  Exiting.')
     }
     // Set the current spell into the cache of spells that have run now.
     if (runSubspell) this.ranSpells.push(this.currentSpell.name)
@@ -278,6 +260,7 @@ class SpellRunner {
     this.module.read({
       inputs: this._formatInputs(inputs),
       secrets,
+      agent,
       publicVariables,
       app,
     })
@@ -287,25 +270,25 @@ class SpellRunner {
     ) as unknown as ModuleComponent
 
     if (!component.run)
-      return this.logger.error('Component does not have a run method')
+      return console.error('Component does not have a run method')
 
     const firstInput = Object.keys(inputs)[0]
 
-    this.logger.info('firstInput: %o', firstInput)
+    console.log('firstInput', firstInput)
 
     // Checking for the triggered node for the connection type
     let triggeredNode = this._getTriggeredNodeByName(firstInput)
 
     // If there isn't one, we should
     if (!triggeredNode) {
-      this.logger.warn(
+      console.warn(
         `No trigger found for ${firstInput}.  Using default trigger.`
       )
       triggeredNode = this._getTriggeredNodeByName('Input - Default')
     }
 
     // If we still don't have a triggered node, we should throw an error.
-    if (!triggeredNode) return this.logger.error('No triggered node found')
+    if (!triggeredNode) return console.error('No triggered node found')
 
     // this running is where the main "work" happens.
     // I do wonder whether we could make this even more elegant by having the node
@@ -317,7 +300,7 @@ class SpellRunner {
       await component.run(triggeredNode as unknown as MagickNode, inputs)
       return this.outputData
     } catch (err) {
-      this.logger.error('ERROR RUNNING SPELL, %o', err)
+      console.error('ERROR RUNNING SPELL', err)
       return {
         Output: `Error running spell- ${err}`,
       }
