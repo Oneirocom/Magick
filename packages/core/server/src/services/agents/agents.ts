@@ -6,6 +6,7 @@
 
 // Import necessary modules and functions
 import * as BullMQ from 'bullmq'
+import { bullMQConnection } from '@magickml/core'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { BadRequest } from '@feathersjs/errors'
 import {
@@ -73,6 +74,8 @@ export const agent = (app: Application) => {
       projectId,
       data: job.data,
     })
+  }, {
+    connection: bullMQConnection
   })
 
   // Initialize hooks for the agent service

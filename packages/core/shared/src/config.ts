@@ -65,7 +65,13 @@ export const JWT_SECRET = getVarForEnvironment('JWT_SECRET') || 'secret'
 export const POSTHOG_ENABLED =
   getVarForEnvironment('POSTHOG_ENABLED') === 'true'
 export const POSTHOG_API_KEY = getVarForEnvironment('POSTHOG_API_KEY') || ''
-export const REDISCLOUD_URL = getVarForEnvironment('REDISCLOUD_URL') || ''
+export const REDISCLOUD_HOST = getVarForEnvironment('REDISCLOUD_HOST') || ''
+export const REDISCLOUD_PORT = Number(getVarForEnvironment('REDISCLOUD_PORT')) || 6379
+export const REDISCLOUD_URL = getVarForEnvironment('REDISCLOUD_URL') || `redis://${REDISCLOUD_HOST}:${REDISCLOUD_PORT}`
+
+export const REDISCLOUD_DB = Number(getVarForEnvironment('REDISCLOUD_DB')) || 0
+export const REDISCLOUD_PASSWORD = getVarForEnvironment('REDISCLOUD_PASSWORD')
+export const REDISCLOUD_USERNAME = getVarForEnvironment('REDISCLOUD_USERNAME')
 
 export const ELEVENLABS_API_KEY =
   getVarForEnvironment('ELEVENLABS_API_KEY') ||
@@ -79,3 +85,11 @@ export const AGENT_UPDATE_TIME_MSEC = Number(
 export const PING_AGENT_TIME_MSEC = Number(
   getVarForEnvironment('PING_AGENT_TIME_MSEC') || 6000
 )
+
+export const bullMQConnection = {
+  host: REDISCLOUD_HOST,
+  port: REDISCLOUD_PORT,
+  password: REDISCLOUD_PASSWORD,
+  username: REDISCLOUD_USERNAME,
+  db: REDISCLOUD_DB,
+}
