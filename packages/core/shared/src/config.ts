@@ -85,3 +85,11 @@ export const AGENT_UPDATE_TIME_MSEC = Number(
 export const PING_AGENT_TIME_MSEC = Number(
   getVarForEnvironment('PING_AGENT_TIME_MSEC') || 6000
 )
+
+export const bullMQConnection = {
+  host: REDISCLOUD_HOST,
+  port: REDISCLOUD_PORT,
+  password: REDISCLOUD_PASSWORD,
+  username: REDISCLOUD_USERNAME,
+  db: REDISCLOUD_DB,
+}

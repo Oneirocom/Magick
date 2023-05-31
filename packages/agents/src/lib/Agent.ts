@@ -11,11 +11,7 @@ import {
   SpellInterface,
   getLogger,
   PING_AGENT_TIME_MSEC,
-  REDISCLOUD_HOST,
-  REDISCLOUD_PORT,
-  REDISCLOUD_USERNAME,
-  REDISCLOUD_PASSWORD,
-  REDISCLOUD_DB
+  bullMQConnection
 } from '@magickml/core'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 
@@ -67,22 +63,10 @@ export class Agent extends RedisPubSub implements AgentInterface {
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
     // Set up the agent worker to handle incoming messages
     this.worker = new BullMQ.Worker(`agent:run`, this.runWorker.bind(this), {
-      connection: {
-        host: REDISCLOUD_HOST,
-        port: REDISCLOUD_PORT,
-        username: REDISCLOUD_USERNAME,
-        password: REDISCLOUD_PASSWORD,
-        db: REDISCLOUD_DB,
-      }
+      connection: bullMQConnection
     })
     this.queue = new BullMQ.Queue(`agent:run:result`, {
-      connection: {
-        host: REDISCLOUD_HOST,
-        port: REDISCLOUD_PORT,
-        username: REDISCLOUD_USERNAME,
-        password: REDISCLOUD_PASSWORD,
-        db: REDISCLOUD_DB,
-      }
+      connection: bullMQConnection
     })
 
     const spellManager = new SpellManager({
