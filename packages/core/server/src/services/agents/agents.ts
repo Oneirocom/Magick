@@ -6,7 +6,13 @@
 
 // Import necessary modules and functions
 import * as BullMQ from 'bullmq'
-import { REDISCLOUD_HOST } from '@magickml/core'
+import {
+  REDISCLOUD_HOST,
+  REDISCLOUD_PORT,
+  REDISCLOUD_USERNAME,
+  REDISCLOUD_PASSWORD,
+  REDISCLOUD_DB,
+} from '@magickml/core'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { BadRequest } from '@feathersjs/errors'
 import {
@@ -77,7 +83,10 @@ export const agent = (app: Application) => {
   }, {
     connection: {
       host: REDISCLOUD_HOST,
-      port: 6379
+      port: REDISCLOUD_PORT,
+      username: REDISCLOUD_USERNAME,
+      password: REDISCLOUD_PASSWORD,
+      db: REDISCLOUD_DB,
     }
   })
 
