@@ -13,6 +13,7 @@ import {
   rest,
 } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 import sync from 'feathers-sync'
 import {
   configureManager,
@@ -39,6 +40,8 @@ declare module './declarations' {
   interface Configuration {
     vectordb: PostgresVectorStoreCustom | any
     docdb: PostgresVectorStoreCustom | any
+    pubsub: RedisPubSub
+    isAgent?: boolean
   }
 }
 
@@ -62,9 +65,6 @@ app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
 
-// Configure app spell management settings
-app.configure(configureManager())
-
 // sync up messages between the app and the runner
 if (REDISCLOUD_URL) {
   app.configure(
@@ -74,7 +74,19 @@ if (REDISCLOUD_URL) {
       deserialize: parse,
     })
   )
+
+  // Initialize pubsub redis client
+  const pubsub = new RedisPubSub()
+
+  await pubsub.initialize({
+    url: REDISCLOUD_URL,
+  })
+
+  app.set('pubsub', pubsub)
 }
+
+// Configure app spell management settings
+app.configure(configureManager())
 
 // Configure authentication
 

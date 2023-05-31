@@ -57,9 +57,8 @@ const ProjectRow = ({
   return (
     <div
       role="button"
-      className={`${css['project-row']} ${
-        css[selectedSpell?.name === label ? 'selected' : '']
-      }`}
+      className={`${css['project-row']} ${css[selectedSpell?.id === spell?.id ? 'selected' : '']
+        }`}
       onClick={e => {
         onClick(e)
       }}
