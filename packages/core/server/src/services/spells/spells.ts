@@ -5,8 +5,7 @@
 
 // Imports
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import { v4 as uuidv4 } from 'uuid'
-import type { Application, HookContext } from '../../declarations'
+import type { Application } from '../../declarations'
 import {
   checkForSpellInManager,
   updateSpellInManager,
@@ -66,35 +65,36 @@ export const spell = (app: Application) => {
       create: [
         schemaHooks.validateData(spellDataValidator),
         schemaHooks.resolveData(spellDataResolver),
-        async (context: HookContext) => {
-          const { data, service } = context
-          context.data = {
-            [service.id]: uuidv4(),
-            ...data,
-          }
-          await context.service
-            .find({
-              query: {
-                name: data.name,
-              },
-            })
-            .then(async param => {
-              if (param.data.length >= 1) {
-                await context.service
-                  .find({
-                    query: {
-                      name: {
-                        $ilike: data.name + ' (%)',
-                      },
-                    },
-                  })
-                  .then(val => {
-                    context.data.name =
-                      data.name + ' (' + (1 + val.data.length) + ')'
-                  })
-              }
-            })
-        },
+        // async (context: HookContext) => {
+        //   const { data, service } = context
+        //   context.data = {
+        //     [service.id]: uuidv4(),
+        //     ...data,
+        //   }
+        //   await context.service
+        //     .find({
+        //       query: {
+        //         projectId: data.projectId,
+        //         name: data.name,
+        //       },
+        //     })
+        //     .then(async param => {
+        //       if (param.data.length >= 1) {
+        //         await context.service
+        //           .find({
+        //             query: {
+        //               projectId: data.projectId,
+        //               name: {
+        //                 $ilike: data.name + ' (%)',
+        //               },
+        //             },
+        //           })
+        //           .then(val => {
+        //             context.data.name = data.name + ' (' + (1 + val.data.length) + ')'
+        //           })
+        //       }
+        //     })
+        // },
       ],
       patch: [
         schemaHooks.validateData(spellPatchValidator),

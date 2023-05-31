@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow'
 import TableSortLabel from './TableSortLabel'
 import { visuallyHidden } from '@mui/utils'
 import styles from './index.module.scss'
-import { Box } from '@mui/material'
+import { Box, Pagination } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 
 interface Props {
@@ -25,7 +25,8 @@ interface Props {
   setSelected: (row: string[]) => void
   setSortField?: (fueld: string) => void
   setFieldOrder?: (order: string) => void
-  handlePageChange?: (e: unknown, newPage: number) => void
+  handlePageChange: (newPage: number) => void
+  handleSorting: (data: Object) => void
   handleRowsPerPageChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 interface Data {
@@ -85,6 +86,7 @@ function stableSort<T>(
 
 interface EnhancedTableProps {
   numSelected: number
+  handleSorting: (column: string) => void
   onRequestSort: (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -105,9 +107,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     rowCount,
     columns,
     onRequestSort,
+    handleSorting
   } = props
   const createSortHandler =
     (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+      handleSorting(property)
       onRequestSort(event, property)
     }
 
@@ -177,6 +181,7 @@ export const TableComponent = ({
   setFieldOrder,
   setSelected,
   handlePageChange,
+  handleSorting,
   handleRowsPerPageChange,
 }: Props) => {
   const [order, setOrder] = React.useState<Order>(
@@ -207,7 +212,7 @@ export const TableComponent = ({
   }
 
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selectedRows?.indexOf(name) || -1
+    const selectedIndex = selectedRows?.indexOf(name)
     let newSelected: string[] = []
 
     if (selectedIndex === -1) {
@@ -248,6 +253,7 @@ export const TableComponent = ({
             order={order}
             orderBy={orderBy}
             onSelectAllClick={handleSelectAllClick}
+            handleSorting={handleSorting}
             onRequestSort={handleRequestSort}
             rowCount={rows.length}
             columns={column}
@@ -299,15 +305,15 @@ export const TableComponent = ({
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      /> */}
+      <div className={styles.paginationContainer}>
+        <Pagination
+          count={count}
+          onChange={(e, page) => handlePageChange(page)}
+          shape="rounded"
+          showFirstButton
+          showLastButton
+        />
+      </div>
     </React.Fragment>
   )
 }

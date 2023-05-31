@@ -1,6 +1,6 @@
 // DOCUMENTED
-import { Agent } from '@magickml/core'
 import { app } from '@magickml/server-core'
+import { Agent } from '@magickml/agents'
 import Discord, {
   AttachmentBuilder,
   EmbedBuilder,
