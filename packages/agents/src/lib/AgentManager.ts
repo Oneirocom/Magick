@@ -153,9 +153,8 @@ export class AgentManager {
         agent.id
       )
 
-      this.removeHandlers.forEach(handler => handler({ agent: oldAgent }))
-
       if (oldAgent) {
+        this.removeHandlers.forEach(handler => handler({ agent: oldAgent }))
         await oldAgent.onDestroy()
       }
 
