@@ -35,14 +35,16 @@ export class AgentManager {
   /**
    * Create an agent manager.
    */
-  constructor(app) {
+  constructor(app, longPolling = true) {
     this.app = app
 
     app.set('isAgent', true)
     // Update agents every second
-    setInterval(async () => {
-      await this.updateAgents()
-    }, AGENT_UPDATE_TIME_MSEC)
+    if (longPolling) {
+      setInterval(async () => {
+        await this.updateAgents()
+      }, AGENT_UPDATE_TIME_MSEC)
+    }
   }
 
   /**
