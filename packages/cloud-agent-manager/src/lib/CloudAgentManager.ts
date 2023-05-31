@@ -2,7 +2,6 @@ import pino from "pino"
 import { getLogger } from "@magickml/core"
 import { Reporter } from "./Reporter"
 import { MessageQueue } from "./MessageQueue"
-import { app } from "@magickml/server-core"
 
 interface CloudAgentManagerConstructor {
     mq: MessageQueue
