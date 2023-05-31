@@ -69,6 +69,10 @@ export const REDISCLOUD_HOST = getVarForEnvironment('REDISCLOUD_HOST') || ''
 export const REDISCLOUD_PORT = Number(getVarForEnvironment('REDISCLOUD_PORT')) || 6379
 export const REDISCLOUD_URL = getVarForEnvironment('REDISCLOUD_URL') || `redis://${REDISCLOUD_HOST}:${REDISCLOUD_PORT}`
 
+export const REDISCLOUD_DB = Number(getVarForEnvironment('REDISCLOUD_DB')) || 0
+export const REDISCLOUD_PASSWORD = getVarForEnvironment('REDISCLOUD_PASSWORD')
+export const REDISCLOUD_USERNAME = getVarForEnvironment('REDISCLOUD_USERNAME')
+
 export const ELEVENLABS_API_KEY =
   getVarForEnvironment('ELEVENLABS_API_KEY') ||
   'ce69df07b50e7179cbbfc5c2bef9d752'
