@@ -58,6 +58,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
     const id = uuidv4()
     // Create a new spell
     const response = (await newSpell({
+      id: uuidv4(),
       graph: defaultGraph,
       name: data.name,
       id,
