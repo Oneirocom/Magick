@@ -1,55 +1,51 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${file}",
-      "outFiles": ["${workspaceFolder}/**/*.js"]
-    },
-    {
-      "name": "Client",
-      "type": "chrome",
-      "request": "launch",
-      "resolveSourceMapLocations": [
-        "${workspaceFolder}/**",
-        "!**/node_modules/**"
-      ],
-      "url": "http://localhost:4200"
-    },
-    {
-      "name": "SpellCaster",
-      "type": "node",
-      "request": "attach",
-      "port": 7777
-    },
-    {
-      "name": "Server",
-      "type": "node",
-      "request": "attach",
-      "port": 7778,
-      "resolveSourceMapLocations": [
-        "${workspaceFolder}/**",
-        "!**/node_modules/**"
-      ],
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
-    },
-    {
-      "name": "AgentServer",
-      "type": "node",
-      "request": "attach",
-      "port": 7779,
-      //   "websocketAddress": "127.0.0.1:7779",
-      "resolveSourceMapLocations": [
-        "${workspaceFolder}/**",
-        "!**/node_modules/**"
-      ],
-      "outFiles": ["${workspaceFolder}/dist/**/*", "!**/node_modules/**"]
-    }
-  ]
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${file}",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
+        },
+        {
+          "name": "Client",
+          "type": "chrome",
+          "request": "launch",
+          "resolveSourceMapLocations": [
+            "${workspaceFolder}/**",
+            "!**/node_modules/**"
+        ],
+          "url": "http://localhost:4200"
+        },
+        {
+          "name": "SpellCaster",
+          "type": "node",
+          "request": "attach",
+          "port": 7777
+        },
+        {
+          "name": "Server",
+          "type": "node",
+          "request": "attach",
+          "port": 7778,
+          "outFiles": [
+            "${workspaceFolder}/dist/**/*.js"
+          ]
+        },
+        {
+          "name": "AgentServer",
+          "type": "node",
+          "request": "attach",
+          "port": 7779
+        }
+    ]
 }

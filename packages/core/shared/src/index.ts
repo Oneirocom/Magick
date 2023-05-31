@@ -2,6 +2,9 @@
 // Import necessary dependencies
 import 'regenerator-runtime/runtime'
 
+// Export the main engine
+export * from './agents/Agent'
+export * from './agents/AgentManager'
 // Export configuration and all other necessary components.
 export * from './config'
 export { BooleanControl } from './dataControls/BooleanControl'
@@ -48,6 +51,5 @@ export * from './spellManager'
 export * from './types'
 export * from './utils'
 export * from './plugins/inspectorPlugin'
-export * from './logger'
 
 export * from './cost-calculator'

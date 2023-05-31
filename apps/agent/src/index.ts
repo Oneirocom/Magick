@@ -5,19 +5,15 @@
  * @packageDocumentation
  */
 
-import { AgentManager } from '@magickml/agents'
+import { AgentManager } from '@magickml/core'
 import { app } from '@magickml/server-core'
-import { initLogger, getLogger } from '@magickml/core'
 import 'regenerator-runtime/runtime'
-
-
 
 /**
  * Asynchronously loads the application's plugins and logs their names.
  * @returns A `Promise` that resolves when the plugins have been loaded.
  */
 async function loadPlugins(): Promise<void> {
-  logger.info('Loading plugins...')
   // Import the plugins and get the default exports.
   const pluginExports = (await import('./plugins')).default
 
@@ -25,7 +21,7 @@ async function loadPlugins(): Promise<void> {
   const pluginNames = Object.values(pluginExports)
     .map((p: any) => p.name)
     .join(', ')
-  logger.info('Plugins loaded: %o', pluginNames)
+  console.log('Loaded plugins on agent:', pluginNames)
 }
 
 /**
@@ -33,18 +29,14 @@ async function loadPlugins(): Promise<void> {
  * @returns A `Promise` that resolves when the application is initialized.
  */
 async function initializeAgent(): Promise<void> {
-  logger.info('Initializing agent...')
   await loadPlugins()
 
   new AgentManager(app)
 
-  logger.info("Agent initialized.")
+  console.log('AGENT: Starting...')
 }
 
+process.on('uncaughtException in Agent Server', console.error)
 
 // Initialize the application and start the agent.
-
-initLogger({ name: 'agent' })
-const logger = getLogger()
-process.on('uncaughtException in Agent Server', logger.error)
 initializeAgent()

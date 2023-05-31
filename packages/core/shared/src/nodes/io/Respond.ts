@@ -84,6 +84,7 @@ export class Respond extends MagickComponent<void> {
       console.error('No input provided to output component')
       return { output: '' }
     }
+
     const { agent, data } = context
     const event = // event data is inside a task
       ((inputs.event?.[0] as any)?.eventData ||

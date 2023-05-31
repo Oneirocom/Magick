@@ -19,13 +19,7 @@ import {
 const info = `The output component will pass values out from your spell. Your output will be sent to the playtest area for easy testing.`
 
 /** Default output types */
-const defaultOutputTypes = [
-  { name: 'Default', socket: anySocket },
-  {
-    name: 'Subspell',
-    socket: anySocket,
-  },
-]
+const defaultOutputTypes = [{ name: 'Default', socket: anySocket }]
 
 /**
  * Output component
@@ -114,6 +108,7 @@ export class Output extends MagickComponent<void> {
     context: ModuleContext
   ): Promise<{ output: string }> {
     const inputName = Object.keys(context.data)[0]
+
     if (!inputs.input) {
       console.error('No input provided to output component')
       return { output: '' }
@@ -133,11 +128,6 @@ export class Output extends MagickComponent<void> {
       inputName?.replace('Input - ', '') ||
       node.data.outputType ||
       event.connector
-
-    // handle this being a subspell returning out
-    if (outputType === 'Subspell') {
-      return { output }
-    }
 
     if (agent) {
       if (outputType && (outputType as string).includes('Default')) {

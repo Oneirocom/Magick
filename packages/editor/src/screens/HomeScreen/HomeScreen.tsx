@@ -16,7 +16,6 @@ import AllProjects from './AllProjects'
 import CreateNew from './CreateNew'
 import css from './homeScreen.module.css'
 import OpenProject from './OpenProject'
-import { uuidv4 } from '../../utils/uuid'
 
 /**
  * StartScreen component. Displays an overlay with options to open or create new spells.
@@ -45,7 +44,6 @@ const StartScreen = (): JSX.Element => {
 
     // Create new spell
     const response = (await newSpell({
-      id: uuidv4(),
       graph: spellData.graph,
       name: spellData.name,
       projectId: config.projectId,
