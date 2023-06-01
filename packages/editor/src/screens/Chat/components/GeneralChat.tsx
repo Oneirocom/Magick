@@ -23,7 +23,7 @@ interface Terminal {
  * @param {Object} props.tab - Tab object.
  * @returns {JSX.Element} Debug console component.
  */
-const DebugConsole = ({ tab }): Element => {
+const DebugConsole = ({ tab }): JSX.Element => {
   const [scrollToBottom, setScrollToBottom] = useState<boolean>(false)
   const { centerNode } = useEditor()
   const { publish, subscribe, events } = usePubSub()
@@ -77,7 +77,7 @@ const DebugConsole = ({ tab }): Element => {
    * @param {string} type - Message type (error or log).
    * @returns {JSX.Element} Rendered message.
    */
-  const Message = (message, type): Element => {
+  const Message = (message, type): JSX.Element => {
     return (
       <div
         style={{

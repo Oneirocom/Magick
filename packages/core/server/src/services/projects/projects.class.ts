@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { Params } from '@feathersjs/feathers'
 import { app } from '../../app'
+import { v4 as uuidv4 } from 'uuid'
 
 /**
  * Interface for CreateData objects
@@ -81,6 +82,7 @@ export class ProjectsService {
       if ('spells' in agent) delete agent.spells // <-- Updated to fix eliza import
       agent.enabled = false
       agent.projectId = projectId
+      agent.secrets = JSON.stringify(agent.secrets || {})
       return agent
     })
 
@@ -90,11 +92,31 @@ export class ProjectsService {
       return doc
     })
 
+    // Create a key value of old IDs to new IDs for spells
+    const spellKeys = {}
+
     const mappedSpells = spells.map(spell => {
       delete spell.updatedAt
+
+      // generate new uuid
+      const newId = uuidv4()
+      spellKeys[spell.id] = newId
+      spell.id = newId
+
       delete spell.creatorId
       spell.projectId = projectId
       return spell
+    })
+
+    // interate through all spells and replace the UUID of any Spell Nodes with the new UUID
+    mappedSpells.forEach(spell => {
+      Object.values(spell.graph.nodes).forEach(
+        (node: { name: string; data: { spellId: string } }) => {
+          if (node.name === 'Spell') {
+            node.data.spellId = spellKeys[node.data.spellId]
+          }
+        }
+      )
     })
 
     // Create and store new agents, documents, and spells
@@ -102,6 +124,7 @@ export class ProjectsService {
     if (mappedAgents.length > 0) {
       mappedAgents.forEach(async agent => {
         console.log('creating agent', agent)
+
         const r = await app.service('agents').create(agent)
         agentResponse.push(r)
       })

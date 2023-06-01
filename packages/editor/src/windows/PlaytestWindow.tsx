@@ -26,12 +26,12 @@ const Input = props => {
 
   // Trigger 'onSend' when 'return' key is pressed on the input.
   useHotkeys(
-    'return',
+    'enter',
     () => {
       if (ref.current !== document.activeElement) return
       props.onSend()
     },
-    { enableOnTags: 'INPUT' as any },
+    { enableOnFormTags: ['INPUT'] },
     [props, ref]
   )
 
@@ -125,10 +125,10 @@ const Playtest = ({ tab }) => {
     if (!inspectorData || inspectorData.name !== 'Input') return
     setPlaytestOption(
       `Input - ` +
-        (inspectorData.data.inputType &&
+      (inspectorData.data.inputType &&
         inspectorData.data.inputType !== 'Default'
-          ? inspectorData.data.inputType
-          : inspectorData.data.inputName)
+        ? inspectorData.data.inputType
+        : inspectorData.data.inputName)
     )
   }, [inspectorData])
 
@@ -147,7 +147,7 @@ const Playtest = ({ tab }) => {
       }))
 
     setPlaytestOptions(options)
-    if (!playtestOption) setPlaytestOption(options[0].value)
+    if (!playtestOption && options.length > 0) setPlaytestOption(options[0].value)
   }, [spellData])
 
   // Keep scrollbar at the bottom of its window.
