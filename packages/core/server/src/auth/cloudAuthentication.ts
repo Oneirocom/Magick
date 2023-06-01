@@ -60,6 +60,8 @@ export class CloudJwtService extends AuthenticationService {
     secretOverride?: string
   ) {
     // Get secret from the configuration or use the override
+    // todo this should be fixed.  Weird bug in feathers typescript
+    //@ts-ignore
     const { secret } = this.configuration
     const encryptionSecret = await getDerivedEncryptionKey(
       secretOverride || secret

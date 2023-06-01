@@ -8,21 +8,26 @@ import {
   POSTHOG_API_KEY,
   POSTHOG_ENABLED,
   DEFAULT_USER_TOKEN,
-  PRODUCTION,
+  STANDALONE,
 } from '@magickml/core'
 import { PostHogProvider } from 'posthog-js/react'
+import { initLogger, getLogger } from '@magickml/core'
 
 import plugins from './plugins'
 
-console.log('plugins', plugins)
+initLogger({ name: "AIDE" })
+
+const logger = getLogger()
+
+logger.info('loaded with plugins %o', plugins)
 /**
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
  */
 if (window === window.parent) {
-  if (!PRODUCTION) {
+  if (STANDALONE) {
     const container = document.getElementById('root')
     const root = createRoot(container) // createRoot(container!) if you use TypeScript
-    ;(window as any).root = root
+      ; (window as any).root = root
 
     // Check URL parameters for projectId and apiUrl
     const projectId =
@@ -62,13 +67,15 @@ if (window === window.parent) {
         event.origin !== window.location.origin &&
         event.origin !== cloudUrl
       ) {
-        console.error('untrusted origin', event.origin)
-        console.error(
-          'cloudUrl is ',
-          cloudUrl,
-          'TRUSTED_PARENT_URL',
+        logger.error('untrusted origin %s', event.origin)
+        logger.error(
+          'cloudUrl is %s',
+          cloudUrl)
+        logger.error(
+          'TRUSTED_PARENT_URL is %s',
           TRUSTED_PARENT_URL
         )
+
         return
       }
 
@@ -97,7 +104,7 @@ if (window === window.parent) {
         }
         const container = document.getElementById('root')
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
-        ;(window as any).root = root
+          ; (window as any).root = root
         root.render(<Root />)
       }
     },

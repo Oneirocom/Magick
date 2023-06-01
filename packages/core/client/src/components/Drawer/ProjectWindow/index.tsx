@@ -1,7 +1,8 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { API_ROOT_URL, Agent, PRODUCTION } from '@magickml/core'
+import { API_ROOT_URL, PRODUCTION } from '@magickml/core'
+import { Agent } from '@magickml/agents'
 import {
   Apps,
   ChevronRight,
@@ -71,9 +72,7 @@ const ProjectWindow = ({ openDrawer }) => {
     const fileReader = new FileReader()
     fileReader.readAsText(selectedFile)
     fileReader.onload = event => {
-      const data = JSON.parse(event?.target?.result)
-
-      console.log('data', data)
+      const data = JSON.parse(event?.target?.result as string)
 
       delete data['id']
       axios({
@@ -108,8 +107,6 @@ const ProjectWindow = ({ openDrawer }) => {
     const exportData = data
     exportData.agents.forEach((agent: Agent) => {
       agent.secrets = {}
-
-      Object.keys(agent.data).forEach(key => {})
     })
 
     // traverse the entire exportData object and set all 'data' properties to {}
