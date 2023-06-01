@@ -1,11 +1,6 @@
-import {
-  ClientPlugin,
-  eventSocket,
-  triggerSocket,
-} from '@magickml/core'
+import { ClientPlugin, eventSocket, triggerSocket } from '@magickml/core'
 import { GithubAgentWindow } from './components/agent.component'
 import { getNodes } from '@magickml/plugin-github-shared'
-
 
 const inputSockets = [
   {
@@ -17,7 +12,7 @@ const inputSockets = [
     socket: 'trigger',
     name: 'trigger',
     type: triggerSocket,
-  }
+  },
 ]
 
 const outputSockets = [
@@ -25,7 +20,7 @@ const outputSockets = [
     socket: 'output',
     name: 'output',
     type: eventSocket,
-  }
+  },
 ]
 
 const GithubPlugin = new ClientPlugin({
@@ -33,20 +28,34 @@ const GithubPlugin = new ClientPlugin({
   nodes: getNodes(),
   agentComponents: [GithubAgentWindow],
   inputTypes: [
-    { name: 'Github (New Issues)', sockets: inputSockets, defaultResponseOutput: '' },
-    { name: 'Github (New PRs)', sockets: inputSockets, defaultResponseOutput: '' },
-    { name: 'Github (Issue Response)', sockets: inputSockets, defaultResponseOutput: '' },
+    {
+      name: 'Github (Issue)',
+      sockets: inputSockets,
+      defaultResponseOutput: '',
+    },
+    {
+      name: 'Github (Pull Request)',
+      sockets: inputSockets,
+      defaultResponseOutput: '',
+    },
+    {
+      name: 'Github (Comment)',
+      sockets: inputSockets,
+      defaultResponseOutput: '',
+    },
   ],
   outputTypes: [
-    { name: 'Github (New Issues)', sockets: outputSockets, }
+    { name: 'Github (Issue Comment)', sockets: outputSockets },
+    { name: 'Github (Pull Request Comment)', sockets: outputSockets },
+    { name: 'Github (Comment Reply)', sockets: outputSockets },
   ],
   secrets: [
     {
       name: 'Github Access Token',
       key: 'github_access_token',
-      global: true
-    }
-  ]
+      global: true,
+    },
+  ],
 })
 
 export default GithubPlugin
