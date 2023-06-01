@@ -2,7 +2,12 @@
 import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
-import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
+import {
+  documentSocket,
+  embeddingSocket,
+  stringSocket,
+  triggerSocket,
+} from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -46,8 +51,8 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
    */
   builder(node: MagickNode) {
     // Create input and output sockets
-    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
-    const out = new Rete.Output('documents', 'Documents', arraySocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
+    const out = new Rete.Output('documents', 'Documents', documentSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
