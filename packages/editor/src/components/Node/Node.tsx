@@ -45,14 +45,12 @@ export class MyNode extends Node {
 
     return (
       <div
-        className={`${css['node']} ${css[selected]} ${
-          css[hasError ? 'error' : '']
-        } ${css[hasSuccess ? 'success' : '']}`}
+        className={`${css['node']} ${css[selected]} ${css[hasError ? 'error' : '']
+          } ${css[hasSuccess ? 'success' : '']}`}
       >
         <div
-          className={`${css['node-id']} ${hasError ? css['error'] : ''} ${
-            hasSuccess ? css['success'] : ''
-          }`}
+          className={`${css['node-id']} ${hasError ? css['error'] : ''} ${hasSuccess ? css['success'] : ''
+            }`}
         >
           <p>{node.id}</p>
         </div>

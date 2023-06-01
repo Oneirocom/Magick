@@ -110,7 +110,8 @@
                     "id": "44",
                     "name": "Console",
                     "component": "debugConsole",
-                    "className": "debug-console"
+                    "className": "debug-console",
+                    "enableFloat": true
                   }
                 ]
               }
