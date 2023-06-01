@@ -2,7 +2,7 @@
 import Rete from 'rete'
 
 import { MagickComponent } from '../../engine'
-import { eventSocket, stringSocket, triggerSocket } from '../../sockets'
+import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 // Information about the component
@@ -41,7 +41,7 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const out = new Rete.Output('conversation', 'Conversation', stringSocket)
-    const inputList = new Rete.Input('events', 'Events', eventSocket)
+    const inputList = new Rete.Input('events', 'Events', arraySocket)
 
     return node
       .addInput(dataInput)
