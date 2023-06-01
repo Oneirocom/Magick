@@ -85,6 +85,7 @@ export async function makeTextCompletion(
       nodeId: node.id as number,
     })
 
+    
     // Check if choices array is not empty, then return the result.
     if (resp.data.choices && resp.data.choices.length > 0) {
       const choice = resp.data.choices[0]
