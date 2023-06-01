@@ -40,7 +40,7 @@ export const SetAPIKeys = (): JSX.Element => {
             width: '100%',
             height: '1px',
             marginLeft: '89%',
-            marginTop: '-40%',
+            marginTop: '-20%',
           }}
         />
       )}
