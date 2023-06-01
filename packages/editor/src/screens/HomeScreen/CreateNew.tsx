@@ -18,6 +18,7 @@ import { spellApi } from '../../state/api/spells'
 import LoadingButton from '@mui/lab/LoadingButton'
 import emptyImg from './empty.png'
 import css from './homeScreen.module.css'
+import { uuidv4 } from '../../utils/uuid'
 
 // Custom configuration for unique name generator
 const customConfig = {
@@ -70,6 +71,7 @@ const CreateNew = () => {
         return
       }
       const response = await newSpell({
+        id: uuidv4(),
         graph: selectedTemplate.graph,
         name,
         projectId: config.projectId,
@@ -88,11 +90,7 @@ const CreateNew = () => {
         }
       }
       setLoading(false)
-      navigate(
-        `/magick/${
-          response.data.id + '-' + encodeURIComponent(btoa(response.data.name))
-        }`
-      )
+      navigate(`/magick/${response.data.id + '-' + encodeURIComponent(btoa(response.data.name))}`)
     } catch (err) {
       console.error('ERROR!', err)
     }

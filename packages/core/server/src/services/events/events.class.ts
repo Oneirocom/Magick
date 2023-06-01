@@ -51,7 +51,7 @@ export class EventService<
       for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
       const f32_ary = new Float32Array(ary_buf)
       const param = params.query
-      const querys = await cli
+      const query = cli
         .from('events')
         .select('*')
         .where({
@@ -77,7 +77,12 @@ export class EventService<
         )
         .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
 
-      return { events: querys }
+      if ('$limit' in params.query) {
+        query.limit(params.query['$limit'])
+      }
+
+      const res = await query
+      return { events: res }
     }
 
     const query = cli.from('events').select()

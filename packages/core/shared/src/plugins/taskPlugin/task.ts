@@ -11,14 +11,19 @@ type TaskRef = {
 }
 
 export type TaskSocketInfo = {
-  targetSocket: string | null,
-  targetNode: NodeData | null,
+  targetSocket: string | null
+  targetNode: NodeData | null
 }
 
 export type TaskOptions = {
   outputs: Record<string, unknown>
-  init?: (task:Task|undefined, node: NodeData) => void
-  onRun?: (node: NodeData, task: Task, data: unknown, socketInfo:TaskSocketInfo) => void
+  init?: (task: Task | undefined, node: NodeData) => void
+  onRun?: (
+    node: NodeData,
+    task: Task,
+    data: unknown,
+    socketInfo: TaskSocketInfo
+  ) => void
   runOneInput?: boolean
 }
 
@@ -33,7 +38,12 @@ type RunOptions = {
 
 export type TaskOutputTypes = 'option' | 'output'
 
-type TaskWorker = (_ctx: unknown, inputs: MagickWorkerInputs, data: NodeData, socketInfo: TaskSocketInfo | string | null) => Promise<Record<string, unknown> | null>
+type TaskWorker = (
+  _ctx: unknown,
+  inputs: MagickWorkerInputs,
+  data: NodeData,
+  socketInfo: TaskSocketInfo | string | null
+) => Promise<Record<string, unknown> | null>
 export class Task {
   node: NodeData
   inputs: MagickWorkerInputs
@@ -58,7 +68,7 @@ export class Task {
     this.closed = []
 
     this.getInputs('option').forEach((key: string) => {
-      (this.inputs[key] as MagickReteInput[]).forEach(
+      ;(this.inputs[key] as MagickReteInput[]).forEach(
         (workerInput: MagickReteInput) => {
           workerInput.task.next.push({ key: workerInput.key, task: this })
         }
@@ -214,8 +224,6 @@ export class Task {
           : null,
         targetNode: fromNode ? fromNode : null,
       }
-
-      // if (!socketInfo.targetSocket) debugger
 
       // the main output data of the task, which is gathered up when the next node gets this nodes value
       this.outputData = await this.worker(this, inputs, data, socketInfo)

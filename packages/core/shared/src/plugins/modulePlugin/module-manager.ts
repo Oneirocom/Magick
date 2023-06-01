@@ -141,7 +141,6 @@ export class ModuleManager {
     )
 
     module.read({
-      agent: context.agent,
       inputs: parsedInputs,
       secrets: context.module.secrets,
       publicVariables: context.module.publicVariables,
