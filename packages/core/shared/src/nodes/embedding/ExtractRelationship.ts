@@ -2,7 +2,7 @@
 import Rete from 'rete'
 
 import { MagickComponent } from '../../engine'
-import { arraySocket, triggerSocket } from '../../sockets'
+import { embeddingSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -44,16 +44,28 @@ export class ExtractRelationship extends MagickComponent<Promise<InputReturn>> {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
-    const embedding1 = new Rete.Input('embedding1', 'Embedding 1', arraySocket)
-    const embedding2 = new Rete.Input('embedding2', 'Embedding 2', arraySocket)
+    const embedding1 = new Rete.Input(
+      'embedding1',
+      'Embedding 1',
+      embeddingSocket
+    )
+    const embedding2 = new Rete.Input(
+      'embedding2',
+      'Embedding 2',
+      embeddingSocket
+    )
 
     const combinedEmbedding = new Rete.Input(
       'combinedEmbedding',
       'Combined',
-      arraySocket
+      embeddingSocket
     )
 
-    const outputEmbedding = new Rete.Output('embedding', 'Output', arraySocket)
+    const outputEmbedding = new Rete.Output(
+      'embedding',
+      'Output',
+      embeddingSocket
+    )
 
     node.addInput(dataInput).addOutput(dataOutput)
     node
