@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv-flow').config();
 const ngrok = require('ngrok');
 
 (async function () {
