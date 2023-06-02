@@ -33,8 +33,10 @@ import handleSockets from './sockets/sockets'
 import { PostgresVectorStoreCustom, ExtendedEmbeddings } from './vectordb'
 import { PluginEmbeddings } from './customEmbeddings'
 
+import { getLogger } from '@magickml/core'
+
 // Initialize the Feathers Koa app
-const app: Application = koa(feathers())
+export const app: Application = koa(feathers())
 
 declare module './declarations' {
   interface Configuration {
@@ -45,152 +47,154 @@ declare module './declarations' {
   }
 }
 
-globalsManager.register('feathers', app)
+export async function initApp() {
+  const logger = getLogger()
+  logger.info('Initializing feathers app...')
+  globalsManager.register('feathers', app)
 
-const port = parseInt(process.env.PORT || '3030', 10)
-app.set('port', port)
-const host = process.env.HOST || 'localhost'
-app.set('host', host)
-const paginateDefault = parseInt(process.env.PAGINATE_DEFAULT || '10', 10)
-const paginateMax = parseInt(process.env.PAGINATE_MAX || '50', 10)
-const paginate = {
-  default: paginateDefault,
-  max: paginateMax,
-}
-app.set('paginate', paginate)
+  const port = parseInt(process.env.PORT || '3030', 10)
+  app.set('port', port)
+  const host = process.env.HOST || 'localhost'
+  app.set('host', host)
+  const paginateDefault = parseInt(process.env.PAGINATE_DEFAULT || '10', 10)
+  const paginateMax = parseInt(process.env.PAGINATE_MAX || '50', 10)
+  const paginate = {
+    default: paginateDefault,
+    max: paginateMax,
+  }
+  app.set('paginate', paginate)
 
-// Koa middleware
-app.use(cors({ origin: '*' }))
-app.use(errorHandler())
-app.use(parseAuthentication())
-app.use(bodyParser())
-
-// sync up messages between the app and the runner
-if (REDISCLOUD_URL) {
-  app.configure(
-    sync({
-      uri: REDISCLOUD_URL,
-      serialize: stringify,
-      deserialize: parse,
-    })
-  )
+  // Koa middleware
+  app.use(cors({ origin: '*' }))
+  app.use(errorHandler())
+  app.use(parseAuthentication())
+  app.use(bodyParser())
 
   // Initialize pubsub redis client
   const pubsub = new RedisPubSub()
+  // sync up messages between the app and the runner
+  logger.debug("checking for REDISCLOUD_URL")
+  if (REDISCLOUD_URL) {
+    logger.info("SETTING UP REDIS")
+    app.configure(
+      sync({
+        uri: REDISCLOUD_URL,
+        serialize: stringify,
+        deserialize: parse,
+      })
+    )
 
-  await pubsub.initialize({
-    url: REDISCLOUD_URL,
+    await pubsub.initialize({
+      url: REDISCLOUD_URL,
+    })
+
+    app.set('pubsub', pubsub)
+  }
+
+  // Configure app spell management settings
+  app.configure(configureManager())
+
+  // Configure authentication
+  app.set('authentication', {
+    secret: process.env.JWT_SECRET || 'secret',
+    entity: null,
+    authStrategies: ['jwt'],
+    jwtOptions: {
+      header: { type: 'access' },
+      audience: 'https://yourdomain.com',
+      issuer: 'feathers',
+      algorithm: 'A256GCM',
+      expiresIn: '1d',
+    },
   })
 
-  app.set('pubsub', pubsub)
-}
+  app.configure(authentication)
 
-// Configure app spell management settings
-app.configure(configureManager())
-
-// Configure authentication
-
-app.set('authentication', {
-  secret: process.env.JWT_SECRET || 'secret',
-  entity: null,
-  authStrategies: ['jwt'],
-  jwtOptions: {
-    header: { type: 'access' },
-    audience: 'https://yourdomain.com',
-    issuer: 'feathers',
-    algorithm: 'A256GCM',
-    expiresIn: '1d',
-  },
-})
-
-app.configure(authentication)
-
-// Configure WebSocket for the app
-app.configure(
-  socketio(
-    {
-      cors: {
-        origin: '*',
-        methods: ['GET', 'POST', 'OPTIONS'],
-        allowedHeaders: ['Authorization'],
-        credentials: true,
+  // Configure WebSocket for the app
+  app.configure(
+    socketio(
+      {
+        cors: {
+          origin: '*',
+          methods: ['GET', 'POST', 'OPTIONS'],
+          allowedHeaders: ['Authorization'],
+          credentials: true,
+        },
       },
-    },
-    handleSockets(app)
+      handleSockets(app)
+    )
   )
-)
 
-// Configure services and transports
-app.configure(rest())
+  // Configure services and transports
+  app.configure(rest())
 
-app.configure(dbClient)
-const embeddings = new PluginEmbeddings({}) as unknown as ExtendedEmbeddings
-const vectordb = new PostgresVectorStoreCustom(embeddings, {
-  client: app.get('dbClient'),
-  tableName: 'events',
-  queryName: 'match_events',
-})
-const docdb = new PostgresVectorStoreCustom(embeddings, {
-  client: app.get('dbClient'),
-  tableName: 'documents',
-  queryName: 'match_documents',
-})
-app.set('vectordb', vectordb)
-app.set('docdb', docdb)
-app.configure(services)
-app.configure(channels)
+  app.configure(dbClient)
+  const embeddings = new PluginEmbeddings({}) as unknown as ExtendedEmbeddings
+  const vectordb = new PostgresVectorStoreCustom(embeddings, {
+    client: app.get('dbClient'),
+    tableName: 'events',
+    queryName: 'match_events',
+  })
+  const docdb = new PostgresVectorStoreCustom(embeddings, {
+    client: app.get('dbClient'),
+    tableName: 'documents',
+    queryName: 'match_documents',
+  })
+  app.set('vectordb', vectordb)
+  app.set('docdb', docdb)
+  app.configure(services)
+  app.configure(channels)
 
-// Register hooks
-app.hooks({
-  around: {
-    all: [
-      logError,
-      async (context: HookContext, next) => {
-        // if the route is to the api service, skip auth
-        if (context.path === 'api') {
-          return next()
-        }
+  // Register hooks
+  app.hooks({
+    around: {
+      all: [
+        logError,
+        async (context: HookContext, next) => {
+          // if the route is to the api service, skip auth
+          if (context.path === 'api') {
+            return next()
+          }
 
-        if (context.path !== 'authentication') {
-          return authenticate('jwt')(context, next)
-        }
-      },
-      async (context: HookContext, next) => {
-        const { params } = context
+          if (context.path !== 'authentication') {
+            return authenticate('jwt')(context, next)
+          }
+        },
+        async (context: HookContext, next) => {
+          const { params } = context
 
-        const { authentication, authenticated } = params
+          const { authentication, authenticated } = params
 
-        if (authenticated) {
-          context.params.user = authentication.payload.user
-          context.params.projectId = authentication.payload.projectId
+          if (authenticated) {
+            context.params.user = authentication.payload.user
+            context.params.projectId = authentication.payload.projectId
 
-          if (context?.params?.query?.projectId) {
-            const projectId = context.params.query.projectId
+            if (context?.params?.query?.projectId) {
+              const projectId = context.params.query.projectId
 
-            if (authentication.payload.project !== projectId) {
-              throw new NotAuthenticated(
-                'User not authorized to access project'
-              )
+              if (authentication.payload.project !== projectId) {
+                throw new NotAuthenticated(
+                  'User not authorized to access project'
+                )
+              }
             }
           }
-        }
 
-        return next()
-      },
-    ],
-  },
-  before: {
-    all: [],
-  },
-  after: {},
-  error: {},
-})
+          return next()
+        },
+      ],
+    },
+    before: {
+      all: [],
+    },
+    after: {},
+    error: {},
+  })
 
-// Register setup and teardown hooks
-app.hooks({
-  setup: [],
-  teardown: [],
-})
-
-// Export the app
-export { app }
+  // Register setup and teardown hooks
+  app.hooks({
+    setup: [],
+    teardown: [],
+  })
+  logger.info('Feathers app initialized')
+}
