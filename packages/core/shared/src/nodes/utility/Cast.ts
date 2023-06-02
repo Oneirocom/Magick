@@ -92,9 +92,22 @@ export class Cast extends MagickComponent<void> {
    */
   worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const value = inputs.input[0]
+    const targetType = node.data.socketType
 
-    return {
-      output: value,
+    // Check the target type and perform the appropriate conversion
+    switch (targetType) {
+      case 'String':
+        return { output: String(value) }
+      case 'Number':
+        return { output: Number(value) }
+      case 'Boolean':
+        return { output: Boolean(value) }
+      case 'Object':
+        return { output: Object(value) }
+      default:
+        return {
+          output: value,
+        }
     }
   }
 }

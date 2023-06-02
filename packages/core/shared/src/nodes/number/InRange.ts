@@ -81,9 +81,11 @@ export class InRange extends MagickComponent<void> {
    */
   worker(node: WorkerData, inputs: MagickWorkerInputs): void {
     const startRange =
-      (inputs['startNumber'][0] as number) ?? (node.data.startNumber as number)
+      (inputs['startNumber'] && (inputs['startNumber'][0] as number)) ??
+      (node.data.startNumber as number)
     const endRange =
-      (inputs['endNumber'][0] as number) ?? (node.data.endNumber as number)
+      (inputs['endNumber'] && (inputs['endNumber'][0] as number)) ??
+      (node.data.endNumber as number)
     const numberToTest = inputs['input'][0] as number
 
     if (numberToTest >= startRange && numberToTest <= endRange) {
