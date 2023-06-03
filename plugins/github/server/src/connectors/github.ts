@@ -2,6 +2,8 @@ import { app } from '@magickml/server-core'
 import { Octokit } from '@octokit/rest'
 import http from 'http'
 import { Webhooks, createNodeMiddleware } from '@octokit/webhooks'
+import ngrok from 'ngrok'
+import { v4 as uuidv4 } from 'uuid'
 
 export class GithubConnector {
   spellRunner
@@ -9,6 +11,9 @@ export class GithubConnector {
   agent
   lastTime
   webhooks
+  webhook
+  octokit
+  secret
 
   constructor({ spellRunner, agent }) {
     agent.github = this
@@ -20,14 +25,7 @@ export class GithubConnector {
     this.initialize({ agent, data })
   }
 
-  async initialize({ agent, data }) {
-    console.log(
-      'Github enabled, initializing...',
-      data.github_access_token,
-      data.github_repo_owner,
-      data.github_repo_name
-    )
-
+  async initialize({ data }) {
     if (!data.github_enabled) {
       console.warn('Github is not enabled, skipping')
     }
@@ -36,69 +34,117 @@ export class GithubConnector {
       console.warn('Github is not enabled for this agent')
     }
 
-    const webhookSecret = data.github_webhooks_secret
+    console.log(
+      'Github enabled, initializing...',
+      data.github_access_token,
+      data.github_repo_owner,
+      data.github_repo_name
+    )
 
-    if (!webhookSecret || webhookSecret == '') {
-      const githubHandler = setInterval(async () => {
-        console.log('running github handler')
+    this.octokit = new Octokit({
+      auth: data.github_access_token,
+    })
 
-        this.lastTime = Date.now() - 30000
+    this.secret = uuidv4()
 
-        const newIssues = await this.getNewIssues(data)
-        if (newIssues.length > 0) {
-          newIssues.forEach(async item => {
-            await this.newSpellInput('Issue', 'new_issues', item)
+    this.webhook = await this.startNgrokAndConfigureWebhook(
+      data.github_repo_owner,
+      data.github_repo_name
+    )
+
+    console.log('webhook start')
+    this.webhooks = new Webhooks({
+      secret: this.secret,
+    })
+
+    this.webhooks.on('pull_request.opened', ({ payload }) => {
+      console.log('payload pull_request', payload.pull_request)
+      this.newSpellInput('Pull Request', 'new_prs', payload.pull_request)
+    })
+
+    this.webhooks.on('issues.opened', ({ payload }) => {
+      console.log('payload issue', payload.issue)
+      this.newSpellInput('Issue', 'new_issues', payload.issue)
+    })
+
+    this.webhooks.on('issue_comment.created', ({ payload }) => {
+      console.log('payload comment', payload.comment)
+      this.newSpellInput('Comment', 'issue_response', payload.comment)
+    })
+
+    const middleware = createNodeMiddleware(this.webhooks, {
+      path: '/payload',
+    })
+    http
+      .createServer(async (req, res) => {
+        if (await middleware(req, res)) return
+        res.writeHead(404)
+        res.end()
+      })
+      .listen(4567)
+  }
+
+  async startNgrokAndConfigureWebhook(owner, repo) {
+    try {
+      // Generate a random port number between 4000 and 10000
+      const randomPort = Math.floor(Math.random() * (10000 - 4000 + 1)) + 4000
+
+      // Start ngrok with the random port and retrieve the URL
+      const ngrokUrl = await ngrok.connect({
+        addr: randomPort,
+      })
+
+      // Check if the webhook exists
+      const { data: webhooks } = await this.octokit.repos.listWebhooks({
+        owner,
+        repo,
+      })
+
+      let webhookId
+
+      // If the webhook exists, update it with the new configuration
+      if (webhooks.length > 0) {
+        const webhook = webhooks.find(hook => hook.config.url.includes('ngrok'))
+
+        if (webhook) {
+          webhookId = webhook.id
+          webhook.config.port = randomPort
+          // config webhook secret
+          webhook.config.secret = this.secret
+
+          await this.octokit.repos.updateWebhook({
+            owner,
+            repo,
+            webhook_id: webhookId,
+            ...webhook,
           })
+          return webhook
         }
+      }
 
-        const newPRs = await this.getNewPRs(data)
-        if (newPRs.length > 0) {
-          newPRs.forEach(async item => {
-            await this.newSpellInput('Pull Request', 'new_prs', item)
-          })
-        }
-
-        const issueComments = await this.getIssueComments(data)
-        if (issueComments.length > 0) {
-          issueComments.forEach(async item => {
-            await this.newSpellInput('Comment', 'issue_response', item)
-          })
-        }
-      }, 30000)
-
-      agent.githubHandler = githubHandler
-      console.log('Added agent to github', agent.id)
-    } else {
-      console.log('webhook start')
-      this.webhooks = new Webhooks({
-        secret: webhookSecret,
-      })
-
-      this.webhooks.on('pull_request.opened', ({ payload }) => {
-        console.log('payload pull_request', payload.pull_request)
-        this.newSpellInput('Pull Request', 'new_prs', payload.pull_request)
-      })
-
-      this.webhooks.on('issues.opened', ({ payload }) => {
-        console.log('payload issue', payload.issue)
-        this.newSpellInput('Issue', 'new_issues', payload.issue)
-      })
-
-      this.webhooks.on('issue_comment.created', ({ payload }) => {
-        console.log('payload comment', payload.comment)
-        this.newSpellInput('Comment', 'issue_response', payload.comment)
-      })
-
-      const middleware = createNodeMiddleware(this.webhooks, {
-        path: '/payload',
-      })
-      http
-        .createServer(async (req, res) => {
-          if (await middleware(req, res)) return
-          res.writeHead(404)
-          res.end()
+      // If the webhook doesn't exist, create a new one
+      if (!webhookId) {
+        const newWebhook = await this.octokit.repos.createWebhook({
+          owner,
+          repo,
+          config: {
+            url: ngrokUrl,
+            content_type: 'json',
+            insecure_ssl: '1',
+            port: randomPort,
+          },
         })
-        .listen(4567)
+
+        webhookId = newWebhook.data.id
+        return newWebhook
+      }
+
+      console.log('Ngrok URL:', ngrokUrl)
+      console.log('Random Port:', randomPort)
+      console.log('Webhook ID:', webhookId)
+      return webhookId
+    } catch (error) {
+      console.error('Error:', error)
     }
   }
 
@@ -159,12 +205,7 @@ export class GithubConnector {
         return null
       }
 
-      //@octokit/rest
-      const octokit = new Octokit({
-        auth: github_access_token,
-      })
-
-      const comment = await octokit.rest.issues.createComment({
+      const comment = await this.octokit.rest.issues.createComment({
         owner: github_repo_owner,
         repo: github_repo_name,
         issue_number: number,
@@ -195,15 +236,10 @@ export class GithubConnector {
         return []
       }
 
-      //@octokit/rest
-      const octokit = new Octokit({
-        auth: github_access_token,
-      })
-
       const since = new Date(this.lastTime).toISOString()
       console.log(since)
 
-      const newIssues = await octokit.rest.issues.listForRepo({
+      const newIssues = await this.octokit.rest.issues.listForRepo({
         owner: github_repo_owner,
         repo: github_repo_name,
         sort: 'created',
@@ -240,12 +276,7 @@ export class GithubConnector {
         return []
       }
 
-      //@octokit/rest
-      const octokit = new Octokit({
-        auth: github_access_token,
-      })
-
-      const newPRs = await octokit.rest.pulls.list({
+      const newPRs = await this.octokit.rest.pulls.list({
         owner: github_repo_owner,
         repo: github_repo_name,
         sort: 'created',
@@ -282,14 +313,9 @@ export class GithubConnector {
         return []
       }
 
-      //@octokit/rest
-      const octokit = new Octokit({
-        auth: github_access_token,
-      })
-
       const since = new Date(this.lastTime).toISOString()
 
-      const issueComments = await octokit.rest.issues.listCommentsForRepo({
+      const issueComments = await this.octokit.rest.issues.listCommentsForRepo({
         owner: github_repo_owner,
         repo: github_repo_name,
         sort: 'created',

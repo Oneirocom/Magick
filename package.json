@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "Apache 2.0",
   "scripts": {
-    "dev": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && node scripts/ngrok.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent,@magickml/docs --parallel --maxParallel=100",
+    "dev": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent,@magickml/docs --parallel --maxParallel=100",
     "start": "node scripts/start-server.js",
     "start-server": "node dist/apps/server/main.js",
     "start-agent": "node dist/apps/agent/main.js",
