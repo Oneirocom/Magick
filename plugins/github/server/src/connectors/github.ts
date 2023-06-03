@@ -22,7 +22,7 @@ export class GithubConnector {
     this.data = data
     this.agent = agent
 
-    this.initialize({ agent, data })
+    this.initialize({ data })
   }
 
   async initialize({ data }) {
