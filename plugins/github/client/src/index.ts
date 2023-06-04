@@ -49,13 +49,7 @@ const GithubPlugin = new ClientPlugin({
     { name: 'Github (Pull Request Comment)', sockets: outputSockets },
     { name: 'Github (Comment Reply)', sockets: outputSockets },
   ],
-  secrets: [
-    {
-      name: 'Github Access Token',
-      key: 'github_access_token',
-      global: true,
-    },
-  ],
+  secrets: [],
 })
 
 export default GithubPlugin

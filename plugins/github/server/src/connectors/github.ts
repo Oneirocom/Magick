@@ -11,7 +11,7 @@ export class GithubConnector {
   agent
   lastTime
   webhooks
-  webhook
+  webhookListeners = [] as any[]
   octokit
   secret
 
@@ -47,10 +47,17 @@ export class GithubConnector {
 
     this.secret = uuidv4()
 
-    this.webhook = await this.startNgrokAndConfigureWebhook(
-      data.github_repo_owner,
-      data.github_repo_name
-    )
+    const repos = data.github_repos
+
+    // repos is an array of owner/repos, separated by comma
+    // split it and add each repo to the webhook
+    repos.split(',').forEach(async repo => {
+      const [owner, name] = repo.trim().split('/')
+      console.log('**** GITHUB: Added repo', owner, name, 'to webhook')
+      this.webhookListeners.push(
+        await this.startNgrokAndConfigureWebhook(owner, name)
+      )
+    })
 
     console.log('webhook start')
     this.webhooks = new Webhooks({
