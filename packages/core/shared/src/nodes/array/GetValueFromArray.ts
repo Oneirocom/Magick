@@ -43,7 +43,7 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
     const inp = new Rete.Input('array', 'Array', arraySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const outp = new Rete.Output('output', 'String', anySocket)
+    const outp = new Rete.Output('output', 'Value', anySocket)
 
     const element = new InputControl({
       dataKey: 'element',
@@ -72,7 +72,7 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs
   ): Promise<WorkerReturn> {
-    const input = inputs.array[0] as string
+    const input = inputs.array[0] as any
     const element = node.data.element as number
 
     const arrayElement = input[element]

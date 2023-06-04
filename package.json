@@ -4,6 +4,7 @@
   "license": "Apache 2.0",
   "scripts": {
     "dev": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent,@magickml/docs --parallel --maxParallel=100",
+    "cloud": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-manager-app,@magickml/cloud-agent-worker-app --parallel --maxParallel=100",
     "start": "node scripts/start-server.js",
     "start-server": "node dist/apps/server/main.js",
     "start-agent": "node dist/apps/agent/main.js",
@@ -169,6 +170,7 @@
     "path": "0.12.7",
     "pdfjs-dist": "3.6.172",
     "pg": "8.11.0",
+    "pg-listen": "1.7.0",
     "pgvector": "0.1.0",
     "pino": "8.14.1",
     "pm2": "5.3.0",

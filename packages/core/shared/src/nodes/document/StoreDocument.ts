@@ -3,7 +3,7 @@ import Rete from 'rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
-import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
+import { embeddingSocket, stringSocket, triggerSocket } from '../../sockets'
 import {
   Document,
   MagickNode,
@@ -51,7 +51,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
     })
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
-    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
     const date = new Rete.Input('date', 'Date', stringSocket)
     const typeInput = new Rete.Input('type', 'Type', stringSocket)
 
