@@ -157,6 +157,7 @@ export type MagicComponentCategory =
   | 'Magick'
   | 'Audio'
   | 'Task'
+  | 'Database'
 
 // MagickComponent abstract class
 export abstract class MagickComponent<
