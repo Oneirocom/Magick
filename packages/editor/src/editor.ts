@@ -1,11 +1,11 @@
 // DOCUMENTED
-import ConnectionPlugin from 'rete-connection-plugin'
 import { Plugin } from 'rete/types/core/plugin'
 import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
 import CommentManager from './plugins/commentPlugin/manager'
 import ContextMenuPlugin from './plugins/contextMenu'
 import HighlightPlugin from './plugins/highlightPlugin'
+import ConnectionPlugin from './plugins/connectionPlugin'
 import {
   CachePlugin,
   OnSubspellUpdated,
