@@ -8,6 +8,7 @@ export type AppConfig = {
   apiUrl: string;
   projectId: string;
   token: string;
+  posthogEnabled?: boolean;
 };
 
 // Define ConfigContext interface
