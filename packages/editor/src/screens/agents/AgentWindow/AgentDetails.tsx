@@ -50,7 +50,7 @@ const AgentDetails = ({
   const [enable, setEnable] = useState(onLoadEnables)
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
-  const headers = !STANDALONE
+  const headers = STANDALONE
     ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
     : { Authorization: `Bearer ${token}` }
 
