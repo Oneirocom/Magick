@@ -14,6 +14,7 @@ export class GithubConnector {
   webhookListeners = [] as any[]
   octokit
   secret
+  numbers
 
   constructor({ spellRunner, agent }) {
     agent.github = this
@@ -21,7 +22,7 @@ export class GithubConnector {
     const { data } = agent.data
     this.data = data
     this.agent = agent
-
+    this.numbers = []
     this.initialize({ data })
   }
 
@@ -60,7 +61,7 @@ export class GithubConnector {
     })
 
     console.log('webhook start')
-    this.webhooks = new Webhooks({
+      this.webhooks = new Webhooks({
       secret: this.secret,
     })
 
@@ -76,6 +77,7 @@ export class GithubConnector {
 
     this.webhooks.on('issue_comment.created', ({ payload }) => {
       console.log('payload comment', payload.comment)
+      payload.comment.number = payload.issue.number
       this.newSpellInput('Comment', 'issue_response', payload.comment)
     })
 
@@ -156,7 +158,7 @@ export class GithubConnector {
   }
 
   newSpellInput = async (name: string, type: string, content: any) => {
-    const { number, title, body } = content
+    const { number, title, body, id } = content
     const entities = [
       this.data.github_repo_owner,
       this.data.github_repo_name,
@@ -169,13 +171,13 @@ export class GithubConnector {
           connector: `Github (${name})`,
           content: body,
           sender: this.data.github_repo_owner,
-          observer: number,
+          observer: id,
           client: 'github',
-          channel: 'github',
+          channel: number,
           agentId: this.agent.id,
           entities,
           channelType: type,
-          rawData: JSON.stringify({ number, title, body }),
+          rawData: JSON.stringify({ number, title, body, id }),
         },
       },
       agent: this.agent,
@@ -191,7 +193,7 @@ export class GithubConnector {
     number: number,
     body: string,
     type: 'issue' | 'pull_request' | 'comment'
-  ) => {
+  ) : Promise<any> => {
     const { github_access_token, github_repo_owner, github_repo_name } = data
     console.log('GITHUB CREATE COMMENT: type', type)
     try {
@@ -349,11 +351,26 @@ export class GithubConnector {
       console.error('output is undefined')
       return
     }
-    if (!event.observer) {
+    if (!event.channel) {
       console.error('number is undefined')
       return
     }
-
-    await this.createComment(this.data, event.observer, content, type)
+    if (!this.numbers) {
+      console.log('null >> ')
+      this.numbers = []
+    }
+    if (type === 'comment') {
+      const count = this.numbers.length
+      this.numbers = this.numbers.filter(num => num != event.observer)
+      if (this.numbers.length != count) { // is existed
+        console.error('duplicate created')
+        return
+      }
+    }
+    
+    const comment = await this.createComment(this.data, event.channel, content, type)
+    if (comment) {
+      this.numbers.push(comment.id)
+    }
   }
 }
