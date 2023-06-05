@@ -1,8 +1,10 @@
 import { Connection } from 'rete'
 import {
+  addPathGlowToNode,
   makeAllConnectionsOpaque,
   makeAllConnectionsTransparent,
   makeNodeConnectionsOpaque,
+  removePathGlowFromAllConnections,
   selectNodeConnections,
   unselectAllConnections,
 } from './utils'
@@ -22,6 +24,8 @@ function install(editor, params) {
   editor.on('renderconnection', ({ connection, el }: DataType) => {
     const inputName = connection.input.socket.name
     const outputName = connection.output.socket.name
+
+    el.className += ' connection-wrapper'
 
     if (inputName === 'Any' && outputName === 'Any') {
       el.className += ' any'
@@ -60,17 +64,20 @@ function install(editor, params) {
     // unselect all connections first from connection Map
     unselectAllConnections(editor)
     makeAllConnectionsOpaque(editor)
+    removePathGlowFromAllConnections(editor)
 
     // select all connections from node
     selectNodeConnections(editor, node)
     makeAllConnectionsTransparent(editor)
     makeNodeConnectionsOpaque(editor, node)
+    addPathGlowToNode(editor, node)
   })
 
   // Make sure to unselect all connections when clicking on the editor
   editor.on('click', () => {
     unselectAllConnections(editor)
     makeAllConnectionsOpaque(editor)
+    removePathGlowFromAllConnections(editor)
   })
 }
 

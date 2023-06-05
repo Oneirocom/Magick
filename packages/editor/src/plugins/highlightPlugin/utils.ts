@@ -55,6 +55,43 @@ export const addClassToNodeConnections = (
   })
 }
 
+export const addPathGlowToNode = (editor: MagickEditor, node: any) => {
+  const connections = node.getConnections()
+
+  connections.forEach((connection: Connection) => {
+    const connectionView = editor.view.connections.get(connection)
+
+    // get main path from inside connection el
+    const path = connectionView.el.querySelector('.main-path')
+
+    path.setAttribute('filter', 'url(#glow)')
+  })
+}
+
+export const removePathGlowFromNode = (editor: MagickEditor, node: any) => {
+  const connections = node.getConnections()
+
+  connections.forEach((connection: Connection) => {
+    const connectionView = editor.view.connections.get(connection)
+
+    // get main path from inside connection el
+    const path = connectionView.el.querySelector('.main-path')
+
+    path.setAttribute('filter', '')
+  })
+}
+
+export const removePathGlowFromAllConnections = (editor: MagickEditor) => {
+  const connections = editor.view.connections
+
+  connections.forEach((connection: any) => {
+    // get main path from inside connection el
+    const path = connection.el.querySelector('.main-path')
+
+    path.setAttribute('filter', '')
+  })
+}
+
 export const unselectAllConnections = (editor: MagickEditor) => {
   removeClassFromAllConnections(editor, 'selected')
 }
