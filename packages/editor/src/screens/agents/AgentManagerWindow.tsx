@@ -218,7 +218,7 @@ const AgentManagerWindow = () => {
         const res = await fetch(
           `${config.apiUrl}/agents?projectId=${config.projectId}`,
           {
-            headers: STANDALONE
+            headers: !STANDALONE
               ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
               : { Authorization: `Bearer ${token}` }
           }

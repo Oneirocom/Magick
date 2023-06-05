@@ -62,61 +62,63 @@ const AgentWindow = ({
   }, [data, selectedAgentData, setSelectedAgentData])
 
   return (
-    <Grid container className={styles.container}>
-      <Grid item xs={3.9} className={styles.item}>
-        <div className={styles.btnContainer}>
-          <Typography variant="h6" className={`${styles.heading}`}>
-            Agents
-          </Typography>
-          <FileInput loadFile={onLoadFile} />
-        </div>
+    <div className={styles.wrapper}>
+      <Grid container className={styles.container}>
+        <Grid item md={3.9} xs={12} sm={12} className={styles.item}>
+          <div className={styles.btnContainer}>
+            <Typography variant="h6" className={`${styles.heading}`}>
+              Agents
+            </Typography>
+            <FileInput loadFile={onLoadFile} />
+          </div>
 
-        <Button
-          variant="contained"
-          className={`${styles.btn} ${styles['mg-btm-medium']}`}
-          onClick={() =>
-            onCreateAgent({
-              name: 'New Agent',
-              projectId: config.projectId,
-              enabled: false,
-              rootSpell: {},
-              publicVariables: '{}',
-              secrets: '{}',
-            })
-          }
-        >
-          Add Agent
-        </Button>
-        {data?.map((agent: { id: string }) => {
-          return (
-            <AgentItem
-              key={agent?.id}
-              keyId={agent?.id}
-              onDelete={onDelete}
-              onClick={onClickHandler}
-              agent={agent}
-              style={
-                agent?.id === selectedAgentData?.id
-                  ? { border: '1px solid var(--primary)' }
-                  : {}
-              }
+          <Button
+            variant="contained"
+            className={`${styles.btn} ${styles['mg-btm-medium']}`}
+            onClick={() =>
+              onCreateAgent({
+                name: 'New Agent',
+                projectId: config.projectId,
+                enabled: false,
+                rootSpell: {},
+                publicVariables: '{}',
+                secrets: '{}',
+              })
+            }
+          >
+            Add Agent
+          </Button>
+          {data?.map((agent: { id: string }) => {
+            return (
+              <AgentItem
+                key={agent?.id}
+                keyId={agent?.id}
+                onDelete={onDelete}
+                onClick={onClickHandler}
+                agent={agent}
+                style={
+                  agent?.id === selectedAgentData?.id
+                    ? { border: '1px solid var(--primary)' }
+                    : {}
+                }
+              />
+            )
+          })}
+        </Grid>
+        <Grid item md={8} xs={12} sm={12} className={styles.item}>
+          {selectedAgentData ? (
+            <AgentDetails
+              selectedAgentData={selectedAgentData}
+              setSelectedAgentData={setSelectedAgentData}
+              updateData={updateData}
+              onLoadEnables={onLoadEnables}
             />
-          )
-        })}
+          ) : (
+            <Typography className={styles.noSelected}>Select Agent</Typography>
+          )}
+        </Grid>
       </Grid>
-      <Grid item xs={8} className={styles.item}>
-        {selectedAgentData ? (
-          <AgentDetails
-            selectedAgentData={selectedAgentData}
-            setSelectedAgentData={setSelectedAgentData}
-            updateData={updateData}
-            onLoadEnables={onLoadEnables}
-          />
-        ) : (
-          <Typography className={styles.noSelected}>Select Agent</Typography>
-        )}
-      </Grid>
-    </Grid>
+    </div>
   )
 }
 
