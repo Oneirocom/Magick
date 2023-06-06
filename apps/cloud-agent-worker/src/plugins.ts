@@ -21,4 +21,6 @@ import {default as plugin9} from '@magickml/plugin-qa-server';
 plugins['@magickml/plugin-qa-server'] = plugin9;
 import {default as plugin10} from '@magickml/plugin-elevenlabs-server';
 plugins['@magickml/plugin-elevenlabs-server'] = plugin10;
+import {default as plugin11} from '@magickml/plugin-database-server';
+plugins['@magickml/plugin-database-server'] = plugin11;
 export default plugins;
