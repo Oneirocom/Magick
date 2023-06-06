@@ -1,6 +1,6 @@
 {
   "name": "@magickml/plugin-localmodel-server",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugin-localmodel/server/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],
@@ -9,7 +9,7 @@
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["plugins/localmodel/server/**/*.ts"]
+        "lintFilePatterns": ["packages/plugins/localmodel/server/**/*.ts"]
       }
     },
     "test": {

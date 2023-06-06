@@ -1,5 +1,5 @@
 {
-  "extends": "../../../tsconfig.base.json",
+  "extends": "../../../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -26,5 +26,5 @@
   "files": [],
   "include": [
     "src"
-  ]
+, "../../server-core/src/services/Upload.class.ts"  ]
 }

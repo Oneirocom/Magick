@@ -13,5 +13,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/plugins/localmodel/client',
+  coverageDirectory: '../../coverage/packages/plugins/localmodel/client',
 }

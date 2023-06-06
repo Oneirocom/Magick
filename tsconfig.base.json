@@ -120,9 +120,9 @@
       "@magickml/plugin-openai-client": ["plugins/openai/client/src/index.ts"],
       "@magickml/plugin-openai-server": ["plugins/openai/server/src/index.ts"],
       "@magickml/plugin-openai-shared": ["plugins/openai/shared/src/index.ts"],
-      "@magickml/plugin-localmodel-client": ["plugins/localmodel/client/src/index.ts"],
-      "@magickml/plugin-localmodel-server": ["plugins/localmodel/server/src/index.ts"],
-      "@magickml/plugin-localmodel-shared": ["plugins/localmodel/shared/src/index.ts"],
+      "@magickml/plugin-localmodel-client": ["packages/plugins/localmodel/client/src/index.ts"],
+      "@magickml/plugin-localmodel-server": ["packages/plugins/localmodel/server/src/index.ts"],
+      "@magickml/plugin-localmodel-shared": ["packages/plugins/localmodel/shared/src/index.ts"],
       "@magickml/plugin-pinecone-client": [
         "plugins/pinecone/client/src/index.ts"
       ],
