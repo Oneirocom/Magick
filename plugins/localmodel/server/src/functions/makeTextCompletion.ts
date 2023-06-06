@@ -53,8 +53,6 @@ export async function makeTextCompletion(
   // Set up headers for the API request.
   const headers = {
     'Content-Type': 'application/json',
-    Authorization:
-      'Bearer ' + (context.module.secrets['openai_api_key'] || null),
   }
 
   // Make the API request and handle the response.
@@ -77,7 +75,7 @@ export async function makeTextCompletion(
       model: settings.model,
       parameters: JSON.stringify(settings),
       type: 'completion',
-      provider: 'openai',
+      provider: 'localmodel',
       totalTokens: usage.total_tokens,
       hidden: false,
       processed: false,

@@ -39,7 +39,7 @@ export async function makeChatCompletion(
   } as any
 
   if (settings.model === 'Loaded Chat Model') {
-    const models = axios.get("http://127.0.0.1:5001/v1/models")
+    const models = axios.get(`${LOCALMODEL_ENPOINT}/models`)
     console.log(models)
   }
   // Initialize conversationMessages array
@@ -77,8 +77,7 @@ export async function makeChatCompletion(
 
   // Create request headers
   const headers = {
-    'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + context.module.secrets!['openai_api_key'],
+    'Content-Type': 'application/json'
   }
 
   try {
@@ -91,7 +90,7 @@ export async function makeChatCompletion(
     )
 
     if (completion.data.error) {
-      console.error('OpenAI Error', completion.data.error)
+      console.error('Model Error', completion.data.error)
     }
 
     // Extract the result from the response
@@ -111,7 +110,7 @@ export async function makeChatCompletion(
       model: settings.model,
       parameters: JSON.stringify(settings),
       type: 'completion',
-      provider: 'openai',
+      provider: 'localmodel',
       totalTokens: usage.total_tokens,
       hidden: false,
       processed: false,

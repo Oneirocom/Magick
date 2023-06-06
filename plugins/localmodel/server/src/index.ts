@@ -18,12 +18,12 @@ import {
 } from './functions'
 
 /**
- * The secrets used by the OpenAI API
+ * The secrets used by the local model handler
  */
 const { secrets } = shared
 
 /**
- * The handlers for each type of OpenAI completion
+ * The handlers for each type of local completion
  */
 const completionHandlers = {
   text: {
@@ -34,7 +34,7 @@ const completionHandlers = {
 }
 
 /**
- * A server plugin for the @magickml/core that adds OpenAI completion functionality
+ * A server plugin for the @magickml/core that adds local completion functionality
  */
 const LocalModelPlugin = new ServerPlugin({
   name: 'LocalModelPlugin',
