@@ -78,17 +78,12 @@ export class FinishTaskStep extends MagickComponent<
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ) {
-    console.log('inputs', inputs)
     const task = inputs['agentTask']?.[0] as AgentTask
     const reasoning = inputs['reasoning']?.[0] as string
     const skill = inputs['skill']?.[0] as string
     const result = inputs['result']?.[0] as string
     const reflection = inputs['reflection']?.[0] as string
     const success = inputs['success']?.[0] as string
-
-    console.log('******* FINISH TASK STEP *******')
-
-    console.log('task.steps', task.steps)
 
     const step = {
       reasoning,
@@ -102,8 +97,6 @@ export class FinishTaskStep extends MagickComponent<
 
     // push the step to the task
     steps.push(step)
-
-    console.log('*** FINISH TASK STEP: steps', steps)
 
     const { app } = context.module
     // call feathers task service to update the task

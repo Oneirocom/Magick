@@ -93,7 +93,7 @@ export class CreateTask extends MagickComponent<Promise<{ task: AgentTask }>> {
 
     const { app } = context.module
     const taskResponse = await app?.service('tasks').create(data)
-    console.log('taskResponse', taskResponse)
+
     // get the task data from the response
     const task = taskResponse as AgentTask
     // return the task

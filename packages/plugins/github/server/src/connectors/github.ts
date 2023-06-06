@@ -1,7 +1,7 @@
 import { app } from '@magickml/server-core'
 import { Octokit } from '@octokit/rest'
-import http from 'http'
 import { Webhooks, createNodeMiddleware } from '@octokit/webhooks'
+import http from 'http'
 import ngrok from 'ngrok'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -9,11 +9,11 @@ export class GithubConnector {
   spellRunner
   data
   agent
-  lastTime
-  webhooks
+  lastTime: any
+  webhooks: any
   webhookListeners = [] as any[]
-  octokit
-  secret
+  octokit: any
+  secret: any
 
   constructor({ spellRunner, agent }) {
     agent.github = this
@@ -25,7 +25,7 @@ export class GithubConnector {
     this.initialize({ data })
   }
 
-  async initialize({ data }) {
+  async initialize({ data }: any) {
     if (!data.github_enabled) {
       console.warn('Github is not enabled, skipping')
     }
@@ -49,32 +49,42 @@ export class GithubConnector {
 
     const repos = data.github_repos
 
+    console.log('repos is', repos)
+
     // repos is an array of owner/repos, separated by comma
     // split it and add each repo to the webhook
-    repos.split(',').forEach(async repo => {
-      const [owner, name] = repo.trim().split('/')
-      console.log('**** GITHUB: Added repo', owner, name, 'to webhook')
-      this.webhookListeners.push(
-        await this.startNgrokAndConfigureWebhook(owner, name)
-      )
-    })
+    repos?.split(',').forEach(
+      async (repo: {
+        trim: () => {
+          (): any
+          new (): any
+          split: { (arg0: string): [any, any]; new (): any }
+        }
+      }) => {
+        const [owner, name] = repo.trim().split('/')
+        console.log('**** GITHUB: Added repo', owner, name, 'to webhook')
+        this.webhookListeners.push(
+          await this.startNgrokAndConfigureWebhook(owner, name)
+        )
+      }
+    )
 
     console.log('webhook start')
     this.webhooks = new Webhooks({
       secret: this.secret,
     })
 
-    this.webhooks.on('pull_request.opened', ({ payload }) => {
+    this.webhooks.on('pull_request.opened', ({ payload }: any) => {
       console.log('payload pull_request', payload.pull_request)
       this.newSpellInput('Pull Request', 'new_prs', payload.pull_request)
     })
 
-    this.webhooks.on('issues.opened', ({ payload }) => {
+    this.webhooks.on('issues.opened', ({ payload }: any) => {
       console.log('payload issue', payload.issue)
       this.newSpellInput('Issue', 'new_issues', payload.issue)
     })
 
-    this.webhooks.on('issue_comment.created', ({ payload }) => {
+    this.webhooks.on('issue_comment.created', ({ payload }: any) => {
       console.log('payload comment', payload.comment)
       this.newSpellInput('Comment', 'issue_response', payload.comment)
     })
@@ -91,7 +101,7 @@ export class GithubConnector {
       .listen(4567)
   }
 
-  async startNgrokAndConfigureWebhook(owner, repo) {
+  async startNgrokAndConfigureWebhook(owner: any, repo: any) {
     try {
       // Generate a random port number between 4000 and 10000
       const randomPort = Math.floor(Math.random() * (10000 - 4000 + 1)) + 4000
@@ -111,7 +121,10 @@ export class GithubConnector {
 
       // If the webhook exists, update it with the new configuration
       if (webhooks.length > 0) {
-        const webhook = webhooks.find(hook => hook.config.url.includes('ngrok'))
+        const webhook = webhooks.find(
+          (hook: { config: { url: string | string[] } }) =>
+            hook.config.url.includes('ngrok')
+        )
 
         if (webhook) {
           webhookId = webhook.id
@@ -254,10 +267,12 @@ export class GithubConnector {
         since: since,
       })
 
-      const filters = newIssues.data.filter(item => {
-        const created = new Date(item.created_at).getTime()
-        return created > this.lastTime
-      })
+      const filters = newIssues.data.filter(
+        (item: { created_at: string | number | Date }) => {
+          const created = new Date(item.created_at).getTime()
+          return created > this.lastTime
+        }
+      )
       console.log('new issues ', filters)
 
       return filters
@@ -290,10 +305,12 @@ export class GithubConnector {
         direction: 'desc',
       })
 
-      const filters = newPRs.data.filter(item => {
-        const created = new Date(item.created_at).getTime()
-        return created > this.lastTime
-      })
+      const filters = newPRs.data.filter(
+        (item: { created_at: string | number | Date }) => {
+          const created = new Date(item.created_at).getTime()
+          return created > this.lastTime
+        }
+      )
 
       console.log('new PRs ', filters)
 

@@ -3,9 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/core/server/src",
   "projectType": "library",
-  "implicitDependencies": [
-    "@magickml/agents"
-  ],
+  "implicitDependencies": [],
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",

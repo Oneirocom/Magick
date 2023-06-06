@@ -64,7 +64,7 @@ export class CompleteTask extends MagickComponent<
   ) {
     try {
       const task = inputs.task[0] as { id: number }
-      console.log('****** COMPLETING TASK ******', task)
+
       const { app } = context.module
 
       // update the task status to cancelled

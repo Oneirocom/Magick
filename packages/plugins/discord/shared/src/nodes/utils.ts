@@ -1,6 +1,4 @@
 import { Application } from '@feathersjs/koa/lib'
-
-import { Agent } from '@magickml/agents'
 import { SpellRunner } from '@magickml/core'
 import TaskCreation from './spells/TaskCreation.spell'
 import TaskExecution from './spells/TaskExecution.spell'
@@ -33,7 +31,7 @@ export async function getChannelFromMessage(
 
 export async function getLoadSpell(
   name: string,
-  agent: Agent,
+  agent: any,
   app: Application
 ): Promise<SpellRunner | undefined> {
   let spell
@@ -62,7 +60,7 @@ export async function getLoadSpell(
 export async function runSpell(
   spellrun: SpellRunner,
   content: string,
-  agent: Agent,
+  agent: any,
   app: Application
 ): Promise<any> {
   const response = await spellrun.runComponent({
@@ -150,7 +148,7 @@ export async function createTasks(
   task_description: string,
   result: string,
   incomplete_tasks: string,
-  agent: Agent,
+  agent: any,
   app: Application
 ): Promise<Array<string>> {
   const content = `{
@@ -163,13 +161,13 @@ export async function createTasks(
   try {
     const taskspell = await getLoadSpell(
       'TaskCreation',
-      agent as unknown as Agent,
+      agent as any,
       app as unknown as Application
     )
     const results = await runSpell(
       taskspell as SpellRunner,
       content,
-      agent as unknown as Agent,
+      agent as any,
       app as unknown as Application
     )
     return parseTasksToArray(results.Output)
@@ -183,7 +181,7 @@ export async function taskReprioritization(
   next_task_id: string,
   objective: string,
   task_array: Array<string>,
-  agent: Agent,
+  agent: any,
   app: Application
 ) {
   const content = `{
@@ -195,13 +193,13 @@ export async function taskReprioritization(
   try {
     const taskspell = await getLoadSpell(
       'TaskReprioritization',
-      agent as unknown as Agent,
+      agent as any,
       app as unknown as Application
     )
     const results = await runSpell(
       taskspell as SpellRunner,
       content,
-      agent as unknown as Agent,
+      agent as any,
       app as unknown as Application
     )
     return parseTasks(results.Output)
@@ -215,7 +213,7 @@ export async function taskCompletion(
   task: string,
   context: string,
   objective: string,
-  agent: Agent,
+  agent: any,
   app: Application
 ) {
   const content = `{
@@ -228,13 +226,13 @@ export async function taskCompletion(
   try {
     const taskspell = await getLoadSpell(
       'TaskExecution',
-      agent as unknown as Agent,
+      agent as any,
       app as unknown as Application
     )
     const results = await runSpell(
       taskspell as SpellRunner,
       content,
-      agent as unknown as Agent,
+      agent as any,
       app as unknown as Application
     )
     return results.Output

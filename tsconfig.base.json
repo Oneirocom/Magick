@@ -31,13 +31,13 @@
         "packages/cloud-agent-worker/src/index.ts"
       ],
       "@magickml/plugin-database-client": [
-        "plugins/database/client/src/index.ts"
+        "packages/plugins/database/client/src/index.ts"
       ],
       "@magickml/plugin-database-server": [
-        "plugins/database/server/src/index.ts"
+        "packages/plugins/database/server/src/index.ts"
       ],
       "@magickml/plugin-database-shared": [
-        "plugins/database/shared/src/index.ts"
+        "packages/plugins/database/shared/src/index.ts"
       ],
       "@magickml/agent": [
         "apps/agent/src/index.ts"
@@ -76,13 +76,13 @@
         "packages/plugins/bluesky/server/src/index.ts"
       ],
       "@magickml/plugin-github-client": [
-        "plugins/github/client/src/index.ts"
+        "packages/plugins/github/client/src/index.ts"
       ],
       "@magickml/plugin-github-server": [
-        "plugins/github/server/src/index.ts"
+        "packages/plugins/github/server/src/index.ts"
       ],
       "@magickml/plugin-github-shared": [
-        "plugins/github/shared/src/index.ts"
+        "packages/plugins/github/shared/src/index.ts"
       ],
       "@magickml/plugin-discord-client": [
         "packages/plugins/discord/client/src/index.ts"
