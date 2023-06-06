@@ -38,8 +38,6 @@ export class GithubConnector {
     console.log(
       'Github enabled, initializing...',
       data.github_access_token,
-      data.github_repo_owner,
-      data.github_repo_name
     )
 
     this.octokit = new Octokit({
@@ -61,24 +59,39 @@ export class GithubConnector {
     })
 
     console.log('webhook start')
-      this.webhooks = new Webhooks({
+    this.webhooks = new Webhooks({
       secret: this.secret,
     })
 
     this.webhooks.on('pull_request.opened', ({ payload }) => {
       console.log('payload pull_request', payload.pull_request)
-      this.newSpellInput('Pull Request', 'new_prs', payload.pull_request)
+      const repo = {
+        owner: payload.repository.owner.login,
+        name: payload.repository.name
+      }
+      this.newSpellInput('Pull Request', 'new_prs', payload.pull_request, repo)
     })
 
     this.webhooks.on('issues.opened', ({ payload }) => {
       console.log('payload issue', payload.issue)
-      this.newSpellInput('Issue', 'new_issues', payload.issue)
+      const repo = {
+        owner: payload.repository.owner.login,
+        name: payload.repository.name
+      }
+      this.newSpellInput('Issue', 'new_issues', payload.issue, repo)
     })
 
     this.webhooks.on('issue_comment.created', ({ payload }) => {
       console.log('payload comment', payload.comment)
-      payload.comment.number = payload.issue.number
-      this.newSpellInput('Comment', 'issue_response', payload.comment)
+      const params = {
+        ...payload.comment,
+        number: payload.issue.number
+      }
+      const repo = {
+        owner: payload.repository.owner.login,
+        name: payload.repository.name
+      }
+      this.newSpellInput('Comment', 'issue_response', params, repo)
     })
 
     const middleware = createNodeMiddleware(this.webhooks, {
@@ -157,27 +170,35 @@ export class GithubConnector {
     }
   }
 
-  newSpellInput = async (name: string, type: string, content: any) => {
+  newSpellInput = async (
+    pretext: string,
+    type: string,
+    content: any,
+    repo: any
+  ) => {
     const { number, title, body, id } = content
+    const { owner, name } = repo
     const entities = [
-      this.data.github_repo_owner,
-      this.data.github_repo_name,
+      owner,
+      name,
       title,
       body,
     ]
     return this.spellRunner.runComponent({
       inputs: {
-        [`Input - Github (${name})`]: {
-          connector: `Github (${name})`,
+        [`Input - Github (${pretext})`]: {
+          connector: `Github (${pretext})`,
           content: body,
-          sender: this.data.github_repo_owner,
+          sender: owner,
           observer: id,
           client: 'github',
           channel: number,
           agentId: this.agent.id,
           entities,
           channelType: type,
-          rawData: JSON.stringify({ number, title, body, id }),
+          rawData: JSON.stringify({
+            number, title, body, id, owner, name
+          }),
         },
       },
       agent: this.agent,
@@ -191,21 +212,24 @@ export class GithubConnector {
   createComment = async (
     data: any,
     number: number,
+    repo: any,
     body: string,
     type: 'issue' | 'pull_request' | 'comment'
-  ) : Promise<any> => {
-    const { github_access_token, github_repo_owner, github_repo_name } = data
-    console.log('GITHUB CREATE COMMENT: type', type)
+  ): Promise<any> => {
+    const { github_access_token } = data
+    const owner = repo[0]
+    const name = repo[1]
+    console.log('GITHUB CREATE COMMENT: type', type, repo)
     try {
       if (!github_access_token || github_access_token[0] != 'g') {
         console.log('github access token is invalid')
         return []
       }
-      if (!github_repo_owner || github_repo_owner == '') {
+      if (!owner || owner == '') {
         console.log('owner/repo are invalid')
         return []
       }
-      if (!github_repo_name || github_repo_name == '') {
+      if (!name || name == '') {
         console.log('owner/repo are invalid')
         return []
       }
@@ -215,8 +239,8 @@ export class GithubConnector {
       }
 
       const comment = await this.octokit.rest.issues.createComment({
-        owner: github_repo_owner,
-        repo: github_repo_name,
+        owner: owner,
+        repo: name,
         issue_number: number,
         body,
       })
@@ -229,18 +253,19 @@ export class GithubConnector {
     }
   }
 
-  getNewIssues = async (data: any) => {
-    const { github_access_token, github_repo_owner, github_repo_name } = data
+  getNewIssues = async (data: any, repo: any) => {
+    const { github_access_token } = data
+    const { owner, name } = repo
     try {
       if (!github_access_token || github_access_token[0] != 'g') {
         console.log('github access token is invalid')
         return []
       }
-      if (!github_repo_owner || github_repo_owner == '') {
+      if (!owner || owner == '') {
         console.log('owner/repo are invalid')
         return []
       }
-      if (!github_repo_name || github_repo_name == '') {
+      if (!name || name == '') {
         console.log('owner/repo are invalid')
         return []
       }
@@ -249,8 +274,8 @@ export class GithubConnector {
       console.log(since)
 
       const newIssues = await this.octokit.rest.issues.listForRepo({
-        owner: github_repo_owner,
-        repo: github_repo_name,
+        owner: owner,
+        repo: name,
         sort: 'created',
         direction: 'desc',
         since: since,
@@ -269,25 +294,26 @@ export class GithubConnector {
     }
   }
 
-  getNewPRs = async (data: any) => {
-    const { github_access_token, github_repo_owner, github_repo_name } = data
+  getNewPRs = async (data: any, repo: any) => {
+    const { github_access_token } = data
+    const { owner, name } = repo
     try {
       if (!github_access_token || github_access_token[0] != 'g') {
         console.log('github access token is invalid')
         return []
       }
-      if (!github_repo_owner || github_repo_owner == '') {
+      if (!owner || owner == '') {
         console.log('owner/repo are invalid')
         return []
       }
-      if (!github_repo_name || github_repo_name == '') {
+      if (!name || name == '') {
         console.log('owner/repo are invalid')
         return []
       }
 
       const newPRs = await this.octokit.rest.pulls.list({
-        owner: github_repo_owner,
-        repo: github_repo_name,
+        owner: owner,
+        repo: name,
         sort: 'created',
         direction: 'desc',
       })
@@ -306,18 +332,19 @@ export class GithubConnector {
     }
   }
 
-  getIssueComments = async (data: any) => {
-    const { github_access_token, github_repo_owner, github_repo_name } = data
+  getIssueComments = async (data: any, repo: any) => {
+    const { github_access_token } = data
+    const { owner, name } = repo
     try {
       if (!github_access_token || github_access_token[0] != 'g') {
         console.log('github access token is invalid')
         return []
       }
-      if (!github_repo_owner || github_repo_owner == '') {
+      if (!owner || owner == '') {
         console.log('owner/repo are invalid')
         return []
       }
-      if (!github_repo_name || github_repo_name == '') {
+      if (!name || name == '') {
         console.log('owner/repo are invalid')
         return []
       }
@@ -325,8 +352,8 @@ export class GithubConnector {
       const since = new Date(this.lastTime).toISOString()
 
       const issueComments = await this.octokit.rest.issues.listCommentsForRepo({
-        owner: github_repo_owner,
-        repo: github_repo_name,
+        owner: owner,
+        repo: name,
         sort: 'created',
         direction: 'desc',
         since: since,
@@ -367,8 +394,10 @@ export class GithubConnector {
         return
       }
     }
-    
-    const comment = await this.createComment(this.data, event.channel, content, type)
+
+    const comment = await this.createComment(
+      this.data, event.channel, event.entities, content, type
+    )
     if (comment) {
       this.numbers.push(comment.id)
     }
