@@ -75,12 +75,6 @@
       "@magickml/plugin-bluesky-server": [
         "packages/plugins/bluesky/server/src/index.ts"
       ],
-      "@magickml/plugin-github-client": [
-        "packages/plugins/github/client/src/index.ts"
-      ],
-      "@magickml/plugin-github-server": [
-        "packages/plugins/github/server/src/index.ts"
-      ],
       "@magickml/plugin-discord-client": [
         "packages/plugins/discord/client/src/index.ts"
       ],

@@ -33,10 +33,9 @@ export async function update(data: CompletionHandlerInputData): Promise<{
   })
 
   try {
-    let result
     const start = Date.now()
 
-    result = await pg(table)
+    const result = await pg(table)
       .where(condition, '=', value)
       .update(updates)
       .returning('*')

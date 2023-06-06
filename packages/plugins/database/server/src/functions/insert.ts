@@ -31,10 +31,9 @@ export async function insert(data: CompletionHandlerInputData): Promise<{
   })
 
   try {
-    let result
     const start = Date.now()
 
-    result = await pg(table).insert(dataToInsert).returning('*')
+    const result = await pg(table).insert(dataToInsert).returning('*')
 
     saveRequest({
       projectId: projectId,

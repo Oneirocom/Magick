@@ -9,7 +9,7 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "rootDir": "../../..",
+    "rootDir": "../../../..",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "strict": true,

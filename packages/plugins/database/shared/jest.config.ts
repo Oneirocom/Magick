@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'openai',
+  displayName: 'database',
   preset: '../../jest.preset.js',
   globals: {},
   testEnvironment: 'node',
@@ -13,5 +13,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/plugins/openai/shared',
+  coverageDirectory: '../../coverage/plugins/database/shared',
 }
