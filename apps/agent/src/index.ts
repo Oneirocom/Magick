@@ -42,6 +42,10 @@ async function initializeAgent(): Promise<void> {
 
 initLogger({ name: 'agent' })
 const logger = getLogger()
-process.on('uncaughtException in Agent Server', logger.error)
+
+process.on('uncaughtException', logger.error)
+
+process.on('unhandledRejection', logger.error)
+
 await initApp()
 initializeAgent()

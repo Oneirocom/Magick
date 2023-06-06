@@ -38,8 +38,6 @@ const AgentPubVariables = ({
           event.target.checked === undefined
             ? event.target.value
             : event.target.checked
-            ? 'on'
-            : 'off',
       },
     })
     setUpdateNeeded(true)
@@ -67,14 +65,14 @@ const AgentPubVariables = ({
                 marginBottom: '10px',
               }}
             >
-              <Grid item>
+              <Grid item xs={1}>
                 <p style={{ marginRight: '20px' }}>{`${variable.name}: `}</p>
               </Grid>
               <Grid item xs={8}>
                 {variable?.type?.includes('Boolean') ? (
                   <Switch
                     label={''}
-                    checked={variable.value === 'on' ? true : false}
+                    checked={variable.value}
                     onChange={e => {
                       onChangeHandler(variable, e)
                     }}
