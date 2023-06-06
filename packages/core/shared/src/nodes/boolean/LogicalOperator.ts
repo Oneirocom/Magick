@@ -98,7 +98,7 @@ export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
         is = inp1 !== inp2
       } else if (operationType === 'greater than') {
         is = inp1 > inp2
-      } else if (operationType === 'less greater than') {
+      } else if (operationType === 'less than') {
         is = inp1 < inp2
       }
     } catch (e) {

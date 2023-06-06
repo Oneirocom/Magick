@@ -2,7 +2,7 @@
 import Rete from 'rete'
 
 import { MagickComponent } from '../../engine'
-import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
+import { embeddingSocket, stringSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -49,7 +49,7 @@ export class FindTextEmbedding extends MagickComponent<
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const success = new Rete.Output('success', 'Success', triggerSocket)
     const fail = new Rete.Output('failure', 'Failure', triggerSocket)
-    const out = new Rete.Output('embedding', 'Embedding', arraySocket)
+    const out = new Rete.Output('embedding', 'Embedding', embeddingSocket)
 
     return node
       .addInput(dataInput)

@@ -1,0 +1,8 @@
+{
+  "name": "@magickml/cloud-agent-worker",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/cloud-agent-worker/src",
+  "projectType": "library",
+  "targets": {},
+  "tags": []
+}
