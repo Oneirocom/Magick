@@ -141,80 +141,177 @@ const AgentDetails = ({
     link.parentNode.removeChild(link)
   }
 
+  const isPublicVarsChanged = (old, newObj): boolean => {
+    // Get the keys of both objects
+    const oldObjKeys = Object.keys(old);
+    const newObjKeys = Object.keys(newObj);
+
+    // Check if the number of keys is different
+    if (oldObjKeys.length !== newObjKeys.length) {
+      return true;
+    }
+
+    // Compare property values
+    for (const prop in old) {
+      //Check if the value prop of inner object has changed
+      if (old[prop].value !== newObj[prop].value) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  const formatPublicVars = (nodes) => {
+    return Object.values(nodes)
+      // get the public nodes
+      .filter((node: { data }) => node?.data?.isPublic)
+      // map to an array of objects
+      .map((node: { data; id; name }) => {
+        return {
+          id: node?.id,
+          name: node?.data?.name,
+          value:
+            node?.data?.value ||
+            node?.data?.text ||
+            node?.data?.fewshot ||
+            node?.data?._var,
+          type: node?.name,
+        }
+      })
+      // map to an object with the id as the key
+      .reduce((acc, cur) => {
+        acc[cur.id] = cur
+        return acc
+      }, {})
+  }
+
+  const updatePublicVar = (spell) => {
+    setSelectedAgentData({
+      ...selectedAgentData,
+      rootSpell: spell,
+      publicVariables: JSON.stringify(formatPublicVars(spell.graph.nodes)),
+    })
+  }
+
   useEffect(() => {
     ; (async () => {
-      const res = await fetch(
+      await fetch(
         `${config.apiUrl}/spells?projectId=${config.projectId}`,
         { headers }
-      )
-      const json = await res.json()
+      ).then(async res => {
+        const json = await res.json()
+        setSpellList(json.data)
+        if (selectedAgentData.rootSpell?.name) {
+          const rootSpell = json.data.find(
+            spell => spell.name === selectedAgentData.rootSpell?.name
+          )
 
-      setSpellList(json.data)
+          if (isPublicVarsChanged(JSON.parse(selectedAgentData.publicVariables), formatPublicVars(rootSpell.graph.nodes))) {
+            updatePublicVar(rootSpell)
+            setUpdateNeeded(true)
+          }
+        }
+
+      }).catch(err => {
+        enqueueSnackbar(err.message, {
+          variant: 'error',
+        })
+      })
+
     })()
   }, [])
 
   return (
     <div style={{ overflowY: 'scroll', height: '100vh' }}>
       <div className={styles.agentDetailsContainer}>
-        {editMode ? (
-          <div className={styles.agentDescription}>
-            <input
-              type="text"
-              name="name"
-              value={selectedAgentData.name}
-              onChange={e =>
-                setSelectedAgentData({
-                  ...selectedAgentData,
-                  name: e.target.value,
-                })
-              }
-              placeholder="Add new agent name here"
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
+        <div className={styles.agentDescription}>
+          {editMode ? (
+            <>
+              <input
+                type="text"
+                name="name"
+                value={selectedAgentData.name}
+                onChange={e =>
+                  setSelectedAgentData({
+                    ...selectedAgentData,
+                    name: e.target.value,
+                  })
+                }
+                placeholder="Add new agent name here"
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    update(selectedAgentData.id)
+                    setEditMode(false)
+                    setOldName('')
+                  }
+                }}
+              />
+              <IconBtn
+                label={'Done'}
+                Icon={<Done />}
+                onClick={e => {
                   update(selectedAgentData.id)
                   setEditMode(false)
                   setOldName('')
-                }
-              }}
-            />
-            <IconBtn
-              label={'Done'}
-              Icon={<Done />}
-              onClick={e => {
-                update(selectedAgentData.id)
-                setEditMode(false)
-                setOldName('')
-              }}
-            />
-            <IconBtn
-              label={'close'}
-              Icon={<Close />}
-              onClick={e => {
-                setSelectedAgentData({ ...selectedAgentData, name: oldName })
-                setOldName('')
-                setEditMode(false)
-              }}
-            />
-          </div>
-        ) : (
-          <div className={styles.agentDescription}>
-            <Avatar className={styles.avatar}>
-              {selectedAgentData?.name?.slice(0, 1)[0]}{' '}
-            </Avatar>
-            <div>
-              <Typography variant="h5">{selectedAgentData.name}</Typography>
-            </div>
-            <IconBtn
-              label={'edit'}
-              Icon={<Edit />}
-              onClick={e => {
-                setEditMode(true)
-                setOldName(selectedAgentData.name)
-              }}
-            />
-          </div>
-        )}
+                }}
+              />
+              <IconBtn
+                label={'close'}
+                Icon={<Close />}
+                onClick={e => {
+                  setSelectedAgentData({ ...selectedAgentData, name: oldName })
+                  setOldName('')
+                  setEditMode(false)
+                }}
+              />
+            </>
+          ) : (
+            <>
+              <Avatar className={styles.avatar}>
+                {selectedAgentData?.name?.slice(0, 1)[0]}{' '}
+              </Avatar>
+              <div>
+                <Typography variant="h5">{selectedAgentData.name}</Typography>
+              </div>
+              <IconBtn
+                label={'edit'}
+                Icon={<Edit />}
+                onClick={e => {
+                  setEditMode(true)
+                  setOldName(selectedAgentData.name)
+                }}
+              />
+            </>
 
+          )}
+          <Tooltip
+            title={
+              !selectedAgentData.rootSpell || !selectedAgentData.rootSpell.id
+                ? 'Root Spell must be set before enabling the agent'
+                : ''
+            }
+          >
+            <span style={{ marginLeft: '20px' }}>
+              <CustomizedSwitch
+                label={selectedAgentData.enabled ? 'On' : 'Off'}
+                checked={selectedAgentData.enabled ? true : false}
+                onChange={() => {
+                  update(selectedAgentData.id, {
+                    ...selectedAgentData,
+                    enabled: selectedAgentData.enabled ? false : true,
+                  })
+                }}
+                disabled={
+                  !selectedAgentData.rootSpell || !selectedAgentData.rootSpell.id
+                }
+                style={{
+                  alignSelf: 'self-start',
+                }}
+              />
+            </span>
+          </Tooltip>
+        </div>
         <div className={styles.btns}>
           <Button
             onClick={() => {
@@ -240,32 +337,6 @@ const AgentDetails = ({
             Export
           </Button>
         </div>
-        <Tooltip
-          title={
-            !selectedAgentData.rootSpell || !selectedAgentData.rootSpell.id
-              ? 'Root Spell must be set before enabling the agent'
-              : ''
-          }
-        >
-          <span>
-            <CustomizedSwitch
-              label={selectedAgentData.enabled ? 'On' : 'Off'}
-              checked={selectedAgentData.enabled ? true : false}
-              onChange={() => {
-                update(selectedAgentData.id, {
-                  ...selectedAgentData,
-                  enabled: selectedAgentData.enabled ? false : true,
-                })
-              }}
-              disabled={
-                !selectedAgentData.rootSpell || !selectedAgentData.rootSpell.id
-              }
-              style={{
-                alignSelf: 'self-start',
-              }}
-            />
-          </span>
-        </Tooltip>
       </div>
       <div className="form-item agent-select">
         <span className="form-item-label">Root Spell</span>
@@ -297,34 +368,7 @@ const AgentDetails = ({
               enabled: true,
               ...selectedAgentData,
             })
-
-            setSelectedAgentData({
-              ...selectedAgentData,
-              rootSpell: newRootSpell,
-              publicVariables: JSON.stringify(
-                Object.values(newRootSpell.graph.nodes)
-                  // get the public nodes
-                  .filter((node: { data }) => node?.data?.isPublic)
-                  // map to an array of objects
-                  .map((node: { data; id; name }) => {
-                    return {
-                      id: node?.id,
-                      name: node?.data?.name,
-                      value:
-                        node?.data?.value ||
-                        node?.data?.text ||
-                        node?.data?.fewshot ||
-                        node?.data?._var,
-                      type: node?.name,
-                    }
-                  })
-                  // map to an object with the id as the key
-                  .reduce((acc, cur) => {
-                    acc[cur.id] = cur
-                    return acc
-                  }, {})
-              ),
-            })
+            updatePublicVar(newRootSpell)
             setUpdateNeeded(true)
           }}
         >
