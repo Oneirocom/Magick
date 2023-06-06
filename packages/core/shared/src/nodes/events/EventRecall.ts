@@ -4,6 +4,7 @@ import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import {
   arraySocket,
+  embeddingSocket,
   eventSocket,
   stringSocket,
   triggerSocket,
@@ -55,7 +56,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
    */
   builder(node: MagickNode): MagickNode {
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
-    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
     const out = new Rete.Output('events', 'Events', arraySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)

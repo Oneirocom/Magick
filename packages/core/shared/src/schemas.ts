@@ -44,6 +44,7 @@ export type SpellInterface = Static<typeof spellSchema>
  * @property {any} [rootSpell] - The root spell of the agent (optional).
  * @property {string} name - The name of the agent.
  * @property {boolean} [enabled] - Whether the agent is enabled or not (optional).
+ * @property {string} runState - The run state of the agent.
  * @property {string} updatedAt - The date when the agent was last updated.
  * @property {string} [pingedAt] - The date when the agent was last pinged (optional).
  * @property {any} [data] - The data stored in the agent (optional).
@@ -57,6 +58,7 @@ export const agentSchema = Type.Object(
     rootSpell: Type.Optional(Type.Any()), // TODO: type me!
     name: Type.String(),
     enabled: Type.Optional(Type.Boolean()),
+    runState: Type.Optional(Type.String()), // TODO: THe database restricts this to a set of values, but we don't have a way to express that in typebox afaik
     updatedAt: Type.Optional(Type.String()),
     pingedAt: Type.Optional(Type.String()),
     data: Type.Optional(Type.Any()),
