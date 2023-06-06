@@ -1,7 +1,6 @@
 // import { Application } from '@magickml/server-core';
 import { Application } from '@feathersjs/koa'
 import io from 'socket.io'
-import { Agent } from '@magickml/agents'
 
 import { MagickSpellInput, SpellInterface } from '../types'
 import SpellRunner from './SpellRunner'
@@ -11,7 +10,7 @@ type SpellManagerArgs = {
   cache?: boolean
   app: Application
   watchSpells?: boolean
-  agent?: Agent
+  agent?: any
 }
 
 type RunArgs = {
@@ -27,7 +26,7 @@ export default class SpellManager {
   socket?: io.Socket
   cache: boolean
   app: Application
-  agent?: Agent
+  agent?: any
 
   constructor({
     socket = undefined,

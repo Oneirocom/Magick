@@ -146,10 +146,14 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
         ? typeData.toLowerCase().trim()
         : 'none')
 
-    const maxCountData =
-      (node?.data?.max_count as string) &&
-      (node?.data as { max_count: string })?.max_count
-    const limit = maxCountData ? parseInt(maxCountData) : 10
+    let max_count
+    if (typeof node.data.max_count === 'string') {
+      max_count = parseInt(node.data.max_count)
+    } else if (typeof node.data.max_count === 'number') {
+      max_count = node.data.max_count
+    } else {
+      max_count = 10
+    }
     const data = {
       type,
       observer,
@@ -159,7 +163,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       connector,
       channelType,
       projectId,
-      $limit: limit ?? 1,
+      $limit: max_count ?? 1,
     }
 
     if (embedding) {
