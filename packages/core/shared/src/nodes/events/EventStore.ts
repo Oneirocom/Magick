@@ -3,7 +3,7 @@ import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import {
-  arraySocket,
+  embeddingSocket,
   eventSocket,
   stringSocket,
   triggerSocket,
@@ -56,7 +56,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       stringSocket
     )
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
-    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
 
     node.inspector.add(nameInput).add(type)
 

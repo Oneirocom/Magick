@@ -92,7 +92,7 @@ export class NumberVariable extends MagickComponent<InputReturn> {
     }
 
     return {
-      output: _var,
+      output: +_var,
     }
   }
 }

@@ -2,7 +2,11 @@
 import Agent from './Agent'
 import _ from 'lodash'
 import pino from 'pino'
-import { AGENT_UPDATE_TIME_MSEC, PING_AGENT_TIME_MSEC, getLogger } from '@magickml/core'
+import {
+  AGENT_UPDATE_TIME_MSEC,
+  PING_AGENT_TIME_MSEC,
+  getLogger,
+} from '@magickml/core'
 
 /**
  * Class for managing agents.
@@ -31,14 +35,16 @@ export class AgentManager {
   /**
    * Create an agent manager.
    */
-  constructor(app) {
+  constructor(app, longPolling = true) {
     this.app = app
 
     app.set('isAgent', true)
     // Update agents every second
-    setInterval(async () => {
-      await this.updateAgents()
-    }, AGENT_UPDATE_TIME_MSEC)
+    if (longPolling) {
+      setInterval(async () => {
+        await this.updateAgents()
+      }, AGENT_UPDATE_TIME_MSEC)
+    }
   }
 
   /**
@@ -108,12 +114,12 @@ export class AgentManager {
       })
     )?.data
 
+    await this.deleteOldAgents()
+
     if (!this.newAgents || this.newAgents.length === 0) {
       this.logger.trace('No new agents found.')
       return
     }
-
-    await this.deleteOldAgents()
 
     this.newAgents?.forEach(async (agent: any) => {
       if (!agent) {
@@ -135,7 +141,8 @@ export class AgentManager {
 
       const pingedAt = new Date(agent.pingedAt)
 
-      if (new Date().getTime() - pingedAt.getTime() < PING_AGENT_TIME_MSEC * 5) return
+      if (new Date().getTime() - pingedAt.getTime() < PING_AGENT_TIME_MSEC * 5)
+        return
 
       const old = this.currentAgents?.find(a => a && a.id === agent.id)
 

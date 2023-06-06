@@ -97,6 +97,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
           enableClipboard={false}
           theme="twilight"
           collapsed={true}
+          style={{ overflow: 'auto' }}
         />
         <br />
       </div>

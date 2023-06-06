@@ -6,11 +6,9 @@
  */
 
 import { AgentManager } from '@magickml/agents'
-import { app } from '@magickml/server-core'
+import { app, initApp } from '@magickml/server-core'
 import { initLogger, getLogger } from '@magickml/core'
 import 'regenerator-runtime/runtime'
-
-
 
 /**
  * Asynchronously loads the application's plugins and logs their names.
@@ -51,4 +49,5 @@ process.on('uncaughtException', logger.error)
 
 process.on('unhandledRejection', logger.error)
 
+await initApp()
 initializeAgent()
