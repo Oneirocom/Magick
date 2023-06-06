@@ -1,6 +1,5 @@
 // DOCUMENTED
 import { app } from '@magickml/server-core'
-import { Agent } from '@magickml/agents'
 import Discord, {
   AttachmentBuilder,
   EmbedBuilder,
@@ -13,7 +12,7 @@ let recognizeSpeech
 
 export class DiscordConnector {
   client = Discord.Client as any
-  agent: Agent
+  agent: any
   spellRunner: any = null
   use_voice = false
   voice_provider!: string

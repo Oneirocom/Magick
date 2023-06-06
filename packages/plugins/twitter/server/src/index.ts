@@ -48,8 +48,6 @@ function getAgentMethods() {
 }
 
 async function handleResponse({ output, agent, event }) {
-  console.log('********* SENT MESSAGE TO TWITTER', agent.id, output)
-
   if (!event.channel) {
     console.log('No channel to send to')
     return

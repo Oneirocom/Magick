@@ -22,7 +22,7 @@ export class TwitterConnector {
       console.warn('Twitter is not enabled, skipping')
       return
     }
-    console.log('Twitter enabled, initializing...')
+
     this.twitter_stream_rules = data.twitter_stream_rules
 
     const bearerToken = getSetting(
@@ -43,14 +43,6 @@ export class TwitterConnector {
       data.twitter_access_token_secret,
       'Access Token Secret'
     )
-
-    console.log('twitterUser', twitterUser)
-    console.log('twitterApiKey', twitterApiKey)
-    console.log('twitterApiKeySecret', twitterApiKeySecret)
-    console.log('twitterAccessToken', twitterAccessToken)
-    console.log('twitterAccessTokenSecret', twitterAccessTokenSecret)
-    console.log('bearerToken', bearerToken)
-    console.log('streamRules', data.twitter_stream_rules)
 
     //
 

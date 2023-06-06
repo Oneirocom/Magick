@@ -122,7 +122,6 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     const { projectId } = _context
     if (agent) {
       const spellRunner = await spellManager.loadById(spellId)
-      console.log('running spell by id')
       const runComponentArgs = {
         inputs: {
           'Input - Default': event,
@@ -135,7 +134,6 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
       }
       const outputs = await spellRunner?.runComponent(runComponentArgs)
       const output = Object.values(outputs as any)[0]
-      console.log('output', output)
       return {
         output,
       }
@@ -151,14 +149,12 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
         publicVariables: {},
         app: module.app,
       }
-      console.log('running without agent')
+
       const spellRunner = await spellManager.loadById(spellId)
       const outputs = await spellRunner?.runComponent(runComponentArgs)
-      console.log('outputs', outputs)
+
       // get the first value from outputs
       const output = Object.values(outputs as any)[0]
-
-      console.log('output', output)
 
       return {
         output,
