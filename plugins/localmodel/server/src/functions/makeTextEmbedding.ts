@@ -8,7 +8,7 @@ import axios from 'axios'
 import { LOCALMODEL_ENPOINT } from '../constants'
 
 /**
- * A function that makes a request to create a text embedding using OpenAI's
+ * A function that makes a request to create a text embedding using the
  * embeddings microservice. The input text is passed to the service along with
  * a specified model which provides the text embedding. Information about the
  * request is then saved (e.g. status code, response, etc.).
@@ -36,20 +36,8 @@ export async function makeTextEmbedding(
     }
   }
 
-  const apiKey =
-    (context?.module?.secrets && context?.module?.secrets['openai_api_key']) ||
-    null
-
-  if (!apiKey) {
-    return {
-      success: false,
-      error: 'OpenAI API key is required to create a text embedding',
-    }
-  }
-
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + apiKey,
   }
 
   const requestData = { input: input, model: node.data.model }
@@ -57,7 +45,7 @@ export async function makeTextEmbedding(
   // Start a timer
   const start = Date.now()
   try {
-    // Make a POST request to the OpenAI endpoint
+    // Make a POST request to the local endpoint
     const resp = await axios.post(
       `${LOCALMODEL_ENPOINT}/embeddings`,
       requestData,
@@ -79,7 +67,7 @@ export async function makeTextEmbedding(
       model: model,
       parameters: '{}',
       type: 'embedding',
-      provider: 'openai',
+      provider: 'localmodel',
       hidden: false,
       processed: false,
       totalTokens: resp.data.usage.total_tokens,

@@ -1,12 +1,12 @@
 // DOCUMENTED 
 /**
- * A plugin for interacting with OpenAI's API.
+ * A plugin for interacting with local models.
  * @class
  */
 import { ClientPlugin, InputControl } from '@magickml/core'
 import shared from '@magickml/plugin-localmodel-shared'
 
-// Importing shared variables from plugin-openai-shared module
+// Importing shared variables from plugin-localmodel-shared module
 const { secrets, completionProviders } = shared
 
 // Input controls for text completion

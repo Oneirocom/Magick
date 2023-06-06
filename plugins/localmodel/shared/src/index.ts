@@ -2,6 +2,7 @@
 import {
   arraySocket,
   CompletionProvider,
+  embeddingSocket,
   PluginSecret,
   stringSocket,
 } from "@magickml/core";
@@ -9,14 +10,7 @@ import {
 /**
  * An array of PluginSecret objects containing information about API key secrets.
  */
-const secrets: PluginSecret[] = [
-  {
-    name: "OpenAI API Key",
-    key: "openai_api_key",
-    global: true,
-    getUrl: "https://beta.openai.com/account/api-keys",
-  },
-];
+const secrets: PluginSecret[] = [];
 
 /**
  * An array of CompletionProvider objects containing information about supported completion providers.
@@ -57,7 +51,7 @@ const completionProviders: CompletionProvider[] = [
       {
         socket: "embedding",
         name: "Embedding",
-        type: arraySocket,
+        type: embeddingSocket,
       }
     ],
     models: ["all-mpnet-base-v2"],

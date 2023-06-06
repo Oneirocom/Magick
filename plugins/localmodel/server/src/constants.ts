@@ -1,6 +1,6 @@
 // DOCUMENTED 
 /**
- * The OpenAI endpoint URL.
+ * The local endpoint URL.
  * Attempts to retrieve from various environment variables, falls back to default endpoint if not found.
  */
 export const LOCALMODEL_ENPOINT =
