@@ -39,7 +39,7 @@ export async function makeChatCompletion(
   } as any
 
   if (settings.model === 'Loaded Chat Model') {
-    let models = axios.get("http://127.0.0.1:5001/v1/models")
+    const models = axios.get("http://127.0.0.1:5001/v1/models")
     console.log(models)
   }
   // Initialize conversationMessages array
