@@ -36,8 +36,9 @@ export class GithubConnector {
     }
 
     console.log(
-      'Github enabled, initializing...',
+      'Github enabled, initializing.....',
       data.github_access_token,
+      data.github_repos
     )
 
     this.octokit = new Octokit({
@@ -50,7 +51,7 @@ export class GithubConnector {
 
     // repos is an array of owner/repos, separated by comma
     // split it and add each repo to the webhook
-    repos.split(',').forEach(async repo => {
+    repos.forEach(async repo => {
       const [owner, name] = repo.trim().split('/')
       console.log('**** GITHUB: Added repo', owner, name, 'to webhook')
       this.webhookListeners.push(
