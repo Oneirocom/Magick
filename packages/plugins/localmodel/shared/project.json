@@ -1,7 +1,7 @@
 {
-  "name": "@magickml/plugin-localmodel-client",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugins/localmodel/client/src",
+  "name": "@magickml/plugin-localmodel-shared",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/plugins/localmodel/shared/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],
   "targets": {
@@ -9,14 +9,14 @@
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["plugins/localmodel/client/**/*.ts"]
+        "lintFilePatterns": ["packages/plugins/localmodel/shared/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "plugins/localmodel/client/jest.config.ts",
+        "jestConfig": "packages/plugins/localmodel/shared/jest.config.ts",
         "passWithNoTests": true
       }
     }
