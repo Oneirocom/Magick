@@ -18,7 +18,7 @@ import { spellApi } from '../../state/api/spells'
 import LoadingButton from '@mui/lab/LoadingButton'
 import emptyImg from './empty.png'
 import css from './homeScreen.module.css'
-import { uuidv4 } from '../../utils/uuid'
+import { v4 as uuidv4 } from 'uuid'
 
 // Custom configuration for unique name generator
 const customConfig = {
@@ -143,9 +143,8 @@ const CreateNew = () => {
           cancel
         </Button>
         <LoadingButton
-          className={`${!selectedTemplate ? 'disabled' : 'primary'} ${
-            css.button
-          }`}
+          className={`${!selectedTemplate ? 'disabled' : 'primary'} ${css.button
+            }`}
           loading={loading}
           onClick={onCreate}
           variant="outlined"
