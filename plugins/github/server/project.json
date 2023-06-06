@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-github-server",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugin-github/server/src",
+  "sourceRoot": "plugins/github/server/src",
   "projectType": "library",
   "implicitDependencies": [
     "@magickml/core"
@@ -24,7 +24,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "plugin/github-server/jest.config.ts",
+        "jestConfig": "plugins/github/server/jest.config.ts",
         "passWithNoTests": true
       }
     }

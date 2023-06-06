@@ -11,6 +11,7 @@ export class GithubConnector {
   agent
   lastTime
   webhooks
+  middleware
   webhookListeners = [] as any[]
   octokit
   secret
@@ -41,11 +42,11 @@ export class GithubConnector {
       data.github_repos
     )
 
+    this.startWebhookServer()
+
     this.octokit = new Octokit({
       auth: data.github_access_token,
     })
-
-    this.secret = uuidv4()
 
     const repos = data.github_repos
 
@@ -58,8 +59,12 @@ export class GithubConnector {
         await this.startNgrokAndConfigureWebhook(owner, name)
       )
     })
+  }
 
-    console.log('webhook start')
+  startWebhookServer() {
+    this.secret = uuidv4()
+
+    console.log('webhook start >')
     this.webhooks = new Webhooks({
       secret: this.secret,
     })
@@ -95,16 +100,9 @@ export class GithubConnector {
       this.newSpellInput('Comment', 'issue_response', params, repo)
     })
 
-    const middleware = createNodeMiddleware(this.webhooks, {
+    this.middleware = createNodeMiddleware(this.webhooks, {
       path: '/payload',
     })
-    http
-      .createServer(async (req, res) => {
-        if (await middleware(req, res)) return
-        res.writeHead(404)
-        res.end()
-      })
-      .listen(4567)
   }
 
   async startNgrokAndConfigureWebhook(owner, repo) {
@@ -123,8 +121,8 @@ export class GithubConnector {
         repo,
       })
 
-      let webhookId
-
+      let webhookId, repoWebhook
+      console.log('webhooks:', webhooks)
       // If the webhook exists, update it with the new configuration
       if (webhooks.length > 0) {
         const webhook = webhooks.find(hook => hook.config.url.includes('ngrok'))
@@ -132,6 +130,7 @@ export class GithubConnector {
         if (webhook) {
           webhookId = webhook.id
           webhook.config.port = randomPort
+          webhook.config.url = ngrokUrl + '/payload'
           // config webhook secret
           webhook.config.secret = this.secret
 
@@ -141,17 +140,19 @@ export class GithubConnector {
             webhook_id: webhookId,
             ...webhook,
           })
-          return webhook
+          repoWebhook = webhook
+          console.log('repoWebhook:', webhook)
         }
       }
 
       // If the webhook doesn't exist, create a new one
       if (!webhookId) {
+        console.log('webhookId null')
         const newWebhook = await this.octokit.repos.createWebhook({
           owner,
           repo,
           config: {
-            url: ngrokUrl,
+            url: ngrokUrl + '/payload',
             content_type: 'json',
             insecure_ssl: '1',
             port: randomPort,
@@ -159,15 +160,25 @@ export class GithubConnector {
         })
 
         webhookId = newWebhook.data.id
-        return newWebhook
+        repoWebhook = newWebhook
       }
+
+      // createServer with randomPort
+      http
+        .createServer(async (req, res) => {
+          if (await this.middleware(req, res)) return
+          res.writeHead(404)
+          res.end()
+        })
+        .listen(randomPort)
 
       console.log('Ngrok URL:', ngrokUrl)
       console.log('Random Port:', randomPort)
       console.log('Webhook ID:', webhookId)
-      return webhookId
+      return repoWebhook
     } catch (error) {
       console.error('Error:', error)
+      return null
     }
   }
 
