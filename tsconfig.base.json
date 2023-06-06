@@ -60,7 +60,7 @@
         "packages/plugins/github/shared/src/index.ts"
       ],
       "@magickml/plugin-github-shared": [
-        "plugins/github/shared/src/index.ts"
+        "packages/plugins/github/shared/src/index.ts"
       ],
       "@magickml/plugin-discord-client": [
         "plugins/discord/client/src/index.ts"
