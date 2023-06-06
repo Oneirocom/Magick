@@ -31,10 +31,9 @@ export async function upsert(data: CompletionHandlerInputData): Promise<{
   })
 
   try {
-    let result
     const start = Date.now()
 
-    result = await pg(table)
+    const result = await pg(table)
       .insert(updates)
       .onConflict(onConflict)
       .merge()

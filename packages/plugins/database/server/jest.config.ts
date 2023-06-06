@@ -1,16 +1,16 @@
 /* eslint-disable */
 export default {
-  displayName: 'openai',
+  displayName: 'database',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
-    }
+    },
   },
   testEnvironment: 'node',
   transform: {
-    '^.+\\.[tj]sx?$': 'ts-jest'
+    '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/plugin-openai/server'
-};
+  coverageDirectory: '../../coverage/packages/plugin/database/server',
+}
