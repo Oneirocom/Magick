@@ -63,16 +63,6 @@ export const spell = (app: Application) => {
       find: [],
       get: [],
       create: [
-        // if there's no spellId, generate a new uuidv4 id
-        async (context: HookContext) => {
-          const { data } = context
-          if (!data.spellId) {
-            context.data = {
-              ...data,
-              id: uuidv4(),
-            }
-          }
-        },
         schemaHooks.validateData(spellDataValidator),
         schemaHooks.resolveData(spellDataResolver),
         // async (context: HookContext) => {
