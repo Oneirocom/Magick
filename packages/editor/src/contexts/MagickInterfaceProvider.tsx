@@ -209,7 +209,7 @@ const MagickInterfaceProvider: React.FC<{
     const response = await _runSpell({ inputs, spellId, projectId })
 
     if ('error' in response) {
-      throw new Error(`Error running spell from runSpell ${spellId}`)
+      throw new Error(`Error running spell ${spellId}`)
     }
 
     return response.data.outputs
