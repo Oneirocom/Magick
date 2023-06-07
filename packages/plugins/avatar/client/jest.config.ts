@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'ethereum-client',
+  displayName: 'avatar',
   preset: '../../jest.preset.js',
   globals: {},
   testEnvironment: 'node',
@@ -13,5 +13,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../coverage/plugins/ethereum/client',
+  coverageDirectory: '../../../coverage/plugins/avatar/client',
 }
