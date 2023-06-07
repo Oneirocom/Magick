@@ -2,6 +2,7 @@
 import {
   arraySocket,
   CompletionProvider,
+  embeddingSocket,
   PluginSecret,
   stringSocket,
 } from '@magickml/core'
@@ -99,7 +100,7 @@ const completionProviders: CompletionProvider[] = [
       {
         socket: 'embedding',
         name: 'Embedding',
-        type: arraySocket,
+        type: embeddingSocket,
       },
       {
         socket: 'error',

@@ -7,6 +7,7 @@ import { MagickComponent } from '../../engine'
 import { Task } from '../../plugins/taskPlugin/task'
 import {
   arraySocket,
+  embeddingSocket,
   eventSocket,
   stringSocket,
   triggerSocket,
@@ -79,7 +80,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
     const client = new Rete.Output('client', 'client', stringSocket)
     const channel = new Rete.Output('channel', 'channel', stringSocket)
     const connector = new Rete.Output('connector', 'connector', stringSocket)
-    const embedding = new Rete.Output('embedding', 'embedding', arraySocket)
+    const embedding = new Rete.Output('embedding', 'embedding', embeddingSocket)
     const channelType = new Rete.Output(
       'channelType',
       'channelType',

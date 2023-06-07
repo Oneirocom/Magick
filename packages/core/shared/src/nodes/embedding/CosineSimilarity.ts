@@ -5,7 +5,7 @@
 import similarity from 'compute-cosine-similarity'
 import Rete from 'rete'
 import { MagickComponent } from '../../engine'
-import { arraySocket, numberSocket, triggerSocket } from '../../sockets'
+import { embeddingSocket, numberSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -45,12 +45,12 @@ export class CosineSimilarity extends MagickComponent<
     const embeddingInputA = new Rete.Input(
       'embeddingA',
       'Embedding A',
-      arraySocket
+      embeddingSocket
     )
     const embeddingInputB = new Rete.Input(
       'embeddingB',
       'Embedding B',
-      arraySocket
+      embeddingSocket
     )
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)

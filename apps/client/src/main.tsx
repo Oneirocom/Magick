@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { createRoot } from 'react-dom/client'
-import { MagickIDE, AppConfig } from '@magickml/editor'
+import { MagickIDE } from '@magickml/editor'
+import { AppConfig } from '@magickml/client-core'
 import {
   DEFAULT_PROJECT_ID,
   API_ROOT_URL,
@@ -85,9 +86,9 @@ if (window === window.parent) {
       // Initialize and render the MagickIDE when message type is 'INIT'
       if (type === 'INIT') {
         // TODO: store configuration in localstorage
-        const { config } = payload
+        const { config } = payload as { config: AppConfig }
         const Root = () => {
-          if (POSTHOG_ENABLED) {
+          if (POSTHOG_ENABLED && config?.posthogEnabled) {
             return (
               <PostHogProvider
                 apiKey={POSTHOG_API_KEY}

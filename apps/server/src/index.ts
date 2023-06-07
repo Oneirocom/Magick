@@ -8,6 +8,7 @@ import Router from '@koa/router'
 import { pluginManager } from '@magickml/core'
 import {
   apis,
+  initApp,
   app,
   Handler,
   initFileServer,
@@ -52,6 +53,7 @@ const routes: Route[] = [...spells, ...apis, ...serverRoutes]
  * form and multipart-json requests, and routes.
  */
 async function init() {
+  await initApp()
   // load plugins
   await (async () => {
     const plugins = (await import('./plugins')).default
@@ -159,8 +161,6 @@ async function init() {
       createRoute('patch', path, _middleware, route.patch)
     }
   })
-
-  process.on('uncaughtException in Editor Server', logger.error)
 
   // adding router middlewares to Koa app
   app.use(router.routes()).use(router.allowedMethods())

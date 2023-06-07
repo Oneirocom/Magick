@@ -1,0 +1,63 @@
+{
+  "name": "@magickml/cloud-agent-manager-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cloud-agent-manager/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/cloud-agent-manager",
+        "main": "apps/cloud-agent-manager/src/main.ts",
+        "tsConfig": "apps/cloud-agent-manager/tsconfig.app.json",
+        "assets": ["apps/cloud-agent-manager/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/cloud-agent-manager/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "@magickml/cloud-agent-manager-app:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "@magickml/cloud-agent-manager-app:build:development"
+        },
+        "production": {
+          "buildTarget": "@magickml/cloud-agent-manager-app:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/cloud-agent-manager/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}

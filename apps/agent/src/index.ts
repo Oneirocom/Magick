@@ -6,11 +6,9 @@
  */
 
 import { AgentManager } from '@magickml/agents'
-import { app } from '@magickml/server-core'
+import { app, initApp } from '@magickml/server-core'
 import { initLogger, getLogger } from '@magickml/core'
 import 'regenerator-runtime/runtime'
-
-
 
 /**
  * Asynchronously loads the application's plugins and logs their names.
@@ -46,5 +44,14 @@ async function initializeAgent(): Promise<void> {
 
 initLogger({ name: 'agent' })
 const logger = getLogger()
-process.on('uncaughtException in Agent Server', logger.error)
+
+process.on('uncaughtException', (e, o) => {
+  logger.error('Uncaught exception: %o\n From: %s', e, o)
+})
+
+process.on('unhandledRejection', (e, o) => {
+  logger.error('Unhandled rejection: %o\n From: %s', e, o)
+})
+
+await initApp()
 initializeAgent()
