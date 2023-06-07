@@ -80,7 +80,6 @@ export class Respond extends MagickComponent<void> {
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<{ output: string }> {
-    console.log('calling respond')
     if (!inputs.input) {
       console.error('No input provided to output component')
       return { output: '' }
