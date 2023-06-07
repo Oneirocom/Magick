@@ -76,7 +76,8 @@ export class Merge extends MagickComponent<void> {
    * @returns {{ object: Record<string, unknown> }} - The merged object
    */
   worker(_node: WorkerData, inputs: MagickWorkerInputs) {
-    const object = inputs.object[0] as Record<string, unknown>
+    const object =
+      inputs.object && (inputs.object[0] as Record<string, unknown>)
     const combinedInputs = Object.entries(inputs).reduce(
       (acc, [key, value]) => {
         if (key === 'object') return acc

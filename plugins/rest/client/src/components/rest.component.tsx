@@ -159,7 +159,7 @@ export const RestAgentWindow: FC<any> = props => {
                   URL
                 </span>
                 <Input
-                  value={`${API_ROOT_URL}/api/${selectedAgentData.data?.rest_api_key}`}
+                  value={`${API_ROOT_URL}/api/${selectedAgentData.id}`}
                   readOnly
                   className="modal-element"
                   style={{

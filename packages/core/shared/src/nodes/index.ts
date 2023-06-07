@@ -67,6 +67,11 @@ import { Echo } from './utility/Echo'
 import { ErrorNode } from './utility/Error'
 import { Log } from './utility/Log'
 import { ExtractRelationship } from './embedding/ExtractRelationship'
+import { Select } from './database/Select'
+import { Insert } from './database/Insert'
+import { Update } from './database/Update'
+import { Upsert } from './database/Upsert'
+import { Delete } from './database/Delete'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -135,6 +140,11 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   greaterThanOrEqual: () => new GreaterThanOrEqual(),
   lessThan: () => new LessThan(),
   lessThanOrEqual: () => new LessThanOrEqual(),
+  select: () => new Select(),
+  insert: () => new Insert(),
+  update: () => new Update(),
+  upsert: () => new Upsert(),
+  delete: () => new Delete(),
 }
 
 /**
