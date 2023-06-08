@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap');
+
+@font-face {
+  font-family: 'BerkeleyMono-Regular';
+  src: url(https://lglrzlrsfxchbqsslvur.supabase.co/storage/v1/object/public/assets/BerkeleyMono-Regular.otf);
+}
+
 * {
   margin: 0;
 }
@@ -13,7 +19,8 @@ form,
 button,
 label,
 .flexlayout__tab_button_content {
-  font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
+    sans-serif;
 }
 
 :root {
@@ -32,10 +39,11 @@ label,
   --yellow: #fcbd03;
   --green: #21b534;
   --blue: #1290ce;
+  --deep-blue: #0e10a4;
   --purple: #7027dd;
   --glow-light: #b2fccd75;
-  --glow: #9d12a4;
-  --glow-dark: #570b5b;
+  --glow: #00e1ef;
+  --glow-dark: #00818a;
 
   --c1: 8px;
   --c2: 16px;

@@ -45,8 +45,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       'Event',
       info
     )
-
-    this.runFromCache = true
   }
 
   /**
