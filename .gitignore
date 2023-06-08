@@ -57,6 +57,7 @@ yarn.lock
 scripts/.cache
 
 apps/docs/build
+apps/docs/api/index.md
 data.json
 /logs
 docstore.json
