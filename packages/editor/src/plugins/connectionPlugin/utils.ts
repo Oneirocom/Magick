@@ -1,4 +1,3 @@
-import { documentResolver } from 'packages/core/server/src/services/documents/documents.schema'
 import { Emitter, Connection } from 'rete'
 import { EventsTypes } from 'rete/types/events'
 
@@ -6,7 +5,7 @@ function toTrainCase(str: string) {
   return str.toLowerCase().replace(/ /g, '-')
 }
 
-export function getMapItemRecursively<T extends any>(
+export function getMapItemRecursively<T>(
   map: WeakMap<Element, T>,
   el: Element
 ): T | null {
