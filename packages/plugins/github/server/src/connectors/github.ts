@@ -124,6 +124,9 @@ export class GithubConnector {
       let webhookId, repoWebhook
       console.log('webhooks:', webhooks)
       // If the webhook exists, update it with the new configuration
+      const events = [
+        'issues', 'issue_comment', 'pull_request', 'push', 'repository'
+      ]
       if (webhooks.length > 0) {
         const webhook = webhooks.find(hook => hook.config.url.includes('ngrok'))
 
@@ -133,6 +136,8 @@ export class GithubConnector {
           webhook.config.url = ngrokUrl + '/payload'
           // config webhook secret
           webhook.config.secret = this.secret
+          webhook.config.insecure_ssl = 0
+          webhook.events = events
 
           await this.octokit.repos.updateWebhook({
             owner,
@@ -141,26 +146,29 @@ export class GithubConnector {
             ...webhook,
           })
           repoWebhook = webhook
-          console.log('repoWebhook:', webhook)
+          console.log('updateWebhook:', webhook.data)
         }
       }
 
       // If the webhook doesn't exist, create a new one
       if (!webhookId) {
-        console.log('webhookId null')
+        console.log('webhookId > null')
         const newWebhook = await this.octokit.repos.createWebhook({
           owner,
           repo,
           config: {
             url: ngrokUrl + '/payload',
             content_type: 'json',
-            insecure_ssl: '1',
+            insecure_ssl: 0,
             port: randomPort,
+            secret: this.secret,
           },
+          events
         })
 
         webhookId = newWebhook.data.id
         repoWebhook = newWebhook
+        console.log('createWebhook:', repoWebhook.data)
       }
 
       // createServer with randomPort
