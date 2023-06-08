@@ -143,12 +143,12 @@ const CreateNew = () => {
           cancel
         </Button>
         <LoadingButton
-          className={`${!selectedTemplate ? 'disabled' : 'primary'} ${
-            css.button
-          }`}
+          className={`${!selectedTemplate ? 'disabled' : 'primary'} ${css.button
+            }`}
           loading={loading}
           onClick={onCreate}
           variant="outlined"
+          sx={{ color: "#fff !important" }}
         >
           CREATE
         </LoadingButton>

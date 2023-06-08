@@ -1,11 +1,14 @@
-// DOCUMENTED 
+// DOCUMENTED
 // For more information about this file, see https://dove.feathersjs.com/guides/cli/.html
-import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers';
-import { Application as FeathersApplication } from '@feathersjs/koa';
-import { ApplicationConfiguration } from './config/configuration';
-import { UserSpellManager } from '@magickml/core';
+import {
+  HookContext as FeathersHookContext,
+  NextFunction,
+} from '@feathersjs/feathers'
+import { Application as FeathersApplication } from '@feathersjs/koa'
+import { ApplicationConfiguration } from './config/configuration'
+import { UserSpellManager } from '@magickml/core'
 
-export { NextFunction };
+export type { NextFunction }
 
 /**
  * The types for app.get(name) and app.set(name).
@@ -22,8 +25,9 @@ export interface ServiceTypes {}
  * The application instance type that will be used everywhere else.
  * @extends FeathersApplication<ServiceTypes, Configuration>
  */
-export interface Application extends FeathersApplication<ServiceTypes, Configuration> {
-  userSpellManagers?: UserSpellManager;
+export interface Application
+  extends FeathersApplication<ServiceTypes, Configuration> {
+  userSpellManagers?: UserSpellManager
 }
 
 /**
@@ -31,4 +35,4 @@ export interface Application extends FeathersApplication<ServiceTypes, Configura
  * @template S - Type of the service. By default, it is set to `any`.
  * @extends FeathersHookContext<Application, S>
  */
-export type HookContext<S = any> = FeathersHookContext<Application, S>;
+export type HookContext<S = any> = FeathersHookContext<Application, S>

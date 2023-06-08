@@ -50,7 +50,7 @@
   background-color: rgba(40, 40, 40, 0.95);
   color: rgba(150, 150, 150, 0.95);
   flex: 1;
-  font-family: 'IBM Plex Mono', 'mono';
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'mono';
   overflow-y: hidden;
   display: flex;
 }
@@ -82,7 +82,8 @@
   margin-top: var(--extraSmall);
 }
 
-.playtest-input input, .playtest-input textarea {
+.playtest-input input,
+.playtest-input textarea {
   color: #fff;
   width: 100%;
   border-radius: 4px;
@@ -131,7 +132,7 @@
 }
 
 .node-bottom-container {
-  font-family: 'IBM Plex Mono', monospace !important;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
   padding: var(--extraSmall);
   display: flex;
   flex-direction: row;
