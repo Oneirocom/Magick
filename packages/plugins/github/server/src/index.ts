@@ -1,4 +1,9 @@
-import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
+import {
+  eventSocket,
+  ServerPlugin,
+  triggerSocket,
+  getLogger
+} from '@magickml/core'
 
 import { GithubConnector } from './connectors/github'
 import { getNodes } from '@magickml/plugin-github-shared'
@@ -10,13 +15,14 @@ type StartGithubArgs = {
 
 function getAgentMethods() {
   async function startGithub({ agent, spellRunner }: StartGithubArgs) {
+    const logger = getLogger()
     const { data } = agent.data
-    if (!data) return console.log('No data for this agent')
+    if (!data) return logger.info('No data for this agent')
     if (!data.github_enabled)
-      return console.log('Github is not enabled for this agent')
+      return logger.info('Github is not enabled for this agent')
     if (!data.github_access_token)
-      return console.log('Github Access Token is not set for this agent')
-    console.log('starting github connect')
+      return logger.info('Github Access Token is not set for this agent')
+    logger.info('starting github connect')
     try {
       const github = new GithubConnector({
         agent,
@@ -24,20 +30,21 @@ function getAgentMethods() {
       })
       agent.github = github
     } catch (err) {
-      console.error('Error starting github client for agent ' + agent.name)
+      logger.error('Error starting github client for agent ' + agent.name)
     }
   }
 
   async function stopGithub({ agent }) {
+    const logger = getLogger()
     if (!agent.github)
-      return console.warn("Github isn't running, can't stop it")
+      return logger.info("Github isn't running, can't stop it")
     try {
       await agent.github.destroy()
       agent.github = null
     } catch {
-      console.log('Agent does not exist !')
+      logger.error('Agent does not exist !')
     }
-    console.log('Stopped github client for agent ' + agent.name)
+    logger.info('Stopped github client for agent ' + agent.name)
   }
 
   return {

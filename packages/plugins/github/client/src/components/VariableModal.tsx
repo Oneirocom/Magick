@@ -32,7 +32,6 @@ const VariableModal = ({
     json['github_repos'] = state.github_repos
     localStorage.setItem('secrets', JSON.stringify(json))
 
-    console.log(JSON.stringify(selectedAgentData))
     update(selectedAgentData.id, data)
   }
 
@@ -56,7 +55,7 @@ const VariableModal = ({
 
   return (
     editMode && (
-      <Modal open={editMode} onClose={setEditMode} handleAction={handleSave} showSaveBtn={state.github_login}>
+      <Modal open={editMode} onClose={setEditMode} handleAction={handleSave} showSaveBtn={true}>
         <>
           <div style={{ marginBottom: '1em' }}>
             <span className="form-item-label">Personal Access Token</span>
