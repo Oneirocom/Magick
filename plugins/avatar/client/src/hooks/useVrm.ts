@@ -9,7 +9,6 @@ export const useVrm = (vrmUrl) => {
   useEffect(() => {
     (async () => {
       let gltf;
-
       if (!vrmUrl) {
         return
       }
@@ -21,11 +20,10 @@ export const useVrm = (vrmUrl) => {
         //default vrm ( Ref! drag/drop model )
         gltf = await gltfLoader.loadAsync('/models/bbb.vrm')
       }
-
       if (!gltf) {
         return
       }
-
+      
       //set avatar with new gltf tranform
       const newVrm = gltf.userData.vrm; 
       VRMUtils.rotateVRM0(newVrm);
