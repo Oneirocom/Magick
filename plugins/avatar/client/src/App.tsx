@@ -6,6 +6,7 @@ import { useDropzone } from "react-dropzone"
 import { useVrm } from './hooks/useVrm'
 import { useCallback, useEffect, useState } from 'react'
 import { useZustand } from './store/useZustand'
+import { DEFAULT_MODEL } from './utils/constants'
 
 const App = () => {
 
@@ -21,7 +22,7 @@ const App = () => {
     noKeyboard: true
   });
 
-  const [vrmURL, setVrmUrl] = useState('/models/avatar2.vrm')
+  const [vrmURL, setVrmUrl] = useState(DEFAULT_MODEL)
   const avatar = useVrm(vrmURL)
   const { setAvatarVrm } = useZustand()
 
