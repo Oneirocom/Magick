@@ -4,6 +4,7 @@ import http from 'http'
 import { Webhooks, createNodeMiddleware } from '@octokit/webhooks'
 import ngrok from 'ngrok'
 import { v4 as uuidv4 } from 'uuid'
+import { getLogger } from '@magickml/core';
 
 export class GithubConnector {
   spellRunner
@@ -16,8 +17,10 @@ export class GithubConnector {
   octokit
   secret
   numbers
+  logger
 
   constructor({ spellRunner, agent }) {
+    this.logger = getLogger()
     agent.github = this
     this.spellRunner = spellRunner
     const { data } = agent.data
@@ -29,15 +32,15 @@ export class GithubConnector {
 
   async initialize({ data }) {
     if (!data.github_enabled) {
-      console.warn('Github is not enabled, skipping')
+      this.logger.info('Github is not enabled, skipping')
     }
 
     if (!data.github_access_token) {
-      console.warn('Github is not enabled for this agent')
+      this.logger.info('Github is not enabled for this agent')
     }
 
-    console.log(
-      'Github enabled, initializing.....',
+    this.logger.info(
+      'Github enabled, initializing... %s, %o',
       data.github_access_token,
       data.github_repos
     )
@@ -54,7 +57,7 @@ export class GithubConnector {
     // split it and add each repo to the webhook
     repos.forEach(async repo => {
       const [owner, name] = repo.trim().split('/')
-      console.log('**** GITHUB: Added repo', owner, name, 'to webhook')
+      this.logger.info('**** GITHUB: Added repo %s, %s to webhook', owner, name)
       this.webhookListeners.push(
         await this.startNgrokAndConfigureWebhook(owner, name)
       )
@@ -64,13 +67,13 @@ export class GithubConnector {
   startWebhookServer() {
     this.secret = uuidv4()
 
-    console.log('webhook start >')
+    this.logger.info('webhook start >')
     this.webhooks = new Webhooks({
       secret: this.secret,
     })
 
     this.webhooks.on('pull_request.opened', ({ payload }) => {
-      console.log('payload pull_request', payload.pull_request)
+      this.logger.info('payload pull_request: %o', payload.pull_request)
       const repo = {
         owner: payload.repository.owner.login,
         name: payload.repository.name
@@ -79,7 +82,7 @@ export class GithubConnector {
     })
 
     this.webhooks.on('issues.opened', ({ payload }) => {
-      console.log('payload issue', payload.issue)
+      this.logger.info('payload issue: %o', payload.issue)
       const repo = {
         owner: payload.repository.owner.login,
         name: payload.repository.name
@@ -88,7 +91,7 @@ export class GithubConnector {
     })
 
     this.webhooks.on('issue_comment.created', ({ payload }) => {
-      console.log('payload comment', payload.comment)
+      this.logger.info('payload comment: %o', payload.comment)
       const params = {
         ...payload.comment,
         number: payload.issue.number
@@ -122,7 +125,7 @@ export class GithubConnector {
       })
 
       let webhookId, repoWebhook
-      console.log('webhooks:', webhooks)
+      this.logger.info('webhooks: %o', webhooks)
       // If the webhook exists, update it with the new configuration
       const events = [
         'issues', 'issue_comment', 'pull_request', 'push', 'repository'
@@ -146,13 +149,13 @@ export class GithubConnector {
             ...webhook,
           })
           repoWebhook = webhook
-          console.log('updateWebhook:', webhook.data)
+          this.logger.info('updateWebhook: %o', webhook.data)
         }
       }
 
       // If the webhook doesn't exist, create a new one
       if (!webhookId) {
-        console.log('webhookId > null')
+        this.logger.info('webhookId > null')
         const newWebhook = await this.octokit.repos.createWebhook({
           owner,
           repo,
@@ -168,7 +171,7 @@ export class GithubConnector {
 
         webhookId = newWebhook.data.id
         repoWebhook = newWebhook
-        console.log('createWebhook:', repoWebhook.data)
+        this.logger.info('createWebhook: %o', repoWebhook.data)
       }
 
       // createServer with randomPort
@@ -180,12 +183,12 @@ export class GithubConnector {
         })
         .listen(randomPort)
 
-      console.log('Ngrok URL:', ngrokUrl)
-      console.log('Random Port:', randomPort)
-      console.log('Webhook ID:', webhookId)
+      this.logger.info(`Ngrok URL: ${ngrokUrl}`)
+      this.logger.info(`Random Port: ${randomPort}`)
+      this.logger.info(`Webhook ID: ${webhookId}`)
       return repoWebhook
     } catch (error) {
-      console.error('Error:', error)
+      this.logger.error('Error: %o', error)
       return null
     }
   }
@@ -239,22 +242,22 @@ export class GithubConnector {
     const { github_access_token } = data
     const owner = repo[0]
     const name = repo[1]
-    console.log('GITHUB CREATE COMMENT: type', type, repo)
+    this.logger.info('GITHUB CREATE COMMENT: type:%s, [%s, %s]', type, owner, name)
     try {
       if (!github_access_token || github_access_token[0] != 'g') {
-        console.log('github access token is invalid')
+        this.logger.info('github access token is invalid')
         return []
       }
       if (!owner || owner == '') {
-        console.log('owner/repo are invalid')
+        this.logger.info('owner/repo are invalid')
         return []
       }
       if (!name || name == '') {
-        console.log('owner/repo are invalid')
+        this.logger.info('owner/repo are invalid')
         return []
       }
       if (!number || !body) {
-        console.log('number/body are invalid')
+        this.logger.info('number/body are invalid')
         return null
       }
 
@@ -264,11 +267,11 @@ export class GithubConnector {
         issue_number: number,
         body,
       })
-      console.log('new comment', comment.data.id, comment.data.body)
+      this.logger.info('new comment: %s, %o', comment.data.id, comment.data.body)
 
       return comment.data
     } catch (error) {
-      console.error(error)
+      this.logger.error('createComment error: %o', error)
       return null
     }
   }
@@ -278,20 +281,20 @@ export class GithubConnector {
     const { owner, name } = repo
     try {
       if (!github_access_token || github_access_token[0] != 'g') {
-        console.log('github access token is invalid')
+        this.logger.info('github access token is invalid')
         return []
       }
       if (!owner || owner == '') {
-        console.log('owner/repo are invalid')
+        this.logger.info('owner/repo are invalid')
         return []
       }
       if (!name || name == '') {
-        console.log('owner/repo are invalid')
+        this.logger.info('owner/repo are invalid')
         return []
       }
 
       const since = new Date(this.lastTime).toISOString()
-      console.log(since)
+      this.logger.info(`since = ${since}`)
 
       const newIssues = await this.octokit.rest.issues.listForRepo({
         owner: owner,
@@ -305,11 +308,11 @@ export class GithubConnector {
         const created = new Date(item.created_at).getTime()
         return created > this.lastTime
       })
-      console.log('new issues ', filters)
+      this.logger.info('new issues: %o', filters)
 
       return filters
     } catch (error) {
-      console.error(error)
+      this.logger.error('%o', error)
       return []
     }
   }
@@ -319,15 +322,15 @@ export class GithubConnector {
     const { owner, name } = repo
     try {
       if (!github_access_token || github_access_token[0] != 'g') {
-        console.log('github access token is invalid')
+        this.logger.info('github access token is invalid')
         return []
       }
       if (!owner || owner == '') {
-        console.log('owner/repo are invalid')
+        this.logger.info('owner/repo are invalid')
         return []
       }
       if (!name || name == '') {
-        console.log('owner/repo are invalid')
+        this.logger.info('owner/repo are invalid')
         return []
       }
 
@@ -343,11 +346,11 @@ export class GithubConnector {
         return created > this.lastTime
       })
 
-      console.log('new PRs ', filters)
+      this.logger.info('new PRs: %o', filters)
 
       return filters
     } catch (error) {
-      console.error(error)
+      this.logger.error('%o', error)
       return []
     }
   }
@@ -357,15 +360,15 @@ export class GithubConnector {
     const { owner, name } = repo
     try {
       if (!github_access_token || github_access_token[0] != 'g') {
-        console.log('github access token is invalid')
+        this.logger.info('github access token is invalid')
         return []
       }
       if (!owner || owner == '') {
-        console.log('owner/repo are invalid')
+        this.logger.info('owner/repo are invalid')
         return []
       }
       if (!name || name == '') {
-        console.log('owner/repo are invalid')
+        this.logger.info('owner/repo are invalid')
         return []
       }
 
@@ -379,11 +382,11 @@ export class GithubConnector {
         since: since,
       })
 
-      console.log('issue comments ', issueComments.data.length)
+      this.logger.info('issue comments: %d', issueComments.data.length)
 
       return issueComments.data
     } catch (error) {
-      console.error(error)
+      this.logger.error('%o', error)
       return []
     }
   }
@@ -393,24 +396,24 @@ export class GithubConnector {
     content: string,
     type: 'issue' | 'pull_request' | 'comment'
   ) {
-    console.log('handleMessage', event, content, type)
+    this.logger.info('handleMessage: %o, %s | %s', event, content, type)
     if (!content) {
-      console.error('output is undefined')
+      this.logger.error('output is undefined')
       return
     }
     if (!event.channel) {
-      console.error('number is undefined')
+      this.logger.error('number is undefined')
       return
     }
     if (!this.numbers) {
-      console.log('null >> ')
+      this.logger.info('null >> ')
       this.numbers = []
     }
     if (type === 'comment') {
       const count = this.numbers.length
       this.numbers = this.numbers.filter(num => num != event.observer)
       if (this.numbers.length != count) { // is existed
-        console.error('duplicate created')
+        this.logger.error('duplicate created')
         return
       }
     }
