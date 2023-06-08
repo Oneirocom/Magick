@@ -1,3 +1,5 @@
+export const DEFAULT_MODEL = '/models/avatar2.vrm'
+
 export const AXIS_LEN = 3
 
 export const CAMERA_INIT_POS = [0, 0, 2]
