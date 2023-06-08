@@ -66,8 +66,11 @@ export const POSTHOG_ENABLED =
   getVarForEnvironment('POSTHOG_ENABLED') === 'true'
 export const POSTHOG_API_KEY = getVarForEnvironment('POSTHOG_API_KEY') || ''
 export const REDISCLOUD_HOST = getVarForEnvironment('REDISCLOUD_HOST') || ''
-export const REDISCLOUD_PORT = Number(getVarForEnvironment('REDISCLOUD_PORT')) || 6379
-export const REDISCLOUD_URL = getVarForEnvironment('REDISCLOUD_URL') || `redis://${REDISCLOUD_HOST}:${REDISCLOUD_PORT}`
+export const REDISCLOUD_PORT =
+  Number(getVarForEnvironment('REDISCLOUD_PORT')) || 6379
+export const REDISCLOUD_URL =
+  getVarForEnvironment('REDISCLOUD_URL') ||
+  `redis://${REDISCLOUD_HOST}:${REDISCLOUD_PORT}`
 
 export const REDISCLOUD_DB = Number(getVarForEnvironment('REDISCLOUD_DB')) || 0
 export const REDISCLOUD_PASSWORD = getVarForEnvironment('REDISCLOUD_PASSWORD')
