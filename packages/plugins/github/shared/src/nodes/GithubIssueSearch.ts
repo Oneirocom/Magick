@@ -14,6 +14,7 @@ import {
   WorkerData,
   objectSocket,
   MagickWorkerOutputs,
+  getLogger
 } from '@magickml/core'
 
 import axios from 'axios'
@@ -36,19 +37,20 @@ async function githubSearchIssue(
     Accept: 'application/vnd.github.v3+json',
   }
 
+  const logger = getLogger()
   return axios.get(url, { headers }).then(response => {
     if (response.data.items) {
-      console.log('count: ' + response.data.items.length)
+      logger.debug('count: ' + response.data.items.length)
 
       const res = response.data.items.map(item => ({
         title: item.title,
         body: item.body,
         url: item.html_url,
       }))
-      console.log(res)
+      logger.debug(res)
       return res
     } else {
-      console.log('error to get')
+      logger.error('error to get')
       return []
     }
   })
@@ -120,13 +122,13 @@ export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
     if (inputs && inputs.query) {
       query = inputs.query[0] as string
     }
-
+    const logger = getLogger()
     let token = ''
     if (context.module && context.module.secrets) {
-      console.log(context.module.secrets)
+      logger.debug(context.module.secrets)
       token = context.module.secrets['github_access_token']
     }
-    console.log(token)
+    logger.debug(token)
 
     const result = await githubSearchIssue(token, query)
 

@@ -62,7 +62,6 @@ export const GithubAgentWindow: FC<any> = props => {
             label={null}
             checked={checked}
             onChange={e => {
-              console.log("checked", checked);
               setChecked(!checked)
               debouncedFunction(selectedAgentData.id, {
                 ...selectedAgentData,
