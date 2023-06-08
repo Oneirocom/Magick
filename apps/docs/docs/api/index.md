@@ -3486,7 +3486,6 @@ A promise that resolves the saved request object.
 
 #### Defined in
 
-<<<<<<< HEAD
 [packages/core/shared/src/functions/saveRequest.ts:27](https://github.com/Oneirocom/Magick/blob/1f9f5624/packages/core/shared/src/functions/saveRequest.ts#L27)
 =======
 [packages/core/shared/src/functions/saveRequest.ts:27](https://github.com/Oneirocom/Magick/blob/1f9f5624/packages/core/shared/src/functions/saveRequest.ts#L27)
