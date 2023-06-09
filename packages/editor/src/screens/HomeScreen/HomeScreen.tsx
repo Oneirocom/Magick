@@ -81,25 +81,26 @@ const StartScreen = (): JSX.Element => {
    * Handles spell deletion.
    * @param spellName - The name of the spell to delete
    */
-  const onDelete = async (spellName): Promise<void> => {
+  const onDelete = async (spellName: string): Promise<void> => {
     try {
-      const [tab] = tabs.filter(tab => tab.id === spellName)
+      const tab = tabs.find(tab => tab.id === spellName);
 
       if (tab) {
-        await dispatch(closeTab(tab.id))
-        await deleteSpell({ spellName, projectId: config.projectId })
-        window.localStorage.removeItem(`zoomValues-${tab.id}`)
-        setSelectedSpell("")
-        return
+        await Promise.all([
+          dispatch(closeTab(tab.id)),
+          deleteSpell({ spellName, projectId: config.projectId }),
+          window.localStorage.removeItem(`zoomValues-${tab.id}`)
+        ]);
       } else {
-        await deleteSpell({ spellName, projectId: config.projectId })
-        return 
+        await deleteSpell({ spellName, projectId: config.projectId });
       }
 
+      setSelectedSpell("");
     } catch (err) {
-      console.error('Error deleting spell', err)
+      console.error('Error deleting spell', err);
     }
-  }
+  };
+
 
   /**
    * Opens a spell
