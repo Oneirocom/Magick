@@ -1,10 +1,10 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Returns a deep copy of an object using the JSON method.
  * @param obj The object to be copied.
  */
 export function deepCopy<T>(obj: T): T {
-  return JSON.parse(JSON.stringify(obj));
+  return JSON.parse(JSON.stringify(obj))
 }
 
 /**
@@ -19,14 +19,19 @@ export function deepCopy<T>(obj: T): T {
  */
 export async function createNode(
   component: any,
-  { data = {}, meta = {}, x = 0, y = 0 }: { data?: any; meta?: any; x?: number; y?: number }
+  {
+    data = {},
+    meta = {},
+    x = 0,
+    y = 0,
+  }: { data?: any; meta?: any; x?: number; y?: number }
 ): Promise<any> {
-  const node = await component.createNode(deepCopy(data));
+  const node = await component.createNode(deepCopy(data))
 
-  node.meta = Object.assign(deepCopy(meta), node.meta);
-  node.position = [x, y];
+  node.meta = Object.assign(deepCopy(meta), node.meta)
+  node.position = [x, y]
 
-  return node;
+  return node
 }
 
 /**
@@ -40,12 +45,12 @@ export function traverse(
   callback: (key: string, value: any, path: string[]) => void,
   path: string[] = []
 ) {
-  if (typeof items !== "object") return;
+  if (typeof items !== 'object') return
 
-  Object.keys(items).forEach((key) => {
-    if (typeof items[key] === "function") callback(key, items[key], path);
-    else traverse(items[key], callback, [...path, key]);
-  });
+  Object.keys(items).forEach(key => {
+    if (typeof items[key] === 'function') callback(key, items[key], path)
+    else traverse(items[key], callback, [...path, key])
+  })
 }
 
 /**
@@ -58,7 +63,7 @@ export function fitViewport(coord: number[], element: HTMLElement): number[] {
   return [
     Math.min(coord[0], window.innerWidth - element.clientWidth),
     Math.min(coord[1], window.innerHeight - element.clientHeight),
-  ];
+  ]
 }
 
 /**
@@ -71,19 +76,19 @@ export function fitViewport(coord: number[], element: HTMLElement): number[] {
 export function injectItem(
   items: any[],
   title: string,
-  onClick: () => void,
+  onClick: (args) => void,
   path: string[]
 ) {
   for (const level of path) {
-    let exist = items.find((i) => i.title === level);
+    let exist = items.find(i => i.title === level)
 
     if (!exist) {
-      exist = { title: level, subitems: [] };
-      items.push(exist);
+      exist = { title: level, subitems: [] }
+      items.push(exist)
     }
 
-    items = exist.subitems || (exist.subitems = []);
+    items = exist.subitems || (exist.subitems = [])
   }
 
-  items.push({ title, onClick });
+  items.push({ title, onClick })
 }
