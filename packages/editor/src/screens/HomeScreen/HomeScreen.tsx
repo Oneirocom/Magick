@@ -11,7 +11,7 @@ import {
   useNewSpellMutation,
 } from '../../state/api/spells'
 import { RootState } from '../../state/store'
-import { closeTab, openTab, selectAllTabs } from '../../state/tabs'
+import { closeTab, openTab, selectAllTabs, activeTabSelector, changeActive } from '../../state/tabs'
 import AllProjects from './AllProjects'
 import CreateNew from './CreateNew'
 import css from './homeScreen.module.css'
@@ -26,7 +26,7 @@ const StartScreen = (): JSX.Element => {
   const config = useConfig()
 
   const dispatch = useDispatch()
-
+  const activeTab = useSelector(activeTabSelector)
   const navigate = useNavigate()
   const [deleteSpell] = useDeleteSpellMutation()
   const { data: spells } = useGetSpellsQuery({
@@ -84,12 +84,15 @@ const StartScreen = (): JSX.Element => {
    */
   const onDelete = async (spellName): Promise<void> => {
     try {
-      await deleteSpell({ spellName, projectId: config.projectId })
       const [tab] = tabs.filter(tab => tab.id === spellName)
+
       if (tab) {
-        dispatch(closeTab(tab.id))
+        await dispatch(closeTab(tab.id))
+        await deleteSpell({ spellName, projectId: config.projectId })
         window.localStorage.removeItem(`zoomValues-${tab.id}`)
+        setSelectedSpell("")
       }
+
     } catch (err) {
       console.error('Error deleting spell', err)
     }
