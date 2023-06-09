@@ -12,7 +12,7 @@ const info =
   'Convert the base64 image into a PNG.'
 
 type WorkerReturn = {
-  png: string
+  url?: string
 }
 
 /**
@@ -25,7 +25,7 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
       'Base64 To Image',
       {
         outputs: {
-          png: 'output',
+          url: 'output',
           trigger: 'option',
         },
       },
@@ -170,16 +170,14 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
     node.data.fileName = fileName
     node.data.bucketName = bucketName
     node.data.file = buffer
-    console.log("Completion handler", completionHandler)
     const { success, result, error } = await completionHandler({
       node,
       inputs,
       outputs,
       context,
     })
-    console.log("result", result)
     return {
-      png: result as string,
+      url: result as string,
     }
   }
 }

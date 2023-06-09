@@ -72,6 +72,18 @@ async function handleResponse({ output, agent, event }) {
 
 }
 
+/**
+ * Handle the rImage esponse from the input plugin and send it to Discord.
+ * @param args - An object containing the output, agent, and event.
+ */
+async function handleImageResponse({ output, agent, event }) {
+  console.log('handleResponse', output, event)
+  if (!output || output === '')
+    return agent.warn('No output to send to discord')
+    //Output here is the image url
+  await agent?.discord?.sendImageToChannelByUrl(event.channel, output)
+}
+
 // Input socket configurations
 const inputSockets = [
   {
