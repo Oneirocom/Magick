@@ -90,6 +90,10 @@ const StartScreen = (): JSX.Element => {
         await deleteSpell({ spellName, projectId: config.projectId })
         window.localStorage.removeItem(`zoomValues-${tab.id}`)
         setSelectedSpell("")
+        return
+      } else {
+        await deleteSpell({ spellName, projectId: config.projectId })
+        return 
       }
 
     } catch (err) {
