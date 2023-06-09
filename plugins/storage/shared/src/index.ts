@@ -14,20 +14,14 @@ import {
  */
 const secrets: PluginSecret[] = [
   {
-    name: 'S3 Access Secret (AWS)',
-    key: 'AWS_S3_ACCESS_SECRET',
-    global: true,
-    getUrl: 'https://aws.com',
-  },
-  {
     name: 'S3 Access Key (AWS)',
     key: 'AWS_S3_ACCESS_KEY',
     global: true,
     getUrl: 'https://aws.com',
   },
   {
-    name: 'Bucket Name',
-    key: 'BUCKET_NAME',
+    name: 'S3 Secret Key (AWS)',
+    key: 'AWS_S3_SECRET_KEY',
     global: true,
     getUrl: 'https://aws.com',
   },

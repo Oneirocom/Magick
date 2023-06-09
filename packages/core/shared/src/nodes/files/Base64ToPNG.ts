@@ -162,10 +162,11 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
       console.error('No completion handler found for provider', provider)
       throw new Error('ERROR: Completion handler undefined')
     }
-    console.log("inputs", inputs)
+
     const base64Image = inputs['files'] as unknown as string
 
-    const buffer = Buffer.from(base64Image, 'base64');
+    //const buffer = Buffer.from(base64Image, 'base64');
+    const buffer = Uint8Array.from(atob(base64Image), c => c.charCodeAt(0));
     node.data.fileName = fileName
     node.data.bucketName = bucketName
     node.data.file = buffer
@@ -177,10 +178,8 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
       context,
     })
     console.log("result", result)
-    console.log("error", error)
-    console.log("success", success)
     return {
-      png: "image",
+      png: result as string,
     }
   }
 }
