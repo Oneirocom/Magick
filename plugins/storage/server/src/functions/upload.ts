@@ -35,7 +35,7 @@ export async function uploadFileToS3(data: CompletionHandlerInputData): Promise<
     Key: node.data.fileName as any,
     Body: node.data.file as any,
   };
-
+  console.log("Uploading file to S3", params)
   return new Promise<UploadResult>((resolve, reject) => {
     s3.putObject(params, function (putErr, putData) {
       if (putErr) {

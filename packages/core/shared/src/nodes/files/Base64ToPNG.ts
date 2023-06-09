@@ -12,7 +12,7 @@ const info =
   'Convert the base64 image into a PNG.'
 
 type WorkerReturn = {
-  url?: string
+  url?: Object
 }
 
 /**
@@ -144,8 +144,8 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
     context: ModuleContext
   ): Promise<WorkerReturn> {
     // Usage example
-    const bucketName = 'sample-bucket';
-    const fileName = 'your-file-name.jpg';
+    const bucketName = inputs['bucketName'][0] as unknown as string;
+    const fileName = inputs["fileName"][0] as unknown as string;
     // get completion providers for text and chat categories
     const completionProviders = pluginManager.getCompletionProviders('storage', [
       'upload',
@@ -167,7 +167,7 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
 
     //const buffer = Buffer.from(base64Image, 'base64');
     const buffer = Uint8Array.from(atob(base64Image), c => c.charCodeAt(0));
-    node.data.fileName = fileName
+    node.data.fileName = fileName +"_converted.jpg"
     node.data.bucketName = bucketName
     node.data.file = buffer
     const { success, result, error } = await completionHandler({
@@ -176,8 +176,11 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
       outputs,
       context,
     })
+    if (error) {
+      throw new Error(error)
+    }
     return {
-      url: result as string,
+      url: {url: result as string},
     }
   }
 }
