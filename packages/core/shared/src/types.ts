@@ -483,7 +483,7 @@ export type MessagingWebhookBody = {
   To: string
 }
 
-export type CompletionType = 'image' | 'text' | 'audio' | 'database' | 'search'
+export type CompletionType = 'image' | 'text' | 'audio' | 'database' | 'search' | 'storage'
 
 export type ImageCompletionSubtype = 'text2image' | 'image2image' | 'image2text'
 
@@ -492,6 +492,7 @@ export type TextCompletionSubtype = 'text' | 'embedding' | 'chat' | 'typeChat'
 export type AudioCompletionSubtype = 'text2speech' | 'text2audio'
 
 export type SearchCompletionSubtype = 'search'
+export type StorageCompletionSubtype = 'upload' | 'download'
 
 export type DatabaseCompletionSubtype =
   | 'select'
@@ -534,6 +535,7 @@ export type CompletionProvider = {
     | AudioCompletionSubtype
     | DatabaseCompletionSubtype
     | SearchCompletionSubtype
+    | StorageCompletionSubtype
   handler?: (attrs: {
     node: WorkerData
     inputs: MagickWorkerInputs

@@ -139,6 +139,7 @@ export type NodeCategory =
   | 'Embedding'
   | 'Documents'
   | 'Code'
+  | 'Files'
   | 'Boolean'
   | 'Array'
   | 'Image'
