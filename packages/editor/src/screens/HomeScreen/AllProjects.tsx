@@ -137,7 +137,7 @@ const AllProjects: React.FC<AllProjectsProps> = ({
         <FileInput loadFile={loadFile} />
         <Button
           onClick={() => {
-            console.log('selectedSpell', selectedSpell)
+            // console.log('selectedSpell', selectedSpell)
             openSpell(selectedSpell)
           }}
           className={!selectedSpell ? 'disabled' : 'primary'}

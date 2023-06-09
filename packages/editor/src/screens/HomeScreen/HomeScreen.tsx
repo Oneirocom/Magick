@@ -11,7 +11,7 @@ import {
   useNewSpellMutation,
 } from '../../state/api/spells'
 import { RootState } from '../../state/store'
-import { closeTab, openTab, selectAllTabs, activeTabSelector, changeActive } from '../../state/tabs'
+import { closeTab, openTab, selectAllTabs, activeTabSelector } from '../../state/tabs'
 import AllProjects from './AllProjects'
 import CreateNew from './CreateNew'
 import css from './homeScreen.module.css'
@@ -26,7 +26,6 @@ const StartScreen = (): JSX.Element => {
   const config = useConfig()
 
   const dispatch = useDispatch()
-  const activeTab = useSelector(activeTabSelector)
   const navigate = useNavigate()
   const [deleteSpell] = useDeleteSpellMutation()
   const { data: spells } = useGetSpellsQuery({
