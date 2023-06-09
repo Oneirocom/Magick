@@ -89,6 +89,15 @@
       "@magickml/plugin-elevenlabs-shared": [
         "packages/plugins/elevenlabs/shared/src/index.ts"
       ],
+      "@magickml/plugin-storage-server": [
+        "plugins/storage/server/src/index.ts"
+      ],
+      "@magickml/plugin-storage-shared": [
+        "plugins/storage/shared/src/index.ts"
+      ],
+      "@magickml/plugin-storage-client": [
+        "plugins/storage/client/src/index.ts"
+      ],
       "@magickml/plugin-ethereum-client": [
         "packages/plugins/ethereum/client/src/index.ts"
       ],
