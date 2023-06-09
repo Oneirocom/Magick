@@ -42,7 +42,7 @@ export const Avatar = () => {
     <primitive
       object={avatarVrm.scene}
       position={avatarInitPos}
-      rotation={[0, Math.PI / 10, 0]}
+      rotation={[0, avatarVrm.lookAt.faceFront.z === 1 ? 0 : Math.PI, 0]}
     />
   )
 }
