@@ -141,6 +141,7 @@ export type MagicComponentCategory =
   | 'Embedding'
   | 'Document'
   | 'Code'
+  | 'Files'
   | 'Boolean'
   | 'Array'
   | 'Image'

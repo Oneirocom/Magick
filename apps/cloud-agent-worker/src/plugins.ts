@@ -23,4 +23,6 @@ import {default as plugin10} from '@magickml/plugin-elevenlabs-server';
 plugins['@magickml/plugin-elevenlabs-server'] = plugin10;
 import {default as plugin11} from '@magickml/plugin-database-server';
 plugins['@magickml/plugin-database-server'] = plugin11;
+import {default as plugin12} from '@magickml/plugin-storage-server';
+plugins['@magickml/plugin-storage-server'] = plugin12;
 export default plugins;

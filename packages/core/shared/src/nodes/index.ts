@@ -5,6 +5,7 @@ import { ArrayToJSON } from './array/ArrayToJSON'
 import { ArrayVariable } from './array/ArrayVariable'
 import { GetValueFromArray } from './array/GetValueFromArray'
 import { JoinListComponent } from './array/JoinList'
+import { Base64ToPNG } from './files/Base64ToPNG'
 import { RemapArray } from './array/RemapArray'
 import { BooleanVariable } from './boolean/BooleanVariable'
 import { IsVariableTrue } from './boolean/IsVariableTrue'
@@ -131,6 +132,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   cosineSimilarity: () => new CosineSimilarity(),
   textToSpeech: () => new TextToSpeech(),
   skill: () => new Skill(),
+  base64topng: () => new Base64ToPNG(),
   runSpell: () => new RunSpell(),
   error: () => new ErrorNode(),
   respond: () => new Respond(),
