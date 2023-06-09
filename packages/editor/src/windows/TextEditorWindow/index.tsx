@@ -49,7 +49,7 @@ const TextEditor = props => {
 
   useEffect(() => {
     if (!inspectorData?.data.inputs || !inspectorData?.data.inputs.length) {
-      if (inspectorData?.category !== 'Code') {
+      if (inspectorData?.category === 'Text') {
         setCode(inspectorData?.data?.fewshot)
         return
       }
