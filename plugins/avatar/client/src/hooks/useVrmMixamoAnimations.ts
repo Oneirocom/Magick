@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
-import { VectorKeyframeTrack, AnimationClip, AnimationMixer, QuaternionKeyframeTrack } from 'three'
+import {
+  VectorKeyframeTrack,
+  AnimationClip,
+  AnimationMixer, 
+  QuaternionKeyframeTrack,
+} from 'three'
 import { mixamoVRMRigMap } from '../utils/constants'
-
 
 export const useVrmMixamoAnimations = (vrm, mixamoAnimations, exceptionBoneNames = []) => {
   const [mixer, setMixer] = useState(null)
@@ -18,7 +22,7 @@ export const useVrmMixamoAnimations = (vrm, mixamoAnimations, exceptionBoneNames
     const tracks = []; // VRM用のKeyframeTrackをこの配列に格納する
 
     clip.tracks.forEach((track) => {
-      // 各TrackをVRM向けに変換し、 `tracks` に格納する
+      // 各TrackをVRM向けに変換し、 `tracks` に格納するscene
       const trackSplitted = track.name.split('.');
       const mixamoRigName = trackSplitted[0];
       const vrmBoneName = mixamoVRMRigMap[mixamoRigName];
@@ -58,6 +62,6 @@ export const useVrmMixamoAnimations = (vrm, mixamoAnimations, exceptionBoneNames
 
   return {
     mixer,
-    mixamoClip,
+    mixamoClip
   }
 }

@@ -30,7 +30,7 @@ export const useVrm = (vrmUrl) => {
       }
 
       //set avatar with new gltf tranform
-      const newVrm = gltf.userData.vrm; 
+      const newVrm = gltf.userData.vrm;
       VRMUtils.rotateVRM0(newVrm);
       setVrm(newVrm)
     })()
