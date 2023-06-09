@@ -11,7 +11,7 @@ import {
   useNewSpellMutation,
 } from '../../state/api/spells'
 import { RootState } from '../../state/store'
-import { closeTab, openTab, selectAllTabs, activeTabSelector } from '../../state/tabs'
+import { closeTab, openTab, selectAllTabs } from '../../state/tabs'
 import AllProjects from './AllProjects'
 import CreateNew from './CreateNew'
 import css from './homeScreen.module.css'
