@@ -1,7 +1,7 @@
 {
   "name": "@magickml/plugin-storage-server",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "plugin-storage/server/src",
+  "sourceRoot": "storage/server/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],
   "targets": {
@@ -16,7 +16,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "plugin/storage-server/jest.config.ts",
+        "jestConfig": "plugin/storage/server/jest.config.ts",
         "passWithNoTests": true
       }
     }
