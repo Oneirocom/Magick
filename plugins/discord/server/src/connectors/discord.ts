@@ -349,7 +349,7 @@ export class DiscordConnector {
   async sendImageToChannelByUrl(channelId: any, url: any) {
     const channel = await this.client.channels.fetch(channelId)
     try {
-      const attachment = new AttachmentBuilder(url); //ex. https://i.imgur.com/random.jpg
+      const attachment = new AttachmentBuilder(url);
       channel.send({ content: "I sent you a photo!", files: [attachment] })
     }catch (e) {
       console.error(e)

@@ -66,10 +66,10 @@ const DiscordPlugin = new ClientPlugin({
   inputTypes: [
     { name: 'Discord (Voice)', sockets: inputSockets },
     { name: 'Discord (Text)', sockets: inputSockets },
+    { name: 'Discord (Image)', sockets: inputSockets }, //WIP
   ],
   outputTypes: [
     { name: 'Discord (Voice)', sockets: outputSockets },
-    { name: 'Discord (Text)', sockets: outputSockets },
   ],
   secrets: [{
     name: 'Discord API Key',

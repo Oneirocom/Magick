@@ -36,6 +36,16 @@ const completionProviders: CompletionProvider[] = [
     subtype: 'upload',
     inputs: [
       {
+        socket: 'bucketName',
+        name: 'Bucket Name',
+        type: anySocket,
+      },
+      {
+        socket: 'fileName',
+        name: 'File Name',
+        type: anySocket,
+      },
+      {
         socket: 'files',
         name: 'Files',
         type: anySocket,
