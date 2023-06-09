@@ -83,24 +83,17 @@ const StartScreen = (): JSX.Element => {
    */
   const onDelete = async (spellName: string): Promise<void> => {
     try {
-      const tab = tabs.find(tab => tab.id === spellName);
-
+      await deleteSpell({ spellName, projectId: config.projectId })
+      const tab = tabs.find(tab => tab.id === spellName)
       if (tab) {
-        await Promise.all([
-          dispatch(closeTab(tab.id)),
-          deleteSpell({ spellName, projectId: config.projectId }),
-          window.localStorage.removeItem(`zoomValues-${tab.id}`)
-        ]);
-      } else {
-        await deleteSpell({ spellName, projectId: config.projectId });
+        dispatch(closeTab(tab.id))
+        window.localStorage.removeItem(`zoomValues-${tab.id}`)
       }
-
-      setSelectedSpell("");
+      setSelectedSpell("")
     } catch (err) {
-      console.error('Error deleting spell', err);
+      console.error('Error deleting spell', err)
     }
-  };
-
+  }
 
   /**
    * Opens a spell
