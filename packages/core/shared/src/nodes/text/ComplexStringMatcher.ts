@@ -242,7 +242,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       notMatchAnyStringArray.pop()
     }
 
-    let isMatched: boolean | undefined = undefined
+    let isMatched = false
     let invalidated = false
 
     function matchStart(inp: string, matchArray: string[]) {
