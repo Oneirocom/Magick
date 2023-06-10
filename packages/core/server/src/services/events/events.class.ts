@@ -51,6 +51,7 @@ export class EventService<
       for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
       const f32_ary = new Float32Array(ary_buf)
       const param = params.query
+      console.log('**** param', param)
       const query = cli
         .from('events')
         .select('*')
