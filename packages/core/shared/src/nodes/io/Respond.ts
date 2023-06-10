@@ -96,21 +96,28 @@ export class Respond extends MagickComponent<void> {
     const output = inputs.input.filter(Boolean)[0] as string
 
     if (agent) {
+      console.log('agent found')
       const type = pluginManager.getInputTypes().find(type => {
         return type.name.includes(
           (event.connector as any).replace('Input - ', '')
         )
       })
+      console.log('type', type)
 
       const responseOutputType = type?.defaultResponseOutput
       const out = agent.outputTypes.find(t => t.name === responseOutputType)
 
+      console.log('responseOutputType', responseOutputType)
+      console.log('out', out)
+
       if (out && out.handler) {
         out.handler({
           output,
-          agent: agent,
+          agent,
           event,
         })
+      } else {
+        console.warn('*** WARNING: No handler found')
       }
     } else {
       console.warn('*** WARNING: No agent found')

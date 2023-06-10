@@ -16,7 +16,7 @@ import AllProjects from './AllProjects'
 import CreateNew from './CreateNew'
 import css from './homeScreen.module.css'
 import OpenProject from './OpenProject'
-import { uuidv4 } from '../../utils/uuid'
+import { v4 as uuidv4 } from 'uuid'
 
 /**
  * StartScreen component. Displays an overlay with options to open or create new spells.
