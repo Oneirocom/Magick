@@ -56,7 +56,7 @@ async function pdfNumberOfPages(file: File) {
     const pdfBuffer = await readFileAsBuffer(file);
 
     // Define the PDF.js worker source path (needed for loading PDF.js)
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.5.141/pdf.worker.min.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.6.172/pdf.worker.min.js';
     //Load the PDF document
     const pdfDocument = await pdfjsLib.getDocument({ data: pdfBuffer }).promise;
     return pdfDocument.numPages
@@ -67,7 +67,7 @@ async function convertPdfToText(file: File, ocrEngine = 'tesseract', ocrConfig?:
     const pdfBuffer = await readFileAsBuffer(file);
 
     // Define the PDF.js worker source path (needed for loading PDF.js)
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.5.141/pdf.worker.min.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.6.172/pdf.worker.min.js';
 
     // Load the PDF document
     const pdfDocument = await pdfjsLib.getDocument({ data: pdfBuffer }).promise;

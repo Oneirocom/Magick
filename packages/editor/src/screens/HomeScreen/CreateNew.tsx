@@ -148,6 +148,7 @@ const CreateNew = () => {
           loading={loading}
           onClick={onCreate}
           variant="outlined"
+          sx={{ color: "#fff !important" }}
         >
           CREATE
         </LoadingButton>
