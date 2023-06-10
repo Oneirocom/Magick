@@ -89,6 +89,10 @@ _Please be aware Magick is under heavy development which may cause breaking chan
 
 Magick installs postgres by default. If you want to use a different database, you can change the database connection in the [`.env` file](.env)
 
+## Webhooks
+
+Some connectors (like Github) require webhooks. In development, Magick uses [ngrok](https://ngrok.com/) to create a tunnel to your local machine. You will need to create an account and add your auth token to the [`.env` file](.env)
+
 ### Deploy your own Postgres database
 
 To deploy your own database, we suggest using Supabase or another Postgres database. The current setup for events and documents requires the [`pgvector`](https://supabase.com/docs/guides/database/extensions/pgvector) extension to be enabled.
