@@ -98,7 +98,7 @@ export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
    * @param rawInputs {MagickWorkerInputs} The raw inputs to the component.
    */
   async worker(node: WorkerData, rawInputs: MagickWorkerInputs) {
-    let input = rawInputs['input'] && rawInputs['input'][0] as string
+    const input = rawInputs['input'] && rawInputs['input'][0] as string
 
     const match = ((rawInputs['match'] && rawInputs['match'][0]) ||
       node?.data?.match) as string

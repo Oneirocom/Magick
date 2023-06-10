@@ -1,7 +1,7 @@
 import Rete from 'rete'
 
 import { InputControl } from '../../dataControls/InputControl'
-import { NumberControl } from '../../dataControls/NumberControl'
+// import { NumberControl } from '../../dataControls/NumberControl'
 import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
 import {
@@ -12,7 +12,7 @@ import {
 } from '../../types'
 
 const info =
-  'Takes a string input and applies a series of text rule checks specified (match/invalidate beginning, match/invalidate end, match/invalidate any, minimum/maximum length) then triggers one of two outputs if all the rules are satisfied. Empty rule properties are ignored.'
+  'Takes a string input and applies a series of text rule checks specified (match beginning, match end, match any, minimum/maximum length) then triggers one of two outputs if all the rules are satisfied. Empty rule properties are ignored.'
 
 export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
   constructor() {
@@ -243,7 +243,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     // }
 
     let isMatched = false
-    // let invalidated = false
+    let invalidated = false
 
     function matchStart(inp: string, matchArray: string[]) {
       for (const matchString of matchArray) {
@@ -272,14 +272,14 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       return false
     }
 
-    // if (stringMaxLength !== 0) {
-    //   if (
-    //     input.length > stringMaxLength ||
-    //     input.length < (stringMinLength ?? 0)
-    //   ) {
-    //     invalidated = true
-    //   }
-    // }
+    if (stringMaxLength !== 0) {
+      if (
+        input.length > stringMaxLength ||
+        input.length < (stringMinLength ?? 0)
+      ) {
+        invalidated = true
+      }
+    }
 
     if (matchBeginningStringArray.length > 0) {
       const matched = matchStart(input, matchBeginningStringArray)
@@ -329,7 +329,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     // }
 
     this._task.closed =
-    // !invalidated &&
+    !invalidated &&
     isMatched ? ['false'] : ['true']
   }
 }
