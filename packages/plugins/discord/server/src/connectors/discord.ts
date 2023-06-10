@@ -409,28 +409,32 @@ export class DiscordConnector {
 
   async sendMessageToChannel(channelId: any, msg: any) {
     try {
-      const channel = await this.client.channels.fetch(channelId)
+      const channel = await this.client.channels.fetch(channelId);
       if (msg && msg !== '' && channel && channel !== undefined) {
-        console.log('**** SENDING DISCORD MESSAGE', msg)
-        // split msg into an array of messages that are less than 2000 characters
-        // if msg is an object, get the valuke of the first key
-        if (typeof msg === 'object') {
-          msg = Object.values(msg)[0]
+        console.log('**** SENDING DISCORD MESSAGE', msg);
+  
+        // Split message by '\n\n'
+        const paragraphs = msg.split('\n\n');
+  
+        // Process each paragraph individually
+        for (const paragraph of paragraphs) {
+          // Split paragraph into chunks of 2000 characters or less
+          const chunks = paragraph.match(/.{1,2000}/gs) || [];
+  
+          // Send each chunk individually
+          for (const chunk of chunks) {
+            channel.send(chunk);
+          }
         }
-        const msgArray = msg.match(/.{1,2000}/g)
-        // send each message individually
-        msgArray.forEach(msg => {
-          channel.send(msg)
-        })
       } else {
         console.error(
-          'could not send message to channel: ' + channelId,
+          'Could not send message to channel: ' + channelId,
           'msg = ' + msg,
           'channel = ' + channel
-        )
+        );
       }
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   }
 }
