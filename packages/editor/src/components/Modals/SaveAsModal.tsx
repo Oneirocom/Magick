@@ -55,8 +55,10 @@ const EditSpellModal = ({ tab, closeModal }) => {
 
   // Function to handle form submission
   const onSubmit = handleSubmit(async data => {
+    const id = uuidv4()
     // Create a new spell
     const response = (await newSpell({
+      id,
       graph: defaultGraph,
       name: data.name,
       projectId: config.projectId,
@@ -65,7 +67,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
 
     // Save the spell
     const saveResponse: any = await saveSpell({
-      spell: { ...spell.data[0], name: data.name, id: response.data.id },
+      spell: { ...spell.data[0], name: data.name, id },
       projectId: config.projectId,
     })
 
