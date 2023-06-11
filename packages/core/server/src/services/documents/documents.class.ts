@@ -78,6 +78,7 @@ export class DocumentService<
    */
   async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
+    console.log('Find: ', params.query)
     if (params.query.embedding) {
       const param = params.query
       const querys = await db('documents')
@@ -95,11 +96,11 @@ export class DocumentService<
           db.raw(
             `1 - (embedding <=> '${JSON.stringify(
               params.query.embedding
-            )}') AS similarity`
+            )}') AS distance`
           )
         )
-        .orderBy('similarity', 'desc')
-        .limit(param.maxCount)
+        .orderBy('distance', 'desc')
+        .limit(param.$limit)
       return { data: querys }
     }
     const res = await super.find(params)
