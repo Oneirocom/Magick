@@ -51,8 +51,7 @@ export class DocumentService<
         outputs: undefined,
         context: { module: { secrets:JSON.parse(secrets) }, projectId: context.data.projectId },
       })
-      embedding = result
-      console.log("embedding", embedding) */
+      embedding = result */
       
       app.get("docdb").fromString(data.content,data,{modelName, projectId: data?.projectId, secrets})
       return data;
@@ -78,7 +77,6 @@ export class DocumentService<
    */
   async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
-    console.log('Find: ', params.query)
     if (params.query.embedding) {
       const param = params.query
       const querys = await db('documents')
