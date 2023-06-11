@@ -53,7 +53,7 @@ export type Document = {
 export type CreateDocumentArgs = Document
 
 export type GetDocumentArgs = Document & {
-  maxCount?: number
+  $limit?: number
 }
 
 type AgentTaskStatus = 'active' | 'completed' | 'canceled'
@@ -119,13 +119,13 @@ export type GetEventArgs = {
   connector?: string
   rawData?: string
   projectId?: string
-  maxCount?: number
+  $limit?: number
 }
 
 export type GetVectorEventArgs = {
   type: string
   entities: string[]
-  maxCount?: number
+  $limit?: number
 }
 
 export type EventResponse = Event[]
