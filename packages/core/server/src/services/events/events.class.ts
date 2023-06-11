@@ -69,7 +69,7 @@ export class EventService<
             `embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`
           )
         )
-        .orderBy('distance', 'desc')
+        .orderBy('distance', 'asc')
 
       if ('$limit' in params.query) {
         query.limit(params.query['$limit'])
