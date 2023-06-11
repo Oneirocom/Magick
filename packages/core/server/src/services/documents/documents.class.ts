@@ -92,12 +92,12 @@ export class DocumentService<
         })
         .select(
           db.raw(
-            `1 - (embedding <=> '${JSON.stringify(
+            `(embedding <=> '${JSON.stringify(
               params.query.embedding
             )}') AS distance`
           )
         )
-        .orderBy('distance', 'desc')
+        .orderBy('distance', 'asc')
         .limit(param.$limit)
       return { data: querys }
     }
