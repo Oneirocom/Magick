@@ -8,7 +8,6 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material'
-import _ from 'lodash'
 import { API_ROOT_URL } from '@magickml/core'
 import { useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
