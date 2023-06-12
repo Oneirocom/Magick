@@ -1,15 +1,27 @@
 export class Restrictor {
-  constructor(editor, scaleExtent, translateExtent) {
+  constructor(editor, scaleExtent, translateExtent, zoomLerpFactor = 0.25) {
     this.editor = editor
     this.scaleExtent = scaleExtent
+    this.zoomLerpFactor = zoomLerpFactor
     this.translateExtent = translateExtent
 
     if (scaleExtent) editor.on('zoom', this.restrictZoom.bind(this))
     if (translateExtent)
       editor.on('translate', this.restrictTranslate.bind(this))
   }
-
+  lastZoom = null
   restrictZoom(data) {
+    if(!this.lastZoom) {
+      this.lastZoom = data.zoom
+    }
+
+    // lerp from lastZoom to zoom, weighted 1/3 toward zoom
+    const avgZoom = (data.zoom * this.zoomLerpFactor) + (this.lastZoom * (1 - this.zoomLerpFactor))
+
+    this.lastZoom = data.zoom
+    data.zoom = avgZoom
+
+
     const se =
       typeof this.scaleExtent === 'boolean'
         ? { min: 0.1, max: 1 }
