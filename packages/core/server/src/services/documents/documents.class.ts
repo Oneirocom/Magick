@@ -127,5 +127,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     },
     Model: app.get('dbClient'),
     name: 'documents',
+    multi: ['remove'],
   }
 }

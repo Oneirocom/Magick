@@ -65,5 +65,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     paginate: app.get('paginate'),
     Model: app.get('dbClient'),
     name: 'agents',
+    multi: ['remove'],
   }
 }
