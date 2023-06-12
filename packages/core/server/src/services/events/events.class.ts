@@ -30,8 +30,8 @@ export class EventService<
    */
   // @ts-ignore
   async create(data: EventData): Promise<any> {
-    const cli = app.get('vectordb')
-    await cli.from('events').insert(data)
+    const db = app.get('vectordb')
+    await db.from('events').insert(data)
     return data
   }
 
@@ -43,7 +43,7 @@ export class EventService<
    */
   // @ts-ignore
   async find(params?: ServiceParams) {
-    const cli = app.get('dbClient')
+    const db = app.get('dbClient')
     if (params.query.embedding) {
       const blob = atob(params.query.embedding)
       const ary_buf = new ArrayBuffer(blob.length)
@@ -52,7 +52,7 @@ export class EventService<
       const f32_ary = new Float32Array(ary_buf)
       const param = params.query
       console.log('**** param', param)
-      const query = cli
+      const query = db
         .from('events')
         .select('*')
         .where({
@@ -65,18 +65,11 @@ export class EventService<
           ...(param.content && { content: param.content }),
         })
         .select(
-          cli.raw(
-            `1 - (embedding <=> ${
-              "'[" + f32_ary.toString() + "]'"
-            }) AS similarity`
-          )
-        )
-        .select(
-          cli.raw(
+          db.raw(
             `embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`
           )
         )
-        .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
+        .orderBy('distance', 'asc')
 
       if ('$limit' in params.query) {
         query.limit(params.query['$limit'])
@@ -86,7 +79,7 @@ export class EventService<
       return { events: res }
     }
 
-    const query = cli.from('events').select()
+    const query = db.from('events').select()
 
     query.orderBy('date', 'desc')
 
@@ -118,8 +111,8 @@ export class EventService<
   // @ts-ignore
   async remove(id: string): Promise<any> {
     const ids = id.split('&')
-    const cli = app.get('vectordb')
-    const res = await cli.from('events').whereIn('id', ids).del()
+    const db = app.get('vectordb')
+    const res = await db.from('events').whereIn('id', ids).del()
     return res
   }
 }

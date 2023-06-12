@@ -42,7 +42,7 @@
   background: var(--dark-1);
   height: var(--c4);
   color: var(--dark-5);
-  border-bottom: 1px solid var(--glow);
+  border-bottom: 1px solid var(--primary);
 }
 
 .tabbar-tab.inactive {
