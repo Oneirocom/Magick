@@ -1,3 +1,11 @@
+---
+id: "index"
+title: "@magickml/core"
+sidebar_label: "Exports"
+sidebar_position: 0.5
+custom_edit_url: null
+---
+
 ## Enumerations
 
 - [ChatModel](enums/ChatModel.md)
@@ -49,9 +57,9 @@ The interface for an agent object that's based on the `agentSchema`.
 
 #### Defined in
 
-[packages/core/shared/src/schemas.ts:75](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/schemas.ts#L75)
+[packages/core/shared/src/schemas.ts:77](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/schemas.ts#L77)
 
----
+___
 
 ### AgentSchema
 
@@ -61,9 +69,9 @@ The type for an agent object that's based on the `agentSchema`.
 
 #### Defined in
 
-[packages/core/shared/src/schemas.ts:73](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/schemas.ts#L73)
+[packages/core/shared/src/schemas.ts:75](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/schemas.ts#L75)
 
----
+___
 
 ### AgentTask
 
@@ -71,22 +79,22 @@ The type for an agent object that's based on the `agentSchema`.
 
 #### Type declaration
 
-| Name        | Type              |
-| :---------- | :---------------- |
-| `agentId?`  | `string`          |
+| Name | Type |
+| :------ | :------ |
+| `agentId?` | `string` |
 | `eventData` | [`Event`](#event) |
-| `id`        | `number`          |
-| `objective` | `string`          |
-| `projectId` | `string`          |
-| `status`    | `AgentTaskStatus` |
-| `steps`     | `string`          |
-| `type`      | `string`          |
+| `id` | `number` |
+| `objective` | `string` |
+| `projectId` | `string` |
+| `status` | `AgentTaskStatus` |
+| `steps` | `string` |
+| `type` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:73](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L73)
+[packages/core/shared/src/types.ts:71](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L71)
 
----
+___
 
 ### AgentTaskData
 
@@ -94,19 +102,19 @@ The type for an agent object that's based on the `agentSchema`.
 
 #### Type declaration
 
-| Name        | Type     |
-| :---------- | :------- |
-| `action`    | `string` |
-| `result`    | `string` |
-| `skill`     | `string` |
-| `thought`   | `string` |
+| Name | Type |
+| :------ | :------ |
+| `action` | `string` |
+| `result` | `string` |
+| `skill` | `string` |
+| `thought` | `string` |
 | `timestamp` | `number` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:84](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L84)
+[packages/core/shared/src/types.ts:82](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L82)
 
----
+___
 
 ### AppService
 
@@ -118,8 +126,8 @@ The type for an agent object that's based on the `agentSchema`.
 
 ##### Parameters
 
-| Name  | Type                  |
-| :---- | :-------------------- |
+| Name | Type |
+| :------ | :------ |
 | `app` | `FeathersApplication` |
 
 ##### Returns
@@ -128,19 +136,19 @@ The type for an agent object that's based on the `agentSchema`.
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:633](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L633)
+[packages/core/shared/src/types.ts:651](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L651)
 
----
+___
 
 ### AudioCompletionSubtype
 
-Ƭ **AudioCompletionSubtype**: `"text2speech"` \| `"text2audio"`
+Ƭ **AudioCompletionSubtype**: ``"text2speech"`` \| ``"text2audio"``
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:480](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L480)
+[packages/core/shared/src/types.ts:490](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L490)
 
----
+___
 
 ### ChatCompletionData
 
@@ -148,25 +156,25 @@ The type for an agent object that's based on the `agentSchema`.
 
 #### Type declaration
 
-| Name                   | Type                            |
-| :--------------------- | :------------------------------ |
-| `apiKey?`              | `string`                        |
+| Name | Type |
+| :------ | :------ |
+| `apiKey?` | `string` |
 | `conversationMessages` | [`ChatMessage`](#chatmessage)[] |
-| `frequency_penalty`    | `number`                        |
-| `max_tokens`           | `number`                        |
-| `model`                | `string`                        |
-| `presence_penalty`     | `number`                        |
-| `stop`                 | `string`[]                      |
-| `systemMessage`        | `string`                        |
-| `temperature`          | `number`                        |
-| `top_p`                | `number`                        |
-| `userMessage`          | `string`                        |
+| `frequency_penalty` | `number` |
+| `max_tokens` | `number` |
+| `model` | `string` |
+| `presence_penalty` | `number` |
+| `stop` | `string`[] |
+| `systemMessage` | `string` |
+| `temperature` | `number` |
+| `top_p` | `number` |
+| `userMessage` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:543](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L543)
+[packages/core/shared/src/types.ts:561](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L561)
 
----
+___
 
 ### ChatMessage
 
@@ -174,16 +182,16 @@ The type for an agent object that's based on the `agentSchema`.
 
 #### Type declaration
 
-| Name      | Type                                                |
-| :-------- | :-------------------------------------------------- |
-| `content` | `string`                                            |
-| `role`    | `"system"` \| `"user"` \| `"assistant"` \| `string` |
+| Name | Type |
+| :------ | :------ |
+| `content` | `string` |
+| `role` | ``"system"`` \| ``"user"`` \| ``"assistant"`` \| `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:538](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L538)
+[packages/core/shared/src/types.ts:556](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L556)
 
----
+___
 
 ### ClassifierSchema
 
@@ -191,16 +199,16 @@ The type for an agent object that's based on the `agentSchema`.
 
 #### Type declaration
 
-| Name       | Type                   |
-| :--------- | :--------------------- |
+| Name | Type |
+| :------ | :------ |
 | `examples` | `string`[] \| `string` |
-| `type`     | `string`               |
+| `type` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:462](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L462)
+[packages/core/shared/src/types.ts:472](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L472)
 
----
+___
 
 ### CompletionHandlerInputData
 
@@ -208,18 +216,18 @@ The type for an agent object that's based on the `agentSchema`.
 
 #### Type declaration
 
-| Name      | Type                                          |
-| :-------- | :-------------------------------------------- |
-| `context` | [`ModuleContext`](#modulecontext)             |
-| `inputs`  | [`MagickWorkerInputs`](#magickworkerinputs)   |
-| `node`    | `NodeData`                                    |
+| Name | Type |
+| :------ | :------ |
+| `context` | [`ModuleContext`](#modulecontext) |
+| `inputs` | [`MagickWorkerInputs`](#magickworkerinputs) |
+| `node` | `NodeData` |
 | `outputs` | [`MagickWorkerOutputs`](#magickworkeroutputs) |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:600](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L600)
+[packages/core/shared/src/types.ts:618](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L618)
 
----
+___
 
 ### CompletionInspectorControls
 
@@ -227,19 +235,19 @@ The type for an agent object that's based on the `agentSchema`.
 
 #### Type declaration
 
-| Name           | Type                        |
-| :------------- | :-------------------------- |
-| `dataKey`      | `string`                    |
-| `defaultValue` | `string`                    |
-| `icon`         | `string`                    |
-| `name`         | `string`                    |
-| `type`         | `DataControlImplementation` |
+| Name | Type |
+| :------ | :------ |
+| `dataKey` | `string` |
+| `defaultValue` | `string` |
+| `icon` | `string` |
+| `name` | `string` |
+| `type` | `DataControlImplementation` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:493](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L493)
+[packages/core/shared/src/types.ts:510](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L510)
 
----
+___
 
 ### CompletionProvider
 
@@ -251,21 +259,21 @@ The type for an agent object that's based on the `agentSchema`.
 
 #### Type declaration
 
-| Name                 | Type                                                                                                                                                                                                                                               |
-| :------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `handler?`           | (`attrs`: { `context`: `unknown` ; `inputs`: [`MagickWorkerInputs`](#magickworkerinputs) ; `node`: [`WorkerData`](#workerdata) ; `outputs`: [`MagickWorkerOutputs`](#magickworkeroutputs) }) => `Promise`<`HandlerResponse`\> \| `HandlerResponse` |
-| `inputs`             | [`CompletionSocket`](#completionsocket)[]                                                                                                                                                                                                          |
-| `inspectorControls?` | [`CompletionInspectorControls`](#completioninspectorcontrols)[]                                                                                                                                                                                    |
-| `models`             | `string`[]                                                                                                                                                                                                                                         |
-| `outputs`            | [`CompletionSocket`](#completionsocket)[]                                                                                                                                                                                                          |
-| `subtype`            | [`ImageCompletionSubtype`](#imagecompletionsubtype) \| [`TextCompletionSubtype`](#textcompletionsubtype) \| [`AudioCompletionSubtype`](#audiocompletionsubtype) \| [`DatabaseCompletionSubtype`](#databasecompletionsubtype)                       |
-| `type`               | [`CompletionType`](#completiontype)                                                                                                                                                                                                                |
+| Name | Type |
+| :------ | :------ |
+| `handler?` | (`attrs`: { `context`: `unknown` ; `inputs`: [`MagickWorkerInputs`](#magickworkerinputs) ; `node`: [`WorkerData`](#workerdata) ; `outputs`: [`MagickWorkerOutputs`](#magickworkeroutputs)  }) => `Promise`<`HandlerResponse`\> \| `HandlerResponse` |
+| `inputs` | [`CompletionSocket`](#completionsocket)[] |
+| `inspectorControls?` | [`CompletionInspectorControls`](#completioninspectorcontrols)[] |
+| `models` | `string`[] |
+| `outputs` | [`CompletionSocket`](#completionsocket)[] |
+| `subtype` | [`ImageCompletionSubtype`](#imagecompletionsubtype) \| [`TextCompletionSubtype`](#textcompletionsubtype) \| [`AudioCompletionSubtype`](#audiocompletionsubtype) \| [`DatabaseCompletionSubtype`](#databasecompletionsubtype) |
+| `type` | [`CompletionType`](#completiontype) |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:507](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L507)
+[packages/core/shared/src/types.ts:524](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L524)
 
----
+___
 
 ### CompletionSocket
 
@@ -273,53 +281,77 @@ The type for an agent object that's based on the `agentSchema`.
 
 #### Type declaration
 
-| Name     | Type     |
-| :------- | :------- |
-| `name`   | `string` |
+| Name | Type |
+| :------ | :------ |
+| `name` | `string` |
 | `socket` | `string` |
-| `type`   | `Socket` |
+| `type` | `Socket` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:482](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L482)
+[packages/core/shared/src/types.ts:499](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L499)
 
----
+___
 
 ### CompletionType
 
-Ƭ **CompletionType**: `"image"` \| `"text"` \| `"audio"` \| `"database"`
+Ƭ **CompletionType**: ``"image"`` \| ``"text"`` \| ``"audio"`` \| ``"database"``
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:474](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L474)
+[packages/core/shared/src/types.ts:484](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L484)
 
----
+___
 
 ### ComponentData
 
-Ƭ **ComponentData**<`T`\>: `Record`<`string`, `unknown`\> & { `icon?`: `string` ; `ignored?`: [`IgnoredList`](#ignoredlist) ; `socketType?`: [`SocketType`](#sockettype) ; `taskType?`: `T` }
+Ƭ **ComponentData**<`T`\>: `Record`<`string`, `unknown`\> & { `icon?`: `string` ; `ignored?`: [`IgnoredList`](#ignoredlist) ; `socketType?`: [`SocketType`](#sockettype) ; `taskType?`: `T`  }
 
 #### Type parameters
 
-| Name | Type                    |
-| :--- | :---------------------- |
-| `T`  | [`TaskType`](#tasktype) |
+| Name | Type |
+| :------ | :------ |
+| `T` | [`TaskType`](#tasktype) |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:352](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L352)
+[packages/core/shared/src/types.ts:362](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L362)
 
----
+___
 
 ### ConnectionType
 
-Ƭ **ConnectionType**: `"input"` \| `"output"`
+Ƭ **ConnectionType**: ``"input"`` \| ``"output"``
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:305](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L305)
+[packages/core/shared/src/types.ts:315](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L315)
 
----
+___
+
+### ControlData
+
+Ƭ **ControlData**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `component` | `string` |
+| `data` | [`ComponentData`](#componentdata) |
+| `dataKey` | `string` |
+| `icon` | `string` |
+| `id` | `string` \| ``null`` |
+| `name` | `string` |
+| `options` | `Record`<`string`, `unknown`\> |
+| `placeholder` | `string` |
+| `type` | `string` |
+
+#### Defined in
+
+[packages/core/shared/src/types.ts:135](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L135)
+
+___
 
 ### CostPerToken
 
@@ -329,15 +361,15 @@ Represents the cost per token for a given model
 
 #### Type parameters
 
-| Name | Type                                                                                                                          |
-| :--- | :---------------------------------------------------------------------------------------------------------------------------- |
-| `T`  | extends [`TextModel`](enums/TextModel.md) \| [`EmbeddingModel`](enums/EmbeddingModel.md) \| [`ChatModel`](enums/ChatModel.md) |
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`TextModel`](enums/TextModel.md) \| [`EmbeddingModel`](enums/EmbeddingModel.md) \| [`ChatModel`](enums/ChatModel.md) |
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:33](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/cost-calculator.ts#L33)
+[packages/core/shared/src/cost-calculator.ts:33](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/cost-calculator.ts#L33)
 
----
+___
 
 ### CreateAgentTaskArgs
 
@@ -345,21 +377,21 @@ Represents the cost per token for a given model
 
 #### Type declaration
 
-| Name        | Type              |
-| :---------- | :---------------- |
-| `agentId?`  | `string`          |
+| Name | Type |
+| :------ | :------ |
+| `agentId?` | `string` |
 | `eventData` | [`Event`](#event) |
-| `objective` | `string`          |
-| `projectId` | `string`          |
-| `status`    | `AgentTaskStatus` |
-| `steps`     | `string`          |
-| `type`      | `string`          |
+| `objective` | `string` |
+| `projectId` | `string` |
+| `status` | `AgentTaskStatus` |
+| `steps` | `string` |
+| `type` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:63](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L63)
+[packages/core/shared/src/types.ts:61](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L61)
 
----
+___
 
 ### CreateDocumentArgs
 
@@ -367,9 +399,9 @@ Represents the cost per token for a given model
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:55](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L55)
+[packages/core/shared/src/types.ts:53](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L53)
 
----
+___
 
 ### CreateEventArgs
 
@@ -377,21 +409,21 @@ Represents the cost per token for a given model
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:110](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L110)
+[packages/core/shared/src/types.ts:108](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L108)
 
----
+___
 
 ### CustomErrorCodes
 
-Ƭ **CustomErrorCodes**: `"input-failed"` \| `"server-error"` \| `"not-found"` \| `"already-exists"` \| `"authentication-error"`
+Ƭ **CustomErrorCodes**: ``"input-failed"`` \| ``"server-error"`` \| ``"not-found"`` \| ``"already-exists"`` \| ``"authentication-error"``
 
 The possible custom error codes to be used in the application.
 
 #### Defined in
 
-[packages/core/shared/src/utils/SpellError.ts:5](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/utils/SpellError.ts#L5)
+[packages/core/shared/src/utils/SpellError.ts:5](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/utils/SpellError.ts#L5)
 
----
+___
 
 ### DataSocketType
 
@@ -399,40 +431,30 @@ The possible custom error codes to be used in the application.
 
 #### Type declaration
 
-| Name             | Type                                |
-| :--------------- | :---------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `connectionType` | [`ConnectionType`](#connectiontype) |
-| `name`           | [`SocketNameType`](#socketnametype) |
-| `socketKey`      | `string`                            |
-| `socketType`     | [`SocketType`](#sockettype)         |
-| `taskType`       | [`TaskType`](#tasktype)             |
-| `useSocketName`  | `boolean`                           |
+| `name` | [`SocketNameType`](#socketnametype) |
+| `socketKey` | `string` |
+| `socketType` | [`SocketType`](#sockettype) |
+| `taskType` | [`TaskType`](#tasktype) |
+| `useSocketName` | `boolean` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:307](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L307)
+[packages/core/shared/src/types.ts:317](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L317)
 
----
+___
 
 ### DatabaseCompletionSubtype
 
-Ƭ **DatabaseCompletionSubtype**: `"select"` \| `"update"` \| `"upsert"` \| `"insert"` \| `"delete"`
+Ƭ **DatabaseCompletionSubtype**: ``"select"`` \| ``"update"`` \| ``"upsert"`` \| ``"insert"`` \| ``"delete"``
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:482](https://github.com/Oneirocom/Magick/blob/fa283798/packages/core/shared/src/types.ts#L482)
+[packages/core/shared/src/types.ts:492](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L492)
 
----
-
-### DatabaseCompletionSubtype
-
-Ƭ **DatabaseCompletionSubtype**: `"select"` \| `"update"` \| `"upsert"` \| `"insert"` \| `"delete"`
-
-#### Defined in
-
-[packages/core/shared/src/types.ts:482](https://github.com/Oneirocom/Magick/blob/1f9f5624/packages/core/shared/src/types.ts#L482)
-
----
+___
 
 ### DebuggerArgs
 
@@ -442,16 +464,16 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name          | Type                             |
-| :------------ | :------------------------------- |
-| `server?`     | `boolean`                        |
+| Name | Type |
+| :------ | :------ |
+| `server?` | `boolean` |
 | `throwError?` | (`message`: `unknown`) => `void` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/consolePlugin/index.ts:18](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/consolePlugin/index.ts#L18)
+[packages/core/shared/src/plugins/consolePlugin/index.ts:18](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/consolePlugin/index.ts#L18)
 
----
+___
 
 ### Document
 
@@ -459,20 +481,20 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name         | Type       |
-| :----------- | :--------- |
-| `content?`   | `string`   |
-| `date?`      | `string`   |
+| Name | Type |
+| :------ | :------ |
+| `content?` | `string` |
+| `date?` | `string` |
 | `embedding?` | `number`[] |
-| `id?`        | `number`   |
-| `projectId?` | `string`   |
-| `type?`      | `string`   |
+| `id?` | `number` |
+| `projectId?` | `string` |
+| `type?` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:46](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L46)
+[packages/core/shared/src/types.ts:44](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L44)
 
----
+___
 
 ### EmbeddingData
 
@@ -480,17 +502,17 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name     | Type     |
-| :------- | :------- |
+| Name | Type |
+| :------ | :------ |
 | `apiKey` | `string` |
-| `input`  | `string` |
+| `input` | `string` |
 | `model?` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:557](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L557)
+[packages/core/shared/src/types.ts:575](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L575)
 
----
+___
 
 ### EngineContext
 
@@ -498,23 +520,23 @@ Arguments passed to the `install` function
 
 #### Type parameters
 
-| Name       | Type                           |
-| :--------- | :----------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `DataType` | `Record`<`string`, `unknown`\> |
 
 #### Type declaration
 
-| Name           | Type                                 |
-| :------------- | :----------------------------------- |
-| `getSpell`     | [`GetSpell`](#getspell)              |
-| `processCode?` | [`ProcessCode`](#processcode)        |
-| `runSpell`     | [`RunSpell`](#runspell)<`DataType`\> |
+| Name | Type |
+| :------ | :------ |
+| `getSpell` | [`GetSpell`](#getspell) |
+| `processCode?` | [`ProcessCode`](#processcode) |
+| `runSpell` | [`RunSpell`](#runspell)<`DataType`\> |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:197](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L197)
+[packages/core/shared/src/types.ts:207](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L207)
 
----
+___
 
 ### Env
 
@@ -522,15 +544,15 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name           | Type     |
-| :------------- | :------- |
+| Name | Type |
+| :------ | :------ |
 | `API_ROOT_URL` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:158](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L158)
+[packages/core/shared/src/types.ts:168](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L168)
 
----
+___
 
 ### Event
 
@@ -538,29 +560,29 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name           | Type                 |
-| :------------- | :------------------- |
-| `agentId?`     | `number` \| `string` |
-| `channel?`     | `string`             |
-| `channelType?` | `string`             |
-| `client?`      | `string`             |
-| `connector?`   | `string`             |
-| `content?`     | `string`             |
-| `date?`        | `string`             |
-| `embedding?`   | `number`[]           |
-| `entities?`    | `string`[]           |
-| `id?`          | `number`             |
-| `observer?`    | `string`             |
-| `projectId?`   | `string`             |
-| `rawData?`     | `string`             |
-| `sender?`      | `string`             |
-| `type?`        | `string`             |
+| Name | Type |
+| :------ | :------ |
+| `agentId?` | `number` \| `string` |
+| `channel?` | `string` |
+| `channelType?` | `string` |
+| `client?` | `string` |
+| `connector?` | `string` |
+| `content?` | `string` |
+| `date?` | `string` |
+| `embedding?` | `number`[] |
+| `entities?` | `string`[] |
+| `id?` | `number` |
+| `observer?` | `string` |
+| `projectId?` | `string` |
+| `rawData?` | `string` |
+| `sender?` | `string` |
+| `type?` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:92](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L92)
+[packages/core/shared/src/types.ts:90](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L90)
 
----
+___
 
 ### EventResponse
 
@@ -568,9 +590,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:133](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L133)
+[packages/core/shared/src/types.ts:131](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L131)
 
----
+___
 
 ### EventsTypes
 
@@ -582,23 +604,23 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name                        | Type                                                                  |
-| :-------------------------- | :-------------------------------------------------------------------- |
-| `connectiondrop`            | `Input` \| `Output`                                                   |
-| `connectionpath`            | { `connection`: `Connection` ; `d`: `string` ; `points`: `number`[] } |
-| `connectionpath.connection` | `Connection`                                                          |
-| `connectionpath.d`          | `string`                                                              |
-| `connectionpath.points`     | `number`[]                                                            |
-| `connectionpick`            | `Input` \| `Output`                                                   |
-| `resetconnection`           | `void`                                                                |
-| `run`                       | `void`                                                                |
-| `save`                      | `void`                                                                |
+| Name | Type |
+| :------ | :------ |
+| `connectiondrop` | `Input` \| `Output` |
+| `connectionpath` | { `connection`: `Connection` ; `d`: `string` ; `points`: `number`[]  } |
+| `connectionpath.connection` | `Connection` |
+| `connectionpath.d` | `string` |
+| `connectionpath.points` | `number`[] |
+| `connectionpick` | `Input` \| `Output` |
+| `resetconnection` | `void` |
+| `run` | `void` |
+| `save` | `void` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:284](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L284)
+[packages/core/shared/src/types.ts:294](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L294)
 
----
+___
 
 ### ExFn
 
@@ -606,19 +628,19 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:455](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L455)
+[packages/core/shared/src/types.ts:465](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L465)
 
----
+___
 
 ### GetDocumentArgs
 
-Ƭ **GetDocumentArgs**: [`Document`](#document) & { `maxCount?`: `number` }
+Ƭ **GetDocumentArgs**: [`Document`](#document) & { `maxCount?`: `number`  }
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:57](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L57)
+[packages/core/shared/src/types.ts:55](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L55)
 
----
+___
 
 ### GetEventArgs
 
@@ -626,31 +648,31 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name           | Type     |
-| :------------- | :------- |
-| `channel?`     | `string` |
+| Name | Type |
+| :------ | :------ |
+| `channel?` | `string` |
 | `channelType?` | `string` |
-| `client?`      | `string` |
-| `connector?`   | `string` |
-| `embedding?`   | `string` |
-| `maxCount?`    | `number` |
-| `observer?`    | `string` |
-| `projectId?`   | `string` |
-| `rawData?`     | `string` |
-| `type?`        | `string` |
+| `client?` | `string` |
+| `connector?` | `string` |
+| `embedding?` | `string` |
+| `maxCount?` | `number` |
+| `observer?` | `string` |
+| `projectId?` | `string` |
+| `rawData?` | `string` |
+| `type?` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:112](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L112)
+[packages/core/shared/src/types.ts:110](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L110)
 
----
+___
 
 ### GetSpell
 
 Ƭ **GetSpell**: (`{
   spellName,
   projectId,
-}`: { `projectId`: `string` ; `spellName`: `string` }) => `Promise`<[`SpellInterface`](#spellinterface)\>
+}`: { `projectId`: `string` ; `spellName`: `string`  }) => `Promise`<[`SpellInterface`](#spellinterface)\>
 
 #### Type declaration
 
@@ -662,8 +684,7 @@ Arguments passed to the `install` function
 ##### Parameters
 
 | Name | Type |
-| :--- | :--- |
-
+| :------ | :------ |
 | `{
   spellName,
   projectId,
@@ -683,9 +704,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:174](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L174)
+[packages/core/shared/src/types.ts:184](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L184)
 
----
+___
 
 ### GetVectorEventArgs
 
@@ -693,17 +714,17 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name        | Type       |
-| :---------- | :--------- |
-| `entities`  | `string`[] |
-| `maxCount?` | `number`   |
-| `type`      | `string`   |
+| Name | Type |
+| :------ | :------ |
+| `entities` | `string`[] |
+| `maxCount?` | `number` |
+| `type` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:127](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L127)
+[packages/core/shared/src/types.ts:125](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L125)
 
----
+___
 
 ### GoFn
 
@@ -711,9 +732,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:448](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L448)
+[packages/core/shared/src/types.ts:458](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L458)
 
----
+___
 
 ### GraphData
 
@@ -721,9 +742,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:344](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L344)
+[packages/core/shared/src/types.ts:354](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L354)
 
----
+___
 
 ### Handler
 
@@ -735,8 +756,8 @@ Arguments passed to the `install` function
 
 ##### Parameters
 
-| Name  | Type          |
-| :---- | :------------ |
+| Name | Type |
+| :------ | :------ |
 | `ctx` | `Koa.Context` |
 
 ##### Returns
@@ -745,19 +766,19 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:667](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L667)
+[packages/core/shared/src/types.ts:685](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L685)
 
----
+___
 
 ### IgnoredList
 
-Ƭ **IgnoredList**: { `name`: `string` }[] \| `string`[]
+Ƭ **IgnoredList**: { `name`: `string`  }[] \| `string`[]
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:346](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L346)
+[packages/core/shared/src/types.ts:356](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L356)
 
----
+___
 
 ### ImageCacheResponse
 
@@ -765,25 +786,25 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name     | Type                        |
-| :------- | :-------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `images` | [`ImageType`](#imagetype)[] |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:42](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L42)
+[packages/core/shared/src/types.ts:40](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L40)
 
----
+___
 
 ### ImageCompletionSubtype
 
-Ƭ **ImageCompletionSubtype**: `"text2image"` \| `"image2image"` \| `"image2text"`
+Ƭ **ImageCompletionSubtype**: ``"text2image"`` \| ``"image2image"`` \| ``"image2text"``
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:476](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L476)
+[packages/core/shared/src/types.ts:486](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L486)
 
----
+___
 
 ### ImageType
 
@@ -791,20 +812,20 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name           | Type                 |
-| :------------- | :------------------- |
-| `captionId`    | `string`             |
-| `id`           | `string`             |
-| `imageCaption` | `string`             |
-| `imageUrl`     | `string`             |
-| `score`        | `number` \| `string` |
-| `tag`          | `string`             |
+| Name | Type |
+| :------ | :------ |
+| `captionId` | `string` |
+| `id` | `string` |
+| `imageCaption` | `string` |
+| `imageUrl` | `string` |
+| `score` | `number` \| `string` |
+| `tag` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:33](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L33)
+[packages/core/shared/src/types.ts:31](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L31)
 
----
+___
 
 ### InitEngineArguments
 
@@ -812,19 +833,20 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name          | Type                                                          |
-| :------------ | :------------------------------------------------------------ |
-| `components`  | [`MagickComponent`](classes/MagickComponent.md)<`unknown`\>[] |
-| `name`        | `string`                                                      |
-| `server`      | `boolean`                                                     |
-| `socket?`     | `io.Socket`                                                   |
-| `throwError?` | (`message`: `unknown`) => `void`                              |
+| Name | Type |
+| :------ | :------ |
+| `components` | [`MagickComponent`](classes/MagickComponent.md)<`unknown`\>[] |
+| `emit?` | `EmitPluginArgs`[``"emit"``] |
+| `name` | `string` |
+| `server` | `boolean` |
+| `socket?` | `io.Socket` |
+| `throwError?` | (`message`: `unknown`) => `void` |
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:56](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/engine.ts#L56)
+[packages/core/shared/src/engine.ts:56](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/engine.ts#L56)
 
----
+___
 
 ### InputComponentData
 
@@ -832,9 +854,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:359](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L359)
+[packages/core/shared/src/types.ts:369](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L369)
 
----
+___
 
 ### InspectorData
 
@@ -842,50 +864,50 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name           | Type                        |
-| :------------- | :-------------------------- |
-| `category?`    | `string`                    |
-| `data`         | [`WorkerData`](#workerdata) |
+| Name | Type |
+| :------ | :------ |
+| `category?` | `string` |
+| `data` | [`WorkerData`](#workerdata) |
 | `dataControls` | [`PubSubData`](#pubsubdata) |
-| `info`         | `string`                    |
-| `name`         | `string`                    |
-| `nodeId`       | `number`                    |
+| `info` | `string` |
+| `name` | `string` |
+| `nodeId` | `number` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/Inspector.ts:27](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/inspectorPlugin/Inspector.ts#L27)
+[packages/core/shared/src/plugins/inspectorPlugin/Inspector.ts:27](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/inspectorPlugin/Inspector.ts#L27)
 
----
+___
 
 ### MagicComponentCategory
 
-Ƭ **MagicComponentCategory**: `"Esoterica"` \| `"Object"` \| `"Number"` \| `"I/O"` \| `"Flow"` \| `"Experimental"` \| `"Discord"` \| `"Embedding"` \| `"Document"` \| `"Code"` \| `"Boolean"` \| `"Array"` \| `"Image"` \| `"Generation"` \| `"Event"` \| `"Text"` \| `"Utility"` \| `"Esoterica"` \| `"Ethereum"` \| `"Pinecone"` \| `"Search"` \| `"Magick"` \| `"Audio"` \| `"Task"` \| `"Database"`
+Ƭ **MagicComponentCategory**: ``"Esoterica"`` \| ``"Object"`` \| ``"Number"`` \| ``"I/O"`` \| ``"Flow"`` \| ``"Experimental"`` \| ``"Langchain"`` \| ``"Github"`` \| ``"Discord"`` \| ``"Embedding"`` \| ``"Document"`` \| ``"Code"`` \| ``"Boolean"`` \| ``"Array"`` \| ``"Image"`` \| ``"Generation"`` \| ``"Event"`` \| ``"Text"`` \| ``"Utility"`` \| ``"Esoterica"`` \| ``"Ethereum"`` \| ``"Pinecone"`` \| ``"Search"`` \| ``"Magick"`` \| ``"Audio"`` \| ``"Task"`` \| ``"Database"``
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:133](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/engine.ts#L133)
+[packages/core/shared/src/engine.ts:133](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/engine.ts#L133)
 
----
+___
 
 ### MagicNodeInput
 
-Ƭ **MagicNodeInput**: `Input` & { `socketType`: [`DataSocketType`](#datasockettype) }
+Ƭ **MagicNodeInput**: `Input` & { `socketType`: [`DataSocketType`](#datasockettype)  }
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:316](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L316)
+[packages/core/shared/src/types.ts:326](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L326)
 
----
+___
 
 ### MagicNodeOutput
 
-Ƭ **MagicNodeOutput**: `Output` & { `socketType`: [`DataSocketType`](#datasockettype) ; `taskType?`: [`TaskType`](#tasktype) }
+Ƭ **MagicNodeOutput**: `Output` & { `socketType`: [`DataSocketType`](#datasockettype) ; `taskType?`: [`TaskType`](#tasktype)  }
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:317](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L317)
+[packages/core/shared/src/types.ts:327](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L327)
 
----
+___
 
 ### MagickComponentArray
 
@@ -893,25 +915,25 @@ Arguments passed to the `install` function
 
 #### Type parameters
 
-| Name | Type                                                                        |
-| :--- | :-------------------------------------------------------------------------- |
-| `T`  | extends [`MagickComponent`](classes/MagickComponent.md)<`unknown`\> = `any` |
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`MagickComponent`](classes/MagickComponent.md)<`unknown`\> = `any` |
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:231](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/engine.ts#L231)
+[packages/core/shared/src/engine.ts:234](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/engine.ts#L234)
 
----
+___
 
 ### MagickNode
 
-Ƭ **MagickNode**: `Node` & { `category?`: `string` ; `console`: `MagickConsole` ; `data`: [`WorkerData`](#workerdata) ; `display`: (`content`: `string`) => `void` ; `displayName?`: `string` ; `info`: `string` ; `inspector`: `Inspector` ; `outputs`: [`MagicNodeOutput`](#magicnodeoutput)[] ; `subscription`: [`PubSubCallback`](#pubsubcallback) }
+Ƭ **MagickNode**: `Node` & { `category?`: `string` ; `console`: `MagickConsole` ; `data`: [`WorkerData`](#workerdata) ; `display`: (`content`: `string`) => `void` ; `displayName?`: `string` ; `info`: `string` ; `inspector`: `Inspector` ; `outputs`: [`MagicNodeOutput`](#magicnodeoutput)[] ; `subscription`: [`PubSubCallback`](#pubsubcallback)  }
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:322](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L322)
+[packages/core/shared/src/types.ts:332](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L332)
 
----
+___
 
 ### MagickNodeData
 
@@ -923,20 +945,20 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name            | Type      |
-| :-------------- | :-------- |
-| `defaultValue?` | `string`  |
-| `element?`      | `number`  |
-| `isInput?`      | `boolean` |
-| `name?`         | `string`  |
-| `socketKey?`    | `string`  |
-| `useDefault?`   | `boolean` |
+| Name | Type |
+| :------ | :------ |
+| `defaultValue?` | `string` |
+| `element?` | `number` |
+| `isInput?` | `boolean` |
+| `name?` | `string` |
+| `socketKey?` | `string` |
+| `useDefault?` | `boolean` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:379](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L379)
+[packages/core/shared/src/types.ts:389](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L389)
 
----
+___
 
 ### MagickReteInput
 
@@ -944,18 +966,18 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name         | Type                                     |
-| :----------- | :--------------------------------------- |
-| `key`        | `string`                                 |
-| `outputData` | `unknown`                                |
-| `task`       | [`MagickTask`](interfaces/MagickTask.md) |
-| `type`       | [`TaskOutputTypes`](#taskoutputtypes)    |
+| Name | Type |
+| :------ | :------ |
+| `key` | `string` |
+| `outputData` | `unknown` |
+| `task` | [`MagickTask`](interfaces/MagickTask.md) |
+| `type` | [`TaskOutputTypes`](#taskoutputtypes) |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:426](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L426)
+[packages/core/shared/src/types.ts:436](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L436)
 
----
+___
 
 ### MagickSpellInput
 
@@ -963,9 +985,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:418](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L418)
+[packages/core/shared/src/types.ts:428](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L428)
 
----
+___
 
 ### MagickSpellOutput
 
@@ -973,9 +995,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:419](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L419)
+[packages/core/shared/src/types.ts:429](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L429)
 
----
+___
 
 ### MagickWorkerInput
 
@@ -983,9 +1005,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:441](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L441)
+[packages/core/shared/src/types.ts:451](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L451)
 
----
+___
 
 ### MagickWorkerInputs
 
@@ -997,19 +1019,19 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:442](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L442)
+[packages/core/shared/src/types.ts:452](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L452)
 
----
+___
 
 ### MagickWorkerOutputs
 
-Ƭ **MagickWorkerOutputs**: `WorkerOutputs` & { `[key: string]`: [`TaskOutput`](#taskoutput); }
+Ƭ **MagickWorkerOutputs**: `WorkerOutputs` & { `[key: string]`: [`TaskOutput`](#taskoutput);  }
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:443](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L443)
+[packages/core/shared/src/types.ts:453](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L453)
 
----
+___
 
 ### MessagingRequest
 
@@ -1017,9 +1039,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:607](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L607)
+[packages/core/shared/src/types.ts:625](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L625)
 
----
+___
 
 ### MessagingWebhookBody
 
@@ -1027,28 +1049,28 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name         | Type     |
-| :----------- | :------- |
-| `Body`       | `string` |
-| `From`       | `string` |
+| Name | Type |
+| :------ | :------ |
+| `Body` | `string` |
+| `From` | `string` |
 | `MessageSid` | `string` |
-| `To`         | `string` |
+| `To` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:467](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L467)
+[packages/core/shared/src/types.ts:477](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L477)
 
----
+___
 
 ### Method
 
-Ƭ **Method**: `"get"` \| `"head"` \| `"post"` \| `"put"` \| `"delete"` \| `"connect"` \| `"options"` \| `"trace"` \| `"patch"`
+Ƭ **Method**: ``"get"`` \| ``"head"`` \| ``"post"`` \| ``"put"`` \| ``"delete"`` \| ``"connect"`` \| ``"options"`` \| ``"trace"`` \| ``"patch"``
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:655](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L655)
+[packages/core/shared/src/types.ts:673](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L673)
 
----
+___
 
 ### Middleware
 
@@ -1060,10 +1082,10 @@ Arguments passed to the `install` function
 
 ##### Parameters
 
-| Name   | Type          |
-| :----- | :------------ |
-| `ctx`  | `Koa.Context` |
-| `next` | `any`         |
+| Name | Type |
+| :------ | :------ |
+| `ctx` | `Koa.Context` |
+| `next` | `any` |
 
 ##### Returns
 
@@ -1071,9 +1093,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:653](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L653)
+[packages/core/shared/src/types.ts:671](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L671)
 
----
+___
 
 ### Module
 
@@ -1081,27 +1103,27 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name   | Type     |
-| :----- | :------- |
-| `data` | `Data`   |
-| `id`   | `string` |
+| Name | Type |
+| :------ | :------ |
+| `data` | `Data` |
+| `id` | `string` |
 | `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:416](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L416)
+[packages/core/shared/src/types.ts:426](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L426)
 
----
+___
 
 ### ModuleComponent
 
-Ƭ **ModuleComponent**: [`MagickComponent`](classes/MagickComponent.md)<`unknown`\> & { `run`: (`node`: [`MagickNode`](#magicknode), `data?`: `unknown`) => `Promise`<`void`\> }
+Ƭ **ModuleComponent**: [`MagickComponent`](classes/MagickComponent.md)<`unknown`\> & { `run`: (`node`: [`MagickNode`](#magicknode), `data?`: `unknown`) => `Promise`<`void`\>  }
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:362](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L362)
+[packages/core/shared/src/types.ts:372](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L372)
 
----
+___
 
 ### ModuleContext
 
@@ -1109,30 +1131,30 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name                      | Type                                                                                                                                                                                                             |
-| :------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `agent`                   | [`Agent`](classes/Agent.md)                                                                                                                                                                                      |
-| `app`                     | `Application`                                                                                                                                                                                                    |
-| `context`                 | [`EngineContext`](#enginecontext)                                                                                                                                                                                |
-| `currentSpell`            | `Spell`                                                                                                                                                                                                          |
-| `data`                    | { `[key: string]`: `unknown`; }                                                                                                                                                                                  |
-| `module`                  | { `app?`: `Application` ; `inputs`: `Record`<`string`, `unknown`\> ; `outputs`: `Record`<`string`, `unknown`\> ; `publicVariables?`: `Record`<`string`, `string`\> ; `secrets?`: `Record`<`string`, `string`\> } |
-| `module.app?`             | `Application`                                                                                                                                                                                                    |
-| `module.inputs`           | `Record`<`string`, `unknown`\>                                                                                                                                                                                   |
-| `module.outputs`          | `Record`<`string`, `unknown`\>                                                                                                                                                                                   |
-| `module.publicVariables?` | `Record`<`string`, `string`\>                                                                                                                                                                                    |
-| `module.secrets?`         | `Record`<`string`, `string`\>                                                                                                                                                                                    |
-| `projectId`               | `string`                                                                                                                                                                                                         |
-| `socketInfo`              | { `targetNode`: [`MagickNode`](#magicknode) ; `targetSocket`: `string` }                                                                                                                                         |
-| `socketInfo.targetNode`   | [`MagickNode`](#magicknode)                                                                                                                                                                                      |
-| `socketInfo.targetSocket` | `string`                                                                                                                                                                                                         |
-| `spellManager`            | [`SpellManager`](classes/SpellManager.md)                                                                                                                                                                        |
+| Name | Type |
+| :------ | :------ |
+| `agent?` | `any` |
+| `app` | `Application` |
+| `context` | [`EngineContext`](#enginecontext) |
+| `currentSpell` | `Spell` |
+| `data` | { `[key: string]`: `unknown`;  } |
+| `module` | { `app?`: `Application` ; `inputs`: `Record`<`string`, `unknown`\> ; `outputs`: `Record`<`string`, `unknown`\> ; `publicVariables?`: `Record`<`string`, `string`\> ; `secrets?`: `Record`<`string`, `string`\>  } |
+| `module.app?` | `Application` |
+| `module.inputs` | `Record`<`string`, `unknown`\> |
+| `module.outputs` | `Record`<`string`, `unknown`\> |
+| `module.publicVariables?` | `Record`<`string`, `string`\> |
+| `module.secrets?` | `Record`<`string`, `string`\> |
+| `projectId` | `string` |
+| `socketInfo` | { `targetNode`: [`MagickNode`](#magicknode) ; `targetSocket`: `string`  } |
+| `socketInfo.targetNode` | [`MagickNode`](#magicknode) |
+| `socketInfo.targetSocket` | `string` |
+| `spellManager` | [`SpellManager`](classes/SpellManager.md) |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:577](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L577)
+[packages/core/shared/src/types.ts:595](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L595)
 
----
+___
 
 ### ModuleGraphData
 
@@ -1140,15 +1162,15 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name    | Type                                             |
-| :------ | :----------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `nodes` | `Record`<`string`, [`MagickNode`](#magicknode)\> |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:26](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L26)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:26](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L26)
 
----
+___
 
 ### ModulePluginArgs
 
@@ -1156,16 +1178,16 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name       | Type                                             |
-| :--------- | :----------------------------------------------- |
-| `engine`   | [`MagickEngine`](interfaces/MagickEngine.md)     |
+| Name | Type |
+| :------ | :------ |
+| `engine` | [`MagickEngine`](interfaces/MagickEngine.md) |
 | `modules?` | `Record`<`string`, [`ModuleType`](#moduletype)\> |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/index.ts:42](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/modulePlugin/index.ts#L42)
+[packages/core/shared/src/plugins/modulePlugin/index.ts:42](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/modulePlugin/index.ts#L42)
 
----
+___
 
 ### ModuleSocketType
 
@@ -1177,17 +1199,17 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name        | Type                                |
-| :---------- | :---------------------------------- |
-| `name`      | [`SocketNameType`](#socketnametype) |
-| `socket`    | `SocketType`                        |
-| `socketKey` | `string`                            |
+| Name | Type |
+| :------ | :------ |
+| `name` | [`SocketNameType`](#socketnametype) |
+| `socket` | `SocketType` |
+| `socketKey` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:19](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L19)
+[packages/core/shared/src/plugins/modulePlugin/module-manager.ts:19](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/modulePlugin/module-manager.ts#L19)
 
----
+___
 
 ### ModuleType
 
@@ -1195,19 +1217,19 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name        | Type                      |
-| :---------- | :------------------------ |
-| `createdAt` | `string`                  |
-| `data`      | [`GraphData`](#graphdata) |
-| `id`        | `string`                  |
-| `name`      | `string`                  |
-| `updatedAt` | `string`                  |
+| Name | Type |
+| :------ | :------ |
+| `createdAt` | `string` |
+| `data` | [`GraphData`](#graphdata) |
+| `id` | `string` |
+| `name` | `string` |
+| `updatedAt` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:334](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L334)
+[packages/core/shared/src/types.ts:344](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L344)
 
----
+___
 
 ### ModuleWorkerOutput
 
@@ -1215,9 +1237,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:439](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L439)
+[packages/core/shared/src/types.ts:449](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L449)
 
----
+___
 
 ### NewSpellArgs
 
@@ -1225,16 +1247,16 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name    | Type     |
-| :------ | :------- |
-| `graph` | `Data`   |
-| `name`  | `string` |
+| Name | Type |
+| :------ | :------ |
+| `graph` | `Data` |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:421](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L421)
+[packages/core/shared/src/types.ts:431](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L431)
 
----
+___
 
 ### NodeConnections
 
@@ -1242,18 +1264,18 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name      | Type                           |
-| :-------- | :----------------------------- |
-| `data`    | `Record`<`string`, `unknown`\> |
-| `input?`  | `string`                       |
-| `node`    | `number`                       |
-| `output?` | `string`                       |
+| Name | Type |
+| :------ | :------ |
+| `data` | `Record`<`string`, `unknown`\> |
+| `input?` | `string` |
+| `node` | `number` |
+| `output?` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:366](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L366)
+[packages/core/shared/src/types.ts:376](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L376)
 
----
+___
 
 ### NodeOutputs
 
@@ -1261,13 +1283,13 @@ Arguments passed to the `install` function
 
 #### Index signature
 
-▪ [outputKey: `string`]: { `connections`: [`NodeConnections`](#nodeconnections)[] }
+▪ [outputKey: `string`]: { `connections`: [`NodeConnections`](#nodeconnections)[]  }
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:373](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L373)
+[packages/core/shared/src/types.ts:383](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L383)
 
----
+___
 
 ### OnDebug
 
@@ -1279,39 +1301,9 @@ Arguments passed to the `install` function
 
 ##### Parameters
 
-| Name        | Type                                    |
-| :---------- | :-------------------------------------- |
-| `spellname` | `string`                                |
-| `callback`  | [`OnEditorCallback`](#oneditorcallback) |
-
-##### Returns
-
-`fn`
-
-▸ (): `void`
-
-##### Returns
-
-`void`
-
-#### Defined in
-
-[packages/core/shared/src/types.ts:262](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L262)
-
----
-
-### OnEditor
-
-Ƭ **OnEditor**: (`callback`: [`OnEditorCallback`](#oneditorcallback)) => () => `void`
-
-#### Type declaration
-
-▸ (`callback`): () => `void`
-
-##### Parameters
-
-| Name       | Type                                    |
-| :--------- | :-------------------------------------- |
+| Name | Type |
+| :------ | :------ |
+| `spellname` | `string` |
 | `callback` | [`OnEditorCallback`](#oneditorcallback) |
 
 ##### Returns
@@ -1326,9 +1318,39 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:261](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L261)
+[packages/core/shared/src/types.ts:272](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L272)
 
----
+___
+
+### OnEditor
+
+Ƭ **OnEditor**: (`callback`: [`OnEditorCallback`](#oneditorcallback)) => () => `void`
+
+#### Type declaration
+
+▸ (`callback`): () => `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `callback` | [`OnEditorCallback`](#oneditorcallback) |
+
+##### Returns
+
+`fn`
+
+▸ (): `void`
+
+##### Returns
+
+`void`
+
+#### Defined in
+
+[packages/core/shared/src/types.ts:271](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L271)
+
+___
 
 ### OnEditorCallback
 
@@ -1340,8 +1362,8 @@ Arguments passed to the `install` function
 
 ##### Parameters
 
-| Name   | Type                        |
-| :----- | :-------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `data` | [`PubSubData`](#pubsubdata) |
 
 ##### Returns
@@ -1350,9 +1372,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:260](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L260)
+[packages/core/shared/src/types.ts:270](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L270)
 
----
+___
 
 ### OnInspector
 
@@ -1364,9 +1386,9 @@ Arguments passed to the `install` function
 
 ##### Parameters
 
-| Name       | Type                                          |
-| :--------- | :-------------------------------------------- |
-| `node`     | [`MagickNode`](#magicknode)                   |
+| Name | Type |
+| :------ | :------ |
+| `node` | [`MagickNode`](#magicknode) |
 | `callback` | [`OnInspectorCallback`](#oninspectorcallback) |
 
 ##### Returns
@@ -1381,9 +1403,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:256](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L256)
+[packages/core/shared/src/types.ts:266](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L266)
 
----
+___
 
 ### OnInspectorCallback
 
@@ -1395,8 +1417,8 @@ Arguments passed to the `install` function
 
 ##### Parameters
 
-| Name   | Type                           |
-| :----- | :----------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `data` | `Record`<`string`, `unknown`\> |
 
 ##### Returns
@@ -1405,9 +1427,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:255](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L255)
+[packages/core/shared/src/types.ts:265](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L265)
 
----
+___
 
 ### OnSubspellUpdated
 
@@ -1419,8 +1441,8 @@ Arguments passed to the `install` function
 
 ##### Parameters
 
-| Name    | Type                                |
-| :------ | :---------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `spell` | [`SpellInterface`](#spellinterface) |
 
 ##### Returns
@@ -1429,9 +1451,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:135](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L135)
+[packages/core/shared/src/types.ts:133](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L133)
 
----
+___
 
 ### OutputComponentData
 
@@ -1439,19 +1461,19 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:360](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L360)
+[packages/core/shared/src/types.ts:370](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L370)
 
----
+___
 
 ### PageLayout
 
-Ƭ **PageLayout**: `LazyExoticComponent`<() => `JSX.Element`\> \| `null`
+Ƭ **PageLayout**: `LazyExoticComponent`<() => `JSX.Element`\> \| ``null``
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:67](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugin.ts#L67)
+[packages/core/shared/src/plugin.ts:67](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugin.ts#L67)
 
----
+___
 
 ### PluginClientRoute
 
@@ -1459,18 +1481,18 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name        | Type      |
-| :---------- | :-------- |
-| `component` | `FC`      |
-| `exact?`    | `boolean` |
-| `path`      | `string`  |
-| `plugin`    | `string`  |
+| Name | Type |
+| :------ | :------ |
+| `component` | `FC` |
+| `exact?` | `boolean` |
+| `path` | `string` |
+| `plugin` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:18](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugin.ts#L18)
+[packages/core/shared/src/plugin.ts:18](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugin.ts#L18)
 
----
+___
 
 ### PluginDrawerItem
 
@@ -1478,17 +1500,17 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name   | Type     |
-| :----- | :------- |
-| `icon` | `FC`     |
+| Name | Type |
+| :------ | :------ |
+| `icon` | `FC` |
 | `path` | `string` |
 | `text` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:12](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugin.ts#L12)
+[packages/core/shared/src/plugin.ts:12](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugin.ts#L12)
 
----
+___
 
 ### PluginIOType
 
@@ -1496,19 +1518,19 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name                     | Type                                                      |
-| :----------------------- | :-------------------------------------------------------- |
-| `defaultResponseOutput?` | `string`                                                  |
-| `handler?`               | (`{ output, agent, event }`: `any`) => `Promise`<`void`\> |
-| `inspectorControls?`     | `any`[]                                                   |
-| `name`                   | `string`                                                  |
-| `sockets?`               | `any`[]                                                   |
+| Name | Type |
+| :------ | :------ |
+| `defaultResponseOutput?` | `string` |
+| `handler?` | (`{ output, agent, event }`: `any`) => `Promise`<`void`\> |
+| `inspectorControls?` | `any`[] |
+| `name` | `string` |
+| `sockets?` | `any`[] |
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:27](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugin.ts#L27)
+[packages/core/shared/src/plugin.ts:27](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugin.ts#L27)
 
----
+___
 
 ### PluginSecret
 
@@ -1516,18 +1538,18 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name      | Type      |
-| :-------- | :-------- |
-| `getUrl?` | `string`  |
+| Name | Type |
+| :------ | :------ |
+| `getUrl?` | `string` |
 | `global?` | `boolean` |
-| `key`     | `string`  |
-| `name`    | `string`  |
+| `key` | `string` |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:5](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugin.ts#L5)
+[packages/core/shared/src/plugin.ts:5](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugin.ts#L5)
 
----
+___
 
 ### PluginServerRoute
 
@@ -1535,9 +1557,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:25](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugin.ts#L25)
+[packages/core/shared/src/plugin.ts:25](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugin.ts#L25)
 
----
+___
 
 ### ProcessCode
 
@@ -1549,11 +1571,11 @@ Arguments passed to the `install` function
 
 ##### Parameters
 
-| Name        | Type                                        |
-| :---------- | :------------------------------------------ |
-| `code`      | `unknown`                                   |
-| `inputs`    | [`MagickWorkerInputs`](#magickworkerinputs) |
-| `data`      | [`UnknownSpellData`](#unknownspelldata)     |
+| Name | Type |
+| :------ | :------ |
+| `code` | `unknown` |
+| `inputs` | [`MagickWorkerInputs`](#magickworkerinputs) |
+| `data` | [`UnknownSpellData`](#unknownspelldata) |
 | `language?` | [`SupportedLanguages`](#supportedlanguages) |
 
 ##### Returns
@@ -1562,9 +1584,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:182](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L182)
+[packages/core/shared/src/types.ts:192](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L192)
 
----
+___
 
 ### PubSubCallback
 
@@ -1576,10 +1598,10 @@ Arguments passed to the `install` function
 
 ##### Parameters
 
-| Name    | Type                        |
-| :------ | :-------------------------- |
-| `event` | `string`                    |
-| `data`  | [`PubSubData`](#pubsubdata) |
+| Name | Type |
+| :------ | :------ |
+| `event` | `string` |
+| `data` | [`PubSubData`](#pubsubdata) |
 
 ##### Returns
 
@@ -1587,9 +1609,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:253](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L253)
+[packages/core/shared/src/types.ts:263](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L263)
 
----
+___
 
 ### PubSubData
 
@@ -1597,9 +1619,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:252](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L252)
+[packages/core/shared/src/types.ts:262](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L262)
 
----
+___
 
 ### PubSubEvents
 
@@ -1607,49 +1629,49 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name                              | Type                                                 |
-| :-------------------------------- | :--------------------------------------------------- |
-| `$CLOSE_EDITOR`                   | (`tabId`: `string`) => `string`                      |
-| `$CREATE_CONSOLE`                 | (`tabId`: `string`) => `string`                      |
-| `$CREATE_DEBUG_CONSOLE`           | (`tabId`: `string`) => `string`                      |
-| `$CREATE_INSPECTOR`               | (`tabId`: `string`) => `string`                      |
-| `$CREATE_MEDIAWINDOW`             | (`tabId`: `string`) => `string`                      |
-| `$CREATE_MESSAGE_REACTION_EDITOR` | (`tabId`: `string`) => `string`                      |
-| `$CREATE_PLAYTEST`                | (`tabId`: `string`) => `string`                      |
-| `$CREATE_PROJECT_WINDOW`          | (`tabId`: `string`) => `string`                      |
-| `$CREATE_TEXT_EDITOR`             | (`tabId`: `string`) => `string`                      |
-| `$DEBUG_INPUT`                    | (`tabId`: `string`) => `string`                      |
-| `$DEBUG_PRINT`                    | (`tabId`: `string`) => `string`                      |
-| `$DELETE`                         | (`tabId`: `string`) => `string`                      |
-| `$EXPORT`                         | (`tabId`: `string`) => `string`                      |
-| `$INSPECTOR_SET`                  | (`tabId`: `string`) => `string`                      |
-| `$MULTI_SELECT_COPY`              | (`tabId`: `string`) => `string`                      |
-| `$MULTI_SELECT_PASTE`             | (`tabId`: `string`) => `string`                      |
-| `$NODE_SET`                       | (`tabId`: `string`, `nodeId`: `number`) => `string`  |
-| `$PLAYTEST_INPUT`                 | (`tabId`: `string`) => `string`                      |
-| `$PLAYTEST_PRINT`                 | (`tabId`: `string`) => `string`                      |
-| `$PROCESS`                        | (`tabId`: `string`) => `string`                      |
-| `$REDO`                           | (`tabId`: `string`) => `string`                      |
-| `$REFRESH_EVENT_TABLE`            | (`tabId`: `string`) => `string`                      |
-| `$RUN_SPELL`                      | (`tabId?`: `string`) => `string`                     |
-| `$SAVE_SPELL`                     | (`tabId`: `string`) => `string`                      |
-| `$SAVE_SPELL_DIFF`                | (`tabId`: `string`) => `string`                      |
-| `$SUBSPELL_UPDATED`               | (`spellName`: `string`) => `string`                  |
-| `$TEXT_EDITOR_CLEAR`              | (`tabId`: `string`) => `string`                      |
-| `$TEXT_EDITOR_SET`                | (`tabId`: `string`) => `string`                      |
-| `$TRIGGER`                        | (`tabId`: `string`, `nodeId?`: `number`) => `string` |
-| `$UNDO`                           | (`tabId`: `string`) => `string`                      |
-| `ADD_SUBSPELL`                    | `string`                                             |
-| `DELETE_SUBSPELL`                 | `string`                                             |
-| `OPEN_TAB`                        | `string`                                             |
-| `TOGGLE_SNAP`                     | `string`                                             |
-| `UPDATE_SUBSPELL`                 | `string`                                             |
+| Name | Type |
+| :------ | :------ |
+| `$CLOSE_EDITOR` | (`tabId`: `string`) => `string` |
+| `$CREATE_CONSOLE` | (`tabId`: `string`) => `string` |
+| `$CREATE_DEBUG_CONSOLE` | (`tabId`: `string`) => `string` |
+| `$CREATE_INSPECTOR` | (`tabId`: `string`) => `string` |
+| `$CREATE_MESSAGE_REACTION_EDITOR` | (`tabId`: `string`) => `string` |
+| `$CREATE_PLAYTEST` | (`tabId`: `string`) => `string` |
+| `$CREATE_TEXT_EDITOR` | (`tabId`: `string`) => `string` |
+| `$DEBUG_INPUT` | (`tabId`: `string`) => `string` |
+| `$DEBUG_PRINT` | (`tabId`: `string`) => `string` |
+| `$DELETE` | (`tabId`: `string`) => `string` |
+| `$EXPORT` | (`tabId`: `string`) => `string` |
+| `$INSPECTOR_SET` | (`tabId`: `string`) => `string` |
+| `$MULTI_SELECT_COPY` | (`tabId`: `string`) => `string` |
+| `$MULTI_SELECT_PASTE` | (`tabId`: `string`) => `string` |
+| `$NODE_SET` | (`tabId`: `string`, `nodeId`: `number`) => `string` |
+| `$PLAYTEST_INPUT` | (`tabId`: `string`) => `string` |
+| `$PLAYTEST_PRINT` | (`tabId`: `string`) => `string` |
+| `$PROCESS` | (`tabId`: `string`) => `string` |
+| `$REDO` | (`tabId`: `string`) => `string` |
+| `$REFRESH_EVENT_TABLE` | (`tabId`: `string`) => `string` |
+| `$RUN_AGENT` | (`tabId`: `string`) => `string` |
+| `$RUN_SPELL` | (`tabId?`: `string`) => `string` |
+| `$SAVE_SPELL` | (`tabId`: `string`) => `string` |
+| `$SAVE_SPELL_DIFF` | (`tabId`: `string`) => `string` |
+| `$SUBSPELL_UPDATED` | (`spellName`: `string`) => `string` |
+| `$TEXT_EDITOR_CLEAR` | (`tabId`: `string`) => `string` |
+| `$TEXT_EDITOR_SET` | (`tabId`: `string`) => `string` |
+| `$TRIGGER` | (`tabId`: `string`, `nodeId?`: `number`) => `string` |
+| `$UNDO` | (`tabId`: `string`) => `string` |
+| `ADD_SUBSPELL` | `string` |
+| `DELETE_SUBSPELL` | `string` |
+| `OPEN_TAB` | `string` |
+| `RUN_AGENT` | `string` |
+| `TOGGLE_SNAP` | `string` |
+| `UPDATE_SUBSPELL` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:203](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L203)
+[packages/core/shared/src/types.ts:213](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L213)
 
----
+___
 
 ### PublishEditorEvent
 
@@ -1661,8 +1683,8 @@ Arguments passed to the `install` function
 
 ##### Parameters
 
-| Name   | Type                        |
-| :----- | :-------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `data` | [`PubSubData`](#pubsubdata) |
 
 ##### Returns
@@ -1671,9 +1693,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:267](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L267)
+[packages/core/shared/src/types.ts:277](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L277)
 
----
+___
 
 ### RequestData
 
@@ -1681,17 +1703,17 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name        | Type     |
-| :---------- | :------- |
-| `nodeId`    | `number` |
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | `number` |
 | `projectId` | `string` |
-| `spell`     | `string` |
+| `spell` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:627](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L627)
+[packages/core/shared/src/types.ts:645](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L645)
 
----
+___
 
 ### RequestPayload
 
@@ -1699,29 +1721,29 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name            | Type                                |
-| :-------------- | :---------------------------------- |
-| `hidden?`       | `boolean`                           |
-| `model`         | `string`                            |
-| `nodeId?`       | `number`                            |
-| `parameters?`   | `string`                            |
-| `processed?`    | `boolean`                           |
-| `projectId`     | `string`                            |
-| `provider?`     | `string`                            |
-| `requestData`   | `string`                            |
-| `responseData?` | `string`                            |
-| `spell?`        | [`SpellInterface`](#spellinterface) |
-| `startTime`     | `number`                            |
-| `status?`       | `string`                            |
-| `statusCode?`   | `number`                            |
-| `totalTokens?`  | `number`                            |
-| `type?`         | `string`                            |
+| Name | Type |
+| :------ | :------ |
+| `hidden?` | `boolean` |
+| `model` | `string` |
+| `nodeId?` | `number` |
+| `parameters?` | `string` |
+| `processed?` | `boolean` |
+| `projectId` | `string` |
+| `provider?` | `string` |
+| `requestData` | `string` |
+| `responseData?` | `string` |
+| `spell?` | [`SpellInterface`](#spellinterface) |
+| `startTime` | `number` |
+| `status?` | `string` |
+| `statusCode?` | `number` |
+| `totalTokens?` | `number` |
+| `type?` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:609](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L609)
+[packages/core/shared/src/types.ts:627](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L627)
 
----
+___
 
 ### Route
 
@@ -1729,25 +1751,25 @@ Arguments passed to the `install` function
 
 #### Type declaration
 
-| Name          | Type                          |
-| :------------ | :---------------------------- |
-| `del?`        | [`Handler`](#handler)         |
-| `delete?`     | [`Handler`](#handler)         |
-| `get?`        | [`Handler`](#handler)         |
-| `handler?`    | [`Handler`](#handler)         |
-| `head?`       | [`Handler`](#handler)         |
-| `method?`     | [`Method`](#method)           |
+| Name | Type |
+| :------ | :------ |
+| `del?` | [`Handler`](#handler) |
+| `delete?` | [`Handler`](#handler) |
+| `get?` | [`Handler`](#handler) |
+| `handler?` | [`Handler`](#handler) |
+| `head?` | [`Handler`](#handler) |
+| `method?` | [`Method`](#method) |
 | `middleware?` | [`Middleware`](#middleware)[] |
-| `patch?`      | [`Handler`](#handler)         |
-| `path`        | `string`                      |
-| `post?`       | [`Handler`](#handler)         |
-| `put?`        | [`Handler`](#handler)         |
+| `patch?` | [`Handler`](#handler) |
+| `path` | `string` |
+| `post?` | [`Handler`](#handler) |
+| `put?` | [`Handler`](#handler) |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:669](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L669)
+[packages/core/shared/src/types.ts:687](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L687)
 
----
+___
 
 ### RunSpell
 
@@ -1761,8 +1783,8 @@ Arguments passed to the `install` function
 
 #### Type parameters
 
-| Name       | Type                           |
-| :--------- | :----------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `DataType` | `Record`<`string`, `unknown`\> |
 
 #### Type declaration
@@ -1778,8 +1800,7 @@ Arguments passed to the `install` function
 ##### Parameters
 
 | Name | Type |
-| :--- | :--- |
-
+| :------ | :------ |
 | `{
   inputs,
   spellId,
@@ -1794,9 +1815,9 @@ Arguments passed to the `install` function
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:189](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L189)
+[packages/core/shared/src/types.ts:199](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L199)
 
----
+___
 
 ### RunSpellArgs
 
@@ -1806,22 +1827,22 @@ Type definition for the arguments of the `runSpell` function.
 
 #### Type declaration
 
-| Name               | Type                                                                   |
-| :----------------- | :--------------------------------------------------------------------- |
-| `agent?`           | `any`                                                                  |
-| `app?`             | `any`                                                                  |
-| `inputFormatter?`  | (`graph`: [`GraphData`](#graphdata)) => `Record`<`string`, `unknown`\> |
-| `inputs?`          | `Record`<`string`, `unknown`\>                                         |
-| `projectId`        | `string`                                                               |
-| `publicVariables?` | `Record`<`string`, `unknown`\>                                         |
-| `secrets`          | `Record`<`string`, `string`\>                                          |
-| `spellId`          | `string`                                                               |
+| Name | Type |
+| :------ | :------ |
+| `agent?` | `any` |
+| `app?` | `any` |
+| `inputFormatter?` | (`graph`: [`GraphData`](#graphdata)) => `Record`<`string`, `unknown`\> |
+| `inputs?` | `Record`<`string`, `unknown`\> |
+| `projectId` | `string` |
+| `publicVariables?` | `Record`<`string`, `unknown`\> |
+| `secrets` | `Record`<`string`, `string`\> |
+| `spellId` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/utils/runSpell.ts:10](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/utils/runSpell.ts#L10)
+[packages/core/shared/src/utils/runSpell.ts:10](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/utils/runSpell.ts#L10)
 
----
+___
 
 ### SearchSchema
 
@@ -1829,34 +1850,34 @@ Type definition for the arguments of the `runSpell` function.
 
 #### Type declaration
 
-| Name          | Type     |
-| :------------ | :------- |
+| Name | Type |
+| :------ | :------ |
 | `description` | `string` |
-| `title`       | `string` |
+| `title` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:457](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L457)
+[packages/core/shared/src/types.ts:467](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L467)
 
----
+___
 
 ### ServerInit
 
-Ƭ **ServerInit**: () => `Promise`<`void`\> \| `null` \| `void`
+Ƭ **ServerInit**: () => `Promise`<`void`\> \| ``null`` \| `void`
 
 #### Type declaration
 
-▸ (): `Promise`<`void`\> \| `null` \| `void`
+▸ (): `Promise`<`void`\> \| ``null`` \| `void`
 
 ##### Returns
 
-`Promise`<`void`\> \| `null` \| `void`
+`Promise`<`void`\> \| ``null`` \| `void`
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:114](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugin.ts#L114)
+[packages/core/shared/src/plugin.ts:114](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugin.ts#L114)
 
----
+___
 
 ### ServerInits
 
@@ -1864,9 +1885,9 @@ Type definition for the arguments of the `runSpell` function.
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:115](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugin.ts#L115)
+[packages/core/shared/src/plugin.ts:115](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugin.ts#L115)
 
----
+___
 
 ### SocketData
 
@@ -1874,29 +1895,29 @@ Type definition for the arguments of the `runSpell` function.
 
 #### Type declaration
 
-| Name            | Type                                        |
-| :-------------- | :------------------------------------------ |
-| `error?`        | { `message`: `string` ; `stack`: `string` } |
-| `error.message` | `string`                                    |
-| `error.stack`   | `string`                                    |
-| `input?`        | [`MagickWorkerInputs`](#magickworkerinputs) |
-| `output?`       | `WorkerOutputs`                             |
+| Name | Type |
+| :------ | :------ |
+| `error?` | { `message`: `string` ; `stack`: `string`  } |
+| `error.message` | `string` |
+| `error.stack` | `string` |
+| `input?` | [`MagickWorkerInputs`](#magickworkerinputs) |
+| `output?` | `WorkerOutputs` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/socketPlugin/index.ts:20](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/socketPlugin/index.ts#L20)
+[packages/core/shared/src/plugins/socketPlugin/index.ts:20](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/socketPlugin/index.ts#L20)
 
----
+___
 
 ### SocketNameType
 
-Ƭ **SocketNameType**: `"Any"` \| `"Number"` \| `"Boolean"` \| `"Array"` \| `"String"` \| `"Object"` \| `"Trigger"` \| `"Event"` \| `"Task"` \| `"Audio"` \| `"Image"` \| `"Document"` \| `"Embedding"`
+Ƭ **SocketNameType**: ``"Any"`` \| ``"Number"`` \| ``"Boolean"`` \| ``"Array"`` \| ``"String"`` \| ``"Object"`` \| ``"Trigger"`` \| ``"Event"`` \| ``"Task"`` \| ``"Audio"`` \| ``"Image"`` \| ``"Document"`` \| ``"Embedding"``
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:8](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L8)
+[packages/core/shared/src/sockets.ts:8](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L8)
 
----
+___
 
 ### SocketPluginArgs
 
@@ -1904,27 +1925,27 @@ Type definition for the arguments of the `runSpell` function.
 
 #### Type declaration
 
-| Name      | Type        |
-| :-------- | :---------- |
-| `client?` | `any`       |
-| `server?` | `boolean`   |
+| Name | Type |
+| :------ | :------ |
+| `client?` | `any` |
+| `server?` | `boolean` |
 | `socket?` | `io.Socket` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/socketPlugin/index.ts:13](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/socketPlugin/index.ts#L13)
+[packages/core/shared/src/plugins/socketPlugin/index.ts:13](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/socketPlugin/index.ts#L13)
 
----
+___
 
 ### SocketType
 
-Ƭ **SocketType**: `"anySocket"` \| `"numberSocket"` \| `"booleanSocket"` \| `"arraySocket"` \| `"stringSocket"` \| `"objectSocket"` \| `"triggerSocket"` \| `"eventSocket"` \| `"taskSocket"` \| `"audioSocket"` \| `"imageSocket"` \| `"embeddingSocket"` \| `"taskSocket"` \| `"documentSocket"`
+Ƭ **SocketType**: ``"anySocket"`` \| ``"numberSocket"`` \| ``"booleanSocket"`` \| ``"arraySocket"`` \| ``"stringSocket"`` \| ``"objectSocket"`` \| ``"triggerSocket"`` \| ``"eventSocket"`` \| ``"taskSocket"`` \| ``"audioSocket"`` \| ``"imageSocket"`` \| ``"embeddingSocket"`` \| ``"taskSocket"`` \| ``"documentSocket"``
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:23](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L23)
+[packages/core/shared/src/sockets.ts:23](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L23)
 
----
+___
 
 ### SpellInterface
 
@@ -1934,9 +1955,9 @@ The interface for a spell object that's based on the `spellSchema`.
 
 #### Defined in
 
-[packages/core/shared/src/schemas.ts:37](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/schemas.ts#L37)
+[packages/core/shared/src/schemas.ts:37](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/schemas.ts#L37)
 
----
+___
 
 ### Subspell
 
@@ -1944,27 +1965,27 @@ The interface for a spell object that's based on the `spellSchema`.
 
 #### Type declaration
 
-| Name   | Type                      |
-| :----- | :------------------------ |
+| Name | Type |
+| :------ | :------ |
 | `data` | [`GraphData`](#graphdata) |
-| `id`   | `string`                  |
-| `name` | `string`                  |
+| `id` | `string` |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:342](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L342)
+[packages/core/shared/src/types.ts:352](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L352)
 
----
+___
 
 ### SupportedLanguages
 
-Ƭ **SupportedLanguages**: `"python"` \| `"javascript"`
+Ƭ **SupportedLanguages**: ``"python"`` \| ``"javascript"``
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:172](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L172)
+[packages/core/shared/src/types.ts:182](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L182)
 
----
+___
 
 ### TaskOptions
 
@@ -1972,18 +1993,18 @@ The interface for a spell object that's based on the `spellSchema`.
 
 #### Type declaration
 
-| Name           | Type                                                                                                                                    |
-| :------------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
-| `init?`        | (`task`: [`Task`](classes/Task.md) \| `undefined`, `node`: `NodeData`) => `void`                                                        |
-| `onRun?`       | (`node`: `NodeData`, `task`: [`Task`](classes/Task.md), `data`: `unknown`, `socketInfo`: [`TaskSocketInfo`](#tasksocketinfo)) => `void` |
-| `outputs`      | `Record`<`string`, `unknown`\>                                                                                                          |
-| `runOneInput?` | `boolean`                                                                                                                               |
+| Name | Type |
+| :------ | :------ |
+| `init?` | (`task`: [`Task`](classes/Task.md) \| `undefined`, `node`: `NodeData`) => `void` |
+| `onRun?` | (`node`: `NodeData`, `task`: [`Task`](classes/Task.md), `data`: `unknown`, `socketInfo`: [`TaskSocketInfo`](#tasksocketinfo)) => `void` |
+| `outputs` | `Record`<`string`, `unknown`\> |
+| `runOneInput?` | `boolean` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:18](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/taskPlugin/task.ts#L18)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:18](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/taskPlugin/task.ts#L18)
 
----
+___
 
 ### TaskOutput
 
@@ -1991,27 +2012,27 @@ The interface for a spell object that's based on the `spellSchema`.
 
 #### Type declaration
 
-| Name   | Type                                     |
-| :----- | :--------------------------------------- |
-| `key`  | `string`                                 |
+| Name | Type |
+| :------ | :------ |
+| `key` | `string` |
 | `task` | [`MagickTask`](interfaces/MagickTask.md) |
-| `type` | [`TaskOutputTypes`](#taskoutputtypes)    |
+| `type` | [`TaskOutputTypes`](#taskoutputtypes) |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:433](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L433)
+[packages/core/shared/src/types.ts:443](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L443)
 
----
+___
 
 ### TaskOutputTypes
 
-Ƭ **TaskOutputTypes**: `"option"` \| `"output"`
+Ƭ **TaskOutputTypes**: ``"option"`` \| ``"output"``
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:39](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/taskPlugin/task.ts#L39)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:39](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/taskPlugin/task.ts#L39)
 
----
+___
 
 ### TaskSocketInfo
 
@@ -2019,26 +2040,26 @@ The interface for a spell object that's based on the `spellSchema`.
 
 #### Type declaration
 
-| Name           | Type                 |
-| :------------- | :------------------- |
-| `targetNode`   | `NodeData` \| `null` |
-| `targetSocket` | `string` \| `null`   |
+| Name | Type |
+| :------ | :------ |
+| `targetNode` | `NodeData` \| ``null`` |
+| `targetSocket` | `string` \| ``null`` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/task.ts:13](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/taskPlugin/task.ts#L13)
+[packages/core/shared/src/plugins/taskPlugin/task.ts:13](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/taskPlugin/task.ts#L13)
 
----
+___
 
 ### TaskType
 
-Ƭ **TaskType**: `"output"` \| `"option"`
+Ƭ **TaskType**: ``"output"`` \| ``"option"``
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:304](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L304)
+[packages/core/shared/src/types.ts:314](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L314)
 
----
+___
 
 ### TextCompletionData
 
@@ -2046,33 +2067,33 @@ The interface for a spell object that's based on the `spellSchema`.
 
 #### Type declaration
 
-| Name                | Type       |
-| :------------------ | :--------- |
-| `apiKey?`           | `string`   |
-| `frequency_penalty` | `number`   |
-| `max_tokens`        | `number`   |
-| `model`             | `string`   |
-| `presence_penalty`  | `number`   |
-| `prompt`            | `string`   |
-| `stop`              | `string`[] |
-| `temperature`       | `number`   |
-| `top_p`             | `number`   |
+| Name | Type |
+| :------ | :------ |
+| `apiKey?` | `string` |
+| `frequency_penalty` | `number` |
+| `max_tokens` | `number` |
+| `model` | `string` |
+| `presence_penalty` | `number` |
+| `prompt` | `string` |
+| `stop` | `string`[] |
+| `temperature` | `number` |
+| `top_p` | `number` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:526](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L526)
+[packages/core/shared/src/types.ts:544](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L544)
 
----
+___
 
 ### TextCompletionSubtype
 
-Ƭ **TextCompletionSubtype**: `"text"` \| `"embedding"` \| `"chat"`
+Ƭ **TextCompletionSubtype**: ``"text"`` \| ``"embedding"`` \| ``"chat"``
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:478](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L478)
+[packages/core/shared/src/types.ts:488](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L488)
 
----
+___
 
 ### UnknownData
 
@@ -2080,9 +2101,9 @@ The interface for a spell object that's based on the `spellSchema`.
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:162](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L162)
+[packages/core/shared/src/types.ts:172](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L172)
 
----
+___
 
 ### UnknownSpellData
 
@@ -2090,9 +2111,9 @@ The interface for a spell object that's based on the `spellSchema`.
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:163](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L163)
+[packages/core/shared/src/types.ts:173](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L173)
 
----
+___
 
 ### UpdateModuleSockets
 
@@ -2104,11 +2125,11 @@ The interface for a spell object that's based on the `spellSchema`.
 
 ##### Parameters
 
-| Name             | Type                        |
-| :--------------- | :-------------------------- |
-| `node`           | [`MagickNode`](#magicknode) |
-| `graphData?`     | [`GraphData`](#graphdata)   |
-| `useSocketName?` | `boolean`                   |
+| Name | Type |
+| :------ | :------ |
+| `node` | [`MagickNode`](#magicknode) |
+| `graphData?` | [`GraphData`](#graphdata) |
+| `useSocketName?` | `boolean` |
 
 ##### Returns
 
@@ -2122,9 +2143,9 @@ The interface for a spell object that's based on the `spellSchema`.
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/index.ts:31](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/modulePlugin/index.ts#L31)
+[packages/core/shared/src/plugins/modulePlugin/index.ts:31](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/modulePlugin/index.ts#L31)
 
----
+___
 
 ### UserSpellManager
 
@@ -2132,19 +2153,19 @@ The interface for a spell object that's based on the `spellSchema`.
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:683](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L683)
+[packages/core/shared/src/types.ts:701](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L701)
 
----
+___
 
 ### WorkerData
 
-Ƭ **WorkerData**: `NodeData` & { `[key: string]`: `unknown`; `console?`: `MagickConsole` ; `data?`: [`MagickNodeData`](#magicknodedata) ; `spell?`: `string` }
+Ƭ **WorkerData**: `NodeData` & { `[key: string]`: `unknown`; `console?`: `MagickConsole` ; `data?`: [`MagickNodeData`](#magicknodedata) ; `spell?`: `string`  }
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:389](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L389)
+[packages/core/shared/src/types.ts:399](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L399)
 
----
+___
 
 ### runSpellType
 
@@ -2152,57 +2173,57 @@ The interface for a spell object that's based on the `spellSchema`.
 
 #### Type parameters
 
-| Name       | Type                                    |
-| :--------- | :-------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `DataType` | [`UnknownSpellData`](#unknownspelldata) |
 
 #### Type declaration
 
-| Name              | Type                                    |
-| :---------------- | :-------------------------------------- |
-| `inputs`          | [`MagickSpellInput`](#magickspellinput) |
-| `projectId`       | `string`                                |
-| `publicVariables` | `DataType`                              |
-| `secrets`         | `Record`<`string`, `string`\>           |
-| `spellId`         | `string`                                |
+| Name | Type |
+| :------ | :------ |
+| `inputs` | [`MagickSpellInput`](#magickspellinput) |
+| `projectId` | `string` |
+| `publicVariables` | `DataType` |
+| `secrets` | `Record`<`string`, `string`\> |
+| `spellId` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:165](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L165)
+[packages/core/shared/src/types.ts:175](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L175)
 
 ## Variables
 
-### AGENT_UPDATE_TIME_MSEC
+### AGENT\_UPDATE\_TIME\_MSEC
 
-• `Const` **AGENT_UPDATE_TIME_MSEC**: `number`
-
-#### Defined in
-
-[packages/core/shared/src/config.ts:76](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L76)
-
----
-
-### API_ROOT_URL
-
-• `Const` **API_ROOT_URL**: `string`
+• `Const` **AGENT\_UPDATE\_TIME\_MSEC**: `number`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:45](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L45)
+[packages/core/shared/src/config.ts:85](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L85)
 
----
+___
 
-### COST_PER_TOKEN
+### API\_ROOT\_URL
 
-• `Const` **COST_PER_TOKEN**: [`CostPerToken`](#costpertoken)<[`TextModel`](enums/TextModel.md) \| [`EmbeddingModel`](enums/EmbeddingModel.md) \| [`ChatModel`](enums/ChatModel.md)\>
+• `Const` **API\_ROOT\_URL**: `string`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:45](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L45)
+
+___
+
+### COST\_PER\_TOKEN
+
+• `Const` **COST\_PER\_TOKEN**: [`CostPerToken`](#costpertoken)<[`TextModel`](enums/TextModel.md) \| [`EmbeddingModel`](enums/EmbeddingModel.md) \| [`ChatModel`](enums/ChatModel.md)\>
 
 The cost per token for each TextModel, EmbeddingModel and ChatModel
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:40](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/cost-calculator.ts#L40)
+[packages/core/shared/src/cost-calculator.ts:40](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/cost-calculator.ts#L40)
 
----
+___
 
 ### CachePlugin
 
@@ -2210,16 +2231,16 @@ The cost per token for each TextModel, EmbeddingModel and ChatModel
 
 #### Type declaration
 
-| Name      | Type                                                            |
-| :-------- | :-------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: [`MagickEditor`](classes/MagickEditor.md)) => `void` |
-| `name`    | `string`                                                        |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/cachePlugin/index.ts:90](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/cachePlugin/index.ts#L90)
+[packages/core/shared/src/plugins/cachePlugin/index.ts:90](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/cachePlugin/index.ts#L90)
 
----
+___
 
 ### ConsolePlugin
 
@@ -2233,76 +2254,76 @@ module:consolePlugin
 
 #### Type declaration
 
-| Name      | Type                                                                                                                 |
-| :-------- | :------------------------------------------------------------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: [`IRunContextEditor`](interfaces/IRunContextEditor.md), `[{?`: [`DebuggerArgs`](#debuggerargs)) => `void` |
-| `name`    | `string`                                                                                                             |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/consolePlugin/index.ts:80](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/consolePlugin/index.ts#L80)
+[packages/core/shared/src/plugins/consolePlugin/index.ts:80](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/consolePlugin/index.ts#L80)
 
----
+___
 
-### DATABASE_URL
+### DATABASE\_URL
 
-• `Const` **DATABASE_URL**: `undefined` \| `string`
-
-#### Defined in
-
-[packages/core/shared/src/config.ts:30](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L30)
-
----
-
-### DEFAULT_PROJECT_ID
-
-• `Const` **DEFAULT_PROJECT_ID**: `string`
+• `Const` **DATABASE\_URL**: `undefined` \| `string`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:31](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L31)
+[packages/core/shared/src/config.ts:30](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L30)
 
----
+___
 
-### DEFAULT_USER_ID
+### DEFAULT\_PROJECT\_ID
 
-• `Const` **DEFAULT_USER_ID**: `string`
-
-#### Defined in
-
-[packages/core/shared/src/config.ts:33](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L33)
-
----
-
-### DEFAULT_USER_TOKEN
-
-• `Const` **DEFAULT_USER_TOKEN**: `string`
+• `Const` **DEFAULT\_PROJECT\_ID**: `string`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:34](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L34)
+[packages/core/shared/src/config.ts:31](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L31)
 
----
+___
 
-### ELEVENLABS_API_KEY
+### DEFAULT\_USER\_ID
 
-• `Const` **ELEVENLABS_API_KEY**: `string`
-
-#### Defined in
-
-[packages/core/shared/src/config.ts:70](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L70)
-
----
-
-### ENABLE_SPEECH_SERVER
-
-• `Const` **ENABLE_SPEECH_SERVER**: `string` \| `true`
+• `Const` **DEFAULT\_USER\_ID**: `string`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:51](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L51)
+[packages/core/shared/src/config.ts:33](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L33)
 
----
+___
+
+### DEFAULT\_USER\_TOKEN
+
+• `Const` **DEFAULT\_USER\_TOKEN**: `string`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:34](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L34)
+
+___
+
+### ELEVENLABS\_API\_KEY
+
+• `Const` **ELEVENLABS\_API\_KEY**: `string`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:79](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L79)
+
+___
+
+### ENABLE\_SPEECH\_SERVER
+
+• `Const` **ENABLE\_SPEECH\_SERVER**: `string` \| ``true``
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:51](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L51)
+
+___
 
 ### ErrorPlugin
 
@@ -2310,46 +2331,46 @@ module:consolePlugin
 
 #### Type declaration
 
-| Name      | Type                                                                                                                                                              |
-| :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `install` | (`engine`: [`IRunContextEditor`](interfaces/IRunContextEditor.md), `options`: { `server?`: `boolean` ; `throwError?`: (`error`: `unknown`) => `void` }) => `void` |
-| `name`    | `string`                                                                                                                                                          |
+| Name | Type |
+| :------ | :------ |
+| `install` | (`engine`: [`IRunContextEditor`](interfaces/IRunContextEditor.md), `options`: { `server?`: `boolean` ; `throwError?`: (`error`: `unknown`) => `void`  }) => `void` |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/errorPlugin/index.ts:48](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/errorPlugin/index.ts#L48)
+[packages/core/shared/src/plugins/errorPlugin/index.ts:48](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/errorPlugin/index.ts#L48)
 
----
+___
 
-### FILE_SERVER_PORT
+### FILE\_SERVER\_PORT
 
-• `Const` **FILE_SERVER_PORT**: `string` \| `65530`
-
-#### Defined in
-
-[packages/core/shared/src/config.ts:54](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L54)
-
----
-
-### FILE_SERVER_URL
-
-• `Const` **FILE_SERVER_URL**: `string`
+• `Const` **FILE\_SERVER\_PORT**: `string` \| ``65530``
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:56](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L56)
+[packages/core/shared/src/config.ts:54](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L54)
 
----
+___
 
-### GOOGLE_APPLICATION_CREDENTIALS
+### FILE\_SERVER\_URL
 
-• `Const` **GOOGLE_APPLICATION_CREDENTIALS**: `any`
+• `Const` **FILE\_SERVER\_URL**: `string`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:47](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L47)
+[packages/core/shared/src/config.ts:56](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L56)
 
----
+___
+
+### GOOGLE\_APPLICATION\_CREDENTIALS
+
+• `Const` **GOOGLE\_APPLICATION\_CREDENTIALS**: `any`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:47](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L47)
+
+___
 
 ### HistoryPlugin
 
@@ -2357,26 +2378,26 @@ module:consolePlugin
 
 #### Type declaration
 
-| Name      | Type                                             |
-| :-------- | :----------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: `any`, `options`: `Object`) => `void` |
-| `name`    | `string`                                         |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/historyPlugin/index.ts:77](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/historyPlugin/index.ts#L77)
+[packages/core/shared/src/plugins/historyPlugin/index.ts:77](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/historyPlugin/index.ts#L77)
 
----
+___
 
-### IGNORE_AUTH
+### IGNORE\_AUTH
 
-• `Const` **IGNORE_AUTH**: `boolean`
+• `Const` **IGNORE\_AUTH**: `boolean`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:29](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L29)
+[packages/core/shared/src/config.ts:29](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L29)
 
----
+___
 
 ### InspectorPlugin
 
@@ -2384,26 +2405,26 @@ module:consolePlugin
 
 #### Type declaration
 
-| Name      | Type                                                                         |
-| :-------- | :--------------------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: [`IRunContextEditor`](interfaces/IRunContextEditor.md)) => `void` |
-| `name`    | `string`                                                                     |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/inspectorPlugin/index.ts:63](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/inspectorPlugin/index.ts#L63)
+[packages/core/shared/src/plugins/inspectorPlugin/index.ts:63](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/inspectorPlugin/index.ts#L63)
 
----
+___
 
-### JWT_SECRET
+### JWT\_SECRET
 
-• `Const` **JWT_SECRET**: `string`
+• `Const` **JWT\_SECRET**: `string`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:63](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L63)
+[packages/core/shared/src/config.ts:63](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L63)
 
----
+___
 
 ### KeyCodePlugin
 
@@ -2411,16 +2432,16 @@ module:consolePlugin
 
 #### Type declaration
 
-| Name      | Type                                                                         |
-| :-------- | :--------------------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: [`IRunContextEditor`](interfaces/IRunContextEditor.md)) => `void` |
-| `name`    | `string`                                                                     |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/keyCodePlugin/index.ts:41](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/keyCodePlugin/index.ts#L41)
+[packages/core/shared/src/plugins/keyCodePlugin/index.ts:41](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/keyCodePlugin/index.ts#L41)
 
----
+___
 
 ### LifecyclePlugin
 
@@ -2430,16 +2451,16 @@ Lifecycle Plugin
 
 #### Type declaration
 
-| Name      | Type                                       |
-| :-------- | :----------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: `NodeEditor`<`any`\>) => `void` |
-| `name`    | `string`                                   |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/lifecyclePlugin/index.ts:92](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/lifecyclePlugin/index.ts#L92)
+[packages/core/shared/src/plugins/lifecyclePlugin/index.ts:92](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/lifecyclePlugin/index.ts#L92)
 
----
+___
 
 ### ModulePlugin
 
@@ -2447,16 +2468,16 @@ Lifecycle Plugin
 
 #### Type declaration
 
-| Name      | Type                                                                                                                                                       |
-| :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`runContext`: [`ModuleIRunContextEditor`](interfaces/ModuleIRunContextEditor.md), `__namedParameters`: [`ModulePluginArgs`](#modulepluginargs)) => `void` |
-| `name`    | `string`                                                                                                                                                   |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/modulePlugin/index.ts:279](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/modulePlugin/index.ts#L279)
+[packages/core/shared/src/plugins/modulePlugin/index.ts:279](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/modulePlugin/index.ts#L279)
 
----
+___
 
 ### MultiCopyPlugin
 
@@ -2464,16 +2485,16 @@ Lifecycle Plugin
 
 #### Type declaration
 
-| Name      | Type                                                                         |
-| :-------- | :--------------------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: [`IRunContextEditor`](interfaces/IRunContextEditor.md)) => `void` |
-| `name`    | `string`                                                                     |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/multiCopyPlugin/index.ts:164](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/multiCopyPlugin/index.ts#L164)
+[packages/core/shared/src/plugins/multiCopyPlugin/index.ts:164](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/multiCopyPlugin/index.ts#L164)
 
----
+___
 
 ### MultiSocketGenerator
 
@@ -2481,26 +2502,26 @@ Lifecycle Plugin
 
 #### Type declaration
 
-| Name      | Type                                                                         |
-| :-------- | :--------------------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: [`IRunContextEditor`](interfaces/IRunContextEditor.md)) => `void` |
-| `name`    | `string`                                                                     |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/multiSocketGenerator/index.ts:70](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/multiSocketGenerator/index.ts#L70)
+[packages/core/shared/src/plugins/multiSocketGenerator/index.ts:70](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/multiSocketGenerator/index.ts#L70)
 
----
+___
 
-### NODE_ENV
+### NODE\_ENV
 
-• `Const` **NODE_ENV**: `string`
+• `Const` **NODE\_ENV**: `string`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:59](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L59)
+[packages/core/shared/src/config.ts:59](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L59)
 
----
+___
 
 ### NodeClickPlugin
 
@@ -2508,66 +2529,66 @@ Lifecycle Plugin
 
 #### Type declaration
 
-| Name      | Type                                                                         |
-| :-------- | :--------------------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: [`IRunContextEditor`](interfaces/IRunContextEditor.md)) => `void` |
-| `name`    | `string`                                                                     |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/nodeClickPlugin/index.ts:38](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/nodeClickPlugin/index.ts#L38)
+[packages/core/shared/src/plugins/nodeClickPlugin/index.ts:38](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/nodeClickPlugin/index.ts#L38)
 
----
+___
 
-### PAGINATE_DEFAULT
+### PAGINATE\_DEFAULT
 
-• `Const` **PAGINATE_DEFAULT**: `string`
-
-#### Defined in
-
-[packages/core/shared/src/config.ts:61](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L61)
-
----
-
-### PAGINATE_MAX
-
-• `Const` **PAGINATE_MAX**: `string`
+• `Const` **PAGINATE\_DEFAULT**: `string`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:62](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L62)
+[packages/core/shared/src/config.ts:61](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L61)
 
----
+___
 
-### PING_AGENT_TIME_MSEC
+### PAGINATE\_MAX
 
-• `Const` **PING_AGENT_TIME_MSEC**: `number`
-
-#### Defined in
-
-[packages/core/shared/src/config.ts:79](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L79)
-
----
-
-### POSTHOG_API_KEY
-
-• `Const` **POSTHOG_API_KEY**: `string`
+• `Const` **PAGINATE\_MAX**: `string`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:67](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L67)
+[packages/core/shared/src/config.ts:62](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L62)
 
----
+___
 
-### POSTHOG_ENABLED
+### PING\_AGENT\_TIME\_MSEC
 
-• `Const` **POSTHOG_ENABLED**: `boolean`
+• `Const` **PING\_AGENT\_TIME\_MSEC**: `number`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:65](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L65)
+[packages/core/shared/src/config.ts:88](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L88)
 
----
+___
+
+### POSTHOG\_API\_KEY
+
+• `Const` **POSTHOG\_API\_KEY**: `string`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:67](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L67)
+
+___
+
+### POSTHOG\_ENABLED
+
+• `Const` **POSTHOG\_ENABLED**: `boolean`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:65](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L65)
+
+___
 
 ### PRODUCTION
 
@@ -2575,59 +2596,109 @@ Lifecycle Plugin
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:38](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L38)
+[packages/core/shared/src/config.ts:38](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L38)
 
----
+___
 
-### REDISCLOUD_URL
+### REDISCLOUD\_DB
 
-• `Const` **REDISCLOUD_URL**: `string`
-
-#### Defined in
-
-[packages/core/shared/src/config.ts:68](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L68)
-
----
-
-### SERVER_HOST
-
-• `Const` **SERVER_HOST**: `string`
+• `Const` **REDISCLOUD\_DB**: `number`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:40](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L40)
+[packages/core/shared/src/config.ts:75](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L75)
 
----
+___
 
-### SERVER_PORT
+### REDISCLOUD\_HOST
 
-• `Const` **SERVER_PORT**: `string`
-
-#### Defined in
-
-[packages/core/shared/src/config.ts:39](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L39)
-
----
-
-### SPEECH_SERVER_PORT
-
-• `Const` **SPEECH_SERVER_PORT**: `string` \| `65532`
+• `Const` **REDISCLOUD\_HOST**: `string`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:49](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L49)
+[packages/core/shared/src/config.ts:68](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L68)
 
----
+___
 
-### SPEECH_SERVER_URL
+### REDISCLOUD\_PASSWORD
 
-• `Const` **SPEECH_SERVER_URL**: `string`
+• `Const` **REDISCLOUD\_PASSWORD**: `undefined` \| `string`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:41](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L41)
+[packages/core/shared/src/config.ts:76](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L76)
 
----
+___
+
+### REDISCLOUD\_PORT
+
+• `Const` **REDISCLOUD\_PORT**: `number`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:69](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L69)
+
+___
+
+### REDISCLOUD\_URL
+
+• `Const` **REDISCLOUD\_URL**: `string`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:71](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L71)
+
+___
+
+### REDISCLOUD\_USERNAME
+
+• `Const` **REDISCLOUD\_USERNAME**: `undefined` \| `string`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:77](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L77)
+
+___
+
+### SERVER\_HOST
+
+• `Const` **SERVER\_HOST**: `string`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:40](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L40)
+
+___
+
+### SERVER\_PORT
+
+• `Const` **SERVER\_PORT**: `string`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:39](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L39)
+
+___
+
+### SPEECH\_SERVER\_PORT
+
+• `Const` **SPEECH\_SERVER\_PORT**: `string` \| ``65532``
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:49](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L49)
+
+___
+
+### SPEECH\_SERVER\_URL
+
+• `Const` **SPEECH\_SERVER\_URL**: `string`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:41](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L41)
+
+___
 
 ### STANDALONE
 
@@ -2635,9 +2706,9 @@ Lifecycle Plugin
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:37](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L37)
+[packages/core/shared/src/config.ts:37](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L37)
 
----
+___
 
 ### SelectionPlugin
 
@@ -2645,16 +2716,16 @@ Lifecycle Plugin
 
 #### Type declaration
 
-| Name      | Type                                                        |
-| :-------- | :---------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: `NodeEditor`<`any`\>, `params`: `Cfg`) => `void` |
-| `name`    | `string`                                                    |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/selectionPlugin/index.ts:292](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/selectionPlugin/index.ts#L292)
+[packages/core/shared/src/plugins/selectionPlugin/index.ts:292](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/selectionPlugin/index.ts#L292)
 
----
+___
 
 ### SocketGeneratorPlugin
 
@@ -2662,16 +2733,16 @@ Lifecycle Plugin
 
 #### Type declaration
 
-| Name      | Type                                                                         |
-| :-------- | :--------------------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: [`IRunContextEditor`](interfaces/IRunContextEditor.md)) => `void` |
-| `name`    | `string`                                                                     |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/socketGenerator/index.ts:71](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/socketGenerator/index.ts#L71)
+[packages/core/shared/src/plugins/socketGenerator/index.ts:71](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/socketGenerator/index.ts#L71)
 
----
+___
 
 ### SocketOverridePlugin
 
@@ -2679,16 +2750,16 @@ Lifecycle Plugin
 
 #### Type declaration
 
-| Name      | Type                                                                         |
-| :-------- | :--------------------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: [`IRunContextEditor`](interfaces/IRunContextEditor.md)) => `void` |
-| `name`    | `string`                                                                     |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/socketOverridePlugin/index.ts:24](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/socketOverridePlugin/index.ts#L24)
+[packages/core/shared/src/plugins/socketOverridePlugin/index.ts:24](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/socketOverridePlugin/index.ts#L24)
 
----
+___
 
 ### SocketPlugin
 
@@ -2696,26 +2767,26 @@ Lifecycle Plugin
 
 #### Type declaration
 
-| Name      | Type                                                                                                                                       |
-| :-------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: [`IRunContextEditor`](interfaces/IRunContextEditor.md), `__namedParameters`: [`SocketPluginArgs`](#socketpluginargs)) => `void` |
-| `name`    | `string`                                                                                                                                   |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/socketPlugin/index.ts:134](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/socketPlugin/index.ts#L134)
+[packages/core/shared/src/plugins/socketPlugin/index.ts:134](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/socketPlugin/index.ts#L134)
 
----
+___
 
-### TRUSTED_PARENT_URL
+### TRUSTED\_PARENT\_URL
 
-• `Const` **TRUSTED_PARENT_URL**: `null` \| `string`
+• `Const` **TRUSTED\_PARENT\_URL**: ``null`` \| `string`
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:43](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L43)
+[packages/core/shared/src/config.ts:43](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L43)
 
----
+___
 
 ### TaskPlugin
 
@@ -2723,58 +2794,58 @@ Lifecycle Plugin
 
 #### Type declaration
 
-| Name      | Type                                                            |
-| :-------- | :-------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `install` | (`editor`: [`MagickEditor`](classes/MagickEditor.md)) => `void` |
-| `name`    | `string`                                                        |
+| `name` | `string` |
 
 #### Defined in
 
-[packages/core/shared/src/plugins/taskPlugin/index.ts:108](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugins/taskPlugin/index.ts#L108)
+[packages/core/shared/src/plugins/taskPlugin/index.ts:108](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugins/taskPlugin/index.ts#L108)
 
----
+___
 
 ### USESSL
 
-• `Const` **USESSL**: `string` \| `false`
+• `Const` **USESSL**: `string` \| ``false``
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:58](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L58)
+[packages/core/shared/src/config.ts:58](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L58)
 
----
+___
 
-### USSSL_SPEECH
+### USSSL\_SPEECH
 
-• `Const` **USSSL_SPEECH**: `string` \| `true`
-
-#### Defined in
-
-[packages/core/shared/src/config.ts:53](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L53)
-
----
-
-### VITE_APP_TRUSTED_PARENT_URL
-
-• `Const` **VITE_APP_TRUSTED_PARENT_URL**: `string`
+• `Const` **USSSL\_SPEECH**: `string` \| ``true``
 
 #### Defined in
 
-[packages/core/shared/src/config.ts:73](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/config.ts#L73)
+[packages/core/shared/src/config.ts:53](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L53)
 
----
+___
+
+### VITE\_APP\_TRUSTED\_PARENT\_URL
+
+• `Const` **VITE\_APP\_TRUSTED\_PARENT\_URL**: `string`
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:82](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L82)
+
+___
 
 ### agentSchema
 
-• `Const` **agentSchema**: `TObject`<{ `data`: `TOptional`<`TAny`\> ; `enabled`: `TOptional`<`TBoolean`\> ; `id`: `TString`<`string`\> ; `name`: `TString`<`string`\> ; `pingedAt`: `TOptional`<`TString`<`string`\>\> ; `projectId`: `TString`<`string`\> ; `publicVariables`: `TOptional`<`TAny`\> ; `rootSpell`: `TOptional`<`TAny`\> ; `secrets`: `TOptional`<`TString`<`string`\>\> ; `updatedAt`: `TOptional`<`TString`<`string`\>\> }\>
+• `Const` **agentSchema**: `TObject`<{ `data`: `TOptional`<`TAny`\> ; `enabled`: `TOptional`<`TBoolean`\> ; `id`: `TString`<`string`\> ; `name`: `TString`<`string`\> ; `pingedAt`: `TOptional`<`TString`<`string`\>\> ; `projectId`: `TString`<`string`\> ; `publicVariables`: `TOptional`<`TAny`\> ; `rootSpell`: `TOptional`<`TAny`\> ; `runState`: `TOptional`<`TString`<`string`\>\> ; `secrets`: `TOptional`<`TString`<`string`\>\> ; `updatedAt`: `TOptional`<`TString`<`string`\>\>  }\>
 
 Full data model schema for an agent.
 
 #### Defined in
 
-[packages/core/shared/src/schemas.ts:53](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/schemas.ts#L53)
+[packages/core/shared/src/schemas.ts:54](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/schemas.ts#L54)
 
----
+___
 
 ### anySocket
 
@@ -2782,9 +2853,9 @@ Full data model schema for an agent.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:55](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L55)
+[packages/core/shared/src/sockets.ts:55](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L55)
 
----
+___
 
 ### arraySocket
 
@@ -2792,9 +2863,9 @@ Full data model schema for an agent.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:58](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L58)
+[packages/core/shared/src/sockets.ts:58](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L58)
 
----
+___
 
 ### audioSocket
 
@@ -2802,9 +2873,9 @@ Full data model schema for an agent.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:63](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L63)
+[packages/core/shared/src/sockets.ts:63](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L63)
 
----
+___
 
 ### booleanSocket
 
@@ -2812,9 +2883,29 @@ Full data model schema for an agent.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:57](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L57)
+[packages/core/shared/src/sockets.ts:57](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L57)
 
----
+___
+
+### bullMQConnection
+
+• `Const` **bullMQConnection**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `db` | `number` |
+| `host` | `string` |
+| `password` | `undefined` \| `string` |
+| `port` | `number` |
+| `username` | `undefined` \| `string` |
+
+#### Defined in
+
+[packages/core/shared/src/config.ts:92](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/config.ts#L92)
+
+___
 
 ### components
 
@@ -2822,21 +2913,21 @@ Full data model schema for an agent.
 
 #### Defined in
 
-[packages/core/shared/src/nodes/index.ts:71](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/nodes/index.ts#L71)
+[packages/core/shared/src/nodes/index.ts:76](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/nodes/index.ts#L76)
 
----
+___
 
 ### documentSchema
 
-• `Const` **documentSchema**: `TObject`<{ `content`: `TOptional`<`TString`<`string`\>\> ; `date`: `TOptional`<`TString`<`string`\>\> ; `embedding`: `TOptional`<`TAny`\> ; `id`: `TString`<`string`\> ; `projectId`: `TString`<`string`\> ; `type`: `TOptional`<`TString`<`string`\>\> }\>
+• `Const` **documentSchema**: `TObject`<{ `content`: `TOptional`<`TString`<`string`\>\> ; `date`: `TOptional`<`TString`<`string`\>\> ; `embedding`: `TOptional`<`TAny`\> ; `id`: `TString`<`string`\> ; `projectId`: `TString`<`string`\> ; `type`: `TOptional`<`TString`<`string`\>\>  }\>
 
 Full data model schema for a document.
 
 #### Defined in
 
-[packages/core/shared/src/schemas.ts:87](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/schemas.ts#L87)
+[packages/core/shared/src/schemas.ts:89](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/schemas.ts#L89)
 
----
+___
 
 ### documentSocket
 
@@ -2844,9 +2935,9 @@ Full data model schema for a document.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:64](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L64)
+[packages/core/shared/src/sockets.ts:64](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L64)
 
----
+___
 
 ### embeddingSocket
 
@@ -2854,9 +2945,9 @@ Full data model schema for a document.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:65](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L65)
+[packages/core/shared/src/sockets.ts:65](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L65)
 
----
+___
 
 ### eventSocket
 
@@ -2864,9 +2955,9 @@ Full data model schema for a document.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:62](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L62)
+[packages/core/shared/src/sockets.ts:62](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L62)
 
----
+___
 
 ### globalsManager
 
@@ -2874,9 +2965,9 @@ Full data model schema for a document.
 
 #### Defined in
 
-[packages/core/shared/src/globals.ts:38](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/globals.ts#L38)
+[packages/core/shared/src/globals.ts:38](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/globals.ts#L38)
 
----
+___
 
 ### imageSocket
 
@@ -2884,9 +2975,9 @@ Full data model schema for a document.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:67](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L67)
+[packages/core/shared/src/sockets.ts:67](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L67)
 
----
+___
 
 ### numberSocket
 
@@ -2894,9 +2985,9 @@ Full data model schema for a document.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:56](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L56)
+[packages/core/shared/src/sockets.ts:56](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L56)
 
----
+___
 
 ### objectSocket
 
@@ -2904,9 +2995,9 @@ Full data model schema for a document.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:60](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L60)
+[packages/core/shared/src/sockets.ts:60](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L60)
 
----
+___
 
 ### pluginManager
 
@@ -2914,9 +3005,9 @@ Full data model schema for a document.
 
 #### Defined in
 
-[packages/core/shared/src/plugin.ts:463](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/plugin.ts#L463)
+[packages/core/shared/src/plugin.ts:463](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/plugin.ts#L463)
 
----
+___
 
 ### socketNameMap
 
@@ -2924,21 +3015,21 @@ Full data model schema for a document.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:39](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L39)
+[packages/core/shared/src/sockets.ts:39](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L39)
 
----
+___
 
 ### spellSchema
 
-• `Const` **spellSchema**: `TObject`<{ `createdAt`: `TOptional`<`TString`<`string`\>\> ; `graph`: `TObject`<{ `id`: `TString`<`string`\> ; `nodes`: `TAny` }\> ; `hash`: `TString`<`string`\> ; `id`: `TString`<`string`\> ; `name`: `TString`<`string`\> ; `projectId`: `TString`<`string`\> ; `updatedAt`: `TOptional`<`TString`<`string`\>\> }\>
+• `Const` **spellSchema**: `TObject`<{ `createdAt`: `TOptional`<`TString`<`string`\>\> ; `graph`: `TObject`<{ `id`: `TString`<`string`\> ; `nodes`: `TAny`  }\> ; `hash`: `TString`<`string`\> ; `id`: `TString`<`string`\> ; `name`: `TString`<`string`\> ; `projectId`: `TString`<`string`\> ; `updatedAt`: `TOptional`<`TString`<`string`\>\>  }\>
 
 Full data model schema for a spell.
 
 #### Defined in
 
-[packages/core/shared/src/schemas.ts:17](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/schemas.ts#L17)
+[packages/core/shared/src/schemas.ts:17](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/schemas.ts#L17)
 
----
+___
 
 ### stringSocket
 
@@ -2946,9 +3037,9 @@ Full data model schema for a spell.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:59](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L59)
+[packages/core/shared/src/sockets.ts:59](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L59)
 
----
+___
 
 ### taskSocket
 
@@ -2956,9 +3047,9 @@ Full data model schema for a spell.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:66](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L66)
+[packages/core/shared/src/sockets.ts:66](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L66)
 
----
+___
 
 ### triggerSocket
 
@@ -2966,7 +3057,7 @@ Full data model schema for a spell.
 
 #### Defined in
 
-[packages/core/shared/src/sockets.ts:61](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/sockets.ts#L61)
+[packages/core/shared/src/sockets.ts:61](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/sockets.ts#L61)
 
 ## Functions
 
@@ -2976,8 +3067,8 @@ Full data model schema for a spell.
 
 #### Parameters
 
-| Name   | Type                          |
-| :----- | :---------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `data` | `InputsData` \| `OutputsData` |
 
 #### Returns
@@ -2986,9 +3077,9 @@ Full data model schema for a spell.
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:398](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L398)
+[packages/core/shared/src/types.ts:408](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L408)
 
----
+___
 
 ### AsInputsAndOutputsData
 
@@ -2996,8 +3087,8 @@ Full data model schema for a spell.
 
 #### Parameters
 
-| Name   | Type                                  |
-| :----- | :------------------------------------ |
+| Name | Type |
+| :------ | :------ |
 | `data` | [`DataSocketType`](#datasockettype)[] |
 
 #### Returns
@@ -3006,9 +3097,9 @@ Full data model schema for a spell.
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:410](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L410)
+[packages/core/shared/src/types.ts:420](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L420)
 
----
+___
 
 ### AsInputsData
 
@@ -3016,8 +3107,8 @@ Full data model schema for a spell.
 
 #### Parameters
 
-| Name   | Type                                  |
-| :----- | :------------------------------------ |
+| Name | Type |
+| :------ | :------ |
 | `data` | [`DataSocketType`](#datasockettype)[] |
 
 #### Returns
@@ -3026,9 +3117,9 @@ Full data model schema for a spell.
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:402](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L402)
+[packages/core/shared/src/types.ts:412](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L412)
 
----
+___
 
 ### AsOutputsData
 
@@ -3036,8 +3127,8 @@ Full data model schema for a spell.
 
 #### Parameters
 
-| Name   | Type                                  |
-| :----- | :------------------------------------ |
+| Name | Type |
+| :------ | :------ |
 | `data` | [`DataSocketType`](#datasockettype)[] |
 
 #### Returns
@@ -3046,9 +3137,9 @@ Full data model schema for a spell.
 
 #### Defined in
 
-[packages/core/shared/src/types.ts:406](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/types.ts#L406)
+[packages/core/shared/src/types.ts:416](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/types.ts#L416)
 
----
+___
 
 ### calculateCompletionCost
 
@@ -3059,11 +3150,11 @@ for a given TextModel or ChatModel
 
 #### Parameters
 
-| Name                 | Type                                                                   | Description                     |
-| :------------------- | :--------------------------------------------------------------------- | :------------------------------ |
-| `params`             | `Object`                                                               | The parameters for the function |
-| `params.model`       | [`TextModel`](enums/TextModel.md) \| [`ChatModel`](enums/ChatModel.md) | The model to be used            |
-| `params.totalTokens` | `number`                                                               | The total number of tokens      |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `params` | `Object` | The parameters for the function |
+| `params.model` | [`TextModel`](enums/TextModel.md) \| [`ChatModel`](enums/ChatModel.md) | The model to be used |
+| `params.totalTokens` | `number` | The total number of tokens |
 
 #### Returns
 
@@ -3071,9 +3162,9 @@ for a given TextModel or ChatModel
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:62](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/cost-calculator.ts#L62)
+[packages/core/shared/src/cost-calculator.ts:62](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/cost-calculator.ts#L62)
 
----
+___
 
 ### calculateEmbeddingCost
 
@@ -3084,11 +3175,11 @@ for a given EmbeddingModel
 
 #### Parameters
 
-| Name            | Type                                        | Description                     |
-| :-------------- | :------------------------------------------ | :------------------------------ |
-| `params`        | `Object`                                    | The parameters for the function |
-| `params.model`  | [`EmbeddingModel`](enums/EmbeddingModel.md) | The model to be used            |
-| `params.tokens` | `number`                                    | The number of tokens            |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `params` | `Object` | The parameters for the function |
+| `params.model` | [`EmbeddingModel`](enums/EmbeddingModel.md) | The model to be used |
+| `params.tokens` | `number` | The number of tokens |
 
 #### Returns
 
@@ -3096,13 +3187,13 @@ for a given EmbeddingModel
 
 #### Defined in
 
-[packages/core/shared/src/cost-calculator.ts:80](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/cost-calculator.ts#L80)
+[packages/core/shared/src/cost-calculator.ts:80](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/cost-calculator.ts#L80)
 
----
+___
 
 ### configureManager
 
-▸ **configureManager**(): (`app`: { `userSpellManagers?`: [`UserSpellManager`](#userspellmanager) }) => `void`
+▸ **configureManager**(): (`app`: { `userSpellManagers?`: [`UserSpellManager`](#userspellmanager)  }) => `void`
 
 #### Returns
 
@@ -3112,9 +3203,9 @@ for a given EmbeddingModel
 
 ##### Parameters
 
-| Name                     | Type                                    |
-| :----------------------- | :-------------------------------------- |
-| `app`                    | `Object`                                |
+| Name | Type |
+| :------ | :------ |
+| `app` | `Object` |
 | `app.userSpellManagers?` | [`UserSpellManager`](#userspellmanager) |
 
 ##### Returns
@@ -3123,9 +3214,9 @@ for a given EmbeddingModel
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/configureManager.ts:3](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/spellManager/configureManager.ts#L3)
+[packages/core/shared/src/spellManager/configureManager.ts:3](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/spellManager/configureManager.ts#L3)
 
----
+___
 
 ### extractModuleInputKeys
 
@@ -3135,8 +3226,8 @@ Extracts all module inputs based upon a given key.
 
 #### Parameters
 
-| Name   | Type   | Description                                                        |
-| :----- | :----- | :----------------------------------------------------------------- |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `data` | `Data` | The data object which contains the GraphData to search inputs for. |
 
 #### Returns
@@ -3147,9 +3238,9 @@ An array containing string values of all input keys found in the GraphData.
 
 #### Defined in
 
-[packages/core/shared/src/spellManager/graphHelpers.ts:9](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/spellManager/graphHelpers.ts#L9)
+[packages/core/shared/src/spellManager/graphHelpers.ts:9](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/spellManager/graphHelpers.ts#L9)
 
----
+___
 
 ### extractNodes
 
@@ -3157,10 +3248,10 @@ An array containing string values of all input keys found in the GraphData.
 
 #### Parameters
 
-| Name    | Type                                            |
-| :------ | :---------------------------------------------- |
-| `nodes` | `NodesData`                                     |
-| `map`   | `Map`<`string`, `unknown`\> \| `Set`<`string`\> |
+| Name | Type |
+| :------ | :------ |
+| `nodes` | `NodesData` |
+| `map` | `Map`<`string`, `unknown`\> \| `Set`<`string`\> |
 
 #### Returns
 
@@ -3168,9 +3259,9 @@ An array containing string values of all input keys found in the GraphData.
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:110](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/engine.ts#L110)
+[packages/core/shared/src/engine.ts:110](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/engine.ts#L110)
 
----
+___
 
 ### getLogger
 
@@ -3182,9 +3273,9 @@ An array containing string values of all input keys found in the GraphData.
 
 #### Defined in
 
-[packages/core/shared/src/logger/index.ts:27](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/logger/index.ts#L27)
+[packages/core/shared/src/logger/index.ts:27](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/logger/index.ts#L27)
 
----
+___
 
 ### getNodes
 
@@ -3200,9 +3291,9 @@ An array of sorted MagickComponents.
 
 #### Defined in
 
-[packages/core/shared/src/nodes/index.ts:163](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/nodes/index.ts#L163)
+[packages/core/shared/src/nodes/index.ts:173](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/nodes/index.ts#L173)
 
----
+___
 
 ### getSpell
 
@@ -3212,8 +3303,8 @@ Fetch a specific spell from the project's spells based on its id.
 
 #### Parameters
 
-| Name    | Type       | Description                                              |
-| :------ | :--------- | :------------------------------------------------------- |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `input` | `GetSpell` | Object containing the app, id of the spell and projectId |
 
 #### Returns
@@ -3224,9 +3315,9 @@ Fetch a specific spell from the project's spells based on its id.
 
 #### Defined in
 
-[packages/core/shared/src/utils/getSpell.ts:18](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/utils/getSpell.ts#L18)
+[packages/core/shared/src/utils/getSpell.ts:18](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/utils/getSpell.ts#L18)
 
----
+___
 
 ### getTriggeredNode
 
@@ -3234,11 +3325,11 @@ Fetch a specific spell from the project's spells based on its id.
 
 #### Parameters
 
-| Name        | Type                                            |
-| :---------- | :---------------------------------------------- |
-| `data`      | `Data`                                          |
-| `socketKey` | `string`                                        |
-| `map`       | `Map`<`string`, `unknown`\> \| `Set`<`string`\> |
+| Name | Type |
+| :------ | :------ |
+| `data` | `Data` |
+| `socketKey` | `string` |
+| `map` | `Map`<`string`, `unknown`\> \| `Set`<`string`\> |
 
 #### Returns
 
@@ -3246,9 +3337,9 @@ Fetch a specific spell from the project's spells based on its id.
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:123](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/engine.ts#L123)
+[packages/core/shared/src/engine.ts:123](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/engine.ts#L123)
 
----
+___
 
 ### initLogger
 
@@ -3256,8 +3347,8 @@ Fetch a specific spell from the project's spells based on its id.
 
 #### Parameters
 
-| Name   | Type     | Default value       |
-| :----- | :------- | :------------------ |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
 | `opts` | `object` | `defaultLoggerOpts` |
 
 #### Returns
@@ -3266,9 +3357,9 @@ Fetch a specific spell from the project's spells based on its id.
 
 #### Defined in
 
-[packages/core/shared/src/logger/index.ts:8](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/logger/index.ts#L8)
+[packages/core/shared/src/logger/index.ts:8](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/logger/index.ts#L8)
 
----
+___
 
 ### initSharedEngine
 
@@ -3276,8 +3367,8 @@ Fetch a specific spell from the project's spells based on its id.
 
 #### Parameters
 
-| Name             | Type                                          |
-| :--------------- | :-------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `«destructured»` | [`InitEngineArguments`](#initenginearguments) |
 
 #### Returns
@@ -3286,13 +3377,13 @@ Fetch a specific spell from the project's spells based on its id.
 
 #### Defined in
 
-[packages/core/shared/src/engine.ts:66](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/engine.ts#L66)
+[packages/core/shared/src/engine.ts:66](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/engine.ts#L66)
 
----
+___
 
 ### mapStatusCode
 
-▸ **mapStatusCode**(`customErrorCode`): `400` \| `401` \| `404` \| `500` \| `239`
+▸ **mapStatusCode**(`customErrorCode`): ``400`` \| ``401`` \| ``404`` \| ``500`` \| ``239``
 
 Maps the custom error code to its corresponding HTTP status code.
 
@@ -3300,21 +3391,21 @@ Maps the custom error code to its corresponding HTTP status code.
 
 #### Parameters
 
-| Name              | Type                                    | Description                  |
-| :---------------- | :-------------------------------------- | :--------------------------- |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `customErrorCode` | [`CustomErrorCodes`](#customerrorcodes) | The code of the custom error |
 
 #### Returns
 
-`400` \| `401` \| `404` \| `500` \| `239`
+``400`` \| ``401`` \| ``404`` \| ``500`` \| ``239``
 
 The corresponding HTTP status code
 
 #### Defined in
 
-[packages/core/shared/src/utils/SpellError.ts:51](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/utils/SpellError.ts#L51)
+[packages/core/shared/src/utils/SpellError.ts:51](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/utils/SpellError.ts#L51)
 
----
+___
 
 ### processCode
 
@@ -3324,11 +3415,11 @@ Process the code based on the given inputs.
 
 #### Parameters
 
-| Name       | Type                                        | Default value  | Description                                                              |
-| :--------- | :------------------------------------------ | :------------- | :----------------------------------------------------------------------- |
-| `code`     | `unknown`                                   | `undefined`    | The code to process.                                                     |
-| `inputs`   | [`MagickWorkerInputs`](#magickworkerinputs) | `undefined`    | The input values for the code.                                           |
-| `data`     | [`UnknownData`](#unknowndata)               | `undefined`    | The data values required for processing the code.                        |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `code` | `unknown` | `undefined` | The code to process. |
+| `inputs` | [`MagickWorkerInputs`](#magickworkerinputs) | `undefined` | The input values for the code. |
+| `data` | [`UnknownData`](#unknowndata) | `undefined` | The data values required for processing the code. |
 | `language` | [`SupportedLanguages`](#supportedlanguages) | `'javascript'` | The supported language for processing the code. Default is `javascript`. |
 
 #### Returns
@@ -3339,9 +3430,9 @@ The result of processing the code.
 
 #### Defined in
 
-[packages/core/shared/src/functions/processCode.ts:23](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/functions/processCode.ts#L23)
+[packages/core/shared/src/functions/processCode.ts:23](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/functions/processCode.ts#L23)
 
----
+___
 
 ### runPython
 
@@ -3351,11 +3442,11 @@ Run Python code using Pyodide and return the result.
 
 #### Parameters
 
-| Name    | Type  | Description                                 |
-| :------ | :---- | :------------------------------------------ |
-| `code`  | `any` | The Python code to run.                     |
-| `entry` | `any` | The input values for the Python code.       |
-| `data`  | `any` | Additional data to pass to the Python code. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `code` | `any` | The Python code to run. |
+| `entry` | `any` | The input values for the Python code. |
+| `data` | `any` | Additional data to pass to the Python code. |
 
 #### Returns
 
@@ -3365,13 +3456,13 @@ The result of the executed Python code.
 
 #### Defined in
 
-[packages/core/shared/src/functions/ProcessPython.ts:17](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/functions/ProcessPython.ts#L17)
+[packages/core/shared/src/functions/ProcessPython.ts:17](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/functions/ProcessPython.ts#L17)
 
----
+___
 
 ### runSpell
 
-▸ **runSpell**(`params`): `Promise`<{ `name`: `string` ; `outputs`: `Record`<`string`, `unknown`\> }\>
+▸ **runSpell**(`params`): `Promise`<{ `name`: `string` ; `outputs`: `Record`<`string`, `unknown`\>  }\>
 
 Run a spell with the given parameters.
 
@@ -3381,21 +3472,21 @@ Run a spell with the given parameters.
 
 #### Parameters
 
-| Name     | Type                            | Description                           |
-| :------- | :------------------------------ | :------------------------------------ |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `params` | [`RunSpellArgs`](#runspellargs) | The parameters needed to run a spell. |
 
 #### Returns
 
-`Promise`<{ `name`: `string` ; `outputs`: `Record`<`string`, `unknown`\> }\>
+`Promise`<{ `name`: `string` ; `outputs`: `Record`<`string`, `unknown`\>  }\>
 
 - The outputs from the spell and its name.
 
 #### Defined in
 
-[packages/core/shared/src/utils/runSpell.ts:28](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/utils/runSpell.ts#L28)
+[packages/core/shared/src/utils/runSpell.ts:28](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/utils/runSpell.ts#L28)
 
----
+___
 
 ### saveRequest
 
@@ -3405,8 +3496,8 @@ Calculate and save request details in the module.
 
 #### Parameters
 
-| Name             | Type                                |
-| :--------------- | :---------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `«destructured»` | [`RequestPayload`](#requestpayload) |
 
 #### Returns
@@ -3417,4 +3508,4 @@ A promise that resolves the saved request object.
 
 #### Defined in
 
-[packages/core/shared/src/functions/saveRequest.ts:27](https://github.com/Oneirocom/Magick/blob/dbd53981/packages/core/shared/src/functions/saveRequest.ts#L27)
+[packages/core/shared/src/functions/saveRequest.ts:27](https://github.com/Oneirocom/Magick/blob/1398c9bb/packages/core/shared/src/functions/saveRequest.ts#L27)
