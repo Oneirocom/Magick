@@ -61,7 +61,6 @@ const EditSpellModal = ({ tab, closeModal }) => {
       id,
       graph: defaultGraph,
       name: data.name,
-      id,
       projectId: config.projectId,
       hash: md5(JSON.stringify(defaultGraph.nodes)),
     })) as any

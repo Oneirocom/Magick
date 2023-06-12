@@ -123,7 +123,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
           minWidth: 0,
           mr: open ? 2 : 'auto',
           justifyContent: 'center',
-          color: active ? 'var(--glow)' : 'white',
+          color: active ? 'var(--primary)' : 'white',
         }}
       >
         <Icon />
