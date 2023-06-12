@@ -130,9 +130,13 @@ export class Output extends MagickComponent<void> {
 
     const output = inputs.input.filter(Boolean)[0] as string
     const outputType =
+      (node.data.outputType !== 'Default' && node.data.outputType) ||
       inputName?.replace('Input - ', '') ||
-      node.data.outputType ||
       event.connector
+
+    console.log('*** output is', output)
+    console.log('*** outputType is', outputType)
+    console.log('*** event is', event)
 
     // handle this being a subspell returning out
     if (outputType === 'Subspell') {
@@ -163,6 +167,7 @@ export class Output extends MagickComponent<void> {
         } else if (!t.handler) {
           console.error('output type handler is not defined', t)
         } else {
+          console.log('calling output type handler', t)
           t.handler({
             output,
             agent: agent,
