@@ -178,7 +178,7 @@ button.option {
 
 button.primary {
   background-color: var(--primary);
-  color: var(--dark-4);
+  color: var(--dark-5);
 }
 
 button.list {
@@ -317,7 +317,7 @@ input {
 }
 
 input:focus-visible {
-  outline: 1px solid var(--glow);
+  outline: 1px solid var(--primary);
 }
 
 .App {
