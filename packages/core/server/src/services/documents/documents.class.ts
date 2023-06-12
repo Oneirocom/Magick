@@ -51,8 +51,7 @@ export class DocumentService<
         outputs: undefined,
         context: { module: { secrets:JSON.parse(secrets) }, projectId: context.data.projectId },
       })
-      embedding = result
-      console.log("embedding", embedding) */
+      embedding = result */
       
       app.get("docdb").fromString(data.content,data,{modelName, projectId: data?.projectId, secrets})
       return data;
@@ -93,13 +92,13 @@ export class DocumentService<
         })
         .select(
           db.raw(
-            `1 - (embedding <=> '${JSON.stringify(
+            `(embedding <=> '${JSON.stringify(
               params.query.embedding
-            )}') AS similarity`
+            )}') AS distance`
           )
         )
-        .orderBy('similarity', 'desc')
-        .limit(param.maxCount)
+        .orderBy('distance', 'asc')
+        .limit(param.$limit)
       return { data: querys }
     }
     const res = await super.find(params)
