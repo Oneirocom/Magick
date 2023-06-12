@@ -25,7 +25,7 @@ import { useSelector } from 'react-redux'
 import styles from './index.module.scss'
 import { Refresh, MoreHoriz } from '@mui/icons-material'
 import { TableComponent } from '@magickml/client-core'
-import { DocumentData, columns } from './document'
+import { DocumentData, columns } from './requests'
 import { useSnackbar } from 'notistack'
 
 /**
