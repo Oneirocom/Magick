@@ -6,6 +6,7 @@ import { ArrayVariable } from './array/ArrayVariable'
 import { GetValueFromArray } from './array/GetValueFromArray'
 import { JoinListComponent } from './array/JoinList'
 import { RemapArray } from './array/RemapArray'
+import { ExtractFromArray } from './array/ExtractFromArray'
 import { BooleanVariable } from './boolean/BooleanVariable'
 import { IsVariableTrue } from './boolean/IsVariableTrue'
 import { LogicalOperator } from './boolean/LogicalOperator'
@@ -72,6 +73,9 @@ import { Insert } from './database/Insert'
 import { Update } from './database/Update'
 import { Upsert } from './database/Upsert'
 import { Delete } from './database/Delete'
+import { SplitBySentence } from './text/SplitBySentence'
+import { Trim } from './text/Trim'
+import { GetLength } from './text/GetLength'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -112,6 +116,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   composeObject: () => new ComposeObject(),
   joinListComponent: () => new JoinListComponent(),
   remapArray: () => new RemapArray(),
+  extractFromArray: () => new ExtractFromArray(),
   moduleComponent: () => new SpellComponent(),
   output: () => new Output(),
   switchGate: () => new SwitchGate(),
@@ -145,6 +150,9 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   update: () => new Update(),
   upsert: () => new Upsert(),
   delete: () => new Delete(),
+  splitBySentence: () => new SplitBySentence(),
+  trim: () => new Trim(),
+  getLength: () => new GetLength(),
 }
 
 /**
