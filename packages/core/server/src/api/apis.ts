@@ -56,6 +56,51 @@ const image_generation = async (ctx: Koa.Context): Promise<void> => {
   ctx.body = data
 }
 
+// const getTokenUser = async (ctx: Koa.Context): Promise<void> => {
+//   const code = ctx.request.query.code
+//   console.log("id", ctx.request.query.github_client_id)
+//   console.log("secret", ctx.request.query.github_client_secret)
+//   const data = qs.stringify({
+//     client_id: ctx.request.query.github_client_id,
+//     client_secret : ctx.request.query.github_client_secret,
+//     code: code
+//   })
+
+//   const reqOptions = {
+//     host: "github.com",
+//     port: 443,
+//     path: "/login/oauth/access_token",
+//     method: "POST",
+//     headers: { 'content-length': data.length }
+//   }
+
+//   let body = "";
+
+//   const sendReq = async(reqOptions, data) => {
+//     return new Promise(( resolve, reject ) => {
+//       const req = https.request(reqOptions, function(res) {
+//         res.setEncoding('utf8')
+//         res.on('data', function (chunk) { body += chunk; });
+//         res.on('end', function() {
+//           console.log(qs.parse(body).access_token);
+//           resolve(qs.parse(body).access_token)
+//         })
+//         req.on('error', (err) => {
+//           reject(err);
+//         });
+//       })
+
+//       req.write(data);
+//       req.end();
+//     })
+
+//   }
+
+//   const token = await sendReq(reqOptions, data)
+
+//   ctx.body=token
+// }
+
 // Export a list of REST APIs
 export const apis: Route[] = [
   {
@@ -66,4 +111,8 @@ export const apis: Route[] = [
     path: '/image_generation',
     post: image_generation,
   },
+  // {
+  //   path: '/gettokenuser',
+  //   get: getTokenUser,
+  // }
 ]

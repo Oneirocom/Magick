@@ -13,7 +13,7 @@
   background-color: var(--dark-2);
 }
 .window.darker .window-layout {
-  background-color: var(--dark-1);
+  background-color: var(--dark-0);
 }
 .window-layout {
   border-radius: 4px;

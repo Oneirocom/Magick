@@ -3,7 +3,13 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/agent/src",
   "projectType": "application",
-  "implicitDependencies": ["@magickml/server-core", "@magickml/core"],
+  "implicitDependencies": [
+    "@magickml/server-core",
+    "@magickml/core",
+    "@magickml/agents",
+    "@magickml/plugin-twitter-server",
+    "@magickml/plugin-discord-server"
+  ],
   "targets": {
     "build": {
       "executor": "@nx/webpack:webpack",
@@ -17,7 +23,9 @@
         "inspect": true,
         "outputPath": "dist/apps/agent",
         "main": "apps/agent/src/index.ts",
-        "assets": ["apps/agent/src/certs"],
+        "assets": [
+          "apps/agent/src/certs"
+        ],
         "tsConfig": "apps/agent/tsconfig.app.json",
         "webpackConfig": "apps/agent/webpack.config.js"
       },

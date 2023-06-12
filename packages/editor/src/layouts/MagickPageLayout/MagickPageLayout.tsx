@@ -12,7 +12,7 @@ import css from './pagewrapper.module.css'
  * @function
  * @returns {JSX.Element} - The JSX element representing the wrapped pages.
  */
-const MagickPageWrapper = (): JSX.Element => {
+const MagickPageWrapper = () => {
   // Select the active tab from the Redux store.
   // const activeTab = useSelector(activeTabSelector)
 

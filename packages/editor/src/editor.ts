@@ -1,10 +1,11 @@
 // DOCUMENTED
-import ConnectionPlugin from 'rete-connection-plugin'
 import { Plugin } from 'rete/types/core/plugin'
 import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
 import CommentManager from './plugins/commentPlugin/manager'
 import ContextMenuPlugin from './plugins/contextMenu'
+import HighlightPlugin from './plugins/highlightPlugin'
+import ConnectionPlugin from './plugins/connectionPlugin'
 import {
   CachePlugin,
   OnSubspellUpdated,
@@ -93,6 +94,8 @@ export const initEditor = function ({
   }
 
   editor.use(CachePlugin)
+
+  editor.use(HighlightPlugin)
 
   // History plugin for undo/redo
   editor.use(HistoryPlugin, { keyboard: false })
@@ -196,6 +199,14 @@ export const initEditor = function ({
   // Event listeners
   editor.on('zoom', ({ source }) => {
     return source !== 'dblclick'
+  })
+
+  // Unselect all nodes when clicking off nodes
+  editor.on('click', () => {
+    const list = [...editor.selected.list]
+
+    editor.selected.clear()
+    list.map(node => (node.update ? node.update() : null))
   })
 
   editor.on(

@@ -1,3 +1,8 @@
+.wrapper {
+  width: 100%;
+  overflow: auto;
+}
+
 .container {
   padding: 10px;
   justify-content: space-between;
@@ -113,13 +118,10 @@
   background: #313131 !important;
 }
 
-@media (max-width: 650px) {
-  .container {
-    flex-direction: column !important;
-  }
-
+@media (max-width: 870px) {
   .item {
     max-width: 100% !important;
+    margin-bottom: 10px !important;
   }
 
   h6 {
