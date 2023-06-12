@@ -77,7 +77,8 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
   worker(node: WorkerData) {
     const _var = node?.data?._var as string
     const splitter = node?.data?.splitter as string
-    const keepEmpty = node?.data?.keepEmpty === 'true'
+    const keepEmpty = node?.data?.keepEmpty as boolean
+
     const res = !keepEmpty
       ? _var.split(splitter).filter(el => el.length > 0)
       : _var.split(splitter)

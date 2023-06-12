@@ -24,8 +24,6 @@ import { TaskSocketInfo } from './plugins/taskPlugin/task'
 import { SpellInterface } from './schemas'
 import { SpellManager } from './spellManager'
 
-import { Agent } from '@magickml/agents'
-
 export { MagickComponent } from './engine'
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 export * from './schemas'
@@ -133,6 +131,18 @@ export type GetVectorEventArgs = {
 export type EventResponse = Event[]
 
 export type OnSubspellUpdated = (spell: SpellInterface) => void
+
+export type ControlData = {
+  dataKey: string
+  name: string
+  component: string
+  data: ComponentData
+  options: Record<string, unknown>
+  id: string | null
+  icon: string
+  type: string
+  placeholder: string
+}
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
@@ -586,7 +596,7 @@ export type ModuleContext = {
   context: EngineContext
   spellManager: SpellManager
   app: Application
-  agent?: Agent
+  agent?: any
   module: {
     secrets?: Record<string, string>
     publicVariables?: Record<string, string>

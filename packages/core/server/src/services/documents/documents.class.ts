@@ -98,7 +98,7 @@ export class DocumentService<
             )}') AS similarity`
           )
         )
-        .orderBy('similarity', 'asc')
+        .orderBy('similarity', 'desc')
         .limit(param.maxCount)
       return { data: querys }
     }
