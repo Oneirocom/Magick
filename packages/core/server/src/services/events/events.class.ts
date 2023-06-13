@@ -51,8 +51,7 @@ export class EventService<
       for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
       const f32_ary = new Float32Array(ary_buf)
       const param = params.query
-      console.log('**** param', param)
-      const query = db
+      const res = await db
         .from('events')
         .select('*')
         .where({
@@ -70,36 +69,35 @@ export class EventService<
           )
         )
         .orderBy('distance', 'asc')
+        .limit(params.query['$limit'])
 
-      if ('$limit' in params.query) {
-        query.limit(params.query['$limit'])
-      }
-
-      const res = await query
       return { events: res }
     }
 
-    const query = db.from('events').select()
+    // If not searching by embedding, perform a normal query
+    const param = params.query
 
-    query.orderBy('date', 'desc')
+    const res = await db
+      .from('events')
+      .select('*')
+      .where({
+        ...(param.type && { type: param.type }),
+        ...(param.id && { id: param.id }),
+        ...(param.sender && { sender: param.sender }),
+        ...(param.client && { client: param.client }),
+        ...(param.channel && { channel: param.channel }),
+        ...(param.projectId && { projectId: param.projectId }),
+      })
+      // get the newest events first
+      .orderBy('date', 'desc')
+      // limit the number of events returned
+      .limit(params.query['$limit'])
+      // reverse the order of the events so that the newest events are last
+      .then((res: any) => res.reverse())
 
-    if (params.query.content) {
-      query.where('content', params.query.content)
-    }
+      console.log(res.map((r: any) => r.content))
 
-    if (params.query.projectId) {
-      query.where('projectId', params.query.projectId)
-    }
-
-    if (params.query.type) {
-      query.where('type', params.query.type)
-    }
-
-    if ('$limit' in params.query) {
-      query.limit(params.query['$limit'])
-    }
-    const res = await query
-    return { events: res?.reverse() as unknown as { data: Array<any> } }
+    return { events: res as unknown as { data: Array<any> } }
   }
 
   /**
