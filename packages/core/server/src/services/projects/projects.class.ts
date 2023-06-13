@@ -75,6 +75,28 @@ export class ProjectsService {
   }> {
     const { agents, documents, spells, projectId } = data
 
+    // If replace is true, delete all agents, documents, and spells for this projectId
+    if ((data as any).replace) {
+      await Promise.all([
+        app.service('agents').remove(null, {
+          query: {
+            projectId,
+          },
+        }),
+        app.service('spells').remove(null, {
+          query: {
+            projectId,
+          },
+        }),
+        app.service('documents').remove(null, {
+          query: {
+            projectId,
+          },
+        }),
+      ])
+    }
+
+
     // Map agents, documents, and spells with updated information for the new project
     const mappedAgents = agents.map(agent => {
       delete agent.id

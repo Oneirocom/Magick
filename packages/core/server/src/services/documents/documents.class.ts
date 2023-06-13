@@ -65,8 +65,14 @@ export class DocumentService<
    * @param id {string} The document ID to remove
    * @return {Promise<any>} The removed document
    */
-  async remove(id: string): Promise<any> {
+  async remove(id: string, params): Promise<any> {
     const db = app.get('dbClient')
+
+    if(!id && params.projectId) {
+      // delete all documents of a project
+      return await db('documents').where('projectId', params.projectId).del()
+    }
+
     return await db('documents').where('id', id).del()
   }
 
@@ -122,5 +128,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     },
     Model: app.get('dbClient'),
     name: 'documents',
+    multi: ['remove'],
   }
 }
