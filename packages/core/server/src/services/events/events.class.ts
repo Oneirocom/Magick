@@ -95,8 +95,6 @@ export class EventService<
       // reverse the order of the events so that the newest events are last
       .then((res: any) => res.reverse())
 
-      console.log(res.map((r: any) => r.content))
-
     return { events: res as unknown as { data: Array<any> } }
   }
 
