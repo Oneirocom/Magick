@@ -373,26 +373,28 @@ export class TwitterConnector {
       )
       console.log('DM MESSAGE: response', response)
     } else if (event.channelType === 'feed') {
-      // if the reponse contains a .mpeg file, remove it from the response and send it as a media file
-      // extract the url from the response
-      // example url: https://vkzhmwivieetdcbhmszr.supabase.co/storage/v1/object/public/avatars/b01edaa9-fe38-49ff-9967-19ff7054e884.mpeg
-      let url = null as null | string
-      if (message.includes('https://')) {
-        url = 'https://' + message.split('https://')[1].split(' ')[0]
-        // remove the url from the response
-        message = message.replace(url, '')
+      // Split the response into chunks of complete sentences but less than 280 characters
+      const responses = [] as string[];
+      const maxChunkSize = 280;
+    
+      const sentences = message.match(/[^.!?]+[.!?]+/g) || [];
+    
+      let currentChunk = '';
+      for (const sentence of sentences) {
+        if (currentChunk.length + sentence.length <= maxChunkSize) {
+          currentChunk += sentence;
+        } else {
+          responses.push(currentChunk.trim());
+          currentChunk = sentence;
+        }
       }
-
-      // split the response into chunks of 250 characters or less
-      const responses = [] as string[]
-      const chunkSize = 250
-
-      for (let i = 0; i < message.length; i += chunkSize) {
-        responses.push(message.slice(i, i + chunkSize))
+    
+      if (currentChunk.length > 0) {
+        responses.push(currentChunk.trim());
       }
-
+    
       for (const chunk of responses) {
-        await this.twitterv1?.v1.reply(chunk, event.channel)
+        await this.twitterv1?.v1.reply(chunk, event.channel);
       }
     } else {
       console.log('Unknown channel type', event.channelType)
