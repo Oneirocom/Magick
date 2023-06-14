@@ -146,7 +146,7 @@ export const initEditor = function ({
 
   // Configure Area plugin
   editor.use(AreaPlugin, {
-    scaleExtent: { min: 0.1, max: 1.5 },
+    scaleExtent: { min: 0.05, max: 2.0 },
     background,
     tab,
     snap: true,
