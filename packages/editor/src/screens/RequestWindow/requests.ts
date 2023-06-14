@@ -1,6 +1,7 @@
 export interface Column {
     id:
       | 'action'
+      | 'checkbox'
       | 'provider'
       | 'type'
       | 'nodeId'
@@ -21,6 +22,7 @@ export interface Column {
   
   export const columns: Column[] = [
     { id: 'action', label: 'Actions', minWidth: 10 },
+    { id: 'checkbox', label: '', minWidth: 10 },
     { id: 'provider', label: 'Provider', minWidth: 65 },
     { id: 'type', label: 'Type', minWidth: 65 },
     { id: 'nodeId', label: 'Node ID', minWidth: 65 },
@@ -49,6 +51,7 @@ export interface Column {
     requestData:string
     responseData:string
     parameters:string
+    spell:string
     
   }
   

@@ -22,10 +22,11 @@ import {
 } from 'react-table'
 import { useSelector } from 'react-redux'
 import styles from './index.module.scss'
-import { Refresh, MoreHoriz } from '@mui/icons-material'
+import { Delete,Refresh, MoreHoriz } from '@mui/icons-material'
 import { TableComponent } from '@magickml/client-core'
 import { DocumentData, columns } from './requests'
 import { useSnackbar } from 'notistack'
+
 
 /**
  * GlobalFilter component.
@@ -76,6 +77,7 @@ function RequestTable({ requests, updateCallback }) {
   const token = globalConfig?.token
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   const handleActionClick = (document, row) => {
     setAnchorEl(document.currentTarget)
@@ -107,6 +109,22 @@ function RequestTable({ requests, updateCallback }) {
     handleActionClose()
     updateCallback()
   }
+
+    // Handle events deletion
+    const handleDeleteMany = async (event: any) => {
+      const ids = selectedRows.join('&')
+      const isDeleted = await fetch(`${API_ROOT_URL}/request/${ids}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      setSelectedRows([])
+      if (isDeleted) enqueueSnackbar('Events deleted', { variant: 'success' })
+      else enqueueSnackbar('Error deleting Event', { variant: 'error' })
+      // close the action menu
+      updateCallback()
+    }
 
 
   const defaultColumns = useMemo(
@@ -209,6 +227,7 @@ function RequestTable({ requests, updateCallback }) {
     requestData: string,
     responseData: string,
     parameters: string,
+    spell?: string,
 
   ): DocumentData => {
     return {
@@ -224,6 +243,7 @@ function RequestTable({ requests, updateCallback }) {
       requestData,
       responseData,
       parameters,
+      spell,
 
       action: (
         <>
@@ -259,6 +279,7 @@ function RequestTable({ requests, updateCallback }) {
       el.original.requestData,
       el.original.responseData,
       el.original.parameters,
+      el.original.spell,
 
     )
   })
@@ -305,7 +326,17 @@ function RequestTable({ requests, updateCallback }) {
             </CSVLink>
           </div>
         </div>
-        <div className={`${styles.flex} ${styles.flexEnd}`}>
+        <div className={styles.flex}>
+          <Button
+            className={`${styles.btn} ${selectedRows.length > 0 ? styles.selectedBtn : ''
+              }`}
+            onClick={handleDeleteMany}
+            variant="outlined"
+            startIcon={<Delete />}
+            disabled={selectedRows.length === 0}
+          >
+            Delete Selected({selectedRows.length})
+          </Button>
           <div className={styles.flex}>
             <GlobalFilter
               globalFilter={globalFilter}
@@ -317,11 +348,9 @@ function RequestTable({ requests, updateCallback }) {
           rows={rows}
           page={page}
           count={pageOptions.length}
-          selectedRows={[]}
           handleSorting={handleSort}
-          setSelected={() => {
-            console.log('set selected not implemented for this table')
-          }}
+          selectedRows={selectedRows}
+          setSelected={setSelectedRows}
           column={columns}
           handlePageChange={handlePageChange}
         />
