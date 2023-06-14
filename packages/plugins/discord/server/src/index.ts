@@ -64,11 +64,8 @@ function getAgentMethods() {
  * @param args - An object containing the output, agent, and event.
  */
 async function handleResponse({ output, agent, event }) {
-  console.log('handleResponse', output, event)
   if (!output || output === '')
-    return agent.warn('No output to send to discord')
-
-  console.log('event.channelType', event.channelType)
+    return agent.logger.warn('No output to send to discord')
 
     await agent?.discord?.sendMessageToChannel(event.channel, output)
 
@@ -140,7 +137,6 @@ const DiscordPlugin = new ServerPlugin({
       name: 'Discord (Text)',
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
-        // console.log('output is', output)
         await handleResponse({ output, agent, event })
       },
     },
@@ -148,7 +144,6 @@ const DiscordPlugin = new ServerPlugin({
       name: 'Discord (Image)',
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
-        // console.log('output is', output)
         await handleResponse({ output, agent, event })
       },
     },
