@@ -196,6 +196,7 @@ export class Agent extends RedisPubSub implements AgentInterface {
     // the job name is the agent id.  Only run if the agent id matches.
     if (this.id !== job.data.agentId) return
 
+
     const { data } = job
 
     // Do we want a debug logger here?
