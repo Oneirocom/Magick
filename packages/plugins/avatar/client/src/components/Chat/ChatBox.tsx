@@ -78,7 +78,7 @@ export default function ChatBox() {
   useEffect(() => {
     if (currentAgent) return
     if (agentList?.length > 0) {
-      setCurrentAgent(agentList[0].name)
+      setCurrentAgent(agentList[0])
     }
   }, [agentList])
 
@@ -201,12 +201,13 @@ export default function ChatBox() {
       entities: ['user', 'assistant'],
     }
 
+
     const data = {
       id: 'avatar',
-      agentName: currentAgent,
+      agentName: currentAgent ? currentAgent.name : "lost agent name",
       projectId: config.projectId,
       sessionId,
-      agentId: 'e3390b6d-1b1f-435d-81bc-04b116762ba5',
+      agentId: currentAgent ? currentAgent.id : "lost agent id",
       inputs: {
         'Input - Default': toSend,
       },
@@ -214,7 +215,6 @@ export default function ChatBox() {
     }
 
     publish(RUN_AGENT, data)
-    console.log('ran agent', data)
   }
 
   useEffect(() => {
@@ -233,12 +233,12 @@ export default function ChatBox() {
 
   }, [client])
 
-  // useEffect(() => {
-  //   const unsubscribe = subscribe($PLAYTEST_PRINT('avatar'), printToConsole)
+  useEffect(() => {
+    const unsubscribe = subscribe($PLAYTEST_PRINT('avatar'), printToConsole)
 
-  //   // Return a cleanup function.
-  //   return unsubscribe as () => void
-  // }, [subscribe, printToConsole, $PLAYTEST_PRINT])
+    // Return a cleanup function.
+    return unsubscribe as () => void
+  }, [subscribe, printToConsole, $PLAYTEST_PRINT])
 
   let hasSet = false
   useEffect(() => {
@@ -272,7 +272,7 @@ export default function ChatBox() {
             className={styles.agentSelector}
             name="agentList"
             id="agentList"
-            defaultValue={currentAgent}
+            defaultValue={currentAgent ? currentAgent.name : ""}
             onChange={e => {
               setCurrentAgent(e.target.value)
             }}
