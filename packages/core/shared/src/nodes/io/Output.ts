@@ -118,6 +118,7 @@ export class Output extends MagickComponent<void> {
       console.error('No input provided to output component')
       return { output: '' }
     }
+    console.log('handling output node')
     const { data, agent } = context
 
     const event = // event data is inside a task
@@ -128,11 +129,17 @@ export class Output extends MagickComponent<void> {
         (Object.values(data)[0] as any)?.eventData ||
         Object.values(data)[0]) as Event
 
-    const output = inputs.input.filter(Boolean)[0] as string
+    const output = inputs.input[0] as string
+
+
     const outputType =
-      inputName?.replace('Input - ', '') ||
-      node.data.outputType ||
+      (!(node.data.outputType as any).includes('Default') && node.data.outputType) ||
+      (!inputName.includes('Default') && inputName?.replace('Input - ', '')) ||
       event.connector
+      || 'Default'
+
+      console.log('outputType', outputType)
+
 
     // handle this being a subspell returning out
     if (outputType === 'Subspell') {
@@ -140,21 +147,7 @@ export class Output extends MagickComponent<void> {
     }
 
     if (agent) {
-      if (outputType && (outputType as string).includes('Default')) {
-        // If default handler, don't call the output type handler
-        // const type = pluginManager.getInputTypes().find(type => {
-        //   return type.name === event.connector?.replace('Input - ', '')
-        // })
-        // const responseOutputType = type?.defaultResponseOutput
-        // const out = module.agent.outputTypes.find(
-        //   t => t.name === responseOutputType
-        // )
-        // out.handler({
-        //   output,
-        //   agent: module.agent,
-        //   event,
-        // })
-      } else {
+      console.log('outputting, agent loop')
         // Find the outputType in the outputTypes array
         const t = agent.outputTypes.find(t => t.name === outputType)
         // Find outputType in outputTypes where name is outputType
@@ -163,13 +156,13 @@ export class Output extends MagickComponent<void> {
         } else if (!t.handler) {
           console.error('output type handler is not defined', t)
         } else {
+          console.log('calling handler for', event)
           t.handler({
             output,
             agent: agent,
             event,
           })
         }
-      }
     }
 
     return {
