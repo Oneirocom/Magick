@@ -98,17 +98,14 @@ export class DiscordConnector {
           }
         })()
       }
-      this.client.on('joinvc', async textChannel => {
+      this.client.on('joinvc', async voiceChannel => {
         let connection
         const { recognizeSpeech: _recognizeSpeech } = await import(
           './discord-voice'
         )
         recognizeSpeech = _recognizeSpeech
         if (this.use_voice) {
-          connection = recognizeSpeech(textChannel, this.client)
-          textChannel.send('Joined ' + textChannel.name)
-        } else {
-          textChannel.send('Voice is disabled')
+          connection = recognizeSpeech(voiceChannel, this.client)
         }
         return connection
       })
