@@ -62,11 +62,10 @@ export default function (app: Application): void {
     if (app.get('isAgent')) return
 
     // Lets not relay up all the patch events
-    if (context.method !== 'patch') return
+    if (context.method === 'patch') return
 
     // Publish all events to the authenticated user channel
     const channel = app.channel(projectId)
-    //
     return channel
   })
 }
