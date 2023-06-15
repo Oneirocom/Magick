@@ -16,18 +16,9 @@ export const Watch = () => {
       if (!avatarVrm) {
         return
       }
-      const isFront = avatarVrm.lookAt.faceFront.z === 1
       const watchBoneNode = avatarVrm.humanoid?.getBoneNode(WATCH_BONE_NAME)
       let point = new Vector3()
-
-      if (isFront) {
-        point = state?.event?.point
-      } else {
-        const headPos = new Vector3();
-        headPos.setFromMatrixPosition( watchBoneNode.matrixWorld );
-        const direcVec3 = headPos.clone().sub(state?.event?.point.clone())
-        point.copy(headPos.clone().add(direcVec3))
-      }
+      point = state?.event?.point
       // watchBoneNode.add(new AxesHelper(AXIS_LEN))
       watchBoneNode.lookAt(point)
     },
