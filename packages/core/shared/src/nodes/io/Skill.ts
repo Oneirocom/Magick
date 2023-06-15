@@ -49,7 +49,7 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
       {
         outputs: { output: 'output', trigger: 'option' },
       },
-      'Experimental',
+      'I/O',
       info
     )
 

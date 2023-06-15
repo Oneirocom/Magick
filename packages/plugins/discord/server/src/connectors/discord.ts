@@ -8,17 +8,10 @@ import Discord, {
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
 
-let recognizeSpeech
-
 export class DiscordConnector {
   client = Discord.Client as any
   agent: any
   spellRunner: any = null
-  use_voice = false
-  voice_provider!: string
-  voice_character!: string
-  voice_language_code!: string
-  voice_endpoint!: string
   guildId!: any
   message!: any
   constructor(options) {
@@ -26,19 +19,9 @@ export class DiscordConnector {
       agent,
       discord_api_key,
       spellRunner,
-      use_voice,
-      voice_provider,
-      voice_character,
-      voice_language_code,
-      voice_endpoint,
     } = options
     this.agent = agent
     this.spellRunner = spellRunner
-    this.use_voice = use_voice
-    this.voice_provider = voice_provider
-    this.voice_character = voice_character
-    this.voice_language_code = voice_language_code
-    this.voice_endpoint = voice_endpoint
 
     const token = discord_api_key
     if (!token) {
@@ -71,57 +54,33 @@ export class DiscordConnector {
 
       this.client.embed = embed
 
-      if (this.use_voice) {
-        const {
-          client,
-          agent,
-          spellRunner,
-          voice_provider,
-          voice_character,
-          voice_language_code,
-          voice_endpoint,
-        } = this
-        ;(async () => {
+      const {
+        client,
+        agent,
+        spellRunner,
+      } = this
+        ; (async () => {
           if (typeof window === 'undefined') {
-            const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
+            const { initSpeechClient } =
               await import('./discord-voice')
-            recognizeSpeech = _recognizeSpeech
             this.client = initSpeechClient({
               client,
               agent,
               spellRunner,
-              voiceProvider: voice_provider,
-              voiceCharacter: voice_character,
-              languageCode: voice_language_code,
-              voice_endpoint,
             })
           }
         })()
-      }
-      this.client.on('joinvc', async textChannel => {
-        let connection
-        const { recognizeSpeech: _recognizeSpeech } = await import(
+      this.client.on('joinvc', async voiceChannel => {
+        const { recognizeSpeech } = await import(
           './discord-voice'
         )
-        recognizeSpeech = _recognizeSpeech
-        if (this.use_voice) {
-          connection = recognizeSpeech(textChannel, this.client)
-          textChannel.send('Joined ' + textChannel.name)
-        } else {
-          textChannel.send('Voice is disabled')
-        }
-        return connection
+        return recognizeSpeech(voiceChannel, this.client.user.id)
       })
-      this.client.on('leavevc', async (voiceChannel, textChannel) => {
-        const { stopSpeechClient: stopSpeechClient } = await import(
+      this.client.on('leavevc', async (voiceChannel) => {
+        const { stopSpeechClient } = await import(
           './discord-voice'
         )
-        if (this.use_voice) {
-          stopSpeechClient(voiceChannel, this.client)
-          textChannel.send('Leaving  ' + voiceChannel.name)
-        } else {
-          textChannel.send('Voice is disabled')
-        }
+        stopSpeechClient(voiceChannel, this.client)
       })
 
       this.client.on('messageCreate', async message => {
@@ -153,18 +112,18 @@ export class DiscordConnector {
       })
 
       this.client.ws
-      ;(async () => {
-        try {
-          const login = await this.client.login(token)
-          agent.log('Discord client logged in', { login })
-        } catch (e) {
-          return agent.error('Error logging in discord client', e)
-        }
+        ; (async () => {
+          try {
+            const login = await this.client.login(token)
+            agent.log('Discord client logged in', { login })
+          } catch (e) {
+            return agent.error('Error logging in discord client', e)
+          }
 
-        this.client.on('error', err => {
-          agent.error('Discord client error', err)
-        })
-      })()
+          this.client.on('error', err => {
+            agent.error('Discord client error', err)
+          })
+        })()
     } catch (e) {
       agent.error('Error creating discord client', e)
     }
@@ -379,9 +338,7 @@ export class DiscordConnector {
   async sendMessageToChannel(channelId: any, msg: any) {
     try {
       const channel = await this.client.channels.fetch(channelId);
-      if (msg && msg !== '' && channel && channel !== undefined) {
-        console.log('**** SENDING DISCORD MESSAGE', msg);
-  
+      if (msg && msg !== '' && channel && channel !== undefined) {  
         const paragraphs = msg.split(/\n{2,}/);
   
         // Process each paragraph individually

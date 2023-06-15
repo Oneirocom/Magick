@@ -20,7 +20,7 @@ const info = 'Generate speech using any of the providers available in Magick.'
 
 /** Type definition for the worker return */
 type WorkerReturn = {
-  result?: string
+  result?: any
 }
 
 /**
@@ -37,7 +37,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Experimental',
+      'Audio',
       info
     )
   }
@@ -186,8 +186,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
       throw new Error('ERROR: ' + error)
     }
 
-    const audio = result as string
-  
+    const audio = result  
   
     return {
       result: audio,
