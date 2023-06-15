@@ -1,4 +1,10 @@
 {
   "name": "@magickml/plugin-avatar-client",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "xstate": "^4.37.2"
+  }
 }
