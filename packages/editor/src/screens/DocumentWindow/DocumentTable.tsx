@@ -30,7 +30,7 @@ import {
 import { DocumentData, columns } from './document'
 import styles from './index.module.scss'
 import DocumentModal from './DocumentModal'
-import { log } from 'console'
+
 /**
  * GlobalFilter component for applying search filter on the whole table.
  * @param {{ globalFilter: any, setGlobalFilter: Function }} param0
