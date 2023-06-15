@@ -15,9 +15,8 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleContext,
-  arraySocket,
+  stringSocket,
 } from '@magickml/core'
-import { ChannelType } from '../types/ChannelType'
 
 /**
  * The return type of the worker function.
@@ -34,12 +33,12 @@ type WorkerReturn = {
  * @category Discord
  * @remarks Must be paired with AgentExecutor.
  */
-export class DiscordListVoiceChannels extends MagickComponent<
+export class DiscordListTextChannels extends MagickComponent<
   Promise<WorkerReturn>
 > {
   constructor() {
     super(
-      'Discord Voice Channels',
+      'Discord Text Channels',
       {
         outputs: {
           output: 'output',
@@ -59,14 +58,14 @@ export class DiscordListVoiceChannels extends MagickComponent<
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const outp = new Rete.Output('output', 'Array', arraySocket)
+    const outp = new Rete.Output('output', 'Array', stringSocket)
     const event = new Rete.Input('event', 'Event', eventSocket, true)
 
     return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp).addInput(event)
   }
 
   /**
-   * The worker function for the Discord List Voice Channels node.
+   * The worker function for the Discord List Text Channels node.
    * @param node - WorkerData object
    * @param inputs - MagicWorkerInputs object
    * @param _outputs - MagicWorkerOutputs object
@@ -96,34 +95,14 @@ export class DiscordListVoiceChannels extends MagickComponent<
         (Object.values(data)[0] as any)?.eventData ||
         Object.values(data)[0]) as Event
 
-    // discordClient is a Discord.js client instance
     const discordClient = agent.discord.client
 
-    const channel = event.channel // channel in which the message was sent
+    const channel = event.channel
 
-    // fetch the channel using its ID
     const fetchedChannel = await discordClient.channels.fetch(channel);
 
-    if (!fetchedChannel) {
-      throw new Error('Channel not found')
-    }
+    const name = fetchedChannel.name;
 
-    if (fetchedChannel.type !== ChannelType.GuildText) {
-      throw new Error('Event channel must be a text channel')
-    }
-
-    // get the guild object from the fetched channel
-    const guild = fetchedChannel.guild;
-
-    // get the list of text channels
-    const voiceChannels = guild.channels.cache.filter(ch => ch.type === ChannelType.GuildVoice);
-
-
-    return {
-      output: voiceChannels.map(channel => ({
-        id: channel.id,
-        name: channel.name,
-      }))
-    };
+    return { output: name };
   }
 }
