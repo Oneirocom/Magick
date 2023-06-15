@@ -152,12 +152,12 @@ export default function ChatBox() {
     handleUserChatInput(value)
   }
 
-  const printToConsole = useCallback((_text) => {
+  const printToConsole = useCallback((text) => {
     setWaitingForResponse(false)
-    setMessages(messages => [...messages, name + ': ' + _text])
+    setMessages(messages => [...messages, name + ': ' + text])
     try {
       // fetch the audio file from ttsEndpoint
-      const ttsEndpoint = 'https://ai-voice.webaverse.ai/tts?s=' + _text
+      const ttsEndpoint = 'https://ai-voice.webaverse.ai/tts?s=' + text
 
       fetch(ttsEndpoint).then(async response => {
         const blob = await response.blob()
@@ -167,8 +167,6 @@ export default function ChatBox() {
 
         lipSync.startFromAudioFile(arrayBuffer)
       })
-
-      // })
     } catch (error) {
       console.error(error)
     }
@@ -276,7 +274,13 @@ export default function ChatBox() {
             id="agentList"
             defaultValue={currentAgent ? currentAgent.name : ""}
             onChange={e => {
-              setCurrentAgent(e.target.value)
+              const newAgent = agentList?.find(agent => {
+                if (agent.name === e.target.value) {
+                  return agent
+                }
+              })
+
+              newAgent && setCurrentAgent(newAgent)
             }}
           >
             {agentList?.map((agent, idx) => {
