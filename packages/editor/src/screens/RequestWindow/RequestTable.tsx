@@ -93,7 +93,7 @@ function RequestTable({ requests, updateCallback }) {
   // Handle request deletion
   const handleRequestDelete = async (event: any) => {
     const resp = await fetch(`${API_ROOT_URL}/request/${selectedRow.id}`, {
-      method: 'PATCH',
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -113,6 +113,8 @@ function RequestTable({ requests, updateCallback }) {
     // Handle events deletion
     const handleDeleteMany = async (event: any) => {
       const ids = selectedRows.join('&')
+      console.log(ids);
+      
       const isDeleted = await fetch(`${API_ROOT_URL}/request/${ids}`, {
         method: 'DELETE',
         headers: {
@@ -120,7 +122,7 @@ function RequestTable({ requests, updateCallback }) {
         },
       })
       setSelectedRows([])
-      if (isDeleted) enqueueSnackbar('Events deleted', { variant: 'success' })
+      if (isDeleted) enqueueSnackbar('Requests deleted', { variant: 'success' })
       else enqueueSnackbar('Error deleting Event', { variant: 'error' })
       // close the action menu
       updateCallback()
@@ -199,7 +201,7 @@ function RequestTable({ requests, updateCallback }) {
       useGlobalFilter,
       useSortBy,
       usePagination
-    ) as any
+    ) 
 
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -227,7 +229,7 @@ function RequestTable({ requests, updateCallback }) {
     requestData: string,
     responseData: string,
     parameters: string,
-    spell?: string,
+    spell: string,
 
   ): DocumentData => {
     return {
@@ -244,12 +246,14 @@ function RequestTable({ requests, updateCallback }) {
       responseData,
       parameters,
       spell,
-
       action: (
         <>
           <IconButton
             aria-label="more"
-            onClick={document => handleActionClick(document, row)}
+            onClick={event => {
+              event.stopPropagation()
+              handleActionClick(event, row)
+            }}
             style={{ boxShadow: 'none' }}
           >
             <MoreHoriz />

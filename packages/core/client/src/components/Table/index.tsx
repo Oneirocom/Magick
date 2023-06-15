@@ -293,7 +293,7 @@ export const TableComponent = ({
                 >
                   {column.map((column, index) => {
                     const value = row[column.id]
-                    console.log('value', value)
+                    
                     const truncatedValue = truncateText(value, 100);
                     return (
                       <TableCell
