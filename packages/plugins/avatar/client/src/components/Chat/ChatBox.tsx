@@ -221,12 +221,14 @@ export default function ChatBox() {
     if (!client) return
 
     client.service('agents').on('result', result => {
-      // right now this is a decent check to ensure the data is the right data. 
+      // right now this is a decent check to ensure the data is the right data.
       // May be able to do something better.
       if (result.sessionId !== sessionId) return
       // Would be good to use a different outpute here eventually.
       // Feels dirty to use the default output hard coded.
-      const output = result.data.result['Output - Default']
+      const outputs = result.data.result
+      const outputKeys = Object.keys(outputs)
+      const output = result.data.result[outputKeys[0]]
 
       printToConsole(output)
     })
