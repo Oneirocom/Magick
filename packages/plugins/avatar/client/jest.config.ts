@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'avatar',
-  preset: '../../jest.preset.js',
+  preset: '../../../../jest.preset.js',
   globals: {},
   testEnvironment: 'node',
   transform: {
