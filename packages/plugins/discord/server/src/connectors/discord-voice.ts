@@ -40,6 +40,8 @@ export function initSpeechClient(options: {
     const { content, connection, author, channel } = msg
     connection.subscribe(audioPlayer)
 
+    console.log('speech handling')
+
     if (!content)
       return console.error('No content in speech message', JSON.stringify(msg))
     const entities: any[] = []
@@ -52,6 +54,12 @@ export function initSpeechClient(options: {
     } catch (e) {
       console.log('error getting members', e)
     }
+
+    console.log('running component')
+
+    console.log('content is', content)
+
+    console.log('msg is', msg)
 
     // Run spell and collect response.
     await spellRunner.runComponent({
@@ -66,7 +74,7 @@ export function initSpeechClient(options: {
           agentId: agent.id,
           entities: entities.map((e: { user }) => e.user),
           channelType: 'voice',
-          rawData: JSON.stringify(msg),
+          rawData: JSON.stringify({}),
         },
       },
       secrets: agent.secrets ?? {},
@@ -74,6 +82,7 @@ export function initSpeechClient(options: {
       app,
       runSubspell: true,
     })
+    console.log('component ran')
   })
 
   return client
@@ -98,7 +107,7 @@ export async function handleVoiceResponse({ output, agent, event }) {
 
   console.log('guild', guild)
 
-  const voiceConnection = getVoiceConnection(guild.id, 'default_' + agent.discord.client.user.id);
+  const voiceConnection = getVoiceConnection(guild.id, 'default_' + agent.id);
 
   console.log('voiceConnection', voiceConnection)
   if (!voiceConnection) {

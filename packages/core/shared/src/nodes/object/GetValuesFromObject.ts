@@ -63,11 +63,14 @@ export class GetValuesFromObject extends MagickComponent<void> {
 
   worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const object = inputs.object[0] as Record<string, unknown>
+    console.log('object', object)
 
     const output = Object.keys(node.outputs).reduce((acc, key) => {
       acc[key] = object[key]
       return acc
     }, {} as Record<string, unknown>)
+
+    console.log('output', output)
 
     return output
   }

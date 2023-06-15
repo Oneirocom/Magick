@@ -74,13 +74,13 @@ export class DiscordConnector {
         const { recognizeSpeech } = await import(
           './discord-voice'
         )
-        return recognizeSpeech(voiceChannel, this.client.user.id)
+        return recognizeSpeech(voiceChannel, this.agent.id)
       })
       this.client.on('leavevc', async (voiceChannel) => {
         const { stopSpeechClient } = await import(
           './discord-voice'
         )
-        stopSpeechClient(voiceChannel, this.client)
+        stopSpeechClient(voiceChannel, this.agent.id)
       })
 
       this.client.on('messageCreate', async message => {

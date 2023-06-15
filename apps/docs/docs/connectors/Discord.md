@@ -12,14 +12,6 @@ Magick supports running agents on Discord with both text and voice.
 
 Discord can be enabled on any agent. Each agent will need a separate API key.
 
-<!--
-User ID - The bot's Discord ID, like bot#1234. This will be removed from messages, although this behavior will change soon.
-
-Bot name - This is how the agent will identify. The agent will generate an event for any message that contains this word, and it will be passed in for the "observer" value of the event.
-
-Wake Words - If a message starts with this the agent will assume interest. "Alexa" and "Hey Google" are examples.
--->
-
 ## Creating a New Discord Bot and Getting an API Key
 
 You will need to set up the Discord bot within the Discord Developer portal. A complete tutorial on how to do that is here: https://www.writebots.com/discord-bot-token/
@@ -45,7 +37,3 @@ Now visit that link and invite the bot to the server of your choice.
 ## Connecting voice
 
 Currently, the bot joins a server when a user writes `join <channel name>`--this will be changed in the v0.2.0 release.
-
-<!--
-To enable voice, make sure you enable the switch in the Discord connector and choose a voice.
--->
