@@ -44,11 +44,11 @@ initLogger({ name: 'agent' })
 const logger = getLogger()
 
 process.on('uncaughtException', (e, o) => {
-  logger.error('Uncaught exception: %o\n From: %s', e, o)
+  logger.error('Uncaught exception: %s\n From: %o', e, o)
 })
 
 process.on('unhandledRejection', (e, o) => {
-  logger.error('Unhandled rejection: %o\n From: %s', e, o)
+  logger.error('Unhandled rejection: %s\n From: %o', e, o)
 })
 
 await initApp()
