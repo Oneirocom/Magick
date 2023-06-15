@@ -6,7 +6,7 @@
 import type { Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
-
+import { app } from '../../app'
 import type { Application } from '../../declarations'
 import type {
   Request,
@@ -24,7 +24,29 @@ export type RequestParams = KnexAdapterParams<RequestQuery>
  */
 export class RequestService<
   ServiceParams extends Params = RequestParams
-> extends KnexService<Request, RequestData, ServiceParams, RequestPatch> {}
+> extends KnexService<Request, RequestData, ServiceParams, RequestPatch> {
+
+ /**
+   * Remove Requests.
+   * This function removes Requests from the database.
+   * @param {string[]} id - The ID of the Requests to remove.
+   * @returns {Promise<any>} - The removed Requests data.
+   */
+  // @ts-ignore
+  async remove(id: string): Promise<any> {
+    const ids = id.split('&')
+    const db = app.get('vectordb')
+    const res = await db.from('request').whereIn('id', ids).del()
+    return res
+  }
+
+}
+
+
+
+
+
+
 
 /**
  * Get options for the RequestService

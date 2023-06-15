@@ -17,7 +17,6 @@ export interface Column {
     label: string
     minWidth?: number
     align?: 'right'
-    maxHeight?: number
   }
   
   export const columns: Column[] = [
