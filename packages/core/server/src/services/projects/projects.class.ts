@@ -37,29 +37,79 @@ export class ProjectsService {
     const { query } = params
     const projectId = query.projectId
 
-    // Get all agents, spells, and documents for this projectId
-    const [agents, spells, documents] = await Promise.all([
-      app.service('agents').find({
-        query: {
-          projectId,
-        },
-      }),
-      app.service('spells').find({
-        query: {
-          projectId,
-        },
-      }),
-      app.service('documents').find({
-        query: {
-          projectId,
-        },
-      }),
-    ])
+    // check for returnAgents, returnSpells, and returnDocuments
+    const returnAgents = query?.returnAgents
+    const returnSpells = query?.returnSpells
+    const returnDocuments = query?.returnDocuments
+
+    // check for omitEmbeddings
+    const omitEmbeddings = query?.omitEmbeddings
+
+    // Prepare the promises for fetching agents, spells, and documents
+    const fetchPromises = []
+
+    if (returnAgents || (!returnAgents && !returnSpells && !returnDocuments)) {
+      fetchPromises.push(
+        app.service('agents').find({
+          query: {
+            projectId,
+          },
+        })
+      )
+    }
+
+    if (returnSpells || (!returnAgents && !returnSpells && !returnDocuments)) {
+      fetchPromises.push(
+        app.service('spells').find({
+          query: {
+            projectId,
+          },
+        })
+      )
+    }
+
+    if (
+      returnDocuments ||
+      (!returnAgents && !returnSpells && !returnDocuments)
+    ) {
+      const documentQuery: any = {
+        projectId,
+      }
+      // If omitEmbeddings is true, select all columns except the 'embedding' column
+      if (omitEmbeddings) {
+        documentQuery.$select = ['type', 'projectId', 'content', 'date']
+      }
+
+      fetchPromises.push(
+        app.service('documents').find({
+          query: documentQuery,
+        })
+      )
+    }
+
+    const results = await Promise.all(fetchPromises)
+
+    let agentsResult, spellsResult, documentsResult
+
+    if (returnAgents || (!returnAgents && !returnSpells && !returnDocuments)) {
+      agentsResult = results.shift()
+    }
+
+    if (returnSpells || (!returnAgents && !returnSpells && !returnDocuments)) {
+      spellsResult = results.shift()
+    }
+
+    if (
+      returnDocuments ||
+      (!returnAgents && !returnSpells && !returnDocuments)
+    ) {
+      documentsResult = results.shift()
+    }
 
     return {
-      agents: agents.data,
-      spells: spells.data,
-      documents: documents.data,
+      agents: agentsResult ? agentsResult.data : null,
+      spells: spellsResult ? spellsResult.data : null,
+      documents: documentsResult ? documentsResult.data : null,
     }
   }
 
@@ -95,7 +145,6 @@ export class ProjectsService {
         }),
       ])
     }
-
 
     // Map agents, documents, and spells with updated information for the new project
     const mappedAgents = agents.map(agent => {
