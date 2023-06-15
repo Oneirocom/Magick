@@ -42,13 +42,15 @@ export class ProjectsService {
     const returnSpells = query?.returnSpells
     const returnDocuments = query?.returnDocuments
 
+    const returnAll = !returnAgents && !returnSpells && !returnDocuments
+
     // check for omitEmbeddings
     const omitEmbeddings = query?.omitEmbeddings
 
     // Prepare the promises for fetching agents, spells, and documents
     const fetchPromises = []
 
-    if (returnAgents || (!returnAgents && !returnSpells && !returnDocuments)) {
+    if (returnAgents || returnAll) {
       fetchPromises.push(
         app.service('agents').find({
           query: {
@@ -58,7 +60,7 @@ export class ProjectsService {
       )
     }
 
-    if (returnSpells || (!returnAgents && !returnSpells && !returnDocuments)) {
+    if (returnSpells || returnAll) {
       fetchPromises.push(
         app.service('spells').find({
           query: {
@@ -68,10 +70,7 @@ export class ProjectsService {
       )
     }
 
-    if (
-      returnDocuments ||
-      (!returnAgents && !returnSpells && !returnDocuments)
-    ) {
+    if (returnDocuments || returnAll) {
       const documentQuery: any = {
         projectId,
       }
@@ -91,18 +90,15 @@ export class ProjectsService {
 
     let agentsResult, spellsResult, documentsResult
 
-    if (returnAgents || (!returnAgents && !returnSpells && !returnDocuments)) {
+    if (returnAgents || returnAll) {
       agentsResult = results.shift()
     }
 
-    if (returnSpells || (!returnAgents && !returnSpells && !returnDocuments)) {
+    if (returnSpells || returnAll) {
       spellsResult = results.shift()
     }
 
-    if (
-      returnDocuments ||
-      (!returnAgents && !returnSpells && !returnDocuments)
-    ) {
+    if (returnDocuments || returnAll) {
       documentsResult = results.shift()
     }
 
