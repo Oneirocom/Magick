@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen } from '@magickml/client-core'
-import { DEFAULT_USER_TOKEN, PRODUCTION, STANDALONE, pluginManager } from '@magickml/core'
+import { ClientPluginManager, DEFAULT_USER_TOKEN, PRODUCTION, STANDALONE, pluginManager } from '@magickml/core'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -8,13 +8,18 @@ import { useConfig } from '@magickml/client-core'
 import AgentWindow from './AgentWindow'
 import validateSpellData from './AgentWindow/spellValidator'
 
+// todo - improve agent typing by pulling from feathers types
+type AgentData = {
+  id: string
+}
+
 /**
  * @description Main window representing the agent manager.
  */
 const AgentManagerWindow = () => {
   const config = useConfig()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [data, setData] = useState<Array<object>>([])
+  const [data, setData] = useState<Array<AgentData>>([])
   const { enqueueSnackbar } = useSnackbar()
   const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
   const [enable, setEnable] = useState({})
@@ -39,8 +44,8 @@ const AgentManagerWindow = () => {
     setIsLoading(false)
     if (!json.data || !json.data[0]) return
     const spellAgent = json.data[0]?.rootSpell ?? {}
-    const inputs = pluginManager.getInputByName()
-    const plugin_list = pluginManager.getPlugins()
+    const inputs = (pluginManager as ClientPluginManager).getInputByName()
+    const plugin_list = (pluginManager as ClientPluginManager).getPlugins()
     for (const key of Object.keys(plugin_list)) {
       plugin_list[key] = validateSpellData(spellAgent, inputs[key])
     }
@@ -242,8 +247,8 @@ const AgentManagerWindow = () => {
       const json = await res.json()
       if (!json.data || !json.data[0]) return
       const spellAgent = json.data[0]?.rootSpell ?? {}
-      const inputs = pluginManager.getInputByName()
-      const plugin_list = pluginManager.getPlugins()
+      const inputs = (pluginManager as ClientPluginManager).getInputByName()
+      const plugin_list = (pluginManager as ClientPluginManager).getPlugins()
       for (const key of Object.keys(plugin_list)) {
         plugin_list[key] = validateSpellData(spellAgent, inputs[key])
       }
