@@ -1,4 +1,4 @@
-// DOCUMENTED
+// DOCUMENTED 
 /**
  * This file provides a configure function exporting a request that registers the service and its hooks via `app.configure`.
  * @see https://dove.feathersjs.com/guides/cli/service.html
@@ -13,7 +13,7 @@ import {
   requestExternalResolver,
   requestDataResolver,
   requestPatchResolver,
-  requestQueryResolver,
+  requestQueryResolver
 } from './requests.schema'
 
 import type { Application } from '../../declarations'
@@ -33,7 +33,7 @@ export const request = (app: Application): void => {
     // A list of all methods this service exposes externally
     methods: ['find', 'get', 'create', 'patch', 'remove'],
     // You can add additional custom events to be sent to clients here
-    events: [],
+    events: []
   })
 
   // Initialize hooks
@@ -42,35 +42,35 @@ export const request = (app: Application): void => {
       all: [
         // Push `requestExternalResolver` and `requestResolver` hooks that resolves external resource and returns a response respectively
         schemaHooks.resolveExternal(requestExternalResolver),
-        schemaHooks.resolveResult(requestResolver),
-      ],
+        schemaHooks.resolveResult(requestResolver)
+      ]
     },
     before: {
       all: [
         // Push `requestQueryValidator` and `requestQueryResolver` hooks that validate and resolve QueryParams respectively
         schemaHooks.validateQuery(requestQueryValidator),
-        schemaHooks.resolveQuery(requestQueryResolver),
+        schemaHooks.resolveQuery(requestQueryResolver)
       ],
       find: [],
       get: [],
       create: [
         // Push `requestDataValidator` and `requestDataResolver` hooks that validate and resolve incoming data respectively
         schemaHooks.validateData(requestDataValidator),
-        schemaHooks.resolveData(requestDataResolver),
+        schemaHooks.resolveData(requestDataResolver)
       ],
       patch: [
         // Push `requestPatchValidator` and `requestPatchResolver` hooks that validate and resolve incoming data respectively
         schemaHooks.validateData(requestPatchValidator),
-        schemaHooks.resolveData(requestPatchResolver),
+        schemaHooks.resolveData(requestPatchResolver)
       ],
-      remove: [],
+      remove: []
     },
     after: {
-      all: [],
+      all: []
     },
     error: {
-      all: [],
-    },
+      all: []
+    }
   })
 }
 
