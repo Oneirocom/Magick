@@ -7,6 +7,7 @@ import { useVrm } from './hooks/useVrm'
 import { useCallback, useEffect, useState } from 'react'
 import { useZustand } from './store/useZustand'
 import { DEFAULT_MODEL } from './utils/constants'
+import { toast } from "react-toastify";
 
 const App = () => {
 
