@@ -1,14 +1,14 @@
-// DOCUMENTED 
-import { API_ROOT_URL } from '../config';
+// DOCUMENTED
+import { API_ROOT_URL } from '@magickml/config'
 /**
  * The type for the function's input parameter which contains the
  * app object, the projectId, and the id of a specific spell.
  */
 type GetSpell = {
-  app: any;
-  id: string;
-  projectId: string;
-};
+  app: any
+  id: string
+  projectId: string
+}
 
 /**
  * Fetch a specific spell from the project's spells based on its id.
@@ -17,9 +17,10 @@ type GetSpell = {
  */
 export const getSpell = async ({ id, projectId }: GetSpell): Promise<any> => {
   // rewrite the feathers service call as a fetch
-  const spell = await fetch(`${API_ROOT_URL}/spells?projectId=${projectId}&id=${id}`)
-    .then(res => res.json());
+  const spell = await fetch(
+    `${API_ROOT_URL}/spells?projectId=${projectId}&id=${id}`
+  ).then(res => res.json())
 
   // Return the first element of the found spells' data
-  return spell.data[0];
-};
+  return spell.data[0]
+}

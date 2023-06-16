@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { LoadingScreen } from '@magickml/client-core'
-import { ClientPluginManager, DEFAULT_USER_TOKEN, PRODUCTION, STANDALONE, pluginManager } from '@magickml/core'
+import { ClientPluginManager, pluginManager } from '@magickml/core'
+import { DEFAULT_USER_TOKEN, PRODUCTION, STANDALONE } from '@magickml/config'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'

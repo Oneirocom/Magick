@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { Button } from '@magickml/client-core'
-import { API_ROOT_URL } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/config'
 import {
   Grid,
   IconButton,
