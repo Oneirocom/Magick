@@ -4,9 +4,11 @@ import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { convertFileToText } from './documentconvert';
 import styles from './index.module.scss';
+import { useSnackbar } from 'notistack'
 
 const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, providerList }) => {
   const [loading, setLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar()
   const [newDocument, setDocument] = useState({
     type: '',
     content: ''
@@ -46,13 +48,16 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
   };
 
   const handleSaveDocument = () => {
+    setLoading(true);
     if (newDocument.type) {
       handleSave(selectedModel);
-      setCreateMode(!createMode)
+      setLoading(false);
     } else {
-      alert('Please fill in all required fields.');
+      setLoading(false);
+      enqueueSnackbar('Please fill in all required fields.', { variant: 'error' });
     }
   };
+  
   return (
     <Modal
       open={createMode}
