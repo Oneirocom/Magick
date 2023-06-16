@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { IconBtn, CustomizedSwitch } from '@magickml/client-core'
-import { ClientPluginManager, DEFAULT_USER_TOKEN, STANDALONE, pluginManager } from '@magickml/core'
+import { ClientPluginManager, pluginManager } from '@magickml/core'
+import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
 
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
