@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useConfig } from '@magickml/client-core'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
@@ -30,6 +30,7 @@ import {
 import { DocumentData, columns } from './document'
 import styles from './index.module.scss'
 import DocumentModal from './DocumentModal'
+
 /**
  * GlobalFilter component for applying search filter on the whole table.
  * @param {{ globalFilter: any, setGlobalFilter: Function }} param0
@@ -232,24 +233,42 @@ function DocumentTable({ documents, updateCallback }) {
         secrets: localStorage.getItem('secrets'),
       }),
     })
+    // Check if the save operation was successful
+    if (result.ok) {
 
-    // reset newDocument
-    setNewDocument({
-      type: '',
-      content: '',
-      projectId: '',
-      date: '',
-      embedding: '',
-    })
-    updateCallback()
+      // Trigger the updateCallback function to update the table
+      setTimeout(() => {
+        updateCallback(); // Trigger the updateCallback function after a delay
+      }, 2000);
 
-    return result
+
+      setCreateMode(!createMode);
+
+      //Reset newDocument
+      setNewDocument({
+        type: '',
+        content: '',
+        projectId: '',
+        date: '',
+        embedding: '',
+      });
+
+      enqueueSnackbar('Document saved successfully', { variant: 'success' });
+    } else {
+      enqueueSnackbar('Error saving document', { variant: 'error' });
+    }
   }
   // Show create modal
   const showCreateModal = () => {
     setCreateMode(true)
   }
-  // Render the table with useMemo
+
+  // trigger updateCallback when createMode changes
+  useEffect(() => {
+    if (!createMode) {
+      updateCallback();
+    }
+  }, [createMode]);
   return (
     <>{createMode && (
       <DocumentModal
