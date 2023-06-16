@@ -56,7 +56,7 @@ const InspectorProvider = ({ children, tab }) => {
       if (!data.dataControls) return
 
       // Handle components
-      Object.entries(data.dataControls as ControlData[]).forEach(([, control]) => {
+      Object.entries(data.dataControls).forEach(([, control]) => {
         if (control?.options?.editor) {
           // Relay data to the text editor
           const textData = {

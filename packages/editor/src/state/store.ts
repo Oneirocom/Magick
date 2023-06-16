@@ -33,7 +33,7 @@ let _store = null
  * @param config - Optional configuration for the store.
  * @returns The created store.
  */
-export const createStore = (config?: AppConfig) => {
+export const createStore = (config: AppConfig) => {
   if (_store) return _store
 
   const persistConfig = {
