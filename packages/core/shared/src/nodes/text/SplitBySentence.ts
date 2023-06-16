@@ -35,7 +35,7 @@ const info =
   
     sentences.forEach(sentence => {
       // convert sentence object to string
-      let sentenceStr = sentence.raw;
+      let sentenceStr = sentence.filter(token => token.type === 'Sentence');
   
       // if the sentence length is less than the maxLength, add it to the strings array
       if(sentenceStr.length <= maxLength) {
