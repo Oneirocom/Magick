@@ -233,41 +233,42 @@ function DocumentTable({ documents, updateCallback }) {
         secrets: localStorage.getItem('secrets'),
       }),
     })
- // Check if the save operation was successful
- if (result.ok) {
-  // Trigger the updateCallback function to update the table
-  setTimeout(() => {
-    updateCallback(); // Trigger the updateCallback function after a delay
-  }, 2000);
-  console.log("result", result);
-  
-  setCreateMode(!createMode);
+    // Check if the save operation was successful
+    if (result.ok) {
 
-  // // Reset newDocument
-  // setNewDocument({
-  //   type: '',
-  //   content: '',
-  //   projectId: '',
-  //   date: '',
-  //   embedding: '',
-  // });
+      // Trigger the updateCallback function to update the table
+      setTimeout(() => {
+        updateCallback(); // Trigger the updateCallback function after a delay
+      }, 2000);
 
-  enqueueSnackbar('Document saved successfully', { variant: 'success' });
-} else {
-  enqueueSnackbar('Error saving document', { variant: 'error' });
-}
+
+      setCreateMode(!createMode);
+
+      //Reset newDocument
+      setNewDocument({
+        type: '',
+        content: '',
+        projectId: '',
+        date: '',
+        embedding: '',
+      });
+
+      enqueueSnackbar('Document saved successfully', { variant: 'success' });
+    } else {
+      enqueueSnackbar('Error saving document', { variant: 'error' });
+    }
   }
   // Show create modal
   const showCreateModal = () => {
     setCreateMode(true)
   }
-  
-// trigger updateCallback when createMode changes
-useEffect(() => {
-  if (!createMode) {
-    updateCallback();
-  }
-}, [createMode]);
+
+  // trigger updateCallback when createMode changes
+  useEffect(() => {
+    if (!createMode) {
+      updateCallback();
+    }
+  }, [createMode]);
   return (
     <>{createMode && (
       <DocumentModal
