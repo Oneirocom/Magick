@@ -24,7 +24,9 @@ export const useVrm = (vrmUrl) => {
         logger.error('non standard model %s', vrmUrl)
         gltf = await gltfLoader.loadAsync(DEFAULT_MODEL)
       }
-      if (!gltf) {
+
+      //ignore vrm0 file
+      if (!gltf || gltf.userData.vrm.lookAt.faceFront.z <= 0) {
         logger.error('non existing model %s', vrmUrl)
         return
       }
