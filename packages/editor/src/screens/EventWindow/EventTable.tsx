@@ -172,8 +172,7 @@ function EventTable({ events, updateCallback }) {
   )
 
   // Initialize the table with hooks
-  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
-    setSortBy } =
+  const tableInstance =
     useTable(
       {
         columns: defaultColumns,
@@ -184,6 +183,12 @@ function EventTable({ events, updateCallback }) {
       useSortBy,
       usePagination
     )
+
+  // tableInstance as any here is a workaround for the type error
+  // for some reason the type of tableInstance is not being inferred correctly, and documentation sucks
+  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
+    setSortBy } = tableInstance as any
+
 
   // Function to handle sorting when a column header is clicked
   const handleSort = (column) => {

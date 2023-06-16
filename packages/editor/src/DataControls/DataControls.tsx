@@ -13,6 +13,7 @@ import PlaytestControl from './PlaytestControl'
 import SwitchControl from './SwitchControl'
 import SpellSelect from './SpellSelect'
 import CheckBoxControl from './CheckBox'
+import { ControlData } from '@magickml/core'
 
 /**
  * Stub component for unknown control types.
@@ -51,7 +52,7 @@ type DataControl = {
 }
 
 export type DataControlsProps = {
-  dataControls: { [key: string]: DataControl }
+  dataControls: { [key: string]: ControlData }
   updateData: Function
   updateControl: Function
   width: number
