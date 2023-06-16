@@ -115,17 +115,21 @@ function RequestTable({ requests, updateCallback }) {
       const ids = selectedRows.join('&')
       console.log(ids);
       
-      const isDeleted = await fetch(`${API_ROOT_URL}/request/${ids}`, {
+      const isDeleted = await fetch(`${API_ROOT_URL}/request/removeMany/${ids}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      setSelectedRows([])
-      if (isDeleted) enqueueSnackbar('Requests deleted', { variant: 'success' })
-      else enqueueSnackbar('Error deleting Event', { variant: 'error' })
-      // close the action menu
-      updateCallback()
+      if (isDeleted.ok) {
+        enqueueSnackbar('Requests deleted', { variant: 'success' });
+        updateCallback();
+      } else {
+        enqueueSnackbar('Error deleting Requests', { variant: 'error' });
+      }
+    
+      // Clear the selected rows
+      setSelectedRows([]);
     }
 
 
