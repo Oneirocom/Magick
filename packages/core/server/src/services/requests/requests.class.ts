@@ -25,28 +25,20 @@ export type RequestParams = KnexAdapterParams<RequestQuery>
 export class RequestService<
   ServiceParams extends Params = RequestParams
 > extends KnexService<Request, RequestData, ServiceParams, RequestPatch> {
-
- /**
+  /**
    * Remove Requests.
    * This function removes Requests from the database.
-   * @param {string[]} id - The ID of the Requests to remove.
-   * @returns {Promise<any>} - The removed Requests data.
+   * @param {string} id - The ID or IDs of the request(s) to remove, separated by the '&' character if multiple IDs are provided.
+   * @returns {Promise<any>} - A Promise that resolves to the data of the removed requests.
    */
   // @ts-ignore
   async remove(id: string): Promise<any> {
     const ids = id.split('&')
-    const db = app.get('vectordb')
+    const db = app.get('dbClient')
     const res = await db.from('request').whereIn('id', ids).del()
     return res
   }
-
 }
-
-
-
-
-
-
 
 /**
  * Get options for the RequestService
