@@ -3,7 +3,6 @@
 import 'regenerator-runtime/runtime'
 
 // Export configuration and all other necessary components.
-export * from './config'
 export { BooleanControl } from './dataControls/BooleanControl'
 export { CodeControl } from './dataControls/CodeControl'
 export { DropdownControl } from './dataControls/DropdownControl'

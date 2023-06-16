@@ -26,7 +26,7 @@ const rootReducer = combineReducers({
 })
 
 // Store instance placeholder
-let _store = null
+let _store: any = null
 
 /**
  * Create a new store with optional configuration.

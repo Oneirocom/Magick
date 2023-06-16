@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 
 import RequestTable from './RequestTable'
 
-import { API_ROOT_URL } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/config'
 import { useConfig } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
 
