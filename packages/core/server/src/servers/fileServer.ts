@@ -1,9 +1,9 @@
-// DOCUMENTED 
-import { FILE_SERVER_PORT, USESSL } from '@magickml/core';
-import * as fs from 'fs';
-import http from 'http';
-import https from 'https';
-import path from 'path';
+// DOCUMENTED
+import { FILE_SERVER_PORT, USESSL } from '@magickml/config'
+import * as fs from 'fs'
+import http from 'http'
+import https from 'https'
+import path from 'path'
 
 /**
  * Initializes the file server with SSL enabled if configured.
@@ -11,20 +11,20 @@ import path from 'path';
 export async function initFileServer() {
   // Ensure the 'files' folder exists
   if (!fs.existsSync('files')) {
-    console.warn('FOLDER DIDNT EXIST AND CREATED');
-    fs.mkdirSync('files');
+    console.warn('FOLDER DIDNT EXIST AND CREATED')
+    fs.mkdirSync('files')
   }
 
   // Initialize the server with SSL if configured, otherwise without SSL
   if (USESSL) {
-    const success = await initSSL();
+    const success = await initSSL()
     if (!success) {
-      initNoSSL();
+      initNoSSL()
     }
   } else {
-    await initNoSSL();
+    await initNoSSL()
   }
-  console.log('file server started on port:', FILE_SERVER_PORT);
+  console.log('file server started on port:', FILE_SERVER_PORT)
 }
 
 /**
@@ -38,7 +38,7 @@ async function initSSL(): Promise<boolean> {
     !fs.existsSync('certs/key.pem') ||
     !fs.existsSync('certs/cert.pem')
   ) {
-    return false;
+    return false
   }
 
   // Create HTTPS server with SSL enabled
@@ -49,69 +49,72 @@ async function initSSL(): Promise<boolean> {
         cert: fs.readFileSync('certs/cert.pem'),
       },
       function (req, res) {
-        let filePath = '.' + req.url; // Get the file path from the request URL
+        let filePath = '.' + req.url // Get the file path from the request URL
         if (filePath == './') {
-          filePath = './index.html';
+          filePath = './index.html'
         }
 
         // Set content type based on file extension
-        const extname = path.extname(filePath);
-        let contentType = 'text/html';
+        const extname = path.extname(filePath)
+        let contentType = 'text/html'
         switch (extname) {
           case '.js':
-            contentType = 'text/javascript';
-            break;
+            contentType = 'text/javascript'
+            break
           case '.css':
-            contentType = 'text/css';
-            break;
+            contentType = 'text/css'
+            break
           case '.json':
-            contentType = 'application/json';
-            break;
+            contentType = 'application/json'
+            break
           case '.png':
-            contentType = 'image/png';
-            break;
+            contentType = 'image/png'
+            break
           case '.jpg':
-            contentType = 'image/jpg';
-            break;
+            contentType = 'image/jpg'
+            break
           case '.wav':
-            contentType = 'audio/wav';
-            break;
+            contentType = 'audio/wav'
+            break
           case '.mp3':
-            contentType = 'audio/mp3';
-            break;
+            contentType = 'audio/mp3'
+            break
         }
 
         // Read the requested file
         fs.readFile(filePath, function (error, content) {
           if (error) {
-            if (error.code == 'ENOENT') { // Handle missing file
-              res.writeHead(404);
-              res.end();
-            } else { // Handle server errors
-              res.writeHead(500);
-              res.end('error');
-              res.end();
+            if (error.code == 'ENOENT') {
+              // Handle missing file
+              res.writeHead(404)
+              res.end()
+            } else {
+              // Handle server errors
+              res.writeHead(500)
+              res.end('error')
+              res.end()
             }
-          } else { // Send the file content with headers and content type
-            res.setHeader('Access-Control-Allow-Origin', '*');
+          } else {
+            // Send the file content with headers and content type
+            res.setHeader('Access-Control-Allow-Origin', '*')
             res.setHeader(
               'Access-Control-Allow-Methods',
               'GET, POST, OPTIONS, PUT, PATCH, DELETE'
-            );
+            )
             res.setHeader(
               'Access-Control-Allow-Headers',
               'X-Requested-With,content-type'
-            );
-            res.setHeader('Access-Control-Allow-Credentials', 'true');
-            res.writeHead(200, { 'Content-Type': contentType });
-            res.end(content, 'utf-8');
+            )
+            res.setHeader('Access-Control-Allow-Credentials', 'true')
+            res.writeHead(200, { 'Content-Type': contentType })
+            res.end(content, 'utf-8')
           }
-        });
+        })
       }
     )
-    .listen(FILE_SERVER_PORT);
+    .listen(FILE_SERVER_PORT)
 
-  return true;
+  return true
 }
 
 /**
@@ -121,64 +124,67 @@ async function initNoSSL() {
   // Create HTTP server
   http
     .createServer(function (req, res) {
-      let filePath = '.' + req.url; // Get the file path from the request URL
+      let filePath = '.' + req.url // Get the file path from the request URL
       if (filePath == './') {
-        filePath = './index.html';
+        filePath = './index.html'
       }
 
       // Set content type based on file extension
-      const extname = path.extname(filePath);
-      let contentType = 'text/html';
+      const extname = path.extname(filePath)
+      let contentType = 'text/html'
       switch (extname) {
         case '.js':
-          contentType = 'text/javascript';
-          break;
+          contentType = 'text/javascript'
+          break
         case '.css':
-          contentType = 'text/css';
-          break;
+          contentType = 'text/css'
+          break
         case '.json':
-          contentType = 'application/json';
-          break;
+          contentType = 'application/json'
+          break
         case '.png':
-          contentType = 'image/png';
-          break;
+          contentType = 'image/png'
+          break
         case '.jpg':
-          contentType = 'image/jpg';
-          break;
+          contentType = 'image/jpg'
+          break
         case '.wav':
-          contentType = 'audio/wav';
-          break;
+          contentType = 'audio/wav'
+          break
         case '.mp3':
-          contentType = 'audio/mp3';
-          break;
+          contentType = 'audio/mp3'
+          break
       }
 
       // Read the requested file
       fs.readFile(filePath, function (error, content) {
         if (error) {
-          if (error.code == 'ENOENT') { // Handle missing file
-            res.writeHead(404);
-            res.end();
-          } else { // Handle server errors
-            res.writeHead(500);
-            res.end('error');
-            res.end();
+          if (error.code == 'ENOENT') {
+            // Handle missing file
+            res.writeHead(404)
+            res.end()
+          } else {
+            // Handle server errors
+            res.writeHead(500)
+            res.end('error')
+            res.end()
           }
-        } else { // Send the file content with headers and content type
-          res.setHeader('Access-Control-Allow-Origin', '*');
+        } else {
+          // Send the file content with headers and content type
+          res.setHeader('Access-Control-Allow-Origin', '*')
           res.setHeader(
             'Access-Control-Allow-Methods',
             'GET, POST, OPTIONS, PUT, PATCH, DELETE'
-          );
+          )
           res.setHeader(
             'Access-Control-Allow-Headers',
             'X-Requested-With,content-type'
-          );
-          res.setHeader('Access-Control-Allow-Credentials', 'true');
-          res.writeHead(200, { 'Content-Type': contentType });
-          res.end(content, 'utf-8');
+          )
+          res.setHeader('Access-Control-Allow-Credentials', 'true')
+          res.writeHead(200, { 'Content-Type': contentType })
+          res.end(content, 'utf-8')
         }
-      });
+      })
     })
-    .listen(FILE_SERVER_PORT);
+    .listen(FILE_SERVER_PORT)
 }
