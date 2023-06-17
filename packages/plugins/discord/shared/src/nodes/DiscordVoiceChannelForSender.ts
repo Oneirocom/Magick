@@ -22,10 +22,7 @@ import {
  * The return type of the worker function.
  */
 type WorkerReturn = {
-  output: {
-    id: string,
-    name: string,
-  }[]
+  output: string | number
 }
 
 /**
@@ -79,12 +76,11 @@ export class DiscordVoiceChannelForSender extends MagickComponent<
     context: ModuleContext
   ): Promise<WorkerReturn> {
     const { agent, data } = context
-    if (!agent) {
-      throw new Error('Agent not found')
-    }
-
-    if (!agent?.discord) {
-      throw new Error('Discord connector not found on agent, is Discord initialized?')
+    if (!agent || !agent?.discord) {
+      console.warn('sending default information since there is no agent available')
+      return {
+        output: 1051457146388217900
+      }
     }
 
     const event = // event data is inside a task?
