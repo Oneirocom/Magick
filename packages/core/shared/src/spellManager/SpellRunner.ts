@@ -1,5 +1,4 @@
 import { Application } from '@feathersjs/koa'
-import { getLogger } from '@magickml/core'
 import pino from 'pino'
 import io from 'socket.io'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
@@ -14,6 +13,7 @@ import {
 } from '../types'
 import { extractModuleInputKeys } from './graphHelpers'
 import SpellManager from './SpellManager'
+import { getLogger } from '../logger'
 
 export type RunComponentArgs = {
   inputs: MagickSpellInput
