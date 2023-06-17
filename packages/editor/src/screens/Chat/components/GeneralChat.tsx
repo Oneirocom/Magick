@@ -12,8 +12,7 @@ import { Navbar } from "./Mobile/Navbar";
 import { Sidebar } from "./Sidebar/Sidebar";
 import styles from './chat.module.css';
 
-import { useConfig, usePubSub } from '@magickml/client-core';
-import { useFeathers } from '../../../../../core/client/src/providers/FeathersProvider';
+import { useConfig, usePubSub, useFeathers } from '@magickml/client-core';
 import {
   useGetSpellsQuery
 } from '../../../state/api/spells';
@@ -27,11 +26,11 @@ export default function GeneralChat() {
   const [messageIsStreaming, setMessageIsStreaming] = useState<boolean>(false);
   const [showSidebar, setShowSidebar] = useState<boolean>(true);
   const [messageError, setMessageError] = useState<boolean>(false);
-  const [chatError, setChatError] = useState<boolean>(false);
+  const [chatError] = useState<boolean>(false);
   const [chatwindowGraph, setChatwindowGraph] = useState(null)
   const stopConversationRef = useRef<boolean>(false);
   const pubSub = usePubSub()
-  const { publish, subscribe, events } = pubSub;
+  const { subscribe, events } = pubSub;
 
   const { enqueueSnackbar } = useSnackbar()
   const config = useConfig()
@@ -62,7 +61,7 @@ export default function GeneralChat() {
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
 
-  const { $PLAYTEST_PRINT, $RUN_SPELL } = events
+  const { $PLAYTEST_PRINT } = events
 
   const printToConsole = useCallback(
     (_, _text) => {

@@ -1,4 +1,4 @@
-import { LoadingScreen } from '@magickml/client-core'
+import { LoadingScreen, useFeathers } from '@magickml/client-core'
 import { EditorContext, GraphData, MagickEditor, SpellInterface } from '@magickml/core'
 import React, {
   createContext,
@@ -14,7 +14,6 @@ import { MyNode } from '../components/Node/Node'
 import { initEditor } from '../editor'
 import { zoomAt } from '../plugins/areaPlugin/zoom-at'
 import { spellApi } from '../state/api/spells'
-import { useFeathers } from '../../../core/client/src/providers/FeathersProvider'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import styles from './styles.module.scss'
 
