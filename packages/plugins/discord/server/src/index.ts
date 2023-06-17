@@ -1,6 +1,7 @@
 // DOCUMENTED
-import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
+import { audioSocket, eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
 import { DiscordConnector } from './connectors/discord'
+import { handleVoiceResponse } from './connectors/discord-voice'
 
 import { getNodes } from '@magickml/plugin-discord-shared'
 type StartDiscordArgs = {
@@ -68,11 +69,10 @@ async function handleResponse({ output, agent, event }) {
   if (!output || output === '')
     return agent.warn('No output to send to discord')
 
-  if (event.channelType !== 'dm') {
+  console.log('event.channelType', event.channelType)
+
     await agent?.discord?.sendMessageToChannel(event.channel, output)
-  } else {
-    await agent?.discord?.sendDMToUser(event.channel, output)
-  }
+
 }
 
 // Input socket configurations
@@ -95,6 +95,14 @@ const outputSockets = [
     socket: 'output',
     name: 'output',
     type: eventSocket,
+  },
+]
+
+const audioOutputSockets = [
+  {
+    socket: 'output',
+    name: 'output',
+    type: audioSocket,
   },
 ]
 
@@ -125,9 +133,9 @@ const DiscordPlugin = new ServerPlugin({
   outputTypes: [
     {
       name: 'Discord (Voice)',
-      sockets: outputSockets,
+      sockets: audioOutputSockets,
       handler: async ({ output, agent, event }) => {
-        await handleResponse({ output, agent, event })
+        await handleVoiceResponse({ output, agent, event })
       },
     },
     {

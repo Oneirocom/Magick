@@ -3,25 +3,12 @@ import {
   joinVoiceChannel,
   createAudioPlayer,
   createAudioResource,
-  AudioPlayerStatus,
-  StreamType,
   NoSubscriberBehavior,
+  getVoiceConnection,
+  AudioPlayerStatus
 } from '@discordjs/voice'
-import { tts, tts_tiktalknet, app } from '@magickml/server-core'
+import { app } from '@magickml/server-core'
 import { addSpeechEvent } from './voiceUtils/addSpeechEvent'
-
-/**
- * Remove emojis and custom emojis from a string.
- * @param {string} str - The string to remove emojis from.
- * @return {string} The string without emojis.
- */
-function removeEmojisFromString(str: string): string {
-  if (!str) return ''
-
-  return str
-    .replace(/(?: ... large regex ... )\uFE0F/g, '')
-    .replace(/:(.*?):/g, '')
-}
 
 /**
  * Initialize the speech client and set up event listeners.
@@ -32,19 +19,11 @@ export function initSpeechClient(options: {
   client: any
   agent: any
   spellRunner: any
-  voiceProvider: string
-  voiceCharacter: string
-  languageCode: string
-  voice_endpoint: string
 }) {
   const {
     client,
     agent,
     spellRunner,
-    voiceProvider,
-    voiceCharacter,
-    languageCode,
-    voice_endpoint,
   } = options
 
   // Add speech event to the client.
@@ -59,78 +38,120 @@ export function initSpeechClient(options: {
 
   client.on('speech', async msg => {
     const { content, connection, author, channel } = msg
-
-    // Lazily import createReadStream.
-    const createReadStream = await import('fs').then(fs => fs.createReadStream)
-
     connection.subscribe(audioPlayer)
 
-    if (content) {
-      const entities: any[] = []
-      try {
-        for (const [, member] of channel.members) {
-          entities.push({
-            user: member.user.username,
-          })
-        }
-      } catch (e) {
-        console.log('error getting members', e)
+    console.log('speech handling')
+
+    if (!content)
+      return console.error('No content in speech message', JSON.stringify(msg))
+    const entities: any[] = []
+    try {
+      for (const [, member] of channel.members) {
+        entities.push({
+          user: member.user.username,
+        })
       }
-
-      // Run spell and collect response.
-      const fullResponse = await spellRunner.runComponent({
-        inputs: {
-          'Input - Discord (Voice)': {
-            connector: 'Discord (Voice)',
-            content,
-            sender: author?.username ?? 'VoiceSpeaker',
-            observer: agent.name,
-            client: 'discord',
-            channel: channel.id,
-            agentId: agent.id,
-            entities: entities.map((e: { user }) => e.user),
-            channelType: 'voice',
-            rawData: JSON.stringify(msg),
-          },
-        },
-        secrets: agent.secrets ?? {},
-        publicVariables: agent.publicVariables ?? {},
-        app,
-        runSubspell: true,
-      })
-
-      let response = Object.values(fullResponse)[0] as string
-      if (!response) return
-
-      // Remove emojis from response.
-      response = removeEmojisFromString(response)
-
-      let url
-      if (response) {
-        if (voiceProvider === 'google') {
-          // Google TTS.
-          url = await tts(response, voiceCharacter, languageCode)
-        } else {
-          url = await tts_tiktalknet(response, voiceCharacter, voice_endpoint)
-        }
-        if (url) {
-          const audioResource = createAudioResource(createReadStream(url), {
-            inputType: StreamType.Arbitrary,
-            inlineVolume: true,
-          })
-          audioPlayer.play(audioResource)
-          audioPlayer.on(AudioPlayerStatus.Playing, () => {
-            console.log('Now playing')
-          })
-          audioPlayer.on(AudioPlayerStatus.Idle, () => {
-            console.log('Finished playing')
-          })
-        }
-      }
+    } catch (e) {
+      console.log('error getting members', e)
     }
+
+    console.log('running component')
+
+    console.log('content is', content)
+
+    console.log('msg is', msg)
+
+    // Run spell and collect response.
+    await spellRunner.runComponent({
+      inputs: {
+        'Input - Discord (Voice)': {
+          connector: 'Discord (Voice)',
+          content,
+          sender: author?.username ?? 'VoiceSpeaker',
+          observer: agent.name,
+          client: 'discord',
+          channel: channel.id,
+          agentId: agent.id,
+          entities: entities.map((e: { user }) => e.user),
+          channelType: 'voice',
+          rawData: JSON.stringify({}),
+        },
+      },
+      secrets: agent.secrets ?? {},
+      publicVariables: agent.publicVariables ?? {},
+      app,
+      runSubspell: true,
+    })
+    console.log('component ran')
   })
 
   return client
+}
+
+export async function handleVoiceResponse({ output, agent, event }) {
+  if (!output || output === '')
+    return agent.warn('No output to send to discord')
+
+  console.log('handling voice response')
+  const discordClient = agent?.discord?.client
+
+  console.log('discordClient', discordClient)
+
+  // TODO: Get the the voice channel by id (event.channel is the id)
+  const voiceChannel = discordClient.channels.cache.get(event.channel)
+
+  console.log('voiceChannel', voiceChannel)
+
+  // get the guild
+  const guild = voiceChannel.guild
+
+  console.log('guild', guild)
+
+  const voiceConnection = getVoiceConnection(guild.id, 'default_' + agent.id);
+
+  console.log('voiceConnection', voiceConnection)
+  if (!voiceConnection) {
+    console.error(`The bot is not in the voice channel of the guild ${guild.id}`);
+    return;
+  }
+
+  // output is a readable stream object
+  const resource = createAudioResource(output)
+  console.log('playing audio')
+
+  const player = createAudioPlayer();
+
+  player.play(resource);
+
+  console.log('played audio')
+
+  player.on('error', error => {
+    console.error(`Error in audio player: ${error.message}`);
+  });
+
+  console.log('subscribing to voice connection')
+
+  voiceConnection.subscribe(player);
+  console.log('subscribed')
+
+  // on idle, log finished
+  player.on(AudioPlayerStatus.Idle, async () => {
+    console.log('Finished playing!');
+    const fs = await import('fs')
+    // delete any files in fs older than 2 hours
+    const files = fs.readdirSync('./files')
+    files.forEach(file => {
+      if(file.includes('mp3')) {
+        const { birthtime } = fs.statSync(`./files/${file}`)
+        const now = new Date()
+        const diff = now.getTime() - birthtime.getTime()
+        const hours = Math.floor(diff / 1000 / 60 / 60)
+        if(hours > 2) {
+          fs.unlinkSync(`./files/${file}`)
+        }
+      }
+  })
+})
 }
 
 export async function stopSpeechClient(textChannel, clientId) {
