@@ -81,8 +81,8 @@ export class DiscordListVoiceChannels extends MagickComponent<
   ): Promise<WorkerReturn> {
     const { agent, data } = context
     console.log('Listing discord voice channels')
-    console.log('agent', agent.id)
-    if (!agent) {
+
+    if (!agent || !agent?.discord) {
       console.warn('sending default information since there is no agent available')
       return {
         output: [{"id":"1051457146388217900","name":"General"},{"id":"1119407851408986122","name":"voice2"}]
@@ -104,11 +104,17 @@ export class DiscordListVoiceChannels extends MagickComponent<
     // discordClient is a Discord.js client instance
     const discordClient = agent.discord.client
 
+    console.log('discord client', discordClient)
+
     const channel = event.channel // channel in which the message was sent
+
+    console.log('channel', channel)
 
     // fetch the channel using its ID
     const fetchedChannel = await discordClient.channels.fetch(channel);
 
+
+    console.log('fetchedChannel', fetchedChannel)
     if (!fetchedChannel) {
       throw new Error('Channel not found')
     }
@@ -120,9 +126,12 @@ export class DiscordListVoiceChannels extends MagickComponent<
     // get the guild object from the fetched channel
     const guild = fetchedChannel.guild;
 
+    console.log('guild', guild)
+
     // get the list of text channels
     const voiceChannels = guild.channels.cache.filter(ch => ch.type === ChannelType.GuildVoice);
 
+    console.log('voiceChannels', voiceChannels)
 
     return {
       output: voiceChannels.map(channel => ({
