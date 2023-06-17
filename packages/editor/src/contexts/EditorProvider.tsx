@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { LoadingScreen } from '@magickml/client-core'
+import { LoadingScreen, useFeathers } from '@magickml/client-core'
 import {
   EditorContext,
   GraphData,
@@ -18,7 +18,6 @@ import { Component } from 'rete/types/engine'
 
 import { useConfig, usePubSub } from '@magickml/client-core'
 import { MyNode } from '../components/Node/Node'
-import { useFeathers } from '../../../core/client/src/providers/FeathersProvider'
 import { initEditor } from '../editor'
 import { zoomAt } from '../plugins/areaPlugin/zoom-at'
 import { spellApi } from '../state/api/spells'

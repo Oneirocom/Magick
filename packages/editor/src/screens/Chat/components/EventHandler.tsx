@@ -5,9 +5,8 @@ import { SpellInterface } from '@magickml/core'
 import {
   useLazyGetSpellByIdQuery
 } from '../../../state/api/spells'
-import { useFeathers } from '../../../../../core/client/src/providers/FeathersProvider'
 
-import { useConfig } from '@magickml/client-core'
+import { useConfig, useFeathers } from '@magickml/client-core'
 
 const EventHandler = ({ pubSub, conversation }) => {
   const config = useConfig()

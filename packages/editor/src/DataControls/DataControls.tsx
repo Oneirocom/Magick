@@ -41,15 +41,15 @@ const controlMap = {
   checkbox: CheckBoxControl,
 }
 
-type DataControl = {
-  component: string
-  dataKey: string
-  label: string
-  type: string
-  options?: any
-  name?: string
-  data: Record<string, any>
-}
+// type DataControl = {
+//   component: string
+//   dataKey: string
+//   label: string
+//   type: string
+//   options?: any
+//   name?: string
+//   data: Record<string, any>
+// }
 
 export type DataControlsProps = {
   dataControls: { [key: string]: ControlData }
