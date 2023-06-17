@@ -44,7 +44,6 @@ async function initializeAgent(): Promise<void> {
 initLogger({ name: 'agent' })
 const logger = getLogger()
 
-
 if (PRODUCTION || DONT_CRASH_ON_ERROR) {
   process.on('uncaughtException', (e, o) => {
     logger.error('Uncaught exception: %s\n From: %o', e, o)

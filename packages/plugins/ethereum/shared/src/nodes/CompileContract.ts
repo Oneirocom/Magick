@@ -1,8 +1,8 @@
-// DOCUMENTED 
-import { isEmpty } from 'lodash';
-import Rete from 'rete';
-import { v4 as uuidv4 } from 'uuid';
-import { API_ROOT_URL } from '@magickml/config';
+// DOCUMENTED
+import { isEmpty } from 'lodash'
+import Rete from 'rete'
+import { v4 as uuidv4 } from 'uuid'
+import { API_ROOT_URL } from '@magickml/config'
 
 import {
   anySocket,
@@ -16,7 +16,7 @@ import {
   CodeControl,
   triggerSocket,
   WorkerData,
-} from '@magickml/core';
+} from '@magickml/core'
 
 // Default solidity code
 const defaultCode = `
@@ -37,13 +37,15 @@ contract SimpleContract {
     }
 
 }
-`;
+`
 
-const info = `This is Solidity block of code, when trigger the code will be compiled and returned as bytecode`;
+const info = `This is Solidity block of code, when trigger the code will be compiled and returned as bytecode`
 
-type InputReturn = {
-  output: string;
-} | undefined;
+type InputReturn =
+  | {
+      output: string
+    }
+  | undefined
 
 /**
  * CompileContract class is responsible for compiling the solidity contract and returning bytecode & ABI
@@ -51,22 +53,27 @@ type InputReturn = {
 export class CompileContract extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     // Name of the component
-    super('PluginEthCompileContract', {
-      outputs: {
-        output: 'output',
-        bytecode: 'output',
-        abi: 'output',
-        trigger: 'option',
+    super(
+      'PluginEthCompileContract',
+      {
+        outputs: {
+          output: 'output',
+          bytecode: 'output',
+          abi: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'Ethereum', info);
+      'Ethereum',
+      info
+    )
 
     this.module = {
       nodeType: 'triggerIn',
       socket: anySocket,
-    };
+    }
 
-    this.contextMenuName = 'Compile Contract';
-    this.displayName = 'Compile Contract';
+    this.contextMenuName = 'Compile Contract'
+    this.displayName = 'Compile Contract'
   }
 
   /**
@@ -76,50 +83,50 @@ export class CompileContract extends MagickComponent<Promise<InputReturn>> {
    * @returns - The node with inputs and outputs
    */
   builder(node: MagickNode) {
-    if (!node.data.code) node.data.code = defaultCode;
+    if (!node.data.code) node.data.code = defaultCode
 
     // Inspector controls
     const optimizationControl = new BooleanControl({
       dataKey: 'optimization',
       name: 'Optimization',
-    });
+    })
 
     const optimizationNumControl = new NumberControl({
       dataKey: 'optimization_num',
       name: 'Oprimization Number',
-    });
+    })
 
     const codeControl = new CodeControl({
       dataKey: 'code',
       name: 'Code',
       language: 'solidity',
-    });
+    })
 
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Component Name',
-    });
+    })
 
     // Add inspector controls
     node.inspector
       .add(optimizationControl)
       .add(optimizationNumControl)
       .add(nameControl)
-      .add(codeControl);
+      .add(codeControl)
 
     // Node input/output sockets
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const bytecodeOutput = new Rete.Output('bytecode', 'Bytecode', anySocket);
-    const abiOutput = new Rete.Output('abi', 'ABI', anySocket);
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const bytecodeOutput = new Rete.Output('bytecode', 'Bytecode', anySocket)
+    const abiOutput = new Rete.Output('abi', 'ABI', anySocket)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
-    node.data.socketKey = node?.data?.socketKey || uuidv4();
+    node.data.socketKey = node?.data?.socketKey || uuidv4()
 
     return node
       .addInput(dataInput)
       .addOutput(dataOutput)
       .addOutput(bytecodeOutput)
-      .addOutput(abiOutput);
+      .addOutput(abiOutput)
   }
 
   /**
@@ -137,9 +144,9 @@ export class CompileContract extends MagickComponent<Promise<InputReturn>> {
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ) {
-    this._task.closed = ['trigger'];
+    this._task.closed = ['trigger']
 
-    const server = `${API_ROOT_URL}/solidity`;
+    const server = `${API_ROOT_URL}/solidity`
 
     const requestOptions = {
       method: 'POST',
@@ -149,24 +156,24 @@ export class CompileContract extends MagickComponent<Promise<InputReturn>> {
       body: {
         code: node.data.code,
       },
-    };
+    }
 
     const response = await fetch(server, requestOptions as any).catch(error =>
       console.log('error', error)
-    );
+    )
 
-    const result = await (response as Response).json();
+    const result = await (response as Response).json()
 
-    const contract = result.output.contracts['code.sol']['SimpleContract'];
+    const contract = result.output.contracts['code.sol']['SimpleContract']
 
     if (data && !isEmpty(data)) {
-      this._task.closed = [];
+      this._task.closed = []
 
       return {
         output: data,
         bytecode: contract.evm.bytecode.object,
         abi: contract.abi,
-      };
+      }
     }
   }
 }

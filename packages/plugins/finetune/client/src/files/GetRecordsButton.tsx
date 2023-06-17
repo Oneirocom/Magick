@@ -37,7 +37,7 @@ export default function GetRecordsButton({ enforce, purpose }: Props) {
   /**
    * Calls the upload function when the user selects a file
    */
-  async function onChange() {}
+  async function onChange() { }
 
   async function get_record(): Promise<void> {
     const projectId = DEFAULT_PROJECT_ID

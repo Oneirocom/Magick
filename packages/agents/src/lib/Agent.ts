@@ -65,10 +65,10 @@ export class Agent extends RedisPubSub implements AgentInterface {
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
     // Set up the agent worker to handle incoming messages
     this.worker = new BullMQ.Worker(`agent:run`, this.runWorker.bind(this), {
-      connection: bullMQConnection
+      connection: bullMQConnection,
     })
     this.queue = new BullMQ.Queue(`agent:run:result`, {
-      connection: bullMQConnection
+      connection: bullMQConnection,
     })
 
     const spellManager = new SpellManager({
@@ -197,7 +197,6 @@ export class Agent extends RedisPubSub implements AgentInterface {
   async runWorker(job) {
     // the job name is the agent id.  Only run if the agent id matches.
     if (this.id !== job.data.agentId) return
-
 
     const { data } = job
 
