@@ -7,7 +7,7 @@ type PluginProps = {
   selectedAgentData: any
   props
 }
-import { API_ROOT_URL, FILE_SERVER_URL } from '@magickml/core'
+import { API_ROOT_URL, FILE_SERVER_URL } from '@magickml/config'
 import { Switch } from '@magickml/client-core'
 import VariableModal from './VariableModal'
 import { useSelector } from 'react-redux'
