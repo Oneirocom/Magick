@@ -6,10 +6,11 @@ import {
 } from '@feathersjs/feathers'
 import type { SocketService } from '@feathersjs/socketio-client'
 import socketio from '@feathersjs/socketio-client'
-import { LoadingScreen, useConfig } from '@magickml/client-core'
 import { getLogger, SpellInterface } from '@magickml/core'
 import { createContext, useContext, useEffect, useState } from 'react'
 import io from 'socket.io-client'
+import { useConfig } from './ConfigProvider'
+import { LoadingScreen } from '../components/LoadingScreen'
 
 /**
  * SaveDiffData type definition.

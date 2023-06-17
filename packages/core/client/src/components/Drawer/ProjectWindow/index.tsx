@@ -1,7 +1,8 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { API_ROOT_URL, PRODUCTION, SpellInterface } from '@magickml/core'
+import { SpellInterface } from '@magickml/core'
+import { API_ROOT_URL, PRODUCTION } from '@magickml/config'
 import {
   Apps,
   ChevronRight,
@@ -29,17 +30,18 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import FileInput from '../../FileInput/FileInput'
 import styles from './index.module.scss'
-import { RootState } from 'packages/editor/src/state/store'
-import { AgentData } from 'packages/core/server/src/services/agents/agents.schema'
-import { DocumentData } from 'packages/core/server/src/services/documents/documents.schema'
+// todo better way to share these types
+// import { RootState } from 'packages/editor/src/state/store'
+// import { AgentData } from 'packages/core/server/src/services/agents/agents.schema'
+// import { DocumentData } from 'packages/core/server/src/services/documents/documents.schema'
 
 let isResizing = false
 const drawerMaxSize = 200
 
 type DataState = {
-  agents: AgentData[]
+  agents: any[]
   spells: SpellInterface[]
-  documents: DocumentData[]
+  documents: any[]
 }
 
 /**
@@ -50,7 +52,7 @@ type DataState = {
  * @param {boolean} props.openDrawer - Whether the drawer is open or not
  */
 const ProjectWindow = ({ openDrawer }) => {
-  const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const globalConfig = useSelector((state: any) => state.globalConfig)
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 

@@ -1,4 +1,3 @@
-import { EventData } from 'packages/core/server/src/services/events/events.schema'
 import Rete from 'rete'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
@@ -93,7 +92,9 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     _context: ModuleContext
   ) {
     const spellName = inputs['spellName'] && (inputs['spellName'][0] as string)
-    const event = inputs['event'] && (inputs['event'][0] as EventData)
+
+    // todo should be better typed.  Removed 'EventData' to prevent circular dependency
+    const event = inputs['event'] && (inputs['event'][0] as any)
 
     const { agent, module, spellManager } = _context
 
