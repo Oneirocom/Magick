@@ -57,11 +57,11 @@ export const events: PubSubEvents = {
 }
 
 // Create the PubSubProvider component
-export const PubSubProvider: React.FC = ({ children }) => {
+export const PubSubProvider = ({ children }) => {
   const { client } = useFeathers()
 
   // Publish function
-  const publish = (event: string, data: PubSubData) => {
+  const publish = (event: string, data?: PubSubData) => {
     return PubSub.publish(event, data)
   }
 
