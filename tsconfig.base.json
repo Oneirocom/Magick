@@ -16,7 +16,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "esModuleInterop": true,
-    "typeRoots": ["./packages/@types", "./node_modules/@types"],
+    "typeRoots": [
+      "./packages/@types",
+      "./node_modules/@types",
+      "./node_modules"
+    ],
     "paths": {
       "@magickml/agent": ["apps/agent/src/index.ts"],
       "@magickml/agents": ["packages/agents/src/index.ts"],
