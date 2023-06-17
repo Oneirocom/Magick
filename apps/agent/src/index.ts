@@ -10,7 +10,7 @@ import { app, initApp } from '@magickml/server-core'
 import { initLogger, getLogger } from '@magickml/core'
 import 'regenerator-runtime/runtime'
 import pluginExports from './plugins'
-import { PRODUCTION, DONT_CRASH_ON_ERROR } from '@magickml/core'
+import { PRODUCTION, DONT_CRASH_ON_ERROR } from '@magickml/config'
 
 /**
  * Asynchronously loads the application's plugins and logs their names.
@@ -43,7 +43,6 @@ async function initializeAgent(): Promise<void> {
 
 initLogger({ name: 'agent' })
 const logger = getLogger()
-
 
 if (PRODUCTION || DONT_CRASH_ON_ERROR) {
   process.on('uncaughtException', (e, o) => {
