@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { usePubSub } from '@magickml/client-core';
-import { ControlData, InspectorData, SupportedLanguages } from '@magickml/core';
+import { InspectorData, SupportedLanguages } from '@magickml/core';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 /**
