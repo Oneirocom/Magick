@@ -41,6 +41,7 @@ import { Skill } from './io/Skill'
 import { SpellComponent } from './io/Spell'
 import { SpellByName } from './io/SpellByName'
 import { RunSpell } from './magick/runSpell'
+import { IsANumber } from './number/IsANumber'
 import { Equal } from './number/Equal'
 import { GreaterThan } from './number/GreaterThan'
 import { GreaterThanOrEqual } from './number/GreaterThanOrEqual'
@@ -153,6 +154,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   splitBySentence: () => new SplitBySentence(),
   trim: () => new Trim(),
   getLength: () => new GetLength(),
+  isANumber: () => new IsANumber(),
 }
 
 /**

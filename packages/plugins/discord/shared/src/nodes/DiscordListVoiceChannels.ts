@@ -80,8 +80,13 @@ export class DiscordListVoiceChannels extends MagickComponent<
     context: ModuleContext
   ): Promise<WorkerReturn> {
     const { agent, data } = context
+    console.log('Listing discord voice channels')
+    console.log('agent', agent.id)
     if (!agent) {
-      throw new Error('Agent not found')
+      console.warn('sending default information since there is no agent available')
+      return {
+        output: [{"id":"1051457146388217900","name":"General"},{"id":"1119407851408986122","name":"voice2"}]
+      }
     }
 
     if (!agent?.discord) {

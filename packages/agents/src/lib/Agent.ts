@@ -10,9 +10,11 @@ import {
   AgentInterface,
   SpellInterface,
   getLogger,
-  PING_AGENT_TIME_MSEC,
-  bullMQConnection
 } from '@magickml/core'
+import {
+  bullMQConnection,
+  PING_AGENT_TIME_MSEC
+} from '@magickml/config'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 
 import { AgentManager } from './AgentManager'

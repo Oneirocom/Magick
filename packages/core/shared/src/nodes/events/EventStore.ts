@@ -158,6 +158,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     })
 
     if (embedding) data.embedding = embedding
+    else delete data.embedding
 
     if (content && content !== '') {
       const { app } = context.module

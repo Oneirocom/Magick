@@ -30,6 +30,7 @@ export class EventService<
    */
   // @ts-ignore
   async create(data: EventData): Promise<any> {
+    console.log('create event data', data)
     const db = app.get('vectordb')
     await db.from('events').insert(data)
     return data

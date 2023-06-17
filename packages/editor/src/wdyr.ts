@@ -1,6 +1,6 @@
-// DOCUMENTED 
+// DOCUMENTED
 
-import { NODE_ENV } from "@magickml/core";
+import { NODE_ENV } from '@magickml/config'
 import whyDidYouRender from '@welldone-software/why-did-you-render'
 
 /**
@@ -22,4 +22,4 @@ function enableWhyDidYouRender(React: any): void {
   }
 }
 
-export default enableWhyDidYouRender;  // Export the function for usage in other files.
+export default enableWhyDidYouRender // Export the function for usage in other files.

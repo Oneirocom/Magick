@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { Button } from '@magickml/client-core'
-import { API_ROOT_URL } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/config'
 import {
   Grid,
   IconButton,
@@ -154,6 +154,7 @@ function RequestTable({ requests, updateCallback }) {
     useEffect(() => setVal(value), [value])
     return (
       <input
+        // @ts-ignore typescript not pocking up ternary operator check of val
         value={val && typeof val === 'object' ? JSON.stringify(val.data) : val}
         onChange={onChange}
         onBlur={onBlur}
@@ -180,8 +181,11 @@ function RequestTable({ requests, updateCallback }) {
     state,
   } = useTable(
     {
+      // todo we should upgrade to the latest version of react-table
+      // @ts-ignore
       columns,
       data: requests,
+      // @ts-ignore
       defaultColumn,
       updateRequest,
     },

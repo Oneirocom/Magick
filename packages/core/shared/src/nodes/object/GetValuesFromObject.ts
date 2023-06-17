@@ -41,6 +41,8 @@ export class GetValuesFromObject extends MagickComponent<void> {
     const objectInput = new Rete.Input('object', 'Object', objectSocket)
     const outputTrigger = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
+    console.log('objectInput', objectInput)
+
     const socketGenerator = new SocketGeneratorControl({
       connectionType: 'output',
       name: 'Property Name',
@@ -62,15 +64,12 @@ export class GetValuesFromObject extends MagickComponent<void> {
    */
 
   worker(node: WorkerData, inputs: MagickWorkerInputs) {
-    const object = inputs.object[0] as Record<string, unknown>
-    console.log('object', object)
+    const object = inputs.object && inputs.object[0] as Record<string, unknown>
 
     const output = Object.keys(node.outputs).reduce((acc, key) => {
       acc[key] = object[key]
       return acc
     }, {} as Record<string, unknown>)
-
-    console.log('output', output)
 
     return output
   }

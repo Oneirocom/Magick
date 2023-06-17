@@ -339,7 +339,7 @@ export class DiscordConnector {
     try {
       const channel = await this.client.channels.fetch(channelId);
       if (msg && msg !== '' && channel && channel !== undefined) {  
-        const paragraphs = msg.split(/\n{2,}/);
+        const paragraphs = msg?.split(/\n{2,}/) ?? [];
   
         // Process each paragraph individually
         for (const paragraph of paragraphs) {

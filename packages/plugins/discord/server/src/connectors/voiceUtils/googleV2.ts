@@ -24,6 +24,7 @@ function getGoogleRequestOptions(
   let lang = 'en-US';
   let profanityFilter = '0';
 
+
   // Override default values if provided
   if (options) {
     if (options.key) key = options.key;

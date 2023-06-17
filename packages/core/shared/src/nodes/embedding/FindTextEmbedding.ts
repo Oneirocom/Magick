@@ -111,8 +111,6 @@ export class FindTextEmbedding extends MagickComponent<
       }
     }
 
-    console.log('Find Text Embedding: embedding', embedding)
-
     // Set the task closed state based on the presence of the embedding
     if (embedding && embedding !== 'null') {
       this._task.closed = ['failure']
