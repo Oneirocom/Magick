@@ -15,18 +15,14 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleContext,
-  arraySocket,
+  booleanSocket,
 } from '@magickml/core'
-import { ChannelType } from '../types/ChannelType'
 
 /**
  * The return type of the worker function.
  */
 type WorkerReturn = {
-  output: {
-    id: string,
-    name: string,
-  }[]
+  left: boolean
 }
 
 /**
@@ -34,20 +30,21 @@ type WorkerReturn = {
  * @category Discord
  * @remarks Must be paired with AgentExecutor.
  */
-export class DiscordListVoiceChannels extends MagickComponent<
+
+export class DiscordLeaveVoiceChannelsInServer extends MagickComponent<
   Promise<WorkerReturn>
 > {
   constructor() {
     super(
-      'Discord Voice Channels',
+      'Leave Voice Channels In Server',
       {
         outputs: {
-          output: 'output',
           trigger: 'option',
+          left: 'output',
         },
       },
       'Discord',
-      'Gets the List of All text channels in a server'
+      'Leave any and all voice channels in a server'
     )
   }
 
@@ -59,7 +56,7 @@ export class DiscordListVoiceChannels extends MagickComponent<
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const outp = new Rete.Output('output', 'Array', arraySocket)
+    const outp = new Rete.Output('left', 'Left', booleanSocket)
     const event = new Rete.Input('event', 'Event', eventSocket, true)
 
     return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp).addInput(event)
@@ -81,14 +78,8 @@ export class DiscordListVoiceChannels extends MagickComponent<
   ): Promise<WorkerReturn> {
     const { agent, data } = context
     if (!agent || !agent?.discord) {
-      console.warn('sending default information since there is no agent available')
-      return {
-        output: [{"id":"1051457146388217900","name":"General"},{"id":"1119407851408986122","name":"voice2"}]
-      }
-    }
-
-    if (!agent?.discord) {
-      throw new Error('Discord connector not found on agent, is Discord initialized?')
+      console.warn('Skipping node since there is no agent available')
+      return {left: false};
     }
 
     const event = // event data is inside a task?
@@ -103,29 +94,19 @@ export class DiscordListVoiceChannels extends MagickComponent<
     const discordClient = agent.discord.client
 
     const channel = event.channel // channel in which the message was sent
-
-    // fetch the channel using its ID
-    const fetchedChannel = await discordClient.channels.fetch(channel);
-
-    if (!fetchedChannel) {
-      throw new Error('Channel not found')
+    async function leaveVoiceChannelInGuild(client, channelId) {
+      const channel = await client.channels.fetch(channelId);
+      const guild = channel.guild;
+      if (guild && guild.me.voice.channel) {
+        guild.me.voice.channel.leave();
+        return true
+      } else {
+        return false
+      }
     }
-
-    if (fetchedChannel.type !== ChannelType.GuildText) {
-      throw new Error('Event channel must be a text channel')
-    }
-
-    // get the guild object from the fetched channel
-    const guild = fetchedChannel.guild;
-
-    // get the list of text channels
-    const voiceChannels = guild.channels.cache.filter(ch => ch.type === ChannelType.GuildVoice);
 
     return {
-      output: voiceChannels.map(channel => ({
-        id: channel.id,
-        name: channel.name,
-      }))
-    };
+      left: await leaveVoiceChannelInGuild(discordClient, channel)
+    }
   }
 }

@@ -11,7 +11,6 @@ Magick supports running agents on Discord with both text and voice.
 # Usage
 
 Discord can be enabled on any agent. Each agent will need a separate API key.
-
 ## Creating a New Discord Bot and Getting an API Key
 
 You will need to set up the Discord bot within the Discord Developer portal. A complete tutorial on how to do that is here: https://www.writebots.com/discord-bot-token/

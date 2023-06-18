@@ -65,7 +65,7 @@ export class DiscordJoinVoice extends MagickComponent<Promise<void>> {
   ): Promise<void> {
     const { agent } = context
     if (!agent || !agent?.discord) {
-      console.warn('sending default information since there is no agent available')
+      console.warn('Skipping node since there is no agent available')
       return;
     }
 
