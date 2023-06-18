@@ -22,7 +22,7 @@ import {
  * The return type of the worker function.
  */
 type WorkerReturn = {
-  output: string | number
+  output: string | number | null
 }
 
 /**
@@ -79,7 +79,7 @@ export class DiscordVoiceChannelForSender extends MagickComponent<
     if (!agent || !agent?.discord) {
       console.warn('sending default information since there is no agent available')
       return {
-        output: 1051457146388217900
+        output: null
       }
     }
 
@@ -95,14 +95,17 @@ export class DiscordVoiceChannelForSender extends MagickComponent<
 
     // get the username of the message sender
     const username = event.sender
-    
-    // get the current voice channel of the message sender
-    const channel = discordClient.users.cache.find(user => user.username === username).voice?.channel
 
-    const fetchedChannel = await discordClient.channels.fetch(channel);
+    // get the user from the cache
+    const user = discordClient.users.cache.find(user => user.username === username)
 
-    const id = fetchedChannel.id;
+    // get the guild from the channel ID
+    const channel = await discordClient.channels.fetch(event.channel)
+    const guild = channel.guild
 
-    return { output: id };
+    const member = await guild.members.fetch(user)
+    const voiceChannel = member.voice.channel
+
+    return { output: voiceChannel && voiceChannel.id };
   }
 }
