@@ -57,7 +57,7 @@ export class JupyterNotebook extends MagickComponent<Promise<{ output: string }>
         output: 'output',
         trigger: 'option',
       },
-    }, 'Experimental', info);
+    }, 'I/O', info);
   }
 
   /**

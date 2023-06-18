@@ -48,6 +48,7 @@ export type Document = {
   embedding?: number[]
   projectId?: string
   date?: string
+  distance?: number
 }
 
 export type CreateDocumentArgs = Document
@@ -487,7 +488,7 @@ export type ImageCompletionSubtype = 'text2image' | 'image2image' | 'image2text'
 
 export type TextCompletionSubtype = 'text' | 'embedding' | 'chat'
 
-export type AudioCompletionSubtype = 'text2speech' | 'text2audio'
+export type AudioCompletionSubtype = 'textToSpeech' | 'textToAudio'
 
 export type DatabaseCompletionSubtype =
   | 'select'

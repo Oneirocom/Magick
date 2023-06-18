@@ -111,13 +111,6 @@ export class FindTextEmbedding extends MagickComponent<
       }
     }
 
-    console.log('Find Text Embedding: embedding', embedding)
-
-    // if embedding is a string and not an array, parse it
-    if (typeof embedding === 'string') {
-      embedding = JSON.parse(JSON.stringify(embedding))
-    }
-
     // Set the task closed state based on the presence of the embedding
     if (embedding && embedding !== 'null') {
       this._task.closed = ['failure']

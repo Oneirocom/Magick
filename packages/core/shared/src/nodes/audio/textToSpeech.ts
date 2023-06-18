@@ -20,7 +20,7 @@ const info = 'Generate speech using any of the providers available in Magick.'
 
 /** Type definition for the worker return */
 type WorkerReturn = {
-  result?: string
+  result?: any
 }
 
 /**
@@ -37,7 +37,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Experimental',
+      'Audio',
       info
     )
   }
@@ -53,7 +53,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
 
     // get completion providers for text and chat categories
     const completionProviders = pluginManager.getCompletionProviders('audio', [
-      'text2speech',
+      'textToSpeech',
     ]) as CompletionProvider[]
 
     // get the models from the completion providers and flatten into a single array
@@ -160,7 +160,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
     }
   ) {
     const completionProviders = pluginManager.getCompletionProviders('audio', [
-      'text2speech',
+      'textToSpeech',
     ]) as CompletionProvider[]
   
     const model = (node.data as { model: string }).model as string
@@ -186,8 +186,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
       throw new Error('ERROR: ' + error)
     }
 
-    const audio = result as string
-  
+    const audio = result  
   
     return {
       result: audio,

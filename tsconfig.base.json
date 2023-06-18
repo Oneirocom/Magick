@@ -136,19 +136,19 @@
         "packages/plugins/localmodel/shared/src/index.ts"
       ],
       "@magickml/plugin-loop-client": [
-        "packages/plugins//loop/client/src/index.ts"
+        "packages/plugins/loop/client/src/index.ts"
       ],
       "@magickml/plugin-loop-server": [
-        "packages/plugins//loop/server/src/index.ts"
+        "packages/plugins/loop/server/src/index.ts"
       ],
       "@magickml/plugin-openai-client": [
-        "packages/plugins//openai/client/src/index.ts"
+        "packages/plugins/openai/client/src/index.ts"
       ],
       "@magickml/plugin-openai-server": [
-        "packages/plugins//openai/server/src/index.ts"
+        "packages/plugins/openai/server/src/index.ts"
       ],
       "@magickml/plugin-openai-shared": [
-        "packages/plugins//openai/shared/src/index.ts"
+        "packages/plugins/openai/shared/src/index.ts"
       ],
       "@magickml/plugin-pinecone-client": [
         "packages/plugins/pinecone/client/src/index.ts"
@@ -176,13 +176,13 @@
         "packages/plugins/search/shared/src/index.ts"
       ],
       "@magickml/plugin-task-client": [
-        "packages/plugins//task/client/src/index.ts"
+        "packages/plugins/task/client/src/index.ts"
       ],
       "@magickml/plugin-task-server": [
-        "packages/plugins//task/server/src/index.ts"
+        "packages/plugins/task/server/src/index.ts"
       ],
       "@magickml/plugin-task-shared": [
-        "packages/plugins//task/shared/src/index.ts"
+        "packages/plugins/task/shared/src/index.ts"
       ],
       "@magickml/plugin-twitter-client": [
         "packages/plugins/twitter/client/src/index.ts"

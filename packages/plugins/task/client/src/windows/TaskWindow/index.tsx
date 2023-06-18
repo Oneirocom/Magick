@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useConfig } from '@magickml/client-core'
 import TaskTable from './TaskTable'
-import { method } from 'lodash'
 
 /**
  * Defines the properties of an task.
