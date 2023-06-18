@@ -25,9 +25,9 @@ export const initLogger = (opts: object = defaultLoggerOpts) => {
 }
 
 export const getLogger: () => pino.Logger = () => {
-  if (logger !== null) {
-    return logger
+  if (logger === null) {
+    initLogger()
   }
 
-  throw new Error('Logger not initialized. Please call initLogger() first.')
+  return logger as pino.Logger
 }
