@@ -53,6 +53,11 @@ export class GithubConnector {
 
     const repos = data.github_repos
 
+    if (!repos) {
+      this.logger.error('Github repos not configured correctly. No repos found. skipping')
+      throw new Error('Github repos not configured correctly. No repos found. skipping')
+    }
+
     // repos is an array of owner/repos, separated by comma
     // split it and add each repo to the webhook
     repos.forEach(async repo => {
