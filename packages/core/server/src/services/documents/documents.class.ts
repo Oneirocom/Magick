@@ -51,8 +51,7 @@ export class DocumentService<
         outputs: undefined,
         context: { module: { secrets:JSON.parse(secrets) }, projectId: context.data.projectId },
       })
-      embedding = result
-      console.log("embedding", embedding) */
+      embedding = result */
       
       app.get("docdb").fromString(data.content,data,{modelName, projectId: data?.projectId, secrets})
       return data;
@@ -66,8 +65,14 @@ export class DocumentService<
    * @param id {string} The document ID to remove
    * @return {Promise<any>} The removed document
    */
-  async remove(id: string): Promise<any> {
+  async remove(id: string, params): Promise<any> {
     const db = app.get('dbClient')
+
+    if(!id && params.projectId) {
+      // delete all documents of a project
+      return await db('documents').where('projectId', params.projectId).del()
+    }
+
     return await db('documents').where('id', id).del()
   }
 
@@ -93,13 +98,13 @@ export class DocumentService<
         })
         .select(
           db.raw(
-            `1 - (embedding <=> '${JSON.stringify(
+            `(embedding <=> '${JSON.stringify(
               params.query.embedding
-            )}') AS similarity`
+            )}') AS distance`
           )
         )
-        .orderBy('similarity', 'asc')
-        .limit(param.maxCount)
+        .orderBy('distance', 'asc')
+        .limit(param.$limit)
       return { data: querys }
     }
     const res = await super.find(params)
@@ -122,5 +127,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     },
     Model: app.get('dbClient'),
     name: 'documents',
+    multi: ['remove'],
   }
 }

@@ -30,8 +30,8 @@ export class EventService<
    */
   // @ts-ignore
   async create(data: EventData): Promise<any> {
-    const cli = app.get('vectordb')
-    await cli.from('events').insert(data)
+    const db = app.get('vectordb')
+    await db.from('events').insert(data)
     return data
   }
 
@@ -43,7 +43,7 @@ export class EventService<
    */
   // @ts-ignore
   async find(params?: ServiceParams) {
-    const cli = app.get('dbClient')
+    const db = app.get('dbClient')
     if (params.query.embedding) {
       const blob = atob(params.query.embedding)
       const ary_buf = new ArrayBuffer(blob.length)
@@ -51,7 +51,7 @@ export class EventService<
       for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
       const f32_ary = new Float32Array(ary_buf)
       const param = params.query
-      const query = cli
+      const res = await db
         .from('events')
         .select('*')
         .where({
@@ -64,48 +64,38 @@ export class EventService<
           ...(param.content && { content: param.content }),
         })
         .select(
-          cli.raw(
-            `1 - (embedding <=> ${
-              "'[" + f32_ary.toString() + "]'"
-            }) AS similarity`
-          )
-        )
-        .select(
-          cli.raw(
+          db.raw(
             `embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`
           )
         )
-        .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
+        .orderBy('distance', 'asc')
+        .limit(params.query['$limit'])
 
-      if ('$limit' in params.query) {
-        query.limit(params.query['$limit'])
-      }
-
-      const res = await query
       return { events: res }
     }
 
-    const query = cli.from('events').select()
+    // If not searching by embedding, perform a normal query
+    const param = params.query
 
-    query.orderBy('date', 'desc')
+    const res = await db
+      .from('events')
+      .select('*')
+      .where({
+        ...(param.type && { type: param.type }),
+        ...(param.id && { id: param.id }),
+        ...(param.sender && { sender: param.sender }),
+        ...(param.client && { client: param.client }),
+        ...(param.channel && { channel: param.channel }),
+        ...(param.projectId && { projectId: param.projectId }),
+      })
+      // get the newest events first
+      .orderBy('date', 'desc')
+      // limit the number of events returned
+      .limit(params.query['$limit'])
+      // reverse the order of the events so that the newest events are last
+      .then((res: any) => res.reverse())
 
-    if (params.query.content) {
-      query.where('content', params.query.content)
-    }
-
-    if (params.query.projectId) {
-      query.where('projectId', params.query.projectId)
-    }
-
-    if (params.query.type) {
-      query.where('type', params.query.type)
-    }
-
-    if ('$limit' in params.query) {
-      query.limit(params.query['$limit'])
-    }
-    const res = await query
-    return { events: res?.reverse() as unknown as { data: Array<any> } }
+    return { events: res as unknown as { data: Array<any> } }
   }
 
   /**
@@ -117,8 +107,8 @@ export class EventService<
   // @ts-ignore
   async remove(id: string): Promise<any> {
     const ids = id.split('&')
-    const cli = app.get('vectordb')
-    const res = await cli.from('events').whereIn('id', ids).del()
+    const db = app.get('vectordb')
+    const res = await db.from('events').whereIn('id', ids).del()
     return res
   }
 }

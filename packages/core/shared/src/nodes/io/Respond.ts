@@ -108,9 +108,11 @@ export class Respond extends MagickComponent<void> {
       if (out && out.handler) {
         out.handler({
           output,
-          agent: agent,
+          agent,
           event,
         })
+      } else {
+        console.warn('*** WARNING: No handler found')
       }
     } else {
       console.warn('*** WARNING: No agent found')

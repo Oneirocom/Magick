@@ -130,8 +130,8 @@ export class Output extends MagickComponent<void> {
 
     const output = inputs.input.filter(Boolean)[0] as string
     const outputType =
+      (node.data.outputType !== 'Default' && node.data.outputType) ||
       inputName?.replace('Input - ', '') ||
-      node.data.outputType ||
       event.connector
 
     // handle this being a subspell returning out

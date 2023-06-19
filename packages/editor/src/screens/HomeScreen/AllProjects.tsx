@@ -7,6 +7,7 @@ import ProjectRow from '../../components/ProjectRow'
 import css from './homeScreen.module.css'
 import SearchIcon from '@mui/icons-material/Search'
 import { IconButton } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 /**
  * @description AllProjects component props
@@ -54,6 +55,7 @@ const AllProjects: React.FC<AllProjectsProps> = ({
     }
   }, [])
 
+  const navigate = useNavigate()
   return (
     <Panel shadow>
       <div className={css.searchContainer}>
@@ -127,7 +129,7 @@ const AllProjects: React.FC<AllProjectsProps> = ({
       <div className={css['button-row']}>
         <Button
           onClick={() => {
-            window.history.back()
+            navigate('/magick')
           }}
         >
           back
@@ -135,7 +137,7 @@ const AllProjects: React.FC<AllProjectsProps> = ({
         <FileInput loadFile={loadFile} />
         <Button
           onClick={() => {
-            console.log('selectedSpell', selectedSpell)
+            // console.log('selectedSpell', selectedSpell)
             openSpell(selectedSpell)
           }}
           className={!selectedSpell ? 'disabled' : 'primary'}

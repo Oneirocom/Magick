@@ -2,7 +2,6 @@
 /** @module ProjectWindow */
 
 import { API_ROOT_URL, PRODUCTION } from '@magickml/core'
-import { Agent } from '@magickml/agents'
 import {
   Apps,
   ChevronRight,
@@ -99,13 +98,54 @@ const ProjectWindow = ({ openDrawer }) => {
   }
 
   /**
+   * Replace all files with the uploaded project
+   *
+   * @param {File} selectedFile - Selected file object
+   */
+    const loadFileReplace = selectedFile => {
+      if (!token && PRODUCTION) {
+        enqueueSnackbar('You must be logged in to create a project', {
+          variant: 'error',
+        })
+        return
+      }
+      const fileReader = new FileReader()
+      fileReader.readAsText(selectedFile)
+      fileReader.onload = event => {
+        const data = JSON.parse(event?.target?.result as string)
+  
+        delete data['id']
+        axios({
+          url: `${globalConfig.apiUrl}/projects`,
+          method: 'POST',
+          data: { ...data, projectId: globalConfig.projectId, replace: true },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then(async res => {
+            const res2 = await fetch(
+              `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
+              { headers: { Authorization: `Bearer ${token}` } }
+            )
+            const json = await res2.json()
+            setData(json)
+          })
+          .catch(err => {
+            console.error('error is', err)
+          })
+      }
+      handleClose()
+    }
+
+  /**
    * Export the project data as a .project.json file.
    */
   const exportProject = () => {
     const element = document.createElement('a')
 
     const exportData = data
-    exportData.agents.forEach((agent: Agent) => {
+    exportData.agents.forEach((agent: any) => {
       agent.secrets = {}
     })
 
@@ -237,7 +277,33 @@ const ProjectWindow = ({ openDrawer }) => {
                       }}
                     />
                   }
-                  innerText={'Import'}
+                  innerText={'Import (Add)'}
+                />
+              </MenuItem>
+              <MenuItem>
+                <FileInput
+                  loadFile={loadFileReplace}
+                  sx={{
+                    display: 'inline-block',
+                    minWidth: '0',
+                    padding: 0,
+                    margin: 0,
+                    color: 'rgba(255,255,255,.5)',
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    boxShadow: 'none',
+                    border: 0,
+                  }}
+                  Icon={
+                    <FileUpload
+                      style={{
+                        height: '1em',
+                        width: '1em',
+                        position: 'relative',
+                        top: '.25em',
+                      }}
+                    />
+                  }
+                  innerText={'Import (Replace)'}
                 />
               </MenuItem>
               <MenuItem>
