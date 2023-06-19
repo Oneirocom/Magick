@@ -6,9 +6,7 @@
   "implicitDependencies": [
     "@magickml/server-core",
     "@magickml/core",
-    "@magickml/agents",
-    "@magickml/plugin-twitter-server",
-    "@magickml/plugin-discord-server"
+    "@magickml/agents"
   ],
   "targets": {
     "build": {
