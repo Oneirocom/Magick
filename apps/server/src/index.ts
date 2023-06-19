@@ -22,6 +22,7 @@ import { Context } from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
 import 'regenerator-runtime/runtime'
+import plugins from './plugins'
 
 initLogger({ name: 'server' })
 const logger = getLogger()
@@ -56,7 +57,6 @@ async function init() {
   await initApp()
   // load plugins
   await (async () => {
-    const plugins = (await import('./plugins')).default
     logger.info(
       'loaded plugins on server %o',
       Object.values(plugins)
