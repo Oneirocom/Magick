@@ -11,7 +11,6 @@ import {
   MagickNode,
   ModuleContext,
   WorkerData,
-  Event,
   MagickWorkerInputs,
   MagickWorkerOutputs,
 } from '@magickml/core'
