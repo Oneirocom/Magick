@@ -1,4 +1,5 @@
 // DOCUMENTED
+import { getLogger } from '@magickml/core'
 import { app } from '@magickml/server-core'
 import Discord, {
   AttachmentBuilder,
@@ -11,6 +12,7 @@ import emoji from 'emoji-dictionary'
 let recognizeSpeech
 
 export class DiscordConnector {
+  logger = getLogger()
   client = Discord.Client as any
   agent: any
   spellRunner: any = null
@@ -136,13 +138,7 @@ export class DiscordConnector {
 
       // handle direct messages
       this.client.on('message', async message => {
-        console.log('message')
-        if (message.channel.type === 'dm') {
-          console.log('direct message', message)
-          this.messageCreate(message)
-        } else {
-          this.messageCreate(message)
-        }
+        this.messageCreate(message)
       })
 
       this.client.on(
@@ -326,9 +322,11 @@ export class DiscordConnector {
       entities.push(this.client.user.username)
     }
 
-    const inputType = message.channel.type === 'dm' ? 'DM' : 'Text'
+    this.logger.info('handling message create: %s', message)
 
-    console.log(this.agent.name, ' - sending message on discord - ', content)
+    const inputType = message.guildId === null ? 'DM' : 'Text'
+
+    this.logger.info(this.agent.name, ' - sending message on discord - ', content)
     await this.spellRunner.runComponent({
       inputs: {
         [`Input - Discord (${inputType})`]: {
@@ -340,7 +338,7 @@ export class DiscordConnector {
           channel: message.channel.id,
           agentId: this.agent.id,
           entities: entities,
-          channelType: message.channel.type,
+          channelType: inputType,
           rawData: JSON.stringify(message),
         },
       },
@@ -361,12 +359,12 @@ export class DiscordConnector {
     if (!author) return
     if (!client || !client.user) return
     if (author.id === this.client.user.id) return
-    console.log('message deleted by', author.username, 'in', channel.id)
+    this.logger.info('message deleted by', author.username, 'in', channel.id)
   }
 
   //Event that is triggered when the discord client fully loaded
   ready = async () => {
-    console.log('client is ready')
+    this.logger.info('client is ready')
   }
 
   async sendImageToChannel(channelId: any, imageUri: any) {
@@ -376,61 +374,37 @@ export class DiscordConnector {
       const attachment = new AttachmentBuilder(buffer, { name: 'image.png' })
       await channel.send(attachment)
     } catch (error) {
-      console.error(`Error sending image to channel: ${error}`)
-    }
-  }
-
-  async sendDMToUser(userId: any, msg: any) {
-    try {
-      const user = await this.client.users.fetch(userId)
-      if (msg && msg !== '' && user && user !== undefined) {
-        console.log('**** SENDING DISCORD MESSAGE', msg)
-        // split msg into an array of messages that are less than 2000 characters
-        // if msg is an object, get the valuke of the first key
-        if (typeof msg === 'object') {
-          msg = Object.values(msg)[0]
-        }
-        const msgArray = msg.match(/.{1,2000}/g)
-        // send each message individually
-        msgArray.forEach(msg => {
-          user.send(msg)
-        })
-      } else {
-        console.error(
-          'could not send message to user: ' + userId,
-          'msg = ' + msg,
-          'user = ' + user
-        )
-      }
-    } catch (e) {
-      console.error(e)
+      this.logger.error(`Error sending image to channel: ${error}`)
     }
   }
 
   async sendMessageToChannel(channelId: any, msg: any) {
     try {
-      const channel = await this.client.channels.fetch(channelId)
+      const channel = await this.client.channels.fetch(channelId);
       if (msg && msg !== '' && channel && channel !== undefined) {
-        console.log('**** SENDING DISCORD MESSAGE', msg)
-        // split msg into an array of messages that are less than 2000 characters
-        // if msg is an object, get the valuke of the first key
-        if (typeof msg === 'object') {
-          msg = Object.values(msg)[0]
+        this.logger.info('**** SENDING DISCORD MESSAGE: %s', msg);
+  
+        const paragraphs = msg.split(/\n{2,}/);
+  
+        // Process each paragraph individually
+        for (const paragraph of paragraphs) {
+          // Split paragraph into chunks of 2000 characters or less
+          const chunks = paragraph.match(/.{1,2000}/gs) || [];
+  
+          // Send each chunk individually
+          for (const chunk of chunks) {
+            channel.send(chunk);
+          }
         }
-        const msgArray = msg.match(/.{1,2000}/g)
-        // send each message individually
-        msgArray.forEach(msg => {
-          channel.send(msg)
-        })
       } else {
-        console.error(
-          'could not send message to channel: ' + channelId,
-          'msg = ' + msg,
-          'channel = ' + channel
-        )
+        this.logger.error(
+          'Could not send message to channel: ' + channelId +'\n',
+          'msg = ' + msg +'\n',
+          'channel = ' + channel +'\n'
+        );
       }
     } catch (e) {
-      console.error(e)
+      this.logger.error(e);
     }
   }
 }
