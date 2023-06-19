@@ -130,24 +130,27 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
         ? typeData.toLowerCase().trim()
         : 'none')
 
-    const maxCountData = nodeData.max_count as string
-    const maxCount = maxCountData ? parseInt(maxCountData) : 10
+    let max_count
+    if (typeof node.data.max_count === 'string') {
+      max_count = parseInt(node.data.max_count)
+    } else if (typeof node.data.max_count === 'number') {
+      max_count = node.data.max_count
+    } else {
+      max_count = 10
+    }
+
     // replace with feathers service call
     const response = await app.service('documents').find({
       query: {
         projectId,
         type,
-        maxCount,
+        $limit: max_count ?? 1,
         embedding,
       },
     })
-
-    // get the data from the response
-    let documents = response.data as Document[]
-    documents = documents.slice(0, maxCount)
     // Return the result for output
     return {
-      documents,
+      documents: response.data as Document[]
     }
   }
 }

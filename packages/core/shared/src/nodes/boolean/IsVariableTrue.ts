@@ -62,6 +62,6 @@ export class IsVariableTrue extends MagickComponent<void> {
       is = action === 1
     }
 
-    this._task.closed = is ? ['true'] : ['false']
+    this._task.closed = is ? ['false'] : ['true']
   }
 }

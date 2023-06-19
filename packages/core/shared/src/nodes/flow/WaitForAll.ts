@@ -27,6 +27,8 @@ export class WaitForAll extends MagickComponent<void> {
 
   // Add documentation for node
   node = {}
+  allTriggerFired = false
+  runningCounter = 0
 
   /**
    * Sets up the node with input sockets and output connection.
@@ -49,17 +51,35 @@ export class WaitForAll extends MagickComponent<void> {
     return node
   }
 
+  waitForAll(): Promise<void> {
+    return new Promise<void>(resolve => {
+      const interval = setInterval(() => {
+        if (this.allTriggerFired) {
+          clearInterval(interval)
+          resolve()
+        }
+      }, 50)
+    })
+  }
+
   /**
    * The worker contains the main business logic of the node.
    * It will pass those results to the outputs to be consumed by any connected components.
    * @param _node - The worker data.
    * @param inputs - Inputs of the worker.
    */
-  worker(_node: WorkerData, inputs: MagickWorkerInputs): void {
-    const nodeInputs = Object.values(inputs).filter(
+  async worker(_node: WorkerData, inputs: MagickWorkerInputs): Promise<void> {
+    const nodeInputs = Object.keys(_node.inputs).filter(
       input => !!input
     ) as Array<any>
-    // Close all outputs
-    this._task.closed = [...nodeInputs.map(out => out.name)]
+    ++this.runningCounter
+    if (nodeInputs.length > this.runningCounter) {
+      await this.waitForAll()
+    } else {
+      this.allTriggerFired = true
+    }
+
+    this.allTriggerFired = false
+    this.runningCounter = 0
   }
 }

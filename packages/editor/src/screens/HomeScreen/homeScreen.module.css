@@ -93,7 +93,7 @@
 }
 
 .button:hover {
-  background-color: var(--glow) !important;
+  background-color: var(--primary) !important;
 }
 
 .button-row {
