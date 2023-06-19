@@ -24,8 +24,6 @@ import { TaskSocketInfo } from './plugins/taskPlugin/task'
 import { SpellInterface } from './schemas'
 import { SpellManager } from './spellManager'
 
-import { Agent } from '@magickml/agents'
-
 export { MagickComponent } from './engine'
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 export * from './schemas'
@@ -55,7 +53,7 @@ export type Document = {
 export type CreateDocumentArgs = Document
 
 export type GetDocumentArgs = Document & {
-  maxCount?: number
+  $limit?: number
 }
 
 type AgentTaskStatus = 'active' | 'completed' | 'canceled'
@@ -121,13 +119,13 @@ export type GetEventArgs = {
   connector?: string
   rawData?: string
   projectId?: string
-  maxCount?: number
+  $limit?: number
 }
 
 export type GetVectorEventArgs = {
   type: string
   entities: string[]
-  maxCount?: number
+  $limit?: number
 }
 
 export type EventResponse = Event[]
@@ -598,7 +596,7 @@ export type ModuleContext = {
   context: EngineContext
   spellManager: SpellManager
   app: Application
-  agent?: Agent
+  agent?: any
   module: {
     secrets?: Record<string, string>
     publicVariables?: Record<string, string>

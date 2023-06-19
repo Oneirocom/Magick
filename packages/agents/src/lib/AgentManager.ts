@@ -28,6 +28,7 @@ export class AgentManager {
   getAgent({ agent }) {
     if (!agent) {
       this.logger.error("AgentManager can't find agent %o", agent)
+      return null
     }
     return this.agents[agent.id]
   }
@@ -69,7 +70,6 @@ export class AgentManager {
    * Delete old agent instances.
    */
   async deleteOldAgents() {
-    this.logger.debug('Deleting old agents...')
     for (const i in this.currentAgents) {
       const newAgent = this.newAgents.find(
         agent => agent.id === this.currentAgents[i].id

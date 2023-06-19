@@ -1,9 +1,7 @@
 import { Application } from '@feathersjs/koa'
-import io from 'socket.io'
-import { Agent } from '@magickml/agents'
-
-import pino from 'pino'
 import { getLogger } from '@magickml/core'
+import pino from 'pino'
+import io from 'socket.io'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
 import { getNodes } from '../nodes'
 import { Module } from '../plugins/modulePlugin/module'
@@ -19,7 +17,7 @@ import SpellManager from './SpellManager'
 
 export type RunComponentArgs = {
   inputs: MagickSpellInput
-  agent?: Agent
+  agent?: any
   componentName?: string
   runSubspell?: boolean
   secrets?: Record<string, string>
@@ -30,7 +28,7 @@ export type RunComponentArgs = {
 type SpellRunnerConstructor = {
   app: Application
   socket?: io.Socket
-  agent?: Agent
+  agent?: any
   spellManager: SpellManager
 }
 
@@ -42,7 +40,7 @@ class SpellRunner {
   ranSpells: string[] = []
   socket?: io.Socket | null = null
   app: Application
-  agent?: Agent
+  agent?: any
   spellManager: SpellManager
 
   log(message, data) {

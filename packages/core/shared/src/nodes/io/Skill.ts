@@ -99,9 +99,6 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
     const task = inputs['task'] && (inputs['task'][0] as AgentTask)
     const content = inputs['content'] && (inputs['content'][0] as string)
 
-    console.log('******* CONTENT *******')
-    console.log(content)
-
     if (task) {
       task.eventData.content = content || task.eventData.content
     }
@@ -129,9 +126,6 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
     }
 
     const spellId = firstSpell.id || firstSpell._id
-
-    console.log('spellId', spellId)
-    console.log('******* RAN SKILL *******')
 
     const { projectId } = _context
     if (agent) {
@@ -166,7 +160,6 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
       }
 
       const outputs = await spellManager.run(runComponentArgs as any)
-      console.log('outputs', outputs)
       // get the first value from outputs
       const output = Object.values(outputs)[0]
 
