@@ -174,8 +174,8 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       ''
     ).toLowerCase()
 
-    const stringMinLength = (node.data.stringMinLength ?? 0) as number
-    const stringMaxLength = (node.data.stringMaxLength ?? 0) as number
+    const stringMinLength = +(node.data.stringMinLength ?? 0) as number
+    const stringMaxLength = +(node.data.stringMaxLength ?? 0) as number
 
     const matchBeginningStringArray = (
       (matchBeginning ?? node.data.matchBeginningString ?? '') as string
@@ -242,7 +242,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       notMatchAnyStringArray.pop()
     }
 
-    let isMatched = false
+    let isMatched: boolean | undefined = undefined
     let invalidated = false
 
     function matchStart(inp: string, matchArray: string[]) {
@@ -328,6 +328,17 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       }
     }
 
+<<<<<<< Updated upstream
     this._task.closed = !invalidated && isMatched ? ['false'] : ['true']
+=======
+    this._task.closed =
+      isMatched !== undefined
+        ? !invalidated && isMatched
+          ? ['false']
+          : ['true']
+        : !invalidated
+        ? ['false']
+        : ['true']
+>>>>>>> Stashed changes
   }
 }
