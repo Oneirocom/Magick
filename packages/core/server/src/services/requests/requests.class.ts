@@ -24,21 +24,7 @@ export type RequestParams = KnexAdapterParams<RequestQuery>
  */
 export class RequestService<
   ServiceParams extends Params = RequestParams
-> extends KnexService<Request, RequestData, ServiceParams, RequestPatch> {
-/**
- * Remove multiple Requests.
- * This function removes multiple Requests from the database based on their IDs.
- * @param {string} ids - The ID or IDs of the request(s) to remove, separated by the '&' character if multiple IDs are provided.
- * @returns {Promise<any>} - A Promise that resolves to the data of the removed requests.
- */
-async removeMany(ids: string): Promise<any> {
-  const requestIds = ids.split('&')
-  const db = app.get('dbClient')
-  const res = await db.from('request').whereIn('id', requestIds).del()
-  return res
-}
-
-}
+> extends KnexService<Request, RequestData, ServiceParams, RequestPatch> {}
 
 /**
  * Get options for the RequestService
@@ -53,5 +39,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     },
     Model: app.get('dbClient'),
     name: 'request',
+    multi: true,
   }
 }

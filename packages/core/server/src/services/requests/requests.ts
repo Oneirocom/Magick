@@ -31,7 +31,7 @@ export const request = (app: Application): void => {
   // Register our service on the Feathers application
   app.use('request', new RequestService(getOptions(app)), {
     // A list of all methods this service exposes externally
-    methods: ['find', 'get', 'create', 'patch', 'remove','removeMany'],
+    methods: ['find', 'get', 'create', 'patch', 'remove'],
     // You can add additional custom events to be sent to clients here
     events: []
   })
@@ -63,8 +63,7 @@ export const request = (app: Application): void => {
         schemaHooks.validateData(requestPatchValidator),
         schemaHooks.resolveData(requestPatchResolver)
       ],
-      remove: [],
-      removeMany: []
+      remove: []
     },
     after: {
       all: []

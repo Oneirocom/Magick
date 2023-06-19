@@ -23,7 +23,7 @@ import {
 import { useSelector } from 'react-redux'
 import styles from './index.module.scss'
 import { Delete,Refresh, MoreHoriz } from '@mui/icons-material'
-import { TableComponent } from '@magickml/client-core'
+import { TableComponent, useFeathers } from '@magickml/client-core'
 import { DocumentData, columns } from './requests'
 import { useSnackbar } from 'notistack'
 
@@ -90,6 +90,8 @@ function RequestTable({ requests, updateCallback }) {
     setSelectedRow(null)
   }
 
+  const { client } = useFeathers()
+
   // Handle request deletion
   const handleRequestDelete = async (event: any) => {
     const resp = await fetch(`${API_ROOT_URL}/request/${selectedRow.id}`, {
@@ -112,16 +114,14 @@ function RequestTable({ requests, updateCallback }) {
 
     // Handle events deletion
     const handleDeleteMany = async (event: any) => {
-      const ids = selectedRows.join('&')
-      console.log(ids);
-      
-      const isDeleted = await fetch(`${API_ROOT_URL}/request/removeMany/${ids}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const isDeleted: Array<unknown> = await client.service('request').remove(null, {
+        query: {
+          id: {
+            $in: selectedRows
+          }
+        }
       })
-      if (isDeleted.ok) {
+      if (isDeleted) {
         enqueueSnackbar('Requests deleted', { variant: 'success' });
         updateCallback();
       } else {
