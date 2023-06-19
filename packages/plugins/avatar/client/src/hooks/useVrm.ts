@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm'
 import { DEFAULT_MODEL } from '../utils/constants'
-import { initLogger, getLogger } from '@magickml/core'
+import { useSnackbar } from 'notistack'
 
 export const useVrm = (vrmUrl) => {
   const [vrm, setVrm] = useState(null)
-  initLogger({ name: "AIDE" })
-  const logger = getLogger()
+  const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
     (async () => {
@@ -21,12 +20,23 @@ export const useVrm = (vrmUrl) => {
         gltf = await gltfLoader.loadAsync(vrmUrl)
       } catch (e) {
         //default vrm ( Ref! drag/drop model )
-        logger.error('non standard model %s', vrmUrl)
+        enqueueSnackbar('Non standard avatar', {
+          variant: 'error',
+        })
         gltf = await gltfLoader.loadAsync(DEFAULT_MODEL)
       }
-      if (!gltf) {
-        logger.error('non existing model %s', vrmUrl)
+
+      //ignore vrm0 file
+      if (!gltf || gltf.userData.vrm.lookAt.faceFront.z <= 0) {
+        enqueueSnackbar('Only VRM1 avatar supported', {
+          variant: 'error',
+        })
         return
+      }
+      else if(vrmUrl !== DEFAULT_MODEL){
+        enqueueSnackbar('New avatar loaded', {
+          variant: 'success',
+        })
       }
 
       //set avatar with new gltf tranform
