@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "Apache 2.0",
   "scripts": {
-    "dev": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent,@magickml/docs --parallel --maxParallel=100",
+    "dev": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent,@magickml/docs --parallel --maxParallel=100 --skip-nx-cache",
     "start": "node scripts/start-server.js",
     "start-server": "node dist/apps/server/main.js",
     "start-agent": "node dist/apps/agent/main.js",
@@ -75,6 +75,7 @@
     "@mui/lab": "5.0.0-alpha.131",
     "@mui/material": "5.13.2",
     "@mui/x-date-pickers": "6.5.0",
+    "@octokit/rest": "^19.0.13",
     "@panva/hkdf": "1.1.1",
     "@pinecone-database/pinecone": "0.1.6",
     "@pixiv/three-vrm": "1.0.9",
