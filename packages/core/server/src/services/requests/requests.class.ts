@@ -6,7 +6,6 @@
 import type { Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
-import { app } from '../../app'
 import type { Application } from '../../declarations'
 import type {
   Request,
