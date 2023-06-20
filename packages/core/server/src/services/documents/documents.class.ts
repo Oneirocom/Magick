@@ -37,24 +37,11 @@ export class DocumentService<
   async create(data: DocumentData): Promise<any> {
     const docdb = app.get('docdb')
     if (data.hasOwnProperty('secrets')) {
-      const {secrets, modelName, ...rest} = data as DocumentData & {secrets: string, modelName: string}
-      data = rest
-      /* const completionProviders = pluginManager.getCompletionProviders('text', ['embedding'])
-      const provider = completionProviders.find(provider =>
-        provider.models.includes(modelName)
-      ) as CompletionProvider
-      const handler = provider?.handler
-      
-      const {success, result, error} = await handler({
-        inputs: { input: context?.data?.content || "" },
-        node: { data: { model: modelName } } as unknown as WorkerData,
-        outputs: undefined,
-        context: { module: { secrets:JSON.parse(secrets) }, projectId: context.data.projectId },
-      })
-      embedding = result */
-      
-      app.get("docdb").fromString(data.content,data,{modelName, projectId: data?.projectId, secrets})
-      return data;
+      const {secrets, modelName, ...docData} = data as DocumentData & {secrets: string, modelName: string}
+
+      docdb.fromString(docData.content,docData,{modelName, projectId: docData?.projectId, secrets})
+
+      return docData;
     }
     await docdb.from('documents').insert(data)
     return data
