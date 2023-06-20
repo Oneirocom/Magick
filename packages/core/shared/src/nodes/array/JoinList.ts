@@ -68,6 +68,9 @@ export class JoinListComponent extends MagickComponent<WorkerReturn> {
     node: WorkerData,
     inputs: MagickWorkerInputs & { list: [string][] }
   ): WorkerReturn {
+    console.log('*** JOIN LIST')
+    console.log('inputs', inputs)
+    console.log('list 0', JSON.stringify(inputs.list[0]))
     return {
       text: inputs.list[0].join(node.data.separator as string),
     }
