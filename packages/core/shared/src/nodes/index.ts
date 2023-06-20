@@ -48,6 +48,10 @@ import { GreaterThanOrEqual } from './number/GreaterThanOrEqual'
 import { InRange } from './number/InRange'
 import { LessThan } from './number/LessThan'
 import { LessThanOrEqual } from './number/LessThanOrEqual'
+import { Multiply} from './number/Multiply'
+import { Divide } from './number/Divide'
+import { Add } from './number/Add'
+import { Subtract } from './number/Subtract'
 import { NumberVariable } from './number/NumberVariable'
 import { ComposeObject } from './object/ComposeObject'
 import { GetValuesFromObject } from './object/GetValuesFromObject'
@@ -155,6 +159,10 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   trim: () => new Trim(),
   getLength: () => new GetLength(),
   isANumber: () => new IsANumber(),
+  multiply: () => new Multiply(),
+  divide: () => new Divide(),
+  add: () => new Add(),
+  subtract: () => new Subtract(),
 }
 
 /**

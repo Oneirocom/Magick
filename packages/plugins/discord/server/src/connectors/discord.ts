@@ -7,6 +7,7 @@ import Discord, {
   Partials,
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
+import { initSpeechClient, stopSpeechClient, recognizeSpeech } from './discord-voice'
 
 export class DiscordConnector {
   client = Discord.Client as any
@@ -61,8 +62,6 @@ export class DiscordConnector {
       } = this
         ; (async () => {
           if (typeof window === 'undefined') {
-            const { initSpeechClient } =
-              await import('./discord-voice')
             this.client = initSpeechClient({
               client,
               agent,
@@ -71,15 +70,10 @@ export class DiscordConnector {
           }
         })()
       this.client.on('joinvc', async voiceChannel => {
-        const { recognizeSpeech } = await import(
-          './discord-voice'
-        )
+        console.log('joinvc', voiceChannel)
         return recognizeSpeech(voiceChannel, this.agent.id)
       })
       this.client.on('leavevc', async (voiceChannel) => {
-        const { stopSpeechClient } = await import(
-          './discord-voice'
-        )
         stopSpeechClient(voiceChannel, this.agent.id)
       })
 

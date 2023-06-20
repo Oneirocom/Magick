@@ -115,7 +115,7 @@ export class Output extends MagickComponent<void> {
       return { output: '' }
     }
     console.log('handling output node')
-    const { data, agent } = context
+    const { data } = context
 
     const event = // event data is inside a task
       ((inputs.event?.[0] as any)?.eventData ||
@@ -127,19 +127,11 @@ export class Output extends MagickComponent<void> {
 
     const output = inputs.input[0] as string
 
-
     const outputType =
       (!(node.data.outputType as any)?.includes('Default') && node.data.outputType) ||
       (!inputName?.includes('Default') && inputName?.replace('Input - ', '')) ||
       event.connector
       || 'Default'
-
-      console.log('outputType', outputType)
-
-
-    console.log('*** output is', output)
-    console.log('*** outputType is', outputType)
-    console.log('*** event is', event)
 
     // handle this being a subspell returning out
     if (outputType === 'Default') {
@@ -150,7 +142,7 @@ export class Output extends MagickComponent<void> {
       return { output }
     }
 
-    // if (agent) {
+    // if (agent && !(node.data.outputType as any)?.includes('Default')) {
     //   console.log('outputting, agent loop')
     //     // Find the outputType in the outputTypes array
     //     const t = agent.outputTypes.find(t => t.name === outputType)

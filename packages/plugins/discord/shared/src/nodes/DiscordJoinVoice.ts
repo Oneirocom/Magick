@@ -71,11 +71,15 @@ export class DiscordJoinVoice extends MagickComponent<Promise<void>> {
 
     const channel = inputs.channel?.[0] as any
 
+    console.log('channel', channel)
+
     // discordClient is a Discord.js client instance
     const discordClient = agent.discord.client
 
     // fetch the channel using its ID
     const fetchedChannel = await discordClient.channels.fetch(channel);
+
+    console.log('fetchChannel', fetchedChannel)
 
     if (!fetchedChannel) {
       throw new Error('Channel not found')
@@ -84,6 +88,8 @@ export class DiscordJoinVoice extends MagickComponent<Promise<void>> {
     if (fetchedChannel.type !== ChannelType.GuildVoice) {
       throw new Error('Channel must be a voice channel')
     }
+
+    console.log('Joining voice channel')
 
     discordClient.emit('joinvc', fetchedChannel)
   }

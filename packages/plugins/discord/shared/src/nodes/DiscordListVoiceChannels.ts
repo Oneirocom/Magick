@@ -128,11 +128,6 @@ export class DiscordListVoiceChannels extends MagickComponent<
       name: channel.name,
     }))
 
-    console.log('*** voiceChannels', voiceChannels)
-
-    console.log('*** mapped channels')
-    console.log(mappedChannels)
-
     return {
       output: mappedChannels
     };

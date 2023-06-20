@@ -142,12 +142,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs
   ) {
-    // implement a function that replaces all instances of a string with another string
-    const replaceAll = (str: string, find: string, replace: string) => {
-      return str.toString().replace(new RegExp(find, 'g'), replace)
-    }
-
-    let input = inputs['input'][0] as string
+    const input = inputs['input'][0] as string
     const matchBeginning =
       (inputs['matchBeginning'] as string[]) &&
       (inputs['matchBeginning'][0] as string)
@@ -164,15 +159,6 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     // const invalidateAny =
     //   (inputs['invalidateAny'] as string[]) &&
     //   (inputs['invalidateAny'][0] as string)
-
-    const str = input + ''
-    const i1 = str.toString().replace(/<.*>/, '')
-
-    input = replaceAll(
-      replaceAll(i1.replace(/ /, ''), '"', ''),
-      "'",
-      ''
-    ).toLowerCase()
 
     const stringMinLength = (node.data.stringMinLength ?? 0) as number
     const stringMaxLength = (node.data.stringMaxLength ?? 0) as number

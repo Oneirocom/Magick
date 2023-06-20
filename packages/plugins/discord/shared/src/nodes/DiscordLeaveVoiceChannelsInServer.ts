@@ -79,7 +79,7 @@ export class DiscordLeaveVoiceChannelsInServer extends MagickComponent<
     const { agent, data } = context
     if (!agent || !agent?.discord) {
       console.warn('Skipping node since there is no agent available')
-      return {left: false};
+      return { left: false };
     }
 
     const event = // event data is inside a task?
@@ -94,19 +94,27 @@ export class DiscordLeaveVoiceChannelsInServer extends MagickComponent<
     const discordClient = agent.discord.client
 
     const channel = event.channel // channel in which the message was sent
+
     async function leaveVoiceChannelInGuild(client, channelId) {
       const channel = await client.channels.fetch(channelId);
       const guild = channel.guild;
-      if (guild && guild.me.voice.channel) {
-        guild.me.voice.channel.leave();
-        return true
-      } else {
+      console.log('*** guild', guild)
+      const voice = client.voiceFunctions
+      console.log('*** voice', voice)
+      const { getVoiceConnection } = voice as any
+      console.log('*** getVoiceConnection', getVoiceConnection)
+      const connection = getVoiceConnection(guild.id, 'default_' + agent.id);
+
+      if(!connection)
         return false
-      }
+      connection.destroy()
+      return true
     }
 
+    const left = await leaveVoiceChannelInGuild(discordClient, channel)
+
     return {
-      left: await leaveVoiceChannelInGuild(discordClient, channel)
+      left
     }
   }
 }

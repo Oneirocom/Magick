@@ -85,6 +85,11 @@ export function initSpeechClient(options: {
     console.log('component ran')
   })
 
+  client.voiceFunctions = {
+    joinVoiceChannel,
+    getVoiceConnection,
+  }
+
   return client
 }
 

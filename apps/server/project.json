@@ -5,7 +5,9 @@
   "projectType": "application",
   "implicitDependencies": [
     "@magickml/server-core",
-    "@magickml/core"
+    "@magickml/core",
+    "@magickml/plugin-twitter-server",
+    "@magickml/plugin-discord-server"
 ],
   "targets": {
     "build": {
