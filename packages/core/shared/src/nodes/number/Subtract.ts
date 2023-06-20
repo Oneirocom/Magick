@@ -20,7 +20,7 @@ export class Subtract extends MagickComponent<WorkerOutputs> {
     super(
       'Subtract',
       {
-        outputs: { result: 'output' },
+        outputs: { trigger: 'option', result: 'output' },
       },
       'Number',
       info

@@ -2,6 +2,7 @@
 import { MagickComponent } from '../engine'
 import { pluginManager } from '../plugin'
 import { ArrayToJSON } from './array/ArrayToJSON'
+import { JSONToArray } from './array/JSONToArray'
 import { ArrayVariable } from './array/ArrayVariable'
 import { GetValueFromArray } from './array/GetValueFromArray'
 import { JoinListComponent } from './array/JoinList'
@@ -163,6 +164,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   divide: () => new Divide(),
   add: () => new Add(),
   subtract: () => new Subtract(),
+  jsonToArray: () => new JSONToArray(),
 }
 
 /**

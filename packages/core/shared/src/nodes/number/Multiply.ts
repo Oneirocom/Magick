@@ -20,7 +20,7 @@ export class Multiply extends MagickComponent<WorkerOutputs> {
     super(
       'Multiply',
       {
-        outputs: { result: 'output' },
+        outputs: { trigger: 'option', result: 'output' },
       },
       'Number',
       info
@@ -59,6 +59,7 @@ export class Multiply extends MagickComponent<WorkerOutputs> {
     })
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     const result = new Rete.Output('result', 'Result', numberSocket)
 
@@ -67,6 +68,7 @@ export class Multiply extends MagickComponent<WorkerOutputs> {
       .addInput(secondNumSocket)
       .addInput(dataInput)
       .addOutput(result)
+      .addOutput(dataOutput)
 
     node.inspector.add(inspectorStartNumSocket).add(inspectorEndNumSocket)
   }

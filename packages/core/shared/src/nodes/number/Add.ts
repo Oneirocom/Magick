@@ -20,7 +20,7 @@ export class Add extends MagickComponent<WorkerOutputs> {
     super(
       'Add',
       {
-        outputs: { result: 'output' },
+        outputs: { trigger: 'option', result: 'output' },
       },
       'Number',
       info

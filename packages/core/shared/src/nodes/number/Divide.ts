@@ -20,7 +20,7 @@ export class Divide extends MagickComponent<WorkerOutputs> {
     super(
       'Divide',
       {
-        outputs: { true: 'option', false: 'option' },
+        outputs: { trigger: 'option', result: 'output' },
       },
       'Number',
       info
