@@ -242,9 +242,6 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       notMatchAnyStringArray.pop()
     }
 
-    let isMatched = false
-    let invalidated = false
-
     function matchStart(inp: string, matchArray: string[]) {
       for (const matchString of matchArray) {
         if (inp.startsWith(matchString)) {
@@ -272,58 +269,68 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       return false
     }
 
+    let isOverMaxLength = false
+    let isUnderMinLength = false
     if (stringMaxLength !== 0) {
-      if (
-        input.length > stringMaxLength ||
-        input.length < (stringMinLength ?? 0)
-      ) {
-        invalidated = true
+      if (input.length > stringMaxLength) {
+        isOverMaxLength = true
+      }
+      if (input.length < stringMinLength) {
+        isUnderMinLength = true
       }
     }
 
+    let isBeginingMatched = false
     if (matchBeginningStringArray.length > 0) {
       const matched = matchStart(input, matchBeginningStringArray)
       if (matched) {
-        isMatched = true
+        isBeginingMatched = true
       }
     }
 
+    let isEndMatched = false
     if (matchEndStringArray.length > 0) {
       const matched = matchEndString(input, matchEndStringArray)
       if (matched) {
-        isMatched = true
-      } else {
-        isMatched = false
+        isEndMatched = true
       }
     }
+
+    let isMatchedAny = false
     if (matchAnyStringArray.length > 0) {
       const matched = match(input, matchAnyStringArray)
       if (matched) {
-        isMatched = true
-      } else {
-        isMatched = false
+        isMatchedAny = true
       }
     }
 
+    const isMatched = isBeginingMatched || isEndMatched || isMatchedAny
+
+    let isBeginningInvalidated = false
     if (notMatchBeginningStringArray.length > 0) {
       const matched = matchStart(input, notMatchBeginningStringArray)
       if (matched) {
-        invalidated = true
+        isBeginningInvalidated = true
       }
     }
 
-    if (!invalidated && notMatchEndStringArray.length > 0) {
+    let isEndInvalidated = false
+    if (notMatchEndStringArray.length > 0) {
       const matched = matchEndString(input, notMatchEndStringArray)
       if (matched) {
-        invalidated = true
+        isEndInvalidated = true
       }
     }
-    if (!invalidated && notMatchAnyStringArray.length > 0) {
+
+    let isAnyInvalidated = false
+    if (notMatchAnyStringArray.length > 0) {
       const matched = match(input, notMatchAnyStringArray)
       if (matched) {
-        invalidated = true
+        isAnyInvalidated = true
       }
     }
+
+    const invalidated = isBeginningInvalidated || isEndInvalidated || isAnyInvalidated
 
     this._task.closed = !invalidated && isMatched ? ['false'] : ['true']
   }
