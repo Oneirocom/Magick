@@ -21,6 +21,10 @@ const info = `The output component will pass values out from your spell. Your ou
 /** Default output types */
 const defaultOutputTypes = [
   { name: 'Default', socket: anySocket },
+  {
+    name: 'Subspell',
+    socket: anySocket,
+  },
 ]
 
 /**
@@ -114,8 +118,7 @@ export class Output extends MagickComponent<void> {
       console.error('No input provided to output component')
       return { output: '' }
     }
-    console.log('handling output node')
-    const { data } = context
+    const { data, agent } = context
 
     const event = // event data is inside a task
       ((inputs.event?.[0] as any)?.eventData ||
@@ -125,40 +128,49 @@ export class Output extends MagickComponent<void> {
         (Object.values(data)[0] as any)?.eventData ||
         Object.values(data)[0]) as Event
 
-    const output = inputs.input[0] as string
-
+    const output = inputs.input.filter(Boolean)[0] as string
     const outputType =
-      (!(node.data.outputType as any)?.includes('Default') && node.data.outputType) ||
-      (!inputName?.includes('Default') && inputName?.replace('Input - ', '')) ||
+      (node.data.outputType !== 'Default' && node.data.outputType) ||
+      inputName?.replace('Input - ', '') ||
       event.connector
-      || 'Default'
 
     // handle this being a subspell returning out
-    if (outputType === 'Default') {
-      // if event.type is playtest, stringify output
-      if (event.type === 'playtest') {
-        return { output: JSON.stringify(output) }
-      }
+    if (outputType === 'Subspell') {
       return { output }
     }
 
-    // if (agent && !(node.data.outputType as any)?.includes('Default')) {
-    //   console.log('outputting, agent loop')
-    //     // Find the outputType in the outputTypes array
-    //     const t = agent.outputTypes.find(t => t.name === outputType)
-    //     // Find outputType in outputTypes where name is outputType
-    //     if (!t) {
-    //       console.error('output type is not defined', t)
-    //     } else if (!t.handler) {
-    //       console.error('output type handler is not defined', t)
-    //     } else {
-    //       t.handler({
-    //         output,
-    //         agent: agent,
-    //         event,
-    //       })
-    //     }
-    // }
+    if (agent) {
+      if (outputType && (outputType as string).includes('Default')) {
+        // If default handler, don't call the output type handler
+        // const type = pluginManager.getInputTypes().find(type => {
+        //   return type.name === event.connector?.replace('Input - ', '')
+        // })
+        // const responseOutputType = type?.defaultResponseOutput
+        // const out = module.agent.outputTypes.find(
+        //   t => t.name === responseOutputType
+        // )
+        // out.handler({
+        //   output,
+        //   agent: module.agent,
+        //   event,
+        // })
+      } else {
+        // Find the outputType in the outputTypes array
+        const t = agent.outputTypes.find(t => t.name === outputType)
+        // Find outputType in outputTypes where name is outputType
+        if (!t) {
+          console.error('output type is not defined', t)
+        } else if (!t.handler) {
+          console.error('output type handler is not defined', t)
+        } else {
+          t.handler({
+            output,
+            agent: agent,
+            event,
+          })
+        }
+      }
+    }
 
     return {
       output,
