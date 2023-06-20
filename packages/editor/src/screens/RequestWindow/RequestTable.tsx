@@ -110,6 +110,7 @@ function RequestTable({ requests, updateCallback }) {
     // close the action menu
     handleActionClose()
     updateCallback()
+    setSelectedRows([]);
   }
 
     // Handle events deletion
