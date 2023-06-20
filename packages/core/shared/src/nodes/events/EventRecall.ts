@@ -18,6 +18,7 @@ import {
   ModuleContext,
   WorkerData,
 } from '../../types'
+import { DropdownControl } from '../../dataControls/DropdownControl'
 
 const info =
   'Searches for events in the Events store based on the Type property and returns an array of events limited by the Max Count property. The optional Embedding input will search for events based on the similarity of their stored embeddings. '
@@ -27,6 +28,19 @@ const info =
  */
 type InputReturn = {
   events: unknown[]
+}
+
+enum FilterTypes {
+  ChannelAndSender = 'Channel And Sender (DMs OK)',
+  AllInChannel = 'All In Channel',
+  AllFromSender = 'All From Sender (No DMs)',
+  AllFromConnector = 'All From Connector',
+  All = 'All'
+}
+
+enum RecallModes {
+  MostRecent = 'Most Recent',
+  MostRevelant = 'Most Relevant (Use Embedding)'
 }
 
 /**
@@ -62,8 +76,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     const nameInput = new InputControl({
       dataKey: 'name',
-      name: 'Input name',
-      placeholder: 'Conversation',
+      name: 'Name',
+      placeholder: 'Event Recall',
     })
 
     const type = new InputControl({
@@ -80,12 +94,54 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       defaultValue: '6',
     })
 
-    node.inspector.add(nameInput).add(type).add(max_count)
+    // FilterTypes is an enum, so we can use Object.values to get the values
+    const filterTypes = Object.values(FilterTypes)
+    const recallModes = Object.values(RecallModes)
+
+    const mode = new DropdownControl({
+      name: 'Mode',
+      dataKey: 'mode',
+      values: recallModes,
+      defaultValue: recallModes[0],
+    })
+
+    const filterBy = new DropdownControl({
+      name: 'Filter By',
+      dataKey: 'filterBy',
+      values: filterTypes,
+      defaultValue: filterTypes[0],
+    })
+
+    const lastMode = node.data.mode
+    
+    if(node.data.mode === RecallModes.MostRevelant || !node.data.mode) {
+      node.addInput(embedding)
+    }
+
+    // based on mode data we can show/hide the embedding input
+    mode.onData = (value) => {
+      console.log('value is', value)
+      if (value === RecallModes.MostRevelant) {
+        if(lastMode === RecallModes.MostRevelant) {
+          return;
+        }
+        // if the input is not already added, add it
+        if (!node.inputs.has('mode')) {
+          node.addInput(embedding)
+        }
+      } else {
+        // if the input is already added, remove it
+        if (node.inputs.has('mode')) {
+          node.inputs.delete('embedding')
+        }
+      }
+    }
+    
+    node.inspector.add(nameInput).add(type).add(max_count).add(filterBy).add(mode)
 
     return node
       .addInput(dataInput)
       .addInput(eventInput)
-      .addInput(embedding)
       .addOutput(dataOutput)
       .addOutput(out)
       .addInput(typeSocket)
@@ -114,7 +170,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       return events
     }
     const typeSocket = inputs['type'] && inputs['type'][0]
-
+    
     const event = (inputs['event'] &&
       (inputs['event'][0] || inputs['event'])) as Event
     let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as
@@ -129,6 +185,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     const {
       observer,
+      sender,
       client,
       channel,
       connector,
@@ -157,11 +214,32 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       observer,
       client,
       entities,
+      sender,
       channel,
       connector,
       channelType,
       projectId,
       $limit: max_count ?? 1,
+    }
+
+    const filterBy = node.data.filterBy
+    if (filterBy === FilterTypes.ChannelAndSender) {
+      // no need to do anything, should just work
+    } else if (filterBy === FilterTypes.AllInChannel) {
+      // filter by observer but not sender
+      delete data['sender']
+    } else if (filterBy === FilterTypes.AllFromSender) {
+      // filter by sender but not channel
+      delete data['channel']
+    } else if (filterBy === FilterTypes.AllFromConnector) {
+      // filter by connector but not channel or sender
+      delete data['channel']
+      delete data['sender']
+    } else if (filterBy === FilterTypes.All) {
+      // filter by all except sender, channel, and connector -- basically all for this observer
+      delete data['channel']
+      delete data['sender']
+      delete data['connector']
     }
 
     if (embedding) {
