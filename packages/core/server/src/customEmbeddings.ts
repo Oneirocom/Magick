@@ -135,7 +135,7 @@ export class PluginEmbeddings extends Embeddings {
       provider.models.includes(param.modelName)
     ) as CompletionProvider
     const handler = provider?.handler
-    let response
+    let response: any
     let retry = 0
     while (retry < 3) {
       try {
