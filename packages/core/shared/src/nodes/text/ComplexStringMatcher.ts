@@ -242,7 +242,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       notMatchAnyStringArray.pop()
     }
 
-    let isMatched: boolean | undefined = undefined
+    let isMatched = false
     let invalidated = false
 
     function matchStart(inp: string, matchArray: string[]) {
@@ -284,7 +284,6 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     if (matchBeginningStringArray.length > 0) {
       const matched = matchStart(input, matchBeginningStringArray)
       if (matched) {
-        //
         isMatched = true
       }
     }
@@ -292,7 +291,6 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     if (matchEndStringArray.length > 0) {
       const matched = matchEndString(input, matchEndStringArray)
       if (matched) {
-        //
         isMatched = true
       } else {
         isMatched = false
@@ -301,7 +299,6 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     if (matchAnyStringArray.length > 0) {
       const matched = match(input, matchAnyStringArray)
       if (matched) {
-        //
         isMatched = true
       } else {
         isMatched = false
@@ -328,13 +325,6 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       }
     }
 
-    this._task.closed =
-      isMatched !== undefined
-        ? !invalidated && isMatched
-          ? ['false']
-          : ['true']
-        : !invalidated
-        ? ['false']
-        : ['true']
+    this._task.closed = !invalidated && isMatched ? ['false'] : ['true']
   }
 }
