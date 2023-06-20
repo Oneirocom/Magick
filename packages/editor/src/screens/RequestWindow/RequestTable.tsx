@@ -195,8 +195,8 @@ function RequestTable({ requests, updateCallback }) {
     []
   )
 
-  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
-    setSortBy } =
+  // @ts-ignore
+  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter }, setSortBy } =
     useTable(
       {
         columns: defaultColumns,

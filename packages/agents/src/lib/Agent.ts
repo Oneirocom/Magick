@@ -11,10 +11,14 @@ import {
   SpellInterface,
   getLogger,
 } from '@magickml/core'
+<<<<<<< HEAD
 import {
   bullMQConnection,
   PING_AGENT_TIME_MSEC
 } from '@magickml/config'
+=======
+import { PING_AGENT_TIME_MSEC, bullMQConnection } from '@magickml/config'
+>>>>>>> origin/typescript-fixes-2
 import { RedisPubSub } from '@magickml/redis-pubsub'
 
 import { AgentManager } from './AgentManager'
