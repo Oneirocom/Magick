@@ -284,7 +284,6 @@ export class TwitterConnector {
 
               const conversation_id = event.dm_conversation_id
               if (!conversation_id) {
-                console.log(event)
                 return console.log('no conversation id')
               }
 
