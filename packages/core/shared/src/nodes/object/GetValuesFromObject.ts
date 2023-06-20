@@ -41,8 +41,6 @@ export class GetValuesFromObject extends MagickComponent<void> {
     const objectInput = new Rete.Input('object', 'Object', objectSocket)
     const outputTrigger = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
-    console.log('objectInput', objectInput)
-
     const socketGenerator = new SocketGeneratorControl({
       connectionType: 'output',
       name: 'Property Name',
