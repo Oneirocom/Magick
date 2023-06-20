@@ -12,6 +12,7 @@ import styles from './index.module.scss'
 import { Box, Pagination } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 
+
 interface Props {
   rows: any
   column: any
@@ -244,6 +245,19 @@ export const TableComponent = ({
 
   const isSelected = (name: string) => selectedRows && selectedRows.indexOf(name) !== -1
 
+  function truncateText(text, maxLength) {
+    if (typeof text !== 'string' || text === undefined || typeof text === 'object') {
+      return text;
+    }
+    
+    if (text.length <= maxLength) {
+      return text;
+    }
+    
+    return text.slice(0, maxLength) + '...';
+  }
+  
+
   return (
     <React.Fragment>
       <TableContainer>
@@ -279,6 +293,8 @@ export const TableComponent = ({
                 >
                   {column.map((column, index) => {
                     const value = row[column.id]
+                    
+                    const truncatedValue = truncateText(value, 100);
                     return (
                       <TableCell
                         key={index}
@@ -294,7 +310,8 @@ export const TableComponent = ({
                             }}
                           />
                         ) : (
-                          value
+                          // value
+                          truncatedValue
                         )}
                       </TableCell>
                     )

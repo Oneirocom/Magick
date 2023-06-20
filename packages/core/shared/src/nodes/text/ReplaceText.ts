@@ -104,10 +104,6 @@ export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
       node?.data?.match) as string
     const replace = ((rawInputs['replace'] && rawInputs['replace'][0]) ||
       node?.data?.replace) as string
-      console.log('input', input)
-      console.log('match', match)
-      console.log('replace', replace)
-      console.log('final input', input.replaceAll(match, replace ?? ''))
 
     return {
       output: input.replaceAll(match, replace ?? ''),

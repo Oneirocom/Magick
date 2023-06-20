@@ -91,7 +91,7 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
         }
         metadata['id'] = uuidv4()
         metadata['content'] = split_docs[index]
-        this.addEvents({
+        await this.addEvents({
           array: [{ ...metadata, embedding: JSON.stringify(vector) }],
         })
       })
@@ -113,7 +113,7 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
         },
       },
     ]
-    this.addEvents({
+    await this.addEvents({
       array: [{ ...metadata, embedding: JSON.stringify(vector) }],
     })
     return insert_data

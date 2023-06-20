@@ -1,4 +1,5 @@
 // DOCUMENTED
+import { getLogger } from '@magickml/core'
 import { app } from '@magickml/server-core'
 import Discord, {
   AttachmentBuilder,
@@ -10,6 +11,7 @@ import emoji from 'emoji-dictionary'
 import { initSpeechClient, stopSpeechClient, recognizeSpeech } from './discord-voice'
 
 export class DiscordConnector {
+  logger = getLogger()
   client = Discord.Client as any
   agent: any
   spellRunner: any = null
@@ -273,11 +275,11 @@ export class DiscordConnector {
       entities.push(this.client.user.username)
     }
 
-    console.log('handling message create', message)
+    this.logger.info('handling message create: %s', message)
 
     const inputType = message.guildId === null ? 'DM' : 'Text'
 
-    console.log(this.agent.name, ' - sending message on discord - ', content)
+    this.logger.info(this.agent.name, ' - sending message on discord - ', content)
     await this.spellRunner.runComponent({
       inputs: {
         [`Input - Discord (${inputType})`]: {
@@ -310,12 +312,12 @@ export class DiscordConnector {
     if (!author) return
     if (!client || !client.user) return
     if (author.id === this.client.user.id) return
-    console.log('message deleted by', author.username, 'in', channel.id)
+    this.logger.info('message deleted by', author.username, 'in', channel.id)
   }
 
   //Event that is triggered when the discord client fully loaded
   ready = async () => {
-    console.log('client is ready')
+    this.logger.info('client is ready')
   }
 
   async sendImageToChannel(channelId: any, imageUri: any) {
@@ -325,7 +327,7 @@ export class DiscordConnector {
       const attachment = new AttachmentBuilder(buffer, { name: 'image.png' })
       await channel.send(attachment)
     } catch (error) {
-      console.error(`Error sending image to channel: ${error}`)
+      this.logger.error(`Error sending image to channel: ${error}`)
     }
   }
 
@@ -346,14 +348,14 @@ export class DiscordConnector {
           }
         }
       } else {
-        console.error(
-          'Could not send message to channel: ' + channelId,
-          'msg = ' + msg,
-          'channel = ' + channel
+        this.logger.error(
+          'Could not send message to channel: ' + channelId +'\n',
+          'msg = ' + msg +'\n',
+          'channel = ' + channel +'\n'
         );
       }
     } catch (e) {
-      console.error(e);
+      this.logger.error(e);
     }
   }
 }

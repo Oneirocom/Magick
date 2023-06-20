@@ -97,3 +97,5 @@ export const bullMQConnection = {
   username: REDISCLOUD_USERNAME,
   db: REDISCLOUD_DB,
 }
+
+export const PINO_LOG_LEVEL = getVarForEnvironment('PINO_LOG_LEVEL') || 'info'
