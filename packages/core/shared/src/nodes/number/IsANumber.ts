@@ -1,21 +1,20 @@
 // DOCUMENTED
 import Rete from 'rete'
 
-import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
-import { numberSocket, triggerSocket } from '../../sockets'
+import { anySocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 // Information about the InRange component
-const info = `Evaluate whether an input number is greater than the value. Triggers true if it is, false if it isn't.`
+const info = `Evaluate whether an input is a number. Triggers true if it is, false if it isn't.`
 
 /**
  * InRange Class represents a component that checks if a given number is within a specified range.
  */
-export class GreaterThan extends MagickComponent<void> {
+export class IsANumber extends MagickComponent<void> {
   constructor() {
     super(
-      'Greater Than',
+      'Is A Number',
       {
         outputs: { true: 'option', false: 'option' },
       },
@@ -29,17 +28,9 @@ export class GreaterThan extends MagickComponent<void> {
    * @param node - The MagickNode instance
    */
   builder(node: MagickNode): void {
-    const valueSocket = new Rete.Input('value', 'Value', numberSocket, false)
-
-    const inspectorValueSocket = new InputControl({
-      dataKey: 'value',
-      name: 'Value',
-      defaultValue: 0,
-    })
-
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
 
-    const testInput = new Rete.Input('input', 'Input To Test', numberSocket)
+    const testInput = new Rete.Input('input', 'Input To Test', anySocket)
 
     const isTrue = new Rete.Output('true', 'True', triggerSocket)
 
@@ -47,12 +38,9 @@ export class GreaterThan extends MagickComponent<void> {
 
     node
       .addInput(testInput)
-      .addInput(valueSocket)
       .addInput(dataInput)
       .addOutput(isTrue)
       .addOutput(isFalse)
-
-    node.inspector.add(inspectorValueSocket)
   }
 
   /**
@@ -61,10 +49,13 @@ export class GreaterThan extends MagickComponent<void> {
    * @param inputs - The MagickWorkerInputs instance
    */
   worker(node: WorkerData, inputs: MagickWorkerInputs): void {
-    const value = (inputs['value']?.[0] as number) ?? (node.data.value as number)
-    const numberToTest = inputs['input']?.[0] as number
+    const numberToTest = inputs['input'][0] as any
 
-    if (numberToTest > value) {
+    const isAnObject = typeof numberToTest === 'object';
+
+    const isANumber = !isAnObject && !isNaN(Number.parseFloat(numberToTest));
+
+    if (isANumber) {
       this._task.closed = ['false']
     } else {
       this._task.closed = ['true']

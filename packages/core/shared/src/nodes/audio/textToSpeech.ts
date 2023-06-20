@@ -1,62 +1,63 @@
-// DOCUMENTED
+// UNDOCUMENTED
 import Rete from 'rete'
-
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
+import { pluginManager } from '../../plugin'
 import { triggerSocket } from '../../sockets'
 import {
   CompletionInspectorControls,
   CompletionProvider,
   CompletionSocket,
+  EngineContext,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   WorkerData,
 } from '../../types'
 
-import { expandVector } from '../../functions/expandVector'
-import { pluginManager } from '../../plugin'
+/** Information related to the GenerateText */
+const info = 'Generate speech using any of the providers available in Magick.'
 
-/** Brief description of the component that this file exports. */
-const info =
-  'Takes a string input and outputs the vector embedding for that string'
-
-type InputReturn = {
-  embedding: number[]
+/** Type definition for the worker return */
+type WorkerReturn = {
+  result?: any
 }
 
 /**
- * Create a new CreateTextEmbedding class that extends MagickComponent.
+ * TextToSpeech component responsible for generating speech from text using any providers
+ * available in Magick.
  */
-export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
+export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super(
-      'Create Text Embedding',
+      'Text to Speech',
       {
         outputs: {
+          result: 'output',
           trigger: 'option',
-          embedding: 'output',
         },
       },
-      'Embedding',
+      'Audio',
       info
     )
   }
 
   /**
-   * Build the CreateTextEmbedding node with necessary configuration.
-   * @param node - A MagickNode instance.
+   * Builder for generating speech.
+   * @param node - the MagickNode instance.
+   * @returns a configured node with data generated from providers.
    */
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
-    const completionProviders = pluginManager.getCompletionProviders('text', [
-      'embedding',
-    ])
+    // get completion providers for text and chat categories
+    const completionProviders = pluginManager.getCompletionProviders('audio', [
+      'textToSpeech',
+    ]) as CompletionProvider[]
 
-    // Get the models from the completion providers.
-    const models = completionProviders.map(p => p.models).flat()
+    // get the models from the completion providers and flatten into a single array
+    const models = completionProviders.map(provider => provider.models).flat()
 
     const modelName = new DropdownControl({
       name: 'Model Name',
@@ -73,17 +74,20 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
     let lastOutputSockets: CompletionSocket[] | undefined = []
     let lastInspectorControls: CompletionInspectorControls[] | undefined = []
 
+    /**
+     * Configure the provided node according to the selected model and provider.
+     */
     const configureNode = () => {
       const model = node.data.model as string
       const provider = completionProviders.find(provider =>
         provider.models.includes(model)
       ) as CompletionProvider
-
       const inspectorControls = provider.inspectorControls
       const inputSockets = provider.inputs
       const outputSockets = provider.outputs
       const connections = node.getConnections()
 
+      // update inspector controls
       if (inspectorControls !== lastInspectorControls) {
         lastInspectorControls?.forEach(control => {
           node.inspector.dataControls.delete(control.dataKey)
@@ -94,6 +98,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
         })
         lastInspectorControls = inspectorControls
       }
+      // update input sockets
       if (inputSockets !== lastInputSockets) {
         lastInputSockets?.forEach(socket => {
           if (node.inputs.has(socket.socket)) {
@@ -110,6 +115,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
         })
         lastInputSockets = inputSockets
       }
+      // update output sockets
       if (outputSockets !== lastOutputSockets) {
         lastOutputSockets?.forEach(socket => {
           if (node.outputs.has(socket.socket))
@@ -131,60 +137,59 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
 
     if (!node.data.model) node.data.model = models[0]
     configureNode()
-
     return node
   }
 
   /**
-   * Processing function for CreateTextEmbedding node.
-   * @param node - A WorkerData instance.
-   * @param inputs - A MagickWorkerInputs object.
-   * @param outputs - A MagickWorkerOutputs object.
-   * @param context - (Optional) An object to hold context data.
+   * Worker for processing the generated audio.
+   * @param node - the worker data.
+   * @param inputs - worker inputs.
+   * @param outputs - worker outputs.
+   * @param context - engine context.
+   * @returns an object with the success status and result or error message.
    */
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
-    context?: any
-  ): Promise<InputReturn> {
-    const completionProviders = pluginManager.getCompletionProviders('text', [
-      'embedding',
+    context: {
+      module: unknown
+      secrets: Record<string, string>
+      projectId: string
+      context: EngineContext
+    }
+  ) {
+    const completionProviders = pluginManager.getCompletionProviders('audio', [
+      'textToSpeech',
     ]) as CompletionProvider[]
-
+  
     const model = (node.data as { model: string }).model as string
-
-    // Get the provider for the selected model.
     const provider = completionProviders.find(provider =>
       provider.models.includes(model)
     ) as CompletionProvider
-
+  
     const completionHandler = provider.handler
-
+  
     if (!completionHandler) {
-      console.error('No completion handler found')
-      throw new Error('No completion handler found')
+      console.error('No completion handler found for provider', provider)
+      throw new Error('ERROR: Completion handler undefined')
     }
-
+  
     const { success, result, error } = await completionHandler({
       node,
       inputs,
       outputs,
       context,
     })
-
+  
     if (!success) {
-      throw new Error(error)
+      throw new Error('ERROR: ' + error)
     }
 
-    let embedding = result as number[]
-
-    if (embedding.length !== 1536) {
-      embedding = expandVector(embedding as number[], 1536)
-    }
-
+    const audio = result  
+  
     return {
-      embedding,
+      result: audio,
     }
   }
 }
