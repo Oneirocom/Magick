@@ -90,39 +90,40 @@ export class ExtractRelationship extends MagickComponent<Promise<InputReturn>> {
     outputs: MagickWorkerOutputs,
     context?: any
   ): Promise<InputReturn> {
-    const embeddingCombined = inputs['embeddingCombined']
-    const embedding1 = inputs['embedding1']
-    const embedding2 = inputs['embedding2']
-
+    // Parsing JSON if inputs are strings
+    const combinedEmbedding = typeof inputs['combinedEmbedding'][0] === 'string' ? JSON.parse(inputs['combinedEmbedding'][0]) : inputs['combinedEmbedding'][0];
+    const embedding1 = typeof inputs['embedding1'][0] === 'string' ? JSON.parse(inputs['embedding1'][0]) : inputs['embedding1'][0];
+    const embedding2 = typeof inputs['embedding2'][0] === 'string' ? JSON.parse(inputs['embedding2'][0]) : inputs['embedding2'][0];
+  
     function relationExtractionByCombinedVectorSubtraction(
-      embeddingCombined,
-      embedding1,
-      embedding2
+      combined,
+      emb1,
+      emb2
     ) {
       // Ensure the embeddings have the same dimensions
       if (
-        embeddingCombined.length !== embedding1.length ||
-        embeddingCombined.length !== embedding2.length
+        combined.length !== emb1.length ||
+        combined.length !== emb2.length
       ) {
         throw new Error('Embeddings must have the same dimensions.')
       }
-
+  
       // Perform vector subtraction
-      const relationshipEmbedding = embeddingCombined.map(
-        (value, index) => value - (embedding1[index] + embedding2[index])
+      const relationshipEmbedding = combined.map(
+        (value, index) => value - (emb1[index] + emb2[index])
       )
-
+  
       return relationshipEmbedding
     }
-
+  
     const embedding = relationExtractionByCombinedVectorSubtraction(
-      embeddingCombined,
+      combinedEmbedding,
       embedding1,
       embedding2
     )
-
+    
     return {
       embedding,
     }
-  }
+  }  
 }

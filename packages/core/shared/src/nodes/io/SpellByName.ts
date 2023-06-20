@@ -47,7 +47,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
       {
         outputs: { output: 'output', trigger: 'option' },
       },
-      'Experimental',
+      'I/O',
       info
     )
 
