@@ -14,6 +14,7 @@ import shared from '@magickml/plugin-elevenlabs-shared'
 import {
   textToSpeech,
 } from './functions'
+import { api } from './services/api/api'
 
 /**
  * The secrets used by the elevenlabs API
@@ -35,6 +36,7 @@ const completionHandlers = {
 const elevenlabsPlugin = new ServerPlugin({
   name: 'elevenlabsPlugin',
   secrets,
+  services: [ api ],
   completionProviders: shared.completionProviders.map(provider => {
     return {
       ...provider,

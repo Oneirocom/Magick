@@ -1,4 +1,3 @@
-
 import {
   IconButton,
   Stack,
@@ -22,18 +21,16 @@ import {
 } from 'react-table'
 import { useSelector } from 'react-redux'
 import styles from './index.module.scss'
-import { Delete,Refresh, MoreHoriz } from '@mui/icons-material'
+import { Delete, Refresh, MoreHoriz } from '@mui/icons-material'
 import { TableComponent, useFeathers } from '@magickml/client-core'
 import { DocumentData, columns } from './requests'
 import { useSnackbar } from 'notistack'
-
 
 /**
  * GlobalFilter component.
  * Filter the table data using a global search input.
  */
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
-
   const [value, setValue] = useState(globalFilter)
   const onChange = useAsyncDebounce(value => {
     setGlobalFilter(value || undefined)
@@ -52,7 +49,6 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   )
 }
 
-
 function ActionMenu({ anchorEl, handleClose, handleDelete }) {
   return (
     <Menu
@@ -65,7 +61,6 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
     </Menu>
   )
 }
-
 
 /**
  * RequestTable component.
@@ -83,7 +78,6 @@ function RequestTable({ requests, updateCallback }) {
     setAnchorEl(document.currentTarget)
     setSelectedRow(row)
   }
-
 
   const handleActionClose = () => {
     setAnchorEl(null)
@@ -110,29 +104,30 @@ function RequestTable({ requests, updateCallback }) {
     // close the action menu
     handleActionClose()
     updateCallback()
-    setSelectedRows([]);
+    setSelectedRows([])
   }
 
-    // Handle events deletion
-    const handleDeleteMany = async (event: any) => {
-      const isDeleted: Array<unknown> = await client.service('request').remove(null, {
+  // Handle events deletion
+  const handleDeleteMany = async (event: any) => {
+    const isDeleted: Array<unknown> = await client
+      .service('request')
+      .remove(null, {
         query: {
           id: {
-            $in: selectedRows
-          }
-        }
+            $in: selectedRows,
+          },
+        },
       })
-      if (isDeleted) {
-        enqueueSnackbar('Requests deleted', { variant: 'success' });
-        updateCallback();
-      } else {
-        enqueueSnackbar('Error deleting Requests', { variant: 'error' });
-      }
-    
-      // Clear the selected rows
-      setSelectedRows([]);
+    if (isDeleted) {
+      enqueueSnackbar('Requests deleted', { variant: 'success' })
+      updateCallback()
+    } else {
+      enqueueSnackbar('Error deleting Requests', { variant: 'error' })
     }
 
+    // Clear the selected rows
+    setSelectedRows([])
+  }
 
   const defaultColumns = useMemo(
     () => [
@@ -196,25 +191,30 @@ function RequestTable({ requests, updateCallback }) {
   )
 
   // @ts-ignore
-  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter }, setSortBy } =
-    useTable(
-      {
-        columns: defaultColumns,
-        data: requests,
-      },
-      useFilters,
-      useGlobalFilter,
-      useSortBy,
-      usePagination
-    ) 
+  const {
+    page,
+    flatRows,
+    pageOptions,
+    gotoPage,
+    setGlobalFilter,
+    state: { sortBy, globalFilter },
+    setSortBy,
+  } = useTable(
+    {
+      columns: defaultColumns,
+      data: requests,
+    },
+    useFilters,
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  )
 
   // Handle page change
   const handlePageChange = (page: number) => {
     const pageIndex = page - 1
     gotoPage(pageIndex)
   }
-
-
 
   // Generate original rows data for CSV export
   const originalRows = useMemo(
@@ -234,8 +234,7 @@ function RequestTable({ requests, updateCallback }) {
     requestData: string,
     responseData: string,
     parameters: string,
-    spell: string,
-
+    spell: string
   ): DocumentData => {
     return {
       row,
@@ -269,10 +268,11 @@ function RequestTable({ requests, updateCallback }) {
   }
 
   // Function to handle sorting when a column header is clicked
-  const handleSort = (column) => {
-    const isAsc = sortBy && sortBy[0] && sortBy[0].id === column && !sortBy[0].desc;
-    setSortBy([{ id: column, desc: isAsc ? isAsc : false }]);
-  };
+  const handleSort = column => {
+    const isAsc =
+      sortBy && sortBy[0] && sortBy[0].id === column && !sortBy[0].desc
+    setSortBy([{ id: column, desc: isAsc ? isAsc : false }])
+  }
 
   const rows = page.map(el => {
     return createData(
@@ -288,88 +288,108 @@ function RequestTable({ requests, updateCallback }) {
       el.original.requestData,
       el.original.responseData,
       el.original.parameters,
-      el.original.spell,
-
+      el.original.spell
     )
   })
 
+  const testTts = async () => {
+    const resp = await fetch(`${API_ROOT_URL}/tts`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        stability: 0.5,
+        similarity_boost: 0.5,
+        voice_id: 'MF3mGyEYCl7XYWbV9V6O',
+        elevenlabs_api_key: '123',
+      }),
+    })
+
+    const json = await resp.json()
+
+    console.log(json)
+  }
 
   return (
-    <Container className={styles.container} classes={{ root: styles.root }}>
-
-      <Stack spacing={2} style={{ padding: '1rem', background: '#272727' }}>
-        <div className={styles.flex}>
-          <Typography variant="h4" className={styles.header}>
-            Requests
-          </Typography>
+    <>
+      <button onClick={testTts}>Test TTS</button>
+      <Container className={styles.container} classes={{ root: styles.root }}>
+        <Stack spacing={2} style={{ padding: '1rem', background: '#272727' }}>
           <div className={styles.flex}>
-
-            <Button
-              variant="outlined"
-              className={styles.btn}
-              startIcon={<Refresh />}
-              name="refresh"
-              onClick={updateCallback}
-            >
-              Refresh
-            </Button>
-            <CSVLink
-              data={originalRows}
-              filename="requests.csv"
-              target="_blank"
-              style={{
-                textDecoration: 'none',
-                display: 'inline',
-                marginLeft: '.5em',
-                marginRight: '.5em',
-              }}
-            >
+            <Typography variant="h4" className={styles.header}>
+              Requests
+            </Typography>
+            <div className={styles.flex}>
               <Button
-                className={styles.btn}
                 variant="outlined"
-                startIcon={<FaFileCsv size={14} />}
-                style={{ marginLeft: '1rem' }}
+                className={styles.btn}
+                startIcon={<Refresh />}
+                name="refresh"
+                onClick={updateCallback}
               >
-                export
+                Refresh
               </Button>
-            </CSVLink>
+              <CSVLink
+                data={originalRows}
+                filename="requests.csv"
+                target="_blank"
+                style={{
+                  textDecoration: 'none',
+                  display: 'inline',
+                  marginLeft: '.5em',
+                  marginRight: '.5em',
+                }}
+              >
+                <Button
+                  className={styles.btn}
+                  variant="outlined"
+                  startIcon={<FaFileCsv size={14} />}
+                  style={{ marginLeft: '1rem' }}
+                >
+                  export
+                </Button>
+              </CSVLink>
+            </div>
           </div>
-        </div>
-        <div className={styles.flex}>
-          <Button
-            className={`${styles.btn} ${selectedRows.length > 0 ? styles.selectedBtn : ''
-              }`}
-            onClick={handleDeleteMany}
-            variant="outlined"
-            startIcon={<Delete />}
-            disabled={selectedRows.length === 0}
-          >
-            Delete Selected({selectedRows.length})
-          </Button>
           <div className={styles.flex}>
-            <GlobalFilter
-              globalFilter={globalFilter}
-              setGlobalFilter={setGlobalFilter}
-            />
+            <Button
+              className={`${styles.btn} ${
+                selectedRows.length > 0 ? styles.selectedBtn : ''
+              }`}
+              onClick={handleDeleteMany}
+              variant="outlined"
+              startIcon={<Delete />}
+              disabled={selectedRows.length === 0}
+            >
+              Delete Selected({selectedRows.length})
+            </Button>
+            <div className={styles.flex}>
+              <GlobalFilter
+                globalFilter={globalFilter}
+                setGlobalFilter={setGlobalFilter}
+              />
+            </div>
           </div>
-        </div>
-        <TableComponent
-          rows={rows}
-          page={page}
-          count={pageOptions.length}
-          handleSorting={handleSort}
-          selectedRows={selectedRows}
-          setSelected={setSelectedRows}
-          column={columns}
-          handlePageChange={handlePageChange}
-        />
-        <ActionMenu
-          anchorEl={anchorEl}
-          handleClose={handleActionClose}
-          handleDelete={handleRequestDelete}
-        />
-      </Stack>
-    </Container>
+          <TableComponent
+            rows={rows}
+            page={page}
+            count={pageOptions.length}
+            handleSorting={handleSort}
+            selectedRows={selectedRows}
+            setSelected={setSelectedRows}
+            column={columns}
+            handlePageChange={handlePageChange}
+          />
+          <ActionMenu
+            anchorEl={anchorEl}
+            handleClose={handleActionClose}
+            handleDelete={handleRequestDelete}
+          />
+        </Stack>
+      </Container>
+    </>
   )
 }
 
