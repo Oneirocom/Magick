@@ -38,7 +38,7 @@ export async function textToSpeech(
 
   const settings = {
     stability: parseFloat(node?.data?.stability as string ?? "0.5"),
-    similarity_boost: parseFloat(node?.data?.stability as string ?? "0.5"),
+    similarity_boost: parseFloat(node?.data?.similarity_boost as string ?? "0.5"),
     voice_id: node?.data.voice_id as string ?? 'MF3mGyEYCl7XYWbV9V6O'
   }
   
