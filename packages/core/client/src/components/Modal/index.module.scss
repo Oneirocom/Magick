@@ -15,11 +15,11 @@
 }
 
 .btnCancel {
-  color: #a96f18 !important;
+  color: var(--primary-dark) !important;
   border: solid 1px !important;
 }
 
 .btnAction {
   color: var(--dark-5) !important;
-  background: var(--primary) !important;
+  background: var(--primary-dark) !important;
 }
