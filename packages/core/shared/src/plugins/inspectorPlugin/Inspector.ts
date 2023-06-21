@@ -7,6 +7,7 @@ import * as socketMap from '../../sockets'
 import {
   AsDataSocket,
   AsInputsAndOutputsData,
+  ControlData,
   DataSocketType,
   IRunContextEditor,
   MagickNode,
@@ -22,12 +23,12 @@ type InspectorConstructor = {
 }
 
 // todo improve this typing
-export type DataControlData = Record<string, DataControl>
+export type DataControlData = Record<string, ControlData>
 
 export type InspectorData = {
   name: string
   nodeId: number
-  dataControls: PubSubData
+  dataControls: DataControlData
   data: WorkerData
   category?: string
   info: string
@@ -307,7 +308,7 @@ export class Inspector {
         acc[key] = { ...val.control, ...cachedControl }
         return acc
       },
-      {} as PubSubData
+      {} as Record<string, ControlData>
     )
 
     return {

@@ -3,7 +3,7 @@
 import type { Knex } from 'knex'
 import knex from 'knex'
 import type { Application } from './declarations'
-import { DATABASE_URL } from '@magickml/core'
+import { DATABASE_URL } from '@magickml/config'
 
 // Extend Configuration interface to include dbClient
 
