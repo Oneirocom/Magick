@@ -1,5 +1,5 @@
 import { Worker, Job } from 'bullmq'
-import { bullMQConnection } from '@magickml/core'
+import { bullMQConnection } from '@magickml/config'
 
 import { app } from '@magickml/server-core'
 import { Agent, AgentManager } from '@magickml/agents'
@@ -14,8 +14,8 @@ export class CloudAgentWorker extends AgentManager {
     const agentDBResult = (
       await app.service('agents').find({
         query: {
-          id: agentId
-        }
+          id: agentId,
+        },
       })
     )?.data
 
@@ -26,7 +26,7 @@ export class CloudAgentWorker extends AgentManager {
 
     const agentData = {
       ...agentDBResult[0],
-      pingedAt: new Date().toISOString()
+      pingedAt: new Date().toISOString(),
     }
 
     if (!agentData.enabled) {
@@ -64,7 +64,7 @@ export class CloudAgentWorker extends AgentManager {
       await app.service('agents').find({
         query: {
           id: agentId,
-        }
+        },
       })
     )?.data
 
@@ -77,16 +77,16 @@ export class CloudAgentWorker extends AgentManager {
 
     if (agent.enabled) {
       await this.addAgent(agentId)
-    // TODO: care about runState for restarting agents
-    //   switch (agent.runState) {
-    //     case 'stopped':
-    //     case 'failed':
-    //       this.logger.info(`Starting agent ${agentId}`)
-    //       await app.service('agents').patch(agentId, {
-    //         runState: 'starting'
-    //       })
-    //     break;
-    //   }
+      // TODO: care about runState for restarting agents
+      //   switch (agent.runState) {
+      //     case 'stopped':
+      //     case 'failed':
+      //       this.logger.info(`Starting agent ${agentId}`)
+      //       await app.service('agents').patch(agentId, {
+      //         runState: 'starting'
+      //       })
+      //     break;
+      //   }
     } else {
       await this.removeAgent(agentId)
     }
@@ -94,19 +94,25 @@ export class CloudAgentWorker extends AgentManager {
 
   async work() {
     this.logger.info('waiting for jobs')
-    new Worker("agent:updates", async (job: Job) => {
-      switch(job.name) {
+    new Worker(
+      'agent:updates',
+      async (job: Job) => {
+        switch (job.name) {
           case 'agent:updated':
-              this.agentUpdated(job.data.agentId)
-              break
+            this.agentUpdated(job.data.agentId)
+            break
           default:
-              this.logger.error(`Received unknown job ${job.name} from queue ${job.queueName}`)
-              throw new Error(`Received unknown job ${job.name} from queue ${job.queueName}`)
+            this.logger.error(
+              `Received unknown job ${job.name} from queue ${job.queueName}`
+            )
+            throw new Error(
+              `Received unknown job ${job.name} from queue ${job.queueName}`
+            )
+        }
+      },
+      {
+        connection: bullMQConnection,
       }
-
-    },
-    {
-      connection: bullMQConnection
-    })
+    )
   }
 }
