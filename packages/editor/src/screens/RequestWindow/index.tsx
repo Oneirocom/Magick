@@ -8,8 +8,8 @@ import { useEffect, useState } from 'react'
 
 import RequestTable from './RequestTable'
 
-import { API_ROOT_URL } from '@magickml/core'
-import { LoadingScreen,useConfig } from '@magickml/client-core'
+import { API_ROOT_URL } from '@magickml/config'
+import { LoadingScreen, useConfig } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
 
 /**

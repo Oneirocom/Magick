@@ -3,7 +3,6 @@
 import 'regenerator-runtime/runtime'
 
 // Export configuration and all other necessary components.
-export * from './config'
 export { BooleanControl } from './dataControls/BooleanControl'
 export { CodeControl } from './dataControls/CodeControl'
 export { DropdownControl } from './dataControls/DropdownControl'
@@ -16,7 +15,6 @@ export { SwitchControl } from './dataControls/SwitchControl'
 export { TextInputControl } from './dataControls/TextInputControl'
 export * from './engine'
 export * from './functions/processCode'
-export { default as runPython } from './functions/ProcessPython'
 export * from './functions/saveRequest'
 export * from './globals'
 export * from './nodes'
@@ -51,3 +49,4 @@ export * from './plugins/inspectorPlugin'
 export * from './logger'
 
 export * from './cost-calculator'
+export * from './functions'
