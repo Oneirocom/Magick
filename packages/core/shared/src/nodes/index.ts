@@ -2,6 +2,7 @@
 import { MagickComponent } from '../engine'
 import { pluginManager } from '../plugin'
 import { ArrayToJSON } from './array/ArrayToJSON'
+import { JSONToArray } from './array/JSONToArray'
 import { ArrayVariable } from './array/ArrayVariable'
 import { GetValueFromArray } from './array/GetValueFromArray'
 import { JoinListComponent } from './array/JoinList'
@@ -24,8 +25,8 @@ import { EventRecall } from './events/EventRecall'
 import { EventRestructureComponent } from './events/EventRestructure'
 import { EventStore } from './events/EventStore'
 import { EventsToConversation } from './events/EventsToConversation'
-import { JupyterNotebook } from './experimental/JupyterNotebook'
-import { TextToSpeech } from './experimental/textToSpeech'
+import { JupyterNotebook } from './io/JupyterNotebook'
+import { TextToSpeech } from './audio/TextToSpeech'
 import { BooleanGate } from './flow/BooleanGate'
 import { ExclusiveGate } from './flow/ExclusiveGate'
 import { IsNullOrUndefined } from './flow/IsNullOrUndefined'
@@ -41,12 +42,17 @@ import { Skill } from './io/Skill'
 import { SpellComponent } from './io/Spell'
 import { SpellByName } from './io/SpellByName'
 import { RunSpell } from './magick/runSpell'
+import { IsANumber } from './number/IsANumber'
 import { Equal } from './number/Equal'
 import { GreaterThan } from './number/GreaterThan'
 import { GreaterThanOrEqual } from './number/GreaterThanOrEqual'
 import { InRange } from './number/InRange'
 import { LessThan } from './number/LessThan'
 import { LessThanOrEqual } from './number/LessThanOrEqual'
+import { Multiply} from './number/Multiply'
+import { Divide } from './number/Divide'
+import { Add } from './number/Add'
+import { Subtract } from './number/Subtract'
 import { NumberVariable } from './number/NumberVariable'
 import { ComposeObject } from './object/ComposeObject'
 import { GetValuesFromObject } from './object/GetValuesFromObject'
@@ -153,6 +159,12 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   splitBySentence: () => new SplitBySentence(),
   trim: () => new Trim(),
   getLength: () => new GetLength(),
+  isANumber: () => new IsANumber(),
+  multiply: () => new Multiply(),
+  divide: () => new Divide(),
+  add: () => new Add(),
+  subtract: () => new Subtract(),
+  jsonToArray: () => new JSONToArray(),
 }
 
 /**
