@@ -322,7 +322,7 @@ const AgentDetails = ({
             style={{
               margin: '1em',
               color: 'white',
-              backgroundColor: updateNeeded ? 'purple' : '#424242',
+              backgroundColor: updateNeeded ? 'var(--primary-dark)' : '#424242',
             }}
           >
             Update
@@ -331,7 +331,7 @@ const AgentDetails = ({
             style={{
               margin: '1em',
               color: 'white',
-              backgroundColor: 'purple',
+              backgroundColor: 'var(--primary-dark)',
             }}
             onClick={() => exportAgent()}
           >

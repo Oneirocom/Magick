@@ -235,7 +235,7 @@ function TaskTable({ tasks, updateCallback }) {
         <Button
           style={{
             display: 'inline',
-            backgroundColor: 'purple',
+            backgroundColor: 'var(--primary-dark)',
             border: 'none',
             color: 'white',
             marginRight: '.5em',
@@ -261,7 +261,7 @@ function TaskTable({ tasks, updateCallback }) {
             style={{
               textDecoration: 'none',
               display: 'inline',
-              backgroundColor: 'purple',
+              backgroundColor: 'var(--primary-dark)',
               color: 'white',
               border: 'none',
             }}
