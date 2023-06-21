@@ -177,7 +177,7 @@ button.option {
 }
 
 button.primary {
-  background-color: var(--primary);
+  background-color: var(--primary-dark);
   color: var(--dark-5);
 }
 
