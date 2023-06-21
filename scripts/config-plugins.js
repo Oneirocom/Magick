@@ -10,7 +10,14 @@ try {
 
 console.log('Server plugins', process.env.SERVER_PLUGINS)
 console.log('Client plugins', process.env.CLIENT_PLUGINS)
+console.log('Agent plugins', process.env.AGENT_PLUGINS)
 
+const agentPlugins = process.env.AGENT_PLUGINS ? process.env.AGENT_PLUGINS.split(',').map(
+  (plugin) => {
+    // agent plugis are server plugins, but scoped differently
+    return `@magickml/plugin-${plugin}-server`;
+  }
+) : [];
 const serverPlugins = process.env.SERVER_PLUGINS ? process.env.SERVER_PLUGINS.split(',').map(
   (plugin) => {
     return `@magickml/plugin-${plugin}-server`;
@@ -35,6 +42,13 @@ function copyExamplePluginsJson() {
   let i = 0;
 
   let importString = 'const plugins = {}\n';
+  for (const plugin of agentPlugins) {
+    importString += `import {default as plugin${i}} from '${plugin}';\nplugins['${plugin}'] = plugin${i};\n`;
+    i++;
+  }
+  fs.writeFileSync(pluginsJsPathAgent, importString);
+
+  importString = 'const plugins = {}\n';
   for (const plugin of serverPlugins) {
     importString += `import {default as plugin${i}} from '${plugin}';\nplugins['${plugin}'] = plugin${i};\n`;
     i++;
@@ -42,7 +56,6 @@ function copyExamplePluginsJson() {
   importString += 'export default plugins;';
 
   fs.writeFileSync(pluginsJsPathServer, importString);
-  fs.writeFileSync(pluginsJsPathAgent, importString);
   fs.writeFileSync(pluginsJsPathCloudAgentWorker, importString);
 
   importString = 'const plugins = {}\n';
