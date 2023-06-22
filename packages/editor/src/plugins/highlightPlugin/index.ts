@@ -1,6 +1,5 @@
 import { Connection } from 'rete'
 import {
-  addPathGlowToNode,
   makeAllConnectionsOpaque,
   makeAllConnectionsTransparent,
   makeNodeConnectionsOpaque,
