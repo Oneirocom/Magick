@@ -7,7 +7,7 @@ import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 // Information about the component
 const info =
-  'Join an array of events input into an output string conversation formatted for prompt injection.'
+  'Join an array of events into a conversation formatted for prompt injection.'
 
 type WorkerReturn = {
   conversation: string

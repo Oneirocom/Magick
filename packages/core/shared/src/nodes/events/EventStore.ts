@@ -3,7 +3,7 @@ import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import {
-  embeddingSocket,
+  arraySocket,
   eventSocket,
   stringSocket,
   triggerSocket,
@@ -20,8 +20,7 @@ import {
 /**
  * Information about the EventStore class
  */
-const info =
-  'Takes an input event and stores it in the Events store with the type specified in the Type property. The content, sender override, and embedding inputs allow you to store/override additional information about the event.'
+const info = 'Event Store is used to store events for an event and user'
 
 /**
  * EventStore class that extends MagickComponent
@@ -56,14 +55,12 @@ export class EventStore extends MagickComponent<Promise<void>> {
       stringSocket
     )
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
-    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
 
     node.inspector.add(nameInput).add(type)
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-
-    const typeSocket = new Rete.Input('type', 'Type', stringSocket)
 
     return node
       .addInput(dataInput)
@@ -71,7 +68,6 @@ export class EventStore extends MagickComponent<Promise<void>> {
       .addInput(senderInput)
       .addInput(eventInput)
       .addInput(embedding)
-      .addInput(typeSocket)
       .addOutput(dataOutput)
   }
 
@@ -91,11 +87,10 @@ export class EventStore extends MagickComponent<Promise<void>> {
     const { projectId } = context
 
     const event = inputs['event'][0] as Event
-    const typeSocket = inputs['type'] && inputs['type'][0]
     const sender = (inputs['sender'] ? inputs['sender'][0] : null) as string
     let content = (inputs['content'] ? inputs['content'][0] : null) as string
     let embedding = (
-      inputs['embedding'] ? inputs['embedding'][0] : undefined
+      inputs['embedding'] ? inputs['embedding'][0] : null
     ) as number[]
 
     if (typeof embedding == 'string') {
@@ -103,9 +98,9 @@ export class EventStore extends MagickComponent<Promise<void>> {
     }
 
     const typeData = node?.data?.type as string
-    console.log('storing data for', typeData)
+
     const type =
-      typeSocket ?? (typeData !== undefined && typeData.length > 0)
+      typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
         : 'none'
 
@@ -123,24 +118,6 @@ export class EventStore extends MagickComponent<Promise<void>> {
       embedding?: number[] | string[]
     }
 
-    const eventValues = [
-      'id',
-      'type',
-      'content',
-      'sender',
-      'entities',
-      'observer',
-      'client',
-      'channel',
-      'channelType',
-      'connector',
-      'projectId',
-      'agentId',
-      'embedding',
-      'date',
-      'rawData',
-    ]
-
     const data: Data = {
       ...event,
       sender: sender ?? event.sender,
@@ -150,15 +127,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       date: new Date().toISOString(),
     }
 
-    // delete any values that are not in the eventValues array
-    Object.keys(data).forEach(key => {
-      if (!eventValues.includes(key)) {
-        delete data[key]
-      }
-    })
-
     if (embedding) data.embedding = embedding
-    else delete data.embedding
 
     if (content && content !== '') {
       const { app } = context.module
