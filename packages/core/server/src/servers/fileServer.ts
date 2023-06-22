@@ -4,6 +4,7 @@ import * as fs from 'fs'
 import http from 'http'
 import https from 'https'
 import path from 'path'
+import sanitize from 'sanitize-filename'
 
 /**
  * Initializes the file server with SSL enabled if configured.
@@ -49,7 +50,7 @@ async function initSSL(): Promise<boolean> {
         cert: fs.readFileSync('certs/cert.pem'),
       },
       function (req, res) {
-        let filePath = '.' + req.url // Get the file path from the request URL
+        let filePath = sanitize('.' + req.url) // Get the file path from the request URL
         if (filePath == './') {
           filePath = './index.html'
         }
@@ -124,7 +125,7 @@ async function initNoSSL() {
   // Create HTTP server
   http
     .createServer(function (req, res) {
-      let filePath = '.' + req.url // Get the file path from the request URL
+      let filePath = sanitize('.' + req.url) // Get the file path from the request URL
       if (filePath == './') {
         filePath = './index.html'
       }
