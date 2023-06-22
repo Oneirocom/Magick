@@ -70,14 +70,14 @@ function install(editor, params) {
     selectNodeConnections(editor, node)
     makeAllConnectionsTransparent(editor)
     makeNodeConnectionsOpaque(editor, node)
-    addPathGlowToNode(editor, node)
+    // addPathGlowToNode(editor, node)
   })
 
   // Make sure to unselect all connections when clicking on the editor
   editor.on('click', () => {
     unselectAllConnections(editor)
     makeAllConnectionsOpaque(editor)
-    removePathGlowFromAllConnections(editor)
+    // removePathGlowFromAllConnections(editor)
   })
 }
 
