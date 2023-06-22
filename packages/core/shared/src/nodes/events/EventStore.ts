@@ -3,7 +3,7 @@ import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import {
-  arraySocket,
+  embeddingSocket,
   eventSocket,
   stringSocket,
   triggerSocket,
@@ -16,11 +16,17 @@ import {
   ModuleContext,
   WorkerData,
 } from '../../types'
+import { DropdownControl } from '../../dataControls/DropdownControl'
 
+enum StoreEventForTypes {
+  Sender = 'Sender (User)',
+  Observer = 'Observer (Agent)'
+}
 /**
  * Information about the EventStore class
  */
-const info = 'Event Store is used to store events for an event and user'
+const info =
+  'Takes an input event and stores it in the Events store with the type specified in the Type property. The content, sender override, and embedding inputs allow you to store/override additional information about the event.'
 
 /**
  * EventStore class that extends MagickComponent
@@ -37,8 +43,8 @@ export class EventStore extends MagickComponent<Promise<void>> {
   builder(node: MagickNode) {
     const nameInput = new InputControl({
       dataKey: 'name',
-      name: 'Input name',
-      placeholder: 'Conversation',
+      name: 'Name',
+      placeholder: 'Store Event',
     })
 
     const type = new InputControl({
@@ -49,25 +55,32 @@ export class EventStore extends MagickComponent<Promise<void>> {
     })
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
-    const senderInput = new Rete.Input(
-      'sender',
-      'Sender Override',
-      stringSocket
-    )
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
-    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
 
     node.inspector.add(nameInput).add(type)
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
+    const typeSocket = new Rete.Input('type', 'Type', stringSocket)
+
+    const storeEventForTypes = Object.values(StoreEventForTypes)
+    const storeEventFor = new DropdownControl({
+      name: 'Store Event For',
+      dataKey: 'storeEventFor',
+      values: storeEventForTypes,
+      defaultValue: storeEventForTypes[0],
+    })
+
+    node.inspector.add(storeEventFor)
+
     return node
       .addInput(dataInput)
       .addInput(contentInput)
-      .addInput(senderInput)
       .addInput(eventInput)
       .addInput(embedding)
+      .addInput(typeSocket)
       .addOutput(dataOutput)
   }
 
@@ -87,10 +100,10 @@ export class EventStore extends MagickComponent<Promise<void>> {
     const { projectId } = context
 
     const event = inputs['event'][0] as Event
-    const sender = (inputs['sender'] ? inputs['sender'][0] : null) as string
+    const typeSocket = inputs['type'] && inputs['type'][0]
     let content = (inputs['content'] ? inputs['content'][0] : null) as string
     let embedding = (
-      inputs['embedding'] ? inputs['embedding'][0] : null
+      inputs['embedding'] ? inputs['embedding'][0] : undefined
     ) as number[]
 
     if (typeof embedding == 'string') {
@@ -98,9 +111,9 @@ export class EventStore extends MagickComponent<Promise<void>> {
     }
 
     const typeData = node?.data?.type as string
-
+    console.log('storing data for', typeData)
     const type =
-      typeData !== undefined && typeData.length > 0
+      typeSocket ?? (typeData !== undefined && typeData.length > 0)
         ? typeData.toLowerCase().trim()
         : 'none'
 
@@ -111,6 +124,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     type Data = {
       sender: string
+      observer: string
       projectId: string
       content: string
       type: string
@@ -118,16 +132,50 @@ export class EventStore extends MagickComponent<Promise<void>> {
       embedding?: number[] | string[]
     }
 
+    const eventValues = [
+      'id',
+      'type',
+      'content',
+      'sender',
+      'entities',
+      'observer',
+      'client',
+      'channel',
+      'channelType',
+      'connector',
+      'projectId',
+      'agentId',
+      'embedding',
+      'date',
+      'rawData',
+    ]
+
     const data: Data = {
       ...event,
-      sender: sender ?? event.sender,
+      observer: event.observer as string,
+      sender: event.sender as string,
       projectId,
       content,
       type,
       date: new Date().toISOString(),
     }
 
+    // delete any values that are not in the eventValues array
+    Object.keys(data).forEach(key => {
+      if (!eventValues.includes(key)) {
+        delete data[key]
+      }
+    })
+
     if (embedding) data.embedding = embedding
+    else delete data.embedding
+
+    const storeEventFor = node?.data?.storeEventFor as string
+    if (storeEventFor === StoreEventForTypes.Observer) {
+      data.sender = data.observer;
+    } else if (storeEventFor === StoreEventForTypes.Sender) {
+      // do nothing
+    }
 
     if (content && content !== '') {
       const { app } = context.module
