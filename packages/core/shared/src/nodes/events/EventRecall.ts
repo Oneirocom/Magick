@@ -183,8 +183,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     }
 
     const {
-      observer,
-      sender,
       client,
       channel,
       connector,
