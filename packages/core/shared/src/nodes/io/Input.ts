@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { InputControl } from '../../dataControls/InputControl'
-import { SwitchControl } from '../../dataControls/SwitchControl'
 import { MagickComponent } from '../../engine'
 import { PluginIOType, pluginManager } from '../../plugin'
 import { DataControl } from '../../plugins/inspectorPlugin'
@@ -145,6 +144,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
             })
             node.outputs.delete(socket.socket)
           }
+          return socket
         })
         node.update()
         this.editor?.view.updateConnections({ node })
