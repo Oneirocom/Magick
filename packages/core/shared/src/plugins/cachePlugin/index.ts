@@ -76,10 +76,10 @@ function install(editor: MagickEditor): void {
           return value;
         };
 
-        const runControl = new RunButtonControl({ key: 'runControl', run });
+        // const runControl = new RunButtonControl({ key: 'runControl', run });
 
         // Add the run control to the node.
-        _node.addControl(runControl as Control);
+        // _node.addControl(runControl as Control);
       }
 
       return originalBuilder.call(component, _node);
