@@ -80,8 +80,14 @@ export class DiscordListVoiceChannels extends MagickComponent<
     context: ModuleContext
   ): Promise<WorkerReturn> {
     const { agent, data } = context
-    if (!agent) {
-      throw new Error('Agent not found')
+    if (!agent || !agent?.discord) {
+      console.warn('sending default information since there is no agent available')
+      return {
+        output: [
+          { id: "1051457146388217900", name: "General" },
+          { id: "1119407851408986122", name:"voice2"}
+        ]
+      }
     }
 
     if (!agent?.discord) {
@@ -117,13 +123,13 @@ export class DiscordListVoiceChannels extends MagickComponent<
 
     // get the list of text channels
     const voiceChannels = guild.channels.cache.filter(ch => ch.type === ChannelType.GuildVoice);
-
+    const mappedChannels = voiceChannels.map(channel => ({
+      id: channel.id,
+      name: channel.name,
+    }))
 
     return {
-      output: voiceChannels.map(channel => ({
-        id: channel.id,
-        name: channel.name,
-      }))
+      output: mappedChannels
     };
   }
 }
