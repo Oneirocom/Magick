@@ -21,6 +21,7 @@
     - Import the character's animations and connect them to user interactions or LLM responses.
     - Measurable Result: Have a working character page with basic interactivity and animations implemented using react-three-fiber within the middle of July 2023.
 
+## Alternative Track
 
 ## Other goals
 
